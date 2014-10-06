@@ -140,15 +140,35 @@
 							'cancel' => 'Cancel Event',
 							);
 			}
+			else	{
+				$actions = array(
+							'convert' => 'Convert Enquiry',
+							'fail' => 'Fail Enquiry',
+							);	
+			}
 			return $actions;
 		} // get_bulk_actions
 		
 		function process_bulk_action() {
+			$action = $this->current_action();
+			$events = isset( $_POST['event'] ) ? $_POST['event'] : false;
+			if( !is_array( $events ) )
+				$events = array( $events );
+			
+			if( empty( $action ) )
+				return;
+			
 			if( 'cancel' === $this->current_action() ) {
-					f_mdjm_cancel_event( $_POST['event'] );
+					f_mdjm_cancel_event( $events );
 			}
 			if( 'complete' === $this->current_action() ) {
-					f_mdjm_complete_event( $_POST['event'] );
+					f_mdjm_complete_event( $events );
+			}
+			if( 'convert' === $this->current_action() ) {
+					f_mdjm_convert_event( $events );
+			}
+			if( 'fail' === $this->current_action() ) {
+					f_mdjm_fail_enquiry( $events );
 			}
 		} // process_bulk_action
 		

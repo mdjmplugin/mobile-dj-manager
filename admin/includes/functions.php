@@ -489,7 +489,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_convert_event( $event_id )	{
+	function f_mdjm_convert_event( $event )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -499,49 +499,53 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-		$convert_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
-		$clientinfo = get_userdata( $eventinfo->user_id );
-		$j_args = array (
-					'client' => $eventinfo->user_id,
-					'event' => $event_id,
-					'author' => get_current_user_id(),
-					'type' => 'Update Event',
-					'source' => 'Admin',
-					'entry' => 'The Event has been converted from an enquiry'
-				);
-		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-		
-		$message = 'The selected enquiry has been successfully converted to a booking';
-		echo '<div id="message" class="updated">';
-		echo '<p>' . _e( $message ) . '</p>';
-		echo '</div>';
-		$email_headers = f_mdjm_client_email_headers( $eventinfo );
-		$info = f_mdjm_prepare_email( $eventinfo, $type='contract_review' );
-		if ( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
-			$message = 'Contract review email sent to client';
+		if( !is_array( $event ) )
+			$event = array( $event );	
+		foreach( $event as $event_id )	{
+			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
+			$convert_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+			$clientinfo = get_userdata( $eventinfo->user_id );
 			$j_args = array (
-				'client' => $eventinfo->user_id,
-				'event' => $eventinfo->event_id,
-				'author' => get_current_user_id(),
-				'type' => 'Email Client',
-				'source' => 'Admin',
-				'entry' => 'Contract Review email sent to client'
-				);
+						'client' => $eventinfo->user_id,
+						'event' => $event_id,
+						'author' => get_current_user_id(),
+						'type' => 'Update Event',
+						'source' => 'Admin',
+						'entry' => 'The Event has been converted from an enquiry'
+					);
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			?>
-			<div id="message" class="updated">
-			<p><?php _e( $message ) ?></p>
-			</div>
-			<?php
-		}
-		else	{
-			$message .= 'Unable to send contract review email to client';
-			?>
-			<div id="message" class="error">
-			<p><?php _e( $message ) ?></p>
-			</div>
-			<?php
+			
+			$message = 'The selected enquiry has been successfully converted to a booking';
+			echo '<div id="message" class="updated">';
+			echo '<p>' . _e( $message ) . '</p>';
+			echo '</div>';
+			$email_headers = f_mdjm_client_email_headers( $eventinfo );
+			$info = f_mdjm_prepare_email( $eventinfo, $type='contract_review' );
+			if ( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
+				$message = 'Contract review email sent to client';
+				$j_args = array (
+					'client' => $eventinfo->user_id,
+					'event' => $eventinfo->event_id,
+					'author' => get_current_user_id(),
+					'type' => 'Email Client',
+					'source' => 'Admin',
+					'entry' => 'Contract Review email sent to client'
+					);
+				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+				?>
+				<div id="message" class="updated">
+				<p><?php _e( $message ) ?></p>
+				</div>
+				<?php
+			}
+			else	{
+				$message .= 'Unable to send contract review email to client';
+				?>
+				<div id="message" class="error">
+				<p><?php _e( $message ) ?></p>
+				</div>
+				<?php
+			}
 		}
 	}
 	
@@ -554,7 +558,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_cancel_event( $event_id )	{
+	function f_mdjm_cancel_event( $event )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -562,35 +566,21 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		if( is_array( $event ) )	{
-			foreach( $event as $event_id )	{
-			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
-			$clientinfo = get_userdata( $eventinfo->user_id );
-			$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $event_id,
-						'author' => get_current_user_id(),
-						'type' => 'Cancel Event',
-						'source' => 'Admin',
-						'entry' => 'Event ID ' . $event_id . ' has been cancelled'
-					);
-			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			}
-		}
-		else	{
-			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event ) );
-			$clientinfo = get_userdata( $eventinfo->user_id );
-			$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $event,
-						'author' => get_current_user_id(),
-						'type' => 'Cancel Event',
-						'source' => 'Admin',
-						'entry' => 'Event ID ' . $event . ' has been cancelled'
-					);
-			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+		if( !is_array( $event ) )
+			$event = array( $event );	
+		foreach( $event as $event_id )	{
+		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
+		$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+		$clientinfo = get_userdata( $eventinfo->user_id );
+		$j_args = array (
+					'client' => $eventinfo->user_id,
+					'event' => $event_id,
+					'author' => get_current_user_id(),
+					'type' => 'Cancel Event',
+					'source' => 'Admin',
+					'entry' => 'Event ID ' . $event_id . ' has been cancelled'
+				);
+		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		}
 		$message = 'The selected events have been successfully cancelled';
 		?>
@@ -609,7 +599,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_complete_event( $event_id )	{
+	function f_mdjm_complete_event( $event )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -617,35 +607,21 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		if( is_array( $event ) )	{
-			foreach( $event as $event_id )	{
-				$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-				$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
-				$clientinfo = get_userdata( $eventinfo->user_id );
-				$j_args = array (
-							'client' => $eventinfo->user_id,
-							'event' => $event_id,
-							'author' => get_current_user_id(),
-							'type' => 'Update Event',
-							'source' => 'Admin',
-							'entry' => 'Event ID ' . $event_id . ' has been marked as completed'
-						);
-				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			}
-		}
-		else	{
+		if( !is_array( $event ) )
+			$event = array( $event );
+		foreach( $event as $event_id )	{
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-				$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event ) );
-				$clientinfo = get_userdata( $eventinfo->user_id );
-				$j_args = array (
-							'client' => $eventinfo->user_id,
-							'event' => $event,
-							'author' => get_current_user_id(),
-							'type' => 'Update Event',
-							'source' => 'Admin',
-							'entry' => 'Event ID ' . $event . ' has been marked as completed'
-						);
-				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+			$clientinfo = get_userdata( $eventinfo->user_id );
+			$j_args = array (
+						'client' => $eventinfo->user_id,
+						'event' => $event_id,
+						'author' => get_current_user_id(),
+						'type' => 'Update Event',
+						'source' => 'Admin',
+						'entry' => 'Event ID ' . $event_id . ' has been marked as completed'
+					);
+			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		}
 		$message = 'The selected events have been successfully marked as completed';
 		?>
@@ -664,7 +640,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_fail_enquiry( $event_id )	{
+	function f_mdjm_fail_enquiry( $event )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -672,35 +648,21 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		if( is_array( $event ) )	{
-			foreach( $event as $event_id )	{
-			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
-			$clientinfo = get_userdata( $eventinfo->user_id );
-			$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $event_id,
-						'author' => get_current_user_id(),
-						'type' => 'Fail Enquiry',
-						'source' => 'Admin',
-						'entry' => 'Enquiry marked as lost'
-					);
-			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			}
-		}
-		else	{
-			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
-			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event ) );
-			$clientinfo = get_userdata( $eventinfo->user_id );
-			$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $event,
-						'author' => get_current_user_id(),
-						'type' => 'Fail Enquiry',
-						'source' => 'Admin',
-						'entry' => 'Enquiry marked as lost'
-					);
-			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+		if( !is_array( $event ) )
+			$event = array( $event );
+		foreach( $event as $event_id )	{
+		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
+		$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+		$clientinfo = get_userdata( $eventinfo->user_id );
+		$j_args = array (
+					'client' => $eventinfo->user_id,
+					'event' => $event_id,
+					'author' => get_current_user_id(),
+					'type' => 'Fail Enquiry',
+					'source' => 'Admin',
+					'entry' => 'Enquiry marked as lost'
+				);
+		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		}
 		$message = 'The selected enquiries have been marked as lost';
 		?>
