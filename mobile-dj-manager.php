@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Management interface for mobile DJ's.
-Version: 0.9
-Date: 01 November 2014
+Version: 0.9.1
+Date: 10 November 2014
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
