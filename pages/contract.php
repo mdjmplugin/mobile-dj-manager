@@ -5,9 +5,6 @@
 	include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 	require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
 	
-	if( !is_user_logged_in() )	{ /* Only show custom content if the user is logged in */
-		f_mdjm_show_user_login_form();
-	}
 	if( empty( $_GET['event_id'] ) )	{
 			wp_die( 'You do not have permission to view this page. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );	
 	}
@@ -105,16 +102,19 @@
 		echo '<p>Contract signed on ' . date( 'l, jS F Y', strtotime( $eventinfo->contract_approved_date ) ) . ' by ' . $eventinfo->contract_approver . '.</p>';
 	}
 	
-	if( $eventinfo->contract_status == 'Approved' )	{
-		f_mdjm_contract_is_signed( $eventinfo );
-		f_mdjm_show_contract( $eventinfo, $info, $dj );
+	if( !is_user_logged_in() )	{ /* Only show custom content if the user is logged in */
+		f_mdjm_show_user_login_form();
 	}
+	
 	else	{
-		f_mdjm_accept_contract_form( $eventinfo->event_id, true );
-		f_mdjm_show_contract( $eventinfo, $info, $dj );
-		f_mdjm_accept_contract_form( $eventinfo->event_id, false );	
+		if( $eventinfo->contract_status == 'Approved' )	{
+			f_mdjm_contract_is_signed( $eventinfo );
+			f_mdjm_show_contract( $eventinfo, $info, $dj );
+		}
+		else	{
+			f_mdjm_accept_contract_form( $eventinfo->event_id, true );
+			f_mdjm_show_contract( $eventinfo, $info, $dj );
+			f_mdjm_accept_contract_form( $eventinfo->event_id, false );	
+		}
 	}
-	
-	
-
 ?>

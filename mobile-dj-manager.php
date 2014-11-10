@@ -3,14 +3,13 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Management interface for mobile DJ's.
-Version: 0.8.1
-Date: 06 October 2014
-Author: Mobile DJ Manager <contact@mdjm.co.uk>
-Author URI: http://www.mdjm.co.uk
+Version: 0.9
+Date: 01 November 2014
+Author: My DJ Planner <contact@mydjplanner.co.uk>
+Author URI: http://www.mydjplanner.co.uk
 */
 
-/*  Copyright 2014  Mobile DJ Manager  (email : contact@mdjm.co.uk)
-
+/*  Copyright 2014  Mobile DJ Manager  (email : contact@mydjplanner.co.uk)
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
     published by the Free Software Foundation.
@@ -20,35 +19,36 @@ Author URI: http://www.mdjm.co.uk
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+	You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
-	$mdjm_db_version = '1.2';
-	
+	$mdjm_db_version = '1.4'; // Used to determine if the DB Tables need updating
+
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.8.1' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
 	define ( 'WPMDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 	define ( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 	define ( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
-	
+
 	require_once WPMDJM_PLUGIN_DIR . '/admin/admin-functions.php';
-	
+
 	f_mdjm_init();
+
 	$mdjm_options = f_mdjm_get_options();
-	
+
 	/* What to do when the plugin is activated? */
 	register_activation_hook( __FILE__, 'f_mdjm_install' );
 	register_activation_hook( __FILE__, 'f_mdjm_db_install' );
 
 	/* What to do when the plugin is deactivated? */
 	register_deactivation_hook( __FILE__, 'f_mdjm_deactivate' );
-	
+
 	/* Actions for admin */
 	if ( is_admin() )	{
 		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
@@ -56,7 +56,7 @@ Author URI: http://www.mdjm.co.uk
 		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'add_action_links' );
 		add_filter( 'plugin_row_meta', 'mdjm_plugin_meta', 10, 2 );
 		add_action( 'admin_init', 'f_mdjm_reg_init' );
-		
+
 		if( $pagenow == 'index.php' && isset( $mdjm_options['show_dashboard'] ) && $mdjm_options['show_dashboard'] == 'Y' )	{
 			/* Activate widgets */
 			require_once WPMDJM_PLUGIN_DIR . '/admin/includes/widgets.php';	

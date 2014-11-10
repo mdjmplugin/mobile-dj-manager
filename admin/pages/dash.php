@@ -110,7 +110,7 @@
                   <td>(coming soon)</td>
               </tr>
               <tr class="alternate">
-                <td colspan="2"><?php wp_widget_rss_output( 'http://www.mdjm.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3 ) ); ?></td>
+                <td colspan="2"><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3 ) ); ?></td>
               </tr>
             </table></td>
           </tr>
@@ -159,7 +159,7 @@
                 </tr>
                 <tr>
                 <td>Lost Enquiries:</td>
-                <td><?php echo $dash_emp['lost_month_enquiries']; ?></td>
+                <td><?php echo $dash_emp['lost_year_enquiries']; ?></td>
                 </tr>
                 <tr>
                 <td>Completed Bookings:</td>
@@ -179,7 +179,7 @@
                     <td width="100%" class="alternate"><strong>Latest Support Topics</strong></td>
                   </tr>
                   <tr>
-                    <td><?php wp_widget_rss_output( 'http://www.mdjm.co.uk/forums/feed/?post_type=topic', $args = array( 'show_author' => 0, 'show_date' => 0, 'show_summary' => 0, 'items' => 3 ) ); ?></td>
+                    <td><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/forums/feed/?post_type=topic', $args = array( 'show_author' => 0, 'show_date' => 0, 'show_summary' => 0, 'items' => 3 ) ); ?></td>
                   </tr>
                   <?php
 			  if( current_user_can( 'administrator' ) && $mdjm_options['multiple_dj'] )	{

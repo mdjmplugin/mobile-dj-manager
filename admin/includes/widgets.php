@@ -33,7 +33,14 @@
 				}
 			}
 		?>
-            <li><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&action=add_event_form">Add New Event</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-dashboard">View Dashboard</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-settings">Edit Settings</a></li>
+            <li><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&action=add_event_form">Add New Event</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-dashboard">View Dashboard</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-settings">Edit Settings</a>
+            <?php
+			if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
+                 echo '| <strong><a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">Buy License</a></strong>';
+			}
+			?>
+            
+            </li>
         </ul>
         </div>
         <div class="alternate">

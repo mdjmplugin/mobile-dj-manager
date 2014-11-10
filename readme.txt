@@ -1,6 +1,6 @@
 === Mobile DJ Manager ===
 Contributors: mikeyhoward1977
-Tags: DJ, Mobile DJ, DJ Planning, Event Planning
+Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
 Tested up to: 4.0
 Stable tag: 0.8.1
@@ -77,6 +77,29 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+
+= 0.9 =
+* Lots of new features in this release so we have reverted all trials back to 30 days
+<h2>Bug Fixes</h2>
+<ul>
+<li>Fixed issue with contract page where users could see contract even if not logged in</li>
+<li>Fixed issue DJ not being blind copied in emails when setting is set</li>
+<li>When an event is marked as completed/converted/failed/recovered you are now returned to the event list rather than a blank page with success message</li>
+<li>Some general improvements to browsing/navigation in the Admin UI</li>
+<li>Fixed navigational links in table views</li>
+</ul>
+
+<h2>New & Enhanced Features</h2>
+<ul>
+<li>Added "Mobile DJ Manager" menu items to the Admin toolbar for both frontend and backend when logged in</li>
+<li>Added "Communications" - You can now communicate with clients directly from the MDJM Admin interface</li>
+<li>Equipment packages have been introduced (activate in settings) - Add pre-defined packages to your events</li>
+<li>Inventorise all your equipment</li>
+<li>Add-ons are available for events</li>
+<li>Lost enquiries can now be viewed and recovered</li>
+<li>Enquiry Sources are now fully custmisable</li>
+</ul>
+
 
 = 0.8.1 =
 <ul>

@@ -15,7 +15,10 @@
 										'show_dashboard',
 										'journaling',
 										'multiple_dj',
+										'enable_packages',
 										'event_types',
+										'enquiry_sources',
+										'default_contract',
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
 										'contract_to_client',
@@ -31,6 +34,7 @@
 										'dj_see_wp_dash',
 										'dj_add_client',
 										'dj_add_event',
+										'dj_add_venue',
 										'dj_see_deposit',
 									);
 		$admin_fields = array();
@@ -84,6 +88,18 @@
 									'page' => 'settings',
 									); // event_types
 									
+		$admin_fields['enquiry_sources'] = array(
+									'display' => 'Enquiry Sources',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => str_replace( ",", "\n", $mdjm_options['enquiry_sources'] ),
+									'text' => '',
+									'desc' => 'Enter possible sources of enquiries. One per line',
+									'section' => 'general',
+									'page' => 'settings',
+									); // enquiry_sources
+									
 		$admin_fields['bcc_dj_to_client'] = array(
 									'display' => 'Copy DJ in Client Emails',
 									'key' => 'mdjm_plugin_settings',
@@ -107,6 +123,24 @@
 									'section' => 'email',
 									'page' => 'settings',
 									); // bcc_admin_to_client
+		
+		$admin_fields['default_contract'] = array(
+									'display' => 'Default Client Contract',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['default_contract'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="add-new-h2">Add New</a>',
+									'desc' => 'Select the client contract you want to use as default. This can be changed per event.',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[default_contract]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['default_contract'],
+														'list_type' => 'contract'
+														),
+									'section' => 'general',
+									'page' => 'settings',
+									); // default_contract
 									
 		$admin_fields['contract_to_client'] = array(
 									'display' => 'Email contract link to client?',
@@ -143,6 +177,18 @@
 									'section' => 'general',
 									'page' => 'settings',
 									); // multiple_dj
+									
+		$admin_fields['enable_packages'] = array(
+									'display' => 'Equipment Packages',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['enable_packages'],
+									'text' => '',
+									'desc' => 'Check this to enable Equipment Packages & Inventories',
+									'section' => 'general',
+									'page' => 'settings',
+									); // enable_packages
 									
 		$admin_fields['playlist_when'] = array(
 									'display' => 'Playlist Song Options',
@@ -216,7 +262,8 @@
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_pages[app_home_page]',
 														'sort_order' => 'ASC',
-														'selected' => $mdjm_options['app_home_page']
+														'selected' => $mdjm_options['app_home_page'],
+														'list_type' => 'page'
 														),
 									'section' => 'pages',
 									'page' => 'pages',
@@ -233,7 +280,8 @@
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_pages[contact_page]',
 														'sort_order' => 'ASC',
-														'selected' => $mdjm_options['contact_page']
+														'selected' => $mdjm_options['contact_page'],
+														'list_type' => 'page'
 														),
 									'section' => 'pages',
 									'page' => 'pages',
@@ -250,7 +298,8 @@
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_pages[contracts_page]',
 														'sort_order' => 'ASC',
-														'selected' => $mdjm_options['contracts_page']
+														'selected' => $mdjm_options['contracts_page'],
+														'list_type' => 'page'
 														),
 									'section' => 'pages',
 									'page' => 'pages',
@@ -261,13 +310,14 @@
 									'key' => 'mdjm_plugin_pages',
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
-									'value' => $key['playlist_page'],
+									'value' => $mdjm_options['playlist_page'],
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
 									'desc' => 'Select your website\'s playlist page - the one where you added the shortcode <code>[MDJM page=Playlist]</code>',
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_pages[playlist_page]',
 														'sort_order' => 'ASC',
-														'selected' => $mdjm_options['playlist_page']
+														'selected' => $mdjm_options['playlist_page'],
+														'list_type' => 'page'
 														),
 									'section' => 'pages',
 									'page' => 'pages',
@@ -310,6 +360,18 @@
 									'page' => 'permissions',
 									); // dj_add_event
 									
+		$admin_fields['dj_add_venue'] = array(
+									'display' => 'DJ\'s Can Add New Venues?',
+									'key' => 'mdjm_plugin_permissions',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['dj_add_venue'],
+									'text' => '',
+									'desc' => '',
+									'section' => 'permissions',
+									'page' => 'permissions',
+									); // dj_add_venue
+									
 		$admin_fields['dj_see_deposit'] = array(
 									'display' => 'DJ\'s Can See Deposit Info?',
 									'key' => 'mdjm_plugin_permissions',
@@ -320,7 +382,7 @@
 									'desc' => '',
 									'section' => 'permissions',
 									'page' => 'permissions',
-									); // dj_add_event
+									); // dj_see_deposit
 		
 		add_settings_section( 'mdjm_general_settings',
 							  '',
@@ -421,8 +483,32 @@
 
 /* Process the fields to be displayed */
 	function f_mdjm_general_settings_callback( $args )	{
+		global $mdjm_options;
 		if( $args['type'] == 'custom_dropdown' )	{
-			wp_dropdown_pages( $args['custom_args'] );
+			if( $args['custom_args']['list_type'] == 'page' )	{
+				wp_dropdown_pages( $args['custom_args'] );
+			}
+			elseif( $args['custom_args']['list_type'] == 'contract' )	{
+				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
+			$contract_args = array(
+								'post_type' => 'contract',
+								'orderby' => 'name',
+								'order' => 'ASC',
+								);
+			$contract_query = new WP_Query( $contract_args );
+			if ( $contract_query->have_posts() ) {
+				while ( $contract_query->have_posts() ) {
+					$contract_query->the_post();
+					echo '<option value="' . get_the_id() . '"';
+					if( $mdjm_options['default_contract'] == get_the_id() )	{
+						echo ' selected="selected"';	
+					}
+					echo '>' . get_the_title() . '</option>' . "\n";	
+				}
+			}
+			wp_reset_postdata();
+			echo '</select>';
+			}
 		}
 		elseif( $args['type'] == 'textarea' )	{
 			echo '<textarea id="' . $args['field'] . '" name="' . $args['key'] . '[' . $args['field'] . ']" cols="30" rows="6">' . $args['value'] . '</textarea>';
@@ -442,7 +528,7 @@
 		$lic_check = do_reg_check( 'check' );
 		if( !$lic_check )	{
 			echo '<div class="error">';
-			echo '<p>Your Mobile DJ Manager license has expired. Please visit <a href="http://www.mdjm.co.uk" target="_blank">http://www.mdjm.co.uk</a> to renew.</p>';
+			echo '<p>Your Mobile DJ Manager license has expired. Please visit <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> to renew.</p>';
 			echo '<p>Functionality will be restricted until your license is renewed.</p>';
 			echo '</div>';
 		}
@@ -471,9 +557,9 @@
 					$lic_info = $lic;
 				}
 				else	{
-					$is_beta = get_transient( 'mdjm_is_beta' );
-					if( $is_beta !== false )	{
-						$lic = explode( '|', $is_beta );
+					$is_trial = get_transient( 'mdjm_is_trial' );
+					if( $is_trial !== false )	{
+						$lic = explode( '|', $is_trial );
 						if( time() <= strtotime( $lic[2] ) )	{
 							$lic_info = $lic;
 						}
@@ -484,9 +570,9 @@
 				}
 			}
 			else	{ // Trans was false
-				$is_beta = get_transient( 'mdjm_is_beta' );
-				if( $is_beta !== false )	{
-					$lic = explode( '|', $is_beta );
+				$is_trial = get_transient( 'mdjm_is_trial' );
+				if( $is_trial !== false )	{
+					$lic = explode( '|', $is_trial );
 					if( time() <= strtotime( $lic[2] ) )	{
 						$lic_info = $lic;
 					}

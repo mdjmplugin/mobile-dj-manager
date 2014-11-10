@@ -55,7 +55,9 @@
 		<?php
 		$journal_table->display(); 
 		?>
-        </form></div>
+        </form>
+        <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back' ); ?>"><?php _e( 'Back' ); ?></a>
+        </div>
         <?php 
 	} // f_mdjm_render_journal_table
 	

@@ -37,7 +37,7 @@
 	function f_wpmdjm_print_credit()	{
 		if ( WPMDJM_CREDITS == 'Y' )	{
 			?>
-			<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mdjm.co.uk" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
+			<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
 			<?php
 		}
 	} // f_wpmdjm_print_credit
@@ -197,6 +197,7 @@
 	function f_mdjm_get_eventinfo( $db_tbl, $current_user )	{
 		global $wpdb, $eventinfo;
 		$eventinfo = $wpdb->get_row("SELECT * FROM `".$db_tbl['events']."` WHERE `user_id` = '".$current_user->ID."' AND `event_date` >= DATE(NOW()) AND `contract_status` = 'Approved'");
+		return $eventinfo;
 	} // f_mdjm_get_eventinfo
 
 /**

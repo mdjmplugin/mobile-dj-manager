@@ -31,14 +31,14 @@
 				echo '<th scope="row">License Key:</th>';
 				if( $lic_info )	{
 					if( $lic_info[0] == 'XXXX' )	{
-						echo '<td>Running in BETA until ' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . '. Visit <a href="http://www.mdjm.co.uk" target="_blank">http://www.mdjm.co.uk</a> to purchase your license</td>';
+						echo '<td>Running in trial mode until ' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . '. Visit <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';
 					}
 					else	{
 						echo '<td>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ')</td>';
 					}
 				}
 				else	{
-					echo '<td class="form-error">UNLICENSED - Visit <a href="http://www.mdjm.co.uk" target="_blank">http://www.mdjm.co.uk</a> to purchase your license</td>';	
+					echo '<td class="form-error">UNLICENSED - Visit <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';	
 				}
 				echo '</tr>';
 				echo '</table>';

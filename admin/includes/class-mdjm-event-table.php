@@ -1,7 +1,7 @@
 <?php
 	class MDJM_Events_Table extends WP_List_Table	{
 		private function get_events()	{
-			global $wpdb, $display_query;
+			global $wpdb, $display_query, $display;
 			include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			// Build the data query
 			$query = 'SELECT * FROM `'.$db_tbl['events'].'`';
@@ -17,6 +17,8 @@
 			$display_query['all'] = $query . " WHERE `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly;
 			
 			$display_query['enquiries'] = $query . " WHERE `contract_status` = 'Enquiry'" . $djonly;
+			
+			$display_query['lost'] = $query . " WHERE `contract_status` = 'Failed Enquiry'" . $djonly;
 			
 			$query = $display_query[$display];
 			
@@ -34,7 +36,7 @@
 				$playlist = $wpdb->get_var( "SELECT COUNT(*) FROM " . $db_tbl['playlists'] . " WHERE event_id = " . $event->event_id );
 				$djinfo = get_userdata( $event->event_dj );
 				if ( $playlist == 0 ) { $play_count = $playlist . ' Songs'; }
-				elseif ( $playlist == 1 ) { $play_count = ' Song'; }
+				elseif ( $playlist == 1 ) { $play_count = $playlist . ' Song'; }
 				else { $play_count = $playlist . ' Songs</a>'; } 
 				$client = get_userdata( $event->user_id );
 				$url = admin_url();
@@ -134,10 +136,15 @@
 		} // get_sortable_columns
 		
 		function get_bulk_actions() { // Define the bulk actions for the drop down list
-			if( $_GET['display'] != 'enquiries' )	{
+			if( $_GET['display'] != 'enquiries' && $_GET['display'] != 'lost' )	{
 				$actions = array(
 							'complete' => 'Mark as Complete',
 							'cancel' => 'Cancel Event',
+							);
+			}
+			elseif( $_GET['display'] == 'lost' )	{
+				$actions = array(
+							'recover' => 'Recover Enquiry',
 							);
 			}
 			else	{
@@ -170,6 +177,9 @@
 			if( 'fail' === $this->current_action() ) {
 					f_mdjm_fail_enquiry( $events );
 			}
+			if( 'recover' === $this->current_action() ) {
+					f_mdjm_recover_event( $events );
+			}
 		} // process_bulk_action
 		
 		function column_cb( $item ) { // Checkbox column
@@ -182,13 +192,16 @@
 			$actions = array();
 			$actions['edit'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Edit</a>', $_REQUEST['page'], 'view_event_form', $item['event_id'] );
 			
-			if( $item['contract_status'] != 'Cancelled' && $item['contract_status'] != 'Completed' && $item['contract_status'] != 'Enquiry' )	{
+			if( $item['contract_status'] != 'Cancelled' && $item['contract_status'] != 'Completed' && $item['contract_status'] != 'Enquiry' && $item['contract_status'] != 'Failed Enquiry' )	{
 				$actions['complete'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Complete</a>', $_REQUEST['page'], 'complete_event', $item['event_id'] );
 				$actions['cancel'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Cancel</a>', $_REQUEST['page'], 'cancel_event', $item['event_id'] );
 			}
 			if( $item['contract_status'] == 'Enquiry' )	{
 				$actions['convert'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Convert</a>', $_REQUEST['page'], 'convert_event', $item['event_id'] );
 				$actions['failed'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Fail</a>', $_REQUEST['page'], 'fail_enquiry', $item['event_id'] );
+			}
+			if( $item['contract_status'] == 'Failed Enquiry' )	{
+				$actions['recover'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Recover</a>', $_REQUEST['page'], 'recover_event', $item['event_id'] );
 			}	
 			return sprintf( '%1$s %2$s', $item['event_date'], $this->row_actions( $actions ) );
 		}
@@ -208,14 +221,15 @@
 		}
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
-			global $wpdb, $display_query;
+			global $wpdb, $display_query, $display;
 			if ( $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
 				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=active"<?php if ( $display == "active" ) { ?> class="current" <?php } ?>>Active <span class="count">(<?php echo count( $wpdb->get_results( $display_query['active'] ) ); ?>)</span></a> |</li>
 				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=historic"<?php if ( $display == "historic" ) { ?> class="current" <?php } ?>>Historic <span class="count">(<?php echo count( $wpdb->get_results( $display_query['historic'] ) ); ?>)</span></a> |</li>
-				<li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=all"<?php if ( $display == "all" ) { ?> class="current" <?php } ?>>All <span class="count">(<?php echo count( $wpdb->get_results( $display_query['all'] ) ); ?>)</span></a></li>
-                <li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=enquiries"<?php if ( $display == "enquiries" ) { ?> class="current" <?php } ?>>Enquiries <span class="count">(<?php echo count( $wpdb->get_results( $display_query['enquiries'] ) ); ?>)</span></a></li>
+				<li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=all"<?php if ( $display == "all" ) { ?> class="current" <?php } ?>>All <span class="count">(<?php echo count( $wpdb->get_results( $display_query['all'] ) ); ?>)</span></a> |</li>
+                <li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=enquiries"<?php if ( $display == "enquiries" ) { ?> class="current" <?php } ?>>Enquiries <span class="count">(<?php echo count( $wpdb->get_results( $display_query['enquiries'] ) ); ?>)</span></a> |</li>
+                <li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=lost"<?php if ( $display == "lost" ) { ?> class="current" <?php } ?>>Lost Enquiries <span class="count">(<?php echo count( $wpdb->get_results( $display_query['lost'] ) ); ?>)</span></a></li>
                 </ul>
            <?php
 		   }

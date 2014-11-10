@@ -118,6 +118,8 @@
 						event_start time NOT NULL,
 						event_finish time NOT NULL,
 						event_description text NOT NULL,
+						event_package varchar(100) NOT NULL,
+						event_addons varchar(100) NOT NULL,
 						event_guest_call varchar(9) NOT NULL,
 						booking_date date DEFAULT NULL,
 						contract_status varchar(255) NOT NULL,
@@ -126,7 +128,7 @@
 						contract_approver varchar(255) NOT NULL,
 						cost decimal(10,2) NOT NULL,
 						deposit decimal(10,2) NOT NULL,
-						deposit_status enum('Due','Paid','Waivered') NOT NULL,
+						deposit_status varchar(50) NOT NULL,
 						venue varchar(255) NOT NULL,
 						venue_contact varchar(255) DEFAULT NULL,
 						venue_addr1 varchar(255) DEFAULT NULL,
@@ -150,6 +152,22 @@
 						KEY converted_by (converted_by),
 						KEY referrer (referrer)
 						) $charset_collate;";
+
+		/* VENUES TABLE */
+		$venues_sql = "CREATE TABLE ". $db_tbl['venues'] . " (
+						venue_id smallint(6) NOT NULL,
+						venue_name varchar(255) NOT NULL,
+						venue_address1 varchar(255) NOT NULL,
+						venue_address2 varchar(255) NOT NULL,
+						venue_town varchar(255) NOT NULL,
+						venue_county varchar(255) NOT NULL,
+						venue_postcode varchar(255) NOT NULL,
+						venue_contact varchar(255) NOT NULL,
+						venue_phone varchar(255) NOT NULL,
+						venue_email varchar(255) NOT NULL,
+						venue_information longtext NOT NULL,
+						PRIMARY KEY  (venue_id)
+						) $charset_collate;";
 				
 		/* JOURNAL TABLE */
 		$journal_sql = "CREATE TABLE ". $db_tbl['journal'] . " (
@@ -157,13 +175,13 @@
 						client int(11) NOT NULL,
 						event int(11) NOT NULL,
 						timestamp varchar(255) NOT NULL,
-						author varchar(255) NOT NULL,
+						author int(11) NOT NULL,
 						type varchar(255) NOT NULL,
 						source varchar(255) NOT NULL,
 						entry text NOT NULL,
 						PRIMARY KEY  (id),
 						KEY client (client,event),
-						KEY entry_date (timestamp,type),
+						KEY entry_date (timestamp,type(10)),
 						KEY author (author)
 						) $charset_collate;";
 						
@@ -179,11 +197,13 @@
 							date_added date NOT NULL,
 							PRIMARY KEY  (id),
 							KEY event_id (event_id),
-							KEY artist (artist,song)
+							KEY artist (artist),
+							KEY song (song)
 							) $charset_collate;";
 				
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $events_sql );
+		dbDelta( $venues_sql );
 		dbDelta( $journal_sql );
 		dbDelta( $playlists_sql );
 		
@@ -199,7 +219,12 @@
  * @since 1.0
 */
 	function f_mdjm_install() {
+		include WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php';
+		/* Import the default template contract */
+		$contract_post_id = wp_insert_post( $contract_template_args );
+
 		$event_types = 'Adult Birthday Party,Child Birthday Party,Wedding,Corporate Event,Other,';
+		$enquiry_sources = 'Website,Google,Facebook,Email,Telephone,Other,';
 		$playlist_when = 'General,First Dance,Second Dance,Last Song,Father & Bride,Mother & Son,DO NOT PLAY,Other,';
 		$mdjm_init_options = array(
 							'company_name' => get_bloginfo( 'name' ),
@@ -207,7 +232,10 @@
 							'show_dashboard' => 'N',
 							'journaling' => 'Y',
 							'multiple_dj' => 'N',
+							'packages' => 'N',
 							'event_types' => $event_types,
+							'enquiry_sources' => $enquiry_sources,
+							'default_contract' => $contract_post_id,
 							'bcc_dj_to_client' => '',
 							'bcc_admin_to_client' => '',
 							'contract_to_client' => '',
@@ -226,6 +254,7 @@
 		$mdjm_init_permissions = array(
 									'dj_see_wp_dash' => 'N',
 									'dj_add_event' => 'N',
+									'dj_add_venue' => 'N',
 									'dj_add_client' => 'N',
 									);
 		$mdjm_init_client_fields = array(
@@ -323,14 +352,10 @@
 		
 		/* Import the default email templates */
 		if( !get_option( WPMDJM_SETTINGS_KEY ) )	{
-			include WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php';
 			add_option( 'mdjm_plugin_email_template_enquiry', $email_enquiry_content );
 			add_option( 'mdjm_plugin_email_template_contract_review', $email_contract_review );
 			add_option( 'mdjm_plugin_email_template_client_booking_confirm', $email_client_booking_confirm );
 			add_option( 'mdjm_plugin_email_template_dj_booking_confirm', $email_dj_booking_confirm );
-			
-			/* Import the default template contract */
-			wp_insert_post( $contract_template_args );
 		}
 		
 		/* Import the option keys */				
@@ -347,9 +372,11 @@
 									 'delete_users' => true
 								) );
 		require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php' );
-		if( !get_option( 'has_been_set' ) )	{
-			set_transient( 'mdjm_is_beta', 'XXXX|' . date( 'Y-m-d' ) . '|' . date( 'Y-m-d', strtotime( "+30 days" ) ), 30 * DAY_IN_SECONDS );
-			add_option( 'has_been_set', time() );
+		if( !get_option( 'm_d_j_m_has_initiated' ) )	{
+			set_transient( 'mdjm_is_trial', 'XXXX|' . date( 'Y-m-d' ) . '|' . date( 'Y-m-d', strtotime( "+30 days" ) ), 30 * DAY_IN_SECONDS );
+			if( get_option( 'has_been_set' ) )
+				delete_option( 'has_been_set' );
+			add_option( 'm_d_j_m_has_initiated', time() );
 		}
 		do_reg_check( 'set' );
 	} // f_mdjm_install
@@ -427,11 +454,11 @@
 	function mdjm_plugin_meta( $links, $file ) {
 		if( strpos( $file, 'mobile-dj-manager.php' ) !== false ) {
 			$lic_info = do_reg_check ('check' );
-			$mdjm_links = array( '<a href="http://www.mdjm.co.uk/forums/" target="_blank">Support</a>' );
+			$mdjm_links = array( '<a href="http://www.mydjplanner.co.uk/support/" target="_blank">Support</a>' );
 			if( !$lic_info || $lic_info[0] == 'XXXX' )
-				$mdjm_links[] = '<a href="http://www.mdjm.co.uk/forums/" target="_blank">Buy Now</a>';
+				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/" target="_blank">Buy Now</a>';
 			$new_links = array(
-						'<a href="http://www.mdjm.co.uk/forums/" target="_blank">Support</a>'
+						'<a href="http://www.mydjplanner.co.uk/support/" target="_blank">Support</a>'
 					);
 			$links = array_merge( $links, $mdjm_links );
 		}
@@ -517,7 +544,7 @@
 						'capability_type'    => 'post',
 						'has_archive'        => true,
 						'hierarchical'       => false,
-						'menu_position'      => null,
+						'menu_position'      => 5,
 						'supports'           => array( 'title', 'editor', 'author' ),
 						'menu_icon'		  => 'dashicons-welcome-write-blog'
 						);
@@ -525,6 +552,208 @@
 			register_post_type( 'contract', $post_args );
 		}
 	}
+
+/**
+ * f_mdjm_toolbar
+ * Creates custom tool bar menu structure
+ * 
+ * @since 1.0
+*/	
+	function f_mdjm_toolbar( $admin_bar )	{
+		global $mdjm_options;
+		if( current_user_can( 'manage_mdjm' ) || current_user_can( 'administrator' ) )	{
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm',
+				'title' => 'Mobile DJ Manager',
+				'href'  => admin_url( 'admin.php?page=mdjm-dashboard' ),
+				'meta'  => array(
+					'title' => __( 'Mobile DJ Manager' ),            
+				),
+			));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-dashboard',
+				'parent' => 'mdjm',
+				'title' => 'Dashboard',
+				'href'  => admin_url( 'admin.php?page=mdjm-dashboard' ),
+				'meta'  => array(
+					'title' => __( 'MDJM Dashboard' ),
+				),
+			));
+			if( current_user_can( 'manage_options' ) )
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings',
+					'parent' => 'mdjm',
+					'title' => 'Settings',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Settings' ),
+					),
+				));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-clients',
+				'parent' => 'mdjm',
+				'title' => 'Clients',
+				'href'  => admin_url( 'admin.php?page=mdjm-clients' ),
+				'meta'  => array(
+					'title' => __( 'Client List' ),
+				),
+			));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-comms',
+				'parent' => 'mdjm',
+				'title' => 'Communications',
+				'href'  => admin_url( 'admin.php?page=mdjm-comms' ),
+				'meta'  => array(
+					'title' => __( 'Communications' ),
+				),
+			));
+			if( current_user_can( 'manage_options' ) )
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-contracts',
+					'parent' => 'mdjm',
+					'title' => 'Contracts',
+					'href'  => admin_url( 'edit.php?post_type=contract' ),
+					'meta'  => array(
+						'title' => __( 'Contracts' ),
+					),
+				));
+			if( current_user_can( 'manage_options' ) && $mdjm_options['multiple_dj'] == 'Y')
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-djs',
+					'parent' => 'mdjm',
+					'title' => 'DJ List',
+					'href'  => admin_url( 'admin.php?page=mdjm-djs' ),
+					'meta'  => array(
+					'title' => __( 'List of DJ\'s' ),
+					),
+				));
+			if( current_user_can( 'manage_options' ) && $mdjm_options['enable_packages'] == 'Y' )
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-equipment',
+					'parent' => 'mdjm',
+					'title' => 'Equipment &amp; Packages',
+					'href'  => admin_url( 'admin.php?page=mdjm-packages' ),
+					'meta'  => array(
+						'title' => __( 'Equipment Inventory' ),
+					),
+				));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-events',
+				'parent' => 'mdjm',
+				'title' => 'Events',
+				'href'  => admin_url( 'admin.php?page=mdjm-events' ),
+				'meta'  => array(
+					'title' => __( 'MDJM Events' ),
+				),
+			));
+			if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-add-events',
+					'parent' => 'mdjm-events',
+					'title' => 'Create Event',
+					'href'  => admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ),
+					'meta'  => array(
+						'title' => __( 'Create New Event' ),
+					),
+				));
+			}
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-enquiries',
+				'parent' => 'mdjm-events',
+				'title' => 'View Enquiries',
+				'href'  => admin_url( 'admin.php?page=mdjm-events&display=enquiries' ),
+				'meta'  => array(
+					'title' => __( 'Outstanding Enquiries' ),
+				),
+			));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-venues',
+				'parent' => 'mdjm',
+				'title' => 'Venues',
+				'href'  => admin_url( 'admin.php?page=mdjm-venues' ),
+				'meta'  => array(
+					'title' => __( 'MDJM Venues' ),
+				),
+			));
+			if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-add-venue',
+					'parent' => 'mdjm-venues',
+					'title' => 'Add Venue',
+					'href'  => admin_url( 'admin.php?page=mdjm-venues&action=add_venue_form' ),
+					'meta'  => array(
+						'title' => __( 'Add New Venue' ),
+					),
+				));
+			}
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-user-guides',
+				'parent' => 'mdjm',
+				'title' => '<font style="color:#F90">User Guides</font>',
+				'href'  => 'http://www.mydjplanner.co.uk/support/user-guides/',
+				'meta'  => array(
+					'title' => __( 'MDJM User Guides' ),
+					'target' => '_blank'
+				),
+			));
+			$admin_bar->add_menu( array(
+				'id'    => 'mdjm-support',
+				'parent' => 'mdjm',
+				'title' => '<font style="color:#F90">Support</font>',
+				'href'  => 'http://www.mydjplanner.co.uk/support/',
+				'meta'  => array(
+					'title' => __( 'MDJM Support Forums' ),
+					'target' => '_blank'
+				),
+			));
+			if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
+				$admin_bar->add_menu( array(
+				'id'    => 'mdjm-purchase',
+				'parent' => 'mdjm',
+				'title' => '<font style="color:#F90">Buy License</font>',
+				'href'  => 'http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/',
+				'meta'  => array(
+					'title' => __( 'Buy Mobile Dj Manager License' ),
+					'target' => '_blank'
+				),
+			));	
+			}
+		}
+	} // f_mdjm_toolbar
+
+/**
+ * f_mdjm_toolbar_new_content
+ * Adss new content links to the admin bar
+ * 
+ * @since 1.0
+*/	
+	function f_mdjm_toolbar_new_content( $admin_bar )	{
+		if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )	{
+			$admin_bar->add_menu( array(
+						'id'    => 'mdjm-add-events-new',
+						'parent' => 'new-content',
+						'title' => 'Event',
+						'href'  => admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ),
+						'meta'  => array(
+							'title' => __( 'Create New Event' ),
+						),
+					));
+		}
+	}
+
+/**
+ * f_mdjm_admin_footer
+ * Adds footer text to MDJM Admin pages
+ * 
+ * @since 1.0
+*/	
+	function f_mdjm_admin_footer() {
+		$str = $_SERVER['QUERY_STRING'];
+		$search = 'page=mdjm';
+		$pos = strpos( $str, $search );
+		if( $pos !== false )
+			echo '<p align="center" class="description">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
+	} // f_mdjm_admin_footer
 	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
@@ -549,6 +778,12 @@
 	add_action( 'jetpack_admin_menu', 'f_mdjm_remove_jetpack' ); // Remove Jetpack from non-Admins
 	
 	add_action( 'init', 'f_mdjm_new_contracts_post_type' ); // Register the contracts post type
+	
+	add_action( 'admin_bar_menu', 'f_mdjm_toolbar_new_content', 70 ); // MDJM New Content to admin bar
+	
+	add_action( 'admin_bar_menu', 'f_mdjm_toolbar', 99 ); // MDJM Toolbar menu options
+	
+	add_action( 'in_admin_footer', 'f_mdjm_admin_footer' );
  
  /**
  * Actions for custom user fields
