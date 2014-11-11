@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
 Tested up to: 4.0
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,11 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+
+= 0.9.2 =
+<ul>
+<li>Bug fix with communication feature - missing info when sending email</li>
+</ul>
 
 = 0.9 =
 * Lots of new features in this release so we have reverted all trials back to 30 days

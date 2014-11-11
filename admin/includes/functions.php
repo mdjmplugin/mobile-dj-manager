@@ -982,7 +982,7 @@
 		
 		$info['num_rows'] = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $db_tbl['events' ]. "` WHERE `user_id` = '" . $client . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
 
-		$next_event = $wpdb->get_row( "SELECT * FROM `".$db_tbl['events']."` WHERE `user_id` = '".$client."' AND `contract_status` = 'Approved' AND `event_date` >= curdate() ORDER BY `event_date` ASC LIMIT 1" );
+		$next_event = $wpdb->get_row( "SELECT * FROM `".$db_tbl['events']."` WHERE `user_id` = '".$client."' AND `contract_status` = 'Approved' OR `contract_status` = 'Pending' AND `event_date` >= curdate() ORDER BY `event_date` ASC LIMIT 1" );
 
 		$info['next_event'] = 'N/A';
 
