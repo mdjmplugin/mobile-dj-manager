@@ -17,7 +17,7 @@ It is an event planning solution built specifically for websites running on Word
 
 Mobile DJ Manager allows you to manage your events from enquiry stage through to completion. Add your DJ's, your clients and then create an event.
 
-As a site admin you will be able to view all information, but as a DJ, depending on the permissions set by the Administrator, you will only see those events that are specific to you.
+As a site admin you will be able to view all information but as a DJ, depending on the permissions set by the Administrator, you will only see those events that are specific to you.
 
 Email automation is also built in, depending on your chosen settings. Quotes can be automatically sent to clients when an event is created, contracts can be issued automatically and digitally signed, and booking confirmations also emailed to both clients and DJ's alike.
 
