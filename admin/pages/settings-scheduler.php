@@ -11,6 +11,9 @@
 * Manage schedule tasks
 */
 
+	/* Check for plugin update */
+	f_mdjm_has_updated();
+
 	global $mdjm_options;
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{

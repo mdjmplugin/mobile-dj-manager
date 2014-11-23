@@ -218,14 +218,6 @@
 		
 		if ( $current_db_ver != $mdjm_db_version ) {
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
-			if ( !empty( $wpdb->charset ) ) {
-				  $charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
-			}
-		
-			if ( !empty( $wpdb->collate ) ) {
-			  $charset_collate .= " COLLATE {$wpdb->collate}";
-			}
 		
 			/* EVENTS TABLE */
 			$events_sql = "CREATE TABLE ". $db_tbl['events'] . " (
@@ -273,7 +265,7 @@
 							KEY converted_by (converted_by),
 							KEY referrer (referrer),
 							KEY event_package (event_package)
-							) $charset_collate;";
+							);";
 			
 			/* VENUES TABLE */
 			$venues_sql = "CREATE TABLE ". $db_tbl['venues'] . " (
@@ -289,7 +281,7 @@
 							venue_email varchar(255) NOT NULL,
 							venue_information longtext NOT NULL,
 							PRIMARY KEY  (venue_id)
-							) $charset_collate;";
+							);";
 			
 			/* JOURNAL TABLE */
 			$journal_sql = "CREATE TABLE ". $db_tbl['journal'] . " (
@@ -305,7 +297,7 @@
 							KEY client (client,event),
 							KEY entry_date (timestamp,type(10)),
 							KEY author (author)
-							) $charset_collate;";
+							);";
 							
 			/* PLAYLISTS TABLE */
 			$playlists_sql = "CREATE TABLE web_wp_mdjm_playlists (
@@ -322,7 +314,7 @@
 								KEY event_id (event_id),
 								KEY artist (artist),
 								KEY song (song)
-								) $charset_collate;";
+								);";
 			
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $events_sql );

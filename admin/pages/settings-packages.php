@@ -4,6 +4,9 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
+	/* Check for plugin update */
+	f_mdjm_has_updated();
+	
 	?>
 	<div class="wrap">
     <div id="icon-themes" class="icon32"></div>

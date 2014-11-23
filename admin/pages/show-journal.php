@@ -15,6 +15,9 @@
  * @since 1.0
  *
  */	
+ 
+	/* Check for plugin update */
+	f_mdjm_has_updated();
 
 /**
  * Retrieve the information submitted via $_GET

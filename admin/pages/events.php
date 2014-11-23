@@ -14,7 +14,9 @@
 *
 * @since 1.0
 *
-*/	
+*/
+	/* Check for plugin update */
+	f_mdjm_has_updated();
 
 /**
  * Check for any form submissions that take place outside the 

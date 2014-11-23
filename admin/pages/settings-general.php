@@ -3,6 +3,10 @@
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
+	
+	/* Check for plugin update */
+	f_mdjm_has_updated();
+	
 	require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 	

@@ -238,7 +238,7 @@
 		$mdjm_init_options = array(
 							'company_name' 			=> get_bloginfo( 'name' ),
 							'app_name'				=> 'Client Zone',
-							'show_dashboard'		  => 'N',
+							'show_dashboard'		  => 'Y',
 							'journaling'			  => 'Y',
 							'multiple_dj' 			 => 'N',
 							'packages' 				=> 'N',
@@ -246,7 +246,7 @@
 							'enquiry_sources' 		 => $enquiry_sources,
 							'default_contract' 		=> $contract_post_id,
 							'bcc_dj_to_client' 		=> '',
-							'bcc_admin_to_client' 	 => '',
+							'bcc_admin_to_client' 	 => 'Y',
 							'contract_to_client' 	  => '',
 							'email_enquiry' 		   => $client_enquiry_post_id,
 							'email_contract'		  => $client_contract_post_id,
@@ -254,7 +254,7 @@
 							'email_dj_confirm' 		=> $dj_confirm_post_id,
 							'playlist_when' 		   => $playlist_when,
 							'playlist_close' 		  => '5',
-							'upload_playlists' 		=> '',
+							'upload_playlists' 		=> 'Y',
 							'uninst_remove_db' 		=> 'N',
 							'show_credits' 			=> 'Y',
 							);
@@ -265,7 +265,7 @@
 							'playlist_page' => '',
 							);
 		$mdjm_init_permissions = array(
-									'dj_see_wp_dash' => 'N',
+									'dj_see_wp_dash' => 'Y',
 									'dj_add_event' => 'N',
 									'dj_add_venue' => 'N',
 									'dj_add_client' => 'N',
@@ -416,7 +416,10 @@
 */	
 	function f_mdjm_upgrade()	{
 		if( !get_option( 'mdjm_version' ) )	{ //  Add application version to the DB if not already there
-			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );	
+			add_option( 'mdjm_version', '0.9.2' );	
+		}
+		if( !get_option( 'mdjm_updated' ) )	{ //  Add application version to the DB if not already there
+			add_option( 'mdjm_updated', '1' );	
 		}
 		
 		$current_version_mdjm = get_option( 'mdjm_version' );
@@ -474,6 +477,10 @@
 				$mdjm_options['email_client_confirm'] = $client_confirm_post_id;
 				$mdjm_options['email_dj_confirm'] = $dj_confirm_post_id;
 				
+				/* Activate the playlist upload */
+				$mdjm_options['upload_playlists'] = 'Y';
+				
+				/* Update the options */				
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 				
 				/**** SCHEDULES ****/
@@ -487,10 +494,6 @@
 			
 			/* Delete the template file */
 			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
-			
-			/* Redirect to upgrade notice */
-			wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
-			exit;
 		} // if( WPMDJM_VERSION_NUM > $current_version_mdjm )
 	} // f_mdjm_upgrade
 
@@ -959,6 +962,20 @@
 		if( $pos !== false )
 			echo '<p align="center" class="description">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
 	} // f_mdjm_admin_footer
+
+/*
+* f_mdjm_has_updated
+* 23/11/2014
+* @since 0.9.3
+* Checks for upgrade and displays the upgrade notice
+*/
+	function f_mdjm_has_updated()	{
+		$updated = get_option( 'mdjm_updated' );
+		if( $updated && $updated == '1' )	{
+			wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
+			exit;
+		}
+	} // f_mdjm_has_updated
 
 /*
 * f_mdjm_scheduler_activate

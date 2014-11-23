@@ -197,6 +197,11 @@
         </div>
 <?php
 	}
+	$updated = get_option( 'mdjm_updated' );
+	if( $updated && $updated == '1' && !$_GET['updated'] && !$_GET['ver'] )	{
+		wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
+		exit;
+	}
 	if( $_GET['updated'] || $_GET['ver'] )	{
 		include( 'updated.php' );
 	}

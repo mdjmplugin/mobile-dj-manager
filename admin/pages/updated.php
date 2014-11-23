@@ -9,7 +9,6 @@
 * since 0.9.3
 * Displays overview of changes in updated version
 */
-
 	function f_mdjm_updated_header()	{
 		?>
         <div class="wrap">
@@ -84,7 +83,8 @@
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Playlist Uploads</font><br>
 		The setting has been there for a while but it didn't do anything! Now if you enable the Upload Playlists settings
         option within the <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>" title="MDJM Settings">Settings</a> page, your clients playlist choices will be sent back to the MDJM servers and consolidated with all other Mobile DJ Manager users' playlists. Once our database has been populated with a reasonable amount of data from this information, we'll begin freely sharing with all.<br>
-        You'll be able to see the most popular song choices per month, per year etc.
+        You'll be able to see the most popular song choices per month, per year etc.<br />
+        We've turned the Upload Playlists setting on as part of the update.
 		</td>
         </tr>
         <tr>
@@ -118,6 +118,7 @@
 			f_mdjm_updated_header();
 			$func();
 			f_mdjm_updated_footer();
+			update_option( 'mdjm_updated', '0' );
 		}
 		else	{
 			echo '<h2>Page not found</h2>';
