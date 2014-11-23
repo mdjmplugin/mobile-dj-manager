@@ -23,7 +23,7 @@
 						$mdjm_schedules[$task['slug']]['active'] = 'N';
 					}
 					else	{
-						$mdjm_schedules[$task['slug']]['active'] = $mdjm_options['upload_playlists'];	
+						$mdjm_schedules[$task['slug']]['active'] = $mdjm_options['upload_playlists'];
 					}
 				}
 				/* Now activate the selected tasks */
@@ -208,8 +208,7 @@
                 </td>
                 <td>
 				<?php 
-				if( 
-					$schedule['nextrun'] != 'N/A'
+				if( $schedule['nextrun'] != 'N/A'
 					&& $schedule['nextrun'] != 'Today' 
 					&& $schedule['nextrun'] != 'Next Week'
 					&& $schedule['nextrun'] != 'Next Month' )	{
@@ -217,13 +216,9 @@
 					echo date( 'd M Y', $schedule['nextrun'] ) . '<br />';
 					echo date( 'H:i', $schedule['nextrun'] );
 				}
-				if(
-					$schedule['nextrun'] == 'N/A'
-					|| $schedule['slug'] == 'upload-playlists'
-					&& !$mdjm_options['upload_playlists']
-					|| $mdjm_options['upload_playlists'] != 'Y' )	{
-							echo 'N/A';	
-						}
+				elseif( $schedule['nextrun'] == 'N/A' )	{
+						echo 'N/A';	
+				}
 				else	{
 					esc_attr( $schedule['nextrun'] );
 				}

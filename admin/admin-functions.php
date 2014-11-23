@@ -416,7 +416,7 @@
 */	
 	function f_mdjm_upgrade()	{
 		if( !get_option( 'mdjm_version' ) )	{ //  Add application version to the DB if not already there
-			add_option( 'mdjm_version', '0.9.2' );	
+			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );	
 		}
 		
 		$current_version_mdjm = get_option( 'mdjm_version' );
@@ -486,7 +486,7 @@
 			update_option( 'mdjm_version', WPMDJM_VERSION_NUM );
 			
 			/* Delete the template file */
-			//unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			/* Redirect to upgrade notice */
 			wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
@@ -1003,6 +1003,28 @@
 			} // if( $task['active'] == 'Y' )
 		} // foreach( $mdjm_schedules as $task )
 	} // f_mdjm_cron
+
+/*
+* f_mdjm_upload_playlist_schedule
+* 23/11/2014
+* @since 0.9.3
+* Ensures the upload playlist schedule is set correctly
+*/
+	function f_mdjm_upload_playlist_schedule()	{
+		global $mdjm_options;
+		$mdjm_schedules = get_option( 'mdjm_schedules' );
+		
+		if( $mdjm_schedules['upload-playlists']['active'] != $mdjm_options['upload_playlists'] )	{
+			$mdjm_schedules['upload-playlists']['active'] = $mdjm_options['upload_playlists'];
+			if( $mdjm_schedules['upload-playlists']['active'] == 'Y' )	{
+				$mdjm_schedules['upload-playlists']['nextrun'] = time();
+			}
+			else	{
+				$mdjm_schedules['upload-playlists']['nextrun'] = 'N/A';
+			}
+			update_option( 'mdjm_schedules', $mdjm_schedules );
+		}
+	} // f_mdjm_upload_playlist_schedule
 	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
@@ -1039,6 +1061,8 @@
 	add_action( 'wp', 'f_mdjm_scheduler_activate' ); // Activate the MDJM Scheduler hook
 	
 	add_action( 'hook_mdjm_hourly_schedule', 'f_mdjm_cron' ); // Run the MDJM scheduler
+	
+	add_action( 'init', 'f_mdjm_upload_playlist_schedule' ); // Check upload playlist schedule
  
  /**
  * Actions for custom user fields
