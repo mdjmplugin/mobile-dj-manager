@@ -416,7 +416,7 @@
 */	
 	function f_mdjm_upgrade()	{
 		if( !get_option( 'mdjm_version' ) )	{ //  Add application version to the DB if not already there
-			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );	
+			add_option( 'mdjm_version', '0.9.2' );	
 		}
 		
 		$current_version_mdjm = get_option( 'mdjm_version' );
@@ -486,7 +486,7 @@
 			update_option( 'mdjm_version', WPMDJM_VERSION_NUM );
 			
 			/* Delete the template file */
-			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			//unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			/* Redirect to upgrade notice */
 			wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
