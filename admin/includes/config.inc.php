@@ -18,7 +18,10 @@
  *
  * @since 1.0
 */
-	$email_templates = array(
+/*********************************************************************************
+							DEPRECATED SINCE 0.9.3
+*********************************************************************************/
+	/*$email_templates = array(
 				'enquiry' => array(
 					'name' => 'Event Enquiry Email Template',
 					'description' => 'This template forms the content of the email sent to a client when an event enquiry is loaded into the system.',
@@ -35,7 +38,7 @@
 					'name' => 'DJ Booking Confirmation Email Template',
 					'description' => 'This template forms the content of the email sent to a DJ when a client\'s event status is changed to "Approved".',
 					),
-				); // $email_templates
+				); // $email_templates*/
 
 /**************************************************************
 -	EMAIL

@@ -197,5 +197,10 @@
         </div>
 <?php
 	}
-	mdjm_dashboard();
+	if( $_GET['updated'] || $_GET['ver'] )	{
+		include( 'updated.php' );
+	}
+	else	{
+		mdjm_dashboard();
+	}
 ?>

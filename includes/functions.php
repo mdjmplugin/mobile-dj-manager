@@ -372,7 +372,7 @@
 													'play_when' => $playlist_array['playlist_when'],
 													'info' => $playlist_array['playlist_info'],
 													'added_by' => $playlist_array['added_by'],
-													'date_added' => date( 'Y-m-d' )
+													'date_added' => date( 'Y-m-d' ),
 												) ) ) {
 				$c_msg = 'The song has been successfully added to your playlist';
 				if( !is_user_logged_in() ) $c_msg = 'Thank you. The song ' . $playlist_array['playlist_song'] . ' by ' . $playlist_array['playlist_artist'] . ' has been successfully added to the playlist.';

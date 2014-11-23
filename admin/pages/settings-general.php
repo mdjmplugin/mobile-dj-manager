@@ -20,6 +20,7 @@
             <a href="admin.php?page=mdjm-settings&tab=permissions" class="nav-tab <?php echo $active_tab == 'permissions' ? 'nav-tab-active' : ''; ?>">Permissions</a>
             <a href="admin.php?page=mdjm-settings&tab=client_fields" class="nav-tab <?php echo $active_tab == 'client_fields' ? 'nav-tab-active' : ''; ?>">Client Fields</a>
             <a href="admin.php?page=mdjm-settings&tab=email_templates" class="nav-tab <?php echo $active_tab == 'email_templates' ? 'nav-tab-active' : ''; ?>">Email Templates</a>
+            <a href="admin.php?page=mdjm-settings&tab=scheduler" class="nav-tab <?php echo $active_tab == 'scheduler' ? 'nav-tab-active' : ''; ?>">Scheduler</a>
         </h2>
              <?php
 			$lic_info = do_reg_check( 'check' );
@@ -61,10 +62,18 @@
 			elseif( $active_tab == 'email_templates' )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-email-templates.php' );
 			}
+			elseif( $active_tab == 'scheduler' )	{
+				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-scheduler.php' );
+			}
 			else	{
 				wp_die( 'You do not have the necessary permissions to view this page!' );
 			}
-			 if( current_user_can( 'manage_options' ) && $lic_info )	{ submit_button(); }
+			if( current_user_can( 'manage_options' ) 
+				&& $lic_info // No license no save
+				&& $active_tab != 'email_templates' // Email Templates use there own submit button
+				&& !$_GET['task_action'] )	{ // If editing a task don't display
+				submit_button(); 
+			}
 			 ?>
           </form>
         </div>

@@ -12,6 +12,7 @@
 	
 	remove_role( 'dj' );
 	remove_role( 'client' );
+	remove_role( 'inactive_client' );
 
 /* Remove Transient info */
 	$transient_name = array(
@@ -46,6 +47,12 @@
 						'mdjm_plugin_permissions',
 						'mdjm_plugin_pages',
 						'mdjm_db_version',
+						'mdjm_schedules',
+						'mdjm_cats',
+						'mdjm_client_fields',
+						'mdjm_equipment',
+						'mdjm_packages',
+						'mdjm_version',
 						'mdjm_plugin_email_template_enquiry',
 						'mdjm_plugin_email_template_client_booking_confirm',
 						'mdjm_plugin_email_template_dj_booking_confirm',

@@ -6,7 +6,7 @@
 	require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
 	
 	if( empty( $_GET['event_id'] ) )	{
-			wp_die( 'You do not have permission to view this page. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );	
+			wp_die( 'You do not have permission to view this page. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
 	}
 	
 	/* Check for submission of form */
@@ -46,14 +46,19 @@
 	}
 	
 	$eventinfo = f_mdjm_get_event_by_id( $db_tbl, $_GET['event_id'] );
+	/* Make sure it's the client's contract! */
+	$this_user = get_current_user_id();
+	if( $eventinfo->user_id != $this_user)
+		wp_die( 'Access Denied: An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
 	
-	if( is_null( $eventinfo->contract ) ) wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
+	/* If the event does not have a contract assigned, error */
+	if( is_null( $eventinfo->contract ) ) 
+		wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
 	
 	function f_mdjm_show_contract( $eventinfo, $info, $dj )	{
 		global $mdjm_options;
 		
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-		//$contract = get_post( $eventinfo->contract );
 		
 		$contract_query = new WP_Query( array( 'post_type' => 'contract', 'post__in' => array( $eventinfo->contract ) ) );
 		if ( $contract_query->have_posts() ) {

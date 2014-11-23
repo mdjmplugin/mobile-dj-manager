@@ -41,7 +41,7 @@
 			$info['dj'] = $dj->user_email;
 			
 			$email_headers = 'MIME-Version: 1.0'  . "\r\n";
-			$email_headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 			$email_headers .= 'From: ' . $dj->display_name . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $info['dj'] . "\r\n";
 			
@@ -59,7 +59,7 @@
 				$email_headers .= "\r\n";
 			}
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-			$email_content = nl2br( html_entity_decode( stripcslashes( $_POST['email_content'] ) ) );
+			$email_content = html_entity_decode( stripcslashes( $_POST['email_content'] ) );
 			$info['content'] = str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
 			
 			if ( wp_mail( $_POST['to_field'], $_POST['subject'], $info['content'], $email_headers ) ) 	{
@@ -78,9 +78,16 @@
 	}
 	
 	function f_mdjm_render_comms( $mdjm_options )	{
-		
 		if( isset( $_GET['template'] ) && !empty( $_GET['template'] ) )	{
-			$content = get_option( 'mdjm_plugin_email_template_' . $_GET['template'] );
+			$template_query = new WP_Query( array( 'post_type' => 'email_template', 'p' => $_GET['template'] ) );
+			if ( $template_query->have_posts() ) {
+				while ( $template_query->have_posts() ) {
+					$template_query->the_post();
+					$content = get_the_content();
+					$content = apply_filters( 'the_content', $content );
+					$content = str_replace(']]>', ']]&gt;', $content);
+				}
+			}
 		}
 		elseif( isset( $_POST['content'] ) )	{
 			$content = $_POST['content'];	
@@ -97,7 +104,7 @@
 		$settings = array(  'media_buttons' => false,
 							'textarea_rows' => '10',
 						 );
-		$clientinfo = f_mdjm_get_clients( 'display_name', 'ASC' );
+		$clientinfo = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
 		?>
 		<script type="text/javascript">
 			function MM_jumpMenu(targ,selObj,restore){ //v3.0
@@ -120,10 +127,23 @@
 		<td width="20%"><label for="email_template">Select a template for content, or write your own:</label></td>
 		<td><select name="email_template" id="email_template" onChange="MM_jumpMenu('parent',this,0)">
 		<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms' ); ?>" <?php if( !$_GET['template'] ) echo ' selected'; ?>>Do not use Template</option>
-		<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms&template=enquiry' ); ?>" <?php if( $_GET['template'] == 'enquiry' ) echo ' selected'; ?>>Enquiry</option>
-		<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms&template=contract_review' ); ?>" <?php if( $_GET['template'] == 'contract_review' ) echo ' selected'; ?>>Contract Review</option>
-		<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms&template=client_booking_confirm' ); ?>" <?php if( $_GET['template'] == 'client_booking_confirm' ) echo ' selected'; ?>>Client Booking Confirmation</option>
-		<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms&template=dj_booking_confirm' ); ?>" <?php if( $_GET['template'] == 'dj_booking_confirm' ) echo ' selected'; ?>>DJ Booking Confirmation</option>
+        <?php
+		$email_args = array(
+								'post_type' => 'email_template',
+								'orderby' => 'name',
+								'order' => 'ASC',
+								);
+			$email_query = new WP_Query( $email_args );
+			if ( $email_query->have_posts() ) {
+				while ( $email_query->have_posts() ) {
+					$email_query->the_post();
+					?>
+					<option value="<?php echo admin_url( 'admin.php?page=mdjm-comms&template=' . get_the_id() ); ?>"<?php selected( get_the_id(), $_GET['template'] ); ?>><?php echo get_the_title(); ?></option>
+                    <?php
+				}
+			}
+			wp_reset_postdata();
+		?>
 		</select></td>
 		</tr>
 		</table>

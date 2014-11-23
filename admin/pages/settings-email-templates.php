@@ -4,7 +4,18 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 
-	if( isset( $_GET['template'] ) && !empty( $_GET['template'] ) )	{
+/*******************************************************************************
+					THIS PAGE IS DEPRECATED SINCE 0.9.3
+					TO BE REMOVED
+*******************************************************************************/
+
+	$class = 'error';
+	$message = '<p style="font-size:14px">This page has been removed since version 0.9.3 as detailed in <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&ver=0_9_3' ) . '" title="Version 0.9.3 upgrade notice">this upgrade notice</a>. The tab will be removed from the Settings section in a soon to be released version.</p>';
+	$message .= '<p style="font-size:14px">To manage your email templates, go to the <a href="' . admin_url( 'edit.php?post_type=email_template' ) .'" title="Email Templates">Email Templates</a> menu option</p>';
+
+	f_mdjm_update_notice( $class, $message );
+
+	/*if( isset( $_GET['template'] ) && !empty( $_GET['template'] ) )	{
 		$template = $_GET['template'];
 	}
 	else	{
@@ -20,8 +31,8 @@
             <?php
 		}
 	}
-
-	function f_mdjm_email_template( $template )	{
+*/
+	/*function f_mdjm_email_template( $template )	{
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 		$content = get_option( 'mdjm_plugin_email_template_' . $template );
 		$settings = array( 'media_buttons' => false,
@@ -59,8 +70,8 @@
         <td><?php wp_editor( html_entity_decode( stripcslashes( $content ) ), 'email_content', $settings ); ?></td>
         </tr>
         </table>
-        <?php
 	}
 	
-	f_mdjm_email_template( $template );
+	f_mdjm_email_template( $template ); */
+	
 ?>

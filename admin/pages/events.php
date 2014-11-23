@@ -177,17 +177,23 @@
 			f_mdjm_add_event_step_1();
 		}
 		elseif( $_POST['step'] == 2 )	{
-			$submit = 'Next';
-			f_mdjm_add_event_step_2();
+			if( $mdjm_options['enable_packages'] == 'Y' )	{
+				$submit = 'Next';
+				f_mdjm_add_event_step_2();
+			}
+			else	{
+				$submit = 'Create Enquiry';
+				f_mdjm_add_event_review();
+			}
 		}
 		elseif( $_POST['step'] == 3 && $mdjm_options['enable_packages'] == 'Y' )	{
-			if( $mdjm_options['enable_packages'] == 'Y' || $_POST['event_venue'] == 'manual' ) 	{
+			if( $mdjm_options['enable_packages'] == 'Y' ) 	{
 				$submit = 'Next';
 				f_mdjm_add_event_step_3();
 			}
 			else	{
 				$submit = 'Create Enquiry';
-				f_mdjm_add_event_review();	
+				f_mdjm_add_event_review();
 			}
 		}
 		else	{
@@ -244,12 +250,7 @@
         <td><select name="user_id" id="user_id">
         	<option value="">--- Select Client ---</option>
         <?php
-		$user_args = array(
-						'role' => 'client',
-						'orderby' => 'display_name',
-						'order' => 'ASC',
-						);
-		$client_list = get_users( $user_args );
+		$client_list = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
         foreach( $client_list as $client )	{
 			?>
 			<option value="<?php echo $client->ID; ?>" <?php selected( $_POST['client'], $client->ID ); ?>><?php echo $client->display_name; ?></option>';	
@@ -353,30 +354,35 @@
         </tr>
         <?php
 		$venueinfo = f_mdjm_get_venueinfo();
+		?>
+        <tr>
+        <th scope="row"><label for="event_venue">Event Venue</label></th>
+        <td colspan="3"><select name="event_venue" id="event_venue" onChange="displayVenue();">
+        <option value=""<?php if( empty( $_POST['event_venue'] ) ) echo ' selected="selected"'; ?>>--- Select Venue ---</option>
+        <option value="manual"<?php if( $_POST['event_venue'] == 'manual' || !$venueinfo ) echo ' selected="selected"'; ?>>Enter Manually</option>
+        <?php
 		if( $venueinfo )	{
-			?>
-            <tr>
-            <th scope="row"><label for="event_venue">Event Venue</label></th>
-            <td colspan="3"><select name="event_venue" id="event_venue" onChange="displayVenue();">
-            <option value=""<?php if( empty( $_POST['event_venue'] ) ) echo ' selected="selected"'; ?>>--- Select Venue ---</option>
-            <option value="manual"<?php if( $_POST['event_venue'] == 'manual' ) echo ' selected="selected"'; ?>>Enter Manually</option>
-            <?php
             foreach( $venueinfo as $venue )	{
 				?>
 				<option value="<?php echo $venue->venue_id; ?>" <?php selected( $venue->venue_id, $_POST['event_venue'] ); ?>><?php echo $venue->venue_name; ?></option>
 				<?php
 			}
-			?>
-            </select> <span class="description">Select event venue, or enter details manually below</span>
-            </td>
-            </tr>
-        <?php	
 		}
 		?>
+        </select> <span class="description">Select event venue, or enter details manually below</span>
+        </td>
+        </tr>
         </table>
         <style>
 		#venue_fields	{
-			display:none;
+			<?php
+			if( !$venueinfo )	{
+				echo 'display:block;';	
+			}
+			else	{
+				echo 'display:none;';	
+			}
+			?>
 		}
 		</style>
   		<div id="venue_fields">
@@ -434,6 +440,7 @@
         </div>
         <?php
 	} // f_mdjm_add_event_step_1
+	
 	function f_mdjm_add_event_step_2()	{
 		global $mdjm_options;
 		
@@ -442,8 +449,8 @@
 		<?php
 		if( $mdjm_options['enable_packages'] == 'Y' )	{
 			$packages = get_option( 'mdjm_packages' );
-			asort( $packages );
 			if( $packages )	{
+			asort( $packages );
 			?>
 				<tr>
 				<th scope="row"><label for="event_package">Choose a Package to Add:</label></th>
@@ -559,7 +566,7 @@
         </tr>
         <tr>
         <th scope="row" width="20%"><label for="deposit">Deposit:</label></th>
-        <td colspan="3">&pound;<input type="text" name="deposit" id="deposit" value="<?php echo $_POST['deposit']; ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
+        <td colspan="3">&pound;<input type="text" name="deposit" id="deposit" value="<?php echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
         </tr>
         <tr>
         <th scope="row"><label for="email_enquiry">Email Quote?</label></th>
@@ -632,12 +639,7 @@
         	<select name="user_id" id="user_id">
             <option value="" <?php selected( $eventinfo->user_id, '' ); ?>>--- Select Client ---</option>
         	<?php
-			$user_args = array(
-							'role' => 'client',
-							'orderby' => 'display_name',
-							'order' => 'ASC',
-							);
-			$client_list = get_users( $user_args );
+			$client_list = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
 			foreach( $client_list as $client )	{
 				?>
 				<option value="<?php echo $client->ID; ?>" <?php selected( $eventinfo->user_id, $client->ID ); ?>><?php echo $client->display_name; ?></option>
@@ -753,46 +755,48 @@
 		}
 		if( $mdjm_options['enable_packages'] == 'Y' )	{
 			$equipment = get_option( 'mdjm_equipment' );
-			$packages = get_option( 'mdjm_packages' );
-			/* Remove add on items included in selected package */
-			$equipment_in_package = explode( ',', $packages[$eventinfo->event_package]['equipment'] );
-			foreach( $equipment_in_package as $equip_in_package )	{
-				unset( $equipment[$equip_in_package] );
-			}
-			$current_addons = explode( ',', $eventinfo->event_addons );
-			if( count( $equipment > 0 ) )	{
-				$cats = get_option( 'mdjm_cats' );
-				asort( $cats );
-				?>
-				<tr>
-				<th scope="row" valign="top"><label for="event_addons">Select Add-ons (if required):</label></th>
-				<td colspan="3" valign="top">
-				<?php
-				foreach( $cats as $cat_key => $cat_value )	{
-					echo '<strong>' . $cat_value . '</strong>';
-					echo '<br />';
-					foreach( $equipment as $equip_list )	{
-						if( $equip_list[5] == $cat_key )	{
-							?><input type="checkbox" name="event_addons[]" id="event_addons[]" value="<?php echo $equip_list[1]; ?>"<?php if( in_array( $equip_list[1], $current_addons ) ) echo ' checked="checked"'; ?>  /><?php
-							echo esc_attr( $equip_list[0] );
-	
-							if( esc_attr( $equip_list[2] ) > 1 )
-								echo ' x ' . esc_attr( $equip_list[2] );
-							echo '<br />';
+			if ($equipment )	{
+				$packages = get_option( 'mdjm_packages' );
+				/* Remove add on items included in selected package */
+				$equipment_in_package = explode( ',', $packages[$eventinfo->event_package]['equipment'] );
+				foreach( $equipment_in_package as $equip_in_package )	{
+					unset( $equipment[$equip_in_package] );
+				}
+				$current_addons = explode( ',', $eventinfo->event_addons );
+				if( count( $equipment > 0 ) )	{
+					$cats = get_option( 'mdjm_cats' );
+					asort( $cats );
+					?>
+					<tr>
+					<th scope="row" valign="top"><label for="event_addons">Select Add-ons (if required):</label></th>
+					<td colspan="3" valign="top">
+					<?php
+					foreach( $cats as $cat_key => $cat_value )	{
+						echo '<strong>' . $cat_value . '</strong>';
+						echo '<br />';
+						foreach( $equipment as $equip_list )	{
+							if( $equip_list[5] == $cat_key )	{
+								?><input type="checkbox" name="event_addons[]" id="event_addons[]" value="<?php echo $equip_list[1]; ?>"<?php if( in_array( $equip_list[1], $current_addons ) ) echo ' checked="checked"'; ?>  /><?php
+								echo esc_attr( $equip_list[0] );
+		
+								if( esc_attr( $equip_list[2] ) > 1 )
+									echo ' x ' . esc_attr( $equip_list[2] );
+								echo '<br />';
+							}
 						}
+						echo '<br />';
 					}
-					echo '<br />';
+					if ( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
+						submit_button( 'Update Add-Ons', 'primary', 'update_packages', false );
+					}
+					else	{
+						echo '&nbsp;';	
+					}
+					?>
+					</td>
+					</tr>
+					<?php
 				}
-                if ( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
-					submit_button( 'Update Add-Ons', 'primary', 'update_packages', false );
-				}
-				else	{
-					echo '&nbsp;';	
-				}
-				?>
-				</td>
-				</tr>
-				<?php
 			}
 		}
         
@@ -848,6 +852,10 @@
         </td>
         <th scope="row"><label for="contract_approved_date">Approved Date:</label></th>
         <td><input type="text" class="custom_date" name="contract_approved_date" id="contract_approved_date" value="<?php if(! empty( $eventinfo->contract_approved_date ) ) echo date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) ); ?>" disabled="disabled"></td>
+        </tr>
+        <tr>
+        <th scope="row"><label for="balance_status">Balance Paid?</label></th>
+        <td colspan="3"><input type="checkbox" id="balance_status" name="balance_status" value="Paid" <?php if( $eventinfo->balance_status == 'Paid' ) echo ' checked'; ?> /></td>
         </tr>
         </table>
         <hr />
@@ -941,6 +949,15 @@
 		exit;
 	}
 	
+	function f_mdjm_test()	{
+		global $mdjm_options;
+		/* Access the cron functions */
+		//echo date( 'H:i d M Y', wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) );
+		require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
+		f_mdjm_cron_balance_reminder();
+		exit;
+	}
+	
 /**
  * Process actions submitted via $_GET or show the main events page
  * 
@@ -952,7 +969,7 @@
 		$func();
 		exit;
 	}
-	if( isset ( $_GET['action'] ) )	{ // Action to process
+	if( isset( $_GET['action'] ) )	{ // Action to process
 		$func = 'f_mdjm_' . $_GET['action'];
 		if( function_exists( $func ) ) $func( $_GET['event_id'] );
 	}

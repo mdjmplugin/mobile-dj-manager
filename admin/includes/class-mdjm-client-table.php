@@ -1,7 +1,10 @@
 <?php
 	class MDJM_Clients_Table extends WP_List_Table	{
 		private function get_clients()	{
-			global $wpdb;
+			global $wpdb, $display;
+			
+			if (isset ( $_GET['display'] ) ) $display = $_GET['display'];
+			else $display = 'client';
 			
 			if (isset ( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'display_name';
@@ -9,7 +12,7 @@
 			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
-			$clientinfo = f_mdjm_get_clients( $orderby, $order );
+			$clientinfo = f_mdjm_get_clients( $display, $orderby, $order );
 			$client_data = array();
 			$url = admin_url();
 			
@@ -69,7 +72,7 @@
 		} // admin_header
 		
 		function no_items() {
-			_e( 'There are currently no clients loaded within the application.' );
+			_e( 'There are currently no such clients within the application.' );
 		}
 		
 		function __construct()	{
@@ -95,6 +98,23 @@
 					return print_r( $item, true ) ; // Show the whole array for troubleshooting purposes
 			}
 		} // column_default
+		
+		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
+			global $wpdb, $display_query, $display;
+			$active_clients = f_mdjm_get_clients( 'client', $orderby, $order );
+			$inactive_clients = f_mdjm_get_clients( 'inactive_client', $orderby, $order );
+			if ( $which == "top" ){ // Before table
+		   ?>
+				<ul class='subsubsub'>
+				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=client"<?php if ( $display == "client" ) { ?> class="current" <?php } ?>>Active Clients <span class="count">(<?php echo count( $active_clients ); ?>)</span></a> |</li>
+				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=inactive_client"<?php if ( $display == "inactive_client" ) { ?> class="current" <?php } ?>>Inactive Clients <span class="count">(<?php echo count( $inactive_clients ); ?>)</span></a></li>
+                </ul>
+           <?php
+		   }
+		   if ( $which == "bottom" )	{ // After table
+			  
+		   }
+		} // extra_tablenav
 	
 		function get_columns()	{ // The table columns
 			$columns = array(

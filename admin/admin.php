@@ -22,6 +22,10 @@
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
 										'contract_to_client',
+										'email_enquiry',
+										'email_contract',
+										'email_client_confirm',
+										'email_dj_confirm',
 										'playlist_when',
 										'playlist_close',
 										'upload_playlists',
@@ -153,6 +157,78 @@
 									'section' => 'email',
 									'page' => 'settings',
 									); // contract_to_client
+									
+		$admin_fields['email_enquiry'] = array(
+									'display' => 'Event Quote Template',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['email_enquiry'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be used when sending quotes to clients',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[email_enquiry]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['email_enquiry'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // email_enquiry
+									
+		$admin_fields['email_contract'] = array(
+									'display' => 'Contract Template',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['email_contract'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be used when sending the Contract to clients',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[email_contract]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['email_contract'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // email_contract
+									
+		$admin_fields['email_client_confirm'] = array(
+									'display' => 'Client Booking Confirmation Template',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['email_client_confirm'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be used when sending the Booking Confirmation to Clients',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[email_client_confirm]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['email_client_confirm'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // email_client_confirm
+									
+		$admin_fields['email_dj_confirm'] = array(
+									'display' => 'DJ Booking Confirmation Template',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['email_dj_confirm'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be used when sending the Booking Confirmation to DJ\'s',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[email_dj_confirm]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['email_dj_confirm'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // email_dj_confirm
 									
 		$admin_fields['journaling'] = array(
 									'display' => 'Enable Journaling?',
@@ -509,6 +585,27 @@
 			wp_reset_postdata();
 			echo '</select>';
 			}
+			elseif( $args['custom_args']['list_type'] == 'email_template' )	{
+				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
+			$email_args = array(
+								'post_type' => 'email_template',
+								'orderby' => 'name',
+								'order' => 'ASC',
+								);
+			$email_query = new WP_Query( $email_args );
+			if ( $email_query->have_posts() ) {
+				while ( $email_query->have_posts() ) {
+					$email_query->the_post();
+					echo '<option value="' . get_the_id() . '"';
+					if( $mdjm_options[$args['field']] == get_the_id() )	{
+						echo ' selected="selected"';	
+					}
+					echo '>' . get_the_title() . '</option>' . "\n";	
+				}
+			}
+			wp_reset_postdata();
+			echo '</select>';
+			}
 		}
 		elseif( $args['type'] == 'textarea' )	{
 			echo '<textarea id="' . $args['field'] . '" name="' . $args['key'] . '[' . $args['field'] . ']" cols="30" rows="6">' . $args['value'] . '</textarea>';
@@ -541,11 +638,17 @@
 		if( false === ( $reg_check = get_transient( $t_query[0] ) ) )
 			do_reg_check( 'set' );
 	}
-	
+
+/*
+* do_reg_check
+* 04/10/2014
+* @since 0.8
+* Checks license status and returns the result
+*/	
 	function do_reg_check( $t_action )	{
 		include WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php';
 		if( $t_action == 'set' )	{
-			set_transient( $t_query[0], wp_remote_retrieve_body( wp_remote_get( $t_query[1] . $t_query[2] . $t_query[3] . $t_query[4] ) ), DAY_IN_SECONDS );
+			set_transient( $t_query[0], wp_remote_retrieve_body( wp_remote_get( $t_query[1] . $t_query[2] . $t_query[3] . $t_query[4] ) ), DAY_IN_SECONDS / 2 );
 		}
 		
 		if( $t_action == 'check' )	{

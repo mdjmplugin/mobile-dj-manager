@@ -99,11 +99,11 @@
              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size:11px">
               <tr>
                 <td width="10%" style="font-weight:bold">Total Price:</td>
-                <td width="23%">£<?php echo $eventinfo->cost; ?></td>
+                <td width="23%">&pound;<?php echo $eventinfo->cost; ?></td>
                 <td width="11%" style="font-weight:bold">Deposit <?php echo $eventinfo->deposit_status; ?>:</td>
-                <td width="22%">£<?php echo $eventinfo->deposit; ?></td>
+                <td width="22%">&pound;<?php echo $eventinfo->deposit; ?></td>
                 <td width="15%" style="font-weight:bold">Balance Remaining:</td>
-                <td>£<?php if($eventinfo->deposit_status == "Paid")	{
+                <td>&pound;<?php if($eventinfo->deposit_status == "Paid")	{
 						echo $eventinfo->cost - $eventinfo->deposit;
 						}
 						else	{
