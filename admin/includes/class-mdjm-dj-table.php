@@ -3,10 +3,10 @@
 		private function get_djs()	{
 			global $wpdb;
 			
-			if (isset ( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
+			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'display_name';
 			
-			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];
+			if( isset( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
 			$djs = f_mdjm_get_djs();
@@ -14,7 +14,7 @@
 			$url = admin_url();
 			foreach( $djs as $dj )	{
 				$info = f_mdjm_dj_get_events( $dj->ID );
-				if( $info['next_event'] != 'N/A' )	{
+				if( isset( $info['next_event'] ) && $info['next_event'] != 'N/A' )	{
 					$event_link = '<a href="' . $url . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info['event_id'] . '">' . $info['next_event'] . '</a>';	
 				}
 				else	{
@@ -86,7 +86,7 @@
 			$columns['dj_all_events'] = __( '<strong>Total Events</strong>', 'mdjmdjtable' );
 			$columns['dj_next_event'] = __( '<strong>Next Event</strong>', 'mdjmdjtable' );
 			$columns['dj_open_enquiries'] = __( '<strong>Open Enquiries</strong>', 'mdjmdjtable' );
-			 return $columns;
+			return $columns;
 		} // get_columns
 		
 		function get_sortable_columns() { // Defines the columns by which users can sort the table

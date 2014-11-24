@@ -32,9 +32,9 @@
 		
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Communications', 'Communications', 'manage_mdjm', 'mdjm-comms', 'f_mdjm_admin_comms');
 
-		if( current_user_can( 'manage_options' ) && $mdjm_options['multiple_dj'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - DJ\'s ', 'DJ\'s' , 'manage_mdjm', 'mdjm-djs', 'f_mdjm_admin_djs');
+		if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - DJ\'s ', 'DJ\'s' , 'manage_mdjm', 'mdjm-djs', 'f_mdjm_admin_djs');
 		
-		if( current_user_can( 'manage_options' ) && $mdjm_options['enable_packages'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Packages', 'Equipment Packages', 'manage_mdjm', 'mdjm-packages', 'f_mdjm_admin_packages');
+		if( current_user_can( 'manage_options' ) && isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Packages', 'Equipment Packages', 'manage_mdjm', 'mdjm-packages', 'f_mdjm_admin_packages');
 
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Events', 'Events', 'manage_mdjm', 'mdjm-events', 'f_mdjm_admin_events');
 		
@@ -100,7 +100,7 @@
  * @since 1.0
 */
 	function f_mdjm_admin_venues()	{
-		if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		wp_nonce_field( "mdjm-venues-page" );
@@ -115,7 +115,7 @@
  * @since 1.0
 */
 	function f_mdjm_purchase()	{
-		wp_redirect( 'http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/' );	
+		wp_redirect( 'http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/' );
 	}
 
 /**
@@ -126,7 +126,7 @@
  * @since 1.0
 */
 	function f_mdjm_admin_clients()	{
-		if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		wp_nonce_field( "mdjm-clients-page" );
@@ -141,7 +141,7 @@
 */
 
 	function f_mdjm_admin_comms()	{
-		if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		wp_nonce_field( "mdjm-comms-page" );
@@ -156,7 +156,7 @@
  * @since 1.0
 */
 	function f_mdjm_admin_djs()	{
-		if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		wp_nonce_field( "mdjm-djs-page" );
@@ -171,7 +171,7 @@
  * @since 1.0
 */
 	function f_mdjm_admin_packages()	{
-		if ( !current_user_can( 'manage_options' ) )  {
+		if( !current_user_can( 'manage_options' ) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		wp_nonce_field( "mdjm-djs-packages" );
@@ -216,7 +216,7 @@
 		global $wpdb, $mdjm_db_version;
 		$current_db_ver = get_option( 'mdjm_db_version' );
 		
-		if ( $current_db_ver != $mdjm_db_version ) {
+		if( $current_db_ver != $mdjm_db_version ) {
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 			/* EVENTS TABLE */
@@ -300,7 +300,7 @@
 							);";
 							
 			/* PLAYLISTS TABLE */
-			$playlists_sql = "CREATE TABLE web_wp_mdjm_playlists (
+			$playlists_sql = "CREATE TABLE ". $db_tbl['playlists'] . " (
 								id int(11) NOT NULL AUTO_INCREMENT,
 								event_id int(11) NOT NULL,
 								artist varchar(255) NOT NULL,
@@ -385,8 +385,8 @@
 		$event_date = explode( '/', $event['event_date'] );
 		$event_date = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
 		$str = f_mdjm_generate_playlist_ref();
-		if( !$event['deposit_status'] || $event['deposit_status'] == '' ) $event['deposit_status'] = 'Due';
-		if( !$event['balance_status'] || $event['balance_status'] == '' ) $event['balance_status'] = 'Due';
+		if( !isset( $event['deposit_status'] ) || $event['deposit_status'] == '' ) $event['deposit_status'] = 'Due';
+		if( !isset( $event['balance_status'] ) || $event['balance_status'] == '' ) $event['balance_status'] = 'Due';
 		
 		/* If a venue was selected use it */
 		if( $event['event_venue'] != '' && $event['event_venue'] != 'manual' )	{
@@ -403,40 +403,40 @@
 			$event['venue_email'] = $venueinfo->venue_email;
 		}
 
-		if ( $wpdb->insert( $db_tbl['events'],
-											array(
-												'event_id' =>	'',
-												'user_id' => $event['user_id'],
-												'event_date' => $event_date,
-												'event_dj' => $event['event_dj'],
-												'event_type' => sanitize_text_field( $event['event_type'] ),
-												'event_start' => $event['event_start'],
-												'event_finish' => $event['event_finish'],
-												'event_description' => $event['event_description'],
-												'event_package' => $event['event_package'],
-												'event_addons' => $event['event_addons'],
-												'event_guest_call' => $str,
-												'contract_status' => 'Enquiry',
-												'contract' => $event['contract'],
-												'cost' => $event['total_cost'],
-												'deposit' => $event['deposit'],
-												'deposit_status' => $event['deposit_status'],
-												'balance_status' => $event['balance_status'],
-												'venue' => sanitize_text_field( $event['venue'] ),
-												'venue_contact' => sanitize_text_field( $event['venue_contact'] ),
-												'venue_addr1' => sanitize_text_field( $event['venue_addr1'] ),
-												'venue_addr2' => sanitize_text_field( $event['venue_addr2'] ),
-												'venue_city' => sanitize_text_field( $event['venue_city'] ),
-												'venue_state' => sanitize_text_field( $event['venue_state'] ),
-												'venue_zip' => sanitize_text_field( strtoupper( $event['venue_zip'] ) ),
-												'venue_phone' => $event['venue_phone'],
-												'venue_email' => sanitize_email( $event['venue_email'] ),
-												'added_by' => get_current_user_id(),
-												'date_added' => date( 'Y-m-d H:i:s' ),
-												'referrer' => sanitize_text_field( $event['enquiry_source'] ),
-												'last_updated_by' => get_current_user_id(),
-												'last_updated' => date( 'Y-m-d H:i:s' )
-											) ) )	{
+		if( $wpdb->insert( $db_tbl['events'],
+										array(
+											'event_id' =>	'',
+											'user_id' => $event['user_id'],
+											'event_date' => $event_date,
+											'event_dj' => $event['event_dj'],
+											'event_type' => sanitize_text_field( $event['event_type'] ),
+											'event_start' => $event['event_start'],
+											'event_finish' => $event['event_finish'],
+											'event_description' => $event['event_description'],
+											'event_package' => $event['event_package'],
+											'event_addons' => $event['event_addons'],
+											'event_guest_call' => $str,
+											'contract_status' => 'Enquiry',
+											'contract' => $event['contract'],
+											'cost' => $event['total_cost'],
+											'deposit' => $event['deposit'],
+											'deposit_status' => $event['deposit_status'],
+											'balance_status' => $event['balance_status'],
+											'venue' => sanitize_text_field( $event['venue'] ),
+											'venue_contact' => sanitize_text_field( $event['venue_contact'] ),
+											'venue_addr1' => sanitize_text_field( $event['venue_addr1'] ),
+											'venue_addr2' => sanitize_text_field( $event['venue_addr2'] ),
+											'venue_city' => sanitize_text_field( $event['venue_city'] ),
+											'venue_state' => sanitize_text_field( $event['venue_state'] ),
+											'venue_zip' => sanitize_text_field( strtoupper( $event['venue_zip'] ) ),
+											'venue_phone' => $event['venue_phone'],
+											'venue_email' => sanitize_email( $event['venue_email'] ),
+											'added_by' => get_current_user_id(),
+											'date_added' => date( 'Y-m-d H:i:s' ),
+											'referrer' => sanitize_text_field( $event['enquiry_source'] ),
+											'last_updated_by' => get_current_user_id(),
+											'last_updated' => date( 'Y-m-d H:i:s' )
+										) ) )	{
 
 			$message = 'A new event on ' . date( "l, jS F Y", strtotime( $event_date ) ) . ' has been successfully created';			
 			$clientinfo = get_userdata( $event['user_id'] );
@@ -455,11 +455,11 @@
 			<p><?php _e( $message ) ?></p>
 			</div>
             <?php
-			if( $event['email_enquiry'] == 'Y' )	{
+			if( isset( $event['email_enquiry'] ) && $event['email_enquiry'] == 'Y' )	{
 				$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_enquiry' );
-				if ( wp_mail( $clientinfo->user_email, 'DJ Enquiry', $info['content'], $email_headers ) ) 	{
+				if( wp_mail( $clientinfo->user_email, 'DJ Enquiry', $info['content'], $email_headers ) ) 	{
 					$message = 'Event quotation email successfully sent to client';
 					$j_args = array (
 						'client' => $event['user_id'],
@@ -480,15 +480,15 @@
 					wp_die( $clientinfo->user_email . '<br />DJ Enquiry<br />' . $info['content'] . '<br />' . $email_headers );
 				}
 			}
-			if( $event['deposit_status'] == 'Paid' )
+			if( isset( $event['deposit_status'] ) && $event['deposit_status'] == 'Paid' )
 				f_mdjm_deposit_paid( $id );
 				
-			if( $event['balance_status'] == 'Paid' )
+			if( isset( $event['balance_status'] ) && $event['balance_status'] == 'Paid' )
 				f_mdjm_deposit_paid( $id );
 			
 			/* Add venue */	
-			if( $event['save_venue'] == 'Y' )	{
-				if ( $wpdb->insert( $db_tbl['venues'],
+			if( isset( $event['save_venue'] ) && $event['save_venue'] == 'Y' )	{
+				if( $wpdb->insert( $db_tbl['venues'],
 											array(
 												'venue_id'	       => '',
 												'venue_name' => sanitize_text_field( $event['venue'] ),
@@ -543,10 +543,10 @@
 		$event_updates['event_date'] = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
 		$event_updates['last_updated_by'] = get_current_user_id();
 		$event_updates['last_updated'] = date( 'Y-m-d H:i:s' );
-		if( !$event_updates['deposit_status'] || $event_updates['deposit_status'] == '' )
+		if( !isset( $event_updates['deposit_status'] ) || $event_updates['deposit_status'] == '' )
 			$event_updates['deposit_status'] = 'Due';
 			
-		if( !$event_updates['balance_status'] || $event_updates['balance_status'] == '' )
+		if( !isset( $event_updates['balance_status'] ) || $event_updates['balance_status'] == '' )
 			$event_updates['balance_status'] = 'Due';
 
 		/* Which fields need updating? */
@@ -580,10 +580,10 @@
 			<p><?php _e( $message ) ?></p>
             </div>
             <?php
-			if( $now_pending && $mdjm_options['contract_to_client'] == 'Y' )	{
+			if( isset( $now_pending ) && $mdjm_options['contract_to_client'] == 'Y' )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
-				if ( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
+				if( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
 					$message = 'Contract email sent to client';
 					$j_args = array (
 						'client' => $eventinfo->user_id,
@@ -609,7 +609,7 @@
                     <?php
 				}
 			}
-			if( $now_approved )	{
+			if( isset( $now_approved ) )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_client_confirm' );
 				if ( wp_mail( $info['client']->user_email, 'Booking Confirmation', $info['content'], $email_headers ) ) 	{
@@ -641,10 +641,10 @@
                     <?php
 				}
 			}
-			if( $event_updates['deposit_status'] == 'Paid' )	{
+			if( isset( $event_updates['deposit_status'] ) && $event_updates['deposit_status'] == 'Paid' )	{
 				f_mdjm_deposit_paid( $eventinfo->event_id );
 			}
-			if( $event_updates['balance_status'] == 'Paid' )	{
+			if( isset( $event_updates['balance_status'] ) && $event_updates['balance_status'] == 'Paid' )	{
 				f_mdjm_deposit_paid( $eventinfo->event_id );
 			}
 		}
@@ -1070,7 +1070,7 @@
 		$event_query = "'SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $status . "'";
 		$eventinfo = $wpdb->get_results( $event_query );
 		return $eventinfo;
-	} // f_mdjm_get_eventinfo_by_id
+	} // f_mdjm_get_eventinfo_by_status
 
 /**
  * f_mdjm_dj_get_events
@@ -1151,7 +1151,7 @@
 		
 		require_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		if( empty( $venue['venue_name'] ) )	{
+		if( !isset( $venue['venue_name'] ) || empty( $venue['venue_name'] ) )	{
 			f_mdjm_update_notice( 'error', 'ERROR: You must enter a Venue name' );
 			return;
 		}
@@ -1285,9 +1285,9 @@
 */	
 	function dj_can( $permission )	{
 		global $mdjm_options;
-		if ( $mdjm_options['dj_' . $permission] == 'Y' ) return true;
+		if( isset( $mdjm_options['dj_' . $permission] ) && $mdjm_options['dj_' . $permission] == 'Y' ) return true;
 		else return false;
-	} //dj_can
+	} // dj_can
 
 /**
  * is_dj
@@ -1415,15 +1415,15 @@
 			$email_headers .= 'From: ' . $dj->display_name . ' <bookings' . substr( get_bloginfo( 'admin_email' ), strpos( get_bloginfo( 'admin_email' ), "@" ) + 1 ) . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $dj->user_email . "\r\n";
 		}
-		if( $mdjm_options['bcc_admin_to_client'] || $mdjm_options['bcc_dj_to_client'] )	{
+		if( isset( $mdjm_options['bcc_admin_to_client'] ) || isset( $mdjm_options['bcc_dj_to_client'] ) )	{
 			$email_headers .= 'Bcc: ';
-			if( $mdjm_options['bcc_dj_to_client'] )
+			if( isset( $mdjm_options['bcc_dj_to_client'] ) )
 				$email_headers .= $dj->user_email;
 
-			if( $mdjm_options['bcc_admin_to_client'] && $mdjm_options['bcc_dj_to_client'] )
+			if( isset( $mdjm_options['bcc_admin_to_client'] ) && isset( $mdjm_options['bcc_dj_to_client'] ) )
 				$email_headers .= ', ';
 
-			if( $mdjm_options['bcc_dj_to_client'] )
+			if( isset( $mdjm_options['bcc_dj_to_client'] ) )
 				$email_headers .= get_bloginfo( 'admin_email' );
 			$email_headers .= "\r\n";
 		}

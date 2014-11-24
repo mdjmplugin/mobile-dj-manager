@@ -107,8 +107,8 @@
         <?php
 	}
 	
-	if( $_GET['ver'] || $_GET['updated'] )	{
-		if( $_GET['updated'] == 1 )	{
+	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
+		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
 			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );
 		}
 		else	{

@@ -20,7 +20,7 @@
 				if( !current_user_can( 'administrator' ) )	{ // Non-Admins only see their own clients
 					if( f_mdjm_client_is_mine( $client->ID ) )	{
 						$info = f_mdjm_client_get_events( $client->ID );
-						if( $info['next_event'] != 'N/A' )	{
+						if( isset( $info['next_event'] ) && $info['next_event'] != 'N/A' )	{
 							$event_link = '<a href="' . $url . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info['event_id'] . '">' . $info['next_event'] . '</a>';	
 						}
 						else	{
@@ -38,7 +38,7 @@
 				}
 				else	{
 					$info = f_mdjm_client_get_events( $client->ID );
-					if( $info['next_event'] != 'N/A' )	{
+					if( isset( $info['next_event'] ) && $info['next_event'] != 'N/A' )	{
 						$event_link = '<a href="' . $url . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info['event_id'] . '">' . $info['next_event'] . '</a>';	
 					}
 					else	{
@@ -50,7 +50,7 @@
 										'client_email' => '<a href="mailto:' . $client->user_email . '">' . $client->user_email . '</a>',
 										'client_events' => $info['num_rows'],
 										'client_next_event' => $event_link,
-										'client_journal' => '<a href="' . $url . 'admin.php?mdjm-events&action=show_journal&client_id=' . $client->ID . '">' . 'View</a>'
+										'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-events&action=show_journal&client_id=' . $client->ID . '">' . 'View</a>'
 										);	
 				}
 			}
@@ -103,15 +103,15 @@
 			global $wpdb, $display_query, $display;
 			$active_clients = f_mdjm_get_clients( 'client', $orderby, $order );
 			$inactive_clients = f_mdjm_get_clients( 'inactive_client', $orderby, $order );
-			if ( $which == "top" ){ // Before table
+			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
-				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=client"<?php if ( $display == "client" ) { ?> class="current" <?php } ?>>Active Clients <span class="count">(<?php echo count( $active_clients ); ?>)</span></a> |</li>
-				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=inactive_client"<?php if ( $display == "inactive_client" ) { ?> class="current" <?php } ?>>Inactive Clients <span class="count">(<?php echo count( $inactive_clients ); ?>)</span></a></li>
+				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=client"<?php if( isset( $display ) && $display == "client" ) { ?> class="current" <?php } ?>>Active Clients <span class="count">(<?php echo count( $active_clients ); ?>)</span></a> |</li>
+				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-clients&display=inactive_client"<?php if( isset( $display ) && $display == "inactive_client" ) { ?> class="current" <?php } ?>>Inactive Clients <span class="count">(<?php echo count( $inactive_clients ); ?>)</span></a></li>
                 </ul>
            <?php
 		   }
-		   if ( $which == "bottom" )	{ // After table
+		   if( isset( $which ) && $which == "bottom" )	{ // After table
 			  
 		   }
 		} // extra_tablenav

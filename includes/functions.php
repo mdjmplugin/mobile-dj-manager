@@ -112,47 +112,47 @@
 		global $_POST, $current_user;
 		$profile_update_fields = array ( 'ID' => $current_user->ID );
 		$profile_update_fields_meta = array ();
-		if ( !empty ( $_POST['first_name'] ) && $_POST['first_name'] != $current_user->first_name )	{
+		if ( isset( $_POST['first_name'] ) && !empty ( $_POST['first_name'] ) && $_POST['first_name'] != $current_user->first_name )	{
 			$profile_update_fields['first_name'] = sanitize_text_field( $_POST['first_name'] );
 		}
-		if ( !empty ( $_POST['last_name'] ) && $_POST['last_name'] != $current_user->last_name )	{
+		if ( isset( $_POST['last_name'] ) && !empty ( $_POST['last_name'] ) && $_POST['last_name'] != $current_user->last_name )	{
 			$profile_update_fields['last_name'] = sanitize_text_field( $_POST['last_name'] );
 		}
-		if ( !empty ( $_POST['phone1'] ) && $_POST['phone1'] != $current_user->phone1 )	{
+		if ( isset( $_POST['phone1'] ) && !empty ( $_POST['phone1'] ) && $_POST['phone1'] != $current_user->phone1 )	{
 			$profile_update_fields_meta['phone1'] = sanitize_text_field( $_POST['phone1'] );
 		}
-		if ( !empty ( $_POST['phone2'] ) && $_POST['phone2'] != $current_user->phone2 )	{
+		if ( isset( $_POST['phone2'] ) && !empty( $_POST['phone2'] ) && $_POST['phone2'] != $current_user->phone2 )	{
 			$profile_update_fields_meta['phone2'] = sanitize_text_field( $_POST['phone2'] );
 		}
-		if ( !empty ( $_POST['user_email'] ) && $_POST['user_email'] != $current_user->user_email )	{
+		if ( isset( $_POST['user_email'] ) && !empty( $_POST['user_email'] ) && $_POST['user_email'] != $current_user->user_email )	{
 			$profile_update_fields['user_email'] = sanitize_email( $_POST['user_email'] );
 		}
-		if ( !empty ( $_POST['address1'] ) && $_POST['address1'] != $current_user->address1 )	{
+		if ( isset( $_POST['address1'] ) && !empty( $_POST['address1'] ) && $_POST['address1'] != $current_user->address1 )	{
 			$profile_update_fields_meta['address1'] = sanitize_text_field( $_POST['address1'] );
 		}
-		if ( !empty ( $_POST['address2'] ) && $_POST['address2'] != $current_user->address2 )	{
+		if ( isset( $_POST['address2'] ) && !empty( $_POST['address2'] ) && $_POST['address2'] != $current_user->address2 )	{
 			$profile_update_fields_meta['address2'] = sanitize_text_field( $_POST['address2'] );
 		}
-		if ( !empty ( $_POST['town'] ) && $_POST['town'] != $current_user->town )	{
+		if ( isset( $_POST['town'] ) && !empty( $_POST['town'] ) && $_POST['town'] != $current_user->town )	{
 			$profile_update_fields_meta['town'] = sanitize_text_field( $_POST['town'] );
 		}
-		if ( !empty ( $_POST['county'] ) && $_POST['county'] != $current_user->county )	{
+		if ( isset( $_POST['county'] ) && !empty( $_POST['county'] ) && $_POST['county'] != $current_user->county )	{
 			$profile_update_fields_meta['county'] = sanitize_text_field( $_POST['county'] );
 		}
-		if ( !empty ( $_POST['postcode'] ) && $_POST['postcode'] != $current_user->postcode )	{
+		if ( isset( $_POST['postcode'] ) && !empty( $_POST['postcode'] ) && $_POST['postcode'] != $current_user->postcode )	{
 			$profile_update_fields_meta['postcode'] = sanitize_text_field( $_POST['postcode'] );
 		}
-		if ( !empty ( $_POST['birthday'] ) && $_POST['birthday'] != $current_user->birthday && $_POST['birthday'] != 'empty' )	{
+		if ( isset( $_POST['birthday'] ) && !empty( $_POST['birthday'] ) && $_POST['birthday'] != $current_user->birthday && $_POST['birthday'] != 'empty' )	{
 			$profile_update_fields_meta['birthday'] = sanitize_text_field( $_POST['birthday'] );
 		}
-		if ( !empty ( $_POST['new_password'] ) &&  $_POST['new_password'] != $_POST['new_password_confirm'] )	{
+		if ( isset( $_POST['new_password'] ) && !empty( $_POST['new_password'] ) && $_POST['new_password'] != $_POST['new_password_confirm'] )	{
 			$pass_error = true;
 		}
-		if ( !empty ( $_POST['new_password'] ) &&  $_POST['new_password'] == $_POST['new_password_confirm'] )	{
+		if ( isset( $_POST['new_password'] ) && !empty( $_POST['new_password'] ) && $_POST['new_password'] == $_POST['new_password_confirm'] )	{
 			$profile_update_fields['user_pass'] = $_POST['new_password'];
 		}
-		
-		$profile_update_fields_meta['marketing'] = $_POST['marketing'];
+		if( isset( $_POST['marketing'] ) )
+			$profile_update_fields_meta['marketing'] = $_POST['marketing'];
 		
 		/* Process any custom fields that have been added */
 		$custom_fields = get_option( WPMDJM_CLIENT_FIELDS );
@@ -166,7 +166,7 @@
 			$user_update_meta = update_user_meta ( $current_user->ID, $meta_key, $meta_value );
 		}
 
-		if( isset ( $profile_update_fields['user_pass'] ) )	{
+		if( isset( $profile_update_fields['user_pass'] ) )	{
 			wp_logout();
 			wp_redirect( get_permalink() );
 		}
@@ -177,7 +177,7 @@
 		else {
 			print ("<p style=\"color:#F93; font-size:11px;\">Your profile has been updated successfully</p>\n");
 		}
-		if( $pass_error == true )	{
+		if( isset( $pass_error ) && $pass_error == true )	{
 			print ("<p style=\"color:#F93; font-size:11px;\">Unable to change password. Check the password's you entered match!</p>\n");
 		}
 	} // f_mdjm_update_user_profile
@@ -245,7 +245,7 @@
 */
 	function f_mdjm_client_approve_contract( $eventinfo, $input, $table )	{
 		global $wpdb;
-		if( !( $eventinfo ) || !( $input ) )	{
+		if( !isset( $eventinfo ) || !isset( $input ) )	{
 			wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a><br />' . $wpdb->print_error() );
 		}
 		$approver = get_user_by( 'display_name', $input['approver'] );
@@ -322,8 +322,8 @@
 		global $wpdb;
 		$songinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['playlists'] . " WHERE `id` = '" . $song_id . "'");
 		$eventinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_id` = '" . $song_id->event_id . "'");
-		$playlist_remove = $wpdb->delete($db_tbl['playlists'], array( 'id' => $song_id ));	
-			if($playlist_remove > 0)	{
+		$playlist_remove = $wpdb->delete( $db_tbl['playlists'], array( 'id' => $song_id ) );	
+			if( $playlist_remove > 0 )	{
 				print( '<p style="color:#F93">The song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' has been successfully removed from the playlist</p>' );
 			}
 		$j_args = array (

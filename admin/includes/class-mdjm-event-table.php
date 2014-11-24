@@ -6,7 +6,7 @@
 			// Build the data query
 			$query = 'SELECT * FROM `'.$db_tbl['events'].'`';
 			
-			if ( isset ( $_GET['display'] ) ) $display = $_GET['display'];
+			if( isset( $_GET['display'] ) ) $display = $_GET['display'];
 			else $display = 'active';
 			
 			/* If your not a site admin you only get your own events */
@@ -22,14 +22,14 @@
 			
 			$query = $display_query[$display];
 			
-			if (isset ( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
+			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'event_date';
 			
-			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];
+			if( isset( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
 			$query .= ' ORDER BY `' . $orderby . '` ' . $order;
-			$eventinfo = $wpdb->get_results($query);
+			$eventinfo = $wpdb->get_results( $query );
 			
 			$event_data = array();
 			foreach( $eventinfo as $event )	{
@@ -136,13 +136,13 @@
 		} // get_sortable_columns
 		
 		function get_bulk_actions() { // Define the bulk actions for the drop down list
-			if( $_GET['display'] != 'enquiries' && $_GET['display'] != 'lost' )	{
+			if( isset( $_GET['display'] ) && $_GET['display'] != 'enquiries' && $_GET['display'] != 'lost' )	{
 				$actions = array(
 							'complete' => 'Mark as Complete',
 							'cancel' => 'Cancel Event',
 							);
 			}
-			elseif( $_GET['display'] == 'lost' )	{
+			elseif( isset( $_GET['display'] ) && $_GET['display'] == 'lost' )	{
 				$actions = array(
 							'recover' => 'Recover Enquiry',
 							);
@@ -222,7 +222,7 @@
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
 			global $wpdb, $display_query, $display;
-			if ( $which == "top" ){ // Before table
+			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
 				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=active"<?php if ( $display == "active" ) { ?> class="current" <?php } ?>>Active <span class="count">(<?php echo count( $wpdb->get_results( $display_query['active'] ) ); ?>)</span></a> |</li>
@@ -233,7 +233,7 @@
                 </ul>
            <?php
 		   }
-		   if ( $which == "bottom" )	{ // After table
+		   if( isset( $which ) && $which == "bottom" )	{ // After table
 			  
 		   }
 		} // extra_tablenav

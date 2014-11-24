@@ -55,7 +55,7 @@
             <td width="15%" style="font-weight:bold">Address Line 2:</td>
             <td><input name="address2" type="text" size="30" value="<?php echo $current_user->address2; ?>" /></td>
             <td width="15%" align="right">Marketing Info?</td>
-            <td><input name="marketing" type="checkbox" value="Y" <?php if( $current_user->marketing == "Y" ) echo "checked" ?> /> <font style="font-size:9px">Your details will never be shared</style></td>
+            <td><input name="marketing" type="checkbox" value="Y" <?php if( isset( $current_user->marketing ) && $current_user->marketing == "Y" ) echo "checked" ?> /> <font style="font-size:9px">Your details will never be shared</style></td>
           </tr>
           <tr>
             <td width="15%" style="font-weight:bold">Town/City:</td>

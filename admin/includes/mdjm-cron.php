@@ -10,8 +10,6 @@
 	
 	global $mdjm_options;
 
-
-
 /***** ERROR CHECKS *****/
 /*
 * f_mdjm_cron_has_errors
@@ -22,9 +20,9 @@
 
 	function f_mdjm_cron_has_errors( $task )	{
 		/* Email errors */
-		if( $task['options']['email_client'] == 'Y' )	{
+		if( isset( $task['options']['email_client'] ) && $task['options']['email_client'] == 'Y' )	{
 			/* Check template is set */
-			if( $task['options']['email_template'] == '0' )	{
+			if( isset( $task['options']['email_template'] ) && $task['options']['email_template'] == '0' )	{
 				if( !$cron_errors ) $cron_errors = array();
 				$error = 'Task ' . $task['name'] . ' is configured to send client emails but no email template is defined. Please check the task configuration to rectify. (Set 1)';
 				array_push( $cron_errors, $error );
@@ -38,20 +36,20 @@
 			}
 			
 			/* Check subject is set */
-			if( !$task['options']['email_subject'] || $task['options']['email_subject'] == '' )	{
-				if( !$cron_errors ) $cron_errors = array();
+			if( !isset( $task['options']['email_subject'] ) || $task['options']['email_subject'] == '' )	{
+				if( !isset( $cron_errors ) ) $cron_errors = array();
 				$error = 'Task ' . $task['name'] . ' is configured to send client emails but no email subject is defined. Please check the task configuration to rectify.';
 				array_push( $cron_errors, $error );
 			}
 			/* Check from address is set */
-			if( !$task['options']['email_from'] || $task['options']['email_from'] == '0' )	{
-				if( !$cron_errors ) $cron_errors = array();
+			if( !isset( $task['options']['email_from'] ) || $task['options']['email_from'] == '0' )	{
+				if( !isset( $cron_errors ) ) $cron_errors = array();
 				$error = 'Task ' . $task['name'] . ' is configured to send client emails but you have not specified a From address. Please check the task configuration to rectify.';
 				array_push( $cron_errors, $error );
 			}
 		}
 		
-		if( $cron_errors )	{
+		if( isset( $cron_errors ) )	{
 			return $cron_errors;	
 		}
 		else	{
@@ -97,7 +95,7 @@
 * Retrieves the from address to be used in emails
 */
 	function f_mdjm_cron_get_fromaddr( $args )	{
-		if( $args['taskinfo']['options']['email_from'] == 'dj' )	{
+		if( isset( $args['taskinfo']['options']['email_from'] ) && $args['taskinfo']['options']['email_from'] == 'dj' )	{
 			$fromaddr = 'From: ' . $args['djinfo']->display_name . ' <' . $args['djinfo']->user_email . '>' . "\r\n";
 		}
 		else	{
@@ -169,12 +167,12 @@
 						f_mdjm_do_journal( $j_args );
 					} // End if( WPDJM_JOURNAL == 'Y' )
 					/* Get the DJ Data */
-					if( $mdjm_schedules['complete-events']['options']['notify_admin'] == Y ||
-						$mdjm_schedules['complete-events']['options']['notify_dj'] == Y)
+					if( isset( $mdjm_schedules['complete-events']['options']['notify_admin'] ) && $mdjm_schedules['complete-events']['options']['notify_admin'] == 'Y' ||
+						isset( $mdjm_schedules['complete-events']['options']['notify_dj'] ) && $mdjm_schedules['complete-events']['options']['notify_dj'] == 'Y' )
 							$djinfo = get_userdata( $event->event_dj );
 						
 					/* Create admin email data array */
-					if( $mdjm_schedules['complete-events']['options']['notify_admin'] == Y )	{
+					if( isset( $mdjm_schedules['complete-events']['options']['notify_admin'] ) && $mdjm_schedules['complete-events']['options']['notify_admin'] == Y )	{
 						if( !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						$notify['admin'][$event->event_id] = array(
 																'id'		=> $event->event_id,
@@ -186,7 +184,7 @@
 					} // End Admin email data array
 					
 					/* Create DJ email data array */
-					if( $mdjm_schedules['complete-events']['options']['notify_dj'] == Y )	{
+					if( isset( $mdjm_schedules['complete-events']['options']['notify_dj'] ) && $mdjm_schedules['complete-events']['options']['notify_dj'] == 'Y' )	{
 						if( !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$event->event_dj] = array();
 						$notify['dj'][$event->event_dj][$event->event_id] = array(
@@ -203,7 +201,7 @@
 				$cron_end = microtime(true);
 				
 				// Admin notification emails
-				if( $mdjm_schedules['complete-events']['options']['notify_admin'] == Y )	{
+				if( isset( $mdjm_schedules['complete-events']['options']['notify_admin'] ) && $mdjm_schedules['complete-events']['options']['notify_admin'] == 'Y' )	{
 					$cron_email_args = array(
 											'type'		=> 'notify',
 											'to'		  => get_bloginfo( 'admin_email' ),
@@ -220,7 +218,7 @@
 				}// if( $mdjm_schedules['complete-events']['options']['notify_admin'] == Y )
 				
 				// DJ notification emails
-				if( $mdjm_schedules['complete-events']['options']['notify_dj'] == Y )	{
+				if( isset( $mdjm_schedules['complete-events']['options']['notify_dj'] ) && $mdjm_schedules['complete-events']['options']['notify_dj'] == Y )	{
 					foreach( $notify['dj'] as $notify_dj )	{
 						foreach( $notify_dj as $dj )	{
 							$cron_email_args = array(
@@ -310,12 +308,14 @@
 					} // End if( WPDJM_JOURNAL == 'Y' )
 					
 					/* Get the DJ Data */
-					if( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' ||
+					if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] ) && 
+						$mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' ||
+						isset( $mdjm_schedules['fail-enquiry']['options']['notify_dj'] ) &&
 						$mdjm_schedules['fail-enquiry']['options']['notify_dj'] == 'Y' )
 							$djinfo = get_userdata( $event->event_dj );
 						
 					/* Create admin email data array */
-					if( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' )	{
+					if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] ) && $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' )	{
 						if( !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						$notify['admin'][$event->event_id] = array(
 																'id'		=> $event->event_id,
@@ -327,7 +327,7 @@
 					} // End Admin email data array
 					
 					/* Create DJ email data array */
-					if( $mdjm_schedules['fail-enquiry']['options']['notify_dj'] == 'Y' )	{
+					if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_dj'] ) && $mdjm_schedules['fail-enquiry']['options']['notify_dj'] == 'Y' )	{
 						if( !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$event->event_dj] = array();
 						$notify['dj'][$event->event_dj][$event->event_id] = array(
@@ -345,7 +345,7 @@
 				$cron_end = microtime(true);
 				
 				// Admin notification emails
-				if( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' )	{
+				if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] ) && $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' )	{
 					$cron_email_args = array(
 											'type'		=> 'notify',
 											'to'		  => get_bloginfo( 'admin_email' ),
@@ -362,7 +362,7 @@
 				}// if( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == Y )
 				
 				// DJ notification emails
-				if( $mdjm_schedules['fail-enquiry']['options']['notify_dj'] == 'Y' )	{
+				if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_dj'] ) && $mdjm_schedules['fail-enquiry']['options']['notify_dj'] == 'Y' )	{
 					foreach( $notify['dj'] as $notify_dj )	{
 						foreach( $notify_dj as $dj )	{
 							$cron_email_args = array(
@@ -483,7 +483,7 @@
 						} // End if( WPDJM_JOURNAL == 'Y' )
 						
 						/* Create admin email data array */
-						if( $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
+						if( isset( $mdjm_schedules['request-deposit']['options']['notify_admin'] ) && $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
 							if( !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 							$notify['admin'][$event->event_id] = array(
 																	'id'		=> $event->event_id,
@@ -496,7 +496,7 @@
 						} // End Admin email data array
 						
 						/* Create DJ email data array */
-						if( $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
+						if( isset( $mdjm_schedules['request-deposit']['options']['notify_dj'] ) && $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
 							if( !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 							$notify['dj'][$event->event_dj] = array();
 							$notify['dj'][$event->event_dj][$event->event_id] = array(
@@ -520,7 +520,7 @@
 			$cron_end = microtime(true);
 			
 			// Admin notification emails
-			if( $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
+			if( isset( $mdjm_schedules['request-deposit']['options']['notify_admin'] ) && $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		=> 'notify',
 										'to'		  => get_bloginfo( 'admin_email' ),
@@ -537,7 +537,7 @@
 			}// if( $mdjm_schedules['request-desposit']['options']['notify_admin'] == Y )
 			
 			// DJ notification emails
-			if( $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
+			if( isset( $mdjm_schedules['request-deposit']['options']['notify_dj'] ) && $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
 				foreach( $notify['dj'] as $notify_dj )	{
 					foreach( $notify_dj as $dj )	{
 						$cron_email_args = array(
@@ -587,7 +587,7 @@
 			return; // Abort
 		}
 		
-		if( $mdjm_schedules['balance-reminder']['active'] == 'Y' 
+		if( isset( $mdjm_schedules['balance-reminder']['active'] ) && $mdjm_schedules['balance-reminder']['active'] == 'Y' 
 			&& $mdjm_schedules['balance-reminder']['nextrun'] <= time() )	{
 			
 			$cron_start = microtime(true);
@@ -655,7 +655,7 @@
 						} // End if( WPDJM_JOURNAL == 'Y' )
 						
 						/* Create admin email data array */
-						if( $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
+						if( isset( $mdjm_schedules['balance-reminder']['options']['notify_admin'] ) && $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
 							if( !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 							$notify['admin'][$event->event_id] = array(
 																	'id'		=> $event->event_id,
@@ -668,7 +668,7 @@
 						} // End Admin email data array
 						
 						/* Create DJ email data array */
-						if( $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
+						if( isset( $mdjm_schedules['balance-reminder']['options']['notify_dj'] ) && $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
 							if( !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 							$notify['dj'][$event->event_dj] = array();
 							$notify['dj'][$event->event_dj][$event->event_id] = array(
@@ -692,7 +692,7 @@
 			$cron_end = microtime(true);
 			
 			// Admin notification emails
-			if( $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
+			if( isset( $mdjm_schedules['balance-reminder']['options']['notify_admin'] ) && $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		=> 'notify',
 										'to'		  => get_bloginfo( 'admin_email' ),
@@ -709,7 +709,7 @@
 			}// if( $mdjm_schedules['balance-reminder']['options']['notify_admin'] == Y )
 			
 			// DJ notification emails
-			if( $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
+			if( isset( $mdjm_schedules['balance-reminder']['options']['notify_dj'] ) && $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
 				foreach( $notify['dj'] as $notify_dj )	{
 					foreach( $notify_dj as $dj )	{
 						$cron_email_args = array(
@@ -824,7 +824,7 @@
 						} // End if( WPDJM_JOURNAL == 'Y' )
 						
 						/* Create admin email data array */
-						if( $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
+						if( isset( $mdjm_schedules['client-feedback']['options']['notify_admin'] ) && $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
 							if( !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 							$notify['admin'][$event->event_id] = array(
 																	'id'		=> $event->event_id,
@@ -837,7 +837,7 @@
 						} // End Admin email data array
 						
 						/* Create DJ email data array */
-						if( $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
+						if( isset( $mdjm_schedules['client-feedback']['options']['notify_dj'] ) && $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
 							if( !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 							$notify['dj'][$event->event_dj] = array();
 							$notify['dj'][$event->event_dj][$event->event_id] = array(
@@ -861,7 +861,7 @@
 			$cron_end = microtime(true);
 			
 			// Admin notification emails
-			if( $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
+			if( isset( $mdjm_schedules['client-feedback']['options']['notify_admin'] ) && $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		 => 'notify',
 										'to'		   => get_bloginfo( 'admin_email' ),
@@ -878,7 +878,7 @@
 			}// if( $mdjm_schedules['client-feedback']['options']['notify_admin'] == Y )
 			
 			// DJ notification emails
-			if( $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
+			if( isset( $mdjm_schedules['client-feedback']['options']['notify_dj'] ) && $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
 				foreach( $notify['dj'] as $notify_dj )	{
 					foreach( $notify_dj as $dj )	{
 						$cron_email_args = array(
@@ -920,19 +920,19 @@
 		$mdjm_schedules[$task]['lastran'] = time();
 		$time = time();
 		
-		if( $mdjm_schedules[$task]['frequency'] == 'Hourly')	{
+		if( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Hourly')	{
 			$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 hour", $time );
 		}
-		elseif( $mdjm_schedules[$task]['frequency'] == 'Daily')	{
+		elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Daily')	{
 			$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 day", $time );
 		}
-		elseif( $mdjm_schedules[$task]['frequency'] == 'Weekly')	{
+		elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Weekly')	{
 			$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 week", $time );
 		}
-		elseif( $mdjm_schedules[$task]['frequency'] == 'Monthly')	{
+		elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Monthly')	{
 			$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 month", $time );
 		}
-		elseif( $mdjm_schedules[$task]['frequency'] == 'Yearly')	{
+		elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Yearly')	{
 			$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 year", $time );
 		}
 		else	{ /* It should not run again */
@@ -956,7 +956,7 @@
 			if( $cron_email_args['taskinfo']['options']['email_from'] == 'dj' )	{
 				$headers .= 'Reply-To: ' . $cron_email_args['djinfo']->user_email . "\r\n";
 			}
-			if( $cron_email_args['taskinfo']['options']['email_client'] == 'Y' )	{
+			if( isset( $cron_email_args['taskinfo']['options']['email_client'] ) && $cron_email_args['taskinfo']['options']['email_client'] == 'Y' )	{
 				if( $mdjm_options['bcc_dj_to_client'] == 'Y' || $mdjm_options['bcc_dj_to_client'] == 'Y' )	{
 					$headers .= 'Bcc: ';
 				}
@@ -1095,7 +1095,7 @@
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
-		if( $mdjm_options['upload_playlists'] && $mdjm_options['upload_playlists'] == 'Y' 
+		if( isset( $mdjm_options['upload_playlists'] ) && $mdjm_options['upload_playlists'] == 'Y' 
 			&& $mdjm_schedules['upload-playlists']['nextrun'] <= time() )	{
 
 			$cron_start = microtime(true);
@@ -1136,9 +1136,6 @@
 			f_mdjm_cronjob_update( $mdjm_schedules['upload-playlists']['slug'] );
 			
 		} // if( $mdjm_options['upload_playlists']...
-		else	{
-			echo 'Not running';	
-		}
 		
 	} // f_mdjm_cron_upload_playlists
 

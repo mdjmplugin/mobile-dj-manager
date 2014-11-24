@@ -26,7 +26,30 @@
 * Default Email Templates *
 * Only used during first installation
 */
-	$email_enquiry_content = '<h1>Your DJ Enquiry from {COMPANY_NAME}</h1>Dear {CLIENT_FIRSTNAME},Thank you for contacting {COMPANY_NAME} regarding your up and coming event on {EVENT_DATE}.I am pleased to tell you that we are available and would love to provide the disco for you.To provide a disco from {START_TIME} to {END_TIME} our cost would be {TOTAL_COST}. There are no hidden charges.My standard disco package includes a vast music collection and great lighting. In addition I would stay in regular contact with you to ensure the night goes to plan. I can incorporate your own playlists, a few songs you want played, requests on the night, or remain in full control of the music - this is your decision, but I can be as flexible as required.Mobile DJs are required to have both PAT and PLI (Portable Appliance Testing and Public Liability Insurance). Confirmation of both can be provided.If you have any further questions, or would like to go ahead and book, please let me know by return.I hope to hear from you soon.Best Regards{DJ_FULLNAME}Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a>Tel: {DJ_PRIMARY_PHONE}<a href="http://{WEBSITE_URL}">{WEBSITE_URL}</a>';
+	$email_enquiry_content = '<h1>Your DJ Enquiry from {COMPANY_NAME}</h1><br />
+								Dear {CLIENT_FIRSTNAME},<br />
+								<br />
+								Thank you for contacting {COMPANY_NAME} regarding your up and coming event on {EVENT_DATE}.<br />
+								<br />
+								I am pleased to tell you that we are available and would love to provide the disco for you.<br />
+								<br />
+								To provide a disco from {START_TIME} to {END_TIME} our cost would be {TOTAL_COST}. There are no hidden charges.<br />
+								<br />
+								My standard disco package includes a vast music collection and great lighting. In addition I would stay in regular contact with you to ensure the night goes to plan. I can incorporate your own playlists, a few songs you want played, requests on the night, or remain in full control of the music - this is your decision, but I can be as flexible as required.<br />
+								<br />
+								Mobile DJs are required to have both PAT and PLI (Portable Appliance Testing and Public Liability Insurance). Confirmation of both can be provided.<br />
+								<br />
+								If you have any further questions, or would like to go ahead and book, please let me know by return.<br />
+								<br />
+								I hope to hear from you soon.<br />
+								<br />
+								Best Regards<br />
+								<br />
+								{DJ_FULLNAME}<br />
+								<br />
+								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
+								Tel: {DJ_PRIMARY_PHONE}<br />
+								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_enquiry_content_args = array(
 								'post_title'    => 'Client Enquiry',
@@ -36,7 +59,28 @@
 								'post_author'   => 1,
 								);
 
-	$email_contract_review = '<h2>Your DJ Booking with {COMPANY_NAME}</h2>Dear {CLIENT_FIRSTNAME},Thank you for indicating that you wish to proceed with booking {COMPANY_NAME} for your up and coming disco on {EVENT_DATE}.There are two final tasks to complete before your booking can be confirmed...<ul><li><strong>Review and accept your contract</strong>Your contract has now been produced. You can review it by <a href="{CONTRACT_URL}">clicking here</a>. Please review the terms and accept the contract. If you would prefer the contract to be emailed to you, please let me know by return email.</li><li><strong>Pay your deposit</strong>Your deposit of <strong>{DEPOSIT}</strong> is now due. If you have not already done so please make this payment now. Details of how to make this payment are shown within the <a href="{CONTRACT_URL}">contract</a>.</li></ul>Once these actions have been completed you will receive a further email confirming your booking.Meanwhile if you have any questions, please do not hesitate to get in touch.Thank you for choosing {COMPANY_NAME}.Regards{COMPANY_NAME}{WEBSITE_URL}';
+	$email_contract_review = '<h2>Your DJ Booking with {COMPANY_NAME}</h2><br />
+								Dear {CLIENT_FIRSTNAME},<br />
+								<br />
+								Thank you for indicating that you wish to proceed with booking {COMPANY_NAME} for your up and coming disco on {EVENT_DATE}.<br />
+								<br />
+								There are two final tasks to complete before your booking can be confirmed...<br />
+								<ul><br />
+									<li><strong>Review and accept your contract</strong><br />
+								Your contract has now been produced. You can review it by <a href="{CONTRACTS_URL}">clicking here</a>. Please review the terms and accept the contract. If you would prefer the contract to be emailed to you, please let me know by return email.</li><br />
+									<li><strong>Pay your deposit</strong><br />
+								Your deposit of <strong>{DEPOSIT}</strong> is now due. If you have not already done so please make this payment now. Details of how to make this payment are shown within the <a href="{CONTRACT_URL}">contract</a>.</li><br />
+								</ul><br />
+								Once these actions have been completed you will receive a further email confirming your booking.<br />
+								<br />
+								Meanwhile if you have any questions, please do not hesitate to get in touch.<br />
+								<br />
+								Thank you for choosing {COMPANY_NAME}.<br />
+								<br />
+								Regards<br />
+								<br />
+								{COMPANY_NAME}<br />
+								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_contract_review_args = array(
 								'post_title'    => 'Client Contract Review',
@@ -46,7 +90,36 @@
 								'post_author'   => 1,
 								);
 
-	$email_client_booking_confirm = '<h1>Your DJ Booking is Confirmed</h1>Dear {CLIENT_FIRSTNAME},Thank you for booking your up and coming disco with {COMPANY_NAME}. Your booking is now confirmed.My name is {DJ_FULLNAME} and I will be your DJ on {EVENT_DATE}. Should you wish to contact me at any stage to discuss your disco, my details are at the end of this email.<h2>What Now?</h2><strong>Music Selection & Playlists</strong>We have an online portal where you can add songs that you would like to ensure we play during your disco. To access this feature, head over to the {COMPANY_NAME} <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a>. The playlist feature will close {PLAYLIST_CLOSE} days before your event.You will need to login. Your username and password have already been sent to you in a previous email but if you no longer have this information, click on the lost password link and enter your user name, which is your email address. Instructions on resetting your password will then be sent to you.You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="{PLAYLIST_URL}">{PLAYLIST_URL}</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.Don\'t worry though, you have full control over your playlist so you can remove songs added by your guests if you do not like their choices.<strong>When will you next hear from me?</strong>I generally contact you again approximately 2 weeks before your event to finalise details with you. However, if you have any questions, concerns, or just want a general chat about your disco, feel free to contact me at any time.Thanks again for choosing {COMPANY_NAME} to provide the DJ & Disco for your event. I look forward to partying with you on {EVENT_DATE}.Best Regards{DJ_FULLNAME}Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a>Tel: {DJ_PRIMARY_PHONE}<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
+	$email_client_booking_confirm = '<h1>Your DJ Booking is Confirmed</h1><br />
+									Dear {CLIENT_FIRSTNAME},<br />
+									<br />
+									Thank you for booking your up and coming disco with {COMPANY_NAME}. Your booking is now confirmed.<br />
+									<br />
+									My name is {DJ_FULLNAME} and I will be your DJ on {EVENT_DATE}. Should you wish to contact me at any stage to discuss your disco, my details are at the end of this email.<br />
+									<h2>What Now?</h2><br />
+									<strong>Music Selection & Playlists</strong><br />
+									<br />
+									We have an online portal where you can add songs that you would like to ensure we play during your disco. To access this feature, head over to the {COMPANY_NAME} <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a>. The playlist feature will close {PLAYLIST_CLOSE} days before your event.<br />
+									<br />
+									You will need to login. Your username and password have already been sent to you in a previous email but if you no longer have this information, click on the lost password link and enter your user name, which is your email address. Instructions on resetting your password will then be sent to you.<br />
+									<br />
+									You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="{PLAYLIST_URL}">{PLAYLIST_URL}</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.<br />
+									<br />
+									Don\'t worry though, you have full control over your playlist so you can remove songs added by your guests if you do not like their choices.<br />
+									<br />
+									<strong>When will you next hear from me?</strong><br />
+									<br />
+									I generally contact you again approximately 2 weeks before your event to finalise details with you. However, if you have any questions, concerns, or just want a general chat about your disco, feel free to contact me at any time.<br />
+									<br />
+									Thanks again for choosing {COMPANY_NAME} to provide the DJ & Disco for your event. I look forward to partying with you on {EVENT_DATE}.<br />
+									<br />
+									Best Regards<br />
+									<br />
+									{DJ_FULLNAME}<br />
+									<br />
+									Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
+									Tel: {DJ_PRIMARY_PHONE}<br />
+									<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_client_booking_confirm_args = array(
 								'post_title'    => 'Client Booking Confirmation',
@@ -56,7 +129,30 @@
 								'post_author'   => 1,
 								);
 
-	$email_dj_booking_confirm = '<h1>Booking Confirmation</h1>Dear {DJ_FIRSTNAME},Your client {CLIENT_FULLNAME} has just confirmed their booking for you to DJ at their event on {EVENT_DATE}.A booking confirmation email has been sent to them and they now have your contact details and access to the online {APPLICATION_NAME} tools to create playlist entries etc.Make sure you login regularly to the <a href="{ADMIN_URL}admin.php?page=mdjm-dashboard">{COMPANY_NAME} {APPLICATION_NAME} admin interface</a> to ensure you have all relevant information relating to their booking.Remember it is your responsibility to remain in regular contact with your client regarding their event as well as answer any queries or concerns they may have. Customer service is one of our key selling points and after the event, your client will be invited to provide feedback regarding the booking process, communication in the lead up to the event, as well as the event itself.<h2>Event Details</h2>Client Name: {CLIENT_FULLNAME}Event Date: {EVENT_DATE}Type: {EVENT_TYPE}Start Time: {START_TIME}Finish Time: {END_TIME}Venue: {VENUE}Balance Due: {BALANCE}Further information is available on the <a href="{ADMIN_URL}admin.php?page=mdjm-dashboard">{COMPANY_NAME} {APPLICATION_NAME} admin interface</a>.Regards{COMPANY_NAME}';
+	$email_dj_booking_confirm = '<h1>Booking Confirmation</h1><br />
+								Dear {DJ_FIRSTNAME},<br />
+								<br />
+								Your client {CLIENT_FULLNAME} has just confirmed their booking for you to DJ at their event on {EVENT_DATE}.<br />
+								<br />
+								A booking confirmation email has been sent to them and they now have your contact details and access to the online {APPLICATION_NAME} tools to create playlist entries etc.<br />
+								<br />
+								Make sure you login regularly to the <a href="{ADMIN_URL}admin.php?page=mdjm-dashboard">{COMPANY_NAME} {APPLICATION_NAME} admin interface</a> to ensure you have all relevant information relating to their booking.<br />
+								<br />
+								Remember it is your responsibility to remain in regular contact with your client regarding their event as well as answer any queries or concerns they may have. Customer service is one of our key selling points and after the event, your client will be invited to provide feedback regarding the booking process, communication in the lead up to the event, as well as the event itself.<br />
+								<h2>Event Details</h2><br />
+								Client Name: {CLIENT_FULLNAME}<br />
+								Event Date: {EVENT_DATE}<br />
+								Type: {EVENT_TYPE}<br />
+								Start Time: {START_TIME}<br />
+								Finish Time: {END_TIME}<br />
+								Venue: {VENUE}<br />
+								Balance Due: {BALANCE}<br />
+								<br />
+								Further information is available on the <a href="{ADMIN_URL}admin.php?page=mdjm-dashboard">{COMPANY_NAME} {APPLICATION_NAME} admin interface</a>.<br />
+								<br />
+								Regards<br />
+								<br />
+								{COMPANY_NAME}';
 	
 	$email_dj_booking_confirm_args = array(
 								'post_title'    => 'DJ Booking Confirmation',
@@ -71,7 +167,7 @@
 * Default Schedules
 * Only used during first installation
 */
-	if( $mdjm_options['upload_playlists'] && $mdjm_options['upload_playlists'] == 'Y' )	{
+	if( isset( $mdjm_options['upload_playlists'] ) && $mdjm_options['upload_playlists'] == 'Y' )	{
 		$time = time();
 		$playlist_nextrun = strtotime( '+1 day', $time );
 	}

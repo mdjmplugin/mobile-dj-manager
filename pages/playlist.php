@@ -12,8 +12,8 @@
 	if ( is_user_logged_in() && empty ( $_GET['mdjmeventid'] ) )	{ // User is logged in, show their event playlist
 		get_currentuserinfo();
 		f_mdjm_get_eventinfo( $db_tbl, $current_user );
-		if ( $_GET['playlist_id'] ) { f_mdjm_remove_playlistsong( $db_tbl,$song_id=$_GET['playlist_id'] ); }
-		if ( isset ( $_POST['submit'] ) ) { f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $_POST); }
+		if ( isset( $_GET['playlist_id'] ) ) { f_mdjm_remove_playlistsong( $db_tbl,$song_id=$_GET['playlist_id'] ); }
+		if ( isset( $_POST['submit'] ) ) { f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $_POST); }
 		f_mdjm_get_playlist( $db_tbl, $eventinfo );
 		if( $wpdb->num_rows > 0 )	{
 			?>
@@ -109,14 +109,14 @@
 *****************************************************************/
 	
 	else	{ // User is not logged in
-		if ( isset ( $_GET['mdjmeventid'] ) )	{ // Guest user
-			if ( !empty ($_GET['mdjmeventid'] ) )	{ // If we have the event id wecan display the form
+		if( isset( $_GET['mdjmeventid'] ) )	{ // Guest user
+			if( !empty ($_GET['mdjmeventid'] ) )	{ // If we have the event id wecan display the form
 				f_mdjm_get_guest_eventinfo( $db_tbl, $event_id=$_GET['mdjmeventid'] );
-				if ( isset ( $_POST['submit'] ) ) { 
+				if( isset ( $_POST['submit'] ) ) { 
 					$_POST['added_by'] = $_POST['first_name'] . ' ' . $_POST['last_name'];
 					f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $_POST );
 				}
-				if ( count ( $eventinfo ) == 0 )	{
+				if( count ( $eventinfo ) == 0 )	{
 					wp_die( '<pre>ERROR: The page you have arrived at is invalid. Please check it again or contact the person who sent you the link. To return to the home page click here - <a href="'. home_url() .'">' . home_url() . '</a></pre>' );
 				}
 				else	{
@@ -124,7 +124,7 @@
 					?>
 					<p>Welcome to the <?php echo get_bloginfo( 'name' ); ?> playlist management system.</p>
                     <?php
-					if ( $eventinfo->event_date > date('c', strtotime('TODAY + ' . $mdjm_options['playlist_close'] . ' DAYS')) )	{ // Is the playlist open?
+					if( $eventinfo->event_date > date('c', strtotime('TODAY + ' . $mdjm_options['playlist_close'] . ' DAYS')) )	{ // Is the playlist open?
 					?>
                         <p>You are adding songs to the playlist for <?php echo $event_owner->first_name . " " . $event_owner->last_name; ?>'s event on <?php echo date("l, jS F Y",strtotime($eventinfo->event_date)); ?>.</p>
                         <p>Please add your playlist requests in the form below. All fields are required.</p>

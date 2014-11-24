@@ -41,11 +41,11 @@
           </tr>
           <tr>
             <td>Potential Earnings: </td>
-            <td>£<?php echo number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
+            <td>&pound;<?php echo number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
           </tr>
           <tr>
             <td>Earnings so Far:</td>
-            <td>£<?php echo number_format( $dash_dj['month_earn'], 2 ); ?></td>
+            <td>&pound;<?php echo number_format( $dash_dj['month_earn'], 2 ); ?></td>
           </tr>
           <tr>
             <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
@@ -116,7 +116,7 @@
           </tr>
           </table>
 		<?php
-			if( current_user_can( 'administrator' ) && $mdjm_options['multiple_dj'] == 'Y' )	{
+			if( current_user_can( 'administrator' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
 				$dash_emp = f_mdjm_dashboard_employee_overview();
 		?>
                 <hr />
@@ -144,11 +144,11 @@
                 </tr>
                 <tr>
                 <td>Potential Earnings:</td>
-                <td>£<?php echo number_format( $dash_emp['potential_month_earn'], 2 ); ?></td>
+                <td>&pound;<?php echo number_format( $dash_emp['potential_month_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td>Earnings so Far:</td>
-                <td>£<?php echo number_format( $dash_emp['month_earn'], 2 ); ?></td>
+                <td>&pound;<?php echo number_format( $dash_emp['month_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td colspan="2" class="alternate"><strong>Annual Employer Overview for <?php echo date( 'Y' ); ?></strong></td>
@@ -167,11 +167,11 @@
                 </tr>
                 <tr>
                 <td>Potential Earnings:</td>
-                <td>£<?php echo number_format( $dash_emp['potential_year_earn'], 2 ); ?></td>
+                <td>&pound;<?php echo number_format( $dash_emp['potential_year_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td>Earnings so Far:</td>
-                <td>£<?php echo number_format( $dash_emp['year_earn'], 2 ); ?></td>
+                <td>&pound;<?php echo number_format( $dash_emp['year_earn'], 2 ); ?></td>
                 </tr>
                 </table></td>
                 <td width="40%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
@@ -182,7 +182,7 @@
                     <td><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/forums/feed/?post_type=topic', $args = array( 'show_author' => 0, 'show_date' => 0, 'show_summary' => 0, 'items' => 3 ) ); ?></td>
                   </tr>
                   <?php
-			  if( current_user_can( 'administrator' ) && $mdjm_options['multiple_dj'] )	{
+			  if( current_user_can( 'administrator' ) && isset( $mdjm_options['multiple_dj'] ) )	{
 				  $dj_event_results = f_mdjm_dj_working_today();
 				  ?>
                   <?php
@@ -197,12 +197,7 @@
         </div>
 <?php
 	}
-	$updated = get_option( 'mdjm_updated' );
-	if( $updated && $updated == '1' && !$_GET['updated'] && !$_GET['ver'] )	{
-		wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
-		exit;
-	}
-	if( $_GET['updated'] || $_GET['ver'] )	{
+	if( isset( $_GET['updated'] ) || isset( $_GET['ver'] ) )	{
 		include( 'updated.php' );
 	}
 	else	{

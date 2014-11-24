@@ -10,7 +10,7 @@
 			if( isset( $_GET['client_id'], $_GET['event_id'] ) ) $query .= ' AND';
 			if( isset( $_GET['event_id'] ) ) $query .= ' `event` = ' . $_GET['event_id'];
 			
-			if (isset ( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
+			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'timestamp';
 			
 			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];

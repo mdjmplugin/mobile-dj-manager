@@ -16,9 +16,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-
 /**
  * f_mdjm_render_clients_table
  * Render the table with list of clients
@@ -32,7 +29,7 @@
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 		}
 	
-		if( ! class_exists( 'MDJM_Clients_Table' ) ) {
+		if( !class_exists( 'MDJM_Clients_Table' ) ) {
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-client-table.php' );
 		}
 		

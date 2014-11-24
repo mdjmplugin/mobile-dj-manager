@@ -4,9 +4,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-	
 	require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 	
@@ -29,6 +26,7 @@
              <?php
 			$lic_info = do_reg_check( 'check' );
 			if( $active_tab == 'general' ) {
+				$class = '';
 				echo '<form method="post" action="options.php">';
 				echo '<table class="form-table">';
 				if( $lic_info && $lic_info[0] == 'XXXX' ) $class = ' class="form-invalid"';
@@ -75,7 +73,7 @@
 			if( current_user_can( 'manage_options' ) 
 				&& $lic_info // No license no save
 				&& $active_tab != 'email_templates' // Email Templates use there own submit button
-				&& !$_GET['task_action'] )	{ // If editing a task don't display
+				&& !isset( $_GET['task_action'] ) )	{ // If editing a task don't display
 				submit_button(); 
 			}
 			 ?>

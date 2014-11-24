@@ -11,9 +11,6 @@
 * Manage schedule tasks
 */
 
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-
 	global $mdjm_options;
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{
@@ -261,7 +258,7 @@
 */
 	function f_mdjm_edit_task( $task )	{
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
-		if( $mdjm_schedules[$task]['default'] == 'Y' )
+		if( isset( $mdjm_schedules[$task]['default'] ) && $mdjm_schedules[$task]['default'] == 'Y' )
 			$ro = ' readonly';
 		else
 			$ro = '';
@@ -472,11 +469,11 @@
 	} // f_mdjm_edit_task
 
 /* Determine which function to execute */
-	if( !$_GET['task_action'] )	{
+	if( !isset( $_GET['task_action'] ) )	{
 		f_mdjm_render_scheduler();
 	}
 	else	{
-		if( $_GET['task_action'] == 'edit' && $_GET['slug'] )	{
+		if( $_GET['task_action'] == 'edit' && isset( $_GET['slug'] ) )	{
 			f_mdjm_edit_task( $_GET['slug'] );	
 		}
 	}

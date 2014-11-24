@@ -32,7 +32,7 @@
 	}*/
 
 /* Remove the DB tables & data */
-	if( $mdjm_options['uninst_remove_db'] == 'Y' )	{
+	if( isset( $mdjm_options['uninst_remove_db'] ) && $mdjm_options['uninst_remove_db'] == 'Y' )	{
 		global $wpdb;
 		require_once 'includes/config.inc.php';
 		foreach( $db_tbl as $key => $value )	{
@@ -56,7 +56,8 @@
 						'mdjm_plugin_email_template_enquiry',
 						'mdjm_plugin_email_template_client_booking_confirm',
 						'mdjm_plugin_email_template_dj_booking_confirm',
-						'mdjm_plugin_email_template_contract_review'
+						'mdjm_plugin_email_template_contract_review',
+						'mdjm_updated',
 						);
 	foreach( $option_name as $option )	{
 		delete_option( $option );

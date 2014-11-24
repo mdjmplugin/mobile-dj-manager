@@ -16,16 +16,13 @@
  *
  */	
  
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-
 /**
  * Retrieve the information submitted via $_GET
  * 
  *
  * @since 1.0
 */
-	if( empty ( $_GET['client_id'] ) && empty ( $_GET['event_id'] ) )	{ 
+	if( !isset( $_GET['client_id'] ) && !isset( $_GET['event_id'] ) || empty( $_GET['client_id'] ) && empty( $_GET['event_id'] ) )	{ 
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
@@ -44,8 +41,8 @@
 		if( !class_exists( 'MDJM_Journal_Table' ) ) {
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-journal-table.php' );
 		}
-		if( $_GET['client_id'] ) $client = true;
-		if( $_GET['event_id'] ) $event = true;
+		if( isset( $_GET['client_id'] ) ) $client = true;
+		if( isset( $_GET['event_id'] ) ) $event = true;
 		$journal_table = new MDJM_Journal_Table();
 		?>
 		

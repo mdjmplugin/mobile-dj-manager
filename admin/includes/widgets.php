@@ -25,7 +25,7 @@
         <div>
         <ul>
         <?php
-			if( current_user_can( 'administrator' ) && $mdjm_options['multiple_dj'] )	{
+			if( current_user_can( 'administrator' ) && isset( $mdjm_options['multiple_dj'] ) )	{
 				$dj_event_results = f_mdjm_dj_working_today();
 				foreach( $dj_event_results as $info )	{
 					$djinfo = get_userdata( $info->event_dj );

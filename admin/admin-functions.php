@@ -55,7 +55,7 @@
 	function f_mdjm_remove_menus()	{
 		global $mdjm_options;
 		if( !current_user_can( 'administrator' ) )	{
-			if( $mdjm_options['dj_see_wp_dash'] != 'Y' ) remove_menu_page( 'index.php' );
+			if( !isset( $mdjm_options['dj_see_wp_dash'] ) || $mdjm_options['dj_see_wp_dash'] != 'Y' ) remove_menu_page( 'index.php' );
 			remove_menu_page( 'profile.php' );
 		}
 	}
@@ -222,15 +222,16 @@
  * @since 1.0
 */
 	function f_mdjm_install() {
-		/* Import the default email templates */
-		$client_enquiry_post_id = wp_insert_post( $email_enquiry_content_args );
-		$client_contract_post_id = wp_insert_post( $email_contract_review );
-		$client_confirm_post_id = wp_insert_post( $email_client_booking_confirm );
-		$dj_confirm_post_id = wp_insert_post( $email_dj_booking_confirm );
 
 		include WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php'; // Must be included after email templates have been imported!
 		/* Import the default template contract */
 		$contract_post_id = wp_insert_post( $contract_template_args );
+		
+		/* Import the default email templates */
+		$client_enquiry_post_id = wp_insert_post( $email_enquiry_content_args );
+		$client_contract_post_id = wp_insert_post( $email_contract_review_args );
+		$client_confirm_post_id = wp_insert_post( $email_client_booking_confirm_args );
+		$dj_confirm_post_id = wp_insert_post( $email_dj_booking_confirm_args );
 
 		$event_types = 'Adult Birthday Party,Child Birthday Party,Wedding,Corporate Event,Other,';
 		$enquiry_sources = 'Website,Google,Facebook,Email,Telephone,Other,';
@@ -494,6 +495,11 @@
 			
 			/* Delete the template file */
 			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			
+			$message = 'Welcome to Mobile DJ Manager for WordPress version 0.9.3. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the enhancements this version brings</a>';
+			
+			f_mdjm_update_notice( 'updated', $message );
+			
 		} // if( WPMDJM_VERSION_NUM > $current_version_mdjm )
 	} // f_mdjm_upgrade
 
@@ -805,7 +811,7 @@
 					),
 				));
 			}
-			if( current_user_can( 'manage_options' ) && $mdjm_options['multiple_dj'] == 'Y')
+			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y')
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-djs',
 					'parent' => 'mdjm',
@@ -835,7 +841,7 @@
 					),
 				));
 			}
-			if( current_user_can( 'manage_options' ) && $mdjm_options['enable_packages'] == 'Y' )
+			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-equipment',
 					'parent' => 'mdjm',
@@ -1002,7 +1008,7 @@
 		
 		/* Get the scheduled tasks */
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
-		if( $mdjm_options['upload_playlists'] )	{
+		if( isset( $mdjm_options['upload_playlists'] ) )	{
 			$mdjm_schedules['upload-playlists']['active'] = $mdjm_options['upload_playlists'];
 		}
 		
@@ -1010,7 +1016,7 @@
 			/* Only execute active tasks */
 			if( $task['active'] == 'Y' )	{
 				/* Check frequency and whether to run */
-				if( !$task['nextrun'] || $task['nextrun'] <= time() || $task['nextrun'] == 'Today'
+				if( !isset( $task['nextrun'] ) || $task['nextrun'] <= time() || $task['nextrun'] == 'Today'
 					|| $task['nextrun'] == 'Next Week' || $task['nextrun'] == 'Next Month'
 					|| $task['nextrun'] == 'Next Year' )	{
 					$func = $task['function'];
@@ -1031,7 +1037,7 @@
 		global $mdjm_options;
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
-		if( $mdjm_schedules['upload-playlists']['active'] != $mdjm_options['upload_playlists'] )	{
+		if( !isset( $mdjm_schedules['upload-playlists']['active'] ) || $mdjm_schedules['upload-playlists']['active'] != $mdjm_options['upload_playlists'] )	{
 			$mdjm_schedules['upload-playlists']['active'] = $mdjm_options['upload_playlists'];
 			if( $mdjm_schedules['upload-playlists']['active'] == 'Y' )	{
 				$mdjm_schedules['upload-playlists']['nextrun'] = time();

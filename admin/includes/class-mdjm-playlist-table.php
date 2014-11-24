@@ -6,10 +6,10 @@
 			// Build the data query
 			$query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $_GET['event'];
 			
-			if (isset ( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
+			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'song';
 			
-			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];
+			if( isset( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
 			$query .= ' ORDER BY `' . $orderby . '` ' . $order;
@@ -44,12 +44,12 @@
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
 			global $wpdb, $query;
-			if ( $which == "top" ){ // Before table
+			if( isset( $which ) && $which == "top" ){ // Before table
 				?>
                 
                 <?php
 			}
-			if ( $which == "bottom" )	{ // After table
+			if( isset( $which ) && $which == "bottom" )	{ // After table
 			
 			}
 		} // extra_tablenav

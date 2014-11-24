@@ -41,6 +41,9 @@
 										'dj_add_venue',
 										'dj_see_deposit',
 									);
+		foreach( $admin_settings_field as $admin_setting_field_key )	{
+			if( !isset( $mdjm_options[$admin_setting_field_key] ) ) $mdjm_options[$admin_setting_field_key] = 'N';
+		}
 		$admin_fields = array();
 
 /* GENERAL TAB */
@@ -310,6 +313,12 @@
 									'value' => $mdjm_options['show_credits'],
 									'text' => '',
 									'desc' => 'Whether or not to display the <font size="-1"; color="#F90">Powered by ' . WPMDJM_NAME . ', version ' . WPMDJM_VERSION_NUM . '</font> text at the footer of the application pages.',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'credits',
 									'page' => 'settings',
 									); // show_credits
@@ -322,6 +331,12 @@
 									'value' => $mdjm_options['upload_playlists'],
 									'text' => '',
 									'desc' => 'With this option checked, your playlist information may occasionally be transmitted back to the MDJM authors to help build an information library. The consolidated list of playlist songs will be freely shared. Only song, artist and the event type information is transmitted.',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'playlist',
 									'page' => 'settings',
 									); // upload_playlists
@@ -408,6 +423,12 @@
 									'value' => $mdjm_options['dj_see_wp_dash'],
 									'text' => 'If checked your DJ\'s will be able to see the main WordPress Dashboard page',
 									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_see_wp_dash
@@ -420,6 +441,12 @@
 									'value' => $mdjm_options['dj_add_client'],
 									'text' => '',
 									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_add_client
@@ -432,6 +459,12 @@
 									'value' => $mdjm_options['dj_add_event'],
 									'text' => '',
 									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_add_event
@@ -444,6 +477,12 @@
 									'value' => $mdjm_options['dj_add_venue'],
 									'text' => '',
 									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_add_venue
@@ -456,6 +495,12 @@
 									'value' => $mdjm_options['dj_see_deposit'],
 									'text' => '',
 									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_see_deposit
@@ -498,6 +543,7 @@
 		
 		foreach( $admin_settings_field as $settings_field )	{
 			if( isset( $admin_fields[$settings_field]['custom_args'] ) && !empty( $admin_fields[$settings_field]['custom_args'] ) ) $custom_args = $admin_fields[$settings_field]['custom_args'];
+			else $custom_args = '';
 			add_settings_field( $settings_field,
 							'<label for="' . $settings_field . '">' . $admin_fields[$settings_field]['display'] . '</label>',
 							'f_mdjm_general_settings_callback',
@@ -534,7 +580,7 @@
 	function f_mdjm_validate_settings( $input )	{
 		$valid = array();
 		/* Check for incomplete fields */
-		if( empty( $input['company_name'] ) )	{
+		if( !isset( $input['company_name'] ) || empty( $input['company_name'] ) )	{
 			add_settings_error(
 				'mdjm_company_name',
 				'mdjm_company_name_texterror',

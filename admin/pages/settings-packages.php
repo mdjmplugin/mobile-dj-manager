@@ -4,9 +4,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-	
 	?>
 	<div class="wrap">
     <div id="icon-themes" class="icon32"></div>
@@ -41,7 +38,7 @@
 					if( $i != count( $_POST['equip_id'] ) ) $equip .= ',';
 					$i++;
 				}
-				if( $_POST['package_available'] != 'Y' ) $_POST['package_available'] = 'N';
+				if( !isset( $_POST['package_available'] ) || $_POST['package_available'] != 'Y' ) $_POST['package_available'] = 'N';
 				
 				$packages[$package_id]['name'] = sanitize_text_field( $_POST['package_name'] );
 				$packages[$package_id]['slug'] = $package_id;
@@ -62,7 +59,7 @@
 			}
 		}
 	}
-	if( $_POST['submit-delete'] == 'Delete This Package' )	{ /* Delete package */
+	if( isset( $_POST['submit-delete'] ) && $_POST['submit-delete'] == 'Delete This Package' )	{ /* Delete package */
 		$packages = get_option( 'mdjm_packages' );
 		unset( $packages[$_POST['slug']] );
 		update_option( 'mdjm_packages', $packages );
@@ -96,7 +93,7 @@
 		echo '<hr />';
 	}
 	/* Create or edit packages */
-	if( $_POST['submit'] == 'Edit Package' )	{
+	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 		$title = 'Editing <span class="code">' . $packages[$_POST['all_packages']]['name'] . '</span> Equipment Package';
 	}
 	else	{
@@ -115,7 +112,7 @@
     <td class="row-title" width="10%"><label for="package_name">Package Name:</label></td>
     <td>
     <?php 
-	if( $_POST['submit'] == 'Edit Package' )	{
+	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['name'] ); ?>" /> <?php submit_button( 'Delete This Package', 'delete', 'submit-delete', false );
 	}
 	else	{
@@ -128,7 +125,7 @@
     <td class="row-title" width="10%"><label for="package_available">Available?</label></td>
     <td>
     <?php 
-	if( $_POST['submit'] == 'Edit Package' )	{
+	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 		?><input type="checkbox" name="package_available" id="package_available" value="Y" <?php checked( $packages[$_POST['all_packages']]['enabled'], 'Y' ); ?> /><?php
 	}
 	else	{
@@ -142,13 +139,13 @@
     <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo $_POST['package_desc']; } ?></textarea></td>
 	</tr>
      <?php
-		if ( $mdjm_options['multiple_dj'] == 'Y' )	{
+		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
 		?>
             <tr>
             <td class="row-title"><label for="djs">DJs with this Package:</label></th>
             <td><select name="djs[]" multiple="multiple" id="djs" width="250" style="width: 250px">
 				<?php
-				if( $_POST['submit'] == 'Edit Package' )	{
+				if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 					$djs_have = explode( ',', $packages[$_POST['all_packages']]['djs'] );
 					foreach( $djs as $dj )	{
 						echo '<option value="' . $dj->ID . '"';
@@ -181,7 +178,7 @@
     <td class="row-title">Package Price:</td>
     <td>
     <?php 
-	if( $_POST['submit'] == 'Edit Package' )	{
+	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['cost'] ); ?>" /> <span class="description">No &pound; symbol needed</span><?php
 	}
 	else	{
@@ -193,7 +190,7 @@
     <tr>
     <td>
 	<?php
-		if( $_POST['submit'] == 'Edit Package' )	{
+		if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 			submit_button( 'Update Package', 'primary', 'submit', false );
 		}
 		else	{
@@ -201,7 +198,7 @@
 		}
 	?>
 	</td>
-    <td><?php if( $_POST['submit'] != 'Edit Package' )
+    <td><?php if( isset( $_POST['submit'] ) && $_POST['submit'] != 'Edit Package' )
 		?> <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Cancel' ); ?>"><?php _e( 'Cancel' ); ?></a></td>
     </tr>
     </tbody>
@@ -219,7 +216,7 @@
 		asort( $equipment );
 		$cats = get_option( 'mdjm_cats' );
 		asort( $cats );
-		if( $_POST['submit'] == 'Edit Package' )	{
+		if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 			foreach( $cats as $cat_key => $cat_value )	{
 				echo '<strong>' . $cat_value . '</strong>';
 				echo '<br />';

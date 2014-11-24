@@ -4,9 +4,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-	
 	function print_notice( $class )	{
 		echo '<div id="message" class="' . $class . '">';
 			echo '<p><strong>' . _e('Settings saved.') . '</strong></p>';
@@ -280,7 +277,7 @@
         <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description">Cost of individual add-on. No &pound; sign required</span></td>
         </tr>
         <?php
-		if ( $mdjm_options['multiple_dj'] == 'Y' )	{
+		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
 		?>
             <tr>
             <th><label for="djs">Which DJs Provide?</label></th>

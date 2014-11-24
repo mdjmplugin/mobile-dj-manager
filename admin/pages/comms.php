@@ -13,9 +13,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-	
 	global $mdjm_options;
 	
 	function print_notice( $class, $notice )	{
@@ -27,13 +24,13 @@
 	if( isset( $_POST['submit'] ) )	{
 		global $current_user;
 		get_currentuserinfo();
-		if( $_POST['to_field'] == '' )	{
+		if( !isset( $_POST['to_field'] ) || $_POST['to_field'] == '' )	{
 			print_notice( 'error', 'ERROR: No email recipient specified. Your email was not sent' );
 		}
-		elseif ( !is_email( $_POST['to_field'] ) ) {
+		elseif( !is_email( $_POST['to_field'] ) ) {
 			print_notice( 'error', 'ERROR: The email address ' . $_POST['to_field'] . ' appears to be invalid. Your email was not sent' );	
 		}
-		elseif ( empty( $_POST['email_content'] ) ) {
+		elseif( !isset( $_POST['email_content'] ) || empty( $_POST['email_content'] ) ) {
 			print_notice( 'error', 'ERROR: There is no content in your email. Your email was not sent' );	
 		}
 		else	{
@@ -49,7 +46,7 @@
 			$email_headers .= 'From: ' . $dj->display_name . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $info['dj'] . "\r\n";
 			
-			if( $_POST['copy_sender'] == 'Y' || $mdjm_options['bcc_admin_to_client'] )	{
+			if( isset( $_POST['copy_sender'] ) || $_POST['copy_sender'] == 'Y' || isset( $mdjm_options['bcc_admin_to_client'] ) )	{
 				$email_headers .= 'Bcc: ';
 				
 				if( $_POST['copy_sender'] =='Y' )
@@ -66,7 +63,7 @@
 			$email_content = html_entity_decode( stripcslashes( $_POST['email_content'] ) );
 			$info['content'] = str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
 			
-			if ( wp_mail( $_POST['to_field'], $_POST['subject'], $info['content'], $email_headers ) ) 	{
+			if( wp_mail( $_POST['to_field'], $_POST['subject'], $info['content'], $email_headers ) ) 	{
 				$j_args = array (
 					'client' => $eventinfo->user_id,
 					'event' => $info['event_id'],

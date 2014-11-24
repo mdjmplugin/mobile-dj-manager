@@ -16,9 +16,6 @@
 *
 */
 
-	/* Check for plugin update */
-	f_mdjm_has_updated();
-
 /**
  * Check for any form submissions that take place outside the 
  * Bulk Actions and process
@@ -27,7 +24,7 @@
  *
  * @since 1.0
 */
-	if( isset ( $_POST['action'] ) )	{
+	if( isset( $_POST['action'] ) )	{
 		$func = 'f_mdjm_' . $_POST['action'];
 		if( function_exists( $func ) ) $func( $_POST );
 	}
@@ -200,7 +197,7 @@
  *
  * @since 1.0
 */
-	if( isset ( $_GET['action'] ) )	{ // Action to process
+	if( isset( $_GET['action'] ) )	{ // Action to process
 		$func = 'f_mdjm_' . $_GET['action'];
 		if( function_exists( $func ) ) $func( $_GET['venue_id'] );
 	}

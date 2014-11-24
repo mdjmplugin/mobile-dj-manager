@@ -5,12 +5,12 @@
 	include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 	require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
 	
-	if( empty( $_GET['event_id'] ) )	{
+	if( !isset( $_GET['event_id'] ) || empty( $_GET['event_id'] ) )	{
 			wp_die( 'You do not have permission to view this page. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
 	}
 	
 	/* Check for submission of form */
-	if( $_POST['submit'] )	{
+	if( isset( $_POST['submit'] ) )	{
 		$eventinfo = f_mdjm_get_event_by_id( $db_tbl, $_GET['event_id'] );
 		if( $_POST['contract_named'] != 'Y' || $_POST['contract_accept'] != 'Y' )	{ // Cannot approve
 			echo '<p><strong>ERROR: Your contract was not approved. Please ensure you check both the boxes and try again</strong></p>';
@@ -25,7 +25,7 @@
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php' );
 			$email_headers = f_mdjm_client_email_headers( $eventinfo );
 			$info = f_mdjm_prepare_email( $eventinfo, $type='client_booking_confirm' );
-			if ( wp_mail( $info['client']->user_email, 'Booking Confirmation', $info['content'], $email_headers ) ) 	{
+			if( wp_mail( $info['client']->user_email, 'Booking Confirmation', $info['content'], $email_headers ) ) 	{
 				$j_args = array (
 					'client' => $eventinfo->user_id,
 					'event' => $eventinfo->event_id,
@@ -61,7 +61,7 @@
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 		
 		$contract_query = new WP_Query( array( 'post_type' => 'contract', 'post__in' => array( $eventinfo->contract ) ) );
-		if ( $contract_query->have_posts() ) {
+		if( $contract_query->have_posts() ) {
 			while ( $contract_query->have_posts() ) {
 				$contract_query->the_post();
 				$content = get_the_content();

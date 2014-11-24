@@ -15,8 +15,6 @@
 * @since 1.0
 *
 */
-	/* Check for plugin update */
-	f_mdjm_has_updated();
 
 /**
  * Check for any form submissions that take place outside the 
@@ -27,7 +25,7 @@
  * @since 1.0
 */
 	if( isset( $_POST['update_packages' ] ) )	{
-		if( $_POST['update_packages' ] == 'Update Package' )	{
+		if( isset( $_POST['update_packages'] ) && $_POST['update_packages'] == 'Update Package' )	{
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $_POST['event_id'] );
 			if( $_POST['event_package'] != $eventinfo->event_package )	{ // Update the package
 				// Get new package details
@@ -54,7 +52,7 @@
 				exit;
 			}
 		}
-		if( $_POST['update_packages' ] == 'Update Add-Ons' )	{
+		if( isset( $_POST['update_packages' ] ) && $_POST['update_packages' ] == 'Update Add-Ons' )	{
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $_POST['event_id'] );
 			// Remove old addon costs from event
 			$c_addons = explode( ',', $eventinfo->event_addons );
@@ -84,20 +82,22 @@
 		}
 	}
 	
-	if( $_GET['updated'] == 1 )	{
-		$class = "updated";
-		$message = "The selected events have been updated successfully.";
-		f_mdjm_update_notice( $class, $message );
-	}
-	if( $_GET['updated'] == 2 )	{
-		$class = "updated";
-		$message = "The event package has been updated successfully.";
-		f_mdjm_update_notice( $class, $message );
-	}
-	if( $_GET['updated'] == 3 )	{
-		$class = "updated";
-		$message = "The event add-ons have been updated successfully.";
-		f_mdjm_update_notice( $class, $message );
+	if( isset( $_GET['updated'] ) )	{
+		if( $_GET['updated'] == 1 )	{
+			$class = "updated";
+			$message = "The selected events have been updated successfully.";
+			f_mdjm_update_notice( $class, $message );
+		}
+		if( $_GET['updated'] == 2 )	{
+			$class = "updated";
+			$message = "The event package has been updated successfully.";
+			f_mdjm_update_notice( $class, $message );
+		}
+		if( $_GET['updated'] == 3 )	{
+			$class = "updated";
+			$message = "The event add-ons have been updated successfully.";
+			f_mdjm_update_notice( $class, $message );
+		}
 	}
 
 /**
@@ -112,7 +112,7 @@
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 		}
 	
-		if( ! class_exists( 'MDJM_Events_Table' ) ) {
+		if( !class_exists( 'MDJM_Events_Table' ) ) {
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-event-table.php' );
 		}
 		$events_table = new MDJM_Events_Table();
@@ -144,7 +144,7 @@
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 		}
 	
-		if( ! class_exists( 'MDJM_PlayList_Table' ) ) {
+		if( !class_exists( 'MDJM_PlayList_Table' ) ) {
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-playlist-table.php' );
 		}
 		
@@ -179,7 +179,7 @@
 			f_mdjm_add_event_step_1();
 		}
 		elseif( $_POST['step'] == 2 )	{
-			if( $mdjm_options['enable_packages'] == 'Y' )	{
+			if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 				$submit = 'Next';
 				f_mdjm_add_event_step_2();
 			}
@@ -189,7 +189,7 @@
 			}
 		}
 		elseif( $_POST['step'] == 3 && $mdjm_options['enable_packages'] == 'Y' )	{
-			if( $mdjm_options['enable_packages'] == 'Y' ) 	{
+			if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' ) 	{
 				$submit = 'Next';
 				f_mdjm_add_event_step_3();
 			}
@@ -310,7 +310,7 @@
         </td>
         <th scope="row"><label for="enquiry_source">Enquiry Source</label></th>
         <td><select name="enquiry_source" id="enquiry_source">
-        	<option value="" <?php if( empty( $_POST['client'] ) ) echo 'selected'; ?>>--- Select ---</option>
+        	<option value="" <?php if( !isset( $_POST['client'] ) || empty( $_POST['client'] ) ) echo 'selected'; ?>>--- Select ---</option>
 			<?php
             $sources = explode( "\n", $mdjm_options['enquiry_sources'] );
 			asort( $sources );
@@ -449,7 +449,7 @@
 		?>
         <table class="form-table">
 		<?php
-		if( $mdjm_options['enable_packages'] == 'Y' )	{
+		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 			$packages = get_option( 'mdjm_packages' );
 			if( $packages )	{
 			asort( $packages );
@@ -489,7 +489,7 @@
 		?>
 		<table class="form-table">
         <?php
-		if( $mdjm_options['enable_packages'] == 'Y' )	{
+		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			$packages = get_option( 'mdjm_packages' );
 			/* Remove add on items included in selected package */
@@ -535,7 +535,7 @@
 		global $mdjm_options;
 		$total_cost = $_POST['event_cost'];
 		/* Add package costs */
-		if( $mdjm_options['enable_packages'] == 'Y' && !empty( $_POST['event_package'] ) )	{
+		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' && !empty( $_POST['event_package'] ) )	{
 			$packages = get_option( 'mdjm_packages' );
 			asort( $packages );
 			if( $packages )	{
@@ -547,7 +547,7 @@
 			}
 		}
 		/* Add costs of add-ons */
-		if( $mdjm_options['enable_packages'] == 'Y' && !empty( $_POST['event_addons'] ) )	{
+		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' && !empty( $_POST['event_addons'] ) )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			if( !is_array( $_POST['event_addons'] ) ) $_POST['event_addons'] = array( $_POST['event_addons'] );
 			foreach( $_POST['event_addons'] as $addon )	{
@@ -714,7 +714,7 @@
         </tr>
         </tr>
            <?php
-        if( $mdjm_options['enable_packages'] == 'Y' )	{
+        if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 			$packages = get_option( 'mdjm_packages' );
 			asort( $packages );
             if( $packages )	{
@@ -755,7 +755,7 @@
                 <?php
             }
 		}
-		if( $mdjm_options['enable_packages'] == 'Y' )	{
+		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			if ($equipment )	{
 				$packages = get_option( 'mdjm_packages' );
@@ -895,7 +895,7 @@
         </tr>
         <tr>
         <th scope="row"><?php
-        	if ( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
+        	if( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
 				submit_button( 'Edit Event', 'primary', 'submit', false );
 			}
 			else	{
@@ -966,7 +966,7 @@
  *
  * @since 1.0
 */
-	if( $_GET['action'] == 'show_journal' )	{
+	if( isset( $_GET['action'] ) && $_GET['action'] == 'show_journal' )	{
 		$func = 'f_mdjm_' . $_GET['action'];
 		$func();
 		exit;

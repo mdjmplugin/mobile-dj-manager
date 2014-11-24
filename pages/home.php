@@ -5,7 +5,7 @@
 	require_once WPMDJM_PLUGIN_DIR . '/includes/config.inc.php';
 	require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 	
-	if(!is_user_logged_in())	{ // Only show custom content if the user is logged in
+	if( !is_user_logged_in() )	{ // Only show custom content if the user is logged in
 		f_mdjm_show_user_login_form();
 	}
 	else	{
