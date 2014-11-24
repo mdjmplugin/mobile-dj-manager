@@ -386,6 +386,7 @@
 		add_option( 'mdjm_plugin_pages', $mdjm_init_pages );
 		add_option( 'mdjm_plugin_permissions', $mdjm_init_permissions );
 		add_option( 'mdjm_schedules', $mdjm_schedules );
+		add_option( 'mdjm_updated', '0' );
 		
 		/* Add user roles */
 		add_role( 'inactive_client', 'Inactive Client', array( 'read' => true ) );
@@ -416,10 +417,10 @@
  * @since 1.0
 */	
 	function f_mdjm_upgrade()	{
-		if( !get_option( 'mdjm_version' ) )	{ //  Add application version to the DB if not already there
-			add_option( 'mdjm_version', '0.9.2' );	
+		if( !get_option( 'mdjm_version' ) )	{ // Add application version to the DB if not already there
+			add_option( 'mdjm_version', '0.9.2' ); // Add the previous version to which this upgrade proc was introduced
 		}
-		if( !get_option( 'mdjm_updated' ) )	{ //  Add application version to the DB if not already there
+		if( !get_option( 'mdjm_updated' ) )	{ // Add the option to show we've updated 
 			add_option( 'mdjm_updated', '1' );	
 		}
 		
