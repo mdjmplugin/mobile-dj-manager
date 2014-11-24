@@ -157,7 +157,7 @@
 
 		/* VENUES TABLE */
 		$venues_sql = "CREATE TABLE ". $db_tbl['venues'] . " (
-						venue_id smallint(6) NOT NULL,
+						venue_id smallint(6) NOT NULL AUTO_INCREMENT,
 						venue_name varchar(255) NOT NULL,
 						venue_address1 varchar(255) NOT NULL,
 						venue_address2 varchar(255) NOT NULL,
