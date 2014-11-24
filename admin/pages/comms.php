@@ -13,6 +13,9 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
+	
 	global $mdjm_options;
 	
 	function print_notice( $class, $notice )	{

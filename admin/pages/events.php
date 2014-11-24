@@ -16,6 +16,9 @@
 *
 */
 
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
+
 /**
  * Check for any form submissions that take place outside the 
  * Bulk Actions and process

@@ -3,6 +3,9 @@
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
+	
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
 
 /**
 * * * * * * * * * * * * * * * MDJM * * * * * * * * * * * * * * *

@@ -978,7 +978,8 @@
 	function f_mdjm_has_updated()	{
 		$updated = get_option( 'mdjm_updated' );
 		if( $updated && $updated == '1' )	{
-			wp_redirect( admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) );
+			$_GET['updated'] = '1';
+			include( WPMDJM_PLUGIN_DIR .  '/admin/pages/updated.php' );
 			exit;
 		}
 	} // f_mdjm_has_updated

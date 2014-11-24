@@ -95,6 +95,7 @@
             <ui>
                 <li>This update notice! For all future updates, this page will provide you with an overview of changes</li>
                 <li>Added option to mark balance as paid in event editor view</li>
+                <li>Added Last Login column to the Clients table</li>
                 <li>Added the MDJM menu icon <img src="<?php echo WPMDJM_PLUGIN_URL . '/admin/images/mdjm-icon-20x20.jpg'; ?>" width="20" height="19"> to Contracts &amp; Email Templates menu items to make them easier to identify</li>
                 <li>Dashboard figures were sometimes slightly inaccurate.</li>
                 <li>In event edit view, Update Add-ons button was displayed even if no Add-ons were configured.</li>

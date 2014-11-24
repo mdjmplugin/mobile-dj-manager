@@ -4,6 +4,9 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
+	
 /*******************************************************************************
 					THIS PAGE IS DEPRECATED SINCE 0.9.3
 					TO BE REMOVED

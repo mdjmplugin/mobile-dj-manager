@@ -26,9 +26,13 @@
 						else	{
 							$event_link = $info['next_event'];
 						}
+						$last_login = strtotime( get_user_meta( $client->ID, 'last_login', true ) );
+						if( !$last_login ) $last_login = 'Never';
+						else $last_login = date( 'H:i d M Y', $last_login );
 						$client_data[] = array(
 											'client_id' => $client->ID,
 											'client_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $client->ID . '">' . $client->display_name . '</a>',
+											'last_login' => $last_login,
 											'client_email' => '<a href="mailto:' . $client->user_email . '">' . $client->user_email . '</a>',
 											'client_events' => $info['num_rows'],
 											'client_next_event' => $event_link,
@@ -44,9 +48,13 @@
 					else	{
 						$event_link = $info['next_event'];
 					}
+					$last_login = strtotime( get_user_meta( $client->ID, 'last_login', true ) );
+						if( !$last_login ) $last_login = 'Never';
+						else $last_login = date( 'H:i d M Y', $last_login );
 					$client_data[] = array(
 										'client_id' => $client->ID,
 										'client_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $client->ID . '">' . $client->display_name . '</a>',
+										'last_login' => $last_login,
 										'client_email' => '<a href="mailto:' . $client->user_email . '">' . $client->user_email . '</a>',
 										'client_events' => $info['num_rows'],
 										'client_next_event' => $event_link,
@@ -64,6 +72,7 @@
 			
 			echo '<style type="text/css">';
 			echo '.wp-list-table .column-client_name { width: 15%; }';
+			echo '.wp-list-table .column-last_login { width: 20%; }';
 			echo '.wp-list-table .column-client_email { width: 15%; }';
 			echo '.wp-list-table .column-client_events { width: 10%; }';
 			echo '.wp-list-table .column-client_next_event { width: 20%; }';
@@ -89,6 +98,7 @@
 		function column_default( $item, $column_name )	{
 			switch( $column_name )	{ 
 				case 'client_name':
+				case 'last_login':
 				case 'client_email':
 				case 'client_events':
 				case 'client_next_event':
@@ -119,6 +129,7 @@
 		function get_columns()	{ // The table columns
 			$columns = array(
 				'client_name' => __( '<strong>Name</strong>', 'mdjmclienttable' ),
+				'last_login' => __( '<strong>Last Login</strong>', 'mdjmclienttable' ),
 				'client_email' => __( '<strong>Email</strong>', 'mdjmclienttable' ),
 				'client_events' => __( '<strong>No. Events</strong>', 'mdjmclienttable' ),
 				'client_next_event' => __( '<strong>Next Event</strong>', 'mdjmclienttable' ),
@@ -130,6 +141,7 @@
 		function get_sortable_columns() { // Defines the columns by which users can sort the table
 			$sortable_columns = array(
 			'client_name'   => array( 'client_name', true ),
+			'last_login'   => array( 'last_login', false ),
 			'client_email'   => array( 'client_email', false ),
 			'client_events'   => array( 'client_events', false ),
 			'client_next_event' => array( 'client_next_event', false ),

@@ -4,6 +4,9 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
+	
 	function print_notice( $class )	{
 		echo '<div id="message" class="' . $class . '">';
 			echo '<p><strong>' . _e('Settings saved.') . '</strong></p>';

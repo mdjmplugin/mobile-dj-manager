@@ -101,6 +101,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 <li>This update notice! For all future updates, this page will provide you with an overview of changes</li>
 <li>Added option to mark balance as paid in event editor view</li>
 <li>Added the MDJM menu icon to Contracts &amp; Email Templates menu items to make them easier to identify</li>
+<li>Added last login column to client table</li>
 </ul>
 
 = 0.9.2 =

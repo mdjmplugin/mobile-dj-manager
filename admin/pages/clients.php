@@ -16,6 +16,9 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
+	// If recently updated, display the release notes
+	f_mdjm_has_updated();
+	
 /**
  * f_mdjm_render_clients_table
  * Render the table with list of clients
