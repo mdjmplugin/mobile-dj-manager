@@ -508,6 +508,9 @@
 			/* Update the version number */
 			update_option( 'mdjm_version', WPMDJM_VERSION_NUM );
 			
+			/* Make sure release notes are displayed */
+			add_option( 'mdjm_updated', '1' );
+			
 			$message = 'Welcome to Mobile DJ Manager for WordPress version ' . WPMDJM_VERSION_NUM . '. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the release notes for this version</a>';
 			
 			f_mdjm_update_notice( 'updated', $message );
