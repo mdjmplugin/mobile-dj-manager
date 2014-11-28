@@ -18,53 +18,53 @@
 	
 	global $mdjm_options;
 	
-	function print_notice( $class, $notice )	{
-		echo '<div id="message" class="' . $class . '">';
-		echo '<p><strong>' . _e( $notice ) . '</strong></p>';
-		echo '</div>';
-	}
-	
 	if( isset( $_POST['submit'] ) )	{
-		global $current_user;
-		get_currentuserinfo();
 		if( !isset( $_POST['to_field'] ) || $_POST['to_field'] == '' )	{
-			print_notice( 'error', 'ERROR: No email recipient specified. Your email was not sent' );
+			$class = 'error';
+			$message = '<strong>ERROR</strong>: No email recipient specified. Your email was not sent';
+			f_mdjm_update_notice( $class, $message );
 		}
 		elseif( !is_email( $_POST['to_field'] ) ) {
-			print_notice( 'error', 'ERROR: The email address ' . $_POST['to_field'] . ' appears to be invalid. Your email was not sent' );	
+			$class = 'error';
+			$message = '<strong>ERROR</strong>: The email address ' . $_POST['to_field'] . ' appears to be invalid. Your email was not sent';
+			f_mdjm_update_notice( $class, $message );
 		}
 		elseif( !isset( $_POST['email_content'] ) || empty( $_POST['email_content'] ) ) {
-			print_notice( 'error', 'ERROR: There is no content in your email. Your email was not sent' );	
+			$class = 'error';
+			$message = '<strong>ERROR</strong>: There is no content in your email. Your email was not sent';
+			f_mdjm_update_notice( $class, $message );
 		}
 		else	{
 			$info['client'] = get_user_by( 'email', $_POST['to_field'] );
 			$info = f_mdjm_client_get_events( $info['client']->ID );
 			$info['client'] = get_user_by( 'email', $_POST['to_field'] );
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $info['event_id'] );
-			$dj = get_userdata( $eventinfo->event_dj );
+			$dj = get_userdata( get_current_user_id() );
 			$info['dj'] = $dj->user_email;
 			
-			$email_headers = 'MIME-Version: 1.0'  . "\r\n";
+			$email_headers = 'MIME-Version: 1.0' . "\r\n";
 			$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-			$email_headers .= 'From: ' . $dj->display_name . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$email_headers .= 'From: ' . $info['dj'] . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $info['dj'] . "\r\n";
 			
 			if( isset( $_POST['copy_sender'] ) || $_POST['copy_sender'] == 'Y' || isset( $mdjm_options['bcc_admin_to_client'] ) )	{
 				$email_headers .= 'Bcc: ';
 				
 				if( $_POST['copy_sender'] =='Y' )
-					$email_headers .= $current_user->user_email;
+					$email_headers .= $dj->user_email;
 				if( $_POST['copy_sender'] =='Y' && $mdjm_options['bcc_admin_to_client'] )	{
 					$email_headers .= ', ';	
 				}
 				if( $mdjm_options['bcc_admin_to_client'] )
-					$email_headers .= get_bloginfo( 'admin_email' );
+					$email_headers .= $mdjm_options['system_email'];
 					
 				$email_headers .= "\r\n";
 			}
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-			$email_content = html_entity_decode( stripcslashes( $_POST['email_content'] ) );
-			$info['content'] = str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
+			$email_content = nl2br( html_entity_decode( stripcslashes( $_POST['email_content'] ) ) );
+			$info['content'] = '<html><body>';
+			$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
+			$info['content'] .= '</html></body>';
 			
 			if( wp_mail( $_POST['to_field'], $_POST['subject'], $info['content'], $email_headers ) ) 	{
 				$j_args = array (
@@ -76,7 +76,9 @@
 					'entry' => 'Email sent to client with subject "' . $_POST['subject'] . '"'
 					);
 				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-				print_notice( 'updated', 'Your email has been sent successfully' );
+				$class = 'updated';
+				$message = 'Your email has been sent successfully';
+				f_mdjm_update_notice( $class, $message );
 			}
 		}
 	}

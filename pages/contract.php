@@ -1,85 +1,116 @@
 <?php
+/*
+* contract.php
+* 27/11/2014
+* @since 0.8
+* Display client contract and enable digital signing
+*/
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
+
 	global $wpdb, $mdjm_options;
 	
-	include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-	require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
-	
-	if( !isset( $_GET['event_id'] ) || empty( $_GET['event_id'] ) )	{
-			wp_die( 'You do not have permission to view this page. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
-	}
-	
-	/* Check for submission of form */
-	if( isset( $_POST['submit'] ) )	{
-		$eventinfo = f_mdjm_get_event_by_id( $db_tbl, $_GET['event_id'] );
-		if( $_POST['contract_named'] != 'Y' || $_POST['contract_accept'] != 'Y' )	{ // Cannot approve
-			echo '<p><strong>ERROR: Your contract was not approved. Please ensure you check both the boxes and try again</strong></p>';
+/* Check if user is logged in */
+	if( is_user_logged_in() )	{ // Yes
+		if( !isset( $_GET['event_id'] ) || empty( $_GET['event_id'] ) )	{
+			echo '<p>You do not have permission to view this page. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a> or <a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '">Click here to return to the ' . WPMDJM_CO_NAME . ' ' . WPMDJM_APP_NAME . ' home page.';
 		}
-		elseif( empty( $_POST['approver'] ) )	{
-			echo '<p><strong>ERROR: An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a></strong></p>';
-
-		}
-		else	{ /* Approve the contract */
-			f_mdjm_client_approve_contract( $eventinfo, $_POST, $db_tbl['events'] );
+		else	{ // Process and Display the contract
+			/* Check for form submission & process */
+			if( isset( $_POST['submit'] ) )	{ // Form submitted
+				$eventinfo = f_mdjm_client_event_by_id( $_GET['event_id'] );
+				if( !isset( $_POST['contract_named'], $_POST['contract_accept'] ) || $_POST['contract_named'] != 'Y' || $_POST['contract_accept'] != 'Y' )	{ // Cannot approve
+					echo '<p><strong>ERROR: Your contract was not approved. Please ensure you check both the boxes and try again</strong></p>';
+				}
+				elseif( !isset( $_POST['approver'] ) || empty( $_POST['approver'] ) )	{
+					echo '<p><strong>ERROR: An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a></strong></p>';
+				}
+				else	{ /* Approve the contract */
+					f_mdjm_client_approve_contract( $eventinfo, $_POST );
+					
+					require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php' );
+					$email_headers = f_mdjm_client_email_headers( $eventinfo );
+					$info = f_mdjm_prepare_email( $eventinfo, 'email_client_confirm' );
+					if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+						$subject = $info['subject'];	
+					}
+					else	{
+						$subject = 'Booking Confirmation';	
+					}
+					
+					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+						$j_args = array (
+							'client'   => $eventinfo->user_id,
+							'event'    => $eventinfo->event_id,
+							'author'   => get_current_user_id(),
+							'type'     => 'Email Client',
+							'source'   => 'Admin',
+							'entry'    => 'Booking confirmation email sent to client'
+							);
+						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+						?>
+						<p>Your booking confirmation email is on it's way!</p>
+						<?php
+						$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
+						$info = f_mdjm_prepare_email( $eventinfo, 'email_dj_confirm' );
+						wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
+					} // if( wp_mail ...
+				} // else	{ /* Approve the contract */
+			} // if( isset( $_POST['submit'] ) )
 			
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php' );
-			$email_headers = f_mdjm_client_email_headers( $eventinfo );
-			$info = f_mdjm_prepare_email( $eventinfo, $type='client_booking_confirm' );
-			if( wp_mail( $info['client']->user_email, 'Booking Confirmation', $info['content'], $email_headers ) ) 	{
-				$j_args = array (
-					'client' => $eventinfo->user_id,
-					'event' => $eventinfo->event_id,
-					'author' => get_current_user_id(),
-					'type' => 'Email Client',
-					'source' => 'Admin',
-					'entry' => 'Booking confirmation email sent to client'
-					);
-				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-				?>
-				<p>Your booking confirmation is on it's way!</p>
-				<?php
-				$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
-				$info = f_mdjm_prepare_email( $eventinfo, $type='dj_booking_confirm' );
-				wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
+			/* Event information */
+			$eventinfo = f_mdjm_client_event_by_id( $_GET['event_id'] );
+			if( $eventinfo )	{
+				/* Make sure it's the client's contract! */
+				$this_user = get_current_user_id();
+				if( $eventinfo->user_id != $this_user)
+					wp_die( 'Access Denied: An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a>' );
+		
+				/* If the event does not have a contract assigned, error */
+				if( is_null( $eventinfo->contract ) ) 
+					wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a>' );
+				
+				$info['client'] = get_userdata( $eventinfo->user_id );
+				$dj = get_userdata( $eventinfo->event_dj );
+				
+				include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
+				
+				if( $eventinfo->contract_status != 'Approved' )	{
+					f_mdjm_accept_contract_form( $eventinfo->event_id, true );
+				}
+				else	{
+					f_mdjm_contract_is_signed( $eventinfo );	
+				}
+				
+				/* Contract */
+				$contract_query = new WP_Query( array( 'post_type' => 'contract', 'post__in' => array( $eventinfo->contract ) ) );
+				if( $contract_query->have_posts() ) {
+					while ( $contract_query->have_posts() ) {
+						$contract_query->the_post();
+						$content = get_the_content();
+						$content = apply_filters( 'the_content', $content );
+						$content = str_replace(']]>', ']]&gt;', $content);
+						$content = str_replace( $shortcode_content_search, $shortcode_content_replace, $content );
+						print( $content );
+					}
+				}
+				else	{
+					wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a>' );	
+				}
+				if( $eventinfo->contract_status != 'Approved' )	{
+					f_mdjm_accept_contract_form( $eventinfo->event_id, true );
+				}
+			} // if( $eventinfo )
+			else	{
+				echo '<p>You do not have permission to view this page. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a> or <a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '">Click here to return to the ' . WPMDJM_CO_NAME . ' ' . WPMDJM_APP_NAME . ' home page.';	
 			}
 		}
+		
+	} // if( is_user_logged_in() )
+	else	{
+		f_mdjm_show_user_login_form();	
 	}
 	
-	$eventinfo = f_mdjm_get_event_by_id( $db_tbl, $_GET['event_id'] );
-	/* Make sure it's the client's contract! */
-	$this_user = get_current_user_id();
-	if( $eventinfo->user_id != $this_user)
-		wp_die( 'Access Denied: An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
-	
-	/* If the event does not have a contract assigned, error */
-	if( is_null( $eventinfo->contract ) ) 
-		wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );
-	
-	function f_mdjm_show_contract( $eventinfo, $info, $dj )	{
-		global $mdjm_options;
-		
-		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-		
-		$contract_query = new WP_Query( array( 'post_type' => 'contract', 'post__in' => array( $eventinfo->contract ) ) );
-		if( $contract_query->have_posts() ) {
-			while ( $contract_query->have_posts() ) {
-				$contract_query->the_post();
-				$content = get_the_content();
-				$content = apply_filters( 'the_content', $content );
-				$content = str_replace(']]>', ']]&gt;', $content);
-				$content = str_replace( $shortcode_content_search, $shortcode_content_replace, $content );
-				print( $content );
-			}
-		}
-		else	{
-			wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a>' );	
-		}
-	} // f_mdjm_show_contract
-	
-	$info['client'] = get_userdata( $eventinfo->user_id );
-	$dj = get_userdata( $eventinfo->event_dj );
-	
-	function f_mdjm_accept_contract_form( $event_id, $header)	{
+	function f_mdjm_accept_contract_form( $event_id, $header )	{
 		global $current_user;
 		
 		$above_below = 'below';
@@ -106,20 +137,7 @@
 		echo '<p>Your contract has already been signed and accepted. A copy is printed below for your records.</p>';
 		echo '<p>Contract signed on ' . date( 'l, jS F Y', strtotime( $eventinfo->contract_approved_date ) ) . ' by ' . $eventinfo->contract_approver . '.</p>';
 	}
-	
-	if( !is_user_logged_in() )	{ /* Only show custom content if the user is logged in */
-		f_mdjm_show_user_login_form();
-	}
-	
-	else	{
-		if( $eventinfo->contract_status == 'Approved' )	{
-			f_mdjm_contract_is_signed( $eventinfo );
-			f_mdjm_show_contract( $eventinfo, $info, $dj );
-		}
-		else	{
-			f_mdjm_accept_contract_form( $eventinfo->event_id, true );
-			f_mdjm_show_contract( $eventinfo, $info, $dj );
-			f_mdjm_accept_contract_form( $eventinfo->event_id, false );	
-		}
-	}
+
+	/* Print the credit if set */
+	add_action( 'wp_footer', f_wpmdjm_print_credit );	
 ?>

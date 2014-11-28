@@ -12,33 +12,6 @@
 /**************************************************************
 -	GENERAL
 **************************************************************/
-/**
- * Email Templates
- *
- *
- * @since 1.0
-*/
-/*********************************************************************************
-							DEPRECATED SINCE 0.9.3
-*********************************************************************************/
-	/*$email_templates = array(
-				'enquiry' => array(
-					'name' => 'Event Enquiry Email Template',
-					'description' => 'This template forms the content of the email sent to a client when an event enquiry is loaded into the system.',
-					),
-				'contract_review' => array(
-					'name' => 'Contract Review Email Template',
-					'description' => 'This template forms the content of the email sent to a client when an Enquiry is converted and the Event status is changed to Pending',
-					),
-				'client_booking_confirm' => array(
-					'name' => 'Client Booking Confirmation Email Template',
-					'description' => 'This template forms the content of the email sent to a client when their event status is changed to "Approved".',
-					),
-				'dj_booking_confirm' => array(
-					'name' => 'DJ Booking Confirmation Email Template',
-					'description' => 'This template forms the content of the email sent to a DJ when a client\'s event status is changed to "Approved".',
-					),
-				); // $email_templates*/
 
 /**************************************************************
 -	EMAIL

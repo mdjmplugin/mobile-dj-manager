@@ -82,7 +82,7 @@
  * @since 1.0
 */
 	function f_mdjm_add_venue_form()	{
-		if( !current_user_can( 'administrator' ) && !dj_can( 'add_venue' ) )	wp_die( 'You do not have permissions to perform this action. Contact your <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">administrator</a> for assistance.' );
+		if( !current_user_can( 'administrator' ) && !dj_can( 'add_venue' ) )	wp_die( 'You do not have permissions to perform this action. Contact your <a href="mailto:' . $mdjm_options['system_email'] . '">administrator</a> for assistance.' );
 		?>
 		<div class="wrap">
         <h2>Add Venue</h2>

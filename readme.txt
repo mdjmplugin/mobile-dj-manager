@@ -78,6 +78,28 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 
 == Changelog ==
 
+= 0.9.4 =
+<h2>Bug Fixes</h2>
+<ul>
+	<li>Early adoptors of 0.9.3 may have experienced issues with saving venues into the venues database during event creation due to an incorrectly set DB attribute</li>
+	<li>Some templated emails were not formatted correctly (too much spacing and/or invalid characters)</li>
+	<li>Admin was not blind copied into emails even if setting was set</li>
+	<li>Client contract page was sometimes denying access if accessed via direct URL</li>
+	<li>Client Playlist page no longer shows odd date if the event has passed</li>
+	<li>Removed the Email Templates tab from the Settings pages as this is no longer used since version 0.9.3</li>
+	<li>Displays the number of playlist entries uploaded to MDJM in the Upload Playlists edit view of the scheduler</li>
+</ul>
+
+<h2>New & Enhanced Features</h2>
+<ul>
+	<li>Customise the subject of emails for Enquiries, Contracts, and Booking Confirmations</li>
+	<li>Customise the Admin email address</li>
+	<li>Enhanced the Client pages</li>
+	<li>Now supports multiple events per client</li>
+	<li>All event's are displayed to client - previously only confirmed (approved events)</li>
+	<li>Clients can accept quotations, sign contracts, decline quotes</li>
+</ul>
+
 = 0.9.3 =
 <h2>Bug Fixes</h2>
 <ul>
@@ -98,10 +120,8 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 <li>and more - fully customisable</li>
 </ui>
 </li>
-<li>This update notice! For all future updates, this page will provide you with an overview of changes</li>
 <li>Added option to mark balance as paid in event editor view</li>
 <li>Added the MDJM menu icon to Contracts &amp; Email Templates menu items to make them easier to identify</li>
-<li>Added last login column to client table</li>
 </ul>
 
 = 0.9.2 =

@@ -12,7 +12,7 @@
 	function f_mdjm_updated_header()	{
 		?>
         <div class="wrap">
-        <table class="widefat">
+        <table class="widefat" width="100%">
         <tr>
         <td align="center"><img src="<?php echo WPMDJM_PLUGIN_URL . '/admin/images/banner-772x250.png'; ?>" width="772" height="250" /></td>
         </tr>
@@ -23,7 +23,7 @@
         <table>
         <tr>
         <td>
-        <table class="widefat">
+        <table class="widefat" width="100%">
         <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new?</font></td>
         </tr>
@@ -33,7 +33,7 @@
 	function f_mdjm_updated_footer()	{
 		?>
         <td width="30%" valign="top">
-        <table class="widefat">
+        <table class="widefat" width="100%">
         <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Help &amp; Support</td>
         </tr>
@@ -106,7 +106,69 @@
         </table>
         </td>
         <?php
-	}
+	} // f_mdjm_updated_to_0_9_3
+	
+/**************************************************
+				VERSION 0.9.4
+**************************************************/
+	function f_mdjm_updated_to_0_9_4()	{
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Customised Email Subjects</font><br>
+		You can now configure the client Enquiry, Contract and Booking Confirmation emails to have customised email subjects.<br /><br />
+If you enable the option <strong>Template Title is Subject</strong> within the <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a> page, these emails will use the title of the templates as the email subject. If the setting remains turned off the default email subjects will be used...<br />
+<ui>
+<li><strong>Event Quote:</strong> DJ Enquiry</li>
+<li><strong>Contract:</strong> Your DJ Booking</li>
+<li><strong>Client Booking Confirmation:</strong> Booking Confirmation</li>
+</ui><br />
+<strong>Note</strong>: The subject of DJ Booking confirmation email which is sent to the event DJ when a client has signed their contract, or an event is set to "Approved" cannot be changed and is set to <strong>DJ Booking Confirmed</strong><br /><br />
+Remember to change the titles of your email templates if you enable this option!<br /><br />
+<strong>Note</strong>: Subjects for emails sent via the scheduler are set within the scheduler. Edit the task and set the subject as required.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Pages</font><br>
+        We have updated the Client Pages to enable your client to login as soon as an enquiry is created and begin managing their event.<br /><br />
+You can now adjust your email template used for sending enquiries to tell your clients about this and enable them to go through the entire booking process, and beyond, easily online.
+		<ui>
+        	<li>Now supports multiple events per client</li>
+            <li>All event's are displayed to client - previously only confirmed (approved events)</li>
+            <li>Clients can accept quotations, sign contracts, decline quotes</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Default Email Address</font><br>
+		Previously the default email address used to send system generated emails was the email address specified under the WordPress <a href="<?php echo admin_url( 'options-general.php' ); ?>">Settings > General</a> option. We have now introduced a new <strong>Default Email Address</strong> field under the <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a> page enabling you to change this email address should you wish to do so.<br /><br />
+
+The address specified here is used as the Admin email address. We recommend using the business owner's email address.<br /><br />
+
+If the Setting <strong>Copy Admin in Client Emails</strong> is set, the email address entered in this new field is the one that is copied.<br /><br />
+
+Additionally, in some system generated emails (enquiry etc.) this address is used in the from field. Make sure the address entered is a real mailbox that is capable of receiving emails.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>Early adoptors of 0.9.3 may have experienced issues with saving venues into the venues database during event creation due to an incorrectly set DB attribute</li>
+                <li>Some templated emails were not formatted correctly (too much spacing and/or invalid characters)</li>
+                <li>Admin was not blind copied into emails even if setting was set</li>
+                <li>Client contract page was sometimes denying access if accessed directly</li>
+                <li>Client Playlist page no longer shows odd date if the event has passed</li>
+                <li>Removed the Email Templates tab from the Settings pages as this is no longer used since version 0.9.3</li>
+                <li>Displays the number of playlist entries uploaded to MDJM in the Upload Playlists edit view within the scheduler</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_4
 	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{

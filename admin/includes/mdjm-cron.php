@@ -67,7 +67,7 @@
 	function f_mdjm_cron_email_errors( $task, $cron_errors )	{
 		global $mdjm_options;
 		if( $cron_errors )	{
-			$to = get_bloginfo( 'admin_email' );
+			$to = $mdjm_options['system_email'];
 			$subject = 'Task Failure Notice from ' . get_bloginfo( 'name' );
 			$content = 'An error occured during the execution of on of your scheduled tasks. Please review the information below and take any remedial actions necessary to resolved.' . "\n";
 			$content .= "\n";
@@ -95,11 +95,12 @@
 * Retrieves the from address to be used in emails
 */
 	function f_mdjm_cron_get_fromaddr( $args )	{
+		global $mdjm_options;
 		if( isset( $args['taskinfo']['options']['email_from'] ) && $args['taskinfo']['options']['email_from'] == 'dj' )	{
 			$fromaddr = 'From: ' . $args['djinfo']->display_name . ' <' . $args['djinfo']->user_email . '>' . "\r\n";
 		}
 		else	{
-			$fromaddr = get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$fromaddr = get_bloginfo( 'name' ) . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		}
 		
 		return $fromaddr;
@@ -204,7 +205,7 @@
 				if( isset( $mdjm_schedules['complete-events']['options']['notify_admin'] ) && $mdjm_schedules['complete-events']['options']['notify_admin'] == 'Y' )	{
 					$cron_email_args = array(
 											'type'		=> 'notify',
-											'to'		  => get_bloginfo( 'admin_email' ),
+											'to'		  => $mdjm_options['system_email'],
 											'subject'	 => $mdjm_schedules['complete-events']['options']['email_subject'],
 											'template'	=> $mdjm_schedules['complete-events']['options']['email_template'],
 											'djinfo'	  => $djinfo,
@@ -348,7 +349,7 @@
 				if( isset( $mdjm_schedules['fail-enquiry']['options']['notify_admin'] ) && $mdjm_schedules['fail-enquiry']['options']['notify_admin'] == 'Y' )	{
 					$cron_email_args = array(
 											'type'		=> 'notify',
-											'to'		  => get_bloginfo( 'admin_email' ),
+											'to'		  => $mdjm_options['system_email'],
 											'subject'	 => $mdjm_schedules['fail-enquiry']['options']['email_subject'],
 											'template'	  => $mdjm_schedules['fail-enquiry']['options']['email_template'],
 											'djinfo'	  => $djinfo,
@@ -523,7 +524,7 @@
 			if( isset( $mdjm_schedules['request-deposit']['options']['notify_admin'] ) && $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		=> 'notify',
-										'to'		  => get_bloginfo( 'admin_email' ),
+										'to'		  => $mdjm_options['system_email'],
 										'subject'     => 'Task Request Deposit Completed ' . $mdjm_options['company_name'],
 										'template'	=> $mdjm_schedules['request-deposit']['options']['email_template'],
 										'djinfo'	  => $djinfo,
@@ -695,7 +696,7 @@
 			if( isset( $mdjm_schedules['balance-reminder']['options']['notify_admin'] ) && $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		=> 'notify',
-										'to'		  => get_bloginfo( 'admin_email' ),
+										'to'		  => $mdjm_options['system_email'],
 										'subject'     => 'Task Balance Reminder Completed ' . $mdjm_options['company_name'],
 										'template'	=> $mdjm_schedules['balance-reminder']['options']['email_template'],
 										'djinfo'	  => $djinfo,
@@ -864,7 +865,7 @@
 			if( isset( $mdjm_schedules['client-feedback']['options']['notify_admin'] ) && $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
 				$cron_email_args = array(
 										'type'		 => 'notify',
-										'to'		   => get_bloginfo( 'admin_email' ),
+										'to'		   => $mdjm_options['system_email'],
 										'subject'      => 'Task "Client Feedback" Completed ' . $mdjm_options['company_name'],
 										'template'	 => $mdjm_schedules['client-feedback']['options']['email_template'],
 										'djinfo'	   => $djinfo,
@@ -970,13 +971,13 @@
 				if( $mdjm_options['bcc_admin_to_client'] == 'Y' )	{
 					if( $cron_email_args['taskinfo']['slug'] != 'complete-events'
 						&& $cron_email_args['taskinfo']['slug'] != 'fail-enquiry' )	{
-						$headers .= get_bloginfo( 'admin_email' ) . "\r\n";	
+						$headers .= $mdjm_options['system_email'] . "\r\n";	
 					}
 				}
 			}
 		}
 		else	{
-			$headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		}
 		/* No email template */
 		if( $cron_email_args['type'] == 'notify' )	{ // No email template

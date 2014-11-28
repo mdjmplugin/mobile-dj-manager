@@ -1,169 +1,203 @@
 <?php
+/*
+* playlist.php
+* 26/11/2014
+* @since 0.8
+* Provides a frontend for clients and guests to add songs to playlist
+*/
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
 	
-	global $wpdb, $mdjm_options, $eventinfo, $current_user, $playlist_result;
-	
-	require_once WPMDJM_PLUGIN_DIR . '/includes/config.inc.php';
-	require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
-	
-/*****************************************************************
--- LOGGED IN
-*****************************************************************/
-	if ( is_user_logged_in() && empty ( $_GET['mdjmeventid'] ) )	{ // User is logged in, show their event playlist
-		get_currentuserinfo();
-		f_mdjm_get_eventinfo( $db_tbl, $current_user );
-		if ( isset( $_GET['playlist_id'] ) ) { f_mdjm_remove_playlistsong( $db_tbl,$song_id=$_GET['playlist_id'] ); }
-		if ( isset( $_POST['submit'] ) ) { f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $_POST); }
-		f_mdjm_get_playlist( $db_tbl, $eventinfo );
-		if( $wpdb->num_rows > 0 )	{
-			?>
-			<p>You currently have <?php echo $wpdb->num_rows; ?> <?php if( $wpdb->num_rows == 1 ) { echo "song"; } else { echo "songs"; }?> on your playlist for your event on <?php echo date( "l, jS F Y", strtotime( $eventinfo->event_date ) ); ?>. You can add and remove songs below.</p>
-           <?php
+	global $wpdb, $mdjm_options;
+
+	/* Check for form submission and add songs */
+	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Add' )	{
+		f_mdjm_add_playlistsong( $_POST );
+	}
+
+/* Check if user is logged in */
+	if( is_user_logged_in() )	{ // Yes
+		/* Check if a song should be removed */
+		if ( isset( $_GET['playlist_id'] ) && !empty( $_GET['playlist_id'] ) )	{
+			f_mdjm_remove_playlistsong( $_GET['playlist_id'] );
 		}
-        else	{
+		
+		$current_user = wp_get_current_user();
+		
+		if( isset( $_GET['mdjmeventid'] ) && !empty( $_GET['mdjmeventid'] ) )	{
+			$event = f_mdjm_client_event_by_id( $_GET['mdjmeventid'] );
+		}
+		else	{
+			$event = f_mdjm_get_client_next_event();
+		}
+		
+		if( $event && f_mdjm_is_playlist_open( $event->event_date ) )	{ // Event found
 			?>
-			<p>There are no songs added to your playlist yet for your event on <?php echo date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ); ?>. Use the form below to start adding.</p>
-			<?php	
-        }
-		?>
-            <p>Why not invite your friends to add their own requests to your playlist? You will see all requests they have submitted in the list below, and have the ability to remove them if you do not agree with their choices.</p>
-            <p>Simply provide your friends with the following URL by posting it on your <a href="https://www.facebook.com" target="_blank">Facebook</a> profile or sending it to them via email.</p>
-            <p>Your unique guest playlist page URL is <a href="<?php echo get_permalink(); ?>?mdjmeventid=<?php echo $eventinfo->event_guest_call ?>" target="_blank"><?php echo get_permalink(); ?>?mdjmeventid=<?php echo $eventinfo->event_guest_call ?></a></p>
+            <p>Welcome to the <?php echo WPMDJM_CO_NAME; ?> event playlist management system.</p>
+            <p>Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong><?php echo date( 'l, jS F Y', strtotime( $event->event_date ) ); ?></strong>.</p>
+            <p>Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>?mdjmeventid=<?php echo $event->event_guest_call ?>" target="_blank"><?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>?mdjmeventid=<?php echo $event->event_guest_call ?></a>.</p>
+            <p>You can view and remove any songs added by your guests below.</p>
 			<?php
-		if ( $eventinfo->event_date > date('c', strtotime('TODAY + ' . $mdjm_options['playlist_close'] . ' DAYS')) )	{ // Is the playlist open?
-		?>
-            <form action="<?php get_permalink(); ?>" method="post" enctype="multipart/form-data" name="playlist">
-			<input type="hidden" name="added_by" value="<?php echo $current_user->first_name." ".$current_user->last_name; ?>" />
-            <table border="0" cellpadding="0" cellspacing="0" style="font-size:11px" width="100%">
-            <tr align="left">
-            <th>Song Name:</th>
-            <th>Artist:</th>
-            <th>When to Play?</th>
-            <th>Info:</th>
-            <th>&nbsp;</th>
-            </tr>
-            <tr valign="top">
-            <td><input name="playlist_song" type="text" size="30" /></td>
-            <td><input name="playlist_artist" type="text" size="30" /></td>
-            <td><select name="playlist_when"><?php
-				$pl_when = explode( "\n", $mdjm_options['playlist_when'] );
-				foreach( $pl_when as $when )	{
+			
+			$total_events = f_mdjm_total_client_events_by_status( 'Approved' );
+			
+			/* If client has more than one event, allow them to switch between events */
+			if( $total_events > 1 )	{
+				?>
+                <p>You are currently editing the playlist for your event on <?php echo date( 'l, jS F Y', strtotime( $event->event_date ) ); ?>. To edit the playlist for one of your other events, return to the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>"><?php echo WPMDJM_APP_NAME; ?> home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.</p>
+                <?php
+			} // if( $total_events > 1 )
+			/* Display the form to add songs to playlist */
+			if( f_mdjm_is_playlist_open( $event->event_date ) )	{ // Display form
+				?>
+                <form action="<?php get_permalink(); ?>" method="post" enctype="multipart/form-data" name="playlist">
+                <input type="hidden" name="event_id" value="<?php echo $event->event_id; ?>" />
+                <input type="hidden" name="client_id" value="<?php echo  $current_user->ID; ?>" />
+                <input type="hidden" name="added_by" value="<?php echo $current_user->first_name." ".$current_user->last_name; ?>" />
+                <table border="0" cellpadding="0" cellspacing="0" style="font-size:11px" width="100%">
+                <thead>
+                <tr align="left">
+                <th>Song Name:</th>
+                <th>Artist:</th>
+                <th>When to Play?</th>
+                <th>Info:</th>
+                <th>&nbsp;</th>
+                </tr>
+                </thead>
+                <tr valign="top">
+                <td><input name="playlist_song" type="text" size="30" /></td>
+                <td><input name="playlist_artist" type="text" size="30" /></td>
+                <td><select name="playlist_when"><?php
+                $pl_when = explode( "\n", $mdjm_options['playlist_when'] );
+                foreach( $pl_when as $when )	{
 					?>
 					<option value="<?php echo $when; ?>"><?php echo $when; ?></option>
 					<?php	
-				}
-			?>
-            </td>
-            <td><textarea name="playlist_info" placeholder="Optional: add information if you selected Other from the drop down list"></textarea></td>
-            <td align="right"><input name="submit" type="submit" value="Add" /></td>
-            </tr>
-            </table>
-            </form>
-		<?php 
-	   	}
-	   	else	{ // If the playlist is closed
-	   		$days_to_go = time() - strtotime( $eventinfo->event_date ); // Days until the event
-			?>
-			<p><strong>Additions to your playlist are disabled as your event is only <?php echo substr( floor( $days_to_go/(60*60*24)), 1 ); ?> days away!</strong><br /><br />
-			Existing playlist entries are displayed below.</p>
-            <?php
-	   	}
-		if( $wpdb->num_rows > 0 )	{ ?>
-            <h4>Your Current Playlist</h4>
-            <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px">
-            <tr align="left"\>
-            <th width="15%">Song</th>
-            <th width="15%">Artist</th>
-            <th width="15%">To be played</th>
-            <th width="30%">Info</th>
-            <th width="20%">Added By</th>
-            <th width="5%">&nbsp;</th>
-            </tr>
-		<?php
-			$i = 1;
-			foreach($playlist_result as $playlist)	{
-				if ($i == 1) { $bgcolour = "#FFF"; } elseif ($i == 2) { $bgcolour = "#EEE"; }
-				print( '<tr bgcolor="' . $bgcolour . '">' );
-				print( '<td>' . stripslashes( $playlist->song ) . '</td>' );
-				print( '<td>' . stripslashes( $playlist->artist ) . '</td>' );
-				print( '<td>' . stripslashes( $playlist->play_when ) . ' </td>' );
-				print( '<td>' . stripslashes( nl2br( htmlentities( $playlist->info ) ) ) . '</td>' );
-				print( '<td>' . stripslashes( $playlist->added_by ) . ' (' . date( 'd/m/Y', strtotime( $playlist->date_added ) ) . ')</td>' );
-				print( '<td>' );
-				if( $eventinfo->event_date > date('c', strtotime('TODAY + ' . $mdjm_options['playlist_close'] . ' DAYS')) )	{
-					print( '<a href="' . get_permalink() . '?playlist_id=' . $playlist->id . '">Remove</a>' );
-				}
-				print( '</td>' );
-				print( '</tr>' );
-				$i++;
-				if ( $i == 3 ) { $i = 1; }
+                } // foreach( $pl_when as $when )
+                ?>
+                </td>
+                <td><textarea name="playlist_info" placeholder="Optional: add information if you selected Other from the drop down list"></textarea></td>
+                <td align="right"><input name="submit" type="submit" value="Add" /></td>
+                </tr>
+                </table>
+                </form>
+                <?php
 			}
+			else	{
+				$days_to_go = time() - strtotime( $eventinfo->event_date ); // Days until the event
+				?>
+				<p><strong>Additions to your playlist are disabled as your event is only <?php echo substr( floor( $days_to_go / ( 60*60*24 ) ), 1 ); ?> days away.</strong></p>
+                <?php if( count( $playlist ) > 0 ) echo '<p>Existing playlist entries are displayed below.</p>'; ?>
+            	<?php
+			}
+			$playlist = f_mdjm_get_playlist( $event->event_id );
+			if( count( $playlist ) > 0 )	{ // Songs to display
+				$entry = ' entries';
+				if( count( $playlist ) == 1 ) $entry = ' entry';
+				?>
+                <p>Your playlist currently has <?php echo count( $playlist ) . $entry; ?></p>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px">
+                <thead>
+                <tr align="left"\>
+                <th width="15%">Song</th>
+                <th width="15%">Artist</th>
+                <th width="15%">To be played</th>
+                <th width="30%">Info</th>
+                <th width="20%">Added By</th>
+                <th width="5%">&nbsp;</th>
+                </tr>
+                </thead>
+                <?php
+				$i = 1;
+				foreach( $playlist as $entry )	{
+					if( $i == 1 ) { $bgcolour = "#FFF"; } elseif( $i == 2 ) { $bgcolour = "#EEE"; }
+					print( '<tr bgcolor="' . $bgcolour . '">' );
+					print( '<td>' . stripslashes( $entry->song ) . '</td>' );
+					print( '<td>' . stripslashes( $entry->artist ) . '</td>' );
+					print( '<td>' . stripslashes( $entry->play_when ) . ' </td>' );
+					print( '<td>' . stripslashes( nl2br( htmlentities( $entry->info ) ) ) . '</td>' );
+					print( '<td>' . stripslashes( $entry->added_by ) . ' (' . date( 'd/m/Y', strtotime( $entry->date_added ) ) . ')</td>' );
+					print( '<td>' );
+					if( f_mdjm_is_playlist_open( $event->event_date ) )	{
+						print( '<a href="' . get_permalink() . '?playlist_id=' . $entry->id . '">Remove</a>' );
+					}
+					print( '</td>' );
+					print( '</tr>' );
+					$i++;
+					if( $i == 3 ) { $i = 1; }
+				}
 			?>
 			</table>
             <?php
-		}
-	} // End if is_user_logged_in()
-	
-/*****************************************************************
--- NOT LOGGED IN
-*****************************************************************/
-	
-	else	{ // User is not logged in
-		if( isset( $_GET['mdjmeventid'] ) )	{ // Guest user
-			if( !empty ($_GET['mdjmeventid'] ) )	{ // If we have the event id wecan display the form
-				f_mdjm_get_guest_eventinfo( $db_tbl, $event_id=$_GET['mdjmeventid'] );
-				if( isset ( $_POST['submit'] ) ) { 
-					$_POST['added_by'] = $_POST['first_name'] . ' ' . $_POST['last_name'];
-					f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $_POST );
-				}
-				if( count ( $eventinfo ) == 0 )	{
-					wp_die( '<pre>ERROR: The page you have arrived at is invalid. Please check it again or contact the person who sent you the link. To return to the home page click here - <a href="'. home_url() .'">' . home_url() . '</a></pre>' );
-				}
-				else	{
-					$event_owner = get_userdata( $eventinfo->user_id );
-					?>
-					<p>Welcome to the <?php echo get_bloginfo( 'name' ); ?> playlist management system.</p>
-                    <?php
-					if( $eventinfo->event_date > date('c', strtotime('TODAY + ' . $mdjm_options['playlist_close'] . ' DAYS')) )	{ // Is the playlist open?
-					?>
-                        <p>You are adding songs to the playlist for <?php echo $event_owner->first_name . " " . $event_owner->last_name; ?>'s event on <?php echo date("l, jS F Y",strtotime($eventinfo->event_date)); ?>.</p>
-                        <p>Please add your playlist requests in the form below. All fields are required.</p>
-                        <hr />
-                        <form action="<?php echo get_permalink() . '?mdjmeventid=' . $_GET['mdjmeventid']; ?>" method="post" enctype="multipart/form-data" name="guest-playlist">
-                        <table border="0" cellpadding="0" cellspacing="0" style="font-size:11px" width="100%">
-                        <tr align="left">
-                        <th>Your First Name:</th>
-                        <th>Your Last Name:</th>
-                        <th>Song Name:</th>
-                        <th>Artist:</th>
-                        <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                        <td><input name="first_name" type="text" size="25" value="<?php echo $_POST['first_name'] ?>"<?php if ( !isset ( $_POST['first_name'] ) || empty ($_POST['first_name'] ) ) echo ' autofocus'; ?>/></td>
-                        <td><input name="last_name" type="text" size="25" value="<?php echo $_POST['last_name'] ?>" /></td>
-                        <td><input name="playlist_song" type="text" size="25"<?php if ( isset ( $_POST['first_name'] ) && !empty ($_POST['first_name'] ) ) echo ' autofocus'; ?> /></td>
-                        <td><input name="playlist_artist" type="text" size="25" /></td>
-                        <td align="center"><input name="submit" type="submit" value="Add" /></td>
-                        </tr>
-                        </table>
-                        </form>
-					<?php
-					}
-					else	{ // Playlist closed
-						$days_to_go = time() - strtotime($eventinfo->event_date); // Days until the event
-						?>
-                        <p><strong>The playlist for <?php echo $event_owner->first_name . " " . $event_owner->last_name; ?>'s event on <?php echo date("l, jS F Y",strtotime( $eventinfo->event_date ) ); ?> is now closed as the event is only <?php echo substr( floor( $days_to_go/(60*60*24) ) ,1 ); ?> days away!</strong></p>
-                        <?php
-					}
-				}
-			} // End if ( !empty ($_GET['mdjmeventid'] )
-			else	{ // Invalid URL
-				wp_die( '<pre>ERROR: The page you have arrived at is invalid. Please check it again or contact the person who sent you the link. To return to the home page click here - <a href="'. home_url() .'">' . home_url() . '</a></pre>' );
 			}
-		} // End if ( isset ( $_GET['mdjmeventid'] ) )
-		else	{ // Show the login form
-			f_mdjm_show_user_login_form();
+			else	{ // No songs in playlist
+				?>
+                <p>Your playlist is currently empty. <?php if( f_mdjm_is_playlist_open( $event->event_date ) ) echo 'Use the form above to start adding songs.'; ?></p>
+                <?php	
+			}
 		}
+		else	{ // no event found
+			echo '<p>You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.</p>';
+			echo '<p>To begin planning your next event with us, please <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact us now</a>.</p>';
+		}
+	} // if( is_user_logged_in() )
+
+	/* Guest access */
+	elseif( isset( $_GET['mdjmeventid'] ) && !empty( $_GET['mdjmeventid'] ) )	{
+		/* Get event info */
+		$eventinfo = f_mdjm_get_guest_eventinfo( $_GET['mdjmeventid'] );
+		if( count( $eventinfo ) == 0 )	{
+			echo '<p>ERROR: No event found. Please check the URL and try again.</p>';
+		}
+		else	{
+			$clientinfo = get_userdata( $eventinfo->user_id );	
+			?>
+            <p>Welcome to the <?php echo get_bloginfo( 'name' ); ?> playlist management system.</p>
+            <?php
+			if( f_mdjm_is_playlist_open( $eventinfo->event_date ) )	{ // Open
+				?>
+				 <p>You are adding songs to the playlist for <?php echo $clientinfo->first_name . " " . $clientinfo->last_name; ?>'s event on <?php echo date("l, jS F Y",strtotime($eventinfo->event_date)); ?>.</p>
+                 <p>Add your playlist requests in the form below. All fields are required.</p>
+				<hr />
+                <form action="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . '?mdjmeventid=' . $_GET['mdjmeventid']; ?>" method="post" enctype="multipart/form-data" name="guest-playlist">
+				<input type="hidden" name="event_id" value="<?php echo $eventinfo->event_id; ?>" />
+				<input type="hidden" name="client_id" value="<?php echo $clientinfo->ID; ?>" />
+                <table border="0" cellpadding="0" cellspacing="0" style="font-size:11px" width="100%">
+                <tr align="left">
+                <th>Your First Name:</th>
+                <th>Your Last Name:</th>
+                <th>Song Name:</th>
+                <th>Artist:</th>
+                <th>&nbsp;</th>
+                </tr>
+                <tr>
+                <td><input name="first_name" type="text" size="25" value="<?php echo $_POST['first_name'] ?>"<?php if ( !isset ( $_POST['first_name'] ) || empty ($_POST['first_name'] ) ) echo ' autofocus'; ?>/></td>
+                <td><input name="last_name" type="text" size="25" value="<?php echo $_POST['last_name'] ?>" /></td>
+                <td><input name="playlist_song" type="text" size="25"<?php if ( isset ( $_POST['first_name'] ) && !empty ($_POST['first_name'] ) ) echo ' autofocus'; ?> /></td>
+                <td><input name="playlist_artist" type="text" size="25" /></td>
+                <td align="center"><input name="submit" type="submit" value="Add" /></td>
+                </tr>
+                </table>
+                </form>
+                 <?php
+			} // if( f_mdjm_is_playlist_open( $eventinfo->event_date ) )
+			else	{
+				?>
+                <p>This playlist is currently closed. No songs can be added at this time.</p>
+                <?php
+			} // 
+		} // if( count( $eventinfo ) == 0 )
+	} // elseif( isset( $_GET['mdjmeventid'] )...
+	
+	/* Not logged in */
+	else	{
+		f_mdjm_show_user_login_form();	
 	}
+/*
+*
+*
+*
+*
+*/
+/* Displays the credit information in the footer if allowed */	
 	add_action( 'wp_footer', f_wpmdjm_print_credit );
 ?>

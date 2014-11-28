@@ -19,6 +19,7 @@
 										'event_types',
 										'enquiry_sources',
 										'default_contract',
+										'system_email',
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
 										'contract_to_client',
@@ -26,6 +27,7 @@
 										'email_contract',
 										'email_client_confirm',
 										'email_dj_confirm',
+										'title_as_subject',
 										'playlist_when',
 										'playlist_close',
 										'upload_playlists',
@@ -35,6 +37,7 @@
 										'contact_page',
 										'contracts_page',
 										'playlist_page',
+										'profile_page',
 										'dj_see_wp_dash',
 										'dj_add_client',
 										'dj_add_event',
@@ -107,6 +110,36 @@
 									'page' => 'settings',
 									); // enquiry_sources
 									
+		$admin_fields['default_contract'] = array(
+									'display' => 'Default Client Contract',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['default_contract'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="add-new-h2">Add New</a>',
+									'desc' => 'Select the client contract you want to use as default. This can be changed per event.',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[default_contract]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['default_contract'],
+														'list_type' => 'contract'
+														),
+									'section' => 'general',
+									'page' => 'settings',
+									); // default_contract
+									
+		$admin_fields['system_email'] = array(
+									'display' => 'Default Email Address',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'email',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['system_email'],
+									'text' => 'Defaults to the E-mail Address set within <a href="' . admin_url( 'options-general.php' ) . '">WordPress Settings > General</a>',
+									'desc' => 'The email address you want generic emails from MDJM to come from',
+									'section' => 'email',
+									'page' => 'settings',
+									); // system_email
+									
 		$admin_fields['bcc_dj_to_client'] = array(
 									'display' => 'Copy DJ in Client Emails',
 									'key' => 'mdjm_plugin_settings',
@@ -130,24 +163,6 @@
 									'section' => 'email',
 									'page' => 'settings',
 									); // bcc_admin_to_client
-		
-		$admin_fields['default_contract'] = array(
-									'display' => 'Default Client Contract',
-									'key' => 'mdjm_plugin_settings',
-									'type' => 'custom_dropdown',
-									'class' => 'regular-text',
-									'value' => $mdjm_options['default_contract'],
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="add-new-h2">Add New</a>',
-									'desc' => 'Select the client contract you want to use as default. This can be changed per event.',
-									'custom_args' => array (
-														'name' =>  'mdjm_plugin_settings[default_contract]',
-														'sort_order' => 'ASC',
-														'selected' => $mdjm_options['default_contract'],
-														'list_type' => 'contract'
-														),
-									'section' => 'general',
-									'page' => 'settings',
-									); // default_contract
 									
 		$admin_fields['contract_to_client'] = array(
 									'display' => 'Email contract link to client?',
@@ -232,6 +247,18 @@
 									'section' => 'email',
 									'page' => 'settings',
 									); // email_dj_confirm
+									
+		$admin_fields['title_as_subject'] = array(
+									'display' => 'Template Title is Subject?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['title_as_subject'],
+									'text' => '',
+									'desc' => 'Use your Email Template\'s title as the subject for the templates specified above',
+									'section' => 'email',
+									'page' => 'settings',
+									); // title_as_subject
 									
 		$admin_fields['journaling'] = array(
 									'display' => 'Enable Journaling?',
@@ -413,6 +440,24 @@
 									'section' => 'pages',
 									'page' => 'pages',
 									); // playlist_page
+									
+		$admin_fields['profile_page'] = array(
+									'display' => 'Profile Page',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['profile_page'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'desc' => 'Select your website\'s profile page - the one where you added the shortcode <code>[MDJM page=Profile]</code>',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[profile_page]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['profile_page'],
+														'list_type' => 'page'
+														),
+									'section' => 'pages',
+									'page' => 'pages',
+									); // profile_page
 
 /* PERMISSIONS TAB */
 		$admin_fields['dj_see_wp_dash'] = array(

@@ -209,7 +209,7 @@
 	} // f_mdjm_add_event_form
 
 	function f_mdjm_add_event_header()	{
-		if( !current_user_can( 'administrator' ) && !dj_can( 'add_event' ) )	wp_die( 'You do not have permissions to perform this action. Contact your <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">administrator</a> for assistance.' );
+		if( !current_user_can( 'administrator' ) && !dj_can( 'add_event' ) )	wp_die( 'You do not have permissions to perform this action. Contact your <a href="mailto:' . $mdjm_options['system_email'] . '">administrator</a> for assistance.' );
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 		?>
@@ -958,8 +958,16 @@
 		global $mdjm_options;
 		/* Access the cron functions */
 		//echo date( 'H:i d M Y', wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) );
-		require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
-		f_mdjm_cron_balance_reminder();
+		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
+		//f_mdjm_cron_balance_reminder();
+		
+		$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+		/* Add system email option */
+		$mdjm_options['system_email'] = $mdjm_options['system_email'];
+		
+		/* Update the options */
+		update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+		
 		exit;
 	}
 	

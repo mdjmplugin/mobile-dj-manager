@@ -1,5 +1,12 @@
 <?php
-	/* Do not run unless the uninstall procedure was called by WordPress */
+/*
+* uninstall.php
+* 04/10/2014
+* @since 0.8
+* Uninstallation procedures for when plugin is deleted
+*/
+
+/* Do not run unless the uninstall procedure was called by WordPress */
 	if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) 
 		exit();
 	$mdjm_options = get_option ( 'mdjm_plugin_settings' );
@@ -53,10 +60,6 @@
 						'mdjm_equipment',
 						'mdjm_packages',
 						'mdjm_version',
-						'mdjm_plugin_email_template_enquiry',
-						'mdjm_plugin_email_template_client_booking_confirm',
-						'mdjm_plugin_email_template_dj_booking_confirm',
-						'mdjm_plugin_email_template_contract_review',
 						'mdjm_updated',
 						);
 	foreach( $option_name as $option )	{

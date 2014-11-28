@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Management interface for mobile DJ's.
-Version: 0.9.3
-Date: 23 November 2014
+Version: 0.9.4
+Date: 28 November 2014
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -24,11 +24,11 @@ Author URI: http://www.mydjplanner.co.uk
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
-	$mdjm_db_version = '1.6'; // Used to determine if the DB Tables need updating
+	$mdjm_db_version = '1.7'; // Used to determine if the DB Tables need updating
 
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.9.3' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9.4' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );

@@ -27,7 +27,7 @@
 		}
 		
 		if( is_admin() && current_user_can( 'client' ) || current_user_can( 'inactive_client' ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-			wp_redirect( home_url() );
+			wp_redirect( get_permalink( WPMDJM_CLIENT_HOME_PAGE ) );
 			exit;
 		}
 	}
@@ -246,6 +246,7 @@
 							'event_types' 			 => $event_types,
 							'enquiry_sources' 		 => $enquiry_sources,
 							'default_contract' 		=> $contract_post_id,
+							'system_email' 		    => get_bloginfo( 'admin_email' ),
 							'bcc_dj_to_client' 		=> '',
 							'bcc_admin_to_client' 	 => 'Y',
 							'contract_to_client' 	  => '',
@@ -253,6 +254,7 @@
 							'email_contract'		  => $client_contract_post_id,
 							'email_client_confirm' 	=> $client_confirm_post_id,
 							'email_dj_confirm' 		=> $dj_confirm_post_id,
+							'title_as_subject'        => 'N',
 							'playlist_when' 		   => $playlist_when,
 							'playlist_close' 		  => '5',
 							'upload_playlists' 		=> 'Y',
@@ -264,6 +266,7 @@
 							'contact_page' => '',
 							'contracts_page' => '',
 							'playlist_page' => '',
+							'profile_page' => '',
 							);
 		$mdjm_init_permissions = array(
 									'dj_see_wp_dash' => 'Y',
@@ -364,17 +367,6 @@
 													),
 									);
 		
-		/*********************************************************************************
-							DEPRECATED SINCE 0.9.3
-		*********************************************************************************/
-		/* Import the default email templates */
-		/*if( !get_option( WPMDJM_SETTINGS_KEY ) )	{
-			add_option( 'mdjm_plugin_email_template_enquiry', $email_enquiry_content );
-			add_option( 'mdjm_plugin_email_template_contract_review', $email_contract_review );
-			add_option( 'mdjm_plugin_email_template_client_booking_confirm', $email_client_booking_confirm );
-			add_option( 'mdjm_plugin_email_template_dj_booking_confirm', $email_dj_booking_confirm );
-		}*/
-		
 		/* Version information into the database */
 		if( !get_option( 'mdjm_version' ) )	{
 			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );
@@ -430,7 +422,7 @@
 			 	UPGRADES FROM 0.9.2 OR LESS
 			************************************/
 			if( $current_version_mdjm <= '0.9.2' )	{
-				$mdjm_options = get_option( 'mdjm_plugin_settings' );
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				/* USER ROLES */
 				/* Create the Inactive Client role */
 				add_role( 'inactive_client', 'Inactive Client', array( 'read' => true ) );
@@ -491,13 +483,32 @@
 				add_option( 'mdjm_schedules', $mdjm_schedules );
 			} // if( $current_version_mdjm <= '0.9.2' )
 			
-			/* Update the version number */
-			update_option( 'mdjm_version', WPMDJM_VERSION_NUM );
+			/************************************
+			 	UPGRADES FROM 0.9.3
+			************************************/
+			if( $current_version_mdjm == '0.9.3' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Remove the email template option keys that became deprecated in 0.9.3 */
+				delete_option( 'mdjm_plugin_email_template_enquiry' );
+				delete_option( 'mdjm_plugin_email_template_contract_review' );
+				delete_option( 'mdjm_plugin_email_template_client_booking_confirm' );
+				delete_option( 'mdjm_plugin_email_template_dj_booking_confirm' );
+				
+				/* Add system email option */
+				$mdjm_options['system_email'] = get_bloginfo( 'admin_email' );
+				
+				/* Update the options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm == '0.9.3' )
 			
 			/* Delete the template file */
 			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
-			$message = 'Welcome to Mobile DJ Manager for WordPress version 0.9.3. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the enhancements this version brings</a>';
+			/* Update the version number */
+			update_option( 'mdjm_version', WPMDJM_VERSION_NUM );
+			
+			$message = 'Welcome to Mobile DJ Manager for WordPress version ' . WPMDJM_VERSION_NUM . '. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the release notes for this version</a>';
 			
 			f_mdjm_update_notice( 'updated', $message );
 			
@@ -533,7 +544,11 @@
 		define( 'WPMDJM_CO_NAME', $mdjm_options['company_name'] );
 		define( 'WPMDJM_APP_NAME', $mdjm_options['app_name'] );
 		define( 'WPDJM_JOURNAL', $mdjm_options['journaling'] );
+		define( 'WPMDJM_CLIENT_HOME_PAGE', $mdjm_options['app_home_page'] );
 		define( 'WPMDJM_CONTACT_PAGE', $mdjm_options['contact_page'] );
+		define( 'WPMDJM_CLIENT_CONTRACT_PAGE', $mdjm_options['contracts_page'] );
+		define( 'WPMDJM_CLIENT_PLAYLIST_PAGE', $mdjm_options['playlist_page'] );
+		define( 'WPMDJM_CLIENT_PROFILE_PAGE', $mdjm_options['profile_page'] );
 		
 		return $mdjm_options;
 	} // f_mdjm_init

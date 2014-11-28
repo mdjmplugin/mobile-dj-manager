@@ -195,10 +195,67 @@
  * @since 1.0
 */
 	function f_mdjm_get_eventinfo( $db_tbl, $current_user )	{
-		global $wpdb, $eventinfo;
+		global $wpdb;
 		$eventinfo = $wpdb->get_row("SELECT * FROM `".$db_tbl['events']."` WHERE `user_id` = '".$current_user->ID."' AND `event_date` >= DATE(NOW()) AND `contract_status` = 'Approved'");
+		
 		return $eventinfo;
 	} // f_mdjm_get_eventinfo
+
+/*
+* f_mdjm_get_client_events
+* 25/11/2014
+* @since 0.9.4
+* Retrieves all client events regardless of status
+*/
+	function f_mdjm_get_client_events( $db_tbl, $current_user )	{
+		global $wpdb;
+		
+		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . $current_user->ID . "' ORDER BY `event_date` DESC";
+		
+		$eventinfo = $wpdb->get_results( $event_query );
+		
+		return $eventinfo;
+	} // f_mdjm_get_client_events
+	
+/*
+* f_mdjm_get_client_next_event
+* 26/11/2014
+* @since 0.9.4
+* Retrieves the clients next approved event
+*/
+	function f_mdjm_get_client_next_event()	{
+		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . get_current_user_id() . "' AND `contract_status` = 'Approved' ORDER BY `event_date` DESC LIMIT 1";
+		
+		$next_event = $wpdb->get_row( $event_query );
+		
+		return $next_event;
+	} // f_mdjm_get_client_events
+
+/*
+* f_mdjm_total_client_events_by_status
+* 26/11/2014
+* @since 0.9.4
+* Retrieves the total number of client events by given status
+*/
+
+	function f_mdjm_total_client_events_by_status( $status )	{
+		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+		$event_query = "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . get_current_user_id() . "' AND `contract_status` = '" .$status . "'";
+		
+		$total_events = $wpdb->get_var( $event_query );
+		
+		return $total_events;
+		
+	} // f_mdjm_total_client_events_by_status
 
 /**
  * f_mdjm_get_event_by_id
@@ -212,24 +269,173 @@
 	function f_mdjm_get_event_by_id( $db_tbl, $event_id )	{
 		global $wpdb;
 		
-		$eventinfo = $wpdb->get_row("SELECT * FROM `".$db_tbl['events']."` WHERE `event_id` = '" . $event_id . "'");
+		$eventinfo = $wpdb->get_row("SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $event_id . "'");
 		
 		return $eventinfo;
 	} // f_mdjm_get_event_by_id
 	
-/**
- * f_mdjm_get_guest_eventinfo
- * Retrieve event info guest visitors
- * 
- * 
- * Called from: frontend playlist page
- * 
- * @since 1.0
+/*
+* f_mdjm_client_event_by_id
+* 26/11/2014
+* @since 0.9.4
+* Retrieve client event info by id
 */
-	function f_mdjm_get_guest_eventinfo( $db_tbl, $event_id )	{
-		global $wpdb, $eventinfo;
-		$eventinfo = $wpdb->get_row("SELECT * FROM `".$db_tbl['events']."` WHERE `event_guest_call` = '".$event_id."'");
+	function f_mdjm_client_event_by_id( $event_id )	{
+		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $event_id . "'";
+		$eventinfo = $wpdb->get_row( $event_query );
+		
+		return $eventinfo;	
+	} // f_mdjm_client_event_by_id
+	
+/**
+* f_mdjm_get_guest_eventinfo
+* 04/10/2014
+* @since 0.8
+* Retrieve event info guest visitors
+*/
+	function f_mdjm_get_guest_eventinfo( $event_id )	{
+		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		$eventinfo = $wpdb->get_row( "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_guest_call` = '" . $event_id . "'");
+		
+		return $eventinfo;
 	} // f_mdjm_get_guest_eventinfo
+	
+/*
+* f_mdjm_change_event_status
+* 26/11/2014
+* @since 0.9.4
+* Updates the event status
+*/
+	function f_mdjm_change_event_status( $status, $event_id )	{
+		global $wpdb, $mdjm_options;
+		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( $status == 'Pending' )	{
+			$update_args = array(
+						'contract_status'    => $status,
+						'converted_by' => get_current_user_id(),
+						'date_converted' => date( 'Y-m-d H:i:s' ),	
+						'last_updated_by'    => get_current_user_id(),
+						'last_updated'       => date( 'Y-m-d H:i:s' )
+					);
+			$j_entry = 'The Event has been converted from an enquiry';
+		}
+		if( $status == 'Approved' )	{
+			$update_args = array(
+						'contract_status'    => $status,
+						'last_updated_by'    => get_current_user_id(),
+						'last_updated'       => date( 'Y-m-d H:i:s' )
+					);
+			$j_entry = 'The Contract has been signed';
+		}
+		if( $status == 'Cancelled' )	{
+			$update_args = array(
+						'contract_status'    => $status,
+						'last_updated_by'    => get_current_user_id(),
+						'last_updated'       => date( 'Y-m-d H:i:s' )
+					);
+			$j_entry = 'The Event has been cancelled';
+		}
+		
+		/* Update the event in the database */
+		$update_event = $wpdb->update( $db_tbl['events'], $update_args, array( 'event_id' => $event_id ) );
+		$j_args = array (
+						'client' => get_current_user_id(),
+						'event' => $event_id,
+						'author' => get_current_user_id(),
+						'type' => 'Update Event',
+						'source' => 'Admin',
+						'entry' => $j_entry,
+					);
+		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+		
+		/* Email client if required */
+		if( $status == 'Pending' || $status == 'Approved' 
+			&& isset( $mdjm_options['contract_to_client'] ) 
+			&& $mdjm_options['contract_to_client'] == 'Y' )	{
+			
+			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
+			$clientinfo = get_userdata( $eventinfo->user_id );
+			
+			if( $status == 'Pending' )	{
+				$type = 'email_contract';
+				$subject = 'Your DJ Booking';
+				$j_entry = 'Contract Review email sent to client';
+				$message = 'Thank you. Your event has been updated and your contract has been issued. You will receive confirmation via email shortly.';
+			}
+			if( $status == 'Approved' )	{
+				$type = 'email_client_confirm';
+				$subject = 'DJ Booking Confirmation';
+				$j_entry = 'Booking confirmation email sent to client';
+				$message = 'Thank you. Your event is now confirmed. You will receive confirmation via email shortly.';
+			}
+			
+			$email_headers = f_mdjm_client_email_headers( $eventinfo );
+			$info = f_mdjm_prepare_email( $eventinfo, $type );
+			if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+				$j_args = array (
+					'client' => $eventinfo->user_id,
+					'event' => $eventinfo->event_id,
+					'author' => get_current_user_id(),
+					'type' => 'Email Client',
+					'source' => 'Admin',
+					'entry' => 'Contract Review email sent to client'
+					);
+				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+			}
+		}
+		if( $status == 'Approved' )	{
+			$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
+			$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
+			wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );	
+		}
+		
+		echo '<p><strong>' . $message . '</strong></p>';
+	} // f_mdjm_change_event_status
+
+/****************************************************************************************************
+--	CLIENT FUNCTIONS
+****************************************************************************************************/
+
+/*
+* f_mdjm_profile_complete
+* 25/11/2014
+* @since 0.9.4
+* Checks for completness of the client profile
+* @param: client WP user ID
+* @return: true : false
+*/
+	function f_mdjm_profile_complete( $client_id )	{
+		$client_data = get_userdata( $client_id );
+		/* No data = false */
+		if( !$client_data )
+			return false;
+		$required = array(
+						'first_name',
+						'last_name',
+						'user_email',
+						'phone1',
+						'address1',
+						'town',
+						'county',
+						'postcode',
+						);
+		foreach( $required as $meta )	{
+			if( !isset( $client_data->$meta ) || empty( $client_data->$meta ) )	{
+				return false;	
+			}
+		}
+		return true;
+	} // f_mdjm_profile_complete
 
 /****************************************************************************************************
 --	CONTRACT FUNCTIONS
@@ -243,12 +449,20 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_client_approve_contract( $eventinfo, $input, $table )	{
+	function f_mdjm_client_approve_contract( $eventinfo, $input )	{
 		global $wpdb;
+		
 		if( !isset( $eventinfo ) || !isset( $input ) )	{
-			wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a><br />' . $wpdb->print_error() );
+			wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a><br />' . $wpdb->print_error() );
 		}
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
 		$approver = get_user_by( 'display_name', $input['approver'] );
+		if( !isset( $input['deposit'] ) || $input['deposit'] == '' || empty( $input['deposit'] ) )	{
+			$input['deposit'] = 'Due';
+		}
 		$update = array(  
 							'contract_status' => 'Approved',
 							'contract_approved_date' => date( 'Y-m-d' ),
@@ -257,7 +471,7 @@
 							'last_updated_by' => get_current_user_id(),
 							'last_updated' => date( 'Y-m-d H:i:s' ),
 						);
-		if( $wpdb->update( $table, $update, array( 'event_id' => $eventinfo->event_id ) ) )	{
+		if( $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $eventinfo->event_id ) ) )	{
 			$j_args = array (
 					'client' => $eventinfo->user_id,
 					'event' => $eventinfo->event_id,
@@ -270,7 +484,7 @@
 			echo '<p><strong>You have successfully signed the contract. Thank you.</strong></p>';										
 		}
 		else	{
-			wp_die( 'An error has occured. Please contact the <a href="mailto:' . get_bloginfo( 'admin_email' ) . '">website administrator</a><br />' . $wpdb->print_error() );
+			wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a><br />' . $wpdb->print_error() );
 		}
 	} // f_mdjm_client_approve_contract
 
@@ -295,6 +509,35 @@
 /****************************************************************************************************
 --	PLAYLIST FUNCTIONS
 ****************************************************************************************************/
+/*
+* f_mdjm_is_playlist_open
+* 26/11/2014
+* @since 0.9.4
+* Checks whether the playlist is open
+* return: true : false
+*/
+	function f_mdjm_is_playlist_open( $event_date )	{
+		global $mdjm_options;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		/* Playlist never closes */
+		if( $mdjm_options['playlist_close'] == 0 )	{
+			return true;	
+		}
+		else	{
+			$pl_close = strtotime( $event_date ) - ( $mdjm_options['playlist_close'] * DAY_IN_SECONDS );
+			if( time() > $pl_close ) 	{
+				return false; // Closed
+			}
+			else	{
+				return true; // Open
+			}
+		}
+		
+	} // f_mdjm_is_playlist_open
+
 /**
  * f_mdjm_get_playlist
  * Retrieve playlist entries for event
@@ -304,9 +547,16 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_get_playlist( $db_tbl, $eventinfo )	{
-		global $wpdb, $eventinfo, $playlist_result;
-		$playlist_result = $wpdb->get_results("SELECT * FROM `".$db_tbl['playlists']."` WHERE `event_id` = '".$eventinfo->event_id."' ORDER BY `play_when`, `artist`");
+	function f_mdjm_get_playlist( $event_id )	{
+		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+		$playlist_query = "SELECT * FROM `"  .$db_tbl['playlists'] . "` WHERE `event_id` = '" . $event_id . "' ORDER BY `play_when`, `artist`";
+		$playlist_result = $wpdb->get_results( $playlist_query );
+		
+		return $playlist_result;
 	} // f_mdjm_get_playlist
 
 /**
@@ -318,10 +568,14 @@
  * 
  * @since 1.0
 */	
-	function f_mdjm_remove_playlistsong( $db_tbl, $song_id )	{
+	function f_mdjm_remove_playlistsong( $song_id )	{
 		global $wpdb;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
 		$songinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['playlists'] . " WHERE `id` = '" . $song_id . "'");
-		$eventinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_id` = '" . $song_id->event_id . "'");
+		$eventinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_id` = '" . $songinfo->event_id . "'");
 		$playlist_remove = $wpdb->delete( $db_tbl['playlists'], array( 'id' => $song_id ) );	
 			if( $playlist_remove > 0 )	{
 				print( '<p style="color:#F93">The song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' has been successfully removed from the playlist</p>' );
@@ -346,7 +600,7 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_add_playlistsong( $db_tbl, $eventinfo, $playlist_array )	{
+	function f_mdjm_add_playlistsong( $playlist_array )	{
 		global $wpdb;
 		// Form validation
 		if ( empty ( $playlist_array['playlist_artist'] ) || empty ( $playlist_array['playlist_song'] ) )	{
@@ -362,11 +616,18 @@
 			print("<p style=\"color:#FF0000\">ERROR: As you selected \"Other\" from the When to Play field, you must enter some additional information into the Info field.</p>\n");
 		}
 		else	{ // Insert the record
+			if( !isset( $db_tbl ) )
+				include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+			if( isset( $playlist_array['first_name'], $playlist_array['last_name'] ) )	{
+				$playlist_array['added_by'] = $playlist_array['first_name'] . ' ' . $playlist_array['last_name'];	
+			}
+			
 			if( !isset( $playlist_array['playlist_when'] ) || $playlist_array['playlist_when'] == '' ) $playlist_array['playlist_when'] = 'General';
 			if( $wpdb->insert( $db_tbl['playlists'],
 												array(
 													'id' =>	'',
-													'event_id' => $eventinfo->event_id,
+													'event_id' => $playlist_array['event_id'],
 													'artist' => $playlist_array['playlist_artist'],
 													'song' => $playlist_array['playlist_song'],
 													'play_when' => $playlist_array['playlist_when'],
@@ -382,12 +643,12 @@
 				die( $wpdb->print_error() );	
 			}
 			$j_args = array (
-							'client' => $eventinfo->user_id,
-							'event' => $eventinfo->event_id,
+							'client' => $playlist_array['client_id'],
+							'event' => $playlist_array['event_id'],
 							'author' => get_current_user_id(),
 							'type' => 'Playlist',
 							'source' => 'Website',
-							'entry' => 'Song ' . $playlist_array['playlist_song'] . ' by artist ' . $playlist_array['playlist_artist'] . ' added to playlist by ' . $playlist_array['added_by']
+							'entry' => 'Song added to playlist by ' . $playlist_array['added_by']
 						);
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		}
@@ -406,7 +667,7 @@
  * @since 1.0
 */
 	function f_mdjm_contact( $subject )	{
-		print("<a href=\"mailto:". get_bloginfo('admin_email') ."?subject=".$subject."\">". get_bloginfo('admin_email') ."</a>");
+		print("<a href=\"mailto:". $mdjm_options['system_email'] ."?subject=".$subject."\">". $mdjm_options['system_email'] ."</a>");
 	} // f_mdjm_contact
 	
 /****************************************************************************************************

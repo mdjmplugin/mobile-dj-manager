@@ -464,8 +464,18 @@
         <td>Total Runs:</td>
         <td><?php echo $mdjm_schedules[$task]['totalruns']; ?></td>
         </tr>
-        </table
-        ></td>
+        <?php
+		if( $mdjm_schedules[$task]['slug'] == 'upload-playlists' && $mdjm_schedules[$task]['active'] == 'Y' )	{
+			?>
+            <tr>
+            <td>Entries Uploaded:</td>
+            <td><?php f_mdjm_count_playlist_records_uploaded(); ?></td>
+            </tr>
+            <?php	
+		}
+		?>
+        </table>
+     	</td>
         </tr>
         </table>
         <?php

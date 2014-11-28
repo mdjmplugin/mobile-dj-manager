@@ -21,7 +21,7 @@
 */
 
 	function f_mdjm_admin_menu()	{
-		global $mdjm_options;
+		global $mdjm_options, $mdjm_help;
 		add_menu_page( 'Mobile DJ Manager', 'DJ Manager', 'manage_mdjm', 'mdjm-dashboard', 'f_mdjm_admin_dashboard', plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ), '58.4' );
 
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Dashboard', 'Dashboard', 'manage_mdjm', 'mdjm-dashboard', 'f_mdjm_admin_dashboard');
@@ -378,7 +378,7 @@
  * @since 1.0
 */
 	function f_mdjm_add_event( $event )	{
-		global $wpdb;
+		global $wpdb, $mdjm_options;
 		require_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
 
@@ -459,7 +459,13 @@
 				$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_enquiry' );
-				if( wp_mail( $clientinfo->user_email, 'DJ Enquiry', $info['content'], $email_headers ) ) 	{
+				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+					$subject = $info['subject'];	
+				}
+				else	{
+					$subject = 'DJ Enquiry';	
+				}
+				if( wp_mail( $clientinfo->user_email, $subject, $info['content'], $email_headers ) ) 	{
 					$message = 'Event quotation email successfully sent to client';
 					$j_args = array (
 						'client' => $event['user_id'],
@@ -583,7 +589,13 @@
 			if( isset( $now_pending ) && $mdjm_options['contract_to_client'] == 'Y' )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
-				if( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
+				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+					$subject = $info['subject'];	
+				}
+				else	{
+					$subject = 'Your DJ Booking';	
+				}
+				if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 					$message = 'Contract email sent to client';
 					$j_args = array (
 						'client' => $eventinfo->user_id,
@@ -612,7 +624,13 @@
 			if( isset( $now_approved ) )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_client_confirm' );
-				if ( wp_mail( $info['client']->user_email, 'Booking Confirmation', $info['content'], $email_headers ) ) 	{
+				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+					$subject = $info['subject'];	
+				}
+				else	{
+					$subject = 'Booking Confirmation';	
+				}
+				if ( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 					$message = 'Booking confirmation email sent to client';
 					$j_args = array (
 						'client' => $eventinfo->user_id,
@@ -641,11 +659,11 @@
                     <?php
 				}
 			}
-			if( isset( $event_updates['deposit_status'] ) && $event_updates['deposit_status'] == 'Paid' )	{
+			if( isset( $event_updates['deposit_status'] ) && $event_updates['deposit_status'] == 'Paid' && $event_updates['deposit_status'] != $eventinfo->deposit_status )	{
 				f_mdjm_deposit_paid( $eventinfo->event_id );
 			}
-			if( isset( $event_updates['balance_status'] ) && $event_updates['balance_status'] == 'Paid' )	{
-				f_mdjm_deposit_paid( $eventinfo->event_id );
+			if( isset( $event_updates['balance_status'] ) && $event_updates['balance_status'] == 'Paid' && $event_updates['balance_status'] != $eventinfo->balance_status )	{
+				f_mdjm_balance_paid( $eventinfo->event_id );
 			}
 		}
 		else	{ // No event
@@ -728,7 +746,7 @@
  * @since 1.0
 */
 	function f_mdjm_convert_event( $event )	{
-		global $wpdb;
+		global $wpdb, $mdjm_options;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
 						'contract_status' => 'Pending',
@@ -759,7 +777,13 @@
 			echo '</div>';
 			$email_headers = f_mdjm_client_email_headers( $eventinfo );
 			$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
-			if ( wp_mail( $info['client']->user_email, 'Your DJ Booking', $info['content'], $email_headers ) ) 	{
+			if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+					$subject = $info['subject'];	
+				}
+				else	{
+					$subject = 'Your DJ Booking';	
+				}
+			if ( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 				$message = 'Contract review email sent to client';
 				$j_args = array (
 					'client' => $eventinfo->user_id,
@@ -973,9 +997,12 @@
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
-		$wpdb->update( $db_tbl['events'], 
-							array( 'deposit_status' => 'Paid' ), 
-							array( 'event_id' => $id ) );
+		$update = array(
+							'deposit_status' => 'Paid',
+							'last_updated_by' => get_current_user_id(),
+							'last_updated' => date( 'Y-m-d H:i:s' ),
+					);
+		$wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $id ) );
 					
 		$j_args = array (
 			'client' => $eventinfo->user_id,
@@ -999,9 +1026,12 @@
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
-		$wpdb->update( $db_tbl['events'], 
-							array( 'balance_status' => 'Paid' ), 
-							array( 'event_id' => $id ) );
+		$update = array(
+							'balance_status' => 'Paid',
+							'last_updated_by' => get_current_user_id(),
+							'last_updated' => date( 'Y-m-d H:i:s' ),
+					);
+		$wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $id ) );
 					
 		$j_args = array (
 			'client' => $eventinfo->user_id,
@@ -1067,7 +1097,7 @@
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		$event_query = "'SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $status . "'";
+		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $status . "'";
 		$eventinfo = $wpdb->get_results( $event_query );
 		return $eventinfo;
 	} // f_mdjm_get_eventinfo_by_status
@@ -1119,6 +1149,23 @@
 		$str = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ), 0, 9 );
 		return $str;
 	} // f_mdjm_generate_playlist_ref
+	
+/*
+* f_mdjm_count_playlist_records
+* 25/11/2014
+* @since 0.9.4
+* Prints the number of playlist records in the specified state
+*/
+	function f_mdjm_count_playlist_records_uploaded()	{
+		global $wpdb;
+		include_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		$pl_query = "SELECT COUNT(*) FROM `". $db_tbl['playlists'] . "` WHERE `date_to_mdjm` != '' AND `date_to_mdjm` IS NOT NULL";
+		$pl_result = $wpdb->get_var( $pl_query );
+		
+		echo $pl_result;
+		
+	} // f_mdjm_count_playlist_records
 
 /****************************************************************************************************
 --	VENUE FUNCTIONS
@@ -1406,13 +1453,13 @@
 		global $mdjm_options;
 		if( !empty( $event->event_dj ) ) $dj = get_userdata( $event->event_dj );
 
-		$email_headers = 'MIME-Version: 1.0'  . "\r\n";
+		$email_headers = 'MIME-Version: 1.0' . "\r\n";
 		$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 		if( $event->contract_status == 'Enquiry' || $event->contract_status == 'Pending' )	{ /* Enquiries & Pending come from site admin */
-			$email_headers .= 'From: ' . $dj->display_name . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+			$email_headers .= 'From: ' . $dj->display_name . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		}
 		else	{ /* Everything else from the DJ */
-			$email_headers .= 'From: ' . $dj->display_name . ' <bookings' . substr( get_bloginfo( 'admin_email' ), strpos( get_bloginfo( 'admin_email' ), "@" ) + 1 ) . '>' . "\r\n";
+			$email_headers .= 'From: ' . $dj->display_name . ' <bookings' . substr( $mdjm_options['system_email'], strpos( $mdjm_options['system_email'], "@" ) + 1 ) . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $dj->user_email . "\r\n";
 		}
 		if( isset( $mdjm_options['bcc_admin_to_client'] ) || isset( $mdjm_options['bcc_dj_to_client'] ) )	{
@@ -1423,8 +1470,8 @@
 			if( isset( $mdjm_options['bcc_admin_to_client'] ) && isset( $mdjm_options['bcc_dj_to_client'] ) )
 				$email_headers .= ', ';
 
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) )
-				$email_headers .= get_bloginfo( 'admin_email' );
+			if( isset( $mdjm_options['bcc_admin_to_client'] ) )
+				$email_headers .= $mdjm_options['system_email'];
 			$email_headers .= "\r\n";
 		}
 		return $email_headers;
@@ -1450,7 +1497,7 @@
 			$template_id = $type['id'];
 		}
 		else	{
-			$template_id = $mdjm_options[$type]; 	
+			$template_id = $mdjm_options[$type];
 		}
 		
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
@@ -1458,15 +1505,19 @@
 		if ( $template_query->have_posts() ) {
 			while ( $template_query->have_posts() ) {
 				$template_query->the_post();
+				/* Check if we are using the post title as the subject */
+				if( isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' && !is_array( $type ) )	{
+					$info['subject'] = get_the_title();
+				}
 				$content = get_the_content();
 				$content = apply_filters( 'the_content', $content );
 				$content = str_replace(']]>', ']]&gt;', $content);
-				$content = str_replace( $shortcode_content_search, $shortcode_content_replace, $content );
 			}
 		}
-		$email_content = nl2br( html_entity_decode( stripcslashes( $content ) ) );
 		
-		$info['content'] = str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
+		$info['content'] = '<html><body>';
+		$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $content );
+		$info['content'] .= '</body></html>';
 		
 		return $info;
 	} // f_mdjm_prepare_email
@@ -1486,7 +1537,7 @@
 		
 		$email_headers = 'MIME-Version: 1.0'  . "\r\n";
 		$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-		$email_headers .= 'From: ' . $mdjm_options['company_name'] . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+		$email_headers .= 'From: ' . $mdjm_options['company_name'] . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		
 		return $email_headers;
 	} // f_mdjm_dj_email_headers
