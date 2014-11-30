@@ -344,10 +344,88 @@
 		</td>
         </tr>
         <tr>
-        <th scope="row"><label for="event_start">Start Time:</label></th>
-        <td><input type="text" id="event_start" class="regular-text" name="event_start" placeholder="19:00" value="<?php echo $_POST['event_start']; ?>" /></td>
+        <th scope="row"><label for="event_start_hr">Start Time:</label></th>
+        <td>
+        <select name="event_start_hr" id="event_start_hr">
+        <?php
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+		}
+		else	{
+			$i = '1';
+			$x = '12';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="event_start_min" id="event_start_min">
+        <?php
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="event_start_period" id="event_start_period">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+            </select>
+            <?php	
+		}
+		?>
+        </td>
         <th scope="row"><label for="event_finish">End Time:</label></th>
-        <td><input type="text" name="event_finish" id="event_finish" class="regular-text" placeholder="00:00" value="<?php echo $_POST['event_finish']; ?>"></td>
+        <td>
+        <select name="event_finish_hr" id="event_finish_hr">
+        <?php
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+		}
+		else	{
+			$i = '1';
+			$x = '12';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="event_finish_min" id="event_finish_min">
+        <?php
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="event_finish_period" id="event_finish_period">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+            </select>
+            <?php	
+		}
+		?>
+        </td>
         </tr>
         <tr>
         <th scope="row"><label for="event_cost">Cost:</label></th>
@@ -615,6 +693,12 @@
 			wp_die( 'You cannot edit an event that is not yours unless you are an Administrator! <a href="' . admin_url() . 'admin.php?page=mdjm-events">Click here to return to your Events List</a>' );
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+		if( isset( $mdjm_options['id_prefix'] ) ) {
+			$contract_id = $mdjm_options['id_prefix'] . $event_id;
+		}
+		else	{
+			$contract_id = $event_id;	
+		}
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
@@ -635,6 +719,10 @@
         <input type="hidden" name="event_id" value="<?php echo $eventinfo->event_id; ?>" />
         <?php wp_nonce_field( 'mdjm_edit_event_verify' ); ?>
         <table class="form-table">
+        <tr>
+        <th scope="row">Event ID:</th>
+        <td colspan="3"><?php echo $contract_id; ?></td>
+        </tr>
         <tr>
         <th scope="row"><label for="user_id">Client:</label></th>
         <td>
@@ -704,10 +792,92 @@
 		</td>
         </tr>
         <tr>
-        <th scope="row"><label for="event_start">Start Time:</label></th>
-        <td><input type="text" id="event_start" class="regular-text" name="event_start" value="<?php echo $eventinfo->event_start; ?>" /></td>
-        <th scope="row"><label for="event_finish">End Time:</label></th>
-        <td><input type="text" name="event_finish" id="event_finish" class="regular-text" value="<?php echo $eventinfo->event_finish; ?>"></td>
+        <th scope="row"><label for="event_start_hr">Start Time:</label></th>
+        <td>
+        <select name="event_start_hr" id="event_start_hr">
+        <?php
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+			$comp = 'H';
+		}
+		else	{
+			$i = '1';
+			$x = '12';
+			$comp = 'g';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"<?php selected( date( $comp, strtotime( $eventinfo->event_start ) ), $i ); ?>><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="event_start_min" id="event_start_min">
+        <?php
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"<?php selected( date('i', strtotime( $eventinfo->event_start ) ), $minute ); ?>><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="event_start_period" id="event_start_period">
+            <option value="AM"<?php selected( date('A', strtotime( $eventinfo->event_start ) ), 'AM' ); ?>>AM</option>
+            <option value="PM"<?php selected( date('A', strtotime( $eventinfo->event_start ) ), 'PM' ); ?>>PM</option>
+            </select>
+            <?php	
+		}
+		?>
+        </td>
+        <th scope="row"><label for="event_finish_hr">Finish Time:</label></th>
+        <td>
+        <select name="event_finish_hr" id="event_finish_hr">
+        <?php
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+			$comp = 'H';
+		}
+		else	{
+			$i = '1';
+			$x = '12';
+			$comp = 'g';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"<?php selected( date( $comp, strtotime( $eventinfo->event_finish ) ), $i ); ?>><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="event_finish_min" id="event_finish_min">
+        <?php
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"<?php selected( date('i', strtotime( $eventinfo->event_finish ) ), $minute ); ?>><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="event_finish_period" id="event_finish_period">
+            <option value="AM"<?php selected( date('A', strtotime( $eventinfo->event_finish ) ), 'AM' ); ?>>AM</option>
+            <option value="PM"<?php selected( date('A', strtotime( $eventinfo->event_finish ) ), 'PM' ); ?>>PM</option>
+            </select>
+            <?php	
+		}
+		?>
+        </td>
         </tr>
         <tr>
         <th scope="row"><label for="event_description">Description:</label></th>
@@ -961,12 +1131,11 @@
 		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
 		//f_mdjm_cron_balance_reminder();
 		
-		$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
-		/* Add system email option */
-		$mdjm_options['system_email'] = $mdjm_options['system_email'];
+		$hr = '7';
+		$min = '15';
+		$period = 'AM';
 		
-		/* Update the options */
-		update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+		echo date( 'H:i:s', strtotime( $hr . ':' . $min . $period ) );
 		
 		exit;
 	}

@@ -170,6 +170,52 @@ Additionally, in some system generated emails (enquiry etc.) this address is use
         <?php
 	} // f_mdjm_updated_to_0_9_4
 	
+/**************************************************
+				VERSION 0.9.5
+**************************************************/
+	function f_mdjm_updated_to_0_9_5()	{
+		?>
+        <tr>
+        <td>This is a minor update to address some reported bugs, although some slight enhancements are included</td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Contract Updates</font><br>
+		<strong>Contract / Invoice Prefix</strong>: Added new option to the <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a> page enabling you to preifx the unique contracts ID if required. This prefix will also apply to invoices in a future release.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Shortcode Updates</font><br>
+        We have added a couple of new Event <a href="http://www.mydjplanner.co.uk/shortcodes">Shortcode options</a><br />
+        <ui>
+        <li><span class="code">{CONTRACT_DATE}</span>: Inserts the date of the contract. If the contract has been signed the date of signing is entered, otherwise it defaults to today</li>
+        <li><span class="code">{CONTRACT_ID}</span>: Inserts the unique ID of the contract. If a prefix has been set within <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a>, the prefix is also displayed</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Time Formatting</font><br>
+        You can now select how times are displayed. Within the <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a> page, set to either a 24 hour or 12 hour format
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/emails-issues/">this bug</a> the From address of emails was not defaulting back to the WordPress Admin email address if unset</li>
+                <li>Also reported in <a href="http://www.mydjplanner.co.uk/forums/topic/emails-issues/">this bug</a> Admins were copied in client emails even if the setting was not enabled</li>
+                <li>Contract Date was always todays date, even when signed. Now shows date of signature if signed</li>
+                <li>The <strong>Complete Events</strong> scheduled task was sending emails with subject of "0"</li>
+                <li>Some scheduled tasks were sending notification emails to admin even when no actions taken</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_5
+	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
 			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );

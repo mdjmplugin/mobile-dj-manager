@@ -515,49 +515,49 @@
 					$x++;
 					
 				} // foreach( $eventlist as $event )
+			
+				$cron_end = microtime(true);
+			
+				// Admin notification emails
+				if( isset( $mdjm_schedules['request-deposit']['options']['notify_admin'] ) && $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
+					$cron_email_args = array(
+											'type'		=> 'notify',
+											'to'		  => $mdjm_options['system_email'],
+											'subject'     => 'Task Request Deposit Completed ' . $mdjm_options['company_name'],
+											'template'	=> $mdjm_schedules['request-deposit']['options']['email_template'],
+											'djinfo'	  => $djinfo,
+											'data'		=> $notify['admin'],
+											'taskinfo'	=> $mdjm_schedules['request-deposit'],
+											'start'	    => $cron_start,
+											'end'		  => $cron_end,
+											'total'		=> $x,
+										); // $cron_email_args
+					f_mdjm_cron_email( $cron_email_args );
+				}// if( $mdjm_schedules['request-desposit']['options']['notify_admin'] == Y )
+				
+				// DJ notification emails
+				if( isset( $mdjm_schedules['request-deposit']['options']['notify_dj'] ) && $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
+					foreach( $notify['dj'] as $notify_dj )	{
+						foreach( $notify_dj as $dj )	{
+							$cron_email_args = array(
+													'type'		  => 'notify',
+													'to'		    => $djinfo->user_email,
+													'subject'  	   => 'Task Request Deposit Completed ' . $mdjm_options['company_name'],
+													'template'	  => $mdjm_schedules['request-deposit']['options']['email_template'],
+													'djinfo'	    => $djinfo,
+													'data'		  => $notify_dj,
+													'taskinfo'	  => $mdjm_schedules['request-deposit'],
+													'total'		 => $x,
+												); // $cron_email_args
+												
+							f_mdjm_cron_email( $cron_email_args );
+						} // foreach( $notify_dj as $event )
+						
+					} // foreach( $notify['dj'] as $dj )
+				
+				}// if( $mdjm_schedules['request-deposit']['options']['notify_dj'] == Y )
 				
 			} // if( $eventlist )
-			
-			$cron_end = microtime(true);
-			
-			// Admin notification emails
-			if( isset( $mdjm_schedules['request-deposit']['options']['notify_admin'] ) && $mdjm_schedules['request-deposit']['options']['notify_admin'] == 'Y' )	{
-				$cron_email_args = array(
-										'type'		=> 'notify',
-										'to'		  => $mdjm_options['system_email'],
-										'subject'     => 'Task Request Deposit Completed ' . $mdjm_options['company_name'],
-										'template'	=> $mdjm_schedules['request-deposit']['options']['email_template'],
-										'djinfo'	  => $djinfo,
-										'data'		=> $notify['admin'],
-										'taskinfo'	=> $mdjm_schedules['request-deposit'],
-										'start'	    => $cron_start,
-										'end'		  => $cron_end,
-										'total'		=> $x,
-									); // $cron_email_args
-				f_mdjm_cron_email( $cron_email_args );
-			}// if( $mdjm_schedules['request-desposit']['options']['notify_admin'] == Y )
-			
-			// DJ notification emails
-			if( isset( $mdjm_schedules['request-deposit']['options']['notify_dj'] ) && $mdjm_schedules['request-deposit']['options']['notify_dj'] == 'Y' )	{
-				foreach( $notify['dj'] as $notify_dj )	{
-					foreach( $notify_dj as $dj )	{
-						$cron_email_args = array(
-												'type'		  => 'notify',
-												'to'		    => $djinfo->user_email,
-												'subject'  	   => 'Task Request Deposit Completed ' . $mdjm_options['company_name'],
-												'template'	  => $mdjm_schedules['request-deposit']['options']['email_template'],
-												'djinfo'	    => $djinfo,
-												'data'		  => $notify_dj,
-												'taskinfo'	  => $mdjm_schedules['request-deposit'],
-												'total'		 => $x,
-											); // $cron_email_args
-											
-						f_mdjm_cron_email( $cron_email_args );
-					} // foreach( $notify_dj as $event )
-					
-				} // foreach( $notify['dj'] as $dj )
-			
-			}// if( $mdjm_schedules['request-deposit']['options']['notify_dj'] == Y )
 			
 			/* Update the cron task with run times */
 			f_mdjm_cronjob_update( $mdjm_schedules['request-deposit']['slug'] );
@@ -687,49 +687,49 @@
 					$x++;
 					
 				} // foreach( $eventlist as $event )
+			
+				$cron_end = microtime(true);
+			
+				// Admin notification emails
+				if( isset( $mdjm_schedules['balance-reminder']['options']['notify_admin'] ) && $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
+					$cron_email_args = array(
+											'type'		=> 'notify',
+											'to'		  => $mdjm_options['system_email'],
+											'subject'     => 'Task Balance Reminder Completed ' . $mdjm_options['company_name'],
+											'template'	=> $mdjm_schedules['balance-reminder']['options']['email_template'],
+											'djinfo'	  => $djinfo,
+											'data'		=> $notify['admin'],
+											'taskinfo'	=> $mdjm_schedules['balance-reminder'],
+											'start'	    => $cron_start,
+											'end'		  => $cron_end,
+											'total'		=> $x,
+										); // $cron_email_args
+					f_mdjm_cron_email( $cron_email_args );
+				}// if( $mdjm_schedules['balance-reminder']['options']['notify_admin'] == Y )
+				
+				// DJ notification emails
+				if( isset( $mdjm_schedules['balance-reminder']['options']['notify_dj'] ) && $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
+					foreach( $notify['dj'] as $notify_dj )	{
+						foreach( $notify_dj as $dj )	{
+							$cron_email_args = array(
+													'type'		  => 'notify',
+													'to'		    => $djinfo->user_email,
+													'subject'  	   => 'Task Request Balance Reminder Completed ' . $mdjm_options['company_name'],
+													'template'	  => $mdjm_schedules['balance-reminder']['options']['email_template'],
+													'djinfo'	    => $djinfo,
+													'data'		  => $notify_dj,
+													'taskinfo'	  => $mdjm_schedules['balance-reminder'],
+													'total'		 => $x,
+												); // $cron_email_args
+												
+							f_mdjm_cron_email( $cron_email_args );
+						} // foreach( $notify_dj as $event )
+						
+					} // foreach( $notify['dj'] as $dj )
+				
+				}// if( $mdjm_schedules['balance-reminder']['options']['notify_dj'] == Y )
 				
 			} // if( $eventlist )
-			
-			$cron_end = microtime(true);
-			
-			// Admin notification emails
-			if( isset( $mdjm_schedules['balance-reminder']['options']['notify_admin'] ) && $mdjm_schedules['balance-reminder']['options']['notify_admin'] == 'Y' )	{
-				$cron_email_args = array(
-										'type'		=> 'notify',
-										'to'		  => $mdjm_options['system_email'],
-										'subject'     => 'Task Balance Reminder Completed ' . $mdjm_options['company_name'],
-										'template'	=> $mdjm_schedules['balance-reminder']['options']['email_template'],
-										'djinfo'	  => $djinfo,
-										'data'		=> $notify['admin'],
-										'taskinfo'	=> $mdjm_schedules['balance-reminder'],
-										'start'	    => $cron_start,
-										'end'		  => $cron_end,
-										'total'		=> $x,
-									); // $cron_email_args
-				f_mdjm_cron_email( $cron_email_args );
-			}// if( $mdjm_schedules['balance-reminder']['options']['notify_admin'] == Y )
-			
-			// DJ notification emails
-			if( isset( $mdjm_schedules['balance-reminder']['options']['notify_dj'] ) && $mdjm_schedules['balance-reminder']['options']['notify_dj'] == 'Y' )	{
-				foreach( $notify['dj'] as $notify_dj )	{
-					foreach( $notify_dj as $dj )	{
-						$cron_email_args = array(
-												'type'		  => 'notify',
-												'to'		    => $djinfo->user_email,
-												'subject'  	   => 'Task Request Balance Reminder Completed ' . $mdjm_options['company_name'],
-												'template'	  => $mdjm_schedules['balance-reminder']['options']['email_template'],
-												'djinfo'	    => $djinfo,
-												'data'		  => $notify_dj,
-												'taskinfo'	  => $mdjm_schedules['balance-reminder'],
-												'total'		 => $x,
-											); // $cron_email_args
-											
-						f_mdjm_cron_email( $cron_email_args );
-					} // foreach( $notify_dj as $event )
-					
-				} // foreach( $notify['dj'] as $dj )
-			
-			}// if( $mdjm_schedules['balance-reminder']['options']['notify_dj'] == Y )
 			
 			/* Update the cron task with run times */
 			f_mdjm_cronjob_update( $mdjm_schedules['balance-reminder']['slug'] );
@@ -856,49 +856,49 @@
 					$x++;
 					
 				} // foreach( $eventlist as $event )
+			
+				$cron_end = microtime(true);
+				
+				// Admin notification emails
+				if( isset( $mdjm_schedules['client-feedback']['options']['notify_admin'] ) && $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
+					$cron_email_args = array(
+											'type'		 => 'notify',
+											'to'		   => $mdjm_options['system_email'],
+											'subject'      => 'Task "Client Feedback" Completed ' . $mdjm_options['company_name'],
+											'template'	 => $mdjm_schedules['client-feedback']['options']['email_template'],
+											'djinfo'	   => $djinfo,
+											'data'		 => $notify['admin'],
+											'taskinfo'	 => $mdjm_schedules['client-feedback'],
+											'start'	    => $cron_start,
+											'end'		  => $cron_end,
+											'total'		=> $x,
+										); // $cron_email_args
+					f_mdjm_cron_email( $cron_email_args );
+				}// if( $mdjm_schedules['client-feedback']['options']['notify_admin'] == Y )
+				
+				// DJ notification emails
+				if( isset( $mdjm_schedules['client-feedback']['options']['notify_dj'] ) && $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
+					foreach( $notify['dj'] as $notify_dj )	{
+						foreach( $notify_dj as $dj )	{
+							$cron_email_args = array(
+													'type'		  => 'notify',
+													'to'		    => $djinfo->user_email,
+													'subject'  	   => 'Task "Client Feedback" Completed ' . $mdjm_options['company_name'],
+													'template'	  => $mdjm_schedules['client-feedback']['options']['email_template'],
+													'djinfo'	    => $djinfo,
+													'data'		  => $notify_dj,
+													'taskinfo'	  => $mdjm_schedules['client-feedback'],
+													'total'		 => $x,
+												); // $cron_email_args
+												
+							f_mdjm_cron_email( $cron_email_args );
+						} // foreach( $notify_dj as $event )
+						
+					} // foreach( $notify['dj'] as $dj )
+				
+				}// if( $mdjm_schedules['client-feedback']['options']['notify_dj'] == Y )
 				
 			} // if( $eventlist )
-			
-			$cron_end = microtime(true);
-			
-			// Admin notification emails
-			if( isset( $mdjm_schedules['client-feedback']['options']['notify_admin'] ) && $mdjm_schedules['client-feedback']['options']['notify_admin'] == 'Y' )	{
-				$cron_email_args = array(
-										'type'		 => 'notify',
-										'to'		   => $mdjm_options['system_email'],
-										'subject'      => 'Task "Client Feedback" Completed ' . $mdjm_options['company_name'],
-										'template'	 => $mdjm_schedules['client-feedback']['options']['email_template'],
-										'djinfo'	   => $djinfo,
-										'data'		 => $notify['admin'],
-										'taskinfo'	 => $mdjm_schedules['client-feedback'],
-										'start'	    => $cron_start,
-										'end'		  => $cron_end,
-										'total'		=> $x,
-									); // $cron_email_args
-				f_mdjm_cron_email( $cron_email_args );
-			}// if( $mdjm_schedules['client-feedback']['options']['notify_admin'] == Y )
-			
-			// DJ notification emails
-			if( isset( $mdjm_schedules['client-feedback']['options']['notify_dj'] ) && $mdjm_schedules['client-feedback']['options']['notify_dj'] == 'Y' )	{
-				foreach( $notify['dj'] as $notify_dj )	{
-					foreach( $notify_dj as $dj )	{
-						$cron_email_args = array(
-												'type'		  => 'notify',
-												'to'		    => $djinfo->user_email,
-												'subject'  	   => 'Task "Client Feedback" Completed ' . $mdjm_options['company_name'],
-												'template'	  => $mdjm_schedules['client-feedback']['options']['email_template'],
-												'djinfo'	    => $djinfo,
-												'data'		  => $notify_dj,
-												'taskinfo'	  => $mdjm_schedules['client-feedback'],
-												'total'		 => $x,
-											); // $cron_email_args
-											
-						f_mdjm_cron_email( $cron_email_args );
-					} // foreach( $notify_dj as $event )
-					
-				} // foreach( $notify['dj'] as $dj )
-			
-			}// if( $mdjm_schedules['client-feedback']['options']['notify_dj'] == Y )
 			
 			/* Update the cron task with run times */
 			f_mdjm_cronjob_update( $mdjm_schedules['client-feedback']['slug'] );

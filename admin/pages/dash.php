@@ -99,7 +99,7 @@
 						echo '<td>';
 						foreach( $dj_event_results as $info )	{
 							$djinfo = get_userdata( $info->event_dj );
-							echo $djinfo->display_name . ' from ' . date( 'H:i', strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)<br />';
+							echo $djinfo->display_name . ' from ' . date( $mdjm_options['time_format'], strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)<br />';
 						}
 						echo '</td>';
 					}

@@ -12,6 +12,7 @@
 		global $mdjm_options;
 		$admin_settings_field = array(  'company_name',
 										'app_name',
+										'time_format',
 										'show_dashboard',
 										'journaling',
 										'multiple_dj',
@@ -19,6 +20,7 @@
 										'event_types',
 										'enquiry_sources',
 										'default_contract',
+										'id_prefix',
 										'system_email',
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
@@ -70,6 +72,26 @@
 									'value' => $mdjm_options['app_name'],
 									'text' => 'Default is <strong>Client Zone</strong>',
 									'desc' => 'Choose your own name for the application. It\'s recommended you give the top level menu item linking to the application the same name.',
+									'section' => 'general',
+									'page' => 'settings',
+									); // app_name
+									
+		$admin_fields['time_format'] = array(
+									'display' => 'Display Time as?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['time_format'],
+									'text' => '',
+									'desc' => 'Select the format in which you want your event times displayed. Applies to both admin and client pages',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[time_format]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['time_format'],
+														'list_type' => 'defined',
+														'list_values' => array( 'g:i A' => date( 'g:i A' ),
+																				'H:i' => date( 'H:i' ) ),
+														),
 									'section' => 'general',
 									'page' => 'settings',
 									); // app_name
@@ -127,6 +149,18 @@
 									'section' => 'general',
 									'page' => 'settings',
 									); // default_contract
+		
+		$admin_fields['id_prefix'] = array(
+									'display' => 'Contract / Invoice Prefix',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['id_prefix'],
+									'text' => '',
+									'desc' => 'Contracts &amp; Invoices are assigned the unique event ID by default. If you wish to prefix this number, enter the prefix here',
+									'section' => 'general',
+									'page' => 'settings',
+									); // id_prefix
 									
 		$admin_fields['system_email'] = array(
 									'display' => 'Default Email Address',
@@ -651,51 +685,61 @@
 /* Process the fields to be displayed */
 	function f_mdjm_general_settings_callback( $args )	{
 		global $mdjm_options;
-		if( $args['type'] == 'custom_dropdown' )	{
+		if( isset( $args['type'] ) && $args['type'] == 'custom_dropdown' )	{
 			if( $args['custom_args']['list_type'] == 'page' )	{
 				wp_dropdown_pages( $args['custom_args'] );
 			}
 			elseif( $args['custom_args']['list_type'] == 'contract' )	{
 				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
-			$contract_args = array(
-								'post_type' => 'contract',
-								'orderby' => 'name',
-								'order' => 'ASC',
-								);
-			$contract_query = new WP_Query( $contract_args );
-			if ( $contract_query->have_posts() ) {
-				while ( $contract_query->have_posts() ) {
-					$contract_query->the_post();
-					echo '<option value="' . get_the_id() . '"';
-					if( $mdjm_options['default_contract'] == get_the_id() )	{
-						echo ' selected="selected"';	
+				$contract_args = array(
+									'post_type' => 'contract',
+									'orderby' => 'name',
+									'order' => 'ASC',
+									);
+				$contract_query = new WP_Query( $contract_args );
+				if ( $contract_query->have_posts() ) {
+					while ( $contract_query->have_posts() ) {
+						$contract_query->the_post();
+						echo '<option value="' . get_the_id() . '"';
+						if( $mdjm_options['default_contract'] == get_the_id() )	{
+							echo ' selected="selected"';	
+						}
+						echo '>' . get_the_title() . '</option>' . "\n";	
 					}
-					echo '>' . get_the_title() . '</option>' . "\n";	
 				}
-			}
-			wp_reset_postdata();
-			echo '</select>';
+				wp_reset_postdata();
+				echo '</select>';
 			}
 			elseif( $args['custom_args']['list_type'] == 'email_template' )	{
 				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
-			$email_args = array(
-								'post_type' => 'email_template',
-								'orderby' => 'name',
-								'order' => 'ASC',
-								);
-			$email_query = new WP_Query( $email_args );
-			if ( $email_query->have_posts() ) {
-				while ( $email_query->have_posts() ) {
-					$email_query->the_post();
-					echo '<option value="' . get_the_id() . '"';
-					if( $mdjm_options[$args['field']] == get_the_id() )	{
+				$email_args = array(
+									'post_type' => 'email_template',
+									'orderby' => 'name',
+									'order' => 'ASC',
+									);
+				$email_query = new WP_Query( $email_args );
+				if ( $email_query->have_posts() ) {
+					while ( $email_query->have_posts() ) {
+						$email_query->the_post();
+						echo '<option value="' . get_the_id() . '"';
+						if( $mdjm_options[$args['field']] == get_the_id() )	{
+							echo ' selected="selected"';	
+						}
+						echo '>' . get_the_title() . '</option>' . "\n";	
+					}
+				}
+				wp_reset_postdata();
+				echo '</select>';
+			}
+			elseif( $args['custom_args']['list_type'] == 'defined' )		{
+				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
+				foreach( $args['custom_args']['list_values'] as $s_key => $s_value )	{
+					echo '<option value="' . $s_key . '"';
+					if( $mdjm_options[$args['field']] == $s_key )	{
 						echo ' selected="selected"';	
 					}
-					echo '>' . get_the_title() . '</option>' . "\n";	
+					echo '>' . $s_value . '</option>' . "\n";
 				}
-			}
-			wp_reset_postdata();
-			echo '</select>';
 			}
 		}
 		elseif( $args['type'] == 'textarea' )	{

@@ -120,6 +120,18 @@
 					text: 'Event Shortcodes',
 					menu: [
 						{
+							text: 'Contract Date',
+							onclick: function() {
+								editor.insertContent('{CONTRACT_DATE}');
+							}
+						},
+						{
+							text: 'Contract ID',
+							onclick: function() {
+								editor.insertContent('{CONTRACT_ID}');
+							}
+						},
+						{
 							text: 'Event Date',
 							onclick: function() {
 								editor.insertContent('{EVENT_DATE}');

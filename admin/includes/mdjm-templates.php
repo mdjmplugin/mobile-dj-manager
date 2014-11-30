@@ -186,7 +186,7 @@
 				'options'	  => array(
 									'email_client'   => 'N',
 									'email_template' => '0',
-									'email_subject'  => '0',
+									'email_subject'  => 'Task "Complete Events" Complete - ' . $mdjm_options['app_name'],
 									'email_from'	 => 'admin',
 									'run_when'	   	 => 'after_event',
 									'age'			 => '1 HOUR',
@@ -255,7 +255,7 @@
 				'options'	  => array(
 									'email_client'   => 'N',
 									'email_template' => '0',
-									'email_subject'  => '0',
+									'email_subject'  => 'Task "Fail Enquiry" Complete - ' . $mdjm_options['app_name'],
 									'email_from'	 => 'admin',
 									'run_when'	   => 'event_created',
 									'age'			=> '2 WEEK',

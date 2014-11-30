@@ -210,9 +210,9 @@
                </tr>
                <tr>
                 <td style="font-weight:bold">Start Time:</td>
-                <td><?php echo date( "H:i", strtotime( $eventinfo->event_start ) ); ?></td>
+                <td><?php echo date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ); ?></td>
                 <td style="font-weight:bold">Finish Time:</td>
-                <td><?php echo date( "H:i", strtotime( $eventinfo->event_finish ) )." (".date( "g", $duration )." hours ".date( "i", $duration )." minutes)"; ?></td>
+                <td><?php echo date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) )." (".date( "g", $duration )." hours ".date( "i", $duration )." minutes)"; ?></td>
               </tr>
               <?php 
 			  if( isset( $eventinfo->event_description ) && !empty( $eventinfo->event_description ) )	{ 

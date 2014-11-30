@@ -388,6 +388,15 @@
 		if( !isset( $event['deposit_status'] ) || $event['deposit_status'] == '' ) $event['deposit_status'] = 'Due';
 		if( !isset( $event['balance_status'] ) || $event['balance_status'] == '' ) $event['balance_status'] = 'Due';
 		
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$start_time = date( 'H:i:s', strtotime( $event['event_start_hr'] . ':' . $event['event_start_min'] ) );
+			$end_time = date( 'H:i:s', strtotime( $event['event_finish_hr'] . ':' . $event['event_finish_min'] ) );
+		}
+		else	{
+			$start_time = date( 'H:i:s', strtotime( $event['event_start_hr'] . ':' . $event['event_start_min'] . $event['event_start_period'] ) );
+			$end_time = date( 'H:i:s', strtotime( $event['event_finish_hr'] . ':' . $event['event_finish_min'] . $event['event_finish_period'] ) );
+		}
+		
 		/* If a venue was selected use it */
 		if( $event['event_venue'] != '' && $event['event_venue'] != 'manual' )	{
 			$venueinfo = f_mdjm_get_venue_by_id( $event['event_venue'] );
@@ -410,8 +419,8 @@
 											'event_date' => $event_date,
 											'event_dj' => $event['event_dj'],
 											'event_type' => sanitize_text_field( $event['event_type'] ),
-											'event_start' => $event['event_start'],
-											'event_finish' => $event['event_finish'],
+											'event_start' => $start_time,
+											'event_finish' => $end_time,
 											'event_description' => $event['event_description'],
 											'event_package' => $event['event_package'],
 											'event_addons' => $event['event_addons'],
@@ -545,6 +554,16 @@
 		else	{
 			unset( $event_updates['contract_approved_date'] );	
 		}
+		
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$event_updates['event_start'] = date( 'H:i:s', strtotime( $event_updates['event_start_hr'] . ':' . $event_updates['event_start_min'] ) );
+			$event_updates['event_finish'] = date( 'H:i:s', strtotime( $event_updates['event_finish_hr'] . ':' . $event_updates['event_finish_min'] ) );
+		}
+		else	{
+			$event_updates['event_start'] = date( 'H:i:s', strtotime( $event_updates['event_start_hr'] . ':' . $event_updates['event_start_min'] . $event_updates['event_start_period'] ) );
+			$event_updates['event_finish'] = date( 'H:i:s', strtotime( $event_updates['event_finish_hr'] . ':' . $event_updates['event_finish_min'] . $event_updates['event_finish_period'] ) );
+		}
+		unset( $event_updates['event_start_hr'], $event_updates['event_start_min'], $event_updates['event_start_period'], $event_updates['event_finish_hr'], $event_updates['event_finish_min'], $event_updates['event_finish_period'] );
 		
 		$event_updates['event_date'] = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
 		$event_updates['last_updated_by'] = get_current_user_id();
@@ -1112,7 +1131,7 @@
  * @since 1.0
 */
 	function f_mdjm_dj_get_events( $dj )	{
-		global $wpdb;
+		global $wpdb, $mdjm_options;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$info['all_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '".$dj."' AND `contract_status` != 'Failed Enquiry' AND `contract_status` != 'Cancelled'" );
@@ -1126,7 +1145,7 @@
 		$info['next_event'] = 'N/A';
 		if( $wpdb->num_rows > 0 )	{
 			$info['next_event'] = date( "jS F Y", strtotime( $next_event->event_date ) );
-			$info['next_event_start'] = date( "H:i", strtotime( $next_event->event_start ) );
+			$info['next_event_start'] = date( $mdjm_options['time_format'], strtotime( $next_event->event_start ) );
 			$info['num_rows'] = $wpdb->num_rows;
 		}
 		$info['event_id'] = $next_event->event_id;
@@ -1462,16 +1481,19 @@
 			$email_headers .= 'From: ' . $dj->display_name . ' <bookings' . substr( $mdjm_options['system_email'], strpos( $mdjm_options['system_email'], "@" ) + 1 ) . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $dj->user_email . "\r\n";
 		}
-		if( isset( $mdjm_options['bcc_admin_to_client'] ) || isset( $mdjm_options['bcc_dj_to_client'] ) )	{
+		if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
+			|| isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )	{
 			$email_headers .= 'Bcc: ';
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) )
+			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
 				$email_headers .= $dj->user_email;
 
-			if( isset( $mdjm_options['bcc_admin_to_client'] ) && isset( $mdjm_options['bcc_dj_to_client'] ) )
+			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
+				&& isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
 				$email_headers .= ', ';
 
-			if( isset( $mdjm_options['bcc_admin_to_client'] ) )
+			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )
 				$email_headers .= $mdjm_options['system_email'];
+				
 			$email_headers .= "\r\n";
 		}
 		return $email_headers;

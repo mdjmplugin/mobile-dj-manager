@@ -202,7 +202,7 @@
 				<?php
                 if( $schedule['lastran'] != 'Never' )	{
 					echo date( 'd M Y', $schedule['lastran'] ) . '<br />';
-					echo date( 'H:i', $schedule['lastran'] );
+					echo date( $mdjm_options['time_format'], $schedule['lastran'] );
 				}
 				else	{
 					echo esc_attr( $schedule['lastran'] );
@@ -217,7 +217,7 @@
 					&& $schedule['nextrun'] != 'Next Month' )	{
 						
 					echo date( 'd M Y', $schedule['nextrun'] ) . '<br />';
-					echo date( 'H:i', $schedule['nextrun'] );
+					echo date( $mdjm_options['time_format'], $schedule['nextrun'] );
 				}
 				elseif( $schedule['nextrun'] == 'N/A' )	{
 						echo 'N/A';	
@@ -260,6 +260,7 @@
 * Edit given task
 */
 	function f_mdjm_edit_task( $task )	{
+		global $mdjm_options;
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		if( isset( $mdjm_schedules[$task]['default'] ) && $mdjm_schedules[$task]['default'] == 'Y' )
 			$ro = ' readonly';
@@ -454,11 +455,11 @@
         </tr>
         <tr>
         <td>Last Run:</td>
-        <td><?php if( $mdjm_schedules[$task]['lastran'] != 'Never' ) echo date( 'H:i d M Y', $mdjm_schedules[$task]['lastran'] ); else echo $mdjm_schedules[$task]['lastran']; ?></td>
+        <td><?php if( $mdjm_schedules[$task]['lastran'] != 'Never' ) echo date( $mdjm_options['time_format'] . ' d M Y', $mdjm_schedules[$task]['lastran'] ); else echo $mdjm_schedules[$task]['lastran']; ?></td>
         </tr>
         <tr>
         <td>Next Run:</td>
-        <td><?php if( $mdjm_schedules[$task]['nextrun'] != 'N/A' ) echo date( 'H:i d M Y', $mdjm_schedules[$task]['nextrun'] ); else echo $mdjm_schedules[$task]['nextrun']; ?></td>
+        <td><?php if( $mdjm_schedules[$task]['nextrun'] != 'N/A' ) echo date( $mdjm_options['time_format'] . ' d M Y', $mdjm_schedules[$task]['nextrun'] ); else echo $mdjm_schedules[$task]['nextrun']; ?></td>
         </tr>
         <tr>
         <td>Total Runs:</td>

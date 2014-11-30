@@ -50,6 +50,20 @@
 			$playlist_url = get_permalink( $mdjm_options['playlist_page'] ) . '&mdjmeventid=' . $eventinfo->event_guest_call;
 		}
 		
+		if( $eventinfo->contract_status != 'Approved' )	{
+			$contract_date = date( 'd/m/Y' );
+		}
+		else	{
+			$contract_date = date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) );	
+		}
+		
+		if( isset( $mdjm_options['id_prefix'] ) && !empty( $mdjm_options['id_prefix'] ) )	{
+			$contract_id = $mdjm_options['id_prefix'] . $eventinfo->event_id;
+		}
+		else	{
+			$contract_id = $eventinfo->event_id;
+		}
+		
 		$balance = $eventinfo->cost - $eventinfo->deposit;
 		
 		if( $eventinfo->deposit_status  == 'Paid' )	{
@@ -102,6 +116,8 @@
 							'{APPLICATION_NAME}',
 							'{APPLICATION_HOME}',
 							'{CONTRACT_URL}',
+							'{CONTRACT_DATE}',
+							'{CONTRACT_ID}',
 							'{PLAYLIST_CLOSE}',
 							'{PLAYLIST_URL}',
 							'{DJ_EMAIL}',
@@ -121,8 +137,8 @@
 							$dj->display_name, /* {DJ_FULLNAME} */
 							$eventinfo->event_type, /* {EVENT_TYPE} */
 							date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ), /* {EVENT_DATE} */
-							date( 'g:iA', strtotime( $eventinfo->event_start ) ), /* {EVENT_START} */
-							date( 'g:iA', strtotime( $eventinfo->event_finish ) ), /* {EVENT_FINISH} */
+							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ), /* {EVENT_START} */
+							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {EVENT_FINISH} */
 							'&pound;' . number_format( $eventinfo->cost, 2 ), /* {TOTAL_COST} */
 							'&pound;' . number_format( $eventinfo->deposit, 2 ), /* {DEPOSIT} */
 							$deposit_status, /* {DEPOSIT_STATUS} */
@@ -138,6 +154,8 @@
 							$mdjm_options['app_name'], /* {APPLICATION_NAME} */
 							get_permalink( $mdjm_options['app_home_page'] ), /* {APPLICATION_HOME} */
 							$contract_url, /* {CONTRACT_URL} */
+							$contract_date, /* {CONTRACT_DATE */
+							$contract_id, /* {CONTRACT_ID} */
 							$mdjm_options['playlist_close'], /* {PLAYLIST_CLOSE} */
 							$playlist_url, /* {PLAYLIST_URL} */
 							$dj->user_email, /* {DJ_EMAIL} */

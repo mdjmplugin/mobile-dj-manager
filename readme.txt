@@ -78,6 +78,24 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 
 == Changelog ==
 
+= 0.9.5 =
+<h2>Bug Fixes</h2>
+<ul>
+	<li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/emails-issues/">this bug</a> the From address of emails was not defaulting back to the WordPress Admin email address if unset</li>
+	<li>Also reported in <a href="http://www.mydjplanner.co.uk/forums/topic/emails-issues/">this bug</a> Admins were copied in client emails even if the setting was not enabled</li>
+    <li>Contract Date was always todays date, even when signed. Now shows date of signature if signed</li>
+	<li>The Complete Events scheduled task was sending emails with subject of "0"</li>
+	<li>Some scheduled tasks were sending notification emails to admin even when no actions taken</li>
+</ul>
+
+<h2>New & Enhanced Features</h2>
+<ul>
+	<li>You can now select how times are displayed. Within the DJ Manager > Settings page, set to either a 24 hour or 12 hour format
+	<li>Added new option to the DJ Manager > Settings page enabling you to preifx the unique contracts ID if required. This prefix will also apply to invoices in a future release.</li>
+	<li>Added shortcode <span class="code">{CONTRACT_DATE}</span>: Inserts the date of the contract. If the contract has been signed the date of signing is entered, otherwise it defaults to today</li>
+    <li>Added shortcode <span class="code">{CONTRACT_ID}</span>: Inserts the unique ID of the contract. If a prefix has been set within <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a>, the prefix is also displayed</li>
+</ul>
+
 = 0.9.4 =
 <h2>Bug Fixes</h2>
 <ul>

@@ -50,12 +50,14 @@
 			if( isset( $_POST['copy_sender'] ) || $_POST['copy_sender'] == 'Y' || isset( $mdjm_options['bcc_admin_to_client'] ) )	{
 				$email_headers .= 'Bcc: ';
 				
-				if( $_POST['copy_sender'] =='Y' )
+				if( isset( $_POST['copy_sender'] ) && $_POST['copy_sender'] =='Y' )
 					$email_headers .= $dj->user_email;
-				if( $_POST['copy_sender'] =='Y' && $mdjm_options['bcc_admin_to_client'] )	{
+					
+				if( isset( $_POST['copy_sender'] ) && $_POST['copy_sender'] =='Y' 
+					&& isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' ) 	{
 					$email_headers .= ', ';	
 				}
-				if( $mdjm_options['bcc_admin_to_client'] )
+				if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )
 					$email_headers .= $mdjm_options['system_email'];
 					
 				$email_headers .= "\r\n";

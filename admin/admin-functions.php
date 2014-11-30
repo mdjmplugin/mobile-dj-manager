@@ -239,6 +239,7 @@
 		$mdjm_init_options = array(
 							'company_name' 			=> get_bloginfo( 'name' ),
 							'app_name'				=> 'Client Zone',
+							'time_format'           => 'H:i',
 							'show_dashboard'		  => 'Y',
 							'journaling'			  => 'Y',
 							'multiple_dj' 			 => 'N',
@@ -246,6 +247,7 @@
 							'event_types' 			 => $event_types,
 							'enquiry_sources' 		 => $enquiry_sources,
 							'default_contract' 		=> $contract_post_id,
+							'id_prefix'             => 'MDJM',
 							'system_email' 		    => get_bloginfo( 'admin_email' ),
 							'bcc_dj_to_client' 		=> '',
 							'bcc_admin_to_client' 	 => 'Y',
@@ -418,9 +420,9 @@
 		
 		$current_version_mdjm = get_option( 'mdjm_version' );
 		if( WPMDJM_VERSION_NUM > $current_version_mdjm )	{ // We have some upgrades to perform
-			/************************************
+/***************************************************
 			 	UPGRADES FROM 0.9.2 OR LESS
-			************************************/
+***************************************************/
 			if( $current_version_mdjm <= '0.9.2' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				/* USER ROLES */
@@ -483,9 +485,9 @@
 				add_option( 'mdjm_schedules', $mdjm_schedules );
 			} // if( $current_version_mdjm <= '0.9.2' )
 			
-			/************************************
+/***************************************************
 			 	UPGRADES FROM 0.9.3
-			************************************/
+***************************************************/
 			if( $current_version_mdjm == '0.9.3' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				
@@ -501,6 +503,28 @@
 				/* Update the options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 			} // if( $current_version_mdjm == '0.9.3' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.4
+***************************************************/
+			if( $current_version_mdjm == '0.9.4' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_schedules = get_option( 'mdjm_schedules' );
+				
+				/* Add Contract Prefix Option */
+				$mdjm_options['id_prefix'] = 'MDJM';
+				
+				/* Add time format option */
+				$mdjm_options['time_format'] = 'H:i';
+				
+				/* Correct the Schedule Copleted Tasks Subject Line */
+				$mdjm_schedules['complete-events']['options']['email_subject'] = 'Task "Complete Events" Complete - ' . $mdjm_options['app_name'];
+				$mdjm_schedules['fail-enquiry']['options']['email_subject'] = 'Task "Fail Enquiry" Complete - ' . $mdjm_options['app_name'];
+				
+				/* Update the options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_options( 'mdjm_schedules', $mdjm_schedules );
+			} // if( $current_version_mdjm == '0.9.4' )
 			
 			/* Delete the template file */
 			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );

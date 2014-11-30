@@ -65,6 +65,11 @@
 				$mdjm_options[$key] = $value;
 			}
 		}
+		
+		if( !isset( $mdjm_options['system_email'] ) || empty( $mdjm_options['system_email'] ) )	{
+			$mdjm_options['system_email'] = get_bloginfo( 'admin_email' );	
+		}
+		
 		return $mdjm_options;
 	} // f_get_mdjm_options
 
