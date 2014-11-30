@@ -523,7 +523,7 @@
 				
 				/* Update the options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
-				update_options( 'mdjm_schedules', $mdjm_schedules );
+				update_option( 'mdjm_schedules', $mdjm_schedules );
 			} // if( $current_version_mdjm == '0.9.4' )
 			
 			/* Delete the template file */
