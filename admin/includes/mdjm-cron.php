@@ -648,7 +648,7 @@
 										'client' => $event->user_id,
 										'event'  => $event->event_id,
 										'author' => get_current_user_id(),
-										'type'   => 'Request Deposit',
+										'type'   => 'Balance Reminder',
 										'source' => 'System',
 										'entry'  => 'Email requesting balance payment sent to client'
 									);
@@ -662,7 +662,7 @@
 																	'id'		=> $event->event_id,
 																	'client'	=> $clientinfo->display_name,
 																	'venue'	 => $event->venue,
-																	'deposit'   => $event->deposit,
+																	'balance'   => $event->cost - $event->deposit,
 																	'djinfo'	=> $djinfo,
 																	'date'	  => date( "d M Y", strtotime( $event->event_date ) ),
 																	);
@@ -676,7 +676,7 @@
 																	'id'		=> $event->event_id,
 																	'client'	=> $clientinfo->display_name,
 																	'venue'	 => $event->venue,
-																	'deposit'   => $event->deposit,
+																	'balance'   => $event->cost - $event->deposit,
 																	'djinfo'	=> $djinfo,
 																	'date'	  => date( "d M Y", strtotime( $event->event_date ) ),
 																	);
@@ -1029,7 +1029,7 @@
 						$content .= 'Date: ' . $eventinfo['date'] . "\n";
 						$content .= 'Client: ' . $eventinfo['client'] . "\n";
 						$content .= 'DJ: ' . $cron_email_args['djinfo']->display_name . "\n";
-						$content .= 'Deposit: &pound;' . $eventinfo['deposit'] . "\n";
+						$content .= 'Deposit: £' . $eventinfo['deposit'] . "\n";
 						$content .= '----------------------------------------';
 						$content .= '----------------------------------------' . "\n";
 					}
@@ -1044,7 +1044,7 @@
 						$content .= 'Date: ' . $eventinfo['date'] . "\n";
 						$content .= 'Client: ' . $eventinfo['client'] . "\n";
 						$content .= 'DJ: ' . $cron_email_args['djinfo']->display_name . "\n";
-						$content .= 'Deposit: &pound;' . $eventinfo['deposit'] . "\n";
+						$content .= 'Balance Due: £' . $eventinfo['cost'] - $eventinfo['deposit'] . "\n";
 						$content .= '----------------------------------------';
 						$content .= '----------------------------------------' . "\n";
 					}
