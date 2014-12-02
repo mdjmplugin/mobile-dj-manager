@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
 Tested up to: 4.0.1
-Stable tag: 0.9.5
+Stable tag: 0.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,37 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+
+= 0.9.6 =
+<h2>Bug Fixes</h2>
+<ui>
+	<li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/error-message/">this bug</a> depending on the PHP configuration of your web server, a warning message may have been displayed when Converting, Completing, Failing, or Recovering and event. This did not affect any functionality</li>
+    <li>The Communication feature was unreliable if a client had multiple events in the system and also regarding copying in Admin/DJ. The overhaul described above addresses these bugs</li>
+</ul>
+
+<h2>New & Enhanced Features</h2>
+<ui>
+	<li>MDJM Shortcodes are supported within email subjects</li>
+	<li>Communication Feature Updated</li>
+	<ul>
+		<li>Admins can now communicate with DJ's as well as all clients in the MDJM system. DJ's can only communicate with their own clients</li>
+		<li>Once you have selected a recipient, you can select the event regarding which you are communicating with them, if you wish to do so. For clients, once selected you can select all events they have in your system. For DJ's, you can select all events at which they have, or will, be DJ'ing at.</li>
+	</ul>
+	<li>Additional fields added to the Event creation and editing process</li>
+	<ul>
+		<li><strong>DJ Setup Time</strong>: Enables you to enter a setup time for the event</li>
+        <li><strong>DJ Setup Date</strong>: Just in case :)</li>
+        <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins and event DJ will see</li>
+        <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins will see</li>
+	</ul>
+	<li>New Shortcodes added to support new event fields</li>
+	<ul>
+        <li><span class="code">{DJ_SETUP_TIME}</span>: Inserts the setup time specified during event creation</li>
+        <li><span class="code">{DJ_SETUP_DATE}</span>: Inserts the setup date specified during event creation</li>
+        <li><span class="code">{DJ_NOTES}</span>: Inserts the information entered into the events DJ Notes field</li>
+        <li><span class="code">{ADMIN_NOTES}</span>: Inserts the information entered into the events Admin Notes field</li>
+	</ul>
+</ul>
 
 = 0.9.5 =
 <h2>Bug Fixes</h2>

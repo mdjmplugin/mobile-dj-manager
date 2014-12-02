@@ -653,8 +653,72 @@
         </tr>
         <tr>
         <th scope="row"><label for="email_enquiry">Email Quote?</label></th>
-        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" /> <span class="description">Select this option to email the quote to the client now</span></td>
+        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" /> <span class="description">Select this option to email the quote to the client now</span> </td>
         </tr>
+        </table>
+        <hr />
+        <h3>Administration</h3>
+        <table class="form-table">
+        <tr>
+        <th scope="row"><label for="dj_setup_hr">Setup Time:</label></th>
+        <td>
+        <select name="dj_setup_hr" id="dj_setup_hr">
+        <?php
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+		}
+		else	{
+			$i = '1';
+			$x = '12';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="dj_setup_min" id="dj_setup_min">
+        <?php
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="dj_setup_period" id="dj_setup_period">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+            </select>
+            <?php	
+		}
+		?>
+        &nbsp;<strong>Date: </strong><input type="text" class="custom_date" name="dj_setup_date" value="<?php echo $_POST['event_date']; ?>" />
+        </td>
+        </tr>
+        <tr>
+        <th scope="row">DJ Notes:</th>
+        <td><textarea name="dj_notes" id="dj_notes" cols="60" rows="5"></textarea><br />
+<span class="description">Notes entered here can be seen by the Event DJ and Admins only. Clients will not see this information</span></td>
+        </tr>
+        <?php
+		if( current_user_can( 'administrator' ) )	{
+			?>
+			<tr>
+			<th scope="row">Admin Notes:</th>
+			<td><textarea name="admin_notes" id="admin_notes" cols="60" rows="5"></textarea><br />
+	<span class="description">Notes entered here can be seen by Admins only. DJ's &amp; Clients will not see this information</span></td>
+			</tr>
+			<?php
+		}
+		?>
         </table>
         <?php
 	}
@@ -709,12 +773,7 @@
         </script>
 		<div class="wrap">
         <h2>Edit Event</h2>
-        <?php 
-		if( $eventinfo->contract_status == 'Enquiry' )	{
-			$refer = '&display=enquiries';	
-		}
-		?>
-        <form name="mdjm-edit-event" id="mdjm-edit-event" method="post"  action="<?php echo admin_url() . 'admin.php?page=mdjm-events' . $refer; ?>">
+        <form name="mdjm-edit-event" id="mdjm-edit-event" method="post"  action="<?php echo admin_url() . 'admin.php?page=mdjm-events'; ?>">
         <input type="hidden" name="action" value="edit_event" />
         <input type="hidden" name="event_id" value="<?php echo $eventinfo->event_id; ?>" />
         <?php wp_nonce_field( 'mdjm_edit_event_verify' ); ?>
@@ -1066,14 +1125,103 @@
         <th scope="row"><label for="venue_zip">Venue Post Code:</label></th>
         <td colspan="3"><input type="text" id="venue_zip" class="regular-text" name="venue_zip" value="<?php echo $eventinfo->venue_zip; ?>" /></td>
         </tr>
+        </table>
+        <hr />
+        <h3>Administration</h3>
+        <table class="form-table">
+        <tr>
+        <th class="row-title"><label for="dj_setup_hr">Setup Time:</label></th>
+        <td>
+        <select name="dj_setup_hr" id="dj_setup_hr">
+        <?php
+		if( !isset( $eventinfo->dj_setup_time ) || empty( $eventinfo->dj_setup_time ) || $eventinfo->dj_setup_time == 'NULL' || $eventinfo->dj_setup_time == '' )	{
+			?>
+            <option value="" selected="selected"></option>
+            <?php	
+		}
+		$minutes = array( '00', '15', '30', '45' );
+		if( $mdjm_options['time_format'] == 'H:i' )	{
+			$i = '00';
+			$x = '23';
+			$comp = 'H';
+		}
+		else	{
+			$i = '1';
+			$x = '12';
+			$comp = 'g';	
+		}
+		while( $i <= $x )	{
+			?>
+            <option value="<?php echo $i; ?>"<?php selected( date( $comp, strtotime( $eventinfo->dj_setup_time ) ), $i ); ?>><?php echo $i; ?></option>
+            <?php
+			$i++;
+		}
+		?>
+		</select>&nbsp;
+        <select name="dj_setup_min" id="dj_setup_min">
+        <?php
+		if( !isset( $eventinfo->dj_setup_time ) || empty( $eventinfo->dj_setup_time ) || $eventinfo->dj_setup_time == 'NULL' || $eventinfo->dj_setup_time == '' )	{
+			?>
+            <option value="" selected="selected"></option>
+            <?php	
+		}
+		foreach( $minutes as $minute )	{
+			?>
+            <option value="<?php echo $minute; ?>"<?php selected( date( 'i', strtotime( $eventinfo->dj_setup_time ) ), $minute ); ?>><?php echo $minute; ?></option>
+            <?php	
+		}
+		?>
+        </select>
+        <?php
+		if( $mdjm_options['time_format'] != 'H:i' )	{
+			?>
+            &nbsp;<select name="dj_setup_period" id="dj_setup_period">
+            <?php
+			if( !isset( $eventinfo->dj_setup_time ) || empty( $eventinfo->dj_setup_time ) || $eventinfo->dj_setup_time == 'NULL' || $eventinfo->dj_setup_time == '' )	{
+				?>
+				<option value="" selected="selected"></option>
+				<?php	
+			}
+			?>
+            <option value="AM"<?php selected( date('A', strtotime( $eventinfo->dj_setup_time ) ), 'AM' ); ?>>AM</option>
+            <option value="PM"<?php selected( date('A', strtotime( $eventinfo->dj_setup_time ) ), 'PM' ); ?>>PM</option>
+            </select>
+            <?php	
+		}
+		if( !isset( $eventinfo->dj_setup_date ) || empty( $eventinfo->dj_setup_date ) || $eventinfo->dj_setup_date == 'NULL' || $eventinfo->dj_setup_date == '0000-00-00' || $eventinfo->dj_setup_date == '' )	{
+			$setup_date = $eventinfo->event_date;
+		}
+		else	{
+			$setup_date = $eventinfo->dj_setup_date;
+		}
+		?>
+        &nbsp;<strong>Date: </strong><input type="text" class="custom_date" name="dj_setup_date" value="<?php echo date( 'd/m/Y', strtotime( $setup_date ) ); ?>" />
+        </td>
+        </tr>
+        <tr>
+        <th class="row-title">DJ Notes:</th>
+        <td><textarea name="dj_notes" id="dj_notes" cols="60" rows="5"><?php echo stripslashes( $eventinfo->dj_notes ); ?></textarea><br />
+        <span class="description">Notes entered here can be seen by the Event DJ and Admins only. Clients will not see this information</span></td>
+        </tr>
+        <?php
+        if( current_user_can( 'administrator' ) )	{
+			?>
+            <tr>
+            <th class="row-title">Admin Notes:</th>
+             <td><textarea name="admin_notes" id="admin_notes" cols="60" rows="5"><?php echo stripslashes( $eventinfo->admin_notes ); ?></textarea><br />
+            <span class="description">Notes entered here can be seen by Admins only. DJ's & Clients will not see this information</span></td>
+            </tr>
+            <?php
+		}
+		?>
         <tr>
         <th scope="row"><?php
-        	if( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
-				submit_button( 'Edit Event', 'primary', 'submit', false );
-			}
-			else	{
-				echo '&nbsp;';	
-			}
+		if( date( 'Y-m-d' ) < date( 'Y-m-d', strtotime( $eventinfo->event_date ) ) )	{
+			submit_button( 'Edit Event', 'primary', 'submit', false );
+		}
+		else	{
+			echo '&nbsp;';	
+		}
 		?></th>
         <td align="center"><a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Cancel Changes' ); ?>"><?php _e( 'Back' ); ?></a></td>
         </tr>
@@ -1131,11 +1279,12 @@
 		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
 		//f_mdjm_cron_balance_reminder();
 		
-		$hr = '7';
-		$min = '15';
-		$period = 'AM';
-		
-		echo date( 'H:i:s', strtotime( $hr . ':' . $min . $period ) );
+		if( f_mdjm_is_client( '6' ) )	{
+			echo 'Client';	
+		}
+		else	{
+			echo 'Not Client';	
+		}
 		
 		exit;
 	}
@@ -1157,9 +1306,11 @@
 	}
 	
 	else	{ // Display the Events table
-		if( $_POST['submit'] != 'Next' )	{
+		if( $_POST['submit'] != 'Next' || $_GET['action'] == 'convert_event' )	{
 			f_mdjm_render_events_table();
 		}
 	}
+	//if( $_GET['action'] == 'convert_event' || $_GET['action'] == 'cancel_event' || $_GET['action'] == 'recover_event' ||
+	//	|| $_GET['action'] == 'fail_enquiry' )
 	
 ?> 

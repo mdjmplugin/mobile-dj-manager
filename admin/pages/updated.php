@@ -216,6 +216,65 @@ Additionally, in some system generated emails (enquiry etc.) this address is use
         <?php
 	} // f_mdjm_updated_to_0_9_5
 	
+/**************************************************
+				VERSION 0.9.6
+**************************************************/
+	function f_mdjm_updated_to_0_9_6()	{
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Communication Feature Update</font><br>
+		The <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a> has been given an overhaul.<br />
+On the face of it, it looks pretty much the same as it did previously, but we have made some quite significant changes behind the scenes to improve it's functionality and reliability.
+        <ui>
+        <li>Admins can now communicate with DJ's as well as all clients in the MDJM system. DJ's can only communicate with their own clients</li>
+        <li>Once you have selected a recipient, you can select the event regarding which you are communicating with them, if you wish to do so. For clients, once selected you can select all events they have in your system. For DJ's, you can select all events at which they have, or will, be DJ'ing at.</li>
+        </ui>
+        A new <a href="http://www.mydjplanner.co.uk/using-communication-feature/" target="_blank">User Guide</a> has been published for the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Event Updates</font><br>
+        We've added some new fields to the event creation process...
+        <ui>
+        <li><strong>DJ Setup Time</strong>: Enables you to enter a setup time for the event</li>
+        <li><strong>DJ Setup Date</strong>: Just in case :)</li>
+        <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins and event DJ will see</li>
+        <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins will see</li>
+        <li>All new fields are available in both the event creation and edit event screens although for existing events, the DJ Setup time will default to midnight. The DJ Setup Date will always default to the event date</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Shortcode Updates</font><br>
+        <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> are now supported in email subjects. You can use shortcodes in Email Template post titles (if you have titles as subject set in <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">settings</a>) as well as in the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a> (if an event is selected).<br /><br />
+        Also, to support the new event fields, more <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcode options</a> have been added...<br />
+        <ui>
+        <li><span class="code">{DJ_SETUP_TIME}</span>: Inserts the setup time specified during event creation</li>
+        <li><span class="code">{DJ_SETUP_DATE}</span>: Inserts the setup date specified during event creation</li>
+        <li><span class="code">{DJ_NOTES}</span>: Inserts the information entered into the events DJ Notes field</li>
+        <li><span class="code">{ADMIN_NOTES}</span>: Inserts the information entered into the events Admin Notes field</li>
+        </ui>
+        All new <a href="http://www.mydjplanner.co.uk/shortcodes">shortcodes</a> are accessible via the MDJM Shortcode button > Event Shortcodes.<br />
+        <strong>Note</strong>: We have found that the shortcodes seem to be stored in the cache of many browsers and therefore if you do not see the new shortcodes immediately, try holding down the shift key on your keyboard whilst refreshing your browser page<br />
+        The <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes User Guide</a> has been updated with the new options
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/error-message/">this bug</a> depending on the PHP configuration of your web server, a warning message may have been displayed when Converting, Completing, Failing, or Recovering an event. This did not affect any functionality</li>
+                <li>The Communication feature was unreliable if a client had multiple events in the system and also regarding copying in Admin/DJ. The overhaul described above addresses these bugs</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_6
+	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
 			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );

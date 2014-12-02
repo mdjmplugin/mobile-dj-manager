@@ -150,6 +150,18 @@
 							}
 						},
 						{
+							text: 'Event Setup Time',
+							onclick: function() {
+								editor.insertContent('{DJ_SETUP_TIME}');
+							}
+						},
+						{
+							text: 'Event Setup Date',
+							onclick: function() {
+								editor.insertContent('{DJ_SETUP_DATE}');
+							}
+						},
+						{
 							text: 'Event Type',
 							onclick: function() {
 								editor.insertContent('{EVENT_TYPE}');
@@ -159,6 +171,18 @@
 							text: 'Event Description',
 							onclick: function() {
 								editor.insertContent('{EVENT_DESCRIPTION}');
+							}
+						},
+						{
+							text: 'DJ Notes',
+							onclick: function() {
+								editor.insertContent('{DJ_NOTES}');
+							}
+						},
+						{
+							text: 'Admin Notes',
+							onclick: function() {
+								editor.insertContent('{ADMIN_NOTES}');
 							}
 						},
 						{

@@ -7,19 +7,13 @@
 	// If recently updated, display the release notes
 	f_mdjm_has_updated();
 	
-	function print_notice( $class )	{
-		echo '<div id="message" class="' . $class . '">';
-			echo '<p><strong>' . _e('Settings saved.') . '</strong></p>';
-			echo '</div>';
-	}
-	
 	if( isset( $_POST['submit'] ) )	{ /* Form Submitted */
 		if( $_POST['submit'] == 'Add Category' )	{ /* Add new category */
 			$cats = get_option( 'mdjm_cats' );
 			$cat_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['category_name'] ) ) );
 			$cats[$cat_id] = sanitize_text_field( $_POST['category_name'] );
 			update_option( 'mdjm_cats', $cats );
-			print_notice( 'updated' );
+			f_mdjm_update_notice( 'updated', 'Category Added Successfully' );
 		}
 		if( $_POST['submit'] == 'Delete Selected' )	{ /* Delete category */
 			$cats = get_option( 'mdjm_cats' );
@@ -27,7 +21,7 @@
 				unset( $cats[$categories] );
 			}
 			update_option( 'mdjm_cats', $cats );
-			print_notice( 'updated' );
+			f_mdjm_update_notice( 'updated', 'Category Deleted Successfully' );
 		}
 		if( $_POST['submit'] == 'Add Item' )	{
 			$items = get_option( 'mdjm_equipment' );
@@ -54,7 +48,7 @@
 									$djs_have
 								);
 			update_option( 'mdjm_equipment', $items );
-			print_notice( 'updated' );
+			f_mdjm_update_notice( 'updated', 'Item Added Successfully' );
 		}
 		/* Edit Item within Inventory */
 		if( $_POST['submit'] == 'Update' )	{
@@ -84,14 +78,14 @@
 									$djs_have
 									);
 			update_option( 'mdjm_equipment', $equipment );
-			print_notice( 'updated' );
+			f_mdjm_update_notice( 'updated', 'Item Updated Successfully' );
 		}
 		/* Remove Item from Inventory */
 		if( $_POST['submit'] == 'Remove' )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			unset( $equipment[$_POST['slug']] );
 			update_option( 'mdjm_equipment', $equipment );
-			print_notice( 'updated' );
+			f_mdjm_update_notice( 'updated', 'Item Removed Successully' );
 		}
 	}
 	

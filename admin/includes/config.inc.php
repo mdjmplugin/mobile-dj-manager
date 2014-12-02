@@ -101,11 +101,15 @@
 							'{EVENT_DATE}',
 							'{START_TIME}',
 							'{END_TIME}',
+							'{DJ_SETUP_TIME}',
+							'{DJ_SETUP_DATE}',
 							'{TOTAL_COST}',
 							'{DEPOSIT}',
 							'{DEPOSIT_STATUS}',
 							'{BALANCE}',
 							'{EVENT_DESCRIPTION}',
+							'{DJ_NOTES}',
+							'{ADMIN_NOTES}',
 							'{VENUE}',
 							'{VENUE_CONTACT}',
 							'{VENUE_FULL_ADDRESS}',
@@ -137,13 +141,17 @@
 							$dj->display_name, /* {DJ_FULLNAME} */
 							$eventinfo->event_type, /* {EVENT_TYPE} */
 							date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ), /* {EVENT_DATE} */
-							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ), /* {EVENT_START} */
-							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {EVENT_FINISH} */
+							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ), /* {START_TIME} */
+							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {END_TIME} */
+							date( $mdjm_options['time_format'], strtotime( $eventinfo->dj_setup_time ) ), /* {DJ_SETUP_TIME} */
+							date( 'd/m/Y', strtotime( $eventinfo->dj_setup_date ) ), /* {DJ_SETUP_DATE} */
 							'&pound;' . number_format( $eventinfo->cost, 2 ), /* {TOTAL_COST} */
 							'&pound;' . number_format( $eventinfo->deposit, 2 ), /* {DEPOSIT} */
 							$deposit_status, /* {DEPOSIT_STATUS} */
 							'&pound;' . number_format( $balance, 2 ), /* {BALANCE} */
 							$eventinfo->event_description, /* {EVENT_DESCRIPTION} */
+							$eventinfo->dj_notes, /* {DJ_NOTES} */
+							$eventinfo->admin_notes, /* {ADMIN_NOTES} */
 							$eventinfo->venue, /* {VENUE} */
 							$eventinfo->venue_contact, /* {VENUE_CONTACT} */
 							$venue_full_address, /* {VENUE_FULL_ADDRESS} */
@@ -164,10 +172,10 @@
 						); // $email_replace
 	} // if( isset( $mdjm_options, $eventinfo, $dj, $info ) )
 	
-		$t_query = array(	'mdjm_call_home',
-							 'http://api.mydjplanner.co.uk/',
-							 'mdjm/apicheck.php?',
-							 'mdjm_user_url=' . get_site_url(),
-							 '&ver=' . WPMDJM_VERSION_NUM,
-						);
+	$t_query = array(	'mdjm_call_home',
+						 'http://api.mydjplanner.co.uk/',
+						 'mdjm/apicheck.php?',
+						 'mdjm_user_url=' . get_site_url(),
+						 '&ver=' . WPMDJM_VERSION_NUM,
+					);
 ?>

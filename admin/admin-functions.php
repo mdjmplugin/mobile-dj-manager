@@ -139,6 +139,11 @@
 						venue_zip varchar(255) NOT NULL,
 						venue_phone varchar(255) DEFAULT NULL,
 						venue_email varchar(255) DEFAULT NULL,
+						dj_setup_time time NULL,
+						dj_setup_date date NOT NULL,
+						dj_notes text NOT NULL,
+						admin_notes text NOT NULL,
+						added_by int(11) NOT NULL,
 						added_by int(11) NOT NULL,
 						date_added datetime NOT NULL,
 						referrer varchar(255) NOT NULL,
@@ -524,6 +529,13 @@
 				/* Update the options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 				update_option( 'mdjm_schedules', $mdjm_schedules );
+			} // if( $current_version_mdjm == '0.9.4' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.5
+***************************************************/
+			if( $current_version_mdjm == '0.9.5' )	{
+				// No procedures
 			} // if( $current_version_mdjm == '0.9.4' )
 			
 			/* Delete the template file */
