@@ -836,33 +836,35 @@
 			$message = 'The selected enquiry has been successfully converted to a booking';
 			f_mdjm_update_notice( $class, $message );
 			
-			$email_headers = f_mdjm_client_email_headers( $eventinfo );
-			$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
-			if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
-					$subject = $info['subject'];	
+			if( isset( $mdjm_options['contract_to_client'] ) && $mdjm_options['contract_to_client'] == 'Y' )	{
+				$email_headers = f_mdjm_client_email_headers( $eventinfo );
+				$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
+				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
+						$subject = $info['subject'];	
+					}
+					else	{
+						$subject = 'Your DJ Booking';	
+					}
+				if ( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+					$class = 'updated';
+					$message = 'Contract review email sent to client';
+					$j_args = array (
+						'client' => $eventinfo->user_id,
+						'event' => $eventinfo->event_id,
+						'author' => get_current_user_id(),
+						'type' => 'Email Client',
+						'source' => 'Admin',
+						'entry' => 'Contract Review email sent to client'
+						);
+					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+					f_mdjm_update_notice( $class, $message );
 				}
 				else	{
-					$subject = 'Your DJ Booking';	
+					$class = 'error';
+					$message = 'Unable to send contract review email to client';
+					f_mdjm_update_notice( $class, $message );
 				}
-			if ( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
-				$class = 'updated';
-				$message = 'Contract review email sent to client';
-				$j_args = array (
-					'client' => $eventinfo->user_id,
-					'event' => $eventinfo->event_id,
-					'author' => get_current_user_id(),
-					'type' => 'Email Client',
-					'source' => 'Admin',
-					'entry' => 'Contract Review email sent to client'
-					);
-				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-				f_mdjm_update_notice( $class, $message );
-			}
-			else	{
-				$class = 'error';
-				$message = 'Unable to send contract review email to client';
-				f_mdjm_update_notice( $class, $message );
-			}
+			} // if( isset( $mdjm_options['contract_to_client'] )
 		}
 		f_mdjm_render_events_table();
 	}
