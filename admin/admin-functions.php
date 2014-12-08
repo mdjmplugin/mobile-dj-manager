@@ -244,7 +244,8 @@
 		$mdjm_init_options = array(
 							'company_name' 			=> get_bloginfo( 'name' ),
 							'app_name'				=> 'Client Zone',
-							'time_format'           => 'H:i',
+							'time_format'             => 'H:i',
+							'pass_length'             => '8',
 							'show_dashboard'		  => 'Y',
 							'journaling'			  => 'Y',
 							'multiple_dj' 			 => 'N',
@@ -252,7 +253,7 @@
 							'event_types' 			 => $event_types,
 							'enquiry_sources' 		 => $enquiry_sources,
 							'default_contract' 		=> $contract_post_id,
-							'id_prefix'             => 'MDJM',
+							'id_prefix'               => 'MDJM',
 							'system_email' 		    => get_bloginfo( 'admin_email' ),
 							'bcc_dj_to_client' 		=> '',
 							'bcc_admin_to_client' 	 => 'Y',
@@ -276,11 +277,20 @@
 							'profile_page' => '',
 							);
 		$mdjm_init_permissions = array(
-									'dj_see_wp_dash' => 'Y',
-									'dj_add_event' => 'N',
-									'dj_add_venue' => 'N',
-									'dj_add_client' => 'N',
+									'dj_see_wp_dash'             => 'Y',
+									'dj_add_event'               => 'N',
+									'dj_view_enquiry'            => 'N',
+									'dj_add_venue'               => 'N',
+									'dj_add_client'              => 'N',
+									'dj_disable_shortcode'       => array( '{ADMIN_NOTES}', '{DEPOSIT_AMOUNT}' ),
 									);
+		$mdjm_init_client_text = array(
+									'custom_client_text'  => 'N',
+									'not_logged_in'       => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
+									'home_welcome'        => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
+									'home_noevents'       => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
+									'home_notactive'      => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
+								);
 		$mdjm_init_client_fields = array(
 									'address1' => array(
 													'label' => 'Address 1',
@@ -384,6 +394,7 @@
 		add_option( WPMDJM_CLIENT_FIELDS, $mdjm_init_client_fields );
 		add_option( 'mdjm_plugin_pages', $mdjm_init_pages );
 		add_option( 'mdjm_plugin_permissions', $mdjm_init_permissions );
+		add_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_init_client_text );
 		add_option( 'mdjm_schedules', $mdjm_schedules );
 		add_option( 'mdjm_updated', '0' );
 		
@@ -536,7 +547,50 @@
 ***************************************************/
 			if( $current_version_mdjm == '0.9.5' )	{
 				// No procedures
-			} // if( $current_version_mdjm == '0.9.4' )
+			} // if( $current_version_mdjm == '0.9.5' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.6
+***************************************************/
+			if( $current_version_mdjm == '0.9.6' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+				
+				/* Set the new password length option */
+				$mdjm_options['pass_length'] = '8';
+				/* Update the Client Text option */
+				$mdjm_options['custom_client_text'] = 'N';
+				
+				/* Create the Client Text Options for front end */
+				$mdjm_frontend_text = array(
+										'custom_client_text'  => 'N',
+										'not_logged_in'       => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
+										'home_welcome'        => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
+										'home_noevents'       => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
+										'home_notactive'      => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
+										
+										);
+				
+				/* Update Permissions */
+				$mdjm_permissions['dj_disable_shortcode'] = array( '{ADMIN_NOTES}', '{DEPOSIT_AMOUNT}' );
+				if( isset( $mdjm_permissions['dj_add_event'] ) && $mdjm_permissions['dj_add_event'] == 'Y' )	{
+					$mdjm_permissions['dj_view_enquiry'] = 'Y';
+				}
+				else	{
+					$mdjm_permissions['dj_view_enquiry'] = 'N';	
+				}
+				
+				/* Update the options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_option( 'mdjm_plugin_permissions', $mdjm_permissions );
+				
+				/* Add the front end text option */
+				add_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
+			} // if( $current_version_mdjm == '0.9.6' )
+
+/***************************************************
+THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
+***************************************************/
 			
 			/* Delete the template file */
 			unlink( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
@@ -656,7 +710,7 @@
 	
 	function mdjm_mce_shortcode_button() {
 		// check user permissions
-		if ( !current_user_can( 'edit_posts' ) && !current_user_can( 'edit_pages' ) ) {
+		if ( !current_user_can( 'edit_posts' ) && !current_user_can( 'edit_pages' ) && !current_user_can( 'dj' ) ) {
 			return;
 		}
 		// check if WYSIWYG is enabled
@@ -809,7 +863,7 @@
 					'title' => __( 'MDJM Dashboard' ),
 				),
 			));
-			if( current_user_can( 'manage_options' ) )
+			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-settings',
 					'parent' => 'mdjm',
@@ -819,6 +873,16 @@
 						'title' => __( 'MDJM Settings' ),
 					),
 				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-tasks',
+					'parent' => 'mdjm',
+					'title' => 'Automated Tasks',
+					'href'  => admin_url( 'admin.php?page=mdjm-tasks' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Settings' ),
+					),
+				));
+			}
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm-clients',
 				'parent' => 'mdjm',
@@ -828,15 +892,17 @@
 					'title' => __( 'Client List' ),
 				),
 			));
-			$admin_bar->add_menu( array(
-				'id'    => 'mdjm-add-client',
-				'parent' => 'mdjm-clients',
-				'title' => 'Add Client',
-				'href'  => admin_url( 'user-new.php' ),
-				'meta'  => array(
-					'title' => __( 'Add New Client' ),
-				),
-			));
+			if( current_user_can( 'manage_options' ) || dj_can( 'add_client' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-add-client',
+					'parent' => 'mdjm-clients',
+					'title' => 'Add Client',
+					'href'  => admin_url( 'user-new.php' ),
+					'meta'  => array(
+						'title' => __( 'Add New Client' ),
+					),
+				));
+			}
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm-comms',
 				'parent' => 'mdjm',
@@ -866,7 +932,7 @@
 					),
 				));
 			}
-			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y')
+			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-djs',
 					'parent' => 'mdjm',
@@ -876,6 +942,7 @@
 					'title' => __( 'List of DJ\'s' ),
 					),
 				));
+			}
 			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-email-templates',
@@ -896,7 +963,7 @@
 					),
 				));
 			}
-			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )
+			if( current_user_can( 'manage_options' ) && isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-equipment',
 					'parent' => 'mdjm',
@@ -906,6 +973,7 @@
 						'title' => __( 'Equipment Inventory' ),
 					),
 				));
+			}
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm-events',
 				'parent' => 'mdjm',
@@ -926,25 +994,27 @@
 					),
 				));
 			}
-			$admin_bar->add_menu( array(
-				'id'    => 'mdjm-enquiries',
-				'parent' => 'mdjm-events',
-				'title' => 'View Enquiries',
-				'href'  => admin_url( 'admin.php?page=mdjm-events&display=enquiries' ),
-				'meta'  => array(
-					'title' => __( 'Outstanding Enquiries' ),
-				),
-			));
-			$admin_bar->add_menu( array(
-				'id'    => 'mdjm-venues',
-				'parent' => 'mdjm',
-				'title' => 'Venues',
-				'href'  => admin_url( 'admin.php?page=mdjm-venues' ),
-				'meta'  => array(
-					'title' => __( 'MDJM Venues' ),
-				),
-			));
+			if( current_user_can( 'manage_options' ) || dj_can( 'view_enquiry' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-enquiries',
+					'parent' => 'mdjm-events',
+					'title' => 'View Enquiries',
+					'href'  => admin_url( 'admin.php?page=mdjm-events&display=enquiries' ),
+					'meta'  => array(
+						'title' => __( 'Outstanding Enquiries' ),
+					),
+				));
+			}
 			if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-venues',
+					'parent' => 'mdjm',
+					'title' => 'Venues',
+					'href'  => admin_url( 'admin.php?page=mdjm-venues' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Venues' ),
+					),
+				));
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-add-venue',
 					'parent' => 'mdjm-venues',
@@ -1105,6 +1175,37 @@
 		}
 	} // f_mdjm_upload_playlist_schedule
 	
+/*
+* f_mdjm_set_role
+* 05/12/2014
+* @since 0.9.7
+* Set the correct permission levels for DJ's
+*/
+	function f_mdjm_set_role()	{
+		$perms = get_option( 'mdjm_plugin_permissions' );
+		$dj_role = get_role( 'dj' );
+		$caps = array(
+					'create_users',
+					'edit_users',
+					'delete_users',
+					);
+		if( current_user_can( 'dj' ) && current_user_can( 'create_users' ) )	{
+			if( !isset( $perms['dj_add_client'] ) || $perms['dj_add_client'] != 'Y' )	{
+				foreach( $caps as $cap )	{
+					$dj_role->remove_cap( $cap );
+				}
+			}
+		}
+		if( current_user_can( 'dj' ) && !current_user_can( 'create_users' ) )	{
+			if( isset( $perms['dj_add_client'] ) || $perms['dj_add_client'] == 'Y' )	{
+				foreach( $caps as $cap )	{
+					$dj_role->add_cap( $cap );
+				}
+			}
+		}
+		
+	} // f_mdjm_set_role
+	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
  ***************************************************************************************************/
@@ -1130,6 +1231,8 @@
 	add_action( 'init', 'f_mdjm_new_contracts_post_type' ); // Register the contracts post type
 	
 	add_action( 'init', 'f_mdjm_email_template_post_type' ); // Register the email template post type
+	
+	add_action( 'admin_init', 'f_mdjm_set_role' ); // Set correct user permissions
 	
 	add_action( 'admin_bar_menu', 'f_mdjm_toolbar_new_content', 70 ); // MDJM New Content to admin bar
 	

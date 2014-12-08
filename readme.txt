@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
 Tested up to: 4.0.1
-Stable tag: 0.9.6
+Stable tag: 0.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,35 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+
+= 0.9.7 =
+<a href="http://www.mydjplanner.co.uk/version-0-9-7-released/" target="_blank">Read the detailed release notes here</a>
+<h2>Bug Fixes</h2>
+<ui>
+	<li>Contract review emails were generated and sent even if the <a href="http://www.mydjplanner.co.uk/settings-overview/" target="_blank">setting</a> was not enabled</li>
+	<li>DJ's should only see their own Clients within the Communication feature</li>
+	<li>DJ's now only see contact information for Clients when clicking their name on the Client screen, unless they have permission to add new clients</li>
+	<li>Clicking on a Clients email address now directs you to the Communication Feature with the client auto selected</li>
+	<li>DJ setup time now defaults to event start time</li>
+	<li>Tighter Security: If you do not provide DJ's with the permission to Add Clients, they cannot Edit Clients either and the Add New button is no longer displayed within the Client Details page</li>
+	<li>If you have not enabled DJ's to add venues, they cannot view them either except in the event detail screen</li>
+	<li>Edit Venue button removed for DJ's that if they do not have permission to add a venue</li>
+	<li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/error-message2/">this bug</a> depending on the PHP configuration of your web server, a warning message may have been displayed when Adding, Editing, or Deleting a venue. This did not affect functionality.</li>
+</ul>
+
+<h2>New & Enhanced Features</h2>
+<ui>
+	<li>Client password's can now be reset as part of the event creation process. Shortcodes also added to enable you to include this information within your quotation emails if you want to</li>
+	<li>{EVENT_DATE_SHORT} shortcode added to enable you to display date as DD/MM/YYYY within emails</li>
+	<li>Updated Permissions</li>
+	<ui>
+		<li><strong>DJ Can View Enquiry</strong>: Whether or not your employees can see outstanding (or failed) enquiries where they have been listed as the DJ. If this is not selected, the relevant information is also removed from the WP Dashboard and the MDJM Dashboard</li>
+		<li><strong>Disabled Shortcodes for DJ's</strong>: Select which <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> your DJ's cannot use within the Communications feature. Whilst the <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> will still be visible, if a DJ tries to send an email with the disabled <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">shortcodes</a> within the content, it will fail</li>
+		<li><strong>Disabled Email Templates for DJ's</strong>: The Email Templates you select here will not be visible to DJ's when they are using the Communications feature</li>
+	</ui>
+	<li>Scheduled Tasks now have a new home. Removed from the Settings page and given their own menu item - Automated Tasks</li>
+	<li>Added Setting for Client Dialogue text enabling you to specify your own text that will be displayed to clients within your website front end</li>
+</ui>
 
 = 0.9.6 =
 <h2>Bug Fixes</h2>

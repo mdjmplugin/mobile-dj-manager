@@ -68,6 +68,18 @@
 							}
 						},
 						{
+							text: 'Client Username',
+							onclick: function() {
+								editor.insertContent('{CLIENT_USERNAME}');
+							}
+						},
+						{
+							text: 'Client Password',
+							onclick: function() {
+								editor.insertContent('{CLIENT_PASSWORD}');
+							}
+						},
+						{
 							text: 'Client Full Address',
 							onclick: function() {
 								editor.insertContent('{CLIENT_FULL_ADDRESS}');
@@ -132,9 +144,15 @@
 							}
 						},
 						{
-							text: 'Event Date',
+							text: 'Event Date (Long)',
 							onclick: function() {
 								editor.insertContent('{EVENT_DATE}');
+							}
+						},
+						{
+							text: 'Event Date (DD/MM/YYYY)',
+							onclick: function() {
+								editor.insertContent('{EVENT_DATE_SHORT}');
 							}
 						},
 						{

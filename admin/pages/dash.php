@@ -30,22 +30,32 @@
             <td width="30%">Active Bookings:</td>
             <td width="70%"><?php echo $dash_dj['month_active_events']; ?></td>
           </tr>
-          <tr>
-            <td>Outstanding Enquiries:</td>
-            <td><?php echo $dash_dj['month_enquiries']; ?></td>
-          </tr>
-          <tr>
-            <td>Lost Enquiries:</td>
-            <td><?php echo $dash_dj['lost_month_enquiries']; ?></td>
-          </tr>
+          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+			  ?>
+              <tr>
+                <td>Outstanding Enquiries:</td>
+                <td><?php echo $dash_dj['month_enquiries']; ?></td>
+              </tr>
+              <tr>
+                <td>Lost Enquiries:</td>
+                <td><?php echo $dash_dj['lost_month_enquiries']; ?></td>
+              </tr>
+				<?php
+		  }
+		  ?>
           <tr>
             <td>Completed Bookings:</td>
             <td><?php echo $dash_dj['month_completed']; ?></td>
           </tr>
+		<?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+			?>
           <tr>
             <td>Potential Earnings: </td>
             <td>&pound;<?php echo number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
           </tr>
+          <?php
+		}
+		  ?>
           <tr>
             <td>Earnings so Far:</td>
             <td>&pound;<?php echo number_format( $dash_dj['month_earn'], 2 ); ?></td>
@@ -53,6 +63,8 @@
           <tr>
             <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
             </tr>
+         <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+			 ?>
           <tr>
             <td>Outstanding Enquiries:</td>
             <td><?php echo $dash_dj['year_enquiries']; ?></td>
@@ -61,14 +73,22 @@
             <td>Lost Enquiries:</td>
             <td><?php echo $dash_dj['lost_year_enquiries']; ?></td>
           </tr>
+          <?php
+		 }
+		 ?>
           <tr>
             <td>Completed Bookings:</td>
             <td><?php echo $dash_dj['year_completed']; ?></td>
           </tr>
+          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+			  ?>
           <tr>
             <td>Potential Earnings:</td>
             <td>£<?php echo number_format( $dash_dj['potential_year_earn'], 2 ); ?></td>
           </tr>
+          <?php
+		  }
+		  ?>
           <tr>
             <td>Earnings so Far:</td>
             <td>£<?php echo number_format( $dash_dj['year_earn'], 2 ); ?></td>

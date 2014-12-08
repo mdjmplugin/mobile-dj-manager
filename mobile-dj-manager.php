@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Management interface for mobile DJ's.
-Version: 0.9.6
-Date: 30 November 2014
+Version: 0.9.7
+Date: 08 December 2014
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -28,13 +28,14 @@ Author URI: http://www.mydjplanner.co.uk
 
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.9.6' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9.7' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
 	define ( 'WPMDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 	define ( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 	define ( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
+	define ( 'WPMDJM_FETEXT_SETTINGS_KEY', 'mdjm_frontend_text' );
 
 	require_once WPMDJM_PLUGIN_DIR . '/admin/admin-functions.php';
 
@@ -70,8 +71,10 @@ Author URI: http://www.mydjplanner.co.uk
 	}
 	/* Actions for users */
 	else	{
+		global $mdjm_client_text;
 		require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 		require_once WPMDJM_PLUGIN_DIR . '/includes/shortcodes.php';
+		$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 		add_action( 'wp_head','f_mdjm_insert_head' );
 		add_shortcode( 'MDJM', 'f_mdjm_shortcode' );
 	}

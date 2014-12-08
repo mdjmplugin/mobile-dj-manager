@@ -20,7 +20,23 @@
 	
 	if( isset( $_POST['submit'] ) )	{
 		/* Validation */
-		if( !isset( $_POST['email_to'] ) || $_POST['email_to'] == '' )	{
+		$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+		if( is_dj() && isset( $mdjm_permissions['dj_disable_shortcode'] ) && !empty( $mdjm_permissions['dj_disable_shortcode'] ) )	{ // Check shortcodes that DJ's cannot use
+			if( !is_array( $mdjm_permissions['dj_disable_shortcode'] ) )	{
+				$mdjm_permissions['dj_disable_shortcode'] = array( $mdjm_permissions['dj_disable_shortcode'] );	
+			}
+				foreach( $mdjm_permissions['dj_disable_shortcode'] as $disabled_shortcode )	{	
+					if( strpos( $_POST['email_content'], $disabled_shortcode ) !== false ) {
+						$disabled_shortcodes = $disabled_shortcodes . ' ' . $disabled_shortcode;
+					}
+				}
+		}
+		if( isset( $disabled_shortcodes ) )	{
+			$class = 'error';
+			$message = '<strong>ERROR</strong>: Your Administrator has disabled the use of the Shortcodes <strong>' . $disabled_shortcodes . '</strong>. Please adjust your content and try again';
+			f_mdjm_update_notice( $class, $message );	
+		}
+		elseif( !isset( $_POST['email_to'] ) || $_POST['email_to'] == '' )	{
 			$class = 'error';
 			$message = '<strong>ERROR</strong>: No email recipient specified. Your email was not sent';
 			f_mdjm_update_notice( $class, $message );
@@ -60,31 +76,17 @@
 			}
 			
 			/* Check for BCC */
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' ||
-				isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )	{
+			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
+				|| isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )	{
 				
-				$email_headers .= 'Bcc: ';	
-			}
-			
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' && 
-				f_mdjm_is_client( $_POST['email_to'] ) && isset( $_POST['event'] ) && !empty( $_POST['event'] ) && $_POST['event'] != 'general' )	{
-				$email_headers .= $dj->user_email;	
-			}
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' && f_mdjm_is_client( $_POST['email_to'] ) &&
-				isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' &&
-				isset( $_POST['event'] ) && !empty( $_POST['event'] ) && $_POST['event'] != 'general' )	{
+				if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
+					$bcc[] = $dj->user_email;
+	
+				if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )
+					$bcc[] = $mdjm_options['system_email'];
 				
-				$email_headers .= ', ';		
+				$email_headers .= 'Bcc: ' . implode( ",", $bcc ) . "\r\n";
 			}
-			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' && f_mdjm_is_client( $_POST['email_to'] ) )	{
-				$email_headers .= $mdjm_options['system_email'];	
-			}
-			
-			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' ||
-				isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )	{
-				
-				$email_headers .= "\r\n";
-			}	
 			
 			$email_content = nl2br( html_entity_decode( stripcslashes( $_POST['email_content'] ) ) );
 			$info['content'] = '<html><body>';
@@ -148,14 +150,23 @@
 					$content = get_the_content();
 					$content = apply_filters( 'the_content', $content );
 					$content = str_replace(']]>', ']]&gt;', $content);
+					$subject = get_the_title();
 				}
 			}
 		}
-		elseif( isset( $_POST['content'] ) )	{
-			$content = $_POST['content'];	
+		elseif( isset( $_POST['email_content'] ) )	{
+			$content = $_POST['email_content'];
 		}
 		else	{
 			$content = '';	
+		}
+		if( !isset( $subject ) || empty( $subject ) )	{
+			if( isset( $_POST['subject'] ) )	{
+				$subject = $_POST['subject'];
+			}
+			else	{
+				$subject = '';	
+			}
 		}
 		
 		?>
@@ -187,6 +198,18 @@
 								'orderby' => 'name',
 								'order' => 'ASC',
 								);
+		if( is_dj() )	{ // Check templates that DJ's cannot use
+			if( !isset( $mdjm_permissions ) )	{
+				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+			}
+			if( isset( $mdjm_permissions['dj_disable_template'] ) && !empty( $mdjm_permissions['dj_disable_template'] ) )	{
+				if( !is_array( $mdjm_permissions['dj_disable_template'] ) )	{
+					$mdjm_permissions['dj_disable_template'] = array( $mdjm_permissions['dj_disable_template'] );	
+				}
+				$email_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
+			}
+			
+		}
 			$email_query = new WP_Query( $email_args );
 			if ( $email_query->have_posts() ) {
 				while ( $email_query->have_posts() ) {
@@ -212,14 +235,9 @@
 			<option value=""<?php if( !isset( $_GET['to_user'] ) || $_GET['to_user'] == '' ) echo 'selected="selected"'; ?>>Select a Recipient</option>
 		<?php
 		foreach( $clientinfo as $client )	{
-			if( !current_user_can( 'administrator' ) && f_mdjm_client_is_mine( $client->ID ) )	{ // Non-Admins only see their own clients
+			if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $client->ID ) )	{ // Non-Admins only see their own clients
 				?>
 				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php selected( $client->ID, $_GET['to_user'] ); ?>>[CLIENT]: <?php echo $client->display_name; ?></option>
-                <?php
-			}
-			else	{ // Admins see all clients and DJ's
-				?>
-                <option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php selected( $client->ID, $_GET['to_user'] ); ?>>[CLIENT]: <?php echo $client->display_name; ?></option>
                 <?php
 			}
 		}
@@ -292,7 +310,7 @@
 		?>
 		<tr class="alternate">
 		<th class="row-title" align="left"><label for="subject">Subject:</label></th>
-		<td><input type="text" name="subject" id="subject" class="regular-text" value="<?php echo $_POST['subject']; ?>" /></td>
+		<td><input type="text" name="subject" id="subject" class="regular-text" value="<?php echo $subject; ?>" /></td>
 		</tr>
 		<tr>
 		<td colspan="2"><?php wp_editor( html_entity_decode( stripcslashes( $content ) ), 'email_content', $settings ); ?></td>

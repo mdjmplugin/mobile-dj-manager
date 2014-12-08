@@ -640,7 +640,7 @@
 			}
 		}
 		?>
-        <p>Finally, review the cost information below and select whether or not to email the quote to your client...</p>
+        <p>Finally, review the cost information below and select whether or not to email the quote to your client and/or reset their password...</p>
         <input type="hidden" name="action" value="add_event" />
         <table class="form-table">
         <tr>
@@ -651,9 +651,19 @@
         <th scope="row" width="20%"><label for="deposit">Deposit:</label></th>
         <td colspan="3">&pound;<input type="text" name="deposit" id="deposit" value="<?php echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
         </tr>
+        <?php
+		if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	{
+			?>
+			<tr>
+			<th scope="row"><label for="set_client_password">Reset Client Password?</label></th>
+			<td colspan="3"><input type="checkbox" id="set_client_password" name="set_client_password" value="Y" /> <span class="description">Select this option to reset your client's password. You can use Shortcodes in your <a href="<?php echo admin_url( 'post.php?post=' . $mdjm_options['email_enquiry'] . '&action=edit' ); ?>">Email Template</a> to advise the client of their new password. Only processes if the <span class="code">Email Quote</span> check box is also selected</span> </td>
+			</tr>
+            <?php
+		}
+		?>
         <tr>
         <th scope="row"><label for="email_enquiry">Email Quote?</label></th>
-        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" /> <span class="description">Select this option to email the quote to the client now</span> </td>
+        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" /> <span class="description">Select this option to email the quote to the client once created</span> </td>
         </tr>
         </table>
         <hr />
@@ -668,14 +678,16 @@
 		if( $mdjm_options['time_format'] == 'H:i' )	{
 			$i = '00';
 			$x = '23';
+			$comp = 'H';
 		}
 		else	{
 			$i = '1';
-			$x = '12';	
+			$x = '12';
+			$comp = 'g';
 		}
 		while( $i <= $x )	{
 			?>
-            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>"<?php selected( $i, $_POST['event_start_hr'] ); ?>><?php echo $i; ?></option>
             <?php
 			$i++;
 		}
@@ -685,7 +697,7 @@
         <?php
 		foreach( $minutes as $minute )	{
 			?>
-            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <option value="<?php echo $minute; ?>"<?php selected( $minute, $_POST['event_start_min'] ); ?>><?php echo $minute; ?></option>
             <?php	
 		}
 		?>
@@ -694,8 +706,8 @@
 		if( $mdjm_options['time_format'] != 'H:i' )	{
 			?>
             &nbsp;<select name="dj_setup_period" id="dj_setup_period">
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
+            <option value="AM"<?php selected( 'AM', $_POST['event_start_period'] ); ?>>AM</option>
+            <option value="PM"<?php selected( 'AM', $_POST['event_start_period'] ); ?>>PM</option>
             </select>
             <?php	
 		}
@@ -1278,13 +1290,7 @@
 		//echo date( 'H:i d M Y', wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) );
 		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
 		//f_mdjm_cron_balance_reminder();
-		
-		if( f_mdjm_is_client( '6' ) )	{
-			echo 'Client';	
-		}
-		else	{
-			echo 'Not Client';	
-		}
+		echo $mdjm_options['system_email'];
 		
 		exit;
 	}

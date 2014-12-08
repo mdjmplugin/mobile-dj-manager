@@ -13,6 +13,7 @@
 		$admin_settings_field = array(  'company_name',
 										'app_name',
 										'time_format',
+										'pass_length',
 										'show_dashboard',
 										'journaling',
 										'multiple_dj',
@@ -43,8 +44,17 @@
 										'dj_see_wp_dash',
 										'dj_add_client',
 										'dj_add_event',
+										'dj_view_enquiry',
 										'dj_add_venue',
 										'dj_see_deposit',
+										'dj_disable_shortcode',
+										'dj_disable_template',
+										'custom_client_text',
+										'not_logged_in',
+										'home_welcome',
+										'home_noevents',
+										'home_notactive',
+										
 									);
 		foreach( $admin_settings_field as $admin_setting_field_key )	{
 			if( !isset( $mdjm_options[$admin_setting_field_key] ) ) $mdjm_options[$admin_setting_field_key] = 'N';
@@ -52,6 +62,8 @@
 		$admin_fields = array();
 
 /* GENERAL TAB */
+		/* "mdjm_" is auto added as prefix to section */
+		/* "_settings" is auto added as suffix to section */
 		$admin_fields['company_name'] = array(
 									'display' => 'Company Name',
 									'key' => 'mdjm_plugin_settings',
@@ -94,7 +106,33 @@
 														),
 									'section' => 'general',
 									'page' => 'settings',
-									); // app_name
+									); // time_format
+									
+		$admin_fields['pass_length'] = array(
+									'display' => 'Default Password Length',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'small-text',
+									'value' => $mdjm_options['pass_length'],
+									'text' => '',
+									'desc' => 'If opting to generate a user password during event creation, how many characters should the password be?',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[pass_length]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['pass_length'],
+														'list_type' => 'defined',
+														'list_values' => array( '5'  => '5',
+																				'6'  => '6',
+																				'7'  => '7',
+																				'8'  => '8',
+																				'9'  => '9',
+																				'10' => '10',
+																				'11' => '11',
+																				'12' => '12', ),
+														),
+									'section' => 'general',
+									'page' => 'settings',
+									); // pass_length
 		
 		$admin_fields['show_dashboard'] = array(
 									'display' => 'Show Dashboard Widget?',
@@ -112,7 +150,7 @@
 									'display' => 'Event Types',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'textarea',
-									'class' => '',
+									'class' => 'all-options',
 									'value' => str_replace( ",", "\n", $mdjm_options['event_types'] ),
 									'text' => '',
 									'desc' => 'The types of events that you provide. One per line.',
@@ -124,7 +162,7 @@
 									'display' => 'Enquiry Sources',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'textarea',
-									'class' => '',
+									'class' => 'all-options',
 									'value' => str_replace( ",", "\n", $mdjm_options['enquiry_sources'] ),
 									'text' => '',
 									'desc' => 'Enter possible sources of enquiries. One per line',
@@ -334,7 +372,7 @@
 									'display' => 'Playlist Song Options',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'textarea',
-									'class' => '',
+									'class' => 'all-options',
 									'value' => str_replace( ",", "\n", $mdjm_options['playlist_when'] ),
 									'text' => '',
 									'desc' => 'The options clients can select for when songs are to be played when adding to the playlist. One per line.',
@@ -548,6 +586,24 @@
 									'page' => 'permissions',
 									); // dj_add_event
 									
+		$admin_fields['dj_view_enquiry'] = array(
+									'display' => 'DJ\'s Can View Enquiries',
+									'key' => 'mdjm_plugin_permissions',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['dj_view_enquiry'],
+									'text' => '',
+									'desc' => '',
+									'custom_args' => array (
+														'name' =>  '',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => ''
+														),
+									'section' => 'permissions',
+									'page' => 'permissions',
+									); // dj_view_enquiry
+									
 		$admin_fields['dj_add_venue'] = array(
 									'display' => 'DJ\'s Can Add New Venues?',
 									'key' => 'mdjm_plugin_permissions',
@@ -583,6 +639,103 @@
 									'section' => 'permissions',
 									'page' => 'permissions',
 									); // dj_see_deposit
+									
+		$admin_fields['dj_disable_shortcode'] = array(
+									'display' => 'Disabled Shortcodes for DJ\'s',
+									'key' => 'mdjm_plugin_permissions',
+									'type' => 'multiple_select',
+									'class' => 'code',
+									'value' => $mdjm_options['dj_disable_shortcode'],
+									'text' => 'CTRL (cmd on MAC) + Click to select multiple Shortcode entries that DJ\'s cannot use',
+									'desc' => '<a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Full list of Shortcodes</a>',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_permissions[dj_disable_shortcode][]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['dj_disable_shortcode'],
+														'list_type' => 'shortcodes',
+														),
+									'section' => 'shortcodes',
+									'page' => 'permissions',
+									); // dj_disable_shortcode
+									
+		$admin_fields['dj_disable_template'] = array(
+									'display' => 'Disabled Email Templates for DJ\'s',
+									'key' => 'mdjm_plugin_permissions',
+									'type' => 'multiple_select',
+									'class' => 'code',
+									'value' => $mdjm_options['dj_disable_template'],
+									'text' => 'CTRL (cmd on MAC) + Click to select multiple Template entries that DJ\'s cannot use',
+									'desc' => '',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_permissions[dj_disable_template][]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['dj_disable_template'],
+														'list_type' => 'email_templates',
+														),
+									'section' => 'templates',
+									'page' => 'permissions',
+									); // dj_disable_template
+									
+/* CLIENT TEXT TAB */
+		$admin_fields['custom_client_text'] = array(
+									'display' => 'Enable Customised Text?',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['custom_client_text'],
+									'text' => '',
+									'desc' => 'Use custom text on Client front end web pages',
+									'section' => 'general',
+									'page' => 'client-text',
+									); // custom_client_text
+									
+		$admin_fields['not_logged_in'] = array(
+									'display' => 'Not Logged In:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['not_logged_in'],
+									'text' => '',
+									'desc' => 'Text displayed with login fields if Client is not logged in',
+									'section' => 'login',
+									'page' => 'client-text',
+									); // not_logged_in
+									
+		$admin_fields['home_welcome'] = array(
+									'display' => 'Welcome Text:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => esc_attr( $mdjm_options['home_welcome'] ),
+									'text' => '',
+									'desc' => 'Welcome text displayed on the home page',
+									'section' => 'home_page',
+									'page' => 'client-text',
+									); // home_welcome
+									
+		$admin_fields['home_noevents'] = array(
+									'display' => 'No Events:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['home_noevents'],
+									'text' => '',
+									'desc' => 'Text displayed on client home page if the client has no events in the system',
+									'section' => 'home_page',
+									'page' => 'client-text',
+									); // home_noevents
+									
+		$admin_fields['home_notactive'] = array(
+									'display' => 'Event Not Active:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['home_notactive'],
+									'text' => '',
+									'desc' => 'Text displayed on client event review screen if the selected event is not active',
+									'section' => 'home_page',
+									'page' => 'client-text',
+									); // home_notactive
 		
 		add_settings_section( 'mdjm_general_settings',
 							  '',
@@ -619,6 +772,31 @@
 							  'f_mdjm_desc',
 							  'mdjm-permissions'
 							);
+		add_settings_section( 'mdjm_shortcodes_settings',
+							  'Shortcodes <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-permissions'
+							);
+		add_settings_section( 'mdjm_templates_settings',
+							  'Templates <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-permissions'
+							);
+		add_settings_section( 'mdjm_general_settings',
+							  '',
+							  'f_mdjm_desc',
+							  'mdjm-client-text'
+							);
+		add_settings_section( 'mdjm_login_settings',
+							  '',
+							  'f_mdjm_desc',
+							  'mdjm-client-text'
+							);
+		add_settings_section( 'mdjm_home_page_settings',
+							  'Home Page <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-client-text'
+							);
 		
 		foreach( $admin_settings_field as $settings_field )	{
 			if( isset( $admin_fields[$settings_field]['custom_args'] ) && !empty( $admin_fields[$settings_field]['custom_args'] ) ) $custom_args = $admin_fields[$settings_field]['custom_args'];
@@ -644,6 +822,7 @@
 		register_setting( 'mdjm-settings', WPMDJM_SETTINGS_KEY );
 		register_setting( 'mdjm-permissions', 'mdjm_plugin_permissions' );
 		register_setting( 'mdjm-pages', 'mdjm_plugin_pages' );
+		register_setting( 'mdjm-client-text', WPMDJM_FETEXT_SETTINGS_KEY );
 	} // f_mdjm_settings_init
 	
 	add_action( 'admin_init', 'f_mdjm_settings_init' );
@@ -740,10 +919,46 @@
 					}
 					echo '>' . $s_value . '</option>' . "\n";
 				}
+				echo '</select>';
+			}
+		}
+		elseif( isset( $args['type'] ) && $args['type'] == 'multiple_select' )	{
+			if( $args['custom_args']['list_type'] == 'shortcodes' )		{
+				echo '<select size="8" name="' . $args['key'] . '[' . $args['field'] . '][]" id="' . $args['field'] . '" multiple="multiple">';
+				include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
+				foreach( $shortcode_content_search as $shortcode )	{
+					echo '<option value="' . $shortcode . '"';
+					if( in_array( $shortcode, $mdjm_options['dj_disable_shortcode'] ) )	{
+						echo ' selected="selected"';	
+					}
+					echo '>' . $shortcode . '</option>';
+				}
+				echo '</select>';	
+			}
+			elseif( $args['custom_args']['list_type'] == 'email_templates' )		{
+				echo '<select size="8" name="' . $args['key'] . '[' . $args['field'] . '][]" id="' . $args['field'] . '" multiple="multiple">';
+				$email_args = array(
+									'post_type' => 'email_template',
+									'orderby' => 'name',
+									'order' => 'ASC',
+									);
+				$email_query = new WP_Query( $email_args );
+				if ( $email_query->have_posts() ) {
+					while ( $email_query->have_posts() ) {
+						$email_query->the_post();
+						echo '<option value="' . get_the_id() . '"';
+						if( in_array( get_the_id(), $mdjm_options['dj_disable_template'] ) )	{
+							echo ' selected="selected"';	
+						}
+						echo '>' . get_the_title() . '</option>' . "\n";	
+					}
+				}
+				wp_reset_postdata();
+				echo '</select>';	
 			}
 		}
 		elseif( $args['type'] == 'textarea' )	{
-			echo '<textarea id="' . $args['field'] . '" name="' . $args['key'] . '[' . $args['field'] . ']" cols="30" rows="6">' . $args['value'] . '</textarea>';
+			echo '<textarea id="' . $args['field'] . '" name="' . $args['key'] . '[' . $args['field'] . ']" cols="80" rows="6" class="' . $args['class'] . '">' . $args['value'] . '</textarea>';
 		}
 		elseif( $args['type'] == 'checkbox' )	{
 			echo '<input name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '" type="' . $args['type'] . '" value="Y" class="' . $args['class']  . '" ' . 

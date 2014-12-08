@@ -32,17 +32,6 @@
 		if( function_exists( $func ) ) $func( $_POST );
 	}
 	
-	if( isset( $_GET['updated'] ) )	{
-		$class = "updated";
-		if( $_GET['updated'] == 1 )
-			$message = "The venue has been added successfully.";
-		if( $_GET['updated'] == 2 )
-			$message = "The venue has been updated successfully.";
-		if( $_GET['updated'] == 3 )
-			$message = "The venue(s) have been deleted.";
-		f_mdjm_update_notice( $class, $message );
-	}
-	
 /**
  * Display the venues within the Admin UI
  * 
@@ -86,7 +75,7 @@
 		?>
 		<div class="wrap">
         <h2>Add Venue</h2>
-        <form method="post" action="<?php echo admin_url() . 'admin.php?page=mdjm-venues&action=add_venue_form'; ?>">
+        <form method="post" action="<?php echo f_mdjm_admin_page( 'venues' ); ?>">
 		<input type="hidden" name="action" value="add_venue" />
        	<?php wp_nonce_field( 'mdjm_add_venue_verify' ); ?>
         <table class="form-table">
@@ -145,7 +134,7 @@
 		?>
 		<div class="wrap">
         <h2>Add Venue</h2>
-        <form method="post" action="<?php echo admin_url() . 'admin.php?page=mdjm-venues&action=view_venue_form'; ?>">
+        <form method="post" action="<?php f_mdjm_admin_page( 'venues' ); ?>">
 		<input type="hidden" name="action" value="edit_venue" />
         <input type="hidden" name="venue_id" value="<?php echo $venue['venue_id']; ?>" />
        	<?php wp_nonce_field( 'mdjm_edit_venue_verify' ); ?>
@@ -184,7 +173,15 @@
         <td colspan="3"><textarea name="venue_information" id="venue_information" cols="80" rows="10"><?php echo esc_attr( $venueinfo->venue_information ); ?></textarea></td>
         </tr>
         <tr>
-        <th scope="row"><?php if( do_reg_check( 'check' ) ) submit_button( 'Edit Venue' ); ?></th>
+        <th scope="row">
+		<?php 
+		if( do_reg_check( 'check' ) )	{
+			if( current_user_can( 'administrator' ) || dj_can( 'add_venue' ) )	{
+				submit_button( 'Edit Venue' );
+			}
+		}
+		?>
+        </th>
         <td colspan="3" align="left"><a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Go Back' ); ?>"><?php _e( 'Cancel' ); ?></a></td>
         </tr> 
         </table>

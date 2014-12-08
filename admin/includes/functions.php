@@ -27,6 +27,8 @@
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Dashboard', 'Dashboard', 'manage_mdjm', 'mdjm-dashboard', 'f_mdjm_admin_dashboard');
 
 		if( current_user_can( 'manage_options' ) ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Settings', 'Settings', 'manage_mdjm', 'mdjm-settings', 'f_mdjm_admin_settings');
+		
+		if( current_user_can( 'manage_options' ) ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Automated Tasks', 'Automated Tasks', 'manage_mdjm', 'mdjm-tasks', 'f_mdjm_admin_tasks');
 
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Clients', 'Clients', 'manage_mdjm', 'mdjm-clients', 'f_mdjm_admin_clients');
 		
@@ -38,7 +40,7 @@
 
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Events', 'Events', 'manage_mdjm', 'mdjm-events', 'f_mdjm_admin_events');
 		
-		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Venues', 'Venues', 'manage_mdjm', 'mdjm-venues', 'f_mdjm_admin_venues');
+		if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Venues', 'Venues', 'manage_mdjm', 'mdjm-venues', 'f_mdjm_admin_venues');
 		
 		if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
 			add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Licensing', '<font style="color:#F90">Buy License</font>', 'manage_mdjm', 'mdjm-license', 'f_mdjm_purchase');	
@@ -76,6 +78,21 @@
 		}
 		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-general.php' );
 	} // f_mdjm_admin_settings
+	
+/**
+ * f_mdjm_admin_tasks
+ * Display the MDJM scheduler
+ *
+ *
+ * @since 1.0
+*/
+	function f_mdjm_admin_tasks()	{
+		global $pagenow;
+		if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-scheduler.php' );
+	} // f_mdjm_admin_tasks
 
 /**
  * f_mdjm_admin_events
@@ -227,6 +244,8 @@
 						'enquiries'             => 'admin.php?page=mdjm-events&display=enquiries',
 						'venues'                => 'admin.php?page=mdjm-venues',
 						'add_venue'             => 'admin.php?page=mdjm-events&action=add_venue_form',
+						'tasks'                 => 'admin.php?page=mdjm-tasks',
+						'client_text'           => 'admin.php?page=mdjm-settings&tab=client_text',
 						);
 		echo admin_url( $mdjm_pages[$mdjm_page] );
 	}
@@ -500,6 +519,12 @@
             <?php
 			if( isset( $event['email_enquiry'] ) && $event['email_enquiry'] == 'Y' )	{
 				$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
+				
+				/* Are we setting a new password? */
+				if( isset( $event['set_client_password'] ) && $event['set_client_password'] == 'Y' )	{
+					update_user_meta( $event['user_id'], 'mdjm_pass_action', wp_generate_password( $mdjm_options['pass_length'] ) );
+				}
+				
 				$email_headers = f_mdjm_client_email_headers( $eventinfo );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_enquiry' );
 				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
@@ -1215,6 +1240,27 @@
 		
 		return $dj_events;
 	} // f_mdjm_get_dj_events
+	
+/*
+* f_mdjm_event_is_active
+* 08/12/2014
+* @since 0.9.7
+* Checks if an event is active. True if so, false if not
+*/
+	function f_mdjm_event_is_active( $eventinfo )	{
+		global $mdjm_options;
+		if( $eventinfo->contract_status != 'Completed' && $eventinfo->contract_status != 'Cancelled' )	{
+			if( !isset( $mdjm_options['dj_view_enquiry'] ) && $mdjm_options['dj_view_enquiry'] != 'Y' )	{
+				if( $eventinfo->contract_status == 'Enquiry' && $eventinfo->contract_status != 'Failed Enquiry' )	{
+					return false;	
+				}
+			}
+			return true;
+		}
+		else	{
+			return false;	
+		}
+	} // f_mdjm_event_is_active
 
 /****************************************************************************************************
 --	PLAYLIST FUNCTIONS
@@ -1299,10 +1345,13 @@
 												'venue_email'		=> sanitize_email( $venue['venue_email'] ),
 												'venue_information'  => $venue['venue_information'],
 											) ) )	{
-				wp_redirect( admin_url( 'admin.php?page=mdjm-venues&updated=1' ) );
+
+									
+				f_mdjm_update_notice( 'updated', 'The venue has been added successfully' );
+				//wp_redirect( admin_url( 'admin.php?page=mdjm-venues&updated=1' ) );
 			}
 			else	{
-				f_mdjm_update_notice( 'error', 'ERROR: ' . $wpdb->print_error() );	
+				f_mdjm_update_notice( 'error', 'ERROR: ' . $wpdb->print_error() );
 			}
 		}
 	} // f_mdjm_add_venue
@@ -1326,7 +1375,7 @@
 		$venueinfo = f_mdjm_get_venue_by_id( $venue_updates['venue_id'] );
 		if( $venueinfo )	{ // Update
 			foreach( $venue_updates as $key => $value )	{
-				if( $key != 'venuet_id' && $key != 'action' && $key != '_wpnonce' && $key != '_wp_http_referer' && $key != 'submit' )	{
+				if( $key != 'venue_id' && $key != 'action' && $key != '_wpnonce' && $key != '_wp_http_referer' && $key != 'submit' )	{
 					if( $value != $venuetinfo->$key )	{
 						$updated_fields[$key] = $value;
 						$wpdb->update( $db_tbl['venues'], 
@@ -1335,7 +1384,7 @@
 					}
 				}
 			}
-			wp_redirect( admin_url( 'admin.php?page=mdjm-venues&updated=2' ) );
+			f_mdjm_update_notice( 'updated', 'The venue has been updated successfully' );
 		}
 		else	{
 			f_mdjm_update_notice( 'error', 'ERROR: ' . $wpdb->print_error() );	
@@ -1358,7 +1407,8 @@
 		foreach( $venues as $venue )	{
 			$wpdb->delete( $db_tbl['venues'], array( 'venue_id' => $venue ) );
 		}
-		wp_redirect( admin_url( 'admin.php?page=mdjm-venues&updated=3' ) );
+		f_mdjm_update_notice( 'updated', 'The selected venue(s) have been deleted' );
+		f_mdjm_render_venues_table();
 	} // f_mdjm_delete_venue
 	
 /**
@@ -1427,7 +1477,12 @@
  * @since 1.0
 */		
 	function is_dj()	{
-		if( current_user_can( 'dj' ) ) return true; else return false;
+		if( current_user_can( 'dj' ) )	{
+			return true;
+		}
+		else	{
+			return false;
+		}
 	} // is_dj
 	
 /**
@@ -1463,8 +1518,13 @@
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$client_query = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . $client_id . "' AND `event_dj` = '" . get_current_user_id() . "'" );
-		if( $client_query == 0 ) return false;
-		return true;
+		
+		if( $client_query != '0' )	{
+			return true;
+		}
+		else	{
+			return false;
+		}
 	}
 	
 /**
@@ -1561,23 +1621,19 @@
 			$email_headers .= 'From: ' . $dj->display_name . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		}
 		else	{ /* Everything else from the DJ */
-			$email_headers .= 'From: ' . $dj->display_name . ' <bookings' . substr( $mdjm_options['system_email'], strpos( $mdjm_options['system_email'], "@" ) + 1 ) . '>' . "\r\n";
+			$email_headers .= 'From: ' . $dj->display_name . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 			$email_headers .= 'Reply-To: ' . $dj->user_email . "\r\n";
 		}
 		if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
 			|| isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )	{
-			$email_headers .= 'Bcc: ';
+			
 			if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
-				$email_headers .= $dj->user_email;
-
-			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
-				&& isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
-				$email_headers .= ', ';
+				$bcc[] = $dj->user_email;
 
 			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )
-				$email_headers .= $mdjm_options['system_email'];
-				
-			$email_headers .= "\r\n";
+				$bcc[] = $mdjm_options['system_email'];
+			
+			$email_headers .= 'Bcc: ' . implode( ",", $bcc ) . "\r\n";
 		}
 		return $email_headers;
 	} // f_mdjm_client_email_headers
@@ -1605,6 +1661,7 @@
 			$template_id = $mdjm_options[$type];
 		}
 		
+		/* All Shortcode vars need to be set by now */
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 		$template_query = new WP_Query( array( 'post_type' => 'email_template', 'post__in' => array( $template_id ) ) );
 		if ( $template_query->have_posts() ) {

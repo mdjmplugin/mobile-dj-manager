@@ -16,18 +16,38 @@
 * Displays the Client Zone frontend event list
 */
 	function f_mdjm_client_home()	{
-		global $wpdb, $current_user, $mdjm_options;
+		global $wpdb, $current_user, $mdjm_options, $mdjm_client_text;
 		
 		include_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		get_currentuserinfo();
 		$eventinfo = f_mdjm_get_client_events( $db_tbl, $current_user );
 ?>
-		<p>Hello <?php echo $current_user->first_name; ?> and welcome to the <a href="<?php echo site_url(); ?>"><?php echo WPMDJM_CO_NAME; ?></a> <?php echo WPMDJM_APP_NAME; ?>.</p>
+		<p>
+        <?php
+        if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+			f_mdjm_client_text( 'home_welcome' );
+		}
+		else	{
+	        echo 'Hello ' . $current_user->first_name . ' and welcome to the <a href="' . site_url() . '">' . WPMDJM_CO_NAME . '</a> ' . WPMDJM_APP_NAME . '.';
+		}
+		?>
+        </p>
 
 <?php	if( !$eventinfo )	{
-?>		<p>You currently have no upcoming events. Please <a title="Contact <?php echo get_bloginfo( 'name' ); ?>" href="<?php echo get_permalink( WPMDJM_CONTACT_PAGE ); ?>">contact me</a> now to start planning your next disco.</p>
-<?php	}
+			?>
+			<p>
+			<?php
+			if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+				f_mdjm_client_text( 'home_noevents' );
+			}
+			else	{
+				echo 'You currently have no upcoming events. Please <a title="Contact ' . get_bloginfo( 'name' ) . '" href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact me</a> now to start planning your next disco.';
+			}
+			?>
+			</p>
+		<?php
+		}
 		else	{
 			/* Multiple events for client */
 			if( count( $eventinfo ) > 1 )	{
@@ -126,7 +146,7 @@
 * Display single event info (no edit)
 */
 	function f_mdjm_view_event( $event_id )	{
-		global $wpdb, $current_user, $mdjm_options;
+		global $wpdb, $current_user, $mdjm_options, $mdjm_client_text;
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
@@ -144,18 +164,24 @@
 			if( $eventinfo->contract_status == 'Failed Enquiry'
 				|| $eventinfo->contract_status == 'Cancelled'
 				|| $eventinfo->contract_status == 'Completed' )	{
-				echo '<p>The selected event is no longer active. <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.</p>';		
+				
+				if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+					f_mdjm_client_text( 'home_notactive' );
+				}
+				else	{
+					echo '<p>The selected event is no longer active. <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.</p>';
+				}
 			}
 			else	{
 				?>
-                <p>Below are details of your upcoming disco on <?php echo $fdate; ?>.</p>
+                <p>Below are details of your upcoming event on <?php echo $fdate; ?>.</p>
                 <p>If any of the event details are incorrect, please <a href="mailto:<?php echo $mdjm_options['system_email']; ?>?subject=Event ID <?php echo $eventinfo->event_id; ?> || Incorrect Event Details">contact me now</a>.</p>
 				<?php
 			}
 			/* Make sure client profile is complete */
 			if( !f_mdjm_profile_complete( $clientinfo->ID ) )	{
 				?>
-                <p style="font-weight:bold">IMPORTANT: Your <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> appears to be incomplete. Please <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">click here</a> to update it now. Incorrect <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> information can cause problems with your event booking.</p>
+                <p style="font-weight:bold">IMPORTANT: Your <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> appears to be incomplete. Please <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">click here</a> to update it now. Incorrect <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> information can cause problems with your booking.</p>
                 <?php	
 			}
 			

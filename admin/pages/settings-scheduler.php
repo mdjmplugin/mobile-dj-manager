@@ -148,7 +148,8 @@
 		asort( $mdjm_schedules );
 		?>
         <div class="wrap">
-        <h2>Scheduler</h2>
+        <div id="icon-themes" class="icon32"></div>
+        <h2>Automated Tasks</h2>
         <p><strong>Important Note:</strong> because of the way that WordPress handles scheduled tasks, the timing at which your tasks below run may differ from day to day dependant on activity to your website. If your website receives zero visits in a day after the time at which your tasks are scheduled to next run, those tasks will not run that day.</p>
 		<p>In this instance, the tasks will be ran the the next time someone visits your website.</p>
         <hr />
@@ -228,7 +229,7 @@
 				?>
                 </td>
                 <td>
-                <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings&tab=scheduler&task_action=edit&slug=' . $schedule['slug'] ); ?>" title="Edit <?php echo esc_attr( $schedule['name'] ); ?> Scheduled Task">Edit</a>
+                <a href="<?php echo f_mdjm_admin_page( 'tasks') . '&task_action=edit&slug=' . $schedule['slug']; ?>" title="Edit <?php echo esc_attr( $schedule['name'] ); ?> Scheduled Task">Edit</a>
                 </td>
                 </tr>
                 <?php
@@ -250,6 +251,9 @@
         </tr>
         </tfoot>
         </table>
+        <?php submit_button(); ?>
+        </form>
+        </div>
         <?php
 	}
 	
@@ -268,7 +272,7 @@
 			$ro = '';
 		?>
         <h2>Edit Task</h2>
-        <form name="form_task_edit" method="post" action="<?php echo admin_url( 'admin.php?page=mdjm-settings&tab=scheduler&task_updated=1' ); ?>">
+        <form name="form_task_edit" method="post" action="<?php echo f_mdjm_admin_page( 'tasks' ) . '&task_updated=1'; ?>">
         <input type="hidden" name="slug" value="<?php echo $mdjm_schedules[$task]['slug']; ?>" />
         <table class="widefat">
         <tr>

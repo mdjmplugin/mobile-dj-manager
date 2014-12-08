@@ -239,7 +239,7 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <li><strong>DJ Setup Time</strong>: Enables you to enter a setup time for the event</li>
         <li><strong>DJ Setup Date</strong>: Just in case :)</li>
         <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins and event DJ will see</li>
-        <li><strong>DJ Notes</strong>: The ability for you to enter notes that only the Admins will see</li>
+        <li><strong>Admin Notes</strong>: The ability for you to enter notes that only the Admins will see</li>
         <li>All new fields are available in both the event creation and edit event screens although for existing events, the DJ Setup time will default to midnight. The DJ Setup Date will always default to the event date</li>
         </ui>
         </td>
@@ -274,6 +274,71 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         </td>
         <?php
 	} // f_mdjm_updated_to_0_9_6
+	
+/**************************************************
+				VERSION 0.9.7
+**************************************************/
+	function f_mdjm_updated_to_0_9_7()	{
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Password Management</font><br>
+		During the event creation process we have added an additional field on the review screen <strong>Reset Client Password</strong>. If both this option and the <strong>Email Quote</strong> option are selected, whilst the event is being created, a random password will be created for the client. With the use of <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a>, you can then add the Client's username and password information into the quotation email that is sent to them if you wish to do so.<br /><br />
+        An additional <a href="http://www.mydjplanner.co.uk/settings-overview/" target="_blank">setting</a>, <strong>Default Password Length</strong> has also been added to allow you to specify the length of this new password.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Shortcode Updates</font><br>
+        <ui>
+            <li><span class="code">{EVENT_DATE_SHORT}</span>: Inserts the Event date in short format (DD/MM/YYYY). <span class="code">{EVENT_DATE}</span> still adds long format</li>
+            <li><span class="code">{CLIENT_USERNAME}</span>: Inserts the client's username for logging into the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_CO_NAME; ?> <?php echo WPMDJM_APP_NAME; ?></a></li>
+            <li><span class="code">{CLIENT_PASSWORD}</span>: Inserts the client's password for logging into the front end of your website</li>
+        </ui>
+        <strong>Note</strong>: We have found that the shortcodes seem to be stored in the cache of many browsers and therefore if you do not see the new shortcodes immediately, try holding down the shift key on your keyboard whilst refreshing your browser page<br /><br />
+        The <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes User Guide</a> has been updated with the new options
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Updated Permissions</font><br>
+        <ui>
+        	<li><strong>DJ Can View Enquiry</strong>: Whether or not your employees can see outstanding (or failed) enquiries where they have been listed as the DJ. If this is not selected, the relevant information is also removed from the WP Dashboard and the MDJM Dashboard</li>
+            <li><strong>Disabled Shortcodes for DJ's</strong>: Select which <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> your DJ's cannot use within the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> feature. Whilst the <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> will still be visible, if a DJ tries to send an email with the disabled <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">shortcodes</a> within the content, it will fail</li>
+            <li><strong>Disabled Email Templates for DJ's</strong>: The Email Templates you select here will not be visible to DJ's when they are using the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> feature</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Scheduled Tasks</font><br>
+        We have given <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Scheduled Tasks</a> a new home by removing the tab from the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings page</a>. and creating an <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Tasks</a> menu link in both the side bar and toolbar - DJ Manager > <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Tasks</a>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Dialogue Text</font><br>
+        Located within the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings Page</a>, a new <a href="<?php f_mdjm_admin_page( 'client_text' ); ?>">Client Dialogue</a> tab has been added. Within this area, you can adjust the default text that is displayed to Clients when they login to the frontend of your website to access the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a>.<br /><br />
+        Currently only applies to Client login text, and text displayed on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?> home page</a> however if you like this feature, let us know via our <a href="http://www.mydjplanner.co.uk/forums/" target="_blank">Support Forums</a> and we will add options for the other pages too. 
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>Contract review emails were generated and sent even if the <a href="http://www.mydjplanner.co.uk/settings-overview/" target="_blank">setting</a> was not enabled</li>
+                <li>DJ's should only see their own Clients within the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication feature</a></li>
+                <li>DJ's now only see contact information for Clients when clicking their name on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client screen</a>, unless they have permission to add new clients</li>
+                <li>Clicking on a Clients email address now directs you to the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a> with the client auto selected</li>
+                <li>DJ setup time now defaults to event start time</li>
+                <li>Tighter Security: If you do not provide DJ's with the permission to Add Clients, they cannot Edit Clients either and the Add New button is no longer displayed within the Client Details page</li>
+                <li>If you have not enabled DJ's to add venues, they cannot view them either except in the event detail screen</li>
+                <li>Edit Venue button removed for DJ's that if they do not have permission to add a venue</li>
+                <li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/error-message2/">this bug</a> depending on the PHP configuration of your web server, a warning message may have been displayed when Adding, Editing, or Deleting a venue. This did not affect functionality.</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_7
 	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{

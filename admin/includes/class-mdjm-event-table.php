@@ -228,8 +228,14 @@
 				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=active"<?php if ( $display == "active" ) { ?> class="current" <?php } ?>>Active <span class="count">(<?php echo count( $wpdb->get_results( $display_query['active'] ) ); ?>)</span></a> |</li>
 				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=historic"<?php if ( $display == "historic" ) { ?> class="current" <?php } ?>>Historic <span class="count">(<?php echo count( $wpdb->get_results( $display_query['historic'] ) ); ?>)</span></a> |</li>
 				<li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=all"<?php if ( $display == "all" ) { ?> class="current" <?php } ?>>All <span class="count">(<?php echo count( $wpdb->get_results( $display_query['all'] ) ); ?>)</span></a> |</li>
+                <?php
+				if( current_user_can( 'manage_options' ) || dj_can( 'view_enquiry' ) )	{
+					?>
                 <li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=enquiries"<?php if ( $display == "enquiries" ) { ?> class="current" <?php } ?>>Enquiries <span class="count">(<?php echo count( $wpdb->get_results( $display_query['enquiries'] ) ); ?>)</span></a> |</li>
                 <li class='all'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&display=lost"<?php if ( $display == "lost" ) { ?> class="current" <?php } ?>>Lost Enquiries <span class="count">(<?php echo count( $wpdb->get_results( $display_query['lost'] ) ); ?>)</span></a></li>
+                <?php
+				}
+				?>
                 </ul>
            <?php
 		   }

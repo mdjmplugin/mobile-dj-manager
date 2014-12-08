@@ -17,6 +17,7 @@
 			$url = admin_url();
 			
 			foreach( $clientinfo as $client )	{
+				
 				if( !current_user_can( 'administrator' ) )	{ // Non-Admins only see their own clients
 					if( f_mdjm_client_is_mine( $client->ID ) )	{
 						$info = f_mdjm_client_get_events( $client->ID );
@@ -31,9 +32,9 @@
 						else $last_login = date( 'H:i d M Y', $last_login );
 						$client_data[] = array(
 											'client_id' => $client->ID,
-											'client_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $client->ID . '">' . $client->display_name . '</a>',
+											'client_name' => '<a href="' . admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $client->ID ) . '">' . $client->display_name . '</a>',
 											'last_login' => $last_login,
-											'client_email' => '<a href="mailto:' . $client->user_email . '">' . $client->user_email . '</a>',
+											'client_email' => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ) . $client->ID . '">' . $client->user_email . '</a>',
 											'client_events' => $info['num_rows'],
 											'client_next_event' => $event_link,
 											'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-journal&client_id=' . $client->ID . '">' . 'View</a>'
@@ -49,13 +50,13 @@
 						$event_link = $info['next_event'];
 					}
 					$last_login = strtotime( get_user_meta( $client->ID, 'last_login', true ) );
-						if( !$last_login ) $last_login = 'Never';
-						else $last_login = date( 'H:i d M Y', $last_login );
+					if( !$last_login ) $last_login = 'Never';
+					else $last_login = date( 'H:i d M Y', $last_login );
 					$client_data[] = array(
 										'client_id' => $client->ID,
 										'client_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $client->ID . '">' . $client->display_name . '</a>',
 										'last_login' => $last_login,
-										'client_email' => '<a href="mailto:' . $client->user_email . '">' . $client->user_email . '</a>',
+										'client_email' => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ) . $client->ID . '">' . $client->user_email . '</a>',
 										'client_events' => $info['num_rows'],
 										'client_next_event' => $event_link,
 										'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-events&action=show_journal&client_id=' . $client->ID . '">' . 'View</a>'

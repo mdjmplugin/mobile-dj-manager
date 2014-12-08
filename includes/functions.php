@@ -52,26 +52,68 @@
  * @since 1.0
 */
 	function f_mdjm_get_options()	{
-		$mdjm_options = get_option ( WPMDJM_SETTINGS_KEY );
-		$mdjm_permissions = get_option ( 'mdjm_plugin_permissions' );
-		$mdjm_pages = get_option ( 'mdjm_plugin_pages' );
-		if( $mdjm_pages )	{
+		$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+		$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
+		$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+		if( isset( $mdjm_pages ) )	{
 			foreach( $mdjm_pages as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
-		if( $mdjm_permissions )	{
+		if( isset( $mdjm_permissions ) )	{
 			foreach( $mdjm_permissions as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
+		if( isset( $mdjm_client_text ) )	{
+			foreach( $mdjm_client_text as $key => $value )	{
+				$mdjm_options[$key] = $value;
+			}
+		}
 		
+		/* Make sure we have a system email value */
 		if( !isset( $mdjm_options['system_email'] ) || empty( $mdjm_options['system_email'] ) )	{
 			$mdjm_options['system_email'] = get_bloginfo( 'admin_email' );	
 		}
 		
 		return $mdjm_options;
 	} // f_get_mdjm_options
+	
+/*
+* f_mdjm_client_text
+* 03/12/2014
+* @since 0.9.7
+* Shortcode replacement for frontend client text
+*/
+	function f_mdjm_client_text ( $text )	{
+		global $mdjm_options, $mdjm_client_text;
+		
+		$client = get_userdata( get_current_user_id() );
+		
+		$search = array(
+						'{APPLICATION_HOME}',                         /* Client Home URL */
+						'{APPLICATION_NAME}',                         /* Application Name */
+						'{CLIENT_FIRSTNAME}',                         /* Client First Name */
+						'{COMPANY_NAME}',                             /* Company Name */
+						'{CONTACT_PAGE}',                             /* Contact Page */
+						'{CONTRACT_PAGE}',                            /* Contract Page */
+						'{PLAYLIST_PAGE}',                            /* Playlist Page */
+						'{PROFILE_PAGE}',                             /* Profile Page */
+					);
+		$replace = array(
+						get_permalink( WPMDJM_CLIENT_HOME_PAGE ),      /* Client Home URL */
+						$mdjm_options['app_name'],                     /* Application Name */
+						$client->first_name,                           /* Client First Name */
+						WPMDJM_CO_NAME,                                /* Company Name */
+						get_permalink( WPMDJM_CONTACT_PAGE ),          /* Contact Page */
+						get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ),  /* Contract Page */
+						get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ),  /* Playlist Page */
+						get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ),   /* Profile Page */
+					);
+					
+		echo nl2br( str_replace( $search, $replace, $mdjm_client_text[$text] ) );
+	}
 
 /****************************************************************************************************
 --	USER FUNCTIONS
@@ -86,7 +128,15 @@
  * @since 1.0
 */
 	function f_mdjm_show_user_login_form()	{
-		print("<p>You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.</p>\n");
+		global $mdjm_client_text;
+		echo '<p>';
+		if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+			f_mdjm_client_text( 'not_logged_in' );
+		}
+		else	{
+			echo '<p>You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.</p>';
+		}
+		echo '</p>';
 		wp_login_form();
 	} // f_mdjm_show_user_login_form
 

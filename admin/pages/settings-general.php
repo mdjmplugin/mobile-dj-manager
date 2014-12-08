@@ -11,6 +11,7 @@
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 	
 	function f_mdjm_display_general_settings_contents()	{
+		global $mdjm_options;
 	?>
         <div class="wrap">
         <div id="icon-themes" class="icon32"></div>
@@ -22,8 +23,14 @@
             <a href="admin.php?page=mdjm-settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">General</a>
             <a href="admin.php?page=mdjm-settings&tab=pages" class="nav-tab <?php echo $active_tab == 'pages' ? 'nav-tab-active' : ''; ?>">Pages</a>
             <a href="admin.php?page=mdjm-settings&tab=permissions" class="nav-tab <?php echo $active_tab == 'permissions' ? 'nav-tab-active' : ''; ?>">Permissions</a>
+            <a href="admin.php?page=mdjm-settings&tab=client_text" class="nav-tab <?php echo $active_tab == 'client_text' ? 'nav-tab-active' : ''; ?>">Client Dialogue</a>
             <a href="admin.php?page=mdjm-settings&tab=client_fields" class="nav-tab <?php echo $active_tab == 'client_fields' ? 'nav-tab-active' : ''; ?>">Client Fields</a>
+            <?php
+/*******************************************************************************************
+		REMOVED SINCE 0.9.7
             <a href="admin.php?page=mdjm-settings&tab=scheduler" class="nav-tab <?php echo $active_tab == 'scheduler' ? 'nav-tab-active' : ''; ?>">Scheduler</a>
+*******************************************************************************************/
+			?>
         </h2>
              <?php
 			$lic_info = do_reg_check( 'check' );
@@ -59,6 +66,12 @@
 				echo '<form method="post" action="options.php">';
 				settings_fields( 'mdjm-permissions' );
 				do_settings_sections( 'mdjm-permissions' );
+			}
+			elseif( $active_tab == 'client_text' )	{
+				echo '<p>Basic HTML and <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">MDJM Shortcodes</a> are permitted.</p>';
+				echo '<form method="post" action="options.php">';
+				settings_fields( 'mdjm-client-text' );
+				do_settings_sections( 'mdjm-client-text' );
 			}
 			elseif( $active_tab == 'client_fields' )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-client-fields.php' );

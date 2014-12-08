@@ -17,10 +17,15 @@
             <th width="40%" align="left">Next Event:</tg>
             <td width="60%"><a href="<?php echo admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $events['event_id']; ?>"><?php echo $events['next_event']; ?></a> (<?php echo $events['event_type']; ?>)</td>
           </tr>
-          <tr>
-            <th align="left">Outstanding Enquiries:</th>
-            <td><?php echo $dash_dj['year_enquiries']; ?> <a href="<?php echo admin_url() . 'admin.php?page=mdjm-events&display=enquiries'; ?>">(view)</a></td>
-          </tr>
+          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+			  ?>
+              <tr>
+                <th align="left">Outstanding Enquiries:</th>
+                <td><?php echo $dash_dj['year_enquiries']; ?> <a href="<?php echo admin_url() . 'admin.php?page=mdjm-events&display=enquiries'; ?>">(view)</a></td>
+              </tr>
+              <?php
+		  }
+		  ?>
      	</table>
         <div>
         <ul>
@@ -33,7 +38,7 @@
 				}
 			}
 		?>
-            <li><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&action=add_event_form">Add New Event</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-dashboard">View Dashboard</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-settings">Edit Settings</a>
+            <li><?php if( current_user_can( 'administrator' ) || dj_can( 'add_event' ) ) { ?><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-events&action=add_event_form">Add New Event</a> | <?php } ?><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-dashboard">View Dashboard</a> | <a href="<?php echo admin_url(); ?>admin.php?page=mdjm-settings">Edit Settings</a>
             <?php
 			if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
                  echo '| <strong><a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">Buy License</a></strong>';
