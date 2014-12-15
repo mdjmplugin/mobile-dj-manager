@@ -144,6 +144,7 @@
 		$p_meta = get_user_meta( $info['client']->ID, 'mdjm_pass_action', 'single' );
 		if( isset( $p_meta ) && $p_meta != '' )	{
 			$user_new_password = $p_meta;
+			wp_set_password( $user_new_password, $info['client']->ID );
 			delete_user_meta( $info['client']->ID, 'mdjm_pass_action' );
 		}
 		else	{
