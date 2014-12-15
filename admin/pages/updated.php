@@ -340,6 +340,30 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <?php
 	} // f_mdjm_updated_to_0_9_7
 	
+/**************************************************
+				VERSION 0.9.8
+**************************************************/
+	function f_mdjm_updated_to_0_9_8()	{
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Bug Fix Release only</font><br>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>Resetting client password during event creation was not always successful</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_8
+	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
 			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );
