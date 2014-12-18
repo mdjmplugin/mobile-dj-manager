@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 * mdjm-templates.php
 * 13/11/2014
