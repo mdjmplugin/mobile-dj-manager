@@ -255,37 +255,39 @@
 		$enquiry_sources = 'Website,Google,Facebook,Email,Telephone,Other,';
 		$playlist_when = 'General,First Dance,Second Dance,Last Song,Father & Bride,Mother & Son,DO NOT PLAY,Other,';
 		$mdjm_init_options = array(
-							'company_name' 			=> get_bloginfo( 'name' ),
-							'app_name'				=> 'Client Zone',
-							'time_format'           => 'H:i',
-							'short_date_format'     => 'd/m/Y',
-							'pass_length'           => '8',
-							'currency'				=> 'GBP',
-							'show_dashboard'		=> 'Y',
-							'journaling'			=> 'Y',
-							'multiple_dj' 			=> 'N',
-							'packages' 				=> 'N',
-							'event_types' 			=> $event_types,
-							'enquiry_sources' 		=> $enquiry_sources,
-							'default_contract' 		=> $contract_post_id,
-							'id_prefix'             => 'MDJM',
-							'system_email' 		    => get_bloginfo( 'admin_email' ),
-							'bcc_dj_to_client' 		=> '',
-							'bcc_admin_to_client' 	=> 'Y',
-							'contract_to_client' 	=> '',
-							'email_enquiry' 		=> $client_enquiry_post_id,
-							'enquiry_email_from'	=> 'admin',
-							'email_contract'		=> $client_contract_post_id,
-							'contract_email_from'	=>'admin',
-							'email_client_confirm' 	=> $client_confirm_post_id,
-							'confirm_email_from'	=> 'admin',
-							'email_dj_confirm' 		=> $dj_confirm_post_id,
-							'title_as_subject'      => 'N',
-							'playlist_when' 		=> $playlist_when,
-							'playlist_close' 		=> '5',
-							'upload_playlists' 		=> 'Y',
-							'uninst_remove_db' 		=> 'N',
-							'show_credits' 			=> 'Y',
+							'company_name'            => get_bloginfo( 'name' ),
+							'app_name'                => 'Client Zone',
+							'time_format'             => 'H:i',
+							'short_date_format'       => 'd/m/Y',
+							'pass_length'             => '8',
+							'currency'                => 'GBP',
+							'show_dashboard'          => 'Y',
+							'journaling'              => 'Y',
+							'multiple_dj'             => 'N',
+							'packages'                => 'N',
+							'event_types'             => $event_types,
+							'enquiry_sources'         => $enquiry_sources,
+							'default_contract'        => $contract_post_id,
+							'id_prefix'               => 'MDJM',
+							'system_email'            => get_bloginfo( 'admin_email' ),
+							'bcc_dj_to_client'        => '',
+							'bcc_admin_to_client'     => 'Y',
+							'boooking_conf_to_client' => 'Y',
+							'boooking_conf_to_dj'     => 'Y',
+							'contract_to_client'      => '',
+							'email_enquiry'           => $client_enquiry_post_id,
+							'enquiry_email_from'      => 'admin',
+							'email_contract'          => $client_contract_post_id,
+							'contract_email_from'     =>'admin',
+							'email_client_confirm'    => $client_confirm_post_id,
+							'confirm_email_from'      => 'admin',
+							'email_dj_confirm'        => $dj_confirm_post_id,
+							'title_as_subject'        => 'N',
+							'playlist_when'           => $playlist_when,
+							'playlist_close'          => '5',
+							'upload_playlists'        => 'Y',
+							'uninst_remove_db'        => 'N',
+							'show_credits'            => 'Y',
 							);
 		$mdjm_init_pages = array(
 							'app_home_page'                => '',
@@ -656,6 +658,26 @@
 				/* Add debug option */
 				add_option( 'mdjm_debug', '0' );
 			} // if( $current_version_mdjm == '0.9.8' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.9
+***************************************************/
+			if( $current_version_mdjm == '0.9.9' )	{
+				/* Get needed options */
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+				
+				/* Set new options */
+				$mdjm_options['boooking_conf_to_client'] = 'Y';
+				$mdjm_options['boooking_conf_to_dj'] = 'Y';
+				
+				/* Set new client dialogue options */
+				$mdjm_frontend_text['warn_incomplete_profile'] = 'Y';
+				
+				/* Update Options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
+			} // if( $current_version_mdjm == '0.9.9' )
 
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST

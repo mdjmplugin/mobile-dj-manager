@@ -28,6 +28,8 @@
 										'system_email',
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
+										'booking_conf_to_client',
+										'booking_conf_to_dj',
 										'contract_to_client',
 										'email_enquiry',
 										'enquiry_email_from',
@@ -59,6 +61,7 @@
 										'dj_see_deposit',
 										'dj_disable_shortcode',
 										'dj_disable_template',
+										'warn_incomplete_profile',
 										'custom_client_text',
 										'not_logged_in',
 										'home_welcome',
@@ -300,8 +303,32 @@
 									'page' => 'settings',
 									); // bcc_admin_to_client
 									
+		$admin_fields['booking_conf_to_client'] = array(
+									'display' => 'Booking Confirmation to client?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['booking_conf_to_client'],
+									'text' => '',
+									'desc' => 'Email client with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
+									'section' => 'email',
+									'page' => 'settings',
+									); // booking_conf_to_client
+									
+		$admin_fields['booking_conf_to_dj'] = array(
+									'display' => 'Booking Confirmation to DJ?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['booking_conf_to_dj'],
+									'text' => '',
+									'desc' => 'Email DJ with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
+									'section' => 'email',
+									'page' => 'settings',
+									); // booking_conf_to_dj
+		
 		$admin_fields['contract_to_client'] = array(
-									'display' => 'Email contract link to client?',
+									'display' => 'Contract link to client?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
 									'class' => 'code',
@@ -889,6 +916,18 @@
 									); // dj_disable_template
 									
 /* CLIENT DIALOGUE TAB */
+		$admin_fields['warn_incomplete_profile'] = array(
+									'display' => 'Incomplete Profile Warning?',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['warn_incomplete_profile'],
+									'text' => '',
+									'desc' => 'Display notice to Clients when they login if their Profile is incomplete?',
+									'section' => 'general',
+									'page' => 'client-text',
+									); // warn_incomplete_profile
+									
 		$admin_fields['custom_client_text'] = array(
 									'display' => 'Enable Customised Text?',
 									'key' => 'mdjm_frontend_text',

@@ -30,7 +30,7 @@
         </tr>
         </table>
         <table>
-        <tr>
+        <tr valign="top">
         <td>
         <table class="widefat" width="100%">
         <?php
@@ -470,6 +470,35 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         </td>
         <?php
 	} // f_mdjm_updated_to_0_9_9
+	
+/**************************************************
+				VERSION 0.9.9.1
+**************************************************/
+	function f_mdjm_updated_to_0_9_9_1()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td>This is a Minor Release primarily to address bugs with a few enhancements...<br>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li>Event date check returned odd results sometimes</li>
+                <li>Added <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> to disable the incomplete profile warning displayed to clients when they logged into the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a> if key information is missing. This setting is within the Client Dialogue tab</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> to choose whether or not the <strong>Client</strong> receives the Booking Confirmation email once contract is signed / event status changes to Approved</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> to choose whether or not the <strong>DJ</strong> receives the Booking Confirmation email once contract is signed / event status changes to Approved</li>
+                
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_9_1
 	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{

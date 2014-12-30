@@ -179,7 +179,7 @@
 				<?php
 			}
 			/* Make sure client profile is complete */
-			if( !f_mdjm_profile_complete( $clientinfo->ID ) )	{
+			if( isset( $mdjm_client_text['warn_incomplete_profile'] ) && $mdjm_client_text['warn_incomplete_profile'] == 'Y' && !f_mdjm_profile_complete( $clientinfo->ID ) )	{
 				?>
                 <p style="font-weight:bold">IMPORTANT: Your <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> appears to be incomplete. Please <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">click here</a> to update it now. Incorrect <a href="<?php echo get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ); ?>">profile</a> information can cause problems with your booking.</p>
                 <?php	

@@ -816,39 +816,46 @@
 			if( isset( $now_approved ) )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['confirm_email_from'] );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_client_confirm' );
+				
 				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
 					$subject = $info['subject'];	
 				}
 				else	{
 					$subject = 'Booking Confirmation';	
 				}
-				if ( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
-					$message = 'Booking confirmation email sent to client';
-					$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $eventinfo->event_id,
-						'author' => get_current_user_id(),
-						'type' => 'Email Client',
-						'source' => 'Admin',
-						'entry' => 'Booking confirmation email sent to client'
-						);
-					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-					?>
-                    <div id="message" class="updated">
-                    <p><?php _e( $message ) ?></p>
-                    </div>
-                    <?php
+				/* Confirmation to Client */
+				if( isset( $mdjm_options['boooking_conf_to_client'] ) && $mdjm_options['boooking_conf_to_client'] == 'Y' )	{
+					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+						$message = 'Booking confirmation email sent to client';
+						$j_args = array (
+							'client' => $eventinfo->user_id,
+							'event' => $eventinfo->event_id,
+							'author' => get_current_user_id(),
+							'type' => 'Email Client',
+							'source' => 'Admin',
+							'entry' => 'Booking confirmation email sent to client'
+							);
+						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+						?>
+						<div id="message" class="updated">
+						<p><?php _e( $message ) ?></p>
+						</div>
+						<?php
+					}
+					else	{
+						$message .= 'Unable to send booking confirmation email to client';
+						?>
+						<div id="message" class="error">
+						<p><?php _e( $message ) ?></p>
+						</div>
+						<?php
+					}
+				}
+				/* Confirmation to DJ */
+				if( isset( $mdjm_options['boooking_conf_to_dj'] ) && $mdjm_options['boooking_conf_to_dj'] == 'Y' )	{
 					$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
 					$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
 					wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
-				}
-				else	{
-					$message .= 'Unable to send booking confirmation email to client';
-					?>
-                    <div id="message" class="error">
-                    <p><?php _e( $message ) ?></p>
-                    </div>
-                    <?php
 				}
 			}
 			if( isset( $event_updates['deposit_status'] ) && $event_updates['deposit_status'] == 'Paid' && $event_updates['deposit_status'] != $eventinfo->deposit_status )	{

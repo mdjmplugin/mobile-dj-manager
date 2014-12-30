@@ -168,19 +168,20 @@
 * Only used during first installation
 */
 	$mdjm_init_client_text = array(
-									'custom_client_text'     => 'N',
-									'not_logged_in'          => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
-									'home_welcome'           => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
-									'home_noevents'          => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
-									'home_notactive'         => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
-									'playlist_welcome'       => 'Welcome to the {COMPANY_NAME} event playlist management system.',
-									'playlist_intro'         => 'Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong> {EVENT_DATE}</strong>.' . "\r\n\r\n" . 'Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="{GUEST_PLAYLIST_URL}" target="_blank">{GUEST_PLAYLIST_URL}</a>.' . "\r\n\r\n" . 'You can view and remove any songs added by your guests below.',
-									'playlist_edit'          => 'You are currently editing the playlist for your event on {EVENT_DATE}. To edit the playlist for one of your other events, return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME} home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.',
-									'playlist_closed'        => '<strong>Additions to your playlist are disabled as your event is taking place soon</strong>',
-									'playlist_noevent'       => 'You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.' . "\r\n\r\n" . 'To begin planning your next event with us, please <a href="{CONTACT_PAGE}">contact us now</a>',
-									'playlist_guest_welcome' => 'Welcome to the {COMPANY_NAME} playlist management system.',
-									'playlist_guest_intro'   => 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . "\r\n\r\n" . 'Add your playlist requests in the form below. All fields are required.',
-									'playlist_guest_closed'  => 'This playlist is currently closed. No songs can be added at this time.',
+									'warn_incomplete_profile' => 'Y',
+									'custom_client_text'      => 'N',
+									'not_logged_in'           => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
+									'home_welcome'            => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
+									'home_noevents'           => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
+									'home_notactive'          => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
+									'playlist_welcome'        => 'Welcome to the {COMPANY_NAME} event playlist management system.',
+									'playlist_intro'          => 'Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong> {EVENT_DATE}</strong>.' . "\r\n\r\n" . 'Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="{GUEST_PLAYLIST_URL}" target="_blank">{GUEST_PLAYLIST_URL}</a>.' . "\r\n\r\n" . 'You can view and remove any songs added by your guests below.',
+									'playlist_edit'           => 'You are currently editing the playlist for your event on {EVENT_DATE}. To edit the playlist for one of your other events, return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME} home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.',
+									'playlist_closed'         => '<strong>Additions to your playlist are disabled as your event is taking place soon</strong>',
+									'playlist_noevent'        => 'You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.' . "\r\n\r\n" . 'To begin planning your next event with us, please <a href="{CONTACT_PAGE}">contact us now</a>',
+									'playlist_guest_welcome'  => 'Welcome to the {COMPANY_NAME} playlist management system.',
+									'playlist_guest_intro'    => 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . "\r\n\r\n" . 'Add your playlist requests in the form below. All fields are required.',
+									'playlist_guest_closed'   => 'This playlist is currently closed. No songs can be added at this time.',
 								);
 
 /*

@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9
+Stable tag: 0.9.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,15 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 0.9.9.1 =
+<h2>Minor Release with a few enhancements</h2>
+<ui>
+	<li>Bug fix: Event date check returned odd results sometimes</li>
+	<li>New Setting: Added setting to disable the incomplete profile warning displayed to clients when they logged into the Client Zone if key information is missing</li>
+	<li>New Setting: To choose whether or not the <strong>Client</strong> receives the Booking Confirmation email once contract is signed / event status changes to Approved</li>
+	<li>New Setting: To choose whether or not the <strong>DJ</strong> receives the Booking Confirmation email once contract is signed / event status changes to Approved</li>
+</ui>
+
 = 0.9.9 =
 <h2>Enhancements</h2>
 <li>Introduction of the Availability Checker & Management feature</li>

@@ -782,9 +782,9 @@
 		if( isset( $fields['event_date'] ) && !empty( $fields['event_date'] ) )	{
 			$event_date = explode( '/', $fields['event_date'] );
 			$event_date = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
-			if( date( 'd/m/Y', strtotime( $event_date ) ) < date( 'd/m/Y' ) )	{
+			if( strtotime( $event_date ) < time() )	{
 				$event_error = '1';
-				f_mdjm_update_notice( 'error', 'Warning: The event date is in the past. Click <a onclick="window.history.go(-1)">Back</a> to amend' );	
+				f_mdjm_update_notice( 'error', 'Warning: The event date ' . date( 'd-m-Y' ) . ' is in the past. Click <a onclick="window.history.go(-1)">Back</a> to amend' );	
 			}
 		}
 		/* Check event date is set */

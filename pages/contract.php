@@ -36,24 +36,27 @@
 					else	{
 						$subject = 'Booking Confirmation';	
 					}
-					
-					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
-						$j_args = array (
-							'client'   => $eventinfo->user_id,
-							'event'    => $eventinfo->event_id,
-							'author'   => get_current_user_id(),
-							'type'     => 'Email Client',
-							'source'   => 'Admin',
-							'entry'    => 'Booking confirmation email sent to client'
-							);
-						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-						?>
-						<p>Your booking confirmation email is on it's way!</p>
-						<?php
+					if( isset( $mdjm_options['boooking_conf_to_client'] ) && $mdjm_options['boooking_conf_to_client'] == 'Y' )	{
+						if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+							$j_args = array (
+								'client'   => $eventinfo->user_id,
+								'event'    => $eventinfo->event_id,
+								'author'   => get_current_user_id(),
+								'type'     => 'Email Client',
+								'source'   => 'Admin',
+								'entry'    => 'Booking confirmation email sent to client'
+								);
+							if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+							?>
+							<p>Your booking confirmation email is on it's way!</p>
+							<?php
+						} // if( wp_mail ...
+					} // if( isset( $mdjm_options['boooking_conf_to_client'] )...
+					if( isset( $mdjm_options['boooking_conf_to_dj'] ) && $mdjm_options['boooking_conf_to_dj'] == 'Y' )	{
 						$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
 						$info = f_mdjm_prepare_email( $eventinfo, 'email_dj_confirm' );
 						wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
-					} // if( wp_mail ...
+					} // if( isset( $mdjm_options['boooking_conf_to_dj'] )...
 				} // else	{ /* Approve the contract */
 			} // if( isset( $_POST['submit'] ) )
 			
