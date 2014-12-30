@@ -182,10 +182,10 @@
     <td>
     <?php 
 	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
-		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['cost'] ); ?>" /> <span class="description">No &pound; symbol needed</span><?php
+		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['cost'] ); ?>" /> <span class="description">No <?php echo f_mdjm_currency(); ?> symbol needed</span><?php
 	}
 	else	{
-		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo $_POST['package_cost']; ?>" /> <span class="description">No &pound; symbol needed</span><?php
+		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo $_POST['package_cost']; ?>" /> <span class="description">No <?php echo f_mdjm_currency(); ?> symbol needed</span><?php
 	}
     ?>   
     </td>

@@ -429,7 +429,7 @@
         </tr>
         <tr>
         <th scope="row"><label for="event_cost">Cost:</label></th>
-        <td colspan="3">&pound;<input type="text" name="event_cost" id="event_cost" class="small-text" value="<?php echo $_POST['event_cost']; ?>" /> <span class="description">No currency symbol needed. Package &amp; add-on costs (if enabled) will be added automatically</span></td>
+        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="event_cost" id="event_cost" class="small-text" value="<?php echo $_POST['event_cost']; ?>" /> <span class="description">No currency symbol needed. Package &amp; add-on costs (if enabled) will be added automatically</span></td>
         </tr>
         <tr>
         <th scope="row"><label for="event_description">Description:</label></th>
@@ -645,11 +645,11 @@
         <table class="form-table">
         <tr>
         <th scope="row" width="20%"><label for="total_cost">Total Event Cost:</label></th>
-        <td colspan="3">&pound;<input type="text" name="total_cost" id="total_cost" value="<?php echo number_format( $total_cost, 2 ); ?>" /> <span class="description">Includes cost of packages and addons. Adjust if required.</span></td>
+        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="total_cost" id="total_cost" value="<?php echo number_format( $total_cost, 2 ); ?>" /> <span class="description">Includes cost of packages and addons. Adjust if required.</span></td>
         </tr>
         <tr>
         <th scope="row" width="20%"><label for="deposit">Deposit:</label></th>
-        <td colspan="3">&pound;<input type="text" name="deposit" id="deposit" value="<?php echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
+        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="deposit" id="deposit" value="<?php echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
         </tr>
         <?php
 		if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	{
@@ -792,7 +792,9 @@
         <table class="form-table">
         <tr>
         <th scope="row">Event ID:</th>
-        <td colspan="3"><?php echo $contract_id; ?></td>
+        <td><?php echo $contract_id; ?></td>
+        <th scope="row">Created:</th>
+        <td><?php echo date( 'd/m/Y', strtotime( $eventinfo->date_added ) ); ?></td>
         </tr>
         <tr>
         <th scope="row"><label for="user_id">Client:</label></th>
@@ -1049,9 +1051,9 @@
 		if( current_user_can( 'administrator' ) || dj_can( 'see_deposit' ) )	{
 		?>
             <tr>
-            <th scope="row"><label for="cost">Total Cost: &pound;</label></th>
+            <th scope="row"><label for="cost">Total Cost: <?php echo f_mdjm_currency(); ?></label></th>
             <td><input type="text" id="cost" class="regular-text" name="cost" value="<?php echo $eventinfo->cost; ?>" /></td>
-            <th scope="row"><label for="despoit">Deposit Amount: &pound;</label></th>
+            <th scope="row"><label for="despoit">Deposit Amount: <?php echo f_mdjm_currency(); ?></label></th>
             <td><input type="text" name="deposit" id="deposit" class="regular-text" value="<?php echo $eventinfo->deposit; ?>"></td>
             </tr>
             <tr>
@@ -1081,7 +1083,7 @@
 			?>
 			<tr>
             <th scope="row">Balance Due:</th>
-            <td colspan="3">&pound; <?php echo $eventinfo->cost - $eventinfo->deposit; ?></td>
+            <td colspan="3"><?php echo f_mdjm_currency() . $eventinfo->cost - $eventinfo->deposit; ?></td>
             </tr>	
             <?php
 		}
@@ -1097,7 +1099,7 @@
         	</select>
         </td>
         <th scope="row"><label for="contract_approved_date">Approved Date:</label></th>
-        <td><input type="text" class="custom_date" name="contract_approved_date" id="contract_approved_date" value="<?php if(! empty( $eventinfo->contract_approved_date ) ) echo date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) ); ?>" disabled="disabled"></td>
+        <td><input type="text" class="custom_date" name="contract_approved_date" id="contract_approved_date" value="<?php if( !empty( $eventinfo->contract_approved_date ) && $eventinfo->contract_status == 'Approved' ) echo date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) ); ?>" disabled="disabled"></td>
         </tr>
         <tr>
         <th scope="row"><label for="balance_status">Balance Paid?</label></th>
@@ -1290,7 +1292,13 @@
 		//echo date( 'H:i d M Y', wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) );
 		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
 		//f_mdjm_cron_balance_reminder();
-		echo $mdjm_options['system_email'];
+		
+		if( f_mdjm_available( '2014-12-29' ) )	{
+			echo 'Available';
+		}
+		else	{
+			echo 'Not Available';	
+		}
 		
 		exit;
 	}
@@ -1312,7 +1320,7 @@
 	}
 	
 	else	{ // Display the Events table
-		if( $_POST['submit'] != 'Next' || $_GET['action'] == 'convert_event' )	{
+		if( !isset( $_POST['submit'] ) || $_POST['submit'] != 'Next' || $_GET['action'] == 'convert_event' )	{
 			f_mdjm_render_events_table();
 		}
 	}

@@ -24,6 +24,20 @@
         <tr>
         <td>
         <table class="widefat" width="100%">
+        <?php
+		$lic_info = do_reg_check( 'check' );
+		if( !do_reg_check( 'check' ) || $lic_info[0] == 'XXXX' )	{
+			?>
+            <tr>
+            <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Licensing</td>
+            </tr>
+            <tr>
+            <td>You are currently running Mobile DJ Manager for WordPress in trial mode. Once your trial period expires, functionality will be restricted.<br /><br />
+            To avoid this, <a href="http://www.mydjplanner.co.uk/shop/" title="Request New Feature" target="_blank"> click here to purchase your license now</a></td>
+            </tr>
+            <?php	
+		}
+		?>
         <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new?</font></td>
         </tr>
@@ -45,6 +59,13 @@
         </tr>
         <tr>
         <td><a href="http://www.mydjplanner.co.uk/forums/forum/feature-requests/" title="Request New Feature" target="_blank">Request a new Feature</a></td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Ratings &amp; Reviews</td>
+        </tr>
+        <tr>
+        <td>Not rated <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank">Mobile DJ Manager for WordPress</a> yet?<br /><br />
+        We'd appreciate your support by submitting your rating and comments for our plugin. <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager/" title="Rate Mobile DJ Manager" target="_blank">Click Here</a> to submit your review now - Thanks :)</td>
         </tr>
         </table>
         </td>
@@ -363,6 +384,57 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         </td>
         <?php
 	} // f_mdjm_updated_to_0_9_8
+	
+/**************************************************
+				VERSION 0.9.9
+**************************************************/
+	function f_mdjm_updated_to_0_9_9()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Availability</font><br>
+		
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Internationalization</font><br>
+		<ui>
+        	<li>Added support for EUR (&euro;) and USD ($) as well as the default GBP (&pound;). Change within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> if required</li>
+            <li>You can now change the display name of the default <a href="<?php f_mdjm_admin_page( 'client_fields' ); ?>">Client Fields</a> to suit your locality i.e. change County to State or Post Code to Zip Code. Exceptions are First Name, Last Name and E-mail fields as these are defaut WordPress fields and not added by the MDJM plugin</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Dialogue Text</font><br>
+        With the release of <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_7">0.9.7</a> we introduced the ability for you to manipulate the text displayed to clients when they logged into the frontend of your website to access the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a>.<br /><br />
+        Text could only be changed on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank">home page</a> and the log in page, but we have now added the ability to also manipulate the text on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>" target="_blank">Playlist page</a>.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">System Emails</font><br>
+		Within the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> page you can now choose who system generated emails are sent from.<br /><br />
+        Select either <strong>Admin</strong> to have these emails sent with a from address of <?php echo $mdjm_options['company_name']; ?> &lt;<?php echo $mdjm_options['system_email']; ?>&gt; or <strong>Event DJ</strong> to have emails sent as DJ NAME &lt;dj's email address&gt;
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>Official support for WordPress 4.1</li>
+                <li>Automated Task "Complete Events" now checks the end time of the event as well as the date (<a href="http://www.mydjplanner.co.uk/forums/topic/completed-items/" target="_blank">bug report</a>)</li>
+                <li>Added <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Debugging</a> option to the <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Settings</a> page. Not recommended for use unless the Mobile DJ Manager for WordPress support team ask you to</li>
+                <li>Added Created Date to Edit Event screen to display the date the event was first loaded</li>
+                <li>Added Last Login time to the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ List</a></li>
+                <li>Improved uninstallation procedures</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_0_9_9
 	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{

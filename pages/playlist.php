@@ -7,7 +7,9 @@
 */
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
 	
-	global $wpdb, $mdjm_options;
+	global $wpdb, $mdjm_options, $mdjm_client_text;
+	
+	include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 
 	/* Check for form submission and add songs */
 	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Add' )	{
@@ -32,10 +34,28 @@
 		
 		if( $event && f_mdjm_is_playlist_open( $event->event_date ) )	{ // Event found
 			?>
-            <p>Welcome to the <?php echo WPMDJM_CO_NAME; ?> event playlist management system.</p>
-            <p>Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong><?php echo date( 'l, jS F Y', strtotime( $event->event_date ) ); ?></strong>.</p>
-            <p>Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>?mdjmeventid=<?php echo $event->event_guest_call ?>" target="_blank"><?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>?mdjmeventid=<?php echo $event->event_guest_call ?></a>.</p>
-            <p>You can view and remove any songs added by your guests below.</p>
+            <p>
+			<?php
+			/* WELCOME TEXT */
+			if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+				f_mdjm_client_text( 'playlist_welcome', $event->event_id );
+			}
+			else	{
+				echo 'Welcome to the ' . WPMDJM_CO_NAME . ' event playlist management system.';
+			}
+			?>
+			</p>
+            <p>
+            <?php
+			/* INTRO TEXT */
+			if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+				f_mdjm_client_text( 'playlist_intro', $event->event_id );
+			}
+			else	{
+				echo 'Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong>' . date( 'l, jS F Y', strtotime( $event->event_date ) ) . '</strong>.';
+			}
+			?>
+            </p>
 			<?php
 			
 			$total_events = f_mdjm_total_client_events_by_status( 'Approved' );
@@ -43,7 +63,17 @@
 			/* If client has more than one event, allow them to switch between events */
 			if( $total_events > 1 )	{
 				?>
-                <p>You are currently editing the playlist for your event on <?php echo date( 'l, jS F Y', strtotime( $event->event_date ) ); ?>. To edit the playlist for one of your other events, return to the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>"><?php echo WPMDJM_APP_NAME; ?> home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.</p>
+                <p>
+                <?php
+				/* EDITING PLAYLIST TEXT */
+				if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+					f_mdjm_client_text( 'playlist_edit', $event->event_id );
+				}
+				else	{
+					echo 'You are currently editing the playlist for your event on ' . date( 'l, jS F Y', strtotime( $event->event_date ) ) . '. To edit the playlist for one of your other events, return to the <a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '">' . WPMDJM_APP_NAME . ' home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.';
+				}
+				?>
+                </p>
                 <?php
 			} // if( $total_events > 1 )
 			/* Display the form to add songs to playlist */
@@ -86,6 +116,17 @@
 				$days_to_go = time() - strtotime( $eventinfo->event_date ); // Days until the event
 				?>
 				<p><strong>Additions to your playlist are disabled as your event is only <?php echo substr( floor( $days_to_go / ( 60*60*24 ) ), 1 ); ?> days away.</strong></p>
+                <p>
+                <?php
+				/* PLAYLIST CLOSED */
+				if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+					f_mdjm_client_text( 'playlist_closed', $event->event_id );
+				}
+				else	{
+					echo '<strong>Additions to your playlist are disabled as your event is only ' . substr( floor( $days_to_go / ( 60*60*24 ) ), 1 ) . ' days away.</strong>';
+				}
+				?>
+                </p>
                 <?php if( count( $playlist ) > 0 ) echo '<p>Existing playlist entries are displayed below.</p>'; ?>
             	<?php
 			}
@@ -136,8 +177,19 @@
 			}
 		}
 		else	{ // no event found
-			echo '<p>You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.</p>';
-			echo '<p>To begin planning your next event with us, please <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact us now</a>.</p>';
+			?>
+            <p>
+            <?php
+			/* PLAYLIST NO EVENTS */
+			if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+				f_mdjm_client_text( 'playlist_noevent' );
+			}
+			else	{
+				echo 'You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.</p><p>To begin planning your next event with us, please <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact us now</a>.';
+			}
+			?>
+            </p>
+            <?php
 		}
 	} // if( is_user_logged_in() )
 
@@ -151,12 +203,31 @@
 		else	{
 			$clientinfo = get_userdata( $eventinfo->user_id );	
 			?>
-            <p>Welcome to the <?php echo get_bloginfo( 'name' ); ?> playlist management system.</p>
+            <p>
+            <?php
+			/* GUEST WELCOME */
+			if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+				f_mdjm_client_text( 'playlist_guest_welcome', $eventinfo->event_id );
+			}
+			else	{
+				echo 'Welcome to the ' . get_bloginfo( 'name' ) . ' playlist management system.';
+			}
+			?>
+            </p>
             <?php
 			if( f_mdjm_is_playlist_open( $eventinfo->event_date ) )	{ // Open
 				?>
-				 <p>You are adding songs to the playlist for <?php echo $clientinfo->first_name . " " . $clientinfo->last_name; ?>'s event on <?php echo date("l, jS F Y",strtotime($eventinfo->event_date)); ?>.</p>
-                 <p>Add your playlist requests in the form below. All fields are required.</p>
+                <p>
+                <?php
+                /* GUEST ADD */
+                if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+                    f_mdjm_client_text( 'playlist_guest_intro', $eventinfo->event_id );
+                }
+                else	{
+                    echo 'You are adding songs to the playlist for ' . $clientinfo->first_name . ' ' . $clientinfo->last_name . '\'s event on ' . date("l, jS F Y",strtotime($eventinfo->event_date)) . '.</p><p>Add your playlist requests in the form below. All fields are required.';
+                }
+                ?>
+                </p>
 				<hr />
                 <form action="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . '?mdjmeventid=' . $_GET['mdjmeventid']; ?>" method="post" enctype="multipart/form-data" name="guest-playlist">
 				<input type="hidden" name="event_id" value="<?php echo $eventinfo->event_id; ?>" />
@@ -182,7 +253,17 @@
 			} // if( f_mdjm_is_playlist_open( $eventinfo->event_date ) )
 			else	{
 				?>
-                <p>This playlist is currently closed. No songs can be added at this time.</p>
+                <p>
+                <?php
+                /* GUEST ADD */
+                if( isset( $mdjm_client_text['custom_client_text'] ) && $mdjm_client_text['custom_client_text'] == 'Y' )	{
+                    f_mdjm_client_text( 'playlist_guest_closed', $eventinfo->event_id );
+                }
+                else	{
+                    echo 'This playlist is currently closed. No songs can be added at this time.';
+                }
+                ?>
+                </p>
                 <?php
 			} // 
 		} // if( count( $eventinfo ) == 0 )
@@ -199,5 +280,5 @@
 *
 */
 /* Displays the credit information in the footer if allowed */	
-	add_action( 'wp_footer', f_wpmdjm_print_credit );
+	add_action( 'wp_footer', 'f_wpmdjm_print_credit' );
 ?>

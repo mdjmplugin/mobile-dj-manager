@@ -86,15 +86,24 @@
 * @since 0.9.7
 * Shortcode replacement for frontend client text
 */
-	function f_mdjm_client_text ( $text )	{
+	function f_mdjm_client_text()	{
 		global $mdjm_options, $mdjm_client_text;
 		
-		$client = get_userdata( get_current_user_id() );
+		$args = func_get_args();
+		
+		if( !is_user_logged_in() && isset( $args[1] ) )	{
+			$eventinfo = f_mdjm_get_eventinfo_by_id( $args[1] );
+			$client = get_userdata( $eventinfo->user_id );
+		}
+		else	{
+			$client = get_userdata( get_current_user_id() );
+		}
 		
 		$search = array(
 						'{APPLICATION_HOME}',                         /* Client Home URL */
 						'{APPLICATION_NAME}',                         /* Application Name */
 						'{CLIENT_FIRSTNAME}',                         /* Client First Name */
+						'{CLIENT_LASTNAME}',                          /* Client's last name */
 						'{COMPANY_NAME}',                             /* Company Name */
 						'{CONTACT_PAGE}',                             /* Contact Page */
 						'{CONTRACT_PAGE}',                            /* Contract Page */
@@ -102,17 +111,51 @@
 						'{PROFILE_PAGE}',                             /* Profile Page */
 					);
 		$replace = array(
-						get_permalink( WPMDJM_CLIENT_HOME_PAGE ),      /* Client Home URL */
-						$mdjm_options['app_name'],                     /* Application Name */
-						$client->first_name,                           /* Client First Name */
-						WPMDJM_CO_NAME,                                /* Company Name */
-						get_permalink( WPMDJM_CONTACT_PAGE ),          /* Contact Page */
-						get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ),  /* Contract Page */
-						get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ),  /* Playlist Page */
-						get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ),   /* Profile Page */
+						get_permalink( WPMDJM_CLIENT_HOME_PAGE ),      /* {APPLICATION_HOME} */
+						$mdjm_options['app_name'],                     /* {APPLICATION_NAME} */
+						$client->first_name,                           /* {CLIENT_FIRSTNAME} */
+						$client->last_name,                            /* {CLIENT_LASTNAME} */
+						WPMDJM_CO_NAME,                                /* {COMPANY_NAME} */
+						get_permalink( WPMDJM_CONTACT_PAGE ),          /* {CONTACT_PAGE} */
+						get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ),  /* {CONTRACT_PAGE} */
+						get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ),  /* {PLAYLIST_PAGE} */
+						get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ),   /* {PROFILE_PAGE} */						
 					);
 					
-		echo nl2br( str_replace( $search, $replace, $mdjm_client_text[$text] ) );
+		if( isset( $args[1] ) )	{
+			$eventinfo = f_mdjm_get_eventinfo_by_id( $args[1] );
+			
+			/* Set the URL's */
+			if ( get_option('permalink_structure') )	{
+				$playlist_url = get_permalink( $mdjm_options['playlist_page'] ) . '?mdjmeventid=' . $eventinfo->event_guest_call;
+			}
+			else	{
+				$playlist_url = get_permalink( $mdjm_options['playlist_page'] ) . '&mdjmeventid=' . $eventinfo->event_guest_call;
+			}
+		
+			$event_search = array(
+						'{EVENT_TYPE}',           /* Event Type */
+						'{EVENT_DATE}',           /* Event Date (Long) */
+						'{EVENT_DATE_SHORT}',     /* Event Date (Short) */
+						'{START_TIME}',           /* Event Start Time */
+						'{END_TIME}',             /* Event End Time */
+						'{GUEST_PLAYLIST_URL}'    /* Guest Playlist URL */
+						);
+			$event_replace = array(
+						$eventinfo->event_type, /* {EVENT_TYPE} */
+						date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ),                    /* {EVENT_DATE} */
+						date( 'd/m/Y', strtotime( $eventinfo->event_date ) ),                        /* {EVENT_DATE_SHORT} */
+						date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ),  /* {START_TIME} */
+						date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {END_TIME} */
+						$playlist_url,                                                               /* {GUEST_PLAYLIST_URL} */
+						);
+						
+			/* We need to merge the arrays */
+			$search = array_merge( $search, $event_search );
+			$replace = array_merge( $replace, $event_replace );
+		}
+					
+		echo nl2br( str_replace( $search, $replace, $mdjm_client_text[$args[0]] ) );
 	}
 
 /****************************************************************************************************
@@ -423,18 +466,20 @@
 			
 			if( $status == 'Pending' )	{
 				$type = 'email_contract';
+				$set_from = $mdjm_options['contract_email_from'];
 				$subject = 'Your DJ Booking';
 				$j_entry = 'Contract Review email sent to client';
 				$message = 'Thank you. Your event has been updated and your contract has been issued. You will receive confirmation via email shortly.';
 			}
 			if( $status == 'Approved' )	{
 				$type = 'email_client_confirm';
+				$set_from = $mdjm_options['confirm_email_from'];
 				$subject = 'DJ Booking Confirmation';
 				$j_entry = 'Booking confirmation email sent to client';
 				$message = 'Thank you. Your event is now confirmed. You will receive confirmation via email shortly.';
 			}
 			
-			$email_headers = f_mdjm_client_email_headers( $eventinfo );
+			$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
 			$info = f_mdjm_prepare_email( $eventinfo, $type );
 			if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 				$j_args = array (

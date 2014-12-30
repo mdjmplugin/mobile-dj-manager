@@ -1,5 +1,6 @@
 <?php
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
+	include_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 /**************************************************************
 -	Display the admin menu
 **************************************************************/
@@ -14,6 +15,7 @@
 										'app_name',
 										'time_format',
 										'pass_length',
+										'currency',
 										'show_dashboard',
 										'journaling',
 										'multiple_dj',
@@ -27,8 +29,11 @@
 										'bcc_admin_to_client',
 										'contract_to_client',
 										'email_enquiry',
+										'enquiry_email_from',
 										'email_contract',
+										'contract_email_from',
 										'email_client_confirm',
+										'confirm_email_from',
 										'email_dj_confirm',
 										'title_as_subject',
 										'playlist_when',
@@ -54,7 +59,14 @@
 										'home_welcome',
 										'home_noevents',
 										'home_notactive',
-										
+										'playlist_welcome',
+										'playlist_intro',
+										'playlist_edit',
+										'playlist_closed',
+										'playlist_noevent',
+										'playlist_guest_welcome',
+										'playlist_guest_intro',
+										'playlist_guest_closed',
 									);
 		foreach( $admin_settings_field as $admin_setting_field_key )	{
 			if( !isset( $mdjm_options[$admin_setting_field_key] ) ) $mdjm_options[$admin_setting_field_key] = 'N';
@@ -129,6 +141,29 @@
 																				'10' => '10',
 																				'11' => '11',
 																				'12' => '12', ),
+														),
+									'section' => 'general',
+									'page' => 'settings',
+									); // pass_length
+									
+		$admin_fields['currency'] = array(
+									'display' => 'Currency',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'small-text',
+									'value' => $mdjm_options['currency'],
+									'text' => '',
+									'desc' => '',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[currency]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['currency'],
+														'list_type' => 'defined',
+														'list_values' => array( 'EUR' => '&euro;',
+																				'GBP' => '&pound;',
+																				'USD' => '$', ),
+														
+																		
 														),
 									'section' => 'general',
 									'page' => 'settings',
@@ -266,6 +301,26 @@
 									'page' => 'settings',
 									); // email_enquiry
 									
+		$admin_fields['enquiry_email_from'] = array(
+									'display' => 'Send Quote\'s From',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['enquiry_email_from'],
+									'text' => '',
+									'desc' => 'Select Admin to have quotes emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[enquiry_email_from]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['enquiry_email_from'],
+														'list_type' => 'defined',
+														'list_values' => array( 'admin' => 'Admin',
+																				'dj'    => 'Event DJ', ),
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // enquiry_email_from
+									
 		$admin_fields['email_contract'] = array(
 									'display' => 'Contract Template',
 									'key' => 'mdjm_plugin_settings',
@@ -284,6 +339,26 @@
 									'page' => 'settings',
 									); // email_contract
 									
+		$admin_fields['contract_email_from'] = array(
+									'display' => 'Send Contract Email From',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['contract_email_from'],
+									'text' => '',
+									'desc' => 'Select Admin to have contracts emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[contract_email_from]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['contract_email_from'],
+														'list_type' => 'defined',
+														'list_values' => array( 'admin' => 'Admin',
+																				'dj'    => 'Event DJ', ),
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // contract_email_from
+									
 		$admin_fields['email_client_confirm'] = array(
 									'display' => 'Client Booking Confirmation Template',
 									'key' => 'mdjm_plugin_settings',
@@ -301,6 +376,26 @@
 									'section' => 'email',
 									'page' => 'settings',
 									); // email_client_confirm
+									
+		$admin_fields['confirm_email_from'] = array(
+									'display' => 'Send Booking Confirmation From',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['confirm_email_from'],
+									'text' => '',
+									'desc' => 'Select Admin to have client booking confirmations emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[confirm_email_from]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['confirm_email_from'],
+														'list_type' => 'defined',
+														'list_values' => array( 'admin' => 'Admin',
+																				'dj'    => 'Event DJ', ),
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // contract_email_from
 									
 		$admin_fields['email_dj_confirm'] = array(
 									'display' => 'DJ Booking Confirmation Template',
@@ -736,6 +831,102 @@
 									'section' => 'home_page',
 									'page' => 'client-text',
 									); // home_notactive
+									
+		$admin_fields['playlist_welcome'] = array(
+									'display' => 'Playlist Welcome:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_welcome'],
+									'text' => '',
+									'desc' => 'Welcome text displayed to logged in users on the Playlist page',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_welcome
+									
+		$admin_fields['playlist_intro'] = array(
+									'display' => 'Playlist Intro:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_intro'],
+									'text' => '',
+									'desc' => 'Introduction text displayed on playlist page to logged in users',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_intro
+									
+		$admin_fields['playlist_edit'] = array(
+									'display' => 'Editing Playlist:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_edit'],
+									'text' => '',
+									'desc' => 'Text displayed to logged in user when editing an event playlist',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_edit
+									
+		$admin_fields['playlist_closed'] = array(
+									'display' => 'Playlist Closed:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_closed'],
+									'text' => '',
+									'desc' => 'Text displayed to logged in user when playlist is closed',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_closed
+									
+		$admin_fields['playlist_noevent'] = array(
+									'display' => 'No Active Events:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_noevent'],
+									'text' => '',
+									'desc' => 'Text displayed to logged in users who have no active events',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_noevent
+									
+		$admin_fields['playlist_guest_welcome'] = array(
+									'display' => 'Guest Welcome:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_guest_welcome'],
+									'text' => '',
+									'desc' => 'Welcome text displayed to guests',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_guest_welcome
+									
+		$admin_fields['playlist_guest_intro'] = array(
+									'display' => 'Guest Intro:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_guest_intro'],
+									'text' => '',
+									'desc' => 'Introduction text displayed on playlist page to guests',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_guest_intro
+									
+		$admin_fields['playlist_guest_closed'] = array(
+									'display' => 'Guest Playlist Closed:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'textarea',
+									'class' => '',
+									'value' => $mdjm_options['playlist_guest_closed'],
+									'text' => '',
+									'desc' => 'Text displayed to guests when playlist is closed',
+									'section' => 'playlist_page',
+									'page' => 'client-text',
+									); // playlist_guest_closed
 		
 		add_settings_section( 'mdjm_general_settings',
 							  '',
@@ -794,6 +985,11 @@
 							);
 		add_settings_section( 'mdjm_home_page_settings',
 							  'Home Page <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-client-text'
+							);
+		add_settings_section( 'mdjm_playlist_page_settings',
+							  'Playlist Page <hr />',
 							  'f_mdjm_desc',
 							  'mdjm-client-text'
 							);

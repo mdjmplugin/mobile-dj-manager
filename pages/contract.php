@@ -28,7 +28,7 @@
 					f_mdjm_client_approve_contract( $eventinfo, $_POST );
 					
 					require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php' );
-					$email_headers = f_mdjm_client_email_headers( $eventinfo );
+					$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['contract_email_from'] );
 					$info = f_mdjm_prepare_email( $eventinfo, 'email_client_confirm' );
 					if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
 						$subject = $info['subject'];	
@@ -139,5 +139,5 @@
 	}
 
 	/* Print the credit if set */
-	add_action( 'wp_footer', f_wpmdjm_print_credit );	
+	add_action( 'wp_footer', 'f_wpmdjm_print_credit' );	
 ?>

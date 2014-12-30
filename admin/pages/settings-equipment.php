@@ -271,7 +271,7 @@
         </tr>
         <tr>
         <th><label for="addon_cost">Cost as Add-on</label></th>
-        <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description">Cost of individual add-on. No &pound; sign required</span></td>
+        <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description">Cost of individual add-on. No <?php echo f_mdjm_currency(); ?> sign required</span></td>
         </tr>
         <?php
 		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{

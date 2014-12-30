@@ -18,7 +18,7 @@
 	function f_mdjm_client_home()	{
 		global $wpdb, $current_user, $mdjm_options, $mdjm_client_text;
 		
-		include_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		get_currentuserinfo();
 		$eventinfo = f_mdjm_get_client_events( $db_tbl, $current_user );
@@ -73,7 +73,7 @@
                     <tr>
                     <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>?action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( "d M Y", strtotime( $event->event_date ) ); ?></a></td>
                     <td align="left"><?php echo $event->event_type; ?></td>
-                    <td align="left">&pound;<?php echo $event->cost; ?></td>
+                    <td align="left"><?php echo f_mdjm_currency() . $event->cost; ?></td>
                     <td align="left"><?php echo $event->contract_status; ?></td>
                     <td align="left">
                     <select name="event_action">
@@ -300,17 +300,17 @@
              <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="10%" style="font-weight:bold">Total Price:</td>
-                <td width="23%">&pound;<?php echo $eventinfo->cost; ?></td>
+                <td width="23%"><?php echo f_mdjm_currency() . $eventinfo->cost; ?></td>
                 <td width="11%" style="font-weight:bold">Deposit <?php echo $eventinfo->deposit_status; ?>:</td>
-                <td width="22%">&pound;<?php echo $eventinfo->deposit; ?></td>
+                <td width="22%"><?php echo f_mdjm_currency() . $eventinfo->deposit; ?></td>
                 <td width="15%" style="font-weight:bold">Remaining:</td>
-                <td>&pound;
+                <td>
 				<?php
                 if( $eventinfo->deposit_status == "Paid" )	{
-					echo number_format( $eventinfo->cost - $eventinfo->deposit, 2 );
+					echo f_mdjm_currency() . number_format( $eventinfo->cost - $eventinfo->deposit, 2 );
 				}
 				else	{
-					echo number_format( $eventinfo->cost, 2 );	
+					echo f_mdjm_currency() . number_format( $eventinfo->cost, 2 );	
 				}
 				?>
 				</td>
@@ -356,9 +356,11 @@
 		}
 		
 		/* Client wants to view or sign contract */
-		if( isset( $_POST['event_action'] ) && $_POST['event_action'] == 'view_contract' || $_POST['event_action'] == 'sign_contract' )	{
-			wp_redirect( get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $_POST['event_id'] );
-			exit;	
+		if( isset( $_POST['event_action'] ) )	{
+			if( $_POST['event_action'] == 'view_contract' || $_POST['event_action'] == 'sign_contract' )	{
+				wp_redirect( get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $_POST['event_id'] );
+				exit;
+			}
 		}
 		
 		/* Display page */
@@ -379,5 +381,5 @@
 	}
 	
 	/* Print the credit if set */
-	add_action( 'wp_footer', f_wpmdjm_print_credit );
+	add_action( 'wp_footer', 'f_wpmdjm_print_credit' );
 ?>

@@ -10,6 +10,7 @@
 		// First check if the user is submitting the form
 		if( isset( $_POST['submit'] ) )	{	f_mdjm_update_user_profile();	}
 		get_currentuserinfo();
+		$custom_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		?>
         <p>Please keep your details up to date as incorrect information may cause problems with your event.</p>
         <form action="<?php get_permalink(); ?>" method="post" enctype="multipart/form-data" name="user-profile">
@@ -21,18 +22,17 @@
             <td width="35%"><input name="last_name" type="text" size="30" value="<?php echo $current_user->last_name; ?>" /></td>
           </tr>
           <tr>
-            <td width="15%" style="font-weight:bold">Phone Number:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['phone1']['label']; ?>:</td>
             <td width="35%"><input name="phone1" type="text" size="30" value="<?php echo $current_user->phone1; ?>" /></td>
-            <td width="15%" style="font-weight:bold">Alternative Phone:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['phone2']['label']; ?>:</td>
             <td width="35%"><input name="phone2" type="text" size="30" value="<?php echo $current_user->phone2; ?>" /></td>
           </tr>
           <tr>
             <td width="15%" style="font-weight:bold">Email Address:</td>
             <td><input name="user_email" type="text" size="30" value="<?php echo $current_user->user_email; ?>" /></td>
-            <td width="15%" style="font-weight:bold">Birthday:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['birthday']['label']; ?>:</td>
             <td><select name="birthday" id="birthday">
             	<?php
-				$custom_fields = get_option( WPMDJM_CLIENT_FIELDS );
 				$option_data = explode( ',', $custom_fields['birthday']['value'] );
 				?>
                 <option value="empty" selected></option>
@@ -47,30 +47,30 @@
             </td>
           </tr>
           <tr>
-            <td width="15%" style="font-weight:bold">Address Line 1:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['address1']['label']; ?>:</td>
             <td><input name="address1" type="text" size="30" value="<?php echo $current_user->address1; ?>" /></td>
             <td colspan="2" valign="bottom"><strong>Personal Preferences</strong><font size="-3"> (optional)</font></td>
           </tr>
             <tr>
-            <td width="15%" style="font-weight:bold">Address Line 2:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['address2']['label']; ?>:</td>
             <td><input name="address2" type="text" size="30" value="<?php echo $current_user->address2; ?>" /></td>
-            <td width="15%" align="right">Marketing Info?</td>
+            <td width="15%" align="right"><?php echo $custom_fields['marketing']['label']; ?></td>
             <td><input name="marketing" type="checkbox" value="Y" <?php if( isset( $current_user->marketing ) && $current_user->marketing == "Y" ) echo "checked" ?> /> <font style="font-size:9px">Your details will never be shared</style></td>
           </tr>
           <tr>
-            <td width="15%" style="font-weight:bold">Town/City:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['town']['label']; ?>:</td>
             <td><input name="town" type="text" size="30" value="<?php echo $current_user->town; ?>" /></td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
           <tr>
-            <td width="15%" style="font-weight:bold">County:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['county']['label']; ?>:</td>
             <td><input name="county" type="text" size="30" value="<?php echo $current_user->county; ?>" /></td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
           <tr>
-            <td width="15%" style="font-weight:bold">Post Code:</td>
+            <td width="15%" style="font-weight:bold"><?php echo $custom_fields['postcode']['label']; ?>:</td>
             <td><input name="postcode" type="text" size="30" value="<?php echo $current_user->postcode; ?>" /></td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -138,5 +138,5 @@
 	else	{ // User not logged in
 		f_mdjm_show_user_login_form();
 	}
-	add_action( 'wp_footer', f_wpmdjm_print_credit );
+	add_action( 'wp_footer', 'f_wpmdjm_print_credit' );
 ?>

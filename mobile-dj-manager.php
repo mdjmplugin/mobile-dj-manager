@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Management interface for mobile DJ's.
-Version: 0.9.8
-Date: 08 December 2014
+Version: 0.9.9
+Date: 30 December 2014
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -24,11 +24,11 @@ Author URI: http://www.mydjplanner.co.uk
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
-	$mdjm_db_version = '1.8'; // Used to determine if the DB Tables need updating
+	$mdjm_db_version = '1.9'; // Used to determine if the DB Tables need updating
 
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.9.8' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9.9' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
@@ -36,7 +36,21 @@ Author URI: http://www.mydjplanner.co.uk
 	define ( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 	define ( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
 	define ( 'WPMDJM_FETEXT_SETTINGS_KEY', 'mdjm_frontend_text' );
-
+	
+	/* Debugging */
+	$mdjm_debug = get_option( 'mdjm_debug' );
+	$cur_url = $_SERVER["REQUEST_URI"];
+	$is_mdjm = strpos( $cur_url, 'mdjm-' );
+	$is_post_email = strpos( $cur_url, 'post-type=email_template' );
+	$is_post_contract = strpos( $cur_url, 'post-type=contract' );
+	
+	if( $is_mdjm !== false || $is_post_email !== false || $is_post_contract !== false )	{
+		ini_set( 'log_errors', $mdjm_debug );
+		if( isset( $mdjm_debug ) && $mdjm_debug == '1' )	{
+			ini_set( 'error_log', WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-error.log');
+		}
+	}
+	
 	require_once WPMDJM_PLUGIN_DIR . '/admin/admin-functions.php';
 
 	f_mdjm_init();

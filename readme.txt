@@ -2,8 +2,8 @@
 Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
 Requires at least: 3.9.1
-Tested up to: 4.0.1
-Stable tag: 0.9.8
+Tested up to: 4.1
+Stable tag: 0.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,25 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 
 == Changelog ==
 
+= 0.9.9 =
+<h2Enhancements</h2>
+<li>Introduction of the Availability Checker & Management feature</li>
+<li>Added support for the EUR and USD currencies</li>
+<li>Added support for changing short date format</li>
+<li>Change the display name of default client fields</li>
+<li>Customise frontend text within the Playlist client zone pages</li>
+<li>Select who each of the system emails are from</li>
+<li>We have added the TinyMCE editor to the Settings textarea's where you can manipulate text displayed to your clients on your website enabling you to format text, add links etc. with ease</li>
+<li>Automated Task "Complete Events" now checks the end time of the event as well as the date</li>
+<li>Added Debugging option to the Settings page. Not recommended for use unless the Mobile DJ Manager for WordPress support team ask you to enable it</li>
+<li>Validate event date during event creation to ensure it is present and not in the past</li>
+<li>Added Created Date to Edit Event screen to display the date the event was first loaded</li>
+<li>Added Last Login time to the DJ List</li>
+<li>Date selectors now include drop downs to change month & year and also start on the day of the week configured within your WordPress settings (was previously always Sunday)</li>
+<li>Improved uninstallation procedures</li>
+<li>The Mobile DJ Manager widget on the main WP Dashboard no longer includes Failed Enquiries in Today's status</li>
+<li>Official support for WordPress 4.1</li>
+
 = 0.9.8 =
 <h2>Bug Fixes</h2>
 <li>Resetting Client Password during event creation was not always successful</li>
@@ -95,7 +114,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 	<li>If you have not enabled DJ's to add venues, they cannot view them either except in the event detail screen</li>
 	<li>Edit Venue button removed for DJ's that if they do not have permission to add a venue</li>
 	<li>As reported in <a href="http://www.mydjplanner.co.uk/forums/topic/error-message2/">this bug</a> depending on the PHP configuration of your web server, a warning message may have been displayed when Adding, Editing, or Deleting a venue. This did not affect functionality.</li>
-</ul>
+</ui>
 
 <h2>New & Enhanced Features</h2>
 <ui>

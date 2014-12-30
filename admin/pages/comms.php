@@ -96,7 +96,7 @@
 				$subject .= str_replace( $shortcode_content_search, $shortcode_content_replace, $_POST['subject'] );
 			}
 			else	{
-				$subject = $_POST['subject'];
+				$subject = stripslashes( $_POST['subject'] );
 			}
 			$info['content'] .= '</html></body>';
 			
@@ -215,7 +215,7 @@
 				while ( $email_query->have_posts() ) {
 					$email_query->the_post();
 					?>
-					<option value="<?php echo add_query_arg( array( 'template' => get_the_id() ) ); ?>"<?php selected( get_the_id(), $_GET['template'] ); ?>><?php echo get_the_title(); ?></option>
+					<option value="<?php echo add_query_arg( array( 'template' => get_the_id() ) ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( get_the_id(), $_GET['template'] ); } ?>><?php echo get_the_title(); ?></option>
                     <?php
 				}
 			}
@@ -232,19 +232,19 @@
 		<tr class="alternate">
 		<th class="row-title" align="left"><label for="to">Send email to:</label></th>
 		<td><select name="to" id="to" onChange="MM_jumpMenu('parent',this,0)">
-			<option value=""<?php if( !isset( $_GET['to_user'] ) || $_GET['to_user'] == '' ) echo 'selected="selected"'; ?>>Select a Recipient</option>
+			<option value="">Select a Recipient</option>
 		<?php
 		foreach( $clientinfo as $client )	{
 			if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $client->ID ) )	{ // Non-Admins only see their own clients
 				?>
-				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php selected( $client->ID, $_GET['to_user'] ); ?>>[CLIENT]: <?php echo $client->display_name; ?></option>
+				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $client->ID, $_GET['to_user'] ); } ?>>[CLIENT]: <?php echo $client->display_name; ?></option>
                 <?php
 			}
 		}
 		if( current_user_can( 'administrator' ) )	{ // Admins see DJ's too
 			foreach( $djinfo as $dj )	{
 				?>
-                <option value="<?php echo add_query_arg( array( 'to_user' => $dj->ID ) ); ?>"<?php selected( $dj->ID, $_GET['to_user'] ); ?>>[DJ]: <?php echo $dj->display_name; ?></option>
+                <option value="<?php echo add_query_arg( array( 'to_user' => $dj->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $dj->ID, $_GET['to_user'] ); } ?>>[DJ]: <?php echo $dj->display_name; ?></option>
                 <?php	
 			}
 		}
@@ -273,11 +273,13 @@
         <td><input type="checkbox" name="copy_sender" id="copy_sender" value="Y" checked="checked" /> <span class="description">Depending on your <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">settings</a>, the DJ and Admin may also receive a copy</span></td>
         </tr>
         <?php
-		if( user_can( $_GET['to_user'], 'dj' ) )	{ // Selected user is a DJ
-			$events = f_mdjm_get_dj_events( $_GET['to_user'] );
-		}
-		else	{
-			$events = f_mdjm_admin_get_client_events( $_GET['to_user'] );
+		if( isset( $_GET['to_user'] ) )	{
+			if( user_can( $_GET['to_user'], 'dj' ) )	{ // Selected user is a DJ
+				$events = f_mdjm_get_dj_events( $_GET['to_user'] );
+			}
+			else	{
+				$events = f_mdjm_admin_get_client_events( $_GET['to_user'] );
+			}
 		}
 		?>
         <tr class="alternate">
@@ -292,11 +294,11 @@
 		else	{
 			?>
 			<select name="event" id="event">
-			<option value="general"<?php selected( $_POST['event'], 'general' ); ?>>No Event (General Message)</option>
+			<option value="general"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], 'general' ); } ?>>No Event (General Message)</option>
             <?php
 			foreach( $events as $event )	{
 				?>
-				<option value="<?php echo $event->event_id; ?>"<?php selected( $_POST['event'], $event->event_id ); ?>><?php echo date( 'd/m/Y', strtotime( $event->event_date ) ) . ' from ' . date( $mdjm_options['time_format'], strtotime( $event->event_start ) ) . ' (' . $event->contract_status . ')'; ?></option>
+				<option value="<?php echo $event->event_id; ?>"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], $event->event_id ); } ?>><?php echo date( 'd/m/Y', strtotime( $event->event_date ) ) . ' from ' . date( $mdjm_options['time_format'], strtotime( $event->event_start ) ) . ' (' . $event->contract_status . ')'; ?></option>
 				<?php
 			}
 			echo '</select>';

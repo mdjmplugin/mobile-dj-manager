@@ -82,35 +82,35 @@
         <tr>
         <th scope="row"><label for="venue_name">Venue Name:</label></th>
         <td>
-        <input type="text" name="venue_name" id="venue_name" class="regular-text" value="<?php echo $_POST['venue_name']; ?>" /></td>
+        <input type="text" name="venue_name" id="venue_name" class="regular-text" value="<?php if( isset( $_POST['venue_name'] ) ) echo $_POST['venue_name']; ?>" /></td>
         <th scope="row"><label for="venue_contact">Contact Name:</label></th>
-        <td><input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php echo $_POST['venue_contact']; ?>" /></td>
+        <td><input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php if( isset( $_POST['venue_contact'] ) ) echo $_POST['venue_contact']; ?>" /></td>
         </tr>
         <tr>
         <th scope="row"><label for="venue_phone">Contact Phone:</label></th>
-        <td><input type="tel" name="venue_phone" id="venue_phonee" class="regular-text" value="<?php echo $_POST['venue_phone']; ?>" /></td>
+        <td><input type="tel" name="venue_phone" id="venue_phonee" class="regular-text" value="<?php if( isset( $_POST['venue_phone'] ) ) echo $_POST['venue_phone']; ?>" /></td>
         <th scope="row"><label for="venue_email">Contact Email:</label></th>
-        <td><input type="email" name="venue_email" id="venue_email" class="regular-text" value="<?php echo $_POST['venue_email']; ?>" /></td>
+        <td><input type="email" name="venue_email" id="venue_email" class="regular-text" value="<?php if( isset( $_POST['venue_email'] ) ) echo $_POST['venue_email']; ?>" /></td>
         </tr>
 		<tr>
         <th scope="row"><label for="venue_address1">Address Line 1:</label></th>
-        <td><input type="text" name="venue_address1" id="venue_address1" class="regular-text" value="<?php echo $_POST['venue_address1']; ?>" /></td>
+        <td><input type="text" name="venue_address1" id="venue_address1" class="regular-text" value="<?php if( isset( $_POST['venue_address1'] ) ) echo $_POST['venue_address1']; ?>" /></td>
         <th scope="row"><label for="venue_address2">Address Line 2:</label></th>
-        <td><input type="text" name="venue_address2" id="venue_address2" class="regular-text" value="<?php echo $_POST['venue_address2']; ?>" /></td>
+        <td><input type="text" name="venue_address2" id="venue_address2" class="regular-text" value="<?php if( isset( $_POST['venue_address2'] ) ) echo $_POST['venue_address2']; ?>" /></td>
         </tr>
         <tr>
         <th scope="row"><label for="venue_town">Town:</label></th>
-        <td><input type="text" name="venue_town" id="venue_town" class="regular-text" value="<?php echo $_POST['venue_town']; ?>" /></td>
+        <td><input type="text" name="venue_town" id="venue_town" class="regular-text" value="<?php if( isset( $_POST['venue_town'] ) ) echo $_POST['venue_town']; ?>" /></td>
         <th scope="row"><label for="venue_county">County:</label></th>
-        <td><input type="text" name="venue_county" id="venue_county" class="regular-text" value="<?php echo $_POST['venue_county']; ?>" /></td>
+        <td><input type="text" name="venue_county" id="venue_county" class="regular-text" value="<?php if( isset( $_POST['venue_county'] ) ) echo $_POST['venue_county']; ?>" /></td>
         </tr>
 		<tr>
         <th scope="row"><label for="venue_postcode">Post Code:</label></th>
-        <td colspan="3"><input type="text" name="venue_postcode" id="venue_postcode" class="regular-text" value="<?php echo $_POST['venue_postcode']; ?>" /></td>
+        <td colspan="3"><input type="text" name="venue_postcode" id="venue_postcode" class="regular-text" value="<?php if( isset( $_POST['venue_postcode'] ) ) echo $_POST['venue_postcode']; ?>" /></td>
         </tr>
 		<tr>
         <th scope="row"><label for="venue_information">Information:</label></th>
-        <td colspan="3"><textarea name="venue_information" id="venue_information" cols="80" rows="10"><?php echo $_POST['venue_information']; ?></textarea></td>
+        <td colspan="3"><textarea name="venue_information" id="venue_information" cols="80" rows="10"><?php if( isset( $_POST['venue_information'] ) ) echo $_POST['venue_information']; ?></textarea></td>
         </tr>
         <tr>
         <th scope="row"><?php if( do_reg_check( 'check' ) ) submit_button( 'Add Venue' ); ?></th>

@@ -208,12 +208,24 @@
 							KEY artist (artist),
 							KEY song (song)
 							) $charset_collate;";
+							
+		/* AVAILABILITY TABLE */
+		$holiday_sql = "CREATE TABLE ". $db_tbl['holiday'] . " (
+							id int(11) NOT NULL AUTO_INCREMENT,
+							user_id int(11) NOT NULL,
+							date_from date NOT NULL,
+							date_to date NOT NULL,
+							notes text NULL,
+							PRIMARY KEY  (id),
+							KEY user_id (user_id)
+							) $charset_collate;";
 				
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $events_sql );
 		dbDelta( $venues_sql );
 		dbDelta( $journal_sql );
 		dbDelta( $playlists_sql );
+		dbDelta( $holiday_sql );
 		
 		add_option( 'mdjm_db_version', $mdjm_db_version );
 	} // f_mdjm_db_install
@@ -246,6 +258,7 @@
 							'app_name'				=> 'Client Zone',
 							'time_format'             => 'H:i',
 							'pass_length'             => '8',
+							'currency'				=> 'GBP',
 							'show_dashboard'		  => 'Y',
 							'journaling'			  => 'Y',
 							'multiple_dj' 			 => 'N',
@@ -259,8 +272,11 @@
 							'bcc_admin_to_client' 	 => 'Y',
 							'contract_to_client' 	  => '',
 							'email_enquiry' 		   => $client_enquiry_post_id,
+							'enquiry_email_from'	  => 'admin',
 							'email_contract'		  => $client_contract_post_id,
+							'contract_email_from'	 =>'admin',
 							'email_client_confirm' 	=> $client_confirm_post_id,
+							'confirm_email_from'	  => 'admin',
 							'email_dj_confirm' 		=> $dj_confirm_post_id,
 							'title_as_subject'        => 'N',
 							'playlist_when' 		   => $playlist_when,
@@ -284,13 +300,7 @@
 									'dj_add_client'              => 'N',
 									'dj_disable_shortcode'       => array( '{ADMIN_NOTES}', '{DEPOSIT_AMOUNT}' ),
 									);
-		$mdjm_init_client_text = array(
-									'custom_client_text'  => 'N',
-									'not_logged_in'       => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
-									'home_welcome'        => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
-									'home_noevents'       => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
-									'home_notactive'      => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
-								);
+		
 		$mdjm_init_client_fields = array(
 									'address1' => array(
 													'label' => 'Address 1',
@@ -396,6 +406,7 @@
 		add_option( 'mdjm_plugin_permissions', $mdjm_init_permissions );
 		add_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_init_client_text );
 		add_option( 'mdjm_schedules', $mdjm_schedules );
+		add_option( 'mdjm_debug', '0' );
 		add_option( 'mdjm_updated', '0' );
 		
 		/* Add user roles */
@@ -587,6 +598,48 @@
 				/* Add the front end text option */
 				add_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
 			} // if( $current_version_mdjm == '0.9.6' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.7
+***************************************************/
+			if( $current_version_mdjm == '0.9.7' )	{
+				// No procedures
+			} // if( $current_version_mdjm == '0.9.7' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.8
+***************************************************/
+			if( $current_version_mdjm == '0.9.8' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+				
+				/* Add currency option */
+				$mdjm_options['currency'] = 'GBP';
+				$mdjm_options['enquiry_email_from'] = 'admin';
+				$mdjm_options['contract_email_from'] = 'admin';
+				$mdjm_options['confirm_email_from'] = 'admin';
+				
+				/* Add Frontend Text options */
+				$mdjm_frontend_text['custom_client_text']  = 'N';
+				$mdjm_frontend_text['not_logged_in'] = 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.';
+				$mdjm_frontend_text['home_welcome'] = 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.';
+				$mdjm_frontend_text['home_noevents'] = 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.';
+				$mdjm_frontend_text['home_notactive'] = 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.';
+				$mdjm_frontend_text['playlist_welcome'] = 'Welcome to the {COMPANY_NAME} event playlist management system.';
+				$mdjm_frontend_text['playlist_intro'] = 'Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong> {EVENT_DATE}</strong>.' . "\r\n\r\n" . 'Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="{GUEST_PLAYLIST_URL}" target="_blank">{GUEST_PLAYLIST_URL}</a>.' . "\r\n\r\n" . 'You can view and remove any songs added by your guests below.';
+				$mdjm_frontend_text['playlist_edit'] = 'You are currently editing the playlist for your event on {EVENT_DATE}. To edit the playlist for one of your other events, return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME} home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.';
+				$mdjm_frontend_text['playlist_closed'] = '<strong>Additions to your playlist are disabled as your event is taking place soon</strong>';
+				$mdjm_frontend_text['playlist_noevent'] = 'You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.' . "\r\n\r\n" . 'To begin planning your next event with us, please <a href="{CONTACT_PAGE}">contact us now</a>';
+				$mdjm_frontend_text['playlist_guest_welcome'] = 'Welcome to the {COMPANY_NAME} playlist management system.';
+				$mdjm_frontend_text['playlist_guest_intro'] = 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . "\r\n\r\n" . 'Add your playlist requests in the form below. All fields are required.';
+				$mdjm_frontend_text['playlist_guest_closed'] = 'This playlist is currently closed. No songs can be added at this time.';
+				
+				/* Update Options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
+				/* Add debug option */
+				add_option( 'mdjm_debug', '0' );
+			} // if( $current_version_mdjm == '0.9.8' )
 
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
@@ -600,6 +653,9 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 			
 			/* Make sure release notes are displayed */
 			update_option( 'mdjm_updated', '1' );
+			
+			/* Re-check Validility */
+			do_reg_check( 'set' );
 			
 			$message = 'Welcome to Mobile DJ Manager for WordPress version ' . WPMDJM_VERSION_NUM . '. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the release notes for this version</a>';
 			
@@ -879,10 +935,19 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'title' => 'Automated Tasks',
 					'href'  => admin_url( 'admin.php?page=mdjm-tasks' ),
 					'meta'  => array(
-						'title' => __( 'MDJM Settings' ),
+						'title' => __( 'Automated Tasks' ),
 					),
 				));
 			}
+			$admin_bar->add_menu( array(
+					'id'    => 'mdjm-availability',
+					'parent' => 'mdjm',
+					'title' => 'Availability',
+					'href'  => admin_url( 'admin.php?page=mdjm-availability' ),
+					'meta'  => array(
+						'title' => __( 'DJ Availability' ),
+					),
+				));
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm-clients',
 				'parent' => 'mdjm',
@@ -1091,7 +1156,9 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		$search = 'page=mdjm';
 		$pos = strpos( $str, $search );
 		if( $pos !== false )
-			echo '<p align="center" class="description">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
+			?>
+			<p align="center" class="description">Powered by <a style="color:#F90" href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
+            <?php
 	} // f_mdjm_admin_footer
 
 /*
@@ -1206,6 +1273,18 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		
 	} // f_mdjm_set_role
 	
+/*
+* f_mdjm_debug_notice
+* 18/12/2014
+* @since 0.9.9
+* Displays notice if debugging is enabled
+*/
+	function f_mdjm_debug_notice()	{
+		if( get_option( 'mdjm_debug' ) == '1' )	{
+			f_mdjm_update_notice( 'error', 'Debugging is enabled for Mobile DJ Manager for WordPress.<br />We do not recommend this setting being turned on unless you have been asked to do so by the Support team' );
+		}	
+	} // f_mdjm_debug_notice
+	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
  ***************************************************************************************************/
@@ -1245,6 +1324,8 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'hook_mdjm_hourly_schedule', 'f_mdjm_cron' ); // Run the MDJM scheduler
 	
 	add_action( 'init', 'f_mdjm_upload_playlist_schedule' ); // Check upload playlist schedule
+	
+	add_action( 'admin_notices', 'f_mdjm_debug_notice' ); // Display notice if debugging enabled
  
  /**
  * Actions for custom user fields

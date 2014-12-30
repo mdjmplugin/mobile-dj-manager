@@ -1,7 +1,7 @@
 <?php
 	class MDJM_Events_Table extends WP_List_Table	{
 		private function get_events()	{
-			global $wpdb, $display_query, $display;
+			global $wpdb, $mdjm_options, $display_query, $display;
 			include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			// Build the data query
 			$query = 'SELECT * FROM `'.$db_tbl['events'].'`';
@@ -10,7 +10,12 @@
 			else $display = 'active';
 			
 			/* If your not a site admin you only get your own events */
-			if( !current_user_can( 'manage_options' ) )	$djonly .= ' AND `event_dj` = ' . get_current_user_id();
+			if( !current_user_can( 'manage_options' ) )	{
+				$djonly = ' AND `event_dj` = ' . get_current_user_id();
+			}
+			else	{
+				$djonly = '';	
+			}
 			
 			$display_query['active'] = $query . " WHERE `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly;
 			$display_query['historic'] = $query . " WHERE (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')" . $djonly;
@@ -49,7 +54,7 @@
 									'event_dj' =>  $djinfo->display_name,
 									'event_type' => $event->event_type,
 									'contract_status' => $event->contract_status,
-									'cost' => '&pound;' . $event->cost,
+									'cost' => $mdjm_currency[$mdjm_options['currency']] . $event->cost,
 									'playlist' => $play_count,
 									'journal' => '<a href="' . $url . 'admin.php?page=mdjm-events&action=show_journal&event_id=' . $event->event_id . '">View</a>'
 								);
@@ -216,8 +221,11 @@
 		function column_playlist( $item ) {
 			if( $item['playlist'] != '0 Songs'	)	{
 				$actions['playlist'] = sprintf( '<a href="?page=%s&action=%s&event=%s">View</a>', $_REQUEST['page'], 'render_playlist_table', $item['event_id'] );
+				return sprintf( '%1$s %2$s', $item['playlist'], $this->row_actions( $actions ) );
 			}
-			return sprintf( '%1$s %2$s', $item['playlist'], $this->row_actions( $actions ) );
+			else	{
+				return '0 Songs';	
+			}
 		}
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table

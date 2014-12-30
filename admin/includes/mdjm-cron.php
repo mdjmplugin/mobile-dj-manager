@@ -134,7 +134,7 @@
 			&& $mdjm_schedules['complete-events']['nextrun'] <= time() )	{
 			
 			$cron_start = microtime(true);
-			$event_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `contract_status` = 'Approved' AND `event_date` <= DATE(NOW())";
+			$event_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `contract_status` = 'Approved' AND `event_date` <= DATE(NOW()) AND TIME(event_finish) < TIME(NOW())";
 			$eventlist = $wpdb->get_results( $event_query );
 			$notify = array();
 			$x = 0;
@@ -952,6 +952,7 @@
 */
 	function f_mdjm_cron_email( $cron_email_args )	{
 		global $mdjm_options;
+		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		if( $cron_email_args['type'] == 'client' )	{
 			$headers = f_mdjm_cron_get_fromaddr( $cron_email_args );
 			if( $cron_email_args['taskinfo']['options']['email_from'] == 'dj' )	{
@@ -1029,7 +1030,7 @@
 						$content .= 'Date: ' . $eventinfo['date'] . "\n";
 						$content .= 'Client: ' . $eventinfo['client'] . "\n";
 						$content .= 'DJ: ' . $cron_email_args['djinfo']->display_name . "\n";
-						$content .= 'Deposit: £' . $eventinfo['deposit'] . "\n";
+						$content .= 'Deposit: ' . $mdjm_currency[$mdjm_options['currency']] . $eventinfo['deposit'] . "\n";
 						$content .= '----------------------------------------';
 						$content .= '----------------------------------------' . "\n";
 					}
@@ -1044,7 +1045,7 @@
 						$content .= 'Date: ' . $eventinfo['date'] . "\n";
 						$content .= 'Client: ' . $eventinfo['client'] . "\n";
 						$content .= 'DJ: ' . $cron_email_args['djinfo']->display_name . "\n";
-						$content .= 'Balance Due: £' . $eventinfo['cost'] - $eventinfo['deposit'] . "\n";
+						$content .= 'Balance Due: ' . $mdjm_currency[$mdjm_options['currency']] . $eventinfo['cost'] - $eventinfo['deposit'] . "\n";
 						$content .= '----------------------------------------';
 						$content .= '----------------------------------------' . "\n";
 					}

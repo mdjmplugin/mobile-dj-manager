@@ -88,6 +88,7 @@
 
 	/* $mdjm_options, $eventinfo, $dj, $info MUST be set for the Shortcodes to work */
 	if( isset( $mdjm_options, $eventinfo, $dj, $info ) )	{
+		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		/* Set the URL's */
 		if ( get_option('permalink_structure') )	{
 			$contract_url = get_permalink( $mdjm_options['contracts_page'] ) . '?event_id=' . $eventinfo->event_id;
@@ -171,10 +172,10 @@
 							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {END_TIME} */
 							date( $mdjm_options['time_format'], strtotime( $eventinfo->dj_setup_time ) ), /* {DJ_SETUP_TIME} */
 							date( 'd/m/Y', strtotime( $eventinfo->dj_setup_date ) ), /* {DJ_SETUP_DATE} */
-							'&pound;' . number_format( $eventinfo->cost, 2 ), /* {TOTAL_COST} */
-							'&pound;' . number_format( $eventinfo->deposit, 2 ), /* {DEPOSIT} */
+							$mdjm_currency[$mdjm_options['currency']] . number_format( $eventinfo->cost, 2 ), /* {TOTAL_COST} */
+							$mdjm_currency[$mdjm_options['currency']] . number_format( $eventinfo->deposit, 2 ), /* {DEPOSIT} */
 							$deposit_status, /* {DEPOSIT_STATUS} */
-							'&pound;' . number_format( $balance, 2 ), /* {BALANCE} */
+							$mdjm_currency[$mdjm_options['currency']] . number_format( $balance, 2 ), /* {BALANCE} */
 							$eventinfo->event_description, /* {EVENT_DESCRIPTION} */
 							$eventinfo->dj_notes, /* {DJ_NOTES} */
 							$eventinfo->admin_notes, /* {ADMIN_NOTES} */

@@ -32,7 +32,13 @@
 		$client_fields[$_POST['field_id']]['checked'] = $checked;
 		$client_fields[$_POST['field_id']]['display'] = $display;
 		$client_fields[$_POST['field_id']]['desc'] = sanitize_text_field( $_POST['field_desc'] );
-		$client_fields[$_POST['field_id']]['default'] = false;
+		
+		if( $client_fields[$_POST['field_id']]['default'] == 1 )	{
+			$client_fields[$_POST['field_id']]['default'] = true;
+		}
+		else	{
+			$client_fields[$_POST['field_id']]['default'] = false;	
+		}
 
 		if( update_option( WPMDJM_CLIENT_FIELDS, $client_fields ) )	{
 			?>
@@ -113,7 +119,10 @@
 			echo '<td>' . $field['display'] . '</td>';
 			
 			echo '<td>';
-			if( $field['default'] != 1 ) echo '<a href="' . admin_url() . 'admin.php?page=mdjm-settings&tab=client_fields&action=edit_field&field=' . $field['id'] . '" class="add-new-h2">Edit</a> <a href="' . admin_url() . 'admin.php?page=mdjm-settings&tab=client_fields&action=del_field&field=' . $field['id'] . '" class="add-new-h2">Delete</a>'; else echo '&nbsp;';
+			echo '<a href="' . admin_url() . 'admin.php?page=mdjm-settings&tab=client_fields&action=edit_field&field=' . $field['id'] . '" class="add-new-h2">Edit</a>';
+			if( !isset( $field['default'] ) || $field['default'] != 1 )	{
+				echo ' <a href="' . admin_url() . 'admin.php?page=mdjm-settings&tab=client_fields&action=del_field&field=' . $field['id'] . '" class="add-new-h2">Delete</a>';
+			}
 			echo '</td>';
 			
             echo '</tr>';
@@ -136,31 +145,49 @@
             </tr>
             <tr>
                 <th><label for="field_id">Field ID</label></th>
-                <td><input type="text" name="field_id" id="field_id" value="<?php echo $client_fields[$_GET['field']]['id']; ?>" class="regular-text"  readonly /></td>
+                <td><input type="text" name="field_id" id="field_id" value="<?php echo $client_fields[$_GET['field']]['id']; ?>" class="regular-text" readonly="readonly" /></td>
             </tr>
             <tr>
                 <th><label for="field_type">Field Type</label></th>
-                <td><select name="field_type" id="field_type">
+                <td><select name="field_type" id="field_type"<?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 ) echo ' disabled="disabled"'; ?>>
                     <option value="text"<?php selected( 'text', $client_fields[$_GET['field']]['type'] ); ?>>Text</option>
                     <option value="checkbox"<?php selected( 'checkbox', $client_fields[$_GET['field']]['type'] ); ?>>Checkbox</option>
                     <option value="dropdown"<?php selected( 'dropdown', $client_fields[$_GET['field']]['type'] ); ?>>Dropdown</option>
+                    <?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 )	{
+						?>
+                        <input type="hidden" name="field_type" id="field_type" value="<?php echo $client_fields[$_GET['field']]['type']; ?>" />
+                        <?php	
+					}
+					?>
                 </td>
             </tr>
             <tr>
                 <th><label for="field_desc">Field Description</label></th>
-                <td><input type="text" name="field_desc" id="field_desc" value="<?php echo $client_fields[$_GET['field']]['desc']; ?>" class="regular-text" /></td>
+                <td><input type="text" name="field_desc" id="field_desc" value="<?php echo $client_fields[$_GET['field']]['desc']; ?>" class="regular-text"<?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 ) echo ' readonly="readonly"'; ?> /></td>
             </tr>
             <tr>
                 <th><label for="field_value">Value</label></th>
-                <td><input type="text" name="field_value" id="field_value" class="regular-text" value="<?php echo $client_fields[$_GET['field']]['value']; ?>" /><span class="description">Enter 'Y' for a checkbox. For a dropdown box, type all entries seperating each with a comma</span></td>
+                <td><input type="text" name="field_value" id="field_value" class="regular-text" value="<?php echo $client_fields[$_GET['field']]['value']; ?>"<?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 ) echo ' readonly="readonly"'; ?> /><span class="description">Enter 'Y' for a checkbox. For a dropdown box, type all entries seperating each with a comma</span></td>
             </tr>
             <tr>
                 <th><label for="field_checked">Checked?</label></th>
-                <td><input type="checkbox" name="field_checked" id="field_checked" value="<?php echo $client_fields[$_GET['field']]['value']; ?>"<?php checked( ' checked', $client_fields[$_GET['field']]['checked'] ); ?> /></td>
+                <td><input type="checkbox" name="field_checked" id="field_checked" value="<?php echo $client_fields[$_GET['field']]['value']; ?>"<?php checked( ' checked', $client_fields[$_GET['field']]['checked'] ); ?><?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 ) echo ' disabled="disabled"'; ?> /></td>
+                <?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 )	{
+					?>
+                    <input type="hidden" name="field_checked" id="field_checked" value="<?php echo $client_fields[$_GET['field']]['checked']; ?>" />
+                    <?php	
+				}
+				?>
             </tr>
             <tr>
                 <th><label for="field_enabled">Enabled</label></th>
-                <td><input type="checkbox" name="field_enabled" id="field_enabled" value="Y"<?php checked( 'Y', $client_fields[$_GET['field']]['display'] ); ?> /></td>
+                <td><input type="checkbox" name="field_enabled" id="field_enabled" value="Y"<?php checked( 'Y', $client_fields[$_GET['field']]['display'] ); ?><?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 ) echo ' disabled="disabled"'; ?> /></td>
+                <?php if( isset( $client_fields[$_GET['field']]['default'] ) && $client_fields[$_GET['field']]['default'] == 1 )	{
+					?>
+                    <input type="hidden" name="field_enabled" id="field_enabled" value="<?php echo $client_fields[$_GET['field']]['display']; ?>" />
+                    <?php	
+				}
+				?>
             </tr>
             <?php
 		}

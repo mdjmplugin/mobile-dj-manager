@@ -4,7 +4,7 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
+	/* If recently updated, display the release notes */
 	f_mdjm_has_updated();
 
 	function mdjm_dashboard() {
@@ -51,14 +51,14 @@
 			?>
           <tr>
             <td>Potential Earnings: </td>
-            <td>&pound;<?php echo number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
+            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
           </tr>
           <?php
 		}
 		  ?>
           <tr>
             <td>Earnings so Far:</td>
-            <td>&pound;<?php echo number_format( $dash_dj['month_earn'], 2 ); ?></td>
+            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['month_earn'], 2 ); ?></td>
           </tr>
           <tr>
             <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
@@ -84,14 +84,14 @@
 			  ?>
           <tr>
             <td>Potential Earnings:</td>
-            <td>£<?php echo number_format( $dash_dj['potential_year_earn'], 2 ); ?></td>
+            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['potential_year_earn'], 2 ); ?></td>
           </tr>
           <?php
 		  }
 		  ?>
           <tr>
             <td>Earnings so Far:</td>
-            <td>£<?php echo number_format( $dash_dj['year_earn'], 2 ); ?></td>
+            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['year_earn'], 2 ); ?></td>
           </tr>
             </table>
         </td>
@@ -167,11 +167,11 @@
                 </tr>
                 <tr>
                 <td>Potential Earnings:</td>
-                <td>&pound;<?php echo number_format( $dash_emp['potential_month_earn'], 2 ); ?></td>
+                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['potential_month_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td>Earnings so Far:</td>
-                <td>&pound;<?php echo number_format( $dash_emp['month_earn'], 2 ); ?></td>
+                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['month_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td colspan="2" class="alternate"><strong>Annual Employer Overview for <?php echo date( 'Y' ); ?></strong></td>
@@ -190,11 +190,11 @@
                 </tr>
                 <tr>
                 <td>Potential Earnings:</td>
-                <td>&pound;<?php echo number_format( $dash_emp['potential_year_earn'], 2 ); ?></td>
+                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['potential_year_earn'], 2 ); ?></td>
                 </tr>
                 <tr>
                 <td>Earnings so Far:</td>
-                <td>&pound;<?php echo number_format( $dash_emp['year_earn'], 2 ); ?></td>
+                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['year_earn'], 2 ); ?></td>
                 </tr>
                 </table></td>
                 <td width="40%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">

@@ -25,12 +25,7 @@
             <a href="admin.php?page=mdjm-settings&tab=permissions" class="nav-tab <?php echo $active_tab == 'permissions' ? 'nav-tab-active' : ''; ?>">Permissions</a>
             <a href="admin.php?page=mdjm-settings&tab=client_text" class="nav-tab <?php echo $active_tab == 'client_text' ? 'nav-tab-active' : ''; ?>">Client Dialogue</a>
             <a href="admin.php?page=mdjm-settings&tab=client_fields" class="nav-tab <?php echo $active_tab == 'client_fields' ? 'nav-tab-active' : ''; ?>">Client Fields</a>
-            <?php
-/*******************************************************************************************
-		REMOVED SINCE 0.9.7
-            <a href="admin.php?page=mdjm-settings&tab=scheduler" class="nav-tab <?php echo $active_tab == 'scheduler' ? 'nav-tab-active' : ''; ?>">Scheduler</a>
-*******************************************************************************************/
-			?>
+            <a href="admin.php?page=mdjm-settings&tab=debugging" class="nav-tab <?php echo $active_tab == 'debugging' ? 'nav-tab-active' : ''; ?>">Debugging</a>
         </h2>
              <?php
 			$lic_info = do_reg_check( 'check' );
@@ -78,6 +73,9 @@
 			}
 			elseif( $active_tab == 'scheduler' )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-scheduler.php' );
+			}
+			elseif( $active_tab == 'debugging' )	{
+				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-debugging.php' );
 			}
 			else	{
 				wp_die( 'You do not have the necessary permissions to view this page!' );

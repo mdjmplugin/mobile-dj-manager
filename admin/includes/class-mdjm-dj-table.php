@@ -20,13 +20,17 @@
 				else	{
 					$event_link = $info['next_event'];
 				}
+				$last_login = strtotime( get_user_meta( $dj->ID, 'last_login', true ) );
+				if( !$last_login ) $last_login = 'Never';
+				else $last_login = date( 'H:i d M Y', $last_login );
 				$dj_data[] = array(
-									'dj_id' => $dj->ID,
-									'dj_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $dj->ID . '">' . $dj->display_name . '</a>',
-									'dj_email' => '<a href="mailto:' . $dj->user_email . '">' . $dj->user_email . '</a>',
-									'dj_active_events' => $info['active_events'],
-									'dj_all_events' => $info['all_events'],
-									'dj_next_event' => $event_link,
+									'dj_id'             => $dj->ID,
+									'dj_name'           => '<a href="' . $url . 'user-edit.php?user_id=' . $dj->ID . '">' . $dj->display_name . '</a>',
+									'dj_email'          => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ). $dj->ID . '">' . $dj->user_email . '</a>',
+									'dj_last_login'     => $last_login,
+									'dj_active_events'  => $info['active_events'],
+									'dj_all_events'     => $info['all_events'],
+									'dj_next_event'     => $event_link,
 									'dj_open_enquiries' => $info['enquiries'],
 									);
 			}
@@ -41,6 +45,7 @@
 			echo '<style type="text/css">';
 			echo '.wp-list-table .column-dj_name { width: 15%; }';
 			echo '.wp-list-table .column-dj_email { width: 15%; }';
+			echo '.wp-list-table .column-dj_last_login { width: 10%; }';
 			echo '.wp-list-table .column-dj_active_events { width: 10%; }';
 			echo '.wp-list-table .column-dj_all_events { width: 10%; }';
 			echo '.wp-list-table .column-dj_next_event { width: 20%; }';
@@ -67,6 +72,7 @@
 			switch( $column_name )	{ 
 				case 'dj_name':
 				case 'dj_email':
+				case 'dj_last_login':
 				case 'dj_active_events':
 				case 'dj_all_events':
 				case 'dj_next_event':
@@ -82,6 +88,7 @@
 			if( current_user_can( 'administrator' ) ) $columns['cb'] = '<input type="checkbox" />';
 			$columns['dj_name'] = __( '<strong>Name</strong>', 'mdjmdjtable' );
 			$columns['dj_email'] = __( '<strong>Email</strong>', 'mdjmdjtable' );
+			$columns['dj_last_login'] = __( '<strong>Last Login</strong>', 'mdjmdjtable' );
 			$columns['dj_active_events'] = __( '<strong>Active Events</strong>', 'mdjmdjtable' );
 			$columns['dj_all_events'] = __( '<strong>Total Events</strong>', 'mdjmdjtable' );
 			$columns['dj_next_event'] = __( '<strong>Next Event</strong>', 'mdjmdjtable' );
@@ -93,6 +100,7 @@
 			$sortable_columns = array(
 			'dj_name'   => array( 'dj_name', true ),
 			'dj_email'   => array( 'dj_email', false ),
+			'dj_email'   => array( 'dj_last_login', false ),
 			'dj_active_events'   => array( 'active_events', false ),
 			'dj_all_events'   => array( 'all_events', false ),
 			'dj_next_event' => array( 'dj_next_event', false ),

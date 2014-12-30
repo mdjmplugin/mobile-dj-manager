@@ -1,7 +1,7 @@
 <?php
 	class MDJM_Clients_Table extends WP_List_Table	{
 		private function get_clients()	{
-			global $wpdb, $display;
+			global $wpdb, $display, $order, $orderby;
 			
 			if (isset ( $_GET['display'] ) ) $display = $_GET['display'];
 			else $display = 'client';
@@ -111,7 +111,7 @@
 		} // column_default
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
-			global $wpdb, $display_query, $display;
+			global $wpdb, $display_query, $display, $order, $orderby;
 			$active_clients = f_mdjm_get_clients( 'client', $orderby, $order );
 			$inactive_clients = f_mdjm_get_clients( 'inactive_client', $orderby, $order );
 			if( isset( $which ) && $which == "top" ){ // Before table
