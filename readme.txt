@@ -78,7 +78,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 
 == Changelog ==
 = 0.9.9 =
-<h2Enhancements</h2>
+<h2>Enhancements</h2>
 <li>Introduction of the Availability Checker & Management feature</li>
 <li>Added support for the EUR and USD currencies</li>
 <li>Added support for changing short date format</li>
