@@ -156,7 +156,7 @@
 					print( '<td>' . stripslashes( $entry->artist ) . '</td>' );
 					print( '<td>' . stripslashes( $entry->play_when ) . ' </td>' );
 					print( '<td>' . stripslashes( nl2br( htmlentities( $entry->info ) ) ) . '</td>' );
-					print( '<td>' . stripslashes( $entry->added_by ) . ' (' . date( 'd/m/Y', strtotime( $entry->date_added ) ) . ')</td>' );
+					print( '<td>' . stripslashes( $entry->added_by ) . ' (' . date( $mdjm_options['short_date_format'], strtotime( $entry->date_added ) ) . ')</td>' );
 					print( '<td>' );
 					if( f_mdjm_is_playlist_open( $event->event_date ) )	{
 						print( '<a href="' . get_permalink() . '?playlist_id=' . $entry->id . '">Remove</a>' );

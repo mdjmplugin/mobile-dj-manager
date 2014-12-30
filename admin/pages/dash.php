@@ -13,6 +13,15 @@
 		$events = f_mdjm_dj_get_events( $current_user->ID );
 		$days_to_go = time() - strtotime( $events['next_event'] )
 ?>
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=832846726735750&version=v2.0";
+			  fjs.parentNode.insertBefore(js, fjs);
+        }	(document, 'script', 'facebook-jssdk'));
+        </script>
         <div class="wrap">
         <h2>Mobile DJ Manager - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h2>
         <hr />
@@ -131,6 +140,11 @@
               <tr>
                   <td>To do list</td>
                   <td>(coming soon)</td>
+              </tr>
+              <tr>
+                  <td colspan="2"><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
+<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script><br />
+<div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
               </tr>
               <tr class="alternate">
                 <td colspan="2"><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3 ) ); ?></td>

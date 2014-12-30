@@ -45,9 +45,9 @@ Author URI: http://www.mydjplanner.co.uk
 	$is_post_contract = strpos( $cur_url, 'post-type=contract' );
 	
 	if( $is_mdjm !== false || $is_post_email !== false || $is_post_contract !== false )	{
-		ini_set( 'log_errors', $mdjm_debug );
 		if( isset( $mdjm_debug ) && $mdjm_debug == '1' )	{
 			ini_set( 'error_log', WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-error.log');
+			ini_set( 'log_errors', $mdjm_debug );
 		}
 	}
 	

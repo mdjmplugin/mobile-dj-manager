@@ -71,7 +71,7 @@
                     <input type="hidden" name="action" value="view_event" />
                     <input type="hidden" name="event_id" value="<?php echo $event->event_id; ?>" />
                     <tr>
-                    <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>?action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( "d M Y", strtotime( $event->event_date ) ); ?></a></td>
+                    <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>?action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( $mdjm_options['short_date_format'], strtotime( $event->event_date ) ); ?></a></td>
                     <td align="left"><?php echo $event->event_type; ?></td>
                     <td align="left"><?php echo f_mdjm_currency() . $event->cost; ?></td>
                     <td align="left"><?php echo $event->contract_status; ?></td>
@@ -214,7 +214,7 @@
 				$event_status = $eventinfo->contract_status;
 				if( $event_status == 'Approved' )	{
 					$event_status = 'Confirmed';
-					$action_item = date( "d/m/Y", strtotime( $eventinfo->contract_approved_date ) );
+					$action_item = date( $mdjm_options['short_date_format'], strtotime( $eventinfo->contract_approved_date ) );
 				}
 				if( $event_status == 'Enquiry' )	{
 					$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '?action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book this Event</a>';
@@ -230,7 +230,7 @@
                </tr>
                <tr>
                 <td width="15%" style="font-weight:bold">Date of Event:</td>
-                <td width="35%"><?php echo date( "d/m/Y", strtotime( $eventinfo->event_date ) )." (".substr( floor( $days_to_go / ( 60*60*24 ) ) ,1 )." days to go!)"; ?></td>
+                <td width="35%"><?php echo date( $mdjm_options['short_date_format'], strtotime( $eventinfo->event_date ) )." (".substr( floor( $days_to_go / ( 60*60*24 ) ) ,1 )." days to go!)"; ?></td>
                 <td width="15%" style="font-weight:bold">Type of Event:</td>
                 <td width="35%"><?php echo $eventinfo->event_type; ?></td>
                </tr>

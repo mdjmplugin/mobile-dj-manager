@@ -400,6 +400,7 @@
 			$holiday_sql = "CREATE TABLE ". $db_tbl['holiday'] . " (
 								id int(11) NOT NULL AUTO_INCREMENT,
 								user_id int(11) NOT NULL,
+								entry_id varchar(100) NOT NULL,
 								date_from date NOT NULL,
 								date_to date NOT NULL,
 								notes text NULL,
@@ -458,6 +459,60 @@
 		echo '<p>' . $message . '</p>';
 		echo '</div>';
 	} // f_mdjm_update_notice
+
+/****************************************************************************************************
+--	GENERAL FUNCTIONS
+****************************************************************************************************/
+/*
+* f_mdjm_all_dates_in_range
+* 21/12/2014
+* @since 0.9.9
+* Returns all dates between 2 given dates as an array
+*/
+	function f_mdjm_all_dates_in_range( $from_date, $to_date )	{
+		$from_date = \DateTime::createFromFormat( 'Y-m-d', $from_date );
+		$to_date = \DateTime::createFromFormat( 'Y-m-d', $to_date );
+		return new \DatePeriod(
+			$from_date,
+			new \DateInterval( 'P1D' ),
+			$to_date->modify( '+1 day' )
+		);
+	} // f_mdjm_all_dates_in_range
+	
+/*
+* f_mdjm_short_date_jquery
+* 27/12/2014
+* @since 0.9.9
+* Sets the correct display date for the jQuery Date Picker
+*/
+	function f_mdjm_short_date_jquery()	{
+		global $mdjm_options;
+		
+		if( !isset( $mdjm_options['short_date_format'] ) || empty( $mdjm_options['short_date_format'] ) )	{
+			$short_date_format = 'd/m/Y';
+		}
+		if( $mdjm_options['short_date_format'] == 'd/m/Y' )	{
+			$short_date_format = 'dd/mm/yy';
+		}
+		elseif( $mdjm_options['short_date_format'] == 'm/d/Y' )	{
+			$short_date_format = 'mm/dd/yy';	
+		}
+		elseif( $mdjm_options['short_date_format'] == 'Y/m/d' )	{
+			$short_date_format = 'yy/mm/dd';	
+		}
+		elseif( $mdjm_options['short_date_format'] == 'd-m-Y' )	{
+			$short_date_format = 'dd-mm-yy';
+		}
+		elseif( $mdjm_options['short_date_format'] == 'm-d-Y' )	{
+			$short_date_format = 'mm-dd-yy';	
+		}
+		elseif( $mdjm_options['short_date_format'] == 'Y-m-d' )	{
+			$short_date_format = 'yy-mm-dd';	
+		}
+		
+		echo $short_date_format;
+		
+	} // f_mdjm_short_date_jquery
 
 /****************************************************************************************************
 --	EVENT FUNCTIONS
@@ -1588,18 +1643,25 @@
 * @since 0.9.9
 * Checks for availability on given date
 */
-	function f_mdjm_available( $enquiry_date )	{
+	function f_mdjm_available()	{
 		global $wpdb, $mdjm_options;
 		
-		/* Get list of DJ's */
-		$djs = f_mdjm_get_djs();
-		$dj_count = count( $djs );
+		$args = func_get_args();
 		
+		if( func_num_args() == 1 )	{ // Assume no DJ passed
+			/* Get list of DJ's */
+			$djs = f_mdjm_get_djs();
+		}
+		else	{
+			$djs = get_userdata( $args[1] );
+		}
+		
+		$dj_count = count( $djs );
 		$available_dj = array();
 		$can_work = array();
 		/* Check holiday table */
 		foreach( $djs as $dj )	{
-			if( !f_mdjm_dj_on_holiday( $dj->ID, $enquiry_date ) )	{
+			if( !f_mdjm_dj_on_holiday( $dj->ID, $args[0] ) )	{
 				$dj_count = $dj_count - 1;
 			}
 			else	{
@@ -1609,22 +1671,109 @@
 		if( $dj_count > 0 )	{
 			/* Check if DJ is working */
 			foreach( $available_dj as $dj )	{
-				if( f_mdjm_dj_is_working( $dj, $enquiry_date ) )	{
+				if( f_mdjm_dj_is_working( $dj, $args[0] ) )	{
 					$dj_count = $dj_count - 1;
-					
 				}
 				else	{
-					$can_work[] = $dj->ID;
+					$can_work[] = $dj;
 				}
 			}
 		}
-		if( count( $can_work ) == 0 )	{ // No DJ's available
+		if( count( $can_work ) == '0' || empty( $can_work[0] ) )	{ // No DJ's available
 			return false;	
 		}
 		else	{
-			return true;	
+			return $can_work;	
 		}
 	} // f_mdjm_availabile
+	
+/*
+* get_availability_activity
+* 21/12/2014
+* @since 0.9.9
+* Displays the bookings and holidays for all DJ's
+*/
+	function get_availability_activity( $month, $year )	{
+		global $wpdb, $mdjm_options;
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( $month == '12' )	{
+			$next_month = '1';
+			$mk_year = $year + 1;
+		}
+		else	{
+			$next_month = $month + 1;
+			$mk_year = $year;
+		}
+		if( date( 'Y-m', strtotime( $year . '-' . $month ) ) == date( 'Y-m' ) )	{
+			$first_day = date( 'Y-m-d' );
+			$last_day = date( 'Y-m-d', strtotime( '+1 month' ) );
+		}
+		else	{
+			$first_day = date( 'Y-m-d', strtotime( $year . '-' . $month . '-01' ) );
+			$last_day = date( 'Y-m-t', mktime( 0, 0, 0, $next_month, 0, $mk_year ) );
+		}
+		
+		$date_range = f_mdjm_all_dates_in_range( $first_day, $last_day );
+		/* Loop through the days */
+		foreach( $date_range as $day )	{
+			if( !current_user_can( 'administrator' ) )	{
+				$work_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `contract_status` != 'Failed Enquiry' AND `contract_status` != 'Cancelled' AND DATE(event_date) = '" . $day->format( 'Y-m-d' ) . "' AND `event_dj` = '" . get_current_user_id() . "'";
+				
+				$hol_query = "SELECT * FROM " . $db_tbl['holiday'] . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "' AND `user_id` = '" . get_current_user_id() . "'";
+			}
+			else	{
+				$work_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `contract_status` != 'Failed Enquiry' AND `contract_status` != 'Cancelled' AND DATE(event_date) = '" . $day->format( 'Y-m-d' ) . "'";
+				
+				$hol_query = "SELECT * FROM " . $db_tbl['holiday'] . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "'";
+			}
+			/* Work Query */
+			$work_result = $wpdb->get_results( $work_query );
+			
+			/* Holiday Query */
+			$hol_result = $wpdb->get_results( $hol_query );
+			/* Print results */
+			$result_array = array();
+			if( $work_result || $hol_result )	{
+				$have_result = true;
+				?>
+				<tr class="alternate">
+				<td colspan="2"><strong><font class="code"><?php echo date( 'l, jS F Y', strtotime( $day->format( 'Y-m-d' ) ) ); ?></strong></font></td>
+				</tr>
+                <?php
+			}
+			if( $work_result )	{
+				foreach( $work_result as $event )	{
+					$dj = get_userdata( $event->event_dj );
+					?>
+					<tr><td width="25%"><strong><?php echo $dj->display_name; ?></strong></td>
+					<td><a href="<?php echo f_mdjm_admin_page( 'events' ); ?>&action=view_event_form&event_id=<?php echo $event->event_id; ?>">Event ID <?php echo $event->event_id . '</a> (' . $event->contract_status . ')'; ?> from <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_start ) ); ?> to <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_finish ) ); ?></td></tr>
+                    <?php
+				}
+			}
+			if( $hol_result )	{
+				foreach( $hol_result as $holiday )	{
+					$dj = get_userdata( $holiday->user_id );
+					?>
+					<tr>
+                    <td width="25%"><strong><?php echo $dj->display_name; ?></strong></td>
+					<td>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) ) echo ' - ' . $holiday->notes; ?></td>
+                    </tr>
+                    <?php
+				}
+			}
+		} // foreach( $date_range as $day )
+		if( !isset( $have_result ) )	{
+			?>
+			<tr class="alternate">
+            <td colspan="2"><strong>There is currently no activity during <?php echo date( 'F Y', strtotime( $year. '-' . $month . '-01' ) ); ?></strong></td>
+            </tr>
+            <?php			
+		}
+		
+	} // get_availability_activity
 	
 /****************************************************************************************************
 --	AVAILABILITY FUNCTIONS
@@ -1639,22 +1788,23 @@
 		global $wpdb;
 		if( !isset( $db_tbl ) )
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
-		if ( $wpdb->insert( $db_tbl['holiday'],
+		
+		$date_range = f_mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+		foreach( $date_range as $the_date )	{
+			if ( $wpdb->insert( $db_tbl['holiday'],
 										array(
 											'id'	     => '',
 											'user_id'    => $args['employee'],
-											'date_from'  => $args['from_date'],
-											'date_to'  	=> $args['to_date'],
+											'entry_id'   => get_current_user_id() . '_' . time(),
+											'date_from'  => $the_date->format( 'Y-m-d' ),
+											'date_to'  	 => $args['to_date'],
 											'notes'      => $args['notes'],
 										) ) )	{
 
 								
-			f_mdjm_update_notice( 'updated', 'The entry was added successfully' );
+			}
 		}
-		else	{
-			f_mdjm_update_notice( 'error', 'Could not add entry.<br />' . $wpdb->print_error() );
-		}
+		f_mdjm_update_notice( 'updated', 'The entry was added successfully' );	
 	} // f_mdjm_add_holiday
 
 /**

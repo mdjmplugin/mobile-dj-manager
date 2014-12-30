@@ -213,6 +213,7 @@
 		$holiday_sql = "CREATE TABLE ". $db_tbl['holiday'] . " (
 							id int(11) NOT NULL AUTO_INCREMENT,
 							user_id int(11) NOT NULL,
+							entry_id varchar(100) NOT NULL,
 							date_from date NOT NULL,
 							date_to date NOT NULL,
 							notes text NULL,
@@ -256,41 +257,46 @@
 		$mdjm_init_options = array(
 							'company_name' 			=> get_bloginfo( 'name' ),
 							'app_name'				=> 'Client Zone',
-							'time_format'             => 'H:i',
-							'pass_length'             => '8',
+							'time_format'           => 'H:i',
+							'short_date_format'     => 'd/m/Y',
+							'pass_length'           => '8',
 							'currency'				=> 'GBP',
-							'show_dashboard'		  => 'Y',
-							'journaling'			  => 'Y',
-							'multiple_dj' 			 => 'N',
+							'show_dashboard'		=> 'Y',
+							'journaling'			=> 'Y',
+							'multiple_dj' 			=> 'N',
 							'packages' 				=> 'N',
-							'event_types' 			 => $event_types,
-							'enquiry_sources' 		 => $enquiry_sources,
+							'event_types' 			=> $event_types,
+							'enquiry_sources' 		=> $enquiry_sources,
 							'default_contract' 		=> $contract_post_id,
-							'id_prefix'               => 'MDJM',
+							'id_prefix'             => 'MDJM',
 							'system_email' 		    => get_bloginfo( 'admin_email' ),
 							'bcc_dj_to_client' 		=> '',
-							'bcc_admin_to_client' 	 => 'Y',
-							'contract_to_client' 	  => '',
-							'email_enquiry' 		   => $client_enquiry_post_id,
-							'enquiry_email_from'	  => 'admin',
-							'email_contract'		  => $client_contract_post_id,
-							'contract_email_from'	 =>'admin',
+							'bcc_admin_to_client' 	=> 'Y',
+							'contract_to_client' 	=> '',
+							'email_enquiry' 		=> $client_enquiry_post_id,
+							'enquiry_email_from'	=> 'admin',
+							'email_contract'		=> $client_contract_post_id,
+							'contract_email_from'	=>'admin',
 							'email_client_confirm' 	=> $client_confirm_post_id,
-							'confirm_email_from'	  => 'admin',
+							'confirm_email_from'	=> 'admin',
 							'email_dj_confirm' 		=> $dj_confirm_post_id,
-							'title_as_subject'        => 'N',
-							'playlist_when' 		   => $playlist_when,
-							'playlist_close' 		  => '5',
+							'title_as_subject'      => 'N',
+							'playlist_when' 		=> $playlist_when,
+							'playlist_close' 		=> '5',
 							'upload_playlists' 		=> 'Y',
 							'uninst_remove_db' 		=> 'N',
 							'show_credits' 			=> 'Y',
 							);
 		$mdjm_init_pages = array(
-							'app_home_page' => '',
-							'contact_page' => '',
-							'contracts_page' => '',
-							'playlist_page' => '',
-							'profile_page' => '',
+							'app_home_page'                => '',
+							'contact_page'                 => '',
+							'contracts_page'               => '',
+							'playlist_page'                => '',
+							'profile_page'                 => '',
+							'availability_check_pass_page' => 'text',
+							'availability_check_pass_text' => 'Good news, we are available on the date you entered. Please contact us now',
+							'availability_check_fail_page' => 'text',
+							'availability_check_fail_text' => 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...',
 							);
 		$mdjm_init_permissions = array(
 									'dj_see_wp_dash'             => 'Y',
@@ -611,6 +617,7 @@
 ***************************************************/
 			if( $current_version_mdjm == '0.9.8' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 				
 				/* Add currency option */
@@ -618,6 +625,13 @@
 				$mdjm_options['enquiry_email_from'] = 'admin';
 				$mdjm_options['contract_email_from'] = 'admin';
 				$mdjm_options['confirm_email_from'] = 'admin';
+				$mdjm_options['short_date_format'] = 'd/m/Y';
+				
+				/* Add Availability Page Options */
+				$mdjm_pages['availability_check_pass_page'] = $mdjm_pages['contact_page'];
+				$mdjm_pages['availability_check_pass_text'] = 'Good news, we are available on the date you entered. Please contact us now';
+				$mdjm_pages['availability_check_fail_page'] = 'text';
+				$mdjm_pages['availability_check_fail_text'] = 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...';
 				
 				/* Add Frontend Text options */
 				$mdjm_frontend_text['custom_client_text']  = 'N';
@@ -636,7 +650,9 @@
 				
 				/* Update Options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_option( 'mdjm_plugin_pages', $mdjm_pages );
 				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
+				
 				/* Add debug option */
 				add_option( 'mdjm_debug', '0' );
 			} // if( $current_version_mdjm == '0.9.8' )
@@ -1285,6 +1301,17 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		}	
 	} // f_mdjm_debug_notice
 	
+/*
+* f_mdjm_register_widgets
+* 28/12/2014
+* @since 0.9.9
+* Registers all plugin widgets
+*/
+	function f_mdjm_register_widgets()	{
+		include( WPMDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' );
+		register_widget( 'MDJM_Availability_Widget' );
+	} // f_mdjm_register_widgets
+	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
  ***************************************************************************************************/
@@ -1326,6 +1353,8 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'init', 'f_mdjm_upload_playlist_schedule' ); // Check upload playlist schedule
 	
 	add_action( 'admin_notices', 'f_mdjm_debug_notice' ); // Display notice if debugging enabled
+	
+	add_action( 'widgets_init', 'f_mdjm_register_widgets' ); // Register the MDJM Widgets
  
  /**
  * Actions for custom user fields

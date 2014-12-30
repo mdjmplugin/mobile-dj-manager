@@ -139,7 +139,8 @@
 						'{EVENT_DATE_SHORT}',     /* Event Date (Short) */
 						'{START_TIME}',           /* Event Start Time */
 						'{END_TIME}',             /* Event End Time */
-						'{GUEST_PLAYLIST_URL}'    /* Guest Playlist URL */
+						'{GUEST_PLAYLIST_URL}',   /* Guest Playlist URL */
+						'{PLAYLIST_URL}'          /* Guest Playlist URL */
 						);
 			$event_replace = array(
 						$eventinfo->event_type, /* {EVENT_TYPE} */
@@ -148,6 +149,7 @@
 						date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ),  /* {START_TIME} */
 						date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {END_TIME} */
 						$playlist_url,                                                               /* {GUEST_PLAYLIST_URL} */
+						$playlist_url,                                                               /* {PLAYLIST_URL} */
 						);
 						
 			/* We need to merge the arrays */
@@ -790,5 +792,115 @@
 		$args['timestamp'] = time();
 		if( !$wpdb->insert( $db_tbl['journal'], $args ) ) die( $wpdb->print_error() );	
 	} // f_mdjm_do_journal
-	
+
+/****************************************************************************************************
+--	AVAILABILITY
+****************************************************************************************************/
+/**
+* f_mdjm_availability_form
+* 27/12/2014
+* @since 0.9.9
+* Displays the availability checker form
+*/
+	function f_mdjm_availability_form( $args )	{
+		global $mdjm_options;
+		
+		if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
+			$mdjm_pages = get_option( 'mdjm_plugin_pages' );
+			$dj_avail = f_mdjm_available( $_POST['check_date'] );
+			
+			if( isset( $dj_avail ) )	{
+				if( $dj_avail !== false )	{
+					if( isset( $mdjm_pages['availability_check_pass_page'] ) && $mdjm_pages['availability_check_pass_page'] != 'text' )	{
+						?>
+						<script type="text/javascript">
+						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_pass_page'] ); ?>';
+						</script>
+						<?php
+					}
+				}
+				else	{
+					if( isset( $mdjm_pages['availability_check_fail_page'] ) && $mdjm_pages['availability_check_fail_page'] != 'text' )	{
+						?>
+						<script type="text/javascript">
+						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_fail_page'] ); ?>';
+						</script>
+						<?php	
+					}	
+				}
+			} // if( isset( $dj_avail ) )
+		}
+		
+		/* We need the jQuery Calendar */
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$('.custom_date').datepicker({
+			dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
+			altField  : '#check_date',
+			altFormat : 'yy-mm-dd',
+			firstDay: <?php echo get_option( 'start_of_week' ); ?>,
+			changeYear: true,
+			changeMonth: true
+			});
+        });
+		function check_avail_validation() {
+			/* Check the Date field for blank submission*/
+			var avail_date = document.forms["mdjm-availability-check"]["avail_date"].value;
+			if (avail_date == "" || avail_date == null) {
+				alert("Please enter a date to check for availability");
+				return false;
+			}
+		}
+        </script>
+        <?php
+		/* Create the table */
+		?>
+        <form name="mdjm-availability-check" method="post" onsubmit="check_avail_validation()">
+        <?php
+        if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
+			if( $dj_avail !== false && $mdjm_pages['availability_check_pass_page'] == 'text' && !empty( $mdjm_pages['availability_check_pass_page'] ) )	{
+				echo '<p>' . $mdjm_pages['availability_check_pass_text'] . '</p>';
+			}
+			if( $dj_avail === false && $mdjm_pages['availability_check_fail_page'] == 'text' && !empty( $mdjm_pages['availability_check_fail_page'] ) )	{
+				echo '<p>' . $mdjm_pages['availability_check_fail_text'] . '</p>';
+			}
+			
+		}
+		?>
+        <p>
+        <?php
+        if( !isset( $args['label'] ) || empty( $args['label'] ) )	{
+			echo 'Select Date:';
+			if( isset( $args['label_wrap'] ) && $args['label_wrap'] == 'true' )	{
+				echo '<br />';	
+			}
+		}
+		else	{
+			echo $args['label'];
+			if( isset( $args['label_wrap'] ) && $args['label_wrap'] == 'true' )	{
+				echo '<br />';	
+			}	
+		}
+		if( !isset( $args['submit_text'] ) || empty( $args['submit_text'] ) )	{
+			$submit_text = 'Check Date';
+		}
+		else	{
+			$submit_text = $args['submit_text'];
+		}
+		?>
+        <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" />
+        <?php
+		if( isset( $args['field_wrap'] ) && $args['field_wrap'] == 'true' )	{
+				echo '<br />';	
+			}
+		?>
+        <input type="hidden" name="check_date" id="check_date" />
+		
+        <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $submit_text; ?>" />
+        </form>
+        <?php
+	} // f_mdjm_availability_form
 ?>

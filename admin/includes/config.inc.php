@@ -101,10 +101,10 @@
 		
 		/* Set the contract date */
 		if( $eventinfo->contract_status != 'Approved' )	{
-			$contract_date = date( 'd/m/Y' );
+			$contract_date = date( $mdjm_options['short_date_format'] );
 		}
 		else	{
-			$contract_date = date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) );	
+			$contract_date = date( $mdjm_options['short_date_format'], strtotime( $eventinfo->contract_approved_date ) );	
 		}
 		
 		/* Set the Contract / Invoice number */
@@ -167,11 +167,11 @@
 							$dj->display_name, /* {DJ_FULLNAME} */
 							$eventinfo->event_type, /* {EVENT_TYPE} */
 							date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ), /* {EVENT_DATE} */
-							date( 'd/m/Y', strtotime( $eventinfo->event_date ) ), /* {EVENT_DATE_SHORT} */
+							date( $mdjm_options['short_date_format'], strtotime( $eventinfo->event_date ) ), /* {EVENT_DATE_SHORT} */
 							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_start ) ), /* {START_TIME} */
 							date( $mdjm_options['time_format'], strtotime( $eventinfo->event_finish ) ), /* {END_TIME} */
 							date( $mdjm_options['time_format'], strtotime( $eventinfo->dj_setup_time ) ), /* {DJ_SETUP_TIME} */
-							date( 'd/m/Y', strtotime( $eventinfo->dj_setup_date ) ), /* {DJ_SETUP_DATE} */
+							date( $mdjm_options['short_date_format'], strtotime( $eventinfo->dj_setup_date ) ), /* {DJ_SETUP_DATE} */
 							$mdjm_currency[$mdjm_options['currency']] . number_format( $eventinfo->cost, 2 ), /* {TOTAL_COST} */
 							$mdjm_currency[$mdjm_options['currency']] . number_format( $eventinfo->deposit, 2 ), /* {DEPOSIT} */
 							$deposit_status, /* {DEPOSIT_STATUS} */
@@ -195,7 +195,7 @@
 							$playlist_url, /* {PLAYLIST_URL} */
 							$dj->user_email, /* {DJ_EMAIL} */
 							$dj->phone1, /* {DJ_PRIMARY_PHONE} */
-							date( 'd/m/Y' ), /* {DDMMYYYY} */
+							date( $mdjm_options['short_date_format'] ), /* {DDMMYYYY} */
 						); // $email_replace
 	} // if( isset( $mdjm_options, $eventinfo, $dj, $info ) )
 	
@@ -204,5 +204,6 @@
 						 'mdjm/apicheck.php?',
 						 'mdjm_user_url=' . get_site_url(),
 						 '&ver=' . WPMDJM_VERSION_NUM,
+						 '&wp_ver=' . get_bloginfo( 'version' ),
 					);
 ?>

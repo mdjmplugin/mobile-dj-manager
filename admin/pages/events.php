@@ -216,7 +216,10 @@
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			$('.custom_date').datepicker({
-			dateFormat : 'dd/mm/yy'
+			dateFormat : 'dd/mm/yy',
+			firstDay: <?php echo get_option( 'start_of_week' ); ?>,
+			changeYear: true,
+			changeMonth: true
 			});
         });
         </script>
@@ -258,7 +261,7 @@
 		$client_list = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
         foreach( $client_list as $client )	{
 			?>
-			<option value="<?php echo $client->ID; ?>" <?php selected( $_POST['client'], $client->ID ); ?>><?php echo $client->display_name; ?></option>';	
+			<option value="<?php echo $client->ID; ?>" <?php if( isset( $_POST['client'] ) ) selected( $_POST['client'], $client->ID ); ?>><?php echo $client->display_name; ?></option>';	
             <?php
 		}
 		?></select> <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	echo '<a href="' . admin_url() . 'user-new.php" class="add-new-h2">Add New</a>'; ?></td>
@@ -614,7 +617,16 @@
 	
 	function f_mdjm_add_event_review()	{
 		global $mdjm_options;
-		$total_cost = $_POST['event_cost'];
+		
+		/* Validation checks */
+		f_mdjm_event_validate( $_POST );
+		
+		if( isset( $_POST['event_cost'] ) && !empty( $_POST['event_cost'] ) )	{
+			$total_cost = $_POST['event_cost'];
+		}
+		else	{
+			$total_cost = '0';
+		}
 		/* Add package costs */
 		if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' && !empty( $_POST['event_package'] ) )	{
 			$packages = get_option( 'mdjm_packages' );
@@ -716,7 +728,7 @@
         </td>
         </tr>
         <tr>
-        <th scope="row">DJ Notes:</th>
+        <th scope="row"><label for="dj_notes">DJ Notes:</label></th>
         <td><textarea name="dj_notes" id="dj_notes" cols="60" rows="5"></textarea><br />
 <span class="description">Notes entered here can be seen by the Event DJ and Admins only. Clients will not see this information</span></td>
         </tr>
@@ -724,7 +736,7 @@
 		if( current_user_can( 'administrator' ) )	{
 			?>
 			<tr>
-			<th scope="row">Admin Notes:</th>
+			<th scope="row"><label for="admin_notes">Admin Notes:</label></th>
 			<td><textarea name="admin_notes" id="admin_notes" cols="60" rows="5"></textarea><br />
 	<span class="description">Notes entered here can be seen by Admins only. DJ's &amp; Clients will not see this information</span></td>
 			</tr>
@@ -736,14 +748,18 @@
 	}
 	
 	function f_mdjm_add_event_footer( $submit )	{
+		global $event_error;
 		?>
         <table class="form-table">
         <tr>
         <th scope="row">&nbsp;</th>
         <td>
-		<?php if( do_reg_check( 'check' ) )	{
-			submit_button( $submit, 'primary', 'submit', false );	
-		} 
+		<?php 
+		if( do_reg_check( 'check' ) )	{
+			if( !isset( $event_error ) || $event_error == '0' )	{
+				submit_button( $submit, 'primary', 'submit', false );	
+			}
+		}
 		?>
         </td>
         <td colspan="2" align="left"><a class="button-secondary" title="<?php _e( 'Go Back' ); ?>" onclick="window.history.go(-1)"><?php _e( 'Back' ); ?></a></td>
@@ -754,6 +770,33 @@
         <?php
 	} // f_mdjm_add_event_footer
 	
+/*
+* f_mdjm_event_validate
+* 21/12/2015
+* @since 0.9.9
+* Validates field entries
+*/
+	function f_mdjm_event_validate( $fields )	{
+		global $event_error;
+		/* Check event date is not in the past */
+		if( isset( $fields['event_date'] ) && !empty( $fields['event_date'] ) )	{
+			$event_date = explode( '/', $fields['event_date'] );
+			$event_date = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
+			if( date( 'd/m/Y', strtotime( $event_date ) ) < date( 'd/m/Y' ) )	{
+				$event_error = '1';
+				f_mdjm_update_notice( 'error', 'Warning: The event date is in the past. Click <a onclick="window.history.go(-1)">Back</a> to amend' );	
+			}
+		}
+		/* Check event date is set */
+		elseif(! isset( $fields['event_date'] ) || empty( $fields['event_date'] ) )	{
+			$event_error = '1';
+			f_mdjm_update_notice( 'error', 'Warning: You have not entered a date for the event. Click <a onclick="window.history.go(-1)">Back</a> to do so' );
+		}
+		else	{
+			$event_error = '0';	
+		}
+	} // f_mdjm_event_validate
+	
 /**
  * Display a form for editing events
  *
@@ -761,7 +804,6 @@
  *
  * @since 1.0
 */
-	
 	function f_mdjm_view_event_form( $event_id )	{
 		global $mdjm_options;
 		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
@@ -779,7 +821,10 @@
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			$('.custom_date').datepicker({
-			dateFormat : 'dd/mm/yy'
+			dateFormat : 'dd/mm/yy',
+			firstDay: <?php echo get_option( 'start_of_week' ); ?>,
+			changeYear: true,
+			changeMonth: true
 			});
         });
         </script>
@@ -794,7 +839,7 @@
         <th scope="row">Event ID:</th>
         <td><?php echo $contract_id; ?></td>
         <th scope="row">Created:</th>
-        <td><?php echo date( 'd/m/Y', strtotime( $eventinfo->date_added ) ); ?></td>
+        <td><?php echo date( $mdjm_options['short_date_format'], strtotime( $eventinfo->date_added ) ); ?></td>
         </tr>
         <tr>
         <th scope="row"><label for="user_id">Client:</label></th>
@@ -1293,8 +1338,12 @@
 		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
 		//f_mdjm_cron_balance_reminder();
 		
-		if( f_mdjm_available( '2014-12-29' ) )	{
-			echo 'Available';
+		$dj_avail = f_mdjm_available( '2014-12-21' );
+		if( $dj_avail !== false )	{
+			foreach( $dj_avail as $dj_detail )	{
+				$dj = get_userdata( $dj_detail );
+				echo $dj->display_name . '<br />';
+			}
 		}
 		else	{
 			echo 'Not Available';	

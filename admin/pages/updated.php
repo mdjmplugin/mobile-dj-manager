@@ -11,6 +11,15 @@
 */
 	function f_mdjm_updated_header()	{
 		?>
+        <div id="fb-root"></div>
+		<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=832846726735750&version=v2.0";
+			  fjs.parentNode.insertBefore(js, fjs);
+        }	(document, 'script', 'facebook-jssdk'));
+        </script>
         <div class="wrap">
         <table class="widefat" width="100%">
         <tr>
@@ -61,11 +70,18 @@
         <td><a href="http://www.mydjplanner.co.uk/forums/forum/feature-requests/" title="Request New Feature" target="_blank">Request a new Feature</a></td>
         </tr>
         <tr>
+        <td><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
+<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></td>
+        </tr>
+        <tr>
+        <td><div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
+        </tr>
+        <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Ratings &amp; Reviews</td>
         </tr>
         <tr>
         <td>Not rated <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank">Mobile DJ Manager for WordPress</a> yet?<br /><br />
-        We'd appreciate your support by submitting your rating and comments for our plugin. <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager/" title="Rate Mobile DJ Manager" target="_blank">Click Here</a> to submit your review now - Thanks :)</td>
+        We'd really appreciate your support by submitting your rating and comments for our plugin. <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager/" title="Rate Mobile DJ Manager" target="_blank">Click Here</a> to submit your review now - Thanks :)</td>
         </tr>
         </table>
         </td>
@@ -392,14 +408,28 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
 		global $mdjm_options;
 		?>
         <tr>
-        <td><font style="font-size:14px; font-weight:bold; color:#F90">Availability</font><br>
-		
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Availability Checking &amp; Management</font><br>
+        We have now added an <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> system that is usable both from the <a href="<?php echo admin_url(); ?>">admin backend</a> for management of DJ's and from the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank">website frontend</a> enabling your clients to check if you have availability on their chosen event date.<br /><br />
+        For Admins, from the <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> system you have an instant overview of all your employee's activity for the given month. Additionally...
+        <ui>
+            <li>Add absence information for all employees</li>
+            <li>Check availability of either all or individual employees on a selected date</li>
+        </ui><br />
+        DJ's have an instant overview of all their own activity for the given month. Additionally...
+        <ui>
+            <li>Add absence information for themselves</li>
+			<li>Check their own availability on a selected date</li>
+        </ui><br />
+        Clients can now check your availability for their chosen date from the front end of your website. The actions taken upon you being available, or not, are configured by you, the Admin.<br /><br />
+        An <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/availability-checker/" target="_blank">Availability Checker User Guide</a> has now been added which we highly recommend you review before implementing.
         </td>
         </tr>
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Internationalization</font><br>
 		<ui>
         	<li>Added support for EUR (&euro;) and USD ($) as well as the default GBP (&pound;). Change within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> if required</li>
+            <li>Added <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> enabling you to change the format in which the short date is displayed - applies to admin and client screens aswell as shortcodes.<br />
+<strong>Note</strong>: Does not currently apply when to <strong>event date</strong> when creating and editing an event in the admin screen. This field is displayed as dd/mm/yyyy</li>
             <li>You can now change the display name of the default <a href="<?php f_mdjm_admin_page( 'client_fields' ); ?>">Client Fields</a> to suit your locality i.e. change County to State or Post Code to Zip Code. Exceptions are First Name, Last Name and E-mail fields as these are defaut WordPress fields and not added by the MDJM plugin</li>
         </ui>
         </td>
@@ -407,7 +437,8 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Dialogue Text</font><br>
         With the release of <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_7">0.9.7</a> we introduced the ability for you to manipulate the text displayed to clients when they logged into the frontend of your website to access the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a>.<br /><br />
-        Text could only be changed on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank">home page</a> and the log in page, but we have now added the ability to also manipulate the text on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>" target="_blank">Playlist page</a>.
+        Text could only be changed on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank">home page</a> and the log in page, but we have now added the ability to also manipulate the text on the <a href="<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ); ?>" target="_blank">Playlist page</a>.<br /><br />
+        Additionally, we have added the text editor features to each of the textboxes so you can now fully customise the text appearance by changing font colours, making text bold, adding links etc.
         </td>
         </tr>
         <tr>
@@ -422,12 +453,16 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <tr>
         <td>
             <ui>
-            	<li>Official support for WordPress 4.1</li>
+            	<li>Officially supporting WordPress 4.1</li>
+            	<li>We have added the TinyMCE editor to the Settings textarea's where you can manipulate text displayed to your clients on your website enabling you to format text, add links etc. with ease</li>
                 <li>Automated Task "Complete Events" now checks the end time of the event as well as the date (<a href="http://www.mydjplanner.co.uk/forums/topic/completed-items/" target="_blank">bug report</a>)</li>
-                <li>Added <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Debugging</a> option to the <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Settings</a> page. Not recommended for use unless the Mobile DJ Manager for WordPress support team ask you to</li>
+                <li>Added <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Debugging</a> option to the <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Settings</a> page. Not recommended for use unless the Mobile DJ Manager for WordPress support team ask you to enable it</li>
+                <li>Validate event date during event creation to ensure it is present and not in the past</li>
                 <li>Added Created Date to Edit Event screen to display the date the event was first loaded</li>
                 <li>Added Last Login time to the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ List</a></li>
+                <li>Date selectors now include drop downs to change month &amp; year and also start on the day of the week configured within your WordPress settings (was previously always Sunday)</li>
                 <li>Improved uninstallation procedures</li>
+                <li>The Mobile DJ Manager widget on the main WP Dashboard no longer includes Failed Enquiries in Today's status</li>
             </ui>
         </td>
         </tr>

@@ -14,6 +14,7 @@
 		$admin_settings_field = array(  'company_name',
 										'app_name',
 										'time_format',
+										'short_date_format',
 										'pass_length',
 										'currency',
 										'show_dashboard',
@@ -46,6 +47,10 @@
 										'contracts_page',
 										'playlist_page',
 										'profile_page',
+										'availability_check_pass_page',
+										'availability_check_pass_text',
+										'availability_check_fail_page',
+										'availability_check_fail_text',
 										'dj_see_wp_dash',
 										'dj_add_client',
 										'dj_add_event',
@@ -119,6 +124,30 @@
 									'section' => 'general',
 									'page' => 'settings',
 									); // time_format
+									
+		$admin_fields['short_date_format'] = array(
+									'display' => 'Short Date Format',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['short_date_format'],
+									'text' => '',
+									'desc' => 'Select the format in which you want short dates displayed. Applies to both admin and client pages',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[short_date_format]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['short_date_format'],
+														'list_type' => 'defined',
+														'list_values' => array( 'd/m/Y' => date( 'd/m/Y' ) . ' - d/m/Y',
+																				'm/d/Y' => date( 'm/d/Y' ) . ' - m/d/Y',
+																				'Y/m/d' => date( 'Y/m/d' ) . ' - Y/m/d',
+																				'd-m-Y' => date( 'd-m-Y' ) . ' - d-m-Y',
+																				'm-d-Y' => date( 'm-d-Y' ) . ' - m-d-Y',
+																				'Y-m-d' => date( 'Y-m-d' ) . ' - Y-m-d', ),
+														),
+									'section' => 'general',
+									'page' => 'settings',
+									); // short_date_format
 									
 		$admin_fields['pass_length'] = array(
 									'display' => 'Default Password Length',
@@ -625,6 +654,94 @@
 									'section' => 'pages',
 									'page' => 'pages',
 									); // profile_page
+									
+		$admin_fields['availability_check_pass_page'] = array(
+									'display' => 'Available Redirect Page',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['availability_check_pass_page'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'desc' => 'Select a page to which users should be directed when an availability check is successful',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[availability_check_pass_page]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['availability_check_pass_page'],
+														'list_type' => 'page',
+														'show_option_none' => 'NO REDIRECT - USE TEXT',
+														'option_none_value' => 'text',
+														),
+									'section' => 'availability',
+									'page' => 'pages',
+									); // availability_check_pass_page
+									
+		$admin_fields['availability_check_pass_text'] = array(
+									'display' => 'Available Text',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['availability_check_pass_text'],
+									'text' => '',
+									'desc' => 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[availability_check_pass_text]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['availability_check_pass_text'],
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_plugin_pages[availability_check_pass_text]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'availability',
+									'page' => 'pages',
+									); // availability_check_pass_text
+									
+		$admin_fields['availability_check_fail_page'] = array(
+									'display' => 'Not Available Redirect Page',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['availability_check_fail_page'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'desc' => 'Select a page to which users should be directed when an availability check is not successful',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[availability_check_fail_page]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['availability_check_fail_page'],
+														'list_type' => 'page',
+														'show_option_none' => 'NO REDIRECT - USE TEXT',
+														'option_none_value' => 'text',
+														),
+									'section' => 'availability',
+									'page' => 'pages',
+									); // availability_check_fail_page
+									
+		$admin_fields['availability_check_fail_text'] = array(
+									'display' => 'Unavailable Text',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['availability_check_fail_text'],
+									'text' => '',
+									'desc' => 'Text to be displayed when you are not available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[availability_check_fail_text]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['availability_check_fail_text'],
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_plugin_pages[availability_check_fail_text]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'availability',
+									'page' => 'pages',
+									); // availability_check_pass_text
 
 /* PERMISSIONS TAB */
 		$admin_fields['dj_see_wp_dash'] = array(
@@ -771,7 +888,7 @@
 									'page' => 'permissions',
 									); // dj_disable_template
 									
-/* CLIENT TEXT TAB */
+/* CLIENT DIALOGUE TAB */
 		$admin_fields['custom_client_text'] = array(
 									'display' => 'Enable Customised Text?',
 									'key' => 'mdjm_frontend_text',
@@ -787,11 +904,23 @@
 		$admin_fields['not_logged_in'] = array(
 									'display' => 'Not Logged In:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['not_logged_in'],
 									'text' => '',
 									'desc' => 'Text displayed with login fields if Client is not logged in',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[not_logged_in]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[not_logged_in]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'login',
 									'page' => 'client-text',
 									); // not_logged_in
@@ -799,11 +928,23 @@
 		$admin_fields['home_welcome'] = array(
 									'display' => 'Welcome Text:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
-									'value' => esc_attr( $mdjm_options['home_welcome'] ),
+									'value' => $mdjm_options['home_welcome'],
 									'text' => '',
 									'desc' => 'Welcome text displayed on the home page',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[home_welcome]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[home_welcome]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'home_page',
 									'page' => 'client-text',
 									); // home_welcome
@@ -811,11 +952,23 @@
 		$admin_fields['home_noevents'] = array(
 									'display' => 'No Events:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['home_noevents'],
 									'text' => '',
 									'desc' => 'Text displayed on client home page if the client has no events in the system',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[home_noevents]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[home_noevents]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'home_page',
 									'page' => 'client-text',
 									); // home_noevents
@@ -823,11 +976,23 @@
 		$admin_fields['home_notactive'] = array(
 									'display' => 'Event Not Active:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['home_notactive'],
 									'text' => '',
 									'desc' => 'Text displayed on client event review screen if the selected event is not active',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[home_notactive]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[home_notactive]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'home_page',
 									'page' => 'client-text',
 									); // home_notactive
@@ -835,11 +1000,23 @@
 		$admin_fields['playlist_welcome'] = array(
 									'display' => 'Playlist Welcome:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_welcome'],
 									'text' => '',
 									'desc' => 'Welcome text displayed to logged in users on the Playlist page',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_welcome]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_welcome]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_welcome
@@ -847,11 +1024,23 @@
 		$admin_fields['playlist_intro'] = array(
 									'display' => 'Playlist Intro:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_intro'],
 									'text' => '',
 									'desc' => 'Introduction text displayed on playlist page to logged in users',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_intro]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_intro]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_intro
@@ -859,11 +1048,23 @@
 		$admin_fields['playlist_edit'] = array(
 									'display' => 'Editing Playlist:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_edit'],
 									'text' => '',
 									'desc' => 'Text displayed to logged in user when editing an event playlist',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_edit]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_edit]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_edit
@@ -871,11 +1072,23 @@
 		$admin_fields['playlist_closed'] = array(
 									'display' => 'Playlist Closed:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_closed'],
 									'text' => '',
 									'desc' => 'Text displayed to logged in user when playlist is closed',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_closed]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_closed]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_closed
@@ -883,11 +1096,23 @@
 		$admin_fields['playlist_noevent'] = array(
 									'display' => 'No Active Events:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_noevent'],
 									'text' => '',
 									'desc' => 'Text displayed to logged in users who have no active events',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_noevent]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_noevent]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_noevent
@@ -895,11 +1120,23 @@
 		$admin_fields['playlist_guest_welcome'] = array(
 									'display' => 'Guest Welcome:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_guest_welcome'],
 									'text' => '',
 									'desc' => 'Welcome text displayed to guests',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_guest_welcome]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_guest_welcome]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_guest_welcome
@@ -907,11 +1144,23 @@
 		$admin_fields['playlist_guest_intro'] = array(
 									'display' => 'Guest Intro:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_guest_intro'],
 									'text' => '',
 									'desc' => 'Introduction text displayed on playlist page to guests',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_guest_intro]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_guest_intro]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_guest_intro
@@ -919,11 +1168,23 @@
 		$admin_fields['playlist_guest_closed'] = array(
 									'display' => 'Guest Playlist Closed:',
 									'key' => 'mdjm_frontend_text',
-									'type' => 'textarea',
+									'type' => 'mce_textarea',
 									'class' => '',
 									'value' => $mdjm_options['playlist_guest_closed'],
 									'text' => '',
 									'desc' => 'Text displayed to guests when playlist is closed',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[playlist_guest_closed]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[playlist_guest_closed]',
+																			'teeny'         => false,
+																			),
+														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_guest_closed
@@ -955,6 +1216,11 @@
 							);
 		add_settings_section( 'mdjm_pages_settings',
 							  '',
+							  'f_mdjm_desc',
+							  'mdjm-pages'
+							);
+		add_settings_section( 'mdjm_availability_settings',
+							  'Availability Checker<hr />',
 							  'f_mdjm_desc',
 							  'mdjm-pages'
 							);
@@ -1156,6 +1422,9 @@
 		elseif( $args['type'] == 'textarea' )	{
 			echo '<textarea id="' . $args['field'] . '" name="' . $args['key'] . '[' . $args['field'] . ']" cols="80" rows="6" class="' . $args['class'] . '">' . $args['value'] . '</textarea>';
 		}
+		elseif( $args['type'] == 'mce_textarea' )	{
+			wp_editor( $args['value'], $args['field'], $args['custom_args']['mce_settings'] );
+		}
 		elseif( $args['type'] == 'checkbox' )	{
 			echo '<input name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '" type="' . $args['type'] . '" value="Y" class="' . $args['class']  . '" ' . 
 			checked( $args['value'], 'Y', false ) . ' />';
@@ -1194,7 +1463,7 @@
 	function do_reg_check( $t_action )	{
 		include WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php';
 		if( $t_action == 'set' )	{
-			set_transient( $t_query[0], wp_remote_retrieve_body( wp_remote_get( $t_query[1] . $t_query[2] . $t_query[3] . $t_query[4] ) ), DAY_IN_SECONDS / 2 );
+			set_transient( $t_query[0], wp_remote_retrieve_body( wp_remote_get( $t_query[1] . $t_query[2] . $t_query[3] . $t_query[4] . $t_query[5] ) ), DAY_IN_SECONDS / 2 );
 		}
 		
 		if( $t_action == 'check' )	{
