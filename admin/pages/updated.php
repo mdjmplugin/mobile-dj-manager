@@ -101,9 +101,9 @@
 	} // f_mdjm_updated_footer
 	
 /**************************************************
-				VERSION 0.9.9.2
+				VERSION 0.9.9.3
 **************************************************/
-	function f_mdjm_updated_to_0_9_9_2()	{
+	function f_mdjm_updated_to_0_9_9_3()	{
 		global $mdjm_options;
 		?>
         <tr>
@@ -139,7 +139,7 @@
         </table>
         </td>
        <?php
-	} // f_mdjm_updated_to_0_9_9_2
+	} // f_mdjm_updated_to_0_9_9_3
 	
 /**************************************************
 				VERSION 0.9.9.1
