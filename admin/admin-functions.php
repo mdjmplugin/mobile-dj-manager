@@ -257,6 +257,7 @@
 		$mdjm_init_options = array(
 							'company_name'            => get_bloginfo( 'name' ),
 							'app_name'                => 'Client Zone',
+							'items_per_page'          => get_option( 'posts_per_page' ),
 							'time_format'             => 'H:i',
 							'short_date_format'       => 'd/m/Y',
 							'pass_length'             => '8',
@@ -670,6 +671,7 @@
 				/* Set new options */
 				$mdjm_options['boooking_conf_to_client'] = 'Y';
 				$mdjm_options['boooking_conf_to_dj'] = 'Y';
+				$mdjm_options['items_per_page'] = get_option( 'posts_per_page' );
 				
 				/* Set new client dialogue options */
 				$mdjm_frontend_text['warn_incomplete_profile'] = 'Y';
@@ -1015,6 +1017,26 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'title' => __( 'Communications' ),
 				),
 			));
+			/*if( current_user_can( 'manage_options' ) )	{
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-contact-forms',
+					'parent' => 'mdjm',
+					'title' => 'Contact Forms',
+					'href'  => admin_url( 'admin.php?page=mdjm-contact-forms' ),
+					'meta'  => array(
+						'title' => __( 'Contact Forms' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-new-contact-form',
+					'parent' => 'mdjm-contact-forms',
+					'title' => 'Add Contact Form',
+					'href'  => admin_url( 'admin.php?page=mdjm-contact-forms&action=add_contact_form' ),
+					'meta'  => array(
+						'title' => __( 'New Contact Form' ),
+					),
+				));
+			}*/
 			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contracts',
@@ -1400,4 +1422,5 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		add_action ( 'personal_options_update', 'f_mdjm_save_custom_user_fields' );
 		add_action ( 'edit_user_profile_update', 'f_mdjm_save_custom_user_fields' );
 	}
+	
 ?>

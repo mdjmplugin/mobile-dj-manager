@@ -17,15 +17,27 @@
 				$djonly = '';	
 			}
 			
-			$display_query['active'] = $query . " WHERE `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly;
-			$display_query['historic'] = $query . " WHERE (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')" . $djonly;
-			$display_query['all'] = $query . " WHERE `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly;
+			if( isset( $_POST['s'] ) && !empty( $_POST['s'] ) )	{
+				$arg = array(	'search'  => $_POST['s'],
+								'orderby' => 'display_name',
+								'order'   => 'ASC',
+							);
+				$clientinfo = get_users( $arg );
+				$search = ' AND `user_id` = ' . $clientinfo[0]->ID;
+			}
+			else	{
+				$search = '';	
+			}
 			
-			$display_query['enquiries'] = $query . " WHERE `contract_status` = 'Enquiry'" . $djonly;
+			$display_query['active'] = $query . " WHERE `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly . $search;
+			$display_query['historic'] = $query . " WHERE (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')" . $djonly . $search;
+			$display_query['all'] = $query . " WHERE `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly . $search;
 			
-			$display_query['lost'] = $query . " WHERE `contract_status` = 'Failed Enquiry'" . $djonly;
+			$display_query['enquiries'] = $query . " WHERE `contract_status` = 'Enquiry'" . $djonly . $search;
 			
-			$query = $display_query[$display];
+			$display_query['lost'] = $query . " WHERE `contract_status` = 'Failed Enquiry'" . $djonly . $search;
+			
+			$query = $display_query[$display] . $search;
 			
 			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'event_date';
@@ -34,7 +46,36 @@
 			else $order = 'ASC';
 			
 			$query .= ' ORDER BY `' . $orderby . '` ' . $order;
+			
+			/* Pagination (but not for searches)*/
+			if( !isset( $_POST['s'] ) || empty( $_POST['s'] ) )	{
+				$per_page = $mdjm_options['items_per_page'];
+				$current_page = $this->get_pagenum();
+				$total_items = $wpdb->query( $query );
+				$total_pages = ceil( $total_items/$per_page );
+				
+				$paged = !empty( $_GET['paged'] ) ? mysql_real_escape_string( $_GET['paged'] ) : '';
+				
+				if( empty( $paged ) || !is_numeric( $paged ) || $paged <= 0 )	{
+					$paged = 1;
+				}
+				
+				if( !empty( $paged ) && !empty( $per_page ) )	{
+					$offset = ( $paged - 1 ) * $per_page;
+					$query .= ' LIMIT ' . (int)$offset . ',' . (int)$per_page;
+				}
+				
+				$this->set_pagination_args( array(
+											'total_items' => $total_items,
+											'per_page'    => $per_page,
+											'total_pages' => $total_pages,
+												)
+											);
+			}
+						
 			$eventinfo = $wpdb->get_results( $query );
+			
+			/* The data */
 			
 			$event_data = array();
 			foreach( $eventinfo as $event )	{
@@ -253,8 +294,6 @@
 		} // extra_tablenav
 		
 		function prepare_items()	{
-			$per_page = $this->get_items_per_page( 'events_per_page', 25 );
-			$current_page = $this->get_pagenum();
 			$this->process_bulk_action(); // Process bulk actions
 			$columns  = $this->get_columns(); // Retrieve table columns
 			$hidden   = array( 'event_id', 'client_id' ); // Which fields are hidden

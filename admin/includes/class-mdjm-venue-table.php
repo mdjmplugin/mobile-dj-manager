@@ -1,10 +1,14 @@
 <?php
 	class MDJM_Venues_Table extends WP_List_Table	{
 		private function get_venues()	{
-			global $wpdb, $query;
+			global $wpdb, $mdjm_options, $query;
 			include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			// Build the data query
 			$query = 'SELECT * FROM `' . $db_tbl['venues'] . '`';
+			
+			if( isset( $_POST['s'] ) && !empty( $_POST['s'] ) )	{
+				$query .= " WHERE `venue_name` LIKE '%" . $_POST['s'] . "%'";
+			}
 			
 			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'venue_name';
@@ -13,6 +17,33 @@
 			else $order = 'ASC';
 			
 			$query .= ' ORDER BY `' . $orderby . '` ' . $order;
+			
+			/* Pagination (but not for searches)*/
+			if( !isset( $_POST['s'] ) || empty( $_POST['s'] ) )	{
+				$per_page = $mdjm_options['items_per_page'];
+				$current_page = $this->get_pagenum();
+				$total_items = $wpdb->query( $query );
+				$total_pages = ceil( $total_items/$per_page );
+				
+				$paged = !empty( $_GET['paged'] ) ? mysql_real_escape_string( $_GET['paged'] ) : '';
+				
+				if( empty( $paged ) || !is_numeric( $paged ) || $paged <= 0 )	{
+					$paged = 1;
+				}
+				
+				if( !empty( $paged ) && !empty( $per_page ) )	{
+					$offset = ( $paged - 1 ) * $per_page;
+					$query .= ' LIMIT ' . (int)$offset . ',' . (int)$per_page;
+				}
+				
+				$this->set_pagination_args( array(
+											'total_items' => $total_items,
+											'per_page'    => $per_page,
+											'total_pages' => $total_pages,
+												)
+											);
+			}
+			
 			$venueinfo = $wpdb->get_results( $query );
 			
 			$venue_data = array();

@@ -1,13 +1,13 @@
 === Mobile DJ Manager ===
 Contributors: mikeyhoward1977
-Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner
+Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.1
+Stable tag: 0.9.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Mobile DJ Manager allows mobile DJ's and businesses to manage their events and employees as well as interact with  their clients easily. 
+Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
 
 == Description ==
 
@@ -77,6 +77,24 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 0.9.9.2 =
+<h2>New Features</h2>
+<ui>
+	<li>Enabled the sending of contracts via email to clients from within the Communication Feature</li>
+	<li>Added ability to mark Clients as inactive to avoid buys Client list when creating an Event</li>
+</ui>
+<h2>Bug Fixes &amp; Minor Enhancements</h2>
+<ui>
+	<li>New Setting added to determine the number of results displayed on the Clients, Events and the Venues list pages</li>
+	<li>Enabled pagination on the Events and the Venues list pages.</li>
+	<li>Enabled searching within the Event list screen, the Client list screen and the Venue list screen.</li>
+	<li>Big Fix: When a Client booked an event via the Client Zone an email was sent to them event if the Contract link to client? setting was disabled.</li>
+	<li>Main dashboard indicated DJ was working today even if the event status was not Approved</li>
+	<li>Confirmation message displayed to a client when they book an event or approve their contract via the Client Zone now only displays the <strong>You will receive confirmation via email shortly</strong> message if you have configured emails to be sent in settings.</li>
+</ui>
+
+If you have an idea for a new feature, or an improvement to an existing one, <a href="<a href="http://www.mydjplanner.co.uk" target="_blank">let us know here.</a>
+
 = 0.9.9.1 =
 <h2>Minor Release with a few enhancements</h2>
 <ui>

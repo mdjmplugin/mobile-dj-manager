@@ -35,6 +35,10 @@
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Clients', 'Clients', 'manage_mdjm', 'mdjm-clients', 'f_mdjm_admin_clients');
 		
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Communications', 'Communications', 'manage_mdjm', 'mdjm-comms', 'f_mdjm_admin_comms');
+		
+		/*if( current_user_can( 'manage_options' ) )	{
+			add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Contact Forms', 'Contact Forms', 'manage_mdjm', 'mdjm-contact-forms', 'f_mdjm_admin_contact_forms');
+		}*/
 
 		if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - DJ\'s ', 'DJ\'s' , 'manage_mdjm', 'mdjm-djs', 'f_mdjm_admin_djs');
 		
@@ -181,6 +185,20 @@
 		wp_nonce_field( "mdjm-comms-page" );
 		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/comms.php' );
 	} // f_mdjm_admin_comms
+	
+/*
+* f_mdjm_admin_contact_forms
+* 30/12/2014
+* @since 1.0
+* Display the Contact Form Admin page
+*/
+	function f_mdjm_admin_contact_forms()	{
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+		wp_nonce_field( "mdjm-contact_forms" );
+		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/contact-forms.php' );
+	} // f_mdjm_admin_contact_forms
 
 /**
  * f_mdjm_admin_djs
@@ -246,6 +264,7 @@
 						'dashboard'             => 'admin.php?page=mdjm-dashboard',
 						'settings'              => 'admin.php?page=mdjm-settings',
 						'clients'               => 'admin.php?page=mdjm-clients',
+						'inactive_clients'      => 'admin.php?page=mdjm-clients&display=inactive_client',
 						'add_client'            => 'user-new.php',
 						'edit_client'           => 'user-edit.php?user_id=',
 						'comms'                 => 'admin.php?page=mdjm-comms',
@@ -265,6 +284,7 @@
 						'client_fields'         => 'admin.php?page=mdjm-settings&tab=client_fields',
 						'availability'          => 'admin.php?page=mdjm-availability',
 						'debugging'             => 'admin.php?page=mdjm-settings&tab=debugging',
+						'contact_forms'         => 'admin.php?page=mdjm-contact-forms',
 						'mydjplanner'           => 'http://www.mydjplanner.co.uk',
 						);
 		if( $mdjm_page == 'mydjplanner' )	{
@@ -664,7 +684,7 @@
 				f_mdjm_deposit_paid( $id );
 				
 			if( isset( $event['balance_status'] ) && $event['balance_status'] == 'Paid' )
-				f_mdjm_deposit_paid( $id );
+				f_mdjm_balance_paid( $id );
 			
 			/* Add venue */	
 			if( isset( $event['save_venue'] ) && $event['save_venue'] == 'Y' )	{
@@ -773,11 +793,8 @@
 						'entry' => 'The event has been updated'
 						);
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			?>
-            <div id="message" class="updated">
-			<p><?php _e( $message ) ?></p>
-            </div>
-            <?php
+			f_mdjm_update_notice( 'updated', $message );
+			
 			if( isset( $now_pending ) && $mdjm_options['contract_to_client'] == 'Y' )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['contract_email_from'] );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
@@ -798,19 +815,11 @@
 						'entry' => 'Contract Review email sent to client'
 						);
 					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-					?>
-                    <div id="message" class="updated">
-                    <p><?php _e( $message ) ?></p>
-                    </div>
-                    <?php
+					f_mdjm_update_notice( 'updated', $message );
 				}
 				else	{
-					$message .= 'Unable to contract review confirmation email to client';
-					?>
-                    <div id="message" class="error">
-                    <p><?php _e( $message ) ?></p>
-                    </div>
-                    <?php
+					$message = 'Unable to contract review confirmation email to client';
+					f_mdjm_update_notice( 'error', $message );
 				}
 			}
 			if( isset( $now_approved ) )	{
@@ -836,19 +845,10 @@
 							'entry' => 'Booking confirmation email sent to client'
 							);
 						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-						?>
-						<div id="message" class="updated">
-						<p><?php _e( $message ) ?></p>
-						</div>
-						<?php
+						f_mdjm_update_notice( 'updated', $message );
 					}
 					else	{
-						$message .= 'Unable to send booking confirmation email to client';
-						?>
-						<div id="message" class="error">
-						<p><?php _e( $message ) ?></p>
-						</div>
-						<?php
+						f_mdjm_update_notice( 'error', 'Unable to send booking confirmation email to client' );
 					}
 				}
 				/* Confirmation to DJ */
@@ -866,11 +866,7 @@
 			}
 		}
 		else	{ // No event
-			?>
-			<div id="message" class="error">
-			<p><?php _e( 'No information was changed' ) ?></p>
-			</div>
-            <?php
+			f_mdjm_update_notice( 'error', 'No information was changed' );
 		}
 	}
 
@@ -1266,7 +1262,7 @@
 
 		$info['next_event'] = 'N/A';
 
-		if( $next_event->num_rows > 0 )	{
+		if( $next_event )	{
 			$info['next_event'] = date( "jS F Y", strtotime( $next_event->event_date ) );
 		}
 		$info['event_id'] = $next_event->event_id;
@@ -1615,7 +1611,7 @@
 	function f_mdjm_dj_working_today()	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		$dj_event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_dj` != '" . get_current_user_id() . "' AND DATE(event_date) = CURDATE()";
+		$dj_event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_dj` != '" . get_current_user_id() . "' AND DATE(event_date) = CURDATE() AND `contract_status` = 'Approved'";
 		$dj_event_results = $wpdb->get_results( $dj_event_query );
 	
 		return $dj_event_results;
@@ -1916,6 +1912,53 @@
 			return false;	
 		}
 	} // f_mdjm_is_client
+	
+/*
+* f_mdjm_set_client_status()
+* 01/01/2015
+* @since 1.0
+* Updates the client's role within WordPress
+*/
+	function f_mdjm_set_client_role( $clients, $role )	{
+		/* $clients must be an array */
+		if( !is_array( $clients ) ) $clients = array( $clients );
+		$user_count = count( $clients );
+		$role_name = array(
+						'client'          => 'Active',
+						'inactive_client' => 'Inactive',
+						);
+		if( $user_count == 1 )	{
+			$user = 'user';
+		}
+		else	{
+			$user = 'users';
+		}
+		$i = 0;
+		foreach( $clients as $client )	{
+			$user_id = wp_update_user( array( 'ID' => $client, 'role' => $role ) );
+			
+			if ( is_wp_error( $user_id ) )	{ /* Action Failed */
+				$user_error = true;
+			}
+			else	{ /* Action Succeeded */
+				$i++;
+			}
+		}
+		if( $user_error && $i == 0 )	{
+			$class = 'error';
+			$message = 'ERROR: ' . $i . ' users were set as ' . $role_name[$role] . '.<br />Contact <a href="http://www.mydjplanner.co.uk/forums/forum/bugs/" target="_blank" title="Report this bug">MDJM Support</a> with details of any errors that are displayed on your screen.';
+		}
+		elseif( $user_error && $i < $user_count )	{
+			$class = 'update-nag';
+			$message = 'WARNING: Some errors occured and only ' . $i . ' out of ' . $user_count . ' ' . $user . ' were set as ' . $role_name[$role] . '.';
+		}
+		else	{
+			$class = 'updated';
+			$message = $i . ' ' . $user . ' successfully marked as ' . $role_name[$role] . '.';	
+		}
+		f_mdjm_update_notice( $class, $message );
+		
+	} // f_mdjm_set_client_status
 
 /****************************************************************************************************
 --	CONTRACT FUNCTIONS

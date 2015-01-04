@@ -142,9 +142,16 @@
  * @since 1.0
 */
 
-	if( isset( $_GET['action'] ) )	{ // Action to process
+	if( isset( $_GET['action'] ) && !isset( $_POST['client'] ) )	{ // Action to process
 		$func = 'f_mdjm_' . $_GET['action'];
-		$func( $_GET['client_id'] );
+		/* Check for actions */
+		if( isset( $_GET['role'] ) && !empty( $_GET['role'] ) )	{
+			$func( $_GET['client_id'], $_GET['role'] );
+			f_mdjm_render_clients_table();
+		}
+		else	{
+			$func( $_GET['client_id'] );
+		}
 	}
 	
 	else	{ // Display the Client table

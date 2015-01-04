@@ -143,7 +143,7 @@
 	
 	function f_mdjm_render_comms( $mdjm_options )	{
 		if( isset( $_GET['template'] ) && !empty( $_GET['template'] ) )	{
-			$template_query = new WP_Query( array( 'post_type' => 'email_template', 'p' => $_GET['template'] ) );
+			$template_query = new WP_Query( array( 'post_type' => array( 'email_template', 'contract' ), 'p' => $_GET['template'] ) );
 			if ( $template_query->have_posts() ) {
 				while ( $template_query->have_posts() ) {
 					$template_query->the_post();
@@ -198,6 +198,11 @@
 								'orderby' => 'name',
 								'order' => 'ASC',
 								);
+		$contract_args = array(
+								'post_type' => 'contract',
+								'orderby' => 'name',
+								'order' => 'ASC',
+								);
 		if( is_dj() )	{ // Check templates that DJ's cannot use
 			if( !isset( $mdjm_permissions ) )	{
 				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
@@ -207,11 +212,13 @@
 					$mdjm_permissions['dj_disable_template'] = array( $mdjm_permissions['dj_disable_template'] );	
 				}
 				$email_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
+				$contract_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
 			}
 			
 		}
 			$email_query = new WP_Query( $email_args );
 			if ( $email_query->have_posts() ) {
+				?><option value="email_templates" disabled>--- EMAIL TEMPLATES ---</option><?php
 				while ( $email_query->have_posts() ) {
 					$email_query->the_post();
 					?>
@@ -220,6 +227,18 @@
 				}
 			}
 			wp_reset_postdata();
+			$contract_query = new WP_Query( $contract_args );
+			if ( $contract_query->have_posts() ) {
+				?><option value="contracts" disabled>--- CONTRACTS ---</option><?php
+				while ( $contract_query->have_posts() ) {
+					$contract_query->the_post();
+					?>
+					<option value="<?php echo add_query_arg( array( 'template' => get_the_id() ) ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( get_the_id(), $_GET['template'] ); } ?>><?php echo get_the_title(); ?></option>
+                    <?php
+				}
+			}
+			wp_reset_postdata();
+			
 		?>
 		</select></td>
 		</tr>

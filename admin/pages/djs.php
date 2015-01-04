@@ -44,13 +44,13 @@
 		<form method="post" name="mdjm_dj_search" id="mdjm_dj_search">
 		<input type="hidden" name="page" value="mdjm-djs">
 		<?php
-		$djs_table->search_box( 'Search DJ\'s', 'search_id' );
+		//$djs_table->search_box( 'Search DJ\'s', 'search_id' );
 		
 		$djs_table->display(); 
 		?>
         </form></div>
         <?php 
-	} // f_mdjm_render_client_table
+	} // f_mdjm_render_djs_table
 
 /**
  * 

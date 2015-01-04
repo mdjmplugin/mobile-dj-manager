@@ -2,9 +2,9 @@
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 /*
 Plugin Name: Mobile DJ Manager
-Description: Management interface for mobile DJ's.
-Version: 0.9.9.1
-Date: 30 December 2014
+Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
+Version: 0.9.9.2
+Date: 04 January 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -28,7 +28,7 @@ Author URI: http://www.mydjplanner.co.uk
 
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.9.9.1' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9.9.2' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );

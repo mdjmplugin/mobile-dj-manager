@@ -11,11 +11,7 @@
 		$client_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		unset( $client_fields[$_GET['field']] );
 		if( update_option( WPMDJM_CLIENT_FIELDS, $client_fields ) )	{
-			?>
-			<div id="message" class="updated">
-			<p><strong><?php _e('Settings saved.') ?></strong></p>
-			</div>
-			<?php
+			f_mdjm_update_notice( 'updated', 'Settings saved.' );
 		}
 	}
 	
@@ -41,11 +37,7 @@
 		}
 
 		if( update_option( WPMDJM_CLIENT_FIELDS, $client_fields ) )	{
-			?>
-			<div id="message" class="updated">
-			<p><strong><?php _e('Settings saved.') ?></strong></p>
-			</div>
-            <?php
+			f_mdjm_update_notice( 'updated', 'Settings saved.' );
 		}
 	}
 

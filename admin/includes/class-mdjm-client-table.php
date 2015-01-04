@@ -12,7 +12,17 @@
 			if (isset ( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
-			$clientinfo = f_mdjm_get_clients( $display, $orderby, $order );
+			if( !isset( $_POST['s'] ) || empty( $_POST['s'] )	 ){
+				$clientinfo = f_mdjm_get_clients( $display, $orderby, $order );
+			}
+			else	{
+				$arg = array(	'search'  => $_POST['s'],
+								'role'    => $display,
+								'orderby' => $orderby,
+								'order'   => $order
+							);
+				$clientinfo = get_users( $arg );
+			}
 			$client_data = array();
 			$url = admin_url();
 			
@@ -129,13 +139,14 @@
 	
 		function get_columns()	{ // The table columns
 			$columns = array(
-				'client_name' => __( '<strong>Name</strong>', 'mdjmclienttable' ),
-				'last_login' => __( '<strong>Last Login</strong>', 'mdjmclienttable' ),
-				'client_email' => __( '<strong>Email</strong>', 'mdjmclienttable' ),
-				'client_events' => __( '<strong>No. Events</strong>', 'mdjmclienttable' ),
-				'client_next_event' => __( '<strong>Next Event</strong>', 'mdjmclienttable' ),
-				'client_journal' => __( '<strong>Journal</strong>', 'mdjmclienttable' )
-			);
+						'cb'                => '<input type="checkbox" />',
+						'client_name'       => __( '<strong>Name</strong>', 'mdjmclienttable' ),
+						'last_login'        => __( '<strong>Last Login</strong>', 'mdjmclienttable' ),
+						'client_email'      => __( '<strong>Email</strong>', 'mdjmclienttable' ),
+						'client_events'     => __( '<strong>No. Events</strong>', 'mdjmclienttable' ),
+						'client_next_event' => __( '<strong>Next Event</strong>', 'mdjmclienttable' ),
+						'client_journal'    => __( '<strong>Journal</strong>', 'mdjmclienttable' ),
+						);
 			 return $columns;
 		} // get_columns
 		
@@ -150,9 +161,63 @@
 			return $sortable_columns;
 		} // get_sortable_columns
 		
+		/* Bulk Actions */
+		
+		function get_bulk_actions() { // Define the bulk actions for the drop down list
+			if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_client' )	{
+				$actions = array(
+							'inactive' => 'Mark Inactive',
+							);
+			}
+			if( isset( $_GET['display'] ) && $_GET['display'] == 'inactive_client' )	{
+				$actions = array(
+							'active' => 'Mark Active',
+							);
+			}
+			return $actions;
+		} // get_bulk_actions
+		
+		function process_bulk_action() {
+			$action = $this->current_action();
+			$clients = isset( $_POST['client'] ) ? $_POST['client'] : false;
+			if( !is_array( $clients ) )
+				$clients = array( $clients );
+			
+			if( empty( $action ) )
+				return;
+			
+			if( 'inactive' === $this->current_action() ) {
+					f_mdjm_set_client_role( $clients, 'inactive_client' );
+			}
+			if( 'active' === $this->current_action() ) {
+					f_mdjm_set_client_role( $clients, 'client' );
+			}
+		} // process_bulk_action
+		
+		function column_cb( $item ) { // Checkbox column
+			return sprintf(
+				'<input type="checkbox" name="client[]" value="%s" />', $item['client_id']
+			);    
+		} // column_cb
+		
+		function column_client_name( $item ) {
+			if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_client' )	{
+				$actions = array(
+						'inactive_client' => sprintf( '<a href="?page=%s&action=%s&role=inactive_client&client_id=%s">Mark Inactive</a>', $_REQUEST['page'], 'set_client_role', $item['client_id'] ),
+							);
+			}
+			else	{
+				$actions = array(
+						'active_client' => sprintf( '<a href="?page=%s&action=%s&role=client&client_id=%s">Mark Active</a>', $_REQUEST['page'], 'set_client_role', $item['client_id'] ),
+							);	
+			}
+			return sprintf( '%1$s %2$s', $item['client_name'], $this->row_actions( $actions ) );
+		}
+		
 		function prepare_items()	{
 			$per_page = $this->get_items_per_page('clients_per_page', 25);
 			$current_page = $this->get_pagenum();
+			$this->process_bulk_action(); // Process bulk actions
 			$columns  = $this->get_columns(); // Retrieve table columns
 			$hidden   = array(); // Which fields are hidden
 			$sortable = $this->get_sortable_columns(); // Which fields can be sorted by

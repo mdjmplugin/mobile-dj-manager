@@ -459,46 +459,66 @@
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
 		/* Email client if required */
-		if( $status == 'Pending' || $status == 'Approved' 
-			&& isset( $mdjm_options['contract_to_client'] ) 
-			&& $mdjm_options['contract_to_client'] == 'Y' )	{
+		if( $status == 'Pending' || $status == 'Approved' )	{
 			
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
 			$clientinfo = get_userdata( $eventinfo->user_id );
 			
 			if( $status == 'Pending' )	{
-				$type = 'email_contract';
-				$set_from = $mdjm_options['contract_email_from'];
-				$subject = 'Your DJ Booking';
-				$j_entry = 'Contract Review email sent to client';
-				$message = 'Thank you. Your event has been updated and your contract has been issued. You will receive confirmation via email shortly.';
+				$message = 'Thank you. Your event has been updated and your contract has been issued.';
+				if( isset( $mdjm_options['contract_to_client'] ) && $mdjm_options['contract_to_client'] == 'Y' )	{
+					$message .= 'You will receive confirmation via email shortly.';
+					$type = 'email_contract';
+					$set_from = $mdjm_options['contract_email_from'];
+					$subject = 'Your DJ Booking';
+					$j_entry = 'Contract Review email sent to client';
+					
+					$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
+					$info = f_mdjm_prepare_email( $eventinfo, $type );
+					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+						$j_args = array (
+							'client' => $eventinfo->user_id,
+							'event' => $eventinfo->event_id,
+							'author' => get_current_user_id(),
+							'type' => 'Email Client',
+							'source' => 'Admin',
+							'entry' => $j_entry,
+							);
+						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+					}
+				}
 			}
 			if( $status == 'Approved' )	{
-				$type = 'email_client_confirm';
-				$set_from = $mdjm_options['confirm_email_from'];
-				$subject = 'DJ Booking Confirmation';
-				$j_entry = 'Booking confirmation email sent to client';
-				$message = 'Thank you. Your event is now confirmed. You will receive confirmation via email shortly.';
-			}
-			
-			$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
-			$info = f_mdjm_prepare_email( $eventinfo, $type );
-			if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
-				$j_args = array (
-					'client' => $eventinfo->user_id,
-					'event' => $eventinfo->event_id,
-					'author' => get_current_user_id(),
-					'type' => 'Email Client',
-					'source' => 'Admin',
-					'entry' => 'Contract Review email sent to client'
-					);
-				if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+				$message = 'Thank you. Your event is now confirmed.';
+				if( isset( $mdjm_options['boooking_conf_to_client'] ) && $mdjm_options['boooking_conf_to_client'] == 'Y' )	{
+					$message .= ' You will receive confirmation via email shortly.';
+					$type = 'email_client_confirm';
+					$set_from = $mdjm_options['confirm_email_from'];
+					$subject = 'DJ Booking Confirmation';
+					$j_entry = 'Booking confirmation email sent to client';
+					
+					$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
+					$info = f_mdjm_prepare_email( $eventinfo, $type );
+					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+						$j_args = array (
+							'client' => $eventinfo->user_id,
+							'event' => $eventinfo->event_id,
+							'author' => get_current_user_id(),
+							'type' => 'Email Client',
+							'source' => 'Admin',
+							'entry' => $j_entry,
+							);
+						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+					}
+				}
 			}
 		}
 		if( $status == 'Approved' )	{
-			$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
-			$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
-			wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );	
+			if( isset( $mdjm_options['boooking_conf_to_dj'] ) && $mdjm_options['boooking_conf_to_dj'] == 'Y' )	{
+				$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
+				$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
+				wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
+			}
 		}
 		
 		echo '<p><strong>' . $message . '</strong></p>';

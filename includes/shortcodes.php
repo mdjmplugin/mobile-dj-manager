@@ -21,7 +21,6 @@
 		
 		/* Process Functions */
 		else	{
-			//include_once WPMDJM_PLUGIN_DIR . '/includes/availability.php';
 			$func = $args[$atts['function']];
 			if( function_exists( $func ) )	{
 				ob_start();

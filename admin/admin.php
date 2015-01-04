@@ -13,6 +13,7 @@
 		global $mdjm_options;
 		$admin_settings_field = array(  'company_name',
 										'app_name',
+										'items_per_page',
 										'time_format',
 										'short_date_format',
 										'pass_length',
@@ -107,6 +108,18 @@
 									'section' => 'general',
 									'page' => 'settings',
 									); // app_name
+									
+		$admin_fields['items_per_page'] = array(
+									'display' => 'Items per Page',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'text',
+									'class' => 'small-text',
+									'value' => $mdjm_options['items_per_page'],
+									'text' => '',
+									'desc' => 'The number of items you want to list per page in event/client/DJ/Venue view',
+									'section' => 'general',
+									'page' => 'settings',
+									); // items_per_page
 									
 		$admin_fields['time_format'] = array(
 									'display' => 'Display Time as?',
@@ -898,7 +911,7 @@
 									); // dj_disable_shortcode
 									
 		$admin_fields['dj_disable_template'] = array(
-									'display' => 'Disabled Email Templates for DJ\'s',
+									'display' => 'Disabled Templates for DJ\'s',
 									'key' => 'mdjm_plugin_permissions',
 									'type' => 'multiple_select',
 									'class' => 'code',
@@ -909,7 +922,7 @@
 														'name' =>  'mdjm_plugin_permissions[dj_disable_template][]',
 														'sort_order' => '',
 														'selected' => $mdjm_options['dj_disable_template'],
-														'list_type' => 'email_templates',
+														'list_type' => 'templates',
 														),
 									'section' => 'templates',
 									'page' => 'permissions',
@@ -1436,7 +1449,7 @@
 				}
 				echo '</select>';	
 			}
-			elseif( $args['custom_args']['list_type'] == 'email_templates' )		{
+			elseif( $args['custom_args']['list_type'] == 'templates' )		{
 				echo '<select size="8" name="' . $args['key'] . '[' . $args['field'] . '][]" id="' . $args['field'] . '" multiple="multiple">';
 				$email_args = array(
 									'post_type' => 'email_template',
@@ -1445,8 +1458,27 @@
 									);
 				$email_query = new WP_Query( $email_args );
 				if ( $email_query->have_posts() ) {
+					?><option value="email_templates" disabled>--- EMAIL TEMPLATES ---</option><?php
 					while ( $email_query->have_posts() ) {
 						$email_query->the_post();
+						echo '<option value="' . get_the_id() . '"';
+						if( in_array( get_the_id(), $mdjm_options['dj_disable_template'] ) )	{
+							echo ' selected="selected"';	
+						}
+						echo '>' . get_the_title() . '</option>' . "\n";	
+					}
+				}
+				wp_reset_postdata();
+				$contract_args = array(
+									'post_type' => 'contract',
+									'orderby' => 'name',
+									'order' => 'ASC',
+									);
+				$contract_query = new WP_Query( $contract_args );
+				if ( $contract_query->have_posts() ) {
+					?><option value="contracts" disabled>--- CONTRACT TEMPLATES ---</option><?php
+					while ( $contract_query->have_posts() ) {
+						$contract_query->the_post();
 						echo '<option value="' . get_the_id() . '"';
 						if( in_array( get_the_id(), $mdjm_options['dj_disable_template'] ) )	{
 							echo ' selected="selected"';	
