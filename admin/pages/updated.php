@@ -101,9 +101,9 @@
 	} // f_mdjm_updated_footer
 	
 /**************************************************
-				VERSION 0.9.9.3
+				VERSION 0.9.9.4
 **************************************************/
-	function f_mdjm_updated_to_0_9_9_3()	{
+	function f_mdjm_updated_to_0_9_9_4()	{
 		global $mdjm_options;
 		?>
         <tr>
@@ -127,7 +127,7 @@
         <tr>
         <td>
             <ui>
-            	<li>New <span class="code">Items per Page</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added to determine the number of results displayed on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a>, <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages. It is currently set to <?php echo get_option( 'posts_per_page' ); ?> items per page, but you can customise it <a href="<?php f_mdjm_admin_page( 'settings' ); ?>"here.</a></li>
+            	<li>New <span class="code">Items per Page</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added to determine the number of results displayed on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a>, <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages. It is currently set to <?php echo get_option( 'posts_per_page' ); ?> items per page, but you can customise it <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">here.</a></li>
             	<li>Enabled pagination on the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages.</li>
             	<li>Enabled searching within the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event list screen</a>, the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client list screen</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venue list screen</a>. <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a> can be searched based upon a <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client's</a> email address, URL, WordPress ID or username (this does not currently include display name due to a restriction within WordPress). <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> are searched upon any part of the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venue</a> name.</li>
                 <li>Big Fix: When a Client booked an event via the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a> an email was sent to them event if the <span class="code">Contract link to client?</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> was disabled.</li>
@@ -139,7 +139,7 @@
         </table>
         </td>
        <?php
-	} // f_mdjm_updated_to_0_9_9_3
+	} // f_mdjm_updated_to_0_9_9_4
 	
 /**************************************************
 				VERSION 0.9.9.1
