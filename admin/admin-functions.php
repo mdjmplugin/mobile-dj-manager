@@ -524,7 +524,7 @@
 /***************************************************
 			 	UPGRADES FROM 0.9.3
 ***************************************************/
-			if( $current_version_mdjm == '0.9.3' )	{
+			if( $current_version_mdjm <= '0.9.3' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				
 				/* Remove the email template option keys that became deprecated in 0.9.3 */
@@ -538,12 +538,12 @@
 				
 				/* Update the options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
-			} // if( $current_version_mdjm == '0.9.3' )
+			} // if( $current_version_mdjm <= '0.9.3' )
 			
 /***************************************************
 			 	UPGRADES FROM 0.9.4
 ***************************************************/
-			if( $current_version_mdjm == '0.9.4' )	{
+			if( $current_version_mdjm <= '0.9.4' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				$mdjm_schedules = get_option( 'mdjm_schedules' );
 				
@@ -560,19 +560,19 @@
 				/* Update the options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 				update_option( 'mdjm_schedules', $mdjm_schedules );
-			} // if( $current_version_mdjm == '0.9.4' )
+			} // if( $current_version_mdjm <= '0.9.4' )
 			
 /***************************************************
 			 	UPGRADES FROM 0.9.5
 ***************************************************/
-			if( $current_version_mdjm == '0.9.5' )	{
+			if( $current_version_mdjm <= '0.9.5' )	{
 				// No procedures
 			} // if( $current_version_mdjm == '0.9.5' )
 			
 /***************************************************
 			 	UPGRADES FROM 0.9.6
 ***************************************************/
-			if( $current_version_mdjm == '0.9.6' )	{
+			if( $current_version_mdjm <= '0.9.6' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
 				
@@ -611,14 +611,14 @@
 /***************************************************
 			 	UPGRADES FROM 0.9.7
 ***************************************************/
-			if( $current_version_mdjm == '0.9.7' )	{
+			if( $current_version_mdjm <= '0.9.7' )	{
 				// No procedures
 			} // if( $current_version_mdjm == '0.9.7' )
 			
 /***************************************************
 			 	UPGRADES FROM 0.9.8
 ***************************************************/
-			if( $current_version_mdjm == '0.9.8' )	{
+			if( $current_version_mdjm <= '0.9.8' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
@@ -658,12 +658,12 @@
 				
 				/* Add debug option */
 				add_option( 'mdjm_debug', '0' );
-			} // if( $current_version_mdjm == '0.9.8' )
-			
+			} // if( $current_version_mdjm <= '0.9.8' )
+
 /***************************************************
 			 	UPGRADES FROM 0.9.9
 ***************************************************/
-			if( $current_version_mdjm == '0.9.9' )	{
+			if( $current_version_mdjm <= '0.9.9' )	{
 				/* Get needed options */
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
 				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
@@ -671,7 +671,6 @@
 				/* Set new options */
 				$mdjm_options['boooking_conf_to_client'] = 'Y';
 				$mdjm_options['boooking_conf_to_dj'] = 'Y';
-				$mdjm_options['items_per_page'] = get_option( 'posts_per_page' );
 				
 				/* Set new client dialogue options */
 				$mdjm_frontend_text['warn_incomplete_profile'] = 'Y';
@@ -679,7 +678,36 @@
 				/* Update Options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
-			} // if( $current_version_mdjm == '0.9.9' )
+			} // if( $current_version_mdjm <= '0.9.9' )
+
+/***************************************************
+			 	UPGRADES FROM 0.9.9.1
+***************************************************/
+			if( $current_version_mdjm <= '0.9.9.1' )	{
+				/* Get needed options */
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Set new options */
+				$mdjm_options['items_per_page'] = get_option( 'posts_per_page' );
+								
+				/* Update Options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.1' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.9.2
+***************************************************/
+/* Same procedures as 0.9.9.1 */
+			if( $current_version_mdjm <= '0.9.9.1' )	{
+				/* Get needed options */
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Set new options */
+				$mdjm_options['items_per_page'] = get_option( 'posts_per_page' );
+								
+				/* Update Options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.1' )
 
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
