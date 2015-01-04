@@ -1262,7 +1262,7 @@
 
 		$info['next_event'] = 'N/A';
 
-		if( $next_event )	{
+		if( $next_event->num_rows > 0 )	{
 			$info['next_event'] = date( "jS F Y", strtotime( $next_event->event_date ) );
 		}
 		$info['event_id'] = $next_event->event_id;
