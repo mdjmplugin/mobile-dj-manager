@@ -93,7 +93,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 	<li>Confirmation message displayed to a client when they book an event or approve their contract via the Client Zone now only displays the <strong>You will receive confirmation via email shortly</strong> message if you have configured emails to be sent in settings.</li>
 </ui>
 
-If you have an idea for a new feature, or an improvement to an existing one, <a href="<a href="http://www.mydjplanner.co.uk" target="_blank">let us know here.</a>
+If you have an idea for a new feature, or an improvement to an existing one, <a href="http://www.mydjplanner.co.uk" target="_blank">let us know here.</a>
 
 = 0.9.9.1 =
 <h2>Minor Release with a few enhancements</h2>
