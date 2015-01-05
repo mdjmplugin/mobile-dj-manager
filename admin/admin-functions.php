@@ -254,10 +254,11 @@
 		$event_types = 'Adult Birthday Party,Child Birthday Party,Wedding,Corporate Event,Other,';
 		$enquiry_sources = 'Website,Google,Facebook,Email,Telephone,Other,';
 		$playlist_when = 'General,First Dance,Second Dance,Last Song,Father & Bride,Mother & Son,DO NOT PLAY,Other,';
+		$items_per_page = get_option( 'posts_per_page' );
 		$mdjm_init_options = array(
 							'company_name'            => get_bloginfo( 'name' ),
 							'app_name'                => 'Client Zone',
-							'items_per_page'          => get_option( 'posts_per_page' ),
+							'items_per_page'          => $items_per_page,
 							'time_format'             => 'H:i',
 							'short_date_format'       => 'd/m/Y',
 							'pass_length'             => '8',
