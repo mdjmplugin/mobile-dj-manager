@@ -724,13 +724,18 @@
 ***************************************************/
 			if( $current_version_mdjm <= '0.9.9.4' )	{
 				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Cleanup previous typo */
 				if( isset( $mdjm_options['boooking_conf_to_client'] ) )	{
 					unset( $mdjm_options['boooking_conf_to_client'] );	
 				}
 				if( isset( $mdjm_options['boooking_conf_to_dj'] ) )	{
 					unset( $mdjm_options['boooking_conf_to_dj'] );	
 				}
+				
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 			} // if( $current_version_mdjm == '0.9.9.4' )
+			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 ***************************************************/
