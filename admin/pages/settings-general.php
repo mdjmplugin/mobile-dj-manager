@@ -34,14 +34,35 @@
 				echo '<form method="post" action="options.php">';
 				echo '<table class="form-table">';
 				if( $lic_info && $lic_info[0] == 'XXXX' ) $class = ' class="form-invalid"';
+				if( $lic_info && $lic_info[2] )	{
+					$date_diff = strtotime( $lic_info[2] ) - time();
+					if( $date_diff < 0 ) { $date_diff = 0; }
+					$days_remaining = floor( $date_diff / 60 / 60 / 24 );
+					if( $days_remaining < 0 ) $days_remaining = 0;
+					if( $days_remaining == 1 )	{
+						$days = ' day';	
+					}
+					else	{
+						$days = ' days';
+					}
+					if( floor( $date_diff / 60 / 60 / 24 ) < 30 )	{
+						$class = ' class="form-invalid"';
+						$lic_msg = ' - Only ' . $days_remaining . $days . ' remaining. <a href="http://www.mydjplanner.co.uk/shop/" target="_blank">Renew now</a>';	
+					}
+				}
 				echo '<tr' . $class . '>';
 				echo '<th scope="row">License Key:</th>';
 				if( $lic_info )	{
 					if( $lic_info[0] == 'XXXX' )	{
-						echo '<td>Running in trial mode until ' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . '. Visit <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';
+						echo '<td' . $class . '>Running in trial mode until ' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . '. (' . $days_remaining . $days . ' remaining) Visit <a href="http://www.mydjplanner.co.uk/shop/" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';
 					}
 					else	{
-						echo '<td>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ')</td>';
+						if( isset( $lic_msg ) )	{
+							echo '<td' . $class . '>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ' ' . $lic_msg . ')</td>';
+						}
+						else	{
+							echo '<td' . $class . '>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ')</td>';
+						}
 					}
 				}
 				else	{

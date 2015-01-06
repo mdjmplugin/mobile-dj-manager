@@ -548,7 +548,7 @@
 		global $wpdb, $mdjm_options;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		require_once( WPMDJM_PLUGIN_DIR . '/includes/functions.php' );
-
+				
 		$event_date = explode( '/', $event['event_date'] );
 		$event_date = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
 		if( isset( $event['dj_setup_date'] ) && $event['dj_setup_date'] != '' )	{
@@ -638,11 +638,7 @@
 						'entry' => 'The event has been created'
 						);
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-			?>
-			<div id="message" class="updated">
-			<p><?php _e( $message ) ?></p>
-			</div>
-            <?php
+			f_mdjm_update_notice( 'updated', $message );
 			if( isset( $event['email_enquiry'] ) && $event['email_enquiry'] == 'Y' )	{
 				$eventinfo = f_mdjm_get_eventinfo_by_id( $id );
 				
@@ -652,6 +648,7 @@
 				}
 				
 				$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['enquiry_email_from'] );
+				$type = array( 'type' => 'custom', 'id' => $event['quote_email_template'], 'subject' => true );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_enquiry' );
 				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
 					$subject = $info['subject'];	
@@ -670,11 +667,7 @@
 						'entry' => 'Quote emailed to client'
 						);
 					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-					?>
-                    <div id="message" class="updated">
-                    <p><?php _e( $message ) ?></p>
-                    </div>
-                    <?php
+					f_mdjm_update_notice( 'updated', $message );
 				}
 				else	{
 					wp_die( $clientinfo->user_email . '<br />DJ Enquiry<br />' . $info['content'] . '<br />' . $email_headers );
@@ -1135,7 +1128,9 @@
 */
 	function f_mdjm_fail_enquiry( $event )	{
 		global $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
 						'contract_status' => 'Failed Enquiry',
 						'last_updated_by' => get_current_user_id(),
@@ -1143,12 +1138,13 @@
 					);
 		if( !is_array( $event ) )
 			$event = array( $event );
+			
 		foreach( $event as $event_id )	{
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
 			$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
 			$clientinfo = get_userdata( $eventinfo->user_id );
 			$j_args = array (
-						'client' => $eventinfo->user_id,
+						'client' => $clientinfo->ID,
 						'event' => $event_id,
 						'author' => get_current_user_id(),
 						'type' => 'Fail Enquiry',
@@ -2050,7 +2046,7 @@
 			while ( $template_query->have_posts() ) {
 				$template_query->the_post();
 				/* Check if we are using the post title as the subject */
-				if( isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' && !is_array( $type ) )	{
+				if( isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' && isset( $type['subject'] ) )	{
 					$subject = get_the_title();
 				}
 				$content = get_the_content();

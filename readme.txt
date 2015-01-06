@@ -77,6 +77,18 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 0.9.9.5 =
+<h2>New Features</h2>
+We have added a drop down field to the event creation process that becomes visible if you select the option to Email Quote?. The drop down list Select email Template to Use enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within Settings is selected.
+This provides the flexibilty for you to create different templates for use with different event types should you wish to.
+If you have Permissions configured to allow DJ's to create events, the Disabled Templates for DJ's setting applies.
+
+<h2>Bug Fixes &amp; Minor Enhancements</h2>
+<ui>
+	<li>AdjustedCommunications page. Send Email to: dropdown now seperates Clients &amp; DJ's in a better format</li>
+	<li>An additional debugging option has been added to enable more in-depth debugging by the MDJM Support Team. Clicking the Submit Debug Files button, sends over information regarding your MDJM Settings to the Support Staff.</li>
+</ui>
+
 = 0.9.9.4 =
 <h2>New Features</h2>
 <ui>

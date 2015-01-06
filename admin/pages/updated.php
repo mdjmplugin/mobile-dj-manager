@@ -26,7 +26,8 @@
         <td align="center"><img src="<?php echo WPMDJM_PLUGIN_URL . '/admin/images/banner-772x250.png'; ?>" width="772" height="250" /></td>
         </tr>
         <tr>
-        <td align="center" style="font-size:24px; font-weight:bold; color:#F90">Welcome to Mobile DJ Manager version <?php echo WPMDJM_VERSION_NUM; ?></td>
+        <td align="center"><span style="font-size:24px; font-weight:bold; color:#F90">Welcome to Mobile DJ Manager version <?php echo WPMDJM_VERSION_NUM; ?></span><br />
+<a href="<?php wp_get_referer(); ?>">Click here to proceed to the requested page</a></td>
         </tr>
         </table>
         <table>
@@ -81,7 +82,7 @@
         </tr>
         <tr>
         <td>Not rated <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank">Mobile DJ Manager for WordPress</a> yet?<br /><br />
-        We'd really appreciate your support by submitting your rating and comments for our plugin. <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager/" title="Rate Mobile DJ Manager" target="_blank">Click Here</a> to submit your review now - Thanks :)</td>
+        We'd really appreciate your support by submitting your rating and comments for our plugin. <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager?rate=5#postform" title="Rate Mobile DJ Manager" target="_blank">Click Here</a> to submit your review now - Thanks :)</td>
         </tr>
         <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Latest News & Topics</td>
@@ -99,6 +100,35 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 0.9.9.5
+**************************************************/
+	function f_mdjm_updated_to_0_9_9_5()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Event Enquiry Email Template</font><br>
+		We have added a drop down field to the event creation process that becomes visible if you select the option to <span class="code">Email Quote?</span>. The drop down list <span class="code">Select email Template to Use</span> enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> is selected.<br /><br />
+		This provides the flexibilty for you to create different templates for use with different event types should you wish to.<br /><br />
+		If you have <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=permissions">Permissions</a> configured to allow DJ's to create events, the <span class="code">Disabled Templates for DJ's</span> setting applies.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>Adjusted <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> page. <span class="code">Send Email to:</span> dropdown now seperates Clients &amp; DJ's in a better format</li>
+                <li>An additional  <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">debugging</a> option has been added to enable more in-depth debugging by the MDJM Support Team. Clicking the Submit Debug Files button, sends over information regarding your MDJM Settings to the Support Staff.</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_0_9_9_5
 	
 /**************************************************
 				VERSION 0.9.9.4

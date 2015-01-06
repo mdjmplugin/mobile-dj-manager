@@ -718,6 +718,13 @@
 			if( $current_version_mdjm <= '0.9.9.3' )	{
 				// No procedures
 			} // if( $current_version_mdjm == '0.9.9.3' )
+
+/***************************************************
+			 	UPGRADES FROM 0.9.9.4
+***************************************************/
+			if( $current_version_mdjm <= '0.9.9.4' )	{
+				// No procedures
+			} // if( $current_version_mdjm == '0.9.9.4' )
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 ***************************************************/
@@ -1074,7 +1081,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					),
 				));
 			}*/
-			if( current_user_can( 'manage_options' ) )	{
+ 			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contracts',
 					'parent' => 'mdjm',

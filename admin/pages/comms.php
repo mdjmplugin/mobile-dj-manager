@@ -252,18 +252,20 @@
 		<th class="row-title" align="left"><label for="to">Send email to:</label></th>
 		<td><select name="to" id="to" onChange="MM_jumpMenu('parent',this,0)">
 			<option value="">Select a Recipient</option>
+            <option value="client_list" disabled="disabled">- - - CLIENTS - - -</option>
 		<?php
 		foreach( $clientinfo as $client )	{
 			if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $client->ID ) )	{ // Non-Admins only see their own clients
 				?>
-				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $client->ID, $_GET['to_user'] ); } ?>>[CLIENT]: <?php echo $client->display_name; ?></option>
+				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $client->ID, $_GET['to_user'] ); } ?>><?php echo $client->display_name; ?></option>
                 <?php
 			}
 		}
 		if( current_user_can( 'administrator' ) )	{ // Admins see DJ's too
+			 ?><option value="client_list" disabled="disabled">- - - DJ'S - - -</option><?php
 			foreach( $djinfo as $dj )	{
 				?>
-                <option value="<?php echo add_query_arg( array( 'to_user' => $dj->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $dj->ID, $_GET['to_user'] ); } ?>>[DJ]: <?php echo $dj->display_name; ?></option>
+                <option value="<?php echo add_query_arg( array( 'to_user' => $dj->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $dj->ID, $_GET['to_user'] ); } ?>><?php echo $dj->display_name; ?></option>
                 <?php	
 			}
 		}

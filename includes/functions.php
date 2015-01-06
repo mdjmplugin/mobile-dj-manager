@@ -806,7 +806,8 @@
 */
 	function f_mdjm_do_journal( $args )	{
 		global $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$args['id'] = '';
 		$args['timestamp'] = time();

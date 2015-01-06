@@ -652,6 +652,16 @@
 			}
 		}
 		?>
+        <script type="text/javascript">
+		function showTemplateDiv(elem){
+			if(elem.checked == 1)	{
+				document.getElementById('enquiry_template_row').style.display = "block";
+			}
+			else	{
+				document.getElementById('enquiry_template_row').style.display = "none";   
+			}
+		}
+		</script>
         <p>Finally, review the cost information below and select whether or not to email the quote to your client and/or reset their password...</p>
         <input type="hidden" name="action" value="add_event" />
         <table class="form-table">
@@ -675,9 +685,47 @@
 		?>
         <tr>
         <th scope="row"><label for="email_enquiry">Email Quote?</label></th>
-        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" /> <span class="description">Select this option to email the quote to the client once created</span> </td>
+        <td colspan="3"><input type="checkbox" id="email_enquiry" name="email_enquiry" value="Y" onclick="showTemplateDiv(this)" /> <span class="description">Select this option to email the quote to the client once created</span> </td>
         </tr>
         </table>
+        <div id="enquiry_template_row" style="display: none;">
+        <table class="form-table">
+        <tr>
+        <th scope="row"><label for="quote_email_template">Select email Template to Use:</label></th>
+        <td colspan="3"><select name="quote_email_template" id="quote_email_template">
+        <?php
+        $email_args = array(
+								'post_type' => 'email_template',
+								'orderby' => 'name',
+								'order' => 'ASC',
+								);
+		if( is_dj() )	{ // Check templates that DJ's cannot use
+			if( !isset( $mdjm_permissions ) )	{
+				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+			}
+			if( isset( $mdjm_permissions['dj_disable_template'] ) && !empty( $mdjm_permissions['dj_disable_template'] ) )	{
+				if( !is_array( $mdjm_permissions['dj_disable_template'] ) )	{
+					$mdjm_permissions['dj_disable_template'] = array( $mdjm_permissions['dj_disable_template'] );	
+				}
+				$email_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
+			}	
+		}
+		$email_query = new WP_Query( $email_args );
+			if ( $email_query->have_posts() ) {
+				while ( $email_query->have_posts() ) {
+					$email_query->the_post();
+					?>
+					<option value="<?php echo get_the_id(); ?>"<?php if( isset( $mdjm_options['email_enquiry'] ) ) { selected( get_the_id(), $mdjm_options['email_enquiry'] ); } ?>><?php echo get_the_title(); ?></option>
+                    <?php
+				}
+			}
+			wp_reset_postdata();
+		?>
+        </select>
+        </td>
+        </tr>
+        </table>
+        </div>
         <hr />
         <h3>Administration</h3>
         <table class="form-table">
