@@ -788,7 +788,7 @@
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 			f_mdjm_update_notice( 'updated', $message );
 			
-			if( isset( $now_pending ) && $mdjm_options['contract_to_client'] == 'Y' )	{
+			if( isset( $now_pending ) )	{
 				$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['contract_email_from'] );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_contract' );
 				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
@@ -797,22 +797,24 @@
 				else	{
 					$subject = 'Your DJ Booking';	
 				}
-				if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
-					$message = 'Contract email sent to client';
-					$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $eventinfo->event_id,
-						'author' => get_current_user_id(),
-						'type' => 'Email Client',
-						'source' => 'Admin',
-						'entry' => 'Contract Review email sent to client'
-						);
-					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-					f_mdjm_update_notice( 'updated', $message );
-				}
-				else	{
-					$message = 'Unable to contract review confirmation email to client';
-					f_mdjm_update_notice( 'error', $message );
+				if( isset( $mdjm_options['contract_to_client'] ) && $mdjm_options['contract_to_client'] == 'Y' )	{
+					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+						$message = 'Contract email sent to client';
+						$j_args = array (
+							'client' => $eventinfo->user_id,
+							'event' => $eventinfo->event_id,
+							'author' => get_current_user_id(),
+							'type' => 'Email Client',
+							'source' => 'Admin',
+							'entry' => 'Contract Review email sent to client'
+							);
+						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+						f_mdjm_update_notice( 'updated', $message );
+					}
+					else	{
+						$message = 'Unable to contract review confirmation email to client';
+						f_mdjm_update_notice( 'error', $message );
+					}
 				}
 			}
 			if( isset( $now_approved ) )	{
