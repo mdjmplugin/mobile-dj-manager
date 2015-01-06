@@ -490,7 +490,7 @@
 			}
 			if( $status == 'Approved' )	{
 				$message = 'Thank you. Your event is now confirmed.';
-				if( isset( $mdjm_options['boooking_conf_to_client'] ) && $mdjm_options['boooking_conf_to_client'] == 'Y' )	{
+				if( isset( $mdjm_options['booking_conf_to_client'] ) && $mdjm_options['booking_conf_to_client'] == 'Y' )	{
 					$message .= ' You will receive confirmation via email shortly.';
 					$type = 'email_client_confirm';
 					$set_from = $mdjm_options['confirm_email_from'];
@@ -514,7 +514,7 @@
 			}
 		}
 		if( $status == 'Approved' )	{
-			if( isset( $mdjm_options['boooking_conf_to_dj'] ) && $mdjm_options['boooking_conf_to_dj'] == 'Y' )	{
+			if( isset( $mdjm_options['booking_conf_to_dj'] ) && $mdjm_options['booking_conf_to_dj'] == 'Y' )	{
 				$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
 				wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
