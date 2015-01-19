@@ -439,7 +439,7 @@
 			/* PHP Validation & Initial Config */
 			foreach( $fields as $field )	{
 				/* Mappings */
-				if( isset( $field['config']['mapping'] ) && !empty( $field['config']['mapping'] ) )	{
+				if( isset( $field['config']['mapping'] ) && !empty( $field['config']['mapping'] ) && !empty( $_POST[$field['slug']] ) )	{
 					/* Client Mappings */
 					if( in_array( $field['config']['mapping'], $client_fields ) )	{
 						$create_user = true;
@@ -479,7 +479,7 @@
 					}
 				}
 				/* Email body */
-				if( $field['type'] != 'submit' && $field['type'] != 'captcha' )	{
+				if( $field['type'] != 'submit' && $field['type'] != 'captcha' && !empty( $_POST[$field['slug']] ) )	{
 					/* DJ Availability */
 					if( $field['type'] == 'date' && isset( $field['config']['datepicker'] ) && $field['config']['datepicker'] == 'Y' )	{
 						$dj_avail = f_mdjm_available( $_POST['the_event_date'] );

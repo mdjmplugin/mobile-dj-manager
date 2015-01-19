@@ -965,6 +965,10 @@
 			$func = 'f_mdjm_' . $_GET['action'];
 			$func( $_GET['form_id'] );
 		}
+		if( $_GET['action'] == 'show_add_contact_form' )	{
+			$func = 'f_mdjm_' . $_GET['action'];
+			$func();
+		}
 		if( $_GET['action'] == 'del_contact_form' )	{
 			$mdjm_forms = get_option( 'mdjm_contact_forms' );
 			unset( $mdjm_forms[$_GET['form_id']] );

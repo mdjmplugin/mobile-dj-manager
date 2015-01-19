@@ -483,6 +483,26 @@
 	} // f_mdjm_update_notice
 
 /****************************************************************************************************
+--	TO DO FUNCTIONS
+****************************************************************************************************/
+/*
+* f_mdjm_unattended_enquiries_count
+* 19/01/2015
+* @since 1.0
+* Retrieve count of unattended enquiries
+*/
+	function f_mdjm_unattended_enquiries_count()	{
+		global $wpdb;
+		if( !isset( $db_tbl ) )	{
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		}
+		
+		$unattended = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'" );
+		
+		return $unattended;
+	} // f_mdjm_unattended_enquiries_count
+
+/****************************************************************************************************
 --	GENERAL FUNCTIONS
 ****************************************************************************************************/
 /*
@@ -777,7 +797,7 @@
 				
 				$email_headers = f_mdjm_client_email_headers( $eventinfo, $mdjm_options['enquiry_email_from'] );
 				$type = array( 'type' => 'custom', 'id' => $event['quote_email_template'], 'subject' => true );
-				$info = f_mdjm_prepare_email( $eventinfo, $type='email_enquiry' );
+				$info = f_mdjm_prepare_email( $eventinfo, $type );
 				if( isset( $info['subject'] ) && !empty( $info['subject'] ) && isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' )	{
 					$subject = $info['subject'];	
 				}

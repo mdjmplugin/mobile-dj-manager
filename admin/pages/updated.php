@@ -102,6 +102,83 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.0
+**************************************************/
+	function f_mdjm_updated_to_1_0()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Dynamic Contact Forms</font><br>
+		We have added a drop down field to the event creation process that becomes visible if you select the option to <span class="code">Email Quote?</span>. The drop down list <span class="code">Select email Template to Use</span> enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> is selected.<br /><br />
+		This provides the flexibilty for you to create different templates for use with different event types should you wish to.<br /><br />
+		If you have <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=permissions">Permissions</a> configured to allow DJ's to create events, the <span class="code">Disabled Templates for DJ's</span> setting applies.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_0
+	
+/**************************************************
+				VERSION 0.9.9.7
+**************************************************/
+	function f_mdjm_updated_to_0_9_9_7()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td>This is a bug fix release only. See below for details.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>Bug: Event quotes were using template set in settings even if you selected an alternative during event creation</li>
+                <li>Bug: jQuery bug on main WP Dashboard stopping availability datepicker from showing resolved.</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
+            </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Version 0.9.9.6 was only released a few hours ago... here are the release notes</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
+                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
+            	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+            	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
+                <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
+                <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
+                <li>Further enhancements to debugging</li>
+                <li>Venue Listing drop down lists are now alphabetical</li>
+                <li>Bug Fix: <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Task</a> <strong>Complete Events</strong> marked events as completed on the day of the event if the event finish time was after midnight</li>
+                <li>Bug Fix: Entries Uploaded count was not displaying when editing the <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>"><strong>Upload Playlist</strong> Automated Task</a></li>
+                <li>Bug Fix: Playlist entries were not uploading to the MDJM servers reliably</li>
+                <li>Front end Availability form validation improvements - no longer using annoying pop-up alert if no date is entered, but instead using jQuery</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_0_9_9_7
+
+/**************************************************
 				VERSION 0.9.9.6
 **************************************************/
 	function f_mdjm_updated_to_0_9_9_6()	{

@@ -19,6 +19,7 @@
 										'pass_length',
 										'currency',
 										'show_dashboard',
+										'warn_unattended',
 										'journaling',
 										'multiple_dj',
 										'enable_packages',
@@ -227,6 +228,18 @@
 									'section' => 'general',
 									'page' => 'settings',
 									); // show_dashboard
+									
+		$admin_fields['warn_unattended'] = array(
+									'display' => 'New Enquiry Notification?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['warn_unattended'],
+									'text' => '',
+									'desc' => 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries',
+									'section' => 'general',
+									'page' => 'settings',
+									); // warn_unattended
 									
 		$admin_fields['event_types'] = array(
 									'display' => 'Event Types',

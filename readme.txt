@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.6
+Stable tag: 0.9.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,7 +77,17 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
-= 9.9.9.6 =
+
+= 0.9.9.7 =
+As this release comes shortly after 0.9.9.6 please see those release notes below also...
+<h2>Bug Fixes &amp; Minor Enhancements</h2>
+<ui>
+	<li>Bug: Event quotes were using template set in settings even if you selected an alternative during event creation</li>
+	<li>Bug: jQuery bug on main WP Dashboard resolvedstopping availability datepicker from showing resolved.</li>
+	<li>New Setting added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
+</ui>
+
+= 0.9.9.6 =
 <h2>Bug Fixes &amp; Minor Enhancements</h2>
 <ui>
 	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main WP Dashboard which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick availability lookup as soon as you have logged into your WordPress Admin interface</li>

@@ -264,6 +264,7 @@
 							'pass_length'             => '8',
 							'currency'                => 'GBP',
 							'show_dashboard'          => 'Y',
+							'warn_unattended'         => 'Y',
 							'journaling'              => 'Y',
 							'multiple_dj'             => 'N',
 							'packages'                => 'N',
@@ -771,6 +772,19 @@
 				
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
 			} // if( $current_version_mdjm <= '0.9.9.5' )
+
+/***************************************************
+			 	UPGRADES FROM 0.9.9.6
+***************************************************/			
+			if( $current_version_mdjm <= '0.9.9.6' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Add new options */
+				$mdjm_options['warn_unattended'] = 'Y';
+				
+				/* Update options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.6' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
@@ -1437,6 +1451,29 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	} // f_mdjm_debug_notice
 	
 /*
+* f_mdjm_unattended_event_notice
+* 19/01/2015
+* @since 1.0
+* Displays notice if there are unattended events
+*/
+	function f_mdjm_unattended_event_notice()	{
+		global $mdjm_options;
+		
+		if( current_user_can( 'administrator' ) && isset( $mdjm_options['warn_unattended'] ) && $mdjm_options['warn_unattended'] == 'Y' )	{
+			$unattended = f_mdjm_unattended_enquiries_count();
+		}
+		if( isset( $unattended ) && $unattended > 0 )	{
+			if( $unattended == 1 )	{
+				$message = 'There is currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiry</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action this Enquiry now</a>';
+			}
+			else	{
+				$message = 'There are currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiries</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action these Enquiries now</a>';	
+			}
+			f_mdjm_update_notice( 'update-nag', $message );
+		}	
+	} // f_mdjm_unattended_event_notice
+	
+/*
 * f_mdjm_register_widgets
 * 28/12/2014
 * @since 0.9.9
@@ -1522,6 +1559,8 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'init', 'f_mdjm_upload_playlist_schedule' ); // Check upload playlist schedule
 	
 	add_action( 'admin_notices', 'f_mdjm_debug_notice' ); // Display notice if debugging enabled
+	
+	add_action( 'admin_notices', 'f_mdjm_unattended_event_notice' ); // Display notice if there are outstanding unattended enquiries
 	
 	add_action( 'widgets_init', 'f_mdjm_register_widgets' ); // Register the MDJM Widgets
 	
