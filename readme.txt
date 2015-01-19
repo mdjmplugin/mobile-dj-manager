@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.5
+Stable tag: 0.9.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
