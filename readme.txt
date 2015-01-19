@@ -81,6 +81,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 <h2>Bug Fixes &amp; Minor Enhancements</h2>
 <ui>
 	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main WP Dashboard which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick availability lookup as soon as you have logged into your WordPress Admin interface</li>
+	<li>New: We have now added functionality within the DJ view screen to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in version 0.9.9.4</li>
 	<li>Quick Availability Check added to main MDJM Dashboard</</li>
 	<li>New Setting <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
 	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
