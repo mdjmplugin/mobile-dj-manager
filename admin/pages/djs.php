@@ -63,7 +63,14 @@
 
 	if( isset($_GET['action'] ) )	{ // Action to process
 		$func = 'f_mdjm_' . $_GET['action'];
-		$func();
+		/* Check for actions */
+		if( isset( $_GET['role'] ) && !empty( $_GET['role'] ) )	{
+			$func( $_GET['dj_id'], $_GET['role'] );
+			f_mdjm_render_djs_table();
+		}
+		else	{
+			$func();
+		}
 	}
 	
 	else	{ // Display the Client table

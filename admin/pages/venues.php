@@ -130,13 +130,13 @@
  * @since 1.0
 */
 	function f_mdjm_view_venue_form( $venue )	{
-		$venueinfo = f_mdjm_get_venue_by_id( $venue['venue_id'] );
+		$venueinfo = f_mdjm_get_venue_by_id( $venue );
 		?>
 		<div class="wrap">
         <h2>Add Venue</h2>
         <form method="post" action="<?php f_mdjm_admin_page( 'venues' ); ?>">
 		<input type="hidden" name="action" value="edit_venue" />
-        <input type="hidden" name="venue_id" value="<?php echo $venue['venue_id']; ?>" />
+        <input type="hidden" name="venue_id" value="<?php echo $venue; ?>" />
        	<?php wp_nonce_field( 'mdjm_edit_venue_verify' ); ?>
         <table class="form-table">
         <tr>

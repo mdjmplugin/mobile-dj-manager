@@ -138,6 +138,27 @@
 				f_mdjm_do_journal( $j_args );
 			}
 			f_mdjm_update_notice( $class, $message );
+			if( isset( $_POST['respond_unavailable'] ) && !empty( $_POST['respond_unavailable'] ) )	{
+				$update = array(
+								'contract_status' => 'Failed Enquiry',
+								'last_updated_by' => get_current_user_id(),
+								'last_updated' => date( 'Y-m-d H:i:s' )
+							);
+				if( $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $eventinfo->event_id ) ) )	{
+					$j_args = array (
+									'client'   => $eventinfo->user_id,
+									'event'    => $eventinfo->event_id,
+									'author'   => get_current_user_id(),
+									'type'     => 'Unavailable to Quote',
+									'source'   => 'Admin',
+									'entry'    => 'Email sent advising unavailable'
+									);
+					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+					$class = 'updated';
+					$message = 'The selected enquiry has been marked as lost. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries' ) . '">View Enquiries</a>';
+					f_mdjm_update_notice( $class, $message );
+				}
+			}
 		}
 	}
 	
@@ -187,6 +208,11 @@
 			}
 		</script>
 		<form name="form-email-template" id="form-email-template" method="post">
+        <?php
+		if( isset( $_GET['action'] ) && $_GET['action'] == 'respond_unavailable' )	{
+			?><input type="hidden" name="respond_unavailable" id="respond_unavailable" value="<?php echo $_GET['event_id']; ?>" /><?php	
+		}
+		?>
 		<table class="form-table">
 		<tr>
 		<td width="20%"><label for="email_template">Select a template for content, or write your own:</label></td>
@@ -319,7 +345,7 @@
             <?php
 			foreach( $events as $event )	{
 				?>
-				<option value="<?php echo $event->event_id; ?>"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], $event->event_id ); } ?>><?php echo date( 'd/m/Y', strtotime( $event->event_date ) ) . ' from ' . date( $mdjm_options['time_format'], strtotime( $event->event_start ) ) . ' (' . $event->contract_status . ')'; ?></option>
+				<option value="<?php echo $event->event_id; ?>"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], $event->event_id ); } elseif( isset( $_GET['event_id'] ) ) { selected( $_GET['event_id'], $event->event_id ); }  ?>><?php echo date( 'd/m/Y', strtotime( $event->event_date ) ) . ' from ' . date( $mdjm_options['time_format'], strtotime( $event->event_start ) ) . ' (' . $event->contract_status . ')'; ?></option>
 				<?php
 			}
 			echo '</select>';

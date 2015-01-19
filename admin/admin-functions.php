@@ -422,6 +422,12 @@
 		/* Add user roles */
 		add_role( 'inactive_client', 'Inactive Client', array( 'read' => true ) );
 		add_role( 'client', 'Client', array( 'read' => true ) );
+		add_role( 'inactive_dj', 'Inactive DJ', array( 	 'read' => true, 
+														 'manage_mdjm' => false,
+														 'create_users' => false,
+														 'edit_users' => false,
+														 'delete_users' => false
+													) );
 		add_role( 'dj', 'DJ', array( 'read' => true, 
 									 'manage_mdjm' => true,
 									 'create_users' => true,
@@ -734,7 +740,37 @@
 				}
 				
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
-			} // if( $current_version_mdjm == '0.9.9.4' )
+			} // if( $current_version_mdjm <= '0.9.9.4' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.9.5
+***************************************************/
+			if( $current_version_mdjm <= '0.9.9.5' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Cleanup previous typo */
+				if( isset( $mdjm_options['boooking_conf_to_client'] ) )	{
+					unset( $mdjm_options['boooking_conf_to_client'] );	
+				}
+				if( isset( $mdjm_options['boooking_conf_to_dj'] ) )	{
+					unset( $mdjm_options['boooking_conf_to_dj'] );	
+				}
+				
+				/* Inactive DJ Role */
+				add_role( 
+						'inactive_dj',
+						'Inactive DJ',
+						array( 	 
+							'read'         => true, 
+							'manage_mdjm'  => false,
+							'create_users' => false,
+							'edit_users'   => false,
+							'delete_users' => false
+							)
+						);
+				
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.5' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
@@ -1409,7 +1445,41 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	function f_mdjm_register_widgets()	{
 		include( WPMDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' );
 		register_widget( 'MDJM_Availability_Widget' );
+		register_widget( 'MDJM_ContactForms_Widget' );
 	} // f_mdjm_register_widgets
+	
+/*
+* f_mdjm_jquery_prep
+* 13/01/2015
+* @since 1.0
+* Register and enqueue jQuery scripts
+*/
+	function f_mdjm_enqueue()	{
+		wp_register_style( 'mobile-dj-manager', WPMDJM_PLUGIN_URL . '/includes/mdjm-styles.css' );
+		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
+		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
+		
+		wp_enqueue_style( 'mobile-dj-manager');
+		wp_enqueue_script( 'google-hosted-jquery');
+		wp_enqueue_script( 'jquery-validation-plugin');
+	}
+	
+	
+/*
+* f_mdjm_admin_jquery_prep
+* 13/01/2015
+* @since 1.0
+* Register and enqueue jQuery scripts
+*/
+	function f_mdjm_admin_enqueue()	{
+		wp_register_style( 'mobile-dj-manager-admin', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css' );
+		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
+		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
+		
+		wp_enqueue_style( 'mobile-dj-manager-admin');
+		wp_enqueue_script( 'google-hosted-jquery');
+		wp_enqueue_script( 'jquery-validation-plugin');
+	}
 	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
@@ -1454,6 +1524,10 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'admin_notices', 'f_mdjm_debug_notice' ); // Display notice if debugging enabled
 	
 	add_action( 'widgets_init', 'f_mdjm_register_widgets' ); // Register the MDJM Widgets
+	
+	add_action( 'wp_enqueue_scripts', 'f_mdjm_enqueue' ); // Enqueue sytles and scripts in the frontend
+	
+	add_action( 'admin_enqueue_scripts', 'f_mdjm_admin_enqueue' ); // Enqueue sytles and scripts in the Admin UI
  
  /**
  * Actions for custom user fields

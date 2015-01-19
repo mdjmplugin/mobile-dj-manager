@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.5
+Stable tag: 0.9.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,23 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 9.9.9.6 =
+<h2>Bug Fixes &amp; Minor Enhancements</h2>
+<ui>
+	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
+	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
+	<li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
+	<li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
+	<li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
+	<li>Further enhancements to debugging</li>
+	<li>Venue Listing drop down lists are now alphabetical</li>
+	<li>Bug Fix: <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Task</a> <strong>Complete Events</strong> marked events as completed on the day of the event if the event finish time was after midnight</li>
+	<li>Bug Fix: Entries Uploaded count was not displaying when editing the <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>"><strong>Upload Playlist</strong> Automated Task</a></li>
+	<li>Bug Fix: Playlist entries were not uploading to the MDJM servers reliably</li>
+	<li>Front end Availability form validation improvements - no longer using annoying pop-up alert if no date is entered, but instead using jQuery</li>
+</ui>
+			
 = 0.9.9.5 =
 <h2>New Features</h2>
 We have added a drop down field to the event creation process that becomes visible if you select the option to Email Quote?. The drop down list Select email Template to Use enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within Settings is selected.

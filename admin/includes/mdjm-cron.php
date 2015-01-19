@@ -1,7 +1,7 @@
 <?php
 
 /*
-* mdjm_cron.php
+* mdjm-cron.php
 * 13/11/2014
 * @since 0.9.3
 * Executes all MDJM scheduled tasks
@@ -116,7 +116,9 @@
 */
 	function f_mdjm_cron_complete_event()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
@@ -134,7 +136,7 @@
 			&& $mdjm_schedules['complete-events']['nextrun'] <= time() )	{
 			
 			$cron_start = microtime(true);
-			$event_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `contract_status` = 'Approved' AND `event_date` <= DATE(NOW()) AND TIME(event_finish) < TIME(NOW())";
+			$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Approved' AND `event_date` <= DATE_ADD(NOW(), INTERVAL " . $mdjm_schedules['complete-events']['options']['age'] . ")";
 			$eventlist = $wpdb->get_results( $event_query );
 			$notify = array();
 			$x = 0;
@@ -258,7 +260,9 @@
 */
 	function f_mdjm_cron_fail_enquiry()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
@@ -402,7 +406,9 @@
 */
 	function f_mdjm_cron_request_deposit()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
@@ -574,7 +580,9 @@
 */
 	function f_mdjm_cron_balance_reminder()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
@@ -745,7 +753,9 @@
 */
 	function f_mdjm_cron_client_feedback()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		
@@ -952,7 +962,10 @@
 */
 	function f_mdjm_cron_email( $cron_email_args )	{
 		global $mdjm_options;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
 		if( $cron_email_args['type'] == 'client' )	{
 			$headers = f_mdjm_cron_get_fromaddr( $cron_email_args );
 			if( $cron_email_args['taskinfo']['options']['email_from'] == 'dj' )	{
@@ -1094,7 +1107,9 @@
 */
 	function f_mdjm_cron_upload_playlists()	{
 		global $mdjm_options, $wpdb;
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if( !isset( $db_tbl ) )	
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		if( isset( $mdjm_options['upload_playlists'] ) && $mdjm_options['upload_playlists'] == 'Y' 
@@ -1105,24 +1120,24 @@
 		// Update the cron job with run times - Limit # jobs per schedule
 		
 		/* Retrieve plsylist entries not yet transferred */
-			$maxrows = 15;
-			$playlist = $wpdb->get_results( "SELECT * FROM " . $db_tbl['playlists'] . " WHERE `date_to_mdjm` IS NULL OR `date_to_mdjm` = '' ORDER BY `event_id` LIMIT $maxrows" );
+			$maxrows = 50;
+			$pl_query = "SELECT * FROM `" . $db_tbl['playlists'] . "` WHERE `date_to_mdjm` IS NULL OR `date_to_mdjm` = '' ORDER BY `event_id` LIMIT " . $maxrows;
+			$playlist = $wpdb->get_results( $pl_query );
 			$pl_rows = $wpdb->num_rows;
 			if( $pl_rows > 0 )	{ /* We have data to transfer */
 				foreach( $playlist as $entry )	{
 					/* Get event details - event must be completed */
-					$event = $wpdb->get_row( "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_id` = '" . $entry->event_id . "' AND `contract_status` = 'Completed'" );
+					$event = $wpdb->get_row( "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $entry->event_id . "' AND `contract_status` = 'Completed'" );
 					if( $event != NULL )	{ // We have a result, proceed
 						$rpc = 'a=' . urlencode( $entry->artist ) . '&s=' . urlencode( $entry->song ) . '&et=' . urlencode( $event->event_type ) . '&ed=' . $event->event_date . '&da=' . $entry->date_added . '&c=' . urlencode( $mdjm_options['company_name'] ) . '&url=' . urlencode( get_site_url() );
 						
 						$pl_response = wp_remote_retrieve_body( wp_remote_get( 'http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc ) );
-						
 						/* Timestamp the playlist record */
 						if( $pl_response )	{
 							$update_args = array( 'date_to_mdjm' => $pl_response );
 							$pl_update = $wpdb->update( 
 												$db_tbl['playlists'],
-												array( 'date_to_mdjm' => $pl_response ),
+												array( 'date_to_mdjm' => date( 'Y-m-d H:i:s', $pl_response ) ),
 												array( 'id' => $entry->id ) );
 						} // if( $pl_response )
 						

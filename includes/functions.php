@@ -856,6 +856,18 @@
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 		?>
+        <style>
+		.mdjm-form-error {
+			color: #FF0000;
+		}
+		input.mdjm-form-error {
+			border: solid 1px #FF0000;
+			color: #000000;
+		}
+		.mdjm-form-valid {
+			color: #000000;
+		}
+		</style>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			$('.custom_date').datepicker({
@@ -867,19 +879,11 @@
 			changeMonth: true
 			});
         });
-		function check_avail_validation() {
-			/* Check the Date field for blank submission*/
-			var avail_date = document.forms["mdjm-availability-check"]["avail_date"].value;
-			if (avail_date == "" || avail_date == null) {
-				alert("Please enter a date to check for availability");
-				return false;
-			}
-		}
         </script>
         <?php
 		/* Create the table */
 		?>
-        <form name="mdjm-availability-check" method="post" onsubmit="check_avail_validation()">
+        <form name="mdjm-availability-check" id="mdjm-availability-check" method="post">
         <?php
         if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
 			if( $dj_avail !== false && $mdjm_pages['availability_check_pass_page'] == 'text' && !empty( $mdjm_pages['availability_check_pass_page'] ) )	{
@@ -912,7 +916,7 @@
 			$submit_text = $args['submit_text'];
 		}
 		?>
-        <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" />
+        <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" required />
         <?php
 		if( isset( $args['field_wrap'] ) && $args['field_wrap'] == 'true' )	{
 				echo '<br />';	
@@ -922,6 +926,30 @@
 		
         <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $submit_text; ?>" />
         </form>
+        <script type="text/javascript">
+        jQuery(document).ready(function($){
+			// Configure the field validator
+            $('#mdjm-availability-check').validate(
+				{
+					rules:
+					{
+						avail_date: {
+							required: true,
+						},
+					}, // End rules
+					messages:
+					{
+						avail_date: {
+								required: "Please enter a date",
+								},
+					}, // End messages
+					// Classes
+					errorClass: "mdjm-form-error",
+					validClass: "mdjm-form-valid",
+				} // End validate
+			); // Close validate
+        });
+		</script>
         <?php
 	} // f_mdjm_availability_form
 ?>

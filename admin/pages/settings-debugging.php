@@ -38,6 +38,7 @@
 /* Check for actions */
 	if( isset( $_POST['action'] ) && $_POST['action'] == 'Submit Debug Files' )	{
 		$debug_file = WPMDJM_PLUGIN_DIR . '/mdjm-debug-' . date( 'd-m-Y' ) . '.log';
+		$mdjm_debug =  WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-error.log';
 		/* Get options */
 		$mdjm_client_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
@@ -82,6 +83,13 @@
 		/* Write the debug file */		
 		file_put_contents( WPMDJM_PLUGIN_DIR . '/mdjm-debug-' . date( 'd-m-Y' ) . '.log', $dump );
 		$files = array( $debug_file );
+		if( file_exists( $mdjm_debug ) )	{
+			$files[] = $mdjm_debug;	
+		}
+		$wp_debug = WP_CONTENT_DIR . '/debug.log';
+		if( file_exists( $wp_debug ) )	{
+			$files[] = $wp_debug;
+		}
 		
 		$headers = 'From: ' . WPMDJM_CO_NAME . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		if( wp_mail( 'support@mydjplanner.co.uk', 'Support Debug Info from ' . WPMDJM_CO_NAME, 'Test', $headers, $files ) )	{

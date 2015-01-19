@@ -12,6 +12,7 @@
 			'Playlist'     => 'playlist',
 			'Contract'     => 'contract',
 			'Availability' => 'f_mdjm_availability_form',
+			'Contact Form' => 'contact-form',
 		), $atts, 'MDJM' );
 		
 		/* Process pages */

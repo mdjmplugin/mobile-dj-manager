@@ -261,6 +261,7 @@
 */
 	function f_mdjm_admin_page( $mdjm_page )	{
 		$mdjm_pages = array(
+						'wp_dashboard'          => 'index.php',
 						'dashboard'             => 'admin.php?page=mdjm-dashboard',
 						'settings'              => 'admin.php?page=mdjm-settings',
 						'clients'               => 'admin.php?page=mdjm-clients',
@@ -271,6 +272,7 @@
 						'contract'              => 'edit.php?post_type=contract',
 						'add_contract'          => 'post-new.php?post_type=contract',
 						'djs'                   => 'admin.php?page=mdjm-djs',
+						'inactive_djs'          => 'admin.php?page=mdjm-djs&display=inactive_dj',
 						'email_template'        => 'edit.php?post_type=email_template',
 						'add_email_template'    => 'post-new.php?post_type=email_template',
 						'equipment'             => 'admin.php?page=mdjm-packages',
@@ -533,6 +535,80 @@
 		echo $short_date_format;
 		
 	} // f_mdjm_short_date_jquery
+	
+/*
+* f_mdjm_contact_form_icons
+* 08/01/2015
+* @since 1.0
+* Displays icons dependant on field settings
+*/
+	function f_mdjm_contact_form_icons( $field )	{
+		global $mdjm_options;
+		
+		$dir = WPMDJM_PLUGIN_URL . '/admin/images/contact-form-icons';
+		
+		$mappings = array(
+						'first_name'           => 'Client First Name',
+						'last_name'            => 'Client Last Name',
+						'user_email'           => 'Client Email Address',
+						'phone1'               => 'Client Telephone',
+						'user_pass'            => 'Client Password',
+						'event_date'           => 'Event Date',
+						'event_type'           => 'Event Type',
+						'event_start'          => 'Event Start',
+						'event_finish'         => 'Event End',
+						'event_description'    => 'Event Description',
+						'venue'                => 'Event Venue Name',
+						'venue_city'           => 'Event Venue Town/City',
+						'venue_state'          => 'Event County (State)'
+						);
+		
+		if( isset( $field['config']['required'] ) && $field['config']['required'] == 'Y' )	{
+			?><img src="<?php echo $dir; ?>/req_field.jpg" width="14" height="14" alt="Required Field" title="Required Field" />&nbsp;<?php
+		}
+		else	{
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+		}
+		if( isset( $field['config']['datepicker'] ) && $field['config']['datepicker'] == 'Y' )	{
+			?><img src="<?php echo $dir; ?>/datepicker.jpg" width="14" height="14" alt="Datepicker" title="Datepicker" />&nbsp;<?php
+		}
+		else	{
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+		}
+		if( $field['type'] == 'select' || $field['type'] == 'select_multi' || $field['type'] == 'event_list' )	{
+			if( $field['type'] == 'event_list' )	{
+				$opt = '';
+				if( !empty( $field['config']['event_list_first_entry'] ) )	{
+					$opt .= $field['config']['event_list_first_entry'] . "\r\n";
+				}
+				$events = explode( "\n", $mdjm_options['event_types'] );
+				asort( $events );
+				foreach( $events as $event )	{
+					$opt .= $event;	
+				}
+			}
+			else	{
+				$opt = $field['config']['options'];
+			}
+			?><img src="<?php echo $dir; ?>/select_list.jpg" width="14" height="14" alt="<?php echo $alt; ?>" title="<?php echo $opt; ?>" />&nbsp;<?php
+		}
+		else	{
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+		}
+		if( isset( $field['config']['mapping'] ) && $field['config']['mapping'] != 'none' )	{
+			?><img src="<?php echo $dir; ?>/mapping.jpg" width="14" height="14" alt="Maps to <?php echo $mappings[$field['config']['mapping']]; ?>" title="Maps to <?php echo $mappings[$field['config']['mapping']]; ?>" />&nbsp;<?php
+		}
+		else	{
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+		}
+		if( isset( $field['type'] ) && $field['type'] == 'captcha' )	{
+			?><img src="<?php echo $dir; ?>/captcha.jpg" width="14" height="14" alt="CAPTCHA Validation Field" title="CAPTCHA Validation Field" />&nbsp;<?php
+		}
+		else	{
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+		}		
+	}
+
 
 /****************************************************************************************************
 --	EVENT FUNCTIONS
@@ -586,8 +662,8 @@
 			$event['venue_phone'] = $venueinfo->venue_phone;
 			$event['venue_email'] = $venueinfo->venue_email;
 		}
-
-		if( $wpdb->insert( $db_tbl['events'],
+		if( !isset( $event['quote_event_id'] ) || empty( $event['quote_event_id'] ) )	{
+			$query = $wpdb->insert( $db_tbl['events'],
 										array(
 											'event_id'           => '',
 											'user_id'            => $event['user_id'],
@@ -624,19 +700,71 @@
 											'referrer'           => sanitize_text_field( $event['enquiry_source'] ),
 											'last_updated_by'    => get_current_user_id(),
 											'last_updated'       => date( 'Y-m-d H:i:s' )
-										) ) )	{
-
-			$message = 'A new event on ' . date( "l, jS F Y", strtotime( $event_date ) ) . ' has been successfully created';			
+										) );
+		}
+		else	{
+			$query = $wpdb->update( $db_tbl['events'], 
+							array(  'user_id'            => $event['user_id'],
+									'event_date'         => $event_date,
+									'event_dj'           => $event['event_dj'],
+									'event_type'         => sanitize_text_field( $event['event_type'] ),
+									'event_start'        => $start_time,
+									'event_finish'       => $end_time,
+									'event_description'  => $event['event_description'],
+									'event_package'      => $event['event_package'],
+									'event_addons'       => $event['event_addons'],
+									'event_guest_call'   => $str,
+									'contract_status'    => 'Enquiry',
+									'contract'           => $event['contract'],
+									'cost'               => $event['total_cost'],
+									'deposit'            => $event['deposit'],
+									'deposit_status'     => $event['deposit_status'],
+									'balance_status'     => $event['balance_status'],
+									'venue'              => sanitize_text_field( $event['venue'] ),
+									'venue_contact'      => sanitize_text_field( $event['venue_contact'] ),
+									'venue_addr1'        => sanitize_text_field( $event['venue_addr1'] ),
+									'venue_addr2'        => sanitize_text_field( $event['venue_addr2'] ),
+									'venue_city'         => sanitize_text_field( $event['venue_city'] ),
+									'venue_state'        => sanitize_text_field( $event['venue_state'] ),
+									'venue_zip'          => sanitize_text_field( strtoupper( $event['venue_zip'] ) ),
+									'venue_phone'        => $event['venue_phone'],
+									'venue_email'        => sanitize_email( $event['venue_email'] ),
+									'dj_setup_time'      => $setup_time,
+									'dj_setup_date'      => $dj_setup_date,
+									'dj_notes'           => $event['dj_notes'],
+									'admin_notes'        => $event['admin_notes'],
+									'referrer'           => sanitize_text_field( $event['enquiry_source'] ),
+									'last_updated_by'    => get_current_user_id(),
+									'last_updated'       => date( 'Y-m-d H:i:s' )
+							 	), 
+							array( 'event_id' => $event['quote_event_id'] ) );	
+		}
+		if( $query )	{
 			$clientinfo = get_userdata( $event['user_id'] );
-			$id = $wpdb->insert_id;
+			if( !isset( $event['quote_event_id'] ) || empty( $event['quote_event_id'] ) )	{
+				$id = $wpdb->insert_id;
+			}
+			else	{
+				$id = $event['quote_event_id'];
+			}
 			$j_args = array (
 						'client' => $event['user_id'],
-						'event' => $wpdb->insert_id,
 						'author' => get_current_user_id(),
-						'type' => 'Add Event Enquiry',
-						'source' => 'Admin',
-						'entry' => 'The event has been created'
 						);
+			if( !isset( $event['quote_event_id'] ) || empty( $event['quote_event_id'] ) )	{
+				$j_args['event'] = $wpdb->insert_id;
+				$j_args['type'] = 'Add Event Enquiry';
+				$j_args['source'] = 'Admin';
+				$j_args['entry'] = 'The event has been created';
+				$message = 'A new event on ' . date( "l, jS F Y", strtotime( $event_date ) ) . ' has been successfully created';			
+			}
+			else	{
+				$j_args['event'] = $event['quote_event_id'];
+				$j_args['type'] = 'Enquiry Completed';
+				$j_args['source'] = 'Admin';
+				$j_args['entry'] = 'The Unattended Enquiry has been updated';
+				$message = 'The unattended enquiry for the event on ' . date( "l, jS F Y", strtotime( $event_date ) ) . ' has been successfully updated';				
+			}
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 			f_mdjm_update_notice( 'updated', $message );
 			if( isset( $event['email_enquiry'] ) && $event['email_enquiry'] == 'Y' )	{
@@ -1391,7 +1519,8 @@
 */
 	function f_mdjm_count_playlist_records_uploaded()	{
 		global $wpdb;
-		include_once( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$pl_query = "SELECT COUNT(*) FROM `". $db_tbl['playlists'] . "` WHERE `date_to_mdjm` != '' AND `date_to_mdjm` IS NOT NULL";
 		$pl_result = $wpdb->get_var( $pl_query );
@@ -1526,7 +1655,7 @@
 	function f_mdjm_get_venueinfo()	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );	
-		$venueinfo = $wpdb->get_results( "SELECT * FROM `".$db_tbl['venues']."` ORDER BY 'venue_name' ASC" );
+		$venueinfo = $wpdb->get_results( "SELECT * FROM `".$db_tbl['venues']."` ORDER BY `venue_name` ASC" );
 		return $venueinfo;
 	}
 
@@ -1563,6 +1692,24 @@
 		
 		return $djs;
 	} // f_mdjm_get_djs
+	
+/*
+* f_mdjm_get_inactive_djs
+* 18/01/2015
+* @since 0.9.9.6
+* Generate list of all inactive DJ's
+*/
+	function f_mdjm_get_inactive_djs()	{
+		global $mdjm_options;
+		
+		$dj_arg = array(	'role' => 'inactive_dj',
+							'orderby' => 'display_name',
+							'order' => 'ASC'
+						);
+		$inactive_djs = get_users( $dj_arg );
+
+		return $inactive_djs;
+	} // f_mdjm_get_inactive_djs
 
 /**
  * dj_can
@@ -1714,6 +1861,11 @@
 			$first_day = date( 'Y-m-d', strtotime( $year . '-' . $month . '-01' ) );
 			$last_day = date( 'Y-m-t', mktime( 0, 0, 0, $next_month, 0, $mk_year ) );
 		}
+		/* 7 Day Checker for the WP Widget */
+		if( $month == 0 && $year == 0 )	{
+			$first_day = date( 'Y-m-d' );
+			$last_day = date( 'Y-m-d', strtotime( '+1 week' ) );
+		}
 		
 		$date_range = f_mdjm_all_dates_in_range( $first_day, $last_day );
 		/* Loop through the days */
@@ -1747,8 +1899,10 @@
 				foreach( $work_result as $event )	{
 					$dj = get_userdata( $event->event_dj );
 					?>
-					<tr><td width="25%"><strong><?php echo $dj->display_name; ?></strong></td>
-					<td><a href="<?php echo f_mdjm_admin_page( 'events' ); ?>&action=view_event_form&event_id=<?php echo $event->event_id; ?>">Event ID <?php echo $event->event_id . '</a> (' . $event->contract_status . ')'; ?> from <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_start ) ); ?> to <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_finish ) ); ?></td></tr>
+					<tr>
+                    <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $dj->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
+					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><a href="<?php echo f_mdjm_admin_page( 'events' ); ?>&action=view_event_form&event_id=<?php echo $event->event_id; ?>">Event ID <?php echo $event->event_id . '</a> (' . $event->contract_status . ')'; ?> from <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_start ) ); ?><?php if( $month != 0 && $year != 0 ) { ?> to <?php echo date( $mdjm_options['time_format'], strtotime( $event->event_finish ) ); } ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
+                    </tr>
                     <?php
 				}
 			}
@@ -1757,19 +1911,28 @@
 					$dj = get_userdata( $holiday->user_id );
 					?>
 					<tr>
-                    <td width="25%"><strong><?php echo $dj->display_name; ?></strong></td>
-					<td>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) ) echo ' - ' . $holiday->notes; ?></td>
+                    <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $dj->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
+					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
                     </tr>
                     <?php
 				}
 			}
 		} // foreach( $date_range as $day )
 		if( !isset( $have_result ) )	{
-			?>
-			<tr class="alternate">
-            <td colspan="2"><strong>There is currently no activity during <?php echo date( 'F Y', strtotime( $year. '-' . $month . '-01' ) ); ?></strong></td>
-            </tr>
-            <?php			
+			if( $month != 0 && $year != 0 )	{
+				?>
+				<tr class="alternate">
+				<td colspan="2"><strong>There is currently no activity during <?php echo date( 'F Y', strtotime( $year. '-' . $month . '-01' ) ); ?></strong></td>
+				</tr>
+				<?php
+			}
+			else	{
+				?>
+				<tr >
+				<td colspan="2">There is currently no activity within the next 7 days</td>
+				</tr>
+				<?php
+			}
 		}
 		
 	} // get_availability_activity
@@ -1910,7 +2073,7 @@
 	} // f_mdjm_is_client
 	
 /*
-* f_mdjm_set_client_status()
+* f_mdjm_set_client_role()
 * 01/01/2015
 * @since 1.0
 * Updates the client's role within WordPress
@@ -1922,6 +2085,8 @@
 		$role_name = array(
 						'client'          => 'Active',
 						'inactive_client' => 'Inactive',
+						'dj'              => 'Active',
+						'inactive_dj'     => 'Inactive',
 						);
 		if( $user_count == 1 )	{
 			$user = 'user';
@@ -1954,7 +2119,7 @@
 		}
 		f_mdjm_update_notice( $class, $message );
 		
-	} // f_mdjm_set_client_status
+	} // f_mdjm_set_client_role
 
 /****************************************************************************************************
 --	CONTRACT FUNCTIONS

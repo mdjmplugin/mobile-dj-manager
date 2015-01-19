@@ -80,6 +80,10 @@
 			f_mdjm_add_event_form();
 		}
 		else	{
+			if( $_POST['action'] == 'respond_event' )	{
+				$_POST['action'] = 'add_event';
+			}
+			
 			$func = 'f_mdjm_' . $_POST['action'];
 			if( function_exists( $func ) ) $func( $_POST );
 		}
@@ -119,6 +123,54 @@
 			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-event-table.php' );
 		}
 		$events_table = new MDJM_Events_Table();
+		
+		/* Availability Check */
+		if( isset( $_GET['availability'] ) && !empty( $_GET['availability'] ) )	{
+			if( is_dj() )	{
+				$dj_avail = f_mdjm_available( $_GET['availability'], get_current_user_id() );
+			}
+			else	{
+				$dj_avail = f_mdjm_available( $_GET['availability'] );
+			}
+			
+			/* Print the availability result */
+			if( isset( $dj_avail ) )	{
+				/* Check all DJ's */
+				if ( $dj_avail !== false && current_user_can( 'administrator' ) )	{
+					if( count( $dj_avail ) != 1 )	{
+						$avail_message = count( $dj_avail ) . ' DJ\'s available on ' . date( 'l, jS F Y', strtotime( $_GET['availability'] ) );
+					}
+					else	{
+						$avail_message = count( $dj_avail ) . ' DJ available on ' . date( 'l, jS F Y', strtotime( $_GET['availability'] ) );
+					}
+					$class = 'updated';
+					?><ui><?php
+					foreach( $dj_avail as $dj_detail )	{
+						$dj = get_userdata( $dj_detail );
+						$avail_message .= '<li>' . $dj->display_name . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form&event_id=' . $_GET['e_id'] . '&dj=' . $dj->ID ) . '"> Assign &amp; Respond to Enquiry</a><br /></li>';
+					}
+					?></ui><?php
+				}
+				/* Single DJ Check */
+				elseif ( $dj_avail !== false && !current_user_can( 'administrator' ) )	{
+					$dj = get_userdata( get_current_user_id() );
+					$class = 'updated';
+					$avail_message = $dj->display_name . ' is available on ' . date( 'l, jS F Y', strtotime( $_GET['availability'] ) ) . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form&event_id=' . $_GET['e_id'] . '&dj=' . $dj->ID ) . '"> Assign &amp; Respond to Enquiry</a><br />';
+				}
+				else	{
+					$class = 'error';
+					if( current_user_can( 'administrator' ) )	{
+						$avail_message = 'No DJ\'s available on ' . date( 'l, jS F Y', strtotime( $_GET['availability'] ) );
+					}
+					else	{
+						$dj = get_userdata( get_current_user_id() );
+						$avail_message = $dj->display_name . ' is not available on ' . date( 'l, jS F Y', strtotime( $_GET['availability'] ) );
+					}
+				}
+				f_mdjm_update_notice( $class, $avail_message );
+			}
+		}
+		
 		?>
 		</pre><div class="wrap"><h2>Events <?php if( current_user_can( 'administrator' ) || dj_can( 'add_event' ) )	echo '<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=add_event_form" class="add-new-h2">Add New</a></h2>';
 		
@@ -187,7 +239,12 @@
 				f_mdjm_add_event_step_2();
 			}
 			else	{
-				$submit = 'Create Enquiry';
+				if( !isset( $_POST['quote_event_id'] ) )	{
+					$submit = 'Create Enquiry';
+				}
+				else	{
+					$submit = 'Respond to Enquiry';	
+				}
 				f_mdjm_add_event_review();
 			}
 		}
@@ -197,12 +254,22 @@
 				f_mdjm_add_event_step_3();
 			}
 			else	{
-				$submit = 'Create Enquiry';
+				if( !isset( $_POST['quote_event_id'] ) )	{
+					$submit = 'Create Enquiry';
+				}
+				else	{
+					$submit = 'Respond to Enquiry';	
+				}
 				f_mdjm_add_event_review();
 			}
 		}
 		else	{
-			$submit = 'Create Enquiry';
+			if( !isset( $_POST['quote_event_id'] ) )	{
+				$submit = 'Create Enquiry';
+			}
+			else	{
+				$submit = 'Respond to Enquiry';	
+			}
 			f_mdjm_add_event_review();	
 		}
 		f_mdjm_add_event_footer( $submit );
@@ -251,6 +318,46 @@
 	
 	function f_mdjm_add_event_step_1()	{
 		global $mdjm_options;
+		$have_venue = false;
+		if( isset( $_GET['event_id'] ) )	{
+			?><input type="hidden" name="quote_event_id" value="<?php echo $_GET['event_id']; ?>" /><?php
+			
+			$eventinfo = f_mdjm_get_eventinfo_by_id( $_GET['event_id'] );
+			$_POST['client'] = $eventinfo->user_id;
+			if( isset( $_GET['dj'] ) && !empty( $_GET['dj'] ) )	{
+				$_POST['event_dj'] = $_GET['dj'];	
+			}
+			if( isset( $eventinfo->referrer ) && !empty( $eventinfo->referrer ) )	{
+				$_POST['enquiry_source'] = $eventinfo->referrer;
+			}
+			if( isset( $eventinfo->event_date ) && !empty( $eventinfo->event_date ) )	{
+				$_POST['event_date'] = date( 'd/m/Y', strtotime( $eventinfo->event_date ) );
+			}
+			if( isset( $eventinfo->event_start ) && !empty( $eventinfo->event_start ) )	{
+				$_POST['event_start'] = date( 'H:i:s', strtotime( $eventinfo->event_start ) );
+			}
+			if( isset( $eventinfo->event_finish ) && !empty( $eventinfo->event_finish ) )	{
+				$_POST['event_finish'] = date( 'H:i:s', strtotime( $eventinfo->event_finish ) );
+			}
+			if( isset( $eventinfo->event_type ) && !empty( $eventinfo->event_type ) )	{
+				$_POST['event_type'] = $eventinfo->event_type;
+			}
+			if( isset( $eventinfo->event_description ) && !empty( $eventinfo->event_description ) )	{
+				$_POST['event_description'] = $eventinfo->event_description;
+			}
+			if( isset( $eventinfo->venue ) && !empty( $eventinfo->venue ) )	{
+				$_POST['venue'] = $eventinfo->venue;
+				$have_venue = true;
+			}
+			if( isset( $eventinfo->venue_city ) && !empty( $eventinfo->venue_city ) )	{
+				$_POST['venue_city'] = $eventinfo->venue_city;
+				$have_venue = true;
+			}
+			if( isset( $eventinfo->venue_state ) && !empty( $eventinfo->venue_state ) )	{
+				$_POST['venue_state'] = $eventinfo->venue_state;
+				$have_venue = true;
+			}
+		}
 		?>
         <table class="form-table">
         <tr>
@@ -316,8 +423,11 @@
         </td>
         <th scope="row"><label for="enquiry_source">Enquiry Source</label></th>
         <td><select name="enquiry_source" id="enquiry_source">
-        	<option value="" <?php if( !isset( $_POST['client'] ) || empty( $_POST['client'] ) ) echo 'selected'; ?>>--- Select ---</option>
+        	<option value="" <?php if( !isset( $_POST['enquiry_source'] ) || empty( $_POST['enquiry_source'] ) ) echo 'selected'; ?>>--- Select ---</option>
 			<?php
+			if( isset( $_POST['enquiry_source'] ) && !empty( $_POST['enquiry_source'] ) )	{
+					?><option value="<?php echo $_POST['enquiry_source']; ?>" selected="selected"><?php echo $_POST['enquiry_source']; ?></option><?php	
+				}
             $sources = explode( "\n", $mdjm_options['enquiry_sources'] );
 			asort( $sources );
 			foreach( $sources as $source )	{
@@ -335,11 +445,15 @@
         <th scope="row"><label for="event_type">Event Type:</label></th>
         <td><select name="event_type" id="event_type">
         	<?php
+				if( isset( $_POST['event_type'] ) && !empty( $_POST['event_type'] ) )	{
+					?><option value="<?php echo $_POST['event_type']; ?>" selected="selected"><?php echo $_POST['event_type']; ?></option><?php	
+				}
 				$raw_events = get_option( WPMDJM_SETTINGS_KEY );
 				$events = explode( "\n", $raw_events['event_types'] );
+				asort( $events );
 				foreach( $events as $event )	{
 					?>
-					<option value="<?php echo str_replace( "\r\n", "", $event ); ?>" <?php selected( $_POST['event_type'], str_replace( "\r\n", "", $event ) ); ?>><?php echo str_replace( "\r\n", "", $event ); ?></option>
+					<option value="<?php echo str_replace( "\r\n", "", $event ); ?>"<?php selected( $_POST['event_type'], str_replace( "\r\n", "", $event ) ); ?>><?php echo str_replace( "\r\n", "", $event ); ?></option>
 					<?php	
 				}
 			?>
@@ -355,14 +469,16 @@
 		if( $mdjm_options['time_format'] == 'H:i' )	{
 			$i = '00';
 			$x = '23';
+			$comp = 'H';
 		}
 		else	{
 			$i = '1';
-			$x = '12';	
+			$x = '12';
+			$comp = 'g';	
 		}
 		while( $i <= $x )	{
 			?>
-            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>"<?php if( isset( $_POST['event_start'] ) ) { selected( date( $comp, strtotime( $eventinfo->event_start ) ), $i ); } ?>><?php echo $i; ?></option>
             <?php
 			$i++;
 		}
@@ -372,7 +488,7 @@
         <?php
 		foreach( $minutes as $minute )	{
 			?>
-            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <option value="<?php echo $minute; ?>"<?php if( isset( $_POST['event_start'] ) ) { selected( date( 'i', strtotime( $eventinfo->event_start ) ), $minute ); } ?>><?php echo $minute; ?></option>
             <?php	
 		}
 		?>
@@ -381,8 +497,8 @@
 		if( $mdjm_options['time_format'] != 'H:i' )	{
 			?>
             &nbsp;<select name="event_start_period" id="event_start_period">
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
+            <option value="AM"<?php if( isset( $_POST['event_start'] ) ) { selected( date( 'A', strtotime( $eventinfo->event_start ) ), 'AM' ); } ?>>AM</option>
+            <option value="PM"<?php if( isset( $_POST['event_start'] ) ) { selected( date( 'A', strtotime( $eventinfo->event_start ) ), 'PM' ); } ?>>PM</option>
             </select>
             <?php	
 		}
@@ -403,7 +519,7 @@
 		}
 		while( $i <= $x )	{
 			?>
-            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>"<?php if( isset( $_POST['event_finish'] ) ) { selected( date( $comp, strtotime( $eventinfo->event_finish ) ), $i ); } ?>><?php echo $i; ?></option>
             <?php
 			$i++;
 		}
@@ -413,7 +529,7 @@
         <?php
 		foreach( $minutes as $minute )	{
 			?>
-            <option value="<?php echo $minute; ?>"><?php echo $minute; ?></option>
+            <option value="<?php echo $minute; ?>"<?php if( isset( $_POST['event_finish'] ) ) { selected( date( 'i', strtotime( $eventinfo->event_finish ) ), $minute ); } ?>><?php echo $minute; ?></option>
             <?php	
 		}
 		?>
@@ -422,8 +538,8 @@
 		if( $mdjm_options['time_format'] != 'H:i' )	{
 			?>
             &nbsp;<select name="event_finish_period" id="event_finish_period">
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
+            <option value="AM"<?php if( isset( $_POST['event_finish'] ) ) { selected( date( 'A', strtotime( $eventinfo->event_finish ) ), 'AM' ); } ?>>AM</option>
+            <option value="PM"<?php if( isset( $_POST['event_finish'] ) ) { selected( date( 'A', strtotime( $eventinfo->event_finish ) ), 'PM' ); } ?>>PM</option>
             </select>
             <?php	
 		}
@@ -445,7 +561,7 @@
         <th scope="row"><label for="event_venue">Event Venue</label></th>
         <td colspan="3"><select name="event_venue" id="event_venue" onChange="displayVenue();">
         <option value=""<?php if( empty( $_POST['event_venue'] ) ) echo ' selected="selected"'; ?>>--- Select Venue ---</option>
-        <option value="manual"<?php if( $_POST['event_venue'] == 'manual' || !$venueinfo ) echo ' selected="selected"'; ?>>Enter Manually</option>
+        <option value="manual"<?php if( $_POST['event_venue'] == 'manual' || !$venueinfo || $have_venue ) echo ' selected="selected"'; ?>>Enter Manually</option>
         <?php
 		if( $venueinfo )	{
             foreach( $venueinfo as $venue )	{
@@ -462,7 +578,7 @@
         <style>
 		#venue_fields	{
 			<?php
-			if( !$venueinfo )	{
+			if( !$venueinfo || $have_venue )	{
 				echo 'display:block;';	
 			}
 			else	{
@@ -663,7 +779,14 @@
 		}
 		</script>
         <p>Finally, review the cost information below and select whether or not to email the quote to your client and/or reset their password...</p>
-        <input type="hidden" name="action" value="add_event" />
+        <?php
+			if( !isset( $_POST['quote_event_id'] ) )	{
+				?><input type="hidden" name="action" value="add_event" /><?php
+			}
+			else	{
+				?><input type="hidden" name="action" value="respond_event" /><?php
+			}
+		?>
         <table class="form-table">
         <tr>
         <th scope="row" width="20%"><label for="total_cost">Total Event Cost:</label></th>
@@ -671,7 +794,7 @@
         </tr>
         <tr>
         <th scope="row" width="20%"><label for="deposit">Deposit:</label></th>
-        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="deposit" id="deposit" value="<?php echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
+        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="deposit" id="deposit" value="<?php if( isset( $_POST['deposit'] ) ) echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
         </tr>
         <?php
 		if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	{
@@ -948,9 +1071,10 @@
         	<?php
 				$raw_events = get_option( WPMDJM_SETTINGS_KEY );
 				$events = explode( "\r\n", $raw_events['event_types'] );
+				asort( $events );
 				foreach( $events as $event )	{
 					?>
-					<option value="<?php echo $event; ?>" <?php selected( str_replace( "\r\n", "", $eventinfo->event_type ), $event ); ?>><?php echo $event; ?></option>
+					<option value="<?php echo $event; ?>"<?php selected( str_replace( "\r\n", "", $eventinfo->event_type ), $event ); ?>><?php echo $event; ?></option>
 					<?php	
 				}
 			?>
@@ -1381,21 +1505,13 @@
 	
 	function f_mdjm_test()	{
 		global $mdjm_options;
-		/* Access the cron functions */
-		//echo date( 'H:i d M Y', wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) );
-		//require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' );
-		//f_mdjm_cron_balance_reminder();
+		add_role( 'inactive_dj', 'Inactive DJ', array( 	 'read' => true, 
+														 'manage_mdjm' => false,
+														 'create_users' => false,
+														 'edit_users' => false,
+														 'delete_users' => false
+													) );
 		
-		$dj_avail = f_mdjm_available( '2014-12-21' );
-		if( $dj_avail !== false )	{
-			foreach( $dj_avail as $dj_detail )	{
-				$dj = get_userdata( $dj_detail );
-				echo $dj->display_name . '<br />';
-			}
-		}
-		else	{
-			echo 'Not Available';	
-		}
 		
 		exit;
 	}

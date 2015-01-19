@@ -39,6 +39,8 @@
 										'email_client_confirm',
 										'confirm_email_from',
 										'email_dj_confirm',
+										'unavailable_email_template',
+										'confirm_email_from',
 										'title_as_subject',
 										'playlist_when',
 										'playlist_close',
@@ -478,6 +480,24 @@
 														'name' =>  'mdjm_plugin_settings[email_dj_confirm]',
 														'sort_order' => 'ASC',
 														'selected' => $mdjm_options['email_dj_confirm'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'email',
+									'page' => 'settings',
+									); // email_dj_confirm
+									
+		$admin_fields['unavailable_email_template'] = array(
+									'display' => 'Unavailability Email Template',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['unavailable_email_template'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be used when replying unavailable to enquiries',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[unavailable_email_template]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['unavailable_email_template'],
 														'list_type' => 'email_template'
 														),
 									'section' => 'email',

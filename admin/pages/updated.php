@@ -26,7 +26,7 @@
         <td align="center"><img src="<?php echo WPMDJM_PLUGIN_URL . '/admin/images/banner-772x250.png'; ?>" width="772" height="250" /></td>
         </tr>
         <tr>
-        <td align="center"><span style="font-size:24px; font-weight:bold; color:#F90">Welcome to Mobile DJ Manager version <?php echo WPMDJM_VERSION_NUM; ?></span><br />
+        <td align="center"><span style="font-size:24px; font-weight:bold; color:#FF9900">Welcome to Mobile DJ Manager version <?php echo WPMDJM_VERSION_NUM; ?></span><br />
 <a href="<?php wp_get_referer(); ?>">Click here to proceed to the requested page</a></td>
         </tr>
         </table>
@@ -49,7 +49,7 @@
 		}
 		?>
         <tr>
-        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new?</font></td>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new?</td>
         </tr>
         <?php	
 	} // f_mdjm_updated_header
@@ -100,6 +100,42 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 0.9.9.6
+**************************************************/
+	function f_mdjm_updated_to_0_9_9_6()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td>No major new features withiin this release but see below for the list of improvements, and bug fixes.<br /><br />Our next release will include some major new features which are currently going through testing.<br /><br />Watch this space for more news, but we think you'll be pleased with what's coming...
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
+            	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+            	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
+                <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
+                <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
+                <li>Further enhancements to debugging</li>
+                <li>Venue Listing drop down lists are now alphabetical</li>
+                <li>Bug Fix: <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Task</a> <strong>Complete Events</strong> marked events as completed on the day of the event if the event finish time was after midnight</li>
+                <li>Bug Fix: Entries Uploaded count was not displaying when editing the <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>"><strong>Upload Playlist</strong> Automated Task</a></li>
+                <li>Bug Fix: Playlist entries were not uploading to the MDJM servers reliably</li>
+                <li>Front end Availability form validation improvements - no longer using annoying pop-up alert if no date is entered, but instead using jQuery</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_0_9_9_6
 
 /**************************************************
 				VERSION 0.9.9.5

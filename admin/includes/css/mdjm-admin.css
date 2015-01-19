@@ -1,2 +1,19 @@
-/* CSS Document */
+@charset "UTF-8";
+/*
+* mdjm-admin.css
+* 16/01/2015
+* @since 0.9.9.6
+* Stylesheet for admin pages
+*/
 
+.mdjm-admin-h1-orange {
+	font-size: 24px;
+	font-weight: bold;
+	color: #FF990;
+}
+.mdjm-admin-feature-head	{
+	font-size: 24px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #FF9900;
+}

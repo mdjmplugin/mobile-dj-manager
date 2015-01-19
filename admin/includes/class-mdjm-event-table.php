@@ -29,11 +29,11 @@
 				$search = '';	
 			}
 			
-			$display_query['active'] = $query . " WHERE `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly . $search;
+			$display_query['active'] = $query . " WHERE `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Unattended' AND `contract_status` != 'Failed Enquiry'" . $djonly . $search;
 			$display_query['historic'] = $query . " WHERE (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')" . $djonly . $search;
 			$display_query['all'] = $query . " WHERE `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" . $djonly . $search;
 			
-			$display_query['enquiries'] = $query . " WHERE `contract_status` = 'Enquiry'" . $djonly . $search;
+			$display_query['enquiries'] = $query . " WHERE `contract_status` = 'Enquiry' OR `contract_status` = 'Unattended'" . $djonly . $search;
 			
 			$display_query['lost'] = $query . " WHERE `contract_status` = 'Failed Enquiry'" . $djonly . $search;
 			
@@ -155,7 +155,7 @@
 	
 		function get_columns()	{ // The table columns
 			$columns = array(
-				'cb'        => '<input type="checkbox" />',
+				//'cb'        => '<input type="checkbox" />',
 				'event_id' => __( '<strong>ID</strong>', 'mdjmeventtable' ),
 				'event_date' => __( '<strong>Date</strong>', 'mdjmeventtable' ),
 				'client_id' => __( '<strong>Client ID</strong>', 'mdjmeventtable' ),
@@ -181,7 +181,7 @@
 			return $sortable_columns;
 		} // get_sortable_columns
 		
-		function get_bulk_actions() { // Define the bulk actions for the drop down list
+		/*function get_bulk_actions() { // Define the bulk actions for the drop down list
 			if( isset( $_GET['display'] ) && $_GET['display'] != 'enquiries' && $_GET['display'] != 'lost' )	{
 				$actions = array(
 							'complete' => 'Mark as Complete',
@@ -200,7 +200,7 @@
 							);	
 			}
 			return $actions;
-		} // get_bulk_actions
+		} // get_bulk_actions*/
 		
 		function process_bulk_action() {
 			$action = $this->current_action();
@@ -235,10 +235,13 @@
 		} // column_cb
 		
 		function column_event_date( $item ) {
+			global $mdjm_options;
 			$actions = array();
-			$actions['edit'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Edit</a>', $_REQUEST['page'], 'view_event_form', $item['event_id'] );
+			if( $item['contract_status'] != 'Unattended' )	{
+				$actions['edit'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Edit</a>', $_REQUEST['page'], 'view_event_form', $item['event_id'] );
+			}
 			
-			if( $item['contract_status'] != 'Cancelled' && $item['contract_status'] != 'Completed' && $item['contract_status'] != 'Enquiry' && $item['contract_status'] != 'Failed Enquiry' )	{
+			if( $item['contract_status'] != 'Cancelled' && $item['contract_status'] != 'Completed' && $item['contract_status'] != 'Enquiry' && $item['contract_status'] != 'Unattended' && $item['contract_status'] != 'Failed Enquiry' )	{
 				$actions['complete'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Complete</a>', $_REQUEST['page'], 'complete_event', $item['event_id'] );
 				$actions['cancel'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Cancel</a>', $_REQUEST['page'], 'cancel_event', $item['event_id'] );
 			}
@@ -246,9 +249,14 @@
 				$actions['convert'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Convert</a>', $_REQUEST['page'], 'convert_event', $item['event_id'] );
 				$actions['failed'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Fail</a>', $_REQUEST['page'], 'fail_enquiry', $item['event_id'] );
 			}
+			if( $item['contract_status'] == 'Unattended' )	{
+				$actions['quote'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Quote</a>', $_REQUEST['page'], 'add_event_form', $item['event_id'] );
+				$actions['availability'] = sprintf( '<a href="?page=%s&display=%s&availability=%s&e_id=%s">Availability</a>', $_REQUEST['page'], 'enquiries', date( 'Y-m-d', strtotime( $item['event_date'] ) ), $item['event_id'] );
+				$actions['respond_unavailable'] = sprintf( '<a href="?page=%s&template=%s&to_user=%s&event_id=%s&action=%s">Unavailable</a>', 'mdjm-comms', $mdjm_options['unavailable_email_template'], $item['client_id'], $item['event_id'], 'respond_unavailable' );
+			}
 			if( $item['contract_status'] == 'Failed Enquiry' )	{
 				$actions['recover'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">Recover</a>', $_REQUEST['page'], 'recover_event', $item['event_id'] );
-			}	
+			}
 			return sprintf( '%1$s %2$s', $item['event_date'], $this->row_actions( $actions ) );
 		}
 		
