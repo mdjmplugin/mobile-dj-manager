@@ -1473,12 +1473,12 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 */
 	function f_mdjm_admin_enqueue()	{
 		wp_register_style( 'mobile-dj-manager-admin', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css' );
-		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
+		//wp_register_script( 'google-hosted-jq', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
 		
-		wp_enqueue_style( 'mobile-dj-manager-admin');
-		wp_enqueue_script( 'google-hosted-jquery');
-		wp_enqueue_script( 'jquery-validation-plugin');
+		wp_enqueue_style( 'mobile-dj-manager-admin' );
+		//wp_enqueue_script( 'google-hosted-jq');
+		wp_enqueue_script( 'jquery-validation-plugin' );
 	}
 	
 /****************************************************************************************************
