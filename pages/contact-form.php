@@ -438,6 +438,29 @@
 			
 			/* PHP Validation & Initial Config */
 			foreach( $fields as $field )	{
+				if( $field['type'] == 'captcha' )	{
+					if( !isset( $_POST['mdjm_captcha_prefix'] ) || empty( $_POST['mdjm_captcha_prefix'] ) )	{
+						$captcha_success = false;
+					}
+					else	{
+						$captcha_instance = new ReallySimpleCaptcha();
+						$captcha_success = $captcha_instance->check( $_POST['mdjm_captcha_prefix'], $_POST[$field['slug']] );
+						$captcha_instance->remove( $_POST['mdjm_captcha_prefix'] );
+					}
+					
+					if( !$captcha_success )	{
+						?>
+                        <script type="text/javascript">
+						alert("Invalid value entered for <?php echo $field['name']; ?> entered. Please try again.");
+						history.back();
+						</script>
+                        <?php
+						exit;
+					}
+				}
+			}
+			
+			foreach( $fields as $field )	{
 				/* Mappings */
 				if( isset( $field['config']['mapping'] ) && !empty( $field['config']['mapping'] ) && !empty( $_POST[$field['slug']] ) )	{
 					/* Client Mappings */
@@ -639,7 +662,7 @@
 					else	{
 						$layout = '0'; // Default
 					}
-					echo '<p>' . str_replace( $search, $replace, $form['config']['display_message_text'] ) . '</p>';
+					echo '<p>' . nl2br( html_entity_decode( stripcslashes( str_replace( $search, $replace, $form['config']['display_message_text'] ) ) ) ) . '</p>';
 					/* Display the page */
 					f_mdjm_contact_header( $form );
 					f_mdjm_contact_form( $layout, $form, $fields );
@@ -659,16 +682,6 @@
 		/* Print the credit if set */
 				add_action( 'wp_footer', 'f_wpmdjm_print_credit' );
 			}
-					
-			/*$captcha_instance = new ReallySimpleCaptcha();
-			$captcha_success = $captcha_instance->check( $_POST['mdjm_captcha_prefix'], $_POST['enter-the-characters:'] );
-			if( $captcha_success )	{
-				echo 'CAPTCHA Success ' . $_POST['mdjm_captcha_prefix'];	
-			}
-			else	{
-				echo 'CAPCTHA Fail ' . $_POST['mdjm_captcha_prefix'];
-			}
-			$captcha_instance->remove( $_POST['mdjm_captcha_prefix'] );*/
 		}
 	}
 	

@@ -144,7 +144,6 @@
 						dj_notes text NOT NULL,
 						admin_notes text NOT NULL,
 						added_by int(11) NOT NULL,
-						added_by int(11) NOT NULL,
 						date_added datetime NOT NULL,
 						referrer varchar(255) NOT NULL,
 						converted_by int(11) NOT NULL,
@@ -784,6 +783,13 @@
 				
 				/* Update options */
 				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.6' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.9.7
+***************************************************/			
+			if( $current_version_mdjm <= '0.9.9.7' )	{
+				/* No Actions */
 			} // if( $current_version_mdjm <= '0.9.9.6' )
 			
 /***************************************************
@@ -1460,14 +1466,14 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		global $mdjm_options;
 		
 		if( current_user_can( 'administrator' ) && isset( $mdjm_options['warn_unattended'] ) && $mdjm_options['warn_unattended'] == 'Y' )	{
-			$unattended = f_mdjm_unattended_enquiries_count();
+			$unattended = f_mdjm_event_count( 'Unattended', '' );
 		}
 		if( isset( $unattended ) && $unattended > 0 )	{
 			if( $unattended == 1 )	{
 				$message = 'There is currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiry</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action this Enquiry now</a>';
 			}
 			else	{
-				$message = 'There are currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiries</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action these Enquiries now</a>';	
+				$message = 'There are currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiries</a> that require your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action these Enquiries now</a>';	
 			}
 			f_mdjm_update_notice( 'update-nag', $message );
 		}	
@@ -1496,9 +1502,11 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
 		
+		
 		wp_enqueue_style( 'mobile-dj-manager');
 		wp_enqueue_script( 'google-hosted-jquery');
 		wp_enqueue_script( 'jquery-validation-plugin');
+		
 	}
 	
 	

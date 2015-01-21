@@ -136,7 +136,6 @@
 						'last_name'            => 'Client Last Name',
 						'user_email'           => 'Client Email Address',
 						'phone1'               => 'Client Telephone',
-						'user_pass'            => 'Client Password',
 						'marketing'            => 'Client Marketing',
 						'event_date'           => 'Event Date',
 						'event_type'           => 'Event Type',
@@ -576,7 +575,7 @@
 			$check = 'N';	
 		}
 		?>
-        <input type="checkbox" name="reply_to" id="reply_to" value="Y"<?php checked( 'Y', $check ); ?> /><span class="description">Do you want to be able to sender by clicking Reply within the email?</span></td>
+        <input type="checkbox" name="reply_to" id="reply_to" value="Y"<?php checked( 'Y', $check ); ?> /><span class="description">Do you want to be able to reply to the sender by clicking Reply within the email?</span></td>
         </tr>
         <tr>
         <th scope="row"><label for="copy_sender">Copy Sender?</label></th>
@@ -586,14 +585,43 @@
         <td>
         <table class="form-table">
         <tr>
-        <th scope="row"><label for="create_enquiry">Create Enquiry:</label></th>
+        <th scope="row"><label for="create_enquiry">Create Enquiry?</label></th>
         <td><input type="checkbox" name="create_enquiry" id="create_enquiry" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['create_enquiry'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['create_enquiry'] ); ?> /><span class="description">Creates a new event enquiry</span></td>
         </tr>
-        <th scope="row"><label for="update_user">Update Existing Users:</label></th>
+        <?php /*
+		$template_args = array(
+							'post_type' => 'email_template',
+							'orderby' => 'name',
+							'order' => 'ASC',
+							);
+		?>
+        <tr>
+        <th scope="row"><label for="send_template">Reply with Template?</label></th>
+        <td><select name="send_template" id="send_template">
+        <option value=""<?php if( !isset( $mdjm_forms[$form_slug]['config']['send_template'] ) || empty( $mdjm_forms[$form_slug]['config']['send_template'] ) ) { echo ' selected="selected"'; } ?>>No</option>
+		<?php
+			$template_query = new WP_Query( $template_args );
+			if ( $template_query->have_posts() ) {
+				?>
+                <option value="" disabled="disabled">EMAIL TEMPLATES</option>
+				<?php
+				while( $template_query->have_posts() ) {
+					$template_query->the_post();
+					?>
+					<option value="<?php echo get_the_id(); ?>"<?php if( isset( $mdjm_forms[$form_slug]['config']['send_template'] ) && !empty( $mdjm_forms[$form_slug]['config']['send_template'] ) ) { selected( get_the_id(), $mdjm_forms[$form_slug]['config']['send_template'] ); } ?>><?php echo get_the_title(); ?></option>
+                    <?php
+				}
+			}
+			wp_reset_postdata();
+		?>
+        </select><span class="description"> Select a template if you want an instant response to the client to be generated on form submission. <strong>No Shortcodes</strong></span></td>
+        </tr>*/
+		?>
+        <th scope="row"><label for="update_user">Update Existing Users?</label></th>
         <td><input type="checkbox" name="update_user" id="update_user" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['update_user'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['update_user'] ); ?> /><span class="description">If the user exists (based on email address) update their information with any mapped fields</span></td>
         </tr>
         <tr>
-        <th scope="row"><label for="redirect">Redirect User:</label></th>
+        <th scope="row"><label for="redirect">Redirect User?</label></th>
         <?php
 		$args = array(
 					'name'              => 'redirect',
@@ -610,7 +638,7 @@
         <td><?php wp_dropdown_pages( $args ); ?><span class="description">Redirects user to selected page on successful form submission. Overides <span class="code">Display Message</span></span></td>
         </tr>
         <tr>
-        <th scope="row"><label for="display_message">Display Message:</label></th>
+        <th scope="row"><label for="display_message">Display Message?</label></th>
         <td><input type="checkbox" name="display_message" id="display_message" value="Y" onclick="showDisplayText()"<?php if( isset( $mdjm_forms[$form_slug]['config']['display_message'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['display_message'] ); ?> /><span class="description">Text to be displayed to the user when the form is successfully submitted. Only valid if <span class="code">Redirect User</span> is not selected</span></td>
         </tr>
         </table>
@@ -913,6 +941,9 @@
 					}
 					else	{
 						$mdjm_forms[$_POST['form_slug']]['config']['create_enquiry'] = false;	
+					}
+					if( isset( $_POST['send_template'] ) && !empty( $_POST['send_template'] ) )	{
+						$mdjm_forms[$_POST['form_slug']]['config']['send_template'] = $_POST['send_template'];
 					}
 					if( isset( $_POST['update_user'] ) && $_POST['update_user'] == 'Y' )	{
 						$mdjm_forms[$_POST['form_slug']]['config']['update_user'] = $_POST['update_user'];

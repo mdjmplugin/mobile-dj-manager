@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.7
+Stable tag: 0.9.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,11 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 0.9.9.8 =
+<ui>
+	<li>Bug: Event table was not being created correctly during installation</li>
+	<li>Bug Fix: Slashes (/) were displayed if apostrophe's (') or other non-HTML characters were used in event description and other free text fields</li>
+</ui>
 
 = 0.9.9.7 =
 As this release comes shortly after 0.9.9.6 please see those release notes below also...

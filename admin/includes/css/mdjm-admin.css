@@ -17,3 +17,17 @@
 	color: #FFFFFF;
 	background-color: #FF9900;
 }
+.mdjm-dash-block {
+	background-color:#FF9900;
+}
+.mdjm-dash-block-head	{
+	font-size: 16px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.mdjm-dash-block-content	{
+	font-size: 46px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+

@@ -699,7 +699,9 @@
 			}
 			if( count( $equipment > 0 ) )	{
 				$cats = get_option( 'mdjm_cats' );
-				asort( $cats );
+				if( isset( $cats ) && !empty( $cats ) && is_array( $cats ) )	{
+					asort( $cats );
+				}
 				?>
 				<tr>
 				<th scope="row" valign="top"><label for="event_addons">Select Add-ons (if required):</label></th>
@@ -1533,7 +1535,10 @@
 	}
 	
 	else	{ // Display the Events table
-		if( !isset( $_POST['submit'] ) || $_POST['submit'] != 'Next' || $_GET['action'] == 'convert_event' )	{
+		if( !isset( $_POST['submit'] ) || $_POST['submit'] != 'Next' )	{
+			f_mdjm_render_events_table();
+		}
+		elseif( isset( $_GET['action'] ) && $_GET['action'] == 'convert_event' )	{
 			f_mdjm_render_events_table();
 		}
 	}

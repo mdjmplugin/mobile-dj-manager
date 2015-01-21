@@ -271,6 +271,9 @@
 	if( isset( $_GET['updated'] ) || isset( $_GET['ver'] ) )	{
 		include( 'updated.php' );
 	}
+	elseif( isset( $_GET['new'] ) && $_GET['new'] == 1 )	{
+		include( 'dash-new.php' );
+	}
 	else	{
 		mdjm_dashboard();
 	}

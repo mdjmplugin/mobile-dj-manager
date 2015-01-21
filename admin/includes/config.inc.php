@@ -127,19 +127,33 @@
 		
 		/* Client Address */
 		$client_full_address = $info['client']->address1 . '<br />';
-		if( !empty( $info['client']->address2 ) )
+		if( !empty( $info['client']->address2 ) )	{
 			$client_full_address .= $info['client']->address2 . '<br />';
-		$client_full_address .= $info['client']->town . '<br />';
-		$client_full_address .= $info['client']->county . '<br />';
-		$client_full_address .= $info['client']->postcode;
+		}
+		if( !empty( $info['client']->town ) )	{
+			$client_full_address .= $info['client']->town . '<br />';
+		}
+		if( !empty( $info['client']->town ) )	{
+			$client_full_address .= $info['client']->town . '<br />';
+		}
+		if( !empty( $info['client']->town ) )	{
+			$client_full_address .= $info['client']->town;
+		}
 		
 		/* Venue Address */
 		$venue_full_address = $eventinfo->venue_addr1 . '<br />';
-		if( !empty( $eventinfo->venue_addr2 ) )
+		if( !empty( $eventinfo->venue_addr2 ) )	{
 			$venue_full_address .= $eventinfo->venue_addr2 . '<br />';
-		$venue_full_address .= $eventinfo->venue_city . '<br />';
-		$venue_full_address .= $eventinfo->venue_state . '<br />';
-		$venue_full_address .= $eventinfo->venue_zip;
+		}
+		if( !empty( $eventinfo->venue_city ) )	{
+			$venue_full_address .= $eventinfo->venue_city . '<br />';
+		}
+		if( !empty( $eventinfo->venue_state ) )	{
+			$venue_full_address .= $eventinfo->venue_state . '<br />';
+		}
+		if( !empty( $eventinfo->venue_zip ) )	{
+			$venue_full_address .= $eventinfo->venue_zip;
+		}
 		
 		/* User password */
 		$p_meta = get_user_meta( $info['client']->ID, 'mdjm_pass_action', 'single' );

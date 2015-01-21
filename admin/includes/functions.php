@@ -486,18 +486,66 @@
 --	TO DO FUNCTIONS
 ****************************************************************************************************/
 /*
-* f_mdjm_unattended_enquiries_count
+* f_mdjm_todo_list
+* 19/01/2015
+* @since 1.0
+* Checks for actions to do and returns results
+*/
+	function f_mdjm_todo_list( $mdjm_args )	{
+		global $mdjm_options;
+		
+		
+		
+	} // f_mdjm_todo_list
+
+/*
+* f_mdjm_event_count
 * 19/01/2015
 * @since 1.0
 * Retrieve count of unattended enquiries
 */
-	function f_mdjm_unattended_enquiries_count()	{
+	function f_mdjm_event_count( $type, $mdjm_args )	{
+		global $wpdb;
+		if( !isset( $db_tbl ) )	{
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		}
+		$event_query = "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $type . "'";
+		
+		if( isset( $mdjm_args['dj'] ) && $mdjm_args['dj'] === true )	{
+			$event_query .= " AND `event_dj` = '" . $mdjm_args['dj'] . "'";
+		}
+		
+		if( isset( $mdjm_args['scope'] ) && $mdjm_args['scope'] == 'month' )	{
+			$event_query .= " AND MONTH(event_date) = '" . date( 'm' ) . "'";
+		}
+		elseif( isset( $mdjm_args['scope'] ) && $mdjm_args['scope'] == 'year' )	{
+			$event_query .= " AND YEAR(event_date) = '" . date( 'Y' ) . "'";
+		}
+		
+		$event_count = $wpdb->get_var( $event_query );
+		
+		if( isset( $mdjm_args['print'] ) && $mdjm_args['print'] === true )	{
+			echo $event_count;
+		}
+		else	{
+			return $event_count;
+		}
+		
+	} // f_mdjm_event_count
+	
+/*
+* f_mdjm_unattended_enquiries
+* 19/01/2015
+* @since 1.0
+* Retrieve count of unattended enquiries
+*/
+	function f_mdjm_unattended_enquiries()	{
 		global $wpdb;
 		if( !isset( $db_tbl ) )	{
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		}
 		
-		$unattended = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'" );
+		$unattended = $wpdb->get_results( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'" );
 		
 		return $unattended;
 	} // f_mdjm_unattended_enquiries_count
@@ -651,6 +699,7 @@
 			$dj_setup_date = explode( '/', $event['dj_setup_date'] );
 			$dj_setup_date = $dj_setup_date[2] . '-' . $dj_setup_date[1] . '-' . $dj_setup_date[0];
 		}
+		$event = array_map( 'stripslashes_deep', $event );
 		$str = f_mdjm_generate_playlist_ref();
 		if( !isset( $event['deposit_status'] ) || $event['deposit_status'] == '' ) $event['deposit_status'] = 'Due';
 		if( !isset( $event['balance_status'] ) || $event['balance_status'] == '' ) $event['balance_status'] = 'Due';
@@ -881,7 +930,7 @@
 		else	{
 			unset( $event_updates['contract_approved_date'] );	
 		}
-		
+		$event_updates = array_map( 'stripslashes_deep', $event_updates );
 		if( $mdjm_options['time_format'] == 'H:i' )	{
 			$event_updates['event_start'] = date( 'H:i:s', strtotime( $event_updates['event_start_hr'] . ':' . $event_updates['event_start_min'] ) );
 			$event_updates['event_finish'] = date( 'H:i:s', strtotime( $event_updates['event_finish_hr'] . ':' . $event_updates['event_finish_min'] ) );

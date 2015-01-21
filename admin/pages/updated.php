@@ -130,6 +130,54 @@
 	} // f_mdjm_updated_to_1_0
 	
 /**************************************************
+				VERSION 0.9.9.8
+**************************************************/
+	function f_mdjm_updated_to_0_9_9_8()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td>This is a bug fix release only. See below for details.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>Bug: Event table was not being created correctly during installation</li>
+                <li>Bug Fix: Slashes (/) were displayed if apostrophe's (') or other non-HTML characters were used in event description and other free text fields</li>
+            </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">&nbsp;</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
+                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
+            	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+            	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
+                <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
+                <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
+                <li>Further enhancements to debugging</li>
+                <li>Venue Listing drop down lists are now alphabetical</li>
+                <li>Bug Fix: <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Task</a> <strong>Complete Events</strong> marked events as completed on the day of the event if the event finish time was after midnight</li>
+                <li>Bug Fix: Entries Uploaded count was not displaying when editing the <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>"><strong>Upload Playlist</strong> Automated Task</a></li>
+                <li>Bug Fix: Playlist entries were not uploading to the MDJM servers reliably</li>
+                <li>Front end Availability form validation improvements - no longer using annoying pop-up alert if no date is entered, but instead using jQuery</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_0_9_9_8
+	
+/**************************************************
 				VERSION 0.9.9.7
 **************************************************/
 	function f_mdjm_updated_to_0_9_9_7()	{

@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
-Version: 0.9.9.7
-Date: 19 January 2015
+Version: 0.9.9.8
+Date: 21 January 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -24,11 +24,11 @@ Author URI: http://www.mydjplanner.co.uk
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
-	$mdjm_db_version = '1.9'; // Used to determine if the DB Tables need updating
+	$mdjm_db_version = '2.0'; // Used to determine if the DB Tables need updating
 
 	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
 	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '0.9.9.7' );
+	define ( 'WPMDJM_VERSION_NUM', '0.9.9.8' );
 	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
