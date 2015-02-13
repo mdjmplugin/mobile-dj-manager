@@ -16,6 +16,12 @@
 		), $atts, 'MDJM' );
 		
 		/* Process pages */
+		if( isset( $atts['page'] ) && $atts['page'] == 'Contact Form' )	{
+			ob_start();
+			include_once WPMDJM_PLUGIN_DIR . '/pages/' . $args[$atts['page']] . '.php';
+			$output = ob_get_clean();
+			return $output;
+		}
 		if( isset( $atts['page'] ) && !empty( $atts['page'] ) )	{
 			include_once WPMDJM_PLUGIN_DIR . '/pages/' . $args[$atts['page']] . '.php';
 		}

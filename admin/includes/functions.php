@@ -36,9 +36,9 @@
 		
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Communications', 'Communications', 'manage_mdjm', 'mdjm-comms', 'f_mdjm_admin_comms');
 		
-		/*if( current_user_can( 'manage_options' ) )	{
+		if( current_user_can( 'manage_options' ) )	{
 			add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Contact Forms', 'Contact Forms', 'manage_mdjm', 'mdjm-contact-forms', 'f_mdjm_admin_contact_forms');
-		}*/
+		}
 
 		if( current_user_can( 'manage_options' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - DJ\'s ', 'DJ\'s' , 'manage_mdjm', 'mdjm-djs', 'f_mdjm_admin_djs');
 		
@@ -715,6 +715,31 @@
 			$end_time = date( 'H:i:s', strtotime( $event['event_finish_hr'] . ':' . $event['event_finish_min'] . $event['event_finish_period'] ) );
 			
 			$setup_time = date( 'H:i:s', strtotime( $event['dj_setup_hr'] . ':' . $event['dj_setup_min'] . $event['dj_setup_period'] ) );
+		}
+		
+		/* Create new Client and assign to this event */
+		if( $event['user_id'] == 'add_new' )	{
+			$random_password = wp_generate_password( $mdjm_options['pass_length'] );
+			$user_id = wp_create_user( $event['client_email'], $random_password, $event['client_email'] );
+			$client_field_array = array( 'ID' => $user_id, 'role' => 'client', 'show_admin_bar_front' => 'false', 'first_name' => sanitize_text_field( $event['client_first_name'] ) );
+			update_user_meta( $user_id, 'marketing', 'Y' );
+			
+			$client_field_array['user_nicename'] = sanitize_text_field( $event['client_first_name'] );
+			$client_field_array['display_name'] = sanitize_text_field( $event['client_first_name'] );
+			if( isset( $event['client_last_name'] ) && !empty( $event['client_last_name'] ) )	{
+				$client_field_array['last_name'] = sanitize_text_field( $event['client_last_name'] );
+				$client_field_array['display_name'] = $client_field_array['display_name'] . ' ' . sanitize_text_field( $event['client_last_name'] );
+			}
+			if( isset( $event['client_phone'] ) && !empty( $event['client_phone'] ) )	{
+				update_user_meta( $user_id, 'phone1', $event['client_phone'] );	
+			}
+			update_user_meta( $user_id, 'marketing', 'Y' );	
+			
+			wp_update_user( $client_field_array );
+			
+			f_mdjm_update_notice( 'updated', ' The Client <strong>' . $client_field_array['display_name'] . '</strong> has been created' );
+			
+			$event['user_id'] = $user_id;
 		}
 		
 		/* If a venue was selected use it */

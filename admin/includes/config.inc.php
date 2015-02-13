@@ -133,11 +133,11 @@
 		if( !empty( $info['client']->town ) )	{
 			$client_full_address .= $info['client']->town . '<br />';
 		}
-		if( !empty( $info['client']->town ) )	{
-			$client_full_address .= $info['client']->town . '<br />';
+		if( !empty( $info['client']->county ) )	{
+			$client_full_address .= $info['client']->county . '<br />';
 		}
-		if( !empty( $info['client']->town ) )	{
-			$client_full_address .= $info['client']->town;
+		if( !empty( $info['client']->postcode ) )	{
+			$client_full_address .= $info['client']->postcode;
 		}
 		
 		/* Venue Address */

@@ -18,9 +18,10 @@
 			}
 			
 			if( isset( $_POST['s'] ) && !empty( $_POST['s'] ) )	{
-				$arg = array(	'search'  => $_POST['s'],
-								'orderby' => 'display_name',
-								'order'   => 'ASC',
+				$arg = array(	
+							'search'  => $_POST['s'],
+							'orderby' => 'display_name',
+							'order'   => 'ASC',
 							);
 				$clientinfo = get_users( $arg );
 				$search = ' AND `user_id` = ' . $clientinfo[0]->ID;
@@ -265,6 +266,20 @@
 					'edit' => sprintf( '<a href="'. admin_url() . '%s?user_id=%s">Edit</a>', 'user-edit.php', $item['client_id'] ),
 				);
 			return sprintf( '%1$s %2$s', $item['client'], $this->row_actions( $actions ) );
+		}
+		function column_contract_status( $item )	{
+			if( $item['contract_status'] == 'Approved' )	{
+				if ( get_option('permalink_structure') )	{
+					$sep = '?';
+				}
+				else	{
+					$sep = '&amp;';	
+				}				
+				$actions = array(
+					'view_contract' => sprintf( '<a href="'. get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . $sep . '%s=%s">View Contract</a>', 'event_id', $item['event_id'] ),
+				);
+			}
+			return sprintf( '%1$s %2$s', $item['contract_status'], $this->row_actions( $actions ) );
 		}
 		
 		function column_playlist( $item ) {

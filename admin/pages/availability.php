@@ -135,9 +135,9 @@
 	?>
     </select>&nbsp;&nbsp;&nbsp;
     <select name="show_year" id="show_year">
-    <option value="2014"<?php if( isset( $_POST['show_year'] ) ) { selected( '2014', $_POST['show_year'] ); } else { selected( '2014', $_POST['show_year'] ); } ?>>2014</option>
-    <option value="2015"<?php if( isset( $_POST['show_year'] ) ) { selected( '2015', $_POST['show_year'] ); } else { selected( '2015', $_POST['show_year'] ); } ?>2015</option>
-    <option value="2016"<?php if( isset( $_POST['show_year'] ) ) { selected( '2016', $_POST['show_year'] ); } else { selected( '2016', $_POST['show_year'] ); } ?>>2016</option>
+    <option value="2014"<?php if( isset( $_POST['show_year'] ) ) { selected( '2014', $_POST['show_year'] ); } else { selected( '2014', date( 'Y' ) ); } ?>>2014</option>
+    <option value="2015"<?php if( isset( $_POST['show_year'] ) ) { selected( '2015', $_POST['show_year'] ); } else { selected( '2015', date( 'Y' ) ); } ?>>2015</option>
+    <option value="2016"<?php if( isset( $_POST['show_year'] ) ) { selected( '2016', $_POST['show_year'] ); } else { selected( '2016', date( 'Y' ) ); } ?>>2016</option>
     </select>&nbsp;&nbsp;&nbsp;
     <?php submit_button( 'Go', 'secondary', 'submit', false, '' ); ?>
     </th>

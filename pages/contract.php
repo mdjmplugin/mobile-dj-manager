@@ -65,7 +65,7 @@
 			if( $eventinfo )	{
 				/* Make sure it's the client's contract! */
 				$this_user = get_current_user_id();
-				if( $eventinfo->user_id != $this_user)
+				if( $eventinfo->user_id != $this_user && !current_user_can( 'administrator' ) )
 					wp_die( 'Access Denied: An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a>' );
 		
 				/* If the event does not have a contract assigned, error */
@@ -137,8 +137,15 @@
 	} // f_mdjm_accept_contract_form
 	
 	function f_mdjm_contract_is_signed( $eventinfo )	{
-		echo '<p>Your contract has already been signed and accepted. A copy is printed below for your records.</p>';
-		echo '<p>Contract signed on ' . date( 'l, jS F Y', strtotime( $eventinfo->contract_approved_date ) ) . ' by ' . $eventinfo->contract_approver . '.</p>';
+		if( $eventinfo->user_id == get_current_user_id() )	{
+			echo '<p>Your contract has already been signed and accepted. A copy is printed below for your records.</p>';
+			echo '<p>Contract signed on ' . date( 'l, jS F Y', strtotime( $eventinfo->contract_approved_date ) ) . ' by ' . $eventinfo->contract_approver . '.</p>';
+		}
+		else	{
+			$the_client = get_user_by( 'ID', $eventinfo->user_id );
+			echo '<p>You are viewing the contract for ' . $the_client->display_name .' who\'s event is scheduled on ' . date( 'l, jS F Y', strtotime( $eventinfo->event_date ) ) . '</p>';
+			echo '<p>Contract signed on ' . date( 'l, jS F Y', strtotime( $eventinfo->contract_approved_date ) ) . ' by ' . $eventinfo->contract_approver . '.</p>';	
+		}
 	}
 
 	/* Print the credit if set */

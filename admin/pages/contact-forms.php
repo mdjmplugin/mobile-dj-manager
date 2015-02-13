@@ -131,21 +131,29 @@
 							'submit'       => 'Submit Button',
 							);
 							
-		$mappings = array(
-						'first_name'           => 'Client First Name',
-						'last_name'            => 'Client Last Name',
-						'user_email'           => 'Client Email Address',
-						'phone1'               => 'Client Telephone',
-						'marketing'            => 'Client Marketing',
-						'event_date'           => 'Event Date',
-						'event_type'           => 'Event Type',
-						'event_start'          => 'Event Start',
-						'event_finish'         => 'Event End',
-						'event_description'    => 'Event Description',
-						'venue'                => 'Event Venue Name',
-						'venue_city'           => 'Event Venue Town/City',
-						'venue_state'          => 'Event County (State)'
-						);
+		$mappings_client = array(
+							'first_name'           => 'Client First Name',
+							'last_name'            => 'Client Last Name',
+							'user_email'           => 'Client Email Address',
+							);
+		$client_fields = get_option( WPMDJM_CLIENT_FIELDS );
+		foreach( $client_fields as $client_field )	{
+			if( $client_field['display'] == 'Y' )	{
+				$mappings_client[$client_field['id']] = 'Client ' . $client_field['label'];
+			}
+		}
+		$mappings_event = array(
+							'event_date'           => 'Event Date',
+							'event_type'           => 'Event Type',
+							'event_start'          => 'Event Start',
+							'event_finish'         => 'Event End',
+							'event_description'    => 'Event Description',
+							'venue'                => 'Event Venue Name',
+							'venue_city'           => 'Event Venue Town/City',
+							'venue_state'          => 'Event County (State)'
+							);
+							
+		$mappings = array_merge( $mappings_client, $mappings_event );
 							
 		/* Process field deletions */
 		if( isset( $_GET['del'], $_GET['field'] ) && $_GET['del'] == 'Y' )	{
@@ -177,6 +185,18 @@
 			}
 			else	{
 				document.getElementById('placeholder_row').style.display = "none";   
+			}
+			if(elem.value == 'text' || elem.value == 'textarea' )	{
+				document.getElementById('width_row').style.display = "block";
+			}
+			else	{
+				document.getElementById('width_row').style.display = "none";   
+			}
+			if(elem.value == 'textarea' )	{
+				document.getElementById('height_row').style.display = "block";
+			}
+			else	{
+				document.getElementById('height_row').style.display = "none";   
 			}
 			if(elem.value == 'date')	{
 				document.getElementById('datepicker_row').style.display = "block";
@@ -356,6 +376,18 @@
         <p>Placeholder text:&nbsp;&nbsp;&nbsp;<input type="text" name="placeholder" id="placeholder" class="regular-text" placeholder="(optional) Placeholder text is displayed like this" /></p>
         </div>
 <?php /* End Placeholder */ ?>
+
+<?php /* Width */ ?>
+        <div id="width_row" style="display: none; font-size:10px">
+        <p>Field Width: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="width" id="width" class="small-text" /></p>
+        </div>
+<?php /* End Width */ ?>
+
+<?php /* Height */ ?>
+        <div id="height_row" style="display: none; font-size:10px">
+        <p>Field Height: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="height" id="height" class="small-text" /></p>
+        </div>
+<?php /* End Height */ ?>
 
 <?php /* Datepicker */ ?>
         <div id="datepicker_row" style="display: none; font-size:10px">
@@ -579,7 +611,7 @@
         </tr>
         <tr>
         <th scope="row"><label for="copy_sender">Copy Sender?</label></th>
-        <td><input type="checkbox" name="copy_sender" id="copy_sender" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['copy_sender'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['copy_sender'] ); ?> /><span class="description">Send a copy of the message to the sender</span></td>
+        <td><input type="checkbox" name="copy_sender" id="copy_sender" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['copy_sender'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['copy_sender'] ); ?> /><span class="description">Send a copy of the message to the sender. If you select a template below, they will receive the template. Otherwise, they will receive a copy of their form</span></td>
         </tr>
         <th scope="row">On Submit:</th>
         <td>
@@ -588,7 +620,7 @@
         <th scope="row"><label for="create_enquiry">Create Enquiry?</label></th>
         <td><input type="checkbox" name="create_enquiry" id="create_enquiry" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['create_enquiry'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['create_enquiry'] ); ?> /><span class="description">Creates a new event enquiry</span></td>
         </tr>
-        <?php /*
+        <?php
 		$template_args = array(
 							'post_type' => 'email_template',
 							'orderby' => 'name',
@@ -615,8 +647,7 @@
 			wp_reset_postdata();
 		?>
         </select><span class="description"> Select a template if you want an instant response to the client to be generated on form submission. <strong>No Shortcodes</strong></span></td>
-        </tr>*/
-		?>
+        </tr>
         <th scope="row"><label for="update_user">Update Existing Users?</label></th>
         <td><input type="checkbox" name="update_user" id="update_user" value="Y"<?php if( isset( $mdjm_forms[$form_slug]['config']['update_user'] ) ) checked( 'Y', $mdjm_forms[$form_slug]['config']['update_user'] ); ?> /><span class="description">If the user exists (based on email address) update their information with any mapped fields</span></td>
         </tr>
@@ -673,7 +704,7 @@
         <table class="form-table">
         <tr>
         <th scope="row"><label for="display_message_text">Message:</label></th>
-        <td><?php wp_editor( $content, 'display_message_text', $mce_settings ); ?></td>
+        <td><?php wp_editor( html_entity_decode( $content ), 'display_message_text', $mce_settings ); ?></td>
         </tr>
         </table>
         </div>
@@ -844,6 +875,14 @@
 						$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['input_class'] = $_POST['input_class'];
 					}
 					
+					/* Size */
+					if( isset( $_POST['width'] ) && !empty( $_POST['width'] ) )	{
+						$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['width'] = $_POST['width'];
+					}
+					if( isset( $_POST['height'] ) && !empty( $_POST['height'] ) )	{
+						$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['height'] = $_POST['height'];
+					}
+					
 					/* Field Mapping */
 					$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['mapping'] = $_POST['mapping'];
 					if( $_POST['field_type'] == 'email' )	{
@@ -959,7 +998,7 @@
 					}
 					if( isset( $_POST['display_message'] ) && $_POST['display_message'] == 'Y' )	{
 						$mdjm_forms[$_POST['form_slug']]['config']['display_message'] = $_POST['display_message'];
-						$mdjm_forms[$_POST['form_slug']]['config']['display_message_text'] = $_POST['display_message_text'];
+						$mdjm_forms[$_POST['form_slug']]['config']['display_message_text'] = htmlentities( stripslashes( $_POST['display_message_text'] ) );
 					}
 					else	{
 						$mdjm_forms[$_POST['form_slug']]['config']['display_message'] = false;	
@@ -1017,3 +1056,4 @@
 	else	{
 		f_mdjm_show_forms();
 	}
+?>

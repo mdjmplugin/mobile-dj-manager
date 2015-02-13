@@ -108,10 +108,21 @@
 		global $mdjm_options;
 		?>
         <tr>
-        <td><font style="font-size:14px; font-weight:bold; color:#F90">Dynamic Contact Forms</font><br>
-		We have added a drop down field to the event creation process that becomes visible if you select the option to <span class="code">Email Quote?</span>. The drop down list <span class="code">Select email Template to Use</span> enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> is selected.<br /><br />
-		This provides the flexibilty for you to create different templates for use with different event types should you wish to.<br /><br />
-		If you have <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=permissions">Permissions</a> configured to allow DJ's to create events, the <span class="code">Disabled Templates for DJ's</span> setting applies.
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">MDJM Contact Forms</font><br>
+		The new MDJM Contact Forms enable you to create fully customisable <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> for use either within a single page of your website, or on multiple pages by using the new MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> Widget which we've also included in this release.<br /><br />By using MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a>, MDJM can now fully manage every stage of an event from enquiry through to completion.<br /><br />Some of the key features of the <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> are;
+        <ui>
+            <li>Fully Customisable forms and settings</li>
+            <li>Configure your forms to create users and event enquiries when submitted</li>
+            <li>Immediate responses to the client (if configured)</li>
+            <li>3 Layouts to choose from</li>
+            <li>Secure your form with a CAPTCHA field (required the <a href="<?php echo admin_url( 'plugin-install.php?tab=search&s=really+simple+captcha' ); ?>">Really Simple CAPTCHA</a> plugin to be installed)</li>
+            <li>Availability status included in your notification email (not for client)</li>
+            <li>Immediate notifications in the Admin interface when you have new "Unattended" enquiries</li>
+            <li>From your <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Events</a> page quickly check availability, assign DJ, finalise quote, or send notification of Unavailability to Client</li>
+        </ui>
+        <br />
+        Make sure you check out the <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/contact-forms/">Contact Forms User Guide </a> for more information and guidance when setting up your forms.<br /><br /><a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> are classed as BETA currently, however we do highly recommend you try them out and in the unlikely event that you encounter any problems, make sure you head over to our <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/forum/bugs/">Support Forums</a> and let us know.
+
         </td>
         </tr>
         <tr>
@@ -120,7 +131,13 @@
         <tr>
         <td>
             <ui>
-            	<li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default</li>
+            	<li><strong>New</strong>: Create Clients directly from the <a href="<?php f_mdjm_admin_page( 'add_event' ); ?>">Add New Event</a> screen as part of the event creation process</li>
+            	<li><strong>New</strong>: MDJM Contact Form Widget enabling you to add your MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> to multiple web pages quickly and easily</li>
+            	<li><strong>New</strong>: <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default</li>
+                <li><strong>New</strong>: Once an event is Approved, you can now click on the status within the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event Listing</a> page and view the Client's signed contract</li>
+                <li><strong>Bug Fix</strong>: The Year drop down list within the <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">Availability</a> page was showing blank instead of 2015</li>
+                <li><strong>Bug Fix</strong>: If you had your <a href="http://codex.wordpress.org/Using_Permalinks" target="_blank">WordPress Permalink Settings</a> set to the default of <strong>Default</strong> (also referred to as "Ugly") the <?php echo WPMDJM_APP_NAME; ?> links did not work correctly for Clients when logged in</li>
+                <li><strong>Bug Fix</strong>: In some instances the links within the <?php echo WPMDJM_APP_NAME; ?> did not work correctly due to a conflict in configuration</li>
             </ui>
         </td>
         </tr>

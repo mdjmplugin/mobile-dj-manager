@@ -1,13 +1,13 @@
 === Mobile DJ Manager ===
 Contributors: mikeyhoward1977
-Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager
+Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.1
-Stable tag: 0.9.9.8
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
+Mobile DJ Manager is an interface to fully manage your DJ or Agency business efficiently.
 
 == Description ==
 
@@ -77,6 +77,42 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.0 =
+<h2>New Features</h2>
+Our fully customisable Contact Forms enable full management of events from the initial client enquiry all the way through to the completion of the event.
+
+<ul>
+	<li>Create as many Contact Forms as you need and display them either on a single page in amongst your own contact, or via a widget that is displayed on multiple pages</li>
+	<li>Configure each individual form to meet your requirements</li>
+	<li>Map form fields directly to Client or Event fields</li>
+	<li>Create clients and event enquiries when the form is submitted</li>
+	<li>Immediately respond to the client once they submit the form with a pre-defined template</li>
+	<li>Customise each individual field as necessary</li>
+	<li>
+		<ul>
+			<li>Include a date picker</li>
+			<li>Specify which fields are required to be completed before submission</li>
+			<li>Specify your own CSS class</li>
+			<li>Include placeholder hints</li>
+			<li>& more</li>
+		</ul>
+	</li>
+	<li>Include text fields, free text areas, checkboxes, date fields, select (drop down) fields & more</li>
+	<li>jQuery Validation</li>
+	<li>Point successful Availability Checks to your MDJM Contact Form page for additional functionality</li>
+</ul>
+
+<h2>Bug Fixes &amp; Minor Enhancements</h2>
+<ul>
+	<li><strong>New</strong>: Create Clients directly from the Add New Event screen as part of the event creation process</li>
+	<li><strong>New</strong>: MDJM Contact Form Widget enabling you to add your MDJM Contact Form to multiple web pages quickly and easily</li>
+	<li><strong>New</strong>: Setting added <strong>New Enquiry Notifications</strong>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <strong>Unattended Enquiries</strong> that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default</li>
+	<li><strong>New</strong>: Once an event is Approved, you can now click on the status within the Event Listing page and view the Client's signed contract</li>
+	<li><strong>Bug Fix</strong>: The Year drop down list within the Availability page was showing blank instead of 2015</li>
+	<li><strong>Bug Fix</strong>: If you had your WordPress Permalink Settings set to the default of <strong>Default</strong> (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in</li>
+	<li><strong>Bug Fix</strong>: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration</li>
+</ul>
+
 = 0.9.9.8 =
 <ui>
 	<li>Bug: Event table was not being created correctly during installation</li>

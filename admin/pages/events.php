@@ -327,6 +327,9 @@
 			if( isset( $_GET['dj'] ) && !empty( $_GET['dj'] ) )	{
 				$_POST['event_dj'] = $_GET['dj'];	
 			}
+			if( isset( $eventinfo->event_dj ) && !empty( $eventinfo->event_dj ) )	{
+				$_POST['event_dj'] = $eventinfo->event_dj;
+			}
 			if( isset( $eventinfo->referrer ) && !empty( $eventinfo->referrer ) )	{
 				$_POST['enquiry_source'] = $eventinfo->referrer;
 			}
@@ -359,11 +362,20 @@
 			}
 		}
 		?>
+        <h3>Client Details</h3>
+        <hr />
         <table class="form-table">
         <tr>
         <th scope="row"><label for="user_id">Select Client:</label></th>
-        <td><select name="user_id" id="user_id">
+        <td><select name="user_id" id="user_id" onchange="displayClientFields();">
         	<option value="">--- Select Client ---</option>
+            <?php
+			if( !isset( $_GET['event_id'] ) )	{
+				?>
+            	<option value="add_new">--- Add New Client ---</option>
+                <?php
+			}
+			?>
         <?php
 		$client_list = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
         foreach( $client_list as $client )	{
@@ -371,12 +383,53 @@
 			<option value="<?php echo $client->ID; ?>" <?php if( isset( $_POST['client'] ) ) selected( $_POST['client'], $client->ID ); ?>><?php echo $client->display_name; ?></option>';	
             <?php
 		}
-		?></select> <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	echo '<a href="' . admin_url() . 'user-new.php" class="add-new-h2">Add New</a>'; ?></td>
+		?></select></td>
+        </tr>
+        </table>
+        <style>
+		#client_fields	{
+			display:none;
+		}
+		</style>
+  		<div id="client_fields">
+        <script type="text/javascript">
+		function displayClientFields() {
+			var user = document.getElementById("user_id");
+			var user_val = user.options[user.selectedIndex].value;
+			var client_div =  document.getElementById("client_fields");
+		
+			  if (user_val == 'add_new') {
+			   client_div.style.display = "block";
+		
+			  }
+			  else {
+			  client_div.style.display = "none";
+			  }  
+		} 
+		</script>
+        <table class="form-table">
+        <tr>
+        <th scope="row"><label for="client_first_name">First Name:</label></th>
+        <td><input type="text" id="client_first_name" name="client_first_name" value="<?php echo $_POST['client_first_name']; ?>" /></td>
+        <th scope="row"><label for="client_last_name">Last Name:&nbsp;<span class="description">(optional)</label></th>
+        <td><input type="text" name="client_last_name" id="client_last_name" value="<?php echo $_POST['client_last_name']; ?>"></td>
+        </tr>
+        <tr>
+        <th scope="row"><label for="client_email">Email:</label></th>
+        <td><input type="text" id="client_email" name="client_email" value="<?php echo $_POST['client_email']; ?>" /></td>
+        <th scope="row"><label for="client_phone">Phone:&nbsp;<span class="description">(optional)</span></label></th>
+        <td><input type="text" name="client_phone" id="client_phone" value="<?php echo $_POST['client_last_name']; ?>"></td>
+        </tr>
+        </table>
+        </div>
+        <h3>Event Details</h3>
+        <hr />
+        <table class="form-table">
         <th scope="row"><label for="event_dj">Select DJ:</label></th>
         <?php 
 		if( current_user_can( 'administrator' ) )	{
 			$djs = f_mdjm_get_djs(); ?>
-			<td><select name="event_dj">
+			<td colspan="3"><select name="event_dj">
 				<option value="" <?php if( empty( $_POST['event_dj'] ) ) echo ' selected'; ?>>--- Select a DJ ---</option>
 				<?php
 				foreach( $djs as $dj )	{
@@ -557,6 +610,10 @@
         <?php
 		$venueinfo = f_mdjm_get_venueinfo();
 		?>
+        </table>
+        <h3>Venue Details</h3>
+        <hr />
+        <table class="form-table">
         <tr>
         <th scope="row"><label for="event_venue">Event Venue</label></th>
         <td colspan="3"><select name="event_venue" id="event_venue" onChange="displayVenue();">
@@ -646,6 +703,9 @@
 	function f_mdjm_add_event_step_2()	{
 		global $mdjm_options;
 		
+		/* Validation checks */
+		f_mdjm_event_validate( $_POST );
+		
 		?>
         <table class="form-table">
 		<?php
@@ -686,6 +746,10 @@
 	
 	function f_mdjm_add_event_step_3()	{
 		global $mdjm_options;
+		
+		/* Validation checks */
+		f_mdjm_event_validate( $_POST );
+		
 		?>
 		<table class="form-table">
         <?php
@@ -923,6 +987,7 @@
 	function f_mdjm_add_event_footer( $submit )	{
 		global $event_error;
 		?>
+        <hr />
         <table class="form-table">
         <tr>
         <th scope="row">&nbsp;</th>
@@ -951,22 +1016,57 @@
 */
 	function f_mdjm_event_validate( $fields )	{
 		global $event_error;
+		
+		$event_error = '0';
+		$error_msg = array();
 		/* Check event date is not in the past */
 		if( isset( $fields['event_date'] ) && !empty( $fields['event_date'] ) )	{
 			$event_date = explode( '/', $fields['event_date'] );
 			$event_date = $event_date[2] . '-' . $event_date[1] . '-' . $event_date[0];
 			if( strtotime( $event_date ) < time() )	{
 				$event_error = '1';
-				f_mdjm_update_notice( 'error', 'Warning: The event date ' . date( 'd-m-Y' ) . ' is in the past. Click <a onclick="window.history.go(-1)">Back</a> to amend' );	
+				$error_msg[] = 'Warning: The event date ' . date( 'd-m-Y' ) . ' is in the past. Click <a onclick="window.history.go(-1)">Back</a> to amend';	
 			}
 		}
 		/* Check event date is set */
 		elseif(! isset( $fields['event_date'] ) || empty( $fields['event_date'] ) )	{
 			$event_error = '1';
-			f_mdjm_update_notice( 'error', 'Warning: You have not entered a date for the event. Click <a onclick="window.history.go(-1)">Back</a> to do so' );
+			$error_msg[] = 'Warning: You have not entered a date for the event. Click <a onclick="window.history.go(-1)">Back</a> to do so';
 		}
-		else	{
-			$event_error = '0';	
+		if( isset( $fields['user_id'] ) && $fields['user_id'] == 'add_new' )	{
+			if( !isset( $fields['client_first_name'] ) || empty( $fields['client_first_name'] ) )	{
+				$event_error = '1';
+				$error_msg[] = 'Warning: You have not entered the new Client\'s First Name. Click <a onclick="window.history.go(-1)">Back</a> to do so';
+			}
+			if( !isset( $fields['client_email'] ) || empty( $fields['client_email'] ) )	{
+				$event_error = '1';
+				$error_msg[] = 'Warning: You have not entered the new Client\'s Email Address. Click <a onclick="window.history.go(-1)">Back</a> to do so';
+			}
+			if( isset( $fields['client_email'] ) && !empty( $fields['client_email'] ) )	{
+				if( !filter_var( $fields['client_email'], FILTER_VALIDATE_EMAIL ) )	{
+					$event_error = '1';
+					$error_msg[] = 'Warning: The Client\'s Email Address (' . $fields['client_email'] . ') does not appear to be valid. Click <a onclick="window.history.go(-1)">Back</a> to check it';
+				}
+				if( email_exists( $fields['client_email'] ) )	{
+					$event_error = '1';
+					$exist_user = get_user_by( 'email', $fields['client_email'] );
+					$error_msg[] = 'Warning: The Client\'s Email Address you entered (' . $fields['client_email'] . ') already exists for Client ' . $exist_user->display_name . '. A client email address must be unique. Click <a onclick="window.history.go(-1)">Back</a> to change';	
+				}
+			}
+		}
+		
+		if( $event_error == 1 )	{
+			if( count( $error_msg ) > 1 )	{
+				$errors = '<ui>';
+				foreach( $error_msg as $msg )	{
+					$errors .= '<li>' . $msg . '</li>';	
+				}
+				$errors .= '<ui>';	
+			}
+			else	{
+				$errors = $error_msg[0];	
+			}
+			f_mdjm_update_notice( 'error', $errors );	
 		}
 	} // f_mdjm_event_validate
 	
@@ -1174,12 +1274,14 @@
         <tr>
         <th scope="row"><label for="event_description">Description:</label></th>
         <td colspan="3"><textarea cols="100" rows="4" id="event_description" name="event_description"><?php echo stripslashes( $eventinfo->event_description ); ?></textarea></td>
-        <tr>
-        <th scope="row" colspan="4">Note: Packages and add-on updates must be performed seperately and do not update other event details</th>
-        </tr>
-        </tr>
            <?php
         if( isset( $mdjm_options['enable_packages'] ) && $mdjm_options['enable_packages'] == 'Y' )	{
+			?>
+            <tr>
+            <th scope="row" colspan="4">Note: Packages and add-on updates must be performed seperately and do not update other event details</th>
+            </tr>
+            </tr>
+            <?php
 			$packages = get_option( 'mdjm_packages' );
 			asort( $packages );
             if( $packages )	{
@@ -1359,8 +1461,8 @@
         <td colspan="3"><input type="text" id="venue_zip" class="regular-text" name="venue_zip" value="<?php echo $eventinfo->venue_zip; ?>" /></td>
         </tr>
         </table>
-        <hr />
         <h3>Administration</h3>
+        <hr />
         <table class="form-table">
         <tr>
         <th class="row-title"><label for="dj_setup_hr">Setup Time:</label></th>
@@ -1542,7 +1644,5 @@
 			f_mdjm_render_events_table();
 		}
 	}
-	//if( $_GET['action'] == 'convert_event' || $_GET['action'] == 'cancel_event' || $_GET['action'] == 'recover_event' ||
-	//	|| $_GET['action'] == 'fail_enquiry' )
 	
 ?> 

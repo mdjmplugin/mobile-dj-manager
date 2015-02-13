@@ -835,9 +835,11 @@
 					if( isset( $mdjm_pages['availability_check_pass_page'] ) && $mdjm_pages['availability_check_pass_page'] != 'text' )	{
 						?>
 						<script type="text/javascript">
-						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_pass_page'] ); ?>';
+						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_pass_page'] ); ?>						?mdjm_avail=1&mdjm_avail_date=<?php echo $_POST['check_date']; ?>';
 						</script>
+                        <p>Please wait...</p>
 						<?php
+						exit;
 					}
 				}
 				else	{
@@ -846,7 +848,8 @@
 						<script type="text/javascript">
 						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_fail_page'] ); ?>';
 						</script>
-						<?php	
+						<?php
+						exit;
 					}	
 				}
 			} // if( isset( $dj_avail ) )

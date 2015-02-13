@@ -790,7 +790,20 @@
 ***************************************************/			
 			if( $current_version_mdjm <= '0.9.9.7' )	{
 				/* No Actions */
-			} // if( $current_version_mdjm <= '0.9.9.6' )
+			} // if( $current_version_mdjm <= '0.9.9.7' )
+			
+/***************************************************
+			 	UPGRADES FROM 0.9.9.8
+***************************************************/			
+			if( $current_version_mdjm <= '0.9.9.8' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				
+				/* Add new options */
+				$mdjm_options['warn_unattended'] = 'Y';
+				
+				/* Update options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '0.9.9.8' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
@@ -808,7 +821,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 			/* Re-check Validility */
 			do_reg_check( 'set' );
 			
-			$message = 'Welcome to Mobile DJ Manager for WordPress version ' . WPMDJM_VERSION_NUM . '. <a href="' . admin_url( 'admin.php?page=mdjm-dashboard&updated=1' ) . '">Click here to view the release notes for this version</a>';
+			$message = 'Welcome to Mobile DJ Manager for WordPress version ' . WPMDJM_VERSION_NUM . '. Click on one of the Mobile DJ Manager menu items to view the release notes.';
 			
 			f_mdjm_update_notice( 'updated', $message );
 			
@@ -1128,7 +1141,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'title' => __( 'Communications' ),
 				),
 			));
-			/*if( current_user_can( 'manage_options' ) )	{
+			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contact-forms',
 					'parent' => 'mdjm',
@@ -1147,7 +1160,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'title' => __( 'New Contact Form' ),
 					),
 				));
-			}*/
+			}
  			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contracts',

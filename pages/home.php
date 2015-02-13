@@ -64,6 +64,12 @@
                 </tr>
                 </thead>
                 <?php
+				if ( get_option('permalink_structure') )	{
+					$sep = '?';
+				}
+				else	{
+					$sep = '&amp;';
+				}
 				/* Loop through events and display details */
 				foreach( $eventinfo as $event )	{
 					?>
@@ -71,7 +77,7 @@
                     <input type="hidden" name="action" value="view_event" />
                     <input type="hidden" name="event_id" value="<?php echo $event->event_id; ?>" />
                     <tr>
-                    <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>?action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( $mdjm_options['short_date_format'], strtotime( $event->event_date ) ); ?></a></td>
+                    <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?><?php echo $sep; ?>action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( $mdjm_options['short_date_format'], strtotime( $event->event_date ) ); ?></a></td>
                     <td align="left"><?php echo $event->event_type; ?></td>
                     <td align="left"><?php echo f_mdjm_currency() . $event->cost; ?></td>
                     <td align="left"><?php echo $event->contract_status; ?></td>
@@ -191,13 +197,30 @@
 				echo '<p><strong>Actions</strong>: ';		
 			
 				if( $eventinfo->contract_status == 'Enquiry' )	{
-					echo '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '?action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book This Event</a>';
+					if ( get_option('permalink_structure') )	{
+						echo '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '?action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book This Event</a>';
+					}
+					else	{
+						echo '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '&action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book This Event</a>';	
+					}
 				}
 				if( $eventinfo->contract_status == 'Pending' )	{
-					echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $eventinfo->event_id . '" title="Approve Contract">Review &amp; Approve Contract</a>';
+					if ( get_option('permalink_structure') )	{
+						echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $eventinfo->event_id . '" title="Approve Contract">Review &amp; Approve Contract</a>';
+					}
+					else	{
+						echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '&event_id=' . $eventinfo->event_id . '" title="Approve Contract">Review &amp; Approve Contract</a>';
+					}
 				}
 				if( $eventinfo->contract_status == 'Approved' )	{
-					echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $eventinfo->event_id . '" title="View Event Contract">View Contract</a>';
+					if ( get_option('permalink_structure') )	{
+						$sep = '?';
+					}
+					else	{
+						$sep = '&amp;';
+					}
+					
+					echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . $sep . 'event_id=' . $eventinfo->event_id . '" title="View Event Contract">View Contract</a>';
 				}
 				echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ) . '" title="Edit your details">Edit Your Profile</a>';	
 				
@@ -217,10 +240,20 @@
 					$action_item = date( $mdjm_options['short_date_format'], strtotime( $eventinfo->contract_approved_date ) );
 				}
 				if( $event_status == 'Enquiry' )	{
-					$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '?action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book this Event</a>';
+					if ( get_option('permalink_structure') )	{
+						$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '?action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book this Event</a>';
+					}
+					else	{
+						$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_HOME_PAGE ) . '&action=accept_enquiry&event_id=' . $eventinfo->event_id . '" title="Book This Event">Book this Event</a>';	
+					}
 				}
 				if( $event_status == 'Pending' )	{
-					$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $eventinfo->event_id . '" title="Review &amp; Sign Event Contract">Review &amp; Sign Contract</a>';
+					if ( get_option('permalink_structure') )	{
+						$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $eventinfo->event_id . '" title="Review &amp; Sign Event Contract">Review &amp; Sign Contract</a>';
+					}
+					else	{
+						$action_item = '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '&event_id=' . $eventinfo->event_id . '" title="Review &amp; Sign Event Contract">Review &amp; Sign Contract</a>';
+					}
 				}
 				?>
                 <td width="15%" style="font-weight:bold">Booking Status:</td>
@@ -278,10 +311,10 @@
                 <td width="35%"><?php echo $eventinfo->venue; ?></td>
                 <td width="15%" style="font-weight:bold">Venue Address:</td>
                 <td width="35%"><?php echo $eventinfo->venue_addr1; ?>
-                <?php if( isset( $eventinfo->venue_addr2 ) && !empty( $eventinfo->venue_addr2 ) ) echo ', ' . $eventinfo->venue_addr2; ?>
-                <?php echo '<br />' . $eventinfo->venue_city; ?>
-                <?php echo ', ' . $eventinfo->venue_state; ?>
-                <?php echo '<br />' . $eventinfo->venue_zip; ?></td>
+                <?php if( isset( $eventinfo->venue_addr2 ) && !empty( $eventinfo->venue_addr2 ) ) { echo ', ' . $eventinfo->venue_addr2; } ?>
+                <?php if( isset( $eventinfo->venue_city ) && !empty( $eventinfo->venue_city ) ) echo '<br />' . $eventinfo->venue_city; ?>
+                <?php if( isset( $eventinfo->venue_state ) && !empty( $eventinfo->venue_state ) ) echo ', ' . $eventinfo->venue_state; ?>
+                <?php if( isset( $eventinfo->venue_zip ) && !empty( $eventinfo->venue_zip ) ) echo '<br />' . $eventinfo->venue_zip; ?></td>
               </tr>
               <tr>
               <td width="15%" style="font-weight:bold">Venue Contact:</td>
@@ -351,14 +384,40 @@
 		
 		/* Go to playlist */
 		if( isset( $_POST['event_action'] ) && $_POST['event_action'] == 'edit_playlist' )	{
-			wp_redirect( get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . '?mdjmeventid=' . $_POST['event_id'] );
+			if ( get_option('permalink_structure') )	{
+				?>
+				<script type="text/javascript">
+				window.location = '<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . '?mdjmeventid=' . $_POST['event_id']; ?>';
+				</script>
+                <?php
+			}
+			else	{
+				?>
+				<script type="text/javascript">
+				window.location = '<?php echo get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . '&mdjmeventid=' . $_POST['event_id']; ?>';
+				</script>
+                <?php
+			}
 			exit;	
 		}
 		
 		/* Client wants to view or sign contract */
 		if( isset( $_POST['event_action'] ) )	{
 			if( $_POST['event_action'] == 'view_contract' || $_POST['event_action'] == 'sign_contract' )	{
-				wp_redirect( get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $_POST['event_id'] );
+				if ( get_option('permalink_structure') )	{
+					?>
+					<script type="text/javascript">
+                    window.location = '<?php echo get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '?event_id=' . $_POST['event_id']; ?>';
+                    </script>
+                    <?php
+				}
+				else	{
+					?>
+					<script type="text/javascript">
+                    window.location = '<?php echo get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . '&event_id=' . $_POST['event_id']; ?>';
+                    </script>
+                    <?php
+				}				
 				exit;
 			}
 		}

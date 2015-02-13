@@ -515,7 +515,7 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // email_dj_confirm
+									); // unavailable_email_template
 									
 		$admin_fields['title_as_subject'] = array(
 									'display' => 'Template Title is Subject?',
@@ -755,7 +755,7 @@
 									'class' => '',
 									'value' => $mdjm_options['availability_check_pass_text'],
 									'text' => '',
-									'desc' => 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above',
+									'desc' => 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above, unless you are redirecting to an MDJM Contact Form',
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_pages[availability_check_pass_text]',
 														'sort_order' => 'ASC',
