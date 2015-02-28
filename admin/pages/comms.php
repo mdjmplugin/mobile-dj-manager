@@ -155,7 +155,7 @@
 									);
 					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 					$class = 'updated';
-					$message = 'The selected enquiry has been marked as lost. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries' ) . '">View Enquiries</a>';
+					$message = 'The selected enquiry has been marked as lost. <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Enquiry' ) . '">View Enquiries</a>';
 					f_mdjm_update_notice( $class, $message );
 				}
 			}
@@ -195,7 +195,7 @@
 		<h2>Client Communications</h2>
 		<?php
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-		$settings = array(  'media_buttons' => false,
+		$settings = array(  'media_buttons' => true,
 							'textarea_rows' => '10',
 						 );
 		$clientinfo = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );

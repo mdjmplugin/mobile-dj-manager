@@ -88,12 +88,12 @@
 								if( isset( $field['config']['required'] ) && $field['config']['required'] == 'Y' )	{
 									echo $field['slug'] . ':' . "\n";
 									echo '{' . "\n";
-									echo 'required: "<br />' . str_replace( '{FIELD_NAME}', $field['name'], $form['config']['required_field_text'] ) . '",' .  "\n";
+									echo 'required: "' . str_replace( '{FIELD_NAME}', $field['name'], $form['config']['required_field_text'] ) . '",' .  "\n";
 									if( $field['type'] == 'email' )	{
-										echo $field['type'] . ': "<br />Please enter a valid email address",' . "\n";
+										echo $field['type'] . ': "Please enter a valid email address",' . "\n";
 									}
 									if( $field['type'] == 'url' )	{
-										echo $field['type'] . ': "<br />Please enter a valid URL",' . "\n";
+										echo $field['type'] . ': "Please enter a valid URL",' . "\n";
 									}
 									echo '},' . "\n";	
 								}

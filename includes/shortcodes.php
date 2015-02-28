@@ -8,6 +8,7 @@
 	function f_mdjm_shortcode( $atts )	{
 		$args = shortcode_atts( array(
 			'Home'         => 'home',
+			'Payments'	 => 'payment',
 			'Profile'      => 'profile',
 			'Playlist'     => 'playlist',
 			'Contract'     => 'contract',

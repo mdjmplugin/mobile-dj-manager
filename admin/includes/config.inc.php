@@ -76,9 +76,11 @@
 							'{ADMIN_URL}',
 							'{APPLICATION_NAME}',
 							'{APPLICATION_HOME}',
+							'{CONTACT_PAGE}',
 							'{CONTRACT_URL}',
 							'{CONTRACT_DATE}',
 							'{CONTRACT_ID}',
+							'{PAYMENT_URL}',
 							'{PLAYLIST_CLOSE}',
 							'{PLAYLIST_URL}',
 							'{DJ_EMAIL}',
@@ -93,10 +95,12 @@
 		if ( get_option('permalink_structure') )	{
 			$contract_url = get_permalink( $mdjm_options['contracts_page'] ) . '?event_id=' . $eventinfo->event_id;
 			$playlist_url = get_permalink( $mdjm_options['playlist_page'] ) . '?mdjmeventid=' . $eventinfo->event_guest_call;
+			$payment_url = get_permalink( $mdjm_options['payments_page'] ) . '?event_id=' . $eventinfo->event_id;
 		}
 		else	{
 			$contract_url = get_permalink( $mdjm_options['contracts_page'] ) . '&event_id=' . $eventinfo->event_id;
 			$playlist_url = get_permalink( $mdjm_options['playlist_page'] ) . '&mdjmeventid=' . $eventinfo->event_guest_call;
+			$payment_url = get_permalink( $mdjm_options['payments_page'] ) . '&event_id=' . $eventinfo->event_id;
 		}
 		
 		/* Set the contract date */
@@ -202,9 +206,11 @@
 							admin_url(), /* {ADMIN_URL} */
 							$mdjm_options['app_name'], /* {APPLICATION_NAME} */
 							get_permalink( $mdjm_options['app_home_page'] ), /* {APPLICATION_HOME} */
+							get_permalink( $mdjm_options['contact_page'] ), /* {CONTACT_PAGE} */
 							$contract_url, /* {CONTRACT_URL} */
 							$contract_date, /* {CONTRACT_DATE */
 							$contract_id, /* {CONTRACT_ID} */
+							$payment_url, /* {PAYMENT_URL} */
 							$mdjm_options['playlist_close'], /* {PLAYLIST_CLOSE} */
 							$playlist_url, /* {PLAYLIST_URL} */
 							$dj->user_email, /* {DJ_EMAIL} */

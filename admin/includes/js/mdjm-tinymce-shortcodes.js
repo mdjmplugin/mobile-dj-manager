@@ -27,6 +27,12 @@
 							}
 						},
 						{
+							text: 'Application Payments Page',
+							onclick: function() {
+								editor.insertContent('{PAYMENT_URL}');
+							}
+						},
+						{
 							text: 'Application Name',
 							onclick: function() {
 								editor.insertContent('{APPLICATION_NAME}');
@@ -36,6 +42,12 @@
 							text: 'Company Name',
 							onclick: function() {
 								editor.insertContent('{COMPANY_NAME}');
+							}
+						},
+						{
+							text: 'Contact Page',
+							onclick: function() {
+								editor.insertContent('{CONTACT_PAGE}');
 							}
 						},
 						{
@@ -267,6 +279,29 @@
 							text: 'Venue Email',
 							onclick: function() {
 								editor.insertContent('{VENUE_EMAIL}');
+							}
+						},
+					]
+				},
+				{
+					text: 'Online Payment Shortcodes',
+					menu: [
+						{
+							text: 'Payment Amount',
+							onclick: function() {
+								editor.insertContent('{PAYMENT_AMOUNT}');
+							}
+						},
+						{
+							text: 'Payment Date',
+							onclick: function() {
+								editor.insertContent('{PAYMENT_DATE}');
+							}
+						},
+						{
+							text: 'Payment For',
+							onclick: function() {
+								editor.insertContent('{PAYMENT_FOR}');
 							}
 						},
 					]

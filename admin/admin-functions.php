@@ -219,6 +219,28 @@
 							PRIMARY KEY  (id),
 							KEY user_id (user_id)
 							) $charset_collate;";
+							
+		/* TRANS TABLE */
+		$trans_sql = "CREATE TABLE ". $db_tbl['trans'] . " (
+						trans_id int(11) NOT NULL AUTO_INCREMENT,
+						event_id int(11) NOT NULL,
+						payment_src varchar(25) NOT NULL,
+						payment_txn_id varchar(19) NULL,
+						payment_date datetime NOT NULL,
+						payment_type varchar(25) NOT NULL,
+						payer_id varchar(25) NULL,
+						payment_status varchar(25) NOT NULL,
+						payer_firstname varchar(75) NULL,
+						payer_lastname varchar(75) NULL,
+						payer_email varchar(75) NOT NULL,
+						payment_for varchar(75) NOT NULL,
+						payment_currency varchar(3) NOT NULL,
+						payment_tax decimal(10,2) NULL,
+						payment_gross decimal(10,2) NOT NULL,
+						full_ipn text NULL,
+						seen_by_admin int(11) NOT NULL,
+						PRIMARY KEY  (trans_id)
+					) $charset_collate;";
 				
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $events_sql );
@@ -226,6 +248,7 @@
 		dbDelta( $journal_sql );
 		dbDelta( $playlists_sql );
 		dbDelta( $holiday_sql );
+		dbDelta( $trans_sql );
 		
 		add_option( 'mdjm_db_version', $mdjm_db_version );
 	} // f_mdjm_db_install
@@ -297,6 +320,7 @@
 							'contracts_page'               => '',
 							'playlist_page'                => '',
 							'profile_page'                 => '',
+							'payments_page'				=> '',
 							'availability_check_pass_page' => 'text',
 							'availability_check_pass_text' => 'Good news, we are available on the date you entered. Please contact us now',
 							'availability_check_fail_page' => 'text',
@@ -404,6 +428,25 @@
 													),
 									);
 		
+		$mdjm_pp_options = array(
+								'pp_cfm_template'   => '',
+								'pp_form_layout'	=> 'horizontal',
+								'pp_layout'		 => 'Pay for:',
+								'pp_tax'			=> 'N',
+								'pp_tax_type'	   => 'percentage',
+								'pp_tax_rate'	   => '20',
+								'pp_enable'		 => 'N',
+								'pp_email'		  => get_bloginfo( 'admin_email' ),
+								'pp_redirect'	   => '',
+								'pp_button'		 => 'btn_paynow_86x21.png',
+								'pp_sandbox'		=> 'N',
+								'pp_sandbox_email'  => get_bloginfo( 'admin_email' ),
+								'pp_debug'		  => 'N',
+								'pp_receiver'	   => get_bloginfo( 'admin_email' ),
+								'pp_inv_prefix'	 => $mdjm_options['id_prefix'] . '-',
+								'pp_checkout_style' => '',
+								);
+		
 		/* Version information into the database */
 		if( !get_option( 'mdjm_version' ) )	{
 			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );
@@ -416,6 +459,7 @@
 		add_option( 'mdjm_plugin_permissions', $mdjm_init_permissions );
 		add_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_init_client_text );
 		add_option( 'mdjm_schedules', $mdjm_schedules );
+		add_option( 'mdjm_pp_options', $mdjm_pp_options );
 		add_option( 'mdjm_debug', '0' );
 		add_option( 'mdjm_updated', '0' );
 		
@@ -806,6 +850,60 @@
 			} // if( $current_version_mdjm <= '0.9.9.8' )
 			
 /***************************************************
+			 	UPGRADES FROM 1.0
+***************************************************/			
+			if( $current_version_mdjm <= '1.0' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_init_pages = get_option( 'mdjm_plugin_pages' );
+				$mdjm_frontend_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+								
+				/* Set new PayPal options */
+				$mdjm_pp_options = array(
+								'pp_cfm_template'   => '',
+								'pp_form_layout'	=> 'horizontal',
+								'pp_label'		  => 'Make a Payment Towards:',
+								'pp_tax'			=> 'N',
+								'pp_tax_type'	   => 'percentage',
+								'pp_tax_rate'	   => '20',
+								'pp_enable'		 => 'N',
+								'pp_email'		  => $mdjm_options['system_email'],
+								'pp_redirect'	   => '',
+								'pp_button'		 => 'btn_paynow_SM.gif',
+								'pp_sandbox'		=> 'N',
+								'pp_sandbox_email'  => $mdjm_options['system_email'],
+								'pp_debug'		  => 'Y',
+								'pp_receiver'	   => $mdjm_options['system_email'],
+								//'pp_inv_prefix'	 => $mdjm_options['id_prefix'] . '-',
+								'pp_checkout_style' => '',
+								);
+				/* Update Pages Options */
+				$mdjm_init_pages['payments_page'] = '';
+				
+				/* Update Client Text Options */
+				$mdjm_frontend_text['deposit_label'] = 'Deposit';
+				$mdjm_frontend_text['balance_label'] = 'Balance';
+				$mdjm_frontend_text['payment_welcome'] = 'Paying for your event is easy as we accept secure online payments via PayPal.' . "\r\n\r\n" . 'PayPal accept all major credit cards and you do not need to be a PayPal member to process your payment to us';
+				
+				$mdjm_frontend_text['payment_intro'] = 'Select the payment you wish to make from the drop down list below and click the <strong>Pay Now</strong> button to be redirected to <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal\'s</a> secure website where you can complete your payment.' . "\r\n\r\n" . 'Upon completion, you can return to the {COMPANY_NAME} website. You will also receive an email as soon as your payment completes.';
+				
+				$mdjm_frontend_text['payment_complete'] = 'Thank you, your payment has completed successfully.' . "\r\n\r\n" . 'You will shortly receive an email from us (remember to check your junk email folder) confirming the payment and detailing next steps for your event.' . "\r\n\r\n" . '<strong>Please note</strong> that it can take a few minutes for our systems to be updated by <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal</a>, and therefore your payment may not have registered below as yet. Once you receive the payment confirmation email from us, the payment will be updated on our systems.' . "\r\n\r\n" . '<a href="{APPLICATION_HOME}">Click here</a> to return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.';
+				
+				$mdjm_frontend_text['payment_cancel'] = 'Your payment has been cancelled.' . "\r\n\r\n" . 'To process your payment, please follow the steps below.';
+				
+				$mdjm_frontend_text['payment_not_due'] = 'There are no payments outstanding for this event. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>.' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.';
+				
+				$mdjm_frontend_text['payment_noevent'] = 'No event has been selected for payment. <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.';
+				
+				$mdjm_frontend_text['payment_noaccess'] = 'We\'re sorry but you do not have permission to access this page. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>..' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.';
+				
+				/* Add / Update Options */
+				add_option( 'mdjm_pp_options', $mdjm_pp_options );
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+				update_option( 'mdjm_plugin_pages', $mdjm_init_pages );
+				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
+			} // if( $current_version_mdjm <= '1.0' )
+			
+/***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 ***************************************************/
 			
@@ -862,6 +960,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		define( 'WPMDJM_CLIENT_CONTRACT_PAGE', $mdjm_options['contracts_page'] );
 		define( 'WPMDJM_CLIENT_PLAYLIST_PAGE', $mdjm_options['playlist_page'] );
 		define( 'WPMDJM_CLIENT_PROFILE_PAGE', $mdjm_options['profile_page'] );
+		define( 'WPMDJM_CLIENT_PAYMENT_PAGE', $mdjm_options['payments_page'] );
 		
 		return $mdjm_options;
 	} // f_mdjm_init
@@ -1065,6 +1164,9 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 */	
 	function f_mdjm_toolbar( $admin_bar )	{
 		global $mdjm_options;
+		
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+		
 		if( current_user_can( 'manage_mdjm' ) || current_user_can( 'administrator' ) )	{
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm',
@@ -1091,6 +1193,71 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'href'  => admin_url( 'admin.php?page=mdjm-settings' ),
 					'meta'  => array(
 						'title' => __( 'MDJM Settings' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-general',
+					'parent' => 'mdjm-settings',
+					'title' => 'General',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=general' ),
+					'meta'  => array(
+						'title' => __( 'MDJM General Settings' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-pages',
+					'parent' => 'mdjm-settings',
+					'title' => 'Pages',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=pages' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Pages Settings' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-permissions',
+					'parent' => 'mdjm-settings',
+					'title' => 'Permissions',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=permissions' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Permission Settings' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-client-text',
+					'parent' => 'mdjm-settings',
+					'title' => 'Client Dialogue',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=client_text' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Client Text Settings' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-client-fields',
+					'parent' => 'mdjm-settings',
+					'title' => 'Client Fields',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=client_fields' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Client Field Settings' ),
+					),
+				));
+				if( isset( $mdjm_pp_options['pp_enable'] ) && $mdjm_pp_options['pp_enable'] == 'Y' )	{
+					$admin_bar->add_menu( array(
+						'id'    => 'mdjm-settings-payments',
+						'parent' => 'mdjm-settings',
+						'title' => 'Payments',
+						'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=payments' ),
+						'meta'  => array(
+							'title' => __( 'MDJM Online Payment Settings' ),
+						),
+					));
+				}
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-settings-debugging',
+					'parent' => 'mdjm-settings',
+					'title' => '<font style="color:#F90">Debugging</font>',
+					'href'  => admin_url( 'admin.php?page=mdjm-settings&tab=debugging' ),
+					'meta'  => array(
+						'title' => __( 'MDJM Debug Settings' ),
 					),
 				));
 				$admin_bar->add_menu( array(
@@ -1155,7 +1322,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'id'    => 'mdjm-new-contact-form',
 					'parent' => 'mdjm-contact-forms',
 					'title' => 'Add Contact Form',
-					'href'  => admin_url( 'admin.php?page=mdjm-contact-forms&action=add_contact_form' ),
+					'href'  => admin_url( 'admin.php?page=mdjm-contact-forms&action=show_add_contact_form' ),
 					'meta'  => array(
 						'title' => __( 'New Contact Form' ),
 					),
@@ -1244,15 +1411,21 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 				));
 			}
 			if( current_user_can( 'manage_options' ) || dj_can( 'view_enquiry' ) )	{
-				$admin_bar->add_menu( array(
-					'id'    => 'mdjm-enquiries',
-					'parent' => 'mdjm-events',
-					'title' => 'View Enquiries',
-					'href'  => admin_url( 'admin.php?page=mdjm-events&display=enquiries' ),
-					'meta'  => array(
-						'title' => __( 'Outstanding Enquiries' ),
-					),
-				));
+				$event_status = array( 'Unattended' => 'Unattended Enquiries', 'Enquiry' => 'View Enquiries' );
+				foreach( $event_status as $current_status => $display )	{
+					$count_event = f_mdjm_get_eventinfo_by_status( $current_status );
+					if( count( $count_event ) > 0 )	{
+						$admin_bar->add_menu( array(
+							'id'    => 'mdjm-' . str_replace( ' ', '-', strtolower( $display ) ),
+							'parent' => 'mdjm-events',
+							'title' => $display . ' (' . count( $count_event ) . ')',
+							'href'  => admin_url( 'admin.php?page=mdjm-events&status=' . $current_status ),
+							'meta'  => array(
+								'title' => __( $display ),
+							),
+						));
+					}
+				}
 			}
 			if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) )	{
 				$admin_bar->add_menu( array(
@@ -1273,6 +1446,17 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'title' => __( 'Add New Venue' ),
 					),
 				));
+			}
+			if( current_user_can( 'manage_options' ) && isset( $mdjm_pp_options['pp_enable'] ) && $mdjm_pp_options['pp_enable'] == 'Y' )	{
+				$admin_bar->add_menu( array(
+				'id'    => 'mdjm-transactions',
+				'parent' => 'mdjm',
+				'title' => 'Transactions',
+				'href'  => admin_url( 'admin.php?page=mdjm-transactions' ),
+				'meta'  => array(
+					'title' => __( 'MDJM Transactions' ),
+				),
+			));
 			}
 			$admin_bar->add_menu( array(
 				'id'    => 'mdjm-user-guides',
@@ -1342,9 +1526,10 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		if( $pos !== false )
 			?>
 			<p align="center" class="description">Powered by <a style="color:#F90" href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
+            <p align="center">If you like our plugin, please show your support by leaving us a <a style="color:#F90" href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager?filter=5#postform" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a> review at <a href="https://wordpress.org/support/view/plugin-reviews/mobile-dj-manager?filter=5#postform" target="_blank">WordPress.org</a>. Thank you from the <a style="color:#F90" href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank">My DJ Planner</a></span> Team.</p>
             <?php
 	} // f_mdjm_admin_footer
-
+	
 /*
 * f_mdjm_has_updated
 * 23/11/2014
@@ -1483,10 +1668,10 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		}
 		if( isset( $unattended ) && $unattended > 0 )	{
 			if( $unattended == 1 )	{
-				$message = 'There is currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiry</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action this Enquiry now</a>';
+				$message = 'There is currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Unattended&orderby=event_date&order=desc' ) . '">Unattended Enquiry</a> that requires your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Unattended&orderby=event_date&order=desc' ) . '">Click here to review and action this Enquiry now</a>';
 			}
 			else	{
-				$message = 'There are currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Unattended Enquiries</a> that require your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">Click here to review and action these Enquiries now</a>';	
+				$message = 'There are currently ' . $unattended . ' <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Unattended&orderby=event_date&order=desc' ) . '">Unattended Enquiries</a> that require your attention. <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Unattended&orderby=event_date&order=desc' ) . '">Click here to review and action these Enquiries now</a>';	
 			}
 			f_mdjm_update_notice( 'update-nag', $message );
 		}	
@@ -1505,26 +1690,26 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	} // f_mdjm_register_widgets
 	
 /*
-* f_mdjm_jquery_prep
+* f_mdjm_enqueue
 * 13/01/2015
 * @since 1.0
 * Register and enqueue jQuery scripts
 */
 	function f_mdjm_enqueue()	{
-		wp_register_style( 'mobile-dj-manager', WPMDJM_PLUGIN_URL . '/includes/mdjm-styles.css' );
+		wp_register_style( 'mobile-dj-manager', WPMDJM_PLUGIN_URL . '/includes/css/mdjm-styles.css' );
 		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
 		
-		
+		wp_enqueue_script('jquery');
 		wp_enqueue_style( 'mobile-dj-manager');
 		wp_enqueue_script( 'google-hosted-jquery');
 		wp_enqueue_script( 'jquery-validation-plugin');
 		
-	}
+	} // f_mdjm_enqueue
 	
 	
 /*
-* f_mdjm_admin_jquery_prep
+* f_mdjm_admin_enqueue
 * 13/01/2015
 * @since 1.0
 * Register and enqueue jQuery scripts
@@ -1536,8 +1721,24 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		
 		wp_enqueue_style( 'mobile-dj-manager-admin' );
 		//wp_enqueue_script( 'google-hosted-jq');
+		wp_enqueue_script('jquery');
 		wp_enqueue_script( 'jquery-validation-plugin' );
-	}
+	} // f_mdjm_admin_enqueue
+	
+/*
+* f_mdjm_api_listener
+* 17/02/2015
+* @since 1.1
+* The API Listener
+*/
+	function f_mdjm_api_listener()	{
+		if( !isset( $_GET['mdjm-api'] ) || $_GET['mdjm-api'] != 'MDJM_PAYPAL_GW' )	{
+			return;	
+		}
+		else	{
+			include( WPMDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-pp-ipn.php' );	
+		}
+	} // f_mdjm_api_listener
 	
 /****************************************************************************************************
  *	ACTIONS & HOOKS
@@ -1588,6 +1789,8 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'wp_enqueue_scripts', 'f_mdjm_enqueue' ); // Enqueue sytles and scripts in the frontend
 	
 	add_action( 'admin_enqueue_scripts', 'f_mdjm_admin_enqueue' ); // Enqueue sytles and scripts in the Admin UI
+	
+	add_action( 'wp_loaded', 'f_mdjm_api_listener' ); // The API listener
  
  /**
  * Actions for custom user fields

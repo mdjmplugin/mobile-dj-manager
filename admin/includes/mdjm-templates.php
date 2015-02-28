@@ -67,7 +67,7 @@
 								There are two final tasks to complete before your booking can be confirmed...<br />
 								<ul><br />
 									<li><strong>Review and accept your contract</strong><br />
-								Your contract has now been produced. You can review it by <a href="{CONTRACTS_URL}">clicking here</a>. Please review the terms and accept the contract. If you would prefer the contract to be emailed to you, please let me know by return email.</li><br />
+								Your contract has now been produced. You can review it by <a href="{CONTRACT_URL}">clicking here</a>. Please review the terms and accept the contract. If you would prefer the contract to be emailed to you, please let me know by return email.</li><br />
 									<li><strong>Pay your deposit</strong><br />
 								Your deposit of <strong>{DEPOSIT}</strong> is now due. If you have not already done so please make this payment now. Details of how to make this payment are shown within the <a href="{CONTRACT_URL}">contract</a>.</li><br />
 								</ul><br />
@@ -168,6 +168,8 @@
 * Only used during first installation
 */
 	$mdjm_init_client_text = array(
+									'deposit_label'		   => 'Deposit',
+									'balance_label'		   => 'Balance',
 									'warn_incomplete_profile' => 'Y',
 									'custom_client_text'      => 'N',
 									'not_logged_in'           => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
@@ -182,6 +184,19 @@
 									'playlist_guest_welcome'  => 'Welcome to the {COMPANY_NAME} playlist management system.',
 									'playlist_guest_intro'    => 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . "\r\n\r\n" . 'Add your playlist requests in the form below. All fields are required.',
 									'playlist_guest_closed'   => 'This playlist is currently closed. No songs can be added at this time.',
+									'payment_welcome'		 => 'Paying for your event is easy as we accept secure online payments via PayPal.' . "\r\n\r\n" . 'PayPal accept all major credit cards and you do not need to be a PayPal member to process your payment to us',
+				
+									'payment_intro'		   => 'Select the payment you wish to make from the drop down list below and click the <strong>Pay Now</strong> button to be redirected to <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal\'s</a> secure website where you can complete your payment.' . "\r\n\r\n" . 'Upon completion, you can return to the {COMPANY_NAME} website. You will also receive an email as soon as your payment completes.',
+									
+									'payment_complete'		=> 'Thank you, your payment has completed successfully.' . "\r\n\r\n" . 'You will shortly receive an email from us (remember to check your junk email folder) confirming the payment and detailing next steps for your event.' . "\r\n\r\n" . '<strong>Please note</strong> that it can take a few minutes for our systems to be updated by <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal</a>, and therefore your payment may not have registered below as yet. Once you receive the payment confirmation email from us, the payment will be updated on our systems.' . "\r\n\r\n" . '<a href="{APPLICATION_HOME}">Click here</a> to return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
+				
+									'payment_cancel'		  => 'Your payment has been cancelled.' . "\r\n\r\n" . 'To process your payment, please follow the steps below',
+									
+									'payment_not_due'		 => 'There are no payments outstanding for this event. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>..' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
+									
+									'payment_noevent'		 => 'No event has been selected for payment. <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
+				
+									'payment_noaccess'		=> 'We\'re sorry but you do not have permission to access this page. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>..' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
 								);
 
 /*

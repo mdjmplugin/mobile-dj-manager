@@ -178,10 +178,10 @@
 			} // End foreach( $fields as $field )
 			
 			/* End the email body */
-			$email_body .= '<p><a href="'. admin_url( 'admin.php?page=mdjm-events&display=enquiries&orderby=contract_status&order=desc' ) . '">View Your Outstanding Enquiries</a></p>';
+			$email_body .= '<p><a href="'. admin_url( 'admin.php?page=mdjm-events&status=Unattended&orderby=contract_status&order=desc' ) . '">View Your Outstanding Enquiries</a></p>';
 			$email_body .= '<hr />';
 			$email_body .= '<p style="font-size:10px;">Form submitted at ' . date( $mdjm_options['time_format'] ) . ' on ' . date( 'l jS F Y' ) . '</p>';
-			$email_body .= '<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
+			$email_body .= '<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a> version ' . WPMDJM_VERSION_NUM . '</p>';
 			$email_body .= '</body></html>';
 			
 			/* Send the email */

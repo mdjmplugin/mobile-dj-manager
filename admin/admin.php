@@ -11,7 +11,9 @@
 **************************************************************/
 	function f_mdjm_settings_init()	{
 		global $mdjm_options;
-		$admin_settings_field = array(  'company_name',
+		$admin_settings_field = array(  
+										// General Settings
+										'company_name',
 										'app_name',
 										'items_per_page',
 										'time_format',
@@ -48,15 +50,20 @@
 										'upload_playlists',
 										'uninst_remove_db',
 										'show_credits',
+										
+										// Pages Settings
 										'app_home_page',
 										'contact_page',
 										'contracts_page',
 										'playlist_page',
 										'profile_page',
+										'payments_page',
 										'availability_check_pass_page',
 										'availability_check_pass_text',
 										'availability_check_fail_page',
 										'availability_check_fail_text',
+										
+										// Permissions Settings
 										'dj_see_wp_dash',
 										'dj_add_client',
 										'dj_add_event',
@@ -65,6 +72,10 @@
 										'dj_see_deposit',
 										'dj_disable_shortcode',
 										'dj_disable_template',
+										
+										// Client Dialogue Settings
+										'deposit_label',
+										'balance_label',
 										'warn_incomplete_profile',
 										'custom_client_text',
 										'not_logged_in',
@@ -79,6 +90,33 @@
 										'playlist_guest_welcome',
 										'playlist_guest_intro',
 										'playlist_guest_closed',
+										'payment_welcome',
+										'payment_intro',
+										'payment_complete',
+										'payment_cancel',
+										'payment_not_due',
+										'payment_noevent',
+										'payment_noaccess',
+										
+										// Payments Settings
+										'pp_cfm_template',
+										'pp_form_layout',
+										'pp_label',
+										'pp_enable_tax',
+										'pp_tax_type',
+										'pp_tax_rate',
+										'pp_enable',
+										'pp_email',
+										'pp_redirect',
+										'pp_cancel',
+										'pp_button',
+										'pp_sandbox',
+										'pp_sandbox_email',
+										'pp_debug',
+										'pp_receiver',
+										//'pp_inv_prefix',
+										'pp_checkout_style',
+										
 									);
 		foreach( $admin_settings_field as $admin_setting_field_key )	{
 			if( !isset( $mdjm_options[$admin_setting_field_key] ) ) $mdjm_options[$admin_setting_field_key] = 'N';
@@ -106,7 +144,7 @@
 									'type' => 'text',
 									'class' => 'regular-text',
 									'value' => $mdjm_options['app_name'],
-									'text' => 'Default is <strong>Client Zone</strong>',
+									'text' => 'Default is <code>Client Zone</code>',
 									'desc' => 'Choose your own name for the application. It\'s recommended you give the top level menu item linking to the application the same name.',
 									'section' => 'general',
 									'page' => 'settings',
@@ -115,11 +153,22 @@
 		$admin_fields['items_per_page'] = array(
 									'display' => 'Items per Page',
 									'key' => 'mdjm_plugin_settings',
-									'type' => 'text',
+									'type' => 'custom_dropdown',
 									'class' => 'small-text',
 									'value' => $mdjm_options['items_per_page'],
 									'text' => '',
 									'desc' => 'The number of items you want to list per page in event/client/DJ/Venue view',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_settings[items_per_page]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['items_per_page'],
+														'list_type' => 'defined',
+														'list_values' => array( '10' => '10',
+																				'25' => '25',
+																				'50' => '50',
+																				'100' => '100',
+																			),
+														),
 									'section' => 'general',
 									'page' => 'settings',
 									); // items_per_page
@@ -392,7 +441,7 @@
 									'class' => 'regular-text',
 									'value' => $mdjm_options['enquiry_email_from'],
 									'text' => '',
-									'desc' => 'Select Admin to have quotes emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'desc' => 'Select Admin to have quotes emailed from the address specified in the <code>Default Email Address</code> or DJ for the from address to be the DJ\'s email address',
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_settings[enquiry_email_from]',
 														'sort_order' => 'ASC',
@@ -430,7 +479,7 @@
 									'class' => 'regular-text',
 									'value' => $mdjm_options['contract_email_from'],
 									'text' => '',
-									'desc' => 'Select Admin to have contracts emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'desc' => 'Select Admin to have contracts emailed from the address specified in the <code>Default Email Address</code> or DJ for the from address to be the DJ\'s email address',
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_settings[contract_email_from]',
 														'sort_order' => 'ASC',
@@ -468,7 +517,7 @@
 									'class' => 'regular-text',
 									'value' => $mdjm_options['confirm_email_from'],
 									'text' => '',
-									'desc' => 'Select Admin to have client booking confirmations emailed from the address specified in the <strong>Default Email Address</strong> or DJ for the from address to be the DJ\'s email address',
+									'desc' => 'Select Admin to have client booking confirmations emailed from the address specified in the <code>Default Email Address</code> or DJ for the from address to be the DJ\'s email address',
 									'custom_args' => array (
 														'name' =>  'mdjm_plugin_settings[confirm_email_from]',
 														'sort_order' => 'ASC',
@@ -728,6 +777,24 @@
 									'page' => 'pages',
 									); // profile_page
 									
+		$admin_fields['payments_page'] = array(
+									'display' => 'Payments Page',
+									'key' => 'mdjm_plugin_pages',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['payments_page'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'desc' => 'Select your website\'s payments page - the one where you added the shortcode <code>[MDJM page=Payments]</code>',
+									'custom_args' => array (
+														'name' =>  'mdjm_plugin_pages[payments_page]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['payments_page'],
+														'list_type' => 'page'
+														),
+									'section' => 'pages',
+									'page' => 'pages',
+									); // payments_page
+									
 		$admin_fields['availability_check_pass_page'] = array(
 									'display' => 'Available Redirect Page',
 									'key' => 'mdjm_plugin_pages',
@@ -962,6 +1029,30 @@
 									); // dj_disable_template
 									
 /* CLIENT DIALOGUE TAB */
+		$admin_fields['deposit_label'] = array(
+									'display' => 'Label for Deposit:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['deposit_label'],
+									'text' => 'Default is <code>Deposit</code>',
+									'desc' => 'If you don\'t use the word <code>Deposit</code>, you can change it here. Many prefer the term <code>Booking Fee</code>. Whatever you enter will be visible to all users',
+									'section' => 'general',
+									'page' => 'client-text',
+									); // deposit_label
+									
+		$admin_fields['balance_label'] = array(
+									'display' => 'Label for Balance:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['balance_label'],
+									'text' => 'Default is <code>Balance</code>',
+									'desc' => 'If you don\'t use the word <code>Balance</code>, you can change it here. Whatever you enter will be visible to all users',
+									'section' => 'general',
+									'page' => 'client-text',
+									); // balance_label
+									
 		$admin_fields['warn_incomplete_profile'] = array(
 									'display' => 'Incomplete Profile Warning?',
 									'key' => 'mdjm_frontend_text',
@@ -970,7 +1061,7 @@
 									'value' => $mdjm_options['warn_incomplete_profile'],
 									'text' => '',
 									'desc' => 'Display notice to Clients when they login if their Profile is incomplete?',
-									'section' => 'general',
+									'section' => 'client_zone',
 									'page' => 'client-text',
 									); // warn_incomplete_profile
 									
@@ -982,7 +1073,7 @@
 									'value' => $mdjm_options['custom_client_text'],
 									'text' => '',
 									'desc' => 'Use custom text on Client front end web pages',
-									'section' => 'general',
+									'section' => 'client_zone',
 									'page' => 'client-text',
 									); // custom_client_text
 									
@@ -1006,7 +1097,7 @@
 																			'teeny'         => false,
 																			),
 														),
-									'section' => 'login',
+									'section' => 'client_zone',
 									'page' => 'client-text',
 									); // not_logged_in
 									
@@ -1273,6 +1364,431 @@
 									'section' => 'playlist_page',
 									'page' => 'client-text',
 									); // playlist_guest_closed
+									
+		$admin_fields['payment_welcome'] = array(
+									'display' => 'Payment Welcome:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_welcome'],
+									'text' => '',
+									'desc' => 'Welcome text displayed to Clients when they arrive at the Payments page',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_welcome]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_welcome]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_welcome
+									
+		$admin_fields['payment_intro'] = array(
+									'display' => 'Payment Intro:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_intro'],
+									'text' => '',
+									'desc' => 'Intro text displayed to Clients when they arrive at the Payments page',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_intro]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_intro]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_intro
+									
+		$admin_fields['payment_complete'] = array(
+									'display' => 'Payment Completed:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_complete'],
+									'text' => '',
+									'desc' => 'Text displayed to Clients when they complete payment and return to your payments page from PayPal',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_complete]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_complete]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_complete
+									
+		$admin_fields['payment_cancel'] = array(
+									'display' => 'Payment Cancelled:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_cancel'],
+									'text' => '',
+									'desc' => 'Text displayed to Clients when they cancel their payment and return to your payments page from PayPal',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_cancel]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_cancel]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_cancel
+									
+		$admin_fields['payment_not_due'] = array(
+									'display' => 'Payment Not Due:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_not_due'],
+									'text' => '',
+									'desc' => 'Text displayed to clients when they land on the payments page but the no payments are due',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_not_due]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_not_due]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_not_due
+									
+		$admin_fields['payment_noevent'] = array(
+									'display' => 'Payment No Event:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_noevent'],
+									'text' => '',
+									'desc' => 'Text displayed to clients when they land on the payments page without an event (unlikely)',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_noevent]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_noevent]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_noevent
+									
+		$admin_fields['payment_noaccess'] = array(
+									'display' => 'Payment No Permission:',
+									'key' => 'mdjm_frontend_text',
+									'type' => 'mce_textarea',
+									'class' => '',
+									'value' => $mdjm_options['payment_noaccess'],
+									'text' => '',
+									'desc' => 'Text displayed to clients when they land on the payments page but the specified event is not theirs (very unlikely)',
+									'custom_args' => array (
+														'name' =>  'mdjm_frontend_text[payment_noaccess]',
+														'sort_order' => '',
+														'selected' => '',
+														'list_type' => '',
+														'mce_settings' => array(
+																			'textarea_rows' => 6,
+																			'media_buttons' => false,
+																			'textarea_name' => 'mdjm_frontend_text[payment_noaccess]',
+																			'teeny'         => false,
+																			),
+														),
+									'section' => 'payment_page',
+									'page' => 'client-text',
+									); // payment_noaccess
+									
+/* PAYMENTS TAB */
+
+		$admin_fields['pp_cfm_template'] = array(
+									'display' => 'Payment Received Template:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_cfm_template'],
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'desc' => 'Select an email template to be sent to clients when confirming receipt of a payment. <a href="www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
+									'custom_args' => array (
+														'name' =>  'mdjm_pp_options[pp_cfm_template]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['pp_cfm_template'],
+														'list_type' => 'email_template'
+														),
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_cfm_template
+									
+		$admin_fields['pp_form_layout'] = array(
+									'display' => 'Form Layout:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_form_layout'],
+									'text' => '',
+									'desc' => 'How do you want the payment form displayed on your page?',
+									'custom_args' => array (
+														'name' =>  'mdjm_pp_options[pp_form_layout]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['pp_form_layout'],
+														'list_type' => 'defined',
+														'list_values' => array( 'horizontal' => 'Horizontal',
+																				'vertical' => 'Vertical',
+																			),
+														),
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_form_layout
+									
+		$admin_fields['pp_label'] = array(
+									'display' => 'Payment Label:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_label'],
+									'text' => 'Default is <code>Make a Payment Towards:</code>',
+									'desc' => 'Display name of the label shown to users to select the payment they wish to make',
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_label
+									
+		$admin_fields['pp_enable_tax'] = array(
+									'display' => 'Enable Taxes?',
+									'key' => 'mdjm_pp_options',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['pp_enable_tax'],
+									'text' => '',
+									'desc' => 'Enable if you need to add taxes to online payments',
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_enable_tax
+									
+		$admin_fields['pp_tax_type'] = array(
+									'display' => 'Apply Tax As:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_tax_type'],
+									'text' => '',
+									'desc' => 'How do you apply tax?',
+									'custom_args' => array (
+														'name' =>  'mdjm_pp_options[pp_tax_type]',
+														'sort_order' => '',
+														'selected' => $mdjm_options['pp_tax_type'],
+														'list_type' => 'defined',
+														'list_values' => array( 'percentage' => '% of total',
+																				'fixed' => 'Fixed rate',
+																			),
+														),
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_tax_type
+									
+		$admin_fields['pp_tax_rate'] = array(
+									'display' => 'Tax Rate:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'small-text',
+									'value' => $mdjm_options['pp_tax_rate'],
+									'text' => 'Do not enter a currency or percentage symbol',
+									'desc' => 'If you apply tax based on a fixed percentage (i.e. VAT) enter the value (i.e 20). For fixed rates, enter the amount in the format 0.00. Taxes will only be applied during checkout',
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_tax_rate
+									
+		$admin_fields['pp_enable'] = array(
+									'display' => 'Enable PayPal?',
+									'key' => 'mdjm_pp_options',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['pp_enable'],
+									'text' => '',
+									'desc' => 'Enables the use of PayPal standard for client payment collections',
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_enable
+									
+		$admin_fields['pp_email'] = array(
+									'display' => 'PayPal Email:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_email'],
+									'text' => '',
+									'desc' => 'Your registered PayPal email address is needed before you can take payments via your website',
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_email
+									
+		$admin_fields['pp_redirect'] = array(
+									'display' => 'Redirect Successful Payment To:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_redirect'],
+									'text' => '<code>Current Page</code> is the page the Client initiated the payment from',
+									'desc' => 'Where do you want your Client redirected to once Payment has completed?',
+									'custom_args' => array (
+														'name' =>  'mdjm_pp_options[pp_redirect]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['pp_redirect'],
+														'list_type' => 'page',
+														'show_option_none' => 'Current Page',
+														'option_none_value' => $mdjm_options['payments_page'],
+														'id' => 'pp_redirect',
+														),
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_redirect
+									
+		$admin_fields['pp_cancel'] = array(
+									'display' => 'Redirect Cancelled Payment To:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_cancel'],
+									'text' => '<code>Current Page</code> is the page the Client initiated the payment from',
+									'desc' => 'Where do you want your Client redirected to if they cancel the payment?',
+									'custom_args' => array (
+														'name' =>  'mdjm_pp_options[pp_cancel]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_options['pp_cancel'],
+														'list_type' => 'page',
+														'show_option_none' => 'Current Page',
+														'option_none_value' => $mdjm_options['payments_page'],
+														'id' => 'pp_cancel',
+														),
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_cancel
+									
+		$admin_fields['pp_button'] = array(
+									'display' => 'Payment Button:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'pp_button_radio',
+									'class' => '',
+									'value' => $mdjm_options['pp_button'],
+									'text' => '',
+									'desc' => '',
+									'custom_args' => array (
+														'name' 	  => 'mdjm_pp_options[pp_button]',
+														'selected'  => $mdjm_options['pp_button'],
+														'values'	=> array(
+																			'btn_paynowCC_LG.gif',
+																			'btn_paynow_LG.gif',
+																			'btn_paynow_SM.gif',
+																			),
+														),
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_button
+									
+		$admin_fields['pp_sandbox'] = array(
+									'display' => 'PayPal Sandbox?',
+									'key' => 'mdjm_pp_options',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['pp_sandbox'],
+									'text' => '',
+									'desc' => 'Enable only to test payments. You can sign up for a developer account <a href="https://developer.paypal.com/" target="_blank">here</a>.',
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_sandbox
+									
+		$admin_fields['pp_sandbox_email'] = array(
+									'display' => 'PayPal Sandbox Email:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_sandbox_email'],
+									'text' => '',
+									'desc' => 'If using PayPal Sandbox, enter your sandbox "Facilitator" email here. If not set, your normal PayPal email will be used',
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_sandbox_email
+									
+		$admin_fields['pp_debug'] = array(
+									'display' => 'Debug?',
+									'key' => 'mdjm_pp_options',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['pp_debug'],
+									'text' => 'Enable logging',
+									'desc' => 'Enable to capture logs for PayPal - will be stored at <code>' . WPMDJM_PLUGIN_DIR . '/mdjm-pp-ipn-debug.log</code>',
+									'section' => 'paypal',
+									'page' => 'payments',
+									); // pp_debug
+									
+		$admin_fields['pp_receiver'] = array(
+									'display' => 'Receiver Email Address:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_receiver'],
+									'text' => '',
+									'desc' => 'This address is used for <a href="https://www.paypal.com/uk/cgi-bin/webscr?cmd=p/acc/ipn-info-outside" target="_blank" title="Instant Payment Notification (IPN)">PayPal IPN validation</a>. It should be your <strong><code>primary</code></strong> PayPal email address',
+									'section' => 'paypal_adv',
+									'page' => 'payments',
+									); // pp_receiver
+									
+		/*$admin_fields['pp_inv_prefix'] = array(
+									'display' => 'Invoice Prefix:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_inv_prefix'],
+									'text' => '',
+									'desc' => 'Enter a prefix for your invoice numbers. Make sure it is unique if you have multiple stores associated to your PayPal account',
+									'section' => 'paypal_adv',
+									'page' => 'payments',
+									);*/ // pp_inv_prefix
+									
+		$admin_fields['pp_checkout_style'] = array(
+									'display' => 'Checkout Page Style:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => $mdjm_options['pp_checkout_style'],
+									'text' => '',
+									'desc' => 'If you have created a custom <a href="https://www.paypal.com/customize" target="_blank" title="PayPal\'s Custom Payment Pages: An Overview">PayPal Checkout Page</a>, enter it\'s ID here to use it',
+									'section' => 'paypal_adv',
+									'page' => 'payments',
+									); // pp_checkout_style
 		
 		add_settings_section( 'mdjm_general_settings',
 							  '',
@@ -1329,8 +1845,8 @@
 							  'f_mdjm_desc',
 							  'mdjm-client-text'
 							);
-		add_settings_section( 'mdjm_login_settings',
-							  '',
+		add_settings_section( 'mdjm_client_zone_settings',
+							  WPMDJM_APP_NAME . ' <hr />',
 							  'f_mdjm_desc',
 							  'mdjm-client-text'
 							);
@@ -1343,6 +1859,26 @@
 							  'Playlist Page <hr />',
 							  'f_mdjm_desc',
 							  'mdjm-client-text'
+							);
+		add_settings_section( 'mdjm_payment_page_settings',
+							  'Payment Page <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-client-text'
+							);
+		add_settings_section( 'mdjm_payments_settings',
+							  '',
+							  'f_mdjm_desc',
+							  'mdjm-payments'
+							);
+		add_settings_section( 'mdjm_paypal_settings',
+							  'PayPal Settings <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-payments'
+							);
+		add_settings_section( 'mdjm_paypal_adv_settings',
+							  'PayPal Advanced Settings <hr />',
+							  'f_mdjm_desc',
+							  'mdjm-payments'
 							);
 		
 		foreach( $admin_settings_field as $settings_field )	{
@@ -1370,6 +1906,7 @@
 		register_setting( 'mdjm-permissions', 'mdjm_plugin_permissions' );
 		register_setting( 'mdjm-pages', 'mdjm_plugin_pages' );
 		register_setting( 'mdjm-client-text', WPMDJM_FETEXT_SETTINGS_KEY );
+		register_setting( 'mdjm-payments', 'mdjm_pp_options' );
 	} // f_mdjm_settings_init
 	
 	add_action( 'admin_init', 'f_mdjm_settings_init' );
@@ -1532,6 +2069,19 @@
 		elseif( $args['type'] == 'checkbox' )	{
 			echo '<input name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '" type="' . $args['type'] . '" value="Y" class="' . $args['class']  . '" ' . 
 			checked( $args['value'], 'Y', false ) . ' />';
+		}
+		elseif( $args['type'] == 'pp_button_radio' )	{
+			$i = 0;
+			foreach( $args['custom_args']['values'] as $radio )	{
+				echo '<label>' . "\n";
+				echo '<input type="radio" name="' . $args['key'] . '[' . $args['field'] . ']" value="' . $radio . '" id="' . $radio . '" ' . checked( $args['value'], $radio, false ) . ' />' . "\n";
+				echo '<img src="https://www.paypalobjects.com/en_GB/i/btn/' . $radio . '">';
+				echo '</label>' . "\n";
+				$i++;
+				if( $i != count( $args['values'] ) )	{
+					echo '<br />' . "\n";	
+				}
+			}
 		}
 		else	{
 			echo '<input name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '" type="' . $args['type'] . '" class="' . $args['class'] . '" value="' . $args['value'] . '" />';

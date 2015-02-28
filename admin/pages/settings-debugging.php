@@ -39,12 +39,15 @@
 	if( isset( $_POST['action'] ) && $_POST['action'] == 'Submit Debug Files' )	{
 		$debug_file = WPMDJM_PLUGIN_DIR . '/mdjm-debug-' . date( 'd-m-Y' ) . '.log';
 		$mdjm_debug =  WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-error.log';
+		$pp_debug = WPMDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log';
+		
 		/* Get options */
 		$mdjm_client_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 		$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
 		$mdjm_fetext = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
+		$pp_options = get_option( 'mdjm_pp_options' );
 		
 		$plugins = get_plugins();
 		
@@ -80,6 +83,9 @@
 		$dump .= '/********** MDJM SCHEDULES **********/' . "\r\n";
 		$dump .= var_export( $mdjm_schedules, true ) . "\r\n\r\n";
 		
+		$dump .= '/********** MDJM PAYMENT OPTIONS **********/' . "\r\n";
+		$dump .= var_export( $pp_options, true ) . "\r\n\r\n";
+		
 		/* Write the debug file */		
 		file_put_contents( WPMDJM_PLUGIN_DIR . '/mdjm-debug-' . date( 'd-m-Y' ) . '.log', $dump );
 		$files = array( $debug_file );
@@ -89,6 +95,9 @@
 		$wp_debug = WP_CONTENT_DIR . '/debug.log';
 		if( file_exists( $wp_debug ) )	{
 			$files[] = $wp_debug;
+		}
+		if( file_exists( $pp_debug ) )	{
+			$files[] = $pp_debug;
 		}
 		
 		$headers = 'From: ' . WPMDJM_CO_NAME . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";

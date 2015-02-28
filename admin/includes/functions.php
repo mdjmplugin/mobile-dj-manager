@@ -21,7 +21,10 @@
 */
 
 	function f_mdjm_admin_menu()	{
-		global $mdjm_options, $mdjm_help;
+		global $mdjm_options;
+		
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+		
 		add_menu_page( 'Mobile DJ Manager', 'DJ Manager', 'manage_mdjm', 'mdjm-dashboard', 'f_mdjm_admin_dashboard', plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ), '58.4' );
 
 		add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Dashboard', 'Dashboard', 'manage_mdjm', 'mdjm-dashboard', 'f_mdjm_admin_dashboard');
@@ -48,11 +51,13 @@
 		
 		if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Venues', 'Venues', 'manage_mdjm', 'mdjm-venues', 'f_mdjm_admin_venues');
 		
+		if( current_user_can( 'manage_options' ) && isset( $mdjm_pp_options['pp_enable'] ) && $mdjm_pp_options['pp_enable'] == 'Y' ) add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Transactions', 'Transactions', 'manage_mdjm', 'mdjm-transactions', 'f_mdjm_admin_transactions');
+		
 		if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
 			add_submenu_page( 'mdjm-dashboard', 'Mobile DJ Manager - Licensing', '<font style="color:#F90">Buy License</font>', 'manage_mdjm', 'mdjm-license', 'f_mdjm_purchase');	
 		}
 	} // f_mdjm_admin_menu
-
+	
 /**************************************************************
 -	Admin Pages
 **************************************************************/	
@@ -144,6 +149,21 @@
 		wp_nonce_field( "mdjm-venues-page" );
 		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/venues.php' );
 	} // f_mdjm_admin_venues
+	
+/**
+ * f_mdjm_admin_venues
+ * Display the MDJM venues list
+ *
+ *
+ * @since 1.0
+*/
+	function f_mdjm_admin_transactions()	{
+		if( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+		wp_nonce_field( "mdjm-transactions-page" );
+		include_once( WPMDJM_PLUGIN_DIR . '/admin/pages/transactions.php' );
+	} // f_mdjm_admin_transactions
 
 /**
  * f_mdjm_purchase
@@ -260,6 +280,7 @@
 * Outputs the desired admin page URL
 */
 	function f_mdjm_admin_page( $mdjm_page )	{
+		$mydjplanner = array( 'mydjplanner', 'user_guides', 'mdjm_support', 'mdjm_forums' );
 		$mdjm_pages = array(
 						'wp_dashboard'          => 'index.php',
 						'dashboard'             => 'admin.php?page=mdjm-dashboard',
@@ -278,7 +299,7 @@
 						'equipment'             => 'admin.php?page=mdjm-packages',
 						'events'                => 'admin.php?page=mdjm-events',
 						'add_event'             => 'admin.php?page=mdjm-events&action=add_event_form',
-						'enquiries'             => 'admin.php?page=mdjm-events&display=enquiries',
+						'enquiries'             => 'admin.php?page=mdjm-events&status=Enquiry',
 						'venues'                => 'admin.php?page=mdjm-venues',
 						'add_venue'             => 'admin.php?page=mdjm-events&action=add_venue_form',
 						'tasks'                 => 'admin.php?page=mdjm-tasks',
@@ -287,9 +308,13 @@
 						'availability'          => 'admin.php?page=mdjm-availability',
 						'debugging'             => 'admin.php?page=mdjm-settings&tab=debugging',
 						'contact_forms'         => 'admin.php?page=mdjm-contact-forms',
+						'transactions'		  => 'admin.php?page=mdjm-transactions',
 						'mydjplanner'           => 'http://www.mydjplanner.co.uk',
+						'user_guides'           => 'http://www.mydjplanner.co.uk/support/user-guides',
+						'mdjm_support'          => 'http://www.mydjplanner.co.uk/support',
+						'mdjm_forums'           => 'http://www.mydjplanner.co.uk/forums',
 						);
-		if( $mdjm_page == 'mydjplanner' )	{
+		if( in_array( $mdjm_page, $mydjplanner ) )	{
 			echo $mdjm_pages[$mdjm_page];	
 		}
 		else	{
@@ -429,6 +454,28 @@
 								PRIMARY KEY  (id),
 								KEY user_id (user_id)
 								);";
+								
+			/* TRANS TABLE */
+			$trans_sql = "CREATE TABLE ". $db_tbl['trans'] . " (
+							trans_id int(11) NOT NULL AUTO_INCREMENT,
+							event_id int(11) NOT NULL,
+							payment_src varchar(25) NOT NULL,
+							payment_txn_id varchar(19) NULL,
+							payment_date datetime NOT NULL,
+							payment_type varchar(25) NOT NULL,
+							payer_id varchar(25) NULL,
+							payment_status varchar(25) NOT NULL,
+							payer_firstname varchar(75) NULL,
+							payer_lastname varchar(75) NULL,
+							payer_email varchar(75) NOT NULL,
+							payment_for varchar(75) NOT NULL,
+							payment_currency varchar(3) NOT NULL,
+							payment_tax decimal(10,2) NULL,
+							payment_gross decimal(10,2) NOT NULL,
+							full_ipn text NULL,
+							seen_by_admin int(11) NOT NULL,
+							PRIMARY KEY  (trans_id)
+							);";
 			
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $events_sql );
@@ -436,6 +483,7 @@
 			dbDelta( $journal_sql );
 			dbDelta( $playlists_sql );
 			dbDelta( $holiday_sql );
+			dbDelta( $trans_sql );
 		
 			update_option( 'mdjm_db_version', $mdjm_db_version );
 		}	
@@ -1622,6 +1670,20 @@
 		echo $pl_result;
 		
 	} // f_mdjm_count_playlist_records
+	
+/*
+* f_mdjm_delete_from_playlist
+* 25/02/2015
+* @since 1.1
+* Delete the specified song from playlist
+*/
+	function f_mdjm_delete_from_playlist( $pl )	{
+		global $wpdb;
+		if( !isset( $db_tbl ) )	{
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		}
+		$wpdb->delete( $db_tbl['playlists'], array( 'id' => $pl ) );
+	}
 
 /****************************************************************************************************
 --	VENUE FUNCTIONS

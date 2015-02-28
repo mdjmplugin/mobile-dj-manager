@@ -42,7 +42,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_Journal_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-journal-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-journal-table.php' );
 		}
 		if( isset( $_GET['client_id'] ) ) $client = true;
 		if( isset( $_GET['event_id'] ) ) $event = true;

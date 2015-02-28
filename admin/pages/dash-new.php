@@ -29,38 +29,51 @@
 			  fjs.parentNode.insertBefore(js, fjs);
         }	(document, 'script', 'facebook-jssdk'));
         </script>
+        <style>
+		td a {
+			display:block;
+			width:100%;
+		}
+		</style>
         <div class="wrap">
         <h2>Mobile DJ Manager - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h2>
         <hr />
 <?php 
 /* Main table*/
 /* Determine arguments for event count monthly stats */
-	$event_status = array( 'Approved', 'Pending', 'Enquiry', 'Unattended', 'Completed', 'Failed Enquiry' );
+	$event_status = array( 'Approved' => 'Approved', 'Pending' => 'Pending', 'Enquiry' => 'Enquiry', 'Unattended' => 'Unattended', 'Completed' => 'Completed', 'Failed Enquiry' => 'Lost' );
 	$mdjm_args = array(
 					'print' => true,
-					'scope' => 'month'
+					'scope' => 'month',
+					'dj'	=> $current_user->ID,
 					);
-	if( is_dj() )	{
+	/*if( is_dj() )	{
 		$mdjm_args['dj'] = $current_user->ID;	
-	}
+	}*/
 ?>
 <table class="widefat" width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="70%"><table class="widefat" width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td colspan="6" class="alternate"><strong><?php echo $mdjm_options['company_name']; ?> Overview for <font color="#F90"><?php echo date ( 'F Y' ); ?></font></strong></td>
+    <td colspan="6" class="alternate"><strong><?php echo $current_user->display_name; ?> Overview for <font color="#F90"><?php echo date ( 'F Y' ); ?></font></strong></td>
     </tr>
   <tr>
 <!-- Start Monthly boxed cells -->
 <?php
-	foreach( $event_status as $status )	{
+	foreach( $event_status as $status => $display_status )	{
+		$decode_to = array(
+						'Approved'			=> 'active',
+						'Enquiry'			=> 'enquiries',
+						'Unattended'		=> 'enquiries&orderby=contract_status&order=desc',
+						'Failed Enquiry'	=> 'lost',
+						);
 	?>
     <td width="16%"><table class="widefat" width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr class="alternate">
-        <td align="center"><font style="font-weight:bold; font-size:12px"><?php echo $status; ?></font></td>
+        <td align="center"><a href="<?php f_mdjm_admin_page( 'events'); ?>&status=<?php echo $decode_to[$status]; ?>"><font style="font-weight:bold; font-size:12px; color:#000;"><?php echo $display_status; ?></font></a></td>
       </tr>
       <tr class="alternate">
-        <td height="50" align="center" valign="middle"><font style="font-weight:bold; font-size:36px; color:#F90;"><?php f_mdjm_event_count( $status, $mdjm_args ); ?></font></td>
+        <td height="50" align="center" valign="middle"><a href="<?php f_mdjm_admin_page( 'events'); ?>&status=<?php echo $decode_to[$status]; ?>"><font style="font-weight:bold; font-size:36px; color:#F90;"><?php f_mdjm_event_count( $status, $mdjm_args ); ?></font></a></td>
       </tr>
     </table></td>
     <?php	
@@ -91,11 +104,11 @@
 <?php
 /* Adjust arguments for event count annual stats */
 	$mdjm_args['scope'] = 'year';
-	foreach( $event_status as $status )	{
+	foreach( $event_status as $status => $display_status )	{
 	?>
     <td width="16%"><table class="widefat" width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr class="alternate">
-        <td align="center"><font style="font-weight:bold; font-size:12px"><?php echo $status; ?></font></td>
+        <td align="center"><font style="font-weight:bold; font-size:12px"><?php echo $display_status; ?></font></td>
       </tr>
       <tr class="alternate">
         <td height="50" align="center" valign="middle"><font style="font-weight:bold; font-size:36px; color:#F90;"><?php f_mdjm_event_count( $status, $mdjm_args ); ?></font></td>
@@ -117,11 +130,11 @@
 <?php
 /* Adjust arguments for event count annual stats */
 	unset( $mdjm_args['scope'] );
-	foreach( $event_status as $status )	{
+	foreach( $event_status as $status => $display_status )	{
 	?>
     <td width="16%"><table class="widefat" width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr class="alternate">
-        <td align="center"><font style="font-weight:bold; font-size:12px"><?php echo $status; ?></font></td>
+        <td align="center"><font style="font-weight:bold; font-size:12px"><?php echo $display_status; ?></font></td>
       </tr>
       <tr class="alternate">
         <td height="50" align="center" valign="middle"><font style="font-weight:bold; font-size:36px; color:#F90;"><?php f_mdjm_event_count( $status, $mdjm_args ); ?></font></td>

@@ -120,7 +120,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_Events_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-event-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-event-table.php' );
 		}
 		$events_table = new MDJM_Events_Table();
 		
@@ -174,16 +174,22 @@
 		?>
 		</pre><div class="wrap"><h2>Events <?php if( current_user_can( 'administrator' ) || dj_can( 'add_event' ) )	echo '<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=add_event_form" class="add-new-h2">Add New</a></h2>';
 		
-		$events_table->prepare_items();
+		if( isset( $_POST['s'] ) )	{
+			$events_table->prepare_items( $_POST['s'] );
+		}
+		else	{
+			$events_table->prepare_items();
+		}
+		/*
 		?>
 		<form method="post" name="mdjm_event" id="mdjm_event">
 		<input type="hidden" name="page" value="mdjm-events">
-		<?php
-		$events_table->search_box( 'Search Events', 'search_id' );
+		<?php $events_table->search_box( 'Search Events', 'mdjm-events' ); ?>
+        </form>
 		
-		$events_table->display(); 
-		?>
-        </form></div>
+		<?php */$events_table->display(); ?>
+        
+        </div>
         <?php 
 	} // f_mdjm_render_events_table
 
@@ -200,10 +206,16 @@
 		}
 	
 		if( !class_exists( 'MDJM_PlayList_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-playlist-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-playlist-table.php' );
 		}
 		
 		$playlist_table = new MDJM_PlayList_Table();
+		
+		// Email the playlist
+		if( isset( $_POST['email_pl'] ) && $_POST['email_pl'] == 'Email me this List' )	{
+			$playlist_table->send_to_email( $_POST, $_GET );	
+		}
+				
 		?>
 		</pre><div class="wrap"><h2>Event Playlist</h2>
 		<?php
@@ -798,7 +810,7 @@
 	} // f_mdjm_add_event_step_3
 	
 	function f_mdjm_add_event_review()	{
-		global $mdjm_options;
+		global $mdjm_options, $mdjm_client_text;
 		
 		/* Validation checks */
 		f_mdjm_event_validate( $_POST );
@@ -859,8 +871,8 @@
         <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="total_cost" id="total_cost" value="<?php echo number_format( $total_cost, 2 ); ?>" /> <span class="description">Includes cost of packages and addons. Adjust if required.</span></td>
         </tr>
         <tr>
-        <th scope="row" width="20%"><label for="deposit">Deposit:</label></th>
-        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="deposit" id="deposit" value="<?php if( isset( $_POST['deposit'] ) ) echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a deposit to be paid upon booking, enter the amount here</span></td>
+        <th scope="row" width="20%"><label for="deposit"><?php echo $mdjm_client_text['deposit_label']; ?>:</label></th>
+        <td colspan="3"><?php echo f_mdjm_currency(); ?><input type="text" name="deposit" id="deposit" value="<?php if( isset( $_POST['deposit'] ) ) echo number_format( $_POST['deposit'] ); ?>" /> <span class="description">If you require a <?php echo $mdjm_client_text['deposit_label']; ?> to be paid upon booking, enter the amount here</span></td>
         </tr>
         <?php
 		if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) )	{
@@ -1078,7 +1090,7 @@
  * @since 1.0
 */
 	function f_mdjm_view_event_form( $event_id )	{
-		global $mdjm_options;
+		global $mdjm_options, $mdjm_client_text;
 		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
 		if( !current_user_can( 'manage_options' ) && $eventinfo->event_dj != get_current_user_id() ) 
 			wp_die( 'You cannot edit an event that is not yours unless you are an Administrator! <a href="' . admin_url() . 'admin.php?page=mdjm-events">Click here to return to your Events List</a>' );
@@ -1374,11 +1386,11 @@
             <tr>
             <th scope="row"><label for="cost">Total Cost: <?php echo f_mdjm_currency(); ?></label></th>
             <td><input type="text" id="cost" class="regular-text" name="cost" value="<?php echo $eventinfo->cost; ?>" /></td>
-            <th scope="row"><label for="despoit">Deposit Amount: <?php echo f_mdjm_currency(); ?></label></th>
+            <th scope="row"><label for="deposit"><?php echo $mdjm_client_text['deposit_label']; ?>: <?php echo f_mdjm_currency(); ?></label></th>
             <td><input type="text" name="deposit" id="deposit" class="regular-text" value="<?php echo $eventinfo->deposit; ?>"></td>
             </tr>
             <tr>
-            <th scope="row"><label for="deposit_status">Deposit Paid?</label></th>
+            <th scope="row"><label for="deposit_status"><?php echo $mdjm_client_text['deposit_label']; ?> Paid?</label></th>
             <td><input type="checkbox" id="deposit_status" name="deposit_status" value="Paid" <?php if( $eventinfo->deposit_status == 'Paid' ) echo ' checked'; ?> /></td>
              <th scope="row"><label for="contract_id">Contract:</label></th>
         <td><select name="contract" id="contract">
@@ -1403,7 +1415,7 @@
 		else	{
 			?>
 			<tr>
-            <th scope="row">Balance Due:</th>
+            <th scope="row"><?php echo $mdjm_client_text['balance_label']; ?> Due:</th>
             <td colspan="3"><?php echo f_mdjm_currency() . $eventinfo->cost - $eventinfo->deposit; ?></td>
             </tr>	
             <?php
@@ -1423,7 +1435,7 @@
         <td><input type="text" class="custom_date" name="contract_approved_date" id="contract_approved_date" value="<?php if( !empty( $eventinfo->contract_approved_date ) && $eventinfo->contract_status == 'Approved' ) echo date( 'd/m/Y', strtotime( $eventinfo->contract_approved_date ) ); ?>" disabled="disabled"></td>
         </tr>
         <tr>
-        <th scope="row"><label for="balance_status">Balance Paid?</label></th>
+        <th scope="row"><label for="balance_status"><?php echo $mdjm_client_text['balance_label']; ?> Paid?</label></th>
         <td colspan="3"><input type="checkbox" id="balance_status" name="balance_status" value="Paid" <?php if( $eventinfo->balance_status == 'Paid' ) echo ' checked'; ?> /></td>
         </tr>
         </table>
@@ -1572,35 +1584,116 @@
  *
  * @since 1.0
 */
-	function f_mdjm_print_playlist( $event )	{
+	function f_mdjm_print_playlist( $post_data )	{
 		global $wpdb;
-		$query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $event . ' ORDER BY `artist` ASC';
-		$playlistinfo = $wpdb->get_results( $query );
+		
+		if( !isset( $db_tbl ) )	{
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		}
+		
+		$print_query = 'SELECT * FROM `' . $db_tbl['playlists'] . '` WHERE `event_id` = ' . $post_data['event_id'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
+		$print_result = $wpdb->get_results( $print_query );
+		$pl_ttl = $wpdb->num_rows;
+		
+		if( !isset( $post_data['repeat_headers'] ) || empty( $post_data['repeat_headers'] ) || $post_data['repeat_headers'] == 0 )	{
+			$repeat = 0;
+		}
+		else	{
+			$repeat = $post_data['repeat_headers'];
+		}
+		
+		$i = 0;
+		
+		$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $post_data['event_id']);
+		$client = get_userdata( $eventinfo->user_id );
+		
 		?>
-        <table border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <th>Artist</th>
-            <th>Song</th>
-            <th>When to Play</th>
-            <th>Info</th>
-            <th>Added By</th>
-       </tr>
+        <script type="text/javascript">
+		window.onload = function() { window.print(); }
+		</script>
+        <style>
+		body { 
+			background:white;
+			color:black;
+			margin:0;
+			width:auto
+		}
+		#adminmenu {
+			display: none !important
+		}
+		#wpadminbar {
+			display: none !important
+		}
+		#wpheader {
+			display: none !important;
+		}
+		#wpcontent {
+			margin-left:0; 
+			float:none; 
+			width:auto }
+		}
+		#wpcomments {
+			display: none !important;
+		}
+		#message {
+			display: none !important;
+		}
+		#wpsidebar {
+			display: none !important;
+		}
+		#wpfooter {
+			display: none !important;
+		}
+		#table	{
+			width: 100%	
+		}
+		</style>
+        <p>Client Name: <?php echo $client->first_name . ' ' . $client->last_name; ?><br />
+        Event Date: <?php echo date( "l, jS F Y", strtotime( $eventinfo->event_date ) ); ?><br />
+        Event Type: <?php echo $eventinfo->event_type; ?><br />
+        No. Songs in Playlist: <?php echo $pl_ttl; ?><br /></p>
+        <hr />
+        <table border="1" cellpadding="0" cellspacing="0" width="90%" align="center">
+        <tr height="30">
+        <th width="15%">Artist</th>
+        <th width="15%">Song</th>
+        <th width="15%">When to Play</th>
+        <th width="40%">Info</th>
+        <th width="15%">Added By</th>
+        </tr>
         <?php
-		foreach( $playlistinfo as $playlist )	{
+		foreach( $print_result as $playlist )	{
+			if( $repeat > 0 && $i == $repeat )	{
+					?>
+                    </table>
+                    <p style="page-break-after:always;">&nbsp;</p>
+                    <table border="1" cellpadding="0" cellspacing="0" width="90%" align="center">
+                    <tr height="30">
+                    <th width="15%">Artist</th>
+                    <th width="15%">Song</th>
+                    <th width="15%">When to Play</th>
+                    <th width="40%">Info</th>
+                    <th width="15%">Added By</th>
+                    </tr>
+					<?php
+					$i = 0;
+				}
 			?>
-            <tr>
-            <td><?php echo $playlist->artist; ?></td>
-            <td><?php echo $playlist->song; ?></td>
-            <td><?php echo $playlist->when; ?></td>
-            <td><?php echo $playlist->info; ?></td>
-            <td><?php echo $playlist->added_by; ?></td>
+            <tr height="30">
+            <td><?php echo stripslashes( $playlist->artist ); ?></td>
+            <td><?php echo stripslashes( $playlist->song ); ?></td>
+            <td><?php echo stripslashes( $playlist->when ); ?></td>
+            <td><?php echo stripslashes( $playlist->info ); ?></td>
+            <td><?php echo stripslashes( $playlist->added_by ); ?></td>
             </tr>
-            <?php	
+            <?php
+			$i++;	
 		}
         ?>
         </table>
+        <p align="center">Powered by Mobile DJ Manager for Wordpress, version <?php echo WPMDJM_VERSION_NUM; ?></p>
         <?php
-	}
+	} // f_mdjm_print_playlist
 	
 	function f_mdjm_show_journal()	{
 		include( WPMDJM_PLUGIN_DIR . '/admin/pages/show-journal.php' );
@@ -1626,12 +1719,16 @@
  *
  * @since 1.0
 */
-	if( isset( $_GET['action'] ) && $_GET['action'] == 'show_journal' )	{
+	if( isset( $_POST['print_pl'] ) && $_POST['print_pl'] == 'Print this List' )	{
+		f_mdjm_print_playlist( $_POST );
+	}
+	
+	elseif( isset( $_GET['action'] ) && $_GET['action'] == 'show_journal' )	{
 		$func = 'f_mdjm_' . $_GET['action'];
 		$func();
 		exit;
 	}
-	if( isset( $_GET['action'] ) )	{ // Action to process
+	elseif( isset( $_GET['action'] ) )	{ // Action to process
 		$func = 'f_mdjm_' . $_GET['action'];
 		if( function_exists( $func ) ) $func( $_GET['event_id'] );
 	}

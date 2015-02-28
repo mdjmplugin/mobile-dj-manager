@@ -114,12 +114,12 @@
 	}
 	
 	function f_mdjm_accept_contract_form( $event_id, $header )	{
-		global $current_user;
+		global $current_user, $mdjm_options, $mdjm_client_text;
 		
 		$above_below = 'below';
 		if( $header == false )	{
 			$above_below = 'above';
-			echo '<hr>';
+			echo '<hr />';
 		}
 		if( $header == true )	{
 			echo '<p>Please read and check the contract below including its terms and then check the acceptance box and click Sign Contract to confirm your acceptance.</p>';
@@ -129,7 +129,7 @@
 		echo '<input type="hidden" name="approver" value="' . $current_user->display_name . '">';
 		echo '<p><input type="checkbox" name="contract_named" value="Y">I hereby confirm that I am the person named within the ' . $above_below . ' contract</p>';
 		echo '<p><input type="checkbox" name="contract_accept" value="Y">By checking this box I confirm that the contract details are correct and that I accept the terms and conditions within it</p>';
-		echo '<p><input type="checkbox" name="deposit" value="Paid">Check this box if you have sent your deposit already. Otherwise if you will be paying shortly, leave it unchecked</p>';
+		echo '<p><input type="checkbox" name="deposit" value="Paid">Check this box if you have sent your ' . $mdjm_client_text['deposit_label'] . ' already. Otherwise if you will be paying shortly, leave it unchecked</p>';
 		
 		echo '<p><input type="submit" name="submit" value="Accept Contract"></p>';
 		echo '</form>';

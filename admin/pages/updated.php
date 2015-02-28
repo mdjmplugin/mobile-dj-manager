@@ -9,7 +9,7 @@
 * since 0.9.3
 * Displays overview of changes in updated version
 */
-	function f_mdjm_updated_header()	{
+	function f_mdjm_updated_header( $ver )	{
 		?>
         <div id="fb-root"></div>
 		<script>(function(d, s, id) {
@@ -26,8 +26,14 @@
         <td align="center"><img src="<?php echo WPMDJM_PLUGIN_URL . '/admin/images/banner-772x250.png'; ?>" width="772" height="250" /></td>
         </tr>
         <tr>
-        <td align="center"><span style="font-size:24px; font-weight:bold; color:#FF9900">Welcome to Mobile DJ Manager version <?php echo WPMDJM_VERSION_NUM; ?></span><br />
+        <td align="center"><span style="font-size:24px; font-weight:bold; color:#FF9900">Welcome to Mobile DJ Manager version <?php echo str_replace( '_', '.', $ver ); ?></span><br />
 <a href="<?php wp_get_referer(); ?>">Click here to proceed to the requested page</a></td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Did you know?</td>
+        </tr>
+        <tr>
+        <td>We are now providing full web hosting services for your WordPress website?<br /><br />Our hosting solution provides you with the perfect platform for your business website and the <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank" title="My DJ Planner: the home of Mobile DJ Manager for WordPress">Mobile DJ Manager</a> plugin and offers enhanced support for both.<br /><br /><a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/contact/" target="_blank" title="Contact us for more information on our web hosting solutions">Contact us</a> for more information</td>
         </tr>
         </table>
         <table>
@@ -49,7 +55,7 @@
 		}
 		?>
         <tr>
-        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new?</td>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new in version <?php echo str_replace( '_', '.', $ver ); ?>?</td>
         </tr>
         <?php	
 	} // f_mdjm_updated_header
@@ -102,6 +108,78 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1
+**************************************************/
+	function f_mdjm_updated_to_1_1()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90"><!-- PayPal Logo --><a href="https://www.paypal.com/uk/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/uk/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" border="0" alt="PayPal Logo"></a><!-- PayPal Logo --> Integration</font><br />
+       <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank" title="My DJ Planner: the home of Mobile DJ Manager for WordPress">Mobile DJ Manager for WordPress</a> is now fully integrated with PayPal enabling you to take online payments securely via your website.
+        <ui>
+        	<li>No PayPal account is needed by Clients in order to make payments</li>
+            <li>Accepts payments from all major credit cards, as well as funds within the Client's PayPal account</li>
+            <li>Clients can choose to pay the Booking Fee/Deposit, or the full event balance</li>
+            <li>Full PayPal integration means the MDJM application receives information from the <a href="https://www.paypal.com/uk/cgi-bin/webscr?cmd=p/acc/ipn-info-outside" target="_blank" title="Instant Payment Notification (IPN)">PayPal IPN</a> API system and updates the booking and journal automatically after verifying payment is completed</li>
+            <li>Automatically sends your client an email based on a template of your choosing when payment is verified</li>
+            <li>Ability to apply taxes</li>
+            <li>Multi-Currency support for GBP, EUR, &amp; USD</li>
+            <li>Supports customised PayPal checkout pages</li>
+            <li>Customise the display of the payment form</li>
+            <li>Immediate notifications in the Admin interface when you have new "Unattended" enquiries</li>
+            <li>Supports the PayPal sandbox environment so full testing can take place without real payments</li>
+        </ui>
+        <br />
+        Make sure you check out the <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/paypal-integration/" target="_blank">PayPal Integration User Guide</a> for detailed information and guidance before implementing online payments.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Transactions Page</font><br />
+        A new <a href="<?php f_mdjm_admin_page( 'transactions' ); ?>">Transactions</a> page has been added to the MDJM system and is available via the Mobile DJ Manager menu's within the WordPress admin interface.<br /><br />
+		This page is only available to Admins and if the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=payments">Payment</a> features is enabled and has been introduced to compliment the new online payments system as described above.<br /><br />
+		For now, the page simply lists any transactions that have been processed via PayPal and any other data relevant to that transaction. We will continue to develop this feature in up and coming versions. If you have ideas/requirements for this page, please <a href="<?php f_mdjm_admin_page( 'mdjm_forums' ); ?>/forum/feature-requests/" target="_blank">let us know</a>.
+        </td>
+        </tr>
+         <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Events Table</font><br />
+        The <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> page has been updated slightly to be a little more intuitive. Unattended enquiries are also now listed as priority and with a red background.<br /><br />
+		The majority of updates to this page were to do with better, cleaner coding resulting in faster loading times and more efficient lookups.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ul>
+            	<li><strong>New</strong>: Added <code>Make A Payment</code> link to the <?php echo WPMDJM_APP_NAME; ?> home page if PayPal is enabled for Client events that are due a deposit of balance payment</li>
+                <li><strong>New</strong>: Enabled the <code>Add Media</code> button within the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> page. You can now include images in your Client Communications</li>
+                <li><strong>New</strong>: Added buttons in Playlist view to email the event playlist to yourself or print it</li>
+            	<li><strong>New</strong>: <code>Payments</code> tab added to the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> to support the new <a href="https://www.paypal.com/" target="_blank" title="PayPal">PayPal</a> online payments feaure</li>
+                <li><strong>New</strong>: Added sub-menu items to the admin toolbar <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> item</li>
+                <li><strong>New</strong>: <code>{CONTACT_URL}</code> <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> added</li>
+                <li><strong>New</strong>: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> added to support the new online payments system. To be used within the verification email template</li>
+                <ul>
+                	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>{PAYMENT_AMOUNT}</code>: Inserts the amount received by the payment</li>
+                	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>{PAYMENT_DATE}</code>: Inserts the date payment was received as determined by PayPal</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>{PAYMENT_FOR}</code>: Inserts <strong>Deposit</strong> or <strong>Balance</strong> depending on the payment received</li>
+                </ul>
+                <li><strong>New</strong>: <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <code>Deposit Label</code> enabling you to change the terminology used on both the front end and backend of your website. Some people prefer <code>Booking Fee</code> for example. Defaults to <code>Deposit</code>. Remember to update any email or contract templates as necessary</li>
+                 <li><strong>New</strong>: <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <code>Balance Label</code> enabling you to change the terminology used on both the front end and backend of your website. Defaults to <code>Balance</code>. Remember to update any email or contract templates as necessary</li>
+                <li><strong>Bug Fix</strong>: Slight adjustment to the <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> validation scripts. In some instances determined during testing (no bug reports) the jQuery validation did not work correctly</li>
+                <li><strong>Bug Fix</strong>: WordPress "reserves" some form field names such as <code>name</code> so if you used this field name within the <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">MDJM Contact Forms</a>, the form did not submit correctly. This is rectified</li>
+                <li><strong>General</strong>: Updated the uninstall script</li>
+                <li><strong>General</strong>: Added the <code>Date Added</code> column to the playlist table admin view. List is sorted by this column as default</li>
+                <li><strong>TODO</strong>: Editing and ordering of <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> fields</li>
+            </ul>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1
+
+/**************************************************
 				VERSION 1.0
 **************************************************/
 	function f_mdjm_updated_to_1_0()	{
@@ -110,7 +188,7 @@
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">MDJM Contact Forms</font><br>
 		The new MDJM Contact Forms enable you to create fully customisable <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> for use either within a single page of your website, or on multiple pages by using the new MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> Widget which we've also included in this release.<br /><br />By using MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a>, MDJM can now fully manage every stage of an event from enquiry through to completion.<br /><br />Some of the key features of the <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> are;
-        <ui>
+        <ul>
             <li>Fully Customisable forms and settings</li>
             <li>Configure your forms to create users and event enquiries when submitted</li>
             <li>Immediate responses to the client (if configured)</li>
@@ -119,7 +197,7 @@
             <li>Availability status included in your notification email (not for client)</li>
             <li>Immediate notifications in the Admin interface when you have new "Unattended" enquiries</li>
             <li>From your <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Events</a> page quickly check availability, assign DJ, finalise quote, or send notification of Unavailability to Client</li>
-        </ui>
+        </ul>
         <br />
         Make sure you check out the <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/contact-forms/">Contact Forms User Guide </a> for more information and guidance when setting up your forms.<br /><br /><a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a> are classed as BETA currently, however we do highly recommend you try them out and in the unlikely event that you encounter any problems, make sure you head over to our <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/forum/bugs/">Support Forums</a> and let us know.
 
@@ -133,7 +211,7 @@
             <ui>
             	<li><strong>New</strong>: Create Clients directly from the <a href="<?php f_mdjm_admin_page( 'add_event' ); ?>">Add New Event</a> screen as part of the event creation process</li>
             	<li><strong>New</strong>: MDJM Contact Form Widget enabling you to add your MDJM <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> to multiple web pages quickly and easily</li>
-            	<li><strong>New</strong>: <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default</li>
+            	<li><strong>New</strong>: <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <code>New Enquiry Notifications</code>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <code>Unattended Enquiries</code> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default</li>
                 <li><strong>New</strong>: Once an event is Approved, you can now click on the status within the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event Listing</a> page and view the Client's signed contract</li>
                 <li><strong>Bug Fix</strong>: The Year drop down list within the <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">Availability</a> page was showing blank instead of 2015</li>
                 <li><strong>Bug Fix</strong>: If you had your <a href="http://codex.wordpress.org/Using_Permalinks" target="_blank">WordPress Permalink Settings</a> set to the default of <strong>Default</strong> (also referred to as "Ugly") the <?php echo WPMDJM_APP_NAME; ?> links did not work correctly for Clients when logged in</li>
@@ -174,9 +252,9 @@
         <td>
             <ui>
             	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
-                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
+                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <code>Select DJ</code> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
             	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
-                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <code>Unavailability Email Template</code> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
             	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
                 <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
                 <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
@@ -212,7 +290,7 @@
             <ui>
             	<li>Bug: Event quotes were using template set in settings even if you selected an alternative during event creation</li>
                 <li>Bug: jQuery bug on main WP Dashboard stopping availability datepicker from showing resolved.</li>
-                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added <code>New Enquiry Notifications</code>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <code>Unattended Enquiries</code> that need attention. These notifications are only displayed to Administrators. The <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
             </ui>
         </td>
         </tr>
@@ -223,9 +301,9 @@
         <td>
             <ui>
             	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
-                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
+                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <code>Select DJ</code> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
             	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
-                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <code>Unavailability Email Template</code> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
             	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
                 <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
                 <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
@@ -260,9 +338,9 @@
         <td>
             <ui>
             	<li>New <strong>Mobile DJ Manager Availability</strong> Widget added to the main <a href="<?php f_mdjm_admin_page( 'wp_dashboard' ); ?>">WP Dashboard</a> which displays an instant 7 day overview for all your staff and provides the ability for you to perform a quick <a href="<?php f_mdjm_admin_page( 'availability' ); ?>">availability</a> lookup as soon as you have logged into your WordPress Admin interface</</li>
-                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <span class="code">Select DJ</span> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
+                <li>New: We have now added functionality within the <a href="<?php f_mdjm_admin_page( 'djs' ); ?>">DJ view screen</a> to mark DJ's as inactive. Inactive DJ's are not displayed within the create event screen in the <code>Select DJ</code> drop down menu. Use this function in the same way as the Inactive Client's which was introduced in <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>&ver=0_9_9_4">version 0.9.9.4</a></li>
             	<li>Quick Availability Check added to main <a href="<?php f_mdjm_admin_page( 'dashboard' ); ?>">MDJM Dashboard</a></</li>
-                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <span class="code">Unavailability Email Template</span> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
+                <li>New <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <code>Unavailability Email Template</code> which enables you to define a template to be used as default when advising clients of unavailability... more on this soon ;)</li>
             	<li>Event listing is now alphabetical within the Create Event and Edit Event pages</li>
                 <li>Removed Bulk Actions drop down and associated checkboxes from the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event List</a> pages. Two main reasons for this. There was/is a bug whereby multiple Journal entries were created when some actions where processed. We're not sure if we will re-introduce the Bulk Actions for these pages. If you find them useful, <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/forums/general-support/">let us know</a>.</li>
                 <li>Bug Fix: If you had more than 10 venues, you could not edit venues with an ID greater than 9</li>
@@ -288,9 +366,9 @@
 		?>
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Event Enquiry Email Template</font><br>
-		We have added a drop down field to the event creation process that becomes visible if you select the option to <span class="code">Email Quote?</span>. The drop down list <span class="code">Select email Template to Use</span> enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> is selected.<br /><br />
+		We have added a drop down field to the event creation process that becomes visible if you select the option to <code>Email Quote?</code>. The drop down list <code>Select email Template to Use</code> enables you to select any of your email templates to use when emailing the Client with their quotation. By default, the option you have set within <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> is selected.<br /><br />
 		This provides the flexibilty for you to create different templates for use with different event types should you wish to.<br /><br />
-		If you have <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=permissions">Permissions</a> configured to allow DJ's to create events, the <span class="code">Disabled Templates for DJ's</span> setting applies.
+		If you have <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=permissions">Permissions</a> configured to allow DJ's to create events, the <code>Disabled Templates for DJ's</code> setting applies.
         </td>
         </tr>
         <tr>
@@ -299,7 +377,7 @@
         <tr>
         <td>
             <ui>
-            	<li>Adjusted <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> page. <span class="code">Send Email to:</span> dropdown now seperates Clients &amp; DJ's in a better format</li>
+            	<li>Adjusted <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communications</a> page. <code>Send Email to:</code> dropdown now seperates Clients &amp; DJ's in a better format</li>
                 <li>An additional  <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">debugging</a> option has been added to enable more in-depth debugging by the MDJM Support Team. Clicking the Submit Debug Files button, sends over information regarding your MDJM Settings to the Support Staff.</li>
             </ui>
         </td>
@@ -319,13 +397,13 @@
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Communications</font><br>
 		We have now enabled the sending of contracts via email to clients from within the <a href="http://www.mydjplanner.co.uk/using-communication-feature/" target="_blank">Communication Feature</a>.<br /><br />
         The dropdown containing the templates is now split into Email Templates and Contracts to make them easily identifiable for selection.<br /><br />
-        If you do not want your employees to see the contracts, you can configure that within the <span class="code">Disabled Templates for DJ's</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a>
+        If you do not want your employees to see the contracts, you can configure that within the <code>Disabled Templates for DJ's</code> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a>
         </td>
         </tr>
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Cleanup Client List</font><br>
 		The Client list could grow quite quickly making it difficult to browse and select a client when creating a new event, and generally just looking untidy.<br /><br />
-        Therefore we have now added functionality within the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client view screen</a> to mark clients as inactive. Inactive clients are not displayed within the create event screen in the <span class="code">Select Client</span> drop down menu.<br /><br />
+        Therefore we have now added functionality within the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client view screen</a> to mark clients as inactive. Inactive clients are not displayed within the create event screen in the <code>Select Client</code> drop down menu.<br /><br />
         To use the feature, for a single Client, hover over their name and select the appropriate action, or for multiple Clients, check the checkboxes next to the Client names and then select <strong>Mark Inactive</strong> from the <strong>Bulk Actions</strong> drop down menu and click <strong>Apply</strong>.<br /><br />
         To mark a Client as active again, client the <a href="<?php f_mdjm_admin_page( 'inactive_clients' ); ?>">Inactive Clients</a> link on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client view screen</a> and follow the same process as above, but select <strong>Mark Active</strong> from the <strong>Bulk Actions</strong> drop down menu and click <strong>Apply</strong>.
         </td>
@@ -336,10 +414,10 @@
         <tr>
         <td>
             <ui>
-            	<li>New <span class="code">Items per Page</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added to determine the number of results displayed on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a>, <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages. It is currently set to <?php echo get_option( 'posts_per_page' ); ?> items per page, but you can customise it <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">here.</a></li>
+            	<li>New <code>Items per Page</code> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> added to determine the number of results displayed on the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a>, <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages. It is currently set to <?php echo get_option( 'posts_per_page' ); ?> items per page, but you can customise it <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">here.</a></li>
             	<li>Enabled pagination on the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> list pages.</li>
             	<li>Enabled searching within the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Event list screen</a>, the <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client list screen</a> and the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venue list screen</a>. <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> and <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Clients</a> can be searched based upon a <a href="<?php f_mdjm_admin_page( 'clients' ); ?>">Client's</a> email address, URL, WordPress ID or username (this does not currently include display name due to a restriction within WordPress). <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a> are searched upon any part of the <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venue</a> name.</li>
-                <li>Big Fix: When a Client booked an event via the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a> an email was sent to them event if the <span class="code">Contract link to client?</span> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> was disabled.</li>
+                <li>Big Fix: When a Client booked an event via the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a> an email was sent to them event if the <code>Contract link to client?</code> <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">setting</a> was disabled.</li>
                 <li>Main dashboard indicated DJ was working today even if the event status was not Approved</li>
                 <li>Confirmation message displayed to a client when they book an event or approve their contract via the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_APP_NAME; ?></a> now only displays the <strong>You will receive confirmation via email shortly</strong> message if you have configured emails to be sent in <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">settings</a>.</li>
             </ui>
@@ -487,9 +565,9 @@
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Shortcode Updates</font><br>
         <ui>
-            <li><span class="code">{EVENT_DATE_SHORT}</span>: Inserts the Event date in short format (DD/MM/YYYY). <span class="code">{EVENT_DATE}</span> still adds long format</li>
-            <li><span class="code">{CLIENT_USERNAME}</span>: Inserts the client's username for logging into the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_CO_NAME; ?> <?php echo WPMDJM_APP_NAME; ?></a></li>
-            <li><span class="code">{CLIENT_PASSWORD}</span>: Inserts the client's password for logging into the front end of your website</li>
+            <li><code>{EVENT_DATE_SHORT}</code>: Inserts the Event date in short format (DD/MM/YYYY). <code>{EVENT_DATE}</code> still adds long format</li>
+            <li><code>{CLIENT_USERNAME}</code>: Inserts the client's username for logging into the <a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?>" target="_blank"><?php echo WPMDJM_CO_NAME; ?> <?php echo WPMDJM_APP_NAME; ?></a></li>
+            <li><code>{CLIENT_PASSWORD}</code>: Inserts the client's password for logging into the front end of your website</li>
         </ui>
         <strong>Note</strong>: We have found that the shortcodes seem to be stored in the cache of many browsers and therefore if you do not see the new shortcodes immediately, try holding down the shift key on your keyboard whilst refreshing your browser page<br /><br />
         The <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes User Guide</a> has been updated with the new options
@@ -571,10 +649,10 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcodes</a> are now supported in email subjects. You can use shortcodes in Email Template post titles (if you have titles as subject set in <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">settings</a>) as well as in the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a> (if an event is selected).<br /><br />
         Also, to support the new event fields, more <a href="http://www.mydjplanner.co.uk/shortcodes" target="_blank">Shortcode options</a> have been added...<br />
         <ui>
-        <li><span class="code">{DJ_SETUP_TIME}</span>: Inserts the setup time specified during event creation</li>
-        <li><span class="code">{DJ_SETUP_DATE}</span>: Inserts the setup date specified during event creation</li>
-        <li><span class="code">{DJ_NOTES}</span>: Inserts the information entered into the events DJ Notes field</li>
-        <li><span class="code">{ADMIN_NOTES}</span>: Inserts the information entered into the events Admin Notes field</li>
+        <li><code>{DJ_SETUP_TIME}</code>: Inserts the setup time specified during event creation</li>
+        <li><code>{DJ_SETUP_DATE}</code>: Inserts the setup date specified during event creation</li>
+        <li><code>{DJ_NOTES}</code>: Inserts the information entered into the events DJ Notes field</li>
+        <li><code>{ADMIN_NOTES}</code>: Inserts the information entered into the events Admin Notes field</li>
         </ui>
         All new <a href="http://www.mydjplanner.co.uk/shortcodes">shortcodes</a> are accessible via the MDJM Shortcode button > Event Shortcodes.<br />
         <strong>Note</strong>: We have found that the shortcodes seem to be stored in the cache of many browsers and therefore if you do not see the new shortcodes immediately, try holding down the shift key on your keyboard whilst refreshing your browser page<br />
@@ -614,8 +692,8 @@ On the face of it, it looks pretty much the same as it did previously, but we ha
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Shortcode Updates</font><br>
         We have added a couple of new Event <a href="http://www.mydjplanner.co.uk/shortcodes">Shortcode options</a><br />
         <ui>
-        <li><span class="code">{CONTRACT_DATE}</span>: Inserts the date of the contract. If the contract has been signed the date of signing is entered, otherwise it defaults to today</li>
-        <li><span class="code">{CONTRACT_ID}</span>: Inserts the unique ID of the contract. If a prefix has been set within <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a>, the prefix is also displayed</li>
+        <li><code>{CONTRACT_DATE}</code>: Inserts the date of the contract. If the contract has been signed the date of signing is entered, otherwise it defaults to today</li>
+        <li><code>{CONTRACT_ID}</code>: Inserts the unique ID of the contract. If a prefix has been set within <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">DJ Manager > Settings</a>, the prefix is also displayed</li>
         </ui>
         </td>
         </tr>
@@ -761,13 +839,15 @@ Additionally, in some system generated emails (enquiry etc.) this address is use
 	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
+			$ver = str_replace( '.', '_', WPMDJM_VERSION_NUM );
 			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );
 		}
 		else	{
+			$ver = $_GET['ver'];
 			$func = 'f_mdjm_updated_to_' . $_GET['ver'];
 		}
 		if( function_exists( $func ) )	{
-			f_mdjm_updated_header();
+			f_mdjm_updated_header( $ver );
 			$func();
 			f_mdjm_updated_footer();
 			update_option( 'mdjm_updated', '0' );

@@ -35,6 +35,7 @@
 		<thead>
 		<th class="row-title">Form Name</th>
 		<th class="row-title">Shortcode</th>
+        <th class="row-title">Fields</th>
 		<th class="row-title">Action</th>
 		</thead>
 		<?php
@@ -54,7 +55,8 @@
 				?>
 				<tr<?php echo $rowclass; ?>>
 				<td><?php echo $forms['name']; ?></td>
-				<td><span class="code">[MDJM page="Contact Form" slug="<?php echo $forms['slug']; ?>"]</span></td>
+				<td><code>[MDJM page="Contact Form" slug="<?php echo $forms['slug']; ?>"]</code></td>
+                <td><?php echo count( $forms['fields'] ); ?></td>
 				<td><a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $forms['slug'] ); ?>" class="add-new-h2">Edit</a>&nbsp;&nbsp;&nbsp;<a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=del_contact_form&form_id=' . $forms['slug'] ); ?>" class="add-new-h2">Delete</a></td>
 				</tr>
 				<?php
@@ -66,6 +68,7 @@
 		<tfoot>
 		<th class="row-title">Form Name</th>
 		<th class="row-title">Shortcode</th>
+        <th class="row-title">Fields</th>
 		<th class="row-title">Action</th>
 		</tfoot>
 		</table>
@@ -163,19 +166,138 @@
 				f_mdjm_update_notice( 'updated', 'The <strong>' . $name . '</strong> field was deleted' );
 			}
 		}
+		/* Process field edits */
+		if( isset( $_POST['submit'], $_POST['form_slug'] ) && $_POST['submit'] == 'Edit Field' )	{
+			$field_name = sanitize_text_field( $_POST['field_name'] );
+			$field_slug = preg_replace( '/[^a-zA-Z0-9_-]$/s', '', $field_name );
+			$field_slug = 'mdjm_' . strtolower( str_replace( array( ' ', '.' ), array( '_', '' ), $field_slug ) );
+			
+			if( $mdjm_forms[$_POST['form_slug']]['fields'][$field_slug] )
+				$field_slug = strtolower( str_replace( ' ', '_', $field_slug ) ) . '_';
+				
+			$pos = $mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['position'];
+			if( $_POST['field_type'] == 'captcha' )
+				$pos = 98;
+			if( $_POST['field_type'] == 'submit' )
+				$pos = 99;
+				
+			unset( $mdjm_forms[$_POST['form_slug']]['fields'][$_POST['field_to_edit']] );
+				
+			$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug] = array(
+															'slug'     => $field_slug,
+															'name'     => sanitize_text_field( $_POST['field_name'] ),
+															'type'     => sanitize_text_field( $_POST['field_type'] ),
+															'config'   => array(),
+															'position' => $pos,
+															);
+			/* Classes */
+			if( isset( $_POST['label_class'] ) && !empty( $_POST['label_class'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['label_class'] = $_POST['label_class'];
+			}
+			if( isset( $_POST['input_class'] ) && !empty( $_POST['input_class'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['input_class'] = $_POST['input_class'];
+			}
+			
+			/* Size */
+			if( isset( $_POST['width'] ) && !empty( $_POST['width'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['width'] = $_POST['width'];
+			}
+			if( isset( $_POST['height'] ) && !empty( $_POST['height'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['height'] = $_POST['height'];
+			}
+			
+			/* Field Mapping */
+			$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['mapping'] = $_POST['mapping'];
+			if( $_POST['field_type'] == 'email' )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['mapping'] = 'user_email';
+			}
+			
+			/* Date Fields */
+			if( $_POST['field_type'] == 'date' && isset( $_POST['datepicker'] ) && $_POST['datepicker'] == 'Y' )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['datepicker'] = 'Y';
+			}
+			/* Checkbox Fields */
+			if( $_POST['field_type'] == 'checkbox' )	{
+				if( isset( $_POST['is_checked'] ) && $_POST['is_checked'] == 'Y' )	{
+					$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['is_checked'] = 'Y';
+				}
+				if( isset( $_POST['checked_value'] ) && !empty( $_POST['checked_value'] ) )	{
+					$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['checked_value'] = sanitize_text_field( $_POST['checked_value'] );
+				}
+				else	{
+					$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['checked_value'] = 'Y';	
+				}
+			}
+			
+			/* Select List Fields */
+			if( $_POST['field_type'] == 'select' || $_POST['field_type'] == 'select_multi' )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['options'] = $_POST['select_options'];
+			}
+			
+			/* Event List First Entry */
+			if( $_POST['field_type'] == 'event_list' && !empty( $_POST['event_list_first_entry'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['event_list_first_entry'] = sanitize_text_field( $_POST['event_list_first_entry'] );
+			}
+			
+			/* Required Field */
+			if( isset( $_POST['required'] ) && $_POST['required'] == 'Y' )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['required'] = 'Y';
+			}
+			
+			/* Placeholder Text */
+			if( isset( $_POST['placeholder'] ) && !empty( $_POST['placeholder'] ) )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['placeholder'] = sanitize_text_field( $_POST['placeholder'] );
+			}
+			
+			/* Submit Button */
+			if( isset( $_POST['submit_align'] ) && $_POST['submit_align'] != '' )	{
+				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['submit_align'] = $_POST['submit_align'];
+			}
+			
+			update_option( 'mdjm_contact_forms', $mdjm_forms );
+			f_mdjm_update_notice( 'updated', 'The <strong>' . sanitize_text_field( $_POST['field_name'] ) . '</strong> field edits were successfully completed' );
+		}
+		
 		/* Editing field */
 		if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' && !isset( $_POST['Edit Field'] ) )	{
 			$name = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['name'];
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['placeholder'] ) )	{
+				$placeholder_text = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['placeholder'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['width'] ) )	{
+				$field_width = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['width'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['height'] ) )	{
+				$field_height = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['height'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['checked_value'] ) )	{
+				$checked_value = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['checked_value'];
+			}
 			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['label_class'] ) )	{
 				$label_class = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['label_class'];
 			}
 			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['input_class'] ) )	{
 				$input_class = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['input_class'];
 			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['mapping'] ) )	{
+				$field_mapping = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['mapping'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['event_list_first_entry'] ) )	{
+				$first_entry = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['event_list_first_entry'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['datepicker'] ) )	{
+				$datepicker = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['datepicker'];
+			}
+			if( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['type'] == 'select' 
+				|| $mdjm_forms[$form_slug]['fields'][$_GET['field']]['type'] == 'multi_select' )	{
+				$select_options = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['options'];
+			}
+			if( !empty( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['type']['submit'] ) )	{
+				$submit_align = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['submit_align'];
+			}
 			f_mdjm_update_notice( 'update-nag', 'You are currently editing the field <strong>' . $name . '</strong>' );
 			
-			/* Put edits here */
-			
+			/* Put edits here */			
 		}
 		?>
         <script type="text/javascript">
@@ -278,7 +400,7 @@
         <table width="100%">
         <tr valign="top">
         <td width="65%">
-        <form name="edit_form_fields" id="edit_form_fields" method="post" action="">
+        <form name="edit_form_fields" id="edit_form_fields" method="post" action="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms' ) . '&action&action=edit_contact_form&form_id=' . $form_slug; ?>">
         <input type="hidden" name="form_slug" id="form_slug" value="<?php echo $form_slug; ?>" />
         <table class="widefat">
         <thead>
@@ -299,18 +421,20 @@
 				<td><?php echo $fields['name']; ?></th>
 				<td><?php echo $field_types[$fields['type']]; ?></td>
                 <td><?php f_mdjm_contact_form_icons( $fields ); ?></td>
-                <td><?php /*<a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $mdjm_forms[$form_slug]['slug'] . '&edit=Y&field=' . $fields['slug'] ); ?>" class="add-new-h2">Edit</a>&nbsp;&nbsp;&nbsp;*/ ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $mdjm_forms[$form_slug]['slug'] . '&del=Y&field=' . $fields['slug'] ); ?>" class="add-new-h2">Delete</a></td>
+                <td><?php /*<a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $mdjm_forms[$form_slug]['slug'] . '&edit=Y&field=' . $fields['slug'] ); ?>" class="add-new-h2">Edit</a>&nbsp;&nbsp;&nbsp;*/?><a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $mdjm_forms[$form_slug]['slug'] . '&del=Y&field=' . $fields['slug'] ); ?>" class="add-new-h2">Delete</a></td>
 				</tr>
 				<?php	
 				$i++;
 				if( $i == 2 )
 					$i = 0;
 				/* Only one email/event list//captcha/submit field type allowed */
-				if( $fields['type'] == 'email' || $fields['type'] == 'event_list' || $fields['type'] == 'captcha' || $fields['type'] == 'submit' )	{
-					unset( $field_types[$fields['type']] );	
+				if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
+					if( $fields['type'] == 'email' || $fields['type'] == 'event_list' || $fields['type'] == 'captcha' || $fields['type'] == 'submit' )	{
+						unset( $field_types[$fields['type']] );	
+					}
 				}
 				/* If mapping in use, do not display again */
-				if( isset( $fields['config']['mapping'] ) && !empty( $fields['config']['mapping'] ) )	{
+				if( isset( $fields['config']['mapping'] ) && !empty( $fields['config']['mapping'] ) && isset( $_GET['edit'] ) && $_GET['edit'] != 'Y' )	{
 					unset( $mappings[$fields['config']['mapping']] );
 				}
 			}
@@ -333,6 +457,11 @@
         </td>
         <td valign="top">
 <?php /* Create Field Options */ ?>
+		<?php 
+		if( isset( $_GET['edit'], $_GET['field'] ) || $_GET['edit'] != 'Y' )	{
+			echo '<input type="hidden" name="field_to_edit" id="field_to_edit" value="' . $_GET['field'] . '" />';
+		}
+		?>
         <table class="widefat" class="alternate">
         <?php 
 		if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' )	{
@@ -372,59 +501,59 @@
 ?>
         
 <?php /* Placeholder */ ?>
-        <div id="placeholder_row" style="display: none; font-size:10px">
-        <p>Placeholder text:&nbsp;&nbsp;&nbsp;<input type="text" name="placeholder" id="placeholder" class="regular-text" placeholder="(optional) Placeholder text is displayed like this" /></p>
+        <div id="placeholder_row" style="display: <?php if( !empty( $placeholder_text ) ) { echo 'block;'; } else { echo 'none;'; } ?> font-size:10px">
+        <p>Placeholder text:&nbsp;&nbsp;&nbsp;<input type="text" name="placeholder" id="placeholder" class="regular-text" placeholder="(optional) Placeholder text is displayed like thi  s"<?php if( !empty( $placeholder_text ) ) { echo ' value="' . $placeholder_text . '"'; } ?> /></p>
         </div>
 <?php /* End Placeholder */ ?>
 
 <?php /* Width */ ?>
-        <div id="width_row" style="display: none; font-size:10px">
-        <p>Field Width: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="width" id="width" class="small-text" /></p>
+        <div id="width_row" style="display: <?php if( !empty( $field_width ) ) { echo 'block;'; } else { echo 'none;'; } ?> font-size:10px">
+        <p>Field Width: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="width" id="width" class="small-text"<?php if( !empty( $field_width ) ) { echo ' value="' . $field_width . '"'; } ?> /></p>
         </div>
 <?php /* End Width */ ?>
 
 <?php /* Height */ ?>
-        <div id="height_row" style="display: none; font-size:10px">
-        <p>Field Height: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="height" id="height" class="small-text" /></p>
+        <div id="height_row" style="display: <?php if( !empty( $field_height ) ) { echo 'block;'; } else { echo 'none;'; } ?> font-size:10px">
+        <p>Field Height: (optional)&nbsp;&nbsp;&nbsp;<input type="text" name="height" id="height" class="small-text"<?php if( !empty( $field_height ) ) { echo ' value="' . $field_height . '"'; } ?> /></p>
         </div>
 <?php /* End Height */ ?>
 
 <?php /* Datepicker */ ?>
-        <div id="datepicker_row" style="display: none; font-size:10px">
-        <p>Use Datepicker?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="datepicker" id="datepicker" value="Y" checked="checked" /></p>
+        <div id="datepicker_row" style="display: <?php if( isset( $datepicker ) && $datepicker == 'Y' ) { echo 'block;'; } else { echo 'none;'; } ?> font-size:10px">
+        <p>Use Datepicker?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="datepicker" id="datepicker" value="Y" <?php if( isset( $datepicker ) ) { checked( $datepicker, 'Y' ); } else echo 'checked="checked"'; ?> /></p>
         </div>
 <?php /* End Datepicker */ ?>
 
 <?php /* Checkbox Options */ ?>
-        <div id="checkbox_row" style="display: none; font-size:10px">
+        <div id="checkbox_row" style="display: <?php if( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['type'] == 'checkbox' ) { echo 'block;'; } else { echo 'none;'; } ?>  font-size:10px">
         <p>Checked Value:<br />
-		&nbsp;&nbsp;&nbsp;<input type="text" name="checked_value" id="checked_value" class="small-text" placeholder="Y" /></p>
-        <p>Checked?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="is_checked" id="is_checked" value="Y" /></p>
+		&nbsp;&nbsp;&nbsp;<input type="text" name="checked_value" id="checked_value" class="small-text" placeholder="Y"<?php if( !empty( $checked_value ) ) { echo ' value="' . $checked_value . '"'; } ?> /></p>
+        <p>Checked?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="is_checked" id="is_checked" value="Y"<?php if( $mdjm_forms[$form_slug]['fields'][$_GET['field']]['type'] == 'checkbox' ) { checked( 'Y', $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['is_checked'] ); } ?> /></p>
         </div>
 <?php /* End Checkbox Options */ ?>
 
 <?php /* Select Options */ ?>
-        <div id="select_options_row" style="display: none; font-size:10px">
+        <div id="select_options_row" style="display: <?php if( isset( $select_options ) && !empty( $select_options ) ) { echo 'block;'; } else { echo 'none;'; } ?> font-size:10px">
         <p>Selectable Options:<br />
-		&nbsp;&nbsp;&nbsp;<textarea name="select_options" id="select_options" class="all-options" rows="5" placeholder="One per line"></textarea></p>
+		&nbsp;&nbsp;&nbsp;<textarea name="select_options" id="select_options" class="all-options" rows="5" placeholder="One per line"><?php if( isset( $select_options ) && !empty( $select_options ) ) { echo $select_options; } ?></textarea></p>
         </div>
 <?php /* End Select Options */ ?>
 
 <?php /* Event List First Entry */ ?>
-        <div id="event_list_first_entry_row" style="display: none; font-size:10px">
+        <div id="event_list_first_entry_row" style="display: <?php if( !empty( $first_entry ) ) {echo 'block;';} else {echo 'none;';} ?> font-size:10px">
         <p>Event List First Entry:<br />
-		&nbsp;&nbsp;&nbsp;<input type="text" name="event_list_first_entry" id="event_list_first_entry" class="regular-text" placeholder="i.e. Select Event Type" /></p>
+		&nbsp;&nbsp;&nbsp;<input type="text" name="event_list_first_entry" id="event_list_first_entry" class="regular-text" placeholder="i.e. Select Event Type"<?php if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' && !empty( $first_entry ) ) echo ' value="' . $first_entry . '"'; ?> /></p>
         </div>
 <?php /* End Event List First Entry */ ?>
 
 <?php /* Submit Align */ ?>
-        <div id="align_submit_row" style="display: none; font-size:10px">
+        <div id="align_submit_row" style="display: <?php if( !empty( $submit_align ) ) {echo 'block;';} else {echo 'none;';} ?> font-size:10px">
         <p>Submit Button Alignment:<br />
 		&nbsp;&nbsp;&nbsp;<select name="submit_align" id="submit_align">
-        <option value="">None</option>
-        <option value="left">Left</option>
-        <option value="center">Centre</option>
-        <option value="right">Right</option>
+        <option value=""<?php if( !empty( $submit_align ) ) selected( $submit_align, '' ); ?>>None</option>
+        <option value="left"<?php if( !empty( $submit_align ) ) selected( $submit_align, 'left' ); ?>>Left</option>
+        <option value="center"<?php if( !empty( $submit_align ) ) selected( $submit_align, 'center' ); ?>>Centre</option>
+        <option value="right"<?php if( !empty( $submit_align ) ) selected( $submit_align, 'right' ); ?>>Right</option>
         </select></p>
         </div>
 <?php /* End Submit Align */ ?>
@@ -435,17 +564,17 @@
 *********************************/
 		if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' )	{
 			$selected = true;
-			$comp = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['required'];
+			$req = $mdjm_forms[$form_slug]['fields'][$_GET['field']]['config']['required'];
 		}
 		elseif( isset( $_POST['required'] ) && $_POST['required'] == 'Y' )	{
 			$selected = true;
-			$comp = $_POST['required'];
+			$req = $_POST['required'];
 		}
 		else	{
 			$selected = false;	
 		}
 ?>
-        <p>Required?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="required" id="required" value="Y"<?php if( $selected ) checked( 'Y', $comp ); ?> /></p>
+        <p>Required?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="required" id="required" value="Y"<?php if( $selected ) checked( 'Y', $req ); ?> /></p>
         <p>Label CSS Class: (optional)<br />
 		&nbsp;&nbsp;&nbsp;<input type="text" name="label_class" id="label_class"<?php if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' && !empty( $class ) ) echo ' value="' . $label_class . '"'; ?> /></p>
         <p>Input Field CSS Class: (optional)<br />
@@ -455,7 +584,7 @@
          <option value="none">No Mapping</option>
          <?php
          foreach( $mappings as $mapping => $mapping_name )	{
-         	?><option value="<?php echo $mapping; ?>"<?php if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' && !empty( $class ) ) { selected( $field['config']['mapping'], $mapping ); } ?>><?php echo $mapping_name; ?></option><?php
+         	?><option value="<?php echo $mapping; ?>"<?php if( isset( $_GET['edit'], $_GET['field'] ) && $_GET['edit'] == 'Y' && !empty( $field_mapping ) ) { selected( $mapping, $field_mapping ); } ?>><?php echo $mapping_name; ?></option><?php
          }
 		 ?>
          </select>
@@ -574,7 +703,7 @@
 <?php /* Configuration Options */ ?>
         <hr />
         <h2>Configuration</h2>
-        <form name="form_config" id="form_config" method="post" action="">
+        <form name="form_config" id="form_config" method="post" action="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms' ) . '&action&action=edit_contact_form&form_id=' . $form_slug; ?>">
         <input type="hidden" name="form_slug" id="form_slug" value="<?php echo $form_slug; ?>" />
         <table class="form-table">
         <tr>
@@ -784,7 +913,7 @@
 				$mdjm_forms = get_option( 'mdjm_contact_forms' );
 				$form_name = sanitize_text_field( $_POST['form_name'] );
 				$form_slug = preg_replace( '/[^a-zA-Z0-9_-]$/s', '', $form_name );
-				$form_slug = strtolower( str_replace( array( ' ', '.' ), array( '_', '' ), $form_name ) );
+				$form_slug = 'mdjm_' . strtolower( str_replace( array( ' ', '.' ), array( '_', '' ), $form_slug ) );
 				if( $mdjm_forms[$form_slug] )
 					$form_slug = strtolower( str_replace( ' ', '_', $form_name ) ) . '_';
 				
@@ -849,7 +978,7 @@
 					$mdjm_forms = get_option( 'mdjm_contact_forms' );
 					$field_name = sanitize_text_field( $_POST['field_name'] );
 					$field_slug = preg_replace( '/[^a-zA-Z0-9_-]$/s', '', $field_name );
-					$field_slug = strtolower( str_replace( array( ' ', '.' ), array( '_', '' ), $field_slug ) );
+					$field_slug = 'mdjm_' . strtolower( str_replace( array( ' ', '.' ), array( '_', '' ), $field_slug ) );
 					
 					if( $mdjm_forms[$_POST['form_slug']]['fields'][$field_slug] )
 						$field_slug = strtolower( str_replace( ' ', '_', $field_slug ) ) . '_';

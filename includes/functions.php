@@ -56,6 +56,7 @@
 		$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
 		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 		$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
 		if( isset( $mdjm_pages ) )	{
 			foreach( $mdjm_pages as $key => $value )	{
 				$mdjm_options[$key] = $value;
@@ -68,6 +69,11 @@
 		}
 		if( isset( $mdjm_client_text ) )	{
 			foreach( $mdjm_client_text as $key => $value )	{
+				$mdjm_options[$key] = $value;
+			}
+		}
+		if( isset( $mdjm_pp_options ) )	{
+			foreach( $mdjm_pp_options as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}

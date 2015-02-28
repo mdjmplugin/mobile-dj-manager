@@ -33,7 +33,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_Clients_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-client-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-client-table.php' );
 		}
 		
 		$clients_table = new MDJM_Clients_Table();

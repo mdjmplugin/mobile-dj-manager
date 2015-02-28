@@ -274,6 +274,9 @@
 	elseif( isset( $_GET['new'] ) && $_GET['new'] == 1 )	{
 		include( 'dash-new.php' );
 	}
+	elseif( isset( $_GET['new'] ) && $_GET['new'] == 2 )	{
+		include( 'dashboard.php' );
+	}
 	else	{
 		mdjm_dashboard();
 	}

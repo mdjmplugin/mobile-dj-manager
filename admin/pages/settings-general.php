@@ -25,6 +25,7 @@
             <a href="admin.php?page=mdjm-settings&tab=permissions" class="nav-tab <?php echo $active_tab == 'permissions' ? 'nav-tab-active' : ''; ?>">Permissions</a>
             <a href="admin.php?page=mdjm-settings&tab=client_text" class="nav-tab <?php echo $active_tab == 'client_text' ? 'nav-tab-active' : ''; ?>">Client Dialogue</a>
             <a href="admin.php?page=mdjm-settings&tab=client_fields" class="nav-tab <?php echo $active_tab == 'client_fields' ? 'nav-tab-active' : ''; ?>">Client Fields</a>
+            <a href="admin.php?page=mdjm-settings&tab=payments" class="nav-tab <?php echo $active_tab == 'payments' ? 'nav-tab-active' : ''; ?>">Payments</a>
             <a href="admin.php?page=mdjm-settings&tab=debugging" class="nav-tab <?php echo $active_tab == 'debugging' ? 'nav-tab-active' : ''; ?>">Debugging</a>
         </h2>
              <?php
@@ -92,8 +93,10 @@
 			elseif( $active_tab == 'client_fields' )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-client-fields.php' );
 			}
-			elseif( $active_tab == 'scheduler' )	{
-				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-scheduler.php' );
+			elseif( $active_tab == 'payments' )	{
+				echo '<form method="post" action="options.php">';
+				settings_fields( 'mdjm-payments' );
+				do_settings_sections( 'mdjm-payments' );
 			}
 			elseif( $active_tab == 'debugging' )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-debugging.php' );

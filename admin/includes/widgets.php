@@ -28,7 +28,7 @@
 			  ?>
               <tr>
                 <th align="left">Outstanding Enquiries:</th>
-                <td><?php echo $dash_dj['year_enquiries']; ?> <a href="<?php echo admin_url() . 'admin.php?page=mdjm-events&display=enquiries'; ?>">(view)</a></td>
+                <td><?php echo $dash_dj['year_enquiries']; ?> <a href="<?php echo admin_url() . 'admin.php?page=mdjm-events&status=Enquiry'; ?>">(view)</a></td>
               </tr>
               <?php
 		  }

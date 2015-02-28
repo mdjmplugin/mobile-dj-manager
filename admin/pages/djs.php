@@ -33,7 +33,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_djs_table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-dj-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-dj-table.php' );
 		}
 		$djs_table = new MDJM_DJs_Table();
 		?>

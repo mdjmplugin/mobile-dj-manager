@@ -63,6 +63,7 @@
 						'mdjm_updated',
 						'mdjm_debug',
 						'mdjm_frontend_text',
+						'mdjm_pp_options',
 						);
 	foreach( $option_name as $option )	{
 		delete_option( $option );

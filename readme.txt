@@ -2,8 +2,8 @@
 Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
-Tested up to: 4.1
-Stable tag: 1.0
+Tested up to: 4.1.1
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,58 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1 =
+<strong>New Features</strong>
+<strong>PayPal Integration</strong> for online Client Payments via your website<br />
+Mobile DJ Manager for WordPress is now fully integrated with PayPal enabling you to take online payments securely via your website.
+<ul>
+	<li>No PayPal account is needed by Clients in order to make payments</li>
+	<li>Accepts payments from all major credit cards, as well as funds within the Client's PayPal account</li>
+	<li>Clients can choose to pay the Booking Fee/Deposit, or the full event balance</li>
+	<li>Full PayPal integration means the MDJM application receives information from the PayPal IPN API system and updates the booking and journal automatically after verifying payment is completed</li>
+	<li>Automatically sends your client an email based on a template of your choosing when payment is verified</li>
+	<li>Ability to apply taxes</li>
+	<li>Multi-Currency support for GBP, EUR, & USD</li>
+	<li>Supports customised PayPal checkout pages</li>
+	<li>Customise the display of the payment form</li>
+	<li>Immediate notifications in the Admin interface when you have new "Unattended" enquiries</li>
+	<li>Supports the PayPal sandbox environment so full testing can take place without real payments</li>
+</ul>
+<strong>Transaction Page</strong><br />
+A new Transactions page has been added to the MDJM system and is available via the Mobile DJ Manager menu's within the WordPress admin interface.
+
+This page is only available to Admins and if the Payment features is enabled and has been introduced to compliment the new online payments system as described above.
+
+For now, the page simply lists any transactions that have been processed via PayPal and any other data relevant to that transaction. We will continue to develop this feature in up and coming versions.
+
+<strong>Events Table</strong><br />
+The Events page has been updated slightly to be a little more intuitive. Unattended enquiries are now listed as priority and with a red background.
+
+The majority of updates to this page were to do with better, cleaner coding resulting in faster loading times and more efficient lookups.
+
+<strong>Bug Fixes &amp; Minor Enhancements</strong>
+	<ul>
+		<li><strong>New</strong>: Added <code>Make A Payment</code> link to the Client home page if PayPal is enabled for Client events that are due a deposit of balance payment</li>
+		<li><strong>New</strong>: Enabled the <strong>Add Media</strong> button within the Communications page. You can now include images in your Client Communications</li>
+		<li><strong>New</strong>: Added buttons in Playlist view to email the event playlist to yourself or print it</li>
+		<li><strong>New</strong>: <strong>Payments</strong> tab added to the Settings page to support the new <a href="https://www.paypal.com/" target="_blank" title="PayPal">PayPal</a> online payments feaure</li>
+		<li><strong>New</strong>: Added sub-menu items to the admin toolbar Settings item</li>
+		<li><strong>New</strong>: <strong>{CONTACT_URL}</strong> <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> added</li>
+		<li><strong>New</strong>: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> added to support the new online payments system. To be used within the verification email template</li>
+		<ul>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_AMOUNT}</strong>: Inserts the amount received by the payment</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_DATE}</strong>: Inserts the date payment was received as determined by PayPal</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_FOR}</strong>: Inserts <strong>Deposit</strong> or <strong>Balance</strong> depending on the payment received</li>
+		</ul>
+		<li><strong>New</strong>: Setting added <strong>Deposit Label</strong> enabling you to change the terminology used on both the front end and backend of your website. Some people prefer <code>Booking Fee</code> for example. Defaults to <strong>Deposit</strong>. Remember to update any email or contract templates as necessary</li>
+		 <li><strong>New</strong>: Setting added <strong>Balance Label</strong> enabling you to change the terminology used on both the front end and backend of your website. Defaults to <code>Balance</code>. Remember to update any email or contract templates as necessary</li>
+		<li><strong>Bug Fix</strong>: Slight adjustment to the Contact Forms validation scripts. In some instances determined during testing (no bug reports) the jQuery validation did not work correctly</li>
+		<li><strong>Bug Fix</strong>: WordPress "reserves" some form field names such as <strong>name</strong> so if you used this field name within the MDJM Contact Forms, the form did not submit correctly. This is rectified</li>
+		<li><strong>General</strong>: Updated the uninstall script</li>
+		<li><strong>General</strong>: Added the <code>Date Added</code> column to the playlist table admin view. List is sorted by this column as default</li>
+		<li><strong>TODO</strong>: Editing and ordering of Contact Form fields</li>
+	</ul>
+
 = 1.0 =
 <h2>New Features</h2>
 Our fully customisable Contact Forms enable full management of events from the initial client enquiry all the way through to the completion of the event.

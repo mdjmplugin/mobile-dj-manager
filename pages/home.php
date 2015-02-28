@@ -20,6 +20,8 @@
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+		
 		get_currentuserinfo();
 		$eventinfo = f_mdjm_get_client_events( $db_tbl, $current_user );
 ?>
@@ -90,8 +92,6 @@
 						&& $event->contract_status != 'Completed' 
 						&& $event->contract_status != 'Cancelled' 
 						&& $event->contract_status != 'Approved' )	{
-						?>
-						<?php
 					}
 					if( $event->contract_status == 'Enquiry' )	{
 						?>
@@ -104,6 +104,13 @@
                         <?php
 					}
 					if( $event->contract_status == 'Approved' )	{
+						if( isset( $mdjm_pp_options['pp_enable'] ) && $mdjm_pp_options['pp_enable'] == 'Y' )	{
+							if( $event->deposit_status != 'Paid' || $event->balance_status != 'Paid' )	{
+								?>
+								<option value="payment">Make a Payment</option>
+								<?php	
+							}
+						}
 						?>
 						<option value="view_contract">View Contract</option>
                         <option value="edit_playlist">Edit Playlist</option>
@@ -155,6 +162,15 @@
 		global $wpdb, $current_user, $mdjm_options, $mdjm_client_text;
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		if ( get_option('permalink_structure') )	{
+			$sep = '?';
+		}
+		else	{
+			$sep = '&amp;';
+		}
+		
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
 		
 		$eventinfo = f_mdjm_get_event_by_id( $db_tbl, $event_id );
 		
@@ -213,14 +229,13 @@
 					}
 				}
 				if( $eventinfo->contract_status == 'Approved' )	{
-					if ( get_option('permalink_structure') )	{
-						$sep = '?';
-					}
-					else	{
-						$sep = '&amp;';
-					}
 					
 					echo '<a href="' . get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . $sep . 'event_id=' . $eventinfo->event_id . '" title="View Event Contract">View Contract</a>';
+				}
+				if( isset( $mdjm_pp_options['pp_enable'] ) && $mdjm_pp_options['pp_enable'] == 'Y' )	{
+					if( $eventinfo->deposit_status != 'Paid' || $eventinfo->balance_status != 'Paid' )	{
+						echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PAYMENT_PAGE ) . $sep . 'event_id=' . $eventinfo->event_id . '" title="Make Payment">Make a Payment</a>';	
+					}
 				}
 				echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ) . '" title="Edit your details">Edit Your Profile</a>';	
 				
@@ -334,8 +349,8 @@
               <tr>
                 <td width="10%" style="font-weight:bold">Total Price:</td>
                 <td width="23%"><?php echo f_mdjm_currency() . $eventinfo->cost; ?></td>
-                <td width="11%" style="font-weight:bold">Deposit <?php echo $eventinfo->deposit_status; ?>:</td>
-                <td width="22%"><?php echo f_mdjm_currency() . $eventinfo->deposit; ?></td>
+                <td width="11%" style="font-weight:bold"><?php echo $mdjm_client_text['deposit_label']; ?>:</td>
+                <td width="22%"><?php echo f_mdjm_currency() . $eventinfo->deposit . ' (' . $eventinfo->deposit_status . ')'; ?></td>
                 <td width="15%" style="font-weight:bold">Remaining:</td>
                 <td>
 				<?php
@@ -352,8 +367,8 @@
 			<?php
 		}
 		else	{ // There is an error
-			echo '<p>We\'re sorry but an error has occured and your event details cannot be displayed at this time.</p>
-			<p>Please <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact us</a> for assistance.</p>';	
+			echo '<p>We\'re sorry but an error has occured and your event details cannot be displayed at this time.</p>' . "\n";
+			echo '<p>Please <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '">contact us</a> for assistance.</p>' . "\n";	
 		}
 	} // f_mdjm_view_event
 	
@@ -420,7 +435,25 @@
 				}				
 				exit;
 			}
+			if( $_POST['event_action'] == 'payment' )	{
+				if ( get_option('permalink_structure') )	{
+					?>
+					<script type="text/javascript">
+                    window.location = '<?php echo get_permalink( WPMDJM_CLIENT_PAYMENT_PAGE ) . '?event_id=' . $_POST['event_id']; ?>';
+                    </script>
+                    <?php
+				}
+				else	{
+					?>
+					<script type="text/javascript">
+                    window.location = '<?php echo get_permalink( WPMDJM_CLIENT_PAYMENT_PAGE ) . '&event_id=' . $_POST['event_id']; ?>';
+                    </script>
+                    <?php
+				}				
+				exit;
+			}
 		}
+		
 		
 		/* Display page */
 		if( !isset( $_GET['action'] ) && !isset( $_POST ['action'] ) )	{

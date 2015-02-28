@@ -45,7 +45,7 @@
 		}
 	
 		if( ! class_exists( 'MDJM_Venues_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class-mdjm-venue-table.php' );
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-venue-table.php' );
 		}
 		$venues_table = new MDJM_Venues_Table();
 		?>
