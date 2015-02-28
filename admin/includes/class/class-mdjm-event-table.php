@@ -286,6 +286,7 @@
 		 * 
 		 */
 		function contract_status_actions( $item )	{
+			$actions = array();
 			if( $item->contract_status == 'Approved' )	{
 				if ( get_option('permalink_structure') )	{
 					$sep = '?';
@@ -293,9 +294,7 @@
 				else	{
 					$sep = '&amp;';	
 				}				
-				$actions = array(
-					'view_contract' => sprintf( '<a href="'. get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . $sep . '%s=%s">View Contract</a>', 'event_id', $item->event_id ),
-				);
+				$actions['view_contract'] = sprintf( '<a href="'. get_permalink( WPMDJM_CLIENT_CONTRACT_PAGE ) . $sep . '%s=%s">View Contract</a>', 'event_id', $item->event_id );
 			}
 			
 			return $this->row_actions( $actions );
