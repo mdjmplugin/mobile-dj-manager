@@ -26,6 +26,226 @@
 		 function no_items()	{
 			_e( 'No events exist yet. <a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ) . '">Create one</a>' );
 		 } // no_items
+
+		/**
+		 * monthly_filter
+		 * Displays the monthly filter drop down
+		 * @since 1.1.1
+		 * 
+		 */
+		function monthly_filter()	{
+			global $wpdb, $wp_locale;
+			
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+			$month_query = "SELECT DISTINCT YEAR( event_date ) AS year, MONTH( event_date ) AS month
+				FROM `" . $db_tbl['events'] . "`";
+				
+			if( $this->status != 'All' )	{
+				$month_query .= " WHERE `contract_status` = '" . $this->status . "'";
+				if( !current_user_can( 'administrator' ) )
+					$month_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+			}
+				
+			elseif( !current_user_can( 'administrator' ) )	{
+				$month_query .= " WHERE `event_dj` = '" . get_current_user_id() . "'";
+			}
+				
+			$month_query .= " ORDER BY event_date DESC";
+			
+			$months = $wpdb->get_results( $month_query );
+				
+			$month_count = count( $months );
+			
+			if ( !$month_count || ( 1 == $month_count && 0 == $months[0]->month ) )
+			return;
+
+			$m = isset( $_GET['m'] ) ? (int) $_GET['m'] : 0;
+			
+			?>
+            <label for="filter-by-date" class="screen-reader-text">Filter by Date</label>
+            <select name="m" id="filter-by-date">
+                <option<?php selected( $m, 0 ); ?> value="0"><?php _e( 'All Dates' ); ?></option>
+			<?php
+			foreach ( $months as $arc_row ) {
+				if ( 0 == $arc_row->year )
+					continue;
+	
+				$month = zeroise( $arc_row->month, 2 );
+				$year = $arc_row->year;
+	
+				printf( "<option %s value='%s'>%s</option>\n",
+					selected( $m, $year . $month, false ),
+					esc_attr( $arc_row->year . $month ),
+					/* translators: 1: month name, 2: 4-digit year */
+					sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month ), $year )
+				);
+			}
+			?>
+		</select>
+        <?php
+		} // monthly_filter
+		
+		/**
+		 * event_type_filter
+		 * Displays the monthly filter drop down
+		 * @since 1.1.1
+		 * 
+		 */
+		function event_type_filter()	{
+			global $wpdb;
+			
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+			$types_query = "SELECT DISTINCT event_type FROM `" . $db_tbl['events'] . "`";
+			
+			if( $this->status != 'All' )	{
+				$types_query .= " WHERE `contract_status` = '" . $this->status . "'";
+				if( !current_user_can( 'administrator' ) )
+					$types_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+			}
+			elseif( !current_user_can( 'administrator' ) )	{
+				$types_query .= " WHERE `event_dj` = '" . get_current_user_id() . "'";
+			}
+				
+			$types_query .= " ORDER BY event_type ASC";
+			
+			$types = $wpdb->get_results( $types_query );
+				
+			$type_count = count( $types );
+			
+			if ( !$type_count || $type_count == 1 )
+				return;
+
+			$t = isset( $_GET['t'] ) ? $_GET['t'] : false;
+			
+			?>
+            <label for="filter-by-type" class="screen-reader-text">Filter by Type</label>
+            <select name="t" id="filter-by-type">
+                <option<?php selected( $t, '' ); ?> value=""><?php _e( 'All Types' ); ?></option>
+			<?php
+			foreach ( $types as $type ) {
+				?>
+				<option value="<?php echo $type->event_type; ?>"<?php selected( $t, $type->event_type ); ?>><?php echo esc_attr( $type->event_type ); ?></option>
+                <?php
+			}
+			?>
+            </select>
+			<?php
+		} // event_type_filter
+		
+		/**
+		 * dj_filter
+		 * Displays the DJ filter drop down
+		 * @since 1.1.1
+		 * 
+		 */
+		function dj_filter()	{
+			global $wpdb;
+			
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+			$dj_query = "SELECT DISTINCT event_dj FROM `" . $db_tbl['events'] . "`";
+			
+			if( $this->status != 'All' )	{
+				$dj_query .= " WHERE `contract_status` = '" . $this->status . "'";
+				if( !current_user_can( 'administrator' ) )
+					$dj_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+			}
+			elseif( !current_user_can( 'administrator' ) )	{
+				$dj_query .= " WHERE `event_dj` = '" . get_current_user_id() . "'";
+			}
+			
+			$dj_query .= " ORDER BY event_dj ASC";
+			
+			$dj_list = $wpdb->get_results( $dj_query );
+			
+			foreach( $dj_list as $d )	{
+				$include[] = $d->event_dj;
+			}
+						
+			$djs = get_users( array( 'include' => $include,  'orderby' => 'display_name', 'order' => 'ASC' ) );
+							
+			$dj_count = count( $djs );
+			
+			$dj = isset( $_GET['dj'] ) ? $_GET['dj'] : '0';
+			
+			if ( !$dj_count || $dj_count == 1 || !current_user_can( 'administrator' ) )
+				return;
+
+			?>
+            <label for="filter-by-dj" class="screen-reader-text">Filter by DJ</label>
+            <select name="dj" id="filter-by-dj">
+                <option<?php selected( $dj, '' ); ?> value=""><?php _e( 'All DJ\'s' ); ?></option>
+			<?php
+			foreach ( $djs as $emp ) {
+				?>
+				<option value="<?php echo $emp->ID; ?>"<?php selected( $dj, $emp->ID ); ?>><?php echo $emp->display_name; ?></option>
+                <?php
+			}
+			?>
+            </select>
+			<?php
+		} // dj_filter
+		
+		/**
+		 * client_filter
+		 * Displays the Client filter drop down
+		 * @since 1.1.1
+		 * 
+		 */
+		function client_filter()	{
+			global $wpdb;
+			
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			
+			$client_query = "SELECT DISTINCT user_id FROM `" . $db_tbl['events'] . "`";
+			
+			if( $this->status != 'All' )	{
+				$client_query .= " WHERE `contract_status` = '" . $this->status . "'";
+				if( !current_user_can( 'administrator' ) )
+					$client_query .= " AND `event_dj` = '" . get_current_user_id() . "'";	
+			}
+			elseif( !current_user_can( 'administrator' ) )	{
+				$client_query .= " WHERE `event_dj` = '" . get_current_user_id() . "'";
+			}
+				
+			$client_query .= " ORDER BY user_id ASC";
+			
+			$client_list = $wpdb->get_results( $client_query );
+			
+			foreach( $client_list as $c )	{
+				$include[] = $c->user_id;
+			}
+						
+			$clients = get_users( array( 'include' => $include,  'orderby' => 'display_name', 'order' => 'ASC' ) );
+							
+			$client_count = count( $clients );
+			
+			if ( !$client_count || $client_count == 1 )
+				return;
+			
+			$c = isset( $_GET['c'] ) ? $_GET['c'] : '0';
+			
+			if ( !$client_count )
+				return;
+
+			?>
+            <label for="filter-by-client" class="screen-reader-text">Filter by Client</label>
+            <select name="c" id="filter-by-client">
+                <option<?php selected( $c, '0' ); ?> value=""><?php _e( 'All Client\'s' ); ?></option>
+			<?php
+			foreach ( $clients as $client ) {
+				if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $client->ID ) )	{
+					?>
+					<option value="<?php echo $client->ID; ?>"<?php selected( $c, $client->ID ); ?>><?php echo $client->display_name; ?></option>
+					<?php
+				}
+			}
+			?>
+            </select>
+			<?php
+		} // client_filter
 		
 		/**
 		 * extra_tablnav
@@ -42,43 +262,65 @@
 			
 			/* -- All Events -- */
 			$all_events_query = "SELECT * FROM `" . $db_tbl['events'] . "`";
+				if( !current_user_can( 'administrator' ) )
+				$all_events_query .= " WHERE `event_dj` = '" . get_current_user_id() . "'";
 			
 			$default_status = 'Approved';
 			/* -- Check for Unattended -- */
-			$unattended_query = 'SELECT * FROM ' . $db_tbl['events'] . ' WHERE `contract_status`=\'Unattended\'';
+			$unattended_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'";
+			if( !current_user_can( 'administrator' ) )
+				$unattended_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+				
 			if( count( $wpdb->get_results( $unattended_query ) ) > 0 )	{
 				$default_status = 'Unattended';	
 			}
 			
 			/* -- Event status parameter -- */
-			$status = !empty( $_GET["status"] ) ? mysql_real_escape_string( $_GET["status"] ) : $default_status;
+			$s = !empty( $_GET["status"] ) ? mysql_real_escape_string( $_GET["status"] ) : $default_status;
 			
 			$event_status = array( 'Unattended' => 'Unattended Enquiries', 'Approved' => 'Approved', 'Pending' => 'Pending', 'Enquiry' => 'Enquiries', 'Completed' => 'Completed', 'Failed Enquiry' => 'Lost Enquiries' );
-			
-			?> <div class="alignleft actions"> <?php
 			?>
-			<ul class='subsubsub'>
+			<div class="alignleft actions">
 			<?php
-			$i = 1;
-			
-			/* -- Loop through the event status' -- */
-			foreach( $event_status as $current_status => $display )	{
-				$status_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $current_status . "'";
-				if( count( $wpdb->get_results( $status_query ) ) != 0 )	{
-					?>
-					<li class="publish"><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=<?php echo $current_status; ?>"<?php if( $current_status == $status ) { ?> class="current" <?php } ?>><?php echo $display; ?><?php if( $display == 'Unattended' ) echo '</span>'; ?> <span class="count">(<?php echo count( $wpdb->get_results( $status_query ) ); ?>)</span></a> |</li>
-					<?php
-				}
+            if ( $which == 'top' )	{
+				?>
+                <ul class='subsubsub'>
+                <?php
+                $i = 1;
+                
+                /* -- Loop through the event status' -- */
+                foreach( $event_status as $current_status => $display )	{
+                    $status_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $current_status . "'";
+                    if( !current_user_can( 'administrator' ) )
+                        $status_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+                    ?>
+                    <li class="publish"><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=<?php echo $current_status; ?>"<?php if( $current_status == $s ) { ?> class="current" <?php } ?>><?php echo $display; ?><?php if( $display == 'Unattended' ) echo '</span>'; ?> <span class="count">(<?php echo count( $wpdb->get_results( $status_query ) ); ?>)</span></a> |</li>
+                    <?php
+                    
+                    $i++;	
+                }
+                
+                /* -- All Events -- */
+                ?>
+                <li class='publish'><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=All"<?php if ( $s == 'All' ) { ?> class="current" <?php } ?>>All Events <span class="count">(<?php echo count( $wpdb->get_results( $all_events_query ) ); ?>)</span></a></li>
+                </ul>
+				<form id="event-filter" method="get" action="">
+				<input type="hidden" name="page" value="<?php echo $_REQUEST['page']; ?>" />
+                <input type="hidden" name="status" value="<?php echo $this->status; ?>" />
+                
+				<?php
+				$this->monthly_filter();
+				$this->event_type_filter();
+				$this->dj_filter();
+				$this->client_filter();
 				
-				$i++;	
+				submit_button( __( 'Filter' ), 'button', 'filter_action', false, array( 'id' => 'event-query-submit' ) );
+				?>
+                <br />
+                <?php
 			}
-			
-			/* -- All Events -- */
 			?>
-			<li class='publish'><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=All"<?php if ( $status == 'All' ) { ?> class="current" <?php } ?>>All Events <span class="count">(<?php echo count( $wpdb->get_results( $all_events_query ) ); ?>)</span></a></li>
-			
-			
-			</ul>
+            </form>
 			</div>
             <?php
 		} // extra_tablenav
@@ -147,17 +389,15 @@
 		 */
 		public function get_sortable_columns() {
 			$sortable = array(
-				'col_event_id'		=> array( 'event_id', true ),
-				'col_user_id'		 => array( 'user_id', true ),
+				'col_event_id'		=> array( 'event_id', false ),
 				'col_event_date'	  => array( 'event_date', true ),
-				'col_event_dj'		=> array( 'event_dj', true ),
-				'col_event_type'  	  => array( 'event_type', true ),
-				'col_contract_status' => array( 'contract_status', true ),
-				'col_contract'	 	=> array( 'contract', true ),
-				'col_cost'			=> array( 'cost', true ),
-				'col_deposit_status'  => array( 'deposit_status', true ),
-				'col_balance_status'  => array( 'balance_status', true ),
-				'col_venue'  		   => array( 'venue', true ),
+				'col_event_type'  	  => array( 'event_type', false ),
+				'col_contract_status' => array( 'contract_status', false ),
+				'col_contract'	 	=> array( 'contract', false ),
+				'col_cost'			=> array( 'cost', false ),
+				'col_deposit_status'  => array( 'deposit_status', false ),
+				'col_balance_status'  => array( 'balance_status', false ),
+				'col_venue'  		   => array( 'venue', false ),
 			);
 			return $sortable;
 		} // get_sortable_columns
@@ -201,15 +441,15 @@
 			$default_status = 'Approved';
 			
 			/* -- Check for Unattended -- */
-			$unattended_query = 'SELECT * FROM ' . $db_tbl['events'] . ' WHERE `contract_status`=\'Unattended\'';
+			$unattended_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'";
 			if( count( $wpdb->get_results( $unattended_query ) ) > 0 )	{
 				$default_status = 'Unattended';	
 			}
 			
 			/* -- Event status parameter -- */
-			$status = !empty( $_GET['status'] ) ? mysql_real_escape_string( $_GET['status'] ) : $default_status;
+			$s = !empty( $_GET['status'] ) ? mysql_real_escape_string( $_GET['status'] ) : $default_status;
 			
-			return $status;
+			return $s;
 		} // get_current_status
 		
 		/* -- Column row actions  -- */
@@ -314,7 +554,7 @@
 			$playlist = $wpdb->get_var( "SELECT COUNT(*) FROM " . $db_tbl['playlists'] . " WHERE event_id = " . $item->event_id );
 			
 			if( $playlist > 0 )	{
-				$actions['playlist'] = sprintf( '<a href="?page=%s&action=%s&event=%s">View</a>', $_REQUEST['page'], 'render_playlist_table', $item->event_id );
+				$actions['playlist'] = sprintf( '<a href="?page=%s&action=%s&event_id=%s">View</a>', $_REQUEST['page'], 'render_playlist_table', $item->event_id );
 				return sprintf( '%1$s %2$s', _n( $playlist . ' Song', $playlist . ' Songs', $playlist ), $this->row_actions( $actions ) );	
 			}
 			else	{
@@ -323,6 +563,83 @@
 			
 			return $this->row_actions( $actions );
 		} // playlist_actions
+		
+		/**
+		 * query_builder
+		 * Set the DB queries
+		 * @since 1.1.1
+		 * 
+		 */
+		function query_builder()	{
+			$where = array();
+			
+			/* -- Filtering parameters -- */
+			/* -- Status -- */
+			$s = !empty( $this->status ) ? $this->status : 'Approved';
+			if( !empty( $s ) )	{
+				if( $s == 'Historic' )	{
+					$where[] = " (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')";	
+				}
+				elseif( $s != 'All' )	{
+					$where[] = " `contract_status` = '" . $s . "'";	
+				}				
+			}
+			
+			/* -- Month -- */
+			$m = !empty( $_GET['m'] ) ? $_GET['m'] : '0';
+			if( !empty( $m ) )
+				$where[] = " year(event_date) = '" . substr( $m, 0, 4 ) . "' AND month(event_date) = '" . substr( $m, -2 ) . "'";
+			
+			/* -- Type -- */
+			$t = !empty( $_GET['t'] ) ? $_GET['t'] : '';
+			if( !empty( $t ) )
+				$where[] = " `event_type` = '" . $t . "'";
+			
+			/* -- DJ -- */
+			$dj = !empty( $_GET['dj'] ) ? $_GET['dj'] : '0';
+			if( !current_user_can( 'administrator' ) )
+				$dj = get_current_user_id();
+			if( !empty( $dj ) )
+				$where[] = " `event_dj` = '" . $dj . "'";
+			
+			if( !empty( $where ) )	{
+				$i = 1;
+				$q = ' WHERE';
+				foreach( $where as $clause )	{
+					if( $i > 1 )
+						$q .= ' AND';
+						
+					$q .= ' ' . $clause;
+					
+					$i++;	
+				}
+			}
+			
+			/* -- Client -- */
+			$c = !empty( $_GET['c'] ) ? $_GET['c'] : '0';
+				
+			if( !empty( $c ) )	{
+				if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $c ) )
+					$where[] = " `user_id` = '" . $c . "'";
+			}
+			
+			if( !empty( $where ) )	{
+				$i = 1;
+				$q = ' WHERE';
+				foreach( $where as $clause )	{
+					if( $i > 1 )
+						$q .= ' AND';
+						
+					$q .= ' ' . $clause;
+					
+					$i++;	
+				}
+			}
+			if( !empty( $q ) )
+				return $q;
+				
+			return;
+		} // query_builder
 		
 		/**
 		 * prepare_items
@@ -340,23 +657,17 @@
 			}
 			
 			$this->mdjm_options = $mdjm_options;
-			$this->status = $this->get_current_status( $_GET );
+			
+			$this->status = $this->get_current_status();
 			
 			/* -- Prepare the query -- */
 			$query = 'SELECT * FROM `' . $db_tbl['events'] . '`';
 			
-			if( !empty( $this->status ) )	{
-				if( $this->status == 'Historic' )	{
-					$query .= " WHERE (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')";	
-				}
-				elseif( $this->status != 'All' )	{
-					$query .= ' WHERE `contract_status`=\'' . $this->status . '\'';	
-				}
-			}
-			
+			$query .= $this->query_builder( $_GET );
+						
 			/* -- Ordering parameters -- */
 			//Parameters that are going to be used to order the result
-			$orderby = !empty( $_GET["orderby"] ) ? mysql_real_escape_string( $_GET["orderby"] ) : '';
+			$orderby = !empty( $_GET["orderby"] ) ? mysql_real_escape_string( $_GET["orderby"] ) : 'event_date';
 			$order = !empty( $_GET["order"] ) ? mysql_real_escape_string( $_GET["order"] ) : 'ASC';
 			
 			if( !empty( $orderby ) & !empty( $order ) )	{

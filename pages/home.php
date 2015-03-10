@@ -237,6 +237,15 @@
 						echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PAYMENT_PAGE ) . $sep . 'event_id=' . $eventinfo->event_id . '" title="Make Payment">Make a Payment</a>';	
 					}
 				}
+				if( $eventinfo->contract_status == 'Approved' || $eventinfo->contract_status == 'Pending' )	{
+					if ( get_option('permalink_structure') )	{
+						echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . $sep . 'mdjmeventid=' . $eventinfo->event_id . '" title="Manage Playlist">Manage Playlist</a>';
+					}
+					else	{
+						echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PLAYLIST_PAGE ) . $sep . 'mdjmeventid=' . $eventinfo->event_id . '" title="Manage Playlist">Manage Playlist</a>';
+					}	
+				}
+				
 				echo ' | <a href="' . get_permalink( WPMDJM_CLIENT_PROFILE_PAGE ) . '" title="Edit your details">Edit Your Profile</a>';	
 				
 				echo ' | <a href="' . get_permalink( WPMDJM_CONTACT_PAGE ) . '" title="Begin planning your next event with us">Book Another Event</a>';

@@ -48,6 +48,7 @@
 										'playlist_when',
 										'playlist_close',
 										'upload_playlists',
+										'uninst_remove_mdjm_templates',
 										'uninst_remove_db',
 										'show_credits',
 										
@@ -105,6 +106,8 @@
 										'pp_enable_tax',
 										'pp_tax_type',
 										'pp_tax_rate',
+										'pp_payment_sources',
+										'pp_transaction_types',
 										'pp_enable',
 										'pp_email',
 										'pp_redirect',
@@ -638,6 +641,18 @@
 									'page' => 'settings',
 									); // playlist_close
 									
+		$admin_fields['uninst_remove_mdjm_templates'] = array(
+									'display' => 'Remove Templates?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['uninst_remove_mdjm_templates'],
+									'text' => '',
+									'desc' => 'Do you want to remove the Contract and Email Templates associated with the Mobile DJ Manager plugin? They will be sent to trash, not permanently deleted',
+									'section' => 'uninstall',
+									'page' => 'settings',
+									); // uninst_remove_mdjm_templates
+		
 		$admin_fields['uninst_remove_db'] = array(
 									'display' => 'Remove Database Tables?',
 									'key' => 'mdjm_plugin_settings',
@@ -1630,6 +1645,30 @@
 									'section' => 'payments',
 									'page' => 'payments',
 									); // pp_tax_rate
+		
+		$admin_fields['pp_payment_sources'] = array(
+									'display' => 'Payment Types:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'textarea',
+									'class' => 'all-options',
+									'value' => $mdjm_options['pp_payment_sources'],
+									'text' => '',
+									'desc' => 'Enter methods of payment',
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_payment_sources
+									
+		$admin_fields['pp_transaction_types'] = array(
+									'display' => 'Transaction Types:',
+									'key' => 'mdjm_pp_options',
+									'type' => 'textarea',
+									'class' => 'all-options',
+									'value' => $mdjm_options['pp_transaction_types'],
+									'text' => '',
+									'desc' => 'Enter possible transaction types for both incoming &amp; outgoing transactions. No need to add <code>' . $mdjm_options['balance_label'] . '</code> or <code>' . $mdjm_options['deposit_label'] . '</code>. One per line',
+									'section' => 'payments',
+									'page' => 'payments',
+									); // pp_transaction_types
 									
 		$admin_fields['pp_enable'] = array(
 									'display' => 'Enable PayPal?',

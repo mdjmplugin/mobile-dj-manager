@@ -108,6 +108,53 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1.1
+**************************************************/
+	function f_mdjm_updated_to_1_1_1()	{
+		global $mdjm_options;
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Transactions</font><br />
+		We've made a few more improvements to the <a href="<?php f_mdjm_admin_page( 'transactions' ); ?>">Transactions</a> feature. The main change here is that when editing an event, you can now view all transactions associated with that event, together with the amount of profit made from the event. You can also add new transactions from here.<br /><br />
+        We've also added two new <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Settings</a> under the <a href="<?php f_mdjm_admin_page( 'settings' ); ?>&tab=payments">Payments</a> tab. These are utilised when adding new transactions manually<br />
+    <ul>
+        <li><code>Payment Types:</code> Add in any methods of payment you accept</li>
+        <li><code>Transaction Types:</code> Add in a list of possible reasons for an expense or payment receipt</li>
+    </ul>
+		There are many more improvements coming to the <a href="<?php f_mdjm_admin_page( 'transactions' ); ?>">Transactions</a> feature, watch our for them in future releases of <a style="color: #F90" href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank" title="My DJ Planner: the home of Mobile DJ Manager for WordPress">Mobile DJ Manager for WordPress</a>
+        
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Events Table</font><br />
+        Further improvements to the display and navigation of the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> page. You can now filter by Event Month, Type, DJ and Client.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ul>
+            	<li><strong>Bug Fix</strong>: <code>Manage Playlist</code> link was missing on the client home page when viewing a single event</li>
+            	<li><strong>Bug Fix</strong>: Mapped field not removed from <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Form</a> list if already assigned to field</li>
+                <li><strong>Bug Fix</strong>: DJ's only see their own events and clients within the <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> page</li>
+                <li><strong>Bug Fix</strong>: Emails sent via the <a href="<?php f_mdjm_admin_page( 'comms' ); ?>">Communication Feature</a> without a template failed</li>
+            	<li><strong>General</strong>: Client first and last names always have a capital letter when created via new event or contact form</li>
+                <li><strong>General</strong>: <a href="<?php f_mdjm_admin_page( 'events' ); ?>">Events</a> table defaults to sorted by event date</li>
+                <li><strong>General</strong>: Added colour picker when setting error text colour for <a href="<?php f_mdjm_admin_page( 'contact_forms' ); ?>">Contact Forms</a></li>
+                <li><strong>General</strong>: Custom verification messages for <a href="<?php f_mdjm_admin_page( 'contract' ); ?>">Contract</a> and <a href="<?php f_mdjm_admin_page( 'email_template' ); ?>">Email</a> Template updates</li>
+                <li><strong>General</strong>: Further improvements to the <a href="<?php f_mdjm_admin_page( 'debugging' ); ?>">Debugging</a> system</li>
+                <li><strong>General</strong>: Updated the uninstallation script</li>
+            </ul>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1_1
+
+/**************************************************
 				VERSION 1.1
 **************************************************/
 	function f_mdjm_updated_to_1_1()	{

@@ -87,15 +87,16 @@
 				
 				$email_headers .= 'Bcc: ' . implode( ",", $bcc ) . "\r\n";
 			}
-			
 			$email_content = nl2br( html_entity_decode( stripcslashes( $_POST['email_content'] ) ) );
 			$info['content'] = '<html><body>';
+			
 			if( $eventinfo )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 				$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
 				$subject .= str_replace( $shortcode_content_search, $shortcode_content_replace, $_POST['subject'] );
 			}
 			else	{
+				$info['content'] .= $email_content;
 				$subject = stripslashes( $_POST['subject'] );
 			}
 			$info['content'] .= '</html></body>';

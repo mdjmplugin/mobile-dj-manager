@@ -1090,7 +1090,7 @@
  * @since 1.0
 */
 	function f_mdjm_view_event_form( $event_id )	{
-		global $mdjm_options, $mdjm_client_text;
+		global $mdjm_options, $mdjm_client_text, $wpdb;
 		$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
 		if( !current_user_can( 'manage_options' ) && $eventinfo->event_dj != get_current_user_id() ) 
 			wp_die( 'You cannot edit an event that is not yours unless you are an Administrator! <a href="' . admin_url() . 'admin.php?page=mdjm-events">Click here to return to your Events List</a>' );
@@ -1102,6 +1102,25 @@
 		else	{
 			$contract_id = $event_id;	
 		}
+		/* -- Transactions -- */
+		if( !class_exists( 'WP_List_Table' ) )	{
+			require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+		}
+		if( !class_exists( 'MDJM_Transactions' ) )	{
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+		}
+		$mdjm_transactions = new MDJM_Transactions();
+		
+		/* -- Add new transactions -- */
+		if( isset( $_POST['action'], $_POST['event_id'], $_POST['submit'] ) )	{
+			if( $_POST['action'] == 'add_transaction' && $_POST['submit'] == 'Enter Transaction' )	{
+				/* -- Security Check -- */
+				check_admin_referer( 'add_event_transaction' );
+				$mdjm_transactions->add_transaction( $_POST );	
+			}
+		}
+		
+		$transactions = $mdjm_transactions->single_event_transactions( $event_id );
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
@@ -1115,6 +1134,7 @@
         </script>
 		<div class="wrap">
         <h2>Edit Event</h2>
+        <p><a href="#transactions" title="View Event Transactions">View Transactions (<?php echo count( $transactions ); ?>)</a></p>
         <form name="mdjm-edit-event" id="mdjm-edit-event" method="post"  action="<?php echo admin_url() . 'admin.php?page=mdjm-events'; ?>">
         <input type="hidden" name="action" value="edit_event" />
         <input type="hidden" name="event_id" value="<?php echo $eventinfo->event_id; ?>" />
@@ -1574,6 +1594,168 @@
         </tr>
         </table>
         </form>
+        <?php
+		if( current_user_can( 'administrator' ) )	{
+			?>
+            <a id="transactions"></a><h3>Event Transactions</h3>
+            <hr />
+            <p>The following transactions are associated with this event</p>
+            <table class="widefat">
+            <thead>
+            <tr>
+            <th>Date</th>
+            <th>In</th>
+            <th>Out</th>
+            <th>Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            <?php
+            if( !$transactions )	{
+                echo '<tr>' . "\n";
+                echo '<td colspan="4">No transactions exist for this event</td>' . "\n";
+                echo '</tr>' . "\n";	
+            }
+            else	{
+                $t = 0;
+                $total_in = '0.00';
+                $total_out = '0.00';
+                foreach( $transactions as $transaction )	{			
+                    echo '<tr';
+                    if( $t == 0 ) { echo ' class="alternate"'; }
+                    echo '>' . "\n";
+                    echo '<td>' . date( $mdjm_options['short_date_format'], strtotime( $transaction->payment_date ) ) . '</td>';
+                    echo '<td>';
+                    if( $transaction->direction == 'In' )	{
+                        $total_in += $transaction->payment_gross;
+                        echo f_mdjm_currency() . number_format( $transaction->payment_gross, 2 );
+                    }
+                    else	{
+                        echo '-';	
+                    }
+                    echo '</td>' . "\n";
+                    echo '<td>';
+                    if( $transaction->direction == 'Out' )	{
+                        $total_out += $transaction->payment_gross;
+                        echo f_mdjm_currency() . number_format( $transaction->payment_gross, 2 );
+                    }
+                    else	{
+                        echo '-';	
+                    }
+                    echo '</td>' . "\n";
+                    echo '<td>' . stripslashes( $transaction->payment_for ) . '</td>' . "\n";
+                    echo '</tr>' . "\n";
+                    $t++;
+                    if( $t == 2 ) $t = 0;
+                }
+            }
+            ?>
+            </tbody>
+            <tfoot>
+            <tr>
+            <th>&nbsp;</th>
+            <th><strong><?php echo f_mdjm_currency() . number_format( $total_in, 2 ); ?></strong></th>
+            <th><strong><?php echo f_mdjm_currency() . number_format( $total_out, 2 ); ?></strong></th>
+            <th><strong>Event Earnings: <?php echo f_mdjm_currency() . number_format( $total_in - $total_out, 2 ); ?></strong></th>
+            </tr>
+            </tfoot>
+            </table>
+            <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $('.transaction_date').datepicker({
+                dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
+                altField  : '#payment_date',
+                altFormat : 'yy-mm-dd',
+                firstDay: <?php echo get_option( 'start_of_week' ); ?>
+                });
+            });
+            </script>
+            <h3>Add Event Transaction</h3>
+            <hr />
+            <form name="add_event_transaction" id="add_event_transaction" method="post" action="">
+            <?php wp_nonce_field( 'add_event_transaction' ); ?>
+            <input type="hidden" name="action" id="action" value="add_transaction" />
+            <input type="hidden" name="event_id" id="event_id" value="<?php echo $event_id; ?>" />
+            <table class="form-table">
+            <tr>
+            <th scope="row"><label for="payment_gross">Amount:</label></th>
+            <td><?php echo f_mdjm_currency(); ?><input type="text" name="payment_gross" id="payment_gross" class="small-text" placeholder="10.00" /></td>
+            </tr>
+            <tr>
+            <th scope="row"><label for="trans_date">Date:</label></th>
+            <td><input type="text" name="trans_date" id="trans_date" class="transaction_date" /></td>
+            <input type="hidden" name="payment_date" id="payment_date" />
+            </tr>
+            <tr>
+            <th scope="row"><label for="direction">Direction:</label></th>
+            <td><select name="direction" id="direction" class="regular-text" onChange="displayPaid();">
+            <option value="In">Incoming</option>
+            <option value="Out">Outgoing</option>
+            </select>
+            </td>
+            </tr>
+            </table>
+            <style>
+                #paid_to_field	{
+                    display: none;
+                }
+				#paid_from_field	{
+                    display: block;
+                }
+            }
+            </style>
+            <script type="text/javascript">
+            function displayPaid() {
+                var direction  =  document.getElementById("direction");
+                var direction_val = direction.options[direction.selectedIndex].value;
+				var paid_from_div =  document.getElementById("paid_from_field");
+                var paid_to_div =  document.getElementById("paid_to_field");
+            
+              if (direction_val == 'Out') {
+				  paid_from_div.style.display = "none";
+                  paid_to_div.style.display = "block";
+              }
+              else {
+				  paid_from_div.style.display = "block";
+                  paid_to_div.style.display = "none";
+              }  
+            } 
+            </script>
+            <div id="paid_from_field">
+            <table class="form-table">
+            <tr>
+            <th scope="row"><label for="payment_from">Paid From:</label></th>
+            <td><input type="text" name="payment_from" id="payment_from" class="regular_text" /> <span class="description">Leave empty if payment from client</span></td>
+            </tr>
+            </table>
+            </div>
+            <div id="paid_to_field">
+            <table class="form-table">
+            <tr>
+            <th scope="row"><label for="payment_to">Paid To:</label></th>
+            <td><input type="text" name="payment_to" id="payment_to" class="regular_text" /> <span class="description">Leave empty if payment to client</span></td>
+            </tr>
+            </table>
+            </div>
+            <table class="form-table">
+            <tr>
+            <th scope="row"><label for="payment_for">Details:</label></th>
+            <td><?php $mdjm_transactions->drop_transaction_types(); ?></td>
+            </tr>
+            <tr>
+            <th scope="row"><label for="payment_src">Source:</label></th>
+            <td><?php $mdjm_transactions->drop_payment_source(); ?></td>
+            </tr>
+            <tr>
+            <th scope="row">&nbsp;</th>
+            <td><?php submit_button( 'Enter Transaction', 'primary', 'submit', false ); ?></td>
+            </tr>
+            </table>
+            </form>
+            <?php
+		}
+		?>
         </div>
         <?php
 	} // f_mdjm_view_event_form
@@ -1644,9 +1826,6 @@
 		#wpfooter {
 			display: none !important;
 		}
-		#table	{
-			width: 100%	
-		}
 		</style>
         <p>Client Name: <?php echo $client->first_name . ' ' . $client->last_name; ?><br />
         Event Date: <?php echo date( "l, jS F Y", strtotime( $eventinfo->event_date ) ); ?><br />
@@ -1682,7 +1861,7 @@
             <tr height="30">
             <td><?php echo stripslashes( $playlist->artist ); ?></td>
             <td><?php echo stripslashes( $playlist->song ); ?></td>
-            <td><?php echo stripslashes( $playlist->when ); ?></td>
+            <td><?php echo stripslashes( $playlist->play_when ); ?></td>
             <td><?php echo stripslashes( $playlist->info ); ?></td>
             <td><?php echo stripslashes( $playlist->added_by ); ?></td>
             </tr>
@@ -1701,14 +1880,16 @@
 	}
 	
 	function f_mdjm_test()	{
-		global $mdjm_options;
-		add_role( 'inactive_dj', 'Inactive DJ', array( 	 'read' => true, 
-														 'manage_mdjm' => false,
-														 'create_users' => false,
-														 'edit_users' => false,
-														 'delete_users' => false
-													) );
+		global $wpdb, $mdjm_options;
 		
+		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+				
+				/* -- Add the new payment options -- */
+				$mdjm_pp_options['pp_payment_sources'] = "BACS\r\nCash\r\nCheque\r\nPayPal\r\nOther";
+				$mdjm_pp_options['pp_transaction_types'] = "Certifications\r\nHardware\r\nInsurance\r\nMaintenance\r\nMusic\r\nParking\r\nPetrol\r\nSoftware\r\nVehicle";
+		update_option( 'mdjm_pp_options', $mdjm_pp_options );		
 		
 		exit;
 	}

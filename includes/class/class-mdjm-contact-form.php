@@ -19,7 +19,7 @@
 			?>
 			<style>
 			.mdjm-form-error {
-				color: #<?php if( !empty( $form['config']['error_text_color'] ) ) { echo $form['config']['error_text_color']; } else { echo 'FF0000'; } ?>;
+				color: <?php if( !empty( $form['config']['error_text_color'] ) ) { echo $form['config']['error_text_color']; } else { echo '#FF0000'; } ?>;
 			}
 			input.mdjm-form-error {
 				border: solid 1px #FF0000;

@@ -117,6 +117,7 @@
 	
 	function f_mdjm_edit_contact_form( $form_slug )	{
 		global $mdjm_options;
+		
 		$mdjm_forms = get_option( 'mdjm_contact_forms' );
 		$field_types = array(
 							'text'         => 'Text Field',
@@ -238,7 +239,7 @@
 			if( $_POST['field_type'] == 'event_list' && !empty( $_POST['event_list_first_entry'] ) )	{
 				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['event_list_first_entry'] = sanitize_text_field( $_POST['event_list_first_entry'] );
 			}
-			
+						
 			/* Required Field */
 			if( isset( $_POST['required'] ) && $_POST['required'] == 'Y' )	{
 				$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['required'] = 'Y';
@@ -427,14 +428,14 @@
 				$i++;
 				if( $i == 2 )
 					$i = 0;
-				/* Only one email/event list//captcha/submit field type allowed */
+				/* Only one email/event list/captcha/submit field type allowed */
 				if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
 					if( $fields['type'] == 'email' || $fields['type'] == 'event_list' || $fields['type'] == 'captcha' || $fields['type'] == 'submit' )	{
 						unset( $field_types[$fields['type']] );	
 					}
 				}
 				/* If mapping in use, do not display again */
-				if( isset( $fields['config']['mapping'] ) && !empty( $fields['config']['mapping'] ) && isset( $_GET['edit'] ) && $_GET['edit'] != 'Y' )	{
+				if( isset( $fields['config']['mapping'] ) && !empty( $fields['config']['mapping'] ) && !isset( $_GET['edit'] ) && $_GET['edit'] != 'Y' )	{
 					unset( $mappings[$fields['config']['mapping']] );
 				}
 			}
@@ -865,10 +866,10 @@
 			$value = $_POST['error_text_color'];
 		}
 		else	{
-			$value = 'FF0000';
+			$value = '#FF0000';
 		}
 		?>
-        <td><input type="text" name="error_text_color" id="error_text_color" class="regular-text" value="<?php echo $value; ?>" /> <span class="description">The colour in which error message text should be displayed. Default is <span class="code">FF0000</span> <font style="color:#FF0000">(Red)</font></span></td>
+        <td><input type="text" name="error_text_color" id="error_text_color" class="mdjm-colour-field" data-default-color="#FF0000" value="<?php echo $value; ?>" /><div id="colorpicker"></div> <span class="description">The colour in which error message text should be displayed. Default is <span class="code">#FF0000</span> <font style="color:#FF0000">(Red)</font></span></td>
         </tr>
         <tr>
         <th scope="row"><label for="layout">Form Layout:</label></th>
@@ -931,7 +932,7 @@
 				$mdjm_forms[$form_slug]['config']['copy_sender'] = 'N';
 				$mdjm_forms[$form_slug]['config']['update_user'] = 'Y';
 				$mdjm_forms[$form_slug]['config']['required_field_text'] = '{FIELD_NAME} is a required field. Please try again.';
-				$mdjm_forms[$form_slug]['config']['error_text_color'] = 'FF0000';
+				$mdjm_forms[$form_slug]['config']['error_text_color'] = '#FF0000';
 				$mdjm_forms[$form_slug]['config']['layout'] = '0_column';
 				
 				
@@ -982,7 +983,7 @@
 					
 					if( $mdjm_forms[$_POST['form_slug']]['fields'][$field_slug] )
 						$field_slug = strtolower( str_replace( ' ', '_', $field_slug ) ) . '_';
-						
+					
 					$pos = count( $mdjm_forms[$_POST['form_slug']]['fields'] );
 					if( $_POST['field_type'] == 'captcha' )
 						$pos = 98;
@@ -1044,7 +1045,7 @@
 					if( $_POST['field_type'] == 'event_list' && !empty( $_POST['event_list_first_entry'] ) )	{
 						$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['event_list_first_entry'] = sanitize_text_field( $_POST['event_list_first_entry'] );
 					}
-					
+										
 					/* Required Field */
 					if( isset( $_POST['required'] ) && $_POST['required'] == 'Y' )	{
 						$mdjm_forms[$_POST['form_slug']]['fields'][$field_slug]['config']['required'] = 'Y';
@@ -1136,7 +1137,7 @@
 					$mdjm_forms[$_POST['form_slug']]['config']['required_field_text'] = $_POST['required_field_text'];
 					
 					if( !isset( $_POST['error_text_color'] ) )	{
-						$mdjm_forms[$_POST['form_slug']]['config']['error_text_color'] = 'FF0000';
+						$mdjm_forms[$_POST['form_slug']]['config']['error_text_color'] = '#FF0000';
 					}
 					else	{
 						$mdjm_forms[$_POST['form_slug']]['config']['error_text_color'] = $_POST['error_text_color'];	
@@ -1176,7 +1177,7 @@
 				f_mdjm_show_forms();
 			}
 			else	{
-				f_mdjm_update_notice( 'updated', 'The Contact Form could not be deleted' );
+				f_mdjm_update_notice( 'error', 'The Contact Form could not be deleted' );
 				f_mdjm_show_forms();
 			}
 		}		

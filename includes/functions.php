@@ -219,10 +219,10 @@
 		$profile_update_fields = array ( 'ID' => $current_user->ID );
 		$profile_update_fields_meta = array ();
 		if ( isset( $_POST['first_name'] ) && !empty ( $_POST['first_name'] ) && $_POST['first_name'] != $current_user->first_name )	{
-			$profile_update_fields['first_name'] = sanitize_text_field( $_POST['first_name'] );
+			$profile_update_fields['first_name'] = sanitize_text_field( ucfirst( $_POST['first_name'] ) );
 		}
 		if ( isset( $_POST['last_name'] ) && !empty ( $_POST['last_name'] ) && $_POST['last_name'] != $current_user->last_name )	{
-			$profile_update_fields['last_name'] = sanitize_text_field( $_POST['last_name'] );
+			$profile_update_fields['last_name'] = sanitize_text_field( ucfirst( $_POST['last_name'] ) );
 		}
 		if ( isset( $_POST['phone1'] ) && !empty ( $_POST['phone1'] ) && $_POST['phone1'] != $current_user->phone1 )	{
 			$profile_update_fields_meta['phone1'] = sanitize_text_field( $_POST['phone1'] );

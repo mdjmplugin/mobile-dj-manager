@@ -226,10 +226,12 @@
 								update_user_meta( $user_id, 'marketing', 'Y' );
 								foreach( $user_meta as $key => $value )	{
 									if( $key == 'first_name' )	{
+										$value = ucfirst( $value );
 										$client_field_array['user_nicename'] = sanitize_text_field( $value );
 										$client_field_array['display_name'] = sanitize_text_field( $value );
 									}
 									if( $key == 'last_name' )	{
+										$value = ucfirst( $value );
 										if( isset( $client_field_array['display_name'] ) )	{
 											$client_field_array['display_name'] = $client_field_array['display_name'] . ' ' . sanitize_text_field( $value );
 										}
@@ -295,7 +297,7 @@
 			else	{
 				$mdjm_contact_form->mdjm_form_header( $form );
 				?>
-				<p style="color:<?php if( !empty( $form['config']['error_text_color'] ) ) { echo $form['config']['error_text_color']; } else { echo 'FF0000'; } ?>;">Sorry there was an error processing the contact form. Please try again.</p>
+				<p style="color: <?php if( !empty( $form['config']['error_text_color'] ) ) { echo $form['config']['error_text_color']; } else { echo '#FF0000'; } ?>;">Sorry there was an error processing the contact form. Please try again.</p>
                 <?php
 				$mdjm_contact_form->mdjm_form_header( $form );
 		

@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.1.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,22 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1.1 =
+<u>Released Tuesday, 10th March 2013</u>
+<ul>
+	<li>New Settings options added - Payment Types & Transaction Types. Used for adding Event transactions</li>
+	<li><strong>Bug Fix</strong>: Manage Playlist link was missing on the client home page when viewing a single event</li>
+	<li><strong>Bug Fix</strong>: Mapped field not removed from Contact Form list if already assigned to field</li>
+	<li><strong>Bug Fix</strong>: DJ's only see their own events and clients within the Events page</li>
+	<li><strong>Bug Fix</strong>: Emails sent via the Communication Feature without a template failed</li>
+	<li><strong>General</strong>: Client first and last names always have a capital letter when created via new event or contact form</li>
+	<li><strong>General</strong>: Events table defaults to sorted by event date</li>
+	<li><strong>General</strong>: Added colour picker when setting error text colour for Contact Forms</li>
+	<li><strong>General</strong>: Custom verification messages for Contract and Email Template updates</li>
+	<li><strong>General</strong>: Further improvements to the Debugging system</li>
+	<li><strong>General</strong>: Updated the uninstallation script</li>
+</ul>
+
 = 1.1 =
 <strong>New Features</strong>
 <strong>PayPal Integration</strong> for online Client Payments via your website<br />

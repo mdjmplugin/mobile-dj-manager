@@ -278,8 +278,9 @@
 			$update_trans_query = $wpdb->insert( $db_tbl['trans'],
 													array(
 														'trans_id'		  => '',
+														'direction'		 => 'In',
 														'event_id'		  => $_POST['item_number'],
-														'payment_src'		=> 'PayPal',
+														'payment_src'	   => 'PayPal',
 														'payment_txn_id'	=> $_POST['txn_id'],
 														'payment_date'	  => date( 'Y-m-d H:i:s', strtotime( $_POST['payment_date'] ) ),
 														'payment_type'	  => $_POST['payment_type'],
@@ -293,7 +294,7 @@
 														'payment_tax'	   => $_POST['tax'],
 														'payment_gross'	 => $_POST['mc_gross'],
 														'full_ipn'		  => json_encode( $_POST ),
-														'seen_by_admin'	  => 0,
+														'seen_by_admin'	 => 0,
 														) );
 			
 			// Update the Events database

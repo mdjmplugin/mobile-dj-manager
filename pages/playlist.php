@@ -32,6 +32,8 @@
 			$event = f_mdjm_get_client_next_event();
 		}
 		
+		$playlist = f_mdjm_get_playlist( $event->event_id );
+		
 		if( $event && f_mdjm_is_playlist_open( $event->event_date ) )	{ // Event found
 			?>
             <p>
@@ -130,7 +132,6 @@
                 <?php if( count( $playlist ) > 0 ) echo '<p>Existing playlist entries are displayed below.</p>'; ?>
             	<?php
 			}
-			$playlist = f_mdjm_get_playlist( $event->event_id );
 			if( count( $playlist ) > 0 )	{ // Songs to display
 				$entry = ' entries';
 				if( count( $playlist ) == 1 ) $entry = ' entry';

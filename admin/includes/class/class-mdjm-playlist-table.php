@@ -4,7 +4,7 @@
 			global $wpdb, $query, $mdjm_options;
 			include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			// Build the data query
-			$query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $_GET['event'];
+			$query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $_GET['event_id'];
 			
 			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'date_added';
@@ -29,7 +29,7 @@
 									'date_added' => date( $mdjm_options['short_date_format'], strtotime( $playlist->date_added ) )
 								);
 			}
-			$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $_GET['event']);
+			$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $_GET['event_id']);
 			$client = get_userdata( $eventinfo->user_id );
 			?>
 			<div class="wrap">

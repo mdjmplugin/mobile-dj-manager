@@ -223,7 +223,8 @@
 		/* TRANS TABLE */
 		$trans_sql = "CREATE TABLE ". $db_tbl['trans'] . " (
 						trans_id int(11) NOT NULL AUTO_INCREMENT,
-						event_id int(11) NOT NULL,
+						direction varchar(8) NOT NULL,
+						event_id int(11) NULL DEFAULT '0',
 						payment_src varchar(25) NOT NULL,
 						payment_txn_id varchar(19) NULL,
 						payment_date datetime NOT NULL,
@@ -232,13 +233,14 @@
 						payment_status varchar(25) NOT NULL,
 						payer_firstname varchar(75) NULL,
 						payer_lastname varchar(75) NULL,
-						payer_email varchar(75) NOT NULL,
+						payer_email varchar(75) NULL,
+						payment_to varchar(75) NULL,
 						payment_for varchar(75) NOT NULL,
 						payment_currency varchar(3) NOT NULL,
 						payment_tax decimal(10,2) NULL,
 						payment_gross decimal(10,2) NOT NULL,
 						full_ipn text NULL,
-						seen_by_admin int(11) NOT NULL,
+						seen_by_admin int(11) NOT NULL DEFAULT '0',
 						PRIMARY KEY  (trans_id)
 					) $charset_collate;";
 				
@@ -275,44 +277,47 @@
 
 		$event_types = 'Adult Birthday Party,Child Birthday Party,Wedding,Corporate Event,Other,';
 		$enquiry_sources = 'Website,Google,Facebook,Email,Telephone,Other,';
+		$payment_sources = 'BACS\r\nCash\r\nCheque\r\nPayPal\r\nOther,';
+		$transaction_types = "Balance\r\nCertifications\r\nDeposit\r\nHardware\r\nInsurance\r\nMaintenance\r\nMusic\r\nParking\r\nPetrol\r\nSoftware\r\nVehicle";
 		$playlist_when = 'General,First Dance,Second Dance,Last Song,Father & Bride,Mother & Son,DO NOT PLAY,Other,';
 		$items_per_page = get_option( 'posts_per_page' );
 		$mdjm_init_options = array(
-							'company_name'            => get_bloginfo( 'name' ),
-							'app_name'                => 'Client Zone',
-							'items_per_page'          => $items_per_page,
-							'time_format'             => 'H:i',
-							'short_date_format'       => 'd/m/Y',
-							'pass_length'             => '8',
-							'currency'                => 'GBP',
-							'show_dashboard'          => 'Y',
-							'warn_unattended'         => 'Y',
-							'journaling'              => 'Y',
-							'multiple_dj'             => 'N',
-							'packages'                => 'N',
-							'event_types'             => $event_types,
-							'enquiry_sources'         => $enquiry_sources,
-							'default_contract'        => $contract_post_id,
-							'id_prefix'               => 'MDJM',
-							'system_email'            => get_bloginfo( 'admin_email' ),
-							'bcc_dj_to_client'        => '',
-							'bcc_admin_to_client'     => 'Y',
-							'booking_conf_to_client' => 'Y',
-							'booking_conf_to_dj'     => 'Y',
-							'contract_to_client'      => '',
-							'email_enquiry'           => $client_enquiry_post_id,
-							'enquiry_email_from'      => 'admin',
-							'email_contract'          => $client_contract_post_id,
-							'contract_email_from'     =>'admin',
-							'email_client_confirm'    => $client_confirm_post_id,
-							'confirm_email_from'      => 'admin',
-							'email_dj_confirm'        => $dj_confirm_post_id,
-							'title_as_subject'        => 'N',
-							'playlist_when'           => $playlist_when,
-							'playlist_close'          => '5',
-							'upload_playlists'        => 'Y',
-							'uninst_remove_db'        => 'N',
-							'show_credits'            => 'Y',
+							'company_name'            		=> get_bloginfo( 'name' ),
+							'app_name'                		=> 'Client Zone',
+							'items_per_page'          		  => $items_per_page,
+							'time_format'            		 => 'H:i',
+							'short_date_format'       		   => 'd/m/Y',
+							'pass_length'             		 => '8',
+							'currency'                		=> 'GBP',
+							'show_dashboard'          		  => 'Y',
+							'warn_unattended'         		 => 'Y',
+							'journaling'              		  => 'Y',
+							'multiple_dj'             		 => 'N',
+							'packages'                		=> 'N',
+							'event_types'             		 => $event_types,
+							'enquiry_sources'         		 => $enquiry_sources,
+							'default_contract'        		=> $contract_post_id,
+							'id_prefix'               		   => 'MDJM',
+							'system_email'            		=> get_bloginfo( 'admin_email' ),
+							'bcc_dj_to_client'        		=> '',
+							'bcc_admin_to_client'     		 => 'Y',
+							'booking_conf_to_client' 		  => 'Y',
+							'booking_conf_to_dj'     		  => 'Y',
+							'contract_to_client'      		  => '',
+							'email_enquiry'           		   => $client_enquiry_post_id,
+							'enquiry_email_from'      		  => 'admin',
+							'email_contract'          		  => $client_contract_post_id,
+							'contract_email_from'     		 =>'admin',
+							'email_client_confirm'    		=> $client_confirm_post_id,
+							'confirm_email_from'      		  => 'admin',
+							'email_dj_confirm'        		=> $dj_confirm_post_id,
+							'title_as_subject'        		=> 'N',
+							'playlist_when'				   => $playlist_when,
+							'playlist_close'          		  => '5',
+							'upload_playlists'        		=> 'Y',
+							'uninst_remove_mdjm_templates'	=> 'N',
+							'uninst_remove_db'        		=> 'N',
+							'show_credits'            		=> 'Y',
 							);
 		$mdjm_init_pages = array(
 							'app_home_page'                => '',
@@ -429,22 +434,24 @@
 									);
 		
 		$mdjm_pp_options = array(
-								'pp_cfm_template'   => '',
-								'pp_form_layout'	=> 'horizontal',
-								'pp_layout'		 => 'Pay for:',
-								'pp_tax'			=> 'N',
-								'pp_tax_type'	   => 'percentage',
-								'pp_tax_rate'	   => '20',
-								'pp_enable'		 => 'N',
-								'pp_email'		  => get_bloginfo( 'admin_email' ),
-								'pp_redirect'	   => '',
-								'pp_button'		 => 'btn_paynow_86x21.png',
-								'pp_sandbox'		=> 'N',
-								'pp_sandbox_email'  => get_bloginfo( 'admin_email' ),
-								'pp_debug'		  => 'N',
-								'pp_receiver'	   => get_bloginfo( 'admin_email' ),
-								'pp_inv_prefix'	 => $mdjm_options['id_prefix'] . '-',
-								'pp_checkout_style' => '',
+								'pp_cfm_template'   		=> '',
+								'pp_form_layout'		 => 'horizontal',
+								'pp_layout'		 	  => 'Pay for:',
+								'pp_tax'				 => 'N',
+								'pp_tax_type'	   		=> 'percentage',
+								'pp_tax_rate'	   		=> '20',
+								'pp_payment_sources'	 => $payment_sources,
+								'pp_transaction_types'   => $transaction_types,
+								'pp_enable'		 	  => 'N',
+								'pp_email'		  	   => get_bloginfo( 'admin_email' ),
+								'pp_redirect'	   		=> '',
+								'pp_button'		 	  => 'btn_paynow_86x21.png',
+								'pp_sandbox'			 => 'N',
+								'pp_sandbox_email'  	   => get_bloginfo( 'admin_email' ),
+								'pp_debug'		  	   => 'N',
+								'pp_receiver'	   		=> get_bloginfo( 'admin_email' ),
+								'pp_inv_prefix'	 	  => $mdjm_options['id_prefix'] . '-',
+								'pp_checkout_style' 	  => '',
 								);
 		
 		/* Version information into the database */
@@ -466,7 +473,7 @@
 		/* Add user roles */
 		add_role( 'inactive_client', 'Inactive Client', array( 'read' => true ) );
 		add_role( 'client', 'Client', array( 'read' => true ) );
-		add_role( 'inactive_dj', 'Inactive DJ', array( 	 'read' => true, 
+		add_role( 'inactive_dj', 'Inactive DJ', array( 	'read' => true, 
 														 'manage_mdjm' => false,
 														 'create_users' => false,
 														 'edit_users' => false,
@@ -902,6 +909,25 @@
 				update_option( 'mdjm_plugin_pages', $mdjm_init_pages );
 				update_option( WPMDJM_FETEXT_SETTINGS_KEY, $mdjm_frontend_text );
 			} // if( $current_version_mdjm <= '1.0' )
+			
+/***************************************************
+			 	UPGRADES FROM 1.1
+***************************************************/			
+			if( $current_version_mdjm <= '1.1' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+				$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+				
+				/* -- Add the new payment options -- */
+				$mdjm_pp_options['pp_payment_sources'] = "BACS\r\nCash\r\nCheque\r\nPayPal\r\nOther";
+				$mdjm_pp_options['pp_transaction_types'] = "Certifications\r\nHardware\r\nInsurance\r\nMaintenance\r\nMusic\r\nParking\r\nPetrol\r\nSoftware\r\nVehicle";
+
+				/* Add the Uninstall Contract/Email Templates Option */
+				$mdjm_options['uninst_remove_mdjm_templates'] = 'N';
+				
+				/* Add / Update Options */
+				update_option( 'mdjm_pp_options', $mdjm_pp_options );
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '1.1' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
@@ -1700,7 +1726,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 		wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
 		
-		wp_enqueue_script('jquery');
+		wp_enqueue_script( 'jquery' );
 		wp_enqueue_style( 'mobile-dj-manager');
 		wp_enqueue_script( 'google-hosted-jquery');
 		wp_enqueue_script( 'jquery-validation-plugin');
@@ -1716,15 +1742,59 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 */
 	function f_mdjm_admin_enqueue()	{
 		wp_register_style( 'mobile-dj-manager-admin', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css' );
-		//wp_register_script( 'google-hosted-jq', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 		wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'google-hosted-jquery' ) );
+		wp_register_script( 'mdjm-colour-picker', WPMDJM_PLUGIN_URL . '/admin/includes/js/mdjm-colour-picker.js', 'jquery', '20150304', true );
 		
 		wp_enqueue_style( 'mobile-dj-manager-admin' );
-		//wp_enqueue_script( 'google-hosted-jq');
-		wp_enqueue_script('jquery');
+		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-validation-plugin' );
+		
+		if( isset( $_GET['page'] ) && $_GET['page'] == 'mdjm-contact-forms' )	{
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'wp-color-picker' );	
+			wp_enqueue_script( 'mdjm-colour-picker' );
+		}
+		
 	} // f_mdjm_admin_enqueue
-	
+
+/*
+* f_mdjm_template_messages
+* 04/03/2015
+* @since 1.1.1
+* Customised messages for contract / email template updates
+*/
+	function f_mdjm_template_messages( $messages )	{
+		global $post;
+
+        $post_id = $post->ID;
+        $post_type = get_post_type( $post_id );
+
+        $obj = get_post_type_object( $post_type );
+        if( $obj->labels->singular_name == 'MDJM Email Template' )	{
+			$singular = 'Email Template';
+		}
+		elseif( $obj->labels->singular_name == 'MDJM Contract' )	{
+			$singular = 'Contract Template';
+		}
+		
+
+        $messages[$post_type] = array(
+                0 => '', // Unused. Messages start at index 1.
+                1 => sprintf( __( '%s updated. <a href="%s" target="_blank">Preview %s</a>' ), $singular, esc_url( get_permalink( $post_id ) ), 'Template' ),
+                2 => __( 'Custom field updated.', 'mdjm' ),
+                3 => __( 'Custom field deleted.', 'mdjm' ),
+                4 => sprintf( __( '%s updated.', 'mdjm' ), $singular ),
+                5 => isset( $_GET['revision']) ? sprintf( __('%2$s restored to revision from %1$s', 'maxson' ), wp_post_revision_title( (int) $_GET['revision'], false ), $singular ) : false,
+                6 => sprintf( __( '%s published. <a href="%s">Preview %s</a>'), $singular, esc_url( get_permalink( $post_id ) ), 'Template' ),
+                7 => sprintf( __( '%s saved.', 'mdjm' ), esc_attr( $singular ) ),
+                8 => sprintf( __( '%s submitted. <a href="%s" target="_blank">Preview %s</a>'), $singular, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_id ) ) ), 'Template' ),
+                9 => sprintf( __( '%s scheduled for: <strong>%s</strong>. <a href="%s" target="_blank">Preview %s</a>' ), $singular, date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_id ) ), 'Template' ),
+                10 => sprintf( __( '%s draft updated. <a href="%s" target="_blank">Preview %s</a>'), $singular, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_id ) ) ), 'Template' )
+        );
+
+        return $messages;
+	} // f_mdjm_template_messages
+
 /*
 * f_mdjm_api_listener
 * 17/02/2015
@@ -1732,12 +1802,16 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 * The API Listener
 */
 	function f_mdjm_api_listener()	{
-		if( !isset( $_GET['mdjm-api'] ) || $_GET['mdjm-api'] != 'MDJM_PAYPAL_GW' )	{
-			return;	
-		}
-		else	{
+		if( isset( $_GET['mdjm-api'] ) && $_GET['mdjm-api'] == 'MDJM_PAYPAL_GW' )	{
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-pp-ipn.php' );	
 		}
+		elseif( $_GET['mdjm-api'] == 'MDJM_EMAIL_RCPT' )	{
+			include( WPMDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-email-rcpt.php' );	
+		}
+		else	{
+			return;	
+		}
+		
 	} // f_mdjm_api_listener
 	
 /****************************************************************************************************
@@ -1791,6 +1865,8 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	add_action( 'admin_enqueue_scripts', 'f_mdjm_admin_enqueue' ); // Enqueue sytles and scripts in the Admin UI
 	
 	add_action( 'wp_loaded', 'f_mdjm_api_listener' ); // The API listener
+	
+	add_filter( 'post_updated_messages', 'f_mdjm_template_messages' );
  
  /**
  * Actions for custom user fields

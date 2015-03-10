@@ -458,7 +458,8 @@
 			/* TRANS TABLE */
 			$trans_sql = "CREATE TABLE ". $db_tbl['trans'] . " (
 							trans_id int(11) NOT NULL AUTO_INCREMENT,
-							event_id int(11) NOT NULL,
+							direction varchar(8) NOT NULL,
+							event_id int(11) NULL DEFAULT '0',
 							payment_src varchar(25) NOT NULL,
 							payment_txn_id varchar(19) NULL,
 							payment_date datetime NOT NULL,
@@ -467,13 +468,14 @@
 							payment_status varchar(25) NOT NULL,
 							payer_firstname varchar(75) NULL,
 							payer_lastname varchar(75) NULL,
-							payer_email varchar(75) NOT NULL,
+							payer_email varchar(75) NULL,
+							payment_to varchar(75) NULL,
 							payment_for varchar(75) NOT NULL,
 							payment_currency varchar(3) NOT NULL,
 							payment_tax decimal(10,2) NULL,
 							payment_gross decimal(10,2) NOT NULL,
 							full_ipn text NULL,
-							seen_by_admin int(11) NOT NULL,
+							seen_by_admin int(11) NOT NULL DEFAULT '0',
 							PRIMARY KEY  (trans_id)
 							);";
 			
@@ -674,6 +676,7 @@
 						'event_start'          => 'Event Start',
 						'event_finish'         => 'Event End',
 						'event_description'    => 'Event Description',
+						'dj_list'			  => 'DJ List',
 						'venue'                => 'Event Venue Name',
 						'venue_city'           => 'Event Venue Town/City',
 						'venue_state'          => 'Event County (State)'
@@ -701,6 +704,17 @@
 				asort( $events );
 				foreach( $events as $event )	{
 					$opt .= $event;	
+				}
+			}
+			elseif( $field['type'] == 'dj_list' )	{
+				$opt = '';
+				if( !empty( $field['config']['dj_list_first_entry'] ) )	{
+					$opt .= $field['config']['dj_list_first_entry'] . "\r\n";
+				}
+				$djs = f_mdjm_get_djs();
+				asort( $djs );
+				foreach( $djs as $dj )	{
+					$opt .= $dj;	
 				}
 			}
 			else	{
@@ -768,6 +782,9 @@
 		/* Create new Client and assign to this event */
 		if( $event['user_id'] == 'add_new' )	{
 			$random_password = wp_generate_password( $mdjm_options['pass_length'] );
+			
+			ucfirst( $event['client_first_name'] );
+			
 			$user_id = wp_create_user( $event['client_email'], $random_password, $event['client_email'] );
 			$client_field_array = array( 'ID' => $user_id, 'role' => 'client', 'show_admin_bar_front' => 'false', 'first_name' => sanitize_text_field( $event['client_first_name'] ) );
 			update_user_meta( $user_id, 'marketing', 'Y' );
@@ -775,6 +792,7 @@
 			$client_field_array['user_nicename'] = sanitize_text_field( $event['client_first_name'] );
 			$client_field_array['display_name'] = sanitize_text_field( $event['client_first_name'] );
 			if( isset( $event['client_last_name'] ) && !empty( $event['client_last_name'] ) )	{
+				ucfirst( $event['client_last_name'] );
 				$client_field_array['last_name'] = sanitize_text_field( $event['client_last_name'] );
 				$client_field_array['display_name'] = $client_field_array['display_name'] . ' ' . sanitize_text_field( $event['client_last_name'] );
 			}
@@ -2047,7 +2065,7 @@
 				$have_result = true;
 				?>
 				<tr class="alternate">
-				<td colspan="2"><strong><font class="code"><?php echo date( 'l, jS F Y', strtotime( $day->format( 'Y-m-d' ) ) ); ?></strong></font></td>
+				<td colspan="2"><strong><font class="code"><?php echo date( 'l, jS F Y', strtotime( $day->format( 'Y-m-d' ) ) ); ?></font></strong></td>
 				</tr>
                 <?php
 			}

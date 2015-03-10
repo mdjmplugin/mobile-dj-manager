@@ -7,8 +7,10 @@
 */
 
 /* Do not run unless the uninstall procedure was called by WordPress */
-	if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) 
+	if( !defined( 'WP_UNINSTALL_PLUGIN' ) )	{
 		exit();
+	}
+	
 	$mdjm_options = get_option ( 'mdjm_plugin_settings' );
 
 /* Remove capabilities and roles */
@@ -18,6 +20,7 @@
 	$role->remove_cap( 'manage_mdjm' );
 	
 	remove_role( 'dj' );
+	remove_role( 'inactive_dj' );
 	remove_role( 'client' );
 	remove_role( 'inactive_client' );
 
@@ -30,13 +33,17 @@
 		delete_transient( $transient );
 	}
 
-/* Remove the contracts data -- NOT WORKING */
-	/*$contract_posts = new WP_Query( array( 'post_type' => 'contract' ) );
-	if ( $contract_posts->have_posts() ) {
-		while ( $contract_posts->have_posts() ) {
-			wp_delete_post( get_the_id(), true);
+/* Remove the template posts -- NOT WORKING */
+	if( isset( $mdjm_options['uninst_remove_mdjm_templates'] ) && $mdjm_options['uninst_remove_mdjm_templates'] == 'Y' )	{
+		$mdjm_template_types = array( 'contract', 'email_template' );
+		
+		foreach( $mdjm_template_types as $mdjm_template )	{
+			$mdjm_posts = get_pages( array( 'post_type' => $mdjm_template ) );
+			foreach ( $mdjm_posts as $mdjm_post ) {
+				wp_delete_post( $mdjm_post, false );
+			}
 		}
-	}*/
+	}
 
 /* Remove the DB tables & data */
 	if( isset( $mdjm_options['uninst_remove_db'] ) && $mdjm_options['uninst_remove_db'] == 'Y' )	{
