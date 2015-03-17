@@ -84,6 +84,16 @@
 			}
 		}
 	}
+	elseif( !empty( $_GET['action'] ) )	{
+		if( $_GET['action'] == 'del_entry' )	{
+			if( empty( $_GET['entry'] ) )	{
+				return;	
+			}
+			else	{
+				f_mdjm_remove_holiday( $_GET['entry'] );
+			}
+		}
+	}
 
     wp_enqueue_script('jquery-ui-datepicker');
     wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');

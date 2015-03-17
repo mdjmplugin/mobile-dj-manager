@@ -252,12 +252,12 @@
 				
 				/* Event actions (mappings) */
 				if( isset( $form['config']['create_enquiry'], $create_event, $event_update, $_POST['the_event_date'], $user_id ) && $create_event === true && $form['config']['create_enquiry'] == 'Y' )	{
-					$mdjm_contact_form->mdjm_create_event( $user_id, $event_update, $_POST );
+					$event_id = $mdjm_contact_form->mdjm_create_event( $user_id, $event_update, $_POST );
 				}
 				
 				/* Send the client email if set */
 					if( isset( $form['config']['copy_sender'] ) && $form['config']['copy_sender'] == 'Y' )	{
-						$mdjm_contact_form->mdjm_client_email( $form, $client_email, $client_form_detail );
+						$mdjm_contact_form->mdjm_client_email( $form, $client_email, $client_form_detail, $user_id, $event_id );
 					}
 				
 				/* Redirect the user */

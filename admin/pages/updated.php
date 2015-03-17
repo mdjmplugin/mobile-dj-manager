@@ -108,6 +108,92 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1.2
+**************************************************/
+	function f_mdjm_updated_to_1_1_2()	{
+		global $mdjm_options;
+		
+		/* -- Complete the upgrade to 1.1.2 -- */
+		/* -- Register the Venue Taxonomy & Terms -- */
+		if( !get_taxonomy( 'venue-details' ) )	{
+			$tax_labels[MDJM_VENUE_POSTS] = array(
+							'name'              		   => _x( 'Venue Details', 'taxonomy general name' ),
+							'singular_name'     		  => _x( 'Venue Detail', 'taxonomy singular name' ),
+							'search_items'      		   => __( 'Search Venue Details' ),
+							'all_items'         		  => __( 'All Venue Details' ),
+							'edit_item'        		  => __( 'Edit Venue Detail' ),
+							'update_item'       			=> __( 'Update Venue Detail' ),
+							'add_new_item'      		   => __( 'Add New Venue Detail' ),
+							'new_item_name'     		  => __( 'New Venue Detail' ),
+							'menu_name'         		  => __( 'Venue Details' ),
+							'separate_items_with_commas' => __( 'Separate venue details with commas' ),
+							'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details' ),
+							'not_found'				  => __( 'No details found' ),
+							);
+			$tax_args[MDJM_VENUE_POSTS] = array(
+							'hierarchical'      => true,
+							'labels'            => $tax_labels[MDJM_VENUE_POSTS],
+							'show_ui'           => true,
+							'show_admin_column' => true,
+							'query_var'         => true,
+							'rewrite'           => array( 'slug' => 'venue-details' ),
+						);
+		
+			register_taxonomy( 'venue-details', MDJM_VENUE_POSTS, $tax_args[MDJM_VENUE_POSTS] );
+		}
+		wp_insert_term( 'Low Ceiling', 'venue-details', array( 'description' => 'Venue has a low ceiling' ) );
+		wp_insert_term( 'PAT Required', 'venue-details', array( 'description' => 'Venue requires a copy of the PAT certificate' ) );
+		wp_insert_term( 'PLI Required', 'venue-details', array( 'description' => 'Venue requires proof of PLI' ) );
+		wp_insert_term( 'Smoke/Fog Allowed', 'venue-details', array( 'description' => 'Venue allows the use of Smoke/Fog/Haze' ) );
+		wp_insert_term( 'Sound Limiter', 'venue-details', array( 'description' => 'Venue has a sound limiter' ) );
+		wp_insert_term( 'Via Stairs', 'venue-details', array( 'description' => 'Access to this Venue is via stairs' ) );
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Email History &amp; Tracking</font><br />
+		Mobile DJ Manager for WordPress now stores every email that is sent via the system to your clients and your DJ's.<br />
+		A new menu item <a href="<?php f_mdjm_admin_page( 'email_history' ); ?>">Email History</a> has been added. This is where the emails are stored allowing you to quickly verify that your clients have been sent the emails as expected.<br />You can be certain that the email has been sent if the Status column shows <code>Sent</code> as this status is only set if the mail send command has been executed successfully. If for any reason the mail send command fails, the status would be set as <code>Ready to Send</code><br /><br />
+		Furthermore, we have added a new <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">Setting</a> <code>Track Client Emails?</code>. If selected, our email tracking API will be activated and when your clients open an email that has been sent via the system, a notification will be received by MDJM and the Status will be adjusted to <code>Opened</code> and additionally the time the message was viewed will be displayed, together with the total number of times the message has been opened.<br /><br />
+		There are a few things to note with this feature...
+    <ui>
+        <li>We recommend that if you leave this option enabled, you disable the settings that dictate admins and/DJ's are copied into the emails. Otherwise, when an Admin/DJ who has received a copy of the email opens it, that will be recorded within the API and the status will be set to Opened. We added a counter to show how many times the email has been opened to try and help with this</li>
+        <li>For the API to work, the client needs to have an active internet connection when they open the email. Otherwise the API callback cannot be performed and we cannot capture the message being opened</li>
+        <li>Whilst we are using a very common means of tracking emails, not all clients will support it (although most do). We cannot therefore guarantee 100% accuracy with the tracking</li>
+        <li>If an email client blocks images from your address, tracking will not function. Encourage your clients to add your email address to their safe-senders list</li>
+    </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Venues</font><br />
+		Over the next few releases you will see some changes to the Admin UI of the Mobile DJ Manager plugin, to improve functionality, speed, coding and integration with WordPress. We started with <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">Venues</a>.<br /><br />
+		The new <a href="<?php f_mdjm_admin_page( 'venues' ); ?>">venues</a> interface allows you to attach details to venues, such as Sound Limiter, Access via Stairs, or whatever is necessary. Add your own details. We have provided a few to get you started, you can remove these if you wish.<br /><br />
+		All venues you added previously have been copied across automatically
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Contract &amp; Email Template's have Moved</font><br />
+        To keep all MDJM links together, we have moved the <a href="<?php f_mdjm_admin_page( 'contract' ); ?>">Contract</a> and <a href="<?php f_mdjm_admin_page( 'email_template' ); ?>">Email Template</a> menu links to be under the DJ Manager menu rather than listed under the Posts section.<br /><br />
+		We've also added additional information to both of these screens and with <a href="<?php f_mdjm_admin_page( 'contract' ); ?>">Contracts</a> you can now add some additional information to help describe the contract and where it should be used.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><strong>Bug Fix</strong>: If your web theme utilises white text some playlist entries where not visible within the front end</li>
+                <li><strong>General</strong>: Cleaner Email and Contract Template tables</li>
+                <li><strong>General</strong>: Code improvements, efficiency and cleanliness</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1_2
+
+/**************************************************
 				VERSION 1.1.1
 **************************************************/
 	function f_mdjm_updated_to_1_1_1()	{

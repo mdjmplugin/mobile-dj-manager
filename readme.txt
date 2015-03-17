@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.1.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,8 +77,19 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1.2 =
+<strong>Released Tuesday, 17th March 2015</strong>
+<ul>
+	<li><strong>New</strong>: All emails sent via the system to clients and DJ's are logged</li>
+	<li><strong>New</strong>: Track your clients opening of emails</li>
+	<li><strong>New</strong>: Re-designed the Venues feature and added additional functionality</li>
+	<li><strong>Bug Fix</strong>: If your web theme utilises white text some playlist entries where not visible within the front end</li>
+	<li><strong>General</strong>: Cleaner Email and Contract Template tables</li>
+	<li><strong>General</strong>: Code improvements, efficiency and cleanliness</li>
+<ul>
+
 = 1.1.1 =
-<u>Released Tuesday, 10th March 2013</u>
+<u>Released Tuesday, 10th March 2015</u>
 <ul>
 	<li>New Settings options added - Payment Types & Transaction Types. Used for adding Event transactions</li>
 	<li><strong>Bug Fix</strong>: Manage Playlist link was missing on the client home page when viewing a single event</li>

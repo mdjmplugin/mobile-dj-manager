@@ -481,6 +481,25 @@
 					
 					$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
 					$info = f_mdjm_prepare_email( $eventinfo, $type );
+					
+					/* -- Insert the communication post */
+					if( !class_exists( 'MDJM_Communication' ) )
+						require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+						
+					$mdjm_comms = new MDJM_Communication();
+					
+					$p = $mdjm_comms->insert_comm( array (
+												'subject'	=> wp_strip_all_tags( $subject ),
+												'content'	=> $info['content'],
+												'recipient'  => $eventinfo->user_id,
+												'source'	 => $mdjm_options['app_name'],
+												'event'	  => $eventinfo->event_id,
+												'author'	 => get_current_user_id(),
+												) );
+					
+					$info['content'] .= $mdjm_comms->insert_stat_image( $p );
+					$info['content'] .= "</body>\r\n</html>\r\n";
+					
 					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 						$j_args = array (
 							'client' => $eventinfo->user_id,
@@ -491,6 +510,7 @@
 							'entry' => $j_entry,
 							);
 						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+						$mdjm_comms->change_email_status( $p, 'sent' );
 					}
 				}
 			}
@@ -505,6 +525,22 @@
 					
 					$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
 					$info = f_mdjm_prepare_email( $eventinfo, $type );
+					/* -- Insert the communication post */
+					if( !class_exists( 'MDJM_Communication' ) )
+						require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+						
+					$mdjm_comms = new MDJM_Communication();
+					$p = $mdjm_comms->insert_comm( array (
+												'subject'	=> wp_strip_all_tags( $subject ),
+												'content'	=> $info['content'],
+												'recipient'  => $eventinfo->user_id,
+												'source'	 => $mdjm_options['app_name'],
+												'event'	  => $eventinfo->event_id,
+												'author'	 => get_current_user_id(),
+												) );
+												
+					$info['content'] .= $mdjm_comms->insert_stat_image( $p );
+					$info['content'] .= "</body>\r\n</html>\r\n";
 					if( wp_mail( $info['client']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 						$j_args = array (
 							'client' => $eventinfo->user_id,
@@ -515,6 +551,7 @@
 							'entry' => $j_entry,
 							);
 						if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+						$mdjm_comms->change_email_status( $p, 'sent' );
 					}
 				}
 			}
@@ -523,7 +560,24 @@
 			if( isset( $mdjm_options['booking_conf_to_dj'] ) && $mdjm_options['booking_conf_to_dj'] == 'Y' )	{
 				$email_headers = f_mdjm_dj_email_headers( $eventinfo->event_dj );
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
-				wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers );
+				
+				/* -- Insert the communication post */
+				if( !class_exists( 'MDJM_Communication' ) )
+					require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+					
+				$mdjm_comms = new MDJM_Communication();
+				$p = $mdjm_comms->insert_comm( array (
+													'subject'	=> wp_strip_all_tags( 'DJ Booking Confirmed' ),
+													'content'	=> $info['content'],
+													'recipient'  => $eventinfo->event_dj,
+													'source'	 => $mdjm_options['app_name'],
+													'event'	  => $eventinfo->event_id,
+													'author'	 => get_current_user_id(),
+													) );
+				
+				if( wp_mail( $info['dj'], 'DJ Booking Confirmed', $info['content'], $email_headers ) )	{
+					$mdjm_comms->change_email_status( $p, 'sent' );
+				}
 			}
 		}
 		

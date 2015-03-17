@@ -80,7 +80,7 @@
                     <input type="hidden" name="event_id" value="<?php echo $event->event_id; ?>" />
                     <tr>
                     <td height="30" align="left"><a href="<?php echo get_permalink( WPMDJM_CLIENT_HOME_PAGE ); ?><?php echo $sep; ?>action=view_event&event_id=<?php echo $event->event_id; ?>"><?php echo date( $mdjm_options['short_date_format'], strtotime( $event->event_date ) ); ?></a></td>
-                    <td align="left"><?php echo $event->event_type; ?></td>
+                    <td align="left"><?php echo stripslashes( $event->event_type ); ?></td>
                     <td align="left"><?php echo f_mdjm_currency() . $event->cost; ?></td>
                     <td align="left"><?php echo $event->contract_status; ?></td>
                     <td align="left">
@@ -289,7 +289,7 @@
                 <td width="15%" style="font-weight:bold">Date of Event:</td>
                 <td width="35%"><?php echo date( $mdjm_options['short_date_format'], strtotime( $eventinfo->event_date ) )." (".substr( floor( $days_to_go / ( 60*60*24 ) ) ,1 )." days to go!)"; ?></td>
                 <td width="15%" style="font-weight:bold">Type of Event:</td>
-                <td width="35%"><?php echo $eventinfo->event_type; ?></td>
+                <td width="35%"><?php echo stripslashes( $eventinfo->event_type ); ?></td>
                </tr>
                <tr>
                 <td style="font-weight:bold">Start Time:</td>
@@ -302,7 +302,7 @@
 					?>
 					<tr>
 					<td style="font-weight:bold">Event Information:</td>
-					<td colspan="3"><?php echo $eventinfo->event_description; ?></td>
+					<td colspan="3"><?php echo stripslashes( $eventinfo->event_description ); ?></td>
 					</tr>
 					<?php 
 				} 
@@ -320,35 +320,50 @@
                 <td style="font-weight:bold">Contact Email:</td>
                 <td><?php echo $clientinfo->user_email; ?></td>
                 <td style="font-weight:bold">Contact Address:</td>
-                <td><?php if( isset( $clientinfo->address1 ) && !empty( $clientinfo->address1 ) ) echo $clientinfo->address1; ?>
-                <?php if( isset( $clientinfo->address2 ) && !empty( $clientinfo->address2 ) ) echo ', ' . $clientinfo->address2; ?>
-                <?php if( isset( $clientinfo->town ) && !empty( $clientinfo->town ) ) echo '<br />' . $clientinfo->town; ?>
-                <?php if( isset( $clientinfo->county ) && !empty( $clientinfo->county ) ) echo ', ' . $clientinfo->county; ?>
+                <td><?php if( isset( $clientinfo->address1 ) && !empty( $clientinfo->address1 ) ) echo stripslashes( $clientinfo->address1 ); ?>
+                <?php if( isset( $clientinfo->address2 ) && !empty( $clientinfo->address2 ) ) echo ', ' . stripslashes( $clientinfo->address2 ); ?>
+                <?php if( isset( $clientinfo->town ) && !empty( $clientinfo->town ) ) echo '<br />' . stripslashes( $clientinfo->town ); ?>
+                <?php if( isset( $clientinfo->county ) && !empty( $clientinfo->county ) ) echo ', ' . stripslashes( $clientinfo->county ); ?>
                 <?php if( isset( $clientinfo->postcode ) && !empty( $clientinfo->postcode ) ) echo '<br />' . $clientinfo->postcode; ?> 
                 </td>
                </tr>
                <tr>
                 <td colspan="4">&nbsp;</td>
               </tr>
+              <?php
+				if( !class_exists( 'MDJM_Events' ) )	{
+					require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );
+				}
+				$mdjm_events = new MDJM_Events();
+				
+				$venue_details = $mdjm_events->mdjm_get_venue_details( $eventinfo->venue, $eventinfo->event_id );
+				$venue_address2 = isset( $venue_details ) ? $venue_details['venue_address2'] : $eventinfo->venue_addr2;
+				$venue_town = isset( $venue_details ) ? $venue_details['venue_town'] : $eventinfo->venue_city;
+				$venue_county = isset( $venue_details ) ? $venue_details['venue_county'] : $eventinfo->venue_state;
+				$venue_postcode = isset( $venue_details ) ? $venue_details['venue_postcode'] : $eventinfo->venue_zip;
+				$venue_contact = isset( $venue_details ) ? $venue_details['venue_contact'] : $eventinfo->venue_contact;
+				$venue_phone = isset( $venue_details ) ? $venue_details['venue_phone'] : $eventinfo->venue_phone;
+				$venue_email = isset( $venue_details ) ? $venue_details['venue_email'] : $eventinfo->venue_email;
+				?>
               <tr valign="top">
                 <td width="15%" style="font-weight:bold">Venue:</td>
-                <td width="35%"><?php echo $eventinfo->venue; ?></td>
+                <td width="35%"><?php echo stripslashes( $venue_details['name'] ); ?></td>
                 <td width="15%" style="font-weight:bold">Venue Address:</td>
-                <td width="35%"><?php echo $eventinfo->venue_addr1; ?>
-                <?php if( isset( $eventinfo->venue_addr2 ) && !empty( $eventinfo->venue_addr2 ) ) { echo ', ' . $eventinfo->venue_addr2; } ?>
-                <?php if( isset( $eventinfo->venue_city ) && !empty( $eventinfo->venue_city ) ) echo '<br />' . $eventinfo->venue_city; ?>
-                <?php if( isset( $eventinfo->venue_state ) && !empty( $eventinfo->venue_state ) ) echo ', ' . $eventinfo->venue_state; ?>
-                <?php if( isset( $eventinfo->venue_zip ) && !empty( $eventinfo->venue_zip ) ) echo '<br />' . $eventinfo->venue_zip; ?></td>
+                <td width="35%"><?php echo stripslashes( $venue_details['venue_address1'] ); ?>
+                <?php echo ( !empty( $venue_address2 ) ? ', ' . stripslashes( $venue_address2 ) : '' ); ?>
+                <?php echo ( !empty( $venue_town ) ? '<br />' . stripslashes( $venue_town ) : '' ); ?>
+                <?php echo ( !empty( $venue_county ) ? ', ' . stripslashes( $venue_county ) : '' ); ?>
+                <?php echo ( !empty( $venue_postcode ) ? '<br />' . stripslashes( $venue_postcode ) : '' ); ?></td>
               </tr>
               <tr>
               <td width="15%" style="font-weight:bold">Venue Contact:</td>
-              <td width="35%"><?php if( isset( $eventinfo->venue_contact ) ) echo $eventinfo->venue_contact; ?></td>
+              <td width="35%"><?php echo ( !empty( $venue_contact ) ? stripslashes( $venue_contact ) : '' ); ?></td>
               <td width="15%" style="font-weight:bold">Venue Phone:</td>
-              <td width="35%"><?php if( isset( $eventinfo->venue_phone ) ) echo $eventinfo->venue_phone; ?></td>
+              <td width="35%"><?php echo ( !empty( $venue_phone ) ? stripslashes( $venue_phone ) : '' ); ?></td>
               </tr>
               <tr>
               <td width="15%" style="font-weight:bold">Venue Email:</td>
-              <td width="35%"><?php if( isset( $eventinfo->venue_email ) ) echo $eventinfo->venue_email; ?></td>
+              <td width="35%"><?php echo ( !empty( $venue_email ) ? stripslashes( $venue_email ) : '' ); ?></td>
               <td width="15%" style="font-weight:bold">&nbsp;</td>
               <td width="35%">&nbsp;</td>
               </tr>

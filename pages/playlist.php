@@ -133,10 +133,8 @@
             	<?php
 			}
 			if( count( $playlist ) > 0 )	{ // Songs to display
-				$entry = ' entries';
-				if( count( $playlist ) == 1 ) $entry = ' entry';
 				?>
-                <p>Your playlist currently has <?php echo count( $playlist ) . $entry; ?></p>
+                <p>Your playlist currently has <?php echo count( $playlist ) . _n( 'entry', 'entries', count( $playlist ) ); ?></p>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px">
                 <thead>
                 <tr align="left"\>
@@ -149,10 +147,8 @@
                 </tr>
                 </thead>
                 <?php
-				$i = 1;
 				foreach( $playlist as $entry )	{
-					if( $i == 1 ) { $bgcolour = "#FFF"; } elseif( $i == 2 ) { $bgcolour = "#EEE"; }
-					print( '<tr bgcolor="' . $bgcolour . '">' );
+					print( '<tr>' );
 					print( '<td>' . stripslashes( $entry->song ) . '</td>' );
 					print( '<td>' . stripslashes( $entry->artist ) . '</td>' );
 					print( '<td>' . stripslashes( $entry->play_when ) . ' </td>' );
@@ -164,8 +160,6 @@
 					}
 					print( '</td>' );
 					print( '</tr>' );
-					$i++;
-					if( $i == 3 ) { $i = 1; }
 				}
 			?>
 			</table>

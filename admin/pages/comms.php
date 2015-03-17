@@ -93,17 +93,35 @@
 			if( $eventinfo )	{
 				include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 				$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
-				$subject .= str_replace( $shortcode_content_search, $shortcode_content_replace, $_POST['subject'] );
+				$subject = str_replace( $shortcode_content_search, $shortcode_content_replace, $_POST['subject'] );
 			}
 			else	{
 				$info['content'] .= $email_content;
 				$subject = stripslashes( $_POST['subject'] );
 			}
-			$info['content'] .= '</html></body>';
+			
+			if( !class_exists( 'MDJM_Communication' ) )
+				require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+			
+			/* -- Insert the communication post */	
+			$mdjm_comms = new MDJM_Communication();
+			
+			$p = $mdjm_comms->insert_comm( array (
+										'subject'	=> wp_strip_all_tags( $subject ),
+										'content'	=> $info['content'] . '</body></html>',
+										'recipient'  => $info['recipient']->ID,
+										'source'	 => 'Communication Feature',
+										'event'	  => $eventinfo->event_id,
+										) );
+			
+			$info['content'] .= $mdjm_comms->insert_stat_image( $p );
+			$info['content'] .= "</body>\r\n</html>\r\n";
 			
 			if( wp_mail( $info['recipient']->user_email, $subject, $info['content'], $email_headers ) ) 	{
 				$class = 'updated';
 				$message = 'Your email has been sent successfully';
+				
+				$mdjm_comms->change_email_status( $p, 'sent' );
 			}
 			if( WPDJM_JOURNAL == 'Y' )	{
 				if( $eventinfo && f_mdjm_is_client( $_POST['email_to'] ) )	{

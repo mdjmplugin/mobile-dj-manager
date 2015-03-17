@@ -1086,6 +1086,24 @@
 			$type = array( 'type' => 'custom', 'id' => $cron_email_args['taskinfo']['options']['email_template'] );
 			$info = f_mdjm_prepare_email( $eventinfo, $type );
 			$content = $info['content'];
+			
+			if( !class_exists( 'MDJM_Communication' ) )
+				require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+			
+			/* -- Insert the communication post */	
+			$mdjm_comms = new MDJM_Communication();
+			
+			$p = $mdjm_comms->insert_comm( array (
+										'subject'	=> wp_strip_all_tags( $cron_email_args['subject'] ),
+										'content'	=> $content . '</body></html>',
+										'recipient'  => $cron_email_args['to'],
+										'source'	 => 'Automated Task',
+										'event'	  => $cron_email_args['eventinfo']->event_id,
+										) );
+										
+			$content .= $mdjm_comms->insert_stat_image( $p );
+			$content .= "</body>\r\n</html>\r\n";
+			
 			/* Set HTML Type */
 			$headers .= 'MIME-Version: 1.0'  . "\r\n";
 			$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
@@ -1095,7 +1113,9 @@
 		}
 		
 		/* Fire the email */
-		wp_mail( $cron_email_args['to'], stripslashes( $cron_email_args['subject'] ), $content, $headers );
+		if( wp_mail( $cron_email_args['to'], stripslashes( $cron_email_args['subject'] ), $content, $headers ) )	{
+			$mdjm_comms->change_email_status( $p, 'sent' );	
+		}
 		
 	} // f_mdjm_cron_email
 	

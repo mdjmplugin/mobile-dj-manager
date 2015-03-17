@@ -457,6 +457,7 @@
 				);
 			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 			
+			return $event_id;
 		} // mdjm_create_event
 		
 		/*
@@ -465,7 +466,7 @@
 		* @since 1.0
 		* Send the Client email
 		*/
-		function mdjm_client_email( $form, $client_email, $client_form_detail )	{
+		function mdjm_client_email( $form, $client_email, $client_form_detail, $user_id, $event_id )	{
 			global $mdjm_options;
 			
 			$client_email_headers = array();
@@ -492,6 +493,7 @@
 						$client_email_content .= '</body></html>';
 					}
 				}
+								
 				wp_mail( $client_email, $subject, $client_email_content, $client_email_headers );
 			}
 			else	{

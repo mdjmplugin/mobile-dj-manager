@@ -349,7 +349,24 @@
 			$subject = str_replace( $pp_content_search, $pp_content_replace, $subject );
 			$info['content'] = str_replace( $pp_content_search, $pp_content_replace, $info['content'] );
 			
+			/* -- Insert the communication post */
+			if( !class_exists( 'MDJM_Communication' ) )
+				require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+				
+			$mdjm_comms = new MDJM_Communication();
+			$p = $mdjm_comms->insert_comm( array (
+												'subject'	=> wp_strip_all_tags( $subject ),
+												'content'	=> $info['content'],
+												'recipient'  => $eventinfo->user_id,
+												'source'	 => 'Payment Confirmation',
+												'event'	  => $eventinfo->event_id,
+												'author'	 => '1',
+												) );
+			$info['content'] .= $mdjm_comms->insert_stat_image( $p );
+			
 			if( wp_mail( $clientinfo->user_email, $subject, $info['content'], $email_headers ) )	{
+				$mdjm_comms->change_email_status( $p, 'sent' );
+				
 				if( PP_DEBUG == true ) {
 					error_log( 'PASS: Email confirmation sent to client' . PHP_EOL, 3, PP_LOG_FILE );
 				}	

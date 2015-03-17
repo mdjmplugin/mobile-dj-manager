@@ -365,11 +365,11 @@
 				$have_venue = true;
 			}
 			if( isset( $eventinfo->venue_city ) && !empty( $eventinfo->venue_city ) )	{
-				$_POST['venue_city'] = $eventinfo->venue_city;
+				$_POST['venue_town'] = $eventinfo->venue_city;
 				$have_venue = true;
 			}
 			if( isset( $eventinfo->venue_state ) && !empty( $eventinfo->venue_state ) )	{
-				$_POST['venue_state'] = $eventinfo->venue_state;
+				$_POST['venue_county'] = $eventinfo->venue_state;
 				$have_venue = true;
 			}
 		}
@@ -620,7 +620,12 @@
         <td colspan="3"><textarea cols="100" rows="4" id="event_description" name="event_description"><?php echo $_POST['event_description']; ?></textarea></td>
         </tr>
         <?php
-		$venueinfo = f_mdjm_get_venueinfo();
+		//$venueinfo = f_mdjm_get_venueinfo();
+		if( !class_exists( 'MDJM_Events' ) )	{
+			require( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );	
+		}
+		$mdjm_events = new MDJM_Events();
+		$venueinfo = $mdjm_events->mdjm_get_venues();
 		?>
         </table>
         <h3>Venue Details</h3>
@@ -635,7 +640,7 @@
 		if( $venueinfo )	{
             foreach( $venueinfo as $venue )	{
 				?>
-				<option value="<?php echo $venue->venue_id; ?>" <?php selected( $venue->venue_id, $_POST['event_venue'] ); ?>><?php echo $venue->venue_name; ?></option>
+				<option value="<?php echo $venue->ID; ?>" <?php selected( $venue->ID, $_POST['event_venue'] ); ?>><?php echo $venue->post_title; ?></option>
 				<?php
 			}
 		}
@@ -680,28 +685,28 @@
         <td><input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php echo $_POST['venue_contact']; ?>"></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_addr1">Venue Address Line 1:</label></th>
-        <td><input type="text" id="venue_addr1" class="regular-text" name="venue_addr1" value="<?php echo $_POST['venue_addr1']; ?>" /></td>
+        <th scope="row"><label for="venue_address1">Venue Address Line 1:</label></th>
+        <td><input type="text" id="venue_address1" class="regular-text" name="venue_address1" value="<?php echo $_POST['venue_address1']; ?>" /></td>
         <th scope="row"><label for="venue_phone">Venue Phone:</label></th>
         <td><input type="text" id="venue_phone" class="regular-text" name="venue_phone" value="<?php echo $_POST['venue_phone']; ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_addr2">Venue Address Line 2:</label></th>
-        <td><input type="text" id="venue_addr2" class="regular-text" name="venue_addr2" value="<?php echo $_POST['venue_addr2']; ?>" /></td>
+        <th scope="row"><label for="venue_address2">Venue Address Line 2:</label></th>
+        <td><input type="text" id="venue_address2" class="regular-text" name="venue_address2" value="<?php echo $_POST['venue_address2']; ?>" /></td>
         <th scope="row"><label for="venue_email">Venue Email:</label></th>
         <td colspan="3"><input type="text" id="venue_email" class="regular-text" name="venue_email" value="<?php echo $_POST['venue_email']; ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_city">Venue Town/City:</label></th>
-        <td colspan="3"><input type="text" id="venue_city" class="regular-text" name="venue_city" value="<?php echo $_POST['venue_city']; ?>" /></td>
+        <th scope="row"><label for="venue_town">Venue Town/City:</label></th>
+        <td colspan="3"><input type="text" id="venue_town" class="regular-text" name="venue_town" value="<?php echo $_POST['venue_town']; ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_state">Venue County:</label></th>
-        <td colspan="3"><input type="text" id="venue_state" class="regular-text" name="venue_state" value="<?php echo $_POST['venue_state']; ?>" /></td>
+        <th scope="row"><label for="venue_county">Venue County:</label></th>
+        <td colspan="3"><input type="text" id="venue_county" class="regular-text" name="venue_county" value="<?php echo $_POST['venue_county']; ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_zip">Venue Post Code:</label></th>
-        <td colspan="3"><input type="text" id="venue_zip" class="regular-text" name="venue_zip" value="<?php echo $_POST['venue_zip']; ?>" /></td>
+        <th scope="row"><label for="venue_postcode">Venue Post Code:</label></th>
+        <td colspan="3"><input type="text" id="venue_postcode" class="regular-text" name="venue_postcode" value="<?php echo $_POST['venue_postcode']; ?>" /></td>
         </tr>
         <tr>
         <th scope="row"><label for="save_venue">Save Venue?</label></th>
@@ -1461,36 +1466,43 @@
         </table>
         <hr />
         <h3>Venue Details</h3>
+        <?php
+		if( !class_exists( 'MDJM_Events' ) )	{
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );
+		}
+		$mdjm_events = new MDJM_Events();
+		$venue_details = $mdjm_events->mdjm_get_venue_details( $eventinfo->venue, $eventinfo->event_id );	
+		?>
         <table class="form-table">
         <tr>
         <th scope="row"><label for="venue">Venue:</label></th>
-        <td><input type="text" id="venue" class="regular-text" name="venue" value="<?php echo $eventinfo->venue; ?>" /></td>
+        <td><input type="text" id="venue" class="regular-text" name="venue" value="<?php echo esc_attr( $venue_details['name'] ); ?>" /></td>
         <th scope="row"><label for="venue_contact">Venue Contact:</label></th>
-        <td><input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php echo $eventinfo->venue_contact; ?>"></td>
+        <td><input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php echo esc_attr( $venue_details['venue_contact'] ); ?>"></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_addr1">Venue Address Line 1:</label></th>
-        <td><input type="text" id="venue_addr1" class="regular-text" name="venue_addr1" value="<?php echo $eventinfo->venue_addr1; ?>" /></td>
+        <th scope="row"><label for="venue_address1">Venue Address Line 1:</label></th>
+        <td><input type="text" id="venue_address1" class="regular-text" name="venue_address1" value="<?php echo esc_attr( $venue_details['venue_address1'] ); ?>" /></td>
         <th scope="row"><label for="venue_phone">Venue Phone:</label></th>
-        <td><input type="text" id="venue_phone" class="regular-text" name="venue_phone" value="<?php echo $eventinfo->venue_phone; ?>" /></td>
+        <td><input type="text" id="venue_phone" class="regular-text" name="venue_phone" value="<?php echo esc_attr( $venue_details['venue_phone'] ); ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_addr2">Venue Address Line 2:</label></th>
-        <td><input type="text" id="venue_addr2" class="regular-text" name="venue_addr2" value="<?php echo $eventinfo->venue_addr2; ?>" /></td>
+        <th scope="row"><label for="venue_address2">Venue Address Line 2:</label></th>
+        <td><input type="text" id="venue_address2" class="regular-text" name="venue_address2" value="<?php echo esc_attr( $venue_details['venue_address2'] ); ?>" /></td>
         <th scope="row"><label for="venue_email">Venue Email:</label></th>
-        <td colspan="3"><input type="text" id="venue_email" class="regular-text" name="venue_email" value="<?php echo $eventinfo->venue_email; ?>" /></td>
+        <td colspan="3"><input type="text" id="venue_email" class="regular-text" name="venue_email" value="<?php echo esc_attr( $venue_details['venue_email'] ); ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_city">Venue Town/City:</label></th>
-        <td colspan="3"><input type="text" id="venue_city" class="regular-text" name="venue_city" value="<?php echo $eventinfo->venue_city; ?>" /></td>
+        <th scope="row"><label for="venue_town">Venue Town/City:</label></th>
+        <td colspan="3"><input type="text" id="venue_town" class="regular-text" name="venue_town" value="<?php echo $venue_details['venue_town']; ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_state">Venue County:</label></th>
-        <td colspan="3"><input type="text" id="venue_state" class="regular-text" name="venue_state" value="<?php echo $eventinfo->venue_state; ?>" /></td>
+        <th scope="row"><label for="venue_county">Venue County:</label></th>
+        <td colspan="3"><input type="text" id="venue_county" class="regular-text" name="venue_county" value="<?php echo esc_attr( $venue_details['venue_county'] ); ?>" /></td>
         </tr>
         <tr>
-        <th scope="row"><label for="venue_zip">Venue Post Code:</label></th>
-        <td colspan="3"><input type="text" id="venue_zip" class="regular-text" name="venue_zip" value="<?php echo $eventinfo->venue_zip; ?>" /></td>
+        <th scope="row"><label for="venue_postcode">Venue Post Code:</label></th>
+        <td colspan="3"><input type="text" id="venue_postcode" class="regular-text" name="venue_postcode" value="<?php echo esc_attr( $venue_details['venue_postcode'] ); ?>" /></td>
         </tr>
         </table>
         <h3>Administration</h3>
@@ -1880,17 +1892,33 @@
 	}
 	
 	function f_mdjm_test()	{
-		global $wpdb, $mdjm_options;
+		$venue_count = wp_count_posts( MDJM_VENUE_POSTS )->publish;
 		
-		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		
-		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+		if( !$venue_count || $venue_count == 0 )	{
+			$venueinfo = f_mdjm_get_venueinfo();
+			
+			if( !class_exists( 'MDJM_Events' ) )	{
+				require( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );	
+			}
+			$mdjm_events = new MDJM_Events();
+			
+			foreach( $venueinfo as $venue )	{
+				$venue_data['name'] = !empty( $venue->venue_name ) ? $venue->venue_name : '';
+				echo $venue_data['name'] . '<br />';
+				$venue_meta['venue_contact'] = !empty( $venue->venue_contact ) ? $venue->venue_contact : '';
+				$venue_meta['venue_phone'] = !empty( $venue->venue_phone ) ? $venue->venue_phone : '';
+				$venue_meta['venue_email'] = !empty( $venue->venue_email ) ? $venue->venue_email : '';
+				$venue_meta['venue_address1'] = !empty( $venue->venue_address1 ) ? $venue->venue_address1 : '';
+				$venue_meta['venue_address2'] = !empty( $venue->venue_address2 ) ? $venue->venue_address2 : '';
+				$venue_meta['venue_town'] = !empty( $venue->venue_town ) ? $venue->venue_town : '';
+				$venue_meta['venue_county'] = !empty( $venue->venue_county ) ? $venue->venue_county : '';
+				$venue_meta['venue_postcode'] = !empty( $venue->venue_postcode ) ? $venue->venue_postcode : '';
+				$venue_meta['venue_information'] = !empty( $venue->venue_information ) ? $venue->venue_information : '';
 				
-				/* -- Add the new payment options -- */
-				$mdjm_pp_options['pp_payment_sources'] = "BACS\r\nCash\r\nCheque\r\nPayPal\r\nOther";
-				$mdjm_pp_options['pp_transaction_types'] = "Certifications\r\nHardware\r\nInsurance\r\nMaintenance\r\nMusic\r\nParking\r\nPetrol\r\nSoftware\r\nVehicle";
-		update_option( 'mdjm_pp_options', $mdjm_pp_options );		
-		
+				$mdjm_events->mdjm_add_venue( $venue_data, $venue_meta );
+				
+			}
+		}
 		exit;
 	}
 	

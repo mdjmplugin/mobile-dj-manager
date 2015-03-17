@@ -30,6 +30,7 @@
 										'default_contract',
 										'id_prefix',
 										'system_email',
+										'track_client_emails',
 										'bcc_dj_to_client',
 										'bcc_admin_to_client',
 										'booking_conf_to_client',
@@ -359,8 +360,20 @@
 									'page' => 'settings',
 									); // system_email
 									
+		$admin_fields['track_client_emails'] = array(
+									'display' => 'Track Client Emails?',
+									'key' => 'mdjm_plugin_settings',
+									'type' => 'checkbox',
+									'class' => 'code',
+									'value' => $mdjm_options['track_client_emails'],
+									'text' => 'If selected you can determine if your emails have been opened',
+									'desc' => '<code>Note</code>: not all email clients will support this',
+									'section' => 'email',
+									'page' => 'settings',
+									); // track_client_emails
+		
 		$admin_fields['bcc_dj_to_client'] = array(
-									'display' => 'Copy DJ in Client Emails',
+									'display' => 'Copy DJ in Client Emails?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
 									'class' => 'code',
@@ -372,7 +385,7 @@
 									); // bcc_dj_to_client
 									
 		$admin_fields['bcc_admin_to_client'] = array(
-									'display' => 'Copy Admin in Client Emails',
+									'display' => 'Copy Admin in Client Emails?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
 									'class' => 'code',

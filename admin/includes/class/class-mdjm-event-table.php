@@ -286,18 +286,19 @@
 				?>
                 <ul class='subsubsub'>
                 <?php
-                $i = 1;
                 
                 /* -- Loop through the event status' -- */
                 foreach( $event_status as $current_status => $display )	{
                     $status_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $current_status . "'";
                     if( !current_user_can( 'administrator' ) )
                         $status_query .= " AND `event_dj` = '" . get_current_user_id() . "'";
+					
+					$count = count( $wpdb->get_results( $status_query ) );	
+					if( $count != 0 )	{
                     ?>
-                    <li class="publish"><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=<?php echo $current_status; ?>"<?php if( $current_status == $s ) { ?> class="current" <?php } ?>><?php echo $display; ?><?php if( $display == 'Unattended' ) echo '</span>'; ?> <span class="count">(<?php echo count( $wpdb->get_results( $status_query ) ); ?>)</span></a> |</li>
+                        <li class="publish"><a href="<?php f_mdjm_admin_page( 'events' ); ?>&status=<?php echo $current_status; ?>"<?php if( $current_status == $s ) { ?> class="current" <?php } ?>><?php echo $display; ?> <span class="count">(<?php echo $count; ?>)</span></a> |</li>
                     <?php
-                    
-                    $i++;	
+					}
                 }
                 
                 /* -- All Events -- */

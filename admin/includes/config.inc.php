@@ -145,18 +145,23 @@
 		}
 		
 		/* Venue Address */
-		$venue_full_address = $eventinfo->venue_addr1 . '<br />';
-		if( !empty( $eventinfo->venue_addr2 ) )	{
-			$venue_full_address .= $eventinfo->venue_addr2 . '<br />';
+		if( !class_exists( 'MDJM_Events' ) )	{
+			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );
 		}
-		if( !empty( $eventinfo->venue_city ) )	{
-			$venue_full_address .= $eventinfo->venue_city . '<br />';
+		$mdjm_events = new MDJM_Events();
+		$venue_details = $mdjm_events->mdjm_get_venue_details( $eventinfo->venue, $eventinfo->event_id );
+		$venue_full_address = $venue_details['venue_address1'] . '<br />';
+		if( !empty( $venue_details['venue_address2'] ) )	{
+			$venue_full_address .= $venue_details['venue_address2'] . '<br />';
 		}
-		if( !empty( $eventinfo->venue_state ) )	{
-			$venue_full_address .= $eventinfo->venue_state . '<br />';
+		if( !empty( $venue_details['venue_town'] ) )	{
+			$venue_full_address .= $venue_details['venue_town'] . '<br />';
 		}
-		if( !empty( $eventinfo->venue_zip ) )	{
-			$venue_full_address .= $eventinfo->venue_zip;
+		if( !empty( $venue_details['venue_county'] ) )	{
+			$venue_full_address .= $venue_details['venue_county'] . '<br />';
+		}
+		if( !empty( $venue_details['venue_postcode'] ) )	{
+			$venue_full_address .= $venue_details['venue_postcode'];
 		}
 		
 		/* User password */
@@ -197,11 +202,11 @@
 							$eventinfo->event_description, /* {EVENT_DESCRIPTION} */
 							$eventinfo->dj_notes, /* {DJ_NOTES} */
 							$eventinfo->admin_notes, /* {ADMIN_NOTES} */
-							$eventinfo->venue, /* {VENUE} */
-							$eventinfo->venue_contact, /* {VENUE_CONTACT} */
+							$venue_details['name'], /* {VENUE} */
+							$venue_details['venue_contact'], /* {VENUE_CONTACT} */
 							$venue_full_address, /* {VENUE_FULL_ADDRESS} */
-							$eventinfo->venue_phone, /* {VENUE_TELEPHONE} */
-							$eventinfo->venue_email, /* {VENUE_EMAIL} */
+							$venue_details['venue_phone'], /* {VENUE_TELEPHONE} */
+							$venue_details['venue_email'], /* {VENUE_EMAIL} */
 							home_url(), /* {WEBSITE_URL} */
 							admin_url(), /* {ADMIN_URL} */
 							$mdjm_options['app_name'], /* {APPLICATION_NAME} */

@@ -299,6 +299,7 @@
 							'default_contract'        		=> $contract_post_id,
 							'id_prefix'               		   => 'MDJM',
 							'system_email'            		=> get_bloginfo( 'admin_email' ),
+							'track_client_emails'			 => 'Y',
 							'bcc_dj_to_client'        		=> '',
 							'bcc_admin_to_client'     		 => 'Y',
 							'booking_conf_to_client' 		  => 'Y',
@@ -454,6 +455,40 @@
 								'pp_checkout_style' 	  => '',
 								);
 		
+		/* -- Register the Venue Taxonomy & Terms -- */
+		if( !get_taxonomy( 'venue-details' ) )	{
+			$tax_labels[MDJM_VENUE_POSTS] = array(
+							'name'              		   => _x( 'Venue Details', 'taxonomy general name' ),
+							'singular_name'     		  => _x( 'Venue Detail', 'taxonomy singular name' ),
+							'search_items'      		   => __( 'Search Venue Details' ),
+							'all_items'         		  => __( 'All Venue Details' ),
+							'edit_item'        		  => __( 'Edit Venue Detail' ),
+							'update_item'       			=> __( 'Update Venue Detail' ),
+							'add_new_item'      		   => __( 'Add New Venue Detail' ),
+							'new_item_name'     		  => __( 'New Venue Detail' ),
+							'menu_name'         		  => __( 'Venue Details' ),
+							'separate_items_with_commas' => __( 'Separate venue details with commas' ),
+							'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details' ),
+							'not_found'				  => __( 'No details found' ),
+							);
+			$tax_args[MDJM_VENUE_POSTS] = array(
+							'hierarchical'      => true,
+							'labels'            => $tax_labels[MDJM_VENUE_POSTS],
+							'show_ui'           => true,
+							'show_admin_column' => true,
+							'query_var'         => true,
+							'rewrite'           => array( 'slug' => 'venue-details' ),
+						);
+		
+			register_taxonomy( 'venue-details', MDJM_VENUE_POSTS, $tax_args[MDJM_VENUE_POSTS] );
+		}
+		wp_insert_term( 'Low Ceiling', 'venue-details', array( 'description' => 'Venue has a low ceiling' ) );
+		wp_insert_term( 'PAT Required', 'venue-details', array( 'description' => 'Venue requires a copy of the PAT certificate' ) );
+		wp_insert_term( 'PLI Required', 'venue-details', array( 'description' => 'Venue requires proof of PLI' ) );
+		wp_insert_term( 'Smoke/Fog Allowed', 'venue-details', array( 'description' => 'Venue allows the use of Smoke/Fog/Haze' ) );
+		wp_insert_term( 'Sound Limiter', 'venue-details', array( 'description' => 'Venue has a sound limiter' ) );
+		wp_insert_term( 'Via Stairs', 'venue-details', array( 'description' => 'Access to this Venue is via stairs' ) );
+
 		/* Version information into the database */
 		if( !get_option( 'mdjm_version' ) )	{
 			add_option( 'mdjm_version', WPMDJM_VERSION_NUM );
@@ -930,6 +965,45 @@
 			} // if( $current_version_mdjm <= '1.1' )
 			
 /***************************************************
+			 	UPGRADES FROM 1.1.1
+***************************************************/			
+			if( $current_version_mdjm <= '1.1.1' )	{
+				$mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+
+				/* Add the Email Tracking Option */
+				$mdjm_options['track_client_emails'] = 'Y';
+				
+				/* -- Copy the venues -- */
+				$venue_count = wp_count_posts( MDJM_VENUE_POSTS )->publish;
+		
+				if( !$venue_count || $venue_count == 0 )	{
+					$venueinfo = f_mdjm_get_venueinfo();
+					
+					if( !class_exists( 'MDJM_Events' ) )	{
+						require( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );	
+					}
+					$mdjm_events = new MDJM_Events();
+					
+					foreach( $venueinfo as $venue )	{
+						$venue_data['name'] = !empty( $venue->venue_name ) ? $venue->venue_name : '';
+						$venue_meta['venue_contact'] = !empty( $venue->venue_contact ) ? $venue->venue_contact : '';
+						$venue_meta['venue_phone'] = !empty( $venue->venue_phone ) ? $venue->venue_phone : '';
+						$venue_meta['venue_email'] = !empty( $venue->venue_email ) ? $venue->venue_email : '';
+						$venue_meta['venue_address1'] = !empty( $venue->venue_address1 ) ? $venue->venue_address1 : '';
+						$venue_meta['venue_address2'] = !empty( $venue->venue_address2 ) ? $venue->venue_address2 : '';
+						$venue_meta['venue_town'] = !empty( $venue->venue_town ) ? $venue->venue_town : '';
+						$venue_meta['venue_county'] = !empty( $venue->venue_county ) ? $venue->venue_county : '';
+						$venue_meta['venue_postcode'] = !empty( $venue->venue_postcode ) ? $venue->venue_postcode : '';
+						$venue_meta['venue_information'] = !empty( $venue->venue_information ) ? $venue->venue_information : '';
+						
+						$mdjm_events->mdjm_add_venue( $venue_data, $venue_meta );
+					}
+				}
+				/* Add / Update Options */
+				update_option( WPMDJM_SETTINGS_KEY, $mdjm_options );
+			} // if( $current_version_mdjm <= '1.1.1' )
+			
+/***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 ***************************************************/
 			
@@ -1085,15 +1159,15 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
  * Called from: mobile-dj-manager.php
  * @since 1.0
 */
-	function f_mdjm_new_contracts_post_type()	{
+	/*function f_mdjm_new_contracts_post_type()	{
 		if( post_type_exists( 'contracts' ) )	{
 			return; /* Nothing to do here */
-		}
+		/*}
 		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
 		$lic_info = do_reg_check( 'check' );
 		if( $lic_info )	{
 		/* Build out the required arguments and register the post type */
-			$contract_labels = array(
+			/*$contract_labels = array(
 						'name'               => 'MDJM Contracts',
 						'singular_name'      => 'MDJM Contract',
 						'menu_name'          => 'Contracts',
@@ -1114,7 +1188,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'public'			 => true,
 						'publicly_queryable' => true,
 						'show_ui'			=> true,
-						'show_in_menu'	   => true,
+						'show_in_menu'	   => 'edit.php?post_type=contract',
 						'query_var'		  => true,
 						'rewrite'            => array( 'slug' => 'contract' ),
 						'capability_type'    => 'post',
@@ -1125,26 +1199,26 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'menu_icon'		  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' )
 						);
 			/* Now register the new post type */
-			register_post_type( 'contract', $post_args );
+			/*register_post_type( 'contract', $post_args );
 		}
-	} // f_mdjm_new_contracts_post_type
+	} // f_mdjm_new_contracts_post_type*/
 	
-	/**
+/**
  * f_mdjm_email_template_post_type
  * Creates custom post type "email_template"
  * 
  * Called from: mobile-dj-manager.php
  * @since 1.0
 */
-	function f_mdjm_email_template_post_type()	{
+	/*function f_mdjm_email_template_post_type()	{
 		if( post_type_exists( 'email_template' ) )	{
 			return; /* Nothing to do here */
-		}
+		/*}
 		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
 		$lic_info = do_reg_check( 'check' );
 		if( $lic_info )	{
 		/* Build out the required arguments and register the post type */
-			$template_labels = array(
+			/*$template_labels = array(
 						'name'               => 'MDJM Email Templates',
 						'singular_name'      => 'MDJM Email Template',
 						'menu_name'          => 'Email Templates',
@@ -1166,7 +1240,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'exclude_from_search'	=> false,
 						'publicly_queryable' 	 => true,
 						'show_ui'				=> true,
-						'show_in_menu'		   => true,
+						'show_in_menu'		   => 'edit.php?post_type=email_template',
 						'show_in_admin_bar'	  => true,
 						'query_var'		 	  => true,
 						'rewrite'            	=> array( 'slug' => 'email-template' ),
@@ -1178,9 +1252,270 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' )
 						);
 			/* Now register the new post type */
-			register_post_type( 'email_template', $post_args );
+			/*register_post_type( 'email_template', $post_args );
 		}
-	} // f_mdjm_email_template_post_type
+	} // f_mdjm_email_template_post_type*/
+	
+	/**
+	 * f_mdjm_communication_post_type
+	 * Creates custom post type "mdjm_communication"
+	 * 
+	 * Called from: mobile-dj-manager.php
+	 * @since 1.0
+	*/
+	/*function f_mdjm_communication_post_type()	{
+		if( post_type_exists( 'mdjm_communication' ) )	{
+			return; /* Nothing to do here */
+		/*}
+		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
+		$lic_info = do_reg_check( 'check' );
+		if( $lic_info )	{
+		/* Build out the required arguments and register the post type */
+			/*$template_labels = array(
+						'name'               => 'Email History',
+						'singular_name'      => 'Email History',
+						'menu_name'          => 'Email History',
+						'name_admin_bar'     => 'Email History',
+						'add_new'            => 'Add Communication',
+						'add_new_item'       => 'Add New Communication',
+						'new_item'           => 'New Communication',
+						'edit_item'          => 'Review Email',
+						'view_item'          => 'View Email',
+						'all_items'          => 'All Emails',
+						'search_items'       => 'Search Emails',
+						'not_found'          => 'No Emails found.',
+						'not_found_in_trash' => 'No Emails found in Trash.',
+					);
+			$post_args = array(
+						'labels'			 	 => $template_labels,
+						'description'			=> 'Communication used by the Mobile DJ Manager for WordPress plugin',
+						'public'			 	 => false,
+						'exclude_from_search'	=> false,
+						'publicly_queryable' 	 => true,
+						'show_ui'				=> true,
+						'show_in_menu'		   => 'edit.php?post_type=mdjm_communication',
+						'show_in_admin_bar'	  => false,
+						'rewrite' 			  => array( 'slug' => 'mdjm-communications'),
+						'query_var'		 	  => true,
+						'capability_type'    	=> 'post',
+						//'capabilities'		   => array( 'read', 'edit', 'delete' ),
+						'has_archive'        	=> true,
+						'hierarchical'       	   => false,
+						'menu_position'     	  => 5,
+						'supports'			   => array( 'title' ),
+						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' )
+						);
+			/* Now register the new post type */
+			/*register_post_type( 'mdjm_communication', $post_args );
+			
+			/* And now register the possible status' */
+			/*register_post_status( 'ready to send', array(
+									'label'                     => _x( 'Ready to Send', 'post' ),
+									'public'                    => true,
+									'exclude_from_search'       => false,
+									'show_in_admin_all_list'    => true,
+									'show_in_admin_status_list' => true,
+									'label_count'               => _n_noop( 'Ready to Send <span class="count">(%s)</span>', 'Ready to Send <span class="count">(%s)</span>' ),
+								) );
+			register_post_status( 'sent', array(
+									'label'                     => _x( 'Sent', 'post' ),
+									'public'                    => true,
+									'exclude_from_search'       => false,
+									'show_in_admin_all_list'    => true,
+									'show_in_admin_status_list' => true,
+									'label_count'               => _n_noop( 'Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>' ),
+								) );
+			register_post_status( 'opened', array(
+									'label'                     => _x( 'Opened', 'post' ),
+									'public'                    => true,
+									'exclude_from_search'       => false,
+									'show_in_admin_all_list'    => true,
+									'show_in_admin_status_list' => true,
+									'label_count'               => _n_noop( 'Opened <span class="count">(%s)</span>', 'Opened <span class="count">(%s)</span>' ),
+								) );
+		}
+	} // f_mdjm_communication_post_type*/
+	
+	/*function set_communication_post_columns( $columns ) {
+			return array(
+				'cb'			   => '<input type="checkbox" />',
+				'date_sent' 		=> __( 'Date Sent' ),
+				'title' 	 		=> __( 'Email Subject' ),
+				'author'		   => __( 'From' ),
+				'recipient' 		=> __( 'Recipient' ),
+				'current_status'   => __( 'Status' ),
+				'source'		   => __( 'Source' ),
+			);
+	} // set_communication_post_columns
+	
+	/*function set_venue_post_columns( $columns ) {
+			return array(
+				'cb'			   => '<input type="checkbox" />',
+				'title' 	 		=> __( 'Venue' ),
+				'contact'		  => __( 'Contact' ),
+				'phone'		    => __( 'Phone' ),
+				'town' 			 => __( 'Town' ),
+				'county'   		   => __( 'County' ),
+				'info'		     => __( 'Information' ),
+			);
+	} // set_communication_post_columns */
+		
+	/*function custom_post_column_action( $column ) {
+		global $post, $mdjm_options;
+		
+		if( $post->post_type == 'mdjm_communication' )	{
+			switch ( $column ) {
+				case 'date_sent':
+					echo date( $mdjm_options['time_format'] . ' ' . $mdjm_options['short_date_format'], get_post_meta( $post->ID, 'date_sent', true ) );
+					break;
+				case 'recipient':
+					$client = get_userdata( get_post_meta( $post->ID, 'recipient', true ) );
+					if( $client )	{
+						echo $client->display_name;
+					}
+					else	{
+						echo get_post_meta( $post->ID, 'recipient' );	
+					}
+					break;
+				case 'current_status':
+					$count = get_post_meta( $post->ID, 'open_count', true );
+					$last_change = $post->post_modified;
+					
+					$change_date = !empty( $last_change ) && $post->post_status == 'opened' ? date( $mdjm_options['time_format'] . ' ' . $mdjm_options['short_date_format'], strtotime( $last_change ) ) : '';
+					$open_count = !empty( $count ) && $post->post_status == 'opened' ? ' (' . $count . ')' : '';
+					
+					echo ucwords( $post->post_status ) . ' ' . $change_date . $open_count;
+					break;
+				case 'source':
+					echo stripslashes( get_post_meta( $post->ID, 'source', true ) );
+					break;
+			}
+		}
+		elseif( $post->post_type == 'mdjm-venue' )	{
+			switch ( $column ) {
+				case 'title':
+					echo $post->post_title;
+					break;
+				case 'contact':
+					if( get_post_meta( $post->ID, 'venue_email', true ) )
+						echo '<a href="mailto:' . get_post_meta( $post->ID, 'venue_email', true ) . '">';
+						
+					echo stripslashes( get_post_meta( $post->ID, 'venue_contact', true ) );
+					
+					if( get_post_meta( $post->ID, 'venue_email', true ) )
+						echo '</a>';
+					break;
+				case 'phone':
+					$phone = get_post_meta( $post->ID, 'venue_phone', true );
+					echo !empty( $phone ) ? $phone : '';
+					break;
+
+				case 'town':
+					$town = get_post_meta( $post->ID, 'venue_town', true );
+					echo !empty( $town ) ? stripslashes( $town ) : '';
+					break;
+				case 'county':
+					$county = get_post_meta( $post->ID, 'venue_county', true );
+					echo !empty( $county ) ? stripslashes( $county ) : '';
+					break;
+				case 'info':
+					$info = get_post_meta( $post->ID, 'venue_info', true );
+					echo !empty( $info ) ? stripslashes( $info ) : '';
+					echo $info;
+					break;
+			}
+		}
+	} // custom_post_column_action */
+	
+	/*function custom_post_row_actions( $actions, $post ) {
+		if( $post->post_type == 'mdjm_communication' )
+			return $actions = array();
+		
+		elseif( $post->post_type == 'mdjm-venue' )	{
+			if( isset( $actions['view'] ) )
+				unset( $actions['view'] );
+			
+			if( isset( $actions['inline hide-if-no-js'] ) )
+				unset( $actions['inline hide-if-no-js'] );
+		}
+		
+		return $actions; 
+	} // custom_post_row_actions */
+	
+	/*function remove_publish_box()	{
+		remove_meta_box( 'submitdiv', 'mdjm_communication', 'side' );
+	} // custom_post_row_actions*/
+	
+	/*function remove_add_new() {
+		if( 'mdjm_communication' == get_post_type() )	{
+			echo '<style type="text/css">
+				#favorite-actions {display:none;}
+				.add-new-h2{display:none;}
+			</style>';
+		}
+		if( 'mdjm-venue' == get_post_type() )	{
+			?>
+			<style>
+			#misc-publishing-actions, #minor-publishing-actions {
+				display:none;
+		  }
+            </style>
+            <?php
+		}
+	} // custom_post_row_actions*/
+	
+    /*function mdjm_communication_custom_bulk_actions( $actions ){
+			unset( $actions['edit'] );
+			return $actions;
+    }*/
+	
+	/*function rename_publish_button( $translation, $text )	{
+		if( 'mdjm-venue' == get_post_type() )	{
+			if( $text == 'Publish' )
+				return 'Save Venue';	
+		}
+		return $translation;
+	}*/
+	
+	// Register the Metabox
+	/*function f_mdjm_email_meta_box( $post ) {
+		//add_meta_box( 'mdjm-email-review', __( 'Email Content', 'textdomain' ), 'f_mdjm_email_review', 'mdjm_communication', 'normal', 'high' );
+		//add_meta_box( 'mdjm-email-back', __( 'Details', 'textdomain' ), 'f_mdjm_email_details', 'mdjm_communication', 'side', 'high' );
+		
+		add_meta_box( 'mdjm-add-venue', __( 'Venue Details', 'textdomain' ), 'f_mdjm_venue_metabox', 'mdjm-venue', 'normal', 'high' );
+	}*/
+	
+	/*function f_mdjm_email_review( $post )	{
+		echo $post->post_content;
+	}*/
+	
+	/*function f_mdjm_email_details( $post )	{
+		global $mdjm_options;
+		$from = get_userdata( $post->post_author );
+		$recipient = get_userdata( get_post_meta( $post->ID, 'recipient', true ) );
+		?>
+        <p><strong>Date</strong>: <?php echo date( $mdjm_options['time_format'] . ' ' . $mdjm_options['short_date_format'], get_post_meta( $post->ID, 'date_sent', true ) ); ?></p>
+        <p><strong>From</strong>: <a href="<?php echo admin_url( '/user-edit.php?user_id=' . $from->ID ); ?>"><?php echo $from->display_name; ?></a></p>
+        <p><strong>Recipient</strong>: <a href="<?php echo admin_url( '/user-edit.php?user_id=' . $recipient->ID ); ?>"><?php echo $recipient->display_name; ?></a></p>
+        <p><strong>Status</strong>: <?php echo ucfirst( $post->post_status ); ?></p>
+        <p><strong>Event</strong>: <a href="<?php f_mdjm_admin_page( 'events' ); ?>&action=&action=view_event_form&event_id=<?php echo get_post_meta( $post->ID, 'event', true ); ?>"><?php echo $mdjm_options['id_prefix'] . stripslashes( get_post_meta( $post->ID, 'event', true ) ); ?></a></p>
+        <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
+        <?php
+	}*/
+		
+	/*function f_mdjm_venues_meta()	{
+		remove_meta_box( 'submitdiv', 'mdjm-venue', 'side' );
+		add_meta_box( 'submitdiv', __( 'Save Venue' ), 'post_submit_meta_box', 'mdjm-venue', 'side', 'high' );
+	} // custom_post_row_actions*/
+	
+	/*function f_mdjm_venue_metabox()	{
+        ?>
+        <p><label for="venue_contact">Venue Contact: </label><input type="text" name="venue_contact" id="venue_contact" class="regular-text" /></p>
+        
+        
+        
+        <?php
+	}*/
 
 /**
  * f_mdjm_toolbar
@@ -1336,6 +1671,17 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 			));
 			if( current_user_can( 'manage_options' ) )	{
 				$admin_bar->add_menu( array(
+					'id'    => 'edit.php?post_type=' . MDJM_COMM_POSTS,
+					'parent' => 'mdjm-comms',
+					'title' => 'Email History',
+					'href'  => admin_url( 'edit.php?post_type=' . MDJM_COMM_POSTS ),
+					'meta'  => array(
+						'title' => __( 'Email History' ),
+					),
+				));
+			}
+			if( current_user_can( 'manage_options' ) )	{
+				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contact-forms',
 					'parent' => 'mdjm',
 					'title' => 'Contact Forms',
@@ -1358,19 +1704,19 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-contracts',
 					'parent' => 'mdjm',
-					'title' => 'Contracts',
-					'href'  => admin_url( 'edit.php?post_type=contract' ),
+					'title' => 'Contract Templates',
+					'href'  => admin_url( 'edit.php?post_type=' . MDJM_CONTRACT_POSTS ),
 					'meta'  => array(
-						'title' => __( 'Contracts' ),
+						'title' => __( 'Contract Templates' ),
 					),
 				));
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-new-contract',
 					'parent' => 'mdjm-contracts',
-					'title' => 'Add Contract',
-					'href'  => admin_url( 'post-new.php?post_type=contract' ),
+					'title' => 'Add Contract Template',
+					'href'  => admin_url( 'post-new.php?post_type=' . MDJM_CONTRACT_POSTS ),
 					'meta'  => array(
-						'title' => __( 'New Contract' ),
+						'title' => __( 'New Contract Template' ),
 					),
 				));
 			}
@@ -1390,7 +1736,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'id'    => 'mdjm-email-templates',
 					'parent' => 'mdjm',
 					'title' => 'Email Templates',
-					'href'  => admin_url( 'edit.php?post_type=email_template' ),
+					'href'  => admin_url( 'edit.php?post_type=' . MDJM_EMAIL_POSTS ),
 					'meta'  => array(
 						'title' => __( 'Email Templates' ),
 					),
@@ -1399,7 +1745,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'id'    => 'mdjm-new-email-template',
 					'parent' => 'mdjm-email-templates',
 					'title' => 'Add Template',
-					'href'  => admin_url( 'post-new.php?post_type=email_template' ),
+					'href'  => admin_url( 'post-new.php?post_type=' . MDJM_EMAIL_POSTS ),
 					'meta'  => array(
 						'title' => __( 'New Email Template' ),
 					),
@@ -1458,18 +1804,27 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 					'id'    => 'mdjm-venues',
 					'parent' => 'mdjm',
 					'title' => 'Venues',
-					'href'  => admin_url( 'admin.php?page=mdjm-venues' ),
+					'href'  => admin_url( 'edit.php?post_type=' . MDJM_VENUE_POSTS ),
 					'meta'  => array(
-						'title' => __( 'MDJM Venues' ),
+						'title' => __( 'Venues' ),
 					),
 				));
 				$admin_bar->add_menu( array(
 					'id'    => 'mdjm-add-venue',
 					'parent' => 'mdjm-venues',
 					'title' => 'Add Venue',
-					'href'  => admin_url( 'admin.php?page=mdjm-venues&action=add_venue_form' ),
+					'href'  => admin_url( 'post-new.php?post_type=' . MDJM_VENUE_POSTS ),
 					'meta'  => array(
 						'title' => __( 'Add New Venue' ),
+					),
+				));
+				$admin_bar->add_menu( array(
+					'id'    => 'mdjm-venue-details',
+					'parent' => 'mdjm-venues',
+					'title' => 'Venue Details',
+					'href'  => admin_url( 'edit-tags.php?taxonomy=venue-details&post_type=' . MDJM_VENUE_POSTS ),
+					'meta'  => array(
+						'title' => __( 'View / Edit Venue Details' ),
 					),
 				));
 			}
@@ -1763,20 +2118,21 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 * @since 1.1.1
 * Customised messages for contract / email template updates
 */
-	function f_mdjm_template_messages( $messages )	{
+	/*function f_mdjm_template_messages( $messages )	{
 		global $post;
-
-        $post_id = $post->ID;
-        $post_type = get_post_type( $post_id );
-
-        $obj = get_post_type_object( $post_type );
-        if( $obj->labels->singular_name == 'MDJM Email Template' )	{
+		
+		$post_id = $post->ID;
+		$post_type = get_post_type( $post_id );
+		
+		if( $post_type === 'email_template' )	{
 			$singular = 'Email Template';
 		}
-		elseif( $obj->labels->singular_name == 'MDJM Contract' )	{
+		elseif( $post_type === 'contract' )	{
 			$singular = 'Contract Template';
 		}
-		
+		else	{
+			return;	
+		}
 
         $messages[$post_type] = array(
                 0 => '', // Unused. Messages start at index 1.
@@ -1793,7 +2149,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
         );
 
         return $messages;
-	} // f_mdjm_template_messages
+	} // f_mdjm_template_messages*/
 
 /*
 * f_mdjm_api_listener
@@ -1802,10 +2158,15 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 * The API Listener
 */
 	function f_mdjm_api_listener()	{
-		if( isset( $_GET['mdjm-api'] ) && $_GET['mdjm-api'] == 'MDJM_PAYPAL_GW' )	{
+		$listener = isset( $_GET['mdjm-api'] ) ? $_GET['mdjm-api'] : '';
+		
+		if( empty( $listener ) )
+			return;
+		
+		elseif( $listener == 'MDJM_PAYPAL_GW' )	{
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-pp-ipn.php' );	
 		}
-		elseif( $_GET['mdjm-api'] == 'MDJM_EMAIL_RCPT' )	{
+		elseif( $listener == 'MDJM_EMAIL_RCPT' )	{
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-email-rcpt.php' );	
 		}
 		else	{
@@ -1836,10 +2197,30 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	
 	add_action( 'jetpack_admin_menu', 'f_mdjm_remove_jetpack' ); // Remove Jetpack from non-Admins
 	
-	add_action( 'init', 'f_mdjm_new_contracts_post_type' ); // Register the contracts post type
+	//add_action( 'init', 'f_mdjm_new_contracts_post_type' ); // Register the contracts post type
 	
-	add_action( 'init', 'f_mdjm_email_template_post_type' ); // Register the email template post type
+	//add_action( 'init', 'f_mdjm_email_template_post_type' ); // Register the email template post type
 	
+	//add_action( 'init', 'f_mdjm_communication_post_type' ); // Register the communication post type
+		
+	//add_filter( 'manage_mdjm_communication_posts_columns' , 'set_communication_post_columns' );
+	
+	//add_filter( 'manage_mdjm-venue_posts_columns' , 'set_venue_post_columns' );
+	
+	//add_action( 'manage_posts_custom_column', 'custom_post_column_action', 10, 1 );
+	
+	//add_filter( 'post_row_actions', 'custom_post_row_actions', 10, 2 );
+	
+	//add_filter( 'bulk_actions-edit-mdjm_communication', 'mdjm_communication_custom_bulk_actions' );
+	
+	//add_action( 'admin_menu', 'remove_publish_box' );
+	
+	//add_action( 'admin_head', 'remove_add_new');
+	
+	//add_action( 'add_meta_boxes', 'f_mdjm_email_meta_box' );
+	
+	//add_filter( 'gettext', 'rename_publish_button', 10, 2 );
+		
 	add_action( 'admin_init', 'f_mdjm_set_role' ); // Set correct user permissions
 	
 	add_action( 'admin_bar_menu', 'f_mdjm_toolbar_new_content', 70 ); // MDJM New Content to admin bar
@@ -1866,7 +2247,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 	
 	add_action( 'wp_loaded', 'f_mdjm_api_listener' ); // The API listener
 	
-	add_filter( 'post_updated_messages', 'f_mdjm_template_messages' );
+	//add_filter( 'post_updated_messages', 'f_mdjm_template_messages' );
  
  /**
  * Actions for custom user fields
