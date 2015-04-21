@@ -94,7 +94,7 @@ Watch out for the next major release of MDJM...coming soon to include a re-desig
 	<li><strong>Bug Fix</strong>: If your web theme utilises white text some playlist entries where not visible within the front end</li>
 	<li><strong>General</strong>: Cleaner Email and Contract Template tables</li>
 	<li><strong>General</strong>: Code improvements, efficiency and cleanliness</li>
-<ul>
+</ul>
 
 = 1.1.1 =
 <u>Released Tuesday, 10th March 2015</u>
