@@ -149,7 +149,7 @@
 		?>
         <div class="wrap">
         <div id="icon-themes" class="icon32"></div>
-        <h2>Automated Tasks <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>&action=add_task" class="add-new-h2">Add New</a></h2></h2>
+        <h2>Automated Tasks</h2>
         <p><strong>Important Note:</strong> because of the way that WordPress handles scheduled tasks, the timing at which your tasks below run may differ from day to day dependant on activity to your website. If your website receives zero visits in a day after the time at which your tasks are scheduled to next run, those tasks will not run that day.</p>
 		<p>In this instance, the tasks will be ran the the next time someone visits your website.</p>
         <hr />
