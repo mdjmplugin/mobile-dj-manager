@@ -77,6 +77,14 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1.3 =
+<strong>Released Tuesday, 21st April 2015</strong>
+<ul>
+	<li><strong>New</strong>: Officially supporting WordPress 4.2</li>
+	<li><strong>General</strong>: Removed Add New option from Automated Tasks - this feature is still in development</li>
+<ul>
+Watch out for the next major release of MDJM...coming soon to include a re-designed Event interface, greater email tracking, faster response times and much more!
+
 = 1.1.2 =
 <strong>Released Tuesday, 17th March 2015</strong>
 <ul>

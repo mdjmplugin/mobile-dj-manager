@@ -108,6 +108,40 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1.3
+**************************************************/
+	function f_mdjm_updated_to_1_1_3()	{
+		global $mdjm_options;
+				
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Support for WordPress 4.2</font><br />
+		WordPress 4.2 is due for release tomorrow, 22nd April 2015. We've been testing our plugin with this new version and can now confirm full compatibility.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Coming Soon</font><br />
+		You may have noticed that we have recently slowed down our release schedules. This does not mean we haven't been working on further improvements...far from it! In fact, our next major release will include a number of major enhancements including a re-designed Event interface, better support for Event Packages and Add-ons, improved email tracking and much much more.<br />
+<br />
+		As always, thank you for your continued support :)
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li><strong>General</strong>: Removed the <code>Add New</code> button from <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>">Automated Tasks</a>. This feature is still in development</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1_3
+
+/**************************************************
 				VERSION 1.1.2
 **************************************************/
 	function f_mdjm_updated_to_1_1_2()	{
