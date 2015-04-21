@@ -82,7 +82,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 <ul>
 	<li><strong>New</strong>: Officially supporting WordPress 4.2</li>
 	<li><strong>General</strong>: Removed Add New option from Automated Tasks - this feature is still in development</li>
-<ul>
+</ul>
 Watch out for the next major release of MDJM...coming soon to include a re-designed Event interface, greater email tracking, faster response times and much more!
 
 = 1.1.2 =
