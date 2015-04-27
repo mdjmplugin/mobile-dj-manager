@@ -1013,9 +1013,9 @@
 /***************************************************
 			 	UPGRADES FROM 1.1.3
 ***************************************************/			
-			if( $current_version_mdjm <= '1.1.3' )	{
+			if( $current_version_mdjm <= '1.1.3.1' )	{
 				// No actions
-			} // if( $current_version_mdjm <= '1.1.3' )
+			} // if( $current_version_mdjm <= '1.1.3.1' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
