@@ -108,6 +108,30 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1.4
+**************************************************/
+	function f_mdjm_updated_to_1_1_4()	{
+		global $mdjm_options;
+				
+		?>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Bug Fixes</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li><strong>Bug Fix</strong>: In certain circumstances, if you do not have events in the <code>Approved</code> status, no events were displayed in the events list</li>
+                <li><strong>Bug Fix</strong>: Relating to the above, the status links did not work in the events list</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1_4
+
+/**************************************************
 				VERSION 1.1.3
 **************************************************/
 	function f_mdjm_updated_to_1_1_3()	{
