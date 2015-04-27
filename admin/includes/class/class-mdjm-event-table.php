@@ -576,7 +576,7 @@
 			
 			/* -- Filtering parameters -- */
 			/* -- Status -- */
-			$s = !empty( $_GET['status'] ) ? $_GET['status'] : 'Approved';
+			$s = !empty( $_GET['status'] ) ? $_GET['status'] : 'All';
 			if( !empty( $s ) )	{
 				if( $s == 'Historic' )	{
 					$where[] = " (`contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' AND `event_date` < DATE(NOW()) OR `contract_status` = 'Cancelled' OR `contract_status` = 'Completed')";	
