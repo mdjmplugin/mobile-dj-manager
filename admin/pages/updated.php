@@ -135,7 +135,7 @@
         <td>We're close to releasing our next major update, just applying the finishing touches and completing testing. It is our hope that this will be available within the next 2-3 weeks so watch this space!<br />
 			Within this release we have made many changes to the Admin interface...<br />
 			<ui>
-            	<li><strong>General</strong>: Many code efficiencies introducing speed enhancements</li>
+            	<li><strong>General</strong>: Many code efficiencies introducing speed enhancements, better CSS styling and moving more towards a class based plugin</li>
                 <li><strong>General</strong>: Better integration with WordPress. Less reliance upon custom database tables</li>
                 <li><strong>Events</strong>: A new and improved Event Listing screen. Create new events from a single screen, including equipment packages and add-ons</li>
                 <li><strong>Events</strong>: Dynamic Event price updates and Ajax based transactions</li>
