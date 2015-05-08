@@ -39,7 +39,7 @@
 			No. Songs in Playlist: <?php echo $pl_ttl; ?></h4>
             <form name="email_pl" id="email_pl" action="" method="post">
             <?php
-            submit_button( 'Email me this List', 'primary small', 'email_pl', false );
+            submit_button( 'Email me this List', 'primary small', 'email_playlist', false );
 			?>
             ordered by <select name="order_pl_by" id="order_pl_by">
             <option value="date_added" selected="selected">Date Added</option>
@@ -170,12 +170,12 @@
 				
 		function send_to_email( $post_data, $get_data )	{
 			global $mdjm_options, $wpdb, $current_user;
-			if( !isset( $get_data['event'] ) || empty( $get_data['event'] ) )	{
+			if( !isset( $get_data['event_id'] ) || empty( $get_data['event_id'] ) )	{
 				return;	
 			}
 			else	{
 				include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-				$email_query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $get_data['event'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
+				$email_query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $get_data['event_id'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
 				$email_result = $wpdb->get_results( $email_query );
 				$pl_ttl = $wpdb->num_rows;
 				
@@ -188,7 +188,7 @@
 				
 				$i = 0;
 				
-				$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $get_data['event']);
+				$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $get_data['event_id']);
 				$client = get_userdata( $eventinfo->user_id );
 				get_currentuserinfo();
 				

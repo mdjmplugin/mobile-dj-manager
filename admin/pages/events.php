@@ -212,7 +212,7 @@
 		$playlist_table = new MDJM_PlayList_Table();
 		
 		// Email the playlist
-		if( isset( $_POST['email_pl'] ) && $_POST['email_pl'] == 'Email me this List' )	{
+		if( isset( $_POST['email_playlist'] ) && $_POST['email_playlist'] == 'Email me this List' )	{
 			$playlist_table->send_to_email( $_POST, $_GET );	
 		}
 				

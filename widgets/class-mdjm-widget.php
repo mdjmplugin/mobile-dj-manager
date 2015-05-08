@@ -101,7 +101,7 @@
             <label for="avail_date"><?php echo $instance['label']; ?></label>
             <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" />
             <input type="hidden" name="check_date" id="check_date" value="" /></p>
-            <p<?php if( isset( $instance['submit_centre'] ) && $instance['submit_centre'] == 'Y' ) echo ' align="center"'; ?>>
+            <p<?php echo ( isset( $instance['submit_centre'] ) && $instance['submit_centre'] == 'Y' ? ' style="text-align:center"' : '' ); ?>>
             <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $instance['submit_text']; ?>" />
             </p>
             </form>
@@ -415,7 +415,7 @@
 				$email_body .= '<p><a href="'. admin_url( 'admin.php?page=mdjm-events&status=Unattended' ) . '">View Your Outstanding Enquiries</a></p>';
 				$email_body .= '<hr />';
 				$email_body .= '<p style="font-size:10px;">Form submitted at ' . date( $mdjm_options['time_format'] ) . ' on ' . date( 'l jS F Y' ) . '</p>';
-				$email_body .= '<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
+				$email_body .= '<p style="font-size:9px; color:#F90; text-align:center">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a>, version ' . WPMDJM_VERSION_NUM . '</p>';
 				$email_body .= '</body></html>';
 				
 				/* Send the email */

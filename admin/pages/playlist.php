@@ -24,7 +24,7 @@
 	$playlist = new MDJM_PlayList_Table();
 	
 	/* -- Email the playlist -- */
-	if( isset( $_POST['email_pl'] ) && $_POST['email_pl'] == 'Email Playlist' )	{
+	if( isset( $_POST['email_playlist'] ) && $_POST['email_playlist'] == 'Email me this List' )	{
 		$playlist->send_to_email( $_POST, $_GET );	
 	}
 	
@@ -87,7 +87,7 @@
                     </select></td>
                     </tr>
                     <tr>
-                    <td colspan="2"><?php submit_button( 'Email Playlist', 'primary small', 'email_pl', false ); ?></td>
+                    <td colspan="2"><?php submit_button( 'Email Playlist', 'primary small', 'email_playlist', false ); ?></td>
                     </tr>
                     </table>
                 </div> <!-- #postbox-container-1 -->

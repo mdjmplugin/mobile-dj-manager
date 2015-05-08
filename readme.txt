@@ -77,6 +77,15 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1.3.2 =
+<strong>Released Friday 8th May, 2015</strong>
+<ul>
+	<li><strong>General</strong>: Full support for WordPress version 4.2.2</li>
+        <li><strong>Bug Fix</strong>: Missing space within Client Zone playlist management page...&quot;Your playlist currently has ...entries&quot;</li>
+        <li><strong>Bug Fix</strong>: CSS Correction within Availability widget</li>
+        <li><strong>Bug Fix</strong>: Error when sending playlist via email</li>
+</ul>
+
 = 1.1.3.1 =
 <strong>Released Monday, 27th April 2015</strong>
 This is a bug-fix release only
