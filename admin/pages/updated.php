@@ -108,6 +108,67 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.1.3.3
+**************************************************/
+	function f_mdjm_updated_to_1_1_3_3()	{
+		global $mdjm_options;
+				
+		?>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Page Content (Shortcode) Placement</font><br />
+		On all MDJM Client Zone pages except the contact form, no matter where the shortcode was placed, the MDJM content was always moved to the top above any custom content you added.<br /><br />
+		We have now adjusted this so that you can add your own custom content above the MDJM shortcode and it will be displayed on the screen above the MDJM content as intended.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li><strong>General</strong>: Support for WordPress 4.2.3</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        </tr>
+        <tr>
+        <td>
+    	
+        </td>
+        </tr>
+         <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Next Major Release (Coming Soon)</td>
+        </tr>
+        <tr>
+        <td>We're close to releasing our next major update, just applying the finishing touches and completing testing. It is our hope that this will be available within the next 2-3 weeks so watch this space!<br />
+			Within this release we have made many changes to the Admin interface...<br />
+			<ui>
+            	<li><strong>General</strong>: Many code efficiencies introducing speed enhancements, better CSS styling and moving more towards a class based plugin</li>
+                <li><strong>General</strong>: Better integration with WordPress. Less reliance upon custom database tables</li>
+                <li><strong>Events</strong>: A new and improved Event Listing screen. Create new events from a single screen, including equipment packages and add-ons</li>
+                <li><strong>Events</strong>: Dynamic Event price updates and Ajax based transactions</li>
+                <li><strong>Events</strong>: More ways to filter your event lists - By Dj, Client, Date, Event Type etc.</li>
+                <li><strong>Contact Forms</strong>: Drag &amp; Drop interface to re-order your fields. You can now also edit fields rather than having to delete &amp; re-create</li>
+                <li><strong>Emails</strong>: Much improved email class, faster to process, better logging and a much improved shortcode filtering process</li>
+                <li><strong>Email Tracking</strong>: Improved email tracking functionality now only tracks the main recipient</li>
+                <li><strong>Digital Contract Signing</strong>: Contract signing now requires clients to re-enter their password to verify it is them. Signing details are appended to the end of the contract</li>
+                <li><strong>Digital Contract Signing</strong>: All signed contracts are easily visible to Admins via the admin interface and Clients via the Client Zone (not editable once signed)</li>
+                <li><strong>Client Profiles</strong>: Choose which custom client fields are required</li>
+                <li><strong>Journalling</strong>: Improved journalling, cleaner and much simpler to review all event and client interactions</li>
+                <li><strong>Debugging</strong>: Many enhancements to the built-in debugging to enable faster resolution to support cases</li>
+                <li><strong>General</strong>: Choose how to refer to your Artistes/performers. No longer have to be &quot;DJ's&quot;</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	} // f_mdjm_updated_to_1_1_3_3
+
+/**************************************************
 				VERSION 1.1.3.2
 **************************************************/
 	function f_mdjm_updated_to_1_1_3_2()	{

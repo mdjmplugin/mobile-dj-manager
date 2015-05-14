@@ -2,8 +2,8 @@
 Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
-Tested up to: 4.2.2
-Stable tag: 1.1.3.2
+Tested up to: 4.2.3
+Stable tag: 1.1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,13 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.1.3.2 =
+<strong>Released Thursday 14th May, 2015</strong>
+<ul>
+	<li><strong>General</strong>: You can now add custom content above MDJM shortcode content within Client Zone pages</li>
+        <li><strong>General</strong>: Support for WordPress 4.2.3 (currently in alpha)</li>
+</ul>
+
 = 1.1.3.2 =
 <strong>Released Friday 8th May, 2015</strong>
 <ul>
