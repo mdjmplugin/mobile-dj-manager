@@ -211,16 +211,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 						
 			mdjm_update_notice( 'updated',
 								'Welcome to Mobile DJ Manager for WordPress version ' . MDJM_VERSION_NUM . 
-								'. Click on one of the Mobile DJ Manager menu items to view the release notes.' . 
-								( MDJM_VERSION_NUM == '1.2' ? 
-								'<br />' . 
-								'<strong>IMPORTANT NOTE:</strong>' . 
-								'The remainder of the upgrade procedure will complete shortly. Loading your first MDJM page may take a few moments. ' .  
-								'<br />' . 
-								'If you have WordPress configured to notify you when a comment is received, you may want to turn this setting off before upgrading. ' . 
-								'To do this <a href="' . admin_url( 'options-discussion.php' ) . '"></a> and disable the checkboxes under <strong>E-mail me whenever</strong> ' . 
-								'before clicking on an MDJM menu link' : '' )
-								);
+								'. Click on one of the Mobile DJ Manager menu items to view the release notes.' );
 			
 		} // if( WPMDJM_VERSION_NUM > $current_version_mdjm )
 	} // f_mdjm_upgrade

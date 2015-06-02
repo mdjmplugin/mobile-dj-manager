@@ -24,7 +24,7 @@ Author URI: http://www.mydjplanner.co.uk
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
-	$mdjm_db_version = '2.3'; // Used to determine if the DB Tables need updating
+	$mdjm_db_version = '2.4'; // Used to determine if the DB Tables need updating
 
 	define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 	define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
