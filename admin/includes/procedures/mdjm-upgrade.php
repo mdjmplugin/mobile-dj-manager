@@ -299,6 +299,29 @@
 			/* -- We add this option for the journal migrations -- */
 			add_option( 'mdjm_date_to_1_2', strtotime( "+3 day" ) );
 			
+			$reg_check = get_transient( 'mdjm_call_home' ); /* Get the existing value */
+						
+			$is_trial = get_transient( 'mdjm_is_trial' );
+			if( $is_trial !== false )	{
+				$lic = explode( '|', $is_trial );
+				if( time() > strtotime( $lic[2] ) )	{
+					$status['key'] = 'XXXX';
+					$status['type'] = 'trial';
+					$status['expire'] = $lic[2];
+					$status['last_auth'] = $values[3];
+					$status['missed'] = '0';
+				}
+				else	{
+					$status['key'] = 'XXXX';
+					$status['type'] = 'trial';
+					$status['expire'] = date( 'Y-m-d' );
+					$status['last_auth'] = $values[3];
+					$status['missed'] = '0';	
+				}
+				
+				update_option( '__mydj_validation', $status );
+			}
+			
 			delete_option( 'mdjm_update_options' );
 			
 			$mdjm->debug_logger( '*** COMPLETED UPDATING PLUGIN SETTINGS ***', true );
