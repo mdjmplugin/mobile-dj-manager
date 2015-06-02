@@ -10,6 +10,7 @@
 * Displays overview of changes in updated version
 */
 	function f_mdjm_updated_header( $ver )	{
+		global $mdjm;
 		?>
         <div id="fb-root"></div>
 		<script>(function(d, s, id) {
@@ -29,27 +30,22 @@
         <td align="center"><span style="font-size:24px; font-weight:bold; color:#FF9900">Welcome to Mobile DJ Manager version <?php echo str_replace( '_', '.', $ver ); ?></span><br />
 <a href="<?php wp_get_referer(); ?>">Click here to proceed to the requested page</a></td>
         </tr>
-        <tr>
-        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Did you know?</td>
-        </tr>
-        <tr>
-        <td>We are now providing full web hosting services for your WordPress website?<br /><br />Our hosting solution provides you with the perfect platform for your business website and the <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>" target="_blank" title="My DJ Planner: the home of Mobile DJ Manager for WordPress">Mobile DJ Manager</a> plugin and offers enhanced support for both.<br /><br /><a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>/contact/" target="_blank" title="Contact us for more information on our web hosting solutions">Contact us</a> for more information</td>
-        </tr>
         </table>
         <table>
         <tr valign="top">
         <td>
         <table class="widefat" width="100%">
         <?php
-		$lic_info = do_reg_check( 'check' );
-		if( !do_reg_check( 'check' ) || $lic_info[0] == 'XXXX' )	{
+		$lic_info = $mdjm->_mdjm_validation();
+		if( empty( $lic_info ) || $lic_info['type'] == 'XXXX' )	{
 			?>
             <tr>
             <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Licensing</td>
             </tr>
             <tr>
             <td>You are currently running Mobile DJ Manager for WordPress in trial mode. Once your trial period expires, functionality will be restricted.<br /><br />
-            To avoid this, <a href="http://www.mydjplanner.co.uk/shop/" title="Request New Feature" target="_blank"> click here to purchase your license now</a></td>
+            To avoid this, <a href="http://www.mydjplanner.co.uk/shop/" title="Request New Feature" target="_blank"> click here to purchase your license now</a><br /><br />
+			If you are seeing this message after upgrading to version 1.2 and you have purchased a license, your license state will be restored momentarily</td>
             </tr>
             <?php	
 		}
@@ -69,6 +65,9 @@
         </tr>
         <tr>
         <td><a href="http://mydjplanner.co.uk/support/user-guides/" title="Mobile DJ Manager User Guides" target="_blank">View the User Guides</a></td>
+        </tr>
+        <tr>
+        <td><a href="https://www.facebook.com/groups/mobiledjmanager">Join our Facebook Group</a><br /></td>
         </tr>
         <tr>
         <td><a href="http://mydjplanner.co.uk/forums/" title="Mobile DJ Manager Support Forums" target="_blank">Visit the Support Forums</a></td>
@@ -106,6 +105,90 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 1.2
+**************************************************/
+	function f_mdjm_updated_to_1_2()	{
+		global $mdjm;
+		
+		/* -- Complete the upgrade procedures for version 1.2 -- */
+		
+		$update_status = get_option( 'mdjm_update' );
+		
+		if( !empty( $update_status ) && $update_status == '1.2' )	{
+		
+			if( !class_exists( 'MDJM_Upgrade' ) )
+				require_once( MDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-upgrade.php' );
+			
+			$mdjm_upgrade = new MDJM_Upgrade();
+			
+			$mdjm_upgrade->update_to_1_2();
+			
+			if( file_exists( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' ) )
+				unlink( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			
+			delete_option( 'mdjm_update' );
+		}
+		
+		/* -- Display the update notes -- */
+		?>
+        <tr>
+        <td>Version <?php echo MDJM_VERSION_NUM; ?> has been a long time coming due to the extensive changes we have made to the core coding which will enable us to bring
+        you many more advanced features in the future.<br />
+		As with any major changes, there is a chance that a few bugs exist. We are on stand by to address these immediately should you encounter any. Of course, we have performed
+        extensive testing ourselves, but if you do find a bug please <a href="" target="_blank">Log it within our Support Forums</a> or post it within our 
+        <a href="" target="_blank">Facebook Group</a> so that we can address it for you, and also to make other users aware.<br /><br />
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">New Event Interface</font><br />
+		The original Event interface has been revamped resulting in a single page for all single event actions;
+            <ui>
+                <li>Adding Event Packages and Add-ons auto updates the total event cost</li>
+                <li>Create and select new Event Types</li>
+                <li>Event Types have been moved and no longer reside within settings</li>
+                <li>Delete events that are set as Unattended Enquiries</li>
+                <li>Add event transaction entries without leaving the page</li>
+                <li>View recent communications and journal entries</li>
+            </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-new">New</span>: Drag &amp; drop your Contact Form fields to re-order them easily</li>
+                <li><span class="mdjm-new">New</span>: Edit field settings without having to delete and re-create</li>
+                <li><span class="mdjm-new">New</span>: All transactions are now logged, whether automated via PayPal or manually entered by the Admin</li>
+                <li><span class="mdjm-new">New</span>: Notifications to clients when payments are entered manually for events</li>
+                <li><span class="mdjm-new">New</span>: Event Transaction overview is displayed on each event page</li>
+                <li><span class="mdjm-new">New</span>: Transaction Types have been moved and no longer reside within settings</li>
+                <li><span class="mdjm-general">General</span>: Email tracking accuracy has been improved. If it says it has been opened, 
+                	you can be sure that the Client has received and opened the email</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Printing playlist no longer shows menu</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Email playlist corrections</li>
+                <li><span class="mdjm-general">General</span>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
+                	the DJ's name will be displayed and the reply-to address will be set to that of the DJ too. This also addresses an issue whereby
+                    DJ's who have email addresses that do not end in the same domain name as the website where MDJM is installed, cannot send emails
+                    due to security controls</li>
+                <li><span class="mdjm-general">General</span>: Digital contract signing now requires the client to re-enter their password as an additional verification step</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content</li>
+                <li><span class="mdjm-general">General</span>: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed</li>
+                <li><span class="mdjm-new">New</span>: Create backups of the MDJM database tables and download within the debugging screen</li>
+                <li><span class="mdjm-general">General</span>: Significant improvements to the application debugging. No annoying notification when debugging
+                	is enabled, however we still only recommend to enable when you are experiencing an issue</li>
+                
+                
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+       <?php
+	};
 
 /**************************************************
 				VERSION 1.1.3.3

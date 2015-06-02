@@ -6,29 +6,63 @@
 * Stylesheet for admin pages
 */
 
-.mdjm-admin-h1-orange {
-	font-size: 24px;
-	font-weight: bold;
-	color: #FF990;
-}
-.mdjm-admin-feature-head	{
-	font-size: 24px;
-	font-weight: bold;
-	color: #FFFFFF;
-	background-color: #FF9900;
-}
-.mdjm-dash-block {
-	background-color:#FF9900;
-}
-.mdjm-dash-block-head	{
-	font-size: 16px;
-	font-weight: bold;
-	color: #FFFFFF;
-}
-.mdjm-dash-block-content	{
-	font-size: 46px;
-	font-weight: bold;
-	color: #FFFFFF;
-}
+	.mdjm-new	{
+		font-weight: bold;
+		color: #F90;	
+	}
+	.mdjm-bug	{
+		font-weight: bold;
+		color: #090;
+	}
+	.mdjm-general	{
+		font-weight: bold;
+	}
 
+/*
+ * Error classes used by jQuery validation
+ * 
+ *
+ */
+	.mdjm-form-error {
+		color: #F00;
+		font-weight: bold;
+	}
+	input.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	select.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	textarea.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	checkbox.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	.mdjm-form-valid {
+		color: #000000;
+	}
+	.mdjm-input-currency {
+		width: 75px;
+	}
+	
+	.mdjm-small	{
+		font-size: 11px;	
+	}
 
+/*
+ *
+ * Sortable
+ *
+ */
+	.mdjm-list-item	{
+		cursor: move;	
+	}

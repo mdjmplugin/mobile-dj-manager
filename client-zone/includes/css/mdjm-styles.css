@@ -1,0 +1,211 @@
+@charset "UTF-8";
+/*
+* mdjm-styles.css
+* 16/01/2015
+* @since 0.9.9.6
+* Stylesheet for frontend pages
+*/
+
+/* -- General -- */
+	.mdjm-label {
+		font-weight: bold;
+	}
+	.success	{
+		font-weight: bold;
+		font-size: 11px;	
+	}
+	.signed	{
+		font-weight: bold;
+	}
+
+/* Error styling */
+	.mdjm-form-error {
+		color: #FF0000;
+	}
+	input.mdjm-form-error {
+		border: solid 1px #FF0000;
+		color: #000000;
+	}
+	.mdjm-form-valid {
+		color: #000000;
+	}
+
+	.mdjm-info, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validation	{
+		border: 1px solid;
+		margin: 10px 0px;
+		padding:15px 10px 15px 50px;
+		background-repeat: no-repeat;
+		background-position: 10px center;
+		font-size: 11px;	
+	}
+	
+	.mdjm-info {
+		color: #00529B;
+		background-color: #BDE5F8;
+		background-image: url('../../images/info-icon.png');
+	}
+	
+	.mdjm-success {
+		color: #4F8A10;
+		background-color: #DFF2BF;
+		background-image: url('../../images/success-icon.png');
+	}
+	
+	.mdjm-warning {
+		color: #9F6000;
+		background-color: #FEEFB3;
+		background-image: url('../../images/warning-icon.png');
+	}
+	
+	.mdjm-error {
+		color: #D8000C;
+		background-color: #FFBABA;
+		background-image: url('../../images/error-icon.png');
+	}
+	
+	.mdjm-validation {
+		color: #D63301;
+		background-color: #FFCCBA;
+		background-image: url('../../images/info-icon.png');
+	}
+
+/* -- Home Page -- */
+
+	/* -- Updates -- */
+	#mdjm_event_updated	{
+		display: none;	
+	}
+	
+	/* -- Multi Event display table -- */
+	#mdjm-events-list	{
+		width: 100%;	
+	}
+	#mdjm-events-list td, #mdjm-events-list th	{
+		padding-top: 3px;
+		padding-right: 7px;
+		padding-bottom: 2px;
+		padding-left: 7px;
+	}
+	#mdjm-events-list th	{
+		text-align: left;
+		padding-top: 5px;
+		padding-bottom: 4px;
+		font-weight: bold;
+	}
+	
+	/* -- Single Event display table -- */
+	#mdjm-event-listing	{
+		border-collapse: collapse;
+		width: 100%;	
+	}
+	#mdjm-event-listing td, #mdjm-event-listing th	{
+		border: hidden;
+		padding-top: 3px;
+		padding-right: 7px;
+		padding-bottom: 2px;
+		padding-left: 7px;
+		vertical-align: top;
+	}
+	#mdjm-event-listing th	{
+		text-align: left;
+		padding-top: 5px;
+		padding-bottom: 4px;
+		font-weight: bold;
+	}
+	
+	/* -- Single Events Container -- */
+	#mdjm-event-container	{
+		width:100%;
+		margin:0 auto;
+		font-size: 12px;	
+	}
+	
+	#mdjm-event-table	{
+		float:left;
+		width:100%;	
+	}
+	
+	#mdjm-actions-table	{
+		float:left;
+		width:100%;	
+	}
+	#mdjm-event-actions	{
+		border-collapse: collapse;
+		width: 100%;	
+	}
+	#mdjm-event-actions td, #mdjm-event-actions th	{
+		border: hidden;
+		padding: 5px;
+		vertical-align: top;
+	}
+	#mdjm-event-actions th	{
+		text-align: left;
+		padding: 5px;
+		font-weight: normal;
+	}
+	#mdjm-event-actions button	{
+		font-size: 10px;
+		width: 15em;
+		height: 4em;
+	}
+	
+/* -- Contract Page -- */
+	/* -- Column Layouts -- */
+	.mdjm-contract-row	{
+		overflow: auto;
+		height: auto;
+	}
+	.mdjm-contract-row p	{
+		font-size: 11px;
+	}
+	.mdjm-contract-row label	{
+		font-weight: bold;
+	}
+	.mdjm-contract-row input	{
+		font-size: 11px;
+	}
+	
+	/* -- 2 Columns -- */
+	.mdjm-contract-2column	{
+		float: left;
+		width: 40%;
+	}
+	
+	.mdjm-contract-last-2column	{
+		float: right;
+		width: 40%;
+	}
+	/* -- 1 Column -- */
+	.mdjm-contract-1column	{
+		float: left;
+		width: auto;
+	}
+	/* -- Input Fields -- */
+	
+	
+/* -- Footer -- */
+	#mdjm-cz-footer	{
+		text-align: center;
+	}
+		#mdjm-cz-footer p	{
+			font-size: 9px;
+			color: #F90;
+		}
+		#mdjm-cz-footer a	{
+			color: #F90;
+			text-decoration: none;
+		}
+		#mdjm-cz-footer a:link {
+			color: #F90;
+		}
+		
+		#mdjm-cz-footer a:visited {
+			color: #F90;
+			text-decoration: underline;
+		}
+		
+		#mdjm-cz-footer a:hover {
+			color: #F90;
+			text-decoration: underline;
+		}
+		

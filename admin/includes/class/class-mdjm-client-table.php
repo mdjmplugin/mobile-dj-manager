@@ -1,7 +1,7 @@
 <?php
 	class MDJM_Clients_Table extends WP_List_Table	{
 		private function get_clients()	{
-			global $wpdb, $display, $order, $orderby;
+			global $wpdb, $display, $order, $orderby, $mdjm;
 			
 			if (isset ( $_GET['display'] ) ) $display = $_GET['display'];
 			else $display = 'client';
@@ -13,7 +13,7 @@
 			else $order = 'ASC';
 			
 			if( !isset( $_POST['s'] ) || empty( $_POST['s'] )	 ){
-				$clientinfo = f_mdjm_get_clients( $display, $orderby, $order );
+				$clientinfo = $mdjm->mdjm_events->get_clients( $display, $orderby, $order );
 			}
 			else	{
 				$arg = array(	'search'  => $_POST['s'],
@@ -29,13 +29,15 @@
 			foreach( $clientinfo as $client )	{
 				
 				if( !current_user_can( 'administrator' ) )	{ // Non-Admins only see their own clients
-					if( f_mdjm_client_is_mine( $client->ID ) )	{
-						$info = f_mdjm_client_get_events( $client->ID );
-						if( isset( $info['next_event'] ) && $info['next_event'] != 'N/A' )	{
-							$event_link = '<a href="' . $url . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info['event_id'] . '">' . $info['next_event'] . '</a>';	
+					if( $mdjm->mdjm_events->is_my_client( $client->ID ) )	{
+						$events = $mdjm->mdjm_events->client_events( $client->ID );
+						$next_event = $mdjm->mdjm_events->next_event( $client->ID, $user_type='client' );
+						if( !empty( $next_event ) )	{
+							$event_link = '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">' . 
+								date( MDJM_SHORTDATE_FORMAT, get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) . '</a>';	
 						}
 						else	{
-							$event_link = $info['next_event'];
+							$event_link = 'N/A';
 						}
 						$last_login = strtotime( get_user_meta( $client->ID, 'last_login', true ) );
 						if( !$last_login ) $last_login = 'Never';
@@ -45,19 +47,22 @@
 											'client_name' => '<a href="' . admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $client->ID ) . '">' . $client->display_name . '</a>',
 											'last_login' => $last_login,
 											'client_email' => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ) . $client->ID . '">' . $client->user_email . '</a>',
-											'client_events' => $info['num_rows'],
+											'client_events' => ( count( $events ) != 0 ? '<a href="' . admin_url( 'edit.php?post_type=' . MDJM_EVENT_POSTS . '&client=' 
+															. $client->ID ) . '">' . count( $events ) . '</a>' : '0' ),
 											'client_next_event' => $event_link,
 											'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-journal&client_id=' . $client->ID . '">' . 'View</a>'
 											);
 					}
 				}
 				else	{
-					$info = f_mdjm_client_get_events( $client->ID );
-					if( isset( $info['next_event'] ) && $info['next_event'] != 'N/A' )	{
-						$event_link = '<a href="' . $url . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info['event_id'] . '">' . $info['next_event'] . '</a>';	
+					$events = $mdjm->mdjm_events->client_events( $client->ID );
+					$next_event = $mdjm->mdjm_events->next_event( $client->ID, $user_type='client' );
+					if( !empty( $next_event ) )	{
+						$event_link = '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">' . 
+							date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>';	
 					}
 					else	{
-						$event_link = $info['next_event'];
+						$event_link = 'N/A';
 					}
 					$last_login = strtotime( get_user_meta( $client->ID, 'last_login', true ) );
 					if( !$last_login ) $last_login = 'Never';
@@ -67,7 +72,8 @@
 										'client_name' => '<a href="' . $url . 'user-edit.php?user_id=' . $client->ID . '">' . $client->display_name . '</a>',
 										'last_login' => $last_login,
 										'client_email' => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ) . $client->ID . '">' . $client->user_email . '</a>',
-										'client_events' => $info['num_rows'],
+										'client_events' => ( count( $events ) != 0 ? '<a href="' . admin_url( 'edit.php?post_type=' . MDJM_EVENT_POSTS . '&client=' 
+															. $client->ID ) . '">' . count( $events ) . '</a>' : '0' ),
 										'client_next_event' => $event_link,
 										'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-events&action=show_journal&client_id=' . $client->ID . '">' . 'View</a>'
 										);	

@@ -12,186 +12,109 @@
 	if ( !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
+		
+	global $mdjm, $mdjm_posts, $mdjm_settings, $current_user;
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
-	global $mdjm_options;
 	
 	if( isset( $_POST['submit'] ) )	{
 		/* Validation */
-		$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
-		if( is_dj() && isset( $mdjm_permissions['dj_disable_shortcode'] ) && !empty( $mdjm_permissions['dj_disable_shortcode'] ) )	{ // Check shortcodes that DJ's cannot use
-			if( !is_array( $mdjm_permissions['dj_disable_shortcode'] ) )	{
-				$mdjm_permissions['dj_disable_shortcode'] = array( $mdjm_permissions['dj_disable_shortcode'] );	
+		if( is_dj() && isset( $mdjm_settings['permissions']['dj_disable_shortcode'] ) && !empty( $mdjm_settings['permissions']['dj_disable_shortcode'] ) )	{ // Check shortcodes that DJ's cannot use
+			if( !is_array( $mdjm_settings['permissions']['dj_disable_shortcode'] ) )	{
+				$mdjm_settings['permissions']['dj_disable_shortcode'] = array( $mdjm_settings['permissions']['dj_disable_shortcode'] );	
 			}
-				foreach( $mdjm_permissions['dj_disable_shortcode'] as $disabled_shortcode )	{	
-					if( strpos( $_POST['email_content'], $disabled_shortcode ) !== false ) {
-						$disabled_shortcodes = $disabled_shortcodes . ' ' . $disabled_shortcode;
-					}
+			foreach( $mdjm_settings['permissions']['dj_disable_shortcode'] as $disabled_shortcode )	{	
+				if( strpos( $_POST['email_content'], $disabled_shortcode ) !== false ) {
+					$disabled_shortcodes = $disabled_shortcodes . ' ' . $disabled_shortcode;
 				}
+			}
 		}
 		if( isset( $disabled_shortcodes ) )	{
 			$class = 'error';
 			$message = '<strong>ERROR</strong>: Your Administrator has disabled the use of the Shortcodes <strong>' . $disabled_shortcodes . '</strong>. Please adjust your content and try again';
-			f_mdjm_update_notice( $class, $message );	
+			mdjm_update_notice( $class, $message );	
 		}
 		elseif( !isset( $_POST['email_to'] ) || $_POST['email_to'] == '' )	{
 			$class = 'error';
 			$message = '<strong>ERROR</strong>: No email recipient specified. Your email was not sent';
-			f_mdjm_update_notice( $class, $message );
+			mdjm_update_notice( $class, $message );
 		}
 		elseif( !is_email( $_POST['user_addr'] ) ) {
 			$class = 'error';
 			$message = '<strong>ERROR</strong>: The email address ' . $_POST['user_addr'] . ' appears to be invalid. Your email was not sent';
-			f_mdjm_update_notice( $class, $message );
+			mdjm_update_notice( $class, $message );
 		}
 		elseif( !isset( $_POST['email_content'] ) || empty( $_POST['email_content'] ) ) {
 			$class = 'error';
 			$message = '<strong>ERROR</strong>: There is no content in your email. Your email was not sent';
-			f_mdjm_update_notice( $class, $message );
+			mdjm_update_notice( $class, $message );
 		}
 		/* Process */
 		else	{
-			$current_user = wp_get_current_user();
-			$info['recipient'] = get_userdata( $_POST['email_to'] );
-			if( isset( $_POST['event'] ) && !empty( $_POST['event'] ) && $_POST['event'] != 'general' )	{
-				$eventinfo = f_mdjm_get_eventinfo_by_id( $_POST['event'] );
-				$info['client'] = get_userdata( $eventinfo->user_id );
-				$dj = get_userdata( $eventinfo->event_dj );
+			/* -- Build the email arguments -- */
+			$email_args = array(
+							'content'	=> nl2br( str_replace( ']]>', ']]&gt;', $_POST['email_content'] ) ),
+							'to'		=> $_POST['email_to'],
+							'subject'	=> $_POST['subject'],
+							'from'		=> $current_user->ID,
+							'source'	=> 'Communication Feature',
+							'html'		=> true,
+							);
+			if( !empty( $_POST['event'] ) )	{
+				$email_args['event_id'] = $_POST['event'];
+				$email_args['journal'] = ( user_can( $_POST['email_to'], 'client' ) || user_can( $_POST['email_to'], 'inactive_client' ) ? 'email-client' : 'email-dj' );
 			}
-			elseif( f_mdjm_is_client( $_POST['email_to'] ) )	{
-				$info['client'] = get_userdata( $_POST['email_to'] );
-			}
-			else	{
-				$info['client'] = '';	
-			}
-			$email_headers = 'MIME-Version: 1.0' . "\r\n";
-			$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-			$email_headers .= 'From: ' . $current_user->display_name . ' <' . $current_user->user_email . '>' . "\r\n";
-			
-			/* Check for sender copy */
-			if( isset( $_POST['copy_sender'] ) && $_POST['copy_sender'] == 'Y' )	{
-				$email_headers .= 'Cc: ' . $current_user->user_email . "\r\n";
-			}
-			
-			/* Check for BCC */
-			if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y'
-				|| isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )	{
 				
-				if( isset( $mdjm_options['bcc_dj_to_client'] ) && $mdjm_options['bcc_dj_to_client'] == 'Y' )
-					$bcc[] = $dj->user_email;
-	
-				if( isset( $mdjm_options['bcc_admin_to_client'] ) && $mdjm_options['bcc_admin_to_client'] == 'Y' )
-					$bcc[] = $mdjm_options['system_email'];
+			if( is_dj() && $_POST['copy_sender'] == 'Y' )
+				$email_args['cc_dj'] = true;
 				
-				$email_headers .= 'Bcc: ' . implode( ",", $bcc ) . "\r\n";
-			}
-			$email_content = nl2br( html_entity_decode( stripcslashes( $_POST['email_content'] ) ) );
-			$info['content'] = '<html><body>';
+			if( current_user_can( 'administrator' ) && $_POST['copy_sender'] == 'Y' )
+				$email_args['cc_admin'] = true;
 			
-			if( $eventinfo )	{
-				include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
-				$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $email_content );
-				$subject = str_replace( $shortcode_content_search, $shortcode_content_replace, $_POST['subject'] );
-			}
-			else	{
-				$info['content'] .= $email_content;
-				$subject = stripslashes( $_POST['subject'] );
-			}
+			// Send the email					
+			$success = $mdjm->send_email( $email_args );
 			
-			if( !class_exists( 'MDJM_Communication' ) )
-				require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
-			
-			/* -- Insert the communication post */	
-			$mdjm_comms = new MDJM_Communication();
-			
-			$p = $mdjm_comms->insert_comm( array (
-										'subject'	=> wp_strip_all_tags( $subject ),
-										'content'	=> $info['content'] . '</body></html>',
-										'recipient'  => $info['recipient']->ID,
-										'source'	 => 'Communication Feature',
-										'event'	  => $eventinfo->event_id,
-										) );
-			
-			$info['content'] .= $mdjm_comms->insert_stat_image( $p );
-			$info['content'] .= "</body>\r\n</html>\r\n";
-			
-			if( wp_mail( $info['recipient']->user_email, $subject, $info['content'], $email_headers ) ) 	{
+			if( !empty( $success ) )	{
 				$class = 'updated';
-				$message = 'Your email has been sent successfully';
 				
-				$mdjm_comms->change_email_status( $p, 'sent' );
+				$recipient = get_userdata( $_POST['email_to'] );
+				
+				$message = 'Message successfully sent to ' . $recipient->display_name . '. ' .  
+				'<a href="' . get_edit_post_link( $success ) . '">View message' . '</a>';
 			}
-			if( WPDJM_JOURNAL == 'Y' )	{
-				if( $eventinfo && f_mdjm_is_client( $_POST['email_to'] ) )	{
-					$j_args = array (
-						'client'   => $eventinfo->user_id,
-						'event'    => $eventinfo->event_id,
-						'author'   => get_current_user_id(),
-						'type'     => 'Email Client',
-						'source'   => 'Admin',
-						'entry'    => 'Email sent to client with subject "' . $_POST['subject'] . '"'
-						);
-				}
-				elseif( $eventinfo && !f_mdjm_is_client( $_POST['email_to'] ) )	{
-					$j_args = array (
-						'client'   => $eventinfo->user_id,
-						'event'    => $eventinfo->event_id,
-						'author'   => get_current_user_id(),
-						'type'     => 'Email DJ',
-						'source'   => 'Admin',
-						'entry'    => 'Email sent to DJ with subject "' . $_POST['subject'] . '"'
-						);
+			else	{
+				$class = 'error';
+				$message = 'There was an error sending your message. Please try again';	
+			}
+			
+			mdjm_update_notice( $class, $message );
+			
+			/* -- Process Unavailability Reponses -- */
+			if( isset( $_POST['respond_unavailable'] ) && !empty( $_POST['respond_unavailable'] ) )	{
+				if( $mdjm->mdjm_events->reject_event( $_POST['event'], $current_user->ID, 'Unavailable' ) )	{
+					$class = 'updated';
+					$message = 'The selected enquiry has been marked as rejected due to unavailability. ' . 
+					'<a href="' . mdjm_get_admin_page( 'enquiries' ) . '">View Enquiries</a>';
 				}
 				else	{
-					$j_args = array (
-						'client'   => $_POST['email_to'],
-						'event'    => '',
-						'author'   => get_current_user_id(),
-						'type'     => 'Email',
-						'source'   => 'Admin',
-						'entry'    => 'Email sent with subject "' . $_POST['subject'] . '"'
-						);	
+					$class = 'error';
+					$message = 'Unable mark event as rejected due to unavailability';
 				}
-				f_mdjm_do_journal( $j_args );
-			}
-			f_mdjm_update_notice( $class, $message );
-			if( isset( $_POST['respond_unavailable'] ) && !empty( $_POST['respond_unavailable'] ) )	{
-				$update = array(
-								'contract_status' => 'Failed Enquiry',
-								'last_updated_by' => get_current_user_id(),
-								'last_updated' => date( 'Y-m-d H:i:s' )
-							);
-				if( $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $eventinfo->event_id ) ) )	{
-					$j_args = array (
-									'client'   => $eventinfo->user_id,
-									'event'    => $eventinfo->event_id,
-									'author'   => get_current_user_id(),
-									'type'     => 'Unavailable to Quote',
-									'source'   => 'Admin',
-									'entry'    => 'Email sent advising unavailable'
-									);
-					if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
-					$class = 'updated';
-					$message = 'The selected enquiry has been marked as lost. <a href="' . admin_url( 'admin.php?page=mdjm-events&status=Enquiry' ) . '">View Enquiries</a>';
-					f_mdjm_update_notice( $class, $message );
-				}
+				mdjm_update_notice( $class, $message );
 			}
 		}
 	}
 	
-	function f_mdjm_render_comms( $mdjm_options )	{
+	function f_mdjm_render_comms()	{
+		global $mdjm, $mdjm_settings;
 		if( isset( $_GET['template'] ) && !empty( $_GET['template'] ) )	{
-			$template_query = new WP_Query( array( 'post_type' => array( 'email_template', 'contract' ), 'p' => $_GET['template'] ) );
-			if ( $template_query->have_posts() ) {
-				while ( $template_query->have_posts() ) {
-					$template_query->the_post();
-					$content = get_the_content();
-					$content = apply_filters( 'the_content', $content );
-					$content = str_replace(']]>', ']]&gt;', $content);
-					$subject = get_the_title();
-				}
+			$template_query = get_post( $_GET['template'] );
+			
+			if( $template_query ) {
+				$content = $template_query->post_content;
+				$content = apply_filters( 'the_content', $content );
+				$content = str_replace(']]>', ']]&gt;', $content);
+				$subject = get_the_title( $_GET['template'] );
 			}
 		}
 		elseif( isset( $_POST['email_content'] ) )	{
@@ -213,12 +136,11 @@
 		<div class="wrap">
 		<h2>Client Communications</h2>
 		<?php
-		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 		$settings = array(  'media_buttons' => true,
 							'textarea_rows' => '10',
 						 );
-		$clientinfo = f_mdjm_get_clients( 'client', 'display_name', 'ASC' );
-		$djinfo = f_mdjm_get_djs();
+		$clientinfo = $mdjm->mdjm_events->get_clients();
+		$djinfo = mdjm_get_djs();
 		?>
 		<script type="text/javascript">
 			function MM_jumpMenu(targ,selObj,restore){ //v3.0
@@ -236,60 +158,58 @@
 		<tr>
 		<td width="20%"><label for="email_template">Select a template for content, or write your own:</label></td>
 		<td><select name="email_template" id="email_template" onChange="MM_jumpMenu('parent',this,0)">
-		<option value="<?php echo add_query_arg( array( 'template' => '0' ) ); ?>" <?php if( !isset( $_GET['template'] ) || $_GET['template'] == '0' ) echo ' selected'; ?>>Do not use Template</option>
+		<option value="<?php echo add_query_arg( 'template', 0 ); ?>" <?php if( !isset( $_GET['template'] ) || $_GET['template'] == '0' ) echo ' selected'; ?>>Do not use Template</option>
         <?php
 		$email_args = array(
-								'post_type' => 'email_template',
-								'orderby' => 'name',
-								'order' => 'ASC',
+								'posts_per_page'	=> -1,
+								'post_type'			=> MDJM_EMAIL_POSTS,
+								'orderby'			=> 'name',
+								'order'				=> 'ASC',
 								);
 		$contract_args = array(
-								'post_type' => 'contract',
-								'orderby' => 'name',
-								'order' => 'ASC',
+								'post_type'			=> MDJM_CONTRACT_POSTS,
+								'posts_per_page'	=> -1,
+								'orderby'			=> 'name',
+								'order'				=> 'ASC',
 								);
 		if( is_dj() )	{ // Check templates that DJ's cannot use
-			if( !isset( $mdjm_permissions ) )	{
-				$mdjm_permissions = get_option( 'mdjm_plugin_permissions' );
+			if( !isset( $mdjm_settings['permissions'] ) )	{
+				$mdjm_settings['permissions'] = get_option( 'mdjm_plugin_permissions' );
 			}
-			if( isset( $mdjm_permissions['dj_disable_template'] ) && !empty( $mdjm_permissions['dj_disable_template'] ) )	{
-				if( !is_array( $mdjm_permissions['dj_disable_template'] ) )	{
-					$mdjm_permissions['dj_disable_template'] = array( $mdjm_permissions['dj_disable_template'] );	
+			if( isset( $mdjm_settings['permissions']['dj_disable_template'] ) && !empty( $mdjm_settings['permissions']['dj_disable_template'] ) )	{
+				if( !is_array( $mdjm_settings['permissions']['dj_disable_template'] ) )	{
+					$mdjm_settings['permissions']['dj_disable_template'] = array( $mdjm_settings['permissions']['dj_disable_template'] );	
 				}
-				$email_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
-				$contract_args['post__not_in'] = $mdjm_permissions['dj_disable_template'];
+				$email_args['post__not_in'] = $mdjm_settings['permissions']['dj_disable_template'];
+				$contract_args['post__not_in'] = $mdjm_settings['permissions']['dj_disable_template'];
 			}
 			
 		}
-			$email_query = new WP_Query( $email_args );
-			if ( $email_query->have_posts() ) {
+			$email_query = get_posts( $email_args );
+			if( $email_query ) {
 				?><option value="email_templates" disabled>--- EMAIL TEMPLATES ---</option><?php
-				while ( $email_query->have_posts() ) {
-					$email_query->the_post();
+				foreach( $email_query as $email_template ) {
 					?>
-					<option value="<?php echo add_query_arg( array( 'template' => get_the_id() ) ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( get_the_id(), $_GET['template'] ); } ?>><?php echo get_the_title(); ?></option>
+					<option value="<?php echo add_query_arg( 'template', $email_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $email_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $email_template->ID ); ?></option>
                     <?php
 				}
 			}
-			wp_reset_postdata();
-			$contract_query = new WP_Query( $contract_args );
-			if ( $contract_query->have_posts() ) {
+			$contract_query = get_posts( $contract_args );
+			if( $contract_query ) {
 				?><option value="contracts" disabled>--- CONTRACTS ---</option><?php
-				while ( $contract_query->have_posts() ) {
-					$contract_query->the_post();
+				foreach ( $contract_query as $contract_template ) {
 					?>
-					<option value="<?php echo add_query_arg( array( 'template' => get_the_id() ) ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( get_the_id(), $_GET['template'] ); } ?>><?php echo get_the_title(); ?></option>
+					<option value="<?php echo add_query_arg( 'template', $contract_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $contract_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $contract_template->ID ); ?></option>
                     <?php
 				}
 			}
-			wp_reset_postdata();
 			
 		?>
 		</select></td>
 		</tr>
 		</table>
 		<hr />
-		<?php wp_nonce_field( 'send-email' ); ?>
+		<?php wp_nonce_field( 'send-email', '__mdjm_send_email' ); ?>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
 		<tr>
 		<td width="60%"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
@@ -300,7 +220,7 @@
             <option value="client_list" disabled="disabled">- - - CLIENTS - - -</option>
 		<?php
 		foreach( $clientinfo as $client )	{
-			if( current_user_can( 'administrator' ) || f_mdjm_client_is_mine( $client->ID ) )	{ // Non-Admins only see their own clients
+			if( current_user_can( 'administrator' ) || $mdjm->mdjm_events->is_my_client( $client->ID ) )	{ // Non-Admins only see their own clients
 				?>
 				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $client->ID, $_GET['to_user'] ); } ?>><?php echo $client->display_name; ?></option>
                 <?php
@@ -336,15 +256,15 @@
         </tr>
         <tr class="alternate">
         <th class="row-title"><label for="copy_sender">Copy yourself?</label></th>
-        <td><input type="checkbox" name="copy_sender" id="copy_sender" value="Y" checked="checked" /> <span class="description">Depending on your <a href="<?php f_mdjm_admin_page( 'settings' ); ?>">settings</a>, the DJ and Admin may also receive a copy</span></td>
+        <td><input type="checkbox" name="copy_sender" id="copy_sender" value="Y" checked="checked" /> <span class="description">Depending on your <a href="<?php echo mdjm_get_admin_page( 'settings' ); ?>">settings</a>, the DJ and Admin may also receive a copy</span></td>
         </tr>
         <?php
 		if( isset( $_GET['to_user'] ) )	{
 			if( user_can( $_GET['to_user'], 'dj' ) )	{ // Selected user is a DJ
-				$events = f_mdjm_get_dj_events( $_GET['to_user'] );
+				$events = $mdjm->mdjm_events->dj_events( $_GET['to_user'], '', $order='DESC' );
 			}
 			else	{
-				$events = f_mdjm_admin_get_client_events( $_GET['to_user'] );
+				$events = $mdjm->mdjm_events->client_events( $_GET['to_user'], '', $order='DESC' );
 			}
 		}
 		?>
@@ -352,19 +272,20 @@
 		<th class="row-title" align="left"><label for="event">Regarding Event:</label></th>
 		<td>
         <?php
-		if( !isset( $events ) || !$events )	{
+		if( empty( $events ) )	{
 			?>
             <input type="text" name="event" class="regular-text" value="No Event (General Message)" disabled="disabled" />
             <?php	
 		}
 		else	{
+			$event_stati = get_event_stati();
 			?>
 			<select name="event" id="event">
-			<option value="general"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], 'general' ); } ?>>No Event (General Message)</option>
+			<option value="">No Event (General Message)</option>
             <?php
 			foreach( $events as $event )	{
 				?>
-				<option value="<?php echo $event->event_id; ?>"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], $event->event_id ); } elseif( isset( $_GET['event_id'] ) ) { selected( $_GET['event_id'], $event->event_id ); }  ?>><?php echo date( 'd/m/Y', strtotime( $event->event_date ) ) . ' from ' . date( $mdjm_options['time_format'], strtotime( $event->event_start ) ) . ' (' . $event->contract_status . ')'; ?></option>
+				<option value="<?php echo $event->ID; ?>"<?php if( isset( $_POST['event'] ) ) { selected( $_POST['event'], $event->ID ); } elseif( isset( $_GET['event_id'] ) ) { selected( $_GET['event_id'], $event->ID ); }  ?>><?php echo date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $event->ID, '_mdjm_event_date', true ) ) ) . ' from ' . date( MDJM_TIME_FORMAT, strtotime( get_post_meta( $event->ID, '_mdjm_event_start', true ) ) ) . ' (' . $event_stati[$event->post_status] . ')'; ?></option>
 				<?php
 			}
 			echo '</select>';
@@ -384,7 +305,14 @@
 		<td colspan="2"><?php wp_editor( html_entity_decode( stripcslashes( $content ) ), 'email_content', $settings ); ?></td>
 		</tr>
 		<tr>
-		<td colspan="2"><?php submit_button( 'Send Email', 'primary', 'submit', true ); ?></td>
+		<td colspan="2">
+		<?php
+		if( $mdjm->_mdjm_validation( 'check' ) )
+			submit_button( 'Send Email', 'primary', 'submit', true );
+		else
+			echo '<a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">License Expired</a>';
+		?>
+        </td>
 		</tr>
 		</table></td>
 		<td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
@@ -402,4 +330,4 @@
 	<?php
 	} // f_mdjm_render_comms
 	
-	f_mdjm_render_comms( $mdjm_options );
+	f_mdjm_render_comms();

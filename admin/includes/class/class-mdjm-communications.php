@@ -25,6 +25,11 @@
 		 * @return: the post id
 		 */
 		function insert_comm( $args )	{
+			global $mdjm;
+			
+			if( MDJM_DEBUG == true )
+				$mdjm->debug_logger( 'Starting ' . __METHOD__, true );
+						
 			if( empty( $args ) || !is_array( $args ) )
 				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged' );
 							
@@ -38,16 +43,29 @@
 			$meta_args['source'] = isset( $args['source'] ) ? $args['source'] : '';
 			$meta_args['event'] = isset( $args['event'] ) ? $args['event'] : '';
 
-			if( empty( $post_args['post_title'] ) || empty( $post_args['post_content'] ) || empty( $meta_args['recipient'] ) || empty( $meta_args['source'] ) || empty( $meta_args['event'] ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged' );
+			if( empty( $post_args['post_title'] ) )
+				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no title ' . $post_args['post_title'] );
+			if( empty( $post_args['post_content'] ) )
+				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no content ' . $post_args['post_content'] ); 
+			if( empty( $meta_args['recipient'] ) )
+				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no recipient ' . $post_args['recipient'] ); 
+			if( empty( $meta_args['source'] ) )
+				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no source ' . $post_args['source'] ); 
+			//if( empty( $meta_args['event'] ) )
+			//	return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no event ' . $post_args['event'] );
 				
 			$post_args['post_type'] = 'mdjm_communication';
 			$post_args['ping_status'] = false;
 			$post_args['comment_status'] = 'closed';
 			
+			if( MDJM_DEBUG == true )
+				$mdjm->debug_logger( '	-- Inserting COMM Post' );
+			
 			$comm_post_id = wp_insert_post( $post_args );
 			
 			if( $comm_post_id )	{
+				if( MDJM_DEBUG == true )
+					$mdjm->debug_logger( '	-- COMM post created ' . $comm_post_id );
 				foreach( $meta_args as $meta_key => $meta_value )	{
 					add_post_meta( $comm_post_id, '_' . $meta_key, $meta_value );	
 				}	
@@ -62,11 +80,9 @@
 		 * @param: $p => the post ID
 		 */
 		function insert_stat_image( $p )	{
-			global $mdjm_options;
+			global $mdjm_settings;
 			
-			$trackit = !empty( $mdjm_options['track_client_emails'] ) ? $mdjm_options['track_client_emails'] : '';
-			
-			if( empty( $p ) || empty( $trackit ) )
+			if( empty( $p ) || MDJM_TRACK_EMAILS != true )
 				return;
 				
 			$stat = sprintf( '<img alt="" src="'. home_url() . '/?mdjm-api=%s&post=%s&action=%s" border="0"  height="3"  width="37" />', 'MDJM_EMAIL_RCPT', $p, 'open_email' );
@@ -82,7 +98,7 @@
 		 * @param: $p => the post ID
 		 */
 		function track_email_open( $p )	{
-			if( empty( $p ) )
+			if( empty( $p ) || get_post_status( $p ) == 'opened' )
 				return;
 			
 			/* -- Display the invisible image on screen -- */
@@ -102,16 +118,10 @@
 			$contents = fread( $handle, filesize( $stat_image ) );
 			fclose( $handle );
 			echo $contents;
-			
-			/* -- Update the tracking information -- */
-			$open_count = get_post_meta( $p, '_open_count', true );
-			$current_count = !empty( $open_count ) ? $open_count : '0';
-			
+					
 			wp_update_post( array( 'ID' => $p, 'post_status' => 'opened' ) );
 	
 			update_post_meta( $p, '_status_change', time() );
-			update_post_meta( $p, '_open_count', $current_count + 1 );
-
 		} // track_email_open
 		
 		/* change_email_status

@@ -77,7 +77,34 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
-= 1.1.3.2 =
+= 1.2 =
+<strong>Released Tuesday 2nd June, 2015</strong>
+A complete revamp of how Events, Transaction, Venues work plus much much more.
+Join our Facebook group for all the latest discussions, news and more - https://www.facebook.com/groups/mobiledjmanager
+<ul>
+	<li><strongNew</strong>: Drag &amp; drop your Contact Form fields to re-order them easily</li>
+	<li><strong>New</strong>: Edit field settings without having to delete and re-create</li>
+	<li><strongNew</strong>: All transactions are now logged, whether automated via PayPal or manually entered by the Admin</li>
+	<li><strongNew</strong>: Notifications to clients when payments are entered manually for events</li>
+	<li><strongNew</strong>: Event Transaction overview is displayed on each event page</li>
+	<li><strongNew</strong>: Transaction Types have been moved and no longer reside within settings</li>
+	<li><strongGeneral</strong>: Email tracking accuracy has been improved. If it says it has been opened, 
+		you can be sure that the Client has received and opened the email</li>
+	<li><strongBug Fix</strong>: Printing playlist no longer shows menu</li>
+	<li><strongBug Fix</strong>: Email playlist corrections</li>
+	<li><strongGeneral</strong>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
+		the DJ's name will be displayed and the reply-to address will be set to that of the DJ too. This also addresses an issue whereby
+		DJ's who have email addresses that do not end in the same domain name as the website where MDJM is installed, cannot send emails
+		due to security controls</li>
+	<li><strongGeneral</strong>: Digital contract signing now requires the client to re-enter their password as an additional verification step</li>
+	<li><strongBug Fix</strong>: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content</li>
+	<li><strongGeneral</strong>: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed</li>
+	<li><strongNew</strong>: Create backups of the MDJM database tables and download within the debugging screen</li>
+	<li><strongGeneral</strong>: Significant improvements to the application debugging. No annoying notification when debugging
+		is enabled, however we still only recommend to enable when you are experiencing an issue</li>
+</ul>
+
+= 1.1.3.3 =
 <strong>Released Thursday 14th May, 2015</strong>
 <ul>
 	<li><strong>General</strong>: You can now add custom content above MDJM shortcode content within Client Zone pages</li>

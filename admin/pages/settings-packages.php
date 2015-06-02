@@ -4,9 +4,8 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
+		
 	?>
 	<div class="wrap">
     <div id="icon-themes" class="icon32"></div>
@@ -105,7 +104,7 @@
 	?>
     <h3><?php echo $title; ?></h3>
     <form name="form-manage-package" id="form-manage-package" method="post">
-    <?php if( $_POST['submit'] == 'Edit Package' ) echo '<input type="hidden" name="slug" value="' . $packages[$_POST['all_packages']]['slug'] . '" />'; ?>
+    <?php if( !empty( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' ) echo '<input type="hidden" name="slug" value="' . $packages[$_POST['all_packages']]['slug'] . '" />'; ?>
     <table>
     <tr>
     <td width="60%">
@@ -119,7 +118,7 @@
 	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['name'] ); ?>" /> <?php submit_button( 'Delete This Package', 'delete', 'submit-delete', false );
 	}
 	else	{
-	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo $_POST['package_name']; ?>" /><?php
+	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo ( !empty( $_POST['package_name'] ) ? $_POST['package_name'] : '' ); ?>" /><?php
     }
 	?>
     </td>
@@ -139,7 +138,7 @@
     </tr>
     <tr>
     <td class="row-title" width="10%"><label for="package_desc">Description:</label></td>
-    <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo $_POST['package_desc']; } ?></textarea></td>
+    <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( !empty( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo ( !empty( $_POST['package_desc'] ) ? $_POST['package_desc'] : '' ); } ?></textarea></td>
 	</tr>
      <?php
 		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
@@ -185,7 +184,7 @@
 		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['cost'] ); ?>" /> <span class="description">No <?php echo f_mdjm_currency(); ?> symbol needed</span><?php
 	}
 	else	{
-		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo $_POST['package_cost']; ?>" /> <span class="description">No <?php echo f_mdjm_currency(); ?> symbol needed</span><?php
+		?><input type="text" name="package_cost" id="package_cost" class="all-options" value="<?php echo ( !empty( $_POST['package_cost'] ) ? $_POST['package_cost'] : '' ); ?>" /> <span class="description">No <?php echo f_mdjm_currency(); ?> symbol needed</span><?php
 	}
     ?>   
     </td>

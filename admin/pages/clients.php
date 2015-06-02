@@ -16,7 +16,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
 	
 /**
@@ -59,7 +58,7 @@
 * Displays client contact information for DJ's
 */
 	function f_mdjm_view_client( $user_id )	{
-		global $wpdb, $mdjm_options;
+		global $wpdb;
 		$client = get_userdata( $user_id );
 		
 		?>

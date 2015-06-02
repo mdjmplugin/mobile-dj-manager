@@ -1,6 +1,6 @@
 (function() {
-	tinymce.PluginManager.add('my_mce_button', function( editor, url ) {
-		editor.addButton( 'my_mce_button', {
+	tinymce.PluginManager.add('mdjm_shortcodes_btn', function( editor, url ) {
+		editor.addButton( 'mdjm_shortcodes_btn', {
 			text: 'MDJM Shortcodes',
 			icon: false,
 			type: 'menubutton',

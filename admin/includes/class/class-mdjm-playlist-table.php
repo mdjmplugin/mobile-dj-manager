@@ -1,10 +1,9 @@
 <?php
 	class MDJM_PlayList_Table extends WP_List_Table	{
 		private function get_playlist()	{
-			global $wpdb, $query, $mdjm_options;
-			include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			global $wpdb, $query, $mdjm_settings;
 			// Build the data query
-			$query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $_GET['event_id'];
+			$query = 'SELECT * FROM `' . MDJM_PLAYLIST_TABLE . '` WHERE `event_id` = ' . $_GET['event_id'];
 			
 			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'date_added';
@@ -26,20 +25,30 @@
 									'play_when' => stripslashes( $playlist->play_when ),
 									'info' => stripslashes( $playlist->info ),
 									'by' => stripslashes( $playlist->added_by ),
-									'date_added' => date( $mdjm_options['short_date_format'], strtotime( $playlist->date_added ) )
+									'date_added' => date( MDJM_SHORTDATE_FORMAT, strtotime( $playlist->date_added ) )
 								);
 			}
-			$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $_GET['event_id']);
-			$client = get_userdata( $eventinfo->user_id );
+			$eventinfo = get_post( $_GET['event_id'] );
+			$client = get_userdata( get_post_meta( $eventinfo->ID, '_mdjm_event_client', true ) );
 			?>
 			<div class="wrap">
-			<h4>Event Date: <?php echo date( "l, jS F Y",strtotime( $eventinfo->event_date ) ); ?><br />
-            Event Type: <?php echo $eventinfo->event_type; ?><br />
+			<h4>Event Date: <?php echo date( 'l, jS F Y', strtotime( get_post_meta( $eventinfo->ID, '_mdjm_event_date', true ) ) ); ?><br />
+            Event Type: 
+			<?php
+            $event_types = get_the_terms( $eventinfo->ID, 'event-types' );
+            if( is_array( $event_types ) )	{
+                foreach( $event_types as $key => $event_type ) {
+                    $event_types[$key] = $event_type->name;
+                }
+                echo implode( "<br/>", $event_types );
+            }
+            ?>
+            <br />
 			Client Name: <?php echo $client->first_name . ' ' . $client->last_name ?><br />
 			No. Songs in Playlist: <?php echo $pl_ttl; ?></h4>
             <form name="email_pl" id="email_pl" action="" method="post">
             <?php
-            submit_button( 'Email me this List', 'primary small', 'email_playlist', false );
+            submit_button( 'Email me this List', 'primary small', 'email_pl', false );
 			?>
             ordered by <select name="order_pl_by" id="order_pl_by">
             <option value="date_added" selected="selected">Date Added</option>
@@ -49,8 +58,8 @@
             </select> and repeating headers after <input type="text" name="repeat_headers" id="repeat_headers" class="small-text" value="0" /> rows <code>Enter 0 for no repeat of headers</code>
             </form>
             <br />
-			<form name="print_pl" id="print_pl" action="<?php f_mdjm_admin_page( 'events' ); ?>" method="post" target="_blank">
-            <input type="hidden" name="event_id" id="event_id" value="<?php echo $eventinfo->event_id; ?>" />
+			<form name="print_pl" id="print_pl" action="<?php mdjm_get_admin_page( 'playlists' ); ?>" method="post" target="_blank">
+            <input type="hidden" name="event_id" id="event_id" value="<?php echo $eventinfo->ID; ?>" />
             <?php
             submit_button( 'Print this List', 'primary small', 'print_pl', false );
 			?>
@@ -80,7 +89,7 @@
 		
 		function admin_header() {
 			$page = ( isset($_GET['page'] ) ) ? esc_attr( $_GET['page'] ) : false;
-			if( 'mdjm-events' != $page )
+			if( 'mdjm-playlists' != $page )
 			return; 
 			
 			echo '<style type="text/css">';
@@ -169,13 +178,12 @@
 		} // column_cb
 				
 		function send_to_email( $post_data, $get_data )	{
-			global $mdjm_options, $wpdb, $current_user;
+			global $mdjm_settings, $wpdb, $current_user;
 			if( !isset( $get_data['event_id'] ) || empty( $get_data['event_id'] ) )	{
 				return;	
 			}
 			else	{
-				include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-				$email_query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $get_data['event_id'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
+				$email_query = 'SELECT * FROM `' . MDJM_PLAYLIST_TABLE . '` WHERE `event_id` = ' . $get_data['event_id'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
 				$email_result = $wpdb->get_results( $email_query );
 				$pl_ttl = $wpdb->num_rows;
 				
@@ -188,8 +196,8 @@
 				
 				$i = 0;
 				
-				$eventinfo = $wpdb->get_row('SELECT * FROM ' . $db_tbl['events'] . ' WHERE `event_id` = ' . $get_data['event_id']);
-				$client = get_userdata( $eventinfo->user_id );
+				$eventinfo = get_post( $get_data['event_id'] );
+				$client = get_userdata( get_post_meta( $eventinfo->ID, '_mdjm_event_client', true ) );
 				get_currentuserinfo();
 				
 				$email_body = '<html>' . "\n" . '<body>' . "\n";
@@ -198,8 +206,16 @@
 				$email_body .= '<p>Here is the playlist you requested.</p>' . "\n";
 				
 				$email_body .= '<p>Client Name: ' . $client->first_name . ' ' . $client->last_name . '<br />' . "\n";
-				$email_body .= 'Event Date: ' . date( "l, jS F Y", strtotime( $eventinfo->event_date ) ) . '<br />' . "\n";
-				$email_body .= 'Event Type: ' . $eventinfo->event_type . '<br />' . "\n";
+				$email_body .= 'Event Date: ' . date( "l, jS F Y", strtotime( get_post_meta( $eventinfo->ID, '_mdjm_event_date', true ) ) ) . '<br />' . "\n";
+				$email_body .= 'Event Type: ' . 
+				$event_types = get_the_terms( $eventinfo->ID, 'event-types' );
+				if( is_array( $event_types ) )	{
+					foreach( $event_types as $key => $event_type ) {
+						$event_types[$key] = $event_type->name;
+					}
+					$email_body .= implode( "<br/>", $event_types );
+				}
+       			$email_body .= '<br />' . "\n";
 				$email_body .= 'No. Songs in Playlist: ' . $pl_ttl . '<br /></p>' . "\n";
 				$email_body .= '<hr />' . "\n";
 				
@@ -241,16 +257,16 @@
 				
 				$email_body .= '</table>' . "\n";
 				$email_body .= '<p>Regards</p>' . "\n";
-				$email_body .= '<p>' . WPMDJM_CO_NAME . '</p>' . "\n";
+				$email_body .= '<p>' . MDJM_COMPANY . '</p>' . "\n";
 				$email_body .= '<p>&nbsp;</p>' . "\n";
-				$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a> version ' . WPMDJM_VERSION_NUM . '</p>' . "\n";
+				$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n";
 				$email_body .= '</body>' . "\n" . '</html>' . "\n";
 				
 				$headers = 'MIME-Version: 1.0' . "\r\n";
 				$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-				$headers .= 'From: ' . $mdjm_options['company_name'] . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
+				$headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['main']['system_email'] . '>' . "\r\n";
 				
-				if( wp_mail( $current_user->user_email, 'Event Playlist for ' . date( "l, jS F Y", strtotime( $eventinfo->event_date ) ), $email_body, $headers ) )	{
+				if( wp_mail( $current_user->user_email, 'Event Playlist for ' . date( "l, jS F Y", strtotime( get_post_meta( $eventinfo->ID, '_mdjm_event_date', true ) ) ), $email_body, $headers ) )	{
 					f_mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	
 				}
 				else	{

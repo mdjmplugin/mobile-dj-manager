@@ -14,11 +14,13 @@
 	$contract_template_content = '<h2 style="text-align: center;"><span style="text-decoration: underline;">Confirmation of Booking</span></h2><h3>Agreement Date: <span style="color: #ff0000;">{DDMMYYYY}</span></h3>This document sets out the terms and conditions verbally agreed by both parties and any non-fulfilment of the schedule below may render the defaulting party liable to damages.This agreement is between: <strong>{COMPANY_NAME}</strong> (hereinafter called the Artiste)and:<strong>{CLIENT_FULLNAME}</strong> (hereinafter called the Employer)<strong>of</strong><address><strong>{CLIENT_FULL_ADDRESS}{CLIENT_EMAIL}{CLIENT_PRIMARY_PHONE}</strong> </address><address> </address><address>in compliance with the schedule set out below.</address><h3 style="text-align: center;"><span style="text-decoration: underline;">Schedule</span></h3>It is agreed that the Artiste shall appear for the performance set out below for a total inclusive fee of <span style="color: #ff0000;"><strong>{TOTAL_COST}</strong></span>.Payment terms are: <strong><span style="color: #ff0000;">{DEPOSIT}</span> Deposit</strong> to be returned together with this form followed by <strong>CASH ON COMPLETION</strong> for the remaining balance of <strong><span style="color: #ff0000;">{BALANCE}</span>. </strong>Cheques will only be accepted by prior arrangement.Deposits can be made via bank transfer to the following account or via cheque made payable to <strong>XXXXXX</strong> and sent to the address at the top of this form.<strong>Bank Transfer Details: Name XXXXXX | Acct No. 10000000 | Sort Code | 30-00-00</strong><strong>The confirmation of this booking is secured upon receipt of the signed contract and any stated deposit amount</strong>.<h3 style="text-align: center;"><span style="text-decoration: underline;">Venue and Event</span></h3><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="center"><table border="0" width="75%" cellspacing="0" cellpadding="0"><tbody><tr><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000; border-right-width: thin; border-right-style: solid; border-right-color: #000;" width="33%"><strong>Address</strong></td><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000; border-right-width: thin; border-right-style: solid; border-right-color: #000;" width="33%"><strong>Telephone Number</strong></td><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000;" width="33%"><strong>Date</strong></td></tr><tr><td style="border-right-width: thin; border-right-style: solid; border-right-color: #000;" valign="top" width="33%"><span style="color: #ff0000;"><strong>{VENUE_FULL_ADDRESS}</strong></span></td><td style="border-right-width: thin; border-right-style: solid; border-right-color: #000;" valign="top" width="33%"><span style="color: #ff0000;"><strong>{VENUE_TELEPHONE}</strong></span></td><td valign="top" width="33%"><span style="color: #ff0000;"><strong>{EVENT_DATE}</strong></span></td></tr></tbody></table></td></tr></tbody></table>The Artiste will perform between the times of <span style="color: #ff0000;"><strong>{START_TIME}</strong></span> to <span style="color: #ff0000;"><strong>{END_TIME}</strong></span>. Any additional time will be charged at £50 per hour or part of.<hr /><h2 style="text-align: center;"> Terms &amp; Conditions</h2><ol>	<li>This contract may be cancelled by either party, giving the other not less than 28 days prior notice.</li>	<li>If the Employer cancels the contract in less than 28 days’ notice, the Employer is required to pay full contractual fee, unless a mutual written agreement has been made by the Artiste and Employer.</li>	<li>Deposits are non-refundable, unless cancellation notice is issued by the Artiste or by prior written agreement.</li>	<li>This contract is not transferable to any other persons/pub/club without written permission of the Artiste.</li>	<li>Provided the Employer pays the Artiste his full contractual fee, he may without giving any reason, prohibit the whole or any part of the Artiste performance.</li>	<li>Whilst all safeguards are assured the Artiste cannot be held responsible for any loss or damage, out of the Artiste’s control during any performance whilst on the Employers premises.</li>	<li>The Employer is under obligation to reprimand or if necessary remove any persons being repetitively destructive or abusive to the Artiste or their equipment.</li>	<li>It is the Employer’s obligation to ensure that the venue is available 90 minutes prior to the event start time and 90 minutes from event completion.</li>	<li>The venue must have adequate parking facilities and accessibility for the Artiste and his or her equipment.</li>	<li>The Artiste reserves the right to provide an alternative performer to the employer for the event. Any substitution will be advised in writing at least 7 days before the event date and the performer is guaranteed to be able to provide at least the same level of service as the Artiste.</li>	<li>Failing to acknowledge and confirm this contract 28 days prior to the performance date does not constitute a cancellation, however it may render the confirmation unsafe. If the employer does not acknowledge and confirm the contract within the 28 days, the Artiste is under no obligation to confirm this booking.</li>	<li>From time to time the Artiste, or a member of their crew, may take photographs of the performance. These photographs may include individuals attending the event. If you do not wish for photographs to be taken or used publicly such as on the Artiste’s websites or other advertising media, notify the Artiste in writing.</li></ol>';
 	
 	$contract_template_args = array(
-								'post_title'    => 'General',
-								'post_content'  => $contract_template_content,
-								'post_status'   => 'publish',
-								'post_type'		=> 'contract',
-								'post_author'   => 1,
+								'post_title'     => 'General',
+								'post_content'   => $contract_template_content,
+								'post_status'    => 'publish',
+								'post_type'	  => 'contract',
+								'post_author'   	=> 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
 								);
 /**** Default Contract end ****/
 
@@ -26,7 +28,7 @@
 * Default Email Templates *
 * Only used during first installation
 */
-	$email_enquiry_content = '<h1>Your DJ Enquiry from {COMPANY_NAME}</h1><br />
+	$email_enquiry_content = '<h1>Your DJ Enquiry from {COMPANY_NAME}</h1>
 								Dear {CLIENT_FIRSTNAME},<br />
 								<br />
 								Thank you for contacting {COMPANY_NAME} regarding your up and coming event on {EVENT_DATE}.<br />
@@ -52,14 +54,16 @@
 								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_enquiry_content_args = array(
-								'post_title'    => 'Client Enquiry',
-								'post_content'  => $email_enquiry_content,
-								'post_status'   => 'publish',
-								'post_type'		=> 'email_template',
-								'post_author'   => 1,
+								'post_title'     => 'Client Enquiry',
+								'post_content'   => $email_enquiry_content,
+								'post_status'   	=> 'publish',
+								'post_type'	  => 'email_template',
+								'post_author'   	=> 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
 								);
 
-	$email_contract_review = '<h2>Your DJ Booking with {COMPANY_NAME}</h2><br />
+	$email_contract_review = '<h2>Your DJ Booking with {COMPANY_NAME}</h2>
 								Dear {CLIENT_FIRSTNAME},<br />
 								<br />
 								Thank you for indicating that you wish to proceed with booking {COMPANY_NAME} for your up and coming disco on {EVENT_DATE}.<br />
@@ -88,9 +92,11 @@
 								'post_status'   => 'publish',
 								'post_type'		=> 'email_template',
 								'post_author'   => 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
 								);
 
-	$email_client_booking_confirm = '<h1>Your DJ Booking is Confirmed</h1><br />
+	$email_client_booking_confirm = '<h1>Your DJ Booking is Confirmed</h1>
 									Dear {CLIENT_FIRSTNAME},<br />
 									<br />
 									Thank you for booking your up and coming disco with {COMPANY_NAME}. Your booking is now confirmed.<br />
@@ -122,14 +128,16 @@
 									<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_client_booking_confirm_args = array(
-								'post_title'    => 'Client Booking Confirmation',
-								'post_content'  => $email_client_booking_confirm,
-								'post_status'   => 'publish',
-								'post_type'		=> 'email_template',
-								'post_author'   => 1,
+								'post_title'     => 'Client Booking Confirmation',
+								'post_content'   => $email_client_booking_confirm,
+								'post_status'   	=> 'publish',
+								'post_type'	  => 'email_template',
+								'post_author'   	=> 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
 								);
 
-	$email_dj_booking_confirm = '<h1>Booking Confirmation</h1><br />
+	$email_dj_booking_confirm = '<h1>Booking Confirmation</h1>
 								Dear {DJ_FIRSTNAME},<br />
 								<br />
 								Your client {CLIENT_FULLNAME} has just confirmed their booking for you to DJ at their event on {EVENT_DATE}.<br />
@@ -155,55 +163,81 @@
 								{COMPANY_NAME}';
 	
 	$email_dj_booking_confirm_args = array(
-								'post_title'    => 'DJ Booking Confirmation',
-								'post_content'  => $email_dj_booking_confirm,
-								'post_status'   => 'publish',
-								'post_type'		=> 'email_template',
-								'post_author'   => 1,
+								'post_title'     => 'DJ Booking Confirmation',
+								'post_content'   => $email_dj_booking_confirm,
+								'post_status'   	=> 'publish',
+								'post_type'	  => 'email_template',
+								'post_author'   	=> 1,
+								'ping_status'    => 'closed',
+								'comment_status' => 'closed',
+								);
+								
+	$email_unavailability_template = '<h1>Your DJ Enquiry with {COMPANY_NAME}</h1>
+								Dear {CLIENT_FIRSTNAME},<br />
+								<br />
+								Thank you for contacting {COMPANY_NAME} regarding your up and coming event on {EVENT_DATE}.<br />
+								<br />
+								Unfortunately however, we are not available on the date you have selected for your event. ' . 
+								'If you have alternative dates you are looking at, we\'d love to hear from you again.<br />
+								<br />
+								Otherwise, we hope you have a great event and hope to hear from you again next time.<br />
+								<br />
+								Best Regards<br />
+								<br />
+								{DJ_FULLNAME}<br />
+								<br />
+								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
+								Tel: {DJ_PRIMARY_PHONE}<br />
+								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
+	
+	$email_unavailability_template_args = array(
+								'post_title'     => '{COMPANY_NAME} is not Available',
+								'post_content'   => $email_unavailability_template,
+								'post_status'   	=> 'publish',
+								'post_type'	  => 'email_template',
+								'post_author'   	=> 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
+								);
+								
+	$email_payment_received_template = '<h4><span style="color: #ff9900;">Thank you for your {PAYMENT_FOR} payment</span></h4>
+								Dear {CLIENT_FIRSTNAME},<br />
+								<br />
+								Thank you for your recent payment of <strong>{PAYMENT_AMOUNT}</strong> towards the ' . 
+								'<strong>{PAYMENT_FOR}</strong> for you event on <strong>{EVENT_DATE}</strong>. Your payment has been received and your ' . 
+								'event details have been updated.<br />
+								<br />
+								You can view your event details and manage your playlist by logging onto our ' . 
+								'<a title="{COMPANY_NAME} {APPLICATION_NAME}" href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> event management system.<br />
+								<br />
+								Your username is {CLIENT_USERNAME} and if you can\'t recall your password, you can reset it by clicking the ' . 
+								'<a title="Reset your password for the {COMPANY_NAME} {APPLICATION_NAME}" href="http://www.djmikehoward.co.uk//wp-login.php?action=lostpassword">' . 
+								'Lost Password</a> link.<br />
+								<br />
+								Best Regards<br />
+								<br />
+								{DJ_FULLNAME}<br />
+								<br />
+								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
+								Tel: {DJ_PRIMARY_PHONE}<br />
+								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
+	
+	$email_payment_received_template_args = array(
+								'post_title'     => 'Event {PAYMENT_FOR} Payment Confirmation',
+								'post_content'   => $email_payment_received_template,
+								'post_status'   	=> 'publish',
+								'post_type'	  => 'email_template',
+								'post_author'   	=> 1,
+								'ping_status'   	=> 'closed',
+								'comment_status' => 'closed',
 								);
 /**** Default Email Template end ****/
-
-/* 
-* Default Client Dialogues
-* Only used during first installation
-*/
-	$mdjm_init_client_text = array(
-									'deposit_label'		   => 'Deposit',
-									'balance_label'		   => 'Balance',
-									'warn_incomplete_profile' => 'Y',
-									'custom_client_text'      => 'N',
-									'not_logged_in'           => 'You must be logged in to enter this area of the website. Please enter your username and password below to continue, or use the menu items above to navigate to another area of our website.',
-									'home_welcome'            => 'Hello {CLIENT_FIRSTNAME} and welcome to the <a href="{APPLICATION_HOME}">{COMPANY_NAME}</a> {APPLICATION_NAME}.',
-									'home_noevents'           => 'You currently have no upcoming events. Please <a title="Contact {COMPANY_NAME}" href="{CONTACT_PAGE}">contact me</a> now to start planning your next disco.',
-									'home_notactive'          => 'The selected event is no longer active. <a href="{CONTACT_PAGE}" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.',
-									'playlist_welcome'        => 'Welcome to the {COMPANY_NAME} event playlist management system.',
-									'playlist_intro'          => 'Use this tool to let your DJ know the songs that you would like played (or perhaps not played) during your event on <strong> {EVENT_DATE}</strong>.' . "\r\n\r\n" . 'Invite your friends to add their song choices to this playlist too by sending them your unique event URL - <a href="{GUEST_PLAYLIST_URL}" target="_blank">{GUEST_PLAYLIST_URL}</a>.' . "\r\n\r\n" . 'You can view and remove any songs added by your guests below.',
-									'playlist_edit'           => 'You are currently editing the playlist for your event on {EVENT_DATE}. To edit the playlist for one of your other events, return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME} home page</a> and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.',
-									'playlist_closed'         => '<strong>Additions to your playlist are disabled as your event is taking place soon</strong>',
-									'playlist_noevent'        => 'You do not have any confirmed events with us. The Playlist is only available once you have confirmed your event and signed your contract.' . "\r\n\r\n" . 'To begin planning your next event with us, please <a href="{CONTACT_PAGE}">contact us now</a>',
-									'playlist_guest_welcome'  => 'Welcome to the {COMPANY_NAME} playlist management system.',
-									'playlist_guest_intro'    => 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . "\r\n\r\n" . 'Add your playlist requests in the form below. All fields are required.',
-									'playlist_guest_closed'   => 'This playlist is currently closed. No songs can be added at this time.',
-									'payment_welcome'		 => 'Paying for your event is easy as we accept secure online payments via PayPal.' . "\r\n\r\n" . 'PayPal accept all major credit cards and you do not need to be a PayPal member to process your payment to us',
-				
-									'payment_intro'		   => 'Select the payment you wish to make from the drop down list below and click the <strong>Pay Now</strong> button to be redirected to <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal\'s</a> secure website where you can complete your payment.' . "\r\n\r\n" . 'Upon completion, you can return to the {COMPANY_NAME} website. You will also receive an email as soon as your payment completes.',
-									
-									'payment_complete'		=> 'Thank you, your payment has completed successfully.' . "\r\n\r\n" . 'You will shortly receive an email from us (remember to check your junk email folder) confirming the payment and detailing next steps for your event.' . "\r\n\r\n" . '<strong>Please note</strong> that it can take a few minutes for our systems to be updated by <a title="PayPal" href="https://www.paypal.com" target="_blank">PayPal</a>, and therefore your payment may not have registered below as yet. Once you receive the payment confirmation email from us, the payment will be updated on our systems.' . "\r\n\r\n" . '<a href="{APPLICATION_HOME}">Click here</a> to return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
-				
-									'payment_cancel'		  => 'Your payment has been cancelled.' . "\r\n\r\n" . 'To process your payment, please follow the steps below',
-									
-									'payment_not_due'		 => 'There are no payments outstanding for this event. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>..' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
-									
-									'payment_noevent'		 => 'No event has been selected for payment. <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
-				
-									'payment_noaccess'		=> 'We\'re sorry but you do not have permission to access this page. If you believe this is an error, please <a href="{CONTACT_PAGE}">contact us</a>..' . "\r\n\r\n" . 'Otherwise, <a href="{APPLICATION_HOME}">Click here</a> return to the <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a> home page.',
-								);
 
 /*
 * Default Schedules
 * Only used during first installation
 */
-	if( isset( $mdjm_options['upload_playlists'] ) && $mdjm_options['upload_playlists'] == 'Y' )	{
+	if( isset( $mdjm_settings['main']['upload_playlists'] ) && $mdjm_settings['main']['upload_playlists'] == 'Y' )	{
 		$time = time();
 		$playlist_nextrun = strtotime( '+1 day', $time );
 	}
@@ -222,14 +256,14 @@
 				'options'	  => array(
 									'email_client'   => 'N',
 									'email_template' => '0',
-									'email_subject'  => 'Task "Complete Events" Complete - ' . $mdjm_options['app_name'],
+									'email_subject'  => 'Task "Complete Events" Complete - Client Zone',
 									'email_from'	 => 'admin',
 									'run_when'	   	 => 'after_event',
 									'age'			 => '1 HOUR',
 									'notify_admin'   => 'Y',
 									'notify_dj' 	 => 'N',
 									),
-				'function'	 => 'f_mdjm_cron_complete_event',
+				'function'	 => 'complete_event',
 				'totalruns'	 => '0',
 				'default'	 => 'Y',
 			), // complete-events
@@ -245,14 +279,14 @@
 				'options'	  => array(
 									'email_client'   => 'Y',
 									'email_template' => '0',
-									'email_subject'  => 'The deposit for your disco is now due',
+									'email_subject'  => 'Task "Request Deposit" Complete - Client Zone',
 									'email_from'	 => 'admin',
 									'run_when'	   => 'after_approval',
 									'age'			=> '3 DAY',
 									'notify_admin'   => 'Y',
 									'notify_dj' 	  => 'N',
 									),
-				'function'	 => 'f_mdjm_cron_request_deposit',
+				'function'	 => 'request_deposit',
 				'totalruns'	 => '0',
 				'default'	 => 'Y',
 			), // request-deposit
@@ -268,14 +302,14 @@
 				'options'	  => array(
 									'email_client'   => 'Y',
 									'email_template' => '0',
-									'email_subject'  => 'The balance for your disco is now due',
+									'email_subject'  => 'Task "Balance Reminder" Complete - Client Zone',
 									'email_from'     => 'admin',
 									'run_when'	     => 'before_event',
 									'age'			 => '2 WEEK',
 									'notify_admin'   => 'Y',
 									'notify_dj' 	 => 'N',
 									),
-				'function'	 => 'f_mdjm_cron_balance_reminder',
+				'function'	 => 'balance_reminder',
 				'totalruns'	 => '0',
 				'default'	 => 'Y',
 			), // balance-reminder
@@ -291,68 +325,22 @@
 				'options'	  => array(
 									'email_client'   => 'N',
 									'email_template' => '0',
-									'email_subject'  => 'Task "Fail Enquiry" Complete - ' . $mdjm_options['app_name'],
+									'email_subject'  => 'Task "Fail Enquiry" Complete - Client Zone',
 									'email_from'	 => 'admin',
 									'run_when'	   => 'event_created',
 									'age'			=> '2 WEEK',
 									'notify_admin'   => 'Y',
 									'notify_dj' 	  => 'N',
 									),
-				'function'	 => 'f_mdjm_cron_fail_enquiry',
+				'function'	 => 'fail_enquiry',
 				'totalruns'	 => '0',
 				'default'	 => 'Y',
 			), // fail-enquiry
 						
-			'client-feedback'	=> array(
-				'slug'		 => 'client-feedback',
-				'name'	     => 'Client Feedback',
-				'active'	   => 'N',
-				'desc'	     => 'Send email to client after event completion for feedback, testimonial, thank you or whatever...',
-				'frequency'	=> 'Daily',
-				'nextrun'	  => 'N/A',
-				'lastran'	  => 'Never',
-				'options'	  => array(
-									'email_client'   => 'Y',
-									'email_template' => '0',
-									'email_subject'  => $mdjm_options['company_name'] . 'Requests your feedback',
-									'email_from'	 => 'dj',
-									'run_when'	   => 'after_event',
-									'age'			=> '3 DAY',
-									'notify_admin'   => 'Y',
-									'notify_dj' 	  => 'N',
-									),
-				'function'	 => 'f_mdjm_cron_client_feedback',
-				'totalruns'	 => '0',
-				'default'	 => 'Y',
-			), // client-feedback
-						
-			/*'purge-clients'	=> array(
-				'slug'		 => 'purge-clients',
-				'name'	     => 'Cleanup Clients',
-				'active'	   => 'N',
-				'desc'	     => 'Delete clients who have never booked. i.e. Failed enquiries',
-				'frequency'	=> 'Weekly',
-				'nextrun'	  => 'N/A',
-				'lastran'	  => 'Never',
-				'options'	  => array(
-									'email_client'   => 'N',
-									'email_template' => '0',
-									'email_subject'  => '0',
-									'email_from'	 => '0',
-									'run_when'	   => 'event_created',
-									'age'			=> '12 WEEK',
-									'notify_admin'   => 'Y',
-									'notify_dj' 	  => 'N',
-									),
-				'function'	 => 'f_mdjm_cron_purge_clients',
-				'totalruns'	 => '0',
-				'default'	 => 'Y',
-			), // purge-clients*/
-						
 			'upload-playlists'	=> array(
 				'slug'		 => 'upload-playlists',
 				'name'	     => 'Upload Playlists',
-				'active'	   => $mdjm_options['upload_playlists'],
+				'active'	   => $mdjm_settings['main']['upload_playlists'],
 				'desc'	     => 'Transmit playlist information back to the MDJM servers to help build an information library. This option is updated via the <a href="' . admin_url( 'admin.php?page=mdjm-settings&tab=general' ) . '">General tab</a>',
 				'frequency'	=> 'Daily',
 				'nextrun'	  => $playlist_nextrun,
@@ -367,7 +355,7 @@
 									'notify_admin'   => 'N',
 									'notify_dj' 	  => 'N',
 									),
-				'function'	 => 'f_mdjm_cron_upload_playlists',
+				'function'	 => 'submit_playlist',
 				'totalruns'	 => '0',
 				'default'	 => 'Y',
 			), // upload-playlists

@@ -13,33 +13,20 @@
 		* @since 1.1
 		* The payment form header content
 		*/
-		function pp_form( $pp_options, $eventinfo )	{
-			global $mdjm_options, $mdjm_client_text;
-			
-			// Set the currency
-			if( !isset( $mdjm_currency ) )	{
-				include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			}
-			
-			// Set the correct seperator for links
-			$sep = '&amp;';
-			if ( get_option( 'permalink_structure' ) )	{
-				$sep = '?';
-			}
-			
-			$balance = $eventinfo->cost;
-			if( $eventinfo->deposit_status == 'Paid' )	{
-				$balance = $eventinfo->cost - $eventinfo->deposit;
+		function pp_form( $post )	{
+			global $clientzone, $mdjm, $mdjm_settings;
+						
+			$balance = get_post_meta( $post->ID, '_mdjm_event_cost', true );
+			if( get_post_meta( $post->ID, '_mdjm_event_deposit_status', true ) == 'Paid' )	{
+				$balance = get_post_meta( $post->ID, '_mdjm_event_cost', true ) - get_post_meta( $post->ID, '_mdjm_event_deposit', true );
 			}
 			
 			// Sandbox or Live?
 			$pp_api = 'www.paypal.com/cgi-bin/webscr';
-			$pp_email = $pp_options['pp_email'];
-			if( isset( $pp_options['pp_sandbox'] ) && $pp_options['pp_sandbox'] == 'Y' )	{
+			$pp_email = $mdjm_settings['payments']['pp_email'];
+			if( isset( $mdjm_settings['payments']['pp_sandbox'] ) )	{
 				$pp_api = 'www.sandbox.paypal.com/cgi-bin/webscr';
-				if( isset( $pp_options['pp_sandbox_email'] ) && !empty( $pp_options['pp_sandbox_email'] ) )	{
-					$pp_email = $pp_options['pp_sandbox_email'];
-				}
+				$pp_email = !empty( $mdjm_settings['payments']['pp_sandbox_email'] ) ? $mdjm_settings['payments']['pp_sandbox_email'] : $mdjm_settings['payments']['pp_email'];
 			}
 			
 			// The form
@@ -54,15 +41,17 @@
 			$pp_form .= '<input type="hidden" name="cmd" value="_xclick">' . "\n";
 			$pp_form .= '<input type="hidden" name="business" value="' . $pp_email . '">' . "\n";
 			$pp_form .= '<input type="hidden" name="lc" value="' . get_locale() . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="item_name" value="Event ID ' . $eventinfo->event_id . ' (' . date( $mdjm_options['short_date_format'], strtotime( $eventinfo->event_date ) ) . ') - ' . WPMDJM_CO_NAME . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="item_number" value="' . $eventinfo->event_id . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="item_name" value="Event ID ' . $post->ID . ' (' . 
+				date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) ) . 
+				') - ' . MDJM_COMPANY . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="item_number" value="' . $post->ID . '">' . "\n";
 			$pp_form .= '<input type="hidden" name="custom" id="custom" value="';
 			
-			if( $eventinfo->deposit_status !='Paid' )	{
-				$pp_form .= $mdjm_client_text['deposit_label'];	
+			if( get_post_meta( $post->ID, '_mdjm_event_deposit_status', true ) !='Paid' )	{
+				$pp_form .= MDJM_DEPOSIT_LABEL;	
 			}
 			else	{
-				$pp_form .= $mdjm_client_text['balance_label'];
+				$pp_form .= MDJM_BALANCE_LABEL;
 			}
 			
 			$pp_form .= '">' . "\n";
@@ -70,38 +59,39 @@
 			$pp_form .= '<input type="hidden" name="no_note" value="1">' . "\n";
 			$pp_form .= '<input type="hidden" name="no_shipping" value="1">' . "\n";
 			$pp_form .= '<input type="hidden" name="rm" value="2">' . "\n";
-			$pp_form .= '<input type="hidden" name="return" value="' . get_permalink( $pp_options['pp_redirect'] ) . $sep . 'pp_action=completed&event_id=' . $eventinfo->event_id . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="cancel_return" value="' . get_permalink( $pp_options['pp_cancel'] ) . $sep . 'pp_action=cancelled&event_id=' . $eventinfo->event_id . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="currency_code" value="' . $mdjm_options['currency'] . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="bn" value="PP-BuyNowBF:' . $pp_options['pp_button'] . ':NonHosted">' . "\n";
+			$pp_form .= '<input type="hidden" name="return" value="' . $mdjm->get_link( $mdjm_settings['payments']['pp_redirect'] ) . 'pp_action=completed&event_id=' . $post->ID . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="cancel_return" value="' . $mdjm->get_link( $mdjm_settings['payments']['pp_cancel'] ) . 'pp_action=cancelled&event_id=' . $post->ID . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="currency_code" value="' . $mdjm_settings['main']['currency'] . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="bn" value="PP-BuyNowBF:' . $mdjm_settings['payments']['pp_button'] . ':NonHosted">' . "\n";
 			$pp_form .= '<input type="hidden" name="notify_url" value="' . home_url() . '/?mdjm-api=MDJM_PAYPAL_GW">' . "\n";
-			//$pp_form .= '<input type="hidden" name="invoice" value="' . $pp_options['pp_inv_prefix'] . '0' . $eventinfo->event_id . '">' . "\n";
+			//$pp_form .= '<input type="hidden" name="invoice" value="' . MDJM_EVENT_PREFIX . '0' . $eventinfo->event_id . '">' . "\n";
 			
 			// Taxes
-			if( isset( $pp_options['pp_enable_tax'], $pp_options['pp_tax_type'], $pp_options['pp_tax_rate'] ) && $pp_options['pp_enable_tax'] == 'Y' )	{
-				if( $pp_options['pp_tax_type'] == 'percentage' )	{
+			if( isset( $mdjm_settings['payments']['pp_enable_tax'], $mdjm_settings['payments']['pp_tax_type'], $mdjm_settings['payments']['pp_tax_rate'] ) 
+				&& $mdjm_settings['payments']['pp_enable_tax'] == 'Y' )	{
+				if( $mdjm_settings['payments']['pp_tax_type'] == 'percentage' )	{
 					$tax = 'tax_rate';
 				}
-				elseif( $pp_options['pp_tax_type'] == 'fixed' )	{
+				elseif( $mdjm_settings['payments']['pp_tax_type'] == 'fixed' )	{
 					$tax = 'tax';
 				}
-				$pp_form .= '<input type="hidden" name="' . $tax . '" value="' . $pp_options['pp_tax_rate'] . '">' . "\n";
+				$pp_form .= '<input type="hidden" name="' . $tax . '" value="' . $mdjm_settings['payments']['pp_tax_rate'] . '">' . "\n";
 			}
 
-			if( isset( $pp_options['pp_checkout_style'] ) && !empty( $pp_options['pp_checkout_style'] ) )	{
-				$pp_form .= '<input type="hidden" name="page_style" value="' . $pp_options['pp_checkout_style'] . '">' . "\n";
+			if( !empty( $mdjm_settings['payments']['pp_checkout_style'] ) )	{
+				$pp_form .= '<input type="hidden" name="page_style" value="' . $mdjm_settings['payments']['pp_checkout_style'] . '">' . "\n";
 			}
 			
 			$pp_form .= '<input type="hidden" name="on0" value="Paying for">' . "\n";
 			
-			if( $pp_options['pp_form_layout'] == 'horizontal' )	{
+			if( $mdjm_settings['payments']['pp_form_layout'] == 'horizontal' )	{
 				$pp_form .= '<table>' . "\n";
 				$pp_form .= '<tr valign="middle">' . "\n";
 				$pp_form .= '<td>';
 			}
 			
-			$pp_form .= $pp_options['pp_label'] . "\n";
-			if( $pp_options['pp_form_layout'] == 'vertical' )	{
+			$pp_form .= $mdjm_settings['payments']['pp_label'] . "\n";
+			if( $mdjm_settings['payments']['pp_form_layout'] == 'vertical' )	{
 				$pp_form .=  '<br />' . "\n";
 			}
 			else	{
@@ -109,26 +99,26 @@
 				$pp_form .= '<td>&nbsp;';	
 			}
 			$pp_form .= '<select name="os0" id="os0" onchange="changeCustomInput(this)">' . "\n";
-			$pp_form .= '<option value="' . $mdjm_client_text['deposit_label'] . '"';
+			$pp_form .= '<option value="' . MDJM_DEPOSIT_LABEL . '"';
 			
-			$balance = $eventinfo->cost;
+			$balance = get_post_meta( $post->ID, '_mdjm_event_cost', true );
 			
-			if( $eventinfo->deposit_status == 'Paid' )	{
+			if( get_post_meta( $post->ID, '_mdjm_event_deposit_status', true ) == 'Paid' )	{
 				$pp_form .= ' disabled="disabled"';
-				$balance = $eventinfo->cost - $eventinfo->deposit;
+				$balance = get_post_meta( $post->ID, '_mdjm_event_cost', true ) - get_post_meta( $post->ID, '_mdjm_event_deposit', true );
 			}
 			
-			$pp_form .= '>' . $mdjm_client_text['deposit_label'] . ' ' . $mdjm_currency[$mdjm_options['currency']] . number_format( $eventinfo->deposit, 2 ) . '</option>' . "\n";
-			$pp_form .= '<option value="' . $mdjm_client_text['balance_label'] . '"';
+			$pp_form .= '>' . MDJM_DEPOSIT_LABEL . ' ' . MDJM_CURRENCY . number_format( get_post_meta( $post->ID, '_mdjm_event_deposit', true ), 2 ) . '</option>' . "\n";
+			$pp_form .= '<option value="' . MDJM_BALANCE_LABEL . '"';
 			
-			if( $eventinfo->balance_status == 'Paid' )	{
+			if( get_post_meta( $post->ID, '_mdjm_event_balance_status', true ) == 'Paid' )	{
 				$pp_body .= ' disabled="disabled"';
 			}
 			
-			$pp_form .= '>' . $mdjm_client_text['balance_label'] . ' ' . $mdjm_currency[$mdjm_options['currency']] . number_format( $balance, 2 ) . '</option>' . "\n";
+			$pp_form .= '>' . MDJM_BALANCE_LABEL . ' ' . MDJM_CURRENCY . number_format( $balance, 2 ) . '</option>' . "\n";
 			$pp_form .= '</select>' . "\n";
 			
-			if( $pp_options['pp_form_layout'] == 'vertical' )	{
+			if( $mdjm_settings['payments']['pp_form_layout'] == 'vertical' )	{
 				$pp_form .= '<br /><br />' . "\n";
 			}
 			else	{
@@ -136,15 +126,16 @@
 				$pp_form .= '<td>&nbsp;';
 			}
 			
-			$pp_form .= '<input type="hidden" name="currency_code" value="' . $mdjm_options['currency'] . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="option_select0" value="' . $mdjm_client_text['deposit_label'] . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="option_amount0" value="' . number_format( $eventinfo->deposit, 2 ) . '">' . "\n";
-			$pp_form .= '<input type="hidden" name="option_select1" value="' . $mdjm_client_text['balance_label'] . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="currency_code" value="' . $mdjm_settings['main']['currency'] . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="option_select0" value="' . MDJM_DEPOSIT_LABEL . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="option_amount0" value="' . number_format( get_post_meta( $post->ID, '_mdjm_event_deposit', true ), 2 ) . '">' . "\n";
+			$pp_form .= '<input type="hidden" name="option_select1" value="' . MDJM_BALANCE_LABEL . '">' . "\n";
 			$pp_form .= '<input type="hidden" name="option_amount1" value="' . number_format( $balance, 2 ) . '">' . "\n";
 			$pp_form .= '<input type="hidden" name="option_index" value="0">' . "\n";
-			$pp_form .= '<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/' . $pp_options['pp_button'] . '" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">' . "\n";
+			$pp_form .= '<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/' . $mdjm_settings['payments']['pp_button'] . 
+				'" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">' . "\n";
 			
-			if( $pp_options['pp_form_layout'] == 'horizontal' )	{
+			if( $mdjm_settings['payments']['pp_form_layout'] == 'horizontal' )	{
 				$pp_form .= '</td>' . "\n";
 				$pp_form .= '</tr>' . "\n";
 				$pp_form .= '</table>' . "\n";

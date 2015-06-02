@@ -4,9 +4,8 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
+		
 	if( isset( $_POST['submit'] ) )	{ /* Form Submitted */
 		if( $_POST['submit'] == 'Add Category' )	{ /* Add new category */
 			$cats = get_option( 'mdjm_cats' );

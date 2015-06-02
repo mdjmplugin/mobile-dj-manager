@@ -4,17 +4,19 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-
+	
 /*
 * settings-scheduler.php 
 * 13/11/2014
 * since 0.9.3
 * Manage schedule tasks
 */
-
-	global $mdjm_options;
+	require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", MDJM_PLUGIN_DIR ) );
+	$mdjm_cron = new MDJM_Cron();
+		
+	global $mdjm_settings;
+	
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{
 		if( $_POST['submit'] == 'Save Changes' )	{
@@ -26,7 +28,7 @@
 						$mdjm_schedules[$task['slug']]['active'] = 'N';
 					}
 					else	{
-						$mdjm_schedules[$task['slug']]['active'] = $mdjm_options['upload_playlists'];
+						$mdjm_schedules[$task['slug']]['active'] = $mdjm_settings['main']['upload_playlists'];
 					}
 				}
 				/* Now activate the selected tasks */
@@ -64,7 +66,7 @@
 			/* Update array for task from input */
 			if( isset( $_POST['name'] ) )	{
 				if( $mdjm_schedules[$_POST['slug']]['name'] != $_POST['name'] )	{
-					$mdjm_schedules[$_POST['slug']]['name'] = $_POST['name'];
+					$mdjm_schedules[$_POST['slug']]['name'] = sanitize_text_field( $_POST['name'] );
 				}
 			}
 			if( isset( $_POST['frequency'] ) )	{
@@ -78,7 +80,7 @@
 			}
 			if( isset( $_POST['desc'] ) )	{
 				if( $mdjm_schedules[$_POST['slug']]['desc'] != $_POST['desc'] )	{
-					$mdjm_schedules[$_POST['slug']]['desc'] = $_POST['desc'];
+					$mdjm_schedules[$_POST['slug']]['desc'] = sanitize_text_field( $_POST['desc'] );
 				}
 			}
 			if( isset( $_POST['notify_admin'] ) )	{
@@ -118,7 +120,7 @@
 			if( isset( $_POST['email_subject'] ) )	{
 				if( !isset( $mdjm_schedules[$_POST['slug']]['options']['email_subject'] ) 
 				|| $mdjm_schedules[$_POST['slug']]['options']['email_subject'] != $_POST['email_subject'] )	{
-					$mdjm_schedules[$_POST['slug']]['options']['email_subject'] = $_POST['email_subject'];
+					$mdjm_schedules[$_POST['slug']]['options']['email_subject'] = sanitize_text_field( $_POST['email_subject'] );
 				}
 			}
 			if( isset( $_POST['email_from'] ) )	{
@@ -143,16 +145,18 @@
 * Displays the scheduled tasks
 */
 	function f_mdjm_render_scheduler()	{
-		global $mdjm_options;
-		$mdjm_schedules = get_option( 'mdjm_schedules' );
+		global $mdjm_settings;
+		$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
 		asort( $mdjm_schedules );
 		?>
         <div class="wrap">
         <div id="icon-themes" class="icon32"></div>
-        <h2>Automated Tasks</h2>
+        <h2>Automated Tasks <a href="<?php f_mdjm_admin_page( 'tasks' ); ?>&action=add_task" class="add-new-h2">Add New</a></h2></h2>
         <p><strong>Important Note:</strong> because of the way that WordPress handles scheduled tasks, the timing at which your tasks below run may differ from day to day dependant on activity to your website. If your website receives zero visits in a day after the time at which your tasks are scheduled to next run, those tasks will not run that day.</p>
 		<p>In this instance, the tasks will be ran the the next time someone visits your website.</p>
         <hr />
+        <h4>Tasks will next be checked for execution shortly after: 
+			<?php echo get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'mdjm_hourly_schedule' ) ), MDJM_TIME_FORMAT . ' \o\n ' . MDJM_SHORTDATE_FORMAT ); ?></h4>
         <form name="form-scheduler" id="form-scheduler" method="post" action="">
         <table class="widefat">
         <thead>
@@ -180,7 +184,7 @@
 				$rowclass = '';
 				if( $i == 1 )
 					$rowclass = ' class="alt"';
-				if( $schedule['active'] != 'Y' || $schedule['slug'] == 'upload-playlists' && !$mdjm_options['upload_playlists'] )
+				if( $schedule['active'] != 'Y' || $schedule['slug'] == 'upload-playlists' && !$mdjm_settings['main']['upload_playlists'] )
 					$rowclass = ' class="form-invalid"';
 				?>
                 <tr<?php if( $rowclass != '' ) echo $rowclass; ?>>
@@ -192,7 +196,7 @@
 				}
 				else	{
 					?>
-                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $mdjm_options['upload_playlists'], 'Y' ); ?> disabled="disabled" title="This setting is set on the General tab of the settings pages. it cannot be adjusted here" /></td>
+                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $mdjm_settings['main']['upload_playlists'], 'Y' ); ?> disabled="disabled" title="This setting is set on the General tab of the settings pages. it cannot be adjusted here" /></td>
                     <?php
 				}
 				?>
@@ -202,8 +206,8 @@
                 <td>
 				<?php
                 if( $schedule['lastran'] != 'Never' )	{
-					echo date( 'd M Y', $schedule['lastran'] ) . '<br />';
-					echo date( $mdjm_options['time_format'], $schedule['lastran'] );
+					echo get_date_from_gmt( date( 'Y-m-d H:i:s', $schedule['lastran'] ), 'd M Y' ) . '<br />';
+					echo get_date_from_gmt( date( 'Y-m-d H:i:s', $schedule['lastran'] ), MDJM_TIME_FORMAT );
 				}
 				else	{
 					echo esc_attr( $schedule['lastran'] );
@@ -217,8 +221,8 @@
 					&& $schedule['nextrun'] != 'Next Week'
 					&& $schedule['nextrun'] != 'Next Month' )	{
 						
-					echo date( 'd M Y', $schedule['nextrun'] ) . '<br />';
-					echo date( $mdjm_options['time_format'], $schedule['nextrun'] );
+					echo get_date_from_gmt( date( 'Y-m-d H:i:s', $schedule['nextrun'] ), 'd M Y' ) . '<br />';
+					echo get_date_from_gmt( date( 'Y-m-d H:i:s', $schedule['nextrun'] ), MDJM_TIME_FORMAT );
 				}
 				elseif( $schedule['nextrun'] == 'N/A' )	{
 						echo 'N/A';	
@@ -264,7 +268,7 @@
 * Edit given task
 */
 	function f_mdjm_edit_task( $task )	{
-		global $mdjm_options;
+		global $mdjm_settings;
 		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		if( isset( $mdjm_schedules[$task]['default'] ) && $mdjm_schedules[$task]['default'] == 'Y' )
 			$ro = ' readonly';
@@ -303,7 +307,19 @@
 			?>
             <tr>
             <th scope="row-title">Notifications:</th>
-            <td colspan="3"><label for="notify_admin">Admin</label> <input type="checkbox" name="notify_admin" id="notify_admin" value="Y"<?php checked( $mdjm_schedules[$task]['options']['notify_admin'], 'Y' ); ?> />&nbsp;&nbsp;&nbsp;<label for="notify_dj">DJ</label> <input type="checkbox" name="notify_dj" id="notify_dj" value="Y"<?php checked( $mdjm_schedules[$task]['options']['notify_dj'], 'Y' ); ?> />&nbsp;<span class="description">Who to notify when the task completes</span>
+            <td colspan="3"><label for="notify_admin">Admin</label> <input type="checkbox" name="notify_admin" id="notify_admin" value="Y"
+				<?php checked( $mdjm_schedules[$task]['options']['notify_admin'], 'Y' ); ?> />&nbsp;&nbsp;&nbsp;
+                <?php if( dj_can( 'see_deposit' ) )	{
+					?>
+                    <label for="notify_dj">DJ</label> <input type="checkbox" name="notify_dj" id="notify_dj" value="Y"
+                    <?php checked( $mdjm_schedules[$task]['options']['notify_dj'], 'Y' ); ?> />&nbsp;
+                    <?php
+				}
+				else	{
+					echo '<input type="hidden" name="notify_dj" id="notify_dj" value="N"	/>' . "\r\n";
+				}
+				?>
+                <span class="description">Who to notify when the task completes</span>
             </td>
             </tr>
 			<?php
@@ -405,6 +421,7 @@
 									'post_type' => 'email_template',
 									'orderby' => 'name',
 									'order' => 'ASC',
+									'posts_per_page' => -1,
 									);
 			$email_template_query = new WP_Query( $email_template_args );
 				if ( $email_template_query->have_posts() ) {
@@ -459,11 +476,17 @@
         </tr>
         <tr>
         <td>Last Run:</td>
-        <td><?php if( $mdjm_schedules[$task]['lastran'] != 'Never' ) echo date( $mdjm_options['time_format'] . ' d M Y', $mdjm_schedules[$task]['lastran'] ); else echo $mdjm_schedules[$task]['lastran']; ?></td>
+        <td><?php if( $mdjm_schedules[$task]['lastran'] != 'Never' ) 
+			echo get_date_from_gmt( date( 'Y-m-d H:i:s', $mdjm_schedules[$task]['lastran'] ), MDJM_TIME_FORMAT . ' d M Y' ); 
+			else echo $mdjm_schedules[$task]['lastran']; ?>
+        </td>
         </tr>
         <tr>
         <td>Next Run:</td>
-        <td><?php if( $mdjm_schedules[$task]['nextrun'] != 'N/A' ) echo date( $mdjm_options['time_format'] . ' d M Y', $mdjm_schedules[$task]['nextrun'] ); else echo $mdjm_schedules[$task]['nextrun']; ?></td>
+        <td><?php if( $mdjm_schedules[$task]['nextrun'] != 'N/A' ) 
+			echo get_date_from_gmt( date( 'Y-m-d H:i:s', $mdjm_schedules[$task]['nextrun'] ), MDJM_TIME_FORMAT . ' d M Y' ); 
+			else echo $mdjm_schedules[$task]['nextrun']; ?>
+        </td>
         </tr>
         <tr>
         <td>Total Runs:</td>

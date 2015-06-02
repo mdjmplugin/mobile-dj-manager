@@ -4,9 +4,8 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
+		
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 
 	function f_mdjm_display_package_settings()	{
@@ -31,6 +30,7 @@
 		else	{
 			wp_die( 'You do not have the necessary permissions to view this page!' );
 		}
+		$lic_info = do_reg_check( 'check' );
 		if( current_user_can( 'manage_options' ) && $lic_info )	{ submit_button(); }
 		?>
         </div>

@@ -4,9 +4,8 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
+		
 	require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 	
@@ -34,9 +33,9 @@
 				$class = '';
 				echo '<form method="post" action="options.php">';
 				echo '<table class="form-table">';
-				if( $lic_info && $lic_info[0] == 'XXXX' ) $class = ' class="form-invalid"';
-				if( $lic_info && $lic_info[2] )	{
-					$date_diff = strtotime( $lic_info[2] ) - time();
+				if( $lic_info && $lic_info['type'] == 'trial' ) $class = ' class="form-invalid"';
+				if( $lic_info && $lic_info['expire'] )	{
+					$date_diff = strtotime( $lic_info['expire'] ) - time();
 					if( $date_diff < 0 ) { $date_diff = 0; }
 					$days_remaining = floor( $date_diff / 60 / 60 / 24 );
 					if( $days_remaining < 0 ) $days_remaining = 0;
@@ -54,15 +53,15 @@
 				echo '<tr' . $class . '>';
 				echo '<th scope="row">License Key:</th>';
 				if( $lic_info )	{
-					if( $lic_info[0] == 'XXXX' )	{
-						echo '<td' . $class . '>Running in trial mode until ' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . '. (' . $days_remaining . $days . ' remaining) Visit <a href="http://www.mydjplanner.co.uk/shop/" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';
+					if( $lic_info['type'] == 'trial' )	{
+						echo '<td' . $class . '>Running in trial mode until ' . date( 'd/m/Y', strtotime( $lic_info['expire'] ) ) . '. (' . $days_remaining . $days . ' remaining) Visit <a href="http://www.mydjplanner.co.uk/shop/" target="_blank">http://www.mydjplanner.co.uk</a> to purchase your license</td>';
 					}
 					else	{
 						if( isset( $lic_msg ) )	{
-							echo '<td' . $class . '>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ' ' . $lic_msg . ')</td>';
+							echo '<td' . $class . '>' . $lic_info['key'] . ' (' . date( MDJM_SHORTDATE_FORMAT, strtotime( $lic_info['expire'] ) ) . ' ' . $lic_msg . ')</td>';
 						}
 						else	{
-							echo '<td' . $class . '>' . $lic_info[0] . ' (' . date( 'd/m/Y', strtotime( $lic_info[2] ) ) . ')</td>';
+							echo '<td' . $class . '>' . $lic_info['key'] . ' (' . date( MDJM_SHORTDATE_FORMAT, strtotime( $lic_info['expire'] ) ) . ')</td>';
 						}
 					}
 				}

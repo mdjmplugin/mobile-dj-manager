@@ -3,10 +3,7 @@
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	// If recently updated, display the release notes
-	f_mdjm_has_updated();
-	
+		
 	if( isset( $_GET['action'] ) && $_GET['action'] == 'del_field' )	{
 		$client_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		unset( $client_fields[$_GET['field']] );
@@ -15,10 +12,13 @@
 		}
 	}
 	
+	f_mdjm_has_updated();
+	
 	if( isset( $_POST['client_fields'] ) && $_POST['client_fields'] == 'update' )	{
 		/* Add the new field */
 		if( $_POST['field_checked'] == 'Y' ) $checked = ' checked'; else $checked = false;
 		if( $_POST['field_enabled'] == 'Y' ) $display = 'Y'; else $display = '';
+		if( $_POST['field_required'] == 'Y' ) $required = 'Y'; else $required = '';
 		$client_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		
 		$client_fields[$_POST['field_id']]['label'] = sanitize_text_field( $_POST['field_label'] );
@@ -27,6 +27,7 @@
 		$client_fields[$_POST['field_id']]['value'] = $_POST['field_value'];
 		$client_fields[$_POST['field_id']]['checked'] = $checked;
 		$client_fields[$_POST['field_id']]['display'] = $display;
+		$client_fields[$_POST['field_id']]['required'] = $required;
 		$client_fields[$_POST['field_id']]['desc'] = sanitize_text_field( $_POST['field_desc'] );
 		
 		if( $client_fields[$_POST['field_id']]['default'] == 1 )	{
@@ -55,6 +56,7 @@
             <th>Value</th>
             <th>Checked</th>
             <th>Enabled</th>
+            <th>Required</th>
             <th>&nbsp;</th>
 		</tr>
         </thead>
@@ -67,6 +69,7 @@
             <td>&nbsp;</td>
             <td><input type="checkbox" disabled></td>
             <td>Y</td>
+            <td>Y</td>
             <td>&nbsp;</td>
         </tr>
         <tr class="alternate">
@@ -77,6 +80,7 @@
             <td>&nbsp;</td>
             <td><input type="checkbox" disabled></td>
             <td>Y</td>
+            <td>Y</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -86,6 +90,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td><input type="checkbox" disabled></td>
+            <td>Y</td>
             <td>Y</td>
             <td>&nbsp;</td>
         </tr>
@@ -109,6 +114,8 @@
 			echo '<td><input type="checkbox" disabled' . $field['checked'] . '></td>';
 			
 			echo '<td>' . $field['display'] . '</td>';
+			
+			echo '<td>' . ( isset( $field['required'] ) ? $field['required'] : '' ) . '</td>';
 			
 			echo '<td>';
 			echo '<a href="' . admin_url() . 'admin.php?page=mdjm-settings&tab=client_fields&action=edit_field&field=' . $field['id'] . '" class="add-new-h2">Edit</a>';
@@ -181,6 +188,10 @@
 				}
 				?>
             </tr>
+            <tr>
+                <th><label for="field_required">Required</label></th>
+                <td><input type="checkbox" name="field_required" id="field_required" value="Y"<?php checked( 'Y', $client_fields[$_GET['field']]['required'] ); ?> /></td>
+            </tr>
             <?php
 		}
 		else	{
@@ -216,6 +227,10 @@
             <tr>
                 <th><label for="field_enabled">Enabled</label></th>
                 <td><input type="checkbox" name="field_enabled" id="field_enabled" value="Y" checked /></td>
+            </tr>
+             <tr>
+                <th><label for="field_required">Required</label></th>
+                <td><input type="checkbox" name="field_required" id="field_required" value="Y" /></td>
             </tr>
             <?php
 		}

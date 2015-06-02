@@ -16,9 +16,8 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	// If recently updated, display the release notes
 	f_mdjm_has_updated();
-	
+		
 /**
  * f_mdjm_render_djs_table
  * Render the table with list of DJ's
@@ -37,7 +36,7 @@
 		}
 		$djs_table = new MDJM_DJs_Table();
 		?>
-		</pre><div class="wrap"><h2>DJ's <a href="<?php echo admin_url(); ?>user-new.php" class="add-new-h2">Add New</a></h2>
+		</pre><div class="wrap"><h2><?php echo MDJM_DJ; ?>'s <a href="<?php echo admin_url(); ?>user-new.php" class="add-new-h2">Add New</a></h2>
 		<?php
 		$djs_table->prepare_items();
 		?>

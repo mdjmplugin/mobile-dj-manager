@@ -20,10 +20,10 @@
  * Called from: plugin main file
  * @since 1.0
 */
-	function f_mdjm_insert_head()	{
+	/*function f_mdjm_insert_head()	{
         echo "<!-- Start Mobile DJ Manager Header Content -->\r\n";
 		echo "<!-- End Mobile DJ Manager Header Content -->\r\n";
-	} // f_mdjm_insert_head
+	} // f_mdjm_insert_head*/
 	
 /**
  * f_wpmdjm_print_credit
@@ -34,13 +34,13 @@
  * Called from: all frontend pages
  * @since 1.0
 */
-	function f_wpmdjm_print_credit()	{
+	/*function f_wpmdjm_print_credit()	{
 		if ( WPMDJM_CREDITS == 'Y' )	{
 			?>
 			<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
 			<?php
 		}
-	} // f_wpmdjm_print_credit
+	} // f_wpmdjm_print_credit*/
 	
 /**
  * f_mdjm_get_options
@@ -57,29 +57,29 @@
 		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 		$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 		$mdjm_pp_options = get_option( 'mdjm_pp_options' );
-		if( isset( $mdjm_pages ) )	{
+		if( !empty( $mdjm_pages ) )	{
 			foreach( $mdjm_pages as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
-		if( isset( $mdjm_permissions ) )	{
+		if( !empty( $mdjm_permissions ) )	{
 			foreach( $mdjm_permissions as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
-		if( isset( $mdjm_client_text ) )	{
+		if( !empty( $mdjm_client_text ) )	{
 			foreach( $mdjm_client_text as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
-		if( isset( $mdjm_pp_options ) )	{
+		if( !empty( $mdjm_pp_options ) )	{
 			foreach( $mdjm_pp_options as $key => $value )	{
 				$mdjm_options[$key] = $value;
 			}
 		}
 		
 		/* Make sure we have a system email value */
-		if( !isset( $mdjm_options['system_email'] ) || empty( $mdjm_options['system_email'] ) )	{
+		if( empty( $mdjm_options['system_email'] ) )	{
 			$mdjm_options['system_email'] = get_bloginfo( 'admin_email' );	
 		}
 		
@@ -215,7 +215,8 @@
  * @since 1.0
 */
 	function f_mdjm_update_user_profile()	{
-		global $_POST, $current_user;
+		global $_POST, $current_user, $clientzone;
+		
 		$profile_update_fields = array ( 'ID' => $current_user->ID );
 		$profile_update_fields_meta = array ();
 		if ( isset( $_POST['first_name'] ) && !empty ( $_POST['first_name'] ) && $_POST['first_name'] != $current_user->first_name )	{
@@ -278,13 +279,22 @@
 		}
 
 		if( is_wp_error( $user_update ) ) {
-			print ("<p style=\"color:#F93; font-size:11px;\">Unable to update your profile. ".$user_update->get_error_message()."</p>\n");
+			$clientzone->display_notice(
+										4,
+										'Unable to update your profile. ' . $user_update->get_error_message()
+										);
 		}
 		else {
-			print ("<p style=\"color:#F93; font-size:11px;\">Your profile has been updated successfully</p>\n");
+			$clientzone->display_notice(
+										2,
+										'Your profile has been updated successfully'
+										);
 		}
 		if( isset( $pass_error ) && $pass_error == true )	{
-			print ("<p style=\"color:#F93; font-size:11px;\">Unable to change password. Check the password's you entered match!</p>\n");
+			$clientzone->display_notice(
+										4,
+										'Unable to change your password. Check the password\'s you entered match!'
+										);
 		}
 	} // f_mdjm_update_user_profile
 
@@ -387,11 +397,7 @@
 * Retrieve client event info by id
 */
 	function f_mdjm_client_event_by_id( $event_id )	{
-		global $wpdb;
-		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
+					
 		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $event_id . "'";
 		$eventinfo = $wpdb->get_row( $event_query );
 		
@@ -404,15 +410,16 @@
 * @since 0.8
 * Retrieve event info guest visitors
 */
-	function f_mdjm_get_guest_eventinfo( $event_id )	{
-		global $wpdb;
+	function f_mdjm_get_guest_eventinfo( $event_id )	{		
 		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		$eventinfo = get_posts( array(
+							'posts_per_page'	=> -1,
+							'post_type'			=> MDJM_EVENT_POSTS,
+							'meta_key'			=> '_mdjm_event_playlist_access',
+							'meta_value'		=> $event_id
+							) );
 		
-		$eventinfo = $wpdb->get_row( "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_guest_call` = '" . $event_id . "'");
-		
-		return $eventinfo;
+		return $eventinfo[0];
 	} // f_mdjm_get_guest_eventinfo
 	
 /*
@@ -596,10 +603,10 @@
 * @param: client WP user ID
 * @return: true : false
 */
-	function f_mdjm_profile_complete( $client_id )	{
+	/*function f_mdjm_profile_complete( $client_id )	{
 		$client_data = get_userdata( $client_id );
 		/* No data = false */
-		if( !$client_data )
+		/*if( !$client_data )
 			return false;
 		$required = array(
 						'first_name',
@@ -617,7 +624,7 @@
 			}
 		}
 		return true;
-	} // f_mdjm_profile_complete
+	} // f_mdjm_profile_complete*/
 
 /****************************************************************************************************
 --	CONTRACT FUNCTIONS
@@ -631,7 +638,7 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_client_approve_contract( $eventinfo, $input )	{
+	/*function f_mdjm_client_approve_contract( $eventinfo, $input )	{
 		global $wpdb;
 		
 		if( !isset( $eventinfo ) || !isset( $input ) )	{
@@ -668,7 +675,7 @@
 		else	{
 			wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_options['system_email'] . '">website administrator</a><br />' . $wpdb->print_error() );
 		}
-	} // f_mdjm_client_approve_contract
+	} // f_mdjm_client_approve_contract*/
 
 /****************************************************************************************************
 --	DJ FUNCTIONS
@@ -699,17 +706,14 @@
 * return: true : false
 */
 	function f_mdjm_is_playlist_open( $event_date )	{
-		global $mdjm_options;
-		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		global $mdjm_settings;
 		
 		/* Playlist never closes */
-		if( $mdjm_options['playlist_close'] == 0 )	{
+		if( empty( $mdjm_settings['main']['playlist_close'] ) || $mdjm_settings['main']['playlist_close'] == 0 )	{
 			return true;	
 		}
 		else	{
-			$pl_close = strtotime( $event_date ) - ( $mdjm_options['playlist_close'] * DAY_IN_SECONDS );
+			$pl_close = strtotime( $event_date ) - ( $mdjm_settings['main']['playlist_close'] * DAY_IN_SECONDS );
 			if( time() > $pl_close ) 	{
 				return false; // Closed
 			}
@@ -751,26 +755,28 @@
  * @since 1.0
 */	
 	function f_mdjm_remove_playlistsong( $song_id )	{
-		global $wpdb;
+		global $mdjm, $clientzone, $wpdb;
+				
+		$songinfo = $wpdb->get_row( "SELECT * FROM " . MDJM_PLAYLIST_TABLE . " WHERE `id` = '" . $song_id . "'");
+		$eventinfo = get_post( $songinfo->event_id );
 		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		
-		$songinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['playlists'] . " WHERE `id` = '" . $song_id . "'");
-		$eventinfo = $wpdb->get_row( "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_id` = '" . $songinfo->event_id . "'");
-		$playlist_remove = $wpdb->delete( $db_tbl['playlists'], array( 'id' => $song_id ) );	
+		$playlist_remove = $wpdb->delete( MDJM_PLAYLIST_TABLE, array( 'id' => $song_id ) );	
 			if( $playlist_remove > 0 )	{
-				print( '<p style="color:#F93">The song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' has been successfully removed from the playlist</p>' );
+				$clientzone->display_notice( 2, 'The song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' has been successfully removed from the playlist' );
 			}
-		$j_args = array (
-						'client' => $eventinfo->user_id,
-						'event' => $songinfo->event_id,
-						'author' => get_current_user_id(),
-						'type' => 'Playlist',
-						'source' => 'Website',
-						'entry' => 'Song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' removed from playlist'
-					);
-		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+		if( MDJM_JOURNAL == true )	{
+				$mdjm->mdjm_events->add_journal( array(
+										'user'				=> get_post_meta( $eventinfo->ID, '_mdjm_event_client', true ),
+										'event'				=> $songinfo->event_id,
+										'comment_content'	=> 'Song ' . $songinfo->song . ' by ' . $songinfo->artist  . ' removed from playlist',
+										'comment_type'		=> 'mdjm-journal',
+													),
+												 array(
+										'type'			=> 'update-event',
+										'visibility'	=> '2',
+												 	)
+												);
+		}
 	} // f_mdjm_remove_playlistsong
 
 /**
@@ -783,7 +789,7 @@
  * @since 1.0
 */
 	function f_mdjm_add_playlistsong( $playlist_array )	{
-		global $wpdb;
+		global $mdjm, $clientzone, $wpdb;
 		// Form validation
 		if ( empty ( $playlist_array['playlist_artist'] ) || empty ( $playlist_array['playlist_song'] ) )	{
 			print("<p style=\"color:#FF0000\">ERROR: You need to complete both the Artist and Song fields.</p>\n");
@@ -797,16 +803,13 @@
 		elseif ( $playlist_array['playlist_when'] == "Other" && empty ( $playlist_array['playlist_info'] ) )	{
 			print("<p style=\"color:#FF0000\">ERROR: As you selected \"Other\" from the When to Play field, you must enter some additional information into the Info field.</p>\n");
 		}
-		else	{ // Insert the record
-			if( !isset( $db_tbl ) )
-				include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
+		else	{ // Insert the record			
 			if( isset( $playlist_array['first_name'], $playlist_array['last_name'] ) )	{
 				$playlist_array['added_by'] = $playlist_array['first_name'] . ' ' . $playlist_array['last_name'];	
 			}
 			
 			if( !isset( $playlist_array['playlist_when'] ) || $playlist_array['playlist_when'] == '' ) $playlist_array['playlist_when'] = 'General';
-			if( $wpdb->insert( $db_tbl['playlists'],
+			if( $wpdb->insert( MDJM_PLAYLIST_TABLE,
 												array(
 													'id' =>	'',
 													'event_id' => $playlist_array['event_id'],
@@ -819,20 +822,25 @@
 												) ) ) {
 				$c_msg = 'The song has been successfully added to your playlist';
 				if( !is_user_logged_in() ) $c_msg = 'Thank you. The song ' . $playlist_array['playlist_song'] . ' by ' . $playlist_array['playlist_artist'] . ' has been successfully added to the playlist.';
-				print('<p style="color:#F93">' . $c_msg . '</p>');	
+				$clientzone->display_notice( 2, $c_msg );
 			}
 			else	{
-				die( $wpdb->print_error() );	
+				$clientzone->display_notice( 4, $wpdb->print_error() );	
 			}
-			$j_args = array (
-							'client' => $playlist_array['client_id'],
-							'event' => $playlist_array['event_id'],
-							'author' => get_current_user_id(),
-							'type' => 'Playlist',
-							'source' => 'Website',
-							'entry' => 'Song added to playlist by ' . $playlist_array['added_by']
-						);
-			if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
+
+			if( MDJM_JOURNAL == true )	{
+				$mdjm->mdjm_events->add_journal( array(
+										'user'				=> $playlist_array['client_id'],
+										'event'				=> $playlist_array['event_id'],
+										'comment_content'	=> 'Song added to playlist by ' . $playlist_array['added_by'],
+										'comment_type'		=> 'mdjm-journal',
+													),
+												 array(
+										'type'			=> 'update-event',
+										'visibility'	=> '2',
+												 	)
+												);
+			}
 		}
 	} // f_mdjm_add_playlistsong
 	
@@ -866,12 +874,10 @@
 */
 	function f_mdjm_do_journal( $args )	{
 		global $wpdb;
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$args['id'] = '';
 		$args['timestamp'] = time();
-		if( !$wpdb->insert( $db_tbl['journal'], $args ) ) die( $wpdb->print_error() );	
+		if( !$wpdb->insert( MDJM_JOURNAL_TABLE, $args ) ) die( $wpdb->print_error() );	
 	} // f_mdjm_do_journal
 
 /****************************************************************************************************
@@ -884,18 +890,17 @@
 * Displays the availability checker form
 */
 	function f_mdjm_availability_form( $args )	{
-		global $mdjm_options;
+		global $mdjm, $mdjm_settings;
 		
 		if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
-			$mdjm_pages = get_option( 'mdjm_plugin_pages' );
-			$dj_avail = f_mdjm_available( $_POST['check_date'] );
+			$dj_avail = dj_available( '', $_POST['check_date'] );
 			
 			if( isset( $dj_avail ) )	{
-				if( $dj_avail !== false )	{
-					if( isset( $mdjm_pages['availability_check_pass_page'] ) && $mdjm_pages['availability_check_pass_page'] != 'text' )	{
+				if( !empty( $dj_avail['available'] ) )	{
+					if( isset( $mdjm_settings['pages']['availability_check_pass_page'] ) && $mdjm_settings['pages']['availability_check_pass_page'] != 'text' )	{
 						?>
 						<script type="text/javascript">
-						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_pass_page'] ); ?>						?mdjm_avail=1&mdjm_avail_date=<?php echo $_POST['check_date']; ?>';
+						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['pages']['availability_check_pass_page'], true ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date']; ?>';
 						</script>
                         <p>Please wait...</p>
 						<?php
@@ -903,10 +908,10 @@
 					}
 				}
 				else	{
-					if( isset( $mdjm_pages['availability_check_fail_page'] ) && $mdjm_pages['availability_check_fail_page'] != 'text' )	{
+					if( isset( $mdjm_settings['pages']['availability_check_fail_page'] ) && $mdjm_settings['pages']['availability_check_fail_page'] != 'text' )	{
 						?>
 						<script type="text/javascript">
-						window.location = '<?php echo get_permalink( $mdjm_pages['availability_check_fail_page'] ); ?>';
+						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['pages']['availability_check_fail_page'], false ); ?>';
 						</script>
 						<?php
 						exit;
@@ -932,28 +937,29 @@
 		}
 		</style>
 		<script type="text/javascript">
-		jQuery(document).ready(function($) {
-			$('.custom_date').datepicker({
-			dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
-			altField  : '#check_date',
-			altFormat : 'yy-mm-dd',
-			firstDay: <?php echo get_option( 'start_of_week' ); ?>,
-			changeYear: true,
-			changeMonth: true
-			});
-        });
+		<?php
+		mdjm_jquery_datepicker_script( array( 'custom_date', 'check_date' ) );
+		?>
         </script>
         <?php
 		/* Create the table */
 		?>
+        <!-- Start of MDJM Availability Checker -->
         <form name="mdjm-availability-check" id="mdjm-availability-check" method="post">
         <?php
         if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
-			if( $dj_avail !== false && $mdjm_pages['availability_check_pass_page'] == 'text' && !empty( $mdjm_pages['availability_check_pass_page'] ) )	{
-				echo '<p>' . $mdjm_pages['availability_check_pass_text'] . '</p>';
+			$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
+			$replace = array( date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ), 
+							date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['check_date'] ) ) );
+			if( !empty( $dj_avail['available'] ) && $mdjm_settings['pages']['availability_check_pass_page'] == 'text' && !empty( $mdjm_settings['pages']['availability_check_pass_page'] ) )	{
+				echo '<p>' . str_replace( $search,
+										  $replace,
+										  $mdjm_settings['pages']['availability_check_pass_text'] ) . '</p>';
 			}
-			if( $dj_avail === false && $mdjm_pages['availability_check_fail_page'] == 'text' && !empty( $mdjm_pages['availability_check_fail_page'] ) )	{
-				echo '<p>' . $mdjm_pages['availability_check_fail_text'] . '</p>';
+			if( empty( $dj_avail['available'] ) && $mdjm_settings['pages']['availability_check_fail_page'] == 'text' && !empty( $mdjm_settings['pages']['availability_check_fail_page'] ) )	{
+				echo '<p>' . str_replace( $search,
+										  $replace,
+										  $mdjm_settings['pages']['availability_check_fail_text'] ) . '</p>';
 			}
 			
 		}
@@ -979,7 +985,7 @@
 			$submit_text = $args['submit_text'];
 		}
 		?>
-        <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" required />
+        <input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php mdjm_jquery_short_date(); ?>" required />
         <?php
 		if( isset( $args['field_wrap'] ) && $args['field_wrap'] == 'true' )	{
 				echo '<br />';	
@@ -1013,6 +1019,7 @@
 			); // Close validate
         });
 		</script>
+        <!-- End of MDJM Availability Checker -->
         <?php
 	} // f_mdjm_availability_form
 ?>

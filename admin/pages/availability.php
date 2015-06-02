@@ -3,8 +3,8 @@
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'dj' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	global $mdjm_options, $current_user;
-	// If recently updated, display the release notes
+	global $current_user;
+
 	f_mdjm_has_updated();
 
 /*
@@ -17,13 +17,13 @@
 	if( isset( $_POST['submit'] ) )	{
 		if( $_POST['submit'] == 'Add Entry' )	{
 			if( !isset( $_POST['from_date'] ) || empty( $_POST['from_date'] ) )	{
-				f_mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>From Date</strong>' );
+				mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>From Date</strong>' );
 			}
 			elseif( !isset( $_POST['to_date'] ) || empty( $_POST['to_date'] ) )	{
-				f_mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>To Date</strong>' );
+				mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>To Date</strong>' );
 			}
 			elseif( date( 'Y-m-d', strtotime( $_POST['from_date'] ) ) < date( 'Y-m-d' ) )	{
-				f_mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
+				mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
 			}
 			else	{
 				f_mdjm_add_holiday( $_POST );
@@ -31,43 +31,40 @@
 		}
 		if( $_POST['submit'] == 'Check Date' )	{
 			if( !isset( $_POST['check_date'] ) || empty( $_POST['check_date'] ) )	{
-				f_mdjm_update_notice( 'error', 'ERROR: You did not enter a date to check' );	
+				mdjm_update_notice( 'error', 'ERROR: You did not enter a date to check' );	
 			}
 			elseif( date( 'Y-m-d', strtotime( $_POST['check_date'] ) ) < date( 'Y-m-d' ) )	{
-				f_mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
+				mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
 			}
 			else	{
 				/* Run the availability check */
 				if( isset( $_POST['check_employee'] ) && $_POST['check_employee'] != 'all' )	{
-					$dj_avail = f_mdjm_available( $_POST['check_date'], $_POST['check_employee'] );
+					//$dj_avail = f_mdjm_available( $_POST['check_date'], $_POST['check_employee'] );
+					$dj_avail = dj_available( $_POST['check_employee'], $_POST['check_date'] );
 				}
 				else	{
-					$dj_avail = f_mdjm_available( $_POST['check_date'] );
+					//$dj_avail = f_mdjm_available( $_POST['check_date'] );
+					$dj_avail = dj_available( '', $_POST['check_date'] );
 				}
 				
 				/* Print the availability result */
 				if( isset( $dj_avail ) )	{
 					/* Check all DJ's */
-					if ( $dj_avail !== false && $_POST['check_employee'] == 'all' )	{
-						if( count( $dj_avail ) != 1 )	{
-							$avail_message = count( $dj_avail ) . ' DJ\'s available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ) . '"> Create event</a><br />';
-						}
-						else	{
-							$avail_message = count( $dj_avail ) . ' DJ available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ) . '"> Create event</a><br />';
-						}
+					if ( !empty( $dj_avail['available'] ) && $_POST['check_employee'] == 'all' )	{
+							$avail_message = count( $dj_avail['available'] ) . _n( ' DJ', ' DJ\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
 						$class = 'updated';
 						?><ui><?php
-						foreach( $dj_avail as $dj_detail )	{
+						foreach( $dj_avail['available'] as $dj_detail )	{
 							$dj = get_userdata( $dj_detail );
 							$avail_message .= '<li>' . $dj->display_name . '</li>';
 						}
 						?></ui><?php
 					}
 					/* Single DJ Check */
-					elseif ( $dj_avail !== false && $_POST['check_employee'] != 'all' )	{
+					elseif ( !empty( $dj_avail['available'] ) !== false && $_POST['check_employee'] != 'all' )	{
 						$dj = get_userdata( $_POST['check_employee'] );
 						$class = 'updated';
-						$avail_message = $dj->display_name . ' is available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form' ) . '"> Create event</a><br />';
+						$avail_message = $dj->display_name . ' is available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
 					}
 					else	{
 						$class = 'error';
@@ -79,7 +76,7 @@
 							$avail_message = $dj->display_name . ' is not available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) );
 						}
 					}
-					f_mdjm_update_notice( $class, $avail_message );
+					mdjm_update_notice( $class, $avail_message );
 				}
 			}
 		}
@@ -100,30 +97,11 @@
 
 	?>
 	<script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('.from_custom_date').datepicker({
-        dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
-		altField  : '#from_date',
-		altFormat : 'yy-mm-dd',
-		firstDay: <?php echo get_option( 'start_of_week' ); ?>
-        });
-    });
-	jQuery(document).ready(function($) {
-        $('.to_custom_date').datepicker({
-        dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
-		altField  : '#to_date',
-		altFormat : 'yy-mm-dd',
-		firstDay: <?php echo get_option( 'start_of_week' ); ?>
-        });
-    });
-	jQuery(document).ready(function($) {
-        $('.check_custom_date').datepicker({
-        dateFormat : '<?php f_mdjm_short_date_jquery(); ?>',
-		altField  : '#check_date',
-		altFormat : 'yy-mm-dd',
-		firstDay: <?php echo get_option( 'start_of_week' ); ?>
-        });
-    });
+	<?php
+	mdjm_jquery_datepicker_script( array( 'from_custom_date', 'from_date' ) ); // Holiday from
+	mdjm_jquery_datepicker_script( array( 'to_custom_date', 'to_date' ) ); // Holiday to
+	mdjm_jquery_datepicker_script( array( 'check_custom_date', 'check_date' ) ); // Availability check
+	?>
     </script>
     <div class="wrap">
     <div id="icon-themes" class="icon32"></div>

@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
-Version: 1.1.3.3
-Date: 14 May 2015
+Version: 1.1.5
+Date: 17 March 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -26,40 +26,25 @@ Author URI: http://www.mydjplanner.co.uk
 	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
 	$mdjm_db_version = '2.3'; // Used to determine if the DB Tables need updating
 
-	define ( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
-	define ( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
+	define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
+	define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	
 	/* -- These will be deprecated soon -- */
-	define ( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define ( 'WPMDJM_VERSION_KEY', 'version');
-	define ( 'WPMDJM_VERSION_NUM', '1.1.3.3' );
-	define ( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
-	define ( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-	define ( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
-	define ( 'WPMDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
-	define ( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
-	define ( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
-	define ( 'WPMDJM_FETEXT_SETTINGS_KEY', 'mdjm_frontend_text' );
-	define ( 'WPMDJM_PAYMENTS_KEY', 'mdjm_pp_options' );
+	define( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress' );
+	define( 'WPMDJM_VERSION_KEY', 'version' );
+	define( 'WPMDJM_VERSION_NUM', '1.2' );
+	define( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
+	define( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+	define( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
+	define( 'WPMDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
+	define( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
+	define( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
+	define( 'WPMDJM_FETEXT_SETTINGS_KEY', 'mdjm_frontend_text' );
+	define( 'WPMDJM_PAYMENTS_KEY', 'mdjm_pp_options' );
 	
 	$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 	
-	if( !class_exists( 'MDJM' ) )	{
-		include( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm.php' );
-	}
-	$mdjm = new MDJM();
-		
-	/* Debugging */
-	$mdjm_debug = get_option( 'mdjm_debug' );
-	$cur_url = $_SERVER["REQUEST_URI"];
-	$is_mdjm = strpos( $cur_url, 'mdjm-' );
-	$is_post_email = strpos( $cur_url, 'post-type=email_template' );
-	$is_post_contract = strpos( $cur_url, 'post-type=contract' );
-	
-	if( isset( $mdjm_debug ) && $mdjm_debug == '1' )	{
-		ini_set( 'error_log', WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-error.log');
-		ini_set( 'log_errors', $mdjm_debug );
-	}
+	include( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm.php' );
 	
 	require_once( WPMDJM_PLUGIN_DIR . '/admin/admin-functions.php' );
 	
@@ -67,28 +52,23 @@ Author URI: http://www.mydjplanner.co.uk
 
 	$mdjm_options = f_mdjm_get_options();
 
-	/* What to do when the plugin is activated? */
-	register_activation_hook( __FILE__, 'f_mdjm_install' );
-	register_activation_hook( __FILE__, 'f_mdjm_db_install' );
-
-	/* What to do when the plugin is deactivated? */
-	register_deactivation_hook( __FILE__, 'f_mdjm_deactivate' );
+	/* What to do when the plugin is activated or de-activated */
+	register_activation_hook( __FILE__, array( 'MDJM', 'mdjm_activate' ) );
+	register_deactivation_hook(__FILE__, array( 'MDJM', 'mdjm_deactivate' ) );
+	//register_activation_hook( __FILE__, 'f_mdjm_db_install' );
 		
 	/* Actions for admin */
 	if ( is_admin() )	{
 		/* -- Define Custom Post Types -- */
-		$mdjm->set_post_types();
 		
 		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
 		/* Upgrade procedures */
 		add_action( 'plugins_loaded', 'f_mdjm_upgrade' );
 		
 		/* Add the Settings link to the plugin */
-		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'add_action_links' );
-		add_filter( 'plugin_row_meta', 'mdjm_plugin_meta', 10, 2 );
 		
 		/* Initialise and go! */
-		add_action( 'admin_init', 'f_mdjm_reg_init' );
+		//add_action( 'admin_init', 'f_mdjm_reg_init' );
 
 		if( $pagenow == 'index.php' && isset( $mdjm_options['show_dashboard'] ) && $mdjm_options['show_dashboard'] == 'Y' )	{
 			/* Activate widgets */
@@ -98,13 +78,13 @@ Author URI: http://www.mydjplanner.co.uk
 	}
 	/* Actions for users */
 	else	{
-		global $mdjm_client_text;
+		//global $mdjm_client_text;
 		require_once WPMDJM_PLUGIN_DIR . '/includes/functions.php';
 		require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
 		require_once WPMDJM_PLUGIN_DIR . '/admin/admin.php';
-		require_once WPMDJM_PLUGIN_DIR . '/includes/shortcodes.php';
-		$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
-		add_action( 'wp_head','f_mdjm_insert_head' );
-		add_shortcode( 'MDJM', 'f_mdjm_shortcode' );
+		//require_once WPMDJM_PLUGIN_DIR . '/includes/shortcodes.php';
+		//$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
+		//add_action( 'wp_head','f_mdjm_insert_head' );
+		//add_shortcode( 'MDJM', 'f_mdjm_shortcode' );
 	}
 ?>
