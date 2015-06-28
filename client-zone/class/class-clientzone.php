@@ -513,10 +513,8 @@
 				/* -- Map the args to the pages/functions -- */
 				$args = shortcode_atts( array(
 					'Home'         => '/client-zone/class/class-home.php',
-					//'Payments'	   => '/pages/payment.php',
 					'Payments'	   => '/client-zone/class/class-payment.php',
 					'Profile'      => '/client-zone/class/class-profile.php',
-					//'Playlist'     => '/pages/playlist.php',
 					'Playlist'	 => '/client-zone/class/class-playlist.php',
 					'Contract'     => '/client-zone/class/class-contract.php',
 					'Availability' => 'f_mdjm_availability_form',
