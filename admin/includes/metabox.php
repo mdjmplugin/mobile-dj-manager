@@ -23,7 +23,7 @@
         <p><strong>Status</strong>: <?php echo ucfirst( $post->post_status ) . 
 		( $post->post_status == 'opened' ? ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( $post->post_modified ) ) : '' );
 		; ?></p>
-        <p><strong>Event</strong>: <a href="<?php f_mdjm_admin_page( 'events' ); ?>&action=view_event_form&event_id=<?php echo get_post_meta( $post->ID, '_event', true ); ?>"><?php echo MDJM_EVENT_PREFIX . stripslashes( get_post_meta( $post->ID, '_event', true ) ); ?></a></p>
+        <p><strong>Event</strong>: <a href="<?php echo get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ); ?>"><?php echo MDJM_EVENT_PREFIX . stripslashes( get_post_meta( $post->ID, '_event', true ) ); ?></a></p>
         
         <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
         
@@ -72,7 +72,7 @@
 		document.getElementById("content").className += " required";
 		</script>
         <p><strong>Author</strong>: <?php echo sprintf( '<a href="' . admin_url( 'user-edit.php?user_id=%s' ) . '">%s</a>', $post->post_author, the_author_meta( 'display_name', $post->post_author ) ); ?></p>
-        <p><strong>Default Contract</strong>: <?php echo $post->ID == $mdjm_settings['main']['default_contract'] ? 'Yes' : 'No'; ?></p>
+        <p><strong>Default Contract</strong>: <?php echo $post->ID == $mdjm_settings['events']['default_contract'] ? 'Yes' : 'No'; ?></p>
         <p><strong>Assigned To</strong>: <?php echo $count . _n( ' Event', ' Events', $count ); ?></p>
         
         <p><strong>Description</strong>: <span class="description">(optional)</span><br />
@@ -352,13 +352,13 @@
         	<div class="mdjm-post-2column">
             <label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
             <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
-            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_cost', true ) ); ?>" placeholder="0.00" /> 
+            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_cost', true ) ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
                 <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
             </div>
             <div class="mdjm-post-last-2column">
             <label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( MDJM_DEPOSIT_LABEL . ':' ); ?></label><br />
             <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
-            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) ); ?>" placeholder="0.00" /> 
+            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
                 <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
             </div>
 		</div><!-- mdjm-post-row -->
@@ -462,7 +462,7 @@
 										' selected="selected"' : '' ) . 
 									'>' . esc_attr( $equip_list[0] ) . 
 									( $equip_list[2] > 1 ? ' x ' . esc_attr( $equip_list[2] ) : '' ) . 
-									' - ' . MDJM_CURRENCY . esc_attr( $equip_list[7] ) . '</option>' . "\r\n";
+									' - ' . display_price( esc_attr( $equip_list[7] ) ) . '</option>' . "\r\n";
 								}
 							}
 						}
@@ -648,7 +648,7 @@
             <label for="_mdjm_event_enquiry_source" class="mdjm-label"><?php _e( 'Enquiry Source:' ); ?></label><br />
             <select name="_mdjm_event_enquiry_source" id="_mdjm_event_enquiry_source">
             <?php
-			$sources = explode( "\r\n", $mdjm_settings['main']['enquiry_sources'] );
+			$sources = explode( "\r\n", $mdjm_settings['events']['enquiry_sources'] );
 			asort( $sources );
 			foreach( $sources as $enquiry_source )	{
 				echo '<option value="' . $enquiry_source . '"';
@@ -821,11 +821,11 @@
 						selected( $event_contract, $contract_template->ID );
 					}
 					else	{
-						selected( $mdjm_settings['main']['default_contract'], $contract_template->ID );
+						selected( $mdjm_settings['events']['default_contract'], $contract_template->ID );
 					}
 					/* -- If the event is past enquiry we only display the contract that is selected
 							and add a link to view it -- */
-					echo ( $post->post_status != 'mdjm-unattended' && $post->post_status != 'mdjm-enquiry' && $post->post_status != 'mdjm-contract' && $event_contract != $contract_template->ID ? ' disabled="disabled"' : '' );
+					echo ( $post->post_status != 'auto-draft' && $post->post_status != 'mdjm-unattended' && $post->post_status != 'mdjm-enquiry' && $post->post_status != 'mdjm-contract' && $event_contract != $contract_template->ID ? ' disabled="disabled"' : '' );
 					
 					echo '>' . $contract_template->post_title . '</option>' . "\r\n";
 				}
@@ -876,7 +876,7 @@
 														) );
 					foreach( $email_templates as $email_template )	{
 						echo '<option value="' . $email_template->ID . '"';
-						selected( $mdjm_settings['main']['email_enquiry'], $email_template->ID );
+						selected( $mdjm_settings['templates']['enquiry'], $email_template->ID );
 						echo '>' . $email_template->post_title . '</option>' . "\r\n";	
 					}
                     ?>
@@ -1030,7 +1030,8 @@
 		echo '<div class="mdjm-post-row">' . "\r\n";
 			echo '<div class="mdjm-post-3column">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
-					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text" placeholder="10.00" />' . "\r\n";
+					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text" placeholder="' . 
+						display_price( '10', false ) . '" />' . "\r\n";
 			echo '</div>' . "\r\n";
 		
 			echo '<div class="mdjm-post-3column">' . "\r\n";
@@ -1159,7 +1160,7 @@
         <!-- Start first row -->
         <div class="mdjm-post-row-single">
         	<div class="mdjm-post-1column">
-                <?php echo __( 'Go to the <a href="' . mdjm_get_admin_page( 'events', 'str' ) . '">Event Management Interface</a> to add a transaction associated to an event, .' ); ?>
+                <?php echo __( 'Go to the <a href="' . mdjm_get_admin_page( 'events', 'str' ) . '">Event Management Interface</a> to add a transaction associated to an event.' ); ?>
             </div>
         </div>
         <!-- End first row -->
@@ -1171,7 +1172,8 @@
 		echo '<div class="mdjm-post-row">' . "\r\n";
 			echo '<div class="mdjm-post-3column">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
-					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="10.00" value="' . get_post_meta( $post->ID, '_mdjm_txn_total', true ) . '" />' . "\r\n";
+					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' . 
+					display_price( '10', false ) . '" value="' . get_post_meta( $post->ID, '_mdjm_txn_total', true ) . '" />' . "\r\n";
 			echo '</div>' . "\r\n";
 		
 			echo '<div class="mdjm-post-3column">' . "\r\n";

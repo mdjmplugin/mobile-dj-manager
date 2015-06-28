@@ -109,7 +109,7 @@
 				if( empty( $form_id ) )	{
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'No form ID passed for deletion! ' . __METHOD__ );
-					return f_mdjm_update_notice( 'error', 'No form to delete' );
+					return mdjm_update_notice( 'error', 'No form to delete' );
 				}
 				
 				$form_fields = $this->get_fields( $form_id );
@@ -123,11 +123,11 @@
 						wp_delete_post( $field->ID, true );	
 					}
 					
-					return f_mdjm_update_notice( 'updated', 'The Contact Form <strong>' . esc_attr( $delete->post_title ) . '</strong> has been successfully deleted' );
+					return mdjm_update_notice( 'updated', 'The Contact Form <strong>' . esc_attr( $delete->post_title ) . '</strong> has been successfully deleted' );
 				}
 					
 				else
-					return f_mdjm_update_notice( 'error', 'Could not delete the contact form' );
+					return mdjm_update_notice( 'error', 'Could not delete the contact form' );
 				
 			} // delete_form
 			
@@ -149,19 +149,19 @@
 					
 				/* -- Validation -- */
 				if( empty( $_POST['field_name'] ) )
-					f_mdjm_update_notice( 'error', 'ERROR: No field name entered' );
+					mdjm_update_notice( 'error', 'ERROR: No field name entered' );
 				
 				elseif( empty( $_POST['field_type'] ) )
-					f_mdjm_update_notice( 'error', 'ERROR: No field type selected' );
+					mdjm_update_notice( 'error', 'ERROR: No field type selected' );
 					
 				elseif( $_POST['field_type'] == 'select' && empty( $_POST['select_options'] ) )
-					f_mdjm_update_notice( 'error', 'ERROR: When choosing a Select List field, you must enter some Selectable Options' );
+					mdjm_update_notice( 'error', 'ERROR: When choosing a Select List field, you must enter some Selectable Options' );
 					
 				elseif( $_POST['field_type'] == 'select_multi' && empty( $_POST['select_options'] ) )
-					f_mdjm_update_notice( 'error', 'ERROR: When choosing a Select List field, you must enter some Selectable Options' );
+					mdjm_update_notice( 'error', 'ERROR: When choosing a Select List field, you must enter some Selectable Options' );
 					
 				elseif( $_POST['field_type'] == 'captcha' && !is_plugin_active( 'really-simple-captcha/really-simple-captcha.php' ) )
-					f_mdjm_update_notice( 'error', 'ERROR: The CAPTCHA field type requires that you have the <strong>Really Simple CAPTCHA</strong> plugin installed and activated. <a href="' . admin_url( 'plugin-install.php?tab=search&s=really+simple+captcha' ) . '"> Download &amp; install the plugin here</a>' );
+					mdjm_update_notice( 'error', 'ERROR: The CAPTCHA field type requires that you have the <strong>Really Simple CAPTCHA</strong> plugin installed and activated. <a href="' . admin_url( 'plugin-install.php?tab=search&s=really+simple+captcha' ) . '"> Download &amp; install the plugin here</a>' );
 					
 				/* -- Add or edit the field -- */
 				else	{
@@ -249,7 +249,7 @@
 						}
 						/* -- And the meta -- */
 						update_post_meta( $_POST['field_id'], '_mdjm_field_config', $field_meta );
-						f_mdjm_update_notice( 'updated', 'The <strong>' . sanitize_text_field( $_POST['field_name'] ) . '</strong> field updated' );
+						mdjm_update_notice( 'updated', 'The <strong>' . sanitize_text_field( $_POST['field_name'] ) . '</strong> field updated' );
 					}
 					/* -- New Field -- */
 					else	{
@@ -264,7 +264,7 @@
 						
 						/* -- New Field Meta -- */
 						add_post_meta( $field_id, '_mdjm_field_config', $field_meta, true );
-						f_mdjm_update_notice( 'updated', 'The <strong>' . sanitize_text_field( $_POST['field_name'] ) . '</strong> field added' );
+						mdjm_update_notice( 'updated', 'The <strong>' . sanitize_text_field( $_POST['field_name'] ) . '</strong> field added' );
 					}
 					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );		
 				}
@@ -284,7 +284,7 @@
 				if( empty( $field_id ) )	{
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'No field ID passed for deletion! ' . __METHOD__ );
-					return f_mdjm_update_notice( 'error', 'No field to delete' );
+					return mdjm_update_notice( 'error', 'No field to delete' );
 				}
 				
 				$delete = wp_delete_post( $field_id, true );
@@ -297,7 +297,7 @@
 				}
 					
 				else
-					return f_mdjm_update_notice( 'error', 'Could not delete the field' );
+					return mdjm_update_notice( 'error', 'Could not delete the field' );
 				
 			} // delete_field
 
@@ -318,28 +318,28 @@
 				
 				/* -- Validation -- */
 				if( empty( $_POST['email_from'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: Configuration needs a From email address' );
+					mdjm_update_notice( 'error', 'ERROR: Configuration needs a From email address' );
 				}
 				if( empty( $_POST['email_from_name'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: Configuration needs a From email display name' );
+					mdjm_update_notice( 'error', 'ERROR: Configuration needs a From email display name' );
 				}
 				if( empty( $_POST['email_to'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: Configuration needs a To email address' );
+					mdjm_update_notice( 'error', 'ERROR: Configuration needs a To email address' );
 				}
 				elseif( !filter_var( $_POST['email_from'], FILTER_VALIDATE_EMAIL ) ) {
-					f_mdjm_update_notice( 'error', 'ERROR: Invalid From email address format' );
+					mdjm_update_notice( 'error', 'ERROR: Invalid From email address format' );
 				}
 				elseif( !filter_var( $_POST['email_to'], FILTER_VALIDATE_EMAIL ) ) {
-					f_mdjm_update_notice( 'error', 'ERROR: Invalid To email address format' );
+					mdjm_update_notice( 'error', 'ERROR: Invalid To email address format' );
 				}
 				elseif( empty( $_POST['email_subject'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: Enter a subject to be used in the email' );	
+					mdjm_update_notice( 'error', 'ERROR: Enter a subject to be used in the email' );	
 				}
 				elseif( empty( $_POST['required_field_text'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: Enter an error message to be displayed if a required field is not populated' );
+					mdjm_update_notice( 'error', 'ERROR: Enter an error message to be displayed if a required field is not populated' );
 				}
 				elseif( isset( $_POST['display_message'] ) && $_POST['display_message'] == 'Y' && empty( $_POST['display_message_text'] ) )	{
-					f_mdjm_update_notice( 'error', 'ERROR: You selected <strong>Display Message</strong> but did not enter a message to display to the user' );	
+					mdjm_update_notice( 'error', 'ERROR: You selected <strong>Display Message</strong> but did not enter a message to display to the user' );	
 				}
 				/* -- Continue with saving the config (post meta) -- */
 				else	{
@@ -410,7 +410,7 @@
 					}
 					
 					if( update_post_meta( $_POST['form_id'], '_mdjm_contact_form_config', $form_meta ) )
-						f_mdjm_update_notice( 'updated', 'Form Configuration Saved Successfully' );
+						mdjm_update_notice( 'updated', 'Form Configuration Saved Successfully' );
 						
 					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				}
@@ -547,7 +547,7 @@
 			 *
 			 */
 			public function set_form_defaults( $form_id )	{
-				global $mdjm, $mdjm_settings;
+				global $mdjm;
 				
 				if( empty( $form_id ) )	{
 					if( MDJM_DEBUG == true )
@@ -556,13 +556,14 @@
 					return false;
 				}
 				
-				$form_config['email_from'] = $mdjm_settings['main']['system_email'];
+				$form_config['email_from'] = $mdjm_settings['email']['system_email'];
 				$form_config['email_from_name'] = sanitize_text_field( MDJM_COMPANY );
-				$form_config['email_to'] = $mdjm_settings['main']['system_email'];
+				$form_config['email_to'] = $mdjm_settings['email']['system_email'];
 				$form_config['reply_to'] = 'Y';
 				$form_config['email_subject'] = sanitize_text_field( get_the_title( $form_id ) . ' form submission from ' . MDJM_COMPANY . ' website' );
 				$form_config['copy_sender'] = 'N';
 				$form_config['update_user'] = 'Y';
+				$form_config['required_asterix'] = '1';
 				$form_config['required_field_text'] = sanitize_text_field( '{FIELD_NAME} is a required field. Please try again.' );
 				$form_config['error_text_color'] = sanitize_text_field( '#FF0000' );
 				$form_config['layout'] = sanitize_text_field( '0_column' );
@@ -636,7 +637,7 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: Form ' . $form_name . ' could not be created' );
 						
-					f_mdjm_update_notice( 'error', 'The Contact Form could not be created' );
+					mdjm_update_notice( 'error', 'The Contact Form could not be created' );
 					$form_id = false;
 				}
 						
@@ -691,17 +692,14 @@
 									);
 				
 				/* -- Marry up field types to Mappings */					
-				$mappings_client = array(
-									'first_name'           => 'Client First Name',
-									'last_name'            => 'Client Last Name',
-									'user_email'           => 'Client Email Address',
-									);
 				$client_fields = get_option( MDJM_CLIENT_FIELDS );
-				foreach( $client_fields as $client_field )	{
-					if( $client_field['display'] == 'Y' )	{
+				
+				foreach( $client_fields as $client_field )	{				
+					if( $client_field['display'] == true )	{
 						$mappings_client[$client_field['id']] = 'Client ' . $client_field['label'];
 					}
 				}
+
 				$mappings_event = array(
 									'_mdjm_event_date'			=> 'Event Date',
 									'mdjm_event_type'				=> 'Event Type',
@@ -841,7 +839,7 @@
 							
 						$f_config = get_post_meta( $field->ID, '_mdjm_field_config', true );
 						if( $f_config['type'] == 'captcha' && !is_plugin_active( 'really-simple-captcha/really-simple-captcha.php' ) )	{
-							f_mdjm_update_notice( 'error', 'ERROR: The CAPTCHA field type requires that you have the <strong>Really Simple CAPTCHA</strong> plugin installed and activated. <a href="' . admin_url( 'plugin-install.php?tab=search&s=really+simple+captcha' ) . '"> Download &amp; install the plugin here</a>' );	
+							mdjm_update_notice( 'error', 'ERROR: The CAPTCHA field type requires that you have the <strong>Really Simple CAPTCHA</strong> plugin installed and activated. <a href="' . admin_url( 'plugin-install.php?tab=search&s=really+simple+captcha' ) . '"> Download &amp; install the plugin here</a>' );	
 						}
 						?>
 						<tr id="<?php echo 'fields_' . $field->ID; ?>"
@@ -1015,7 +1013,7 @@
 		*********************************/
 				if( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' )	{
 					$selected = true;
-					$req = $e_meta['config']['required'];
+					$req = ( !empty( $e_meta['config']['required'] ) ? $e_meta['config']['required'] : 'N' );
 				}
 				elseif( isset( $_POST['required'] ) && $_POST['required'] == 'Y' )	{
 					$selected = true;
@@ -1181,11 +1179,11 @@
 				</tr>
 				<tr>
 				<th scope="row"><label for="email_from">Email From Address:</label></th>
-				<td><input type="email" name="email_from" id="email_from" class="regular-text" value="<?php echo ( isset( $config['email_from'] ) ? $config['email_from'] : $mdjm_settings['main']['system_email'] ); ?>" /> <span class="description">The email address that the email should be sent from. Should be a valid address</span></td>
+				<td><input type="email" name="email_from" id="email_from" class="regular-text" value="<?php echo ( isset( $config['email_from'] ) ? $config['email_from'] : $mdjm_settings['email']['system_email'] ); ?>" /> <span class="description">The email address that the email should be sent from. Should be a valid address</span></td>
 				</tr>
 				<tr>
 				<th scope="row"><label for="email_to">Email To:</label></th>
-				<td><input type="email" name="email_to" id="email_to" class="regular-text" value="<?php echo ( isset( $config['email_to'] ) ? $config['email_to'] : $mdjm_settings['main']['system_email'] ); ?>" /> <span class="description">The email address to which the enquiry should be sent</span></td>
+				<td><input type="email" name="email_to" id="email_to" class="regular-text" value="<?php echo ( isset( $config['email_to'] ) ? $config['email_to'] : $mdjm_settings['email']['system_email'] ); ?>" /> <span class="description">The email address to which the enquiry should be sent</span></td>
 				</tr>
 				<tr>
 				<th scope="row"><label for="email_subject">Email Subject:</label></th>
@@ -1307,7 +1305,9 @@
 				</tr>
                 <tr>
                 <th scope="row"><label for="required_asterix">Indicate Required Field?</label></th>
-                <td><input type="checkbox" name="required_asterix" id="required_asterix" value="1" <?php checked( $config['required_asterix'], true ); ?> /> <span class="description">Select to display a <span style="color: red; font-weight: bold;">*</span> next to a required field</span></td>
+                <td><input type="checkbox" name="required_asterix" id="required_asterix" value="1" 
+					<?php if( !empty( $config['required_asterix'] ) ) echo ' selected="selected"'; ?> 
+                    /> <span class="description">Select to display a <span style="color: red; font-weight: bold;">*</span> next to a required field</span></td>
                 </tr>
 				<tr>
 				<th scope="row"><label for="required_field_text">Error Message:</label></th>
@@ -1399,10 +1399,11 @@
 								'_mdjm_event_venue_town'     => 'Event Venue Town/City',
 								'_mdjm_event_venue_county'   => 'Event County (State)'
 								);
-								
+				
+				$mappings_custom = array();				
 				$client_fields = get_option( MDJM_CLIENT_FIELDS );
 				foreach( $client_fields as $client_field )	{
-					if( $client_field['display'] == 'Y' )	{
+					if( !empty( $client_field['display'] ) )	{
 						$mappings_custom[$client_field['id']] = 'Client ' . $client_field['label'];
 					}
 				}
@@ -1446,7 +1447,7 @@
 					else	{
 						$opt = $field['config']['options'];
 					}
-					?><img src="<?php echo $dir; ?>/select_list.jpg" width="14" height="14" alt="Maps to <?php echo $mappings[$field['config']['mapping']]; ?>" title="<?php echo $opt; ?>" />&nbsp;<?php
+					?><img src="<?php echo $dir; ?>/select_list.jpg" width="14" height="14" alt="Select List Options" title="<?php echo $opt; ?>" />&nbsp;<?php
 				}
 				else	{
 					echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	

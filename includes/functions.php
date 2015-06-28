@@ -12,35 +12,7 @@
 /****************************************************************************************************
 --	GENERAL FUNCTIONS
 ****************************************************************************************************/
-/**
- * f_mdjm_insert_head
- * Adds header content to all pages on the frontend
- * 
- * 
- * Called from: plugin main file
- * @since 1.0
-*/
-	/*function f_mdjm_insert_head()	{
-        echo "<!-- Start Mobile DJ Manager Header Content -->\r\n";
-		echo "<!-- End Mobile DJ Manager Header Content -->\r\n";
-	} // f_mdjm_insert_head*/
-	
-/**
- * f_wpmdjm_print_credit
- * Prints author & application credit to the foot of every application
- * page on the frontend
- * 
- * 
- * Called from: all frontend pages
- * @since 1.0
-*/
-	/*function f_wpmdjm_print_credit()	{
-		if ( WPMDJM_CREDITS == 'Y' )	{
-			?>
-			<p align="center" style="font-size:9px; color:#F90">Powered by <a style="font-size:9px; color:#F90" href="http://www.mydjplanner.co.uk" target="_blank"><?php echo WPMDJM_NAME; ?></a>, version <?php echo WPMDJM_VERSION_NUM; ?></p>
-			<?php
-		}
-	} // f_wpmdjm_print_credit*/
+
 	
 /**
  * f_mdjm_get_options
@@ -200,10 +172,10 @@
  * frontend
  * @since 1.0
 */
-	add_action( 'login_form_middle', 'f_mdjm_add_lost_password_link' );
+	/*add_action( 'login_form_middle', 'f_mdjm_add_lost_password_link' );
 	function f_mdjm_add_lost_password_link() {
 		return '<a href="/wp-login.php?action=lostpassword">Lost Password?</a>';
-	}
+	}*/
 
 /**
  * f_mdjm_update_user_profile
@@ -214,7 +186,7 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_update_user_profile()	{
+	/*function f_mdjm_update_user_profile()	{
 		global $_POST, $current_user, $clientzone;
 		
 		$profile_update_fields = array ( 'ID' => $current_user->ID );
@@ -262,7 +234,7 @@
 			$profile_update_fields_meta['marketing'] = $_POST['marketing'];
 		
 		/* Process any custom fields that have been added */
-		$custom_fields = get_option( WPMDJM_CLIENT_FIELDS );
+		/*$custom_fields = get_option( WPMDJM_CLIENT_FIELDS );
 		foreach ( $custom_fields as $custom_field )	{
 			if( $custom_field['default'] == false && $custom_field['display'] == 'Y' )	{
 				$profile_update_fields_meta[$custom_field['id']] = $_POST[$custom_field['id']];
@@ -296,7 +268,7 @@
 										'Unable to change your password. Check the password\'s you entered match!'
 										);
 		}
-	} // f_mdjm_update_user_profile
+	} // f_mdjm_update_user_profile*/
 
 /****************************************************************************************************
 --	EVENT FUNCTIONS
@@ -709,11 +681,11 @@
 		global $mdjm_settings;
 		
 		/* Playlist never closes */
-		if( empty( $mdjm_settings['main']['playlist_close'] ) || $mdjm_settings['main']['playlist_close'] == 0 )	{
+		if( empty( $mdjm_settings['playlist']['playlist_close'] ) || $mdjm_settings['playlist']['playlist_close'] == 0 )	{
 			return true;	
 		}
 		else	{
-			$pl_close = strtotime( $event_date ) - ( $mdjm_settings['main']['playlist_close'] * DAY_IN_SECONDS );
+			$pl_close = strtotime( $event_date ) - ( $mdjm_settings['playlist']['playlist_close'] * DAY_IN_SECONDS );
 			if( time() > $pl_close ) 	{
 				return false; // Closed
 			}
@@ -897,10 +869,10 @@
 			
 			if( isset( $dj_avail ) )	{
 				if( !empty( $dj_avail['available'] ) )	{
-					if( isset( $mdjm_settings['pages']['availability_check_pass_page'] ) && $mdjm_settings['pages']['availability_check_pass_page'] != 'text' )	{
+					if( isset( $mdjm_settings['availability']['availability_check_pass_page'] ) && $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )	{
 						?>
 						<script type="text/javascript">
-						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['pages']['availability_check_pass_page'], true ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date']; ?>';
+						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'], true ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date']; ?>';
 						</script>
                         <p>Please wait...</p>
 						<?php
@@ -908,10 +880,10 @@
 					}
 				}
 				else	{
-					if( isset( $mdjm_settings['pages']['availability_check_fail_page'] ) && $mdjm_settings['pages']['availability_check_fail_page'] != 'text' )	{
+					if( isset( $mdjm_settings['availability']['availability_check_fail_page'] ) && $mdjm_settings['availability']['availability_check_fail_page'] != 'text' )	{
 						?>
 						<script type="text/javascript">
-						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['pages']['availability_check_fail_page'], false ); ?>';
+						window.location = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_fail_page'], false ); ?>';
 						</script>
 						<?php
 						exit;
@@ -924,18 +896,6 @@
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 		?>
-        <style>
-		.mdjm-form-error {
-			color: #FF0000;
-		}
-		input.mdjm-form-error {
-			border: solid 1px #FF0000;
-			color: #000000;
-		}
-		.mdjm-form-valid {
-			color: #000000;
-		}
-		</style>
 		<script type="text/javascript">
 		<?php
 		mdjm_jquery_datepicker_script( array( 'custom_date', 'check_date' ) );
@@ -951,15 +911,15 @@
 			$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
 			$replace = array( date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ), 
 							date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['check_date'] ) ) );
-			if( !empty( $dj_avail['available'] ) && $mdjm_settings['pages']['availability_check_pass_page'] == 'text' && !empty( $mdjm_settings['pages']['availability_check_pass_page'] ) )	{
+			if( !empty( $dj_avail['available'] ) && $mdjm_settings['availability']['availability_check_pass_page'] == 'text' && !empty( $mdjm_settings['availability']['availability_check_pass_page'] ) )	{
 				echo '<p>' . str_replace( $search,
 										  $replace,
-										  $mdjm_settings['pages']['availability_check_pass_text'] ) . '</p>';
+										  $mdjm_settings['availability']['availability_check_pass_text'] ) . '</p>';
 			}
-			if( empty( $dj_avail['available'] ) && $mdjm_settings['pages']['availability_check_fail_page'] == 'text' && !empty( $mdjm_settings['pages']['availability_check_fail_page'] ) )	{
+			if( empty( $dj_avail['available'] ) && $mdjm_settings['availability']['availability_check_fail_page'] == 'text' && !empty( $mdjm_settings['availability']['availability_check_fail_page'] ) )	{
 				echo '<p>' . str_replace( $search,
 										  $replace,
-										  $mdjm_settings['pages']['availability_check_fail_text'] ) . '</p>';
+										  $mdjm_settings['availability']['availability_check_fail_text'] ) . '</p>';
 			}
 			
 		}

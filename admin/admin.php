@@ -11,7 +11,7 @@
 **************************************************************/
 	function f_mdjm_settings_init()	{
 		global $mdjm_options;
-		$admin_settings_field = array(  
+		/*$admin_settings_field = array(  
 										// General Settings
 										'company_name',
 										'app_name',
@@ -132,12 +132,12 @@
 		foreach( $admin_settings_field as $admin_setting_field_key )	{
 			if( !isset( $mdjm_options[$admin_setting_field_key] ) ) $mdjm_options[$admin_setting_field_key] = 'N';
 		}
-		$admin_fields = array();
+		$admin_fields = array();*/
 
 /* GENERAL TAB */
 		/* "mdjm_" is auto added as prefix to section */
 		/* "_settings" is auto added as suffix to section */
-		$admin_fields['company_name'] = array(
+		/*$admin_fields['company_name'] = array(
 									'display' => 'Company Name',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'text',
@@ -238,9 +238,9 @@
 														),
 									'section' => 'general',
 									'page' => 'settings',
-									); // short_date_format
+									); // short_date_format*/
 									
-		$admin_fields['pass_length'] = array(
+		/*$admin_fields['pass_length'] = array(
 									'display' => 'Default Password Length',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -263,10 +263,10 @@
 																				'12' => '12', ),
 														),
 									'section' => 'general',
-									'page' => 'settings',
-									); // pass_length
+									'page' => 'clients',
+									); // pass_length*/
 									
-		$admin_fields['currency'] = array(
+		/*$admin_fields['currency'] = array(
 									'display' => 'Currency',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -287,9 +287,9 @@
 														),
 									'section' => 'general',
 									'page' => 'settings',
-									); // pass_length
+									); // currency*/
 		
-		$admin_fields['show_dashboard'] = array(
+		/*$admin_fields['show_dashboard'] = array(
 									'display' => 'Show Dashboard Widget?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -299,9 +299,9 @@
 									'desc' => 'Displays the MDJM widget on the main Wordpress Admin Dashboard',
 									'section' => 'general',
 									'page' => 'settings',
-									); // show_dashboard
+									); // show_dashboard*/
 									
-		$admin_fields['warn_unattended'] = array(
+		/*$admin_fields['warn_unattended'] = array(
 									'display' => 'New Enquiry Notification?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -311,21 +311,9 @@
 									'desc' => 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries',
 									'section' => 'general',
 									'page' => 'settings',
-									); // warn_unattended
-									
-		/*$admin_fields['event_types'] = array(
-									'display' => 'Event Types',
-									'key' => 'mdjm_plugin_settings',
-									'type' => 'textarea',
-									'class' => 'all-options',
-									'value' => str_replace( ",", "\n", $mdjm_options['event_types'] ),
-									'text' => '',
-									'desc' => 'The types of events that you provide. One per line.',
-									'section' => 'general',
-									'page' => 'settings',
-									); // event_types*/
-									
-		$admin_fields['enquiry_sources'] = array(
+									); // warn_unattended*/
+																		
+		/*$admin_fields['enquiry_sources'] = array(
 									'display' => 'Enquiry Sources',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'textarea',
@@ -335,9 +323,9 @@
 									'desc' => 'Enter possible sources of enquiries. One per line',
 									'section' => 'general',
 									'page' => 'settings',
-									); // enquiry_sources
+									); // enquiry_sources*/
 									
-		$admin_fields['default_contract'] = array(
+		/*$admin_fields['default_contract'] = array(
 									'display' => 'Default Client Contract',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -365,9 +353,9 @@
 									'desc' => 'Contracts &amp; Invoices are assigned the unique event ID by default. If you wish to prefix this number, enter the prefix here',
 									'section' => 'general',
 									'page' => 'settings',
-									); // id_prefix
+									); // id_prefix*/
 									
-		$admin_fields['system_email'] = array(
+		/*$admin_fields['system_email'] = array(
 									'display' => 'Default Email Address',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'email',
@@ -377,9 +365,9 @@
 									'desc' => 'The email address you want generic emails from MDJM to come from',
 									'section' => 'email',
 									'page' => 'settings',
-									); // system_email
+									); // system_email*/
 									
-		$admin_fields['track_client_emails'] = array(
+		/*$admin_fields['track_client_emails'] = array(
 									'display' => 'Track Client Emails?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -389,9 +377,9 @@
 									'desc' => '<code>Note</code>: not all email clients will support this',
 									'section' => 'email',
 									'page' => 'settings',
-									); // track_client_emails
+									); // track_client_emails*/
 		
-		$admin_fields['bcc_dj_to_client'] = array(
+		/*$admin_fields['bcc_dj_to_client'] = array(
 									'display' => 'Copy DJ in Client Emails?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -413,9 +401,9 @@
 									'desc' => 'Blind copy the WP admin in emails to client',
 									'section' => 'email',
 									'page' => 'settings',
-									); // bcc_admin_to_client
+									); // bcc_admin_to_client*/
 									
-		$admin_fields['booking_conf_to_client'] = array(
+		/*$admin_fields['booking_conf_to_client'] = array(
 									'display' => 'Booking Confirmation to client?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -425,9 +413,9 @@
 									'desc' => 'Email client with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
 									'section' => 'email',
 									'page' => 'settings',
-									); // booking_conf_to_client
+									); // booking_conf_to_client*/
 									
-		$admin_fields['booking_conf_to_dj'] = array(
+		/*$admin_fields['booking_conf_to_dj'] = array(
 									'display' => 'Booking Confirmation to DJ?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -437,9 +425,9 @@
 									'desc' => 'Email DJ with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
 									'section' => 'email',
 									'page' => 'settings',
-									); // booking_conf_to_dj
+									); // booking_conf_to_dj*/
 		
-		$admin_fields['contract_to_client'] = array(
+		/*$admin_fields['contract_to_client'] = array(
 									'display' => 'Contract link to client?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -449,9 +437,9 @@
 									'desc' => 'Email client with contract details when an enquiry is converted and the event status changes to Pending',
 									'section' => 'email',
 									'page' => 'settings',
-									); // contract_to_client
+									); // contract_to_client*/
 									
-		$admin_fields['email_enquiry'] = array(
+		/*$admin_fields['email_enquiry'] = array(
 									'display' => 'Event Quote Template',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -467,9 +455,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // email_enquiry
+									); // email_enquiry*/
 									
-		$admin_fields['enquiry_email_from'] = array(
+		/*$admin_fields['enquiry_email_from'] = array(
 									'display' => 'Send Quote\'s From',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -487,9 +475,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // enquiry_email_from
+									); // enquiry_email_from*/
 									
-		$admin_fields['email_contract'] = array(
+		/*$admin_fields['email_contract'] = array(
 									'display' => 'Contract Template',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -505,9 +493,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // email_contract
+									); // email_contract*/
 									
-		$admin_fields['contract_email_from'] = array(
+		/*$admin_fields['contract_email_from'] = array(
 									'display' => 'Send Contract Email From',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -525,9 +513,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // contract_email_from
+									); // contract_email_from*/
 									
-		$admin_fields['email_client_confirm'] = array(
+		/*$admin_fields['email_client_confirm'] = array(
 									'display' => 'Client Booking Confirmation Template',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -563,9 +551,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // contract_email_from
+									); // contract_email_from*/
 									
-		$admin_fields['email_dj_confirm'] = array(
+		/*$admin_fields['email_dj_confirm'] = array(
 									'display' => 'DJ Booking Confirmation Template',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -581,9 +569,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // email_dj_confirm
+									); // email_dj_confirm*/
 									
-		$admin_fields['unavailable_email_template'] = array(
+		/*$admin_fields['unavailable_email_template'] = array(
 									'display' => 'Unavailability Email Template',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'custom_dropdown',
@@ -599,9 +587,9 @@
 														),
 									'section' => 'email',
 									'page' => 'settings',
-									); // unavailable_email_template
+									); // unavailable_email_template*/
 									
-		$admin_fields['title_as_subject'] = array(
+		/*$admin_fields['title_as_subject'] = array(
 									'display' => 'Template Title is Subject?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -611,9 +599,9 @@
 									'desc' => 'Use your Email Template\'s title as the subject for the templates specified above',
 									'section' => 'email',
 									'page' => 'settings',
-									); // title_as_subject
+									); // title_as_subject*/
 									
-		$admin_fields['journaling'] = array(
+		/*$admin_fields['journaling'] = array(
 									'display' => 'Enable Journaling?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -623,9 +611,9 @@
 									'desc' => 'Log and track all client &amp; event actions (recommended)',
 									'section' => 'general',
 									'page' => 'settings',
-									); // journaling
+									); // journaling*/
 									
-		$admin_fields['multiple_dj'] = array(
+		/*$admin_fields['multiple_dj'] = array(
 									'display' => 'Multiple DJ\'s',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -635,9 +623,9 @@
 									'desc' => 'Check this if you employ DJ\'s',
 									'section' => 'general',
 									'page' => 'settings',
-									); // multiple_dj
+									)*/; // multiple_dj
 									
-		$admin_fields['enable_packages'] = array(
+		/*$admin_fields['enable_packages'] = array(
 									'display' => 'Equipment Packages',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -647,9 +635,9 @@
 									'desc' => 'Check this to enable Equipment Packages & Inventories',
 									'section' => 'general',
 									'page' => 'settings',
-									); // enable_packages
+									); // enable_packages*/
 									
-		$admin_fields['playlist_when'] = array(
+		/*$admin_fields['playlist_when'] = array(
 									'display' => 'Playlist Song Options',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'textarea',
@@ -659,9 +647,9 @@
 									'desc' => 'The options clients can select for when songs are to be played when adding to the playlist. One per line.',
 									'section' => 'playlist',
 									'page' => 'settings',
-									); // playlist_when
+									); // playlist_when*/
 									
-		$admin_fields['playlist_close'] = array(
+		/*$admin_fields['playlist_close'] = array(
 									'display' => 'Close the Playlist',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'text',
@@ -671,9 +659,9 @@
 									'desc' => 'Days before the event should the playlist be closed.',
 									'section' => 'playlist',
 									'page' => 'settings',
-									); // playlist_close
+									); // playlist_close*/
 									
-		$admin_fields['uninst_remove_mdjm_templates'] = array(
+		/*$admin_fields['uninst_remove_mdjm_templates'] = array(
 									'display' => 'Remove Templates?',
 									'key' => 'mdjm_plugin_settings',
 									'type' => 'checkbox',
@@ -731,10 +719,10 @@
 														),
 									'section' => 'playlist',
 									'page' => 'settings',
-									); // upload_playlists
+									); // upload_playlists*/
 		
 /* PAGES TAB */
-		$admin_fields['app_home_page'] = array(
+		/*$admin_fields['app_home_page'] = array(
 									'display' => WPMDJM_APP_NAME . ' Home Page',
 									'key' => 'mdjm_plugin_pages',
 									'type' => 'custom_dropdown',
@@ -840,9 +828,9 @@
 														),
 									'section' => 'pages',
 									'page' => 'pages',
-									); // payments_page
+									); // payments_page*/
 									
-		$admin_fields['availability_check_pass_page'] = array(
+		/*$admin_fields['availability_check_pass_page'] = array(
 									'display' => 'Available Redirect Page',
 									'key' => 'mdjm_plugin_pages',
 									'type' => 'custom_dropdown',
@@ -931,7 +919,7 @@
 									); // availability_check_pass_text
 
 /* PERMISSIONS TAB */
-		$admin_fields['dj_see_wp_dash'] = array(
+		/*$admin_fields['dj_see_wp_dash'] = array(
 									'display' => 'DJ\'s see WP Dashboard?',
 									'key' => 'mdjm_plugin_permissions',
 									'type' => 'checkbox',
@@ -1073,10 +1061,10 @@
 														),
 									'section' => 'templates',
 									'page' => 'permissions',
-									); // dj_disable_template
+									); // dj_disable_template*/
 									
 /* CLIENT DIALOGUE TAB */
-		$admin_fields['deposit_label'] = array(
+		/*$admin_fields['deposit_label'] = array(
 									'display' => 'Label for Deposit:',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'text',
@@ -1098,9 +1086,9 @@
 									'desc' => 'If you don\'t use the word <code>Balance</code>, you can change it here. Whatever you enter will be visible to all users',
 									'section' => 'general',
 									'page' => 'client-text',
-									); // balance_label
+									); // balance_label*/
 									
-		$admin_fields['warn_incomplete_profile'] = array(
+		/*$admin_fields['warn_incomplete_profile'] = array(
 									'display' => 'Incomplete Profile Warning?',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'checkbox',
@@ -1110,9 +1098,9 @@
 									'desc' => 'Display notice to Clients when they login if their Profile is incomplete?',
 									'section' => 'client_zone',
 									'page' => 'client-text',
-									); // warn_incomplete_profile
+									); // warn_incomplete_profile*/
 									
-		$admin_fields['custom_client_text'] = array(
+		/*$admin_fields['custom_client_text'] = array(
 									'display' => 'Enable Customised Text?',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'checkbox',
@@ -1218,9 +1206,9 @@
 														),
 									'section' => 'home_page',
 									'page' => 'client-text',
-									); // home_notactive
+									); // home_notactive*/
 									
-		$admin_fields['contract_intro'] = array(
+		/*$admin_fields['contract_intro'] = array(
 									'display' => 'Contract Sign Intro:',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'mce_textarea',
@@ -1314,9 +1302,9 @@
 														),
 									'section' => 'contract_page',
 									'page' => 'client-text',
-									); // contract_signed
+									); // contract_signed*/
 									
-		$admin_fields['playlist_welcome'] = array(
+		/*$admin_fields['playlist_welcome'] = array(
 									'display' => 'Playlist Welcome:',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'mce_textarea',
@@ -1506,9 +1494,9 @@
 														),
 									'section' => 'playlist_page',
 									'page' => 'client-text',
-									); // playlist_guest_closed
+									); // playlist_guest_closed*/
 									
-		$admin_fields['payment_welcome'] = array(
+		/*$admin_fields['payment_welcome'] = array(
 									'display' => 'Payment Welcome:',
 									'key' => 'mdjm_frontend_text',
 									'type' => 'mce_textarea',
@@ -1674,11 +1662,11 @@
 														),
 									'section' => 'payment_page',
 									'page' => 'client-text',
-									); // payment_noaccess
+									); // payment_noaccess*/
 									
 /* PAYMENTS TAB */
 
-		$admin_fields['pp_cfm_template'] = array(
+		/*$admin_fields['pp_cfm_template'] = array(
 									'display' => 'Payment Received Template:',
 									'key' => 'mdjm_pp_options',
 									'type' => 'custom_dropdown',
@@ -1712,9 +1700,9 @@
 														),
 									'section' => 'payments',
 									'page' => 'payments',
-									); // pp_manual_cfm_template
+									); // pp_manual_cfm_template*/
 		
-		$trans_sources = get_transaction_source();
+		/*$trans_sources = get_transaction_source();
 		foreach( $trans_sources as $source )	{
 			$sources[$source] = $source;	
 		}
@@ -1825,21 +1813,9 @@
 									'desc' => 'Enter methods of payment. First entry will be the default',
 									'section' => 'payments',
 									'page' => 'payments',
-									); // pp_payment_sources
-									
-		/*$admin_fields['pp_transaction_types'] = array(
-									'display' => 'Transaction Types:',
-									'key' => 'mdjm_pp_options',
-									'type' => 'textarea',
-									'class' => 'all-options',
-									'value' => $mdjm_options['pp_transaction_types'],
-									'text' => '',
-									'desc' => 'Enter possible transaction types for both incoming &amp; outgoing transactions. No need to add <code>' . $mdjm_options['balance_label'] . '</code> or <code>' . $mdjm_options['deposit_label'] . '</code>. One per line',
-									'section' => 'payments',
-									'page' => 'payments',
-									); // pp_transaction_types*/
-									
-		$admin_fields['pp_enable'] = array(
+									); // pp_payment_sources*/
+																		
+		/*$admin_fields['pp_enable'] = array(
 									'display' => 'Enable PayPal?',
 									'key' => 'mdjm_pp_options',
 									'type' => 'checkbox',
@@ -1973,19 +1949,7 @@
 									'section' => 'paypal_adv',
 									'page' => 'payments',
 									); // pp_receiver
-									
-		/*$admin_fields['pp_inv_prefix'] = array(
-									'display' => 'Invoice Prefix:',
-									'key' => 'mdjm_pp_options',
-									'type' => 'text',
-									'class' => 'regular-text',
-									'value' => $mdjm_options['pp_inv_prefix'],
-									'text' => '',
-									'desc' => 'Enter a prefix for your invoice numbers. Make sure it is unique if you have multiple stores associated to your PayPal account',
-									'section' => 'paypal_adv',
-									'page' => 'payments',
-									);*/ // pp_inv_prefix
-									
+																		
 		$admin_fields['pp_checkout_style'] = array(
 									'display' => 'Checkout Page Style:',
 									'key' => 'mdjm_pp_options',
@@ -1996,8 +1960,8 @@
 									'desc' => 'If you have created a custom <a href="https://www.paypal.com/customize" target="_blank" title="PayPal\'s Custom Payment Pages: An Overview">PayPal Checkout Page</a>, enter it\'s ID here to use it',
 									'section' => 'paypal_adv',
 									'page' => 'payments',
-									); // pp_checkout_style
-		
+									); // pp_checkout_style*/
+		/*
 		add_settings_section( 'mdjm_general_settings',
 							  '',
 							  'f_mdjm_desc',
@@ -2114,28 +2078,23 @@
 								'custom_args' => $custom_args
 								)
 						);
-		} // foreach
-		/*register_setting( 'mdjm-settings', WPMDJM_SETTINGS_KEY );
-		register_setting( 'mdjm-permissions', 'mdjm_plugin_permissions' );
-		register_setting( 'mdjm-pages', 'mdjm_plugin_pages' );
-		register_setting( 'mdjm-client-text', WPMDJM_FETEXT_SETTINGS_KEY );
-		register_setting( 'mdjm-payments', 'mdjm_pp_options' );*/
+		}*/ // foreach
 	} // f_mdjm_settings_init
 	
-	add_action( 'admin_init', 'f_mdjm_settings_init' );
+	//add_action( 'admin_init', 'f_mdjm_settings_init' );
 
 /**************************************************************
 -	Callbacks for sections, fields & validation
 **************************************************************/	
-	function f_mdjm_desc()	{
+	/*function f_mdjm_desc()	{
 		// Intentionally blank
-	} // f_mdjm_desc
+	} // f_mdjm_desc*/
 
 /* Validate the fields */	
-	function f_mdjm_validate_settings( $input )	{
+	/*function f_mdjm_validate_settings( $input )	{
 		$valid = array();
 		/* Check for incomplete fields */
-		if( !isset( $input['company_name'] ) || empty( $input['company_name'] ) )	{
+		/*if( !isset( $input['company_name'] ) || empty( $input['company_name'] ) )	{
 			add_settings_error(
 				'mdjm_company_name',
 				'mdjm_company_name_texterror',
@@ -2159,7 +2118,7 @@
 	} // f_mdjm_validate_settings
 
 /* Process the fields to be displayed */
-	function f_mdjm_general_settings_callback( $args )	{
+	/*function f_mdjm_general_settings_callback( $args )	{
 		global $mdjm_options;
 		if( isset( $args['type'] ) && $args['type'] == 'custom_dropdown' )	{
 			if( $args['custom_args']['list_type'] == 'page' )	{
@@ -2187,7 +2146,7 @@
 				echo '<select name="' . $args['key'] . '[' . $args['field'] . ']" id="' . $args['field'] . '">';
 				
 				/* -- This is for Manual Payment Template -- */
-				if( $args['field'] == 'pp_manual_cfm_template' )	{
+				/*if( $args['field'] == 'pp_manual_cfm_template' )	{
 					echo '<option value="0"';
 					if( empty( $mdjm_options[$args['field']] ) || $mdjm_options[$args['field']] == 0 )
 						echo ' selected="selected"';
@@ -2317,24 +2276,6 @@
 		if( isset( $args['desc'] ) && !empty( $args['desc'] ) ) echo '<p class="description">' . $args['desc'] . '</p>';
 	} // f_mdjm_general_settings_callback
 
-	/*function f_mdjm_app_validate()	{
-		$lic_check = do_reg_check( 'check' );
-		if( !$lic_check )	{
-			echo '<div class="error">';
-			echo '<p>Your Mobile DJ Manager license has expired. Please visit <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> to renew.</p>';
-			echo '<p>Functionality will be restricted until your license is renewed.</p>';
-			echo '</div>';
-		}
-	}
-	add_action( 'admin_notices', 'f_mdjm_app_validate' );*/
-	
-	/* Validation */
-	/*function f_mdjm_reg_init()	{ /* Update the status if required */
-		/*include WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php';
-		if( false === ( $reg_check = get_transient( $t_query[0] ) ) )
-			do_reg_check( 'set' );
-	}*/
-
 /*
 * do_reg_check
 * 04/10/2014
@@ -2344,6 +2285,8 @@
 	// This function is deprecated //
 	function do_reg_check( $action )	{
 		global $mdjm;
+		
+		$mdjm->debug_logger( 'DEPRECATED function in use ' . __FUNCTION__, true );
 		
 		return $mdjm->_mdjm_validation( $action );
 	}	

@@ -24,6 +24,8 @@ Email automation is also built in, depending on your chosen settings. Quotes can
 As a client, you gain access to a number of features via the main website once you login. These include;
 *	Profile management ensuring that the DJ has all the relevant contact details at all times
 *	Playlist management
+*	Secure online payments via PayPal
+*	Digitally sign event contracts
 *	Invite guests to add songs to the playlist via a unique URL. Clients can remove songs they do not deem appropriate
 
 The main dashboard provides a complete overview of your business detailing the number of events and earnings over the month and year.
@@ -32,14 +34,14 @@ All in all Mobile DJ Manager helps you to run your DJ business efficiently.
 
 == Installation ==
 
-Automated Installation
+<strong>Automated Installation</strong>
 
-1. Login to your WordPress administration screen and select the "Plugins" -> "Add New" from the menu
+1. Login to your WordPress administration screen and select "Plugins" -> "Add New" from the menu
 3. Enter "Mobile DJ Manager" into the Search Plugins text box and hit Enter
 4. Click "Install Now" within the Mobile DJ Manager plugin box
 5. Activate the plugin once installation is completed
 
-Manual Installation
+<strong>Manual Installation</strong>
 
 Once you have downloaded the plugin zip file, follow these simple instructions to get going;
 
@@ -77,30 +79,45 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.1 =
+<strong>Released Sunday 28th June, 2015</strong>
+<ul>
+	<li>Refreshed the Settings Options layout</li>
+	<li>HTML5/CSS3 compatibility on all front end pages</li>
+	<li>Updated Client fields</li>
+	<li><strong>New</strong>: Additional shortcodes for equipment & packages</li>
+	<li><strong>New</strong>: IP address captured during client contract signing and displayed in contract view</li>
+	<li><strong>General</strong>: More improvements to debugging</li>
+	<li><strong>Bug Fix</strong>: Addressed Email Tracking reliability</li>
+	<li><strong>Bug Fix</strong>: {EVENT_TYPE} shortcode was returning ID rather than name</li>
+	<li><strong>Bug Fix</strong>: Playlist submission to MDJM date error</li>
+	<li><strong>Bug Fix</strong>: Broken event link when reviewing sent communication</li>
+</ul>
+
 = 1.2 =
 <strong>Released Tuesday 2nd June, 2015</strong>
-A complete revamp of how Events, Transaction, Venues work plus much much more.
+A complete revamp of how Events, Transactions, and Venues work plus much much more.
 Join our Facebook group for all the latest discussions, news and more - https://www.facebook.com/groups/mobiledjmanager
 <ul>
-	<li><strongNew</strong>: Drag &amp; drop your Contact Form fields to re-order them easily</li>
+	<li><strong>New</strong>: Drag &amp; drop your Contact Form fields to re-order them easily</li>
 	<li><strong>New</strong>: Edit field settings without having to delete and re-create</li>
-	<li><strongNew</strong>: All transactions are now logged, whether automated via PayPal or manually entered by the Admin</li>
-	<li><strongNew</strong>: Notifications to clients when payments are entered manually for events</li>
-	<li><strongNew</strong>: Event Transaction overview is displayed on each event page</li>
-	<li><strongNew</strong>: Transaction Types have been moved and no longer reside within settings</li>
-	<li><strongGeneral</strong>: Email tracking accuracy has been improved. If it says it has been opened, 
+	<li><strong>New</strong>: All transactions are now logged, whether automated via PayPal or manually entered by the Admin</li>
+	<li><strong>New</strong>: Notifications to clients when payments are entered manually for events</li>
+	<li><strong>New</strong>: Event Transaction overview is displayed on each event page</li>
+	<li><strong>New</strong>: Transaction Types have been moved and no longer reside within settings</li>
+	<li><strong>General</strong>: Email tracking accuracy has been improved. If it says it has been opened, 
 		you can be sure that the Client has received and opened the email</li>
-	<li><strongBug Fix</strong>: Printing playlist no longer shows menu</li>
-	<li><strongBug Fix</strong>: Email playlist corrections</li>
-	<li><strongGeneral</strong>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
+	<li><strong>Bug Fix</strong>: Printing playlist no longer shows menu</li>
+	<li><strong>Bug Fix</strong>: Email playlist corrections</li>
+	<li><strong>General</strong>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
 		the DJ's name will be displayed and the reply-to address will be set to that of the DJ too. This also addresses an issue whereby
 		DJ's who have email addresses that do not end in the same domain name as the website where MDJM is installed, cannot send emails
 		due to security controls</li>
-	<li><strongGeneral</strong>: Digital contract signing now requires the client to re-enter their password as an additional verification step</li>
-	<li><strongBug Fix</strong>: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content</li>
-	<li><strongGeneral</strong>: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed</li>
-	<li><strongNew</strong>: Create backups of the MDJM database tables and download within the debugging screen</li>
-	<li><strongGeneral</strong>: Significant improvements to the application debugging. No annoying notification when debugging
+	<li><strong>General</strong>: Digital contract signing now requires the client to re-enter their password as an additional verification step</li>
+	<li><strong>Bug Fix</strong>: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content</li>
+	<li><strong>General</strong>: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed</li>
+	<li><strong>New</strong>: Create backups of the MDJM database tables and download within the debugging screen</li>
+	<li><strong>General</strong>: Significant improvements to the application debugging. No annoying notification when debugging
 		is enabled, however we still only recommend to enable when you are experiencing an issue</li>
 </ul>
 

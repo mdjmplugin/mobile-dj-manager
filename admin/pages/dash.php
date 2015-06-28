@@ -189,10 +189,6 @@
                 </tr>
                 </form>
               <tr>
-                  <td>To do list</td>
-                  <td>(coming soon)</td>
-              </tr>
-              <tr>
                   <td colspan="2"><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
 <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script><br />
 <div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>

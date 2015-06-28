@@ -39,7 +39,7 @@
 			 *
 			 */
 	 		public function mdjm_menu()	{
-				global $mdjm;
+				global $mdjm, $mdjm_settings_page;
 				/* -- Build out the menu structure -- */
 				add_menu_page( __( 'Mobile DJ Manager' ),
 													  __( 'DJ Manager' ), 
@@ -201,7 +201,7 @@
 				global $mdjm_settings;
 				
 				if( !current_user_can( 'administrator' ) )	{
-					if( !isset( $mdjm_settings['']['dj_see_wp_dash'] ) ) remove_menu_page( 'index.php' );
+					if( !isset( $mdjm_settings['permissions']['dj_see_wp_dash'] ) ) remove_menu_page( 'index.php' );
 					remove_menu_page( 'profile.php' );
 				}	
 			} // menu_for_admin
@@ -254,12 +254,12 @@
 						),
 					) );
 					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-settings-pages',
+						'id'		=> 'mdjm-settings-events',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => __( 'Pages' ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=pages' ),
+						'title'	 => __( 'Events' ),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=events' ),
 						'meta'	  => array(
-							'title' => __( 'MDJM Pages Settings' ),
+							'title' => __( 'MDJM Event Settings' ),
 						),
 					) );
 					$admin_bar->add_menu( array(
@@ -272,41 +272,30 @@
 						),
 					) );
 					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-settings-client-text',
+						'id'		=> 'mdjm-settings-emails',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => __( 'Client Dialogue' ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_text' ),
+						'title'	 => __( 'Email Settings' ),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=emails' ),
 						'meta'	  => array(
-							'title' => __( 'MDJM Client Dialogue Settings' ),
+							'title' => __( 'MDJM Email Settings' ),
 						),
 					) );
 					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-settings-client-fields',
+						'id'		=> 'mdjm-settings-client-zone',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => __( 'Client Fields' ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_fields' ),
+						'title'	 => __( MDJM_APP . ' Settings' ),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client-zone' ),
 						'meta'	  => array(
-							'title' => __( 'MDJM Client Field Settings' ),
+							'title' => __( 'MDJM ' . MDJM_APP . ' Settings' ),
 						),
 					) );
-					if( MDJM_PAYMENTS == true )	{
-						$admin_bar->add_menu( array(
-							'id'		=> 'mdjm-settings-payments',
-							'parent'	=> 'mdjm-settings',
-							'title'	 => __( 'Payments' ),
-							'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=payments' ),
-							'meta'	  => array(
-								'title' => __( 'MDJM Online Payment Settings' ),
-							),
-						) );
-					}
 					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-settings-debugging',
+						'id'		=> 'mdjm-settings-payments',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => '<span style="color:#F90">' . __( 'Debugging' . ( MDJM_DEBUG == true ? ' (On)' : ' (Off)' ) ) . '</span>',
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=debugging' ),
+						'title'	 => __( 'Payment Settings' ),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=payments' ),
 						'meta'	  => array(
-							'title' => __( 'MDJM Debug Settings' ),
+							'title' => __( 'MDJM Payment Settings' ),
 						),
 					) );
 				/* -- Automated Tasks -- */
@@ -701,9 +690,9 @@
 				if( !current_user_can( 'manage_options' ) )
 			        wp_die( __( 'MDJM: This page requires Administrative priviledges.' ) );
 				
-				include_once( MDJM_PAGES_DIR . '/settings-general.php' );
+				include_once( MDJM_PLUGIN_DIR . '/admin/settings/class-mdjm-settings-page.php' );
 			} // mdjm_settings_page
-			
+						
 			/*
 			 * The MDJM Playlists page
 			 *

@@ -299,9 +299,11 @@
 			 *
 			 */
 			public function single_event()	{
-				global $clientzone, $mdjm, $my_mdjm, $mdjm_settings;
+				global $clientzone, $mdjm, $my_mdjm, $mdjm_settings, $post;
 				
 				$event = isset( $_GET['event_id'] ) ? get_post( $_GET['event_id'] ) : $my_mdjm['next'][0];	
+				
+				$post = $event;
 				
 				if( !$mdjm->mdjm_events->is_my_event( $event->ID ) )	{
 					if( MDJM_DEBUG == true )
@@ -327,7 +329,7 @@
 				else	{
 					echo '<div id="mdjm_event_updated"></div>';
 					echo '<p>' . __( 'Below are the details of your upcoming event on ' . date( 'l, jS F Y', $eventinfo['date'] ) . '.' ) . '</p>' . "\r\n";
-					echo '<p>If any of the event details are incorrect, please <a href="mailto:' . $mdjm_settings['main']['system_email'] . 
+					echo '<p>If any of the event details are incorrect, please <a href="mailto:' . $mdjm_settings['email']['system_email'] . 
 						'">contact me now</a>.</p>' . "\r\n";
 						
 					// Incomplete Profile warning

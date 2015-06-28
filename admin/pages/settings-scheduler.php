@@ -3,9 +3,7 @@
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	f_mdjm_has_updated();
-	
+		
 /*
 * settings-scheduler.php 
 * 13/11/2014
@@ -16,6 +14,7 @@
 	$mdjm_cron = new MDJM_Cron();
 		
 	global $mdjm_settings;
+		
 	
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{
@@ -28,7 +27,7 @@
 						$mdjm_schedules[$task['slug']]['active'] = 'N';
 					}
 					else	{
-						$mdjm_schedules[$task['slug']]['active'] = $mdjm_settings['main']['upload_playlists'];
+						$mdjm_schedules[$task['slug']]['active'] = ( !empty( $mdjm_settings['playlist']['upload_playlists'] ) ? 'Y' : 'N' );
 					}
 				}
 				/* Now activate the selected tasks */
@@ -49,7 +48,7 @@
 					}
 				}
 				update_option( 'mdjm_schedules', $mdjm_schedules );
-				f_mdjm_update_notice( 'updated', 'Settings Saved' );
+				mdjm_update_notice( 'updated', 'Settings Saved' );
 			}
 		} // if( $_POST['submit'] == 'Save Changes' )
 		elseif( $_POST['submit'] == 'Update Task' )	{
@@ -184,7 +183,7 @@
 				$rowclass = '';
 				if( $i == 1 )
 					$rowclass = ' class="alt"';
-				if( $schedule['active'] != 'Y' || $schedule['slug'] == 'upload-playlists' && !$mdjm_settings['main']['upload_playlists'] )
+				if( $schedule['active'] != 'Y' || $schedule['slug'] == 'upload-playlists' && empty( $mdjm_settings['playlist']['upload_playlists'] ) )
 					$rowclass = ' class="form-invalid"';
 				?>
                 <tr<?php if( $rowclass != '' ) echo $rowclass; ?>>
@@ -196,7 +195,7 @@
 				}
 				else	{
 					?>
-                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $mdjm_settings['main']['upload_playlists'], 'Y' ); ?> disabled="disabled" title="This setting is set on the General tab of the settings pages. it cannot be adjusted here" /></td>
+                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $schedule['active'], 'Y' ); ?> disabled="disabled" title="This setting is set on the General tab of the settings pages. it cannot be adjusted here" /></td>
                     <?php
 				}
 				?>

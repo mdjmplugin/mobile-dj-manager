@@ -12,15 +12,15 @@
 	
 	// If debugging is enabled, we'll capture IPN requests into the specified log file for review
 	
-	if( isset( $mdjm_settings['payments']['pp_debug'] ) && $mdjm_settings['payments']['pp_debug'] == 'Y' )
+	if( isset( $mdjm_settings['paypal']['paypal_debug'] ) )
 		$pp_debug = 1;
 
-	if( isset( $mdjm_settings['payments']['pp_sandbox'] ) && $mdjm_settings['payments']['pp_sandbox'] == 'Y' )
+	if( isset( $mdjm_settings['paypal']['enable_sandbox'] ) )
 		$pp_sandbox = 1;
 
 	define( 'PP_DEBUG', $pp_debug );
 	
-	define( 'PP_LOG_FILE', WPMDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log' );
+	define( 'PP_LOG_FILE', MDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log' );
 	
 	define( 'USE_SANDBOX', $pp_sandbox );
 	
@@ -50,15 +50,15 @@
 		$req .= "&$key=$value";
 	}
 	
-	$pp_email = $mdjm_settings['payments']['pp_receiver'];
+	$pp_email = $mdjm_settings['paypal']['receiver_email'];
 	
 	// Now post the IPN data back to PayPal to validate the IPN request is real
 	if( USE_SANDBOX == true ) {
 		error_log( date( '[' . MDJM_SHORTDATE_FORMAT . ' ' . MDJM_TIME_FORMAT . '] ' ). "Using Sandbox" . PHP_EOL, 3, PP_LOG_FILE );
 		$paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 		
-		if( isset( $mdjm_settings['payments']['pp_sandbox_email'] ) && !empty( $mdjm_settings['payments']['pp_sandbox_email'] ) )	{
-			$pp_email = $mdjm_settings['payments']['pp_sandbox_email'];
+		if( isset( $mdjm_settings['paypal']['sandbox_email'] ) && !empty( $mdjm_settings['paypal']['sandbox_email'] ) )	{
+			$pp_email = $mdjm_settings['paypal']['sandbox_email'];
 		}
 	} 
 	else {
@@ -153,7 +153,7 @@
 		}
 		
 		// Make sure the currency is correct
-		if( $_POST['mc_currency'] != $mdjm_settings['main']['currency'] ) {
+		if( $_POST['mc_currency'] != $mdjm_settings['payments']['currency'] ) {
 			if( PP_DEBUG == true ) {
 				error_log( 'WARNING: Currency does not match: ' . $_POST['mc_currency'] . PHP_EOL, 3, PP_LOG_FILE );
 			}
@@ -198,18 +198,17 @@
 			}
 			
 			// Include the taxes
-			if( isset( $mdjm_settings['payments']['pp_enable_tax'], $mdjm_settings['payments']['pp_tax_type'], $mdjm_settings['payments']['pp_tax_rate'] ) 
-				&& $mdjm_settings['payments']['pp_enable_tax'] == 'Y' )	{
+			if( isset( $mdjm_settings['payments']['enable_tax'], $mdjm_settings['payments']['tax_type'], $mdjm_settings['payments']['tax_rate'] ) )	{
 					
 				// Add tax rate as percent to deposit & balance
-				if( $mdjm_settings['payments']['pp_tax_type'] == 'percentage' )	{
-					$deposit *= '1.' . $mdjm_settings['payments']['pp_tax_rate'];
-					$balance *= '1.' . $mdjm_settings['payments']['pp_tax_rate'];
+				if( $mdjm_settings['payments']['tax_type'] == 'percentage' )	{
+					$deposit *= '1.' . $mdjm_settings['payments']['tax_rate'];
+					$balance *= '1.' . $mdjm_settings['payments']['tax_rate'];
 				}
 				// Add tax rate as fixed value to deposit & balance
 				else	{
-					$deposit += $mdjm_settings['payments']['pp_tax_rate'];
-					$balance += $mdjm_settings['payments']['pp_tax_rate'];	
+					$deposit += $mdjm_settings['payments']['tax_rate'];
+					$balance += $mdjm_settings['payments']['tax_rate'];	
 				}
 			}
 			
@@ -266,7 +265,7 @@
 				error_log( date( '[' . MDJM_SHORTDATE_FORMAT . ' ' . MDJM_TIME_FORMAT . '] ' ). $errmsg . PHP_EOL, 3, PP_LOG_FILE );
 			}
 			$body = 'IPN failed fraud checks: ' . "\n" . $errmsg . "\n\n";
-			wp_mail( $mdjm_settings['main']['system_email'], 'IPN Fraud Warning', $body );
+			wp_mail( $mdjm_settings['email']['system_email'], 'IPN Fraud Warning', $body );
 		}
 		// If validation succeeds, we can process the order
 		else	{
@@ -361,7 +360,7 @@
 				$mdjm->mdjm_events->add_journal( array(
 							'user' 			=> get_post_meta( $post->ID, '_mdjm_event_client', true ),
 							'event'		   => $post->ID,
-							'comment_content' => 'Payment of ' . MDJM_CURRENCY . $_POST['mc_gross'] . 'received via PayPal for event ' . $_POST['custom'],
+							'comment_content' => 'Payment of ' . display_price( $_POST['mc_gross'] ) . 'received via PayPal for event ' . $_POST['custom'],
 							'comment_type' 	=> 'mdjm-journal',
 							),
 							array(
@@ -379,15 +378,15 @@
 				$mdjm->debug_logger( 'Generating email...' );
 					
 			$payment_rcvd_email = $mdjm->send_email( array( 
-									'content'	=> $mdjm_settings['payments']['pp_cfm_template'],
+									'content'	=> $mdjm_settings['templates']['payment_cfm_template'],
 									'to'		 => get_post_meta( $post->ID, '_mdjm_event_client', true ),
 									'from'	   => 0,
 									'journal'	=> 'email-client',
 									'event_id'   => $post->ID,
 									'html'	   => true,
 									'cc_dj'	  => false,
-									'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
-									'source'	 => MDJM_CURRENCY . $_POST['mc_gross'] . ' ' . $_POST['custom'] . ' payment received',
+									'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+									'source'	 => display_price( $_POST['mc_gross'] ) . ' ' . $_POST['custom'] . ' payment received',
 								) );
 			if( $payment_rcvd_email )	{
 				if( MDJM_DEBUG == true )
@@ -401,7 +400,7 @@
 			/* -- Email the Admin confirming payment -- */			
 			$email_headers = 'MIME-Version: 1.0' . "\r\n";
 			$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-			$email_headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['main']['system_email'] . '>' . "\r\n";
+			$email_headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['email']['system_email'] . '>' . "\r\n";
 			
 			$subject = 'Payment received for Event ' . $_POST['item_number'];
 			$body = '<html>' . "\n" . '<body>' . "\n";
@@ -416,7 +415,7 @@
 			
 			$body .= 'Event Status: ' . $event_stati[$post->post_status] . '<br />' . "\n";
 			$body .= 'Client: ' . get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) )->display_name . '<br />' . "\n";
-			$body .= 'Payment: ' . MDJM_CURRENCY . $_POST['mc_gross'] . ' (' . $_POST['custom'] . ')' . '<br />' . "\n";
+			$body .= 'Payment: ' . display_price( $_POST['mc_gross'] ) . ' (' . $_POST['custom'] . ')' . '<br />' . "\n";
 			$body .= 'Payment by: ' . $_POST['first_name'] . ' ' . $_POST['last_name'] .' (' . $_POST['payer_email'] . ')</h4>' . "\n";
 			$body .= 'Payment Date/Time: ' . date( MDJM_SHORTDATE_FORMAT . ' H:i:s', strtotime( $_POST['payment_date'] ) ) . '</h4>' . "\n";
 			$body .= '<hr />' . "\n";
@@ -424,7 +423,7 @@
 			$body .= MDJM_COMPANY . '</p>' . "\n";
 			$body .= '</body>' . "\n" . '</html>' . "\n";
 			
-			if( wp_mail( $mdjm_settings['main']['system_email'], $subject, $body, $email_headers ) )	{
+			if( wp_mail( $mdjm_settings['email']['system_email'], $subject, $body, $email_headers ) )	{
 				if( PP_DEBUG == true )
 					error_log( 'PASS: Payment confirmation sent to admin' . PHP_EOL, 3, PP_LOG_FILE );
 			}

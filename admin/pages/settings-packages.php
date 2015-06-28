@@ -21,7 +21,7 @@
 					unset( $packages[$_POST['slug']] );
 					
 				$package_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['package_name'] ) ) );
-				if( $packages[$package_id] )	{
+				if( !empty( $packages[$package_id] ) )	{
 					$package_id = sanitize_text_field( $_POST['package_name'] ) . '_';
 				}
 				$djs_have = '';
@@ -53,11 +53,11 @@
 				update_option( 'mdjm_packages', $packages );
 				$curr_action = 'created';
 				if( $_POST['submit'] == 'Update Package' ) $curr_action = 'updated';
-				f_mdjm_update_notice( 'updated', 'Package ' . $curr_action . ' successfully' );
+				mdjm_update_notice( 'updated', 'Package ' . $curr_action . ' successfully' );
 				unset( $_POST );
 			}
 			else	{
-				f_mdjm_update_notice( 'error', 'ERROR: You need to enter a Package Name' );	
+				mdjm_update_notice( 'error', 'ERROR: You need to enter a Package Name' );	
 			}
 		}
 	}
@@ -65,7 +65,7 @@
 		$packages = get_option( 'mdjm_packages' );
 		unset( $packages[$_POST['slug']] );
 		update_option( 'mdjm_packages', $packages );
-		f_mdjm_update_notice( 'updated', 'The selected packages have been deleted'  );
+		mdjm_update_notice( 'updated', 'The selected packages have been deleted'  );
 		unset( $_POST );
 	}
 	
@@ -73,7 +73,7 @@
 	global $mdjm_options;
 	$packages = get_option( 'mdjm_packages' );
 	asort( $packages );
-	$djs = f_mdjm_get_djs();
+	$djs = mdjm_get_djs();
 
 	if( $packages )	{ /* Option to edit existing packages */
 		echo '<h3>Packages</h3>';
@@ -141,7 +141,7 @@
     <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( !empty( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo ( !empty( $_POST['package_desc'] ) ? $_POST['package_desc'] : '' ); } ?></textarea></td>
 	</tr>
      <?php
-		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
+		if ( MDJM_MULTI == true )	{
 		?>
             <tr>
             <td class="row-title"><label for="djs">DJs with this Package:</label></th>

@@ -9,8 +9,12 @@
 * since 0.9.3
 * Displays overview of changes in updated version
 */
+
 	function f_mdjm_updated_header( $ver )	{
 		global $mdjm;
+		
+		
+		
 		?>
         <div id="fb-root"></div>
 		<script>(function(d, s, id) {
@@ -107,29 +111,83 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.2.1
+**************************************************/
+	function f_mdjm_updated_to_1_2_1()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Updated Settings</font><br />
+		We have given the <a href="<?php echo mdjm_get_admin_page( 'settings'); ?>">Settings</a> page an overhaul. The number of settings increases with almost every new update and we felt it was time to re-organise to make each setting a little easier to find. The <a href="http://www.mydjplanner.co.uk/settings-overview/" target="_blank">Settings Overview User Guide</a> has also been updated.<br /><br />
+        <strong>New Payments Settings</strong>
+        <ui>
+            <li>Additional currencies added</li>
+            <li><code>Display Currency Symbol</code> Choose where and how the currency symbol is displayed</li>
+            <li><code>Decimal Point</code> Choose whether the decimal is displayed as a dot, comma or dash</li>
+            <li><code>Thousands Seperator</code> Choose whether to use a dot or comma as the thousands seperator</li>
+        </ui>
+        We've also added some additional Custom Text options allowing you to specify the text displayed on the Contract page during digital signing
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Client Fields &amp; <?php echo MDJM_APP; ?> Profile Page</font><br />
+		The <a href="<?php echo mdjm_get_admin_page( 'client_fields'); ?>">Client Fields</a> admin page has been updated to enable the following additional functionality...
+        <ui>
+        	<li>Drag &amp; drop to re-order the fields. The order specified will be how these fields are displayed on the 
+            <a href="<?php $mdjm->get_link( MDJM_PROFILE_PAGE, false ); ?>" target="_blank"><?php echo MDJM_APP; ?> Profile Page</a> when a client is updating their profile</li>
+            <li>You choose which fields are displayed and which are required to be filled in. Exceptions are First Name, Last Name and Email Address, all of which are always enabled and required</li>
+            <li>You can re-label any of the fields. The label you choose will be the label displayed to the client. i.e Change <code>Last Name</code> to <code>Surname</code> if you wish</li>
+        </ui>
+        In addition we have updated the <a href="<?php $mdjm->get_link( MDJM_PROFILE_PAGE, false ); ?>" target="_blank"><?php echo MDJM_APP; ?> Profile Page</a> to be more efficient
+        as well as HTML5 &amp; CSS3 compatible.
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">New Shortcodes for Equipment &amp; Packages</font><br />
+		We've added some new shortcodes for you...
+        <ui>
+        	<li><code>{AVAILABLE_PACKAGES}</code> - Display a list of packages that are currently available. If this shortcode is used with reference to an event that has a <?php echo MDJM_DJ; ?> assigned, only the packages that <?php echo MDJM_DJ; ?> can provide are displayed</li>
+            <li><code>{AVAILABLE_PACKAGES_COST}</code> - Same as <code>{AVAILABLE_PACKAGES}</code> but additionally includes the cost of the package</li>
+            <li><code>{EVENT_PACKAGE}</code> - Display the package that is currently assigned to the event. If no package is assigned, <code>No package is assigned to this event</code> is returned</li>
+            <li><code>EVENT_PACKAGE_COST}</code> - Same as <code>{EVENT_PACKAGE}</code> but additionally includes the cost of the package</li>
+            <li><code>{AVAILABLE_ADDONS}</code> - Display a list of equipment add-ons that are currently available. If this shortcode is used with reference to an event that has a <?php echo MDJM_DJ; ?> assigned, only the addons that <?php echo MDJM_DJ; ?> can provide are displayed</li>
+            <li><code>{AVAILABLE_ADDONS_COST}</code> - Same as <code>{AVAILABLE_ADDONS}</code> but additionally includes the cost of the add-on</li>
+            <li><code>{EVENT_ADDONS}</code> - Display the add-ons that are currently assigned to the event. If no add-on is assigned, <code>No addons are assigned to this event</code> is returned</li>
+            <li><code>EVENT_ADDONS_COST}</code> - Same as <code>{EVENT_ADDONS}</code> but additionally includes the cost of the add-on</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-new">New</span>: IP address captured during client contract signing and displayed in contract view</li>
+                <li><span class="mdjm-new">New</span>: <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>">Payment settings</a> to select custom decimal and 
+                thousands seperator for currency as well dictating whether the currency symbol appears before of after the price</li>
+                <li><span class="mdjm-general">General</span>: Refreshed <?php echo MDJM_APP; ?> code for HTML5 &amp; CSS3 compatibility</li>
+                <li><span class="mdjm-general">General</span>: Additional currency symbols added</li>
+                <li><span class="mdjm-general">General</span>: More improvements to debugging</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Addressed Email Tracking reliability</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: <code>{EVENT_TYPE}</code> shortcode was returning ID rather than name</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Playlist submission to MDJM date error</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Broken event link when reviewing sent communication</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+		
+	} // f_mdjm_updated_to_1_2_1
+
+/**************************************************
 				VERSION 1.2
 **************************************************/
 	function f_mdjm_updated_to_1_2()	{
 		global $mdjm;
-		
-		/* -- Complete the upgrade procedures for version 1.2 -- */
-		
-		$update_status = get_option( 'mdjm_update' );
-		
-		if( !empty( $update_status ) && $update_status == '1.2' )	{
-		
-			if( !class_exists( 'MDJM_Upgrade' ) )
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-upgrade.php' );
-			
-			$mdjm_upgrade = new MDJM_Upgrade();
-			
-			$mdjm_upgrade->update_to_1_2();
-			
-			if( file_exists( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' ) )
-				unlink( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
-			
-			delete_option( 'mdjm_update' );
-		}
 		
 		/* -- Display the update notes -- */
 		?>
@@ -168,6 +226,7 @@
                 <li><span class="mdjm-new">New</span>: Transaction Types have been moved and no longer reside within settings</li>
                 <li><span class="mdjm-general">General</span>: Email tracking accuracy has been improved. If it says it has been opened, 
                 	you can be sure that the Client has received and opened the email</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Unreliable email tracking resolved</li>
                 <li><span class="mdjm-bug">Bug Fix</span>: Printing playlist no longer shows menu</li>
                 <li><span class="mdjm-bug">Bug Fix</span>: Email playlist corrections</li>
                 <li><span class="mdjm-general">General</span>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
@@ -1222,10 +1281,16 @@ Additionally, in some system generated emails (enquiry etc.) this address is use
         <?php
 	} // f_mdjm_updated_to_0_9_3
 	
+	// Check for additional updates and execute
+	$update = get_option( 'mdjm_update_me' );
+	
+	if( !empty( $update ) )
+		include( MDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-upgrade.php' );
+	
 	if( isset( $_GET['ver'] ) || isset( $_GET['updated'] ) )	{
 		if( isset( $_GET['updated'] ) && $_GET['updated'] == 1 )	{
-			$ver = str_replace( '.', '_', WPMDJM_VERSION_NUM );
-			$func = 'f_mdjm_updated_to_' . str_replace( '.', '_', WPMDJM_VERSION_NUM );
+			$ver = str_replace( '.', '_', MDJM_VERSION_NUM );
+			$func = 'f_mdjm_updated_to_' . $ver;
 		}
 		else	{
 			$ver = $_GET['ver'];

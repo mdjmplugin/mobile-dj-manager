@@ -1,6 +1,26 @@
 <?php
 
 /*
+ * Save the client fields order
+ *
+ *
+ */
+	function save_mdjm_client_field_order()	{
+		$client_fields = get_option( MDJM_CLIENT_FIELDS );
+				
+		foreach( $_POST['fields'] as $order => $field )	{
+			$i = $order + 1;
+						
+			$client_fields[$field]['position'] = $i;
+			
+		}
+		update_option( MDJM_CLIENT_FIELDS, $client_fields );
+		
+		die();
+	} // save_mdjm_client_field_order
+	add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_order' );
+
+/*
  * Save the contact form field order
  *
  *

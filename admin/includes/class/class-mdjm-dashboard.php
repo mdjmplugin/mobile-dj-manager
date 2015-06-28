@@ -192,7 +192,7 @@
 					
 			} // End foreach( $events as $event )
 			
-			return MDJM_CURRENCY . number_format( $earnings, 2 );
+			return display_price( $earnings );
 		} // period_earnings
 				
 	} // Class

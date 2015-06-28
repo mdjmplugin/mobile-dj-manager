@@ -63,7 +63,7 @@
 					
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-income' )	{
-						$transactions .= MDJM_CURRENCY . get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
+						$transactions .= display_price( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
 						$total_in += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
 					}
 					else	{
@@ -73,7 +73,7 @@
 					
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-expenditure' )	{
-						$transactions .= MDJM_CURRENCY . get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
+						$transactions .= display_price( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
 						$total_out += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
 					}
 					else	{
@@ -94,9 +94,9 @@
 				$transactions .= '<tfoot>' . "\r\n";
 				$transactions .= '<tr class="border_top">' . "\r\n";
 				$transactions .= '<th width="25%" align="left">&nbsp;</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . MDJM_CURRENCY . number_format( $total_in, 2 ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . MDJM_CURRENCY . number_format( $total_out, 2 ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">Earnings: ' . MDJM_CURRENCY . number_format( $total_in - $total_out, 2 ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . display_price(  $total_in ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . display_price(  $total_out ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">Earnings: ' . display_price(  $total_in - $total_out ) . '</th>' . "\r\n";
 				$transactions .= '</tr>' . "\r\n";
 				$transactions .= '</tfoot>' . "\r\n";
 				$transactions .= '</table>' . "\r\n";
@@ -140,7 +140,7 @@
 			
 			/* -- Post Meta -- */
 			$trans_meta['_mdjm_txn_status'] = 'Completed';
-			$trans_meta['_mdjm_txn_source'] = $mdjm_settings['payments']['pp_default_method'];
+			$trans_meta['_mdjm_txn_source'] = $mdjm_settings['payments']['default_type'];
 			$trans_meta['_mdjm_txn_total'] = ( $type == MDJM_BALANCE_LABEL ? str_replace( MDJM_CURRENCY, '', $eventinfo['balance'] ) 
 				: str_replace( MDJM_CURRENCY, '', $eventinfo['deposit'] ) );
 					
@@ -152,7 +152,7 @@
 			
 			$trans_meta['_mdjm_payment_from'] = $eventinfo['client']->display_name;
 																				
-			$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['main']['currency'];
+			$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['payments']['currency'];
 			
 			/* -- Create the transaction post -- */
 			wp_update_post( $trans_data );
@@ -168,7 +168,7 @@
 			$mdjm->debug_logger( 'Event Transaction procedure complete' );
 			
 			// Email client with defined template
-			if( !empty( $mdjm_settings['payments']['pp_manual_cfm_template'] ) && $mdjm_settings['payments']['pp_manual_cfm_template'] != 0 )	{
+			if( !empty( $mdjm_settings['templates']['manual_payment_cfm_template'] ) && $mdjm_settings['templates']['manual_payment_cfm_template'] != 0 )	{
 				$mdjm->debug_logger( 'Configured to email client with payment receipt confirmation' );
 												
 				$filters = array(
@@ -178,7 +178,7 @@
 							);
 							
 				/* -- Get the template and perform the {PAYMENT_*) filter replacements -- */
-				$template = get_post( $mdjm_settings['payments']['pp_manual_cfm_template'] );
+				$template = get_post( $mdjm_settings['templates']['manual_payment_cfm_template'] );
 				$message = $template->post_content;
 				$message = apply_filters( 'the_content', $message );
 				$message = str_replace( ']]>', ']]&gt;', $message );
@@ -303,7 +303,7 @@
 					$trans_meta['_mdjm_payment_to'] = sanizitize_text_field( $_POST['to'] );
 				}
 							
-				$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['main']['currency'];
+				$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['payments']['currency'];
 				
 				/* -- Create the transaction post -- */
 				wp_update_post( $trans_data );
@@ -390,6 +390,16 @@
 			
 			return $transactions;
 		} // get_earnings
+		
+		/*
+		 * If an payment is cancelled, we still want it logged
+		 *
+		 *
+		 *
+		 */
+		function cancel_transaction( $event )	{
+			
+		} // cancel_transaction
 		
 	} // class MDJM_Transactions
  

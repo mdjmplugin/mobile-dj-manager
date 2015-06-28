@@ -29,7 +29,7 @@
 			
 			$clientdata['user_email'] = $_POST['client_email'];
 			$clientdata['user_login'] = $clientdata['user_email'];
-			$clientdata['user_pass'] = wp_generate_password( $mdjm_settings['main']['pass_length'] );
+			$clientdata['user_pass'] = wp_generate_password( $mdjm_settings['clientzone']['pass_length'] );
 			$clientdata['role'] = 'client';
 			
 			/* -- Create the user -- */
@@ -299,17 +299,31 @@
 		 */
 		public function mdjm_event_by( $field, $data )	{
 			global $wpdb;
-			
+					
 			if( empty( $field ) || empty( $data ) )
 				return;
 			
 			switch( $field )	{
-				case 'ID':
-					$event_details = get_post( $data );
-					break;	
+				case 'ID': // A general event post ID lookup
+					return get_post( $data );
+				break;
+				case 'playlist': // Lookup by playlist guest access string
+					$event_details = get_posts( array(
+							'posts_per_page'	=> 1,
+							'post_type'		 => MDJM_EVENT_POSTS,
+							'post_status'	   => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
+							'meta_key'		  => '_mdjm_event_date',
+							'meta_query'		=> array(
+													'key' 	  => '_mdjm_event_playlist_access',
+													'value'	=> $data,
+													'compare'  => '=',
+														),
+							) );
+					return get_post( $event_details[0]->ID );
+				break;
 			}
 						
-			return $event_details;
+			return false;
 		} // mdjm_event_by
 		
 		/* List employee bookings by given date
@@ -584,9 +598,9 @@
 							'dj'			  => !empty( $dj ) ? get_userdata( $dj ) : 'Not Specified',
 							'start'		   => !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : 'Not Specified',
 							'finish'	      => !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : 'Not Specified',
-							'cost' 			=> !empty( $cost ) ? MDJM_CURRENCY . number_format( $cost, 2 ) : 'Not Specified',
-							'deposit' 		 => !empty( $deposit ) ? MDJM_CURRENCY . number_format( $deposit, 2 ) : '0.00',
-							'balance' 		 => !empty( $deposit ) ? MDJM_CURRENCY . number_format( ( $cost - $deposit ), 2 ) : 'Not Specified',
+							'cost' 			=> !empty( $cost ) ? display_price( $cost ) : 'Not Specified',
+							'deposit' 		 => !empty( $deposit ) ? display_price( $deposit ) : '0.00',
+							'balance' 		 => !empty( $deposit ) ? display_price( $cost - $deposit ) : 'Not Specified',
 							'deposit_status'  => !empty( $deposit_status ) ? $deposit_status : 'Due',
 							'balance_status'  => !empty( $balance_status ) ? $balance_status : 'Due',
 							'type'			=> $this->get_event_type( $post_id ),
@@ -778,14 +792,14 @@
 					$mdjm->debug_logger( '	-- Generating Email' );
 					
 				$quote = $mdjm->send_email( array( 
-									'content'	=> !empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template'] : $mdjm_settings['main']['email_enquiry'],
+									'content'	=> !empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template'] : $mdjm_settings['templates']['enquiry'],
 									'to'		 => $event_data['_mdjm_event_client'],
-									'from'	   => $mdjm_settings['main']['enquiry_email_from'] == 'dj' ? $_POST['_mdjm_event_dj'] : 0,
+									'from'	   => $mdjm_settings['templates']['enquiry_from'] == 'dj' ? $_POST['_mdjm_event_dj'] : 0,
 									'journal'	=> 'email-client',
 									'event_id'   => $post_id,
 									'html'	   => true,
-									'cc_dj'	  => isset( $mdjm_settings['main']['bcc_dj_to_client'] ) ? true : false,
-									'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
+									'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+									'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 									'source'	 => 'Event Enquiry',
 								) );
 				if( $quote )	{
@@ -834,8 +848,8 @@
 				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
 			/* -- Email the contract to the client is required -- */
-			$contact_client = isset( $mdjm_settings['main']['contract_to_client'] ) ? true : false;
-			$contract_email = isset( $mdjm_settings['main']['email_contract'] ) ? $mdjm_settings['main']['email_contract'] : false;
+			$contact_client = isset( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
+			$contract_email = isset( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : false;
 			
 			if( !$mdjm_posts->post_exists( $contract_email ) )	{
 				if( MDJM_DEBUG == true )
@@ -852,12 +866,12 @@
 					$contract_email = $mdjm->send_email( array( 
 											'content'	=> $contract_email,
 											'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
-											'from'	   => $mdjm_settings['main']['contract_email_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
+											'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
 											'journal'	=> 'email-client',
 											'event_id'   => $post_id,
 											'html'	   => true,
-											'cc_dj'	  => isset( $mdjm_settings['main']['bcc_dj_to_client'] ) ? true : false,
-											'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
+											'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+											'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 											'source'	 => 'Event Status to Awaiting Contract',
 										) );
 					if( $contract_email )	{
@@ -903,10 +917,10 @@
 				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
 			/* -- Email the confirmation to the client & DJ if required -- */
-			$contact_client = isset( $mdjm_settings['main']['booking_conf_to_client'] ) ? true : false;
-			$contact_dj = isset( $mdjm_settings['main']['booking_conf_to_dj'] ) ? true : false;
-			$client_email = isset( $mdjm_settings['main']['email_client_confirm'] ) ? $mdjm_settings['main']['email_client_confirm'] : false;
-			$dj_email = isset( $mdjm_settings['main']['email_dj_confirm'] ) ? $mdjm_settings['main']['email_client_confirm'] : false;
+			$contact_client = isset( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
+			$contact_dj = isset( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? true : false;
+			$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['main']['booking_conf_client'] : false;
+			$dj_email = isset( $mdjm_settings['templates']['booking_conf_dj'] ) ? $mdjm_settings['templates']['booking_conf_dj'] : false;
 			
 			if( !$mdjm_posts->post_exists( $client_email ) )	{
 				if( MDJM_DEBUG == true )
@@ -924,12 +938,12 @@
 				$approval_email = $mdjm->send_email( array( 
 										'content'	=> $client_email,
 										'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
-										'from'	   => $mdjm_settings['main']['confirm_email_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
+										'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
 										'journal'	=> 'email-client',
 										'event_id'   => $post_id,
 										'html'	   => true,
-										'cc_dj'	  => isset( $mdjm_settings['main']['bcc_dj_to_client'] ) ? true : false,
-										'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
+										'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+										'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 										'source'	 => 'Event Status to Approved',
 									) );
 				if( $approval_email )	{
@@ -959,7 +973,7 @@
 											'event_id'   => $post_id,
 											'html'	   => true,
 											'cc_dj'	  => false,
-											'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_dj'] ) ? true : false,
+											'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_dj'] ) ? true : false,
 											'source'	 => 'Event Status to Approved',
 										) );
 					if( $approval_dj_email )	{
@@ -1083,14 +1097,12 @@
 		 * @param	str		$date	The date (timestamp) of the event
 		 * @return	bool			true if open, otherwise false
 		 */
-		public function playlist_status( $date )	{
-			global $mdjm_settings;
-				
+		public function playlist_status( $date )	{				
 			/* Playlist never closes */
-			if( empty( $mdjm_settings['main']['playlist_close'] ) || $mdjm_settings['main']['playlist_close'] == 0 )
+			if( MDJM_PLAYLIST_CLOSE == 0 )
 				return true;
 				
-			return ( time() > ( $date - ( $mdjm_settings['main']['playlist_close'] * DAY_IN_SECONDS ) ) ?
+			return ( time() > ( $date - ( MDJM_PLAYLIST_CLOSE * DAY_IN_SECONDS ) ) ?
 				false : true );
 				
 		} // playlist_status
@@ -1106,6 +1118,47 @@
 			
 			return $pl_ref;
 		} // playlist_ref
+		
+		/*
+		 * Retrieve the playlist for the current event grouped by category
+		 *
+		 * @param	int			$event		Required: The event ID
+		 * @return	arr|bool	$entries	false if no records or array of songs by category
+		 */
+		function get_playlist_by_cat( $event )	{
+			global $wpdb;
+						
+			$categories = $wpdb->get_results( "SELECT DISTINCT play_when as cat 
+				FROM `" . MDJM_PLAYLIST_TABLE . "` WHERE `event_id` = '" . $event . "' ORDER BY `play_when`" );
+			
+			if( $categories )	{
+				foreach( $categories as $category )	{
+					$songs = $wpdb->get_results( "SELECT * FROM `" . MDJM_PLAYLIST_TABLE . "` 
+						WHERE `event_id` = '" . $event . "' AND `play_when` = '" . $category->cat . "'" );
+						
+					$entries[$category->cat] = $songs;	
+				}
+				
+				return $entries;
+			}
+			else
+				return false;
+		} // get_playlist_by_cat
+		
+		/*
+		 * Count the songs in the playlist for the given event
+		 *
+		 * @param	int			$event		Required: The event ID
+		 * @return	int|bool	$count		The number of records or false if none
+		 */
+		function count_playlist_entries( $event )	{
+			global $wpdb;
+			
+			$count = $wpdb->get_var( "SELECT COUNT(*) FROM " . MDJM_PLAYLIST_TABLE . 
+														" WHERE `event_id` = " . $event );
+			
+			return ( !empty( $count ) ? $count : '0' );
+		} // count_playlist_entries
 
 /*
  * Venue functions

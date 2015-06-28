@@ -748,7 +748,7 @@
 					elseif( $_POST['transaction_direction'] == 'Out' )
 						$trans_meta['_mdjm_payment_to'] = sanitize_text_field( $_POST['transaction_payee'] );
 													
-					$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['main']['currency'];
+					$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['payments']['currency'];
 					
 					/* -- Create the transaction post -- */
 					if( MDJM_DEBUG == true )
@@ -812,7 +812,7 @@
 						if( MDJM_DEBUG == true )
 							$mdjm->debug_logger( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
 							
-						update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', wp_generate_password( $mdjm_settings['main']['pass_length'] ) );
+						update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', wp_generate_password( $mdjm_settings['clientzone']['pass_length'] ) );
 					}
 										
 					/* -- Get the Venue ID -- */
@@ -1321,7 +1321,7 @@
 			 * @params: $column
 			 */
 			public function define_custom_post_column_data( $column )	{
-				global $post, $mdjm_settings, $mdjm_post_types, $wpdb;
+				global $post, $mdjm, $mdjm_settings, $mdjm_post_types, $wpdb;
 				
 				if( !in_array( $post->post_type, $mdjm_post_types ) )
 					return;
@@ -1384,7 +1384,7 @@
 					switch ( $column ) {
 						/* -- Is Default? -- */
 						case 'default':
-							echo $post->ID == $mdjm_settings['main']['default_contract'] ? 'Yes' : 'No';
+							echo $post->ID == $mdjm_settings['events']['default_contract'] ? 'Yes' : 'No';
 							break;
 						/* -- Assigned To -- */
 						case 'assigned':
@@ -1446,12 +1446,11 @@
 						/* -- Status -- */
 						case 'value':
 							$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
-							echo ( !empty( $value ) ? MDJM_CURRENCY . $value : '<span class="mdjm-form-error">' . MDJM_CURRENCY . '0.00</span>' );
+							echo ( !empty( $value ) ? display_price( $value ) : '<span class="mdjm-form-error">' . display_price( '0.00' ) . '</span>' );
 							break;
 						/* -- Playlist -- */
 						case 'playlist':
-							$playlist = $wpdb->get_var( "SELECT COUNT(*) FROM " . MDJM_PLAYLIST_TABLE . 
-														" WHERE `event_id` = " . $post->ID );
+							$playlist = $mdjm->mdjm_events->count_playlist_entries( $post->ID );
 							echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post->ID . '">' . $playlist . _n( ' Song', ' Songs', $playlist ) . '</a>' . "\r\n";
 							break;
 						/* -- Journal -- */
@@ -1495,7 +1494,7 @@
 							break;
 						/* -- Value -- */
 						case 'value':
-							echo MDJM_CURRENCY . get_post_meta( $post->ID, '_mdjm_txn_total', true );
+							echo display_price( get_post_meta( $post->ID, '_mdjm_txn_total', true ) );
 							break;
 					}
 				}
@@ -1787,7 +1786,7 @@
 						// Respond Unavailable
 						$actions['respond_unavailable'] = sprintf( '<span class="trash"><a href="' . 
 							admin_url( 'admin.php?page=%s&template=%s&to_user=%s&event_id=%s&action=%s' ) . 
-							'">Unavailable</a></span>', 'mdjm-comms', $mdjm_settings['main']['unavailable_email_template'], 
+							'">Unavailable</a></span>', 'mdjm-comms', $mdjm_settings['templates']['unavailable'], 
 							get_post_meta( $post->ID, '_mdjm_event_client', true ), $post->ID, 'respond_unavailable' );	
 					}
 				}

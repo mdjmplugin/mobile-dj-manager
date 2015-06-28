@@ -141,6 +141,59 @@
 					]
 				},
 				{
+					text: 'Equipment Shortcodes',
+					menu: [
+						{
+							text: 'Available Addons',
+							onclick: function() {
+								editor.insertContent('{AVAILABLE_ADDONS}');
+							}
+						},
+						{
+							text: 'Available Addons with Cost',
+							onclick: function() {
+								editor.insertContent('{AVAILABLE_ADDONS_COST}');
+							}
+						},
+						{
+							text: 'Available Packages',
+							onclick: function() {
+								editor.insertContent('{AVAILABLE_PACKAGES}');
+							}
+						},
+						{
+							text: 'Available Packages with Cost',
+							onclick: function() {
+								editor.insertContent('{AVAILABLE_PACKAGES_COST}');
+							}
+						},
+						{
+							text: 'Event Addons',
+							onclick: function() {
+								editor.insertContent('{EVENT_ADDONS}');
+							}
+						},
+						{
+							text: 'Event Addons with Cost',
+							onclick: function() {
+								editor.insertContent('{EVENT_ADDONS_COST}');
+							}
+						},
+						{
+							text: 'Event Package',
+							onclick: function() {
+								editor.insertContent('{EVENT_PACKAGE}');
+							}
+						},
+						{
+							text: 'Event Package with Cost',
+							onclick: function() {
+								editor.insertContent('{EVENT_PACKAGE_COST}');
+							}
+						},
+					]
+				},
+				{
 					text: 'Event Shortcodes',
 					menu: [
 						{

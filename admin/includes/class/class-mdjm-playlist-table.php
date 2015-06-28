@@ -264,7 +264,7 @@
 				
 				$headers = 'MIME-Version: 1.0' . "\r\n";
 				$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-				$headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['main']['system_email'] . '>' . "\r\n";
+				$headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['email']['system_email'] . '>' . "\r\n";
 				
 				if( wp_mail( $current_user->user_email, 'Event Playlist for ' . date( "l, jS F Y", strtotime( get_post_meta( $eventinfo->ID, '_mdjm_event_date', true ) ) ), $email_body, $headers ) )	{
 					f_mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	

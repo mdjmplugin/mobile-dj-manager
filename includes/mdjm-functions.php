@@ -31,6 +31,7 @@
 						'wp_dashboard'          => 'index.php',
 						'dashboard'             => 'admin.php?page=mdjm-dashboard',
 						'settings'              => 'admin.php?page=mdjm-settings',
+						'payment_settings'      => 'admin.php?page=mdjm-settings&tab=payments',
 						'clients'               => 'admin.php?page=mdjm-clients',
 						'inactive_clients'      => 'admin.php?page=mdjm-clients&display=inactive_client',
 						'add_client'            => 'user-new.php',
@@ -53,10 +54,10 @@
 						'venues'                => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
 						'add_venue'             => 'post-new.php?post_type=' . MDJM_VENUE_POSTS,
 						'tasks'                 => 'admin.php?page=mdjm-tasks',
-						'client_text'           => 'admin.php?page=mdjm-settings&tab=client_text',
-						'client_fields'         => 'admin.php?page=mdjm-settings&tab=client_fields',
+						'client_text'           => 'admin.php?page=mdjm-settings&tab=client-zone&section=mdjm_app_text',
+						'client_fields'         => 'admin.php?page=mdjm-settings&tab=client-zone&section=mdjm_client_field_settings',
 						'availability'          => 'admin.php?page=mdjm-availability',
-						'debugging'             => 'admin.php?page=mdjm-settings&tab=debugging',
+						'debugging'             => 'admin.php?page=mdjm-settings&tab=general&section=mdjm_app_debugging',
 						'contact_forms'         => 'admin.php?page=mdjm-contact-forms',
 						'transactions'		  => 'edit.php?post_type=' . MDJM_TRANS_POSTS,
 						'updated'			   => 'admin.php?page=mdjm-updated',
@@ -162,7 +163,7 @@
 	* 
 	*	@since: 1.1.3
 	*	@called:
-	*	@params: 	$currency (ABR)
+	*	@params: 	$currency (ISO Code)
 	*	@returns:	$symbols
 	*/
 	function mdjm_set_currency( $currency )	{
@@ -171,9 +172,51 @@
 						'EUR' => '&euro;',
 						'GBP' => '&pound;',
 						'USD' => '$',
+						'BRL' => '&#x52;&#x24;',
+						'CHF' => 'CHF',
+						'CZK' => '&#x4b;&#x10d;',
+						'DKK' => 'kr',
+						'TRL' => '&#x20a4;'
 						);
 		return $symbols[$currency];	
 	} // mdjm_set_currency
+	
+	/*
+	 * Displays the price in the selected format per settings
+	 * basically determining where the currency symbol is displayed
+	 *
+	 * @param	str		$amount		The price to to display
+	 * 			bool	$symbol		true to display currency symbol (default)
+	 * @return	str					The formatted price with currency symbol
+	 */
+	function display_price( $amount, $symbol=true )	{
+		global $mdjm_settings;
+		
+		$symbol = ( isset( $symbol ) ? $symbol : true );
+		
+		$dec = $mdjm_settings['payments']['decimal'];
+		$tho = $mdjm_settings['payments']['thousands_seperator'];
+		
+		// Currency before price
+		if( $mdjm_settings['payments']['currency_format'] == 'before' )
+			return ( !empty( $symbol ) ? MDJM_CURRENCY : '' ) . number_format( $amount, 2, $dec, $tho );
+		
+		// Currency before price with space
+		elseif( $mdjm_settings['payments']['currency_format'] == 'before with space' )
+			return ( !empty( $symbol ) ? MDJM_CURRENCY . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
+			
+		// Currency after price
+		elseif( $mdjm_settings['payments']['currency_format'] == 'after' )
+			return number_format( $amount, 2, $dec, $tho ) . ( !empty( $symbol ) ? MDJM_CURRENCY : '' );
+			
+		// Currency after price with space
+		elseif( $mdjm_settings['payments']['currency_format'] == 'after with space' )
+			return number_format( $amount, 2, $dec, $tho ) . ' ' . ( !empty( $symbol ) ? MDJM_CURRENCY : '' );
+		
+		// Default	
+		return ( !empty( $symbol ) ? MDJM_CURRENCY : '' ) . number_format( $amount, 2, $dec, $tho );
+		
+	} // display_price
 
 /*
  * -- START GENERAL POST FUNCTIONS
@@ -605,6 +648,151 @@
  */
 
 /*
+ * -- START PACKAGE/ADDON FUNCTIONS
+ */
+	/*
+	 * Get the package information for the given event
+	 *
+	 * @param	int			$event_id	The event ID
+	 * @return
+	 */
+	function get_event_package( $event_id, $price=false )	{
+		if( MDJM_PACKAGES != true )
+			return 'N/A';
+		
+		// Event package
+		$event_package = get_post_meta( $event_id, '_mdjm_event_package', true );
+		
+		if( empty( $event_package ) )
+			return 'No package is assigned to this event';
+		
+		// All packages
+		$packages = get_option( 'mdjm_packages' );
+						
+		
+		return $packages[$event_package]['name'] . ( !empty( $price ) ? ' ' . 
+			display_price( $packages[$event_package]['cost'], true ) : '' );
+				
+	} // get_event_package
+	
+	/*
+	 * Get the package information
+	 *
+	 * @param	int			$dj			Optional: The user ID of the DJ
+	 * @return
+	 */
+	function get_available_packages( $dj='', $price=false )	{
+		if( MDJM_PACKAGES != true )
+			return 'N/A';
+		
+		// All packages
+		$packages = get_option( 'mdjm_packages' );
+		
+		if( !empty( $packages ) )	{
+			foreach( $packages as $package )	{
+				if( !isset( $package['enabled'] ) || $package['enabled'] != 'Y' )
+					continue;
+				
+				if( !empty( $dj ) )	{
+					if( in_array( $dj, explode( ',', $package['djs'] ) ) )
+						$available[] = $package['name'] . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+				}
+				else
+					$available[] = $package['name'] . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+			}
+			$i = 1;
+			$the_packages = '';
+			foreach( $available as $avail )	{
+				$the_packages .= $avail . ( $i < count( $available ) ? '<br />' : '' );
+				$i++;
+			}
+		}
+		return ( !empty( $the_packages ) ? $the_packages : 'No packages available' );
+				
+	} // get_available_packages
+	
+	/*
+	 * Get the addon information for the given event
+	 *
+	 * @param	int			$event_id	The event ID
+	 * @return	arr|bool	$addons		array with package details, or false if no package assigned
+	 */
+	function get_event_addons( $event_id, $price=false )	{
+		if( MDJM_PACKAGES != true )
+			return 'N/A';
+		
+		// Event Addons
+		$event_addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
+				
+		if( empty( $event_addons ) )
+			return 'No addons are assigned to this event';
+			
+		// All addons
+		$all_addons = get_option( 'mdjm_equipment' );
+		
+		$addons = '';
+		$i = 1;
+		
+		foreach( $event_addons as $event_addon )	{
+			$addons .= $all_addons[$event_addon][0] . ( !empty( $price ) ? ' ' . 
+				display_price( $all_addons[$event_addon][7], true ) : '' ) . ( $i < count( $event_addons ) ? 
+				'<br />' : '' );
+			$i++;
+		}
+										
+		return $addons;
+				
+	} // get_event_addons
+	
+	/*
+	 * Get the addons available
+	 *
+	 *
+	 * @param	int			$dj			Optional: The user ID of the DJ
+	 *			bool		$price		Optional: true to display the price, false (default) not to display
+	 * @return
+	 */
+	function get_available_addons( $dj='', $price=false )	{
+		if( MDJM_PACKAGES != true )
+			return 'N/A';
+									
+		// All addons
+		$all_addons = get_option( 'mdjm_equipment' );
+		
+		if( empty( $all_addons ) )
+			return 'No addons are available';
+		
+		$addons = '';
+		$i = 1;
+		
+		foreach( $all_addons as $all_addon )	{
+			if( !isset( $package[6] ) || $package[6] != 'Y' )
+				continue;
+			
+			if( !empty( $dj ) )	{
+				if( in_array( $dj, explode( ',', $all_addon[8] ) ) )
+					$addons .= $all_addon[0] . ( !empty( $price ) ? ' ' . 
+					display_price( $all_addon[7], true ) : '' ) . ( $i < count( $all_addon ) ? 
+					'<br />' : '' );
+			}
+			else	{
+				$addons .= $all_addon[0] . ( !empty( $price ) ? ' ' . 
+				display_price( $all_addon[7], true ) : '' ) . ( $i < count( $all_addon ) ? 
+				'<br />' : '' );
+			}
+			
+			$i++;
+		}
+										
+		return $addons;
+				
+	} // get_available_addons
+
+/*
+ * -- END PACKAGE/ADDON FUNCTIONS
+ */
+
+/*
  * -- START TRANSACTION FUNCTIONS
  */
 
@@ -639,7 +827,7 @@
 	function get_transaction_source()	{
 		global $mdjm_settings;
 		
-		$trans_src = explode( "\r\n", $mdjm_settings['payments']['pp_payment_sources'] );
+		$trans_src = explode( "\r\n", $mdjm_settings['payments']['default_type'] );
 			
 		asort( $trans_src );
 		

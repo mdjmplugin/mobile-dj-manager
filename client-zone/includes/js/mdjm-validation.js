@@ -1,6 +1,16 @@
+/*
+ *
+ * Validation code for Client Zone pages
+ *
+ *
+ */
 	jQuery().ready(function()	{
-		jQuery("#user-profile").validate(	{
-			
+		/*
+		 *
+		 * Validation for client playlist
+		 *
+		 */
+		jQuery("#client-playlist").validate(	{
 			/* -- Classes -- */
 			errorClass: "mdjm-form-error",
 			validClass: "mdjm-form-valid",
@@ -13,24 +23,47 @@
 			
 			messages:	{
 				
-				first_name:		 		" Required",
-								
-				last_name:				" Required",
+				playlist_song:		 " Song Name is required",
 				
-				phone1:					" Required",
+				playlist_artist:	   " Artist is required",
 				
-				user_email:				" Required",
-				
-				address1:				" Required",
-				
-				town:					" Required",
-				
-				county:					" Required",
-				
-				postcode:				" Required",							
 			}
+		} );
+		
+		/*
+		 *
+		 * Validation for guest playlist
+		 *
+		 */
+		jQuery("#guest-playlist").validate(	{
+			/* -- Classes -- */
+			errorClass: "mdjm-form-error",
+			validClass: "mdjm-form-valid",
+			focusInvalid: false,
 			
-		} ); // Validate Contract
+			/* -- Rules -- */
+			rules:	{
+				
+			}, // End rules
+			
+			messages:	{
+				
+				first_name:		 	" First Name is required",
+				
+				last_name:		 	 " Last Name is required",
+				
+				playlist_song:		 " Song Name is required",
+				
+				playlist_artist:	   " Artist is required",
+				
+			}
+		} );
+		
+		/*
+		 *
+		 * Validation for contract signing
+		 *
+		 */
 		jQuery("#mdjm_sign_contract").validate(	{
 			
 			/* -- Classes -- */

@@ -30,8 +30,6 @@
 		else	{
 			wp_die( 'You do not have the necessary permissions to view this page!' );
 		}
-		$lic_info = do_reg_check( 'check' );
-		if( current_user_can( 'manage_options' ) && $lic_info )	{ submit_button(); }
 		?>
         </div>
         <?php

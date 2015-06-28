@@ -108,11 +108,11 @@
 				<?php
 				/* -- Availability Check -- */
 				if( isset( $_GET['mdjm_avail'], $_GET['mdjm_avail_date'] ) && $_GET['mdjm_avail'] == 1 )	{
-					if( !empty( $mdjm_settings['pages']['availability_check_pass_text'] ) )	{	
+					if( !empty( $mdjm_settings['availability']['availability_check_pass_text'] ) )	{	
 						$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
 						$replace = array( date( 'l, jS F Y', strtotime( $_GET['mdjm_avail_date'] ) ), date( MDJM_SHORTDATE_FORMAT, strtotime( $_GET['mdjm_avail_date'] ) ) );
 						echo '<p>' . 
-						nl2br( html_entity_decode( stripcslashes( str_replace( $search, $replace, $mdjm_settings['pages']['availability_check_pass_text'] ) ) ) ) . 
+						nl2br( html_entity_decode( stripcslashes( str_replace( $search, $replace, $mdjm_settings['availability']['availability_check_pass_text'] ) ) ) ) . 
 						'</p>' . "\r\n";
 					}
 				}
@@ -492,7 +492,7 @@
 						$this->user_id = username_exists( $this->client_email ); // Check if username exists
 						if( !$this->user_id && $this->user_id == false )	{
 							// Generate a password to user
-							$random_password = wp_generate_password( $mdjm_settings['main']['pass_length'] );
+							$random_password = wp_generate_password( $mdjm_settings['clientzone']['pass_length'] );
 							
 							// Create a new user and store their ID
 							$this->user_id = wp_create_user( $this->client_email, $random_password, $this->client_email );

@@ -148,7 +148,145 @@
 		width: 15em;
 		height: 4em;
 	}
+
+/* -- Profile Page -- */
+	#mdjm-user-profile-container	{
+		width:100%;
+		margin:0 auto;
+		font-size: 11px;	
+	}
 	
+	#mdjm-user-profile-container input	{
+		font-size: 11px;
+	}
+	
+	#mdjm-user-profile-table	{
+		float:left;
+		width:100%;	
+	}
+	
+	.mdjm-user-profile-display	{
+		border-collapse: collapse;
+		width: 100%;	
+	}
+	.mdjm-user-profile-display input	{
+		font-size: 11px;
+	}
+	.mdjm-user-profile-display select	{
+		font-size: 11px;
+	}
+	.mdjm-user-profile-display td	{
+		border: hidden;
+		padding-top: 3px;
+		padding-right: 7px;
+		padding-bottom: 2px;
+		padding-left: 7px;
+		vertical-align: middle;
+	}
+	.mdjm-user-profile-display td	{
+		width: 50%;	
+	}
+	.mdjm-user-profile-display label	{
+		text-align: left;
+		padding-top: 5px;
+		padding-bottom: 4px;
+		width: 15%;
+		font-weight: bold;
+	}
+
+/* -- Playlist Page -- */
+	#mdjm-playlist-container	{
+		width:100%;
+		margin:0 auto;
+		font-size: 11px;	
+	}
+	
+	#mdjm-playlist-container input	{
+		font-size: 11px;
+	}
+	
+	#mdjm-playlist-table	{
+		float:left;
+		width:100%;	
+	}
+	
+	#mdjm-playlist-display	{
+		border-collapse: collapse;
+		width: 100%;	
+	}
+	#mdjm-playlist-display input	{
+		font-size: 11px;
+	}
+	#mdjm-playlist-display select	{
+		font-size: 11px;
+	}
+	#mdjm-playlist-display textarea	{
+		font-size: 11px;
+	}
+	#mdjm-playlist-display td	{
+		border: hidden;
+		padding-top: 3px;
+		padding-right: 7px;
+		padding-bottom: 2px;
+		padding-left: 7px;
+		vertical-align: top;
+	}
+	#mdjm-playlist-display td	{
+		width: 25%;	
+	}
+	#mdjm-playlist-display label	{
+		text-align: left;
+		padding-top: 5px;
+		padding-bottom: 4px;
+		width: 15%;
+		font-weight: bold;
+	}
+	/* -- 3 Columns -- */
+	.mdjm-playlist-3column	{
+		float: left;
+		width: 33%;
+	}
+	.mdjm-playlist-3column label	{
+		font-weight: bold;
+	}
+	
+	.mdjm-contract-last-3column	{
+		float: right;
+		width: 33%;
+	}
+	.mdjm-playlist-last-3column label	{
+		font-weight: bold;
+	}
+	
+	#mdjm_song_container	{
+		width: 100%; 
+		min-height: 50px;
+		overflow: hidden;
+		font-size: 12px;	
+	}
+	
+	.mdjm_song_table	{
+		width: 100%;
+		border: 2px solid;
+		margin: 1%;
+		margin-left: 0;		
+	}
+	
+	.mdjm_song_table th, .mdjm_song_table td	{
+		width: 33%;
+		border: hidden;
+	}
+	
+	.mdjm_song_table th	{
+		font-weight: bold;
+		border-bottom: 2px solid;
+		font-size: 12px;
+		height: 4px;
+		text-align: center;
+	}
+		
+	
+		
 /* -- Contract Page -- */
 	/* -- Column Layouts -- */
 	.mdjm-contract-row	{

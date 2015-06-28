@@ -34,26 +34,13 @@
 		if( MDJM_VERSION_NUM > $current_version_mdjm )	{ // We have some upgrades to perform
 			$mdjm->debug_logger( 'UPGRADE REQUIRED', true );
 			
-/***************************************************
-			 	UPGRADES FROM 0.9.9.7
-***************************************************/			
-			if( $current_version_mdjm <= '0.9.9.7' )	{
-				/* No Actions */
-			} // if( $current_version_mdjm <= '0.9.9.7' )
-			
-/***************************************************
-			 	UPGRADES FROM 0.9.9.8
-***************************************************/			
-			if( $current_version_mdjm <= '0.9.9.8' )	{
-				$mdjm_options = get_option( MDJM_SETTINGS_KEY );
-				
-				/* Add new options */
-				$mdjm_options['warn_unattended'] = 'Y';
-				
-				/* Update options */
-				update_option( MDJM_SETTINGS_KEY, $mdjm_options );
-			} // if( $current_version_mdjm <= '0.9.9.8' )
-			
+			if( $current_version_mdjm < MDJM_UNSUPPORTED )	{
+				return mdjm_update_notice( 'error',
+										   'ERROR: Upgrading from your version of the MDJM plugin is not supported<br />' . 
+										   'In order to continue using the MDJM plugin, you will need to uninstall your version ' . 
+										   'and re-install the latest version manually.<br />' . 
+										   '<a href="http://www.mydjplanner.co.uk/release-cycles-version-support/" target="_blank">More Information</a>' );
+			}
 /***************************************************
 			 	UPGRADES FROM 1.0
 ***************************************************/			
@@ -139,29 +126,6 @@
 				/* -- Copy the venues -- */
 				$venue_count = wp_count_posts( MDJM_VENUE_POSTS )->publish;
 		
-				/*if( !$venue_count || $venue_count == 0 )	{
-					$venueinfo = f_mdjm_get_venueinfo();
-					
-					if( !class_exists( 'MDJM_Events' ) )	{
-						require( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-events.php' );	
-					}
-					$mdjm_events = new MDJM_Events();
-					
-					foreach( $venueinfo as $venue )	{
-						$venue_data['name'] = !empty( $venue->venue_name ) ? $venue->venue_name : '';
-						$venue_meta['venue_contact'] = !empty( $venue->venue_contact ) ? $venue->venue_contact : '';
-						$venue_meta['venue_phone'] = !empty( $venue->venue_phone ) ? $venue->venue_phone : '';
-						$venue_meta['venue_email'] = !empty( $venue->venue_email ) ? $venue->venue_email : '';
-						$venue_meta['venue_address1'] = !empty( $venue->venue_address1 ) ? $venue->venue_address1 : '';
-						$venue_meta['venue_address2'] = !empty( $venue->venue_address2 ) ? $venue->venue_address2 : '';
-						$venue_meta['venue_town'] = !empty( $venue->venue_town ) ? $venue->venue_town : '';
-						$venue_meta['venue_county'] = !empty( $venue->venue_county ) ? $venue->venue_county : '';
-						$venue_meta['venue_postcode'] = !empty( $venue->venue_postcode ) ? $venue->venue_postcode : '';
-						$venue_meta['venue_information'] = !empty( $venue->venue_information ) ? $venue->venue_information : '';
-						
-						$mdjm_events->mdjm_add_venue( $venue_data, $venue_meta );
-					}
-				}*/
 				/* Add / Update Options */
 				update_option( MDJM_SETTINGS_KEY, $mdjm_options );
 			} // if( $current_version_mdjm <= '1.1.1' )
@@ -192,6 +156,13 @@
 				add_option( 'mdjm_update', '1.2' ); // Add option to tell updated.php we have tasks to complete
 				// No actions everything is completed in updated.php
 			} // if( $current_version_mdjm <= '1.2' )
+			
+/***************************************************
+			 	UPGRADES FROM 1.2
+***************************************************/			
+			if( $current_version_mdjm < '1.2.1' )	{
+				add_option( 'mdjm_update_me', '1.2.1' ); // Add option to tell updated.php we have tasks to complete
+			} // if( $current_version_mdjm <= '1.2.1' )
 			
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST

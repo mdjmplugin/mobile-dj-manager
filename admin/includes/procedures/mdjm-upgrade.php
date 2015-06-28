@@ -17,6 +17,17 @@
 			/* -- Extend the script time out as we may have a lot of entries -- */
 			set_time_limit( 180 );
 			
+			// Ensure 1.2 procedures have run as these are major
+			$this->check_1_2();
+			
+			// Check for additional updates and execute
+			$update = get_option( 'mdjm_update_me' );
+			
+			if( !empty( $update ) )	{
+				$func = 'update_to_' . str_replace( '.', '_', $update );
+				$this->$func();	
+			}
+			
 		} // __construct
 		
 		/*
@@ -282,7 +293,7 @@
 			
 			$mdjm_settings = array(
 								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
+								'payments'	=> get_option( 'mdjm_pp_options' ),
 								);
 			// Main settings updates
 			$mdjm_settings['main']['artist'] = 'DJ';
@@ -294,7 +305,7 @@
 			unset( $mdjm_settings['payments']['pp_transaction_types'] );
 			
 			update_option( MDJM_SETTINGS_KEY, $mdjm_settings['main'] );
-			update_option( MDJM_PAYMENTS_KEY, $mdjm_settings['payments'] );
+			update_option( 'mdjm_pp_options', $mdjm_settings['payments'] );
 			
 			/* -- We add this option for the journal migrations -- */
 			add_option( 'mdjm_date_to_1_2', strtotime( "+3 day" ) );
@@ -1025,6 +1036,42 @@
 			$mdjm_cron = new MDJM_Cron();
 			$mdjm_cron->synchronise();
 		} // resync
+		
+		/*
+		 * Check that 1.2 procedures have run
+		 *
+		 *
+		 *
+		 */
+		function check_1_2()	{
+			/* -- Complete the upgrade procedures for version 1.2 -- */
+			$update_status = get_option( 'mdjm_update' );
+			
+			if( !empty( $update_status ) && $update_status == '1.2' )	{
+				$this->update_to_1_2();
+				
+				delete_option( 'mdjm_update' );
+			}
+		} // update_to_1_2
+		
+		/*
+		 * Execute upgrade for version
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_1()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.1.2', true );
+			
+			include_once( 'update_to_1.1.2.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.1.2', true );
+		} // update_to_1_2_1
 	} // class
+	
+	$mdjm_upgrade = new MDJM_Upgrade();	
 	
 ?>

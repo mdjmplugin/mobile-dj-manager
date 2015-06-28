@@ -91,7 +91,7 @@
 		if( !isset( $mdjm_currency ) )
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		echo $mdjm_currency[$mdjm_settings['main']['currency']];
+		echo $mdjm_currency[$mdjm_settings['payments']['currency']];
 	} // f_mdjm_currency
 
 /**************************************************************

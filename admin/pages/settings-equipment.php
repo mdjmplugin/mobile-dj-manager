@@ -12,7 +12,7 @@
 			$cat_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['category_name'] ) ) );
 			$cats[$cat_id] = sanitize_text_field( $_POST['category_name'] );
 			update_option( 'mdjm_cats', $cats );
-			f_mdjm_update_notice( 'updated', 'Category Added Successfully' );
+			mdjm_update_notice( 'updated', 'Category Added Successfully' );
 		}
 		if( $_POST['submit'] == 'Delete Selected' )	{ /* Delete category */
 			$cats = get_option( 'mdjm_cats' );
@@ -20,7 +20,7 @@
 				unset( $cats[$categories] );
 			}
 			update_option( 'mdjm_cats', $cats );
-			f_mdjm_update_notice( 'updated', 'Category Deleted Successfully' );
+			mdjm_update_notice( 'updated', 'Category Deleted Successfully' );
 		}
 		if( $_POST['submit'] == 'Add Item' )	{
 			$items = get_option( 'mdjm_equipment' );
@@ -47,22 +47,24 @@
 									$djs_have
 								);
 			update_option( 'mdjm_equipment', $items );
-			f_mdjm_update_notice( 'updated', 'Item Added Successfully' );
+			mdjm_update_notice( 'updated', 'Item Added Successfully' );
 		}
 		/* Edit Item within Inventory */
 		if( $_POST['submit'] == 'Update' )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			$djs_have = '';
 			$i = 1;
-			foreach( $_POST['djs'] as $this_dj ) {
-				$djs_have .= $this_dj;
-				if( $i != count( $_POST['djs'] ) ) $djs_have .= ',';
-				$i++;
+			if( !empty( $_POST['djs'] ) )	{
+				foreach( $_POST['djs'] as $this_dj ) {
+					$djs_have .= $this_dj;
+					if( $i != count( $_POST['djs'] ) ) $djs_have .= ',';
+					$i++;
+				}
 			}
 			if( $_POST['addon_avail'] != 'Y' ) $_POST['addon_avail'] = 'N';
 			unset( $equipment[$_POST['slug']] );
 			$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) );
-			if( $equipment[$item_id] )
+			if( !empty( $equipment[$item_id] ) )
 				$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) ) . '_';
 				
 			$equipment[$item_id] = array(
@@ -77,14 +79,14 @@
 									$djs_have
 									);
 			update_option( 'mdjm_equipment', $equipment );
-			f_mdjm_update_notice( 'updated', 'Item Updated Successfully' );
+			mdjm_update_notice( 'updated', 'Item Updated Successfully' );
 		}
 		/* Remove Item from Inventory */
 		if( $_POST['submit'] == 'Remove' )	{
 			$equipment = get_option( 'mdjm_equipment' );
 			unset( $equipment[$_POST['slug']] );
 			update_option( 'mdjm_equipment', $equipment );
-			f_mdjm_update_notice( 'updated', 'Item Removed Successully' );
+			mdjm_update_notice( 'updated', 'Item Removed Successully' );
 		}
 	}
 	
@@ -148,7 +150,7 @@
         </thead>
         <tbody>
         <?
-		$djs = f_mdjm_get_djs();
+		$djs = mdjm_get_djs();
 		if( !$equipment )	{
 			echo '<tr>';
 			echo '<td colspan="6">You have no equipment in your inventory yet. Begin adding below.</td>';
@@ -178,7 +180,7 @@
 				<td>
                 <input type="checkbox" name="addon_avail" id="addon_avail" value="Y" <?php checked( $equip_list[6], 'Y' ); ?> />&nbsp;&nbsp;<input type="text" name="addon_cost" id="addon_cost" class="small-text" value="<?php echo esc_attr( $equip_list[7] ); ?>" /></td>
                 <?php
-				if ( $mdjm_options['multiple_dj'] == 'Y' )	{
+				if ( MDJM_MULTI == true )	{
 					?>
 					<td><select name="djs[]" multiple="multiple" id="djs">
                     <?php

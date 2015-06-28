@@ -33,6 +33,8 @@
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
+				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
+				
 			} // __construct
 
 /*
@@ -54,7 +56,7 @@
 				/* -- No user, no data -- */
 				if( !is_user_logged_in() )
 					return;
-				
+							
 				$c = !empty( $client ) ? $client : $current_user->ID;
 				
 				$event_stati = get_event_stati();
@@ -63,29 +65,15 @@
 				
 				$my_mdjm['me'] = get_userdata( $c );
 				
-				$my_mdjm['next'] = $mdjm->mdjm_events->next_event();
-				
-				$my_mdjm['active'] = $mdjm->mdjm_events->active_events();
-				
-				/*$my_mdjm['all'] = get_posts( array(
-											'post_type'	   => MDJM_EVENT_POSTS,
-											'post_status'	 => 'any',
-											'posts_per_page'  => -1,
-											'orderby'		 => 'post_status',
-											'order'		   => 'ASC',
-											'meta_key'	 	=> '_mdjm_event_client',
-											'meta_value'   	  => $c,
-											) );*/
-				
-				/*foreach( $event_stati as $status => $label )	{
-					$my_mdjm[$status] = get_posts( array(
-													'post_type'	  => MDJM_EVENT_POSTS,
-													'post_status'	=> $status,
-													'posts_per_page' => -1,
-													'meta_key'	   => '_mdjm_event_client',
-													'meta_value'   	 => $c,
-													) );
-				}*/
+				if( is_dj() || current_user_can( 'administrator' ) )	{
+					$my_mdjm['next'] = $mdjm->mdjm_events->next_event( '', 'dj' );
+					$my_mdjm['active'] = $mdjm->mdjm_events->active_events( '', 'dj' );
+				}
+					
+				else	{
+					$my_mdjm['next'] = $mdjm->mdjm_events->next_event();
+					$my_mdjm['active'] = $mdjm->mdjm_events->active_events();
+				}
 			} // my_events
 			
 			/**
@@ -164,8 +152,8 @@
 				}
 				
 				/* -- Email Contract Link -- */
-				$contact_client = isset( $mdjm_settings['main']['contract_to_client'] ) ? true : false;
-				$client_email = isset( $mdjm_settings['main']['email_contract'] ) ? $mdjm_settings['main']['email_contract'] : false;
+				$contact_client = !empty( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
+				$client_email = isset( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : false;
 				
 				if( !$mdjm_posts->post_exists( $client_email ) )	{
 					if( MDJM_DEBUG == true )
@@ -183,12 +171,12 @@
 					$contract_email = $mdjm->send_email( array( 
 											'content'	=> $client_email,
 											'to'		 => get_post_meta( $post->ID, '_mdjm_event_client', true ),
-											'from'	   => $mdjm_settings['main']['contract_email_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
+											'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
 											'journal'	=> 'email-client',
 											'event_id'   => $post->ID,
 											'html'	   => true,
-											'cc_dj'	  => isset( $mdjm_settings['main']['bcc_dj_to_client'] ) ? true : false,
-											'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
+											'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+											'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 											'source'	 => 'Event Enquiry Accepted via ' . MDJM_APP,
 										) );
 					if( $contract_email )	{
@@ -236,17 +224,11 @@
 				
 				$client_data = get_userdata( $client_id );
 				
-				/* -- We definately need this information -- */
-				$required_fields = array(
-									'first_name',
-									'last_name',
-									'user_email',
-									);
 				/* -- Check the fields marked as required within Custom Client Fields -- */
 				$custom_fields = get_option( MDJM_CLIENT_FIELDS );
 				foreach( $custom_fields as $field )	{
-					if( !empty( $field['required'] ) && $field['required'] == 'Y' )
-						$default_fields[] = $field['id'];
+					if( !empty( $field['required'] ) )
+						$required_fields[] = $field['id'];
 				}
 									
 				foreach( $required_fields as $required_field )	{
@@ -295,9 +277,7 @@
 			public function warn_profile()	{
 				global $mdjm_settings;
 				
-				return ( !empty( $mdjm_settings['custom_text']['warn_incomplete_profile'] ) && 
-								$mdjm_settings['custom_text']['warn_incomplete_profile'] == 'Y' 
-								? true : false );
+				return ( !empty( $mdjm_settings['clientzone']['notify_profile'] ) ? true : false );
 				
 			} // warn_profile
 /*
@@ -375,7 +355,7 @@
 				
 				$mdjm_messages = array(
 									1	=> 'Thank you. Your event has been updated and your contract has been issued.' . 
-										 ( !empty( $mdjm_settings['main']['contract_to_client'] ) && $mdjm_settings['main']['contract_to_client'] == 'Y' ? 
+										 ( !empty( $mdjm_settings['templates']['contract_to_client'] ) ? 
 										 '<br />You will receive confirmation via email shortly.' : '' ),
 										 
 									2	=> 'An error has occured whilst confirming your event. Please <a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
@@ -383,8 +363,8 @@
 										
 									3	=> $this->__text( 'contract_sign_success', 'Thank you. Your contract has been successfully signed and your event is now <strong>confirmed</strong>.<br />' . 
 											'A confirmation email is on it\'s way to you' ),
-									4	=> '',
-									5	=> '',
+									4	=> 'Security verification failed. We could not update your profile at this time',
+									5	=> 'Security verification failed. We could not update the playlist at this time',
 									6	=> 'Security verification failed. We could not update your event at this time',
 									9	=> 'This event does not belong to you.<br />' . 
 											'<a href="' . $mdjm->get_link( MDJM_HOME, false ) . '">' . MDJM_COMPANY . ' ' . MDJM_APP . ' Home Page</a>',
@@ -436,6 +416,16 @@
 
 				wp_login_form();		
 			} // login
+			
+			/*
+			 * Display Lost Password text and link on login page
+			 *
+			 *
+			 *
+			 */
+			function lost_password_link()	{
+				return '<a href="/wp-login.php?action=lostpassword">' . __( 'Lost Password' ) . '?</a>';	
+			} // lost_password_link
 
 			/*
 			 *
@@ -447,7 +437,7 @@
 				global $mdjm, $mdjm_settings;
 				
 				echo '<p>' . __( 'ERROR: You do not have permission to view this page. ') . '</p>' . "\r\n" . 
-				'<p>' . __( 'Please contact the <a href="mailto:' . $mdjm_settings['main']['system_email'] . 
+				'<p>' . __( 'Please contact the <a href="mailto:' . $mdjm_settings['email']['system_email'] . 
 				'">website administrator</a> or <a href="' . $mdjm->get_link( MDJM_HOME ) . '">' . 
 				'Click here to return to the ' . MDJM_COMPANY . ' ' . MDJM_APP . ' home page.' ) . '</p>';
 			
@@ -468,18 +458,21 @@
 				if( empty( $key ) )
 					return;
 				
-				$client = is_user_logged_in() ? $my_mdjm['me']->ID : '';
+				$client = is_user_logged_in() ? $my_mdjm['me']->ID : 
+					( !empty( $post ) ? get_post_meta( $post->ID, '_mdjm_event_client', true ) : '' );
+				
 				$event = !empty( $post ) ? $post->ID : '';
 				
-				$the_text = $mdjm->filter_content( $client, $event, $mdjm_settings['custom_text'][$key] );
+				$the_text = $mdjm->filter_content( $client, $event, ( !empty( $mdjm_settings['custom_text'][$key] ) 
+					? '<p>' . $mdjm_settings['custom_text'][$key] . '</p>' : '' ) );
 				
-				return '<p>' . nl2br( $the_text ) . '</p>' . "\r\n";
+				return nl2br( $the_text ) . "\r\n";
 			} // custom_text
 			
 			/*
 			 * Print out the text for the page from the given arguments
 			 *
-			 * @param:		str		$custom_section	Required:	The section for which we are printing
+			 * @param:		str		$section		Required:	The section for which we are printing
 			 *						$default_text	Optional:	The default text to be displayed if custom text is not enabled/set
 			 *										If empty str provided, log error and print custom text
 			 * 
@@ -491,7 +484,7 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: No page section was parsed. ' . __METHOD__, true );
 						
-					wp_die( 'An error has occured. Please <a href="mailto:' . $mdjm_settings['main']['system_email'] . '">' . 
+					wp_die( 'An error has occured. Please <a href="mailto:' . $mdjm_settings['email']['system_email'] . '">' . 
 						'Contact Us</a> for assistance' );	
 				}
 									
@@ -500,7 +493,7 @@
 					: $default_text );
 					
 				return $text;
-			} // __mdjm_text
+			} // __text
 
 /*
  * --
@@ -520,9 +513,11 @@
 				/* -- Map the args to the pages/functions -- */
 				$args = shortcode_atts( array(
 					'Home'         => '/client-zone/class/class-home.php',
-					'Payments'	   => '/pages/payment.php',
-					'Profile'      => '/pages/profile.php',
-					'Playlist'     => '/pages/playlist.php',
+					//'Payments'	   => '/pages/payment.php',
+					'Payments'	   => '/client-zone/class/class-payment.php',
+					'Profile'      => '/client-zone/class/class-profile.php',
+					//'Playlist'     => '/pages/playlist.php',
+					'Playlist'	 => '/client-zone/class/class-playlist.php',
 					'Contract'     => '/client-zone/class/class-contract.php',
 					'Availability' => 'f_mdjm_availability_form',
 					'Contact Form' => '/client-zone/class/class-contactform.php',

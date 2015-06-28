@@ -100,7 +100,7 @@
 			}
 			?>
             <label for="avail_date"><?php echo $instance['label']; ?></label>
-            <input type="text" name="avail_date" id="avail_date" class="mdjm_date" placeholder="<?php f_mdjm_short_date_jquery(); ?>" />
+            <input type="text" name="avail_date" id="avail_date" class="mdjm_date" placeholder="<?php mdjm_jquery_short_date(); ?>" />
             <input type="hidden" name="widget_check_date" id="widget_check_date" value="" /></p>
             <p<?php echo ( isset( $instance['submit_centre'] ) && $instance['submit_centre'] == 'Y' ? ' style="text-align:center"' : '' ); ?>>
             <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $instance['submit_text']; ?>" />

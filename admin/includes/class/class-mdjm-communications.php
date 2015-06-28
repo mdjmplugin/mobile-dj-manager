@@ -79,13 +79,11 @@
 		 * Inserts the stat tracker image
 		 * @param: $p => the post ID
 		 */
-		function insert_stat_image( $p )	{
-			global $mdjm_settings;
-			
+		function insert_stat_image( $p )	{			
 			if( empty( $p ) || MDJM_TRACK_EMAILS != true )
 				return;
 				
-			$stat = sprintf( '<img alt="" src="'. home_url() . '/?mdjm-api=%s&post=%s&action=%s" border="0"  height="3"  width="37" />', 'MDJM_EMAIL_RCPT', $p, 'open_email' );
+			$stat = sprintf( '<img alt="" src="'. home_url() . '/?mdjm-api=%s&post=%s&action=%s" border="0" height="3"  width="37" />', 'MDJM_EMAIL_RCPT', $p, 'open_email' );
 			
 			return $stat;
 

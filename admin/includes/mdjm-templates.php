@@ -237,7 +237,7 @@
 * Default Schedules
 * Only used during first installation
 */
-	if( isset( $mdjm_settings['main']['upload_playlists'] ) && $mdjm_settings['main']['upload_playlists'] == 'Y' )	{
+	if( isset( $mdjm_settings['playlist']['upload_playlists'] ) )	{
 		$time = time();
 		$playlist_nextrun = strtotime( '+1 day', $time );
 	}
@@ -340,7 +340,7 @@
 			'upload-playlists'	=> array(
 				'slug'		 => 'upload-playlists',
 				'name'	     => 'Upload Playlists',
-				'active'	   => $mdjm_settings['main']['upload_playlists'],
+				'active'	   => $mdjm_settings['playlist']['upload_playlists'],
 				'desc'	     => 'Transmit playlist information back to the MDJM servers to help build an information library. This option is updated via the <a href="' . admin_url( 'admin.php?page=mdjm-settings&tab=general' ) . '">General tab</a>',
 				'frequency'	=> 'Daily',
 				'nextrun'	  => $playlist_nextrun,

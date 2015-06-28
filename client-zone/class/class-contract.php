@@ -17,9 +17,11 @@
 			 *
 			 */
 			public function __construct( $event )	{
-				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts;
+				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts, $post;
 				
 				$this->event = get_post( $event );
+				
+				$post = $this->event;
 				
 				$event_client = get_post_meta( $this->event->ID, '_mdjm_event_client', true );
 				
@@ -133,6 +135,7 @@
 							'_mdjm_signed_contract'				=> $signed_contract,
 							'_mdjm_event_contract_approved'		=> date( 'Y-m-d H:i:s' ),
 							'_mdjm_event_contract_approver'		=> ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] ),
+							'_mdjm_event_contract_approver_ip'	 => $_SERVER['REMOTE_ADDR'],
 							'_mdjm_event_last_updated_by'		  => $my_mdjm['me']->ID,
 							);
 							
@@ -168,10 +171,10 @@
 						}
 						
 						/* -- Email booking confirmations -- */
-						$contact_client = isset( $mdjm_settings['main']['booking_conf_to_client'] ) ? true : false;
-						$contact_dj = isset( $mdjm_settings['main']['booking_conf_to_dj'] ) ? true : false;
-						$client_email = isset( $mdjm_settings['main']['email_client_confirm'] ) ? $mdjm_settings['main']['email_client_confirm'] : false;
-						$dj_email = isset( $mdjm_settings['main']['email_dj_confirm'] ) ? $mdjm_settings['main']['email_client_confirm'] : false;
+						$contact_client = isset( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
+						$contact_dj = isset( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? true : false;
+						$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : false;
+						$dj_email = isset( $mdjm_settings['templates']['booking_conf_dj'] ) ? $mdjm_settings['templates']['booking_conf_dj'] : false;
 						
 						if( !$mdjm_posts->post_exists( $client_email ) )	{
 							if( MDJM_DEBUG == true )
@@ -189,12 +192,12 @@
 							$approval_email = $mdjm->send_email( array( 
 													'content'	=> $client_email,
 													'to'		 => get_post_meta( $this->event->ID, '_mdjm_event_client', true ),
-													'from'	   => $mdjm_settings['main']['confirm_email_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
+													'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
 													'journal'	=> 'email-client',
 													'event_id'   => $this->event->ID,
 													'html'	   => true,
-													'cc_dj'	  => isset( $mdjm_settings['main']['bcc_dj_to_client'] ) ? true : false,
-													'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_client'] ) ? true : false,
+													'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+													'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 													'source'	 => 'Event Status to Approved',
 												) );
 							if( $approval_email )	{
@@ -224,7 +227,7 @@
 														'event_id'   => $this->event->ID,
 														'html'	   => true,
 														'cc_dj'	  => false,
-														'cc_admin'   => isset( $mdjm_settings['main']['bcc_admin_to_dj'] ) ? true : false,
+														'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_dj'] ) ? true : false,
 														'source'	 => 'Event Status to Approved',
 													) );
 								if( $approval_dj_email )	{
@@ -377,7 +380,13 @@
 					$prefix = '<p class="signed">' . __( 'This contract has been signed' ) . '<br>' . "\r\n";
 					$prefix .= __( 'Signed on ' . date( MDJM_SHORTDATE_FORMAT, strtotime( $contract->post_date ) ) . 
 					' by ' . get_post_meta( $contract->ID, '_mdjm_contract_signed_name', true ) ) . 
-					__( ' with password verification' ) . '</p>' . "\r\n";
+					__( ' with password verification' );
+					
+					$ip = get_post_meta( $contract->ID, '_mdjm_event_contract_approver_ip', true );
+					if( !empty( $ip ) )
+						$prefix .= ' from IP address ' . $ip;
+					
+					$prefix .= '</p>' . "\r\n";
 				}
 				
 				/* -- Retrieve the contract content -- */
@@ -402,7 +411,7 @@
 				}
 				/* -- If we have no content -- */	
 				else
-					wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_settings['main']['system_email'] . '">website administrator</a>' );
+					wp_die( 'An error has occured. Please contact the <a href="mailto:' . $mdjm_settings['email']['system_email'] . '">website administrator</a>' );
 				
 				echo '<hr>' . "\r\n";	
 				$this->contract_footer();
