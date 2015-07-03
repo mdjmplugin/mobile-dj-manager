@@ -185,6 +185,21 @@
 								PRIMARY KEY  (id)
 								);";
 								
+			/* PLAYLISTS LIBRARY TABLE */
+			$playlist_library_sql = "CREATE TABLE ". MDJM_PLAYLIST_LIBRARY_TABLE . " (
+								id int(11) NOT NULL AUTO_INCREMENT,
+								song varchar(255) NOT NULL,
+								artist varchar(255) NOT NULL,
+								album varchar(255) NULL,
+								genre varchar(255) NULL,
+								year varchar(10) NULL,
+								comments text NULL,
+								rating varchar(10) NULL,
+								dj int(11) NOT NULL,
+								date_added date NULL,
+								PRIMARY KEY  (id)
+								);";
+								
 			/* AVAILABILITY TABLE */
 			$holiday_sql = "CREATE TABLE ". MDJM_HOLIDAY_TABLE . " (
 								id int(11) NOT NULL AUTO_INCREMENT,
@@ -216,6 +231,7 @@
 											
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $playlists_sql );
+			dbDelta( $playlist_library_sql );
 			dbDelta( $holiday_sql );
 			dbDelta( $journal_sql );
 		
@@ -1055,20 +1071,37 @@
 		} // update_to_1_2
 		
 		/*
-		 * Execute upgrade for version
+		 * Execute upgrade for version 1.2.1
 		 *
 		 *
 		 *
 		 */
 		function update_to_1_2_1()	{
 			
-			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.1.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.1', true );
 			
-			include_once( 'update_to_1.1.2.php' );
+			include_once( 'update_to_1.2.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.1.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.1', true );
+		} // update_to_1_2_1
+		
+		/*
+		 * Execute upgrade for version 1.2.1
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_2()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.2', true );
+			
+			include_once( 'update_to_1.2.2.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.2', true );
 		} // update_to_1_2_1
 	} // class
 	

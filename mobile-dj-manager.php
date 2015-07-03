@@ -3,7 +3,7 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
-Version: 1.2.1
+Version: 1.2.2
 Date: 17 March 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
@@ -23,7 +23,7 @@ Author URI: http://www.mydjplanner.co.uk
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-	global $wpdb, $mdjm_options, $pagenow, $mdjm_db_version;
+	global $wpdb, $mdjm_options, $mdjm_settings, $pagenow, $mdjm_db_version;
 	$mdjm_db_version = '2.4'; // Used to determine if the DB Tables need updating
 
 	define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
@@ -32,7 +32,7 @@ Author URI: http://www.mydjplanner.co.uk
 	/* -- These will be deprecated soon -- */
 	define( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress' );
 	define( 'WPMDJM_VERSION_KEY', 'version' );
-	define( 'WPMDJM_VERSION_NUM', '1.2.1' );
+	define( 'WPMDJM_VERSION_NUM', '1.2.2' );
 	define( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
@@ -70,7 +70,7 @@ Author URI: http://www.mydjplanner.co.uk
 		/* Initialise and go! */
 		//add_action( 'admin_init', 'f_mdjm_reg_init' );
 
-		if( $pagenow == 'index.php' && isset( $mdjm_options['show_dashboard'] ) && $mdjm_options['show_dashboard'] == 'Y' )	{
+		if( $pagenow == 'index.php' && !empty( $mdjm_settings['main']['show_dashboard'] ) )	{
 			/* Activate widgets */
 			require_once WPMDJM_PLUGIN_DIR . '/admin/includes/widgets.php';	
 			add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );

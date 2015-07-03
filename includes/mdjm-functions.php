@@ -606,7 +606,10 @@
 					//$dj = get_userdata( $event->event_dj );
 					?>
 					<tr>
-                    <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $eventinfo['dj']->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
+                    <td width="25%">
+						<?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>
+                        <strong><?php echo ( !empty( $eventinfo['dj']->display_name ) ? $eventinfo['dj']->display_name : 'DJ ' . $eventinfo['dj'] ); ?></strong>
+						<?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
 					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><a href="<?php echo get_edit_post_link( $event->ID ); ?>">Event ID <?php echo $event->ID . '</a> (' . $event_stati[$event->post_status] . ')'; ?> from <?php echo $eventinfo['start']; ?><?php if( $month != 0 && $year != 0 ) { ?> to <?php echo $eventinfo['finish']; } ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
                     </tr>
                     <?php

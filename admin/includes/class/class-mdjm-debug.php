@@ -15,18 +15,21 @@
 				$this->db_backup_dir = MDJM_PLUGIN_DIR . '/db_backups';
 				$this->backup_url = WPMDJM_PLUGIN_URL . '/db_backups';
 				$this->tables = array(
-									'Events'		=> MDJM_EVENTS_TABLE,
-									'Playlist'	  => MDJM_PLAYLIST_TABLE,
-									'Transactions'  => MDJM_TRANSACTION_TABLE,
-									'Journal'	   => MDJM_JOURNAL_TABLE,
-									'Availability'  => MDJM_HOLIDAY_TABLE,
+									'Events'			  => MDJM_EVENTS_TABLE,
+									'Playlist'	  		=> MDJM_PLAYLIST_TABLE,
+									//'Playlist Library'	=> MDJM_PLAYLIST_LIBRARY_TABLE,
+									'Transactions'  		=> MDJM_TRANSACTION_TABLE,
+									'Journal'	   		 => MDJM_JOURNAL_TABLE,
+									'Availability'  		=> MDJM_HOLIDAY_TABLE,
 									);
 				$this->deprecated = array(
 										MDJM_EVENTS_TABLE,
 										MDJM_TRANSACTION_TABLE,
 										MDJM_JOURNAL_TABLE,
 										);
-				
+										
+				define( 'MDJM_DEBUG', !empty( $this->settings['enable'] ) ? true : false );
+				define( 'MDJM_DEBUG_LOG', MDJM_PLUGIN_DIR . '/mdjm_debug.log' );
 			} // __construct
 			
 			/**
@@ -500,11 +503,12 @@
 				
 				/* -- Unique identifier fields -- */				
 				$data_id = array(
-							MDJM_EVENTS_TABLE		=> 'event_id',
-							MDJM_PLAYLIST_TABLE		=> 'id',
-							MDJM_TRANSACTION_TABLE	=> 'trans_id',
-							MDJM_JOURNAL_TABLE		=> 'id',
-							MDJM_HOLIDAY_TABLE		=> 'id',
+							MDJM_EVENTS_TABLE				  => 'event_id',
+							MDJM_PLAYLIST_TABLE				=> 'id',
+							//MDJM_PLAYLIST_LIBRARY_TABLE		=> 'id',
+							MDJM_TRANSACTION_TABLE			 => 'trans_id',
+							MDJM_JOURNAL_TABLE				 => 'id',
+							MDJM_HOLIDAY_TABLE				 => 'id',
 						);
 						
 				/* -- Loop through the tables creating the backups -- */
@@ -569,11 +573,12 @@
 						$file_content .= '  '.implode( ";\nINSERT INTO `" . $table . "` VALUES ", $vals ) . ";\n";
 						
 						$mdjm_desc = array(
-							MDJM_EVENTS_TABLE		=> 'Events Table',
-							MDJM_PLAYLIST_TABLE		=> 'Playlist Table',
-							MDJM_TRANSACTION_TABLE	=> 'Transactions Table',
-							MDJM_JOURNAL_TABLE		=> 'Journal Table',
-							MDJM_HOLIDAY_TABLE		=> 'Availability Table',
+							MDJM_EVENTS_TABLE				  => 'Events Table',
+							MDJM_PLAYLIST_TABLE				=> 'Playlist Table',
+							//MDJM_PLAYLIST_LIBRARY_TABLE		=> 'Playlist Library Table',
+							MDJM_TRANSACTION_TABLE			 => 'Transactions Table',
+							MDJM_JOURNAL_TABLE				 => 'Journal Table',
+							MDJM_HOLIDAY_TABLE				 => 'Availability Table',
 							);
 						
 						$search = array( '{MDJM_TABLE}', '{MDJM_DESC}', '{MDJM_ROWS}' );

@@ -337,6 +337,7 @@
 				
 				$event_fields = array( '_mdjm_event_date', 
 									   'mdjm_event_type',
+									   '_mdjm_event_package',
 									   '_mdjm_event_start',
 									   '_mdjm_event_finish',
 									   '_mdjm_event_notes',
@@ -567,6 +568,13 @@
 				$this->event_update['_mdjm_event_enquiry_source'] = 'Website';
 				$this->event_update['_mdjm_playlist_access'] = $mdjm->mdjm_events->playlist_ref();
 				
+				// If we have a package selected, we can add the cost to the event
+				if( array_key_exists( '_mdjm_event_package', $this->event_update ) && !empty( $this->event_update['_mdjm_event_package'] ) )	{
+					$packages = get_option( 'mdjm_packages' );
+					
+					$this->event_update['_mdjm_event_cost'] = number_format( $packages[$this->event_updates['_mdjm_event_package']]['cost'], 2 );
+				}
+				
 				/* -- Create default post (auto-draft) so we can use the ID etc -- */
 				require_once( ABSPATH . 'wp-admin/includes/post.php' );
 				$event_post = get_default_post_to_edit( MDJM_EVENT_POSTS, true );
@@ -592,7 +600,7 @@
 						if( MDJM_DEBUG == true )
 							 $mdjm->debug_logger( '	-- Assigning Event Type' );
 						wp_set_post_terms( $this->event_id, $meta_value, 'event-types' );
-					}	
+					}
 					
 					// Add the post meta
 					else	{
@@ -784,8 +792,12 @@
 						}
 					} // Time Field
 					
-				/* Select / Event List Fields */
-					elseif( $field_settings['type'] == 'select' || $field_settings['type'] == 'select_multi' || $field_settings['type'] == 'event_list' )	{
+				/* Select / Event / Package List Fields */
+					elseif( $field_settings['type'] == 'select' 
+							|| $field_settings['type'] == 'select_multi' 
+							|| $field_settings['type'] == 'event_list'
+							|| $field_settings['type'] == 'package_list' )	{
+						
 						echo '<select name="' . $field->post_name . '" id="' . $field->post_name . '"' . 
 						
 						( $field_settings['type'] == 'select_multi' ? ' multiple="multiple"' : '' ) . 
@@ -807,6 +819,21 @@
 								
 							foreach( $event_types as $type )	{
 								echo '<option value="' . $type->term_id . '">' . esc_attr( $type->name ) . '</option>' . "\n";
+							}
+						}
+						elseif( $field_settings['type'] == 'package_list' )	{
+							$packages = get_option( 'mdjm_packages' );
+							
+							$first_entry = !empty( $field_settings['config']['package_list_first_entry'] ) ? $field_settings['config']['package_list_first_entry'] : '';
+							
+							if( !empty( $first_entry ) )
+								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\n";
+								
+							foreach( $packages as $package )	{
+								echo '<option value="' . $package['slug'] . '">' . $package['name'] . 
+								( isset( $field_settings['config']['display_price'] ) && $field_settings['config']['display_price'] == 'Y' 
+									? '&nbsp;' . display_price( $package['cost'], true ) : '' ) . 
+								'</option>' . "\n";
 							}
 						}
 						else	{

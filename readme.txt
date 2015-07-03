@@ -79,6 +79,17 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.2 =
+<strong>Released Friday 3rd July, 2015</strong>
+<ul>
+	<li>Bug Fix: Addons available within Events screen when Available as Addon setting was not selected</li>
+	<li>Bug Fix: Debugging was stuck on/off depending on your setting prior to the 1.2.1 upgrade</li>
+	<li>Bug Fix: Unable to toggle the PayPal Enabled setting since upgrade to 1.2.1</li>
+	<li>Bug Fix: Cleared an error that may display if WP Debugging is enabled, whilst adding new equipment and/or package</li>
+	<li>Bug Fix: No more comment approval requests caused by journaling</li>
+	<li>General: Slight adjustment to codebase for debugging as a tidy up</li>
+</ul>
+These issues appear to impact new installations more than existing due to the fact that the settings are set correctly, but not adjustable. However we recommend checking that both the Enable PayPal? and Enable Debugging? settings are set as expected.
 = 1.2.1 =
 <strong>Released Sunday 28th June, 2015</strong>
 <ul>

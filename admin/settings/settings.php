@@ -89,6 +89,10 @@
 							'title' 	=> __( 'Client Settings' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone',
 							),
+					'mdjm_clientzone_event_settings' => array(
+							'title' 	=> __( 'Event Settings' ) . '<hr />',
+							'page'	 => 'mdjm-clientzone',
+							),
 					'mdjm_clientzone_page_settings' => array(
 							'title' 	=> __( 'Pages' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-page',
@@ -340,8 +344,9 @@
 									'page' => 'permissions',
 									),
 					/* -- Debugging -- */
-							MDJM_DEBUG_KEY => array(
+							'enable' => array(
 									'label' => 'Enable Debugging?',
+									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( MDJM_DEBUG == true ? '1' : '0' ),
 									'text' => '',
@@ -849,6 +854,16 @@
 									'text' => '',
 									'desc' => 'Display notice to Clients when they login if their Profile is incomplete? (i.e. Required field is empty)',
 									'section' => 'clientzone_client',
+									'page' => 'clientzone',
+									),
+							'update_event' => array(
+									'label' => 'Allow Client to Edit Event?',
+									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['clientzone']['update_event'] ) ? '1' : '' ),
+									'text' => '',
+									'desc' => 'Enables clients to update some of their event details within the ' . MDJM_APP,
+									'section' => 'clientzone_event',
 									'page' => 'clientzone',
 									),
 									
@@ -1821,7 +1836,7 @@
 									'label' => 'Enable PayPal?',
 									'key' => MDJM_PAYPAL_KEY,
 									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['paypal']['enable'] ) ? '1' : '0' ),
+									'value' => ( !empty( $mdjm_settings['paypal']['enable_paypal'] ) ? '1' : '0' ),
 									'text' => '',
 									'desc' => 'Enables the use of PayPal standard for client payment collections',
 									'section' => 'paypal',

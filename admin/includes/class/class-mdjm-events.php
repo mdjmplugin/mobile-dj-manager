@@ -579,6 +579,7 @@
 		 */
 		public function event_detail( $post_id )	{
 			
+			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
 			$client = get_post_meta( $post_id, '_mdjm_event_client', true );
 			$dj = get_post_meta( $post_id, '_mdjm_event_dj', true );
@@ -593,16 +594,17 @@
 			$notes = get_post_meta( $post_id, '_mdjm_event_notes', true );
 			
 			$eventinfo = array(
-							'date'			=> !empty( $date ) ? strtotime( $date ) : 'Not Specified',
-							'client'		  => !empty( $client ) ? get_userdata( $client ) : 'Not Specified',
-							'dj'			  => !empty( $dj ) ? get_userdata( $dj ) : 'Not Specified',
-							'start'		   => !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : 'Not Specified',
-							'finish'	      => !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : 'Not Specified',
-							'cost' 			=> !empty( $cost ) ? display_price( $cost ) : 'Not Specified',
+							'name'			=> !empty( $name ) ? $name : '',
+							'date'			=> !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ),
+							'client'		  => !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ),
+							'dj'			  => !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ),
+							'start'		   => !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ),
+							'finish'	      => !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ),
+							'cost' 			=> !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ),
 							'deposit' 		 => !empty( $deposit ) ? display_price( $deposit ) : '0.00',
-							'balance' 		 => !empty( $deposit ) ? display_price( $cost - $deposit ) : 'Not Specified',
-							'deposit_status'  => !empty( $deposit_status ) ? $deposit_status : 'Due',
-							'balance_status'  => !empty( $balance_status ) ? $balance_status : 'Due',
+							'balance' 		 => !empty( $deposit ) ? display_price( $cost - $deposit ) : __( 'Not Specified' ),
+							'deposit_status'  => !empty( $deposit_status ) ? $deposit_status : __( 'Due' ),
+							'balance_status'  => !empty( $balance_status ) ? $balance_status : __( 'Due' ),
 							'type'			=> $this->get_event_type( $post_id ),
 							'contract' 		=> !empty( $contract ) ? $contract : '',
 							'signed_contract' => !empty( $contract_signed ) ? $contract_signed : '',

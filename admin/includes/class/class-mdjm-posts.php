@@ -645,12 +645,12 @@
 					return;
 					
 				if( MDJM_DEBUG == true )
-					 $mdjm->debug_logger( '*** Starting Custom Post Type Save ***' . "\r\n", true );
+					 $GLOBALS['mdjm_debug']->log_it( '*** Starting Custom Post Type Save ***' . "\r\n", true );
 											
 			/* -- Security Verification -- */
 				if( !isset( $_POST['mdjm_update_custom_post'] ) || $_POST['mdjm_update_custom_post'] != 'mdjm_update' )	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	ERROR: MDJM fields not defined' );
+						 $GLOBALS['mdjm_debug']->log_it( '	ERROR: MDJM fields not defined' );
 					return $post_id;
 				}
 				
@@ -659,7 +659,7 @@
 			/* -- Contract Post Saves -- */
 				case MDJM_CONTRACT_POSTS:
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'POST TYPE: ' . strtoupper( MDJM_CONTRACT_POSTS ) );
+						 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_CONTRACT_POSTS ) );
 					/* -- Permission Check -- */
 					if( !current_user_can( 'administrator' ) )
 						return $post_id;
@@ -682,7 +682,7 @@
 			/* -- Venue Post Saves -- */
 				case MDJM_VENUE_POSTS:
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'POST TYPE: ' . strtoupper( MDJM_VENUE_POSTS ) );
+						 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_VENUE_POSTS ) );
 					/* -- Permission Check -- */
 					if( !current_user_can( 'administrator' ) && !dj_can( 'add_venue' ) )
 						return $post_id;
@@ -720,7 +720,7 @@
 				/* Transaction Post Saves -- */
 				case MDJM_TRANS_POSTS:
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'POST TYPE: ' . strtoupper( MDJM_TRANS_POSTS ) );
+						 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_TRANS_POSTS ) );
 					/* -- Permission Check -- */
 					if( !current_user_can( 'administrator' ) )
 						return $post_id;
@@ -752,18 +752,18 @@
 					
 					/* -- Create the transaction post -- */
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'Updating the post' );
+						 $GLOBALS['mdjm_debug']->log_it( 'Updating the post' );
 					remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 					wp_update_post( $trans_data );
 					
 					/* -- Set the transaction Type -- */
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'Setting the transaction type' );													
+						 $GLOBALS['mdjm_debug']->log_it( 'Setting the transaction type' );													
 					wp_set_post_terms( $post->ID, $_POST['mdjm_transaction_type'], 'transaction-types' );
 					
 					/* -- Add the meta data -- */
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'Updating the post meta' );
+						 $GLOBALS['mdjm_debug']->log_it( 'Updating the post meta' );
 					foreach( $trans_meta as $meta_key => $new_meta_value )	{
 						$current_meta_value = get_post_meta( $post_id, $meta_key, true );
 						
@@ -785,7 +785,7 @@
 			/* Event Post Saves -- */
 				case MDJM_EVENT_POSTS:
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( 'POST TYPE: ' . strtoupper( MDJM_EVENT_POSTS ) );
+						 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_EVENT_POSTS ) );
 					
 					/* -- Permission Check -- */
 					if( !current_user_can( 'administrator' ) || dj_can( 'dj_add_event' ) )
@@ -810,7 +810,7 @@
 					
 					if( !empty( $_POST['mdjm_reset_pw'] ) )	{
 						if( MDJM_DEBUG == true )
-							$mdjm->debug_logger( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
 							
 						update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', wp_generate_password( $mdjm_settings['clientzone']['pass_length'] ) );
 					}
@@ -865,6 +865,10 @@
 					/* -- Prepare the remaining event fields -- */
 					$event_data['_mdjm_event_last_updated_by'] = $current_user->ID;
 					
+					// Event name
+					$_POST['_mdjm_event_name'] = ( !empty( $_POST['_mdjm_event_name'] ) ? $_POST['_mdjm_event_name'] : 
+						get_term( $_POST['mdjm_event_type'], 'event-types' )->name );
+					
 					// Playlist
 					if( $new_post == true || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )
 						$event_data['_mdjm_event_playlist_access'] = $mdjm->mdjm_events->playlist_ref();
@@ -909,7 +913,7 @@
 						
 						/* -- Add the meta -- */
 						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	-- Beginning Meta Updates' );
+							 $GLOBALS['mdjm_debug']->log_it( '	-- Beginning Meta Updates' );
 							 
 						foreach( $event_data as $event_meta_key => $event_meta_value )	{
 							
@@ -955,7 +959,7 @@
 							}
 						}
 						if( MDJM_DEBUG == true )
-							$mdjm->debug_logger( '	-- Meta Updates Completed     ' . "\r\n" . '| ' .
+							$GLOBALS['mdjm_debug']->log_it( '	-- Meta Updates Completed     ' . "\r\n" . '| ' .
 								implode( "\r\n" . '     | ', $field_updates ) );
 								
 						/* -- Set the status & initiate the specific event type tasks -- */
@@ -979,7 +983,7 @@
 							/* -- Update Journal with event updates -- */
 							if( MDJM_JOURNAL == true )	{
 								if( MDJM_DEBUG == true )
-									$mdjm->debug_logger( '	-- Adding journal entry' );
+									$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 									
 								$mdjm->mdjm_events->add_journal( array(
 											'user' 			=> get_current_user_id(),
@@ -994,7 +998,7 @@
 							}
 							else	{
 								if( MDJM_DEBUG == true )
-									$mdjm->debug_logger( '	-- Journalling is disabled' );	
+									$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 							}
 						}
 						/* -- Check for manual payment received -- */
@@ -1113,7 +1117,7 @@
 				
 				/* Print the availability result */
 				if( isset( $dj_avail ) )	{
-					$mdjm->debug_logger( 'DJ Availability check returns availability for ' . $date );
+					$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns availability for ' . $date );
 					/* Check all DJ's */
 					if ( !empty( $dj_avail['available'] ) && current_user_can( 'administrator' ) )	{
 						$avail_message = count( $dj_avail['available'] ) . ' ' . _n( MDJM_DJ, MDJM_DJ . '\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $date ) );
@@ -1146,7 +1150,7 @@
 					mdjm_update_notice( $class, $avail_message );
 				}
 				else	{
-					$mdjm->debug_logger( 'DJ Availability check returns no availability for ' . $date );
+					$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns no availability for ' . $date );
 				}
 			} // availability_check
 			

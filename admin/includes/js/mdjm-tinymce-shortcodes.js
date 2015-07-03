@@ -197,6 +197,12 @@
 					text: 'Event Shortcodes',
 					menu: [
 						{
+							text: 'Event Name',
+							onclick: function() {
+								editor.insertContent('{EVENT_NAME}');
+							}
+						},
+						{
 							text: 'Contract Date',
 							onclick: function() {
 								editor.insertContent('{CONTRACT_DATE}');

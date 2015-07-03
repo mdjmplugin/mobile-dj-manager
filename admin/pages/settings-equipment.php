@@ -25,7 +25,7 @@
 		if( $_POST['submit'] == 'Add Item' )	{
 			$items = get_option( 'mdjm_equipment' );
 			$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) );
-			if( $items[$item_id] )
+			if( isset( $items[$item_id] ) )
 				$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) ) . '_';
 			$djs_have = '';
 			$i = 1;
@@ -34,7 +34,7 @@
 				if( $i != count( $_POST['djs'] ) ) $djs_have .= ',';
 				$i++;
 			}
-			if( $_POST['addon_avail'] != 'Y' ) $_POST['addon_avail'] = 'N';
+			if( isset( $_POST['addon_avail'] ) && $_POST['addon_avail'] != 'Y' ) $_POST['addon_avail'] = 'N';
 			$items[$item_id] = array( 
 									sanitize_text_field( $_POST['equip_name'] ),
 									$item_id,

@@ -163,7 +163,13 @@
 			if( $current_version_mdjm < '1.2.1' )	{
 				add_option( 'mdjm_update_me', '1.2.1' ); // Add option to tell updated.php we have tasks to complete
 			} // if( $current_version_mdjm <= '1.2.1' )
-			
+/***************************************************
+			 	UPGRADES FROM 1.2.1
+***************************************************/			
+			if( $current_version_mdjm < '1.2.2' )	{
+				add_option( 'mdjm_update_me', '1.2.2' ); // Add option to tell updated.php we have tasks to complete
+			} // if( $current_version_mdjm <= '1.2.2' )
+
 /***************************************************
 THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 ***************************************************/

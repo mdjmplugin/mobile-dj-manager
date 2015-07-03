@@ -16,6 +16,7 @@
 			
 				
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'youtube-subscribe' );
 		wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 ?>
 		<script type="text/javascript">
@@ -189,9 +190,10 @@
                 </tr>
                 </form>
               <tr>
-                  <td colspan="2"><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
-<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script><br />
-<div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
+                  <td colspan="2"><p><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
+<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></p>
+<p><div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></p>
+<p><div class="g-ytsubscribe" data-channelid="UCaD6icd6OZ8haoTBc5YjJrw" data-layout="default" data-count="hidden"></div></p></td>
               </tr>
               <tr class="alternate">
                 <td colspan="2"><strong>Your 7 Day Schedule</strong></td>

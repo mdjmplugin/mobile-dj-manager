@@ -214,6 +214,14 @@
 					if( $_POST['field_type'] == 'event_list' && !empty( $_POST['event_list_first_entry'] ) )
 						$field_meta['config']['event_list_first_entry'] = sanitize_text_field( $_POST['event_list_first_entry'] );
 						
+					/* Package List First Entry */
+					if( $_POST['field_type'] == 'package_list' && !empty( $_POST['package_list_first_entry'] ) )
+						$field_meta['config']['package_list_first_entry'] = sanitize_text_field( $_POST['package_list_first_entry'] );
+						
+					/* Package List Display Price */
+					if( $_POST['field_type'] == 'package_list' )
+						$field_meta['config']['display_price'] = ( isset( $_POST['package_price'] ) && !empty( $_POST['package_price'] ) ? 'Y' : 'N' );
+						
 					/* Required Field */
 					if( $field_meta['type'] == 'captcha' || $field_meta['type'] == 'submit' )
 						$field_meta['config']['required'] = 'Y';
@@ -389,7 +397,7 @@
 					}
 					
 					$form_meta['required_field_text'] = sanitize_text_field( $_POST['required_field_text'] );
-					$form_meta['required_asterix'] = !empty( $_POST['required_asterix'] ) ? true : false;
+					$form_meta['required_asterix'] = !empty( $_POST['required_asterix'] ) ? '1' : '0';
 					
 					$form_meta['error_text_color'] = ( empty( $_POST['error_text_color'] ) 
 						? '#FF0000' : sanitize_text_field( $_POST['error_text_color'] ) );
@@ -683,6 +691,7 @@
 									'select'       => 'Select List',
 									'select_multi' => 'Select List (Multiple Select)',
 									'event_list'   => 'Event Type List',
+									'package_list' => 'Event Package List',
 									'checkbox'     => 'Checkbox',
 									'textarea'     => 'Textarea',
 									'tel'          => 'Telephone Number',
@@ -701,15 +710,19 @@
 				}
 
 				$mappings_event = array(
-									'_mdjm_event_date'			=> 'Event Date',
-									'mdjm_event_type'				=> 'Event Type',
-									'_mdjm_event_start'			=> 'Event Start',
-									'_mdjm_event_finish'		=> 'Event End',
-									'_mdjm_event_notes'			=> 'Event Description',
-									'_mdjm_event_venue_name'	=> 'Event Venue Name',
-									'_mdjm_event_venue_town'	=> 'Event Venue Town/City',
-									'_mdjm_event_venue_county'	=> 'Event County (State)'
+									'_mdjm_event_date'		   => 'Event Date',
+									'mdjm_event_type'			=> 'Event Type',
+									'_mdjm_event_package'		=> 'Event Package',
+									'_mdjm_event_start'		  => 'Event Start',
+									'_mdjm_event_finish'		 => 'Event End',
+									'_mdjm_event_notes'		  => 'Event Description',
+									'_mdjm_event_venue_name'	 => 'Event Venue Name',
+									'_mdjm_event_venue_town'	 => 'Event Venue Town/City',
+									'_mdjm_event_venue_county'   => 'Event County (State)'
 									);
+				
+				if( MDJM_PACKAGES == false )
+					unset( $mappings_event['_mdjm_event_package'] );
 									
 				$mappings = array_merge( $mappings_client, $mappings_event );
 				
@@ -763,6 +776,12 @@
 					}
 					else	{
 						document.getElementById('event_list_first_entry_row').style.display = "none";   
+					}
+					if(elem.value == 'package_list')	{
+						document.getElementById('package_list_first_entry_row').style.display = "block";
+					}
+					else	{
+						document.getElementById('package_list_first_entry_row').style.display = "none";
 					}
 					if(elem.value == 'submit')	{
 						document.getElementById('align_submit_row').style.display = "block";
@@ -864,11 +883,12 @@
 						$i++;
 						if( $i == 2 )
 							$i = 0;
-						/* Only one email/event list/captcha/submit field type allowed */
+						/* Only one email/event list/package/captcha/submit field type allowed */
+						$only_one = array( 'email', 'event_list', 'package_list', 'captcha', 'submit' );
 						if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
-							if( $f_config['type'] == 'email' || $f_config['type'] == 'event_list' || $f_config['type'] == 'captcha' || $f_config['type'] == 'submit' )	{
+							if( in_array( $f_config['type'], $only_one ) )
 								unset( $field_types[$f_config['type']] );	
-							}
+
 						}
 						/* If mapping in use, do not display again */
 						if( isset( $f_config['config']['mapping'] ) && !empty( $f_config['config']['mapping'] ) && !isset( $_GET['edit'] )	 )	{
@@ -963,7 +983,7 @@
 		<?php /* Datepicker */ ?>
 				<div id="datepicker_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type']['date'] ? 'block;' : 'none;' ); ?> font-size:10px">
 				<p>Use Datepicker?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="datepicker" id="datepicker" value="Y" 
-				<?php if( isset( $e_meta['config']['datepicker'] ) ) { checked( $e_meta['config']['datepicker'], 'Y' ); } else echo 'checked="checked"'; ?> /></p>
+				<?php if( isset( $e_meta['config']['datepicker'] ) ) { checked( $e_meta['config']['datepicker'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>
 		<?php /* End Datepicker */ ?>
 		
@@ -994,6 +1014,16 @@
 				<?php echo( !empty( $e_meta['config']['event_list_first_entry'] ) ? ' value="' . esc_attr( $e_meta['config']['event_list_first_entry'] ) . '"' : '' ); ?> /></p>
 				</div>
 		<?php /* End Event List First Entry */ ?>
+        
+        <?php /* Package List First Entry */ ?>
+				<div id="package_list_first_entry_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'package_list' ? 'block;' : 'none;' ); ?> font-size:10px">
+				<p>Package List First Entry:<br />
+				&nbsp;&nbsp;&nbsp;<input type="text" name="package_list_first_entry" id="package_list_first_entry" class="regular-text" placeholder="i.e. Select A Package"
+				<?php echo( !empty( $e_meta['config']['package_list_first_entry'] ) ? ' value="' . esc_attr( $e_meta['config']['package_list_first_entry'] ) . '"' : '' ); ?> /></p>
+                <p>Include Package Price:?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="package_price" id="package_price" value="1" 
+				<?php if( isset( $e_meta['config']['display_price'] ) ) { checked( $e_meta['config']['display_price'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
+				</div>
+		<?php /* End Package List First Entry */ ?>
 		
 		<?php /* Submit Align */ ?>
 				<div id="align_submit_row" style="display: <?php echo ( !empty( $e_meta ) && $e_meta['type'] == 'submit' ? 'block;' : 'none;' ); ?> font-size:10px">
@@ -1305,9 +1335,7 @@
 				</tr>
                 <tr>
                 <th scope="row"><label for="required_asterix">Indicate Required Field?</label></th>
-                <td><input type="checkbox" name="required_asterix" id="required_asterix" value="1" 
-					<?php if( !empty( $config['required_asterix'] ) ) echo ' selected="selected"'; ?> 
-                    /> <span class="description">Select to display a <span style="color: red; font-weight: bold;">*</span> next to a required field</span></td>
+                <td><input type="checkbox" name="required_asterix" id="required_asterix" value="1"<?php if( !empty( $config['required_asterix'] ) ) echo ' checked="checked"'; ?> /> <span class="description">Select to display a <span style="color: red; font-weight: bold;">*</span> next to a required field</span></td>
                 </tr>
 				<tr>
 				<th scope="row"><label for="required_field_text">Error Message:</label></th>
@@ -1391,6 +1419,7 @@
 								'user_pass'            	  => 'Client Password',
 								'_mdjm_event_date'     	   => 'Event Date',
 								'mdjm_event_type'      		=> 'Event Type',
+								'_mdjm_event_package'   		=> 'Event Package',
 								'_mdjm_event_start'    	  => 'Event Start',
 								'_mdjm_event_finish'   		 => 'Event End',
 								'_mdjm_event_notes'    	  => 'Event Description',
@@ -1422,7 +1451,7 @@
 				else	{
 					echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
 				}
-				if( $field['type'] == 'select' || $field['type'] == 'select_multi' || $field['type'] == 'event_list' )	{
+				if( $field['type'] == 'select' || $field['type'] == 'select_multi' || $field['type'] == 'event_list' || $field['type'] == 'package_list' )	{
 					if( $field['type'] == 'event_list' )	{
 						$opt = '';
 						if( !empty( $field['config']['event_list_first_entry'] ) )	{
@@ -1431,6 +1460,23 @@
 						$event_types = $mdjm->mdjm_events->get_event_types();
 						foreach( $event_types as $event_type )	{
 							$opt .= stripslashes( $event_type->name ) . "\r\n";
+						}
+					}
+					elseif( $field['type'] == 'package_list' )	{
+						$opt = '';
+						if( !empty( $field['config']['event_list_first_entry'] ) )	{
+							$opt .= $field['config']['event_list_first_entry'] . "\r\n";
+						}
+						$packages = get_option( 'mdjm_packages' );
+						asort( $packages );
+						foreach( $packages as $package )	{
+							// Only display packages that are set as enabled
+							if( empty( $package['enabled'] ) || $package['enabled'] != 'Y' )
+								continue;
+								
+							$opt .= esc_attr( $package['name'] ) . 
+								( isset( $field['config']['display_price'] ) && $field['config']['display_price'] == 'Y' 
+									? ' ' . display_price( $package['cost'], true ) : '' ) . "\r\n";
 						}
 					}
 					elseif( $field['type'] == 'dj_list' )	{

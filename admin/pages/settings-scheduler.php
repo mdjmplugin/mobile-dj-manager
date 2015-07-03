@@ -15,7 +15,6 @@
 		
 	global $mdjm_settings;
 		
-	
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{
 		if( $_POST['submit'] == 'Save Changes' )	{

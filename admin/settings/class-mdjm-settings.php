@@ -42,7 +42,6 @@
 				/* -- Register the settings -- */
 				register_setting( 'mdjm-settings', MDJM_SETTINGS_KEY );
 				register_setting( 'mdjm-permissions', MDJM_PERMISSIONS_KEY );
-				register_setting( 'mdjm-debugging', MDJM_DEBUG_KEY );
 				register_setting( 'mdjm-debugging-files', MDJM_DEBUG_SETTINGS_KEY );
 				register_setting( 'mdjm-events', MDJM_EVENT_SETTINGS_KEY );
 				register_setting( 'mdjm-playlists', MDJM_PLAYLIST_SETTINGS_KEY );
@@ -535,10 +534,10 @@
 					$status = $mdjm->_mdjm_validation();
 				
 				$true_vals = array(
-								'show_dashboard', 'show_credits', 'mdjm_debug', 'warn', 'auto_purge', 'employer', 
+								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
 								'enable_packages', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
-								'booking_conf_to_dj', 'notify_profile', 'custom_client_text', 'enable_tax',
+								'booking_conf_to_dj', 'notify_profile', 'update_event', 'custom_client_text', 'enable_tax',
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'dj_see_wp_dash', 'dj_add_client',
 								'dj_add_event', 'dj_view_enquiry', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists'
 								);

@@ -218,6 +218,16 @@
 		<?php mdjm_jquery_datepicker_script(); ?>
 		</script>
         <!-- Start of first row -->
+        <div class="mdjm-post-row-single">
+            <div class="mdjm-post-1column">
+            <?php
+            echo '<label for="_mdjm_event_name" class="mdjm-label">' . __( 'Event Name:' ) . '</label><br />' . "\r\n" . 
+            '<input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="' . 
+				esc_attr( get_post_meta( $post->ID, '_mdjm_event_name', true ) ) . '" size="50" /> <span class="mdjm-description">' . 
+				__( 'Optional: Display name in ' . MDJM_APP ) . '</span>' . "\r\n";
+            ?>
+            </div>
+        </div>
         <div class="mdjm-post-row">
         	<div class="mdjm-post-2column">
                 <label for="_mdjm_event_dj" class="mdjm-label"><?php _e( 'Select ' . MDJM_DJ . ':' ); ?></label><br />
@@ -443,6 +453,7 @@
 							unset( $equipment[$equip_in_package] );
 						}
 					}
+					// If we have addons, display them
 					if( count( $equipment > 0 ) )	{
 						$cats = get_option( 'mdjm_cats' );
 						if( !empty( $cats ) && is_array( $cats ) )	{
@@ -456,7 +467,7 @@
 						foreach( $cats as $cat_key => $cat_value )	{
 							echo '<option value="" disabled="disabled" data-price="0.00">--- ' . strtoupper( esc_attr( $cat_value ) ) . ' ---</option>' . "\r\n";
 							foreach( $equipment as $equip_list )	{
-								if( $equip_list[5] == $cat_key )	{
+								if( $equip_list[5] == $cat_key && isset( $equip_list[6] ) && $equip_list[6] == 'Y' )	{
 									echo '<option value="' . $equip_list[1] . '" data-price="' . $equip_list[7] . '"' . 
 									( !empty( $current_addons ) && in_array( $equip_list[1], $current_addons ) ? 
 										' selected="selected"' : '' ) . 

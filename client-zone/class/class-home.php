@@ -28,6 +28,9 @@
 					if( $_GET['action'] == 'view_event' )
 						$this->single_event();
 						
+					elseif( $_GET['action'] == 'edit_event_detail' )
+						$this->edit_event_form( $_GET['event_id'] );
+						
 					else // Process actions
 						$this->process_event_action();
 				}
@@ -350,10 +353,22 @@
 						echo '<div id="mdjm-event-table">' . "\r\n";
 							echo '<table id="mdjm-event-listing">' . "\r\n";
 								echo '<tr>' . "\r\n";
+									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Event Details' ) . '</span>&nbsp;&nbsp;&nbsp;' . 
+									$this->edit_event_link( 'edit', $event->ID ) . '</th>' . "\r\n";
+								echo '</tr>' . "\r\n";
+								
+								echo '<tr>' . "\r\n";
+									echo '<th style="width: 15%;">' . __( 'Event Name:' ) . '</th>' . "\r\n";
+									echo '<td colspan="3">' . ( !empty( $eventinfo['name'] ) ? 
+										esc_attr( $eventinfo['name'] ) : $eventinfo['type'] ) . '</span>&nbsp;&nbsp;&nbsp;' . 
+										$this->edit_event_link( 'change', $event->ID ) . '</td>' . "\r\n";
+								echo '</tr>' . "\r\n";
+								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Status:' ) . '</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . __( get_post_status_object( $event->post_status )->label ) . '</td>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Your ' . MDJM_DJ . ':' ) . '</th>' . "\r\n";
-									echo '<td style="width: 35%;">' . $eventinfo['dj']->display_name . '</td>' . "\r\n";
+									echo '<td style="width: 35%;">' . ( !empty( $eventinfo['dj']->display_name ) ? 
+										$eventinfo['dj']->display_name : $eventinfo['dj'] ) . '</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Event Date:' ) . '</th>' . "\r\n";
@@ -389,7 +404,7 @@
 									echo '<td colspan="4">&nbsp;</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								echo '<tr>' . "\r\n";
-									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Client Contact Details' ) . '</span>&nbsp;&nbsp;&nbsp;<a href="' . 
+									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Your Contact Details' ) . '</span>&nbsp;&nbsp;&nbsp;<a href="' . 
 									$mdjm->get_link( MDJM_PROFILE_PAGE, false ) . '">' . 
 									__( 'edit' ) . '</a></th>' . "\r\n";
 								echo '</tr>' . "\r\n";
@@ -431,6 +446,242 @@
 					
 				} // foreach( $posts as $post )
 			} // single_event
+			
+			/*
+			 * Display form to enable client to edit event
+			 *
+			 *
+			 *
+			 */
+			function edit_event_form( $event_id )	{
+				global $post, $mdjm;
+				
+				$post = get_post( $event_id );
+				
+				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				
+				$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
+				
+				/* -- Initiate the datepicker script -- */
+				echo '<script type="text/javascript">' . "\r\n";
+				mdjm_jquery_datepicker_script( array( 'mdjm_setup_date', '_mdjm_event_djsetup' ) );
+				echo '</script>' . "\r\n";
+				
+				echo '<form name="edit_client_event" id="edit_client_event" method="post" action="' . $mdjm->get_link( MDJM_HOME, true ) . 
+					'action=view_event&event_id=' . $event_id . '">' . "\r\n";
+				
+				echo '<input type="hidden" name="event_id" id="event_id" value="' . $post->ID . '" />' . "\r\n";
+				wp_nonce_field( 'manage_event', '__mdjm_event' );
+				echo '<div id="mdjm-event-container">' . "\r\n";
+					echo '<div id="mdjm-event-table">' . "\r\n";
+						echo '<table id="mdjm-event-listing">' . "\r\n";
+							echo '<tr>' . "\r\n";
+								echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Event Details' ) . '</th>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							
+							echo '<tr>' . "\r\n";
+								echo '<th style="width: 15%;"><label for="_mdjm_event_name">' . __( 'Event Name:' ) . '</label></th>' . "\r\n";
+								echo '<td colspan="3"><input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="' 
+									. ( !empty( $eventinfo['name'] ) ? 
+									esc_attr( $eventinfo['name'] ) : $eventinfo['type'] ) . '" /></td>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							echo '<tr>' . "\r\n";
+								echo '<th style="width: 15%;"><label for="display_event_date">' . __( 'Event Date:' ) . '</label></th>' . "\r\n";
+								echo '<td style="width: 35%;"><input type="text" class="mdjm_date required" name="display_event_date" id="display_event_date" ' . 
+                				'value="' . ( get_post_meta( $post->ID, '_mdjm_event_date', true ) ? 
+								date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : '' ) . '" />' . 
+								'<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="' . ( !empty( $eventinfo['date'] ) ? 
+								date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : '' ) . '" /></td>' . "\r\n";
+								
+								echo '<th style="width: 15%;"><label for="mdjm_event_type">' . __( 'Event Type:' ) . '</label></th>' . "\r\n";
+								echo '<td style="width: 35%;">';
+								wp_dropdown_categories( array( 'taxonomy'		  => 'event-types',
+															   'hide_empty'		=> 0,
+															   'name'			  => 'mdjm_event_type',
+															   'id' 				=> 'mdjm_event_type',
+															   'selected'		  => ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : '' ),
+															   'orderby' 		   => 'name',
+															   'hierarchical' 	  => 0,
+															   'class'			 => 'mdjm-meta required',
+                                                ) );
+								'</td>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							
+							echo '<tr>' . "\r\n";
+								echo '<th style="width: 15%;"><label for="event_start_hr">' . __( 'Start Time:' ) . '</label></th>' . "\r\n";
+								echo '<td style="width: 35%;">';
+								echo '<select name="event_start_hr" id="event_start_hr">' . "\r\n";
+								$minutes = array( '00', '15', '30', '45' );
+								if( MDJM_TIME_FORMAT == 'H:i' )	{
+									$i = '00';
+									$x = '23';
+									$comp = 'H';
+								}
+								else	{
+									$i = '1';
+									$x = '12';
+									$comp = 'g';	
+								}
+								while( $i <= $x )	{
+									if( $i != 0 && $i < 10 && $comp == 'H' )
+										$i = '0' . $i;
+									echo '<option value="' . $i . '"';
+									selected( date( $comp, strtotime( $eventinfo['start'] ) ), $i );
+									echo '>' . $i . '</option>' . "\r\n";
+									$i++;
+								}
+								echo '</select>' . "\r\n";
+                				echo '<select name="event_start_min" id="event_start_min">' . "\r\n";
+								foreach( $minutes as $minute )	{
+									echo '<option value="' . $minute . '"';
+									selected( date( 'i', strtotime( $eventinfo['start'] ) ), $minute );
+									echo '>' . $minute . '</option>' . "\r\n";
+								}
+								echo '</select>' . "\r\n";
+								
+								if( MDJM_TIME_FORMAT != 'H:i' )	{
+									echo '&nbsp;<select name="event_start_period" id="event_start_period">' . "\r\n";
+									echo '<option value="AM"';
+									selected( date( 'A', strtotime( $eventinfo['start'] ) ), 'AM' );
+									echo '>AM</option>' . "\r\n";
+									echo '<option value="PM"';
+									selected( date( 'A', strtotime( $eventinfo['start'] ) ), 'PM' );
+									echo '>PM</option>' . "\r\n";
+									echo '</select>' . "\r\n";
+								}
+								
+								echo '</td>' . "\r\n";
+								echo '<th style="width: 15%;"><label for="event_finish_hr">' . __( 'End Time:' ) . '</label></th>' . "\r\n";
+								echo '<td style="width: 35%;">';
+								echo '<select name="event_finish_hr" id="event_finish_hr">' . "\r\n";
+								
+								$minutes = array( '00', '15', '30', '45' );
+								if( MDJM_TIME_FORMAT == 'H:i' )	{
+									$i = '00';
+									$x = '23';
+									$comp = 'H';
+								}
+								else	{
+									$i = '1';
+									$x = '12';
+									$comp = 'g';	
+								}
+								while( $i <= $x )	{
+									if( $i != 0 && $i < 10 && $comp == 'H' )
+										$i = '0' . $i;
+									echo '<option value="' . $i . '"';
+									selected( date( $comp, strtotime( $eventinfo['finish'] ) ), $i );
+									echo '>' . $i . '</option>' . "\r\n";
+									$i++;
+								}
+								
+								echo '</select>' . "\r\n";
+								echo '<select name="event_finish_min" id="event_finish_min">' . "\r\n";
+								foreach( $minutes as $minute )	{
+									echo '<option value="' . $minute . '"';
+									selected( date( 'i', strtotime( $eventinfo['finish'] ) ), $minute );
+									echo '>' . $minute . '</option>' . "\r\n";
+								}
+								echo '</select>' . "\r\n";
+								
+								if( MDJM_TIME_FORMAT != 'H:i' )	{
+									echo '&nbsp;<select name="event_finish_period" id="event_finish_period">' . "\r\n";
+									echo '<option value="AM"';
+									selected( date( 'A', strtotime( $eventinfo['finish'] ) ), 'AM' );
+									echo '>AM</option>' . "\r\n";
+									echo '<option value="PM"';
+									selected( date( 'A', strtotime( $eventinfo['finish'] ) ), 'PM' );
+									echo '>PM</option>' . "\r\n";
+									echo '</select>' . "\r\n";
+								}
+								
+								echo '</td>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							
+							echo '<tr>' . "\r\n";
+								echo '<th style="width: 15%;"><label for="_mdjm_event_notes">' . __( 'Notes:' ) . '</label></th>' . "\r\n";
+								echo '<td colspan="3"><textarea name="_mdjm_event_notes" id="_mdjm_event_notes" rows="5">' . 
+								esc_attr( $eventinfo['notes'] ) . '</textarea></td>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							
+							echo '<tr>' . "\r\n";
+								echo '<td colspan="2"><input type="submit" name="submit" id="submit" value="Submit Changes" /></td>' . "\r\n";
+								echo '<td colspan="2"><button type="reset" onclick="location.href=\'' . $mdjm->get_link( MDJM_HOME, true ) . 
+								'action=view_event&amp;event_id=' . $post->ID . '\'">' . __( 'Cancel Changes' ) . '</button></td>' . "\r\n";
+							echo '</tr>' . "\r\n";
+							
+							echo '</table>' . "\r\n";
+						echo '</div>' . "\r\n"; // End div mdjm-event-table						
+					echo '</div>' . "\r\n"; // End div mdjm-event-container	
+				echo '</form>' . "\r\n";
+
+			} // edit_event_form
+			
+			function update_event()	{
+				global $mdjm, $mdjm_posts, $post;
+				
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Event ID ' . $post->ID . ' is being updated by ' . $eventinfo['client']->display_name, true );
+				
+				$post = get_post( $_POST['event_id'] );
+				
+				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				
+				// Prepare the meta data
+				$event_data['_mdjm_event_last_updated_by'] = $current_user->ID;
+				
+				if( $_POST['_mdjm_event_name'] != $eventinfo['name'] )	{
+					$event_data['_mdjm_event_name'] = sanitize_text_field( $_POST['event_name'] );
+					
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Event Name updating to ' . $_POST['event_name'] );
+				}
+					
+				// Event Times
+				if( date( 'H:i', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) != $eventinfo['start'] )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Event start time updating to ' . $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] );
+						
+						$event_data['_mdjm_event_start'] = MDJM_TIME_FORMAT == 'H:i' ? 
+							date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) : 
+							date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] . 
+							isset( $_POST['event_start_period'] ) ? $_POST['event_start_period'] : '' ) );	
+				}
+				if( date( 'H:i', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) != $eventinfo['finish'] )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Event finish time updating to ' . $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] );
+						
+						$event_data['_mdjm_event_finish'] = MDJM_TIME_FORMAT == 'H:i' ? 
+							date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) : 
+							date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . 
+							isset( $_POST['event_finish_period'] ) ? $_POST['event_finish_period'] : '' ) );	
+				}
+								
+				remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
+				
+				
+				add_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
+				
+			} // update_event
+			
+			/*
+			 * If the client is allowed to edit their event details, provide a link
+			 *
+			 * @param		str		$text		The text to display for the link
+			 *				str		$event_id	The ID of the event
+			 * @return		str		Prints the link
+			 */
+			function edit_event_link( $text, $event_id )	{
+				global $mdjm, $mdjm_settings;
+				
+				if( !empty( $mdjm_settings['clientzone']['update_event'] ) )
+					return '<a href="' . $mdjm->get_link( MDJM_HOME, true ) . 'action=edit_event_detail&event_id=' . $event_id . '">' . 
+					$text . '</a>';
+					
+				else
+					return;
+				
+			} // edit_event_link
 			
 		} // class ClientZone_Home
 		

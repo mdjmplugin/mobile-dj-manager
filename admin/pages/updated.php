@@ -12,9 +12,7 @@
 
 	function f_mdjm_updated_header( $ver )	{
 		global $mdjm;
-		
-		
-		
+		wp_enqueue_script( 'youtube-subscribe' );
 		?>
         <div id="fb-root"></div>
 		<script>(function(d, s, id) {
@@ -25,6 +23,7 @@
 			  fjs.parentNode.insertBefore(js, fjs);
         }	(document, 'script', 'facebook-jssdk'));
         </script>
+        
         <div class="wrap">
         <table class="widefat" width="100%">
         <tr>
@@ -87,6 +86,9 @@
         <td><div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
         </tr>
         <tr>
+        <td><div class="g-ytsubscribe" data-channelid="UCaD6icd6OZ8haoTBc5YjJrw" data-layout="default" data-count="hidden"></div></td>
+        </tr>
+        <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Ratings &amp; Reviews</td>
         </tr>
         <tr>
@@ -109,6 +111,35 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 1.2.2
+**************************************************/
+	function f_mdjm_updated_to_1_2_2()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Bug Fix Release</font><br />
+            <p>MDJM Version 1.2.2 is a bug fix release to address a few issues that have arisen since the release of 1.2.1 last week.</p>
+        	<ui>
+                <li><span class="mdjm-bug">Bug Fix</span>: Addons available within Events screen when <code>Available as Addon</code> setting was not selected</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: <a href="<?php echo mdjm_get_admin_page( 'debugging' ); ?>">Debugging</a> was stuck on/off depending on your setting prior to the 1.2.1 upgrade</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Unable to toggle the <code>PayPal Enabled</code> <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>&section=mdjm_paypal_settings">setting</a> since upgrade to 1.2.1</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Cleared an error that may display if WP Debugging is enabled, whilst adding new equipment and/or package</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: No more comment approval requests caused by journaling</li>
+                <li><span class="mdjm-general">General</span>: Slight adjustment to codebase for debugging as a tidy up</li>
+            </ui>
+            <p>These issues appear to impact new installations more than existing due to the fact that the settings are set correctly, but not adjustable. However we <strong>recommend</strong> checking that both the <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>&section=mdjm_paypal_settings"><code>Enable PayPal?</code></a> and  <a href="<?php echo mdjm_get_admin_page( 'debugging' ); ?>"><code>Enable Debugging?</code></a> settings are set as expected.</p>
+        </td>
+        </tr>
+        <tr>
+        </tr>
+        </table>
+        </td>
+        <?php
+		
+	} // f_mdjm_updated_to_1_2_2
 
 /**************************************************
 				VERSION 1.2.1

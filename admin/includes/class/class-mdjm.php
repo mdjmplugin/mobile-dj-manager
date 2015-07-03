@@ -641,6 +641,10 @@
 				wp_register_style( 'mdjm-admin', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css' );
 				wp_enqueue_style( 'mdjm-admin' );
 				
+				/* -- YouTube Suscribe Script -- */
+				// Needs to be enqueued as and when required
+				wp_register_script( 'youtube-subscribe', 'https://apis.google.com/js/platform.js' );
+				
 				if( in_array( get_post_type(), $mdjm_post_types ) )	{
 					/* -- mdjm-posts.css: The CSS script for all custom post pages -- */
 					wp_register_style( 'mdjm-posts', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-posts.css' );
@@ -1376,7 +1380,6 @@
 					$venue_details = $this->mdjm_events->mdjm_get_venue_details( get_post_meta( $e->ID, '_mdjm_event_venue_id', true ), $e->ID );
 
 				}
-				
 					
 				/* -- Replacements -- */
 				$mdjm_filter = array(
@@ -1427,6 +1430,7 @@
 					'{EVENT_DATE}'		   => !empty( $e_meta['_mdjm_event_date'][0] ) ? date( 'l, jS F Y', strtotime( $e_meta['_mdjm_event_date'][0] ) ) : '',
 					'{EVENT_DATE_SHORT}'     => !empty( $e_meta['_mdjm_event_date'][0] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $e_meta['_mdjm_event_date'][0] ) ) : '',
 					'{EVENT_DESCRIPTION}'    => !empty( $e_meta['_mdjm_event_notes'][0] ) ? $e_meta['_mdjm_event_notes'][0] : '',
+					'{EVENT_NAME}'		   => !empty( $e_meta['_mdjm_event_name'][0] ) ? $e_meta['_mdjm_event_name'][0] : '',
 					'{EVENT_TYPE}'		   => !empty( $type ) ? $type[0]->name : '',
 					'{PAYMENT_AMOUNT}'	   => isset( $_POST['mc_gross'] ) ? display_price( $_POST['mc_gross'] ) : '',
 					'{PAYMENT_DATE}'		 => isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '',
@@ -1511,7 +1515,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.1' );
+	define( 'MDJM_VERSION_NUM', '1.2.2' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );
@@ -1541,7 +1545,6 @@
 	define( 'MDJM_AVAILABILITY_SETTINGS_KEY', 'mdjm_availability_settings' );
 	define( 'MDJM_SCHEDULES_KEY', 'mdjm_schedules' );
 	define( 'MDJM_UPDATED_KEY', 'mdjm_updated' );
-	define( 'MDJM_DEBUG_KEY', 'mdjm_debug' );
 	define( 'MDJM_DEBUG_SETTINGS_KEY', 'mdjm_debug_settings' );
 	define( 'MDJM_DB_VERSION_KEY', 'mdjm_db_version' );
 	define( 'MDJM_UNINST_SETTINGS_KEY', 'mdjm_uninst' );
@@ -1549,14 +1552,11 @@
 	/* -- Tables -- */
 	define( 'MDJM_EVENTS_TABLE', $wpdb->prefix . 'mdjm_events' );
 	define( 'MDJM_PLAYLIST_TABLE', $wpdb->prefix . 'mdjm_playlists' );
+	define( 'MDJM_PLAYLIST_LIBRARY_TABLE', $wpdb->prefix . 'mdjm_playlist_library' );
 	define( 'MDJM_TRANSACTION_TABLE', $wpdb->prefix . 'mdjm_trans' );
 	define( 'MDJM_JOURNAL_TABLE', $wpdb->prefix . 'mdjm_journal' );
 	define( 'MDJM_HOLIDAY_TABLE', $wpdb->prefix . 'mdjm_avail' );
 	
-	/* -- Debugging -- */
-	define( 'MDJM_DEBUG', get_option( MDJM_DEBUG_KEY ) );
-	define( 'MDJM_DEBUG_LOG', MDJM_PLUGIN_DIR . '/mdjm_debug.log' );
-
 /* -- Insantiate the class & register the activation/deactivation hooks -- */
 	if( class_exists( 'MDJM' ) )	{
 		/* -- Instantiate the plugin class -- */
