@@ -106,7 +106,7 @@
 					'posts_per_page'   => 1,
 					'meta_key'		 => '_mdjm_event_date',
 					'meta_query'	   => array(
-											'relation'	=> 'AND',
+											'relation'   => 'AND',
 											array( 
 											'key'		=> '_mdjm_event_dj',
 											'value'  	  => $current_user->ID,
@@ -1366,11 +1366,6 @@
 				$commenter = get_userdata( $data['user'] );
 			else
 				$commenter = 'mdjm';
-			
-			// Filter
-			$data = apply_filters( 'preprocess_comment', $data );
-			
-			wp_filter_comment( $data['comment_content'] );
 							
 			$comment_data = array(
 							'comment_post_ID'		=> (int) $event_id,
@@ -1378,16 +1373,21 @@
 							'comment_author_email'   => ( $commenter != 'mdjm' ? $commenter->user_email : '' ),
 							'comment_author_IP'	  => ( !empty( $_SERVER['REMOTE_ADDR'] ) ? preg_replace( '/[^0-9a-fA-F:., ]/', '',$_SERVER['REMOTE_ADDR'] ) : '' ),
 							'comment_agent'		  => ( isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '' ),
-							'comment_author_url'   => ( $commenter != 'mdjm' ? ( !empty( $commenter->user_url ) ? $commenter->user_url : '' ) : '' ),
+							'comment_author_url'	 => ( $commenter != 'mdjm' ? ( !empty( $commenter->user_url ) ? $commenter->user_url : '' ) : '' ),
 							'comment_content'		=>  $data['comment_content'] . ' (' . time() . ')',
 							'comment_type'		   => ( !empty( $data['comment_type'] ) ? $data['comment_type'] : 'mdjm-journal' ),
 							'comment_date'		   => ( !empty( $data['comment_date'] ) ? $data['comment_date'] : current_time( 'mysql' ) ),
 							'user_id'				=> ( $commenter != 'mdjm' ? $commenter->ID : '0' ),
 							'comment_parent'		 => 0,
-							'comment_approved'		=> 1,
+							'comment_approved'	   => 1,
 							);
+							
+			// Filter the comment data before inserting
+			$comment_data = apply_filters( 'preprocess_comment', $comment_data );
 			
-			/* -- Disable comment filter -- */
+			$comment_data = wp_filter_comment( $comment_data );
+			
+			/* -- Disable comment duplication check filter -- */
 			remove_filter( 'commentdata','comment_duplicate_trigger' );
 			
 			/* -- Insert the entry -- */
