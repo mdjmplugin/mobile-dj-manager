@@ -592,23 +592,27 @@
 			$contract = get_post_meta( $post_id, '_mdjm_event_contract', true );
 			$contract_signed = get_post_meta( $post_id, '_mdjm_signed_contract', true );
 			$notes = get_post_meta( $post_id, '_mdjm_event_notes', true );
+			$package = get_package_details( get_post_meta( $post_id, '_mdjm_event_package', true ) );
+			$addons = get_post_meta( $post_id, '_mdjm_event_addons', true );
 			
 			$eventinfo = array(
-							'name'			=> !empty( $name ) ? $name : '',
-							'date'			=> !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ),
-							'client'		  => !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ),
-							'dj'			  => !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ),
-							'start'		   => !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ),
-							'finish'	      => !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ),
-							'cost' 			=> !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ),
-							'deposit' 		 => !empty( $deposit ) ? display_price( $deposit ) : '0.00',
-							'balance' 		 => !empty( $deposit ) ? display_price( $cost - $deposit ) : __( 'Not Specified' ),
-							'deposit_status'  => !empty( $deposit_status ) ? $deposit_status : __( 'Due' ),
-							'balance_status'  => !empty( $balance_status ) ? $balance_status : __( 'Due' ),
-							'type'			=> $this->get_event_type( $post_id ),
-							'contract' 		=> !empty( $contract ) ? $contract : '',
-							'signed_contract' => !empty( $contract_signed ) ? $contract_signed : '',
-							'notes'		   => !empty( $notes ) ? $notes : '',
+							'name'				=> !empty( $name ) ? $name : '',
+							'date'				=> !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ),
+							'client'			=> !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ),
+							'dj'				=> !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ),
+							'start'				=> !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ),
+							'finish'			=> !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ),
+							'cost'				=> !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ),
+							'deposit'			=> !empty( $deposit ) ? display_price( $deposit ) : '0.00',
+							'balance'			=> !empty( $deposit ) ? display_price( $cost - $deposit ) : __( 'Not Specified' ),
+							'deposit_status'	=> !empty( $deposit_status ) ? $deposit_status : __( 'Due' ),
+							'balance_status'	=> !empty( $balance_status ) ? $balance_status : __( 'Due' ),
+							'type'				=> $this->get_event_type( $post_id ),
+							'contract'			=> !empty( $contract ) ? $contract : '',
+							'signed_contract'	=> !empty( $contract_signed ) ? $contract_signed : '',
+							'notes'		   		=> !empty( $notes ) ? $notes : '',
+							'package'			=> !empty( $package ) ? $package : '',
+							'addons'			=> !empty( $addons ) ? $addons : '',
 							);
 			
 			return $eventinfo;
@@ -1362,24 +1366,32 @@
 				$commenter = get_userdata( $data['user'] );
 			else
 				$commenter = 'mdjm';
+			
+			// Filter
+			$data = apply_filters( 'preprocess_comment', $data );
+			
+			wp_filter_comment( $data['comment_content'] );
 							
 			$comment_data = array(
-							'comment_post_ID'		=> $event_id,
+							'comment_post_ID'		=> (int) $event_id,
 							'comment_author' 	 	 => ( $commenter != 'mdjm' ? $commenter->display_name : '' ),
 							'comment_author_email'   => ( $commenter != 'mdjm' ? $commenter->user_email : '' ),
+							'comment_author_IP'	  => ( !empty( $_SERVER['REMOTE_ADDR'] ) ? preg_replace( '/[^0-9a-fA-F:., ]/', '',$_SERVER['REMOTE_ADDR'] ) : '' ),
+							'comment_agent'		  => ( isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '' ),
 							'comment_author_url'   => ( $commenter != 'mdjm' ? ( !empty( $commenter->user_url ) ? $commenter->user_url : '' ) : '' ),
-							'comment_content'		=> $data['comment_content'] . ' (' . time() . ')',
+							'comment_content'		=>  $data['comment_content'] . ' (' . time() . ')',
 							'comment_type'		   => ( !empty( $data['comment_type'] ) ? $data['comment_type'] : 'mdjm-journal' ),
-							'comment_date'		   => ( !empty( $data['comment_date'] ) ? $data['comment_date'] : date( 'Y-m-d H:i:s' ) ),
+							'comment_date'		   => ( !empty( $data['comment_date'] ) ? $data['comment_date'] : current_time( 'mysql' ) ),
 							'user_id'				=> ( $commenter != 'mdjm' ? $commenter->ID : '0' ),
 							'comment_parent'		 => 0,
+							'comment_approved'		=> 1,
 							);
 			
 			/* -- Disable comment filter -- */
 			remove_filter( 'commentdata','comment_duplicate_trigger' );
 			
 			/* -- Insert the entry -- */
-			$comment_id = wp_new_comment( $comment_data );
+			$comment_id = wp_insert_comment( $comment_data );
 			
 			if( empty( $comment_id ) )
 				return false;
