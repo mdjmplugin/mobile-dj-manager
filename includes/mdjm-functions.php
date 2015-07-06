@@ -790,6 +790,201 @@
 		return $addons;
 				
 	} // get_available_addons
+	
+	/*
+	 * Retrieve the package name, description, cost
+	 *
+	 * @param	str		$slug		Slug name of the package
+	 *		
+	 *
+	 */
+	function get_package_details( $slug )	{
+		if( empty( $slug ) )
+			return false;
+		
+		$packages = get_option( 'mdjm_packages' );
+		
+		if( empty( $packages[$slug] ) )
+			return false;
+		
+		$package['slug'] = $slug;
+		$package['name'] = $packages[$slug]['name'];
+		$package['desc'] = $packages[$slug]['desc'];
+		$package['cost'] = $packages[$slug]['cost'];
+		
+		return $package;
+		
+	} // get_package_name
+	
+	/*
+	 * Output HTML code for Package dropdown
+	 *
+	 * @param	arr		$settings		Settings for the dropdown
+	 *									'name'				Optional: The name of the input. Defaults to '_mdjm_event_package'
+	 *									'id'				Optional: ID for the field (uses name if not present)
+	 *									'class'				Optional: Class of the input field
+	 *									'selected'			Optional: Initially selected option
+	 *									'first_entry'		Optional: First entry to be displayed (default none)
+	 *									'first_entry_val'	Optional: First entry value
+	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
+	 * @ return	HTML output for select field
+	 */
+	function mdjm_package_dropdown( $settings='' )	{
+		global $current_user;
+		
+		$packages = get_option( 'mdjm_packages' );
+				
+		// Set the values based on the array passed
+		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
+		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
+		$select_dj = isset( $settings['dj'] ) ? $settings['dj'] : $current_user->ID;
+		
+		$mdjm_select = '<select name="' . $select_name . '" id="' . $select_id . '"';
+		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
+		$mdjm_select .= '>' . "\r\n";
+		
+		// First entry
+		$mdjm_select .= isset( $settings['first_entry'] ) ? 
+			'<option value="' . isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' . '">' . 
+			$settings['first_entry'] . '</option>' . "\r\n" : '';
+			
+		$packages = get_option( 'mdjm_packages' );
+		
+		if( empty( $packages ) )
+			$mdjm_select .= '<option value="0">No Packages Available</option>' . "\r\n";
+		
+		else	{
+		// All packages
+			foreach( $packages as $package )	{
+				// If the package is not enabled, do not show it
+				if( empty( $package['enabled'] ) || $package['enabled'] != 'Y' )
+					continue;
+				
+				// If the DJ does not have the package, do not show it	
+				$djs_have = explode( ',', $package['djs'] );
+				
+				if( !in_array( $select_dj, $djs_have ) )
+					continue;
+				
+				$mdjm_select .= '<option value="' . $package['slug'] . '"';
+				$mdjm_select .= isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>';
+				$mdjm_select .= esc_attr( $package['name'] ) . ' - ' . display_price( $package['cost'] ) . '</option>' . "\r\n";
+			}
+		}
+		
+		$mdjm_select .= '</select>' . "\r\n";
+		
+		return $mdjm_select;
+			
+	} // mdjm_package_dropdown
+	
+	/*
+	 * Retrieve the package category, name, decription & cost
+	 *
+	 *
+	 *
+	 */
+	function get_addon_details( $slug )	{
+		if( empty( $slug ) )
+			return false;
+			
+		$cats = get_option( 'mdjm_cats' );
+		
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		if( empty( $equipment[$slug] ) )
+			return false;
+			
+		$addon['slug'] = $slug;
+		$addon['cat'] = $cats[$equipment[$slug][5]];
+		$addon['name'] = $equipment[$slug][0];
+		$addon['desc'] = $equipment[$slug][4];
+		$addon['cost'] = $equipment[$slug][7];
+		
+		return $addon;
+		
+	} // get_addon_details
+	
+	/*
+	 * Output HTML code for Addons multiple select dropdown
+	 *
+	 * @param	arr		$settings		Settings for the dropdown
+	 *									'name'				Optional: The name of the input. Defaults to '_mdjm_event_addons'
+	 *									'id'				Optional: ID for the field (uses name if not present)
+	 *									'class'				Optional: Class of the input field
+	 *									'selected'			Optional: ARRAY of initially selected option
+	 *									'first_entry'		Optional: First entry to be displayed (default none)
+	 *									'first_entry_val'	Optional: First entry value
+	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
+	 * @ return	HTML output for select field
+	 */
+	function mdjm_addons_dropdown( $settings='' )	{
+				
+		// Set the values based on the array passed
+		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_addons';
+		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
+		$select_dj = isset( $settings['dj'] ) ? $settings['dj'] : $current_user->ID;
+		
+		$mdjm_select = '<select name="' . $select_name . '[]" id="' . $select_id . '"';
+		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
+		$mdjm_select .= ' multiple="multiple">' . "\r\n";
+		
+		// First entry
+		$mdjm_select .= isset( $settings['first_entry'] ) ? 
+			'<option value="' . isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' . '">' . 
+			$settings['first_entry'] . '</option>' . "\r\n" : '';
+		
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		if( empty( $equipment ) )
+			$mdjm_select .= '<option value="0">No Packages Available</option>' . "\r\n";
+		
+		else	{
+			asort( $equipment );
+		// All addons
+			$cats = get_option( 'mdjm_cats' );
+			if( !empty( $cats ) )
+				asort( $cats );
+			
+			foreach( $cats as $cat_key => $cat_value )	{
+				
+				$header = false;
+				
+				// Create an array of options grouped by category
+				foreach( $equipment as $item )	{
+					// If the addon is not enabled, do not show it
+					if( empty( $item[6] ) || $item[6] != 'Y' )
+						continue;
+					
+					// If the DJ does not have the addon, do not show it	
+					$djs_have = explode( ',', $item[8] );
+					
+					if( !in_array( $select_dj, $djs_have ) )
+						continue;
+					
+					if( $item[5] == $cat_key )	{
+						if( empty( $header ) )	{
+							$mdjm_select .= '<option value="' . $cat_key . '" disabled="disabled">--- ' . $cat_value . ' ---</option>' . "\r\n";
+							$header = true;
+						}
+							
+							$mdjm_select .= '<option value="' . $item[1] . '"';
+							
+							if( !empty( $settings['selected'] ) && in_array( $item[1], $settings['selected'] ) )
+								$mdjm_select .= ' selected="selected"';
+							
+							$mdjm_select .= '>' . $item[0] . ' - ' . display_price( $item[7] ) . '</option>' . "\r\n";
+					}
+					
+				}
+			}
+		}
+		
+		$mdjm_select .= '</select>' . "\r\n";
+		
+		return $mdjm_select;
+			
+	} // mdjm_addons_dropdown
 
 /*
  * -- END PACKAGE/ADDON FUNCTIONS
