@@ -91,6 +91,10 @@
 		background-color: #FFCCBA;
 		background-image: url('../../images/info-icon.png');
 	}
+	.mdjm-updating	{
+		border: solid 1px #F90 !important;
+		color: #F90 !important;	
+	}
 
 /*
  * Error classes used by jQuery validation

@@ -72,10 +72,11 @@
 	/* Display the forms */
 	global $mdjm_options;
 	$packages = get_option( 'mdjm_packages' );
-	asort( $packages );
+	
 	$djs = mdjm_get_djs();
 
 	if( $packages )	{ /* Option to edit existing packages */
+		asort( $packages );
 		echo '<h3>Packages</h3>';
 		echo '<form name="form-packages" id="form-packages" method="post">';
 		echo '<table class="widefat">';
@@ -215,9 +216,13 @@
     <td>
     <?php
 		$equipment = get_option( 'mdjm_equipment' );
-		asort( $equipment );
+		if( !empty( $equipment ) )
+			asort( $equipment );
+			
 		$cats = get_option( 'mdjm_cats' );
-		asort( $cats );
+		if( !empty( $cats ) )
+			asort( $cats );
+			
 		if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
 			foreach( $cats as $cat_key => $cat_value )	{
 				echo '<strong>' . $cat_value . '</strong>';

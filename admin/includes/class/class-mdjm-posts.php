@@ -918,7 +918,7 @@
 						foreach( $event_data as $event_meta_key => $event_meta_value )	{
 							
 							if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' )
-								$event_meta_value = number_format( (float)$event_meta_value, 2 );
+								$event_meta_value = $event_meta_value;
 							
 							if( $event_meta_key == 'venue_postcode' && !empty( $event_meta_value ) )
 								$event_meta_value = strtoupper( $event_meta_value );

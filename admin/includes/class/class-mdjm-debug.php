@@ -17,7 +17,7 @@
 				$this->tables = array(
 									'Events'			  => MDJM_EVENTS_TABLE,
 									'Playlist'	  		=> MDJM_PLAYLIST_TABLE,
-									//'Playlist Library'	=> MDJM_PLAYLIST_LIBRARY_TABLE,
+									'Music Library'	   => MDJM_MUSIC_LIBRARY_TABLE,
 									'Transactions'  		=> MDJM_TRANSACTION_TABLE,
 									'Journal'	   		 => MDJM_JOURNAL_TABLE,
 									'Availability'  		=> MDJM_HOLIDAY_TABLE,
@@ -30,6 +30,7 @@
 										
 				define( 'MDJM_DEBUG', !empty( $this->settings['enable'] ) ? true : false );
 				define( 'MDJM_DEBUG_LOG', MDJM_PLUGIN_DIR . '/mdjm_debug.log' );
+								
 			} // __construct
 			
 			/**
@@ -70,7 +71,7 @@
 				if( isset( $_POST['delete_log_files'], $_POST['delete_files'] ) && $_POST['delete_log_files'] == 'Delete Selected Files' )
 					$this->delete_log( $_POST['delete_files'] );
 				
-				if( empty( $this->settings['warn'] ) )
+				if( empty( $this->settings['warn'] ) && empty( $this->settings['auto_purge'] ) )
 					return;
 							
 				$bytes = pow( 1024, $this->settings['log_size'] );
@@ -83,6 +84,9 @@
 							$this->delete_log( array( $name ) );
 						}
 						else	{
+							if( empty( $this->settings['warn'] ) ) // If warnings are disabled, skip
+								continue;
+							
 							$this->log_it( 'Auto purge disabled. Displaying notice for oversized log file ' . $name, true );
 							$warn[$conf[1]] = $name;
 						}
@@ -110,7 +114,7 @@
 					echo '</div>' . "\r\n";	
 				}
 							
-			} // log_file_size
+			} // log_file_check
 			
 			/*
 			 * Delete the given log file so that a new one may be generated
@@ -124,11 +128,12 @@
 					if( file_exists( $this->files[$file][0] ) )	{
 						if( unlink( $this->files[$file][0] ) )	{
 							$this->log_it( 'Purged the ' . $file . ' log file', true );
-							$success[] = 'The ' . $file . ' log file was deleted successfully';
+							$success[] = 'The ' . $file . ' log file was auto-purged successfully in accordance with your <a href="' . 
+								mdjm_get_admin_page( 'debugging') . '">Debug Settings</a>';
 						}
 						else	{
 							$this->log_it( 'ERROR: Could not purge the ' . $file . ' log file', true );
-							$error[] = 'The ' . $file . ' log file cound not be deleted';
+							$error[] = 'The ' . $file . ' log file cound not be purged';
 						}
 					}
 				}
@@ -505,7 +510,7 @@
 				$data_id = array(
 							MDJM_EVENTS_TABLE				  => 'event_id',
 							MDJM_PLAYLIST_TABLE				=> 'id',
-							//MDJM_PLAYLIST_LIBRARY_TABLE		=> 'id',
+							MDJM_MUSIC_LIBRARY_TABLE		   => 'id',
 							MDJM_TRANSACTION_TABLE			 => 'trans_id',
 							MDJM_JOURNAL_TABLE				 => 'id',
 							MDJM_HOLIDAY_TABLE				 => 'id',
@@ -575,7 +580,7 @@
 						$mdjm_desc = array(
 							MDJM_EVENTS_TABLE				  => 'Events Table',
 							MDJM_PLAYLIST_TABLE				=> 'Playlist Table',
-							//MDJM_PLAYLIST_LIBRARY_TABLE		=> 'Playlist Library Table',
+							MDJM_MUSIC_LIBRARY_TABLE		   => 'Music Library Table',
 							MDJM_TRANSACTION_TABLE			 => 'Transactions Table',
 							MDJM_JOURNAL_TABLE				 => 'Journal Table',
 							MDJM_HOLIDAY_TABLE				 => 'Availability Table',

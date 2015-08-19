@@ -578,6 +578,7 @@
 		 * @return	obj		$eventinfo	The event meta information
 		 */
 		public function event_detail( $post_id )	{
+			global $mdjm;
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
@@ -589,30 +590,67 @@
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
+			$setup_date = get_post_meta( $post_id, '_mdjm_event_djsetup', true );
+			$setup_time = get_post_meta( $post_id, '_mdjm_event_djsetup_time', true );
 			$contract = get_post_meta( $post_id, '_mdjm_event_contract', true );
-			$contract_signed = get_post_meta( $post_id, '_mdjm_signed_contract', true );
+			$contract_date = get_post_meta( $post_id, '_mdjm_event_contract_approved', true );
+			$signed_contract = get_post_meta( $post_id, '_mdjm_signed_contract', true );
 			$notes = get_post_meta( $post_id, '_mdjm_event_notes', true );
-			$package = get_package_details( get_post_meta( $post_id, '_mdjm_event_package', true ) );
+			$admin_notes = get_post_meta( $post_id, '_mdjm_event_admin_notes', true );
+			$package = get_post_meta( $post_id, '_mdjm_event_package', true );
 			$addons = get_post_meta( $post_id, '_mdjm_event_addons', true );
+			$guest_playlist = get_post_meta( $post_id, '_mdjm_event_playlist_access', true );
 			
 			$eventinfo = array(
-							'name'				=> !empty( $name ) ? $name : '',
-							'date'				=> !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ),
-							'client'			=> !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ),
-							'dj'				=> !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ),
-							'start'				=> !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ),
-							'finish'			=> !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ),
-							'cost'				=> !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ),
-							'deposit'			=> !empty( $deposit ) ? display_price( $deposit ) : '0.00',
-							'balance'			=> !empty( $deposit ) ? display_price( $cost - $deposit ) : __( 'Not Specified' ),
-							'deposit_status'	=> !empty( $deposit_status ) ? $deposit_status : __( 'Due' ),
-							'balance_status'	=> !empty( $balance_status ) ? $balance_status : __( 'Due' ),
+							// Event name
+							'name'				=> ( !empty( $name ) ? $name : '' ),
+							// Event date
+							'date'				=> ( !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ) ),
+							// Client details as object array
+							'client'			  => ( !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ) ),
+							// DJ details as object array
+							'dj'				  => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ) ),
+							// Event Start
+							'start'			   => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ) ),
+							// Event Finish
+							'finish'			  => ( !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ) ),
+							// DJ Setup date
+							'setup_date'		  => ( !empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified' ) ),
+							// DJ Setup time
+							'setup_time'		  => ( !empty( $setup_time ) ? date( MDJM_TIME_FORMAT, strtotime( $setup_time ) ) : __( 'Not Specified' ) ),
+							// Total cost
+							'cost'				=> ( !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ) ),
+							// Deposit fee
+							'deposit'			 => ( !empty( $deposit ) ? display_price( $deposit ) : '0.00' ),
+							// Balance remaining
+							'balance'			 => ( !empty( $deposit ) && !empty( $deposit_status ) && $deposit_status == 'Paid' ? 
+								display_price( $cost - $deposit ) : display_price( $cost ) ),
+								
+							// Deposit status
+							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due' ) ),
+							// Balanace status
+							'balance_status'	  => ( !empty( $balance_status ) ? $balance_status : __( 'Due' ) ),
+							// Event type
 							'type'				=> $this->get_event_type( $post_id ),
-							'contract'			=> !empty( $contract ) ? $contract : '',
-							'signed_contract'	=> !empty( $contract_signed ) ? $contract_signed : '',
-							'notes'		   		=> !empty( $notes ) ? $notes : '',
-							'package'			=> !empty( $package ) ? $package : '',
-							'addons'			=> !empty( $addons ) ? $addons : '',
+							// Contract template
+							'contract'			=> ( !empty( $contract ) ? $contract : '' ),
+							// Date contract signed
+							'contract_date'	   => ( !empty( $contract_date ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $contract_date ) ) : 
+								date( MDJM_SHORTDATE_FORMAT ) ),
+								
+							// Signed contract post ID
+							'signed_contract'	 => ( !empty( $signed_contract ) ? $signed_contract : '' ),
+							// Event notes
+							'notes'		   	   => ( !empty( $notes ) ? $notes : '' ),
+							// Admin notes
+							'admin_notes'		 => ( !empty( $admin_notes ) ? $admin_notes : '' ),
+							// Event package
+							'package'			 => ( !empty( $package ) ? $package : '' ),
+							// Event addons as array
+							'addons'			  => ( !empty( $addons ) ? implode( "\n", $addons ) : '' ),
+							// Guest playlist URL
+							'guest_playlist'	  => ( !empty( $guest_playlist ) ? 
+								$mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $guest_playlist : '' ),
 							);
 			
 			return $eventinfo;
@@ -1165,6 +1203,21 @@
 			
 			return ( !empty( $count ) ? $count : '0' );
 		} // count_playlist_entries
+		
+		/*
+		 * Return the count of records that have been uploaded to the MDJM servers
+		 *
+		 *
+		 */
+		function count_playlist_uploaded()	{
+			global $wpdb;
+						
+			$query = "SELECT COUNT(*) FROM `". MDJM_PLAYLIST_TABLE . "` WHERE `upload_procedure` = '1'";
+			$result = $wpdb->get_var( $query );
+			
+			echo $result;
+			
+		} // count_playlist_uploaded
 
 /*
  * Venue functions

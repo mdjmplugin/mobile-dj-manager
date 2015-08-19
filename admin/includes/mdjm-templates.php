@@ -340,9 +340,9 @@
 			'upload-playlists'	=> array(
 				'slug'		 => 'upload-playlists',
 				'name'	     => 'Upload Playlists',
-				'active'	   => $mdjm_settings['playlist']['upload_playlists'],
+				'active'	   => 'Y',
 				'desc'	     => 'Transmit playlist information back to the MDJM servers to help build an information library. This option is updated via the <a href="' . admin_url( 'admin.php?page=mdjm-settings&tab=general' ) . '">General tab</a>',
-				'frequency'	=> 'Daily',
+				'frequency'	=> 'Twice Daily',
 				'nextrun'	  => $playlist_nextrun,
 				'lastran'	  => 'Never',
 				'options'	  => array(

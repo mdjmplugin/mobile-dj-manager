@@ -243,9 +243,12 @@
 						echo '>' . $dj->display_name . '</option>' . "\r\n";
 					}
 					echo '</select>' . "\r\n";
+					echo '<input type="hidden" name="event_dj" id="event_dj" value="' . ( $pagenow == 'post-new.php' ? 
+						 get_current_user_id() : get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) . '" />' . "\r\n";
 				}
 				else	{
 					echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
+					echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
 					echo '<input type="text" value="' . $current_user->display_name . '" readonly="readonly" />' . "\r\n";
 						
 				}
@@ -362,8 +365,8 @@
         	<div class="mdjm-post-2column">
             <label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
             <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
-            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_cost', true ) ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
-                <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
+            	value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+                <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed.</span>
             </div>
             <div class="mdjm-post-last-2column">
             <label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( MDJM_DEPOSIT_LABEL . ':' ); ?></label><br />
@@ -382,35 +385,6 @@
 			if( $packages )	{
 				asort( $packages );
 				?>
-                <script type="text/javascript">
-				jQuery(document).ready(function ($) {
-					base = 0;
-					if ( $('#_mdjm_event_cost').val() != '' ) {
-						base = $('#_mdjm_event_cost').val();
-					}
-					$("#_mdjm_event_cost").on("keyup", function () {
-						base = $('#_mdjm_event_cost').val();
-					});
-					$('#_mdjm_event_package, #event_addons').change(function () {
-						var extras = 0;
-						var packages = 0;
-						var addons = 0;
-						$('#_mdjm_event_package :selected').each(function () {
-							packages += Number($(this).data("price"));
-						});
-						$('#event_addons :selected').each(function () {
-							addons += Number($(this).data("price"));
-						});
-						var extras = ( packages + addons );
-						var total = (base * 100 + extras * 100) / 100;
-						if (total == "0") {
-							$("#_mdjm_event_cost").val('');
-						} else {
-							$("#_mdjm_event_cost").val(total.toFixed(2));
-						}
-					});
-				});
-				</script>
 				<div class="mdjm-post-row" style="height: auto !important;">
 					<div class="mdjm-post-2column">
 					<label for="_mdjm_event_package" class="mdjm-label"><?php _e( 'Select an Event Package:' ); ?> <span class="description">(Optional)</span></label><br />
@@ -461,25 +435,21 @@
 						}
 						?>
 						<label for="event_addons" class="mdjm-label"><?php _e( 'Select Add-ons:' ); ?> <span class="description">(Optional)</span></label><br />
-						<select name="event_addons[]" id="event_addons" multiple="multiple" size="5">
 						<?php
 						$current_addons = get_post_meta( $post->ID, '_mdjm_event_addons', true );
-						foreach( $cats as $cat_key => $cat_value )	{
-							echo '<option value="" disabled="disabled" data-price="0.00">--- ' . strtoupper( esc_attr( $cat_value ) ) . ' ---</option>' . "\r\n";
-							foreach( $equipment as $equip_list )	{
-								if( $equip_list[5] == $cat_key && isset( $equip_list[6] ) && $equip_list[6] == 'Y' )	{
-									echo '<option value="' . $equip_list[1] . '" data-price="' . $equip_list[7] . '"' . 
-									( !empty( $current_addons ) && in_array( $equip_list[1], $current_addons ) ? 
-										' selected="selected"' : '' ) . 
-									'>' . esc_attr( $equip_list[0] ) . 
-									( $equip_list[2] > 1 ? ' x ' . esc_attr( $equip_list[2] ) : '' ) . 
-									' - ' . display_price( esc_attr( $equip_list[7] ) ) . '</option>' . "\r\n";
-								}
-							}
-						}
-						?>
-						</select>
-                        <?php
+						$dj = get_post_meta( $post->ID, '_mdjm_event_dj', true );
+						$package = get_post_meta( $post->ID, '_mdjm_event_package', true );
+						
+						if( !empty( $current_addons ) )
+							$args['selected'] = $current_addons;
+							
+						if( !empty( $dj ) )
+							$args['dj'] = $dj;
+							
+						if( !empty( $package ) )
+							$args['package'] = $package;
+						
+						echo mdjm_addons_dropdown( !empty( $args ) ? $args : '' );
 					}
 					?>
                     </div>
@@ -1020,7 +990,7 @@
 	function mdjm_event_post_transactions_metabox( $post )	{
 		
 		wp_enqueue_script( 'event-trans', WPMDJM_PLUGIN_URL . '/admin/includes/js/mdjm-save-transaction.js' );
-		wp_localize_script( 'event-trans', 'posttrans', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
+		wp_localize_script( 'event-trans', 'posttrans', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 												
 		echo '<div id="transaction">' . "\r\n";
 		if( !class_exists( 'MDJM_Transactions' ) )

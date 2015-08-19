@@ -187,21 +187,27 @@
 		}
 			$email_query = get_posts( $email_args );
 			if( $email_query ) {
-				?><option value="email_templates" disabled>--- EMAIL TEMPLATES ---</option><?php
+				?><optgroup label="EMAIL TEMPLATES"><?php
 				foreach( $email_query as $email_template ) {
 					?>
 					<option value="<?php echo add_query_arg( 'template', $email_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $email_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $email_template->ID ); ?></option>
                     <?php
 				}
+				?>
+                </optgroup>
+                <?php
 			}
 			$contract_query = get_posts( $contract_args );
 			if( $contract_query ) {
-				?><option value="contracts" disabled>--- CONTRACTS ---</option><?php
+				?><optgroup label="CONTRACTS"><?php
 				foreach ( $contract_query as $contract_template ) {
 					?>
 					<option value="<?php echo add_query_arg( 'template', $contract_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $contract_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $contract_template->ID ); ?></option>
                     <?php
 				}
+				?>
+                </optgroup>
+                <?php
 			}
 			
 		?>
@@ -217,7 +223,7 @@
 		<th class="row-title" align="left"><label for="to">Send email to:</label></th>
 		<td><select name="to" id="to" onChange="MM_jumpMenu('parent',this,0)">
 			<option value="">Select a Recipient</option>
-            <option value="client_list" disabled="disabled">- - - CLIENTS - - -</option>
+            <optgroup label="CLIENTS">
 		<?php
 		foreach( $clientinfo as $client )	{
 			if( current_user_can( 'administrator' ) || $mdjm->mdjm_events->is_my_client( $client->ID ) )	{ // Non-Admins only see their own clients
@@ -226,8 +232,11 @@
                 <?php
 			}
 		}
+		?>
+        </optgroup>
+        <?php
 		if( current_user_can( 'administrator' ) )	{ // Admins see DJ's too
-			 ?><option value="client_list" disabled="disabled">- - - DJ'S - - -</option><?php
+			 ?><optgroup label="<?php echo MDJM_DJ; ?>'s"><?php
 			foreach( $djinfo as $dj )	{
 				?>
                 <option value="<?php echo add_query_arg( array( 'to_user' => $dj->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $dj->ID, $_GET['to_user'] ); } ?>><?php echo $dj->display_name; ?></option>
@@ -235,6 +244,7 @@
 			}
 		}
 		?>
+        </optgroup>
 		</select>
         </td>
         </tr>

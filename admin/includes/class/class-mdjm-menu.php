@@ -125,7 +125,7 @@
 															'mdjm-availability',
 															array( &$this, 'mdjm_dj_availability_page' ) );
 				/* -- DJ's -- */
-				if( current_user_can( 'manage_options' ) && MDJM_MULTI == true ) 
+				if( MDJM_MULTI == true ) 
 					$mdjm_dj_page = add_submenu_page( 'mdjm-dashboard',
 													   __(  ' ' . MDJM_DJ . ' \'s' ),
 													   __(  ' ' . MDJM_DJ . ' \'s' ),
@@ -147,6 +147,16 @@
 													   'manage_mdjm',
 													   'edit.php?post_type=' . MDJM_EVENT_POSTS,
 													   '' );
+													   
+				/* -- Music Library -- */
+				/*if( current_user_can( 'administrator' ) || dj_can( 'upload_music' ) )
+					$mdjm_music_page = add_submenu_page( 'mdjm-dashboard',
+														   __( 'Music Library' ),
+														   __( 'Music Library' ),
+														   'manage_mdjm',
+														   'mdjm-music',
+															array( &$this, 'mdjm_music_page' ) );*/
+													   
 				/* -- Transactions -- */
 				if( current_user_can( 'manage_options' ) && MDJM_PAYMENTS == true )
 					$mdjm_transactions_page = add_submenu_page( 'mdjm-dashboard',
@@ -266,7 +276,7 @@
 						'id'		=> 'mdjm-settings-permissions',
 						'parent'	=> 'mdjm-settings',
 						'title'	 => __( 'Permissions' ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=permissions' ),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=general&section=mdjm_app_permissions' ),
 						'meta'	  => array(
 							'title' => __( 'MDJM Permission Settings' ),
 						),
@@ -455,6 +465,20 @@
 						'title' => __( 'MDJM Events' ),
 					),
 				) );
+				
+				/* -- Music Library -- */
+				/*if( current_user_can( 'administrator' ) || dj_can( 'upload_music' ) )	{
+					$admin_bar->add_menu( array(
+						'id'    	=> 'mdjm-music',
+						'parent' 	=> 'mdjm',
+						'title' 	 => __( 'Music Library' ),
+						'href'  	  => admin_url( 'admin.php?page=mdjm-music' ),
+						'meta'  	  => array(
+							'title' => __( 'Music Library' ),
+						),
+					) );
+				}*/
+				
 				if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-add-events',
@@ -656,7 +680,7 @@
 			 * The MDJM DJ list
 			 */
 			public function mdjm_djs_page()	{
-				if( !current_user_can( 'manage_options' ) && MDJM_MULTI == true )
+				if( !current_user_can( 'manage_options' ) || MDJM_MULTI != true )
 					wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 				
 				include_once( MDJM_PAGES_DIR . '/djs.php' );	
@@ -674,6 +698,15 @@
 					
 				include_once( MDJM_PAGES_DIR . '/settings-packages-main.php' );
 			} // mdjm_packages_page
+			
+			/*
+			 * mdjm_music_page
+			 * The MDJM Music Library admin page
+			 */			
+			public function mdjm_music_page()	{
+				include_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-music-library.php' );
+			} // mdjm_dashboard_page
+			
 	 		/*
 			 * mdjm_dashboard_page
 			 * The MDJM Dashboard admin page

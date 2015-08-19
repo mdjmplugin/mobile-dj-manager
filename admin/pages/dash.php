@@ -4,7 +4,7 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	
-	f_mdjm_has_updated();
+	//f_mdjm_has_updated();
 	
 	function mdjm_dashboard() {
 		global $mdjm, $my_mdjm, $current_user;

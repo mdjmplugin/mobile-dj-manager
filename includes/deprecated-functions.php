@@ -147,4 +147,26 @@
 			$to_date->modify( '+1 day' )
 		);
 	} // f_mdjm_all_dates_in_range
+	
+	/*
+	* f_mdjm_count_playlist_records
+	* 25/11/2014
+	* @from: /admin/includes/functions.php
+	* @since 1.2.3
+	* Prints the number of playlist records in the specified state
+	*/
+	function f_mdjm_count_playlist_records_uploaded()	{
+		global $mdjm, $wpdb;
+		
+		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
+		
+		if( !isset( $db_tbl ) )
+			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+		
+		$pl_query = "SELECT COUNT(*) FROM `". $db_tbl['playlists'] . "` WHERE `date_to_mdjm` != '' AND `date_to_mdjm` IS NOT NULL";
+		$pl_result = $wpdb->get_var( $pl_query );
+		
+		echo $pl_result;
+		
+	} // f_mdjm_count_playlist_records
 ?>

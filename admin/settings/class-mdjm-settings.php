@@ -7,15 +7,13 @@
  */
 	defined( 'ABSPATH' ) or die( 'Direct access to this page is disabled!!!' );
 	
-	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) ) 
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-
 	/* -- Build the MDJM Settings class -- */
 	if( !class_exists( 'MDJM_Settings' ) )	{
 		class MDJM_Settings	{
 			
 			function __construct()	{
 				$this->settings_register();
+				$this->mdjm_credits();
 				
 				add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
 				
@@ -53,6 +51,7 @@
 				register_setting( 'mdjm-client-text', MDJM_CUSTOM_TEXT_KEY );
 				register_setting( 'mdjm-payments', MDJM_PAYMENTS_KEY );
 				register_setting( 'mdjm-paypal', MDJM_PAYPAL_KEY );
+				register_setting( 'mdjm-uninstall', MDJM_UNINST_SETTINGS_KEY );
 			} // settings_register
 			
 			/*
@@ -231,7 +230,6 @@
 			 *
 			 */
 			function page_header()	{
-				global $mdjm_debug;
 				
 				$this->set_loc();
 				
@@ -263,9 +261,6 @@
 				
 				$this->exclude = array( 'client_text', 'mdjm_client_field_settings', 'mdjm_db_backups' );
 				
-				if( $this->current_section == 'mdjm_app_debugging' )
-					$mdjm_debug->log_file_check();
-					
 				if( !in_array( $this->current_section, $this->exclude ) )
 					echo '<form method="post" action="options.php">' . "\r\n";
 					
@@ -539,7 +534,9 @@
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
 								'booking_conf_to_dj', 'notify_profile', 'update_event', 'custom_client_text', 'enable_tax',
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'dj_see_wp_dash', 'dj_add_client',
-								'dj_add_event', 'dj_view_enquiry', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists'
+								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists',
+								'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
+								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users'
 								);
 				
 				$value = ( in_array( $args['field'], $true_vals ) ? '1' : 'Y' );
@@ -551,11 +548,32 @@
 				
 				/* -- For trial versions and expired licenses the credits cannot be removed -- */
 				( $args['field'] == 'show_credits' && ( empty( $status ) || $status['type'] == 'trial' ) ? ' disabled="disabled"' : '' ) . 
+				( $args['field'] == 'update_event' ? ' disabled="disabled"' : '' ) . 
 				' />' . 
 				
 				( $args['field'] == 'show_credits' && ( empty( $status ) || $status['type'] == 'trial' ) ? 
-					' This option can only be turned off once the MDJM plugin has been purchased' : '' ) . "\r\n"; 
+					' This option can only be turned off once the MDJM plugin has been purchased' : '' ) . "\r\n";
+					
 			} // show_checkbox_field
+			
+			/*
+			 * If trial or expired license, always display credits
+			 *
+			 *
+			 */
+			function mdjm_credits()	{
+				global $mdjm, $mdjm_settings;
+				
+				$status = $mdjm->_mdjm_validation();
+				
+				if( empty( $status ) || $status['type'] == 'trial' )	{
+					$plugin_settings = get_option( 'mdjm_plugin_settings' );
+					$plugin_settings['show_credits'] = true;
+					
+					update_option( 'mdjm_plugin_settings', $plugin_settings );
+				}
+				
+			}
 			
 			/*
 			 * Display the setting field as a radio input

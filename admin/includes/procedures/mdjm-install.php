@@ -98,10 +98,10 @@
 							'booking_conf_to_client' 		  => true,
 							'booking_conf_client'    	  	 => 'N',
 							'booking_conf_from'      		   => 'admin',
-							'booking_conf_to_dj'     		  => true,
+							'booking_conf_to_dj'     		  => false,
 							'email_dj_confirm'        		=> 'N',
 							'payment_cfm_template'   			=> 'N',
-							'manual_payment_cfm_template' 	 => 'N',
+							'manual_payment_cfm_template' 	 => '0',
 						),
 						'mdjm_plugin_permissions' => array(
 							'dj_see_wp_dash'             => true,
@@ -115,7 +115,9 @@
 						'mdjm_clientzone_settings' => array(
 							'app_name'                	=> 'Client Zone',
 							'pass_length'             	 => '8',
-							'notify_profile' 			  => true,
+							'notify_profile' 			=> true,
+							'update_event'				=> false,
+							'edit_event_stop'			=> '5',	
 						),
 						'mdjm_plugin_pages' => array(
 							'app_home_page'                => 'N',
@@ -308,7 +310,7 @@
 							'paypal_email'		=> get_bloginfo( 'admin_email' ),
 							'redirect_success'	=> 'N',
 							'redirect_cancel'	 => 'N',
-							'paypal_button'	   => 'btn_paynow_86x21.png',
+							'paypal_button'	   => 'btn_paynow_SM.gif',
 							'enable_sandbox'	  => false,
 							'sandbox_email'  	   => get_bloginfo( 'admin_email' ),
 							'paypal_debug'		=> false,
@@ -321,8 +323,11 @@
 							'auto_purge'	=> true,
 						),
 						'mdjm_uninst' => array(
-							'uninst_remove_mdjm_templates'	=> false,
-							'uninst_remove_db'        		=> false,
+							'uninst_remove_db'        		=> true,
+							'uninst_remove_mdjm_posts'		=> true,
+							'uninst_remove_mdjm_pages'		=> true,
+							'uninst_remove_mdjm_templates'	=> true,
+							'uninst_remove_mdjm_users'		=> true,
 						),
 						'mdjm_frontend_text' => array(
 							'custom_client_text'      => false,
@@ -427,7 +432,7 @@
 			add_option( 'mdjm_debug', '0' );
 			add_option( 'mdjm_updated', '0' );
 			if( !get_option( 'mdjm_version' ) )
-				add_option( 'mdjm_version', WPMDJM_VERSION_NUM );
+				add_option( 'mdjm_version', MDJM_VERSION_NUM );
 				
 			if( !get_option( 'm_d_j_m_installed' ) )
 				add_option( 'm_d_j_m_installed', date( 'Y-m-d H:i:s' ) );
@@ -478,17 +483,17 @@
 			
 			$template_args = array(
 							'default_contract'			  => $contract_template_args,
-							'email_enquiry'		   		 => $email_enquiry_content_args,
-							'email_contract'   		  		=> $email_contract_review_args,
-							'email_client_confirm'		  => $email_client_booking_confirm_args,
+							'enquiry'	 		   		   => $email_enquiry_content_args,
+							'contract'   		  			  => $email_contract_review_args,
+							'booking_conf_client'		   => $email_client_booking_confirm_args,
 							'email_dj_confirm'			  => $email_dj_booking_confirm_args,
-							'unavailable_email_template'	=> $email_unavailability_template_args,
-							'pp_cfm_template'			   => $email_payment_received_template_args,
+							'unavailable'				   => $email_unavailability_template_args,
+							'payment_cfm_template'   		  => $email_payment_received_template_args
 							);
 			
 			/* -- Existing Settings -- */
-			$mdjm_plugin_settings = get_option( 'mdjm_plugin_settings' );
-			$mdjm_pp_settings = get_option( 'mdjm_pp_options' );
+			$mdjm_event_settings = get_option( 'mdjm_event_settings' );
+			$mdjm_template_settings = get_option( 'mdjm_templates_settings' );
 			
 			/* -- Loop through the array and create the post before setting the option -- */				
 			foreach( $template_args as $key => $args )	{
@@ -499,19 +504,18 @@
 					error_log( $key . ' template was not created' . "\r\n", 3, true );		
 				}
 				
-				/* -- Payments Settings -- */
-				if( $key == 'pp_cfm_template' )	{
-					$mdjm_pp_settings[$key] = $id;
-					$mdjm_pp_settings['pp_manual_cfm_template'] = $id;	
+				/* -- Default Contract -- */
+				if( $key == 'default_contract' )	{
+					$mdjm_event_settings[$key] = $id;
 				}
-				/* -- MDJM Settings -- */
+				/* -- Email Templates -- */
 				else
-					$mdjm_plugin_settings[$key] = $id;
+					$mdjm_template_settings[$key] = $id;
 			}
 			
 			/* -- Apply the settings -- */
-			update_option( 'mdjm_pp_options', $mdjm_pp_settings );
-			update_option( 'mdjm_plugin_settings', $mdjm_plugin_settings );
+			update_option( 'mdjm_event_settings', $mdjm_event_settings );
+			update_option( 'mdjm_templates_settings', $mdjm_template_settings );
 			
 		} // install_templates
 
@@ -536,11 +540,11 @@
 			
 			/* -- Needed page params -- */
 			$mdjm_pages = array( /* -- Page Title => array [0] = slug, [1] = content, [2] = parent/child -- */
-							'Client Zone'		   => array( 'mdjm_home_page', 'Home', 'parent' ),
-							'Your Details'		  => array( 'mdjm_profile_page', 'Profile', 'chlid' ),
-							'Event Contract'	 	=> array( 'mdjm_contracts_page', 'Contract', 'chlid' ),
-							'Playlist Management'   => array( 'mdjm_playlist_page', 'Playlist', 'chlid' ),
-							'Event Payments'		=> array( 'mdjm_payments_page', 'Payments', 'chlid' ),
+							'Client Zone'		   => array( 'mdjm_home_page', 'Home', 'parent', 'app_home_page' ),
+							'Your Details'		  => array( 'mdjm_profile_page', 'Profile', 'child', 'profile_page' ),
+							'Event Contract'	 	=> array( 'mdjm_contracts_page', 'Contract', 'child', 'contracts_page' ),
+							'Playlist Management'   => array( 'mdjm_playlist_page', 'Playlist', 'child', 'playlist_page' ),
+							'Event Payments'		=> array( 'mdjm_payments_page', 'Payments', 'child', 'payments_page' ),
 							);
 
 			/* -- Defaults for all pages -- */
@@ -554,7 +558,7 @@
 
 			/* -- Grab the existing page settings so we can update with page ID's -- */
 			if( !isset( $mdjm_page_settings ) );
-				$mdjm_page_settings = get_option( MDJM_PAGES_KEY );
+				$mdjm_page_settings = get_option( 'mdjm_plugin_pages' );
 			
 			/* -- Loop through the pages finialising the defaults -- */						
 			foreach( $mdjm_pages as $mdjm_page_name => $mdjm_page_data )	{
@@ -566,7 +570,7 @@
 				$mdjm_page_defaults['post_content'] = '[MDJM page="' . $mdjm_page_data[1] . '"]';
 				
 				/* -- Check if this is a parent or child -- */
-				$mdjm_page_defaults['post_parent'] = isset( $mdjm_parent_page ) && $mdjm_page_data[2] == 'child' ? $mdjm_parent_page : 0;
+				$mdjm_page_defaults['post_parent'] = ( isset( $mdjm_parent_page ) && $mdjm_page_data[2] == 'child' ? $mdjm_parent_page : 0 );
 				
 				/* -- Insert the page & return the page ID -- */
 				$mdjm_page_id[$mdjm_page_name] = wp_insert_post( $mdjm_page_defaults );
@@ -578,7 +582,7 @@
 					$mdjm_parent_page = $mdjm_page_id[$mdjm_page_name];
 
 				/* -- Add the setting for the page -- */
-				$mdjm_page_settings[$mdjm_page_data[0]] = $mdjm_page_id[$mdjm_page_name];
+				$mdjm_page_settings[$mdjm_page_data[3]] = $mdjm_page_id[$mdjm_page_name];
 			} // end foreach
 			
 			/* -- Update settings with the new pages -- */
@@ -730,7 +734,7 @@
 			
 			$mdjm_db_tables = array(
 								/* PLAYLISTS TABLE */
-								'playlist'	=> 'CREATE TABLE ' . MDJM_PLAYLIST_TABLE . ' (
+								'playlist'	=> "CREATE TABLE " . MDJM_PLAYLIST_TABLE . " (
 												id int(11) NOT NULL AUTO_INCREMENT,
 												event_id int(11) NOT NULL,
 												artist varchar(255) NOT NULL,
@@ -740,14 +744,17 @@
 												added_by varchar(255) NOT NULL,
 												date_added date NOT NULL,
 												date_to_mdjm datetime NULL,
+												upload_procedure int(11) DEFAULT '0' NOT NULL,
 												PRIMARY KEY  (id),
 												KEY event_id (event_id),
 												KEY artist (artist),
 												KEY song (song)
-												) ' . $charset_collate . ';',
-								/* PLAYLISTS LIBRARY TABLE */
-								'playlist_library' => 'CREATE TABLE ' . MDJM_PLAYLIST_LIBRARY_TABLE . ' (
+												) " . $charset_collate . ";",
+								/* MUSIC LIBRARY TABLE */
+								'music_library' => 'CREATE TABLE ' . MDJM_MUSIC_LIBRARY_TABLE . ' (
 												id int(11) NOT NULL AUTO_INCREMENT,
+												library varchar(255) NOT NULL,
+												library_slug varchar(255) NOT NULL,
 												song varchar(255) NOT NULL,
 												artist varchar(255) NOT NULL,
 												album varchar(255) NULL,
@@ -757,7 +764,8 @@
 												rating varchar(10) NULL,
 												dj int(11) NOT NULL,
 												date_added date NULL,
-												PRIMARY KEY  (id)
+												PRIMARY KEY  (id),
+												KEY library (library),
 												KEY song (song),
 												KEY artist (artist),
 												KEY year (year),

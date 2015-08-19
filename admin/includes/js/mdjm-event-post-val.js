@@ -123,3 +123,96 @@
 			
 		});
 	});
+	
+	
+	
+	/*
+	 * Update the event cost when the package changes
+	 *
+	 *
+	 *
+	 */
+	jQuery(document).ready(function($) 	{
+		$('#_mdjm_event_package').on('change', '', function()	{
+			var package = $("#_mdjm_event_package option:selected").val(); // Selected package
+			var event_id = $("#post_ID").val(); // We need the event ID
+			var cost = $("#_mdjm_event_cost"); // The id of the cost input
+			var current_cost = $("#_mdjm_event_cost").val(); // Current event cost
+			//var addons = $("#event_addons"); // 
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: mdjmeventcost.ajax_url,
+				data: {
+					package : package,
+					event_id : event_id,
+					current_cost : current_cost,
+					action : "update_event_cost_from_package"
+				},
+				beforeSend: function()	{
+					$("#_mdjm_event_cost").addClass( "mdjm-updating" );
+					cost.fadeTo("fast", 0.5);
+				},
+				success: function(response)	{
+					if(response.type == "success") {
+						cost.val(response.cost);
+						cost.fadeTo("fast", 1);
+						$("#_mdjm_event_cost").removeClass( "mdjm-updating" );
+					}
+					else	{
+						alert(response.msg);
+						cost.val(current_cost);
+						cost.fadeTo("fast", 1);
+						$("#_mdjm_event_cost").removeClass( "mdjm-updating" );
+					}
+				}
+			});
+		});
+	});
+	
+	/*
+	 * Update the event cost when the addons change
+	 *
+	 *
+	 *
+	 */
+	jQuery(document).ready(function($) 	{
+		$('#event_addons').on('change', '', function()	{
+			var addons = $("#event_addons").val() || []; // Selected addons
+			var package = $("#_mdjm_event_package option:selected").val(); // Selected package
+			var event_id = $("#post_ID").val(); // We need the event ID
+			var cost = $("#_mdjm_event_cost"); // The id of the cost input
+			var current_cost = $("#_mdjm_event_cost").val(); // Current event cost
+			//var addons = $("#event_addons"); // 
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: mdjmeventcost.ajax_url,
+				data: {
+					addons : addons,
+					package : package,
+					event_id : event_id,
+					current_cost : current_cost,
+					action : "update_event_cost_from_addons"
+				},
+				beforeSend: function()	{
+					cost.fadeTo("fast", 0.5);
+					$("#_mdjm_event_cost").addClass( "mdjm-updating" );
+				},
+				success: function(response)	{
+					if(response.type == "success") {
+						cost.val(response.cost);
+						cost.fadeTo("fast", 1);
+						$("#_mdjm_event_cost").removeClass( "mdjm-updating" );
+					}
+					else	{
+						alert(response.msg);
+						cost.val(current_cost);
+						cost.fadeTo("fast", 1);
+						$("#_mdjm_event_cost").removeClass( "mdjm-updating" );
+					}
+				}
+			});
+		});
+	});

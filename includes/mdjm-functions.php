@@ -51,6 +51,7 @@
 						'enquiries'             => 'edit.php?post_status=mdjm-enquiry&post_type=' . MDJM_EVENT_POSTS,
 						'unattended'            => 'edit.php?post_status=mdjm-unattended&post_type=' . MDJM_EVENT_POSTS,
 						'playlists'             => 'admin.php?page=mdjm-playlists&event_id=',
+						'music_library'         => 'admin.php?page=mdjm-music',
 						'venues'                => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
 						'add_venue'             => 'post-new.php?post_type=' . MDJM_VENUE_POSTS,
 						'tasks'                 => 'admin.php?page=mdjm-tasks',
@@ -446,7 +447,7 @@
 	 * Check the availability of the DJ('s) on the given date (Y-m-d)
 	 *
 	 * @param	int			$dj		The user ID of the DJ, if empty we'll check all
-	 *			str|arr		$date	The date (Y-m-d) to check. For a date range, needs to be array (start, finish)
+	 *			str|arr		$date	The date (Y-m-d) to check
 	 * @return	arr			$status	array of user id's (['available'] | ['unavailable']
 	 */
 	function dj_available( $dj='', $date='' )	{
@@ -752,10 +753,10 @@
 	 *
 	 *
 	 * @param	int			$dj			Optional: The user ID of the DJ
-	 *			bool		$price		Optional: true to display the price, false (default) not to display
+	 *			str			$package	Optional: The slug of a package where the package contents need to be excluded
 	 * @return
 	 */
-	function get_available_addons( $dj='', $price=false )	{
+	function get_available_addons( $dj='', $package='' )	{
 		if( MDJM_PACKAGES != true )
 			return 'N/A';
 									
@@ -765,26 +766,31 @@
 		if( empty( $all_addons ) )
 			return 'No addons are available';
 		
-		$addons = '';
-		$i = 1;
+		$addons = array();
 		
 		foreach( $all_addons as $all_addon )	{
-			if( !isset( $package[6] ) || $package[6] != 'Y' )
+			// If the addon is not enabled, do not display
+			if( !isset( $all_addon[6] ) || $all_addon[6] != 'Y' )
 				continue;
 			
-			if( !empty( $dj ) )	{
-				if( in_array( $dj, explode( ',', $all_addon[8] ) ) )
-					$addons .= $all_addon[0] . ( !empty( $price ) ? ' ' . 
-					display_price( $all_addon[7], true ) : '' ) . ( $i < count( $all_addon ) ? 
-					'<br />' : '' );
-			}
-			else	{
-				$addons .= $all_addon[0] . ( !empty( $price ) ? ' ' . 
-				display_price( $all_addon[7], true ) : '' ) . ( $i < count( $all_addon ) ? 
-				'<br />' : '' );
+			// If a package is parsed, remove the package items from the available addons
+			if( !empty( $package ) )	{
+				$packages = get_option( 'mdjm_packages' );
+				$current_items = explode( ',', $packages[$package]['equipment'] );
+				
+				if( !empty( $current_items ) && in_array( $all_addon[1], $current_items ) )
+					continue;
 			}
 			
-			$i++;
+			// If a DJ is parsed, only show their available addons
+			if( !empty( $dj ) && !in_array( $dj, explode( ',', $all_addon[8] ) ) )
+				continue;
+
+			$addons[$all_addon[1]]['cat'] = '';
+			$addons[$all_addon[1]]['slug'] = $all_addon[1];
+			$addons[$all_addon[1]]['name'] = $all_addon[0];
+			$addons[$all_addon[1]]['cost'] = $all_addon[7];
+			$addons[$all_addon[1]]['desc'] = $all_addon[4];
 		}
 										
 		return $addons;
@@ -810,6 +816,7 @@
 		$package['slug'] = $slug;
 		$package['name'] = $packages[$slug]['name'];
 		$package['desc'] = $packages[$slug]['desc'];
+		$package['equipment'] = $packages[$slug]['equipment'];
 		$package['cost'] = $packages[$slug]['cost'];
 		
 		return $package;
@@ -827,6 +834,7 @@
 	 *									'first_entry'		Optional: First entry to be displayed (default none)
 	 *									'first_entry_val'	Optional: First entry value
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
+	 *									'title'				Optional: Add package description to the title element of each option
 	 * @ return	HTML output for select field
 	 */
 	function mdjm_package_dropdown( $settings='' )	{
@@ -837,15 +845,15 @@
 		// Set the values based on the array passed
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-		$select_dj = isset( $settings['dj'] ) ? $settings['dj'] : $current_user->ID;
+		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
 		
 		$mdjm_select = '<select name="' . $select_name . '" id="' . $select_id . '"';
 		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
 		$mdjm_select .= '>' . "\r\n";
 		
 		// First entry
-		$mdjm_select .= isset( $settings['first_entry'] ) ? 
-			'<option value="' . isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' . '">' . 
+		$mdjm_select .= isset( $settings['first_entry'] ) && !empty( $settings['first_entry'] ) ? 
+			'<option value="' . ( isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' ) . '">' . 
 			$settings['first_entry'] . '</option>' . "\r\n" : '';
 			
 		$packages = get_option( 'mdjm_packages' );
@@ -860,14 +868,17 @@
 				if( empty( $package['enabled'] ) || $package['enabled'] != 'Y' )
 					continue;
 				
-				// If the DJ does not have the package, do not show it	
-				$djs_have = explode( ',', $package['djs'] );
-				
-				if( !in_array( $select_dj, $djs_have ) )
-					continue;
+				// If the specified DJ does not have the package, do not show it
+				if( !empty( $select_dj ) )	{	
+					$djs_have = explode( ',', $package['djs'] );
+					
+					if( !in_array( $select_dj, $djs_have ) )
+						continue;
+				}
 				
 				$mdjm_select .= '<option value="' . $package['slug'] . '"';
-				$mdjm_select .= isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>';
+				$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . $package['desc'] . '"' : '' );
+				$mdjm_select .= ( isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>' ) ;
 				$mdjm_select .= esc_attr( $package['name'] ) . ' - ' . display_price( $package['cost'] ) . '</option>' . "\r\n";
 			}
 		}
@@ -909,25 +920,32 @@
 	 * Output HTML code for Addons multiple select dropdown
 	 *
 	 * @param	arr		$settings		Settings for the dropdown
-	 *									'name'				Optional: The name of the input. Defaults to '_mdjm_event_addons'
+	 *									'name'				Optional: The name of the input. Defaults to 'event_addons'
 	 *									'id'				Optional: ID for the field (uses name if not present)
 	 *									'class'				Optional: Class of the input field
 	 *									'selected'			Optional: ARRAY of initially selected option
 	 *									'first_entry'		Optional: First entry to be displayed (default none)
 	 *									'first_entry_val'	Optional: First entry value
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
+	 *									'package'			Optional: Package slug for which to exclude addons if they exist in that package
+	 *									'title'				Optional: Add addon description to the title element of each option
 	 * @ return	HTML output for select field
 	 */
-	function mdjm_addons_dropdown( $settings='' )	{
-				
-		// Set the values based on the array passed
-		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_addons';
-		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-		$select_dj = isset( $settings['dj'] ) ? $settings['dj'] : $current_user->ID;
+	function mdjm_addons_dropdown( $settings='', $structure=true )	{
+		global $current_user;
 		
-		$mdjm_select = '<select name="' . $select_name . '[]" id="' . $select_id . '"';
-		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
-		$mdjm_select .= ' multiple="multiple">' . "\r\n";
+		// Set the values based on the array passed
+		$select_name = isset( $settings['name'] ) ? $settings['name'] : 'event_addons';
+		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
+		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		
+		$mdjm_select = '';
+		
+		if( $structure == true )	{
+			$mdjm_select .= '<select name="' . $select_name . '[]" id="' . $select_id . '"';
+			$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
+			$mdjm_select .= ' multiple="multiple">' . "\r\n";
+		}
 		
 		// First entry
 		$mdjm_select .= isset( $settings['first_entry'] ) ? 
@@ -937,7 +955,7 @@
 		$equipment = get_option( 'mdjm_equipment' );
 		
 		if( empty( $equipment ) )
-			$mdjm_select .= '<option value="0">No Packages Available</option>' . "\r\n";
+			$mdjm_select .= '<option value="0">No Addons Available</option>' . "\r\n";
 		
 		else	{
 			asort( $equipment );
@@ -947,6 +965,8 @@
 				asort( $cats );
 			
 			foreach( $cats as $cat_key => $cat_value )	{
+				if( !empty( $header ) )
+					$mdjm_select .= '</optgroup>' . "\r\n";
 				
 				$header = false;
 				
@@ -955,20 +975,32 @@
 					// If the addon is not enabled, do not show it
 					if( empty( $item[6] ) || $item[6] != 'Y' )
 						continue;
+						
+					// If the addon is part of an assigned package, exlude it
+					if( !empty( $settings['package'] ) )	{
+						$packages = get_option( 'mdjm_packages' );
+						$package_items = explode( ',', $packages[$settings['package']]['equipment'] );
+						
+						if( !empty( $package_items ) && in_array( $item[1], $package_items ) )
+							continue;	
+					}
 					
-					// If the DJ does not have the addon, do not show it	
-					$djs_have = explode( ',', $item[8] );
-					
-					if( !in_array( $select_dj, $djs_have ) )
-						continue;
+					// If the specified DJ does not have the addon, do not show it	
+					if( !empty( $select_dj ) )	{
+						$djs_have = explode( ',', $item[8] );
+						
+						if( !in_array( $select_dj, $djs_have ) )
+							continue;
+					}
 					
 					if( $item[5] == $cat_key )	{
 						if( empty( $header ) )	{
-							$mdjm_select .= '<option value="' . $cat_key . '" disabled="disabled">--- ' . $cat_value . ' ---</option>' . "\r\n";
+							$mdjm_select .= '<optgroup label="' . $cat_value . '">' . "\r\n";
 							$header = true;
 						}
 							
 							$mdjm_select .= '<option value="' . $item[1] . '"';
+							$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $item[4] ) ? ' title="' . $item[4] . '"' : '' );
 							
 							if( !empty( $settings['selected'] ) && in_array( $item[1], $settings['selected'] ) )
 								$mdjm_select .= ' selected="selected"';
@@ -980,7 +1012,8 @@
 			}
 		}
 		
-		$mdjm_select .= '</select>' . "\r\n";
+		if( $structure == true )
+			$mdjm_select .= '</select>' . "\r\n";
 		
 		return $mdjm_select;
 			
@@ -1034,6 +1067,24 @@
  
 /*
  * -- END TRANSACTION FUNCTIONS
- */ 
+ */
+ 
+/*
+ * -- START MUSIC LIBRARY FUNCTIONS
+ */
+	/*
+	 * Check if any music libraries exist
+	 *
+	 * @params:
+	 * @return		bool	true if we have libraries, otherwise false
+	 */
+	function ml_exists()	{
+		
+		
+	} // ml_exists
+	
+/*
+ * -- END MUSIC LIBRARY FUNCTIONS
+ */
 
 ?>

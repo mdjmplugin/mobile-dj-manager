@@ -170,9 +170,9 @@
 					
 				if( floor( $diff / 60 / 60 / 24 ) < 30 )	{
 					$box_class = 'mdjm-warning';
-					$msg = 'You license will expire in ' . _n( 'day', 'days', $remaining ) . ' ' .
+					$msg = '<span style="color: red; font-weight: bold">Your license will expire in ' . $remaining . _n( ' day', ' days', $remaining ) . '. ' .
 					'Visit <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a> ' . 
-					'to renew your license now';
+					'to renew your license now</span>';
 				}
 				
 				/* -- Trial or license expired -- */
@@ -192,7 +192,7 @@
 			'<strong>Expires</strong>: ' . date( 'l, jS F Y', strtotime( $status['expire'] ) ) . ' <br />' . "\r\n" . 
 			'<strong>Licensed To</strong>: ' . ( !empty( $status['url'] ) ? '<a href="' . strtolower( $status['url'] ) . '" target="_blank">' . 
 				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n" . 
-			'<strong>Last Updated</strong>: ' . date( MDJM_TIME_FORMAT .' \o\n\ ' . MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . 
+			'<strong>Last Updated</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . 
 			( !empty( $msg ) ? $msg : '' ) ) . "\r\n" . 
 			'</div>' . "\r\n";
 			

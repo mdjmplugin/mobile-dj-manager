@@ -161,4 +161,107 @@
 		die();
 	} // add_transaction_type
 	add_action( 'wp_ajax_add_transaction_type', 'add_transaction_type' );
+	
+	/*
+	 * Update the event cost as the package changes
+	 *
+	 *
+	 *
+	 */
+	function update_event_cost_from_package()	{
+		$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
+		$current_addons = get_post_meta( $_POST['event_id'], '_mdjm_event_addons', true );
+		$packages = get_option( 'mdjm_packages' );
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		$event_cost = get_post_meta( $_POST['event_id'], '_mdjm_event_cost', true );
+		
+		if( !empty( $event_cost ) )
+			$base_cost = !empty( $packages[$current_package]['cost'] ) ? (float)$event_cost - (float)$packages[$current_package]['cost'] : (float)$event_cost;
+			
+		else
+			$base_cost = '0.00';
+		
+		if( !empty( $current_addons ) )	{
+			foreach( $current_addons as $item )	{
+				$base_cost = $base_cost - (float)$equipment[$item][7];	
+			}
+		}
+		
+		if( !empty( $packages[$_POST['package']]['cost'] ) )
+			$cost = $base_cost + (float)$packages[$_POST['package']]['cost'];
+		else
+			$cost = $base_cost;
+		
+		if( !empty( $cost ) )	{
+			$result['type'] = 'success';
+			$result['cost'] = number_format( (float)$cost, 2, '.', '' );	
+		}
+		else	{
+			$result['type'] = 'success';
+			$result['cost'] = number_format( 0, 2, '.', '' );
+		}
+		
+		$result = json_encode( $result );
+		echo $result;
+		
+		die();
+		
+	} // update_event_cost_from_package
+	add_action( 'wp_ajax_update_event_cost_from_package', 'update_event_cost_from_package' );
+	
+	/*
+	 * Update the event cost as the package changes
+	 *
+	 *
+	 *
+	 */
+	function update_event_cost_from_addons()	{
+		$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
+		$current_addons = get_post_meta( $_POST['event_id'], '_mdjm_event_addons', true );
+		$packages = get_option( 'mdjm_packages' );
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		$event_cost = get_post_meta( $_POST['event_id'], '_mdjm_event_cost', true );
+				
+		if( !empty( $event_cost ) )
+			$base_cost = !empty( $packages[$current_package]['cost'] ) ? (float)$event_cost - (float)$packages[$current_package]['cost'] : (float)$event_cost;
+			
+		else
+			$base_cost = '0.00';
+		
+		if( !empty( $current_addons ) )	{
+			foreach( $current_addons as $item )	{
+				$base_cost = $base_cost - (float)$equipment[$item][7];	
+			}
+		}
+		
+		if( !empty( $packages[$_POST['package']]['cost'] ) )
+			$cost = $base_cost + (float)$packages[$_POST['package']]['cost'];
+		else
+			$cost = $base_cost;
+			
+		if( !empty( $_POST['addons'] ) )	{
+			foreach( $_POST['addons'] as $item )	{
+				if( !empty( $equipment[$item][7] ) )
+					$cost += (float)$equipment[$item][7];
+			}
+		}
+		
+		if( !empty( $cost ) )	{
+			$result['type'] = 'success';
+			$result['cost'] = number_format( (float)$cost, 2, '.', '' );	
+		}
+		else	{
+			$result['type'] = 'success';
+			$result['cost'] = number_format( 0, 2, '.', '' );
+		}
+		
+		$result = json_encode( $result );
+		echo $result;
+		
+		die();
+		
+	} // update_event_cost_from_addons
+	add_action( 'wp_ajax_update_event_cost_from_addons', 'update_event_cost_from_addons' );
 

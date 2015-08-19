@@ -222,6 +222,10 @@
 					if( $_POST['field_type'] == 'package_list' )
 						$field_meta['config']['display_price'] = ( isset( $_POST['package_price'] ) && !empty( $_POST['package_price'] ) ? 'Y' : 'N' );
 						
+					/* Addon List Display Price */
+					if( $_POST['field_type'] == 'addons_list' )
+						$field_meta['config']['display_price'] = ( isset( $_POST['addons_price'] ) && !empty( $_POST['addons_price'] ) ? 'Y' : 'N' );
+						
 					/* Required Field */
 					if( $field_meta['type'] == 'captcha' || $field_meta['type'] == 'submit' )
 						$field_meta['config']['required'] = 'Y';
@@ -439,7 +443,7 @@
 				?>
                 <div class="wrap">
                 <div id="icon-themes" class="icon32"></div>
-                <h2>Contact Forms <a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=new_form' ); ?>" class="add-new-h2">Add New</a></h2>
+                <h1>Contact Forms <a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=new_form' ); ?>" class=".page-title-action">Add New</a></h1>
                 <hr />
                 <table class="widefat" width="100%">
                 <thead>
@@ -521,7 +525,7 @@
 				</script>
                 <div class="wrap">
                 <div id="icon-themes" class="icon32"></div>
-                <h2>Add Contact Form</h2>
+                <h1>Add Contact Form</h1>
                 <hr />
                 <form name="add_contact_form" id="add_contact_form" method="post" action="<?php mdjm_get_admin_page( 'contact_forms' ); ?>">
                 <input type="hidden" name="mdjm_action" id="mdjm_action" value="new_contact_form" />
@@ -692,6 +696,7 @@
 									'select_multi' => 'Select List (Multiple Select)',
 									'event_list'   => 'Event Type List',
 									'package_list' => 'Event Package List',
+									'addons_list'  => 'Event Addons List',
 									'checkbox'     => 'Checkbox',
 									'textarea'     => 'Textarea',
 									'tel'          => 'Telephone Number',
@@ -713,6 +718,7 @@
 									'_mdjm_event_date'		   => 'Event Date',
 									'mdjm_event_type'			=> 'Event Type',
 									'_mdjm_event_package'		=> 'Event Package',
+									'_mdjm_event_addons'		 => 'Event Addons',
 									'_mdjm_event_start'		  => 'Event Start',
 									'_mdjm_event_finish'		 => 'Event End',
 									'_mdjm_event_notes'		  => 'Event Description',
@@ -721,8 +727,11 @@
 									'_mdjm_event_venue_county'   => 'Event County (State)'
 									);
 				
-				if( MDJM_PACKAGES == false )
-					unset( $mappings_event['_mdjm_event_package'] );
+				// If packages are not enabled, we don't need these
+				if( MDJM_PACKAGES == false )	{
+					unset( $mappings_event['_mdjm_event_package'], $mappings_event['_mdjm_event_addons'] );
+					
+				}
 									
 				$mappings = array_merge( $mappings_client, $mappings_event );
 				
@@ -783,6 +792,12 @@
 					else	{
 						document.getElementById('package_list_first_entry_row').style.display = "none";
 					}
+					if(elem.value == 'addons_list')	{
+						document.getElementById('addons_list_price_row').style.display = "block";
+					}
+					else	{
+						document.getElementById('addons_list_price_row').style.display = "none";
+					}
 					if(elem.value == 'submit')	{
 						document.getElementById('align_submit_row').style.display = "block";
 					}
@@ -834,7 +849,7 @@
 				</script>
 				<div class="wrap">
 				<div id="icon-themes" class="icon32"></div>
-				<h2><?php echo esc_attr( $form->post_title ); ?></h2>
+				<h1><?php echo esc_attr( $form->post_title ); ?></h1>
 				<hr />
 				<table width="100%">
 				<tr valign="top">
@@ -883,8 +898,8 @@
 						$i++;
 						if( $i == 2 )
 							$i = 0;
-						/* Only one email/event list/package/captcha/submit field type allowed */
-						$only_one = array( 'email', 'event_list', 'package_list', 'captcha', 'submit' );
+						/* Only one email/event list/package/addons/captcha/submit field type allowed */
+						$only_one = array( 'email', 'event_list', 'package_list', 'addons_list', 'captcha', 'submit' );
 						if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
 							if( in_array( $f_config['type'], $only_one ) )
 								unset( $field_types[$f_config['type']] );	
@@ -1001,9 +1016,9 @@
 			$select_types = array( 'select', 'select_multi' );
 		?>
 				<div id="select_options_row" style="display: <?php echo( !empty( $e_meta ) && in_array( $e_meta['type'], $select_types ) ? 'block;' : 'none;' ); ?> font-size:10px">
-				<p>Selectable Options:<br />
-				&nbsp;&nbsp;&nbsp;<textarea name="select_options" id="select_options" class="all-options" rows="5" placeholder="One per line">
-				<?php echo( !empty( $e_meta['config']['options'] ) ? $e_meta['config']['options'] : '' ); ?></textarea></p>
+				<p>Selectable Options: <span style="font-size:11px; font-style:italic">(one entry per line)</span><br />
+				&nbsp;&nbsp;&nbsp;<textarea name="select_options" id="select_options" class="all-options" rows="5" placeholder="One entry per line"><?php echo( !empty( $e_meta['config']['options'] ) ? 
+					$e_meta['config']['options'] : '' ); ?></textarea></p>
 				</div>
 		<?php /* End Select Options */ ?>
 		
@@ -1024,6 +1039,13 @@
 				<?php if( isset( $e_meta['config']['display_price'] ) ) { checked( $e_meta['config']['display_price'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>
 		<?php /* End Package List First Entry */ ?>
+        
+        <?php /* Addons List Price */ ?>
+				<div id="addons_list_price_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'addons_list' ? 'block;' : 'none;' ); ?> font-size:10px">
+                <p>Include Addon Price:?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="addons_price" id="addons_price" value="1" 
+				<?php if( isset( $e_meta['config']['display_price'] ) ) { checked( $e_meta['config']['display_price'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
+				</div>
+		<?php /* End Addons List First Entry */ ?>
 		
 		<?php /* Submit Align */ ?>
 				<div id="align_submit_row" style="display: <?php echo ( !empty( $e_meta ) && $e_meta['type'] == 'submit' ? 'block;' : 'none;' ); ?> font-size:10px">
@@ -1054,11 +1076,11 @@
 				}
 		?>
 				<p>Required?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="required" id="required" value="Y"<?php if( $selected ) checked( 'Y', $req ); ?> /></p>
-				<p>Label CSS Class: (optional)<br />
+				<p>Label CSS Class: <span style="font-size:11px; font-style:italic">(optional)</span><br />
 				&nbsp;&nbsp;&nbsp;<input type="text" name="label_class" id="label_class"
 					<?php echo ( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' && !empty( $e_meta['config']['label_class'] ) 
 					? ' value="' . esc_attr( $e_meta['config']['label_class'] ) . '"' : '' ); ?> /></p>
-				<p>Input Field CSS Class: (optional)<br />
+				<p>Input Field CSS Class: <span style="font-size:11px; font-style:italic">(optional)</span><br />
 				&nbsp;&nbsp;&nbsp;<input type="text" name="input_class" id="input_class"
 					<?php echo( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' && !empty( $e_meta['config']['input_class'] ) 
 					? ' value="' . esc_attr( $e_meta['config']['input_class'] ) . '"' : '' ); ?> /></p>
@@ -1090,7 +1112,7 @@
 				elseif( $mdjm->_mdjm_validation( 'check' ) )	{
 					submit_button( 'Edit Field', 'primary small', 'submit', false, '' ); 
 					?>
-					&nbsp;&nbsp;&nbsp;<a class="button button-secondary button-small" href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form->ID ); ?>" class="add-new-h2">Cancel</a>
+					&nbsp;&nbsp;&nbsp;<a class="button button-secondary button-small" href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form->ID ); ?>" class=".page-title-action">Cancel</a>
 					<?php
 				}
 				else
@@ -1420,6 +1442,7 @@
 								'_mdjm_event_date'     	   => 'Event Date',
 								'mdjm_event_type'      		=> 'Event Type',
 								'_mdjm_event_package'   		=> 'Event Package',
+								'_mdjm_event_addons'   		 => 'Event Addons',
 								'_mdjm_event_start'    	  => 'Event Start',
 								'_mdjm_event_finish'   		 => 'Event End',
 								'_mdjm_event_notes'    	  => 'Event Description',
@@ -1451,7 +1474,10 @@
 				else	{
 					echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
 				}
-				if( $field['type'] == 'select' || $field['type'] == 'select_multi' || $field['type'] == 'event_list' || $field['type'] == 'package_list' )	{
+				if( $field['type'] == 'select' || $field['type'] == 'select_multi' 
+					|| $field['type'] == 'event_list' || $field['type'] == 'package_list' 
+					|| $field['type'] == 'addons_list' )	{
+						
 					if( $field['type'] == 'event_list' )	{
 						$opt = '';
 						if( !empty( $field['config']['event_list_first_entry'] ) )	{
@@ -1477,6 +1503,17 @@
 							$opt .= esc_attr( $package['name'] ) . 
 								( isset( $field['config']['display_price'] ) && $field['config']['display_price'] == 'Y' 
 									? ' ' . display_price( $package['cost'], true ) : '' ) . "\r\n";
+						}
+					}
+					elseif( $field['type'] == 'addons_list' )	{
+						$opt = '';
+						
+						$addons = get_available_addons();
+						
+						foreach( $addons as $addon )	{
+							$opt .= esc_attr( $addon['name'] ) . 
+								( isset( $field['config']['display_price'] ) && $field['config']['display_price'] == 'Y' 
+									? ' ' . display_price( $addon['cost'], true ) : '' ) . "\r\n";
 						}
 					}
 					elseif( $field['type'] == 'dj_list' )	{

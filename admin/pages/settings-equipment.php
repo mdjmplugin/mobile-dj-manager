@@ -91,7 +91,7 @@
 	}
 	
 	function f_mdjm_equipment_settings_display()	{
-		global $mdjm_options;
+
 		$cats = get_option( 'mdjm_cats' );
 		asort( $cats );
 		?>
@@ -133,7 +133,6 @@
         <h3>Equipment Inventory</h3>
         <?php
         $equipment = get_option( 'mdjm_equipment' );
-		asort( $equipment );
 		?>
         <table class="widefat">
         <thead>
@@ -151,12 +150,13 @@
         <tbody>
         <?
 		$djs = mdjm_get_djs();
-		if( !$equipment )	{
+		if( empty( $equipment ) )	{
 			echo '<tr>';
 			echo '<td colspan="6">You have no equipment in your inventory yet. Begin adding below.</td>';
 			echo '</tr>';	
 		}
 		else	{
+			asort( $equipment );
 			/* START TABLE DISPLAY OF EQUIPMENT INVENTORY */
 			$rowclass = ' class="alternate"';
 			foreach( $equipment as $equip_list )	{
@@ -275,7 +275,7 @@
         <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description">Cost of individual add-on. No <?php echo f_mdjm_currency(); ?> sign required</span></td>
         </tr>
         <?php
-		if ( isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
+		if ( MDJM_MULTI == true )	{
 		?>
             <tr>
             <th><label for="djs">Which DJs Provide?</label></th>

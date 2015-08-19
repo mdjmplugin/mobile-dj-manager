@@ -61,6 +61,10 @@
 							'title' 	=> __( 'Playlist Settings' ) . '<hr />',
 							'page'	 => 'mdjm-playlists',
 							),
+					/*'mdjm_music_library_settings' => array(
+							'title' 	=> __( 'Music Library Options' ) . '<hr />',
+							'page'	 => 'mdjm-playlists',
+							),*/
 					'mdjm_email_settings' => array(
 							'title' 	=> __( 'Email Settings' ) . '<hr />',
 							'page'	 => 'mdjm-email',
@@ -268,7 +272,7 @@
 									),
 									
 							'dj_add_event' => array(
-									'label' => MDJM_DJ . '\'s Can Add New Events?',
+									'label' => MDJM_DJ . '\'s can Add New Events?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_add_event'] ) ? '1' : '0' ),
@@ -277,9 +281,20 @@
 									'section' => 'permissions',
 									'page' => 'permissions',
 									),
+									
+							'dj_upload_music' => array(
+									'label' => MDJM_DJ . '\'s can Upload Music?',
+									'key' => MDJM_PERMISSIONS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['permissions']['dj_upload_music'] ) ? '1' : '0' ),
+									'text' => 'Allow your ' . MDJM_DJ . '\'s to upload their music libraries enabling client searches',
+									'desc' => '',
+									'section' => 'permissions',
+									'page' => 'permissions',
+									),
 								
 							'dj_view_enquiry' => array(
-									'label' => MDJM_DJ . '\'s Can View Enquiries',
+									'label' => MDJM_DJ . '\'s can View Enquiries',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_view_enquiry'] ) ? '1' : '0' ),
@@ -290,7 +305,7 @@
 									),
 									
 							'dj_add_venue' => array(
-									'label' => MDJM_DJ . '\'s Can Add New Venues?',
+									'label' => MDJM_DJ . '\'s can Add New Venues?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_add_venue'] ) ? '1' : '0' ),
@@ -301,7 +316,7 @@
 									),
 									
 							'dj_see_deposit' => array(
-									'label' => MDJM_DJ . '\'s Can See Deposit Info?',
+									'label' => MDJM_DJ . '\'s can See Deposit Info?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_see_deposit'] ) ? '1' : '0' ),
@@ -403,14 +418,48 @@
 									'page' => 'uninstall',
 									),
 									
+							'uninst_remove_mdjm_posts' => array(
+									'label' => 'Remove Data?',
+									'key' => MDJM_UNINST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_posts'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_posts'] : '' ),
+									'text' => '',
+									'desc' => 'Do you want to remove all MDJM data? Includes contact forms, transaction and venue data as well as signed contracts and ' . 
+										'communication history when uninstalling the plugin?',
+									'section' => 'uninstall',
+									'page' => 'uninstall',
+									),
+									
+							'uninst_remove_mdjm_pages' => array(
+									'label' => 'Remove Pages?',
+									'key' => MDJM_UNINST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_pages'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_pages'] : '' ),
+									'text' => '',
+									'desc' => 'Do you want to remove all MDJM pages?',
+									'section' => 'uninstall',
+									'page' => 'uninstall',
+									),
+							
 							'uninst_remove_mdjm_templates' => array(
 									'label' => 'Remove Templates?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_templates'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_templates'] : '' ),
 									'text' => '',
-									'desc' => 'Do you want to remove the Contract and Email Templates associated with Mobile DJ Manager when uninstalling plugin? ' . 
-										'They will be sent to trash, not permanently deleted',
+									'desc' => 'Do you want to remove the Contract and Email Templates associated with Mobile DJ Manager when uninstalling plugin?',
+									'section' => 'uninstall',
+									'page' => 'uninstall',
+									),
+									
+							'uninst_remove_users' => array(
+									'label' => 'Remove DJ\'s &amp; Client\'s?',
+									'key' => MDJM_UNINST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_users'] ) ? $mdjm_settings['uninst']['uninst_remove_users'] : '' ),
+									'text' => '',
+									'desc' => 'If selected all WordPress users with the role <code>Client</code> or <code>DJ</code> (including inactive) ' . 
+										'will be deleted together with their data',
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
@@ -483,7 +532,7 @@
 									'label' => 'New Enquiry Notification?',
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['events']['warn_unattended'] ) ? $mdjm_settings['events']['warn_unattended'] : '' ),
+									'value' => ( !empty( $mdjm_settings['events']['warn_unattended'] ) ? '1' : '' ),
 									'text' => '',
 									'desc' => 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries',
 									'section' => 'event',
@@ -550,6 +599,29 @@
 									'section' => 'playlist',
 									'page' => 'playlists',
 									),
+					/* -- Music Library Settings -- */
+							/*'enable_music_library' => array(
+									'label' => 'Use Music Library?',
+									'key' => MDJM_PLAYLIST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['playlist']['enable_music_library'] ) ? '1' : '0' ),
+									'text' => '',
+									'desc' => 'Enable client searching of uploaded music library via ' . MDJM_APP,
+									'section' => 'music_library',
+									'page' => 'playlists',
+									),
+							'music_library_only' => array(
+									'label' => 'Only Use Music Library?',
+									'key' => MDJM_PLAYLIST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['playlist']['music_library_only'] ) ? '1' : '0' ),
+									'text' => '',
+									'desc' => 'If enabled, clients cannot add song entries you do not have within your library.<br />
+										<span style="font-weight: bold;">Note: </span> If the assigned ' . MDJM_DJ . 
+										' does not have a music library, this setting does not apply',
+									'section' => 'music_library',
+									'page' => 'playlists',
+									),*/
 									
 					/* -- Email Settings -- */
 							'system_email' => array(
@@ -861,8 +933,19 @@
 									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['clientzone']['update_event'] ) ? '1' : '' ),
-									'text' => '',
+									'text' => 'Coming soon...',
 									'desc' => 'Enables clients to update some of their event details within the ' . MDJM_APP,
+									'section' => 'clientzone_event',
+									'page' => 'clientzone',
+									),
+							'edit_event_stop' => array(
+									'label' => 'Disable client editing event',
+									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
+									'type' => 'text',
+									'class' => 'small-text',
+									'value' => ( !empty( $mdjm_settings['clientzone']['edit_event_stop'] ) ? $mdjm_settings['clientzone']['edit_event_stop'] : '5' ),
+									'text' => 'Days before the event starts',
+									'desc' => 'If <code>Allow Client to Edit Event?</code> is enabled, how many days before the event do you want to disable edits. 0 for never disable',
 									'section' => 'clientzone_event',
 									'page' => 'clientzone',
 									),

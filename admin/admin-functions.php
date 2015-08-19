@@ -8,6 +8,9 @@
  * @since 1.0
  *
  */
+ 
+/**** THIS FILE IS DEFUNCT SINCE 1.2.3
+	  REMOVE 5 VERSIONS AFTER 1.2.3
 
 /****************************************************************************************************
  *	INSTALLATION & INITIALISATION
@@ -23,24 +26,27 @@
 	function f_mdjm_upgrade()	{
 		global $mdjm;
 		
-		if( !get_option( MDJM_VERSION_KEY ) )	{ // Add application version to the DB if not already there
-			add_option( MDJM_VERSION_KEY, '0.9.2' ); // Add the previous version to which this upgrade proc was introduced
-		}
-		if( !get_option( MDJM_UPDATED_KEY ) )	{ // Add the option to show we've updated 
-			add_option( MDJM_UPDATED_KEY, '1' );	
-		}
-		
 		$current_version_mdjm = get_option( MDJM_VERSION_KEY );
+		
+		if( !empty( $current_version_mdjm ) && MDJM_VERSION_NUM >= '1.2.3' )
+			return;
+		
+		if( !get_option( MDJM_VERSION_KEY ) ) // Add application version to the DB if not already there
+			add_option( MDJM_VERSION_KEY, '0.9.2' ); // Add the previous version to which this upgrade proc was introduced	
+		
 		if( MDJM_VERSION_NUM > $current_version_mdjm )	{ // We have some upgrades to perform
 			$mdjm->debug_logger( 'UPGRADE REQUIRED', true );
 			
-			if( $current_version_mdjm < MDJM_UNSUPPORTED )	{
+			if( !get_option( MDJM_UPDATED_KEY ) ) // Add the option to show we've updated 
+				add_option( MDJM_UPDATED_KEY, '1' );
+			
+			/*if( $current_version_mdjm < MDJM_UNSUPPORTED )	{
 				return mdjm_update_notice( 'error',
 										   'ERROR: Upgrading from your version of the MDJM plugin is not supported<br />' . 
 										   'In order to continue using the MDJM plugin, you will need to uninstall your version ' . 
 										   'and re-install the latest version manually.<br />' . 
 										   '<a href="http://www.mydjplanner.co.uk/release-cycles-version-support/" target="_blank">More Information</a>' );
-			}
+			}*/
 /***************************************************
 			 	UPGRADES FROM 1.0
 ***************************************************/			

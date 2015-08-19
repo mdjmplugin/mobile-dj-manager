@@ -16,7 +16,6 @@
 		 */
 		public function __construct()	{
 			$this->schedules = get_option( MDJM_SCHEDULES_KEY );
-			
 		} // __construct
 		
 		/*
@@ -62,7 +61,7 @@
 			}
 			
 			// Check for active task
-			if( $task['active'] != 'Y' )	{
+			if( $task['active'] != 'Y' && $task['active'] != true )	{
 				if( MDJM_DEBUG == true )
 					$GLOBALS['mdjm_debug']->log_it( 'The task ' . $task['name'] . ' is not active' );
 					
@@ -100,6 +99,9 @@
 				
 			/* -- Loop through each of the scheduled tasks and execute as necessary -- */
 			foreach( $this->schedules as $task )	{
+				if( $task['active'] != 'Y' )
+					continue;
+					
 				/* Only execute active tasks */
 				if( $this->task_ready( $task ) )	{
 					if( MDJM_DEBUG == true )
@@ -129,10 +131,10 @@
 			
 			$cron_start = microtime(true);
 			
-			/* Retrieve plsylist entries not yet transferred */
+			/* Retrieve playlist entries not yet transferred */
 			$maxrows = 50;
 			
-			$query = "SELECT * FROM `" . MDJM_PLAYLIST_TABLE . "` WHERE `date_to_mdjm` IS NULL OR `date_to_mdjm` = '' ORDER BY `event_id` LIMIT " . $maxrows;
+			$query = "SELECT * FROM `" . MDJM_PLAYLIST_TABLE . "` WHERE `upload_procedure` = '0' ORDER BY `event_id` LIMIT " . $maxrows;
 			$playlist = $wpdb->get_results( $query );
 			$rows = $wpdb->num_rows;
 			
@@ -143,7 +145,8 @@
 			}
 			// We have data to process
 			else	{
-				$i = 1;
+				$i = 0;
+				$x = 0;
 				if( MDJM_DEBUG == true )
 					$GLOBALS['mdjm_debug']->log_it( 'Beginnning playlist upload' );
 					
@@ -154,47 +157,69 @@
 					
 					// If the event is not completed, go to the next record
 					if( $event_status != 'mdjm-completed' )
-						continue;
+						$invalid = true;
 					
 					// Get the event post data
 					$event = get_post( $record->event_id );
 					
-					// Build the rpc call
-					$event_types = wp_get_object_terms( $event->ID, 'event-types' );
-					$event_type = isset( $event_types[0]->name ) ? $event_types[0]->name : 'Undefined';
-					$event_date = get_post_meta( $event->ID, '_mdjm_event_date', true );
-					
-					$rpc = 'a=' . esc_attr( urlencode( $record->artist ) ) . '&s=' . esc_attr( urlencode( $record->song ) ) . '&et=' . esc_attr( urlencode( $event_type ) ) . '&ed=' . 
-						date( 'Y-m-d', strtotime( $event_date ) ) . '&da=' . $record->date_added . '&c=' . urlencode( MDJM_COMPANY ) . '&url=' . urlencode( get_site_url() );
-					
-					// Retrieve the response
-					$response = wp_remote_retrieve_body( wp_remote_get( 'http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc ) );
-					
-					// Update the playlist record with the timestamp of the upload
-					if( $response )	{ // Success
+					if( !empty( $event ) )	{
+						// Build the rpc call
+						$event_types = wp_get_object_terms( $event->ID, 'event-types' );
+						$event_type = isset( $event_types[0]->name ) ? $event_types[0]->name : 'Undefined';
+						$event_date = get_post_meta( $event->ID, '_mdjm_event_date', true );
+						
+						$rpc = 'a=' . esc_attr( urlencode( stripslashes( $record->artist ) ) ) . '&s=' . 
+							esc_attr( urlencode( stripslashes( $record->song ) ) ) . '&et=' . esc_attr( urlencode( $event_type ) ) . '&ed=' . 
+							date( 'Y-m-d', strtotime( $event_date ) ) . '&da=' . $record->date_added . '&c=' . urlencode( MDJM_COMPANY ) . 
+							'&url=' . urlencode( get_site_url() );
+							
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' successfull uploaded' );
+							$GLOBALS['mdjm_debug']->log_it( 'Sending RPC string http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc );
+						
+						// Retrieve the response
+						$response = wp_remote_retrieve_body( wp_remote_get( 'http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc ) );
+						
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'Response received ' . $response );
+						
+						// Update the playlist record with the timestamp of the upload
+						if( $response )	{ // Success
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' successfully uploaded' );
+							
+							$update = $wpdb->update( 
+												MDJM_PLAYLIST_TABLE,
+												array( 'date_to_mdjm' => date( 'Y-m-d H:i:s', $response ),
+													   'upload_procedure' => '1' ),
+												array( 'id' => $record->id ) );
+												
+							$i++;
+						} // if( $response )
+						else	{ // Failrue
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( 'ERROR: ' . ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' could not be uploaded. ' . $wpdb->print_error() );	
+						}
+					} // if( !empty( $event ) )
+					// If no event exists update the record so we don't retry if
+					else	{
+						$x++;
 						
 						$update = $wpdb->update( 
-											MDJM_PLAYLIST_TABLE,
-											array( 'date_to_mdjm' => date( 'Y-m-d H:i:s', $response ) ),
-											array( 'id' => $record->id ) );
-											
-						$i++;
-					} // if( $response )
-					else	{ // Failrue
-						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'ERROR: ' . ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' could not be uploaded. ' . $wpdb->print_error() );	
+												MDJM_PLAYLIST_TABLE,
+												array( 'upload_procedure' => '1' ),
+												array( 'id' => $record->id ) );	
 					}
 				} // End foreach
+				
+				if( MDJM_DEBUG == true )	{
+					$GLOBALS['mdjm_debug']->log_it( $i . _n( ' record', ' records', $i ) . ' uploaded successfully' );
+					if( $x > 0 )
+						$GLOBALS['mdjm_debug']->log_it( $x . _n( ' record', ' records', $x ) . ' had no event posts' );
+					$GLOBALS['mdjm_debug']->log_it( '*** Completed the Playlist Upload ***', true );
+				}
 			}
 			
 			$cron_end = microtime(true);
-			
-			if( MDJM_DEBUG == true )	{
-				$GLOBALS['mdjm_debug']->log_it( $i . _n( ' record', ' records', $i ) . ' uploaded successfully' );
-				$GLOBALS['mdjm_debug']->log_it( '*** Completed the Playlist Upload ***', true );
-			}
 			
 			// Prepare next run time
 			$this->update_nextrun( 'upload-playlists' );
@@ -1132,6 +1157,9 @@
 			
 			elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Daily')
 				$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 day", $time );
+				
+			elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Twice Daily')
+				$mdjm_schedules[$task]['nextrun'] = strtotime( "+12 hours", $time );
 			
 			elseif( isset( $mdjm_schedules[$task]['frequency'] ) && $mdjm_schedules[$task]['frequency'] == 'Weekly')
 				$mdjm_schedules[$task]['nextrun'] = strtotime( "+1 week", $time );
@@ -1301,7 +1329,7 @@
 					$GLOBALS['mdjm_debug']->log_it( 'Logging as invalid/trial' );	
 					$status['key'] = 'XXXX';
 					$status['type'] = 'trial';
-					$status['last_auth'] = $values[3];
+					$status['last_auth'] = date( 'Y-m-d H:i:s' );
 					$status['missed'] = '0';
 				}
 				else	{					
@@ -1311,7 +1339,7 @@
 					$status['type'] = 'full';
 					$status['start'] = $values[1];
 					$status['expire'] = $values[2];
-					$status['last_auth'] = $values[3];
+					$status['last_auth'] = date( 'Y-m-d H:i:s' );
 					$status['missed'] = '0';
 					$status['url'] = $values[5];
 				}
@@ -1335,59 +1363,58 @@
 		 *
 		 */
 		function import_journal()	{
-		global $mdjm, $wpdb;
-		
-		add_filter( 'akismet_debug_log', '__return_false' );
-		remove_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
-		remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
-		
-		$events = get_posts( array(
-							'posts_per_page'	=> -1,
-							'post_status'	   => 'any',
-							'post_type'		 => MDJM_EVENT_POSTS,
-							) );
-		
-		$GLOBALS['mdjm_debug']->log_it( count( $events ) . ' events found' );
-							
-		foreach( $events as $event )	{
-			/* List event journal entries -- */
-			$journal_list = $wpdb->get_results(
-					"SELECT * FROM `" . MDJM_JOURNAL_TABLE . "` WHERE `event` = '" . $event->ID . "' AND `migration` IS NULL" );
-			$i = 0;
-			$total = count( $journal_list );				
-			if( $total > 0 )	{
-				$GLOBALS['mdjm_debug']->log_it( $wpdb->num_rows . ' journal entries found for event ' . $event->ID );
-				foreach( $journal_list as $journal_entry )	{
-					/* -- Insert the comment -- */
-					$mdjm->mdjm_events->add_journal( array(
-											'user'				=> $journal_entry->author,
-											'event'				=> $event->ID,
-											'comment_content'	=> $journal_entry->entry,
-											'comment_type'		=> 'mdjm-journal',
-											'comment_date'		=> date( 'Y-m-d H:i:s', $journal_entry->timestamp )
-											 ),
-											 array(
-												 'type'				=> $journal_entry->type,
-												 'visibility'		=> '1',
-											 ) );
-					$i++;
-					$GLOBALS['mdjm_debug']->log_it( '    ' . $i . ' of ' . $total . ' entries imported' );
-					$wpdb->update(
-								MDJM_JOURNAL_TABLE,
-								array( 'migration' => 'Completed' ),
-								array( 'id' => $journal_entry->id )
-								);
-					
+			global $mdjm, $wpdb;
+			
+			add_filter( 'akismet_debug_log', '__return_false' );
+			remove_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
+			remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
+			
+			$events = get_posts( array(
+								'posts_per_page'	=> -1,
+								'post_status'	   => 'any',
+								'post_type'		 => MDJM_EVENT_POSTS,
+								) );
+			
+			$GLOBALS['mdjm_debug']->log_it( count( $events ) . ' events found' );
+								
+			foreach( $events as $event )	{
+				/* List event journal entries -- */
+				$journal_list = $wpdb->get_results(
+						"SELECT * FROM `" . MDJM_JOURNAL_TABLE . "` WHERE `event` = '" . $event->ID . "' AND `migration` IS NULL" );
+				$i = 0;
+				$total = count( $journal_list );				
+				if( $total > 0 )	{
+					$GLOBALS['mdjm_debug']->log_it( $wpdb->num_rows . ' journal entries found for event ' . $event->ID );
+					foreach( $journal_list as $journal_entry )	{
+						/* -- Insert the comment -- */
+						$mdjm->mdjm_events->add_journal( array(
+												'user'				=> $journal_entry->author,
+												'event'				=> $event->ID,
+												'comment_content'	=> $journal_entry->entry,
+												'comment_type'		=> 'mdjm-journal',
+												'comment_date'		=> date( 'Y-m-d H:i:s', $journal_entry->timestamp )
+												 ),
+												 array(
+													 'type'				=> $journal_entry->type,
+													 'visibility'		=> '1',
+												 ) );
+						$i++;
+						$GLOBALS['mdjm_debug']->log_it( '    ' . $i . ' of ' . $total . ' entries imported' );
+						$wpdb->update(
+									MDJM_JOURNAL_TABLE,
+									array( 'migration' => 'Completed' ),
+									array( 'id' => $journal_entry->id )
+									);
+					}
+				}
+				else	{
+					$GLOBALS['mdjm_debug']->log_it( 'No journal entries found for event ' . $event->ID );	
 				}
 			}
-			else	{
-				$GLOBALS['mdjm_debug']->log_it( 'No journal entries found for event ' . $event->ID );	
-			}
-		}
-		add_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
-		add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );					
-		
-	} // import_journal
+			add_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
+			add_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );					
+			
+		} // import_journal
 		
 	} // class	
 	

@@ -338,6 +338,7 @@
 				$event_fields = array( '_mdjm_event_date', 
 									   'mdjm_event_type',
 									   '_mdjm_event_package',
+									   '_mdjm_event_addons',
 									   '_mdjm_event_start',
 									   '_mdjm_event_finish',
 									   '_mdjm_event_notes',
@@ -398,14 +399,9 @@
 					
 					/* DJ Availability Check */
 					if( $field_settings['type'] == 'date' && isset( $field_settings['config']['datepicker'] ) && $field_settings['config']['datepicker'] == 'Y' )	{
-						$dj_avail = f_mdjm_available( $_POST['_mdjm_event_date'] );
-						if( $dj_avail !== false )	{
-							if( count( $dj_avail ) != 1 )	{
-								$avail_message = count( $dj_avail ) . ' DJ\'s available';
-							}
-							else	{
-								$avail_message = count( $dj_avail ) . ' DJ available';
-							}
+						$dj_avail = dj_available( '', $_POST['_mdjm_event_date'] );
+						if( !empty( $dj_avail['available'] ) )	{
+							$avail_message = count( $dj_avail['available'] ) . ' ' . MDJM_DJ . _n( '', '\'s', $dj_avail['available'] ) . ' available';	
 						}
 						else	{
 							$avail_message = 'No DJ\'s available';	
@@ -429,6 +425,11 @@
 						$term = get_term( $_POST[$field->post_name], 'event-types' );
 						$_POST[$field->post_name] = $term->name;	
 					}
+					/* -- Addons -- */
+					if( $field_settings['type'] == 'addons_list' )	{
+						$_POST[$field->post_name] = implode( "\n", $_POST[$field->post_name] );	
+					}
+					
 					/* -- Finalise the email content -- */
 					$this->admin_email_body .= '<p><span style="font-weight:bold">' . $field->post_title . '</span><br />';
 					$this->admin_email_body .= nl2br( html_entity_decode( stripcslashes( $_POST[$field->post_name] ) ) );
@@ -551,6 +552,9 @@
 					return;	
 				}
 				
+				// Set initial event cost
+				$event_cost = 0;
+				
 				/* -- Event Date -- */
 				if( !empty( $this->event_date ) )
 					$this->event_update['_mdjm_event_date'] = $this->event_date;
@@ -567,13 +571,6 @@
 				$this->event_update['_mdjm_event_last_updated_by'] = $this->user_id;
 				$this->event_update['_mdjm_event_enquiry_source'] = 'Website';
 				$this->event_update['_mdjm_playlist_access'] = $mdjm->mdjm_events->playlist_ref();
-				
-				// If we have a package selected, we can add the cost to the event
-				if( array_key_exists( '_mdjm_event_package', $this->event_update ) && !empty( $this->event_update['_mdjm_event_package'] ) )	{
-					$packages = get_option( 'mdjm_packages' );
-					
-					$this->event_update['_mdjm_event_cost'] = number_format( $packages[$this->event_updates['_mdjm_event_package']]['cost'], 2 );
-				}
 				
 				/* -- Create default post (auto-draft) so we can use the ID etc -- */
 				require_once( ABSPATH . 'wp-admin/includes/post.php' );
@@ -605,7 +602,32 @@
 					// Add the post meta
 					else	{
 						add_post_meta( $this->event_id, $meta_key, $meta_value, true );
+						
+						// If we have an event package and/or addons, set the event cost
+						if( $meta_key == '_mdjm_event_package' )	{
+							$packages = get_option( 'mdjm_packages' );
+							
+							$event_cost += $packages[$meta_value]['cost'];
+							if( MDJM_DEBUG == true )
+								$mdjm->debug_logger( '	-- Cost of ' . $meta_value . ' package is ' . $packages[$meta_value]['cost'] );
+						}
+						if( $meta_key == '_mdjm_event_addons' )	{
+							foreach( $meta_value as $addon )	{
+								$equipment = get_option( 'mdjm_equipment' );
+								$event_cost += $equipment[$addon][7];
+								if( MDJM_DEBUG == true )
+									$mdjm->debug_logger( '	-- Cost of ' . $addon . ' addon is ' . $equipment[$addon][7] );
+							}
+						}
 					}
+				}
+				// Apply the cost of packages and addons if we have it
+				if( $event_cost != 0 )	{
+					add_post_meta( $this->event_id, 
+								   '_mdjm_event_cost', 
+								   number_format( $event_cost, 2 ), true );
+					if( MDJM_DEBUG == true )
+							$mdjm->debug_logger( '	-- Total Event Cost is ' . $event_cost );
 				}
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( '	-- Meta Updates Completed' );
@@ -646,6 +668,9 @@
 			 */
 			public function show_form()	{
 				global $mdjm, $mdjm_settings;
+				
+				// If this counter reaches 2 then we need the Addons to dynamically update
+				$packages = 0;
 				
 				$this->form_header();
 				
@@ -792,21 +817,24 @@
 						}
 					} // Time Field
 					
-				/* Select / Event / Package List Fields */
+				/* Select / Event / Package / Addons List Fields */
 					elseif( $field_settings['type'] == 'select' 
 							|| $field_settings['type'] == 'select_multi' 
 							|| $field_settings['type'] == 'event_list'
-							|| $field_settings['type'] == 'package_list' )	{
+							|| $field_settings['type'] == 'package_list'
+							|| $field_settings['type'] == 'addons_list' )	{
 						
-						echo '<select name="' . $field->post_name . '" id="' . $field->post_name . '"' . 
-						
-						( $field_settings['type'] == 'select_multi' ? ' multiple="multiple"' : '' ) . 
-						
-						( !empty( $field_settings['config']['input_class'] ) ? ' class="' . $field_settings['config']['input_class'] . '"' : '' ) . 
-						
-						( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' ? ' required' : '' ) . 
-						
-						'>' . "\r\n";
+						if( $field_settings['type'] != 'package_list' && $field_settings['type'] != 'addons_list' )	{
+							echo '<select name="' . $field->post_name . '" id="' . $field->post_name . '"' . 
+							
+							( $field_settings['type'] == 'select_multi' ? ' multiple="multiple"' : '' ) . 
+							
+							( !empty( $field_settings['config']['input_class'] ) ? ' class="' . $field_settings['config']['input_class'] . '"' : '' ) . 
+							
+							( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' ? ' required' : '' ) . 
+							
+							'>' . "\r\n";
+						}
 						
 						// Event List
 						if( $field_settings['type'] == 'event_list' )	{
@@ -821,20 +849,33 @@
 								echo '<option value="' . $type->term_id . '">' . esc_attr( $type->name ) . '</option>' . "\n";
 							}
 						}
+						// Package List
 						elseif( $field_settings['type'] == 'package_list' )	{
-							$packages = get_option( 'mdjm_packages' );
+							$packages++;
+							$package_field = $field->post_name; // For the dynamic updating of addons
 							
-							$first_entry = !empty( $field_settings['config']['package_list_first_entry'] ) ? $field_settings['config']['package_list_first_entry'] : '';
+							$package_settings['name'] = $field->post_name;
+							$package_settings['id'] = $field->post_name;
+							$package_settings['class'] = ( !empty( $field_settings['config']['input_class'] ) ? 
+								' class="' . $field_settings['config']['input_class'] . '"' : '' );
+							$package_settings['first_entry'] = ( !empty( $field_settings['config']['package_list_first_entry'] ) ? 
+								$field_settings['config']['package_list_first_entry'] : '' );
+							$package_settings['title'] = true;
 							
-							if( !empty( $first_entry ) )
-								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\n";
+							echo mdjm_package_dropdown( $package_settings );
+						}
+						// Addons List
+						elseif( $field_settings['type'] == 'addons_list' )	{
+							$packages++;
+							$addons_field = $field->post_name; // For the dynamic updating of addons
+							
+							$addons_settings['name'] = $field->post_name;
+							$addons_settings['id'] = $field->post_name;
+							$addons_settings['class'] = ( !empty( $field_settings['config']['input_class'] ) ? 
+								' class="' . $field_settings['config']['input_class'] . '"' : '' );
+							$addons_settings['title'] = true;
 								
-							foreach( $packages as $package )	{
-								echo '<option value="' . $package['slug'] . '">' . $package['name'] . 
-								( isset( $field_settings['config']['display_price'] ) && $field_settings['config']['display_price'] == 'Y' 
-									? '&nbsp;' . display_price( $package['cost'], true ) : '' ) . 
-								'</option>' . "\n";
-							}
+							echo mdjm_addons_dropdown( $addons_settings );
 						}
 						else	{
 							$options = explode( "\n", $field_settings['config']['options'] );
@@ -843,7 +884,9 @@
 							}
 						}
 						
-						echo '</select>' . "\n";
+						if( $field_settings['type'] != 'package_list' && $field_settings['type'] != 'addons_list' )	{
+							echo '</select>' . "\n";
+						}
 					} // Select / Event List
 				
 				/* Checkbox Field */
@@ -906,6 +949,10 @@
 						$submit = $field_settings;
 				} // foreach( $form_fields as $field )
 				
+				// Add dynamic updating of addons if needed
+				if( $packages == 2 )
+					$this->dynamic_addons( $package_field, $addons_field );
+				
 				/* -- Excessive Columns -- */
 				if( $this->layout != 0 && $i != 0 )	{
 					 while( $i < $columns ) {
@@ -951,6 +998,55 @@
 				echo '</form>' . "\r\n" . 
 				'<!-- End of MDJM Contact Form -->' . "\r\n";	
 			} // show_form
+			
+			/*
+			 * Add jQuery to dynamically update the addons list
+			 *
+			 *
+			 *
+			 */
+			function dynamic_addons( $package_field, $addons_field )	{
+				?>
+				<script type="text/javascript"> 
+				jQuery(document).ready(function($) 	{
+					$('#<?php echo $package_field; ?>').on('change', '', function()	{
+						
+						var package = $("#<?php echo $package_field; ?> option:selected").val();
+						var addons = $("#<?php echo $addons_field; ?>");
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+							data: {
+								package : package,
+								addons_field : <?php echo $addons_field; ?>,
+								action : "mdjm_update_contact_form_addon_options"
+							},
+							beforeSend: function()	{
+								$("#<?php echo $addons_field; ?>").addClass( "mdjm-updating" );
+								$("#<?php echo $addons_field; ?>").fadeTo("slow", 0.5);
+							},
+							success: function(response)	{
+								if(response.type == "success") {
+									addons.empty(); // Remove existing options
+									addons.append(response.addons);
+									$("#<?php echo $addons_field; ?>").fadeTo("slow", 1);
+									
+									$("#<?php echo $addons_field; ?>").removeClass( "mdjm-updating" );
+								}
+								else	{
+									alert(response.msg);
+									$("#<?php echo $addons_field; ?>").fadeTo("slow", 1);
+									$("#<?php echo $addons_field; ?>").removeClass( "mdjm-updating" );
+								}
+							}
+						});
+					});
+				});
+				</script>
+                <?php
+			} // dynamic_addons
+			
 		} // class
 		
 		}// if( !class_exists( 'MDJM_ContactForm' ) )

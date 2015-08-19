@@ -590,27 +590,6 @@
 	} // f_mdjm_generate_playlist_ref
 	
 /*
-* f_mdjm_count_playlist_records
-* 25/11/2014
-* @since 0.9.4
-* Prints the number of playlist records in the specified state
-*/
-	function f_mdjm_count_playlist_records_uploaded()	{
-		global $mdjm, $wpdb;
-		
-		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
-		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		
-		$pl_query = "SELECT COUNT(*) FROM `". $db_tbl['playlists'] . "` WHERE `date_to_mdjm` != '' AND `date_to_mdjm` IS NOT NULL";
-		$pl_result = $wpdb->get_var( $pl_query );
-		
-		echo $pl_result;
-		
-	} // f_mdjm_count_playlist_records
-	
-/*
 * f_mdjm_delete_from_playlist
 * 25/02/2015
 * @since 1.1

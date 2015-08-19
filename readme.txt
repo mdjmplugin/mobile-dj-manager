@@ -2,7 +2,7 @@
 Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
-Tested up to: 4.2.3
+Tested up to: 4.3
 Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -79,6 +79,22 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.3 =
+<strong>Released Wednesday 19th August, 2015</strong>
+<ul>
+	<li>General: Full support for WordPress 4.3</li>
+	<li>New: Updating the package for an Event in the Events Management screen, now dynamically updates the addons available for selection</li>
+	<li>New: Packages and Addons now displayed within Event Overview on the Client Zone screen. When a client hovers over the package or addon, the description and price is displayed</li>
+	<li>New: New settings added to the Plugin Removal settings screen so you can manipulate what data to/not to delete during deletion of plugin</li>
+	<li>Bug Fix: Resolved coding conflict which <em>may</em> have interferred with other plugins Ajax requests</li>
+	<li>Bug Fix: Empty equipment add-on categories no longer display</li>
+	<li>Bug Fix: Playlist upload to #MDJM error</li>
+	<li>Bug Fix: Changing Packages &amp; Addons for existing events now correctly re-calculates the event cost</li>
+	<li>Bug Fix: Playlist entries are now successfully submitted to the MDJM servers when songs and artists contain apostraphe's</li>
+	<li>General: Enhanced the shortcode replacement procedure to make it cleaner and faster</li>
+	<li>General: Log files are now auto-purged regardless of the admin page you are visiting. Previously only auto-purged whilst viewing Debug Settings</li>
+	<li>General: Refreshed and cleaned up the uninstallation script</li>
+</ul>
 = 1.2.2 =
 <strong>Released Friday 3rd July, 2015</strong>
 <ul>
@@ -292,7 +308,7 @@ As this release comes shortly after 0.9.9.6 please see those release notes below
 <ui>
 	<li>Bug: Event quotes were using template set in settings even if you selected an alternative during event creation</li>
 	<li>Bug: jQuery bug on main WP Dashboard resolvedstopping availability datepicker from showing resolved.</li>
-	<li>New Setting added <span class="code">New Enquiry Notifications</span>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
+	<li>New Setting added <span class="code">New Enquiry Notifications. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <span class="code">Unattended Enquiries</span> that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default. <strong>Note that this feature will not be active until the next major release</strong></li>
 </ui>
 
 = 0.9.9.6 =

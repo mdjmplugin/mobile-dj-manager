@@ -290,6 +290,7 @@
         <td width="35%"><select name="frequency" id="frequency">
         <option value="Hourly" <?php selected( $mdjm_schedules[$task]['frequency'], 'Hourly' ); ?>>Hourly</option>
         <option value="Daily" <?php selected( $mdjm_schedules[$task]['frequency'], 'Daily' ); ?>>Daily</option>
+        <option value="Twice Daily" <?php selected( $mdjm_schedules[$task]['frequency'], 'Twice Daily' ); ?>>Twice Daily</option>
         <option value="Weekly" <?php selected( $mdjm_schedules[$task]['frequency'], 'Weekly' ); ?>>Weekly</option>
         <option value="Monthly" <?php selected( $mdjm_schedules[$task]['frequency'], 'Monthly' ); ?>>Monthly</option>
         <option value="Yearly" <?php selected( $mdjm_schedules[$task]['frequency'], 'Yearly' ); ?>>Yearly</option>
@@ -495,7 +496,7 @@
 			?>
             <tr>
             <td>Entries Uploaded:</td>
-            <td><?php f_mdjm_count_playlist_records_uploaded(); ?></td>
+            <td><?php $GLOBALS['mdjm']->mdjm_events->count_playlist_uploaded(); ?></td>
             </tr>
             <?php	
 		}

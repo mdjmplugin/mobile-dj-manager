@@ -22,7 +22,7 @@
 				global $clientzone_loaded, $my_mdjm, $mdjm_settings;
 								
 				$clientzone_loaded = true;
-				
+								
 				/* -- Text replacements THIS CAN BE REMOVED SOON -- */
 				$mdjm_client_text = get_option( MDJM_CUSTOM_TEXT_KEY );
 				
@@ -297,6 +297,9 @@
 				wp_register_style( 'mobile-dj-manager', WPMDJM_PLUGIN_URL . '/client-zone/includes/css/mdjm-styles.css' );
 				//wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
 				wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array( 'jquery' ) );
+				
+				/* -- Dynamics Ajax -- */
+				wp_register_script( 'mdjm-dynamics', WPMDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ) );
 				
 				//wp_enqueue_script( 'jquery' );
 				wp_enqueue_style( 'mobile-dj-manager');
