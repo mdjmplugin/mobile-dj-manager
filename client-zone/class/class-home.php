@@ -392,30 +392,40 @@
 									echo '<th style="width: 15%;">' . __( 'End Time:' ) . '</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['finish'] . '</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
-								echo '<tr>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( 'Package:' ) . '</th>' . "\r\n";
-									echo '<td style="width: 35%;">' . 
-										( !empty( $eventinfo['package'] ) ? '<a title="' . ( !empty( $eventinfo['package']['desc'] ) ? 
-										$eventinfo['package']['desc'] : '' ) . ' - ' . display_price( $eventinfo['package']['cost'] ) . '">' . 
-										$eventinfo['package']['name'] . '</a>' : 'None' ) 
-										. '</td>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( 'Addons:' ) . '</th>' . "\r\n";
-									echo '<td style="width: 35%;">';
-									if( !empty( $eventinfo['addons'] ) )	{
-										$i = 1;
-										foreach( $eventinfo['addons'] as $addon )	{
-											$item = get_addon_details( $addon );
-											echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . ' - ' 
-												. display_price( $item['cost'] ) . '">' . $item['name'] . '</a>';
-											echo ( $i < count( $eventinfo['addons'] ) ? '<br />' : '' );
-											$i++;	
+								if( MDJM_PACKAGES == true )	{
+									echo '<tr>' . "\r\n";
+										echo '<th style="width: 15%;">' . __( 'Package:' ) . '</th>' . "\r\n";
+										echo '<td style="width: 35%;">';
+										if( !empty( $eventinfo['package'] ) )	{
+											$eventinfo['package'] = get_package_details( $eventinfo['package'] );
+											
+											echo ( !empty( $eventinfo['package'] ) ? '<a title="' . ( !empty( $eventinfo['package']['desc'] ) ? 
+											$eventinfo['package']['desc'] : '' ) . ' - ' . display_price( $eventinfo['package']['cost'] ) . '">' . 
+											$eventinfo['package']['name'] . '</a>' : 'None' );
 										}
-									}
-									else	{
-										echo 'None';	
-									}
-										'</td>' . "\r\n";
-								echo '</tr>' . "\r\n";
+										else	{
+											echo 'None';	
+										}
+										echo '</td>' . "\r\n";
+										echo '<th style="width: 15%;">' . __( 'Addons:' ) . '</th>' . "\r\n";
+										echo '<td style="width: 35%;">';
+										$eventinfo['addons'] = get_post_meta( $event->ID, '_mdjm_event_addons', true );
+										if( !empty( $eventinfo['addons'] ) )	{
+											$i = 1;
+											foreach( $eventinfo['addons'] as $addon )	{
+												$item = get_addon_details( $addon );
+												echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . ' - ' 
+													. display_price( $item['cost'] ) . '">' . $item['name'] . '</a>';
+												echo ( $i < count( $eventinfo['addons'] ) ? '<br />' : '' );
+												$i++;	
+											}
+										}
+										else	{
+											echo 'None';	
+										}
+											'</td>' . "\r\n";
+									echo '</tr>' . "\r\n";
+								} // if( MDJM_PACKAGES == true )
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Total Cost:' ) . '</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['cost'] . '</td>' . "\r\n";
