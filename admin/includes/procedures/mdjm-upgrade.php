@@ -23,11 +23,34 @@
 			// Check for additional updates and execute
 			$update = get_option( 'mdjm_update_me' );
 			
-			if( !empty( $update ) )	{
-				$func = 'update_to_' . str_replace( '.', '_', $update );
-				$this->$func();	
-			}
+			if( !empty( $update ) )
+				$this->execute_updates();	
 		} // __construct
+		
+		/*
+		 * Run update procedures
+		 *
+		 *
+		 *
+		 */
+		function execute_updates()	{
+			$version = get_option( MDJM_VERSION_KEY );
+			
+			if( $version < '1.2.1' )
+				$this->update_to_1_2_1();
+			
+			if( $version < '1.2.2' )
+				$this->update_to_1_2_2();
+				
+			if( $version < '1.2.3' )
+				$this->update_to_1_2_3();
+				
+			if( $version < '1.2.3.1' )
+				$this->update_to_1_2_3_1();
+				
+			$this->resync();
+			
+		} // execute_updates
 		
 		/*
 		 * Backup the database table data to CSV file
@@ -1113,7 +1136,7 @@
 		} // update_to_1_2_2
 		
 		/*
-		 * Execute upgrade for version 1.2.2
+		 * Execute upgrade for version 1.2.3
 		 *
 		 *
 		 *
@@ -1128,6 +1151,24 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3', true );
 		} // update_to_1_2_3
+		
+		/*
+		 * Execute upgrade for version 1.2.3.1
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_3_1()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.1', true );
+			
+			include_once( 'update_to_1.2.3.1.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.1', true );
+		} // update_to_1_2_3_1
+		
 	} // class
 	
 	$mdjm_upgrade = new MDJM_Upgrade();	

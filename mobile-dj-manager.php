@@ -32,7 +32,7 @@ Author URI: http://www.mydjplanner.co.uk
 	/* -- These will be deprecated soon -- */
 	define( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress' );
 	define( 'WPMDJM_VERSION_KEY', 'version' );
-	define( 'WPMDJM_VERSION_NUM', '1.2.3' );
+	define( 'WPMDJM_VERSION_NUM', '1.2.3.1' );
 	define( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );

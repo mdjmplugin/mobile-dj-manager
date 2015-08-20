@@ -141,7 +141,7 @@
 										echo '"' . $field->post_name . '":' . "\n";
 										echo '{' . "\n";
 										echo 'required: true,' . "\n";
-										if( $field_settings['type'] == 'email' || $field_settings['type'] == 'url' || $field_settings['type'] == 'date' )	{
+										if( $field_settings['type'] == 'email' || $field_settings['type'] == 'url' )	{
 											echo $field_settings['type'] . ': true,' . "\n";
 										}
 										echo '},' . "\n";

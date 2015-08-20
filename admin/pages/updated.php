@@ -113,12 +113,17 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
-				VERSION 1.2.3
+				VERSION 1.2.3.1
 **************************************************/
-	function f_mdjm_updated_to_1_2_3()	{
+	function f_mdjm_updated_to_1_2_3_1()	{
 		global $mdjm;
 		
 		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Bug Fix</font><br />
+		The release of version 1.2.3 on 19th August 2015 seemed to trigger a validation error when setting a date field as "required". The release of version 1.2.3.1 addresses that issue
+        </td>
+        </tr>
         <tr>
         <td><font style="font-size:14px; font-weight:bold; color:#F90">Packages &amp; Equipment</font><br />
 		We've made some enhancements to the Packages &amp; Equipment functionality within the Event's screen, as well as on the <?php echo MDJM_APP; ?> event overview screen.<br /><br />
@@ -147,13 +152,82 @@
         <tr>
         <td>
             <ui>
-            	<li><span class="mdjm-general">General</span>: Full support for WordPress 4.3</li>
+            	<li><span class="mdjm-general">General</span>: Full support for <a href="https://wordpress.org/news/2015/08/billie/" target="_blank">WordPress 4.3 &quot;Billie&quot;</a></li>
             	<li><span class="mdjm-new">New</span>: Updating the package for an Event in the Events Management screen, now dynamically updates the addons available for selection</li>
                 <li><span class="mdjm-new">New</span>: Packages and Addons now displayed within Event Overview on the <?php echo MDJM_APP; ?> screen. When a client hovers over the package or addon, the description and price is displayed</li>
                 <li><span class="mdjm-new">New</span>: New settings added to the Plugin Removal settings screen so you can manipulate what data to/not to delete during deletion of plugin</li>
                 <li><span class="mdjm-new">New</span>: Enhanced the installation script</li>
             	<li><span class="mdjm-bug">Bug Fix</span>: Resolved coding conflict which <em>may</em> have interferred with other plugins Ajax requests</li>
-            	<li><span class="mdjm-bug">Bug Fix</span>: Empty equipment add-on categories no longer display</li>
+            	<li><span class="mdjm-bug">Bug Fix</span>: A required date field within Contact Form resulted in verification failure</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Empty equipment add-on categories no longer display</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Playlist upload to #MDJM error</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Changing Packages &amp; Addons for existing events now correctly re-calculates the event cost</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Playlist entries are now successfully submitted to the MDJM servers when songs and artists contain apostraphe's</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: No longer restricts re-installation if trial is expired</li>
+                <li><span class="mdjm-general">General</span>: Enhanced the shortcode replacement procedure to make it cleaner and faster</li>
+                <li><span class="mdjm-general">General</span>: Log files are now auto-purged regardless of the admin page you are visiting. Previously only auto-purged whilst viewing Debug Settings</li>
+                <li><span class="mdjm-general">General</span>: Refreshed and cleaned up the uninstallation script</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+		
+	} // f_mdjm_updated_to_1_2_3_1
+
+/**************************************************
+				VERSION 1.2.2
+**************************************************/
+
+/**************************************************
+				VERSION 1.2.3
+**************************************************/
+	function f_mdjm_updated_to_1_2_3()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Bug Fix</font><br />
+		The release of version 1.2.3 on 19th August 2015 seemed to trigger a validation error when setting a date field as "required". The release of version 1.2.3.1 addresses that issue
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Packages &amp; Equipment</font><br />
+		We've made some enhancements to the Packages &amp; Equipment functionality within the Event's screen, as well as on the <?php echo MDJM_APP; ?> event overview screen.<br /><br />
+        <ui>
+        	<li>Packages &amp; Addons are now displayed on the <?php echo MDJM_APP; ?> event overview for clients. When they hover their mouse over the name, the descrption and price will be displayed</li>
+            <li>The Addons list no longer shows empty categories</li>
+            <li>Setting or changing the Event Package, dynamically updates the list of available addons</li>
+            <li>Price updates for existing events when adjusting Packages or Addons is vastly improved</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Dynamic Contact Forms</font><br />
+		Further to the enhancements of Packages &amp; Equipment as described above, you can now add Package Lists and Addons Lists to your contact forms allowing prospective clients to select the pre-configured event packages, and addons as required<br /><br />
+        <ui>
+        	<li>Price can be displayed next to packages and addons as required</li>
+            <li>When a client hovers the mouse over a package or an addon item, the description is displayed</li>
+            <li>When a client selects a package, the addons list is dynamically updated removing items that are included within the selected package</li>
+            <li>If the <code>Create Enquiry</code> option is enabled within the Contact Form configuration, the accumulated price of any selected package and addons, is automatically added to the new event</li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-general">General</span>: Full support for <a href="https://wordpress.org/news/2015/08/billie/" target="_blank">WordPress 4.3 &quot;Billie&quot;</a></li>
+            	<li><span class="mdjm-new">New</span>: Updating the package for an Event in the Events Management screen, now dynamically updates the addons available for selection</li>
+                <li><span class="mdjm-new">New</span>: Packages and Addons now displayed within Event Overview on the <?php echo MDJM_APP; ?> screen. When a client hovers over the package or addon, the description and price is displayed</li>
+                <li><span class="mdjm-new">New</span>: New settings added to the Plugin Removal settings screen so you can manipulate what data to/not to delete during deletion of plugin</li>
+                <li><span class="mdjm-new">New</span>: Enhanced the installation script</li>
+            	<li><span class="mdjm-bug">Bug Fix</span>: Resolved coding conflict which <em>may</em> have interferred with other plugins Ajax requests</li>
+            	<li><span class="mdjm-bug">Bug Fix</span>: A required date field within Contact Form resulted in verification failure</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Empty equipment add-on categories no longer display</li>
                 <li><span class="mdjm-bug">Bug Fix</span>: Playlist upload to #MDJM error</li>
                 <li><span class="mdjm-bug">Bug Fix</span>: Changing Packages &amp; Addons for existing events now correctly re-calculates the event cost</li>
                 <li><span class="mdjm-bug">Bug Fix</span>: Playlist entries are now successfully submitted to the MDJM servers when songs and artists contain apostraphe's</li>

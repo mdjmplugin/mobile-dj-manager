@@ -177,6 +177,9 @@
 			 *
 			 */
 			function release_notes()	{
+				if( !is_admin() && is_user_logged_in() )
+					return;
+				
 				// Reset the key telling us an update occured
 				update_option( 'mdjm_updated', '0' );
 				
@@ -964,7 +967,7 @@
 			 * @return   str		 		The URI link to the destination with the first query string (& or ?)
 			 * @since    1.1.3
 			 */
-			public function get_link( $page_id = '', $permalink=true, $echo=false )	{
+			public function get_link( $page_id='', $permalink=true, $echo=false )	{
 				if( empty( $page_id ) )	{
 					if( MDJM_DEBUG == true )
 						 $this->debug_logger( 'Missing `page_id` argument in ' . __FUNCTION__, true );
@@ -1574,7 +1577,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.3' );
+	define( 'MDJM_VERSION_NUM', '1.2.3.1' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );
