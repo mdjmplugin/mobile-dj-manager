@@ -125,6 +125,21 @@
 			*
 			*/
 			public function form_validation()	{
+				
+				// Create an array of required fields
+				$is_required = array();			
+				foreach( $this->form_fields as $field )	{
+					$field = $this->field_data( $field->ID );
+					$field_settings = $this->field_settings( $field->ID );
+					$contact_fields[$field->ID] = array( 
+													'id'		=> $field->ID,
+													'slug'	  => $field->post_name,
+													'name'	  => $field->post_title,
+													'type'	  => $field_settings['type']
+													);
+					if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )
+						$is_required[] = $field->ID;
+				}
 				?>
 				<script type="text/javascript">
 				jQuery(document).ready(function($){
@@ -134,17 +149,29 @@
 							rules:
 							{
 								<?php
-								foreach( $this->form_fields as $field )	{
+								/*foreach( $this->form_fields as $field )	{
 									$field = $this->field_data( $field->ID );
 									$field_settings = $this->field_settings( $field->ID );
 									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
 										echo '"' . $field->post_name . '":' . "\n";
 										echo '{' . "\n";
-										echo 'required: true,' . "\n";
+										echo 'required: true';
 										if( $field_settings['type'] == 'email' || $field_settings['type'] == 'url' )	{
-											echo $field_settings['type'] . ': true,' . "\n";
+											echo ',' . "\n" . $field_settings['type'] . ': true' . "\n";
 										}
-										echo '},' . "\n";
+										echo '}' . ( $i < $required_fields ? ',' : '' ) . "\n";
+									}
+								}*/
+								$i = 1;
+								foreach( $contact_fields as $contact_field )	{
+									if( in_array( $contact_field['id'], $is_required ) )	{
+										echo '"' . $contact_field['slug'] . '":' . "\r\n";
+										echo '{' . "\r\n";
+										echo 'required: true';
+										if( $contact_field['type'] == 'email' || $contact_field['type'] == 'url' )
+											echo ',' . "\n" . $contact_field['type'] . ': true' . "\r\n";
+										echo '}' . ( $i < count( $is_required ) ? ',' : '' ) . "\r\n";
+										$i++;
 									}
 								}
 								?>	
@@ -152,7 +179,23 @@
 							messages:
 							{
 								<?php
-								foreach( $this->form_fields as $field )	{
+								$i = 1;
+								foreach( $contact_fields as $contact_field )	{
+									if( in_array( $contact_field['id'], $is_required ) )	{
+										echo '"' . $contact_field['slug'] . '":' . "\n";
+										echo '{' . "\n";
+										echo 'required: " ' . str_replace( '{FIELD_NAME}', $contact_field['name'], $this->form_config['required_field_text'] ) . '"' .  "\r\n";
+										if( $contact_field['type'] == 'email' )
+											echo ',' . "\r\n" . $contact_field['type'] . ': "Please enter a valid email address"' . "\r\n";
+										
+										if( $contact_field['type'] == 'url' )
+											echo ',' . "\r\n" . $contact_field['type'] . ': "Please enter a valid URL"' . "\r\n";
+										
+										echo '}' . ( $i < count( $is_required ) ? ',' : '' ) . "\r\n";
+										$i++;
+									}
+								}
+								/*foreach( $this->form_fields as $field )	{
 									$field = $this->field_data( $field->ID );
 									$field_settings = $this->field_settings( $field->ID );
 									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
@@ -167,14 +210,14 @@
 										}
 										echo '},' . "\n";	
 									}
-								}
+								}*/
 								?>	
 							}, // End messages
 							
 							// Classes
 							errorClass: "mdjm-form-error",
 							validClass: "mdjm-form-valid",
-							focusInvalid: false,
+							focusInvalid: false
 							
 						} // End validate
 					); // Close validate
@@ -342,6 +385,7 @@
 									   '_mdjm_event_start',
 									   '_mdjm_event_finish',
 									   '_mdjm_event_notes',
+									   '_mdjm_event_venue_id',
 									   '_mdjm_event_venue_name',
 									   '_mdjm_event_venue_town',
 									   '_mdjm_event_venue_county' );
@@ -421,13 +465,31 @@
 					}
 					
 					/* -- Event Type -- */
-					if( $field_settings['type'] == 'event_list' )	{
+					if( $field_settings['type'] == 'event_list' && $_POST[$field->post_name] != '0' )	{
 						$term = get_term( $_POST[$field->post_name], 'event-types' );
-						$_POST[$field->post_name] = $term->name;	
+						$_POST[$field->post_name] = $term->name;
 					}
 					/* -- Addons -- */
 					if( $field_settings['type'] == 'addons_list' )	{
 						$_POST[$field->post_name] = implode( "\n", $_POST[$field->post_name] );	
+					}
+					/* -- Venue -- */
+					if( $field_settings['type'] == 'venue_list' )	{
+						if( !empty( $_POST[$field->post_name] ) && $_POST[$field->post_name] == '0' )	{
+							$venue = ( !empty( $_POST[$field->post_name] ) ? 
+								$GLOBALS['mdjm']->mdjm_events->mdjm_get_venue_details( $_POST[$field->post_name] ) : 'Not specified' );
+							
+							$_POST[$field->post_name] = ( $venue != 'Not specified' ? 
+								( !empty( $venue['name'] ) ? stripslashes( $venue['name'] ) . '<br />' : '' ) . 
+								( !empty( $venue['venue_address1'] ) ? stripslashes( $venue['venue_address1'] ) . '<br />' : '' ) . 
+								( !empty( $venue['venue_address2'] ) ? stripslashes( $venue['venue_address2'] ) . '<br />' : '' ) . 
+								( !empty( $venue['venue_town'] ) ? stripslashes( $venue['venue_town'] ) . '<br />' : '' ) . 
+								( !empty( $venue['venue_county'] ) ? stripslashes( $venue['venue_county'] ) . '<br />' : '' ) . 
+								( !empty( $venue['venue_postcode'] ) ? stripslashes( $venue['venue_postcode'] ) . '<br />' : '' ) : $venue );
+						}
+						else	{
+							unset( $_POST[$field->post_name] );
+						}
 					}
 					
 					/* -- Finalise the email content -- */
@@ -597,6 +659,7 @@
 						if( MDJM_DEBUG == true )
 							 $mdjm->debug_logger( '	-- Assigning Event Type' );
 						wp_set_post_terms( $this->event_id, $meta_value, 'event-types' );
+						add_post_meta( $this->event_id, '_mdjm_event_name', get_term( $meta_value, 'event-types' )->name, true );
 					}
 					
 					// Add the post meta
@@ -680,7 +743,7 @@
 				echo "\r\n" . '<!-- Start of MDJM Contact Form -->' . "\r\n" . 
 				'<form name="mdjm-' . $this->form->post_name . '" id="mdjm-' . $this->form->post_name . '" method="post">' . "\r\n" . 
 				'<input type="hidden" name="mdjm_contact_form_submission" id="mdjm_contact_form_submission" value="submitted" />' . "\r\n" . 
-				'<input type="hidden" name="mdjm_contact_form" id="mdjm_contact_form" value="' . $this->form->ID . '" />' . "\r\n";
+				'<input type="hidden" name="mdjm_contact_form" id="mdjm_contact_form" value="' . $this->form->ID . '" />';
 				
 				/* -- Start table layout if required -- */
 				if( $this->layout != 0 )
@@ -817,12 +880,13 @@
 						}
 					} // Time Field
 					
-				/* Select / Event / Package / Addons List Fields */
+				/* Select / Event / Package / Addons / Venue List Fields */
 					elseif( $field_settings['type'] == 'select' 
 							|| $field_settings['type'] == 'select_multi' 
 							|| $field_settings['type'] == 'event_list'
 							|| $field_settings['type'] == 'package_list'
-							|| $field_settings['type'] == 'addons_list' )	{
+							|| $field_settings['type'] == 'addons_list'
+							|| $field_settings['type'] == 'venue_list' )	{
 						
 						if( $field_settings['type'] != 'package_list' && $field_settings['type'] != 'addons_list' )	{
 							echo '<select name="' . $field->post_name . '" id="' . $field->post_name . '"' . 
@@ -851,6 +915,23 @@
 						}
 						// Package List
 						elseif( $field_settings['type'] == 'package_list' )	{
+							$selected_package = false;
+							
+							if( isset( $_GET['selected_package'] ) && !empty( $_GET['selected_package'] ) && MDJM_MULTI == true )	{
+								$desired_package = urldecode( $_GET['selected_package'] );
+								$all_packages = get_option( 'mdjm_packages' );
+								foreach( $all_packages as $mdjm_package )	{
+									if( $mdjm_package['name'] == $desired_package )
+										$selected_package = $mdjm_package['slug'];
+								}
+							}
+								
+							elseif( !empty( $field_settings['config']['package_list_selected'] ) )
+								$selected_package = $field_settings['config']['package_list_selected'];
+							
+							else
+								$selected_package = false;							
+							
 							$packages++;
 							$package_field = $field->post_name; // For the dynamic updating of addons
 							
@@ -861,6 +942,7 @@
 							$package_settings['first_entry'] = ( !empty( $field_settings['config']['package_list_first_entry'] ) ? 
 								$field_settings['config']['package_list_first_entry'] : '' );
 							$package_settings['title'] = true;
+							$package_settings['selected'] = ( !empty( $selected_package ) ? $selected_package : '' );
 							
 							echo mdjm_package_dropdown( $package_settings );
 						}
@@ -874,8 +956,30 @@
 							$addons_settings['class'] = ( !empty( $field_settings['config']['input_class'] ) ? 
 								' class="' . $field_settings['config']['input_class'] . '"' : '' );
 							$addons_settings['title'] = true;
+							$addons_settings['package'] = ( !empty( $selected_package ) ? $selected_package : '' );
 								
 							echo mdjm_addons_dropdown( $addons_settings );
+						}
+						// Venue List
+						elseif( $field_settings['type'] == 'venue_list' )	{
+							$venues = $mdjm->mdjm_events->mdjm_get_venues();
+							
+							$first_entry = !empty( $field_settings['config']['venue_list_first_entry'] ) ? $field_settings['config']['venue_list_first_entry'] : '';
+							
+							if( !empty( $first_entry ) )
+								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\n";
+								
+							foreach( $venues as $venue )	{
+								$venue_details = $mdjm->mdjm_events->mdjm_get_venue_details( $venue->ID );
+								echo '<option value="' . $venue->ID . '"' . 
+									( !empty( $venue_details['name'] ) || !empty( $venue_details['venue_address1'] ) || !empty( $venue_details['venue_town'] ) ? 
+										' title="' . ( !empty( $venue_details['name'] ) ? $venue_details['name'] . ', ' : '' ) . 
+										( !empty( $venue_details['venue_address1'] ) ? $venue_details['venue_address1'] . ', ' : '' ) . 
+										( !empty( $venue_details['venue_town'] ) ? $venue_details['venue_town'] : '' ) . '"' : '' ) . 
+									'>' . esc_attr( $venue_details['name'] ) .  ( !empty( $venue_details['venue_town'] ) ? 
+										' (' . $venue_details['venue_town'] . ')' : '' ) . 
+									'</option>' . "\n";
+							}
 						}
 						else	{
 							$options = explode( "\n", $field_settings['config']['options'] );
@@ -986,7 +1090,7 @@
 					
 					' />';
 					
-					echo ( $this->layout == 0 ) ? '</p>' . "\r\n" : '</td>' . "r\n" . '</tr>' . "\r\n";
+					echo ( $this->layout == 0 ) ? '</p>' . "\r\n" : '</td>' . "\r\n" . '</tr>' . "\r\n";
 				}
 				
 				/* -- End the table -- */

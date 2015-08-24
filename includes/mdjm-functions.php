@@ -193,6 +193,9 @@
 	function display_price( $amount, $symbol=true )	{
 		global $mdjm_settings;
 		
+		if( empty( $amount ) )
+			$amount = '0.00';
+		
 		$symbol = ( isset( $symbol ) ? $symbol : true );
 		
 		$dec = $mdjm_settings['payments']['decimal'];
@@ -372,7 +375,43 @@
 			echo $event_stati_dropdown;
 
 		return $event_stati_dropdown;
-	}
+	} // event_stati_dropdown
+	
+	/*
+	 * Determine the event deposit value based upon event cost and
+	 * payment settings
+	 *
+	 * @param:		cost	str		Required: Current cost of event
+	 */
+	function get_deposit( $cost='' )	{
+		global $mdjm_settings;
+		
+		// If no event cost is provided then we return 0
+		if( empty( $cost ) )	{
+			if( MDJM_DEBUG == true )
+				$GLOBALS['mdjm_debug']->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
+			$deposit = '0.00';
+		}
+		
+		// If we don't need a deposit per settings, return 0
+		if( empty( $mdjm_settings['payments']['deposit_type'] ) )
+			$deposit = '0.00';
+		
+		// Set fixed deposit amount
+		elseif( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
+			$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
+		
+		// Set deposit based on % of total cost
+		elseif( $mdjm_settings['payments']['deposit_type'] == 'percentage' )	{
+			$percentage = $mdjm_settings['payments']['deposit_amount']; // The % to apply
+			
+			$deposit = ( !empty( $cost ) && $cost > 0 ? round( $percentage * ( $cost / 100 ), 2 ) : '0.00' );
+		}
+		
+		return $deposit;
+		
+	} // get_deposit
+	
 /*
  * -- END EVENT FUNCTIONS
  */
@@ -835,9 +874,10 @@
 	 *									'first_entry_val'	Optional: First entry value
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
 	 *									'title'				Optional: Add package description to the title element of each option
+	 *					$structure		bool				true create the select list, false just return values
 	 * @ return	HTML output for select field
 	 */
-	function mdjm_package_dropdown( $settings='' )	{
+	function mdjm_package_dropdown( $settings='', $structure=true )	{
 		global $current_user;
 		
 		$packages = get_option( 'mdjm_packages' );
@@ -847,9 +887,13 @@
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
 		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
 		
-		$mdjm_select = '<select name="' . $select_name . '" id="' . $select_id . '"';
-		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
-		$mdjm_select .= '>' . "\r\n";
+		$mdjm_select = '';
+		
+		if( $structure == true )	{
+			$mdjm_select = '<select name="' . $select_name . '" id="' . $select_id . '"';
+			$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
+			$mdjm_select .= '>' . "\r\n";
+		}
 		
 		// First entry
 		$mdjm_select .= isset( $settings['first_entry'] ) && !empty( $settings['first_entry'] ) ? 
@@ -883,7 +927,8 @@
 			}
 		}
 		
-		$mdjm_select .= '</select>' . "\r\n";
+		if( $structure == true )
+			$mdjm_select .= '</select>' . "\r\n";
 		
 		return $mdjm_select;
 			
@@ -929,6 +974,7 @@
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
 	 *									'package'			Optional: Package slug for which to exclude addons if they exist in that package
 	 *									'title'				Optional: Add addon description to the title element of each option
+	 *					$structure		bool				true create the select list, false just return values
 	 * @ return	HTML output for select field
 	 */
 	function mdjm_addons_dropdown( $settings='', $structure=true )	{

@@ -32,13 +32,13 @@
         }	(document, 'script', 'facebook-jssdk'));
         </script>
         <div class="wrap">
-        <h2>Mobile DJ Manager - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h2>
+        <h1>Mobile DJ Manager - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h1>
         <hr />
-        <h3>
+        <h2>
         <?php
 		//$dash_dj = f_mdjm_dashboard_dj_overview();
 		$dj_event_count = $mdjm->mdjm_events->count_events_by_status( 'dj', get_current_user_id() );
-        ?></h3>
+        ?></h2>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
           <tr>
             <td width="60%"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">

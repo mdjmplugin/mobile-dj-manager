@@ -70,31 +70,32 @@
 				$event_status = !empty( $post ) ? $post->post_status : $status;
 				
 				// The link to view event details is always available
-				$selections['view_event'] = 'View Details';
+				$selections['view_event'] = __( 'View Details', 'mobile-dj-manager' );
 				
 				switch( $event_status )	{
 					case 'mdjm-unattended':
-						$selections['cancel_event'] = __( 'Cancel Event' );
+						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
 					break;
 					case 'mdjm-enquiry':
-						$selections['accept_enquiry'] = __( 'Book Event' );
-						$selections['cancel_event'] = __( 'Cancel Event' );
+						$selections['accept_enquiry'] = __( 'Book Event', 'mobile-dj-manager' );
+						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
 					break;
 					case 'mdjm-contract':
-						$selections['sign_contract'] = __( 'Sign Contract' );
-						$selections['cancel_event'] = __( 'Cancel Event' );
+						$selections['sign_contract'] = __( 'Sign Contract', 'mobile-dj-manager' );
+						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
 					break;
 					case 'mdjm-approved':
 						// Payment Option
 						$balance_status = get_post_meta( $event_id, '_mdjm_event_balance_status', true );
 						$deposit_status = get_post_meta( $event_id, '_mdjm_event_deposit_status', true );
+						
 						if( $deposit_status != 'Paid' || $balance_status != 'Paid' )
-							$selections['make_payment'] = __( 'Make a Payment' );
+							$selections['make_payment'] = __( 'Make a Payment', 'mobile-dj-manager' );
 					break;
 				} // End switch
 				
 				$actions = '<select name="event_action_' . $event_id . '" id="event_action_' . $event_id . '">' . "\r\n" . 
-						   '<option value="">--- Select Action ---</option>' . "\r\n";
+						   '<option value="">--- ' . __( 'Select Action', 'mobile-dj-manager' ) . ' ---</option>' . "\r\n";
 				
 				foreach( $selections as $key => $value )	{
 					$actions .= '<option value="' . $key . '">' . $value . '</option>' . "\r\n";	

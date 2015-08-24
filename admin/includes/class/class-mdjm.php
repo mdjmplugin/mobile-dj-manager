@@ -700,7 +700,7 @@
 			 * Others should be called from the pages themselves
 			 */
 	 		public function admin_enqueue()	{
-				global $mdjm_post_types;
+				global $mdjm_post_types, $mdjm_settings;
 				
 				/* -- Admin style sheet -- */
 				wp_register_style( 'mdjm-admin', WPMDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css' );
@@ -746,6 +746,9 @@
 						wp_enqueue_script( 'mdjm-event-js' );
 						wp_localize_script( 'mdjm-event-js', 'event_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
 						wp_localize_script( 'mdjm-event-js', 'mdjmeventcost', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+						wp_localize_script( 'mdjm-event-js', 'mdjmdjpackages', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+						wp_localize_script( 'mdjm-event-js', 'mdjmsetdeposit', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+						
 						wp_enqueue_script( 'mdjm-dynamics' );
 						wp_localize_script( 'mdjm-dynamics', 'mdjmaddons', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 					}
@@ -1577,7 +1580,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.3.1' );
+	define( 'MDJM_VERSION_NUM', '1.2.3.2' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );

@@ -52,7 +52,7 @@
 		}
 				
 		?>
-		</pre><div class="wrap"><h2>Event Playlist</h2>
+		</pre><div class="wrap"><h1>Event Playlist</h1>
 		<?php
 		$playlist_table->prepare_items();
 		?>

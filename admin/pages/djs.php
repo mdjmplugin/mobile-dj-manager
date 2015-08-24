@@ -36,7 +36,7 @@
 		}
 		$djs_table = new MDJM_DJs_Table();
 		?>
-		</pre><div class="wrap"><h2><?php echo MDJM_DJ; ?>'s <a href="<?php echo admin_url(); ?>user-new.php" class="add-new-h2">Add New</a></h2>
+		</pre><div class="wrap"><h1><?php echo MDJM_DJ; ?>'s <a href="<?php echo admin_url(); ?>user-new.php" class="page-title-action">Add New</a></h1>
 		<?php
 		$djs_table->prepare_items();
 		?>

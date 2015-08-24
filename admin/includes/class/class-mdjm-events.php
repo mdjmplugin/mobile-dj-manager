@@ -578,7 +578,10 @@
 		 * @return	obj		$eventinfo	The event meta information
 		 */
 		public function event_detail( $post_id )	{
-			global $mdjm;
+			global $mdjm, $mdjm_posts;
+			
+			if( empty( $post_id ) || !$mdjm_posts->post_exists( $post_id ) )
+				return;
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
@@ -1281,7 +1284,7 @@
 		} // mdjm_add_venue
 		
 		/*
-		 * mdjm_get_venue_meta
+		 * mdjm_get_venue_details
 		 * Retrieve all venue meta
 		 * 
 		 * @param: venue_post_id

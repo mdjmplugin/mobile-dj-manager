@@ -1773,6 +1773,8 @@
 				elseif( $post->post_type == MDJM_EVENT_POSTS )	{
 					if( isset( $actions['trash'] ) )
 						unset( $actions['trash'] );
+					if( isset( $actions['view'] ) )
+						unset( $actions['view'] );
 					if( isset( $actions['edit'] ) )
 						unset( $actions['edit'] );	
 					if( isset( $actions['inline hide-if-no-js'] ) )

@@ -264,4 +264,86 @@
 		
 	} // update_event_cost_from_addons
 	add_action( 'wp_ajax_update_event_cost_from_addons', 'update_event_cost_from_addons' );
+	
+	/*
+	 * Update the available list of packages and addons when selected event DJ changes
+	 *
+	 *
+	 *
+	 */
+	function mdjm_update_dj_package_options()	{
+		$dj = $_POST['dj'];
+		$event_package = ( !empty( $_POST['package'] ) ? $_POST['package'] : '' );
+		$event_addons = ( !empty( $_POST['addons'] ) ? $_POST['addons'] : '' );
+		
+		$packages = mdjm_package_dropdown( array(
+											'name'			=> '_mdjm_event_package',
+											'dj'			  => !empty( $dj ) ? $dj : '',
+											'selected'		=> !empty( $event_package ) ? $event_package : '',
+											'first_entry'	 => 'No Package',
+											'first_entry_val' => '0'
+											), false );
+		
+		
+		$addons = mdjm_addons_dropdown( array( 
+											'name'		=> 'event_addons',
+											'dj'		=> !empty( $dj ) ? $dj : '',
+											'package'	=> !empty( $event_package ) ? $event_package : '',
+											//'selected'	=> !empty( $event_addons ) ? $event_addons : '',
+											), false );
+				
+		if( !empty( $addons ) || !empty( $packages ) )	{
+			$result['type'] = 'success';
+		}
+		else	{
+			$result['type'] = 'error';
+			$result['msg'] = 'No packages or addons available';
+		}
+		
+		if( !empty( $packages ) )
+			$result['packages'] = $packages;
+			
+		else
+			$result['packages'] = 'No Packages Available';
+			
+		if( !empty( $addons ) && $packages != '<option value="0">No Packages Available</option>' )
+			$result['addons'] = $addons;
+			
+		else
+			$result['addons'] = 'No Addons Available';
+		
+		$result = json_encode( $result );
+		echo $result;
+		
+		die();
+	} // mdjm_update_dj_package_options
+	add_action( 'wp_ajax_mdjm_update_dj_package_options', 'mdjm_update_dj_package_options' );
+	
+	/*
+	 * Update the event deposit amount based upon the event cost
+	 * and the payment settings
+	 *
+	 *
+	 */
+	function mdjm_update_event_deposit()	{
+		$event_cost = $_POST['current_cost'];
+		
+		$deposit = get_deposit( $event_cost );
+				
+		if( !empty( $deposit ) )	{
+			$result['type'] = 'success';
+			$result['deposit'] = number_format( (float)$deposit, 2, '.', '' );
+		}
+		else	{
+			$result['type'] = 'error';
+			$result['msg'] = 'Unable to calculate deposit';
+		}
+		
+		$result = json_encode( $result );
+		echo $result;
+		
+		die();
+	} // mdjm_update_event_deposit
+	add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit' );
+	
 

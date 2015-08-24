@@ -213,6 +213,7 @@
 				
 		wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		
 		?>
         <script type="text/javascript">
 		<?php mdjm_jquery_datepicker_script(); ?>
@@ -368,10 +369,27 @@
             	value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
                 <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed.</span>
             </div>
+            <?php
+            if( empty( $existing_event ) )	{
+				if( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
+					$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
+					
+				else
+					$deposit = '0.00';	
+			}
+			else
+				$deposit = esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) );
+			
+			// Determine whether or not the deposit needs to dynamically update
+			echo '<input type="hidden" name="mdjm_update_deposit" id="mdjm_update_deposit" value="' . 
+				( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' ? 
+					'1' : '0' ) . '" />' . "\r\n";
+			
+			?>
             <div class="mdjm-post-last-2column">
             <label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( MDJM_DEPOSIT_LABEL . ':' ); ?></label><br />
             <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
-            	value="<?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+            	value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
                 <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
             </div>
 		</div><!-- mdjm-post-row -->
@@ -468,6 +486,20 @@
 		</div>
         <!-- End of fifth row -->
         <?php
+		// Update event deposit when manually updating cost field
+		if( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' )	{
+			?>
+            <script type="text/javascript">
+			jQuery(document).ready(function($) 	{
+				$('#_mdjm_event_cost').on('focusout', '', function()	{
+					var current_cost = $("#_mdjm_event_cost").val(); // Current event cost
+					
+					set_deposit($);
+				});
+			});
+			</script>
+            <?php	
+		}
 	} // mdjm_event_post_event_metabox
 	
 	/*

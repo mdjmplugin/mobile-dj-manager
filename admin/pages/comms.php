@@ -134,7 +134,7 @@
 		
 		?>
 		<div class="wrap">
-		<h2>Client Communications</h2>
+		<h1>Client Communications</h1>
 		<?php
 		$settings = array(  'media_buttons' => true,
 							'textarea_rows' => '10',

@@ -146,12 +146,12 @@
 		function get_columns()	{ // The table columns
 			$columns = array(
 						'cb'                => '<input type="checkbox" />',
-						'client_name'       => __( '<strong>Name</strong>', 'mdjmclienttable' ),
-						'last_login'        => __( '<strong>Last Login</strong>', 'mdjmclienttable' ),
-						'client_email'      => __( '<strong>Email</strong>', 'mdjmclienttable' ),
-						'client_events'     => __( '<strong>No. Events</strong>', 'mdjmclienttable' ),
-						'client_next_event' => __( '<strong>Next Event</strong>', 'mdjmclienttable' ),
-						'client_journal'    => __( '<strong>Journal</strong>', 'mdjmclienttable' ),
+						'client_name'       => '<strong>' . __( 'Name', 'mobile-dj-manager' ) . '</strong>',
+						'last_login'        => '<strong>' . __( 'Last Login', 'mobile-dj-manager' ) . '</strong>',
+						'client_email'      => '<strong>' . __( 'Email', 'mobile-dj-manager' ) . '</strong>',
+						'client_events'     => '<strong>' . __( 'No. Events', 'mobile-dj-manager' ) . '</strong>',
+						'client_next_event' => '<strong>' . __( 'Next Event', 'mobile-dj-manager' ) . '</strong>',
+						'client_journal'    => '<strong>' . __( 'Journal', 'mobile-dj-manager' ) . '</strong>'
 						);
 			 return $columns;
 		} // get_columns

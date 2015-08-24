@@ -85,7 +85,7 @@
 										
 				$count = !empty( $libraries ) ? $libraries : '0';
 				
-				echo '<h2>Playlist Library Management</h2>' . "\r\n";
+				echo '<h1>Playlist Library Management</h1>' . "\r\n";
 				echo '<table class="widefat" width="100%">' . "\r\n"; // Container table
 				echo '<tr>';
 				echo '<th width="60%" class="alternate"><strong>' . MDJM_COMPANY . ' Music Library</strong> <em>(' . $count. ' Uploads)</em></th>' . "\r\n";

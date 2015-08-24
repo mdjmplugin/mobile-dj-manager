@@ -2,7 +2,7 @@
 Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: 1.2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -79,8 +79,28 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.3.2 =
+<strong>Released Monday 24th August, 2015</strong>
+<ul>
+	<li>New: Settings added to the Payments tab to configure default event deposit based on fixed rate or % of event value</li>
+	<li>New: Define initially selected package within a dynamic contact form</li>
+	<li>New: Venue list has been added to contact forms</li>
+	<li>General: Optimized Dynamic Contact Form front end coding. Slight enhancement to load time</li>
+	<li>General: Refresh available packages & Add-ons when DJ selection changes on Event Management screen</li>
+	<li>General: Updated WP Admin header tags per 4.3 release</li>
+	<li>General: Updated jQuery version for validation. Now works with IE versions < 11</li>
+	<li>Bug Fix: Restored missing folder which was causing custom DB table backups to fail since version 1.2.3</li>
+	<li>Bug Fix: Contact form creation did not always correctly define default behaviours correctly</li>
+	<li>Bug Fix: Error displayed when deleting Contact Form field</li>
+	<li>Bug Fix: Error displayed upon Contact Form creation</li>
+	<li>Bug Fix: Depending on PHP/WP config an unwanted notice may have been displayed on client screen</li>
+	<li>Bug Fix: Only obtain event data when an event with the given ID exists. Unnecessary PHP notice logging</li>
+	<li>Bug Fix: Removed the random "r" character from the top of contact forms with layout set as table</li>
+	<li>New: Preliminary translation work</li>
+</ul>
+
 = 1.2.3.1 =
-<strong>Released Wednesday 20th August, 2015</strong>
+<strong>Released Thursday 20th August, 2015</strong>
 <ul>
 	<li>Bug Fix: issue with validation of the date field when used with #MDJM Contact Forms</li>
 </ul>

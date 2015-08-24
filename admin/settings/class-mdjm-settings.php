@@ -530,7 +530,7 @@
 				
 				$true_vals = array(
 								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
-								'enable_packages', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
+								'enable_packages', 'warn_unattended', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
 								'booking_conf_to_dj', 'notify_profile', 'update_event', 'custom_client_text', 'enable_tax',
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'dj_see_wp_dash', 'dj_add_client',

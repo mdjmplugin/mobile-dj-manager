@@ -1787,6 +1787,40 @@
 									'page' => 'payments',
 									),
 							
+							'deposit_type' => array(
+									'label' => MDJM_DEPOSIT_LABEL . '\'s are:',
+									'key' => MDJM_PAYMENTS_KEY,
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payments']['deposit_type'] ) ? $mdjm_settings['payments']['deposit_type'] : '0' ),
+									'text' => '',
+									'desc' => 'If you require ' . MDJM_DEPOSIT_LABEL . ' payments for your events, how are they calculated?',
+									'custom_args' => array (
+														'name' =>  MDJM_PAYMENTS_KEY . '[deposit_type]',
+														'sort_order' => '',
+														'list_type' => 'defined',
+														'list_values' => array( '0' => 'Not required',
+																				'percentage' => '% of event value',
+																				'fixed' => 'Fixed price',
+																			),
+														),
+									'section' => 'payment',
+									'page' => 'payments',
+									),
+									
+							'deposit_amount' => array(
+									'label' => MDJM_DEPOSIT_LABEL . ' Amount:',
+									'key' => MDJM_PAYMENTS_KEY,
+									'type' => 'text',
+									'class' => 'small-text',
+									'value' => ( !empty( $mdjm_settings['payments']['deposit_amount'] ) ? $mdjm_settings['payments']['deposit_amount'] : '' ),
+									'text' => 'Do not enter a currency or percentage symbol',
+									'desc' => 'If your ' . MDJM_DEPOSIT_LABEL . '\'s are a percentage enter the value (i.e 20). For fixed prices, ' . 
+										'enter the amount in the format 0.00',
+									'section' => 'payment',
+									'page' => 'payments',
+									),
+							
 							'deposit_label' => array(
 									'label' => 'Label for Deposit:',
 									'key' => MDJM_PAYMENTS_KEY,
@@ -1880,7 +1914,7 @@
 									'text' => '',
 									'desc' => 'How do you apply tax?',
 									'custom_args' => array (
-														'name' =>  MDJM_PAYMENTS_KEY . '[pp_tax_type]',
+														'name' =>  MDJM_PAYMENTS_KEY . '[tax_type]',
 														'sort_order' => '',
 														'list_type' => 'defined',
 														'list_values' => array( 'percentage' => '% of total',

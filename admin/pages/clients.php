@@ -37,7 +37,7 @@
 		
 		$clients_table = new MDJM_Clients_Table();
 		?>
-		</pre><div class="wrap"><h2>Clients <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) ) echo '<a href="' . admin_url() . 'user-new.php" class="add-new-h2">Add New</a></h2>';
+		</pre><div class="wrap"><h1>Clients <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) ) echo '<a href="' . admin_url() . 'user-new.php" class="page-title-action">Add New</a></h1>';
 		$clients_table->prepare_items();
 		?>
 		<form method="post" name="mdjm_client_search" id="mdjm_client_search">
@@ -63,7 +63,7 @@
 		
 		?>
         <div class="wrap">
-        <h2><?php echo $client->display_name; ?> Contact Details</h2>
+        <h1><?php echo $client->display_name; ?> Contact Details</h1>
         <table class="form-table">
         <tr>
         <th class="row-title">Email:</th>

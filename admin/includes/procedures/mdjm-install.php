@@ -295,6 +295,8 @@
 							'currency_format'		=> 'before',
 							'decimal'				=> '.',
 							'thousands_seperator'	=> ',',
+							'deposit_type'		   => 'fixed',
+							'deposit_amount'		 => '50.00',
 							'deposit_label'		  => 'Deposit',
 							'balance_label'		  => 'Balance',
 							'default_type'		   => 'Cash',

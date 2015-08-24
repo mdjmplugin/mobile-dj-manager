@@ -213,7 +213,11 @@
 					/* Event List First Entry */
 					if( $_POST['field_type'] == 'event_list' && !empty( $_POST['event_list_first_entry'] ) )
 						$field_meta['config']['event_list_first_entry'] = sanitize_text_field( $_POST['event_list_first_entry'] );
-						
+					
+					/* Package List Initially Selected */
+					if( $_POST['field_type'] == 'package_list' && !empty( $_POST['package_list_selected'] ) )
+						$field_meta['config']['package_list_selected'] = $_POST['package_list_selected'];
+
 					/* Package List First Entry */
 					if( $_POST['field_type'] == 'package_list' && !empty( $_POST['package_list_first_entry'] ) )
 						$field_meta['config']['package_list_first_entry'] = sanitize_text_field( $_POST['package_list_first_entry'] );
@@ -225,6 +229,10 @@
 					/* Addon List Display Price */
 					if( $_POST['field_type'] == 'addons_list' )
 						$field_meta['config']['display_price'] = ( isset( $_POST['addons_price'] ) && !empty( $_POST['addons_price'] ) ? 'Y' : 'N' );
+					
+					/* Venue List First Entry */
+					if( $_POST['field_type'] == 'venue_list' && !empty( $_POST['venue_list_first_entry'] ) )
+						$field_meta['config']['venue_list_first_entry'] = sanitize_text_field( $_POST['venue_list_first_entry'] );
 						
 					/* Required Field */
 					if( $field_meta['type'] == 'captcha' || $field_meta['type'] == 'submit' )
@@ -304,8 +312,8 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'Contact Form Field ' . esc_attr( $delete->post_title ) . ' has been deleted', true );
 					
-					wp_redirect( admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form_id . '&mdjm_message=3' ) );
-					exit;
+					$this->edit_form( $form_id );
+					mdjm_update_notice( 'updated', 'Field deleted successfully' );
 				}
 					
 				else
@@ -443,7 +451,7 @@
 				?>
                 <div class="wrap">
                 <div id="icon-themes" class="icon32"></div>
-                <h1>Contact Forms <a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=new_form' ); ?>" class=".page-title-action">Add New</a></h1>
+                <h1>Contact Forms <a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=new_form' ); ?>" class="page-title-action">Add New</a></h1>
                 <hr />
                 <table class="widefat" width="100%">
                 <thead>
@@ -559,7 +567,7 @@
 			 *
 			 */
 			public function set_form_defaults( $form_id )	{
-				global $mdjm;
+				global $mdjm, $mdjm_settings;
 				
 				if( empty( $form_id ) )	{
 					if( MDJM_DEBUG == true )
@@ -657,11 +665,9 @@
 				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
 				if( $form_id != false )	{
-					wp_redirect( admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form_id ) );
-					exit;
+					$this->list_forms();
+					mdjm_update_notice( 'updated', 'Contact Form created successfully' );
 				}
-				
-				return $form_id;
 			} // create_form
  
  			/*
@@ -697,6 +703,7 @@
 									'event_list'   => 'Event Type List',
 									'package_list' => 'Event Package List',
 									'addons_list'  => 'Event Addons List',
+									'venue_list'   => 'Venue List',
 									'checkbox'     => 'Checkbox',
 									'textarea'     => 'Textarea',
 									'tel'          => 'Telephone Number',
@@ -722,16 +729,16 @@
 									'_mdjm_event_start'		  => 'Event Start',
 									'_mdjm_event_finish'		 => 'Event End',
 									'_mdjm_event_notes'		  => 'Event Description',
+									'_mdjm_event_venue_id'	   => 'Event Venue',
 									'_mdjm_event_venue_name'	 => 'Event Venue Name',
 									'_mdjm_event_venue_town'	 => 'Event Venue Town/City',
 									'_mdjm_event_venue_county'   => 'Event County (State)'
 									);
 				
 				// If packages are not enabled, we don't need these
-				if( MDJM_PACKAGES == false )	{
-					unset( $mappings_event['_mdjm_event_package'], $mappings_event['_mdjm_event_addons'] );
-					
-				}
+				if( MDJM_PACKAGES == false )
+					unset( $mappings_event['_mdjm_event_package'], $mappings_event['_mdjm_event_addons'], 
+						   $field_types['package_list'], $field_types['addons_list'] );
 									
 				$mappings = array_merge( $mappings_client, $mappings_event );
 				
@@ -797,6 +804,12 @@
 					}
 					else	{
 						document.getElementById('addons_list_price_row').style.display = "none";
+					}
+					if(elem.value == 'venue_list')	{
+						document.getElementById('venue_list_first_entry_row').style.display = "block";
+					}
+					else	{
+						document.getElementById('venue_list_first_entry_row').style.display = "none";
 					}
 					if(elem.value == 'submit')	{
 						document.getElementById('align_submit_row').style.display = "block";
@@ -899,7 +912,7 @@
 						if( $i == 2 )
 							$i = 0;
 						/* Only one email/event list/package/addons/captcha/submit field type allowed */
-						$only_one = array( 'email', 'event_list', 'package_list', 'addons_list', 'captcha', 'submit' );
+						$only_one = array( 'email', 'event_list', 'package_list', 'addons_list', 'venue_list', 'captcha', 'submit' );
 						if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
 							if( in_array( $f_config['type'], $only_one ) )
 								unset( $field_types[$f_config['type']] );	
@@ -996,7 +1009,7 @@
 		<?php /* End Height */ ?>
 		
 		<?php /* Datepicker */ ?>
-				<div id="datepicker_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type']['date'] ? 'block;' : 'none;' ); ?> font-size:10px">
+				<div id="datepicker_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == date ? 'block;' : 'none;' ); ?> font-size:10px">
 				<p>Use Datepicker?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="datepicker" id="datepicker" value="Y" 
 				<?php if( isset( $e_meta['config']['datepicker'] ) ) { checked( $e_meta['config']['datepicker'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>
@@ -1032,7 +1045,13 @@
         
         <?php /* Package List First Entry */ ?>
 				<div id="package_list_first_entry_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'package_list' ? 'block;' : 'none;' ); ?> font-size:10px">
-				<p>Package List First Entry:<br />
+				<p>Initially Selected:<br />
+				&nbsp;&nbsp;&nbsp;<?php echo mdjm_package_dropdown( array(
+																'name'		=> 'package_list_selected',
+																'first_entry' => 'None',
+																'selected'	=> ( !empty( $e_meta['config']['package_list_selected'] ) 
+																? $e_meta['config']['package_list_selected'] : '' ) ) ); ?></p>
+                <p>Package List First Entry:<br />
 				&nbsp;&nbsp;&nbsp;<input type="text" name="package_list_first_entry" id="package_list_first_entry" class="regular-text" placeholder="i.e. Select A Package"
 				<?php echo( !empty( $e_meta['config']['package_list_first_entry'] ) ? ' value="' . esc_attr( $e_meta['config']['package_list_first_entry'] ) . '"' : '' ); ?> /></p>
                 <p>Include Package Price:?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="package_price" id="package_price" value="1" 
@@ -1046,6 +1065,14 @@
 				<?php if( isset( $e_meta['config']['display_price'] ) ) { checked( $e_meta['config']['display_price'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>
 		<?php /* End Addons List First Entry */ ?>
+        
+        <?php /* Venue List First Entry */ ?>
+				<div id="venue_list_first_entry_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'venue_list' ? 'block;' : 'none;' ); ?> font-size:10px">
+				<p>Venue List First Entry:<br />
+				&nbsp;&nbsp;&nbsp;<input type="text" name="venue_list_first_entry" id="venue_list_first_entry" class="regular-text" placeholder="i.e. Select Venue if Listed"
+				<?php echo( !empty( $e_meta['config']['venue_list_first_entry'] ) ? ' value="' . esc_attr( $e_meta['config']['venue_list_first_entry'] ) . '"' : '' ); ?> /></p>
+				</div>
+		<?php /* End Venue List First Entry */ ?>
 		
 		<?php /* Submit Align */ ?>
 				<div id="align_submit_row" style="display: <?php echo ( !empty( $e_meta ) && $e_meta['type'] == 'submit' ? 'block;' : 'none;' ); ?> font-size:10px">
@@ -1089,12 +1116,10 @@
 				 <option value="none">No Mapping</option>
 				 <?php
 				 foreach( $mappings as $mapping => $mapping_name )	{
-					?><option value="<?php echo $mapping; ?>"
-						<?php 
-						if( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' && !empty( $e_meta['config']['mapping'] ) ) { 
-							selected( $mapping, $e_meta['config']['mapping'] );
-						}
-						?>><?php echo $mapping_name; ?></option><?php
+					echo '<option value="' . $mapping . '"' . 
+						( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' && !empty( $e_meta['config']['mapping'] ) 
+						? selected( $mapping, $e_meta['config']['mapping'], false ) : '' ) . 
+						'>' . $mapping_name . '</option>' . "\r\n";
 				 }
 				 ?>
 				 </select>
@@ -1447,6 +1472,7 @@
 								'_mdjm_event_finish'   		 => 'Event End',
 								'_mdjm_event_notes'    	  => 'Event Description',
 								'_mdjm_dj_list'			  => 'DJ List',
+								'_mdjm_event_venue_id'   	   => 'Event Venue',
 								'_mdjm_event_venue_name'     => 'Event Venue Name',
 								'_mdjm_event_venue_town'     => 'Event Venue Town/City',
 								'_mdjm_event_venue_county'   => 'Event County (State)'
@@ -1476,7 +1502,7 @@
 				}
 				if( $field['type'] == 'select' || $field['type'] == 'select_multi' 
 					|| $field['type'] == 'event_list' || $field['type'] == 'package_list' 
-					|| $field['type'] == 'addons_list' )	{
+					|| $field['type'] == 'addons_list' || $field['type'] == 'venue_list' )	{
 						
 					if( $field['type'] == 'event_list' )	{
 						$opt = '';
@@ -1490,8 +1516,8 @@
 					}
 					elseif( $field['type'] == 'package_list' )	{
 						$opt = '';
-						if( !empty( $field['config']['event_list_first_entry'] ) )	{
-							$opt .= $field['config']['event_list_first_entry'] . "\r\n";
+						if( !empty( $field['config']['package_list_first_entry'] ) )	{
+							$opt .= $field['config']['package_list_first_entry'] . "\r\n";
 						}
 						$packages = get_option( 'mdjm_packages' );
 						asort( $packages );
@@ -1526,6 +1552,16 @@
 						foreach( $djs as $dj )	{
 							$opt .= $dj;	
 						}
+					}
+					elseif( $field['type'] == 'venue_list' )	{
+						$opt = '';
+						if( !empty( $field['config']['venue_list_first_entry'] ) )	{
+							$opt .= $field['config']['venue_list_first_entry'] . "\r\n";
+						}
+						$venues = $mdjm->mdjm_events->mdjm_get_venues();
+						foreach( $venues as $venue )	{
+							$opt .= stripslashes( $venue->post_title ) . "\r\n";
+						}	
 					}
 					else	{
 						$opt = $field['config']['options'];
