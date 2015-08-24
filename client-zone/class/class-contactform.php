@@ -916,9 +916,9 @@
 						// Package List
 						elseif( $field_settings['type'] == 'package_list' )	{
 							$selected_package = false;
-							
-							if( isset( $_GET['selected_package'] ) && !empty( $_GET['selected_package'] ) && MDJM_MULTI == true )	{
-								$desired_package = urldecode( $_GET['selected_package'] );
+														
+							if( isset( $_GET['selected_package'] ) && !empty( $_GET['selected_package'] ) && MDJM_PACKAGES == true )	{
+								$desired_package = $_GET['selected_package'];
 								$all_packages = get_option( 'mdjm_packages' );
 								foreach( $all_packages as $mdjm_package )	{
 									if( $mdjm_package['name'] == $desired_package )
