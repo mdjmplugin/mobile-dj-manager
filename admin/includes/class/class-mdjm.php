@@ -28,6 +28,7 @@
 				define( 'MDJM_SIGNED_CONTRACT_POSTS', 'mdjm-signed-contract' );
 				define( 'MDJM_EMAIL_POSTS', 'email_template' );
 				define( 'MDJM_EVENT_POSTS', 'mdjm-event' );
+				define( 'MDJM_QUOTE_POSTS', 'mdjm-quotes' );
 				define( 'MDJM_TRANS_POSTS', 'mdjm-transaction' );
 				define( 'MDJM_VENUE_POSTS', 'mdjm-venue' );
 				
@@ -41,6 +42,7 @@
 							MDJM_SIGNED_CONTRACT_POSTS,
 							MDJM_EMAIL_POSTS,
 							MDJM_EVENT_POSTS,
+							MDJM_QUOTE_POSTS,
 							MDJM_TRANS_POSTS,
 							MDJM_VENUE_POSTS,
 							);
@@ -65,7 +67,7 @@
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
 				add_action( 'in_admin_footer', array( &$this, 'admin_footer' ) ); // The admin footer text
-				add_action( 'wp_loaded', array( &$this, 'api_listener' ) ); // The API Listener
+				add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
 				add_action( 'wp_login', array( &$this, 'last_login' ), 10, 2 ); // Login timestamp
 				add_action( 'admin_notices', array( &$this, 'notices' ) ); // Hook into the admin notices hook
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
@@ -159,6 +161,7 @@
 					f_mdjm_upgrade();
 				}
 				if( $current_version < MDJM_VERSION_NUM )	{
+					
 					// Instantiate the update class which will execute the updates
 					include_once( MDJM_PROCEDURES_DIR . '/mdjm-upgrade.php' );
 					
@@ -283,9 +286,9 @@
 			 */
 			public function all_plugins_loaded()	{
 			/* -- Check version against DB -- */
-				$current_version = get_option( MDJM_VERSION_KEY );
+				/*$current_version = get_option( MDJM_VERSION_KEY );
 				if( $current_version < MDJM_VERSION_NUM ) // Update needed
-					$this->mdjm_upgrade_check( $current_version );
+					$this->mdjm_upgrade_check( $current_version );*/
 
 			/* -- Database update -- */
 				if( MDJM_DB_VERSION != $this->db_version )	{ // DB Update needed
@@ -303,6 +306,28 @@
 					$GLOBALS['mdjm_debug']->log_file_check();
 						
 			} // all_plugins_loaded
+			
+/*
+ *
+ * WP LOADED HOOK
+ *
+ */
+			/*
+			 * Methods to run during wp loaded hook
+			 *
+			 *
+			 *
+			 */
+			public function wp_fully_loaded()	{
+			/* -- Check version against DB -- */
+				$current_version = get_option( MDJM_VERSION_KEY );
+				if( $current_version < MDJM_VERSION_NUM ) // Update needed
+					$this->mdjm_upgrade_check( $current_version );
+
+				/* -- Initiate the API listener -- */
+				$this->api_listener();
+										
+			} // all_plugins_loaded	
 /*
  * --
  * ADMIN_NOTICES HOOK
@@ -385,7 +410,9 @@
 				define( 'MDJM_PLAYLIST_PAGE', isset( $mdjm_settings['pages']['playlist_page'] ) ? $mdjm_settings['pages']['playlist_page'] : '' );
 				define( 'MDJM_PROFILE_PAGE', isset( $mdjm_settings['pages']['profile_page'] ) ? $mdjm_settings['pages']['profile_page'] : '' );
 				define( 'MDJM_PAYMENT_PAGE', isset( $mdjm_settings['pages']['payments_page'] ) ? $mdjm_settings['pages']['payments_page'] : '' );
+				define( 'MDJM_QUOTES_PAGE', isset( $mdjm_settings['pages']['quotes_page'] ) ? $mdjm_settings['pages']['quotes_page'] : '' );
 				define( 'MDJM_CUSTOM_TEXT', isset( $mdjm_settings['custom_text']['custom_client_text'] ) ? $mdjm_settings['custom_text']['custom_client_text'] : false );
+				define( 'MDJM_ONLINE_QUOTES', ( !empty( $mdjm_settings['templates']['online_enquiry'] ) ? true : false ) );
 			 } // mdjm_settings
 			 
 			 /*
@@ -404,8 +431,7 @@
 				 
 				/* -- Determine if an update is needed -- */
 				if( empty( $current_setting ) || $current_setting != $required_setting )	{
-						
-					 $mdjm_schedules['upload-playlists']['active'] = $required_setting;
+					$mdjm_schedules['upload-playlists']['active'] = $required_setting;
 					
 					/* -- Set next run time -- */
 					if( $mdjm_schedules['upload-playlists']['active'] == 'Y' )
@@ -494,12 +520,13 @@
 					$role->add_cap( 'edit_mdjm_manage_events' );
 					$role->add_cap( 'edit_others_mdjm_manage_events' );
 					$role->add_cap( 'edit_published_mdjm_manage_events' );
-					if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )	{
+					
+					if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )
 						$role->add_cap( 'publish_mdjm_manage_events' );
-					}
-					else	{
+					
+					else
 						$role->remove_cap( 'publish_mdjm_manage_events' );
-					}
+					
 					if( current_user_can( 'manage_options' ) )	{
 						$role->add_cap( 'delete_mdjm_manage_events' );
 						$role->add_cap( 'delete_others_mdjm_manage_events' );
@@ -512,8 +539,28 @@
 					$role->add_cap( 'publish_mdjm_signed_contracts' );
 					$role->add_cap( 'edit_mdjm_signed_contract' );
 					$role->add_cap( 'edit_mdjm_signed_contracts' );
+					
 					if( current_user_can( 'manage_options' ) )
 						$role->add_cap( 'read_private_mdjm_signed_contracts' );
+						
+				/* -- MDJM_QUOTE_POSTS -- */
+					$role->add_cap( 'read_mdjm_manage_quote' );
+					$role->add_cap( 'publish_mdjm_manage_quotes' );
+					$role->add_cap( 'edit_mdjm_manage_quote' );
+					$role->add_cap( 'edit_mdjm_manage_quotes' );
+					
+					if( current_user_can( 'manage_options' ) )	{
+						$role->add_cap( 'read_private_mdjm_manage_quotes' );
+						$role->add_cap( 'edit_mdjm_manage_quote' );
+						$role->add_cap( 'edit_mdjm_manage_quotes' );
+						$role->add_cap( 'edit_others_mdjm_manage_quotes' );
+						$role->add_cap( 'edit_published_mdjm_manage_quotes' );
+						$role->add_cap( 'publish_mdjm_manage_quotes' );
+						$role->add_cap( 'delete_mdjm_manage_quotes' );
+						$role->add_cap( 'delete_others_mdjm_manage_quotes' );
+						$role->add_cap( 'delete_private_mdjm_manage_quotes' );
+						$role->add_cap( 'delete_published_mdjm_manage_quotes' );
+					}
 				
 				/* -- MDJM_TRANS_POSTS -- */
 					$role->add_cap( 'read_mdjm_manage_transaction' );
@@ -1395,7 +1442,7 @@
 				global $mdjm_settings;
 				
 				if( MDJM_DEBUG == true )
-						 $this->debug_logger( 'Starting ' . __FUNCTION__, true );
+					$this->debug_logger( 'Starting ' . __FUNCTION__, true );
 				
 				if( empty( $content ) )	{
 					if( MDJM_DEBUG == true )
@@ -1455,6 +1502,7 @@
 					'{ADMIN_URL}'			=> admin_url(),
 					'{APPLICATION_HOME}'	 => $this->get_link( MDJM_HOME, false ),
 					'{APPLICATION_NAME}'	 => MDJM_APP,
+
 					'{COMPANY_NAME}'		 => MDJM_COMPANY,
 					'{CONTACT_PAGE}'		 => $this->get_link( MDJM_CONTACT_PAGE, false ),
 					'{DDMMYYYY}'			 => date( MDJM_SHORTDATE_FORMAT ),
@@ -1481,7 +1529,7 @@
 					
 					'{CONTRACT_URL}'		 => ( !empty( $e ) ? $this->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $e->ID : '' ),
 																		
-					'{DEPOSIT}'			  => ( !empty( $eventinfo['deposit'] ) ? display_price( $eventinfo['deposit'] ) : '' ),
+					'{DEPOSIT}'			  => ( !empty( $eventinfo['deposit'] ) ? $eventinfo['deposit'] : '' ),
 												
 					'{DEPOSIT_STATUS}'	   => ( !empty( $eventinfo['deposit_status'] ) ? $eventinfo['deposit_status'] : __( 'Due' ) ),
 					'{DJ_EMAIL}'		     => ( !empty( $eventinfo['dj']->user_email ) ? $eventinfo['dj']->user_email : __( 'Not Assigned' ) ),
@@ -1494,8 +1542,12 @@
 						
 					'{DJ_SETUP_TIME}'	    => ( !empty( $eventinfo['setup_time'] ) ? $eventinfo['setup_time'] : '' ),
 					'{END_TIME}'		     => ( !empty( $eventinfo['finish'] ) ? $eventinfo['finish'] : '' ),
-					'{EVENT_DATE}'		   => ( !empty( $eventinfo['date'] ) ? date( 'l, jS F Y', $eventinfo['date'] ) : __( 'Not Specified' ) ),
-					'{EVENT_DATE_SHORT}'     => ( !empty( $eventinfo['date'] ) ? date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : __( 'Not Specified' ) ),
+					'{EVENT_DATE}'		   => ( !empty( $eventinfo['date'] ) && is_numeric( $eventinfo['date'] ) ? 
+						date( 'l, jS F Y', $eventinfo['date'] ) : __( 'Not Specified' ) ),
+						
+					'{EVENT_DATE_SHORT}'     => ( !empty( $eventinfo['date'] ) && is_numeric( $eventinfo['date'] ) ? 
+						date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : __( 'Not Specified' ) ),
+						
 					'{EVENT_DESCRIPTION}'    => ( !empty( $eventinfo['notes'] ) ? $eventinfo['notes'] : '' ),
 					'{EVENT_NAME}'		   => ( !empty( $eventinfo['name'] ) ? $eventinfo['name'] : '' ),
 					'{EVENT_TYPE}'		   => ( !empty( $eventinfo['type'] ) ? $eventinfo['type'] : '' ),
@@ -1505,6 +1557,7 @@
 					'{PAYMENT_URL}'		  => ( !empty( $e ) ? $this->get_link( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
 					'{PLAYLIST_CLOSE}'	   => $mdjm_settings['playlist']['close'] != 0 ? $mdjm_settings['playlist']['close'] : 'never',
 					'{PLAYLIST_URL}'		 => $this->get_link( MDJM_PLAYLIST_PAGE, false ),
+					'{QUOTES_URL}'		   => ( !empty( $e->ID ) ? $this->get_link( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $e->ID : '' ),
 					'{GUEST_PLAYLIST_URL}'   => ( !empty( $eventinfo['guest_playlist'] ) ? $eventinfo['guest_playlist'] : '' ),
 					'{START_TIME}'		   => ( !empty( $eventinfo['start'] ) ? $eventinfo['start'] : '' ),
 					'{TOTAL_COST}'		   => ( !empty( $eventinfo['cost'] ) ? $eventinfo['cost'] : '' ),
@@ -1529,7 +1582,7 @@
 					'{AVAILABLE_PACKAGES_COST}' => ( !empty( $eventinfo['dj']->ID ) ? 
 						get_available_packages( $eventinfo['dj']->ID, true ) : get_available_packages( '', true ) ),
 						
-					'{EVENT_PACKAGE}'		=> ( !empty( $eventinfo['package'] ) ? $eventinfo['package'] : 'N/A' ),
+					'{EVENT_PACKAGE}'		=> ( !empty( $eventinfo['package'] ) && !empty( $e->ID ) ? get_event_package( $e->ID, false ) : 'N/A' ),
 					'{EVENT_PACKAGE_COST}'   => ( !empty( $e ) ? get_event_package( $e->ID, true ) : 'N/A' ),
 						
 					//'{AVAILABLE_ADDONS}'	 => ( !empty( $eventinfo['dj']->ID ) ? 
@@ -1580,7 +1633,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.3.2' );
+	define( 'MDJM_VERSION_NUM', '1.2.3.3' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );

@@ -33,6 +33,12 @@
 							}
 						},
 						{
+							text: 'Application Quotes Page',
+							onclick: function() {
+								editor.insertContent('{QUOTES_URL}');
+							}
+						},
+						{
 							text: 'Application Name',
 							onclick: function() {
 								editor.insertContent('{APPLICATION_NAME}');

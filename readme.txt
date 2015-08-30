@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.3.2
+Stable tag: 1.2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,23 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.3.3 =
+<strong>Released Sunday 30th August, 2015</strong>
+<ul>
+	<li>New: Online quotes are now available in addition to email quotes. Clients can view quotes online and via a fully customisable button, accept the quote and book the event</li>
+	<li>New: Setting added to Client Zone tab enabling you to choose whether or not to display package & add-on prices within Client Zone</li>
+	<li>General: Updated WP Admin header tags per 4.3 release</li>
+	<li>General: Support for long field names in Contact Form for validation and Dynamic addon updates</li>
+	<li>Bug Fix: If event venue was entered manually, fields were not displayed on the screen until you changed the dropdown selection</li>
+	<li>Bug Fix: Saving playlist entries failed</li>
+	<li>Bug Fix: Removed updating of email address via dynamic contact form as potential problems with login</li>
+	<li>Bug Fix: Events not displaying on Clients page when filtered</li>
+	<li>Bug Fix: Default transaction type was not displaying all options</li>
+	<li>Bug Fix: Transaction source was not displaying all options on Events screen</li>
+	<li>Bug Fix: Is Default? column was not populated within Contract Template screen. May have generated on screen error</li>
+	<li>Bug Fix: Warning may have been displayed on Client Login screen and some admin screens dependant on PHP/WP settings</li>
+</ul>
+
 = 1.2.3.2 =
 <strong>Released Monday 24th August, 2015</strong>
 <ul>

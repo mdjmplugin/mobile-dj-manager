@@ -1329,7 +1329,7 @@
 					$GLOBALS['mdjm_debug']->log_it( 'Logging as invalid/trial' );	
 					$status['key'] = 'XXXX';
 					$status['type'] = 'trial';
-					$status['last_auth'] = date( 'Y-m-d H:i:s' );
+					$status['last_auth'] = current_time( 'mysql' );
 					$status['missed'] = '0';
 				}
 				else	{					
@@ -1339,7 +1339,7 @@
 					$status['type'] = 'full';
 					$status['start'] = $values[1];
 					$status['expire'] = $values[2];
-					$status['last_auth'] = date( 'Y-m-d H:i:s' );
+					$status['last_auth'] = current_time( 'mysql' );
 					$status['missed'] = '0';
 					$status['url'] = $values[5];
 				}

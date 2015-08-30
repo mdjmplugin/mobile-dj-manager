@@ -15,9 +15,7 @@
 	if ( !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	f_mdjm_has_updated();
-	
+		
 /**
  * f_mdjm_render_clients_table
  * Render the table with list of clients
@@ -37,7 +35,8 @@
 		
 		$clients_table = new MDJM_Clients_Table();
 		?>
-		</pre><div class="wrap"><h1>Clients <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) ) echo '<a href="' . admin_url() . 'user-new.php" class="page-title-action">Add New</a></h1>';
+		</pre><div class="wrap"><h1>Clients <?php if( current_user_can( 'administrator' ) || dj_can( 'add_client' ) ) echo '<a href="' . admin_url() . 
+			'user-new.php" class="page-title-action">Add New</a></h1>';
 		$clients_table->prepare_items();
 		?>
 		<form method="post" name="mdjm_client_search" id="mdjm_client_search">
@@ -58,7 +57,7 @@
 * Displays client contact information for DJ's
 */
 	function f_mdjm_view_client( $user_id )	{
-		global $wpdb;
+		global $mdjm;
 		$client = get_userdata( $user_id );
 		
 		?>
@@ -67,14 +66,14 @@
         <table class="form-table">
         <tr>
         <th class="row-title">Email:</th>
-        <td><a href="<?php f_mdjm_admin_page( 'comms' ); ?>&to_user=<?php echo $client->ID; ?>"><?php echo $client->user_email; ?></a></td>
+        <td><a href="<?php mdjm_get_admin_page( 'comms', 'echo' ); ?>&to_user=<?php echo $client->ID; ?>"><?php echo $client->user_email; ?></a></td>
         </tr>
         <tr>
         <th class="row-title">Primary Phone:</th>
-        <td><?php echo $client->phone1; ?></td>
+        <td><?php echo ( !empty( $client->phone1 ) ? $client->phone1 : 'N/A' ); ?></td>
         </tr>
         <?php
-		if( isset( $client->phone2 ) && !empty( $client->phone2 ) )	{
+		if( !empty( $client->phone2 ) )	{
 			?>
             <tr>
             <th class="row-title">Secondary Phone:</th>
@@ -86,11 +85,9 @@
         </table>
         <h3>Event List</h3>
         <?php
-		$client_events = f_mdjm_admin_get_client_events( $user_id );
-		if( !is_array( $client_events ) )	{
-			$client_events = array( $client_events );
-		}
-		if( count( $client_events > 0 ) )	{
+		$client_events = $mdjm->mdjm_events->client_events( $user_id );
+		
+		if( $client_events )	{
 			?>
             <table class="widefat">
             <thead>
@@ -101,18 +98,20 @@
             </thead>
             <?php
 			foreach( $client_events as $client_event )	{
-				if( $client_event->event_dj == get_current_user_id() && f_mdjm_event_is_active( $client_event->event_id ) )	{
-					include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-					$playlist = $wpdb->get_var( "SELECT COUNT(*) FROM " . $db_tbl['playlists'] . " WHERE event_id = " . $client_event->event_id );
-					if ( $playlist == 0 ) { $play_count = $playlist . ' Songs'; }
-					elseif ( $playlist == 1 ) { $play_count = '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=render_playlist_table&event=' . $client_event->event_id ) . '">' .  $playlist . ' Song</a>'; }
-					else { $play_count = '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=render_playlist_table&event=' . $client_event->event_id ) . '">' .  $playlist . ' Song</a>s'; }
+				$eventinfo = $mdjm->mdjm_events->event_detail( $client_event->ID );
+				
+				if( $eventinfo['dj'] == get_current_user_id() )	{
+
+					$playlist =  $mdjm->mdjm_events->count_playlist_entries( $client_event->ID );
+					
 					?>
                     <tr>
-                    <td><a href="<?php f_mdjm_admin_page( 'events' ); ?>&action=view_event_form&event_id=<?php echo $client_event->event_id; ?>"><?php echo date( 'd M Y', strtotime( $client_event->event_date ) ); ?></a></td>
-                    <td><?php echo $client_event->event_type; ?></td>
-                    <td><?php echo $client_event->contract_status; ?></td>
-                    <td><?php echo $play_count; ?></td>
+                    <td><a href="<?php echo mdjm_get_admin_page( 'events' ) . 
+						's&post_status=all&post_type=mdjm-event&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_dj=0&mdjm_filter_client=' 
+						. $user_id . '&filter_action=Filter&paged=1&mode=list&action2=-1'; ?>"><?php echo date( 'd M Y', $eventinfo['date'] ); ?></a></td>
+                    <td><?php echo $eventinfo['type']; ?></td>
+                    <td><?php echo get_post_status_object( $client_event->post_status )->label; ?></td>
+                    <td><?php echo _n( 'Song', 'Songs', $playlist, 'mobile-dj-manager' ); ?></td>
                     </tr>
                     <?php
 				}

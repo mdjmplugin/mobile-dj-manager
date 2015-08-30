@@ -241,19 +241,19 @@
 				echo '<h2 class="nav-tab-wrapper">' . "\r\n" .
 				 
 				'<a href="' . $this->tab_url( 'general' ) . '" class="nav-tab' . 
-					$this->active_tab( 'general' ) . '">' . __( 'General' ) . '</a>' . "\r\n" . 
+					$this->active_tab( 'general' ) . '">' . __( 'General', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
 				
 				'<a href="' . $this->tab_url( 'events' ) . '" class="nav-tab' . 
-					$this->active_tab( 'events' ) . '">' . __( 'Events' ) . '</a>' . "\r\n" . 
+					$this->active_tab( 'events' ) . '">' . __( 'Events', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
 					
 				'<a href="' . $this->tab_url( 'emails' ) . '" class="nav-tab' . 
-					$this->active_tab( 'emails' ) . '">' . __( 'Email Settings' ) . '</a>' . "\r\n" . 
+					$this->active_tab( 'emails' ) . '">' . sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ) . '</a>' . "\r\n" . 
 					
 				'<a href="' . $this->tab_url( 'client-zone' ) . '" class="nav-tab' . 
-					$this->active_tab( 'client-zone' ) . '">' . __( MDJM_APP ) . '</a>' . "\r\n" . 
+					$this->active_tab( 'client-zone' ) . '">' . MDJM_APP . '</a>' . "\r\n" . 
 					
 				'<a href="' . $this->tab_url( 'payments' ) . '" class="nav-tab' . 
-					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings' ) . '</a>' . "\r\n" . 
+					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
 										
 				'</h2>' . "\r\n";
 				
@@ -284,8 +284,9 @@
 						submit_button();
 						
 					else
-						echo '<p><a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">License Expired</a>.<br>' . 
-						'You cannot update your settings without a valid MDJM License</p>' . "\r\n";
+						echo '<p><a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">' . 
+						__( 'License Expired', 'mobile-dj-manager' ) . '</a>.<br>' . 
+						__( 'You cannot update your settings without a valid MDJM License', 'mobile-dj-manager' ) . '</p>' . "\r\n";
 					
 					echo '</form>' . "\r\n";
 				}
@@ -330,32 +331,32 @@
 			function print_nav_links()	{				
 				$links = array(
 							'general'		=> array(
-												'Application Settings'   => 'mdjm_app_settings',
-												'Permissions'			=> 'mdjm_app_permissions',
-												'Debugging'			  => 'mdjm_app_debugging',
-												'Backups'				=> 'mdjm_db_backups',
-												'Plugin Removal'		 => 'mdjm_app_uninstall',
+												__( 'Application Settings', 'mobile-dj-manager' )   => 'mdjm_app_settings',
+												__( 'Permissions', 'mobile-dj-manager' )			=> 'mdjm_app_permissions',
+												__( 'Debugging', 'mobile-dj-manager' )			  => 'mdjm_app_debugging',
+												__( 'Backups', 'mobile-dj-manager' )				=> 'mdjm_db_backups',
+												__( 'Plugin Removal', 'mobile-dj-manager' )		 => 'mdjm_app_uninstall',
 												),
 							'events'		=> array(
-												'Event Settings' 		=> 'mdjm_events_settings',
-												'Playlist Settings'	 => 'mdjm_playlist_settings',
-												//'Event Staff'		   => 'mdjm_event_staff',
+												__( 'Event Settings', 'mobile-dj-manager' ) 		=> 'mdjm_events_settings',
+												__( 'Playlist Settings', 'mobile-dj-manager' )	 => 'mdjm_playlist_settings',
+												//__( 'Event Staff', 'mobile-dj-manager' )		   => 'mdjm_event_staff',
 												),
 							'emails'		=> array(
-												'General Email Settings'	=> 'mdjm_email_settings',
-												'Event Templates'		   => 'mdjm_email_templates_settings',
+												__( 'General Email Settings', 'mobile-dj-manager' )	=> 'mdjm_email_settings',
+												__( 'Event Templates', 'mobile-dj-manager' )		   => 'mdjm_email_templates_settings',
 												
 												),
 							'client-zone'	=> array(
-													MDJM_APP . ' General Settings' => 'mdjm_app_general',
-													'Pages'						=> 'mdjm_app_pages',
-													'Customised Text'			  => 'mdjm_app_text',
-													'Client Fields'				=> 'mdjm_client_field_settings',
-													'Availability Checker'		 => 'mdjm_availability_settings',
+													MDJM_APP . ' ' . __( 'General Settings', 'mobile-dj-manager' ) => 'mdjm_app_general',
+													__( 'Pages', 'mobile-dj-manager' )						=> 'mdjm_app_pages',
+													__( 'Customised Text', 'mobile-dj-manager' )			  => 'mdjm_app_text',
+													__( 'Client Fields', 'mobile-dj-manager' )				=> 'mdjm_client_field_settings',
+													__( 'Availability Checker', 'mobile-dj-manager' )		 => 'mdjm_availability_settings',
 													),
 							'payments'	=> array(
-													'Payment Settings' 		=> 'mdjm_payment_settings',
-													'PayPal Configuration'	=> 'mdjm_paypal_settings',
+													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings',
+													__( 'PayPal Configuration', 'mobile-dj-manager' )	=> 'mdjm_paypal_settings',
 													),
 							);
 				if( !array_key_exists( $this->current_tab, $links ) )
@@ -369,7 +370,7 @@
 				foreach( $links[$this->current_tab] as $name => $slug )	{
 					echo '<li><a href="' . $this->tab_url( $this->current_tab, $slug ) . '"' . 
 					( $slug == $this->current_section ? ' class="current"' : '' ) . 
-					'>' . __( $name ) . '</a>' . ( $i < $sections ? ' | ' : '' ) . '</li>' . "\r\n";
+					'>' . $name . '</a>' . ( $i < $sections ? ' | ' : '' ) . '</li>' . "\r\n";
 					
 					$i++;
 				}
@@ -419,7 +420,7 @@
 					
 				else	{
 					echo '<select name="' . ( !empty( $args['key'] ) ? $args['key'] . '[' . $args['field'] . ']' 
-					: $args['field'] ) . '" id="' . $args['field'] . '"' . 
+					: $args['field'] ) . ( $args['type'] == 'multiple_select' ? '[]' : '' ) . '" id="' . $args['field'] . '"' . 
 					( !empty( $args['class'] ) ? ' class="' . $args['class'] . '"' : '' ) . 
 					( $args['type'] == 'multiple_select' ? ' multiple="multiple"' : '' ) . 
 					( !empty( $args['size'] ) ? ' size="' . $args['size'] . '"' : '' ) . 
@@ -438,7 +439,8 @@
 					elseif( $args['custom_args']['list_type'] == 'shortcode' )	{
 						foreach( $args['custom_args']['list_values'] as $shortcode )	{
 							echo '<option value="' . $shortcode . '"' . 
-							( in_array( $shortcode, $mdjm_settings['permissions']['dj_disable_shortcode'] ) ? ' selected="selected"' : '' ) . 
+							( !empty( $mdjm_settings['permissions']['dj_disable_shortcode'] ) && 
+								in_array( $shortcode, $mdjm_settings['permissions']['dj_disable_shortcode'] ) ? ' selected="selected"' : '' ) . 
 							'>' . $shortcode . '</option>' . "\r\n";
 						}
 					}
@@ -471,9 +473,9 @@
 										);
 						$templates = get_posts( $template_args );
 						if( !empty( $args['custom_args']['first_entry'] ) )	{
-							echo '<option value="0"' . 
+							echo '<option value="' . $args['custom_args']['first_entry'][0] . '"' . 
 							selected( $args['value'], '0', false ) . 
-							'>Do Not Email</option>' . "\r\n";
+							'>' . $args['custom_args']['first_entry'][1] . '</option>' . "\r\n";
 						}
 						if( $templates )	{							
 							foreach( $templates as $template )	{
@@ -504,7 +506,8 @@
 								
 								foreach( $templates as $template )	{
 									echo '<option value="' . $template->ID . '"';
-									if( in_array( $template->ID, $mdjm_settings['permissions']['dj_disable_template'] ) )
+									if( !empty( $mdjm_settings['permissions']['dj_disable_template'] ) && 
+										in_array( $template->ID, $mdjm_settings['permissions']['dj_disable_template'] ) )
 										echo ' selected="selected"';
 									echo '>' . get_the_title( $template->ID ) . '</option>' . "\n";
 								}
@@ -532,7 +535,7 @@
 								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
 								'enable_packages', 'warn_unattended', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
-								'booking_conf_to_dj', 'notify_profile', 'update_event', 'custom_client_text', 'enable_tax',
+								'booking_conf_to_dj', 'notify_profile', 'package_prices', 'update_event', 'custom_client_text', 'enable_tax',
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'dj_see_wp_dash', 'dj_add_client',
 								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists',
 								'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
@@ -552,7 +555,7 @@
 				' />' . 
 				
 				( $args['field'] == 'show_credits' && ( empty( $status ) || $status['type'] == 'trial' ) ? 
-					' This option can only be turned off once the MDJM plugin has been purchased' : '' ) . "\r\n";
+					__( ' This option can only be turned off once the MDJM plugin has been purchased', 'mobile-dj-manager' ) : '' ) . "\r\n";
 					
 			} // show_checkbox_field
 			
@@ -635,19 +638,34 @@
 				switch( $current )	{
 					case 'mdjm_client_field_settings':
 						$contextual_help = 
-						'<p>' . __( 'By managing Client Fields, you can determine which information you capture and store for each of your clients. ' .
-						'Each field listed below, whether default or create by you, will be displayed on the ' . MDJM_APP . ' profile page ' . 
-						'when visited by a client. As long as it is enabled.<br />' . 
-						'For further assistance, refer to our <a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">User Guides</a>' .
-						' or visit the <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a> ' . 
-						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">Support Forums' ) . '</a></p>' . "\r\n";
+						'<p>' . sprintf( __( 'By managing Client Fields, you can determine which information you capture and store for each of your clients. ' .
+						'Each field listed below, whether default or create by you, will be displayed on the %s profile page ' . 
+						'when visited by a client. As long as it is enabled.', 'mobile-dj-manager' ), MDJM_APP ) . '<br />' . 
+						
+						sprintf( __( 'For further assistance, refer to our %sUser Guides%s' .
+						' or visit the %s ' . 
+						'%sSupport Forums' . '%s', 'mobile-dj-manager' ),
+						'<a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">',
+						'</a>',
+						'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a>',
+						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">',
+						'</a>' ) . 
+						
+						'</p>' . "\r\n";
 					break;
 					
 					default:
 						$contextual_help = 
-						'<p>' . __( 'For assistance, refer to our <a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">User Guides</a>' .
-						' or visit the <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a> ' . 
-						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">Support Forums' ) . '</a></p>' . "\r\n";
+						'<p>' . sprintf( __( 'For assistance, refer to our %sUser Guides%s' .
+						' or visit the %s ' . 
+						'%sSupport Forums%s', 'mobile-dj-manager' ),
+						'<a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">',
+						'</a>',
+						'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a>',
+						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">',
+						'</a>' ) . 
+						
+						'</p>' . "\r\n";
 					break;
 					
 				} // switch

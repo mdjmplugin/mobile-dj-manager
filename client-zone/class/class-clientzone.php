@@ -93,17 +93,22 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: No event object was provided in ' . __METHOD__, true );
 						
-					$this->display_notice(
-										4,
-										'An error has occured whilst confirming your event. Please <a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
-										'">contact me for assistance</a>'
-										);
 					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4' );
 					exit;			
+				}
+				if( get_current_user_id() != get_post_meta( $post->ID, '_mdjm_event_client', true ) )	{
+					if( MDJM_DEBUG == true )
+						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
+						
+					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
+					exit;
 				}
 				
 				/* -- Security verification -- */
 				if( !isset( $_GET['__mdjm_verify'] ) || !wp_verify_nonce( $_GET['__mdjm_verify'], 'book_event' ) )	{
+					if( MDJM_DEBUG == true )
+						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
+					
 					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
@@ -343,7 +348,7 @@
 							5	=> 'mdjm-validation',
 							);
 				
-				echo '<div class="' . $class[$type] . '">' . __( $msg ) . '</div>' . "\r\n";
+				echo '<div class="' . $class[$type] . '">' . __( $msg, 'mobile-dj-manager' ) . '</div>' . "\r\n";
 				
 			} // display_notice
 			
@@ -515,23 +520,24 @@
 			public function shortcode( $atts )	{
 				/* -- Map the args to the pages/functions -- */
 				$args = shortcode_atts( array(
-					'Home'         => '/client-zone/class/class-home.php',
-					'Payments'	   => '/client-zone/class/class-payment.php',
-					'Profile'      => '/client-zone/class/class-profile.php',
-					'Playlist'	 => '/client-zone/class/class-playlist.php',
-					'Contract'     => '/client-zone/class/class-contract.php',
+					'Home'         => MDJM_CLIENTZONE . '/class/class-home.php',
+					'Payments'	 => MDJM_CLIENTZONE . '/class/class-payment.php',
+					'Profile'      => MDJM_CLIENTZONE . '/class/class-profile.php',
+					'Playlist'	 => MDJM_CLIENTZONE . '/class/class-playlist.php',
+					'Contract'     => MDJM_CLIENTZONE . '/class/class-contract.php',
 					'Availability' => 'f_mdjm_availability_form',
-					'Contact Form' => '/client-zone/class/class-contactform.php',
+					'Contact Form' => MDJM_CLIENTZONE . '/class/class-contactform.php',
+					'Online Quote' => MDJM_CLIENTZONE . '/class/class-onlinequote.php'
 				), $atts, 'MDJM' );
 				
 				/* Process pages */
 				if( !empty( $atts['page'] ) )	{
 					ob_start();
-					include_once( WPMDJM_PLUGIN_DIR . $args[$atts['page']] );
+					include_once( $args[$atts['page']] );
 					$output = ob_get_clean();
 				}
 				/* Process Functions */
-				else	{
+				elseif( !empty( $atts['function'] ) )	{
 					$func = $args[$atts['function']];
 					if( function_exists( $func ) )	{
 						ob_start();
@@ -542,6 +548,9 @@
 						wp_die( 'An error has occurred' );	
 					}
 				}
+				else
+					return;
+				
 				return $output;
 			} // shortcode
 

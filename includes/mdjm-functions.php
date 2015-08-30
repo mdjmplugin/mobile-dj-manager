@@ -193,7 +193,7 @@
 	function display_price( $amount, $symbol=true )	{
 		global $mdjm_settings;
 		
-		if( empty( $amount ) )
+		if( empty( $amount ) || !is_numeric( $amount ) )
 			$amount = '0.00';
 		
 		$symbol = ( isset( $symbol ) ? $symbol : true );
@@ -305,6 +305,7 @@
 			$event_stati[$status] = get_post_status_object( $status )->label;
 		}
 		asort( $event_stati );
+		
 		return $event_stati;
 	}
 	/*
@@ -745,9 +746,11 @@
 			}
 			$i = 1;
 			$the_packages = '';
-			foreach( $available as $avail )	{
-				$the_packages .= $avail . ( $i < count( $available ) ? '<br />' : '' );
-				$i++;
+			if( !empty( $available ) )	{
+				foreach( $available as $avail )	{
+					$the_packages .= $avail . ( $i < count( $available ) ? '<br />' : '' );
+					$i++;
+				}
 			}
 		}
 		return ( !empty( $the_packages ) ? $the_packages : 'No packages available' );
@@ -837,6 +840,28 @@
 	} // get_available_addons
 	
 	/*
+	 * Retrieve the package name
+	 *
+	 * @param	str		$slug		Slug name of the package
+	 * @return	str		$package	The display name of the package	
+	 *
+	 */
+	function get_package_name( $slug )	{
+		if( empty( $slug ) )
+			return false;
+		
+		$packages = get_option( 'mdjm_packages' );
+		
+		if( empty( $packages[$slug] ) || empty( $packages[$slug]['name'] ) )
+			return false;
+		
+		$package = $packages[$slug]['name'];
+		
+		return $package;
+		
+	} // get_package_name
+	
+	/*
 	 * Retrieve the package name, description, cost
 	 *
 	 * @param	str		$slug		Slug name of the package
@@ -860,7 +885,7 @@
 		
 		return $package;
 		
-	} // get_package_name
+	} // get_package_details
 	
 	/*
 	 * Output HTML code for Package dropdown
@@ -935,7 +960,28 @@
 	} // mdjm_package_dropdown
 	
 	/*
-	 * Retrieve the package category, name, decription & cost
+	 * Retrieve the addon name
+	 *
+	 * @param	str		$slug	The slug name of the addon
+	 * @return	str		$addon	The display name of the addon
+	 */
+	function get_addon_name( $slug )	{
+		if( empty( $slug ) )
+			return false;
+				
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		if( empty( $equipment[$slug] ) || empty( $equipment[$slug][0] ) )
+			return false;
+			
+		$addon = $equipment[$slug][0];
+		
+		return $addon;
+		
+	} // get_addon_name
+	
+	/*
+	 * Retrieve the addon category, name, decription & cost
 	 *
 	 *
 	 *
@@ -1104,7 +1150,7 @@
 	function get_transaction_source()	{
 		global $mdjm_settings;
 		
-		$trans_src = explode( "\r\n", $mdjm_settings['payments']['default_type'] );
+		$trans_src = explode( "\r\n", $mdjm_settings['payments']['payment_sources'] );
 			
 		asort( $trans_src );
 		

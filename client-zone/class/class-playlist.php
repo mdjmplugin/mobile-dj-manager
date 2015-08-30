@@ -23,7 +23,8 @@
 				global $mdjm, $my_mdjm, $post;
 				
 				if( !is_user_logged_in() )	{
-					$playlist = ( isset( $_GET['mdjmeventid'] ) ? $this->playlist_exists( $_GET['mdjmeventid'] ) : false );
+					$playlist = ( isset( $_GET['mdjmeventid'] ) ? $this->playlist_exists( $_GET['mdjmeventid'] ) 
+						: false );
 										
 					// Incorrect playlist code (or not found)
 					if( isset( $_GET['mdjmeventid'] ) && empty( $playlist ) )
@@ -349,7 +350,7 @@
 					echo '<hr />' . "\r\n";
 					echo '<div id="mdjm-playlist-container">' . "\r\n";
 					echo '<div id="mdjm-playlist-table">' . "\r\n";
-					echo '<form action="' . get_permalink() . 
+					echo '<form action="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'event_id=' . $this->event->ID . 
 						'" method="post" enctype="multipart/form-data" name="client-playlist" id="client-playlist">' . "\r\n";
 					
 					wp_nonce_field( 'manage_playlist', '__mdjm_playlist' ) . "\r\n";

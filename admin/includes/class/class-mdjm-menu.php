@@ -284,10 +284,10 @@
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-settings-emails',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => __( 'Email Settings' ),
+						'title'	 => sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ),
 						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=emails' ),
 						'meta'	  => array(
-							'title' => __( 'MDJM Email Settings' ),
+							'title' => sprintf( __( 'MDJM Email %s Settings', 'mobile-dj-manager' ), '&amp;' ),
 						),
 					) );
 					$admin_bar->add_menu( array(
@@ -508,6 +508,8 @@
 							),
 						) );
 					}
+				}
+				if( current_user_can( 'manage_options' ) )	{
 					/* -- Event Types -- */
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-types',
@@ -518,6 +520,18 @@
 							'title' => __( 'View / Edit Event Types' ),
 						),
 					) );
+					/* -- Event Quotes -- */
+					if( MDJM_ONLINE_QUOTES == true )	{
+						$admin_bar->add_menu( array(
+							'id'     => 'mdjm-event-quotes',
+							'parent' => 'mdjm-events',
+							'title'  => __( 'Event Quotes', 'mobile-dj-manager' ),
+							'href'   => admin_url( 'edit.php?post_type=' . MDJM_QUOTE_POSTS ),
+							'meta'   => array(
+								'title' => __( 'View Event Quotes', 'mobile-dj-manager' ),
+							),
+					) );	
+					}
 				}
 				/* -- Transactions -- */
 				if( current_user_can( 'manage_options' ) && MDJM_PAYMENTS == true )	{

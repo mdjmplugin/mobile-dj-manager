@@ -35,6 +35,7 @@
 				/* -- Bulk Actions -- */
 				add_filter( 'bulk_actions-edit-mdjm_communication', array( &$this, 'define_mdjm_communication_bulk_action_list' ) );
 				add_filter( 'bulk_actions-edit-mdjm-event', array( &$this, 'define_mdjm_event_bulk_action_list' ) );
+				add_filter( 'bulk_actions-edit-mdjm-quotes', array( &$this, 'define_mdjm_quotes_bulk_action_list' ) );
 				add_filter( 'bulk_actions-edit-mdjm-venue', array( &$this, 'define_mdjm_venue_bulk_action_list' ) );
 				
 				/* -- Column Sorting -- */
@@ -328,6 +329,41 @@
 						'taxonomies'			 => array( MDJM_EVENT_POSTS ),
 						'register_meta_box_cb'   => array( &$this, 'define_metabox' ),
 						);
+						
+			/* -- Quotes -- */
+				$template_labels[MDJM_QUOTE_POSTS] = array(
+						'name'               => __( 'Quotes', 'mobile-dj-manager' ),
+						'singular_name'      => __( 'Quote', 'mobile-dj-manager' ),
+						'menu_name'          => __( 'Quotes', 'mobile-dj-manager' ),
+						'name_admin_bar'     => __( 'Quote', 'mobile-dj-manager' ),
+						'add_new'            => __( 'Create Quote', 'mobile-dj-manager' ),
+						'add_new_item'       => __( 'Create New Quote', 'mobile-dj-manager' ),
+						'new_item'           => __( 'New Quote', 'mobile-dj-manager' ),
+						'edit_item'          => __( 'Edit Quote', 'mobile-dj-manager' ),
+						'view_item'          => __( 'View Quote', 'mobile-dj-manager' ),
+						'all_items'          => __( 'All Quotes', 'mobile-dj-manager' ),
+						'search_items'       => __( 'Search Quotes', 'mobile-dj-manager' ),
+						'not_found'          => __( 'No quotes found.', 'mobile-dj-manager' ),
+						'not_found_in_trash' => __( 'No quotes found in Trash.', 'mobile-dj-manager' ),
+					);
+				$post_args[MDJM_QUOTE_POSTS] = array(
+						'labels'			 	 => $template_labels[MDJM_QUOTE_POSTS],
+						'description'			=> __( 'Mobile DJ Manager Quotes', 'mobile-dj-manager' ),
+						'public'			 	 => true,
+						'publicly_queryable' 	 => true,
+						'show_ui'				=> true,
+						'show_in_menu'	   	   => false,
+						'query_var'		  	  => true,
+						'rewrite'            	=> array( 'slug' => 'mdjm-quotes' ),
+						'capability_type'    	=> array( 'mdjm_manage_quote', 'mdjm_manage_quotes' ),
+						'map_meta_cap'		   => true,
+						'has_archive'        	=> true,
+						'hierarchical'       	   => false,
+						'menu_position'      	  => 5,
+						'supports'           	   => array( 'title' ),
+						'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
+						'register_meta_box_cb'   => array( &$this, 'define_metabox' ),
+						);
 			
 			/* -- Transactions -- */
 				$template_labels[MDJM_TRANS_POSTS] = array(
@@ -426,7 +462,7 @@
 										'show_in_admin_all_list'    => true,
 										'show_in_admin_status_list' => true,
 										'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>' ),
-										) );
+									) );
 				register_post_status( 'mdjm-enquiry', array(
 										'label'                     => _x( 'Enquiry', 'mdjm-event' ),
 										'public'                    => true,
@@ -516,6 +552,23 @@
 										'show_in_admin_status_list' => true,
 										'label_count'               => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>' ),
 									) );
+			/* -- Quote Statuses -- */
+				register_post_status( 'mdjm-quote-generated', array(
+										'label'                     => _x( 'Generated', MDJM_QUOTE_POSTS ),
+										'public'                    => true,
+										'exclude_from_search'       => false,
+										'show_in_admin_all_list'    => true,
+										'show_in_admin_status_list' => true,
+										'label_count'               => _n_noop( 'Generated Quote <span class="count">(%s)</span>', 'Generated Quotes <span class="count">(%s)</span>' ),
+										) );
+				register_post_status( 'mdjm-quote-viewed', array(
+										'label'                     => _x( 'Viewed', MDJM_QUOTE_POSTS ),
+										'public'                    => true,
+										'exclude_from_search'       => false,
+										'show_in_admin_all_list'    => true,
+										'show_in_admin_status_list' => true,
+										'label_count'               => _n_noop( 'Viewed Quote <span class="count">(%s)</span>', 'Viewed Quotes <span class="count">(%s)</span>' ),
+										) );
 			/* -- Transaction Statuses -- */
 				register_post_status( 'mdjm-income', array(
 										'label'                     => _x( 'Income', 'mdjm-transaction' ),
@@ -798,14 +851,15 @@
 					$current_meta = get_post_meta( $post->ID );
 					
 					/* -- Get the Client ID -- */
-					$event_data['_mdjm_event_client'] = $_POST['client_name'] != 'add_new' ? $_POST['client_name'] : $mdjm->mdjm_events->mdjm_add_client();
-					
+					$event_data['_mdjm_event_client'] = ( $_POST['client_name'] != 'add_new' ? 
+						$_POST['client_name'] : $mdjm->mdjm_events->mdjm_add_client() );
+						
 					if( $new_post === false && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
 						$field_updates[] = '     | Client changed from ' . $current_meta['_mdjm_event_client'][0] . ' to ' . $_POST['client_name'];
 					
 					if( empty( $_POST['client_name'] ) )	{
 						if( MDJM_DEBUG == true )
-							 $this->debug_logger( '	-- No content passed for filtering ' );
+							 $GLOBALS['mdjm_debug']->log_it( '	-- No content passed for filtering ' );
 					}
 					
 					if( !empty( $_POST['mdjm_reset_pw'] ) )	{
@@ -816,7 +870,9 @@
 					}
 										
 					/* -- Get the Venue ID -- */
-					$event_data['_mdjm_event_venue_id'] = $_POST['venue_id'] != 'manual' ? $_POST['venue_id'] : '';
+					$event_data['_mdjm_event_venue_id'] = ( $_POST['venue_id'] != 'manual' ? 
+						$_POST['venue_id'] : 'manual' );
+						
 					if( $new_post === false && isset( $current_meta['_mdjm_event_venue_id'][0] ) && $_POST['venue_id'] != $current_meta['_mdjm_event_venue_id'][0] )	{
 						$field_updates[] = 'Venue changed from ' . ( $current_meta['_mdjm_event_venue_id'][0] != 'Manual' ?
 										   get_the_title( $current_meta['_mdjm_event_venue_id'][0] ) : $current_meta['_mdjm_event_venue_name'][0] ) .
@@ -842,7 +898,7 @@
 						}
 						/* -- Create the venue -- */
 						if( MDJM_DEBUG == true )
-							debug_logger( '	-- New venue to be created' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- New venue to be created' );
 						remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 						$event_data['_mdjm_event_venue_id'] = $mdjm->mdjm_events->mdjm_add_venue( 
 																					array( 'venue_name' => $_POST['venue_name'] ), 
@@ -907,7 +963,7 @@
 						/* -- Assign the event type -- */
 						$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 						if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )
-							$field_updates[] = 'Event Type changed from ' . $existing_event_type[0]->name . ' to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
+							$field_updates[] = 'Event Type changed to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
 						
 						$mdjm->mdjm_events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
 						
@@ -916,6 +972,9 @@
 							 $GLOBALS['mdjm_debug']->log_it( '	-- Beginning Meta Updates' );
 							 
 						foreach( $event_data as $event_meta_key => $event_meta_value )	{
+							// If the field value is empty, skip it
+							if( empty( $event_meta_value ) )
+								continue;
 							
 							if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' )
 								$event_meta_value = $event_meta_value;
@@ -939,7 +998,7 @@
 								$event_meta_value = sanitize_text_field( ucfirst( $event_meta_value ) );
 							
 							/* -- If we have a value and the key did not exist previously, add it -- */
-							if ( $event_meta_value && '' == $current_meta[$event_meta_key][0] )	{
+							if ( $event_meta_value && ( empty( $current_meta[$event_meta_key] ) || '' == $current_meta[$event_meta_key][0] ) )	{
 								add_post_meta( $post->ID, $event_meta_key, $event_meta_value );
 								if( $new_post === false )
 									$field_updates[] = 'Field ' . $event_meta_key . ' added: ' . $event_meta_value;
@@ -960,7 +1019,7 @@
 						}
 						if( MDJM_DEBUG == true )
 							$GLOBALS['mdjm_debug']->log_it( '	-- Meta Updates Completed     ' . "\r\n" . '| ' .
-								implode( "\r\n" . '     | ', $field_updates ) );
+								( !empty( $field_updates ) ? implode( "\r\n" . '     | ', $field_updates ) : '' )  );
 								
 						/* -- Set the status & initiate the specific event type tasks -- */
 						if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
@@ -1250,11 +1309,11 @@
 			public function define_contract_post_columns( $columns ) {
 				$columns = array(
 						'cb'			   => '<input type="checkbox" />',
-						'title' 			=> __( 'Contract Name' ),
-						'default'		  => __( 'Is Default?' ),
-						'assigned'		 => __( 'Assigned To' ),
-						'author'		   => __( 'Created By' ),
-						'date' 			 => __( 'Date' ),
+						'title' 			=> __( 'Contract Name', 'mobile-dj-manager' ),
+						'event_default'	=> __( 'Is Default?', 'mobile-dj-manager' ),
+						'assigned'		 => __( 'Assigned To', 'mobile-dj-manager' ),
+						'author'		   => __( 'Created By', 'mobile-dj-manager' ),
+						'date' 			 => __( 'Date', 'mobile-dj-manager' ),
 					);
 				return $columns;
 			} // define_contract_post_columns
@@ -1286,6 +1345,20 @@
 					);
 				return $columns;
 			} // define_email_template_post_columns
+			
+			/* -- Event Quote Columns -- */
+			public function define_mdjm_quotes_post_columns( $columns ) {
+				$columns = array(
+						'cb'			   => '<input type="checkbox" />',
+						'quote_date'   	   => __( 'Date Generated', 'mobile-dj-manager' ),
+						'event' 			=> __( 'Event ID', 'mobile-dj-manager' ),
+						'client'		   => __( 'Client', 'mobile-dj-manager' ),
+						'value'			=> __( 'Quote Value', 'mobile-dj-manager' ),
+						'view_date'		=> __( 'Date Viewed', 'mobile-dj-manager' ),
+						'view_count'	   => __( 'View Count', 'mobile-dj-manager' ),
+					);
+				return $columns;
+			} // define_mdjm_quotes_post_columns
 			
 			/* -- Transaction Columns -- */
 			public function define_mdjm_transaction_post_columns( $columns ) {
@@ -1387,8 +1460,9 @@
 				elseif( $post->post_type == MDJM_CONTRACT_POSTS )	{
 					switch ( $column ) {
 						/* -- Is Default? -- */
-						case 'default':
-							echo $post->ID == $mdjm_settings['events']['default_contract'] ? 'Yes' : 'No';
+						case 'event_default':
+							echo ( $post->ID == $mdjm_settings['events']['default_contract'] ? 
+								'<span style="color: green; font-weight: bold;">' . __( 'Yes' ) . '</span>' : __( 'No' ) );
 							break;
 						/* -- Assigned To -- */
 						case 'assigned':
@@ -1463,6 +1537,50 @@
 							wp_count_comments( $post->ID )->approved . _n( ' Entry', ' Entries', wp_count_comments( $post->ID )->approved ) .
 							'</a>' . "\r\n";
 							break;
+					} // switch
+				}
+				
+				/* -- mdjm-quotes -- */
+				elseif( $post->post_type == MDJM_QUOTE_POSTS )	{
+					$parent = wp_get_post_parent_id( $post->ID );
+					
+					switch( $column )	{
+						/* -- Quote Date -- */
+						case 'quote_date':
+							echo date( 'd M Y H:i:s', strtotime( $post->post_date ) );
+						break;
+						
+						/* -- Event -- */
+						case 'event':
+							echo ( !empty( $parent ) ? '<a href="' . admin_url( '/post.php?post=' . $parent . 
+								'&action=edit' ) . '">' . MDJM_EVENT_PREFIX . $parent . '</a><br />' . 
+								date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $parent, '_mdjm_event_date', true ) ) ) : 
+								'N/A' );
+						break;
+						
+						/* -- Event -- */
+						case 'client':
+							echo '<a href="' . admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $post->post_author ) . '">' . get_the_author() . '</a>';
+						break;
+						
+						/* -- Cost -- */
+						case 'value':
+							echo display_price( get_post_meta( $parent, '_mdjm_event_cost', true ) );
+						break;
+						
+						/* -- Date Viewed -- */
+						case 'view_date':
+							echo ( $post->post_status == 'mdjm-quote-viewed' ? 
+								date( 'd M Y H:i:s', strtotime( get_post_meta( $post->ID, '_mdjm_quote_viewed_date', true ) ) ) : 'N/A' );
+						break;
+						/* -- View Count -- */
+						case 'view_count':
+							$count = get_post_meta( $post->ID, '_mdjm_quote_viewed_count', true );
+							if( empty( $count ) )
+								$count = 0;
+								
+							echo $count . ' ' . _n( 'time', 'times', $count, 'mobile-dj-manager' );
+						break;
 					} // switch
 				}
 				
@@ -1710,6 +1828,23 @@
 			} // define_mdjm_communication_bulk_action_list
 						
 			/*
+			 * define_mdjm_quote_bulk_action_list
+			 * Define which options are available within the 
+			 * bulk actions drop down list for each custom post type
+			 *
+			 * @since 1.1.3
+			 * @params: $actions
+			 * @return: $actions
+			 */
+			/* -- Remove Move to Trash from Event Bulk Actions -- */
+			public function define_mdjm_quotes_bulk_action_list( $actions )	{
+				unset( $actions['edit'] );
+				//unset( $actions['trash'] );
+				
+				return $actions;
+			} // define_mdjm_event_bulk_action_list
+			
+			/*
 			 * define_mdjm_event_bulk_action_list
 			 * Define which options are available within the 
 			 * bulk actions drop down list for each custom post type
@@ -1795,6 +1930,14 @@
 							'">Unavailable</a></span>', 'mdjm-comms', $mdjm_settings['templates']['unavailable'], 
 							get_post_meta( $post->ID, '_mdjm_event_client', true ), $post->ID, 'respond_unavailable' );	
 					}
+				}
+				
+				elseif( $post->post_type == MDJM_QUOTE_POSTS )	{			
+					if( isset( $actions['inline hide-if-no-js'] ) )
+						unset( $actions['inline hide-if-no-js'] );
+						
+					if( isset( $actions['edit'] ) )
+						unset( $actions['edit'] );
 				}
 				
 				elseif( $post->post_type == MDJM_TRANS_POSTS )	{			
@@ -2119,13 +2262,13 @@
 				global $mdjm, $mdjm_post_types;
 				
 				/* -- No Add New for Communications -- */
-				if( MDJM_COMM_POSTS == get_post_type() )	{
+				if( MDJM_COMM_POSTS == get_post_type() || MDJM_QUOTE_POSTS == get_post_type() )	{
 					// Remove the Add New post button
 					echo '<style type="text/css">' . "\r\n" . 
 					'#favorite-actions {' . "\r\n" . 
 					' 	display:none;' . "\r\n" . 
 					'}' . "\r\n" . 
-					'.add-new-h2{' . "\r\n" . 
+					'page-title-action{' . "\r\n" . 
 					' 	display:none;' . "\r\n" . 
 					'}' . "\r\n" . 
 					'</style>' . "\r\n";

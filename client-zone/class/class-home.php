@@ -132,34 +132,43 @@
 				
 				switch( $event_status )	{
 					case 'mdjm-enquiry':
+						$actions[] = ( MDJM_ONLINE_QUOTES == true ? '<button type="reset" onclick="location.href=\'' . 
+							$mdjm->get_link( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $event_id . '\'">' . 
+							__( 'View Event Quote', 'mobile-dj-manager' ) . '</button>' : '' );
+							
 						$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_HOME, true ) . 
-							'action=accept_enquiry&amp;event_id=' . $event_id, 'book_event', '__mdjm_verify' ) . '\'">' . __( 'Book this Event' ) . '</button>';
+							'action=accept_enquiry&amp;event_id=' . $event_id, 'book_event', '__mdjm_verify' ) . '\'">' . 
+							__( 'Book this Event', 'mobile-dj-manager' ) . '</button>';
 					break;
 					case 'mdjm-contract':
 						$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_CONTRACT_PAGE, true ) . 
-							'event_id=' . $event_id, 'sign_contract', '__mdjm_verify' ) . '\'">' . __( 'Review &amp; Approve Contract' ) . '</button>';
+							'event_id=' . $event_id, 'sign_contract', '__mdjm_verify' ) . '\'">' . 
+							__( 'Review &amp; Approve Contract', 'mobile-dj-manager' ) . '</button>';
 					break;
 					case 'mdjm-approved':
 						$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_CONTRACT_PAGE, true ) . 
-							'event_id=' . $event_id, 'view_contract', '__mdjm_verify' ) . '\'">' . __( 'View Contract' ) . '</button>';
+							'event_id=' . $event_id, 'view_contract', '__mdjm_verify' ) . '\'">' . 
+							__( 'View Contract', 'mobile-dj-manager' ) . '</button>';
 					break;
 				} // switch
 				
 				if( MDJM_PAYMENTS == true )	{
 					if( get_post_meta( $event_id, '_mdjm_deposit_status', true ) != 'Paid' || get_post_meta( $event_id, '_mdjm_balance_status', true ) != 'Paid' )
 						$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PAYMENT_PAGE, true ) . 
-							'event_id=' . $event_id, 'make_payment', '__mdjm_verify' ) . '\'">' . __( 'Make a Payment' ) . '</button>';
+							'event_id=' . $event_id, 'make_payment', '__mdjm_verify' ) . '\'">' . 
+							__( 'Make a Payment', 'mobile-dj-manager' ) . '</button>';
 				}
 				
 				if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )
 					$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PLAYLIST_PAGE, true ) . 
-							'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . __( 'Manage Playlist' ) . '</button>';
+							'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
+							__( 'Manage Playlist', 'mobile-dj-manager' ) . '</button>';
 							
 				$actions[] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PROFILE_PAGE, false ), 'manage_profile', '__mdjm_verify' ) . 
-							 '\'">' . __( 'Update Profile' ) . '</button>';
+							 '\'">' . __( 'Update Profile', 'mobile-dj-manager' ) . '</button>';
 							 
 				$actions[] = '<button type="reset" onclick="location.href=\'' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
-							 '\'">' . __( 'Book Another Event' ) . '</button>';
+							 '\'">' . __( 'Book Another Event', 'mobile-dj-manager' ) . '</button>';
 							 
 				$columns = 3; // Maximum column width
 				$i = 1; // Counter for the current column
@@ -401,7 +410,9 @@
 											$eventinfo['package'] = get_package_details( $eventinfo['package'] );
 											
 											echo ( !empty( $eventinfo['package'] ) ? '<a title="' . ( !empty( $eventinfo['package']['desc'] ) ? 
-											$eventinfo['package']['desc'] : '' ) . ' - ' . display_price( $eventinfo['package']['cost'] ) . '">' . 
+											$eventinfo['package']['desc'] : '' ) . 
+											( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
+												display_price( $eventinfo['package']['cost'] ) : '' ) . '">' . 
 											$eventinfo['package']['name'] . '</a>' : 'None' );
 										}
 										else	{
@@ -415,8 +426,9 @@
 											$i = 1;
 											foreach( $eventinfo['addons'] as $addon )	{
 												$item = get_addon_details( $addon );
-												echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . ' - ' 
-													. display_price( $item['cost'] ) . '">' . $item['name'] . '</a>';
+												echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . 
+												( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
+													display_price( $item['cost'] ) : '' ) . '">' . $item['name'] . '</a>';
 												echo ( $i < count( $eventinfo['addons'] ) ? '<br />' : '' );
 												$i++;	
 											}

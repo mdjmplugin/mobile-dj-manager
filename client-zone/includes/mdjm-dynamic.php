@@ -62,6 +62,7 @@ Author URI: http://www.mydjplanner.co.uk
 			$result['type'] = 'error';
 			$result['msg'] = 'No addons available';
 		}
+		
 		echo json_encode( $result );
 		
 		die();

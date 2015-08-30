@@ -170,16 +170,18 @@
 					
 				if( floor( $diff / 60 / 60 / 24 ) < 30 )	{
 					$box_class = 'mdjm-warning';
-					$msg = '<span style="color: red; font-weight: bold">Your license will expire in ' . $remaining . _n( ' day', ' days', $remaining ) . '. ' .
-					'Visit <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a> ' . 
-					'to renew your license now</span>';
+					$msg = sprintf( __( '%sYour license will expire in %s. ' .
+					'Visit %s ' . 'to renew your license now%s', 'mobile-dj-manager' ), 
+					'<span style="color: red; font-weight: bold">', $remaining . _n( ' day', ' days', $remaining ),
+					'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a>',
+					'</span>' );
 				}
 				
 				/* -- Trial or license expired -- */
 				if( !empty( $status['expire'] ) && time() >= strtotime( $status['expire'] ) )	{
 					$box_class = 'mdjm-error';
-					$msg = 'Visit <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . 
-					'</a> to purchase your license.	Functionality will remain restricted until a new license is acquired';	
+					$msg = sprintf( __( 'Visit %s to purchase your license.	Functionality will remain restricted until a new license is acquired', 'mobile-dj-manager' ),
+					'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a>' );	
 				}
 				
 				/* -- Running in trial mode -- */
@@ -187,14 +189,20 @@
 					$box_class = 'mdjm-success';
 			
 			/* -- Print the license status -- */
-			echo '<div class="' . $box_class . '">' . "\r\n" . 
-			__( '<strong>License Key</strong>: ' . ( $status['key'] != 'XXXX' ? $status['key'] : 'TRIAL' ) . '<br />' . "\r\n" . 
-			'<strong>Expires</strong>: ' . date( 'l, jS F Y', strtotime( $status['expire'] ) ) . ' <br />' . "\r\n" . 
-			'<strong>Licensed To</strong>: ' . ( !empty( $status['url'] ) ? '<a href="' . strtolower( $status['url'] ) . '" target="_blank">' . 
-				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n" . 
-			'<strong>Last Updated</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . 
-			( !empty( $msg ) ? $msg : '' ) ) . "\r\n" . 
-			'</div>' . "\r\n";
+			echo '<div class="' . $box_class . '">' . "\r\n"; 
+			
+			echo sprintf( __( '%sLicense Key%s: %s', 'mobile-dj-manager' ),
+				'<strong>', '</strong>', ( $status['key'] != 'XXXX' ? $status['key'] : 'TRIAL' ) ) . '<br />' . "\r\n"; 
+			
+			echo '<strong>' . __( 'Expires', 'mobile-dj-manager' ) . '</strong>: ' . date( 'l, jS F Y', strtotime( $status['expire'] ) ) . ' <br />' . "\r\n"; 
+			
+			echo '<strong>' . __( 'Licensed To', 'mobile-dj-manager' ) . '</strong>: ' . ( !empty( $status['url'] ) ? '<a href="' . strtolower( $status['url'] ) . '" target="_blank">' . 
+				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n"; 
+				
+			echo '<strong>' . __( 'Last Updated', 'mobile-dj-manager' ) . '</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . 
+			( !empty( $msg ) ? $msg : '' ) . "\r\n"; 
+			
+			echo '</div>' . "\r\n";
 			
 		} // current_status
 	} // class

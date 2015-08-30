@@ -1009,7 +1009,7 @@
 		<?php /* End Height */ ?>
 		
 		<?php /* Datepicker */ ?>
-				<div id="datepicker_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == date ? 'block;' : 'none;' ); ?> font-size:10px">
+				<div id="datepicker_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'date' ? 'block;' : 'none;' ); ?> font-size:10px">
 				<p>Use Datepicker?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="datepicker" id="datepicker" value="Y" 
 				<?php if( isset( $e_meta['config']['datepicker'] ) ) { checked( $e_meta['config']['datepicker'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>

@@ -1,13 +1,13 @@
 <?php
 /*
- * class-clientzone.php
+ * class-contactform.php
  * 08/04/2015
  * @since 1.1.3
- * The ClientZone class
+ * The MDJM_ContactForm class
  * Also acts as the controller for all front end activity
  */
 	
-	/* -- Build the ClientZone class -- */
+	/* -- Build the MDJM_ContactForm class -- */
 	if( !class_exists( 'MDJM_ContactForm' ) )	{
 		class MDJM_ContactForm	{
 		 /*
@@ -153,13 +153,13 @@
 									$field = $this->field_data( $field->ID );
 									$field_settings = $this->field_settings( $field->ID );
 									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
-										echo '"' . $field->post_name . '":' . "\n";
-										echo '{' . "\n";
+										echo '"' . $field->post_name . '":' . "\r\n";
+										echo '{' . "\r\n";
 										echo 'required: true';
 										if( $field_settings['type'] == 'email' || $field_settings['type'] == 'url' )	{
-											echo ',' . "\n" . $field_settings['type'] . ': true' . "\n";
+											echo ',' . "\r\n" . $field_settings['type'] . ': true' . "\r\n";
 										}
-										echo '}' . ( $i < $required_fields ? ',' : '' ) . "\n";
+										echo '}' . ( $i < $required_fields ? ',' : '' ) . "\r\n";
 									}
 								}*/
 								$i = 1;
@@ -169,7 +169,7 @@
 										echo '{' . "\r\n";
 										echo 'required: true';
 										if( $contact_field['type'] == 'email' || $contact_field['type'] == 'url' )
-											echo ',' . "\n" . $contact_field['type'] . ': true' . "\r\n";
+											echo ',' . "\r\n" . $contact_field['type'] . ': true' . "\r\n";
 										echo '}' . ( $i < count( $is_required ) ? ',' : '' ) . "\r\n";
 										$i++;
 									}
@@ -182,8 +182,8 @@
 								$i = 1;
 								foreach( $contact_fields as $contact_field )	{
 									if( in_array( $contact_field['id'], $is_required ) )	{
-										echo '"' . $contact_field['slug'] . '":' . "\n";
-										echo '{' . "\n";
+										echo '"' . $contact_field['slug'] . '":' . "\r\n";
+										echo '{' . "\r\n";
 										echo 'required: " ' . str_replace( '{FIELD_NAME}', $contact_field['name'], $this->form_config['required_field_text'] ) . '"' .  "\r\n";
 										if( $contact_field['type'] == 'email' )
 											echo ',' . "\r\n" . $contact_field['type'] . ': "Please enter a valid email address"' . "\r\n";
@@ -199,16 +199,16 @@
 									$field = $this->field_data( $field->ID );
 									$field_settings = $this->field_settings( $field->ID );
 									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
-										echo '"' . $field->post_name . '":' . "\n";
-										echo '{' . "\n";
-										echo 'required: " ' . str_replace( '{FIELD_NAME}', $field->post_title, $this->form_config['required_field_text'] ) . '",' .  "\n";
+										echo '"' . $field->post_name . '":' . "\r\n";
+										echo '{' . "\r\n";
+										echo 'required: " ' . str_replace( '{FIELD_NAME}', $field->post_title, $this->form_config['required_field_text'] ) . '",' .  "\r\n";
 										if( $field_settings['type'] == 'email' )	{
-											echo $field_settings['type'] . ': "Please enter a valid email address",' . "\n";
+											echo $field_settings['type'] . ': "Please enter a valid email address",' . "\r\n";
 										}
 										if( $field_settings['type'] == 'url' )	{
-											echo $field_settings['type'] . ': "Please enter a valid URL",' . "\n";
+											echo $field_settings['type'] . ': "Please enter a valid URL",' . "\r\n";
 										}
-										echo '},' . "\n";	
+										echo '},' . "\r\n";	
 									}
 								}*/
 								?>	
@@ -242,7 +242,6 @@
 				if( !empty( $_POST['_mdjm_event_date'] ) )
 					$this->event_date = $_POST['_mdjm_event_date'];
 				
-								
 				/* -- Start Email Headers -- */
 				$this->admin_email_headers = array();
 				$this->admin_email_headers[] = 'MIME-Version: 1.0';
@@ -525,6 +524,9 @@
 						
 						/* -- Loop through fields and set user first, last & display names -- */
 						foreach( $this->user_meta as $key => $value )	{
+							if( $key == 'user_email' ) // Do not update as causes problems with login
+								continue;
+								
 							if( $key == 'first_name' && $value != $userdata->first_name )	{
 								$client_field_array['user_nicename'] = ucfirst( sanitize_text_field( $value ) );
 								$client_field_array['display_name'] = ucfirst( sanitize_text_field( $value ) );
@@ -824,7 +826,7 @@
 						' />' . "\r\n";
 						
 						if( isset( $field_settings['config']['datepicker'] ) && $field_settings['config']['datepicker'] == 'Y' )
-							echo '<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="" />' . "\n";
+							echo '<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="" />' . "\r\n";
 					} // Date Field
 					
 				/* Time Field */
@@ -862,9 +864,9 @@
 						'>' . "\r\n";
 						
 						foreach( $minutes as $minute )	{
-							echo '<option value="' . $minute . '">' . $minute . '</option>' . "\n";
+							echo '<option value="' . $minute . '">' . $minute . '</option>' . "\r\n";
 						}
-						echo '</select>' . "\n";
+						echo '</select>' . "\r\n";
 						
 						if( MDJM_TIME_FORMAT != 'H:i' )	{
 							echo '&nbsp;<select name="' . $field->post_name . '_period" id="' . $field->post_name . '_period"' . 
@@ -907,10 +909,10 @@
 							$first_entry = !empty( $field_settings['config']['event_list_first_entry'] ) ? $field_settings['config']['event_list_first_entry'] : '';
 							
 							if( !empty( $first_entry ) )
-								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\n";
+								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\r\n";
 								
 							foreach( $event_types as $type )	{
-								echo '<option value="' . $type->term_id . '">' . esc_attr( $type->name ) . '</option>' . "\n";
+								echo '<option value="' . $type->term_id . '">' . esc_attr( $type->name ) . '</option>' . "\r\n";
 							}
 						}
 						// Package List
@@ -918,7 +920,7 @@
 							$selected_package = false;
 														
 							if( isset( $_GET['selected_package'] ) && !empty( $_GET['selected_package'] ) && MDJM_PACKAGES == true )	{
-								$desired_package = $_GET['selected_package'];
+								$desired_package = urldecode( $_GET['selected_package'] );
 								$all_packages = get_option( 'mdjm_packages' );
 								foreach( $all_packages as $mdjm_package )	{
 									if( $mdjm_package['name'] == $desired_package )
@@ -967,7 +969,7 @@
 							$first_entry = !empty( $field_settings['config']['venue_list_first_entry'] ) ? $field_settings['config']['venue_list_first_entry'] : '';
 							
 							if( !empty( $first_entry ) )
-								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\n";
+								echo '<option value="0">' . esc_attr( $first_entry ) . '</option>' . "\r\n";
 								
 							foreach( $venues as $venue )	{
 								$venue_details = $mdjm->mdjm_events->mdjm_get_venue_details( $venue->ID );
@@ -978,18 +980,18 @@
 										( !empty( $venue_details['venue_town'] ) ? $venue_details['venue_town'] : '' ) . '"' : '' ) . 
 									'>' . esc_attr( $venue_details['name'] ) .  ( !empty( $venue_details['venue_town'] ) ? 
 										' (' . $venue_details['venue_town'] . ')' : '' ) . 
-									'</option>' . "\n";
+									'</option>' . "\r\n";
 							}
 						}
 						else	{
-							$options = explode( "\n", $field_settings['config']['options'] );
+							$options = explode( "\r\n", $field_settings['config']['options'] );
 							foreach( $options as $option )	{
-								echo '<option value="' . $option . '">' . esc_attr( $option ) . '</option>' . "\n";
+								echo '<option value="' . $option . '">' . esc_attr( $option ) . '</option>' . "\r\n";
 							}
 						}
 						
 						if( $field_settings['type'] != 'package_list' && $field_settings['type'] != 'addons_list' )	{
-							echo '</select>' . "\n";
+							echo '</select>' . "\r\n";
 						}
 					} // Select / Event List
 				
@@ -1045,7 +1047,7 @@
 					/* End of row */
 					$i++;
 					if( $this->layout != 0 && $i == $columns )	{
-						echo '</tr>' . "\n";
+						echo '</tr>' . "\r\n";
 						$i = 0;
 					}
 					/* Prepare the Submit Button */
@@ -1060,10 +1062,10 @@
 				/* -- Excessive Columns -- */
 				if( $this->layout != 0 && $i != 0 )	{
 					 while( $i < $columns ) {
-						  echo '<td>&nbsp;</td>' . "\n";
+						  echo '<td>&nbsp;</td>' . "\r\n";
 						  $i++;
 					 }
-					 echo '</tr>' . "\n";
+					 echo '</tr>' . "\r\n";
 				}
 				
 				/* -- Display the Submit Button -- */
@@ -1123,7 +1125,7 @@
 							url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
 							data: {
 								package : package,
-								addons_field : <?php echo $addons_field; ?>,
+								addons_field : "<?php echo $addons_field; ?>",
 								action : "mdjm_update_contact_form_addon_options"
 							},
 							beforeSend: function()	{
@@ -1158,6 +1160,3 @@
 	
 /* -- Insantiate the MDJM_ContactForm class -- */
 	$mdjm_contactform = new MDJM_ContactForm( $atts );
-	
-	
-	

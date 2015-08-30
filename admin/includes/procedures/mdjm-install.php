@@ -90,6 +90,7 @@
 						),
 						'mdjm_templates_settings' => array(
 							'enquiry'           		   		 => 'N',
+							'online_enquiry'				  => '0',
 							'unavailable'				     => 'N',
 							'enquiry_from'      		  		=> 'admin',
 							'contract_to_client'      		  => true,
@@ -115,9 +116,10 @@
 						'mdjm_clientzone_settings' => array(
 							'app_name'                	=> 'Client Zone',
 							'pass_length'             	 => '8',
-							'notify_profile' 			=> true,
+							'notify_profile' 			  => true,
+							'package_prices'			  => false,
 							'update_event'				=> false,
-							'edit_event_stop'			=> '5',	
+							'edit_event_stop'			  => '5',	
 						),
 						'mdjm_plugin_pages' => array(
 							'app_home_page'                => 'N',
@@ -126,6 +128,7 @@
 							'payments_page'				=> 'N',
 							'playlist_page'                => 'N',
 							'profile_page'                 => 'N',
+							'quotes_page'                  => 'N',
 						),
 						'mdjm_availability_settings' => array(
 							'availability_check_pass_page' => 'text',
@@ -490,7 +493,8 @@
 							'booking_conf_client'		   => $email_client_booking_confirm_args,
 							'email_dj_confirm'			  => $email_dj_booking_confirm_args,
 							'unavailable'				   => $email_unavailability_template_args,
-							'payment_cfm_template'   		  => $email_payment_received_template_args
+							'payment_cfm_template'   		  => $email_payment_received_template_args,
+							'online_enquiry'				=> $online_quote_template_args
 							);
 			
 			/* -- Existing Settings -- */
@@ -507,9 +511,13 @@
 				}
 				
 				/* -- Default Contract -- */
-				if( $key == 'default_contract' )	{
+				if( $key == 'default_contract' )
 					$mdjm_event_settings[$key] = $id;
-				}
+					
+				/* -- Online Quote Template -- */
+				elseif( $key == 'online_enquiry' )
+					continue;
+					
 				/* -- Email Templates -- */
 				else
 					$mdjm_template_settings[$key] = $id;
@@ -542,11 +550,12 @@
 			
 			/* -- Needed page params -- */
 			$mdjm_pages = array( /* -- Page Title => array [0] = slug, [1] = content, [2] = parent/child -- */
-							'Client Zone'		   => array( 'mdjm_home_page', 'Home', 'parent', 'app_home_page' ),
-							'Your Details'		  => array( 'mdjm_profile_page', 'Profile', 'child', 'profile_page' ),
-							'Event Contract'	 	=> array( 'mdjm_contracts_page', 'Contract', 'child', 'contracts_page' ),
-							'Playlist Management'   => array( 'mdjm_playlist_page', 'Playlist', 'child', 'playlist_page' ),
-							'Event Payments'		=> array( 'mdjm_payments_page', 'Payments', 'child', 'payments_page' ),
+							'Client Zone'		   => array( 'client-zone', 'Home', 'parent', 'app_home_page' ),
+							'Your Details'		  => array( 'client-details', 'Profile', 'child', 'profile_page' ),
+							'Event Contract'	 	=> array( 'client-contracts', 'Contract', 'child', 'contracts_page' ),
+							'Playlist Management'   => array( 'client-playlists', 'Playlist', 'child', 'playlist_page' ),
+							'Event Payments'		=> array( 'client-payments', 'Payments', 'child', 'payments_page' ),
+							'Event Quotes'		  => array( 'client-quotes', 'Online Quote', 'child', 'quotes_page' ),
 							);
 
 			/* -- Defaults for all pages -- */

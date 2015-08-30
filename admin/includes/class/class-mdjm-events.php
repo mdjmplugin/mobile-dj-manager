@@ -36,7 +36,7 @@
 			$client_id = wp_insert_user( $clientdata );
 			
 			if( is_wp_error( $client_id ) )
-				return $mdjm_error = 'Error adding client';
+				return 'Error adding client. ' . $client_id->get_error_message();
 			
 			/* -- Update client meta fields -- */
 			wp_update_user( array( 'ID' => $client_id, 'show_admin_bar_front' => false ) );
@@ -602,15 +602,17 @@
 			$admin_notes = get_post_meta( $post_id, '_mdjm_event_admin_notes', true );
 			$package = get_post_meta( $post_id, '_mdjm_event_package', true );
 			$addons = get_post_meta( $post_id, '_mdjm_event_addons', true );
+			$online_quote = get_post_meta( $post_id, '_mdjm_online_quote', true );
 			$guest_playlist = get_post_meta( $post_id, '_mdjm_event_playlist_access', true );
 			
 			$eventinfo = array(
 							// Event name
 							'name'				=> ( !empty( $name ) ? $name : '' ),
 							// Event date
-							'date'				=> ( !empty( $date ) ? strtotime( $date ) : __( 'Not Specified' ) ),
+							'date'				=> ( !empty( $date ) && is_int( strtotime( $date ) ) ? 
+								strtotime( $date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Client details as object array
-							'client'			  => ( !empty( $client ) ? get_userdata( $client ) : __( 'Not Specified' ) ),
+							'client'			  => ( !empty( $client ) ? get_userdata( $client ) : '' ),
 							// DJ details as object array
 							'dj'				  => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ) ),
 							// Event Start
@@ -635,6 +637,8 @@
 							'balance_status'	  => ( !empty( $balance_status ) ? $balance_status : __( 'Due' ) ),
 							// Event type
 							'type'				=> $this->get_event_type( $post_id ),
+							// Online Quote
+							'online_quote'		=> ( MDJM_ONLINE_QUOTES == true && !empty( $online_quote ) ? $online_quote : '' ),
 							// Contract template
 							'contract'			=> ( !empty( $contract ) ? $contract : '' ),
 							// Date contract signed
@@ -831,6 +835,71 @@
 			else	{
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( '	-- Journalling is disabled' );	
+			}
+			
+			/* -- Generate online quote if configured -- */
+			if( MDJM_ONLINE_QUOTES == true && !empty( $_POST['_mdjm_online_quote'] ) )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( '	-- Generating event quote for event ' . $post_id );
+				
+				// Determine if a post already exists for the event quote
+				$quote_post = $this->retrieve_quote( $post_id );
+				
+				// Retrieve the post content. If one exists we'll use that, otherwise get the template
+				$quote_template = get_post( $_POST['_mdjm_online_quote'] );
+				
+				// Make sure we have the template and create or update the quote post
+				if( is_object( $quote_template ) )	{					
+					/* -- Retrieve the quote content -- */
+					$content = $quote_template->post_content;
+					$content = apply_filters( 'the_content', $content );
+					$content = str_replace( ']]>', ']]&gt;', $content );
+					/* -- Shortcode replacements -- */
+					$content = $mdjm->filter_content(
+										$event_data['_mdjm_event_client'],
+										$post_id,
+										$content
+										);
+					
+					// If no quote post exists for this event, we'll be creating one
+					if( empty( $quote_post ) )	{
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- Creating new event quote' );
+							
+						$post_args['post_title'] = 'Quote ' . MDJM_EVENT_PREFIX . $post_id;
+						$post_args['post_content'] = $content;
+						$post_args['post_type'] = MDJM_QUOTE_POSTS;
+						$post_args['post_status'] = 'mdjm-quote-generated';
+						$post_args['post_author'] = ( !empty( $event_data['_mdjm_event_client'] ) ? $event_data['_mdjm_event_client'] : get_current_user_id() );
+						$post_args['post_parent'] = $post_id;
+						
+						// Create the quotation post
+						$quote_post_id = wp_insert_post( $post_args );
+						
+						if( !empty( $quote_post_id ) )	{
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( '	-- Quotation generated ' . $quote_post_id );							
+						}
+					}
+					else	{ // We have an existing quote so update it
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- Updating existing event quote' );
+						
+						wp_update_post( array( 
+											'ID' 			  => $quote_post,
+											'post_content'	=> $content,
+											'post_status'	 => 'mdjm-quote-generated',
+											'post_date'	   => current_time( 'mysql' ),
+											'edit_date'	   => true ) );
+						
+						/* -- Reset the meta keys for date viewed and view count -- */
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- Removing existing meta keys' );
+												
+						delete_post_meta( $quote_post, '_mdjm_quote_viewed_date' );
+						delete_post_meta( $quote_post, '_mdjm_quote_viewed_count' );
+					}
+				} // if( is_object( $quote_template ) )				
 			}
 			
 			/* -- Send emails as required -- */
@@ -1137,6 +1206,29 @@
 				
 			return false;
 		} // is_my_event
+		
+		/*
+		 * Retrieve event quotation post
+		 *
+		 * @param	int			event_id	Required: The ID of the event for which to search
+		 * 			str|arr		$status		Optional: The status of the quote to retrieve. Default to 'any'
+		 * @return	int|bool				The quote post ID or if none exists, false
+		 */
+		function retrieve_quote( $event_id, $status='any' )	{
+			$quote = get_posts( array( 
+										'numberposts'		=> 1,
+										'post_parent'		=> $event_id,
+										'post_status'		=> $status,
+										'post_type'		  => MDJM_QUOTE_POSTS ) );
+										
+			if( empty( $quote ) )
+				return false;
+				
+			if( MDJM_DEBUG == true )
+				$GLOBALS['mdjm_debug']->log_it( 'Returning quote ID ' . $quote[0]->ID );
+			
+			return ( !empty( $quote ) ? $quote[0]->ID : false );			
+		} // retrieve_quote
 		
 		/*
 		 * Check the status of the playlist

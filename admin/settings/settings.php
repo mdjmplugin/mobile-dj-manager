@@ -34,71 +34,71 @@
 	 */
 	$all_sections = array(
 					'mdjm_general_settings' => array(
-							'title' 	=> __( 'General MDJM Settings' ) . '<hr />',
+							'title' 	=> __( 'General MDJM Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-settings',
 							),
 					'mdjm_permissions_settings' => array(
-							'title'	=> __( 'MDJM Permissions' ) . '<hr />',
+							'title'	=> __( 'MDJM Permissions', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-permissions',
 							),
 					'mdjm_debugging_settings' => array(
-							'title'	=> __( 'MDJM Debugging' ) . '<hr />',
+							'title'	=> __( 'MDJM Debugging', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-debugging',
 							),
 					'mdjm_debugging_files_settings' => array(
-							'title'	=> __( 'Log Files' ) . '<hr />',
+							'title'	=> __( 'Log Files', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-debugging-files',
 							),
 					'mdjm_uninstall_settings' => array(
-							'title'	=> __( 'MDJM Plugin Removal Settings' ) . '<hr />',
+							'title'	=> __( 'MDJM Plugin Removal Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-uninstall',
 							),
 					'mdjm_event_settings' => array(
-							'title' 	=> __( 'Event Settings' ) . '<hr />',
+							'title' 	=> __( 'Event Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-events',
 							),
 					'mdjm_playlist_settings' => array(
-							'title' 	=> __( 'Playlist Settings' ) . '<hr />',
+							'title' 	=> __( 'Playlist Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-playlists',
 							),
 					/*'mdjm_music_library_settings' => array(
-							'title' 	=> __( 'Music Library Options' ) . '<hr />',
+							'title' 	=> __( 'Music Library Options', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-playlists',
 							),*/
 					'mdjm_email_settings' => array(
-							'title' 	=> __( 'Email Settings' ) . '<hr />',
+							'title' 	=> __( 'Email Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email',
 							),
 					'mdjm_enquiry_templates_settings' => array(
-							'title' 	=> __( 'Quote Templates' ) . '<hr />',
+							'title' 	=> __( 'Quote Templates', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email-templates',
 							),
 					'mdjm_contract_templates_settings' => array(
-							'title' 	=> __( 'Awaiting Contract Templates' ) . '<hr />',
+							'title' 	=> __( 'Awaiting Contract Templates', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email-templates',
 							),
 					'mdjm_confirmation_templates_settings' => array(
-							'title' 	=> __( 'Booking Confirmation Templates' ) . '<hr />',
+							'title' 	=> __( 'Booking Confirmation Templates', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email-templates',
 							),
 					'mdjm_payment_templates_settings' => array(
-							'title' 	=> __( 'Payment Confirmation Templates' ) . '<hr />',
+							'title' 	=> __( 'Payment Confirmation Templates', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email-templates',
 							),
 					'mdjm_clientzone_general_settings' => array(
-							'title' 	=> __( MDJM_APP . ' General Settings' ) . '<hr />',
+							'title' 	=> sprintf( __( '%s General Settings', 'mobile-dj-manager' ), MDJM_APP ) . '<hr />',
 							'page'	 => 'mdjm-clientzone',
 							),
 					'mdjm_clientzone_client_settings' => array(
-							'title' 	=> __( 'Client Settings' ) . '<hr />',
+							'title' 	=> __( 'Client Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone',
 							),
 					'mdjm_clientzone_event_settings' => array(
-							'title' 	=> __( 'Event Settings' ) . '<hr />',
+							'title' 	=> __( 'Event Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone',
 							),
 					'mdjm_clientzone_page_settings' => array(
-							'title' 	=> __( 'Pages' ) . '<hr />',
+							'title' 	=> __( 'Pages', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-page',
 							),
 					'mdjm_clientzone_text_settings' => array(
@@ -106,43 +106,43 @@
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_general_settings' => array(
-							'title' 	=> __( 'General Text' ) . '<hr />',
+							'title' 	=> __( 'General Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_home_settings' => array(
-							'title' 	=> __( 'Home Page Text' ) . '<hr />',
+							'title' 	=> __( 'Home Page Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_profile_settings' => array(
-							'title' 	=> __( 'Profile Page Text' ) . '<hr />',
+							'title' 	=> __( 'Profile Page Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_contract_settings' => array(
-							'title' 	=> __( 'Contracts Page Text' ) . '<hr />',
+							'title' 	=> __( 'Contracts Page Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_playlist_settings' => array(
-							'title' 	=> __( 'Playlists Page Text' ) . '<hr />',
+							'title' 	=> __( 'Playlists Page Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_text_payment_settings' => array(
-							'title' 	=> __( 'Payments Page Text' ) . '<hr />',
+							'title' 	=> __( 'Payments Page Text', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-clientzone-text',
 							),
 					'mdjm_clientzone_availability_settings' => array(
-							'title' 	=> __( 'Availability Settings' ) . '<hr />',
+							'title' 	=> __( 'Availability Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-availability',
 							),
 					'mdjm_payment_settings' => array(
-							'title' 	=> __( 'Payments Settings' ) . '<hr />',
+							'title' 	=> __( 'Payments Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-payments',
 							),
 					'mdjm_paypal_settings' => array(
-							'title' 	=> __( 'PayPal Configuration' ) . '<hr />',
+							'title' 	=> __( 'PayPal Configuration', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-paypal',
 							),
 					'mdjm_paypal_advanced_settings' => array(
-							'title' 	=> __( 'PayPal Advanced Configuration' ) . '<hr />',
+							'title' 	=> __( 'PayPal Advanced Configuration', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-paypal',
 							),
 						);
@@ -155,25 +155,25 @@
 	$all_settings = array( 
 					/* -- General Settings -- */
 							'company_name' => array(
-									'label' => 'Company Name:',
+									'label' => __( 'Company Name', 'mobile-dj-manager' ) . ':',
 									'key' => MDJM_SETTINGS_KEY,
 									'value'	=> MDJM_COMPANY,
 									'type' => 'text',
 									'class' => 'regular-text',
 									'text' => '',
-									'desc' => 'Enter your company name',
+									'desc' => __( 'Enter your company name', 'mobile-dj-manager' ),
 									'section' => 'general',
 									'page' => 'settings',
 									),
 									
 							'items_per_page' => array(
-									'label' => 'Items per Page:',
+									'label' => __( 'Items per Page', 'mobile-dj-manager' ) . ':',
 									'key' => MDJM_SETTINGS_KEY,
 									'value'	=> ( !empty( $mdjm_settings['main']['items_per_page'] ) ? $mdjm_settings['main']['items_per_page'] : '' ),
 									'type' => 'custom_dropdown',
 									'class' => 'small-text',
 									'text' => '',
-									'desc' => 'The number of items you want to list per page in event/client/DJ/Venue view',
+									'desc' => __( 'The number of items you want to list per page in event/client/DJ/Venue view', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'sort_order' => '',
 														'list_type' => 'defined',
@@ -188,12 +188,12 @@
 									),
 									
 							'time_format' => array(
-									'label' => 'Display Time as?',
+									'label' => __( 'Display Time as', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_SETTINGS_KEY,
 									'value'	=> MDJM_TIME_FORMAT,
 									'type' => 'custom_dropdown',
 									'text' => '',
-									'desc' => 'Select the format in which you want your event times displayed. Applies to both admin and client pages',
+									'desc' => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'list_type' => 'defined',
 														'list_values' => array( 'g:i A'	=> get_date_from_gmt( '', 'g:i A' ),
@@ -204,12 +204,12 @@
 									),
 									
 							'short_date_format' => array(
-									'label' => 'Short Date Format:',
+									'label' => __( 'Short Date Format', 'mobile-dj-manager' ) . ':',
 									'key' => MDJM_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
 									'value' => MDJM_SHORTDATE_FORMAT,
 									'text' => '',
-									'desc' => 'Select the format in which you want short dates displayed. Applies to both admin and client pages',
+									'desc' => __( 'Select the format in which you want short dates displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'sort_order' => '',
 														'list_type' => 'defined',
@@ -225,43 +225,44 @@
 									),
 							
 							'show_dashboard' => array(
-									'label' => 'Show Dashboard Widget?',
+									'label' => __( 'Show Dashboard Widget', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['main']['show_dashboard'] ) ? '1' : '0' ),
 									'text' => '',
-									'desc' => 'Displays the MDJM widget on the main Wordpress Admin Dashboard',
+									'desc' => __( 'Displays the MDJM widget on the main Wordpress Admin Dashboard', 'mobile-dj-manager' ),
 									'section' => 'general',
 									'page' => 'settings',
 									),
 									
 							'show_credits' => array(
-									'label' => 'Display Credits?',
+									'label' => __( 'Display Credits', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['main']['show_credits'] ) ? '1' : '0' ),
 									'text' => '',
-									'desc' => 'Whether or not to display the <font size="-1"; color="#F90">Powered by ' . 
-										MDJM_NAME . ', version ' . MDJM_VERSION_NUM . '</font> text at the footer of the ' . 
-										MDJM_APP . ' application pages.',
+									'desc' => sprintf( __( 'Whether or not to display the %sPowered by ' . 
+										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
+										'<font size="-1"; color="#F90">', MDJM_NAME, MDJM_VERSION_NUM, '</font>', MDJM_APP ),
 									'section' => 'general',
 									'page' => 'settings',
 									),
 									
 					/* -- Permissions -- */
 							'dj_see_wp_dash' => array(
-									'label' => MDJM_DJ . '\'s see WP Dashboard?',
+									'label' => sprintf( __( '%s see WP Dashboard', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_see_wp_dash'] ) ? '1' : '0' ),
-									'text' => 'If checked your ' . MDJM_DJ . '\'s will be able to see the main WordPress Dashboard page',
+									'text' => sprintf( __( 'If checked your %s will be able to see the main WordPress Dashboard page', 
+										'mobile-dj-manager' ), MDJM_DJ . '\'s' ),
 									'desc' => '',
 									'section' => 'permissions',
 									'page' => 'permissions',
 									),
 
 							'dj_add_client' => array(
-									'label' => MDJM_DJ . '\'s can Add New Clients?',
+									'label' => sprintf( __( '%s can Add New Clients', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_add_client'] ) ? '1' : '0' ),
@@ -272,7 +273,7 @@
 									),
 									
 							'dj_add_event' => array(
-									'label' => MDJM_DJ . '\'s can Add New Events?',
+									'label' =>sprintf( __( '%s can Add New Events', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_add_event'] ) ? '1' : '0' ),
@@ -283,18 +284,19 @@
 									),
 									
 							'dj_upload_music' => array(
-									'label' => MDJM_DJ . '\'s can Upload Music?',
+									'label' => sprintf( __( '%s can Upload Music', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_upload_music'] ) ? '1' : '0' ),
-									'text' => 'Allow your ' . MDJM_DJ . '\'s to upload their music libraries enabling client searches',
+									'text' => sprintf( __( 'Allow your %s to upload their music libraries enabling client searches', 
+										'mobile-dj-manager' ), MDJM_DJ . '\'s' ),
 									'desc' => '',
 									'section' => 'permissions',
 									'page' => 'permissions',
 									),
 								
 							'dj_view_enquiry' => array(
-									'label' => MDJM_DJ . '\'s can View Enquiries',
+									'label' => sprintf( __( '%s can View Enquiries', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_view_enquiry'] ) ? '1' : '0' ),
@@ -305,7 +307,7 @@
 									),
 									
 							'dj_add_venue' => array(
-									'label' => MDJM_DJ . '\'s can Add New Venues?',
+									'label' => sprintf( __( '%s can Add New Venues', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_add_venue'] ) ? '1' : '0' ),
@@ -316,7 +318,7 @@
 									),
 									
 							'dj_see_deposit' => array(
-									'label' => MDJM_DJ . '\'s can See Deposit Info?',
+									'label' => sprintf( __( '%s can See Deposit Info', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_see_deposit'] ) ? '1' : '0' ),
@@ -327,14 +329,14 @@
 									),
 									
 							'dj_disable_shortcode' => array(
-									'label' => 'Disabled Shortcodes for ' . MDJM_DJ . '\'s:',
+									'label' => sprintf( __( 'Disabled Shortcodes for %s', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . ':',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'multiple_select',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_disable_shortcode'] ) ? $mdjm_settings['permissions']['dj_disable_shortcode'] : '' ),
 									'text' => '<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . 
 										'" target="_blank">Full list of Shortcodes</a>',
-									'desc' => 'CTRL (cmd on MAC) + Click to select multiple Shortcode entries that ' . 
-										MDJM_DJ . '\'s cannot use',
+									'desc' => sprintf( __( 'CTRL (cmd on MAC) + Click to select multiple Shortcode entries that ' . 
+										'%s cannot use', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ),
 									'size' => 8,
 									'custom_args' => array (
 													'list_type' => 'shortcode',
@@ -345,12 +347,13 @@
 									),
 									
 							'dj_disable_template' => array(
-									'label' => 'Disabled Templates for ' . MDJM_DJ . '\'s:',
+									'label' => sprintf( __( 'Disabled Templates for %s', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . ':',
 									'key' => MDJM_PERMISSIONS_KEY,
 									'type' => 'multiple_select',
 									'value' => ( !empty( $mdjm_settings['permissions']['dj_disable_template'] ) ? $mdjm_settings['permissions']['dj_disable_template'] : '' ),
 									'text' => '',
-									'desc' => 'CTRL (cmd on MAC) + Click to select multiple Template entries that ' . MDJM_DJ . '\'s cannot use',
+									'desc' => sprintf( __( 'CTRL (cmd on MAC) + Click to select multiple Template entries that ' . 
+										'%s cannot use', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ),
 									'size' => 8,
 									'custom_args' => array (
 														'list_type' => 'templates',
@@ -360,7 +363,7 @@
 									),
 					/* -- Debugging -- */
 							'enable' => array(
-									'label' => 'Enable Debugging?',
+									'label' => __( 'Enable Debugging', 'mobile-dj-manager' ) . '?',
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( MDJM_DEBUG == true ? '1' : '0' ),
@@ -371,95 +374,98 @@
 									),
 									
 							'log_size' => array(
-									'label'  => 'Maximum Log File Size:',
+									'label'  => __( 'Maximum Log File Size', 'mobile-dj-manager' ) . ':',
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'text',
 									'class' => 'small-text',
 									'value' => ( !empty( $mdjm_debug->settings['log_size'] ) ? $mdjm_debug->settings['log_size'] : '' ),
-									'text' => 'MB <code>Default is 2 (MB)</code>',
-									'desc' => 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)',
+									'text' => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
+									'desc' => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 
+										'mobile-dj-manager' ),
 									'section' => 'debugging_files',
 									'page' => 'debugging-files',
 									),
 									
 							'warn' => array(
-									'label'  => 'Display Warning if Over Size?',
+									'label'  => __( 'Display Warning if Over Size', 'mobile-dj-manager' ) . '?',
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'class' => 'small-text',
 									'value' => ( !empty( $mdjm_debug->settings['warn'] ) ? '1' : '' ),
 									'text' => '',
-									'desc' => 'Will display notice and allow removal and recreation of log files',
+									'desc' => __( 'Will display notice and allow removal and recreation of log files', 'mobile-dj-manager' ),
 									'section' => 'debugging_files',
 									'page' => 'debugging-files',
 									),
 									
 							'auto_purge' => array(
-									'label'  => 'Auto Purge Log Files?',
+									'label'  => __( 'Auto Purge Log Files', 'mobile-dj-manager' ) . '?',
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_debug->settings['auto_purge'] ) ? '1' : '' ),
 									'text' => '',
-									'desc' => 'If selected, log files will be auto-purged when they reach the value of <code>Maximum Log File Size</code>',
+									'desc' => sprintf( __( 'If selected, log files will be auto-purged when they reach the value of %sMaximum Log File Size%s',
+										'mobile-dj-manager' ), '<code>', '</code>' ),
 									'section' => 'debugging_files',
 									'page' => 'debugging-files',
 									),
 									
 					/* -- Uninstallation -- */
 							'uninst_remove_db' => array(
-									'label' => 'Remove Database Tables?',
+									'label' => __( 'Remove Database Tables', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_db'] ) ? $mdjm_settings['uninst']['uninst_remove_db'] : '' ),
 									'text' => '',
-									'desc' => 'Should the database tables and data be removed when uninstalling the plugin? ' . 
-										'Cannot be recovered unless you or your host have a backup solution in place and a recent backup.',
+									'desc' => __( 'Should the database tables and data be removed when uninstalling the plugin? ' . 
+										'Cannot be recovered unless you or your host have a backup solution in place and a recent backup.', 'mobile-dj-manager' ),
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
 									
 							'uninst_remove_mdjm_posts' => array(
-									'label' => 'Remove Data?',
+									'label' => __( 'Remove Data', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_posts'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_posts'] : '' ),
 									'text' => '',
-									'desc' => 'Do you want to remove all MDJM data? Includes contact forms, transaction and venue data as well as signed contracts and ' . 
-										'communication history when uninstalling the plugin?',
+									'desc' => __( 'Do you want to remove all MDJM data? Includes contact forms, transaction and venue data as well as signed contracts and ' . 
+										'communication history when uninstalling the plugin', 'mobile-dj-manager' ) . '?',
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
 									
 							'uninst_remove_mdjm_pages' => array(
-									'label' => 'Remove Pages?',
+									'label' => __( 'Remove Pages', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_pages'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_pages'] : '' ),
 									'text' => '',
-									'desc' => 'Do you want to remove all MDJM pages?',
+									'desc' => __( 'Do you want to remove all MDJM pages', 'mobile-dj-manager' ) . '?',
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
 							
 							'uninst_remove_mdjm_templates' => array(
-									'label' => 'Remove Templates?',
+									'label' => __( 'Remove Templates', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_mdjm_templates'] ) ? $mdjm_settings['uninst']['uninst_remove_mdjm_templates'] : '' ),
 									'text' => '',
-									'desc' => 'Do you want to remove the Contract and Email Templates associated with Mobile DJ Manager when uninstalling plugin?',
+									'desc' => __( 'Do you want to remove the Contract and Email Templates associated with Mobile DJ Manager when uninstalling plugin', 
+										'mobile-dj-manager' ) . '?',
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
 									
 							'uninst_remove_users' => array(
-									'label' => 'Remove DJ\'s &amp; Client\'s?',
+									'label' => sprintf( __( 'Remove %s &amp; Client\'s', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_UNINST_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['uninst']['uninst_remove_users'] ) ? $mdjm_settings['uninst']['uninst_remove_users'] : '' ),
 									'text' => '',
-									'desc' => 'If selected all WordPress users with the role <code>Client</code> or <code>DJ</code> (including inactive) ' . 
-										'will be deleted together with their data',
+									'desc' => sprintf( __( 'If selected all WordPress users with the role %sClient%s or %s%s%s (including inactive) ' . 
+										'will be deleted together with their data', 'mobile-dj-manager' ), '<code>', '</code>', '<code>', MDJM_DJ, '</code>' ),
 									'section' => 'uninstall',
 									'page' => 'uninstall',
 									),
@@ -518,7 +524,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['events']['default_contract'] ) ? $mdjm_settings['events']['default_contract'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="page-title-action">Add New</a>',
 									'desc' => 'Select the client contract you want to use as default. This can be changed per event.',
 									'custom_args' => array (
 														'sort_order' => 'ASC',
@@ -677,12 +683,31 @@
 									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
 									'value' => ( !empty( $mdjm_settings['templates']['enquiry'] ) ? $mdjm_settings['templates']['enquiry'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
-									'desc' => 'This is the default template used when sending quotes to clients',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
+									'desc' => sprintf( __( 'This is the default template used when sending quotes via %semail%s to clients', 'mobile-dj-manager' ),
+										'<code>', '</code>' ),
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[enquiry]',
 														'sort_order' => 'ASC',
 														'list_type' => 'email_template'
+														),
+									'section' => 'enquiry_templates',
+									'page' => 'email-templates',
+									),
+									
+							'online_enquiry' => array(
+									'label' => 'Online Quote Template:',
+									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
+									'type' => 'custom_dropdown',
+									'value' => ( !empty( $mdjm_settings['templates']['online_enquiry'] ) ? $mdjm_settings['templates']['online_enquiry'] : '' ),
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
+									'desc' => sprintf( __( 'This is the default template used for clients viewing quotes %sonline%s via the %s application', 'mobile-dj-manager' ), 
+										'<code>', '</code>', MDJM_APP ),
+									'custom_args' => array (
+														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[online_enquiry]',
+														'sort_order' => 'ASC',
+														'list_type' => 'email_template',
+														'first_entry' => array( '0', 'Disable Online Quotes' ),
 														),
 									'section' => 'enquiry_templates',
 									'page' => 'email-templates',
@@ -694,7 +719,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['unavailable'] ) ? $mdjm_settings['templates']['unavailable'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'This is the default template used when respoding to enquiries that you are unavailable for the event',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[unavailable_email_template]',
@@ -740,7 +765,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'Only applies if <code>Awaiting Contract Email</code> is enabled',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[email_contract]',
@@ -787,7 +812,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'Select an email template to be used when sending the Booking Confirmation to Clients',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[email_client_confirm]',
@@ -834,7 +859,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['email_dj_confirm'] ) ? $mdjm_settings['templates']['email_dj_confirm'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'Select an email template to be used when sending the Booking Confirmation to ' . MDJM_DJ . '\'s',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[email_dj_confirm]',
@@ -851,7 +876,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['payment_cfm_template'] ) ? $mdjm_settings['templates']['payment_cfm_template'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'Select an email template to be sent to clients when confirming receipt of a payment. <a href="www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[payment_cfm_template]',
@@ -868,7 +893,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['manual_payment_cfm_template'] ) ? $mdjm_settings['templates']['manual_payment_cfm_template'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => 'Select an email template to be sent to clients when you manually mark an event payment as received. <a href="www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[manual_payment_cfm_template]',
@@ -928,6 +953,19 @@
 									'section' => 'clientzone_client',
 									'page' => 'clientzone',
 									),
+									
+							'package_prices' => array(
+									'label' => __( 'Display Package prices', 'mobile-dj-manager' ),
+									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? '1' : '' ),
+									'text' => '',
+									'desc' => sprintf( __( 'Select to display event package %s Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
+										'&amp;', MDJM_APP ),
+									'section' => 'clientzone_event',
+									'page' => 'clientzone',
+									),
+									
 							'update_event' => array(
 									'label' => 'Allow Client to Edit Event?',
 									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
@@ -957,7 +995,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_HOME,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select the home page for the ' . MDJM_APP . ' application  - the one where you added the shortcode <code>[MDJM page=Home]</code>',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[app_home_page]',
@@ -969,13 +1007,31 @@
 									'page' => 'clientzone-page',
 									),
 
+							'quotes_page' => array(
+									'label' => __( 'Online Quotes Page', 'mobile-dj-manager' ),
+									'key' => MDJM_PAGES_KEY,
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => MDJM_QUOTES_PAGE,
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">' . __( 'Add New', 'mobile-dj-manager' ) . '</a>',
+									'desc' => __( 'Select the page to use for online event quotes', 'mobile-dj-manager' ),
+									'custom_args' => array (
+														'name' =>  MDJM_PAGES_KEY . '[quotes_page]',
+														'selected' => MDJM_QUOTES_PAGE,
+														'sort_order' => 'ASC',
+														'list_type' => 'page'
+														),
+									'section' => 'clientzone_page',
+									'page' => 'clientzone-page',
+									),
+							
 							'contact_page' => array(
 									'label' => 'Contact Page',
 									'key' => MDJM_PAGES_KEY,
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_CONTACT_PAGE,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select your website\'s contact page so we can correctly direct visitors.',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[contact_page]',
@@ -993,7 +1049,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_CONTRACT_PAGE,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select your website\'s contracts page - the one where you added the shortcode <code>[MDJM page=Contract]</code>',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[contracts_page]',
@@ -1011,7 +1067,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_PAYMENT_PAGE,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select your website\'s payments page - the one where you added the shortcode <code>[MDJM page=Payments]</code>',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[payments_page]',
@@ -1029,7 +1085,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_PLAYLIST_PAGE,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select your website\'s playlist page - the one where you added the shortcode <code>[MDJM page=Playlist]</code>',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[playlist_page]',
@@ -1047,7 +1103,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => MDJM_PROFILE_PAGE,
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select your website\'s profile page - the one where you added the shortcode <code>[MDJM page=Profile]</code>',
 									'custom_args' => array (
 														'name' =>  MDJM_PAGES_KEY . '[profile_page]',
@@ -1624,7 +1680,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => $mdjm_settings['availability']['availability_check_pass_page'],
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select a page to which users should be directed when an availability check is successful',
 									'custom_args' => array (
 														'name' =>  MDJM_AVAILABILITY_SETTINGS_KEY . '[availability_check_pass_page]',
@@ -1665,7 +1721,7 @@
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => $mdjm_settings['availability']['availability_check_fail_page'],
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="add-new-h2">Add New</a>',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=page" class="page-title-action">Add New</a>',
 									'desc' => 'Select a page to which users should be directed when an availability check is not successful',
 									'custom_args' => array (
 														'name' =>  MDJM_AVAILABILITY_SETTINGS_KEY . '[availability_check_fail_page]',

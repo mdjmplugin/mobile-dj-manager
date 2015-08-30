@@ -47,7 +47,7 @@
 				if( empty( $msg ) )
 					return;
 				
-				$debug_log = ( $stampit == true ? date( 'd/m/Y  H:i:s' ) . ' : ' . $msg : '    ' . $msg );
+				$debug_log = ( $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg );
 				
 				error_log( $debug_log . "\r\n", 3, MDJM_DEBUG_LOG );	
 				

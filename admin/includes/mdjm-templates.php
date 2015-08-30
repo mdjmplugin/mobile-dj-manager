@@ -231,6 +231,69 @@
 								'ping_status'   	=> 'closed',
 								'comment_status' => 'closed',
 								);
+								
+		$online_quote_template = '[caption id="" align="alignleft" width="128"]<a href="{WEBSITE_URL}"><img title="{COMPANY_NAME}" src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/10/icon-128x1281.png" alt="{COMPANY_NAME}" width="128" height="128" /></a> {COMPANY_NAME}[/caption]
+							<h3>Event Quotation for {CLIENT_FULLNAME}</h3>
+							<pre>Prepared by: {DJ_FULLNAME}<br />
+							Date: {DDMMYYYY}<br />
+							Valid for: 2 weeks from date</pre><br />
+							Dear {CLIENT_FIRSTNAME},<br />
+							
+							It is with pleasure that I am providing you with the following costs for your event on {EVENT_DATE}.<br /><br />
+							
+							I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on {DJ_PRIMARY_PHONE} or at <a href="mailto: {DJ_EMAIL}">{DJ_EMAIL}</a>.<br />
+							<table style="font-size: 11px;">
+							<tbody>
+							<tr>
+							<td>Event Date:</td>
+							<td>{EVENT_DATE}</td>
+							<td>Event Type:</td>
+							<td>{EVENT_TYPE}</td>
+							</tr>
+							<tr>
+							<td>Start Time:</td>
+							<td>{START_TIME}</td>
+							<td>End Time:</td>
+							<td>{END_TIME}</td>
+							</tr>
+							<tr>
+							<td>Selected Package:</td>
+							<td>{EVENT_PACKAGE}</td>
+							<td>Add-ons:</td>
+							<td>{EVENT_ADDONS}</td>
+							</tr>
+							<tr>
+							<td>Venue Details:</td>
+							<td colspan="3">{VENUE_FULL_ADDRESS}</td>
+							</tr>
+							<tr>
+							<td colspan="4">
+							
+							<hr />
+							
+							</td>
+							</tr>
+							<tr style="font-weight: bold;">
+							<td colspan="2">Event Cost:</td>
+							<td colspan="2">{TOTAL_COST}</td>
+							</tr>
+							<tr style="font-weight: bold;">
+							<td colspan="2">Booking Fee:</td>
+							<td colspan="2">{DEPOSIT} <span style="font-size: 9px;">(due at time of booking)</span></td>
+							</tr>
+							</tbody>
+							</table>
+							<span style="color: #cccccc; font-size: 9px;"><a style="color: #cccccc;" href="#">Click here</a> to view our list of terms and conditions</span>';
+	
+	$online_quote_template_args = array(
+								'post_title'     => 'Default Online Quote',
+								'post_content'   => $online_quote_template,
+								'post_status'    => 'publish',
+								'post_type'		 => 'email_template',
+								'post_author'    => 1,
+								'ping_status'    => 'closed',
+								'comment_status' => 'closed',
+								);
 /**** Default Email Template end ****/
 
 /*

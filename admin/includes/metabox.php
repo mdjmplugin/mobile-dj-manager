@@ -525,7 +525,7 @@
                 if( empty( $current_venue ) )
 					echo '<option value="">--- Select a Venue ---</option>' . "\r\n";
 				?>
-                <option value="manual"<?php selected( 'Manual', $current_venue ); ?>>--- Enter Manually ---</option>
+                <option value="manual"<?php selected( 'manual', $current_venue ); ?>>--- Enter Manually ---</option>
                 <?php
                 /* -- Build the drop down box -- */
                 $venues = get_posts( array( 'post_type' => MDJM_VENUE_POSTS, 'orderby' => 'post_title', 'order' => 'ASC', 'numberposts' => -1, ) );
@@ -623,7 +623,7 @@
         </div>
         <!-- End of sixth row -->
         <?php 
-		if( $pagenow =='post-new.php' && ( current_user_can( 'administrator' ) || dj_can( 'add_venue' ) ) )	{
+		if( current_user_can( 'administrator' ) || dj_can( 'add_venue' ) )	{
 			?>
             <!-- Start of seventh row -->
             <div class="mdjm-post-row-single">
@@ -877,7 +877,7 @@
                     <div class="mdjm-right-col"><?php _e( 'Reset Client Password?' ); ?></div>
                 </div>
                 <div class="mdjm-meta-row" style="height: 60px !important">
-                    Select Template:<br />
+                    Email Quote Template:<br />
                     <select name="mdjm_email_template" id="mdjm_email_template" class="mdjm-meta" style="width: 200px;">
                     <?php
 					$email_templates = get_posts( array( 'post_type' => MDJM_EMAIL_POSTS,
@@ -895,6 +895,24 @@
                     ?>
                     </select>
                 </div>
+                <?php
+				if( MDJM_ONLINE_QUOTES == true )	{
+					?>
+					<div class="mdjm-meta-row" style="height: 60px !important">
+						Online Quote Template:<br />
+						<select name="_mdjm_online_quote" id="_mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
+						<?php
+						foreach( $email_templates as $email_template )	{
+							echo '<option value="' . $email_template->ID . '"';
+							selected( $mdjm_settings['templates']['online_enquiry'], $email_template->ID );
+							echo '>' . $email_template->post_title . '</option>' . "\r\n";	
+						}
+						?>
+						</select>
+					</div>
+                    <?php
+				}
+				?>
             </div>
             <?php
 		}
@@ -1112,7 +1130,9 @@
 					'<select name="transaction_src" id="transaction_src">' . "\r\n" . 
 					'<option value="">--- Select ---</option>' . "\r\n";
 					foreach( $sources as $source )	{
-						echo '<option value="' . $source . '">' . $source . '</option>' . "\r\n";	
+						echo '<option value="' . $source . '"' . 
+							selected( $GLOBALS['mdjm_settings']['payments']['default_type'], $source, false ) . 
+							'>' . $source . '</option>' . "\r\n";	
 					}
 					echo '</select>' . "\r\n";
 			echo '</div>' . "\r\n";
