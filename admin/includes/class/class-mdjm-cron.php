@@ -26,23 +26,13 @@
 		 *
 		 */
 		public function activate()	{
-			global $mdjm;
+			global $mdjm, $mdjm_settings;
 			
 			if( !wp_next_scheduled( 'mdjm_hourly_schedule' ) )
 				wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
 			
-			if( !wp_next_scheduled( 'mdjm_synchronise' ) )
-				wp_schedule_event( time(), 'twicedaily', 'mdjm_synchronise' );
-			
-			/*$upgrade_date = get_option( 'mdjm_date_to_1_5' );
-			if(!empty( $upgrade_date ) && time() < $upgrade_date )	{
-				if( !wp_next_scheduled( 'mdjm_import_journal_entries' ) )
-					wp_schedule_event( time(), 'hourly', 'mdjm_import_journal_entries' );
-			}
-			else	{
-				if( wp_next_scheduled( 'mdjm_import_journal_entries' ) )
-					wp_clear_scheduled_hook( 'mdjm_import_journal_entries' );
-			}*/
+			if( wp_next_scheduled( 'mdjm_synchronise' ) )
+				wp_clear_scheduled_hook( 'mdjm_synchronise' );
 				
 		} // activate
 		
@@ -1297,63 +1287,17 @@
 			return $content;
 		} // notification_content
 		
-		public function synchronise()	{
-			global $mdjm;
-			
+		/*
+		 * This function is deprecated since 1.2.3.4
+		 * It remains purely to avoid fatal errors until a full cleanup has been performed
+		 * although it should not longer be utilised
+		 *
+		 */
+		public function synchronise()	{		
 			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'Starting synchronisation', true );
+				$GLOBALS['mdjm_debug']->log_it( 'Deprecated function in use in ' . __METHOD__, true );
 			
-			$status = get_option( '__mydj_validation' );
-				
-			$response = wp_remote_retrieve_body( 
-									wp_remote_get( 
-										'http://api.mydjplanner.co.uk/' . 
-										'mdjm/apicheck.php?' . 
-										'mdjm_user_url=' . get_site_url() . 
-										'&ver=' . MDJM_VERSION_NUM . 
-										'&wp_ver=' . get_bloginfo( 'version' )
-									) 
-								);
-								
-			if( empty( $response ) )	{
-				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Unable to complete synchronisation', true );
-				
-				$status['missed']++;
-			}
-			else	{
-				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Synchronisation response received ' . $response );
-				
-				if( $response == 'License key is invalid' )	{
-					$GLOBALS['mdjm_debug']->log_it( 'Logging as invalid/trial' );	
-					$status['key'] = 'XXXX';
-					$status['type'] = 'trial';
-					$status['last_auth'] = current_time( 'mysql' );
-					$status['missed'] = '0';
-				}
-				else	{					
-					$values = explode( '|', $response );
-					
-					$status['key'] = $values[0];
-					$status['type'] = 'full';
-					$status['start'] = $values[1];
-					$status['expire'] = $values[2];
-					$status['last_auth'] = current_time( 'mysql' );
-					$status['missed'] = '0';
-					$status['url'] = $values[5];
-				}
-			}
-			
-			/* -- Set the current state -- */
-			update_option( '__mydj_validation', $status );
-			
-			/* -- Transient -- */
-			if( $status['missed'] == '0' )
-				set_transient( '_mdjm_validated', $status['key'], 3 * DAY_IN_SECONDS );
-			
-			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'Completed synchronisation with values ' . $response, true );
+			return;
 		} // synchronise
 		
 		/*

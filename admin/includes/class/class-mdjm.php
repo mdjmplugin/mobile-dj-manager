@@ -92,7 +92,7 @@
 				$mdjm_cron = new MDJM_Cron();
 				add_action( 'wp', array( $mdjm_cron, 'activate' ) ); // Activate the MDJM Scheduler hook
 				add_action( 'mdjm_hourly_schedule', array( $mdjm_cron, 'execute_cron' ) ); // Run the MDJM scheduler
-				add_action( 'mdjm_synchronise', array( $mdjm_cron, 'synchronise' ) ); // Run the validation
+				//add_action( 'mdjm_synchronise', array( $mdjm_cron, 'synchronise' ) ); // Run the validation
 				
 				/* -- Remove 5 updates after 1.2 -- */
 				$upgrade_date = get_option( 'mdjm_date_to_1_2' );
@@ -224,6 +224,7 @@
 				/* -- Catch all and fail -- */
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'LICENSE ERROR: Should not reach this stage in ' . __METHOD__, true );				
+				
 				return false;
 			} // _mdjm_validation
 
@@ -1633,7 +1634,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.3.3' );
+	define( 'MDJM_VERSION_NUM', '1.2.3.4' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );

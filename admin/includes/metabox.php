@@ -894,27 +894,25 @@
 					}
                     ?>
                     </select>
-                </div>
-                <?php
-				if( MDJM_ONLINE_QUOTES == true )	{
-					?>
-					<div class="mdjm-meta-row" style="height: 60px !important">
-						Online Quote Template:<br />
-						<select name="_mdjm_online_quote" id="_mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
-						<?php
-						foreach( $email_templates as $email_template )	{
-							echo '<option value="' . $email_template->ID . '"';
-							selected( $mdjm_settings['templates']['online_enquiry'], $email_template->ID );
-							echo '>' . $email_template->post_title . '</option>' . "\r\n";	
-						}
-						?>
-						</select>
-					</div>
-                    <?php
-				}
-				?>
+                </div>				
             </div>
             <?php
+			if( MDJM_ONLINE_QUOTES == true )	{
+				?>
+				<div class="mdjm-meta-row" style="height: 60px !important">
+					Online Quote Template:<br />
+					<select name="_mdjm_online_quote" id="_mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
+					<?php
+					foreach( $email_templates as $email_template )	{
+						echo '<option value="' . $email_template->ID . '"';
+						selected( $mdjm_settings['templates']['online_enquiry'], $email_template->ID );
+						echo '>' . $email_template->post_title . '</option>' . "\r\n";	
+					}
+					?>
+					</select>
+				</div>
+				<?php
+			}
 		}
 		?>
         <div class="mdjm-meta-row">

@@ -54,7 +54,8 @@
 			if( $version < '1.2.3.3' )
 				$this->update_to_1_2_3_3();
 				
-			$this->resync();
+			if( $version < '1.2.3.4' )
+				$this->update_to_1_2_3_4();
 			
 		} // execute_updates
 		
@@ -323,9 +324,7 @@
 			$this->update_options_1_2(); // Update the plugin options
 			
 			wp_schedule_single_event( time(), 'mdjm_import_journal_entries' );
-			
-			$this->resync(); // Re-synchronise the plugin
-					
+								
 			$GLOBALS['mdjm_debug']->log_it( 'Completed version 1.2 upgrade procedures', true );
 			
 		} // update_to_1_2
@@ -1080,14 +1079,12 @@
 		/*
 		 * Force an application re-sync
 		 *
-		 *
+		 * This function is deprecated as of 1.2.3.4
+		 * It remains only to avoid fatal errors until full cleanup is complete
 		 *
 		 */
 		public function resync()	{
-			/* -- Force a resync of the license -- */
-			require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", MDJM_PLUGIN_DIR ) );
-			$mdjm_cron = new MDJM_Cron();
-			$mdjm_cron->synchronise();
+			return;
 		} // resync
 		
 		/*
@@ -1208,6 +1205,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.3', true );
 		} // update_to_1_2_3_3
+		
+		/*
+		 * Execute upgrade for version 1.2.3.3
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_3_4()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.4', true );
+			
+			include_once( 'update_to_1.2.3.4.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.4', true );
+		} // update_to_1_2_3_4
 		
 	} // class
 	

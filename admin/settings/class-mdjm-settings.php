@@ -527,10 +527,7 @@
 			 */
 			function show_checkbox_field( $args )	{
 				global $mdjm;
-				
-				if( $args['field'] == 'show_credits' )
-					$status = $mdjm->_mdjm_validation();
-				
+								
 				$true_vals = array(
 								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
 								'enable_packages', 'warn_unattended', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
@@ -549,13 +546,8 @@
 				checked( $args['value'], $value, false ) . 
 				' value="' . $value . '"' . 
 				
-				/* -- For trial versions and expired licenses the credits cannot be removed -- */
-				( $args['field'] == 'show_credits' && ( empty( $status ) || $status['type'] == 'trial' ) ? ' disabled="disabled"' : '' ) . 
-				( $args['field'] == 'update_event' ? ' disabled="disabled"' : '' ) . 
-				' />' . 
-				
-				( $args['field'] == 'show_credits' && ( empty( $status ) || $status['type'] == 'trial' ) ? 
-					__( ' This option can only be turned off once the MDJM plugin has been purchased', 'mobile-dj-manager' ) : '' ) . "\r\n";
+				/* -- The setting for a client to update an event is not yet active so disable is -- */
+				( $args['field'] == 'update_event' ? ' disabled="disabled"' : '' ) . ' />';
 					
 			} // show_checkbox_field
 			

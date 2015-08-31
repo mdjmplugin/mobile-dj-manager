@@ -111,6 +111,59 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 1.2.3.4
+**************************************************/
+	function f_mdjm_updated_to_1_2_3_4()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td>Version 1.2.3.4 is a very minor update to resolve an issue preventing plugin availability within the <a href="https://wordpress.org">WordPress</a>
+        plugin repository.<br />
+        Additionally, correct the display of the <code>Online Quote Template</code> option available even if 
+        <code>Email Quote to Client</code> is not selected on the <a href="<?php echo mdjm_get_admin_page( 'add_event' ); ?>">Events page</a><br /><br />
+		The version 1.2.3.3 release notes are displayed below...</td>
+        </tr>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Online Event Quotes</font><br />
+		We have introduced the ability to provide event quotes online via your website as well as via email as has been the possibility historically.<br /><br />
+        You now have the possibility to direct your clients to a page on your website by use of the new shortcode <code>{QUOTES_URL}</code> where they will be able to review the details of their requested event together with the cost and any other associated information you choose to include within the fully customisable template.<br />
+		From there, they can immediately accept the enquiry and book the event.<br /><br />
+		Furthermore, you are able to see if the client has accessed their quote.<br /><br />
+		A new <a href="<?php echo mdjm_get_admin_page( 'mydjplanner' ); ?>/online-quotes/" target="_blank">user guide</a> has been published providing a full overview of this feature.<br /><br />
+		To get you started we have created the <a href="<?php echo get_edit_post_link( MDJM_QUOTES_PAGE ); ?>">Quote Page</a> for you and also a <code><a href="<?php echo mdjm_get_admin_page( 'email_template' ); ?>&s=Default+Online+Quote">Default Online Quote</a></code> Template that you can modify as required.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-new">New</span>: Online quotes are now available in addition to email quotes. Clients can view quotes online and via a fully customisable button, accept the quote and book the event</li>
+                <li><span class="mdjm-new">New</span>: <a href="=<?php echo mdjm_get_admin_page( 'settings' ); ?>">Setting</a> added to Client Zone tab enabling you to choose whether or not to display package & add-on prices within Client Zone</li>
+                <li><span class="mdjm-new">New</span>: <a href="=<?php echo mdjm_get_admin_page( 'settings' ); ?>">Setting</a> added to support the online quotes feature</li>
+                <li><span class="mdjm-new">New</span>: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> <code>{QUOTES_URL}</code> added to support the online quotes feature</li>
+                <li><span class="mdjm-general">General</span>: Updated WP Admin header tags per 4.3 release</li>
+                <li><span class="mdjm-general">General</span>: Support for long field names in Contact Form for validation and Dynamic addon updates</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: If event venue was entered manually, fields were not displayed on the screen until you changed the dropdown selection</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Saving playlist entries failed</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Removed updating of email address via dynamic contact form as potential problems with login</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Events not displaying on Clients page when filtered</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Default transaction type was not displaying all options</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Transaction source was not displaying all options on Events screen</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Is Default? column was not populated within Contract Template screen. May have generated on screen error</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Warning may have been displayed on Client Login screen and some admin screens dependant on PHP/WP settings</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+		
+	} // f_mdjm_updated_to_1_2_3_4
 	
 /**************************************************
 				VERSION 1.2.3.3

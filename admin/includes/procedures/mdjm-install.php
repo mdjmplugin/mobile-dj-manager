@@ -66,7 +66,7 @@
 							'time_format'            		 => 'H:i',
 							'short_date_format'       		   => 'd/m/Y',
 							'show_dashboard'          		  => true,
-							'show_credits'            		=> true,
+							'show_credits'            		=> false,
 						),
 						'mdjm_email_settings' => array(
 							'system_email'            		=> get_bloginfo( 'admin_email' ),
