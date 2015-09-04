@@ -450,7 +450,8 @@
 				if( get_option( 'mdjm_is_trial' ) )
 					delete_option( 'mdjm_is_trial' );
 					
-				add_option( 'm_d_j_m_has_initiated', time() );
+				add_option( 'm_d_j_m_has_initiated', current_time( 'timestamp' ) );
+				add_option( 'm_d_j_m_expires', strtotime( '+30 days' ) );
 			}
 			
 			$status['key'] = 'N/A';

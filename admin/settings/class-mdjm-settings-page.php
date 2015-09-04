@@ -199,7 +199,10 @@
 			echo '<strong>' . __( 'Licensed To', 'mobile-dj-manager' ) . '</strong>: ' . ( !empty( $status['url'] ) ? '<a href="' . strtolower( $status['url'] ) . '" target="_blank">' . 
 				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n"; 
 				
-			echo '<strong>' . __( 'Last Updated', 'mobile-dj-manager' ) . '</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . 
+			echo '<strong>' . __( 'Last Updated', 'mobile-dj-manager' ) . '</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . 
+				MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . ' <a href="' . mdjm_get_admin_page( 'settings' ) . '&dlmdjmlic=1">' . 
+				__( 'Update License', 'mobile-dj-manager' ) . '</a>' . '<br />' . 
+				
 			( !empty( $msg ) ? $msg : '' ) . "\r\n"; 
 			
 			echo '</div>' . "\r\n";

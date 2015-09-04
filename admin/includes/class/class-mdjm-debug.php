@@ -44,7 +44,7 @@
 			 * 
 			 */
 			public function log_it( $msg, $stampit=false )	{
-				if( empty( $msg ) )
+				if( MDJM_DEBUG == false || empty( $msg ) )
 					return;
 				
 				$debug_log = ( $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg );

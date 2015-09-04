@@ -934,20 +934,18 @@
 							$event_data[$key] = $value;	
 					}
 					/* -- Set the event & dj setup times -- */
-						/* -- Start time -- */
-						$event_data['_mdjm_event_start'] = MDJM_TIME_FORMAT == 'H:i' ? 
-							date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) : 
-							date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] . isset( $_POST['event_start_period'] ) ? $_POST['event_start_period'] : '' ) );
-						
-						/* -- Finish time -- */	
-						$event_data['_mdjm_event_finish'] = MDJM_TIME_FORMAT == 'H:i' ? 
-							date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) : 
-							date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . isset( $_POST['event_finish_period'] ) ? $_POST['event_finish_period'] : '' ) );
-							
-						/* -- DJ Setup time -- */
-						$event_data['_mdjm_event_djsetup_time'] = !empty( $_POST['dj_setup_hr'] ) && MDJM_TIME_FORMAT == 'H:i' ? 
-							date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] ) ) : 
-							date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . isset( $_POST['dj_setup_period'] ) ? $_POST['dj_setup_period'] : '' ) );
+						/* -- 24 hour format -- */
+						if( MDJM_TIME_FORMAT == 'H:i' )	{
+							$event_data['_mdjm_event_start'] = date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ); 
+							$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) );
+							$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] ) );
+						}
+						/* -- 12 hour format -- */
+						else	{
+							$event_data['_mdjm_event_start'] = date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] . $_POST['event_start_period'] ) );
+							$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
+							$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
+						}
 						
 						/* -- Deposit & Balance -- */
 						$event_data['_mdjm_event_deposit_status'] = !empty( $_POST['deposit_paid'] ) ? $_POST['deposit_paid'] : 'Due';
@@ -1321,16 +1319,17 @@
 			/* -- Event Columns -- */
 			public function define_mdjm_event_post_columns( $columns ) {
 				$columns = array(
-						'cb'			   => '<input type="checkbox" />',
-						'title'			=> __( 'Event ID' ),
-						'event_date'   	   => __( 'Date' ),
-						'client'		  => __( 'Client' ),
-						'dj'		   => __( MDJM_DJ ),
-						'event_status'	=> __( 'Status' ),
-						'event_type' 	=> __( 'Event Type' ),
-						'value'			=> __( 'Value' ),
-						'playlist'		=> __( 'Playlist' ),
-						'journal'		=> __( 'Journal' ),
+						'cb'				=> '<input type="checkbox" />',
+						'title'			 => __( 'Event ID', 'mobile-dj-manager' ),
+						'event_date'		=> __( 'Date', 'mobile-dj-manager' ),
+						'client'			=> __( 'Client', 'mobile-dj-manager' ),
+						'dj'				=> MDJM_DJ,
+						'event_status'	  => __( 'Status', 'mobile-dj-manager' ),
+						'event_type'		=> __( 'Event Type', 'mobile-dj-manager' ),
+						'value'			 => __( 'Value', 'mobile-dj-manager' ),
+						'balance'		   => __( 'Due', 'mobile-dj-manager' ),
+						'playlist'		  => __( 'Playlist', 'mobile-dj-manager' ),
+						'journal'		   => __( 'Journal', 'mobile-dj-manager' ),
 					);
 				return $columns;
 			} // define_mdjm_event_post_columns
@@ -1364,12 +1363,12 @@
 			public function define_mdjm_transaction_post_columns( $columns ) {
 				$columns = array(
 						'cb'			   => '<input type="checkbox" />',
-						'title' 	 		=> __( 'ID' ),
-						'tdate'				=> __( 'Date' ),
-						'direction'			=> __( 'In/Out' ),
-						'detail'			=> __( 'Details' ),
-						'event'		  => __( 'Event' ),
-						'value'		  => __( 'Value' ),
+						'title' 	 		=> __( 'ID', 'mobile-dj-manager' ),
+						'tdate'			=> __( 'Date', 'mobile-dj-manager' ),
+						'direction'		=> __( 'In/Out', 'mobile-dj-manager' ),
+						'detail'		   => __( 'Details', 'mobile-dj-manager' ),
+						'event'			=> __( 'Event', 'mobile-dj-manager' ),
+						'value'			=> __( 'Value', 'mobile-dj-manager' )
 					);
 				return $columns;
 			} // define_mdjm_transaction_post_columns
@@ -1483,6 +1482,15 @@
 				
 				/* -- mdjm-event -- */
 				elseif( $post->post_type == MDJM_EVENT_POSTS )	{
+					$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
+					
+					if( !class_exists( 'MDJM_Transactions' ) )
+						require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+					
+					$mdjm_transactions = new MDJM_Transactions();
+					
+					$rcvd = $mdjm_transactions->get_transactions( $post->ID, $direction='in' );
+					
 					switch ( $column ) {
 						/* -- Event Date -- */
 						case 'event_date':
@@ -1521,11 +1529,16 @@
 								echo implode( "<br/>", $event_types );
 							}
 							break;
-						/* -- Status -- */
+						/* -- Value -- */
 						case 'value':
-							$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
 							echo ( !empty( $value ) ? display_price( $value ) : '<span class="mdjm-form-error">' . display_price( '0.00' ) . '</span>' );
 							break;
+							
+						/* -- Balance -- */
+						case 'balance':
+							echo ( !empty( $rcvd ) && $rcvd != '0.00' ? display_price( ( $value - $rcvd ) ) : display_price( $value ) );
+							break;
+							
 						/* -- Playlist -- */
 						case 'playlist':
 							$playlist = $mdjm->mdjm_events->count_playlist_entries( $post->ID );

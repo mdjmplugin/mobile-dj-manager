@@ -196,8 +196,8 @@
 									'desc' => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'list_type' => 'defined',
-														'list_values' => array( 'g:i A'	=> get_date_from_gmt( '', 'g:i A' ),
-																				'H:i'	  => get_date_from_gmt( '', 'H:i' ) ),
+														'list_values' => array( 'g:i A'	=> date( 'g:i A', current_time( 'timestamp' ) ),
+																				'H:i'	  => date( 'H:i', current_time( 'timestamp' ) ) ),
 														),
 									'section' => 'general',
 									'page' => 'settings',
@@ -1850,7 +1850,7 @@
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['payments']['deposit_type'] ) ? $mdjm_settings['payments']['deposit_type'] : '0' ),
 									'text' => '',
-									'desc' => 'If you require ' . MDJM_DEPOSIT_LABEL . ' payments for your events, how are they calculated?',
+									'desc' => __( 'If you require ' . MDJM_DEPOSIT_LABEL . ' payments for your events, how are they calculated?', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'name' =>  MDJM_PAYMENTS_KEY . '[deposit_type]',
 														'sort_order' => '',

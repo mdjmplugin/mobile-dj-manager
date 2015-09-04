@@ -284,7 +284,7 @@
 															
 				}
 				if( $_POST['direction'] == 'In' && !empty( $_POST['from'] ) )	{
-					$trans_meta['_mdjm_payment_from'] = sanizitize_text_field( $_POST['from'] );
+					$trans_meta['_mdjm_payment_from'] = sanitize_text_field( $_POST['from'] );
 				}
 				
 				if( $_POST['direction'] == 'Out' && empty( $_POST['to'] ) )	{
@@ -353,6 +353,45 @@
 			return $transactions;
 			
 		} // get_event_transactions
+		
+		/*
+		 * Retrieve transactions based on the parameters given
+		 *
+		 * @param	int		$event_id		Required: The post ID of the event to query
+		 *			str		$direction		Optional: in|out|any (default)
+		 *			str		$status			Optional: (default) Completed|Cancelled|Pending
+		 *			str		$return			Optional: (default) value|transactions (obj arr)
+		 *
+		 */
+		function get_transactions( $event_id, $direction='', $status='', $return='' )	{
+			
+			$direction = ( !empty( $direction ) ? $direction : 'any' );
+			$status = ( !empty( $status ) ? $status : 'Completed' );
+			$return = ( !empty( $return ) ? $return : 'value' );
+			
+			$total = '0.00';
+			
+			$transactions = get_posts( array(
+										'post_type'	  => MDJM_TRANS_POSTS,
+										'post_parent'	=> $event_id,
+										'post_status'	=> $direction,
+										'posts_per_page' => -1,
+										'orderby'		=> 'post_date',
+										'order'		  => 'ASC',
+										'meta_key'	   => '_mdjm_txn_status',										
+										'meta_query'	 => array(
+											'key'		=> '_mdjm_txn_status',
+											'value'  	  => $status,
+											'compare'	=> '=' ) ) );
+											
+			if( $transactions )	{
+				foreach( $transactions as $txn )	{
+					$total += get_post_meta( $txn->ID, '_mdjm_txn_total', true );
+				}
+			}
+			
+			return ( $return == 'value' ? $total : $transactions );
+		}
 		
 		/*
 		 * Retrieve the event earnings for the employer or specified DJ

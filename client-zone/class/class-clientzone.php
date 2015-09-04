@@ -33,9 +33,24 @@
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
+				add_action( 'init', array( &$this, 'no_comments' ) );
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 				
 			} // __construct
+			
+			/*
+			 * 
+			 *
+			 *
+			 *
+			 */
+			function no_comments()	{
+				//add_filter( 'comments_array', '__return_false' );
+				add_filter( 'get_comments_number', '__return_false' );
+				
+				if( is_dj() || is_client() )
+					add_filter( 'get_edit_post_link', '__return_false' );	
+			}
 
 /*
  * --
@@ -305,7 +320,7 @@
 				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', WPMDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ) );
-				
+								
 				//wp_enqueue_script( 'jquery' );
 				wp_enqueue_style( 'mobile-dj-manager');
 				//wp_enqueue_script( 'google-hosted-jquery');

@@ -20,6 +20,9 @@
 			 *
 			 */
 			function __construct()	{
+				
+				mdjm_page_visit( MDJM_APP . ' Profile' );
+				
 				if( !is_user_logged_in() )
 					parent::login();
 					

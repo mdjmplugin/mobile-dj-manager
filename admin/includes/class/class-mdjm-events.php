@@ -582,6 +582,11 @@
 			
 			if( empty( $post_id ) || !$mdjm_posts->post_exists( $post_id ) )
 				return;
+				
+			if( !class_exists( 'MDJM_Transactions' ) )
+				require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+			
+			$mdjm_transactions = new MDJM_Transactions();
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
@@ -590,6 +595,7 @@
 			$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
 			$deposit = get_post_meta( $post_id, '_mdjm_event_deposit', true );
 			$deposit_status = get_post_meta( $post_id, '_mdjm_event_deposit_status', true );
+			$paid = $mdjm_transactions->get_transactions( $post_id, $direction='in' );
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
@@ -628,8 +634,8 @@
 							// Deposit fee
 							'deposit'			 => ( !empty( $deposit ) ? display_price( $deposit ) : '0.00' ),
 							// Balance remaining
-							'balance'			 => ( !empty( $deposit ) && !empty( $deposit_status ) && $deposit_status == 'Paid' ? 
-								display_price( $cost - $deposit ) : display_price( $cost ) ),
+							'balance'			 => ( !empty( $paid ) && $paid != '0.00' && !empty( $cost ) ? 
+								display_price( ( $cost - $paid ) ) : display_price( $cost ) ),
 								
 							// Deposit status
 							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due' ) ),

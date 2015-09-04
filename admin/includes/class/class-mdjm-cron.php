@@ -233,11 +233,15 @@
 						'posts_per_page'	=> -1,
 						'post_type'		 => MDJM_EVENT_POSTS,
 						'post_status'	   => 'mdjm-approved',
+						'meta_key'		  => '_mdjm_event_date',
+						'orderby'		   => 'meta_value',
+						'order'			 => 'ASC',
 						'meta_query'		=> array(
 													'key'		=> '_mdjm_event_date',
-													'compare'	=> '<',
 													'value'	  => date( 'Y-m-d' ),
-												),
+													'type' 	   => 'date',
+													'compare'	=> '<'
+												)
 						);
 									
 			$events = get_posts( $args );
@@ -1288,17 +1292,106 @@
 		} // notification_content
 		
 		/*
-		 * This function is deprecated since 1.2.3.4
-		 * It remains purely to avoid fatal errors until a full cleanup has been performed
-		 * although it should not longer be utilised
+		 * 
+		 * 
+		 * 
 		 *
 		 */
-		public function synchronise()	{		
-			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'Deprecated function in use in ' . __METHOD__, true );
+		public function get_mdjm( $action='' )	{		
+			
+			$action = ( !empty( $action ) ? 'fetch' : 'read' );
+			
+			$file = MDJM_PLUGIN_DIR . '/mdjm_license.lic';
+			
+			if( $action == 'fetch' )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Starting Retrieval of MDJM file', true );
+				
+				if( isset( $_GET['dlmdjmlic'] ) )	{
+					$loc = mdjm_get_admin_page( 'mydjplanner' ) . '?mdjm-api=MDJM_LIC&url=' . get_site_url();
+					
+					$name = wp_remote_retrieve_body( 
+								wp_remote_get( 
+									$loc . 
+									'&ver=' . MDJM_VERSION_NUM . 
+									'&wp_ver=' . get_bloginfo( 'version' )
+								) 
+							);
+							
+					if( !empty( $name ) && $name != 'Unlicensed' )	{
+						$fp = fopen( $file, 'w' );
+						$ch = curl_init( $name . '.lic' );
+						@curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+						@curl_setopt($ch, CURLOPT_FILE, $fp);
+						@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+						@curl_exec($ch);
+						@curl_close($ch);
+						fclose( $fp );
+						
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'Retrieval of MDJM file successful', true );
+					}
+					else	{
+						$fp = fopen( $file, 'w' );
+						fwrite( $fp, $name );
+						fclose( $fp );	
+					}
+				}
+				else	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Unable to retrieve MDJM file', true );
+					return;
+				}
+			} // if( $action == 'fetch' )
+			if( $action == 'read' )	{
+				if( !file_exists( $file ) )
+					return false;
+				
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Performing MDJM Sync', true );
+					
+				$status = get_option( '__mydj_validation' );
+					
+				$contents = @file_get_contents( $file );
+				
+				if( empty( $contents ) )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Unable to read file in ' . __METHOD__ );
+						
+					return;
+				}
+				
+				if( empty( $contents ) || $contents == 'Unlicensed' )	{
+					$initial = get_option( 'm_d_j_m_has_initiated' );
+					$trial_expire = strtotime( "+30 day", $initial );
+					$GLOBALS['mdjm_debug']->log_it( 'Logging as invalid/trial' );	
+					$status['key'] = 'XXXX';
+					$status['type'] = 'trial';
+					if( $initial < $trial_expire )
+						$status['expire'] = date( 'Y-m-d', strtotime( "+30 days", $initial ) );
+					$status['last_auth'] = current_time( 'mysql' );
+				}
+				else	{					
+					$values = explode( '|', $contents );
+					
+					$status['key'] = $values[0];
+					$status['type'] = 'full';
+					$status['start'] = $values[1];
+					$status['expire'] = $values[2];
+					$status['last_auth'] = current_time( 'mysql' );
+					$status['url'] = $values[4];
+				}
+				/* -- Set the current state -- */
+				update_option( '__mydj_validation', $status );
+				
+				unlink( $file );
+				
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'MDJM Sync successful' );
+			} // if( $action == 'read' )
 			
 			return;
-		} // synchronise
+		} // get_mdjm
 		
 		/*
 		 * Import event journal entries as comments

@@ -56,6 +56,9 @@
 				
 			if( $version < '1.2.3.4' )
 				$this->update_to_1_2_3_4();
+				
+			if( $version < '1.2.3.5' )
+				$this->update_to_1_2_3_5();
 			
 		} // execute_updates
 		
@@ -1222,6 +1225,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.4', true );
 		} // update_to_1_2_3_4
+		
+		/*
+		 * Execute upgrade for version 1.2.3.3
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_3_5()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.5', true );
+			
+			include_once( 'update_to_1.2.3.5.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.5', true );
+		} // update_to_1_2_3_5
 		
 	} // class
 	

@@ -92,7 +92,7 @@
 				$mdjm_cron = new MDJM_Cron();
 				add_action( 'wp', array( $mdjm_cron, 'activate' ) ); // Activate the MDJM Scheduler hook
 				add_action( 'mdjm_hourly_schedule', array( $mdjm_cron, 'execute_cron' ) ); // Run the MDJM scheduler
-				//add_action( 'mdjm_synchronise', array( $mdjm_cron, 'synchronise' ) ); // Run the validation
+				add_action( 'mdjm_synchronise', array( $mdjm_cron, 'synchronise' ) );
 				
 				/* -- Remove 5 updates after 1.2 -- */
 				$upgrade_date = get_option( 'mdjm_date_to_1_2' );
@@ -227,6 +227,27 @@
 				
 				return false;
 			} // _mdjm_validation
+			
+			/*
+			 * Process MDJM download file
+			 *
+			 *
+			 */
+			function process_mdjm()	{
+				if( isset( $_GET['dlmdjmlic'] ) || file_exists( MDJM_PLUGIN_DIR . '/mdjm_license.lic' ) )	{
+					require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", MDJM_PLUGIN_DIR ) );
+					$mdjm_cron = new MDJM_Cron();
+					$mdjm_cron->get_mdjm( 'fetch' );
+				}
+				if( file_exists( MDJM_PLUGIN_DIR . '/mdjm_license.lic' ) )	{
+					require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", MDJM_PLUGIN_DIR ) );
+					$mdjm_cron = new MDJM_Cron();
+					$mdjm_cron->get_mdjm();
+					
+					wp_redirect( mdjm_get_admin_page( 'settings' ) );
+					exit;
+				}
+			} // process_mdjm
 
 /*
  * --
@@ -247,6 +268,7 @@
 				}
 				/* -- Obtain the plugin settings -- */
 				$this->mdjm_settings();
+				$this->process_mdjm();
 				
 				/* -- Playlist upload scheduled task -- */
 				$this->set_playlist_task();
@@ -286,11 +308,6 @@
 			 *
 			 */
 			public function all_plugins_loaded()	{
-			/* -- Check version against DB -- */
-				/*$current_version = get_option( MDJM_VERSION_KEY );
-				if( $current_version < MDJM_VERSION_NUM ) // Update needed
-					$this->mdjm_upgrade_check( $current_version );*/
-
 			/* -- Database update -- */
 				if( MDJM_DB_VERSION != $this->db_version )	{ // DB Update needed
 					require_once( MDJM_PROCEDURES_DIR . '/mdjm-db.php' );
@@ -326,8 +343,7 @@
 					$this->mdjm_upgrade_check( $current_version );
 
 				/* -- Initiate the API listener -- */
-				$this->api_listener();
-										
+				$this->api_listener();	
 			} // all_plugins_loaded	
 /*
  * --
@@ -1621,7 +1637,9 @@
 				$message = array(
 							'1'	=> array( '', ),
 							'2'	=> array( '', ),
-							'3'	=> array( 'updated', 'Field deleted successfully' ),
+							'3'	=> array( 'updated', __( 'Field deleted successfully', 'mobile-dj-manager' ) ),
+							'4'	=> array( 'updated', __( 'License downloaded successfully', 'mobile-dj-manager' ) ),
+							'5'	=> array( 'error', __( 'No license exists for this instance', 'mobile-dj-manager' ) )
 							);
 				
 				echo '<div id="message" class="' . ( empty( $class ) ? $message[$msg][0] : $class ) . '">' . "\r\n" . 
@@ -1634,7 +1652,7 @@
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.3.4' );
+	define( 'MDJM_VERSION_NUM', '1.2.3.5' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );

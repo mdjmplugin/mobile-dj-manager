@@ -33,6 +33,12 @@ jQuery(document).ready(function($) 	{
 			success: function(response)	{
 				if(response.type == "success") {
 					jQuery("#loader").replaceWith('<div id="transaction">' + response.transactions + '</div>')
+					if(response.key == "deposit")	{
+						jQuery("#deposit_paid").prop('checked', true );	
+					}
+					if(response.key == "balance")	{
+						jQuery("#balance_paid").prop('checked', true );	
+					}
 				}
 				else	{
 					alert(response.msg)

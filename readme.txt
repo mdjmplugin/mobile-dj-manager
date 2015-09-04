@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.3.4
+Stable tag: 1.2.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,7 +65,7 @@ This plugin is fully functional and free to use for a period of 30 days after wh
 
 == Screenshots ==
 
-1. An overview fo the Mobile DJ Manager Dashboard screen as seen by an Administrator when they are logged into the WordPress Admin UI
+1. An overview of the Mobile DJ Manager Dashboard screen as seen by an Administrator when they are logged into the WordPress Admin UI
 2. The Dashboard as seen by a DJ (employee) when they are logged in
 3. A view of the settings page (not seen by DJs)
 4. Permissions can be set to determine what a DJ can see/do within the application
@@ -79,6 +79,19 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.3.5 =
+<strong>Released Friday 4th September, 2015</strong>
+<ul>
+	<li>Bug Fix: Completed event automated task sets event as completed incorrectly</li>
+	<li>Bug Fix: Adding event transaction hung when the "Paid From" field was populated with a value</li>
+	<li>Bug Fix: 12hr time format was not registering event time from the Dynamic Contact Form or Events page</li>
+	<li>Bug Fix: Some themes displayed comments in footer of client zone page. Addition of action hook to ensure none are displayed</li>
+	<li>Bug Fix: Redirect "may" not have worked when signing of contract was completed</li>
+	<li>General: Remove page/post edit link from Client Zone pages for clients and DJ's</li>
+	<li>General: Added Balance Due to event listing screen</li>
+	<li>General: More translation preparation</li>
+</ul>
+
 = 1.2.3.4 =
 <strong>Released 31st August, 2015</strong>
 <ul>

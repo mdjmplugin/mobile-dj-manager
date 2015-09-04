@@ -27,6 +27,8 @@
 			function __construct( $args='' )	{
 				global $mdjm, $clientzone_loaded, $mdjm_settings;
 				
+				mdjm_page_visit( MDJM_APP . ' Online Quotes' );
+				
 				// Must be authenticated
 				if( !is_user_logged_in() )
 					parent::login();

@@ -408,10 +408,15 @@
 							$this->event_update = array();
 												
 						if( $field_settings['type'] == 'time' )	{
-							$this->event_update[$field_settings['config']['mapping']] = ( MDJM_TIME_FORMAT == 'H:i' ? 
-								date( 'H:i:s', strtotime( $_POST[$field->post_name . '_hr'] . ':' . $_POST[$field->post_name . '_min'] ) ) : 
-								date( 'H:i:s', strtotime( $_POST[$field->post_name . '_hr'] . ':' . $_POST[$field->post_name . '_min'] . isset( $_POST[$field->post_name . '_period'] ) 
-									? $_POST[$field->post_name . '_period'] : '' ) ) );
+							// 24 hour
+							if( MDJM_TIME_FORMAT == 'H:i' )
+								$this->event_update[$field_settings['config']['mapping']] = date( 'H:i:s', strtotime( $_POST[$field->post_name . '_hr'] . 
+								':' . $_POST[$field->post_name . '_min'] ) ); 
+							
+							// 12 hour
+							else
+								$this->event_update[$field_settings['config']['mapping']] = date( 'H:i:s', strtotime( $_POST[$field->post_name . '_hr'] . 
+								':' . $_POST[$field->post_name . '_min'] . $_POST[$field->post_name . '_period'] ) );
 						}
 						else	{
 							$this->event_update[$field_settings['config']['mapping']] = $_POST[$field->post_name];	

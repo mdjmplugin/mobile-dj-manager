@@ -22,6 +22,8 @@
 			function __construct()	{
 				global $mdjm, $my_mdjm, $post;
 				
+				mdjm_page_visit( MDJM_APP . ' Playlist' );
+				
 				if( !is_user_logged_in() )	{
 					$playlist = ( isset( $_GET['mdjmeventid'] ) ? $this->playlist_exists( $_GET['mdjmeventid'] ) 
 						: false );
@@ -49,7 +51,7 @@
 						$this->event = $my_mdjm['next'][0];
 					
 					$post = $this->event;
-						
+					
 					$this->eventinfo = $mdjm->mdjm_events->event_detail( $this->event->ID );
 					
 					$this->client_form();
@@ -440,4 +442,4 @@
 	
 /* -- Insantiate the MDJM_Playlist class -- */
 	$mdjm_playlist = new MDJM_Playlist();	
-				
+					

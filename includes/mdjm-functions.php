@@ -82,6 +82,34 @@
 		}
 	} // mdjm_get_admin_page
 	
+	/**
+	 * Log the access to the specified page
+	 *
+	 * @param	str		Required: $page 	Name of the page
+	 *			
+	 * @return
+	 * @since	1.2.3.5
+	 * 
+	 */
+	function mdjm_page_visit( $page )	{
+		global $current_user;
+		
+		if( MDJM_DEBUG == false )
+			return;
+		
+		if( empty( $page ) || !is_user_logged_in() )
+			return;
+		
+		$content = "\r\n";
+		$content .= '------------------------------------------------------' . "\r\n";
+		$content .= date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ';
+		$content .= $page . ' accessed by ' . $current_user->display_name . ' (' . $current_user->ID . ')' . "\r\n";
+		$content .= '------------------------------------------------------' . "\r\n";
+		
+		$GLOBALS['mdjm_debug']->log_it( $content );
+		
+	} // mdjm_page_visit
+	
 	/*
 	 * Display update notice within Admin UI
 	 *
@@ -415,6 +443,14 @@
 	
 /*
  * -- END EVENT FUNCTIONS
+ */
+ 
+/*
+ * -- START CLIENT FUNCTIONS
+ */
+ 
+/*
+ * -- END CLIENT FUNCTIONS
  */
  
 /*
@@ -1177,6 +1213,44 @@
 	
 /*
  * -- END MUSIC LIBRARY FUNCTIONS
+ */
+ 
+/*
+ * -- START USER FUNCTIONS
+ */
+	/*
+	 * Check if the given user has the given role
+	 *
+	 * @param	int		$user	Optional: User ID to check. Default to current user
+	 *			str		$role	Required: The role to determine if the user has
+	 *
+	 * @return	bool			true if the user has the role, otherwise false
+	 */
+	function user_is( $user='', $role )	{
+		if( !empty( $user ) && user_can( $user, $role ) )
+			return true;			
+		
+		if( current_user_can( $role ) )
+			return true;
+		
+		return false;
+	} // user_is
+	
+	/*
+	 * Check if the given user is a client
+	 *
+	 * @param	int		$client Optional: User ID to check. Default to current user
+	 *
+	 */
+	function is_client( $user='' )	{
+		if( user_is( $user, 'client' ) )
+			return true;
+			
+		return false;
+	} // is_client
+ 
+/*
+ * -- END USER FUNCTIONS
  */
 
 ?>

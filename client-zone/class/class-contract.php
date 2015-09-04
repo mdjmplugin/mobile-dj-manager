@@ -17,11 +17,11 @@
 			 *
 			 */
 			public function __construct( $event )	{
-				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts, $post;
+				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts;
+				
+				mdjm_page_visit( MDJM_APP . ' Contracts' );
 				
 				$this->event = get_post( $event );
-				
-				$post = $this->event;
 				
 				$event_client = get_post_meta( $this->event->ID, '_mdjm_event_client', true );
 				
@@ -174,7 +174,7 @@
 						$contact_client = isset( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
 						$contact_dj = isset( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? true : false;
 						$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : false;
-						$dj_email = isset( $mdjm_settings['templates']['booking_conf_dj'] ) ? $mdjm_settings['templates']['booking_conf_dj'] : false;
+						$dj_email = isset( $mdjm_settings['templates']['email_dj_confirm'] ) ? $mdjm_settings['templates']['email_dj_confirm'] : false;
 						
 						if( !$mdjm_posts->post_exists( $client_email ) )	{
 							if( MDJM_DEBUG == true )
@@ -192,7 +192,7 @@
 							$approval_email = $mdjm->send_email( array( 
 													'content'	=> $client_email,
 													'to'		 => get_post_meta( $this->event->ID, '_mdjm_event_client', true ),
-													'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
+													'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $this->event->ID, '_mdjm_event_dj', true ) : 0,
 													'journal'	=> 'email-client',
 													'event_id'   => $this->event->ID,
 													'html'	   => true,
@@ -250,7 +250,7 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'Completed client signing of contract ' . __METHOD__, true );
 
-					wp_redirect( $mdjm->get_link( MDJM_CONTRACTS_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2' );
+					wp_redirect( $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2' );
 					exit;
 					
 				}
@@ -276,11 +276,9 @@
 				}
 					
 				elseif( $this->event->post_status == 'mdjm-approved' || $this->event->post_status == 'mdjm-completed' )	{
-					
 					/* -- If the contract has been signed, display success message -- */
-					if( isset( $_GET['message'], $_GET['class'] ) )	{
+					if( isset( $_GET['message'], $_GET['class'] ) )
 						$clientzone->display_message( $_GET['message'], $_GET['class'] );	
-					}
 					
 					$section = 'contract_signed';
 					
@@ -295,7 +293,7 @@
 						__( '<p>The client contract is not yet ready for signing as the event status has not been updated to "Awaiting Contract"</p>' );
 				}
 				
-				echo ( !current_user_can( 'administrator' ) ? $clientzone->__text( $section, $default_text ) : $default_text );
+				echo ( !current_user_can( 'administrator' ) ? $clientzone->__text( $section, $default_text ) : $default_text );				
 			} // contract_header
 			
 			/*
