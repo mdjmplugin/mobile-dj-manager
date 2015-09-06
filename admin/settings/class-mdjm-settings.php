@@ -577,14 +577,21 @@
 			 *
 			 */
 			function show_radio_field( $args )	{
-				global $mdjm;
-												
+				global $mdjm_settings;											
 				$i = 0;
 				foreach( $args['custom_args']['values'] as $radio )	{
 					echo '<label>' . "\n";
 					echo '<input type="radio" name="' . $args['key'] . '[' . $args['field'] . ']" value="' . $radio . '" id="' . $radio . '" ' . 
 					checked( $args['value'], $radio, false ) . ' />' . "\n";
-					echo '<img src="https://www.paypalobjects.com/en_GB/i/btn/' . $radio . '">';
+					if( $radio == 'html' )
+						echo __( 'Use standard HTML submit button with text', 'mobile-dj-manager' ) . 
+							'&nbsp;<input type="text" name="' . $args['key'] . '[button_text]" id="button_text" style="max-width: 100px;" value="' . 
+							( !empty( $mdjm_settings['paypal']['button_text'] ) ? $mdjm_settings['paypal']['button_text'] : 
+							__( 'Pay Now', 'mobile-dj-manager' ) ) . '">';
+						
+					else
+						echo '<img src="https://www.paypalobjects.com/en_GB/i/btn/' . $radio . '">';
+						
 					echo '</label>' . "\n";
 					$i++;
 					if( $i != count( $args['custom_args']['values'] ) )	{

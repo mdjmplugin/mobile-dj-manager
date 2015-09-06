@@ -113,6 +113,42 @@
 	} // f_mdjm_updated_footer
 	
 /**************************************************
+				VERSION 1.2.3.6
+**************************************************/
+	function f_mdjm_updated_to_1_2_3_6()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">PayPal Payments:</font><br />
+		The <a href="http://www.mydjplanner.co.uk/paypal-integration/" target="_blank">PayPal form</a> has been updated and now accepts custom payment amounts as specified by the client as well as the deposit and balance amounts.<br /><br />
+        <ui>
+        	<li>Now utilises radio buttons rather than the old style drop down box</li>
+            <li>Ability to use standard HTML submit button instead of PayPal button</li>
+            <li>Define your own label for the <code>Other amount</code> radio button</li>
+        </ui><br />
+        <strong>Note</strong>: We recommend you review your <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>">Payment Settings</a> as the radio buttons look better vertically rather than horizontally.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li><span class="mdjm-new">New</span>: Added ZAR currency for South Africa</li>
+                <li><span class="mdjm-new">New</span>: <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>">Payment Setting</a> added <code>Label for Other Amount</code></li>
+                <li><span class="mdjm-new">New</span>: <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>&section=mdjm_paypal_settings">PayPal Button Option</a> added <code>Use standard HTML submit button</code> with option to customise the text</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_1_2_3_6
+
+	
+/**************************************************
 				VERSION 1.2.3.5
 **************************************************/
 	function f_mdjm_updated_to_1_2_3_5()	{
@@ -184,7 +220,7 @@
         </td>
         <?php
 		
-	} // f_mdjm_updated_to_1_2_3_4
+	} // f_mdjm_updated_to_1_2_3_5
 
 /**************************************************
 				VERSION 1.2.3.4

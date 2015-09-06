@@ -205,6 +205,7 @@
 						'CHF' => 'CHF',
 						'CZK' => '&#x4b;&#x10d;',
 						'DKK' => 'kr',
+						'ZAR' => 'R',
 						'TRL' => '&#x20a4;'
 						);
 		return $symbols[$currency];	

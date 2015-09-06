@@ -33,11 +33,11 @@
 					$post = ( !empty( $this->event ) ? $this->event : '' );
 					
 					// Returning from PayPal?
-					if( isset( $_GET['pp_action'] ) && !empty( $_GET['pp_action'] ) )
-						$this->paypal_return( $_GET['pp_action'] );
+					if( isset( $_GET['return_action'] ) && !empty( $_GET['return_action'] ) )
+						$this->paypal_return( $_GET['return_action'] );
 						
-					//$this->payment_wrapper();	
-					$this->display();
+					$this->payment_wrapper();	
+					//$this->display();
 				}
 				
 			} // __construct
@@ -185,18 +185,7 @@
 					
 				/* -- Display the PayPal form -- */
 				$this->PayPal_form();
-				
-				?>
-				<script type="text/javascript">
-				jQuery(document).ready(function ($) {
-					$('#manual').click(function()	{
-						$('#part_payment').focus();
-					});					
-				});
-				</script>
-                
-                <?php
-				
+							
 				echo '<!-- ' . 
 				sprintf( __( 'End %s (%s) PayPal API integration form for online client payments', 'mobile-dj-manager' ),
 						 MDJM_NAME,
@@ -244,22 +233,21 @@
 				$payment_form .= '{' . "\r\n";
 				$payment_form .= '    var objHidden = document.getElementById("custom");' . "\r\n";
 				$payment_form .= '    objHidden.value = objDropDown.value;' . "\r\n";
-				$payment_form .= '    }' . "\r\n";
 				$payment_form .= '}' . "\r\n";
 				$payment_form .= 'function setAmount()' . "\r\n";
 				$payment_form .= '{' . "\r\n";
-				$payment_form .= '    var manual_input = document.getElementById("part_payment")' . "\r\n";
+				$payment_form .= '    var manual_input = document.getElementsByName("part_payment")[0]' . "\r\n";
+				$payment_form .= '    var radio_group = document.getElementsByName("os0")[0]' . "\r\n";
 				$payment_form .= '    var update_amount = document.getElementById("option_amount2")' . "\r\n";
 				$payment_form .= '    var selected_type = document.getElementById("Part Payment");' . "\r\n";
 				$payment_form .= '    if( selected_type.checked )	{' . "\r\n";
-				$payment_form .= '        update_amount.value = manual_input;' . "\r\n";
+				$payment_form .= '        update_amount.value = manual_input.value;' . "\r\n";
 				$payment_form .= '    }' . "\r\n";
-				
 				$payment_form .= '}' . "\r\n";
 				$payment_form .= '</script>' . "\r\n";
 				
 				// Begin the form
-				$payment_form .= '<form action="https://' . $paypal_api . '" method="post" target="_top" name="mdjm_paypal" id="mdjm_paypal" onsubmit="setAmount();">' . "\r\n";
+				$payment_form .= '<form action="https://' . $paypal_api . '" method="post" target="_top" name="mdjm_paypal" id="mdjm_paypal">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="cmd" value="_xclick">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="business" value="' . $paypal_email . '">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="lc" value="' . get_locale() . '">' . "\r\n";
@@ -283,11 +271,11 @@
 				
 				// Set the return page from PayPal once successful payment completes
 				$payment_form .= '<input type="hidden" name="return" value="' . 
-					$mdjm->get_link( $paypal_settings['redirect_success'] ) . 'pp_action=completed&event_id=' . $post->ID . '">' . "\r\n";
+					$mdjm->get_link( $paypal_settings['redirect_success'] ) . 'return_action=completed&event_id=' . $post->ID . '">' . "\r\n";
 					
 				// Set the return page from PayPal upon cancellation of payment
 				$payment_form .= '<input type="hidden" name="cancel_return" value="' . 
-					$mdjm->get_link( $paypal_settings['redirect_cancel'] ) . 'pp_action=cancelled&event_id=' . $post->ID . '">' . "\r\n";
+					$mdjm->get_link( $paypal_settings['redirect_cancel'] ) . 'return_action=cancelled&event_id=' . $post->ID . '">' . "\r\n";
 				
 				// Set the currency for payment	
 				$payment_form .= '<input type="hidden" name="currency_code" value="' . $payment_settings['currency'] . '">' . "\r\n";
@@ -326,7 +314,7 @@
 					$payment_form .= '<td>';	
 				}
 				
-				$payment_form .= $payment_settings['payment_label'] . "\r\n";
+				$payment_form .= '<span style="font-weight: bold;">' . $payment_settings['payment_label'] . '</span>' . "\r\n";
 				if( $layout == 'vertical' )
 					$payment_form .=  '<br />' . "\r\n";
 				
@@ -336,23 +324,25 @@
 				}
 				
 				$payment_form .= '<input type="radio" name="os0" id="' . MDJM_DEPOSIT_LABEL . '" value="' . MDJM_DEPOSIT_LABEL . 
-					'" onclick="changeCustomInput(this)"' . ( $deposit_status == 'Paid' ? ' disabled="disabled"' : '' ) . '>';
+					'" onclick="changeCustomInput(this)"' . ( $deposit_status == 'Paid' ? ' disabled="disabled"' : '' ) . 
+					checked( $deposit_status, 'Due', false ) . '>';
 				$payment_form .= '&nbsp;<label for="' . MDJM_DEPOSIT_LABEL . '">' . MDJM_DEPOSIT_LABEL . ( $deposit_status == 'Due' ? ' - ' 
 					. display_price( $deposit, true ) : '' ) . '</label>' . "\r\n";
 					
 				$payment_form .= '<br />' . "\r\n";
 					
 				$payment_form .= '<input type="radio" name="os0" id="' . MDJM_BALANCE_LABEL . '" value="' . MDJM_BALANCE_LABEL . 
-					'" onclick="changeCustomInput(this)"' . ( $balance_status == 'Paid' ? ' disabled="disabled"' : '' ) . '>';
+					'" onclick="changeCustomInput(this)"' . ( $balance_status == 'Paid' ? ' disabled="disabled"' : '' ) . 
+					( $deposit_status == 'Paid' && $balance_status == 'Due' ? ' checked="checked"' : '' ) . '>';
 				$payment_form .= '&nbsp;<label for="' . MDJM_BALANCE_LABEL . '">' . MDJM_BALANCE_LABEL . ( $balance_status == 'Due' ? ' - ' 
 					. display_price( $balance, true ) : '' ) . '</label>' . "\r\n";
 					
 				$payment_form .= '<br />' . "\r\n";
 				
-				$payment_form .= '<input type="radio" name="os0" id="Part Payment" value="Part Payment" onclick="changeCustomInput(this)">' . "\r\n";
-				$payment_form .= '<label for="part_payment">Other amount:</label>' . "\r\n";
+				$payment_form .= '<input type="radio" name="os0" id="Part Payment" value="Part Payment" onclick="changeCustomInput(this); document.getElementById(\'part_payment\').focus()">' . "\r\n";
+				$payment_form .= '<label for="part_payment">' . $payment_settings['other_amount_label'] . ':</label>' . "\r\n";
 				$payment_form .= MDJM_CURRENCY . '&nbsp;<input type="text" style="max-width: 80px;" name="part_payment" id="part_payment" ' . 
-					' placeholder="0.00" value="">' . "\r\n";
+					' placeholder="0.00" value="" onkeyup="setAmount();" onclick="document.getElementById(\'Part Payment\').checked = true;" autocomplete="off">' . "\r\n";
 								
 				if( $layout == 'vertical' )
 					$payment_form .= '<br />' . "\r\n";
@@ -367,11 +357,16 @@
 				$payment_form .= '<input type="hidden" name="option_amount0" value="' . number_format( $deposit, 2 ) . '">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="option_select1" value="' . MDJM_BALANCE_LABEL . '">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="option_amount1" value="' . number_format( $balance, 2 ) . '">' . "\r\n";				
-				$payment_form .= '<input type="hidden" name="option_select2" value="Part Payment">' . "\r\n";
-				$payment_form .= '<input type="hidden" name="option_amount2" id="option_amount2" value="0">' . "\r\n";	
+				$payment_form .= '<input type="hidden" name="option_select2" value="' . $payment_settings['other_amount_label'] . '">' . "\r\n";
+				$payment_form .= '<input type="hidden" name="option_amount2" id="option_amount2" value="' . number_format( $deposit, 2 ) . '">' . "\r\n";	
 				
 				$payment_form .= '<input type="hidden" name="option_index" value="0">' . "\r\n";
-				$payment_form .= '<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/' . $paypal_settings['paypal_button'] . 
+				
+				if( $paypal_settings['paypal_button'] == 'html' )
+					$payment_form .= '<input type="submit" name="submit" id="submit" value="' . esc_attr( $paypal_settings['button_text'] ) . '">' . "\r\n";
+				
+				else
+					$payment_form .= '<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/' . $paypal_settings['paypal_button'] . 
 					'" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">' . "\r\n";
 				
 				if( $layout == 'horizontal' )	{
@@ -382,7 +377,7 @@
 				
 				$payment_form .= '<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">' . "\r\n";
 				$payment_form .= '</form>' . "\r\n";
-				
+								
 				echo $payment_form;
 			} // PayPal_form
 			
