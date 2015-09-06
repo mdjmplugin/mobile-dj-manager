@@ -239,10 +239,11 @@
 				$payment_form .= '    var manual_input = document.getElementsByName("part_payment")[0]' . "\r\n";
 				$payment_form .= '    var radio_group = document.getElementsByName("os0")[0]' . "\r\n";
 				$payment_form .= '    var update_amount = document.getElementById("option_amount2")' . "\r\n";
-				$payment_form .= '    var selected_type = document.getElementById("Part Payment");' . "\r\n";
+				$payment_form .= '    var selected_type = document.getElementById("' . $payment_settings['other_amount_label'] . '");' . "\r\n";
 				$payment_form .= '    if( selected_type.checked )	{' . "\r\n";
 				$payment_form .= '        update_amount.value = manual_input.value;' . "\r\n";
 				$payment_form .= '    }' . "\r\n";
+				
 				$payment_form .= '}' . "\r\n";
 				$payment_form .= '</script>' . "\r\n";
 				
@@ -339,10 +340,10 @@
 					
 				$payment_form .= '<br />' . "\r\n";
 				
-				$payment_form .= '<input type="radio" name="os0" id="Part Payment" value="Part Payment" onclick="changeCustomInput(this); document.getElementById(\'part_payment\').focus()">' . "\r\n";
+				$payment_form .= '<input type="radio" name="os0" id="' . $payment_settings['other_amount_label'] . '" value="' . $payment_settings['other_amount_label'] . '" onclick="changeCustomInput(this); document.getElementById(\'part_payment\').focus()">' . "\r\n";
 				$payment_form .= '<label for="part_payment">' . $payment_settings['other_amount_label'] . ':</label>' . "\r\n";
 				$payment_form .= MDJM_CURRENCY . '&nbsp;<input type="text" style="max-width: 80px;" name="part_payment" id="part_payment" ' . 
-					' placeholder="0.00" value="" onkeyup="setAmount();" onclick="document.getElementById(\'Part Payment\').checked = true;" autocomplete="off">' . "\r\n";
+					' placeholder="0.00" value="" onkeyup="setAmount();" onclick="document.getElementById(\'' . $payment_settings['other_amount_label'] . '\').checked = true;" autocomplete="off">' . "\r\n";
 								
 				if( $layout == 'vertical' )
 					$payment_form .= '<br />' . "\r\n";
@@ -358,7 +359,7 @@
 				$payment_form .= '<input type="hidden" name="option_select1" value="' . MDJM_BALANCE_LABEL . '">' . "\r\n";
 				$payment_form .= '<input type="hidden" name="option_amount1" value="' . number_format( $balance, 2 ) . '">' . "\r\n";				
 				$payment_form .= '<input type="hidden" name="option_select2" value="' . $payment_settings['other_amount_label'] . '">' . "\r\n";
-				$payment_form .= '<input type="hidden" name="option_amount2" id="option_amount2" value="' . number_format( $deposit, 2 ) . '">' . "\r\n";	
+				$payment_form .= '<input type="hidden" name="option_amount2" id="option_amount2" value="0">' . "\r\n";	
 				
 				$payment_form .= '<input type="hidden" name="option_index" value="0">' . "\r\n";
 				
@@ -377,7 +378,7 @@
 				
 				$payment_form .= '<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">' . "\r\n";
 				$payment_form .= '</form>' . "\r\n";
-								
+				
 				echo $payment_form;
 			} // PayPal_form
 			

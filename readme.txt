@@ -80,7 +80,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 
 == Changelog ==
 = 1.2.3.6 =
-<strong>Released Sunday 6th September, 2015</strong>
+<strong>Released Friday 4th September, 2015</strong>
 <ul>
 	<li>General: Added custom payment amount option to the PayPal form</li>
 	<li>General: PayPal form now uses radio buttons rather than select list</li>
