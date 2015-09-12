@@ -2088,17 +2088,6 @@
 									),
 							
 						/* -- PayPal Settings -- */		
-							'enable_paypal' => array(
-									'label' => 'Enable PayPal?',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['paypal']['enable_paypal'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => 'Enables the use of PayPal standard for client payment collections',
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
 							'paypal_email' => array(
 									'label' => 'PayPal Email:',
 									'key' => MDJM_PAYPAL_KEY,
