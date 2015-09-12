@@ -37,26 +37,28 @@
 		 */
 		public function default_settings()	{
 			global $mdjm;
-			$enquiry_sources = 'Website' . "\r\n" . 
-								'Google' . "\r\n" . 
-								'Facebook' . "\r\n" . 
-								'Email' . "\r\n" . 
-								'Telephone' . "\r\n" . 
-								'Other';
+			$enquiry_sources = __( 'Website', 'mobile-dj-manager' ) . "\r\n" . 
+							   __( 'Google', 'mobile-dj-manager' ) . "\r\n" . 
+							   __( 'Facebook', 'mobile-dj-manager' ) . "\r\n" . 
+							   __( 'Email', 'mobile-dj-manager' ) . "\r\n" . 
+							   __( 'Telephone', 'mobile-dj-manager' ) . "\r\n" . 
+							   __( 'Other', 'mobile-dj-manager' );
 			
-			$payment_sources = 'BACS' . "\r\n" . 
-								'Cash' . "\r\n" . 
-								'Cheque' . "\r\n" . 
-								'PayPal' . "\r\n" . 
-								'Other';
+			$payment_sources = __( 'BACS', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Cheque', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Other', 'mobile-dj-manager' );
 								
-			$playlist_options = 'General' . "\r\n" . 
-								'First Dance' . "\r\n" . 
-								'Second Dance' . "\r\n" . 
-								'Last Song' . "\r\n" . 
-								'Father & Bride' . "\r\n" . 
-								'Mother & Son' . "\r\n" . 
-								'DO NOT PLAY\r\nOther';
+			$playlist_options = __( 'General', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'First Dance', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Second Dance', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Last Song', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Father & Bride', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Mother & Son', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'DO NOT PLAY', 'mobile-dj-manager' ) . "\r\n" . 
+								__( 'Other', 'mobile-dj-manager' );
 			
 			$default_settings = array( 
 						'mdjm_plugin_settings' => array(
@@ -114,10 +116,11 @@
 							'dj_disable_template'		=> '',
 						),
 						'mdjm_clientzone_settings' => array(
-							'app_name'                	=> 'Client Zone',
+							'app_name'                	=> __( 'Client Zone', 'mobile-dj-manager' ),
 							'pass_length'             	 => '8',
 							'notify_profile' 			  => true,
 							'package_prices'			  => false,
+							'status_notification'		 => true,
 							'update_event'				=> false,
 							'edit_event_stop'			  => '5',	
 						),
@@ -132,14 +135,14 @@
 						),
 						'mdjm_availability_settings' => array(
 							'availability_check_pass_page' => 'text',
-							'availability_check_pass_text' => 'Good news, we are available on the date you entered. Please contact us now',
+							'availability_check_pass_text' => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' ),
 							'availability_check_fail_page' => 'text',
-							'availability_check_fail_text' => 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...',
+							'availability_check_fail_text' => __( 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...', 'mobile-dj-manager' ),
 						),
 						
 						'mdjm_client_fields' => array(
 							'first_name' => array(
-								'label' => 'First Name',
+								'label' => __( 'First Name', 'mobile-dj-manager' ),
 								'id' => 'first_name',
 								'type' => 'text',
 								'value' => '',
@@ -151,7 +154,7 @@
 								'position' => '0',
 								),
 							'last_name' => array(
-								'label' => 'Last Name',
+								'label' => __( 'Last Name', 'mobile-dj-manager' ),
 								'id' => 'last_name',
 								'type' => 'text',
 								'value' => '',
@@ -163,7 +166,7 @@
 								'position' => '1',
 								),
 							'user_email' => array(
-								'label' => 'Email Address',
+								'label' => __( 'Email Address', 'mobile-dj-manager' ),
 								'id' => 'user_email',
 								'type' => 'text',
 								'value' => '',
@@ -175,7 +178,7 @@
 								'position' => '2',
 								),
 							'address1' => array(
-								'label' => 'Address 1',
+								'label' => __( 'Address 1', 'mobile-dj-manager' ),
 								'id' => 'address1',
 								'type' => 'text',
 								'value' => '',
@@ -187,7 +190,7 @@
 								'position' => '3',
 								),
 							'address2' => array(
-								'label' => 'Address 2',
+								'label' => __( 'Address 2', 'mobile-dj-manager' ),
 								'id' => 'address2',
 								'type' => 'text',
 								'value' => '',
@@ -199,7 +202,7 @@
 								'position' => '4',
 								),
 							'town' => array(
-								'label' => 'Town / City',
+								'label' => __( 'Town / City', 'mobile-dj-manager' ),
 								'id' => 'town',
 								'type' => 'text',
 								'value' => '',
@@ -211,7 +214,7 @@
 								'position' => '5',
 								),
 							'county' => array(
-								'label' => 'County',
+								'label' => __( 'County', 'mobile-dj-manager' ),
 								'id' => 'county',
 								'type' => 'text',
 								'value' => '',
@@ -224,7 +227,7 @@
 								'position' => '6',
 								),
 							'postcode' => array(
-								'label' => 'Post Code',
+								'label' => __( 'Post Code', 'mobile-dj-manager' ),
 								'id' => 'postcode',
 								'type' => 'text',
 								'value' => '',
@@ -237,7 +240,7 @@
 								'position' => '7',
 								),
 							'phone1' => array(
-								'label' => 'Primary Phone',
+								'label' => __( 'Primary Phone', 'mobile-dj-manager' ),
 								'id' => 'phone1',
 								'type' => 'text',
 								'value' => '',
@@ -249,7 +252,7 @@
 								'position' => '8',
 								),
 							'phone2' => array(
-								'label' => 'Alternative Phone',
+								'label' => __( 'Alternative Phone', 'mobile-dj-manager' ),
 								'id' => 'phone2',
 								'type' => 'text',
 								'value' => '',
@@ -260,21 +263,21 @@
 								'position' => '9',
 								),
 							'birthday' => array(
-								'label' => 'Birthday',
+								'label' => __( 'Birthday', 'mobile-dj-manager' ),
 								'id' => 'birthday',
 								'type' => 'dropdown',
-								'value' => 'January' . "\r\n" . 
-										   'February' . "\r\n" .
-										   'March' . "\r\n" . 
-										   'April' . "\r\n" . 
-										   'May' . "\r\n" . 
-										   'June' . "\r\n" . 
-										   'July' . "\r\n" . 
-										   'August' . "\r\n" . 
-										   'September' . "\r\n" . 
-										   'October' . "\r\n" . 
-										   'November' . "\r\n" . 
-										   'December',
+								'value' => __( 'January' ) . "\r\n" . 
+										   __( 'February' ) . "\r\n" .
+										   __( 'March' ) . "\r\n" . 
+										   __( 'April' ) . "\r\n" . 
+										   __( 'May' ) . "\r\n" . 
+										   __( 'June' ) . "\r\n" . 
+										   __( 'July' ) . "\r\n" . 
+										   __( 'August' ) . "\r\n" . 
+										   __( 'September' ) . "\r\n" . 
+										   __( 'October' ) . "\r\n" . 
+										   __( 'November' ) . "\r\n" . 
+										   __( 'December' ),
 								'checked' => '0',
 								'display' => '1',
 								'desc' => '',
@@ -282,18 +285,19 @@
 								'position' => '10',
 								),
 							'marketing' => array(
-								'label' => 'Marketing Info?',
+								'label' => __( 'Marketing Info', 'mobile-dj-manager' ) . '?',
 								'id' => 'marketing',
 								'type' => 'checkbox',
 								'value' => '1',
 								'checked' => ' checked',
 								'display' => '1',
-								'desc' => 'Do we add the user to the mailing list?',
+								'desc' => __( 'Do we add the user to the mailing list', 'mobile-dj-manager' ) . '?',
 								'default' => '1',
 								'position' => '11',
 								),
 						),
 						'mdjm_payment_settings' => array(
+							'payment_gateway'		=> false,
 							'currency'			   => 'GBP',
 							'currency_format'		=> 'before',
 							'decimal'				=> '.',
@@ -312,7 +316,6 @@
 							'payment_sources'	 	=> $payment_sources,
 						),
 						'mdjm_paypal_settings' 	=> array(
-							'enable_paypal'	   => false,
 							'paypal_email'		=> get_bloginfo( 'admin_email' ),
 							'redirect_success'	=> 'N',
 							'redirect_cancel'	 => 'N',
@@ -323,6 +326,18 @@
 							'paypal_debug'		=> false,
 							'receiver_email'	  => get_bloginfo( 'admin_email' ),
 							'checkout_style' 	  => '',
+						),
+						'mdjm_payfast_settings' 	=> array(
+							'merchant_id'			=> '',
+							'merchant_key'			=> '',
+							'email_confirmation'	=> get_bloginfo( 'admin_email' ),
+							'redirect_pf_success'	=> 'N',
+							'redirect_pf_cancel'	=> 'N',
+							'payfast_button'		=> 'paynow_basic_logo.gif',
+							'enable_pf_sandbox'		=> false,
+							'sandbox_merchant_id'	=> '',
+							'sandbox_merchant_key'	=> '',
+							'payfast_debug'			=> false
 						),
 						'mdjm_debug_settings' => array(
 							'enable'		=> false,
@@ -553,12 +568,12 @@
 			
 			/* -- Needed page params -- */
 			$mdjm_pages = array( /* -- Page Title => array [0] = slug, [1] = content, [2] = parent/child -- */
-							'Client Zone'		   => array( 'client-zone', 'Home', 'parent', 'app_home_page' ),
-							'Your Details'		  => array( 'client-details', 'Profile', 'child', 'profile_page' ),
-							'Event Contract'	 	=> array( 'client-contracts', 'Contract', 'child', 'contracts_page' ),
-							'Playlist Management'   => array( 'client-playlists', 'Playlist', 'child', 'playlist_page' ),
-							'Event Payments'		=> array( 'client-payments', 'Payments', 'child', 'payments_page' ),
-							'Event Quotes'		  => array( 'client-quotes', 'Online Quote', 'child', 'quotes_page' ),
+				__( 'Client Zone', 'mobile-dj-manager' )   => array( 'client-zone', 'Home', 'parent', 'app_home_page' ),
+				__( 'Your Details', 'mobile-dj-manager' )		  => array( 'client-details', 'Profile', 'child', 'profile_page' ),
+				__( 'Event Contract', 'mobile-dj-manager' )	 	=> array( 'client-contracts', 'Contract', 'child', 'contracts_page' ),
+				__( 'Playlist Management', 'mobile-dj-manager' )   => array( 'client-playlists', 'Playlist', 'child', 'playlist_page' ),
+				__( 'Event Payments', 'mobile-dj-manager' )		=> array( 'client-payments', 'Payments', 'child', 'payments_page' ),
+				__( 'Event Quotes', 'mobile-dj-manager' )		  => array( 'client-quotes', 'Online Quote', 'child', 'quotes_page' ),
 							);
 
 			/* -- Defaults for all pages -- */
@@ -673,13 +688,13 @@
 				$tax_labels['mdjm-venue'] = array(
 								'name'              		   => _x( 'Venue Details', 'taxonomy general name' ),
 								'singular_name'     		  => _x( 'Venue Detail', 'taxonomy singular name' ),
-								'search_items'      		   => __( 'Search Venue Details' ),
-								'all_items'         		  => __( 'All Venue Details' ),
-								'edit_item'        		  => __( 'Edit Venue Detail' ),
-								'update_item'       			=> __( 'Update Venue Detail' ),
-								'add_new_item'      		   => __( 'Add New Venue Detail' ),
-								'new_item_name'     		  => __( 'New Venue Detail' ),
-								'menu_name'         		  => __( 'Venue Details' ),
+								'search_items'      		   => __( 'Search Venue Details', 'mobile-dj-manager' ),
+								'all_items'         		  => __( 'All Venue Details', 'mobile-dj-manager' ),
+								'edit_item'        		  => __( 'Edit Venue Detail', 'mobile-dj-manager' ),
+								'update_item'       			=> __( 'Update Venue Detail', 'mobile-dj-manager' ),
+								'add_new_item'      		   => __( 'Add New Venue Detail', 'mobile-dj-manager' ),
+								'new_item_name'     		  => __( 'New Venue Detail', 'mobile-dj-manager' ),
+								'menu_name'         		  => __( 'Venue Details', 'mobile-dj-manager' ),
 								'separate_items_with_commas' => NULL,
 								'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details' ),
 								'not_found'				  => __( 'No details found' ),
@@ -697,47 +712,60 @@
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Event Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
 			/* -- Event Terms -- */
-			wp_insert_term( '16th Birthday Party', 'event-types' );
-			wp_insert_term( '18th Birthday Party', 'event-types' );
-			wp_insert_term( '21st Birthday Party', 'event-types' );
-			wp_insert_term( '30th Birthday Party', 'event-types' );
-			wp_insert_term( '40th Birthday Party', 'event-types' );
-			wp_insert_term( '50th Birthday Party', 'event-types' );
-			wp_insert_term( '60th Birthday Party', 'event-types' );
-			wp_insert_term( '70th Birthday Party', 'event-types' );
-			wp_insert_term( 'Anniversary Party', 'event-types' );
-			wp_insert_term( 'Child Birthday Party', 'event-types' );
-			wp_insert_term( 'Corporate Event', 'event-types' );
-			wp_insert_term( 'Engagement Party', 'event-types' );
-			wp_insert_term( 'Halloween Party', 'event-types' );
-			wp_insert_term( 'New Years Eve Party', 'event-types' );
-			wp_insert_term( 'Other', 'event-types' );
-			wp_insert_term( 'School Disco', 'event-types' );
-			wp_insert_term( 'School Prom', 'event-types' );
-			wp_insert_term( 'Wedding', 'event-types' );
+			wp_insert_term( __( '16th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '18th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '21st Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '30th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '40th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '50th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '60th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( '70th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Anniversary Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Child Birthday Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Corporate Event', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Engagement Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Halloween Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'New Years Eve Party', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Other', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'School Disco', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'School Prom', 'mobile-dj-manager' ), 'event-types' );
+			wp_insert_term( __( 'Wedding', 'mobile-dj-manager' ), 'event-types' );
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Transaction Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
+			
 			/* -- Transaction Terms -- */
-			wp_insert_term( 'Deposit', 'transaction-types' );
-			wp_insert_term( 'Balance', 'transaction-types' );
-			wp_insert_term( 'Certifications', 'transaction-types' );
-			wp_insert_term( 'Hardware', 'transaction-types' );
-			wp_insert_term( 'Insurance', 'transaction-types' );
-			wp_insert_term( 'Maintenance', 'transaction-types' );
-			wp_insert_term( 'Music', 'transaction-types' );
-			wp_insert_term( 'Parking', 'transaction-types' );
-			wp_insert_term( 'Petrol', 'transaction-types' );
-			wp_insert_term( 'Software', 'transaction-types' );
-			wp_insert_term( 'Vehicle', 'transaction-types' );
+			wp_insert_term( __( 'Deposit', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Balance', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Certifications', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Hardware', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Insurance', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Maintenance', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Merchant Fees', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Music', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Parking', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Petrol', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Software', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term( __( 'Vehicle', 'mobile-dj-manager' ), 'transaction-types' );
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Venue Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
 			/* -- Venue Terms -- */
-			wp_insert_term( 'Low Ceiling', 'venue-details', array( 'description' => 'Venue has a low ceiling' ) );
-			wp_insert_term( 'PAT Required', 'venue-details', array( 'description' => 'Venue requires a copy of the PAT certificate' ) );
-			wp_insert_term( 'PLI Required', 'venue-details', array( 'description' => 'Venue requires proof of PLI' ) );
-			wp_insert_term( 'Smoke/Fog Allowed', 'venue-details', array( 'description' => 'Venue allows the use of Smoke/Fog/Haze' ) );
-			wp_insert_term( 'Sound Limiter', 'venue-details', array( 'description' => 'Venue has a sound limiter' ) );
-			wp_insert_term( 'Via Stairs', 'venue-details', array( 'description' => 'Access to this Venue is via stairs' ) );
+			wp_insert_term( __( 'Low Ceiling', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Venue has a low ceiling' ) );
+				
+			wp_insert_term( __( 'PAT Required', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Venue requires a copy of the PAT certificate' ) );
+				
+			wp_insert_term( __( 'PLI Required', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Venue requires proof of PLI' ) );
+				
+			wp_insert_term( __( 'Smoke/Fog Allowed', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Venue allows the use of Smoke/Fog/Haze' ) );
+				
+			wp_insert_term( __( 'Sound Limiter', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Venue has a sound limiter' ) );
+				
+			wp_insert_term( __( 'Via Stairs', 'mobile-dj-manager' ),
+				'venue-details', array( 'description' => 'Access to this Venue is via stairs' ) );
 		} //set_mdjm_terms
 		
 		public function install_db()	{

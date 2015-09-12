@@ -14,16 +14,6 @@
 		global $mdjm;
 		wp_enqueue_script( 'youtube-subscribe' );
 		?>
-        <div id="fb-root"></div>
-		<script>(function(d, s, id) {
-			  var js, fjs = d.getElementsByTagName(s)[0];
-			  if (d.getElementById(id)) return;
-			  js = d.createElement(s); js.id = id;
-			  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=832846726735750&version=v2.0";
-			  fjs.parentNode.insertBefore(js, fjs);
-        }	(document, 'script', 'facebook-jssdk'));
-        </script>
-        
         <div class="wrap">
         <table class="widefat" width="100%">
         <tr>
@@ -83,9 +73,6 @@
 <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script></td>
         </tr>
         <tr>
-        <td><div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
-        </tr>
-        <tr>
         <td><div class="g-ytsubscribe" data-channelid="UCaD6icd6OZ8haoTBc5YjJrw" data-layout="default" data-count="hidden"></div></td>
         </tr>
         <tr>
@@ -111,7 +98,59 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
-	
+
+/**************************************************
+				VERSION 1.2.4
+**************************************************/
+	function f_mdjm_updated_to_1_2_4()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Online Payment Updates</font><br />
+		We have made some changes to the online payment system including the introduction of <a href="https://www.payfast.co.za" target="_blank">PayFast</a> as a fully integrated API solution within South Africa for the ZAR currency. <br /><br />
+As with <a href="https://www.paypal.com" target="_blank">PayPal</a> all transactions are automatically recorded reliably within MDJM once <a href="https://www.payfast.co.za" target="_blank">PayFast</a> confirm they have processed and accepted the payment enabling automated payment confirmation emails using MDJM templates to your clients.<br /><br />
+        
+        Select your desired gateway within the <a href="<?php echo mdjm_get_admin_page( 'payment_settings' ); ?>">Payments Settings</a> page and then configure as required. The <a href="https://www.paypal.com" target="_blank">PayPal</a> settings remain untouched if you are already using them.<br /><br />
+        
+        Other changes in this area include a full re-write of the Payment Gateway API's to bring the following new and enhanced features...
+        <ui>
+        	<li>Addition of new Transaction Type <code>Merchant Fees</code></li>
+            <li>When your client makes an online payment, if the Payment Gateway charges for the transaction, that charge is recorded within MDJM</li>
+            <li>Removed obvious deletion links from the required transaction types - Merchant Fees, <?php echo MDJM_DEPOSIT_LABEL . ', '. MDJM_BALANCE_LABEL . ', and ' . $GLOBALS['mdjm_settings']['payments']['other_amount_label']; ?></li>
+            <li>Addition of new Transaction Type <code>Merchant Fees</code></li>
+            <li>Payment confirmation email to admin now includes the remaining balance owed for the booking plus additional information relating to the transaction</li>
+            <li>Using Transaction Post ID as the invoice number for online transactions (<a href="https://www.paypal.com" target="_blank">PayPal</a> only)</li>
+            <li>Payment confirmation email to admin now includes the remaining balance for the booking</li>
+            <li>Improvements to the coding for the <?php echo MDJM_APP; ?>Payments Page</li>
+        </ui><br />
+        <font style="font-size:14px; font-weight:bold; color:#F90">Event Emails</font><br />
+        The <a href="<?php echo mdjm_get_admin_page( 'add_event' ); ?>">event</a> screen has been updated so that you can now overide email notification settings to clients regardless of event status. Toggle the <code>Disable Client Update Emails</code> setting as required.<br /><br />
+        We've also updated the event status transition process so that you can transition between any status as required rather than stepping through the <code>Unattended</code>, <code>Enquiry</code>, <code>Awiaiting Contract</code> and <code>Approved</code> status' step by step.<br /><br />
+Note that omitting the Enquiry status will result in no online quote being generated and bypassing the Awaiting Contract status will result in no contract being generated.
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+                <li><span class="mdjm-new">New</span>: <a href="<?php echo mdjm_get_admin_page( 'transactions' ); ?>">Transactions</a> list now includes <code>To/From</code> column to identify the payer/payee</li>
+                <li><span class="mdjm-new">New</span>: <a href="<?php echo mdjm_get_admin_page( 'events' ); ?>">Events</a> list now includes a <code>Due</code> column displaying the balance owed on the event</li>
+                <li><span class="mdjm-new">New</span>: <code>Notify Admin?</code><a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?></li>
+                <li><span class="mdjm-bug">Bug Fix</span>: <a href="https://www.paypal.com" target="_blank">PayPal</a> API now correctly processes non deposit/balance payments</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Dynamic coding did not update values under certain circumstances</li>
+                <li><span class="mdjm-general">General</span>: A few spelling corrections within admin</li>
+                <li><span class="mdjm-general">General</span>: Yet more translation work...nearly there!</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_1_2_4
+
 /**************************************************
 				VERSION 1.2.3.6
 **************************************************/

@@ -558,7 +558,7 @@
 						'id'     => 'mdjm-transaction-types',
 						'parent' => 'mdjm-transactions',
 						'title'  => __( 'Transaction Types' ),
-						'href'   => admin_url( 'edit-tags.php?taxonomy=transaction-types&post_type' . MDJM_TRANS_POSTS ),
+						'href'   => admin_url( 'edit-tags.php?taxonomy=transaction-types&post_type=' . MDJM_TRANS_POSTS ),
 						'meta'   => array(
 							'title' => __( 'View / Edit Transaction Types' ),
 						),

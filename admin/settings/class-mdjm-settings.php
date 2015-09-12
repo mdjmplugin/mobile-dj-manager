@@ -51,6 +51,7 @@
 				register_setting( 'mdjm-client-text', MDJM_CUSTOM_TEXT_KEY );
 				register_setting( 'mdjm-payments', MDJM_PAYMENTS_KEY );
 				register_setting( 'mdjm-paypal', MDJM_PAYPAL_KEY );
+				register_setting( 'mdjm-payfast', MDJM_PAYFAST_KEY );
 				register_setting( 'mdjm-uninstall', MDJM_UNINST_SETTINGS_KEY );
 			} // settings_register
 			
@@ -99,16 +100,17 @@
 			 */
 			function section_content( $args )	{
 				if( $args['id'] == 'mdjm_debugging_settings' )
-					echo __( '<p>The settings below enable the MDJM support team to identify any problems ' . 
+					echo '<p>' . sprintf( __( 'The settings below enable the MDJM support team to identify any problems ' . 
 					'you may be experiencing.</p>' . 
 					'<p>With debugging enabled, much of the activity that is executed as you browse around ' . 
-					'pages and utilise features within the MDJM application and the ' . MDJM_APP . ' is logged ' . 
+					'pages and utilise features within the MDJM application and the %s is logged ' . 
 					'and this can lead to slightly slower load times for your pages. It is therefore recommended ' . 
 					'that you leave debugging turned off unless you are experiencing an issue and the MDJM support ' . 
-					'team have asked you to enable this setting to aid in identifying the problem.</p>' );
+					'team have asked you to enable this setting to aid in identifying the problem.', 'mobile-dj-manager' ), 
+					MDJM_APP ) . '</p>' . "\r\n";
 					
 				if( $args['id'] == 'mdjm_debugging_files_settings' )
-					echo __( '<p>The following settings only apply if debugging is enabled</p>' );
+					echo '<p>' . __( 'The following settings only apply if debugging is enabled', 'mobile-dj-manager' ) . '</p>' . "\r\n";
 			} // section_content
 			
 			/*
@@ -357,6 +359,7 @@
 							'payments'	=> array(
 													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings',
 													__( 'PayPal Configuration', 'mobile-dj-manager' )	=> 'mdjm_paypal_settings',
+													__( 'PayFast Configuration', 'mobile-dj-manager' )	=> 'mdjm_payfast_settings',
 													),
 							);
 				if( !array_key_exists( $this->current_tab, $links ) )
@@ -367,7 +370,22 @@
 				$sections = count( $links[$this->current_tab] );
 				$i = 1;
 				
+				$payment_gw = array( 'mdjm_paypal_settings', 'mdjm_payfast_settings' );
+				
 				foreach( $links[$this->current_tab] as $name => $slug )	{
+					
+					if( in_array( $slug, $payment_gw ) )	{
+						if( MDJM_PAYMENTS == false )
+							continue;
+							
+						$sections = $sections - count( $payment_gw );
+
+						if( MDJM_PAYMENT_GW != substr( $slug, 5, strlen( MDJM_PAYMENT_GW ) ) )
+							continue;
+							
+						$sections = $sections - 1;
+					}
+					
 					echo '<li><a href="' . $this->tab_url( $this->current_tab, $slug ) . '"' . 
 					( $slug == $this->current_section ? ' class="current"' : '' ) . 
 					'>' . $name . '</a>' . ( $i < $sections ? ' | ' : '' ) . '</li>' . "\r\n";
@@ -532,8 +550,9 @@
 								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
 								'enable_packages', 'warn_unattended', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
-								'booking_conf_to_dj', 'notify_profile', 'package_prices', 'update_event', 'custom_client_text', 'enable_tax',
-								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'dj_see_wp_dash', 'dj_add_client',
+								'booking_conf_to_dj', 'notify_profile', 'package_prices', 'status_notification',
+								'update_event', 'custom_client_text', 'enable_tax',
+								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'enable_pf_sandbox', 'payfast_debug', 'dj_see_wp_dash', 'dj_add_client',
 								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists',
 								'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
 								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users'
@@ -586,11 +605,16 @@
 					if( $radio == 'html' )
 						echo __( 'Use standard HTML submit button with text', 'mobile-dj-manager' ) . 
 							'&nbsp;<input type="text" name="' . $args['key'] . '[button_text]" id="button_text" style="max-width: 100px;" value="' . 
-							( !empty( $mdjm_settings['paypal']['button_text'] ) ? $mdjm_settings['paypal']['button_text'] : 
+							( !empty( $mdjm_settings[MDJM_PAYMENT_GW]['button_text'] ) ? $mdjm_settings[MDJM_PAYMENT_GW]['button_text'] : 
 							__( 'Pay Now', 'mobile-dj-manager' ) ) . '">';
 						
-					else
-						echo '<img src="https://www.paypalobjects.com/en_GB/i/btn/' . $radio . '">';
+					else	{
+						if( MDJM_PAYMENT_GW == 'paypal' )
+							echo '<img src="https://www.paypalobjects.com/en_GB/i/btn/' . $radio . '">';
+							
+						elseif( MDJM_PAYMENT_GW == 'payfast' )
+							echo '<img src="https://www.payfast.co.za/images/buttons/' . $radio . '" style="alignment-baseline: baseline;">';
+					}
 						
 					echo '</label>' . "\n";
 					$i++;

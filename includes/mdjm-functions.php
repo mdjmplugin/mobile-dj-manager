@@ -32,6 +32,7 @@
 						'dashboard'             => 'admin.php?page=mdjm-dashboard',
 						'settings'              => 'admin.php?page=mdjm-settings',
 						'payment_settings'      => 'admin.php?page=mdjm-settings&tab=payments',
+						'clientzone_settings'   => 'admin.php?page=mdjm-settings&tab=client-zone',
 						'clients'               => 'admin.php?page=mdjm-clients',
 						'inactive_clients'      => 'admin.php?page=mdjm-clients&display=inactive_client',
 						'add_client'            => 'user-new.php',
@@ -116,8 +117,10 @@
 	 *
 	 *
 	 */
-	function mdjm_update_notice( $class, $message )	{
-		echo '<div id="message" class="' . $class . '">';
+	function mdjm_update_notice( $class, $message, $dismiss='' )	{
+		$dismiss = ( !empty( $dismiss ) ? ' notice is-dismissible' : '' );
+		
+		echo '<div id="message" class="' . $class . $dismiss . '">';
 		echo '<p>' . __( $message ) . '</p>';
 		echo '</div>';
 	} // mdjm_update_notice
@@ -347,13 +350,13 @@
 	*	@params: $args => array
 	*				(Required)
 	*				'name' = the name of the select list
-					(Optional)
-					'id' = the id of the select list (default to name')
-					'selected' = the item to be selected
-					'first_entry' = the first entry in the drop down list
-					'first_entry_value' = the value of the first entry in the drop down list
-					'small' = true: small font style
-					'return_type' = list: return the outputted select list | str: return as an array (default to list)
+	*				(Optional)
+	*				'id' = the id of the select list (default to name')
+	*				'selected' = the item to be selected
+	*				'first_entry' = the first entry in the drop down list
+	*				'first_entry_value' = the value of the first entry in the drop down list
+	*				'small' = true: small font style
+	*				'return_type' = list: return the outputted select list | str: return as an array (default to list)
 	*	@returns: $event_stati_dropdown = HTML for the select list
 	*/
 	function event_stati_dropdown( $args='' )	{
@@ -387,7 +390,7 @@
 		$selected = !empty( $current_status ) ? $current_status : 'mdjm-unattended';
 		
 		$event_stati_dropdown = '<select name="' . $args['name'] . '" id="' . $select_id . '"';
-		$event_stati_dropdown .= !empty( $args['small'] ) ? ' style="font-size: 11px;"' : '';
+		$event_stati_dropdown .= ( !empty( $args['small'] ) ? ' style="font-size: 11px;"' : '' );
 		$event_stati_dropdown .= '>' . "\r\n";
 		
 		if( !empty( $first_entry ) )

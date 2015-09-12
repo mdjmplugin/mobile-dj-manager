@@ -52,6 +52,9 @@
 					add_filter( 'post_updated_messages', array( &$this, 'custom_post_status_messages' ) ); // Status messages
 					add_filter( 'gettext', array( &$this, 'rename_publish_button' ), 10, 2 ); // Set the value of the submit button
 					add_filter( 'enter_title_here', array( &$this, 'title_placeholder' ) ); // Set the title placeholder text
+					/* -- Protected Terms -- */
+					add_filter( 'transaction-types_row_actions', array( &$this, 'protected_term_actions' ), 10, 2 );
+					add_action( 'admin_footer-edit-tags.php', array( &$this, 'protected_term_checkboxes' ) );
 				}
 
 			} // __construct()
@@ -1366,6 +1369,8 @@
 						'title' 	 		=> __( 'ID', 'mobile-dj-manager' ),
 						'tdate'			=> __( 'Date', 'mobile-dj-manager' ),
 						'direction'		=> __( 'In/Out', 'mobile-dj-manager' ),
+						'payee'			=> __( 'To/From', 'mobile-dj-manager' ),
+						'txn_status'	   => __( 'Status', 'mobile-dj-manager' ),
 						'detail'		   => __( 'Details', 'mobile-dj-manager' ),
 						'event'			=> __( 'Event', 'mobile-dj-manager' ),
 						'value'			=> __( 'Value', 'mobile-dj-manager' )
@@ -1489,7 +1494,7 @@
 					
 					$mdjm_transactions = new MDJM_Transactions();
 					
-					$rcvd = $mdjm_transactions->get_transactions( $post->ID, $direction='in' );
+					$rcvd = $mdjm_transactions->get_transactions( $post->ID, 'mdjm-income' );
 					
 					switch ( $column ) {
 						/* -- Event Date -- */
@@ -1619,7 +1624,16 @@
 							echo ( $post->post_status == 'mdjm-income' ? 
 								'<span style="color:green">In</span>' : 
 								'<span style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;Out</span>' );					
-							break;		
+							break;
+							
+						/* -- Source -- */
+						case 'payee':
+							echo ( $post->post_status == 'mdjm-income' ? 
+								get_post_meta( $post->ID, '_mdjm_payment_from', true ) : 
+								get_post_meta( $post->ID, '_mdjm_payment_to', true ) );
+							
+							break;
+								
 						/* -- Event -- */
 						case 'event':
 							echo ( wp_get_post_parent_id( $post->ID ) ? 
@@ -1631,6 +1645,11 @@
 						case 'value':
 							echo display_price( get_post_meta( $post->ID, '_mdjm_txn_total', true ) );
 							break;
+							
+						/* -- Status -- */
+						case 'txn_status':
+							echo get_post_meta( $post->ID, '_mdjm_txn_status', true );
+						break;
 					}
 				}
 				
@@ -2543,6 +2562,61 @@
 			public function post_exists( $id )	{
 				return is_string( get_post_status( $id ) );	
 			} // post_exists
+			
+			/**
+			 *
+			 * Ensure that built-in terms cannot be deleted by removing the 
+			 * delete, edit and quick edit options from the hover menu
+			 *
+			 * @param	arr		$actions		The array of actions in the hover menu
+			 * 			obj		$tag			The object array for the term
+			 */
+			function protected_term_actions( $actions, $tag )	{
+				$protected_terms = array(
+									__( 'Merchant Fees', 'mobile-dj-manager' ),
+									MDJM_DEPOSIT_LABEL,
+									MDJM_BALANCE_LABEL,
+									$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
+									
+				if ( in_array( $tag->name, $protected_terms ) ) 
+					unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
+					
+				return $actions;
+			} // protected_term_actions
+			
+			/**
+			 *
+			 * Ensure that built-in terms cannot be deleted by removing the 
+			 * bulk action checkboxes
+			 *
+			 *
+			 */
+			 function protected_term_checkboxes()	{
+				 if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )
+				 	return;
+					
+				$protected_terms = array(
+									__( 'Merchant Fees', 'mobile-dj-manager' ),
+									MDJM_DEPOSIT_LABEL,
+									MDJM_BALANCE_LABEL,
+									$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
+				?>
+				<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					<?php
+					foreach( $protected_terms as $term_name )	{
+						$obj_term = get_term_by( 'name', $term_name, 'transaction-types' );
+						if( !empty( $obj_term ) )	{
+							?>
+							$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();
+							<?php
+						}
+					}
+					?>
+				});
+				</script>
+				<?php
+			 } // protected_term_checkboxes
 			
 			/*
 			 * check_user_permission

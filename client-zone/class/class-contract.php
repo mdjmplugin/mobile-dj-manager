@@ -54,9 +54,7 @@
 						$this->sign_contract();
 					}
 					$this->display_contract();
-				}
-				
-				
+				}				
 			} // __construct
 			
 			/*
@@ -249,6 +247,59 @@
 					
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'Completed client signing of contract ' . __METHOD__, true );
+						
+					/* -- Email admin to notify of changes -- */
+					if( MDJM_NOTIFY_ADMIN == true )	{
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'Sending event status change notification to admin (Contract Signed)' );
+							
+						$content = '<html>' . "\n" . '<body>' . "\n";
+						$content .= '<p>' . sprintf( __( 'Good news... %s has just signed their event contract via %s', 'mobile-dj-manager' ), 
+											'{CLIENT_FULLNAME}', MDJM_APP ) . '</p>';
+											
+						$content .= '<hr />' . "\n";
+						$content .= '<h4><a href="' . get_edit_post_link( $this->event->ID ) . '">' . __( 'Event ID', 'mobile-dj-manager' ) . ': ' 
+							. MDJM_EVENT_PREFIX . $this->event->ID . '</a></h4>' . "\n";
+							
+						$content .= '<p>' . "\n";
+						$content .= __( 'Date', 'mobile-dj-manager' ) . ': {EVENT_DATE}<br />' . "\n";
+						$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . $mdjm->mdjm_events->get_event_type( $this->event->ID ) . '<br />' . "\n";
+						
+						$event_stati = get_event_stati();
+						
+						$content .= __( 'Status', 'mobile-dj-manager' ) . ': ' . $event_stati[get_post_status( $this->event->ID )] . '<br />' . "\n";
+						$content .= __( 'Client', 'mobile-dj-manager' ) . ': {CLIENT_FULLNAME}<br />' . "\n";
+						$content .= __( 'Value', 'mobile-dj-manager' ) . ': {TOTAL_COST}<br />' . "\n";
+						
+						$deposit = get_post_meta( $this->event->ID, '_mdjm_event_deposit' );
+						$deposit_status = get_post_meta( $this->event->ID, '_mdjm_event_deposit_status' );
+						
+						if( !empty( $deposit ) && $deposit != '0.00' )
+							$body .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
+						
+						$content .= __( 'Balance Due', 'mobile-dj-manager' ) . ': {BALANCE}</p>' . "\n";
+						
+						$content .= '<p>' . sprintf( __( '%sView Event%s', 'mobile-dj-manager' ),
+										'<a href="=' . get_edit_post_link( $this->event->ID ) . '">',
+										'</a>' )
+										 . '</p>' . "\n";
+						
+						$content .= '</body>' . "\n" . '</html>' . "\n";
+						
+						$mdjm->send_email( array(
+											'content'		=> $content,
+											'to'			 => $mdjm_settings['email']['system_email'],
+											'subject'		=> __( 'Event Contract Signed', 'mobile-dj-manager' ),
+												
+											'journal'		=> false,
+											'event_id'	   => $this->event->ID,
+											'cc_dj'		  => false,
+											'cc_admin'	   => false,
+											'log_comm'	   => false ) );
+					}
+					else
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'Skipping admin notification' );
 
 					wp_redirect( $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2' );
 					exit;

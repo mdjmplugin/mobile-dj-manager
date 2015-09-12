@@ -35,7 +35,12 @@
 											'post_status'	=> 'any',
 											'posts_per_page' => -1,
 											'orderby'		=> 'post_status',
-										) );
+											'meta_key'	   => '_mdjm_txn_status',										
+											'meta_query'	 => array(
+												'key'		=> '_mdjm_txn_status',
+												'value'  	  => 'Completed',
+												'compare'	=> '=' )
+											) );
 			$transactions = '';
 										
 			if( count( $event_transactions ) == 0 )	{
@@ -363,12 +368,8 @@
 		 *			str		$return			Optional: (default) value|transactions (obj arr)
 		 *
 		 */
-		function get_transactions( $event_id, $direction='', $status='', $return='' )	{
-			
-			$direction = ( !empty( $direction ) ? $direction : 'any' );
-			$status = ( !empty( $status ) ? $status : 'Completed' );
-			$return = ( !empty( $return ) ? $return : 'value' );
-			
+		function get_transactions( $event_id, $direction='any', $status='Completed', $return='value' )	{
+						
 			$total = '0.00';
 			
 			$transactions = get_posts( array(
@@ -391,7 +392,7 @@
 			}
 			
 			return ( $return == 'value' ? $total : $transactions );
-		}
+		} // get_transactions
 		
 		/*
 		 * Retrieve the event earnings for the employer or specified DJ
@@ -440,6 +441,115 @@
 			
 		} // cancel_transaction
 		
+		/*
+		 * Add a new transaction
+		 *
+		 * @param	arr		$data		Required: An array of the post data to insert
+		 *			arr		$meta		Optional: An array of meta data to add for the post
+		 *			str		$direction	Optional: The direction of the transaction. Default to In
+		 *			arr		$source		Optional: The term to associated with the transaction - i.e. the source of the payment (PayPal etc)
+		 * @return	int|bool			Post ID on successful insertion, or false on failure
+		 */
+		function add_transaction( $data, $meta='', $direction='in', $type='' )	{
+			global $mdjm_settings;
+			
+			if( MDJM_DEBUG == true )
+				$GLOBALS['mdjm_debug']->log_it( 'Beginning transaction add procedure in ' . __METHOD__, true );
+			
+			// Define the post status
+			$txn_status = ( strtolower( $direction ) == 'in' ? 'mdjm-income' : 'mdjm-expenditure' );
+			
+			// Define the source of payment
+			if( !empty( $type ) )	{
+				//$txn_type = get_term_by( 'name', $type, 'transaction-types' );
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'term found with ID ' . $type, true );
+			}
+			
+			/* -- Get the new post ID -- */
+			if( !function_exists( 'get_default_post_to_edit' ) )
+				require_once( ABSPATH . '/wp-admin/includes/post.php' );
+			
+			$trans_post = get_default_post_to_edit( MDJM_TRANS_POSTS, true );
+			
+			$trans_data['ID'] = MDJM_EVENT_PREFIX . $trans_post->ID;
+			$trans_data['post_title'] = MDJM_EVENT_PREFIX . $trans_post->ID;
+			$trans_data['post_status'] = $txn_status;
+			$trans_data['post_date'] = ( !empty( $data['post_date'] ) ? $data['post_date'] : date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) );
+			$trans_data['edit_date'] = true;
+			
+			$trans_data['post_author'] = ( !empty( $data['post_author'] ) ? $data['post_author'] : 1 );
+			$trans_data['post_type'] = MDJM_TRANS_POSTS;
+			$trans_data['post_category'] = ( !empty( $type ) ? array( $type ) : '' );
+			$trans_data['post_parent'] = ( !empty( $data['post_parent'] ) ? $data['post_parent'] : '' );
+			$trans_data['post_modified'] = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+			
+			$trans_meta['_mdjm_txn_status'] = ( !empty( $meta['_mdjm_txn_status'] ) ? $meta['_mdjm_txn_status'] : 'Completed' );
+			$trans_meta['_mdjm_txn_source'] = ( !empty( $meta['_mdjm_txn_source'] ) ? $meta['_mdjm_txn_source'] : $mdjm_settings['payments']['default_type'] );
+			$trans_meta['_mdjm_gw_txn_id'] = ( !empty( $meta['_mdjm_gw_txn_id'] ) ? $meta['_mdjm_gw_txn_id'] : '' );
+			$trans_meta['_mdjm_payer_firstname'] = ( !empty( $meta['_mdjm_payer_firstname'] ) ? 
+				sanitize_text_field( ucfirst( stripslashes( $meta['_mdjm_payer_firstname'] ) ) ) : '' );
+													
+			$trans_meta['_mdjm_payer_lastname'] = ( !empty( $meta['_mdjm_payer_lastname'] ) ? 
+				sanitize_text_field( ucfirst( stripslashes( $meta['_mdjm_payer_lastname'] ) ) ) : '' );
+													
+			$trans_meta['_mdjm_payer_email'] = ( !empty( $meta['_mdjm_payer_email'] ) ? 
+				strtolower( $meta['_mdjm_payer_email'] ) : '' );
+			
+			$trans_meta['_mdjm_txn_net'] = ( !empty( $meta['_mdjm_txn_net'] ) ? 
+													number_format( $meta['_mdjm_txn_net'], 2 ) : '0.00' );
+															
+			$trans_meta['_mdjm_txn_currency'] = ( !empty( $meta['_mdjm_txn_currency'] ) ? 
+				strtoupper( $meta['_mdjm_txn_currency'] ) : $mdjm_settings['payments']['currency'] );
+													
+			$trans_meta['_mdjm_txn_fee'] = ( !empty( $meta['_mdjm_txn_fee'] ) ? 
+													number_format( $meta['_mdjm_txn_fee'], 2 ) : '0.00' );
+													
+			$trans_meta['_mdjm_txn_total'] = ( !empty( $meta['_mdjm_txn_total'] ) ? 
+													number_format( $meta['_mdjm_txn_total'], 2 ) : '0.00' );
+													
+			$trans_meta['_mdjm_payment_to'] = ( !empty( $meta['_mdjm_payment_to'] ) ? 
+													$meta['_mdjm_payment_to'] : '' );
+													
+			$trans_meta['_mdjm_payment_from'] = ( !empty( $meta['_mdjm_payment_from'] ) ? 
+													$meta['_mdjm_payment_from'] : '' );	
+			
+			// Add the transaction	
+			$txn_id = wp_update_post( $trans_data );
+			if( !empty( $txn_id ) )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Added transaction with ID: ' . $txn_id );
+									
+				// Set the transaction source (term)
+				if( !empty( $type ) )	{
+					wp_set_post_terms( $txn_id, $type, 'transaction-types' );
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'Assigning transaction source ID ' . $type );
+				}
+					
+				// Add the meta data
+				if( !empty( $trans_meta ) && is_array( $trans_meta ) )	{
+					foreach( $trans_meta as $key => $value )	{
+						if( add_post_meta( $txn_id, $key, $value ) )	{
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( 'Meta key ' . $key . ' added with value ' . $value );
+						}
+						else	{
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( 'Failed to add Meta key ' . $key . ' with value ' . $value );	
+						}
+					}
+				}
+			}
+			else	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Failed to add transaction' );
+					
+				return false;
+			}
+			
+			return $txn_id;
+		} // add_transaction
 	} // class MDJM_Transactions
  
 ?>

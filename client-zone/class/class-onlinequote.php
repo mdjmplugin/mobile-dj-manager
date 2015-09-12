@@ -256,7 +256,7 @@
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
 				/* -- Initiate actions for status change -- */
-				wp_transition_post_status( 'mdjm-rejected', $event->post_status, $event );
+				wp_transition_post_status( 'mdjm-quote-viewed', 'mdjm-quote-generated', get_post( $quote_id ) );
 				
 				if( MDJM_DEBUG == true )
 					$GLOBALS['mdjm_debug']->log_it( 'Setting quote to viewed status for quote ' . $quote_id . ' event ' . $event_id, true );

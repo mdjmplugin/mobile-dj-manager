@@ -137,6 +137,11 @@
 					do_settings_sections( 'mdjm-paypal' );
 				break;
 				
+				case 'mdjm_payfast_settings':
+					settings_fields( 'mdjm-payfast' );
+					do_settings_sections( 'mdjm-payfast' );
+				break;
+				
 				case 'mdjm_client_field_settings':
 					include_once( 'class-mdjm-settings-client-fields.php' );
 				break;

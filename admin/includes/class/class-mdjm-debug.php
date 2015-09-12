@@ -63,7 +63,13 @@
 				
 				$this->files = array(
 							'MDJM Debug'		=> array( MDJM_DEBUG_LOG, 'mdjm_debug.log' ),
-							'MDJM PayPal API'   => array( MDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log', 'mdjm-pp-ipn-debug.log' ),
+															 
+							'MDJM PayPal API'   => array( MDJM_PLUGIN_DIR . 
+								 '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log', 'mdjm-pp-ipn-debug.log' ),
+								 
+							'MDJM PayFast API'   => array( MDJM_PLUGIN_DIR . 
+								'/admin/includes/api/api-log/mdjm-payfast-itn-debug.log', 'mdjm-payfast-itn-debug.log' ),
+								
 							'WordPress Debug'   => array( WP_CONTENT_DIR . '/debug.log', 'debug.log' ),
 							);
 				
@@ -278,7 +284,8 @@
 				}
 				
 				/* -- Set log files -- */
-				$this->payments_log = MDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log';
+				$this->paypal_log = MDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-pp-ipn-debug.log';
+				$this->payfast_log = MDJM_PLUGIN_DIR . '/admin/includes/api/api-log/mdjm-payfast-itn-debug.log';
 				$this->php_info_log = MDJM_PLUGIN_DIR . '/admin/includes/phpinfo.html';
 				$this->content_file = MDJM_PLUGIN_DIR . '/admin/includes/mdjm_content.html';
 				
@@ -425,8 +432,11 @@
 				if( file_exists( WP_CONTENT_DIR . '/debug.log' ) ) // WP Log file
 					$files[] = WP_CONTENT_DIR . '/debug.log';
 					
-				if( file_exists( $this->payments_log ) ) // Paypal IPN Log
-					$files[] = $this->payments_log;
+				if( file_exists( $this->paypal_log ) ) // PayPal IPN Log
+					$files[] = $this->paypal_log;
+					
+				if( file_exists( $this->payfast_log ) ) // PayFast ITN Log
+					$files[] = $this->payfast_log;
 					
 				if( file_exists( $this->php_info_log ) ) // PHP Info file
 					$files[] = $this->php_info_log;

@@ -362,6 +362,9 @@
 				
 				/* -- Licensing -- */
 				$this->license_warning();
+				
+				/* -- Price Increase -- */
+				$this->price_increase();
 			} // notices
 	
 /*
@@ -402,6 +405,7 @@
 								'pages'	   => get_option( MDJM_PAGES_KEY ),
 								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
 								'paypal'	  => get_option( MDJM_PAYPAL_KEY ),
+								'payfast'	  => get_option( MDJM_PAYFAST_KEY ),
 								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
 								'uninst'	  => get_option( MDJM_UNINST_SETTINGS_KEY ),
 								);
@@ -416,7 +420,8 @@
 				define( 'MDJM_EVENT_PREFIX', isset( $mdjm_settings['events']['event_prefix'] ) ? $mdjm_settings['events']['event_prefix'] : '' );
 				define( 'MDJM_PLAYLIST_CLOSE', isset( $mdjm_settings['playlist']['close'] ) ? $mdjm_settings['playlist']['close'] : '0' );
 				define( 'MDJM_CURRENCY', isset( $mdjm_settings['payments']['currency'] ) ? mdjm_set_currency( $mdjm_settings['payments']['currency'] ) : mdjm_set_currency( 'GBP' ) );
-				define( 'MDJM_PAYMENTS', ( !empty( $mdjm_settings['paypal']['enable_paypal'] ) ? true : false ) );
+				define( 'MDJM_PAYMENTS', ( !empty( $mdjm_settings['payments']['payment_gateway'] ) ? true : false ) );
+				define( 'MDJM_PAYMENT_GW', ( !empty( $mdjm_settings['payments']['payment_gateway'] ) ? $mdjm_settings['payments']['payment_gateway'] : false ) );
 				define( 'MDJM_DEPOSIT_LABEL', isset( $mdjm_settings['payments']['deposit_label'] ) ? $mdjm_settings['payments']['deposit_label'] : 'Deposit' );
 				define( 'MDJM_BALANCE_LABEL', isset( $mdjm_settings['payments']['balance_label'] ) ? $mdjm_settings['payments']['balance_label'] : 'Balance' );
 				define( 'MDJM_COMPANY', isset( $mdjm_settings['main']['company_name'] ) ? $mdjm_settings['main']['company_name'] : '' );
@@ -430,6 +435,7 @@
 				define( 'MDJM_QUOTES_PAGE', isset( $mdjm_settings['pages']['quotes_page'] ) ? $mdjm_settings['pages']['quotes_page'] : '' );
 				define( 'MDJM_CUSTOM_TEXT', isset( $mdjm_settings['custom_text']['custom_client_text'] ) ? $mdjm_settings['custom_text']['custom_client_text'] : false );
 				define( 'MDJM_ONLINE_QUOTES', ( !empty( $mdjm_settings['templates']['online_enquiry'] ) ? true : false ) );
+				define( 'MDJM_NOTIFY_ADMIN', ( !empty( $mdjm_settings['clientzone']['status_notification'] ) ? true : false ) );
 			 } // mdjm_settings
 			 
 			 /*
@@ -735,6 +741,29 @@
 										'" target="_blank">http://www.mydjplanner.co.uk</a> to renew.<br />' . 
 										'Functionality will be restricted until your license is renewed' );
 			} // license_warning
+			
+			/*
+			 * Price increase warning
+			 * Remove after version 1.3
+			 *
+			 *
+			 */
+			function price_increase()	{
+				$warn = get_option( 'price_warning' );
+				$update = get_option( 'mdjm_update_me' );
+				
+				if( !empty( $warn ) && is_admin() && current_user_can( 'administrator' ) && empty( $update ) )	{
+					mdjm_update_notice( 'update-nag',
+										sprintf( __( 'The price of the MDJM plugin will increase from October 1st. To benefit from the ' .
+										'current price %spurchase your license now%s', 'mobile-dj-manager' ),
+										'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '">',
+										'</a>' ),
+										true );
+										
+				delete_option( 'price_warning' );
+										
+				}
+			} // price_increase
 /*
  * --
  * WIDGETS
@@ -931,8 +960,16 @@
 					case 'MDJM_PAYPAL_GW':
 						if( MDJM_DEBUG == true )
 							$GLOBALS['mdjm_debug']->log_it( 'PayPal IPN API listener activated', true );
-						include( MDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-pp-ipn.php' );
+						include( MDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-PayPal-ipn.php' );
 					break;
+					
+					/* -- PayFast ITN API -- */
+					case 'MDJM_PAYFAST_GW':
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( 'PayFast ITN API listener activated', true );
+						include( MDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-PayFast-itn.php' );
+					break;
+					
 					/* -- MDJM Email Tracking -- */
 					case 'MDJM_EMAIL_RCPT':
 						if( MDJM_DEBUG == true )
@@ -1193,18 +1230,19 @@
 			 * 
 			 *
 			 * @param    array	$args
-			 *						Required: content 	str			post ID or email content as str
-			 *						Required: to	 	str|int		email address or user ID of recipient
-			 *						Optional: subject	str			required if content is not a post ID
-			 *						Optional: from		int			user ID of sender, defaults to 0 (system)
-			 *						Optional: journal	str|bool	The journal entry type or false not to log this action, default to 'email-client'
-			 *						Optional: event_id	int			event ID
-			 *						Optional: html		bool		true sends html (Default) false plain text
-			 *						Optional: cc_dj		bool		true sends copy to DJ false does not, only applicable if we have event. Default per settings
-			 *						Optional: cc_admin	bool		true sends copy to Admin false does not. Default per settings
-			 *						Optional: source	str			what initiated the email - i.e. Event Enquiry (Default)
-			 *						Optional: filter	bool		true (Default) filters subject and content for shortcode, false does not
-			 *						Optional: log_comm	bool		true (Default) logs the email, false does not
+			 *						Required: content 		str			post ID or email content as str
+			 *						Required: to	 		str|int		email address or user ID of recipient
+			 *						Optional: subject		str			required if content is not a post ID
+			 *						Optional: from			int			user ID of sender, defaults to 0 (system)
+			 *						Optional: journal		str|bool	The journal entry type or false not to log this action, default to 'email-client'
+			 *						Optional: event_id		int			event ID
+			 *						Optional: html			bool		true sends html (Default) false plain text
+			 *						Optional: cc_dj			bool		true sends copy to DJ false does not, only applicable if we have event. Default per settings
+			 *						Optional: cc_admin		bool		true sends copy to Admin false does not. Default per settings
+			 *						Optional: source		str			what initiated the email - i.e. Event Enquiry (Default)
+			 *						Optional: filter		bool		true (Default) filters subject and content for shortcode, false does not
+			 *						Optional: add_filters	arr			An array with key {SEARCH} and value $replace for additional filters to process
+			 *						Optional: log_comm		bool		true (Default) logs the email, false does not
 			 *
 			 * @return   str	$comm_id	The communication post ID if the email was successfully sent
 			 * @since    1.1.3
@@ -1339,14 +1377,28 @@
 					$msg = $message;
 					$sub = $subject;	
 				}
+				
+				/* -- Additional filters -- */
+				if( !empty( $args['add_filters'] ) && is_array( $args['add_filters'] ) )	{
+					if( MDJM_DEBUG == true )
+						$this->debug_logger( 'Additional content filtering requested...' );
+					
+					foreach( $args['add_filters'] as $key => $value )	{
+						$search[] = $key;
+						$replace[] = $value;	
+					}
+					
+					$sub = str_replace( $search, $replace, $sub );
+					$msg = str_replace( $search, $replace, $msg );
+				}
 												
 				/* -- Add the COMM post -- */
 				if( $log_comm == true )	{
-					if( !class_exists( 'MDJM_Communication' ) || !$mdjm_comms )	{
+					if( !class_exists( 'MDJM_Communication' ) )
 						require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
-						$mdjm_comms = new MDJM_Communication();	
-					}
-					
+						
+					$mdjm_comms = new MDJM_Communication();
+				
 					remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 					$comm_post = $mdjm_comms->insert_comm( array (
 											'subject'	=> $sub,
@@ -1362,7 +1414,7 @@
 					
 					elseif( MDJM_DEBUG == true )
 						$this->debug_logger( 'Comm post created with ID `' . $comm_post . '` ', true );
-				}
+					}
 				else	{
 					if( MDJM_DEBUG == true )
 						$this->debug_logger( 'Skipping communication logging by command' );	
@@ -1568,9 +1620,9 @@
 					'{EVENT_DESCRIPTION}'    => ( !empty( $eventinfo['notes'] ) ? $eventinfo['notes'] : '' ),
 					'{EVENT_NAME}'		   => ( !empty( $eventinfo['name'] ) ? $eventinfo['name'] : '' ),
 					'{EVENT_TYPE}'		   => ( !empty( $eventinfo['type'] ) ? $eventinfo['type'] : '' ),
-					'{PAYMENT_AMOUNT}'	   => ( isset( $_POST['mc_gross'] ) ? display_price( $_POST['mc_gross'] ) : '' ),
-					'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
-					'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
+					//'{PAYMENT_AMOUNT}'	   => ( isset( $_POST['mc_gross'] ) ? display_price( $_POST['mc_gross'] ) : '' ),
+					//'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
+					//'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
 					'{PAYMENT_URL}'		  => ( !empty( $e ) ? $this->get_link( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
 					'{PLAYLIST_CLOSE}'	   => $mdjm_settings['playlist']['close'] != 0 ? $mdjm_settings['playlist']['close'] : 'never',
 					'{PLAYLIST_URL}'		 => $this->get_link( MDJM_PLAYLIST_PAGE, false ),
@@ -1679,6 +1731,7 @@
 	define( 'MDJM_PAGES_KEY', 'mdjm_plugin_pages' );
 	define( 'MDJM_PAYMENTS_KEY', 'mdjm_payment_settings' );
 	define( 'MDJM_PAYPAL_KEY', 'mdjm_paypal_settings' );
+	define( 'MDJM_PAYFAST_KEY', 'mdjm_payfast_settings' );
 	define( 'MDJM_PERMISSIONS_KEY', 'mdjm_plugin_permissions' );
 	define( 'MDJM_AVAILABILITY_SETTINGS_KEY', 'mdjm_availability_settings' );
 	define( 'MDJM_SCHEDULES_KEY', 'mdjm_schedules' );

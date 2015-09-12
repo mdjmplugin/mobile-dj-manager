@@ -79,6 +79,22 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.4 =
+<strong>Released Saturday 12th September, 2015</strong>
+<ul>
+	<li>New: Introduction of PayFast as a payment gateway to accept online payments using the ZAR currency</li>
+	<li>New: Addition of new built-in Transaction Type Merchant Fees</li>
+	<li>New: When your client makes an online payment, if the Payment Gateway charges for the transaction, that charge is recorded within MDJM</li>
+	<li>New: Removed obvious deletion links from the required transaction types - Merchant Fees, Deposit, Balance, and Other Amount</li>
+	<li>New: Payment confirmation email to admin now includes the remaining balance owed for the booking plus additional information relating to the transaction</li>
+	<li>New: Using Transaction Post ID as the invoice number for online transactions (PayPal only)</li>
+	<li>New: Payment confirmation email to admin now includes the remaining balance for the booking</li>
+	<li>New: Transactions list now includes To/From column to identify the payer/payee</li>
+	<li>New: Events list now includes a Due column displaying the balance owed on the event</li>
+	<li>New: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?></li>
+	<li>Bug Fix: PayPal API now correctly processes non deposit/balance payments</li>
+	<li>Bug Fix: Dynamic coding did not update values under certain circumstances</li>
+</ul>
 = 1.2.3.6 =
 <strong>Released Friday 4th September, 2015</strong>
 <ul>

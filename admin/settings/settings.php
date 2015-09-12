@@ -145,6 +145,14 @@
 							'title' 	=> __( 'PayPal Advanced Configuration', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-paypal',
 							),
+					'mdjm_payfast_settings' => array(
+							'title' 	=> __( 'PayFast Configuration', 'mobile-dj-manager' ) . '<hr />',
+							'page'	 => 'mdjm-payfast',
+							),
+					'mdjm_payfast_advanced_settings' => array(
+							'title' 	=> __( 'PayFast Advanced Configuration', 'mobile-dj-manager' ) . '<hr />',
+							'page'	 => 'mdjm-payfast',
+							),
 						);
 
 	/*
@@ -472,60 +480,61 @@
 					
 					/* -- Event Settings -- */
 							'event_prefix' => array(
-									'label' => 'Event Prefix:',
+									'label' => __( 'Event Prefix', 'mobile-dj-manager' ) . ':',
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'type' => 'text',
 									'class' => 'small-text',
 									'value' => MDJM_EVENT_PREFIX,
 									'text' => '',
-									'desc' => 'The prefix you enter here will be added to each unique event, contract and invoice ID. ',
+									'desc' => __( 'The prefix you enter here will be added to each unique event, contract and invoice ID', 'mobile-dj-manager' ),
 									'section' => 'event',
 									'page' => 'events',
 									),
 							
 							'employer' => array(
-									'label' => 'I am an Employer?',
+									'label' => __( 'I am an Employer', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['events']['employer'] ) ? '1' : '' ),
 									'text' => '',
-									'desc' => 'Check this if you employ other staff (i.e. ' . MDJM_DJ . '\'s)',
+									'desc' => __( 'Check this if you employ other staff', 'mobile-dj-manager' ),
 									'section' => 'event',
 									'page' => 'events',
 									),
 									
 							'artist' => array(
-									'label' => 'Refer to Performers as?',
+									'label' => __( 'Refer to Performers as', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'value'	=> MDJM_DJ,
 									'type' => 'text',
 									'class' => 'regular-text',
-									'text' => 'Default is <code>DJ</code>',
-									'desc' => 'Change the name of your performers here as necessary. Useful if you are not a DJ business',
+									'text' => sprintf( __( 'Default is %s', 'mobile-dj-manager' ), '<code>' . MDJM_DJ . '</code' ),
+									'desc' => __( 'Change the name of your performers here as necessary. Useful if you are not a DJ business', 'mobile-dj-manager' ),
 									'section' => 'general',
 									'section' => 'event',
 									'page'  => 'events',
 									),
 									
 							'enable_packages' => array(
-									'label' => 'Enable Packages?',
+									'label' => __( 'Enable Packages', 'mobile-dj-manager' ) . '?',
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'value' => ( MDJM_PACKAGES == true ? '1' : '' ),
 									'text' => '',
-									'desc' => 'Check this to enable Equipment Packages & Inventories',
+									'desc' => __( 'Check this to enable Equipment Packages & Inventories', 'mobile-dj-manager' ),
 									'section' => 'event',
 									'page' => 'events',
 									),
 									
 							'default_contract' => array(
-									'label' => 'Default Client Contract',
+									'label' => __( 'Default Client Contract', 'mobile-dj-manager' ),
 									'key' => MDJM_EVENT_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['events']['default_contract'] ) ? $mdjm_settings['events']['default_contract'] : '' ),
-									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="page-title-action">Add New</a>',
-									'desc' => 'Select the client contract you want to use as default. This can be changed per event.',
+									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=contract" class="page-title-action">' . 
+										__( 'Add New', 'mobile-dj-manager' ) . '</a>',
+									'desc' => __( 'Select the client contract you want to use as default. This can be changed per event', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'sort_order' => 'ASC',
 														'list_type' => 'contract'
@@ -540,7 +549,9 @@
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['events']['warn_unattended'] ) ? '1' : '' ),
 									'text' => '',
-									'desc' => 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries',
+									'desc' => __( 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries', 
+										'mobile-dj-manager' ),
+										
 									'section' => 'event',
 									'page' => 'events',
 									),
@@ -552,7 +563,7 @@
 									'class' => 'all-options',
 									'value' => $mdjm_settings['events']['enquiry_sources'],
 									'text' => '',
-									'desc' => 'Enter possible sources of enquiries. One per line',
+									'desc' => __( 'Enter possible sources of enquiries. One per line', 'mobile-dj-manager' ),
 									'section' => 'event',
 									'page' => 'events',
 									),
@@ -563,7 +574,7 @@
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['events']['journaling'] ) ? '1' : '' ),
 									'text' => '',
-									'desc' => 'Log and track all client &amp; event actions (recommended)',
+									'desc' => __( 'Log and track all client &amp; event actions (recommended)', 'mobile-dj-manager' ),
 									'section' => 'event',
 									'page' => 'events',
 									),
@@ -649,7 +660,7 @@
 									'type' => 'checkbox',
 									'value' => ( !empty( $mdjm_settings['email']['track_client_emails'] ) ? '1' : '' ),
 									'text' => 'If selected you can determine if emails you send have been opened ' . 
-									'witihin the <a href="' . mdjm_get_admin_page( 'comms' ) . '">Communicatiion ' . 
+									'witihin the <a href="' . mdjm_get_admin_page( 'comms' ) . '">Communication ' . 
 									'history page</a>',
 									'desc' => '<code>Note</code>: not all email clients will support this',
 									'section' => 'email',
@@ -682,7 +693,7 @@
 									'label' => 'Quote Template:',
 									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
-									'value' => ( !empty( $mdjm_settings['templates']['enquiry'] ) ? $mdjm_settings['templates']['enquiry'] : '' ),
+									'value' => ( !empty( $mdjm_settings['templates']['enquiry'] ) ? '1' : '0' ),
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => sprintf( __( 'This is the default template used when sending quotes via %semail%s to clients', 'mobile-dj-manager' ),
 										'<code>', '</code>' ),
@@ -720,7 +731,7 @@
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['unavailable'] ) ? $mdjm_settings['templates']['unavailable'] : '' ),
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
-									'desc' => 'This is the default template used when respoding to enquiries that you are unavailable for the event',
+									'desc' => 'This is the default template used when responding to enquiries that you are unavailable for the event',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[unavailable_email_template]',
 														'sort_order' => 'ASC',
@@ -799,7 +810,7 @@
 									'label' => 'Booking Confirmation to client?',
 									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
 									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['templates']['booking_conf_to_client'] ) ? $mdjm_settings['templates']['booking_conf_to_client'] : '' ),
+									'value' => ( !empty( $mdjm_settings['templates']['booking_conf_to_client'] ) ? '1' : '0' ),
 									'text' => '',
 									'desc' => 'Email client with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
 									'section' => 'confirmation_templates',
@@ -846,7 +857,7 @@
 									'label' => 'Booking Confirmation to ' . MDJM_DJ . '?',
 									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
 									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? $mdjm_settings['templates']['booking_conf_to_dj'] : '' ),
+									'value' => ( !empty( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? '1' : '0' ),
 									'text' => '',
 									'desc' => 'Email ' . MDJM_DJ . ' with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved',
 									'section' => 'confirmation_templates',
@@ -877,7 +888,7 @@
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['payment_cfm_template'] ) ? $mdjm_settings['templates']['payment_cfm_template'] : '' ),
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
-									'desc' => 'Select an email template to be sent to clients when confirming receipt of a payment. <a href="www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
+									'desc' => 'Select an email template to be sent to clients when confirming receipt of a payment. <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[payment_cfm_template]',
 														'sort_order' => 'ASC',
@@ -894,7 +905,7 @@
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['templates']['manual_payment_cfm_template'] ) ? $mdjm_settings['templates']['manual_payment_cfm_template'] : '' ),
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
-									'desc' => 'Select an email template to be sent to clients when you manually mark an event payment as received. <a href="www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
+									'desc' => 'Select an email template to be sent to clients when you manually mark an event payment as received. <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> can be used.',
 									'custom_args' => array (
 														'name' =>  MDJM_TEMPLATES_SETTINGS_KEY . '[manual_payment_cfm_template]',
 														'sort_order' => 'ASC',
@@ -962,6 +973,18 @@
 									'text' => '',
 									'desc' => sprintf( __( 'Select to display event package %s Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
 										'&amp;', MDJM_APP ),
+									'section' => 'clientzone_event',
+									'page' => 'clientzone',
+									),
+							
+							'status_notification' => array(
+									'label' => __( 'Notify Admin', 'mobile-dj-manager' ) . '?',
+									'key' => MDJM_CLIENTZONE_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['clientzone']['status_notification'] ) ? true : false ),
+									'text' => '',
+									'desc' => sprintf( __( 'Select to send an email to admin when a client updates their event via %s', 'mobile-dj-manager' ),
+										MDJM_APP ),
 									'section' => 'clientzone_event',
 									'page' => 'clientzone',
 									),
@@ -1760,6 +1783,30 @@
 									),
 										
 					/* -- Payment Settings -- */
+							'payment_gateway' => array(
+									'label' => 'Payment Gateway:',
+									'key' => MDJM_PAYMENTS_KEY,
+									'type' => 'custom_dropdown',
+									'class' => 'small-text',
+									'value' => ( !empty( $mdjm_settings['payments']['payment_gateway'] ) ? 
+										$mdjm_settings['payments']['payment_gateway'] : false ),
+									'text' => '',
+									'desc' => '',
+									'custom_args' => array (
+														'name' =>  MDJM_PAYMENTS_KEY . '[payment_gateway]',
+														'sort_order' => '',
+														'list_type' => 'defined',
+														'list_values' => array( 
+															'0'			=> __( 'Disable', 'mobile-dj-manager' ),
+															'paypal'	=> __( 'PayPal', 'mobile-dj-manager' ),
+															'payfast'	=> __( 'PayFast (South Africa Only)', 'mobile-dj-manager' ) ),
+														
+																		
+														),
+									'section' => 'payment',
+									'page' => 'payments',
+									),
+					
 							'currency' => array(
 									'label' => 'Currency:',
 									'key' => MDJM_PAYMENTS_KEY,
@@ -1944,7 +1991,8 @@
 									'key' => MDJM_PAYMENTS_KEY,
 									'type' => 'text',
 									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payments']['payment_label'] ) ? $mdjm_settings['payments']['payment_label'] : __( 'Make a Payment Towards', 'mobile-dj-manager' ) ),
+									'value' => ( !empty( $mdjm_settings['payments']['payment_label'] ) ? $mdjm_settings['payments']['payment_label'] : 
+										__( 'Make a Payment Towards', 'mobile-dj-manager' ) ),
 									'text' => 'Default is <code>Make a Payment Towards:</code>',
 									'desc' => 'Display name of the label shown to users to select the payment they wish to make',
 									'section' => 'payment',
@@ -1956,9 +2004,30 @@
 									'key' => MDJM_PAYMENTS_KEY,
 									'type' => 'text',
 									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payments']['other_amount_label'] ) ? $mdjm_settings['payments']['other_amount_label'] : __( 'Other Amount', 'mobile-dj-manager' ) ),
-									'text' => sprintf( __( 'Deafult is %sOther Amount%s', 'mobile-dj-manager' ), '<code>','</code>' ),
+									'value' => ( !empty( $mdjm_settings['payments']['other_amount_label'] ) ? $mdjm_settings['payments']['other_amount_label'] : 
+										__( 'Other Amount', 'mobile-dj-manager' ) ),
+									'text' => sprintf( __( 'Default is %sOther Amount%s. Be sure to create a %sTransaction Type%s that matches this label', 
+										'mobile-dj-manager' ), 
+										'<code>',
+										'</code>',
+										'<a href="' . admin_url( 'edit-tags.php?taxonomy=transaction-types&post_type=mdjm-transaction' ) . '">',
+										'</a>' ),
 									'desc' => __( 'Enter your desired label for the other amount radio button', 'mobile-dj-manager' ),
+									'section' => 'payment',
+									'page' => 'payments',
+									),
+									
+							'other_amount_default' => array(
+									'label' => __( 'Default ', 'mobile-dj-manager' ) . ( !empty( $mdjm_settings['payments']['other_amount_label'] ) ? 
+										$mdjm_settings['payments']['other_amount_label'] : __( 'Other Amount', 'mobile-dj-manager' ) ) . ':',
+									'key' => MDJM_PAYMENTS_KEY,
+									'type' => 'text',
+									'class' => 'small-text',
+									'value' => ( !empty( $mdjm_settings['payments']['other_amount_default'] ) ? number_format( $mdjm_settings['payments']['other_amount_default'], 2 ) : '50.00' ),
+									'text' => sprintf( __( 'Deafult is %s50.00%s', 'mobile-dj-manager' ), '<code>','</code>' ),
+									'desc' => sprintf( __( 'Enter the default amount to be used in the %s field', 'mobile-dj-manager' ), 
+										( !empty( $mdjm_settings['payments']['other_amount_label'] ) ? $mdjm_settings['payments']['other_amount_label'] : 
+											__( 'Other Amount', 'mobile-dj-manager' ) ) ),
 									'section' => 'payment',
 									'page' => 'payments',
 									),
@@ -2017,7 +2086,8 @@
 									'section' => 'payment',
 									'page' => 'payments',
 									),
-									
+							
+						/* -- PayPal Settings -- */		
 							'enable_paypal' => array(
 									'label' => 'Enable PayPal?',
 									'key' => MDJM_PAYPAL_KEY,
@@ -2162,7 +2232,158 @@
 									'desc' => 'If you have created a custom <a href="https://www.paypal.com/customize" target="_blank" title="PayPal\'s Custom Payment Pages: An Overview">PayPal Checkout Page</a>, enter it\'s ID here to use it',
 									'section' => 'paypal_advanced',
 									'page' => 'paypal',
-									)
+									),
+									
+						/* -- PayFast Settings -- */
+							'merchant_id' => array(
+									'label' => __( 'PayFast Merchant ID', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payfast']['merchant_id'] ) ? $mdjm_settings['payfast']['merchant_id'] : '' ),
+									'text' => '',
+									'desc' => __( 'Your PayFast merchant ID is needed before you can take payments via your website', 'mobile-dj-manager' ),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+									
+							'merchant_key' => array(
+									'label' => __( 'PayFast Merchant Key', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payfast']['merchant_key'] ) ? $mdjm_settings['payfast']['merchant_key'] : '' ),
+									'text' => '',
+									'desc' => __( 'Your PayFast merchant key is needed before you can take payments via your website', 'mobile-dj-manager' ),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+									
+							'email_confirmation' => array(
+									'label' => __( 'Email Confirmation Address', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'email',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payfast']['email_confirmation'] ) ? $mdjm_settings['payfast']['email_confirmation'] : '' ),
+									'text' => '',
+									'desc' => __( 'Enter the email address at which you wish to receive payment confirmations. Leave blank for no confirmation', 'mobile-dj-manager' ),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+									
+							'redirect_pf_success' => array(
+									'label' => __( 'Redirect Successful Payment To', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_settings['payfast']['redirect_pf_success'],
+									'text' => sprintf( __( '%sCurrent Page%s is the page the Client initiated the payment from', 'mobile-dj-manager' ),
+										'<code>',
+										'</code>' ),
+									'desc' => __( 'Where do you want your Client redirected to once Payment has completed', 'mobile-dj-manager' ) . '?',
+									'custom_args' => array (
+														'name' =>  MDJM_PAYFAST_KEY . '[redirect_pf_success]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_settings['payfast']['redirect_pf_success'],
+														'list_type' => 'page',
+														'show_option_none' => 'Current Page',
+														'option_none_value' => $mdjm_settings['pages']['payments_page'],
+														'id' => 'redirect_pf_success',
+														),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+									
+							'redirect_pf_cancel' => array(
+									'label' => __( 'Redirect Cancelled Payment To', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'custom_dropdown',
+									'class' => 'regular-text',
+									'value' => $mdjm_settings['payfast']['redirect_pf_cancel'],
+									'text' => sprintf( __( '%sCurrent Page%s is the page the Client initiated the payment from', 'mobile-dj-manager' ),
+										'<code>',
+										'</code>' ),
+									'desc' => __( 'Where do you want your Client redirected to if they cancel the payment', 'mobile-dj-manager' ) . '?',
+									'custom_args' => array (
+														'name' =>  MDJM_PAYFAST_KEY . '[redirect_pf_cancel]',
+														'sort_order' => 'ASC',
+														'selected' => $mdjm_settings['payfast']['redirect_pf_cancel'],
+														'list_type' => 'page',
+														'show_option_none' => __( 'Current Page', 'mobile-dj-manager' ),
+														'option_none_value' => $mdjm_settings['pages']['payments_page'],
+														'id' => 'redirect_pf_cancel',
+														),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+									
+							'payfast_button' => array(
+									'label' => 'Payment Button:',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'radio',
+									'value' => ( !empty( $mdjm_settings['payfast']['payfast_button'] ) ? $mdjm_settings['payfast']['payfast_button'] : 'html' ),
+									'text' => '',
+									'desc' => '',
+									'custom_args' => array (
+														'name' 	  => MDJM_PAYPAL_KEY . '[payfast_button]',
+														'values'	=> array(
+																			'paynow_basic_logo.gif',
+																			'html'
+																			),
+														),
+									'section' => 'payfast',
+									'page' => 'payfast',
+									),
+							
+						/* -- PayFast Advanced -- */		
+							'enable_pf_sandbox' => array(
+									'label' => __( 'PayFast Sandbox', 'mobile-dj-manager' ) . '?',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['payfast']['enable_pf_sandbox'] ) ? '1' : '0' ),
+									'text' => '',
+									'desc' => sprintf( __( 'Enable only to test payments. You can sign up for a developer account %shere%s', 'mobile-dj-manager' ),
+										'<a href="https://sandbox.payfast.co.za/" target="_blank">',
+										'</a>' ),
+									'section' => 'payfast_advanced',
+									'page' => 'payfast',
+									),
+									
+							'sandbox_merchant_id' => array(
+									'label' => __( 'PayFast Sandbox Merchant ID', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payfast']['sandbox_merchant_id'] ) ? $mdjm_settings['payfast']['sandbox_merchant_id'] : '' ),
+									'text' => '',
+									'desc' => __( 'If using PayFast Sandbox, enter your sandbox Merchant ID here. If not set, your normal PayFast Merchant ID will be used', 'mobile-dj-manager' ),
+									'section' => 'payfast_advanced',
+									'page' => 'payfast',
+									),
+									
+							'sandbox_merchant_key' => array(
+									'label' => __( 'PayFast Sandbox Merchant Key', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'text',
+									'class' => 'regular-text',
+									'value' => ( !empty( $mdjm_settings['payfast']['sandbox_merchant_key'] ) ? $mdjm_settings['payfast']['sandbox_merchant_key'] : '' ),
+									'text' => '',
+									'desc' => __( 'If using PayFast Sandbox, enter your sandbox Merchant Key here. If not set, your normal PayFast Merchant Key will be used', 'mobile-dj-manager' ),
+									'section' => 'payfast_advanced',
+									'page' => 'payfast',
+									),
+																		
+							'payfast_debug' => array(
+									'label' => __( 'Debug', 'mobile-dj-manager' ) . '?',
+									'key' => MDJM_PAYFAST_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['payfast']['payfast_debug'] ) ? '1' : '0' ),
+									'text' => __( 'Enable logging', 'mobile-dj-manager' ),
+									'desc' => sprintf( __( 'Enable to capture logs for PayFast - will be stored at %s', 'mobile-dj-manager' ),
+										'<code>' . MDJM_PLUGIN_DIR . '/includes/api/api-log/mdjm-payfast-itn-debug.log</code>' ),
+									'section' => 'payfast_advanced',
+									'page' => 'payfast',
+									),
 									
 							);		
 ?>

@@ -21,8 +21,6 @@
 			public function __construct()	{
 				global $clientzone_loaded, $clientzone, $my_mdjm, $mdjm_settings;
 				
-				mdjm_page_visit( MDJM_APP . ' Home' );
-				
 				define( 'MDJM_EDIT_EVENT', ( !empty( $mdjm_settings['clientzone']['update_event'] ) ? true : false ) );
 				define( 'MDJM_EDIT_EVENT_DISABLE', ( !empty( $mdjm_settings['clientzone']['edit_event_stop'] ) ? 
 					$mdjm_settings['clientzone']['edit_event_stop'] : '5' ) );

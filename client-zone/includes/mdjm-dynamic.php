@@ -69,3 +69,28 @@ Author URI: http://www.mydjplanner.co.uk
 	} // update_contact_form_addon_options
 	add_action( 'wp_ajax_mdjm_update_contact_form_addon_options', 'update_contact_form_addon_options' );
 	add_action( 'wp_ajax_nopriv_mdjm_update_contact_form_addon_options', 'update_contact_form_addon_options' );
+	
+	/*
+	 * create a new post so that the ID can be used
+	 * Generally used for the Payments page for creating an Invoice ID
+	 *
+	 * @param:	str		$type			Required: The type of post to create
+	 *			
+	 * @return	The post ID
+	 */
+	function mdjm_create_post()	{
+		$transaction = get_default_post_to_edit( $_POST['mdjm_post_type'], true );
+		
+		if( empty( $transaction ) )
+			return $result['type'] = 'error';
+		
+		$response['type'] = 'success';
+		$response['id'] = $transaction->ID;
+		
+		echo json_encode( $response );
+		
+		die();
+			
+	} // mdjm_create_post
+	add_action( 'wp_ajax_mdjm_create_post', 'mdjm_create_post' );
+	add_action( 'wp_ajax_nopriv_mdjm_create_post', 'mdjm_create_post' );

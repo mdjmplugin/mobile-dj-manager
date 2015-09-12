@@ -22,7 +22,7 @@
 				global $clientzone_loaded, $my_mdjm, $mdjm_settings;
 								
 				$clientzone_loaded = true;
-								
+												
 				/* -- Text replacements THIS CAN BE REMOVED SOON -- */
 				$mdjm_client_text = get_option( MDJM_CUSTOM_TEXT_KEY );
 				
@@ -216,11 +216,65 @@
 				/* -- Re-add the save post hook -- */
 				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
+				/* -- Email admin to notify of changes -- */
+				if( MDJM_NOTIFY_ADMIN == true )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Sending event status change notification to admin' );
+						
+					$content = '<html>' . "\n" . '<body>' . "\n";
+					$content .= '<p>' . sprintf( __( 'Good news... %s has just accepted their event quotation via %s', 'mobile-dj-manager' ), 
+										'{CLIENT_FULLNAME}', MDJM_APP ) . '</p>';
+										
+					$content .= '<hr />' . "\n";
+					$content .= '<h4><a href="' . get_edit_post_link( $post->ID ) . '">' . __( 'Event ID', 'mobile-dj-manager' ) . ': ' 
+						. MDJM_EVENT_PREFIX . $post->ID . '</a></h4>' . "\n";
+						
+					$content .= '<p>' . "\n";
+					$content .= __( 'Date', 'mobile-dj-manager' ) . ': {EVENT_DATE}<br />' . "\n";
+					$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . $mdjm->mdjm_events->get_event_type( $post->ID ) . '<br />' . "\n";
+					
+					$event_stati = get_event_stati();
+					
+					$content .= __( 'Status', 'mobile-dj-manager' ) . ': ' . $event_stati[get_post_status( $post->ID )] . '<br />' . "\n";
+					$content .= __( 'Client', 'mobile-dj-manager' ) . ': {CLIENT_FULLNAME}<br />' . "\n";
+					$content .= __( 'Value', 'mobile-dj-manager' ) . ': {TOTAL_COST}<br />' . "\n";
+					
+					$deposit = get_post_meta( $post->ID, '_mdjm_event_deposit' );
+					$deposit_status = get_post_meta( $post->ID, '_mdjm_event_deposit_status' );
+					
+					if( !empty( $deposit ) && $deposit != '0.00' )
+						$body .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
+					
+					$content .= __( 'Balance Due', 'mobile-dj-manager' ) . ': {BALANCE}</p>' . "\n";
+					
+					$content .= '<p>' . sprintf( __( '%sView Event%s', 'mobile-dj-manager' ),
+									'<a href="=' . get_edit_post_link( $post->ID ) . '">',
+									'</a>' )
+									 . '</p>' . "\n";
+					
+					$content .= '</body>' . "\n" . '</html>' . "\n";
+					
+					$mdjm->send_email( array(
+										'content'		=> $content,
+										'to'			 => $mdjm_settings['email']['system_email'],
+										'subject'		=> __( 'Event Quotation Accepted', 'mobile-dj-manager' ),
+											
+										'journal'		=> false,
+										'event_id'	   => $post->ID,
+										'cc_dj'		  => false,
+										'cc_admin'	   => false,
+										'log_comm'	   => false ) );
+				}
+				else
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Skipping admin notification' );
+				
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'Completed enquiry acceptance via ' . MDJM_APP . ' in ' .  __METHOD__, true );
 					
 				$this->display_message( 1, 2 );
-			}
+			} // accept_enquiry
+			
 /*
  * --
  * CLIENT PROFILE ACTIONS

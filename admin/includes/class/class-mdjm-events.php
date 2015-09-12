@@ -595,7 +595,7 @@
 			$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
 			$deposit = get_post_meta( $post_id, '_mdjm_event_deposit', true );
 			$deposit_status = get_post_meta( $post_id, '_mdjm_event_deposit_status', true );
-			$paid = $mdjm_transactions->get_transactions( $post_id, $direction='in' );
+			$paid = $mdjm_transactions->get_transactions( $post_id, 'mdjm-income' );
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
@@ -712,7 +712,7 @@
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'ERROR: Could not find the term.', true );
 					
-				return __( 'No Event Type Set' );	
+				return __( 'No Event Type Set', 'mobile-dj-manager' );	
 			}
 			
 		} // get_event_type
@@ -860,12 +860,12 @@
 					$content = $quote_template->post_content;
 					$content = apply_filters( 'the_content', $content );
 					$content = str_replace( ']]>', ']]&gt;', $content );
+					
 					/* -- Shortcode replacements -- */
 					$content = $mdjm->filter_content(
 										$event_data['_mdjm_event_client'],
 										$post_id,
-										$content
-										);
+										$content );
 					
 					// If no quote post exists for this event, we'll be creating one
 					if( empty( $quote_post ) )	{
@@ -909,7 +909,7 @@
 			}
 			
 			/* -- Send emails as required -- */
-			if( isset( $_POST['mdjm_email_enquiry'] ) )	{
+			if( empty( $_POST['mdjm_block_emails'] ) || $_POST['mdjm_block_emails'] != 'Y' )	{
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( '	-- Generating Email' );
 					
@@ -920,8 +920,8 @@
 									'journal'	=> 'email-client',
 									'event_id'   => $post_id,
 									'html'	   => true,
-									'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-									'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+									'cc_dj'	  => !empty( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+									'cc_admin'   => !empty( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
 									'source'	 => 'Event Enquiry',
 								) );
 				if( $quote )	{
@@ -969,14 +969,20 @@
 			if( MDJM_DEBUG == true )
 				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
-			/* -- Email the contract to the client is required -- */
-			$contact_client = isset( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
+			/* -- Email the contract to the client as required -- */
+			$contact_client = !empty( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
 			$contract_email = isset( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : false;
 			
 			if( !$mdjm_posts->post_exists( $contract_email ) )	{
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
+			}
+			
+			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Overiding client email settings' );
+				$contact_client = false;
 			}
 			
 			if( $contact_client == true )	{
@@ -1039,15 +1045,22 @@
 				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
 			/* -- Email the confirmation to the client & DJ if required -- */
-			$contact_client = isset( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
-			$contact_dj = isset( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? true : false;
-			$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['main']['booking_conf_client'] : false;
-			$dj_email = isset( $mdjm_settings['templates']['booking_conf_dj'] ) ? $mdjm_settings['templates']['booking_conf_dj'] : false;
+			$contact_client = !empty( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
+			$contact_dj = !empty( $mdjm_settings['templates']['booking_conf_to_dj'] ) ? true : false;
+			$client_email = !empty( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : false;
+			$dj_email = !empty( $mdjm_settings['templates']['email_dj_confirm'] ) ? $mdjm_settings['templates']['email_dj_confirm'] : false;
 			
 			if( !$mdjm_posts->post_exists( $client_email ) )	{
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
+				
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
+			}
+			
+			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( 'Overiding client email settings' );
+				$contact_client = false;
 			}
 			
 			if( $contact_client == true )	{

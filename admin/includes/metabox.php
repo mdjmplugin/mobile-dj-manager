@@ -133,7 +133,7 @@
 			<?php
 			if( $existing_event == false )	{
 				?>
-				var email_enq = document.getElementById("mdjm_email_enquiry");
+				var block_emails = document.getElementById("mdjm_block_emails");
 				var reset_pw = document.getElementById("mdjm_reset_pw");
 				<?php
 			}
@@ -146,7 +146,7 @@
 				<?php
 				if( $existing_event == false )	{
 					?>
-					email_enq.checked = true;
+					block_emails.checked = false;
 					reset_pw.checked = true;
 					<?php
 				}
@@ -850,23 +850,36 @@
 				?>
             </div>
         </div>
+        <div class="mdjm-meta-row">
+            <div class="mdjm-left-col">
+            <?php
+            echo '<input type="checkbox" name="mdjm_block_emails" id="mdjm_block_emails" value="Y"';
+            
+            if( $post->post_status == 'mdjm-unattended' )
+                echo ' onclick="showTemplateOptions();"';
+                
+            if( $post->post_status == 'mdjm-enquiry' )
+                checked( 'contract_to_client', false );
+                
+            if( $post->post_status == 'mdjm-enquiry' )
+                checked( 'booking_conf_to_client', false );
+            
+            echo ' />' . "\r\n";
+            ?>
+            </div>
+            <div class="mdjm-right-col"><?php _e( 'Disable Client Update Emails', 'mobile-dj-manager' ) . '?'; ?></div>
+        </div>
         <?php
 		if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )	{
 			?>
-            <div class="mdjm-meta-row">
-                <div class="mdjm-left-col">
-                <input type="checkbox" name="mdjm_email_enquiry" id="mdjm_email_enquiry" value="Y" checked="checked" onclick="showTemplateOptions()" />
-                </div>
-                <div class="mdjm-right-col"><?php _e( 'Email Quote to Client?' ); ?></div>
-            </div>
             <div id="email_template_fields">
                 <script type="text/javascript">
                 function showTemplateOptions(){
-                    if (mdjm_email_enquiry.checked == 1)	{
-                        document.getElementById('email_template_fields').style.display = "block";
+                    if (mdjm_block_emails.checked == 1)	{
+                        document.getElementById('email_template_fields').style.display = "none";
                     }
                     else	{
-                        document.getElementById('email_template_fields').style.display = "none";	
+                        document.getElementById('email_template_fields').style.display = "block";	
                     }
                 }
                 </script>
@@ -1258,8 +1271,10 @@
 					echo '<label class="mdjm-label" for="transaction_to">Paid To:</label><br />';
 				echo '</div>' . "\r\n";
 				echo '<input type="text" name="transaction_payee" id="transaction_payee" class="regular_text" value="' 
-					. get_post_meta( $post->ID, ( $post->post_status = 'mdjm-income' ? 
-					'_mdjm_payment_from' : '_mdjm_payment_to' ) , true ) . '" />';
+					. ( $post->post_status == 'mdjm-income' ? 
+					get_post_meta( $post->ID, '_mdjm_payment_from', true ) :
+					get_post_meta( $post->ID, '_mdjm_payment_to', true ) )
+					. '" />';
 			echo '</div>' . "\r\n";
 			
 			/* -- The current transaction type -- */
