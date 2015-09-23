@@ -18,8 +18,8 @@
 					'{DJ_NOTES}', '{DJ_PRIMARY_PHONE}', '{DJ_SETUP_DATE}', '{DJ_SETUP_TIME}', '{END_TIME}',
 					'{EVENT_DATE}', '{EVENT_DATE_SHORT}', '{EVENT_DESCRIPTION}', '{EVENT_TYPE}', '{PAYMENT_AMOUNT}',
 					'{PAYMENT_DATE}', '{PAYMENT_FOR}', '{PAYMENT_URL}', '{PLAYLIST_CLOSE}', '{PLAYLIST_URL}',
-					'{START_TIME}', '{TOTAL_COST}', '{VENUE}', '{VENUE_CONTACT}', '{VENUE_DETAILS}', '{VENUE_EMAIL}',
-					'{VENUE_FULL_ADDRESS}', '{VENUE_NOTES}', '{VENUE_TELEPHONE}',
+					'{GUEST_PLAYLIST_URL}', '{START_TIME}', '{TOTAL_COST}', '{VENUE}', '{VENUE_CONTACT}', '{VENUE_DETAILS}', 
+					'{VENUE_EMAIL}', '{VENUE_FULL_ADDRESS}', '{VENUE_NOTES}', '{VENUE_TELEPHONE}',
 					);
 					
 	$payment_sources = get_transaction_source();
@@ -508,7 +508,7 @@
 									'value'	=> MDJM_DJ,
 									'type' => 'text',
 									'class' => 'regular-text',
-									'text' => sprintf( __( 'Default is %s', 'mobile-dj-manager' ), '<code>' . MDJM_DJ . '</code' ),
+									'text' => sprintf( __( 'Default is %s', 'mobile-dj-manager' ), '<code>' . MDJM_DJ . '</code>' ),
 									'desc' => __( 'Change the name of your performers here as necessary. Useful if you are not a DJ business', 'mobile-dj-manager' ),
 									'section' => 'general',
 									'section' => 'event',
@@ -2373,6 +2373,54 @@
 									'section' => 'payfast_advanced',
 									'page' => 'payfast',
 									),
-									
-							);		
+							);
+							
+	if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )	{
+		$all_sections['mdjm_to_pdf_settings'] = array(
+							'title' 	=> __( 'MDJM to PDF Settings', 'mobile-dj-manager' ) . '<hr />',
+							'page'	 => 'mdjm-to-pdf' );	
+		
+		$all_settings['pdf_page_size'] = 
+					array(
+						'label' => __( 'Page Size', 'mobile-dj-manager' ) . ':',
+						'key' => MDJM_PDF_SETTINGS_KEY,
+						'type' => 'custom_dropdown',
+						'class' => 'regular-text',
+						'value' => $GLOBALS['mdjm_pdf_settings']['pdf_page_size'],
+						'text' => __( 'Set the page size for PDF documents', 'mobile-dj-manager' ),
+						'desc' => '',
+						'custom_args' => array (
+											'name' =>  MDJM_PDF_SETTINGS_KEY . '[pdf_page_size]',
+											'sort_order' => 'ASC',
+											'selected' => $GLOBALS['mdjm_pdf_settings']['pdf_page_size'],
+											'sort_order' => '',
+											'list_type' => 'defined',
+											'list_values' => array( 'A4' => 'A4',
+																	'Letter' => 'Letter',
+																	'Legal' => 'Legal' ),
+											),
+						'section' => 'to_pdf',
+						'page' => 'to-pdf' );
+						
+		$all_settings['pdf_page_orientation'] = 
+					array(
+						'label' => __( 'Page Orientation', 'mobile-dj-manager' ) . ':',
+						'key' => MDJM_PDF_SETTINGS_KEY,
+						'type' => 'custom_dropdown',
+						'class' => 'regular-text',
+						'value' => $GLOBALS['mdjm_pdf_settings']['pdf_page_orientation'],
+						'text' => __( 'Set the page size for PDF documents', 'mobile-dj-manager' ),
+						'desc' => '',
+						'custom_args' => array (
+											'name' =>  MDJM_PDF_SETTINGS_KEY . '[pdf_page_orientation]',
+											'sort_order' => 'ASC',
+											'selected' => $GLOBALS['mdjm_pdf_settings']['pdf_page_orientation'],
+											'sort_order' => '',
+											'list_type' => 'defined',
+											'list_values' => array( '-A' => 'Portrait',
+																	'-L' => 'Landscape' ),
+											),
+						'section' => 'to_pdf',
+						'page' => 'to-pdf' );					
+	}
 ?>

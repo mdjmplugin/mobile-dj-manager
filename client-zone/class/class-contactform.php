@@ -101,6 +101,7 @@
 				.mdjm-form-valid {
 					color: #000000;
 				}
+				<?php echo ( !empty( $this->form_config['css'] ) ? $this->form_config['css'] : '' ); ?>
 				</style>
 				<script type="text/javascript">
 				<?php mdjm_jquery_datepicker_script( array(  ) ); ?>
@@ -131,6 +132,10 @@
 				foreach( $this->form_fields as $field )	{
 					$field = $this->field_data( $field->ID );
 					$field_settings = $this->field_settings( $field->ID );
+					
+					if( $field_settings['type'] == 'section_head' || $field_settings['type'] == 'rule' )
+						continue;
+					
 					$contact_fields[$field->ID] = array( 
 													'id'		=> $field->ID,
 													'slug'	  => $field->post_name,
@@ -149,19 +154,6 @@
 							rules:
 							{
 								<?php
-								/*foreach( $this->form_fields as $field )	{
-									$field = $this->field_data( $field->ID );
-									$field_settings = $this->field_settings( $field->ID );
-									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
-										echo '"' . $field->post_name . '":' . "\r\n";
-										echo '{' . "\r\n";
-										echo 'required: true';
-										if( $field_settings['type'] == 'email' || $field_settings['type'] == 'url' )	{
-											echo ',' . "\r\n" . $field_settings['type'] . ': true' . "\r\n";
-										}
-										echo '}' . ( $i < $required_fields ? ',' : '' ) . "\r\n";
-									}
-								}*/
 								$i = 1;
 								foreach( $contact_fields as $contact_field )	{
 									if( in_array( $contact_field['id'], $is_required ) )	{
@@ -195,22 +187,6 @@
 										$i++;
 									}
 								}
-								/*foreach( $this->form_fields as $field )	{
-									$field = $this->field_data( $field->ID );
-									$field_settings = $this->field_settings( $field->ID );
-									if( isset( $field_settings['config']['required'] ) && $field_settings['config']['required'] == 'Y' )	{
-										echo '"' . $field->post_name . '":' . "\r\n";
-										echo '{' . "\r\n";
-										echo 'required: " ' . str_replace( '{FIELD_NAME}', $field->post_title, $this->form_config['required_field_text'] ) . '",' .  "\r\n";
-										if( $field_settings['type'] == 'email' )	{
-											echo $field_settings['type'] . ': "Please enter a valid email address",' . "\r\n";
-										}
-										if( $field_settings['type'] == 'url' )	{
-											echo $field_settings['type'] . ': "Please enter a valid URL",' . "\r\n";
-										}
-										echo '},' . "\r\n";	
-									}
-								}*/
 								?>	
 							}, // End messages
 							
@@ -247,7 +223,7 @@
 				$this->admin_email_headers[] = 'MIME-Version: 1.0';
 				$this->admin_email_headers[] = 'Content-type: text/html; charset=UTF-8';
 				$this->admin_email_headers[] = 'From: ' . $this->form_config['email_from_name'] . ' <' . $this->form_config['email_from'] . '>';
-				
+				$this->admin_email_headers[] = 'X-Mailer: ' . MDJM_NAME . ' version ' . MDJM_VERSION_NUM . ' (http://www.mydjplanner.co.uk)';
 				/* -- Start Email Content -- */
 				$this->admin_email_body = '<html><body>';
 				
@@ -283,8 +259,8 @@
 					$this->manage_user(); // Update or create the user
 						
 					/* -- Event Enquiry Creation -- */
-					if( isset( $this->form_config['create_enquiry'], $this->event_update, $_POST['_mdjm_event_date'], $this->user_id ) && 
-						$this->form_config['create_enquiry'] == 'Y' )	{
+					if( isset( $this->form_config['create_enquiry'], $this->event_update, $_POST['_mdjm_event_date'] ) && 
+						!empty( $this->user_id ) && $this->form_config['create_enquiry'] == 'Y' )	{
 						
 						if( MDJM_DEBUG == true )
 							$mdjm->debug_logger( 'Configured to create Enquiry' );
@@ -296,7 +272,7 @@
 					}
 					
 					/* -- Form Content to client if configured -- */
-					if( isset( $this->form_config['copy_sender'], $this->client_form_detail ) && $this->form_config['copy_sender'] == 'Y' )	{
+					if( isset( $this->form_config['copy_sender'], $this->client_form_detail, $this->user_id ) && $this->form_config['copy_sender'] == 'Y' )	{
 						$mdjm->send_email( array( 
 									'content'	=> !empty( $this->form_config['send_template'] ) ? $this->form_config['send_template'] : $this->client_form_detail,
 									'to'		 => $this->user_id,
@@ -312,7 +288,11 @@
 					
 					/* -- Success, redirect user -- */
 					if( !empty( $this->form_config['redirect'] ) && $this->form_config['redirect'] != 'no_redirect' )	{
-						wp_redirect( $mdjm->get_link( $this->form_config['redirect'] ) );
+						?>
+                        <script type="text/javascript">
+						window.location.replace("<?php echo $mdjm->get_link( $this->form_config['redirect'] ); ?>");
+						</script>
+                        <?php
 						exit;
 					}
 					/* -- Success, no redirect, display message -- */
@@ -474,9 +454,9 @@
 						$_POST[$field->post_name] = $term->name;
 					}
 					/* -- Addons -- */
-					if( $field_settings['type'] == 'addons_list' )	{
+					if( $field_settings['type'] == 'addons_list' || $field_settings['type'] == 'addons_check_list' )
 						$_POST[$field->post_name] = implode( "\n", $_POST[$field->post_name] );	
-					}
+					
 					/* -- Venue -- */
 					if( $field_settings['type'] == 'venue_list' )	{
 						if( !empty( $_POST[$field->post_name] ) && $_POST[$field->post_name] == '0' )	{
@@ -518,6 +498,10 @@
 			 */
 			public function manage_user()	{
 				global $mdjm_settings;
+				
+				// No changes if the user is logged in
+				if( is_user_logged_in() || empty( $this->client_email ) )
+					return;
 				
 				/* -- Existing users should have their data updated where possible -- */
 				if( !empty( $this->user_id ) )	{
@@ -659,12 +643,13 @@
 				/* -- Now loop through the field updates to add post meta and set Event Type -- */
 				if( MDJM_DEBUG == true )
 					 $mdjm->debug_logger( '	-- Beginning Meta Updates' );
+				
 				foreach( $this->event_update as $meta_key => $meta_value )	{
-										
 					// Set the event type
 					if( $meta_key == 'mdjm_event_type' )	{
 						if( MDJM_DEBUG == true )
 							 $mdjm->debug_logger( '	-- Assigning Event Type' );
+						
 						wp_set_post_terms( $this->event_id, $meta_value, 'event-types' );
 						add_post_meta( $this->event_id, '_mdjm_event_name', get_term( $meta_value, 'event-types' )->name, true );
 					}
@@ -695,9 +680,21 @@
 				if( $event_cost != 0 )	{
 					add_post_meta( $this->event_id, 
 								   '_mdjm_event_cost', 
-								   number_format( $event_cost, 2 ), true );
+								   number_format( $event_cost, 2 ),
+								   true );
+								   
 					if( MDJM_DEBUG == true )
 							$mdjm->debug_logger( '	-- Total Event Cost is ' . $event_cost );
+					
+					/** -- Set the deposit amount -- */
+					$deposit = get_deposit( $event_cost );		
+					add_post_meta( $this->event_id,
+								   '_mdjm_event_deposit',
+								   number_format( $deposit, 2 ),
+								   true );
+								   
+					if( MDJM_DEBUG == true )
+							$mdjm->debug_logger( '	-- Event Deposit is ' . $deposit );
 				}
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( '	-- Meta Updates Completed' );
@@ -750,17 +747,101 @@
 				echo "\r\n" . '<!-- Start of MDJM Contact Form -->' . "\r\n" . 
 				'<form name="mdjm-' . $this->form->post_name . '" id="mdjm-' . $this->form->post_name . '" method="post">' . "\r\n" . 
 				'<input type="hidden" name="mdjm_contact_form_submission" id="mdjm_contact_form_submission" value="submitted" />' . "\r\n" . 
-				'<input type="hidden" name="mdjm_contact_form" id="mdjm_contact_form" value="' . $this->form->ID . '" />';
+				'<input type="hidden" name="mdjm_contact_form" id="mdjm_contact_form" value="' . $this->form->ID . '" />' . "\r\n";
 				
 				/* -- Start table layout if required -- */
-				if( $this->layout != 0 )
-					echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">' . "\r\n";
+				$table = '<table style="clear: both; border-collapse: collapse; width: 100%; border: 0px; padding: 0px;">' . "\r\n";
+				$this->table_initialised = false;
 				
 				/* -- Begin field loop for display -- */
 				foreach( $this->form_fields as $field )	{
-					/* -- Get the field data -- */
+				/* -- Get the field data -- */
 					$field = $this->field_data( $field->ID );
 					$field_settings = $this->field_settings( $field->ID );
+					
+					/** 
+					 * If the field is a header then we need to finish the table layout if started
+					 * and also redefine the variables for the layout of the section
+					 *
+					 *
+					 */
+					if( $field_settings['type'] == 'section_head' )	{
+						if( $this->table_initialised == true && $this->layout != 0 )	{ // Finalise the table
+							 if( $i != 0 )	{
+								 while( $i < $columns ) {
+									  echo '<td>&nbsp;</td>' . "\r\n";
+									  $i++;
+								 }
+								 echo '</tr>' . "\r\n";
+							 }
+							 echo '</table>' . "\r\n";
+							 $i = 0;
+						}
+						
+						if( !empty( $field_settings['config']['display_label'] ) )	{
+							$styles = array();
+							if( !empty( $field_settings['config']['font_size'] ) )
+								$styles['font_size'] = 'font-size: ' . $field_settings['config']['font_size'] . 'px;';
+								
+							if( !empty( $field_settings['config']['font_weight'] ) )
+								$styles['font_weight'] = 'font-weight: ' . $field_settings['config']['font_weight'] . ';';
+								
+							if( !empty( $field_settings['config']['font_colour'] ) )
+								$styles['font_colour'] = 'color: ' . $field_settings['config']['font_colour'] . ';';
+								
+							if( !empty( $field_settings['config']['font_align'] ) )
+								$styles['font_align'] = 'text-align: ' . $field_settings['config']['font_align'] . ';';
+							
+							echo '<' . $field_settings['config']['section_wrap'];
+							
+							if( !empty( $styles ) )	{
+								echo ' style="';
+								
+								$n = 0;
+								
+								foreach( $styles as $style_type => $style_value )	{
+									if( $n > 0 )
+										echo ' ';
+										
+									echo $style_value;
+									$n++;	
+								}
+								echo '"';
+							}
+							
+							echo ( !empty( $field_settings['config']['label_class'] ) ? ' class="' . $field_settings['config']['label_class'] . '"' : '' ) . 
+							'>';
+							echo esc_attr( $field->post_title );	
+							echo '</' . $field_settings['config']['section_wrap'] . '>' . "\r\n";
+						}
+						
+						$this->layout = ( !empty( $field_settings['config']['section_layout'] ) ? 
+							$field_settings['config']['section_layout'] : '0' );
+							
+						$columns = $this->layout;
+							
+						$this->table_initialised = false;
+						
+						// Skip to next field
+						continue;
+					} // if( $field_settings['type'] == 'section_head' )
+					
+					if( $field_settings['type'] == 'rule' )	{
+						if( $this->table_initialised == true && $this->layout != 0 )	{ // Finalise the table
+							 if( $i != 0 )	{
+								 while( $i < $columns ) {
+									  echo '<td>&nbsp;</td>' . "\r\n";
+									  $i++;
+								 }
+								 echo '</tr>' . "\r\n";
+							 }
+							 echo '</table>' . "\r\n";
+							 $i = 0;
+						}
+						echo '<hr' . ( !empty( $field_settings['config']['label_class'] ) ? ' class="' . $field_settings['config']['label_class'] . '"' : '' ) . ' />' . "\r\n";
+						// Skip to next field
+						continue;
+					} // if( $field_settings['type'] == 'rule' )
 					
 				/* -- Start the layout -- */
 					// No table
@@ -771,6 +852,11 @@
 					}
 					// Table needs a row
 					elseif ( $i == 0 )	{
+						if( $this->table_initialised == false )	{
+							echo $table;
+							$this->table_initialised = true;
+						}
+						
 						echo '<tr>' . "\r\n";
 					}
 					
@@ -785,7 +871,8 @@
 					}
 					
 				/* -- Display the field label -- */
-					echo ( $field_settings['type'] != 'submit' ? '<label for="' . $field->post_name . '">' . esc_attr( $field->post_title ) . '</label>' : '' ) . 
+					echo ( $field_settings['type'] != 'submit' ? '<label for="' . $field->post_name . 
+						 ( $field_settings['type'] == 'time' ? '_hr' : '' ) . '">' . esc_attr( $field->post_title ) . '</label>' : '' ) . 
 					( !empty( $this->form_config['required_asterix'] ) 
 						&& !empty( $field_settings['config']['required'] ) 
 						&& $field_settings['type'] != 'submit' ? '<span style="color: red; font-weight: bold;">*</span>' : '' );
@@ -951,12 +1038,17 @@
 							$package_settings['title'] = true;
 							$package_settings['selected'] = ( !empty( $selected_package ) ? $selected_package : '' );
 							
+							// Cost
+							if( empty( $field_settings['config']['display_price'] ) || $field_settings['config']['display_price'] != 'Y' )
+								$package_settings['cost'] = false;
+							
 							echo mdjm_package_dropdown( $package_settings );
 						}
 						// Addons List
 						elseif( $field_settings['type'] == 'addons_list' )	{
 							$packages++;
 							$addons_field = $field->post_name; // For the dynamic updating of addons
+							$addons_type = 'dropdown';
 							
 							$addons_settings['name'] = $field->post_name;
 							$addons_settings['id'] = $field->post_name;
@@ -964,6 +1056,10 @@
 								' class="' . $field_settings['config']['input_class'] . '"' : '' );
 							$addons_settings['title'] = true;
 							$addons_settings['package'] = ( !empty( $selected_package ) ? $selected_package : '' );
+							
+							// Cost
+							if( empty( $field_settings['config']['display_price'] ) || $field_settings['config']['display_price'] != 'Y' )
+								$package_settings['cost'] = false;
 								
 							echo mdjm_addons_dropdown( $addons_settings );
 						}
@@ -999,6 +1095,49 @@
 							echo '</select>' . "\r\n";
 						}
 					} // Select / Event List
+				
+				/* Addons Checked List */
+				elseif( $field_settings['type'] == 'addons_check_list' )	{
+					$packages++;
+					$addons_field = $field->post_name; // For the dynamic updating of addons
+					$addons_type = 'checkboxes';
+					
+					$addons_settings['name'] = $field->post_name;
+					$addons_settings['class'] = ( !empty( $field_settings['config']['input_class'] ) ? 
+						' class="' . $field_settings['config']['input_class'] . '"' : '' );
+					$addons_settings['title'] = true;
+					$addons_settings['package'] = ( !empty( $selected_package ) ? $selected_package : '' );
+					
+					// Cost
+					if( empty( $field_settings['config']['display_price'] ) || $field_settings['config']['display_price'] != 'Y' )
+						$package_settings['cost'] = false;
+					echo '<span id="' . $field->post_name . '">' . "\r\n";	
+					echo mdjm_addons_checkboxes( $addons_settings );
+					echo '</span>' . "\r\n";
+			
+					/*$addons = get_available_addons();
+					if( !empty( $addons ) )	{
+						$count = 1;
+						foreach( $addons as $addon )	{
+							echo '<input type="checkbox" name="' . $field->post_name . '[]" ' . 
+								 'id="' . $field->post_name . '_' . $addon['slug'] . '"' . 
+								 ( !empty( $field_settings['config']['input_class'] ) ? 
+									' class="' . $field_settings['config']['input_class'] . '"' : '' ) . 
+								 ' value="' . $addon['slug'] . '" />' . "\r\n";
+								 
+							echo '&nbsp;';
+							echo '<span title="' . $addon['desc'] . '"><label for="' . $field->post_name . '_' . $addon['slug'] . '">' . 
+								$addon['name'] . '</label></span>';
+							
+							if( !empty( $field_settings['config']['display_price'] ) && $field_settings['config']['display_price'] == 'Y' )
+								echo ' - ' . display_price( $addon['cost'] );
+								
+							echo ( $count < count( $addons ) ? '<br />' : '' ) . "\r\n";
+							$count++;
+						}
+					}*/
+					
+				} // Addons checked list
 				
 				/* Checkbox Field */
 					elseif( $field_settings['type'] == 'checkbox' )	{
@@ -1062,7 +1201,7 @@
 				
 				// Add dynamic updating of addons if needed
 				if( $packages == 2 )
-					$this->dynamic_addons( $package_field, $addons_field );
+					$this->dynamic_addons( $package_field, $addons_field, $addons_type );
 				
 				/* -- Excessive Columns -- */
 				if( $this->layout != 0 && $i != 0 )	{
@@ -1116,7 +1255,7 @@
 			 *
 			 *
 			 */
-			function dynamic_addons( $package_field, $addons_field )	{
+			function dynamic_addons( $package_field, $addons_field , $addons_type)	{
 				?>
 				<script type="text/javascript"> 
 				jQuery(document).ready(function($) 	{
@@ -1124,6 +1263,7 @@
 						
 						var package = $("#<?php echo $package_field; ?> option:selected").val();
 						var addons = $("#<?php echo $addons_field; ?>");
+						var field_type = "<?php echo $addons_type; ?>";
 						$.ajax({
 							type: "POST",
 							dataType: "json",
@@ -1131,6 +1271,7 @@
 							data: {
 								package : package,
 								addons_field : "<?php echo $addons_field; ?>",
+								addons_type : "<?php echo $addons_type; ?>",
 								action : "mdjm_update_contact_form_addon_options"
 							},
 							beforeSend: function()	{
@@ -1140,7 +1281,12 @@
 							success: function(response)	{
 								if(response.type == "success") {
 									addons.empty(); // Remove existing options
-									addons.append(response.addons);
+									if( field_type == 'dropdown' )	{
+										addons.append(response.addons);
+									}
+									else	{
+										addons.html(response.addons);	
+									}
 									$("#<?php echo $addons_field; ?>").fadeTo("slow", 1);
 									
 									$("#<?php echo $addons_field; ?>").removeClass( "mdjm-updating" );

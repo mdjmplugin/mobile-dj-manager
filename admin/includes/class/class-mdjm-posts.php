@@ -877,7 +877,7 @@
 						$_POST['venue_id'] : 'manual' );
 						
 					if( $new_post === false && isset( $current_meta['_mdjm_event_venue_id'][0] ) && $_POST['venue_id'] != $current_meta['_mdjm_event_venue_id'][0] )	{
-						$field_updates[] = 'Venue changed from ' . ( $current_meta['_mdjm_event_venue_id'][0] != 'Manual' ?
+						$field_updates[] = 'Venue changed from ' . ( $current_meta['_mdjm_event_venue_id'][0] != 'manual' ?
 										   get_the_title( $current_meta['_mdjm_event_venue_id'][0] ) : $current_meta['_mdjm_event_venue_name'][0] ) .
 										   ' to ' . ( is_numeric( $_POST['venue_id'] ) && $this->post_exists( $_POST['venue_id'] ) ?
 										   get_the_title( $_POST['venue_id'] ) : $_POST['venue_id'] );

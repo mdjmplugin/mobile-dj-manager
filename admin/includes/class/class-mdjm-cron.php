@@ -158,7 +158,7 @@
 						$event_type = isset( $event_types[0]->name ) ? $event_types[0]->name : 'Undefined';
 						$event_date = get_post_meta( $event->ID, '_mdjm_event_date', true );
 						
-						$rpc = 'a=' . esc_attr( urlencode( stripslashes( $record->artist ) ) ) . '&s=' . 
+						$rpc = '&a=' . esc_attr( urlencode( stripslashes( $record->artist ) ) ) . '&s=' . 
 							esc_attr( urlencode( stripslashes( $record->song ) ) ) . '&et=' . esc_attr( urlencode( $event_type ) ) . '&ed=' . 
 							date( 'Y-m-d', strtotime( $event_date ) ) . '&da=' . $record->date_added . '&c=' . urlencode( MDJM_COMPANY ) . 
 							'&url=' . urlencode( get_site_url() );
@@ -167,7 +167,7 @@
 							$GLOBALS['mdjm_debug']->log_it( 'Sending RPC string http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc );
 						
 						// Retrieve the response
-						$response = wp_remote_retrieve_body( wp_remote_get( 'http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc ) );
+						$response = wp_remote_retrieve_body( wp_remote_get( 'http://www.mydjplanner.co.uk/?mdjm-api=MDJM_PLAYLIST' . $rpc ) );
 						
 						if( MDJM_DEBUG == true )
 							$GLOBALS['mdjm_debug']->log_it( 'Response received ' . $response );
@@ -335,7 +335,7 @@
 						if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$dj] = array();
 						$notify['dj'][$dj][$event->ID] = array(
-																'id'		=> $event->id,
+																'id'		=> $event->ID,
 																'client'	=> $event_client->display_name,
 																'venue'	 => !empty( $event_venue['name'] ) ? 
 																	$event_venue['name'] : 'No Venue Set',
@@ -1380,6 +1380,12 @@
 					$status['expire'] = $values[2];
 					$status['last_auth'] = current_time( 'mysql' );
 					$status['url'] = $values[4];
+					
+					if( !empty( $values[5] ) )
+						$status['extensions'] = $values[5];
+						
+					elseif( !empty( $status['extensions'] ) )
+						unset( $status['extensions'] );
 				}
 				/* -- Set the current state -- */
 				update_option( '__mydj_validation', $status );

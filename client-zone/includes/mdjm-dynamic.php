@@ -30,8 +30,11 @@ Author URI: http://www.mydjplanner.co.uk
 			$result['addons'] = $addons;
 		}
 		else	{
-			$result['type'] = 'error';
-			$result['msg'] = 'No addons available';
+			$result['type'] = 'success';
+			$result['addons'] = '<option value="0" disabled="disabled">' .
+				 __( 'No addons available', 'mobile-dj-manager' ) . '</option>';
+			//$result['type'] = 'error';
+			//$result['msg'] = 'No addons available';
 		}
 		echo json_encode( $result );
 		
@@ -49,7 +52,10 @@ Author URI: http://www.mydjplanner.co.uk
 	 */
 	function update_contact_form_addon_options()	{
 		$event_package = $_POST['package'];
-		$addons = mdjm_addons_dropdown( array( 
+		
+		$func = 'mdjm_addons_' . $_POST['addons_type'];
+		
+		$addons = $func( array( 
 											'name'		=> $_POST['addons_field'],
 											'package'	=> !empty( $event_package ) ? $event_package : '',
 											), false );
@@ -59,8 +65,12 @@ Author URI: http://www.mydjplanner.co.uk
 			$result['addons'] = $addons;
 		}
 		else	{
-			$result['type'] = 'error';
-			$result['msg'] = 'No addons available';
+			$result['type'] = 'success';
+			$result['addons'] = ( $_POST['addons_type'] == 'dropdown' ? 
+				'<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>' : 
+				__( 'No addons available', 'mobile-dj-manager' ) );
+			//$result['type'] = 'error';
+			//$result['msg'] = 'No addons available';
 		}
 		
 		echo json_encode( $result );

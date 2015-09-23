@@ -844,7 +844,7 @@
 			}
 			
 			/* -- Generate online quote if configured -- */
-			if( MDJM_ONLINE_QUOTES == true && !empty( $_POST['_mdjm_online_quote'] ) )	{
+			if( MDJM_ONLINE_QUOTES == true && !empty( $_POST['mdjm_online_quote'] ) )	{
 				if( MDJM_DEBUG == true )
 					$GLOBALS['mdjm_debug']->log_it( '	-- Generating event quote for event ' . $post_id );
 				
@@ -852,7 +852,7 @@
 				$quote_post = $this->retrieve_quote( $post_id );
 				
 				// Retrieve the post content. If one exists we'll use that, otherwise get the template
-				$quote_template = get_post( $_POST['_mdjm_online_quote'] );
+				$quote_template = get_post( $_POST['mdjm_online_quote'] );
 				
 				// Make sure we have the template and create or update the quote post
 				if( is_object( $quote_template ) )	{					
@@ -860,6 +860,9 @@
 					$content = $quote_template->post_content;
 					$content = apply_filters( 'the_content', $content );
 					$content = str_replace( ']]>', ']]&gt;', $content );
+					
+					$content = str_replace( '{DEPOSIT}', '<span id="deposit_price">{DEPOSIT}</span>', $content );
+					$content = str_replace( '{TOTAL_COST}', '<span id="quote_price">{TOTAL_COST}</span>', $content );
 					
 					/* -- Shortcode replacements -- */
 					$content = $mdjm->filter_content(

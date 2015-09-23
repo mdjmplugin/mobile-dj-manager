@@ -112,6 +112,8 @@
 					$clientzone = new ClientZone();
 				}
 				
+				/** -- Controller Class -- */
+				include( MDJM_EXTENSIONS_DIR . '/controller.php' );
 			} // __construct
 /*
  * --
@@ -198,7 +200,7 @@
 			 * @return		bool|arr		false if invalid, otherwise array with details
 			 */
 			public function _mdjm_validation( $action ='' )	{
-				global $mdjm;
+				global $mdjm, $mdjm_ext;
 				
 				$action = !empty( $action ) ? $action : 'set';
 				
@@ -219,6 +221,16 @@
 				}
 				
 				/* -- Return the license state -- */
+				if( !empty( $status['extensions'] ) )	{
+					$mdjm_ext = array();
+					
+					$extensions = maybe_unserialize( $status['extensions'] );
+					
+					foreach( $extensions as $ext => $ext_detail )	{
+						if( time() >= $ext_detail[1] )
+							$mdjm_ext[] = $ext;
+					}
+				}
 				return ( !empty( $status['expire'] ) && time() <= strtotime( $status['expire'] ) ? $status : false );
 				
 				/* -- Catch all and fail -- */
@@ -274,7 +286,6 @@
 				$this->set_playlist_task();
 				/* -- Remove admin toolbar for clients -- */
 				$this->no_admin_for_clients();
-				
 			} // mdjm_init
 	
 /*
@@ -315,14 +326,12 @@
 					$mdjm_db->update_db();
 				}
 
-				//$this->supported_version(); Closed in 1.2.3
 				/* -- Validation -- */
 				$this->mdjm_validate();
 				
 				// Check log files
 				if( is_admin() )
-					$GLOBALS['mdjm_debug']->log_file_check();
-						
+					$GLOBALS['mdjm_debug']->log_file_check();						
 			} // all_plugins_loaded
 			
 /*
@@ -1697,14 +1706,13 @@
 				echo '<div id="message" class="' . ( empty( $class ) ? $message[$msg][0] : $class ) . '">' . "\r\n" . 
 				'<p>' . ( empty( $class ) ? $message[$msg][1] : $msg ) . '</p>' . "\r\n" . 
 				'</div>' . "\r\n";
-			} // messages
-						
+			} // messages						
 		} // MDJM class
 	} // if( !class_exists )
 	
 /* -- Constants -- */
 	define( 'MDJM_NAME', 'Mobile DJ Manager for Wordpress');
-	define( 'MDJM_VERSION_NUM', '1.2.4' );
+	define( 'MDJM_VERSION_NUM', '1.2.4.1' );
 	define( 'MDJM_UNSUPPORTED', '1.0' );
 	define( 'MDJM_UNSUPPORTED_ALERT', '0.9.9.8' );
 	define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );
@@ -1717,6 +1725,7 @@
 	define( 'MDJM_PROCEDURES_DIR', MDJM_PLUGIN_DIR . '/admin/includes/procedures' );
 	define( 'MDJM_FUNCTIONS', MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
 	define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );
+	define( 'MDJM_EXTENSIONS_DIR', MDJM_PLUGIN_DIR . '/includes/extensions' );
 	
 	/* -- Option Keys -- */
 	define( 'MDJM_VERSION_KEY', 'mdjm_version');
@@ -1762,5 +1771,5 @@
 		include( MDJM_PLUGIN_DIR . '/admin/includes/core.php' ); // Interact with WP core
 		include( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 	}
-	include( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Ajax functions, front & backend
+	include( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Clientzone class
 ?>

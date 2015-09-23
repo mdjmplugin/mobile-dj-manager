@@ -39,11 +39,9 @@
 			else	{
 				/* Run the availability check */
 				if( isset( $_POST['check_employee'] ) && $_POST['check_employee'] != 'all' )	{
-					//$dj_avail = f_mdjm_available( $_POST['check_date'], $_POST['check_employee'] );
 					$dj_avail = dj_available( $_POST['check_employee'], $_POST['check_date'] );
 				}
 				else	{
-					//$dj_avail = f_mdjm_available( $_POST['check_date'] );
 					$dj_avail = dj_available( '', $_POST['check_date'] );
 				}
 				
@@ -157,7 +155,7 @@
       	<?php
 	}
 	else	{
-		$djs = f_mdjm_get_djs();
+		$djs = mdjm_get_djs();
 		foreach( $djs as $dj )	{
 			?>
 			<option value="<?php echo $dj->ID; ?>" <?php selected( $current_user->ID, $dj->ID ); ?>><?php echo $dj->display_name; ?></option>
@@ -206,7 +204,7 @@
 		?>
         <option value="all">All</option>
         <?php
-		$djs = f_mdjm_get_djs();
+		$djs = mdjm_get_djs();
 		foreach( $djs as $dj )	{
 			?>
 			<option value="<?php echo $dj->ID; ?>" <?php if( isset( $_POST['check_employee'] ) ) { selected( $_POST['check_employee'], $dj->ID ); } ?>><?php echo $dj->display_name; ?></option>

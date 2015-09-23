@@ -12,7 +12,7 @@
 			if( isset( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
-			$func = 'f_mdjm_get_' . $display;
+			$func = 'mdjm_get_' . $display;
 			
 			$djs = $func();
 			$dj_data = array();
@@ -36,13 +36,15 @@
 				$active = 0;
 				$enquiry = 0;
 				$unattended = 0;
-				foreach( $events as $event )	{
-					if( in_array( $event->post_status, $active_events ) )
-						$active++;
-					if( $event->post_status == 'mdjm-enquiry' )
-						$enquiry++;
-					if( $event->post_status == 'mdjm-unattended' )
-						$unattended++;
+				if( !empty( $events ) )	{
+					foreach( $events as $event )	{
+						if( in_array( $event->post_status, $active_events ) )
+							$active++;
+						if( $event->post_status == 'mdjm-enquiry' )
+							$enquiry++;
+						if( $event->post_status == 'mdjm-unattended' )
+							$unattended++;
+					}
 				}
 				
 				$dj_data[] = array(
@@ -51,7 +53,7 @@
 									'dj_email'          => '<a href="' . admin_url( 'admin.php?page=mdjm-comms&to_user=' ). $dj->ID . '">' . $dj->user_email . '</a>',
 									'dj_last_login'     => $last_login,
 									'dj_active_events'  => $active,
-									'dj_all_events'     => ( count( $events ) != 0 ? '<a href="' . admin_url( 'edit.php?post_type=' . MDJM_EVENT_POSTS . '&dj=' . $dj->ID ) . '">' . count( $events ) . '</a>' : '0' ),
+									'dj_all_events'     => ( !empty( $events ) && count( $events ) != 0 ? '<a href="' . admin_url( 'edit.php?post_type=' . MDJM_EVENT_POSTS . '&dj=' . $dj->ID ) . '">' . count( $events ) . '</a>' : '0' ),
 									'dj_next_event'     => $event_link,
 									'dj_open_enquiries' => sprintf( '<a href="' . admin_url( 'edit.php?post_status=%s&post_type=%s&dj=%s' ) . '">%s</a> (<a href="' . admin_url( 'edit.php?post_status=%s&post_type=%s&dj=%s' ) . '">%s</a>)', 'mdjm-enquiry', MDJM_EVENT_POSTS, $dj->ID, $enquiry, 'mdjm-unattended', MDJM_EVENT_POSTS, $dj->ID, $unattended ), );
 			}
@@ -111,8 +113,8 @@
 			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
-				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=djs"<?php if( isset( $display ) && $display == "djs" ) { ?> class="current" <?php } ?>> <?php echo __( 'Active', 'mobile-dj-manager' ) . MDJM_DJ; ?>'s <span class="count">(<?php echo count( $active_djs ); ?>)</span></a> |</li>
-				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=inactive_djs"<?php if( isset( $display ) && $display == "inactive_djs" ) { ?> class="current" <?php } ?>> <?php echo __( 'Inactive', 'mobile-dj-manager' ) . MDJM_DJ; ?>'s <span class="count">(<?php echo count( $inactive_djs ); ?>)</span></a></li>
+				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=djs"<?php if( isset( $display ) && $display == "djs" ) { ?> class="current" <?php } ?>>Active <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $active_djs ); ?>)</span></a> |</li>
+				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=inactive_djs"<?php if( isset( $display ) && $display == "inactive_djs" ) { ?> class="current" <?php } ?>>Inactive <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $inactive_djs ); ?>)</span></a></li>
                 </ul>
            <?php
 		   }
@@ -125,11 +127,11 @@
 			$columns = array();
 			if( current_user_can( 'administrator' ) ) $columns['cb'] = '<input type="checkbox" />';
 			$columns['dj_name'] = '<strong>' . __( 'Name', 'mobile-dj-manager' ) . '</strong>';
-			$columns['dj_email'] = '<strong>' . __( '>Email', 'mobile-dj-manager' ) . '</strong>';
+			$columns['dj_email'] = '<strong>' . __( 'Email', 'mobile-dj-manager' ) . '</strong>';
 			$columns['dj_last_login'] = '<strong>' . __( 'Last Login', 'mobile-dj-manager' ) . '</strong>';
 			$columns['dj_active_events'] = '<strong>' . __( 'Active Events', 'mobile-dj-manager' ) . '</strong>';
 			$columns['dj_all_events'] = '<strong>' . __( 'Total Events', 'mobile-dj-manager' ) . '</strong>';
-			$columns['dj_next_event'] = '<strong>' . __( 'Next Event', 'mobile-dj-manager' ) . '</strong>';
+			$columns['dj_next_event'] ='<strong>' . __( 'Next Event', 'mobile-dj-manager' ) . '</strong>';
 			$columns['dj_open_enquiries'] = '<strong>' . __( 'Open Enquiries', 'mobile-dj-manager' ) . '</strong>';
 			return $columns;
 		} // get_columns

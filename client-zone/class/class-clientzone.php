@@ -34,6 +34,8 @@
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
 				add_action( 'init', array( &$this, 'no_comments' ) );
+				add_action( 'template_redirect', array( &$this, 'output_to_pdf' ) );
+				
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 				
 			} // __construct
@@ -51,6 +53,31 @@
 				if( is_dj() || is_client() )
 					add_filter( 'get_edit_post_link', '__return_false' );	
 			}
+			
+			/**
+			 * Output the content to PDF and deliver as required
+			 *
+			 *
+			 *
+			 *
+			 */
+			function output_to_pdf()	{
+				if( !isset( $_GET['pdf_output'] ) )
+					return;
+					
+				$template = get_post( $_GET['pdf_output'] );
+				
+				$content = $template->post_content;
+				$content = apply_filters( 'the_content', $content );
+				$content = str_replace( ']]>', ']]&gt;', $content );
+				
+				MDJM_to_PDF::init_mpdf();
+				//$stylesheet = file_get_contents(get_template_directory_uri() . '/style.css');
+				//$GLOBALS['mdjm_mpdf']->WriteHTML( $stylesheet,1 );
+				$GLOBALS['mdjm_mpdf']->WriteHTML( $content,2 );
+				$GLOBALS['mdjm_mpdf']->Output('test8.pdf','I');
+				exit;
+			} // output_to_pdf
 
 /*
  * --

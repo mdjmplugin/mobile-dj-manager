@@ -53,6 +53,10 @@
 				register_setting( 'mdjm-paypal', MDJM_PAYPAL_KEY );
 				register_setting( 'mdjm-payfast', MDJM_PAYFAST_KEY );
 				register_setting( 'mdjm-uninstall', MDJM_UNINST_SETTINGS_KEY );
+				
+				if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
+					register_setting( 'mdjm-to-pdf', MDJM_PDF_SETTINGS_KEY );
+				
 			} // settings_register
 			
 			/*
@@ -222,6 +226,9 @@
 					case 'payments':
 						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_payment_settings' );
 					break;
+					case 'mdjm-to-pdf':
+						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_to_pdf_settings' );
+					break;
 				} // switch
 			} // set_loc
 			
@@ -240,24 +247,27 @@
 				
 				settings_errors(); // Prints the saved and error messages
 				
-				echo '<h2 class="nav-tab-wrapper">' . "\r\n" .
+				echo '<h2 class="nav-tab-wrapper">' . "\r\n";
 				 
-				'<a href="' . $this->tab_url( 'general' ) . '" class="nav-tab' . 
-					$this->active_tab( 'general' ) . '">' . __( 'General', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
+				echo '<a href="' . $this->tab_url( 'general' ) . '" class="nav-tab' . 
+					$this->active_tab( 'general' ) . '">' . __( 'General', 'mobile-dj-manager' ) . '</a>' . "\r\n";
 				
-				'<a href="' . $this->tab_url( 'events' ) . '" class="nav-tab' . 
-					$this->active_tab( 'events' ) . '">' . __( 'Events', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
+				echo '<a href="' . $this->tab_url( 'events' ) . '" class="nav-tab' . 
+					$this->active_tab( 'events' ) . '">' . __( 'Events', 'mobile-dj-manager' ) . '</a>' . "\r\n"; 
 					
-				'<a href="' . $this->tab_url( 'emails' ) . '" class="nav-tab' . 
-					$this->active_tab( 'emails' ) . '">' . sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ) . '</a>' . "\r\n" . 
+				echo '<a href="' . $this->tab_url( 'emails' ) . '" class="nav-tab' . 
+					$this->active_tab( 'emails' ) . '">' . sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ) . '</a>' . "\r\n";
 					
-				'<a href="' . $this->tab_url( 'client-zone' ) . '" class="nav-tab' . 
-					$this->active_tab( 'client-zone' ) . '">' . MDJM_APP . '</a>' . "\r\n" . 
+				echo '<a href="' . $this->tab_url( 'client-zone' ) . '" class="nav-tab' . 
+					$this->active_tab( 'client-zone' ) . '">' . MDJM_APP . '</a>' . "\r\n";
 					
-				'<a href="' . $this->tab_url( 'payments' ) . '" class="nav-tab' . 
-					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n" . 
+				echo '<a href="' . $this->tab_url( 'payments' ) . '" class="nav-tab' . 
+					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n"; 
+				if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
+					echo '<a href="' . $this->tab_url( 'mdjm-to-pdf' ) . '" class="nav-tab' . 
+					$this->active_tab( 'mdjm-to-pdf' ) . '">' . __( 'MDJM to PDF', 'mobile-dj-manager' ) . '</a>' . "\r\n"; 
 										
-				'</h2>' . "\r\n";
+				echo '</h2>' . "\r\n";
 				
 				$this->print_nav_links();
 				

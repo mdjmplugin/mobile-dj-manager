@@ -594,9 +594,6 @@
 	function get_availability_activity( $month, $year )	{
 		global $wpdb, $mdjm, $mdjm_settings, $current_user;
 		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		
 		if( $month == '12' )	{
 			$next_month = '1';
 			$mk_year = $year + 1;
@@ -645,7 +642,7 @@
 													),
 												);
 				
-				$hol_query = "SELECT * FROM " . $db_tbl['holiday'] . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "'";
+				$hol_query = "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "'";
 			}
 			else	{
 				$event_args['meta_query'] = array(
@@ -663,7 +660,7 @@
 												),
 											);
 				
-				$hol_query = "SELECT * FROM " . $db_tbl['holiday'] . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "' AND `user_id` = '" . get_current_user_id() . "'";
+				$hol_query = "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "' AND `user_id` = '" . get_current_user_id() . "'";
 			}
 			/* Work Query */
 			$work_result = get_posts( $event_args );
@@ -754,7 +751,7 @@
 		$packages = get_option( 'mdjm_packages' );
 						
 		
-		return $packages[$event_package]['name'] . ( !empty( $price ) ? ' ' . 
+		return stripslashes( esc_attr( $packages[$event_package]['name'] ) ) . ( !empty( $price ) ? ' ' . 
 			display_price( $packages[$event_package]['cost'], true ) : '' );
 				
 	} // get_event_package
@@ -779,10 +776,10 @@
 				
 				if( !empty( $dj ) )	{
 					if( in_array( $dj, explode( ',', $package['djs'] ) ) )
-						$available[] = $package['name'] . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+						$available[] = stripslashes( esc_attr( $package['name'] ) ). ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
 				}
 				else
-					$available[] = $package['name'] . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+					$available[] = stripslashes( esc_attr( $package['name'] ) ) . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
 			}
 			$i = 1;
 			$the_packages = '';
@@ -793,7 +790,7 @@
 				}
 			}
 		}
-		return ( !empty( $the_packages ) ? $the_packages : 'No packages available' );
+		return ( !empty( $the_packages ) ? $the_packages : __( 'No packages available', 'mobile-dj-manager' ) );
 				
 	} // get_available_packages
 	
@@ -811,7 +808,7 @@
 		$event_addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
 				
 		if( empty( $event_addons ) )
-			return 'No addons are assigned to this event';
+			return __( 'No addons are assigned to this event', 'mobile-dj-manager' );
 			
 		// All addons
 		$all_addons = get_option( 'mdjm_equipment' );
@@ -820,7 +817,7 @@
 		$i = 1;
 		
 		foreach( $event_addons as $event_addon )	{
-			$addons .= $all_addons[$event_addon][0] . ( !empty( $price ) ? ' ' . 
+			$addons .= stripslashes( esc_attr( $all_addons[$event_addon][0] ) ) . ( !empty( $price ) ? ' ' . 
 				display_price( $all_addons[$event_addon][7], true ) : '' ) . ( $i < count( $event_addons ) ? 
 				'<br />' : '' );
 			$i++;
@@ -846,7 +843,7 @@
 		$all_addons = get_option( 'mdjm_equipment' );
 		
 		if( empty( $all_addons ) )
-			return 'No addons are available';
+			return __( 'No addons are available', 'mobile-dj-manager' );
 		
 		$addons = array();
 		
@@ -870,9 +867,9 @@
 
 			$addons[$all_addon[1]]['cat'] = '';
 			$addons[$all_addon[1]]['slug'] = $all_addon[1];
-			$addons[$all_addon[1]]['name'] = $all_addon[0];
+			$addons[$all_addon[1]]['name'] = stripslashes( esc_attr( $all_addon[0] ) );
 			$addons[$all_addon[1]]['cost'] = $all_addon[7];
-			$addons[$all_addon[1]]['desc'] = $all_addon[4];
+			$addons[$all_addon[1]]['desc'] = stripslashes( esc_textarea( $all_addon[4] ) );
 		}
 										
 		return $addons;
@@ -895,7 +892,7 @@
 		if( empty( $packages[$slug] ) || empty( $packages[$slug]['name'] ) )
 			return false;
 		
-		$package = $packages[$slug]['name'];
+		$package = stripslashes( esc_attr( $packages[$slug]['name'] ) );
 		
 		return $package;
 		
@@ -918,8 +915,8 @@
 			return false;
 		
 		$package['slug'] = $slug;
-		$package['name'] = $packages[$slug]['name'];
-		$package['desc'] = $packages[$slug]['desc'];
+		$package['name'] = stripslashes( esc_attr( $packages[$slug]['name'] ) );
+		$package['desc'] = stripslashes( esc_textarea( $packages[$slug]['desc'] ) );
 		$package['equipment'] = $packages[$slug]['equipment'];
 		$package['cost'] = $packages[$slug]['cost'];
 		
@@ -939,6 +936,7 @@
 	 *									'first_entry_val'	Optional: First entry value
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
 	 *									'title'				Optional: Add package description to the title element of each option
+	 *									'cost'				Optional: Display the price of the package (default true)
 	 *					$structure		bool				true create the select list, false just return values
 	 * @ return	HTML output for select field
 	 */
@@ -951,6 +949,7 @@
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
 		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		$select_cost = ( isset( $settings['cost'] ) ? $settings['cost'] : true );
 		
 		$mdjm_select = '';
 		
@@ -968,7 +967,7 @@
 		$packages = get_option( 'mdjm_packages' );
 		
 		if( empty( $packages ) )
-			$mdjm_select .= '<option value="0">No Packages Available</option>' . "\r\n";
+			$mdjm_select .= '<option value="0">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 		
 		else	{
 		// All packages
@@ -986,9 +985,10 @@
 				}
 				
 				$mdjm_select .= '<option value="' . $package['slug'] . '"';
-				$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . $package['desc'] . '"' : '' );
+				$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . stripslashes( esc_textarea( $package['desc'] ) ) . '"' : '' );
 				$mdjm_select .= ( isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>' ) ;
-				$mdjm_select .= esc_attr( $package['name'] ) . ' - ' . display_price( $package['cost'] ) . '</option>' . "\r\n";
+				$mdjm_select .= stripslashes( esc_attr( $package['name'] ) ) . 
+					( $select_cost == true ? ' - ' . display_price( $package['cost'] ) : '' ) . '</option>' . "\r\n";
 			}
 		}
 		
@@ -1014,7 +1014,7 @@
 		if( empty( $equipment[$slug] ) || empty( $equipment[$slug][0] ) )
 			return false;
 			
-		$addon = $equipment[$slug][0];
+		$addon = stripslashes( esc_attr( $equipment[$slug][0] ) );
 		
 		return $addon;
 		
@@ -1038,9 +1038,9 @@
 			return false;
 			
 		$addon['slug'] = $slug;
-		$addon['cat'] = $cats[$equipment[$slug][5]];
-		$addon['name'] = $equipment[$slug][0];
-		$addon['desc'] = $equipment[$slug][4];
+		$addon['cat'] = stripslashes( esc_attr( $cats[$equipment[$slug][5]] ) );
+		$addon['name'] = stripslashes( esc_attr( $equipment[$slug][0] ) );
+		$addon['desc'] = stripslashes( esc_textarea( $equipment[$slug][4] ) );
 		$addon['cost'] = $equipment[$slug][7];
 		
 		return $addon;
@@ -1060,6 +1060,7 @@
 	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
 	 *									'package'			Optional: Package slug for which to exclude addons if they exist in that package
 	 *									'title'				Optional: Add addon description to the title element of each option
+	 *									'cost'				Optional: Display the price of the package (default true)
 	 *					$structure		bool				true create the select list, false just return values
 	 * @ return	HTML output for select field
 	 */
@@ -1070,6 +1071,7 @@
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : 'event_addons';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
 		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		$select_cost = isset( $settings['cost'] ) ? $settings['cost'] : true;
 		
 		$mdjm_select = '';
 		
@@ -1087,7 +1089,7 @@
 		$equipment = get_option( 'mdjm_equipment' );
 		
 		if( empty( $equipment ) )
-			$mdjm_select .= '<option value="0">No Addons Available</option>' . "\r\n";
+			$mdjm_select .= '<option value="0">' . __( 'No Addons Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 		
 		else	{
 			asort( $equipment );
@@ -1132,12 +1134,13 @@
 						}
 							
 							$mdjm_select .= '<option value="' . $item[1] . '"';
-							$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $item[4] ) ? ' title="' . $item[4] . '"' : '' );
+							$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $item[4] ) ? ' title="' . stripslashes( esc_textarea( $item[4] ) ) . '"' : '' );
 							
 							if( !empty( $settings['selected'] ) && in_array( $item[1], $settings['selected'] ) )
 								$mdjm_select .= ' selected="selected"';
 							
-							$mdjm_select .= '>' . $item[0] . ' - ' . display_price( $item[7] ) . '</option>' . "\r\n";
+							$mdjm_select .= '>' . stripslashes( esc_attr( $item[0] ) ) . 
+								( $select_cost == true ? ' - ' . display_price( $item[7] ) : '' ) . '</option>' . "\r\n";
 					}
 					
 				}
@@ -1150,6 +1153,104 @@
 		return $mdjm_select;
 			
 	} // mdjm_addons_dropdown
+	
+	/*
+	 * Output HTML code for Addons checkbox list
+	 *
+	 * @param	arr		$settings		Settings for the dropdown
+	 *									'name'				Optional: The name of the input. Defaults to 'event_addons'
+	 *									'class'				Optional: Class of the input field
+	 *									'checked'			Optional: ARRAY of initially checked options
+	 *									'dj'				Optional: The ID of the DJ to present package for (default current user)
+	 *									'package'			Optional: Package slug for which to exclude addons if they exist in that package
+	 *									'title'				Optional: Add addon description to the title element of each option
+	 *									'cost'				Optional: Display the price of the package (default true)
+	 * @ return	HTML output for select field
+	 */
+	function mdjm_addons_checkboxes( $settings='' )	{
+		global $current_user;
+		
+		// Set the values based on the array passed
+		$check_name = isset( $settings['name'] ) ? $settings['name'] : 'event_addons';
+		$check_id = isset( $settings['id'] ) ? $settings['id'] : $check_name;
+		$check_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		$check_cost = isset( $settings['cost'] ) ? $settings['cost'] : false;
+		
+		$mdjm_check = '';
+		
+		$equipment = get_option( 'mdjm_equipment' );
+		
+		if( empty( $equipment ) )
+			$mdjm_check .= __( 'No Addons Available', 'mobile-dj-manager' ) . "\r\n";
+			
+		else	{
+			asort( $equipment );
+		// All addons
+			$cats = get_option( 'mdjm_cats' );
+			if( !empty( $cats ) )
+				asort( $cats );
+			
+			foreach( $cats as $cat_key => $cat_value )	{				
+				$header = false;
+				
+				// Create an array of options grouped by category
+				foreach( $equipment as $item )	{
+					// If the addon is not enabled, do not show it
+					if( empty( $item[6] ) || $item[6] != 'Y' )
+						continue;
+						
+					// If the addon is part of an assigned package, exlude it
+					if( !empty( $settings['package'] ) )	{
+						$packages = get_option( 'mdjm_packages' );
+						$package_items = explode( ',', $packages[$settings['package']]['equipment'] );
+						
+						if( !empty( $package_items ) && in_array( $item[1], $package_items ) )
+							continue;	
+					}
+					
+					// If the specified DJ does not have the addon, do not show it	
+					if( !empty( $select_dj ) )	{
+						$djs_have = explode( ',', $item[8] );
+						
+						if( !in_array( $select_dj, $djs_have ) )
+							continue;
+					}
+					
+					if( $item[5] == $cat_key )	{
+						if( empty( $header ) )	{
+							$mdjm_check .= '<span class="font-weight: bold;">' . stripslashes( $cat_value ) . '</span><br />' . "\r\n";
+							$header = true;
+						}
+							
+							$mdjm_check .= '<input type="checkbox" name="' . $check_name . '[]" ';
+							$mdjm_check .= 'id="' . $check_name . '_' . stripslashes( esc_attr( $item[1] ) ) . '"';
+							$mdjm_check .= ( !empty( $settings['class'] ) ? 
+									' class="' . $settings['class'] . '"' : '' );
+									
+							$mdjm_check .= ' value="' . stripslashes( esc_attr( $item[1] ) ) . '"';
+							
+							if( !empty( $settings['checked'] ) && in_array( $item[1], $settings['checked'] ) )
+								$mdjm_check .= ' checked="checked"';
+							
+							$mdjm_check .= ' />&nbsp;' . "\r\n";
+							
+							$mdjm_check .= ( !empty( $settings['title'] ) && !empty( $item[4] ) ? 
+								'<span title="' . stripslashes( $item[4] ) . '">' : '' );
+							
+							$mdjm_check .= '<label for="' . $check_name . '_' . stripslashes( esc_attr( $item[1] ) ) . '">' . stripslashes( $item[0] );
+							
+							$mdjm_check .= ( $check_cost == true ? ' - ' . display_price( $item[7] ) : '' );
+							
+							$mdjm_check .= '</label>' . ( !empty( $settings['title'] ) && !empty( $item[4] ) ? '</span>' : '' ) . '<br />' .  "\r\n";
+					}
+					
+				}
+			}
+		}
+		
+		return $mdjm_check;
+		
+	} // mdjm_addons_checkboxes
 
 /*
  * -- END PACKAGE/ADDON FUNCTIONS

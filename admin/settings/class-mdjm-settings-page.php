@@ -146,6 +146,11 @@
 					include_once( 'class-mdjm-settings-client-fields.php' );
 				break;
 				
+				case 'mdjm_to_pdf_settings':
+					settings_fields( 'mdjm-to-pdf' );
+					do_settings_sections( 'mdjm-to-pdf' );
+				break;
+				
 				default:
 					return;
 			} // switch
@@ -162,6 +167,9 @@
 			global $mdjm;
 			
 			$status = $mdjm->_mdjm_validation();
+			
+			$ext = array(
+					'mdjm-to-pdf'	=> 'MDJM to PDF' );
 			
 			if( !empty( $status ) )
 				/* -- Calculate days remaining -- */
@@ -205,12 +213,31 @@
 				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n"; 
 				
 			echo '<strong>' . __( 'Last Updated', 'mobile-dj-manager' ) . '</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . 
-				MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . ' <a href="' . mdjm_get_admin_page( 'settings' ) . '&dlmdjmlic=1">' . 
-				__( 'Update License', 'mobile-dj-manager' ) . '</a>' . '<br />' . 
+				MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . "\r\n";
+			
+			echo '<strong>' . __( 'Extensions', 'mobile-dj-manager' ) . '</strong>: ';
+			
+			if( !empty( $GLOBALS['mdjm_ext'] ) )	{
+				$i = 1;
 				
-			( !empty( $msg ) ? $msg : '' ) . "\r\n"; 
+				foreach( $GLOBALS['mdjm_ext'] as $extension )	{
+					echo $ext[$extension] . ( $i > 1 && $i < count( $GLOBALS['mdjm_ext'] ) ? ' | ' : '' );
+					$i++;	
+				}
+			}
+			else	{
+				echo __( 'None', 'mobile-dj-manager' );
+			}
+				
+			echo '<br />' . "\r\n";
+				
+			echo ( !empty( $msg ) ? $msg : '' ) . "\r\n";
 			
 			echo '</div>' . "\r\n";
+			
+			echo '<p><a href="' . mdjm_get_admin_page( 'settings' ) . '&dlmdjmlic=1" ' . 
+				'class="button button-primary button-small">' . 
+				__( 'Update License', 'mobile-dj-manager' ) . '</a></p>' . "\r\n";
 			
 		} // current_status
 	} // class

@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.4
+Stable tag: 1.2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,31 @@ After 30 days, functionality will be restricted in that you will no longer be ab
 Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
 
 == Changelog ==
+= 1.2.4.1 =
+<strong>Released Wednesday, 23rd September, 2015</strong>
+<ul>
+	<li>New: Section headings introduced for Contact Forms</li>
+	<li>New: Horizontal rules introduced for Contact Forms</li>
+	<li>New: Custom CSS introduced for Contact Forms</li>
+	<li>New: Event addons now available as checkbox list in dynamic contact forms</li>
+	<li>New: Contact form submission now also adds the deposit amount</li>
+	<li>Bug Fix: Packages, Equipment and categories now support special characters - quotes, double quotes etc.</li>
+	<li>Bug Fix: Online quote template was not changed on selection in event screen</li>
+	<li>Bug Fix: Contact form settings may not save as expected</li>
+	<li>Bug Fix: To address conflicts with the WP reserved names, added prefix to all contact form field slugs</li>
+	<li>Bug Fix: Client Zone re-directs did not work in some cases</li>
+	<li>Bug Fix: DJ list was not showing users that were assigned the DJ role</li>
+	<li>Bug Fix: DJ list may have displayed an on screen error if no active events were in the system</li>
+	<li>Bug Fix: Contact Form configuration settings were not always saving correctly</li>
+	<li>Bug Fix: Do not update a users profile upon Contact Form submssion if the user is logged in</li>
+	<li>Bug Fix: Venue fields now display by default if Unattended enquiry has venue details entered manually</li>
+	<li>General: Dynamic addons list not longer displays on screen alert for "No addons available" and instead displays, "No addons available" within select list as a disabled option</li>
+	<li>>General: Added Extensions row to the application settings screen. More on this soon!</li>
+	<li>General: Removed the colon (:) which was displayed after the "Other Label" on the PayPal form</li>
+	<li>General: Added OOP code for MDJM extensions - coming soon</li>
+	<li>General: /includes/config.inc.php is deprecated</li>
+	<li>General: Lots of old code removed</li>
+</ul>
 = 1.2.4 =
 <strong>Released Saturday 12th September, 2015</strong>
 <ul>

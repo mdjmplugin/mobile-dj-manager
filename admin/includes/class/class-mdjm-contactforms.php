@@ -58,7 +58,6 @@
  * Data Methods
  *
  */
-			
 			/*
 			 * Retrieve the forms
 			 *
@@ -170,18 +169,38 @@
 					/* -- Prepare the data -- */
 					$field_meta['type'] = sanitize_text_field( $_POST['field_type'] );
 					
+					/* Section Header Settings */
+					if( $_POST['field_type'] == 'section_head' )	{
+						if( isset( $_POST['section_layout'] ) )
+							$field_meta['config']['section_layout'] = ( $_POST['section_layout'] == 'not_set' ? '0' : $_POST['section_layout'] );
+							
+						$field_meta['config']['display_label'] = ( !empty( $_POST['display_label'] ) ? '1' : '0' );
+							
+						if( isset( $_POST['section_wrap'] ) )
+							$field_meta['config']['section_wrap'] = $_POST['section_wrap'];
+											
+						if( isset( $_POST['font_size'] ) )
+							$field_meta['config']['font_size'] = sanitize_text_field( $_POST['font_size'] );
+							
+						if( isset( $_POST['font_weight'] ) )
+							$field_meta['config']['font_weight'] = sanitize_text_field( $_POST['font_weight'] );
+														
+						if( isset( $_POST['font_align'] ) )
+							$field_meta['config']['font_align'] = sanitize_text_field( $_POST['font_align'] );
+					}
+					
 					/* Classes */
-					if( isset( $_POST['label_class'] ) && !empty( $_POST['label_class'] ) )
+					if( isset( $_POST['label_class'] ) )
 						$field_meta['config']['label_class'] = sanitize_text_field( $_POST['label_class'] );
 						
-					if( isset( $_POST['input_class'] ) && !empty( $_POST['input_class'] ) )
+					if( isset( $_POST['input_class'] ) )
 						$field_meta['config']['input_class'] = sanitize_text_field( $_POST['input_class'] );
 						
 					/* Size */
-					if( isset( $_POST['width'] ) && !empty( $_POST['width'] ) )
+					if( isset( $_POST['width'] ) )
 						$field_meta['config']['width'] = sanitize_text_field( $_POST['width'] );
 					
-					if( isset( $_POST['height'] ) && !empty( $_POST['height'] ) )
+					if( isset( $_POST['height'] ) )
 						$field_meta['config']['height'] = sanitize_text_field( $_POST['height'] );
 					
 					/* Field Mapping */
@@ -230,6 +249,10 @@
 					if( $_POST['field_type'] == 'addons_list' )
 						$field_meta['config']['display_price'] = ( isset( $_POST['addons_price'] ) && !empty( $_POST['addons_price'] ) ? 'Y' : 'N' );
 					
+					/* Addon Checked List Display Price */
+					if( $_POST['field_type'] == 'addons_check_list' )
+						$field_meta['config']['display_price'] = ( isset( $_POST['addons_price'] ) && !empty( $_POST['addons_price'] ) ? 'Y' : 'N' );
+					
 					/* Venue List First Entry */
 					if( $_POST['field_type'] == 'venue_list' && !empty( $_POST['venue_list_first_entry'] ) )
 						$field_meta['config']['venue_list_first_entry'] = sanitize_text_field( $_POST['venue_list_first_entry'] );
@@ -276,6 +299,7 @@
 						$field_args = array(
 									'post_title'	=> sanitize_text_field( $_POST['field_name'] ), // Field name
 									'post_type'		=> MDJM_CONTACT_FIELD_POSTS,
+									'post_name'	  => 'mdjmcf-' . sanitize_title( $_POST['field_name'] ),
 									'post_status'	=> 'publish',
 									'post_parent'	=> $_POST['form_id'],
 									'menu_order'	=> $order,
@@ -373,51 +397,22 @@
 					$form_meta['email_from_name'] = sanitize_text_field( $_POST['email_from_name'] );
 					$form_meta['email_to'] = sanitize_text_field( $_POST['email_to'] );
 					$form_meta['email_subject'] = sanitize_text_field( $_POST['email_subject'] );
-					
-					if( !empty( $_POST['reply_to'] ) )
-						$form_meta['reply_to'] = $_POST['reply_to'];
-					
-					if( !empty( $_POST['copy_sender'] ) )	
-						$form_meta['copy_sender'] = $_POST['copy_sender'];
-					
-					if( !empty( $_POST['create_enquiry'] ) )
-						$form_meta['create_enquiry'] = $_POST['create_enquiry'];
-					else
-						$form_meta['create_enquiry'] = false;
-						
-					if( !empty( $_POST['send_template'] ) && is_numeric( $_POST['send_template'] ) )
-						$form_meta['send_template'] = $_POST['send_template'];
-						
-					if( isset( $_POST['update_user'] ) && $_POST['update_user'] == 'Y' )	{
-						$form_meta['update_user'] = $_POST['update_user'];
-					}
-					else	{
-						$form_meta['update_user'] = false;	
-					}
-					if( isset( $_POST['redirect'] ) && is_numeric( $_POST['redirect'] ) )	{
-						$form_meta['redirect'] = $_POST['redirect'];
-					}
-					else	{
-						$form_meta['redirect'] = false;	
-					}
-					if( isset( $_POST['display_message'] ) && $_POST['display_message'] == 'Y' )	{
-						$form_meta['display_message'] = $_POST['display_message'];
-						$form_meta['display_message_text'] = htmlentities( stripslashes( $_POST['display_message_text'] ) );
-					}
-					else	{
-						$form_meta['display_message'] = false;	
-					}
-					
+					$form_meta['copy_sender'] = $_POST['copy_sender'];
+					$form_meta['create_enquiry'] = $_POST['create_enquiry'];
+					$form_meta['send_template'] = $_POST['send_template'];
+					$form_meta['update_user'] = $_POST['update_user'];
+					$form_meta['redirect'] = $_POST['redirect'];
+					$form_meta['display_message'] = $_POST['display_message'];
+					$form_meta['display_message_text'] = htmlentities( stripslashes( $_POST['display_message_text'] ) );
 					$form_meta['required_field_text'] = sanitize_text_field( $_POST['required_field_text'] );
-					$form_meta['required_asterix'] = !empty( $_POST['required_asterix'] ) ? '1' : '0';
+					$form_meta['required_asterix'] = $_POST['required_asterix'];
+					$form_meta['css'] = $_POST['css'];
 					
 					$form_meta['error_text_color'] = ( empty( $_POST['error_text_color'] ) 
 						? '#FF0000' : sanitize_text_field( $_POST['error_text_color'] ) );
 						
 					$form_meta['layout'] = ( $_POST['layout'] == 'not_set' ? '0_column' : $_POST['layout'] );
-					
-					if( !empty( $_POST['row_height'] ) && is_numeric( $_POST['row_height'] ) )
-						$form_meta['row_height'] = $_POST['row_height'];
+					$form_meta['row_height'] = $_POST['row_height'];
 					
 					/* -- Save the data -- */
 					remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
@@ -694,6 +689,8 @@
 				
 				/* -- Marry Field type values to nice names -- */
 				$field_types = array(
+									'section_head' => 'Section Heading',
+									'rule'		 => 'Horizontal Rule',
 									'text'         => 'Text Field',
 									'date'         => 'Date Field',
 									'time'         => 'Time Field',
@@ -703,6 +700,7 @@
 									'event_list'   => 'Event Type List',
 									'package_list' => 'Event Package List',
 									'addons_list'  => 'Event Addons List',
+									'addons_check_list'  => 'Event Addons Checkbox List',
 									'venue_list'   => 'Venue List',
 									'checkbox'     => 'Checkbox',
 									'textarea'     => 'Textarea',
@@ -738,7 +736,7 @@
 				// If packages are not enabled, we don't need these
 				if( MDJM_PACKAGES == false )
 					unset( $mappings_event['_mdjm_event_package'], $mappings_event['_mdjm_event_addons'], 
-						   $field_types['package_list'], $field_types['addons_list'] );
+						   $field_types['package_list'], $field_types['addons_list'], $field_types['addons_check_list'] );
 									
 				$mappings = array_merge( $mappings_client, $mappings_event );
 				
@@ -751,6 +749,12 @@
 				?>
 				<script type="text/javascript">
 				function showDiv(elem){
+					if(elem.value == 'section_head' )	{
+						document.getElementById('section_head_settings').style.display = "block";
+					}
+					else	{
+						document.getElementById('section_head_settings').style.display = "none";
+					}
 					if(elem.value == 'text' || elem.value == 'textarea' || elem.value == 'tel' || elem.value == 'email' || elem.value == 'url')	{
 						document.getElementById('placeholder_row').style.display = "block";
 					}
@@ -799,7 +803,7 @@
 					else	{
 						document.getElementById('package_list_first_entry_row').style.display = "none";
 					}
-					if(elem.value == 'addons_list')	{
+					if(elem.value == 'addons_list' || elem.value == 'addons_check_list')	{
 						document.getElementById('addons_list_price_row').style.display = "block";
 					}
 					else	{
@@ -871,9 +875,9 @@
 				<input type="hidden" name="form_id" id="form_id" value="<?php echo $form_id; ?>" />
 				<table class="widefat<?php echo( !empty( $fields ) ? ' mdjm-list-item' : '' ); ?>">
 				<thead>
-				<th class="row-title"><?php echo __( 'Label' ); ?></th>
-				<th class="row-title"><?php echo __( 'Field Type' ); ?></th>
-				<th class="row-title"><?php echo __( 'Settings' ); ?></th>
+				<th class="row-title"><?php echo __( 'Label', 'mobile-dj-manager' ); ?></th>
+				<th class="row-title"><?php echo __( 'Field Type', 'mobile-dj-manager' ); ?></th>
+				<th class="row-title"><?php echo __( 'Settings', 'mobile-dj-manager' ); ?></th>
 				<th class="row-title">&nbsp;</th>
 				</thead>
 				<?php
@@ -899,9 +903,9 @@
 						<td><?php echo esc_attr( $field->post_title ); ?></th>
 						<td><?php echo $field_types[$f_config['type']]; ?></td>
 						<td><?php $this->form_icons( $f_config ); ?></td>                
-						<td valign="middle"><a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form->ID . '&edit=Y&field_id=' . $field->ID ); ?>" class="button button-primary button-small">Edit</a>
+						<td valign="middle"><a href="<?php echo admin_url( 'admin.php?page=mdjm-contact-forms&action=edit_contact_form&form_id=' . $form->ID . '&edit=Y&field_id=' . $field->ID ); ?>" class="button button-primary button-small"><?php _e( 'Edit', 'mobile-dj-manager' ); ?></a>
 							&nbsp;&nbsp;&nbsp;
-						<?php submit_button( 'Delete', 'secondary small', 'submit', false, array( 
+						<?php submit_button( __( 'Delete', 'mobile-dj-manager' ), 'secondary small', 'submit', false, array( 
 							'formmethod'	=> 'post',
 							'formaction'	=> mdjm_get_admin_page( 'contact_forms' ) . '&mdjm_action=delete_field&field_id=' . $field->ID . '&form_id=' . $form->ID
 							) ); ?>
@@ -912,10 +916,16 @@
 						if( $i == 2 )
 							$i = 0;
 						/* Only one email/event list/package/addons/captcha/submit field type allowed */
-						$only_one = array( 'email', 'event_list', 'package_list', 'addons_list', 'venue_list', 'captcha', 'submit' );
+						$only_one = array( 'email', 'event_list', 'package_list', 'addons_list', 'addons_check_list', 'venue_list', 'captcha', 'submit' );
 						if( !isset( $_GET['edit'] ) || $_GET['edit'] != 'Y' )	{
 							if( in_array( $f_config['type'], $only_one ) )
-								unset( $field_types[$f_config['type']] );	
+								unset( $field_types[$f_config['type']] );
+								
+							if( $f_config['type'] == 'addons_list' )
+								unset( $field_types['addons_check_list'] );
+								
+							if( $f_config['type'] == 'addons_check_list' )
+								unset( $field_types['addons_list'] );	
 
 						}
 						/* If mapping in use, do not display again */
@@ -933,9 +943,9 @@
 				}
 				?>
 				<tfoot>
-				<th class="row-title"><?php echo __( 'Label' ); ?></th>
-				<th class="row-title"><?php echo __( 'Field Type' ); ?></th>
-				<th class="row-title"><?php echo __( 'Settings' ); ?></th>
+				<th class="row-title"><?php echo __( 'Label', 'mobile-dj-manager' ); ?></th>
+				<th class="row-title"><?php echo __( 'Field Type', 'mobile-dj-manager' ); ?></th>
+				<th class="row-title"><?php echo __( 'Settings', 'mobile-dj-manager' ); ?></th>
 				<th class="row-title">&nbsp;</th>
 				</tfoot>
 				</table>
@@ -982,13 +992,64 @@
 				HIDDEN DIVS
 		*********************************/
 		?>
-				
+		
+        <?php /* Section Header Settings */ ?>
+				<div id="section_head_settings" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'section_head' ? 'block;' : 'none;' ); ?> font-size:10px">
+                <p><?php _e( 'Section Layout', 'mobile-dj-manager' ); ?>:&nbsp;&nbsp;&nbsp;
+                <select name="section_layout" id="section_layout" />
+                    <option value="not_set"<?php if( isset( $e_meta['config']['section_layout'] ) ) selected( 'not_set', $e_meta['config']['section_layout'] ); ?>>Not Set</option>
+                    <option value="4"<?php if( isset( $e_meta['config']['section_layout'] ) ) selected( '4', $e_meta['config']['section_layout'] ); ?>>4 Column Table</option>
+                    <option value="2"<?php if( isset( $e_meta['config']['section_layout'] ) ) selected( '2', $e_meta['config']['section_layout'] ); ?>>2 Column Table</option>
+                    <option value="0"<?php if( isset( $e_meta['config']['section_layout'] ) ) selected( '0', $e_meta['config']['section_layout'] ); ?>>No Table</option>
+				</select>
+                </p>
+                 <p><?php _e( 'Display Header Label', 'mobile-dj-manager' ); ?>?&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" name="display_label" id="display_label" value="1"<?php if( isset( $e_meta['config']['display_label'] ) ) checked( '1', $e_meta['config']['display_label'] ); else echo ' checked="checked"'; ?> />
+                </p>
+                <p><?php _e( 'Wrap In', 'mobile-dj-manager' ); ?>:&nbsp;&nbsp;&nbsp;
+                <select name="section_wrap" id="section_wrap" />
+                    <option value="p"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'p', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'p tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h1"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h1', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h1 tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h2"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h2', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h2 tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h3"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h3', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h3 tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h4"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h4', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h4 tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h5"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h5', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h5 tag', 'mobile-dj-manager' ); ?></option>
+                    <option value="h6"<?php if( isset( $e_meta['config']['section_wrap'] ) ) selected( 'h6', $e_meta['config']['section_wrap'] ); ?>><?php _e( 'h6 tag', 'mobile-dj-manager' ); ?></option>
+				</select>
+                </p>
+                <p><?php _e( 'Font Size', 'mobile-dj-manager' ); ?>:&nbsp;&nbsp;&nbsp;
+                	<select name="font_size" id="font_size">
+                    <option value=""<?php if( empty( $e_meta['type']['config']['font_size'] ) ) echo ' selected="selected"'; ?>>N/A</option>
+                    <option value="10"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '10' ); ?>>10px</option>
+                    <option value="11"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '11' ); ?>>11px</option>
+                    <option value="12"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '12' ); ?>>12px</option>
+                    <option value="14"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '14' ); ?>>14px</option>
+                    <option value="16"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '16' ); ?>>16px</option>
+                    <option value="18"<?php if( !empty( $e_meta['config']['font_size'] ) ) selected( $e_meta['config']['font_size'], '18' ); ?>>18px</option>
+                </select>
+                </p>
+                <p><?php _e( 'Font Weight', 'mobile-dj-manager' ); ?>:&nbsp;&nbsp;&nbsp;
+                <select name="font_weight" id="font_weight">
+                    <option value=""<?php if( empty( $e_meta['config']['font_weight'] ) ) echo ' selected="selected"'; ?>>N/A</option>
+                    <option value="normal"<?php if( !empty( $e_meta['config']['font_weight'] ) ) selected( $e_meta['config']['font_weight'], 'normal' ); ?>><?php _e( 'Normal', 'mobile-dj-manager' ); ?></option>
+                    <option value="bold"<?php if( !empty( $e_meta['config']['font_weight'] ) ) selected( $e_meta['config']['font_weight'], 'bold' ); ?>><?php _e( 'Bold', 'mobile-dj-manager' ); ?></option>
+                </select>
+                </p>
+                <p><?php _e( 'Font Align', 'mobile-dj-manager' ); ?>:&nbsp;&nbsp;&nbsp;
+                <select name="font_align" id="font_align">
+                    <option value=""<?php if( empty( $e_meta['config']['font_align'] ) ) echo ' selected="selected"'; ?>>N/A</option>
+                    <option value="center"<?php if( !empty( $e_meta['config']['font_align'] ) ) selected( $e_meta['config']['font_align'], 'center' ); ?>><?php _e( 'Centre', 'mobile-dj-manager' ); ?></option>
+                    <option value="left"<?php if( !empty( $e_meta['config']['font_align'] ) ) selected( $e_meta['config']['font_align'], 'left' ); ?>><?php _e( 'Left', 'mobile-dj-manager' ); ?></option>
+                    <option value="right"<?php if( !empty( $e_meta['config']['font_align'] ) ) selected( $e_meta['config']['font_align'], 'right' ); ?>><?php _e( 'Right', 'mobile-dj-manager' ); ?></option>
+                </select>
+                </div>
+        	
 		<?php /* Placeholder */ 
 			$placeholder_types = array( 'text', 'textarea', 'email', 'url' );
 		?>
 				<div id="placeholder_row" style="display: <?php echo ( !empty( $e_meta ) && in_array( $e_meta['type'], $placeholder_types ) ? 'block;' : 'none;' ); ?> font-size:10px">
 				<p>Placeholder text:&nbsp;&nbsp;&nbsp;<input type="text" name="placeholder" id="placeholder" class="regular-text" placeholder="(optional) Placeholder text is displayed like this"
-					<?php echo( !empty( $e_meta['config']['placeholder'] ) ? ' value="' . esc_attr( $e_meta['config']['placeholder'] ) . '"' : '' ); ?> /></p>
+					<?php echo ( !empty( $e_meta['config']['placeholder'] ) ? ' value="' . esc_attr( $e_meta['config']['placeholder'] ) . '"' : '' ); ?> /></p>
 				</div>
 		<?php /* End Placeholder */ ?>
 		
@@ -1060,7 +1121,7 @@
 		<?php /* End Package List First Entry */ ?>
         
         <?php /* Addons List Price */ ?>
-				<div id="addons_list_price_row" style="display: <?php echo( !empty( $e_meta ) && $e_meta['type'] == 'addons_list' ? 'block;' : 'none;' ); ?> font-size:10px">
+				<div id="addons_list_price_row" style="display: <?php echo( !empty( $e_meta ) && ( $e_meta['type'] == 'addons_list' || $e_meta['type'] == 'addons_check_list' ) ? 'block;' : 'none;' ); ?> font-size:10px">
                 <p>Include Addon Price:?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="addons_price" id="addons_price" value="1" 
 				<?php if( isset( $e_meta['config']['display_price'] ) ) { checked( $e_meta['config']['display_price'], 'Y' ); } else echo ' checked="checked"'; ?> /></p>
 				</div>
@@ -1102,6 +1163,7 @@
 					$selected = false;	
 				}
 		?>
+        		
 				<p>Required?&nbsp;&nbsp;&nbsp;<input type="checkbox" name="required" id="required" value="Y"<?php if( $selected ) checked( 'Y', $req ); ?> /></p>
 				<p>Label CSS Class: <span style="font-size:11px; font-style:italic">(optional)</span><br />
 				&nbsp;&nbsp;&nbsp;<input type="text" name="label_class" id="label_class"
@@ -1115,12 +1177,12 @@
 				 <select name="mapping" id="mapping">
 				 <option value="none">No Mapping</option>
 				 <?php
-				 foreach( $mappings as $mapping => $mapping_name )	{
+				foreach( $mappings as $mapping => $mapping_name )	{
 					echo '<option value="' . $mapping . '"' . 
 						( isset( $_GET['edit'], $_GET['field_id'] ) && $_GET['edit'] == 'Y' && !empty( $e_meta['config']['mapping'] ) 
 						? selected( $mapping, $e_meta['config']['mapping'], false ) : '' ) . 
 						'>' . $mapping_name . '</option>' . "\r\n";
-				 }
+				}
 				 ?>
 				 </select>
 				</td>
@@ -1428,6 +1490,11 @@
 				<th scope="row"><label for="row_height">Table Row Height:</label></th>
 				<td><input type="text" name="row_height" id="row_height" class="small-text" value="<?php echo ( !empty( $config['row_height'] ) ? $config['row_height'] : '' ); ?>" /> <span class="description">Adjust the table row height as required (optional - applies to table layout only)</span></td>
 				</tr>
+                <tr>
+				<th scope="row"><label for="css">Custom CSS:</label></th>
+				<td><textarea name="css" id="css" rows="6" cols="50" placeholder=".example { font-weight: bold; font-size: 12px; }"><?php echo ( !empty( $config['css'] ) ? esc_attr( $config['css'] ) : '' ); ?></textarea><br />
+				<span class="description">Add your own custom CSS styling above and then apply to labels and field inputs as required</span></td>
+				</tr>
 				<tr>
 				<td colspan="2">
 				<?php
@@ -1605,14 +1672,6 @@
  * INSIANTIATE THE CLASS
  *
  */	
- 	if( isset( $_GET['upgrade'] ) && $_GET['upgrade'] == 'Y' )	{
-		if( !class_exists( 'MDJM_Upgrade' ) )	{
-			include( MDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-upgrade.php' );
-			$mdjm_upgrade = new MDJM_Upgrade();
-		}
-		$mdjm_upgrade->migrate_cron_tasks();
-		exit;	
-	}
 	
 	/* -- The page & actions -- */
 	if( class_exists( 'MDJM_ContactForms' ) )	{	

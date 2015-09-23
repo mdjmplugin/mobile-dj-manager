@@ -308,6 +308,17 @@
 							'title' => __( 'MDJM Payment Settings' ),
 						),
 					) );
+					
+					if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
+						$admin_bar->add_menu( array(
+							'id'		=> 'mdjm-settings-payments',
+							'parent'	=> 'mdjm-settings',
+							'title'	 => __( 'MDJM to PDF Settings' ),
+							'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=mdjm-to-pdf' ),
+							'meta'	  => array(
+								'title' => __( 'MDJM to PDF Settings' ),
+							),
+						) );
 				/* -- Automated Tasks -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-tasks',

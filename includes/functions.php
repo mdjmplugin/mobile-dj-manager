@@ -282,12 +282,12 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_get_eventinfo( $db_tbl, $current_user )	{
+	/*function f_mdjm_get_eventinfo( $db_tbl, $current_user )	{
 		global $wpdb;
 		$eventinfo = $wpdb->get_row("SELECT * FROM `".$db_tbl['events']."` WHERE `user_id` = '".$current_user->ID."' AND `event_date` >= DATE(NOW()) AND `contract_status` = 'Approved'");
 		
 		return $eventinfo;
-	} // f_mdjm_get_eventinfo
+	} // f_mdjm_get_eventinfo*/
 
 /*
 * f_mdjm_get_client_events
@@ -295,7 +295,7 @@
 * @since 0.9.4
 * Retrieves all client events regardless of status
 */
-	function f_mdjm_get_client_events( $db_tbl, $current_user )	{
+	/*function f_mdjm_get_client_events( $db_tbl, $current_user )	{
 		global $wpdb;
 		
 		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . $current_user->ID . "' ORDER BY `event_date` DESC";
@@ -303,7 +303,7 @@
 		$eventinfo = $wpdb->get_results( $event_query );
 		
 		return $eventinfo;
-	} // f_mdjm_get_client_events
+	} // f_mdjm_get_client_events*/
 	
 /*
 * f_mdjm_get_client_next_event
@@ -311,7 +311,7 @@
 * @since 0.9.4
 * Retrieves the clients next approved event
 */
-	function f_mdjm_get_client_next_event()	{
+	/*function f_mdjm_get_client_next_event()	{
 		global $wpdb;
 		
 		if( !isset( $db_tbl ) )
@@ -322,7 +322,7 @@
 		$next_event = $wpdb->get_row( $event_query );
 		
 		return $next_event;
-	} // f_mdjm_get_client_events
+	} // f_mdjm_get_client_events*/
 
 /*
 * f_mdjm_total_client_events_by_status
@@ -331,7 +331,7 @@
 * Retrieves the total number of client events by given status
 */
 
-	function f_mdjm_total_client_events_by_status( $status )	{
+	/*function f_mdjm_total_client_events_by_status( $status )	{
 		global $wpdb;
 		
 		if( !isset( $db_tbl ) )
@@ -343,7 +343,7 @@
 		
 		return $total_events;
 		
-	} // f_mdjm_total_client_events_by_status
+	} // f_mdjm_total_client_events_by_status*/
 
 /**
  * f_mdjm_get_event_by_id
@@ -354,13 +354,13 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_get_event_by_id( $db_tbl, $event_id )	{
+	/*function f_mdjm_get_event_by_id( $db_tbl, $event_id )	{
 		global $wpdb;
 		
 		$eventinfo = $wpdb->get_row("SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $event_id . "'");
 		
 		return $eventinfo;
-	} // f_mdjm_get_event_by_id
+	} // f_mdjm_get_event_by_id*/
 	
 /*
 * f_mdjm_client_event_by_id
@@ -368,13 +368,13 @@
 * @since 0.9.4
 * Retrieve client event info by id
 */
-	function f_mdjm_client_event_by_id( $event_id )	{
+	/*function f_mdjm_client_event_by_id( $event_id )	{
 					
 		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $event_id . "'";
 		$eventinfo = $wpdb->get_row( $event_query );
 		
 		return $eventinfo;	
-	} // f_mdjm_client_event_by_id
+	} // f_mdjm_client_event_by_id*/
 	
 /**
 * f_mdjm_get_guest_eventinfo
@@ -382,7 +382,7 @@
 * @since 0.8
 * Retrieve event info guest visitors
 */
-	function f_mdjm_get_guest_eventinfo( $event_id )	{		
+	/*function f_mdjm_get_guest_eventinfo( $event_id )	{		
 		
 		$eventinfo = get_posts( array(
 							'posts_per_page'	=> -1,
@@ -392,7 +392,7 @@
 							) );
 		
 		return $eventinfo[0];
-	} // f_mdjm_get_guest_eventinfo
+	} // f_mdjm_get_guest_eventinfo*/
 	
 /*
 * f_mdjm_change_event_status
@@ -400,7 +400,7 @@
 * @since 0.9.4
 * Updates the event status
 */
-	function f_mdjm_change_event_status( $status, $event_id )	{
+	/*function f_mdjm_change_event_status( $status, $event_id )	{
 		global $wpdb, $mdjm_options;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
@@ -432,7 +432,7 @@
 		}
 		
 		/* Update the event in the database */
-		$update_event = $wpdb->update( $db_tbl['events'], $update_args, array( 'event_id' => $event_id ) );
+		/*$update_event = $wpdb->update( $db_tbl['events'], $update_args, array( 'event_id' => $event_id ) );
 		$j_args = array (
 						'client' => get_current_user_id(),
 						'event' => $event_id,
@@ -444,7 +444,7 @@
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
 		/* Email client if required */
-		if( $status == 'Pending' || $status == 'Approved' )	{
+		/*if( $status == 'Pending' || $status == 'Approved' )	{
 			
 			$eventinfo = f_mdjm_get_eventinfo_by_id( $event_id );
 			$clientinfo = get_userdata( $eventinfo->user_id );
@@ -462,7 +462,7 @@
 					$info = f_mdjm_prepare_email( $eventinfo, $type );
 					
 					/* -- Insert the communication post */
-					if( !class_exists( 'MDJM_Communication' ) )
+					/*if( !class_exists( 'MDJM_Communication' ) )
 						require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
 						
 					$mdjm_comms = new MDJM_Communication();
@@ -505,7 +505,7 @@
 					$email_headers = f_mdjm_client_email_headers( $eventinfo, $set_from );
 					$info = f_mdjm_prepare_email( $eventinfo, $type );
 					/* -- Insert the communication post */
-					if( !class_exists( 'MDJM_Communication' ) )
+					/*if( !class_exists( 'MDJM_Communication' ) )
 						require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
 						
 					$mdjm_comms = new MDJM_Communication();
@@ -541,7 +541,7 @@
 				$info = f_mdjm_prepare_email( $eventinfo, $type='email_dj_confirm' );
 				
 				/* -- Insert the communication post */
-				if( !class_exists( 'MDJM_Communication' ) )
+				/*if( !class_exists( 'MDJM_Communication' ) )
 					require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
 					
 				$mdjm_comms = new MDJM_Communication();
@@ -561,7 +561,7 @@
 		}
 		
 		echo '<p><strong>' . $message . '</strong></p>';
-	} // f_mdjm_change_event_status
+	} // f_mdjm_change_event_status*/
 
 /****************************************************************************************************
 --	CLIENT FUNCTIONS
@@ -661,11 +661,11 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_get_djinfo( $db_tbl, $eventinfo )	{
+	/*function f_mdjm_get_djinfo( $db_tbl, $eventinfo )	{
 		global $wpdb;
 		$djinfo = get_user_by( 'id', $eventinfo->event_dj );
 		return $djinfo;
-	} // f_mdjm_get_djinfo
+	} // f_mdjm_get_djinfo*/
 
 /****************************************************************************************************
 --	PLAYLIST FUNCTIONS
@@ -705,7 +705,7 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_get_playlist( $event_id )	{
+	/*function f_mdjm_get_playlist( $event_id )	{
 		global $wpdb;
 		
 		if( !isset( $db_tbl ) )
@@ -715,7 +715,7 @@
 		$playlist_result = $wpdb->get_results( $playlist_query );
 		
 		return $playlist_result;
-	} // f_mdjm_get_playlist
+	} // f_mdjm_get_playlist*/
 
 /**
  * f_mdjm_remove_playlistsong
@@ -726,7 +726,7 @@
  * 
  * @since 1.0
 */	
-	function f_mdjm_remove_playlistsong( $song_id )	{
+	/*function f_mdjm_remove_playlistsong( $song_id )	{
 		global $mdjm, $clientzone, $wpdb;
 				
 		$songinfo = $wpdb->get_row( "SELECT * FROM " . MDJM_PLAYLIST_TABLE . " WHERE `id` = '" . $song_id . "'");
@@ -749,7 +749,7 @@
 												 	)
 												);
 		}
-	} // f_mdjm_remove_playlistsong
+	} // f_mdjm_remove_playlistsong*/
 
 /**
  * f_mdjm_add_playlistsong
@@ -760,7 +760,7 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_add_playlistsong( $playlist_array )	{
+	/*function f_mdjm_add_playlistsong( $playlist_array )	{
 		global $mdjm, $clientzone, $wpdb;
 		// Form validation
 		if ( empty ( $playlist_array['playlist_artist'] ) || empty ( $playlist_array['playlist_song'] ) )	{
@@ -814,7 +814,7 @@
 												);
 			}
 		}
-	} // f_mdjm_add_playlistsong
+	} // f_mdjm_add_playlistsong*/
 	
 /****************************************************************************************************
 --	Contact	--
@@ -828,9 +828,9 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_contact( $subject )	{
+	/*function f_mdjm_contact( $subject )	{
 		print("<a href=\"mailto:". $mdjm_options['system_email'] ."?subject=".$subject."\">". $mdjm_options['system_email'] ."</a>");
-	} // f_mdjm_contact
+	} // f_mdjm_contact*/
 	
 /****************************************************************************************************
 --	JOURNALING
@@ -844,13 +844,13 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_do_journal( $args )	{
+	/*function f_mdjm_do_journal( $args )	{
 		global $wpdb;
 		
 		$args['id'] = '';
 		$args['timestamp'] = time();
 		if( !$wpdb->insert( MDJM_JOURNAL_TABLE, $args ) ) die( $wpdb->print_error() );	
-	} // f_mdjm_do_journal
+	} // f_mdjm_do_journal*/
 
 /****************************************************************************************************
 --	AVAILABILITY

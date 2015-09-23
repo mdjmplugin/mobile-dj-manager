@@ -222,10 +222,7 @@
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
-		if( !isset( $db_tbl ) )	{
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		}
-		$event_query = "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $type . "'";
+		$event_query = "SELECT COUNT(*) FROM `" . MDJM_EVENTS_TABLE . "` WHERE `contract_status` = '" . $type . "'";
 		
 		if( isset( $mdjm_args['dj'] ) && $mdjm_args['dj'] === true )	{
 			$event_query .= " AND `event_dj` = '" . $mdjm_args['dj'] . "'";
@@ -259,12 +256,8 @@
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
-		
-		if( !isset( $db_tbl ) )	{
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		}
-		
-		$unattended = $wpdb->get_results( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = 'Unattended'" );
+				
+		$unattended = $wpdb->get_results( "SELECT COUNT(*) FROM `" . MDJM_EVENTS_TABLE . "` WHERE `contract_status` = 'Unattended'" );
 		
 		return $unattended;
 	} // f_mdjm_unattended_enquiries_count
@@ -333,7 +326,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_update_event_package( $event_id, $event_cost, $event_package, $client )	{
+	/*function f_mdjm_update_event_package( $event_id, $event_cost, $event_package, $client )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -343,7 +336,7 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+		$update_event = $wpdb->update( MDJM_EVENTS_TABLE, $update, array( 'event_id' => $event_id ) );
 		$j_args = array (
 						'client' => $client,
 						'event' => $event_id,
@@ -354,7 +347,7 @@
 					);
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
-	} // f_mdjm_update_event_package
+	} // f_mdjm_update_event_package*/
 	
 /**
  * f_mdjm_update_event_addons
@@ -364,7 +357,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_update_event_addons( $event_id, $event_cost, $event_addons, $client )	{
+	/*function f_mdjm_update_event_addons( $event_id, $event_cost, $event_addons, $client )	{
 		global $wpdb;
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		$update = array(
@@ -373,7 +366,7 @@
 						'last_updated_by' => get_current_user_id(),
 						'last_updated' => date( 'Y-m-d H:i:s' )
 					);
-		$update_event = $wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $event_id ) );
+		$update_event = $wpdb->update( MDJM_EVENTS_TABLE, $update, array( 'event_id' => $event_id ) );
 		$j_args = array (
 						'client' => $client,
 						'event' => $event_id,
@@ -384,7 +377,7 @@
 					);
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
-	} // f_mdjm_update_event_addons
+	} // f_mdjm_update_event_addons*/
 
 /**
  * f_mdjm_deposit_paid
@@ -395,7 +388,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_deposit_paid( $id )	{
+	/*function f_mdjm_deposit_paid( $id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -407,7 +400,7 @@
 							'last_updated_by' => get_current_user_id(),
 							'last_updated' => date( 'Y-m-d H:i:s' ),
 					);
-		$wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $id ) );
+		$wpdb->update( MDJM_EVENTS_TABLE, $update, array( 'event_id' => $id ) );
 					
 		$j_args = array (
 			'client' => $eventinfo->user_id,
@@ -419,7 +412,7 @@
 			);
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
-	} // f_mdjm_deposit_paid
+	} // f_mdjm_deposit_paid*/
 
 /*
 * f_mdjm_balance_paid
@@ -427,7 +420,7 @@
 * @since 0.9.3
 * Mark the balance as paid
 */
-	function f_mdjm_balance_paid( $id )	{
+	/*function f_mdjm_balance_paid( $id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -439,7 +432,7 @@
 							'last_updated_by' => get_current_user_id(),
 							'last_updated' => date( 'Y-m-d H:i:s' ),
 					);
-		$wpdb->update( $db_tbl['events'], $update, array( 'event_id' => $id ) );
+		$wpdb->update( MDJM_EVENTS_TABLE, $update, array( 'event_id' => $id ) );
 					
 		$j_args = array (
 			'client' => $eventinfo->user_id,
@@ -451,7 +444,7 @@
 			);
 		if( WPDJM_JOURNAL == 'Y' ) f_mdjm_do_journal( $j_args );
 		
-	} // f_mdjm_balance_paid
+	} // f_mdjm_balance_paid*/
 
 /**
  * f_mdjm_get_eventinfo_by_id
@@ -462,15 +455,15 @@
  *
  * @since 1.0
 */
-	function f_mdjm_get_eventinfo_by_id( $event_id )	{
+	/*function f_mdjm_get_eventinfo_by_id( $event_id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		$eventinfo = $wpdb->get_row( 'SELECT * FROM `' . $db_tbl['events'] . '` WHERE `event_id` = ' . $event_id );
+		$eventinfo = $wpdb->get_row( 'SELECT * FROM `' . MDJM_EVENTS_TABLE . '` WHERE `event_id` = ' . $event_id );
 		return $eventinfo;
-	} // f_mdjm_get_eventinfo_by_id
+	} // f_mdjm_get_eventinfo_by_id*/
 	
 /**
 * f_mdjm_get_eventinfo_by_status
@@ -478,17 +471,17 @@
 * Since 0.9.3
 * Retrieve events detail by status 
 */
-	function f_mdjm_get_eventinfo_by_status( $status )	{
+	/*function f_mdjm_get_eventinfo_by_status( $status )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		$event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `contract_status` = '" . $status . "'";
+		$event_query = "SELECT * FROM `" . MDJM_EVENTS_TABLE . "` WHERE `contract_status` = '" . $status . "'";
 		$eventinfo = $wpdb->get_results( $event_query );
 		return $eventinfo;
-	} // f_mdjm_get_eventinfo_by_status
+	} // f_mdjm_get_eventinfo_by_status*/
 
 /**
  * f_mdjm_dj_get_events
@@ -499,20 +492,20 @@
  *
  * @since 1.0
 */
-	function f_mdjm_dj_get_events( $dj )	{
+	/*function f_mdjm_dj_get_events( $dj )	{
 		global $mdjm, $wpdb, $mdjm_options;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		$info['all_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '".$dj."' AND `contract_status` != 'Failed Enquiry' AND `contract_status` != 'Cancelled'" );
+		$info['all_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '".$dj."' AND `contract_status` != 'Failed Enquiry' AND `contract_status` != 'Cancelled'" );
 
-		$info['active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '".$dj."' AND `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" );
+		$info['active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '".$dj."' AND `event_date` >= DATE(NOW()) AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry'" );
 
-		$info['enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '".$dj."' AND `contract_status` = 'Enquiry' AND `event_date` >= curdate()" );
+		$info['enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '".$dj."' AND `contract_status` = 'Enquiry' AND `event_date` >= curdate()" );
 
-		$next_event = $wpdb->get_row( "SELECT * FROM `".$db_tbl['events']."` WHERE `event_dj` = '".$dj."' AND `event_date` >= curdate() AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' ORDER BY `event_date` ASC LIMIT 1" );
+		$next_event = $wpdb->get_row( "SELECT * FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '".$dj."' AND `event_date` >= curdate() AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Enquiry' AND `contract_status` != 'Failed Enquiry' ORDER BY `event_date` ASC LIMIT 1" );
 		
 		$info['next_event'] = 'N/A';
 		if( $wpdb->num_rows > 0 )	{
@@ -523,7 +516,7 @@
 		$info['event_id'] = $next_event->event_id;
 		$info['event_type'] = $next_event->event_type;
 		return $info;
-	} // f_mdjm_dj_get_events
+	} // f_mdjm_dj_get_events*/
 	
 /*
 * f_mdjm_get_dj_events
@@ -531,7 +524,7 @@
 * @since 0.9.6
 * Returns all DJ eventinfo as array
 */
-	function f_mdjm_get_dj_events( $dj_id )	{
+	/*function f_mdjm_get_dj_events( $dj_id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -539,11 +532,11 @@
 		if( !isset( $db_tbl ) )
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			
-		$query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_dj` = " . $dj_id . " ORDER BY `contract_status`, `event_date`";
+		$query = "SELECT * FROM " . MDJM_EVENTS_TABLE . " WHERE `event_dj` = " . $dj_id . " ORDER BY `contract_status`, `event_date`";
 		$dj_events = $wpdb->get_results( $query );
 		
 		return $dj_events;
-	} // f_mdjm_get_dj_events
+	} // f_mdjm_get_dj_events*/
 	
 /*
 * f_mdjm_event_is_active
@@ -551,7 +544,7 @@
 * @since 0.9.7
 * Checks if an event is active. True if so, false if not
 */
-	function f_mdjm_event_is_active( $eventinfo )	{
+	/*function f_mdjm_event_is_active( $eventinfo )	{
 		global $mdjm, $mdjm_options;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -567,7 +560,7 @@
 		else	{
 			return false;	
 		}
-	} // f_mdjm_event_is_active
+	} // f_mdjm_event_is_active*/
 
 /****************************************************************************************************
 --	PLAYLIST FUNCTIONS
@@ -580,14 +573,14 @@
  *
  * @since 1.0
 */
-	function f_mdjm_generate_playlist_ref()	{
+	/*function f_mdjm_generate_playlist_ref()	{
 		global $mdjm;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		$str = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ), 0, 9 );
 		return $str;
-	} // f_mdjm_generate_playlist_ref
+	} // f_mdjm_generate_playlist_ref*/
 	
 /*
 * f_mdjm_delete_from_playlist
@@ -595,7 +588,7 @@
 * @since 1.1
 * Delete the specified song from playlist
 */
-	function f_mdjm_delete_from_playlist( $pl )	{
+	/*function f_mdjm_delete_from_playlist( $pl )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -604,7 +597,7 @@
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		}
 		$wpdb->delete( $db_tbl['playlists'], array( 'id' => $pl ) );
-	}
+	}*/
 
 /****************************************************************************************************
 --	DJ FUNCTIONS
@@ -617,7 +610,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_get_djs()	{
+	/*function f_mdjm_get_djs()	{
 		global $mdjm, $mdjm_options;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -641,7 +634,7 @@
 		}
 		
 		return $djs;
-	} // f_mdjm_get_djs
+	} // f_mdjm_get_djs*/
 	
 /*
 * f_mdjm_get_inactive_djs
@@ -649,7 +642,7 @@
 * @since 0.9.9.6
 * Generate list of all inactive DJ's
 */
-	function f_mdjm_get_inactive_djs()	{
+	/*function f_mdjm_get_inactive_djs()	{
 		global $mdjm, $mdjm_options;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );		
@@ -661,7 +654,7 @@
 		$inactive_djs = get_users( $dj_arg );
 
 		return $inactive_djs;
-	} // f_mdjm_get_inactive_djs
+	} // f_mdjm_get_inactive_djs*/
 	
 /**
  * f_mdjm_dj_working_today
@@ -677,7 +670,7 @@
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		$dj_event_query = "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_dj` != '" . get_current_user_id() . "' AND DATE(event_date) = CURDATE() AND `contract_status` = 'Approved'";
+		$dj_event_query = "SELECT * FROM `" . MDJM_EVENTS_TABLE . "` WHERE `event_dj` != '" . get_current_user_id() . "' AND DATE(event_date) = CURDATE() AND `contract_status` = 'Approved'";
 		$dj_event_results = $wpdb->get_results( $dj_event_query );
 	
 		return $dj_event_results;
@@ -693,11 +686,8 @@
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
-		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
-		$dj_work_query = "SELECT * FROM " . $db_tbl['events'] . " WHERE `event_dj` = '" . $dj . "' AND DATE(event_date) = '" . $check_date . "' AND `contract_status` = 'Approved'";
+					
+		$dj_work_query = "SELECT * FROM " . MDJM_EVENTS_TABLE . " WHERE `event_dj` = '" . $dj . "' AND DATE(event_date) = '" . $check_date . "' AND `contract_status` = 'Approved'";
 		$dj_work_result = $wpdb->get_results( $dj_work_query );
 		
 		if( $dj_work_result )	{ // DJ is working
@@ -722,7 +712,7 @@
 		$args = func_get_args();
 		
 		if( func_num_args() == 1 )	{ // Assume no DJ passed
-			/* Get list of DJ's */
+			// Get list of DJ's 
 			$djs = f_mdjm_get_djs();
 		}
 		else	{
@@ -732,7 +722,7 @@
 		$dj_count = count( $djs );
 		$available_dj = array();
 		$can_work = array();
-		/* Check holiday table */
+		// Check holiday table 
 		foreach( $djs as $dj )	{
 			if( !f_mdjm_dj_on_holiday( $dj->ID, $args[0] ) )	{
 				$dj_count = $dj_count - 1;
@@ -742,7 +732,7 @@
 			}
 		}
 		if( $dj_count > 0 )	{
-			/* Check if DJ is working */
+			// Check if DJ is working
 			foreach( $available_dj as $dj )	{
 				if( f_mdjm_dj_is_working( $dj, $args[0] ) )	{
 					$dj_count = $dj_count - 1;
@@ -771,12 +761,10 @@
 */
 	function f_mdjm_add_holiday( $args )	{
 		global $wpdb;
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		$date_range = f_mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
 		foreach( $date_range as $the_date )	{
-			if ( $wpdb->insert( $db_tbl['holiday'],
+			if ( $wpdb->insert( MDJM_HOLIDAY_TABLE,
 										array(
 											'id'	     => '',
 											'user_id'    => $args['employee'],
@@ -803,16 +791,14 @@
 		if( empty( $entry ) )	{
 			return f_mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		if ( $wpdb->delete( $db_tbl['holiday'], array( 'id' => $entry, ) ) )	{
+		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'id' => $entry, ) ) )	{
 			f_mdjm_update_notice( 'updated', 'The entry was <strong>deleted</strong> successfully' );					
 		}
 		else	{
 			f_mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
-	} // f_mdjm_add_holiday
+	} // f_mdjm_remove_holiday
 
 /**
 * f_mdjm_dj_on_holiday
@@ -825,10 +811,7 @@
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
-		if( !isset( $db_tbl ) )
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-			
-		$hol_query = "SELECT * FROM " . $db_tbl['holiday'] . " WHERE `user_id` = '" . $dj . "' AND DATE(date_from) = '" . $check_date . "'";
+		$hol_query = "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " WHERE `user_id` = '" . $dj . "' AND DATE(date_from) = '" . $check_date . "'";
 		
 		$hol_result = $wpdb->get_results( $hol_query );
 		
@@ -853,13 +836,13 @@
  *
  * @since 1.0
 */
-	function f_mdjm_client_is_mine( $client_id )	{
+	/*function f_mdjm_client_is_mine( $client_id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
-		$client_query = $wpdb->get_var( "SELECT COUNT(*) FROM `" . $db_tbl['events'] . "` WHERE `user_id` = '" . $client_id . "' AND `event_dj` = '" . get_current_user_id() . "'" );
+		$client_query = $wpdb->get_var( "SELECT COUNT(*) FROM `" . MDJM_EVENTS_TABLE . "` WHERE `user_id` = '" . $client_id . "' AND `event_dj` = '" . get_current_user_id() . "'" );
 		
 		if( $client_query != '0' )	{
 			return true;
@@ -867,7 +850,7 @@
 		else	{
 			return false;
 		}
-	}
+	}*/
 	
 /**
  * f_mdjm_get_clients
@@ -878,7 +861,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_get_clients( $role, $orderby, $order )	{
+	/*function f_mdjm_get_clients( $role, $orderby, $order )	{
 		global $mdjm;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -889,7 +872,7 @@
 						);
 		$clients = get_users( $arg );
 		return $clients;
-	} // f_mdjm_get_clients
+	} // f_mdjm_get_clients*/
 
 /**
  * f_mdjm_edit_own_client_only
@@ -898,7 +881,7 @@
  *
  * @since 1.0
 */	
-	function f_mdjm_edit_own_client_only() {
+	/*function f_mdjm_edit_own_client_only() {
 		global $mdjm;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -906,7 +889,7 @@
 		if( !empty( $_GET ) && !current_user_can( 'administrator' ) && !f_mdjm_client_is_mine( $_GET['user_id'] ) ) {
 			wp_die( 'You can only edit clients for whom you have, or will, DJ for. <a href="' . admin_url() . 'admin.php?page=mdjm-clients">Click here to return to your Clients List</a>' );
 		}
-	} // f_mdjm_edit_own_client_only
+	} // f_mdjm_edit_own_client_only*/
 	
 /*
 * f_mdjm_is_client
@@ -914,7 +897,7 @@
 * @since 0.9.5
 * Checks whether a user is a client or not by given ID
 */
-	function f_mdjm_is_client( $id )	{
+	/*function f_mdjm_is_client( $id )	{
 		global $mdjm, $wpdb;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
@@ -922,7 +905,7 @@
 		if( !isset( $db_tbl ) )
 			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
-		$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM " . $db_tbl['events'] . " WHERE `user_id` = " . $id );
+		$event_count = $wpdb->get_var( "SELECT COUNT(*) FROM " . MDJM_EVENTS_TABLE . " WHERE `user_id` = " . $id );
 		
 		if( $event_count > 0 )	{
 			return true;	
@@ -930,7 +913,7 @@
 		else	{
 			return false;	
 		}
-	} // f_mdjm_is_client
+	} // f_mdjm_is_client*/
 	
 /*
 * f_mdjm_set_client_role()
@@ -938,12 +921,12 @@
 * @since 1.0
 * Updates the client's role within WordPress
 */
-	function f_mdjm_set_client_role( $clients, $role )	{
+	/*function f_mdjm_set_client_role( $clients, $role )	{
 		global $mdjm;
 		
 		$mdjm->debug_logger( 'WARNING: Use of deprecated function ' . __FUNCTION__, true );
 		
-		/* $clients must be an array */
+		// $clients must be an array 
 		if( !is_array( $clients ) ) $clients = array( $clients );
 		$user_count = count( $clients );
 		$role_name = array(
@@ -962,10 +945,10 @@
 		foreach( $clients as $client )	{
 			$user_id = wp_update_user( array( 'ID' => $client, 'role' => $role ) );
 			
-			if ( is_wp_error( $user_id ) )	{ /* Action Failed */
+			if ( is_wp_error( $user_id ) )	{ // Action Failed
 				$user_error = true;
 			}
-			else	{ /* Action Succeeded */
+			else	{ // Action Succeeded 
 				$i++;
 			}
 		}
@@ -983,7 +966,7 @@
 		}
 		f_mdjm_update_notice( $class, $message );
 		
-	} // f_mdjm_set_client_role
+	} // f_mdjm_set_client_role*/
 
 /****************************************************************************************************
 --	CONTRACT FUNCTIONS
@@ -998,10 +981,10 @@
  *
  * @since 1.0
 */
-	function f_mdjm_get_contractinfo( $id )	{
+	/*function f_mdjm_get_contractinfo( $id )	{
 		$contractinfo = get_post( $id );
 		return $contractinfo;
-	} // f_mdjm_get_contractinfo
+	} // f_mdjm_get_contractinfo*/
 
 	
 
@@ -1016,14 +999,14 @@
  * 
  * @since 1.0
 */
-	function f_mdjm_client_email_headers( $event, $email_from )	{
+	/*function f_mdjm_client_email_headers( $event, $email_from )	{
 		global $mdjm_options;
 		if( !empty( $event->event_dj ) ) $dj = get_userdata( $event->event_dj );
 
 		$email_headers = 'MIME-Version: 1.0' . "\r\n";
 		$email_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 		
-		/* Who should email be sent from? */
+		// Who should email be sent from?
 		if( $email_from == 'dj' && !empty( $event->event_dj ) )	{ // DJ
 			$email_headers .= 'From: ' . $dj->display_name . ' <' . $dj->user_email . '>' . "\r\n";
 		}
@@ -1043,7 +1026,7 @@
 			$email_headers .= 'Bcc: ' . implode( ",", $bcc ) . "\r\n";
 		}
 		return $email_headers;
-	} // f_mdjm_client_email_headers
+	} // f_mdjm_client_email_headers*/
 
 /**
  * f_mdjm_prepare_email
@@ -1054,7 +1037,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_prepare_email( $eventinfo, $type )	{
+	/*function f_mdjm_prepare_email( $eventinfo, $type )	{
 		global $mdjm_options;
 
 		$info['client'] = get_userdata( $eventinfo->user_id );
@@ -1068,13 +1051,13 @@
 			$template_id = $mdjm_options[$type];
 		}
 		
-		/* All Shortcode vars need to be set by now */
+		// All Shortcode vars need to be set by now
 		include( WPMDJM_PLUGIN_DIR . '/admin/includes/config.inc.php' );
 		$template_query = new WP_Query( array( 'post_type' => 'email_template', 'post__in' => array( $template_id ) ) );
 		if ( $template_query->have_posts() ) {
 			while ( $template_query->have_posts() ) {
 				$template_query->the_post();
-				/* Check if we are using the post title as the subject */
+				// Check if we are using the post title as the subject
 				if( isset( $mdjm_options['title_as_subject'] ) && $mdjm_options['title_as_subject'] == 'Y' && isset( $type['subject'] ) )	{
 					$subject = get_the_title();
 				}
@@ -1088,7 +1071,7 @@
 		$info['content'] .= str_replace( $shortcode_content_search, $shortcode_content_replace, $content );
 		
 		return $info;
-	} // f_mdjm_prepare_email
+	} // f_mdjm_prepare_email*/
 
 /**
  * f_mdjm_dj_email_headers
@@ -1098,7 +1081,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_dj_email_headers( $event_dj )	{
+	/*function f_mdjm_dj_email_headers( $event_dj )	{
 		global $mdjm_options;
 		
 		$dj = get_userdata( $event_dj );
@@ -1108,7 +1091,7 @@
 		$email_headers .= 'From: ' . $mdjm_options['company_name'] . ' <' . $mdjm_options['system_email'] . '>' . "\r\n";
 		
 		return $email_headers;
-	} // f_mdjm_dj_email_headers
+	} // f_mdjm_dj_email_headers*/
 
 /****************************************************************************************************
 --	DASHBOARD FUNCTIONS
@@ -1126,58 +1109,58 @@
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		// DJ Active Events
-		$dash_dj['month_active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Approved'" );
+		$dash_dj['month_active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Approved'" );
 		
 		// DJ Active Enquiries for Month
-		$dash_dj['month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Enquiry'" );
+		$dash_dj['month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Enquiry'" );
 		
 		// DJ Enquiries lost this month
-		$dash_dj['lost_month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Failed Enquiry'" );
+		$dash_dj['lost_month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Failed Enquiry'" );
 		
 		// DJ Events completed this month
-		$dash_dj['month_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_dj['month_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 		
 		// DJ Total enquiries for the year
-		$dash_dj['year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Enquiry'" );
+		$dash_dj['year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Enquiry'" );
 		
 		// DJ Enquiries lost this year
-		$dash_dj['lost_year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Failed Enquiry'" );
+		$dash_dj['lost_year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Failed Enquiry'" );
 		
 		// DJ Events completed this year
-		$dash_dj['year_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_dj['year_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 		
 		
 		if( current_user_can( 'administrator' ) || dj_can( 'see_deposit' ) )	{
-			$dash_dj['potential_month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
+			$dash_dj['potential_month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
 			
-			$dash_dj['month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+			$dash_dj['month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 			
-			$dash_dj['potential_year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
+			$dash_dj['potential_year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
 			
-			$dash_dj['year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+			$dash_dj['year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 		}
 		else	{ // We take away the deposit amount from their earnings
-			$dj_potential_month = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
+			$dj_potential_month = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
 
-			$dj_deposit_potential_month = $wpdb->get_var( "SELECT SUM(deposit) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
+			$dj_deposit_potential_month = $wpdb->get_var( "SELECT SUM(deposit) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
 			
 			$dash_dj['potential_month_earn'] = $dj_potential_month - $dj_deposit_potential_month;
 			
-			$dj_month = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+			$dj_month = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 
-			$dj_deposit_month = $wpdb->get_var( "SELECT SUM(deposit) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+			$dj_deposit_month = $wpdb->get_var( "SELECT SUM(deposit) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 			
 			$dash_dj['month_earn'] = $dj_month - $dj_deposit_month;
 			
-			$dj_potential_year = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
+			$dj_potential_year = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
 			
-			$dj_deposit_potential_year = $wpdb->get_var( "SELECT SUM(deposit) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
+			$dj_deposit_potential_year = $wpdb->get_var( "SELECT SUM(deposit) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
 			
 			$dash_dj['potential_year_earn'] = $dj_potential_year - $dj_deposit_potential_year;
 			
-			$dj_year = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+			$dj_year = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 			
-			$dj_deposit_year = $wpdb->get_var( "SELECT SUM(deposit) FROM `".$db_tbl['events']."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+			$dj_deposit_year = $wpdb->get_var( "SELECT SUM(deposit) FROM `".MDJM_EVENTS_TABLE."` WHERE `event_dj` = '" .get_current_user_id(). "' AND year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 			
 			$dash_dj['year_earn'] = $dj_year - $dj_deposit_year;
 		}
@@ -1198,37 +1181,37 @@
 		include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 		
 		// Employer's active events for month
-		$dash_emp['month_active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Approved'" );
+		$dash_emp['month_active_events'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Approved'" );
 		
 		// Employers enquiries for month
-		$dash_emp['month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Enquiry'" );
+		$dash_emp['month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Enquiry'" );
 		
 		// Employers lost enquiries for month
-		$dash_emp['lost_month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Failed Enquiry'" );
+		$dash_emp['lost_month_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Failed Enquiry'" );
 		
 		// Employers events completed for month
-		$dash_emp['month_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_emp['month_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 		
 		// Total employer enquiries this year
-		$dash_emp['year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Enquiry'" );
+		$dash_emp['year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Enquiry'" );
 		
 		// Total employer lost enquiries this year
-		$dash_emp['lost_year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Failed Enquiry'" );
+		$dash_emp['lost_year_enquiries'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Failed Enquiry'" );
 		
 		// Employer events completed this year
-		$dash_emp['year_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".$db_tbl['events']."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_emp['year_completed'] = $wpdb->get_var( "SELECT COUNT(*) FROM `".MDJM_EVENTS_TABLE."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 		
 		// Employer potential earnings for month
-		$dash_emp['potential_month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
+		$dash_emp['potential_month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Completed' AND `contract_status` != 'Failed Enquiry'" );
 		
 		// Employer actual earnings for month
-		$dash_emp['month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_emp['month_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE monthname(event_date) = '" . date( 'F' ) . "' AND `contract_status` = 'Completed'" );
 		
 		// Employer potential earnings for year
-		$dash_emp['potential_year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
+		$dash_emp['potential_year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` != 'Cancelled' AND `contract_status` != 'Failed Enquiry'" );
 		
 		// Employer actual earnings for year
-		$dash_emp['year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".$db_tbl['events']."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
+		$dash_emp['year_earn'] = $wpdb->get_var( "SELECT SUM(cost) FROM `".MDJM_EVENTS_TABLE."` WHERE year(event_date) = '" . date( 'Y' ) . "' AND `contract_status` = 'Completed'" );
 		
 		return $dash_emp;
 	} // f_mdjm_dashboard_dj_overview

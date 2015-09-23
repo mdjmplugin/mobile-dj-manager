@@ -22,13 +22,12 @@
 			 *				str		'button_loc'	Optional: Where to display the button before|after|both. Default both
 			 *				str		'button_align'	Optional: Button alignment. left|center|right Default centre
 			 *				str		'button_text'	Optional: Text to display on button. Default "Book this Event"
+			 *				bool	'addons'		Optional: True to display addons selection, false (default) not to
 			 *
 			 */
 			function __construct( $args='' )	{
 				global $mdjm, $clientzone_loaded, $mdjm_settings;
-				
-				mdjm_page_visit( MDJM_APP . ' Online Quotes' );
-				
+								
 				// Must be authenticated
 				if( !is_user_logged_in() )
 					parent::login();
@@ -228,7 +227,6 @@
 					
 					if( $this->button_loc == 'after' || $this->button_loc == 'both' )
 						$this->display_book_button( $event_id );
-					
 				}
 				
 				// No content so return an error
@@ -300,7 +298,7 @@
 				return ( !empty( $result ) ? true : false );
 					
 			} // update_event_quote
-
+			
 		} // class
 	} // if( !class_exists( 'ClientZone_Quote' ) )
 	

@@ -541,7 +541,7 @@
         <!-- End of first row -->
         <style>
         #venue_fields	{
-            display: <?php echo ( $current_venue == 'Manual' ? 'block;' : 'none' ); ?>
+            display: <?php echo ( $current_venue == 'manual' || !is_numeric( $current_venue ) ? 'block;' : 'none;' ); ?>
         }
 		</style>
   		<div id="venue_fields">
@@ -914,7 +914,7 @@
 				?>
 				<div class="mdjm-meta-row" style="height: 60px !important">
 					Online Quote Template:<br />
-					<select name="_mdjm_online_quote" id="_mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
+					<select name="mdjm_online_quote" id="mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
 					<?php
 					foreach( $email_templates as $email_template )	{
 						echo '<option value="' . $email_template->ID . '"';

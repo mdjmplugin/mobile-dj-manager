@@ -100,6 +100,61 @@
 	} // f_mdjm_updated_footer
 
 /**************************************************
+				VERSION 1.2.4.1
+**************************************************/
+	function f_mdjm_updated_to_1_2_4_1()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Contact Form Updates</font><br />
+		The one thing our highly popular <a href="<?php echo mdjm_get_admin_page( 'contact_forms' ); ?>">Contact Forms</a> were missing is a little more control over the way in which they are displayed. This release goes some way towards improving that
+        with the addition of section headers.<br /><br />
+		Section Headers allow you to specify headings within the <a href="<?php echo mdjm_get_admin_page( 'contact_forms' ); ?>">Contact Form</a> as well as change the entire layout of all fields within the section.<br /><br />
+		Additionally, you can fully customise the class, size, weight and position of the section header, or choose not to display a header and leave a blank line instead.<br /><br />
+		Overview of changes to <a href="<?php echo mdjm_get_admin_page( 'contact_forms' ); ?>">Contact Forms</a> are;
+        <ui>
+        	<li>Fully customisable section headings</li>
+            <li>Addition of a horizontal rule</li>
+            <li>Display addons as a checkbox list - still dynamically updating if you also display packages</li>
+            <li>Apply your own Custom CSS to the <a href="<?php echo mdjm_get_admin_page( 'contact_forms' ); ?>">Contact Form</a> via the textbox at the bottom of the form configuration screen</li>
+            <li>You can then use these classes within the field settings as required</li>
+            <li>Event Deposit is now calculated and applied when using packages and addons</li>
+        </ui></td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-bug">Bug Fix</span>: Packages, Equipment and categories now support special characters - quotes, double quotes etc.</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Online quote template was not changed on selection in event screen</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Contact form settings may not save as expected</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: To address conflicts with the WP reserved names, added prefix to all contact form field slugs</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Client Zone re-directs did not work in some cases</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: DJ list was not showing users that were assigned the DJ role</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: DJ list may have displayed an on screen error if no active events were in the system</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Contact Form configuration settings were not always saving correctly</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Do not update a users profile upon Contact Form submssion if the user is logged in</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Venue fields now display by default if Unattended enquiry has venue details entered manually</li>
+                <li><span class="mdjm-new">New</span>: Event addons now available as checkbox list in dynamic contact forms</li>
+                <li><span class="mdjm-new">New</span>: Contact form submission now also adds the deposit amount</li>
+                <li><span class="mdjm-general">General</span>: Dynamic addons list not longer displays on screen alert for "No addons available" and instead displays, "No addons available" within select list as a disabled option</li>
+                <li><span class="mdjm-general">General</span>: Added <code>Extensions</code> row to the application settings screen. More on this soon!</li>
+                <li><span class="mdjm-general">General</span>: Removed the colon (:) which was displayed after the "Other Label" on the PayPal form</li>
+                <li><span class="mdjm-general">General</span>: Added OOP code for MDJM extensions - coming soon</li>
+                <li><span class="mdjm-general">General</span>: /includes/config.inc.php is deprecated</li>
+                <li><span class="mdjm-general">General</span>: Lots of old code removed</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_1_2_4_1
+
+/**************************************************
 				VERSION 1.2.4
 **************************************************/
 	function f_mdjm_updated_to_1_2_4()	{

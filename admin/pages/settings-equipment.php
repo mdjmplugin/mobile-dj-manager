@@ -9,7 +9,7 @@
 	if( isset( $_POST['submit'] ) )	{ /* Form Submitted */
 		if( $_POST['submit'] == 'Add Category' )	{ /* Add new category */
 			$cats = get_option( 'mdjm_cats' );
-			$cat_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['category_name'] ) ) );
+			$cat_id = sanitize_title_with_dashes( $_POST['category_name'] );
 			$cats[$cat_id] = sanitize_text_field( $_POST['category_name'] );
 			update_option( 'mdjm_cats', $cats );
 			mdjm_update_notice( 'updated', 'Category Added Successfully' );
@@ -24,9 +24,11 @@
 		}
 		if( $_POST['submit'] == 'Add Item' )	{
 			$items = get_option( 'mdjm_equipment' );
-			$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) );
+			$item_id = sanitize_title_with_dashes( $_POST['equip_name'] );
+			
 			if( isset( $items[$item_id] ) )
-				$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) ) . '_';
+				$item_id = sanitize_title_with_dashes( $_POST['equip_name'] ) . '_';
+				
 			$djs_have = '';
 			$i = 1;
 			foreach( $_POST['djs'] as $this_dj ) {
@@ -63,9 +65,9 @@
 			}
 			if( $_POST['addon_avail'] != 'Y' ) $_POST['addon_avail'] = 'N';
 			unset( $equipment[$_POST['slug']] );
-			$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) );
+			$item_id = sanitize_title_with_dashes( $_POST['equip_name'] );
 			if( !empty( $equipment[$item_id] ) )
-				$item_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['equip_name'] ) ) ) . '_';
+				$item_id = sanitize_title_with_dashes( $_POST['equip_name'] ) . '_';
 				
 			$equipment[$item_id] = array(
 									sanitize_text_field( $_POST['equip_name'] ),
@@ -164,7 +166,7 @@
 				<form name="form-<?php echo $equip_list[1]; ?>" id="form-<?php echo $equip_list[1]; ?>" method="post">
 				<input type="hidden" name="slug" value="<?php echo esc_attr( $equip_list[1] ); ?>" />
 				<tr<?php echo $rowclass; ?>>
-				<td class="row-title"><input type="text" name="equip_name" id="equip_name" value="<?php echo esc_attr( $equip_list[0] ); ?>" /></td>
+				<td class="row-title"><input type="text" name="equip_name" id="equip_name" value="<?php echo stripslashes( esc_attr( $equip_list[0] ) ); ?>" /></td>
                 <td><select name="equip_cat" id="equip_cat" />
                 <?php
 				foreach( $cats as $cat_key => $cat_value )	{
@@ -176,7 +178,7 @@
 				</select></td></td>
                 <td><input type="text" name="equip_qty" id="equip_qty" class="small-text" value="<?php echo esc_attr( $equip_list[2] ); ?>" /></td>
                 <td><textarea name="equip_options" id="equip_options" class="all-options"><?php echo esc_textarea( $equip_list[3] ); ?></textarea></td>
-				<td><textarea name="equip_desc" id="equip_desc" class="all-options"><?php echo esc_attr( $equip_list[4] ); ?></textarea></td>
+				<td><textarea name="equip_desc" id="equip_desc" class="all-options"><?php echo stripslashes( esc_attr( $equip_list[4] ) ); ?></textarea></td>
 				<td>
                 <input type="checkbox" name="addon_avail" id="addon_avail" value="Y" <?php checked( $equip_list[6], 'Y' ); ?> />&nbsp;&nbsp;<input type="text" name="addon_cost" id="addon_cost" class="small-text" value="<?php echo esc_attr( $equip_list[7] ); ?>" /></td>
                 <?php

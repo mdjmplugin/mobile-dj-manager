@@ -301,7 +301,12 @@
 						if( MDJM_DEBUG == true )
 							$GLOBALS['mdjm_debug']->log_it( 'Skipping admin notification' );
 
-					wp_redirect( $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2' );
+					//wp_redirect( $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2' );
+					?>
+					<script type="text/javascript">
+                    window.location.replace("<?php echo $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2'; ?>");
+                    </script>
+                    <?php
 					exit;
 					
 				}

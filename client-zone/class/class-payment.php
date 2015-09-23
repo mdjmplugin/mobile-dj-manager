@@ -346,7 +346,7 @@
 				
 				$payment_form .= '<input type="radio" name="os0" id="' . $payment_settings['other_amount_label'] . '" value="' . $payment_settings['other_amount_label'] . 
 					'"  onclick="changeCustomInput(this); document.getElementById(\'part_payment\').select();">' . "\r\n";
-				$payment_form .= '<label for="part_payment">' . $payment_settings['other_amount_label'] . ':</label>' . "\r\n";
+				$payment_form .= '<label for="part_payment">' . $payment_settings['other_amount_label'] . '</label>' . "\r\n";
 				$payment_form .= MDJM_CURRENCY . '&nbsp;<input type="text" style="max-width: 80px;" name="part_payment" id="part_payment" ' . 
 					' placeholder="0.00" value="' . number_format( $payment_settings['other_amount_default'], 2 ) . '" onkeyup="setAmount();" onclick="document.getElementById(\'' . $payment_settings['other_amount_label'] . 
 					'\').checked = true;" autocomplete="off">' . "\r\n";

@@ -20,9 +20,9 @@
 				if( $_POST['submit'] == 'Update Package' ) /* If Editing, delete and add again */
 					unset( $packages[$_POST['slug']] );
 					
-				$package_id = sanitize_text_field( strtolower( str_replace( ' ', '-', $_POST['package_name'] ) ) );
+				$package_id = sanitize_title_with_dashes( $_POST['package_name'] );
 				if( !empty( $packages[$package_id] ) )	{
-					$package_id = sanitize_text_field( $_POST['package_name'] ) . '_';
+					$package_id = sanitize_title_with_dashes( $_POST['package_name'] ) . '_';
 				}
 				$djs_have = '';
 				$i = 1;
@@ -84,7 +84,7 @@
 		echo '<td style="vertical-align:middle">';
 		echo '<select name="all_packages" id="all_packages">';
 		foreach( $packages as $list_package )	{
-			echo '<option value="' . $list_package['slug'] . '">' . $list_package['name'] . '</option>';
+			echo '<option value="' . $list_package['slug'] . '">' . stripslashes( $list_package['name'] ) . '</option>';
 		}
 		echo '</select>';
 		echo '&nbsp;&nbsp;&nbsp;';
@@ -116,10 +116,10 @@
     <td>
     <?php 
 	if( isset( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' )	{
-	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo esc_attr( $packages[$_POST['all_packages']]['name'] ); ?>" /> <?php submit_button( 'Delete This Package', 'delete', 'submit-delete', false );
+	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['name'] ) ); ?>" /> <?php submit_button( 'Delete This Package', 'delete', 'submit-delete', false );
 	}
 	else	{
-	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo ( !empty( $_POST['package_name'] ) ? $_POST['package_name'] : '' ); ?>" /><?php
+	?><input type="text" name="package_name" id="package_name" class="all-options" value="<?php echo ( !empty( $_POST['package_name'] ) ? stripslashes( esc_attr( $_POST['package_name'] ) ) : '' ); ?>" /><?php
     }
 	?>
     </td>
@@ -139,7 +139,7 @@
     </tr>
     <tr>
     <td class="row-title" width="10%"><label for="package_desc">Description:</label></td>
-    <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( !empty( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_attr( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo ( !empty( $_POST['package_desc'] ) ? $_POST['package_desc'] : '' ); } ?></textarea></td>
+    <td><textarea name="package_desc" id="package_desc" class="all-options"><?php if( !empty( $_POST['submit'] ) && $_POST['submit'] == 'Edit Package' ) { echo stripslashes( esc_textarea( $packages[$_POST['all_packages']]['desc'] ) ); } else { echo ( !empty( $_POST['package_desc'] ) ? stripslashes( esc_textarea( $_POST['package_desc'] ) ) : '' ); } ?></textarea></td>
 	</tr>
      <?php
 		if ( MDJM_MULTI == true )	{
@@ -236,7 +236,7 @@
 								echo ' checked="checked"';	
 						}
 						echo ' />&nbsp;';
-						echo esc_attr( $equip_list[0] );
+						echo stripslashes( esc_attr( $equip_list[0] ) );
 
 						if( esc_attr( $equip_list[2] ) > 1 )
 							echo ' x ' . esc_attr( $equip_list[2] );
@@ -256,7 +256,7 @@
 					if( $equip_list[5] == $cat_key )	{
 						?>
 						<input type="checkbox" name="equip_id[]" id="equip_id[]" value="<?php echo $equip_list[1]; ?>" />&nbsp;
-						<?php echo esc_attr( $equip_list[0] ); ?>
+						<?php echo stripslashes( esc_attr( $equip_list[0] ) ); ?>
 						<?php
 						if( esc_attr( $equip_list[2] ) > 1 )
 							echo ' x ' . esc_attr( $equip_list[2] );
