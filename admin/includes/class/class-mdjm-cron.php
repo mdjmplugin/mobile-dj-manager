@@ -1308,7 +1308,7 @@
 					$GLOBALS['mdjm_debug']->log_it( 'Starting Retrieval of MDJM file', true );
 				
 				if( isset( $_GET['dlmdjmlic'] ) )	{
-					$loc = mdjm_get_admin_page( 'mydjplanner' ) . '?mdjm-api=MDJM_LIC&url=' . get_site_url();
+					$loc = 'http://www.mydjplanner.co.uk/?mdjm-api=MDJM_LIC&url=' . get_site_url();
 					
 					$name = wp_remote_retrieve_body( 
 								wp_remote_get( 
