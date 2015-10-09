@@ -1,0 +1,2862 @@
+# Copyright (C) 2015 Mobile DJ Manager
+# This file is distributed under the same license as the Mobile DJ Manager package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Mobile DJ Manager 1.2.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mobile-dj-"
+"manager\n"
+"POT-Creation-Date: 2015-10-09 13:30:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:315
+msgid "PayFast Transaction ITN Error Log"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:489
+#: admin/includes/procedures/mdjm-install.php:51
+msgid "PayFast"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:494
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:409
+#: admin/includes/class/class-mdjm-posts.php:2508
+#: admin/includes/class/class-mdjm-posts.php:2531
+#: admin/includes/procedures/mdjm-install.php:694
+#: admin/includes/procedures/update_to_1.2.4.php:81
+msgid "Merchant Fees"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:614
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:530
+msgid "Payment received for Event"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:616
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:532
+msgid "Hi there"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:617
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:533
+msgid ""
+"A payment has just been from PayFast via the Mobile DJ Manager for WordPress "
+"plugin..."
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:619
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:535
+#: admin/includes/class/class-mdjm-playlist.php:40
+#: admin/includes/class/class-mdjm-posts.php:1258
+#: admin/includes/class/class-mdjm-posts.php:1288
+#: client-zone/class/class-clientzone.php:256
+#: client-zone/class/class-contract.php:261
+msgid "Event ID"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:622
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:538
+#: admin/includes/class/class-mdjm-posts.php:1249
+#: admin/includes/class/class-mdjm-posts.php:1259
+#: admin/includes/class/class-mdjm-posts.php:1278
+#: admin/includes/class/class-mdjm-posts.php:1302
+#: client-zone/class/class-clientzone.php:260
+#: client-zone/class/class-contract.php:265
+#: client-zone/class/class-home.php:291
+msgid "Date"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:626
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:542
+#: admin/includes/class/class-mdjm-posts.php:1235
+#: admin/includes/class/class-mdjm-posts.php:1262
+#: admin/includes/class/class-mdjm-posts.php:1305
+#: client-zone/class/class-clientzone.php:265
+#: client-zone/class/class-contract.php:270
+#: client-zone/class/class-home.php:292
+msgid "Status"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:627
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:543
+#: admin/includes/class/class-mdjm-posts.php:1260
+#: admin/includes/class/class-mdjm-posts.php:1289
+#: admin/includes/class/class-mdjm-posts.php:2079
+#: client-zone/class/class-clientzone.php:266
+#: client-zone/class/class-contract.php:271
+msgid "Client"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:628
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:544
+msgid "Payment Date/Time"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:629
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:549
+msgid "For"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:630
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:550
+msgid "Amount"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:633
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:553
+msgid "Transaction Fee"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:636
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:556
+msgid "Total Received"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:639
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:559
+msgid "Outstanding Event Balance"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:642
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:562
+msgid ""
+"The client was emailed in reference to this payment. %sClick here%s to "
+"review their email"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:647
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:567
+msgid "The client was not emailed in reference to this payment"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayFast-itn.php:650
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:570
+msgid "Regards"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:230
+msgid "PayPal Transaction IPN Error Log"
+msgstr ""
+
+#: admin/includes/api/mdjm-api-PayPal-ipn.php:404
+#: admin/includes/procedures/mdjm-install.php:50
+#: admin/settings/settings.php:1789
+msgid "PayPal"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:28
+#: admin/includes/class/class-mdjm-playlist.php:39
+#: admin/includes/class/class-mdjm-posts.php:1301
+msgid "ID"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:29
+msgid "Employee"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:30
+msgid "Entry ID"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:31
+msgid "Start Date"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:32
+msgid "End Date"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-availability.php:33
+#: admin/includes/class/class-mdjm-playlist.php:44
+msgid "Notes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:101
+msgid "There are currently no such clients within the application."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:108
+msgid "client"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:109
+msgid "clients"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:149
+#: admin/includes/class/class-mdjm-dj-table.php:129
+msgid "Name"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:150
+#: admin/includes/class/class-mdjm-dj-table.php:131
+msgid "Last Login"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:151
+#: admin/includes/class/class-mdjm-dj-table.php:130
+#: admin/includes/procedures/mdjm-install.php:43
+msgid "Email"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:152
+msgid "No. Events"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:153
+#: admin/includes/class/class-mdjm-dj-table.php:134
+msgid "Next Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-client-table.php:154
+#: admin/includes/class/class-mdjm-posts.php:1267
+msgid "Journal"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-cron.php:202
+#: admin/includes/class/class-mdjm-cron.php:204
+msgid " record"
+msgid_plural " records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-cron.php:251
+#: admin/includes/class/class-mdjm-cron.php:660
+#: admin/includes/class/class-mdjm-cron.php:924
+msgid "event"
+msgid_plural "events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-cron.php:449
+msgid "enquiry"
+msgid_plural "enquiries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-cron.php:740
+msgid "Request Deposit Scheduled Task"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-debug.php:106
+msgid "One"
+msgid_plural "Some"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-dj-table.php:87
+msgid "dj"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-dj-table.php:88
+msgid "dj'"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-dj-table.php:132
+msgid "Active Events"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-dj-table.php:133
+msgid "Total Events"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-dj-table.php:135
+msgid "Open Enquiries"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-events.php:619
+#: admin/includes/class/class-mdjm-events.php:625
+#: admin/includes/class/class-mdjm-events.php:627
+#: admin/includes/class/class-mdjm-events.php:629
+#: admin/includes/class/class-mdjm-events.php:631
+#: admin/includes/class/class-mdjm-events.php:633
+#: admin/includes/class/class-mdjm.php:1423
+#: admin/includes/class/class-mdjm.php:1428
+#: admin/includes/class/class-mdjm.php:1431
+msgid "Not Specified"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-events.php:623
+#: admin/includes/class/class-mdjm.php:1417
+msgid "Not Assigned"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-events.php:641
+#: admin/includes/class/class-mdjm-events.php:643
+#: admin/includes/class/class-mdjm-posts.php:1265
+#: admin/includes/class/class-mdjm.php:1416
+msgid "Due"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-events.php:715
+msgid "No Event Type Set"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-events.php:1155
+msgid "Unavailable"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (Mobile DJ Manager 1.2.5)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: admin/includes/class/class-mdjm-menu.php:34
+#: admin/includes/class/class-mdjm-menu.php:209
+#: admin/includes/class/class-mdjm-menu.php:212
+msgid "Mobile DJ Manager"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:35
+msgid "DJ Manager"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:43
+#: admin/includes/class/class-mdjm-menu.php:44
+#: admin/includes/class/class-mdjm-menu.php:219 admin/includes/core.php:33
+msgid "Dashboard"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:51
+#: admin/includes/class/class-mdjm-menu.php:52
+#: admin/includes/class/class-mdjm-menu.php:230 admin/includes/core.php:34
+msgid "Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:59
+#: admin/includes/class/class-mdjm-menu.php:60
+#: admin/includes/class/class-mdjm-menu.php:360
+#: admin/includes/class/class-mdjm-menu.php:363
+msgid "Contract Templates"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:67
+#: admin/includes/class/class-mdjm-menu.php:68
+#: admin/includes/class/class-mdjm-menu.php:391
+#: admin/includes/class/class-mdjm-menu.php:394
+msgid "Email Templates"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:75
+#: admin/includes/class/class-mdjm-menu.php:76
+#: admin/includes/class/class-mdjm-menu.php:294
+#: admin/includes/class/class-mdjm-menu.php:297
+msgid "Automated Tasks"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:82
+#: admin/includes/class/class-mdjm-menu.php:83
+#: admin/includes/class/class-mdjm-menu.php:315
+#: admin/includes/class/class-mdjm-menu.php:318
+msgid "Clients"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:89
+#: admin/includes/class/class-mdjm-menu.php:90
+#: admin/includes/class/class-mdjm-menu.php:336
+#: admin/includes/class/class-mdjm-menu.php:339
+msgid "Communications"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:97
+#: admin/includes/class/class-mdjm-menu.php:98
+#: admin/includes/class/class-mdjm-menu.php:346
+#: admin/includes/class/class-mdjm-menu.php:349
+msgid "Communication History"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:124
+#: admin/includes/class/class-mdjm-menu.php:125
+msgid "Equipment Packages"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:131
+#: admin/includes/class/class-mdjm-menu.php:132
+#: admin/includes/class/class-mdjm-menu.php:248
+#: admin/includes/class/class-mdjm-menu.php:424
+#: admin/includes/class/class-mdjm-posts.php:1322
+#: admin/settings/class-mdjm-settings.php:262
+msgid "Events"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:149
+#: admin/includes/class/class-mdjm-menu.php:150
+#: admin/includes/class/class-mdjm-menu.php:503
+#: admin/includes/class/class-mdjm-posts.php:2425
+msgid "Transactions"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:157
+#: admin/includes/class/class-mdjm-menu.php:158
+#: admin/includes/class/class-mdjm-menu.php:534
+#: admin/includes/class/class-mdjm-menu.php:537
+msgid "Venues"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:166
+#: admin/includes/class/class-mdjm-menu.php:167
+msgid "Playlists"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:175
+#: admin/includes/class/class-mdjm-menu.php:176
+msgid "Updated"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:222
+msgid "MDJM Dashboard"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:233
+msgid "MDJM Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:239
+#: admin/includes/procedures/mdjm-install.php:54
+#: admin/settings/class-mdjm-settings.php:259
+msgid "General"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:242
+msgid "MDJM General Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:251
+msgid "MDJM Event Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:257
+#: admin/settings/class-mdjm-settings.php:351
+msgid "Permissions"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:260
+msgid "MDJM Permission Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:266
+#: admin/settings/class-mdjm-settings.php:265
+msgid "Email %s Template Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:269
+msgid "MDJM Email %s Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:284
+#: admin/settings/class-mdjm-settings.php:271
+#: admin/settings/class-mdjm-settings.php:374
+msgid "Payment Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:287
+msgid "MDJM Payment Settings"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:325
+msgid "Add Client"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:328
+msgid "Add New Client"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:369
+msgid "Add Contract Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:372
+msgid "New Contract Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:400
+msgid "Add Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:403
+msgid "New Email Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:412
+#: admin/includes/class/class-mdjm-menu.php:415
+msgid "Equipment &amp; Packages"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:427
+msgid "MDJM Events"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:451
+msgid "Create New Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:479
+#: admin/includes/class/class-mdjm-posts.php:543
+#: admin/includes/procedures/mdjm-install.php:593
+#: admin/includes/procedures/mdjm-upgrade.php:657
+msgid "Event Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:482
+msgid "View / Edit Event Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:490
+#: admin/includes/procedures/mdjm-install.php:527
+msgid "Event Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:493
+msgid "View Event Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:506
+msgid "MDJM Transactions"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:512
+#: admin/includes/class/class-mdjm-menu.php:515
+msgid "Add Transaction"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:522
+#: admin/includes/class/class-mdjm-posts.php:571
+#: admin/includes/procedures/mdjm-install.php:621
+#: admin/includes/procedures/mdjm-upgrade.php:685
+msgid "Transaction Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:525
+msgid "View / Edit Transaction Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:543
+msgid "Add Venue"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:546
+msgid "Add New Venue"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:552
+#: admin/includes/class/class-mdjm-posts.php:598
+#: admin/includes/class/class-mdjm-posts.php:2421
+#: admin/includes/class/class-mdjm-posts.php:2447
+#: admin/includes/procedures/mdjm-install.php:648
+#: admin/includes/procedures/mdjm-upgrade.php:712 admin/pages/updated.php:1010
+#: client-zone/class/class-home.php:487
+msgid "Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:555
+msgid "View / Edit Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:563
+msgid "User Guides"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:566
+msgid "MDJM User Guides"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:573 admin/includes/core.php:49
+msgid "Support"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:576
+msgid "MDJM Support Forums"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:604
+#: admin/includes/class/class-mdjm-menu.php:648
+#: admin/includes/class/class-mdjm-menu.php:678
+msgid "MDJM: This page requires Administrative priviledges."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-menu.php:614
+#: admin/includes/class/class-mdjm-menu.php:638 admin/pages/availability.php:4
+#: admin/pages/clients.php:16 admin/pages/comms.php:13 admin/pages/dash.php:4
+#: admin/pages/djs.php:16 admin/pages/playlists.php:4
+#: admin/pages/settings-equipment.php:4
+#: admin/pages/settings-packages-main.php:4
+#: admin/pages/settings-packages.php:4 admin/pages/settings-scheduler.php:4
+#: admin/pages/updated.php:4
+#: admin/settings/class-mdjm-settings-client-fields.php:13
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:100
+#: admin/includes/class/class-mdjm-music-library.php:149
+#: admin/includes/class/class-mdjm-music-library.php:223
+msgid "Library Name"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:102
+#: admin/includes/class/class-mdjm-music-library.php:151
+msgid "Songs"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:110
+msgid "No music libraries have been uploaded yet"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:228
+msgid "DJ"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:247
+msgid "File to Import"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-music-library.php:420
+msgid " song"
+msgid_plural " songs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:106
+msgid "There are currently no songs in the playlist for this event."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:113
+msgid "song"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:114
+msgid "songs"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:137
+msgid "<strong>Song Name</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:138
+msgid "<strong>Artist</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:139
+msgid "<strong>When to Play</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:140
+msgid "<strong>Information</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:141
+msgid "<strong>Added By</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist-table.php:142
+msgid "<strong>Date Added</strong>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:28
+msgid "No Playlist entries exist yet."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:41
+#: client-zone/class/class-playlist.php:366
+msgid "Artist"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:42 admin/pages/clients.php:114
+msgid "Song"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:43
+msgid "Category"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:45
+msgid "Added By"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:46
+msgid "Date Added"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-playlist.php:47
+msgid "Date Uploaded"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:270
+#: admin/includes/class/class-mdjm-posts.php:272
+msgid "Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:271
+#: admin/includes/class/class-mdjm-posts.php:273
+msgid "Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:274
+msgid "Create Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:275
+msgid "Create New Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:276
+msgid "New Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:277
+msgid "Edit Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:278
+msgid "View Quote"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:279
+msgid "All Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:280
+msgid "Search Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:281
+msgid "No quotes found."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:282
+msgid "No quotes found in Trash."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:286
+msgid "Mobile DJ Manager Quotes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:394
+msgctxt "mdjm-event"
+msgid "Unattended Enquiry"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:399
+msgid "Unattended Enquiry <span class=\"count\">(%s)</span>"
+msgid_plural "Unattended Enquiries <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:402
+msgctxt "mdjm-event"
+msgid "Enquiry"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:407
+msgid "Enquiry <span class=\"count\">(%s)</span>"
+msgid_plural "Enquiries <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:410
+msgctxt "mdjm-event"
+msgid "Approved"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:415
+msgid "Approved <span class=\"count\">(%s)</span>"
+msgid_plural "Approved <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:418
+msgctxt "mdjm-event"
+msgid "Awaiting Contract"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:423
+msgid "Awaiting Contract <span class=\"count\">(%s)</span>"
+msgid_plural "Awaiting Contracts <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:426
+msgctxt "mdjm-event"
+msgid "Completed"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:431
+msgid "Completed <span class=\"count\">(%s)</span>"
+msgid_plural "Completed <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:434
+msgctxt "mdjm-event"
+msgid "Cancelled"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:439
+msgid "Cancelled <span class=\"count\">(%s)</span>"
+msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:442
+msgctxt "mdjm-event"
+msgid "Rejected Enquiry"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:447
+msgid "Rejected Enquiry <span class=\"count\">(%s)</span>"
+msgid_plural "Rejected Enquiries <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:450
+msgctxt "mdjm-event"
+msgid "Failed Enquiry"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:455
+msgid "Failed Enquiry <span class=\"count\">(%s)</span>"
+msgid_plural "Failed Enquiries <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:464
+msgid "Ready to Send <span class=\"count\">(%s)</span>"
+msgid_plural "Ready to Send <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:472
+msgid "Sent <span class=\"count\">(%s)</span>"
+msgid_plural "Sent <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:480
+msgid "Opened <span class=\"count\">(%s)</span>"
+msgid_plural "Opened <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:488
+msgid "Failed <span class=\"count\">(%s)</span>"
+msgid_plural "Failed <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:497
+msgid "Generated Quote <span class=\"count\">(%s)</span>"
+msgid_plural "Generated Quotes <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:505
+msgid "Viewed Quote <span class=\"count\">(%s)</span>"
+msgid_plural "Viewed Quotes <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:509
+msgctxt "mdjm-transaction"
+msgid "Income"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:514
+msgid "Received Payment <span class=\"count\">(%s)</span>"
+msgid_plural "Received Payments <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:517
+msgctxt "mdjm-transaction"
+msgid "Expenditure"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:522
+msgid "Ougoing Payment <span class=\"count\">(%s)</span>"
+msgid_plural "Ougoing Payments <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:535
+#: admin/includes/procedures/mdjm-install.php:585
+#: admin/includes/procedures/mdjm-upgrade.php:649
+msgctxt "taxonomy general name"
+msgid "Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:536
+#: admin/includes/procedures/mdjm-install.php:586
+#: admin/includes/procedures/mdjm-upgrade.php:650
+msgctxt "taxonomy singular name"
+msgid "Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:537
+#: admin/includes/procedures/mdjm-install.php:587
+#: admin/includes/procedures/mdjm-upgrade.php:651
+msgid "Search Event Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:538
+#: admin/includes/class/class-mdjm-posts.php:2128
+#: admin/includes/procedures/mdjm-install.php:588
+#: admin/includes/procedures/mdjm-upgrade.php:652
+msgid "All Event Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:539
+#: admin/includes/procedures/mdjm-install.php:589
+#: admin/includes/procedures/mdjm-upgrade.php:653
+msgid "Edit Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:540
+#: admin/includes/procedures/mdjm-install.php:590
+#: admin/includes/procedures/mdjm-upgrade.php:654
+msgid "Update Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:541
+#: admin/includes/procedures/mdjm-install.php:591
+#: admin/includes/procedures/mdjm-upgrade.php:655
+msgid "Add New Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:542
+#: admin/includes/procedures/mdjm-install.php:592
+#: admin/includes/procedures/mdjm-upgrade.php:656
+msgid "New Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:545
+#: admin/includes/procedures/mdjm-install.php:595
+#: admin/includes/procedures/mdjm-upgrade.php:659
+msgid "Choose from the most popular Event Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:546
+#: admin/includes/procedures/mdjm-install.php:596
+#: admin/includes/procedures/mdjm-upgrade.php:660
+msgid "No event types found"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:563
+#: admin/includes/procedures/mdjm-install.php:613
+#: admin/includes/procedures/mdjm-upgrade.php:677
+msgctxt "taxonomy general name"
+msgid "Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:564
+#: admin/includes/procedures/mdjm-install.php:614
+#: admin/includes/procedures/mdjm-upgrade.php:678
+msgctxt "taxonomy singular name"
+msgid "Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:565
+#: admin/includes/procedures/mdjm-install.php:615
+#: admin/includes/procedures/mdjm-upgrade.php:679
+msgid "Search Transaction Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:566
+#: admin/includes/class/class-mdjm-posts.php:2174
+#: admin/includes/procedures/mdjm-install.php:616
+#: admin/includes/procedures/mdjm-upgrade.php:680
+msgid "All Transaction Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:567
+#: admin/includes/procedures/mdjm-install.php:617
+#: admin/includes/procedures/mdjm-upgrade.php:681
+msgid "Edit Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:568
+#: admin/includes/procedures/mdjm-install.php:618
+#: admin/includes/procedures/mdjm-upgrade.php:682
+msgid "Update Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:569
+#: admin/includes/procedures/mdjm-install.php:619
+#: admin/includes/procedures/mdjm-upgrade.php:683
+msgid "Add New Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:570
+#: admin/includes/procedures/mdjm-install.php:620
+#: admin/includes/procedures/mdjm-upgrade.php:684
+msgid "New Transaction Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:573
+#: admin/includes/procedures/mdjm-install.php:623
+#: admin/includes/procedures/mdjm-upgrade.php:687
+msgid "Choose from the most popular Transaction Types"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:574
+#: admin/includes/procedures/mdjm-install.php:624
+#: admin/includes/procedures/mdjm-upgrade.php:688
+msgid "No transaction types found"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:590
+#: admin/includes/procedures/mdjm-install.php:640
+#: admin/includes/procedures/mdjm-upgrade.php:704 admin/pages/updated.php:1002
+msgctxt "taxonomy general name"
+msgid "Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:591
+#: admin/includes/procedures/mdjm-install.php:641
+#: admin/includes/procedures/mdjm-upgrade.php:705 admin/pages/updated.php:1003
+msgctxt "taxonomy singular name"
+msgid "Venue Detail"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:592
+#: admin/includes/procedures/mdjm-install.php:642
+#: admin/includes/procedures/mdjm-upgrade.php:706 admin/pages/updated.php:1004
+msgid "Search Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:593
+#: admin/includes/procedures/mdjm-install.php:643
+#: admin/includes/procedures/mdjm-upgrade.php:707 admin/pages/updated.php:1005
+msgid "All Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:594
+#: admin/includes/procedures/mdjm-install.php:644
+#: admin/includes/procedures/mdjm-upgrade.php:708 admin/pages/updated.php:1006
+msgid "Edit Venue Detail"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:595
+#: admin/includes/procedures/mdjm-install.php:645
+#: admin/includes/procedures/mdjm-upgrade.php:709 admin/pages/updated.php:1007
+msgid "Update Venue Detail"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:596
+#: admin/includes/procedures/mdjm-install.php:646
+#: admin/includes/procedures/mdjm-upgrade.php:710 admin/pages/updated.php:1008
+msgid "Add New Venue Detail"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:597
+#: admin/includes/procedures/mdjm-install.php:647
+#: admin/includes/procedures/mdjm-upgrade.php:711 admin/pages/updated.php:1009
+msgid "New Venue Detail"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:600
+#: admin/includes/procedures/mdjm-install.php:650
+#: admin/includes/procedures/mdjm-upgrade.php:714 admin/pages/updated.php:1012
+msgid "Choose from the most popular Venue Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:601
+#: admin/includes/procedures/mdjm-install.php:651
+#: admin/includes/procedures/mdjm-upgrade.php:715 admin/pages/updated.php:1013
+msgid "No details found"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1230
+msgid "Date Sent"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1231
+#: admin/includes/class/class-mdjm-posts.php:1276
+msgid "Email Subject"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1232
+msgid "From"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1233
+msgid "Recipient"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1234
+msgid "Associated Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1236
+msgid "Source"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1245
+msgid "Contract Name"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1246
+msgid "Is Default?"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1247
+msgid "Assigned To"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1248
+#: admin/includes/class/class-mdjm-posts.php:1277
+msgid "Created By"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1263
+msgid "Event Type"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1264
+#: admin/includes/class/class-mdjm-posts.php:1308
+#: client-zone/class/class-clientzone.php:267
+#: client-zone/class/class-contract.php:272
+msgid "Value"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1266
+msgid "Playlist"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1287
+msgid "Date Generated"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1290
+msgid "Quote Value"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1291
+msgid "Date Viewed"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1292
+msgid "View Count"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1303
+msgid "In/Out"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1304
+msgid "To/From"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1306
+#: admin/includes/class/class-mdjm-posts.php:1324
+#: admin/includes/class/class-mdjm-posts.php:2403
+msgid "Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1307
+msgid "Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1317
+msgid "Venue"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1318
+msgid "Contact"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1319
+msgid "Phone"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1320
+msgid "Town"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1321
+#: admin/includes/procedures/mdjm-install.php:217
+msgid "County"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1323
+msgid "Information"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1401
+msgid "Yes"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1401
+msgid "No"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1415
+#: admin/includes/metabox.php:76
+msgid " Event"
+msgid_plural " Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:1482
+#: client-zone/class/class-playlist.php:428
+msgid " Song"
+msgid_plural " Songs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:1487
+msgid " Entry"
+msgid_plural " Entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:1532
+msgid "time"
+msgid_plural "times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm-posts.php:1748
+#: admin/includes/class/class-mdjm-posts.php:1751
+msgid "%s updated."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1749
+msgid "Custom field updated."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1750
+msgid "Custom field deleted."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1752
+msgid "%2$s restored to revision from %1$s"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1753
+msgid "%s published."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1754
+msgid "%s saved."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1755
+msgid "%s submitted."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1756
+msgid ""
+"%s scheduled for: <strong>%s</strong>. <a href=\"%s\" target=\"_blank"
+"\">Preview %s</a>"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1756
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1757
+msgid "%s draft updated."
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:1978
+msgid "All Dates"
+msgstr ""
+
+#. translators: 1: month name, 2: 4-digit year
+#: admin/includes/class/class-mdjm-posts.php:1991
+msgid "%1$s %2$d"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2081
+msgid "All Client's"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2260
+msgid "Save Contract"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2262
+msgid "Update Contract"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2266
+msgid "Save Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2268
+msgid "Update Template"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2275
+#: admin/includes/class/class-mdjm-posts.php:2279
+msgid "Update Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2277
+msgid "Create Event"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2283
+#: admin/includes/class/class-mdjm-posts.php:2440
+msgid "Save Transaction"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2285
+msgid "Update Transaction"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2289
+msgid "Save Venue"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2291
+msgid "Update Venue"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2406
+msgid "Email Content"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2411
+msgid "Contract Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2419
+msgid "Client Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2420
+#: client-zone/class/class-home.php:376 client-zone/class/class-home.php:532
+msgid "Event Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2422
+msgid "Administration"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2429
+msgid "Event History"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2433
+msgid "Event Options"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2442
+msgid "Transaction Details"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-posts.php:2572
+#: admin/includes/class/class-mdjm-posts.php:2576
+#: admin/includes/class/class-mdjm-posts.php:2583
+#: admin/includes/metabox.php:28 admin/pages/playlists.php:33
+#: admin/pages/playlists.php:37 admin/pages/playlists.php:65
+#: admin/pages/playlists.php:81 admin/pages/playlists.php:85
+#: admin/pages/settings-scheduler.php:458
+msgid "Back"
+msgstr ""
+
+#: admin/includes/class/class-mdjm-transactions.php:47
+msgid "No transactions exist for this event yet."
+msgstr ""
+
+#: admin/includes/class/class-mdjm.php:604
+msgid "Enquiry"
+msgid_plural "Enquiries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm.php:607
+msgid "this enquiry"
+msgid_plural "these enquiries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/class/class-mdjm.php:1505
+msgid "Field deleted successfully"
+msgstr ""
+
+#: admin/includes/core.php:50
+msgid "Donate"
+msgstr ""
+
+#: admin/includes/metabox.php:28
+msgid "Back to List"
+msgstr ""
+
+#: admin/includes/metabox.php:107
+msgid " Select Client:"
+msgstr ""
+
+#: admin/includes/metabox.php:180 client-zone/class/class-contract.php:382
+msgid "First Name:"
+msgstr ""
+
+#: admin/includes/metabox.php:184 client-zone/class/class-contract.php:386
+msgid "Last Name:"
+msgstr ""
+
+#: admin/includes/metabox.php:184 admin/includes/metabox.php:194
+msgid "(optional)"
+msgstr ""
+
+#: admin/includes/metabox.php:190 client-zone/class/class-home.php:477
+msgid "Email:"
+msgstr ""
+
+#: admin/includes/metabox.php:194 client-zone/class/class-home.php:472
+msgid "Phone:"
+msgstr ""
+
+#: admin/includes/metabox.php:225 client-zone/class/class-home.php:381
+#: client-zone/class/class-home.php:536
+msgid "Event Name:"
+msgstr ""
+
+#: admin/includes/metabox.php:259 client-zone/class/class-home.php:394
+#: client-zone/class/class-home.php:542
+msgid "Event Date:"
+msgstr ""
+
+#: admin/includes/metabox.php:269 client-zone/class/class-home.php:400
+#: client-zone/class/class-home.php:564
+msgid "Start Time:"
+msgstr ""
+
+#: admin/includes/metabox.php:316 client-zone/class/class-home.php:402
+#: client-zone/class/class-home.php:607
+msgid "End Time:"
+msgstr ""
+
+#: admin/includes/metabox.php:367 client-zone/class/class-home.php:443
+msgid "Total Cost:"
+msgstr ""
+
+#: admin/includes/metabox.php:408
+msgid "Select an Event Package:"
+msgstr ""
+
+#: admin/includes/metabox.php:455
+msgid "Select Add-ons:"
+msgstr ""
+
+#: admin/includes/metabox.php:483 client-zone/class/class-home.php:687
+msgid "Notes:"
+msgstr ""
+
+#: admin/includes/metabox.php:484
+msgid "Enter any information you feel relevant"
+msgstr ""
+
+#: admin/includes/metabox.php:522
+msgid " Select Venue:"
+msgstr ""
+
+#: admin/includes/metabox.php:572
+msgid "Venue Name:"
+msgstr ""
+
+#: admin/includes/metabox.php:576
+msgid "Contact Name:"
+msgstr ""
+
+#: admin/includes/metabox.php:584 admin/includes/metabox.php:1357
+msgid "Contact Phone:"
+msgstr ""
+
+#: admin/includes/metabox.php:588
+msgid "Contact Email:"
+msgstr ""
+
+#: admin/includes/metabox.php:596 admin/includes/metabox.php:1374
+msgid "Address Line 1:"
+msgstr ""
+
+#: admin/includes/metabox.php:600 admin/includes/metabox.php:1380
+msgid "Address Line 2:"
+msgstr ""
+
+#: admin/includes/metabox.php:608 admin/includes/metabox.php:1390
+msgid "Town:"
+msgstr ""
+
+#: admin/includes/metabox.php:612 admin/includes/metabox.php:1396
+msgid "County:"
+msgstr ""
+
+#: admin/includes/metabox.php:620
+msgid "Postcode:"
+msgstr ""
+
+#: admin/includes/metabox.php:661
+msgid "Enquiry Source:"
+msgstr ""
+
+#: admin/includes/metabox.php:686
+msgid "Setup Time:"
+msgstr ""
+
+#: admin/includes/metabox.php:748
+msgid "Admin Notes:"
+msgstr ""
+
+#: admin/includes/metabox.php:774
+msgid "Event Status:"
+msgstr ""
+
+#: admin/includes/metabox.php:790 client-zone/class/class-home.php:396
+#: client-zone/class/class-home.php:549
+msgid "Event Type:"
+msgstr ""
+
+#: admin/includes/metabox.php:801 admin/includes/process-ajax.php:80
+msgid "Select Event Type"
+msgstr ""
+
+#: admin/includes/metabox.php:822
+msgid "Event Contract:"
+msgstr ""
+
+#: admin/includes/metabox.php:870
+msgid "Disable Client Update Emails"
+msgstr ""
+
+#: admin/includes/metabox.php:890
+msgid "Reset Client Password?"
+msgstr ""
+
+#: admin/includes/metabox.php:1285 admin/includes/process-ajax.php:131
+msgid "Select Transaction Type"
+msgstr ""
+
+#: admin/includes/metabox.php:1349
+msgid "Contact Name: "
+msgstr ""
+
+#: admin/includes/metabox.php:1365
+msgid "Contact Email: "
+msgstr ""
+
+#: admin/includes/metabox.php:1405
+msgid "Post Code:"
+msgstr ""
+
+#: admin/includes/metabox.php:1413
+msgid "General Information:"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:40
+msgid "Website"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:41
+msgid "Google"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:42
+msgid "Facebook"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:44
+msgid "Telephone"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:45
+#: admin/includes/procedures/mdjm-install.php:52
+#: admin/includes/procedures/mdjm-install.php:61
+#: admin/includes/procedures/mdjm-install.php:680
+msgid "Other"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:47
+msgid "BACS"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:48
+msgid "Cash"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:49
+msgid "Cheque"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:55
+msgid "First Dance"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:56
+msgid "Second Dance"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:57
+msgid "Last Song"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:58
+msgid "Father & Bride"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:59
+msgid "Mother & Son"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:60
+msgid "DO NOT PLAY"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:119
+#: admin/includes/procedures/mdjm-install.php:522
+msgid "Client Zone"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:138
+msgid ""
+"Good news, we are available on the date you entered. Please contact us now"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:140
+msgid ""
+"Unfortunately we do not appear to be available on the date you selected. Why "
+"not try another date below..."
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:145
+msgid "First Name"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:157
+msgid "Last Name"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:169
+msgid "Email Address"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:181
+msgid "Address 1"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:193
+msgid "Address 2"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:205
+msgid "Town / City"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:230
+msgid "Post Code"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:243
+msgid "Primary Phone"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:255
+msgid "Alternative Phone"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:266
+msgid "Birthday"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:269
+msgid "January"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:270
+msgid "February"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:271
+msgid "March"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:272
+msgid "April"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:273
+msgid "May"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:274
+msgid "June"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:275
+msgid "July"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:276
+msgid "August"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:277
+msgid "September"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:278
+msgid "October"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:279
+msgid "November"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:280
+msgid "December"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:288
+msgid "Marketing Info"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:294
+msgid "Do we add the user to the mailing list"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:311
+#: admin/settings/settings.php:1983
+msgid "Make a Payment Towards"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:312
+#: admin/includes/procedures/update_to_1.2.3.6.php:27
+#: admin/settings/settings.php:1996 admin/settings/settings.php:2010
+#: admin/settings/settings.php:2018
+msgid "Other Amount"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:523
+msgid "Your Details"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:524
+msgid "Event Contract"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:525
+msgid "Playlist Management"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:526
+msgid "Event Payments"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:666
+msgid "16th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:667
+msgid "18th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:668
+msgid "21st Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:669
+msgid "30th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:670
+msgid "40th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:671
+msgid "50th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:672
+msgid "60th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:673
+msgid "70th Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:674
+msgid "Anniversary Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:675
+msgid "Child Birthday Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:676
+msgid "Corporate Event"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:677
+msgid "Engagement Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:678
+msgid "Halloween Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:679
+msgid "New Years Eve Party"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:681
+msgid "School Disco"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:682
+msgid "School Prom"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:683
+msgid "Wedding"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:688
+#: client-zone/class/class-clientzone.php:273
+#: client-zone/class/class-contract.php:278
+msgid "Deposit"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:689
+msgid "Balance"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:690
+msgid "Certifications"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:691
+msgid "Hardware"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:692
+msgid "Insurance"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:693
+msgid "Maintenance"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:695
+msgid "Music"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:696
+msgid "Parking"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:697
+msgid "Petrol"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:698
+msgid "Software"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:699
+msgid "Vehicle"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:703
+msgid "Low Ceiling"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:706
+msgid "PAT Required"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:709
+msgid "PLI Required"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:712
+msgid "Smoke/Fog Allowed"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:715
+msgid "Sound Limiter"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-install.php:718
+msgid "Via Stairs"
+msgstr ""
+
+#: admin/includes/procedures/mdjm-upgrade.php:423
+msgid " event found"
+msgid_plural " events found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/procedures/mdjm-upgrade.php:563
+#: admin/includes/procedures/mdjm-upgrade.php:570
+#: admin/includes/procedures/mdjm-upgrade.php:577
+#: admin/includes/procedures/mdjm-upgrade.php:620
+msgid " entry "
+msgid_plural " entries "
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/procedures/mdjm-upgrade.php:819
+msgid " transaction found"
+msgid_plural " transactions found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/procedures/update_to_1.2.3.6.php:26
+#: admin/settings/class-mdjm-settings.php:606
+msgid "Pay Now"
+msgstr ""
+
+#: admin/includes/procedures/update_to_1.2.3.php:50
+#: admin/includes/procedures/update_to_1.2.3.php:61
+msgid "record "
+msgid_plural "records "
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/procedures/update_to_1.2.4.php:83
+msgid "Used to track fees for using payment gateways such as PayPal"
+msgstr ""
+
+#: admin/includes/widgets.php:58
+msgid " Enquiry"
+msgid_plural " Enquiries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/pages/availability.php:52
+msgid " DJ"
+msgid_plural " DJ's"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/pages/settings-equipment.php:277
+msgid "Cost of individual add-on"
+msgstr ""
+
+#: admin/pages/settings-equipment.php:277
+#: admin/pages/settings-packages.php:185 admin/pages/settings-packages.php:188
+msgid "No %s symbol needed"
+msgstr ""
+
+#: admin/pages/settings-packages.php:205
+msgid "Cancel"
+msgstr ""
+
+#: admin/pages/updated.php:1011
+msgid "Separate venue details with commas"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:202
+msgid "Label"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:203
+#: client-zone/class/class-clientzone.php:261
+#: client-zone/class/class-contract.php:266
+msgid "Type"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:204
+#: admin/settings/class-mdjm-settings-client-fields.php:376
+msgid "Description"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:205
+msgid "Options"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:206
+msgid "Actions"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:230
+msgid "Edit"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:233
+msgid "Delete"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:284
+msgid "Add New Client Field"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:285
+msgid "Edit the "
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:285
+msgid " Field"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:289
+msgid "Field Label"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:297
+msgid "Field Type"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:330
+msgid "Selectable Options"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:339
+msgid "Checked Value"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:345
+msgid "Checked by Default"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:386
+msgid " Field Enabled?"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings-client-fields.php:395
+msgid " Required Field?"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:119
+msgid "The following settings only apply if debugging is enabled"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:122
+msgid ""
+"These settings are important to ensure that your MDJM Premium plugins "
+"continue to be updated and remain enabled"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:274
+msgid "Premium Addons"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:350
+msgid "Application Settings"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:352
+msgid "Debugging"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:353
+msgid "Backups"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:354
+msgid "Plugin Removal"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:357 admin/settings/settings.php:57
+#: admin/settings/settings.php:97
+msgid "Event Settings"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:358 admin/settings/settings.php:61
+msgid "Playlist Settings"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:362
+msgid "General Email Settings"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:363
+msgid "Event Templates"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:367
+msgid "General Settings"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:368 admin/settings/settings.php:101
+msgid "Pages"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:369
+msgid "Customised Text"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:370
+msgid "Client Fields"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:371
+msgid "Availability Checker"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:603
+msgid "Use standard HTML submit button with text"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:705
+msgid "Have you tried our Premium Plugins"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:706
+msgid ""
+"Our selection of premium add-ons for MDJM enable additional enhanced "
+"features to increase functionality and enhance your clients experience"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:707
+msgid "MDJM Dynamic Contact Forms"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:707
+#: admin/settings/class-mdjm-settings.php:712
+msgid "Buy Now"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:708
+msgid ""
+"With the Dynamic Contact Forms add-on you can respond to enquiries within "
+"seconds and guarantee a professional and accurate quote each and every time, "
+"without spending a lot of time doing it"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:710
+msgid "You can even see when the client has opened your quote"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:712
+msgid "MDJM Payments"
+msgstr ""
+
+#: admin/settings/class-mdjm-settings.php:713
+msgid ""
+"The MDJM Payments add-on enables you to receive client payments via your "
+"website with full automation."
+msgstr ""
+
+#: admin/settings/settings.php:37
+msgid "General MDJM Settings"
+msgstr ""
+
+#: admin/settings/settings.php:41
+msgid "MDJM Permissions"
+msgstr ""
+
+#: admin/settings/settings.php:45
+msgid "MDJM Debugging"
+msgstr ""
+
+#: admin/settings/settings.php:49
+msgid "Log Files"
+msgstr ""
+
+#: admin/settings/settings.php:53
+msgid "MDJM Plugin Removal Settings"
+msgstr ""
+
+#: admin/settings/settings.php:69
+msgid "Email Settings"
+msgstr ""
+
+#: admin/settings/settings.php:73
+msgid "Quote Templates"
+msgstr ""
+
+#: admin/settings/settings.php:77
+msgid "Awaiting Contract Templates"
+msgstr ""
+
+#: admin/settings/settings.php:81
+msgid "Booking Confirmation Templates"
+msgstr ""
+
+#: admin/settings/settings.php:85
+msgid "Payment Confirmation Templates"
+msgstr ""
+
+#: admin/settings/settings.php:89
+msgid "%s General Settings"
+msgstr ""
+
+#: admin/settings/settings.php:93
+msgid "Client Settings"
+msgstr ""
+
+#: admin/settings/settings.php:109
+msgid "General Text"
+msgstr ""
+
+#: admin/settings/settings.php:113
+msgid "Home Page Text"
+msgstr ""
+
+#: admin/settings/settings.php:117
+msgid "Profile Page Text"
+msgstr ""
+
+#: admin/settings/settings.php:121
+msgid "Contracts Page Text"
+msgstr ""
+
+#: admin/settings/settings.php:125
+msgid "Playlists Page Text"
+msgstr ""
+
+#: admin/settings/settings.php:129
+msgid "Payments Page Text"
+msgstr ""
+
+#: admin/settings/settings.php:133
+msgid "Availability Settings"
+msgstr ""
+
+#: admin/settings/settings.php:137
+msgid "Payments Settings"
+msgstr ""
+
+#: admin/settings/settings.php:154
+msgid "Company Name"
+msgstr ""
+
+#: admin/settings/settings.php:160
+msgid "Enter your company name"
+msgstr ""
+
+#: admin/settings/settings.php:166
+msgid "Items per Page"
+msgstr ""
+
+#: admin/settings/settings.php:172
+msgid ""
+"The number of items you want to list per page in event/client/DJ/Venue view"
+msgstr ""
+
+#: admin/settings/settings.php:187
+msgid "Display Time as"
+msgstr ""
+
+#: admin/settings/settings.php:192
+msgid ""
+"Select the format in which you want your event times displayed. Applies to "
+"both admin and client pages"
+msgstr ""
+
+#: admin/settings/settings.php:203
+msgid "Short Date Format"
+msgstr ""
+
+#: admin/settings/settings.php:208
+msgid ""
+"Select the format in which you want short dates displayed. Applies to both "
+"admin and client pages"
+msgstr ""
+
+#: admin/settings/settings.php:224
+msgid "Show Dashboard Widget"
+msgstr ""
+
+#: admin/settings/settings.php:229
+msgid "Displays the MDJM widget on the main Wordpress Admin Dashboard"
+msgstr ""
+
+#: admin/settings/settings.php:235
+msgid "Display Credits"
+msgstr ""
+
+#: admin/settings/settings.php:249
+msgid "%s see WP Dashboard"
+msgstr ""
+
+#: admin/settings/settings.php:253
+msgid ""
+"If checked your %s will be able to see the main WordPress Dashboard page"
+msgstr ""
+
+#: admin/settings/settings.php:261
+msgid "%s can Add New Clients"
+msgstr ""
+
+#: admin/settings/settings.php:272
+msgid "%s can Add New Events"
+msgstr ""
+
+#: admin/settings/settings.php:283
+msgid "%s can Upload Music"
+msgstr ""
+
+#: admin/settings/settings.php:287
+msgid "Allow your %s to upload their music libraries enabling client searches"
+msgstr ""
+
+#: admin/settings/settings.php:295
+msgid "%s can View Enquiries"
+msgstr ""
+
+#: admin/settings/settings.php:306
+msgid "%s can Add New Venues"
+msgstr ""
+
+#: admin/settings/settings.php:317
+msgid "%s can See Deposit Info"
+msgstr ""
+
+#: admin/settings/settings.php:328
+msgid "Disabled Shortcodes for %s"
+msgstr ""
+
+#: admin/settings/settings.php:346
+msgid "Disabled Templates for %s"
+msgstr ""
+
+#: admin/settings/settings.php:362
+msgid "Enable Debugging"
+msgstr ""
+
+#: admin/settings/settings.php:373
+msgid "Maximum Log File Size"
+msgstr ""
+
+#: admin/settings/settings.php:378
+msgid "MB %sDefault is 2 (MB)%s"
+msgstr ""
+
+#: admin/settings/settings.php:379
+msgid ""
+"The max size in Megabytes to allow your log files to grow to before you "
+"receive a warning (if configured below)"
+msgstr ""
+
+#: admin/settings/settings.php:386
+msgid "Display Warning if Over Size"
+msgstr ""
+
+#: admin/settings/settings.php:392
+msgid "Will display notice and allow removal and recreation of log files"
+msgstr ""
+
+#: admin/settings/settings.php:398
+msgid "Auto Purge Log Files"
+msgstr ""
+
+#: admin/settings/settings.php:403
+msgid ""
+"If selected, log files will be auto-purged when they reach the value of "
+"%sMaximum Log File Size%s"
+msgstr ""
+
+#: admin/settings/settings.php:411
+msgid "Remove Database Tables"
+msgstr ""
+
+#: admin/settings/settings.php:423
+msgid "Remove Data"
+msgstr ""
+
+#: admin/settings/settings.php:435
+msgid "Remove Pages"
+msgstr ""
+
+#: admin/settings/settings.php:440
+msgid "Do you want to remove all MDJM pages"
+msgstr ""
+
+#: admin/settings/settings.php:446
+msgid "Remove Templates"
+msgstr ""
+
+#: admin/settings/settings.php:451
+msgid ""
+"Do you want to remove the Contract and Email Templates associated with "
+"Mobile DJ Manager when uninstalling plugin"
+msgstr ""
+
+#: admin/settings/settings.php:458
+msgid "Remove %s &amp; Client's"
+msgstr ""
+
+#: admin/settings/settings.php:471
+msgid "Event Prefix"
+msgstr ""
+
+#: admin/settings/settings.php:477
+msgid ""
+"The prefix you enter here will be added to each unique event, contract and "
+"invoice ID"
+msgstr ""
+
+#: admin/settings/settings.php:483
+msgid "I am an Employer"
+msgstr ""
+
+#: admin/settings/settings.php:488
+msgid "Check this if you employ other staff"
+msgstr ""
+
+#: admin/settings/settings.php:494
+msgid "Refer to Performers as"
+msgstr ""
+
+#: admin/settings/settings.php:499
+msgid "Default is %s"
+msgstr ""
+
+#: admin/settings/settings.php:500
+msgid ""
+"Change the name of your performers here as necessary. Useful if you are not "
+"a DJ business"
+msgstr ""
+
+#: admin/settings/settings.php:507
+msgid "Enable Packages"
+msgstr ""
+
+#: admin/settings/settings.php:512
+msgid "Check this to enable Equipment Packages & Inventories"
+msgstr ""
+
+#: admin/settings/settings.php:518
+msgid "Default Client Contract"
+msgstr ""
+
+#: admin/settings/settings.php:524 admin/settings/settings.php:1027
+msgid "Add New"
+msgstr ""
+
+#: admin/settings/settings.php:525
+msgid ""
+"Select the client contract you want to use as default. This can be changed "
+"per event"
+msgstr ""
+
+#: admin/settings/settings.php:540
+msgid ""
+"Displays a notification message at the top of the Admin pages to "
+"Administrators if there are outstanding Unattended Enquiries"
+msgstr ""
+
+#: admin/settings/settings.php:554
+msgid "Enter possible sources of enquiries. One per line"
+msgstr ""
+
+#: admin/settings/settings.php:565
+msgid "Log and track all client &amp; event actions (recommended)"
+msgstr ""
+
+#: admin/settings/settings.php:686
+msgid ""
+"This is the default template used when sending quotes via %semail%s to "
+"clients"
+msgstr ""
+
+#: admin/settings/settings.php:703
+msgid ""
+"This is the default template used for clients viewing quotes %sonline%s via "
+"the %s application"
+msgstr ""
+
+#: admin/settings/settings.php:957
+msgid "Display Package prices"
+msgstr ""
+
+#: admin/settings/settings.php:962
+msgid ""
+"Select to display event package %s Add-on prices within hover text within "
+"the %s"
+msgstr ""
+
+#: admin/settings/settings.php:969
+msgid "Notify Admin"
+msgstr ""
+
+#: admin/settings/settings.php:974
+msgid ""
+"Select to send an email to admin when a client updates their event via %s"
+msgstr ""
+
+#: admin/settings/settings.php:1022
+msgid "Online Quotes Page"
+msgstr ""
+
+#: admin/settings/settings.php:1028
+msgid "Select the page to use for online event quotes"
+msgstr ""
+
+#: admin/settings/settings.php:1788
+msgid "Disable"
+msgstr ""
+
+#: admin/settings/settings.php:1790
+msgid "PayFast (South Africa Only)"
+msgstr ""
+
+#: admin/settings/settings.php:1857 admin/settings/settings.php:1875
+msgid "dot"
+msgstr ""
+
+#: admin/settings/settings.php:1858 admin/settings/settings.php:1876
+msgid "comma"
+msgstr ""
+
+#: admin/settings/settings.php:1859
+msgid "dash"
+msgstr ""
+
+#: admin/settings/settings.php:1997
+msgid ""
+"Default is %sOther Amount%s. Be sure to create a %sTransaction Type%s that "
+"matches this label"
+msgstr ""
+
+#: admin/settings/settings.php:2003
+msgid "Enter your desired label for the other amount radio button"
+msgstr ""
+
+#: admin/settings/settings.php:2009
+msgid "Default "
+msgstr ""
+
+#: admin/settings/settings.php:2015
+msgid "Deafult is %s50.00%s"
+msgstr ""
+
+#: admin/settings/settings.php:2016
+msgid "Enter the default amount to be used in the %s field"
+msgstr ""
+
+#: admin/settings/settings.php:2079
+msgid "MDJM API Key"
+msgstr ""
+
+#: admin/settings/settings.php:2085
+msgid ""
+"Provided to you during purchase of one of our premium plugins and needed to "
+"validate your license"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:252
+msgid "Good news... %s has just accepted their event quotation via %s"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:275
+#: client-zone/class/class-contract.php:280
+msgid "Balance Due"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:277
+#: client-zone/class/class-contract.php:282
+msgid "%sView Event%s"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:287
+msgid "Event Quotation Accepted"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:368
+msgid "No Address"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:531
+msgid "Lost Password"
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:543
+msgid "ERROR: You do not have permission to view this page. "
+msgstr ""
+
+#: client-zone/class/class-clientzone.php:631
+msgid "ERROR: Unknown Page"
+msgstr ""
+
+#: client-zone/class/class-contract.php:53
+#: client-zone/class/class-contract.php:410
+#: client-zone/class/class-home.php:84
+msgid "Sign Contract"
+msgstr ""
+
+#: client-zone/class/class-contract.php:115
+msgid "Signatory"
+msgstr ""
+
+#: client-zone/class/class-contract.php:118
+msgid "Date of Signature"
+msgstr ""
+
+#: client-zone/class/class-contract.php:119
+msgid "Verification Method"
+msgstr ""
+
+#: client-zone/class/class-contract.php:257
+msgid "Good news... %s has just signed their event contract via %s"
+msgstr ""
+
+#: client-zone/class/class-contract.php:292
+msgid "Event Contract Signed"
+msgstr ""
+
+#: client-zone/class/class-contract.php:331
+msgid "The Client contract is displayed below. It is not yet signed"
+msgstr ""
+
+#: client-zone/class/class-contract.php:348
+msgid ""
+"<p>Your contract is not yet ready for signing as you have not indicated that "
+"you would like to proceed with your event. You can do this <a href="
+"\"{APPLICATION_HOME}\">here</a>.</p>"
+msgstr ""
+
+#: client-zone/class/class-contract.php:349
+msgid ""
+"<p>The client contract is not yet ready for signing as the event status has "
+"not been updated to \"Awaiting Contract\"</p>"
+msgstr ""
+
+#: client-zone/class/class-contract.php:393
+msgid "I hereby confirm that I have read and accept the contract and its terms"
+msgstr ""
+
+#: client-zone/class/class-contract.php:399
+msgid ""
+"I hereby confirm that the person named within the above contract is me and "
+"that all associated details are correct"
+msgstr ""
+
+#: client-zone/class/class-contract.php:404
+msgid "Re-Enter Your Password"
+msgstr ""
+
+#: client-zone/class/class-contract.php:434
+msgid "This contract has been signed"
+msgstr ""
+
+#: client-zone/class/class-contract.php:437
+msgid " with password verification"
+msgstr ""
+
+#: client-zone/class/class-home.php:73
+msgid "View Details"
+msgstr ""
+
+#: client-zone/class/class-home.php:77 client-zone/class/class-home.php:81
+#: client-zone/class/class-home.php:85
+msgid "Cancel Event"
+msgstr ""
+
+#: client-zone/class/class-home.php:80
+msgid "Book Event"
+msgstr ""
+
+#: client-zone/class/class-home.php:93
+msgid "Make a Payment"
+msgstr ""
+
+#: client-zone/class/class-home.php:98
+msgid "Select Action"
+msgstr ""
+
+#: client-zone/class/class-home.php:138
+msgid "View Event Quote"
+msgstr ""
+
+#: client-zone/class/class-home.php:142
+#: client-zone/class/class-onlinequote.php:66
+msgid "Book this Event"
+msgstr ""
+
+#: client-zone/class/class-home.php:147
+msgid "Review &amp; Approve Contract"
+msgstr ""
+
+#: client-zone/class/class-home.php:152
+msgid "View Contract"
+msgstr ""
+
+#: client-zone/class/class-home.php:159
+msgid "Manage Playlist"
+msgstr ""
+
+#: client-zone/class/class-home.php:162
+msgid "Update Profile"
+msgstr ""
+
+#: client-zone/class/class-home.php:165
+msgid "Book Another Event"
+msgstr ""
+
+#: client-zone/class/class-home.php:286
+msgid "Click on an event date below to begin managing that event."
+msgstr ""
+
+#: client-zone/class/class-home.php:293
+msgid "Cost"
+msgstr ""
+
+#: client-zone/class/class-home.php:387
+msgid "Status:"
+msgstr ""
+
+#: client-zone/class/class-home.php:407 client-zone/class/class-home.php:656
+msgid "Package:"
+msgstr ""
+
+#: client-zone/class/class-home.php:422 client-zone/class/class-home.php:668
+msgid "Addons:"
+msgstr ""
+
+#: client-zone/class/class-home.php:455
+msgid "Information:"
+msgstr ""
+
+#: client-zone/class/class-home.php:464
+msgid "Your Contact Details"
+msgstr ""
+
+#: client-zone/class/class-home.php:466
+msgid "edit"
+msgstr ""
+
+#: client-zone/class/class-home.php:470
+msgid "Name:"
+msgstr ""
+
+#: client-zone/class/class-home.php:479 client-zone/class/class-home.php:495
+msgid "Address:"
+msgstr ""
+
+#: client-zone/class/class-home.php:493
+msgid "Venue:"
+msgstr ""
+
+#: client-zone/class/class-home.php:693
+msgid "Reason for Changes:"
+msgstr ""
+
+#: client-zone/class/class-home.php:694
+msgid ""
+"If you are making any changes to your event, please enter the reason here"
+msgstr ""
+
+#: client-zone/class/class-home.php:700
+msgid "Cancel Changes"
+msgstr ""
+
+#: client-zone/class/class-onlinequote.php:37
+msgid ""
+"This option is disabled for your event. Please %scontact us%s for assistance"
+msgstr ""
+
+#: client-zone/class/class-onlinequote.php:44
+msgid ""
+"An error is stopping your access to this quotation. Please %scontact us%s "
+"for assistance"
+msgstr ""
+
+#: client-zone/class/class-onlinequote.php:169
+#: client-zone/class/class-onlinequote.php:188
+#: client-zone/class/class-onlinequote.php:202
+msgid "Unable to process request. Please %scontact us%s for assistance"
+msgstr ""
+
+#: client-zone/class/class-onlinequote.php:234
+msgid "An error has occured, please %scontact us%s for assistance"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:77
+msgid "The song was successfully removed"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:82
+#: client-zone/class/class-playlist.php:152
+msgid "An error occurred. Please try again."
+msgstr ""
+
+#: client-zone/class/class-playlist.php:143
+msgid "The song was successfully added"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:363
+msgid "Song Name"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:369
+msgid "When to Play"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:379
+msgid "Info"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:402
+msgid "Existing playlist entries are displayed below"
+msgstr ""
+
+#: client-zone/class/class-playlist.php:423
+msgid "Remove"
+msgstr ""
+
+#: client-zone/class/class-profile.php:147
+msgid ""
+"<p>Please keep your details up to date as incorrect information may cause "
+"problems with your event.</p>"
+msgstr ""
+
+#: client-zone/class/class-profile.php:298
+msgid "New Password"
+msgstr ""
+
+#: client-zone/class/class-profile.php:302
+msgid "Confirm"
+msgstr ""
+
+#: client-zone/includes/mdjm-dynamic.php:35
+#: client-zone/includes/mdjm-dynamic.php:70
+#: client-zone/includes/mdjm-dynamic.php:71
+msgid "No addons available"
+msgstr ""
+
+#: includes/mdjm-functions.php:815
+msgid "No packages available"
+msgstr ""
+
+#: includes/mdjm-functions.php:833
+msgid "No addons are assigned to this event"
+msgstr ""
+
+#: includes/mdjm-functions.php:868
+msgid "No addons are available"
+msgstr ""
+
+#: includes/mdjm-functions.php:992
+msgid "No Packages Available"
+msgstr ""
+
+#: includes/mdjm-functions.php:1114 includes/mdjm-functions.php:1206
+msgid "No Addons Available"
+msgstr ""
+
+#: widgets/class-mdjm-widget.php:21
+msgid "MDJM Availability Checker"
+msgstr ""
+
+#: widgets/class-mdjm-widget.php:22
+msgid "Enables clients to check your availability"
+msgstr ""
+
+#: widgets/class-mdjm-widget.php:265
+msgid "MDJM Contact Form"
+msgstr ""
+
+#: widgets/class-mdjm-widget.php:266
+msgid "Displays the specified contact form"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Mobile DJ Manager is an interface allowing mobile DJ's and businesses to "
+"manage their events and employees as well as interact with their clients "
+"easily. Automating many of your day to day tasks, Mobile DJ Manager for "
+"WordPress is the ultimate tool for any Mobile DJ Business."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "My DJ Planner <contact@mydjplanner.co.uk>"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.mydjplanner.co.uk"
+msgstr ""
