@@ -68,6 +68,9 @@
 				
 			if( $version < '1.2.4.1' )
 				$this->update_to_1_2_4_1();
+				
+			if( $version < '1.2.5' )
+				$this->update_to_1_2_5();
 			
 		} // execute_updates
 		
@@ -334,9 +337,7 @@
 			
 			add_option( 'mdjm_update_options', '1' );
 			$this->update_options_1_2(); // Update the plugin options
-			
-			wp_schedule_single_event( time(), 'mdjm_import_journal_entries' );
-								
+											
 			$GLOBALS['mdjm_debug']->log_it( 'Completed version 1.2 upgrade procedures', true );
 			
 		} // update_to_1_2
@@ -357,7 +358,7 @@
 			
 			$mdjm_settings = array(
 								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'payments'	=> get_option( 'mdjm_pp_options' ),
+								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
 								);
 			// Main settings updates
 			$mdjm_settings['main']['artist'] = 'DJ';
@@ -369,7 +370,7 @@
 			unset( $mdjm_settings['payments']['pp_transaction_types'] );
 			
 			update_option( MDJM_SETTINGS_KEY, $mdjm_settings['main'] );
-			update_option( 'mdjm_pp_options', $mdjm_settings['payments'] );
+			update_option( MDJM_PAYMENTS_KEY, $mdjm_settings['payments'] );
 			
 			/* -- We add this option for the journal migrations -- */
 			add_option( 'mdjm_date_to_1_2', strtotime( "+3 day" ) );
@@ -1087,18 +1088,7 @@
 			
 			delete_option( 'mdjm_update_scheduler' );
 		} // update_scheduler
-		
-		/*
-		 * Force an application re-sync
-		 *
-		 * This function is deprecated as of 1.2.3.4
-		 * It remains only to avoid fatal errors until full cleanup is complete
-		 *
-		 */
-		public function resync()	{
-			return;
-		} // resync
-		
+				
 		/*
 		 * Check that 1.2 procedures have run
 		 *
@@ -1302,6 +1292,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.4.1', true );
 		} // update_to_1_2_4_1
+		
+		/*
+		 * Execute upgrade for version 1.2.5
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_5()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5', true );
+			
+			include_once( 'update_to_1.2.5.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5', true );
+		} // update_to_1_2_5
 		
 	} // class
 	

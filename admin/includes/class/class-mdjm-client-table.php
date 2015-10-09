@@ -128,8 +128,8 @@
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
 			global $wpdb, $display_query, $display, $order, $orderby;
-			$active_clients = f_mdjm_get_clients( 'client', $orderby, $order );
-			$inactive_clients = f_mdjm_get_clients( 'inactive_client', $orderby, $order );
+			$active_clients = mdjm_get_clients( 'client', $orderby, $order );
+			$inactive_clients = mdjm_get_clients( 'inactive_client', $orderby, $order );
 			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>

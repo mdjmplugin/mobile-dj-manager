@@ -315,30 +315,6 @@
 							'tax_rate'	   		   => '20',
 							'payment_sources'	 	=> $payment_sources,
 						),
-						'mdjm_paypal_settings' 	=> array(
-							'paypal_email'		=> get_bloginfo( 'admin_email' ),
-							'redirect_success'	=> 'N',
-							'redirect_cancel'	 => 'N',
-							'paypal_button'	   => 'btn_paynow_SM.gif',
-							'button_text'		=> __( 'Pay Now', 'mobile-dj-manager' ),
-							'enable_sandbox'	  => false,
-							'sandbox_email'  	   => get_bloginfo( 'admin_email' ),
-							'paypal_debug'		=> false,
-							'receiver_email'	  => get_bloginfo( 'admin_email' ),
-							'checkout_style' 	  => '',
-						),
-						'mdjm_payfast_settings' 	=> array(
-							'merchant_id'			=> '',
-							'merchant_key'			=> '',
-							'email_confirmation'	=> get_bloginfo( 'admin_email' ),
-							'redirect_pf_success'	=> 'N',
-							'redirect_pf_cancel'	=> 'N',
-							'payfast_button'		=> 'paynow_basic_logo.gif',
-							'enable_pf_sandbox'		=> false,
-							'sandbox_merchant_id'	=> '',
-							'sandbox_merchant_key'	=> '',
-							'payfast_debug'			=> false
-						),
 						'mdjm_debug_settings' => array(
 							'enable'		=> false,
 							'log_size'	  => '2',
@@ -454,32 +430,7 @@
 			add_option( 'mdjm_debug', '0' );
 			add_option( 'mdjm_updated', '0' );
 			if( !get_option( 'mdjm_version' ) )
-				add_option( 'mdjm_version', MDJM_VERSION_NUM );
-				
-			if( !get_option( 'm_d_j_m_installed' ) )
-				add_option( 'm_d_j_m_installed', date( 'Y-m-d H:i:s' ) );
-			
-			if( !get_option( 'm_d_j_m_initiated' ) )	{
-				set_transient( 'mdjm_is_trial', 'XXXX|' . date( 'Y-m-d' ) . '|' . date( 'Y-m-d', strtotime( "+30 days" ) ), 30 * DAY_IN_SECONDS );
-				if( get_option( 'has_been_set' ) )
-					delete_option( 'has_been_set' );
-					
-				if( get_option( 'mdjm_is_trial' ) )
-					delete_option( 'mdjm_is_trial' );
-					
-				add_option( 'm_d_j_m_has_initiated', current_time( 'timestamp' ) );
-				add_option( 'm_d_j_m_expires', strtotime( '+30 days' ) );
-			}
-			
-			$status['key'] = 'N/A';
-			$status['type'] = 'trial';
-			$status['start'] = date( 'Y-m-d' );
-			$status['expire'] = date( 'Y-m-d', strtotime( "+30 days" ) );
-			$status['last_auth'] = date( 'Y-m-d H:i:s' );
-			$status['missed'] = 0;
-			
-			add_option( '__mydj_validation', $status );
-					
+				add_option( 'mdjm_version', MDJM_VERSION_NUM );				
 		} // default_settings
 
 /*

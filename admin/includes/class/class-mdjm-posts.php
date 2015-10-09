@@ -121,75 +121,7 @@
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
 						'register_meta_box_cb'   => array( &$this, 'define_metabox' ),
-						);
-			
-			/* -- Contact Forms -- */
-				$template_labels[MDJM_CONTACT_FORM_POSTS] = array(
-						'name'               => 'Contact Forms',
-						'singular_name'      => 'Contact Form',
-						'menu_name'          => 'Contact Forms',
-						'name_admin_bar'     => 'Contact Form',
-						'add_new'            => 'Add Contact Form',
-						'add_new_item'       => 'Add New Contact Form',
-						'new_item'           => 'New Contact Form',
-						'edit_item'          => 'Edit Contact Form',
-						'view_item'          => 'View Contact Form',
-						'all_items'          => 'All Contact Forms',
-						'search_items'       => 'Search Contact Forms',
-						'not_found'          => 'No contact forms found.',
-						'not_found_in_trash' => 'No contact forms found in Trash.',
-					);
-				$post_args[MDJM_CONTACT_FORM_POSTS] = array(
-						'labels'			 	 => $template_labels[MDJM_CONTACT_FORM_POSTS],
-						'description'			=> 'Contact forms used by the MDJM plugin',
-						'public'			 	 => false,
-						'publicly_queryable' 	 => true,
-						'show_ui'				=> false,
-						'show_in_menu'	   	   => 'edit.php?post_type=' . MDJM_CONTACT_FORM_POSTS,
-						'query_var'		  	  => false,
-						'rewrite'            	=> array( 'slug' => 'mdjm-contact-form' ),
-						'capability_type'    	=> 'post',
-						'has_archive'        	=> false,
-						'hierarchical'       	   => false,
-						'menu_position'      	  => 5,
-						'supports'           	   => array( 'title' ),
-						'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-						'register_meta_box_cb'   => array( &$this, 'define_metabox' ),
-					);
-					
-			/* -- Contact Form Fields -- */
-				$template_labels[MDJM_CONTACT_FIELD_POSTS] = array(
-						'name'               => 'Contact Form Fields',
-						'singular_name'      => 'Contact Form Field',
-						'menu_name'          => 'Contact Form Fields',
-						'name_admin_bar'     => 'Contact Form Field',
-						'add_new'            => 'Add Contact Form Field',
-						'add_new_item'       => 'Add New Contact Form Field',
-						'new_item'           => 'New Contact Form Field',
-						'edit_item'          => 'Edit Contact Form Field',
-						'view_item'          => 'View Contact Form Field',
-						'all_items'          => 'All Contact Forms Field',
-						'search_items'       => 'Search Contact Form Fields',
-						'not_found'          => 'No contact form fields found.',
-						'not_found_in_trash' => 'No contact forms fields found in Trash.',
-					);
-				$post_args[MDJM_CONTACT_FIELD_POSTS] = array(
-						'labels'			 	 => $template_labels[MDJM_CONTACT_FIELD_POSTS],
-						'description'			=> 'Contact form fields used by the MDJM plugin',
-						'public'			 	 => false,
-						'publicly_queryable' 	 => true,
-						'show_ui'				=> false,
-						'show_in_menu'	   	   => false,
-						'query_var'		  	  => false,
-						'rewrite'            	=> array( 'slug' => 'mdjm-contact-field' ),
-						'capability_type'    	=> 'post',
-						'has_archive'        	=> false,
-						'hierarchical'       	   => false,
-						'menu_position'      	  => 5,
-						'supports'           	   => array( 'title', 'page-attributes' ),
-						'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-					);
-			
+						);			
 			/* -- Contract Templates -- */
 				$template_labels[MDJM_CONTRACT_POSTS] = array(
 						'name'               => 'Contract Templates',

@@ -76,11 +76,6 @@
 			}
 		?>
             <li><?php if( current_user_can( 'administrator' ) || dj_can( 'add_event' ) ) { ?><a href="<?php echo admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ); ?>">Add New Event</a> | <?php } ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-dashboard' ); ?>">View Dashboard</a> | <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">Edit Settings</a>
-            <?php
-			if( !do_reg_check( 'check' ) && current_user_can( 'manage_options' ) )	{
-                 echo '| <strong><a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">Buy License</a></strong>';
-			}
-			?>
             
             </li>
         </ul>

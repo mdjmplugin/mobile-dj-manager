@@ -452,7 +452,25 @@
 /*
  * -- START CLIENT FUNCTIONS
  */
- 
+	/**
+	 * mdjm_get_clients
+	 * 19/03/2015
+	 * Retrieve a list of all Client's
+	 * 
+	 *	@since: 1.1.3
+	 *	@params:
+	 *	@returns: $clients => object
+	 */
+	function mdjm_get_clients( $role = 'client', $orderby, $order )	{
+		$client_arg = array(	
+			'role' => $role,
+			'orderby' => $order,
+			'order' => 'ASC'
+						);
+		$clients = get_users( $client_arg );
+		
+		return $clients;
+	} // mdjm_get_clients
 /*
  * -- END CLIENT FUNCTIONS
  */
@@ -469,15 +487,19 @@
 	*	@params:
 	*	@returns: $djs => object
 	*/
-	function mdjm_get_djs()	{
-		$admin_arg = array( 'role' => 'administrator',
-							'orderby' => 'display_name',
-							'order' => 'ASC'
-						);
-		$admin = get_users( $admin_arg );
+	function mdjm_get_djs( $role = 'dj' )	{
+		if( $role == 'dj' )	{
+			$admin_arg = array( 'role' => 'administrator',
+								'orderby' => 'display_name',
+								'order' => 'ASC'
+							);
+			$admin = get_users( $admin_arg );
+		}
+		else 
+			$admin = array();
 		
 		if( MDJM_MULTI == true )	{
-			$dj_arg = array(	'role' => 'dj',
+			$dj_arg = array(	'role' => $role,
 								'orderby' => 'display_name',
 								'order' => 'ASC'
 							);
@@ -490,7 +512,7 @@
 		
 		return $djs;
 	} // mdjm_get_djs
-
+	
 	/*
 	* dj_can
 	* 19/03/2015

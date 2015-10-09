@@ -442,7 +442,7 @@
 			 * @param	arr		$field		The field which to query
 			 */
 			function field_icons( $field )	{
-				$dir = WPMDJM_PLUGIN_URL . '/admin/images/contact-form-icons';
+				$dir = WPMDJM_PLUGIN_URL . '/admin/images/form-icons';
 				
 				$output = '';
 				

@@ -28,21 +28,6 @@
         <tr valign="top">
         <td>
         <table class="widefat" width="100%">
-        <?php
-		$lic_info = $mdjm->_mdjm_validation();
-		if( empty( $lic_info ) || $lic_info['type'] == 'XXXX' )	{
-			?>
-            <tr>
-            <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">Licensing</td>
-            </tr>
-            <tr>
-            <td>You are currently running Mobile DJ Manager for WordPress in trial mode. Once your trial period expires, functionality will be restricted.<br /><br />
-            To avoid this, <a href="http://www.mydjplanner.co.uk/shop/" title="Request New Feature" target="_blank"> click here to purchase your license now</a><br /><br />
-			If you are seeing this message after upgrading to version 1.2 and you have purchased a license, your license state will be restored momentarily</td>
-            </tr>
-            <?php	
-		}
-		?>
         <tr>
         <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">So... What's new in version <?php echo str_replace( '_', '.', $ver ); ?>?</td>
         </tr>
@@ -98,6 +83,43 @@
         </div>
         <?php
 	} // f_mdjm_updated_footer
+
+/**************************************************
+				VERSION 1.2.5
+**************************************************/
+	function f_mdjm_updated_to_1_2_5()	{
+		global $mdjm;
+		
+		?>
+        <tr>
+        <td><font style="font-size:14px; font-weight:bold; color:#F90">Mobile DJ Manager is FREE!</font><br />
+		Mobile DJ Manager for WordPress is now completley free for all to use and enjoy.
+        
+        You can enhance the plugin with our Premium Add-ons...
+        
+        <ui>
+        	<li><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank">MDJM Dynamic Contact Forms</a></li>
+            <li><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank">MDJM Payments</a></li>
+        </ui>
+        </td>
+        </tr>
+        <tr>
+        <td style="background-color:#F90; font-size:16px; color:#FFF; font-weight:bold">And... What's fixed or improved?</td>
+        </tr>
+        <tr>
+        <td>
+            <ui>
+            	<li><span class="mdjm-bug">Bug Fix</span>: DJ & Client admin pages were referring to a deprecated function which generated an error</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Hosted JS files are now loaded via HTTPS</li>
+                <li><span class="mdjm-bug">Bug Fix</span>: Enquiry email template saved correctly, but did not correctly display which enquiry was default</li>
+                <li><span class="mdjm-new">New</span>: <code>Premium Addons</code> tab added to the Settings screen. If you have purchased Premium addons, enter your API key here</li>
+            </ui>
+        </td>
+        </tr>
+        </table>
+        </td>
+        <?php
+	} // f_mdjm_updated_to_1_2_5
 
 /**************************************************
 				VERSION 1.2.4.1

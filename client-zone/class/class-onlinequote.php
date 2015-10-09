@@ -158,7 +158,7 @@
 			 *
 			 */
 			function display_quote( $event_id )	{
-				global $mdjm, $mdjm_posts, $my_mdjm;
+				global $mdjm, $mdjm_posts, $my_mdjm, $post;
 				
 				$online_template = $mdjm->mdjm_events->retrieve_quote( $event_id );
 				
@@ -178,10 +178,10 @@
 						$GLOBALS['mdjm_debug']->log_it( 'Unable to update quote post for event with ID ' . $event_id . ' in ' . __METHOD__, true );	
 				}
 				
-				$template = get_post( $online_template );
+				$post = get_post( $online_template );
 				
 				// Make sure we have the template
-				if( !is_object( $template ) )	{
+				if( !is_object( $post ) )	{
 					if( MDJM_DEBUG == true )
 						$GLOBALS['mdjm_debug']->log_it( 'The online template with ID ' . $online_template . ' could not be retrieved in ' . __METHOD__, true );
 					
@@ -208,7 +208,7 @@
 				
 				// Display the online quotation
 				/* -- Retrieve the quote content -- */
-				$content = $template->post_content;
+				$content = $post->post_content;
 				$content = apply_filters( 'the_content', $content );
 				$content = str_replace( ']]>', ']]&gt;', $content );
 				

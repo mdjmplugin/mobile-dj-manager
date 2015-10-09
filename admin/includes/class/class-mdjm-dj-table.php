@@ -4,7 +4,7 @@
 			global $wpdb, $mdjm, $display, $order, $orderby;
 			
 			if (isset ( $_GET['display'] ) ) $display = $_GET['display'];
-			else $display = 'djs';
+			else $display = 'dj';
 			
 			if( isset( $_GET['orderby'] ) ) $orderby = $_GET['orderby'];
 			else $orderby = 'display_name';
@@ -12,9 +12,9 @@
 			if( isset( $_GET['order'] ) ) $order = $_GET['order'];
 			else $order = 'ASC';
 			
-			$func = 'mdjm_get_' . $display;
+			//$func = 'mdjm_get_djs' . $display;
 			
-			$djs = $func();
+			$djs = mdjm_get_djs( $display );
 			$dj_data = array();
 			$url = admin_url();
 			foreach( $djs as $dj )	{
@@ -108,13 +108,13 @@
 		
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
 			global $wpdb, $display_query, $display, $order, $orderby;
-			$active_djs = f_mdjm_get_djs();
-			$inactive_djs = f_mdjm_get_inactive_djs();
+			$active_djs = mdjm_get_djs();
+			$inactive_djs = mdjm_get_djs( 'inactive' );
 			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
-				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=djs"<?php if( isset( $display ) && $display == "djs" ) { ?> class="current" <?php } ?>>Active <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $active_djs ); ?>)</span></a> |</li>
-				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=inactive_djs"<?php if( isset( $display ) && $display == "inactive_djs" ) { ?> class="current" <?php } ?>>Inactive <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $inactive_djs ); ?>)</span></a></li>
+				<li class='publish'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=dj"<?php if( isset( $display ) && $display == "dj" ) { ?> class="current" <?php } ?>>Active <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $active_djs ); ?>)</span></a> |</li>
+				<li class='draft'><a href="<?php echo admin_url(); ?>admin.php?page=mdjm-djs&display=inactive_dj"<?php if( isset( $display ) && $display == "inactive_dj" ) { ?> class="current" <?php } ?>>Inactive <?php echo MDJM_DJ; ?>'s <span class="count">(<?php echo count( $inactive_djs ); ?>)</span></a></li>
                 </ul>
            <?php
 		   }

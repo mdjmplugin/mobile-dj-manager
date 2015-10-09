@@ -33,9 +33,6 @@
 						'<a href="' . admin_url( 'admin.php?page=mdjm-dashboard' ) . '">' . __( 'Dashboard' ) . '</a>',
 						'<a href="' . admin_url( 'admin.php?page=mdjm-settings' ) . '">' . __( 'Settings' ) . '</a>',
 					);
-				$lic_info = do_reg_check ('check' );
-				if( !$lic_info || $lic_info['type'] == 'trial' )
-					$mdjm_plugin_links[] = '<a href="http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/"><font style="color:#F90">' . __( 'Buy License' ) . '</font></a>';
 						
 				return array_merge( $mdjm_plugin_links, $links );
 			}  // mdjm_action_links
@@ -49,12 +46,9 @@
 				if( strpos( $file, 'mobile-dj-manager.php' ) === false )
 					return $links;
 					
-				$lic_info = do_reg_check ('check' );
 				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/support/" target="_blank">' . __( 'Support' ) . '</a>';
-				
-				if( !$lic_info || $lic_info['key'] == 'XXXX' )
-					$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/" target="_blank"><font style="color: #F90;">' . __( 'Buy Now' ) . '</font></a>';
-					
+				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/support-our-work/" target="_blank">' . __( 'Donate' ) . '</a>';
+									
 				$links = array_merge( $links, $mdjm_links );
 		
 				return $links;

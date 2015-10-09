@@ -3,8 +3,8 @@
 /*
 Plugin Name: Mobile DJ Manager
 Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
-Version: 1.2.4.1
-Date: 23 September 2015
+Version: 1.2.5
+Date: 09 October 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
 Author URI: http://www.mydjplanner.co.uk
 */
@@ -32,7 +32,7 @@ Author URI: http://www.mydjplanner.co.uk
 	/* -- These will be deprecated soon -- */
 	define( 'WPMDJM_NAME', 'Mobile DJ Manager for Wordpress' );
 	define( 'WPMDJM_VERSION_KEY', 'version' );
-	define( 'WPMDJM_VERSION_NUM', '1.2.4.1' );
+	define( 'WPMDJM_VERSION_NUM', '1.2.5' );
 	define( 'WPMDJM_REQUIRED_WP_VERSION', '3.9' );
 	define( 'WPMDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 	define( 'WPMDJM_PLUGIN_NAME', trim( dirname( WPMDJM_PLUGIN_BASENAME ), '/' ) );
@@ -40,18 +40,14 @@ Author URI: http://www.mydjplanner.co.uk
 	define( 'WPMDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 	define( 'WPMDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
 	define( 'WPMDJM_FETEXT_SETTINGS_KEY', 'mdjm_frontend_text' );
-	define( 'WPMDJM_PAYMENTS_KEY', 'mdjm_pp_options' );
+	define( 'WPMDJM_PAYMENTS_KEY', 'mdjm_payment_settings' );
 	
 	$mdjm_client_text = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 	
 	function mdjm_activate()	{
 		global $mdjm;
-		/* -- Force a resync of the license -- */
-		require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", WPMDJM_PLUGIN_DIR ) );
-		$mdjm_cron = new MDJM_Cron();
-		$mdjm_cron->get_mdjm();		
 
-		if( !get_option( 'm_d_j_m_has_initiated' ) )	{
+		if( !get_option( 'mdjm_version' ) )	{
 			error_log( '** THE MDJM INSTALLATION PROCEDURE IS STARTING **' . "\r\n", 3, MDJM_DEBUG_LOG );
 		
 			include( WPMDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-install.php' );

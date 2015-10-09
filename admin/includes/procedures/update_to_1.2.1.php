@@ -325,7 +325,7 @@
 		update_option( MDJM_UNINST_SETTINGS_KEY, $uninst_settings );
 		
 	update_option( MDJM_PAYMENTS_KEY, $payments );
-	update_option( MDJM_PAYPAL_KEY, $paypal );
+	update_option( 'mdjm_paypal_settings', $paypal );
 	update_option( MDJM_CLIENT_FIELDS, $client_fields );
 	delete_option( 'mdjm_pp_options' );
  

@@ -188,10 +188,7 @@ THESE SETTINGS APPLY TO ALL UPDATES - DO NOT ADJUST
 			
 			/* Make sure release notes are displayed */
 			update_option( MDJM_UPDATED_KEY, '1' );
-			
-			/* Re-check Validility */
-			$mdjm->_mdjm_validation();
-						
+									
 			mdjm_update_notice( 'updated',
 								'Welcome to Mobile DJ Manager for WordPress version ' . MDJM_VERSION_NUM . 
 								'. Click on one of the Mobile DJ Manager menu items to view the release notes.' );

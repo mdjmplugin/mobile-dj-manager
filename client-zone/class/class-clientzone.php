@@ -397,7 +397,7 @@
 				
 				wp_register_style( 'mobile-dj-manager', WPMDJM_PLUGIN_URL . '/client-zone/includes/css/mdjm-styles.css' );
 				//wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
-				wp_register_script( 'jquery-validation-plugin', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
+				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', WPMDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ) );
@@ -615,37 +615,46 @@
 			 */
 			public function shortcode( $atts )	{
 				/* -- Map the args to the pages/functions -- */
-				$args = shortcode_atts( array(
-					'Home'         => MDJM_CLIENTZONE . '/class/class-home.php',
-					'Payments'	 => MDJM_CLIENTZONE . '/class/class-payment.php',
-					'Profile'      => MDJM_CLIENTZONE . '/class/class-profile.php',
-					'Playlist'	 => MDJM_CLIENTZONE . '/class/class-playlist.php',
-					'Contract'     => MDJM_CLIENTZONE . '/class/class-contract.php',
-					'Availability' => 'f_mdjm_availability_form',
-					'Contact Form' => MDJM_CLIENTZONE . '/class/class-contactform.php',
-					'Online Quote' => MDJM_CLIENTZONE . '/class/class-onlinequote.php'
-				), $atts, 'MDJM' );
+				$pairs = array(
+							'Home'			=> MDJM_CLIENTZONE . '/class/class-home.php',
+							'Profile'		=> MDJM_CLIENTZONE . '/class/class-profile.php',
+							'Playlist'		=> MDJM_CLIENTZONE . '/class/class-playlist.php',
+							'Contract'		=> MDJM_CLIENTZONE . '/class/class-contract.php',
+							'Availability'	=> 'f_mdjm_availability_form',
+							'Online Quote'	=> MDJM_CLIENTZONE . '/class/class-onlinequote.php' );
 				
+				$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
+								
+				$args = shortcode_atts( $pairs, $atts, 'MDJM' );
+								
+				if( isset( $atts['page'] ) && !array_key_exists( $atts['page'], $pairs ) )
+					$output = __( 'ERROR: Unknown Page', 'mobile-dj-manager' );
+				
+				else	{
 				/* Process pages */
-				if( !empty( $atts['page'] ) )	{
-					ob_start();
-					include_once( $args[$atts['page']] );
-					$output = ob_get_clean();
-				}
-				/* Process Functions */
-				elseif( !empty( $atts['function'] ) )	{
-					$func = $args[$atts['function']];
-					if( function_exists( $func ) )	{
+					if( !empty( $atts['page'] ) )	{
 						ob_start();
-						$func( $atts );
+						include_once( $args[$atts['page']] );
+						if( $atts['page'] == 'Contact Form' )
+							do_action( 'mdjm_dcf_execute_shortcode', $atts );
+	
 						$output = ob_get_clean();
 					}
-					else	{
-						wp_die( 'An error has occurred' );	
+					/* Process Functions */
+					elseif( !empty( $atts['function'] ) )	{
+						$func = $args[$atts['function']];
+						if( function_exists( $func ) )	{
+							ob_start();
+							$func( $atts );
+							$output = ob_get_clean();
+						}
+						else	{
+							wp_die( 'An error has occurred' );	
+						}
 					}
+					else
+						return;
 				}
-				else
-					return;
 				
 				return $output;
 			} // shortcode

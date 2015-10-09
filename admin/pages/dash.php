@@ -163,7 +163,7 @@
 					<?php
 			  }
 			  ?>
-                <form name="availability-check" id="availability-check" method="post" action="<?php f_mdjm_admin_page( 'availability' ); ?>">
+                <form name="availability-check" id="availability-check" method="post" action="<?php mdjm_get_admin_page( 'availability' ); ?>">
                 <?php
 				if( !current_user_can( 'administrator' ) )	{
 					?><input type="hidden" name="check_employee" id="check_employee" value="<?php echo get_current_user_id(); ?>" /><?php
@@ -265,7 +265,7 @@
                 <td width="40%" valign="top">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
                   <tr>
-                    <td width="100%" class="alternate"><strong>Latest News from <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>">My DJ Planner</a></strong></td>
+                    <td width="100%" class="alternate"><strong>Latest News from <a href="<?php mdjm_get_admin_page( 'mydjplanner' ); ?>">My DJ Planner</a></strong></td>
                   </tr>
                   <tr>
                     <td><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3 ) ); ?></td>

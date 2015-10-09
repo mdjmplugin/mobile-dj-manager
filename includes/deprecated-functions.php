@@ -4,21 +4,7 @@
  *
  *
  *
- */
-	/*
-	 * License check
-	 *
-	 * @from: admin.php
-	 * @since: 1.2.1
-	 */
-	function do_reg_check( $action )	{
-		global $mdjm;
-		
-		$mdjm->debug_logger( 'DEPRECATED function in use ' . __FUNCTION__, true );
-		
-		return $mdjm->_mdjm_validation( $action );
-	}
-	
+ */	
 	/*
 	* Print out the correct currency symbol
 	* 

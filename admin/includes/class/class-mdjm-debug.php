@@ -295,10 +295,7 @@
 				
 				/* -- List of plugins installed -- */
 				$plugins = get_plugins();
-				
-				/* -- License Status -- */
-				$status = $mdjm->_mdjm_validation();
-				
+								
 				/* -- Generate the PHP info log -- */
 				ob_start();
 				phpinfo();

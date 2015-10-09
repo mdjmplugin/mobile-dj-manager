@@ -13,7 +13,6 @@
 			
 			function __construct()	{
 				$this->settings_register();
-				$this->mdjm_credits();
 				
 				add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
 				
@@ -31,9 +30,13 @@
 				/* -- Get the array of settings -- */
 				include( 'settings.php' );
 				
-				$this->sections = $all_sections;
-				$this->settings = $all_settings;
+				if( !class_exists( 'MDJM_PG' ) )
+					unset( $all_settings['payment_gateway'] );
 				
+				$this->sections = apply_filters( 'mdjm_addon_sections', $all_sections );
+				
+				$this->settings = apply_filters( 'mdjm_addon_settings', $all_settings );
+								
 				$this->add_sections();
 				$this->add_fields();
 								
@@ -50,13 +53,10 @@
 				register_setting( 'mdjm-availability', MDJM_AVAILABILITY_SETTINGS_KEY );
 				register_setting( 'mdjm-client-text', MDJM_CUSTOM_TEXT_KEY );
 				register_setting( 'mdjm-payments', MDJM_PAYMENTS_KEY );
-				register_setting( 'mdjm-paypal', MDJM_PAYPAL_KEY );
-				register_setting( 'mdjm-payfast', MDJM_PAYFAST_KEY );
 				register_setting( 'mdjm-uninstall', MDJM_UNINST_SETTINGS_KEY );
+				register_setting( 'mdjm-addons', MDJM_API_SETTINGS_KEY );
 				
-				if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
-					register_setting( 'mdjm-to-pdf', MDJM_PDF_SETTINGS_KEY );
-				
+				do_action( 'register_mdjm_premium_settings' ); // Allows MDJM PG Settings to be registered
 			} // settings_register
 			
 			/*
@@ -103,18 +103,23 @@
 			 *
 			 */
 			function section_content( $args )	{
-				if( $args['id'] == 'mdjm_debugging_settings' )
-					echo '<p>' . sprintf( __( 'The settings below enable the MDJM support team to identify any problems ' . 
-					'you may be experiencing.</p>' . 
-					'<p>With debugging enabled, much of the activity that is executed as you browse around ' . 
-					'pages and utilise features within the MDJM application and the %s is logged ' . 
-					'and this can lead to slightly slower load times for your pages. It is therefore recommended ' . 
-					'that you leave debugging turned off unless you are experiencing an issue and the MDJM support ' . 
-					'team have asked you to enable this setting to aid in identifying the problem.', 'mobile-dj-manager' ), 
-					MDJM_APP ) . '</p>' . "\r\n";
+				if( $args['id'] == 'mdjm_debugging_settings' )	{
+					echo '<p>' . __( 'The settings below enable the MDJM support team to identify any problems ' . 
+						'you may be experiencing.', 'mobile-dj-manager' ) . '</p>';
+					
+					echo '<p>' . sprintf( __( 'With debugging enabled, much of the activity that is executed as you browse around ' . 
+						'pages and utilise features within the MDJM application and the %s is logged ' . 
+						'and this can lead to slightly slower load times for your pages. It is therefore recommended ' . 
+						'that you leave debugging turned off unless you are experiencing an issue and the MDJM support ' . 
+						'team have asked you to enable this setting to aid in identifying the problem.', 'mobile-dj-manager' ), 
+						MDJM_APP ) . '</p>' . "\r\n";
+				}
 					
 				if( $args['id'] == 'mdjm_debugging_files_settings' )
 					echo '<p>' . __( 'The following settings only apply if debugging is enabled', 'mobile-dj-manager' ) . '</p>' . "\r\n";
+					
+				if( $args['id'] == 'mdjm_addon_settings' )
+					echo '<p>' . __( 'These settings are important to ensure that your MDJM Premium plugins continue to be updated and remain enabled', 'mobile-dj-manager' ) . '</p>' . "\r\n";
 			} // section_content
 			
 			/*
@@ -144,6 +149,7 @@
 										'text' => ( !empty( $options['text'] ) ? $options['text'] : '' ),
 										'desc' => ( !empty( $options['desc'] ) ? $options['desc'] : '' ),
 										'size' => ( !empty( $options['size'] ) ? $options['size'] : '' ),
+										'readonly' => ( !empty( $options['readonly'] ) ? true : false ),
 										'custom_args' => ( !empty( $options['custom_args'] ) ? $options['custom_args'] : '' ),
 									) );
 				}
@@ -226,8 +232,8 @@
 					case 'payments':
 						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_payment_settings' );
 					break;
-					case 'mdjm-to-pdf':
-						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_to_pdf_settings' );
+					case 'addons':
+						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_addon_settings' );
 					break;
 				} // switch
 			} // set_loc
@@ -262,10 +268,10 @@
 					$this->active_tab( 'client-zone' ) . '">' . MDJM_APP . '</a>' . "\r\n";
 					
 				echo '<a href="' . $this->tab_url( 'payments' ) . '" class="nav-tab' . 
-					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n"; 
-				if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
-					echo '<a href="' . $this->tab_url( 'mdjm-to-pdf' ) . '" class="nav-tab' . 
-					$this->active_tab( 'mdjm-to-pdf' ) . '">' . __( 'MDJM to PDF', 'mobile-dj-manager' ) . '</a>' . "\r\n"; 
+					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n";
+					
+				echo '<a href="' . $this->tab_url( 'addons' ) . '" class="nav-tab' . 
+					$this->active_tab( 'addons' ) . '">' . __( 'Premium Addons', 'mobile-dj-manager' ) . '</a>' . "\r\n";
 										
 				echo '</h2>' . "\r\n";
 				
@@ -292,20 +298,18 @@
 					return;
 				
 				if( !in_array( $this->current_section, $this->exclude ) )	{	
-					if( current_user_can( 'manage_options' ) && $mdjm->_mdjm_validation() )
+					if( current_user_can( 'manage_options' ) )
 						submit_button();
-						
-					else
-						echo '<p><a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">' . 
-						__( 'License Expired', 'mobile-dj-manager' ) . '</a>.<br>' . 
-						__( 'You cannot update your settings without a valid MDJM License', 'mobile-dj-manager' ) . '</p>' . "\r\n";
-					
+											
 					echo '</form>' . "\r\n";
 				}
 				
 				/* -- This is where we can display any additional fields. Will not be saved as options -- */
 				if( $this->current_section == 'mdjm_app_debugging' )
 					$mdjm_debug->submit_files_button();
+				
+				if( $this->current_tab == 'addons' )
+					$this->mdjm_premium_addons();
 			
 				/* -- End the wrap div -- */
 				echo '</div>' . "\r\n";
@@ -367,11 +371,12 @@
 													__( 'Availability Checker', 'mobile-dj-manager' )		 => 'mdjm_availability_settings',
 													),
 							'payments'	=> array(
-													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings',
-													__( 'PayPal Configuration', 'mobile-dj-manager' )	=> 'mdjm_paypal_settings',
-													__( 'PayFast Configuration', 'mobile-dj-manager' )	=> 'mdjm_payfast_settings',
-													),
+													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' )
 							);
+							
+				// Run the filter for the MDJM Add ons to enable the settings links
+				$links = apply_filters( 'mdjm_settings_links', $links );
+							
 				if( !array_key_exists( $this->current_tab, $links ) )
 					return;
 					
@@ -381,11 +386,11 @@
 				$i = 1;
 				
 				$payment_gw = array( 'mdjm_paypal_settings', 'mdjm_payfast_settings' );
-				
+								
 				foreach( $links[$this->current_tab] as $name => $slug )	{
 					
 					if( in_array( $slug, $payment_gw ) )	{
-						if( MDJM_PAYMENTS == false )
+						if( MDJM_PAYMENTS == false || !class_exists( 'MDJM_PG' ) )
 							continue;
 							
 						$sections = $sections - count( $payment_gw );
@@ -428,10 +433,11 @@
 			 *
 			 */
 			function show_text_field( $args )	{
-				echo '<input type="text" name="' . ( !empty( $args['key'] ) ? $args['key'] . '[' . $args['field'] . ']' 
+				echo '<input type="' . $args['type'] . '" name="' . ( !empty( $args['key'] ) ? $args['key'] . '[' . $args['field'] . ']' 
 					: $args['field'] ) . '" id="' . $args['field'] . '" ' . 
 				( !empty( $args['class'] ) ? 'class="' . $args['class'] . '" ' : '' ) . 
-				'value="' . esc_attr( $args['value'] ) . '" /> ' . "\r\n";
+				'value="' . esc_attr( $args['value'] ) . '"' .
+				( !empty( $args['readonly'] ) ? ' readonly="readonly"' : '' ) . ' /> ' . "\r\n";
 			} // show_text_field
 			
 			/*
@@ -579,26 +585,7 @@
 				( $args['field'] == 'update_event' ? ' disabled="disabled"' : '' ) . ' />';
 					
 			} // show_checkbox_field
-			
-			/*
-			 * If trial or expired license, always display credits
-			 *
-			 *
-			 */
-			function mdjm_credits()	{
-				global $mdjm, $mdjm_settings;
-				
-				$status = $mdjm->_mdjm_validation();
-				
-				if( empty( $status ) || $status['type'] == 'trial' )	{
-					$plugin_settings = get_option( 'mdjm_plugin_settings' );
-					$plugin_settings['show_credits'] = true;
-					
-					update_option( 'mdjm_plugin_settings', $plugin_settings );
-				}
-				
-			}
-			
+						
 			/*
 			 * Display the setting field as a radio input
 			 *
@@ -705,5 +692,28 @@
 				
 				return $contextual_help;
 			} // help_text
+			
+			/**
+			 * Display our premium addons
+			 *
+			 *
+			 *
+			 *
+			 */	
+			function mdjm_premium_addons()	{
+				?>
+				<h3><?php _e( 'Have you tried our Premium Plugins', 'mobile-dj-manager' ); ?>?</h3>
+                <p><?php _e( 'Our selection of premium add-ons for MDJM enable additional enhanced features to increase functionality and enhance your clients experience', 'mobile-dj-manager' ); ?>.</p>
+                <p style="font-weight: bold; font-size: 14px; color: #F90;"><?php _e( 'MDJM Dynamic Contact Forms', 'mobile-dj-manager' ); ?> <a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank"><?php _e( 'Buy Now', 'mobile-dj-manager' ); ?></a></p>
+                <p><?php _e( 'With the Dynamic Contact Forms add-on you can respond to enquiries within seconds and guarantee a professional and accurate quote each and every time, without spending a lot of time doing it', 'mobile-dj-manager' ); ?>.</p>
+
+				<p><?php _e( 'You can even see when the client has opened your quote', 'mobile-dj-manager' ); ?>!</p>
+                
+                <p style="font-weight: bold; font-size: 14px; color: #F90;"><?php _e( 'MDJM Payments', 'mobile-dj-manager' ); ?> <a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><?php _e( 'Buy Now', 'mobile-dj-manager' ); ?></a></p>
+                <p><?php _e( 'The MDJM Payments add-on enables you to receive client payments via your website with full automation.', 'mobile-dj-manager' ); ?>
+				<?php
+			} // mdjm_premium_addons	
+
+			
 		} // Class MDJM_Settings
 	}	

@@ -3,9 +3,10 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.4.1
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: http://www.mydjplanner.co.uk/donate/
 
 Mobile DJ Manager is an interface to fully manage your DJ or Agency business efficiently.
 
@@ -57,11 +58,11 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 
 = Is any support provided? =
 
-Yes. Support can be obtained via our online Support Forums at http://www.mydjplanner.co.uk/support/ or by emailing contact@mydjplanner.co.uk. We'll answer all queries as quickly as we can.
+Support can be obtained via our online [Support Forums](http://www.mydjplanner.co.uk/support/ "MDJM Support Forums") at  or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
 
 = Is there a Pro version with additional features? =
 
-This plugin is fully functional and free to use for a period of 30 days after which the ability to adjust settings and add new information is restricted. To list these restrictions, you must purchase a license from http://www.mydjplanner.co.uk
+Premium addons are available to enhance the plugin at http://www.mydjplanner.co.uk
 
 == Screenshots ==
 
@@ -73,12 +74,15 @@ This plugin is fully functional and free to use for a period of 30 days after wh
 6. The client's homepage on the website front end
 7. The playlist feature as utilised by clients
 
-== Licensing ==
-Mobile DJ Manager for WordPress ships as a 30 day fully functional trial for you to fully experience the benefits of the plugin. 
-After 30 days, functionality will be restricted in that you will no longer be able to add new events, or make adjustments to the plugins settings. After you purchase a license from <a href="http://www.mydjplanner.co.uk" target="_blank">http://www.mydjplanner.co.uk</a> full functionality will be restored.
-Note: It can take up to 24 hours for your new license to be applied and restrictions to be lifted so to ensure you are not impacted, we recommend you purchase your license in advance of the trial expiring.
-
 == Changelog ==
+= 1.2.5 =
+<strong>Released 09 October, 2015</strong>
+<ul>
+	<li>Bug Fix: DJ & Client admin pages were referring to a deprecated function which generated an error</li>
+	<li>Bug Fix: Hosted JS files are now loaded via HTTPS</li>
+	<li>Bug Fix: Enquiry email template saved correctly, but did not correctly display which enquiry was default</li>
+	<li>New: <code>Premium Addons</code> tab added to the Settings screen. If you have purchased Premium addons, enter your API key here</li>
+</ul>
 = 1.2.4.1 =
 <strong>Released Wednesday, 23rd September, 2015</strong>
 <ul>
@@ -98,7 +102,7 @@ Note: It can take up to 24 hours for your new license to be applied and restrict
 	<li>Bug Fix: Do not update a users profile upon Contact Form submssion if the user is logged in</li>
 	<li>Bug Fix: Venue fields now display by default if Unattended enquiry has venue details entered manually</li>
 	<li>General: Dynamic addons list not longer displays on screen alert for "No addons available" and instead displays, "No addons available" within select list as a disabled option</li>
-	<li>>General: Added Extensions row to the application settings screen. More on this soon!</li>
+	<li>General: Added Extensions row to the application settings screen. More on this soon!</li>
 	<li>General: Removed the colon (:) which was displayed after the "Other Label" on the PayPal form</li>
 	<li>General: Added OOP code for MDJM extensions - coming soon</li>
 	<li>General: /includes/config.inc.php is deprecated</li>

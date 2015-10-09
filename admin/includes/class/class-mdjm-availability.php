@@ -271,7 +271,7 @@
 			if( !isset( $db_tbl ) )	{
 				include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			}
-			$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+			$mdjm_pp_options = get_option( MDJM_PAYMENTS_KEY );
 			$client_dialogue = get_option( WPMDJM_FETEXT_SETTINGS_KEY );
 			
 			$types = explode( "\n", $mdjm_pp_options['pp_transaction_types'] );
@@ -299,7 +299,7 @@
 			if( !isset( $db_tbl ) )	{
 				include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			}
-			$mdjm_pp_options = get_option( 'mdjm_pp_options' );
+			$mdjm_pp_options = get_option( MDJM_PAYMENTS_KEY );
 			
 			$sources = explode( "\n", $mdjm_pp_options['pp_payment_sources'] );
 			

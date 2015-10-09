@@ -317,10 +317,7 @@
 		<tr>
 		<td colspan="2">
 		<?php
-		if( $mdjm->_mdjm_validation( 'check' ) )
-			submit_button( 'Send Email', 'primary', 'submit', true );
-		else
-			echo '<a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">License Expired</a>';
+		submit_button( 'Send Email', 'primary', 'submit', true );
 		?>
         </td>
 		</tr>

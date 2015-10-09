@@ -16,21 +16,11 @@
 			 *
 			 */
 			public function __construct()	{
-				add_action( 'admin_menu', array( &$this, 'mdjm_menu_init' ) ); // Admin menu
+				add_action( 'admin_menu', array( &$this, 'mdjm_menu' ) ); // Admin menu
+				add_action( 'admin_menu', array( &$this, 'menu_for_admin' ) ); // Remove Jetback for non-admins
 				add_action( 'admin_bar_menu', array( &$this, 'mdjm_toolbar' ), 99 ); // Admin bar menu
 				add_action( 'jetpack_admin_menu', array( &$this, 'remove_jetpack' ) ); // Remove Jetpack for non-Admins
 			} // __construct
-			
-			/*
-			 * mdjm_menu_init
-			 * Initialise the MDJM Admin menu
-			 * 
-			 *
-			 */
-	 		public function mdjm_menu_init()	{
-				$this->mdjm_menu(); // The menu structure
-				$this->menu_for_admin(); // Remove menu items for DJ's & Clients				
-			} // mdjm_menu_init
 			
 			/*
 			 * mdjm_menu
@@ -109,14 +99,10 @@
 																 'manage_mdjm',
 																 'edit.php?post_type=' . MDJM_COMM_POSTS,
 																 '' );
-				/* -- Contact Forms -- */
+																 
+				// Placeholder for the Contact Forms menu item
 				if( current_user_can( 'manage_options' ) )
-					$mdjm_contact_forms_page = add_submenu_page( 'mdjm-dashboard',
-																 __( 'Contact Forms' ),
-																 __( 'Contact Forms' ),
-																 'manage_mdjm',
-																 'mdjm-contact-forms',
-																 array( &$this, 'mdjm_contact_forms_page' ) );
+					do_action( 'mdjm_dcf_menu_items' );
 				/* -- DJ availability -- */
 				$mdjm_availability_page = add_submenu_page( 'mdjm-dashboard',
 															__( ' ' . MDJM_DJ . ' Availability' ),
@@ -173,13 +159,6 @@
 														  'manage_mdjm',
 														  'edit.php?post_type=' . MDJM_VENUE_POSTS,
 														  '' );
-				if( current_user_can( 'manage_options' ) && !$mdjm->_mdjm_validation( 'check' ) )
-					add_submenu_page( 'mdjm-dashboard',
-									  __( 'Licensing' ),
-									  '<span style="color:#F90">' . __( 'Buy License' ) . '</span>',
-									  'manage_mdjm',
-									  'mdjm-license',
-									  'mdjm_purchase' );
 				
 				/* -- This is for the playlist, does not display on menu -- */					  
 				add_submenu_page( 
@@ -307,18 +286,7 @@
 						'meta'	  => array(
 							'title' => __( 'MDJM Payment Settings' ),
 						),
-					) );
-					
-					if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )
-						$admin_bar->add_menu( array(
-							'id'		=> 'mdjm-settings-payments',
-							'parent'	=> 'mdjm-settings',
-							'title'	 => __( 'MDJM to PDF Settings' ),
-							'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=mdjm-to-pdf' ),
-							'meta'	  => array(
-								'title' => __( 'MDJM to PDF Settings' ),
-							),
-						) );
+					) );					
 				/* -- Automated Tasks -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-tasks',
@@ -382,26 +350,9 @@
 						),
 					) );
 				}
-				/* -- Contact Forms -- */
 				if( current_user_can( 'manage_options' ) )	{
-					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-contact-forms',
-						'parent' 	=> 'mdjm',
-						'title' 	 => __( 'Contact Forms' ),
-						'href'  	  => admin_url( 'admin.php?page=mdjm-contact-forms' ),
-						'meta'  	  => array(
-							'title' => __( 'Contact Forms' ),
-						),
-					) );
-					$admin_bar->add_menu( array(
-						'id'		=> 'mdjm-new-contact-form',
-						'parent'	=> 'mdjm-contact-forms',
-						'title'	 => __( 'New Contact Form' ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-contact-forms&action=show_add_contact_form' ),
-						'meta'	  => array(
-							'title' => __( 'New Contact Form' ),
-						),
-					) );
+					// Filter for MDJM DCF Admin Bar Items
+					do_action( 'mdjm_dcf_admin_bar_items', $admin_bar );
 					/* -- Contract Templates -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-contracts',
@@ -626,18 +577,6 @@
 						'target' => '_blank'
 					),
 				));
-				if( !$mdjm->_mdjm_validation( 'check' ) && current_user_can( 'manage_options' ) )	{
-					$admin_bar->add_menu( array(
-						'id'     => 'mdjm-purchase',
-						'parent' => 'mdjm',
-						'title'  => '<span style="color:#F90">' . __( 'Buy License' ) . '</span>',
-						'href'   => 'http://www.mydjplanner.co.uk/shop/mobile-dj-manager-for-wordpress-plugin/',
-						'meta'   => array(
-							'title' => __( 'Buy Mobile Dj Manager License' ),
-							'target' => '_blank'
-						),
-					));	
-				}
 			} // mdjm_toolbar
 			
 			/*
@@ -683,16 +622,6 @@
 			public function mdjm_comms_page()	{				
 				include_once( MDJM_PAGES_DIR . '/comms.php' );
 			} // mdjm_comms_page
-			/*
-			 * mdjm_contact_forms_page
-			 * The MDJM Contact Forms page
-			 */			
-			public function mdjm_contact_forms_page()	{
-				if( !current_user_can( 'manage_options' ) )
-			        wp_die( __( 'MDJM: This page requires Administrative priviledges.' ) );
-				
-				include_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-contactforms.php' );
-			} // mdjm_contact_forms_page
 			/*
 			 * mdjm_dj_availability_page
 			 * The MDJM DJ Availability page

@@ -58,7 +58,6 @@
 			switch( $this->current_section )	{
 				/* -- General Tab Settings -- */
 				case 'mdjm_app_settings':
-					$this->current_status();
 					settings_fields( 'mdjm-settings' );
 					do_settings_sections( 'mdjm-settings' );
 				break;
@@ -145,101 +144,16 @@
 				case 'mdjm_client_field_settings':
 					include_once( 'class-mdjm-settings-client-fields.php' );
 				break;
-				
-				case 'mdjm_to_pdf_settings':
-					settings_fields( 'mdjm-to-pdf' );
-					do_settings_sections( 'mdjm-to-pdf' );
+								
+				case 'mdjm_addon_settings':
+					settings_fields( 'mdjm-addons' );
+					do_settings_sections( 'mdjm-addons' );
 				break;
 				
 				default:
 					return;
 			} // switch
-			
-		} // display_sections
-		
-		/*
-		 * Display current validility status
-		 *
-		 *
-		 *
-		 */
-		function current_status()	{
-			global $mdjm;
-			
-			$status = $mdjm->_mdjm_validation();
-			
-			$ext = array(
-					'mdjm-to-pdf'	=> 'MDJM to PDF' );
-			
-			if( !empty( $status ) )
-				/* -- Calculate days remaining -- */
-				$diff = strtotime( $status['expire'] ) - time();
-				if( $diff < 0 )
-					$diff = 0;
-					
-				$remaining = floor( $diff / 60 / 60 / 24 );
-				if( $remaining < 0 )
-					$remaining = 0;
-					
-				if( floor( $diff / 60 / 60 / 24 ) < 30 )	{
-					$box_class = 'mdjm-warning';
-					$msg = sprintf( __( '%sYour license will expire in %s. ' .
-					'Visit %s ' . 'to renew your license now%s', 'mobile-dj-manager' ), 
-					'<span style="color: red; font-weight: bold">', $remaining . _n( ' day', ' days', $remaining ),
-					'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a>',
-					'</span>' );
-				}
-				
-				/* -- Trial or license expired -- */
-				if( !empty( $status['expire'] ) && time() >= strtotime( $status['expire'] ) )	{
-					$box_class = 'mdjm-error';
-					$msg = sprintf( __( 'Visit %s to purchase your license.	Functionality will remain restricted until a new license is acquired', 'mobile-dj-manager' ),
-					'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . mdjm_get_admin_page( 'mydjplanner' ) . '</a>' );	
-				}
-				
-				/* -- Running in trial mode -- */
-				else
-					$box_class = 'mdjm-success';
-			
-			/* -- Print the license status -- */
-			echo '<div class="' . $box_class . '">' . "\r\n"; 
-			
-			echo sprintf( __( '%sLicense Key%s: %s', 'mobile-dj-manager' ),
-				'<strong>', '</strong>', ( $status['key'] != 'XXXX' ? $status['key'] : 'TRIAL' ) ) . '<br />' . "\r\n"; 
-			
-			echo '<strong>' . __( 'Expires', 'mobile-dj-manager' ) . '</strong>: ' . date( 'l, jS F Y', strtotime( $status['expire'] ) ) . ' <br />' . "\r\n"; 
-			
-			echo '<strong>' . __( 'Licensed To', 'mobile-dj-manager' ) . '</strong>: ' . ( !empty( $status['url'] ) ? '<a href="' . strtolower( $status['url'] ) . '" target="_blank">' . 
-				strtolower( $status['url'] ) . '</a>' : '' ) . '<br />' . "\r\n"; 
-				
-			echo '<strong>' . __( 'Last Updated', 'mobile-dj-manager' ) . '</strong>: ' . date( MDJM_TIME_FORMAT . ' \o\n ' . 
-				MDJM_SHORTDATE_FORMAT, strtotime( $status['last_auth'] ) ) . '<br />' . "\r\n";
-			
-			echo '<strong>' . __( 'Extensions', 'mobile-dj-manager' ) . '</strong>: ';
-			
-			if( !empty( $GLOBALS['mdjm_ext'] ) )	{
-				$i = 1;
-				
-				foreach( $GLOBALS['mdjm_ext'] as $extension )	{
-					echo $ext[$extension] . ( $i > 1 && $i < count( $GLOBALS['mdjm_ext'] ) ? ' | ' : '' );
-					$i++;	
-				}
-			}
-			else	{
-				echo __( 'None', 'mobile-dj-manager' );
-			}
-				
-			echo '<br />' . "\r\n";
-				
-			echo ( !empty( $msg ) ? $msg : '' ) . "\r\n";
-			
-			echo '</div>' . "\r\n";
-			
-			echo '<p><a href="' . mdjm_get_admin_page( 'settings' ) . '&dlmdjmlic=1" ' . 
-				'class="button button-primary button-small">' . 
-				__( 'Update License', 'mobile-dj-manager' ) . '</a></p>' . "\r\n";
-			
-		} // current_status
+		} // display_sections	
 	} // class
 	
 	$mdjm_plugin_settings_page = new MDJM_Settings_Page();

@@ -137,21 +137,9 @@
 							'title' 	=> __( 'Payments Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-payments',
 							),
-					'mdjm_paypal_settings' => array(
-							'title' 	=> __( 'PayPal Configuration', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-paypal',
-							),
-					'mdjm_paypal_advanced_settings' => array(
-							'title' 	=> __( 'PayPal Advanced Configuration', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-paypal',
-							),
-					'mdjm_payfast_settings' => array(
-							'title' 	=> __( 'PayFast Configuration', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-payfast',
-							),
-					'mdjm_payfast_advanced_settings' => array(
-							'title' 	=> __( 'PayFast Advanced Configuration', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-payfast',
+					'mdjm_addon_settings' => array(
+							'title' 	=> '',
+							'page'	 => 'mdjm-addons',
 							),
 						);
 
@@ -693,7 +681,7 @@
 									'label' => 'Quote Template:',
 									'key' => MDJM_TEMPLATES_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
-									'value' => ( !empty( $mdjm_settings['templates']['enquiry'] ) ? '1' : '0' ),
+									'value' => ( !empty( $mdjm_settings['templates']['enquiry'] ) ? $mdjm_settings['templates']['enquiry'] : '' ),
 									'text' => '<a href="' . admin_url() . 'post-new.php?post_type=email_template" class="page-title-action">Add New</a>',
 									'desc' => sprintf( __( 'This is the default template used when sending quotes via %semail%s to clients', 'mobile-dj-manager' ),
 										'<code>', '</code>' ),
@@ -1583,7 +1571,7 @@
 									'class' => '',
 									'value' => $mdjm_settings['custom_text']['payment_complete'],
 									'text' => '',
-									'desc' => 'Text displayed to Clients when they complete payment and return to your payments page from PayPal',
+									'desc' => 'Text displayed to Clients when they complete payment and return to your payments page from the Payment Gateway',
 									'custom_args' => array (
 														'name' =>  MDJM_CUSTOM_TEXT_KEY . '[payment_complete]',
 														'sort_order' => '',
@@ -1607,7 +1595,7 @@
 									'class' => '',
 									'value' => $mdjm_settings['custom_text']['payment_cancel'],
 									'text' => '',
-									'desc' => 'Text displayed to Clients when they cancel their payment and return to your payments page from PayPal',
+									'desc' => 'Text displayed to Clients when they cancel their payment and return to your payments page from the Payment Gateway',
 									'custom_args' => array (
 														'name' =>  MDJM_CUSTOM_TEXT_KEY . '[payment_cancel]',
 														'sort_order' => '',
@@ -2086,341 +2074,18 @@
 									'section' => 'payment',
 									'page' => 'payments',
 									),
-							
-						/* -- PayPal Settings -- */		
-							'paypal_email' => array(
-									'label' => 'PayPal Email:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'email',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['paypal']['paypal_email'],
-									'text' => '',
-									'desc' => 'Your registered PayPal email address is needed before you can take payments via your website',
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'redirect_success' => array(
-									'label' => 'Redirect Successful Payment To:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'custom_dropdown',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['paypal']['redirect_success'],
-									'text' => '<code>Current Page</code> is the page the Client initiated the payment from',
-									'desc' => 'Where do you want your Client redirected to once Payment has completed?',
-									'custom_args' => array (
-														'name' =>  MDJM_PAYPAL_KEY . '[redirect_success]',
-														'sort_order' => 'ASC',
-														'selected' => $mdjm_settings['paypal']['redirect_success'],
-														'list_type' => 'page',
-														'show_option_none' => 'Current Page',
-														'option_none_value' => $mdjm_settings['pages']['payments_page'],
-														'id' => 'redirect_success',
-														),
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'redirect_cancel' => array(
-									'label' => 'Redirect Cancelled Payment To:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'custom_dropdown',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['paypal']['redirect_cancel'],
-									'text' => '<code>Current Page</code> is the page the Client initiated the payment from',
-									'desc' => 'Where do you want your Client redirected to if they cancel the payment?',
-									'custom_args' => array (
-														'name' =>  MDJM_PAYPAL_KEY . '[redirect_cancel]',
-														'sort_order' => 'ASC',
-														'selected' => $mdjm_settings['paypal']['redirect_cancel'],
-														'list_type' => 'page',
-														'show_option_none' => 'Current Page',
-														'option_none_value' => $mdjm_settings['pages']['payments_page'],
-														'id' => 'redirect_cancel',
-														),
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'paypal_button' => array(
-									'label' => 'Payment Button:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'radio',
-									'value' => $mdjm_settings['paypal']['paypal_button'],
-									'text' => '',
-									'desc' => '',
-									'custom_args' => array (
-														'name' 	  => MDJM_PAYPAL_KEY . '[paypal_button]',
-														'values'	=> array(
-																			'btn_paynowCC_LG.gif',
-																			'btn_paynow_LG.gif',
-																			'btn_paynow_SM.gif',
-																			'html'
-																			),
-														),
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'enable_sandbox' => array(
-									'label' => 'PayPal Sandbox?',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['paypal']['enable_sandbox'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => 'Enable only to test payments. You can sign up for a developer account <a href="https://developer.paypal.com/" target="_blank">here</a>.',
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'sandbox_email' => array(
-									'label' => 'PayPal Sandbox Email:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'email',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['paypal']['sandbox_email'],
-									'text' => '',
-									'desc' => 'If using PayPal Sandbox, enter your sandbox "Facilitator" email here. If not set, your normal PayPal email will be used',
-									'section' => 'paypal',
-									'page' => 'paypal',
-									),
-									
-							'paypal_debug' => array(
-									'label' => 'Debug?',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['paypal']['paypal_debug'] ) ? '1' : '0' ),
-									'text' => 'Enable logging',
-									'desc' => 'Enable to capture logs for PayPal - will be stored at <code>' . MDJM_PLUGIN_DIR . 
-										'/includes/api/api-log/mdjm-pp-ipn-debug.log</code>',
-									'section' => 'paypal_advanced',
-									'page' => 'paypal',
-									),
-									
-							'receiver_email' => array(
-									'label' => 'Receiver Email Address:',
-									'key' => MDJM_PAYPAL_KEY,
-									'type' => 'email',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['paypal']['receiver_email'],
-									'text' => '',
-									'desc' => 'This address is used for <a href="https://www.paypal.com/uk/cgi-bin/webscr?cmd=p/acc/ipn-info-outside" ' . 
-										'target="_blank" title="Instant Payment Notification (IPN)">PayPal IPN validation</a>. It should be your ' . 
-										'<strong><code>primary</code></strong> PayPal email address',
-									'section' => 'paypal_advanced',
-									'page' => 'paypal',
-									),
-																		
-							'checkout_style' => array(
-									'label' => 'Checkout Page Style:',
-									'key' => MDJM_PAYPAL_KEY,
+							// Premium Addons		
+							'mdjm_api_key' => array(
+									'label' => __( 'MDJM API Key', 'mobile-dj-manager' ) . ':',
+									'key' => MDJM_API_SETTINGS_KEY,
 									'type' => 'text',
 									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['paypal']['checkout_style'] ) ? $mdjm_settings['paypal']['checkout_style'] : '' ),
+									'value' => !empty( $mdjm_settings['data']['mdjm_api_key'] ) ? $mdjm_settings['data']['mdjm_api_key'] : '',
 									'text' => '',
-									'desc' => 'If you have created a custom <a href="https://www.paypal.com/customize" target="_blank" title="PayPal\'s Custom Payment Pages: An Overview">PayPal Checkout Page</a>, enter it\'s ID here to use it',
-									'section' => 'paypal_advanced',
-									'page' => 'paypal',
-									),
-									
-						/* -- PayFast Settings -- */
-							'merchant_id' => array(
-									'label' => __( 'PayFast Merchant ID', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'text',
-									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payfast']['merchant_id'] ) ? $mdjm_settings['payfast']['merchant_id'] : '' ),
-									'text' => '',
-									'desc' => __( 'Your PayFast merchant ID is needed before you can take payments via your website', 'mobile-dj-manager' ),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-									
-							'merchant_key' => array(
-									'label' => __( 'PayFast Merchant Key', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'text',
-									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payfast']['merchant_key'] ) ? $mdjm_settings['payfast']['merchant_key'] : '' ),
-									'text' => '',
-									'desc' => __( 'Your PayFast merchant key is needed before you can take payments via your website', 'mobile-dj-manager' ),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-									
-							'email_confirmation' => array(
-									'label' => __( 'Email Confirmation Address', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'email',
-									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payfast']['email_confirmation'] ) ? $mdjm_settings['payfast']['email_confirmation'] : '' ),
-									'text' => '',
-									'desc' => __( 'Enter the email address at which you wish to receive payment confirmations. Leave blank for no confirmation', 'mobile-dj-manager' ),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-									
-							'redirect_pf_success' => array(
-									'label' => __( 'Redirect Successful Payment To', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'custom_dropdown',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['payfast']['redirect_pf_success'],
-									'text' => sprintf( __( '%sCurrent Page%s is the page the Client initiated the payment from', 'mobile-dj-manager' ),
-										'<code>',
-										'</code>' ),
-									'desc' => __( 'Where do you want your Client redirected to once Payment has completed', 'mobile-dj-manager' ) . '?',
-									'custom_args' => array (
-														'name' =>  MDJM_PAYFAST_KEY . '[redirect_pf_success]',
-														'sort_order' => 'ASC',
-														'selected' => $mdjm_settings['payfast']['redirect_pf_success'],
-														'list_type' => 'page',
-														'show_option_none' => 'Current Page',
-														'option_none_value' => $mdjm_settings['pages']['payments_page'],
-														'id' => 'redirect_pf_success',
-														),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-									
-							'redirect_pf_cancel' => array(
-									'label' => __( 'Redirect Cancelled Payment To', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'custom_dropdown',
-									'class' => 'regular-text',
-									'value' => $mdjm_settings['payfast']['redirect_pf_cancel'],
-									'text' => sprintf( __( '%sCurrent Page%s is the page the Client initiated the payment from', 'mobile-dj-manager' ),
-										'<code>',
-										'</code>' ),
-									'desc' => __( 'Where do you want your Client redirected to if they cancel the payment', 'mobile-dj-manager' ) . '?',
-									'custom_args' => array (
-														'name' =>  MDJM_PAYFAST_KEY . '[redirect_pf_cancel]',
-														'sort_order' => 'ASC',
-														'selected' => $mdjm_settings['payfast']['redirect_pf_cancel'],
-														'list_type' => 'page',
-														'show_option_none' => __( 'Current Page', 'mobile-dj-manager' ),
-														'option_none_value' => $mdjm_settings['pages']['payments_page'],
-														'id' => 'redirect_pf_cancel',
-														),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-									
-							'payfast_button' => array(
-									'label' => 'Payment Button:',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'radio',
-									'value' => ( !empty( $mdjm_settings['payfast']['payfast_button'] ) ? $mdjm_settings['payfast']['payfast_button'] : 'html' ),
-									'text' => '',
-									'desc' => '',
-									'custom_args' => array (
-														'name' 	  => MDJM_PAYPAL_KEY . '[payfast_button]',
-														'values'	=> array(
-																			'paynow_basic_logo.gif',
-																			'html'
-																			),
-														),
-									'section' => 'payfast',
-									'page' => 'payfast',
-									),
-							
-						/* -- PayFast Advanced -- */		
-							'enable_pf_sandbox' => array(
-									'label' => __( 'PayFast Sandbox', 'mobile-dj-manager' ) . '?',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['payfast']['enable_pf_sandbox'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => sprintf( __( 'Enable only to test payments. You can sign up for a developer account %shere%s', 'mobile-dj-manager' ),
-										'<a href="https://sandbox.payfast.co.za/" target="_blank">',
-										'</a>' ),
-									'section' => 'payfast_advanced',
-									'page' => 'payfast',
-									),
-									
-							'sandbox_merchant_id' => array(
-									'label' => __( 'PayFast Sandbox Merchant ID', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'text',
-									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payfast']['sandbox_merchant_id'] ) ? $mdjm_settings['payfast']['sandbox_merchant_id'] : '' ),
-									'text' => '',
-									'desc' => __( 'If using PayFast Sandbox, enter your sandbox Merchant ID here. If not set, your normal PayFast Merchant ID will be used', 'mobile-dj-manager' ),
-									'section' => 'payfast_advanced',
-									'page' => 'payfast',
-									),
-									
-							'sandbox_merchant_key' => array(
-									'label' => __( 'PayFast Sandbox Merchant Key', 'mobile-dj-manager' ) . ':',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'text',
-									'class' => 'regular-text',
-									'value' => ( !empty( $mdjm_settings['payfast']['sandbox_merchant_key'] ) ? $mdjm_settings['payfast']['sandbox_merchant_key'] : '' ),
-									'text' => '',
-									'desc' => __( 'If using PayFast Sandbox, enter your sandbox Merchant Key here. If not set, your normal PayFast Merchant Key will be used', 'mobile-dj-manager' ),
-									'section' => 'payfast_advanced',
-									'page' => 'payfast',
-									),
-																		
-							'payfast_debug' => array(
-									'label' => __( 'Debug', 'mobile-dj-manager' ) . '?',
-									'key' => MDJM_PAYFAST_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['payfast']['payfast_debug'] ) ? '1' : '0' ),
-									'text' => __( 'Enable logging', 'mobile-dj-manager' ),
-									'desc' => sprintf( __( 'Enable to capture logs for PayFast - will be stored at %s', 'mobile-dj-manager' ),
-										'<code>' . MDJM_PLUGIN_DIR . '/includes/api/api-log/mdjm-payfast-itn-debug.log</code>' ),
-									'section' => 'payfast_advanced',
-									'page' => 'payfast',
+									'desc' => __( 'Provided to you during purchase of one of our premium plugins and needed to validate your license', 'mobile-dj-manager' ),
+									'section' => 'addon',
+									'page' => 'addons',
 									),
 							);
 							
-	if( MDJM_CTRL::has_extension( 'mdjm-to-pdf' ) )	{
-		$all_sections['mdjm_to_pdf_settings'] = array(
-							'title' 	=> __( 'MDJM to PDF Settings', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-to-pdf' );	
-		
-		$all_settings['pdf_page_size'] = 
-					array(
-						'label' => __( 'Page Size', 'mobile-dj-manager' ) . ':',
-						'key' => MDJM_PDF_SETTINGS_KEY,
-						'type' => 'custom_dropdown',
-						'class' => 'regular-text',
-						'value' => $GLOBALS['mdjm_pdf_settings']['pdf_page_size'],
-						'text' => __( 'Set the page size for PDF documents', 'mobile-dj-manager' ),
-						'desc' => '',
-						'custom_args' => array (
-											'name' =>  MDJM_PDF_SETTINGS_KEY . '[pdf_page_size]',
-											'sort_order' => 'ASC',
-											'selected' => $GLOBALS['mdjm_pdf_settings']['pdf_page_size'],
-											'sort_order' => '',
-											'list_type' => 'defined',
-											'list_values' => array( 'A4' => 'A4',
-																	'Letter' => 'Letter',
-																	'Legal' => 'Legal' ),
-											),
-						'section' => 'to_pdf',
-						'page' => 'to-pdf' );
-						
-		$all_settings['pdf_page_orientation'] = 
-					array(
-						'label' => __( 'Page Orientation', 'mobile-dj-manager' ) . ':',
-						'key' => MDJM_PDF_SETTINGS_KEY,
-						'type' => 'custom_dropdown',
-						'class' => 'regular-text',
-						'value' => $GLOBALS['mdjm_pdf_settings']['pdf_page_orientation'],
-						'text' => __( 'Set the page size for PDF documents', 'mobile-dj-manager' ),
-						'desc' => '',
-						'custom_args' => array (
-											'name' =>  MDJM_PDF_SETTINGS_KEY . '[pdf_page_orientation]',
-											'sort_order' => 'ASC',
-											'selected' => $GLOBALS['mdjm_pdf_settings']['pdf_page_orientation'],
-											'sort_order' => '',
-											'list_type' => 'defined',
-											'list_values' => array( '-A' => 'Portrait',
-																	'-L' => 'Landscape' ),
-											),
-						'section' => 'to_pdf',
-						'page' => 'to-pdf' );					
-	}
 ?>

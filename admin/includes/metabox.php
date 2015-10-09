@@ -944,17 +944,13 @@
 													'60px' : '40px' ); ?> !important;">
         	<div class="mdjm-left-col">
             <?php 
-			if( do_reg_check( 'check' ) )
-				submit_button( 
-							( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
-							'primary',
-							'save',
-							false,
-							array( 'id' => 'save-post' ) );
-							
-			else
-				echo '<a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">License Expired</a>';				
-							
+			submit_button( 
+						( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
+						'primary',
+						'save',
+						false,
+						array( 'id' => 'save-post' ) );
+														
 			if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )
 				echo '<br />' . 
 				'<br />' .
@@ -1173,16 +1169,12 @@
         <div class="mdjm-meta-row">
         	<div class="mdjm-left-col">
              <?php 
-			if( do_reg_check( 'check' ) )
-				submit_button( 
-							( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
-							'primary',
-							'save',
-							false,
-							array( 'id' => 'save-post' ) );
-							
-			else
-				echo '<a style="color:#a00" target="_blank" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '">License Expired</a>';
+			submit_button( 
+						( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
+						'primary',
+						'save',
+						false,
+						array( 'id' => 'save-post' ) );
 			?>
             </div>
         </div>
