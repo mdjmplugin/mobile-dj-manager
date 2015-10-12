@@ -66,6 +66,12 @@
 	register_activation_hook( __FILE__, 'mdjm_activate' );
 	register_deactivation_hook(__FILE__, array( 'MDJM', 'mdjm_deactivate' ) );
 	//register_activation_hook( __FILE__, 'f_mdjm_db_install' );
+	
+	// Add the text domain for translation
+	function mdjm_textdomain() {
+		load_plugin_textdomain( 'mobile-dj-manager', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+	}
+	add_action( 'plugins_loaded', 'mdjm_textdomain' );
 		
 	/* Actions for admin */
 	if ( is_admin() )	{
