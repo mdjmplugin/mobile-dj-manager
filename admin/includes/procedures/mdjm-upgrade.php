@@ -1297,6 +1297,23 @@
 		} // update_to_1_2_4_1
 		
 		/*
+		 * Execute upgrade for version 1.2.5
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_5()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5', true );
+			
+			include_once( 'update_to_1.2.5.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5', true );
+		} // update_to_1_2_5
+		
+		/*
 		 * Execute upgrade for version 1.2.5.1
 		 *
 		 *
