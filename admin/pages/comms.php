@@ -14,9 +14,7 @@
 	}
 		
 	global $mdjm, $mdjm_posts, $mdjm_settings, $current_user;
-	
-	f_mdjm_has_updated();
-	
+		
 	if( isset( $_POST['submit'] ) )	{
 		/* Validation */
 		if( is_dj() && isset( $mdjm_settings['permissions']['dj_disable_shortcode'] ) && !empty( $mdjm_settings['permissions']['dj_disable_shortcode'] ) )	{ // Check shortcodes that DJ's cannot use
@@ -53,9 +51,9 @@
 		else	{
 			/* -- Build the email arguments -- */
 			$email_args = array(
-							'content'	=> nl2br( str_replace( ']]>', ']]&gt;', $_POST['email_content'] ) ),
+							'content'	=> nl2br( str_replace( ']]>', ']]&gt;', stripslashes( $_POST['email_content'] ) ) ),
 							'to'		=> $_POST['email_to'],
-							'subject'	=> $_POST['subject'],
+							'subject'	=> stripslashes( $_POST['subject'] ),
 							'from'		=> $current_user->ID,
 							'source'	=> 'Communication Feature',
 							'html'		=> true,
@@ -118,14 +116,14 @@
 			}
 		}
 		elseif( isset( $_POST['email_content'] ) )	{
-			$content = $_POST['email_content'];
+			$content = stripslashes( $_POST['email_content'] );
 		}
 		else	{
 			$content = '';	
 		}
 		if( !isset( $subject ) || empty( $subject ) )	{
 			if( isset( $_POST['subject'] ) )	{
-				$subject = $_POST['subject'];
+				$subject = stripslashes( $_POST['subject'] );
 			}
 			else	{
 				$subject = '';	
