@@ -1,12 +1,13 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-/*
-Plugin Name: Mobile DJ Manager
-Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
-Version: 1.2.5.1
-Date: 09 October 2015
-Author: My DJ Planner <contact@mydjplanner.co.uk>
-Author URI: http://www.mydjplanner.co.uk
+/**
+ * Plugin Name: Mobile DJ Manager
+ * Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
+ * Version: 1.2.5.1
+ * Date: 09 October 2015
+ * Author: My DJ Planner <contact@mydjplanner.co.uk>
+ * Author URI: http://www.mydjplanner.co.uk
+ * Text Domain: mobile-dj-manager
 */
 
 /*  Copyright 2014  Mobile DJ Manager  (email : contact@mydjplanner.co.uk)
