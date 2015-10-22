@@ -193,6 +193,12 @@
                     onclick: function () {
                         editor.insertContent('{START_TIME}');
                     }
+				}, {
+                    text: 'Event End Date (DD/MM/YYYY)',
+                    onclick: function () {
+                        editor.insertContent('{END_DATE}');
+                    }
+                }, {
                 }, {
                     text: 'Event End Time',
                     onclick: function () {

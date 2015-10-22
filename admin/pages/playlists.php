@@ -4,8 +4,6 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 
-	f_mdjm_has_updated();
-
 /**
 * * * * * * * * * * * * * * * MDJM * * * * * * * * * * * * * * *
 * events.php
@@ -41,7 +39,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_PlayList_Table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-playlist-table.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-playlist-table.php' );
 		}
 		
 		$playlist_table = new MDJM_PlayList_Table();

@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.5.1
+Stable tag: 1.2.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,6 +75,19 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.5.2 =
+<strong>Released 22nd October, 2015</strong>
+<ul>
+	<li>New: Added new currencies for AUS, CAD, NZD and SGD</li>
+	<li>New: Order your event listings by ID, Date, or Value by clicking on the relevant column header</li>
+	<li>New: Order your venue listings by Name, Town or County by clicking on the relevant column header</li>
+	<li>New: Support for MDJM Google Calendar Sync add-on</li>
+	<li>New: Added a few developer hooks and filters</li>
+	<li>New: Added new shortcode {END_DATE} which will display the date on which the event completes in short date format</li>
+	<li>New: Adjusted branding</li>
+	<li>Bug Fix: Fixed availability checker function on MDJM Dashboard</li>
+	<li>Bug Fix: {DJ_NOTES} shortcode was displaying event notes</li>
+</ul>
 = 1.2.5.1 =
 <strong>Released 10 October, 2015</strong>
 <ul>

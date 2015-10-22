@@ -167,7 +167,7 @@
 				foreach( $_POST['playlist_id'] as $pl ) {
 					f_mdjm_delete_from_playlist( $pl );
 				}
-				f_mdjm_update_notice( 'updated', 'Selected songs have deleted' );
+				mdjm_update_notice( 'updated', 'Selected songs have deleted' );
 			}
 		}
 		
@@ -267,10 +267,10 @@
 				$headers .= 'From: ' . MDJM_COMPANY . ' <' . $mdjm_settings['email']['system_email'] . '>' . "\r\n";
 				
 				if( wp_mail( $current_user->user_email, 'Event Playlist for ' . date( "l, jS F Y", strtotime( get_post_meta( $eventinfo->ID, '_mdjm_event_date', true ) ) ), $email_body, $headers ) )	{
-					f_mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	
+					mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	
 				}
 				else	{
-					f_mdjm_update_notice( 'error', 'Unable to email playlist' );	
+					mdjm_update_notice( 'error', 'Unable to email playlist' );	
 				}
 				
 			}

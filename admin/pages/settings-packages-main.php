@@ -3,11 +3,7 @@
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	f_mdjm_has_updated();
-		
-	require_once WPMDJM_PLUGIN_DIR . '/admin/includes/functions.php';
-
+			
 	function f_mdjm_display_package_settings()	{
 		?>
 		<div class="wrap">
@@ -22,10 +18,10 @@
 		</h2>
 		<?php
 		if( $active_tab == 'packages' ) {
-			include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-packages.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/pages/settings-packages.php' );
 		}
 		elseif( $active_tab == 'equipment' ) {
-			include( WPMDJM_PLUGIN_DIR . '/admin/pages/settings-equipment.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/pages/settings-equipment.php' );
 		}
 		else	{
 			wp_die( 'You do not have the necessary permissions to view this page!' );

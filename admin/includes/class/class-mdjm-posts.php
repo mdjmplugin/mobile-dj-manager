@@ -39,12 +39,11 @@
 				add_filter( 'bulk_actions-edit-mdjm-venue', array( &$this, 'define_mdjm_venue_bulk_action_list' ) );
 				
 				/* -- Column Sorting -- */
-				if( !empty( $post ) )	{
-					add_filter( 'manage_edit-mdjm-event_sortable_columns', array( &$this, 'column_sorting' ) ); // Defines which columns are sortable for Events
-					add_filter( 'manage_edit-mdjm-venue_sortable_columns', array( &$this, 'column_sorting' ) ); // Defines which columns are sortable for Venues
-				}
+				add_filter( 'manage_edit-mdjm-event_sortable_columns', array( &$this, 'column_sorting' ) ); // Defines which columns are sortable for Events
+				add_filter( 'manage_edit-mdjm-venue_sortable_columns', array( &$this, 'column_sorting' ) ); // Defines which columns are sortable for Venues
 				
 				if( is_admin() )	{
+					add_filter( 'posts_clauses', array( &$this, 'column_sort' ), 1, 2 );
 					add_action( 'pre_get_posts', array( &$this, 'pre_post' ) ); // Actions for pre_get_posts
 					add_filter( 'parse_query', array( &$this, 'custom_post_filter' ) ); // Actions for filtered queries
 					
@@ -797,6 +796,15 @@
 							 $GLOBALS['mdjm_debug']->log_it( '	-- No content passed for filtering ' );
 					}
 					
+					/**
+					 * For new events we run the 'mdjm_add_new_event' action
+					 *
+					 *
+					 *
+					 */
+					if( $new_post == true )
+						do_action( 'mdjm_add_new_event', $post );
+					
 					if( !empty( $_POST['mdjm_reset_pw'] ) )	{
 						if( MDJM_DEBUG == true )
 							$GLOBALS['mdjm_debug']->log_it( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
@@ -881,6 +889,13 @@
 							$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
 							$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
 						}
+						
+						// Set the event end date. If the finish time is less than the start time, assume following day
+						if( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )
+							$event_data['_mdjm_event_end_date'] = $_POST['_mdjm_event_date'];
+							
+						else
+							$event_data['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $_POST['_mdjm_event_date'] ) ) );
 						
 						/* -- Deposit & Balance -- */
 						$event_data['_mdjm_event_deposit_status'] = !empty( $_POST['deposit_paid'] ) ? $_POST['deposit_paid'] : 'Due';
@@ -1007,6 +1022,13 @@
 							$mdjm_trans = new MDJM_Transactions();
 							$mdjm_trans->manual_event_payment( $type, $post->ID );
 						}
+						/**
+						 * For all events we run the 'mdjm_save_event' action
+						 *
+						 *
+						 *
+						 */
+						do_action( 'mdjm_save_event', $post, $_POST['mdjm_event_status'] );
 					break;
 				} // switch
 
@@ -1044,9 +1066,7 @@
 				/* -- Filter posts by Type -- */
 				if( isset( $_GET['mdjm_filter_type'] ) )
 					$this->post_types_query( $query );
-				
-				/* -- Define queries for sorting columns -- */
-				$this->column_sort( $query );
+								
 			} // pre_post
 			
 			function custom_post_filter( $query ){
@@ -1658,14 +1678,14 @@
 			public function column_sorting( $columns )	{
 				global $post, $mdjm_post_types;
 				
-				if( !in_array( $post->post_type, $mdjm_post_types ) )
+				if( !isset( $post ) || !in_array( $post->post_type, $mdjm_post_types ) )
 					return; 
 				
 				/* -- Events sortable columns -- */
 				if( $post->post_type == MDJM_EVENT_POSTS )	{
 					$columns['event_date'] = 'event_date';
-					$columns['event_status'] = 'event_status';
-					$columns['event_type'] = 'event_type';
+					//$columns['event_status'] = 'event_status';
+					//$columns['event_type'] = 'event_type';
 					$columns['value'] = 'value';
 				}
 				
@@ -1686,38 +1706,52 @@
 			 * @params: $query
 			 * @return:
 			 */
-			public function column_sort( $query )	{
+			public function column_sort( $pieces, $query )	{
+				global $wpdb;
 				
 				if( !is_admin() )
 					return;
 				
-				$orderby = $query->get( 'orderby' );
+				/**
+				 * We only want our code to run in the main WP query
+				 * AND if an orderby query variable is designated.
+				 */
 				
-				/* -- Event Sorting -- */
-				if ( 'event_date' == 'orderby' )	{
-					$query->set( 'meta_key', '_mdjm_event_date' );
-					$query->set( 'orderby', 'meta_value_num' );
-				}
-				if ( 'event_status' == 'orderby' )	{
-					$query->set( 'orderby', 'post_status' );
-				}
-				if ( 'event_type' == 'orderby' )	{
-					$query->set( 'orderby', 'category_name' );
-				}
-				if ( 'value' == 'orderby' )	{
-					$query->set( 'meta_key', '_mdjm_event_cost' );
-					$query->set( 'orderby', 'meta_value_num' );
+				if( $query->is_main_query() && ( $orderby = $query->get( 'orderby' ) ) )	{
+					$order = strtoupper( $query->get( 'order' ) );
+					
+					if( !in_array( $order, array( 'ASC', 'DESC' ) ) )
+						$order = 'ASC';
+						
+					switch( $orderby )	{
+						case 'event_date':
+							$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_ed ON mdjm_ed.post_id = {$wpdb->posts}.ID AND mdjm_ed.meta_key = '_mdjm_event_date'";
+							
+							$pieces[ 'orderby' ] = "STR_TO_DATE( mdjm_ed.meta_value,'%Y-%m-%d' ) $order, " . $pieces[ 'orderby' ];
+						break;
+												
+						case 'value':
+							$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_event_cost'";
+							
+							$pieces[ 'orderby' ] = "mdjm_cost.meta_value $order, " . $pieces[ 'orderby' ];
+						break;
+						
+						case 'town':
+							$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_town ON mdjm_town.post_id = {$wpdb->posts}.ID AND mdjm_town.meta_key = '_venue_town'";
+							
+							$pieces[ 'orderby' ] = "mdjm_town.meta_value $order, " . $pieces[ 'orderby' ];
+						break;
+						
+						case 'county':
+							$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_county ON mdjm_county.post_id = {$wpdb->posts}.ID AND mdjm_county.meta_key = '_venue_county'";
+							
+							$pieces[ 'orderby' ] = "mdjm_county.meta_value $order, " . $pieces[ 'orderby' ];
+						break;
+						
+					} // switch
 				}
 				
-				/* -- Venue Sorting -- */
-				if ( 'town' == 'orderby' )	{
-					$query->set( 'meta_key', '_venue_town' );
-					$query->set( 'orderby', 'meta_value_num' );
-				}
-				if ( 'county' == 'orderby' )	{
-					$query->set( 'meta_key', '_venue_county' );
-					$query->set( 'orderby', 'meta_value_num' );
-				}
+				return $pieces;
 			} // column_sort
 			
 /**
@@ -2400,15 +2434,15 @@
 				if( $post->post_type == MDJM_COMM_POSTS )	{
 					/* -- Sidebar -- */
 					remove_meta_box( 'submitdiv', MDJM_COMM_POSTS, 'side' );
-					add_meta_box( 'mdjm-email-details', __( 'Details', 'textdomain' ), MDJM_COMM_POSTS . '_post_details_metabox', MDJM_COMM_POSTS, 'side', 'high' );
+					add_meta_box( 'mdjm-email-details', __( 'Details', 'mobile-dj-manager' ), MDJM_COMM_POSTS . '_post_details_metabox', MDJM_COMM_POSTS, 'side', 'high' );
 					
 					/* -- Main Body -- */
-					add_meta_box( 'mdjm-email-review', __( 'Email Content', 'textdomain' ), str_replace( '-', '_', MDJM_COMM_POSTS ) . '_post_output_metabox', MDJM_COMM_POSTS, 'normal', 'high' );
+					add_meta_box( 'mdjm-email-review', __( 'Email Content', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_COMM_POSTS ) . '_post_output_metabox', MDJM_COMM_POSTS, 'normal', 'high' );
 				}
 			/* -- Contract Templates -- */
 				if( $post->post_type == MDJM_CONTRACT_POSTS )	{
 					/* -- Main Body -- */
-					add_meta_box( 'mdjm-contract-details', __( 'Contract Details', 'textdomain' ), str_replace( '-', '_', MDJM_CONTRACT_POSTS ) . '_post_details_metabox', MDJM_CONTRACT_POSTS, 'side' );
+					add_meta_box( 'mdjm-contract-details', __( 'Contract Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_CONTRACT_POSTS ) . '_post_details_metabox', MDJM_CONTRACT_POSTS, 'side' );
 				}
 			/* -- Events -- */
 				if( $post->post_type == MDJM_EVENT_POSTS )	{
@@ -2416,35 +2450,35 @@
 					/* -- Main Body -- */
 					remove_meta_box( 'submitdiv', MDJM_EVENT_POSTS, 'side' );
 					remove_meta_box( 'event-typesdiv', MDJM_EVENT_POSTS, 'side' );
-					add_meta_box( 'mdjm-event-client', __( 'Client Details', 'textdomain' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_client_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
-					add_meta_box( 'mdjm-event-details', __( 'Event Details', 'textdomain' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
-					add_meta_box( 'mdjm-event-venue', __( 'Venue Details', 'textdomain' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_venue_metabox', MDJM_EVENT_POSTS, 'normal', '' );
-					add_meta_box( 'mdjm-event-admin', __( 'Administration', 'textdomain' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_admin_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
+					add_meta_box( 'mdjm-event-client', __( 'Client Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_client_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
+					add_meta_box( 'mdjm-event-details', __( 'Event Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
+					add_meta_box( 'mdjm-event-venue', __( 'Venue Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_venue_metabox', MDJM_EVENT_POSTS, 'normal', '' );
+					add_meta_box( 'mdjm-event-admin', __( 'Administration', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_admin_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 					
 					if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && current_user_can( 'administrator' ) )
-						add_meta_box( 'mdjm-event-transactions', __( 'Transactions', 'textdomain' ), 
+						add_meta_box( 'mdjm-event-transactions', __( 'Transactions', 'mobile-dj-manager' ), 
 							str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_transactions_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 					
 					if( current_user_can( 'administrator' ) && array_key_exists( $post->post_status, $event_stati ) )
-						add_meta_box( 'mdjm-event-email-history', __( 'Event History', 'textdomain' ), 
+						add_meta_box( 'mdjm-event-email-history', __( 'Event History', 'mobile-dj-manager' ), 
 							str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_history_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 					
 					/* -- Side -- */
-					add_meta_box( 'mdjm-event-options', __( 'Event Options', 'textdomain' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox', MDJM_EVENT_POSTS, 'side', 'low' );
+					add_meta_box( 'mdjm-event-options', __( 'Event Options', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox', MDJM_EVENT_POSTS, 'side', 'low' );
 				}
 			/* -- Transactions -- */
 				if( $post->post_type == MDJM_TRANS_POSTS )	{
 					remove_meta_box( 'submitdiv', MDJM_TRANS_POSTS, 'side' );
 					remove_meta_box( 'transaction-typesdiv', MDJM_TRANS_POSTS, 'side' );
 					/* -- Side -- */
-					add_meta_box( 'mdjm-trans-save', __( 'Save Transaction', 'textdomain' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_save_metabox', MDJM_TRANS_POSTS, 'side', 'high' );
+					add_meta_box( 'mdjm-trans-save', __( 'Save Transaction', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_save_metabox', MDJM_TRANS_POSTS, 'side', 'high' );
 					/* -- Main -- */
-					add_meta_box( 'mdjm-trans-details', __( 'Transaction Details', 'textdomain' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_details_metabox', MDJM_TRANS_POSTS, 'normal' );
+					add_meta_box( 'mdjm-trans-details', __( 'Transaction Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_details_metabox', MDJM_TRANS_POSTS, 'normal' );
 				}
 			/* -- Venues -- */
 				if( $post->post_type == MDJM_VENUE_POSTS )	{
 					/* -- Main Body -- */
-					add_meta_box( 'mdjm-venue-details', __( 'Venue Details', 'textdomain' ), str_replace( '-', '_', MDJM_VENUE_POSTS ) . '_post_main_metabox', MDJM_VENUE_POSTS, 'normal', 'high' );
+					add_meta_box( 'mdjm-venue-details', __( 'Venue Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_VENUE_POSTS ) . '_post_main_metabox', MDJM_VENUE_POSTS, 'normal', 'high' );
 				}
 			} // define_metabox
 

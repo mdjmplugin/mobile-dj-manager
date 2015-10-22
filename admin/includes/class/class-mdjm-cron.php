@@ -16,23 +16,10 @@
 		 */
 		public function __construct()	{
 			$this->schedules = get_option( MDJM_SCHEDULES_KEY );
-		} // __construct
-		
-		/*
-		 * Register the MDJM scheduled tasks
-		 *
-		 *
-		 *
-		 *
-		 */
-		public function activate()	{
-			global $mdjm, $mdjm_settings;
 			
-			if( !wp_next_scheduled( 'mdjm_hourly_schedule' ) )
-				wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
-							
-		} // activate
-		
+			add_action( 'mdjm_hourly_schedule', array( &$this, 'execute_cron' ) ); // Run the MDJM scheduler
+		} // __construct
+				
 		/*
 		 * Determine is a task is active and due to be executed
 		 *
@@ -1287,5 +1274,4 @@
 			/* -- Return the content -- */
 			return $content;
 		} // notification_content		
-	} // class	
-	
+	} // class

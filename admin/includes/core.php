@@ -7,7 +7,7 @@
  * Manipulate WP for non-WP functions
  */
 
-	if( !class_exists( 'MDJM_WP' ) )	{
+	if( !class_exists( 'MDJM_WP' ) ) :
 		class MDJM_WP	{
 			/*
 			 * __construct
@@ -15,12 +15,12 @@
 			 *
 			 *
 			 */
-			public function __construct()	{
+			public function init()	{
 				global $wpdb, $mdjm_post_types;
 			
 				/* -- Plugin data -- */
-				add_filter( 'plugin_action_links_' . MDJM_PLUGIN_BASENAME, array( &$this, 'mdjm_plugin_action_links' ) );
-				add_filter( 'plugin_row_meta', array( &$this, 'mdjm_plugin_meta' ), 10, 2 );
+				add_filter( 'plugin_action_links_' . MDJM_PLUGIN_BASENAME, array( __CLASS__, 'mdjm_plugin_action_links' ) );
+				add_filter( 'plugin_row_meta', array( __CLASS__, 'mdjm_plugin_meta' ), 10, 2 );
 			} // __construct
 			
 			/*
@@ -47,17 +47,15 @@
 					return $links;
 					
 				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/support/" target="_blank">' . __( 'Support' ) . '</a>';
-				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/support-our-work/" target="_blank">' . __( 'Donate' ) . '</a>';
+				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/donate/" target="_blank">' . __( 'Donate' ) . '</a>';
+				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/product-category/mdjm/premium-add-ons/" target="_blank">' . __( 'Extensions' ) . '</a>';
 									
 				$links = array_merge( $links, $mdjm_links );
 		
 				return $links;
 			}
 		}
-	}
-/* -- Insantiate the class & register the activation/deactivation hooks -- */
-	if( class_exists( 'MDJM_WP' ) )	{	
-		/* -- Instantiate the plugin class -- */
-		$mdjm_wp = new MDJM_WP();
-	}
+	endif;
+// Insantiate the class & register the activation/deactivation hooks
+	MDJM_WP::init();
 ?>

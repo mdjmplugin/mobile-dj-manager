@@ -42,44 +42,7 @@ Author URI: http://www.mydjplanner.co.uk
 	} // update_addon_options
 	add_action( 'wp_ajax_mdjm_update_addon_options', 'update_addon_options' );
 	add_action( 'wp_ajax_nopriv_mdjm_update_addon_options', 'update_addon_options' );
-	
-	/*
-	 * Update the Addons select list based on Package selections within dynamic contact forms
-	 *
-	 * @param	str		$package	Optional: The slug of the current package. If empty (default), no current package
-	 *								Otherwise query package for it's items and remove those from available addons
-	 * @return	arr		$addons		array of 
-	 */
-	function update_contact_form_addon_options()	{
-		$event_package = $_POST['package'];
 		
-		$func = 'mdjm_addons_' . $_POST['addons_type'];
-		
-		$addons = $func( array( 
-											'name'		=> $_POST['addons_field'],
-											'package'	=> !empty( $event_package ) ? $event_package : '',
-											), false );
-				
-		if( !empty( $addons ) )	{
-			$result['type'] = 'success';
-			$result['addons'] = $addons;
-		}
-		else	{
-			$result['type'] = 'success';
-			$result['addons'] = ( $_POST['addons_type'] == 'dropdown' ? 
-				'<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>' : 
-				__( 'No addons available', 'mobile-dj-manager' ) );
-			//$result['type'] = 'error';
-			//$result['msg'] = 'No addons available';
-		}
-		
-		echo json_encode( $result );
-		
-		die();
-	} // update_contact_form_addon_options
-	add_action( 'wp_ajax_mdjm_update_contact_form_addon_options', 'update_contact_form_addon_options' );
-	add_action( 'wp_ajax_nopriv_mdjm_update_contact_form_addon_options', 'update_contact_form_addon_options' );
-	
 	/*
 	 * create a new post so that the ID can be used
 	 * Generally used for the Payments page for creating an Invoice ID

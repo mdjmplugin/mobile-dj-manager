@@ -3,9 +3,7 @@
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	//f_mdjm_has_updated();
-	
+		
 	function mdjm_dashboard() {
 		global $mdjm, $my_mdjm, $current_user;
 		
@@ -27,7 +25,6 @@
         <hr />
         <h2>
         <?php
-		//$dash_dj = f_mdjm_dashboard_dj_overview();
 		$dj_event_count = $mdjm->mdjm_events->count_events_by_status( 'dj', get_current_user_id() );
         ?></h2>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
@@ -135,7 +132,6 @@
               <?php
 			  if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
 				  $bookings_today = $mdjm->mdjm_events->employee_bookings();
-				  //$dj_event_results = f_mdjm_dj_working_today();
 				  ?>
 				  <tr>
 					<td>Employee Bookings:</td>
@@ -163,7 +159,7 @@
 					<?php
 			  }
 			  ?>
-                <form name="availability-check" id="availability-check" method="post" action="<?php mdjm_get_admin_page( 'availability' ); ?>">
+                <form name="availability-check" id="availability-check" method="post" action="<?php echo mdjm_get_admin_page( 'availability' ); ?>">
                 <?php
 				if( !current_user_can( 'administrator' ) )	{
 					?><input type="hidden" name="check_employee" id="check_employee" value="<?php echo get_current_user_id(); ?>" /><?php
@@ -196,7 +192,6 @@
           </table>
 		<?php
 			if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				//$dash_emp = f_mdjm_dashboard_employee_overview();
 				$emp_event_count = $mdjm->mdjm_events->count_events_by_status();
 		?>
                 <hr />
@@ -286,10 +281,6 @@
         </div>
 <?php
 	}
-	if( isset( $_GET['updated'] ) || isset( $_GET['ver'] ) )	{
-		include( 'updated.php' );
-	}
-	else	{
-		mdjm_dashboard();
-	}
+	mdjm_dashboard();
+
 ?>

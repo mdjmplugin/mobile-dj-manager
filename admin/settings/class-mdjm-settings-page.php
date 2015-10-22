@@ -150,6 +150,11 @@
 					do_settings_sections( 'mdjm-addons' );
 				break;
 				
+				case 'mdjm_gcal_settings':
+					settings_fields( 'mdjm-gcal' );
+					do_settings_sections( 'mdjm-gcal' );
+				break;
+				
 				default:
 					return;
 			} // switch

@@ -425,7 +425,7 @@
 								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
 								);
 			
-			include( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			add_option( 'mdjm_schedules', $mdjm_schedules );
 			add_option( 'mdjm_debug', '0' );
 			add_option( 'mdjm_updated', '0' );
@@ -453,7 +453,7 @@
 								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
 								);
 								
-			include( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			$template_args = array(
 							'default_contract'			  => $contract_template_args,
@@ -513,7 +513,7 @@
 								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
 								);
 								
-			include( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' *** Starting MDJM Page Installation ***' . "\r\n", 3, MDJM_DEBUG_LOG );
 			
@@ -743,28 +743,6 @@
 												KEY artist (artist),
 												KEY song (song)
 												) " . $charset_collate . ";",
-								/* MUSIC LIBRARY TABLE */
-								'music_library' => 'CREATE TABLE ' . MDJM_MUSIC_LIBRARY_TABLE . ' (
-												id int(11) NOT NULL AUTO_INCREMENT,
-												library varchar(255) NOT NULL,
-												library_slug varchar(255) NOT NULL,
-												song varchar(255) NOT NULL,
-												artist varchar(255) NOT NULL,
-												album varchar(255) NULL,
-												genre varchar(255) NULL,
-												year varchar(10) NULL,
-												comments text NULL,
-												rating varchar(10) NULL,
-												dj int(11) NOT NULL,
-												date_added date NULL,
-												PRIMARY KEY  (id),
-												KEY library (library),
-												KEY song (song),
-												KEY artist (artist),
-												KEY year (year),
-												KEY genre (genre),
-												KEY dj (dj)
-												) ' . $charset_collate . ';',
 								/* AVAILABILITY TABLE */
 								'holiday'	=> 'CREATE TABLE ' . MDJM_HOLIDAY_TABLE . ' (
 												id int(11) NOT NULL AUTO_INCREMENT,

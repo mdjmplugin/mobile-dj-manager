@@ -587,9 +587,11 @@
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
 			
 			$mdjm_transactions = new MDJM_Transactions();
+			$event_stati = get_event_stati();
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
+			$end_date = get_post_meta( $post_id, '_mdjm_event_end_date', true );
 			$client = get_post_meta( $post_id, '_mdjm_event_client', true );
 			$dj = get_post_meta( $post_id, '_mdjm_event_dj', true );
 			$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
@@ -599,12 +601,14 @@
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
+			$status = $event_stati[get_post_status( $post_id )];
 			$setup_date = get_post_meta( $post_id, '_mdjm_event_djsetup', true );
 			$setup_time = get_post_meta( $post_id, '_mdjm_event_djsetup_time', true );
 			$contract = get_post_meta( $post_id, '_mdjm_event_contract', true );
 			$contract_date = get_post_meta( $post_id, '_mdjm_event_contract_approved', true );
 			$signed_contract = get_post_meta( $post_id, '_mdjm_signed_contract', true );
 			$notes = get_post_meta( $post_id, '_mdjm_event_notes', true );
+			$dj_notes = get_post_meta( $post_id, '_mdjm_event_dj_notes', true );
 			$admin_notes = get_post_meta( $post_id, '_mdjm_event_admin_notes', true );
 			$package = get_post_meta( $post_id, '_mdjm_event_package', true );
 			$addons = get_post_meta( $post_id, '_mdjm_event_addons', true );
@@ -617,6 +621,9 @@
 							// Event date
 							'date'				=> ( !empty( $date ) && is_int( strtotime( $date ) ) ? 
 								strtotime( $date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							// Event end date
+							'end_date'				=> ( !empty( $end_date ) && is_int( strtotime( $end_date ) ) ? 
+								strtotime( $end_date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Client details as object array
 							'client'			  => ( !empty( $client ) ? get_userdata( $client ) : '' ),
 							// DJ details as object array
@@ -625,6 +632,8 @@
 							'start'			   => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ) ),
 							// Event Finish
 							'finish'			  => ( !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ) ),
+							// Event Status
+							'status'			  => ( !empty( $status ) ? $status : '' ),
 							// DJ Setup date
 							'setup_date'		  => ( !empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified' ) ),
 							// DJ Setup time
@@ -655,6 +664,8 @@
 							'signed_contract'	 => ( !empty( $signed_contract ) ? $signed_contract : '' ),
 							// Event notes
 							'notes'		   	   => ( !empty( $notes ) ? $notes : '' ),
+							// Admin notes
+							'dj_notes'		 => ( !empty( $dj_notes ) ? $dj_notes : '' ),
 							// Admin notes
 							'admin_notes'		 => ( !empty( $admin_notes ) ? $admin_notes : '' ),
 							// Event package

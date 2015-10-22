@@ -15,7 +15,7 @@
 				'plural' => 'mdjm_playlists',
 				'ajax'   => false
 			) );
-			$this->mdjm_options = get_option( WPMDJM_SETTINGS_KEY );
+			$this->mdjm_options = get_option( MDJM_SETTINGS_KEY );
 		} // __construct
 		
 		/**
@@ -89,7 +89,7 @@
 		 * 
 		 */
 		function query_builder( $event )	{
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			include( MDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			/* -- Prepare the query -- */
 			$query = "SELECT * FROM `" . $db_tbl['playlists'] . "` WHERE `event_id` = '" . $event . "'";
 						
@@ -102,7 +102,7 @@
 			if( empty( $_GET['event_id'] ) )
 				return;
 			
-			include( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+			include( MDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 			
 			$eventinfo = $wpdb->get_row( "SELECT * FROM `" . $db_tbl['events'] . "` WHERE `event_id` = '" . $_GET['event_id'] . "'" );
 			$clientinfo = get_userdata( $eventinfo->user_id );
@@ -143,7 +143,7 @@
 				return;	
 			}
 			else	{
-				include ( WPMDJM_PLUGIN_DIR . '/includes/config.inc.php' );
+				include ( MDJM_PLUGIN_DIR . '/includes/config.inc.php' );
 				$email_query = 'SELECT * FROM `'.$db_tbl['playlists'].'` WHERE `event_id` = ' . $get_data['event_id'] . ' ORDER BY `' . $post_data['order_pl_by'] . '` ASC';
 				$email_result = $wpdb->get_results( $email_query );
 				$pl_ttl = $wpdb->num_rows;
@@ -212,7 +212,7 @@
 				$email_body .= '<p>Regards</p>' . "\n";
 				$email_body .= '<p>' . WPMDJM_CO_NAME . '</p>' . "\n";
 				$email_body .= '<p>&nbsp;</p>' . "\n";
-				$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . WPMDJM_NAME . '</a> version ' . WPMDJM_VERSION_NUM . '</p>' . "\n";
+				$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n";
 				$email_body .= '</body>' . "\n" . '</html>' . "\n";
 				
 				$headers = 'MIME-Version: 1.0' . "\r\n";
@@ -220,10 +220,10 @@
 				$headers .= 'From: ' . $this->mdjm_options['company_name'] . ' <' . $this->mdjm_options['system_email'] . '>' . "\r\n";
 				
 				if( wp_mail( $current_user->user_email, 'Event Playlist for ' . date( "l, jS F Y", strtotime( $eventinfo->event_date ) ), $email_body, $headers ) )	{
-					f_mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	
+					mdjm_update_notice( 'updated', 'Playlist successfully emailed to <a href="mailto:' . $current_user->user_email . '">' . $current_user->display_name . '</a>' );	
 				}
 				else	{
-					f_mdjm_update_notice( 'error', 'Unable to email playlist' );	
+					mdjm_update_notice( 'error', 'Unable to email playlist' );	
 				}
 			}
 		} // send_to_email

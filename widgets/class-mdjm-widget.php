@@ -18,10 +18,22 @@
 		function __construct() {
 			parent::__construct(
 				'mdjm_availability_widget', /* Base ID */
-				__( 'MDJM Availability Checker', 'text_domain' ), /* Name */
-				array( 'description' => __( 'Enables clients to check your availability', 'text_domain' ), ) /* Args */
+				__( 'MDJM Availability Checker', 'mobile-dj-manager' ), /* Name */
+				array( 'description' => __( 'Enables clients to check your availability', 'mobile-dj-manager' ), ) /* Args */
 			);
+			
+			add_action( 'widgets_init', array( &$this, 'register_widgets' ) ); // Register the MDJM Widgets
 		}
+		
+		/**
+		 * Register the Availability widget for the use within WP
+		 *
+		 *
+		 *
+		 */
+		function register_widgets()	{
+			register_widget( 'MDJM_Availability_Widget' );
+		} // register_widgets
 	
 		/**
 		 * Front-end display of widget.
@@ -41,7 +53,7 @@
 			}
 			
 			/* Check for form submission & process */
-			if( isset( $_POST['mdjm_avail_submit'] ) && $_POST['mdjm_avail_submit'] == $instance['submit_text'] )	{
+			if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
 				$dj_avail = dj_available( '', $_POST['widget_check_date'] );
 				
 				if( isset( $dj_avail ) )	{
@@ -72,19 +84,19 @@
             ?>
             <script type="text/javascript">
 			<?php
-			mdjm_jquery_datepicker_script( array( '', 'widget_check_date' ) );
+			mdjm_jquery_datepicker_script( array( 'mdjm_widget_date', 'widget_check_date' ) );
 			?>
             </script>
             <form name="mdjm-widget-availability-check" id="mdjm-widget-availability-check" method="post">
             <p>
             <?php
 			if( isset( $instance['intro'] ) && !empty( $instance['intro'] ) )	{
-				if( isset( $_POST['mdjm_avail_submit'] ) && $_POST['mdjm_avail_submit'] == $instance['submit_text'] )	{
+				if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
 					$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
 					$replace = array( date( 'l, jS F Y', strtotime( $_POST['widget_check_date'] ) ), 
 									date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['widget_check_date'] ) ) );
 				}
-				if( !isset( $_POST['mdjm_avail_submit'] ) || $_POST['mdjm_avail_submit'] != $instance['submit_text'] )	{
+				if( !isset( $_POST['mdjm_widget_avail_submit'] ) || $_POST['mdjm_widget_avail_submit'] != $instance['submit_text'] )	{
 					echo $instance['intro'] . '</p><p>';
 				}
 				elseif( !empty( $dj_avail['available'] ) && $instance['available_action'] == 'text' && !empty( $instance['available_text'] ) )	{
@@ -99,11 +111,11 @@
 				}
 			}
 			?>
-            <label for="avail_date"><?php echo $instance['label']; ?></label>
-            <input type="text" name="avail_date" id="avail_date" class="mdjm_date" placeholder="<?php mdjm_jquery_short_date(); ?>" />
+            <label for="widget_avail_date"><?php echo $instance['label']; ?></label>
+            <input type="text" name="widget_avail_date" id="widget_avail_date" class="mdjm_widget_date" placeholder="<?php mdjm_jquery_short_date(); ?>" />
             <input type="hidden" name="widget_check_date" id="widget_check_date" value="" /></p>
             <p<?php echo ( isset( $instance['submit_centre'] ) && $instance['submit_centre'] == 'Y' ? ' style="text-align:center"' : '' ); ?>>
-            <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $instance['submit_text']; ?>" />
+            <input type="submit" name="mdjm_widget_avail_submit" id="mdjm_widget_avail_submit" value="<?php echo $instance['submit_text']; ?>" />
             </p>
             </form>
             <script type="text/javascript">
@@ -113,13 +125,13 @@
 					{
 						rules:
 						{
-							avail_date: {
+							widget_avail_date: {
 								required: true,
 							},
 						}, // End rules
 						messages:
 						{
-							avail_date: {
+							widget_avail_date: {
 									required: "Please enter a date",
 									},
 						}, // End messages
@@ -245,121 +257,5 @@
 	
 			return $instance;
 		}
-	
 	} // class MDJM_Availability_Widget
-
-/****************************************************************
-* CONTACT FORM WIDGET
-****************************************************************/	
-/*
-* MDJM_ContactForms_Widget
-* 08/01/2015
-* @since 1.0
-* Displays the contact form
-*/
-	class MDJM_ContactForms_Widget extends WP_Widget {
-		/* Register the Widget */
-		function __construct() {
-			parent::__construct(
-				'mdjm_contact_form_widget', /* Base ID */
-				__( 'MDJM Contact Form', 'text_domain' ), /* Name */
-				array( 'description' => __( 'Displays the specified contact form', 'text_domain' ), ) /* Args */
-			);
-		}
-	
-		/**
-		 * Front-end display of Contact Form widget.
-		 *
-		 * @see WP_Widget::widget()
-		 *
-		 * @param array $args     Widget arguments.
-		 * @param array $instance Saved values from database.
-		 */
-		public function widget( $args, $instance )	{
-			
-			echo $args['before_widget'];
-			if ( !empty( $instance['title'] ) ) {
-				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
-			}
-			
-			/* -- This is the format the MDJM_ContactForm class needs -- */
-			$atts['slug'] = $instance['contact_form'];
-			$atts['layout'] = '0';
-						
-			ob_start();
-			include_once WPMDJM_PLUGIN_DIR . '/client-zone/class/class-contactform.php';
-			$output = ob_get_clean();
-			
-			echo $output;
-			
-			echo $args['after_widget'];
-		}
-	
-		/**
-		 * Back-end widget form.
-		 *
-		 * @see WP_Widget::form()
-		 *
-		 * @param array $instance Previously saved values from database.
-		 */
-		public function form( $instance ) {
-			$mdjm_forms = get_posts( array(
-										'posts_per_page'		=> -1,
-										'orderby'				=> 'post_date',
-										'order'            		=> 'ASC',
-										'post_type'				=> MDJM_CONTACT_FORM_POSTS,
-									) );
-			$defaults = array( 
-						'title'              => MDJM_COMPANY . ' Contact Form',
-						'intro'              => 'Contact us using the form below',
-						'contact_form'       => '--- Select a Form ---',						
-						);
-			$instance = wp_parse_args( (array) $instance, $defaults );
-			?>
-			<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title:</label>
-			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
-            </p>
-            
-            <p>
-			<label for="<?php echo $this->get_field_id( 'intro' ); ?>">Intro Text:</label>
-			<textarea id="<?php echo $this->get_field_id( 'intro' ); ?>" name="<?php echo $this->get_field_name( 'intro' ); ?>" style="width:100%;"><?php echo $instance['intro']; ?></textarea>
-            </p>
-            
-            <p>
-			<label for="<?php echo $this->get_field_id( 'contact_form' ); ?>">Show Contact Form:</label>
-			<select id="<?php echo $this->get_field_id( 'contact_form' ); ?>" name="<?php echo $this->get_field_name( 'contact_form' ); ?>" style="width:100%;">
-            <?php
-            if( !isset( $instance['contact_form'] ) || empty( $instance['contact_form'] ) )	{
-				?><option value="">--- Select a Form ---</option><?php	
-			}
-            foreach( $mdjm_forms as $form )	{
-				?><option value="<?php echo $form->post_name; ?>"<?php selected( $instance['contact_form'], $form->post_name ); ?>><?php echo $form->post_title; ?></option><?php
-			}
-			?>
-            </select>
-            </p>
-			<?php 
-		}
-	
-		/**
-		 * Sanitize widget form values as they are saved.
-		 *
-		 * @see WP_Widget::update()
-		 *
-		 * @param array $new_instance Values just sent to be saved.
-		 * @param array $old_instance Previously saved values from database.
-		 *
-		 * @return array Updated safe values to be saved.
-		 */
-		public function update( $new_instance, $old_instance ) {
-			$instance = array();
-			$instance['title'] = ( !empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-			$instance['intro'] = ( !empty( $new_instance['intro'] ) ) ? strip_tags( $new_instance['intro'] ) : '';
-			$instance['contact_form'] = ( !empty( $new_instance['contact_form'] ) ) ? strip_tags( $new_instance['contact_form'] ) : '';
-	
-			return $instance;
-		}
-	
-	} // class MDJM_ContactForms_Widget
-?>
+	new MDJM_Availability_Widget();

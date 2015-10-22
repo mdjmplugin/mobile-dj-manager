@@ -89,7 +89,7 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'Adding quote template for version 1.2.3.3' );
 			
-			include( WPMDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
+			include( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			if( wp_insert_post( $online_quote_template_args ) )
 				$GLOBALS['mdjm_debug']->log_it( ' Online Quote template created successfully' );

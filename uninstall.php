@@ -49,8 +49,6 @@
 	
 /* -- Remove MDJM Data -- */			
 	$data_type = array( 'Communications'		   => 'mdjm_communication',
-						'Contact Forms'			=> 'mdjm-contact-form',
-						'Contact Form Fields'	  => 'mdjm-contact-field',
 						'Contract Templates'	   => 'contract',
 						'Signed Contracts'		 => 'mdjm-signed-contract',
 						'Email Templates'		  => 'email_template',
@@ -134,12 +132,10 @@
 	delete_option( 'mdjm_plugin_settings' );
 	
 	delete_option( 'mdjm_payment_settings' );
-	delete_option( 'mdjm_paypal_settings' );
 	delete_option( 'mdjm_playlist_settings' );
 	delete_option( 'mdjm_plugin_pages' );
 	delete_option( 'mdjm_plugin_permissions' );
 	delete_option( 'mdjm_plugin_settings' );
-	delete_option( 'mdjm_pp_settings' );
 	delete_option( 'mdjm_templates_settings' );
 				
 	delete_option( 'mdjm_schedules' );
@@ -149,5 +145,4 @@
 	delete_option( 'mdjm_updated' );
 	delete_option( 'mdjm_uninst' );
 	delete_option( 'mdjm_debug_settings' );
-	delete_option( 'm_d_j_m_has_initiated' );
 ?>

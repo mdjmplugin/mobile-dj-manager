@@ -36,7 +36,7 @@
 													  'manage_mdjm',
 													  'mdjm-dashboard',
 													  array( &$this, 'mdjm_dashboard_page' ),
-													  plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
+													  plugins_url( 'mobile-dj-manager/admin/images/mdjm-menu-16x16.jpg' ),
 													  '58.4' );
 				/* -- Dashboard -- */									  
 				$mdjm_dashboard_page = add_submenu_page( 'mdjm-dashboard',
@@ -159,6 +159,14 @@
 														  'manage_mdjm',
 														  'edit.php?post_type=' . MDJM_VENUE_POSTS,
 														  '' );
+														  
+				// Premium Extensions
+				$mdjm_addons_page = add_submenu_page( 'mdjm-dashboard',
+													  __( 'Extensions' ),
+													  '<span style="color: #F90;">' . __( 'Extensions' ) . '</span>',
+													  'manage_options',
+													  'admin.php?page=mdjm-settings&tab=addons',
+													  '' );
 				
 				/* -- This is for the playlist, does not display on menu -- */					  
 				add_submenu_page( 
@@ -169,14 +177,14 @@
 					'mdjm-playlists',
 					array( &$this, 'mdjm_playlists_page' )
 				);
-				/* -- This is for the updated page, does not display on menu -- */					  
+				/* -- This is for the about page, does not display on menu -- */					  
 				add_submenu_page( 
 					  null,
-					__( 'Updated' ),
-					__( 'Updated' ),
-					'manage_mdjm',
-					'mdjm-updated',
-					array( &$this, 'mdjm_updated_page' )
+					__( 'About MDJM' ),
+					__( 'About MDJM' ),
+					'manage_options',
+					'mdjm-about',
+					array( &$this, 'mdjm_about_page' )
 				);
 			} // mdjm_menu
 			
@@ -577,6 +585,15 @@
 						'target' => '_blank'
 					),
 				));
+				$admin_bar->add_menu( array(
+					'id'     => 'mdjm-extensions',
+					'parent' => 'mdjm',
+					'title'  => '<span style="color:#F90">' . __( 'Extensions', 'mobile-dj-manager' ) . '</span>',
+					'href'   => admin_url( 'admin.php?page=mdjm-settings&tab=addons' ),
+					'meta'   => array(
+						'title' => __( 'MDJM Extensions' )
+					),
+				));
 			} // mdjm_toolbar
 			
 			/*
@@ -691,13 +708,13 @@
 			} // mdjm_playlists_page
 			
 			/*
-			 * The MDJM Updated page
+			 * The MDJM About page displays plugin information and is generally called following an update
 			 *
 			 *
 			 *
 			 */
-			public function mdjm_updated_page()	{
-				include_once( MDJM_PAGES_DIR . '/updated.php' );
-			} // mdjm_playlists_page
+			public function mdjm_about_page()	{
+				include_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-about.php' );
+			} // mdjm_about_page
 		} // class
 	}

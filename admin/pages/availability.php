@@ -5,8 +5,6 @@
 	}
 	global $current_user;
 
-	f_mdjm_has_updated();
-
 /*
 * availability.php 
 * 08/12/2014
@@ -26,7 +24,7 @@
 				mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
 			}
 			else	{
-				f_mdjm_add_holiday( $_POST );
+				mdjm_add_holiday( $_POST );
 			}
 		}
 		if( $_POST['submit'] == 'Check Date' )	{
@@ -85,7 +83,7 @@
 				return;	
 			}
 			else	{
-				f_mdjm_remove_holiday( $_GET['entry'] );
+				mdjm_remove_holiday( $_GET['entry'] );
 			}
 		}
 	}

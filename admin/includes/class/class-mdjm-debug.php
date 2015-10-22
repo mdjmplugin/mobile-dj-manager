@@ -13,11 +13,10 @@
 			public function __construct()	{
 				$this->settings = get_option( MDJM_DEBUG_SETTINGS_KEY );
 				$this->db_backup_dir = MDJM_PLUGIN_DIR . '/db_backups';
-				$this->backup_url = WPMDJM_PLUGIN_URL . '/db_backups';
+				$this->backup_url = MDJM_PLUGIN_URL . '/db_backups';
 				$this->tables = array(
 									'Events'			  => MDJM_EVENTS_TABLE,
 									'Playlist'	  		=> MDJM_PLAYLIST_TABLE,
-									'Music Library'	   => MDJM_MUSIC_LIBRARY_TABLE,
 									'Transactions'  		=> MDJM_TRANSACTION_TABLE,
 									'Journal'	   		 => MDJM_JOURNAL_TABLE,
 									'Availability'  		=> MDJM_HOLIDAY_TABLE,
@@ -30,6 +29,8 @@
 										
 				define( 'MDJM_DEBUG', !empty( $this->settings['enable'] ) ? true : false );
 				define( 'MDJM_DEBUG_LOG', MDJM_PLUGIN_DIR . '/mdjm_debug.log' );
+				
+				add_action( 'admin_init', array( &$this, 'log_file_check' ) );
 								
 			} // __construct
 			
@@ -517,7 +518,6 @@
 				$data_id = array(
 							MDJM_EVENTS_TABLE				  => 'event_id',
 							MDJM_PLAYLIST_TABLE				=> 'id',
-							MDJM_MUSIC_LIBRARY_TABLE		   => 'id',
 							MDJM_TRANSACTION_TABLE			 => 'trans_id',
 							MDJM_JOURNAL_TABLE				 => 'id',
 							MDJM_HOLIDAY_TABLE				 => 'id',
@@ -587,7 +587,6 @@
 						$mdjm_desc = array(
 							MDJM_EVENTS_TABLE				  => 'Events Table',
 							MDJM_PLAYLIST_TABLE				=> 'Playlist Table',
-							MDJM_MUSIC_LIBRARY_TABLE		   => 'Music Library Table',
 							MDJM_TRANSACTION_TABLE			 => 'Transactions Table',
 							MDJM_JOURNAL_TABLE				 => 'Journal Table',
 							MDJM_HOLIDAY_TABLE				 => 'Availability Table',

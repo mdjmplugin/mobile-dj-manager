@@ -16,7 +16,6 @@
 		if( !empty( $next_event ) )
 			$event_types = get_the_terms( $next_event[0]->ID, 'event-types' );
 						
-		$dash_dj = f_mdjm_dashboard_dj_overview();
 		$bookings_today = $mdjm->mdjm_events->employee_bookings();
 		?>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -68,10 +67,12 @@
         <ul>
         <?php
 			if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				$dj_event_results = f_mdjm_dj_working_today();
-				foreach( $dj_event_results as $info )	{
-					$djinfo = get_userdata( $info->event_dj );
-					echo '<li>' . $djinfo->first_name . ' is working from ' . date( 'H:i', strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)</li>';
+				$dj_event_results = $mdjm->mdjm_events->employee_bookings();
+				if( $dj_event_results )	{
+					foreach( $dj_event_results as $info )	{
+						$djinfo = get_userdata( $info->event_dj );
+						echo '<li>' . $djinfo->first_name . ' is working from ' . date( 'H:i', strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)</li>';
+					}
 				}
 			}
 		?>

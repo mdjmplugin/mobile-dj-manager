@@ -11,9 +11,7 @@
 	
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-	
-	f_mdjm_has_updated();
-	
+		
 	/* -- Build the MDJM_ClientFields class -- */
 	if( !class_exists( 'MDJM_ClientFields' ) )	{
 		class MDJM_ClientFields	{
@@ -171,7 +169,7 @@
 			 */
 			public function drag_n_drop()	{
 				wp_enqueue_script( 'jquery-ui-sortable' );
-				wp_enqueue_script( 'update-order', WPMDJM_PLUGIN_URL . '/admin/includes/js/mdjm-order-list.js' );
+				wp_enqueue_script( 'update-order-client-fields', MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-order-list.js' );
 			} // drag_n_drop
 			
 			/*
@@ -186,7 +184,7 @@
 				/* -- Enable drag & drop -- */
 				$this->drag_n_drop();
 				
-				$dir = WPMDJM_PLUGIN_URL . '/admin/images/contact-form-icons';
+				$dir = MDJM_PLUGIN_URL . '/admin/images/contact-form-icons';
 				
 				// Start the container
 				echo '<div class="mdjm-client-field-container">' . "\r\n";
@@ -442,7 +440,7 @@
 			 * @param	arr		$field		The field which to query
 			 */
 			function field_icons( $field )	{
-				$dir = WPMDJM_PLUGIN_URL . '/admin/images/form-icons';
+				$dir = MDJM_PLUGIN_URL . '/admin/images/form-icons';
 				
 				$output = '';
 				

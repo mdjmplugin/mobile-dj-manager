@@ -132,7 +132,7 @@
 			
 			$class = 'updated';
 			$message = 'The <strong>' . $mdjm_schedules[$_POST['slug']]['name'] . '</strong> task has been updated successfully';
-			f_mdjm_update_notice( $class, $message );
+			mdjm_update_notice( $class, $message );
 		}
 	}
 
@@ -231,7 +231,7 @@
 				?>
                 </td>
                 <td>
-                <a href="<?php echo f_mdjm_admin_page( 'tasks') . '&task_action=edit&slug=' . $schedule['slug']; ?>" title="Edit <?php echo esc_attr( $schedule['name'] ); ?> Scheduled Task">Edit</a>
+                <a href="<?php echo mdjm_get_admin_page( 'tasks') . '&task_action=edit&slug=' . $schedule['slug']; ?>" title="Edit <?php echo esc_attr( $schedule['name'] ); ?> Scheduled Task">Edit</a>
                 </td>
                 </tr>
                 <?php
@@ -274,7 +274,7 @@
 			$ro = '';
 		?>
         <h2>Edit Task</h2>
-        <form name="form_task_edit" method="post" action="<?php echo f_mdjm_admin_page( 'tasks' ) . '&task_updated=1'; ?>">
+        <form name="form_task_edit" method="post" action="<?php echo mdjm_get_admin_page( 'tasks' ) . '&task_updated=1'; ?>">
         <input type="hidden" name="slug" value="<?php echo $mdjm_schedules[$task]['slug']; ?>" />
         <table class="widefat">
         <tr>

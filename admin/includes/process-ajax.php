@@ -19,29 +19,6 @@
 		die();
 	} // save_mdjm_client_field_order
 	add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_order' );
-
-/*
- * Save the contact form field order
- *
- *
- */
-	function save_mdjm_field_order()	{
-		global $mdjm_posts;
-		
-		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-		
-		foreach( $_POST['fields'] as $order => $id )	{
-			$menu = $order + 1;
-			
-			wp_update_post( array(
-								'ID'			=> $id,
-								'menu_order'	=> $menu,
-								) );	
-		}
-		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-		die();
-	} // save_mdjm_field_order
-	add_action( 'wp_ajax_mdjm_update_field_order', 'save_mdjm_field_order' );
 	
 /*
  * Save the event transaction
@@ -50,7 +27,7 @@
  */
 	function save_event_transaction()	{		
 		if( !class_exists( 'MDJM_Transactions' ) )
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
 		
 		$mdjm_transactions = new MDJM_Transactions();
 		
@@ -211,7 +188,7 @@
 	add_action( 'wp_ajax_update_event_cost_from_package', 'update_event_cost_from_package' );
 	
 	/*
-	 * Update the event cost as the package changes
+	 * Update the event cost as the addons change
 	 *
 	 *
 	 *

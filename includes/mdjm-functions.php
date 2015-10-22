@@ -10,21 +10,17 @@
  * START GENERAL FUNCTIONS
  */
  	/*
-	 * mdjm_get_admin_page
-	 * 18/03/2015
-	 * Return the requested page URL
+	 * Return the admin URL for the given page
 	 *
-	 *	@since: 1.1.3
-	 *	@called: Only from the admin UI
-	 *	@params: $mdjm_page, $action (echo or str )
-	 * 	@returns: $mdjm_page - str or echo
+	 *
+	 * 
+	 * @params 	STR		$mdjm_page	Required: The page for which we want the URL
+	 * 			str		$action		Optional: Whether to return as string (Default) or echo the URL.
+	 * @returns $mdjm_page - str or echo
 	 */
-	function mdjm_get_admin_page( $mdjm_page, $action='' )	{
+	function mdjm_get_admin_page( $mdjm_page, $action='str' )	{
 		if( empty( $mdjm_page ) )
 			return;
-		/* -- Always assume str -- */
-		if( empty( $action ) )
-			$action = 'str';
 		
 		$mydjplanner = array( 'mydjplanner', 'user_guides', 'mdjm_support', 'mdjm_forums' );
 		$mdjm_pages = array(
@@ -40,7 +36,7 @@
 						'comms'                 => 'admin.php?page=mdjm-comms',
 						'email_history'         => 'edit.php?post_type=' . MDJM_COMM_POSTS,
 						'contract'              => 'edit.php?post_type=' . MDJM_CONTRACT_POSTS,
-						'signed_contract'		=> 'edit.php?post_type=' . MDJM_SIGNED_CONTRACT_POSTS,
+						'signed_contract'	   => 'edit.php?post_type=' . MDJM_SIGNED_CONTRACT_POSTS,
 						'add_contract'          => 'post-new.php?post_type=' . MDJM_CONTRACT_POSTS,
 						'djs'                   => 'admin.php?page=mdjm-djs',
 						'inactive_djs'          => 'admin.php?page=mdjm-djs&display=inactive_dj',
@@ -63,6 +59,7 @@
 						'contact_forms'         => 'admin.php?page=mdjm-contact-forms',
 						'transactions'		  => 'edit.php?post_type=' . MDJM_TRANS_POSTS,
 						'updated'			   => 'admin.php?page=mdjm-updated',
+						'about'			     => 'admin.php?page=mdjm-about',
 						'mydjplanner'           => 'http://www.mydjplanner.co.uk',
 						'user_guides'           => 'http://www.mydjplanner.co.uk/support/user-guides',
 						'mdjm_support'          => 'http://www.mydjplanner.co.uk/support',
@@ -204,12 +201,16 @@
 						'EUR' => '&euro;',
 						'GBP' => '&pound;',
 						'USD' => '$',
+						'AUS' => '$',
 						'BRL' => '&#x52;&#x24;',
+						'CAD' => '$',
 						'CHF' => 'CHF',
 						'CZK' => '&#x4b;&#x10d;',
 						'DKK' => 'kr',
-						'ZAR' => 'R',
-						'TRL' => '&#x20a4;'
+						'NZD' => '$',
+						'SGD' => '$',
+						'TRL' => '&#x20a4;',
+						'ZAR' => 'R'
 						);
 		return $symbols[$currency];	
 	} // mdjm_set_currency
@@ -545,6 +546,76 @@
 		return false;
 	} // is_dj
 	
+	/**
+	 * Return all dates within the given range
+	 * 
+	 * @param	$str	$from_date		The start date Y-m-d
+	 *			$str	$to_date		The end date Y-m-d
+	 * 
+	 * @return all dates between 2 given dates as an array
+	 */
+	function mdjm_all_dates_in_range( $from_date, $to_date )	{
+		$from_date = \DateTime::createFromFormat( 'Y-m-d', $from_date );
+		$to_date = \DateTime::createFromFormat( 'Y-m-d', $to_date );
+		return new \DatePeriod(
+			$from_date,
+			new \DateInterval( 'P1D' ),
+			$to_date->modify( '+1 day' )
+		);
+	} // mdjm_all_dates_in_range
+	
+	/**
+	 * Insert an employee holiday into the database
+	 * 
+	 * 
+	 * @param	arr		$args	An array of information regarding the holiday
+	 *							'from_date' Y-m-d
+	 *							'to_date' Y-m-d
+	 *							'employee' UserID
+	 *							'notes' String with information re holiday
+	 * 
+	 */
+	function mdjm_add_holiday( $args )	{
+		global $wpdb;
+		
+		$date_range = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+		foreach( $date_range as $the_date )	{
+			$wpdb->insert( 
+				MDJM_HOLIDAY_TABLE,
+					array(
+						'id'	     => '',
+						'user_id'    => $args['employee'],
+						'entry_id'   => get_current_user_id() . '_' . time(),
+						'date_from'  => $the_date->format( 'Y-m-d' ),
+						'date_to'  	 => $args['to_date'],
+						'notes'      => $args['notes'],
+					) );
+		}
+		mdjm_update_notice( 'updated', 'The entry was added successfully' );	
+	} // mdjm_add_holiday
+	
+	/**
+	 * Remove an employee holiday entry from the database
+	 * 
+	 * 
+	 * @param	int		$entry	The database ID for the entry
+	 *
+	 * 
+	 */
+	function mdjm_remove_holiday( $entry )	{
+		global $wpdb;
+		if( empty( $entry ) )	{
+			return mdjm_update_notice( 'error', 'Could not remove entry' );	
+		}
+		
+		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'id' => $entry, ) ) )	{
+			mdjm_update_notice( 'updated', 'The entry was <strong>deleted</strong> successfully' );					
+		}
+		else	{
+			mdjm_update_notice( 'error', 'Could not remove entry' );	
+		}
+	} // mdjm_remove_holiday
+	
 	/*
 	 * Check the availability of the DJ('s) on the given date (Y-m-d)
 	 *
@@ -638,7 +709,7 @@
 			$last_day = date( 'Y-m-d', strtotime( '+1 week' ) );
 		}
 		
-		$date_range = f_mdjm_all_dates_in_range( $first_day, $last_day );
+		$date_range = mdjm_all_dates_in_range( $first_day, $last_day );
 		
 		$event_args = array(
 						'posts_per_page'	=> -1,

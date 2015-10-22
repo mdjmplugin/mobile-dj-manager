@@ -31,7 +31,7 @@
 				$mdjm->debug_logger( 'Starting ' . __METHOD__, true );
 						
 			if( empty( $args ) || !is_array( $args ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged' );
+				return mdjm_update_notice( 'update-nag', 'The communication was not logged' );
 							
 			$post_args['post_title'] = isset( $args['subject'] ) ? wp_strip_all_tags( $args['subject'] ) : '';
 			$post_args['post_content'] = isset( $args['content'] ) ? $args['content'] : '';
@@ -44,15 +44,13 @@
 			$meta_args['event'] = isset( $args['event'] ) ? $args['event'] : '';
 
 			if( empty( $post_args['post_title'] ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no title ' . $post_args['post_title'] );
+				return mdjm_update_notice( 'update-nag', 'The communication was not logged - no title ' . $post_args['post_title'] );
 			if( empty( $post_args['post_content'] ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no content ' . $post_args['post_content'] ); 
+				return mdjm_update_notice( 'update-nag', 'The communication was not logged - no content ' . $post_args['post_content'] ); 
 			if( empty( $meta_args['recipient'] ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no recipient ' . $post_args['recipient'] ); 
+				return mdjm_update_notice( 'update-nag', 'The communication was not logged - no recipient ' . $post_args['recipient'] ); 
 			if( empty( $meta_args['source'] ) )
-				return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no source ' . $post_args['source'] ); 
-			//if( empty( $meta_args['event'] ) )
-			//	return f_mdjm_update_notice( 'update-nag', 'The communication was not logged - no event ' . $post_args['event'] );
+				return mdjm_update_notice( 'update-nag', 'The communication was not logged - no source ' . $post_args['source'] ); 
 				
 			$post_args['post_type'] = 'mdjm_communication';
 			$post_args['ping_status'] = false;
@@ -105,7 +103,7 @@
 			header( 'Pragma: no-cache' );
 		
 			if( empty( $stat_image ) )
-				$stat_image = WPMDJM_PLUGIN_DIR . '/admin/images/invpicture.png';
+				$stat_image = MDJM_PLUGIN_DIR . '/admin/images/invpicture.png';
 				
 			$handle = fopen( $stat_image, 'r' );
 		

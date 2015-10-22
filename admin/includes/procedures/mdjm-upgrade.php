@@ -24,7 +24,10 @@
 			$update = get_option( 'mdjm_update_me' );
 			
 			if( !empty( $update ) )
-				$this->execute_updates();	
+				$this->execute_updates();
+			
+			if( !wp_next_scheduled( 'mdjm_hourly_schedule' ) )	
+				wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );	
 		} // __construct
 		
 		/*
@@ -74,6 +77,9 @@
 				
 			if( $version < '1.2.5.1' )
 				$this->update_to_1_2_5_1();
+				
+			if( $version < '1.2.5.2' )
+				$this->update_to_1_2_5_2();
 			
 		} // execute_updates
 		
@@ -1329,6 +1335,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.1', true );
 		} // update_to_1_2_5_1
+		
+		/*
+		 * Execute upgrade for version 1.2.5.2
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_5_2()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5.2', true );
+			
+			include_once( 'update_to_1.2.5.2.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.2', true );
+		} // update_to_1_2_5_2
 		
 	} // class
 	

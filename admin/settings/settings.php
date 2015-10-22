@@ -1810,12 +1810,16 @@
 														'list_values' => array( 'EUR' => '&euro; (EUR)',
 																				'GBP' => '&pound; (GBP)',
 																				'USD' => '$ (USD)',
+																				'AUS' => '$ (AUS)',
 																				'BRL' => '&#x52;&#x24; (BRL)',
+																				'CAD' => '$ (CAD)',
 																				'CHF' => 'CHF',
 																				'CZK' => '&#x4b;&#x10d; (CZK)',
 																				'DKK' => 'kr (DKK)',
-																				'ZAR' => 'R (ZAR)',
-																				'TRL' => '&#x20a4; (TRL)'),
+																				'NZD' => '$ (NZD)',
+																				'SGD' => '$ (SGD)',
+																				'TRL' => '&#x20a4; (TRL)',
+																				'ZAR' => 'R (ZAR)' ),
 														
 																		
 														),

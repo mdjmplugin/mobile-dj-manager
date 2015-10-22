@@ -6,7 +6,7 @@
 * A Listener for Client Emails
 */
 	if( !class_exists( 'MDJM_Communication' ) )
-		require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+		require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
 		
 	$mdjm_comms = new MDJM_Communication();
 

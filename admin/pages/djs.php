@@ -15,9 +15,7 @@
 	if ( !current_user_can( 'manage_mdjm' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
-	
-	f_mdjm_has_updated();
-		
+			
 /**
  * f_mdjm_render_djs_table
  * Render the table with list of DJ's
@@ -32,7 +30,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_djs_table' ) ) {
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-dj-table.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-dj-table.php' );
 		}
 		$djs_table = new MDJM_DJs_Table();
 		?>

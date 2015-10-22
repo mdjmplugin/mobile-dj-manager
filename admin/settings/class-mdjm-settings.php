@@ -188,6 +188,10 @@
 					case 'text':
 						$this->show_text_field( $args );
 					break;
+					/* -- Password Field -- */
+					case 'password':
+						$this->show_text_field( $args );
+					break;
 					/* -- Email Field -- */
 					case 'email':
 						$this->show_text_field( $args );
@@ -308,7 +312,7 @@
 				if( $this->current_section == 'mdjm_app_debugging' )
 					$mdjm_debug->submit_files_button();
 				
-				if( $this->current_tab == 'addons' )
+				if( $this->current_section == 'mdjm_addon_settings' )
 					$this->mdjm_premium_addons();
 			
 				/* -- End the wrap div -- */
@@ -371,7 +375,9 @@
 													__( 'Availability Checker', 'mobile-dj-manager' )		 => 'mdjm_availability_settings',
 													),
 							'payments'	=> array(
-													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' )
+													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' ),
+							'addons'	=> array(
+													__( 'Premium Addons', 'mobile-dj-manager' ) 		=> 'mdjm_addon_settings' )
 							);
 							
 				// Run the filter for the MDJM Add ons to enable the settings links
@@ -427,8 +433,8 @@
 			} // show_hidden_field
 			
 			/*
-			 * Display the setting field as a text input
-			 *
+			 * Display the setting field as a text input.
+			 * Also applies for password fields
 			 *
 			 *
 			 */
@@ -451,7 +457,7 @@
 				
 				if( $args['custom_args']['list_type'] == 'page' ) // Pages
 					wp_dropdown_pages( $args['custom_args'] );
-					
+										
 				else	{
 					echo '<select name="' . ( !empty( $args['key'] ) ? $args['key'] . '[' . $args['field'] . ']' 
 					: $args['field'] ) . ( $args['type'] == 'multiple_select' ? '[]' : '' ) . '" id="' . $args['field'] . '"' . 
@@ -571,7 +577,8 @@
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'enable_pf_sandbox', 'payfast_debug', 'dj_see_wp_dash', 'dj_add_client',
 								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists',
 								'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
-								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users'
+								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users',
+								'gmail_enquiry', 'gmail_dj', 'gcal_full_sync'
 								);
 				
 				$value = ( in_array( $args['field'], $true_vals ) ? '1' : 'Y' );
@@ -702,15 +709,30 @@
 			 */	
 			function mdjm_premium_addons()	{
 				?>
+                <style>
+				table { border-spacing: 0.5rem; }
+				td {padding-left: 0.5rem; padding-right: 0.5rem; }
+				</style>
 				<h3><?php _e( 'Have you tried our Premium Plugins', 'mobile-dj-manager' ); ?>?</h3>
-                <p><?php _e( 'Our selection of premium add-ons for MDJM enable additional enhanced features to increase functionality and enhance your clients experience', 'mobile-dj-manager' ); ?>.</p>
-                <p style="font-weight: bold; font-size: 14px; color: #F90;"><?php _e( 'MDJM Dynamic Contact Forms', 'mobile-dj-manager' ); ?> <a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank"><?php _e( 'Buy Now', 'mobile-dj-manager' ); ?></a></p>
-                <p><?php _e( 'With the Dynamic Contact Forms add-on you can respond to enquiries within seconds and guarantee a professional and accurate quote each and every time, without spending a lot of time doing it', 'mobile-dj-manager' ); ?>.</p>
-
-				<p><?php _e( 'You can even see when the client has opened your quote', 'mobile-dj-manager' ); ?>!</p>
-                
-                <p style="font-weight: bold; font-size: 14px; color: #F90;"><?php _e( 'MDJM Payments', 'mobile-dj-manager' ); ?> <a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><?php _e( 'Buy Now', 'mobile-dj-manager' ); ?></a></p>
-                <p><?php _e( 'The MDJM Payments add-on enables you to receive client payments via your website with full automation.', 'mobile-dj-manager' ); ?>
+                <p><?php _e( 'Our Premium Plugins enhance the features of the MDJM Event Management Plugin. All premium plugins are provided with a full years updates and support', 'mobile-dj-manager' ); ?>.</p>
+                <table>
+                <tr>
+                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/09/MDJM_DCF_Product.jpg" alt="MDJM Dynamic Contact Forms" title="MDJM Dynamic Contact Forms" /></a></td>
+                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Payments_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></td></a>
+                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Google_Cal_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></td></a>
+                </tr>
+                <tr>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank" class="button secondary">Buy now</a><br>
+                    <strong>&pound;35.00</strong>
+                </td>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank" class="button secondary">Buy now</a><br>
+                    <strong>&pound;25.00</strong>
+                </td>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank" class="button secondary">Buy now</a><br>
+                    <strong>&pound;25.00</strong>
+                </td>
+                </tr>
+                </table>
 				<?php
 			} // mdjm_premium_addons	
 

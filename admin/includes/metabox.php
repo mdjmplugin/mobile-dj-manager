@@ -940,6 +940,12 @@
             </div>
             <div class="mdjm-right-col"><?php _e( MDJM_BALANCE_LABEL . ' paid?' ); ?></div>
         </div>
+        
+		<?php 
+            // Execute actions before the update/save event button
+            do_action( 'mdjm_event_options_meta_content_last', $post );
+        ?>
+        
         <div class="mdjm-meta-row" style="height: <?php echo ( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' ? 
 													'60px' : '40px' ); ?> !important;">
         	<div class="mdjm-left-col">
@@ -1046,12 +1052,12 @@
 	 */
 	function mdjm_event_post_transactions_metabox( $post )	{
 		
-		wp_enqueue_script( 'event-trans', WPMDJM_PLUGIN_URL . '/admin/includes/js/mdjm-save-transaction.js' );
+		wp_enqueue_script( 'event-trans', MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-save-transaction.js' );
 		wp_localize_script( 'event-trans', 'posttrans', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 												
 		echo '<div id="transaction">' . "\r\n";
 		if( !class_exists( 'MDJM_Transactions' ) )
-			require_once( WPMDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
 		
 		$mdjm_transactions = new MDJM_Transactions();
 		

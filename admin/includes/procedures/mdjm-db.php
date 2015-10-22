@@ -40,24 +40,7 @@
 								upload_procedure int(11) DEFAULT '0' NOT NULL
 								PRIMARY KEY  (id)
 								);";
-								
-			/* PLAYLISTS LIBRARY TABLE */
-			$music_library_sql = "CREATE TABLE ". MDJM_MUSIC_LIBRARY_TABLE . " (
-								id int(11) NOT NULL AUTO_INCREMENT,
-								library varchar(255) NULL,
-								library_slug varchar(255) NOT NULL,
-								song varchar(255) NOT NULL,
-								artist varchar(255) NOT NULL,
-								album varchar(255) NULL,
-								genre varchar(255) NULL,
-								year varchar(10) NULL,
-								comments text NULL,
-								rating varchar(10) NULL,
-								dj int(11) NOT NULL,
-								date_added date NULL,
-								PRIMARY KEY  (id)
-								);";
-								
+																
 			/* AVAILABILITY TABLE */
 			$holiday_sql = "CREATE TABLE ". MDJM_HOLIDAY_TABLE . " (
 								id int(11) NOT NULL AUTO_INCREMENT,
