@@ -119,7 +119,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public function mdjm_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.2.5.1' );
+			define( 'MDJM_VERSION_NUM', '1.2.5.2' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
