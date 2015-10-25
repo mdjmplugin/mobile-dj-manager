@@ -100,6 +100,8 @@
 								'orderby' => 'display_name',
 								'order' => 'ASC',
 								) );
+		$client_id = get_post_meta( $post->ID, '_mdjm_event_client', true );
+		
 		?>
         <div class="mdjm-post-row-single">
             <div class="mdjm-post-1column">
@@ -112,11 +114,15 @@
                     echo ( $existing_event == false && ( current_user_can( 'administrator' ) || dj_can( 'dj_add_client' ) ) ? '<option value="add_new">--- Add New Client ---</option>' . "\r\n" : '' );
                     foreach( $clients as $client )	{
                         echo '<option value="' . $client->ID . '"';
-						selected( $client->ID, get_post_meta( $post->ID, '_mdjm_event_client', true ) );
+						selected( $client->ID, $client_id );
 						echo '>' . $client->display_name . '</option>' . "\r\n";
                     }
                 ?>
                 </select>
+                <?php
+                if( $post->post_status != 'auto-draft' && !empty( $client_id ) )
+					echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>';
+				?>
             </div>
 		</div>
         <style>
@@ -525,7 +531,8 @@
                 if( empty( $current_venue ) )
 					echo '<option value="">--- Select a Venue ---</option>' . "\r\n";
 				?>
-                <option value="manual"<?php selected( 'manual', $current_venue ); ?>>--- Enter Manually ---</option>
+                <option value="manual"<?php selected( 'manual', $current_venue ); ?>>--- <?php _e( 'Enter Manually', 'mobile-dj-manager' ); ?> ---</option>
+                <option value="client"<?php selected( 'client', $current_venue ); ?>>--- <?php _e( 'Use Client Address', 'mobile-dj-manager' ); ?> ---</option>
                 <?php
                 /* -- Build the drop down box -- */
                 $venues = get_posts( array( 'post_type' => MDJM_VENUE_POSTS, 'orderby' => 'post_title', 'order' => 'ASC', 'numberposts' => -1, ) );
@@ -541,7 +548,7 @@
         <!-- End of first row -->
         <style>
         #venue_fields	{
-            display: <?php echo ( $current_venue == 'manual' || !is_numeric( $current_venue ) ? 'block;' : 'none;' ); ?>
+            display: <?php echo ( $current_venue == 'manual' || !is_numeric( $current_venue ) && $current_venue != 'client' ? 'block;' : 'none;' ); ?>
         }
 		</style>
   		<div id="venue_fields">
@@ -939,6 +946,24 @@
             <input type="checkbox" name="balance_paid" id="balance_paid" value="Paid"<?php checked( get_post_meta( $post->ID, '_mdjm_event_balance_status', true ), 'Paid' ); ?> />
             </div>
             <div class="mdjm-right-col"><?php _e( MDJM_BALANCE_LABEL . ' paid?' ); ?></div>
+        </div>
+        
+        <div class="mdjm-meta-row">
+        	<div class="mdjm-left-col">
+            <input type="checkbox" name="_mdjm_event_playlist" id="_mdjm_event_playlist" value="Y"<?php 
+				if( $existing_event == false )	{
+					if( MDJM_PLAYLIST_ENABLE == true )	{
+						echo ' checked = "checked"';
+					}
+				}
+				else	{	
+					if( get_post_meta( $post->ID, '_mdjm_event_playlist', true ) == 'Y' )	{
+						echo ' checked = "checked"';
+					}
+				}
+				?> />
+            </div>
+            <div class="mdjm-right-col"><?php _e( 'Enable Event Playlist?', 'mobile-dj-manager' ); ?></div>
         </div>
         
 		<?php 

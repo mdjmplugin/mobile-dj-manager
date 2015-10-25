@@ -86,6 +86,7 @@
 							'journaling'              		  => true,
 						),
 						'mdjm_playlist_settings' => array(
+							'enable_playlists'				=> true,
 							'close'		           		   => '5',
 							'playlist_cats'				   => $playlist_options,
 							'upload_playlists'        		=> true,

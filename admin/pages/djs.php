@@ -62,7 +62,7 @@
 		$func = 'f_mdjm_' . $_GET['action'];
 		/* Check for actions */
 		if( isset( $_GET['role'] ) && !empty( $_GET['role'] ) )	{
-			$func( $_GET['dj_id'], $_GET['role'] );
+			set_user_role( $_GET['dj_id'], $_GET['role'] );
 			f_mdjm_render_djs_table();
 		}
 		else	{

@@ -788,7 +788,7 @@
 					$event_data['_mdjm_event_client'] = ( $_POST['client_name'] != 'add_new' ? 
 						$_POST['client_name'] : $mdjm->mdjm_events->mdjm_add_client() );
 						
-					if( $new_post === false && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
+					if( $new_post != true && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
 						$field_updates[] = '     | Client changed from ' . $current_meta['_mdjm_event_client'][0] . ' to ' . $_POST['client_name'];
 					
 					if( empty( $_POST['client_name'] ) )	{
@@ -813,8 +813,8 @@
 					}
 										
 					/* -- Get the Venue ID -- */
-					$event_data['_mdjm_event_venue_id'] = ( $_POST['venue_id'] != 'manual' ? 
-						$_POST['venue_id'] : 'manual' );
+					$event_data['_mdjm_event_venue_id'] = ( $_POST['venue_id'] != 'manual' && $_POST['venue_id'] != 'client' ? 
+						$_POST['venue_id'] : ( !empty( $_POST['_mdjm_event_venue_id'] ) && $_POST['_mdjm_event_venue_id'] == 'client' ? 'client' : 'manual' ) );
 						
 					if( $new_post === false && isset( $current_meta['_mdjm_event_venue_id'][0] ) && $_POST['venue_id'] != $current_meta['_mdjm_event_venue_id'][0] )	{
 						$field_updates[] = 'Venue changed from ' . ( $current_meta['_mdjm_event_venue_id'][0] != 'manual' ?
@@ -850,15 +850,30 @@
 					}
 					/* -- Manual venue, set event fields -- */
 					else	{
-						$event_data['_mdjm_event_venue_name'] = sanitize_text_field( ucwords( $_POST['venue_name'] ) );
-						$event_data['_mdjm_event_venue_contact'] = sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
-						$event_data['_mdjm_event_venue_phone'] = sanitize_text_field( $_POST['venue_phone'] );
-						$event_data['_mdjm_event_venue_email'] = sanitize_email( strtolower( $_POST['venue_email'] ) );
-						$event_data['_mdjm_event_venue_address1'] = sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
-						$event_data['_mdjm_event_venue_address2'] = sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
-						$event_data['_mdjm_event_venue_town'] = sanitize_text_field( ucwords( $_POST['venue_town'] ) );
-						$event_data['_mdjm_event_venue_county'] = sanitize_text_field( ucwords( $_POST['venue_county'] ) );
-						$event_data['_mdjm_event_venue_postcode'] = strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
+						if( $_POST['venue_id'] != 'client' )	{ // Don't use client address
+							$event_data['_mdjm_event_venue_name'] = sanitize_text_field( ucwords( $_POST['venue_name'] ) );
+							$event_data['_mdjm_event_venue_contact'] = sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
+							$event_data['_mdjm_event_venue_phone'] = sanitize_text_field( $_POST['venue_phone'] );
+							$event_data['_mdjm_event_venue_email'] = sanitize_email( strtolower( $_POST['venue_email'] ) );
+							$event_data['_mdjm_event_venue_address1'] = sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
+							$event_data['_mdjm_event_venue_address2'] = sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
+							$event_data['_mdjm_event_venue_town'] = sanitize_text_field( ucwords( $_POST['venue_town'] ) );
+							$event_data['_mdjm_event_venue_county'] = sanitize_text_field( ucwords( $_POST['venue_county'] ) );
+							$event_data['_mdjm_event_venue_postcode'] = strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
+						}
+						else	{
+							$client_data = get_userdata( $event_data['_mdjm_event_client'] );
+							$event_data['_mdjm_event_venue_name'] = __( 'Client Address', 'mobile-dj-manager' );
+							$event_data['_mdjm_event_venue_contact'] = !empty( $client_data->first_name ) ? sanitize_text_field( $client_data->first_name ) : '';
+							$event_data['_mdjm_event_venue_contact'] .= ' ' . !empty( $client_data->last_name ) ? sanitize_text_field( $client_data->last_name ) : '';
+							$event_data['_mdjm_event_venue_phone'] = !empty( $client_data->phone1 ) ? $client_data->phone1 : '';
+							$event_data['_mdjm_event_venue_email'] = !empty( $client_data->user_email ) ? $client_data->user_email : '';
+							$event_data['_mdjm_event_venue_address1'] = !empty( $client_data->address1 ) ? $client_data->address1 : '';
+							$event_data['_mdjm_event_venue_address2'] = !empty( $client_data->address2 ) ? $client_data->address2 : '';
+							$event_data['_mdjm_event_venue_town'] = !empty( $client_data->town ) ? $client_data->town : '';
+							$event_data['_mdjm_event_venue_county'] = !empty( $client_data->county ) ? $client_data->county : '';
+							$event_data['_mdjm_event_venue_postcode'] = !empty( $client_data->postcode ) ? $client_data->postcode : '';
+						}
 					}
 					
 					/* -- Prepare the remaining event fields -- */
@@ -867,10 +882,12 @@
 					// Event name
 					$_POST['_mdjm_event_name'] = ( !empty( $_POST['_mdjm_event_name'] ) ? $_POST['_mdjm_event_name'] : 
 						get_term( $_POST['mdjm_event_type'], 'event-types' )->name );
-					
-					// Playlist
+											
 					if( $new_post == true || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )
 						$event_data['_mdjm_event_playlist_access'] = $mdjm->mdjm_events->playlist_ref();
+					
+					// Playlist Enabled
+					$event_data['_mdjm_event_playlist'] = !empty( $_POST['enable_playlist'] ) ? $_POST['enable_playlist'] : 'N';
 					
 					foreach( $_POST as $key => $value )	{
 						if( substr( $key, 0, 12 ) == '_mdjm_event_' )
@@ -1457,12 +1474,14 @@
 						/* -- Client -- */
 						case 'client':
 							$client = get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) );
-							echo ( !empty( $client ) ? $client->display_name : '<span class="mdjm-form-error">Not Assigned</span>' );
+							echo ( !empty( $client ) ? '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . $client->ID . '&event_id=' . $post->ID . '">' . 
+								$client->display_name . '</a>' : '<span class="mdjm-form-error">Not Assigned</span>' );
 							break;
 						/* -- DJ -- */
 						case 'dj':
 							$dj = get_userdata( get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
-							echo ( !empty( $dj ) ? $dj->display_name : '<span class="mdjm-form-error">Not Assigned</span>' );
+							echo ( !empty( $dj ) ? '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . $dj->ID . '&event_id=' . $post->ID . '">' . 
+								$dj->display_name . '</a>' : '<span class="mdjm-form-error">Not Assigned</span>' );
 							break;
 						/* -- Status -- */
 						case 'event_status':
@@ -1678,8 +1697,8 @@
 			public function column_sorting( $columns )	{
 				global $post, $mdjm_post_types;
 				
-				if( !isset( $post ) || !in_array( $post->post_type, $mdjm_post_types ) )
-					return; 
+				if( empty( $post ) || !in_array( $post->post_type, $mdjm_post_types ) )
+					return $columns; 
 				
 				/* -- Events sortable columns -- */
 				if( $post->post_type == MDJM_EVENT_POSTS )	{
@@ -2465,6 +2484,9 @@
 					
 					/* -- Side -- */
 					add_meta_box( 'mdjm-event-options', __( 'Event Options', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox', MDJM_EVENT_POSTS, 'side', 'low' );
+					
+					// Run action hook for mdjm_event_metabox
+					do_action( 'mdjm_event_metaboxes', $post );
 				}
 			/* -- Transactions -- */
 				if( $post->post_type == MDJM_TRANS_POSTS )	{

@@ -109,7 +109,7 @@
 		function extra_tablenav( $which )	{ // Determine what is to be shown before and after the table
 			global $wpdb, $display_query, $display, $order, $orderby;
 			$active_djs = mdjm_get_djs();
-			$inactive_djs = mdjm_get_djs( 'inactive' );
+			$inactive_djs = mdjm_get_djs( 'inactive_dj' );
 			if( isset( $which ) && $which == "top" ){ // Before table
 		   ?>
 				<ul class='subsubsub'>
@@ -151,12 +151,12 @@
 		
 		function get_bulk_actions() { // Define the bulk actions for the drop down list
 			if( current_user_can( 'administrator' ) )	{
-				if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_djs' )	{
+				if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_dj' )	{
 					$actions = array(
 								'inactive' => 'Mark Inactive',
 								);
 				}
-				if( isset( $_GET['display'] ) && $_GET['display'] == 'inactive_djs' )	{
+				if( isset( $_GET['display'] ) && $_GET['display'] == 'inactive_dj' )	{
 					$actions = array(
 								'active' => 'Mark Active',
 								);
@@ -175,10 +175,10 @@
 				return;
 			
 			if( 'inactive' === $this->current_action() ) {
-					f_mdjm_set_client_role( $djs, 'inactive_dj' );
+					set_user_role( $djs, 'inactive_dj' );
 			}
 			if( 'active' === $this->current_action() ) {
-					f_mdjm_set_client_role( $djs, 'dj' );
+					set_user_role( $djs, 'dj' );
 			}
 		} // process_bulk_action
 		
@@ -192,8 +192,8 @@
 			$actions = array(
 					'edit' => sprintf( '<a href="'. admin_url() . '%s?user_id=%s">Edit</a>', 'user-edit.php', $item['dj_id'] ),
 				);
-			if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_djs' )	{
-				$actions['inactive_djs'] = sprintf( '<a href="?page=%s&action=%s&role=inactive_dj&dj_id=%s">Mark Inactive</a>', $_REQUEST['page'], 'set_client_role', $item['dj_id'] );
+			if( !isset( $_GET['display'] ) || $_GET['display'] != 'inactive_dj' )	{
+				$actions['inactive_dj'] = sprintf( '<a href="?page=%s&action=%s&role=inactive_dj&dj_id=%s">Mark Inactive</a>', $_REQUEST['page'], 'set_client_role', $item['dj_id'] );
 			}
 			else	{
 				$actions['active_dj'] = sprintf( '<a href="?page=%s&action=%s&role=dj&dj_id=%s">Mark Active</a>', $_REQUEST['page'], 'set_client_role', $item['dj_id'] );

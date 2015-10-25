@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.5.2
+Stable tag: 1.2.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,6 +75,19 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.5.3 =
+<strong>Released 25th October, 2015</strong>
+<ul>
+	<li>New: Added setting to enable event playlist (enabled by default)</li>
+    <li>New: Event playlists can now be controlled per event. If not enabled, the Manage Playlist action button is not displayed within the Client Zone</li>
+	<li>New: Option to select Client Address as event venue</li>
+	<li>New: On event screen added <code>Contact</code> link next to client list. Click to immediately contact regarding event</li>
+	<li>New: On event listing screen click the Client's or DJ's name to contact them regarding that event</li>
+	<li>New: Added `mdjm_event_metaboxes` developer action hook</li>
+	<li>Bug Fix: Depending on WP Debug settings, error may be displayed on client login screen (unlikely)</li>
+	<li>Bug Fix: In event listing error may be displayed if no events exist for the current status</li>
+	<li>Bug Fix: Unable to set Client's and DJ's as Active/Inactive</li>
+</ul>
 = 1.2.5.2 =
 <strong>Released 22nd October, 2015</strong>
 <ul>

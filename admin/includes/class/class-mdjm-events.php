@@ -601,7 +601,7 @@
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
-			$status = $event_stati[get_post_status( $post_id )];
+			$status = !empty( $event_stati[get_post_status( $post_id )] ) ? $event_stati[get_post_status( $post_id )] : '';
 			$setup_date = get_post_meta( $post_id, '_mdjm_event_djsetup', true );
 			$setup_time = get_post_meta( $post_id, '_mdjm_event_djsetup_time', true );
 			$contract = get_post_meta( $post_id, '_mdjm_event_contract', true );

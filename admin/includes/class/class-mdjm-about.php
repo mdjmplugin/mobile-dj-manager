@@ -35,6 +35,9 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_header()	{
 			?>
             <style>
+			.site-title	{
+				color: #FF9900;	
+			}
 			.site-title img	{
 				display: block; max-width: 100%; max-height: 60px; height: auto; padding: 0; margin: 0 auto; -webkit-border-radius: 0; border-radius: 0;	
 			}
@@ -92,6 +95,20 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
+            <h3 class="site-title">Version 1.2.5.3 - 25th October 2015</h3>
+            <ui>
+            	<li><strong>New</strong>: Added setting to enable event playlist (enabled by default)</li>
+                <li><strong>New</strong>: Event playlists can now be controlled per event. If not enabled, the <code>Manage Playlist</code> action button is not displayed within the <?php echo MDJM_APP; ?></li>
+                <li><strong>New</strong>: Option to select Client Address as event venue</li>
+            	<li><strong>New</strong>: On event screen added <code>Contact</code> link next to client list. Click to immediately contact regarding event</li>
+            	<li><strong>New</strong>: On event listing screen click the Client's or <?php echo MDJM_DJ; ?>'s name to contact them regarding that event</li>
+                <li><strong>New</strong>: Added <code>mdjm_event_metaboxes</code> developer action hook</li>
+                <li><strong>Bug Fix</strong>: Depending on WP Debug settings, error may be displayed on client login screen (unlikely)</li>
+            	<li><strong>Bug Fix</strong>: In event listing error may be displayed if no events exist for the current status</li>
+                <li><strong>Bug Fix</strong>: Unable to set Client's and <?php echo MDJM_DJ; ?>'s as Active/Inactive</li>
+            </ui>
+            <hr />
+            <h3 class="site-title">Version 1.2.5.2 - 22nd October 2015</h3>
             <ui>
             	<li><strong>New</strong>: Added new currencies for AUS, CAD, NZD and SGD</li>
                 <li><strong>New</strong>: Order your event listings by ID, Date, or Value by clicking on the relevant column header</li>

@@ -111,14 +111,16 @@
 	/*
 	 * Display update notice within Admin UI
 	 *
-	 *
+	 * @param	str		$class		Required: The admin notice class - updated | update-nag | error
+	 *			str		$message	Required: Translated notice message
+	 *			bool	$dismiss	Optional: true will make the notice dismissable. Default false.
 	 *
 	 */
 	function mdjm_update_notice( $class, $message, $dismiss='' )	{
 		$dismiss = ( !empty( $dismiss ) ? ' notice is-dismissible' : '' );
 		
 		echo '<div id="message" class="' . $class . $dismiss . '">';
-		echo '<p>' . __( $message ) . '</p>';
+		echo '<p>' . __( $message, 'mobile-dj-manager' ) . '</p>';
 		echo '</div>';
 	} // mdjm_update_notice
 	
@@ -1433,6 +1435,67 @@
 		
 		return false;
 	} // user_is
+	
+	/**
+	 * Toggle the users role between active/inactive
+	 * This can be called via the link on the Client/DJ screen, or by a bulk action
+	 *
+	 * @param	str|arr		$users		If string, will be converted to array or User ID's to process
+	 *			str			$role		The role to convert the user to
+	 * @return
+	 */
+	function set_user_role( $users, $role )	{
+		// If $users is not an array, make it one
+		if( !is_array( $users ) ) 
+			$users = array( $users );
+			
+		// Array of role names
+		$role_name = array(
+			'client'          => 'Active',
+			'inactive_client' => 'Inactive',
+			'dj'              => 'Active',
+			'inactive_dj'     => 'Inactive' );
+			
+		$i = 0; // Counter
+		// Loop through the $users array and adjust the roles
+		foreach( $users as $user )	{
+			$user_id = wp_update_user( array( 'ID' => $user, 'role' => $role ) );
+			
+			if ( is_wp_error( $user_id ) ) // Failed
+				$user_error = true;
+			else // Success
+				$i++;
+		}
+		
+		// Define the admin notice class and content
+		if( !empty( $user_error ) && $i == 0 )	{
+			$class = 'error';
+			$message = sprintf( __( 'ERROR: %s were set as %s.%sContact 
+				%sMDJM Support%s with details of any errors that are displayed on your screen.', 'mobile-dj-manager' ),
+					_n( $i . ' user ', ' ' . $i . ' users ', $i, 'mobile-dj-manager' ),
+					$role_name[$role],
+					'<br />',
+					'<a href="http://www.mydjplanner.co.uk/forums/forum/bugs/" target="_blank" title="Report this bug">',
+					'</a>' );
+		}
+		elseif( !empty( $user_error ) && $i < $user_count )	{
+			$class = 'update-nag';
+			$message = sprintf( __( 'WARNING: Some errors occured and only %s out of %s %s were set as %s.', 'mobile-dj-manager' ),
+				$i,
+				count( $users ),
+				_n( 'user', 'users', $i, 'mobile-dj-manager' ),
+				$role_name[$role] );
+		}
+		else	{
+			$class = 'updated';
+			$message = sprintf( __( '%s %s successfully marked as %s.', 'mobile-dj-manager' ),
+			$i,
+			_n( 'user', 'users', $i, 'mobile-dj-manager' ),
+			$role_name[$role] );
+		}
+		
+		mdjm_update_notice( $class, $message, true );
+	} // set_user_role
 	
 	/*
 	 * Check if the given user is a client

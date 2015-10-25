@@ -485,6 +485,16 @@
 						}
 					}
 					
+					/* -- Post Status Select List -- */
+					elseif( $args['custom_args']['list_type'] == 'post_status' )	{
+						foreach( $args['custom_args']['list_values'] as $status => $value )	{
+							echo '<option value="' . $status . '"' . 
+							( !empty( $args['custom_args']['selected'] ) && 
+								in_array( $status, $args['custom_args']['selected'] ) ? ' selected="selected"' : '' ) . 
+							'>' . $value . '</option>' . "\r\n";
+						}
+					}
+					
 					/* -- Contract Select List -- */
 					elseif( $args['custom_args']['list_type'] == 'contract' )	{										
 						$template_args = array(
@@ -575,8 +585,8 @@
 								'booking_conf_to_dj', 'notify_profile', 'package_prices', 'status_notification',
 								'update_event', 'custom_client_text', 'enable_tax',
 								'enable_paypal', 'enable_sandbox', 'paypal_debug', 'enable_pf_sandbox', 'payfast_debug', 'dj_see_wp_dash', 'dj_add_client',
-								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'upload_playlists',
-								'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
+								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'enable_playlists', 
+								'upload_playlists', 'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
 								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users',
 								'gmail_enquiry', 'gmail_dj', 'gcal_full_sync'
 								);

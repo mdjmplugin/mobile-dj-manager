@@ -193,10 +193,10 @@
 				return;
 			
 			if( 'inactive' === $this->current_action() ) {
-					f_mdjm_set_client_role( $clients, 'inactive_client' );
+					set_user_role( $clients, 'inactive_client' );
 			}
 			if( 'active' === $this->current_action() ) {
-					f_mdjm_set_client_role( $clients, 'client' );
+					set_user_role( $clients, 'client' );
 			}
 		} // process_bulk_action
 		

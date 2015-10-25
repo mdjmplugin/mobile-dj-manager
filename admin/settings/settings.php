@@ -568,6 +568,16 @@
 									),
 									
 					/* -- Playlist Settings -- */
+							'enable_playlists' => array(
+									'label' => __( 'Enable Event Playlists by Default', 'mobile-dj-manager' ),
+									'key' => MDJM_PLAYLIST_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['playlist']['enable_playlists'] ) ? '1' : '' ),
+									'text' => '',
+									'desc' => __( 'Check to enable Client Playlist features by default per event. Can be overridden per event', 'mobile-dj-manager' ),
+									'section' => 'playlist',
+									'page' => 'playlists',
+									),
 							'close' => array(
 									'label' => 'Close the Playlist',
 									'key' => MDJM_PLAYLIST_SETTINGS_KEY,

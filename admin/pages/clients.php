@@ -144,7 +144,7 @@
 		$func = 'f_mdjm_' . $_GET['action'];
 		/* Check for actions */
 		if( isset( $_GET['role'] ) && !empty( $_GET['role'] ) )	{
-			$func( $_GET['client_id'], $_GET['role'] );
+			set_user_role( $_GET['client_id'], $_GET['role'] );
 			f_mdjm_render_clients_table();
 		}
 		else	{

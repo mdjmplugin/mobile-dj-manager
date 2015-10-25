@@ -153,10 +153,12 @@
 					break;
 				} // switch
 				
-				if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )
-					$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PLAYLIST_PAGE, true ) . 
-							'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
-							__( 'Manage Playlist', 'mobile-dj-manager' ) . '</button>';
+				if( 'Y' == get_post_meta( $event_id, '_mdjm_event_playlist', true ) )	{
+					if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )
+						$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PLAYLIST_PAGE, true ) . 
+								'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
+								__( 'Manage Playlist', 'mobile-dj-manager' ) . '</button>';
+				}
 							
 				$actions[25] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PROFILE_PAGE, false ), 'manage_profile', '__mdjm_verify' ) . 
 							 '\'">' . __( 'Update Profile', 'mobile-dj-manager' ) . '</button>';
