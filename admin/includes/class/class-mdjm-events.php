@@ -650,6 +650,8 @@
 							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due' ) ),
 							// Balanace status
 							'balance_status'	  => ( !empty( $balance_status ) ? $balance_status : __( 'Due' ) ),
+							// Payment History
+							'payment_history'	 => $mdjm_transactions->list_event_transactions( $post_id ),
 							// Event type
 							'type'				=> $this->get_event_type( $post_id ),
 							// Online Quote
@@ -676,6 +678,9 @@
 							'guest_playlist'	  => ( !empty( $guest_playlist ) ? 
 								$mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $guest_playlist : '' ),
 							);
+			
+			// Allow the $eventinfo array to be filtered
+			$eventinfo = apply_filters( 'mdjm_event_info', $eventinfo );
 			
 			return $eventinfo;
 		} // event_detail
@@ -926,18 +931,24 @@
 			if( empty( $_POST['mdjm_block_emails'] ) || $_POST['mdjm_block_emails'] != 'Y' )	{
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( '	-- Generating Email' );
-					
-				$quote = $mdjm->send_email( array( 
-									'content'	=> !empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template'] : $mdjm_settings['templates']['enquiry'],
-									'to'		 => $event_data['_mdjm_event_client'],
-									'from'	   => $mdjm_settings['templates']['enquiry_from'] == 'dj' ? $_POST['_mdjm_event_dj'] : 0,
-									'journal'	=> 'email-client',
-									'event_id'   => $post_id,
-									'html'	   => true,
-									'cc_dj'	  => !empty( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-									'cc_admin'   => !empty( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-									'source'	 => 'Event Enquiry',
-								) );
+				
+				$email_args = array( 
+					'content'	=> !empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template'] : $mdjm_settings['templates']['enquiry'],
+					'to'		 => $event_data['_mdjm_event_client'],
+					'from'	   => $mdjm_settings['templates']['enquiry_from'] == 'dj' ? $_POST['_mdjm_event_dj'] : 0,
+					'journal'	=> 'email-client',
+					'event_id'   => $post_id,
+					'html'	   => true,
+					'cc_dj'	  => !empty( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+					'cc_admin'   => !empty( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+					'source'	 => 'Event Enquiry' );
+				
+				// Filter the email args
+				$email_args = apply_filters( 'mdjm_quote_email_args', $email_args );
+				
+				// Send the email	
+				$quote = $mdjm->send_email( $email_args );
+				
 				if( $quote )	{
 					if( MDJM_DEBUG == true )
 						 $mdjm->debug_logger( '	-- Client quote sent. ' . $quote . ' ID ' );
@@ -1004,26 +1015,33 @@
 					$mdjm->debug_logger( 'Configured to email client with template ID ' . $contract_email );
 				
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Generating email...' );	
-					$contract_email = $mdjm->send_email( array( 
-											'content'	=> $contract_email,
-											'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
-											'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
-											'journal'	=> 'email-client',
-											'event_id'   => $post_id,
-											'html'	   => true,
-											'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-											'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-											'source'	 => 'Event Status to Awaiting Contract',
-										) );
-					if( $contract_email )	{
-						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	-- Contract email sent to client ' );
-					}
-					else	{
-						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	ERROR: Contract email was not sent' );	
-					}	
+					$mdjm->debug_logger( 'Generating email...' );
+					
+				$email_args = array( 
+					'content'	=> $contract_email,
+					'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
+					'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
+					'journal'	=> 'email-client',
+					'event_id'   => $post_id,
+					'html'	   => true,
+					'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+					'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+					'source'	 => 'Event Status to Awaiting Contract' );
+				
+				// Filter the email args
+				$email_args = apply_filters( 'mdjm_contract_email_args', $email_args );
+				
+				// Send the email	
+				$contract_email = $mdjm->send_email( $email_args );
+				
+				if( $contract_email )	{
+					if( MDJM_DEBUG == true )
+						 $mdjm->debug_logger( '	-- Contract email sent to client ' );
+				}
+				else	{
+					if( MDJM_DEBUG == true )
+						 $mdjm->debug_logger( '	ERROR: Contract email was not sent' );	
+				}	
 			}
 			else	{
 				if( MDJM_DEBUG == true )
@@ -1083,18 +1101,24 @@
 				
 				if( MDJM_DEBUG == true )
 					$mdjm->debug_logger( 'Generating email...' );
-						
-				$approval_email = $mdjm->send_email( array( 
-										'content'	=> $client_email,
-										'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
-										'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
-										'journal'	=> 'email-client',
-										'event_id'   => $post_id,
-										'html'	   => true,
-										'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-										'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-										'source'	 => 'Event Status to Approved',
-									) );
+				
+				$email_args = array( 
+					'content'	=> $client_email,
+					'to'		 => get_post_meta( $post_id, '_mdjm_event_client', true ),
+					'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $post_id, '_mdjm_event_dj', true ) : 0,
+					'journal'	=> 'email-client',
+					'event_id'   => $post_id,
+					'html'	   => true,
+					'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+					'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+					'source'	 => 'Event Status to Approved' );
+				
+				// Filter the email args
+				$email_args = apply_filters( 'mdjm_booking_conf_email_args', $email_args );
+				
+				// Send the email		
+				$approval_email = $mdjm->send_email( $email_args );
+				
 				if( $approval_email )	{
 					if( MDJM_DEBUG == true )
 						 $mdjm->debug_logger( '	-- Confrmation email sent to client ' );

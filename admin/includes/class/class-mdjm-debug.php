@@ -15,18 +15,10 @@
 				$this->db_backup_dir = MDJM_PLUGIN_DIR . '/db_backups';
 				$this->backup_url = MDJM_PLUGIN_URL . '/db_backups';
 				$this->tables = array(
-									'Events'			  => MDJM_EVENTS_TABLE,
 									'Playlist'	  		=> MDJM_PLAYLIST_TABLE,
-									'Transactions'  		=> MDJM_TRANSACTION_TABLE,
-									'Journal'	   		 => MDJM_JOURNAL_TABLE,
 									'Availability'  		=> MDJM_HOLIDAY_TABLE,
 									);
-				$this->deprecated = array(
-										MDJM_EVENTS_TABLE,
-										MDJM_TRANSACTION_TABLE,
-										MDJM_JOURNAL_TABLE,
-										);
-										
+									
 				define( 'MDJM_DEBUG', !empty( $this->settings['enable'] ) ? true : false );
 				define( 'MDJM_DEBUG_LOG', MDJM_PLUGIN_DIR . '/mdjm_debug.log' );
 				
@@ -179,9 +171,6 @@
 						'<td>' . 
 						'<input type="checkbox" name="mdjm_table[]" id="' . $name . '" value="' . $name . '" />' . 
 						$this->backup_exists( $name );
-						if( in_array( $name, $this->deprecated ) )
-							echo '<p class="description">This table became deprecated with MDJM version 1.2 ' . 
-							'and is no longer in use</p>'; 
 						'</td>' . "\r\n" . 
 						'</tr>' . "\r\n";
 				}
@@ -202,8 +191,7 @@
 				
 				if( file_exists( $backup_file ) ) // We have a backup file
 					return ' <a class="mdjm-small" href="' . $this->backup_url . '/' . 
-					$table . '.sql">Last backup: ' . date( MDJM_SHORTDATE_FORMAT, filemtime( $backup_file ) ) . ' ' . 
-					get_date_from_gmt( filemtime( $backup_file ), MDJM_TIME_FORMAT ) . '</a>' . "\r\n";
+					$table . '.sql">Last backup: ' . date( MDJM_SHORTDATE_FORMAT . ' ' . MDJM_TIME_FORMAT, filemtime( $backup_file ) ) . '</a>' . "\r\n";
 					
 				return;
 			} // backup_exists
@@ -516,10 +504,7 @@
 				
 				/* -- Unique identifier fields -- */				
 				$data_id = array(
-							MDJM_EVENTS_TABLE				  => 'event_id',
 							MDJM_PLAYLIST_TABLE				=> 'id',
-							MDJM_TRANSACTION_TABLE			 => 'trans_id',
-							MDJM_JOURNAL_TABLE				 => 'id',
 							MDJM_HOLIDAY_TABLE				 => 'id',
 						);
 						
@@ -585,10 +570,7 @@
 						$file_content .= '  '.implode( ";\nINSERT INTO `" . $table . "` VALUES ", $vals ) . ";\n";
 						
 						$mdjm_desc = array(
-							MDJM_EVENTS_TABLE				  => 'Events Table',
 							MDJM_PLAYLIST_TABLE				=> 'Playlist Table',
-							MDJM_TRANSACTION_TABLE			 => 'Transactions Table',
-							MDJM_JOURNAL_TABLE				 => 'Journal Table',
 							MDJM_HOLIDAY_TABLE				 => 'Availability Table',
 							);
 						

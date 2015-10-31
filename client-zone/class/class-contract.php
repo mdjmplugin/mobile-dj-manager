@@ -18,9 +18,7 @@
 			 */
 			public function __construct( $event )	{
 				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts;
-				
-				mdjm_page_visit( MDJM_APP . ' Contracts' );
-				
+								
 				$this->event = get_post( $event );
 				
 				$event_client = get_post_meta( $this->event->ID, '_mdjm_event_client', true );
@@ -186,18 +184,24 @@
 							
 							if( MDJM_DEBUG == true )
 								$mdjm->debug_logger( 'Generating email...' );
-									
-							$approval_email = $mdjm->send_email( array( 
-													'content'	=> $client_email,
-													'to'		 => get_post_meta( $this->event->ID, '_mdjm_event_client', true ),
-													'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $this->event->ID, '_mdjm_event_dj', true ) : 0,
-													'journal'	=> 'email-client',
-													'event_id'   => $this->event->ID,
-													'html'	   => true,
-													'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-													'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-													'source'	 => 'Event Status to Approved',
-												) );
+							
+							$email_args = array( 
+								'content'	=> $client_email,
+								'to'		 => get_post_meta( $this->event->ID, '_mdjm_event_client', true ),
+								'from'	   => $mdjm_settings['templates']['booking_conf_from'] == 'dj' ? get_post_meta( $this->event->ID, '_mdjm_event_dj', true ) : 0,
+								'journal'	=> 'email-client',
+								'event_id'   => $this->event->ID,
+								'html'	   => true,
+								'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+								'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+								'source'	 => 'Event Status to Approved' );
+							
+							// Filter the email args
+							$email_args = apply_filters( 'mdjm_booking_conf_email_args', $email_args );
+							
+							// Send the email
+							$approval_email = $mdjm->send_email( $email_args );
+							
 							if( $approval_email )	{
 								if( MDJM_DEBUG == true )
 									 $mdjm->debug_logger( '	-- Confrmation email sent to client ' );

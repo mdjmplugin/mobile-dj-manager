@@ -34,7 +34,7 @@
 						'<a href="' . admin_url( 'admin.php?page=mdjm-settings' ) . '">' . __( 'Settings' ) . '</a>',
 					);
 						
-				return array_merge( $mdjm_plugin_links, $links );
+				return array_merge( $links, $mdjm_plugin_links );
 			}  // mdjm_action_links
 			
 			/*

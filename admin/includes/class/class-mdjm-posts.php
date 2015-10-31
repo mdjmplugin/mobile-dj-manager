@@ -2178,20 +2178,19 @@
 					}
 					?>
 					<select name="mdjm_filter_type">
-					<option value=""><?php echo __( 'All Event Types' ); ?></option>
+					<option value=""><?php echo __( 'All Event Types', 'mobile-dj-manager' ); ?></option>
 					<?php
-						$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
-						
+					$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+					if( !empty( $values ) )	{
 						foreach( $values as $value => $label ) {
-							printf
-								(
-									'<option value="%s"%s>%s (%s)</option>',
-									$value,
-									$value == $current_v ? ' selected="selected"' : '',
-									$label,
-									$label
-								);
-							}
+							printf(
+								'<option value="%s"%s>%s (%s)</option>',
+								$value,
+								$value == $current_v ? ' selected="selected"' : '',
+								$label,
+								$label );
+						}
+					}
 					?>
 					</select>
 					<?php
@@ -2257,7 +2256,9 @@
 				
 				/* -- Define the post types & screens within which the MCE button should be displayed -- */
 				$post_types = array( 'email_template', 'contract', 'page' );
-				$screens = array( 'dj-manager_page_mdjm-comms', 'dj-manager_page_mdjm-settings' );
+				$screens = array( 
+					'mdjm-events_page_mdjm-comms',
+					'mdjm-events_page_mdjm-settings' );
 				
 				/* -- Add the MDJM TinyMCE buttons -- */
 				$screen = get_current_screen();

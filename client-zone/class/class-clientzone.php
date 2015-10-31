@@ -22,10 +22,7 @@
 				global $clientzone_loaded, $my_mdjm, $mdjm_settings;
 								
 				$clientzone_loaded = true;
-												
-				/* -- Text replacements THIS CAN BE REMOVED SOON -- */
-				//$mdjm_client_text = get_option( MDJM_CUSTOM_TEXT_KEY );
-				
+																
 				/* -- The MDJM content shortcodes -- */
 				add_shortcode( 'MDJM', array( &$this, 'shortcode' ) );
 				
@@ -34,7 +31,6 @@
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
 				add_action( 'init', array( &$this, 'no_comments' ) );
-				add_action( 'template_redirect', array( &$this, 'output_to_pdf' ) );
 				
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 				
@@ -47,37 +43,11 @@
 			 *
 			 */
 			function no_comments()	{
-				//add_filter( 'comments_array', '__return_false' );
 				add_filter( 'get_comments_number', '__return_false' );
 				
 				if( is_dj() || is_client() )
 					add_filter( 'get_edit_post_link', '__return_false' );	
 			}
-			
-			/**
-			 * Output the content to PDF and deliver as required
-			 *
-			 *
-			 *
-			 *
-			 */
-			function output_to_pdf()	{
-				if( !isset( $_GET['pdf_output'] ) )
-					return;
-					
-				$template = get_post( $_GET['pdf_output'] );
-				
-				$content = $template->post_content;
-				$content = apply_filters( 'the_content', $content );
-				$content = str_replace( ']]>', ']]&gt;', $content );
-				
-				MDJM_to_PDF::init_mpdf();
-				//$stylesheet = file_get_contents(get_template_directory_uri() . '/style.css');
-				//$GLOBALS['mdjm_mpdf']->WriteHTML( $stylesheet,1 );
-				$GLOBALS['mdjm_mpdf']->WriteHTML( $content,2 );
-				$GLOBALS['mdjm_mpdf']->Output('test8.pdf','I');
-				exit;
-			} // output_to_pdf
 
 /*
  * --
@@ -214,18 +184,24 @@
 					
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'Generating email...' );
-							
-					$contract_email = $mdjm->send_email( array( 
-											'content'	=> $client_email,
-											'to'		 => get_post_meta( $post->ID, '_mdjm_event_client', true ),
-											'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
-											'journal'	=> 'email-client',
-											'event_id'   => $post->ID,
-											'html'	   => true,
-											'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-											'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-											'source'	 => 'Event Enquiry Accepted via ' . MDJM_APP,
-										) );
+					
+					$email_args = array( 
+						'content'	=> $client_email,
+						'to'		 => get_post_meta( $post->ID, '_mdjm_event_client', true ),
+						'from'	   => $mdjm_settings['templates']['contract_from'] == 'dj' ? get_post_meta( $post->ID, '_mdjm_event_dj', true ) : 0,
+						'journal'	=> 'email-client',
+						'event_id'   => $post->ID,
+						'html'	   => true,
+						'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
+						'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
+						'source'	 => 'Event Enquiry Accepted via ' . MDJM_APP );
+					
+					// Filter the email args
+					$email_args = apply_filters( 'mdjm_contract_email_args', $email_args );
+					
+					// Send the email
+					$contract_email = $mdjm->send_email( $email_args );
+					
 					if( $contract_email )	{
 						if( MDJM_DEBUG == true )
 							 $mdjm->debug_logger( '	-- Contract link email sent to client ' );
@@ -270,7 +246,7 @@
 					$deposit_status = get_post_meta( $post->ID, '_mdjm_event_deposit_status' );
 					
 					if( !empty( $deposit ) && $deposit != '0.00' )
-						$body .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
+						$content .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
 					
 					$content .= __( 'Balance Due', 'mobile-dj-manager' ) . ': {BALANCE}</p>' . "\n";
 					
@@ -617,7 +593,7 @@
 				/* -- Map the args to the pages/functions -- */
 				$pairs = array(
 							'Home'			=> MDJM_CLIENTZONE . '/class/class-home.php',
-							'Profile'		=> MDJM_CLIENTZONE . '/class/class-profile.php',
+							'Profile'		 => MDJM_CLIENTZONE . '/class/class-profile.php',
 							'Playlist'		=> MDJM_CLIENTZONE . '/class/class-playlist.php',
 							'Contract'		=> MDJM_CLIENTZONE . '/class/class-contract.php',
 							'Availability'	=> 'f_mdjm_availability_form',
@@ -649,7 +625,7 @@
 							$output = ob_get_clean();
 						}
 						else	{
-							wp_die( 'An error has occurred' );	
+							wp_die( __( 'An error has occurred', 'mobile-dj-manager' ) );	
 						}
 					}
 					else

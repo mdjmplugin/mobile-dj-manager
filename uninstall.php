@@ -87,12 +87,9 @@
 /* -- Remove custom DB Tables -- */
 	// If the option to remove the tables is not selected, skip
 	if( !empty( $settings['uninst_remove_db'] ) )	{	
-		$tables = array( 'Events'		   => $wpdb->prefix . 'mdjm_events', 
-						 'Playlist'		 => $wpdb->prefix . 'mdjm_playlists',
-						 'Music Library'	=> $wpdb->prefix . 'mdjm_music_library',
-						 'Transactions'	 => $wpdb->prefix . 'mdjm_trans',
-						 'Journal'		  => $wpdb->prefix . 'mdjm_journal',
-						 'Availability'	 => $wpdb->prefix . 'mdjm_avail' );
+		$tables = array( 
+					 'Playlist'		 => $wpdb->prefix . 'mdjm_playlists',
+					 'Availability'	 => $wpdb->prefix . 'mdjm_avail' );
 		
 		foreach( $tables as $table_display => $table_name )	{
 			$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $table_name . "'" );

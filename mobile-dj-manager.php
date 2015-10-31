@@ -1,29 +1,31 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 /**
- * Plugin Name: Mobile DJ Manager
- * Description: Mobile DJ Manager is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, Mobile DJ Manager for WordPress is the ultimate tool for any Mobile DJ Business.
+ * Plugin Name: MDJM Event Management
+ * Plugin URI: http://www.mydjplanner.co.uk
+ * Description: MDJM Event Management is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, MDJM Event Management for WordPress is the ultimate tool for any Mobile DJ Business.
  * Version: 1.2.5.3
  * Date: 25 October 2015
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
  * Author URI: http://www.mydjplanner.co.uk
  * Text Domain: mobile-dj-manager
-*/
+ * Domain Path: /lang
+ * License: GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ */
+/**
+   MDJM Event Management is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License, version 2, as 
+   published by the Free Software Foundation.
 
-/*  Copyright 2014  Mobile DJ Manager  (email : contact@mydjplanner.co.uk)
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
-    published by the Free Software Foundation.
+   MDJM Event Management is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+   You should have received a copy of the GNU General Public License
+   along with MDJM Event Management; if not, see https://www.gnu.org/licenses/gpl-2.0.html
+ */
 /**
  * Class: Mobile_DJ_Manager
  * Description: The main MDJM class
@@ -157,14 +159,6 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_PLAYLIST_TABLE', $wpdb->prefix . 'mdjm_playlists' );
 			define( 'MDJM_HOLIDAY_TABLE', $wpdb->prefix . 'mdjm_avail' );
 			
-			/** 
-			 * Deprecated tables since 1.2. Kept here to support updates from older versions.
-			 * Remove these at version 1.3.
-			 *
-			 */
-			define( 'MDJM_EVENTS_TABLE', $wpdb->prefix . 'mdjm_events' ); // Deprecated since 1.2
-			define( 'MDJM_TRANSACTION_TABLE', $wpdb->prefix . 'mdjm_trans' ); // Deprecated since 1.2
-			define( 'MDJM_JOURNAL_TABLE', $wpdb->prefix . 'mdjm_journal' ); // Deprecated since 1.2
 		} // mdjm_constants
 				
 		/**

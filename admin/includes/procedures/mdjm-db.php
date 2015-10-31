@@ -52,29 +52,10 @@
 								PRIMARY KEY  (id),
 								KEY user_id (user_id)
 								);";
-								
-			/* JOURNAL TABLE */
-			$journal_sql = "CREATE TABLE ". MDJM_JOURNAL_TABLE . " (
-							id int(11) NOT NULL AUTO_INCREMENT,
-							client int(11) NOT NULL,
-							event int(11) NOT NULL,
-							timestamp varchar(255) NOT NULL,
-							author int(11) NOT NULL,
-							type varchar(255) NOT NULL,
-							source varchar(255) NOT NULL,
-							entry text NOT NULL,
-							migration varchar(10) NULL,
-							PRIMARY KEY  (id),
-							KEY client (client,event),
-							KEY entry_date (timestamp,type(10)),
-							KEY author (author)
-							);";
-											
+																			
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $playlists_sql );
-			dbDelta( $music_library_sql );
 			dbDelta( $holiday_sql );
-			dbDelta( $journal_sql );
 		
 			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
 			$GLOBALS['mdjm_debug']->log_it( 'Completed database upgrade procedures', true );

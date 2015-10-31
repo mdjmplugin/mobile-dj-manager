@@ -262,6 +262,23 @@
 		font-weight: bold;
 	}
 	
+	/** -- 4 Columns -- */
+	.mdjm-playlist-4column	{
+		float: left;
+		width: 25%;
+	}
+	.mdjm-playlist-4column label	{
+		font-weight: bold;
+	}
+	
+	.mdjm-contract-last-4column	{
+		float: right;
+		width: 25%;
+	}
+	.mdjm-playlist-last-4column label	{
+		font-weight: bold;
+	}
+	
 	#mdjm_song_container	{
 		width: 100%; 
 		min-height: 50px;

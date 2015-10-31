@@ -31,8 +31,8 @@
 	 		public function mdjm_menu()	{
 				global $mdjm, $mdjm_settings_page;
 				/* -- Build out the menu structure -- */
-				add_menu_page( __( 'Mobile DJ Manager' ),
-													  __( 'DJ Manager' ), 
+				add_menu_page( __( 'MDJM Events' ),
+													  __( 'MDJM Events' ), 
 													  'manage_mdjm',
 													  'mdjm-dashboard',
 													  array( &$this, 'mdjm_dashboard_page' ),
@@ -214,10 +214,10 @@
 				/* -- Build out the toolbar menu structure -- */
 				$admin_bar->add_menu( array(
 					'id'		=> 'mdjm',
-					'title'	 => __( 'Mobile DJ Manager' ),
+					'title'	 => __( 'MDJM Events' ),
 					'href'	  => admin_url( 'admin.php?page=mdjm-dashboard' ),
 					'meta'	  => array(
-						'title' => __( 'Mobile DJ Manager' ),            
+						'title' => __( 'MDJM Event Management' ),            
 					),
 				) );
 				/* -- Dashboard -- */
@@ -294,7 +294,8 @@
 						'meta'	  => array(
 							'title' => __( 'MDJM Payment Settings' ),
 						),
-					) );					
+					) );
+					do_action( 'mdjm_admin_bar_settings_items', $admin_bar );					
 				/* -- Automated Tasks -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-tasks',
@@ -435,20 +436,7 @@
 						'title' => __( 'MDJM Events' ),
 					),
 				) );
-				
-				/* -- Music Library -- */
-				/*if( current_user_can( 'administrator' ) || dj_can( 'upload_music' ) )	{
-					$admin_bar->add_menu( array(
-						'id'    	=> 'mdjm-music',
-						'parent' 	=> 'mdjm',
-						'title' 	 => __( 'Music Library' ),
-						'href'  	  => admin_url( 'admin.php?page=mdjm-music' ),
-						'meta'  	  => array(
-							'title' => __( 'Music Library' ),
-						),
-					) );
-				}*/
-				
+								
 				if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-add-events',

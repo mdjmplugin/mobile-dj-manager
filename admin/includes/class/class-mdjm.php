@@ -575,10 +575,7 @@
 				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
-				
-				/* -- Music Library Script -- */
-				wp_register_script( 'mdjm-music-library', MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-music-library.js', array( 'jquery' ), MDJM_VERSION_NUM );
-				
+								
 				/* -- YouTube Suscribe Script -- */
 				// Needs to be enqueued as and when required
 				wp_register_script( 'youtube-subscribe', 'https://apis.google.com/js/platform.js' );
@@ -982,6 +979,7 @@
 			 *						Required: to	 		str|int		email address or user ID of recipient
 			 *						Optional: subject		str			required if content is not a post ID
 			 *						Optional: from			int			user ID of sender, defaults to 0 (system)
+			 *						Optional: attachments	arr			files to attach
 			 *						Optional: journal		str|bool	The journal entry type or false not to log this action, default to 'email-client'
 			 *						Optional: event_id		int			event ID
 			 *						Optional: html			bool		true sends html (Default) false plain text
@@ -1106,6 +1104,9 @@
 					
 				$headers[] = 'X-Mailer: ' . MDJM_NAME . ' version ' . MDJM_VERSION_NUM . ' (http://www.mydjplanner.co.uk)'; 
 				
+				// Filter the email headers
+				$headers = apply_filters( 'mdjm_email_headers', $headers );
+				
 				if( $filter == true )	{
 					/* -- Filter the content -- */
 					$msg = $this->filter_content(
@@ -1139,6 +1140,15 @@
 					$sub = str_replace( $search, $replace, $sub );
 					$msg = str_replace( $search, $replace, $msg );
 				}
+				
+				// File attachments
+				if( !empty( $args['attachments'] ) && is_array( $args['attachments'] ) )
+					$files = $args['attachments'];
+				else
+					$files = array();
+				
+				// Apply filter to attach (additional) files to an email
+				$files = apply_filters( 'mdjm_attach_files_to_email', $files );
 												
 				/* -- Add the COMM post -- */
 				if( $log_comm == true )	{
@@ -1149,12 +1159,13 @@
 				
 					remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 					$comm_post = $mdjm_comms->insert_comm( array (
-											'subject'	=> $sub,
-											'content'	=> $msg,
+											'subject'	 => $sub,
+											'content'	 => $msg,
 											'recipient'  => !empty( $recipient ) ? $recipient->ID : '',
 											'source'	 => !empty( $args['source'] ) ? $args['source'] : 'Event Enquiry',
-											'event'	  => !empty( $event ) ? $event->ID : '',
+											'event'	  	 => !empty( $event ) ? $event->ID : '',
 											'author'	 => $sender,
+											'attachments'=> !empty( $files ) ? $files : ''
 											) );
 					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 					if( empty( $comm_post ) && MDJM_DEBUG == true )
@@ -1169,11 +1180,12 @@
 				}
 								
 				/* -- Send the email to the client with stat tracking if configured -- */
-				if( wp_mail( $recipient->user_email,
-							$sub,
-							$msg . ( !empty( $comm_post ) ? $mdjm_comms->insert_stat_image( $comm_post ) : '' ),
-							$headers 
-							) )	{
+				if( wp_mail( 
+					$recipient->user_email,
+					$sub,
+					$msg . ( !empty( $comm_post ) ? $mdjm_comms->insert_stat_image( $comm_post ) : '' ),
+					$headers,
+					$files ) )	{
 					
 					/* -- Set the status of the email -- */
 					if( $log_comm == true )	{
@@ -1221,7 +1233,7 @@
 					$msg_prefix .= '<hr size="1" />';
 					
 					foreach( $copy_to as $mdjm_recipient )	{
-						if( wp_mail( $mdjm_recipient, $sub, $msg_prefix . $msg, $headers ) )	{
+						if( wp_mail( $mdjm_recipient, $sub, $msg_prefix . $msg, $headers, $files ) )	{
 							if( MDJM_DEBUG == true )
 								$this->debug_logger( '	-- A copy of the message "' . $sub . '" successfully sent to ' . $mdjm_recipient );
 						}
@@ -1314,7 +1326,7 @@
 				}
 					
 				/* -- Replacements -- */
-				$mdjm_filter = array(
+				$pairs = array(
 				/* -- General -- */
 					'{ADMIN_URL}'			=> admin_url(),
 					'{APPLICATION_HOME}'	 => $this->get_link( MDJM_HOME, false ),
@@ -1376,6 +1388,8 @@
 					//'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
 					//'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
 					'{PAYMENT_URL}'		  => ( !empty( $e ) ? $this->get_link( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
+					'{PAYMENT_HISTORY}'	  => $eventinfo['payment_history'],
+						
 					'{PLAYLIST_CLOSE}'	   => $mdjm_settings['playlist']['close'] != 0 ? $mdjm_settings['playlist']['close'] : 'never',
 					'{PLAYLIST_URL}'		 => $this->get_link( MDJM_PLAYLIST_PAGE, false ),
 					'{QUOTES_URL}'		   => ( !empty( $e->ID ) ? $this->get_link( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $e->ID : '' ),
@@ -1417,8 +1431,11 @@
 					
 				);
 				
+				// Allow the $pairs array to be filtered
+				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, $eventinfo );
+				
 				/* -- Create the Search/Replace Array's -- */							
-				foreach( $mdjm_filter as $key => $value )	{
+				foreach( $pairs as $key => $value )	{
 					$search[] = $key;
 					$replace[] = $value;	
 				}

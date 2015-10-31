@@ -183,30 +183,30 @@
 			}
 			
 		}
-			$email_query = get_posts( $email_args );
-			if( $email_query ) {
-				?><optgroup label="EMAIL TEMPLATES"><?php
-				foreach( $email_query as $email_template ) {
-					?>
-					<option value="<?php echo add_query_arg( 'template', $email_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $email_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $email_template->ID ); ?></option>
-                    <?php
-				}
+		$email_query = get_posts( $email_args );
+		if( $email_query ) {
+			?><optgroup label="EMAIL TEMPLATES"><?php
+			foreach( $email_query as $email_template ) {
 				?>
-                </optgroup>
-                <?php
+				<option value="<?php echo add_query_arg( 'template', $email_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $email_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $email_template->ID ); ?></option>
+				<?php
 			}
-			$contract_query = get_posts( $contract_args );
-			if( $contract_query ) {
-				?><optgroup label="CONTRACTS"><?php
-				foreach ( $contract_query as $contract_template ) {
-					?>
-					<option value="<?php echo add_query_arg( 'template', $contract_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $contract_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $contract_template->ID ); ?></option>
-                    <?php
-				}
+			?>
+			</optgroup>
+			<?php
+		}
+		$contract_query = get_posts( $contract_args );
+		if( $contract_query ) {
+			?><optgroup label="CONTRACTS"><?php
+			foreach ( $contract_query as $contract_template ) {
 				?>
-                </optgroup>
-                <?php
+				<option value="<?php echo add_query_arg( 'template', $contract_template->ID ); ?>"<?php if( isset( $_GET['template'] ) ) { selected( $contract_template->ID, $_GET['template'] ); } ?>><?php echo get_the_title( $contract_template->ID ); ?></option>
+				<?php
 			}
+			?>
+			</optgroup>
+			<?php
+		}
 			
 		?>
 		</select></td>
@@ -309,6 +309,7 @@
 		<th class="row-title" align="left"><label for="subject">Subject:</label></th>
 		<td><input type="text" name="subject" id="subject" class="regular-text" value="<?php echo $subject; ?>" /></td>
 		</tr>
+        <?php do_action( 'mdjm_comms_fields_last', $email_query, $contract_query ); ?>
 		<tr>
 		<td colspan="2"><?php wp_editor( html_entity_decode( stripcslashes( $content ) ), 'email_content', $settings ); ?></td>
 		</tr>

@@ -144,6 +144,16 @@
 				case 'mdjm_client_field_settings':
 					include_once( 'class-mdjm-settings-client-fields.php' );
 				break;
+				
+				case 'mdjm_pdf_settings':
+					settings_fields( 'mdjm-pdf' );
+					do_settings_sections( 'mdjm-pdf' );
+				break;
+				
+				case 'mdjm_pdf_content_settings':
+					settings_fields( 'mdjm-pdf-content' );
+					do_settings_sections( 'mdjm-pdf-content' );
+				break;
 								
 				case 'mdjm_addon_settings':
 					settings_fields( 'mdjm-addons' );

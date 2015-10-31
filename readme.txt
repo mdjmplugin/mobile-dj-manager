@@ -1,6 +1,6 @@
-=== Mobile DJ Manager ===
+=== MDJM Event Management ===
 Contributors: mikeyhoward1977
-Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, Mobile DJ Manager, DJ Management
+Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
 Stable tag: 1.2.5.3
@@ -8,15 +8,15 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
 
-Mobile DJ Manager is an interface to fully manage your DJ or Agency business efficiently.
+MDJM Event Management is an interface to fully manage your DJ or Agency business efficiently.
 
 == Description ==
 
-Mobile DJ Manager is the solution for Mobile DJ's who work on their own or businesses that employ multiple DJ's.
+MDJM Event Management is the solution for Mobile DJ's who work on their own or businesses that employ multiple DJ's.
 
 It is an event planning solution built specifically for websites running on WordPress ensuring the users are familiar with the Administration settings and look and feel.
 
-Mobile DJ Manager allows you to manage your events from enquiry stage through to completion. Add your DJ's, your clients and then create an event.
+MDJM Event Management allows you to manage your events from enquiry stage through to completion. Add your DJ's, your clients and then create an event.
 
 As a site admin you will be able to view all information, but as a DJ, depending on the permissions set by the Administrator, you will only see those events that are specific to you.
 
@@ -31,34 +31,34 @@ As a client, you gain access to a number of features via the main website once y
 
 The main dashboard provides a complete overview of your business detailing the number of events and earnings over the month and year.
 
-All in all Mobile DJ Manager helps you to run your DJ business efficiently.
+All in all MDJM Event Management helps you to run your DJ business efficiently.
 
 == Installation ==
 
 <strong>Automated Installation</strong>
 
 1. Login to your WordPress administration screen and select "Plugins" -> "Add New" from the menu
-3. Enter "Mobile DJ Manager" into the Search Plugins text box and hit Enter
-4. Click "Install Now" within the Mobile DJ Manager plugin box
-5. Activate the plugin once installation is completed
+1. Enter "MDJM Event Management" into the Search Plugins text box and hit Enter
+1. Click "Install Now" within the MDJM Event Management plugin box
+1. Activate the plugin once installation is completed
 
 <strong>Manual Installation</strong>
 
 Once you have downloaded the plugin zip file, follow these simple instructions to get going;
 
 1. Login to your WordPress administration screen and select the "Plugins" -> "Add New" from the menu
-2. Select "Upload Plugin" from the top of the main page
-3. Click "Choose File" and select the mobile-dj-manager.zip file you downloaded
-4. Click "Install Now"
-5. Once installation has finished, select "Activate Plugin"
-6. Once activation has completed, click the "Settings" link under the Mobile DJ Manager plugin
-7. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://www.mydjplanner.co.uk/initial-configuration/">configure MDJM</a>.
+1. Select "Upload Plugin" from the top of the main page
+1. Click "Choose File" and select the mobile-dj-manager.zip file you downloaded
+1. Click "Install Now"
+1. Once installation has finished, select "Activate Plugin"
+1. Once activation has completed, click the "Settings" link under the MDJM Event Management plugin
+1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://www.mydjplanner.co.uk/initial-configuration/">configure MDJM</a>.
 
 == Frequently Asked Questions ==
 
 = Is any support provided? =
 
-Support can be obtained via our online [Support Forums](http://www.mydjplanner.co.uk/support/ "MDJM Support Forums") at  or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
+Support can be obtained via our online [Support Forums](http://www.mydjplanner.co.uk/support/ "MDJM Support Forums") at or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
 
 = Is there a Pro version with additional features? =
 
@@ -66,7 +66,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Screenshots ==
 
-1. An overview of the Mobile DJ Manager Dashboard screen as seen by an Administrator when they are logged into the WordPress Admin UI
+1. An overview of the MDJM Event Management Dashboard screen as seen by an Administrator when they are logged into the WordPress Admin UI
 2. The Dashboard as seen by a DJ (employee) when they are logged in
 3. A view of the settings page (not seen by DJs)
 4. Permissions can be set to determine what a DJ can see/do within the application
@@ -75,6 +75,26 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.6 =
+<strong>Released 31st October, 2015</strong>
+<ui>
+	<li>New: {PAYMENT_HISTORY} client shortcode added. Displays a simple list of client payments for the current event</li>
+	<li>New: Click the Details button on the event screen to reveal additional information</li>
+	<li>General: Added Domain Path for translations</li> 
+	<li>General: Removed deprecated journal DB table</li>
+	<li>General: Preparation for MDJM to PDF extension</li>
+	<li>General: Rebranded to MDJM Event Management on the plugin screen</li>
+	<li>General: Rebranded to MDJM Events on the menu and admin bar</li>
+	<li>Bug Fix: Client Zone playlist now displays guest entries and which guest added</li>
+	<li>Bug Fix: Client Zone playlist now displays content from the info</li>
+	<li>Bug Fix: Removed blank line after Event End Date shortcode in list of shortcodes</li>
+	<li>Bug Fix: DB Backup time was always 00:00</li>
+	<li>Bug Fix: Client Zone was logging an error when booking was accepted</li>
+	<li>Bug Fix: Scheduled task was logging an error in the log file due to missing variable</li>
+	<li>Bug Fix: If no events exist, it was possible an error would be written to the log file relating to the Event Type filter</li>
+	<li>Bug Fix: Installation was trying to create a DB table that is no longer required and could possibly generate an on screen warning notification</li>
+</ui>
+
 = 1.2.5.3 =
 <strong>Released 25th October, 2015</strong>
 <ul>
@@ -359,7 +379,7 @@ Watch out for the next major release of MDJM...coming soon to include a re-desig
 = 1.1 =
 <strong>New Features</strong>
 <strong>PayPal Integration</strong> for online Client Payments via your website<br />
-Mobile DJ Manager for WordPress is now fully integrated with PayPal enabling you to take online payments securely via your website.
+MDJM Event Management for WordPress is now fully integrated with PayPal enabling you to take online payments securely via your website.
 <ul>
 	<li>No PayPal account is needed by Clients in order to make payments</li>
 	<li>Accepts payments from all major credit cards, as well as funds within the Client's PayPal account</li>
@@ -374,7 +394,7 @@ Mobile DJ Manager for WordPress is now fully integrated with PayPal enabling you
 	<li>Supports the PayPal sandbox environment so full testing can take place without real payments</li>
 </ul>
 <strong>Transaction Page</strong><br />
-A new Transactions page has been added to the MDJM system and is available via the Mobile DJ Manager menu's within the WordPress admin interface.
+A new Transactions page has been added to the MDJM system and is available via the MDJM Event Management menu's within the WordPress admin interface.
 
 This page is only available to Admins and if the Payment features is enabled and has been introduced to compliment the new online payments system as described above.
 

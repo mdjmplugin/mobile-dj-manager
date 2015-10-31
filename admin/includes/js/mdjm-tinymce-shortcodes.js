@@ -94,6 +94,11 @@
                     onclick: function () {
                         editor.insertContent('{CLIENT_PRIMARY_PHONE}');
                     }
+                }, {
+                    text: 'Payment History',
+                    onclick: function () {
+                        editor.insertContent('{PAYMENT_HISTORY}');
+                    }
                 }]
             }, {
                 text: 'DJ Shortcodes',
@@ -198,8 +203,8 @@
                     onclick: function () {
                         editor.insertContent('{END_DATE}');
                     }
-                }, {
-                }, {
+                }, 
+				{
                     text: 'Event End Time',
                     onclick: function () {
                         editor.insertContent('{END_TIME}');
@@ -269,7 +274,7 @@
                     onclick: function () {
                         editor.insertContent('{BALANCE}');
                     }
-                }, {
+				}, {
                     text: 'Venue',
                     onclick: function () {
                         editor.insertContent('{VENUE}');

@@ -245,12 +245,12 @@
 					if( !empty( $cronned ) && $cronned != '' )
 						$cron_update = json_decode( $cronned, true );
 					
-					if( array_key_exists( 'complete-events', $cron_update ) )	{// Task has already run for this event
+					if( !empty( $cron_update ) && array_key_exists( 'complete-events', $cron_update ) )	{// Task has already run for this event
 						$GLOBALS['mdjm_debug']->log_it( 'This task has already run for this event (' . $event->ID . ')' );
 						continue;
 					}
 						
-					if( !is_array( $cron_update ) ) $cron_update = array();
+					if( empty( $cron_update ) || !is_array( $cron_update ) ) $cron_update = array();
 					
 					$cron_update[$this->schedules['complete-events']['slug']] = time();
 					

@@ -241,7 +241,7 @@
 					echo '</div>' . "\r\n"; // End div mdjm-playlist-table
 					
 					// Display songs that the user has added during this session and allow deletions
-					//$this->guest_songs();
+					$this->guest_songs();
 					
 					echo '</div>' . "\r\n"; // End div mdjm-playlist-container
 					
@@ -300,7 +300,6 @@
 						'&remove_id=' . $entry->event_id . '"></a>' . "\r\n";
 					echo '</div>' . "\r\n";	
 				}
-				
 			} // guest_songs
 			
 			/*
@@ -411,7 +410,7 @@
 					foreach( $categories as $category => $songs )	{
 						echo '<table class="mdjm_song_table">' . "\r\n";
 						echo '<tr>' . "\r\n";
-						echo '<th colspan="3">' . $category . '</th>' . "\r\n";
+						echo '<th colspan="4">' . $category . '</th>' . "\r\n";
 						echo '</tr>' . "\r\n";
 						foreach( $songs as $song )	{
 							echo '<tr>' . "\r\n";
@@ -419,12 +418,20 @@
 							
 							echo '<td>' . $song->artist . '</td>' . "\r\n";
 							
+							if( $category == 'Guest Added' )	{
+								echo '<td>' . $song->added_by . '</td>' . "\r\n";
+							}
+							else	{
+								echo '<td>' . ( !empty( $song->info ) ? stripslashes( $song->info ) : '' ) . '</td>' . "\r\n";
+							}
+							
 							echo '<td style="text-align: right;"><a href="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 
 								'remove_song=' . $song->id . '">' . __( 'Remove' ) . '</a></td>' . "\r\n";
+								
 							echo '</tr>' . "\r\n";
 						}
 						echo '<tr>' . "\r\n";
-						echo '<td colspan="3" style="font-weight: bold; border-top: 2px solid;">' . 
+						echo '<td colspan="4" style="font-weight: bold; border-top: 2px solid;">' . 
 							count( $songs ) . _n( ' Song', ' Songs', count( $songs ) ) . 
 							'</td>' . "\r\n";
 						echo '</tr>' . "\r\n";

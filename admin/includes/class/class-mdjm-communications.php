@@ -21,7 +21,7 @@
 		 *
 		 * @param: $args => array
 		 *			required: subject, content, recipient, source, event
-		 *			optional: status, author
+		 *			optional: status, author, attachments
 		 * @return: the post id
 		 */
 		function insert_comm( $args )	{
@@ -68,6 +68,55 @@
 					add_post_meta( $comm_post_id, '_' . $meta_key, $meta_value );	
 				}	
 			}
+			
+			// Process attachments
+			if( !empty( $args['attachments'] ) && is_array( $args['attachments'] ) )	{
+				if( MDJM_DEBUG == true )
+					$GLOBALS['mdjm_debug']->log_it( '	-- This email has attachments' );
+					
+				foreach( $args['attachments'] as $file )	{
+					// Make sure the file exists
+					if( !file_exists( $file ) )	{
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- ERROR: Attachment not found, will not process' );
+							
+						continue;
+					}
+					
+					$file_type = wp_check_filetype( basename( $file ), null );
+					
+					$upload_dir = wp_upload_dir();
+					
+					// Prepare an array of post data for the attachment.
+					$attachment = array(
+						'guid'           => $upload_dir['url'] . '/' . basename( $file ), 
+						'post_mime_type' => $file_type['type'],
+						'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $file ) ),
+						'post_content'   => '',
+						'post_status'    => 'inherit' );
+						
+					// Insert the attachment.
+					$attach_id = wp_insert_attachment( $attachment, $file, $comm_post_id );
+					
+					if( $attach_id )	{
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- Attachment post inserted successfully. ID ' . $attach_id );
+					}
+					else	{
+						if( MDJM_DEBUG == true )
+							$GLOBALS['mdjm_debug']->log_it( '	-- Attachment post could not be inserted' );	
+					}
+					
+					// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+					require_once( ABSPATH . 'wp-admin/includes/image.php' );
+					
+					// Generate the metadata for the attachment, and update the database record.
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+					
+				} // End foreach( $args['attachments'] as $file )
+			} // Attachments
+			
 			return $comm_post_id;
 		} // insert_comm
 		

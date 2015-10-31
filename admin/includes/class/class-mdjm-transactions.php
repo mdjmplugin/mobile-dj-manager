@@ -359,6 +359,43 @@
 			
 		} // get_event_transactions
 		
+		/**
+		 * List the event transactions for client view
+		 *
+		 * @params	int			$eventID	Required. Post ID of the event
+		 *			str			$display	Optional: 'list' to list each payment date, amount and reason
+		 *
+		 * @return	str						'No Payments Received' if no txns, otherwise txn detail as specified by $display
+		 */
+		function list_event_transactions( $eventID, $display = 'list' )	{
+			$txns = $this->get_transactions( $eventID, 'mdjm-income', 'Completed', 'obj' );
+			
+			if( empty( $txns ) )
+				return __( 'No Payments Found', 'mobile-dj-manager' );
+			
+			$i = 1;
+			switch( $display )	{
+				case 'list':
+					foreach( $txns as $txn )	{
+						$types = wp_get_object_terms( $txn->ID, 'transaction-types' );
+			
+						$txn_type = !is_wp_error( $types ) && !empty( $types ) ? $types[0]->name : '';
+						
+						$output = display_price( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) );
+						$output .=  ' ';
+						$output .=  'on ' . date( MDJM_SHORTDATE_FORMAT, strtotime( $txn->post_date ) ) . ' (' . $txn_type . ')';
+						
+						if( $i < count( $txns ) )
+							$output .= '<br />';
+						
+						$i++;	
+					}
+				break;	
+			}
+			return $output;
+			
+		} // list_event_transactions
+		
 		/*
 		 * Retrieve transactions based on the parameters given
 		 *

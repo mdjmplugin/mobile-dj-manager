@@ -53,6 +53,7 @@
 											'client_journal' => '<a href="' . $url . 'admin.php?page=mdjm-journal&client_id=' . $client->ID . '">' . 'View</a>'
 											);
 					}
+					
 				}
 				else	{
 					$events = $mdjm->mdjm_events->client_events( $client->ID );

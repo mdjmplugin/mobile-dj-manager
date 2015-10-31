@@ -236,6 +236,9 @@
 					case 'payments':
 						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_payment_settings' );
 					break;
+					case 'pdf':
+						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_pdf_settings' );
+					break;
 					case 'addons':
 						$this->current_section = ( isset( $_GET['section'] ) ? $_GET['section'] : 'mdjm_addon_settings' );
 					break;
@@ -273,6 +276,10 @@
 					
 				echo '<a href="' . $this->tab_url( 'payments' ) . '" class="nav-tab' . 
 					$this->active_tab( 'payments' ) . '">' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n";
+					
+				if( class_exists( 'MDJM_to_PDF' ) )
+					echo '<a href="' . $this->tab_url( 'pdf' ) . '" class="nav-tab' . 
+						$this->active_tab( 'pdf' ) . '">' . __( 'PDF Settings', 'mobile-dj-manager' ) . '</a>' . "\r\n";
 					
 				echo '<a href="' . $this->tab_url( 'addons' ) . '" class="nav-tab' . 
 					$this->active_tab( 'addons' ) . '">' . __( 'Premium Addons', 'mobile-dj-manager' ) . '</a>' . "\r\n";
@@ -376,7 +383,8 @@
 													),
 							'payments'	=> array(
 													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' ),
-							'addons'	=> array(
+
+							'addons'	  => array(
 													__( 'Premium Addons', 'mobile-dj-manager' ) 		=> 'mdjm_addon_settings' )
 							);
 							
@@ -723,24 +731,36 @@
 				table { border-spacing: 0.5rem; }
 				td {padding-left: 0.5rem; padding-right: 0.5rem; }
 				</style>
-				<h3><?php _e( 'Have you tried our Premium Plugins', 'mobile-dj-manager' ); ?>?</h3>
-                <p><?php _e( 'Our Premium Plugins enhance the features of the MDJM Event Management Plugin. All premium plugins are provided with a full years updates and support', 'mobile-dj-manager' ); ?>.</p>
+				<h3><?php _e( 'Have you tried the MDJM Event Management extensions', 'mobile-dj-manager' ); ?>?</h3>
+                <p><?php _e( 'Extensions enhance the features of the MDJM Event Management Plugin. All paid extensions are provided with a full years updates and support', 'mobile-dj-manager' ); ?>.</p>
                 <table>
                 <tr>
+                <td><a href="<?php echo admin_url( 'plugin-install.php?tab=search&s=mdjm-to-pdf' ); ?>"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/11/MDJM_to_PDF_Product.jpg" alt="MDJM to PDF" title="MDJM to PDF" /></a></td>
                 <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/09/MDJM_DCF_Product.jpg" alt="MDJM Dynamic Contact Forms" title="MDJM Dynamic Contact Forms" /></a></td>
-                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Payments_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></td></a>
-                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Google_Cal_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></td></a>
+                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Google_Cal_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
                 </tr>
                 <tr>
+                <td style="text-align:center"><a href="<?php echo admin_url( 'plugin-install.php?tab=search&s=mdjm-to-pdf' ); ?>" class="button secondary">Install now</a><br>
+                    <strong>FREE</strong>
+                </td>
                 <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank" class="button secondary">Buy now</a><br>
                     <strong>&pound;35.00</strong>
-                </td>
-                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank" class="button secondary">Buy now</a><br>
-                    <strong>&pound;25.00</strong>
                 </td>
                 <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank" class="button secondary">Buy now</a><br>
                     <strong>&pound;25.00</strong>
                 </td>
+                </tr>
+                <tr>
+                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Payments_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank" class="button secondary">Buy now</a><br>
+                    <strong>&pound;25.00</strong>
+                </td>
+                <td style="text-align:center">&nbsp;</td>
+                <td style="text-align:center">&nbsp;</td>
                 </tr>
                 </table>
 				<?php

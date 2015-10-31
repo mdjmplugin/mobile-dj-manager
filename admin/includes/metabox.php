@@ -16,6 +16,13 @@
 		$from = get_userdata( $post->post_author );
 		$recipient = get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
 		
+		$attachments = get_children( 
+			array(
+				'post_parent' 	=> $post->ID,
+				'post_type'	  	=> 'attachment',
+				'number_posts'	=> -1,
+				'post_status'	=> 'any' ) );
+		
 		?>
         <p><strong>Date Sent</strong>: <?php echo date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, get_post_meta( $post->ID, '_date_sent', true ) ); ?></p>
         <p><strong>From</strong>: <a href="<?php echo admin_url( '/user-edit.php?user_id=' . $from->ID ); ?>"><?php echo $from->display_name; ?></a></p>
@@ -24,6 +31,25 @@
 		( $post->post_status == 'opened' ? ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( $post->post_modified ) ) : '' );
 		; ?></p>
         <p><strong>Event</strong>: <a href="<?php echo get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ); ?>"><?php echo MDJM_EVENT_PREFIX . stripslashes( get_post_meta( $post->ID, '_event', true ) ); ?></a></p>
+        
+        <?php
+		if( !empty( $attachments ) )	{
+			$i = 1;
+			?>
+            <p><strong>Attachments</strong>:<br />
+            	<?php
+				foreach( $attachments as $attachment )	{
+					echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
+					echo basename( get_attached_file( $attachment->ID ) );
+					echo '</a>';
+					echo ( $i < count( $attachments ) ? '<br />' : '' );
+					$i++;	
+				}
+				?>
+            </p>
+            <?php	
+		}
+		?>
         
         <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
         
@@ -91,6 +117,8 @@
 	 * @params: $post => array
 	 */
 	function mdjm_event_post_client_metabox( $post )	{
+		global $mdjm;
+		
 		wp_nonce_field( basename( __FILE__ ), MDJM_EVENT_POSTS . '_nonce' );
 		
 		$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
@@ -121,13 +149,16 @@
                 </select>
                 <?php
                 if( $post->post_status != 'auto-draft' && !empty( $client_id ) )
-					echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>';
+					echo '<a style="font-size: 11px;" id="client_details_show" href="#">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
 				?>
             </div>
 		</div>
         <style>
 		#client_fields	{
 			display: <?php echo ( empty( $clients ) ? 'block;' : 'none;' ); ?>
+		}
+		#client_details	{
+			display: none;
 		}
 		</style>
   		<div id="client_fields">
@@ -202,6 +233,44 @@
                 </div>
             </div><!-- mdjm-post-row -->
         </div><!-- client_fields -->
+        
+        <?php
+			$last_login = get_user_meta( $client_id, 'last_login', true );
+		?>
+        
+        <div id="client_details">
+        	<div class="mdjm-post-row" style="height: 80px;">
+                <div class="mdjm-post-2column">
+                    <p><span class="mdjm-label"><?php printf( __( 'Last Login to %s', 'mobile-dj-manager' ), MDJM_APP ); ?></span>:<br />
+						<?php echo ( !empty( $last_login ) ? date( 'H:i d M Y', strtotime( $last_login ) ) : 'Never' ); ?> </p>
+                </div>
+                <div class="mdjm-post-last-2column">
+                    <p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
+						<?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
+                </div>
+            </div>
+            <?php
+            $quote = $mdjm->mdjm_events->retrieve_quote( $post->ID );
+			if( !empty( $quote ) )	{
+				?>
+				<div class="mdjm-post-row-single" style="height: 80px;">
+					<div class="mdjm-post-1column">
+						<p><span class="mdjm-label"><?php _e( 'Online Quote Status', 'mobile-dj-manager' ); ?></span>:<br />
+							<?php 
+							if( get_post_status( $quote ) == 'mdjm-quote-viewed' )
+								echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
+								
+							else
+								echo __( 'Not viewed yet', 'mobile-dj-manager' );
+							?>
+							</p>
+					</div>
+				</div>
+                <?php
+			}
+			?>
+        </div>
+        
         <?php
 	} // mdjm_event_post_client_metabox
 	 

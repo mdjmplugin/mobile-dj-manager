@@ -95,30 +95,23 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
-            <h3 class="site-title">Version 1.2.5.3 - 25th October 2015</h3>
+            <h3 class="site-title">Version 1.2.6 - 31st October 2015</h3>
             <ui>
-            	<li><strong>New</strong>: Added setting to enable event playlist (enabled by default)</li>
-                <li><strong>New</strong>: Event playlists can now be controlled per event. If not enabled, the <code>Manage Playlist</code> action button is not displayed within the <?php echo MDJM_APP; ?></li>
-                <li><strong>New</strong>: Option to select Client Address as event venue</li>
-            	<li><strong>New</strong>: On event screen added <code>Contact</code> link next to client list. Click to immediately contact regarding event</li>
-            	<li><strong>New</strong>: On event listing screen click the Client's or <?php echo MDJM_DJ; ?>'s name to contact them regarding that event</li>
-                <li><strong>New</strong>: Added <code>mdjm_event_metaboxes</code> developer action hook</li>
-                <li><strong>Bug Fix</strong>: Depending on WP Debug settings, error may be displayed on client login screen (unlikely)</li>
-            	<li><strong>Bug Fix</strong>: In event listing error may be displayed if no events exist for the current status</li>
-                <li><strong>Bug Fix</strong>: Unable to set Client's and <?php echo MDJM_DJ; ?>'s as Active/Inactive</li>
-            </ui>
-            <hr />
-            <h3 class="site-title">Version 1.2.5.2 - 22nd October 2015</h3>
-            <ui>
-            	<li><strong>New</strong>: Added new currencies for AUS, CAD, NZD and SGD</li>
-                <li><strong>New</strong>: Order your event listings by ID, Date, or Value by clicking on the relevant column header</li>
-                <li><strong>New</strong>: Order your venue listings by Name, Town or County by clicking on the relevant column header</li>
-                <li><strong>New</strong>: Support for MDJM Google Calendar Sync add-on</li>
-                <li><strong>New</strong>: Added a few developer hooks and filters</li>
-                <li><strong>New</strong>: Added new shortcode {END_DATE} which will display the date on which the event completes in short date format</li>
-                <li><strong>New</strong>: Adjusted branding</li>
-                <li><strong>Bug Fix</strong>: Fixed availability checker function on MDJM Dashboard</li>
-                <li><strong>Bug Fix</strong>: <code>{DJ_NOTES}</code> shortcode was displaying event notes</li>
+            	<li><strong>New</strong>: <code>{PAYMENT_HISTORY}</code> client shortcode added. Displays a simple list of client payments for the current event</li>
+                <li><strong>New</strong>: Click the <code>Details</code> button on the event screen to reveal additional information</li>
+                <li><strong>General</strong>: Added Domain Path for translations</li> 
+                <li><strong>General</strong>: Removed deprecated journal DB table</li>
+                <li><strong>General</strong>: Preparation for MDJM to PDF</li>
+            	<li><strong>General</strong>: Rebranded to <code>MDJM Event Management</code> on the plugin screen</li>
+                <li><strong>General</strong>: Rebranded to <code>MDJM Events</code> on the menu and admin bar</li>
+                <li><strong>Bug Fix</strong>: <?php echo MDJM_APP; ?> playlist now displays guest entries and which guest added</li>
+                <li><strong>Bug Fix</strong>: <?php echo MDJM_APP; ?> playlist now displays content from the <code>info</code></li>
+                <li><strong>Bug Fix</strong>: Removed blank line after Event End Date shortcode in list of shortcodes</li>
+                <li><strong>Bug Fix</strong>: DB Backup time was always 00:00</li>
+                <li><strong>Bug Fix</strong>: <?php echo MDJM_APP; ?> was logging an error when booking was accepted</li>
+                <li><strong>Bug Fix</strong>: Scheduled task was logging an error in the log file due to missing variable</li>
+                <li><strong>Bug Fix</strong>: If no events exist, it was possible an error would be written to the log file relating to the <code>Event Type</code> filter</li>
+                <li><strong>Bug Fix</strong>: Installation was trying to create a DB table that is no longer required and could possibly generate an on screen warning notification</li>
             </ui>
             <?php
 			$this->page_footer();

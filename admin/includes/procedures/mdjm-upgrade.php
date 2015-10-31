@@ -83,6 +83,9 @@
 				
 			if( $version < '1.2.5.3' )
 				$this->update_to_1_2_5_3();
+				
+			if( $version < '1.2.6' )
+				$this->update_to_1_2_6();
 			
 		} // execute_updates
 		
@@ -109,17 +112,11 @@
 				mkdir( $backup_dir, 0777, true );
 			
 			$mdjm_tables = array(
-							MDJM_EVENTS_TABLE,
 							MDJM_PLAYLIST_TABLE,
-							MDJM_TRANSACTION_TABLE,
-							MDJM_JOURNAL_TABLE,
 							MDJM_HOLIDAY_TABLE,
 							);
 			$mdjm_desc = array(
-							MDJM_EVENTS_TABLE		=> 'Events Table',
 							MDJM_PLAYLIST_TABLE		=> 'Playlist Table',
-							MDJM_TRANSACTION_TABLE	=> 'Transactions Table',
-							MDJM_JOURNAL_TABLE		=> 'Journal Table',
 							MDJM_HOLIDAY_TABLE		=> 'Availability Table',
 							);
 			
@@ -137,10 +134,7 @@
 							'-------------------------------------------*/' . "\n";
 			
 			$data_id = array(
-							MDJM_EVENTS_TABLE		=> 'event_id',
 							MDJM_PLAYLIST_TABLE		=> 'id',
-							MDJM_TRANSACTION_TABLE	=> 'trans_id',
-							MDJM_JOURNAL_TABLE		=> 'id',
 							MDJM_HOLIDAY_TABLE		=> 'id',
 						);
 			
@@ -276,29 +270,11 @@
 								PRIMARY KEY  (id),
 								KEY user_id (user_id)
 								);";
-								
-			/* JOURNAL TABLE */
-			$journal_sql = "CREATE TABLE ". MDJM_JOURNAL_TABLE . " (
-							id int(11) NOT NULL AUTO_INCREMENT,
-							client int(11) NOT NULL,
-							event int(11) NOT NULL,
-							timestamp varchar(255) NOT NULL,
-							author int(11) NOT NULL,
-							type varchar(255) NOT NULL,
-							source varchar(255) NOT NULL,
-							entry text NOT NULL,
-							migration varchar(10) NULL,
-							PRIMARY KEY  (id),
-							KEY client (client,event),
-							KEY entry_date (timestamp,type(10)),
-							KEY author (author)
-							) $charset_collate;";
-											
+																			
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $playlists_sql );
 			dbDelta( $music_library_sql );
 			dbDelta( $holiday_sql );
-			dbDelta( $journal_sql );
 		
 			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
 			$GLOBALS['mdjm_debug']->log_it( 'Completed database upgrade procedures', true );
@@ -422,7 +398,7 @@
 			$GLOBALS['mdjm_debug']->log_it( '*** STARTING EVENT IMPORT ***', true );
 			
 			$event_list = $wpdb->get_results(
-									'SELECT * FROM `' . MDJM_EVENTS_TABLE . '`'
+									'SELECT * FROM `' . $wpdb->prefix . 'mdjm_events`'
 										);
 			
 			if( !$event_list )	{
@@ -576,42 +552,11 @@
 						
 						/* -- Update Transactions -- */
 						$GLOBALS['mdjm_debug']->log_it( 'Updating Transactions' );
-						$trans_update = $wpdb->update( MDJM_TRANSACTION_TABLE, 
+						$trans_update = $wpdb->update( $wpdb->prefix . 'mdjm_trans', 
 														  array( 'event_id' => $event_id ),
 														  array( 'event_id' => $event->event_id ) );
 						$GLOBALS['mdjm_debug']->log_it( $trans_update . _n( ' entry ', ' entries ', $trans_update ) . 'updated' );
-						
-						/* -- Update Journal -- */
-						$GLOBALS['mdjm_debug']->log_it( 'Updating Journal' );
-						$journal_update = $wpdb->update( MDJM_JOURNAL_TABLE, 
-														  array( 'event' => $event_id ),
-														  array( 'event' => $event->event_id ) );
-						$GLOBALS['mdjm_debug']->log_it( $journal_update . _n( ' entry ', ' entries ', $journal_update ) . 'updated' );
-						
-						/* -- Transfer Journal to Post Comment -- */
-						/* List event journal entries -- */
-						/*$journal_list = $wpdb->get_results(
-								"SELECT * FROM `" . MDJM_JOURNAL_TABLE . "` WHERE `event` = '" . $event_id . "'" );
-						
-						if( $journal_list )	{
-							$i = 0;
-							foreach( $journal_list as $journal_entry )	{
-								/* -- Insert the comment -- */
-								/*$mdjm->mdjm_events->add_journal( array(
-														'user'				=> $journal_entry->author,
-														'event'				=> $event_id,
-														'comment_content'	=> $journal_entry->entry . '<br />(' . time() . $i . ')',
-														'comment_type'		=> 'mdjm-journal',
-														'comment_date'		=> $journal_entry->timestamp
-														 ),
-														 array(
-															 'type'				=> $journal_entry->type,
-															 'visibility'		=> '1',
-														 ) );
-								$i++;
-							}
-						}*/
-						
+												
 						/* -- Update Comm Posts -- */
 						$GLOBALS['mdjm_debug']->log_it( 'Updating Communications' );
 						$i = 0;
@@ -820,7 +765,7 @@
 			$GLOBALS['mdjm_debug']->log_it( '*** STARTING TRANSACTION IMPORT ***', true );
 						
 			$trans_list = $wpdb->get_results(
-									'SELECT * FROM `' . MDJM_TRANSACTION_TABLE . '`'
+									'SELECT * FROM `' . $wpdb->prefix . 'mdjm_trans`'
 										);
 			
 			if( !$trans_list )	{
@@ -1357,7 +1302,7 @@
 		} // update_to_1_2_5_2
 		
 		/*
-		 * Execute upgrade for version 1.2.5.2
+		 * Execute upgrade for version 1.2.5.3
 		 *
 		 *
 		 *
@@ -1372,6 +1317,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.3', true );
 		} // update_to_1_2_5_3
+		
+		/*
+		 * Execute upgrade for version 1.2.6
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_6()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.6', true );
+			
+			include_once( 'update_to_1.2.6.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.6', true );
+		} // update_to_1_2_6
 		
 	} // class
 	

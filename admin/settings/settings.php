@@ -61,10 +61,6 @@
 							'title' 	=> __( 'Playlist Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-playlists',
 							),
-					/*'mdjm_music_library_settings' => array(
-							'title' 	=> __( 'Music Library Options', 'mobile-dj-manager' ) . '<hr />',
-							'page'	 => 'mdjm-playlists',
-							),*/
 					'mdjm_email_settings' => array(
 							'title' 	=> __( 'Email Settings', 'mobile-dj-manager' ) . '<hr />',
 							'page'	 => 'mdjm-email',
@@ -613,31 +609,7 @@
 										'Only song, artist and the event type information is transmitted.',
 									'section' => 'playlist',
 									'page' => 'playlists',
-									),
-					/* -- Music Library Settings -- */
-							/*'enable_music_library' => array(
-									'label' => 'Use Music Library?',
-									'key' => MDJM_PLAYLIST_SETTINGS_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['playlist']['enable_music_library'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => 'Enable client searching of uploaded music library via ' . MDJM_APP,
-									'section' => 'music_library',
-									'page' => 'playlists',
-									),
-							'music_library_only' => array(
-									'label' => 'Only Use Music Library?',
-									'key' => MDJM_PLAYLIST_SETTINGS_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['playlist']['music_library_only'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => 'If enabled, clients cannot add song entries you do not have within your library.<br />
-										<span style="font-weight: bold;">Note: </span> If the assigned ' . MDJM_DJ . 
-										' does not have a music library, this setting does not apply',
-									'section' => 'music_library',
-									'page' => 'playlists',
-									),*/
-									
+									),									
 					/* -- Email Settings -- */
 							'system_email' => array(
 									'label' => 'Default Email Address',
@@ -1798,8 +1770,6 @@
 															'0'			=> __( 'Disable', 'mobile-dj-manager' ),
 															'paypal'	=> __( 'PayPal', 'mobile-dj-manager' ),
 															'payfast'	=> __( 'PayFast (South Africa Only)', 'mobile-dj-manager' ) ),
-														
-																		
 														),
 									'section' => 'payment',
 									'page' => 'payments',
