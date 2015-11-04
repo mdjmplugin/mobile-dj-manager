@@ -78,6 +78,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 = 1.2.7 =
 <strong>Released 31st October, 2015</strong>
 <ui>
+	<li>New: Development hooks added to event post metaboxes</li>
 	<li>General: Client fields settings page is now translation ready</li>
 	<li>General: Updated the uninstallation procedure</li>
 </ul>
