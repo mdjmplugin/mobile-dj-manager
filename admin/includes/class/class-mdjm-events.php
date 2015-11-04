@@ -1491,14 +1491,29 @@
 				}				
 			}
 			// Full address
-			$venue_details['full_address'][] = !empty( $venue_details['venue_address1'] ) ? $venue_details['venue_address1'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_address2'] ) ? $venue_details['venue_address2'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_town'] ) ? $venue_details['venue_town'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_county'] ) ? $venue_details['venue_county'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_postcode'] ) ? $venue_details['venue_postcode'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_contact'] ) ? $venue_details['venue_contact'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_phone'] ) ? $venue_details['venue_phone'] : '';
-			$venue_details['full_address'][] = !empty( $venue_details['venue_email'] ) ? $venue_details['venue_email'] : '';
+			if( !empty( $venue_details['venue_address1'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_address1'];
+			
+			if( !empty( $venue_details['venue_address2'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_address2'];
+			
+			if( !empty( $venue_details['venue_town'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_town'];
+			
+			if( !empty( $venue_details['venue_county'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_county'];
+			
+			if( !empty( $venue_details['venue_postcode'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_postcode'];
+			
+			if( !empty( $venue_details['venue_contact'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_contact'];
+			
+			if( !empty( $venue_details['venue_phone'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_phone'];
+			
+			if( !empty( $venue_details['venue_email'] ) )
+				$venue_details['full_address'][] = $venue_details['venue_email'];
 				
 			return $venue_details;
 		} // mdjm_get_venue_details

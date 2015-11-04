@@ -1517,5 +1517,4 @@
         <!-- End seventh row -->
         <?php
 	} // mdjm_venue_post_main_metabox
-	
 ?>

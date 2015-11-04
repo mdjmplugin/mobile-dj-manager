@@ -12,6 +12,7 @@
  * Domain Path: /lang
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Tags: Event Management, DJ, Mobile DJ, Photobooth, Photo booth, DJ Business, DJ Agency, Event Agency, Event Planning, Event Planner, DJ Event Planner, CRM, MDJM, Mobile DJ Manager
  */
 /**
    MDJM Event Management is free software; you can redistribute it and/or modify

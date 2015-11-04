@@ -596,8 +596,7 @@
 								'dj_add_event', 'dj_view_enquiry', 'dj_upload_music', 'dj_add_venue', 'dj_see_deposit', 'enable_playlists', 
 								'upload_playlists', 'enable_music_library', 'music_library_only', 'uninst_remove_db', 'uninst_remove_mdjm_posts', 
 								'uninst_remove_mdjm_pages', 'uninst_remove_mdjm_templates', 'uninst_remove_mdjm_users',
-								'gmail_enquiry', 'gmail_dj', 'gcal_full_sync'
-								);
+								'gmail_enquiry', 'gmail_dj', 'gcal_full_sync', 'enable_recaptcha' );
 				
 				$value = ( in_array( $args['field'], $true_vals ) ? '1' : 'Y' );
 				

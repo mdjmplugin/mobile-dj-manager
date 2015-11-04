@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * class-mdjm-settings-client-fields.php
  * 16/06/2015
  * @since 2.1
@@ -10,7 +10,7 @@
 	defined( 'ABSPATH' ) or die( 'Direct access to this page is disabled!!!' );
 	
 	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		wp_die( __( 'You do not have sufficient permissions to access this page.', 'mobile-dj-manager' ) );
 		
 	/* -- Build the MDJM_ClientFields class -- */
 	if( !class_exists( 'MDJM_ClientFields' ) )	{
@@ -34,10 +34,10 @@
 					$this->delete_field();
 				
 				if( isset( $_POST['submit'] ) )	{
-					if( $_POST['submit'] == 'Add Field' )
+					if( $_POST['submit'] == __( 'Add Field', 'mobile-dj-manager' ) )
 						$this->add_field();
 						
-					if( $_POST['submit'] == 'Save Changes' )
+					if( $_POST['submit'] == __( 'Save Changes', 'mobile-dj-manager' ) )
 						$this->update_field();
 				}
 				
@@ -56,12 +56,16 @@
 				unset( $this->fields[$_GET['id']] );
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
-					$mdjm_debug->log_it( 'Client field ' . $_GET['id'] . ' has been deleted', true );
-					mdjm_update_notice( 'updated', 'The field was deleted successfully.' );
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Client field ' . $_GET['id'] . ' has been deleted', true );
+					
+					mdjm_update_notice( 'updated', __( 'The field was deleted successfully.', 'mobile-dj-manager' ) );
 				}
 				else	{
-					$mdjm_debug->log_it( 'Error deleting Client field ' . $_GET['id'], true );
-					mdjm_update_notice( 'error', 'Field could not be deleted' );	
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Error deleting Client field ' . $_GET['id'], true );
+					
+					mdjm_update_notice( 'error', __( 'Field could not be deleted', 'mobile-dj-manager' ) );	
 				}
 			} // delete_field
 			
@@ -102,16 +106,19 @@
 										);
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
-					$mdjm_debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
-						' created successfully by ' .  $current_user->display_name, true );
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
+							' created successfully by ' .  $current_user->display_name, true );
+					
 					mdjm_update_notice( 'updated', sanitize_text_field( $_POST['field_label'] ) . 
-						' created successfully.' );
+						__( ' created successfully.', 'mobile-dj-manager' ) );
 				}
 				else	{
-					$mdjm_debug->log_it( 'Error creating Client field ' . 
-						sanitize_text_field( $_POST['field_label'] ), true );
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Error creating Client field ' . 
+							sanitize_text_field( $_POST['field_label'] ), true );
 						
-					mdjm_update_notice( 'error', 'Field could not be created' );	
+					mdjm_update_notice( 'error', __( 'Field could not be created', 'mobile-dj-manager' ) );
 				}
 				
 			} // add_field
@@ -145,16 +152,16 @@
 										);
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
-					$mdjm_debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
+					$GLOBALS['mdjm_debug']->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
 						' updated successfully by ' .  $current_user->display_name, true );
 					mdjm_update_notice( 'updated', sanitize_text_field( $_POST['field_label'] ) . 
 						' updated successfully.' );
 				}
 				else	{
-					$mdjm_debug->log_it( 'Error updating Client field ' . 
+					$GLOBALS['mdjm_debug']->log_it( 'Error updating Client field ' . 
 						sanitize_text_field( $_POST['field_label'] ), true );
 						
-					mdjm_update_notice( 'error', 'Field could not be updated' );	
+					mdjm_update_notice( 'error', __( 'Field could not be updated', 'mobile-dj-manager' ) );
 				}
 				
 				
@@ -284,7 +291,7 @@
 				
 				// Field Label
 				echo '<p>';
-				echo '<label class="mdjm-label" for="field_label">' . __( 'Field Label' ) . ':</label><br />' . "\r\n";
+				echo '<label class="mdjm-label" for="field_label">' . __( 'Field Label', 'mobile-dj-manager' ) . ':</label><br />' . "\r\n";
 				echo '<input type="text" name="field_label" id="field_label" class="regular-text" value="' . ( !empty( $editing ) ? $this->fields[$_GET['id']]['label'] : '' ) . 
 					'" class="regular-text" />';
 				echo '</p>' . "\r\n";
@@ -292,7 +299,7 @@
 				// Field Type
 				$types = array( 'text', 'checkbox', 'dropdown' );
 				echo '<p>' . "\r\n";
-                echo '<label class="mdjm-label" for="field_type">' . __( 'Field Type' ) . ':</label><br />' . "\r\n";
+                echo '<label class="mdjm-label" for="field_type">' . __( 'Field Type', 'mobile-dj-manager' ) . ':</label><br />' . "\r\n";
 				echo '<select name="field_type" id="field_type"' . ( !empty( $editing ) && $this->fields[$_GET['id']]['default'] == true ? 
 					' disabled="disabled"' : '' ) . ' onChange="whichField(); showRequired();">' . "\r\n";
 				
@@ -325,7 +332,7 @@
                 <div id="value_field_dropdown">
                 <?php
 				echo '<p>' . "\r\n";
-				echo '<label class="mdjm-label" for="field_options">' . __( 'Selectable Options' ) . ':</label> <br />' . "\r\n";
+				echo '<label class="mdjm-label" for="field_options">' . __( 'Selectable Options', 'mobile-dj-manager' ) . ':</label> <br />' . "\r\n";
 				echo '<textarea name="field_options" id="field_options" class="all-options" rows="5">' . 
 					( !empty( $editing ) ? $this->fields[$_GET['id']]['value'] : '' ) . '</textarea><br /><span class="description">One entry per line</span>';
 				echo '</p>' . "\r\n";
@@ -334,13 +341,13 @@
                 <div id="value_field_checkbox">
                 <?php
 				echo '<p>' . "\r\n";
-				echo '<label class="mdjm-label" for="field_value">' . __( 'Checked Value' ) . ':</label><br />' . "\r\n";
+				echo '<label class="mdjm-label" for="field_value">' . __( 'Checked Value', 'mobile-dj-manager' ) . ':</label><br />' . "\r\n";
 				echo '<input type="text" name="field_value" id="field_value" value="' . ( !empty( $editing ) ? $this->fields[$_GET['id']]['value'] : '' ) . 
 					'" class="small-text" />';
 				echo '</p>' . "\r\n";
 				
 				echo '<p>' . "\r\n";
-				echo '<label class="mdjm-label" for="field_checked">' . __( 'Checked by Default' ) . '?</label><br />' . "\r\n";
+				echo '<label class="mdjm-label" for="field_checked">' . __( 'Checked by Default', 'mobile-dj-manager' ) . '?</label><br />' . "\r\n";
 				echo '<input type="checkbox" name="field_checked" id="field_checked" value="1"' . 
 					( !empty( $editing ) && $this->fields[$_GET['id']]['checked'] ? ' checked="checked"' : '' ) . '" />';
 				echo '</p>' . "\r\n";
@@ -371,7 +378,7 @@
 				<?php
 				// Description
 				echo '<p>' . "\r\n";
-				echo '<label class="mdjm-label" for="field_desc">' . __( 'Description' ) . ':</label><br />' . "\r\n";
+				echo '<label class="mdjm-label" for="field_desc">' . __( 'Description', 'mobile-dj-manager' ) . ':</label><br />' . "\r\n";
 				echo '<input type="text" name="field_desc" id="field_desc" value="' . ( !empty( $editing ) ? $this->fields[$_GET['id']]['desc'] : '' ) . 
 					'" class="regular-text" />';
 				echo '</p>' . "\r\n";
@@ -381,7 +388,7 @@
 				echo '<input type="checkbox" name="field_enabled" id="field_enabled" value="1"' . 
 					( !empty( $editing ) && !empty( $this->fields[$_GET['id']]['display'] ) ? ' checked="checked"' : '' ) . 
 					( !empty( $editing ) && in_array( $this->fields[$_GET['id']]['id'], $must ) ? ' disabled="disabled"' : '' ) . ' />' . 
-					'<label class="mdjm-label" for="field_enabled">' . __( ' Field Enabled?' ) . '</label>';
+					'<label class="mdjm-label" for="field_enabled">' . __( ' Field Enabled?', 'mobile-dj-manager' ) . '</label>';
 				if( !empty( $editing ) && in_array( $this->fields[$_GET['id']]['id'], $must ) )
 					echo '<input type="hidden" name="field_enabled" id="field_enabled" value="1" />' . "\r\n";
 				echo '</p>' . "\r\n";
@@ -390,7 +397,7 @@
 				echo '<input type="checkbox" name="field_required" id="field_required" value="1"' . 
 					( !empty( $editing ) && !empty( $this->fields[$_GET['id']]['required'] ) ? ' checked="checked"' : '' ) . 
 					( !empty( $editing ) && in_array( $this->fields[$_GET['id']]['id'], $must ) ? ' disabled="disabled"' : '' ) . ' />' . 
-					'<label class="mdjm-label" for="field_required">' . __( ' Required Field?' ) . '</label>';
+					'<label class="mdjm-label" for="field_required">' . __( ' Required Field?', 'mobile-dj-manager' ) . '</label>';
 				if( !empty( $editing ) && in_array( $this->fields[$_GET['id']]['id'], $must ) )
 					echo '<input type="hidden" name="field_required" id="field_required" value="1" />' . "\r\n";
 				echo '</p>' . "\r\n";
@@ -413,7 +420,7 @@
 				</script>
                 <?php
 				echo '<p>';
-				submit_button( ( empty( $editing ) ? 'Add Field' : 'Save Changes' ), 
+				submit_button( ( empty( $editing ) ? __( 'Add Field', 'mobile-dj-manager' ) : __( 'Save Changes', 'mobile-dj-manager' ) ), 
 								'primary', 
 								'submit',
 								false );
@@ -421,7 +428,7 @@
 				if( !empty( $editing ) )	{
 					echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					echo '<a href="' . mdjm_get_admin_page( 'client_fields' ) . '" class="button-secondary">' . 
-						'Cancel Changes</a>';
+						__( 'Cancel Changes', 'mobile-dj-manager' ) . '</a>';
 				}
 								
 				echo '</p>' . "\r\n";
@@ -445,22 +452,22 @@
 				$output = '';
 				
 				if( $field['required'] == true )
-					$output .= '<img src="' . $dir . '/req_field.jpg" width="14" height="14" alt="Required Field" title="Required Field" />' . "\r\n";
+					$output .= '<img src="' . $dir . '/req_field.jpg" width="14" height="14" alt="' . __( 'Required Field', 'mobile-dj-manager' ) . '" title="' . __( 'Required Field', 'mobile-dj-manager' ) . '" />' . "\r\n";
 					
 				else
 					$output .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					
 				if( $field['type'] == 'checkbox' && !empty( $field['checked'] ) )
-					$output .= '<img src="' . $dir . '/captcha.jpg" width="14" height="14" alt="Checked checkbox field Field" title="Checked" />';
+					$output .= '<img src="' . $dir . '/captcha.jpg" width="14" height="14" alt="' . __( 'Checked checkbox field Field', 'mobile-dj-manager' ) . '" title="' . __( 'Checked', 'mobile-dj-manager' ) . '" />';
 				
 				else
 					$output .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					
 				if( $field['type'] == 'dropdown' )
-					$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="Dropdown field options" title="' . str_replace( ',', "\r\n", $field['value'] ) . '" />' . "\r\n";
+					$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="' . __( 'Dropdown field options', 'mobile-dj-manager' ) . '" title="' . str_replace( ',', "\r\n", $field['value'] ) . '" />' . "\r\n";
 					
 				if( $field['type'] == 'checkbox' )
-					$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="Checked Value" title="' . $field['value'] . '" />' . "\r\n";
+					$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="' . __( 'Checked Value', 'mobile-dj-manager' ) . '" title="' . $field['value'] . '" />' . "\r\n";
 					
 				else
 					$output .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';

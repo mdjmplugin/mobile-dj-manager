@@ -48,19 +48,19 @@
 	remove_role( 'inactive_client' );
 	
 /* -- Remove MDJM Data -- */			
-	$data_type = array( 'Communications'		   => 'mdjm_communication',
-						'Contract Templates'	   => 'contract',
-						'Signed Contracts'		 => 'mdjm-signed-contract',
-						'Email Templates'		  => 'email_template',
-						'Events'				   => 'mdjm-event',
-						'Transactions'			 => 'mdjm-transaction',
-						'Venues' 				   => 'mdjm-venue' );
+	$data_type = array( 'Communications'		=> 'mdjm_communication',
+						'Contract Templates'	=> 'contract',
+						'Signed Contracts'		=> 'mdjm-signed-contract',
+						'Email Templates'		=> 'email_template',
+						'Events'				=> 'mdjm-event',
+						'Quotes'				=> 'mdjm-quotes',
+						'Transactions'			=> 'mdjm-transaction',
+						'Venues'				=> 'mdjm-venue' );
 	
 	$mdjm_custom = array( 'mdjm_communication',
-						  'mdjm-contact-form',
-						  'mdjm-contact-field',
 						  'mdjm-signed-contract',
 						  'mdjm-event',
+						  'mdjm-quotes',
 						  'mdjm-transaction',
 						  'mdjm-venue' );
 										
@@ -103,7 +103,7 @@
 	if( !empty( $settings['uninst_remove_mdjm_pages'] ) )	{
 		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
 		
-		// Do not delete the contact page
+		// Do not delete the contact page, it was not created by us!
 		unset( $mdjm_pages['contact_page'] );
 		
 		foreach( $mdjm_pages as $mdjm_page )	{

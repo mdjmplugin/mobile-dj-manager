@@ -1,6 +1,6 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977
-Tags: DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
+Tags: Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
 Stable tag: 1.2.6
@@ -75,6 +75,12 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.7 =
+<strong>Released 31st October, 2015</strong>
+<ui>
+	<li>General: Client fields settings page is now translation ready</li>
+	<li>General: Updated the uninstallation procedure</li>
+</ul>
 = 1.2.6 =
 <strong>Released 31st October, 2015</strong>
 <ui>

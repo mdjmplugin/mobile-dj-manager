@@ -2501,7 +2501,13 @@
 			/* -- Venues -- */
 				if( $post->post_type == MDJM_VENUE_POSTS )	{
 					/* -- Main Body -- */
-					add_meta_box( 'mdjm-venue-details', __( 'Venue Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_VENUE_POSTS ) . '_post_main_metabox', MDJM_VENUE_POSTS, 'normal', 'high' );
+					add_meta_box(
+						'mdjm-venue-details',
+						__( 'Venue Details', 'mobile-dj-manager' ),
+						str_replace( '-', '_', MDJM_VENUE_POSTS ) . '_post_main_metabox',
+						MDJM_VENUE_POSTS,
+						'normal',
+						'high' );
 				}
 			} // define_metabox
 
