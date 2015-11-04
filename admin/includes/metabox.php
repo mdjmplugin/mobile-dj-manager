@@ -272,6 +272,7 @@
         </div>
         
         <?php
+		do_action( 'mdjm_events_client_metabox_last', $post, $client_id );
 	} // mdjm_event_post_client_metabox
 	 
 	 /*
@@ -573,7 +574,8 @@
 				});
 			});
 			</script>
-            <?php	
+            <?php
+			do_action( 'mdjm_events_metabox_last', $post );
 		}
 	} // mdjm_event_post_event_metabox
 	
@@ -713,6 +715,7 @@
 		?>
         </div><!-- End Venue Div -->
         <?php
+		do_action( 'mdjm_events_venue_metabox_last', $post );
 	} // mdjm_event_post_venue_metabox
 	
 	/*
