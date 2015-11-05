@@ -71,7 +71,10 @@
 					add_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
 					add_action ( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 					add_action ( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-				}																								
+				}
+				
+				// Runs after Events settings are updated
+				add_action ( 'update_option_mdjm_event_settings', array( &$this, 'rename_dj_role' ), 10, 2 );																							
 			} // __construct
 			
 			/**
@@ -162,7 +165,7 @@
 				/* -- Register the settings -- */
 				if( get_option( MDJM_SETTINGS_KEY ) )	{
 					$this->mdjm_init_settings();
-					$this->mdjm_role_caps();
+					//$this->mdjm_role_caps();
 				}
 				/* -- Release notes check -- */
 				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
@@ -304,6 +307,47 @@
 				define( 'MDJM_NOTIFY_ADMIN', ( !empty( $mdjm_settings['clientzone']['status_notification'] ) ? true : false ) );
 			 } // mdjm_settings
 			 
+			 /**
+			  * Rename the DJ role display name when admin saves the event settings from the settings page.
+			  * Include both the standard and inactive role.
+			  *
+			  * Called by: update_option_mdjm_event_settings hook
+			  *
+			  * @param		arr		$old_value		Old settings values
+			  *				arr		$new_value		New settings values
+			  */
+			function rename_dj_role( $old_value, $new_value )	{
+				global $wpdb;
+				
+				// If the artist setting has not been updated, we can return and do nothing
+				if( $new_value['artist'] == $old_value['artist'] )
+					return;
+				
+				$user_roles = get_option( $wpdb->prefix . 'user_roles' );
+				
+				if( empty( $user_roles ) )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: Could not retrieve user roles from DB', true );
+						
+					return;
+				}
+				
+				$user_roles['inactive_dj']['name'] = __( 'Inactive', 'mobile-dj-manager' ) . ' ' . $new_value['artist'];
+				$user_roles['dj']['name'] = $new_value['artist'];
+				
+				if( update_option( $wpdb->prefix . 'user_roles', $user_roles ) )	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'Updated DJ role name to ' . $new_value['artist'], true );	
+						
+					return;
+				}
+				else	{
+					if( MDJM_DEBUG == true )
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: Could not update DJ role name to ' . $new_value['artist'], true );
+				}
+				
+			} // rename_dj_role
+			 
 			 /*
 			  * Grab the upload playlist setting from the options table
 			  * & ensure the cron task is set correctly
@@ -332,169 +376,6 @@
 				update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
 				 
 			} // set_playlist_task
-			
-			/**
-			 * Add capabilities to user roles for custom post types
-			 *
-			 *
-			 * @since 1.1.3
-			 */
-			public function mdjm_role_caps()	{
-				global $mdjm_settings, $mdjm_post_types;
-			
-				/* -- Add the MDJM User roles -- */
-				add_role( 'inactive_client', 'Inactive Client', array( 'read' => true ) );
-				add_role( 'client', 'Client', array( 'read' => true ) );
-				add_role( 'inactive_dj', 'Inactive DJ', array( 	'read' => true, 
-														'create_users' => false,
-														'edit_users' => false,
-														'delete_users' => false,
-														'edit_posts' => false,
-														'delete_posts' => false,
-														'publish_posts' => false,
-														'upload_files' => true,
-													) );
-				add_role( 'dj', 'DJ', array( 'read' => true, 
-										'create_users' => true,
-										'edit_users' => true,
-										'delete_users' => true,
-										'edit_posts' => false,
-										'delete_posts' => false,
-										'publish_posts' => false,
-										'upload_files' => true,
-										) );
-				
-				$roles = array( 'client', 'dj', 'editor', 'administrator' );
-				
-				/* -- Loop through roles assigning capabilities -- */
-				foreach( $roles as $the_role )	{ 
-					
-					$role = get_role( $the_role );
-					
-					$role->add_cap( 'read' );
-					
-				/* -- Admin Only (May be deprecated>) -- */
-					if( $the_role == 'administrator' )
-						$role->add_cap( 'manage_mdjm' );
-						
-				/* -- DJ Permissions -- */
-					if( $the_role == 'dj' )	{
-						$perms = get_option( MDJM_PERMISSIONS_KEY );
-						$dj_role = get_role( 'dj' );
-						$caps = array(
-									'create_users',
-									'edit_users',
-									'delete_users',
-									);
-						if( current_user_can( 'dj' ) && current_user_can( 'create_users' ) )	{
-							if( !isset( $perms['dj_add_client'] ) || $perms['dj_add_client'] != 'Y' )	{
-								foreach( $caps as $cap )	{
-									$dj_role->remove_cap( $cap );
-								}
-							}
-						}
-						if( current_user_can( 'dj' ) && !current_user_can( 'create_users' ) )	{
-							if( isset( $perms['dj_add_client'] ) && $perms['dj_add_client'] == 'Y' )	{
-								foreach( $caps as $cap )	{
-									$dj_role->add_cap( $cap );
-								}
-							}
-						}	
-					} // if( $the_role == 'dj' )
-					
-				/* -- MDJM_EVENT_POSTS -- */
-					$role->add_cap( 'read_mdjm_manage_event' );
-					$role->add_cap( 'read_private_mdjm_manage_events' );
-					$role->add_cap( 'edit_mdjm_manage_event' );
-					$role->add_cap( 'edit_mdjm_manage_events' );
-					$role->add_cap( 'edit_others_mdjm_manage_events' );
-					$role->add_cap( 'edit_published_mdjm_manage_events' );
-					
-					if( current_user_can( 'manage_options' ) || dj_can( 'add_event' ) )
-						$role->add_cap( 'publish_mdjm_manage_events' );
-					
-					else
-						$role->remove_cap( 'publish_mdjm_manage_events' );
-					
-					if( current_user_can( 'manage_options' ) )	{
-						$role->add_cap( 'delete_mdjm_manage_events' );
-						$role->add_cap( 'delete_others_mdjm_manage_events' );
-						$role->add_cap( 'delete_private_mdjm_manage_events' );
-						$role->add_cap( 'delete_published_mdjm_manage_events' );
-					}
-				
-				/* -- MDJM_SIGNED_CONTRACT_POSTS -- */
-					$role->add_cap( 'read_mdjm_signed_contract' );
-					$role->add_cap( 'publish_mdjm_signed_contracts' );
-					$role->add_cap( 'edit_mdjm_signed_contract' );
-					$role->add_cap( 'edit_mdjm_signed_contracts' );
-					
-					if( current_user_can( 'manage_options' ) )
-						$role->add_cap( 'read_private_mdjm_signed_contracts' );
-						
-				/* -- MDJM_QUOTE_POSTS -- */
-					$role->add_cap( 'read_mdjm_manage_quote' );
-					$role->add_cap( 'publish_mdjm_manage_quotes' );
-					$role->add_cap( 'edit_mdjm_manage_quote' );
-					$role->add_cap( 'edit_mdjm_manage_quotes' );
-					
-					if( current_user_can( 'manage_options' ) )	{
-						$role->add_cap( 'read_private_mdjm_manage_quotes' );
-						$role->add_cap( 'edit_mdjm_manage_quote' );
-						$role->add_cap( 'edit_mdjm_manage_quotes' );
-						$role->add_cap( 'edit_others_mdjm_manage_quotes' );
-						$role->add_cap( 'edit_published_mdjm_manage_quotes' );
-						$role->add_cap( 'publish_mdjm_manage_quotes' );
-						$role->add_cap( 'delete_mdjm_manage_quotes' );
-						$role->add_cap( 'delete_others_mdjm_manage_quotes' );
-						$role->add_cap( 'delete_private_mdjm_manage_quotes' );
-						$role->add_cap( 'delete_published_mdjm_manage_quotes' );
-					}
-				
-				/* -- MDJM_TRANS_POSTS -- */
-					$role->add_cap( 'read_mdjm_manage_transaction' );
-					
-					if( current_user_can( 'manage_options' ) )	{
-						$role->add_cap( 'read_private_mdjm_manage_transactions' );
-						$role->add_cap( 'edit_mdjm_manage_transaction' );
-						$role->add_cap( 'edit_mdjm_manage_transactions' );
-						$role->add_cap( 'edit_others_mdjm_manage_transactions' );
-						$role->add_cap( 'edit_published_mdjm_manage_transactions' );
-						$role->add_cap( 'delete_mdjm_manage_transactions' );
-						$role->add_cap( 'delete_others_mdjm_manage_transactions' );
-						$role->add_cap( 'delete_private_mdjm_manage_transactions' );
-						$role->add_cap( 'delete_published_mdjm_manage_transactions' );
-						$role->add_cap( 'publish_mdjm_manage_transactions' );
-					}
-						
-				/* -- MDJM_VENUE_POSTS -- */
-					$role->add_cap( 'read_mdjm_manage_venue' );
-					
-					if( current_user_can( 'manage_options' ) || dj_can( 'add_venue' ) )	{
-						$role->add_cap( 'read_private_mdjm_manage_venues' );
-						$role->add_cap( 'edit_mdjm_manage_venue' );
-						$role->add_cap( 'edit_mdjm_manage_venues' );
-						$role->add_cap( 'edit_others_mdjm_manage_venues' );
-						$role->add_cap( 'edit_published_mdjm_manage_venues' );
-						$role->add_cap( 'publish_mdjm_manage_venues' );
-					}
-					else	{
-						$role->remove_cap( 'read_private_mdjm_manage_venues' );
-						$role->remove_cap( 'edit_mdjm_manage_venue' );
-						$role->remove_cap( 'edit_mdjm_manage_venues' );
-						$role->remove_cap( 'edit_others_mdjm_manage_venues' );
-						$role->remove_cap( 'edit_published_mdjm_manage_venues' );
-						$role->remove_cap( 'publish_mdjm_manage_venues' );
-					}
-					
-					if( current_user_can( 'manage_options' ) )	{
-						$role->add_cap( 'delete_mdjm_manage_venues' );
-						$role->add_cap( 'delete_others_mdjm_manage_venues' );
-						$role->add_cap( 'delete_private_mdjm_manage_venues' );
-						$role->add_cap( 'delete_published_mdjm_manage_venues' );
-					}
-				}
-			} // mdjm_role_caps
 			
 			/**
 			 * Register the login action within the user meta

@@ -93,7 +93,9 @@
 	function f_mdjm_equipment_settings_display()	{
 
 		$cats = get_option( 'mdjm_cats' );
-		asort( $cats );
+		
+		if( !empty( $cats ) )
+			asort( $cats );
 		?>
         <div class="wrap">
 	    <div id="icon-themes" class="icon32"></div>
@@ -148,7 +150,7 @@
 		</tr>
         </thead>
         <tbody>
-        <?
+        <?php
 		$djs = mdjm_get_djs();
 		if( empty( $equipment ) )	{
 			echo '<tr>';

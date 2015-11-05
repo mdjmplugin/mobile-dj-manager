@@ -15,12 +15,12 @@
 			 *
 			 *
 			 */
-			public function init()	{
+			function __construct()	{
 				global $wpdb, $mdjm_post_types;
 			
 				/* -- Plugin data -- */
-				add_filter( 'plugin_action_links_' . MDJM_PLUGIN_BASENAME, array( __CLASS__, 'mdjm_plugin_action_links' ) );
-				add_filter( 'plugin_row_meta', array( __CLASS__, 'mdjm_plugin_meta' ), 10, 2 );
+				add_filter( 'plugin_action_links_' . MDJM_PLUGIN_BASENAME, array( &$this, 'mdjm_plugin_action_links' ) );
+				add_filter( 'plugin_row_meta', array( &$this, 'mdjm_plugin_meta' ), 10, 2 );
 			} // __construct
 			
 			/*
@@ -57,5 +57,4 @@
 		}
 	endif;
 // Insantiate the class & register the activation/deactivation hooks
-	MDJM_WP::init();
-?>
+	new MDJM_WP();
