@@ -17,6 +17,8 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 			add_action( 'manage_mdjm-transaction_posts_custom_column' , array( __CLASS__, 'transaction_posts_custom_column' ), 10, 2 );
 			
 			add_action( 'admin_footer-edit-tags.php', array( __CLASS__, 'transaction_term_checkboxes' ) );
+			
+			add_action( 'restrict_manage_posts', array( __CLASS__, 'transaction_post_filter_list' ) ); // Filter dropdown boxes
 								
 			add_filter( 'manage_mdjm-transaction_posts_columns' , array( __CLASS__, 'transaction_post_columns' ) );
 			
@@ -123,6 +125,60 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 				break;
 			} // switch( $column_name )
 		} // transaction_posts_custom_column
+		
+		/**
+		 * Add the filter dropdowns to the transaction post list
+		 *
+		 * @params
+		 *
+		 * @return
+		 */
+		function transaction_post_filter_list()	{
+			if( !isset( $_GET['post_type'] ) || $_GET['post_type'] != MDJM_TRANS_POSTS )
+				return;
+			
+			self::transaction_type_filter_dropdown();
+		} // transaction_post_filter_list
+		
+		/**
+		 * Display the filter drop down list to enable user to select and filter transactions by type
+		 * 
+		 * @params
+		 *
+		 * @return
+		 */
+		public function transaction_type_filter_dropdown()	{			
+			$transaction_types = get_categories( 
+										array(
+											'type'			  => MDJM_TRANS_POSTS,
+											'taxonomy'		  => 'transaction-types',
+											'pad_counts'		=> false,
+											'hide_empty'		=> true,
+											'orderby'		  => 'name' ) );
+											
+			foreach( $transaction_types as $transaction_type )	{
+				$values[$transaction_type->term_id] = $transaction_type->name;
+			}
+			?>
+			<select name="mdjm_filter_type">
+			<option value=""><?php echo __( 'All Transaction Types', 'mobile-dj-manager' ); ?></option>
+			<?php
+				$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+				
+				if( !empty( $values ) )	{
+					foreach( $values as $value => $label ) {
+						printf(
+							'<option value="%s"%s>%s (%s)</option>',
+							$value,
+							$value == $current_v ? ' selected="selected"' : '',
+							$label,
+							$label );
+					}
+				}
+			?>
+			</select>
+			<?php
+		} // transaction_type_filter_dropdown
 		
 		/**
 		 * Ensure that built-in terms cannot be deleted by removing the 

@@ -21,24 +21,15 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			$this->includes();
 
 			/* -- Register actions -- */
-			add_action( 'manage_posts_custom_column', array( &$this, 'define_custom_post_column_data' ), 10, 1 ); // Data displayed in post columns
 			add_action( 'edit_form_top', array( &$this, 'check_user_permission' ) ); // Permissions
 			add_action( 'admin_head', array( &$this, 'mdjm_admin_head' ) ); // Execute the admin_head hook
 			add_action( 'edit_form_after_title', array( &$this, 'set_post_title' ) ); // Set the post title for Custom posts
 			add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
-			add_action( 'restrict_manage_posts', array( &$this, 'post_filter_list' ) ); // Filter dropdown boxes
 			
-			/* -- Register filters -- */
-			foreach( $mdjm_post_types as $mdjm_post_type )	{ // Post columns
-				if( method_exists( $this, 'define_' . str_replace( '-', '_', $mdjm_post_type ) . '_post_columns' ) )
-					add_filter( 'manage_' . $mdjm_post_type . '_posts_columns' , array( &$this, 'define_' . str_replace( '-', '_', $mdjm_post_type ) . '_post_columns' ) );
-			}
-			
-			/* -- Bulk Actions -- */
-			add_filter( 'bulk_actions-edit-mdjm-quotes', array( &$this, 'define_mdjm_quotes_bulk_action_list' ) );
-						
+			add_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
+												
 			if( is_admin() )	{
-				add_filter( 'posts_clauses', array( &$this, 'column_sort' ), 1, 2 );
+				add_filter( 'posts_clauses', array( &$this, 'sort_post_by_column' ), 1, 2 );
 				add_action( 'pre_get_posts', array( &$this, 'pre_post' ) ); // Actions for pre_get_posts
 				add_filter( 'parse_query', array( &$this, 'custom_post_filter' ) ); // Actions for filtered queries
 				
@@ -57,11 +48,13 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 *
 		 */
 		function includes()	{
+			include_once( 'mdjm-communications-posts.php' );
 			include_once( 'mdjm-contract-posts.php' );
+			include_once( 'mdjm-email-template-posts.php' );
 			include_once( 'mdjm-event-posts.php' );
+			include_once( 'mdjm-quote-posts.php' );
 			include_once( 'mdjm-transaction-posts.php' );
 			include_once( 'mdjm-venue-posts.php' );
-			include_once( 'mdjm-communications-posts.php' );
 		} // includes
 
 /**
@@ -708,105 +701,18 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			}
 			
 		} // post_types_query
-					
-		/* -- Email Template Columns -- */
-		public function define_email_template_post_columns( $columns ) {
-			$columns = array(
-					'cb'			   => '<input type="checkbox" />',
-					'title' 			=> __( 'Email Subject' ),
-					'author'		   => __( 'Created By' ),
-					'date' 			 => __( 'Date' ),
-				);
-			return $columns;
-		} // define_email_template_post_columns
-		
-		/* -- Event Quote Columns -- */
-		public function define_mdjm_quotes_post_columns( $columns ) {
-			$columns = array(
-					'cb'			   => '<input type="checkbox" />',
-					'quote_date'   	   => __( 'Date Generated', 'mobile-dj-manager' ),
-					'event' 			=> __( 'Event ID', 'mobile-dj-manager' ),
-					'client'		   => __( 'Client', 'mobile-dj-manager' ),
-					'value'			=> __( 'Quote Value', 'mobile-dj-manager' ),
-					'view_date'		=> __( 'Date Viewed', 'mobile-dj-manager' ),
-					'view_count'	   => __( 'View Count', 'mobile-dj-manager' ),
-				);
-			return $columns;
-		} // define_mdjm_quotes_post_columns
-						
-		/*
-		 * define_custom_post_column_data
-		 * Define  data that is displayed in each column for the custom post types
-		 * 
-		 * @since 1.1.2
-		 * @params: $column
-		 */
-		public function define_custom_post_column_data( $column )	{
-			global $post, $mdjm, $mdjm_settings, $mdjm_post_types, $wpdb;
-			
-			if( $post->post_type == 'mdjm_communication' || !in_array( $post->post_type, $mdjm_post_types ) )
-				return;
-						
-			/* -- mdjm-quotes -- */
-			elseif( $post->post_type == MDJM_QUOTE_POSTS )	{
-				$parent = wp_get_post_parent_id( $post->ID );
-				
-				switch( $column )	{
-					/* -- Quote Date -- */
-					case 'quote_date':
-						echo date( 'd M Y H:i:s', strtotime( $post->post_date ) );
-					break;
-					
-					/* -- Event -- */
-					case 'event':
-						echo ( !empty( $parent ) ? '<a href="' . admin_url( '/post.php?post=' . $parent . 
-							'&action=edit' ) . '">' . MDJM_EVENT_PREFIX . $parent . '</a><br />' . 
-							date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $parent, '_mdjm_event_date', true ) ) ) : 
-							'N/A' );
-					break;
-					
-					/* -- Event -- */
-					case 'client':
-						echo '<a href="' . admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $post->post_author ) . '">' . get_the_author() . '</a>';
-					break;
-					
-					/* -- Cost -- */
-					case 'value':
-						echo display_price( get_post_meta( $parent, '_mdjm_event_cost', true ) );
-					break;
-					
-					/* -- Date Viewed -- */
-					case 'view_date':
-						echo ( $post->post_status == 'mdjm-quote-viewed' ? 
-							date( 'd M Y H:i:s', strtotime( get_post_meta( $post->ID, '_mdjm_quote_viewed_date', true ) ) ) : 'N/A' );
-					break;
-					/* -- View Count -- */
-					case 'view_count':
-						$count = get_post_meta( $post->ID, '_mdjm_quote_viewed_count', true );
-						if( empty( $count ) )
-							$count = 0;
-							
-						echo $count . ' ' . _n( 'time', 'times', $count, 'mobile-dj-manager' );
-					break;
-				} // switch
-			}
-			else
-				return;
-		} // define_custom_post_columns
-
+													
 /**
 * -- POST COLUMN SORTING
 */		
 		/**
-		 * column_sort
-		 * The queries used to sort columns
+		 * The queries used to sort posts by selected column
 		 * 
 		 * 
-		 * @since 1.1.3
 		 * @params: $query
 		 * @return:
 		 */
-		public function column_sort( $pieces, $query )	{
+		public function sort_post_by_column( $pieces, $query )	{
 			global $wpdb;
 			
 			if( !is_admin() )
@@ -838,9 +744,27 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					case 'value':
 						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_event_cost'";
 						
-						$pieces[ 'orderby' ] = "mdjm_cost.meta_value $order, " . $pieces[ 'orderby' ];
+						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
 					break;
 					
+					/**
+					 * Quote sorting
+					 */	
+					// Order by quote view date
+					case 'quote_view_date':
+						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_q ON mdjm_q.post_id = {$wpdb->posts}.ID AND mdjm_q.meta_key = '_mdjm_quote_viewed_date'";
+						
+						$pieces[ 'orderby' ] = "STR_TO_DATE( mdjm_q.meta_value,'%Y-%m-%d' ) $order, " . $pieces[ 'orderby' ];
+					
+					break;
+					
+					// Order by quote value	
+					case 'quote_value':
+						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.post_parent AND mdjm_cost.meta_key = '_mdjm_event_cost'";
+						
+						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
+					break;
+										
 					/**
 					 * Transaction sorting
 					 */										
@@ -855,7 +779,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					case 'txn_value':
 						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_txn_total'";
 						
-						$pieces[ 'orderby' ] = "mdjm_cost.meta_value $order, " . $pieces[ 'orderby' ];
+						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
 					break;
 					
 					/**
@@ -880,7 +804,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			}
 			
 			return $pieces;
-		} // column_sort
+		} // sort_post_by_column
 		
 /**
 * -- STYLES & CUSTOMISATIONS
@@ -937,24 +861,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 	
 			return $messages;
 		} // custom_post_status_messages
-					
-		/*
-		 * define_mdjm_quote_bulk_action_list
-		 * Define which options are available within the 
-		 * bulk actions drop down list for each custom post type
-		 *
-		 * @since 1.1.3
-		 * @params: $actions
-		 * @return: $actions
-		 */
-		/* -- Remove Move to Trash from Event Bulk Actions -- */
-		public function define_mdjm_quotes_bulk_action_list( $actions )	{
-			unset( $actions['edit'] );
-			//unset( $actions['trash'] );
-			
-			return $actions;
-		} // define_mdjm_event_bulk_action_list
-							
+												
 		/*
 		 * define_custom_post_row_actions
 		 * Dictate which row action links are displayed for
@@ -1036,73 +943,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			
 			return $actions;
 		} // define_custom_post_row_actions
-		
-/*
-* EVENT POST FILTERED DROPDOWNS
-*/
-		/*
-		 * Call functions to display posts filter drop downs
-		 *
-		 *
-		 */
-		public function post_filter_list()	{
-			$type = '';
-			if( isset($_GET['post_type'] ) )
-				$type = $_GET['post_type'];
-			
-			if( MDJM_TRANS_POSTS == $type )
-				$this->transaction_type_filter_dropdown();
-
-		} // post_filter_list
 				
-		/*
-		 * Filter dropdown for Transaction Types
-		 * Display the drop down list to enable user to select transaction type
-		 * to display
-		 *
-		 */
-		public function transaction_type_filter_dropdown()	{
-			global $mdjm;
-			
-			$type = '';
-			if (isset($_GET['post_type']))
-				$type = $_GET['post_type'];
-			
-			if( MDJM_TRANS_POSTS == $type )	{
-				$transaction_types = get_categories( array(
-											'type'			  => MDJM_TRANS_POSTS,
-											'taxonomy'		  => 'transaction-types',
-											'pad_counts'		=> false,
-											'hide_empty'		=> true,
-											'orderby'		  => 'name',
-											) );
-				foreach( $transaction_types as $transaction_type )	{
-					$values[$transaction_type->term_id] = $transaction_type->name;
-				}
-				?>
-				<select name="mdjm_filter_type">
-				<option value=""><?php echo __( 'All Transaction Types' ); ?></option>
-				<?php
-					$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
-					
-					if( !empty( $values ) )	{
-						foreach( $values as $value => $label ) {
-							printf
-								(
-									'<option value="%s"%s>%s (%s)</option>',
-									$value,
-									$value == $current_v ? ' selected="selected"' : '',
-									$label,
-									$label
-								);
-							}
-					}
-				?>
-				</select>
-				<?php
-			}
-		} // transaction_type_filter_dropdown
-		
 		/*
 		 * Actions to be run within the admin_head hook
 		 *

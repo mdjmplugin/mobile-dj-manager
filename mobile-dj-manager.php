@@ -190,6 +190,8 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/debug/mdjm-debug.php' ); // Debug class
 			
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' ); // Transaction class
+			
 			if( is_admin() )	{ // Required for admin only
 				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
