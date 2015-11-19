@@ -138,6 +138,10 @@
 							'quotes_page'                  => 'N',
 						),
 						'mdjm_availability_settings' => array(
+							'availability_status'		  => array( 
+																'mdjm-enquiry',
+																'mdjm-contract',
+																'mdjm-approved' ),
 							'availability_check_pass_page' => 'text',
 							'availability_check_pass_text' => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' ),
 							'availability_check_fail_page' => 'text',

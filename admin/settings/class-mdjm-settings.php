@@ -288,7 +288,7 @@
 				
 				$this->print_nav_links();
 				
-				$this->exclude = array( 'client_text', 'mdjm_client_field_settings', 'mdjm_db_backups' );
+				$this->exclude = array( 'client_text', 'mdjm_client_field_settings', 'mdjm_custom_event_fields', 'mdjm_db_backups' );
 				
 				if( !in_array( $this->current_section, $this->exclude ) )
 					echo '<form method="post" action="options.php">' . "\r\n";
@@ -357,36 +357,34 @@
 			 */
 			function print_nav_links()	{				
 				$links = array(
-							'general'		=> array(
-												__( 'Application Settings', 'mobile-dj-manager' )   => 'mdjm_app_settings',
-												__( 'Permissions', 'mobile-dj-manager' )			=> 'mdjm_app_permissions',
-												__( 'Debugging', 'mobile-dj-manager' )			  => 'mdjm_app_debugging',
-												__( 'Backups', 'mobile-dj-manager' )				=> 'mdjm_db_backups',
-												__( 'Plugin Removal', 'mobile-dj-manager' )		 => 'mdjm_app_uninstall',
-												),
-							'events'		=> array(
-												__( 'Event Settings', 'mobile-dj-manager' ) 		=> 'mdjm_events_settings',
-												__( 'Playlist Settings', 'mobile-dj-manager' )	 => 'mdjm_playlist_settings',
-												//__( 'Event Staff', 'mobile-dj-manager' )		   => 'mdjm_event_staff',
-												),
-							'emails'		=> array(
-												__( 'General Email Settings', 'mobile-dj-manager' )	=> 'mdjm_email_settings',
-												__( 'Event Templates', 'mobile-dj-manager' )		   => 'mdjm_email_templates_settings',
+							'general'	=> array(
+								__( 'Application Settings', 'mobile-dj-manager' )   => 'mdjm_app_settings',
+								__( 'Permissions', 'mobile-dj-manager' )			=> 'mdjm_app_permissions',
+								__( 'Debugging', 'mobile-dj-manager' )			  => 'mdjm_app_debugging',
+								__( 'Backups', 'mobile-dj-manager' )				=> 'mdjm_db_backups',
+								__( 'Plugin Removal', 'mobile-dj-manager' )		 => 'mdjm_app_uninstall' ),
 												
-												),
-							'client-zone'	=> array(
-													MDJM_APP . ' ' . __( 'General Settings', 'mobile-dj-manager' ) => 'mdjm_app_general',
-													__( 'Pages', 'mobile-dj-manager' )						=> 'mdjm_app_pages',
-													__( 'Customised Text', 'mobile-dj-manager' )			  => 'mdjm_app_text',
-													__( 'Client Fields', 'mobile-dj-manager' )				=> 'mdjm_client_field_settings',
-													__( 'Availability Checker', 'mobile-dj-manager' )		 => 'mdjm_availability_settings',
-													),
-							'payments'	=> array(
-													__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' ),
+							'events'	 => array(
+								__( 'Event Settings', 'mobile-dj-manager' ) 		 => 'mdjm_events_settings',
+								__( 'Custom Event Fields', 'mobile-dj-manager' ) 	=> 'mdjm_custom_event_fields',
+								__( 'Playlist Settings', 'mobile-dj-manager' )	  => 'mdjm_playlist_settings' ),
+												
+							'emails'	 => array(
+								__( 'General Email Settings', 'mobile-dj-manager' ) => 'mdjm_email_settings',
+								__( 'Event Templates', 'mobile-dj-manager' )		=> 'mdjm_email_templates_settings' ),
+												
+							'client-zone'=> array(
+								MDJM_APP . ' ' . __( 'General Settings', 'mobile-dj-manager' ) => 'mdjm_app_general',
+								__( 'Pages', 'mobile-dj-manager' )						=> 'mdjm_app_pages',
+								__( 'Customised Text', 'mobile-dj-manager' )			  => 'mdjm_app_text',
+								__( 'Client Fields', 'mobile-dj-manager' )				=> 'mdjm_client_field_settings',
+								__( 'Availability Checker', 'mobile-dj-manager' )		 => 'mdjm_availability_settings' ),
+													
+							'payments'   => array(
+								__( 'Payment Settings', 'mobile-dj-manager' ) 		=> 'mdjm_payment_settings' ),
 
-							'addons'	  => array(
-													__( 'Premium Addons', 'mobile-dj-manager' ) 		=> 'mdjm_addon_settings' )
-							);
+							'addons'	 => array(
+								__( 'Premium Addons', 'mobile-dj-manager' ) 		=> 'mdjm_addon_settings' ) );
 							
 				// Run the filter for the MDJM Add ons to enable the settings links
 				$links = apply_filters( 'mdjm_settings_links', $links );

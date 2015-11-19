@@ -166,8 +166,8 @@
 													  'manage_options',
 													  'admin.php?page=mdjm-settings&tab=addons',
 													  '' );
-				
-				/* -- This is for the playlist, does not display on menu -- */					  
+								
+				/* -- This is for the playlist, does not display on menu -- */
 				add_submenu_page( 
 					  null,
 					__( 'Playlists', 'mobile-dj-manager' ),
@@ -470,7 +470,7 @@
 					}
 				}
 				if( current_user_can( 'manage_options' ) )	{
-					/* -- Event Types -- */
+					// Event Types
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-types',
 						'parent' => 'mdjm-events',
@@ -480,7 +480,17 @@
 							'title' => __( 'View / Edit Event Types', 'mobile-dj-manager' ),
 						),
 					) );
-					/* -- Event Quotes -- */
+					// Custom Event Fields
+					$admin_bar->add_menu( array(
+						'id'     => 'mdjm-event-fields',
+						'parent' => 'mdjm-events',
+						'title'  => __( 'Custom Event Fields', 'mobile-dj-manager' ),
+						'href'   => admin_url( 'admin.php?page=mdjm-settings&tab=events&section=mdjm_custom_event_fields' ),
+						'meta'   => array(
+							'title' => __( 'Manage Custom Event Fields', 'mobile-dj-manager' ),
+						)
+					) );
+					// Event Quotes
 					if( MDJM_ONLINE_QUOTES == true )	{
 						$admin_bar->add_menu( array(
 							'id'     => 'mdjm-event-quotes',

@@ -63,11 +63,17 @@
 				$email_args['journal'] = ( user_can( $_POST['email_to'], 'client' ) || user_can( $_POST['email_to'], 'inactive_client' ) ? 'email-client' : 'email-dj' );
 			}
 				
-			if( is_dj() && $_POST['copy_sender'] == 'Y' )
+			if( is_dj() && isset( $_POST['copy_sender'] ) && $_POST['copy_sender'] == 'Y' )
 				$email_args['cc_dj'] = true;
 				
-			if( current_user_can( 'administrator' ) && $_POST['copy_sender'] == 'Y' )
+			else
+				$email_args['cc_dj'] = false;
+				
+			if( current_user_can( 'administrator' ) && isset( $_POST['copy_sender'] ) && $_POST['copy_sender'] == 'Y' )
 				$email_args['cc_admin'] = true;
+				
+			else
+				$email_args['cc_admin'] = false;
 			
 			// Send the email					
 			$success = $mdjm->send_email( $email_args );

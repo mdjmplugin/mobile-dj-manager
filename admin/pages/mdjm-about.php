@@ -109,7 +109,8 @@ if( !class_exists( 'MDJM_About' ) ) :
 			?>
             <h3 class="site-title">Version 1.2.6.1 - XXXXXXX 2015</h3>
             <ui>
-            	<li><strong>New</strong>: Display name for <?php _e( MDJM_DJ ); ?> is now updated within user roles</li>
+            	<li><strong>New</strong>: New setting added <code>Unavailable Statuses</code> within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
+                <li><strong>New</strong>: Display name for <?php _e( MDJM_DJ ); ?> is now updated within user roles</li>
                 <li><strong>New</strong>: Development hooks added to event post metaboxes</li>
                 <li><strong>General</strong>: Client fields settings page is now translation ready</li>
                 <li><strong>General</strong>: Updated the uninstallation procedure</li>

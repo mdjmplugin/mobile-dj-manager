@@ -1667,6 +1667,32 @@
 									),
 					
 					/* -- Availability Settings -- */
+							'availability_status' => array(
+								'label' => __( 'Unavailable Statuses', 'mobile-dj-manager' ) . ':',
+								'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
+								'type' => 'multiple_select',
+								'value' => ( !empty( $mdjm_settings['availability']['availability_status'] ) ? 
+									$mdjm_settings['availability']['availability_status'] : '' ),
+								'text' => '',
+								'desc' => __( 'CTRL (cmd on MAC) + Click to select event status\' that ' . 
+									'you want availability checker to report as unavailable', 'mobile-dj-manager' ),
+								'size' => 8,
+								'custom_args' => array (
+												'list_type' => 'post_status',
+												'list_values' => array(
+													'mdjm-approved' 	=> 'Approved',
+													'mdjm-contract'	=> 'Awaiting Contract',
+													'mdjm-unattended'  => 'Unattended Enquiry',
+													'mdjm-enquiry'	 => 'Enquiry',
+													'mdjm-completed'   => 'Completed',
+													'mdjm-cancelled'   => 'Cancelled',
+													'mdjm-rejected'	=> 'Rejected Enquiry',
+													'mdjm-failed'	  => 'Failed Enquiry' ),
+												'selected' => ( !empty( $mdjm_settings['availability']['availability_status'] ) ? 
+													$mdjm_settings['availability']['availability_status'] : '' ) ),
+								'section' => 'clientzone_availability',
+								'page' => 'availability' ),
+								
 							'availability_check_pass_page' => array(
 									'label' => 'Available Redirect Page',
 									'key' => MDJM_AVAILABILITY_SETTINGS_KEY,

@@ -164,10 +164,10 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'supports'               => array( 'title' ),
 						'has_archive'         	=> false,
 						'show_in_menu'		   => false,
-						'capability_type'    	=> 'manage_options',
+						'capability_type'    	=> 'post',
 						'show_in_nav_menus'   	  => false ) );
 			} // Custom fields
-			
+						
 			/**
 			 * Register the email_template custom post type for email templates
 			 */

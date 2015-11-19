@@ -451,7 +451,13 @@
 				// Needs to be enqueued as and when required
 				wp_register_script( 'youtube-subscribe', 'https://apis.google.com/js/platform.js' );
 				
-				if( in_array( get_post_type(), $mdjm_post_types ) )	{
+				// Custom Event Field Ordering
+				if( isset( $_GET['section'] ) && $_GET['section'] == 'mdjm_custom_event_fields' )	{
+					wp_enqueue_script( 'jquery-ui-sortable' );
+					wp_enqueue_script( 'update-order-custom-fields', MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-order-list.js' );	
+				}
+				
+				if( in_array( get_post_type(), $mdjm_post_types ) || ( isset( $_GET['section'] ) && $_GET['section'] == 'mdjm_custom_event_fields' ) )	{
 					/* -- mdjm-posts.css: The CSS script for all custom post pages -- */
 					wp_register_style( 'mdjm-posts', MDJM_PLUGIN_URL . '/admin/includes/css/mdjm-posts.css', '', MDJM_VERSION_NUM );
 					wp_enqueue_style( 'mdjm-posts' );

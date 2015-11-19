@@ -19,6 +19,75 @@
 		die();
 	} // save_mdjm_client_field_order
 	add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_order' );
+
+/**
+ * Save the custom event fields order for clients
+ *
+ *
+ */
+	function mdjm_update_custom_field_client_order()	{
+		global $mdjm_posts;
+		
+		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		
+		foreach( $_POST['clientfields'] as $order => $id )	{
+			$menu = $order + 1;
+			
+			wp_update_post( array(
+								'ID'			=> $id,
+								'menu_order'	=> $menu,
+								) );	
+		}
+		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		die();
+	} // mdjm_update_custom_field_client_order
+	add_action( 'wp_ajax_mdjm_update_custom_field_client_order', 'mdjm_update_custom_field_client_order' );
+	
+/**
+ * Save the custom event fields order for events
+ *
+ *
+ */
+	function mdjm_update_custom_field_event_order()	{
+		global $mdjm_posts;
+		
+		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		
+		foreach( $_POST['eventfields'] as $order => $id )	{
+			$menu = $order + 1;
+			
+			wp_update_post( array(
+								'ID'			=> $id,
+								'menu_order'	=> $menu,
+								) );	
+		}
+		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		die();
+	} // mdjm_update_custom_field_event_order
+	add_action( 'wp_ajax_mdjm_update_custom_field_event_order', 'mdjm_update_custom_field_event_order' );
+	
+/**
+ * Save the custom event fields order for venues
+ *
+ *
+ */
+	function mdjm_update_custom_field_venue_order()	{
+		global $mdjm_posts;
+		
+		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		
+		foreach( $_POST['venuefields'] as $order => $id )	{
+			$menu = $order + 1;
+			
+			wp_update_post( array(
+								'ID'			=> $id,
+								'menu_order'	=> $menu,
+								) );	
+		}
+		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+		die();
+	} // mdjm_update_custom_field_venue_order
+	add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_field_venue_order' );
 	
 /*
  * Save the event transaction

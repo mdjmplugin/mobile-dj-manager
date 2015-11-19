@@ -70,7 +70,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			global $mdjm, $mdjm_post_types, $mdjm_settings, $current_user;
 			
 		/* -- Only for MDJM custom posts -- */
-			if( !in_array( $post->post_type, $mdjm_post_types ) )
+			if( !in_array( $post->post_type, $mdjm_post_types ) || $post->post_type == MDJM_CUSTOM_FIELD_POSTS )
 				return;
 				
 		/* -- Do not save if this is an autosave -- */
@@ -384,8 +384,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						 
 					foreach( $event_data as $event_meta_key => $event_meta_value )	{
 						// If the field value is empty, skip it
-						if( empty( $event_meta_value ) )
-							continue;
 						
 						if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' )
 							$event_meta_value = $event_meta_value;
@@ -1108,13 +1106,13 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				return;
 			
 			if( $post->post_type == MDJM_CONTRACT_POSTS )
-				$title = __( 'Enter the Contract name here...', 'mobile-dj-manager' );	
-			
+				$title = __( 'Enter Contract name here...', 'mobile-dj-manager' );
+				
 			elseif( $post->post_type == MDJM_EMAIL_POSTS )
-				$title = __( 'Enter the Template name here. Used as email subject, shortcodes allowed', 'mobile-dj-manager' );
+				$title = __( 'Enter Template name here. Used as email subject, shortcodes allowed', 'mobile-dj-manager' );
 				
 			elseif( $post->post_type == MDJM_VENUE_POSTS )	{
-				$title = __( 'Enter the Venue name here...', 'mobile-dj-manager' );
+				$title = __( 'Enter Venue name here...', 'mobile-dj-manager' );
 			}
 			
 			return $title;
@@ -1136,7 +1134,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				return;
 			
 			/* -- Our meta box functions -- */
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/metabox.php' );
+			require_once( 'mdjm-metaboxes.php' );
 			
 		/* -- Communications -- */
 			if( $post->post_type == MDJM_COMM_POSTS )	{

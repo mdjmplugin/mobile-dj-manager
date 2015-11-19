@@ -334,6 +334,8 @@
 		 * @return
 		 */
 		public function employee_bookings( $dj='', $date='' )	{
+			global $mdjm_settings;
+			
 			$date = !empty( $date ) ? $date : date( 'Y-m-d' );
 			$dj = !empty( $dj ) ? $dj : mdjm_get_djs();
 			
@@ -346,7 +348,8 @@
 				$user[] = $dj;
 			}
 			
-			$status = array( 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved' );
+			//$status = array( 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved' );
+			$status = $mdjm_settings['availability']['availability_status'];
 			
 			$events = $this->dj_events( $user, '_mdjm_event_dj', 'ASC', $status, $date );
 			

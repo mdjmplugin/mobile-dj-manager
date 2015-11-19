@@ -78,6 +78,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 = 1.2.6.1 =
 <strong>Released 31st October, 2015</strong>
 <ui>
+	<li><strong>New</strong>: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
 	<li>New: Display name for DJ is now updated within user roles</li>
 	<li>New: Development hooks added to event post metaboxes</li>
 	<li>General: Client fields settings page is now translation ready</li>

@@ -47,6 +47,22 @@
 		width: 30%;
 	}
 	
+/* -- Custom Event Fields Settings Screen -- */
+	.mdjm-event-field-container	{
+		overflow: none;
+	}
+
+	/* -- 2 Column -- */
+	.mdjm-event-field-column-left	{
+		float: left;
+		width: 70%;
+	}
+	
+	.mdjm-event-field-column-right	{
+		float: right;
+		width: 30%;
+	}
+	
 /*
  * Notifications
  *
@@ -145,5 +161,14 @@
 		cursor: move;	
 	}
 	.mdjm-client-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-client-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-event-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-venue-list-item	{
 		cursor: move;	
 	}

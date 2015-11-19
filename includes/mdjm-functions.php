@@ -48,7 +48,7 @@
 						'enquiries'             => 'edit.php?post_status=mdjm-enquiry&post_type=' . MDJM_EVENT_POSTS,
 						'unattended'            => 'edit.php?post_status=mdjm-unattended&post_type=' . MDJM_EVENT_POSTS,
 						'playlists'             => 'admin.php?page=mdjm-playlists&event_id=',
-						'music_library'         => 'admin.php?page=mdjm-music',
+						'custom_event_fields'   => 'admin.php?page=mdjm-settings&tab=events&section=mdjm_custom_event_fields',
 						'venues'                => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
 						'add_venue'             => 'post-new.php?post_type=' . MDJM_VENUE_POSTS,
 						'tasks'                 => 'admin.php?page=mdjm-tasks',
@@ -1510,8 +1510,49 @@
 		return false;
 	} // is_client
  
-/*
+/**
  * -- END USER FUNCTIONS
  */
-
+ 
+/**
+ * -- START CUSTOM FIELD FUNCTIONS
+ */
+	/**
+	 * Retrieve all custom fields for the relevant section of the event
+	 *
+	 * @param	str		$section	Optional: The section for which to retrieve the fields. If empty retrieve all
+	 *			str		$orderby	Optional. Which field to order by. Default to menu order
+	 *			str		$order		Optional. ASC or DESC. Default ASC
+	 *			int		$limit		Optional: The number of results to return. Default -1 (all)
+	 *
+	 * @return	arr		$fields		The custom event fields
+	 */
+	function mdjm_get_custom_fields( $section = '', $orderby = 'menu_order', $order = 'ASC', $limit = -1 )	{
+		// Retrieve fields for given $section and return as object
+		if( !empty( $section ) )
+			$custom_fields = new WP_Query(
+								array(
+									'posts_per_page'	=> $limit,
+									'post_type'		 => MDJM_CUSTOM_FIELD_POSTS,
+									'post_status'  	   => 'publish',
+									'meta_query'		=> array(
+										'field_clause'	=> array(
+											'key'	   => '_mdjm_field_section',
+											'value'	 => $section ) ),
+									'orderby'		   => array( 'field_clause' => $order, $orderby => $order ),
+									'order'			 => $order ) );
+		
+		// Retrieve fields for all custom event fields return as object
+		else	{
+			$custom_fields['client'] = get_option( 'mdjm_custom_client_fields' );
+			$custom_fields['event'] = get_option( 'mdjm_custom_event_fields' );
+			$custom_fields['venue'] = get_option( 'mdjm_custom_venue_fields' );
+		}
+		
+		return $custom_fields;
+	} // mdjm_get_custom_fields
+	
+/**
+ * -- END CUSTOM FIELD FUNCTIONS
+ */
 ?>

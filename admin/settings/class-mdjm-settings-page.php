@@ -56,46 +56,49 @@
 				return;
 						
 			switch( $this->current_section )	{
-				/* -- General Tab Settings -- */
+				// General Tab Settings
 				case 'mdjm_app_settings':
 					settings_fields( 'mdjm-settings' );
 					do_settings_sections( 'mdjm-settings' );
 				break;
+				
 				case 'mdjm_app_permissions':
 					settings_fields( 'mdjm-permissions' );
 					do_settings_sections( 'mdjm-permissions' );
 				break;
+				
 				case 'mdjm_app_debugging':
 					settings_fields( 'mdjm-debugging' );
 					do_settings_sections( 'mdjm-debugging' );
 					settings_fields( 'mdjm-debugging-files' );
 					do_settings_sections( 'mdjm-debugging-files' );
 				break;
+				
 				case 'mdjm_db_backups':
 					$mdjm_debug->db_backup_form();
 				break;
+				
 				case 'mdjm_app_uninstall':
 					settings_fields( 'mdjm-uninstall' );
 					do_settings_sections( 'mdjm-uninstall' );
 				break;
 				
-				/* -- Event Tab Settings -- */
+				// Event Tab Settings
 				case 'mdjm_events_settings':
 					settings_fields( 'mdjm-events' );
 					do_settings_sections( 'mdjm-events' );
+				break;
+				
+				case 'mdjm_custom_event_fields':
+					MDJM_Event_Fields::custom_event_field_settings();
 				break;
 				
 				case 'mdjm_playlist_settings':
 					settings_fields( 'mdjm-playlists' );
 					do_settings_sections( 'mdjm-playlists' );
 				break;
-				
-				case 'mdjm_event_staff':
-					settings_fields( 'mdjm-staff' );
-					do_settings_sections( 'mdjm-staff' );
-				break;
-				
-				/* -- Email Tab Settings -- */
+								
+				// Email Tab Settings
 				case 'mdjm_email_settings':
 					settings_fields( 'mdjm-email' );
 					do_settings_sections( 'mdjm-email' );
@@ -105,7 +108,7 @@
 					do_settings_sections( 'mdjm-email-templates' );
 				break;
 				
-				/* -- Client Zone Tab Settings -- */
+				// Client Zone Tab Settings
 				case 'mdjm_app_general':
 					settings_fields( 'mdjm-clientzone' );
 					do_settings_sections( 'mdjm-clientzone' );
@@ -121,11 +124,16 @@
 					do_settings_sections( 'mdjm-clientzone-text' );
 				break;
 				
+				case 'mdjm_client_field_settings':
+					include_once( 'class-mdjm-settings-client-fields.php' );
+				break;
+				
 				case 'mdjm_availability_settings':
 					settings_fields( 'mdjm-availability' );
 					do_settings_sections( 'mdjm-availability' );
 				break;
 				
+				// Payment Tab Settings
 				case 'mdjm_payment_settings':
 					settings_fields( 'mdjm-payments' );
 					do_settings_sections( 'mdjm-payments' );
@@ -141,10 +149,7 @@
 					do_settings_sections( 'mdjm-payfast' );
 				break;
 				
-				case 'mdjm_client_field_settings':
-					include_once( 'class-mdjm-settings-client-fields.php' );
-				break;
-				
+				// PDF Tab Settings
 				case 'mdjm_pdf_settings':
 					settings_fields( 'mdjm-pdf' );
 					do_settings_sections( 'mdjm-pdf' );
@@ -154,7 +159,8 @@
 					settings_fields( 'mdjm-pdf-content' );
 					do_settings_sections( 'mdjm-pdf-content' );
 				break;
-								
+				
+				// Premium Addons Tab Settings				
 				case 'mdjm_addon_settings':
 					settings_fields( 'mdjm-addons' );
 					do_settings_sections( 'mdjm-addons' );

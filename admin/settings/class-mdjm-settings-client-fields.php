@@ -458,7 +458,7 @@
 					$output .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					
 				if( $field['type'] == 'checkbox' && !empty( $field['checked'] ) )
-					$output .= '<img src="' . $dir . '/captcha.jpg" width="14" height="14" alt="' . __( 'Checked checkbox field Field', 'mobile-dj-manager' ) . '" title="' . __( 'Checked', 'mobile-dj-manager' ) . '" />';
+					$output .= '<img src="' . $dir . '/captcha.jpg" width="14" height="14" alt="' . __( 'Checked checkbox Field', 'mobile-dj-manager' ) . '" title="' . __( 'Checked', 'mobile-dj-manager' ) . '" />';
 				
 				else
 					$output .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
