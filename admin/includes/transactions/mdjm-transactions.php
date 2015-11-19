@@ -274,7 +274,7 @@
 				/* -- Post Meta -- */
 				$trans_meta['_mdjm_txn_status'] = 'Completed';
 				$trans_meta['_mdjm_txn_source'] = $_POST['src'];
-				$trans_meta['_mdjm_txn_total'] = number_format( $_POST['amount'], 2 );
+				$trans_meta['_mdjm_txn_total'] = number_format( $_POST['amount'], 2, '.', '' );
 				
 				if( $_POST['direction'] == 'In' && empty( $_POST['from'] ) )	{
 					$client = get_userdata( $_POST['client'] );	
@@ -534,16 +534,16 @@
 				strtolower( $meta['_mdjm_payer_email'] ) : '' );
 			
 			$trans_meta['_mdjm_txn_net'] = ( !empty( $meta['_mdjm_txn_net'] ) ? 
-													number_format( $meta['_mdjm_txn_net'], 2 ) : '0.00' );
+													number_format( $meta['_mdjm_txn_net'], 2, '.', '' ) : '0.00' );
 															
 			$trans_meta['_mdjm_txn_currency'] = ( !empty( $meta['_mdjm_txn_currency'] ) ? 
 				strtoupper( $meta['_mdjm_txn_currency'] ) : $mdjm_settings['payments']['currency'] );
 													
 			$trans_meta['_mdjm_txn_fee'] = ( !empty( $meta['_mdjm_txn_fee'] ) ? 
-													number_format( $meta['_mdjm_txn_fee'], 2 ) : '0.00' );
+													number_format( $meta['_mdjm_txn_fee'], '.', '' ) : '0.00' );
 													
 			$trans_meta['_mdjm_txn_total'] = ( !empty( $meta['_mdjm_txn_total'] ) ? 
-													number_format( $meta['_mdjm_txn_total'], 2 ) : '0.00' );
+													number_format( $meta['_mdjm_txn_total'], '.', '' ) : '0.00' );
 													
 			$trans_meta['_mdjm_payment_to'] = ( !empty( $meta['_mdjm_payment_to'] ) ? 
 													$meta['_mdjm_payment_to'] : '' );

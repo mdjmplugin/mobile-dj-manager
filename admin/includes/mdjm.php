@@ -1221,7 +1221,8 @@
 					//'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
 					//'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
 					'{PAYMENT_URL}'		  => ( !empty( $e ) ? $this->get_link( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
-					'{PAYMENT_HISTORY}'	  => $eventinfo['payment_history'],
+					'{PAYMENT_HISTORY}'	  => ( !empty( $eventinfo['payment_history'] ) ? 
+						$eventinfo['payment_history'] : __( 'No payments', 'mobile-dj-manager' ) ),
 						
 					'{PLAYLIST_CLOSE}'	   => $mdjm_settings['playlist']['close'] != 0 ? $mdjm_settings['playlist']['close'] : 'never',
 					'{PLAYLIST_URL}'		 => $this->get_link( MDJM_PLAYLIST_PAGE, false ),
@@ -1265,7 +1266,7 @@
 				);
 				
 				// Allow the $pairs array to be filtered
-				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, $eventinfo );
+				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, ( !empty( $eventinfo ) ? $eventinfo : '' ) );
 				
 				/* -- Create the Search/Replace Array's -- */							
 				foreach( $pairs as $key => $value )	{

@@ -159,6 +159,7 @@
 	*			 	[0] = class name
 	*			 	[1] = alternative field name (hidden)
 	*				[2] = maximum # days from today which can be selected
+	*				[3] = minimum # days past today which can be selected
 	*
 	*	@defaults:	[0] = mdjm_date
 	*				[1] = _mdjm_event_date
@@ -170,6 +171,7 @@
 		$class = !empty ( $args[0] ) ? $args[0] : 'mdjm_date';
 		$altfield = !empty( $args[1] ) ? $args[1] : '_mdjm_event_date';
 		$maxdate = !empty( $args[2] ) ? $args[2] : '';
+		$mindate = !empty( $args[3] ) ? $args[3] : '';
 		
 		if( empty( $class ) || empty( $altfield ) )
 			return;
@@ -182,6 +184,7 @@
 		"   firstDay: " . get_option( 'start_of_week' ) . ",\r\n" . 
 		"   changeYear: true,\r\n" . 
 		"   changeMonth: true,\r\n" . 
+		"   " . ( !empty( $mindate ) ? "minDate: '" . ( $mindate == 'today' ? '0' : $mindate ) . "',\r\n" : '' ) . 
 		"   " . ( !empty( $maxdate ) ? "maxDate: '" . ( $maxdate == 'today' ? '0' : $maxdate ) . "',\r\n" : '' ) . 
 		"	});" . "\r\n" . 
 		"});" . "\r\n";

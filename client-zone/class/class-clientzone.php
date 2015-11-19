@@ -30,13 +30,36 @@
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
-				add_action( 'init', array( &$this, 'no_comments' ) ); // Stop comments from being displayed on Client Zone pages
+				add_action( 'init', array( &$this, 'init' ) ); // Init actions
 				
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 			} // __construct
 			
 			/**
-			 * 
+			 * Actions during the init hook
+			 *
+			 * @params
+			 *
+			 * @return
+			 */
+			function init()	{
+				$this->includes();
+				$this->no_comments();
+			} // init
+			
+			/**
+			 * Call files for inclusion
+			 *
+			 * @params
+			 *
+			 * @return
+			 */
+			function includes()	{
+				require_once( MDJM_CLIENTZONE . '/includes/mdjm-availability.php' );
+			} // includes
+			
+			/**
+			 * Stop comments being displayed within the Client Zone pages
 			 *
 			 *
 			 *
@@ -45,7 +68,7 @@
 				add_filter( 'get_comments_number', '__return_false' );
 				
 				if( is_dj() || is_client() )
-					add_filter( 'get_edit_post_link', '__return_false' );	
+					add_filter( 'get_edit_post_link', '__return_false' );
 			} // no_comments
 
 /*
@@ -610,7 +633,8 @@
 							'Profile'		 => MDJM_CLIENTZONE . '/class/class-profile.php',
 							'Playlist'		=> MDJM_CLIENTZONE . '/class/class-playlist.php',
 							'Contract'		=> MDJM_CLIENTZONE . '/class/class-contract.php',
-							'Availability'	=> 'f_mdjm_availability_form',
+							//'Availability'	=> 'f_mdjm_availability_form',
+							'Availability'	=> MDJM_CLIENTZONE . '/includes/mdjm-availability.php',
 							'Online Quote'	=> MDJM_CLIENTZONE . '/class/class-onlinequote.php' );
 				
 				$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
@@ -632,7 +656,7 @@
 					}
 					/* Process Functions */
 					elseif( !empty( $atts['function'] ) )	{
-						$func = $args[$atts['function']];
+						/*$func = $args[$atts['function']];
 						if( function_exists( $func ) )	{
 							ob_start();
 							$func( $atts );
@@ -640,7 +664,10 @@
 						}
 						else	{
 							wp_die( __( 'An error has occurred', 'mobile-dj-manager' ) );	
-						}
+						}*/
+						ob_start();
+						MDJM_Availability_Checker::availability_form();
+						$output = ob_get_clean();
 					}
 					else
 						return;

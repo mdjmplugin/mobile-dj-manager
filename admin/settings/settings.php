@@ -1681,6 +1681,17 @@
 								'section' => 'clientzone_availability',
 								'page' => 'availability' ),
 								
+							'avail_ajax' => array(
+									'label' => __( 'Use Ajax?', 'mobile-dj-manager' ),
+									'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
+									'type' => 'checkbox',
+									'value' => ( !empty( $mdjm_settings['availability']['avail_ajax'] ) ? '1' : '0' ),
+									'text' => '',
+									'desc' => __( 'Perform checks without page refresh', 'mobile-dj-manager' ),
+									'section' => 'clientzone_availability',
+									'page' => 'availability',
+									),
+								
 							'availability_check_pass_page' => array(
 									'label' => 'Available Redirect Page',
 									'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
