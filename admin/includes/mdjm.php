@@ -47,7 +47,7 @@
 				
 				/* -- Initiate events class -- */
 				if( !class_exists( 'MDJM_Events' ) )	{
-					require( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-events.php' );
+					require( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-events.php' );
 					$this->mdjm_events = new MDJM_Events();
 				}
 								
