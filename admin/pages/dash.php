@@ -8,7 +8,7 @@
 		global $mdjm, $my_mdjm, $current_user;
 		
 		if( !class_exists( 'MDJM_Dashboard' ) )	{
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-dashboard.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-dashboard.php' );
 			$mdjm_dash = new MDJM_Dashboard();
 		}
 			
