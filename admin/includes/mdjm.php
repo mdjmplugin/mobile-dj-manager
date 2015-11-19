@@ -1024,7 +1024,7 @@
 				/* -- Add the COMM post -- */
 				if( $log_comm == true )	{
 					if( !class_exists( 'MDJM_Communication' ) )
-						require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-communications.php' );
+						require_once( MDJM_PLUGIN_DIR . '/admin/includes/communications/mdjm-communications.php' );
 						
 					$mdjm_comms = new MDJM_Communication();
 				
