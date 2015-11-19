@@ -65,8 +65,9 @@ if( !class_exists( 'MDJM_Contract_Posts' ) ) :
 							'post_status'  	  => 'any',
 							)
 						);
-		
-					echo count( $contract_events ) . ' ' . _n( 'Event', 'Events', count( $contract_events ), 'mobile-dj-manager' );
+					
+					$total = count( $contract_events );
+					echo $total . ' ' . _n( 'Event', 'Events', $total, 'mobile-dj-manager' );
 					break;	
 			} // switch
 		} // contract_posts_custom_column		
