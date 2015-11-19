@@ -202,8 +202,10 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
 			}
-			else // Required for front end only
+			else	{ // Required for front end only
+				include_once( MDJM_CLIENTZONE . '/includes/mdjm-shortcodes.php' );
 				require_once( MDJM_CLIENTZONE . '/class/class-clientzone.php' );
+			}
 		} // mdjm_includes
 	} //class  Mobile_DJ_Manager
 	

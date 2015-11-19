@@ -22,10 +22,7 @@
 				global $clientzone_loaded, $my_mdjm, $mdjm_settings;
 								
 				$clientzone_loaded = true;
-																
-				/* -- The MDJM content shortcodes -- */
-				add_shortcode( 'MDJM', array( &$this, 'shortcode' ) );
-				
+																				
 				/* -- Hooks -- */
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
@@ -611,70 +608,5 @@
 					
 				return $text;
 			} // __text
-
-/*
- * --
- * SHORTCODES
- * --
- */
-			/**
-			 * shortcode
-			 * Shortcode replacements
-			 *
-			 * @param		arr		$atts
-			 * @return				print the content
-			 * @since		1.1.3
-			 * @called wp action hook
-			 */
-			public function shortcode( $atts )	{
-				/* -- Map the args to the pages/functions -- */
-				$pairs = array(
-							'Home'			=> MDJM_CLIENTZONE . '/class/class-home.php',
-							'Profile'		 => MDJM_CLIENTZONE . '/class/class-profile.php',
-							'Playlist'		=> MDJM_CLIENTZONE . '/class/class-playlist.php',
-							'Contract'		=> MDJM_CLIENTZONE . '/class/class-contract.php',
-							//'Availability'	=> 'f_mdjm_availability_form',
-							'Availability'	=> MDJM_CLIENTZONE . '/includes/mdjm-availability.php',
-							'Online Quote'	=> MDJM_CLIENTZONE . '/class/class-onlinequote.php' );
-				
-				$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
-								
-				$args = shortcode_atts( $pairs, $atts, 'MDJM' );
-								
-				if( isset( $atts['page'] ) && !array_key_exists( $atts['page'], $pairs ) )
-					$output = __( 'ERROR: Unknown Page', 'mobile-dj-manager' );
-				
-				else	{
-				/* Process pages */
-					if( !empty( $atts['page'] ) )	{
-						ob_start();
-						include_once( $args[$atts['page']] );
-						if( $atts['page'] == 'Contact Form' )
-							do_action( 'mdjm_dcf_execute_shortcode', $atts );
-	
-						$output = ob_get_clean();
-					}
-					/* Process Functions */
-					elseif( !empty( $atts['function'] ) )	{
-						/*$func = $args[$atts['function']];
-						if( function_exists( $func ) )	{
-							ob_start();
-							$func( $atts );
-							$output = ob_get_clean();
-						}
-						else	{
-							wp_die( __( 'An error has occurred', 'mobile-dj-manager' ) );	
-						}*/
-						ob_start();
-						MDJM_Availability_Checker::availability_form();
-						$output = ob_get_clean();
-					}
-					else
-						return;
-				}
-				
-				return $output;
-			} // shortcode
-
 		} // class
 	} // if( !class_exists( 'ClientZone' ) )

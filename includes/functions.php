@@ -18,6 +18,9 @@
 * Displays the availability checker form
 */
 	function f_mdjm_availability_form( $args )	{
+		MDJM_Availability_Checker::availability_form();
+	}
+	function old_f_mdjm_availability_form( $args )	{
 		global $mdjm, $mdjm_settings;
 		
 		if( isset( $_POST['mdjm_avail_submit'] ) && !empty( $_POST['mdjm_avail_submit'] ) )	{
