@@ -13,7 +13,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		 * Hook in methods.
 		 */
 		public static function init()	{			
-			add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
+			add_action( 'init', array( __CLASS__, 'register_post_types' ) );
 			add_action( 'init', array( __CLASS__, 'register_post_status' ) );
 			add_action( 'init', array( __CLASS__, 'register_post_taxonomies' ) );		
 		} // init

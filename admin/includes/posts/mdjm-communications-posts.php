@@ -15,9 +15,32 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 		 */
 		public static function init()	{
 			add_action( 'manage_mdjm_communication_posts_custom_column' , array( __CLASS__, 'mdjm_communication_posts_custom_column' ), 10, 2 );
+			
+			add_filter( 'manage_mdjm_communication_posts_columns' , array( __CLASS__, 'mdjm_communication_post_columns' ) );
+			add_filter( 'bulk_actions-edit-mdjm_communication', array( __CLASS__, 'mdjm_communication_bulk_action_list' ) ); // Remove Edit from Bulk Actions
+			
 		} // init
 		
-		
+		/**
+		 * Define the post columns for the communication posts
+		 *
+		 *
+		 *
+		 *
+		 */
+		function mdjm_communication_post_columns( $columns )	{
+			$columns = array(
+				'cb'			   => '<input type="checkbox" />',
+				'date_sent' 		=> __( 'Date Sent', 'mobile-dj-manager' ),
+				'title' 	 		=> __( 'Email Subject', 'mobile-dj-manager' ),
+				'from'		   	 => __( 'From', 'mobile-dj-manager' ),
+				'recipient' 		=> __( 'Recipient', 'mobile-dj-manager' ),
+				'event'			=> __( 'Associated Event', 'mobile-dj-manager' ),
+				'current_status'   => __( 'Status', 'mobile-dj-manager' ),
+				'source'		   => __( 'Source', 'mobile-dj-manager' ) );
+				
+			return $columns;
+		} // mdjm_communication_post_columns
 		
 		/**
 		 * Define the data to be displayed in each of the custom columns for the Communications post types
@@ -80,6 +103,18 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 					break;
 			} // switch( $column_name	)
 		} // mdjm_communication_posts_custom_column
+		
+		/**
+		 * Adjust the options available within the Bulk Actions drop down.
+		 * Remove the Edit option and return the remaining options
+		 *
+		 *
+		 */
+		function mdjm_communication_bulk_action_list( $actions )	{
+			unset( $actions['edit'] );
+			return $actions;
+		} // mdjm_communication_bulk_action_list
+				
 	} // MDJM_Comms_Posts
 endif;
 	MDJM_Comms_Posts::init();
