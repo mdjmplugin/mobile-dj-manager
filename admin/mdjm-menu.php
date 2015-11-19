@@ -135,12 +135,12 @@
 													   '' );
 				
 				// Reporting
-				$mdjm_reports_page = add_submenu_page(
+				/*$mdjm_reports_page = add_submenu_page(
 					'mdjm-dashboard',
 					__( 'Reports', 'mobile-dj-manager' ),
 					__( 'Reports', 'mobile-dj-manager' ),
 					'manage_options',
-					admin_url( 'admin.php?page=mdjm-reports' ) );
+					admin_url( 'admin.php?page=mdjm-reports' ) );*/
 													   
 				/* -- Transactions -- */
 				if( current_user_can( 'manage_options' ) && MDJM_PAYMENTS == true )
@@ -494,7 +494,7 @@
 					}
 				}
 				// Reporting
-				if( current_user_can( 'manage_options' ) )	{
+				/*if( current_user_can( 'manage_options' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-reports',
 						'parent' => 'mdjm',
@@ -504,7 +504,7 @@
 							'title' => __( 'MDJM Reports', 'mobile-dj-manager' ),
 						),
 					) );	
-				}
+				}*/
 				/* -- Transactions -- */
 				if( current_user_can( 'manage_options' ) && MDJM_PAYMENTS == true )	{
 					$admin_bar->add_menu( array(
