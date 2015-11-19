@@ -485,7 +485,7 @@
 				}
 			} // admin_footer
 
-			/*
+			/**
 			 * Add the filters for the TinyMCE plugin
 			 *
 			 *
@@ -503,14 +503,13 @@
 				}
 			}
 			
-			/*
+			/**
 			 * Declare the script that inserts ths MDJM Shortcodes into the content
 			 * when the MDJM Shortcode button is used
 			 *
 			 *
 			 */
 			public function add_mce_shortcode( $plugin_array ) {
-				
 				$plugin_array['mdjm_shortcodes_btn'] = MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-tinymce-shortcodes.js';
 				return $plugin_array;
 			}

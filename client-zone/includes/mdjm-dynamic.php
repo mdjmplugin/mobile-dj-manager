@@ -33,8 +33,6 @@ Author URI: http://www.mydjplanner.co.uk
 			$result['type'] = 'success';
 			$result['addons'] = '<option value="0" disabled="disabled">' .
 				 __( 'No addons available', 'mobile-dj-manager' ) . '</option>';
-			//$result['type'] = 'error';
-			//$result['msg'] = 'No addons available';
 		}
 		echo json_encode( $result );
 		

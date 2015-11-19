@@ -23,6 +23,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
 			
 			add_filter( 'dcf_mapping_fields', array( &$this, 'dcf_mapping_fields' ), 10, 2 );
+			add_filter( 'dcf_mapping_fields_on_submit', array( &$this, 'dcf_mapping_fields_on_submit' ), 10, 2 );
 		}
 					
 		/**
@@ -712,6 +713,32 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			return $mappings;
 		} // dcf_mapping_fields
+		
+		/**
+		 * Append the custom event fields to the Contact Form mapping array.
+		 * Used on the front end of the contact form
+		 * @called: dcf_mapping_fields_on_submit hook
+		 *
+		 * @params	arr		$mappings			Required: The existing mapping options
+		 *			str		$type				Required: client | event | venue
+		 *
+		 *
+		 * @return	arr		$mappings_event		The filtered mapping options
+		 */
+		function dcf_mapping_fields_on_submit( $mappings, $type )	{
+			$query = mdjm_get_custom_fields( $type );
+			$fields = $query->get_posts();
+			
+			if( $fields )	{
+				foreach( $fields as $field )	{
+					$name = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+					
+					$mappings[] = $name;
+				}
+			}
+			
+			return $mappings;
+		} // dcf_mapping_fields_on_submit
 		
 	} // class MDJM_Event_Fields
 endif;

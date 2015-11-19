@@ -1059,7 +1059,7 @@
 		
 		// First entry
 		$mdjm_select .= isset( $settings['first_entry'] ) && !empty( $settings['first_entry'] ) ? 
-			'<option value="' . ( isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' ) . '">' . 
+			'<option value="' . ( isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '' ) . '">' . 
 			$settings['first_entry'] . '</option>' . "\r\n" : '';
 			
 		$packages = get_option( 'mdjm_packages' );

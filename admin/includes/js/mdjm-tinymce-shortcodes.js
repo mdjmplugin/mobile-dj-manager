@@ -4,6 +4,7 @@
             text: 'MDJM Shortcodes',
             icon: false,
             type: 'menubutton',
+			tooltip: 'Insert MDJM shortcodes into your document',
             menu: [{
                 text: 'Application Shortcodes',
                 menu: [{

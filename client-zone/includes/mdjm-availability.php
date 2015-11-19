@@ -141,7 +141,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 */
 		function check_availability()	{
 			global $mdjm, $mdjm_settings;
-			$GLOBALS['mdjm_debug']->log_it( 'Availability check' );
+			
 			if( !isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )
 				return;
 				
