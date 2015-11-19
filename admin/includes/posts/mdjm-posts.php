@@ -46,9 +46,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				add_filter( 'post_updated_messages', array( &$this, 'custom_post_status_messages' ) ); // Status messages
 				add_filter( 'gettext', array( &$this, 'rename_publish_button' ), 10, 2 ); // Set the value of the submit button
 				add_filter( 'enter_title_here', array( &$this, 'title_placeholder' ) ); // Set the title placeholder text
-				/* -- Protected Terms -- */
-				add_filter( 'transaction-types_row_actions', array( &$this, 'protected_term_actions' ), 10, 2 );
-				add_action( 'admin_footer-edit-tags.php', array( &$this, 'protected_term_checkboxes' ) );
 			}
 
 		} // __construct()
@@ -62,6 +59,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		function includes()	{
 			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-event-posts.php' );
+			include_once( 'mdjm-transaction-posts.php' );
 			include_once( 'mdjm-venue-posts.php' );
 			include_once( 'mdjm-communications-posts.php' );
 		} // includes
@@ -735,23 +733,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				);
 			return $columns;
 		} // define_mdjm_quotes_post_columns
-		
-		/* -- Transaction Columns -- */
-		public function define_mdjm_transaction_post_columns( $columns ) {
-			$columns = array(
-					'cb'			   => '<input type="checkbox" />',
-					'title' 	 		=> __( 'ID', 'mobile-dj-manager' ),
-					'tdate'			=> __( 'Date', 'mobile-dj-manager' ),
-					'direction'		=> __( 'In/Out', 'mobile-dj-manager' ),
-					'payee'			=> __( 'To/From', 'mobile-dj-manager' ),
-					'txn_status'	   => __( 'Status', 'mobile-dj-manager' ),
-					'detail'		   => __( 'Details', 'mobile-dj-manager' ),
-					'event'			=> __( 'Event', 'mobile-dj-manager' ),
-					'value'			=> __( 'Value', 'mobile-dj-manager' )
-				);
-			return $columns;
-		} // define_mdjm_transaction_post_columns
-				
+						
 		/*
 		 * define_custom_post_column_data
 		 * Define  data that is displayed in each column for the custom post types
@@ -808,57 +790,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					break;
 				} // switch
 			}
-			
-			/* -- mdjm-transaction -- */
-			elseif( $post->post_type == MDJM_TRANS_POSTS )	{
-				switch ( $column ) {	
-					/* -- Details -- */
-					case 'detail':
-						$trans_types = get_the_terms( $post->ID, 'transaction-types' );
-						if( is_array( $trans_types ) )	{
-							foreach( $trans_types as $key => $trans_type ) {
-								$trans_types[$key] = $trans_type->name;
-							}
-							echo implode( "<br/>", $trans_types );
-						}
-						break;	
-					/* -- Date -- */
-					case 'tdate':
-						echo get_post_time( 'd M Y' );					
-						break;
-					/* -- Direction -- */
-					case 'direction':
-						echo ( $post->post_status == 'mdjm-income' ? 
-							'<span style="color:green">In</span>' : 
-							'<span style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;Out</span>' );					
-						break;
-						
-					/* -- Source -- */
-					case 'payee':
-						echo ( $post->post_status == 'mdjm-income' ? 
-							get_post_meta( $post->ID, '_mdjm_payment_from', true ) : 
-							get_post_meta( $post->ID, '_mdjm_payment_to', true ) );
-						
-						break;
-							
-					/* -- Event -- */
-					case 'event':
-						echo ( wp_get_post_parent_id( $post->ID ) ? 
-							'<a href="' . admin_url( '/post.php?post=' . wp_get_post_parent_id( $post->ID ) . '&action=edit' ) . '">' . 
-							MDJM_EVENT_PREFIX . wp_get_post_parent_id( $post->ID ) . '</a>' : 
-							'N/A' );					
-						break;
-					/* -- Value -- */
-					case 'value':
-						echo display_price( get_post_meta( $post->ID, '_mdjm_txn_total', true ) );
-						break;
-						
-					/* -- Status -- */
-					case 'txn_status':
-						echo get_post_meta( $post->ID, '_mdjm_txn_status', true );
-					break;
-				}
-			}
 			else
 				return;
 		} // define_custom_post_columns
@@ -893,6 +824,9 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					$order = 'ASC';
 					
 				switch( $orderby )	{
+					/**
+					 * Event sorting
+					 */
 					// Order by event date
 					case 'event_date':
 						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_ed ON mdjm_ed.post_id = {$wpdb->posts}.ID AND mdjm_ed.meta_key = '_mdjm_event_date'";
@@ -906,6 +840,27 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						
 						$pieces[ 'orderby' ] = "mdjm_cost.meta_value $order, " . $pieces[ 'orderby' ];
 					break;
+					
+					/**
+					 * Transaction sorting
+					 */										
+					// Order by transaction status
+					case 'txn_status':
+						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_status ON mdjm_status.post_id = {$wpdb->posts}.ID AND mdjm_status.meta_key = '_mdjm_txn_status'";
+						
+						$pieces[ 'orderby' ] = "mdjm_status.meta_value $order, " . $pieces[ 'orderby' ];
+					break;
+					
+					// Order by transaction value
+					case 'txn_value':
+						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_txn_total'";
+						
+						$pieces[ 'orderby' ] = "mdjm_cost.meta_value $order, " . $pieces[ 'orderby' ];
+					break;
+					
+					/**
+					 * Venue sorting
+					 */
 					
 					// Order by Venue town
 					case 'town':
@@ -1449,61 +1404,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		public function post_exists( $id )	{
 			return is_string( get_post_status( $id ) );	
 		} // post_exists
-		
-		/**
-		 *
-		 * Ensure that built-in terms cannot be deleted by removing the 
-		 * delete, edit and quick edit options from the hover menu
-		 *
-		 * @param	arr		$actions		The array of actions in the hover menu
-		 * 			obj		$tag			The object array for the term
-		 */
-		function protected_term_actions( $actions, $tag )	{
-			$protected_terms = array(
-								__( 'Merchant Fees', 'mobile-dj-manager' ),
-								MDJM_DEPOSIT_LABEL,
-								MDJM_BALANCE_LABEL,
-								$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
-								
-			if ( in_array( $tag->name, $protected_terms ) ) 
-				unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
-				
-			return $actions;
-		} // protected_term_actions
-		
-		/**
-		 *
-		 * Ensure that built-in terms cannot be deleted by removing the 
-		 * bulk action checkboxes
-		 *
-		 *
-		 */
-		 function protected_term_checkboxes()	{
-			 if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )
-				return;
-				
-			$protected_terms = array(
-								__( 'Merchant Fees', 'mobile-dj-manager' ),
-								MDJM_DEPOSIT_LABEL,
-								MDJM_BALANCE_LABEL,
-								$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
-			?>
-			<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				<?php
-				foreach( $protected_terms as $term_name )	{
-					$obj_term = get_term_by( 'name', $term_name, 'transaction-types' );
-					if( !empty( $obj_term ) )	{
-						?>
-						$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();
-						<?php
-					}
-				}
-				?>
-			});
-			</script>
-			<?php
-		 } // protected_term_checkboxes
 		
 		/*
 		 * check_user_permission
