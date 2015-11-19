@@ -46,7 +46,7 @@ if( !class_exists( 'MDJM_About' ) ) :
 			
 			</style>
             <div class="wrap">
-            <a href="http://www.mydjplanner.co.uk/" target="_blank"><img style="max-height: 80px; height: auto;" src="<?php echo MDJM_PLUGIN_URL . '/admin/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" title="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" /></a>
+            <a href="http://www.mydjplanner.co.uk/" target="_blank"><img style="max-height: 80px; height: auto;" src="<?php echo MDJM_PLUGIN_URL . '../images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" title="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" /></a>
             <h1><?php printf( __( 'Welcome to MDJM Event Management version %s', 'mobile-dj-manager' ), MDJM_VERSION_NUM ); ?></h1>
             <hr>
             <?php
@@ -110,6 +110,9 @@ if( !class_exists( 'MDJM_About' ) ) :
             <h3 class="site-title">Version 1.2.6.1 - XXXXXXX 2015</h3>
             <ui>
             	<li><strong>New</strong>: Display name for <?php _e( MDJM_DJ ); ?> is now updated within user roles</li>
+                <li><strong>New</strong>: Development hooks added to event post metaboxes</li>
+                <li><strong>General</strong>: Client fields settings page is now translation ready</li>
+                <li><strong>General</strong>: Updated the uninstallation procedure</li>
                 <li><strong>Bug Fix</strong>: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
                 <li><strong>Bug Fix</strong>: Depending on PHP notice display settings, warning may be displayed on front end when client clicks <code>Book this Event</code></li>
             </ui>

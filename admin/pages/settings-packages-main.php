@@ -13,8 +13,8 @@
 		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'packages';
 		?>
 		<h2 class="nav-tab-wrapper">
-			<a href="admin.php?page=mdjm-packages&tab=packages" class="nav-tab <?php echo $active_tab == 'packages' ? 'nav-tab-active' : ''; ?>">Available Packages</a>
-			<a href="admin.php?page=mdjm-packages&tab=equipment" class="nav-tab <?php echo $active_tab == 'equipment' ? 'nav-tab-active' : ''; ?>">Equipment List</a>
+			<a href="admin.php?page=mdjm-packages&amp;tab=packages" class="nav-tab <?php echo $active_tab == 'packages' ? 'nav-tab-active' : ''; ?>">Available Packages</a>
+			<a href="admin.php?page=mdjm-packages&amp;tab=equipment" class="nav-tab <?php echo $active_tab == 'equipment' ? 'nav-tab-active' : ''; ?>">Equipment List</a>
 		</h2>
 		<?php
 		if( $active_tab == 'packages' ) {

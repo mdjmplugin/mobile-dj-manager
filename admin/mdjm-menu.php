@@ -710,7 +710,7 @@
 			 *
 			 */
 			public function mdjm_about_page()	{
-				include_once( MDJM_PLUGIN_DIR . '/admin/includes/pages/mdjm-about.php' );
+				include_once( MDJM_PAGES_DIR . '/mdjm-about.php' );
 			} // mdjm_about_page
 		} // class
 	}

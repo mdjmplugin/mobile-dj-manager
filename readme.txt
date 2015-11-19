@@ -75,12 +75,15 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-= 1.2.7 =
+= 1.2.6.1 =
 <strong>Released 31st October, 2015</strong>
 <ui>
+	<li>New: Display name for DJ is now updated within user roles</li>
 	<li>New: Development hooks added to event post metaboxes</li>
 	<li>General: Client fields settings page is now translation ready</li>
 	<li>General: Updated the uninstallation procedure</li>
+	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
+	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
 </ul>
 = 1.2.6 =
 <strong>Released 31st October, 2015</strong>
