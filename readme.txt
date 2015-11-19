@@ -75,21 +75,23 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-= 1.2.6.1 =
-<strong>Released 31st October, 2015</strong>
-<ui>
-	<li><strong>New</strong>: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
-	<li>New: Display name for DJ is now updated within user roles</li>
-	<li>New: Development hooks added to event post metaboxes</li>
-	<li>General: Client fields settings page is now translation ready</li>
-	<li>General: Updated the uninstallation procedure</li>
-	<li>General: Added column ordering to transactions</li>
-	<li>General: Added column ordering to quotes</li>
-	<li>Bug Fix: User roles should only register during install</li>
-	<li>Bug Fix: Ordering by event value column in event list now accurate</li>
-	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
-	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
-</ul>
+= 1.2.7 =
+**Released 31st October, 2015**
+
+	* New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
+	* New: Option to use AJAX for Availability Checker to avoid page refresh
+	* New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved
+	* New: Display name for DJ is now updated within user roles
+	* New: Development hooks added to event post metaboxes
+	* General: Client fields settings page is now translation ready
+	* General: Updated the uninstallation procedure
+	* General: Added column ordering to transactions
+	* General: Added column ordering to quotes
+	* Bug Fix: User roles should only register during install
+	* Bug Fix: Ordering by event value column in event list now accurate
+	* Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
+	* Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event
+
 = 1.2.6 =
 <strong>Released 31st October, 2015</strong>
 <ui>

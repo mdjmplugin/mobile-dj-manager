@@ -1,11 +1,11 @@
 <?php
 /*
- * Update procedures for version 1.2.6.1
+ * Update procedures for version 1.2.7
  *
  *
  *
  */
-	class MDJM_Upgrade_to_1_2_6_1	{
+	class MDJM_Upgrade_to_1_2_7	{
 		function __construct()	{
 			$this->update_settings();
 		}
@@ -17,7 +17,7 @@
 		 *
 		 */
 		function update_settings()	{
-			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.6.1' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.7' );
 				
 			// Update the Availability Checker settings and set default settings for Unavailable Status
 			$mdjm_availability_settings = get_option( 'mdjm_availability_settings' );
@@ -29,6 +29,6 @@
 			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
 		} // update_settings
 				
-	} // class MDJM_Upgrade_to_1_2_6_1
+	} // class MDJM_Upgrade_to_1_2_7
 	
-	new MDJM_Upgrade_to_1_2_6_1();
+	new MDJM_Upgrade_to_1_2_7();

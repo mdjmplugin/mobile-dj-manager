@@ -142,6 +142,7 @@
 																'mdjm-enquiry',
 																'mdjm-contract',
 																'mdjm-approved' ),
+							'avail_ajax'				   => true,
 							'availability_check_pass_page' => 'text',
 							'availability_check_pass_text' => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' ),
 							'availability_check_fail_page' => 'text',
