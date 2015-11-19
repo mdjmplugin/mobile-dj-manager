@@ -108,6 +108,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			$mdjm_posts				  = new MDJM_Posts();
 			self::$instance->posts	   = new MDJM_Post_Types();
 			self::$instance->cron		= new MDJM_Cron();
+			self::$instance->users	   = new MDJM_Users();
 			self::$instance->menu		= new MDJM_Menu();
 			
 			// If we're on the front end, load the ClienZone class
@@ -177,6 +178,8 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
+			
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/mdjm-users.php' );
 			
 			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
 			

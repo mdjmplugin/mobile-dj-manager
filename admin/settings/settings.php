@@ -274,19 +274,7 @@
 									'section' => 'permissions',
 									'page' => 'permissions',
 									),
-									
-							'dj_upload_music' => array(
-									'label' => sprintf( __( '%s can Upload Music', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
-									'key' => MDJM_PERMISSIONS_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['permissions']['dj_upload_music'] ) ? '1' : '0' ),
-									'text' => sprintf( __( 'Allow your %s to upload their music libraries enabling client searches', 
-										'mobile-dj-manager' ), MDJM_DJ . '\'s' ),
-									'desc' => '',
-									'section' => 'permissions',
-									'page' => 'permissions',
-									),
-								
+																	
 							'dj_view_enquiry' => array(
 									'label' => sprintf( __( '%s can View Enquiries', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ) . '?',
 									'key' => MDJM_PERMISSIONS_KEY,
