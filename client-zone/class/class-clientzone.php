@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * class-clientzone.php
  * 08/04/2015
  * @since 1.1.3
@@ -12,7 +12,7 @@
 	if( !class_exists( 'ClientZone' ) )	{
 		class ClientZone	{
 						
-		 /*
+		 /**
 		  * __construct
 		  * defines the params used within the class
 		  *
@@ -33,10 +33,9 @@
 				add_action( 'init', array( &$this, 'no_comments' ) ); // Stop comments from being displayed on Client Zone pages
 				
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
-				
 			} // __construct
 			
-			/*
+			/**
 			 * 
 			 *
 			 *
@@ -47,7 +46,7 @@
 				
 				if( is_dj() || is_client() )
 					add_filter( 'get_edit_post_link', '__return_false' );	
-			}
+			} // no_comments
 
 /*
  * --
@@ -298,7 +297,7 @@
  * CLIENT PROFILE ACTIONS
  * --
  */
-			/*
+			/**
 			 * Check for completness of the Client's profile and if configured
 			 * to do so, print an error if the profile is not completed
 			 *
@@ -332,7 +331,7 @@
 				
 			} // check_client_profile
 			
-			/*
+			/**
 			 * Retrieve and print the given client's address
 			 *
 			 * @param	int		$client_id	The ID of the client
@@ -360,7 +359,7 @@
 				
 			} // get_client_address
 			
-			/*
+			/**
 			 * Whether or not to display a client profile warning
 			 *
 			 *
@@ -377,7 +376,7 @@
  * STYLES & SCRIPTS
  * --
  */
-			/*
+			/**
 			 * client_zone_enqueue
 			 * Register & enqueue the scripts & styles we want to use
 			 * Only register those scripts we want on all pages
@@ -402,7 +401,7 @@
 				
 			} // client_zone_enqueue
 			
-			/*
+			/**
 			 * Display given message on the screen
 			 * 
 			 * @param	int		$type	The type of message to display
@@ -439,7 +438,7 @@
 				
 			} // display_notice
 			
-			/*
+			/**
 			 * Display the specified message upon the web page
 			 *
 			 * @param	int		$_GET['message']	The array key of the message
@@ -469,7 +468,7 @@
 									
 			} // display_message
 			
-			/*
+			/**
 			 * print_credit
 			 * Write out the MDJM credit information to the footer 
 			 * of all Client Zone pages, if settings allow us to
@@ -512,7 +511,7 @@
 				wp_login_form();		
 			} // login
 			
-			/*
+			/**
 			 * Display Lost Password text and link on login page
 			 *
 			 *
@@ -522,7 +521,7 @@
 				return '<a href="/wp-login.php?action=lostpassword">' . __( 'Lost Password' ) . '?</a>';	
 			} // lost_password_link
 
-			/*
+			/**
 			 *
 			 *
 			 *
@@ -564,7 +563,7 @@
 				return nl2br( $the_text ) . "\r\n";
 			} // custom_text
 			
-			/*
+			/**
 			 * Print out the text for the page from the given arguments
 			 *
 			 * @param:		str		$section		Required:	The section for which we are printing
