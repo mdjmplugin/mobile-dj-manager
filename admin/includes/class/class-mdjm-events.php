@@ -584,7 +584,7 @@
 				return;
 				
 			if( !class_exists( 'MDJM_Transactions' ) )
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-transactions.php' );
+				require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
 			
 			$mdjm_transactions = new MDJM_Transactions();
 			$event_stati = get_event_stati();

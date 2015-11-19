@@ -106,6 +106,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			
 			$mdjm			  			= new MDJM();
 			$mdjm_posts				  = new MDJM_Posts();
+			self::$instance->posts	   = new MDJM_Post_Types();
 			self::$instance->cron		= new MDJM_Cron();
 			self::$instance->menu		= new MDJM_Menu();
 			
@@ -169,26 +170,28 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 *
 		 */
 		public function mdjm_includes()	{
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
 			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-posts.php' );
 			
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-menu.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
+			
+			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
 			
 			require_once( MDJM_FUNCTIONS ); // Call the main functions file
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-cron.php' ); // Scheduler
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' ); // Scheduler
 			
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
 			
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
 			
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-debug.php' ); // Debug class
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/debug/mdjm-debug.php' ); // Debug class
 			
 			if( is_admin() )	{ // Required for admin only
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/core.php' ); // Plugin settings
+				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
 			}

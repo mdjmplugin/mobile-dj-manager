@@ -1,6 +1,6 @@
 <?php
 /*
- * class-mdjm.php
+ * class-mdjm-settings-page.php
  * 03/06/2015
  * @since 1.2.1
  * The MDJM_Settings_Page class

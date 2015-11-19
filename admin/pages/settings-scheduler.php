@@ -10,7 +10,7 @@
 * since 0.9.3
 * Manage schedule tasks
 */
-	require_once( sprintf( "%s/admin/includes/class/class-mdjm-cron.php", MDJM_PLUGIN_DIR ) );
+	require_once( sprintf( "%s/admin/includes/mdjm-cron.php", MDJM_PLUGIN_DIR ) );
 	$mdjm_cron = new MDJM_Cron();
 		
 	global $mdjm_settings;

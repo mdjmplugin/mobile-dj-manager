@@ -30,7 +30,7 @@
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
 				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
-				add_action( 'init', array( &$this, 'no_comments' ) );
+				add_action( 'init', array( &$this, 'no_comments' ) ); // Stop comments from being displayed on Client Zone pages
 				
 				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 				
@@ -105,14 +105,24 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: No event object was provided in ' . __METHOD__, true );
 						
-					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4' );
-					exit;			
+					?>
+					<script type="text/javascript">
+                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4'; ?>");
+                    </script>
+                    <?php
+					exit;
+					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4' );
 				}
 				if( get_current_user_id() != get_post_meta( $post->ID, '_mdjm_event_client', true ) )	{
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
 						
-					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
+					?>
+					<script type="text/javascript">
+                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    </script>
+                    <?php
+					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				
@@ -121,7 +131,12 @@
 					if( MDJM_DEBUG == true )
 						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
 					
-					wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
+					?>
+					<script type="text/javascript">
+                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    </script>
+                    <?php
+					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				

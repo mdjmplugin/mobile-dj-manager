@@ -735,28 +735,28 @@
                 <table>
                 <tr>
                 <td><a href="<?php echo admin_url( 'plugin-install.php?tab=search&s=mdjm-to-pdf' ); ?>"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/11/MDJM_to_PDF_Product.jpg" alt="MDJM to PDF" title="MDJM to PDF" /></a></td>
-                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/09/MDJM_DCF_Product.jpg" alt="MDJM Dynamic Contact Forms" title="MDJM Dynamic Contact Forms" /></a></td>
-                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Google_Cal_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
+                <td><a href="http://www.mydjplanner.co.uk/portfolio/dynamic-contact-forms/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/09/MDJM_DCF_Product.jpg" alt="MDJM Dynamic Contact Forms" title="MDJM Dynamic Contact Forms" /></a></td>
+                <td><a href="http://www.mydjplanner.co.uk/portfolio/google-calendar-sync/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Google_Cal_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
                 </tr>
                 <tr>
                 <td style="text-align:center"><a href="<?php echo admin_url( 'plugin-install.php?tab=search&s=mdjm-to-pdf' ); ?>" class="button secondary">Install now</a><br>
-                    <strong>FREE</strong>
+                <strong>FREE</strong>
                 </td>
-                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-dynamic-contact-forms/" target="_blank" class="button secondary">Buy now</a><br>
-                    <strong>&pound;35.00</strong>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/portfolio/dynamic-contact-forms/" target="_blank" class="button secondary">Buy now</a><br>
+                <strong>&pound;35.00</strong>
                 </td>
-                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-google-calendar-sync/" target="_blank" class="button secondary">Buy now</a><br>
-                    <strong>&pound;25.00</strong>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/portfolio/google-calendar-sync/" target="_blank" class="button secondary">Buy now</a><br>
+                <strong>&pound;25.00</strong>
                 </td>
                 </tr>
                 <tr>
-                <td><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Payments_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
+                <td><a href="http://www.mydjplanner.co.uk/portfolio/payments/" target="_blank"><img src="http://www.mydjplanner.co.uk/wp-content/uploads/2015/10/MDJM_Payments_Product.jpg" alt="MDJM Google Calendar Sync" title="MDJM Google Calendar Sync" /></a></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 </tr>
                 <tr>
-                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/shop/mdjm-payments/" target="_blank" class="button secondary">Buy now</a><br>
-                    <strong>&pound;25.00</strong>
+                <td style="text-align:center"><a href="http://www.mydjplanner.co.uk/portfolio/payments/" target="_blank" class="button secondary">Buy now</a><br>
+                <strong>&pound;25.00</strong>
                 </td>
                 <td style="text-align:center">&nbsp;</td>
                 <td style="text-align:center">&nbsp;</td>
