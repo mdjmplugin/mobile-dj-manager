@@ -11,7 +11,7 @@
 
 	class MDJM_Communication	{
 		function __construct() {
-			$post_type = 'mdjm_communication';
+			
 		} // __construct
 		
 		/*

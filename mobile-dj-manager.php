@@ -172,7 +172,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		public function mdjm_includes()	{
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
 			
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/class/class-mdjm-posts.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-posts.php' );
 			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			
