@@ -68,12 +68,7 @@ if( !class_exists( 'MDJM_Venue_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function venue_posts_custom_column( $column_name, $post_id )	{
-			global $post;
-			
-			if( $column_name == 'value' || $column_name == 'balance' )
-				$value = get_post_meta( $post_id, '_mdjm_event_cost', true );
-				
+		function venue_posts_custom_column( $column_name, $post_id )	{				
 			switch ( $column_name ) {
 				case 'contact':
 					echo sprintf( 

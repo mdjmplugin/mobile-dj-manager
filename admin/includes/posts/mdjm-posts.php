@@ -60,6 +60,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 *
 		 */
 		function includes()	{
+			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-event-posts.php' );
 			include_once( 'mdjm-venue-posts.php' );
 			include_once( 'mdjm-communications-posts.php' );
@@ -710,19 +711,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			
 		} // post_types_query
 					
-		/* -- Contract Columns -- */
-		public function define_contract_post_columns( $columns ) {
-			$columns = array(
-					'cb'			   => '<input type="checkbox" />',
-					'title' 			=> __( 'Contract Name', 'mobile-dj-manager' ),
-					'event_default'	=> __( 'Is Default?', 'mobile-dj-manager' ),
-					'assigned'		 => __( 'Assigned To', 'mobile-dj-manager' ),
-					'author'		   => __( 'Created By', 'mobile-dj-manager' ),
-					'date' 			 => __( 'Date', 'mobile-dj-manager' ),
-				);
-			return $columns;
-		} // define_contract_post_columns
-				
 		/* -- Email Template Columns -- */
 		public function define_email_template_post_columns( $columns ) {
 			$columns = array(
@@ -776,31 +764,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			
 			if( $post->post_type == 'mdjm_communication' || !in_array( $post->post_type, $mdjm_post_types ) )
 				return;
-			
-			/* -- contract -- */
-			elseif( $post->post_type == MDJM_CONTRACT_POSTS )	{
-				switch ( $column ) {
-					/* -- Is Default? -- */
-					case 'event_default':
-						echo ( $post->ID == $mdjm_settings['events']['default_contract'] ? 
-							'<span style="color: green; font-weight: bold;">' . __( 'Yes' ) . '</span>' : __( 'No' ) );
-						break;
-					/* -- Assigned To -- */
-					case 'assigned':
-						$contract_events = get_posts(
-							array(
-								'post_type'		=> MDJM_EVENT_POSTS,
-								'posts_per_page'   => -1,
-								'meta_key'	 	 => '_mdjm_event_contract',
-								'meta_value'   	   => $post->ID,
-								'post_status'  	  => 'any',
-								)
-							);
-			
-						echo count( $contract_events ) . _n( ' Event', ' Events', count( $contract_events ) );
-						break;	
-				} // switch
-			}
 						
 			/* -- mdjm-quotes -- */
 			elseif( $post->post_type == MDJM_QUOTE_POSTS )	{
