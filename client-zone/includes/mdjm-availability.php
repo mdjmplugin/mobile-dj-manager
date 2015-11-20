@@ -202,20 +202,66 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			/**
 			 * Now display the availability checker form
 			 */
-			?>
-            <form name="mdjm-availability-check" id="mdjm-availability-check" method="post">
-			<p><label for="avail_date"<?php if( !empty( $args['label_wrap'] ) && $args['label_wrap'] != 'false' ) echo ' style="display: inline;"'; ?>><?php echo $args['label']; ?></label>
-			<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php mdjm_jquery_short_date(); ?>" readonly required<?php if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' ) echo ' style="display: inline;"'; ?> />
-            <input type="hidden" name="check_date" id="check_date" />
+			echo '<form name="mdjm-availability-check" id="mdjm-availability-check" method="post">' . "\r\n";
+			echo '<p>';
 			
-			<?php if( empty( $args['field_wrap'] ) || $args['field_wrap'] == 'false' ) 
-				echo '<br />
-'; ?>
-            <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $args['submit_text']; ?>"<?php if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' ) echo ' style="display: inline;"'; ?> />
-            <span id="pleasewait" class="page-content" id="loader" style="display: none;"><?php echo $args['please_wait_text']; ?><img src="/wp-admin/images/loading.gif" /></span>
-            </form>
+			// Label
+			echo '<label for="avail_date"';
 			
-			<?php
+			// Label Wrap
+			if( !empty( $args['label_wrap'] ) && $args['label_wrap'] != 'false' )
+				echo ' style="display: inline;"';
+			
+			// Label Class
+			if( !empty( $args['label_class'] ) && $args['label_class'] != 'false' )
+				echo ' class="' . $args['label_class'] . '"';
+				
+			echo '>' . $args['label'] . '</label>' . "\r\n";
+			
+			// Input field
+            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_jquery_short_date() . '"';
+			
+			// Input Wrap
+			if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' )
+				echo ' style="display: inline;"';
+				
+			// Input Class
+			if( !empty( $args['field_class'] ) && $args['field_class'] != 'false' )
+				echo ' class="' . $args['field_class'] . '"';
+				
+			echo ' readonly required />' . "\r\n";
+			
+			// Hidden field for datepicker
+            echo '<input type="hidden" name="check_date" id="check_date" />' . "\r\n";
+			
+			if( empty( $args['field_wrap'] ) || $args['field_wrap'] == 'false' ) 
+				echo '<br />' . "\r\n";
+            
+			// Submit field
+			echo '<input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="' . $args['submit_text'] . '"';
+			
+			// Submit wrap
+			if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' )
+				echo ' style="display: inline;"';
+			
+			// Submit Class
+			if( !empty( $args['submit_class'] ) && $args['submit_class'] != 'false' )
+				echo ' class="' . $args['submit_class'] . '"';
+				
+			echo '/>' . "\r\n";
+			
+			// Please wait
+			echo '<span id="pleasewait" id="loader" style="display: none;" class="page-content';
+			
+			// Please wait class
+			if( !empty( $args['please_wait_class'] ) && $args['please_wait_class'] != 'false' )
+				echo ' ' . $args['please_wait_class'];
+				
+			echo '" >';
+			echo $args['please_wait_text'] . '<img src="/wp-admin/images/loading.gif" /></span>' . "\r\n";
+            
+			echo '</form>' . "\r\n";
+			
 			self::validate();
 			echo '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
 		} // availability_form

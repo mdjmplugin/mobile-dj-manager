@@ -335,12 +335,12 @@
 				menu: [{
 					text: 'Addons List',
 					onclick: function() {
-						editor.insertContent('[mdjm-addons filter_by="false" filter_value="false" list="p" desc="false" cost="true"]');
+						editor.insertContent('[mdjm-addons filter_by="false" filter_value="false" list="p" desc="false" cost="true" addon_class="false" desc_class="false" cost_class="false"]');
 					}
 				}, {
 					text: 'Availability Checker',
 					onclick: function() {
-						editor.insertContent('[mdjm-availability label="Select Date" label_wrap="false" field_wrap="false" submit_text="Check Date" please_wait_text="Working..."]');
+						editor.insertContent('[mdjm-availability label="Select Date" label_wrap="false" label_class="false" field_wrap="false" field_class="false" submit_text="Check Date" submit_class="false" please_wait_text="Please Wait..." please_wait_class="false"]');
 					}
 				}]
 			}, {

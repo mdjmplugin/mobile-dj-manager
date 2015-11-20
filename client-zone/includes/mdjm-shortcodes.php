@@ -46,11 +46,15 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 			extract( 
 				$args = shortcode_atts( 
 					array( // These are our default values
-						'label'				=> __( 'Select Date', 'mobile-dj-manager' ),
-						'label_wrap'		=> true,
-						'field_wrap'		=> true,
+						'label'			  => __( 'Select Date', 'mobile-dj-manager' ),
+						'label_wrap'		 => true,
+						'label_class'		=> false,
+						'field_wrap'		 => true,
+						'field_class'		=> false,
 						'submit_text'		=> __( 'Check Date', 'mobile-dj-manager' ),
-						'please_wait_text'	=> __( 'Please wait...', 'mobile-dj-manager' )
+						'submit_class'	   => false,
+						'please_wait_text'   => __( 'Please wait...', 'mobile-dj-manager' ),
+						'please_wait_class'  => false
 					),
 					$atts
 				)
@@ -132,14 +136,35 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 					if( !empty( $args['list'] ) )
 						$output .= '<' . $args['list'] . '>';
 					
+					if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )
+						$output = '<span class="' . $args['addon_class'] . '">';
+					
 					$output .= stripslashes( esc_textarea( $item[0] ) );
 					
-					if( !empty( $args['cost'] ) && $args['cost'] != 'false' && !empty( $item[7] ) )
+					if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )
+						$output = '</span>';
+					
+					if( !empty( $args['cost'] ) && $args['cost'] != 'false' && !empty( $item[7] ) )	{
+						if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
+							$output = '<span class="' . $args['cost_class'] . '">';
+						
 						$output .= '&nbsp;&ndash;&nbsp;' . display_price( $item[7] );
+						
+						if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
+							$output = '</span>';
+						
+					}
 					
 					if( !empty( $atts['desc'] ) && $atts['desc'] != 'false' && !empty( $item[4] ) )	{
 						$output .= '<br />';
-						$output .= '<span style="font-style: italic; font-size: smaller;">' . stripslashes( esc_textarea( $item[4] ) ) . '</span>';	
+						
+						if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
+							$output = '<span class="' . $args['cost_class'] . '">';
+						else	
+							$output .= '<span style="font-style: italic; font-size: smaller;">';
+						
+						$output .= stripslashes( esc_textarea( $item[4] ) );
+						$output .= '</span>';	
 					}
 						
 					if( !empty( $args['list'] ) )
