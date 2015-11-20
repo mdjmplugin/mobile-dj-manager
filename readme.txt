@@ -76,6 +76,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Changelog ==
 = 1.2.7 =
+<<<<<<< HEAD
 **Released 31st October, 2015**
 
 	* New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
@@ -92,6 +93,14 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
 	* Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event
 
+=======
+<strong>Released 31st October, 2015</strong>
+<ui>
+	<li>New: Development hooks added to event post metaboxes</li>
+	<li>General: Client fields settings page is now translation ready</li>
+	<li>General: Updated the uninstallation procedure</li>
+</ul>
+>>>>>>> Updating readme changelog
 = 1.2.6 =
 <strong>Released 31st October, 2015</strong>
 <ui>
