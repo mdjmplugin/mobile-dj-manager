@@ -109,11 +109,14 @@ if( !class_exists( 'MDJM_About' ) ) :
 			?>
             <h3 class="site-title">Version 1.2.6.1 - XXXXXXX 2015</h3>
             <ui>
+            	<li><strong>New</strong>: Shortcodes added for Addons List and Availability checker></li>
             	<li><strong>New</strong>: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
                 <li><strong>New</strong>: Option to use AJAX for Availability Checker to avoid page refresh</li>
             	<li><strong>New</strong>: New setting added <code>Unavailable Statuses</code> within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
                 <li><strong>New</strong>: Display name for <?php _e( MDJM_DJ ); ?> is now updated within user roles</li>
                 <li><strong>New</strong>: Development hooks added to event post metaboxes</li>
+                <li><strong>General</strong>: Availability checker re-write</li>
+				<li><strong>General</strong>: MDJM Shortcodes button renamed to MDJM and new structure and options added</li>
                 <li><strong>General</strong>: Client fields settings page is now translation ready</li>
                 <li><strong>General</strong>: Updated the uninstallation procedure</li>
                 <li><strong>General</strong>: Added column ordering to transactions</li>
