@@ -513,7 +513,7 @@
 				$plugin_array['mdjm_shortcodes_btn'] = MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-tinymce-shortcodes.js';
 				return $plugin_array;
 			}
-			
+						
 			/*
 			 * Register the MDJM Shortcode button within the TinyMCE interface
 			 * 

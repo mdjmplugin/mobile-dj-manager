@@ -61,7 +61,9 @@
 					$i++;
 				}
 			}
-			if( $_POST['addon_avail'] != 'Y' ) $_POST['addon_avail'] = 'N';
+			if( !isset( $_POST['addon_avail'] ) || $_POST['addon_avail'] != 'Y' )
+				$_POST['addon_avail'] = 'N';
+				
 			unset( $equipment[$_POST['slug']] );
 			$item_id = sanitize_title_with_dashes( $_POST['equip_name'] );
 			if( !empty( $equipment[$item_id] ) )

@@ -1,7 +1,7 @@
 (function () {
     tinymce.PluginManager.add('mdjm_shortcodes_btn', function (editor, url) {
         editor.addButton('mdjm_shortcodes_btn', {
-            text: 'MDJM Shortcodes',
+            text: 'MDJM',
             icon: false,
             type: 'menubutton',
 			tooltip: 'Insert MDJM shortcodes into your document',
@@ -331,11 +331,16 @@
 					}]
 				}]
 			}, {
-				text: 'Functions',
+				text: 'Content',
 				menu: [{
+					text: 'Addons List',
+					onclick: function() {
+						editor.insertContent('[mdjm-addons filter_by="false" filter_value="false" list="p" desc="false" cost="true"]');
+					}
+				}, {
 					text: 'Availability Checker',
 					onclick: function() {
-						editor.insertContent('[mdjm-availability]');
+						editor.insertContent('[mdjm-availability label="Select Date" label_wrap="false" field_wrap="false" submit_text="Check Date" please_wait_text="Working..."]');
 					}
 				}]
 			}, {
@@ -382,6 +387,11 @@
 					text: 'Print PDF',
 					onclick: function() {
 						editor.insertContent('[mdjm-pdf-print type="text" text="Print"]');
+					}
+				}, {
+					text: 'PDF Page Break',
+					onclick: function() {
+						editor.insertContent('{PDF_PAGEBREAK}');
 					}
 				}]
 			}]

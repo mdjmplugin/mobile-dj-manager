@@ -829,6 +829,54 @@
 /*
  * -- START PACKAGE/ADDON FUNCTIONS
  */
+	/**
+	 * Retrieve all packages
+	 *
+	 *
+	 *
+	 *
+	 */
+	function mdjm_get_packages()	{
+		return get_option( 'mdjm_packages' );
+	} // mdjm_get_packages
+	
+	/**
+	 * Retrieve the package from the given slug
+	 *
+	 * @param	str			$slug		The slug to search for
+	 *
+	 * @return	arr|bool	$packages	The package details
+	 */
+	function mdjm_get_package_by_slug( $slug )	{
+		$packages = mdjm_get_packages();
+		
+		$package = !empty( $packages ) && !empty( $packages[$slug] ) ? $packages[$slug] : false;
+			
+		return $package;
+	} // mdjm_get_package_by_slug
+	
+	/**
+	 * Retrieve the package by name
+	 *
+	 * @param	str			$name		The name to search for
+	 *
+	 * @return	arr|bool	$packages	The package details
+	 */
+	function mdjm_get_package_by_name( $name )	{
+		$packages = mdjm_get_packages();
+		
+		if( empty( $packages ) )
+			return false;
+			
+		foreach( $packages as $pack )	{
+			// Set everything to uppercase so we're not relying on case sensitive user entry
+			if( strtoupper( $pack['name'] ) == strtoupper( $name ) )
+				$package = $pack;
+		}
+			
+		return !empty( $package ) ? $package : false;
+	} // mdjm_get_package_by_name
+	 
 	/*
 	 * Get the package information for the given event
 	 *
@@ -846,7 +894,7 @@
 			return 'No package is assigned to this event';
 		
 		// All packages
-		$packages = get_option( 'mdjm_packages' );
+		$packages = mdjm_get_packages();
 						
 		
 		return stripslashes( esc_attr( $packages[$event_package]['name'] ) ) . ( !empty( $price ) ? ' ' . 
@@ -865,7 +913,7 @@
 			return 'N/A';
 		
 		// All packages
-		$packages = get_option( 'mdjm_packages' );
+		$packages = mdjm_get_packages();
 		
 		if( !empty( $packages ) )	{
 			foreach( $packages as $package )	{
@@ -909,7 +957,7 @@
 			return __( 'No addons are assigned to this event', 'mobile-dj-manager' );
 			
 		// All addons
-		$all_addons = get_option( 'mdjm_equipment' );
+		$all_addons = mdjm_get_addons();
 		
 		$addons = '';
 		$i = 1;
@@ -938,7 +986,7 @@
 			return 'N/A';
 									
 		// All addons
-		$all_addons = get_option( 'mdjm_equipment' );
+		$all_addons = mdjm_get_addons();
 		
 		if( empty( $all_addons ) )
 			return __( 'No addons are available', 'mobile-dj-manager' );
@@ -952,7 +1000,7 @@
 			
 			// If a package is parsed, remove the package items from the available addons
 			if( !empty( $package ) )	{
-				$packages = get_option( 'mdjm_packages' );
+				$packages = mdjm_get_packages();
 				$current_items = explode( ',', $packages[$package]['equipment'] );
 				
 				if( !empty( $current_items ) && in_array( $all_addon[1], $current_items ) )
@@ -985,7 +1033,7 @@
 		if( empty( $slug ) )
 			return false;
 		
-		$packages = get_option( 'mdjm_packages' );
+		$packages = mdjm_get_packages();
 		
 		if( empty( $packages[$slug] ) || empty( $packages[$slug]['name'] ) )
 			return false;
@@ -1007,7 +1055,7 @@
 		if( empty( $slug ) )
 			return false;
 		
-		$packages = get_option( 'mdjm_packages' );
+		$packages = mdjm_get_packages();
 		
 		if( empty( $packages[$slug] ) )
 			return false;
@@ -1041,8 +1089,7 @@
 	function mdjm_package_dropdown( $settings='', $structure=true )	{
 		global $current_user;
 		
-		$packages = get_option( 'mdjm_packages' );
-				
+		$packages = mdjm_get_packages();
 		// Set the values based on the array passed
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
@@ -1062,7 +1109,7 @@
 			'<option value="' . ( isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '' ) . '">' . 
 			$settings['first_entry'] . '</option>' . "\r\n" : '';
 			
-		$packages = get_option( 'mdjm_packages' );
+		$packages = mdjm_get_packages();
 		
 		if( empty( $packages ) )
 			$mdjm_select .= '<option value="0">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
@@ -1097,6 +1144,143 @@
 			
 	} // mdjm_package_dropdown
 	
+	/**
+	 * Retrieve all addons
+	 *
+	 * @param
+	 *
+	 * @return	arr		$addons		Array of all addons
+	 */
+	function mdjm_get_addons()	{
+		return get_option( 'mdjm_equipment' );
+	} // mdjm_get_addons
+	
+	/**
+	 * Retrieve all addons by dj
+	 *
+	 * @param	int|arr	$user_id	Required: User ID of DJ, or array of DJ User ID's
+	 *
+	 * @return	arr		$addons		Array of all addons
+	 */
+	function mdjm_addons_by_dj( $user_id )	{
+		// We work with an array
+		if( !is_array( $user_id ) )
+			$users = array( $user_id );
+			
+		$equipment = mdjm_get_addons();
+		
+		// No addons, return false
+		if( empty( $equipment ) )
+			return false;
+			
+		asort( $equipment );
+		
+		// Loop through the addons and filter for the given user(s)
+		foreach( $equipment as $addon )	{
+			$users_have = explode( ',', $addon[8] );
+			
+			foreach( $users as $user )	{			
+				if( !in_array( $user, $users_have ) )
+					continue 2; // Continue from the foreach( $equipment as $addon ) loop
+			}
+				
+			$addons[] = $addon;
+		}
+		// Return the results, or false if none
+		return !empty( $addons ) ? $addons : false;
+	} // mdjm_addons_by_dj
+	
+	/**
+	 * Retrieve all addons within the given category
+	 *
+	 * @param	str		$cat		Required: Slug of the category for which to search
+	 *
+	 * @return	arr		$addons		Array of all addons
+	 */
+	function mdjm_addons_by_cat( $cat )	{
+		$equipment = mdjm_get_addons();
+		
+		// No addons, return false
+		if( empty( $equipment ) )
+			return false;
+			
+		asort( $equipment );
+		
+		// Loop through the addons and filter for the given category
+		foreach( $equipment as $addon )	{
+			if( $addon[5] != $cat )
+				continue;
+			
+			$addons[] = $addon;	
+		}
+		// Return the results, or false if none
+		return !empty( $addons ) ? $addons : false;
+	} // mdjm_addons_by_cat
+	
+	/**
+	 * Retrieve all addons within the given package slug
+	 *
+	 * @param	str		$slug		Required: Slug of the package for which to search
+	 *
+	 * @return	arr		$addons		Array of all addons
+	 */
+	function mdjm_addons_by_package_slug( $slug )	{
+		$package = mdjm_get_package_by_slug( strtolower( $slug ) );
+		
+		// No package or the package has no addons, return false
+		if( empty( $package ) || empty( $package['equipment'] ) )
+			return false;
+		
+		$package_items = explode( ',', $package['equipment'] );
+		$equipment = mdjm_get_addons();
+		
+		// No addons, return false
+		if( empty( $equipment ) )
+			return false;
+		
+		foreach( $equipment as $addon )	{
+			if( !in_array( $addon[1], $package_items ) )
+				continue;
+				
+			$addons[] = $addon;	
+		}
+		
+		// Return the results, or false if none
+		return !empty( $addons ) ? $addons : false;
+	} // mdjm_addons_by_package_slug
+	
+	/**
+	 * Retrieve all addons within the given package
+	 *
+	 * @param	str		$name		Required: Name of the package for which to search
+	 *
+	 * @return	arr		$addons		Array of all addons
+	 */
+	function mdjm_addons_by_package_name( $name )	{
+		$package = mdjm_get_package_by_name( $name );
+		
+		// No package or the package has no addons, return false
+		if( empty( $package ) || empty( $package['equipment'] ) )
+			return false;
+		
+		$package_items = explode( ',', $package['equipment'] );
+		$equipment = mdjm_get_addons();
+		
+		// No addons, return false
+		if( empty( $equipment ) )
+			return false;
+		
+		foreach( $equipment as $addon )	{
+			if( !in_array( $addon[1], $package_items ) )
+				continue;
+				
+			$addons[] = $addon;	
+		}
+		
+		// Return the results, or false if none
+		return !empty( $addons ) ? $addons : false;
+	} // mdjm_addons_by_package_name
+	
 	/*
 	 * Retrieve the addon name
 	 *
@@ -1107,7 +1291,7 @@
 		if( empty( $slug ) )
 			return false;
 				
-		$equipment = get_option( 'mdjm_equipment' );
+		$equipment = mdjm_get_addons();
 		
 		if( empty( $equipment[$slug] ) || empty( $equipment[$slug][0] ) )
 			return false;
@@ -1130,7 +1314,7 @@
 			
 		$cats = get_option( 'mdjm_cats' );
 		
-		$equipment = get_option( 'mdjm_equipment' );
+		$equipment = mdjm_get_addons();
 		
 		if( empty( $equipment[$slug] ) )
 			return false;
@@ -1184,7 +1368,7 @@
 			'<option value="' . isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' . '">' . 
 			$settings['first_entry'] . '</option>' . "\r\n" : '';
 		
-		$equipment = get_option( 'mdjm_equipment' );
+		$equipment = mdjm_get_addons();
 		
 		if( empty( $equipment ) )
 			$mdjm_select .= '<option value="0">' . __( 'No Addons Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
@@ -1208,9 +1392,9 @@
 					if( empty( $item[6] ) || $item[6] != 'Y' )
 						continue;
 						
-					// If the addon is part of an assigned package, exlude it
+					// If the addon is part of an assigned package, exclude it
 					if( !empty( $settings['package'] ) )	{
-						$packages = get_option( 'mdjm_packages' );
+						$packages = mdjm_get_packages();
 						$package_items = explode( ',', $packages[$settings['package']]['equipment'] );
 						
 						if( !empty( $package_items ) && in_array( $item[1], $package_items ) )
@@ -1276,7 +1460,7 @@
 		
 		$mdjm_check = '';
 		
-		$equipment = get_option( 'mdjm_equipment' );
+		$equipment = mdjm_get_addons();
 		
 		if( empty( $equipment ) )
 			$mdjm_check .= __( 'No Addons Available', 'mobile-dj-manager' ) . "\r\n";
@@ -1299,7 +1483,7 @@
 						
 					// If the addon is part of an assigned package, exlude it
 					if( !empty( $settings['package'] ) )	{
-						$packages = get_option( 'mdjm_packages' );
+						$packages = mdjm_get_packages();
 						$package_items = explode( ',', $packages[$settings['package']]['equipment'] );
 						
 						if( !empty( $package_items ) && in_array( $item[1], $package_items ) )
@@ -1547,9 +1731,17 @@
 		
 		// Retrieve fields for all custom event fields return as object
 		else	{
-			$custom_fields['client'] = get_option( 'mdjm_custom_client_fields' );
-			$custom_fields['event'] = get_option( 'mdjm_custom_event_fields' );
-			$custom_fields['venue'] = get_option( 'mdjm_custom_venue_fields' );
+			$custom_fields = new WP_Query(
+								array(
+									'posts_per_page'	=> $limit,
+									'post_type'		 => MDJM_CUSTOM_FIELD_POSTS,
+									'post_status'  	   => 'publish',
+									'meta_query'		=> array(
+										'field_clause'	=> array(
+											'key'	   => '_mdjm_field_section' ) ),
+									'orderby'		   => array( 'field_clause' => $order, $orderby => $order ),
+									'order'			 => $order ) );
+		
 		}
 		
 		return $custom_fields;

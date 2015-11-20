@@ -171,11 +171,11 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		/**
 		 * The Availability checker form
 		 *
-		 * @params
+		 * @params	arr		$args	Optional: Settings passed from the shortcode
 		 *
 		 * @return
 		 */
-		function availability_form()	{
+		function availability_form( $args='' )	{
 			global $mdjm_settings;
 			
 			/**
@@ -204,12 +204,15 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			 */
 			?>
             <form name="mdjm-availability-check" id="mdjm-availability-check" method="post">
-			<p><?php _e( 'Select Date:', 'mobile-dj-manager' ); ?><br>
-			<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php mdjm_jquery_short_date(); ?>" readonly required /><br>
+			<p><label for="avail_date"<?php if( !empty( $args['label_wrap'] ) && $args['label_wrap'] != 'false' ) echo ' style="display: inline;"'; ?>><?php echo $args['label']; ?></label>
+			<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="<?php mdjm_jquery_short_date(); ?>" readonly required<?php if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' ) echo ' style="display: inline;"'; ?> />
             <input type="hidden" name="check_date" id="check_date" />
-		
-            <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php _e( 'Check Date', 'mobile-dj-manager' ); ?>" />
-            <span id="pleasewait" class="page-content" id="loader" style="display: none;"><?php _e( 'Please wait...', 'mobile-dj-manager' ); ?><img src="/wp-admin/images/loading.gif" /></span>
+			
+			<?php if( empty( $args['field_wrap'] ) || $args['field_wrap'] == 'false' ) 
+				echo '<br />
+'; ?>
+            <input type="submit" name="mdjm_avail_submit" id="mdjm_avail_submit" value="<?php echo $args['submit_text']; ?>"<?php if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' ) echo ' style="display: inline;"'; ?> />
+            <span id="pleasewait" class="page-content" id="loader" style="display: none;"><?php echo $args['please_wait_text']; ?><img src="/wp-admin/images/loading.gif" /></span>
             </form>
 			
 			<?php
