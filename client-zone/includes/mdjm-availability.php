@@ -219,7 +219,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			echo '>' . $args['label'] . '</label>' . "\r\n";
 			
 			// Input field
-            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_jquery_short_date() . '"';
+            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" style="z-index:99;" placeholder="' . mdjm_jquery_short_date() . '"';
 			
 			// Input Wrap
 			if( !empty( $args['field_wrap'] ) && $args['field_wrap'] != 'false' )
