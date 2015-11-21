@@ -81,11 +81,14 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 			extract( 
 				$args = shortcode_atts( 
 					array( // These are our default values
-						'filter_by'		=> false,
+						'filter_by'	   => false,
 						'filter_value'	=> false,
 						'list'			=> 'p',
 						'desc'			=> false,
-						'cost'			=> false
+						'cost'			=> false,
+						'addon_class'	 => false,
+						'cost_class'	 => false,
+						'desc_class'	=> false
 					),
 					$atts
 				)
@@ -158,8 +161,8 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 					if( !empty( $atts['desc'] ) && $atts['desc'] != 'false' && !empty( $item[4] ) )	{
 						$output .= '<br />';
 						
-						if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
-							$output = '<span class="' . $args['cost_class'] . '">';
+						if( !empty( $args['desc_class'] ) && $args['desc_class'] != 'false' )
+							$output = '<span class="' . $args['desc_class'] . '">';
 						else	
 							$output .= '<span style="font-style: italic; font-size: smaller;">';
 						

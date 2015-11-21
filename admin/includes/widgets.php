@@ -70,8 +70,20 @@
 				$dj_event_results = $mdjm->mdjm_events->employee_bookings();
 				if( $dj_event_results )	{
 					foreach( $dj_event_results as $info )	{
-						$djinfo = get_userdata( $info->event_dj );
-						echo '<li>' . $djinfo->first_name . ' is working from ' . date( 'H:i', strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)</li>';
+						$djinfo = get_userdata( get_post_meta( $info->ID, '_mdjm_event_dj', true ) );
+						
+						if( !empty( $djinfo ) && !empty( $djinfo->first_name ) )
+							$dj_name = $djinfo->first_name;
+							
+						else
+							$dj_name = __( 'No name', 'mobile-dj-manager' );
+						
+						$event_start = date( 'H:i', strtotime( get_post_meta( $info->ID, '_mdjm_event_start', true ) ) );
+						
+						if( empty( $event_start ) )
+							$event_start = __( 'No start', 'mobile-dj-manager' );
+						
+						echo '<li>' . $dj_name . ' is working from ' . $event_start . ' (<a href="' . admin_url( 'post.php?post=' . $info->ID . '&action=edit' ) . '">view details</a>)</li>';
 					}
 				}
 			}

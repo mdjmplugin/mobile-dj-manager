@@ -76,7 +76,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Changelog ==
 = 1.2.7 =
-**Released XXXX November, 2015**
+**Released 31st October, 2015**
 
 	* New: Shortcodes added for Addons List and Availability checker
 	* New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
