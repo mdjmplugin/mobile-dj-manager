@@ -1,7 +1,7 @@
 <?php
 	function f_mdjm_add_wp_dashboard_widgets() {
-		wp_add_dashboard_widget( 'mdjm-widget-overview', 'Mobile DJ Manager Overview', 'f_mdjm_dash_overview' );
-		wp_add_dashboard_widget( 'mdjm-availability-overview', 'Mobile DJ Manager Availability', 'f_mdjm_dash_availability' );	
+		wp_add_dashboard_widget( 'mdjm-widget-overview', 'MDJM Overview', 'f_mdjm_dash_overview' );
+		wp_add_dashboard_widget( 'mdjm-availability-overview', 'MDJM Availability', 'f_mdjm_dash_availability' );	
 	}
 
 /*

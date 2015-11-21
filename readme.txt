@@ -90,7 +90,10 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* General: Updated the uninstallation procedure
 	* General: Added column ordering to transactions
 	* General: Added column ordering to quotes
+	* Replace Mobile DJ Manager with MDJM in WP dashboard widgets
+	* Change title to MDJM Event Management in MDJM dashboard
 	* Bug Fix: User roles should only register during install
+	* Bug Fix: WP Dashboard MDJM Overview now has correct edit URL
 	* Bug Fix: Ordering by event value column in event list now accurate
 	* Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
 	* Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event

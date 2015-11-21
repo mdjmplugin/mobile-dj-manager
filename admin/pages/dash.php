@@ -21,7 +21,7 @@
 		<?php mdjm_jquery_datepicker_script( array( 'check_custom_date', 'check_date' ) ); ?>
 		</script>
         <div class="wrap">
-        <h1>Mobile DJ Manager - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h1>
+        <h1>MDJM Event Management - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h1>
         <hr />
         <h2>
         <?php

@@ -121,7 +121,10 @@ if( !class_exists( 'MDJM_About' ) ) :
                 <li><strong>General</strong>: Updated the uninstallation procedure</li>
                 <li><strong>General</strong>: Added column ordering to transactions</li>
                 <li><strong>General</strong>: Added column ordering to quotes</li>
+                <li><strong>General</strong>: Replace Mobile DJ Manager with MDJM in WP dashboard widgets</li>
+                <li><strong>General</strong>: Change title to MDJM Event Management in MDJM dashboard</li>
                 <li><strong>Bug Fix</strong>: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
+                <li><strong>Bug Fix</strong>: WP Dashboard MDJM Overview now has correct edit URL</li>
                 <li><strong>Bug Fix</strong>: Depending on PHP notice display settings, warning may be displayed on front end when client clicks <code>Book this Event</code></li>
                 <li><strong>Bug Fix</strong>: User roles should only register during install</li>
                 <li><strong>Bug Fix</strong>: Ordering by event value column in event list now accurate</li>
