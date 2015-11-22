@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -76,10 +76,11 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Changelog ==
 = 1.2.7 =
-**Released 31st October, 2015**
+**Released 22nd November, 2015**
 
 	* New: Shortcodes added for Addons List and Availability checker
 	* New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
+	* New: Text replacement shortcodes available for custom fields
 	* New: Option to use AJAX for Availability Checker to avoid page refresh
 	* New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved
 	* New: Display name for DJ is now updated within user roles
@@ -90,8 +91,8 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* General: Updated the uninstallation procedure
 	* General: Added column ordering to transactions
 	* General: Added column ordering to quotes
-	* Replace Mobile DJ Manager with MDJM in WP dashboard widgets
-	* Change title to MDJM Event Management in MDJM dashboard
+	* General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets
+	* General: Change title to MDJM Event Management in MDJM dashboard
 	* Bug Fix: User roles should only register during install
 	* Bug Fix: WP Dashboard MDJM Overview now has correct edit URL
 	* Bug Fix: Ordering by event value column in event list now accurate

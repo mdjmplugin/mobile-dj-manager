@@ -51,7 +51,7 @@
 		}
 		?>
         
-        <a class="button-secondary" href="<?php echo $_SERVER['../HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
+        <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
         
         <?php
 	} // comm_post_details_metabox

@@ -110,7 +110,8 @@ if( !class_exists( 'MDJM_About' ) ) :
             <h3 class="site-title">Version 1.2.6.1 - XXXXXXX 2015</h3>
             <ui>
             	<li><strong>New</strong>: Shortcodes added for Addons List and Availability checker></li>
-            	<li><strong>New</strong>: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
+            	<li><strong>New</strong>: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen. See <a href="http://www.mydjplanner.co.uk/custom-event-fields/" target="_blank">the user guide</a></li>
+                <li><strong>New</strong>:Text replacement shortcodes available for custom fields. See <a href="http://www.mydjplanner.co.uk/custom-event-fields/" target="_blank">the user guide</a></li>
                 <li><strong>New</strong>: Option to use AJAX for Availability Checker to avoid page refresh</li>
             	<li><strong>New</strong>: New setting added <code>Unavailable Statuses</code> within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
                 <li><strong>New</strong>: Display name for <?php _e( MDJM_DJ ); ?> is now updated within user roles</li>

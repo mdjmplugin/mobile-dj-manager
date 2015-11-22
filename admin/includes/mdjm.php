@@ -1,23 +1,21 @@
 <?php
-/*
- * mdjm.php
- * 10/03/2015
- * @since 1.1.2
- * The main MDJM class
+/**
+ * Class: MDJM
+ * Description: The main MDJM class
+ *
  */
 	
 	/* -- Build the MDJM class -- */
 	if( !class_exists( 'MDJM' ) )	{
 		class MDJM	{
-			
-			/* -- Publicise the Events class so we can use it throughout -- */
+			// Publicise the Events class so we can use it throughout
 			public $mdjm_events;			
-		 /*
-		  * __construct
-		  * 
-		  *
-		  *
-		  */
+			/**
+			 * Class constructor
+			 * 
+			 *
+			 *
+			 */
 			public function __construct()	{
 				global $wpdb, $pagenow, $mdjm_post_types, $mdjm_posts, $clientzone;
 				
@@ -34,16 +32,15 @@
 				$this->db_version = '2.6';
 								
 				$mdjm_post_types = array(
-							MDJM_COMM_POSTS,
-							MDJM_CONTRACT_POSTS,
-							MDJM_CUSTOM_FIELD_POSTS,
-							MDJM_SIGNED_CONTRACT_POSTS,
-							MDJM_EMAIL_POSTS,
-							MDJM_EVENT_POSTS,
-							MDJM_QUOTE_POSTS,
-							MDJM_TRANS_POSTS,
-							MDJM_VENUE_POSTS,
-							);
+					MDJM_COMM_POSTS,
+					MDJM_CONTRACT_POSTS,
+					MDJM_CUSTOM_FIELD_POSTS,
+					MDJM_SIGNED_CONTRACT_POSTS,
+					MDJM_EMAIL_POSTS,
+					MDJM_EVENT_POSTS,
+					MDJM_QUOTE_POSTS,
+					MDJM_TRANS_POSTS,
+					MDJM_VENUE_POSTS );
 				
 				/* -- Initiate events class -- */
 				if( !class_exists( 'MDJM_Events' ) )	{
@@ -1265,7 +1262,7 @@
 				);
 				
 				// Allow the $pairs array to be filtered
-				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, ( !empty( $eventinfo ) ? $eventinfo : '' ) );
+				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, $e->ID, ( !empty( $eventinfo ) ? $eventinfo : '' ) );
 				
 				/* -- Create the Search/Replace Array's -- */							
 				foreach( $pairs as $key => $value )	{

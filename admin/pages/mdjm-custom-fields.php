@@ -22,6 +22,8 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			add_action( 'mdjm_events_metabox_last', array( &$this, 'custom_event_details_fields' ) );
 			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
 			
+			add_filter( 'mdjm_shortcode_filter_pairs', array( &$this, 'custom_event_fields_shortcode_pairs' ), 10, 3 );
+			
 			add_filter( 'dcf_mapping_fields', array( &$this, 'dcf_mapping_fields' ), 10, 2 );
 			add_filter( 'dcf_mapping_fields_on_submit', array( &$this, 'dcf_mapping_fields_on_submit' ), 10, 2 );
 		}
@@ -739,6 +741,38 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			return $mappings;
 		} // dcf_mapping_fields_on_submit
+		
+		/**
+		 * Add the custom event fields and their values to the filter array
+		 *
+		 * @params	arr		$pairs		Required: The existing pairs array
+		 *			int		$event_id	Optional: The post ID of the event
+		 *			arr		$eventinfo	Optional: Event info
+		 *
+		 * @return	arr		$pairs		The filtered pairs array
+		 */
+		function custom_event_fields_shortcode_pairs( $pairs, $event_id='', $eventinfo='' )	{
+			// Get the custom fields
+			$query = mdjm_get_custom_fields();
+			$fields = $query->get_posts();
+			
+			if( $fields )	{
+				foreach( $fields as $field )	{
+					$meta_key = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+					$meta_value = get_post_meta( $event_id, $meta_key, true );
+					
+					if( !empty( $meta_value ) )	{
+						if( is_array( $meta_value ) )
+							$meta_value = implode( '<br />', $meta_value );
+						
+						$pairs['{MDJM_CF_' . strtoupper( get_the_title( $field->ID ) ) . '}'] = !empty( $meta_value ) ? 
+							$meta_value : '';
+					}
+				}
+			}
+			
+			return $pairs;
+		} // custom_event_fields_shortcode_pairs
 		
 	} // class MDJM_Event_Fields
 endif;
