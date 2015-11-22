@@ -89,6 +89,9 @@
 				
 			if( $version < '1.2.7' )
 				$this->update_to_1_2_7();
+				
+			if( $version < '1.2.7.1' )
+				$this->update_to_1_2_7_1();
 			
 		} // execute_updates
 		
@@ -1339,7 +1342,7 @@
 		} // update_to_1_2_6
 		
 		/*
-		 * Execute upgrade for version 1.2.6.7
+		 * Execute upgrade for version 1.2.7
 		 *
 		 *
 		 *
@@ -1354,6 +1357,23 @@
 			
 			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7', true );
 		} // update_to_1_2_7
+		
+		/*
+		 * Execute upgrade for version 1.2.7
+		 *
+		 *
+		 *
+		 */
+		function update_to_1_2_7_1()	{
+			
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7.1', true );
+			
+			include_once( 'update_to_1.2.7.1.php' );
+			
+			delete_option( 'mdjm_update_me' );
+			
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7.1', true );
+		} // update_to_1_2_7_1
 		
 	} // class
 	

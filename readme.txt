@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.7
+Stable tag: 1.2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -76,28 +76,53 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Changelog ==
 = 1.2.7 =
-**Released 22nd November, 2015**
-
-	* New: Shortcodes added for Addons List and Availability checker
-	* New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
-	* New: Text replacement shortcodes available for custom fields
-	* New: Option to use AJAX for Availability Checker to avoid page refresh
-	* New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved
-	* New: Display name for DJ is now updated within user roles
-	* New: Development hooks added to event post metaboxes
-	* General: Availability checker re-write
-	* General: MDJM Shortcodes button renamed to MDJM and new structure and options added
-	* General: Client fields settings page is now translation ready
-	* General: Updated the uninstallation procedure
-	* General: Added column ordering to transactions
-	* General: Added column ordering to quotes
-	* General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets
-	* General: Change title to MDJM Event Management in MDJM dashboard
-	* Bug Fix: User roles should only register during install
-	* Bug Fix: WP Dashboard MDJM Overview now has correct edit URL
-	* Bug Fix: Ordering by event value column in event list now accurate
-	* Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
-	* Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event
+<strong>Released 22nd November, 2015</strong>
+<ui>
+	<li>New: Shortcodes added for Addons List and Availability checker</li>
+	<li>New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
+	<li>New: Text replacement shortcodes available for custom fields</li>
+	<li>New: Option to use AJAX for Availability Checker to avoid page refresh</li>
+	<li>New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
+	<li>New: Display name for DJ is now updated within user roles</li>
+	<li>New: Development hooks added to event post metaboxes</li>
+	<li>General: Availability checker re-write</li>
+	<li>General: MDJM Shortcodes button renamed to MDJM and new structure and options added</li>
+	<li>General: Client fields settings page is now translation ready</li>
+	<li>General: Updated the uninstallation procedure</li>
+	<li>General: Added column ordering to transactions</li>
+	<li>General: Added column ordering to quotes</li>
+	<li>General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets</li>
+	<li>General: Change title to MDJM Event Management in MDJM dashboard</li>
+	<li>Bug Fix: User roles should only register during install</li>
+	<li>Bug Fix: WP Dashboard MDJM Overview now has correct edit URL</li>
+	<li>Bug Fix: Ordering by event value column in event list now accurate</li>
+	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
+	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
+</ui>
+= 1.2.7 =
+<strong>Released 22nd November, 2015</strong>
+<ui>
+	<li>New: Shortcodes added for Addons List and Availability checker</li>
+	<li>New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
+	<li>New: Text replacement shortcodes available for custom fields</li>
+	<li>New: Option to use AJAX for Availability Checker to avoid page refresh</li>
+	<li>New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
+	<li>New: Display name for DJ is now updated within user roles</li>
+	<li>New: Development hooks added to event post metaboxes</li>
+	<li>General: Availability checker re-write</li>
+	<li>General: MDJM Shortcodes button renamed to MDJM and new structure and options added</li>
+	<li>General: Client fields settings page is now translation ready</li>
+	<li>General: Updated the uninstallation procedure</li>
+	<li>General: Added column ordering to transactions</li>
+	<li>General: Added column ordering to quotes</li>
+	<li>General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets</li>
+	<li>General: Change title to MDJM Event Management in MDJM dashboard</li>
+	<li>Bug Fix: User roles should only register during install</li>
+	<li>Bug Fix: WP Dashboard MDJM Overview now has correct edit URL</li>
+	<li>Bug Fix: Ordering by event value column in event list now accurate</li>
+	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
+	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
+</ui>
 
 = 1.2.6 =
 <strong>Released 31st October, 2015</strong>
