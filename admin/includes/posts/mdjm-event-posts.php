@@ -121,9 +121,9 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 					
 					if( isset( $_GET['availability'] ) && $post_id == $_GET['e_id'] )	{
 						if( is_dj() )
-							$dj_avail = $this->availability_check( $_GET['availability'], $current_user->ID );
+							$dj_avail = mdjm_availability_check( $_GET['availability'], $current_user->ID );
 						else
-							$dj_avail = $this->availability_check( $_GET['availability'] );
+							$dj_avail = mdjm_availability_check( $_GET['availability'] );
 					}
 					break;
 					

@@ -317,9 +317,9 @@
 							'balance_label'		  => 'Balance',
 							'default_type'		   => 'Cash',
 							'form_layout'		 	=> 'vertical',
-							'payment_label'		  => __( 'Make a Payment Towards', 'mobile-dj-manager' ) . ':',
+							'payment_label'		  => __( 'Make a Payment Towards', 'mobile-dj-manager' ),
 							'other_amount_label'	=> __( 'Other Amount', 'mobile-dj-manager' ),
-							'enable_tax'			 => 'N',
+							'enable_tax'			 => false,
 							'tax_type'	   		   => 'percentage',
 							'tax_rate'	   		   => '20',
 							'payment_sources'	 	=> $payment_sources,
@@ -365,9 +365,6 @@
 								'and select Edit Playlist from the drop down list displayed next to the event for which you want to edit the playlist.',
 								
 							'playlist_closed'         => '<strong>Additions to your playlist are disabled as your event is taking place soon</strong>',
-							'playlist_noevent'        => 'You do not have any confirmed events with us. The Playlist is only available once you have ' . 
-								'confirmed your event and signed your contract.' . "\r\n\r\n" . 
-								'To begin planning your next event with us, please <a href="{CONTACT_PAGE}">contact us now</a>',
 								
 							'playlist_guest_welcome'  => 'Welcome to the {COMPANY_NAME} playlist management system.',
 							'playlist_guest_intro'    => 'You are adding songs to the playlist for {CLIENT_FIRSTNAME} {CLIENT_LASTNAME}\'s event on {EVENT_DATE}.' . 

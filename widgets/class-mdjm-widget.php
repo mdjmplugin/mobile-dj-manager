@@ -58,7 +58,7 @@
 			?>
             <script type="text/javascript">
 			jQuery(document).ready(function($) 	{
-				$('#mdjm-widget-availability-check').submit(function()	{
+				$('#mdjm-widget-availability-check').submit(function(event)	{
 					if( !$("#widget_check_date").val() )	{
 						return false;
 					}

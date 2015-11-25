@@ -451,7 +451,7 @@
 				
 				$output = '';
 				
-				if( $field['required'] == true )
+				if( !empty( $field['required'] ) )
 					$output .= '<img src="' . $dir . '/req_field.jpg" width="14" height="14" alt="' . __( 'Required Field', 'mobile-dj-manager' ) . '" title="' . __( 'Required Field', 'mobile-dj-manager' ) . '" />' . "\r\n";
 					
 				else

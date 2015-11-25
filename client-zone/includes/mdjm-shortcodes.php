@@ -52,6 +52,7 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 						'field_wrap'		 => true,
 						'field_class'		=> false,
 						'submit_text'		=> __( 'Check Date', 'mobile-dj-manager' ),
+						'submit_wrap'		 => true,
 						'submit_class'	   => false,
 						'please_wait_text'   => __( 'Please wait...', 'mobile-dj-manager' ),
 						'please_wait_class'  => false
@@ -196,12 +197,12 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 		function shortcode_mdjm( $atts )	{
 			// Array mapping the args to the pages/functions
 			$pairs = array(
-						'Home'			=> MDJM_CLIENTZONE . '/class/class-home.php',
-						'Profile'		 => MDJM_CLIENTZONE . '/class/class-profile.php',
-						'Playlist'		=> MDJM_CLIENTZONE . '/class/class-playlist.php',
-						'Contract'		=> MDJM_CLIENTZONE . '/class/class-contract.php',
+						'Home'			=> MDJM_CLIENTZONE . '/pages/mdjm-home.php',
+						'Profile'		 => MDJM_CLIENTZONE . '/pages/mdjm-profile.php',
+						'Playlist'		=> MDJM_CLIENTZONE . '/pages/mdjm-playlist.php',
+						'Contract'		=> MDJM_CLIENTZONE . '/pages/mdjm-contract.php',
 						'Availability'	=> 'f_mdjm_availability_form',
-						'Online Quote'	=> MDJM_CLIENTZONE . '/class/class-onlinequote.php' );
+						'Online Quote'	=> MDJM_CLIENTZONE . '/pages/mdjm-onlinequote.php' );
 			
 			$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
 							

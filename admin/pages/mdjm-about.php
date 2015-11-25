@@ -46,10 +46,18 @@ if( !class_exists( 'MDJM_About' ) ) :
 			
 			</style>
             <div class="wrap">
-            <a href="http://www.mydjplanner.co.uk/" target="_blank"><img style="max-height: 80px; height: auto;" src="<?php echo MDJM_PLUGIN_URL . '/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" title="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" /></a>
+            <a href="http://www.mydjplanner.co.uk/" target="_blank"><img style="max-height: 80px; height: auto;" src="<?php echo MDJM_PLUGIN_URL . '/admin/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" title="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" /></a>
             <h1><?php printf( __( 'Welcome to MDJM Event Management version %s', 'mobile-dj-manager' ), MDJM_VERSION_NUM ); ?></h1>
             <hr>
             <?php
+			mdjm_update_notice( 
+				'update-nag',
+				sprintf( 'We are currently working hard on new documentation for the MDJM plugin family. If you are willing to get involved and help out, please %sContact Mike%s.%s' . 
+					'Additionally if you are able to assist with translating our plugins we\'d love to hear from you.',
+					'<a href="http://www.mydjplanner.co.uk/contact/">',
+					'</a>',
+					'<br />' ),
+				true );
 		} // page_header
 		
 		/**
@@ -107,6 +115,23 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
+            <h3 class="site-title">Version 1.2.7.2 - 25th November 2015</h3>
+            <ui>
+                <li><strong>Bug Fix</strong>: Availability checker ajax scripts did not work if using a Firefox web browser</li>
+                <li><strong>Bug Fix</strong>: Field wrap now functions as expected for Availability Checker</li>
+                <li><strong>Bug Fix</strong>: PHP Notice written to log file if WP debugging enabled when saving event that has empty fields</li>
+                <li><strong>Bug Fix</strong>: Unattended event availability check now calls correct function and does not generate error</li>
+                <li><strong>Bug Fix</strong>: Backwards compatibility issue with front end availability checker</li>
+                <li><strong>Bug Fix</strong>: Put availability checker fields on their own line if field wrap is true</li>
+                <li><strong>Bug Fix</strong>: Redirect failed after client password change</li>
+                <li><strong>Bug Fix</strong>: Image now displays on about page</li>
+                <li><strong>General</strong>: Ignore communication posts during custom post type save</li>
+                <li><strong>General</strong>: Removed custom text playlist setting for No Active Event</li>
+                <li><strong>General</strong>: Do not write to log file if no client fields are set as required</li>
+                <li><strong>General</strong>: Adjust folder structure within client zone</li>
+                <li><strong>New</strong>: Added submit_wrap option for availability shortcode</li>
+            </ui>
+            <hr />
             <h3 class="site-title">Version 1.2.7.1 - 22nd November 2015</h3>
             <ui>
             	<li><strong>New</strong>: Shortcodes added for Addons List and Availability checker></li>

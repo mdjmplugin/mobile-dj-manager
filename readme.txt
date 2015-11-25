@@ -75,7 +75,24 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-= 1.2.7 =
+= 1.2.7.2 =
+<strong>Released 25th November, 2015</strong>
+<ui>
+	<li>Bug Fix: Availability checker ajax scripts did not work if using a Firefox web browser</li>
+	<li>Bug Fix: Field wrap now functions as expected for Availability Checker</li>
+	<li>Bug Fix: PHP Notice written to log file if WP debugging enabled when saving event that has empty fields</li>
+	<li>Bug Fix: Unattended event availability check now calls correct function and does not generate error</li>
+	<li>Bug Fix: Backwards compatibility issue with front end availability checker</li>
+	<li>Bug Fix: Put availability checker fields on their own line if field wrap is true</li>
+	<li>Bug Fix: Redirect failed after client password change</li>
+	<li><strong>Bug Fix</strong>: Image now displays on about page</li>
+	<li>General: Ignore communication posts during custom post type save</li>
+	<li>General: Removed custom text playlist setting for No Active Event</li>
+	<li>General: Do not write to log file if no client fields are set as required</li>
+	<li>General: Adjust folder structure within client zone</li>
+	<li>New: Added submit_wrap option for availability shortcode</li>
+</ui>
+= 1.2.7.1 =
 <strong>Released 22nd November, 2015</strong>
 <ui>
 	<li>New: Shortcodes added for Addons List and Availability checker</li>

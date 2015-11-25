@@ -1398,28 +1398,7 @@
 									'section' => 'clientzone_text_playlist',
 									'page' => 'clientzone-text',
 									),
-									
-							'playlist_noevent' => array(
-									'label' => 'No Active Events:',
-									'key' => MDJM_CUSTOM_TEXT_KEY,
-									'type' => 'mce_textarea',
-									'class' => '',
-									'value' => $mdjm_settings['custom_text']['playlist_noevent'],
-									'text' => '',
-									'desc' => 'Text displayed to logged in users who have no active events',
-									'custom_args' => array (
-														'name' =>  MDJM_CUSTOM_TEXT_KEY . '[playlist_noevent]',
-														'mce_settings' => array(
-															'textarea_rows' => 6,
-															'media_buttons' => false,
-															'textarea_name' => MDJM_CUSTOM_TEXT_KEY . '[playlist_noevent]',
-															'teeny'         => false,
-															),
-														),
-									'section' => 'clientzone_text_playlist',
-									'page' => 'clientzone-text',
-									),
-									
+																		
 							'playlist_guest_welcome' => array(
 									'label' => 'Guest Welcome:',
 									'key' => MDJM_CUSTOM_TEXT_KEY,
@@ -1734,7 +1713,7 @@
 									),
 									
 							'availability_check_fail_page' => array(
-									'label' => 'Not Available Redirect Page',
+									'label' => 'Unavailable Redirect Page',
 									'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
@@ -1990,7 +1969,7 @@
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['payments']['payment_label'] ) ? $mdjm_settings['payments']['payment_label'] : 
 										__( 'Make a Payment Towards', 'mobile-dj-manager' ) ),
-									'text' => 'Default is <code>Make a Payment Towards:</code>',
+									'text' => 'Default is <code>Make a Payment Towards</code>',
 									'desc' => 'Display name of the label shown to users to select the payment they wish to make',
 									'section' => 'payment',
 									'page' => 'payments',

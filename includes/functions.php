@@ -18,6 +18,6 @@
 * Displays the availability checker form
 */
 	function f_mdjm_availability_form( $args )	{
-		MDJM_Availability_Checker::availability_form();
+		MDJM_Availability_Checker::availability_form( $args );
 	}
 ?>

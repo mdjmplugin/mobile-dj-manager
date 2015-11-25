@@ -1123,7 +1123,6 @@
 						
 						$c_pw = $pass_action;
 						wp_set_password( $c_pw, $c->ID );
-						delete_user_meta( $c->ID, 'mdjm_pass_action' );
 					}
 					else	{
 						$c_pw = 'Please <a href="' . home_url( '/wp-login.php?action=lostpassword' ) . '">click here</a> to reset your password';
@@ -1262,7 +1261,11 @@
 				);
 				
 				// Allow the $pairs array to be filtered
-				$pairs = apply_filters( 'mdjm_shortcode_filter_pairs', $pairs, $e->ID, ( !empty( $eventinfo ) ? $eventinfo : '' ) );
+				$pairs = apply_filters(
+					'mdjm_shortcode_filter_pairs',
+					$pairs,
+					( !empty( $e->ID ) ? $e->ID : '' ),
+					( !empty( $eventinfo ) ? $eventinfo : '' ) );
 				
 				/* -- Create the Search/Replace Array's -- */							
 				foreach( $pairs as $key => $value )	{

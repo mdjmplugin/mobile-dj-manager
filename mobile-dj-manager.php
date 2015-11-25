@@ -201,10 +201,11 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
+				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-functions-admin.php' ); // Admin only functions
 			}
 			else	{ // Required for front end only
 				include_once( MDJM_CLIENTZONE . '/includes/mdjm-shortcodes.php' );
-				require_once( MDJM_CLIENTZONE . '/class/class-clientzone.php' );
+				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 		} // mdjm_includes
 	} //class  Mobile_DJ_Manager
@@ -217,5 +218,5 @@ endif;
 	
 	register_activation_hook( __FILE__, array( 'Mobile_DJ_Manager', 'mdjm_activate' ) );
 	register_deactivation_hook( __FILE__, array( 'Mobile_DJ_Manager', 'mdjm_deactivate' ) );
-	
+
 	MDJM();

@@ -70,7 +70,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			global $mdjm, $mdjm_post_types, $mdjm_settings, $current_user;
 			
 		/* -- Only for MDJM custom posts -- */
-			if( !in_array( $post->post_type, $mdjm_post_types ) || $post->post_type == MDJM_CUSTOM_FIELD_POSTS )
+			if( !in_array( $post->post_type, $mdjm_post_types ) || $post->post_type == MDJM_CUSTOM_FIELD_POSTS ||$post->post_type == MDJM_COMM_POSTS )
 				return;
 				
 		/* -- Do not save if this is an autosave -- */
@@ -235,7 +235,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					$_POST['client_name'] : $mdjm->mdjm_events->mdjm_add_client() );
 					
 				if( $new_post != true && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
-					$field_updates[] = '     | Client changed from ' . $current_meta['_mdjm_event_client'][0] . ' to ' . $_POST['client_name'];
+					$field_updates[] = '     | Client changed to ' . $_POST['client_name'];
 				
 				if( empty( $_POST['client_name'] ) )	{
 					if( MDJM_DEBUG == true )
@@ -256,6 +256,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						$GLOBALS['mdjm_debug']->log_it( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
 						
 					update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', wp_generate_password( $mdjm_settings['clientzone']['pass_length'] ) );
+					$pass_reset = true;
 				}
 									
 				/* -- Get the Venue ID -- */
@@ -420,7 +421,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						}
 							
 						/* If there is no new meta value but an old value exists, delete it. */
-						elseif ( '' == $event_meta_value && $current_meta[$event_meta_key][0] )	{
+						elseif ( '' == $event_meta_value && !empty( $current_meta[$event_meta_key][0] ) )	{
 							delete_post_meta( $post->ID, $event_meta_key, $event_meta_value );
 							if( $new_post === false )
 								$field_updates[] = 'Field ' . $event_meta_key . ' updated: ' . $current_meta[$event_meta_key][0] . ' removed';
@@ -452,8 +453,9 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
 						$event_stati = get_event_stati();
 						$field_updates[] = 'Event status ' . 
-											( isset( $event_stati[$_POST['original_post_status']] ) ? 'set ' : 'changed from ' . $event_stati[$_POST['original_post_status']] ) . 
-											' to ' . $event_stati[$_POST['mdjm_event_status']];
+							( isset( $event_stati[$_POST['original_post_status']] ) ? 'set ' : 'changed from ' ) . 
+								( $_POST['original_post_status'] != 'auto-draft' ? $event_stati[$_POST['original_post_status']] : 'new' ) . 
+							' to ' . $event_stati[$_POST['mdjm_event_status']];
 						
 						remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 						wp_transition_post_status( $_POST['mdjm_event_status'], $_POST['original_post_status'], $post );
@@ -462,6 +464,13 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						
 						if( method_exists( $mdjm->mdjm_events, $method ) )
 							$mdjm->mdjm_events->$method( $post_id, $post, $event_data, $field_updates );
+						
+						// Remove password reset flag if set
+						if( !empty( $pass_reset ) )	{
+							if( MDJM_DEBUG == true )
+								$GLOBALS['mdjm_debug']->log_it( '	-- Removing password reset flag' );
+							delete_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action' );
+						}
 						
 						add_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 					} // if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )
@@ -575,61 +584,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				}
 			}
 		} // custom_post_filter
-		
-		/*
-		 * availability_check
-		 * Check DJ Availability for given date
-		 * 
-		 * @since 1.1.3
-		 * @params: 	
-		 * @return: 
-		 */
-		public function availability_check( $date='', $dj='' )	{
-			global $mdjm;
-			
-			$date = !empty( $date ) ? $date : date( 'Y-m-d' );
-			
-			/* Availability Check */
-			$dj_avail = ( is_dj() ) ? dj_available( $dj, $date ) : dj_available( '', $date );
-			
-			/* Print the availability result */
-			if( isset( $dj_avail ) )	{
-				$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns availability for ' . $date );
-				/* Check all DJ's */
-				if ( !empty( $dj_avail['available'] ) && current_user_can( 'administrator' ) )	{
-					$avail_message = count( $dj_avail['available'] ) . ' ' . _n( MDJM_DJ, MDJM_DJ . '\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $date ) );
-				$class = 'updated';
-					?><ui><?php
-					foreach( $dj_avail['available'] as $dj_detail )	{
-						$dj = get_userdata( $dj_detail );
-						$avail_message .= '<li>' . $dj->display_name . 
-						'<a href="' . get_edit_post_link( $_GET['e_id'] ) . '&dj=' . $dj->ID . 
-						'"> Assign &amp; Respond to Enquiry</a><br /></li>';
-					}
-					?></ui><?php
-				}
-				/* Single DJ Check */
-				elseif ( !empty( $dj_avail['available'] ) && !current_user_can( 'administrator' ) )	{
-					$dj = get_userdata( get_current_user_id() );
-					$class = 'updated';
-					$avail_message = $dj->display_name . ' is available on ' . date( 'l, jS F Y', strtotime( $date ) ) . '<a href="' . admin_url( 'admin.php?page=mdjm-events&action=add_event_form&event_id=' . $_GET['e_id'] . '&dj=' . $dj->ID ) . '"> Assign &amp; Respond to Enquiry</a><br />';
-				}
-				else	{
-					$class = 'error';
-					if( current_user_can( 'administrator' ) )	{
-						$avail_message = 'No ' . MDJM_DJ . '\'s available on ' . date( 'l, jS F Y', strtotime( $date ) );
-					}
-					else	{
-						$dj = get_userdata( get_current_user_id() );
-						$avail_message = $dj->display_name . ' is not available on ' . date( 'l, jS F Y', strtotime( $date ) );
-					}
-				}
-				mdjm_update_notice( $class, $avail_message );
-			}
-			else	{
-				$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns no availability for ' . $date );
-			}
-		} // availability_check
 		
 		/*
 		 * client_events_filter
