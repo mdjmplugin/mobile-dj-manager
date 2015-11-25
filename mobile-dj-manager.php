@@ -3,16 +3,16 @@
 /**
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://www.mydjplanner.co.uk
- * Description: MDJM Event Management (formerly Mobile DJ Manager) is an interface allowing mobile DJ's and businesses to manage their events and employees as well as interact with their clients easily. Automating many of your day to day tasks, MDJM Event Management for WordPress is the ultimate tool for any Mobile DJ Business.
- * Version: 1.2.7.1
- * Date: 22 November 2015
+ * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
+ * Version: 1.2.7.2
+ * Date: 25 November 2015
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
  * Author URI: http://www.mydjplanner.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /lang
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Tags: Event Management, DJ, Mobile DJ, Photobooth, Photo booth, DJ Business, DJ Agency, Event Agency, Event Planning, Event Planner, DJ Event Planner, CRM, MDJM, Mobile DJ Manager
+ * Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
  */
 /**
    MDJM Event Management is free software; you can redistribute it and/or modify
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public function mdjm_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.2.7.1' );
+			define( 'MDJM_VERSION_NUM', '1.2.7.2' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );

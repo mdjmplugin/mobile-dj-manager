@@ -1,14 +1,14 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977
-Tags: Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, MDJM Event Management, DJ Management
+Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.7.1
+Stable tag: 1.2.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
 
-MDJM Event Management is an interface to fully manage your DJ or Agency business efficiently.
+MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
 
 == Description ==
 
