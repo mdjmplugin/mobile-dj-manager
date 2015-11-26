@@ -34,7 +34,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function transaction_post_columns( $columns ) {
+		public static function transaction_post_columns( $columns ) {
 			$columns = array(
 					'cb'			   => '<input type="checkbox" />',
 					'title' 	 		=> __( 'ID', 'mobile-dj-manager' ),
@@ -56,7 +56,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 *
 		 * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
 		 */
-		function transaction_post_sortable_columns( $sortable_columns )	{
+		public static function transaction_post_sortable_columns( $sortable_columns )	{
 			$sortable_columns['txn_date'] = 'txn_date';
 			$sortable_columns['txn_status'] = 'txn_status';
 			$sortable_columns['txn_value'] = 'txn_value';
@@ -72,7 +72,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function transaction_posts_custom_column( $column_name, $post_id )	{
+		public static function transaction_posts_custom_column( $column_name, $post_id )	{
 			global $post;
 							
 			switch( $column_name ) {	
@@ -133,7 +133,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		function transaction_post_filter_list()	{
+		public static function transaction_post_filter_list()	{
 			if( !isset( $_GET['post_type'] ) || $_GET['post_type'] != MDJM_TRANS_POSTS )
 				return;
 			
@@ -147,7 +147,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		public function transaction_type_filter_dropdown()	{			
+		public static function transaction_type_filter_dropdown()	{			
 			$transaction_types = get_categories( 
 										array(
 											'type'			  => MDJM_TRANS_POSTS,
@@ -189,7 +189,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 * 
 		 * @return	arr		$actions		The filtered array of actions in the hover menu
 		 */
-		function transaction_term_row_actions( $actions, $tag )	{
+		public static function transaction_term_row_actions( $actions, $tag )	{
 			$protected_terms = array(
 								__( 'Merchant Fees', 'mobile-dj-manager' ),
 								MDJM_DEPOSIT_LABEL,
@@ -210,7 +210,7 @@ if( !class_exists( 'MDJM_TXN_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		 function transaction_term_checkboxes()	{
+		 public static function transaction_term_checkboxes()	{
 			 if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )
 				return;
 			

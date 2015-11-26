@@ -95,24 +95,6 @@
 					update_option( MDJM_UPDATED_KEY, '1' );
 				}
 			} // mdjm_upgrade_check
-			
-			/*
-			 * Force display of release notes
-			 *
-			 *
-			 *
-			 */
-			function release_notes()	{
-				if( !is_admin() && is_user_logged_in() )
-					return;
-				
-				// Reset the key telling us an update occured
-				update_option( 'mdjm_updated', '0' );
-				
-				// Redirect to the release notes
-				wp_redirect( mdjm_get_admin_page( 'about' ) );
-				exit;	
-			}
 /*
  * --
  * INIT HOOK
@@ -128,8 +110,6 @@
 				/* -- Obtain the plugin settings -- */
 				$this->mdjm_settings();
 				
-				/* -- Playlist upload scheduled task -- */
-				$this->set_playlist_task();
 				/* -- Remove admin toolbar for clients -- */
 				$this->no_admin_for_clients();
 			} // mdjm_init
@@ -151,7 +131,7 @@
 					$this->mdjm_init_settings();
 					//$this->mdjm_role_caps();
 				}
-				/* -- Release notes check -- */
+				// Release notes check
 				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
 					$GLOBALS['mdjm_debug']->log_it( '*** Redirect to release notes ***' );
 					// Reset the key telling us an update occured
@@ -290,36 +270,7 @@
 				define( 'MDJM_ONLINE_QUOTES', ( !empty( $mdjm_settings['templates']['online_enquiry'] ) ? true : false ) );
 				define( 'MDJM_NOTIFY_ADMIN', ( !empty( $mdjm_settings['clientzone']['status_notification'] ) ? true : false ) );
 			 } // mdjm_settings
-			 
-			 /*
-			  * Grab the upload playlist setting from the options table
-			  * & ensure the cron task is set correctly
-			  *
-			  *
-			  */
-			public function set_playlist_task()	{
-				global $mdjm_settings;
-				
-				$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
-				 
-				$current_setting = isset( $mdjm_schedules['upload-playlists']['active'] ) ? $mdjm_schedules['upload-playlists']['active'] : 'N';
-				$required_setting = !empty( $mdjm_settings['playlist']['upload_playlists'] ) ? 'Y' : 'N';
-				 
-				/* -- Determine if an update is needed -- */
-				if( empty( $current_setting ) || $current_setting != $required_setting )	{
-					$mdjm_schedules['upload-playlists']['active'] = $required_setting;
-					
-					/* -- Set next run time -- */
-					if( $mdjm_schedules['upload-playlists']['active'] == 'Y' )
-						$mdjm_schedules['upload-playlists']['nextrun'] = time();
-						
-					else
-						$mdjm_schedules['upload-playlists']['nextrun'] = 'N/A';
-				}				 
-				update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
-				 
-			} // set_playlist_task
-			
+			 			
 			/**
 			 * Register the login action within the user meta
 			 * 

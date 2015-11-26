@@ -21,7 +21,8 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		/**
 		 * Register the custom post types
 		 */
-		function register_post_types()	{
+		public static function register_post_types()	{
+			global $mdjm_posts;
 			/**
 			 * Register the mdjm_communication custom post type for communications
 			 */
@@ -57,7 +58,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'menu_position'     	  => 5,
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			} // Communications
 			
 			/**
@@ -93,7 +94,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'menu_position'      	  => 5,
 						'supports'           	   => array( 'title', 'editor', 'revisions' ),
 						'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -130,7 +131,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 					'menu_position'      	  => 5,
 					'supports'           	   => array( 'title' ),
 					'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-					'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+					'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -203,7 +204,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'menu_position'     	  => 5,
 						'supports'			   => array( 'title', 'editor', 'revisions' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -243,7 +244,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
 						'taxonomies'			 => array( MDJM_EVENT_POSTS ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -280,7 +281,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'menu_position'      	  => 5,
 						'supports'           	   => array( 'title' ),
 						'menu_icon'		  	  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -320,7 +321,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
 						'taxonomies'			 => array( MDJM_TRANS_POSTS ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 			/**
@@ -360,7 +361,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-icon-20x20.jpg' ),
 						'taxonomies'			 => array( MDJM_VENUE_POSTS ),
-						'register_meta_box_cb'   => array( 'MDJM_Posts', 'define_metabox' ) ) );
+						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
 			}
 			
 		} // register_post_types
@@ -368,7 +369,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		/**
 		 * Register the custom post statuses
 		 */
-		function register_post_status()	{
+		public static function register_post_status()	{
 			/**
 			 * Communication Post Statuses
 			 */
@@ -544,7 +545,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		/**
 		 * Register the custom taxonomies for our custom posts
 		 */
-		function register_post_taxonomies()	{
+		public static function register_post_taxonomies()	{
 			/**
 			 * Event Type Taxonomies
 			 */

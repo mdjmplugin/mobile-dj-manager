@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.7.2
+Stable tag: 1.2.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,6 +75,15 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.7.3 =
+<strong>Released 25th November, 2015</strong>
+<ui>
+	<li>Bug Fix: Missing number_format param was causing payment gateway API to not record merchant fees</li>
+	<li>General: Accomodate changes in other MDJM plugins</li>
+	<li>General: Update playlist task via update_option_{$option_name} when setting changes</li>
+	<li>General: get_event_types now accepts args</li>
+</ui>
+
 = 1.2.7.2 =
 <strong>Released 25th November, 2015</strong>
 <ui>

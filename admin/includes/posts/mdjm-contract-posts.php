@@ -27,7 +27,7 @@ if( !class_exists( 'MDJM_Contract_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function contract_post_columns( $columns ) {
+		public static function contract_post_columns( $columns ) {
 			$columns = array(
 					'cb'			   => '<input type="checkbox" />',
 					'title' 			=> __( 'Contract Name', 'mobile-dj-manager' ),
@@ -47,7 +47,7 @@ if( !class_exists( 'MDJM_Contract_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function contract_posts_custom_column( $column_name, $post_id )	{
+		public static function contract_posts_custom_column( $column_name, $post_id )	{
 			switch ( $column_name ) {
 				// Is Default?
 				case 'event_default':

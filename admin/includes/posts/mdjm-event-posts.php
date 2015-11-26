@@ -34,7 +34,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function event_post_columns( $columns ) {
+		public static function event_post_columns( $columns ) {
 			$columns = array(
 					'cb'			=> '<input type="checkbox" />',
 					'title'			=> __( 'Event ID', 'mobile-dj-manager' ),
@@ -59,7 +59,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
 		 */
-		function event_post_sortable_columns( $sortable_columns )	{
+		public static function event_post_sortable_columns( $sortable_columns )	{
 			$sortable_columns['event_date'] = 'event_date';
 			$sortable_columns['value'] = 'value';
 			
@@ -74,7 +74,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function event_posts_custom_column( $column_name, $post_id )	{
+		public static function event_posts_custom_column( $column_name, $post_id )	{
 			global $post;
 			
 			if( $column_name == 'value' || $column_name == 'balance' )
@@ -180,7 +180,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return	arr		$actions	Filtered Array of actions
 		 */
-		function event_bulk_action_list( $actions )	{
+		public static function event_bulk_action_list( $actions )	{
 			unset( $actions['edit'] );
 			
 			return $actions;
@@ -193,7 +193,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 *
 		 */
-		function highlight_unattended_event_rows()	{
+		public static function highlight_unattended_event_rows()	{
 			global $post;
 					
 			if( !isset( $post ) || $post->post_type != MDJM_EVENT_POSTS )
@@ -216,7 +216,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		function event_post_filter_list()	{
+		public static function event_post_filter_list()	{
 			if( !isset( $_GET['post_type'] ) || $_GET['post_type'] != MDJM_EVENT_POSTS )
 				return;
 			
@@ -236,7 +236,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		function event_date_filter_dropdown()	{
+		public static function event_date_filter_dropdown()	{
 			global $wpdb, $wp_locale;
 			
 			$month_query = "SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month 
@@ -286,7 +286,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		public function event_type_filter_dropdown()	{			
+		public static function event_type_filter_dropdown()	{			
 			$event_types = get_categories(
 								array(
 									'type'			  => MDJM_EVENT_POSTS,
@@ -325,7 +325,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		public function event_dj_filter_dropdown()	{
+		public static function event_dj_filter_dropdown()	{
 			global $wpdb;
 			
 			$dj_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
@@ -367,7 +367,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		 *
 		 * @return
 		 */
-		function event_client_filter_dropdown()	{
+		public static function event_client_filter_dropdown()	{
 			global $wpdb;
 							
 			$client_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 

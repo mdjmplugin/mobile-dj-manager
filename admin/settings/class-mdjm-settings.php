@@ -14,8 +14,8 @@
 			function __construct()	{
 				$this->settings_register();
 				
-				add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
-				
+				// Runs after Events settings are updated
+				add_action ( 'update_option_mdjm_playlist_settings', array( &$this, 'update_playlist_task' ), 10, 2 );
 			} // __construct
 			
 			/*
@@ -668,52 +668,40 @@
 				wp_editor( $args['value'], $args['field'], $args['custom_args']['mce_settings'] );
 			} // show_mce_textarea_field
 			
-			/*
-			 * Help text for settings pages
+			/**
+			 * Update the playlist upload task when the setting is changed
 			 *
 			 *
 			 *
 			 */
-			function help_text( $contextual_help, $screen_id, $screen )	{
-				$current = ( isset( $_GET['section'] ) ? $_GET['section'] : '' );
-				
-				switch( $current )	{
-					case 'mdjm_client_field_settings':
-						$contextual_help = 
-						'<p>' . sprintf( __( 'By managing Client Fields, you can determine which information you capture and store for each of your clients. ' .
-						'Each field listed below, whether default or create by you, will be displayed on the %s profile page ' . 
-						'when visited by a client. As long as it is enabled.', 'mobile-dj-manager' ), MDJM_APP ) . '<br />' . 
-						
-						sprintf( __( 'For further assistance, refer to our %sUser Guides%s' .
-						' or visit the %s ' . 
-						'%sSupport Forums' . '%s', 'mobile-dj-manager' ),
-						'<a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">',
-						'</a>',
-						'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a>',
-						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">',
-						'</a>' ) . 
-						
-						'</p>' . "\r\n";
-					break;
+			function update_playlist_task( $old_value, $new_value )	{
+				// If the upload playlist setting has not been updated, we can return and do nothing
+				if( !empty( $new_value['upload_playlists'] ) && !empty( $old_value['upload_playlists'] ) )
+					return;
 					
-					default:
-						$contextual_help = 
-						'<p>' . sprintf( __( 'For assistance, refer to our %sUser Guides%s' .
-						' or visit the %s ' . 
-						'%sSupport Forums%s', 'mobile-dj-manager' ),
-						'<a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">',
-						'</a>',
-						'<a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a>',
-						'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">',
-						'</a>' ) . 
-						
-						'</p>' . "\r\n";
-					break;
+				if( empty( $new_value['upload_playlists'] ) && empty( $old_value['upload_playlists'] ) )
+					return;
+									
+				$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+				 
+				$current_setting = isset( $mdjm_schedules['upload-playlists']['active'] ) ? $mdjm_schedules['upload-playlists']['active'] : 'N';
+				$new_setting = !empty( $new_value['upload_playlists'] ) ? 'Y' : 'N';
+				 
+				// Determine if an update is needed
+				if( empty( $current_setting ) || $current_setting != $new_setting )	{
+					// Update the setting
+					$mdjm_schedules['upload-playlists']['active'] = $new_setting;
 					
-				} // switch
-				
-				return $contextual_help;
-			} // help_text
+					// Set next run time
+					if( $mdjm_schedules['upload-playlists']['active'] == 'Y' )
+						$mdjm_schedules['upload-playlists']['nextrun'] = time();
+						
+					else
+						$mdjm_schedules['upload-playlists']['nextrun'] = 'N/A';
+				}
+				// Update the option				 
+				update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
+			} // update_playlist_task
 			
 			/**
 			 * Display our premium addons

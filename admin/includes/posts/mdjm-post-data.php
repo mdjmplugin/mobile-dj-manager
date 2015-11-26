@@ -12,7 +12,7 @@ if( !class_exists( 'MDJM_Post_Data' ) ) :
 		/**
 		 * Hook in methods.
 		 */
-		public function init()	{
+		public static function init()	{
 			add_filter( 'manage_mdjm_hosted_posts_columns' , array( __CLASS__, 'add_columns' ) );
 			add_action( 'manage_posts_custom_column' , array( __CLASS__, 'post_columns_data' ), 10, 1 );	
 			

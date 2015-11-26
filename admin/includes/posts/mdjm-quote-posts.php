@@ -31,7 +31,7 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function quote_post_columns( $columns ) {
+		public static function quote_post_columns( $columns ) {
 			$columns = array(
 					'cb'				=> '<input type="checkbox" />',
 					'date'				=> __( 'Generated', 'mobile-dj-manager' ),
@@ -51,7 +51,7 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 		 *
 		 * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
 		 */
-		function quote_post_sortable_columns( $sortable_columns )	{
+		public static function quote_post_sortable_columns( $sortable_columns )	{
 			$sortable_columns['quote_view_date'] = 'quote_view_date';
 			$sortable_columns['quote_value'] = 'quote_value';
 			
@@ -66,7 +66,7 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function quote_posts_custom_column( $column_name, $post_id )	{
+		public static function quote_posts_custom_column( $column_name, $post_id )	{
 			global $post;
 			
 			if( $column_name == 'quote_event' || $column_name == 'quote_value' )
@@ -120,7 +120,7 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 		 *
 		 * @return	arr		$actions	Filtered Array of actions
 		 */
-		function quote_bulk_action_list( $actions )	{
+		public static function quote_bulk_action_list( $actions )	{
 			unset( $actions['edit'] );
 			
 			return $actions;

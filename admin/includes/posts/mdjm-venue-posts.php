@@ -30,7 +30,7 @@ if( !class_exists( 'MDJM_Venue_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function venue_post_columns( $columns ) {
+		public static function venue_post_columns( $columns ) {
 			$columns = array(
 					'cb'			 => '<input type="checkbox" />',
 					'title' 	 	  => __( 'Venue', 'mobile-dj-manager' ),
@@ -53,7 +53,7 @@ if( !class_exists( 'MDJM_Venue_Posts' ) ) :
 		 *
 		 * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
 		 */
-		function venue_post_sortable_columns( $sortable_columns )	{
+		public static function venue_post_sortable_columns( $sortable_columns )	{
 			$sortable_columns['town'] = 'town';
 			$sortable_columns['county'] = 'county';
 			
@@ -68,7 +68,7 @@ if( !class_exists( 'MDJM_Venue_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function venue_posts_custom_column( $column_name, $post_id )	{				
+		public static function venue_posts_custom_column( $column_name, $post_id )	{				
 			switch ( $column_name ) {
 				case 'contact':
 					echo sprintf( 
@@ -131,7 +131,7 @@ if( !class_exists( 'MDJM_Venue_Posts' ) ) :
 		 *
 		 * @return	arr		$actions	Filtered Array of actions
 		 */
-		function venue_bulk_action_list( $actions )	{
+		public static function venue_bulk_action_list( $actions )	{
 			unset( $actions['edit'] );
 			
 			return $actions;

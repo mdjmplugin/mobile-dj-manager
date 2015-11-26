@@ -709,10 +709,11 @@
 		/*
 		 * Get the event type for the given event
 		 *
-		 * @param	int		$id		The event ID. Only required of global $post not set
+		 * @param	int		$id			Optional: The event ID. Only required of global $post not set
+		 *			arr		$args		Optional: See https://codex.wordpress.org/Function_Reference/wp_get_object_terms#Default_Arguments
 		 *
 		 */
-		public function get_event_type( $id='' )	{
+		public function get_event_type( $id='', $args='' )	{
 			global $post, $mdjm;
 			
 			if( empty( $post ) && empty( $id ) )	{
@@ -722,7 +723,7 @@
 			
 			$event_id = !empty( $id ) ? $id : $post->ID;
 			
-			$types = wp_get_object_terms( $event_id, 'event-types' );
+			$types = wp_get_object_terms( $event_id, 'event-types', $args );
 			
 			if( !is_wp_error( $types ) && !empty( $types ) )
 				return $types[0]->name;
@@ -757,20 +758,21 @@
 		} // mdjm_assign_event_type
 		
 		/*
-		 * get_event_types
 		 * Retrieve all possible event types (taxonomy)
 		 *
-		 * @params:		$hide_empty		bool	false (default) to show all, true only those in use
+		 * @params:		bool	$hide_empty	 		false (default) to show all, true only those in use
+		 *				str		$orderby			Optional: Default name
+		 *				str		$order				Optional: Default ASC
 		 *				
-		 * @return: 	$event_types	arr		Event type objects
+		 * @return: 	arr		$event_types		Event type objects
 		 */
-		public function get_event_types( $hide_empty=false )	{
+		public function get_event_types( $hide_empty=false, $orderby='name', $order='ASC' )	{
 			$hide_empty = $hide_empty == false ? 0 : 1;
 			$event_types = get_categories( array(
 											'type'		=> MDJM_EVENT_POSTS,
 											'taxonomy'	=> 'event-types',
-											'order_by'	=> 'name',
-											'order'	   => 'ASC',
+											'order_by'	=> $orderby,
+											'order'	   => $order,
 											'hide_empty'  => $hide_empty,
 											) );
 			return $event_types;

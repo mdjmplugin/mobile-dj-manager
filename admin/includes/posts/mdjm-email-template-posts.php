@@ -25,7 +25,7 @@ if( !class_exists( 'MDJM_Email_Template_Posts' ) ) :
 		 *
 		 * @return	arr		$columns	Filtered array of column names
 		 */
-		function email_template_post_columns( $columns ) {
+		public static function email_template_post_columns( $columns ) {
 			$columns = array(
 					'cb'		=> '<input type="checkbox" />',
 					'title'		=> __( 'Email Subject', 'mobile-dj-manager' ),

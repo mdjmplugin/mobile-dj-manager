@@ -279,7 +279,7 @@
 						$deposit_status = get_post_meta( $this->event->ID, '_mdjm_event_deposit_status' );
 						
 						if( !empty( $deposit ) && $deposit != '0.00' )
-							$body .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
+							$content .= __( 'Deposit', 'mobile-dj-manager' ) . ': {DEPOSIT} ({DEPOSIT_STATUS})<br />' . "\n";
 						
 						$content .= __( 'Balance Due', 'mobile-dj-manager' ) . ': {BALANCE}</p>' . "\n";
 						

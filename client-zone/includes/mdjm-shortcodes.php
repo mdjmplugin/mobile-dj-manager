@@ -43,22 +43,21 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 		 *
 		 */
 		function shortcode_availability( $atts )	{
-			extract( 
-				$args = shortcode_atts( 
-					array( // These are our default values
-						'label'			  => __( 'Select Date', 'mobile-dj-manager' ),
-						'label_wrap'		 => true,
-						'label_class'		=> false,
-						'field_wrap'		 => true,
-						'field_class'		=> false,
-						'submit_text'		=> __( 'Check Date', 'mobile-dj-manager' ),
-						'submit_wrap'		 => true,
-						'submit_class'	   => false,
-						'please_wait_text'   => __( 'Please wait...', 'mobile-dj-manager' ),
-						'please_wait_class'  => false
-					),
-					$atts
-				)
+			$args = shortcode_atts( 
+				array( // These are our default values
+					'label'			  => __( 'Select Date', 'mobile-dj-manager' ),
+					'label_wrap'		 => true,
+					'label_class'		=> false,
+					'field_wrap'		 => true,
+					'field_class'		=> false,
+					'submit_text'		=> __( 'Check Date', 'mobile-dj-manager' ),
+					'submit_wrap'		 => true,
+					'submit_class'	   => false,
+					'please_wait_text'   => __( 'Please wait...', 'mobile-dj-manager' ),
+					'please_wait_class'  => false
+				),
+				$atts,
+				'mdjm-availability'
 			);
 			
 			ob_start();
@@ -79,20 +78,19 @@ if( !class_exists( 'MDJM_Shortcodes' ) ) :
 		 *
 		 */
 		function shortcode_addons_list( $atts )	{
-			extract( 
-				$args = shortcode_atts( 
-					array( // These are our default values
-						'filter_by'	   => false,
-						'filter_value'	=> false,
-						'list'			=> 'p',
-						'desc'			=> false,
-						'cost'			=> false,
-						'addon_class'	 => false,
-						'cost_class'	 => false,
-						'desc_class'	=> false
-					),
-					$atts
-				)
+			$args = shortcode_atts( 
+				array( // These are our default values
+					'filter_by'	   => false,
+					'filter_value'	=> false,
+					'list'			=> 'p',
+					'desc'			=> false,
+					'cost'			=> false,
+					'addon_class'	 => false,
+					'cost_class'	 => false,
+					'desc_class'	=> false
+				),
+				$atts,
+				'mdjm-addons'
 			);
 			
 			ob_start();

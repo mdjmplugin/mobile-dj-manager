@@ -28,7 +28,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 		 *
 		 *
 		 */
-		function mdjm_communication_post_columns( $columns )	{
+		public static function mdjm_communication_post_columns( $columns )	{
 			$columns = array(
 				'cb'			   => '<input type="checkbox" />',
 				'date_sent' 		=> __( 'Date Sent', 'mobile-dj-manager' ),
@@ -50,7 +50,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 		 * 
 		 *
 		 */
-		function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
+		public static function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			global $post;
 			
 			switch( $column_name ) {
@@ -110,7 +110,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 		 *
 		 *
 		 */
-		function mdjm_communication_bulk_action_list( $actions )	{
+		public static function mdjm_communication_bulk_action_list( $actions )	{
 			unset( $actions['edit'] );
 			return $actions;
 		} // mdjm_communication_bulk_action_list

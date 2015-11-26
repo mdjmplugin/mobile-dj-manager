@@ -115,6 +115,13 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
+            <h3 class="site-title">Version 1.2.7.3 - 26th November 2015</h3>
+            <ui>
+                <li>Bug Fix: Missing number_format param was causing payment gateway API to not record merchant fees</li>
+                <li>General: Accomodate changes in other MDJM plugins</li>
+                <li>General: Update playlist task via update_option_{$option_name} when setting changes</li>
+                <li>General: get_event_types now accepts args</li>
+            </ui>
             <h3 class="site-title">Version 1.2.7.2 - 25th November 2015</h3>
             <ui>
                 <li><strong>Bug Fix</strong>: Availability checker ajax scripts did not work if using a Firefox web browser</li>

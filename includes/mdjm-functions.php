@@ -1093,7 +1093,7 @@
 		// Set the values based on the array passed
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() && !current_user_can( 'client' ) ? $current_user->ID : '' ) );
 		$select_cost = ( isset( $settings['cost'] ) ? $settings['cost'] : true );
 		
 		$mdjm_select = '';
@@ -1352,7 +1352,7 @@
 		// Set the values based on the array passed
 		$select_name = isset( $settings['name'] ) ? $settings['name'] : 'event_addons';
 		$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() ? $current_user->ID : '' ) );
+		$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() && !current_user_can( 'client' ) ? $current_user->ID : '' ) );
 		$select_cost = isset( $settings['cost'] ) ? $settings['cost'] : true;
 		
 		$mdjm_select = '';
@@ -1583,25 +1583,7 @@
 /*
  * -- END TRANSACTION FUNCTIONS
  */
- 
-/*
- * -- START MUSIC LIBRARY FUNCTIONS
- */
-	/*
-	 * Check if any music libraries exist
-	 *
-	 * @params:
-	 * @return		bool	true if we have libraries, otherwise false
-	 */
-	function ml_exists()	{
-		
-		
-	} // ml_exists
-	
-/*
- * -- END MUSIC LIBRARY FUNCTIONS
- */
- 
+  
 /*
  * -- START USER FUNCTIONS
  */

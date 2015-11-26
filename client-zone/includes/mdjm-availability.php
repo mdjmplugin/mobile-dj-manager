@@ -42,7 +42,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 * @return
 		 */
-		function enqueue_scripts()	{
+		public static function enqueue_scripts()	{
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_enqueue_style(
 				'jquery-ui-css',
@@ -56,7 +56,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 *
 		 */
-		function ajax_in_head()	{
+		public static function ajax_in_head()	{
 			global $mdjm, $mdjm_settings;
 				
 			if( $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )
@@ -139,7 +139,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 * @return
 		 */
-		function check_availability()	{
+		public static function check_availability()	{
 			global $mdjm, $mdjm_settings;
 			
 			if( !isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )
@@ -175,7 +175,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 * @return
 		 */
-		function availability_form( $args='' )	{
+		public static function availability_form( $args='' )	{
 			global $mdjm_settings;
 			
 			/**
@@ -282,7 +282,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 * @return
 		 */
-		function validate()	{
+		public static function validate()	{
 			?>
             <script type="text/javascript">
 			jQuery(document).ready(function($){
@@ -318,7 +318,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 * @return
 		 */
-		function display_result()	{
+		public static function display_result()	{
 			global $mdjm_settings;
 			
 			if( !empty( $_POST['mdjm_avail_submit'] ) )	{

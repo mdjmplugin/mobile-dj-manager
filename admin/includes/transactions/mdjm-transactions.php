@@ -540,10 +540,10 @@
 				strtoupper( $meta['_mdjm_txn_currency'] ) : $mdjm_settings['payments']['currency'] );
 													
 			$trans_meta['_mdjm_txn_fee'] = ( !empty( $meta['_mdjm_txn_fee'] ) ? 
-													number_format( $meta['_mdjm_txn_fee'], '.', '' ) : '0.00' );
+													number_format( $meta['_mdjm_txn_fee'], 2, '.', '' ) : '0.00' );
 													
 			$trans_meta['_mdjm_txn_total'] = ( !empty( $meta['_mdjm_txn_total'] ) ? 
-													number_format( $meta['_mdjm_txn_total'], '.', '' ) : '0.00' );
+													number_format( $meta['_mdjm_txn_total'], 2, '.', '' ) : '0.00' );
 													
 			$trans_meta['_mdjm_payment_to'] = ( !empty( $meta['_mdjm_payment_to'] ) ? 
 													$meta['_mdjm_payment_to'] : '' );
