@@ -20,7 +20,7 @@
 		function remove_deprecated_db_tables()	{
 			global $wpdb;
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Removing deprecated DB tables' );
+			MDJM()->debug->log_it( 'Removing deprecated DB tables' );
 			
 			$tables = array( 
 						'Events'		   => $wpdb->prefix . 'mdjm_events', 
@@ -32,11 +32,11 @@
 				$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $table_name . "'" );
 				if( $results )	{
 					$wpdb->query( 'DROP TABLE IF EXISTS ' . $table_name );
-					$GLOBALS['mdjm_debug']->log_it( $table_name . ' Removed' );
+					MDJM()->debug->log_it( $table_name . ' Removed' );
 				}
 			}
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Completed removing deprecated DB tables' );
+			MDJM()->debug->log_it( 'Completed removing deprecated DB tables' );
 		}
 	} // class MDJM_Upgrade_to_1_2_6
 	

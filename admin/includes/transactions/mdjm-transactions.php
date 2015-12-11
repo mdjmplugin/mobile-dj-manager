@@ -7,7 +7,6 @@
  *
  * @version 1.0
  */
-
 	class MDJM_Transactions	{
 		
 		/*
@@ -28,7 +27,6 @@
 		 *
 		 */
 		public function show_event_transactions( $event_id )	{
-			
 			$event_transactions = get_posts( array(
 											'post_type'	  => MDJM_TRANS_POSTS,
 											'post_parent'	=> $event_id,
@@ -131,7 +129,7 @@
 			$trans_type = get_term_by( 'name', $type, 'transaction-types' );
 			
 			// Event info
-			$eventinfo = $mdjm->mdjm_events->event_detail( $event_id );
+			$eventinfo = MDJM()->events->event_detail( $event_id );
 
 			/* -- Post Data -- */
 			$trans_data['ID'] = $trans_id;
@@ -170,11 +168,11 @@
 				add_post_meta( $trans_id, $trans_meta_key, $trans_meta_value );	
 			}
 			
-			$mdjm->debug_logger( 'Event Transaction procedure complete' );
+			MDJM()->debug->log_it( 'Event Transaction procedure complete' );
 			
 			// Email client with defined template
 			if( !empty( $mdjm_settings['templates']['manual_payment_cfm_template'] ) && $mdjm_settings['templates']['manual_payment_cfm_template'] != 0 )	{
-				$mdjm->debug_logger( 'Configured to email client with payment receipt confirmation' );
+				MDJM()->debug->log_it( 'Configured to email client with payment receipt confirmation' );
 												
 				$filters = array(
 							'{PAYMENT_FOR}'		=> ( $type == MDJM_BALANCE_LABEL ? MDJM_BALANCE_LABEL : MDJM_DEPOSIT_LABEL ),
@@ -204,7 +202,7 @@
 				
 			}
 			else	{
-				$mdjm->debug_logger( 'Skipping email as no template is defined for manual payment in ' . __METHOD__ );
+				MDJM()->debug->log_it( 'Skipping email as no template is defined for manual payment in ' . __METHOD__ );
 			}
 			add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 			
@@ -242,7 +240,7 @@
 			}*/
 			
 			else	{
-				$mdjm->debug_logger( 'Starting the Add Transaction procedure', true );
+				MDJM()->debug->log_it( 'Starting the Add Transaction procedure', true );
 				
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
@@ -323,7 +321,7 @@
 				
 				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
-				$mdjm->debug_logger( 'Completed the Add Transaction procedure', true );
+				MDJM()->debug->log_it( 'Completed the Add Transaction procedure', true );
 				$result['type'] = 'success';
 			}
 			$result['transactions'] = $this->show_event_transactions( $_POST['event_id'] );
@@ -342,7 +340,7 @@
 			
 			if( empty( $event_id ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No event ID provided in ' . __METHOD__, true );
+					MDJM()->debug->log_it( 'ERROR: No event ID provided in ' . __METHOD__, true );
 				
 				return false;
 			}
@@ -442,7 +440,7 @@
 			
 			if( empty( $event_id ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No event ID provided in ' . __METHOD__, true );
+					MDJM()->debug->log_it( 'ERROR: No event ID provided in ' . __METHOD__, true );
 				return false;
 			}
 									
@@ -491,7 +489,7 @@
 			global $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'Beginning transaction add procedure in ' . __METHOD__, true );
+				MDJM()->debug->log_it( 'Beginning transaction add procedure in ' . __METHOD__, true );
 			
 			// Define the post status
 			$txn_status = ( strtolower( $direction ) == 'in' ? 'mdjm-income' : 'mdjm-expenditure' );
@@ -500,7 +498,7 @@
 			if( !empty( $type ) )	{
 				//$txn_type = get_term_by( 'name', $type, 'transaction-types' );
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'term found with ID ' . $type, true );
+					MDJM()->debug->log_it( 'term found with ID ' . $type, true );
 			}
 			
 			/* -- Get the new post ID -- */
@@ -555,13 +553,13 @@
 			$txn_id = wp_update_post( $trans_data );
 			if( !empty( $txn_id ) )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Added transaction with ID: ' . $txn_id );
+					MDJM()->debug->log_it( 'Added transaction with ID: ' . $txn_id );
 									
 				// Set the transaction source (term)
 				if( !empty( $type ) )	{
 					wp_set_post_terms( $txn_id, $type, 'transaction-types' );
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'Assigning transaction source ID ' . $type );
+							MDJM()->debug->log_it( 'Assigning transaction source ID ' . $type );
 				}
 					
 				// Add the meta data
@@ -569,18 +567,18 @@
 					foreach( $trans_meta as $key => $value )	{
 						if( add_post_meta( $txn_id, $key, $value ) )	{
 							if( MDJM_DEBUG == true )
-								$GLOBALS['mdjm_debug']->log_it( 'Meta key ' . $key . ' added with value ' . $value );
+								MDJM()->debug->log_it( 'Meta key ' . $key . ' added with value ' . $value );
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								$GLOBALS['mdjm_debug']->log_it( 'Failed to add Meta key ' . $key . ' with value ' . $value );	
+								MDJM()->debug->log_it( 'Failed to add Meta key ' . $key . ' with value ' . $value );	
 						}
 					}
 				}
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Failed to add transaction' );
+					MDJM()->debug->log_it( 'Failed to add transaction' );
 					
 				return false;
 			}
@@ -588,5 +586,4 @@
 			return $txn_id;
 		} // add_transaction
 	} // class MDJM_Transactions
- 
 ?>

@@ -1,7 +1,11 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	if ( !current_user_can( 'manage_options' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	if( !MDJM()->permissions->employee_can( 'manage_packages' ) )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You do not have permission to manage equipment packages.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
 	}
 			
 	if( isset( $_POST['submit'] ) )	{ /* Form Submitted */

@@ -25,6 +25,10 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 			add_filter( 'manage_edit-mdjm-event_sortable_columns', array( __CLASS__, 'event_post_sortable_columns' ) );
 			
 			add_filter( 'bulk_actions-edit-mdjm-event', array( __CLASS__, 'event_bulk_action_list' ) );
+			
+			add_action( 'pre_get_posts', array( __CLASS__, 'custom_event_post_query' ) );
+			
+			add_filter( 'views_edit-mdjm-event' , array( __CLASS__, 'event_view_filters' ) );
 		} // init
 		
 		/**
@@ -77,44 +81,41 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 		public static function event_posts_custom_column( $column_name, $post_id )	{
 			global $post;
 			
-			if( $column_name == 'value' || $column_name == 'balance' )
+			if( MDJM()->permissions->employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )
 				$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
 				
 			switch ( $column_name ) {
 				// Event Date
 				case 'event_date':
-					echo sprintf( '<a href="' . admin_url( 'post.php?post=%s&action=edit' ) . '">%s</a>', 
-						$post_id, date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) );
-					break;
+					if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+						echo sprintf( '<a href="' . admin_url( 'post.php?post=%s&action=edit' ) . '">%s</a>', 
+							$post_id, date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) );
+					}
+					else
+						echo date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) );
+				break;
 					
 				// Client
-				case 'client':
-					$client = get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) );
-					
-					if( !empty( $client ) )
-						echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
-							$client->ID . '&event_id=' . $post_id . '">' . 
-							$client->display_name . '</a>';
-					else
-						printf( __( '%sNot Assigned%s', 'mobile-dj-manager' ),
-							'<span class="mdjm-form-error">',
-							'</span>' );
-					break;
-					
 				// DJ
+				case 'client':
 				case 'dj':
-					$dj = get_userdata( get_post_meta( $post_id, '_mdjm_event_dj', true ) );
-					if( !empty( $dj ) )
-						echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
-							$dj->ID . '&event_id=' . $post->ID . '">' . 
-							$dj->display_name . '</a>';
-							
+					$user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_' . $column_name, true ) );
+					
+					if( !empty( $user ) )	{
+						if( MDJM()->permissions->employee_can( 'send_comms' ) )
+							echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
+								$user->ID . '&event_id=' . $post_id . '">' . 
+								$user->display_name . '</a>';
+								
+						else
+							echo $user->display_name;
+					}
 					else
 						printf( __( '%sNot Assigned%s', 'mobile-dj-manager' ),
 							'<span class="mdjm-form-error">',
 							'</span>' );
-					break;
-					
+				break;
+										
 				// Status
 				case 'event_status':
 					echo get_post_status_object( $post->post_status )->label;
@@ -125,7 +126,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 						else
 							$dj_avail = mdjm_availability_check( $_GET['availability'] );
 					}
-					break;
+				break;
 					
 				// Event Type
 				case 'event_type':
@@ -136,39 +137,51 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 						}
 						echo implode( "<br/>", $event_types );
 					}
-					break;
+				break;
 					
 				// Value
 				case 'value':
-					echo ( !empty( $value ) ? display_price( $value ) : '<span class="mdjm-form-error">' . display_price( '0.00' ) . '</span>' );
-					break;
+					if( MDJM()->permissions->employee_can( 'edit_txns' ) )
+						echo ( !empty( $value ) ? display_price( $value ) : '<span class="mdjm-form-error">' . display_price( '0.00' ) . '</span>' );
+					
+					else	
+						echo '&mdash;';
+				break;
 					
 				// Balance
 				case 'balance':
-					if( !class_exists( 'MDJM_Transactions' ) )
-						require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
+					if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{				
+						$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
+						echo ( !empty( $rcvd ) && $rcvd != '0.00' ? display_price( ( $value - $rcvd ) ) : display_price( $value ) );
+					}
 					
-					$mdjm_transactions = new MDJM_Transactions();
-					
-					$rcvd = $mdjm_transactions->get_transactions( $post->ID, 'mdjm-income' );
-					echo ( !empty( $rcvd ) && $rcvd != '0.00' ? display_price( ( $value - $rcvd ) ) : display_price( $value ) );
-					break;
+					else	
+						echo '&mdash;';
+				break;
 					
 				/* -- Playlist -- */
 				case 'playlist':
-					$total = $GLOBALS['mdjm']->mdjm_events->count_playlist_entries( $post_id );
-					echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post_id . '">' . $total . ' ' . 
-						_n( 'Song', 'Songs', $total, 'mobile-dj-manager' ) . '</a>' . "\r\n";
-					break;
+					if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+						$total = MDJM()->events->count_playlist_entries( $post_id );
+						echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post_id . '">' . $total . ' ' . 
+							_n( 'Song', 'Songs', $total, 'mobile-dj-manager' ) . '</a>' . "\r\n";
+					}
+					else
+						echo '&mdash;';
+				break;
 				
 				// Journal
 				case 'journal':
-					$total = wp_count_comments( $post_id )->approved;
-					echo '<a href="' . admin_url( '/edit-comments.php?p=' . $post_id ) . '">' . 
-						$total . ' ' . 
-						_n( 'Entry', 'Entries', $total, 'mobile-dj-manager' ) . 
-						'</a>' . "\r\n";
-					break;
+					if( current_user_can( 'manage_mdjm' ) )	{
+						$total = wp_count_comments( $post_id )->approved;
+						echo '<a href="' . admin_url( '/edit-comments.php?p=' . $post_id ) . '">' . 
+							$total . ' ' . 
+							_n( 'Entry', 'Entries', $total, 'mobile-dj-manager' ) . 
+							'</a>' . "\r\n";
+					}
+					else
+						echo '&mdash;';
+				break;
 			} // switch
 			
 		} // event_posts_custom_column
@@ -222,10 +235,10 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 			
 			self::event_date_filter_dropdown();
 			self::event_type_filter_dropdown();
-			if( MDJM_MULTI == true && current_user_can( 'administrator' ) )
+			if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )
 				self::event_dj_filter_dropdown();
 				
-			if( current_user_can( 'administrator' ) )
+			if( MDJM()->permissions->employee_can( 'list_all_clients' ) )
 				self::event_client_filter_dropdown();	
 		} // event_post_filter_list
 		
@@ -241,7 +254,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 			
 			$month_query = "SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month 
 				FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_mdjm_event_date'";
-															
+																			
 			$months = $wpdb->get_results( $month_query );
 				
 			$month_count = count( $months );
@@ -372,7 +385,7 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 							
 			$client_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
 				"` WHERE `meta_key` = '_mdjm_event_client'";
-									
+													
 			$clients = $wpdb->get_results( $client_query );
 			$client_count = count( $clients );
 			
@@ -401,6 +414,137 @@ if( !class_exists( 'MDJM_Event_Posts' ) ) :
 			</select>
 			<?php
 		} // event_client_filter_dropdown
+		
+		/**
+		 * Customise the view filter counts
+		 *
+		 * @called	views_edit-post hook
+		 *
+		 *
+		 */
+		public static function event_view_filters( $views )	{
+			// We only run this filter if the user has restrictive caps and the post type is mdjm-event
+			if( MDJM()->permissions->employee_can( 'manage_all_events' ) || !is_post_type_archive( MDJM_EVENT_POSTS ) )
+				return $views;
+			
+			// The All filter
+			$views['all'] = preg_replace( '/\(.+\)/U', '(' . count( MDJM()->events->dj_events() ) . ')', $views['all'] ); 
+						
+			$event_stati = get_event_stati();
+			
+			foreach( $event_stati as $status => $label )	{
+				$events = MDJM()->events->dj_events( '', '', '', $status );
+				
+				if( empty( $events ) )	{
+					if( isset( $views[$status] ) )
+						unset( $views[$status] );
+					
+					continue;
+				}
+					
+				$views[$status] = preg_replace( '/\(.+\)/U', '(' . count( $events ) . ')', $views[$status] );	
+			}
+			
+			// Only show the views we want
+			foreach( $views as $status => $link )	{
+				if( $status != 'all' && !array_key_exists( $status, $event_stati ) )
+					unset( $views[$status] );	
+			}
+			
+			return $views;
+		} // event_view_filters
+		
+		/**
+		 * Customise the post query 
+		 *
+		 * @called	pre_get_posts
+		 *
+		 * @params	obj		$query		The WP_Query
+		 *
+		 * @return	obj		$query		The customised WP_Query
+		 */
+		public static function custom_event_post_query( $query )	{
+			global $pagenow;
+			
+			if( !is_post_type_archive( MDJM_EVENT_POSTS ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )
+				return;
+			
+			/**
+			 * If searching it's only useful if we include clients and employees
+			 */
+			if( $query->is_search() )	{
+				$users = new WP_User_Query(
+					array(
+						'search'			=> $_GET['s'],
+						'search_columns'	=> array(
+							'user_login',
+							'user_email',
+							'user_nicename',
+							'display_name'
+						)
+					)
+				); // WP_User_Query
+								
+				// Loop through WP_User_Query search looking for events where user is client or employee
+				if( !empty( $users->results ) )	{
+					foreach( $users->results as $user )	{
+						$results = get_posts(
+							array(
+								'post_type'      => MDJM_EVENT_POSTS,
+								'post_status'	=> 'any',
+								'meta_query'	=> array(
+									'relation'	=> 'OR',
+									array(
+										'key'		=> '_mdjm_event_dj',
+										'value'  	=> $user->ID,
+										'compare'	=> '==',
+										'type'		=> 'NUMERIC'
+									),
+									array(
+										'key'		=> '_mdjm_event_client',
+										'value'  	=> $user->ID,
+										'compare'	=> '==',
+										'type'		=> 'NUMERIC'
+									)
+								)
+							)
+						); // get_posts
+						
+						if( !empty( $results ) )	{
+							foreach( $results as $result )	{
+								$events[] = $result->ID;								
+							}
+						}
+						
+					} // foreach( $users as $user )
+				} // if( !empty( $users ) )
+				if( !empty( $events ) )	{
+					$query->set( 'post__in', $events );
+					$query->set( 'post_status', array( 'mdjm-unattended', 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved', 'mdjm-failed', 'mdjm-rejected', 'mdjm-completed' ) );
+				}
+
+			} // if( $query->is_search() 
+			//wp_die( print_r( $query ) );
+			/**
+			 * If current user is restricted, filter to their own events only
+			 */	
+			if( !MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
+				global $user_ID;
+				
+				$query->set(
+					'meta_query',
+					array(
+						'relation' => 'AND',
+						array(
+							'key'		=> '_mdjm_event_dj',
+							'value'  	  => $user_ID,
+							'compare'	=> '=='
+						)
+					)
+				);
+			}
+		} // custom_event_post_query
+		
 	} // MDJM_Event_Posts
 endif;
 	MDJM_Event_Posts::init();

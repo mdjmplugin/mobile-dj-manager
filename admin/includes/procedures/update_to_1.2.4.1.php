@@ -18,14 +18,14 @@
 		 */
 		function update_settings()	{
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.4.1' );
+			MDJM()->debug->log_it( 'Updating Settings for version 1.2.4.1' );
 						
 			$status = get_option( '__mydj_validation' );
 			
 			if( $status['key'] == 'XXXX' || $status['type'] = 'trial' || time() >= strtotime( $status['expire'] ) )
 				add_option( 'mdjm_price_warn', 1, '', 'yes' );
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
+			MDJM()->debug->log_it( 'Settings Updated' );
 						
 		} // update_settings
 				

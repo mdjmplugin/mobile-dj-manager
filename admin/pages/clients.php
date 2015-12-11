@@ -12,7 +12,7 @@
  */
 
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	if ( !current_user_can( 'manage_mdjm' ) )  {
+	if ( !current_user_can( 'mdjm_employee' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 		
@@ -85,7 +85,7 @@
         </table>
         <h3>Event List</h3>
         <?php
-		$client_events = $mdjm->mdjm_events->client_events( $user_id );
+		$client_events = MDJM()->events->client_events( $user_id );
 		
 		if( $client_events )	{
 			?>
@@ -98,11 +98,11 @@
             </thead>
             <?php
 			foreach( $client_events as $client_event )	{
-				$eventinfo = $mdjm->mdjm_events->event_detail( $client_event->ID );
+				$eventinfo = MDJM()->events->event_detail( $client_event->ID );
 				
 				if( $eventinfo['dj'] == get_current_user_id() )	{
 
-					$playlist =  $mdjm->mdjm_events->count_playlist_entries( $client_event->ID );
+					$playlist =  MDJM()->events->count_playlist_entries( $client_event->ID );
 					
 					?>
                     <tr>

@@ -5,4 +5,4 @@
  *
  *
  */
-	$GLOBALS['mdjm_debug']->log_it( 'No update procedures required for version ' . MDJM_VERSION_NUM );
+	MDJM()->debug->log_it( 'No update procedures required for version ' . MDJM_VERSION_NUM );

@@ -1,4 +1,14 @@
 <?php
+	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+	
+	if( !MDJM()->permissions->employee_can( 'view_clients_list' ) )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You are not allowed to browse clients.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
+	}
+	
 	class MDJM_Clients_Table extends WP_List_Table	{
 		private function get_clients()	{
 			global $wpdb, $display, $order, $orderby, $mdjm;
@@ -13,7 +23,7 @@
 			else $order = 'ASC';
 			
 			if( !isset( $_POST['s'] ) || empty( $_POST['s'] )	 ){
-				$clientinfo = $mdjm->mdjm_events->get_clients( $display, $orderby, $order );
+				$clientinfo = MDJM()->events->get_clients( $display, $orderby, $order );
 			}
 			else	{
 				$arg = array(	'search'  => $_POST['s'],
@@ -29,12 +39,12 @@
 			foreach( $clientinfo as $client )	{
 				
 				if( !current_user_can( 'administrator' ) )	{ // Non-Admins only see their own clients
-					if( $mdjm->mdjm_events->is_my_client( $client->ID ) )	{
-						$events = $mdjm->mdjm_events->client_events( $client->ID );
-						$next_event = $mdjm->mdjm_events->next_event( $client->ID, $user_type='client' );
+					if( MDJM()->events->is_my_client( $client->ID ) )	{
+						$events = MDJM()->events->client_events( $client->ID );
+						$next_event = MDJM()->events->next_event( $client->ID, $user_type='client' );
 						if( !empty( $next_event ) )	{
 							$event_link = '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">' . 
-								date( MDJM_SHORTDATE_FORMAT, get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) . '</a>';	
+								date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>';	
 						}
 						else	{
 							$event_link = 'N/A';
@@ -56,8 +66,8 @@
 					
 				}
 				else	{
-					$events = $mdjm->mdjm_events->client_events( $client->ID );
-					$next_event = $mdjm->mdjm_events->next_event( $client->ID, $user_type='client' );
+					$events = MDJM()->events->client_events( $client->ID );
+					$next_event = MDJM()->events->next_event( $client->ID, $user_type='client' );
 					if( !empty( $next_event ) )	{
 						$event_link = '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">' . 
 							date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>';	

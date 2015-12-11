@@ -18,8 +18,8 @@
 			$dj_data = array();
 			$url = admin_url();
 			foreach( $djs as $dj )	{
-				$events = $mdjm->mdjm_events->dj_events( $dj->ID );
-				$next_event = $mdjm->mdjm_events->next_event( $dj->ID, $user_type='dj' );
+				$events = MDJM()->events->dj_events( $dj->ID );
+				$next_event = MDJM()->events->next_event( $dj->ID, $user_type='dj' );
 				if( !empty( $next_event ) )	{
 					$event_link = '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">' . 
 						date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>';	

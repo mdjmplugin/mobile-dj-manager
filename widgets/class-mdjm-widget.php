@@ -85,7 +85,7 @@
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>';
+									window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail=1&mdjm_avail_date=<?php echo $_POST['widget_check_date']; ?>';
 									<?php
 								}
 								else	{

@@ -11,14 +11,14 @@
 		}
 		
 		function update_settings()	{
-			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings' );
+			MDJM()->debug->log_it( 'Updating Settings' );
 			// Add the enable playlist setting option and enable by default
 			$playlist_settings = get_option( MDJM_PLAYLIST_SETTINGS_KEY );
 			
 			$playlist_settings['enable_playlists'] = true;
 			
 			update_option( MDJM_PLAYLIST_SETTINGS_KEY, $playlist_settings );
-			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
+			MDJM()->debug->log_it( 'Settings Updated' );
 		} // update_settings
 		
 	}

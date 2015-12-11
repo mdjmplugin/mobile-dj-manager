@@ -58,12 +58,12 @@
 				
 				if( empty( $post ) && empty( $id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
 				}
 				
 				if( empty( $post ) && empty( $status ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
 				}
 				
 				$event_id = !empty( $post ) ? $post->ID : $id;
@@ -120,12 +120,12 @@
 				
 				if( empty( $post ) && empty( $id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
 				}
 				
 				if( empty( $post ) && empty( $status ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
 				}
 				
 				$event_id = !empty( $id ) ? $id : $post->ID;
@@ -222,7 +222,7 @@
 				
 				if( empty( $action ) || empty( $event_id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Unable to process event action as ' . ( empty( $action ) ? 'the action is missing' : 
+						MDJM()->debug->log_it( 'ERROR: Unable to process event action as ' . ( empty( $action ) ? 'the action is missing' : 
 							'the event ID is missing' ) . 'in . ' . __METHOD__, true );
 				}
 				
@@ -300,7 +300,7 @@
 							setup_postdata( $post );
 							if( $post->post_status == 'mdjm-unattended' )
 								continue; // We don't display unattended events here
-							$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID ); // The event details
+							$eventinfo = MDJM()->events->event_detail( $post->ID ); // The event details
 							echo '<tr>' . "\r\n";
 								echo '<td><a href="' . $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&amp;event_id=' . $post->ID . '">' . 
 									date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) . '</a></td>' . "\r\n";
@@ -330,15 +330,15 @@
 				
 				$post = $event;
 				
-				if( !$mdjm->mdjm_events->is_my_event( $event->ID ) )	{
+				if( !MDJM()->events->is_my_event( $event->ID ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: ' . get_current_user_id() . ' is attempting to access event ID ' . $event->ID . 
+						MDJM()->debug->log_it( 'ERROR: ' . get_current_user_id() . ' is attempting to access event ID ' . $event->ID . 
 											 ' which is not theirs. In ' . __METHOD__, true );
 											 
 					wp_die( $clientzone->display_message( 9, 5 ), 'Event Ownership Error' );
 				}
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
+				$eventinfo = MDJM()->events->event_detail( $event->ID );
 				
 				$expired = array( 'mdjm-failed', 'mdjm-cancelled', 'mdjm-completed' );
 				
@@ -489,7 +489,7 @@
 									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Venue Details' ) . '</span></th>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								
-								$venue_details = $mdjm->mdjm_events->mdjm_get_venue_details( get_post_meta( $event->ID, '_mdjm_event_venue_id', true ), $event->ID );
+								$venue_details = MDJM()->events->mdjm_get_venue_details( get_post_meta( $event->ID, '_mdjm_event_venue_id', true ), $event->ID );
 																
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Venue:' ) . '</th>' . "\r\n";
@@ -517,7 +517,7 @@
 				
 				$post = get_post( $event_id );
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				$eventinfo = MDJM()->events->event_detail( $post->ID );
 				
 				$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 								
@@ -720,10 +720,10 @@
 				
 				$post = get_post( $_POST['event_id'] );
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				$eventinfo = MDJM()->events->event_detail( $post->ID );
 				
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Event ID ' . $post->ID . ' is being updated by ' . $eventinfo['client']->display_name, true );
+					MDJM()->debug->log_it( 'Event ID ' . $post->ID . ' is being updated by ' . $eventinfo['client']->display_name, true );
 								
 				// Prepare the meta data
 				$event_data['_mdjm_event_last_updated_by'] = $my_mdjm['me']->ID;
@@ -744,13 +744,13 @@
 				$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 				if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )	{
 					$field_updates[] = 'Event Type changed from ' . $existing_event_type[0]->name . ' to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
-					$mdjm->mdjm_events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
+					MDJM()->events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
 				}
 					
 				// Event Times
 				if( date( 'H:i', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) != $eventinfo['start'] )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Event start time updating to ' . $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] );
+						MDJM()->debug->log_it( 'Event start time updating to ' . $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] );
 						
 					$event_data['_mdjm_event_start'] = MDJM_TIME_FORMAT == 'H:i' ? 
 						date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) : 
@@ -759,7 +759,7 @@
 				}
 				if( date( 'H:i', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) != $eventinfo['finish'] )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Event finish time updating to ' . $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] );
+						MDJM()->debug->log_it( 'Event finish time updating to ' . $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] );
 						
 					$event_data['_mdjm_event_finish'] = MDJM_TIME_FORMAT == 'H:i' ? 
 						date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) : 
@@ -792,7 +792,7 @@
 					
 					// Log changes to debug file
 					if( MDJM_DEBUG == true && !empty( $field_updates ) )
-						$GLOBALS['mdjm_debug']->log_it( 'Event Updates Completed     ' . "\r\n" . '| ' .
+						MDJM()->debug->log_it( 'Event Updates Completed     ' . "\r\n" . '| ' .
 							implode( "\r\n" . '     | ', $field_updates ) );
 					
 				}
@@ -800,7 +800,7 @@
 				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
 				// Update journal
-				$mdjm->mdjm_events->add_journal( array(
+				MDJM()->events->add_journal( array(
 										'user' 			=> $my_mdjm['me']->ID,
 										'event'		   => $post->ID,
 										'comment_content' => $my_mdjm['me']->display_name . ' updated event - ' . $post->ID . '<br />(' . time() . ')',

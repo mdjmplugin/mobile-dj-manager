@@ -38,14 +38,14 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function custom_fields_controller()	{
 			if( isset( $_POST['submit_custom_field'] ) )	{
 				if( $_POST['submit_custom_field'] == __( 'Add Field', 'mobile-dj-manager' ) )
-					self::add_field();
+					$this->add_field();
 					
 				elseif( $_POST['submit_custom_field'] == __( 'Save Changes', 'mobile-dj-manager' ) )
-					self::update_field();
+					$this->update_field();
 			}
 				
 			if( isset( $_GET['delete_custom_field'], $_GET['id'] ) )
-				self::delete_field();
+				$this->delete_field();
 			
 			return;
 		} // custom_fields_controller
@@ -97,7 +97,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Custom field added ' . $_POST['field_label'], true );
+					MDJM()->debug->log_it( 'Custom field added ' . $_POST['field_label'], true );
 				
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
@@ -116,7 +116,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
-					$GLOBALS['mdjm_debug']->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
+					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
 					
 				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
@@ -142,7 +142,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			if( !$existing )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Unable to update field with ID: ' . $_GET['id'] . '. May not exist', true );
+					MDJM()->debug->log_it( 'Unable to update field with ID: ' . $_GET['id'] . '. May not exist', true );
 					
 				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
 				exit;
@@ -162,7 +162,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Custom field updated ' . $_POST['field_label'], true );
+					MDJM()->debug->log_it( 'Custom field updated ' . $_POST['field_label'], true );
 				
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
@@ -182,7 +182,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
-					$GLOBALS['mdjm_debug']->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
+					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
 					
 				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
@@ -201,7 +201,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function delete_field()	{
 			if( wp_delete_post( $_GET['id'], true ) )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Custom event field deleted with ID: ' . $_GET['id'], true );
+					MDJM()->debug->log_it( 'Custom event field deleted with ID: ' . $_GET['id'], true );
 					
 				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=3' );
 				exit;
@@ -209,7 +209,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			else	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Custom event field with ID: ' . $_GET['id'] . ' could not be deleted', true );
+					MDJM()->debug->log_it( 'Custom event field with ID: ' . $_GET['id'] . ' could not be deleted', true );
 				
 				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
 				exit;
@@ -223,7 +223,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 *
 		 */
-		function custom_event_field_settings()	{
+		public static function custom_event_field_settings()	{
 			if( isset( $_GET['message'] ) )	{
 				$messages = array(
 					'1'	=> array( 'updated', __( 'Field added successfully.', 'mobile-dj-manager' ) ),
@@ -334,7 +334,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 *
 		 */
-		function add_new_custom_field_table( $field_types )	{
+		public static function add_new_custom_field_table( $field_types )	{
 			wp_enqueue_script( 'jquery' );
 			
 			wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
@@ -505,7 +505,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return	str					Echo the HTML required to display the necessary icons
 		 */
-		function field_icons( $field_id )	{
+		public static function field_icons( $field_id )	{
 			$dir = MDJM_PLUGIN_URL . '/admin/images/form-icons';
 			
 			$output = '';

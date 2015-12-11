@@ -41,7 +41,7 @@
 			
 			if( empty( $status ) || empty( $period ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No ' . ( empty( $status ) ? 'status' : 'period' ) . 
+					MDJM()->debug->log_it( 'ERROR: No ' . ( empty( $status ) ? 'status' : 'period' ) . 
 						' was provided in ' . __METHOD__, true );
 				
 				return false;	
@@ -49,7 +49,7 @@
 			
 			if( !empty( $type ) && empty( $user_id ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No user ID was provided in ' . __METHOD__, true );
+					MDJM()->debug->log_it( 'ERROR: No user ID was provided in ' . __METHOD__, true );
 				
 				return false;	
 			}
@@ -110,7 +110,7 @@
 			
 			if( empty( $period ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No period was provided in ' . __METHOD__, true );	
+					MDJM()->debug->log_it( 'ERROR: No period was provided in ' . __METHOD__, true );	
 			}
 			elseif( $period == 'week' )	{
 				$start_date = date( 'Y-m-d', strtotime( "-7 day" ) );
@@ -171,11 +171,7 @@
 				$earnings += $event_cost;
 				
 				if( !empty( $earnings ) )	{
-					if( !class_exists( 'MDJM_Transactions' ) )	{
-						require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
-					}
-					$mdjm_trans = new MDJM_Transactions();
-					$transactions = $mdjm_trans->get_event_transactions( $event->ID );
+					$transactions = MDJM()->txns->get_event_transactions( $event->ID );
 					foreach( $transactions as $transaction )	{
 						$status = get_post_meta( $transaction->ID, '_mdjm_txn_status', true );
 						if( empty( $status ) || $status == 'Completed' )

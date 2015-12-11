@@ -30,6 +30,14 @@
 				define( 'MDJM_VENUE_POSTS', 'mdjm-venue' );
 				
 				$this->db_version = '2.6';
+				
+				/**
+				 * This can be removed post 1.3
+				 *
+				 *
+				 *
+				 */
+				$this->mdjm_events = new MDJM_Events(); // REMOVE
 								
 				$mdjm_post_types = array(
 					MDJM_COMM_POSTS,
@@ -41,34 +49,16 @@
 					MDJM_QUOTE_POSTS,
 					MDJM_TRANS_POSTS,
 					MDJM_VENUE_POSTS );
-				
-				/* -- Initiate events class -- */
-				if( !class_exists( 'MDJM_Events' ) )	{
-					require( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-events.php' );
-					$this->mdjm_events = new MDJM_Events();
-				}
-								
+												
 				/* -- Hooks -- */
 				add_action( 'init', array( &$this, 'mdjm_init' ) ); // init processes
 				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
-				add_action( 'in_admin_footer', array( &$this, 'admin_footer' ) ); // The admin footer text
 				add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
 				add_action( 'wp_login', array( &$this, 'last_login' ), 10, 2 ); // Login timestamp
 				add_action( 'admin_notices', array( &$this, 'notices' ) ); // Hook into the admin notices hook
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
-				
-				/* -- Custom Client Fields -- */
-				if( $pagenow == 'user-new.php' || $pagenow == 'user-edit.php' || $pagenow == 'profile.php' )	{
-					add_action( 'show_user_profile', array( &$this, 'profile_custom_fields' ) ); // User profile screen
-					add_action( 'edit_user_profile', array( &$this, 'profile_custom_fields' ) ); // Edit user screen
-					add_action( 'user_new_form', array( &$this, 'profile_custom_fields' ) ); // // New user screen
-					
-					add_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
-					add_action ( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
-					add_action ( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-				}
 			} // __construct
 			
 /*
@@ -108,10 +98,7 @@
 			 */
 	 		public function mdjm_init()	{
 				/* -- Obtain the plugin settings -- */
-				$this->mdjm_settings();
-				
-				/* -- Remove admin toolbar for clients -- */
-				$this->no_admin_for_clients();
+				$this->mdjm_settings();				
 			} // mdjm_init
 	
 /*
@@ -133,7 +120,7 @@
 				}
 				// Release notes check
 				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
-					$GLOBALS['mdjm_debug']->log_it( '*** Redirect to release notes ***' );
+					MDJM()->debug->log_it( '*** Redirect to release notes ***' );
 					// Reset the key telling us an update occured
 					update_option( 'mdjm_updated', '0' );
 					
@@ -280,26 +267,6 @@
 			public function last_login( $user_login, $user ) {
 				update_user_meta( $user->ID, 'last_login', date( 'Y-m-d H:i:s' ) );
 			} // last_login
-			
-			/**
-			 * Remove admin bar & do not allow admin UI for Clients
-			 * Redirect to Client Zone
-			 *
-			 * @since 1.1.3
-			 */
-			public function no_admin_for_clients() {
-				
-				if( current_user_can( 'client' ) || current_user_can( 'inactive_client' ) )	{
-					add_filter( 'show_admin_bar', '__return_false' );
-					
-					if( is_admin() )	{
-						if( !defined( 'DOING_AJAX' ) || !DOING_AJAX )	{
-							wp_redirect( $this->get_link( MDJM_HOME, false, false ) );
-							exit;	
-						}
-					}
-				}				
-			} // no_admin_for_clients
 
 /*
  * --
@@ -316,7 +283,7 @@
 				global $mdjm_settings;
 				
 				if( current_user_can( 'administrator' ) && !empty( $mdjm_settings['events']['warn_unattended'] ) )	{
-					$unattended = $this->mdjm_events->mdjm_count_event_status( 'mdjm-unattended' );
+					$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
 					
 					if( !empty( $unattended ) && $unattended > 0 )
 						mdjm_update_notice( 'update-nag', 
@@ -348,8 +315,19 @@
 				wp_register_style( 'mdjm-admin', MDJM_PLUGIN_URL . '/admin/includes/css/mdjm-admin.css', '', MDJM_VERSION_NUM );
 				wp_enqueue_style( 'mdjm-admin' );
 				
+				// jQuery Validation
+				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
+				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
+				
+				// Users JS for Ajax
+				wp_register_script(
+					'mdjm-users-js',
+					MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-users.js',
+					array( 'jquery' ),
+					MDJM_VERSION_NUM
+				);
 								
 				/* -- YouTube Suscribe Script -- */
 				// Needs to be enqueued as and when required
@@ -370,7 +348,6 @@
 					wp_enqueue_script( 'jquery' );
 					
 					/* -- jQuery Validation -- */
-					wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
 					wp_enqueue_script( 'jquery-validation-plugin' );
 								
 				/* -- Contract Templates Only -- */
@@ -413,66 +390,6 @@
 				}
 			} // admin_enqueue
 			
-			/*
-			 * admin_footer
-			 * Displays the specified text in the WP Admin UI footer
-			 * 
-			 * 
-			 * 
-			 */
-			function admin_footer() {
-				global $post, $mdjm_post_types;
-				
-				$str = $_SERVER['QUERY_STRING'];
-				$search = 'mdjm';
-				$pos = strpos( $str, $search );
-				
-				if( $pos !== false || ( in_array( get_post_type(), $mdjm_post_types ) ) )	{
-					echo '<p align="center" class="description">Powered by <a style="color:#F90" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . 
-					'" target="_blank">' . MDJM_NAME . '</a>, version ' . MDJM_VERSION_NUM . '</p>' . "\r\n";
-				}
-			} // admin_footer
-
-			/**
-			 * Add the filters for the TinyMCE plugin
-			 *
-			 *
-			 *
-			 */
-			public function mce_shortcode_button() {
-				// Check user permissions
-				if ( !current_user_can( 'edit_posts' ) && !current_user_can( 'edit_pages' ) && !current_user_can( 'dj' ) )
-					return;
-				
-				// Check if WYSIWYG is enabled
-				if ( 'true' == get_user_option( 'rich_editing' ) ) {
-					add_filter( 'mce_external_plugins', array( &$this, 'add_mce_shortcode' ) );
-					add_filter( 'mce_buttons', array( &$this, 'register_mce_buttons' ) );
-				}
-			}
-			
-			/**
-			 * Declare the script that inserts ths MDJM Shortcodes into the content
-			 * when the MDJM Shortcode button is used
-			 *
-			 *
-			 */
-			public function add_mce_shortcode( $plugin_array ) {
-				$plugin_array['mdjm_shortcodes_btn'] = MDJM_PLUGIN_URL . '/admin/includes/js/mdjm-tinymce-shortcodes.js';
-				return $plugin_array;
-			}
-						
-			/*
-			 * Register the MDJM Shortcode button within the TinyMCE interface
-			 * 
-			 *
-			 *
-			 */
-			public function register_mce_buttons( $buttons ) {
-				array_push( $buttons, 'mdjm_shortcodes_btn' );
-				return $buttons;
-			}
-			
 /*
  * --
  * API LISTENER
@@ -494,12 +411,12 @@
 					/* -- MDJM Email Tracking -- */
 					case 'MDJM_EMAIL_RCPT':
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'MDJM Email API listener activated', true );
+							MDJM()->debug->log_it( 'MDJM Email API listener activated', true );
 						include( MDJM_PLUGIN_DIR . '/admin/includes/api/mdjm-api-email-rcpt.php' );
 					break;
 					/* -- Default action -- */
 					default:
-						$GLOBALS['mdjm_debug']->log_it( 'WARNING: Rogue API request received - ' . $listener, true );
+						MDJM()->debug->log_it( 'WARNING: Rogue API request received - ' . $listener, true );
 						return;
 				} // switch				
 			} // api_listener
@@ -564,25 +481,21 @@
  * --
  */			
 			/**
-			 * debug_logger
 			 * Send the specified message to the debug file
 			 *
-			 * @param	str		Required: $debug_msg 	The message to log
-			 *			bool	Optional: $stampit	true to include timestamp otherwise false
+			 * @param       str             Required: $debug_msg    The message to log
+			 *                      bool    Optional: $stampit      true to include timestamp otherwise false
 			 * @return
-			 * @since	1.1.3
+			 * @since       1.1.3
 			 * @called From back and front
 			 */
-			public function debug_logger( $debug_msg='', $stampit=false )	{
+			public function debug_logger( $debug_msg='', $stampit=false )   {
 				if( empty( $debug_msg ) )
 					return;
-				
-				$debug_log = $stampit == true ? date( 'd/m/Y  H:i:s' ) . ' : ' . $debug_msg : '    ' . $debug_msg;
-				
-				error_log( $debug_log . "\r\n", 3, MDJM_DEBUG_LOG );	
-				
+			   
+				MDJM()->debug->log_it( $debug_msg, $stampit );
 			} // debug_logger
-			
+ 
 			/**
 			 * Provide the correct page link dependant on permalink settings
 			 * 
@@ -595,7 +508,7 @@
 			public function get_link( $page_id='', $permalink=true, $echo=false )	{
 				if( empty( $page_id ) )	{
 					if( MDJM_DEBUG == true )
-						 $this->debug_logger( 'Missing `page_id` argument in ' . __FUNCTION__, true );
+						 MDJM()->debug->log_it( 'Missing `page_id` argument in ' . __FUNCTION__, true );
 					return false;
 				}
 				
@@ -610,140 +523,6 @@
 					return get_permalink( $page_id ) . ( !empty( $permalink ) ? ( get_option( 'permalink_structure' ) ? '?' : '&amp;' ) : '' );
 			} // get_link
 
-/*
- * --
- * CLIENT PROFILES
- * --
- */
-			/**
-			 * Add the MDJM Custom User Fields to the user profile page
-			 * 
-			 * 
-			 *
-			 * @param    int    $user    The ID of the user
-			 * @return
-			 * @since    1.1.3
-			 */
-			public function profile_custom_fields( $user )	{
-				global $current_screen, $user_ID, $pagenow;
-								
-				if( $pagenow != 'user-new.php' )
-					$user_id = ( $current_screen->id == 'profile' ) ? $user_ID : $_REQUEST['user_id'];
-				
-				do_action( 'mdjm_user_fields_before_mdjm', $user );
-				
-				echo '<h3>Mobile DJ Manager Custom User Fields</h3>' . "\r\n";
-				echo '<table class="form-table">' . "\r\n";
-				
-				/* -- Get the custom user fields -- */
-				$custom_fields = get_option( MDJM_CLIENT_FIELDS );
-				
-				/* -- Loop through the fields -- */
-				foreach( $custom_fields as $custom_field )	{
-					if( $pagenow != 'user-new.php' )
-						$field_value = get_user_meta( $user_id, $custom_field['id'], true );
-
-					/* -- Display if configured -- */
-					if( $custom_field['display'] == true )	{
-						echo '<tr>' . "\r\n" . 
-						'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" . 
-						'<td>' . "\r\n";
-						
-						/* -- Checkbox Field -- */
-						if( $custom_field['type'] == 'checkbox' )	{
-							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="Y" ';
-							if( $pagenow != 'user-new.php' )
-								checked( $field_value, 'Y' );
-							else
-								checked ( '', '' );
-							echo ' />' . "\r\n";
-						}
-						/* -- Select List -- */
-						elseif( $custom_field['type'] == 'dropdown' )	{
-							echo '<select name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '">';
-							
-							$option_data = explode( "\r\n", $custom_field['value'] );
-							
-							echo '<option value="empty"';
-							if( $pagenow == 'user-new.php' || empty( $field_value ) || $field_value == 'empty' ) echo ' selected';
-							echo '></option>' . "\r\n";
-							
-							foreach( $option_data as $option )	{
-								echo '<option value="' . $option . '"';
-								if( $pagenow != 'user-new.php' )
-									selected( $option, $field_value );
-								echo '>' . $option . '</option>' . "\r\n";
-							}
-							
-							echo '<select/>';
-						}
-						/* -- Everything else -- */
-						else	{
-							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . 
-							'" id="' . $custom_field['id'] . '" value="' . ( $pagenow != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'], $user->ID ) ) : '' ) . 
-							'" class="regular-text" />' . "\r\n";
-						}
-						
-						/* -- Description if set -- */
-						if( $custom_field['desc'] != '' )	{
-							echo '<br />' . 
-							'<span class="description">' . $custom_field['desc'] . '</span>' . "\r\n";
-						}
-						/* -- End the table row -- */
-						echo '</td>' . "\r\n" . 
-						'</tr>' . "\r\n";
-					}
-				}
-				
-				echo '</table>' . "\r\n";
-				
-				do_action( 'mdjm_user_fields_after_mdjm', $user );
-				
-			} // profile_custom_fields
-			
-			/**
-			 * Save the MDJM Custom User Fields
-			 * 
-			 * 
-			 *
-			 * @param    int    $user_id    The ID of the user
-			 * @return
-			 * @since    1.1.3
-			 */
-			public function save_custom_user_fields( $user_id )	{
-				
-				$custom_fields = get_option( MDJM_CLIENT_FIELDS );
-				$default_fields = get_user_by( 'id', $user_id );
-				
-				if( !current_user_can( 'edit_user', $user_id ) )
-					return;
-				
-				/* -- Loop through the fields and update -- */
-				foreach( $custom_fields as $custom_field )	{
-					$field = $custom_field['id'];
-					
-					/* -- Checkbox unchecked = N -- */
-					if( $custom_field['type'] == 'checkbox' && $_POST[$field] == '' )
-						$_POST[$field] = 'N';
-					
-					/* -- Update the meta field -- */	
-					if( !empty( $_POST[$field] ) )
-						update_user_meta( $user_id, $field, $_POST[$field] );
-					
-					/* -- For new users, remove the admin bar 
-						  and set the action to created -- */	
-					if( $_POST['action'] == 'createuser' )	{
-						update_user_option( $user_id, 'show_admin_bar_front', false );
-						if( !empty( $default_fields->first_name ) && !empty( $default_fields->last_name ) )	{
-							update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );
-						}
-						$client_action = 'created';	
-					}
-					else	{
-						$client_action = 'updated';	
-					}
-				}
-			} // save_custom_user_fields
 /*
  * --
  * EMAILS
@@ -777,12 +556,12 @@
 				global $mdjm_posts, $mdjm_settings;
 				
 				if( MDJM_DEBUG == true )
-					$this->debug_logger( 'Starting ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'Starting ' . __FUNCTION__, true );
 				
 				/* -- Error checking -- */
 				if( !is_numeric( $args['content'] ) && empty( $args['subject'] ) )	{
 					if( MDJM_DEBUG == true )
-						$this->debug_logger( '	ERROR: Missing `subject` argument' );
+						MDJM()->debug->log_it( '	ERROR: Missing `subject` argument' );
 						 
 					return false;
 				}
@@ -794,14 +573,14 @@
 				
 				if( empty( $to ) )	{
 					if( MDJM_DEBUG == true )
-						 $this->debug_logger( '	ERROR: Missing `to` argument' );
+						 MDJM()->debug->log_it( '	ERROR: Missing `to` argument' );
 						 
 					return false;	
 				}
 						
 				if( empty( $content ) )	{
 					if( MDJM_DEBUG == true )
-						 $this->debug_logger( '	ERROR: Missing `content` argument' );
+						 MDJM()->debug->log_it( '	ERROR: Missing `content` argument' );
 						 
 					return false;
 				}
@@ -834,7 +613,7 @@
 					
 				if( !$recipient )	{
 					if( MDJM_DEBUG == true )
-						 $this->debug_logger( '	ERROR: User `' . $to . '` does not exist ' );
+						 MDJM()->debug->log_it( '	ERROR: User `' . $to . '` does not exist ' );
 					
 					return false;
 				}
@@ -849,7 +628,7 @@
 					/* -- For a template -- */
 					if( !$mdjm_posts->post_exists( $content ) )	{
 						if( MDJM_DEBUG == true )
-							 $this->debug_logger( '	ERROR: Specified template `' . $content . '` does not exist' );
+							 MDJM()->debug->log_it( '	ERROR: Specified template `' . $content . '` does not exist' );
 							 
 						return false;	
 					}
@@ -910,7 +689,7 @@
 				/* -- Additional filters -- */
 				if( !empty( $args['add_filters'] ) && is_array( $args['add_filters'] ) )	{
 					if( MDJM_DEBUG == true )
-						$this->debug_logger( 'Additional content filtering requested...' );
+						MDJM()->debug->log_it( 'Additional content filtering requested...' );
 					
 					foreach( $args['add_filters'] as $key => $value )	{
 						$search[] = $key;
@@ -949,14 +728,14 @@
 											) );
 					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 					if( empty( $comm_post ) && MDJM_DEBUG == true )
-						$this->debug_logger( 'Could not create Comm post in ' . __FUNCTION__, true );
+						MDJM()->debug->log_it( 'Could not create Comm post in ' . __FUNCTION__, true );
 					
 					elseif( MDJM_DEBUG == true )
-						$this->debug_logger( 'Comm post created with ID `' . $comm_post . '` ', true );
+						MDJM()->debug->log_it( 'Comm post created with ID `' . $comm_post . '` ', true );
 					}
 				else	{
 					if( MDJM_DEBUG == true )
-						$this->debug_logger( 'Skipping communication logging by command' );	
+						MDJM()->debug->log_it( 'Skipping communication logging by command' );	
 				}
 								
 				/* -- Send the email to the client with stat tracking if configured -- */
@@ -975,11 +754,11 @@
 					}
 					
 					if( MDJM_DEBUG == true )
-						$this->debug_logger( '	-- Message "' . $sub . '" successfully sent to "' . $recipient->display_name . '"' );
+						MDJM()->debug->log_it( '	-- Message "' . $sub . '" successfully sent to "' . $recipient->display_name . '"' );
 						
 					/* -- Update Journal -- */
 					if( !empty( $journal ) && !empty( $event ) )	{
-						$this->mdjm_events->add_journal( array(
+						MDJM()->events->add_journal( array(
 										'user' 			=> !empty( $sender_data->ID ) ? $sender_data->ID : '1',
 										'event'		   => $event->ID,
 										'comment_content' => 'Email sent to Client - ' . $sub . '<br />(' . time() . ')',
@@ -998,7 +777,7 @@
 					$mdjm_comms->change_email_status( $comm_post, 'failed' );
 					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 					if( MDJM_DEBUG == true )
-						$this->debug_logger( '	ERROR: Message "' . $sub . '" could not be sent to "' . $recipient->display_name . '"' );
+						MDJM()->debug->log_it( '	ERROR: Message "' . $sub . '" could not be sent to "' . $recipient->display_name . '"' );
 						
 					return false;
 				}
@@ -1015,16 +794,16 @@
 					foreach( $copy_to as $mdjm_recipient )	{
 						if( wp_mail( $mdjm_recipient, $sub, $msg_prefix . $msg, $headers, $files ) )	{
 							if( MDJM_DEBUG == true )
-								$this->debug_logger( '	-- A copy of the message "' . $sub . '" successfully sent to ' . $mdjm_recipient );
+								MDJM()->debug->log_it( '	-- A copy of the message "' . $sub . '" successfully sent to ' . $mdjm_recipient );
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								$this->debug_logger( '	ERROR: A copy of the message "' . $sub . '" could not be sent to ' . $mdjm_recipient );
+								MDJM()->debug->log_it( '	ERROR: A copy of the message "' . $sub . '" could not be sent to ' . $mdjm_recipient );
 						}
 					}
 				}
 				if( MDJM_DEBUG == true )
-					$this->debug_logger( 'Completed ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'Completed ' . __FUNCTION__, true );
 
 				return ( isset( $comm_post ) ? $comm_post : true );
 			} // send_email
@@ -1051,11 +830,11 @@
 				global $mdjm_settings;
 				
 				if( MDJM_DEBUG == true )
-					$this->debug_logger( 'Starting ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'Starting ' . __FUNCTION__, true );
 				
 				if( empty( $content ) )	{
 					if( MDJM_DEBUG == true )
-						 $this->debug_logger( '	ERROR: No content passed for filtering ' );
+						 MDJM()->debug->log_it( '	ERROR: No content passed for filtering ' );
 					return false;	
 				}
 				
@@ -1070,7 +849,7 @@
 					/* -- Reset -- */
 					if( !empty( $pass_action ) )	{
 						if( MDJM_DEBUG == true )
-							$this->debug_logger( '	-- Password reset for user ' . $c->ID );
+							MDJM()->debug->log_it( '	-- Password reset for user ' . $c->ID );
 						
 						$c_pw = $pass_action;
 						wp_set_password( $c_pw, $c->ID );
@@ -1098,9 +877,9 @@
 					
 					$e = !is_array( $event ) ? get_post( $event ) : $event;
 					
-					$eventinfo = $this->mdjm_events->event_detail( $e->ID );
+					$eventinfo = MDJM()->events->event_detail( $e->ID );
 										
-					$venue_details = $this->mdjm_events->mdjm_get_venue_details( get_post_meta( $e->ID, '_mdjm_event_venue_id', true ), $e->ID );
+					$venue_details = MDJM()->events->mdjm_get_venue_details( get_post_meta( $e->ID, '_mdjm_event_venue_id', true ), $e->ID );
 
 				}
 					
@@ -1226,7 +1005,7 @@
 				
 				/* -- Return the filtered data -- */
 				if( MDJM_DEBUG == true )
-					$this->debug_logger( 'Completed ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'Completed ' . __FUNCTION__, true );
 				
 				return str_replace( $search, $replace, $content );
 								
