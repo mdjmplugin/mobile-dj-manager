@@ -80,6 +80,8 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 <ui>
 	<li>Bug Fix: Date now carries across to contact form if available</li>
 	<li>Bug Fix: Don't use Ajax for availability check if Ajax is not selected</li>
+	<li>Bug Fix: No MDJM data should be returned from a front end search</li>
+	<li>Correct name displayed in admin notification email for client contract signing</li>
 </ui>
 
 = 1.2.7.3 =
