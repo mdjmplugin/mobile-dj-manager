@@ -21,17 +21,22 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			$this->includes();
 
 			/* -- Register actions -- */
+			add_action( 'edit_form_top', array( &$this, 'check_user_permission' ) ); // Permissions
+			add_action( 'admin_head', array( &$this, 'mdjm_admin_head' ) ); // Execute the admin_head hook
+			add_action( 'edit_form_after_title', array( &$this, 'set_post_title' ) ); // Set the post title for Custom posts
 			add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
 			
 			add_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 												
 			if( is_admin() )	{
 				add_filter( 'posts_clauses', array( &$this, 'sort_post_by_column' ), 1, 2 );
-				//add_action( 'pre_get_posts', array( &$this, 'pre_post' ) ); // Actions for pre_get_posts
+				add_action( 'pre_get_posts', array( &$this, 'pre_post' ) ); // Actions for pre_get_posts
 				add_filter( 'parse_query', array( &$this, 'custom_post_filter' ) ); // Actions for filtered queries
 				
 				add_filter( 'post_row_actions', array( &$this, 'define_custom_post_row_actions' ), 10, 2 ); // Row actions
 				add_filter( 'post_updated_messages', array( &$this, 'custom_post_status_messages' ) ); // Status messages
+				add_filter( 'gettext', array( &$this, 'rename_publish_button' ), 10, 2 ); // Set the value of the submit button
+				add_filter( 'enter_title_here', array( &$this, 'title_placeholder' ) ); // Set the title placeholder text
 			}
 
 		} // __construct()
@@ -73,12 +78,12 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				return;
 				
 			if( MDJM_DEBUG == true )
-				 MDJM()->debug->log_it( '*** Starting Custom Post Type Save ***' . "\r\n", true );
+				 $GLOBALS['mdjm_debug']->log_it( '*** Starting Custom Post Type Save ***' . "\r\n", true );
 										
 		/* -- Security Verification -- */
 			if( !isset( $_POST['mdjm_update_custom_post'] ) || $_POST['mdjm_update_custom_post'] != 'mdjm_update' )	{
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( '	ERROR: MDJM fields not defined' );
+					 $GLOBALS['mdjm_debug']->log_it( '	ERROR: MDJM fields not defined' );
 				return $post_id;
 			}
 			
@@ -87,7 +92,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		/* -- Contract Post Saves -- */
 			case MDJM_CONTRACT_POSTS:
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'POST TYPE: ' . strtoupper( MDJM_CONTRACT_POSTS ) );
+					 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_CONTRACT_POSTS ) );
 				/* -- Permission Check -- */
 				if( !current_user_can( 'administrator' ) )
 					return $post_id;
@@ -110,7 +115,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		/* -- Venue Post Saves -- */
 			case MDJM_VENUE_POSTS:
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'POST TYPE: ' . strtoupper( MDJM_VENUE_POSTS ) );
+					 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_VENUE_POSTS ) );
 				/* -- Permission Check -- */
 				if( !current_user_can( 'administrator' ) && !dj_can( 'add_venue' ) )
 					return $post_id;
@@ -148,7 +153,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			/* Transaction Post Saves -- */
 			case MDJM_TRANS_POSTS:
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'POST TYPE: ' . strtoupper( MDJM_TRANS_POSTS ) );
+					 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_TRANS_POSTS ) );
 				/* -- Permission Check -- */
 				if( !current_user_can( 'administrator' ) )
 					return $post_id;
@@ -180,18 +185,18 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				
 				/* -- Create the transaction post -- */
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'Updating the post' );
+					 $GLOBALS['mdjm_debug']->log_it( 'Updating the post' );
 				remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
 				wp_update_post( $trans_data );
 				
 				/* -- Set the transaction Type -- */
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'Setting the transaction type' );													
+					 $GLOBALS['mdjm_debug']->log_it( 'Setting the transaction type' );													
 				wp_set_post_terms( $post->ID, $_POST['mdjm_transaction_type'], 'transaction-types' );
 				
 				/* -- Add the meta data -- */
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'Updating the post meta' );
+					 $GLOBALS['mdjm_debug']->log_it( 'Updating the post meta' );
 				foreach( $trans_meta as $meta_key => $new_meta_value )	{
 					$current_meta_value = get_post_meta( $post_id, $meta_key, true );
 					
@@ -213,7 +218,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		/* Event Post Saves -- */
 			case MDJM_EVENT_POSTS:
 				if( MDJM_DEBUG == true )
-					 MDJM()->debug->log_it( 'POST TYPE: ' . strtoupper( MDJM_EVENT_POSTS ) );
+					 $GLOBALS['mdjm_debug']->log_it( 'POST TYPE: ' . strtoupper( MDJM_EVENT_POSTS ) );
 				
 				/* -- Permission Check -- */
 				if( !current_user_can( 'administrator' ) || dj_can( 'dj_add_event' ) )
@@ -227,14 +232,14 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				
 				/* -- Get the Client ID -- */
 				$event_data['_mdjm_event_client'] = ( $_POST['client_name'] != 'add_new' ? 
-					$_POST['client_name'] : MDJM()->events->mdjm_add_client() );
+					$_POST['client_name'] : $mdjm->mdjm_events->mdjm_add_client() );
 					
 				if( $new_post != true && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
 					$field_updates[] = '     | Client changed to ' . $_POST['client_name'];
 				
 				if( empty( $_POST['client_name'] ) )	{
 					if( MDJM_DEBUG == true )
-						 MDJM()->debug->log_it( '	-- No content passed for filtering ' );
+						 $GLOBALS['mdjm_debug']->log_it( '	-- No content passed for filtering ' );
 				}
 				
 				/**
@@ -248,7 +253,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				
 				if( !empty( $_POST['mdjm_reset_pw'] ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
+						$GLOBALS['mdjm_debug']->log_it( '	-- User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
 						
 					update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', wp_generate_password( $mdjm_settings['clientzone']['pass_length'] ) );
 					$pass_reset = true;
@@ -283,9 +288,9 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					}
 					/* -- Create the venue -- */
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- New venue to be created' );
+						$GLOBALS['mdjm_debug']->log_it( '	-- New venue to be created' );
 					remove_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
-					$event_data['_mdjm_event_venue_id'] = MDJM()->events->mdjm_add_venue( 
+					$event_data['_mdjm_event_venue_id'] = $mdjm->mdjm_events->mdjm_add_venue( 
 																				array( 'venue_name' => $_POST['venue_name'] ), 
 																				$venue_meta );
 					add_action( 'save_post', array( &$this, 'save_custom_post' ), 10, 2 );
@@ -326,7 +331,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					get_term( $_POST['mdjm_event_type'], 'event-types' )->name );
 										
 				if( $new_post == true || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )
-					$event_data['_mdjm_event_playlist_access'] = MDJM()->events->playlist_ref();
+					$event_data['_mdjm_event_playlist_access'] = $mdjm->mdjm_events->playlist_ref();
 				
 				// Playlist Enabled
 				$event_data['_mdjm_event_playlist'] = !empty( $_POST['enable_playlist'] ) ? $_POST['enable_playlist'] : 'N';
@@ -372,11 +377,11 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )
 						$field_updates[] = 'Event Type changed to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
 					
-					MDJM()->events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
+					$mdjm->mdjm_events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
 					
 					/* -- Add the meta -- */
 					if( MDJM_DEBUG == true )
-						 MDJM()->debug->log_it( '	-- Beginning Meta Updates' );
+						 $GLOBALS['mdjm_debug']->log_it( '	-- Beginning Meta Updates' );
 						 
 					foreach( $event_data as $event_meta_key => $event_meta_value )	{
 						// If the field value is empty, skip it
@@ -423,7 +428,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						}
 					}
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Meta Updates Completed     ' . "\r\n" . '| ' .
+						$GLOBALS['mdjm_debug']->log_it( '	-- Meta Updates Completed     ' . "\r\n" . '| ' .
 							( !empty( $field_updates ) ? implode( "\r\n" . '     | ', $field_updates ) : '' )  );
 					
 					/**
@@ -437,7 +442,11 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						else
 							$type = MDJM_DEPOSIT_LABEL;
 						/* -- Initiate transactions class -- */
-						MDJM()->txns->manual_event_payment( $type, $post->ID );
+						if( !class_exists( 'MDJM_Transactions' ) )
+							require( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
+							
+						$mdjm_trans = new MDJM_Transactions();
+						$mdjm_trans->manual_event_payment( $type, $post->ID );
 					}
 							
 					/* -- Set the status & initiate the specific event type tasks -- */
@@ -453,13 +462,13 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						wp_update_post( array( 'ID' => $post->ID, 'post_status' => $_POST['mdjm_event_status'] ) );
 						$method = 'status_' . substr( $_POST['mdjm_event_status'], 5 );
 						
-						if( method_exists( MDJM()->events, $method ) )
-							MDJM()->events->$method( $post_id, $post, $event_data, $field_updates );
+						if( method_exists( $mdjm->mdjm_events, $method ) )
+							$mdjm->mdjm_events->$method( $post_id, $post, $event_data, $field_updates );
 						
 						// Remove password reset flag if set
 						if( !empty( $pass_reset ) )	{
 							if( MDJM_DEBUG == true )
-								MDJM()->debug->log_it( '	-- Removing password reset flag' );
+								$GLOBALS['mdjm_debug']->log_it( '	-- Removing password reset flag' );
 							delete_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action' );
 						}
 						
@@ -469,9 +478,9 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						/* -- Update Journal with event updates -- */
 						if( MDJM_JOURNAL == true )	{
 							if( MDJM_DEBUG == true )
-								MDJM()->debug->log_it( '	-- Adding journal entry' );
+								$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 								
-							MDJM()->events->add_journal( array(
+							$mdjm->mdjm_events->add_journal( array(
 										'user' 			=> get_current_user_id(),
 										'comment_content' => 'Event ' . ( !empty( $new_post ) ? 'created' : 'updated' ) . ' via Admin <br /><br />' .
 															 ( isset( $field_updates ) ? implode( '<br />', $field_updates ) : '' ) . '<br />(' . time() . ')',
@@ -484,7 +493,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+								$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 						}
 					}
 					/**
@@ -496,8 +505,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					do_action( 'mdjm_save_event', $post, $_POST['mdjm_event_status'] );
 				break;
 			} // switch
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Completed Custom Post Type Save ***', true );	
+
 		} // save_custom_post
 
 /**
@@ -523,7 +531,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 							
 			/* -- Filter events by Client -- */
 			if( isset( $_GET['client'] ) )	{
-				if( !current_user_can( 'administrator' ) && !MDJM()->events->is_my_client( $_GET['client'] ) )
+				if( !current_user_can( 'administrator' ) && !$mdjm->mdjm_events->is_my_client( $_GET['client'] ) )
 					wp_die( 'Tut tut... you can only search your own Clients' );
 				
 				$this->client_events_filter( $query );	
@@ -887,10 +895,182 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			
 			return $actions;
 		} // define_custom_post_row_actions
+				
+		/*
+		 * Actions to be run within the admin_head hook
+		 *
+		 *
+		 *
+		 */
+		public function mdjm_admin_head()	{
+			global $mdjm;
+			
+			/* -- Define the post types & screens within which the MCE button should be displayed -- */
+			$post_types = array( 'email_template', 'contract', 'page' );
+			$screens = array( 
+				'mdjm-events_page_mdjm-comms',
+				'mdjm-events_page_mdjm-settings' );
+			
+			/* -- Add the MDJM TinyMCE buttons -- */
+			$screen = get_current_screen();
+			if( in_array( get_post_type(), $post_types ) || in_array( $screen->id, $screens ) )
+				$mdjm->mce_shortcode_button();
+			
+			/* -- Edit styles for given page as required -- */
+			$this->custom_post_edit_display();
+		} // mdjm_admin_head
 		
+		/*
+		 * Customise the post screen
+		 * 
+		 * @params
+		 * 
+		 * @return
+		 */
+		public function custom_post_edit_display() {
+			if( !isset( $_GET['post_type'] ) )
+				return;
+			
+			/**
+			 * Remove the Add New button from the post lists display for all posts within the 
+			 * $no_add_new array
+			 */
+			$no_add_new = array( MDJM_COMM_POSTS, MDJM_QUOTE_POSTS );
+			
+			if( in_array( $_GET['post_type'], $no_add_new ) )	{
+				?>
+				<style type="text/css">
+					.page-title-action	{
+						display: none;	
+					}
+				</style>
+				<?php
+			}
+			
+			/**
+			 * Remove the date filter from the post lists display for all posts within the 
+			 * $no_date_filter array
+			 */
+			$no_date_filter = array( MDJM_EVENT_POSTS );
+			if( in_array( $_GET['post_type'], $no_date_filter ) )
+				add_filter('months_dropdown_results', '__return_empty_array');
+			
+			/**
+			 * Remove all filter from the post lists display for all posts within the 
+			 * $no_filter array
+			 */
+			$no_filter = array( MDJM_VENUE_POSTS );
+			
+			if( in_array( $_GET['post_type'], $no_filter ) )	{
+				?>
+				<style type="text/css">
+					#posts-filter .tablenav select[name=m],
+					#posts-filter .tablenav select[name=cat],
+					#posts-filter .tablenav #post-query-submit{
+						display:none;
+					}
+				</style>
+				<?php	
+			}
+		} // custom_post_edit_display			
 		
+		/*
+		 * rename_publish_button
+		 * Sets the name for the publish button for each
+		 * custom post type
+		 * 
+		 * @since 1.1.2
+		 * 
+		 */
+		public function rename_publish_button( $translation, $text )	{
+			global $post;
+			
+			if( MDJM_CONTRACT_POSTS == get_post_type() )	{
+				if( $text == 'Publish' )
+					return __( 'Save Contract', 'mobile-dj-manager' );
+				elseif( $text == 'Update' )
+					return __( 'Update Contract', 'mobile-dj-manager' );
+			}
+			if( MDJM_EMAIL_POSTS == get_post_type() )	{
+				if( $text == 'Publish' )
+					return __( 'Save Template', 'mobile-dj-manager' );
+				elseif( $text == 'Update' )
+					return __( 'Update Template', 'mobile-dj-manager' );
+			}
+			if( MDJM_EVENT_POSTS == get_post_type() )	{
+	
+				$event_stati = get_event_stati();
+				
+				if( $text == 'Publish' && isset( $event_stati[$post->post_status] ) )
+					return __( 'Update Event', 'mobile-dj-manager' );
+				elseif( $text == 'Publish' )
+					return __( 'Create Event', 'mobile-dj-manager' );
+				elseif( $text == 'Update' )
+					return __( 'Update Event', 'mobile-dj-manager' );
+			}
+			if( MDJM_TRANS_POSTS == get_post_type() )	{
+				if( $text == 'Publish' )
+					return __( 'Save Transaction', 'mobile-dj-manager' );
+				elseif( $text == 'Update' )
+					return __( 'Update Transaction', 'mobile-dj-manager' );	
+			}
+			if( MDJM_VENUE_POSTS == get_post_type() )	{
+				if( $text == 'Publish' )
+					return __( 'Save Venue', 'mobile-dj-manager' );
+				elseif( $text == 'Update' )
+					return __( 'Update Venue', 'mobile-dj-manager' );	
+			}
+			return $translation;
+		} // rename_publish_button
 		
+		/**
+		 * Set the title of a custom post upon new creation & make it readonly
+		 * 
+		 * @params	obj		$post		The post object
+		 *
+		 * @return
+		 */
+		public function set_post_title( $post ) {
+			// Only apply to events and transactions
+			if( get_post_type() != MDJM_EVENT_POSTS && get_post_type() != MDJM_TRANS_POSTS )
+				return;
+			
+			?>
+			<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$("#title").val("<?php echo MDJM_EVENT_PREFIX . $post->ID; ?>");
+					$("#title").prop("readonly", true);
+				});
+			</script>
+			<?php
+		} // set_post_title
 		
+		/**
+		 * Set the post title placeholder for custom post types
+		 * 
+		 *
+		 * @param    str	$title
+		 *
+		 * @return   str	$title
+		 */
+		public function title_placeholder( $title )	{
+			global $mdjm_post_types, $post;
+			
+			if( empty( $post ) || !in_array( $post->post_type, $mdjm_post_types ) )
+				return;
+			
+			if( $post->post_type == MDJM_CONTRACT_POSTS )
+				$title = __( 'Enter Contract name here...', 'mobile-dj-manager' );
+				
+			elseif( $post->post_type == MDJM_EMAIL_POSTS )
+				$title = __( 'Enter Template name here. Used as email subject, shortcodes allowed', 'mobile-dj-manager' );
+				
+			elseif( $post->post_type == MDJM_VENUE_POSTS )	{
+				$title = __( 'Enter Venue name here...', 'mobile-dj-manager' );
+			}
+			
+			return $title;
+		} // title_placeholder
 		
 /**
 * -- META BOXES
@@ -930,74 +1110,21 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				/* -- Main Body -- */
 				remove_meta_box( 'submitdiv', MDJM_EVENT_POSTS, 'side' );
 				remove_meta_box( 'event-typesdiv', MDJM_EVENT_POSTS, 'side' );
+				add_meta_box( 'mdjm-event-client', __( 'Client Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_client_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
+				add_meta_box( 'mdjm-event-details', __( 'Event Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox', MDJM_EVENT_POSTS, 'normal', 'high' );
+				add_meta_box( 'mdjm-event-venue', __( 'Venue Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_venue_metabox', MDJM_EVENT_POSTS, 'normal', '' );
+				add_meta_box( 'mdjm-event-admin', __( 'Administration', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_admin_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 				
-				add_meta_box(
-					'mdjm-event-client',
-					__( 'Client Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_client_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'high'
-				);
+				if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && current_user_can( 'administrator' ) )
+					add_meta_box( 'mdjm-event-transactions', __( 'Transactions', 'mobile-dj-manager' ), 
+						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_transactions_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 				
-				add_meta_box(
-					'mdjm-event-details',
-					__( 'Event Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'high'
-				);
-				
-				add_meta_box(
-					'mdjm-event-venue',
-					__( 'Venue Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_venue_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					''
-				);
-				
-				add_meta_box(
-					'mdjm-event-admin',
-					__( 'Administration', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_admin_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'low'
-				);
-				
-				if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
-					add_meta_box(
-						'mdjm-event-transactions',
-						__( 'Transactions', 'mobile-dj-manager' ), 
-						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_transactions_metabox',
-						MDJM_EVENT_POSTS,
-						'normal',
-						'low'
-					);	
-				}
-				
-				if( current_user_can( 'manage_mdjm' ) && array_key_exists( $post->post_status, $event_stati ) )	{
-					add_meta_box(
-						'mdjm-event-email-history',
-						__( 'Event History', 'mobile-dj-manager' ), 
-						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_history_metabox',
-						MDJM_EVENT_POSTS,
-						'normal',
-						'low'
-					);
-				}
+				if( current_user_can( 'administrator' ) && array_key_exists( $post->post_status, $event_stati ) )
+					add_meta_box( 'mdjm-event-email-history', __( 'Event History', 'mobile-dj-manager' ), 
+						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_history_metabox', MDJM_EVENT_POSTS, 'normal', 'low' );
 				
 				/* -- Side -- */
-				add_meta_box(
-					'mdjm-event-options',
-					__( 'Event Options', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox',
-					MDJM_EVENT_POSTS,
-					'side',
-					'low'
-				);
+				add_meta_box( 'mdjm-event-options', __( 'Event Options', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox', MDJM_EVENT_POSTS, 'side', 'low' );
 				
 				// Run action hook for mdjm_event_metabox
 				do_action( 'mdjm_event_metaboxes', $post );
@@ -1092,7 +1219,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					wp_die( 'Your administrator has restricted you from creating new Events. Please contact them for assistance.<br /><br />
 						<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] .'" title="' . __( 'Back' ) .'">' . __( 'Back' ) . '</a>' );
 				// Edit event permissions
-				if( is_dj() && $pagenow == 'post.php' && !MDJM()->events->is_my_event( $post->ID ) )	{
+				if( is_dj() && $pagenow == 'post.php' && !$mdjm->mdjm_events->is_my_event( $post->ID ) )	{
 					wp_die( 'You can only view and edit your own events!<br /><br />
 						<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] .'" title="' . __( 'Back' ) .'">' . __( 'Back' ) . '</a>' );	
 				}

@@ -47,13 +47,13 @@
 			 *
 			 */
 			function update_profile()	{
-				global $mdjm, $my_mdjm;
+				global $mdjm, $my_mdjm, $mdjm_debug;
 				
-				MDJM()->debug->log_it( 'Starting user profile update for user ' . $my_mdjm['me']->display_name, true );
+				$mdjm_debug->log_it( 'Starting user profile update for user ' . $my_mdjm['me']->display_name, true );
 				
 				// Firstly, our security check
 				if( !isset( $_POST['__mdjm_user'] ) || !wp_verify_nonce( $_POST['__mdjm_user'], 'manage_client_profile' ) )	{
-					MDJM()->debug->log_it( 'Security verification failed during update. No update occured', false );
+					$mdjm_debug->log_it( 'Security verification failed during update. No update occured', false );
 					return parent::display_message( 4, 4 );	
 				}
 					
@@ -89,10 +89,10 @@
 					// Process field updates starting with custom fields
 					foreach ( $update_meta as $meta_key => $meta_value ) {
 						if( update_user_meta ( $my_mdjm['me']->ID, $meta_key, $meta_value ) )
-							MDJM()->debug->log_it( 'Success: User profile field ' . $meta_key . ' updated with value ' . $meta_value, false );
+							$mdjm_debug->log_it( 'Success: User profile field ' . $meta_key . ' updated with value ' . $meta_value, false );
 							
 						else
-							MDJM()->debug->log_it( 'Failure: User profile field ' . $meta_key . ' could not be updated with value ' . $meta_value, false  );
+							$mdjm_debug->log_it( 'Failure: User profile field ' . $meta_key . ' could not be updated with value ' . $meta_value, false  );
 					}
 					
 					// And now built-in fields
@@ -100,7 +100,7 @@
 					
 					// If we changed the password, we need to logout
 					if( isset( $update_fields['user_pass'] ) )	{
-						MDJM()->debug->log_it( 'User password was changed. Logging user out', false  );
+						$mdjm_debug->log_it( 'User password was changed. Logging user out', false  );
 						wp_logout();
 						?>
 						<script type="text/javascript">

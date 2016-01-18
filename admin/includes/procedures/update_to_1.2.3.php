@@ -39,7 +39,7 @@
 		function update_playlist()	{
 			global $wpdb;
 			
-			MDJM()->debug->log_it( 'Updating playlist entries' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating playlist entries' );
 			
 			$query = "SELECT * FROM " . MDJM_PLAYLIST_TABLE . " WHERE `date_to_mdjm` IS NOT NULL AND `date_to_mdjm` != '' AND `date_to_mdjm` != '0000-00-00 00:00:00' ORDER BY `event_id`";
 			
@@ -47,7 +47,7 @@
 			
 			$rows = $wpdb->num_rows;
 			
-			MDJM()->debug->log_it( $rows . ' ' . _n( 'record ', 'records ', $rows ) . ' to update' );
+			$GLOBALS['mdjm_debug']->log_it( $rows . ' ' . _n( 'record ', 'records ', $rows ) . ' to update' );
 			
 			if( $rows > 0 )	{
 				$i = 0;
@@ -58,10 +58,10 @@
 										 array( 'id' => $record->id ) );
 					$i++;
 				}
-				MDJM()->debug->log_it( $i . ' ' . _n( 'record ', 'records ', $rows ) . ' updated' );				
+				$GLOBALS['mdjm_debug']->log_it( $i . ' ' . _n( 'record ', 'records ', $rows ) . ' updated' );				
 			}
 			else	{
-				MDJM()->debug->log_it( 'No records to update' );	
+				$GLOBALS['mdjm_debug']->log_it( 'No records to update' );	
 			}
 		} // update_playlist
 		

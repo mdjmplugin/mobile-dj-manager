@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://www.mydjplanner.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
- * Version: 1.2.7.4
- * Date: 18 January 2016
+ * Version: 1.2.7.3
+ * Date: 26 November 2015
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
  * Author URI: http://www.mydjplanner.co.uk
  * Text Domain: mobile-dj-manager
@@ -34,9 +34,12 @@
  *
  */
  
-if( !class_exists( 'Mobile_DJ_Manager' ) ) :
+if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
+
 	class Mobile_DJ_Manager	{
+		
 		private static $instance;
+		
 		/**
 		 * Run during plugin activation. Check for existance of version key and execute install procedures
 		 * if it does not exist. Otherwise simply return.
@@ -87,57 +90,31 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 *
 		 *
 		 *
-		 * @return The one true Mobile_DJ_Manager
+		 *
 		 */
 		public static function instance()	{
-			global $mdjm, $mdjm_debug, $mdjm_posts, $clientzone;
+			global $mdjm, $mdjm_posts, $clientzone;
 			
-			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
-				self::$instance = new Mobile_DJ_Manager;
-				
-				self::$instance->define_constants();
-				self::$instance->includes();
-				
-				add_action( 'plugins_loaded', array( __CLASS__, 'mdjm_plugins_loaded' ) );
-				
-				add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );	
-				
-				$mdjm			  			= new MDJM();
-				self::$instance->debug	   = new MDJM_Debug();
-				$mdjm_debug				  = self::$instance->debug; // REMOVE POST 1.2.3
-				self::$instance->events	  = new MDJM_Events();
-				$mdjm_posts				  = new MDJM_Posts();
-				self::$instance->posts	   = new MDJM_Post_Types();
-				self::$instance->cron		= new MDJM_Cron();
-				self::$instance->users	   = new MDJM_Users();
-				self::$instance->roles	   = new MDJM_Roles();
-				self::$instance->permissions = new MDJM_Permissions();
-				self::$instance->menu		= new MDJM_Menu();
-				self::$instance->txns		= new MDJM_Transactions();
-				
-				
-				// If we're on the front end, load the ClienZone class
-				if( class_exists( 'ClientZone' ) )
-					$clientzone = new ClientZone();
-			}
+			self::$instance = new Mobile_DJ_Manager();
 			
-			return self::$instance;
+			self::$instance->mdjm_constants();
+			self::$instance->mdjm_includes();
+			
+			add_action( 'plugins_loaded', array( __CLASS__, 'mdjm_plugins_loaded' ) );
+			
+			add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );	
+			
+			$mdjm			  			= new MDJM();
+			$mdjm_posts				  = new MDJM_Posts();
+			self::$instance->posts	   = new MDJM_Post_Types();
+			self::$instance->cron		= new MDJM_Cron();
+			self::$instance->users	   = new MDJM_Users();
+			self::$instance->menu		= new MDJM_Menu();
+			
+			// If we're on the front end, load the ClienZone class
+			if( class_exists( 'ClientZone' ) )
+				$clientzone = new ClientZone();
 		} // instance
-		
-		/**
-		 * Throw error on object clone
-		 *
-		 * The whole idea of the singleton design pattern is that there is a single
-		 * object therefore, we don't want the object to be cloned.
-		 *
-		 * @since 1.3
-		 * @access protected
-		 * @return void
-		 */
-		public function __clone() {
-			// Cloning instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'mobile-dj-manager' ), '1.3' );
-		}
 		
 		/**
 		 * Define constants
@@ -145,9 +122,9 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 *
 		 *
 		 */
-		public function define_constants()	{
+		public function mdjm_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.2.7.4' );
+			define( 'MDJM_VERSION_NUM', '1.2.7.3' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -193,22 +170,31 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 *
 		 *
 		 */
-		public function includes()	{
+		public function mdjm_includes()	{
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-events.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-posts.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/mdjm-users.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/roles/mdjm-roles.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/permissions/mdjm-permissions.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
+			
 			require_once( MDJM_FUNCTIONS ); // Call the main functions file
+			
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' ); // Scheduler
+			
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
+			
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/debug/mdjm-debug.php' ); // Debug class
+			
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' ); // Transaction class
 			
 			if( is_admin() )	{ // Required for admin only
@@ -216,10 +202,9 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-functions-admin.php' ); // Admin only functions
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/formatting/mdjm-formatting.php' );
 			}
 			else	{ // Required for front end only
-				require_once( MDJM_CLIENTZONE . '/includes/mdjm-shortcodes.php' );
+				include_once( MDJM_CLIENTZONE . '/includes/mdjm-shortcodes.php' );
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 		} // mdjm_includes

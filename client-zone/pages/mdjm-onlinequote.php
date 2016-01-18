@@ -86,14 +86,14 @@
 				// Make sure we have an event passed
 				if( !isset( $_GET['event_id'] ) || empty( $_GET['event_id'] ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Missing event ID', true );
+						$GLOBALS['mdjm_debug']->log_it( 'Missing event ID', true );
 						
 					$passed = false;
 				}
 				// Make sure the passed event belongs to the logged in user
-				elseif( !MDJM()->events->is_my_event( $_GET['event_id'] ) )	{
+				elseif( !$mdjm->mdjm_events->is_my_event( $_GET['event_id'] ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Event does not belong to this user. Event: ' . $_GET['event_id'] . 
+						$GLOBALS['mdjm_debug']->log_it( 'Event does not belong to this user. Event: ' . $_GET['event_id'] . 
 							' User: ' . $current_user->ID, true );
 						
 					$passed = false;	
@@ -101,14 +101,14 @@
 				// Make sure the passed event exists
 				elseif( !$GLOBALS['mdjm_posts']->post_exists( $_GET['event_id'] ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Event does not exist ' . $_GET['event_id'], true );
+						$GLOBALS['mdjm_debug']->log_it( 'Event does not exist ' . $_GET['event_id'], true );
 						
 					$passed = false;	
 				}
 				// Make sure the quote has been generated
 				elseif( get_post_status( $_GET['event_id'] ) != 'mdjm-enquiry' )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Event is not in enquiry status ' . $_GET['event_id'], true );
+						$GLOBALS['mdjm_debug']->log_it( 'Event is not in enquiry status ' . $_GET['event_id'], true );
 						
 					$passed = false;	
 				}
@@ -132,7 +132,7 @@
 					return;
 					
 				if ( get_post_status ( $event_id ) != 'mdjm-enquiry' )	{
-					MDJM()->debug->log_it( 'We don\'t display the book button on quotes when the event status ' . 
+					$GLOBALS['mdjm_debug']->log_it( 'We don\'t display the book button on quotes when the event status ' . 
 						'is not Enquiry. This event is ' . get_post_status ( $event_id ), true );
 					
 					return;
@@ -160,11 +160,11 @@
 			function display_quote( $event_id )	{
 				global $mdjm, $mdjm_posts, $my_mdjm, $post;
 				
-				$online_template = MDJM()->events->retrieve_quote( $event_id );
+				$online_template = $mdjm->mdjm_events->retrieve_quote( $event_id );
 				
 				if( empty( $online_template ) || !$mdjm_posts->post_exists( $online_template ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'The online template associated with event with ID ' . $event_id . ' could not be found in ' . __METHOD__, true );
+						$GLOBALS['mdjm_debug']->log_it( 'The online template associated with event with ID ' . $event_id . ' could not be found in ' . __METHOD__, true );
 					
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
 						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
@@ -175,7 +175,7 @@
 				
 				if(!$this->update_event_quote( $event_id, $online_template ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Unable to update quote post for event with ID ' . $event_id . ' in ' . __METHOD__, true );	
+						$GLOBALS['mdjm_debug']->log_it( 'Unable to update quote post for event with ID ' . $event_id . ' in ' . __METHOD__, true );	
 				}
 				
 				$post = get_post( $online_template );
@@ -183,7 +183,7 @@
 				// Make sure we have the template
 				if( !is_object( $post ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'The online template with ID ' . $online_template . ' could not be retrieved in ' . __METHOD__, true );
+						$GLOBALS['mdjm_debug']->log_it( 'The online template with ID ' . $online_template . ' could not be retrieved in ' . __METHOD__, true );
 					
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
 						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
@@ -192,12 +192,12 @@
 					return;
 				}
 				
-				$eventinfo = MDJM()->events->event_detail( $event_id );
+				$eventinfo = $GLOBALS['mdjm']->mdjm_events->event_detail( $event_id );
 				
 				// Make sure we have the event info
 				if( empty( $eventinfo ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Could not retrieve event information for event ' . $event_id . ' in ' . __METHOD__, true );
+						$GLOBALS['mdjm_debug']->log_it( 'Could not retrieve event information for event ' . $event_id . ' in ' . __METHOD__, true );
 						
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
 						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
@@ -257,12 +257,12 @@
 				wp_transition_post_status( 'mdjm-quote-viewed', 'mdjm-quote-generated', get_post( $quote_id ) );
 				
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Setting quote to viewed status for quote ' . $quote_id . ' event ' . $event_id, true );
+					$GLOBALS['mdjm_debug']->log_it( 'Setting quote to viewed status for quote ' . $quote_id . ' event ' . $event_id, true );
 				
 				/* -- Update the post status -- */
 				if( wp_update_post( array( 'ID' => $quote_id, 'post_status' => 'mdjm-quote-viewed' ) ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Quote status updated successfully', false );
+						$GLOBALS['mdjm_debug']->log_it( 'Quote status updated successfully', false );
 						
 					$result = true;
 				}
@@ -270,7 +270,7 @@
 				/* -- Set post meta for read time and update the number of client views -- */
 				if( $result == true )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Updating quote view count', false );
+						$GLOBALS['mdjm_debug']->log_it( 'Updating quote view count', false );
 					
 					$view_count = get_post_meta( $quote_id, '_mdjm_quote_viewed_count', true );
 					
@@ -285,7 +285,7 @@
 					// Only update the view date if this is the first viewing
 					if( $view_count == 1 )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Updating quote viewed time', false );
+							$GLOBALS['mdjm_debug']->log_it( 'Updating quote viewed time', false );
 							
 						update_post_meta( $quote_id, '_mdjm_quote_viewed_date', current_time( 'mysql' ) );
 					}

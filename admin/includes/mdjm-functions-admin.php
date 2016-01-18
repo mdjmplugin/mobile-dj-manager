@@ -22,7 +22,7 @@ function mdjm_availability_check( $date='', $dj='' )	{
 	
 	// Print the availability result
 	if( isset( $dj_avail ) )	{
-		MDJM()->debug->log_it( 'DJ Availability check returns availability for ' . $date );
+		$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns availability for ' . $date );
 		/* Check all DJ's */
 		if ( !empty( $dj_avail['available'] ) && current_user_can( 'administrator' ) )	{
 			$avail_message = count( $dj_avail['available'] ) . ' ' . _n( MDJM_DJ, MDJM_DJ . '\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $date ) );
@@ -55,7 +55,7 @@ function mdjm_availability_check( $date='', $dj='' )	{
 		mdjm_update_notice( $class, $avail_message );
 	}
 	else	{
-		MDJM()->debug->log_it( 'DJ Availability check returns no availability for ' . $date );
+		$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns no availability for ' . $date );
 	}
 } // mdjm_availability_check
 ?>

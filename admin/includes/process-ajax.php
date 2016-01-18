@@ -94,8 +94,13 @@
  *
  *
  */
-	function save_event_transaction()	{				
-		$result = MDJM()->txns->add_event_transaction();
+	function save_event_transaction()	{		
+		if( !class_exists( 'MDJM_Transactions' ) )
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
+		
+		$mdjm_transactions = new MDJM_Transactions();
+		
+		$result = $mdjm_transactions->add_event_transaction();
 		
 		die();
 	} // save_event_transaction
@@ -109,7 +114,7 @@
 	function add_event_type()	{
 		global $mdjm;
 		
-		MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+		$mdjm->debug_logger( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
 			
 		$args = array( 
 					'taxonomy'			=> 'event-types',
@@ -139,7 +144,7 @@
 			}
 		}
 		
-		MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+		$mdjm->debug_logger( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
 		
 		$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
 		
@@ -160,7 +165,7 @@
 	function add_transaction_type()	{
 		global $mdjm;
 		
-		MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+		$mdjm->debug_logger( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 			
 		$args = array( 
 					'taxonomy'			=> 'transaction-types',
@@ -190,7 +195,7 @@
 			}
 		}
 		
-		MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+		$mdjm->debug_logger( 'Completed adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 		
 		$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
 		

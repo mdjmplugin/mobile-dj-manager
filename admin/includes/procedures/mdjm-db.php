@@ -20,11 +20,11 @@
 			global $wpdb, $mdjm;
 			
 			if ( get_option( MDJM_DB_VERSION_KEY ) == $mdjm->db_version )	{
-				MDJM()->debug->log_it( 'No database update is required' );
+				$GLOBALS['mdjm_debug']->log_it( 'No database update is required' );
 				return;
 			}
 			
-			MDJM()->debug->log_it( 'Starting database upgrade procedures', true );														
+			$GLOBALS['mdjm_debug']->log_it( 'Starting database upgrade procedures', true );														
 			
 			/* PLAYLISTS TABLE */
 			$playlists_sql = "CREATE TABLE ". MDJM_PLAYLIST_TABLE . " (
@@ -58,6 +58,6 @@
 			dbDelta( $holiday_sql );
 		
 			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
-			MDJM()->debug->log_it( 'Completed database upgrade procedures', true );
+			$GLOBALS['mdjm_debug']->log_it( 'Completed database upgrade procedures', true );
 		} // update_db
 	} // class MDJM_DB

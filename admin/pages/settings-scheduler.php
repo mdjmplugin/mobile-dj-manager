@@ -496,7 +496,7 @@
 			?>
             <tr>
             <td>Entries Uploaded:</td>
-            <td><?php MDJM()->events->count_playlist_uploaded(); ?></td>
+            <td><?php $GLOBALS['mdjm']->mdjm_events->count_playlist_uploaded(); ?></td>
             </tr>
             <?php	
 		}

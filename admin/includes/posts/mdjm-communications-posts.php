@@ -19,7 +19,6 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 			add_filter( 'manage_mdjm_communication_posts_columns' , array( __CLASS__, 'mdjm_communication_post_columns' ) );
 			add_filter( 'bulk_actions-edit-mdjm_communication', array( __CLASS__, 'mdjm_communication_bulk_action_list' ) ); // Remove Edit from Bulk Actions
 			
-			add_action( 'pre_get_posts', array( __CLASS__, 'custom_comm_post_query' ) );
 		} // init
 		
 		/**
@@ -76,7 +75,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 						echo sprintf( '<a href="' . admin_url( 'user-edit.php?user_id=%s' ) . '">%s</a>', $client->ID, ucwords( $client->display_name ) );
 					}
 					else	{
-						echo __( 'Recipient no longer exists' );	
+						echo get_post_meta( $post_id, '_recipient' );	
 					}
 					break;
 					
@@ -115,27 +114,6 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 			unset( $actions['edit'] );
 			return $actions;
 		} // mdjm_communication_bulk_action_list
-		
-		/**
-		 * Customise the post query 
-		 *
-		 *
-		 *
-		 *
-		 */
-		public static function custom_comm_post_query( $query )	{
-			global $pagenow;
-			
-			if( !is_post_type_archive( MDJM_COMM_POSTS ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )
-				return $query;
-				
-			if( !current_user_can( 'manage_mdjm' ) )	{
-				global $user_ID;
-				
-				$query->set( 'author', $user_ID );
-			}
-			return $query;
-		} // custom_comm_post_query
 				
 	} // MDJM_Comms_Posts
 endif;

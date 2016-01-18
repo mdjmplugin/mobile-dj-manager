@@ -30,8 +30,6 @@
 						'payment_settings'      => 'admin.php?page=mdjm-settings&tab=payments',
 						'clientzone_settings'   => 'admin.php?page=mdjm-settings&tab=client-zone',
 						'clients'               => 'admin.php?page=mdjm-clients',
-						'employees'             => 'admin.php?page=mdjm-employees',
-						'permissions'           => 'admin.php?page=mdjm-employees&tab=permissions',
 						'inactive_clients'      => 'admin.php?page=mdjm-clients&display=inactive_client',
 						'add_client'            => 'user-new.php',
 						'edit_client'           => 'user-edit.php?user_id=',
@@ -106,7 +104,7 @@
 		$content .= $page . ' accessed by ' . $current_user->display_name . ' (' . $current_user->ID . ')' . "\r\n";
 		$content .= '------------------------------------------------------' . "\r\n";
 		
-		MDJM()->debug->log_it( $content );
+		$GLOBALS['mdjm_debug']->log_it( $content );
 		
 	} // mdjm_page_visit
 	
@@ -150,23 +148,25 @@
 		
 	} // mdjm_jquery_short_date
 	
-	/**
-	 * Insert the datepicker jQuery code
-	 * 
-	 *	@since: 1.1.3
-	 *	@called:
-	 *	@params 	$args =>array
-	 *			 	[0] = class name
-	 *			 	[1] = alternative field name (hidden)
-	 *				[2] = maximum # days from today which can be selected
-	 *				[3] = minimum # days past today which can be selected
-	 *
-	 *	@defaults	[0] = mdjm_date
-	 *				[1] = _mdjm_event_date
-	 *				[2] none
-	 *
-	 *	@return
-	 */
+	/*
+	* mdjm_jquery_datepicker_script
+	* 19/03/2015
+	* Insert the datepicker jQuery code
+	* 
+	*	@since: 1.1.3
+	*	@called:
+	*	@params: 	$args =>array
+	*			 	[0] = class name
+	*			 	[1] = alternative field name (hidden)
+	*				[2] = maximum # days from today which can be selected
+	*				[3] = minimum # days past today which can be selected
+	*
+	*	@defaults:	[0] = mdjm_date
+	*				[1] = _mdjm_event_date
+	*				[2] none
+	*
+	*	@returns:
+	*/
 	function mdjm_jquery_datepicker_script( $args='' )	{
 		$class = !empty ( $args[0] ) ? $args[0] : 'mdjm_date';
 		$altfield = !empty( $args[1] ) ? $args[1] : '_mdjm_event_date';
@@ -370,7 +370,7 @@
 				
 		if( empty( $args['name'] ) )	{
 			if( MDJM_DEBUG == true )
-				 MDJM()->debug->log_it( 'The `name` argument does not exist ' . __FUNCTION__, true );
+				 $mdjm->debug_logger( 'The `name` argument does not exist ' . __FUNCTION__, true );
 			
 			return false;
 		}
@@ -378,7 +378,7 @@
 		$event_stati = get_event_stati();
 		if( empty( $event_stati ) )	{
 			if( MDJM_DEBUG == true )
-				 MDJM()->debug->log_it( 'No statuses returned ' . __FUNCTION__, true );
+				 $mdjm->debug_logger( 'No statuses returned ' . __FUNCTION__, true );
 			
 			return false;
 		}
@@ -428,7 +428,7 @@
 		// If no event cost is provided then we return 0
 		if( empty( $cost ) )	{
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
+				$GLOBALS['mdjm_debug']->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
 			$deposit = '0.00';
 		}
 		
@@ -631,7 +631,7 @@
 	function dj_available( $dj='', $date='' )	{
 		global $mdjm;
 		
-		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
+		$mdjm->debug_logger( 'Check availability for ' . $date, true );
 		
 		$dj = !empty( $dj ) ? $dj : mdjm_get_djs();
 		
@@ -647,7 +647,7 @@
 		}
 		
 		foreach( $user as $dj )	{
-			if( MDJM()->events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{ // Unavailable
+			if( $mdjm->mdjm_events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{ // Unavailable
 				$status['unavailable'][] = $dj;
 			}
 			else	{
@@ -778,7 +778,7 @@
 			}
 			if( count( $work_result ) > 0 )	{
 				foreach( $work_result as $event )	{
-					$eventinfo = MDJM()->events->event_detail( $event->ID );
+					$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
 					//$dj = get_userdata( $event->event_dj );
 					?>
 					<tr>

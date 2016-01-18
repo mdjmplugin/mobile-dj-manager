@@ -21,10 +21,7 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 			add_filter( 'manage_edit-mdjm-quotes_sortable_columns', array( __CLASS__, 'quote_post_sortable_columns' ) );
 			
 			add_filter( 'bulk_actions-edit-mdjm-quotes', array( __CLASS__, 'quote_bulk_action_list' ) );
-			
-			add_action( 'pre_get_posts', array( __CLASS__, 'custom_quote_post_query' ) );
-			
-			add_filter( 'views_edit-mdjm-quotes' , array( __CLASS__, 'quote_view_filters' ) );			
+						
 		} // init
 		
 		/**
@@ -128,90 +125,6 @@ if( !class_exists( 'MDJM_Quote_Posts' ) ) :
 			
 			return $actions;
 		} // quote_bulk_action_list
-		
-		/**
-		 * Customise the post query 
-		 *
-		 *
-		 *
-		 *
-		 */
-		public static function custom_quote_post_query( $query )	{
-			global $pagenow;
-			
-			if( !is_post_type_archive( MDJM_QUOTE_POSTS ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )
-				return $query;
-			
-			// If the current user cannot list all quotes, lets limit the results	
-			if( !MDJM()->permissions->employee_can( 'list_all_quotes' ) )	{
-				global $user_ID;
-				
-				$events = $total = MDJM()->events->dj_events( $user_ID );
-				
-				foreach( $events as $event )	{
-					$quote = MDJM()->events->retrieve_quote( $event->ID, 'any' );
-					
-					if( !empty( $quote ) )	{
-						$quotes[] = $quote;	
-					}
-				}
-				
-				if( !empty( $quotes ) )
-					$query->set( 'post__in', $quotes );
-			}
-		} // custom_quote_post_query
-		
-		/**
-		 * Customise the view filter counts
-		 *
-		 * @called	views_edit-post hook
-		 *
-		 *
-		 */
-		public static function quote_view_filters( $views )	{
-			// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-			if( MDJM()->permissions->employee_can( 'list_all_quotes' ) || !is_post_type_archive( MDJM_QUOTE_POSTS ) )
-				return $views;
-			
-			global $user_ID;
-			$events = $total = MDJM()->events->dj_events( $user_ID );
-				$all = 0;
-				
-				foreach( $events as $event )	{
-					$quote = MDJM()->events->retrieve_quote( $event->ID, 'any' );
-					$quote_status = get_post_status( $quote );
-					
-					if( !isset( $status[$quote_status] ) )
-						$status[$quote_status] = 1;
-						
-					else
-						$status[$quote_status]++;
-						
-					$all++;
-				}
-			
-			// The All filter
-			$views['all'] = preg_replace( '/\(.+\)/U', '(' . $all . ')', $views['all'] ); 
-									
-			foreach( $status as $s => $total )	{				
-				if( empty( $s ) )	{
-					if( isset( $views[$s] ) )
-						unset( $views[$s] );
-					
-					continue;
-				}
-					
-				$views[$s] = preg_replace( '/\(.+\)/U', '(' . $total . ')', $views[$s] );	
-			}
-			
-			// Only show the views we want
-			foreach( $views as $filter => $link )	{
-				if( $filter != 'all' && !array_key_exists( $filter, $status ) )
-					unset( $views[$filter] );	
-			}
-			
-			return $views;
-		} // event_view_filters
 			
 	} // class MDJM_Quote_Posts
 endif;

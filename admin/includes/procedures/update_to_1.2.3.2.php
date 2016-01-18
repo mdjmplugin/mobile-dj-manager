@@ -13,7 +13,7 @@
 		function update_settings()	{
 			$payment_settings = get_option( 'mdjm_payment_settings' );
 			
-			MDJM()->debug->log_it( 'Updating Payment settings', false );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Payment settings', false );
 			
 			$payment_settings['deposit_type'] = false;
 			$payment_settings['deposit_amount'] = '50.00';

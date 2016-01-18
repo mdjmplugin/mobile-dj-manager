@@ -19,7 +19,7 @@
 		 */
 		function update_settings()	{
 			
-			MDJM()->debug->log_it( 'Updating Settings for version 1.2.4' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.4' );
 			
 			$mdjm_paypal_settings = get_option( 'mdjm_paypal_settings' );
 			$mdjm_payment_settings = get_option( 'mdjm_payment_settings' );
@@ -66,7 +66,7 @@
 			if( $status['key'] == 'XXXX' || $status['type'] = 'trial' || time() >= strtotime( $status['expire'] ) )
 				add_option( 'mdjm_price_warn', 1, '', 'yes' );
 			
-			MDJM()->debug->log_it( 'Settings Updated' );
+			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
 						
 		} // update_settings
 		

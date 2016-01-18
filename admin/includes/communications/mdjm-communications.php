@@ -29,7 +29,7 @@
 			global $mdjm;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'Starting ' . __METHOD__, true );
+				$mdjm->debug_logger( 'Starting ' . __METHOD__, true );
 						
 			if( empty( $args ) || !is_array( $args ) )
 				return mdjm_update_notice( 'update-nag', 'The communication was not logged' );
@@ -58,13 +58,13 @@
 			$post_args['comment_status'] = 'closed';
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '	-- Inserting COMM Post' );
+				$mdjm->debug_logger( '	-- Inserting COMM Post' );
 			
 			$comm_post_id = wp_insert_post( $post_args );
 			
 			if( $comm_post_id )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( '	-- COMM post created ' . $comm_post_id );
+					$mdjm->debug_logger( '	-- COMM post created ' . $comm_post_id );
 				foreach( $meta_args as $meta_key => $meta_value )	{
 					add_post_meta( $comm_post_id, '_' . $meta_key, $meta_value );	
 				}	
@@ -73,13 +73,13 @@
 			// Process attachments
 			if( !empty( $args['attachments'] ) && is_array( $args['attachments'] ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( '	-- This email has attachments' );
+					$GLOBALS['mdjm_debug']->log_it( '	-- This email has attachments' );
 					
 				foreach( $args['attachments'] as $file )	{
 					// Make sure the file exists
 					if( !file_exists( $file ) )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- ERROR: Attachment not found, will not process' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- ERROR: Attachment not found, will not process' );
 							
 						continue;
 					}
@@ -101,11 +101,11 @@
 					
 					if( $attach_id )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Attachment post inserted successfully. ID ' . $attach_id );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Attachment post inserted successfully. ID ' . $attach_id );
 					}
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Attachment post could not be inserted' );	
+							$GLOBALS['mdjm_debug']->log_it( '	-- Attachment post could not be inserted' );	
 					}
 					
 					// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.

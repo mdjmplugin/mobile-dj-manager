@@ -29,7 +29,7 @@
 		public function task_ready( $task )	{			
 			if( empty( $task ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'ERROR: No task name was passed within ' . __METHOD__, true );
+					$GLOBALS['mdjm_debug']->log_it( 'ERROR: No task name was passed within ' . __METHOD__, true );
 				
 				return false;
 			}
@@ -37,7 +37,7 @@
 			// Check for active task
 			if( $task['active'] != 'Y' && $task['active'] != true )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'The task ' . $task['name'] . ' is not active' );
+					$GLOBALS['mdjm_debug']->log_it( 'The task ' . $task['name'] . ' is not active' );
 					
 				return false;
 			}
@@ -51,7 +51,7 @@
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'SKIPPING CRON TASK: ' . $task['name'] . '. Next due ' . date( 'd/m/Y H:i:s', $task['nextrun'] ), true );	
+					$GLOBALS['mdjm_debug']->log_it( 'SKIPPING CRON TASK: ' . $task['name'] . '. Next due ' . date( 'd/m/Y H:i:s', $task['nextrun'] ), true );	
 			}
 						
 			return false;	
@@ -79,7 +79,7 @@
 				/* Only execute active tasks */
 				if( $this->task_ready( $task ) )	{
 					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'CRON TASK: ' . $task['name'] . ' is due to run (' . date( 'd/m/Y H:i:s', $task['nextrun'] ) . ')' );
+						$GLOBALS['mdjm_debug']->log_it( 'CRON TASK: ' . $task['name'] . ' is due to run (' . date( 'd/m/Y H:i:s', $task['nextrun'] ) . ')' );
 					
 					$func = $task['function'];
 					
@@ -101,7 +101,7 @@
 			global $mdjm, $wpdb;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Starting the Playlist Upload ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Starting the Playlist Upload ***', true );
 			
 			$cron_start = microtime(true);
 			
@@ -115,14 +115,14 @@
 			// No data to transfer
 			if( $rows == 0 )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'No playlist entries to upload' );	
+					$GLOBALS['mdjm_debug']->log_it( 'No playlist entries to upload' );	
 			}
 			// We have data to process
 			else	{
 				$i = 0;
 				$x = 0;
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Beginnning playlist upload' );
+					$GLOBALS['mdjm_debug']->log_it( 'Beginnning playlist upload' );
 					
 				/* -- Loop through each playlist record, upload to MDJM and update table row -- */
 				foreach( $playlist as $record )	{
@@ -148,18 +148,18 @@
 							'&url=' . urlencode( get_site_url() );
 							
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Sending RPC string http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc );
+							$GLOBALS['mdjm_debug']->log_it( 'Sending RPC string http://api.mydjplanner.co.uk/mdjm/pl/pl.php?' . $rpc );
 						
 						// Retrieve the response
 						$response = wp_remote_retrieve_body( wp_remote_get( 'http://www.mydjplanner.co.uk/?mdjm-api=MDJM_PLAYLIST' . $rpc ) );
 						
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Response received ' . $response );
+							$GLOBALS['mdjm_debug']->log_it( 'Response received ' . $response );
 						
 						// Update the playlist record with the timestamp of the upload
 						if( $response )	{ // Success
 							if( MDJM_DEBUG == true )
-								MDJM()->debug->log_it( ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' successfully uploaded' );
+								$GLOBALS['mdjm_debug']->log_it( ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' successfully uploaded' );
 							
 							$update = $wpdb->update( 
 												MDJM_PLAYLIST_TABLE,
@@ -171,7 +171,7 @@
 						} // if( $response )
 						else	{ // Failrue
 							if( MDJM_DEBUG == true )
-								MDJM()->debug->log_it( 'ERROR: ' . ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' could not be uploaded. ' . $wpdb->print_error() );	
+								$GLOBALS['mdjm_debug']->log_it( 'ERROR: ' . ucfirst( $record->song ) . ' by ' . ucfirst( $record->artist ) . ' could not be uploaded. ' . $wpdb->print_error() );	
 						}
 					} // if( !empty( $event ) )
 					// If no event exists update the record so we don't retry if
@@ -186,10 +186,10 @@
 				} // End foreach
 				
 				if( MDJM_DEBUG == true )	{
-					MDJM()->debug->log_it( $i . _n( ' record', ' records', $i ) . ' uploaded successfully' );
+					$GLOBALS['mdjm_debug']->log_it( $i . _n( ' record', ' records', $i ) . ' uploaded successfully' );
 					if( $x > 0 )
-						MDJM()->debug->log_it( $x . _n( ' record', ' records', $x ) . ' had no event posts' );
-					MDJM()->debug->log_it( '*** Completed the Playlist Upload ***', true );
+						$GLOBALS['mdjm_debug']->log_it( $x . _n( ' record', ' records', $x ) . ' had no event posts' );
+					$GLOBALS['mdjm_debug']->log_it( '*** Completed the Playlist Upload ***', true );
 				}
 			}
 			
@@ -209,7 +209,7 @@
 			global $mdjm, $mdjm_posts, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Starting the Complete Events task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Starting the Complete Events task ***', true );
 			
 			$cron_start = microtime(true);
 			
@@ -235,7 +235,7 @@
 			
 			if( count( $events ) > 0 )	{ // Enquiries to process
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' to mark as completed' );
+					$GLOBALS['mdjm_debug']->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' to mark as completed' );
 				
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
@@ -246,7 +246,7 @@
 						$cron_update = json_decode( $cronned, true );
 					
 					if( !empty( $cron_update ) && array_key_exists( 'complete-events', $cron_update ) )	{// Task has already run for this event
-						MDJM()->debug->log_it( 'This task has already run for this event (' . $event->ID . ')' );
+						$GLOBALS['mdjm_debug']->log_it( 'This task has already run for this event (' . $event->ID . ')' );
 						continue;
 					}
 						
@@ -262,9 +262,9 @@
 					/* -- Update Journal -- */
 					if( MDJM_JOURNAL == true )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Adding journal entry' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 								
-						MDJM()->events->add_journal( array(
+						$mdjm->mdjm_events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $event->ID,
 									'comment_content' => 'Event marked as completed via Scheduled Task <br /><br />' . time(),
@@ -277,7 +277,7 @@
 					} // End if( MDJM_JOURNAL == true )
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+							$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 					}
 					
 					$notify_dj = isset( $this->schedules['complete-events']['options']['notify_dj'] ) ? $this->schedules['complete-events']['options']['notify_dj'] : '';
@@ -292,12 +292,12 @@
 					
 					$venue_post_id = get_post_meta( $event->ID, '_mdjm_event_venue_id', true );
 					
-					$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
+					$event_venue = $mdjm->mdjm_events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
 				
 					/* Prepare admin notification email data array */
 					if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Admin notifications are enabled' );
 							
 						if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						
@@ -314,7 +314,7 @@
 					/* Prepare DJ notification email data array */
 					if( !empty( $notify_dj ) && $notify_dj == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- DJ notifications are enabled' );
 							
 						if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$dj] = array();
@@ -389,14 +389,14 @@
 			
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'No events to mark as complete' );	
+					$GLOBALS['mdjm_debug']->log_it( 'No events to mark as complete' );	
 			}
 						
 			// Prepare next run time
 			$this->update_nextrun( 'complete-events' );
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Completed the Complete Events task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Completed the Complete Events task ***', true );
 			
 		} // complete_event
 		
@@ -410,7 +410,7 @@
 			global $mdjm, $mdjm_posts, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Starting the Fail Enquiry task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Starting the Fail Enquiry task ***', true );
 			
 			$cron_start = microtime(true);
 			
@@ -433,7 +433,7 @@
 			
 			if( count( $enquiries ) > 0 )	{ // Enquiries to process
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( count( $enquiries ) . ' ' . _n( 'enquiry', 'enquiries', count( $enquiries ) ) . ' to expire' );
+					$GLOBALS['mdjm_debug']->log_it( count( $enquiries ) . ' ' . _n( 'enquiry', 'enquiries', count( $enquiries ) ) . ' to expire' );
 				
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
@@ -458,9 +458,9 @@
 					/* -- Update Journal -- */
 					if( MDJM_JOURNAL == true )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Adding journal entry' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 								
-						MDJM()->events->add_journal( array(
+						$mdjm->mdjm_events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $enquiry->ID,
 									'comment_content' => 'Enquiry marked as lost via Scheduled Task <br /><br />' . time(),
@@ -473,7 +473,7 @@
 					} // End if( MDJM_JOURNAL == true )
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+							$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 					}
 					
 					$notify_dj = isset( $this->schedules['fail-enquiry']['options']['notify_dj'] ) ? $this->schedules['fail-enquiry']['options']['notify_dj'] : '';
@@ -488,12 +488,12 @@
 					
 					$venue_post_id = get_post_meta( $enquiry->ID, '_mdjm_event_venue_id', true );
 					
-					$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $enquiry->ID );	
+					$event_venue = $mdjm->mdjm_events->mdjm_get_venue_details( $venue_post_id, $enquiry->ID );	
 				
 					/* Prepare admin notification email data array */
 					if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Admin notifications are enabled' );
 							
 						if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						
@@ -510,7 +510,7 @@
 					/* Prepare DJ notification email data array */
 					if( !empty( $notify_dj ) && $notify_dj == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- DJ notifications are enabled' );
 							
 						if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$dj] = array();
@@ -587,14 +587,14 @@
 			
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'No enquiries to process as failed' );	
+					$GLOBALS['mdjm_debug']->log_it( 'No enquiries to process as failed' );	
 			}
 						
 			// Prepare next run time
 			$this->update_nextrun( 'fail-enquiry' );
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Completed the Fail Enquiry task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Completed the Fail Enquiry task ***', true );
 			
 		} // fail_enquiry
 		
@@ -608,7 +608,7 @@
 			global $mdjm, $mdjm_posts, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Starting the Request Deposit task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Starting the Request Deposit task ***', true );
 			
 			$cron_start = microtime(true);
 						
@@ -644,7 +644,7 @@
 			
 			if( count( $events ) > 0 )	{ // Events to process
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the deposit needs to be requested' );
+					$GLOBALS['mdjm_debug']->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the deposit needs to be requested' );
 				
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
@@ -669,9 +669,9 @@
 					/* -- Update Journal -- */
 					if( MDJM_JOURNAL == true )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Adding journal entry' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 								
-						MDJM()->events->add_journal( array(
+						$mdjm->mdjm_events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $event->ID,
 									'comment_content' => MDJM_DEPOSIT_LABEL . ' request Scheduled Task executed<br /><br />' . time(),
@@ -684,7 +684,7 @@
 					} // End if( MDJM_JOURNAL == true )
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+							$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 					}
 					
 					$notify_dj = isset( $this->schedules['request-deposit']['options']['notify_dj'] ) ? $this->schedules['request-deposit']['options']['notify_dj'] : '';
@@ -701,7 +701,7 @@
 					
 					$venue_post_id = get_post_meta( $event->ID, '_mdjm_event_venue_id', true );
 					
-					$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
+					$event_venue = $mdjm->mdjm_events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
 				
 					$contact_client = ( isset( $this->schedules['request-deposit']['options']['email_client'] ) 
 						&& $this->schedules['request-deposit']['options']['email_client'] == 'Y'  ? true : false );
@@ -713,7 +713,7 @@
 					/* -- Client Deposit Request Email -- */
 					if( !empty( $contact_client ) && !empty( $email_template ) )	{ // Email the client
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Task ' . $this->schedules['request-deposit']['name'] . ' is configured to notify client that deposit is due' );
+							$GLOBALS['mdjm_debug']->log_it( 'Task ' . $this->schedules['request-deposit']['name'] . ' is configured to notify client that deposit is due' );
 							
 						$request = $mdjm->send_email( array( 
 									'content'	=> $email_template,
@@ -728,22 +728,22 @@
 								) );
 						if( $request )	{
 							if( MDJM_DEBUG == true )
-								 MDJM()->debug->log_it( '	-- Deposit request sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
+								 $GLOBALS['mdjm_debug']->log_it( '	-- Deposit request sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								 MDJM()->debug->log_it( '	ERROR: Deposit request was not sent' );
+								 $GLOBALS['mdjm_debug']->log_it( '	ERROR: Deposit request was not sent' );
 						}
 					}
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Task ' . $this->schedules['request-deposit']['name'] . ' is not configured to notify client' );	
+							$GLOBALS['mdjm_debug']->log_it( 'Task ' . $this->schedules['request-deposit']['name'] . ' is not configured to notify client' );	
 					}
 				
 					/* Prepare admin notification email data array */
 					if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Admin notifications are enabled' );
 							
 						if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						
@@ -764,7 +764,7 @@
 					/* Prepare DJ notification email data array */
 					if( !empty( $notify_dj ) && $notify_dj == 'Y' && dj_can( 'see_deposit' ) )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- DJ notifications are enabled' );
 							
 						if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$dj] = array();
@@ -842,14 +842,14 @@
 			} // if( count( $events ) > 0 )
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'No deposits are due' );	
+					$GLOBALS['mdjm_debug']->log_it( 'No deposits are due' );	
 			}
 						
 			// Prepare next run time
 			$this->update_nextrun( 'request-deposit' );
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Completed the Request Deposit task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Completed the Request Deposit task ***', true );
 			
 		} // request_deposit
 		
@@ -863,7 +863,7 @@
 			global $mdjm, $mdjm_posts, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Starting the Request Balance task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Starting the Request Balance task ***', true );
 			
 			$cron_start = microtime(true);
 			
@@ -908,7 +908,7 @@
 			
 			if( count( $events ) > 0 )	{ // Events to process
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the balance is due' );
+					$GLOBALS['mdjm_debug']->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the balance is due' );
 				
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				
@@ -933,9 +933,9 @@
 					/* -- Update Journal -- */
 					if( MDJM_JOURNAL == true )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Adding journal entry' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Adding journal entry' );
 								
-						MDJM()->events->add_journal( array(
+						$mdjm->mdjm_events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $event->ID,
 									'comment_content' => MDJM_BALANCE_LABEL . ' Reminder Scheduled Task executed<br /><br />' . time(),
@@ -948,7 +948,7 @@
 					} // End if( MDJM_JOURNAL == true )
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+							$GLOBALS['mdjm_debug']->log_it( '	-- Journalling is disabled' );	
 					}
 					
 					$notify_dj = isset( $this->schedules['balance-reminder']['options']['notify_dj'] ) ? $this->schedules['balance-reminder']['options']['notify_dj'] : '';
@@ -965,7 +965,7 @@
 					
 					$venue_post_id = get_post_meta( $event->ID, '_mdjm_event_venue_id', true );
 					
-					$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
+					$event_venue = $mdjm->mdjm_events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
 				
 					$contact_client = ( isset( $this->schedules['balance-reminder']['options']['email_client'] ) 
 						&& $this->schedules['balance-reminder']['options']['email_client'] == 'Y'  ? true : false );
@@ -977,7 +977,7 @@
 					/* -- Client Deposit Request Email -- */
 					if( !empty( $contact_client ) && !empty( $email_template ) )	{ // Email the client
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is configured to notify client that deposit is due' );
+							$GLOBALS['mdjm_debug']->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is configured to notify client that deposit is due' );
 							
 						$request = $mdjm->send_email( array( 
 									'content'	=> $email_template,
@@ -992,22 +992,22 @@
 								) );
 						if( $request )	{
 							if( MDJM_DEBUG == true )
-								 MDJM()->debug->log_it( '	-- Balance reminder sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
+								 $GLOBALS['mdjm_debug']->log_it( '	-- Balance reminder sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								 MDJM()->debug->log_it( '	ERROR: Balance reminder was not sent' );
+								 $GLOBALS['mdjm_debug']->log_it( '	ERROR: Balance reminder was not sent' );
 						}
 					}
 					else	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is not configured to notify client' );	
+							$GLOBALS['mdjm_debug']->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is not configured to notify client' );	
 					}
 				
 					/* Prepare admin notification email data array */
 					if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- Admin notifications are enabled' );
 							
 						if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 						
@@ -1028,7 +1028,7 @@
 					/* Prepare DJ notification email data array */
 					if( !empty( $notify_dj ) && $notify_dj == 'Y' && dj_can( 'see_deposit' ) )	{
 						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+							$GLOBALS['mdjm_debug']->log_it( '	-- DJ notifications are enabled' );
 							
 						if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 						$notify['dj'][$dj] = array();
@@ -1107,14 +1107,14 @@
 			
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'No balances are due' );
+					$GLOBALS['mdjm_debug']->log_it( 'No balances are due' );
 			}
 						
 			// Prepare next run time
 			$this->update_nextrun( 'balance-reminder' );
 			
 			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( '*** Completed the Balance Reminder task ***', true );
+				$GLOBALS['mdjm_debug']->log_it( '*** Completed the Balance Reminder task ***', true );
 			
 		} // balance_reminder
 		
@@ -1167,11 +1167,11 @@
 						
 			if( empty( $task ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'ERROR: No task was parsed ' . __METHOD__ );
+					$GLOBALS['mdjm_debug']->log_it( 'ERROR: No task was parsed ' . __METHOD__ );
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Creating notification content for ' . $task['taskinfo']['name'] );	
+					$GLOBALS['mdjm_debug']->log_it( 'Creating notification content for ' . $task['taskinfo']['name'] );	
 			}
 			
 			/* -- Start the email content -- */

@@ -1,11 +1,7 @@
 <?php
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	if( !current_user_can( 'mdjm_employee' ) )  {
-		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
-			'<p>' . __( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
-			403
-		);
+	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 		
 	function mdjm_dashboard() {
@@ -29,7 +25,7 @@
         <hr />
         <h2>
         <?php
-		$dj_event_count = MDJM()->events->count_events_by_status( 'dj', get_current_user_id() );
+		$dj_event_count = $mdjm->mdjm_events->count_events_by_status( 'dj', get_current_user_id() );
         ?></h2>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
           <tr>
@@ -122,9 +118,9 @@
               <tr>
                 <td width="35%">Your Status:</td>
                 <?php
-				$next_event = MDJM()->events->next_event( $current_user->ID, 'dj' );
+				$next_event = $mdjm->mdjm_events->next_event( $current_user->ID, 'dj' );
 				if( !empty( $next_event ) )
-					$eventinfo = MDJM()->events->event_detail( $next_event[0]->ID );
+					$eventinfo = $mdjm->mdjm_events->event_detail( $next_event[0]->ID );
 				?>
                 <td width="65%">
 				<?php
@@ -135,7 +131,7 @@
               </tr>
               <?php
 			  if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				  $bookings_today = MDJM()->events->employee_bookings();
+				  $bookings_today = $mdjm->mdjm_events->employee_bookings();
 				  ?>
 				  <tr>
 					<td>Employee Bookings:</td>
@@ -149,7 +145,7 @@
 						echo '<td>';
 						$i = 1;
 						foreach( $bookings_today as $event )	{
-							$eventinfo = MDJM()->events->event_detail( $event->ID );
+							$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
 								
 							echo '<a href="' . get_edit_post_link( $event->ID ) . '">' . 
 							$eventinfo['dj']->display_name . ' from ' . $eventinfo['start'] . '</a>' . 
@@ -196,7 +192,7 @@
           </table>
 		<?php
 			if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				$emp_event_count = MDJM()->events->count_events_by_status();
+				$emp_event_count = $mdjm->mdjm_events->count_events_by_status();
 		?>
                 <hr />
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">

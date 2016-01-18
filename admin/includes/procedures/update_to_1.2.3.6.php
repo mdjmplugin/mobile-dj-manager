@@ -18,7 +18,7 @@
 		 */
 		function update_settings()	{
 			
-			MDJM()->debug->log_it( 'Updating Settings for version 1.2.3.6' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.3.6' );
 			
 			$mdjm_paypal_settings = get_option( 'mdjm_paypal_settings' );
 			$mdjm_payment_settings = get_option( 'mdjm_payment_settings' );
@@ -29,7 +29,7 @@
 			update_option( 'mdjm_paypal_settings', $mdjm_paypal_settings );
 			update_option( 'mdjm_payment_settings', $mdjm_payment_settings );
 			
-			MDJM()->debug->log_it( 'Settings Updated' );
+			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
 						
 		} // update_settings
 		
