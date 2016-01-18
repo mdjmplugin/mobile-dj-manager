@@ -109,7 +109,7 @@
 									<br />
 									You will need to login. Your username and password have already been sent to you in a previous email but if you no longer have this information, click on the lost password link and enter your user name, which is your email address. Instructions on resetting your password will then be sent to you.<br />
 									<br />
-									You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="{PLAYLIST_URL}">{PLAYLIST_URL}</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.<br />
+									You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="{GUEST_PLAYLIST_URL}">{GUEST_PLAYLIST_URL}</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.<br />
 									<br />
 									Don\'t worry though, you have full control over your playlist so you can remove songs added by your guests if you do not like their choices.<br />
 									<br />
