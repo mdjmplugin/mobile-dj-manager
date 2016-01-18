@@ -75,15 +75,13 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-= 1.3 =
-<strong>Released XXXX XXXX, 2015</strong>
+= 1.2.7.4 =
+<strong>Released 18th January, 2016</strong>
 <ui>
-	<li>New: Create custom MDJM employee roles</li>
-	<li>Bug Fix: No MDJM data should be returned from a front end search</li>
-	<li>Bug Fix: Removed duplicate fields from client profile on admin profile page</li>
-	<li>Bug Fix: Redirecting to contact page from availability widget should pre-populate event date field if present</li>
-	<li>General: Main MDJM class is now a singleton class</li>
+	<li>Bug Fix: Date now carries across to contact form if available</li>
+	<li>Bug Fix: Don't use Ajax for availability check if Ajax is not selected</li>
 </ui>
+
 = 1.2.7.3 =
 <strong>Released 25th November, 2015</strong>
 <ui>
