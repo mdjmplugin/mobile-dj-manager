@@ -57,6 +57,9 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 */
 		public static function ajax_in_head()	{
+			if( empty( self::$ajax ) )
+				return;
+			
 			global $mdjm, $mdjm_settings;
 				
 			if( $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )
@@ -91,7 +94,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>';
+									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>mdjm_avail_date=' + check_date;
 									<?php
 								}
 								else	{
