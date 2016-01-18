@@ -115,6 +115,15 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
+            <h3 class="site-title">Version 1.2.7.4 - 18th January 2016</h3>
+            <ui>
+                <li>Bug Fix: Don't use Ajax for availability check if Ajax is not selected</li>
+                <li>Bug Fix: No MDJM data should be returned from a front end search</li>
+                <li>Bug Fix: Custom event fields did not display on the event screen if your deposit type was not set as percentage</li>
+                <li>Bug Fix: Removed duplicate fields from client profile on admin profile page</li>
+                <li>Bug Fix: Redirecting to contact page from availability check should pre-populate event date field if present</li>
+                <li>Bug Fix: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.</li>
+            </ui>
             <h3 class="site-title">Version 1.2.7.3 - 26th November 2015</h3>
             <ui>
                 <li>Bug Fix: Missing number_format param was causing payment gateway API to not record merchant fees</li>
