@@ -12,7 +12,7 @@
 			/* -- Use the WP Error Class -- */
 			$upgrade_error = new WP_Error;
 			
-			MDJM()->debug->log_it( '** THE MDJM UPGRADE PROCEDURE IS STARTING **', true );
+			$GLOBALS['mdjm_debug']->log_it( '** THE MDJM UPGRADE PROCEDURE IS STARTING **', true );
 			
 			/* -- Extend the script time out as we may have a lot of entries -- */
 			set_time_limit( 180 );
@@ -99,8 +99,8 @@
 			if( $version < '1.2.7.3' )
 				$this->update_to_1_2_7_3();
 				
-			if( $version < '1.3' )
-				$this->update_to_1_3();
+			if( $version < '1.2.7.4' )
+				$this->update_to_1_2_7_4();
 			
 		} // execute_updates
 		
@@ -231,11 +231,11 @@
 			global $wpdb, $mdjm;
 			
 			if ( get_option( MDJM_DB_VERSION_KEY ) == $mdjm->db_version )	{
-				MDJM()->debug->log_it( 'No database update is required' );
+				$GLOBALS['mdjm_debug']->log_it( 'No database update is required' );
 				return;
 			}
 			
-			MDJM()->debug->log_it( 'Starting database upgrade procedures', true );														
+			$GLOBALS['mdjm_debug']->log_it( 'Starting database upgrade procedures', true );														
 			
 			/* PLAYLISTS TABLE */
 			$playlists_sql = "CREATE TABLE ". MDJM_PLAYLIST_TABLE . " (
@@ -292,7 +292,7 @@
 			dbDelta( $holiday_sql );
 		
 			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
-			MDJM()->debug->log_it( 'Completed database upgrade procedures', true );
+			$GLOBALS['mdjm_debug']->log_it( 'Completed database upgrade procedures', true );
 		} // update_db
 		
 		/*
@@ -306,7 +306,7 @@
 			
 			set_time_limit( 180 );
 			
-			MDJM()->debug->log_it( 'Starting version 1.2 upgrade procedures', true );
+			$GLOBALS['mdjm_debug']->log_it( 'Starting version 1.2 upgrade procedures', true );
 			
 			$this->db_backup();
 			
@@ -341,7 +341,7 @@
 			add_option( 'mdjm_update_options', '1' );
 			$this->update_options_1_2(); // Update the plugin options
 											
-			MDJM()->debug->log_it( 'Completed version 1.2 upgrade procedures', true );
+			$GLOBALS['mdjm_debug']->log_it( 'Completed version 1.2 upgrade procedures', true );
 			
 		} // update_to_1_2
 		
@@ -357,7 +357,7 @@
 			if( !get_option( 'mdjm_update_options' ) )
 				return;
 			
-			MDJM()->debug->log_it( '*** UPDATING PLUGIN SETTINGS ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** UPDATING PLUGIN SETTINGS ***', true );
 			
 			$mdjm_settings = array(
 								'main'		=> get_option( MDJM_SETTINGS_KEY ),
@@ -380,7 +380,7 @@
 			
 			delete_option( 'mdjm_update_options' );
 			
-			MDJM()->debug->log_it( '*** COMPLETED UPDATING PLUGIN SETTINGS ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** COMPLETED UPDATING PLUGIN SETTINGS ***', true );
 			
 		} // update_options_1_2
 		
@@ -410,20 +410,20 @@
 							'Unattended'		=> 'mdjm-unattended',
 							);
 			
-			MDJM()->debug->log_it( '*** STARTING EVENT IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** STARTING EVENT IMPORT ***', true );
 			
 			$event_list = $wpdb->get_results(
 									'SELECT * FROM `' . $wpdb->prefix . 'mdjm_events`'
 										);
 			
 			if( !$event_list )	{
-				MDJM()->debug->log_it( 'NO EVENTS FOUND' );
+				$GLOBALS['mdjm_debug']->log_it( 'NO EVENTS FOUND' );
 			}
 			else	{
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 				remove_action( 'wp_insert_comment', array( 'Akismet', 'auto_check_update_meta' ), 10, 2 );
 				remove_filter( 'preprocess_comment', array( 'Akismet', 'auto_check_comment' ), 1 );
-				MDJM()->debug->log_it( '--' . count( $event_list ) . _n( ' event found', ' events found', count( $event_list ) ) );
+				$GLOBALS['mdjm_debug']->log_it( '--' . count( $event_list ) . _n( ' event found', ' events found', count( $event_list ) ) );
 				foreach( $event_list as $event )	{					
 					$event_type = get_term_by( 'name', $event->event_type, 'event-types' );
 					
@@ -520,13 +520,13 @@
 					
 					/* -- If we have errors, make sure they are logged so we can support -- */
 					if( is_wp_error( $event_id ) )	{
-						MDJM()->debug->log_it( ' ERROR: Event ID: ' . $event_id . ' | ' . $event_id->get_error_message() );
+						$GLOBALS['mdjm_debug']->log_it( ' ERROR: Event ID: ' . $event_id . ' | ' . $event_id->get_error_message() );
 					}
 					
 					/* -- Import the event -- */
 					elseif( !empty( $event_id ) )	{
 						set_time_limit( 180 );
-						MDJM()->debug->log_it( 'Event ' . $event->event_id . ' successfully imported as ' . $event_id );
+						$GLOBALS['mdjm_debug']->log_it( 'Event ' . $event->event_id . ' successfully imported as ' . $event_id );
 						wp_update_post( array( 'ID' => $event_id, 'post_title' => MDJM_EVENT_PREFIX . $event_id ) );
 						
 						/* -- Set the Event Type -- */
@@ -559,21 +559,21 @@
 						}
 						
 						/* -- Update playlist entries -- */
-						MDJM()->debug->log_it( 'Updating Playlist' );
+						$GLOBALS['mdjm_debug']->log_it( 'Updating Playlist' );
 						$playlist_update = $wpdb->update( MDJM_PLAYLIST_TABLE, 
 														  array( 'event_id' => $event_id ),
 														  array( 'event_id' => $event->event_id ) );
-						MDJM()->debug->log_it( $playlist_update . _n( ' entry ', ' entries ', $playlist_update ) . 'updated' );
+						$GLOBALS['mdjm_debug']->log_it( $playlist_update . _n( ' entry ', ' entries ', $playlist_update ) . 'updated' );
 						
 						/* -- Update Transactions -- */
-						MDJM()->debug->log_it( 'Updating Transactions' );
+						$GLOBALS['mdjm_debug']->log_it( 'Updating Transactions' );
 						$trans_update = $wpdb->update( $wpdb->prefix . 'mdjm_trans', 
 														  array( 'event_id' => $event_id ),
 														  array( 'event_id' => $event->event_id ) );
-						MDJM()->debug->log_it( $trans_update . _n( ' entry ', ' entries ', $trans_update ) . 'updated' );
+						$GLOBALS['mdjm_debug']->log_it( $trans_update . _n( ' entry ', ' entries ', $trans_update ) . 'updated' );
 												
 						/* -- Update Comm Posts -- */
-						MDJM()->debug->log_it( 'Updating Communications' );
+						$GLOBALS['mdjm_debug']->log_it( 'Updating Communications' );
 						$i = 0;
 						$comms = get_posts( array(
 									'post_type'		 => MDJM_COMM_POSTS,
@@ -589,10 +589,10 @@
 							if( update_post_meta( $comm->ID, '_event', $event_id ) )
 								$i++;
 						}
-						MDJM()->debug->log_it( $i . _n( ' entry ', ' entries ', $i ) . 'updated' );
+						$GLOBALS['mdjm_debug']->log_it( $i . _n( ' entry ', ' entries ', $i ) . 'updated' );
 					}
 					else	{
-						MDJM()->debug->log_it( 'ERROR: Event ' . $event_id . ' was not imported' );	
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: Event ' . $event_id . ' was not imported' );	
 					}
 				}
 			}
@@ -603,7 +603,7 @@
 			
 			delete_option( 'mdjm_migrate_events' );
 			
-			MDJM()->debug->log_it( '*** COMPLETED EVENT IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** COMPLETED EVENT IMPORT ***', true );
 			
 		} // migrate_events
 		
@@ -720,11 +720,11 @@
 				
 				if( is_wp_error( $event_type ) )	{
 					foreach( $upgrade_error->get_error_messages() as $error )	{
-						MDJM()->debug->log_it( 'ERROR: ' . $error );
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: ' . $error );
 					}
 				}
 				else	{
-					MDJM()->debug->log_it( 'SUCCESS: ' .  $event_type . ' term created' );
+					$GLOBALS['mdjm_debug']->log_it( 'SUCCESS: ' .  $event_type . ' term created' );
 				}
 			}
 			delete_option( 'mdjm_migrate_event_types' );
@@ -752,11 +752,11 @@
 				
 				if( is_wp_error( $form_error ) )	{
 					foreach( $upgrade_error->get_error_messages() as $error )	{
-						MDJM()->debug->log_it( 'ERROR: ' . $error );
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: ' . $error );
 					}
 				}
 				else	{
-					MDJM()->debug->log_it( 'SUCCESS: ' .  $trans_type . ' term created' );
+					$GLOBALS['mdjm_debug']->log_it( 'SUCCESS: ' .  $trans_type . ' term created' );
 				}
 			}
 			wp_insert_term( MDJM_DEPOSIT_LABEL, 'transaction-types' );
@@ -777,18 +777,18 @@
 			if( !get_option( 'mdjm_migrate_transactions' ) )
 				return;
 			
-			MDJM()->debug->log_it( '*** STARTING TRANSACTION IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** STARTING TRANSACTION IMPORT ***', true );
 						
 			$trans_list = $wpdb->get_results(
 									'SELECT * FROM `' . $wpdb->prefix . 'mdjm_trans`'
 										);
 			
 			if( !$trans_list )	{
-				MDJM()->debug->log_it( 'NO TRANSACTIONS FOUND' );
+				$GLOBALS['mdjm_debug']->log_it( 'NO TRANSACTIONS FOUND' );
 			}
 			else	{
 				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-				MDJM()->debug->log_it( '--' . count( $trans_list ) . _n( ' transaction found', ' transactions found', count( $trans_list ) ) );
+				$GLOBALS['mdjm_debug']->log_it( '--' . count( $trans_list ) . _n( ' transaction found', ' transactions found', count( $trans_list ) ) );
 				
 				foreach( $trans_list as $transaction )	{					
 					$trans_type = get_term_by( 'name', $transaction->payment_for, 'transaction-types' );
@@ -845,12 +845,12 @@
 					
 					/* -- If we have errors, make sure they are logged so we can support -- */
 					if( is_wp_error( $trans_id ) )	{
-						MDJM()->debug->log_it( ' ERROR: Transaction ID: ' . $trans_id . ' | ' . $trans_id->get_error_message() );
+						$GLOBALS['mdjm_debug']->log_it( ' ERROR: Transaction ID: ' . $trans_id . ' | ' . $trans_id->get_error_message() );
 					}
 					
 					/* -- Import the transaction -- */
 					elseif( !empty( $trans_id ) )	{
-						MDJM()->debug->log_it( 'Transaction ' . $transaction->trans_id . ' successfully imported as ' . $trans_id );						
+						$GLOBALS['mdjm_debug']->log_it( 'Transaction ' . $transaction->trans_id . ' successfully imported as ' . $trans_id );						
 						/* -- Set the Transaction Type -- */
 						wp_set_post_terms( $trans_id, $trans_type->term_id, 'transaction-types' );
 						
@@ -860,7 +860,7 @@
 						}
 					}
 					else	{
-						MDJM()->debug->log_it( 'ERROR: Transaction ' . $trans_id . ' was not imported' );	
+						$GLOBALS['mdjm_debug']->log_it( 'ERROR: Transaction ' . $trans_id . ' was not imported' );	
 					}
 				}
 			}
@@ -868,7 +868,7 @@
 			
 			delete_option( 'mdjm_migrate_transactions' );
 			
-			MDJM()->debug->log_it( '*** COMPLETED TRANSACTION IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** COMPLETED TRANSACTION IMPORT ***', true );
 		} // migrate_transactions
 		
 		/*
@@ -883,7 +883,7 @@
 			if( !get_option( 'mdjm_update_client_fields' ) )
 				return;
 			
-			MDJM()->debug->log_it( 'Starting client field updates' );
+			$GLOBALS['mdjm_debug']->log_it( 'Starting client field updates' );
 			$client_fields = get_option( MDJM_CLIENT_FIELDS );
 			
 			$required_fields = array( 'address1', 'town', 'county', 'postcode', 'phone1' );
@@ -897,11 +897,11 @@
 			$client_fields['phone2']['value'] = '';
 			
 			if( update_option( MDJM_CLIENT_FIELDS, $client_fields ) )	{
-				MDJM()->debug->log_it( 'SUCCESS: completed client field updates' );
+				$GLOBALS['mdjm_debug']->log_it( 'SUCCESS: completed client field updates' );
 				return true;
 			}
 			else	{
-				MDJM()->debug->log_it( 'ERROR: client field updates failed' );
+				$GLOBALS['mdjm_debug']->log_it( 'ERROR: client field updates failed' );
 				return false;
 			}
 			
@@ -921,7 +921,7 @@
 			if( !get_option( 'mdjm_migrate_contact_forms' ) )
 				return;
 			
-			MDJM()->debug->log_it( '*** STARTING CONTACT FORM IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** STARTING CONTACT FORM IMPORT ***', true );
 			
 			remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 			/* -- Retrieve the forms -- */
@@ -941,7 +941,7 @@
 				/* -- Insert the parent post & meta -- */
 				$contact_form_id = wp_insert_post( $post_args );
 				
-				MDJM()->debug->log_it( 'Form ' . $form['name'] . ' created with ID ' . $contact_form_id );
+				$GLOBALS['mdjm_debug']->log_it( 'Form ' . $form['name'] . ' created with ID ' . $contact_form_id );
 				
 				if( !empty( $form['config']['error_text_color'] ) && substr( $form['config']['error_text_color'], 0, 1 ) != '#' )
 					$form['config']['error_text_color'] = '#' . $form['config']['error_text_color'];
@@ -996,7 +996,7 @@
 				
 			}
 			add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-			MDJM()->debug->log_it( '*** COMPLETED CONTACT FORM IMPORT ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** COMPLETED CONTACT FORM IMPORT ***', true );
 			
 			delete_option( 'mdjm_migrate_contact_forms' );
 		} // migrate_contact_forms
@@ -1014,31 +1014,31 @@
 			if( !get_option( 'mdjm_migrate_cron_tasks' ) )
 				return;
 			
-			MDJM()->debug->log_it( '*** STARTING CRON TASK ADJUSTMENTS ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** STARTING CRON TASK ADJUSTMENTS ***', true );
 			
 			$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
 			
-			MDJM()->debug->log_it( 'Updating Completed Events' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Completed Events' );
 			$mdjm_schedules['complete-events']['function'] = 'complete_event';
 			
-			MDJM()->debug->log_it( 'Updating Request Deposit' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Request Deposit' );
 			$mdjm_schedules['request-deposit']['function'] = 'request_deposit';
 			
-			MDJM()->debug->log_it( 'Updating Balance Reminder' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Balance Reminder' );
 			$mdjm_schedules['balance-reminder']['function'] = 'balance_reminder';
 			
-			MDJM()->debug->log_it( 'Updating Fail Enquiry' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Fail Enquiry' );
 			$mdjm_schedules['fail-enquiry']['function'] = 'fail_enquiry';
 			
-			MDJM()->debug->log_it( 'Updating Client Feedback' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Client Feedback' );
 			$mdjm_schedules['client-feedback']['function'] = 'request_feedback';
 						
-			MDJM()->debug->log_it( 'Updating Upload Playlist' );
+			$GLOBALS['mdjm_debug']->log_it( 'Updating Upload Playlist' );
 			$mdjm_schedules['upload-playlists']['function'] = 'submit_playlist';
 									
 			update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
 			
-			MDJM()->debug->log_it( '*** COMPLETED CRON TASK ADJUSTMENTS ***', true );
+			$GLOBALS['mdjm_debug']->log_it( '*** COMPLETED CRON TASK ADJUSTMENTS ***', true );
 			
 			delete_option( 'mdjm_migrate_cron_tasks' );
 			
@@ -1086,13 +1086,13 @@
 		 */
 		function update_to_1_2_1()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.1', true );
 			
 			include_once( 'update_to_1.2.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.1', true );
 		} // update_to_1_2_1
 		
 		/*
@@ -1103,13 +1103,13 @@
 		 */
 		function update_to_1_2_2()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.2', true );
 			
 			include_once( 'update_to_1.2.2.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.2', true );
 		} // update_to_1_2_2
 		
 		/*
@@ -1120,13 +1120,13 @@
 		 */
 		function update_to_1_2_3()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3', true );
 			
 			include_once( 'update_to_1.2.3.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3', true );
 		} // update_to_1_2_3
 		
 		/*
@@ -1137,13 +1137,13 @@
 		 */
 		function update_to_1_2_3_1()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.1', true );
 			
 			include_once( 'update_to_1.2.3.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.1', true );
 		} // update_to_1_2_3_1
 		
 		/*
@@ -1154,13 +1154,13 @@
 		 */
 		function update_to_1_2_3_2()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.2', true );
 			
 			include_once( 'update_to_1.2.3.2.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.2', true );
 		} // update_to_1_2_3_2
 		
 		/*
@@ -1171,13 +1171,13 @@
 		 */
 		function update_to_1_2_3_3()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.3', true );
 			
 			include_once( 'update_to_1.2.3.3.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.3', true );
 		} // update_to_1_2_3_3
 		
 		/*
@@ -1188,13 +1188,13 @@
 		 */
 		function update_to_1_2_3_4()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.4', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.4', true );
 			
 			include_once( 'update_to_1.2.3.4.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.4', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.4', true );
 		} // update_to_1_2_3_4
 		
 		/*
@@ -1205,13 +1205,13 @@
 		 */
 		function update_to_1_2_3_5()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.5', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.5', true );
 			
 			include_once( 'update_to_1.2.3.5.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.5', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.5', true );
 		} // update_to_1_2_3_5
 		
 		/*
@@ -1222,13 +1222,13 @@
 		 */
 		function update_to_1_2_3_6()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.3.6', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.3.6', true );
 			
 			include_once( 'update_to_1.2.3.6.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.3.6', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.3.6', true );
 		} // update_to_1_2_3_6
 		
 		/*
@@ -1239,13 +1239,13 @@
 		 */
 		function update_to_1_2_4()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.4', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.4', true );
 			
 			include_once( 'update_to_1.2.4.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.4', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.4', true );
 		} // update_to_1_2_4
 		
 		/*
@@ -1256,13 +1256,13 @@
 		 */
 		function update_to_1_2_4_1()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.4.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.4.1', true );
 			
 			include_once( 'update_to_1.2.4.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.4.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.4.1', true );
 		} // update_to_1_2_4_1
 		
 		/*
@@ -1273,13 +1273,13 @@
 		 */
 		function update_to_1_2_5()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.5', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5', true );
 			
 			include_once( 'update_to_1.2.5.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.5', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5', true );
 		} // update_to_1_2_5
 		
 		/*
@@ -1290,13 +1290,13 @@
 		 */
 		function update_to_1_2_5_1()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.5.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5.1', true );
 			
 			include_once( 'update_to_1.2.5.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.5.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.1', true );
 		} // update_to_1_2_5_1
 		
 		/*
@@ -1307,13 +1307,13 @@
 		 */
 		function update_to_1_2_5_2()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.5.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5.2', true );
 			
 			include_once( 'update_to_1.2.5.2.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.5.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.2', true );
 		} // update_to_1_2_5_2
 		
 		/*
@@ -1324,13 +1324,13 @@
 		 */
 		function update_to_1_2_5_3()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.5.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.5.3', true );
 			
 			include_once( 'update_to_1.2.5.3.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.5.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.5.3', true );
 		} // update_to_1_2_5_3
 		
 		/*
@@ -1341,13 +1341,13 @@
 		 */
 		function update_to_1_2_6()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.6', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.6', true );
 			
 			include_once( 'update_to_1.2.6.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.6', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.6', true );
 		} // update_to_1_2_6
 		
 		/*
@@ -1358,13 +1358,13 @@
 		 */
 		function update_to_1_2_7()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.7', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7', true );
 			
 			include_once( 'update_to_1.2.7.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.7', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7', true );
 		} // update_to_1_2_7
 		
 		/*
@@ -1375,13 +1375,13 @@
 		 */
 		function update_to_1_2_7_1()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.7.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7.1', true );
 			
 			include_once( 'update_to_1.2.7.1.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.7.1', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7.1', true );
 		} // update_to_1_2_7_1
 		
 		/*
@@ -1392,13 +1392,13 @@
 		 */
 		function update_to_1_2_7_2()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.7.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7.2', true );
 			
 			include_once( 'update_to_1.2.7.2.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.7.2', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7.2', true );
 		} // update_to_1_2_7_2
 		
 		/*
@@ -1409,31 +1409,31 @@
 		 */
 		function update_to_1_2_7_3()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.2.7.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7.3', true );
 			
 			include_once( 'update_to_1.2.7.3.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.2.7.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7.3', true );
 		} // update_to_1_2_7_3
 		
 		/*
-		 * Execute upgrade for version 1.3
+		 * Execute upgrade for version 1.2.7.3
 		 *
 		 *
 		 *
 		 */
-		function update_to_1_3()	{
+		function update_to_1_2_7_4()	{
 			
-			MDJM()->debug->log_it( 'UPDATING to 1.3', true );
+			$GLOBALS['mdjm_debug']->log_it( 'UPDATING to 1.2.7.4', true );
 			
-			include_once( 'update_to_1.3.php' );
+			include_once( 'update_to_1.2.7.4.php' );
 			
 			delete_option( 'mdjm_update_me' );
 			
-			MDJM()->debug->log_it( 'COMPLETED update to 1.3', true );
-		} // update_to_1_3
+			$GLOBALS['mdjm_debug']->log_it( 'COMPLETED update to 1.2.7.4', true );
+		} // update_to_1_2_7_4
 		
 	} // class
 	
