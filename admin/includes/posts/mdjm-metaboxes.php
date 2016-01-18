@@ -612,8 +612,8 @@
 			});
 			</script>
             <?php
-			do_action( 'mdjm_events_metabox_last', $post );
 		}
+		do_action( 'mdjm_events_metabox_last', $post );
 	} // mdjm_event_post_event_metabox
 	
 	/*
