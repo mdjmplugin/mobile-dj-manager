@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.7.4
+Stable tag: 1.2.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -78,12 +78,8 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 = 1.2.7.4 =
 <strong>Released 18th January, 2016</strong>
 <ui>
+	<li>Bug Fix: Date now carries across to contact form if available</li>
 	<li>Bug Fix: Don't use Ajax for availability check if Ajax is not selected</li>
-	<li>Bug Fix: No MDJM data should be returned from a front end search</li>
-	<li>Bug Fix: Custom event fields did not display on the event screen if your deposit type was not set as percentage</li>
-	<li>Bug Fix: Removed duplicate fields from client profile on admin profile page</li>
-	<li>Bug Fix: Redirecting to contact page from availability check should pre-populate event date field if present</li>
-	<li>Bug Fix: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.</li>
 </ui>
 
 = 1.2.7.3 =
