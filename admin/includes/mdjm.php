@@ -644,7 +644,7 @@
 						$field_value = get_user_meta( $user_id, $custom_field['id'], true );
 
 					/* -- Display if configured -- */
-					if( $custom_field['display'] == true )	{
+					if( $custom_field['display'] == true && $custom_field['id'] != 'first_name' && $custom_field['id'] != 'last_name' && $custom_field['id'] != 'user_email' )	{
 						echo '<tr>' . "\r\n" . 
 						'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" . 
 						'<td>' . "\r\n";

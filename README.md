@@ -17,7 +17,7 @@ From a client perspective, a front end portal is provided which fits in seamless
 * and much more...
 
 <h2>Bugs & Issues</h2>
-Let us know [here](http://www.mydjplanner.co.uk/forums/forum/bugs/)!
+Let us know [here](https://github.com/mydjplanner/mobile-dj-manager/issues/)!
 
 <h2>Support</h2>
 This is a developers portal for MDJM Event Management and should not be used for support. Please visit the [Support Forums](http://www.mydjplanner.co.uk/forums/forum/general-support/) or our [Facebook Group](https://www.facebook.com/groups/mobiledjmanager)
@@ -32,4 +32,4 @@ There are various ways you can contribute:
 1. Send us a Pull Request with your bug fixes and/or new features
 1. Translate MDJM into different languages
 1. Provide feedback and suggestions on enhancements
-1. Develop premium add-ons
+1. Develop add-ons (free or premium)

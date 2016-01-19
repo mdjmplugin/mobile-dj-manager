@@ -290,16 +290,23 @@
 						
 						$content .= '</body>' . "\n" . '</html>' . "\n";
 						
-						$mdjm->send_email( array(
-											'content'		=> $content,
-											'to'			 => $mdjm_settings['email']['system_email'],
-											'subject'		=> __( 'Event Contract Signed', 'mobile-dj-manager' ),
-												
-											'journal'		=> false,
-											'event_id'	   => $this->event->ID,
-											'cc_dj'		  => false,
-											'cc_admin'	   => false,
-											'log_comm'	   => false ) );
+						$mdjm->send_email(
+							array(
+								'content'		=> $mdjm->filter_content( 
+									get_post_meta( $this->event->ID,'_mdjm_event_client', true ),
+									$this->event->ID,
+									$content 
+								),
+								'to'			 => $mdjm_settings['email']['system_email'],
+								'subject'		=> __( 'Event Contract Signed', 'mobile-dj-manager' ),			
+								'journal'		=> false,
+								'event_id'	   => $this->event->ID,
+								'cc_dj'		  => false,
+								'cc_admin'	   => false,
+								'filter'		 => false,
+								'log_comm'	   => false
+							)
+						);
 					}
 					else
 						if( MDJM_DEBUG == true )

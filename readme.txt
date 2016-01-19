@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 3.9.1
 Tested up to: 4.4
-Stable tag: 1.2.7.3
+Stable tag: 1.2.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,6 +75,15 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.7.4 =
+**Released 19th January, 2016**
+
+* **Bug Fix**: Custom event fields did not display on the event screen if your deposit type was not set as percentage
+* **Bug Fix**:  No MDJM data should be returned from a front end search
+* **Bug Fix**:  Removed duplicate fields from client profile on admin profile page
+* **Bug Fix**: Redirecting to contact page from availability widget should pre-populate event date field if present
+* **Bug Fix**: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.
+
 = 1.2.7.3 =
 <strong>Released 25th November, 2015</strong>
 <ui>
@@ -538,3 +547,7 @@ Our fully customisable Contact Forms enable full management of events from the i
 	<li><strong>Bug Fix</strong>: If you had your WordPress Permalink Settings set to the default of <strong>Default</strong> (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in</li>
 	<li><strong>Bug Fix</strong>: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration</li>
 </ul>
+
+== Upgrade Notice ==
+= 1.2.7.4 =
+Resolves a few bugs which have been around for too long. Version 1.3 is pending with new features.
