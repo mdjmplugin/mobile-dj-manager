@@ -308,7 +308,7 @@
             <th scope="row-title">Notifications:</th>
             <td colspan="3"><label for="notify_admin">Admin</label> <input type="checkbox" name="notify_admin" id="notify_admin" value="Y"
 				<?php checked( $mdjm_schedules[$task]['options']['notify_admin'], 'Y' ); ?> />&nbsp;&nbsp;&nbsp;
-                <?php if( dj_can( 'see_deposit' ) )	{
+                <?php if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
 					?>
                     <label for="notify_dj">DJ</label> <input type="checkbox" name="notify_dj" id="notify_dj" value="Y"
                     <?php checked( $mdjm_schedules[$task]['options']['notify_dj'], 'Y' ); ?> />&nbsp;
@@ -496,7 +496,7 @@
 			?>
             <tr>
             <td>Entries Uploaded:</td>
-            <td><?php $GLOBALS['mdjm']->mdjm_events->count_playlist_uploaded(); ?></td>
+            <td><?php MDJM()->events->count_playlist_uploaded(); ?></td>
             </tr>
             <?php	
 		}

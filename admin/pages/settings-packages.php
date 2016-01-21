@@ -1,7 +1,11 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	if ( !current_user_can( 'manage_options' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	if( !MDJM()->permissions->employee_can( 'manage_packages' ) )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You do not have permission to manage equipment packages.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
 	}
 			
 	?>
@@ -31,14 +35,17 @@
 				}
 				$equip = '';
 				$i = 1;
-				if( !is_array( $_POST['equip_id'] ) )
-					$_POST['equip_id'] = array( $_POST['equip_id'] );
-				foreach( $_POST['equip_id'] as $equip_slug )	{
-					$equip .= $equip_slug;
-					if( $i != count( $_POST['equip_id'] ) ) $equip .= ',';
-					$i++;
+				if( isset( $_POST['equip_id'] ) )	{
+					if( !is_array( $_POST['equip_id'] ) )
+						$_POST['equip_id'] = array( $_POST['equip_id'] );
+					foreach( $_POST['equip_id'] as $equip_slug )	{
+						$equip .= $equip_slug;
+						if( $i != count( $_POST['equip_id'] ) ) $equip .= ',';
+						$i++;
+					}
 				}
-				if( !isset( $_POST['package_available'] ) || $_POST['package_available'] != 'Y' ) $_POST['package_available'] = 'N';
+				if( !isset( $_POST['package_available'] ) || $_POST['package_available'] != 'Y' )
+					$_POST['package_available'] = 'N';
 				
 				$packages[$package_id]['name'] = sanitize_text_field( $_POST['package_name'] );
 				$packages[$package_id]['slug'] = $package_id;
@@ -71,7 +78,7 @@
 	global $mdjm_options;
 	$packages = get_option( 'mdjm_packages' );
 	
-	$djs = mdjm_get_djs();
+	$djs = MDJM()->users->get_employees();
 
 	if( $packages )	{ /* Option to edit existing packages */
 		asort( $packages );

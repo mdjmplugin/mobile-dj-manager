@@ -50,20 +50,18 @@
 			 *
 			 *
 			 */
-			function delete_field()	{
-				global $mdjm_debug;
-				
+			function delete_field()	{				
 				unset( $this->fields[$_GET['id']] );
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Client field ' . $_GET['id'] . ' has been deleted', true );
+						MDJM()->debug->log_it( 'Client field ' . $_GET['id'] . ' has been deleted', true );
 					
 					mdjm_update_notice( 'updated', __( 'The field was deleted successfully.', 'mobile-dj-manager' ) );
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Error deleting Client field ' . $_GET['id'], true );
+						MDJM()->debug->log_it( 'Error deleting Client field ' . $_GET['id'], true );
 					
 					mdjm_update_notice( 'error', __( 'Field could not be deleted', 'mobile-dj-manager' ) );	
 				}
@@ -76,7 +74,7 @@
 			 *
 			 */
 			function add_field()	{
-				global $mdjm_debug, $current_user;				
+				global $current_user;				
 								
 				// Set the field id
 				$id = preg_replace( '/[^a-zA-Z0-9_-]$/s', '', sanitize_text_field( $_POST['field_label'] ) );
@@ -107,7 +105,7 @@
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
+						MDJM()->debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
 							' created successfully by ' .  $current_user->display_name, true );
 					
 					mdjm_update_notice( 'updated', sanitize_text_field( $_POST['field_label'] ) . 
@@ -115,7 +113,7 @@
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Error creating Client field ' . 
+						MDJM()->debug->log_it( 'Error creating Client field ' . 
 							sanitize_text_field( $_POST['field_label'] ), true );
 						
 					mdjm_update_notice( 'error', __( 'Field could not be created', 'mobile-dj-manager' ) );
@@ -130,7 +128,7 @@
 			 *
 			 */
 			function update_field()	{
-				global $mdjm_debug, $current_user;
+				global $current_user;
 				
 				if( $_POST['field_type'] == 'checkbox' )
 					$value = $_POST['field_value'];
@@ -152,13 +150,13 @@
 										);
 				
 				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
-					$GLOBALS['mdjm_debug']->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
+					MDJM()->debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
 						' updated successfully by ' .  $current_user->display_name, true );
 					mdjm_update_notice( 'updated', sanitize_text_field( $_POST['field_label'] ) . 
 						' updated successfully.' );
 				}
 				else	{
-					$GLOBALS['mdjm_debug']->log_it( 'Error updating Client field ' . 
+					MDJM()->debug->log_it( 'Error updating Client field ' . 
 						sanitize_text_field( $_POST['field_label'] ), true );
 						
 					mdjm_update_notice( 'error', __( 'Field could not be updated', 'mobile-dj-manager' ) );
@@ -185,9 +183,7 @@
 			 *
 			 *
 			 */
-			function display_fields()	{
-				global $mdjm_debug;
-				
+			function display_fields()	{			
 				/* -- Enable drag & drop -- */
 				$this->drag_n_drop();
 				

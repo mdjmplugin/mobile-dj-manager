@@ -30,6 +30,8 @@
 						'payment_settings'      => 'admin.php?page=mdjm-settings&tab=payments',
 						'clientzone_settings'   => 'admin.php?page=mdjm-settings&tab=client-zone',
 						'clients'               => 'admin.php?page=mdjm-clients',
+						'employees'             => 'admin.php?page=mdjm-employees',
+						'permissions'           => 'admin.php?page=mdjm-employees&tab=permissions',
 						'inactive_clients'      => 'admin.php?page=mdjm-clients&display=inactive_client',
 						'add_client'            => 'user-new.php',
 						'edit_client'           => 'user-edit.php?user_id=',
@@ -104,7 +106,7 @@
 		$content .= $page . ' accessed by ' . $current_user->display_name . ' (' . $current_user->ID . ')' . "\r\n";
 		$content .= '------------------------------------------------------' . "\r\n";
 		
-		$GLOBALS['mdjm_debug']->log_it( $content );
+		MDJM()->debug->log_it( $content );
 		
 	} // mdjm_page_visit
 	
@@ -148,25 +150,23 @@
 		
 	} // mdjm_jquery_short_date
 	
-	/*
-	* mdjm_jquery_datepicker_script
-	* 19/03/2015
-	* Insert the datepicker jQuery code
-	* 
-	*	@since: 1.1.3
-	*	@called:
-	*	@params: 	$args =>array
-	*			 	[0] = class name
-	*			 	[1] = alternative field name (hidden)
-	*				[2] = maximum # days from today which can be selected
-	*				[3] = minimum # days past today which can be selected
-	*
-	*	@defaults:	[0] = mdjm_date
-	*				[1] = _mdjm_event_date
-	*				[2] none
-	*
-	*	@returns:
-	*/
+	/**
+	 * Insert the datepicker jQuery code
+	 * 
+	 *	@since: 1.1.3
+	 *	@called:
+	 *	@params 	$args =>array
+	 *			 	[0] = class name
+	 *			 	[1] = alternative field name (hidden)
+	 *				[2] = maximum # days from today which can be selected
+	 *				[3] = minimum # days past today which can be selected
+	 *
+	 *	@defaults	[0] = mdjm_date
+	 *				[1] = _mdjm_event_date
+	 *				[2] none
+	 *
+	 *	@return
+	 */
 	function mdjm_jquery_datepicker_script( $args='' )	{
 		$class = !empty ( $args[0] ) ? $args[0] : 'mdjm_date';
 		$altfield = !empty( $args[1] ) ? $args[1] : '_mdjm_event_date';
@@ -370,7 +370,7 @@
 				
 		if( empty( $args['name'] ) )	{
 			if( MDJM_DEBUG == true )
-				 $mdjm->debug_logger( 'The `name` argument does not exist ' . __FUNCTION__, true );
+				 MDJM()->debug->log_it( 'The `name` argument does not exist ' . __FUNCTION__, true );
 			
 			return false;
 		}
@@ -378,7 +378,7 @@
 		$event_stati = get_event_stati();
 		if( empty( $event_stati ) )	{
 			if( MDJM_DEBUG == true )
-				 $mdjm->debug_logger( 'No statuses returned ' . __FUNCTION__, true );
+				 MDJM()->debug->log_it( 'No statuses returned ' . __FUNCTION__, true );
 			
 			return false;
 		}
@@ -428,7 +428,7 @@
 		// If no event cost is provided then we return 0
 		if( empty( $cost ) )	{
 			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
+				MDJM()->debug->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
 			$deposit = '0.00';
 		}
 		
@@ -459,23 +459,19 @@
  * -- START CLIENT FUNCTIONS
  */
 	/**
-	 * mdjm_get_clients
-	 * 19/03/2015
 	 * Retrieve a list of all Client's
 	 * 
-	 *	@since: 1.1.3
-	 *	@params:
-	 *	@returns: $clients => object
+	 * @since: 1.1.3
+	 * @params:
+	 * @returns: $clients => object
 	 */
 	function mdjm_get_clients( $role = 'client', $orderby, $order )	{
-		$client_arg = array(	
-			'role' => $role,
-			'orderby' => $order,
-			'order' => 'ASC'
-						);
-		$clients = get_users( $client_arg );
-		
-		return $clients;
+		return MDJM()->users->get_clients( 
+			$role,
+			!MDJM()->permissions->employee_can() ? get_current_user_id() : '',
+			$orderby,
+			$order
+		);
 	} // mdjm_get_clients
 /*
  * -- END CLIENT FUNCTIONS
@@ -494,29 +490,9 @@
 	*	@returns: $djs => object
 	*/
 	function mdjm_get_djs( $role = 'dj' )	{
-		if( $role == 'dj' )	{
-			$admin_arg = array( 'role' => 'administrator',
-								'orderby' => 'display_name',
-								'order' => 'ASC'
-							);
-			$admin = get_users( $admin_arg );
-		}
-		else 
-			$admin = array();
-		
-		if( MDJM_MULTI == true )	{
-			$dj_arg = array(	'role' => $role,
-								'orderby' => 'display_name',
-								'order' => 'ASC'
-							);
-			$dj = get_users( $dj_arg );
-			$djs = array_merge( $admin, $dj );
-		}
-		else	{
-			$djs = $admin;	
-		}
-		
-		return $djs;
+		return MDJM()->users->get_employees(
+			$role == 'dj' ? array( 'administrator', $role ) : $role
+		);
 	} // mdjm_get_djs
 	
 	/*
@@ -624,21 +600,32 @@
 	/*
 	 * Check the availability of the DJ('s) on the given date (Y-m-d)
 	 *
-	 * @param	int			$dj		The user ID of the DJ, if empty we'll check all
+	 * @param	int			$dj		Optional: The user ID of the DJ, if empty we'll check all
+	 *			arr			$roles	Optional: If no $dj is set, we can check an array of role names
 	 *			str|arr		$date	The date (Y-m-d) to check
+	 *
 	 * @return	arr			$status	array of user id's (['available'] | ['unavailable']
 	 */
-	function dj_available( $dj='', $date='' )	{
+	function dj_available( $dj='', $roles='', $date='' )	{
 		global $mdjm;
 		
-		$mdjm->debug_logger( 'Check availability for ' . $date, true );
+		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
 		
-		$dj = !empty( $dj ) ? $dj : mdjm_get_djs();
+		$required_roles = array( 'administrator' );
 		
+		if( !empty( $GLOBALS['mdjm_settings']['availability']['availability_roles'] ) )
+			$required_roles = array_merge( $required_roles, $GLOBALS['mdjm_settings']['availability']['availability_roles'] );
+		
+		// If no DJ is specified but roles are, retrieve all employees for the roles
+		if( empty( $dj ) && !empty( $roles ) )
+			$dj = MDJM()->users->get_employees( $roles );
+		
+		$dj = !empty( $dj ) ? $dj : MDJM()->users->get_employees( $required_roles );
+
 		$date = !empty( $date ) ? $date : date( 'Y-m-d' );
 		
 		if( is_array( $dj ) )	{
-			foreach( $dj as $employee )	{
+			foreach( $dj as $employee )	{						
 				$user[] = $employee->ID;
 			}
 		}
@@ -647,7 +634,7 @@
 		}
 		
 		foreach( $user as $dj )	{
-			if( $mdjm->mdjm_events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{ // Unavailable
+			if( MDJM()->events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{ // Unavailable
 				$status['unavailable'][] = $dj;
 			}
 			else	{
@@ -665,17 +652,15 @@
 	 * @return	bool		true|false	false if the DJ is available, true if they are not
 	 */
 	function is_on_holiday( $dj='', $date='' )	{
-		global $wpdb;
+		global $wpdb, $current_user;
 		
-		global $current_user;
-		
-		$dj = !empty( $dj ) ? $dj : $curren_user->ID;
+		$dj = !empty( $dj ) ? $dj : $current_user->ID;
 		
 		$date = !empty( $date ) ? $date : date( 'Y-m-d' );
-		
+	
 		$result = $wpdb->get_results( "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " 
 										WHERE DATE(date_from) = '" . $date . "' AND `user_id` = '" . $dj . "'" );
-										
+												
 		if( !$result )
 			return false; // DJ is available
 			
@@ -730,7 +715,7 @@
 		
 		/* Loop through the days */
 		foreach( $date_range as $day )	{
-			if( current_user_can( 'administrator' ) )	{
+			if( current_user_can( 'manage_mdjm' ) )	{
 				$event_args['meta_query'] = array(
 												array( 
 													'key'		=> '_mdjm_event_date',
@@ -778,8 +763,7 @@
 			}
 			if( count( $work_result ) > 0 )	{
 				foreach( $work_result as $event )	{
-					$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
-					//$dj = get_userdata( $event->event_dj );
+					$eventinfo = MDJM()->events->event_detail( $event->ID );
 					?>
 					<tr>
                     <td width="25%">

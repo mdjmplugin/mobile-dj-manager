@@ -18,11 +18,11 @@ function mdjm_availability_check( $date='', $dj='' )	{
 	$date = !empty( $date ) ? $date : date( 'Y-m-d' );
 	
 	// Run the availability check with the correct params depending on what we've been passed
-	$dj_avail = ( is_dj() ) ? dj_available( $dj, $date ) : dj_available( '', $date );
+	$dj_avail = ( is_dj() ) ? dj_available( $dj, '', $date ) : dj_available( '', '', $date );
 	
 	// Print the availability result
 	if( isset( $dj_avail ) )	{
-		$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns availability for ' . $date );
+		MDJM()->debug->log_it( 'DJ Availability check returns availability for ' . $date );
 		/* Check all DJ's */
 		if ( !empty( $dj_avail['available'] ) && current_user_can( 'administrator' ) )	{
 			$avail_message = count( $dj_avail['available'] ) . ' ' . _n( MDJM_DJ, MDJM_DJ . '\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $date ) );
@@ -55,7 +55,7 @@ function mdjm_availability_check( $date='', $dj='' )	{
 		mdjm_update_notice( $class, $avail_message );
 	}
 	else	{
-		$GLOBALS['mdjm_debug']->log_it( 'DJ Availability check returns no availability for ' . $date );
+		MDJM()->debug->log_it( 'DJ Availability check returns no availability for ' . $date );
 	}
 } // mdjm_availability_check
 ?>

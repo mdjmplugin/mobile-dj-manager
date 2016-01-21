@@ -25,7 +25,7 @@
 			 *
 			 */
 			function settings_register()	{	
-				global $mdjm_settings, $mdjm_debug;
+				global $mdjm_settings;
 							
 				/* -- Get the array of settings -- */
 				include( 'settings.php' );
@@ -302,7 +302,7 @@
 			 *
 			 */
 			function page_footer()	{
-				global $mdjm, $mdjm_debug;
+				global $mdjm;
 				
 				/* -- Don't display the save button for aitomated tasks page -- */
 				if( isset( $_GET['task_action'] ) )
@@ -317,7 +317,7 @@
 				
 				/* -- This is where we can display any additional fields. Will not be saved as options -- */
 				if( $this->current_section == 'mdjm_app_debugging' )
-					$mdjm_debug->submit_files_button();
+					MDJM()->debug->submit_files_button();
 				
 				if( $this->current_section == 'mdjm_addon_settings' )
 					$this->mdjm_premium_addons();

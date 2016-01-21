@@ -49,9 +49,7 @@
 		 *
 		 *
 		 */
-		function display_sections()	{	
-			global $mdjm_debug;
-					
+		function display_sections()	{						
 			if( empty( $this->current_section ) )
 				return;
 						
@@ -75,7 +73,7 @@
 				break;
 				
 				case 'mdjm_db_backups':
-					$mdjm_debug->db_backup_form();
+					MDJM()->debug->db_backup_form();
 				break;
 				
 				case 'mdjm_app_uninstall':

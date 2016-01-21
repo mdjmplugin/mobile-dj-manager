@@ -95,7 +95,7 @@
 			
 			if( empty( $client ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No client was provided. ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'ERROR: No client was provided. ' . __FUNCTION__, true );
 				
 				return false;	
 			}
@@ -149,7 +149,7 @@
 			
 			if( empty( $client ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No client was provided. ' . __FUNCTION__, true );
+					MDJM()->debug->log_it( 'ERROR: No client was provided. ' . __FUNCTION__, true );
 					
 				return false;
 			}
@@ -179,7 +179,7 @@
 
 /*
  * DJ Functions
- */
+ */		
 		/**
 		 * Retrieve list of DJ events
 		 *
@@ -337,7 +337,7 @@
 			global $mdjm_settings;
 			
 			$date = !empty( $date ) ? $date : date( 'Y-m-d' );
-			$dj = !empty( $dj ) ? $dj : mdjm_get_djs();
+			$dj = !empty( $dj ) ? $dj : MDJM()->users->get_employees();
 			
 			if( is_array( $dj ) )	{
 				foreach( $dj as $employee )	{
@@ -585,11 +585,7 @@
 			
 			if( empty( $post_id ) || !$mdjm_posts->post_exists( $post_id ) )
 				return;
-				
-			if( !class_exists( 'MDJM_Transactions' ) )
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
 			
-			$mdjm_transactions = new MDJM_Transactions();
 			$event_stati = get_event_stati();
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
@@ -597,10 +593,11 @@
 			$end_date = get_post_meta( $post_id, '_mdjm_event_end_date', true );
 			$client = get_post_meta( $post_id, '_mdjm_event_client', true );
 			$dj = get_post_meta( $post_id, '_mdjm_event_dj', true );
+			$dj_wage = get_post_meta( $post_id, '_mdjm_event_dj_wage', true );
 			$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
 			$deposit = get_post_meta( $post_id, '_mdjm_event_deposit', true );
 			$deposit_status = get_post_meta( $post_id, '_mdjm_event_deposit_status', true );
-			$paid = $mdjm_transactions->get_transactions( $post_id, 'mdjm-income' );
+			$paid = MDJM()->txns->get_transactions( $post_id, 'mdjm-income' );
 			$balance_status = get_post_meta( $post_id, '_mdjm_event_balance_status', true );
 			$start = get_post_meta( $post_id, '_mdjm_event_start', true );
 			$finish = get_post_meta( $post_id, '_mdjm_event_finish', true );
@@ -630,19 +627,21 @@
 							// Client details as object array
 							'client'			  => ( !empty( $client ) ? get_userdata( $client ) : '' ),
 							// DJ details as object array
-							'dj'				  => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned' ) ),
+							'dj'				  => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned', 'mobile-dj-manager' ) ),
+							// DJ Wages
+							'dj_wage'   		     => ( !empty( $dj_wage ) ? display_price( $dj_wage ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Event Start
-							'start'			   => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified' ) ),
+							'start'			   => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Event Finish
-							'finish'			  => ( !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified' ) ),
+							'finish'			  => ( !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Event Status
 							'status'			  => ( !empty( $status ) ? $status : '' ),
 							// DJ Setup date
-							'setup_date'		  => ( !empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified' ) ),
+							'setup_date'		  => ( !empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// DJ Setup time
-							'setup_time'		  => ( !empty( $setup_time ) ? date( MDJM_TIME_FORMAT, strtotime( $setup_time ) ) : __( 'Not Specified' ) ),
+							'setup_time'		  => ( !empty( $setup_time ) ? date( MDJM_TIME_FORMAT, strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Total cost
-							'cost'				=> ( !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified' ) ),
+							'cost'				=> ( !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Deposit fee
 							'deposit'			 => ( !empty( $deposit ) ? display_price( $deposit ) : '0.00' ),
 							// Balance remaining
@@ -650,11 +649,11 @@
 								display_price( ( $cost - $paid ) ) : display_price( $cost ) ),
 								
 							// Deposit status
-							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due' ) ),
+							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due', 'mobile-dj-manager' ) ),
 							// Balanace status
-							'balance_status'	  => ( !empty( $balance_status ) ? $balance_status : __( 'Due' ) ),
+							'balance_status'	  => ( !empty( $balance_status ) ? $balance_status : __( 'Due', 'mobile-dj-manager' ) ),
 							// Payment History
-							'payment_history'	 => $mdjm_transactions->list_event_transactions( $post_id ),
+							'payment_history'	 => MDJM()->txns->list_event_transactions( $post_id ),
 							// Event type
 							'type'				=> $this->get_event_type( $post_id ),
 							// Online Quote
@@ -718,7 +717,7 @@
 			
 			if( empty( $post ) && empty( $id ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
+					MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
 			}
 			
 			$event_id = !empty( $id ) ? $id : $post->ID;
@@ -730,7 +729,7 @@
 				
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: Could not find the term.', true );
+					MDJM()->debug->log_it( 'ERROR: Could not find the term.', true );
 					
 				return __( 'No Event Type Set', 'mobile-dj-manager' );	
 			}
@@ -791,17 +790,17 @@
 			global $mdjm, $mdjm_settings;
 						
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( '*** Starting Unattended Enquiry procedures ***' . "\r\n", true );
+				MDJM()->debug->log_it( '*** Starting Unattended Enquiry procedures ***' . "\r\n", true );
 						
 		/* -- Permission Check -- */
-			if( !current_user_can( 'administrator' ) || dj_can( 'dj_add_event' ) )
+			if( !MDJM()->permissions->employee_can( 'manage_events' ) )
 				return $post_id;	
 			
 										
 		/* -- Update Journal with event creation -- */
 			if( MDJM_JOURNAL == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Adding journal entry' );
+					MDJM()->debug->log_it( '	-- Adding journal entry' );
 					
 				$this->add_journal( array(
 							'user' 			=> get_current_user_id(),
@@ -816,11 +815,11 @@
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Journalling is disabled' );	
+					MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 			}
 			
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( '*** Completed Unattended Enquiry procedures ***' . "\r\n", true );
+				MDJM()->debug->log_it( '*** Completed Unattended Enquiry procedures ***' . "\r\n", true );
 						
 		} // status_unattended
 		
@@ -837,7 +836,7 @@
 			global $mdjm, $mdjm_settings;
 						
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( '*** Starting New Enquiry procedures ***' . "\r\n", true );
+				MDJM()->debug->log_it( '*** Starting New Enquiry procedures ***' . "\r\n", true );
 						
 		/* -- Permission Check -- */
 			if( !current_user_can( 'administrator' ) || dj_can( 'dj_add_event' ) )
@@ -846,7 +845,7 @@
 		/* -- Update Journal with event creation -- */
 			if( MDJM_JOURNAL == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Adding journal entry' );
+					MDJM()->debug->log_it( '	-- Adding journal entry' );
 					
 				$this->add_journal( array(
 							'user' 			=> get_current_user_id(),
@@ -861,13 +860,13 @@
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Journalling is disabled' );	
+					MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 			}
 			
 			/* -- Generate online quote if configured -- */
 			if( MDJM_ONLINE_QUOTES == true && !empty( $_POST['mdjm_online_quote'] ) )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( '	-- Generating event quote for event ' . $post_id );
+					MDJM()->debug->log_it( '	-- Generating event quote for event ' . $post_id );
 				
 				// Determine if a post already exists for the event quote
 				$quote_post = $this->retrieve_quote( $post_id );
@@ -894,7 +893,7 @@
 					// If no quote post exists for this event, we'll be creating one
 					if( empty( $quote_post ) )	{
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( '	-- Creating new event quote' );
+							MDJM()->debug->log_it( '	-- Creating new event quote' );
 							
 						$post_args['post_title'] = 'Quote ' . MDJM_EVENT_PREFIX . $post_id;
 						$post_args['post_content'] = $content;
@@ -908,12 +907,12 @@
 						
 						if( !empty( $quote_post_id ) )	{
 							if( MDJM_DEBUG == true )
-								$GLOBALS['mdjm_debug']->log_it( '	-- Quotation generated ' . $quote_post_id );							
+								MDJM()->debug->log_it( '	-- Quotation generated ' . $quote_post_id );							
 						}
 					}
 					else	{ // We have an existing quote so update it
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( '	-- Updating existing event quote' );
+							MDJM()->debug->log_it( '	-- Updating existing event quote' );
 						
 						wp_update_post( array( 
 											'ID' 			  => $quote_post,
@@ -924,7 +923,7 @@
 						
 						/* -- Reset the meta keys for date viewed and view count -- */
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( '	-- Removing existing meta keys' );
+							MDJM()->debug->log_it( '	-- Removing existing meta keys' );
 												
 						delete_post_meta( $quote_post, '_mdjm_quote_viewed_date' );
 						delete_post_meta( $quote_post, '_mdjm_quote_viewed_count' );
@@ -935,7 +934,7 @@
 			/* -- Send emails as required -- */
 			if( empty( $_POST['mdjm_block_emails'] ) || $_POST['mdjm_block_emails'] != 'Y' )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Generating Email' );
+					MDJM()->debug->log_it( '	-- Generating Email' );
 				
 				$email_args = array( 
 					'content'	=> !empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template'] : $mdjm_settings['templates']['enquiry'],
@@ -956,20 +955,20 @@
 				
 				if( $quote )	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	-- Client quote sent. ' . $quote . ' ID ' );
+						 MDJM()->debug->log_it( '	-- Client quote sent. ' . $quote . ' ID ' );
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	ERROR: Client quote was not sent' );
+						 MDJM()->debug->log_it( '	ERROR: Client quote was not sent' );
 				}
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- No email requested' );		
+					MDJM()->debug->log_it( '	-- No email requested' );		
 			}
 			
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( '*** Completed New Enquiry procedures ***' . "\r\n", true );
+				MDJM()->debug->log_it( '*** Completed New Enquiry procedures ***' . "\r\n", true );
 						
 		} // status_enquiry
 		
@@ -997,7 +996,7 @@
 			$event_stati = get_event_stati();
 			
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
+				MDJM()->debug->log_it( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
 			/* -- Email the contract to the client as required -- */
 			$contact_client = !empty( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
@@ -1005,22 +1004,22 @@
 			
 			if( !$mdjm_posts->post_exists( $contract_email ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
+					MDJM()->debug->log_it( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 			}
 			
 			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Overiding client email settings' );
+					MDJM()->debug->log_it( 'Overiding client email settings' );
 				$contact_client = false;
 			}
 			
 			if( $contact_client == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Configured to email client with template ID ' . $contract_email );
+					MDJM()->debug->log_it( 'Configured to email client with template ID ' . $contract_email );
 				
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Generating email...' );
+					MDJM()->debug->log_it( 'Generating email...' );
 					
 				$email_args = array( 
 					'content'	=> $contract_email,
@@ -1041,16 +1040,16 @@
 				
 				if( $contract_email )	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	-- Contract email sent to client ' );
+						 MDJM()->debug->log_it( '	-- Contract email sent to client ' );
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	ERROR: Contract email was not sent' );	
+						 MDJM()->debug->log_it( '	ERROR: Contract email was not sent' );	
 				}	
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Not configured to email client' );	
+					MDJM()->debug->log_it( 'Not configured to email client' );	
 			}
 			
 		} // status_contract
@@ -1079,7 +1078,7 @@
 			$event_stati = get_event_stati();
 			
 			if( MDJM_DEBUG == true )
-				$mdjm->debug_logger( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
+				MDJM()->debug->log_it( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
 				
 			/* -- Email the confirmation to the client & DJ if required -- */
 			$contact_client = !empty( $mdjm_settings['templates']['booking_conf_to_client'] ) ? true : false;
@@ -1089,23 +1088,23 @@
 			
 			if( !$mdjm_posts->post_exists( $client_email ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
+					MDJM()->debug->log_it( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
 				
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 			}
 			
 			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Overiding client email settings' );
+					MDJM()->debug->log_it( 'Overiding client email settings' );
 				$contact_client = false;
 			}
 			
 			if( $contact_client == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Configured to email client with template ID ' . $client_email );
+					MDJM()->debug->log_it( 'Configured to email client with template ID ' . $client_email );
 				
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Generating email...' );
+					MDJM()->debug->log_it( 'Generating email...' );
 				
 				$email_args = array( 
 					'content'	=> $client_email,
@@ -1126,23 +1125,23 @@
 				
 				if( $approval_email )	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	-- Confrmation email sent to client ' );
+						 MDJM()->debug->log_it( '	-- Confrmation email sent to client ' );
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						 $mdjm->debug_logger( '	ERROR: Confrmation email was not sent' );	
+						 MDJM()->debug->log_it( '	ERROR: Confrmation email was not sent' );	
 				}	
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Not configured to email client' );	
+					MDJM()->debug->log_it( 'Not configured to email client' );	
 			}
 			if( $contact_dj == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Configured to email DJ with template ID ' . $dj_email );
+					MDJM()->debug->log_it( 'Configured to email DJ with template ID ' . $dj_email );
 				
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Generating email...' );	
+					MDJM()->debug->log_it( 'Generating email...' );	
 					$approval_dj_email = $mdjm->send_email( array( 
 											'content'	=> $dj_email,
 											'to'		 => get_post_meta( $post_id, '_mdjm_event_dj', true ),
@@ -1156,16 +1155,16 @@
 										) );
 					if( $approval_dj_email )	{
 						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	-- Approval email sent to DJ ' );
+							 MDJM()->debug->log_it( '	-- Approval email sent to DJ ' );
 					}
 					else	{
 						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	ERROR: Approval email was not sent to DJ' );	
+							 MDJM()->debug->log_it( '	ERROR: Approval email was not sent to DJ' );	
 					}	
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Not configured to email DJ' );	
+					MDJM()->debug->log_it( 'Not configured to email DJ' );	
 			}
 		} // status_approved
 		
@@ -1184,7 +1183,7 @@
 			/* -- Validation -- */
 			if( empty( $event_id ) )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'ERROR: Cannot reject an event without an Event ID in ' . __METHOD__, true );
+					MDJM()->debug->log_it( 'ERROR: Cannot reject an event without an Event ID in ' . __METHOD__, true );
 					
 				return false;	
 			}
@@ -1201,7 +1200,7 @@
 				);
 
 			/* -- Prevent loops whilst updating -- */
-			remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 			
 			/* -- Initiate actions for status change -- */
 			wp_transition_post_status( 'mdjm-rejected', $event->post_status, $event );
@@ -1221,7 +1220,7 @@
 			/* -- Update Journal with event updates -- */
 			if( MDJM_JOURNAL == true )	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Adding journal entry' );
+					MDJM()->debug->log_it( '	-- Adding journal entry' );
 					
 				$this->add_journal( array(
 							'user'				=> $user,
@@ -1236,10 +1235,10 @@
 			}
 			else	{
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( '	-- Journalling is disabled' );	
+					MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 			}
 			
-			add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 			
 			return $result;
 		} // reject_event
@@ -1285,10 +1284,7 @@
 										
 			if( empty( $quote ) )
 				return false;
-				
-			if( MDJM_DEBUG == true )
-				$GLOBALS['mdjm_debug']->log_it( 'Returning quote ID ' . $quote[0]->ID );
-			
+							
 			return ( !empty( $quote ) ? $quote[0]->ID : false );			
 		} // retrieve_quote
 		
@@ -1557,20 +1553,20 @@
 			
 			if( MDJM_JOURNAL != true )	{
 				if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR:	Instructed to Journal whilst Journalling is disabled' );
+						MDJM()->debug->log_it( 'ERROR:	Instructed to Journal whilst Journalling is disabled' );
 	
 				return;	
 			}
 			
 			if( empty( $data['comment_content'] ) )	{
 				if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Missing Comment Contents in ' . __FUNCTION__, true );
+						MDJM()->debug->log_it( 'ERROR: Missing Comment Contents in ' . __FUNCTION__, true );
 				
 				return false;
 			}
 			if( empty( $meta['type'] ) )	{
 				if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Missing Comment Type in ' . __FUNCTION__, true );
+						MDJM()->debug->log_it( 'ERROR: Missing Comment Type in ' . __FUNCTION__, true );
 				
 				return false;
 			}
@@ -1581,7 +1577,7 @@
 			$event_id = !empty( $data['event'] ) ? $data['event'] : $post->ID;
 			if( empty( $event_id ) )	{
 				if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Missing event id in ' . __FUNCTION__, true );
+						MDJM()->debug->log_it( 'ERROR: Missing event id in ' . __FUNCTION__, true );
 				
 				return false;
 			}

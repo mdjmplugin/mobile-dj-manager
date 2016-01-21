@@ -30,7 +30,7 @@
 			wp_die( 'ERROR: No event to list the playlist for!<br />' . 
 			'<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] . '" title="' . __( 'Back' ) . '">' . __( 'Back' ) . '</a>' );
 			
-		if( !current_user_can( 'administrator' ) && !$mdjm->mdjm_events->is_my_event( $_GET['event_id'] ) )
+		if( !current_user_can( 'administrator' ) && !MDJM()->events->is_my_event( $_GET['event_id'] ) )
 			wp_die( 'ERROR: You can only view the playlists for your own event!<br />' . 
 			'<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] . '" title="' . __( 'Back' ) . '">' . __( 'Back' ) . '</a>' );
 		
@@ -78,7 +78,7 @@
 			wp_die( 'ERROR: No event to list the playlist for!<br />' . 
 			'<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] . '" title="' . __( 'Back' ) . '">' . __( 'Back' ) . '</a>' );
 			
-		if( !current_user_can( 'administrator' ) && !!$mdjm->mdjm_events->is_my_event( $post_data['event_id'] ) )
+		if( !current_user_can( 'administrator' ) && !!MDJM()->events->is_my_event( $post_data['event_id'] ) )
 			wp_die( 'ERROR: You can only view the playlists for your own event!<br />' . 
 			'<a class="button-secondary" href="' . $_SERVER['HTTP_REFERER'] . '" title="' . __( 'Back' ) . '">' . __( 'Back' ) . '</a>' );
 				

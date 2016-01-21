@@ -7,7 +7,7 @@
  */
 	class MDJM_Upgrade_to_1_2_7_3	{
 		function __construct()	{
-			$GLOBALS['mdjm_debug']->log_it( 'No updates required for version 1.2.7.3' );
+			MDJM()->debug->log_it( 'No updates required for version 1.2.7.3' );
 		}
 	}
 	

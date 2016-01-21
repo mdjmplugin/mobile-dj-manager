@@ -27,9 +27,7 @@
  */
 	function mdjm_update_custom_field_client_order()	{
 		global $mdjm_posts;
-		
-		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-		
+				
 		foreach( $_POST['clientfields'] as $order => $id )	{
 			$menu = $order + 1;
 			
@@ -38,7 +36,6 @@
 								'menu_order'	=> $menu,
 								) );	
 		}
-		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 		die();
 	} // mdjm_update_custom_field_client_order
 	add_action( 'wp_ajax_mdjm_update_custom_field_client_order', 'mdjm_update_custom_field_client_order' );
@@ -50,9 +47,7 @@
  */
 	function mdjm_update_custom_field_event_order()	{
 		global $mdjm_posts;
-		
-		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-		
+				
 		foreach( $_POST['eventfields'] as $order => $id )	{
 			$menu = $order + 1;
 			
@@ -61,7 +56,6 @@
 								'menu_order'	=> $menu,
 								) );	
 		}
-		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 		die();
 	} // mdjm_update_custom_field_event_order
 	add_action( 'wp_ajax_mdjm_update_custom_field_event_order', 'mdjm_update_custom_field_event_order' );
@@ -73,9 +67,7 @@
  */
 	function mdjm_update_custom_field_venue_order()	{
 		global $mdjm_posts;
-		
-		remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
-		
+				
 		foreach( $_POST['venuefields'] as $order => $id )	{
 			$menu = $order + 1;
 			
@@ -84,7 +76,6 @@
 								'menu_order'	=> $menu,
 								) );	
 		}
-		add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
 		die();
 	} // mdjm_update_custom_field_venue_order
 	add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_field_venue_order' );
@@ -94,13 +85,8 @@
  *
  *
  */
-	function save_event_transaction()	{		
-		if( !class_exists( 'MDJM_Transactions' ) )
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
-		
-		$mdjm_transactions = new MDJM_Transactions();
-		
-		$result = $mdjm_transactions->add_event_transaction();
+	function save_event_transaction()	{				
+		$result = MDJM()->txns->add_event_transaction();
 		
 		die();
 	} // save_event_transaction
@@ -114,7 +100,7 @@
 	function add_event_type()	{
 		global $mdjm;
 		
-		$mdjm->debug_logger( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+		MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
 			
 		$args = array( 
 					'taxonomy'			=> 'event-types',
@@ -144,7 +130,7 @@
 			}
 		}
 		
-		$mdjm->debug_logger( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+		MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
 		
 		$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
 		
@@ -165,7 +151,7 @@
 	function add_transaction_type()	{
 		global $mdjm;
 		
-		$mdjm->debug_logger( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+		MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 			
 		$args = array( 
 					'taxonomy'			=> 'transaction-types',
@@ -195,7 +181,7 @@
 			}
 		}
 		
-		$mdjm->debug_logger( 'Completed adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+		MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 		
 		$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
 		

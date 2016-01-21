@@ -57,11 +57,10 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		 *
 		 */
 		public static function ajax_in_head()	{
-			global $mdjm, $mdjm_settings;
-			
-			// If we're not using AJAX, return
 			if( empty( self::$ajax ) )
 				return;
+			
+			global $mdjm, $mdjm_settings;
 				
 			if( $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )
 				$pass_redirect = true;

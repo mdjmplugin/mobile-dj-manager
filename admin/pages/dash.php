@@ -1,7 +1,11 @@
 <?php
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	if( !current_user_can( 'mdjm_employee' ) )  {
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
 	}
 		
 	function mdjm_dashboard() {
@@ -25,7 +29,7 @@
         <hr />
         <h2>
         <?php
-		$dj_event_count = $mdjm->mdjm_events->count_events_by_status( 'dj', get_current_user_id() );
+		$dj_event_count = MDJM()->events->count_events_by_status( 'dj', get_current_user_id() );
         ?></h2>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
           <tr>
@@ -37,7 +41,7 @@
             <td width="30%">Active Bookings:</td>
             <td width="70%"><?php echo $dj_event_count['active_month']; ?></td>
           </tr>
-          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+          <?php if( MDJM()->permissions->employee_can( 'read_events' ) )	{
 			  ?>
               <tr>
                 <td><a href="<?php echo mdjm_get_admin_page( 'enquiries' ) . '&mdjm_filter_type&mdjm_filter_date=' . 
@@ -60,7 +64,7 @@
 				'&mdjm_filter_type'; ?>">Completed Bookings:</a></td>
             <td><?php echo $dj_event_count['completed_month']; ?></td>
           </tr>
-		<?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+		<?php if( MDJM()->permissions->employee_can( 'manage_events' ))	{
 			?>
           <tr>
             <td>Potential Earnings: </td>
@@ -76,7 +80,7 @@
           <tr>
             <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
             </tr>
-         <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+         <?php if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
 			 ?>
           <tr>
             <td><a href="<?php echo mdjm_get_admin_page( 'enquiries' ); ?>">Outstanding Enquiries:</a></td>
@@ -96,7 +100,7 @@
             <td>Completed Bookings:</td>
             <td><?php echo $dj_event_count['completed_year']; ?></td>
           </tr>
-          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+          <?php if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
 			  ?>
           <tr>
             <td>Potential Earnings:</td>
@@ -118,9 +122,9 @@
               <tr>
                 <td width="35%">Your Status:</td>
                 <?php
-				$next_event = $mdjm->mdjm_events->next_event( $current_user->ID, 'dj' );
+				$next_event = MDJM()->events->next_event( $current_user->ID, 'dj' );
 				if( !empty( $next_event ) )
-					$eventinfo = $mdjm->mdjm_events->event_detail( $next_event[0]->ID );
+					$eventinfo = MDJM()->events->event_detail( $next_event[0]->ID );
 				?>
                 <td width="65%">
 				<?php
@@ -131,7 +135,7 @@
               </tr>
               <?php
 			  if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				  $bookings_today = $mdjm->mdjm_events->employee_bookings();
+				  $bookings_today = MDJM()->events->employee_bookings();
 				  ?>
 				  <tr>
 					<td>Employee Bookings:</td>
@@ -145,7 +149,7 @@
 						echo '<td>';
 						$i = 1;
 						foreach( $bookings_today as $event )	{
-							$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
+							$eventinfo = MDJM()->events->event_detail( $event->ID );
 								
 							echo '<a href="' . get_edit_post_link( $event->ID ) . '">' . 
 							$eventinfo['dj']->display_name . ' from ' . $eventinfo['start'] . '</a>' . 
@@ -192,7 +196,7 @@
           </table>
 		<?php
 			if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				$emp_event_count = $mdjm->mdjm_events->count_events_by_status();
+				$emp_event_count = MDJM()->events->count_events_by_status();
 		?>
                 <hr />
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">

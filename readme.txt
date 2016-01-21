@@ -75,6 +75,20 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3 =
+<strong>Released XXXX XXXX, 2015</strong>
+<ui>
+	<li>New: Updated Employee interface replaces the old "DJ List"</li>
+	<li>New: Updated Client interface replaces the old "Client List"</li>
+	<li>New: Create custom MDJM employee roles and assign permissions to each role</li>
+	<li>New: Assign multiple MDJM roles to each employee</li>
+	<li>New: Added Event Staff checkbox on user screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions</li>
+	<li>New: Admin availability checker can check for availability by role</li>
+	<li>New: Added availability checker setting. Specify which roles need to be available on the given date for you to be available</li>
+	<li>General: Main MDJM class is now a singleton class</li>
+	<li>General: Post actions and filters do not need to be a class</li>
+</ui>
+
 = 1.2.7.4 =
 **Released 19th January, 2016**
 

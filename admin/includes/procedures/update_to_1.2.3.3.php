@@ -20,7 +20,7 @@
 		 */
 		function update_settings()	{
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Updating Settings for version 1.2.3.3' );
+			MDJM()->debug->log_it( 'Updating Settings for version 1.2.3.3' );
 			
 			if( !get_option( 'm_d_j_m_has_initiated' ) )
 				add_option( 'm_d_j_m_has_initiated', current_time( 'timestamp' ) );
@@ -37,7 +37,7 @@
 			update_option( 'mdjm_clientzone_settings', $clientzone );
 			update_option( 'mdjm_templates_settings', $templates );
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Settings Updated' );
+			MDJM()->debug->log_it( 'Settings Updated' );
 						
 		} // update_settings
 		
@@ -65,17 +65,17 @@
 									);
 			
 			/* -- Insert the page & return the page ID -- */
-			$GLOBALS['mdjm_debug']->log_it( 'Creating quote page for version 1.2.3.3' );
+			MDJM()->debug->log_it( 'Creating quote page for version 1.2.3.3' );
 			$mdjm_page_id = wp_insert_post( $mdjm_page_defaults );
 			
 			if( $mdjm_page_id )
-				$GLOBALS['mdjm_debug']->log_it( 'Page Client Quotes created successfully' );
+				MDJM()->debug->log_it( 'Page Client Quotes created successfully' );
 				
 			/* -- Add the setting for the page -- */
 			$mdjm_page_settings['quotes_page'] = $mdjm_page_id;
 			update_option( 'mdjm_plugin_pages', $mdjm_page_settings );
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Quote page created' );
+			MDJM()->debug->log_it( 'Quote page created' );
 				
 		} // create_pages
 		
@@ -87,17 +87,17 @@
 		 */
 		function create_template()	{
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Adding quote template for version 1.2.3.3' );
+			MDJM()->debug->log_it( 'Adding quote template for version 1.2.3.3' );
 			
 			include( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-templates.php' );
 			
 			if( wp_insert_post( $online_quote_template_args ) )
-				$GLOBALS['mdjm_debug']->log_it( ' Online Quote template created successfully' );
+				MDJM()->debug->log_it( ' Online Quote template created successfully' );
 					
 			else
-				$GLOBALS['mdjm_debug']->log_it( ' Online Quote template was not created' );		
+				MDJM()->debug->log_it( ' Online Quote template was not created' );		
 			
-			$GLOBALS['mdjm_debug']->log_it( 'Quote template added' );
+			MDJM()->debug->log_it( 'Quote template added' );
 			
 		} // create_template
 		

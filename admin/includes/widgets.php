@@ -12,11 +12,11 @@
 */
 	function f_mdjm_dash_overview() {
 		global $mdjm, $mdjm_settings;
-		$next_event = $mdjm->mdjm_events->next_event( '', 'dj' );
+		$next_event = MDJM()->events->next_event( '', 'dj' );
 		if( !empty( $next_event ) )
 			$event_types = get_the_terms( $next_event[0]->ID, 'event-types' );
 						
-		$bookings_today = $mdjm->mdjm_events->employee_bookings();
+		$bookings_today = MDJM()->events->employee_bookings();
 		?>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
          <tr>
@@ -36,7 +36,7 @@
             <td width="60%">
             <?php
 			if( !empty( $next_event ) )	{
-				$eventinfo = $mdjm->mdjm_events->event_detail( $next_event[0]->ID );
+				$eventinfo = MDJM()->events->event_detail( $next_event[0]->ID );
             	
 				echo '<a href="' . get_edit_post_link( $next_event[0]->ID ) . '">' . 
 					date( 'd M Y', $eventinfo['date'] ) . '</a> (' . $eventinfo['type'] . ')';
@@ -46,14 +46,14 @@
 			?>
             </td>
           </tr>
-          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+          <?php if( MDJM()->permissions->employee_can( 'read_events_all' ) )	{
 			  ?>
               <tr>
                 <th align="left">Outstanding Enquiries:</th>
                 <td>
 				<?php
-						$e = $mdjm->mdjm_events->mdjm_count_event_status( 'mdjm-enquiry' );
-						$ue = $mdjm->mdjm_events->mdjm_count_event_status( 'mdjm-unattended' );
+						$e = MDJM()->events->mdjm_count_event_status( 'mdjm-enquiry' );
+						$ue = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
 						echo '<a href="' . mdjm_get_admin_page( 'enquiries' ) . '">' . $e . _n( ' Enquiry', ' Enquiries', $e ) . '</a> | ' .
 						'<a href="' . mdjm_get_admin_page( 'events' ) . '&post_status=mdjm-unattended">' . $ue . ' Unattended' . '</a>';
 				?>
@@ -67,7 +67,7 @@
         <ul>
         <?php
 			if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-				$dj_event_results = $mdjm->mdjm_events->employee_bookings();
+				$dj_event_results = MDJM()->events->employee_bookings();
 				if( $dj_event_results )	{
 					foreach( $dj_event_results as $info )	{
 						$djinfo = get_userdata( get_post_meta( $info->ID, '_mdjm_event_dj', true ) );
@@ -88,13 +88,13 @@
 				}
 			}
 		?>
-            <li><?php if( current_user_can( 'administrator' ) || dj_can( 'add_event' ) ) { ?><a href="<?php echo admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ); ?>">Add New Event</a> | <?php } ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-dashboard' ); ?>">View Dashboard</a> | <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">Edit Settings</a>
+            <li><?php if( MDJM()->permissions->employee_can( 'manage_events' ) ) { ?><a href="<?php echo admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ); ?>">Add New Event</a> | <?php } ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-dashboard' ); ?>">View Dashboard</a> | <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">Edit Settings</a>
             
             </li>
         </ul>
         </div>
         <div class="alternate">
-        <?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 1 ) ); ?>
+        <?php wp_widget_rss_output( 'http://www.mdjm.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 1 ) ); ?>
         </div>
        	<?php
 	} // f_mdjm_dash_overview

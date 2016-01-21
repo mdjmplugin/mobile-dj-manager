@@ -144,6 +144,13 @@
 	 *
 	 * 
 	 */
+	// Retrieve the MDJM roles array
+	$mdjm_roles = MDJM()->roles->get_roles();
+	
+	// We don't need to show the admin role as it is considered as a 'DJ'
+	if( array_key_exists( 'administrator', $mdjm_roles ) )
+		unset( $mdjm_roles['administrator'] );
+	
 	$all_settings = array( 
 					/* -- General Settings -- */
 							'company_name' => array(
@@ -358,7 +365,7 @@
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'text',
 									'class' => 'small-text',
-									'value' => ( !empty( $mdjm_debug->settings['log_size'] ) ? $mdjm_debug->settings['log_size'] : '' ),
+									'value' => ( !empty( MDJM()->debug->settings['log_size'] ) ? MDJM()->debug->settings['log_size'] : '' ),
 									'text' => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
 									'desc' => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 
 										'mobile-dj-manager' ),
@@ -371,7 +378,7 @@
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
 									'class' => 'small-text',
-									'value' => ( !empty( $mdjm_debug->settings['warn'] ) ? '1' : '' ),
+									'value' => ( !empty( MDJM()->debug->settings['warn'] ) ? '1' : '' ),
 									'text' => '',
 									'desc' => __( 'Will display notice and allow removal and recreation of log files', 'mobile-dj-manager' ),
 									'section' => 'debugging_files',
@@ -382,7 +389,7 @@
 									'label'  => __( 'Auto Purge Log Files', 'mobile-dj-manager' ) . '?',
 									'key'	=> MDJM_DEBUG_SETTINGS_KEY,
 									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_debug->settings['auto_purge'] ) ? '1' : '' ),
+									'value' => ( !empty( MDJM()->debug->settings['auto_purge'] ) ? '1' : '' ),
 									'text' => '',
 									'desc' => sprintf( __( 'If selected, log files will be auto-purged when they reach the value of %sMaximum Log File Size%s',
 										'mobile-dj-manager' ), '<code>', '</code>' ),
@@ -1660,6 +1667,24 @@
 								'section' => 'clientzone_availability',
 								'page' => 'availability' ),
 								
+							'availability_roles' => array(
+								'label' => __( 'Employee Roles', 'mobile-dj-manager' ) . ':',
+								'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
+								'type' => 'multiple_select',
+								'value' => ( !empty( $mdjm_settings['availability']['availability_roles'] ) ? 
+									$mdjm_settings['availability']['availability_roles'] : '' ),
+								'text' => '',
+								'desc' => __( 'CTRL (cmd on MAC) + Click to select employee roles that ' . 
+									'need to be available', 'mobile-dj-manager' ),
+								'size' => 8,
+								'custom_args' => array (
+												'list_type' => 'post_status',
+												'list_values' => $mdjm_roles,
+												'selected' => ( !empty( $mdjm_settings['availability']['availability_roles'] ) ? 
+													$mdjm_settings['availability']['availability_roles'] : '' ) ),
+								'section' => 'clientzone_availability',
+								'page' => 'availability' ),
+								
 							'avail_ajax' => array(
 									'label' => __( 'Use Ajax?', 'mobile-dj-manager' ),
 									'key' => MDJM_AVAILABILITY_SETTINGS_KEY,
@@ -2074,6 +2099,5 @@
 									'section' => 'addon',
 									'page' => 'addons',
 									),
-							);
-							
+							);							
 ?>
