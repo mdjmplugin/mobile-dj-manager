@@ -75,7 +75,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-<<<<<<< HEAD
+
 = 1.3 =
 <strong>Released XXXX XXXX, 2015</strong>
 <ui>
@@ -98,7 +98,6 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 * **General**: List multiple attachments on communication history
 * **Bug Fix**: Custom event fields output if the field name contained spaces
 * **Bug Fix**: Venue contact name missing a space if venue is set to client address
->>>>>>> master
 
 = 1.2.7.4 =
 **Released 19th January, 2016**
