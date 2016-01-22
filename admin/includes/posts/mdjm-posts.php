@@ -311,8 +311,9 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					else	{
 						$client_data = get_userdata( $event_data['_mdjm_event_client'] );
 						$event_data['_mdjm_event_venue_name'] = __( 'Client Address', 'mobile-dj-manager' );
+												
 						$event_data['_mdjm_event_venue_contact'] = !empty( $client_data->first_name ) ? sanitize_text_field( $client_data->first_name ) : '';
-						$event_data['_mdjm_event_venue_contact'] .= ' ' . !empty( $client_data->last_name ) ? sanitize_text_field( $client_data->last_name ) : '';
+						$event_data['_mdjm_event_venue_contact'] .= !empty( $client_data->last_name ) ? ' ' . sanitize_text_field( $client_data->last_name ) : '';
 						$event_data['_mdjm_event_venue_phone'] = !empty( $client_data->phone1 ) ? $client_data->phone1 : '';
 						$event_data['_mdjm_event_venue_email'] = !empty( $client_data->user_email ) ? $client_data->user_email : '';
 						$event_data['_mdjm_event_venue_address1'] = !empty( $client_data->address1 ) ? $client_data->address1 : '';
