@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 3.9.1
 Tested up to: 4.4.1
-Stable tag: 1.2.7.4
+Stable tag: 1.2.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,6 +75,15 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.7.5 =
+**Released 22nd January, 2016**
+
+* **New**: Attach files from computer to email composed via communication feature
+* **New**: DJ / Admin access to the Client Zone is now blocked. Use the Admin area. For testing create a test client account and log in with that
+* **General**: List multiple attachments on communication history
+* **Bug Fix**: Custom event fields output if the field name contained spaces
+* **Bug Fix**: Venue contact name missing a space if venue is set to client address
+
 = 1.2.7.4 =
 **Released 19th January, 2016**
 
@@ -549,5 +558,5 @@ Our fully customisable Contact Forms enable full management of events from the i
 </ul>
 
 == Upgrade Notice ==
-= 1.2.7.4 =
-Resolves a few bugs which have been around for too long. Version 1.3 is pending with new features.
+= 1.2.7.5 =
+Minor update with some bug fixes and small additions. Version 1.3 is pending with new features.
