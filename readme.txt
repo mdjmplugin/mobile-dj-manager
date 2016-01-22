@@ -78,6 +78,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 = 1.2.7.5 =
 **Released 22nd January, 2016**
 
+* **New**: Attach files from computer to email composed via communication feature
 * **Bug Fix**: Custom event fields output if the field name contained spaces
 * **Bug Fix**: Venue contact name missing a space if venue is set to client address
 
