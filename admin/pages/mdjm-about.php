@@ -115,6 +115,14 @@ if( !class_exists( 'MDJM_About' ) ) :
 		public function page_content()	{
 			$this->page_header();
 			?>
+            <h3 class="site-title">Version 1.2.7.5 - 22nd January 2015</h3>
+            <ui>
+            	<li><strong>New</strong>: Attach files from computer to email composed via communication feature</li>
+                <li><strong>New</strong>: DJ / Admin access to the Client Zone is now blocked. Use the Admin area. For testing create a test client account and log in with that</li>
+                <li><strong>General</strong>: List multiple attachments on communication history</li>
+                <li><strong>Bug Fix</strong>: Custom event fields output if the field name contained spaces</li>
+                <li><strong>Bug Fix</strong>: Venue contact name missing a space if venue is set to client address</li>
+            </ui>
             <h3 class="site-title">Version 1.2.7.4 - 19th January 2015</h3>
             <ui>
                 <li><strong>Bug Fix</strong>: Custom event fields did not display on the event screen if your deposit type was not set as percentage</li>
