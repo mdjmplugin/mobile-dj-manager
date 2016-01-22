@@ -75,6 +75,11 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.2.7.5 =
+**Released 22nd January, 2016**
+
+* **Bug Fix**: Custom event fields output if the field name contained spaces
+
 = 1.2.7.4 =
 **Released 19th January, 2016**
 
