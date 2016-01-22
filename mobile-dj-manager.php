@@ -4,8 +4,13 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://www.mydjplanner.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
+<<<<<<< HEAD
  * Version: 1.2.7.4
  * Date: 26 November 2015
+=======
+ * Version: 1.2.7.5
+ * Date: 19 January 2916
+>>>>>>> master
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
  * Author URI: http://www.mydjplanner.co.uk
  * Text Domain: mobile-dj-manager
@@ -146,7 +151,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public function define_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.2.7.4' );
+			define( 'MDJM_VERSION_NUM', '1.2.7.5' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
