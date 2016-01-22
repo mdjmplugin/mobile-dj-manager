@@ -36,17 +36,18 @@
 		if( !empty( $attachments ) )	{
 			$i = 1;
 			?>
-            <p><strong>Attachments</strong>:<br />
+            <p><strong>Attachments</strong>:</p>
+            	<ul>
             	<?php
 				foreach( $attachments as $attachment )	{
-					echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
+					echo '<li><a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 					echo basename( get_attached_file( $attachment->ID ) );
-					echo '</a>';
-					echo ( $i < count( $attachments ) ? '<br />' : '' );
+					echo '</a></li>';
+					//echo ( $i < count( $attachments ) ? '<br />' : '' );
 					$i++;	
 				}
 				?>
-            </p>
+                </ul>
             <?php	
 		}
 		?>

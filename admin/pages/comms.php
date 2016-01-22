@@ -80,7 +80,7 @@
 			if( isset( $_FILES['upload_file'] ) && '' !== $_FILES['upload_file']['name'] )	{
 				$upload_dir = wp_upload_dir();
 				
-				$file_name	= basename( $_FILES['upload_file']['name'] );
+				$file_name	= $_FILES['upload_file']['name'];
 				$file_path	= $upload_dir['path'] . '/' . $file_name;
 				$tmp_path	 = $_FILES['upload_file']['tmp_name'];
 				
