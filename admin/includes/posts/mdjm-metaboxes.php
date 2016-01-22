@@ -34,7 +34,6 @@
         
         <?php
 		if( !empty( $attachments ) )	{
-			$i = 1;
 			?>
             <p><strong>Attachments</strong>:</p>
             	<ul>
@@ -43,8 +42,6 @@
 					echo '<li><a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 					echo basename( get_attached_file( $attachment->ID ) );
 					echo '</a></li>';
-					//echo ( $i < count( $attachments ) ? '<br />' : '' );
-					$i++;	
 				}
 				?>
                 </ul>

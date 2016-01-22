@@ -331,7 +331,10 @@
 		</tr>
         <tr class="alternate">
 		<th class="row-title" align="left"><label for="upload_file">Attach File from Computer:</label></th>
-		<td><input type="file" name="upload_file" id="upload_file" class="regular-text" value="" /></td>
+		<td><input type="file" name="upload_file" id="upload_file" class="regular-text" value="" /><p class="description"><?php echo __( 'Max file size', 'mobile-dj-manager' ) . ': ' . ini_get( 'post_max_size' )
+							. '. ' . sprintf( __( 'Change php.ini %spost_max_size%s to increase', 'mobile-dj-manager' ), 
+							'<strong>',
+							'</strong>' ); ?></p></td>
 		</tr>
         <?php do_action( 'mdjm_comms_fields_last', $email_query, $contract_query ); ?>
 		<tr>
