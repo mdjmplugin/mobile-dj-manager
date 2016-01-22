@@ -765,7 +765,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						if( is_array( $meta_value ) )
 							$meta_value = implode( '<br />', $meta_value );
 						
-						$pairs['{MDJM_CF_' . strtoupper( get_the_title( $field->ID ) ) . '}'] = !empty( $meta_value ) ? 
+						$pairs['{MDJM_CF_' . strtoupper( str_replace( ' ', '_', get_the_title( $field->ID ) ) ) . '}'] = !empty( $meta_value ) ? 
 							$meta_value : '';
 					}
 				}
