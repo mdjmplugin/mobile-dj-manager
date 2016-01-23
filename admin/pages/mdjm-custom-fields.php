@@ -49,6 +49,36 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			return;
 		} // custom_fields_controller
+		
+		/**
+		 * Display a list of custom shortcodes.
+		 *
+		 * This function outputs a HTML list of custom shortcodes to be used.
+		 *
+		 * @since	1.3
+		 * @param
+		 * @return	HTML formatted list of tags.
+		 */
+		public static function list_custom_tags()	{
+			$query 	= mdjm_get_custom_fields();
+			$tags	= $query->get_posts();
+			$output	= '';
+			
+			if( $tags )	{
+				$output .= '<ul>';
+				
+				foreach( $tags as $tag )	{
+					$output .= '<li style="font-style: italic; font-size: smaller;">';
+					$output .= '{MDJM_CF_' . strtoupper( str_replace( ' ', '_', get_the_title( $tag->ID ) ) ) . '}';
+					$output .= ' ' . $tag->post_content;
+					$output .= '</li>';
+				}
+				
+				$output .= '</ul>';
+			}
+			
+			echo $output;
+		} // list_custom_tags
 			
 		/**
 		 * Insert a new custom field post to the relevant section
@@ -484,8 +514,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			}
 			?>                
 			</p>
-			
 			</form>
+            <h4><?php _e( 'Your Custom Shortcodes', 'mobile-dj-manager' ); ?></h4>
+            <p><?php self::list_custom_tags(); ?></p>
 			</div>
 			<?php
 		} // add_new_custom_field_table
