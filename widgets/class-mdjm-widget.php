@@ -85,7 +85,7 @@
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
+									window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail=1&mdjm_avail_date=<?php echo ( isset( $_POST['widget_check_date'] ) ? $_POST['widget_check_date'] : '' ); ?>';
 									<?php
 								}
 								else	{
@@ -146,7 +146,7 @@
 			
 			/* Check for form submission & process */
 			if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
-				$dj_avail = dj_available( '', $_POST['widget_check_date'] );
+				$dj_avail = dj_available( '', '', $_POST['widget_check_date'] );
 				
 				if( isset( $dj_avail ) )	{
 					if ( !empty( $dj_avail['available'] ) )	{

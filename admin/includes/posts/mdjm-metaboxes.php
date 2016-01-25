@@ -34,17 +34,19 @@
         
         <?php
 		if( !empty( $attachments ) )	{
+			$i = 1;
 			?>
-            <p><strong>Attachments</strong>:</p>
-            	<ul>
+            <p><strong>Attachments</strong>:<br />
             	<?php
 				foreach( $attachments as $attachment )	{
-					echo '<li><a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
+					echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
 					echo basename( get_attached_file( $attachment->ID ) );
-					echo '</a></li>';
+					echo '</a>';
+					echo ( $i < count( $attachments ) ? '<br />' : '' );
+					$i++;	
 				}
 				?>
-                </ul>
+            </p>
             <?php	
 		}
 		?>
@@ -137,7 +139,7 @@
                 <?php
                     /* -- Build the drop down box -- */
                     echo ( !empty( $clients ) && $existing_event == false ? '<option value="">--- Select Client ---</option>' . "\r\n" : '' );
-                    echo ( $existing_event == false && ( current_user_can( 'administrator' ) || dj_can( 'dj_add_client' ) ) ? '<option value="add_new">--- Add New Client ---</option>' . "\r\n" : '' );
+                    echo ( $existing_event == false && ( MDJM()->permissions->employee_can( 'list_all_clients' ) ) ? '<option value="add_new">--- Add New Client ---</option>' . "\r\n" : '' );
                     foreach( $clients as $client )	{
                         echo '<option value="' . $client->ID . '"';
 						selected( $client->ID, $client_id );
@@ -146,7 +148,7 @@
                 ?>
                 </select>
                 <?php
-                if( $post->post_status != 'auto-draft' && !empty( $client_id ) )
+                if( MDJM()->permissions->employee_can( 'view_clients_list' ) && $post->post_status != 'auto-draft' && !empty( $client_id ) )
 					echo '<a style="font-size: 11px;" id="client_details_show" href="#">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
 				?>
             </div>
@@ -243,28 +245,36 @@
 						<?php echo ( !empty( $last_login ) ? date( 'H:i d M Y', strtotime( $last_login ) ) : 'Never' ); ?> </p>
                 </div>
                 <div class="mdjm-post-last-2column">
-                    <p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
-						<?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
+                	<?php
+					if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
+						?>
+                        <p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
+                            <?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
+                        <?php
+					}
+					?>
                 </div>
             </div>
             <?php
-            $quote = $mdjm->mdjm_events->retrieve_quote( $post->ID );
-			if( !empty( $quote ) )	{
-				?>
-				<div class="mdjm-post-row-single" style="height: 80px;">
-					<div class="mdjm-post-1column">
-						<p><span class="mdjm-label"><?php _e( 'Online Quote Status', 'mobile-dj-manager' ); ?></span>:<br />
-							<?php 
-							if( get_post_status( $quote ) == 'mdjm-quote-viewed' )
-								echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
-								
-							else
-								echo __( 'Not viewed yet', 'mobile-dj-manager' );
-							?>
-							</p>
+			if( MDJM()->permissions->employee_can( 'list_own_quotes' ) )	{
+				$quote = MDJM()->events->retrieve_quote( $post->ID );
+				if( !empty( $quote ) )	{
+					?>
+					<div class="mdjm-post-row-single" style="height: 80px;">
+						<div class="mdjm-post-1column">
+							<p><span class="mdjm-label"><?php _e( 'Online Quote Status', 'mobile-dj-manager' ); ?></span>:<br />
+								<?php 
+								if( get_post_status( $quote ) == 'mdjm-quote-viewed' )
+									echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
+									
+								else
+									echo __( 'Not viewed yet', 'mobile-dj-manager' );
+								?>
+								</p>
+						</div>
 					</div>
-				</div>
-                <?php
+					<?php
+				}
 			}
 			?>
         </div>
@@ -305,30 +315,76 @@
         </div>
         <div class="mdjm-post-row">
         	<div class="mdjm-post-2column">
+                <label for="_mdjm_event_dj" class="mdjm-label"><?php printf( __( 'Select Primary %s', 'mobile-dj-manager' ), MDJM_DJ ); ?>:</label><br />
+                <?php
+                /**
+                 * If a Multi Employee business, display dropdown of all employees.
+                 * But only if the user is permitted to view all employees.
+                 */
+                if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+                    MDJM()->users->employee_dropdown( 
+                        array(
+                            'name'            => '_mdjm_event_dj',
+                            'class'           => 'required',
+                            'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), MDJM_DJ ) . ' ---',
+                            'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
+                            'group'           => true,
+                        )
+                    );
+                    echo '<input type="hidden" name="event_dj" id="event_dj" value="';
+                    echo ( $pagenow == 'post-new.php' ? 
+                        get_current_user_id() : 
+                        get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+                    echo '" />' . "\r\n";
+                }
+                /**
+                 * Otherwise the current user is the DJ
+                 */
+                else	{
+                    echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
+                    echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
+                    echo '<input type="text" value="';
+                    
+                    if( '' != get_post_meta( $post->ID, '_mdjm_event_dj', true ) )
+                        echo get_post_meta( $post->ID, '_mdjm_event_dj', true );
+                    
+                    else
+                        echo $current_user->display_name;
+                    
+                    echo '" readonly="readonly" />' . "\r\n";	
+                }
+                ?>
+            </div>
+        <?php 
+		/*
+        	<div class="mdjm-post-2column">
                 <label for="_mdjm_event_dj" class="mdjm-label"><?php _e( 'Select ' . MDJM_DJ . ':' ); ?></label><br />
                 <?php
-                if( current_user_can( 'administrator' ) && MDJM_MULTI == true )	{
-					$djs = mdjm_get_djs();
-					echo '<select name="_mdjm_event_dj" id="_mdjm_event_dj" class="required">' . "\r\n";
-					echo '<option value="">--- Select a ' . MDJM_DJ . ' ---</option>' . "\r\n";
-					foreach( $djs as $dj )	{
-						echo '<option value="' . $dj->ID . '"';
-						$pagenow == 'post-new.php' ? selected( $dj->ID, get_current_user_id() ) : 
-							( isset( $_GET['dj'] ) ? selected( $dj->ID, $_GET['dj'] ) : selected( $dj->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) );
-						echo '>' . $dj->display_name . '</option>' . "\r\n";
-					}
-					echo '</select>' . "\r\n";
-					echo '<input type="hidden" name="event_dj" id="event_dj" value="' . ( $pagenow == 'post-new.php' ? 
-						 get_current_user_id() : get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) . '" />' . "\r\n";
+				if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+					MDJM()->users->employee_dropdown( 
+						array(
+							'name'            => '_mdjm_event_dj',
+							'class'           => 'required',
+							'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), MDJM_DJ ) . ' ---',
+							'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
+							'group'           => true,
+						)
+					);
+					echo '<input type="hidden" name="event_dj" id="event_dj" value="';
+					echo ( $pagenow == 'post-new.php' ? 
+						get_current_user_id() : 
+						get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+					echo '" />' . "\r\n";
 				}
 				else	{
 					echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
 					echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
-					echo '<input type="text" value="' . $current_user->display_name . '" readonly="readonly" />' . "\r\n";
-						
+					echo '<input type="text" value="' . $current_user->display_name . '" readonly="readonly" />' . "\r\n";	
 				}
 				?>
             </div>
+			*/
+			?>
             <div class="mdjm-post-last-2column">
                 <label for="display_event_date" class="mdjm-label"><?php _e( 'Event Date:' ); ?></label><br />
                 <input type="text" class="mdjm_date required" name="display_event_date" id="display_event_date" 
@@ -436,38 +492,51 @@
         </div><!-- mdjm-post-row -->
         <!-- End of second row -->
         <!-- Start of third row -->
-        <div class="mdjm-post-row">
-        	<div class="mdjm-post-2column">
-            <label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
-            <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
-            	value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
-                <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed.</span>
-            </div>
-            <?php
-            if( empty( $existing_event ) )	{
-				if( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
-					$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
-					
-				else
-					$deposit = '0.00';	
-			}
+        <?php
+		if( empty( $existing_event ) )	{
+			if( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
+				$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
+				
 			else
-				$deposit = esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) );
-			
-			// Determine whether or not the deposit needs to dynamically update
-			echo '<input type="hidden" name="mdjm_update_deposit" id="mdjm_update_deposit" value="' . 
-				( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' ? 
-					'1' : '0' ) . '" />' . "\r\n";
-			
+				$deposit = '0.00';	
+		}
+		else
+			$deposit = esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) );
+		
+		if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
 			?>
-            <div class="mdjm-post-last-2column">
-            <label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( MDJM_DEPOSIT_LABEL . ':' ); ?></label><br />
-            <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
-            	value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
-                <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
-            </div>
-		</div><!-- mdjm-post-row -->
-        <!-- End of third row -->
+            <div class="mdjm-post-row">
+                <div class="mdjm-post-2column">
+                <label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
+                <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
+                    value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+                    <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed.</span>
+                </div>
+                <?php
+                
+                // Determine whether or not the deposit needs to dynamically update
+                echo '<input type="hidden" name="mdjm_update_deposit" id="mdjm_update_deposit" value="' . 
+                    ( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' ? 
+                        '1' : '0' ) . '" />' . "\r\n";
+                
+                ?>
+                <div class="mdjm-post-last-2column">
+                <label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( MDJM_DEPOSIT_LABEL . ':' ); ?></label><br />
+                <?php echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
+                    value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+                    <span class="mdjm-description">No <?php echo MDJM_CURRENCY; ?> symbol needed</span>
+                </div>
+            </div><!-- mdjm-post-row -->
+            <!-- End of third row -->
+            <?php
+		}
+		else	{
+			?>
+            	<input type="hidden" name="_mdjm_event_cost" id="_mdjm_event_cost" value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" />
+                <input type="hidden" name="_mdjm_event_deposit" id="_mdjm_event_deposit" value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" />
+            <?php
+		}
+		?>
         <!-- Start of fourth row -->
         <?php
 	/* -- Equipment Packages & Add-ons -- */
@@ -576,6 +645,140 @@
 		}
 		do_action( 'mdjm_events_metabox_last', $post );
 	} // mdjm_event_post_event_metabox
+	
+	/**
+	 * Add the event employee meta box to event posts.
+	 * This is where the main employee (DJ) and their wage is set
+	 * as well as any other employees and their wages.
+	 *
+	 *
+	 */
+	function mdjm_event_employee_mb( $post )	{
+		/**
+		 * Display all event employees. Start with the DJ
+		 */
+		 
+		echo '<div id="list-employees">' . "\r\n";
+		
+		$employees = MDJM()->users->get_event_employees( $post->ID );
+		echo $employees;
+		echo '</div>' . "\r\n";
+		
+		$primary = get_post_meta( $post->ID, '_mdjm_event_dj', true );
+		
+		$dj = !empty( $primary ) ? get_userdata( $primary )->display_name : '';
+		
+		?>
+        <table width="100%" id="mdjm-event-employees">
+        <thead>
+        <tr>
+        <th style="text-align:left; width:25%;"><?php _e( 'Role', 'mobile-dj-manager' ); ?></th>
+        <th style="text-align:left; width:25%;"><?php _e( 'Employee', 'mobile-dj-manager' ); ?></th>
+        <th style="text-align:left; width:20%;"><?php _e( 'Wage', 'mobile-dj-manager' ); ?></th>
+        <th style="text-align:left; width:15%;">&nbsp;</th>
+        <th style="text-align:left; width:15%;">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr id="dj-role">
+        <td style="text-align:left;"><?php echo MDJM_DJ; ?></td>
+        <td style="text-align:left;"><?php echo $dj; ?></td>
+        <td style="text-align:left;">
+			<?php 
+			if( MDJM()->permissions->employee_can( 'manage_txns' ) )	{
+				echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" placeholder="<?php echo display_price( '0', false ); ?>" value="<?php echo get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ); ?>" />
+          	<?php
+			}
+			else	{
+				echo '&mdash;';
+				?><input type="hidden" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" value="<?php echo get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ); ?>" /><?php
+			}
+			?>
+        </td>
+        <td><?php echo ( MDJM()->permissions->employee_can( 'manage_txns' ) ? __( 'Update', 'mobile-dj-manager' ) : '' ); ?></td>
+        <td>&nbsp;</td>
+        </tr>
+        
+        <?php
+		// Loop through all other employees and list
+		?>
+        </tbody>
+        </table>
+        <hr />
+        <?php
+		/**
+		 * Add the row which enables us to add a new employee to the event
+		 * if the current user is allowed to manage users
+		 */
+		 
+		if( MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+			?>
+			<div class="mdjm-post-row">
+				<div class="mdjm-post-3column">
+					<label for="event_new_employee" class="mdjm-label"><?php _e( 'Add Employee to Event', 'mobile-dj-manager' ); ?>:</label><br />
+					<?php
+					
+					$event_employees = get_post_meta( $post->ID, '_mdjm_event_employees', true );
+					
+					if( !empty( $event_employees ) )	{
+						foreach( $event_employees as $employee_role => $employees )	{
+							foreach( $employees as $employee )	{
+								$exclude[] = $employee->ID;
+							}
+						}
+					}
+					
+					add_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
+					$mdjm_roles = MDJM()->roles->get_roles();
+					remove_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
+					
+					MDJM()->users->employee_dropdown(
+						array(
+							'name'				=> 'event_new_employee',
+							'first_entry'		=> __( 'Add Employee', 'mobile-dj-manager' ),
+							'first_entry_val'	=> '',
+							'group'				=> true,
+							'structure'			=> true,
+							'exclude'			=> !empty( $exclude ) ? $exclude : '',
+							'echo'				=> true
+						)
+					);
+					?>
+				</div>
+				
+				<div class="mdjm-post-3column">
+					<label for="event_new_employee_role" class="mdjm-label"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
+					<select name="event_new_employee_role" id="event_new_employee_role">
+					<?php									
+					foreach( $mdjm_roles as $role_id => $role_name )	{						
+						echo '<option value="' . $role_id . '">' . $role_name . '</option>' . "\r\n";
+					}
+					
+					?>
+					</select>
+				</div>
+                
+				<div class="mdjm-post-last-3column">
+                	<?php
+					if( MDJM_PAYMENTS == true && MDJM()->permissions->employee_can( 'manage_txns' ) )	{
+						?>
+						<label for="event_new_employee_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
+                        <?php echo MDJM_CURRENCY; ?><input type="text" name="event_new_employee_wage" id="event_new_employee_wage" class="mdjm-input-currency" 
+						value="" placeholder="<?php echo display_price( '0', false ); ?>" />
+                        <?php
+					}
+					?>
+				</div>
+			</div>
+            <div class="mdjm-post-row-single">
+				<div class="mdjm-post-1column">
+					<a href="#" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+				</div>
+			</div>
+        
+        <?php
+		}
+	} // mdjm_event_employee_mb
 	
 	/*
 	 * mdjm_event_post_venue_metabox
@@ -699,7 +902,7 @@
         </div>
         <!-- End of sixth row -->
         <?php 
-		if( current_user_can( 'administrator' ) || dj_can( 'add_venue' ) )	{
+		if( MDJM()->permissions->employee_can( 'add_venues' ) )	{
 			?>
             <!-- Start of seventh row -->
             <div class="mdjm-post-row-single">
@@ -868,18 +1071,26 @@
             <div id="event_types">
 				<?php
                 /* -- Display the drop down selection -- */    
-                wp_dropdown_categories( array( 'taxonomy' 			=> 'event-types',
-                                               'hide_empty' 		=> 0,
-                                               'name' 				=> 'mdjm_event_type',
-											   'id' 				=> 'mdjm_event_type',
-                                               'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : '' ),
-                                               'orderby' 			=> 'name',
-                                               'hierarchical' 		=> 0,
-                                               'show_option_none' 	=> __( 'Select Event Type' ),
-                                               'class'				=> 'mdjm-meta required',
-                                                ) );
-                ?>
-                    <a id="new_event_type" class="side-meta" href="#">Add New</a>
+                wp_dropdown_categories( 
+					array( 
+						'taxonomy' 			=> 'event-types',
+						'hide_empty' 		  => 0,
+						'name' 				=> 'mdjm_event_type',
+						'id' 				  => 'mdjm_event_type',
+						'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : '' ),
+						'orderby' 			 => 'name',
+						'hierarchical' 		=> 0,
+						'show_option_none' 	=> __( 'Select Event Type' ),
+						'class'			   => 'mdjm-meta required'
+					)
+				);
+												
+				if( MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
+					?>
+					<a id="new_event_type" class="side-meta" href="#">Add New</a>
+					<?php
+				}
+				?>
             </div>
                 </div>
             </div>
@@ -1044,19 +1255,22 @@
         <div class="mdjm-meta-row" style="height: <?php echo ( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' ? 
 													'60px' : '40px' ); ?> !important;">
         	<div class="mdjm-left-col">
-            <?php 
-			submit_button( 
-						( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
-						'primary',
-						'save',
-						false,
-						array( 'id' => 'save-post' ) );
+            <?php
+			if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+				submit_button( 
+							( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
+							'primary',
+							'save',
+							false,
+							array( 'id' => 'save-post' ) );
+			}
 														
-			if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )
+			if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' && MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
 				echo '<br />' . 
 				'<br />' .
 				'<a style="color:#a00" href="' . get_delete_post_link( $post->ID ) . '">Delete this event</a>' . 
 				"\r\n";
+			}
 			?>
             </div>
         </div>
@@ -1151,12 +1365,8 @@
 		wp_localize_script( 'event-trans', 'posttrans', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 												
 		echo '<div id="transaction">' . "\r\n";
-		if( !class_exists( 'MDJM_Transactions' ) )
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' );
 		
-		$mdjm_transactions = new MDJM_Transactions();
-		
-		$transactions = $mdjm_transactions->show_event_transactions( $post->ID );
+		$transactions = MDJM()->txns->show_event_transactions( $post->ID );
 		echo $transactions;
 		echo '</div>' . "\r\n";
 		
@@ -1169,7 +1379,7 @@
 		echo '<div class="mdjm-post-row">' . "\r\n";
 			echo '<div class="mdjm-post-3column">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
-					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text" placeholder="' . 
+					MDJM_CURRENCY . '<input type="text" name="transaction_amount" id="transaction_amount" class="mdjm-input-currency" placeholder="' . 
 						display_price( '10', false ) . '" />' . "\r\n";
 			echo '</div>' . "\r\n";
 		

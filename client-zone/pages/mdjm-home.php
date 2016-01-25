@@ -28,21 +28,7 @@
 				if( isset( $_GET['message'], $_GET['class'] ) )
 					$clientzone->display_message( $_GET['message'], $_GET['class'] );
 				
-				if( current_user_can( 'administrator' ) || is_dj() )	{
-					$clientzone->display_notice(
-						1,
-						sprintf(
-							__( 'The %s is reserved for clients. %s should use the %sWordPress admin area%s.%s To test %s functionality, log in with a test client account.', 'mobile-dj-manager' ),
-							MDJM_APP,
-							MDJM_DJ . "'s",
-							'<a href="' . admin_url() . '">',
-							'</a>',
-							'<br /><br />',
-							MDJM_APP
-						)
-					);
-				}
-				elseif( isset( $_GET['action'] ) )	{
+				if( isset( $_GET['action'] ) )	{
 					if( $_GET['action'] == 'view_event' )
 						$this->single_event();
 						

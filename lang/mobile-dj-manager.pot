@@ -1,15 +1,15 @@
-# Copyright (C) 2016 MDJM Event Management
+# Copyright (C) 2015 MDJM Event Management
 # This file is distributed under the same license as the MDJM Event Management package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.2.7.5\n"
+"Project-Id-Version: MDJM Event Management 1.2.7.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mobile-dj-"
 "manager\n"
-"POT-Creation-Date: 2016-01-22 17:58:47+00:00\n"
+"POT-Creation-Date: 2015-11-25 16:24:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -109,27 +109,27 @@ msgstr[1] ""
 #: admin/includes/events/mdjm-events.php:637
 #: admin/includes/events/mdjm-events.php:641
 #: admin/includes/events/mdjm-events.php:643
-#: admin/includes/events/mdjm-events.php:645 admin/includes/mdjm.php:1149
-#: admin/includes/mdjm.php:1154 admin/includes/mdjm.php:1157
-#: admin/includes/mdjm.php:1160
+#: admin/includes/events/mdjm-events.php:645 admin/includes/mdjm.php:1198
+#: admin/includes/mdjm.php:1203 admin/includes/mdjm.php:1206
+#: admin/includes/mdjm.php:1209
 msgid "Not Specified"
 msgstr ""
 
-#: admin/includes/events/mdjm-events.php:633 admin/includes/mdjm.php:1143
+#: admin/includes/events/mdjm-events.php:633 admin/includes/mdjm.php:1192
 msgid "Not Assigned"
 msgstr ""
 
 #: admin/includes/events/mdjm-events.php:653
-#: admin/includes/events/mdjm-events.php:655 admin/includes/mdjm.php:1142
+#: admin/includes/events/mdjm-events.php:655 admin/includes/mdjm.php:1191
 #: admin/includes/posts/mdjm-event-posts.php:47
 msgid "Due"
 msgstr ""
 
-#: admin/includes/events/mdjm-events.php:735
+#: admin/includes/events/mdjm-events.php:734
 msgid "No Event Type Set"
 msgstr ""
 
-#: admin/includes/events/mdjm-events.php:1195
+#: admin/includes/events/mdjm-events.php:1193
 msgid "Unavailable"
 msgstr ""
 
@@ -192,23 +192,23 @@ msgstr[1] ""
 msgid "Request Deposit Scheduled Task"
 msgstr ""
 
-#: admin/includes/mdjm.php:324 admin/includes/posts/mdjm-post-types.php:435
+#: admin/includes/mdjm.php:373 admin/includes/posts/mdjm-post-types.php:430
 msgid "Enquiry"
 msgid_plural "Enquiries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/mdjm.php:327
+#: admin/includes/mdjm.php:376
 msgid "this enquiry"
 msgid_plural "these enquiries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/mdjm.php:1171
+#: admin/includes/mdjm.php:1220
 msgid "No payments"
 msgstr ""
 
-#: admin/includes/mdjm.php:1245
+#: admin/includes/mdjm.php:1294
 msgid "Field deleted successfully"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 #: admin/includes/posts/mdjm-event-posts.php:44
 #: admin/includes/posts/mdjm-transaction-posts.php:44
 #: client-zone/pages/mdjm-clientzone.php:275
-#: client-zone/pages/mdjm-contract.php:274 client-zone/pages/mdjm-home.php:308
+#: client-zone/pages/mdjm-contract.php:274 client-zone/pages/mdjm-home.php:294
 msgid "Status"
 msgstr ""
 
@@ -267,7 +267,7 @@ msgstr ""
 #: admin/includes/posts/mdjm-event-posts.php:41
 #: admin/includes/posts/mdjm-transaction-posts.php:41
 #: client-zone/pages/mdjm-clientzone.php:270
-#: client-zone/pages/mdjm-contract.php:269 client-zone/pages/mdjm-home.php:307
+#: client-zone/pages/mdjm-contract.php:269 client-zone/pages/mdjm-home.php:293
 msgid "Date"
 msgstr ""
 
@@ -344,9 +344,9 @@ msgid "%1$s %2$d"
 msgstr ""
 
 #: admin/includes/posts/mdjm-event-posts.php:303
-#: admin/includes/posts/mdjm-post-types.php:566
+#: admin/includes/posts/mdjm-post-types.php:561
 #: admin/includes/procedures/mdjm-install.php:770
-#: admin/includes/procedures/mdjm-upgrade.php:627
+#: admin/includes/procedures/mdjm-upgrade.php:615
 msgid "All Event Types"
 msgstr ""
 
@@ -358,1132 +358,1132 @@ msgstr ""
 msgid "All Client's"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:52
+#: admin/includes/posts/mdjm-metaboxes.php:54
 msgid "Back to List"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:52
-#: admin/includes/posts/mdjm-posts.php:1221
-#: admin/includes/posts/mdjm-posts.php:1225
-#: admin/includes/posts/mdjm-posts.php:1232 admin/pages/playlists.php:31
+#: admin/includes/posts/mdjm-metaboxes.php:54
+#: admin/includes/posts/mdjm-posts.php:1220
+#: admin/includes/posts/mdjm-posts.php:1224
+#: admin/includes/posts/mdjm-posts.php:1231 admin/pages/playlists.php:31
 #: admin/pages/playlists.php:35 admin/pages/playlists.php:63
 #: admin/pages/playlists.php:79 admin/pages/playlists.php:83
 #: admin/pages/settings-scheduler.php:458
 msgid "Back"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:100
+#: admin/includes/posts/mdjm-metaboxes.php:102
 msgid " Event"
 msgid_plural " Events"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:135
+#: admin/includes/posts/mdjm-metaboxes.php:137
 msgid " Select Client:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:150
+#: admin/includes/posts/mdjm-metaboxes.php:152
 msgid "Display Client Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:215
-#: client-zone/pages/mdjm-contract.php:392
+#: admin/includes/posts/mdjm-metaboxes.php:217
+#: client-zone/pages/mdjm-contract.php:385
 msgid "First Name:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:219
-#: client-zone/pages/mdjm-contract.php:396
+#: admin/includes/posts/mdjm-metaboxes.php:221
+#: client-zone/pages/mdjm-contract.php:389
 msgid "Last Name:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:219
-#: admin/includes/posts/mdjm-metaboxes.php:229
+#: admin/includes/posts/mdjm-metaboxes.php:221
+#: admin/includes/posts/mdjm-metaboxes.php:231
 msgid "(optional)"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:225
-#: client-zone/pages/mdjm-home.php:493
+#: admin/includes/posts/mdjm-metaboxes.php:227
+#: client-zone/pages/mdjm-home.php:479
 msgid "Email:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:229
-#: client-zone/pages/mdjm-home.php:488
+#: admin/includes/posts/mdjm-metaboxes.php:231
+#: client-zone/pages/mdjm-home.php:474
 msgid "Phone:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:242
+#: admin/includes/posts/mdjm-metaboxes.php:244
 msgid "Last Login to %s"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:246
+#: admin/includes/posts/mdjm-metaboxes.php:248
 msgid "Communicate"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:247
+#: admin/includes/posts/mdjm-metaboxes.php:249
 #: admin/includes/posts/mdjm-venue-posts.php:37
 msgid "Contact"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:256
+#: admin/includes/posts/mdjm-metaboxes.php:258
 msgid "Online Quote Status"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:259
-#: admin/includes/posts/mdjm-post-types.php:518
+#: admin/includes/posts/mdjm-metaboxes.php:261
+#: admin/includes/posts/mdjm-post-types.php:513
 msgid "Viewed"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:262
+#: admin/includes/posts/mdjm-metaboxes.php:264
 msgid "Not viewed yet"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:299
-#: client-zone/pages/mdjm-home.php:397 client-zone/pages/mdjm-home.php:552
+#: admin/includes/posts/mdjm-metaboxes.php:301
+#: client-zone/pages/mdjm-home.php:383 client-zone/pages/mdjm-home.php:538
 msgid "Event Name:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:333
-#: client-zone/pages/mdjm-home.php:410 client-zone/pages/mdjm-home.php:558
+#: admin/includes/posts/mdjm-metaboxes.php:335
+#: client-zone/pages/mdjm-home.php:396 client-zone/pages/mdjm-home.php:544
 msgid "Event Date:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:343
-#: client-zone/pages/mdjm-home.php:416 client-zone/pages/mdjm-home.php:580
+#: admin/includes/posts/mdjm-metaboxes.php:345
+#: client-zone/pages/mdjm-home.php:402 client-zone/pages/mdjm-home.php:566
 msgid "Start Time:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:390
-#: client-zone/pages/mdjm-home.php:418 client-zone/pages/mdjm-home.php:623
+#: admin/includes/posts/mdjm-metaboxes.php:392
+#: client-zone/pages/mdjm-home.php:404 client-zone/pages/mdjm-home.php:609
 msgid "End Time:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:441
-#: client-zone/pages/mdjm-home.php:459
+#: admin/includes/posts/mdjm-metaboxes.php:443
+#: client-zone/pages/mdjm-home.php:445
 msgid "Total Cost:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:482
+#: admin/includes/posts/mdjm-metaboxes.php:484
 msgid "Select an Event Package:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:529
+#: admin/includes/posts/mdjm-metaboxes.php:531
 msgid "Select Add-ons:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:557
-#: client-zone/pages/mdjm-home.php:703
+#: admin/includes/posts/mdjm-metaboxes.php:559
+#: client-zone/pages/mdjm-home.php:689
 msgid "Notes:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:558
+#: admin/includes/posts/mdjm-metaboxes.php:560
 msgid "Enter any information you feel relevant"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:597
+#: admin/includes/posts/mdjm-metaboxes.php:599
 msgid " Select Venue:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:603
+#: admin/includes/posts/mdjm-metaboxes.php:605
 msgid "Enter Manually"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:604
+#: admin/includes/posts/mdjm-metaboxes.php:606
 msgid "Use Client Address"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:648
+#: admin/includes/posts/mdjm-metaboxes.php:650
 msgid "Venue Name:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:652
+#: admin/includes/posts/mdjm-metaboxes.php:654
 msgid "Contact Name:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:660
-#: admin/includes/posts/mdjm-metaboxes.php:1458
+#: admin/includes/posts/mdjm-metaboxes.php:662
+#: admin/includes/posts/mdjm-metaboxes.php:1460
 msgid "Contact Phone:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:664
+#: admin/includes/posts/mdjm-metaboxes.php:666
 msgid "Contact Email:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:672
-#: admin/includes/posts/mdjm-metaboxes.php:1475
+#: admin/includes/posts/mdjm-metaboxes.php:674
+#: admin/includes/posts/mdjm-metaboxes.php:1477
 msgid "Address Line 1:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:676
-#: admin/includes/posts/mdjm-metaboxes.php:1481
+#: admin/includes/posts/mdjm-metaboxes.php:678
+#: admin/includes/posts/mdjm-metaboxes.php:1483
 msgid "Address Line 2:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:684
-#: admin/includes/posts/mdjm-metaboxes.php:1491
+#: admin/includes/posts/mdjm-metaboxes.php:686
+#: admin/includes/posts/mdjm-metaboxes.php:1493
 msgid "Town:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:688
-#: admin/includes/posts/mdjm-metaboxes.php:1497
+#: admin/includes/posts/mdjm-metaboxes.php:690
+#: admin/includes/posts/mdjm-metaboxes.php:1499
 msgid "County:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:696
+#: admin/includes/posts/mdjm-metaboxes.php:698
 msgid "Postcode:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:738
+#: admin/includes/posts/mdjm-metaboxes.php:740
 msgid "Enquiry Source:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:763
+#: admin/includes/posts/mdjm-metaboxes.php:765
 msgid "Setup Time:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:825
+#: admin/includes/posts/mdjm-metaboxes.php:827
 msgid "Admin Notes:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:851
+#: admin/includes/posts/mdjm-metaboxes.php:853
 msgid "Event Status:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:867
-#: client-zone/pages/mdjm-home.php:412 client-zone/pages/mdjm-home.php:565
+#: admin/includes/posts/mdjm-metaboxes.php:869
+#: client-zone/pages/mdjm-home.php:398 client-zone/pages/mdjm-home.php:551
 msgid "Event Type:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:878
+#: admin/includes/posts/mdjm-metaboxes.php:880
 #: admin/includes/process-ajax.php:126
 msgid "Select Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:899
+#: admin/includes/posts/mdjm-metaboxes.php:901
 msgid "Event Contract:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:947
+#: admin/includes/posts/mdjm-metaboxes.php:949
 msgid "Disable Client Update Emails"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:967
+#: admin/includes/posts/mdjm-metaboxes.php:969
 msgid "Reset Client Password?"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1036
+#: admin/includes/posts/mdjm-metaboxes.php:1038
 msgid "Enable Event Playlist?"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1386
+#: admin/includes/posts/mdjm-metaboxes.php:1388
 #: admin/includes/process-ajax.php:177
 msgid "Select Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1450
+#: admin/includes/posts/mdjm-metaboxes.php:1452
 msgid "Contact Name: "
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1466
+#: admin/includes/posts/mdjm-metaboxes.php:1468
 msgid "Contact Email: "
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1506
+#: admin/includes/posts/mdjm-metaboxes.php:1508
 msgid "Post Code:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-metaboxes.php:1514
+#: admin/includes/posts/mdjm-metaboxes.php:1516
 msgid "General Information:"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:33
+#: admin/includes/posts/mdjm-post-types.php:32
 msgctxt "post type general name"
+msgid "Email History"
+msgstr ""
+
+#: admin/includes/posts/mdjm-post-types.php:33
+msgctxt "post type singular name"
 msgid "Email History"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:34
-msgctxt "post type singular name"
+msgctxt "admin menu"
 msgid "Email History"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:35
-msgctxt "admin menu"
+msgctxt "add new on admin bar"
 msgid "Email History"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:36
-msgctxt "add new on admin bar"
-msgid "Email History"
-msgstr ""
-
-#: admin/includes/posts/mdjm-post-types.php:37
 msgid "Add Communication"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:38
+#: admin/includes/posts/mdjm-post-types.php:37
 msgid "Add New Communication"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:39
+#: admin/includes/posts/mdjm-post-types.php:38
 msgid "New Communication"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:40
+#: admin/includes/posts/mdjm-post-types.php:39
 msgid "Review Email"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:41
+#: admin/includes/posts/mdjm-post-types.php:40
 msgid "View Email"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:42
+#: admin/includes/posts/mdjm-post-types.php:41
 msgid "All Emails"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:43
+#: admin/includes/posts/mdjm-post-types.php:42
 msgid "Search Emails"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:44
+#: admin/includes/posts/mdjm-post-types.php:43
 msgid "No Emails found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:45
+#: admin/includes/posts/mdjm-post-types.php:44
 msgid "No Emails found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:46
+#: admin/includes/posts/mdjm-post-types.php:45
 msgid "Communication used by the Mobile DJ Manager for WordPress plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:71
+#: admin/includes/posts/mdjm-post-types.php:70
 msgctxt "post type general name"
 msgid "Contract Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:72
+#: admin/includes/posts/mdjm-post-types.php:71
 msgctxt "post type singular name"
 msgid "Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:73
+#: admin/includes/posts/mdjm-post-types.php:72
 msgctxt "admin menu"
 msgid "Contract Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:74
+#: admin/includes/posts/mdjm-post-types.php:73
 msgctxt "add new on admin bar"
 msgid "Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:75 admin/mdjm-menu.php:377
+#: admin/includes/posts/mdjm-post-types.php:74 admin/mdjm-menu.php:377
 msgid "Add Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:76
+#: admin/includes/posts/mdjm-post-types.php:75
 msgid "Add New Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:77 admin/mdjm-menu.php:380
+#: admin/includes/posts/mdjm-post-types.php:76 admin/mdjm-menu.php:380
 msgid "New Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:78
+#: admin/includes/posts/mdjm-post-types.php:77
 msgid "Edit Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:79
+#: admin/includes/posts/mdjm-post-types.php:78
 msgid "View Contract Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:80
+#: admin/includes/posts/mdjm-post-types.php:79
 msgid "All Contract Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:81
+#: admin/includes/posts/mdjm-post-types.php:80
 msgid "Search Contract Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:82
+#: admin/includes/posts/mdjm-post-types.php:81
 msgid "No contract templates found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:83
+#: admin/includes/posts/mdjm-post-types.php:82
 msgid "No contract templates found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:84
+#: admin/includes/posts/mdjm-post-types.php:83
 msgid "Contracts used by the MDJM plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:108
+#: admin/includes/posts/mdjm-post-types.php:106
 msgctxt "post type general name"
+msgid "Signed Contracts"
+msgstr ""
+
+#: admin/includes/posts/mdjm-post-types.php:107
+msgctxt "post type singular name"
+msgid "Signed Contract"
+msgstr ""
+
+#: admin/includes/posts/mdjm-post-types.php:108
+msgctxt "admin menu"
 msgid "Signed Contracts"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:109
-msgctxt "post type singular name"
+msgctxt "add new on admin bar"
 msgid "Signed Contract"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:110
-msgctxt "admin menu"
-msgid "Signed Contracts"
-msgstr ""
-
-#: admin/includes/posts/mdjm-post-types.php:111
-msgctxt "add new on admin bar"
-msgid "Signed Contract"
-msgstr ""
-
-#: admin/includes/posts/mdjm-post-types.php:112
 msgid "Add Signed Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:113
+#: admin/includes/posts/mdjm-post-types.php:111
 msgid "Add New Signed Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:114
+#: admin/includes/posts/mdjm-post-types.php:112
 msgid "New Signed Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:115
+#: admin/includes/posts/mdjm-post-types.php:113
 msgid "Edit Signed Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:116
+#: admin/includes/posts/mdjm-post-types.php:114
 msgid "View Signed Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:117
+#: admin/includes/posts/mdjm-post-types.php:115
 msgid "All Signed Contracts"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:118
+#: admin/includes/posts/mdjm-post-types.php:116
 msgid "Search Signed Contracts"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:119
+#: admin/includes/posts/mdjm-post-types.php:117
 msgid "No signed contracts found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:120
+#: admin/includes/posts/mdjm-post-types.php:118
 msgid "No signed contracts found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:121
+#: admin/includes/posts/mdjm-post-types.php:119
 msgid "Signed Contracts used by the MDJM plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:146
+#: admin/includes/posts/mdjm-post-types.php:143
 msgctxt "post type general name"
 msgid "Custom Event Fields"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:147
+#: admin/includes/posts/mdjm-post-types.php:144
 msgctxt "post type singular name"
 msgid "Custom Event Field"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:148
+#: admin/includes/posts/mdjm-post-types.php:145
 msgctxt "admin menu"
 msgid "Custom Event Fields"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:149
+#: admin/includes/posts/mdjm-post-types.php:146
 msgctxt "add new on admin bar"
 msgid "Add Custom Event Field"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:150
+#: admin/includes/posts/mdjm-post-types.php:147
 msgid "Add New Custom Event Field"
+msgstr ""
+
+#: admin/includes/posts/mdjm-post-types.php:148
+#: admin/includes/posts/mdjm-post-types.php:149
+msgid "Edit Custom Event Field"
+msgstr ""
+
+#: admin/includes/posts/mdjm-post-types.php:150
+msgid "New Hosted Plugin"
 msgstr ""
 
 #: admin/includes/posts/mdjm-post-types.php:151
 #: admin/includes/posts/mdjm-post-types.php:152
-msgid "Edit Custom Event Field"
-msgstr ""
-
-#: admin/includes/posts/mdjm-post-types.php:153
-msgid "New Hosted Plugin"
-msgstr ""
-
-#: admin/includes/posts/mdjm-post-types.php:154
-#: admin/includes/posts/mdjm-post-types.php:155
 msgid "View Custom Event Field"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:156
+#: admin/includes/posts/mdjm-post-types.php:153
 msgid "Search Custom Event Field"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:157
+#: admin/includes/posts/mdjm-post-types.php:154
 msgid "No Custom Event Fields found"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:158
+#: admin/includes/posts/mdjm-post-types.php:155
 msgid "No Custom Event Fields found in trash"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:159
+#: admin/includes/posts/mdjm-post-types.php:156
 msgid ""
 "This is where you can add Custom Event Fields for use in the event screen."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:182
+#: admin/includes/posts/mdjm-post-types.php:178
 msgctxt "post type general name"
 msgid "Email Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:183
+#: admin/includes/posts/mdjm-post-types.php:179
 msgctxt "post type singular name"
 msgid "Email Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:184
+#: admin/includes/posts/mdjm-post-types.php:180
 msgctxt "admin menu"
 msgid "Email Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:185
+#: admin/includes/posts/mdjm-post-types.php:181
 msgctxt "add new on admin bar"
 msgid "Email Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:186 admin/mdjm-menu.php:408
+#: admin/includes/posts/mdjm-post-types.php:182 admin/mdjm-menu.php:408
 msgid "Add Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:187
+#: admin/includes/posts/mdjm-post-types.php:183
 msgid "Add New Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:188
+#: admin/includes/posts/mdjm-post-types.php:184
 msgid "New Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:189
+#: admin/includes/posts/mdjm-post-types.php:185
 msgid "Edit Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:190
+#: admin/includes/posts/mdjm-post-types.php:186
 msgid "View Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:191
+#: admin/includes/posts/mdjm-post-types.php:187
 msgid "All Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:192
+#: admin/includes/posts/mdjm-post-types.php:188
 msgid "Search Templates"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:193
+#: admin/includes/posts/mdjm-post-types.php:189
 msgid "No templates found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:194
+#: admin/includes/posts/mdjm-post-types.php:190
 msgid "No templates found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:195
+#: admin/includes/posts/mdjm-post-types.php:191
 msgid "Email Templates for the Mobile DJ Manager plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:220
+#: admin/includes/posts/mdjm-post-types.php:216
 msgctxt "post type general name"
 msgid "Events"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:221
+#: admin/includes/posts/mdjm-post-types.php:217
 msgctxt "post type singular name"
 msgid "Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:222
+#: admin/includes/posts/mdjm-post-types.php:218
 msgctxt "admin menu"
 msgid "Events"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:223
+#: admin/includes/posts/mdjm-post-types.php:219
 msgctxt "add new on admin bar"
 msgid "Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:224
-#: admin/includes/posts/mdjm-posts.php:1008 admin/mdjm-menu.php:443
+#: admin/includes/posts/mdjm-post-types.php:220
+#: admin/includes/posts/mdjm-posts.php:1007 admin/mdjm-menu.php:443
 msgid "Create Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:225 admin/mdjm-menu.php:446
+#: admin/includes/posts/mdjm-post-types.php:221 admin/mdjm-menu.php:446
 msgid "Create New Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:226
+#: admin/includes/posts/mdjm-post-types.php:222
 msgid "New Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:227
+#: admin/includes/posts/mdjm-post-types.php:223
 msgid "Edit Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:228
+#: admin/includes/posts/mdjm-post-types.php:224
 msgid "View Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:229
+#: admin/includes/posts/mdjm-post-types.php:225
 msgid "All Events"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:230
+#: admin/includes/posts/mdjm-post-types.php:226
 msgid "Search Events"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:231
+#: admin/includes/posts/mdjm-post-types.php:227
 msgid "No events found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:232
+#: admin/includes/posts/mdjm-post-types.php:228
 msgid "No events found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:233
+#: admin/includes/posts/mdjm-post-types.php:229
 msgid "Mobile DJ Manager Events"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:260
+#: admin/includes/posts/mdjm-post-types.php:256
 msgctxt "post type general name"
 msgid "Quotes"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:261
+#: admin/includes/posts/mdjm-post-types.php:257
 msgctxt "post type singular name"
 msgid "Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:262
+#: admin/includes/posts/mdjm-post-types.php:258
 msgctxt "admin menu"
 msgid "Quotes"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:263
+#: admin/includes/posts/mdjm-post-types.php:259
 msgctxt "add new on admin bar"
 msgid "Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:264
+#: admin/includes/posts/mdjm-post-types.php:260
 msgid "Create Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:265
+#: admin/includes/posts/mdjm-post-types.php:261
 msgid "Create New Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:266
+#: admin/includes/posts/mdjm-post-types.php:262
 msgid "New Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:267
+#: admin/includes/posts/mdjm-post-types.php:263
 msgid "Edit Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:268
+#: admin/includes/posts/mdjm-post-types.php:264
 msgid "View Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:269
+#: admin/includes/posts/mdjm-post-types.php:265
 msgid "All Quotes"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:270
+#: admin/includes/posts/mdjm-post-types.php:266
 msgid "Search Quotes"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:271
+#: admin/includes/posts/mdjm-post-types.php:267
 msgid "No quotes found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:272
+#: admin/includes/posts/mdjm-post-types.php:268
 msgid "No quotes found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:273
+#: admin/includes/posts/mdjm-post-types.php:269
 msgid "Mobile DJ Manager Quotes"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:298
+#: admin/includes/posts/mdjm-post-types.php:293
 msgctxt "post type general name"
 msgid "Transactions"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:299
+#: admin/includes/posts/mdjm-post-types.php:294
 msgctxt "post type singular name"
 msgid "Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:300
+#: admin/includes/posts/mdjm-post-types.php:295
 msgctxt "admin menu"
 msgid "Transactions"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:301
+#: admin/includes/posts/mdjm-post-types.php:296
 msgctxt "add new on admin bar"
 msgid "Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:302 admin/mdjm-menu.php:532
+#: admin/includes/posts/mdjm-post-types.php:297 admin/mdjm-menu.php:532
 #: admin/mdjm-menu.php:535
 msgid "Add Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:303
+#: admin/includes/posts/mdjm-post-types.php:298
 msgid "Add New Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:304
+#: admin/includes/posts/mdjm-post-types.php:299
 msgid "New Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:305
+#: admin/includes/posts/mdjm-post-types.php:300
 msgid "Edit Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:306
+#: admin/includes/posts/mdjm-post-types.php:301
 msgid "View Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:307
+#: admin/includes/posts/mdjm-post-types.php:302
 msgid "All Transactions"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:308
+#: admin/includes/posts/mdjm-post-types.php:303
 msgid "Search Transactions"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:309
+#: admin/includes/posts/mdjm-post-types.php:304
 msgid "No Transactions found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:310
+#: admin/includes/posts/mdjm-post-types.php:305
 msgid "No Transactions found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:311
+#: admin/includes/posts/mdjm-post-types.php:306
 msgid "Transactions for the Mobile DJ Manager plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:338
+#: admin/includes/posts/mdjm-post-types.php:333
 msgctxt "post type general name"
 msgid "Venues"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:339
+#: admin/includes/posts/mdjm-post-types.php:334
 msgctxt "post type singular name"
 msgid "Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:340
+#: admin/includes/posts/mdjm-post-types.php:335
 msgctxt "admin menu"
 msgid "Venues"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:341
+#: admin/includes/posts/mdjm-post-types.php:336
 msgctxt "add new on admin bar"
 msgid "Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:342 admin/mdjm-menu.php:563
+#: admin/includes/posts/mdjm-post-types.php:337 admin/mdjm-menu.php:563
 msgid "Add Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:343 admin/mdjm-menu.php:566
+#: admin/includes/posts/mdjm-post-types.php:338 admin/mdjm-menu.php:566
 msgid "Add New Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:344
+#: admin/includes/posts/mdjm-post-types.php:339
 msgid "New Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:345
+#: admin/includes/posts/mdjm-post-types.php:340
 msgid "Edit Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:346
+#: admin/includes/posts/mdjm-post-types.php:341
 msgid "View Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:347
+#: admin/includes/posts/mdjm-post-types.php:342
 msgid "All Venues"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:348
+#: admin/includes/posts/mdjm-post-types.php:343
 msgid "Search Venues"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:349
+#: admin/includes/posts/mdjm-post-types.php:344
 msgid "No Venues found."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:350
+#: admin/includes/posts/mdjm-post-types.php:345
 msgid "No Venues found in Trash."
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:351
+#: admin/includes/posts/mdjm-post-types.php:346
 msgid "Venues stored for the Mobile DJ Manager plugin"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:383
+#: admin/includes/posts/mdjm-post-types.php:378
 msgid "Ready to Send"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:388
+#: admin/includes/posts/mdjm-post-types.php:383
 msgid "Ready to Send <span class=\"count\">(%s)</span>"
 msgid_plural "Ready to Send <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:393
+#: admin/includes/posts/mdjm-post-types.php:388
 msgid "Sent"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:398
+#: admin/includes/posts/mdjm-post-types.php:393
 msgid "Sent <span class=\"count\">(%s)</span>"
 msgid_plural "Sent <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:403
+#: admin/includes/posts/mdjm-post-types.php:398
 msgid "Opened"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:408
+#: admin/includes/posts/mdjm-post-types.php:403
 msgid "Opened <span class=\"count\">(%s)</span>"
 msgid_plural "Opened <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:413
+#: admin/includes/posts/mdjm-post-types.php:408
 msgid "Failed"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:418
+#: admin/includes/posts/mdjm-post-types.php:413
 msgid "Failed <span class=\"count\">(%s)</span>"
 msgid_plural "Failed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:425
+#: admin/includes/posts/mdjm-post-types.php:420
 msgid "Unattended Enquiry"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:430
+#: admin/includes/posts/mdjm-post-types.php:425
 msgid "Unattended Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Unattended Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:440
+#: admin/includes/posts/mdjm-post-types.php:435
 msgid "Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:445
+#: admin/includes/posts/mdjm-post-types.php:440
 msgid "Approved"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:450
+#: admin/includes/posts/mdjm-post-types.php:445
 msgid "Approved <span class=\"count\">(%s)</span>"
 msgid_plural "Approved <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:455
+#: admin/includes/posts/mdjm-post-types.php:450
 msgid "Awaiting Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:460
+#: admin/includes/posts/mdjm-post-types.php:455
 msgid "Awaiting Contract <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting Contracts <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:465
+#: admin/includes/posts/mdjm-post-types.php:460
 msgid "Completed"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:470
+#: admin/includes/posts/mdjm-post-types.php:465
 msgid "Completed <span class=\"count\">(%s)</span>"
 msgid_plural "Completed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:475
+#: admin/includes/posts/mdjm-post-types.php:470
 msgid "Cancelled"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:480
+#: admin/includes/posts/mdjm-post-types.php:475
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:485
+#: admin/includes/posts/mdjm-post-types.php:480
 msgid "Rejected Enquiry"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:490
+#: admin/includes/posts/mdjm-post-types.php:485
 msgid "Rejected Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Rejected Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:495
+#: admin/includes/posts/mdjm-post-types.php:490
 msgid "Failed Enquiry"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:500
+#: admin/includes/posts/mdjm-post-types.php:495
 msgid "Failed Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Failed Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:508
+#: admin/includes/posts/mdjm-post-types.php:503
 #: admin/includes/posts/mdjm-quote-posts.php:37
 msgid "Generated"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:513
+#: admin/includes/posts/mdjm-post-types.php:508
 msgid "Generated Quote <span class=\"count\">(%s)</span>"
 msgid_plural "Generated Quotes <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:523
+#: admin/includes/posts/mdjm-post-types.php:518
 msgid "Viewed Quote <span class=\"count\">(%s)</span>"
 msgid_plural "Viewed Quotes <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:531
+#: admin/includes/posts/mdjm-post-types.php:526
 msgid "Income"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:536
+#: admin/includes/posts/mdjm-post-types.php:531
 msgid "Received Payment <span class=\"count\">(%s)</span>"
 msgid_plural "Received Payments <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:541
+#: admin/includes/posts/mdjm-post-types.php:536
 msgid "Expenditure"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:546
+#: admin/includes/posts/mdjm-post-types.php:541
 msgid "Ougoing Payment <span class=\"count\">(%s)</span>"
 msgid_plural "Ougoing Payments <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/posts/mdjm-post-types.php:563
+#: admin/includes/posts/mdjm-post-types.php:558
 #: admin/includes/procedures/mdjm-install.php:767
-#: admin/includes/procedures/mdjm-upgrade.php:624
+#: admin/includes/procedures/mdjm-upgrade.php:612
 msgctxt "taxonomy general name"
 msgid "Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:564
+#: admin/includes/posts/mdjm-post-types.php:559
 #: admin/includes/procedures/mdjm-install.php:768
-#: admin/includes/procedures/mdjm-upgrade.php:625
+#: admin/includes/procedures/mdjm-upgrade.php:613
 msgctxt "taxonomy singular name"
 msgid "Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:565
+#: admin/includes/posts/mdjm-post-types.php:560
 #: admin/includes/procedures/mdjm-install.php:769
-#: admin/includes/procedures/mdjm-upgrade.php:626
+#: admin/includes/procedures/mdjm-upgrade.php:614
 msgid "Search Event Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:567
+#: admin/includes/posts/mdjm-post-types.php:562
 #: admin/includes/procedures/mdjm-install.php:771
-#: admin/includes/procedures/mdjm-upgrade.php:628
+#: admin/includes/procedures/mdjm-upgrade.php:616
 msgid "Edit Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:568
+#: admin/includes/posts/mdjm-post-types.php:563
 #: admin/includes/procedures/mdjm-install.php:772
-#: admin/includes/procedures/mdjm-upgrade.php:629
+#: admin/includes/procedures/mdjm-upgrade.php:617
 msgid "Update Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:569
+#: admin/includes/posts/mdjm-post-types.php:564
 #: admin/includes/procedures/mdjm-install.php:773
-#: admin/includes/procedures/mdjm-upgrade.php:630
+#: admin/includes/procedures/mdjm-upgrade.php:618
 msgid "Add New Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:570
+#: admin/includes/posts/mdjm-post-types.php:565
 #: admin/includes/procedures/mdjm-install.php:774
-#: admin/includes/procedures/mdjm-upgrade.php:631
+#: admin/includes/procedures/mdjm-upgrade.php:619
 msgid "New Event Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:571
+#: admin/includes/posts/mdjm-post-types.php:566
 #: admin/includes/procedures/mdjm-install.php:775
-#: admin/includes/procedures/mdjm-upgrade.php:632 admin/mdjm-menu.php:477
+#: admin/includes/procedures/mdjm-upgrade.php:620 admin/mdjm-menu.php:477
 msgid "Event Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:573
+#: admin/includes/posts/mdjm-post-types.php:568
 #: admin/includes/procedures/mdjm-install.php:777
-#: admin/includes/procedures/mdjm-upgrade.php:634
+#: admin/includes/procedures/mdjm-upgrade.php:622
 msgid "Choose from the most popular Event Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:574
+#: admin/includes/posts/mdjm-post-types.php:569
 #: admin/includes/procedures/mdjm-install.php:778
-#: admin/includes/procedures/mdjm-upgrade.php:635
+#: admin/includes/procedures/mdjm-upgrade.php:623
 msgid "No event types found"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:592
+#: admin/includes/posts/mdjm-post-types.php:587
 #: admin/includes/procedures/mdjm-install.php:795
-#: admin/includes/procedures/mdjm-upgrade.php:652
+#: admin/includes/procedures/mdjm-upgrade.php:640
 msgctxt "taxonomy general name"
 msgid "Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:593
+#: admin/includes/posts/mdjm-post-types.php:588
 #: admin/includes/procedures/mdjm-install.php:796
-#: admin/includes/procedures/mdjm-upgrade.php:653
+#: admin/includes/procedures/mdjm-upgrade.php:641
 msgctxt "taxonomy singular name"
 msgid "Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:594
+#: admin/includes/posts/mdjm-post-types.php:589
 #: admin/includes/procedures/mdjm-install.php:797
-#: admin/includes/procedures/mdjm-upgrade.php:654
+#: admin/includes/procedures/mdjm-upgrade.php:642
 msgid "Search Transaction Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:595
+#: admin/includes/posts/mdjm-post-types.php:590
 #: admin/includes/posts/mdjm-transaction-posts.php:164
 #: admin/includes/procedures/mdjm-install.php:798
-#: admin/includes/procedures/mdjm-upgrade.php:655
+#: admin/includes/procedures/mdjm-upgrade.php:643
 msgid "All Transaction Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:596
+#: admin/includes/posts/mdjm-post-types.php:591
 #: admin/includes/procedures/mdjm-install.php:799
-#: admin/includes/procedures/mdjm-upgrade.php:656
+#: admin/includes/procedures/mdjm-upgrade.php:644
 msgid "Edit Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:597
+#: admin/includes/posts/mdjm-post-types.php:592
 #: admin/includes/procedures/mdjm-install.php:800
-#: admin/includes/procedures/mdjm-upgrade.php:657
+#: admin/includes/procedures/mdjm-upgrade.php:645
 msgid "Update Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:598
+#: admin/includes/posts/mdjm-post-types.php:593
 #: admin/includes/procedures/mdjm-install.php:801
-#: admin/includes/procedures/mdjm-upgrade.php:658
+#: admin/includes/procedures/mdjm-upgrade.php:646
 msgid "Add New Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:599
+#: admin/includes/posts/mdjm-post-types.php:594
 #: admin/includes/procedures/mdjm-install.php:802
-#: admin/includes/procedures/mdjm-upgrade.php:659
+#: admin/includes/procedures/mdjm-upgrade.php:647
 msgid "New Transaction Type"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:600
+#: admin/includes/posts/mdjm-post-types.php:595
 #: admin/includes/procedures/mdjm-install.php:803
-#: admin/includes/procedures/mdjm-upgrade.php:660 admin/mdjm-menu.php:542
+#: admin/includes/procedures/mdjm-upgrade.php:648 admin/mdjm-menu.php:542
 msgid "Transaction Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:602
+#: admin/includes/posts/mdjm-post-types.php:597
 #: admin/includes/procedures/mdjm-install.php:805
-#: admin/includes/procedures/mdjm-upgrade.php:662
+#: admin/includes/procedures/mdjm-upgrade.php:650
 msgid "Choose from the most popular Transaction Types"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:603
+#: admin/includes/posts/mdjm-post-types.php:598
 #: admin/includes/procedures/mdjm-install.php:806
-#: admin/includes/procedures/mdjm-upgrade.php:663
+#: admin/includes/procedures/mdjm-upgrade.php:651
 msgid "No transaction types found"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:621
+#: admin/includes/posts/mdjm-post-types.php:616
 #: admin/includes/procedures/mdjm-install.php:822
-#: admin/includes/procedures/mdjm-upgrade.php:679
+#: admin/includes/procedures/mdjm-upgrade.php:667
 msgctxt "taxonomy general name"
 msgid "Venue Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:622
+#: admin/includes/posts/mdjm-post-types.php:617
 #: admin/includes/procedures/mdjm-install.php:823
-#: admin/includes/procedures/mdjm-upgrade.php:680
+#: admin/includes/procedures/mdjm-upgrade.php:668
 msgctxt "taxonomy singular name"
 msgid "Venue Detail"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:623
+#: admin/includes/posts/mdjm-post-types.php:618
 #: admin/includes/procedures/mdjm-install.php:824
-#: admin/includes/procedures/mdjm-upgrade.php:681
+#: admin/includes/procedures/mdjm-upgrade.php:669
 msgid "Search Venue Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:624
+#: admin/includes/posts/mdjm-post-types.php:619
 #: admin/includes/procedures/mdjm-install.php:825
-#: admin/includes/procedures/mdjm-upgrade.php:682
+#: admin/includes/procedures/mdjm-upgrade.php:670
 msgid "All Venue Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:625
+#: admin/includes/posts/mdjm-post-types.php:620
 #: admin/includes/procedures/mdjm-install.php:826
-#: admin/includes/procedures/mdjm-upgrade.php:683
+#: admin/includes/procedures/mdjm-upgrade.php:671
 msgid "Edit Venue Detail"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:626
+#: admin/includes/posts/mdjm-post-types.php:621
 #: admin/includes/procedures/mdjm-install.php:827
-#: admin/includes/procedures/mdjm-upgrade.php:684
+#: admin/includes/procedures/mdjm-upgrade.php:672
 msgid "Update Venue Detail"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:627
+#: admin/includes/posts/mdjm-post-types.php:622
 #: admin/includes/procedures/mdjm-install.php:828
-#: admin/includes/procedures/mdjm-upgrade.php:685
+#: admin/includes/procedures/mdjm-upgrade.php:673
 msgid "Add New Venue Detail"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:628
+#: admin/includes/posts/mdjm-post-types.php:623
 #: admin/includes/procedures/mdjm-install.php:829
-#: admin/includes/procedures/mdjm-upgrade.php:686
+#: admin/includes/procedures/mdjm-upgrade.php:674
 msgid "New Venue Detail"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:629
-#: admin/includes/posts/mdjm-posts.php:1116
-#: admin/includes/posts/mdjm-posts.php:1147
+#: admin/includes/posts/mdjm-post-types.php:624
+#: admin/includes/posts/mdjm-posts.php:1115
+#: admin/includes/posts/mdjm-posts.php:1146
 #: admin/includes/procedures/mdjm-install.php:830
-#: admin/includes/procedures/mdjm-upgrade.php:687 admin/mdjm-menu.php:572
-#: client-zone/pages/mdjm-home.php:503
+#: admin/includes/procedures/mdjm-upgrade.php:675 admin/mdjm-menu.php:572
+#: client-zone/pages/mdjm-home.php:489
 msgid "Venue Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:631
+#: admin/includes/posts/mdjm-post-types.php:626
 #: admin/includes/procedures/mdjm-install.php:832
-#: admin/includes/procedures/mdjm-upgrade.php:689
+#: admin/includes/procedures/mdjm-upgrade.php:677
 msgid "Choose from the most popular Venue Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-post-types.php:632
+#: admin/includes/posts/mdjm-post-types.php:627
 #: admin/includes/procedures/mdjm-install.php:833
-#: admin/includes/procedures/mdjm-upgrade.php:690
+#: admin/includes/procedures/mdjm-upgrade.php:678
 msgid "No details found"
 msgstr ""
 
@@ -1491,144 +1491,144 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:787
-#: admin/includes/posts/mdjm-posts.php:790
+#: admin/includes/posts/mdjm-posts.php:786
+#: admin/includes/posts/mdjm-posts.php:789
 msgid "%s updated."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:788
+#: admin/includes/posts/mdjm-posts.php:787
 msgid "Custom field updated."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:789
+#: admin/includes/posts/mdjm-posts.php:788
 msgid "Custom field deleted."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:791
+#: admin/includes/posts/mdjm-posts.php:790
 msgid "%2$s restored to revision from %1$s"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:792
+#: admin/includes/posts/mdjm-posts.php:791
 msgid "%s published."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:793
+#: admin/includes/posts/mdjm-posts.php:792
 msgid "%s saved."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:794
+#: admin/includes/posts/mdjm-posts.php:793
 msgid "%s submitted."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:795
+#: admin/includes/posts/mdjm-posts.php:794
 msgid ""
 "%s scheduled for: <strong>%s</strong>. <a href=\"%s\" target=\"_blank"
 "\">Preview %s</a>"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:795
+#: admin/includes/posts/mdjm-posts.php:794
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:796
+#: admin/includes/posts/mdjm-posts.php:795
 msgid "%s draft updated."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:862
+#: admin/includes/posts/mdjm-posts.php:861
 msgid "Quote"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:991
+#: admin/includes/posts/mdjm-posts.php:990
 msgid "Save Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:993
+#: admin/includes/posts/mdjm-posts.php:992
 msgid "Update Contract"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:997
+#: admin/includes/posts/mdjm-posts.php:996
 msgid "Save Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:999
+#: admin/includes/posts/mdjm-posts.php:998
 msgid "Update Template"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1006
-#: admin/includes/posts/mdjm-posts.php:1010
+#: admin/includes/posts/mdjm-posts.php:1005
+#: admin/includes/posts/mdjm-posts.php:1009
 msgid "Update Event"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1014
-#: admin/includes/posts/mdjm-posts.php:1138
+#: admin/includes/posts/mdjm-posts.php:1013
+#: admin/includes/posts/mdjm-posts.php:1137
 msgid "Save Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1016
+#: admin/includes/posts/mdjm-posts.php:1015
 msgid "Update Transaction"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1020
+#: admin/includes/posts/mdjm-posts.php:1019
 msgid "Save Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1022
+#: admin/includes/posts/mdjm-posts.php:1021
 msgid "Update Venue"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1064
+#: admin/includes/posts/mdjm-posts.php:1063
 msgid "Enter Contract name here..."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1067
+#: admin/includes/posts/mdjm-posts.php:1066
 msgid "Enter Template name here. Used as email subject, shortcodes allowed"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1070
+#: admin/includes/posts/mdjm-posts.php:1069
 msgid "Enter Venue name here..."
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1098
+#: admin/includes/posts/mdjm-posts.php:1097
 #: admin/includes/posts/mdjm-transaction-posts.php:45
 #: admin/includes/posts/mdjm-venue-posts.php:43
 msgid "Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1101
+#: admin/includes/posts/mdjm-posts.php:1100
 msgid "Email Content"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1106
+#: admin/includes/posts/mdjm-posts.php:1105
 msgid "Contract Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1114
+#: admin/includes/posts/mdjm-posts.php:1113
 msgid "Client Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1115
-#: client-zone/pages/mdjm-home.php:392 client-zone/pages/mdjm-home.php:548
+#: admin/includes/posts/mdjm-posts.php:1114
+#: client-zone/pages/mdjm-home.php:378 client-zone/pages/mdjm-home.php:534
 msgid "Event Details"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1117
+#: admin/includes/posts/mdjm-posts.php:1116
 msgid "Administration"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1120 admin/mdjm-menu.php:148
+#: admin/includes/posts/mdjm-posts.php:1119 admin/mdjm-menu.php:148
 #: admin/mdjm-menu.php:149 admin/mdjm-menu.php:523
 msgid "Transactions"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1124
+#: admin/includes/posts/mdjm-posts.php:1123
 msgid "Event History"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1128
+#: admin/includes/posts/mdjm-posts.php:1127
 msgid "Event Options"
 msgstr ""
 
-#: admin/includes/posts/mdjm-posts.php:1140
+#: admin/includes/posts/mdjm-posts.php:1139
 msgid "Transaction Details"
 msgstr ""
 
@@ -2072,21 +2072,21 @@ msgstr ""
 msgid "Via Stairs"
 msgstr ""
 
-#: admin/includes/procedures/mdjm-upgrade.php:429
+#: admin/includes/procedures/mdjm-upgrade.php:417
 msgid " event found"
 msgid_plural " events found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/procedures/mdjm-upgrade.php:569
-#: admin/includes/procedures/mdjm-upgrade.php:576
-#: admin/includes/procedures/mdjm-upgrade.php:595
+#: admin/includes/procedures/mdjm-upgrade.php:557
+#: admin/includes/procedures/mdjm-upgrade.php:564
+#: admin/includes/procedures/mdjm-upgrade.php:583
 msgid " entry "
 msgid_plural " entries "
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/includes/procedures/mdjm-upgrade.php:794
+#: admin/includes/procedures/mdjm-upgrade.php:782
 msgid " transaction found"
 msgid_plural " transactions found"
 msgstr[0] ""
@@ -2198,7 +2198,7 @@ msgstr ""
 msgid "About MDJM"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: admin/mdjm-menu.php:219 admin/pages/mdjm-about.php:49
 msgid "MDJM Event Management"
@@ -2359,23 +2359,15 @@ msgid_plural " DJ's"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/pages/comms.php:334
-msgid "Max file size"
-msgstr ""
-
-#: admin/pages/comms.php:335
-msgid "Change php.ini %spost_max_size%s to increase"
-msgstr ""
-
 #: admin/pages/mdjm-about.php:50
 msgid "Welcome to MDJM Event Management version %s"
 msgstr ""
 
-#: admin/pages/mdjm-about.php:72 admin/settings/class-mdjm-settings.php:719
+#: admin/pages/mdjm-about.php:72 admin/settings/class-mdjm-settings.php:731
 msgid "Have you tried the MDJM Event Management extensions"
 msgstr ""
 
-#: admin/pages/mdjm-about.php:73 admin/settings/class-mdjm-settings.php:720
+#: admin/pages/mdjm-about.php:73 admin/settings/class-mdjm-settings.php:732
 msgid ""
 "Extensions enhance the features of the MDJM Event Management Plugin. All "
 "paid extensions are provided with a full years updates and support"
@@ -2528,7 +2520,7 @@ msgstr ""
 
 #: admin/pages/mdjm-custom-fields.php:491
 #: admin/settings/class-mdjm-settings-client-fields.php:431
-#: client-zone/pages/mdjm-home.php:716
+#: client-zone/pages/mdjm-home.php:702
 msgid "Cancel Changes"
 msgstr ""
 
@@ -3110,42 +3102,42 @@ msgid ""
 "validate your license"
 msgstr ""
 
-#: client-zone/includes/mdjm-availability.php:193
-#: client-zone/includes/mdjm-availability.php:279
+#: client-zone/includes/mdjm-availability.php:189
+#: client-zone/includes/mdjm-availability.php:275
 #: widgets/class-mdjm-widget.php:25
 msgid "MDJM Availability Checker"
 msgstr ""
 
-#: client-zone/includes/mdjm-availability.php:272
-#: client-zone/includes/mdjm-availability.php:274
-#: client-zone/includes/mdjm-shortcodes.php:56
+#: client-zone/includes/mdjm-availability.php:268
+#: client-zone/includes/mdjm-availability.php:270
+#: client-zone/includes/mdjm-shortcodes.php:57
 #: widgets/class-mdjm-widget.php:219
 msgid "Please wait..."
 msgstr ""
 
-#: client-zone/includes/mdjm-availability.php:305
+#: client-zone/includes/mdjm-availability.php:301
 #: widgets/class-mdjm-widget.php:236
 msgid "Please enter a date"
 msgstr ""
 
 #: client-zone/includes/mdjm-dynamic.php:35
-#: client-zone/includes/mdjm-shortcodes.php:125
+#: client-zone/includes/mdjm-shortcodes.php:127
 msgid "No addons available"
 msgstr ""
 
-#: client-zone/includes/mdjm-shortcodes.php:48
+#: client-zone/includes/mdjm-shortcodes.php:49
 msgid "Select Date"
 msgstr ""
 
-#: client-zone/includes/mdjm-shortcodes.php:53
+#: client-zone/includes/mdjm-shortcodes.php:54
 msgid "Check Date"
 msgstr ""
 
-#: client-zone/includes/mdjm-shortcodes.php:210
+#: client-zone/includes/mdjm-shortcodes.php:212
 msgid "ERROR: Unknown Page"
 msgstr ""
 
-#: client-zone/includes/mdjm-shortcodes.php:231
+#: client-zone/includes/mdjm-shortcodes.php:233
 msgid "An error has occurred"
 msgstr ""
 
@@ -3180,7 +3172,7 @@ msgid "ERROR: You do not have permission to view this page. "
 msgstr ""
 
 #: client-zone/pages/mdjm-contract.php:51
-#: client-zone/pages/mdjm-contract.php:420 client-zone/pages/mdjm-home.php:98
+#: client-zone/pages/mdjm-contract.php:413 client-zone/pages/mdjm-home.php:84
 msgid "Sign Contract"
 msgstr ""
 
@@ -3200,154 +3192,148 @@ msgstr ""
 msgid "Good news... %s has just signed their event contract via %s"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:301
+#: client-zone/pages/mdjm-contract.php:296
 msgid "Event Contract Signed"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:341
+#: client-zone/pages/mdjm-contract.php:334
 msgid "The Client contract is displayed below. It is not yet signed"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:358
+#: client-zone/pages/mdjm-contract.php:351
 msgid ""
 "<p>Your contract is not yet ready for signing as you have not indicated that "
 "you would like to proceed with your event. You can do this <a href="
 "\"{APPLICATION_HOME}\">here</a>.</p>"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:359
+#: client-zone/pages/mdjm-contract.php:352
 msgid ""
 "<p>The client contract is not yet ready for signing as the event status has "
 "not been updated to \"Awaiting Contract\"</p>"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:403
+#: client-zone/pages/mdjm-contract.php:396
 msgid "I hereby confirm that I have read and accept the contract and its terms"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:409
+#: client-zone/pages/mdjm-contract.php:402
 msgid ""
 "I hereby confirm that the person named within the above contract is me and "
 "that all associated details are correct"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:414
+#: client-zone/pages/mdjm-contract.php:407
 msgid "Re-Enter Your Password"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:444
+#: client-zone/pages/mdjm-contract.php:437
 msgid "This contract has been signed"
 msgstr ""
 
-#: client-zone/pages/mdjm-contract.php:447
+#: client-zone/pages/mdjm-contract.php:440
 msgid " with password verification"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:35
-msgid ""
-"The %s is reserved for clients. %s should use the %sWordPress admin area%s."
-"%s To test %s functionality, log in with a test client account."
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:87
+#: client-zone/pages/mdjm-home.php:73
 msgid "View Details"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:91 client-zone/pages/mdjm-home.php:95
-#: client-zone/pages/mdjm-home.php:99
+#: client-zone/pages/mdjm-home.php:77 client-zone/pages/mdjm-home.php:81
+#: client-zone/pages/mdjm-home.php:85
 msgid "Cancel Event"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:94
+#: client-zone/pages/mdjm-home.php:80
 msgid "Book Event"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:107
+#: client-zone/pages/mdjm-home.php:93
 msgid "Make a Payment"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:112
+#: client-zone/pages/mdjm-home.php:98
 msgid "Select Action"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:152
+#: client-zone/pages/mdjm-home.php:138
 msgid "View Event Quote"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:156
+#: client-zone/pages/mdjm-home.php:142
 #: client-zone/pages/mdjm-onlinequote.php:66
 msgid "Book this Event"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:161
+#: client-zone/pages/mdjm-home.php:147
 msgid "Review &amp; Approve Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:166
+#: client-zone/pages/mdjm-home.php:152
 msgid "View Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:174
+#: client-zone/pages/mdjm-home.php:160
 msgid "Manage Playlist"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:178
+#: client-zone/pages/mdjm-home.php:164
 msgid "Update Profile"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:181
+#: client-zone/pages/mdjm-home.php:167
 msgid "Book Another Event"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:302
+#: client-zone/pages/mdjm-home.php:288
 msgid "Click on an event date below to begin managing that event."
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:309
+#: client-zone/pages/mdjm-home.php:295
 msgid "Cost"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:403
+#: client-zone/pages/mdjm-home.php:389
 msgid "Status:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:423 client-zone/pages/mdjm-home.php:672
+#: client-zone/pages/mdjm-home.php:409 client-zone/pages/mdjm-home.php:658
 msgid "Package:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:438 client-zone/pages/mdjm-home.php:684
+#: client-zone/pages/mdjm-home.php:424 client-zone/pages/mdjm-home.php:670
 msgid "Addons:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:471
+#: client-zone/pages/mdjm-home.php:457
 msgid "Information:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:480
+#: client-zone/pages/mdjm-home.php:466
 msgid "Your Contact Details"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:482
+#: client-zone/pages/mdjm-home.php:468
 msgid "edit"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:486
+#: client-zone/pages/mdjm-home.php:472
 msgid "Name:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:495 client-zone/pages/mdjm-home.php:511
+#: client-zone/pages/mdjm-home.php:481 client-zone/pages/mdjm-home.php:497
 msgid "Address:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:509
+#: client-zone/pages/mdjm-home.php:495
 msgid "Venue:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:709
+#: client-zone/pages/mdjm-home.php:695
 msgid "Reason for Changes:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:710
+#: client-zone/pages/mdjm-home.php:696
 msgid ""
 "If you are making any changes to your event, please enter the reason here"
 msgstr ""
@@ -3450,24 +3436,24 @@ msgstr ""
 msgid "No Addons Available"
 msgstr ""
 
-#: includes/mdjm-functions.php:1642
+#: includes/mdjm-functions.php:1660
 msgid ""
 "ERROR: %s were set as %s.%sContact \r\n"
 "\t\t\t\t%sMDJM Support%s with details of any errors that are displayed on "
 "your screen."
 msgstr ""
 
-#: includes/mdjm-functions.php:1652
+#: includes/mdjm-functions.php:1670
 msgid "WARNING: Some errors occured and only %s out of %s %s were set as %s."
 msgstr ""
 
-#: includes/mdjm-functions.php:1655 includes/mdjm-functions.php:1662
+#: includes/mdjm-functions.php:1673 includes/mdjm-functions.php:1680
 msgid "user"
 msgid_plural "users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/mdjm-functions.php:1660
+#: includes/mdjm-functions.php:1678
 msgid "%s %s successfully marked as %s."
 msgstr ""
 
@@ -3533,17 +3519,20 @@ msgstr ""
 msgid "Unavailable Text"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.1)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.2.7.1)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://www.mydjplanner.co.uk"
 msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"MDJM Event Management is an interface to fully manage your DJ/Events or "
-"Agency business efficiently."
+"MDJM Event Management (formerly Mobile DJ Manager) is an interface allowing "
+"mobile DJ's and businesses to manage their events and employees as well as "
+"interact with their clients easily. Automating many of your day to day "
+"tasks, MDJM Event Management for WordPress is the ultimate tool for any "
+"Mobile DJ Business."
 msgstr ""
 
 #. Author of the plugin/theme
@@ -3552,8 +3541,7 @@ msgstr ""
 
 #. Tags of the plugin/theme
 msgid ""
-"MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, "
-"Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, "
-"Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, "
-"DJ Manager, DJ Management, Music, Playlist, Music Playlist"
+"Event Management, DJ, Mobile DJ, Photobooth, Photo booth, DJ Business, DJ "
+"Agency, Event Agency, Event Planning, Event Planner, DJ Event Planner, CRM, "
+"MDJM, Mobile DJ Manager"
 msgstr ""

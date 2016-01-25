@@ -52,18 +52,17 @@
 			$message = '<strong>ERROR</strong>: There is no content in your email. Your email was not sent';
 			mdjm_update_notice( $class, $message );
 		}
-		
 		/* Process */
 		else	{
 			/* -- Build the email arguments -- */
 			$email_args = array(
-							'content'		=> nl2br( str_replace( ']]>', ']]&gt;', stripslashes( $_POST['email_content'] ) ) ),
-							'to'			 => $_POST['email_to'],
-							'subject'		=> stripslashes( $_POST['subject'] ),
-							'from'		   => $current_user->ID,
-							'source'		 => 'Communication Feature',
-							'html'		   => true
-						);
+							'content'	=> nl2br( str_replace( ']]>', ']]&gt;', stripslashes( $_POST['email_content'] ) ) ),
+							'to'		=> $_POST['email_to'],
+							'subject'	=> stripslashes( $_POST['subject'] ),
+							'from'		=> $current_user->ID,
+							'source'	=> 'Communication Feature',
+							'html'		=> true,
+							);
 			if( !empty( $_POST['event'] ) )	{
 				$email_args['event_id'] = $_POST['event'];
 				$email_args['journal'] = ( user_can( $_POST['email_to'], 'client' ) || user_can( $_POST['email_to'], 'inactive_client' ) ? 'email-client' : 'email-dj' );
@@ -80,19 +79,6 @@
 				
 			else
 				$email_args['cc_admin'] = false;
-			
-			// If we have any attachments from the desktop, process them here
-			if( isset( $_FILES['upload_file'] ) && '' !== $_FILES['upload_file']['name'] )	{
-				$upload_dir = wp_upload_dir();
-				
-				$file_name	= $_FILES['upload_file']['name'];
-				$file_path	= $upload_dir['path'] . '/' . $file_name;
-				$tmp_path	 = $_FILES['upload_file']['tmp_name'];
-				
-				if( move_uploaded_file( $tmp_path, $file_path ) )	{
-					$email_args['attachments'] = array( $file_path );
-				}
-			}
 			
 			// Send the email					
 			$success = $mdjm->send_email( $email_args );
@@ -174,7 +160,7 @@
 			  if (restore) selObj.selectedIndex=0;
 			}
 		</script>
-		<form name="form-email-template" id="form-email-template" method="post" enctype="multipart/form-data">
+		<form name="form-email-template" id="form-email-template" method="post">
         <?php
 		if( isset( $_GET['action'] ) && $_GET['action'] == 'respond_unavailable' )	{
 			?>
@@ -339,13 +325,6 @@
 		<tr class="alternate">
 		<th class="row-title" align="left"><label for="subject">Subject:</label></th>
 		<td><input type="text" name="subject" id="subject" class="regular-text" value="<?php echo $subject; ?>" /></td>
-		</tr>
-        <tr class="alternate">
-		<th class="row-title" align="left"><label for="upload_file">Attach File from Computer:</label></th>
-		<td><input type="file" name="upload_file" id="upload_file" class="regular-text" value="" /><p class="description"><?php echo __( 'Max file size', 'mobile-dj-manager' ) . ': ' . ini_get( 'post_max_size' )
-							. '. ' . sprintf( __( 'Change php.ini %spost_max_size%s to increase', 'mobile-dj-manager' ), 
-							'<strong>',
-							'</strong>' ); ?></p></td>
 		</tr>
         <?php do_action( 'mdjm_comms_fields_last', $email_query, $contract_query ); ?>
 		<tr>

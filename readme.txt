@@ -1,9 +1,9 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
-Requires at least: 3.9.1
-Tested up to: 4.4.1
-Stable tag: 1.2.7.5
+Requires at least: 4.4
+Tested up to: 4.4
+Stable tag: 1.2.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://www.mydjplanner.co.uk/donate/
@@ -75,7 +75,6 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-
 = 1.3 =
 <strong>Released XXXX XXXX, 2015</strong>
 <ui>
@@ -86,28 +85,14 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>New: Added Event Staff checkbox on user screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions</li>
 	<li>New: Admin availability checker can check for availability by role</li>
 	<li>New: Added availability checker setting. Specify which roles need to be available on the given date for you to be available</li>
+	<li>Bug Fix: Custom event fields did not display on the event screen if your deposit type was not set as percentage</li>
+	<li>Bug Fix: No MDJM data should be returned from a front end search</li>
+	<li>Bug Fix: Removed duplicate fields from client profile on admin profile page</li>
+	<li>Bug Fix: Redirecting to contact page from availability widget should pre-populate event date field if present</li>
+	<li>Bug Fix: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.</li>
 	<li>General: Main MDJM class is now a singleton class</li>
 	<li>General: Post actions and filters do not need to be a class</li>
 </ui>
-=======
-= 1.2.7.5 =
-**Released 22nd January, 2016**
-
-* **New**: Attach files from computer to email composed via communication feature
-* **New**: DJ / Admin access to the Client Zone is now blocked. Use the Admin area. For testing create a test client account and log in with that
-* **General**: List multiple attachments on communication history
-* **Bug Fix**: Custom event fields output if the field name contained spaces
-* **Bug Fix**: Venue contact name missing a space if venue is set to client address
-
-= 1.2.7.4 =
-**Released 19th January, 2016**
-
-* **Bug Fix**: Custom event fields did not display on the event screen if your deposit type was not set as percentage
-* **Bug Fix**:  No MDJM data should be returned from a front end search
-* **Bug Fix**:  Removed duplicate fields from client profile on admin profile page
-* **Bug Fix**: Redirecting to contact page from availability widget should pre-populate event date field if present
-* **Bug Fix**: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.
-
 = 1.2.7.3 =
 <strong>Released 25th November, 2015</strong>
 <ui>
@@ -571,7 +556,3 @@ Our fully customisable Contact Forms enable full management of events from the i
 	<li><strong>Bug Fix</strong>: If you had your WordPress Permalink Settings set to the default of <strong>Default</strong> (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in</li>
 	<li><strong>Bug Fix</strong>: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration</li>
 </ul>
-
-== Upgrade Notice ==
-= 1.2.7.5 =
-Minor update with some bug fixes and small additions. Version 1.3 is pending with new features.
