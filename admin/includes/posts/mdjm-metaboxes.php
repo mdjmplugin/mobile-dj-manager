@@ -654,56 +654,10 @@
 	 *
 	 */
 	function mdjm_event_employee_mb( $post )	{
-		/**
-		 * Display all event employees. Start with the DJ
-		 */
-		 
-		echo '<div id="list-employees">' . "\r\n";
-		
-		//$employees = MDJM()->users->get_event_employees( $post->ID );
-		//echo $employees;
-		echo '</div>' . "\r\n";
-		
-		$primary = get_post_meta( $post->ID, '_mdjm_event_dj', true );
-		
-		$dj = !empty( $primary ) ? get_userdata( $primary )->display_name : '';
-		
 		?>
-        <table width="100%" id="mdjm-event-employees">
-        <thead>
-        <tr>
-        <th style="text-align:left; width:25%;"><?php _e( 'Role', 'mobile-dj-manager' ); ?></th>
-        <th style="text-align:left; width:25%;"><?php _e( 'Employee', 'mobile-dj-manager' ); ?></th>
-        <th style="text-align:left; width:20%;"><?php _e( 'Wage', 'mobile-dj-manager' ); ?></th>
-        <th style="text-align:left; width:15%;">&nbsp;</th>
-        <th style="text-align:left; width:15%;">&nbsp;</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr id="dj-role">
-        <td style="text-align:left;"><?php echo MDJM_DJ; ?></td>
-        <td style="text-align:left;"><?php echo $dj; ?></td>
-        <td style="text-align:left;">
-			<?php 
-			if( MDJM()->permissions->employee_can( 'manage_txns' ) )	{
-				echo MDJM_CURRENCY; ?><input type="text" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" placeholder="<?php echo display_price( '0', false ); ?>" value="<?php echo get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ); ?>" />
-          	<?php
-			}
-			else	{
-				echo '&mdash;';
-				?><input type="hidden" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" value="<?php echo get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ); ?>" /><?php
-			}
-			?>
-        </td>
-        <td><?php echo ( MDJM()->permissions->employee_can( 'manage_txns' ) ? __( 'Update', 'mobile-dj-manager' ) : '' ); ?></td>
-        <td>&nbsp;</td>
-        </tr>
-        
-        <?php
-		// Loop through all other employees and list
-		?>
-        </tbody>
-        </table>
+		<div id="event_employee_list">
+            <?php echo mdjm_list_event_employees( $post->ID ); ?>
+        </div>
         <hr />
         <?php
 		/**
@@ -721,10 +675,8 @@
 					$event_employees = get_post_meta( $post->ID, '_mdjm_event_employees', true );
 					
 					if( !empty( $event_employees ) )	{
-						foreach( $event_employees as $employee_role => $employees )	{
-							foreach( $employees as $employee )	{
-								$exclude[] = $employee->ID;
-							}
+						foreach( $event_employees as $employee )	{
+							$exclude[] = $employee['id'];
 						}
 					}
 					
@@ -772,7 +724,7 @@
 			</div>
             <div class="mdjm-post-row-single">
 				<div class="mdjm-post-1column">
-					<a href="#" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+					<a href="#" id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
 				</div>
 			</div>
         

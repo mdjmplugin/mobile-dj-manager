@@ -378,4 +378,35 @@
 	} // mdjm_update_event_deposit
 	add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit' );
 	
-
+/**
+ * Add an employee to the event.
+ *
+ * @since	1.3
+ *
+ * @param
+ * @return
+ */
+function mdjm_ajax_add_employee_to_event()	{
+	$args = array(
+		'id'		=> isset( $_POST['employee'] ) ? $_POST['employee'] : '',
+		'role'	  => isset( $_POST['employee_role'] ) ? $_POST['employee_role'] : '',
+		'wage'	  => isset( $_POST['employee_wage'] ) ? $_POST['employee_wage'] : ''
+	);
+	
+	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
+		$result['type'] = 'error';
+		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );
+	}
+	
+	else	{
+		$result['type'] = 'success';
+	}
+	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
+		
+	$result = json_encode( $result );
+	
+	echo $result;
+	die();
+} // mdjm_ajax_add_employee_to_event
+add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event' );
+?>

@@ -82,6 +82,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>New: Updated Client interface replaces the old "Client List"</li>
 	<li>New: Create custom MDJM employee roles and assign permissions to each role</li>
 	<li>New: Assign multiple MDJM roles to each employee</li>
+	<li>New: Assign multiple employees to events</li>
 	<li>New: Added Event Staff checkbox on user screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions</li>
 	<li>New: Admin availability checker can check for availability by role</li>
 	<li>New: Added availability checker setting. Specify which roles need to be available on the given date for you to be available</li>

@@ -30,7 +30,7 @@ function mdjm_event_post_columns( $columns ) {
 			'journal'		=> __( 'Journal', 'mobile-dj-manager' ),
 		);
 	
-	if( !MDJM()->permissions->employee_can( 'manage_all_events' ) )
+	if( !MDJM()->permissions->employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )
 		unset( $columns['cb'] );
 	
 	return $columns;
