@@ -199,6 +199,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/mdjm-users.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/user-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/roles/mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/permissions/mdjm-permissions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );

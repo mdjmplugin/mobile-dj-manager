@@ -660,8 +660,8 @@
 		 
 		echo '<div id="list-employees">' . "\r\n";
 		
-		$employees = MDJM()->users->get_event_employees( $post->ID );
-		echo $employees;
+		//$employees = MDJM()->users->get_event_employees( $post->ID );
+		//echo $employees;
 		echo '</div>' . "\r\n";
 		
 		$primary = get_post_meta( $post->ID, '_mdjm_event_dj', true );

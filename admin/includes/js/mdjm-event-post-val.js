@@ -301,3 +301,51 @@
 			}
 		});
 	} // set_deposit
+	
+/**
+ * Append an additional employee row to the event edit screen.
+ *
+ *
+ *
+ *
+ */
+jQuery(document).ready(function($) 	{
+	$('#add_employee').click(function()	{
+		event.preventDefault();
+		var employee_id = $("#event_new_employee").val();
+		var employe_role = $('#event_new_employee_role').val();
+		var employee_wage = $('#event_new_employee_wage').val();
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: event_employee_add.ajax_url,
+			data: {
+				employee : employee_id,
+				employee_role : employe_role,
+				employee_wage : employee_wage,
+				action : "add_employee_to_event"
+			},
+			beforeSend: function()	{
+				jQuery("#transaction_types").replaceWith('<div class="page-content" id="loader" style="color:#F90">Updating Transaction Types...<img src="/wp-admin/images/loading.gif" /></div>');
+			},
+			success: function(response)	{
+				if(response.type == "success") {
+					$("#new_transaction_type_div").fadeToggle('fast');
+					jQuery("#loader").replaceWith('<div id="transaction_types">' + response.transaction_types + '<a id="new_transaction_type" class="side-meta" href="#">Add New</a></div>');
+					$('#new_transaction_type').click(function()	{
+						$("#new_transaction_type_div").fadeToggle('fast');
+					});
+				}
+				else	{
+					alert(response.msg)
+					jQuery("#loader").replaceWith('<div id="transaction_types">' + response.transaction_types + '<a id="new_transaction_type" class="side-meta" href="#">Add New</a></div>');
+					$('#new_transaction_type').click(function()	{
+						$("#new_transaction_type_div").fadeToggle('fast');
+					});
+				}
+			}
+		});
+		
+	});
+});

@@ -512,14 +512,14 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					'high'
 				);
 				
-				/*add_meta_box(
+				add_meta_box(
 					'mdjm-event-employees',
 					__( 'Event Employees', 'mobile-dj-manager' ),
 					'mdjm_event_employee_mb',
 					MDJM_EVENT_POSTS,
 					'normal',
 					''
-				);*/
+				);
 				
 				add_meta_box(
 					'mdjm-event-venue',
