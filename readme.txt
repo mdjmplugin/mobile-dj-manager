@@ -88,6 +88,25 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>General: Main MDJM class is now a singleton class</li>
 	<li>General: Post actions and filters do not need to be a class</li>
 </ui>
+
+= 1.2.7.5 =
+**Released 22nd January, 2016**
+
+* **New**: Attach files from computer to email composed via communication feature
+* **New**: DJ / Admin access to the Client Zone is now blocked. Use the Admin area. For testing create a test client account and log in with that
+* **General**: List multiple attachments on communication history
+* **Bug Fix**: Custom event fields output if the field name contained spaces
+* **Bug Fix**: Venue contact name missing a space if venue is set to client address
+
+= 1.2.7.4 =
+**Released 19th January, 2016**
+
+* **Bug Fix**: Custom event fields did not display on the event screen if your deposit type was not set as percentage
+* **Bug Fix**:  No MDJM data should be returned from a front end search
+* **Bug Fix**:  Removed duplicate fields from client profile on admin profile page
+* **Bug Fix**: Redirecting to contact page from availability widget should pre-populate event date field if present
+* **Bug Fix**: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.
+
 = 1.2.7.3 =
 <strong>Released 25th November, 2015</strong>
 <ui>
