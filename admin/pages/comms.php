@@ -9,13 +9,8 @@
  *
  */
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	
-	if( !MDJM()->permissions->employee_can( 'send_comms' ) )  {
-		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
-			'<p>' . __( 'You are not allowed to send communications.', 'mobile-dj-manager' ) . '</p>',
-			403
-		);
+	if ( !current_user_can( 'manage_mdjm' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 		
 	global $mdjm, $mdjm_posts, $mdjm_settings, $current_user;
@@ -52,17 +47,18 @@
 			$message = '<strong>ERROR</strong>: There is no content in your email. Your email was not sent';
 			mdjm_update_notice( $class, $message );
 		}
+		
 		/* Process */
 		else	{
 			/* -- Build the email arguments -- */
 			$email_args = array(
-							'content'	=> nl2br( str_replace( ']]>', ']]&gt;', stripslashes( $_POST['email_content'] ) ) ),
-							'to'		=> $_POST['email_to'],
-							'subject'	=> stripslashes( $_POST['subject'] ),
-							'from'		=> $current_user->ID,
-							'source'	=> 'Communication Feature',
-							'html'		=> true,
-							);
+							'content'		=> nl2br( str_replace( ']]>', ']]&gt;', stripslashes( $_POST['email_content'] ) ) ),
+							'to'			 => $_POST['email_to'],
+							'subject'		=> stripslashes( $_POST['subject'] ),
+							'from'		   => $current_user->ID,
+							'source'		 => 'Communication Feature',
+							'html'		   => true
+						);
 			if( !empty( $_POST['event'] ) )	{
 				$email_args['event_id'] = $_POST['event'];
 				$email_args['journal'] = ( user_can( $_POST['email_to'], 'client' ) || user_can( $_POST['email_to'], 'inactive_client' ) ? 'email-client' : 'email-dj' );
@@ -80,6 +76,19 @@
 			else
 				$email_args['cc_admin'] = false;
 			
+			// If we have any attachments from the desktop, process them here
+			if( isset( $_FILES['upload_file'] ) && '' !== $_FILES['upload_file']['name'] )	{
+				$upload_dir = wp_upload_dir();
+				
+				$file_name	= $_FILES['upload_file']['name'];
+				$file_path	= $upload_dir['path'] . '/' . $file_name;
+				$tmp_path	 = $_FILES['upload_file']['tmp_name'];
+				
+				if( move_uploaded_file( $tmp_path, $file_path ) )	{
+					$email_args['attachments'] = array( $file_path );
+				}
+			}
+			
 			// Send the email					
 			$success = $mdjm->send_email( $email_args );
 			
@@ -89,10 +98,7 @@
 				$recipient = get_userdata( $_POST['email_to'] );
 				
 				$message = 'Message successfully sent to ' . $recipient->display_name . '. ' .  
-				'<a href="' . get_edit_post_link( $success ) . '">' . __( 'View message', 'mobile-dj-manager' ) . '</a>';
-				
-				if( !empty( $_POST['event'] ) )
-					$message .= ' ' . __( 'or' ) . ' <a href="' . get_edit_post_link( $_POST['event'] ) . '">' . __( 'Goto event', 'mobile-dj-manager' ) . '</a>';
+				'<a href="' . get_edit_post_link( $success ) . '">View message' . '</a>';
 			}
 			else	{
 				$class = 'error';
@@ -103,10 +109,10 @@
 			
 			/* -- Process Unavailability Reponses -- */
 			if( isset( $_POST['respond_unavailable'] ) && !empty( $_POST['respond_unavailable'] ) )	{
-				if( MDJM()->events->reject_event( $_POST['event'], $current_user->ID, 'Unavailable' ) )	{
+				if( $mdjm->mdjm_events->reject_event( $_POST['event'], $current_user->ID, 'Unavailable' ) )	{
 					$class = 'updated';
 					$message = 'The selected enquiry has been marked as rejected due to unavailability. ' . 
-					'<a href="' . $_POST['return_to'] . '">' . __( 'Return to Event Listings', 'mobilt-dj-manager' ) . '</a>';
+					'<a href="' . mdjm_get_admin_page( 'enquiries' ) . '">View Enquiries</a>';
 				}
 				else	{
 					$class = 'error';
@@ -151,8 +157,8 @@
 		$settings = array(  'media_buttons' => true,
 							'textarea_rows' => '10',
 						 );
-		$clientinfo = MDJM()->users->get_clients();
-		$djinfo = MDJM()->users->get_employees();
+		$clientinfo = $mdjm->mdjm_events->get_clients();
+		$djinfo = mdjm_get_djs();
 		?>
 		<script type="text/javascript">
 			function MM_jumpMenu(targ,selObj,restore){ //v3.0
@@ -160,13 +166,10 @@
 			  if (restore) selObj.selectedIndex=0;
 			}
 		</script>
-		<form name="form-email-template" id="form-email-template" method="post">
+		<form name="form-email-template" id="form-email-template" method="post" enctype="multipart/form-data">
         <?php
 		if( isset( $_GET['action'] ) && $_GET['action'] == 'respond_unavailable' )	{
-			?>
-            <input type="hidden" name="respond_unavailable" id="respond_unavailable" value="<?php echo $_GET['event_id']; ?>" />
-			<input type="hidden" name="return_to" id="return_to" value="<?php echo $_SERVER['HTTP_REFERER']; ?>" />
-			<?php	
+			?><input type="hidden" name="respond_unavailable" id="respond_unavailable" value="<?php echo $_GET['event_id']; ?>" /><?php	
 		}
 		?>
 		<table class="form-table">
@@ -241,7 +244,7 @@
             <optgroup label="CLIENTS">
 		<?php
 		foreach( $clientinfo as $client )	{
-			if( current_user_can( 'administrator' ) || MDJM()->events->is_my_client( $client->ID ) )	{ // Non-Admins only see their own clients
+			if( current_user_can( 'administrator' ) || $mdjm->mdjm_events->is_my_client( $client->ID ) )	{ // Non-Admins only see their own clients
 				?>
 				<option value="<?php echo add_query_arg( array( 'to_user' => $client->ID ) ); ?>"<?php if( isset( $_GET['to_user'] ) ) { selected( $client->ID, $_GET['to_user'] ); } ?>><?php echo $client->display_name; ?></option>
                 <?php
@@ -286,10 +289,10 @@
         <?php
 		if( isset( $_GET['to_user'] ) )	{
 			if( user_can( $_GET['to_user'], 'dj' ) )	{ // Selected user is a DJ
-				$events = MDJM()->events->dj_events( $_GET['to_user'], '', $order='DESC' );
+				$events = $mdjm->mdjm_events->dj_events( $_GET['to_user'], '', $order='DESC' );
 			}
 			else	{
-				$events = MDJM()->events->client_events( $_GET['to_user'], '', $order='DESC' );
+				$events = $mdjm->mdjm_events->client_events( $_GET['to_user'], '', $order='DESC' );
 			}
 		}
 		?>
@@ -325,6 +328,13 @@
 		<tr class="alternate">
 		<th class="row-title" align="left"><label for="subject">Subject:</label></th>
 		<td><input type="text" name="subject" id="subject" class="regular-text" value="<?php echo $subject; ?>" /></td>
+		</tr>
+        <tr class="alternate">
+		<th class="row-title" align="left"><label for="upload_file">Attach File from Computer:</label></th>
+		<td><input type="file" name="upload_file" id="upload_file" class="regular-text" value="" /><p class="description"><?php echo __( 'Max file size', 'mobile-dj-manager' ) . ': ' . ini_get( 'post_max_size' )
+							. '. ' . sprintf( __( 'Change php.ini %spost_max_size%s to increase', 'mobile-dj-manager' ), 
+							'<strong>',
+							'</strong>' ); ?></p></td>
 		</tr>
         <?php do_action( 'mdjm_comms_fields_last', $email_query, $contract_query ); ?>
 		<tr>
