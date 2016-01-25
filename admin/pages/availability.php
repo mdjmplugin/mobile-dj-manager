@@ -216,7 +216,7 @@
       	<?php
 	}
 	else	{
-		MDJM()->users->employee_dropdown( 
+		mdjm_employee_dropdown( 
 			array(
 				'name'				=> 'check_employee',
 				'first_entry'		=> __( 'All', 'mobile-dj-manager' ),
@@ -266,7 +266,7 @@
       	<?php
 	}
 	else	{
-		MDJM()->users->employee_dropdown( 
+		mdjm_employee_dropdown( 
 			array(
 				'name'				=> 'check_employee',
 				'first_entry'		=> __( 'All', 'mobile-dj-manager' ),

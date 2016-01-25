@@ -157,7 +157,7 @@
         </thead>
         <tbody>
         <?php
-		$djs = MDJM()->users->get_employees();
+		$djs = mdjm_get_employees();
 		if( empty( $equipment ) )	{
 			echo '<tr>';
 			echo '<td colspan="6">You have no equipment in your inventory yet. Begin adding below.</td>';

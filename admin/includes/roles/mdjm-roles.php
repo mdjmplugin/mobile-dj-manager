@@ -181,7 +181,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				$roles = array( $roles );
 			
 			// Make sure there are no employees assigned to the roles marked for deletion
-			$employees = MDJM()->users->get_employees( $roles );
+			$employees = mdjm_get_employees( $roles );
 			
 			if( !empty( $employees ) )	{
 				wp_redirect( $_SERVER['HTTP_REFERER'] . '&role_action=1&message=6' );

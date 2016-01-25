@@ -78,7 +78,7 @@
 	global $mdjm_options;
 	$packages = get_option( 'mdjm_packages' );
 	
-	$djs = MDJM()->users->get_employees();
+	$djs = mdjm_get_employees();
 
 	if( $packages )	{ /* Option to edit existing packages */
 		asort( $packages );

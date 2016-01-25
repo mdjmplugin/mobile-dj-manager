@@ -322,7 +322,7 @@
                  * But only if the user is permitted to view all employees.
                  */
                 if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
-                    MDJM()->users->employee_dropdown( 
+                    mdjm_employee_dropdown( 
                         array(
                             'name'            => '_mdjm_event_dj',
                             'class'           => 'required',
@@ -361,7 +361,7 @@
                 <label for="_mdjm_event_dj" class="mdjm-label"><?php _e( 'Select ' . MDJM_DJ . ':' ); ?></label><br />
                 <?php
 				if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
-					MDJM()->users->employee_dropdown( 
+					mdjm_employee_dropdown( 
 						array(
 							'name'            => '_mdjm_event_dj',
 							'class'           => 'required',
@@ -684,7 +684,7 @@
 					$mdjm_roles = MDJM()->roles->get_roles();
 					remove_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
 					
-					MDJM()->users->employee_dropdown(
+					mdjm_employee_dropdown(
 						array(
 							'name'				=> 'event_new_employee',
 							'first_entry'		=> __( 'Add Employee', 'mobile-dj-manager' ),

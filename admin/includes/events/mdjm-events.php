@@ -337,7 +337,7 @@
 			global $mdjm_settings;
 			
 			$date = !empty( $date ) ? $date : date( 'Y-m-d' );
-			$dj = !empty( $dj ) ? $dj : MDJM()->users->get_employees();
+			$dj = !empty( $dj ) ? $dj : mdjm_get_employees();
 			
 			if( is_array( $dj ) )	{
 				foreach( $dj as $employee )	{

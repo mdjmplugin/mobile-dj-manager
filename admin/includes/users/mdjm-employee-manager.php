@@ -41,7 +41,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 			// Update the user role
 			if( isset( $_POST['change_role'], $_POST['new_role'], $_POST['employees'] ) )	{
 				foreach( $_POST['employees'] as $employee )	{
-					MDJM()->users->set_employee_role( $employee, $_POST['new_role'] );	
+					mdjm_set_employee_role( $employee, $_POST['new_role'] );	
 				}
 				
 				mdjm_update_notice( 'updated', __( 'Employee roles updated.', 'mobile-dj-manager' ), true );
@@ -77,8 +77,8 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 				self::$mdjm_employee_table = new MDJM_Employee_Table();
 				self::$mdjm_employee_table->process_bulk_actions();
 				// Retrieve employee list
-				self::$employees = MDJM()->users->get_employees( self::$display_role, self::$orderby, self::$order );
-				self::$total_employees = count( MDJM()->users->get_employees() );
+				self::$employees = mdjm_get_employees( self::$display_role, self::$orderby, self::$order );
+				self::$total_employees = count( mdjm_get_employees() );
 				self::$mdjm_employee_table->prepare_items();
 				
 				// The header for the user management page
@@ -671,7 +671,7 @@ endif;
 			
 			// Loop through all roles and generate the required views for each
 			foreach( MDJM_Employee_Manager::$mdjm_roles as $role_id => $role )	{
-				$count = count( MDJM()->users->get_employees( $role_id ) );
+				$count = count( mdjm_get_employees( $role_id ) );
 				
 				if( empty( $count ) )
 					continue;

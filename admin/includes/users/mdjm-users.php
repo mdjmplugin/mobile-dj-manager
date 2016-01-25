@@ -40,7 +40,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 */
 		public function init()	{
 			if( isset( $_POST['mdjm-add-employee'] ) )
-				$this->add_employee( $_POST );
+				$this->add( $_POST );
 				
 			$this->remove_client_admin();
 		} // init
@@ -105,62 +105,9 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 *
 		 * @return	void
 		 */
-		function add_employee( $post_data )	{
-			if( empty( $post_data['first_name'] ) || empty( $post_data['last_name'] ) || empty( $post_data['user_email'] ) || empty( $post_data['employee_role'] ) )	{
-				wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=5' );
-				exit;
-			}
-			
-			// We don't need to execute the hooks for user saves
-			remove_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
-			remove_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
-			remove_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-			
-			// Default employee settings
-			$userdata = array(
-				'user_email'            => $post_data['user_email'],
-				'user_login'            => $post_data['user_email'],
-				'user_pass'		     => wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] ),
-				'first_name'            => ucfirst( $post_data['first_name'] ),
-				'last_name'             => ucfirst( $post_data['last_name'] ),
-				'display_name'          => ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ),
-				'role'                  => $post_data['employee_role'],
-				'show_admin_bar_front'  => false
-			);
-			
-			/**
-			 * Insert the new employee into the DB.
-			 * Fire a hook on the way to allow filtering of the $default_userdata array.
-			 */
-			$userdata = apply_filters( 'mdjm_new_employee_data', $userdata );
-			
-			$user_id = wp_insert_user( $userdata );
-			
-			// Re-add our custom user save hooks
-			add_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
-			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
-			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-			
-			// Success
-			if( !is_wp_error( $user_id ) )	{
-				if( MDJM_DEBUG == true )	{
-					MDJM()->debug->log_it( 
-						'Adding employee ' . ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ) . ' with user ID ' . $user_id,
-						true
-					);
-				}
-				
-				wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=1' );
-				exit;
-			}
-			else	{
-				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'ERROR: Unable to add employee. ' . $user_id->get_error_message(), true );
-					
-				wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=6' );
-				exit;
-			}			
-		} // add_employee
+		public function add( $post_data )	{
+			return mdjm_add_employee( $post_data );
+		} // add
 		
 		/**
 		 * Retrieve a list of all employees
@@ -171,160 +118,9 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 *
 		 * @return	$arr	$employees	or false if no employees for the specified roles
 		 */
-		public function get_employees( $roles='', $orderby='display_name', $order='ASC' )	{			
-			// We'll work with an array of roles
-			if( !empty( $roles ) && !is_array( $roles ) )
-				$roles = array( $roles );
-						
-			// Define the default query	
-			if( empty( $roles ) )
-				$roles = MDJM()->roles->get_roles();
-						
-			// This array will store our employees
-			$employees = array();
-						
-			// Create and execute the WP_User_Query for each role	
-			foreach( $roles as $role_id => $role_name )	{
-				$args = array(
-					'role'		 => is_numeric( $role_id ) ? $role_name : $role_id,
-					'orderby'	 => $orderby,
-					'order'		 => $order
-				);
-									
-				if( !is_numeric( $role_id ) && $role_id == 'administrator' )	{
-					$args['meta_key'] = '_mdjm_event_staff';
-					$args['meta_value'] = true;
-				}
-				
-				// Execute the query
-				$employee_query = new WP_User_Query( $args );
-				
-				// Merge the results into our $employees array
-				$results = $employee_query->get_results();
-				
-				$employees = array_merge( $employees, $results );
-				$employees = array_unique( $employees, SORT_REGULAR );
-			}
-			
-			return $employees;
-		} // get_employees
-		
-		/**
-		 * Display a dropdown select list with all employees. The label must be handled seperately.
-		 *
-		 * @param	arr		$args			Settings for the dropdown
-		 *									'role' (str|arr)		Optional: Only display employees with the given role. Default empty (all).
-		 *									'name' (str)			Optional: The name of the input. Defaults to '_mdjm_employees'
-		 *									'id' (str)				Optional: ID for the field (uses name if not present)
-		 *									'class' (str)			Optional: Class of the input field
-		 *									'selected' (str)		Optional: Initially selected option
-		 *									'first_entry' (str)		Optional: First entry to be displayed (default none)
-		 *									'first_entry_val' (str)	Optional: First entry value. Only valid if first_entry is set
-		 *									'multiple' (bool)		Optional: Whether multiple options can be selected
-		 *									'group' (bool)			Optional: True to group employees by role
-		 *									'structure' (bool)		Optional: True outputs the <select> tags, false just the <options>
-		 *									'exclude' (int|arr)		Optional: Employee ID's to exclude
-		 *									'echo' (bool)           Optional: Echo the HTML output (default) or false to return as $output
-		 *
-		 * @return	str		$output			The HTML output for the dropdown list
-		 */
-		public function employee_dropdown( $args='' )	{
-			global $wp_roles;
-			
-			// Define the default args for the dropdown
-			$defaults = array(
-				'role'                => '',
-				'name'                => '_mdjm_employees',
-				'class'               => '',
-				'selected'            => '',
-				'first_entry'         => '',
-				'first_entry_val'     => '',
-				'multiple'			  => false,
-				'group'               => false,
-				'structure'           => true,
-				'exclude'			  => false,
-				'echo'                => true
-			);
-			
-			// Merge default args with those passed to function
-			$args = wp_parse_args( $args, $defaults );
-			
-			$args['id'] = isset( $args['id'] ) ? $args['id'] : $args['name'];
-			
-			if( !empty( $args['exclude'] ) && !is_array( $args['exclude'] ) )
-				$args['exclude'] = array( $args['exclude'] );
-			
-			// We'll store the output here
-			$output = '';
-			
-			// Start the structure
-			if( !empty( $args['structure'] ) )	{
-				$output .= '<select name="' . $args['name'];
-				if( !empty( $args['multiple'] ) ) 
-					$output .= '[]';
-					
-				$output .= '"	id="' . $args['id'] . '"';
-				
-				if( !empty( $args['class'] ) )
-					$output .= ' class="' . $args['class'] . '"';
-					
-				if( !empty( $args['multiple'] ) )
-					$output .= ' multiple="multiple"';
-					
-				$output .= '>' . "\r\n";
-			}
-			
-			$employees = $this->get_employees( $args['role'] );
-			
-			if( empty( $employees ) )	{
-				$output .= '<option value="">' . __( 'No employees found', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-			}
-			else	{
-				if( !empty( $args['first_entry'] ) )	{
-					$output .= '<option value="' .  $args['first_entry_val'] . '">'; 
-					$output .= $args['first_entry'] . '</option>' . "\r\n";
-					
-				}
-				$results = new stdClass();
-				$results->role = array();
-				foreach( $employees as $employee )	{
-					if( $employee->roles[0] == 'administrator' )
-						$employee->roles[0] = 'dj';
-					
-					if( !empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )
-						continue;
-					
-					$results->role[$employee->roles[0]][] = $employee;
-				}
-				// Loop through the roles and employees to create the output
-				foreach( $results->role as $role => $userobj )	{
-					if( !empty( $args['group'] ) )
-						$output .= '<optgroup label="' . translate_user_role( $wp_roles->roles[$role]['name'] ) . '">' . "\r\n";
-					
-					foreach( $userobj as $user )	{
-						$output .= '<option value="' . $user->ID . '"';
-						
-						if( !empty( $args['selected'] ) && $user->ID == $args['selected'] )
-							$output .= ' selected="selected"';
-						
-						$output .= '>' . $user->display_name . '</option>' . "\r\n";	
-					}
-					
-					if( !empty( $args['group'] ) )
-						$output .= '</optgroup>' . "\r\n";
-				}
-			}
-			
-			// End the structure
-			if( $args['structure'] == true )
-				$output .= '</select>' . "\r\n";
-			
-			if( !empty( $args['echo'] ) )
-				echo $output;
-				
-			else
-				return $output;
-		} // employee_dropdown
+		public function get( $roles='', $orderby='display_name', $order='ASC' )	{			
+			return mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' );
+		} // get
 				
 		/**
 		 * Set the role for the given employees
@@ -334,23 +130,9 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 *
 		 * @return	
 		 */
-		public function set_employee_role( $employees, $role )	{			
-			if( !is_array( $employees ) )
-				$employees = array( $employees );
-			
-			foreach( $employees as $employee )	{
-				// Fetch the WP_User object of our user.
-				$user = new WP_User( $employee );
-				
-				if( !empty( $user ) )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Updating user role for ' . $employee . ' to ' . $role, true );	
-				}
-				
-				// Replace the current role with specified role
-				$user->set_role( $role );
-			}
-		} // set_employee_role
+		public function set_role( $employees, $role )	{			
+			mdjm_set_employee_role( $employees, $role );
+		} // set_role
 		
 		/**
 		 * Retrieve a list of all clients
@@ -363,48 +145,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @return	$arr	$employees	or false if no employees for the specified roles
 		 */
 		public function get_clients( $roles='', $employee='', $orderby='', $order='' )	{			
-			$defaults = array(
-				'roles'		=> array( 'client', 'inactive_client' ),
-				'employee'	 => false,
-				'orderby'	  => 'display_name',
-				'order'		=> 'ASC'
-			);
-			
-			$roles = empty( $roles ) ? $defaults['roles'] : $roles;
-			$employee = empty( $employee ) ? $defaults['employee'] : $employee;
-			$orderby = empty( $orderby ) ? $defaults['orderby'] : $orderby;
-			$order = empty( $order ) ? $defaults['order'] : $order;
-			
-			// We'll work with an array of roles
-			if( !empty( $roles ) && !is_array( $roles ) )
-				$roles = array( $roles );
-			
-			$all_clients = get_users( 
-				array(
-					'role__in'	 => $roles,
-					'orderby'	  => $orderby,
-					'order'		=> $order
-				)
-			);
-			
-			// If we are only quering an employee's client, we need to filter	
-			if( !empty( $employee ) )	{
-				foreach( $all_clients as $client )	{
-					if( !$this->is_employee_client( $client->ID, $employee ) )
-						continue;
-						
-					$clients[] = $client;	
-				}
-				// No clients for employee
-				if( empty( $clients ) )
-					return false;
-					
-				$all_clients = $clients;
-			}
-			
-			$clients = $all_clients; 
-						
-			return $clients;
+			return mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' );
 		} // get_clients
 		
 		/**

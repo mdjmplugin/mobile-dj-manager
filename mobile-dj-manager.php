@@ -199,7 +199,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/mdjm-users.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/user-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/admin/includes/user-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/roles/mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/permissions/mdjm-permissions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
@@ -210,6 +210,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/debug/mdjm-debug.php' ); // Debug class
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' ); // Transaction class
+			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
 			if( is_admin() )	{ // Required for admin only
 				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
@@ -219,7 +220,6 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/formatting/mdjm-formatting.php' );
 			}
 			else	{ // Required for front end only
-				require_once( MDJM_CLIENTZONE . '/includes/mdjm-shortcodes.php' );
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 		} // mdjm_includes

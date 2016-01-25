@@ -454,29 +454,7 @@
 /*
  * -- END EVENT FUNCTIONS
  */
- 
-/*
- * -- START CLIENT FUNCTIONS
- */
-	/**
-	 * Retrieve a list of all Client's
-	 * 
-	 * @since: 1.1.3
-	 * @params:
-	 * @returns: $clients => object
-	 */
-	function mdjm_get_clients( $role = 'client', $orderby, $order )	{
-		return MDJM()->users->get_clients( 
-			$role,
-			!MDJM()->permissions->employee_can() ? get_current_user_id() : '',
-			$orderby,
-			$order
-		);
-	} // mdjm_get_clients
-/*
- * -- END CLIENT FUNCTIONS
- */
- 
+  
 /*
  * -- START DJ FUNCTIONS
  */
@@ -490,7 +468,7 @@
 	*	@returns: $djs => object
 	*/
 	function mdjm_get_djs( $role = 'dj' )	{
-		return MDJM()->users->get_employees(
+		return mdjm_get_employees(
 			$role == 'dj' ? array( 'administrator', $role ) : $role
 		);
 	} // mdjm_get_djs
@@ -618,9 +596,9 @@
 		
 		// If no DJ is specified but roles are, retrieve all employees for the roles
 		if( empty( $dj ) && !empty( $roles ) )
-			$dj = MDJM()->users->get_employees( $roles );
+			$dj = mdjm_get_employees( $roles );
 		
-		$dj = !empty( $dj ) ? $dj : MDJM()->users->get_employees( $required_roles );
+		$dj = !empty( $dj ) ? $dj : mdjm_get_employees( $required_roles );
 
 		$date = !empty( $date ) ? $date : date( 'Y-m-d' );
 		

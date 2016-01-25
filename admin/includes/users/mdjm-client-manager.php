@@ -57,7 +57,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			
 			// Retrieve client list
 			if( empty( $_POST ) || !empty( $_POST['action'] ) || !empty( $_POST['action2'] ) )	{
-				self::$clients = MDJM()->users->get_clients(
+				self::$clients = mdjm_get_clients(
 					self::$display_role,
 					( !MDJM()->permissions->employee_can( 'list_all_clients' ) ? get_current_user_id() : '' ),
 					self::$orderby,
@@ -79,7 +79,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 					);
 				}
 				if( !empty( $_POST['filter_client'] ) )	{
-					self::$clients = MDJM()->users->get_clients(
+					self::$clients = mdjm_get_clients(
 						self::$display_role,
 						$_POST['filter_client'],
 						self::$orderby,
@@ -88,7 +88,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 				}
 			}
 			
-			self::$total_clients = count( MDJM()->users->get_clients() );
+			self::$total_clients = count( mdjm_get_clients() );
 		} // get_clients
 					
 		/**
@@ -124,7 +124,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			<div class="alignleft actions">
                 <label class="screen-reader-text" for="filter_client"><?php _e( 'Only show', 'mobile-dj-manager' ); ?>&hellip;</label>
                 <?php
-                MDJM()->users->employee_dropdown( 
+               mdjm_employee_dropdown( 
                 	array(
 						'name'			=> 'filter_client',
 						'first_entry' 	 => __( 'Show clients of', 'mobile-dj-manager' ) . '...',
@@ -321,7 +321,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			// Loop through all roles and generate the required views for each
 			$roles = array( 'client', 'inactive_client' );
 			foreach( $roles as $key => $role )	{
-				$count = count( MDJM()->users->get_clients( $role ) );
+				$count = count( mdjm_get_clients( $role ) );
 				
 				if( empty( $count ) )
 					continue;
