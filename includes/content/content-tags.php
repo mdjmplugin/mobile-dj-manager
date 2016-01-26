@@ -357,6 +357,31 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'contract_url',
 			'description' => __( 'The URL for the client to access their event contract', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_url'
+		),
+		array(
+			'tag'         => 'deposit',
+			'description' => __( 'The deposit amount for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_deposit'
+		),
+		array(
+			'tag'         => 'deposit_status',
+			'description' => __( "The deposit payment status. Generally 'Paid' or 'Due'", 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_deposit_status'
+		),
+		array(
+			'tag'         => 'dj_email',
+			'description' => __( 'The email address of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_email'
+		),
+		array(
+			'tag'         => 'dj_firstname',
+			'description' => __( 'The first name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_firstname'
+		),
+		array(
+			'tag'         => 'dj_fullname',
+			'description' => __( 'The full name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_fullname'
 		)
 	);
 
@@ -481,7 +506,7 @@ function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
 	}
 	
 	if( !empty( $client ) && !empty( $client->first_name ) )	{
-		$return = $client->first_name;
+		$return = ucfirst( $client->first_name );
 	}
 	
 	return $return;
@@ -514,7 +539,7 @@ function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
 	}
 	
 	if( !empty( $client ) && !empty( $client->last_name ) )	{
-		$return = $client->last_name;
+		$return = ucfirst( $client->last_name );
 	}
 	
 	return $return;
@@ -547,7 +572,7 @@ function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
 	}
 	
 	if( !empty( $client ) && !empty( $client->display_name ) )	{
-		$return = $client->display_name;
+		$return = ucwords( $client->display_name );
 	}
 	
 	return $return;
@@ -631,7 +656,7 @@ function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
 	}
 	
 	if( !empty( $client ) && !empty( $client->user_email ) )	{
-		$return = $client->user_email;
+		$return = strtolower( $client->user_email );
 	}
 	
 	return $return;
@@ -840,4 +865,140 @@ function mdjm_content_tag_contract_url( $event_id='' )	{
 	
 	return mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $event_id;
 } // mdjm_content_tag_contract_url
+
+/**
+ * Content tag: deposit.
+ * The event contract URL for the client.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The formatted event deposit amount
+ */
+function mdjm_content_tag_deposit( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$deposit = get_post_meta( $event_id, '_mdjm_event_deposit', true );
+	
+	if( !empty( $deposit ) )	{
+		$return = display_price( $deposit );
+	}
+	else	{
+		$return = '';
+	}
+	
+	return $return;
+} // mdjm_content_tag_deposit
+
+/**
+ * Content tag: deposit_status.
+ * Current status of the deposit.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The status of the deposit payment, or Due if no status is found.
+ */
+function mdjm_content_tag_deposit_status( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = get_post_meta( $post_id, '_mdjm_event_deposit_status', true );
+	
+	if( empty( $return ) )	{
+		$return = 'Due';	
+	}
+	
+	return $return;
+} // mdjm_content_tag_deposit_status
+
+/**
+ * Content tag: dj_email.
+ * Email address of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The email address of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_dj_email( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
+	
+	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	
+	if( !empty( $user_id ) )	{
+		$employee = get_userdata( $user_id );	
+	}
+	
+	if( !empty( $employee ) && !empty( $employee->user_email ) )	{
+		$return = strtolower( $employee->user_email );
+	}
+	
+	return $return;
+} // mdjm_content_tag_dj_email
+
+/**
+ * Content tag: dj_firstname.
+ * First name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The first name of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_dj_firstname( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
+	
+	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	
+	if( !empty( $user_id ) )	{
+		$employee = get_userdata( $user_id );	
+	}
+	
+	if( !empty( $employee ) && !empty( $employee->first_name ) )	{
+		$return = ucfirst( $employee->first_name );
+	}
+	
+	return $return;
+} // mdjm_content_tag_dj_firstname
+
+/**
+ * Content tag: dj_fullname.
+ * Full name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The full name (display name) of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_dj_fullname( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
+	
+	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	
+	if( !empty( $user_id ) )	{
+		$employee = get_userdata( $user_id );	
+	}
+	
+	if( !empty( $employee ) && !empty( $employee->display_name ) )	{
+		$return = ucwords( $employee->display_name );
+	}
+	
+	return $return;
+} // mdjm_content_tag_dj_fullname
 ?>

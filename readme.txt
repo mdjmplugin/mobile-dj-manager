@@ -90,6 +90,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>Tweak: Shortcodes have been re-written.</li>
 	<li>Tweak: Main MDJM class is now a singleton class</li>
 	<li>Tweak: Post actions and filters do not need to be a class</li>
+	<li>Tweak: Replaced get_link method with mdjm_get_formatted_url function</li>
 </ui>
 
 = 1.2.7.5 =
