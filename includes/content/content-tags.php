@@ -325,13 +325,33 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'client_username',
-			'description' => sprintf( __( 'The event clients username for logging into', 'mobile-dj-manager' ), MDJM_APP ),
+			'description' => sprintf( __( 'The event clients username for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
 			'function'    => 'mdjm_content_tag_client_username'
 		),
 		array(
 			'tag'         => 'client_password',
-			'description' => sprintf( __( 'The event clients password for logging into', 'mobile-dj-manager' ), MDJM_APP ),
+			'description' => sprintf( __( 'The event clients password for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
 			'function'    => 'mdjm_content_tag_client_password'
+		),
+		array(
+			'tag'         => 'admin_notes',
+			'description' => __( 'The admin notes associated with the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_admin_notes'
+		),
+		array(
+			'tag'         => 'balance',
+			'description' => __( 'The remaining balance owed for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_balance'
+		),
+		array(
+			'tag'         => 'contract_date',
+			'description' => __( 'The date the event contract was signed, or today\'s date', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contract_date'
+		),
+		array(
+			'tag'         => 'contract_id',
+			'description' => __( 'The contract / event ID', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contract_id'
 		)
 	);
 
@@ -717,4 +737,85 @@ function mdjm_content_tag_client_password( $event_id='', $client_id='' )	{
 	
 	return $return;
 } // mdjm_content_tag_client_password
+
+/**
+ * Content tag: admin_notes.
+ * Admin notes associated with event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Event admin notes.
+ */
+function mdjm_content_tag_admin_notes( $event_id='' )	{	
+	return !empty( $event_id ) ? get_post_meta( $event_id, '_mdjm_admin_notes', true ) : '';
+} // mdjm_content_tag_admin_notes
+
+/**
+ * Content tag: balance.
+ * The remaining balance for the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The event payment balance.
+ */
+function mdjm_content_tag_balance( $event_id='' )	{	
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$rcvd = MDJM()->txns->get_transactions( $event_id, 'mdjm-income' );
+	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
+	
+	if( !empty( $paid ) && $paid != '0.00' && !empty( $cost ) )	{
+		return display_price( ( $cost - $paid ) );	
+	}
+	
+	return display_price( $cost );
+} // mdjm_content_tag_balance
+
+/**
+ * Content tag: contract_date.
+ * The date of the contract. If the contract is signed, return the signing date.
+ * Otherwise, return the current date.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The event contract date.
+ */
+function mdjm_content_tag_contract_date( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$signed = get_post_meta( $event_id, '_mdjm_event_contract_approved', true );
+	
+	if( !empty( $signed ) )	{
+		$return	= $return = date( MDJM_SHORTDATE_FORMAT, strtotime( $contract_date ) );
+	}
+	else	{
+		$return = date( MDJM_SHORTDATE_FORMAT );
+	}
+	
+	return $return;
+} // mdjm_content_tag_contract_date
+
+/**
+ * Content tag: contract_id.
+ * The event ID.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The event contract ID.
+ */
+function mdjm_content_tag_contract_id( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_the_title( $event_id );
+} // mdjm_content_tag_contract_id
 ?>
