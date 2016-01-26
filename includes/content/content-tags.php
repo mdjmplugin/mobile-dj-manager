@@ -382,6 +382,36 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'dj_fullname',
 			'description' => __( 'The full name of the events assigned primary employee', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_dj_fullname'
+		),
+		array(
+			'tag'         => 'dj_notes',
+			'description' => __( 'The DJ notes that have been entered against the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_notes'
+		),
+		array(
+			'tag'         => 'dj_primary_phone',
+			'description' => __( 'The primary phone number of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_primary_phone'
+		),
+		array(
+			'tag'         => 'dj_setup_date',
+			'description' => __( 'The setup date for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_setup_date'
+		),
+		array(
+			'tag'         => 'dj_setup_time',
+			'description' => __( 'The setup time for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_setup_time'
+		),
+		array(
+			'tag'         => 'end_time',
+			'description' => __( 'The time the event completes', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_end_time'
+		),
+		array(
+			'tag'         => 'end_date',
+			'description' => __( 'The date the event completes', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_end_date'
 		)
 	);
 
@@ -499,17 +529,13 @@ function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+		$return = get_user_meta( $user_id, 'first_name', true );
 	}
 	
-	if( !empty( $client ) && !empty( $client->first_name ) )	{
-		$return = ucfirst( $client->first_name );
-	}
-	
-	return $return;
+	return ucfirst( $return );
 } // mdjm_content_tag_client_firstname
 
 /**
@@ -532,17 +558,13 @@ function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+		$return = get_user_meta( $user_id, 'last_name', true );
 	}
 	
-	if( !empty( $client ) && !empty( $client->last_name ) )	{
-		$return = ucfirst( $client->last_name );
-	}
-	
-	return $return;
+	return ucfirst( $return );
 } // mdjm_content_tag_client_lastname
 
 /**
@@ -564,18 +586,18 @@ function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
 	else	{
 		$user_id = '';
 	}
-	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+		
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+		$return = get_user_meta( $user_id, 'first_name', true );
+		
+		if( !empty( $return ) )	{
+			$return .= ' ' . get_user_meta( $user_id, 'last_name', true );
+		}
 	}
 	
-	if( !empty( $client ) && !empty( $client->display_name ) )	{
-		$return = ucwords( $client->display_name );
-	}
-	
-	return $return;
+	return ucwords( $return );
 } // mdjm_content_tag_client_fullname
 
 /**
@@ -598,7 +620,7 @@ function mdjm_content_tag_client_full_address( $event_id='', $client_id='' )	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
 		$client = get_userdata( $user_id );	
@@ -649,17 +671,13 @@ function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+		$return = get_user_meta( $user_id, 'user_email', true );	
 	}
 	
-	if( !empty( $client ) && !empty( $client->user_email ) )	{
-		$return = strtolower( $client->user_email );
-	}
-	
-	return $return;
+	return strtolower( $return );
 } // mdjm_content_tag_client_email
 
 /**
@@ -682,14 +700,10 @@ function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
-	}
-	
-	if( !empty( $client ) && !empty( $client->phone1 ) )	{
-		$return = $client->phone1;
+		$return = get_user_meta( $user_id, 'phone1', true );
 	}
 	
 	return $return;
@@ -931,14 +945,10 @@ function mdjm_content_tag_dj_email( $event_id='' )	{
 	
 	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
 	
-	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$employee = get_userdata( $user_id );	
-	}
-	
-	if( !empty( $employee ) && !empty( $employee->user_email ) )	{
-		$return = strtolower( $employee->user_email );
+		$return = get_user_meta( $user_id, 'user_email', true );
 	}
 	
 	return $return;
@@ -960,14 +970,10 @@ function mdjm_content_tag_dj_firstname( $event_id='' )	{
 	
 	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
 	
-	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$employee = get_userdata( $user_id );	
-	}
-	
-	if( !empty( $employee ) && !empty( $employee->first_name ) )	{
-		$return = ucfirst( $employee->first_name );
+		$return = get_user_meta( $user_id, 'first_name', true );
 	}
 	
 	return $return;
@@ -989,16 +995,160 @@ function mdjm_content_tag_dj_fullname( $event_id='' )	{
 	
 	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
 	
-	$return = __( 'Employee data not set', 'mobile-dj-manager' );
+	$return = '';
+	
+	$return = '';
 	
 	if( !empty( $user_id ) )	{
-		$employee = get_userdata( $user_id );	
+		$return = get_user_meta( $user_id, 'first_name', true );
+		
+		if( !empty( $return ) )	{
+			$return .= ' ' . get_user_meta( $user_id, 'last_name', true );
+		}
 	}
 	
-	if( !empty( $employee ) && !empty( $employee->display_name ) )	{
-		$return = ucwords( $employee->display_name );
+	return ucwords( $return );
+} // mdjm_content_tag_dj_fullname
+
+/**
+ * Content tag: dj_primary_phone.
+ * DJ Notes associated with event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The notes tassociated with the event that are for the DJ.
+ */
+function mdjm_content_tag_dj_primary_phone( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
+	
+	$return = '';
+	
+	if( !empty( $user_id ) )	{
+		$return = get_user_meta( $user_id, 'phone1', true );
+	}
+		
+	return $return;
+} // mdjm_content_tag_dj_primary_phone
+
+/**
+ * Content tag: dj_notes.
+ * DJ Notes associated with event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The notes tassociated with the event that are for the DJ.
+ */
+function mdjm_content_tag_dj_notes( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_post_meta( $event_id, '_mdjm_event_dj_notes', true );
+} // mdjm_content_tag_dj_notes
+
+/**
+ * Content tag: dj_setup_date.
+ * The date to setup for the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The date for which the event needs to be setup.
+ */
+function mdjm_content_tag_dj_setup_date( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = __( 'Not specified', 'mobile-dj-manager' );
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_djsetup', true );
+	
+	if( !empty( $date ) )	{
+		$return = date( 'l, jS F Y', strtotime( $date ) );
 	}
 	
 	return $return;
-} // mdjm_content_tag_dj_fullname
+} // mdjm_content_tag_dj_setup_date
+
+/**
+ * Content tag: dj_setup_time.
+ * The time to setup for the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted time for which the event needs to be setup.
+ */
+function mdjm_content_tag_dj_setup_time( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = __( 'Not specified', 'mobile-dj-manager' );
+	
+	$time = get_post_meta( $event_id, '_mdjm_event_djsetup_time', true );
+	
+	if( !empty( $time ) )	{
+		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_dj_setup_time
+
+/**
+ * Content tag: end_time.
+ * The time the event completes.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted time for when the event finishes.
+ */
+function mdjm_content_tag_end_time( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$time = get_post_meta( $event_id, '_mdjm_event_finish', true );
+	
+	if( !empty( $time ) )	{
+		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_end_time
+
+/**
+ * Content tag: end_date.
+ * The date the event completes.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted date the event finishes.
+ */
+function mdjm_content_tag_end_date( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_end_date', true );
+	
+	if( !empty( $date ) )	{
+		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_end_date
 ?>
