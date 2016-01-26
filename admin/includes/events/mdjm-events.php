@@ -678,7 +678,7 @@
 							'addons'			  => ( !empty( $addons ) ? implode( "\n", $addons ) : '' ),
 							// Guest playlist URL
 							'guest_playlist'	  => ( !empty( $guest_playlist ) ? 
-								$mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $guest_playlist : '' ),
+								mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $guest_playlist : '' ),
 							);
 			
 			// Allow the $eventinfo array to be filtered

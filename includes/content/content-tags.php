@@ -352,6 +352,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'contract_id',
 			'description' => __( 'The contract / event ID', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_id'
+		),
+		array(
+			'tag'         => 'contract_url',
+			'description' => __( 'The URL for the client to access their event contract', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contract_url'
 		)
 	);
 
@@ -386,7 +391,7 @@ function mdjm_content_tag_admin_url()	{
  * @return	str		The URL to the Client Zone home page.
  */
 function mdjm_content_tag_application_home()	{
-	return $this->get_link( MDJM_HOME, false );
+	return mdjm_get_formatted_url( MDJM_HOME, false );
 } // mdjm_content_tag_application_home
 
 /**
@@ -422,7 +427,7 @@ function mdjm_content_tag_company_name()	{
  * @return	str		The URL of the contact page.
  */
 function mdjm_content_tag_contact_page()	{
-	return $mdjm->get_link( MDJM_CONTACT_PAGE, false );
+	return mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false );
 } // mdjm_content_tag_contact_page
 
 /**
@@ -818,4 +823,21 @@ function mdjm_content_tag_contract_id( $event_id='' )	{
 	
 	return get_the_title( $event_id );
 } // mdjm_content_tag_contract_id
+
+/**
+ * Content tag: contract_url.
+ * The event contract URL for the client.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The URL to the client contract within Client Zone
+ */
+function mdjm_content_tag_contract_url( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $event_id;
+} // mdjm_content_tag_contract_url
 ?>

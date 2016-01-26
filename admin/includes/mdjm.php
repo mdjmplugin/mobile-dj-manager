@@ -499,29 +499,15 @@
  
 			/**
 			 * Provide the correct page link dependant on permalink settings
-			 * 
-			 * 
+			 * DEPRECATED SINCE 1.3.
+			 * MAINTAINED FOR BACKWARDS COMPATIBILITY ONLY.
 			 *
 			 * @param    int    $page_id    The ID of the destination page
 			 * @return   str		 		The URI link to the destination with the first query string (& or ?)
 			 * @since    1.1.3
 			 */
 			public function get_link( $page_id='', $permalink=true, $echo=false )	{
-				if( empty( $page_id ) )	{
-					if( MDJM_DEBUG == true )
-						 MDJM()->debug->log_it( 'Missing `page_id` argument in ' . __FUNCTION__, true );
-					return false;
-				}
-				
-				$permalink = isset( $permalink ) ? $permalink : true;
-				
-				$echo = isset( $echo ) ? $echo : false;
-				
-				if( !empty( $echo ) )
-					echo get_permalink( $page_id ) . ( !empty( $permalink ) ? ( get_option( 'permalink_structure' ) ? '?' : '&amp;' ) : '' );
-				
-				else
-					return get_permalink( $page_id ) . ( !empty( $permalink ) ? ( get_option( 'permalink_structure' ) ? '?' : '&amp;' ) : '' );
+				return mdjm_get_formatted_url( $page_id='', $permalink, $echo );
 			} // get_link
 
 /*
@@ -881,11 +867,11 @@
 				$pairs = array(
 				/* -- General -- */
 					'{ADMIN_URL}'			=> admin_url(),
-					'{APPLICATION_HOME}'	 => $this->get_link( MDJM_HOME, false ),
+					'{APPLICATION_HOME}'	 => mdjm_get_formatted_url( MDJM_HOME, false ),
 					'{APPLICATION_NAME}'	 => MDJM_APP,
 
 					'{COMPANY_NAME}'		 => MDJM_COMPANY,
-					'{CONTACT_PAGE}'		 => $this->get_link( MDJM_CONTACT_PAGE, false ),
+					'{CONTACT_PAGE}'		 => mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ),
 					'{DDMMYYYY}'			 => date( MDJM_SHORTDATE_FORMAT ),
 					'{WEBSITE_URL}'		  => home_url(),
 					
@@ -908,7 +894,7 @@
 					
 					'{CONTRACT_ID}'		  => ( !empty( $e ) ? $e->post_title : '' ),
 					
-					'{CONTRACT_URL}'		 => ( !empty( $e ) ? $this->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $e->ID : '' ),
+					'{CONTRACT_URL}'		 => ( !empty( $e ) ? mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $e->ID : '' ),
 																		
 					'{DEPOSIT}'			  => ( !empty( $eventinfo['deposit'] ) ? $eventinfo['deposit'] : '' ),
 												
@@ -939,13 +925,13 @@
 					//'{PAYMENT_AMOUNT}'	   => ( isset( $_POST['mc_gross'] ) ? display_price( $_POST['mc_gross'] ) : '' ),
 					//'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
 					//'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
-					'{PAYMENT_URL}'		  => ( !empty( $e ) ? $this->get_link( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
+					'{PAYMENT_URL}'		  => ( !empty( $e ) ? mdjm_get_formatted_url( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),
 					'{PAYMENT_HISTORY}'	  => ( !empty( $eventinfo['payment_history'] ) ? 
 						$eventinfo['payment_history'] : __( 'No payments', 'mobile-dj-manager' ) ),
 						
 					'{PLAYLIST_CLOSE}'	   => $mdjm_settings['playlist']['close'] != 0 ? $mdjm_settings['playlist']['close'] : 'never',
-					'{PLAYLIST_URL}'		 => $this->get_link( MDJM_PLAYLIST_PAGE, false ),
-					'{QUOTES_URL}'		   => ( !empty( $e->ID ) ? $this->get_link( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $e->ID : '' ),
+					'{PLAYLIST_URL}'		 => mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, false ),
+					'{QUOTES_URL}'		   => ( !empty( $e->ID ) ? mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $e->ID : '' ),
 					'{GUEST_PLAYLIST_URL}'   => ( !empty( $eventinfo['guest_playlist'] ) ? $eventinfo['guest_playlist'] : '' ),
 					'{START_TIME}'		   => ( !empty( $eventinfo['start'] ) ? $eventinfo['start'] : '' ),
 					'{TOTAL_COST}'		   => ( !empty( $eventinfo['cost'] ) ? $eventinfo['cost'] : '' ),

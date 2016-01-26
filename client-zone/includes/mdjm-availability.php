@@ -95,7 +95,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>mdjm_avail_date=' + check_date;
+									window.location.href = '<?php echo mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>mdjm_avail_date=' + check_date;
 									<?php
 								}
 								else	{
@@ -113,7 +113,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 								<?php
 								if( !empty( $fail_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_fail_page'], true ); ?>';
+									window.location.href = '<?php echo mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_fail_page'], true ); ?>';
 									<?php
 								}
 								else	{
@@ -157,7 +157,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 					isset( $mdjm_settings['availability']['availability_check_pass_page'] ) && 
 					$mdjm_settings['availability']['availability_check_pass_page'] != 'text' )	{
 					
-					wp_redirect( $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'] ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date'] );
+					wp_redirect( mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_pass_page'] ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date'] );
 					exit;	
 				}
 				
@@ -165,7 +165,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 				else	{
 					if( isset( $mdjm_settings['availability']['availability_check_fail_page'] ) && 
 					$mdjm_settings['availability']['availability_check_fail_page'] != 'text' )	{
-						wp_redirect( $mdjm->get_link( $mdjm_settings['availability']['availability_check_fail_page'] ) );
+						wp_redirect( mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_fail_page'] ) );
 						exit;
 					}
 				}

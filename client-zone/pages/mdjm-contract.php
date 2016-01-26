@@ -312,7 +312,7 @@
 
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2'; ?>");
                     </script>
                     <?php
 					exit;

@@ -86,8 +86,10 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>New: Added Event Staff checkbox on user screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions</li>
 	<li>New: Admin availability checker can check for availability by role</li>
 	<li>New: Added availability checker setting. Specify which roles need to be available on the given date for you to be available</li>
-	<li>General: Main MDJM class is now a singleton class</li>
-	<li>General: Post actions and filters do not need to be a class</li>
+	<li>New: Content tags re-written and made into an API which developers can hook into when creating extensions or customising</li>
+	<li>Tweak: Shortcodes have been re-written.</li>
+	<li>Tweak: Main MDJM class is now a singleton class</li>
+	<li>Tweak: Post actions and filters do not need to be a class</li>
 </ui>
 
 = 1.2.7.5 =

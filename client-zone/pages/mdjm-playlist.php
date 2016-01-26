@@ -205,7 +205,7 @@
                     echo '<hr />' . "\r\n";
 					echo '<div id="mdjm-playlist-container">' . "\r\n";
 					echo '<div id="mdjm-playlist-table">' . "\r\n";
-					echo '<form action="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
+					echo '<form action="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
 						'" method="post" enctype="multipart/form-data" name="guest-playlist" id="guest-playlist">' . "\r\n";
 					
 					wp_nonce_field( 'manage_playlist', '__mdjm_playlist' ) . "\r\n";
@@ -296,7 +296,7 @@
 					echo $entry->artist . "\r\n";
 					echo '</div>' . "\r\n";echo '<div class="mdjm-playlist-3column">' . "\r\n";
 					echo '<div class="mdjm-playlist-last-3column">' . "\r\n";
-					echo '<a href="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
+					echo '<a href="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
 						'&remove_id=' . $entry->event_id . '"></a>' . "\r\n";
 					echo '</div>' . "\r\n";	
 				}
@@ -339,7 +339,7 @@
 					echo parent::__text( 'playlist_edit',
 										 '<p>You are currently editing the playlist for your event on ' . 
 										 date( 'l, jS F Y', $this->eventinfo['date'] ) . '. To edit the playlist for one of your other events, ' . 
-										 'return to the <a href="' . $mdjm->get_link( MDJM_HOME, false ) . '">' . MDJM_APP . 
+										 'return to the <a href="' . mdjm_get_formatted_url( MDJM_HOME, false ) . '">' . MDJM_APP . 
 										 ' home page</a> and select Edit Playlist from the drop down list displayed next to the event for ' . 
 										 'which you want to edit the playlist.</p>' );
 				} // if( count( $my_mdjm['active'] ) > 1 )
@@ -351,7 +351,7 @@
 					echo '<hr />' . "\r\n";
 					echo '<div id="mdjm-playlist-container">' . "\r\n";
 					echo '<div id="mdjm-playlist-table">' . "\r\n";
-					echo '<form action="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'event_id=' . $this->event->ID . 
+					echo '<form action="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'event_id=' . $this->event->ID . 
 						'" method="post" enctype="multipart/form-data" name="client-playlist" id="client-playlist">' . "\r\n";
 					
 					wp_nonce_field( 'manage_playlist', '__mdjm_playlist' ) . "\r\n";
@@ -425,7 +425,7 @@
 								echo '<td>' . ( !empty( $song->info ) ? stripslashes( $song->info ) : '' ) . '</td>' . "\r\n";
 							}
 							
-							echo '<td style="text-align: right;"><a href="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 
+							echo '<td style="text-align: right;"><a href="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 
 								'remove_song=' . $song->id . '">' . __( 'Remove' ) . '</a></td>' . "\r\n";
 								
 							echo '</tr>' . "\r\n";

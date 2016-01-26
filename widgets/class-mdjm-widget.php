@@ -85,7 +85,7 @@
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
+									window.location.href = '<?php echo mdjm_get_formatted_url( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
 									<?php
 								}
 								else	{
@@ -103,7 +103,7 @@
 								<?php
 								if( !empty( $fail_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $instance['unavailable_action'], true ); ?>';
+									window.location.href = '<?php echo mdjm_get_formatted_url( $instance['unavailable_action'], true ); ?>';
 									<?php
 								}
 								else	{
@@ -153,7 +153,7 @@
 						if( isset( $instance['available_action'] ) && $instance['available_action'] != 'text' )	{
 							?>
 							<script type="text/javascript">
-							window.location = '<?php echo $mdjm->get_link( $instance['available_action'], true ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['widget_check_date']; ?>';
+							window.location = '<?php echo mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['widget_check_date']; ?>';
 							</script>
 							<?php
 						}
@@ -162,7 +162,7 @@
 						if( isset( $instance['unavailable_action'] ) && $instance['unavailable_action'] != 'text' )	{
 							?>
 							<script type="text/javascript">
-							window.location = '<?php echo $mdjm->get_link( $instance['unavailable_action'] ); ?>';
+							window.location = '<?php echo mdjm_get_formatted_url( $instance['unavailable_action'] ); ?>';
 							</script>
 							<?php	
 						}

@@ -375,7 +375,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				
 				if( is_admin() )	{
 					if( !defined( 'DOING_AJAX' ) || !DOING_AJAX )	{
-						wp_redirect( $GLOBALS['mdjm']->get_link( MDJM_HOME, false, false ) );
+						wp_redirect( mdjm_get_formatted_url( MDJM_HOME, false ) );
 						exit;	
 					}
 				}

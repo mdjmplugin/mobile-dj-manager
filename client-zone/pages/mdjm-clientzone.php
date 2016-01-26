@@ -126,11 +126,10 @@
 						
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4'; ?>");
                     </script>
                     <?php
 					exit;
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4' );
 				}
 				if( get_current_user_id() != get_post_meta( $post->ID, '_mdjm_event_client', true ) )	{
 					if( MDJM_DEBUG == true )
@@ -138,10 +137,9 @@
 						
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
                     </script>
                     <?php
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				
@@ -152,10 +150,9 @@
 					
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
                     </script>
                     <?php
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				
@@ -472,7 +469,7 @@
 										 ( !empty( $mdjm_settings['templates']['contract_to_client'] ) ? 
 										 '<br />You will receive confirmation via email shortly.' : '' ),
 										 
-									2	=> 'An error has occured whilst confirming your event. Please <a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
+									2	=> 'An error has occured whilst confirming your event. Please <a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . 
 										'">contact me for assistance</a>',
 										
 									3	=> $this->__text( 'contract_sign_success', 'Thank you. Your contract has been successfully signed and your event is now <strong>confirmed</strong>.<br />' . 
@@ -481,7 +478,7 @@
 									5	=> 'Security verification failed. We could not update the playlist at this time',
 									6	=> 'Security verification failed. We could not update your event at this time',
 									9	=> 'This event does not belong to you.<br />' . 
-											'<a href="' . $mdjm->get_link( MDJM_HOME, false ) . '">' . MDJM_COMPANY . ' ' . MDJM_APP . ' Home Page</a>',
+											'<a href="' . mdjm_get_formatted_url( MDJM_HOME, false ) . '">' . MDJM_COMPANY . ' ' . MDJM_APP . ' Home Page</a>',
 									);
 									
 				$this->display_notice( $class, $mdjm_messages[$msg] );
@@ -552,7 +549,7 @@
 				
 				echo '<p>' . __( 'ERROR: You do not have permission to view this page. ') . '</p>' . "\r\n" . 
 				'<p>' . __( 'Please contact the <a href="mailto:' . $mdjm_settings['email']['system_email'] . 
-				'">website administrator</a> or <a href="' . $mdjm->get_link( MDJM_HOME ) . '">' . 
+				'">website administrator</a> or <a href="' . mdjm_get_formatted_url( MDJM_HOME ) . '">' . 
 				'Click here to return to the ' . MDJM_COMPANY . ' ' . MDJM_APP . ' home page.' ) . '</p>';
 			
 			} // no_permission

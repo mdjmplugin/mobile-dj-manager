@@ -104,7 +104,7 @@
 						wp_logout();
 						?>
 						<script type="text/javascript">
-                        window.location.replace("<?php echo $mdjm->get_link( MDJM_PROFILE_PAGE ); ?>");
+                        window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_PROFILE_PAGE ); ?>");
                         </script>
                         <?php
 						exit;
@@ -150,7 +150,7 @@
 				
 				echo parent::__text( 'profile_intro', $default_text );
 				
-				echo '<form action="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . '" method="post" enctype="multipart/form-data" name="mdjm-user-profile" id="mdjm-user-profile">' . "\r\n";
+				echo '<form action="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . '" method="post" enctype="multipart/form-data" name="mdjm-user-profile" id="mdjm-user-profile">' . "\r\n";
 				// For security
 				wp_nonce_field( 'manage_client_profile', '__mdjm_user' ) . "\r\n";
 				 

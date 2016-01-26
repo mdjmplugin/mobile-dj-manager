@@ -35,14 +35,14 @@
 				// Option must be enabled
 				elseif( empty( $mdjm_settings['templates']['online_enquiry'] ) )
 					parent::display_notice( 4, sprintf( __( 'This option is disabled for your event. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 				
 				// Check if the user is allowed here and that we have the data to provide the quote
 				// If not, display an error	
 				elseif( !$this->should_i_be_here() ) // do validation
 					parent::display_notice( 4, sprintf( __( 'An error is stopping your access to this quotation. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 				
 				// Display the quote
@@ -144,7 +144,7 @@
 				// Button with text
 				echo '<button type="reset" ' . 
 					( !empty( $this->button_class ) ? 'class="' . $this->button_class . '" ' : '' ) . 
-					'onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_HOME, true ) . 
+					'onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_HOME, true ) . 
 					'action=accept_enquiry&amp;event_id=' . $event_id, 'book_event', '__mdjm_verify' ) . '\'">' . 
 					$this->button_text . '</button>';
 					 
@@ -167,7 +167,7 @@
 						MDJM()->debug->log_it( 'The online template associated with event with ID ' . $event_id . ' could not be found in ' . __METHOD__, true );
 					
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 						
 					return;
@@ -186,7 +186,7 @@
 						MDJM()->debug->log_it( 'The online template with ID ' . $online_template . ' could not be retrieved in ' . __METHOD__, true );
 					
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 					
 					return;
@@ -200,7 +200,7 @@
 						MDJM()->debug->log_it( 'Could not retrieve event information for event ' . $event_id . ' in ' . __METHOD__, true );
 						
 					parent::display_notice( 4, sprintf( __( 'Unable to process request. Please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 					
 					return;
@@ -232,7 +232,7 @@
 				// No content so return an error
 				else
 					parent::display_notice( 4, sprintf( __( 'An error has occured, please %scontact us%s for assistance', 'mobile-dj-manager' ),
-						'<a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">',
+						'<a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">',
 						'</a>' ) );
 					
 			} // display_quote
