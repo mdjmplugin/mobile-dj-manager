@@ -37,6 +37,24 @@
 if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
+		
+		private static $events;
+		
+		private static $posts;
+		
+		private static $cron;
+		
+		private static $users;
+		
+		private static $roles;
+		
+		private static $permissions;
+		
+		private static $menu;
+		
+		private static $txns;
+		
+		private static $content_tags;
 		/**
 		 * Run during plugin activation. Check for existance of version key and execute install procedures
 		 * if it does not exist. Otherwise simply return.
@@ -104,10 +122,11 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				
 				$mdjm			  				= new MDJM();
 				self::$instance->debug			= new MDJM_Debug();
-				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.2.3
+				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events			= new MDJM_Events();
-				$mdjm_posts						= new MDJM_Posts(); // // REMOVE POST 1.2.3
+				$mdjm_posts						= new MDJM_Posts(); // REMOVE POST 1.3
 				self::$instance->posts			= new MDJM_Post_Types();
+				self::$instance->content_tags	= new MDJM_Content_Tags();
 				self::$instance->cron			= new MDJM_Cron();
 				self::$instance->users			= new MDJM_Users();
 				self::$instance->roles			= new MDJM_Roles();
@@ -203,6 +222,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/roles/mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/permissions/mdjm-permissions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_FUNCTIONS ); // Call the main functions file
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' ); // Scheduler

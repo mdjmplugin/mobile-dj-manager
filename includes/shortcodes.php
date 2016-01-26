@@ -88,9 +88,8 @@ function mdjm_shortcode_availability( $atts )	{
 	
 	ob_start();
 	MDJM_Availability_Checker::availability_form( $args );
-	$output = ob_get_clean();
 	
-	return $output;
+	return ob_get_clean();
 } // mdjm_shortcode_availability
 add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );
 
@@ -206,10 +205,8 @@ function mdjm_shortcode_addons_list( $atts )	{
 	}
 	
 	echo $output;
-	
-	$output = ob_get_clean();
-	
-	return $output;
+		
+	return ob_get_clean();
 } // mdjm_shortcode_addons_list
 add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
 ?>
