@@ -38,23 +38,23 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
 		
-		private static $events;
+		public $events;
 		
-		private static $posts;
+		public $posts;
 		
-		private static $cron;
+		public $cron;
 		
-		private static $users;
+		public $users;
 		
-		private static $roles;
+		public $roles;
 		
-		private static $permissions;
+		public $permissions;
 		
-		private static $menu;
+		public $menu;
 		
-		private static $txns;
+		public $txns;
 		
-		private static $content_tags;
+		public $content_tags;
 		/**
 		 * Run during plugin activation. Check for existance of version key and execute install procedures
 		 * if it does not exist. Otherwise simply return.
