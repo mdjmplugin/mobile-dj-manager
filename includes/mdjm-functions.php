@@ -330,21 +330,7 @@
 	*	@returns: $event_stati => object sorted aphabetically
 	*/
 	function get_event_stati()	{
-		$mdjm_event_stati = array( 'mdjm-unattended',
-								   'mdjm-enquiry',
-								   'mdjm-approved',
-								   'mdjm-contract',
-								   'mdjm-completed',
-								   'mdjm-cancelled',
-								   'mdjm-rejected',
-								   'mdjm-failed' );
-		
-		foreach( $mdjm_event_stati as $status )	{
-			$event_stati[$status] = get_post_status_object( $status )->label;
-		}
-		asort( $event_stati );
-		
-		return $event_stati;
+		return mdjm_all_event_status();
 	}
 	/*
 	* event_stati_dropdown
@@ -375,7 +361,7 @@
 			return false;
 		}
 		
-		$event_stati = get_event_stati();
+		$event_stati = mdjm_all_event_status();
 		if( empty( $event_stati ) )	{
 			if( MDJM_DEBUG == true )
 				 MDJM()->debug->log_it( 'No statuses returned ' . __FUNCTION__, true );
@@ -731,7 +717,7 @@
 			/* Print results */
 			$result_array = array();
 			if( count( $work_result ) > 0 || $hol_result )	{
-				$event_stati = get_event_stati();
+				$event_stati = mdjm_all_event_status();
 				$have_result = true;
 				?>
 				<tr class="alternate">

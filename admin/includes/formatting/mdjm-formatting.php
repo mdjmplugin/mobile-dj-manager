@@ -214,7 +214,7 @@ function mdjm_rename_publish_button( $translation, $text )	{
 		break;
 		
 		case MDJM_EVENT_POSTS:
-			$event_stati = get_event_stati();
+			$event_stati = mdjm_all_event_status();
 			
 			if( $text == 'Publish' && isset( $event_stati[$post->post_status] ) )
 				return __( 'Update Event', 'mobile-dj-manager' );

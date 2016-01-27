@@ -392,7 +392,7 @@ function mdjm_event_view_filters( $views )	{
 	// The All filter
 	$views['all'] = preg_replace( '/\(.+\)/U', '(' . count( MDJM()->events->dj_events() ) . ')', $views['all'] ); 
 				
-	$event_stati = get_event_stati();
+	$event_stati = mdjm_all_event_status();
 	
 	foreach( $event_stati as $status => $label )	{
 		$events = MDJM()->events->dj_events( '', '', '', $status );
@@ -812,7 +812,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
-		$event_stati = get_event_stati();
+		$event_stati = mdjm_all_event_status();
 		
 		$field_updates[] = 'Event status ' . 
 			( isset( $event_stati[$_POST['original_post_status']] ) ? 'set ' : 'changed from ' ) . 

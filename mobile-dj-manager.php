@@ -214,6 +214,8 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		public function includes()	{
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-events.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/event-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/venue-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-posts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );

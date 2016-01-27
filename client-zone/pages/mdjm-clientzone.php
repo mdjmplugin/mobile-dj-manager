@@ -90,7 +90,7 @@
 							
 				$c = !empty( $client ) ? $client : $current_user->ID;
 				
-				$event_stati = get_event_stati();
+				$event_stati = mdjm_all_event_status();
 				
 				$my_mdjm = array();
 				
@@ -267,7 +267,7 @@
 					$content .= __( 'Date', 'mobile-dj-manager' ) . ': {EVENT_DATE}<br />' . "\n";
 					$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . MDJM()->events->get_event_type( $post->ID ) . '<br />' . "\n";
 					
-					$event_stati = get_event_stati();
+					$event_stati = mdjm_all_event_status();
 					
 					$content .= __( 'Status', 'mobile-dj-manager' ) . ': ' . $event_stati[get_post_status( $post->ID )] . '<br />' . "\n";
 					$content .= __( 'Client', 'mobile-dj-manager' ) . ': {CLIENT_FULLNAME}<br />' . "\n";

@@ -489,7 +489,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			}
 		/* -- Events -- */
 			if( $post->post_type == MDJM_EVENT_POSTS )	{
-				$event_stati = get_event_stati();
+				$event_stati = mdjm_all_event_status();
 				/* -- Main Body -- */
 				remove_meta_box( 'submitdiv', MDJM_EVENT_POSTS, 'side' );
 				remove_meta_box( 'event-typesdiv', MDJM_EVENT_POSTS, 'side' );

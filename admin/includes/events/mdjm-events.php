@@ -586,7 +586,7 @@
 			if( empty( $post_id ) || !$mdjm_posts->post_exists( $post_id ) )
 				return;
 			
-			$event_stati = get_event_stati();
+			$event_stati = mdjm_all_event_status();
 			
 			$name = get_post_meta( $post_id, '_mdjm_event_name', true );
 			$date = get_post_meta( $post_id, '_mdjm_event_date', true );
@@ -993,7 +993,7 @@
 			if( empty( $post_id ) || empty( $post ) )
 				return;
 			
-			$event_stati = get_event_stati();
+			$event_stati = mdjm_all_event_status();
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );
@@ -1075,7 +1075,7 @@
 			if( empty( $post_id ) || empty( $post ) )
 				return;
 			
-			$event_stati = get_event_stati();
+			$event_stati = mdjm_all_event_status();
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( 'Event status transition to ' . $event_stati[$_POST['mdjm_event_status']] . ' starting', $stampit=true );

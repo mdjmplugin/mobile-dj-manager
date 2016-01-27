@@ -306,7 +306,7 @@
             <?php	
 		}
 		else	{
-			$event_stati = get_event_stati();
+			$event_stati = mdjm_all_event_status();
 			?>
 			<select name="event" id="event">
 			<option value="">No Event (General Message)</option>

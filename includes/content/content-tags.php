@@ -209,7 +209,6 @@ function mdjm_get_content_tags_list() {
 
 	// Check
 	if( count( $content_tags ) > 0 )	{
-
 		// Loop
 		foreach( $content_tags as $content_tag )	{
 			// Add email tag to list.
@@ -259,14 +258,14 @@ function mdjm_setup_content_tags() {
 	// Setup default tags array
 	$content_tags = array(
 		array(
+			'tag'         => 'admin_notes',
+			'description' => __( 'The admin notes associated with the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_admin_notes'
+		),
+		array(
 			'tag'         => 'admin_url',
 			'description' => __( 'The admin URL to WordPress', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_admin_url'
-		),
-		array(
-			'tag'         => 'application_url',
-			'description' => __( 'The Client Zone application URL', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_application_url'
 		),
 		array(
 			'tag'         => 'application_name',
@@ -274,24 +273,19 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_application_name'
 		),
 		array(
-			'tag'         => 'company_name',
-			'description' => __( 'The name of your company', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_company_name'
+			'tag'         => 'application_url',
+			'description' => __( 'The Client Zone application URL', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_application_url'
 		),
 		array(
-			'tag'         => 'contact_page',
-			'description' => __( 'The URL to your websites contact page', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_contact_page'
+			'tag'         => 'balance',
+			'description' => __( 'The remaining balance owed for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_balance'
 		),
 		array(
-			'tag'         => 'ddmmyyyy',
-			'description' => __( 'Todays date in shortdate format', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_ddmmyyyy'
-		),
-		array(
-			'tag'         => 'website_url',
-			'description' => __( 'The URL to your website', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_website_url'
+			'tag'         => 'client_email',
+			'description' => __( 'The event clients email address', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_client_email'
 		),
 		array(
 			'tag'         => 'client_firstname',
@@ -299,9 +293,9 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_client_firstname'
 		),
 		array(
-			'tag'         => 'client_lastname',
-			'description' => __( 'The event clients last name', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_client_lastname'
+			'tag'         => 'client_full_address',
+			'description' => __( 'The event clients full address', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_client_full_address'
 		),
 		array(
 			'tag'         => 'client_fullname',
@@ -309,14 +303,14 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_client_fullname'
 		),
 		array(
-			'tag'         => 'client_full_address',
-			'description' => __( 'The event clients full address', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_client_full_address'
+			'tag'         => 'client_lastname',
+			'description' => __( 'The event clients last name', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_client_lastname'
 		),
 		array(
-			'tag'         => 'client_email',
-			'description' => __( 'The event clients email address', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_client_email'
+			'tag'         => 'client_password',
+			'description' => sprintf( __( 'The event clients password for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
+			'function'    => 'mdjm_content_tag_client_password'
 		),
 		array(
 			'tag'         => 'client_primary_phone',
@@ -329,19 +323,14 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_client_username'
 		),
 		array(
-			'tag'         => 'client_password',
-			'description' => sprintf( __( 'The event clients password for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
-			'function'    => 'mdjm_content_tag_client_password'
+			'tag'         => 'company_name',
+			'description' => __( 'The name of your company', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_company_name'
 		),
 		array(
-			'tag'         => 'admin_notes',
-			'description' => __( 'The admin notes associated with the event', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_admin_notes'
-		),
-		array(
-			'tag'         => 'balance',
-			'description' => __( 'The remaining balance owed for the event', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_balance'
+			'tag'         => 'contact_page',
+			'description' => __( 'The URL to your websites contact page', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contact_page'
 		),
 		array(
 			'tag'         => 'contract_date',
@@ -357,6 +346,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'contract_url',
 			'description' => __( 'The URL for the client to access their event contract', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_url'
+		),
+		array(
+			'tag'         => 'ddmmyyyy',
+			'description' => __( 'Todays date in shortdate format', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_ddmmyyyy'
 		),
 		array(
 			'tag'         => 'deposit',
@@ -404,14 +398,124 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_dj_setup_time'
 		),
 		array(
+			'tag'         => 'end_date',
+			'description' => __( 'The date the event completes', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_end_date'
+		),
+		array(
 			'tag'         => 'end_time',
 			'description' => __( 'The time the event completes', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_end_time'
 		),
 		array(
-			'tag'         => 'end_date',
-			'description' => __( 'The date the event completes', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_end_date'
+			'tag'         => 'event_date',
+			'description' => __( 'The date of the event in long format', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_date'
+		),
+		array(
+			'tag'         => 'event_date_short',
+			'description' => __( 'The date of the event in short format', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_date_short'
+		),
+		array(
+			'tag'         => 'event_description',
+			'description' => __( 'The contents of the event description field', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_description'
+		),
+		array(
+			'tag'         => 'event_name',
+			'description' => __( 'The assigned name of the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_name'
+		),
+		array(
+			'tag'         => 'event_status',
+			'description' => __( 'The current status of the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_status'
+		),
+		array(
+			'tag'         => 'event_type',
+			'description' => __( 'The type of event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_type'
+		),
+		array(
+			'tag'         => 'guest_playlist_url',
+			'description' => __( 'The URL to your event playlist page for guests', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_guest_playlist_url'
+		),
+		array(
+			'tag'         => 'payment_history',
+			'description' => __( 'An overview of payments made by the client for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_payment_history'
+		),
+		array(
+			'tag'         => 'payment_url',
+			'description' => __( 'The URL to your payments page', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_payment_url'
+		),
+		array(
+			'tag'         => 'playlist_close',
+			'description' => __( 'The number of days before the event that the playlist closes', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_payment_url'
+		),
+		array(
+			'tag'         => 'playlist_url',
+			'description' => __( 'The URL to your event playlist page for clients', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_payment_url'
+		),
+		array(
+			'tag'         => 'quotes_url',
+			'description' => __( 'The URL to your online quotes page', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_quotes_url'
+		),
+		array(
+			'tag'         => 'start_time',
+			'description' => __( 'The event start time', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_start_time'
+		),
+		array(
+			'tag'         => 'total_cost',
+			'description' => __( 'The total cost of the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_total_cost'
+		),
+		array(
+			'tag'         => 'venue',
+			'description' => __( 'The name of the event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue'
+		),
+		array(
+			'tag'         => 'venue_contact',
+			'description' => __( 'The name of the contact at event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_contact'
+		),
+		array(
+			'tag'         => 'venue_details',
+			'description' => __( 'Details stored for the venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_details'
+		),
+		array(
+			'tag'         => 'venue_email',
+			'description' => __( 'The email address of the event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_email'
+		),
+		array(
+			'tag'         => 'venue_full_address',
+			'description' => __( 'The full address of the event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_full_address'
+		),
+		array(
+			'tag'         => 'venue_notes',
+			'description' => __( 'Notes associated with the event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_notes'
+		),
+		array(
+			'tag'         => 'venue_telephone',
+			'description' => __( 'The phone number of the event venue', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_venue_telephone'
+		),
+		array(
+			'tag'         => 'website_url',
+			'description' => __( 'The URL to your website', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_website_url'
 		)
 	);
 
@@ -1151,4 +1255,428 @@ function mdjm_content_tag_end_date( $event_id='' )	{
 	
 	return $return;
 } // mdjm_content_tag_end_date
+
+/**
+ * Content tag: event_date.
+ * The date of the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted long date of the event.
+ */
+function mdjm_content_tag_event_date( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
+	
+	if( !empty( $date ) )	{
+		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_event_date
+
+/**
+ * Content tag: event_date_short.
+ * The date of the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted short date of the event.
+ */
+function mdjm_content_tag_event_date_short( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
+	
+	if( !empty( $date ) )	{
+		$return = date( 'l, jS F Y', strtotime( $date ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_event_date_short
+
+/**
+ * Content tag: event_description.
+ * The event description as defined by the description field.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Contents of the event description field.
+ */
+function mdjm_content_tag_event_description( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+		
+	$return = get_post_meta( $event_id, '_mdjm_event_description', true );
+		
+	return $return;
+} // mdjm_content_tag_event_description
+
+/**
+ * Content tag: event_name.
+ * The assigned event name.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Contents of the event name field.
+ */
+function mdjm_content_tag_event_name( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+		
+	$return = get_post_meta( $event_id, '_mdjm_event_name', true );
+		
+	return $return;
+} // mdjm_content_tag_event_name
+
+/**
+ * Content tag: event_status.
+ * The current event status.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The current event status label.
+ */
+function mdjm_content_tag_event_status( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_status( $event_id );
+} // mdjm_content_tag_event_status
+
+/**
+ * Content tag: event_type.
+ * The current event type.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The current event type label.
+ */
+function mdjm_content_tag_event_type( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_type( $event_id );
+} // mdjm_content_tag_event_type
+
+/**
+ * Content tag: guest_playlist_url.
+ * The URL to the guest playlist page.
+ *
+ * @param	int		The event ID.
+ * @return	str		The playlist page URL for guests.
+ */
+function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$access = get_post_meta( $post_id, '_mdjm_event_playlist_access', true );
+	
+	$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
+	
+	if( !empty( $access ) )	{
+		$return = mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ) . 'event_id=' . $event_id;
+	}
+		
+	return $return;
+} // mdjm_content_tag_guest_playlist_url
+
+/**
+ * Content tag: payment_history.
+ * The payment history for the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The events payment history.
+ */
+function mdjm_content_tag_payment_history( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return MDJM()->txns->list_event_transactions( $event_id );
+} // mdjm_content_tag_payment_history
+
+/**
+ * Content tag: payment_url.
+ * The URL to the payments page.
+ *
+ * @param
+ * @param
+ *
+ * @return	str		The payments page URL.
+ */
+function mdjm_content_tag_payment_url()	{	
+	return mdjm_get_formatted_url( MDJM_PAYMENT_PAGE, false );
+} // mdjm_content_tag_payment_url
+
+/**
+ * Content tag: playlist_close.
+ * The number of days until the playlist closes.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	int|str	The number of days until the playlist for the event closes, or 'never' if it does not.
+ */
+function mdjm_content_tag_playlist_close( $event_id='' )	{
+	$close = $_GLOBALS['mdjm_settings']['playlist']['close'];
+	
+	return !empty( $close ) ? $close : 'never';
+} // mdjm_content_tag_playlist_close
+
+/**
+ * Content tag: playlist_url.
+ * The URL to the playlist page.
+ *
+ * @param	int		The event ID.
+ * @return	str		The playlist page URL for clients.
+ */
+function mdjm_content_tag_playlist_url( $event_id='' )	{
+	$access = get_post_meta( $event_id, '_mdjm_event_playlist', true );
+	
+	$return = __( 'Event playlist disabled', 'mobile-dj-manager' );
+	
+	if( $access == 'Y' )	{
+		$return = mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true );
+		
+		if( !empty( $event_id ) )	{
+			$return .=  'event_id=' . $event_id;
+		}
+	}
+	
+	return $return;
+} // mdjm_content_tag_playlist_url
+
+/**
+ * Content tag: quotes_url.
+ * The URL to the online quotes page.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		The online quote page URL for clients.
+ */
+function mdjm_content_tag_quotes_url( $event_id='' )	{
+	$return = mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true );
+
+	if( empty( $event_id ) )	{
+		$return .= 'event_id=' . $event_id;
+	}
+	
+	return $return;
+} // mdjm_content_tag_quotes_url
+
+/**
+ * Content tag: start_time.
+ * The event start time.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Formatted event start time.
+ */
+function mdjm_content_tag_start_time( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$time = get_post_meta( $event_id, '_mdjm_event_start', true );
+	
+	if( !empty( $time ) )	{
+		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_start_time
+
+/**
+ * Content tag: total_cost.
+ * The event start time.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Formatted event total cost.
+ */
+function mdjm_content_tag_total_cost( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = __( 'Not specified', 'mobile-dj-manager' );
+	
+	$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
+	
+	if( !empty( $cost ) )	{
+		$return = display_price( $cost );
+	}
+	
+	return $return;
+} // mdjm_content_tag_total_cost
+
+/**
+ * Content tag: venue.
+ * The event venue name.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Name of the event venue.
+ */
+function mdjm_content_tag_venue( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_venue_meta( $event_id, 'name' );
+} // mdjm_content_tag_total_venue
+
+/**
+ * Content tag: venue_contact.
+ * The event venue contact name.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Name of the contact at the event venue.
+ */
+function mdjm_content_tag_venue_contact( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_venue_meta( $event_id, 'contact' );
+} // mdjm_content_tag_venue_contact
+
+/**
+ * Content tag: venue_details.
+ * The details associated with the venue.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		The details (tags) associated with the venue.
+ */
+function mdjm_content_tag_venue_details( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$details = mdjm_get_event_venue_meta( $event_id, 'details' );
+	$return = '';
+	
+	$i = 0;
+	
+	foreach( $details as $detail )	{
+		if( $i > 0 )	{
+			$return .= '<br />';
+		}
+		
+		$return .= $detail;
+		
+		$i++;
+	}
+	
+	return $return;
+} // mdjm_content_tag_venue_details
+
+/**
+ * Content tag: venue_email.
+ * The event venue email address.
+ *
+ * @param	int		$event_id	The 
+ *
+ * @return	str		Email address of the event venue.
+ */
+function mdjm_content_tag_venue_email( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_venue_meta( $event_id, 'email' );
+} // mdjm_content_tag_venue_email
+
+/**
+ * Content tag: venue_full_address.
+ * The address of the venue.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		The details (tags) associated with the venue.
+ */
+function mdjm_content_tag_venue_full_address( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$address = mdjm_get_event_venue_meta( $event_id, 'address' );
+	$return = '';
+	
+	$i = 0;
+	
+	foreach( $address as $add )	{
+		if( !empty( $add ) )	{
+			if( $i > 0 )	{
+				$return .= '<br />';
+			}
+			
+			$return .= $add;
+			
+			$i++;
+		}
+	}
+	
+	return $return;
+} // mdjm_content_tag_venue_full_address
+
+/**
+ * Content tag: venue_notes.
+ * The notes for the venue.
+ *
+ * @param
+ *
+ * @return	str		Notes associated with venue.
+ */
+function mdjm_content_tag_venue_notes( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_venue_meta( $event_id, 'notes' );
+} // mdjm_content_tag_venue_notes
+
+
+/**
+ * Content tag: venue_telephone.
+ * The event venue phone number.
+ *
+ * @param
+ *
+ * @return	str		Phone number of the event venue.
+ */
+function mdjm_content_tag_venue_telephone( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_venue_meta( $event_id, 'phone' );
+} // mdjm_content_tag_venue_telephone
 ?>

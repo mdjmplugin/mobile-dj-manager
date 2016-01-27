@@ -155,8 +155,7 @@
 				
 				if( 'Y' == get_post_meta( $event_id, '_mdjm_event_playlist', true ) )	{
 					if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )
-						$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ) . 
-								'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
+						$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ), 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
 								__( 'Manage Playlist', 'mobile-dj-manager' ) . '</button>';
 				}
 							

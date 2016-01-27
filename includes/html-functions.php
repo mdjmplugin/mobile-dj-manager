@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * General an MDJM URL based upon the sites permalink settings.
+ * Generate an MDJM URL based upon the sites permalink settings.
  *
  * @since	1.3
  * @param	int		$page_id	Required: The WordPress page ID.
@@ -34,7 +34,7 @@ function mdjm_get_formatted_url( $page_id, $permalink=true, $echo=false )	{
 		}
 	}
 	
-	if( isset( $echo ) )	{
+	if( !empty( $echo ) )	{
 		echo $return;	
 	}
 	else	{
