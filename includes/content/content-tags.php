@@ -278,6 +278,16 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_application_url'
 		),
 		array(
+			'tag'         => 'available_packages',
+			'description' => __( 'The list of packages available. No price', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_available_packages'
+		),
+		array(
+			'tag'         => 'available_packages_cost',
+			'description' => __( 'The list of packages available. With price', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_available_packages_cost'
+		),
+		array(
 			'tag'         => 'balance',
 			'description' => __( 'The remaining balance owed for the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_balance'
@@ -564,6 +574,30 @@ function mdjm_content_tag_application_home()	{
 function mdjm_content_tag_application_name()	{
 	return MDJM_APP;
 } // mdjm_content_tag_application_name
+
+/**
+ * Content tag: available_packages.
+ * The list of available packages.
+ *
+ * @param	
+ *
+ * @return	str		The list of available packages. No cost.
+ */
+function mdjm_content_tag_available_packages()	{
+	return mdjm_list_available_packages();
+} // mdjm_content_tag_available_packages
+
+/**
+ * Content tag: available_packages_cost.
+ * The list of available packages with cost.
+ *
+ * @param	
+ *
+ * @return	str		The list of available packages. With cost.
+ */
+function mdjm_content_tag_available_packages_cost()	{
+	return mdjm_list_available_packages( '', true );
+} // mdjm_content_tag_available_packages_cost
 
 /**
  * Content tag: company_name.

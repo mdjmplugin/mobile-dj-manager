@@ -777,16 +777,6 @@
 /*
  * -- START PACKAGE/ADDON FUNCTIONS
  */
-	/**
-	 * Retrieve all packages
-	 *
-	 *
-	 *
-	 *
-	 */
-	function mdjm_get_packages()	{
-		return get_option( 'mdjm_packages' );
-	} // mdjm_get_packages
 	
 	/**
 	 * Retrieve the package from the given slug
