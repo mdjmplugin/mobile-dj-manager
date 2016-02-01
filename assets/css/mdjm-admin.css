@@ -1,0 +1,174 @@
+@charset "UTF-8";
+/*
+* mdjm-admin.css
+* 16/01/2015
+* @since 0.9.9.6
+* Stylesheet for admin pages
+*/
+
+	.mdjm-new	{
+		font-weight: bold;
+		color: #F90;	
+	}
+	.mdjm-bug	{
+		font-weight: bold;
+		color: #090;
+	}
+	.mdjm-general	{
+		font-weight: bold;
+	}
+	
+	.mdjm-label {
+		font-weight: bold;
+	}
+	.mdjm-color	{
+		color: #F90;	
+	}
+
+/*
+ * Columns
+ *
+ *
+ *
+ */
+/* -- Client Fields Settings Screen -- */
+	.mdjm-client-field-container	{
+		overflow: none;
+	}
+
+	/* -- 2 Column -- */
+	.mdjm-client-field-column-left	{
+		float: left;
+		width: 70%;
+	}
+	
+	.mdjm-client-field-column-right	{
+		float: right;
+		width: 30%;
+	}
+	
+/* -- Custom Event Fields Settings Screen -- */
+	.mdjm-event-field-container	{
+		overflow: none;
+	}
+
+	/* -- 2 Column -- */
+	.mdjm-event-field-column-left	{
+		float: left;
+		width: 70%;
+	}
+	
+	.mdjm-event-field-column-right	{
+		float: right;
+		width: 30%;
+	}
+	
+/*
+ * Notifications
+ *
+ *
+ *
+ */
+	.mdjm-info, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validation	{
+		border: 1px solid;
+		margin: 10px 0px;
+		padding:15px 10px 15px 50px;
+		background-repeat: no-repeat;
+		background-position: 10px center;
+		font-size: 12px;
+	}
+	
+	.mdjm-info {
+		color: #00529B;
+		background-color: #BDE5F8;
+		background-image: url('../images/info-icon.png');
+	}
+	
+	.mdjm-success {
+		color: #4F8A10;
+		background-color: #DFF2BF;
+		background-image: url('../images/success-icon.png');
+	}
+	
+	.mdjm-warning {
+		color: #9F6000;
+		background-color: #FEEFB3;
+		background-image: url('../images/warning-icon.png');
+	}
+	
+	.mdjm-error {
+		color: #D8000C;
+		background-color: #FFBABA;
+		background-image: url('../images/error-icon.png');
+	}
+	
+	.mdjm-validation {
+		color: #D63301;
+		background-color: #FFCCBA;
+		background-image: url('../images/info-icon.png');
+	}
+	.mdjm-updating	{
+		border: solid 1px #F90 !important;
+		color: #F90 !important;	
+	}
+
+/*
+ * Error classes used by jQuery validation
+ * 
+ *
+ */
+	.mdjm-form-error {
+		color: #F00;
+		font-weight: bold;
+	}
+	input.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	select.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	textarea.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	checkbox.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	.mdjm-form-valid {
+		color: #000000;
+	}
+	.mdjm-input-currency {
+		width: 75px;
+	}
+	
+	.mdjm-small	{
+		font-size: 11px;	
+	}
+
+/*
+ *
+ * Sortable
+ *
+ */
+	.mdjm-list-item	{
+		cursor: move;	
+	}
+	.mdjm-client-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-client-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-event-list-item	{
+		cursor: move;	
+	}
+	.mdjm-custom-venue-list-item	{
+		cursor: move;	
+	}

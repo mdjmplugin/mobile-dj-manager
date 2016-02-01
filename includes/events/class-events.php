@@ -458,7 +458,7 @@
 		 */
 		public function count_events_by_status( $type='', $user_id='' )	{			
 			if( !class_exists( 'MDJM_Dashboard' ) )
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-dashboard.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-dashboard.php' );
 				
 			$mdjm_dash = new MDJM_Dashboard();
 			

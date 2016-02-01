@@ -1,0 +1,177 @@
+@charset "UTF-8";
+/*
+* mdjm-posts.css
+* 19/03/2015
+* @since 1.1.3
+* Stylesheet for custom post types
+*/
+	/*
+	 * General
+	 */
+	.side-meta	{
+		font-size: 11px;	
+	}
+	/*
+	 *
+	 * Hidden DIV's
+	 *
+	 */
+	#email_template_fields	{
+		display: block;
+	}
+	#paid_to_field	{
+		display: none;
+	}
+	#paid_from_field	{
+		display: block;
+	}
+	#new_event_type_div	{
+		display: none;	
+	}
+	#new_transaction_type_div	{
+		display: none;	
+	}
+	/*
+	 *
+	 * Column/Row Layouts
+	 *
+	 */
+	.mdjm-post-row	{
+		overflow: auto;
+		height: 60px;
+	}
+	/* -- 4 Column -- */
+	.mdjm-post-4column	{
+		float: left;
+		width: 25%;
+	}
+	
+	.mdjm-post-last-4column	{
+		float: right;
+		width: 25%;
+	}
+	/* -- 3 Column -- */
+	.mdjm-post-3column	{
+		float: left;
+		width: 33%;
+	}
+	
+	.mdjm-post-last-3column	{
+		float: right;
+		width: 33%;
+	}
+	/* -- 2 Column -- */
+	.mdjm-post-2column	{
+		float: left;
+		width: 50%;
+	}
+	
+	.mdjm-post-last-2column	{
+		float: right;
+		width: 50%;
+	}
+	/* -- 1 Column -- */
+	.mdjm-post-row-single	{
+		overflow: auto;
+		height: 60px;
+	}
+	.mdjm-post-row-single-textarea	{
+		overflow: auto;
+		height: 90px;
+	}
+	.mdjm-post-1column	{
+		float: right;
+		width: 100%;
+	}
+	
+	/*
+	 *
+	 * Tags
+	 *
+	 */
+	.mdjm-label {
+		font-weight: bold;
+	}
+	.mdjm-label .description {
+		font-weight: normal;
+		font-size: 11px;
+	}
+	.mdjm-description {
+		font-weight: normal;
+		font-size: 11px;
+	}
+	/*
+	 *
+	 * Meta Boxes
+	 *
+	 */
+	.mdjm-meta-row	{
+		overflow: auto;
+		height: 30px;
+	}
+	.mdjm-left-col	{
+		width: auto;
+		float: left;
+	}
+	.mdjm-right-col	{
+		width: auto
+		float: right;
+	}
+	select.mdjm-meta {
+		font-size: 11px;
+	}
+	input.mdjm-meta {
+		font-size: 11px;
+	}
+	.mdjm-meta-title {
+		font-weight: bold;
+	}
+	.mdjm-meta-title .count {
+		color:#999;
+		font-weight:400;
+		font-size: 11px;
+	}
+	.mdjm-meta-latest {
+		font-size: 11px;
+	}
+	
+	/*
+	 * jQuery
+	 */
+	.mdjm-form-error {
+		color: #F00;
+		font-weight: bold;
+	}
+	input.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	select.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	textarea.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	checkbox.mdjm-form-error {
+		border: solid 1px #F00;
+		color: #000000;
+		font-weight: normal;
+	}
+	.mdjm-form-valid {
+		color: #000000;
+	}
+	.mdjm-input-currency {
+		width: 75px;
+	}
+	
+	/*
+	 * Tables
+	 */
+	tr.border_top th {
+		border-top: 1pt solid #ddd;
+	}

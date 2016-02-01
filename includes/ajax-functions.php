@@ -1,7 +1,21 @@
 <?php
+/**
+ * AJAX Functions
+ *
+ * Process the AJAX actions. Frontend and backend
+ *
+ * @package     MDJM
+ * @subpackage  Functions/AJAX
+ * @since       1.3
+ */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
- * Save the client fields order
+ * Save the client fields order during drag and drop.
+ *
  *
  *
  */

@@ -67,7 +67,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			if( !get_option( 'mdjm_version' ) )	{
 				error_log( '** THE MDJM INSTALLATION PROCEDURE IS STARTING **' . "\r\n", 3, MDJM_DEBUG_LOG );
 			
-				include( MDJM_PLUGIN_DIR . '/admin/includes/procedures/mdjm-install.php' );
+				include( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-install.php' );
 										
 				error_log( '** THE MDJM INSTALLATION PROCEDURE COMPLETED **' . "\r\n", 3, MDJM_DEBUG_LOG );
 			}
@@ -173,8 +173,8 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_NAME', 'MDJM Event Management' );
 			define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );
 			
-			define( 'MDJM_PAGES_DIR', MDJM_PLUGIN_DIR . '/admin/pages' );
-			define( 'MDJM_PROCEDURES_DIR', MDJM_PLUGIN_DIR . '/admin/includes/procedures' );
+			define( 'MDJM_PAGES_DIR', MDJM_PLUGIN_DIR . '/includes/admin/pages' );
+			define( 'MDJM_PROCEDURES_DIR', MDJM_PLUGIN_DIR . '/includes/admin/procedures' );
 			define( 'MDJM_FUNCTIONS', MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
 			define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );
 			
@@ -213,37 +213,37 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public function includes()	{
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes//admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/event-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/venue-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/equipment/equipment-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-posts.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/users/mdjm-users.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/user-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/roles/mdjm-roles.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/permissions/mdjm-permissions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/mdjm-menu.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-posts.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-post-types.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-custom-fields.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/mdjm-users.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/user-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/mdjm-roles.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/permissions/mdjm-permissions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-menu.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_FUNCTIONS ); // Call the main functions file
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/includes/html-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-cron.php' ); // Scheduler
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-cron.php' ); // Scheduler
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/debug/mdjm-debug.php' ); // Debug class
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/transactions/mdjm-transactions.php' ); // Transaction class
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/debug/mdjm-debug.php' ); // Debug class
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' ); // Transaction class
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
 			if( is_admin() )	{ // Required for admin only
-				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/metaboxes.php' );
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/equipment/metaboxes.php' );
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-functions-admin.php' ); // Admin only functions
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/formatting/mdjm-formatting.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' ); // Plugin settings
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/metaboxes.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/equipment/metaboxes.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' ); // WP Dashboard Widgets
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/formatting/mdjm-formatting.php' );
 			}
 			else	{ // Required for front end only
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
