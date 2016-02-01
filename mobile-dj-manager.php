@@ -216,6 +216,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/event-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/venue-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/equipment/equipment-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-posts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/pages/mdjm-custom-fields.php' );
@@ -237,6 +238,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			
 			if( is_admin() )	{ // Required for admin only
 				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
+				require_once( MDJM_PLUGIN_DIR . '/admin/includes/equipment/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-functions-admin.php' ); // Admin only functions
