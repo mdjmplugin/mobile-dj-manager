@@ -212,24 +212,14 @@
 									'custom_args' => array (
 														'sort_order' => '',
 														'list_type' => 'defined',
-														'list_values' => array( 'd/m/Y' => date( 'd/m/Y' ) . ' - d/m/Y',
+														'list_values' => array( 
+														'd/m/Y' => date( 'd/m/Y' ) . ' - d/m/Y',
 																				'm/d/Y' => date( 'm/d/Y' ) . ' - m/d/Y',
 																				'Y/m/d' => date( 'Y/m/d' ) . ' - Y/m/d',
 																				'd-m-Y' => date( 'd-m-Y' ) . ' - d-m-Y',
 																				'm-d-Y' => date( 'm-d-Y' ) . ' - m-d-Y',
 																				'Y-m-d' => date( 'Y-m-d' ) . ' - Y-m-d', ),
 														),
-									'section' => 'general',
-									'page' => 'settings',
-									),
-							
-							'show_dashboard' => array(
-									'label' => __( 'Show Dashboard Widget', 'mobile-dj-manager' ) . '?',
-									'key' => MDJM_SETTINGS_KEY,
-									'type' => 'checkbox',
-									'value' => ( !empty( $mdjm_settings['main']['show_dashboard'] ) ? '1' : '0' ),
-									'text' => '',
-									'desc' => __( 'Displays the MDJM widget on the main Wordpress Admin Dashboard', 'mobile-dj-manager' ),
 									'section' => 'general',
 									'page' => 'settings',
 									),
@@ -242,7 +232,7 @@
 									'text' => '',
 									'desc' => sprintf( __( 'Whether or not to display the %sPowered by ' . 
 										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
-										'<font size="-1"; color="#F90">', MDJM_NAME, MDJM_VERSION_NUM, '</font>', MDJM_APP ),
+										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', MDJM_APP ),
 									'section' => 'general',
 									'page' => 'settings',
 									),

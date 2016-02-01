@@ -70,7 +70,6 @@
 							'items_per_page'          		  => get_option( 'posts_per_page' ),
 							'time_format'            		 => 'H:i',
 							'short_date_format'       		   => 'd/m/Y',
-							'show_dashboard'          		  => true,
 							'show_credits'            		=> false,
 						),
 						'mdjm_email_settings' => array(

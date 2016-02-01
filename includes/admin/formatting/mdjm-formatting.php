@@ -278,28 +278,20 @@ function mdjm_highlight_unattended_event_rows()	{
 add_action( 'admin_footer', 'mdjm_highlight_unattended_event_rows' );
 
 /**
- * Displays the MDJM footer text in the WP Admin UI within MDJM pages and posts only
+ * Append MDJM to the Thank you for creating with WordPress footer text
  *
- *
- *
- *
+ * @since	1.3
+ * @param	str		$text	The footer text
+ * @return	str		Filtered footer text string
  */
-function mdjm_admin_footer() {
-	global $mdjm_post_types;
-	
-	$str = $_SERVER['QUERY_STRING'];
-	$search = 'mdjm';
-	$pos = strpos( $str, $search );
-	
-	if( $pos !== false || ( in_array( get_post_type(), $mdjm_post_types ) ) )	{
-		echo '<p align="center" class="description">';
-		printf( 
-			__( 'Powered by %s, version %s', 'mobile-dj-manager' ),
-			'<a style="color:#F90" href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '" target="_blank">' . MDJM_NAME . '</a>',
-			MDJM_VERSION_NUM 
-		);
-		echo '</p>' . "\r\n";
-	}
-} // mdjm_admin_footer
-add_action( 'in_admin_footer', 'mdjm_admin_footer' );
+function mdjm_admin_footer_text( $text )	{
+	$text = str_replace( '.', '', $text );
+	$text .= ' ';
+	$text .= sprintf( __( 'and <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
+		mdjm_get_admin_page( 'mydjplanner', 'str' ),
+		MDJM_VERSION_NUM );
+		
+	return $text;
+} // mdjm_admin_footer_text
+add_filter( 'admin_footer_text', 'mdjm_admin_footer_text' );
 ?>

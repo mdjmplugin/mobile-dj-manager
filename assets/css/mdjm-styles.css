@@ -343,28 +343,28 @@
 	
 	
 /* -- Footer -- */
-	#mdjm-cz-footer	{
-		text-align: center;
-	}
-		#mdjm-cz-footer p	{
-			font-size: 9px;
-			color: #F90;
-		}
-		#mdjm-cz-footer a	{
-			color: #F90;
-			text-decoration: none;
-		}
-		#mdjm-cz-footer a:link {
-			color: #F90;
-		}
-		
-		#mdjm-cz-footer a:visited {
-			color: #F90;
-			text-decoration: underline;
-		}
-		
-		#mdjm-cz-footer a:hover {
-			color: #F90;
-			text-decoration: underline;
-		}
+#mdjm-cz-footer	{
+	text-align: center;
+}
+#mdjm-cz-footer p	{
+	font-size: 11px;
+	color: #F90;
+}
+#mdjm-cz-footer a	{
+	color: #F90;
+	text-decoration: none;
+}
+#mdjm-cz-footer a:link {
+	color: #F90;
+}
+
+#mdjm-cz-footer a:visited {
+	color: #F90;
+	text-decoration: underline;
+}
+
+#mdjm-cz-footer a:hover {
+	color: #F90;
+	text-decoration: underline;
+}
 		

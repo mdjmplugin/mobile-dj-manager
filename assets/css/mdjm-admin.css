@@ -172,3 +172,23 @@
 	.mdjm-custom-venue-list-item	{
 		cursor: move;	
 	}
+/**
+ *
+ * Footer text within admin UI
+ *
+ */
+.mdjm-admin-footer	{
+	color: #F90;
+}
+.mdjm-admin-footer a	{
+	color: #F90;
+	text-decoration: none;
+}
+.mdjm-admin-footer a:link {
+	color: #F90;
+}
+
+.mdjm-admin-footer a:visited {
+	color: #F90;
+	text-decoration: underline;
+}

@@ -585,7 +585,7 @@
 				global $mdjm;
 								
 				$true_vals = array(
-								'show_dashboard', 'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
+								'show_credits', 'enable', 'warn', 'auto_purge', 'employer', 
 								'enable_packages', 'warn_unattended', 'journaling', 'track_client_emails', 'bcc_dj_to_client', 
 								'bcc_admin_to_client', 'contract_to_client', 'booking_conf_to_client', 
 								'booking_conf_to_dj', 'notify_profile', 'package_prices', 'status_notification',
