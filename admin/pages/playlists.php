@@ -39,7 +39,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_PlayList_Table' ) ) {
-			require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/mdjm-playlist.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-playlist-table.php' );
 		}
 		
 		$playlist_table = new MDJM_PlayList_Table();

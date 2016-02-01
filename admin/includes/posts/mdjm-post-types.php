@@ -295,8 +295,8 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 			/**
 			 * Register the mdjm-event custom post type for events
 			 */
-			if( !post_type_exists( MDJM_EVENT_POSTS ) )	{
-				register_post_type( MDJM_EVENT_POSTS,
+			if( !post_type_exists( 'mdjm-event' ) )	{
+				register_post_type( 'mdjm-event',
 					array(
 						'labels'	=> array(
 							'name'               => _x( 'Events', 'post type general name', 'mobile-dj-manager' ),
@@ -317,7 +317,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'exclude_from_search'	=> true,
 						'publicly_queryable' 	 => true,
 						'show_ui'				=> true,
-						'show_in_menu'		   => 'edit.php?post_type=' . MDJM_EVENT_POSTS,
+						'show_in_menu'		   => 'edit.php?post_type=mdjm-event',
 						'show_in_admin_bar'	  => true,
 						'query_var'		 	  => true,
 						'rewrite'            	=> array( 'slug' => 'mdjm-event' ),
@@ -337,8 +337,9 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'menu_position'     	  => 5,
 						'supports'			   => array( 'title' ),
 						'menu_icon'			  => plugins_url( 'mobile-dj-manager/admin/images/mdjm-menu-16x16.jpg' ),
-						'taxonomies'			 => array( MDJM_EVENT_POSTS ),
-						'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' ) ) );
+						'taxonomies'			 => array( 'mdjm-event' )
+					)
+				);
 			}
 			
 			/**
@@ -674,7 +675,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 			if( !get_taxonomy( 'event-types' ) )	{
 				register_taxonomy(
 					'event-types',
-					MDJM_EVENT_POSTS,
+					'mdjm-event',
 					array(
 						'hierarchical'      	   => true,
 						'labels'            	 => array(

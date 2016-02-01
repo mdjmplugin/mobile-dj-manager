@@ -495,15 +495,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				remove_meta_box( 'event-typesdiv', MDJM_EVENT_POSTS, 'side' );
 				
 				add_meta_box(
-					'mdjm-event-client',
-					__( 'Client Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_client_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'high'
-				);
-				
-				add_meta_box(
 					'mdjm-event-details',
 					__( 'Event Details', 'mobile-dj-manager' ),
 					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox',
