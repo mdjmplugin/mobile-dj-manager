@@ -319,7 +319,7 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'client_password',
-			'description' => sprintf( __( 'The event clients password for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
+			'description' => sprintf( __( 'The event clients password for logging into %s', 'mobile-dj-manager' ), 'Client Zone' ),
 			'function'    => 'mdjm_content_tag_client_password'
 		),
 		array(
@@ -329,7 +329,7 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'client_username',
-			'description' => sprintf( __( 'The event clients username for logging into %s', 'mobile-dj-manager' ), MDJM_APP ),
+			'description' => sprintf( __( 'The event clients username for logging into %s', 'mobile-dj-manager' ), 'Client Zone' ),
 			'function'    => 'mdjm_content_tag_client_username'
 		),
 		array(

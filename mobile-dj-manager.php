@@ -212,6 +212,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 *
 		 */
 		public function includes()	{
+			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/event-functions.php' );
@@ -240,7 +241,6 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/admin/core.php' ); // Plugin settings
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/events/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/equipment/metaboxes.php' );
-				require_once( MDJM_PLUGIN_DIR . '/admin/includes/process-ajax.php' ); // Ajax functions backend
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/widgets.php' ); // WP Dashboard Widgets
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/mdjm-functions-admin.php' ); // Admin only functions
 				require_once( MDJM_PLUGIN_DIR . '/admin/includes/formatting/mdjm-formatting.php' );
