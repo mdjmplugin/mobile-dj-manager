@@ -167,6 +167,20 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'         => '2'
+					),
+					'warn'                 => array(
+						'id'          => 'warn',
+						'name'        => __( 'Display Warning if Over Size', 'mobile-dj-manager' ),
+						'desc'        => __( 'Will display notice and allow removal and recreation of log files', 'mobile-dj-manager' ),
+						'type'        => 'checkbox',
+						'std'         => '1'
+					),
+					'auto_purge'           => array(
+						'id'          => 'auto_purge',
+						'name'        => __( 'Auto Purge Log Files', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If selected, log files will be auto-purged when they reach the value of %sMaximum Log File Size%s',
+										'mobile-dj-manager' ), '<code>', '</code>' ),
+						'type'        => 'checkbox'
 					)
 				)
 			)
