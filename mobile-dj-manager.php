@@ -196,7 +196,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_API_SETTINGS_KEY', 'mdjm_api_data' );
 			define( 'MDJM_DEBUG_SETTINGS_KEY', 'mdjm_debug_settings' );
 			define( 'MDJM_DB_VERSION_KEY', 'mdjm_db_version' );
-			define( 'MDJM_DB_VERSION', get_option( MDJM_DB_VERSION_KEY ) );
+			define( 'MDJM_DB_VERSION', get_option( 'mdjm_db_version' ) );
 			define( 'MDJM_UNINST_SETTINGS_KEY', 'mdjm_uninst' );
 			
 			// Tables

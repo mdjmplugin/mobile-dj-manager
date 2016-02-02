@@ -19,7 +19,7 @@
 		public function update_db()	{
 			global $wpdb, $mdjm;
 			
-			if ( get_option( MDJM_DB_VERSION_KEY ) == $mdjm->db_version )	{
+			if ( get_option( 'mdjm_db_version' ) == $mdjm->db_version )	{
 				MDJM()->debug->log_it( 'No database update is required' );
 				return;
 			}
@@ -57,7 +57,7 @@
 			dbDelta( $playlists_sql );
 			dbDelta( $holiday_sql );
 		
-			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
+			update_option( 'mdjm_db_version', $mdjm->db_version );
 			MDJM()->debug->log_it( 'Completed database upgrade procedures', true );
 		} // update_db
 	} // class MDJM_DB

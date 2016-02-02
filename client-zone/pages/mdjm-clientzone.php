@@ -333,7 +333,7 @@
 				$client_data = get_userdata( $client_id );
 				
 				/* -- Check the fields marked as required within Custom Client Fields -- */
-				$custom_fields = get_option( MDJM_CLIENT_FIELDS );
+				$custom_fields = get_option( 'mdjm_client_fields' );
 				foreach( $custom_fields as $field )	{
 					if( !empty( $field['required'] ) )
 						$required_fields[] = $field['id'];

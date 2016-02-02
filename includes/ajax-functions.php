@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  */
 function save_mdjm_client_field_order()	{
-	$client_fields = get_option( MDJM_CLIENT_FIELDS );
+	$client_fields = get_option( 'mdjm_client_fields' );
 			
 	foreach( $_POST['fields'] as $order => $field )	{
 		$i = $order + 1;
@@ -28,7 +28,7 @@ function save_mdjm_client_field_order()	{
 		$client_fields[$field]['position'] = $i;
 		
 	}
-	update_option( MDJM_CLIENT_FIELDS, $client_fields );
+	update_option( 'mdjm_client_fields', $client_fields );
 	
 	die();
 } // save_mdjm_client_field_order

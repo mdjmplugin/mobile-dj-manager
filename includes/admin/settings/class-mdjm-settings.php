@@ -41,20 +41,20 @@
 				$this->add_fields();
 								
 				/* -- Register the settings -- */
-				register_setting( 'mdjm-settings', MDJM_SETTINGS_KEY );
-				register_setting( 'mdjm-permissions', MDJM_PERMISSIONS_KEY );
-				register_setting( 'mdjm-debugging-files', MDJM_DEBUG_SETTINGS_KEY );
-				register_setting( 'mdjm-events', MDJM_EVENT_SETTINGS_KEY );
-				register_setting( 'mdjm-playlists', MDJM_PLAYLIST_SETTINGS_KEY );
-				register_setting( 'mdjm-email', MDJM_EMAIL_SETTINGS_KEY );
-				register_setting( 'mdjm-email-templates', MDJM_TEMPLATES_SETTINGS_KEY );
-				register_setting( 'mdjm-clientzone', MDJM_CLIENTZONE_SETTINGS_KEY );
-				register_setting( 'mdjm-pages', MDJM_PAGES_KEY );
-				register_setting( 'mdjm-availability', MDJM_AVAILABILITY_SETTINGS_KEY );
-				register_setting( 'mdjm-client-text', MDJM_CUSTOM_TEXT_KEY );
-				register_setting( 'mdjm-payments', MDJM_PAYMENTS_KEY );
-				register_setting( 'mdjm-uninstall', MDJM_UNINST_SETTINGS_KEY );
-				register_setting( 'mdjm-addons', MDJM_API_SETTINGS_KEY );
+				register_setting( 'mdjm-settings', 'mdjm_plugin_settings' );
+				register_setting( 'mdjm-permissions', 'mdjm_plugin_permissions' );
+				register_setting( 'mdjm-debugging-files', 'mdjm_debug_settings' );
+				register_setting( 'mdjm-events', 'mdjm_event_settings' );
+				register_setting( 'mdjm-playlists', 'mdjm_playlist_settings' );
+				register_setting( 'mdjm-email', 'mdjm_email_settings' );
+				register_setting( 'mdjm-email-templates', 'mdjm_templates_settings' );
+				register_setting( 'mdjm-clientzone', 'mdjm_clientzone_settings' );
+				register_setting( 'mdjm-pages', 'mdjm_plugin_pages' );
+				register_setting( 'mdjm-availability', 'mdjm_availability_settings' );
+				register_setting( 'mdjm-client-text', 'mdjm_frontend_text' );
+				register_setting( 'mdjm-payments', 'mdjm_payment_settings' );
+				register_setting( 'mdjm-uninstall', 'mdjm_uninst' );
+				register_setting( 'mdjm-addons', 'mdjm_api_data' );
 				
 				do_action( 'register_mdjm_premium_settings' ); // Allows MDJM PG Settings to be registered
 			} // settings_register
@@ -682,7 +682,7 @@
 				if( empty( $new_value['upload_playlists'] ) && empty( $old_value['upload_playlists'] ) )
 					return;
 									
-				$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+				$mdjm_schedules = get_option( 'mdjm_schedules' );
 				 
 				$current_setting = isset( $mdjm_schedules['upload-playlists']['active'] ) ? $mdjm_schedules['upload-playlists']['active'] : 'N';
 				$new_setting = !empty( $new_value['upload_playlists'] ) ? 'Y' : 'N';
@@ -700,7 +700,7 @@
 						$mdjm_schedules['upload-playlists']['nextrun'] = 'N/A';
 				}
 				// Update the option				 
-				update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
+				update_option( 'mdjm_schedules', $mdjm_schedules );
 			} // update_playlist_task
 			
 			/**

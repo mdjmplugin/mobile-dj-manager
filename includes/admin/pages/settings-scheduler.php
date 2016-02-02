@@ -144,7 +144,7 @@
 */
 	function f_mdjm_render_scheduler()	{
 		global $mdjm_settings;
-		$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+		$mdjm_schedules = get_option( 'mdjm_schedules' );
 		asort( $mdjm_schedules );
 		?>
         <div class="wrap">

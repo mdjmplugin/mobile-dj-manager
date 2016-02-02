@@ -13,11 +13,11 @@
 		function update_settings()	{
 			// Change the enable debug setting key whilst carrying the current setting
 			// Then remove the old key
-			$debugging = get_option( MDJM_DEBUG_SETTINGS_KEY );
+			$debugging = get_option( 'mdjm_debug_settings' );
 			
 			$debugging['enable'] = get_option( 'mdjm_debug' );
 			
-			update_option( MDJM_DEBUG_SETTINGS_KEY, $debugging );
+			update_option( 'mdjm_debug_settings', $debugging );
 			delete_option( 'mdjm_debug' );
 						
 		} // update_settings

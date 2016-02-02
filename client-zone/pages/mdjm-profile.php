@@ -26,7 +26,7 @@
 					
 				else	{
 					// We need the custom fields
-					$this->fields = get_option( MDJM_CLIENT_FIELDS );
+					$this->fields = get_option( 'mdjm_client_fields' );
 					foreach( $this->fields as $key => $row )	{
 						$field[$key] = $row['position'];	
 					}

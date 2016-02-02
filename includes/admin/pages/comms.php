@@ -192,7 +192,7 @@
 								);
 		if( is_dj() )	{ // Check templates that DJ's cannot use
 			if( !isset( $mdjm_settings['permissions'] ) )	{
-				$mdjm_settings['permissions'] = get_option( MDJM_PERMISSIONS_KEY );
+				$mdjm_settings['permissions'] = get_option( 'mdjm_plugin_permissions' );
 			}
 			if( isset( $mdjm_settings['permissions']['dj_disable_template'] ) && !empty( $mdjm_settings['permissions']['dj_disable_template'] ) )	{
 				if( !is_array( $mdjm_settings['permissions']['dj_disable_template'] ) )	{

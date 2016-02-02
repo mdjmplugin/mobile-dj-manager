@@ -10,7 +10,7 @@
 if( !class_exists( 'MDJM_Debug' ) )	{
 	class MDJM_Debug	{
 		public function __construct()	{
-			$this->settings = get_option( MDJM_DEBUG_SETTINGS_KEY );
+			$this->settings = get_option( 'mdjm_debug_settings' );
 			$this->db_backup_dir = MDJM_PLUGIN_DIR . '/db_backups';
 			$this->backup_url = MDJM_PLUGIN_URL . '/db_backups';
 			$this->tables = array(
@@ -275,8 +275,8 @@ if( !class_exists( 'MDJM_Debug' ) )	{
 			$this->content_file = MDJM_PLUGIN_DIR . '/includes/admin/mdjm_content.html';
 			
 			/* -- Get options -- */
-			$mdjm_client_fields = get_option( MDJM_CLIENT_FIELDS );
-			$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+			$mdjm_client_fields = get_option( 'mdjm_client_fields' );
+			$mdjm_schedules = get_option( 'mdjm_schedules' );
 			
 			/* -- List of plugins installed -- */
 			$plugins = get_plugins();

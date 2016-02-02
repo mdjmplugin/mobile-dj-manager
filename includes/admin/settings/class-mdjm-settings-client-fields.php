@@ -23,7 +23,7 @@
 			 */
 			function __construct()	{
 				
-				$this->fields = get_option( MDJM_CLIENT_FIELDS );
+				$this->fields = get_option( 'mdjm_client_fields' );
 				foreach( $this->fields as $key => $row )	{
 					$field[$key] = $row['position'];	
 				}
@@ -53,7 +53,7 @@
 			function delete_field()	{				
 				unset( $this->fields[$_GET['id']] );
 				
-				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
+				if( update_option( 'mdjm_client_fields', $this->fields ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'Client field ' . $_GET['id'] . ' has been deleted', true );
 					
@@ -103,7 +103,7 @@
 										'position' => $_POST['field_position'],
 										);
 				
-				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
+				if( update_option( 'mdjm_client_fields', $this->fields ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
 							' created successfully by ' .  $current_user->display_name, true );
@@ -149,7 +149,7 @@
 										'position' => $this->fields[$_POST['field_id']]['position'],
 										);
 				
-				if( update_option( MDJM_CLIENT_FIELDS, $this->fields ) )	{
+				if( update_option( 'mdjm_client_fields', $this->fields ) )	{
 					MDJM()->debug->log_it( 'Client field ' . sanitize_text_field( $_POST['field_label'] ) . 
 						' updated successfully by ' .  $current_user->display_name, true );
 					mdjm_update_notice( 'updated', sanitize_text_field( $_POST['field_label'] ) . 

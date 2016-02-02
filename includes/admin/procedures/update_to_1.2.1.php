@@ -7,12 +7,12 @@
  */
  
 /* -- Update the settings -- */
-	$settings = get_option( MDJM_SETTINGS_KEY );
-	$permissions = get_option( MDJM_PERMISSIONS_KEY );
-	$client_text = get_option( MDJM_CUSTOM_TEXT_KEY );
+	$settings = get_option( 'mdjm_plugin_settings' );
+	$permissions = get_option( 'mdjm_plugin_permissions' );
+	$client_text = get_option( 'mdjm_frontend_text' );
 	$payment_settings = get_option( 'mdjm_pp_options' );
-	$pages = get_option( MDJM_PAGES_KEY );
-	$current_client_fields = get_option( MDJM_CLIENT_FIELDS );
+	$pages = get_option( 'mdjm_plugin_pages' );
+	$current_client_fields = get_option( 'mdjm_client_fields' );
 	
 	if( isset( $settings['title_as_subject'] ) )
 		unset( $settings['title_as_subject'] );
@@ -309,24 +309,24 @@
 	}
 	
 	/* -- Update the options table -- */
-	update_option( MDJM_SETTINGS_KEY, $settings );
-	update_option( MDJM_PERMISSIONS_KEY, $permissions );
-	update_option( MDJM_EVENT_SETTINGS_KEY, $event_settings );
-	update_option( MDJM_PLAYLIST_SETTINGS_KEY, $playlist_settings );
-	update_option( MDJM_EMAIL_SETTINGS_KEY, $email_settings );
-	update_option( MDJM_TEMPLATES_SETTINGS_KEY, $email_templates );
-	update_option( MDJM_CLIENTZONE_SETTINGS_KEY, $clientzone_settings );
-	update_option( MDJM_CUSTOM_TEXT_KEY, $client_text );
-	update_option( MDJM_AVAILABILITY_SETTINGS_KEY, $availability );
-	update_option( MDJM_DEBUG_SETTINGS_KEY, $debug_settings );
-	update_option( MDJM_PAGES_KEY, $pages );
+	update_option( 'mdjm_plugin_settings', $settings );
+	update_option( 'mdjm_plugin_permissions', $permissions );
+	update_option( 'mdjm_event_settings', $event_settings );
+	update_option( 'mdjm_playlist_settings', $playlist_settings );
+	update_option( 'mdjm_email_settings', $email_settings );
+	update_option( 'mdjm_templates_settings', $email_templates );
+	update_option( 'mdjm_clientzone_settings', $clientzone_settings );
+	update_option( 'mdjm_frontend_text', $client_text );
+	update_option( 'mdjm_availability_settings', $availability );
+	update_option( 'mdjm_debug_settings', $debug_settings );
+	update_option( 'mdjm_plugin_pages', $pages );
 	
 	if( !empty( $uninst_settings ) )
-		update_option( MDJM_UNINST_SETTINGS_KEY, $uninst_settings );
+		update_option( 'mdjm_uninst', $uninst_settings );
 		
-	update_option( MDJM_PAYMENTS_KEY, $payments );
+	update_option( 'mdjm_payment_settings', $payments );
 	update_option( 'mdjm_paypal_settings', $paypal );
-	update_option( MDJM_CLIENT_FIELDS, $client_fields );
+	update_option( 'mdjm_client_fields', $client_fields );
 	delete_option( 'mdjm_pp_options' );
  
 

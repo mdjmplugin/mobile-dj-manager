@@ -72,11 +72,11 @@
 		 *
 		 */
 		function update_playlist_upload_schedule()	{
-			$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+			$mdjm_schedules = get_option( 'mdjm_schedules' );
 			
 			$mdjm_schedules['upload-playlists']['frequency'] = 'Twice Daily';
 			
-			update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
+			update_option( 'mdjm_schedules', $mdjm_schedules );
 		}
 	} // class MDJM_Upgrade_to_1_2_3
 	

@@ -15,7 +15,7 @@
 		 *
 		 */
 		public function __construct()	{
-			$this->schedules = get_option( MDJM_SCHEDULES_KEY );
+			$this->schedules = get_option( 'mdjm_schedules' );
 			
 			add_action( 'mdjm_hourly_schedule', array( &$this, 'execute_cron' ) ); // Run the MDJM scheduler
 		} // __construct
@@ -1125,7 +1125,7 @@
 		 * 
 		 */
 		public function update_nextrun( $task )	{
-			$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+			$mdjm_schedules = get_option( 'mdjm_schedules' );
 			
 			$mdjm_schedules[$task]['lastran'] = time();
 			$time = time();
@@ -1153,7 +1153,7 @@
 			
 			$mdjm_schedules[$task]['totalruns'] = $mdjm_schedules[$task]['totalruns'] + 1;
 	
-			update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
+			update_option( 'mdjm_schedules', $mdjm_schedules );
 		} // update_nextrun
 		
 		/*

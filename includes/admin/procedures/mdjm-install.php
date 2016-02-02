@@ -423,11 +423,11 @@
 			}
 			/* -- Other options -- */
 			$mdjm_settings = array(
-								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'custom_text' => get_option( MDJM_CUSTOM_TEXT_KEY ),
-								'pages'	   => get_option( MDJM_PAGES_KEY ),
-								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
-								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
+								'main'		=> get_option( 'mdjm_plugin_settings' ),
+								'custom_text' => get_option( 'mdjm_frontend_text' ),
+								'pages'	   => get_option( 'mdjm_plugin_pages' ),
+								'payments'	=> get_option( 'mdjm_payment_settings' ),
+								'permissions' => get_option( 'mdjm_plugin_permissions' ),
 								);
 			
 			include( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-templates.php' );
@@ -515,11 +515,11 @@
 		 */ 
 		public function install_templates()	{
 			$mdjm_settings = array(
-								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'custom_text' => get_option( MDJM_CUSTOM_TEXT_KEY ),
-								'pages'	   => get_option( MDJM_PAGES_KEY ),
-								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
-								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
+								'main'		=> get_option( 'mdjm_plugin_settings' ),
+								'custom_text' => get_option( 'mdjm_frontend_text' ),
+								'pages'	   => get_option( 'mdjm_plugin_pages' ),
+								'payments'	=> get_option( 'mdjm_payment_settings' ),
+								'permissions' => get_option( 'mdjm_plugin_permissions' ),
 								);
 								
 			include( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-templates.php' );
@@ -575,11 +575,11 @@
 		 */
 		public function install_pages()	{
 			$mdjm_settings = array(
-								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'custom_text' => get_option( MDJM_CUSTOM_TEXT_KEY ),
-								'pages'	   => get_option( MDJM_PAGES_KEY ),
-								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
-								'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
+								'main'		=> get_option( 'mdjm_plugin_settings' ),
+								'custom_text' => get_option( 'mdjm_frontend_text' ),
+								'pages'	   => get_option( 'mdjm_plugin_pages' ),
+								'payments'	=> get_option( 'mdjm_payment_settings' ),
+								'permissions' => get_option( 'mdjm_plugin_permissions' ),
 								);
 								
 			include( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-templates.php' );
@@ -635,7 +635,7 @@
 			} // end foreach
 			
 			/* -- Update settings with the new pages -- */
-			update_option( MDJM_PAGES_KEY, $mdjm_page_settings );
+			update_option( 'mdjm_plugin_pages', $mdjm_page_settings );
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' *** Completed MDJM Page Installation ***' . "\r\n", 3, MDJM_DEBUG_LOG );
 		} // install_pages

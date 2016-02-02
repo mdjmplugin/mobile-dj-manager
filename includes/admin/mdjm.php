@@ -82,7 +82,7 @@
 					update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
 					
 					// Update the updated key so we know to redirect
-					update_option( MDJM_UPDATED_KEY, '1' );
+					update_option( 'mdjm_updated', '1' );
 				}
 			} // mdjm_upgrade_check
 /*
@@ -114,7 +114,7 @@
 			 */
 	 		public function mdjm_admin_init()	{
 				/* -- Register the settings -- */
-				if( get_option( MDJM_SETTINGS_KEY ) )	{
+				if( get_option( 'mdjm_plugin_settings' ) )	{
 					$this->mdjm_init_settings();
 					//$this->mdjm_role_caps();
 				}
@@ -214,19 +214,19 @@
 			 public function mdjm_settings()	{
 				global $mdjm_settings;
 				$mdjm_settings = array(
-									'main'		=> get_option( MDJM_SETTINGS_KEY ),
-									'email'	   => get_option( MDJM_EMAIL_SETTINGS_KEY ),
-									'templates'   => get_option( MDJM_TEMPLATES_SETTINGS_KEY ),
-									'events'	  => get_option( MDJM_EVENT_SETTINGS_KEY ),
-									'playlist'	=> get_option( MDJM_PLAYLIST_SETTINGS_KEY ),
-									'custom_text' => get_option( MDJM_CUSTOM_TEXT_KEY ),
-									'clientzone'  => get_option( MDJM_CLIENTZONE_SETTINGS_KEY ),
-									'availability'=> get_option( MDJM_AVAILABILITY_SETTINGS_KEY ),
-									'pages'	   => get_option( MDJM_PAGES_KEY ),
-									'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
-									'permissions' => get_option( MDJM_PERMISSIONS_KEY ),
-									'data' 		=> get_option( MDJM_API_SETTINGS_KEY ),
-									'uninst'	  => get_option( MDJM_UNINST_SETTINGS_KEY )
+									'main'		=> get_option( 'mdjm_plugin_settings' ),
+									'email'	   => get_option( 'mdjm_email_settings' ),
+									'templates'   => get_option( 'mdjm_templates_settings' ),
+									'events'	  => get_option( 'mdjm_event_settings' ),
+									'playlist'	=> get_option( 'mdjm_playlist_settings' ),
+									'custom_text' => get_option( 'mdjm_frontend_text' ),
+									'clientzone'  => get_option( 'mdjm_clientzone_settings' ),
+									'availability'=> get_option( 'mdjm_availability_settings' ),
+									'pages'	   => get_option( 'mdjm_plugin_pages' ),
+									'payments'	=> get_option( 'mdjm_payment_settings' ),
+									'permissions' => get_option( 'mdjm_plugin_permissions' ),
+									'data' 		=> get_option( 'mdjm_api_data' ),
+									'uninst'	  => get_option( 'mdjm_uninst' )
 								);
 								
 				define( 'MDJM_DJ', isset( $mdjm_settings['events']['artist'] ) ? $mdjm_settings['events']['artist'] : 'DJ' );				
@@ -456,7 +456,7 @@
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-cron.php' );
 				
 				/* Get the scheduled tasks */
-				$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+				$mdjm_schedules = get_option( 'mdjm_schedules' );
 				if( isset( $mdjm_settings['playlist']['upload_playlists'] ) )	{
 					$mdjm_schedules['upload-playlists']['active'] = $mdjm_settings['playlist']['upload_playlists'];
 				}

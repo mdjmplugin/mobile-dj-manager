@@ -230,7 +230,7 @@
 		public function update_db()	{
 			global $wpdb, $mdjm;
 			
-			if ( get_option( MDJM_DB_VERSION_KEY ) == $mdjm->db_version )	{
+			if ( get_option( 'mdjm_db_version' ) == $mdjm->db_version )	{
 				MDJM()->debug->log_it( 'No database update is required' );
 				return;
 			}
@@ -291,7 +291,7 @@
 			dbDelta( $music_library_sql );
 			dbDelta( $holiday_sql );
 		
-			update_option( MDJM_DB_VERSION_KEY, $mdjm->db_version );
+			update_option( 'mdjm_db_version', $mdjm->db_version );
 			MDJM()->debug->log_it( 'Completed database upgrade procedures', true );
 		} // update_db
 		
@@ -360,8 +360,8 @@
 			MDJM()->debug->log_it( '*** UPDATING PLUGIN SETTINGS ***', true );
 			
 			$mdjm_settings = array(
-								'main'		=> get_option( MDJM_SETTINGS_KEY ),
-								'payments'	=> get_option( MDJM_PAYMENTS_KEY ),
+								'main'		=> get_option( 'mdjm_plugin_settings' ),
+								'payments'	=> get_option( 'mdjm_payment_settings' ),
 								);
 			// Main settings updates
 			$mdjm_settings['main']['artist'] = 'DJ';
@@ -372,8 +372,8 @@
 			$mdjm_settings['payments']['pp_default_method'] = 'Cash';
 			unset( $mdjm_settings['payments']['pp_transaction_types'] );
 			
-			update_option( MDJM_SETTINGS_KEY, $mdjm_settings['main'] );
-			update_option( MDJM_PAYMENTS_KEY, $mdjm_settings['payments'] );
+			update_option( 'mdjm_plugin_settings', $mdjm_settings['main'] );
+			update_option( 'mdjm_payment_settings', $mdjm_settings['payments'] );
 			
 			/* -- We add this option for the journal migrations -- */
 			add_option( 'mdjm_date_to_1_2', strtotime( "+3 day" ) );
@@ -884,7 +884,7 @@
 				return;
 			
 			MDJM()->debug->log_it( 'Starting client field updates' );
-			$client_fields = get_option( MDJM_CLIENT_FIELDS );
+			$client_fields = get_option( 'mdjm_client_fields' );
 			
 			$required_fields = array( 'address1', 'town', 'county', 'postcode', 'phone1' );
 			
@@ -896,7 +896,7 @@
 			$client_fields['address2']['value'] = '';
 			$client_fields['phone2']['value'] = '';
 			
-			if( update_option( MDJM_CLIENT_FIELDS, $client_fields ) )	{
+			if( update_option( 'mdjm_client_fields', $client_fields ) )	{
 				MDJM()->debug->log_it( 'SUCCESS: completed client field updates' );
 				return true;
 			}
@@ -1014,7 +1014,7 @@
 			
 			MDJM()->debug->log_it( '*** STARTING CRON TASK ADJUSTMENTS ***', true );
 			
-			$mdjm_schedules = get_option( MDJM_SCHEDULES_KEY );
+			$mdjm_schedules = get_option( 'mdjm_schedules' );
 			
 			MDJM()->debug->log_it( 'Updating Completed Events' );
 			$mdjm_schedules['complete-events']['function'] = 'complete_event';
@@ -1034,7 +1034,7 @@
 			MDJM()->debug->log_it( 'Updating Upload Playlist' );
 			$mdjm_schedules['upload-playlists']['function'] = 'submit_playlist';
 									
-			update_option( MDJM_SCHEDULES_KEY, $mdjm_schedules );
+			update_option( 'mdjm_schedules', $mdjm_schedules );
 			
 			MDJM()->debug->log_it( '*** COMPLETED CRON TASK ADJUSTMENTS ***', true );
 			

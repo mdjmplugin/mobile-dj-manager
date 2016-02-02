@@ -237,7 +237,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			}
 			
 			// Get the custom user fields
-			$custom_fields = get_option( MDJM_CLIENT_FIELDS );
+			$custom_fields = get_option( 'mdjm_client_fields' );
 			
 			// Loop through the fields
 			foreach( $custom_fields as $custom_field )	{
@@ -311,7 +311,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @return
 		 */
 		public function save_custom_user_fields( $user_id )	{
-			$custom_fields = get_option( MDJM_CLIENT_FIELDS );
+			$custom_fields = get_option( 'mdjm_client_fields' );
 			$default_fields = get_user_by( 'id', $user_id );
 			
 			if( !current_user_can( 'edit_user', $user_id ) )
