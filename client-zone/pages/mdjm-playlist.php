@@ -21,9 +21,7 @@
 			 */
 			function __construct()	{
 				global $mdjm, $my_mdjm, $post;
-				
-				mdjm_page_visit( MDJM_APP . ' Playlist' );
-				
+								
 				if( !is_user_logged_in() )	{
 					$playlist = ( isset( $_GET['mdjmeventid'] ) ? $this->playlist_exists( $_GET['mdjmeventid'] ) 
 						: false );

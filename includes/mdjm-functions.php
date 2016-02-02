@@ -82,34 +82,6 @@
 		}
 	} // mdjm_get_admin_page
 	
-	/**
-	 * Log the access to the specified page
-	 *
-	 * @param	str		Required: $page 	Name of the page
-	 *			
-	 * @return
-	 * @since	1.2.3.5
-	 * 
-	 */
-	function mdjm_page_visit( $page )	{
-		global $current_user;
-		
-		if( MDJM_DEBUG == false )
-			return;
-		
-		if( empty( $page ) || !is_user_logged_in() )
-			return;
-		
-		$content = "\r\n";
-		$content .= '------------------------------------------------------' . "\r\n";
-		$content .= date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ';
-		$content .= $page . ' accessed by ' . $current_user->display_name . ' (' . $current_user->ID . ')' . "\r\n";
-		$content .= '------------------------------------------------------' . "\r\n";
-		
-		MDJM()->debug->log_it( $content );
-		
-	} // mdjm_page_visit
-	
 	/*
 	 * Display update notice within Admin UI
 	 *
