@@ -200,7 +200,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-posts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-custom-fields.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/mdjm-users.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/client-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/employee-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/mdjm-roles.php' );
