@@ -171,33 +171,12 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 			define( 'MDJM_NAME', 'MDJM Event Management' );
-			define( 'MDJM_REQUIRED_WP_VERSION', '3.9' );
 			
-			define( 'MDJM_PAGES_DIR', MDJM_PLUGIN_DIR . '/includes/admin/pages' );
-			define( 'MDJM_PROCEDURES_DIR', MDJM_PLUGIN_DIR . '/includes/admin/procedures' );
-			define( 'MDJM_FUNCTIONS', MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
 			define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );
 			
-			// Option Keys
-			define( 'MDJM_SETTINGS_KEY', 'mdjm_plugin_settings' );
-			define( 'MDJM_EMAIL_SETTINGS_KEY', 'mdjm_email_settings' );
-			define( 'MDJM_TEMPLATES_SETTINGS_KEY', 'mdjm_templates_settings' );
-			define( 'MDJM_EVENT_SETTINGS_KEY', 'mdjm_event_settings' );
-			define( 'MDJM_PLAYLIST_SETTINGS_KEY', 'mdjm_playlist_settings' );
-			define( 'MDJM_CLIENTZONE_SETTINGS_KEY', 'mdjm_clientzone_settings' );
-			define( 'MDJM_CLIENT_FIELDS', 'mdjm_client_fields' );
-			define( 'MDJM_CUSTOM_TEXT_KEY', 'mdjm_frontend_text' );
-			define( 'MDJM_PAGES_KEY', 'mdjm_plugin_pages' );
-			define( 'MDJM_PAYMENTS_KEY', 'mdjm_payment_settings' );
-			define( 'MDJM_PERMISSIONS_KEY', 'mdjm_plugin_permissions' );
-			define( 'MDJM_AVAILABILITY_SETTINGS_KEY', 'mdjm_availability_settings' );
-			define( 'MDJM_SCHEDULES_KEY', 'mdjm_schedules' );
-			define( 'MDJM_UPDATED_KEY', 'mdjm_updated' );
-			define( 'MDJM_API_SETTINGS_KEY', 'mdjm_api_data' );
-			define( 'MDJM_DEBUG_SETTINGS_KEY', 'mdjm_debug_settings' );
-			define( 'MDJM_DB_VERSION_KEY', 'mdjm_db_version' );
 			define( 'MDJM_DB_VERSION', get_option( 'mdjm_db_version' ) );
-			define( 'MDJM_UNINST_SETTINGS_KEY', 'mdjm_uninst' );
+			
+			define( 'MDJM_API_SETTINGS_KEY', 'mdjm_api_data' );
 			
 			// Tables
 			define( 'MDJM_PLAYLIST_TABLE', $wpdb->prefix . 'mdjm_playlists' );
@@ -227,7 +206,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/permissions/mdjm-permissions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-menu.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
-			require_once( MDJM_FUNCTIONS ); // Call the main functions file
+			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' ); // Call the main functions file
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/includes/html-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-cron.php' ); // Scheduler

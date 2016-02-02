@@ -76,7 +76,7 @@
 				if( $current_version < MDJM_VERSION_NUM )	{
 					
 					// Instantiate the update class which will execute the updates
-					include_once( MDJM_PROCEDURES_DIR . '/mdjm-upgrade.php' );
+					include_once( '/includes/admin/procedures/mdjm-upgrade.php' );
 					
 					// Update the stored version
 					update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
