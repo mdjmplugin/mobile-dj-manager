@@ -285,11 +285,10 @@ add_action( 'admin_footer', 'mdjm_highlight_unattended_event_rows' );
  * @return	str		Filtered footer text string
  */
 function mdjm_admin_footer_text( $text )	{
-	$text = str_replace( '.', '', $text );
 	$text .= ' ';
-	$text .= sprintf( __( 'and <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
+	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
 		mdjm_get_admin_page( 'mydjplanner', 'str' ),
-		MDJM_VERSION_NUM );
+		MDJM_VERSION_NUM ) . '</em>';
 		
 	return $text;
 } // mdjm_admin_footer_text

@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) )
  * Looks to see if the specified setting exists, returns default if not
  *
  * @since	1.3
- * @param	$option	str		The option to retrieve
- * @param	$key	str		The option key to retrieve
+ * @param	str		$key		The option key to retrieve.
+ * @param	str		$default	What should be returned if the option is empty.
  * @return	mixed
  */
 function mdjm_get_option( $key = '', $default = false )	{
@@ -367,7 +367,6 @@ function mdjm_get_registered_settings()	{
 											'<code>',
 											'</code>'
 										),
-											
 						'type'        => 'checkbox'
 					)
 				),
@@ -411,7 +410,92 @@ function mdjm_get_registered_settings()	{
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
 							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
 						)
-					)
+					),
+					'contract_templates' => array(
+						'id'          => 'contract_templates',
+						'name'        => '<h3>' . __( 'Awaiting Contract Template Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'contract_to_client' => array(
+						'id'          => 'contract_to_client',
+						'name'        => __( 'Contract Notification Email?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Do you want to auto send an email to the client when their event changes to the %sAwaiting Contract%s status?', 'mobile-dj-manager' ), '<em>', '</em>' ),
+						'type'        => 'checkbox'
+					),
+					'contract'         => array(
+						'id'          => 'contract',
+						'name'        => __( 'Contract Template', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Only applies if %sContract Notification Email%s is enabled', 'mobile-dj-manager' ), '<em>', '</em>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'contract_from'    => array(
+						'id'          => 'contract_from',
+						'name'        => __( 'Emails From?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Who should contract notification emails to be sent by?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
+							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+						)
+					),
+					'booking_conf_templates' => array(
+						'id'          => 'booking_conf_templates',
+						'name'        => '<h3>' . __( 'Booking Confirmation Template Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'booking_conf_to_client' => array(
+						'id'          => 'booking_conf_to_client',
+						'name'        => __( 'Booking Confirmation to Client', 'mobile-dj-manager' ),
+						'desc'        => __( 'Email client with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'booking_conf_client' => array(
+						'id'          => 'booking_conf_client',
+						'name'        => __( 'Client Booking Confirmation Template', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be used when sending the Booking Confirmation to Clients', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'booking_conf_from' => array(
+						'id'          => 'booking_conf_from',
+						'name'        => __( 'Emails From?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Who should booking confirmation emails to be sent by?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
+							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+						)
+					),
+					'booking_conf_to_dj' => array(
+						'id'          => 'booking_conf_to_dj',
+						'name'        => __( 'Booking Confirmation to Employee?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Email events primary %s with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'type'        => 'checkbox'
+					),
+					'email_dj_confirm' => array(
+						'id'          => 'email_dj_confirm',
+						'name'        => sprintf( __( '%s Booking Confirmation Template', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to events primary %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'payment_cfm_template' => array(
+						'id'          => 'payment_cfm_template',
+						'name'        => __( 'Payment Received Template', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent to clients when confirming receipt of a payment', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'manual_payment_cfm_template' => array(
+						'id'          => 'manual_payment_cfm_template',
+						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent to clients when you manually mark an event payment as received', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
 				)
 			)
 		)
