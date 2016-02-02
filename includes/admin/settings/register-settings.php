@@ -260,7 +260,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Time Format', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 						'type'        => 'select',
-						'options' => mdjm_list_contracts()
+						'options' => mdjm_list_templates( 'contract' )
 					),
 					'warn_unattended'  => array(
 						'id'          => 'warn_unattended',
@@ -294,6 +294,123 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Enable Event Playlists by Default?', 'mobile-dj-manager' ),
 						'desc'        => __( 'Check to enable Client Playlist features by default. Can be overridden per event.', 'mobile-dj-manager' ),
 						'type'        => 'checkbox'
+					),
+					'close'           => array(
+						'id'          => 'close',
+						'name'        => __( 'Close the Playlist', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Enter %s0%s to never close.', 'mobile-dj-manager' ),
+											'<code>',
+											'</code>'
+										),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'		 => '5'
+					),
+					'playlist_cats'    => array(
+						'id'          => 'playlist_cats',
+						'name'        => __( 'Playlist Song Categories', 'mobile-dj-manager' ),
+						'desc'        => __( 'The options clients can select for when songs are to be played when adding to the playlist. One per line.', 'mobile-dj-manager' ),
+						'type'        => 'textarea'
+					),
+					'upload_playlists' => array(
+						'id'          => 'upload_playlists',
+						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
+						'desc'        => __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' . 
+										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' . 
+										'Only song, artist and the event type information is transmitted.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					)
+				)
+			)
+		),
+		/** Events Settings */
+		'emails' => apply_filters( 'mdjm_settings_emails',
+			array(
+				'main' => array(
+					'email_settings'   => array(
+						'id'          => 'email_settings',
+						'name'        => '<h3>' . __( 'Email Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'system_email'     => array(
+						'id'          => 'system_email',
+						'name'        => __( 'Default From Address', 'mobile-dj-manager' ),
+						'desc'        => __( 'The email address you want generic emails from MDJM to come from.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => get_bloginfo( 'admin_email' )
+					),
+					'track_client_emails' => array(
+						'id'          => 'track_client_emails',
+						'name'        => __( 'Track Client Emails?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( '%sNote%s: not all email clients will support this', 'mobile-dj-manager' ),
+											'<code>',
+											'</code>'
+										),
+											
+						'type'        => 'checkbox'
+					),
+					'bcc_dj_to_client' => array(
+						'id'          => 'bcc_dj_to_client',
+						'name'        => sprintf( __( 'Copy %s in Client Emails?', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'desc'        => sprintf( __( 'Send a copy of client emails to the events primary %s', 'mobile-dj-manager' ),
+											mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+										),
+											
+						'type'        => 'checkbox'
+					),
+					'bcc_admin_to_client' => array(
+						'id'          => 'bcc_admin_to_client',
+						'name'        => __( 'Copy Admin in Client Emails?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Send a copy of client emails to %sDefault From Address%s', 'mobile-dj-manager' ),
+											'<code>',
+											'</code>'
+										),
+											
+						'type'        => 'checkbox'
+					)
+				),
+				'templates' => array(
+					'quote_templates'   => array(
+						'id'          => 'quote_templates',
+						'name'        => '<h3>' . __( 'Quote Template Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'enquiry'          => array(
+						'id'          => 'enquiry',
+						'name'        => __( 'Quote Template', 'mobile-dj-manager' ),
+						'desc'        => __( 'This is the default template used when sending quotes via email to clients', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'online_enquiry'   => array(
+						'id'          => 'online_enquiry',
+						'name'        => __( 'Online Quote Template', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+						'type'        => 'select',
+						'options'     => array_merge( 
+											array( '0' => __( 'Disable Online Quotes', 'mobile-dj-manager' ) ),
+											mdjm_list_templates( 'email_template' ) )
+					),
+					'unavailable'      => array(
+						'id'          => 'unavailable',
+						'name'        => __( 'Unavailability Template', 'mobile-dj-manager' ),
+						'desc'        => __( 'This is the default template used when responding to enquiries that you are unavailable for the event', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template' )
+					),
+					'enquiry_from'     => array(
+						'id'          => 'enquiry_from',
+						'name'        => __( 'Emails From?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Who should enquiries and unavailability emails to be sent by?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
+							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+						)
 					)
 				)
 			)
@@ -302,16 +419,16 @@ function mdjm_get_registered_settings()	{
 } // mdjm_get_registered_settings
 
 /**
- * Return a list of contracts for use as dropdown options within a select list.
+ * Return a list of templates for use as dropdown options within a select list.
  *
  * @since	1.3
- * @param
- * @return	arr		Array of contracts, id => title
+ * @param	str		$post_type	Optional: 'contract' or 'email_template'. If omitted, fetch both.
+ * @return	arr		Array of templates, id => title.
  */
-function mdjm_list_contracts()	{
-	$contract_posts = get_posts(
+function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ) )	{
+	$template_posts = get_posts(
 		array(
-			'post_type'        => 'contract',
+			'post_type'        => $post_type,
 			'post_status'      => 'publish',
 			'posts_per_page'   => -1,
 			'orderby'          => 'post_title',
@@ -319,11 +436,11 @@ function mdjm_list_contracts()	{
 		)
 	);
 	
-	$contracts = array();
+	$templates = array();
 	
-	foreach( $contract_posts as $contract )	{
-		$contracts[ $contract->ID ] = get_the_title( $contract->ID );	
+	foreach( $template_posts as $template )	{
+		$templates[ $template->ID ] = get_the_title( $template->ID );	
 	}
 	
-	return $contracts;
-} // mdjm_list_contracts
+	return $templates;
+} // mdjm_list_templates
