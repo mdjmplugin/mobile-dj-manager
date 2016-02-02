@@ -23,6 +23,123 @@ function mdjm_is_employer()	{
 } // mdjm_is_employer
 
 /**
+ * Display a dropdown select list with all employees. The label must be handled seperately.
+ *
+ * @param	arr		$args			Settings for the dropdown
+ *									'role' (str|arr)		Optional: Only display employees with the given role. Default empty (all).
+ *									'name' (str)			Optional: The name of the input. Defaults to '_mdjm_employees'
+ *									'id' (str)				Optional: ID for the field (uses name if not present)
+ *									'class' (str)			Optional: Class of the input field
+ *									'selected' (str)		Optional: Initially selected option
+ *									'first_entry' (str)		Optional: First entry to be displayed (default none)
+ *									'first_entry_val' (str)	Optional: First entry value. Only valid if first_entry is set
+ *									'multiple' (bool)		Optional: Whether multiple options can be selected
+ *									'group' (bool)			Optional: True to group employees by role
+ *									'structure' (bool)		Optional: True outputs the <select> tags, false just the <options>
+ *									'exclude' (int|arr)		Optional: Employee ID's to exclude
+ *									'echo' (bool)           Optional: Echo the HTML output (default) or false to return as $output
+ *
+ * @return	str		$output			The HTML output for the dropdown list
+ */
+function mdjm_employee_dropdown( $args='' )	{
+	global $wp_roles;
+	
+	// Define the default args for the dropdown
+	$defaults = array(
+		'role'                => '',
+		'name'                => '_mdjm_employees',
+		'class'               => '',
+		'selected'            => '',
+		'first_entry'         => '',
+		'first_entry_val'     => '',
+		'multiple'			  => false,
+		'group'               => false,
+		'structure'           => true,
+		'exclude'			  => false,
+		'echo'                => true
+	);
+	
+	// Merge default args with those passed to function
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['id'] = isset( $args['id'] ) ? $args['id'] : $args['name'];
+	
+	if( !empty( $args['exclude'] ) && !is_array( $args['exclude'] ) )
+		$args['exclude'] = array( $args['exclude'] );
+	
+	// We'll store the output here
+	$output = '';
+	
+	// Start the structure
+	if( !empty( $args['structure'] ) )	{
+		$output .= '<select name="' . $args['name'];
+		if( !empty( $args['multiple'] ) ) 
+			$output .= '[]';
+			
+		$output .= '"	id="' . $args['id'] . '"';
+		
+		if( !empty( $args['class'] ) )
+			$output .= ' class="' . $args['class'] . '"';
+			
+		if( !empty( $args['multiple'] ) )
+			$output .= ' multiple="multiple"';
+			
+		$output .= '>' . "\r\n";
+	}
+	
+	$employees = mdjm_get_employees( $args['role'] );
+	
+	if( empty( $employees ) )	{
+		$output .= '<option value="">' . __( 'No employees found', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+	}
+	else	{
+		if( !empty( $args['first_entry'] ) )	{
+			$output .= '<option value="' .  $args['first_entry_val'] . '">'; 
+			$output .= $args['first_entry'] . '</option>' . "\r\n";
+			
+		}
+		$results = new stdClass();
+		$results->role = array();
+		foreach( $employees as $employee )	{
+			if( $employee->roles[0] == 'administrator' )
+				$employee->roles[0] = 'dj';
+			
+			if( !empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )
+				continue;
+			
+			$results->role[$employee->roles[0]][] = $employee;
+		}
+		// Loop through the roles and employees to create the output
+		foreach( $results->role as $role => $userobj )	{
+			if( !empty( $args['group'] ) )
+				$output .= '<optgroup label="' . translate_user_role( $wp_roles->roles[$role]['name'] ) . '">' . "\r\n";
+			
+			foreach( $userobj as $user )	{
+				$output .= '<option value="' . $user->ID . '"';
+				
+				if( !empty( $args['selected'] ) && $user->ID == $args['selected'] )
+					$output .= ' selected="selected"';
+				
+				$output .= '>' . $user->display_name . '</option>' . "\r\n";	
+			}
+			
+			if( !empty( $args['group'] ) )
+				$output .= '</optgroup>' . "\r\n";
+		}
+	}
+	
+	// End the structure
+	if( $args['structure'] == true )
+		$output .= '</select>' . "\r\n";
+	
+	if( !empty( $args['echo'] ) )
+		echo $output;
+		
+	else
+		return $output;
+} // mdjm_employee_dropdown
+
+/**
  * Adds a new employee and assigns the role
  *
  * @param	arr		$post_data
@@ -242,123 +359,6 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 
 	return $employees;
 } // mdjm_add_employee_to_event
-
-/**
- * Display a dropdown select list with all employees. The label must be handled seperately.
- *
- * @param	arr		$args			Settings for the dropdown
- *									'role' (str|arr)		Optional: Only display employees with the given role. Default empty (all).
- *									'name' (str)			Optional: The name of the input. Defaults to '_mdjm_employees'
- *									'id' (str)				Optional: ID for the field (uses name if not present)
- *									'class' (str)			Optional: Class of the input field
- *									'selected' (str)		Optional: Initially selected option
- *									'first_entry' (str)		Optional: First entry to be displayed (default none)
- *									'first_entry_val' (str)	Optional: First entry value. Only valid if first_entry is set
- *									'multiple' (bool)		Optional: Whether multiple options can be selected
- *									'group' (bool)			Optional: True to group employees by role
- *									'structure' (bool)		Optional: True outputs the <select> tags, false just the <options>
- *									'exclude' (int|arr)		Optional: Employee ID's to exclude
- *									'echo' (bool)           Optional: Echo the HTML output (default) or false to return as $output
- *
- * @return	str		$output			The HTML output for the dropdown list
- */
-function mdjm_employee_dropdown( $args='' )	{
-	global $wp_roles;
-	
-	// Define the default args for the dropdown
-	$defaults = array(
-		'role'                => '',
-		'name'                => '_mdjm_employees',
-		'class'               => '',
-		'selected'            => '',
-		'first_entry'         => '',
-		'first_entry_val'     => '',
-		'multiple'			  => false,
-		'group'               => false,
-		'structure'           => true,
-		'exclude'			  => false,
-		'echo'                => true
-	);
-	
-	// Merge default args with those passed to function
-	$args = wp_parse_args( $args, $defaults );
-	
-	$args['id'] = isset( $args['id'] ) ? $args['id'] : $args['name'];
-	
-	if( !empty( $args['exclude'] ) && !is_array( $args['exclude'] ) )
-		$args['exclude'] = array( $args['exclude'] );
-	
-	// We'll store the output here
-	$output = '';
-	
-	// Start the structure
-	if( !empty( $args['structure'] ) )	{
-		$output .= '<select name="' . $args['name'];
-		if( !empty( $args['multiple'] ) ) 
-			$output .= '[]';
-			
-		$output .= '"	id="' . $args['id'] . '"';
-		
-		if( !empty( $args['class'] ) )
-			$output .= ' class="' . $args['class'] . '"';
-			
-		if( !empty( $args['multiple'] ) )
-			$output .= ' multiple="multiple"';
-			
-		$output .= '>' . "\r\n";
-	}
-	
-	$employees = mdjm_get_employees( $args['role'] );
-	
-	if( empty( $employees ) )	{
-		$output .= '<option value="">' . __( 'No employees found', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-	}
-	else	{
-		if( !empty( $args['first_entry'] ) )	{
-			$output .= '<option value="' .  $args['first_entry_val'] . '">'; 
-			$output .= $args['first_entry'] . '</option>' . "\r\n";
-			
-		}
-		$results = new stdClass();
-		$results->role = array();
-		foreach( $employees as $employee )	{
-			if( $employee->roles[0] == 'administrator' )
-				$employee->roles[0] = 'dj';
-			
-			if( !empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )
-				continue;
-			
-			$results->role[$employee->roles[0]][] = $employee;
-		}
-		// Loop through the roles and employees to create the output
-		foreach( $results->role as $role => $userobj )	{
-			if( !empty( $args['group'] ) )
-				$output .= '<optgroup label="' . translate_user_role( $wp_roles->roles[$role]['name'] ) . '">' . "\r\n";
-			
-			foreach( $userobj as $user )	{
-				$output .= '<option value="' . $user->ID . '"';
-				
-				if( !empty( $args['selected'] ) && $user->ID == $args['selected'] )
-					$output .= ' selected="selected"';
-				
-				$output .= '>' . $user->display_name . '</option>' . "\r\n";	
-			}
-			
-			if( !empty( $args['group'] ) )
-				$output .= '</optgroup>' . "\r\n";
-		}
-	}
-	
-	// End the structure
-	if( $args['structure'] == true )
-		$output .= '</select>' . "\r\n";
-	
-	if( !empty( $args['echo'] ) )
-		echo $output;
-		
-	else
-		return $output;
-} // mdjm_employee_dropdown
 
 /**
  * Set the role for the given employees

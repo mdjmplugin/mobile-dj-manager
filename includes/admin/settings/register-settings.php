@@ -22,13 +22,13 @@ if ( ! defined( 'ABSPATH' ) )
  * @param	$key	str		The option key to retrieve
  * @return	mixed
  */
-function mdjm_get_option( $option ='', $key = '', $default = false )	{
+function mdjm_get_option( $key = '', $default = false )	{
 	global $mdjm_options;
 	
-	$value = ! empty( $mdjm_options[ $option ][ $key ] ) ? $mdjm_options[ $option ][ $key ] : $default;
-	$value = apply_filters( 'mdjm_get_option', $value, $option, $key, $default );
+	$value = ! empty( $mdjm_options[ $key ] ) ? $mdjm_options[ $key ] : $default;
+	$value = apply_filters( 'mdjm_get_option', $value, $key, $default );
 	
-	return apply_filters( 'mdjm_get_option' . $key, $value, $option, $key, $default );
+	return apply_filters( 'mdjm_get_option' . $key, $value, $key, $default );
 } // mdjm_get_option
 
 /**
@@ -182,8 +182,148 @@ function mdjm_get_registered_settings()	{
 										'mobile-dj-manager' ), '<code>', '</code>' ),
 						'type'        => 'checkbox'
 					)
+				),
+				'uninstall' => array(
+					'uninst_settings'   => array(
+						'id'          => 'uninst_settings',
+						'name'        => '<h3>' . __( 'Uninstallation Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header',
+					),
+					'uninst_remove_db'  => array(
+						'id'          => 'uninst_remove_db',
+						'name'        => __( 'Remove Database Tables', 'mobile-dj-manager' ),
+						'desc'        =>  __( 'Should the database tables and data be removed when uninstalling the plugin? ' . 
+										'Cannot be recovered unless you or your host have a backup solution in place and a recent backup.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'uninst_remove_mdjm_posts'  => array(
+						'id'          => 'uninst_remove_mdjm_posts',
+						'name'        => __( 'Remove Data?', 'mobile-dj-manager' ),
+						'desc'        =>  __( 'Do you want to remove all MDJM pages', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'uninst_remove_mdjm_pages'  => array(
+						'id'          => 'uninst_remove_mdjm_pages',
+						'name'        => __( 'Remove Pages?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Do you want to remove all MDJM pages?', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'uninst_remove_users'  => array(
+						'id'          => 'uninst_remove_users',
+						'name'        => __( 'Remove Employees and Clients?', 'mobile-dj-manager' ),
+						'desc'        => __( 'If selected, all users who are defined as clients or employees will be removed.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					)
+				)
+			)
+		),
+		/** Events Settings */
+		'events' => apply_filters( 'mdjm_settings_events',
+			array(
+				'main' => array(
+					'event_settings'  => array(
+						'id'         => 'event_settings',
+						'name'       => '<h3>' . __( 'Event Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'       => '',
+						'type'       => 'header'
+					),
+					'event_prefix'     => array(
+						'id'          => 'event_prefix',
+						'name'        => __( 'Event Prefix', 'mobile-dj-manager' ),
+						'desc'        => __( 'The prefix you enter here will be added to each unique event, contract and invoice ID', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'small'
+					),
+					'employer'         => array(
+						'id'          => 'employer',
+						'name'        =>  __( 'I am an Employer', 'mobile-dj-manager' ),
+						'desc'        => __( 'Check if you employ staff other than yourself.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'artist'           => array(
+						'id'          => 'artist',
+						'name'        => __( 'Refer to Performers as', 'mobile-dj-manager' ),
+						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'		 => 'DJ'
+					),
+					'enable_packages'  => array(
+						'id'          => 'enable_packages',
+						'name'        => __( 'Enable Packages', 'mobile-dj-manager' ),
+						'desc'        => __( 'Check this to enable Equipment Packages & Inventories.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'default_contract' => array(
+						'id'          => 'default_contract',
+						'name'        => __( 'Time Format', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options' => mdjm_list_contracts()
+					),
+					'warn_unattended'  => array(
+						'id'          => 'warn_unattended',
+						'name'        => __( 'New Enquiry Notification', 'mobile-dj-manager' ),
+						'desc'        => __( 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'enquiry_sources'  => array(
+						'id'          => 'enquiry_sources',
+						'name'        => __( 'Enquiry Sources', 'mobile-dj-manager' ),
+						'desc'        => __( 'Enter possible sources of enquiries. One per line', 'mobile-dj-manager' ),
+						'type'        => 'textarea'
+					),
+					'journaling'       => array(
+						'id'          => 'journaling',
+						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
+						'desc'        =>__( 'Log and track all client &amp; event actions (recommended).', 'mobile-dj-manager' ),
+						'type'        => 'checkbox',
+						'std'		 => '1'
+					)
+				),
+				'playlist' => array(
+					'playlist_settings' => array(
+						'id'          => 'playlist_settings',
+						'name'        => '<h3>' . __( 'Playlist Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'enable_playlists' => array(
+						'id'          => 'enable_playlists',
+						'name'        => __( 'Enable Event Playlists by Default?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Check to enable Client Playlist features by default. Can be overridden per event.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					)
 				)
 			)
 		)
 	);
 } // mdjm_get_registered_settings
+
+/**
+ * Return a list of contracts for use as dropdown options within a select list.
+ *
+ * @since	1.3
+ * @param
+ * @return	arr		Array of contracts, id => title
+ */
+function mdjm_list_contracts()	{
+	$contract_posts = get_posts(
+		array(
+			'post_type'        => 'contract',
+			'post_status'      => 'publish',
+			'posts_per_page'   => -1,
+			'orderby'          => 'post_title',
+			'order'            => 'ASC'
+		)
+	);
+	
+	$contracts = array();
+	
+	foreach( $contract_posts as $contract )	{
+		$contracts[ $contract->ID ] = get_the_title( $contract->ID );	
+	}
+	
+	return $contracts;
+} // mdjm_list_contracts

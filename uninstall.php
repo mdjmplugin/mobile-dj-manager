@@ -1,10 +1,10 @@
 <?php
-/*
-* uninstall.php
-* 04/10/2014
-* @since 0.8
-* Uninstallation procedures for when plugin is deleted
-*/
+/**
+ * Uninstallation procedures for MDJM.
+ * What happens here is determined by the plugin uninstallation settings.
+ * 
+ * @since 0.8
+ */
 
 /* Do not run unless the uninstall procedure was called by WordPress */
 	if( !defined( 'WP_UNINSTALL_PLUGIN' ) )	{
@@ -71,10 +71,7 @@
 		// Check if we are deleting
 		if( empty( $settings['uninst_remove_mdjm_posts'] ) && in_array( $type, $mdjm_custom ) )
 			continue;
-		
-		if( empty( $settings['uninst_remove_mdjm_templates'] ) && in_array( $type, $templates ) )
-			continue;
-		
+				
 		$mdjm_posts = $wpdb->get_results( "SELECT ID FROM " . $wpdb->posts . " WHERE `post_type` = '" . $type . "'" );
 		
 		// Delete the post and all data permanently
