@@ -678,28 +678,28 @@
 			 * The MDJM Automated Tasks page
 			 */			
 			public function mdjm_auto_tasks_page()	{				
-				include_once( '/includes/admin/pages/settings-scheduler.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-scheduler.php' );
 			} // mdjm_auto_tasks_page
 			/*
 			 * mdjm_clients_page
 			 * The MDJM Client list
 			 */
 			public function mdjm_clients_page()	{
-				include_once( '/includes/admin/pages/clients.php' );	
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );	
 			} // mdjm_clients_page
 			/*
 			 * mdjm_comms_page
 			 * The MDJM Communications page
 			 */			
 			public function mdjm_comms_page()	{
-				include_once( '/includes/admin/pages/comms.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/comms.php' );
 			} // mdjm_comms_page
 			/*
 			 * mdjm_dj_availability_page
 			 * The MDJM DJ Availability page
 			 */			
 			public function mdjm_dj_availability_page()	{				
-				include_once( '/includes/admin/pages/availability.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
 			} // mdjm_dj_availability_page
 			/*
 			 * mdjm_packages_page
@@ -718,7 +718,7 @@
 					);
 				}
 					
-				include_once( '/includes/admin/pages/settings-packages-main.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-packages-main.php' );
 			} // mdjm_packages_page
 						
 	 		/*
@@ -726,7 +726,7 @@
 			 * The MDJM Dashboard admin page
 			 */			
 			public function mdjm_dashboard_page()	{
-				include_once( '/includes/admin/pages/dash.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/dash.php' );
 			} // mdjm_dashboard_page
 			
 			/*
@@ -744,7 +744,7 @@
 			 *
 			 */
 			public function mdjm_playlists_page()	{
-				include_once( '/includes/admin/pages/playlists.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/playlists.php' );
 			} // mdjm_playlists_page
 			
 			/*
@@ -754,7 +754,7 @@
 			 *
 			 */
 			public function mdjm_about_page()	{
-				include_once( '/includes/admin/pages/mdjm-about.php' );
+				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-about.php' );
 			} // mdjm_about_page
 		} // class
 	}
