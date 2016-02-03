@@ -443,11 +443,11 @@
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Total Cost:' ) . '</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['cost'] . '</td>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( MDJM_DEPOSIT_LABEL ) . ':</th>' . "\r\n";
+									echo '<th style="width: 15%;">' . __( mdjm_get_deposit_label() ) . ':</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['deposit'] . ' (' . __( $eventinfo['deposit_status'] ) . ')</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								echo '<tr>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( MDJM_BALANCE_LABEL ) . ':</th>' . "\r\n";
+									echo '<th style="width: 15%;">' . __( mdjm_get_balance_label() ) . ':</th>' . "\r\n";
 									echo '<td colspan="3">' . $eventinfo['balance'] . ' (' . __( $eventinfo['balance_status'] ) . ')</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								

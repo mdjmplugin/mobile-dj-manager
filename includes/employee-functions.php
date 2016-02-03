@@ -223,7 +223,7 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
 				
 	// Define the default query	
 	if( empty( $roles ) )
-		$roles = MDJM()->roles->get_roles();
+		$roles = mdjm_get_roles( false );
 				
 	// This array will store our employees
 	$employees = array();

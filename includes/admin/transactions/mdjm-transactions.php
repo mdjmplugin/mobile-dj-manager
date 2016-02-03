@@ -138,14 +138,14 @@
 				
 			$trans_data['post_author'] = $user;
 			$trans_data['post_type'] = MDJM_TRANS_POSTS;
-			$trans_data['post_category'] = ( $type == MDJM_BALANCE_LABEL ? array( MDJM_BALANCE_LABEL ) : array( MDJM_DEPOSIT_LABEL ) );
+			$trans_data['post_category'] = ( $type == mdjm_get_balance_label() ? array( mdjm_get_balance_label() ) : array( mdjm_get_deposit_label() ) );
 			$trans_data['post_parent'] = $event_id;
 			
 			/* -- Post Meta -- */
 			$trans_meta['_mdjm_txn_status'] = 'Completed';
 			$trans_meta['_mdjm_txn_source'] = $mdjm_settings['payments']['default_type'];
-			$trans_meta['_mdjm_txn_total'] = ( $type == MDJM_BALANCE_LABEL ? str_replace( MDJM_CURRENCY, '', $eventinfo['balance'] ) 
-				: str_replace( MDJM_CURRENCY, '', $eventinfo['deposit'] ) );
+			$trans_meta['_mdjm_txn_total'] = ( $type == mdjm_get_balance_label() ? str_replace( mdjm_currency_symbol(), '', $eventinfo['balance'] ) 
+				: str_replace( mdjm_currency_symbol(), '', $eventinfo['deposit'] ) );
 					
 			$trans_meta['_mdjm_payer_firstname'] = !empty( $eventinfo['client']->first_name ) ? $eventinfo['client']->first_name : '';
 													
@@ -175,8 +175,8 @@
 				MDJM()->debug->log_it( 'Configured to email client with payment receipt confirmation' );
 												
 				$filters = array(
-							'{PAYMENT_FOR}'		=> ( $type == MDJM_BALANCE_LABEL ? MDJM_BALANCE_LABEL : MDJM_DEPOSIT_LABEL ),
-							'{PAYMENT_AMOUNT}'	 => ( $type == MDJM_BALANCE_LABEL ? $eventinfo['balance'] : $eventinfo['deposit'] ),
+							'{PAYMENT_FOR}'		=> ( $type == mdjm_get_balance_label() ? mdjm_get_balance_label() : mdjm_get_deposit_label() ),
+							'{PAYMENT_AMOUNT}'	 => ( $type == mdjm_get_balance_label() ? $eventinfo['balance'] : $eventinfo['deposit'] ),
 							'{PAYMENT_DATE}'	   => date( MDJM_SHORTDATE_FORMAT ),
 							);
 							

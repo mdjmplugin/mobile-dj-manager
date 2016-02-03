@@ -240,10 +240,7 @@
 				define( 'MDJM_EVENT_PREFIX', isset( $mdjm_settings['events']['event_prefix'] ) ? $mdjm_settings['events']['event_prefix'] : '' );
 				define( 'MDJM_PLAYLIST_ENABLE', !empty( $mdjm_settings['playlist']['enable_playlists'] ) ? true : false );
 				define( 'MDJM_PLAYLIST_CLOSE', isset( $mdjm_settings['playlist']['close'] ) ? $mdjm_settings['playlist']['close'] : '0' );
-				define( 'MDJM_CURRENCY', isset( $mdjm_settings['payments']['currency'] ) ? mdjm_set_currency( $mdjm_settings['payments']['currency'] ) : mdjm_set_currency( 'GBP' ) );
 				define( 'MDJM_PAYMENTS', ( !empty( $mdjm_settings['payments']['payment_gateway'] ) ? true : false ) );
-				define( 'MDJM_DEPOSIT_LABEL', isset( $mdjm_settings['payments']['deposit_label'] ) ? $mdjm_settings['payments']['deposit_label'] : 'Deposit' );
-				define( 'MDJM_BALANCE_LABEL', isset( $mdjm_settings['payments']['balance_label'] ) ? $mdjm_settings['payments']['balance_label'] : 'Balance' );
 				define( 'MDJM_COMPANY', isset( $mdjm_settings['main']['company_name'] ) ? $mdjm_settings['main']['company_name'] : '' );
 				define( 'MDJM_APP', isset( $mdjm_settings['clientzone']['app_name'] ) ? $mdjm_settings['clientzone']['app_name'] : '' );
 				define( 'MDJM_HOME', isset( $mdjm_settings['pages']['app_home_page'] ) ? $mdjm_settings['pages']['app_home_page'] : '' );

@@ -22,10 +22,10 @@
 		</h2>
 		<?php
 		if( $active_tab == 'packages' ) {
-			include( MDJM_PLUGIN_DIR . '/admin/pages/settings-packages.php' );
+			include( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-packages.php' );
 		}
 		elseif( $active_tab == 'equipment' ) {
-			include( MDJM_PLUGIN_DIR . '/admin/pages/settings-equipment.php' );
+			include( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-equipment.php' );
 		}
 		else	{
 			wp_die( 'You do not have the necessary permissions to view this page!' );

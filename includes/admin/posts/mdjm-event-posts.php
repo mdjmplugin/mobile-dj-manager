@@ -801,10 +801,10 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	 */
 	if( $deposit_payment == true || $balance_payment == true )	{
 		if( $balance_payment == true )
-			$type = MDJM_BALANCE_LABEL;
+			$type = mdjm_get_balance_label();
 			
 		else
-			$type = MDJM_DEPOSIT_LABEL;
+			$type = mdjm_get_deposit_label();
 		
 		// Insert the event transaction
 		MDJM()->txns->manual_event_payment( $type, $ID );

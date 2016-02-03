@@ -213,22 +213,22 @@
 		
 		// Currency before price
 		if( $mdjm_settings['payments']['currency_format'] == 'before' )
-			return ( !empty( $symbol ) ? MDJM_CURRENCY : '' ) . number_format( $amount, 2, $dec, $tho );
+			return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
 		
 		// Currency before price with space
 		elseif( $mdjm_settings['payments']['currency_format'] == 'before with space' )
-			return ( !empty( $symbol ) ? MDJM_CURRENCY . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
+			return ( !empty( $symbol ) ? mdjm_currency_symbol() . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
 			
 		// Currency after price
 		elseif( $mdjm_settings['payments']['currency_format'] == 'after' )
-			return number_format( $amount, 2, $dec, $tho ) . ( !empty( $symbol ) ? MDJM_CURRENCY : '' );
+			return number_format( $amount, 2, $dec, $tho ) . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
 			
 		// Currency after price with space
 		elseif( $mdjm_settings['payments']['currency_format'] == 'after with space' )
-			return number_format( $amount, 2, $dec, $tho ) . ' ' . ( !empty( $symbol ) ? MDJM_CURRENCY : '' );
+			return number_format( $amount, 2, $dec, $tho ) . ' ' . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
 		
 		// Default	
-		return ( !empty( $symbol ) ? MDJM_CURRENCY : '' ) . number_format( $amount, 2, $dec, $tho );
+		return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
 		
 	} // display_price
 

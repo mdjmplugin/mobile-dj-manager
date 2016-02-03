@@ -280,7 +280,7 @@
         </tr>
         <tr>
         <th><label for="addon_cost">Cost as Add-on</label></th>
-        <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description"><?php _e( 'Cost of individual add-on', 'mobile-dj-manager' ); ?>. <?php echo sprintf( __( 'No %s symbol needed', 'mobile-dj-manager' ), MDJM_CURRENCY ); ?></span></td>
+        <td><input type="text" name="addon_cost" id="addon_cost" class="small-text" placeholder="10.00" /> <span class="description"><?php _e( 'Cost of individual add-on', 'mobile-dj-manager' ); ?>. <?php echo sprintf( __( 'No %s symbol needed', 'mobile-dj-manager' ), mdjm_currency_symbol() ); ?></span></td>
         </tr>
         <?php
 		if ( MDJM_MULTI == true )	{

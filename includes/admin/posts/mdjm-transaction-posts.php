@@ -177,8 +177,8 @@ function mdjm_transaction_type_filter_dropdown()	{
 function mdjm_transaction_term_row_actions( $actions, $tag )	{
 	$protected_terms = array(
 						__( 'Merchant Fees', 'mobile-dj-manager' ),
-						MDJM_DEPOSIT_LABEL,
-						MDJM_BALANCE_LABEL,
+						mdjm_get_deposit_label(),
+						mdjm_get_balance_label(),
 						$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
 						
 	if ( in_array( $tag->name, $protected_terms ) ) 
@@ -203,8 +203,8 @@ function mdjm_transaction_term_checkboxes()	{
 	// Create an array with all terms that we should protect from deletion	
 	$protected_terms = array(
 						__( 'Merchant Fees', 'mobile-dj-manager' ),
-						MDJM_DEPOSIT_LABEL,
-						MDJM_BALANCE_LABEL,
+						mdjm_get_deposit_label(),
+						mdjm_get_balance_label(),
 						$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
 	?>
 	<script type="text/javascript">

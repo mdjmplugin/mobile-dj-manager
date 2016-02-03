@@ -97,7 +97,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 * @return	str		$output			HTML code for the <options>
 		 */
 		public function roles_dropdown( $args='' )	{
-			$mdjm_roles = MDJM()->roles->get_roles();
+			$mdjm_roles = $this->get_roles();
 			
 			// Filter the roles
 			$mdjm_roles = apply_filters( 'mdjm_user_roles', $mdjm_roles );

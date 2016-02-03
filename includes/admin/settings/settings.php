@@ -1,5 +1,41 @@
 <?php
+/**
+ * Get an option
+ *
+ * Looks to see if the specified setting exists, returns default if not
+ *
+ * @since	1.3
+ * @param	str		$key		The option key to retrieve.
+ * @param	str		$default	What should be returned if the option is empty.
+ * @return	mixed
+ */
+if( ! function_exists( 'mdjm_get_option' ) )	{
+	function mdjm_get_option( $key = '', $default = false )	{
+		global $mdjm_options;
+		
+		$value = ! empty( $mdjm_options[ $key ] ) ? $mdjm_options[ $key ] : $default;
+		$value = apply_filters( 'mdjm_get_option', $value, $key, $default );
+		
+		return apply_filters( 'mdjm_get_option' . $key, $value, $key, $default );
+	} // mdjm_get_option
+}
 
+/**
+ * Retrieve a list of all transaction sources
+ *
+ * @since	1.3
+ * @param	bool
+ * @return	arr		$txn_sources	An array of transaction sources
+ */
+if( ! function_exists( 'mdjm_list_txn_sources' ) )	{
+	function mdjm_list_txn_sources() {
+		foreach( get_transaction_source() as $source )	{
+			$txn_sources[ $source ] = $source;	
+		}
+		
+		return $txn_sources;
+	} // mdjm_list_txn_sources
+}
 	/*
 	 * Full list of shortcodes available
 	 * within the application
@@ -22,11 +58,6 @@
 					'{VENUE_EMAIL}', '{VENUE_FULL_ADDRESS}', '{VENUE_NOTES}', '{VENUE_TELEPHONE}',
 					);
 					
-	$payment_sources = get_transaction_source();
-	foreach( $payment_sources as $source )	{
-		$sources[$source] = $source;	
-	}
-
 	/*
 	 * Possible values for setting sections
 	 *
@@ -145,7 +176,7 @@
 	 * 
 	 */
 	// Retrieve the MDJM roles array
-	$mdjm_roles = MDJM()->roles->get_roles();
+	$mdjm_roles = mdjm_get_roles();
 	
 	// We don't need to show the admin role as it is considered as a 'DJ'
 	if( array_key_exists( 'administrator', $mdjm_roles ) )
@@ -1643,15 +1674,7 @@
 								'size' => 8,
 								'custom_args' => array (
 												'list_type' => 'post_status',
-												'list_values' => array(
-													'mdjm-approved' 	=> 'Approved',
-													'mdjm-contract'	=> 'Awaiting Contract',
-													'mdjm-unattended'  => 'Unattended Enquiry',
-													'mdjm-enquiry'	 => 'Enquiry',
-													'mdjm-completed'   => 'Completed',
-													'mdjm-cancelled'   => 'Cancelled',
-													'mdjm-rejected'	=> 'Rejected Enquiry',
-													'mdjm-failed'	  => 'Failed Enquiry' ),
+												'list_values' => mdjm_all_event_status(),
 												'selected' => ( !empty( $mdjm_settings['availability']['availability_status'] ) ? 
 													$mdjm_settings['availability']['availability_status'] : '' ) ),
 								'section' => 'clientzone_availability',
@@ -1806,19 +1829,7 @@
 														'name' =>  'mdjm_payment_settings' . '[currency]',
 														'sort_order' => '',
 														'list_type' => 'defined',
-														'list_values' => array( 'EUR' => '&euro; (EUR)',
-																				'GBP' => '&pound; (GBP)',
-																				'USD' => '$ (USD)',
-																				'AUS' => '$ (AUS)',
-																				'BRL' => '&#x52;&#x24; (BRL)',
-																				'CAD' => '$ (CAD)',
-																				'CHF' => 'CHF',
-																				'CZK' => '&#x4b;&#x10d; (CZK)',
-																				'DKK' => 'kr (DKK)',
-																				'NZD' => '$ (NZD)',
-																				'SGD' => '$ (SGD)',
-																				'TRL' => '&#x20a4; (TRL)',
-																				'ZAR' => 'R (ZAR)' ),
+														'list_values' => mdjm_get_currencies(),
 														
 																		
 														),
@@ -1883,13 +1894,13 @@
 									),
 							
 							'deposit_type' => array(
-									'label' => MDJM_DEPOSIT_LABEL . '\'s are:',
+									'label' => mdjm_get_deposit_label() . '\'s are:',
 									'key' => 'mdjm_payment_settings',
 									'type' => 'custom_dropdown',
 									'class' => 'regular-text',
 									'value' => ( !empty( $mdjm_settings['payments']['deposit_type'] ) ? $mdjm_settings['payments']['deposit_type'] : '0' ),
 									'text' => '',
-									'desc' => __( 'If you require ' . MDJM_DEPOSIT_LABEL . ' payments for your events, how are they calculated?', 'mobile-dj-manager' ),
+									'desc' => __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your events, how are they calculated?', 'mobile-dj-manager' ),
 									'custom_args' => array (
 														'name' =>  'mdjm_payment_settings' . '[deposit_type]',
 														'sort_order' => '',
@@ -1904,13 +1915,13 @@
 									),
 									
 							'deposit_amount' => array(
-									'label' => MDJM_DEPOSIT_LABEL . ' Amount:',
+									'label' => mdjm_get_deposit_label() . ' Amount:',
 									'key' => 'mdjm_payment_settings',
 									'type' => 'text',
 									'class' => 'small-text',
 									'value' => ( !empty( $mdjm_settings['payments']['deposit_amount'] ) ? $mdjm_settings['payments']['deposit_amount'] : '' ),
 									'text' => 'Do not enter a currency or percentage symbol',
-									'desc' => 'If your ' . MDJM_DEPOSIT_LABEL . '\'s are a percentage enter the value (i.e 20). For fixed prices, ' . 
+									'desc' => 'If your ' . mdjm_get_deposit_label() . '\'s are a percentage enter the value (i.e 20). For fixed prices, ' . 
 										'enter the amount in the format 0.00',
 									'section' => 'payment',
 									'page' => 'payments',
@@ -1921,7 +1932,7 @@
 									'key' => 'mdjm_payment_settings',
 									'type' => 'text',
 									'class' => 'regular-text',
-									'value' => MDJM_DEPOSIT_LABEL,
+									'value' => mdjm_get_deposit_label(),
 									'text' => 'Default is <code>Deposit</code>',
 									'desc' => 'If you don\'t use the word <code>Deposit</code>, you can change it here. Many prefer the term <code>Booking Fee</code>. ' . 
 										'Whatever you enter will be visible to all users',
@@ -1934,7 +1945,7 @@
 									'key' => 'mdjm_payment_settings',
 									'type' => 'text',
 									'class' => 'regular-text',
-									'value' => MDJM_BALANCE_LABEL,
+									'value' => mdjm_get_balance_label(),
 									'text' => 'Default is <code>Balance</code>',
 									'desc' => 'If you don\'t use the word <code>Balance</code>, you can change it here. Whatever you enter will be visible to all users',
 									'section' => 'payment',
@@ -1947,12 +1958,12 @@
 									'type' => 'custom_dropdown',
 									'value' => $mdjm_settings['payments']['default_type'],
 									'text' => '',
-									'desc' => 'What is the default method of payment? i.e. if you select an event ' . MDJM_BALANCE_LABEL . ' as paid how should we log it?',
+									'desc' => 'What is the default method of payment? i.e. if you select an event ' . mdjm_get_balance_label() . ' as paid how should we log it?',
 									'custom_args' => array (
 														'name' =>  'mdjm_payment_settings' . '[default_type]',
 														'sort_order' => '',
 														'list_type' => 'defined',
-														'list_values' => $sources,
+														'list_values' => mdjm_list_txn_sources(),
 														),
 									'section' => 'payment',
 									'page' => 'payments',

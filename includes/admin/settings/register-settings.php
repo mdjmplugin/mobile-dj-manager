@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains all metabox functions for the mdjm-event post type
+ * MDJM Settings API
  *
  * @package		MDJM
  * @subpackage	Admin/Settings
@@ -482,6 +482,12 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
+					'payment_conf_templates' => array(
+						'id'          => 'payment_conf_templates',
+						'name'        => '<h3>' . __( 'Payment Confirmation Template Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
 					'payment_cfm_template' => array(
 						'id'          => 'payment_cfm_template',
 						'name'        => __( 'Payment Received Template', 'mobile-dj-manager' ),
@@ -495,6 +501,379 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Select an email template to be sent to clients when you manually mark an event payment as received', 'mobile-dj-manager' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
+					)
+				)
+			)
+		),
+		/** Client Zone Settings */
+		'client_zone' => apply_filters( 'mdjm_settings_client_zone',
+			array(
+				'main' => array(
+					'client_zone_settings' => array(
+						'id'          => 'client_zone_settings',
+						'name'        => '<h3>' . __( 'Client Zone Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'app_name'         => array(
+						'id'          => 'app_name',
+						'name'        => __( 'Application Name', 'mobile-dj-manager' ),
+						'desc'        => __( 'Choose your own name for the application.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Client Zone', 'mobile-dj-manager' )
+					),
+					'client_settings'  => array(
+						'id'          => 'client_settings',
+						'name'        => '<h3>' . __( 'Client Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'pass_length'      => array(
+						'id'          => 'pass_length',
+						'name'        => __( 'Default Password Length', 'mobile-dj-manager' ),
+						'desc'        => __( 'If opting to generate or reset a user password during event creation, how many characters should the password be?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'5'  => '5',
+							'6'  => '6',
+							'7'  => '7',
+							'8'  => '8',
+							'9'  => '9',
+							'10' => '10',
+							'11' => '11',
+							'12' => '12'
+						)
+					),
+					'notify_profile'   => array(
+						'id'          => 'notify_profile',
+						'name'        => __( 'Incomplete Profile Warning?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Display notice to Clients when they login if their Profile is incomplete? (i.e. Required field is empty)', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'client_zone_event_settings'  => array(
+						'id'          => 'client_zone_event_settings',
+						'name'        => '<h3>' . __( 'Event Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'package_prices'   => array(
+						'id'          => 'package_prices',
+						'name'        => __( 'Display Package Price?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select to display event package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+						'type'        => 'checkbox'
+					)
+				),
+				'pages' => array(
+					'page_settings'    => array(
+						'id'          => 'page_settings',
+						'name'        => '<h3>' . __( 'Page Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'app_home_page'    => array(
+						'id'          => 'app_home_page',
+						'name'        => mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select the home page for the %s application  - the one where you added the shortcode %s[MDJM page='Home']%s", 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											'<code>',
+											'</code>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'quotes_page'      => array(
+						'id'          => 'quotes_page',
+						'name'        => __( 'Online Quotes Page', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select the page to use for online event quotes', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'contact_page'     => array(
+						'id'          => 'contact_page',
+						'name'        => __( 'Contact Page', 'mobile-dj-manager' ),
+						'desc'        => __( "Select your website's contact page so we can correctly direct visitors.", 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'contracts_page'   => array(
+						'id'          => 'contracts_page',
+						'name'        => __( 'Contracts Page', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select your website's contracts page - the one where you added the shortcode %s[MDJM page='Contract']%s", 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											'<code>',
+											'</code>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'payments_page'    => array(
+						'id'          => 'payments_page',
+						'name'        => __( 'Payments Page', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select your website's payments page - the one where you added the shortcode %s[MDJM page='Payments']%s", 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											'<code>',
+											'</code>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'playlist_page'    => array(
+						'id'          => 'playlist_page',
+						'name'        => __( 'Playlist Page', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select your website's playlist page - the one where you added the shortcode %s[MDJM page='Playlist']%s", 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											'<code>',
+											'</code>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					),
+					'profile_page'     => array(
+						'id'          => 'profile_page',
+						'name'        => __( 'Profile Page', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select your website's profile page - the one where you added the shortcode %s[MDJM page='Profile']%s", 'mobile-dj-manager' ),
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											'<code>',
+											'</code>' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_pages()
+					)
+				),
+				'availability' => array(
+					'availability_settings' => array(
+						'id'          => 'availability_settings',
+						'name'        => '<h3>' . __( 'Availability Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'availability_status' => array(
+						'id'          => 'availability_status',
+						'name'        => __( 'Unavailable Statuses', 'mobile-dj-manager' ),
+						'desc'        => __( "CTRL (cmd on MAC) + Click to select event status' that you want availability checker to report as unavailable", 'mobile-dj-manager' ),
+						'type'        => 'multiple_select',
+						'options'     => mdjm_all_event_status()
+					),
+					'availability_roles' => array(
+						'id'          => 'availability_roles',
+						'name'        => __( 'Employee Roles', 'mobile-dj-manager' ),
+						'desc'        => __( 'CTRL (cmd on MAC) + Click to select employee roles that need to be available', 'mobile-dj-manager' ),
+						'type'        => 'multiple_select',
+						'options'     => mdjm_get_roles()
+					),
+					'avail_ajax'       => array(
+						'id'          => 'avail_ajax',
+						'name'        => __( 'Use Ajax?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Perform checks without page refresh', 'mobile-dj-manager' ),
+						'type'        => 'checkbox',
+						'std'         => '1'
+					),
+					'availability_check_pass_page' => array(
+						'id'          => 'availability_check_pass_page',
+						'name'        => __( 'Available Redirect Page', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select a page to which users should be directed when an availability check is successful', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array_merge(
+											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
+											mdjm_list_pages()
+										)
+					),
+					'availability_check_pass_text' => array(
+						'id'          => 'availability_check_pass_text',
+						'name'        => __( 'Available Text', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Text to be displayed when you are available - Only displayed if %sNO REDIRECT - USE TEXT%s is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes %s{event_date}%s &amp; %s{event_date_short}%s','mobile-dj-manager' ),
+											'<code>',
+											'</code>',
+											'<code>',
+											'</code>',
+											'<code>',
+											'</code>' ),
+						'type'        => 'rich_editor'
+					),
+					'availability_check_fail_page' => array(
+						'id'          => 'availability_check_fail_page',
+						'name'        => __( 'Unavailable Redirect Page', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select a page to which users should be directed when an availability check is not successful', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array_merge(
+											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
+											mdjm_list_pages()
+										)
+					),
+					'availability_check_fail_text' => array(
+						'id'          => 'availability_check_fail_text',
+						'name'        => __( 'Unavailable Text', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Text to be displayed when you are not available - Only displayed if %sNO REDIRECT - USE TEXT%s is selected above. Valid shortcodes %s{event_date}%s &amp; %s{event_date_short}%s','mobile-dj-manager' ),
+											'<code>',
+											'</code>',
+											'<code>',
+											'</code>',
+											'<code>',
+											'</code>' ),
+						'type'        => 'rich_editor'
+					)
+				)
+			)
+		),
+		/** Payment Settings */
+		'payments' => apply_filters( 'mdjm_settings_payments',
+			array(
+				'main' => array(
+					'payment_settings' => array(
+						'id'          => 'payment_settings',
+						'name'        => '<h3>' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'payment_gateway'  => array(
+						'id'          => 'payment_gateway',
+						'name'        => __( 'Payment Gateway', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => apply_filters( 'mdjm_payment_gateways',
+							array( 
+								'0'   => __( 'Disable', 'mobile-dj-manager' )
+							)
+						)
+					),
+					'currency'         => array(
+						'id'          => 'currency',
+						'name'        => __( 'Currency', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => mdjm_get_currencies()
+					),
+		
+					'currency_format'  => array(
+						'id'          => 'currency_format',
+						'name'        => __( 'Currency Position', 'mobile-dj-manager' ),
+						'desc'        => __( 'Where to display the currency symbol.', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'before'            => __( 'before price', 'mobile-dj-manager' ),
+							'after'             => __( 'after price', 'mobile-dj-manager' ),
+							'before with space' => __( 'before price with space', 'mobile-dj-manager' ),
+							'after with space'  => __( 'after price with space', 'mobile-dj-manager' )
+						)
+					),
+					'decimal'          => array(
+						'id'          => 'decimal',
+						'name'        => __( 'Decimal Separator', 'mobile-dj-manager' ),
+						'desc'        => __( 'The symbol to separate decimal points. (Usually . or ,)', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => '.',
+					),
+					'thousands_seperator' => array(
+						'id'          => 'thousands_seperator',
+						'name'        => __( 'Thousands Separator', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => ',',
+					),
+					'deposit_type'     => array(
+						'id'          => 'deposit_type',
+						'name'        => mdjm_get_deposit_label() . "'s " . __( 'are', 'mobile-dj-manager' ),
+						'desc'        => __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your events, how should they be calculated?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'0'          => 'Not required',
+							'percentage' => __( '% of event value', 'mobile-dj-manager' ),
+							'fixed'      => __( 'Fixed price', 'mobile-dj-manager' )
+						)
+					),
+					'deposit_amount'   => array(
+						'id'          => 'deposit_amount',
+						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Amount', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "If your %s\'s are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format 0.00", 'mobile-dj-manager' ),
+											mdjm_get_deposit_label() ),
+						'type'        => 'text',
+						'size'        => 'small'
+					),
+					'deposit_label'    => array(
+						'id'          => 'deposit_label',
+						'name'        => __( 'Label for Deposit', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "If you don't use the word %sDeposit%s, you can change it here. Many prefer the term %sBooking Fee%s. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
+											'<code>',
+											'</code>',
+											'<code>',
+											'</code>'
+										 ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Deposit', 'mobile-dj-manager' )
+					),
+					'balance_label'    => array(
+						'id'          => 'balance_label',
+						'name'        => __( 'Label for Balance', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "If you don't use the word %sBalance%s, you can change it here. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
+											'<code>',
+											'</code>'
+										 ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Balance', 'mobile-dj-manager' )
+					),
+					'default_type'     => array(
+						'id'          => 'default_type',
+						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an event %s as paid how should we log it?', 'mobile-dj-manager' ),
+											mdjm_get_balance_label()
+										),
+						'type'        => 'select',
+						'options'     => mdjm_list_txn_sources()
+					),
+					'form_layout'      => array(
+						'id'          => 'form_layout',
+						'name'        => __( 'Form Layout', 'mobile-dj-manager' ),
+						'desc'        => __( 'How do you want the payment form displayed on your page?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array( 
+							'horizontal' => 'Horizontal',
+							'vertical'   => 'Vertical',
+						),
+						'std'         => 'horizontal'
+					),
+					'payment_label'    => array(
+						'id'          => 'payment_label',
+						'name'        => __( 'Payment Label', 'mobile-dj-manager' ),
+						'desc'        => __( 'Display name of the label shown to clients to select the payment they wish to make.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Balance', 'mobile-dj-manager' )
+					),
+					'other_amount_label' => array(
+						'id'          => 'other_amount_label',
+						'name'        => __( 'Label for Other Amount', 'mobile-dj-manager' ),
+						'desc'        => __( 'Enter your desired label for the other amount radio button.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Other Amount', 'mobile-dj-manager' )
+					),
+					'other_amount_default' => array(
+						'id'          => 'other_amount_default',
+						'name'        => __( 'Default', 'mobile-dj-manager' ) . ' ' . mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) ),
+						'desc'        => sprintf( __( 'Enter the default amount to be used in the %s field.', 'mobile-dj-manager' ),
+											mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) )
+										),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => '50.00'
+					),
+					'enable_tax'       => array(
+						'id'          => 'enable_tax',
+						'name'        => __( 'Enable Taxes?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Enable if you need to add taxes to online payments', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'tax_type'         => array(
+						'id'          => 'tax_type',
+						'name'        => __( 'Apply Tax As', 'mobile-dj-manager' ),
+						'desc'        => __( 'How do you apply tax?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array( 
+							'percentage' => __( '% of total', 'mobile-dj-manager' ),
+							'fixed'      => __( 'Fixed rate', 'mobile-dj-manager' )
+						),
+						'std'         => 'percentage'
 					),
 				)
 			)
@@ -523,8 +902,53 @@ function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ) )
 	$templates = array();
 	
 	foreach( $template_posts as $template )	{
-		$templates[ $template->ID ] = get_the_title( $template->ID );	
+		$templates[ $template->ID ] = $template->post_title;	
 	}
 	
 	return $templates;
 } // mdjm_list_templates
+
+/**
+ * Retrieve a list of all published pages
+ *
+ * On large sites this can be expensive, so only load if on the settings page or $force is set to true
+ *
+ * @since	1.3
+ * @param	bool	$force			Force the pages to be loaded even if not on settings
+ * @return	arr		$pages_options	An array of the pages
+ */
+function mdjm_list_pages( $force = false ) {
+
+	$pages_options = array( '' => '' ); // Blank option
+
+	if( ( ! isset( $_GET['page'] ) || 'mdjm-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages_options;
+	}
+
+	$pages = get_pages();
+	
+	if ( $pages ) {
+		foreach ( $pages as $page ) {
+			$pages_options[ $page->ID ] = $page->post_title;
+		}
+	}
+
+	return $pages_options;
+} // mdjm_list_pages
+
+/**
+ * Retrieve a list of all transaction sources
+ *
+ * @since	1.3
+ * @param	bool
+ * @return	arr		$txn_sources	An array of transaction sources
+ */
+function mdjm_list_txn_sources() {
+	$sources = get_transaction_source();
+	
+	foreach( $sources as $source )	{
+		$txn_sources[ $source ] = $source;	
+	}
+	
+	return $txn_sources;
+} // mdjm_list_txn_sources

@@ -63,7 +63,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 			self::page_header();
 			
 			// Retrieve all MDJM roles
-			self::$mdjm_roles = MDJM()->roles->get_roles();
+			self::$mdjm_roles = mdjm_get_roles( false );
 			self::$total_roles = count( self::$mdjm_roles );
 			
 			// Determine the page to display

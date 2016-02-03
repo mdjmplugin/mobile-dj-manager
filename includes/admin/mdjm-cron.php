@@ -674,7 +674,7 @@
 						MDJM()->events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $event->ID,
-									'comment_content' => MDJM_DEPOSIT_LABEL . ' request Scheduled Task executed<br /><br />' . time(),
+									'comment_content' => mdjm_get_deposit_label() . ' request Scheduled Task executed<br /><br />' . time(),
 									'comment_type' 	=> 'mdjm-journal',
 									),
 									array(
@@ -801,7 +801,7 @@
 					$mdjm->send_email( array(
 											'content'	=> $this->notification_content( $notify_email_args ),
 											'to'		 => $mdjm_settings['email']['system_email'],
-											'subject'	=> MDJM_DEPOSIT_LABEL . ' Request Scheduled Task Completed - ' . MDJM_APP,
+											'subject'	=> mdjm_get_deposit_label() . ' Request Scheduled Task Completed - ' . MDJM_APP,
 											'journal'	=> false,
 											'html'	   => false,
 											'cc_admin'   => false,
@@ -826,7 +826,7 @@
 							$mdjm->send_email( array(
 													'content'	=> $this->notification_content( $notify_email_args ),
 													'to'		 => $dj->ID,
-													'subject'	=> MDJM_DEPOSIT_LABEL . ' Request Scheduled Task Completed - ' . MDJM_APP,
+													'subject'	=> mdjm_get_deposit_label() . ' Request Scheduled Task Completed - ' . MDJM_APP,
 													'journal'	=> false,
 													'html'	   => false,
 													'cc_admin'   => false,
@@ -938,7 +938,7 @@
 						MDJM()->events->add_journal( array(
 									'user' 			=> 1,
 									'event'		   => $event->ID,
-									'comment_content' => MDJM_BALANCE_LABEL . ' Reminder Scheduled Task executed<br /><br />' . time(),
+									'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time(),
 									'comment_type' 	=> 'mdjm-journal',
 									),
 									array(
@@ -988,7 +988,7 @@
 									'html'	   => true,
 									'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
 									'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-									'source'	 => __( 'Request ' . MDJM_BALANCE_LABEL . ' Scheduled Task' ),
+									'source'	 => __( 'Request ' . mdjm_get_balance_label() . ' Scheduled Task' ),
 								) );
 						if( $request )	{
 							if( MDJM_DEBUG == true )
@@ -1227,7 +1227,7 @@
 							'Date: ' . $eventinfo['date'] . "\r\n" . 
 							'Client: ' . $eventinfo['client'] . "\r\n" . 
 							'DJ: ' . $eventinfo['djinfo']->display_name . "\r\n" . 
-							MDJM_DEPOSIT_LABEL . ': ' . display_price( $eventinfo['deposit'] ) . "\r\n" . 
+							mdjm_get_deposit_label() . ': ' . display_price( $eventinfo['deposit'] ) . "\r\n" . 
 							'Link: ' . get_edit_post_link( $eventinfo['id'], '' ) . "\r\n" .
 							'----------------------------------------' . 
 							'----------------------------------------' . "\r\n";
@@ -1244,7 +1244,7 @@
 							'Date: ' . $eventinfo['date'] . "\r\n" . 
 							'Client: ' . $eventinfo['client'] . "\r\n" . 
 							'DJ: ' . $eventinfo['djinfo']->display_name . "\r\n" . 
-							MDJM_BALANCE_LABEL . ' Due: ' . display_price( $eventinfo['cost'] - $eventinfo['deposit'] ) . "\r\n" . 
+							mdjm_get_balance_label() . ' Due: ' . display_price( $eventinfo['cost'] - $eventinfo['deposit'] ) . "\r\n" . 
 							'Link: ' . get_edit_post_link( $eventinfo['id'], '' ) . "\r\n" .
 							'----------------------------------------' . 
 							'----------------------------------------' . "\r\n";

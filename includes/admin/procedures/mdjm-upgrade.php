@@ -759,8 +759,8 @@
 					MDJM()->debug->log_it( 'SUCCESS: ' .  $trans_type . ' term created' );
 				}
 			}
-			wp_insert_term( MDJM_DEPOSIT_LABEL, 'transaction-types' );
-			wp_insert_term( MDJM_BALANCE_LABEL, 'transaction-types' );
+			wp_insert_term( mdjm_get_deposit_label(), 'transaction-types' );
+			wp_insert_term( mdjm_get_balance_label(), 'transaction-types' );
 			
 			delete_option( 'mdjm_migrate_transaction_types' );
 		} // migrate_transaction_types
