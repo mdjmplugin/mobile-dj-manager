@@ -82,6 +82,76 @@ function mdjm_get_settings() {
 } // mdjm_get_settings
 
 /**
+ * Add all settings sections and fields
+ *
+ * @since	1.3
+ * @return	void
+*/
+function mdjm_register_settings() {
+
+	if ( false == get_option( 'mdjm_settings' ) ) {
+		add_option( 'mdjm_settings' );
+	}
+
+	foreach ( mdjm_get_registered_settings() as $tab => $sections ) {
+		foreach ( $sections as $section => $settings) {
+			// Check for backwards compatibility
+			$section_tabs = mdjm_get_settings_tab_sections( $tab );
+			
+			if ( ! is_array( $section_tabs ) || ! array_key_exists( $section, $section_tabs ) ) {
+				$section = 'main';
+				$settings = $sections;
+			}
+			
+			add_settings_section(
+				'mdjm_settings_' . $tab . '_' . $section,
+				__return_null(),
+				'__return_false',
+				'mdjm_settings_' . $tab . '_' . $section
+			);
+
+			foreach ( $settings as $option ) {
+				// For backwards compatibility
+				if ( empty( $option['id'] ) ) {
+					continue;
+				}
+
+				$name = isset( $option['name'] ) ? $option['name'] : '';
+
+				add_settings_field(
+					'mdjm_settings[' . $option['id'] . ']',
+					$name,
+					function_exists( 'mdjm_' . $option['type'] . '_callback' ) ? 'mdjm_' . $option['type'] . '_callback' : 'mdjm_missing_callback',
+					'mdjm_settings_' . $tab . '_' . $section,
+					'mdjm_settings_' . $tab . '_' . $section,
+					array(
+						'section'     => $section,
+						'id'          => isset( $option['id'] )          ? $option['id']          : null,
+						'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
+						'name'        => isset( $option['name'] )        ? $option['name']        : null,
+						'size'        => isset( $option['size'] )        ? $option['size']        : null,
+						'options'     => isset( $option['options'] )     ? $option['options']     : '',
+						'std'         => isset( $option['std'] )         ? $option['std']         : '',
+						'min'         => isset( $option['min'] )         ? $option['min']         : null,
+						'max'         => isset( $option['max'] )         ? $option['max']         : null,
+						'step'        => isset( $option['step'] )        ? $option['step']        : null,
+						'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
+						'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
+						'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
+						'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
+						'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
+					)
+				);
+			}
+		}
+	}
+
+	// Creates our settings in the options table
+	register_setting( 'mdjm_settings', 'mdjm_settings', 'mdjm_settings_sanitize' );
+} // mdjm_register_settings
+add_action( 'admin_init', 'mdjm_register_settings' );
+
+/**
  * Retrieve the array of plugin settings
  *
  * @since	1.3
@@ -89,7 +159,7 @@ function mdjm_get_settings() {
 */
 function mdjm_get_registered_settings()	{
 	/**
-	 * 'Whitelisted' EDD settings, filters are provided for each settings
+	 * 'Whitelisted' MDJM settings, filters are provided for each settings
 	 * section to allow extensions and other plugins to add their own settings
 	 */
 	$mdjm_settings = array(
@@ -875,11 +945,208 @@ function mdjm_get_registered_settings()	{
 						),
 						'std'         => 'percentage'
 					),
+					'tax_rate'         => array(
+						'id'          => 'tax_rate',
+						'name'        => __( 'Tax Rate', 'mobile-dj-manager' ),
+						'desc'        => __( 'If you apply tax based on a fixed percentage (i.e. VAT) enter the value (i.e 20). For fixed rates, enter the amount in the format 0.00. Taxes will only be applied during checkout.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => '20'
+					),
+					'payment_sources'  => array(
+						'id'          => 'payment_sources',
+						'name'        => __( 'Payment Types', 'mobile-dj-manager' ),
+						'desc'        => __( 'Enter methods of payment.', 'mobile-dj-manager' ),
+						'type'        => 'textarea',
+						'std'         => "BACS\r\nCash\r\nCheque\r\nPayFast\r\nPayPal\r\nOthers\r\n"
+					),
 				)
 			)
 		)
 	);
+	
+	return apply_filters( 'mdjm_registered_settings', $mdjm_settings );
 } // mdjm_get_registered_settings
+
+/**
+ * Settings Sanitization
+ *
+ * Adds a settings error (for the updated message)
+ * At some point this will validate input
+ *
+ * @since	1.3
+ *
+ * @param	arr		$input	The value inputted in the field
+ *
+ * @return	str		$input	Sanitizied value
+ */
+function mdjm_settings_sanitize( $input = array() ) {
+	global $mdjm_options;
+
+	if ( empty( $_POST['_wp_http_referer'] ) ) {
+		return $input;
+	}
+
+	parse_str( $_POST['_wp_http_referer'], $referrer );
+
+	$settings = mdjm_get_registered_settings();
+	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
+	$section  = isset( $referrer['section'] ) ? $referrer['section'] : 'main';
+
+	$input = $input ? $input : array();
+	$legacy_inputs  = apply_filters( 'mdjm_settings_' . $tab . '_sanitize', $input ); // Check for extensions that aren't using new sections
+	$section_inputs = apply_filters( 'mdjm_settings_' . $tab . '-' . $section . '_sanitize', $input );
+
+	$input = array_merge( $legacy_inputs, $section_inputs );
+
+	// Loop through each setting being saved and pass it through a sanitization filter
+	foreach ( $input as $key => $value ) {
+		// Get the setting type (checkbox, select, etc)
+		$type = isset( $settings[ $tab ][ $key ]['type'] ) ? $settings[ $tab ][ $key ]['type'] : false;
+
+		if ( $type ) {
+			// Field type specific filter
+			$input[$key] = apply_filters( 'mdjm_settings_sanitize_' . $type, $value, $key );
+		}
+
+		// General filter
+		$input[ $key ] = apply_filters( 'mdjm_settings_sanitize', $input[ $key ], $key );
+	}
+
+	// Loop through the whitelist and unset any that are empty for the tab being saved
+	$main_settings    = $section == 'main' ? $settings[ $tab ] : array(); // Check for extensions that aren't using new sections
+	$section_settings = ! empty( $settings[ $tab ][ $section ] ) ? $settings[ $tab ][ $section ] : array();
+
+	$found_settings = array_merge( $main_settings, $section_settings );
+
+	if ( ! empty( $found_settings ) ) {
+		foreach ( $found_settings as $key => $value ) {
+
+			// Settings used to have numeric keys, now they have keys that match the option ID. This ensures both methods work
+			if ( is_numeric( $key ) ) {
+				$key = $value['id'];
+			}
+
+			if ( empty( $input[ $key ] ) ) {
+				unset( $mdjm_options[ $key ] );
+			}
+
+		}
+	}
+
+	// Merge our new settings with the existing
+	$output = array_merge( $mdjm_options, $input );
+
+	add_settings_error( 'mdjm-notices', '', __( 'Settings updated.', 'mobile-dj-manager' ), 'updated' );
+
+	return $output;
+} // mdjm_settings_sanitize
+
+/**
+ * Sanitize text fields
+ *
+ * @since	1.3
+ * @param	arr		$input	The field value
+ * @return	str		$input	Sanitizied value
+ */
+function mdjm_sanitize_text_field( $input ) {
+	return trim( $input );
+} // mdjm_sanitize_text_field
+add_filter( 'mdjm_settings_sanitize_text', 'mdjm_sanitize_text_field' );
+
+/**
+ * Retrieve settings tabs
+ *
+ * @since	1.3
+ * @return	arr		$tabs
+ */
+function mdjm_get_settings_tabs() {
+
+	$settings = mdjm_get_registered_settings();
+
+	$tabs                  = array();
+	$tabs['general']       = __( 'General', 'mobile-dj-manager' );
+	$tabs['events']        = __( 'Events', 'mobile-dj-manager' );
+	$tabs['emails']        = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
+	$tabs['client_zone']   = __( 'Client Zone', 'mobile-dj-manager' );
+	$tabs['payments']      = __( 'Payments', 'mobile-dj-manager' );
+
+	if( ! empty( $settings['extensions'] ) ) {
+		$tabs['extensions'] = __( 'Extensions', 'mobile-dj-manager' );
+	}
+	if( ! empty( $settings['licenses'] ) ) {
+		$tabs['licenses'] = __( 'Licenses', 'mobile-dj-manager' );
+	}
+
+	return apply_filters( 'mdjm_settings_tabs', $tabs );
+} // mdjm_get_settings_tabs
+
+/**
+ * Retrieve settings tabs sections
+ *
+ * @since	1.3
+ * @return	arr		$section
+ */
+function mdjm_get_settings_tab_sections( $tab = false ) {
+	$tabs     = false;
+	$sections = mdjm_get_registered_settings_sections();
+
+	if( $tab && ! empty( $sections[ $tab ] ) ) {
+		$tabs = $sections[ $tab ];
+	}
+	elseif ( $tab ) {
+		$tabs = false;
+	}
+	
+	return $tabs;
+} // mdjm_get_settings_tab_sections
+
+/**
+ * Get the settings sections for each tab
+ * Uses a static to avoid running the filters on every request to this function
+ *
+ * @since	1.3
+ * @return	arr		Array of tabs and sections
+ */
+function mdjm_get_registered_settings_sections() {
+	static $sections = false;
+
+	if ( false !== $sections ) {
+		return $sections;
+	}
+
+	$sections = array(
+		'general'         => apply_filters( 'mdjm_settings_sections_general', array(
+			'main'               => __( 'Application Settings', 'mobile-dj-manager' ),
+			'debugging'          => __( 'Debug Settings', 'mobile-dj-manager' ),
+			'uninstall'          => __( 'Uninstall Actions', 'mobile-dj-manager' )
+		) ),
+		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
+			'main'               => __( 'Event Settings', 'mobile-dj-manager' ),
+			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' )
+		) ),
+		'emails'          => apply_filters( 'mdjm_settings_sections_emails', array(
+			'main'               => __( 'General Email Settings', 'mobile-dj-manager' ),
+			'templates'          => __( 'Event Templates', 'mobile-dj-manager' )
+		) ),
+		'client_zone'     => apply_filters( 'mdjm_settings_sections_styles', array(
+			'main'               => __( 'Client Zone Settings', 'mobile-dj-manager' ),
+			'pages'              => __( 'Pages', 'mobile-dj-manager' ),
+			'availability'       => __( 'Availability Checker', 'mobile-dj-manager' )
+		) ),
+		'payments'        => apply_filters( 'mdjm_settings_sections_taxes', array(
+			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
+		) ),
+		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
+			'main'               => __( 'Main', 'mobile-dj-manager' )
+		) ),
+		'licenses'   => apply_filters( 'mdjm_settings_sections_licenses', array() )
+	);
+
+	$sections = apply_filters( 'mdjm_settings_sections', $sections );
+
+	return $sections;
+} // mdjm_get_registered_settings_sections
 
 /**
  * Return a list of templates for use as dropdown options within a select list.
@@ -952,3 +1219,446 @@ function mdjm_list_txn_sources() {
 	
 	return $txn_sources;
 } // mdjm_list_txn_sources
+
+/**
+ * Header Callback
+ *
+ * Renders the header.
+ *
+ * @since	1.3
+ * @param	arr		$args	Arguments passed by the setting
+ * @return	void
+ */
+function mdjm_header_callback( $args ) {
+	echo '';
+} // mdjm_header_callback
+
+/**
+ * Checkbox Callback
+ *
+ * Renders checkboxes.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options 	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_checkbox_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
+		$name = '';
+	} else {
+		$name = 'name="mdjm_settings[' . $args['id'] . ']"';
+	}
+
+	$checked = isset( $mdjm_options[ $args['id'] ] ) ? checked( 1, $mdjm_options[ $args['id'] ], false ) : '';
+	$html = '<input type="checkbox" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_checkbox_callback
+
+/**
+ * Multicheck Callback
+ *
+ * Renders multiple checkboxes.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options 	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_multicheck_callback( $args ) {
+	global $mdjm_options;
+
+	if ( ! empty( $args['options'] ) ) {
+		foreach( $args['options'] as $key => $option ):
+			if( isset( $mdjm_options[$args['id']][$key] ) )	{
+				$enabled = $option;
+			}
+			else	{
+				$enabled = NULL;
+			}
+			
+			echo '<input name="mdjm_settings[' . $args['id'] . '][' . $key . ']" id="mdjm_settings[' . $args['id'] . '][' . $key . ']" type="checkbox" value="' . $option . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
+			echo '<label for="mdjm_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
+		endforeach;
+		echo '<p class="description">' . $args['desc'] . '</p>';
+	}
+} // mdjm_multicheck_callback
+
+/**
+ * Radio Callback
+ *
+ * Renders radio boxes.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options 	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_radio_callback( $args ) {
+	global $mdjm_options;
+
+	foreach ( $args['options'] as $key => $option ) :
+		$checked = false;
+
+		if ( isset( $mdjm_options[ $args['id'] ] ) && $mdjm_options[ $args['id'] ] == $key )
+			$checked = true;
+		elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[ $args['id'] ] ) )
+			$checked = true;
+
+		echo '<input name="mdjm_settings[' . $args['id'] . ']"" id="mdjm_settings[' . $args['id'] . '][' . $key . ']" type="radio" value="' . $key . '" ' . checked(true, $checked, false) . '/>&nbsp;';
+		echo '<label for="mdjm_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
+	endforeach;
+
+	echo '<p class="description">' . $args['desc'] . '</p>';
+} // mdjm_radio_callback
+
+/**
+ * Text Callback
+ *
+ * Renders text fields.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options 	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_text_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
+		$args['readonly'] = true;
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+		$name  = '';
+	} else {
+		$name = 'name="mdjm_settings[' . $args['id'] . ']"';
+	}
+
+	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
+	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html     = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
+	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_text_callback
+
+/**
+ * Number Callback
+ *
+ * Renders number fields.
+ *
+ * @since	1.3
+ * @param	arr			$args	Arguments passed by the setting
+ * @global	$mdjm_options		Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_number_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
+		$args['readonly'] = true;
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+		$name  = '';
+	} else {
+		$name = 'name="mdjm_settings[' . $args['id'] . ']"';
+	}
+
+	$max  = isset( $args['max'] ) ? $args['max'] : 999999;
+	$min  = isset( $args['min'] ) ? $args['min'] : 0;
+	$step = isset( $args['step'] ) ? $args['step'] : 1;
+
+	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+}
+
+/**
+ * Textarea Callback
+ *
+ * Renders textarea fields.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_textarea_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$html = '<textarea class="large-text" cols="50" rows="5" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_textarea_callback
+
+/**
+ * Password Callback
+ *
+ * Renders password fields.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global 	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_password_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_password_callback
+
+/**
+ * Missing Callback
+ *
+ * If a function is missing for settings callbacks alert the user.
+ *
+ * @since	1.3
+ * @param	arr		$args	Arguments passed by the setting
+ * @return	void
+ */
+function mdjm_missing_callback( $args ) {
+	printf(
+		__( 'The callback function used for the %s setting is missing.', 'mobile-dj-manager' ),
+		'<strong>' . $args['id'] . '</strong>'
+	);
+} // mdjm_missing_callback
+
+/**
+ * Select Callback
+ *
+ * Renders select fields.
+ *
+ * @since	1.3
+ * @param	arr				$args Arguments passed by the setting
+ * @global 	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_select_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	if ( isset( $args['placeholder'] ) ) {
+		$placeholder = $args['placeholder'];
+	} else {
+		$placeholder = '';
+	}
+
+	if ( isset( $args['chosen'] ) ) {
+		$chosen = 'class="mdjm-chosen"';
+	} else {
+		$chosen = '';
+	}
+
+	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" />';
+
+	foreach ( $args['options'] as $option => $name ) {
+		$selected = selected( $option, $value, false );
+		$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+	}
+
+	$html .= '</select>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_select_callback
+
+/**
+ * Color select Callback
+ *
+ * Renders color select fields.
+ *
+ * @since	1.3
+ * @param	arr				$args Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_color_select_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']"/>';
+
+	foreach ( $args['options'] as $option => $color ) {
+		$selected = selected( $option, $value, false );
+		$html .= '<option value="' . $option . '" ' . $selected . '>' . $color['label'] . '</option>';
+	}
+
+	$html .= '</select>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_color_select_callback
+
+/**
+ * Rich Editor Callback
+ *
+ * Renders rich editor fields.
+ *
+ * @since	1.3
+ * @param	arr				$args Arguments passed by the setting
+ * @global 	$mdjm_options 	Array of all the MDJM Options
+ * @global	$wp_version		WordPress Version
+ */
+function mdjm_rich_editor_callback( $args ) {
+	global $mdjm_options, $wp_version;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+
+		if( empty( $args['allow_blank'] ) && empty( $value ) ) {
+			$value = isset( $args['std'] ) ? $args['std'] : '';
+		}
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$rows = isset( $args['size'] ) ? $args['size'] : 20;
+
+	if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
+		ob_start();
+		wp_editor( stripslashes( $value ), 'mdjm_settings_' . $args['id'], array( 'textarea_name' => 'mdjm_settings_[' . $args['id'] . ']', 'textarea_rows' => $rows ) );
+		$html = ob_get_clean();
+	} else {
+		$html = '<textarea class="large-text" rows="10" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+	}
+
+	$html .= '<br/><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_rich_editor_callback
+
+/**
+ * Upload Callback
+ *
+ * Renders upload fields.
+ *
+ * @since	1.3
+ * @param	arr				$args	Arguments passed by the setting
+ * @global $mdjm_options 	Array of all the MDJM Options
+ * @return void
+ */
+function mdjm_upload_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[$args['id']];
+	} else {
+		$value = isset($args['std']) ? $args['std'] : '';
+	}
+
+	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html .= '<span>&nbsp;<input type="button" class="mdjm_settings_upload_button button-secondary" value="' . __( 'Upload File', 'mobile-dj-manager' ) . '"/></span>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_upload_callback
+
+/**
+ * Color picker Callback
+ *
+ * Renders color picker fields.
+ *
+ * @since	1.3
+ * @param	arr				$args		Arguments passed by the setting
+ * @global	$mdjm_options 	Array of all the MDJM Options
+ * @return void
+ */
+function mdjm_color_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$default = isset( $args['std'] ) ? $args['std'] : '';
+
+	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html = '<input type="text" class="mdjm-color-field" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+	echo $html;
+} // mdjm_color_callback
+
+/**
+ * Descriptive text callback.
+ *
+ * Renders descriptive text onto the settings field.
+ *
+ * @since	1.3
+ * @param	arr		$args	Arguments passed by the setting
+ * @return	void
+ */
+function mdjm_descriptive_text_callback( $args ) {
+	echo wp_kses_post( $args['desc'] );
+} // mdjm_descriptive_text_callback
+
+/**
+ * Hook Callback
+ *
+ * Adds a do_action() hook in place of the field
+ *
+ * @since	1.3
+ * @param	arr		$args	Arguments passed by the setting
+ * @return	void
+ */
+function mdjm_hook_callback( $args ) {
+	do_action( 'mdjm_' . $args['id'], $args );
+} // mdjm_hook_callback
+
+/**
+ * Set manage_mdjm as the cap required to save MDJM settings pages
+ *
+ * @since	1.3
+ * @return	str		Capability required
+ */
+function mdjm_set_settings_cap() {
+	return 'manage_mdjm';
+} // mdjm_set_settings_cap
+add_filter( 'option_page_capability_mdjm_settings', 'mdjm_set_settings_cap' );
+

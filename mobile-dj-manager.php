@@ -120,19 +120,19 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				
 				add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );	
 				
-				$mdjm			  				= new MDJM();
-				self::$instance->debug			= new MDJM_Debug();
+				$mdjm			  				  = new MDJM();
+				self::$instance->debug			 = new MDJM_Debug();
 				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events			= new MDJM_Events();
 				$mdjm_posts						= new MDJM_Posts(); // REMOVE POST 1.3
-				self::$instance->posts			= new MDJM_Post_Types();
-				self::$instance->content_tags	= new MDJM_Content_Tags();
-				self::$instance->cron			= new MDJM_Cron();
-				self::$instance->users			= new MDJM_Users();
-				self::$instance->roles			= new MDJM_Roles();
-				self::$instance->permissions	= new MDJM_Permissions();
-				self::$instance->menu			= new MDJM_Menu();
-				self::$instance->txns			= new MDJM_Transactions();
+				self::$instance->posts			 = new MDJM_Post_Types();
+				self::$instance->content_tags	  = new MDJM_Content_Tags();
+				self::$instance->cron			  = new MDJM_Cron();
+				self::$instance->users			 = new MDJM_Users();
+				self::$instance->roles			 = new MDJM_Roles();
+				self::$instance->permissions	   = new MDJM_Permissions();
+				self::$instance->menu			  = new MDJM_Menu();
+				self::$instance->txns			  = new MDJM_Transactions();
 				
 				// If we're on the front end, load the ClienZone class
 				if( class_exists( 'ClientZone' ) )
@@ -158,12 +158,13 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		}
 		
 		/**
-		 * Define constants
+		 * Setup plugin constants
 		 *
-		 *
-		 *
+		 * @access	private
+		 * @since	1.3
+		 * @return	void
 		 */
-		public function define_constants()	{
+		private function define_constants()	{
 			global $wpdb;
 			define( 'MDJM_VERSION_NUM', '1.2.7.5' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
@@ -185,12 +186,18 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		} // mdjm_constants
 				
 		/**
-		 * Controls which files to include
+		 * Include required files
 		 *
-		 *
-		 *
+		 * @access	private
+		 * @since	1.3
+		 * @return	void
 		 */
-		public function includes()	{
+		private function includes()	{
+			global $mdjm_options;
+
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/register-settings.php' );
+			$mdjm_options = mdjm_get_settings();
+			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes//admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
@@ -207,6 +214,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/class-mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/roles-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/permissions/mdjm-permissions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/display-settings.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-menu.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' ); // Call the main functions file

@@ -114,10 +114,10 @@
 			 */
 	 		public function mdjm_admin_init()	{
 				/* -- Register the settings -- */
-				if( get_option( 'mdjm_plugin_settings' ) )	{
+				/*if( get_option( 'mdjm_plugin_settings' ) )	{
 					$this->mdjm_init_settings();
 					//$this->mdjm_role_caps();
-				}
+				}*/
 				// Release notes check
 				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
 					MDJM()->debug->log_it( '*** Redirect to release notes ***' );
@@ -198,12 +198,12 @@
 			 * 
 			 *
 			 */
-	 		public function mdjm_init_settings()	{
+	 		/*public function mdjm_init_settings()	{
 				if( !class_exists( 'MDJM_Settings' ) )
 					require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/class-mdjm-settings.php' );
 					
 				$this->settings = new MDJM_Settings();
-			} // mdjm_init_settings
+			} // mdjm_init_settings*/
 			
 			/*
 			 * mdjm_settings

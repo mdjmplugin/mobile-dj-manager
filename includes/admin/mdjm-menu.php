@@ -60,7 +60,7 @@
 					__( 'Settings', 'mobile-dj-manager' ),
 					'manage_mdjm',
 					'mdjm-settings',
-					array( $this, 'mdjm_settings_page' )
+					'mdjm_options_page'
 				);
 				// Contract Templates
 				if( MDJM()->permissions->employee_can( 'manage_templates' ) )	{
@@ -733,9 +733,9 @@
 			 * mdjm_settings_page
 			 * The MDJM Settings page
 			 */			
-			public function mdjm_settings_page()	{
+			/*public function mdjm_settings_page()	{
 				include_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/class-mdjm-settings-page.php' );
-			} // mdjm_settings_page
+			} // mdjm_settings_page*/
 						
 			/*
 			 * The MDJM Playlists page
