@@ -127,6 +127,7 @@ function mdjm_register_settings() {
 					array(
 						'section'     => $section,
 						'id'          => isset( $option['id'] )          ? $option['id']          : null,
+						'hint'        => ! empty( $option['hint'] )      ? $option['hint']        : '',
 						'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
 						'name'        => isset( $option['name'] )        ? $option['name']        : null,
 						'size'        => isset( $option['size'] )        ? $option['size']        : null,
@@ -347,7 +348,7 @@ function mdjm_get_registered_settings()	{
 					'journaling'       => array(
 						'id'          => 'journaling',
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
-						'desc'        =>__( 'Log and track all client &amp; event actions (recommended).', 'mobile-dj-manager' ),
+						'desc'        => __( 'Log and track all client &amp; event actions (recommended).', 'mobile-dj-manager' ),
 						'type'        => 'checkbox',
 						'std'		 => '1'
 					)
@@ -1255,7 +1256,8 @@ function mdjm_checkbox_callback( $args ) {
 
 	$checked = isset( $mdjm_options[ $args['id'] ] ) ? checked( 1, $mdjm_options[ $args['id'] ], false ) : '';
 	$html = '<input type="checkbox" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_checkbox_callback
@@ -1347,7 +1349,8 @@ function mdjm_text_callback( $args ) {
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html     = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
-	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_text_callback
@@ -1385,7 +1388,8 @@ function mdjm_number_callback( $args ) {
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 }
@@ -1410,7 +1414,8 @@ function mdjm_textarea_callback( $args ) {
 	}
 
 	$html = '<textarea class="large-text" cols="50" rows="5" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_textarea_callback
@@ -1436,7 +1441,8 @@ function mdjm_password_callback( $args ) {
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_password_callback
@@ -1496,10 +1502,56 @@ function mdjm_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_select_callback
+
+/**
+ * Multiple Select Callback
+ *
+ * Renders multiple select fields.
+ *
+ * @since	1.3
+ * @param	arr				$args Arguments passed by the setting
+ * @global 	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_multiple_select_callback( $args ) {
+	global $mdjm_options;
+
+	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+		$value = $mdjm_options[ $args['id'] ];
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	if ( isset( $args['placeholder'] ) ) {
+		$placeholder = $args['placeholder'];
+	} else {
+		$placeholder = '';
+	}
+
+	if ( isset( $args['chosen'] ) ) {
+		$chosen = 'class="mdjm-chosen"';
+	} else {
+		$chosen = '';
+	}
+
+	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" multiple="multiple" />';
+
+	foreach ( $args['options'] as $option => $name ) {
+		$selected = selected( $option, $value, false );
+		$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+	}
+
+	$html .= '</select>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+
+	echo $html;
+} // mdjm_multiple_select_callback
 
 /**
  * Color select Callback
@@ -1528,7 +1580,8 @@ function mdjm_color_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_color_select_callback
@@ -1566,7 +1619,7 @@ function mdjm_rich_editor_callback( $args ) {
 		$html = '<textarea class="large-text" rows="10" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	}
 
-	$html .= '<br/><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<p class="description"<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_rich_editor_callback
@@ -1593,7 +1646,8 @@ function mdjm_upload_callback( $args ) {
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<span>&nbsp;<input type="button" class="mdjm_settings_upload_button button-secondary" value="' . __( 'Upload File', 'mobile-dj-manager' ) . '"/></span>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_upload_callback
@@ -1621,7 +1675,8 @@ function mdjm_color_callback( $args ) {
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="text" class="mdjm-color-field" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
 } // mdjm_color_callback

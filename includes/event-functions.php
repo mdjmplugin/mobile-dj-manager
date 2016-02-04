@@ -31,7 +31,7 @@ function mdjm_all_event_status()	{
 	);
 		
 	foreach( $post_status as $status )	{
-		$mdjm_status[$status] = get_post_status_object( $status )->label;
+		$mdjm_status[ $status ] = get_post_status_object( $status )->label;
 	}
 	
 	// Sort alphabetically
