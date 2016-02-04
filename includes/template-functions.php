@@ -146,7 +146,5 @@ function mdjm_get_theme_template_paths() {
  * @return string
 */
 function mdjm_get_theme_template_dir_name() {
-	return trailingslashit( apply_filters( 'mdjm_templates_dir', 'mdjm_templates' ) );
+	return trailingslashit( apply_filters( 'mdjm_templates_dir', 'mdjm-templates' ) );
 } // mdjm_get_theme_template_dir_name
-
-?>

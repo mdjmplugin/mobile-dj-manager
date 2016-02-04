@@ -341,6 +341,11 @@
 	}
 	/* -- Input Fields -- */
 	
+/** -- Client Zone Home Page -- */
+#mdjm-event-overview table	{
+	width: 100%;
+}
+
 	
 /* -- Footer -- */
 #mdjm-cz-footer	{

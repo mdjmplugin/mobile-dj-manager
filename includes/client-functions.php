@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @return	$arr	$employees	or false if no employees for the specified roles
  */
-function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{			
+function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
 	$defaults = array(
 		'roles'		=> array( 'client', 'inactive_client' ),
 		'employee'	 => false,
@@ -65,3 +65,35 @@ function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
 				
 	return $clients;
 } // mdjm_get_clients
+
+/**
+ * Retrieve all of this clients events.
+ *
+ * @param	int		$client_id	Optional: The WP userID of the client. Default to current user.
+ *			str|arr	$status		Optional: Status of events that should be returned. Default any.
+ *			str		$orderby	Optional: The field by which to order. Default date.
+ *			str		$order		Optional: DESC (default) | ASC
+ *
+ * @return	mixed	$events		WP_Query object or false.
+ */
+function mdjm_get_client_events( $client_id='', $status='any', $orderby='post_date', $order='DESC' )	{
+	$args = apply_filters( 'mdjm_get_client_events_args',
+		array(
+			'post_type'        => 'mdjm-event',
+			'post_status'      => $status,
+			'orderby'          => $orderby,
+			'order'            => $order,
+			'meta_query'       => array(
+				array(
+					'key'      => '_mdjm_event_client',
+					'value'    => !empty( $client_id ) ? $client_id : get_current_user_id(),
+					'compare'  => 'IN',
+				),
+			)
+		)
+	);
+	
+	$events_query = new WP_Query( $args );
+	
+	return $events_query;
+} // mdjm_get_client_events

@@ -41,6 +41,29 @@ function mdjm_all_event_status()	{
 } // mdjm_all_event_status
 
 /**
+ * Returns an array of active event post statuses.
+ *
+ * @since	1.3
+ * @param
+ * @return	arr		Array of active event status'.
+ */
+function mdjm_active_event_statuses()	{
+	$event_status = apply_filters( 'mdjm_active_event_statuses',
+		array(
+			'mdjm-approved',
+			'mdjm-contract',
+			'mdjm-completed',
+			'mdjm-enquiry'
+		)
+	);
+	
+	// Sort alphabetically
+	asort( $event_status );
+	
+	return $event_status;
+} // mdjm_active_event_statuses
+
+/**
  * Return the event status label for given event ID.
  *
  * @since	1.3

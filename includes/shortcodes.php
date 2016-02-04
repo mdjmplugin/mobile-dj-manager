@@ -62,6 +62,64 @@ function shortcode_mdjm( $atts )	{
 add_shortcode( 'MDJM', 'shortcode_mdjm' );
 
 /**
+ * MDJM Home Shortcode.
+ *
+ * Displays the Client Zone home page which will render event details if the client only has a single event
+ * or a list of events if they have multiple events in the system.
+ * 
+ * @since	1.3
+ *
+ * @return	string
+ */
+function mdjm_shortcode_home( $atts )	{
+	if ( is_user_logged_in() ) {
+		ob_start();
+		
+		$client_id = get_current_user_id();
+		$events    = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
+		$output    = '';
+		
+		if( $events->have_posts() )	{
+			if( $events->post_count == 1 )	{
+				mdjm_get_template_part( 'event', 'single' );
+				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+			}
+			else	{
+				mdjm_get_template_part( 'event', 'loop-header' );
+				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+				
+				do_action( 'mdjm_event_loop_before_loop' );
+				?>
+                <div id="mdjm-event-loop">
+                <?php
+				
+				while( $events->have_posts() )	{
+					$events->the_post();
+					mdjm_get_template_part( 'event', 'loop' );
+					$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id ) );
+				}
+				
+				?>
+                </div>
+                <?php
+				do_action( 'mdjm_event_loop_after_loop' );
+				
+				mdjm_get_template_part( 'event', 'loop-footer' );
+				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+			}
+			wp_reset_postdata();
+		} 
+		else	{
+			mdjm_get_template_part( 'event', 'none' );
+			$output = do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+		}
+		
+		return $output;
+	}
+} // mdjm_shortcode_home
+add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
+
+/**
  * Display the MDJM availability checker.
  * 
  * @since	1.3
