@@ -232,7 +232,7 @@ function mdjm_get_registered_settings()	{
 					'log_size'             => array(
 						'id'          => 'log_size',
 						'name'        => __( 'Maximum Log File Size', 'mobile-dj-manager' ),
-						'text'        => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
+						'hint'        => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 
 										'mobile-dj-manager' ),
 						'type'        => 'text',
@@ -315,6 +315,7 @@ function mdjm_get_registered_settings()	{
 					'artist'           => array(
 						'id'          => 'artist',
 						'name'        => __( 'Refer to Performers as', 'mobile-dj-manager' ),
+						'hint'        => sprintf( __( '%sDefault is DJ%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
@@ -343,7 +344,13 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'enquiry_sources',
 						'name'        => __( 'Enquiry Sources', 'mobile-dj-manager' ),
 						'desc'        => __( 'Enter possible sources of enquiries. One per line', 'mobile-dj-manager' ),
-						'type'        => 'textarea'
+						'type'        => 'textarea',
+						'std'         => __( 'Website', 'mobile-dj-manager' ) . "\r\n" .
+							             __( 'Google', 'mobile-dj-manager' ) . "\r\n" .
+							             __( 'Facebook', 'mobile-dj-manager' ) . "\r\n" .
+							             __( 'Email', 'mobile-dj-manager' ) . "\r\n" .
+							             __( 'Telephone', 'mobile-dj-manager' ) . "\r\n" .
+										 __( 'Other', 'mobile-dj-manager' )
 					),
 					'journaling'       => array(
 						'id'          => 'journaling',
@@ -364,15 +371,17 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'enable_playlists',
 						'name'        => __( 'Enable Event Playlists by Default?', 'mobile-dj-manager' ),
 						'desc'        => __( 'Check to enable Client Playlist features by default. Can be overridden per event.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					),
 					'close'           => array(
 						'id'          => 'close',
 						'name'        => __( 'Close the Playlist', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Enter %s0%s to never close.', 'mobile-dj-manager' ),
+						'hint'        => sprintf( __( 'Enter %s0%s to never close.', 'mobile-dj-manager' ),
 											'<code>',
 											'</code>'
 										),
+						'desc'        => __( 'Number of days before event that the playlist should close to new entries.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'		 => '5'
@@ -381,7 +390,15 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'playlist_cats',
 						'name'        => __( 'Playlist Song Categories', 'mobile-dj-manager' ),
 						'desc'        => __( 'The options clients can select for when songs are to be played when adding to the playlist. One per line.', 'mobile-dj-manager' ),
-						'type'        => 'textarea'
+						'type'        => 'textarea',
+						'std'         => __( 'General', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'First Dance', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Second Dance', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Last Song', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Father & Bride', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Mother & Son', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'DO NOT PLAY', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Other', 'mobile-dj-manager' )
 					),
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
@@ -415,11 +432,7 @@ function mdjm_get_registered_settings()	{
 					'track_client_emails' => array(
 						'id'          => 'track_client_emails',
 						'name'        => __( 'Track Client Emails?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( '%sNote%s: not all email clients will support this', 'mobile-dj-manager' ),
-											'<code>',
-											'</code>'
-										),
-											
+						'desc'        => __( 'Some email clients may not support this feature.', 'mobile-dj-manager' ),
 						'type'        => 'checkbox'
 					),
 					'bcc_dj_to_client' => array(
@@ -590,6 +603,9 @@ function mdjm_get_registered_settings()	{
 					'app_name'         => array(
 						'id'          => 'app_name',
 						'name'        => __( 'Application Name', 'mobile-dj-manager' ),
+						'hint'        => sprintf( __( 'Default is %sClient Zone%s.', 'mobile-dj-manager' ),
+											'<code>',
+											'</code>' ),
 						'desc'        => __( 'Choose your own name for the application.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
@@ -647,7 +663,7 @@ function mdjm_get_registered_settings()	{
 					'app_home_page'    => array(
 						'id'          => 'app_home_page',
 						'name'        => mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select the home page for the %s application  - the one where you added the shortcode %s[MDJM page='Home']%s", 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s", 'mobile-dj-manager' ),
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
 											'<code>',
 											'</code>' ),
@@ -657,7 +673,9 @@ function mdjm_get_registered_settings()	{
 					'quotes_page'      => array(
 						'id'          => 'quotes_page',
 						'name'        => __( 'Online Quotes Page', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select the page to use for online event quotes', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Select the page to use for online event quotes. Needs to contain the shortcode %s[mdjm-online-quote]%s", 'mobile-dj-manager' ),
+											'<code>',
+											'</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
@@ -671,8 +689,7 @@ function mdjm_get_registered_settings()	{
 					'contracts_page'   => array(
 						'id'          => 'contracts_page',
 						'name'        => __( 'Contracts Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's contracts page - the one where you added the shortcode %s[MDJM page='Contract']%s", 'mobile-dj-manager' ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+						'desc'        => sprintf( __( "Select your website's contracts page. Needs to contain the shortcode %s[mdjm-contract]%s", 'mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'select',
@@ -681,8 +698,7 @@ function mdjm_get_registered_settings()	{
 					'payments_page'    => array(
 						'id'          => 'payments_page',
 						'name'        => __( 'Payments Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's payments page - the one where you added the shortcode %s[MDJM page='Payments']%s", 'mobile-dj-manager' ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+						'desc'        => sprintf( __( "Select your website's payments page. Needs to contain the shortcode %s[mdjm-payments]%s", 'mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'select',
@@ -691,8 +707,7 @@ function mdjm_get_registered_settings()	{
 					'playlist_page'    => array(
 						'id'          => 'playlist_page',
 						'name'        => __( 'Playlist Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's playlist page - the one where you added the shortcode %s[MDJM page='Playlist']%s", 'mobile-dj-manager' ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+						'desc'        => sprintf( __( "Select your website's playlist page. Needs to contain the shortcode %s[mdjm-playlist]%s", 'mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'select',
@@ -701,8 +716,7 @@ function mdjm_get_registered_settings()	{
 					'profile_page'     => array(
 						'id'          => 'profile_page',
 						'name'        => __( 'Profile Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's profile page - the one where you added the shortcode %s[MDJM page='Profile']%s", 'mobile-dj-manager' ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+						'desc'        => sprintf( __( "Select your website's profile page. Needs to contain the shortcode %s[mdjm-profile]%s", 'mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'select',
@@ -757,7 +771,8 @@ function mdjm_get_registered_settings()	{
 											'</code>',
 											'<code>',
 											'</code>' ),
-						'type'        => 'rich_editor'
+						'type'        => 'rich_editor',
+						'std'         => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' )
 					),
 					'availability_check_fail_page' => array(
 						'id'          => 'availability_check_fail_page',
@@ -779,7 +794,8 @@ function mdjm_get_registered_settings()	{
 											'</code>',
 											'<code>',
 											'</code>' ),
-						'type'        => 'rich_editor'
+						'type'        => 'rich_editor',
+						'std'         => __( 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...', 'mobile-dj-manager' )
 					)
 				)
 			)
@@ -855,7 +871,7 @@ function mdjm_get_registered_settings()	{
 					'deposit_amount'   => array(
 						'id'          => 'deposit_amount',
 						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Amount', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "If your %s\'s are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format 0.00", 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "If your %s's are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format 0.00", 'mobile-dj-manager' ),
 											mdjm_get_deposit_label() ),
 						'type'        => 'text',
 						'size'        => 'small'
@@ -960,8 +976,13 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Payment Types', 'mobile-dj-manager' ),
 						'desc'        => __( 'Enter methods of payment.', 'mobile-dj-manager' ),
 						'type'        => 'textarea',
-						'std'         => "BACS\r\nCash\r\nCheque\r\nPayFast\r\nPayPal\r\nOthers\r\n"
-					),
+						'std'         => __( 'BACS', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'Other', 'mobile-dj-manager' )
+					)
 				)
 			)
 		)
@@ -1526,7 +1547,7 @@ function mdjm_multiple_select_callback( $args ) {
 	} else {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
-
+	
 	if ( isset( $args['placeholder'] ) ) {
 		$placeholder = $args['placeholder'];
 	} else {
@@ -1539,10 +1560,10 @@ function mdjm_multiple_select_callback( $args ) {
 		$chosen = '';
 	}
 
-	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" multiple="multiple" />';
+	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . '][]" ' . $chosen . 'data-placeholder="' . $placeholder . '" multiple="multiple" />';
 
 	foreach ( $args['options'] as $option => $name ) {
-		$selected = selected( $option, $value, false );
+		$selected = !empty( $value ) && in_array( $option, $value ) ? 'selected="selected"' : '';
 		$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
 	}
 
