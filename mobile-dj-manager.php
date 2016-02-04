@@ -97,7 +97,8 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			load_plugin_textdomain( 
 				'mobile-dj-manager',
 				false, 
-				dirname( plugin_basename(__FILE__) ) . '/lang/' );
+				dirname( plugin_basename(__FILE__) ) . '/lang/'
+			);
 		} // mdjm_plugins_loaded
 		
 		/**
@@ -113,13 +114,13 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
 				self::$instance = new Mobile_DJ_Manager;
 				
-				self::$instance->define_constants();
-				self::$instance->includes();
+				self::$instance->setup_constants();
 				
 				add_action( 'plugins_loaded', array( __CLASS__, 'mdjm_plugins_loaded' ) );
 				
 				add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );	
 				
+				self::$instance->includes();
 				$mdjm			  				  = new MDJM();
 				self::$instance->debug			 = new MDJM_Debug();
 				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.3
@@ -164,7 +165,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 		 * @since	1.3
 		 * @return	void
 		 */
-		private function define_constants()	{
+		private function setup_constants()	{
 			global $wpdb;
 			define( 'MDJM_VERSION_NUM', '1.2.7.5' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');

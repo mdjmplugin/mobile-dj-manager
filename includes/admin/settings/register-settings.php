@@ -186,8 +186,8 @@ function mdjm_get_registered_settings()	{
 						'desc'    => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 						'type'    => 'select',
 						'options' => array(
-							'g:i A'	=> date( 'g:i A', current_time( 'timestamp' ) ),
-							'H:i'      => date( 'H:i', current_time( 'timestamp' ) ),
+							'g:i A'		=> date( 'g:i A', current_time( 'timestamp' ) ),
+							'H:i'		=> date( 'H:i', current_time( 'timestamp' ) ),
 						),
 						'std'     => 'H:i'
 					),
@@ -211,7 +211,7 @@ function mdjm_get_registered_settings()	{
 						'name'    => __( 'Display Credits?', 'mobile-dj-manager' ),
 						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by ' . 
 										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
-										'<span class="mdjm-admin-footer"', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'    => 'checkbox',
 					)
 				),
@@ -581,7 +581,8 @@ function mdjm_get_registered_settings()	{
 				'main' => array(
 					'client_zone_settings' => array(
 						'id'          => 'client_zone_settings',
-						'name'        => '<h3>' . __( 'Client Zone Settings', 'mobile-dj-manager' ) . '</h3>',
+						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ),
+													mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</h3>',
 						'desc'        => '',
 						'type'        => 'header'
 					),
@@ -1068,7 +1069,7 @@ function mdjm_get_settings_tabs() {
 	$tabs['general']       = __( 'General', 'mobile-dj-manager' );
 	$tabs['events']        = __( 'Events', 'mobile-dj-manager' );
 	$tabs['emails']        = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
-	$tabs['client_zone']   = __( 'Client Zone', 'mobile-dj-manager' );
+	$tabs['client_zone']   = mdjm_get_option( 'app_name', 'mobile-dj-manager' );
 	$tabs['payments']      = __( 'Payments', 'mobile-dj-manager' );
 
 	if( ! empty( $settings['extensions'] ) ) {
