@@ -199,6 +199,8 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/register-settings.php' );
 			$mdjm_options = mdjm_get_settings();
 			
+			require_once( MDJM_PLUGIN_DIR . '/includes/actions.php' );
+			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );

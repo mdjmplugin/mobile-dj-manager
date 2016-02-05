@@ -143,3 +143,24 @@ function mdjm_get_deposit_label() {
 function mdjm_get_balance_label() {
 	return mdjm_get_option( 'balance_label', __( 'Balance', 'mobile-dj-manager' ) );
 } // mdjm_get_balance_label
+
+/**
+ * Get the current page URL
+ *
+ * @since	1.3
+ * @param
+ * @return	str		$page_url	Current page URL
+ */
+function mdjm_get_current_page_url() {
+	$scheme = is_ssl() ? 'https' : 'http';
+	$uri    = esc_url( site_url( $_SERVER['REQUEST_URI'], $scheme ) );
+
+	if ( is_front_page() )	{
+		$uri = home_url();
+	}
+
+	$uri = apply_filters( 'mdjm_get_current_page_url', $uri );
+
+	return $uri;
+}
+

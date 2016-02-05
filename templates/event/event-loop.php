@@ -22,7 +22,8 @@
 				{event_date}
 			</th>
             <th class="mdjm-event-heading right-align"><?php _e( 'ID:', 'mobile-dj-manager' ); ?> {contract_id}<br />
-				<?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}
+				<?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}<br />
+				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) . 'view_event_id=' . get_the_ID() ); ?></span>
             </th>
 		</tr>
 		<tr>
@@ -54,9 +55,11 @@
 		 */
 		?>
         
-        <?php $buttons = mdjm_get_event_action_buttons( get_the_ID() ); ?>
+        <?php $buttons = mdjm_get_event_action_buttons( get_the_ID(), true ); ?>
         <?php $cells   = 2; // Number of cells ?>
 		<?php $i       = 1; // Counter for the current cell ?>
+        
+        <?php do_action( 'mdjm_event_loop_before_action_buttons' ); ?>
         
 		<?php foreach( $buttons as $button ) : ?>
         	
@@ -76,16 +79,16 @@
 		<?php endforeach; ?><!-- endforeach( $buttons as $button ) -->
         
         <?php // Write out empty cells to complete the table row ?>
-            <?php if( $i != 1 ) : ?>
-            	
-				<?php while( $i <= $cells ) : ?>
-                	<td>&nbsp;</td>
-                    <?php $i++; ?>
-                    <?php if( $i == $cells ) : ?> </tr> <?php endif; ?>
-                <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
-                
-            <?php endif; ?><!-- endif( $i < $cells ) -->
-        	</tr>
+		<?php if( $i != 1 ) : ?>
+            
+            <?php while( $i <= $cells ) : ?>
+                <td>&nbsp;</td>
+                <?php $i++; ?>
+                <?php if( $i == $cells ) : ?> </tr> <?php endif; ?>
+            <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
+            </tr>
+        <?php endif; ?><!-- endif( $i < $cells ) -->
+        <?php do_action( 'mdjm_event_loop_after_action_buttons' ); ?>
 	</table>
 </div>    
 <?php do_action( 'mdjm_event_loop_after_event' ); ?>

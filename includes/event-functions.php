@@ -10,6 +10,25 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
+/**
+ * Retrieve an event by ID.
+ *
+ * @param	int		$event_id	The WP post ID for the event.
+ *
+ * @return	mixed	$event		WP_Query object or false.
+ */
+function mdjm_get_event_by_id( $event_id )	{
+	$args = array(
+				'p'            => $event_id,
+				'post_type'    => 'mdjm-event',
+				'post_status'  => 'any'
+			);
+	
+	$event_query = new WP_Query( $args );
+	
+	return $event_query;
+} // mdjm_get_event_by_id
 	
 /**
  * Returns an array of event post status.
@@ -124,7 +143,7 @@ function mdjm_get_event_type( $event_id='' )	{
 	
 	// Event type
 	if( !empty( $id ) )	{
-		$types = wp_get_object_terms( $event_id, 'event-types', $args );
+		$types = wp_get_object_terms( $event_id, 'event-types' );
 		
 		if( !empty( $types ) )	{
 			$return = $types[0]->name;

@@ -17,7 +17,7 @@
 		mdjm_get_option( 'company_name' ),
 		mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
     
-    <p><?php _e( 'You do not appear to have any active events booked with us.', 'mobile-dj-manager' ); ?>
+    <p><?php _e( 'You do not currently have any active events booked with us.', 'mobile-dj-manager' ); ?>
     
     <p><?php printf( 
 		__( 'If you are ready to plan your next event, contact us <a href="%s">here</a>.', 'mobile-dj-manager' ),

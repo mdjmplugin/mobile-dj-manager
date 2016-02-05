@@ -75,57 +75,80 @@ function mdjm_shortcode_home( $atts )	{
 	if ( is_user_logged_in() ) {
 		ob_start();
 		
-		$client_id = get_current_user_id();
-		$events    = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
-		$output    = '';
+		$output = '';
 		
-		if( $events->have_posts() )	{
-			if( $events->post_count == 1 )	{
+		$client_id = get_current_user_id();
+		
+		if( isset( $_GET['view_event_id'] ) )	{
+			$event     = mdjm_get_event_by_id( $_GET['view_event_id'] );
+			if( $event->have_posts() )	{
 				ob_start();
-				mdjm_get_template_part( 'event', 'single' );
-				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
-				ob_get_clean();
-			}
-			else	{
-				ob_start();
-				mdjm_get_template_part( 'event', 'loop-header' );
-				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
-				ob_get_clean();
-				
-				do_action( 'mdjm_event_loop_before_loop' );
-				?>
-                <div id="mdjm-event-loop">
-                <?php
-				
-				while( $events->have_posts() )	{
+				while( $event->have_posts() )	{
 					ob_start();
-					$events->the_post();
-					mdjm_get_template_part( 'event', 'loop' );
+					$event->the_post();
+					mdjm_get_template_part( 'event', 'single' );
 					$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
 					ob_get_clean();
 				}
-				
-				?>
-                </div>
-                <?php
-				do_action( 'mdjm_event_loop_after_loop' );
-				ob_start();
-				mdjm_get_template_part( 'event', 'loop-footer' );
+			}
+			else	{
+				echo 'Hello';
+			}
+		}
+		else	{
+			$events    = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
+			
+			if( $events->have_posts() )	{
+				if( $events->post_count == 1 )	{
+					ob_start();
+					while( $events->have_posts() )	{
+						ob_start();
+						$events->the_post();
+						mdjm_get_template_part( 'event', 'single' );
+						$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
+						ob_get_clean();
+					}
+				}
+				else	{
+					ob_start();
+					mdjm_get_template_part( 'event', 'loop-header' );
+					$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+					ob_get_clean();
+					
+					do_action( 'mdjm_event_loop_before_loop' );
+					?>
+					<div id="mdjm-event-loop">
+					<?php
+					
+					while( $events->have_posts() )	{
+						ob_start();
+						$events->the_post();
+						mdjm_get_template_part( 'event', 'loop' );
+						$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
+						ob_get_clean();
+					}
+					
+					?>
+					</div>
+					<?php
+					do_action( 'mdjm_event_loop_after_loop' );
+					ob_start();
+					mdjm_get_template_part( 'event', 'loop-footer' );
+					$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+					ob_get_clean();
+				}
+				wp_reset_postdata();
+			} 
+			else	{
+				mdjm_get_template_part( 'event', 'none' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
 				ob_get_clean();
 			}
-			wp_reset_postdata();
-		} 
-		else	{
-			mdjm_get_template_part( 'event', 'none' );
-			$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
-			ob_get_clean();
 		}
-		
 		return $output;
 	}
 	else	{
-		ClientZone::login();
+		echo mdjm_login_form();
 	}
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
@@ -278,4 +301,23 @@ function mdjm_shortcode_addons_list( $atts )	{
 	return ob_get_clean();
 } // mdjm_shortcode_addons_list
 add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
+
+/**
+ * MDJM Login Shortcode.
+ *
+ * Displays a login form for the front end of the website.
+ * 
+ * @since	1.3
+ *
+ * @return	string
+ */
+function mdjm_shortcode_login( $atts )	{
+	extract( shortcode_atts( array(
+			'redirect' => '',
+		), $atts, 'mdjm-login' )
+	);
+	
+	return mdjm_login_form( $redirect );
+} // mdjm_shortcode_home
+add_shortcode( 'mdjm-login', 'mdjm_shortcode_login' );
 ?>

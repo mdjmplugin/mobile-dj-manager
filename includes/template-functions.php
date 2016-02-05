@@ -53,7 +53,7 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
 	$templates = array();
 	if ( isset( $name ) )
 		$templates[] = $slug . '/' . $slug . '-' . $name . '.php';
-	$templates[] = $slug . '.php';
+	$templates[] = $slug . '/' . $slug . '.php';
 
 	// Allow template parts to be filtered
 	$templates = apply_filters( 'mdjm_get_template_part', $templates, $slug, $name );

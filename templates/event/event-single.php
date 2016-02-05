@@ -13,3 +13,145 @@
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-single.php
  */
 ?>
+<?php do_action( 'mdjm_event_detail_before_event' ); ?>
+<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<p><?php printf( __( 'Details of your event taking place on %s are shown below.', 'mobile-dj-manager' ),
+			'{event_date}' ); ?></p>
+            
+    <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ),
+			mdjm_get_formatted_url( mdjm_get_option( 'contact_page', '#' ), false ) ); ?></p>
+                
+    <?php
+	/**
+	 * Display event action buttons
+	 */
+	?>
+	<div id="mdjm-singlevent-action-buttons">
+		<?php $buttons = mdjm_get_event_action_buttons( get_the_ID() ); ?>
+        <?php $cells   = 3; // Number of cells ?>
+        <?php $i       = 1; // Counter for the current cell ?>
+        
+        <?php do_action( 'mdjm_event_details_before_action_buttons' ); ?>
+        
+        <table>
+        	<?php foreach( $buttons as $button ) : ?>
+        	
+				<?php if( $i == 1 ) : ?>
+                    <tr>
+                <?php endif; ?><!-- endif( $i == 1 ) -->
+                
+                        <td><?php printf( '<a href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+                        
+                <?php if( $i == $cells ) : ?>
+                    </tr>
+                    <?php $i = 0; ?>
+                <?php endif; ?><!-- endif( $i == $cells ) -->
+                
+                <?php $i++; ?>
+                
+            <?php endforeach; ?><!-- endforeach( $buttons as $button ) -->
+        
+			<?php // Write out empty cells to complete the table row ?>
+			<?php if( $i != 1 ) : ?>
+                
+                <?php while( $i <= $cells ) : ?>
+                    <td>&nbsp;</td>
+                    <?php $i++; ?>
+                    <?php if( $i == $cells ) : ?> </tr> <?php endif; ?>
+                <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
+            </tr>    
+            <?php endif; ?><!-- endif( $i < $cells ) -->
+        </table>
+        
+        <?php do_action( 'mdjm_event_details_after_action_buttons' ); ?>
+        
+    </div>
+
+	<?php
+	/**
+	 * Display event details
+	 */
+	?>
+    <?php do_action( 'mdjm_event_details_before' ); ?>
+    <div id="mdjm-singleevent-details">
+        <table class="mdjm-singleevent-overview">
+            <tr>
+                <th colspan="4" class="mdjm-event-heading">{event_name} - {event_date}</th>
+            </tr>
+            
+            <tr>
+            	<th colspan="4"><?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}</th>
+            </tr>
+            
+            <tr>
+            	<th><?php _e( 'Event Type:', 'mobile-dj-manager' ); ?></th>
+                <td>{event_type}</td>
+                <th><?php printf(  __( 'Your %s:', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mogile-dj-manager' ) ) ); ?></th>
+                <td>{dj_fullname}</td>
+            </tr>
+            
+            <tr>
+            	<th><?php _e( 'Starts:', 'mobile-dj-manager' ); ?></th>
+                <td>{start_time}</td>
+                <th><?php _e( 'Completes:', 'mobile-dj-manager' ); ?></th>
+                <td>{end_time} ({end_date})</td>
+            </tr>
+            
+            <tr>
+            	<th colspan="4"><?php _e( 'Package Details:', 'mobile-dj-manager' ); ?></th>
+            </tr>
+            
+            <tr>
+            	<th><?php _e( 'Package:', 'mobile-dj-manager' ); ?></th>
+                <td>{event_package}</td>
+                <th><?php _e( 'Add-ons:', 'mobile-dj-manager' ); ?></th>
+                <td>{event_addons}</td>
+            </tr>
+            
+            <tr>
+            	<th colspan="4"><?php _e( 'Pricing', 'mobile-dj-manager' ); ?></th>
+            </tr>
+            
+            <tr>
+                <th colspan="4"><?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?> {total_cost}<br />
+					<?php echo mdjm_get_option( 'deposit_label', __( 'Deposit', 'mobile-dj-manager' ) ); ?>: {deposit} ({deposit_status})<br />
+					<?php echo mdjm_get_option( 'balance_label', __( 'Balance Due', 'mobile-dj-manager' ) ) ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
+                </th>
+            </tr>
+            
+            <tr>
+            	<th colspan="4"><?php _e( 'Your Details', 'mobile-dj-manager' ); ?></th>
+            </tr>
+            
+            <tr>
+            	<th><?php _e( 'Name:', 'mobile-dj-manager' ); ?></th>
+                <td>{client_fullname}</td>
+                <th><?php _e( 'Phone:', 'mobile-dj-manager' ); ?></th>
+                <td>{client_primary_phone}</td>
+            </tr>
+            
+            <tr>
+            	<th><?php _e( 'Email:', 'mobile-dj-manager' ); ?></th>
+                <td>{client_email}</td>
+                <th><?php _e( 'Address:', 'mobile-dj-manager' ); ?></th>
+                <td>{client_full_address}</td>
+            </tr>
+            
+            <tr>
+            	<th colspan="4"><?php _e( 'Venue Details', 'mobile-dj-manager' ); ?></th>
+            </tr>
+            
+             <tr>
+            	<th><?php _e( 'Venue:', 'mobile-dj-manager' ); ?></th>
+                <td>{venue}</td>
+                <th><?php _e( 'Address:', 'mobile-dj-manager' ); ?></th>
+                <td>{venue_full_address}</td>
+            </tr>
+            
+        </table>
+    </div>
+    
+    <?php do_action( 'mdjm_event_details_after' ); ?>
+
+</div>
+<?php do_action( 'mdjm_event_detail_after_event' ); ?>

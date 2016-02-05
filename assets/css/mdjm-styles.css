@@ -92,6 +92,11 @@ input.mdjm-form-error {
 	font-style: italic;
 	text-decoration:underline;
 }
+.mdjm-edit	{
+	font-style: normal;
+	font-weight: normal;
+	font-size: 11px;
+}
 
 /* -- Home Page -- */
 
@@ -369,6 +374,60 @@ input.mdjm-form-error {
 	
 }
 
+#mdjm-singlevent-action-buttons	{
+	float:left;
+	width:100%;	
+}
+#mdjm-singlevent-action-buttons table	{
+	border-collapse: collapse;
+	width: 100%;	
+}
+
+#mdjm-singlevent-action-buttons td, th	{
+	border: hidden;
+	padding: 5px;
+	vertical-align: top;
+}
+
+#mdjm-singlevent-action-buttons th	{
+	text-align: left;
+	padding: 5px;
+	font-weight: normal;
+}
+
+#mdjm-singlevent-action-buttons button	{
+	font-size: 10px;
+	width: 15em;
+	height: 4em;
+}
+
+#mdjm-singlevent-action-buttons	{
+	float:left;
+	width:100%;	
+}
+#mdjm-singlevent-details table	{
+	border-collapse: collapse;
+	width: 100%;	
+}
+
+#mdjm-singlevent-details td th	{
+	padding: 5px;
+	vertical-align: top;
+}
+
+#mdjm-singlevent-details th	{
+	text-align: left;
+	padding: 5px;
+	font-weight: normal;
+}
+
+.mdjm-singleevent-overview	{
+	width: 100%;
+}
+
+.mdjm-singleevent-overview th td	{
+	border: hidden;
+}
 	
 /* -- Footer -- */
 #mdjm-cz-footer	{
