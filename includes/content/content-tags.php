@@ -1058,7 +1058,7 @@ function mdjm_content_tag_deposit_status( $event_id='' )	{
 		return '';
 	}
 	
-	$return = get_post_meta( $post_id, '_mdjm_event_deposit_status', true );
+	$return = get_post_meta( $event_id, '_mdjm_event_deposit_status', true );
 	
 	if( empty( $return ) )	{
 		$return = 'Due';	
@@ -1309,7 +1309,7 @@ function mdjm_content_tag_event_date( $event_id='' )	{
 	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	
 	if( !empty( $date ) )	{
-		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
+		$return = date( 'l, jS F Y', strtotime( $date ) );
 	}
 	
 	return $return;
@@ -1334,7 +1334,7 @@ function mdjm_content_tag_event_date_short( $event_id='' )	{
 	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	
 	if( !empty( $date ) )	{
-		$return = date( 'l, jS F Y', strtotime( $date ) );
+		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
 	}
 	
 	return $return;
@@ -1424,7 +1424,7 @@ function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
 		return '';
 	}
 	
-	$access = get_post_meta( $post_id, '_mdjm_event_playlist_access', true );
+	$access = get_post_meta( $event_id, '_mdjm_event_playlist_access', true );
 	
 	$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
 	
@@ -1560,7 +1560,7 @@ function mdjm_content_tag_total_cost( $event_id='' )	{
 	
 	$return = __( 'Not specified', 'mobile-dj-manager' );
 	
-	$cost = get_post_meta( $post_id, '_mdjm_event_cost', true );
+	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
 	
 	if( !empty( $cost ) )	{
 		$return = display_price( $cost );

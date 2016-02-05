@@ -10,6 +10,6 @@
  * @shortcodes		Supported
  *
  * Do not customise this file!
- * If you wish to make changes, copy this file to your theme directory /theme/templates/event-single.php
+ * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-single.php
  */
 ?>

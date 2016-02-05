@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains all role functions.
+ * Contains misc functions.
  *
  * @package		MDJM
  * @subpackage	Functions

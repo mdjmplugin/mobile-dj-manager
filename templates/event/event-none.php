@@ -9,7 +9,7 @@
  * @shortcodes		Supported
  *
  * Do not customise this file!
- * If you wish to make changes, copy this file to your theme, or child theme, directory /theme/templates/event-none.php
+ * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-none.php
  */
 ?>
 <div id="client-no-events">

@@ -81,12 +81,16 @@ function mdjm_shortcode_home( $atts )	{
 		
 		if( $events->have_posts() )	{
 			if( $events->post_count == 1 )	{
+				ob_start();
 				mdjm_get_template_part( 'event', 'single' );
-				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+				ob_get_clean();
 			}
 			else	{
+				ob_start();
 				mdjm_get_template_part( 'event', 'loop-header' );
-				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+				ob_get_clean();
 				
 				do_action( 'mdjm_event_loop_before_loop' );
 				?>
@@ -94,24 +98,28 @@ function mdjm_shortcode_home( $atts )	{
                 <?php
 				
 				while( $events->have_posts() )	{
+					ob_start();
 					$events->the_post();
 					mdjm_get_template_part( 'event', 'loop' );
-					$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id ) );
+					$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
+					ob_get_clean();
 				}
 				
 				?>
                 </div>
                 <?php
 				do_action( 'mdjm_event_loop_after_loop' );
-				
+				ob_start();
 				mdjm_get_template_part( 'event', 'loop-footer' );
-				$output .= do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+				ob_get_clean();
 			}
 			wp_reset_postdata();
 		} 
 		else	{
 			mdjm_get_template_part( 'event', 'none' );
-			$output = do_shortcode( mdjm_do_content_tags( ob_get_contents(), '', $client_id ) );
+			$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+			ob_get_clean();
 		}
 		
 		return $output;

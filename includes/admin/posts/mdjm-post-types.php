@@ -493,176 +493,233 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		 * Register the custom post statuses
 		 */
 		public static function register_post_status()	{
-			/**
-			 * Communication Post Statuses
-			 */
+			/** Communication Post Statuses */
 			register_post_status( 
 				'ready to send',
-				array(
-					'label'                     => __( 'Ready to Send', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Ready to Send <span class="count">(%s)</span>', 'Ready to Send <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-			
-			register_post_status( 
-				'sent',
-				array(
-					'label'                     => __( 'Sent', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-			
-			register_post_status(
-				'opened',
-				array(
-					'label'                     => __( 'Opened', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Opened <span class="count">(%s)</span>', 'Opened <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-			
-			register_post_status(
-				'failed',
-				array(
-					'label'                     => __( 'Failed', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-			/**
-			 * Event Post Statuses
-			 */
-			register_post_status( 
-				'mdjm-unattended',
-				array(
-					'label'                     => __( 'Unattended Enquiry', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-
-			register_post_status(
-				'mdjm-enquiry',
-				array(
-					'label'                     => __( 'Enquiry', 'mobile-dj-manager' ),
-					'public'                    => true,
-					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Enquiry <span class="count">(%s)</span>', 'Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
-							
-				register_post_status(
-					'mdjm-approved',
+				apply_filters( 'mdjm_register_post_status_ready_to_send',
 					array(
-						'label'                     => __( 'Approved', 'mobile-dj-manager' ),
+						'label'                     => __( 'Ready to Send', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Approved <span class="count">(%s)</span>', 'Approved <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Ready to Send <span class="count">(%s)</span>', 'Ready to Send <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+			
+			register_post_status( 
+				'sent',
+				apply_filters( 'mdjm_register_post_status_sent',
+					array(
+						'label'                     => __( 'Sent', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+			
+			register_post_status(
+				'opened',
+				apply_filters( 'mdjm_register_post_status_opened',
+					array(
+						'label'                     => __( 'Opened', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Opened <span class="count">(%s)</span>', 'Opened <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+			
+			register_post_status(
+				'failed',
+				apply_filters( 'mdjm_register_post_status_failed',
+					array(
+						'label'                     => __( 'Failed', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+			
+			/** Event Post Statuses */
+			register_post_status( 
+				'mdjm-unattended',
+				apply_filters( 'mdjm_register_post_status_mdjm-unattended',
+					array(
+						'label'                     => __( 'Unattended Enquiry', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+
+			register_post_status(
+				'mdjm-enquiry',
+				apply_filters( 'mdjm_register_post_status_mdjm-enquiry',
+					array(
+						'label'                     => __( 'Enquiry', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Enquiry <span class="count">(%s)</span>', 'Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
+							
+			register_post_status(
+				'mdjm-approved',
+				apply_filters( 'mdjm_register_post_status_mdjm-approved',
+					array(
+						'label'                     => __( 'Confirmed', 'mobile-dj-manager' ),
+						'public'                    => true,
+						'exclude_from_search'       => false,
+						'show_in_admin_all_list'    => true,
+						'show_in_admin_status_list' => true,
+						'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				register_post_status(
-					'mdjm-contract',
+			register_post_status(
+				'mdjm-contract',
+				apply_filters( 'mdjm_register_post_status_mdjm-contract',
 					array(
 						'label'                     => __( 'Awaiting Contract', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 
-				register_post_status(
-					'mdjm-completed',
+			register_post_status(
+				'mdjm-completed',
+				apply_filters( 'mdjm_register_post_status_mdjm-completed',
 					array(
 						'label'                     => __( 'Completed', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 						
-				register_post_status(
-					'mdjm-cancelled',
+			register_post_status(
+				'mdjm-cancelled',
+				apply_filters( 'mdjm_register_post_status_mdjm-cancelled',
 					array(
 						'label'                     => __( 'Cancelled', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				register_post_status(
-					'mdjm-rejected',
+			register_post_status(
+				'mdjm-rejected',
+				apply_filters( 'mdjm_register_post_status_mdjm-rejected',
 					array(
 						'label'                     => __( 'Rejected Enquiry', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Rejected Enquiry <span class="count">(%s)</span>', 'Rejected Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Rejected Enquiry <span class="count">(%s)</span>', 'Rejected Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				register_post_status(
-					'mdjm-failed',
+			register_post_status(
+				'mdjm-failed',
+				apply_filters( 'mdjm_register_post_status_mdjm-failed',
 					array(
 						'label'                     => __( 'Failed Enquiry', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Failed Enquiry <span class="count">(%s)</span>', 'Failed Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Failed Enquiry <span class="count">(%s)</span>', 'Failed Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				/**
-				 * Online Quote Post Statuses
-				 */		
-				register_post_status(
-					'mdjm-quote-generated',
+			/** Online Quote Post Statuses */		
+			register_post_status(
+				'mdjm-quote-generated',
+				apply_filters( 'mdjm_register_post_status_mdjm-quote-generated',
 					array(
 						'label'                     => __( 'Generated', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Generated Quote <span class="count">(%s)</span>', 'Generated Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Generated Quote <span class="count">(%s)</span>', 'Generated Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				register_post_status(
-					'mdjm-quote-viewed',
+			register_post_status(
+				'mdjm-quote-viewed',
+				apply_filters( 'mdjm_register_post_status_quote-viewed',
 					array(
 						'label'                     => __( 'Viewed', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Viewed Quote <span class="count">(%s)</span>', 'Viewed Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Viewed Quote <span class="count">(%s)</span>', 'Viewed Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				/**
-				 * Transaction Post Statuses
-				 */		
-				register_post_status(
-					'mdjm-income',
+			/** Transaction Post Statuses */		
+			register_post_status(
+				'mdjm-income',
+				apply_filters( 'mdjm_register_post_status_mdjm-income',
 					array(
 						'label'                     => __( 'Income', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Received Payment <span class="count">(%s)</span>', 'Received Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Received Payment <span class="count">(%s)</span>', 'Received Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 				
-				register_post_status(
-					'mdjm-expenditure',
+			register_post_status(
+				'mdjm-expenditure',
+				apply_filters( 'mdjm_register_post_status_mdjm-expenditure',
 					array(
 						'label'                     => __( 'Expenditure', 'mobile-dj-manager' ),
 						'public'                    => true,
 						'exclude_from_search'       => false,
 						'show_in_admin_all_list'    => true,
 						'show_in_admin_status_list' => true,
-						'label_count'               => _n_noop( 'Ougoing Payment <span class="count">(%s)</span>', 'Ougoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ) ) );
+						'label_count'               => _n_noop( 'Ougoing Payment <span class="count">(%s)</span>', 'Ougoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
+					)
+				)
+			);
 		} // register_post_status
 		
 		/**
