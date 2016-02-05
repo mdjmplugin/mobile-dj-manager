@@ -124,6 +124,9 @@ function mdjm_shortcode_home( $atts )	{
 		
 		return $output;
 	}
+	else	{
+		ClientZone::login();
+	}
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
 

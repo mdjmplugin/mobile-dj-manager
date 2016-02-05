@@ -950,8 +950,8 @@ function mdjm_content_tag_balance( $event_id='' )	{
 	$rcvd = MDJM()->txns->get_transactions( $event_id, 'mdjm-income' );
 	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
 	
-	if( !empty( $paid ) && $paid != '0.00' && !empty( $cost ) )	{
-		return display_price( ( $cost - $paid ) );	
+	if( !empty( $rcvd ) && $rcvd != '0.00' && !empty( $cost ) )	{
+		return display_price( ( $cost - $rcvd ) );	
 	}
 	
 	return display_price( $cost );

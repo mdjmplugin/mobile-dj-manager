@@ -52,7 +52,6 @@ function mdjm_active_event_statuses()	{
 		array(
 			'mdjm-approved',
 			'mdjm-contract',
-			'mdjm-completed',
 			'mdjm-enquiry'
 		)
 	);

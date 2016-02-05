@@ -36,7 +36,7 @@ function mdjm_playlist_is_enabled( $event_id )	{
  */
 function mdjm_playlist_is_open( $event_id )	{
 	// Playlist disabled for this event
-	if( ! mdjm_playlist_is_enabled() )	{
+	if( ! mdjm_playlist_is_enabled( $event_id ) )	{
 		return false;
 	}
 	

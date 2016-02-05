@@ -33,7 +33,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 				array(
 					'label'		=> __( 'View Quote', 'mobile-dj-manager' ),
 					'id'		=> 'mdjm-quote-button',
-					'uri'		=> mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $event_id
+					'url'		=> mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $event_id
 				)	
 			);
 		}
@@ -42,7 +42,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 			array(
 				'label'		=> __( 'Book Event', 'mobile-dj-manager' ),
 				'id'		=> 'mdjm-book-button',
-				'uri'		=> mdjm_get_formatted_url( MDJM_HOME, true ) . 'do_action=accept_enquiry&amp;event_id=' . $event_id
+				'url'		=> mdjm_get_formatted_url( MDJM_HOME, true ) . 'do_action=accept_enquiry&amp;event_id=' . $event_id
 			)	
 		);
 	}
@@ -53,7 +53,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 			array(
 				'label'		=> __( 'Review &amp; Sign Contract', 'mobile-dj-manager' ),
 				'id'		=> 'mdjm-sign-contract-button',
-				'uri'		=> mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 'event_id=' . $event_id
+				'url'		=> mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 'event_id=' . $event_id
 			)	
 		);
 	}
@@ -64,7 +64,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 			array(
 				'label'		=> __( 'View Contract', 'mobile-dj-manager' ),
 				'id'		=> 'mdjm-view-contract-button',
-				'uri'		=> mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 'event_id=' . $event_id
+				'url'		=> mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 'event_id=' . $event_id
 			)	
 		);
 	}
@@ -76,7 +76,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 				array(
 					'label'		=> __( 'Manage Playlist', 'mobile-dj-manager' ),
 					'id'		=> 'mdjm-manage-playlist-button',
-					'uri'		=> mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true )
+					'url'		=> mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ) . 'event_id=' . $event_id
 				)	
 			);
 		}
@@ -87,7 +87,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 			array(
 				'label'		=> __( 'Update Profile', 'mobile-dj-manager' ),
 				'id'		=> 'mdjm-manage-playlist-button',
-				'uri'		=> mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false )
+				'url'		=> mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false )
 			)	
 		);
 		
@@ -95,7 +95,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 			array(
 				'label'		=> __( 'Book Another Event', 'mobile-dj-manager' ),
 				'id'		=> 'mdjm-book-again-button',
-				'uri'		=> mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false )
+				'url'		=> mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false )
 			)	
 		);
 	}

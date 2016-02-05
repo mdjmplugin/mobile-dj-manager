@@ -71,17 +71,18 @@ function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
  *
  * @param	int		$client_id	Optional: The WP userID of the client. Default to current user.
  *			str|arr	$status		Optional: Status of events that should be returned. Default any.
- *			str		$orderby	Optional: The field by which to order. Default date.
+ *			str		$orderby	Optional: The field by which to order. Default event date.
  *			str		$order		Optional: DESC (default) | ASC
  *
  * @return	mixed	$events		WP_Query object or false.
  */
-function mdjm_get_client_events( $client_id='', $status='any', $orderby='post_date', $order='DESC' )	{
+function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_date', $order='ASC' )	{
 	$args = apply_filters( 'mdjm_get_client_events_args',
 		array(
 			'post_type'        => 'mdjm-event',
 			'post_status'      => $status,
-			'orderby'          => $orderby,
+			'meta_key'         => '_mdjm_' . $orderby,
+			'orderby'          => 'meta_value_num',
 			'order'            => $order,
 			'meta_query'       => array(
 				array(

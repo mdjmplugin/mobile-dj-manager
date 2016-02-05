@@ -47,6 +47,45 @@
                 <?php echo mdjm_get_option( 'balance_label', __( 'Balance Due', 'mobile-dj-manager' ) ) ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
 			</td>
         </tr>
+        
+        <?php
+		/**
+		 * Display event action buttons
+		 */
+		?>
+        
+        <?php $buttons = mdjm_get_event_action_buttons( get_the_ID() ); ?>
+        <?php $cells   = 2; // Number of cells ?>
+		<?php $i       = 1; // Counter for the current cell ?>
+        
+		<?php foreach( $buttons as $button ) : ?>
+        	
+			<?php if( $i == 1 ) : ?>
+            	<tr>
+            <?php endif; ?><!-- endif( $i == 1 ) -->
+            
+            		<td><?php printf( '<a href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+                    
+			<?php if( $i == $cells ) : ?>
+                </tr>
+                <?php $i = 0; ?>
+            <?php endif; ?><!-- endif( $i == $cells ) -->
+        	
+            <?php $i++; ?>
+            
+		<?php endforeach; ?><!-- endforeach( $buttons as $button ) -->
+        
+        <?php // Write out empty cells to complete the table row ?>
+            <?php if( $i != 1 ) : ?>
+            	
+				<?php while( $i <= $cells ) : ?>
+                	<td>&nbsp;</td>
+                    <?php $i++; ?>
+                    <?php if( $i == $cells ) : ?> </tr> <?php endif; ?>
+                <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
+                
+            <?php endif; ?><!-- endif( $i < $cells ) -->
+        	</tr>
 	</table>
 </div>    
 <?php do_action( 'mdjm_event_loop_after_event' ); ?>
