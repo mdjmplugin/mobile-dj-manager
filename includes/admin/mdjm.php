@@ -450,7 +450,7 @@
 			public function cron()	{
 				global $mdjm_settings;
 				/* Access the cron functions */
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-cron.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/class-mdjm-cron.php' );
 				
 				/* Get the scheduled tasks */
 				$mdjm_schedules = get_option( 'mdjm_schedules' );

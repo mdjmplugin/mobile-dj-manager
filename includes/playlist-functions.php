@@ -47,3 +47,24 @@ function mdjm_playlist_is_open( $event_id )	{
 		
 	return time() > ( $date - ( MDJM_PLAYLIST_CLOSE * DAY_IN_SECONDS ) ) ? false : true;
 } // mdjm_playlist_is_open
+
+/**
+ * Returns the URL for the events guest playlist.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str		URL to access the guest playlist.
+ */
+function mdjm_guest_playlist_url( $event_id )	{
+	$access_code = get_post_meta( $event_id, '_mdjm_event_playlist_access', true );
+	
+	if( empty( $access_code ) )	{
+		$url = '';
+	}
+	
+	else	{
+		$url = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true ) . 'guest_playlist=' . $access_code;
+	}
+	
+	return $url;
+} // mdjm_guest_playlist_url

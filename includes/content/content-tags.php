@@ -1424,12 +1424,14 @@ function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
 		return '';
 	}
 	
-	$access = get_post_meta( $event_id, '_mdjm_event_playlist_access', true );
+	$url = mdjm_guest_playlist_url( $event_id );
 	
-	$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
+	if( empty( $url ) )	{
+		$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
+	}
 	
-	if( !empty( $access ) )	{
-		$return = mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ) . 'event_id=' . $event_id;
+	else	{
+		$return = $url;
 	}
 		
 	return $return;

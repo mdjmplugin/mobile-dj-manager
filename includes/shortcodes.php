@@ -154,6 +154,43 @@ function mdjm_shortcode_home( $atts )	{
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
 
 /**
+ * MDJM Playlist Shortcode.
+ *
+ * Displays the MDJM plsylist management system which will render a client interface for clients
+ * or a guest interface for event guests with the access URL.
+ * 
+ * @since	1.3
+ *
+ * @return	string
+ */
+function mdjm_shortcode_playlist( $atts )	{
+	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
+	
+	if( $visitor == 'client' )	{
+		$event = mdjm_get_event_by_id( $_GET['event_id'] );
+	}
+	else	{
+		$event = mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] );
+	}
+	
+	if( $event->have_posts() )	{
+		while( $event->have_posts() )	{
+			ob_start();
+			$event->the_post();
+			$client_id = mdjm_get_client_id( get_the_ID() );
+			mdjm_get_template_part( 'playlist', $visitor );
+			$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
+			ob_get_clean();
+		}
+		
+		wp_reset_postdata();
+	}
+	
+	return $output;
+} // mdjm_shortcode_playlist
+add_shortcode( 'mdjm-playlist', 'mdjm_shortcode_playlist' );
+
+/**
  * Display the MDJM availability checker.
  * 
  * @since	1.3

@@ -1,9 +1,9 @@
 <?php
 /*
- * mdjm-cron.php
+ * MDJM Cron Class
  * 10/03/2015
  * @since 1.1.2
- * The main MDJM class
+ * The MDJM cron class
  */
 	
 	/* -- Build the MDJM_Cron class -- */

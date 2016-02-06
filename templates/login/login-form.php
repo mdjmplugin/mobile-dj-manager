@@ -9,7 +9,7 @@
  * @shortcodes		Not Supported
  *
  * Do not customise this file!
- * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/login/login.php
+ * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/login/login-form.php
  */
 global $mdjm_login_redirect;
 ?>

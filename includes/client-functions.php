@@ -67,6 +67,17 @@ function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
 } // mdjm_get_clients
 
 /**
+ * Retrieve the client ID from the event
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	$arr	$employees	or false if no employees for the specified roles
+ */
+function mdjm_get_client_id( $event_id )	{
+	return get_post_meta( $event_id, '_mdjm_event_client', true );
+} // mdjm_get_client_id
+
+/**
  * Retrieve all of this clients events.
  *
  * @param	int		$client_id	Optional: The WP userID of the client. Default to current user.

@@ -29,6 +29,33 @@ function mdjm_get_event_by_id( $event_id )	{
 	
 	return $event_query;
 } // mdjm_get_event_by_id
+
+/**
+ * Retrieve all of this clients events.
+ *
+ * @since	1.3
+ * @param	int		$access_code	The access code for the event playlist.
+ * @return	obj		$event_query	WP_Query object.
+ */
+function mdjm_get_event_by_playlist_code( $access_code )	{
+	$args = apply_filters( 'mdjm_get_event_by_playlist_code_args',
+		array(
+			'post_type'        => 'mdjm-event',
+			'post_status'      => 'any',
+			'posts_per_page'   => 1,
+			'meta_query'       => array(
+				array(
+					'key'      => '_mdjm_event_playlist_access',
+					'value'    => $access_code
+				),
+			)
+		)
+	);
+	
+	$event_query = new WP_Query( $args );
+	
+	return $event_query;
+} // mdjm_get_event_by_playlist_code
 	
 /**
  * Returns an array of event post status.
