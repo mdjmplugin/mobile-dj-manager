@@ -50,6 +50,10 @@
 	font-size: smaller;
 }
 
+#mdjm-playlist-form-table .mdjm-playlist-addnew-cell	{
+	text-align: right;
+}
+
 /* Playlist Entries */
 #mdjm-playlist-entries .col	{
     float: left;

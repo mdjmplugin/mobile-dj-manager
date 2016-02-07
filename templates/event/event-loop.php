@@ -28,7 +28,9 @@
 		</tr>
 		<tr>
 			<td><span class="mdjm-event-label"><?php _e( 'Time', 'mobile-dj-manager' ); ?></span><br />
-				{start_time} - {end_time}
+				{start_time} - {end_time}<br />
+				<span class="mdjm-event-label"><?php _e( 'Duration', 'mobile-dj-manager' ); ?></span><br />
+                {event_duration}
 			</td>
             <td rowspan="3" class="top-align"><span class="mdjm-event-label"><?php _e( 'Venue', 'mobile-dj-manager' ); ?></span><br />
 				{venue}

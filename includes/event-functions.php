@@ -193,16 +193,16 @@ function mdjm_get_event_uri( $event_id )	{
 } // mdjm_get_event_uri
 
 /**
- * Retrieve the length of the event.
+ * Retrieve the duration of the event.
  *
- * Calculate the length of the event and return in human readable format.
+ * Calculate the duration of the event and return in human readable format.
  *
  * @since	1.3
  * @uses	human_time_diff
  * @param	int		$event_id	The event ID.
  * @return	str		The length of the event.
  */
-function mdjm_event_length( $event_id )	{
+function mdjm_event_duration( $event_id )	{
 	$start_time = get_post_meta( $event_id, '_mdjm_event_start', true );
 	$start_date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	$end_time   = get_post_meta( $event_id, '_mdjm_event_finish', true );
@@ -212,11 +212,11 @@ function mdjm_event_length( $event_id )	{
 		$start  = strtotime( $start_time . ' ' . $start_date );
 		$end    = strtotime( $end_time . ' ' . $end_date );
 		
-		$length = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
+		$duration = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
 		
-		return apply_filters( 'mdjm_event_length', $length );
+		return apply_filters( 'mdjm_event_duration', $duration );
 	}
-} // mdjm_event_length
+} // mdjm_event_duration
 
 /**
  * Calculate time to event.

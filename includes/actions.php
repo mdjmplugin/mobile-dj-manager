@@ -37,7 +37,7 @@ add_action( 'init', 'mdjm_get_actions' );
 */
 function mdjm_post_actions() {
 	if ( isset( $_POST['mdjm_action'] ) ) {
-		do_action( 'edd_' . $_POST['mdjm_action'], $_POST );
+		do_action( 'mdjm_' . $_POST['mdjm_action'], $_POST );
 	}
 } // mdjm_post_actions
 add_action( 'init', 'mdjm_post_actions' );

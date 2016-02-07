@@ -433,6 +433,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_description'
 		),
 		array(
+			'tag'         => 'event_duration',
+			'description' => __( 'The duration of the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_duration'
+		),
+		array(
 			'tag'         => 'event_name',
 			'description' => __( 'The assigned name of the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_name'
@@ -1358,6 +1363,23 @@ function mdjm_content_tag_event_description( $event_id='' )	{
 		
 	return $return;
 } // mdjm_content_tag_event_description
+
+/**
+ * Content tag: event_duration.
+ * Duration of the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The duration of the event in hours, minutes.
+ */
+function mdjm_content_tag_event_duration( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+				
+	return mdjm_event_duration( $event_id );
+} // event_duration
 
 /**
  * Content tag: event_name.

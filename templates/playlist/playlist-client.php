@@ -66,6 +66,11 @@ $mdjm_event_id = get_the_ID();
                             <textarea name="mdjm_playlist_djnotes" id="mdjm_playlist_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>"></textarea>
                         </td>
                     </tr>
+                    <tr>
+                    	<td class="mdjm-playlist-addnew-cell" colspan="4">
+                            <input type="submit" name="mdjm_playlist_addnew" id="mdjm_playlist_addnew" value="<?php _e( 'Add to Playlist', 'mobile-dj-manager' ); ?>" />
+                        </td>
+                    </tr>
                 </table>
             </form>
             
@@ -89,8 +94,8 @@ $mdjm_event_id = get_the_ID();
         	<p><?php printf( __( 'Your playlist currently consists of %d %s and is approximately %s long. Your event is %s long.', 'mobile-dj-manager' ),
 					$songs_in_playlist,
 					_n( 'track', 'tracks', $songs_in_playlist, 'mobile-dj-manager' ),
-					mdjm_playlist_length( $mdjm_event_id, $songs_in_playlist ),
-					mdjm_event_length( $mdjm_event_id ) ); ?></p>
+					mdjm_playlist_duration( $mdjm_event_id, $songs_in_playlist ),
+					mdjm_event_duration( $mdjm_event_id ) ); ?></p>
         
         	<?php foreach( $playlist as $category => $songs ) : ?>
             	
@@ -129,7 +134,7 @@ $mdjm_event_id = get_the_ID();
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         
-                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_song&song_id=' . $entry->id, 'remove_song', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
+                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=mdjm_delete_playlist_entry&id=' . $entry->id, 'delete_song', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
                     </div>
                 </div>
                 

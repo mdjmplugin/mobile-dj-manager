@@ -12,6 +12,58 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Add a song to the playlist.
+ *
+ * Add a new song to the event playlist.
+ *
+ * @since	1.3
+ * @param	arr		$data	Form data from the $_POST super global.
+ * @return	void
+ */
+function mdjm_add_song( $data )	{
+	if( wp_verify_nonce( 'mdjm_nonce', 'add_song' ) )	{
+		// Process actions before adding song.
+		do_action( 'mdjm_before_add_song', $data );
+		
+		// Process actions after adding song.
+		do_action( 'mdjm_after_add_song', $data );
+	}
+} // mdjm_add_song
+add_action( 'mdjm_add_song', 'mdjm_add_song' );
+
+/**
+ * Remove a song.
+ *
+ * Remove a new song from the event playlist.
+ *
+ * @since	1.3
+ * @param	int		$entry_id	DB entry ID.
+ * @return	void
+ */
+function mdjm_delete_song( $data )	{
+	global $wpdb;
+	
+	if( isset( $data[ 'id' ] ) && wp_verify_nonce( 'mdjm_nonce', 'delete_song' ) )	{
+		// Process actions before removing song.
+		do_action( 'mdjm_before_delete_song', $entry_id );
+		
+		$return = $wpdb->delete(
+			MDJM_PLAYLIST_TABLE,
+			array( 'id' => $entry_id ),
+			array( '%d' ) 
+		);
+		
+		if( $return )	{
+			// Process actions after removing song.
+			do_action( 'mdjm_after_delete_song', $return );
+			
+			return $return;
+		}
+	}
+} // mdjm_delete_song
+add_action( 'mdjm_delete_playlist_entry', 'mdjm_delete_song' );
+
+/**
  * Retrieves the playlist entries for an event grouped by category.
  *
  * @since	1.3
@@ -136,29 +188,28 @@ function mdjm_count_songs( $event_id, $category='' )	{
 } // mdjm_count_songs
 
 /**
- * Retrieve the length of the event playlist.
+ * Retrieve the duration of the event playlist.
  *
  * Calculate the approximate length of the event playlist and return in human readable format.
  *
  * @since	1.3
  * @param	int		$event_id		The event ID.
  * @param	int		$songs			Number of songs in playlist.
- * @param	int		$song_length	Average length of a song in seconds.
+ * @param	int		$song_duration	Average length of a song in seconds.
  * @return	str		The length of the event playlist.
  */
-function mdjm_playlist_length( $event_id='', $songs='', $song_length=180 )	{
+function mdjm_playlist_duration( $event_id='', $songs='', $song_duration=180 )	{
 	if( empty( $songs ) )	{
 		$songs = mdjm_count_songs( $event_id );
 	}
 	
-	$length_of_playlist = ( $songs * $song_length );
 	$start_time         = current_time( 'timestamp' );
-	$end_time           = strtotime( '+' . ( $song_length * $songs ) . ' seconds', current_time( 'timestamp' ) );
+	$end_time           = strtotime( '+' . ( $song_duration * $songs ) . ' seconds', current_time( 'timestamp' ) );
 	
-	$length = str_replace( 'min', 'minute', human_time_diff( $start_time, $end_time ) );
+	$duration = str_replace( 'min', 'minute', human_time_diff( $start_time, $end_time ) );
 	
-	return apply_filters( 'mdjm_playlist_length', $length, $event_id, $songs, $song_length ); 
-} // mdjm_playlist_length
+	return apply_filters( 'mdjm_playlist_duration', $duration, $event_id, $songs, $song_duration ); 
+} // mdjm_playlist_duration
 
 /**
  * Returns the URL for the events guest playlist.
