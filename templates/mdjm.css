@@ -1,0 +1,85 @@
+/**
+ * MDJM Event Management Styles
+ *
+ * @package     MDJM
+ * @subpackage  CSS
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
+
+@charset "UTF-8";
+
+/* =Events Page
+-------------------------------------------------------------- */
+
+/* =Playlist Page
+-------------------------------------------------------------- */
+
+#mdjm-playlist-header	{
+	float: left;
+}
+
+#mdjm-playlist-header p.head-nav	{
+	font-size: 11px;
+	text-align: right;
+	colour: #7B7D80;
+}
+
+/* Playlist Table */
+#mdjm-playlist-form-table	{
+	border-collapse: collapse;
+	border: none;
+	font-size: smaller;
+}
+
+#mdjm-playlist-form-table td	{
+	text-align: left;
+	vertical-align: top;
+	border: none;
+	padding: 5px;
+}
+
+#mdjm-playlist-form-table td label	{
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#mdjm-playlist-form-table td input,
+#mdjm-playlist-form-table td select,
+#mdjm-playlist-form-table td textarea	{
+	font-size: smaller;
+}
+
+/* Playlist Entries */
+#mdjm-playlist-entries .col	{
+    float: left;
+    width: 25%;
+}
+
+#mdjm-playlist-entries .last	{
+    float: right;
+    width: 25%;
+}
+
+#mdjm-playlist-entries .category	{
+    float: left;
+    width: 100%;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+#mdjm-playlist-entries .row	{
+    height: auto;
+    overflow: auto;
+}
+
+#mdjm-playlist-entries .mdjm-playlist-entry:hover	{
+	background-color: #DFF2BF;
+}
+
+#mdjm-playlist-entries .cat-count	{
+	font-style: italic;
+	font-weight: normal;
+	font-size: small;
+}
+

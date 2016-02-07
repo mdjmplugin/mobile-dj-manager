@@ -180,4 +180,64 @@ function mdjm_get_event_type( $event_id='' )	{
 	// Return the label for the status
 	return $return;
 } // mdjm_get_event_type
-?>
+	
+/**
+ * Returns the URL for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str		URL to Client Zone page for the event.
+ */
+function mdjm_get_event_uri( $event_id )	{
+	return mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) . 'event_id=' . $event_id;
+} // mdjm_get_event_uri
+
+/**
+ * Retrieve the length of the event.
+ *
+ * Calculate the length of the event and return in human readable format.
+ *
+ * @since	1.3
+ * @uses	human_time_diff
+ * @param	int		$event_id	The event ID.
+ * @return	str		The length of the event.
+ */
+function mdjm_event_length( $event_id )	{
+	$start_time = get_post_meta( $event_id, '_mdjm_event_start', true );
+	$start_date = get_post_meta( $event_id, '_mdjm_event_date', true );
+	$end_time   = get_post_meta( $event_id, '_mdjm_event_finish', true );
+	$end_date   = get_post_meta( $event_id, '_mdjm_event_end_date', true );
+	
+	if( ! empty( $start_time ) && ! empty( $start_date ) && ! empty( $end_time ) && ! empty( $end_time ) )	{
+		$start  = strtotime( $start_time . ' ' . $start_date );
+		$end    = strtotime( $end_time . ' ' . $end_date );
+		
+		$length = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
+		
+		return apply_filters( 'mdjm_event_length', $length );
+	}
+} // mdjm_event_length
+
+/**
+ * Calculate time to event.
+ *
+ * Calculate the length of time until the event starts.
+ *
+ * @since	1.3
+ * @uses	human_time_diff
+ * @param	int		$event_id	The event ID.
+ * @return	str		The length of the event.
+ */
+function mdjm_time_until_event( $event_id )	{
+	$start_time = get_post_meta( $event_id, '_mdjm_event_start', true );
+	$start_date = get_post_meta( $event_id, '_mdjm_event_date', true );
+	
+	if( ! empty( $start_time ) && ! empty( $start_date ) )	{
+		$start  = strtotime( $start_time . ' ' . $start_date );
+		$end    = strtotime( $end_time . ' ' . $end_date );
+		
+		$length = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
+		
+		return apply_filters( 'mdjm_time_until_event', $length );
+	}
+} // mdjm_time_until_event

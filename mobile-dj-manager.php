@@ -228,6 +228,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/html-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' ); // Scheduler
+			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/debug/mdjm-debug.php' ); // Debug class

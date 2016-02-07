@@ -165,6 +165,7 @@ add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
  */
 function mdjm_shortcode_playlist( $atts )	{
 	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
+	$output  = '';
 	
 	if( $visitor == 'client' )	{
 		$event = mdjm_get_event_by_id( $_GET['event_id'] );
