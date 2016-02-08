@@ -366,7 +366,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						'public'			 	 => false,
 						'exclude_from_search'	=> true,
 						'publicly_queryable' 	 => true,
-						'show_ui'				=> false,
+						'show_ui'				=> true,
 						'show_in_menu'	   	   => false,
 						'query_var'		  	  => true,
 						'capability_type'	    => 'mdjm_playlist',
