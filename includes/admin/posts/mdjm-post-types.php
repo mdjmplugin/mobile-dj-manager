@@ -806,6 +806,42 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 						),
 						'update_count_callback'  => '_update_generic_term_count',) );
 			}
+			
+			/**
+			 * PLaylist Entry Taxonomies
+			 */
+			if( ! get_taxonomy( 'mdjm-playlist-category' ) )	{
+				register_taxonomy(
+					'mdjm-playlist-category',
+					'mdjm-playlist',
+					array(
+						'hierarchical'      	   => false,
+						'labels'            	 => array(
+							'name'              		   => _x( 'Playlist Categories', 'taxonomy general name', 'mobile-dj-manager' ),
+							'singular_name'     		  => _x( 'Playlist Categor', 'taxonomy singular name', 'mobile-dj-manager' ),
+							'search_items'      		   => __( 'Playlist Categories', 'mobile-dj-manager' ),
+							'all_items'         		  => __( 'All Playlist Categories', 'mobile-dj-manager' ),
+							'edit_item'        		  => __( 'Edit Playlist Category', 'mobile-dj-manager' ),
+							'update_item'       			=> __( 'Update Playlist Category', 'mobile-dj-manager' ),
+							'add_new_item'      		   => __( 'Add New Playlist Category', 'mobile-dj-manager' ),
+							'new_item_name'     		  => __( 'New Playlist Category', 'mobile-dj-manager' ),
+							'menu_name'         		  => __( 'Event Playlist Categories', 'mobile-dj-manager' ),
+							'separate_items_with_commas' => NULL,
+							'choose_from_most_used'	  => __( 'Choose from the most popular Playlist Categories', 'mobile-dj-manager' ),
+							'not_found'				  => __( 'No playlist categories found', 'mobile-dj-manager' ) ),
+						'show_ui'           		=> true,
+						'show_admin_column' 	  => false,
+						'query_var'         	  => true,
+						'capabilities'	  => array(
+							'manage_terms'	=> 'manage_mdjm',
+							'edit_terms'	  => 'manage_mdjm',
+							'delete_terms'	=> 'manage_mdjm',
+							'assign_terms'	=> 'mdjm_employee'
+						),
+						'update_count_callback'  => '_update_generic_term_count'
+					)
+				);
+			}
 
 			/**
 			 * Transaction Type Taxonomies

@@ -1,4 +1,24 @@
 <?php
+/**
+ * Create terms for each of the playlist categories.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_create_playlist_terms()	{
+	$playlist_categories = mdjm_get_option( 'playlist_cats', false );
+	
+	if ( ! empty( $playlist_categories ) )	{
+		$categories = explode( "\r\n", $playlist_categories );
+		
+		foreach( $categories as $category )	{
+			wp_insert_term( $category, 'mdjm-playlist-category' );
+		}
+	}
+} // mdjm_create_playlist_terms
+add_action( 'init', 'mdjm_create_playlist_terms' );
+
 /*
  * Update procedures for version 1.3
  *

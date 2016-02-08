@@ -42,48 +42,47 @@ function mdjm_get_playlist_entry( $entry_id = 0 ) {
  * @param	arr		$details	Playlist entry data
  * @return	bool	Whether or not the entry was created.
  */
-function mdjm_store_playlist_entry( $details, $entry_id = null )	{
+function mdjm_store_playlist_entry( $details )	{
 	$meta = array(
 		'event'     => isset( $details['entry_event'] )       ? $details['entry_event']       : '',
 		'song'      => isset( $details['entry_song'] )        ? $details['entry_song']        : '',
 		'artist'    => isset( $details['entry_artist'] )      ? $details['entry_artist']      : '',
-		'category'  => isset( $details['entry_category'] )    ? $details['entry_category']    : '',
 		'added_by'  => isset( $details['entry_added_by'] )    ? $details['entry_added_by']    : get_current_user_id(),
 	);
 	
-	if ( ! empty( $entry_id ) && mdjm_playlist_entry_exists( $entry_id ) ) {
-		// Update an existing playlist entry
-	}
+	$category = isset( $details['entry_category'] ) ? $details['entry_category'] : '';
+
+	// Add the playlist entry
+	$meta = apply_filters( 'mdjm_insert_playlist_entry', $meta );
+
+	do_action( 'mdjm_insert_playlist_entry_before', $meta );
+
+	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
+				mdjm_get_option( 'event_prefix', '' ) . $meta['event'],
+				$meta['song'],
+				$meta['artist'] );
+
+	$entry_id = wp_insert_post(
+		array(
+			'post_type'   => 'mdjm-playlist',
+			'post_title'  => $title,
+			'post_status' => 'publish',
+			'post_parent' => $meta['event']
+		)
+	);
 	
-	else	{
-		// Add the playlist entry
-		$meta = apply_filters( 'mdjm_insert_playlist_entry', $meta );
-
-		do_action( 'mdjm_insert_playlist_entry_before', $meta );
-
-		$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
-					mdjm_get_option( 'event_prefix', '' ) . $meta['event'],
-					$meta['song'],
-					$meta['artist'] );
-
-		$entry_id = wp_insert_post(
-			array(
-				'post_type'   => 'mdjm-playlist',
-				'post_title'  => $title,
-				'post_status' => 'publish',
-				'post_parent' => $meta['event']
-			)
-		);
-
-		foreach( $meta as $key => $value ) {
-			update_post_meta( $entry_id, '_mdjm_playlist_entry' . $key, $value );
-		}
-
-		do_action( 'mdjm_insert_playlist_entry_after', $meta, $entry_id );
-
-		// Playlist entry added
-		return $entry_id;
+	if( ! empty( $category ) )	{
+		wp_set_object_terms( $entry_id, $category, 'mdjm-playlist-category', false );
 	}
+
+	foreach( $meta as $key => $value ) {
+		update_post_meta( $entry_id, '_mdjm_playlist_entry' . $key, $value );
+	}
+
+	do_action( 'mdjm_insert_playlist_entry_after', $meta, $entry_id );
+
+	// Playlist entry added
+	return $entry_id;
 } // mdjm_store_playlist_entry
 
 /**
@@ -333,33 +332,35 @@ function mdjm_get_playlist_categories()	{
  */	
 function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 	$defaults = array(
-		'name'		=> 'entry_category',
-		'id'		  => 'entry_category',
-		'class'	   => ''
+		'show_option_all'    => '',
+		'show_option_none'   => '',
+		'option_none_value'  => '-1',
+		'orderby'            => 'name', 
+		'order'              => 'ASC',
+		'show_count'         => 0,
+		'hide_empty'         => 0, 
+		'child_of'           => 0,
+		'exclude'            => '',
+		'echo'               => 0,
+		'selected'           => 0,
+		'hierarchical'       => 0, 
+		'name'               => 'entry_category',
+		'id'                 => 'entry_category',
+		'class'              => '',
+		'taxonomy'           => 'mdjm-playlist-category',
+		'hide_if_empty'      => false,
+		'value_field'	    => 'term_id'
 	);
 	
 	$settings = wp_parse_args( $args, $defaults );
-	$class    = '';
-	
-	if( ! empty( $args['class'] ) )	{
-		$class = ' class="' . $args['class'] . '"';
-	}
-	
-	$categories = mdjm_get_playlist_categories();
-		
-	$output = '<select name="' . $settings['name'] . '" id="' . $settings['name'] . '"' . $class . '>' . "\r\n";
-	
-	foreach( $categories as $category )	{
-		$output .= '<option value="' . $category . '">' . $category . '</option>' . "\r\n";
-	}
-	
-	$output .= '</select>' . "\r\n";
+
+	$category_dropdown = wp_dropdown_categories( $settings );
 	
 	if( ! empty( $echo ) )	{
-		echo $output;
+		echo $category_dropdown;
 	}
 	else	{
-		return $output;
+		return $category_dropdown;
 	}
 	
 } // mdjm_playlist_category_dropdown
