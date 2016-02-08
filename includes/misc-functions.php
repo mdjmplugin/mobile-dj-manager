@@ -162,5 +162,21 @@ function mdjm_get_current_page_url() {
 	$uri = apply_filters( 'mdjm_get_current_page_url', $uri );
 
 	return $uri;
-}
+} // mdjm_get_current_page_url
 
+/**
+ * Display a Notice.
+ *
+ * Display a notice on the front end.
+ *
+ * @since	1.3
+ * @param	str		$class		The notice CSS class.
+ * @param	str		$title		The notice title.
+ * @param	str		$message	The notice message.
+ * @return	str		The HTML string for the notice
+ */
+function mdjm_display_notice( $class='success', $title='Success', $message='Completed successfully.' )	{	
+	$notice = '<div class="mdjm-' . $class . '"><span>' . $title . ': </span>' . $message . '</div>';
+
+	return apply_filters( 'mdjm_notice', $notice, $class, $title, $message );
+} // mdjm_display_notice

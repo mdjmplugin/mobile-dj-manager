@@ -167,6 +167,10 @@ function mdjm_shortcode_playlist( $atts )	{
 	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
 	$output  = '';
 	
+	if( ! isset( $_GET['event_id'] ) )	{
+		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
+	}
+	
 	if( $visitor == 'client' )	{
 		$event = mdjm_get_event_by_id( $_GET['event_id'] );
 	}

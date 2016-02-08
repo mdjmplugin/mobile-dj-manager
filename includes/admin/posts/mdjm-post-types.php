@@ -343,6 +343,52 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 			}
 			
 			/**
+			 * Register the mdjm-playlist custom post type for playlist entries
+			 */
+			if( ! post_type_exists( 'mdjm-playlist' ) )	{
+				register_post_type( 'mdjm-playlist',
+					array(
+						'labels'	=> array(
+							'name'               => _x( 'Playlist Entries', 'post type general name', 'mobile-dj-manager' ),
+							'singular_name'      => _x( 'Playlist Entry', 'post type singular name', 'mobile-dj-manager' ),
+							'menu_name'          => _x( 'Playlist Entries', 'admin menu', 'mobile-dj-manager' ),
+							'name_admin_bar'     => _x( 'Playlist Entry', 'add new on admin bar', 'mobile-dj-manager' ),
+							'add_new'            => __( 'Add Playlist Entry', 'mobile-dj-manager' ),
+							'add_new_item'       => __( 'Add New Playlist Entry', 'mobile-dj-manager' ),
+							'new_item'           => __( 'New Entry', 'mobile-dj-manager' ),
+							'edit_item'          => __( 'Edit Entry', 'mobile-dj-manager' ),
+							'view_item'          => __( 'View Entry', 'mobile-dj-manager' ),
+							'all_items'          => __( 'All Entries', 'mobile-dj-manager' ),
+							'search_items'       => __( 'Search Entries', 'mobile-dj-manager' ),
+							'not_found'          => __( 'No entries found.', 'mobile-dj-manager' ),
+							'not_found_in_trash' => __( 'No entries found in Trash.', 'mobile-dj-manager' ) ),
+						'description'			=> __( 'MDJM Event Management PLaylist Entries', 'mobile-dj-manager' ),
+						'public'			 	 => false,
+						'exclude_from_search'	=> true,
+						'publicly_queryable' 	 => true,
+						'show_ui'				=> false,
+						'show_in_menu'	   	   => false,
+						'query_var'		  	  => true,
+						'capability_type'	    => 'mdjm_playlist',
+						'capabilities'           => array(
+							'edit_post'             => 'edit_mdjm_playlist',
+							'read_post'             => 'read_mdjm_playlist',
+							'delete_post'           => 'delete_mdjm_playlist',
+							'edit_posts'            => 'edit_mdjm_playlists',
+							'edit_others_posts'     => 'edit_others_mdjm_playlists',
+							'publish_posts'         => 'publish_mdjm_playlists',
+							'read_private_posts'    => 'read_private_mdjm_playlists'
+						),
+						'map_meta_cap'		   => true,
+						'has_archive'        	=> false,
+						'hierarchical'       	   => false,
+						'menu_position'      	  => 5,
+						'supports'           	   => array( 'title' )
+					)
+				);
+			}
+			
+			/**
 			 * Register the mdjm-quotes custom post type for online quotations
 			 */
 			if( !post_type_exists( MDJM_QUOTE_POSTS ) )	{

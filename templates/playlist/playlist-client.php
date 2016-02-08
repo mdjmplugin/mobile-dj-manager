@@ -12,13 +12,18 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist.php
  */
+global $mdjm_notice;
 $mdjm_event_id = get_the_ID();
 ?>
+
 <div id="mdjm-playlist-wrapper">
 	<?php do_action( 'mdjm_playlist_top', $mdjm_event_id ); ?>
 	
 	<div id="mdjm-playlist-header">
+    	
     	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event_id ); ?>
+        
+        <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>
         
         <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event_id ); ?>"><?php  _e( 'Back to Event', 'mobile-dj-manager' ); ?></a></p>
         
@@ -41,34 +46,35 @@ $mdjm_event_id = get_the_ID();
         <?php if( mdjm_playlist_is_open( $mdjm_event_id ) ) : ?>
         
             <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
-                <?php wp_nonce_field( 'add_song', 'mdjm_nonce', true, true ); ?>
-                <?php mdjm_action_field( 'add_song' ); ?>
+                <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
+                <?php mdjm_action_field( 'add_playlist_entry' ); ?>
+                <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event_id; ?>" />
                 
                 <table id="mdjm-playlist-form-table">
                     <tr>
                         <td class="mdjm-playlist-song-cell">
-                            <label for="mdjm_playlist_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="mdjm_playlist_song" id="mdjm_playlist_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" />
+                            <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" />
                         </td>
                         
                         <td class="mdjm-playlist-artist-cell">
-                            <label for="mdjm_playlist_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="mdjm_playlist_artist" id="mdjm_playlist_artist" data-placeholder="<?php _e( 'Artist Name', 'mobile-dj-manager' ); ?>" />
+                            <label for="entry_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_artist" id="entry_artist" data-placeholder="<?php _e( 'Artist Name', 'mobile-dj-manager' ); ?>" />
                         </td>
                         
                         <td class="mdjm-playlist-category-cell">
-                            <label for="mdjm_playlist_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
+                            <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
                             <?php mdjm_playlist_category_dropdown(); ?>
                         </td>
                         
                         <td class="mdjm-playlist-djnotes-cell">
                             <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?></label><br />
-                            <textarea name="mdjm_playlist_djnotes" id="mdjm_playlist_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>"></textarea>
+                            <textarea name="entry_djnotes" id="entry_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>"></textarea>
                         </td>
                     </tr>
                     <tr>
                     	<td class="mdjm-playlist-addnew-cell" colspan="4">
-                            <input type="submit" name="mdjm_playlist_addnew" id="mdjm_playlist_addnew" value="<?php _e( 'Add to Playlist', 'mobile-dj-manager' ); ?>" />
+                            <input type="submit" name="entry_addnew" id="entry_addnew" value="<?php _e( 'Add to Playlist', 'mobile-dj-manager' ); ?>" />
                         </td>
                     </tr>
                 </table>
@@ -83,31 +89,31 @@ $mdjm_event_id = get_the_ID();
         
     	<?php do_action( 'mdjm_playlist_form_bottom', $mdjm_event_id ); ?>
 	</div><!-- end mdjm-playlist-form -->
-    
-    <div id="mdjm-playlist-entries">
-    	<?php do_action( 'mdjm_playlist_entries_top', $mdjm_event_id ); ?>
     	
-		<?php $playlist = mdjm_get_playlist_by_category( $mdjm_event_id ); ?>
-        
-        <?php if( $playlist ) : ?>
-        	<?php $songs_in_playlist = mdjm_count_songs( $mdjm_event_id ); ?>
+	<?php $playlist = mdjm_get_playlist_by_category( $mdjm_event_id ); ?>
+    
+    <?php if( $playlist ) : ?>
+    	 <div id="mdjm-playlist-entries">
+        	<?php do_action( 'mdjm_playlist_entries_top', $mdjm_event_id ); ?>
+            
+        	<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event_id ); ?>
         	<p><?php printf( __( 'Your playlist currently consists of %d %s and is approximately %s long. Your event is %s long.', 'mobile-dj-manager' ),
-					$songs_in_playlist,
-					_n( 'track', 'tracks', $songs_in_playlist, 'mobile-dj-manager' ),
-					mdjm_playlist_duration( $mdjm_event_id, $songs_in_playlist ),
+					$entries_in_playlist,
+					_n( 'track', 'tracks', $entries_in_playlist, 'mobile-dj-manager' ),
+					mdjm_playlist_duration( $mdjm_event_id, $entries_in_playlist ),
 					mdjm_event_duration( $mdjm_event_id ) ); ?></p>
         
-        	<?php foreach( $playlist as $category => $songs ) : ?>
+        	<?php foreach( $playlist as $category => $entries ) : ?>
             	
-				<?php $songs_in_category = mdjm_count_songs( $mdjm_event_id, $category ); ?>
+				<?php $entries_in_category = mdjm_count_playlist_entries( $mdjm_event_id, $category ); ?>
                 
                 <div class="row">
                 
-                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $songs_in_category; ?> <?php echo _n( 'song', 'songs', $songs_in_category, 'mobile-dj-manager' ); ?>)</span></div>
+                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $entries_in_category; ?> <?php echo _n( 'entry', 'entries', $entries_in_category, 'mobile-dj-manager' ); ?>)</span></div>
                     
                 </div>
                 
-                <?php foreach( $songs as $entry ) : ?>
+                <?php foreach( $entries as $entry ) : ?>
                 
                 	<div class="row mdjm-playlist-entry mdjm-playlist-entry-<?php echo $entry->id; ?>">
                     	<div class="mdjm-playlist-song col"><?php echo $entry->song; ?></div>
@@ -134,18 +140,19 @@ $mdjm_event_id = get_the_ID();
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         
-                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=mdjm_delete_playlist_entry&id=' . $entry->id, 'delete_song', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
+                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->id . '&event_id=' . $mdjm_event_id, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
                     </div>
                 </div>
                 
-                <?php endforeach; // end foreach( $songs as $entry ) ?>
+                <?php endforeach; // end foreach( $entries as $entry ) ?>
                 
             <?php endforeach; // end foreach( $playlist as $entry ) ?>
-        	
-        <?php endif; // endif( $playlist ) ?>
+        
+        </div><!-- end mdjm-playlist-entries -->
+	
+	<?php endif; // endif( $playlist ) ?>
     	
-        <?php do_action( 'mdjm_playlist_entries_bottom', $mdjm_event_id ); ?>
-    </div><!-- end mdjm-playlist-entries -->
+	<?php do_action( 'mdjm_playlist_entries_bottom', $mdjm_event_id ); ?>
     
     	
     <div id="mdjm-playlist-footer">
