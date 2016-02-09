@@ -761,6 +761,7 @@
 			wp_insert_term( __( 'Mother & Son', 'mobile-dj-manager' ), 'playlist-category' );
 			wp_insert_term( __( 'DO NOT PLAY', 'mobile-dj-manager' ), 'playlist-category' );
 			wp_insert_term( __( 'Other', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Guest', 'mobile-dj-manager' ), 'playlist-category' );
 			
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Transaction Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
 			

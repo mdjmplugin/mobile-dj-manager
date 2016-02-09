@@ -85,13 +85,15 @@ function mdjm_get_playlist_entry_data( $entry_id )	{
  */
 function mdjm_store_playlist_entry( $details )	{
 	$meta = array(
-		'song'      => isset( $details['entry_song'] )		? $details['entry_song']		: '',
+		'song'      => isset( $details['entry_song'] )      ? $details['entry_song']		: '',
 		'artist'    => isset( $details['entry_artist'] )	? $details['entry_artist']		: '',
-		'added_by'  => isset( $details['entry_addedby'] )	? $details['entry_addedby']	: get_current_user_id(),
-		'djnotes'	=> isset( $details['entry_djnotes'] )	? $details['entry_djnotes']	: ''
+		'added_by'  => isset( $details['entry_addedby'] )   ? $details['entry_addedby']	  : get_current_user_id(),
+		'djnotes'   => isset( $details['entry_djnotes'] )   ? $details['entry_djnotes']	 : '',
+		'to_mdjm'   => '',
+		'uploaded'  => false,
 	);
 	
-	(int)$term 	= isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
+	(int)$term   = isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
 	$event_id	= isset( $details['entry_event'] )		? $details['entry_event']       : '';
 	
 	// Add the playlist entry
@@ -144,24 +146,15 @@ function mdjm_remove_stored_playlist_entry( $entry_id )	{
 	
 	if( $entry )	{
 		// Process actions after removing song.
-		do_action( 'mdjm_delete_playlist_entry_after', $entry );
-		
-		$class   = 'success';
-		$title   = __( 'Done', 'mobile-dj-manager' );
-		$message =  __( 'The entry was removed.', 'mobile-dj-manager' );
+		do_action( 'mdjm_delete_playlist_entry_after', $entry );		
 	}
-	
 	else	{
-		$class   = 'error';
-		$title   = __( 'Error', 'mobile-dj-manager' );
-		$message =  __( 'Unable to delete entry.', 'mobile-dj-manager' );
-		
 		$entry = false;
 	}
 	// Process actions after removing song.
 	do_action( 'mdjm_delete_playlist_entry_after', $entry_id, $entry );
 	
-	$mdjm_notice = mdjm_display_notice( $class, $title, $message );
+	return $entry;
 } // mdjm_remove_stored_playlist_entry
 
 /**
@@ -207,12 +200,12 @@ function mdjm_set_playlist_entry_category( $event_id, $term_id )	{
  */
 function mdjm_get_playlist_by_category( $event_id )	{
 	
-	$terms = mdjm_get_event_playlist_categories( $event_id );
+	$terms    = mdjm_get_event_playlist_categories( $event_id );
+	$playlist = array();
 	
 	if( ! $terms )	{
 		return false;
 	}
-	
 	
 	// Place all playlist entries into an array grouped by the category
 	foreach( $terms as $term => $data )	{

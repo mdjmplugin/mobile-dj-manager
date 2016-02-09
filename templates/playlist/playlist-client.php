@@ -10,7 +10,7 @@
  * @shortcodes		Not Supported
  *
  * Do not customise this file!
- * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist.php
+ * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-client.php
  */
 global $mdjm_notice;
 $mdjm_event_id = get_the_ID();
@@ -21,6 +21,8 @@ $mdjm_event_id = get_the_ID();
 	
 	<div id="mdjm-playlist-header">
     	
+        <?php do_action( 'mdjm_print_notices' ); ?>
+        
     	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event_id ); ?>
         
         <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>

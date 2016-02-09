@@ -24,19 +24,11 @@ function mdjm_add_playlist_entry( $data )	{
 	global $wpdb, $mdjm_notice;
 	
 	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'add_playlist_entry' ) )	{
-		$class   = 'error';
-		$title   = __( 'Error', 'mobile-dj-manager' );
-		$message =  __( 'Security verification failed.', 'mobile-dj-manager' );
-		
-		$return = false;
+		$message = 99;
 	}
 	
 	elseif( ! isset( $data[ 'mdjm_playlist_song' ], $data[ 'mdjm_playlist_artist' ] ) )	{
-		$class   = 'error';
-		$title   = __( 'Error', 'mobile-dj-manager' );
-		$message =  __( 'Please provide at least a song and an artist.', 'mobile-dj-manager' );
-		
-		$return = false;
+		$message = 22;
 	}
 	
 	// Setup the discount code details
@@ -59,22 +51,13 @@ function mdjm_add_playlist_entry( $data )	{
 	}
 	
 	if( mdjm_store_playlist_entry( $posted ) )	{
-		$mdjm_notice = mdjm_display_notice(
-			$class   = 'success',
-			$title   = __( 'Added', 'mobile-dj-manager' ),
-			$message =  __( 'Playlist entry added.', 'mobile-dj-manager' )
-		);
+		$message = 20;
 	}
 	else	{
-		$mdjm_notice = mdjm_display_notice(
-			$class   = 'error',
-			$title   = __( 'Error', 'mobile-dj-manager' ),
-			$message =  __( 'Unable to add entry.', 'mobile-dj-manager' )
-		);
-		return false;
+		$message = 21;
 	}
 	
-	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['entry_event'] );
+	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['entry_event'] . '&mdjm_message=' . $message );
 	die();
 } // mdjm_add_playlist_entry
 add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry' );
@@ -92,25 +75,23 @@ function mdjm_remove_playlist_entry( $data )	{
 	global $wpdb, $mdjm_notice;
 	
 	if( ! isset( $data['id'] ) )	{
-		$class   = 'notice';
-		$title   = __( 'Ooops!', 'mobile-dj-manager' );
-		$message =  __( 'No track was specified.', 'mobile-dj-manager' );
-		
-		$return = false;
+		$message = 25;
 	}
 	
 	elseif( ! wp_verify_nonce( $data['mdjm_nonce'], 'remove_playlist_entry' ) )	{
-		$class   = 'error';
-		$title   = __( 'Error', 'mobile-dj-manager' );
-		$message =  __( 'Security verification failed.', 'mobile-dj-manager' );
-		
-		$return = false;
+		$message = 99;
 	}
 	
 	else	{
-		$return = mdjm_remove_stored_playlist_entry( $data['id'] );
+		if( mdjm_remove_stored_playlist_entry( $data['id'] ) )	{
+			$message = 23;
+		}
+		else	{
+			$message =24;
+		}
 	}
 	
-	return $return;
+	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['event_id'] . '&mdjm_message=' . $message );
+	die();
 } // mdjm_remove_playlist_entry
 add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry' );

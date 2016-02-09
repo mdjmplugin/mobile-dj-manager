@@ -235,7 +235,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/debug/mdjm-debug.php' ); // Debug class
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' ); // Transaction class
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
-			//require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/testing.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/testing.php' );
 			
 			if( is_admin() )	{ // Required for admin only
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' ); // Plugin settings

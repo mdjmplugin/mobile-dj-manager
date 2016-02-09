@@ -170,13 +170,91 @@ function mdjm_get_current_page_url() {
  * Display a notice on the front end.
  *
  * @since	1.3
- * @param	str		$class		The notice CSS class.
- * @param	str		$title		The notice title.
- * @param	str		$message	The notice message.
+ * @param	int		$m		The notice message key.
  * @return	str		The HTML string for the notice
  */
-function mdjm_display_notice( $class='success', $title='Success', $message='Completed successfully.' )	{	
-	$notice = '<div class="mdjm-' . $class . '"><span>' . $title . ': </span>' . $message . '</div>';
+function mdjm_display_notice( $m )	{	
+	$message = mdjm_messages( $m );
+	
+	$notice = '<div class="mdjm-' . $message['class'] . '"><span>' . $message['title'] . ': </span>' . $message['message'] . '</div>';
 
-	return apply_filters( 'mdjm_notice', $notice, $class, $title, $message );
+	return apply_filters( 'mdjm_display_notice', $notice, $m );
 } // mdjm_display_notice
+
+/**
+ * Display notice on front end.
+ *
+ * Check for super global $_GET['mdjm-message'] key and return message if set.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		Out the relevant message to the browser.
+ */
+function mdjm_print_notices()	{
+	if( ! isset( $_GET, $_GET['mdjm_message'] ) )	{
+		return;
+	}
+	
+	echo mdjm_display_notice( $_GET['mdjm_message'] );
+} // mdjm_print_notices
+add_action( 'mdjm_print_notices', 'mdjm_print_notices' );
+
+/**
+ * Messages.
+ *
+ * Messages that are used on the front end.
+ *
+ * @since	1.3
+ * @param	str		$key		Array key of notice to retrieve. All by default.
+ * @return	arr		Array containing message text, title and class.
+ */
+function mdjm_messages( $key )	{
+	$messages = apply_filters(
+		'mdjm_messages',
+		array(
+			'20'	=> array(
+				'class'		=> 'success',
+				'title'		=> __( 'Done', 'mobile-dj-manager' ),
+				'message'	  => __( 'Playlist entry added.', 'mobile-dj-manager' )
+			),
+			'21'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
+			),
+			'22'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
+				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+			),
+			'23'	=> array(
+				'class'		=> 'success',
+				'title'		=> __( 'Done', 'mobile-dj-manager' ),
+				'message'	  => __( 'Playlist entry removed.', 'mobile-dj-manager' )
+			),
+			'24'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'Unable to remove playlist entry.', 'mobile-dj-manager' )
+			),
+			'25'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'No playlist entry selected.', 'mobile-dj-manager' )
+			),
+			'99'   => array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'Security verification failed.', 'mobile-dj-manager' )
+			)
+		)
+	);
+	
+	// Return a single message
+	if( isset( $key ) && array_key_exists( $key, $messages ) )	{
+		return $messages[ $key ];
+	}
+	
+	// Return all messages
+	return $messages;
+} // mdjm_messages

@@ -7,15 +7,16 @@
  * @return	void
  */
 function mdjm_create_playlist_terms()	{
-	$playlist_categories = mdjm_get_option( 'playlist_cats', false );
+	$playlist_categories = $wpdb->get_results( "SELECT DISTINCT play_when as cat 
+		FROM `" . MDJM_PLAYLIST_TABLE . "` WHERE `event_id` = '" . $event . "' ORDER BY `play_when`" );
 	
 	if ( ! empty( $playlist_categories ) )	{
-		$categories = explode( "\r\n", $playlist_categories );
-		
 		foreach( $categories as $category )	{
 			wp_insert_term( $category, 'playlist-category' );
 		}
 	}
+	
+	wp_insert_term( __( 'Guest', 'mobile-dj-manager' ), 'playlist-category' );
 } // mdjm_create_playlist_terms
 add_action( 'init', 'mdjm_create_playlist_terms' );
 
