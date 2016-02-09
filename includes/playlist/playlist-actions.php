@@ -64,13 +64,18 @@ function mdjm_add_playlist_entry( $data )	{
 			$title   = __( 'Added', 'mobile-dj-manager' ),
 			$message =  __( 'Playlist entry added.', 'mobile-dj-manager' )
 		);
-		
-		return $return;
 	}
 	else	{
-		$mdjm_notice = mdjm_display_notice();
+		$mdjm_notice = mdjm_display_notice(
+			$class   = 'error',
+			$title   = __( 'Error', 'mobile-dj-manager' ),
+			$message =  __( 'Unable to add entry.', 'mobile-dj-manager' )
+		);
 		return false;
 	}
+	
+	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['entry_event'] );
+	die();
 } // mdjm_add_playlist_entry
 add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry' );
 

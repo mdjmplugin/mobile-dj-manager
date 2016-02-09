@@ -751,6 +751,17 @@
 			wp_insert_term( __( 'School Prom', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( 'Wedding', 'mobile-dj-manager' ), 'event-types' );
 			
+			error_log(  date( 'd M Y H:i:s' ) . ' Adding Playlist Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
+			/* -- Playlist Terms -- */
+			wp_insert_term( __( 'General', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'First Dance', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Second Dance', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Last Song', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Father & Bride', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Mother & Son', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'DO NOT PLAY', 'mobile-dj-manager' ), 'playlist-category' );
+			wp_insert_term( __( 'Other', 'mobile-dj-manager' ), 'playlist-category' );
+			
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Transaction Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
 			
 			/* -- Transaction Terms -- */

@@ -13,9 +13,9 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 		 * Hook in methods.
 		 */
 		public static function init()	{			
-			add_action( 'init', array( __CLASS__, 'register_post_types' ) );
-			add_action( 'init', array( __CLASS__, 'register_post_status' ) );
-			add_action( 'init', array( __CLASS__, 'register_post_taxonomies' ) );		
+			add_action( 'init', array( __CLASS__, 'register_post_types' ), -999 );
+			add_action( 'init', array( __CLASS__, 'register_post_status' ), -999 );
+			add_action( 'init', array( __CLASS__, 'register_post_taxonomies' ), -999 );		
 		} // init
 		
 		/**
@@ -362,7 +362,7 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 							'search_items'       => __( 'Search Entries', 'mobile-dj-manager' ),
 							'not_found'          => __( 'No entries found.', 'mobile-dj-manager' ),
 							'not_found_in_trash' => __( 'No entries found in Trash.', 'mobile-dj-manager' ) ),
-						'description'			=> __( 'MDJM Event Management PLaylist Entries', 'mobile-dj-manager' ),
+						'description'			=> __( 'MDJM Event Management Playlist Entries', 'mobile-dj-manager' ),
 						'public'			 	 => false,
 						'exclude_from_search'	=> true,
 						'publicly_queryable' 	 => true,
@@ -808,17 +808,17 @@ if( !class_exists( 'MDJM_Post_Types' ) ) :
 			}
 			
 			/**
-			 * PLaylist Entry Taxonomies
+			 * Playlist Entry Taxonomies
 			 */
-			if( ! get_taxonomy( 'mdjm-playlist-category' ) )	{
+			if( ! get_taxonomy( 'playlist-category' ) )	{
 				register_taxonomy(
-					'mdjm-playlist-category',
+					'playlist-category',
 					'mdjm-playlist',
 					array(
-						'hierarchical'      	   => false,
+						'hierarchical'      	   => true,
 						'labels'            	 => array(
 							'name'              		   => _x( 'Playlist Categories', 'taxonomy general name', 'mobile-dj-manager' ),
-							'singular_name'     		  => _x( 'Playlist Categor', 'taxonomy singular name', 'mobile-dj-manager' ),
+							'singular_name'     		  => _x( 'Playlist Category', 'taxonomy singular name', 'mobile-dj-manager' ),
 							'search_items'      		   => __( 'Playlist Categories', 'mobile-dj-manager' ),
 							'all_items'         		  => __( 'All Playlist Categories', 'mobile-dj-manager' ),
 							'edit_item'        		  => __( 'Edit Playlist Category', 'mobile-dj-manager' ),

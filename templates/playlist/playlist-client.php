@@ -109,38 +109,40 @@ $mdjm_event_id = get_the_ID();
                 
                 <div class="row">
                 
-                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $entries_in_category; ?> <?php echo _n( 'entry', 'entries', $entries_in_category, 'mobile-dj-manager' ); ?>)</span></div>
+                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $entries_in_category; ?> <?php echo _n( 'entry', 'entries', $entries_in_category, 'mobile-dj-manager' ); ?> | <?php echo mdjm_playlist_duration( $mdjm_event_id, $entries_in_category ); ?>)</span></div>
                     
                 </div>
                 
                 <?php foreach( $entries as $entry ) : ?>
-                
+                	
+                    <?php $entry_data = mdjm_get_playlist_entry_data( $entry->ID ); ?>
+                    
                 	<div class="row mdjm-playlist-entry mdjm-playlist-entry-<?php echo $entry->id; ?>">
-                    	<div class="mdjm-playlist-song col"><?php echo $entry->song; ?></div>
+                    	<div class="mdjm-playlist-song col"><?php echo $entry_data['song']; ?></div>
                         
-                        <div class="mdjm-playlist-artist col"><?php echo $entry->song; ?></div>
+                        <div class="mdjm-playlist-artist col"><?php echo $entry_data['artist']; ?></div>
                         
                         <div class="mdjm-playlist-info col">
 							<?php if( $category == 'Guest Added' ) : ?>
                             
-                            	<?php echo $entry->added_by; ?>
+                            	<?php echo $entry_data['added_by']; ?>
                             
 							<?php else : ?>
 								
-								<?php if( ! empty( $entry->info ) ) : ?>
+								<?php if( ! empty( $entry_data['djnotes'] ) ) : ?>
 									
-									<?php echo stripslashes( $entry->info ); ?>
+									<?php echo stripslashes( $entry_data['djnotes'] ); ?>
                                 
 								<?php else : ?>
                                 	
 									<?php echo '&ndash;'; ?>
 								
-								<?php endif; // endif( ! empty( $entry->info ) ) ?>
+								<?php endif; // endif( ! empty( $entry_data['djnotes'] ) ) ?>
                             
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         
-                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->id . '&event_id=' . $mdjm_event_id, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
+                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->ID . '&event_id=' . $mdjm_event_id, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
                     </div>
                 </div>
                 

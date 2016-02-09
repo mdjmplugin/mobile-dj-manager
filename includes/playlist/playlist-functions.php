@@ -36,6 +36,47 @@ function mdjm_get_playlist_entry( $entry_id = 0 ) {
 } // mdjm_get_playlist_entry
 
 /**
+ * Get Playlist Entries.
+ *
+ * Retrieves all playlist entries for the event.
+ *
+ * @since	1.3
+ * @param	int		$entry_id	Entry ID
+ * @return	obj		
+ */
+function mdjm_get_playlist_entries( $event_id )	{
+	$entries = get_posts(
+		apply_filters( 
+			'mdjm_get_playlist_entries',
+			array(
+				'post_type'			=> 'mdjm-playlist',
+				'posts_per_page' 	=> -1,
+				'post_status'		=> 'publish',
+				'post_parent'		=> $event_id
+			)
+		)
+	);
+} // mdjm_get_playlist_entries
+
+/**
+ * Retrieve the data for the playlist entry.
+ *
+ * @since	1.3
+ * @param	int		$entry_id	The playlist entry ID (post ID)
+ * @return	arr		$entry_data	The playlist data.
+ */
+function mdjm_get_playlist_entry_data( $entry_id )	{
+	$entry_data = array(
+		'song'		=> get_post_meta( $entry_id, '_mdjm_playlist_entry_song', true ),
+		'artist'	=> get_post_meta( $entry_id, '_mdjm_playlist_entry_artist', true ),
+		'added_by'	=> get_post_meta( $entry_id, '_mdjm_playlist_entry_added_by', true ),
+		'djnotes'	=> get_post_meta( $entry_id, '_mdjm_playlist_entry_djnotes', true )
+	);
+	
+	return apply_filters( 'mdjm_get_playlist_entry_data', $entry_data );
+} // mdjm_get_playlist_entry_data
+
+/**
  * Store a playlist entry. If it exists, update it, otherwise create a new one.
  *
  * @since	1.3
@@ -44,39 +85,42 @@ function mdjm_get_playlist_entry( $entry_id = 0 ) {
  */
 function mdjm_store_playlist_entry( $details )	{
 	$meta = array(
-		'event'     => isset( $details['entry_event'] )       ? $details['entry_event']       : '',
-		'song'      => isset( $details['entry_song'] )        ? $details['entry_song']        : '',
-		'artist'    => isset( $details['entry_artist'] )      ? $details['entry_artist']      : '',
-		'added_by'  => isset( $details['entry_added_by'] )    ? $details['entry_added_by']    : get_current_user_id(),
+		'song'      => isset( $details['entry_song'] )		? $details['entry_song']		: '',
+		'artist'    => isset( $details['entry_artist'] )	? $details['entry_artist']		: '',
+		'added_by'  => isset( $details['entry_addedby'] )	? $details['entry_addedby']	: get_current_user_id(),
+		'djnotes'	=> isset( $details['entry_djnotes'] )	? $details['entry_djnotes']	: ''
 	);
 	
-	$category = isset( $details['entry_category'] ) ? $details['entry_category'] : '';
-
+	(int)$term 	= isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
+	$event_id	= isset( $details['entry_event'] )		? $details['entry_event']       : '';
+	
 	// Add the playlist entry
 	$meta = apply_filters( 'mdjm_insert_playlist_entry', $meta );
 
 	do_action( 'mdjm_insert_playlist_entry_before', $meta );
 
 	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
-				mdjm_get_option( 'event_prefix', '' ) . $meta['event'],
+				mdjm_get_option( 'event_prefix', '' ) . $event_id,
 				$meta['song'],
 				$meta['artist'] );
 
 	$entry_id = wp_insert_post(
 		array(
-			'post_type'   => 'mdjm-playlist',
-			'post_title'  => $title,
-			'post_status' => 'publish',
-			'post_parent' => $meta['event']
+			'post_type'     => 'mdjm-playlist',
+			'post_title'    => $title,
+			'post_author'	=> 1,
+			'post_status'   => 'publish',
+			'post_parent'   => $event_id,
+			'post_category' => array( $term )
 		)
 	);
 	
-	if( ! empty( $category ) )	{
-		wp_set_object_terms( $entry_id, $category, 'mdjm-playlist-category', false );
+	if( ! empty( $term ) )	{
+		mdjm_set_playlist_entry_category( $entry_id, $term );
 	}
 
 	foreach( $meta as $key => $value ) {
-		update_post_meta( $entry_id, '_mdjm_playlist_entry' . $key, $value );
+		update_post_meta( $entry_id, '_mdjm_playlist_entry_' . $key, $value );
 	}
 
 	do_action( 'mdjm_insert_playlist_entry_after', $meta, $entry_id );
@@ -93,8 +137,8 @@ function mdjm_store_playlist_entry( $details )	{
  * @return	bool	Whether or not the entry was removed.
  */
 function mdjm_remove_stored_playlist_entry( $entry_id )	{
-	// Process actions before removing song.
-	do_action( 'mdjm_delete_playlist_entry_before', $data );
+	// Process actions before removing entry.
+	do_action( 'mdjm_delete_playlist_entry_before', $entry_id );
 	
 	$entry = wp_delete_post( $entry_id, true );
 	
@@ -114,7 +158,9 @@ function mdjm_remove_stored_playlist_entry( $entry_id )	{
 		
 		$entry = false;
 	}
-
+	// Process actions after removing song.
+	do_action( 'mdjm_delete_playlist_entry_after', $entry_id, $entry );
+	
 	$mdjm_notice = mdjm_display_notice( $class, $title, $message );
 } // mdjm_remove_stored_playlist_entry
 
@@ -132,6 +178,25 @@ function mdjm_playlist_entry_exists( $entry_id ) {
 
 	return false;
 }// mdjm_entry_exists
+
+/**
+ * Set the playlist entry category.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	int		$term_id	The category term ID.
+ * @return	bool	True on success, otherwise false.
+ */
+function mdjm_set_playlist_entry_category( $event_id, $term_id )	{
+	$set_entry_type = wp_set_post_terms( $event_id, $term_id, 'playlist-category' );
+	
+	if ( is_wp_error( $set_entry_type ) )	{
+		return false;
+	}
+	else	{ 
+		return true;
+	}
+} // mdjm_set_playlist_entry_category
  
 /**
  * Retrieves the playlist entries for an event grouped by category.
@@ -141,21 +206,29 @@ function mdjm_playlist_entry_exists( $entry_id ) {
  * @return	obj		$playlist	Array of all playlist entries.
  */
 function mdjm_get_playlist_by_category( $event_id )	{
-	$categories = mdjm_get_event_playlist_categories( $event_id );
 	
-	if( ! $categories )	{
+	$terms = mdjm_get_event_playlist_categories( $event_id );
+	
+	if( ! $terms )	{
 		return false;
 	}
 	
+	
 	// Place all playlist entries into an array grouped by the category
-	foreach( $categories as $cat )	{
-		$category = $cat->category;
-		
+	foreach( $terms as $term => $data )	{
 		$entries = get_posts(
 			array(
-				'post_type'	=> 'mdjm_playlist',
-				'post_parent'  => $event_id,
-				'post_status'  => 'publish'
+				'post_type'			=> 'mdjm-playlist',
+				'posts_per_page' 	=> -1,
+				'post_parent'  		=> $event_id,
+				'post_status'  		=> 'publish',
+				'tax_query'			=> array(
+					array(
+						'taxonomy' => 'playlist-category',
+						'field'    => 'name',
+						'terms'    => $term
+					)
+				)
 			)
 		);
 					
@@ -164,7 +237,7 @@ function mdjm_get_playlist_by_category( $event_id )	{
 		}
 		
 		foreach( $entries as $entry )	{
-			$playlist[ $category ] = $entries;
+			$playlist[ $term ] = $entries;
 		}
 	}
 	
@@ -174,23 +247,41 @@ function mdjm_get_playlist_by_category( $event_id )	{
 /**
  * Retrieves the categories for entries within the event playlist.
  *
- * Performs a search through the playlist database table for the given event to determine all song categories used.
+ * Performs a search through the playlist database table for the given event to determine all song categories used within that playlist.
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
- * @return	obj		Object array of all unique playlist categories.
+ * @return	arr		Array of all unique playlist categories.
  */
 function mdjm_get_event_playlist_categories( $event_id )	{
-	global $wpdb;
+	$terms		= mdjm_get_playlist_categories();
+	$categories = array();
 	
-	$query   = "SELECT 
-				DISTINCT play_when 
-				as category 
-				FROM `" . MDJM_PLAYLIST_TABLE . "` 
-				WHERE `event_id` = '$event_id' 
-				ORDER BY `play_when`";
-				
-	return $wpdb->get_results( $query );
+	if( ! $terms )	{
+		return false;
+	}
+	
+	// Loop through categories and retrieve entries within each category.
+	// Place each entry into the $category array
+	foreach( $terms as $term )	{
+		$categories[ $term->name ] = get_posts(
+			array(
+				'post_type'			=> 'mdjm-playlist',
+				'posts_per_page' 	=> 1,
+				'post_status'		=> 'publish',
+				'post_parent'		=> $event_id,
+				'tax_query'			=> array(
+					array(
+						'taxonomy' => 'playlist-category',
+						'field'    => 'term_id',
+						'terms'    => $term->term_id
+					)
+				)
+			)
+		);
+	}
+		
+	return $categories;
 } // mdjm_get_event_playlist_categories
 
 /**
@@ -243,22 +334,33 @@ function mdjm_playlist_is_open( $event_id )	{
  * @return	int		Number of songs in the playlist.
  */
 function mdjm_count_playlist_entries( $event_id, $category='' )	{
-	global $wpdb;
-	
-	$cat_only = '';
+	$entry_query = array(
+		'post_type'		=> 'mdjm-playlist',
+		'post_status'	=> 'publish',
+		'post_parent'	=> $event_id
+	);
 	
 	if( ! empty( $category ) )	{
-		$cat_only .= "AND `play_when` = '$category'";
+		$tax_query = array(
+			'tax_query' => array(
+				array(
+					'taxonomy' => 'playlist-category',
+					'field'    => 'name',
+					'terms'    => $category
+				)
+			)
+		);
 	}
 	
-	$query = "SELECT COUNT(*)
-			  FROM `" . MDJM_PLAYLIST_TABLE . "` 
-			  WHERE `event_id` = '$event_id' 
-			  $cat_only";		  
-			  
-	$count = $wpdb->get_var( $query );
+	$query = $entry_query;
 	
-	return ( ! empty( $count ) ? $count : 0 );
+	if( isset( $tax_query ) )	{
+		$query = array_merge( $entry_query, $tax_query );
+	}
+	
+	$entries = new WP_Query( $query );
+	
+	return ( $entries ? $entries->post_count : 0 );
 } // mdjm_count_playlist_entries
 
 /**
@@ -311,11 +413,13 @@ function mdjm_guest_playlist_url( $event_id )	{
  *
  * @since	1.3
  * @param
- * @return	arr|bool	Array of categories, or false if none.
+ * @return	obj|bool	Array of categories, or false if none.
  */
 function mdjm_get_playlist_categories()	{
-	if( ! empty( mdjm_get_option( 'playlist_cats', false ) ) )	{
-		return explode( "\r\n", mdjm_get_option( 'playlist_cats' ) );
+	$terms = get_terms( 'playlist-category' );
+	
+	if ( ! empty( $terms ) && ! is_wp_error( $terms ) )	{
+		return $terms;
 	}
 	else	{
 		return false;
@@ -347,7 +451,7 @@ function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 		'name'               => 'entry_category',
 		'id'                 => 'entry_category',
 		'class'              => '',
-		'taxonomy'           => 'mdjm-playlist-category',
+		'taxonomy'           => 'playlist-category',
 		'hide_if_empty'      => false,
 		'value_field'	    => 'term_id'
 	);

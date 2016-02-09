@@ -13,7 +13,7 @@ function mdjm_create_playlist_terms()	{
 		$categories = explode( "\r\n", $playlist_categories );
 		
 		foreach( $categories as $category )	{
-			wp_insert_term( $category, 'mdjm-playlist-category' );
+			wp_insert_term( $category, 'playlist-category' );
 		}
 	}
 } // mdjm_create_playlist_terms
