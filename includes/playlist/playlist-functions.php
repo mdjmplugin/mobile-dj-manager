@@ -395,7 +395,7 @@ function mdjm_guest_playlist_url( $event_id )	{
 	}
 	
 	else	{
-		$url = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true ) . 'guest_playlist=' . $access_code;
+		$url = mdjm_get_formatted_url( mdjm_get_option( 'app_home' ), true ) . 'guest_playlist=' . $access_code;
 	}
 	
 	return $url;

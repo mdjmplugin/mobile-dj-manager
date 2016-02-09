@@ -167,18 +167,23 @@ function mdjm_shortcode_playlist( $atts )	{
 	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
 	$output  = '';
 	
-	if( ! isset( $_GET['event_id'] ) )	{
+	if( ! isset( $_GET['event_id'] ) && ! isset( $_GET['guest_playlist'] ) )	{
 		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
 	}
 	
 	if( $visitor == 'client' )	{
-		$event = mdjm_get_event_by_id( $_GET['event_id'] );
+		if( ! is_user_logged_in() )	{
+			echo mdjm_login_form( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $_GET['event_id'] );
+		}
+		else	{
+			$event = mdjm_get_event_by_id( $_GET['event_id'] );
+		}
 	}
 	else	{
 		$event = mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] );
 	}
 	
-	if( $event->have_posts() )	{
+	if( isset( $event ) && $event->have_posts() )	{
 		while( $event->have_posts() )	{
 			ob_start();
 			$event->the_post();

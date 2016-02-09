@@ -215,37 +215,42 @@ function mdjm_messages( $key )	{
 			'20'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'Playlist entry added.', 'mobile-dj-manager' )
+				'message'	=> __( 'Playlist entry added.', 'mobile-dj-manager' )
 			),
 			'21'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
 			),
 			'22'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
 			),
 			'23'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'Playlist entry removed.', 'mobile-dj-manager' )
+				'message'	=> __( 'Playlist entry removed.', 'mobile-dj-manager' )
 			),
 			'24'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Unable to remove playlist entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Unable to remove playlist entry.', 'mobile-dj-manager' )
 			),
 			'25'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'No playlist entry selected.', 'mobile-dj-manager' )
+				'message'	=> __( 'No playlist entry selected.', 'mobile-dj-manager' )
+			),
+			'90'   => array(
+				'class'		=> 'error',
+				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
+				'message'	=> __( "We seem to be missing the event details.", 'mobile-dj-manager' )
 			),
 			'99'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Security verification failed.', 'mobile-dj-manager' )
+				'message'	=> __( 'Security verification failed.', 'mobile-dj-manager' )
 			)
 		)
 	);

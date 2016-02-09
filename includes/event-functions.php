@@ -43,11 +43,13 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 			'post_type'        => 'mdjm-event',
 			'post_status'      => 'any',
 			'posts_per_page'   => 1,
+			'meta_key'		   => '_mdjm_event_playlist_access',
 			'meta_query'       => array(
 				array(
 					'key'      => '_mdjm_event_playlist_access',
-					'value'    => $access_code
-				),
+					'value'    => $access_code,
+					'compare' => '='
+				)
 			)
 		)
 	);
@@ -56,6 +58,17 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 	
 	return $event_query;
 } // mdjm_get_event_by_playlist_code
+
+/**
+ * Determine if the event exists.
+ *
+ * @since	1.3
+ * @param	int			$event_id		The event ID.
+ * @return	obj|bool	The WP_Post object for the event if it exists, otherwise false.
+ */
+function mdjm_event_exists( $event_id )	{
+	return mdjm_get_event_by_id( $event_id );
+} // mdjm_event_exists
 	
 /**
  * Returns an array of event post status.
