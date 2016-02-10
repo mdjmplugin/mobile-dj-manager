@@ -12,6 +12,17 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	obj		$event		The event WP_Post object
+ */
+function mdjm_get_event( $event_id )	{
+	return mdjm_get_event_by_id( $event_id );
+} // mdjm_get_event
+
+/**
  * Retrieve an event by ID.
  *
  * @param	int		$event_id	The WP post ID for the event.
@@ -19,15 +30,9 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	mixed	$event		WP_Query object or false.
  */
 function mdjm_get_event_by_id( $event_id )	{
-	$args = array(
-				'p'            => $event_id,
-				'post_type'    => 'mdjm-event',
-				'post_status'  => 'any'
-			);
+	$event = new MDJM_Event( $event_id );
 	
-	$event_query = new WP_Query( $args );
-	
-	return $event_query;
+	return ( !empty( $event->ID ) ? $event : false );
 } // mdjm_get_event_by_id
 
 /**
@@ -38,25 +43,17 @@ function mdjm_get_event_by_id( $event_id )	{
  * @return	obj		$event_query	WP_Query object.
  */
 function mdjm_get_event_by_playlist_code( $access_code )	{
-	$args = apply_filters( 'mdjm_get_event_by_playlist_code_args',
-		array(
-			'post_type'        => 'mdjm-event',
-			'post_status'      => 'any',
-			'posts_per_page'   => 1,
-			'meta_key'		   => '_mdjm_event_playlist_access',
-			'meta_query'       => array(
-				array(
-					'key'      => '_mdjm_event_playlist_access',
-					'value'    => $access_code,
-					'compare' => '='
-				)
-			)
-		)
-	);
+	global $wpdb;
 	
-	$event_query = new WP_Query( $args );
+	$query = "SELECT `post_id`
+			  AS `event_id` 
+			  FROM `$wpdb->postmeta` 
+			  WHERE `meta_value` = '$access_code' 
+			  LIMIT 1";
+					
+	$result = $wpdb->get_row( $query );
 	
-	return $event_query;
+	return mdjm_get_event( $result->event_id );
 } // mdjm_get_event_by_playlist_code
 
 /**
@@ -144,16 +141,10 @@ function mdjm_get_event_status( $event_id='' )	{
 		$id = '';
 	}
 	
-	$return = '';
-	
-	// Current event status
-	if( !empty( $id ) )	{
-		$status = get_post_status( $id );
-		$return = get_post_status_object( $status )->label;
-	}
+	$event = new MDJM_Event( $id );
 	
 	// Return the label for the status
-	return $return;
+	return $event->get_status();
 } // mdjm_get_event_status
 
 /**
@@ -179,19 +170,10 @@ function mdjm_get_event_type( $event_id='' )	{
 		$id = '';
 	}
 	
-	$return = __( 'No event type set', 'mobile-dj-manager' );
-	
-	// Event type
-	if( !empty( $id ) )	{
-		$types = wp_get_object_terms( $event_id, 'event-types' );
-		
-		if( !empty( $types ) )	{
-			$return = $types[0]->name;
-		}
-	}
+	$event = new MDJM_Event( $id );
 	
 	// Return the label for the status
-	return $return;
+	return $event->get_type();
 } // mdjm_get_event_type
 	
 /**
@@ -202,7 +184,7 @@ function mdjm_get_event_type( $event_id='' )	{
  * @return	str		URL to Client Zone page for the event.
  */
 function mdjm_get_event_uri( $event_id )	{
-	return mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) . 'event_id=' . $event_id;
+	return add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) );
 } // mdjm_get_event_uri
 
 /**

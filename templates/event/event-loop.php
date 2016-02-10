@@ -12,10 +12,10 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-loop.php
  */
-
+global $mdjm_event, $mdjm_notice;
 ?>
-<?php do_action( 'mdjm_event_loop_before_event' ); ?>
-<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<?php do_action( 'mdjm_pre_event_loop' ); ?>
+<div id="post-<?php echo $mdjm_event->ID; ?>" class="<?php echo $mdjm_event->post_status; ?>">
 	<table class="mdjm-event-overview">
 		<tr>
 			<th class="mdjm-event-heading">{event_name}<br />
@@ -23,7 +23,7 @@
 			</th>
             <th class="mdjm-event-heading right-align"><?php _e( 'ID:', 'mobile-dj-manager' ); ?> {contract_id}<br />
 				<?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}<br />
-				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) . 'view_event_id=' . get_the_ID() ); ?></span>
+				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), add_query_arg( 'event_id', $mdjm_event->ID, mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) ) ); ?></span>
             </th>
 		</tr>
 		<tr>
@@ -57,11 +57,11 @@
 		 */
 		?>
         
-        <?php $buttons = mdjm_get_event_action_buttons( get_the_ID(), true ); ?>
+        <?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID, true ); ?>
         <?php $cells   = 2; // Number of cells ?>
 		<?php $i       = 1; // Counter for the current cell ?>
         
-        <?php do_action( 'mdjm_event_loop_before_action_buttons' ); ?>
+        <?php do_action( 'mdjm_pre_event_loop_action_buttons' ); ?>
         
 		<?php foreach( $buttons as $button ) : ?>
         	
@@ -90,7 +90,7 @@
             <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
             </tr>
         <?php endif; ?><!-- endif( $i < $cells ) -->
-        <?php do_action( 'mdjm_event_loop_after_action_buttons' ); ?>
+        <?php do_action( 'mdjm_post_event_loop_action_buttons' ); ?>
 	</table>
 </div>    
-<?php do_action( 'mdjm_event_loop_after_event' ); ?>
+<?php do_action( 'mdjm_post_event_loop' ); ?>

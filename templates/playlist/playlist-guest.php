@@ -12,18 +12,17 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-guest.php
  */
-global $mdjm_notice;
-$mdjm_event_id = get_the_ID();
+global $mdjm_event, $mdjm_notice;
 ?>
 
 <div id="mdjm-guest-playlist-wrapper">
-	<?php do_action( 'mdjm_guest_playlist_top', $mdjm_event_id ); ?>
+	<?php do_action( 'mdjm_guest_playlist_top', $mdjm_event->ID ); ?>
 	
 	<div id="mdjm-guest-playlist-header">
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-    	<?php do_action( 'mdjm_guest_playlist_header_top', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_header_top', $mdjm_event->ID ); ?>
         
         <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>
                 
@@ -34,21 +33,21 @@ $mdjm_event_id = get_the_ID();
 				'{event_type}',
 				'{event_date}' ); ?></p>
                 
-        <p><?php printf( __( '%s$1 has invited you to provide input for the music that will be played during their event. Simply add your selections below and %s$1 will be able to review them.', 'mobile-dj-manager' ),
+        <p><?php printf( __( '%1$s has invited you to provide input for the music that will be played during their event. Simply add your selections below and %1$s will be able to review them.', 'mobile-dj-manager' ),
                     '{client_firstname}' ); ?></p>
     
-    	<?php do_action( 'mdjm_guest_playlist_header_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_header_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-header -->
     
 	<div id="mdjm-guest-playlist-form">
-    	<?php do_action( 'mdjm_guest_playlist_form_top', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_form_top', $mdjm_event->ID ); ?>
         
-        <?php if( mdjm_playlist_is_open( $mdjm_event_id ) ) : ?>
+        <?php if( $mdjm_event->playlist_is_open() ) : ?>
         
             <form id="mdjm-guest-playlist-form" name="mdjm-guest-playlist-form" action="" method="post">
                 <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
                 <?php mdjm_action_field( 'add_playlist_entry' ); ?>
-                <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event_id; ?>" />
+                <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event->ID; ?>" />
                 
                 <table id="mdjm-guest-playlist-form-table">
                     <tr>
@@ -81,22 +80,22 @@ $mdjm_event_id = get_the_ID();
             </form>
             
         <?php else : ?>
-        	<?php do_action( 'mdjm_guest_playlist_closed', $mdjm_event_id ); ?>
+        	<?php do_action( 'mdjm_guest_playlist_closed', $mdjm_event->ID ); ?>
             
             <p><?php printf( __( 'Sorry but the music playlist system for %s %s on %s is no longer accepting suggestions.', 'mobile-dj-manager' ),
 						"{client_fullname}'s", '{event_type}', '{event_date}' ); ?></p>
             
-        <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event_id ) ) ?>
+        <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
         
-    	<?php do_action( 'mdjm_guest_playlist_form_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_form_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-guest-playlist-form -->
     	
     
     	
     <div id="mdjm-guest-playlist-footer">
-    	<?php do_action( 'mdjm_guest_playlist_footer_top', $mdjm_event_id ); ?>
-    	<?php do_action( 'mdjm_guest_playlist_footer_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_footer_top', $mdjm_event->ID ); ?>
+    	<?php do_action( 'mdjm_guest_playlist_footer_bottom', $mdjm_event->ID ); ?>
     </div><!-- end mdjm-guest-playlist-footer -->
     
-	<?php do_action( 'mdjm_guest_playlist_bottom', $mdjm_event_id ); ?>
+	<?php do_action( 'mdjm_guest_playlist_bottom', $mdjm_event->ID ); ?>
 </div><!-- end mdjm-guest-playlist-wrapper -->

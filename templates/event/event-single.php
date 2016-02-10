@@ -12,9 +12,12 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-single.php
  */
+global $mdjm_event, $mdjm_notice;
 ?>
-<?php do_action( 'mdjm_event_detail_before_event' ); ?>
-<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<?php do_action( 'mdjm_pre_event_detail', $mdjm_event->ID, $mdjm_event ); ?>
+<div id="post-<?php echo $mdjm_event->ID; ?>" class="mdjm-<?php echo $mdjm_event->post_status; ?>">
+	<?php do_action( 'mdjm_print_notices' ); ?>
+
 	<p><?php printf( __( 'Details of your event taking place on %s are shown below.', 'mobile-dj-manager' ),
 			'{event_date}' ); ?></p>
             
@@ -27,11 +30,11 @@
 	 */
 	?>
 	<div id="mdjm-singlevent-action-buttons">
-		<?php $buttons = mdjm_get_event_action_buttons( get_the_ID() ); ?>
+		<?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID ); ?>
         <?php $cells   = 3; // Number of cells ?>
         <?php $i       = 1; // Counter for the current cell ?>
         
-        <?php do_action( 'mdjm_event_details_before_action_buttons' ); ?>
+        <?php do_action( 'mdjm_pre_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
         
         <table>
         	<?php foreach( $buttons as $button ) : ?>
@@ -63,7 +66,7 @@
             <?php endif; ?><!-- endif( $i < $cells ) -->
         </table>
         
-        <?php do_action( 'mdjm_event_details_after_action_buttons' ); ?>
+        <?php do_action( 'mdjm_post_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
         
     </div>
 
@@ -72,7 +75,7 @@
 	 * Display event details
 	 */
 	?>
-    <?php do_action( 'mdjm_event_details_before' ); ?>
+    <?php do_action( 'mdjm_pre_event_details', $mdjm_event->ID, $mdjm_event ); ?>
     <div id="mdjm-singleevent-details">
         <table class="mdjm-singleevent-overview">
             <tr>
@@ -151,7 +154,7 @@
         </table>
     </div>
     
-    <?php do_action( 'mdjm_event_details_after' ); ?>
+    <?php do_action( 'mdjm_post_event_details', $mdjm_event->ID, $mdjm_event ); ?>
 
 </div>
-<?php do_action( 'mdjm_event_detail_after_event' ); ?>
+<?php do_action( 'mdjm_post_event_detail', $mdjm_event->ID, $mdjm_event ); ?>

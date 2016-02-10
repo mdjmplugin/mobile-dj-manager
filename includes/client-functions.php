@@ -85,13 +85,14 @@ function mdjm_get_client_id( $event_id )	{
  *			str		$orderby	Optional: The field by which to order. Default event date.
  *			str		$order		Optional: DESC (default) | ASC
  *
- * @return	mixed	$events		WP_Query object or false.
+ * @return	mixed	$events		WP_Post objects or false.
  */
 function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_date', $order='ASC' )	{
 	$args = apply_filters( 'mdjm_get_client_events_args',
 		array(
 			'post_type'        => 'mdjm-event',
 			'post_status'      => $status,
+			'posts_per_page'   => -1,
 			'meta_key'         => '_mdjm_' . $orderby,
 			'orderby'          => 'meta_value_num',
 			'order'            => $order,
@@ -105,7 +106,7 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
 		)
 	);
 	
-	$events_query = new WP_Query( $args );
+	$events = get_posts( $args );
 	
-	return $events_query;
+	return $events;
 } // mdjm_get_client_events

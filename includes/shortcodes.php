@@ -73,78 +73,78 @@ add_shortcode( 'MDJM', 'shortcode_mdjm' );
  */
 function mdjm_shortcode_home( $atts )	{
 	if ( is_user_logged_in() ) {
+		global $mdjm_event;
+		
+		$mdjm_event = '';
+		
 		ob_start();
 		
 		$output = '';
 		
 		$client_id = get_current_user_id();
 		
-		if( isset( $_GET['view_event_id'] ) )	{
-			$event     = mdjm_get_event_by_id( $_GET['view_event_id'] );
-			if( $event->have_posts() )	{
+		if( isset( $_GET['event_id'] ) )	{
+			$mdjm_event = mdjm_get_event( $_GET['event_id'] );
+			
+			if( ! empty( $mdjm_event->ID ) )	{
 				ob_start();
-				while( $event->have_posts() )	{
-					ob_start();
-					$event->the_post();
-					mdjm_get_template_part( 'event', 'single' );
-					$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
-					ob_get_clean();
-				}
+				mdjm_get_template_part( 'event', 'single' );
+				$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $client_id );
+				ob_get_clean();
 			}
 			else	{
-				echo 'Hello';
+				ob_start();
+				mdjm_get_template_part( 'event', 'none' );
+				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+				ob_get_clean();
 			}
 		}
 		else	{
-			$events    = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
+			$client_events = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
 			
-			if( $events->have_posts() )	{
-				if( $events->post_count == 1 )	{
-					ob_start();
-					while( $events->have_posts() )	{
-						ob_start();
-						$events->the_post();
-						mdjm_get_template_part( 'event', 'single' );
-						$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
-						ob_get_clean();
-					}
-				}
-				else	{
+			if( $client_events )	{
+				$slug = 'single';
+				
+				if( count ( $client_events ) > 1 )	{
+					$slug = 'loop';
+					
 					ob_start();
 					mdjm_get_template_part( 'event', 'loop-header' );
 					$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+					
+					do_action( 'mdjm_pre_event_loop' );
+					?><div id="mdjm-event-loop"><?php
 					ob_get_clean();
+				}
+				
+				foreach( $client_events as $event )	{
+					$mdjm_event = new MDJM_Event( $event->ID );
 					
-					do_action( 'mdjm_event_loop_before_loop' );
-					?>
-					<div id="mdjm-event-loop">
-					<?php
-					
-					while( $events->have_posts() )	{
-						ob_start();
-						$events->the_post();
-						mdjm_get_template_part( 'event', 'loop' );
-						$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
-						ob_get_clean();
-					}
-					
-					?>
-					</div>
-					<?php
-					do_action( 'mdjm_event_loop_after_loop' );
+					ob_start();
+					mdjm_get_template_part( 'event', $slug );
+					$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $client_id );
+					ob_get_clean();
+				}
+				
+				
+				if( $slug == 'loop' )	{
 					ob_start();
 					mdjm_get_template_part( 'event', 'loop-footer' );
 					$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
+					?></div><?php
+					do_action( 'mdjm_post_event_loop', $client_events );
 					ob_get_clean();
 				}
-				wp_reset_postdata();
-			} 
+			}
+			// No events
 			else	{
 				mdjm_get_template_part( 'event', 'none' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
 				ob_get_clean();
 			}
 		}
+		$mdjm_event = '';
+		
 		return $output;
 	}
 	else	{
@@ -164,6 +164,8 @@ add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
  * @return	string
  */
 function mdjm_shortcode_playlist( $atts )	{
+	global $mdjm_event;
+	
 	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
 	$output  = '';
 	
@@ -171,30 +173,27 @@ function mdjm_shortcode_playlist( $atts )	{
 		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
 	}
 	
+	$mdjm_event = ( $visitor == 'client' ? mdjm_get_event( $_GET['event_id'] ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] ) );
+	
 	if( $visitor == 'client' )	{
 		if( ! is_user_logged_in() )	{
-			echo mdjm_login_form( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $_GET['event_id'] );
+			echo mdjm_login_form( add_query_arg( 'event_id', $_GET['event_id'], mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) 
+		) );
 		}
-		else	{
-			$event = mdjm_get_event_by_id( $_GET['event_id'] );
-		}
-	}
-	else	{
-		$event = mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] );
 	}
 	
-	if( isset( $event ) && $event->have_posts() )	{
-		while( $event->have_posts() )	{
-			ob_start();
-			$event->the_post();
-			$client_id = mdjm_get_client_id( get_the_ID() );
-			mdjm_get_template_part( 'playlist', $visitor );
-			$output .= mdjm_do_content_tags( ob_get_contents(), get_the_ID(), $client_id );
-			ob_get_clean();
-		}
-		
-		wp_reset_postdata();
+	if( $mdjm_event )	{
+		ob_start();
+		mdjm_get_template_part( 'playlist', $visitor );
+		$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+		ob_get_clean();		
 	}
+	else	{
+		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
+	}
+	
+	// Reset global var
+	$mdjm_event = '';
 	
 	return $output;
 } // mdjm_shortcode_playlist

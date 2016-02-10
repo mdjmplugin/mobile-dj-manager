@@ -10,6 +10,29 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
+/**
+ * Redirect to guest playlist.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_guest_playlist()	{
+	if( ! isset( $_GET['playlist'] ) )	{
+		return;
+	}
+	
+	$event = mdjm_get_event_by_playlist_code( $_GET['playlist'] );
+	
+	if( ! $event || ! mdjm_event_exists( $event ) )	{
+		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
+	}
+	
+	wp_redirect(  );
+	die();
+} // mdjm_goto_event
+add_action( 'mdjm_guest_playlist', 'mdjm_guest_playlist' );
 	
 /**
  * Add a song to the playlist.
@@ -57,7 +80,15 @@ function mdjm_add_playlist_entry( $data )	{
 		$message = 21;
 	}
 	
-	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['entry_event'] . '&mdjm_message=' . $message );
+	wp_redirect(
+		add_query_arg(
+			array(
+				'event_id'	 => $data['entry_event'],
+				'mdjm_message' => $message
+			),
+			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) )
+		)
+	);
 	die();
 } // mdjm_add_playlist_entry
 add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry' );
@@ -91,7 +122,15 @@ function mdjm_remove_playlist_entry( $data )	{
 		}
 	}
 	
-	wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'event_id=' . $data['event_id'] . '&mdjm_message=' . $message );
+	wp_redirect( 
+		add_query_arg( 
+			array(
+				'event_id'	  => $data['event_id'],
+				'mdjm-message'  => $message
+			),
+			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) )
+		)
+	);
 	die();
 } // mdjm_remove_playlist_entry
 add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry' );

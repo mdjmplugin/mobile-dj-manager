@@ -12,22 +12,21 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-client.php
  */
-global $mdjm_notice;
-$mdjm_event_id = get_the_ID();
+global $mdjm_event, $mdjm_notice;
 ?>
 
 <div id="mdjm-playlist-wrapper">
-	<?php do_action( 'mdjm_playlist_top', $mdjm_event_id ); ?>
+	<?php do_action( 'mdjm_playlist_top', $mdjm_event->ID ); ?>
 	
 	<div id="mdjm-playlist-header">
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-    	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event->ID ); ?>
         
         <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event_id ); ?>"><?php  _e( 'Back to Event', 'mobile-dj-manager' ); ?></a></p>
+        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  _e( 'Back to Event', 'mobile-dj-manager' ); ?></a></p>
         
         <p><?php printf( __( 'The %s playlist management system enables you to give %s (your %s) an idea of the types of songs you would like played during your event on %s.', 'mobile-dj-manager' ),
                 mdjm_get_option( 'company_name' ),
@@ -39,18 +38,18 @@ $mdjm_event_id = get_the_ID();
                     '{guest_playlist_url}',
                     '{guest_playlist_url}' ); ?></p>
     
-    	<?php do_action( 'mdjm_playlist_header_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_playlist_header_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-header -->
     
 	<div id="mdjm-playlist-form">
-    	<?php do_action( 'mdjm_playlist_form_top', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_playlist_form_top', $mdjm_event->ID ); ?>
         
-        <?php if( mdjm_playlist_is_open( $mdjm_event_id ) ) : ?>
+        <?php if( $mdjm_event->playlist_is_open() ) : ?>
         
             <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
                 <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
                 <?php mdjm_action_field( 'add_playlist_entry' ); ?>
-                <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event_id; ?>" />
+                <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event->ID; ?>" />
                 
                 <table id="mdjm-playlist-form-table">
                     <tr>
@@ -83,35 +82,40 @@ $mdjm_event_id = get_the_ID();
             </form>
             
         <?php else : ?>
-        	<?php do_action( 'mdjm_playlist_closed', $mdjm_event_id ); ?>
+        <style type="text/css">
+		.mdjm-playlist-remove	{
+			display: none;
+		}
+		</style>
+        	<?php do_action( 'mdjm_playlist_closed', $mdjm_event->ID ); ?>
             
             <p><?php printf( __( 'The playlist for this event is currently closed to allow %s to prepare for your event. Existing playlist entries are displayed below.', 'mobile-dj-manager' ), '{dj_firstname}' ); ?></p>
             
-        <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event_id ) ) ?>
+        <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
         
-    	<?php do_action( 'mdjm_playlist_form_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_playlist_form_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-form -->
     	
-	<?php $playlist = mdjm_get_playlist_by_category( $mdjm_event_id ); ?>
+	<?php $playlist = mdjm_get_playlist_by_category( $mdjm_event->ID ); ?>
     
     <?php if( $playlist ) : ?>
     	 <div id="mdjm-playlist-entries">
-        	<?php do_action( 'mdjm_playlist_entries_top', $mdjm_event_id ); ?>
+        	<?php do_action( 'mdjm_playlist_entries_top', $mdjm_event->ID ); ?>
             
-        	<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event_id ); ?>
+        	<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
         	<p><?php printf( __( 'Your playlist currently consists of %d %s and is approximately %s long. Your event is %s long.', 'mobile-dj-manager' ),
 					$entries_in_playlist,
 					_n( 'track', 'tracks', $entries_in_playlist, 'mobile-dj-manager' ),
-					mdjm_playlist_duration( $mdjm_event_id, $entries_in_playlist ),
-					mdjm_event_duration( $mdjm_event_id ) ); ?></p>
+					mdjm_playlist_duration( $mdjm_event->ID, $entries_in_playlist ),
+					mdjm_event_duration( $mdjm_event->ID ) ); ?></p>
         
         	<?php foreach( $playlist as $category => $entries ) : ?>
             	
-				<?php $entries_in_category = mdjm_count_playlist_entries( $mdjm_event_id, $category ); ?>
+				<?php $entries_in_category = mdjm_count_playlist_entries( $mdjm_event->ID, $category ); ?>
                 
                 <div class="row">
                 
-                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $entries_in_category; ?> <?php echo _n( 'entry', 'entries', $entries_in_category, 'mobile-dj-manager' ); ?> | <?php echo mdjm_playlist_duration( $mdjm_event_id, $entries_in_category ); ?>)</span></div>
+                    <div class="category"><?php echo $category; ?> <span class="cat-count">(<?php echo $entries_in_category; ?> <?php echo _n( 'entry', 'entries', $entries_in_category, 'mobile-dj-manager' ); ?> | <?php echo mdjm_playlist_duration( $mdjm_event->ID, $entries_in_category ); ?>)</span></div>
                     
                 </div>
                 
@@ -144,7 +148,7 @@ $mdjm_event_id = get_the_ID();
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         
-                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->ID . '&event_id=' . $mdjm_event_id, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
+                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->ID . '&event_id=' . $mdjm_event->ID, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
                     </div>
                 </div>
                 
@@ -156,13 +160,13 @@ $mdjm_event_id = get_the_ID();
 	
 	<?php endif; // endif( $playlist ) ?>
     	
-	<?php do_action( 'mdjm_playlist_entries_bottom', $mdjm_event_id ); ?>
+	<?php do_action( 'mdjm_playlist_entries_bottom', $mdjm_event->ID ); ?>
     
     	
     <div id="mdjm-playlist-footer">
-    	<?php do_action( 'mdjm_playlist_footer_top', $mdjm_event_id ); ?>
-    	<?php do_action( 'mdjm_playlist_footer_bottom', $mdjm_event_id ); ?>
+    	<?php do_action( 'mdjm_playlist_footer_top', $mdjm_event->ID ); ?>
+    	<?php do_action( 'mdjm_playlist_footer_bottom', $mdjm_event->ID ); ?>
     </div><!-- end mdjm-playlist-footer -->
     
-	<?php do_action( 'mdjm_playlist_bottom', $mdjm_event_id ); ?>
+	<?php do_action( 'mdjm_playlist_bottom', $mdjm_event->ID ); ?>
 </div><!-- end mdjm-playlist-wrapper -->
