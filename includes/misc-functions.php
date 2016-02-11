@@ -212,6 +212,21 @@ function mdjm_messages( $key )	{
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
+			'10'	=> array(
+				'class'		=> 'success',
+				'title'		=> __( 'Done', 'mobile-dj-manager' ),
+				'message'	=> __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
+			),
+			'11'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	=> __( 'Unable to sign event contract.', 'mobile-dj-manager' )
+			),
+			'12'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
+				'message'	=> __( 'Please ensure all fields have been completed, you have accepted the terms, confirmed your identity and re-entered your password.', 'mobile-dj-manager' )
+			),
 			'20'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),

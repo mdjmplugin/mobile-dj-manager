@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param
  * @return	void
  */
-function mdjm_goto_guest_playlist()	{
+function mdjm_goto_guest_playlist_action()	{
 	if( ! isset( $_GET['playlist'] ) )	{
 		return;
 	}
@@ -35,7 +35,7 @@ function mdjm_goto_guest_playlist()	{
 	);
 	die();
 } // mdjm_goto_guest_playlist
-add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist' );
+add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist_action' );
 	
 /**
  * Add a song to the playlist.
@@ -46,9 +46,7 @@ add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist' );
  * @param	arr		$data	Form data from the $_POST super global.
  * @return	void
  */
-function mdjm_add_playlist_entry( $data )	{
-	global $wpdb, $mdjm_notice;
-	
+function mdjm_add_playlist_entry_action( $data )	{
 	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'add_playlist_entry' ) )	{
 		$message = 99;
 	}
@@ -57,30 +55,32 @@ function mdjm_add_playlist_entry( $data )	{
 		$message = 22;
 	}
 	
-	// Setup the discount code details
-	$posted = array();
-
-	foreach ( $data as $key => $value ) {
-
-		if ( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_addnew' ) {
-
-			if ( is_string( $value ) || is_int( $value ) ) {
-
-				$posted[ $key ] = strip_tags( addslashes( $value ) );
-
-			} elseif ( is_array( $value ) ) {
-
-				$posted[ $key ] = array_map( 'absint', $value );
-
+	else	{
+		// Setup the playlist entry details
+		$posted = array();
+	
+		foreach ( $data as $key => $value ) {
+	
+			if ( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_addnew' ) {
+	
+				if ( is_string( $value ) || is_int( $value ) ) {
+	
+					$posted[ $key ] = strip_tags( addslashes( $value ) );
+	
+				} elseif ( is_array( $value ) ) {
+	
+					$posted[ $key ] = array_map( 'absint', $value );
+	
+				}
 			}
 		}
-	}
-	
-	if( mdjm_store_playlist_entry( $posted ) )	{
-		$message = 20;
-	}
-	else	{
-		$message = 21;
+		
+		if( mdjm_store_playlist_entry( $posted ) )	{
+			$message = 20;
+		}
+		else	{
+			$message = 21;
+		}
 	}
 	
 	wp_redirect(
@@ -94,7 +94,7 @@ function mdjm_add_playlist_entry( $data )	{
 	);
 	die();
 } // mdjm_add_playlist_entry
-add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry' );
+add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry_action' );
 
 /**
  * Remove a song.
@@ -105,9 +105,7 @@ add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry' );
  * @param	int		$entry_id	DB entry ID.
  * @return	int		true if successfull, false if not.
  */
-function mdjm_remove_playlist_entry( $data )	{
-	global $wpdb, $mdjm_notice;
-	
+function mdjm_remove_playlist_entry_action( $data )	{
 	if( ! isset( $data['id'] ) )	{
 		$message = 25;
 	}
@@ -136,4 +134,4 @@ function mdjm_remove_playlist_entry( $data )	{
 	);
 	die();
 } // mdjm_remove_playlist_entry
-add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry' );
+add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_action' );

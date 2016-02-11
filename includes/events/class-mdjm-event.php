@@ -208,16 +208,43 @@ class MDJM_Event {
 	} // get_client
 	
 	/**
-	 * Retrieve the event contract
+	 * Retrieve the event contract.
 	 *
 	 * @since	1.3
 	 * @return	int
 	 */
 	public function get_contract() {
-		$contract = get_post_meta( $this->ID, '_mdjm_event_contract', true );
+		if( 'false' === $this->get_contract_status() )	{
+			$contract = get_post_meta( $this->ID, '_mdjm_event_contract', true );
+		}
+		else	{
+			$contract = get_post_meta( $this->ID, '_mdjm_signed_contract', true );
+		}
 		
-		return apply_filters( 'mdjm_event_contract', $return, $this->ID );
+		return apply_filters( 'mdjm_event_contract', $contract, $this->ID );
 	} // get_contract
+	
+	/**
+	 * Retrieve the event contract status.
+	 *
+	 * @since	1.3
+	 * @return	int|bool
+	 */
+	public function get_contract_status() {		
+		if( isset( $this->ID ) )	{
+			$signed_contract_id = get_post_meta( $this->ID, '_mdjm_signed_contract', true );
+			
+			if( ! empty( $signed_contract_id ) && mdjm_contract_exists( $signed_contract_id ) )	{
+				$return = $signed_contract_id;
+			}
+			
+			if( $this->post_status != 'mdjm-approved' || $this->post_status != 'mdjm-completed' )	{
+				$return = false;
+			}
+		}
+				
+		return apply_filters( 'mdjm_get_contract_status', $return, $this->ID );
+	} // get_contract_status
 	
 	/**
 	 * Retrieve the event date

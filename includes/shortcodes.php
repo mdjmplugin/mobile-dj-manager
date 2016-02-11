@@ -169,10 +169,19 @@ function mdjm_shortcode_contract( $atts )	{
 			
 			$mdjm_event = new MDJM_Event( $_GET['event_id'] );
 			
+			$status = ( ! empty( $mdjm_event->get_contract_status() ) ? 'signed' : '' );
+			
 			if( $mdjm_event )	{
 				ob_start();
-				mdjm_get_template_part( 'contract', '' );
-				$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+				mdjm_get_template_part( 'contract', $status );
+				
+				// Do not replace tags in a signed contract
+				if( $status == 'signed' )	{
+					$output = ob_get_contents();
+				}
+				else	{
+					$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+				}
 				ob_get_clean();
 			}
 			else	{

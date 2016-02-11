@@ -208,7 +208,8 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-actions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/contract-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/contract/contract-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/contract/contract-actions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/playlist-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/playlist-actions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/venue-functions.php' );

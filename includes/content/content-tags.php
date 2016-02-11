@@ -112,12 +112,12 @@ class MDJM_Content_Tags	{
 			return $content;
 		}
 
-		$this->event_id		= $event_id;
+		$this->event_id     = $event_id;
 		$this->client_id	= $client_id;
 
 		$new_content = preg_replace_callback( "/{([A-z0-9\-\_]+)}/s", array( $this, 'do_tag' ), $content );
 
-		$this->event_id		= null;
+		$this->event_id     = null;
 		$this->client_id	= null;
 
 		return $new_content;
@@ -133,9 +133,9 @@ class MDJM_Content_Tags	{
 	 * @return	mixed
 	 */
 	public function do_tag( $m ) {
-		// Get tag
-		$tag = $m[1];
-
+		// Get tag. Force to lower case for backwards compatibility.
+		$tag = strtolower( $m[1] );
+		
 		// Return tag if tag not set
 		if ( ! $this->content_tag_exists( $tag ) ) {
 			return $m[0];
@@ -344,13 +344,23 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'contract_date',
-			'description' => __( 'The date the event contract was signed, or today\'s date', 'mobile-dj-manager' ),
+			'description' => __( "The date the event contract was signed, or today's date", 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_date'
 		),
 		array(
 			'tag'         => 'contract_id',
 			'description' => __( 'The contract / event ID', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_id'
+		),
+		array(
+			'tag'         => 'contract_signatory',
+			'description' => __( 'The name of the person who signed the contract', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contract_signatory'
+		),
+		array(
+			'tag'         => 'contract_signatory_ip',
+			'description' => __( 'The IP address recorded during contract signing', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_contract_signatory_ip'
 		),
 		array(
 			'tag'         => 'contract_url',
@@ -613,7 +623,7 @@ function mdjm_content_tag_available_packages_cost()	{
  * @return	str		The name of the company running this MDJM instance.
  */
 function mdjm_content_tag_company_name()	{
-	return COMPANY_APP;
+	return mdjm_get_option( 'company_name' );
 } // mdjm_content_tag_company_name
 
 /**
@@ -625,7 +635,7 @@ function mdjm_content_tag_company_name()	{
  * @return	str		The URL of the contact page.
  */
 function mdjm_content_tag_contact_page()	{
-	return mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false );
+	return mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ), false );
 } // mdjm_content_tag_contact_page
 
 /**
@@ -980,7 +990,7 @@ function mdjm_content_tag_contract_date( $event_id='' )	{
 	$signed = get_post_meta( $event_id, '_mdjm_event_contract_approved', true );
 	
 	if( !empty( $signed ) )	{
-		$return	= $return = date( MDJM_SHORTDATE_FORMAT, strtotime( $contract_date ) );
+		$return	= $return = date( MDJM_SHORTDATE_FORMAT, strtotime( $signed ) );
 	}
 	else	{
 		$return = date( MDJM_SHORTDATE_FORMAT );
@@ -1007,6 +1017,44 @@ function mdjm_content_tag_contract_id( $event_id='' )	{
 } // mdjm_content_tag_contract_id
 
 /**
+ * Content tag: contract_signatory.
+ * The event ID.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The name of the person who signed the contract.
+ */
+function mdjm_content_tag_contract_signatory( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$contract_id = mdjm_get_event_contract( $event_id );
+	
+	return mdjm_get_contract_signatory_name( $contract_id );
+} // mdjm_content_tag_contract_signatory
+
+/**
+ * Content tag: contract_signatory_ip.
+ * The event ID.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The IP address of the person who signed the contract.
+ */
+function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$contract_id = mdjm_get_event_contract( $event_id );
+	
+	return mdjm_get_contract_signatory_ip( $contract_id );
+} // mdjm_content_tag_contract_signatory_ip
+
+/**
  * Content tag: contract_url.
  * The event contract URL for the client.
  *
@@ -1020,7 +1068,7 @@ function mdjm_content_tag_contract_url( $event_id='' )	{
 		return '';
 	}
 	
-	return mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $event_id;
+	return mdjm_get_formatted_url( mdjm_get_option( 'contract_page' ) ) . 'event_id=' . $event_id;
 } // mdjm_content_tag_contract_url
 
 /**
@@ -1486,7 +1534,7 @@ function mdjm_content_tag_payment_history( $event_id='' )	{
  * @return	str		The payments page URL.
  */
 function mdjm_content_tag_payment_url()	{	
-	return mdjm_get_formatted_url( MDJM_PAYMENT_PAGE, false );
+	return mdjm_get_formatted_url( mdjm_get_option( 'payments_page' ), false );
 } // mdjm_content_tag_payment_url
 
 /**
@@ -1517,7 +1565,7 @@ function mdjm_content_tag_playlist_url( $event_id='' )	{
 	$return = __( 'Event playlist disabled', 'mobile-dj-manager' );
 	
 	if( $access == 'Y' )	{
-		$return = mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true );
+		$return = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true );
 		
 		if( !empty( $event_id ) )	{
 			$return .=  'event_id=' . $event_id;
@@ -1536,7 +1584,7 @@ function mdjm_content_tag_playlist_url( $event_id='' )	{
  * @return	str		The online quote page URL for clients.
  */
 function mdjm_content_tag_quotes_url( $event_id='' )	{
-	$return = mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true );
+	$return = mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true );
 
 	if( empty( $event_id ) )	{
 		$return .= 'event_id=' . $event_id;

@@ -175,6 +175,19 @@ function mdjm_get_event_type( $event_id='' )	{
 	// Return the label for the status
 	return $event->get_type();
 } // mdjm_get_event_type
+
+/**
+ * Returns the event contract ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int		The post ID of the event contract.
+ */
+function mdjm_get_event_contract( $event_id )	{
+	$event = new MDJM_Event( $event_id );
+	
+	return $event->get_contract();
+} // mdjm_get_event_contract
 	
 /**
  * Returns the URL for an event.
