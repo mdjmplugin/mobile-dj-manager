@@ -154,9 +154,51 @@ function mdjm_shortcode_home( $atts )	{
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
 
 /**
+ * MDJM Contract Shortcode.
+ *
+ * Displays the MDJM contract page to allow the client to review and sign their event contract.
+ * 
+ * @since	1.3
+ *
+ * @return	string
+ */
+function mdjm_shortcode_contract( $atts )	{
+	if( isset( $_GET['event_id'] ) && mdjm_event_exists( $_GET['event_id'] ) )	{
+		if( is_user_logged_in() )	{
+			global $mdjm_event;
+			
+			$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+			
+			if( $mdjm_event )	{
+				ob_start();
+				mdjm_get_template_part( 'contract', '' );
+				$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+				ob_get_clean();
+			}
+			else	{
+				wp_die( __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' ) );
+			}
+			
+			// Reset global var
+			$mdjm_event = '';
+			
+			return $output;
+		}
+		else	{
+			echo mdjm_login_form();
+		}
+	}
+	else	{
+		wp_die( __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' ) );
+	}
+	
+} // mdjm_shortcode_contract
+add_shortcode( 'mdjm-contract', 'mdjm_shortcode_contract' );
+
+/**
  * MDJM Playlist Shortcode.
  *
- * Displays the MDJM plsylist management system which will render a client interface for clients
+ * Displays the MDJM playlist management system which will render a client interface for clients
  * or a guest interface for event guests with the access URL.
  * 
  * @since	1.3

@@ -205,7 +205,19 @@ class MDJM_Event {
 		if( ! isset( $this->client ) )	{
 			$this->client = get_post_meta( $this->ID, '_mdjm_event_client', true );
 		}
-	} // get_date
+	} // get_client
+	
+	/**
+	 * Retrieve the event contract
+	 *
+	 * @since	1.3
+	 * @return	int
+	 */
+	public function get_contract() {
+		$contract = get_post_meta( $this->ID, '_mdjm_event_contract', true );
+		
+		return apply_filters( 'mdjm_event_contract', $return, $this->ID );
+	} // get_contract
 	
 	/**
 	 * Retrieve the event date

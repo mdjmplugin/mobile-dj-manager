@@ -53,7 +53,7 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 					
 	$result = $wpdb->get_row( $query );
 	
-	return mdjm_get_event( $result->event_id );
+	return ( $result ? mdjm_get_event( $result->event_id ) : false );
 } // mdjm_get_event_by_playlist_code
 
 /**

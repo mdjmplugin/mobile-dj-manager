@@ -18,21 +18,24 @@ if ( ! defined( 'ABSPATH' ) )
  * @param
  * @return	void
  */
-function mdjm_guest_playlist()	{
+function mdjm_goto_guest_playlist()	{
 	if( ! isset( $_GET['playlist'] ) )	{
 		return;
 	}
 	
 	$event = mdjm_get_event_by_playlist_code( $_GET['playlist'] );
 	
-	if( ! $event || ! mdjm_event_exists( $event ) )	{
+	if( ! $event )	{
 		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
 	}
 	
-	wp_redirect(  );
+	wp_redirect( 
+		add_query_arg( 'guest_playlist', $_GET['playlist'], 
+		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
+	);
 	die();
-} // mdjm_goto_event
-add_action( 'mdjm_guest_playlist', 'mdjm_guest_playlist' );
+} // mdjm_goto_guest_playlist
+add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist' );
 	
 /**
  * Add a song to the playlist.
