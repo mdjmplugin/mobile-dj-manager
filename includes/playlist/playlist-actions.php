@@ -12,6 +12,30 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Redirect to playlist.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_goto_playlist_action()	{
+	if( ! isset( $_GET['event_id'] ) )	{
+		return;
+	}
+	
+	if( ! mdjm_event_exists( $_GET['event_id'] ) )	{
+		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
+	}
+	
+	wp_redirect( 
+		add_query_arg( 'event_id', $_GET['event_id'], 
+		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
+	);
+	die();
+} // mdjm_goto_guest_playlist
+add_action( 'mdjm_goto_playlist', 'mdjm_goto_playlist_action' );
+
+/**
  * Redirect to guest playlist.
  *
  * @since	1.3

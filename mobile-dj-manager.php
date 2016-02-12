@@ -200,6 +200,10 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/actions.php' );
 			
+			if( file_exists( MDJM_PLUGIN_DIR . '/includes/deprecated-functions.php' ) )	{
+				require_once( MDJM_PLUGIN_DIR . '/includes/deprecated-functions.php' );
+			}
+			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
