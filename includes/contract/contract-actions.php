@@ -13,6 +13,30 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Redirect to contract.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_goto_contract_action()	{
+	if( ! isset( $_GET['event_id'] ) )	{
+		return;
+	}
+	
+	if( ! mdjm_event_exists( $_GET['event_id'] ) )	{
+		wp_die( 'Sorry but we could not locate your event.', 'mobile-dj-manager' );
+	}
+	
+	wp_redirect( 
+		add_query_arg( 'event_id', $_GET['event_id'], 
+		mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) )
+	);
+	die();
+} // mdjm_goto_contract_action
+add_action( 'mdjm_goto_contract', 'mdjm_goto_contract_action' );
+
+/**
  * Sign the contract.
  *
  * @since	1.3

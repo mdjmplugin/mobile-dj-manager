@@ -224,14 +224,14 @@ function mdjm_get_content_tags_list() {
  * Search content for tags and filter content tags through their hooks.
  *
  * @param	str		$content		Required: Content to search for tags.
- * @param	int		$event_id		Required: The event_id.
+ * @param	int		$event_id		Optional: The event_id.
  * @param	int		$client_id		Optional: The event_id. id
  *
  * @since	1.3
  *
  * @return	str		Content with content tags filtered out.
  */
-function mdjm_do_content_tags( $content, $event_id, $client_id='' ) {
+function mdjm_do_content_tags( $content, $event_id='', $client_id='' ) {
 	// Replace all tags
 	$content = MDJM()->content_tags->do_tags( $content, $event_id, $client_id );
 
