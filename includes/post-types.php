@@ -269,21 +269,25 @@ function mdjm_register_post_types()	{
 	$event_labels = apply_filters( 
 		'mdjm_event_labels',
 		array(
-			'name'               => _x( 'Events', 'post type general name', 'mobile-dj-manager' ),
+			'name'               => _x( '%2$s', 'post type general name', 'mobile-dj-manager' ),
 			'singular_name'      => _x( 'Event', 'post type singular name', 'mobile-dj-manager' ),
-			'menu_name'          => _x( 'MDJM Events', 'admin menu', 'mobile-dj-manager' ),
+			'menu_name'          => _x( 'MDJM %2$s', 'admin menu', 'mobile-dj-manager' ),
 			'name_admin_bar'     => _x( 'Event', 'add new on admin bar', 'mobile-dj-manager' ),
-			'add_new'            => __( 'Create Event', 'mobile-dj-manager' ),
-			'add_new_item'       => __( 'Create New Event', 'mobile-dj-manager' ),
-			'new_item'           => __( 'New Event', 'mobile-dj-manager' ),
-			'edit_item'          => __( 'Edit Event', 'mobile-dj-manager' ),
-			'view_item'          => __( 'View Event', 'mobile-dj-manager' ),
-			'all_items'          => __( 'All Events', 'mobile-dj-manager' ),
-			'search_items'       => __( 'Search Events', 'mobile-dj-manager' ),
-			'not_found'          => __( 'No events found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No events found in Trash.', 'mobile-dj-manager' )
+			'add_new'            => __( 'Create %1$s', 'mobile-dj-manager' ),
+			'add_new_item'       => __( 'Create New %1$s', 'mobile-dj-manager' ),
+			'new_item'           => __( 'New %1$s', 'mobile-dj-manager' ),
+			'edit_item'          => __( 'Edit %1$s', 'mobile-dj-manager' ),
+			'view_item'          => __( 'View %1$s', 'mobile-dj-manager' ),
+			'all_items'          => __( 'All %2$s', 'mobile-dj-manager' ),
+			'search_items'       => __( 'Search %2$s', 'mobile-dj-manager' ),
+			'not_found'          => __( 'No %3$s found.', 'mobile-dj-manager' ),
+			'not_found_in_trash' => __( 'No %3$s found in Trash.', 'mobile-dj-manager' )
 		)
 	);
+	
+	foreach ( $event_labels as $key => $value ) {
+	   $event_labels[ $key ] = sprintf( $value, mdjm_get_label_singular(), mdjm_get_label_plural(), mdjm_get_label_plural( true ) );
+	}
 		
 	$event_args = array(
 		'labels'                 => $event_labels,
@@ -499,8 +503,8 @@ add_action( 'init', 'mdjm_register_post_types', 1 );
  */
 function mdjm_get_default_labels() {
 	$defaults = array(
-	   'singular' => __( 'Event', 'easy-digital-downloads' ),
-	   'plural'   => __( 'Events','easy-digital-downloads' )
+	   'singular' => __( 'Event', 'mobile-dj-manager' ),
+	   'plural'   => __( 'Events','mobile-dj-manager' )
 	);
 	return apply_filters( 'mdjm_default_events_name', $defaults );
 } // mdjm_get_default_labels

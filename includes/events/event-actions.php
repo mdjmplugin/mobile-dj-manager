@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param
  * @return	void
  */
-function mdjm_view_event()	{
+function mdjm_goto_event_action()	{
 	if( ! isset( $_GET['event_id'] ) )	{
 		return;
 	}
@@ -30,4 +30,4 @@ function mdjm_view_event()	{
 	wp_redirect( mdjm_get_event_uri( $_GET['event_id'] ) );
 	die();
 } // mdjm_goto_event
-add_action( 'mdjm_view_event', 'mdjm_view_event' );
+add_action( 'mdjm_goto_event', 'mdjm_goto_event_action' );
