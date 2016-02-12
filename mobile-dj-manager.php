@@ -126,7 +126,6 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events			= new MDJM_Events();
 				$mdjm_posts						= new MDJM_Posts(); // REMOVE POST 1.3
-				self::$instance->posts			 = new MDJM_Post_Types();
 				self::$instance->content_tags	  = new MDJM_Content_Tags();
 				self::$instance->cron			  = new MDJM_Cron();
 				self::$instance->users			 = new MDJM_Users();
@@ -216,7 +215,6 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/equipment/equipment-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/misc-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-posts.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-custom-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/client-functions.php' );
@@ -233,6 +231,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' ); // Scheduler
 			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
 			require_once( MDJM_PLUGIN_DIR . '/widgets/class-mdjm-widget.php' ); // Widgets
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/debug/mdjm-debug.php' ); // Debug class
