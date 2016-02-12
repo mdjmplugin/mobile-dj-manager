@@ -13,6 +13,29 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Load Scripts
+ *
+ * Enqueues the required scripts.
+ *
+ * @since	1.3
+ * @global	$post
+ * @return	void
+ */
+function mdjm_load_scripts()	{
+	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
+	
+	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_enqueue_script( 'mdjm-ajax' );
+
+	wp_localize_script( 'mdjm-ajax', 'mdjm_scripts', apply_filters( 'mdjm_ajax_script_vars', array(
+		'ajaxurl'                 => mdjm_get_ajax_url(),
+		
+	) ) );
+	
+} // mdjm_load_scripts
+add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
+
+/**
  * Load Frontend Styles
  *
  * Enqueues the required styles for the frontend.

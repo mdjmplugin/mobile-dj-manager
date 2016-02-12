@@ -25,19 +25,9 @@
 				__( 'MDJM Availability Checker', 'mobile-dj-manager' ), /* Name */
 				array( 'description' => __( 'Enables clients to check your availability', 'mobile-dj-manager' ), ) /* Args */
 			);
-			
-			add_action( 'widgets_init', array( &$this, 'register_widgets' ) ); // Register the MDJM Widgets						
+			add_filter( 'mdjm_ajax_script_vars', array( &$this, 'ajax' ) );
 		}
 		
-		/**
-		 * Register the Availability widget for the use within WP
-		 *
-		 *
-		 *
-		 */
-		function register_widgets()	{
-			register_widget( 'MDJM_Availability_Widget' );
-		} // register_widgets
 		
 		/**
 		 * Inserts the jQuery for AJAX lookups
@@ -46,84 +36,21 @@
 		 *
 		 *
 		 */
-		function ajax( $args, $instance )	{	
-			global $mdjm, $mdjm_settings;
-						
-			if( $instance['available_action'] != 'text' )
-				$pass_redirect = true;
-				
-			if( $instance['unavailable_action'] != 'text' )
-				$fail_redirect = true;
-			
-			?>
-            <script type="text/javascript">
-			jQuery(document).ready(function($) 	{
-				$('#mdjm-widget-availability-check').submit(function(event)	{
-					if( !$("#widget_check_date").val() )	{
-						return false;
-					}
-					event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-					var check_date = $("#widget_check_date").val();
-					var avail = "<?php echo $instance['available_text']; ?>";
-					var unavail = "<?php echo $instance['unavailable_text']; ?>";
-					$.ajax({
-						type: "POST",
-						dataType: "json",
-						url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
-						data: {
-							check_date : check_date,
-							avail_text: avail,
-							unavail_text : unavail,
-							action : "mdjm_availability_by_ajax"
-						},
-						beforeSend: function()	{
-							$('input[type="submit"]').prop('disabled', true);
-							$("#widget_pleasewait").show();
-						},
-						success: function(response)	{
-							if(response.result == "available") {
-								<?php
-								if( !empty( $pass_redirect ) )	{
-									?>
-									window.location.href = '<?php echo mdjm_get_formatted_url( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
-									<?php
-								}
-								else	{
-									?>
-									$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
-									$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
-									$("#mdjm_widget_avail_submit").removeClass( "mdjm-updating" );
-									$("#widget_pleasewait").hide();
-									<?php
-								}
-								?>
-								$('input[type="submit"]').prop('disabled', false);
-							}
-							else	{
-								<?php
-								if( !empty( $fail_redirect ) )	{
-									?>
-									window.location.href = '<?php echo mdjm_get_formatted_url( $instance['unavailable_action'], true ); ?>';
-									<?php
-								}
-								else	{
-									?>
-									$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
-									$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
-									$("#mdjm_widget_avail_submit").removeClass( "mdjm-updating" );
-									$("#widget_pleasewait").hide();
-									<?php
-								}
-								?>
-								$('input[type="submit"]').prop('disabled', false);
-							}
-						}
-					});
-				});
-			});
-			</script>
-            <?php	
-		} // ajax
+		public function ajax( $vars )	{
+		$widget_options_all = get_option($this->option_name);
+		$instance = $widget_options_all[ $this->number ];
+		
+		if( empty( $instance['ajax'] ) )	{
+			return;
+		}
+		
+		$availability_vars = array(
+			'pass_redirect'	=> $instance['available_action'] != 'text' ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
+			'fail_redirect'	=> $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true ) : ''
+		);
+		
+		return array_merge( $vars, $availability_vars );
+	} // ajax
 						
 		/**
 		 * Front-end display of widget.
@@ -362,4 +289,13 @@
 			return $instance;
 		}
 	} // class MDJM_Availability_Widget
-	new MDJM_Availability_Widget();
+/**
+ * Register the Availability widget for the use within WP
+ *
+ *
+ *
+ */
+function mdjm_register_widgets()	{
+	register_widget( 'MDJM_Availability_Widget' );
+} // register_widgets
+add_action( 'widgets_init', 'mdjm_register_widgets' );
