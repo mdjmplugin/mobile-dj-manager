@@ -404,7 +404,7 @@
 				
 				wp_register_style( 'mobile-dj-manager', MDJM_PLUGIN_URL . '/assets/css/mdjm-styles.css', '', MDJM_VERSION_NUM );
 				//wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
-				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
+				//wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/assets/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
@@ -412,9 +412,9 @@
 				//wp_enqueue_script( 'jquery' );
 				wp_enqueue_style( 'mobile-dj-manager');
 				//wp_enqueue_script( 'google-hosted-jquery');
-				wp_enqueue_script( 'jquery-validation-plugin');
+				//wp_enqueue_script( 'jquery-validation-plugin');
 				
-				wp_register_script( 'mdjm-validation', MDJM_PLUGIN_URL . '/assets/js/mdjm-validation.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
+				//wp_register_script( 'mdjm-validation', MDJM_PLUGIN_URL . '/assets/js/mdjm-validation.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 				
 			} // client_zone_enqueue
 			

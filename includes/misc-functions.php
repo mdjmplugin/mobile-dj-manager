@@ -12,6 +12,54 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
+function mdjm_format_datepicker_date()	{
+	$date_format = mdjm_get_option( 'short_date_format', 'd/m/Y' );
+	
+	$search = array( 'd', 'm', 'Y' );
+	$replace = array( 'dd', 'mm', 'yy' );
+	
+	$date_format = str_replace( $search, $replace, $date_format );
+			
+	return apply_filters( 'mdjm_format_datepicker_date', $date_format );
+} // mdjm_format_datepicker_date
+
+/**
+ * Datepicker.
+ *
+ * @since	1.3
+ * @param	arr		$args	Datepicker field serttings.
+ * @return	void
+ */
+function mdjm_insert_datepicker( $args = array() )	{
+	$defaults = array(
+		'class'			=> 'mdjm_date',
+		'altfield'		=> '_mdjm_event_date',
+		'altformat'		=> 'yy-mm-dd',
+		'firstday'		=> get_option( 'start_of_week' ),
+		'changeyear'	=> 'true',
+		'changemonth'	=> 'true'		
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	?>
+    <script type="text/javascript">
+	jQuery(document).ready( function($)	{
+		$(".<?php echo $args['class']; ?>").datepicker({
+			dateFormat  : "<?php echo mdjm_format_datepicker_date(); ?>",
+			altField    : "#<?php echo $args['altfield']; ?>",
+			altFormat   : "<?php echo $args['altformat']; ?>",
+			firstDay    : "<?php echo $args['firstday']; ?>",
+			changeYear  : "<?php echo $args['changeyear']; ?>",
+			changeMonth : "<?php echo $args['changemonth']; ?>",
+			minDate     : "<?php echo ( isset( $args['mindate'] ) ) ? $args['mindate'] : '' ; ?>",
+			maxDate     : "<?php echo ( isset( $args['maxdate'] ) ) ? $args['maxdate'] : '' ; ?>"
+		});
+	});
+	</script>
+    <?php
+} // mdjm_insert_datepicker
+
 /**
  * Return all registered currencies.
  *

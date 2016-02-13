@@ -16,14 +16,15 @@
 			$mdjm_dash = new MDJM_Dashboard();
 		}
 			
-				
-		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'youtube-subscribe' );
-		wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 ?>
-		<script type="text/javascript">
-		<?php mdjm_jquery_datepicker_script( array( 'check_custom_date', 'check_date' ) ); ?>
-		</script>
+		<?php mdjm_insert_datepicker(
+			array(
+				'class'		=> 'check_custom_date',
+				'altfield'	=> 'check_date',
+				'mindate'	=> 'today'
+			)
+		); ?>
         <div class="wrap">
         <h1>MDJM Event Management - <?php echo $current_user->display_name; ?> (<?php if( !current_user_can( 'manage_options' ) ) echo 'DJ'; else echo 'Admin'; ?>)</h1>
         <hr />

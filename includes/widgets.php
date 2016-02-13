@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 |--------------------------------------------------------------------------
 |
 | - Availability Widget
-| - Categories / Tags Widget
+| 
 |
 */
 
@@ -43,11 +43,11 @@ class mdjm_availability_widget extends WP_Widget {
 	} // __construct
 	
 	/**
-	 * Set the vars within our Ajax script
+	 * Pass required variables to the jQuery script.
 	 *
-	 *
-	 *
-	 *
+	 * @since	1.3
+	 * @param
+	 * @return 	void
 	 */
 	public function ajax()	{
 		$widget_options_all = get_option($this->option_name);
@@ -65,9 +65,32 @@ class mdjm_availability_widget extends WP_Widget {
 		return array_merge( $vars, $availability_vars );
 	} // ajax
 	
-	/** @see WP_Widget::widget */
+	/**
+	 * Front-end display of widget.
+	 *
+	 * @see WP_Widget::widget()
+	 *
+	 * @param	arr		$args		Widget arguments.
+	 * @param	arr		$instance	Saved values from database.
+	 */
 	public function widget( $args, $instance )	{
+		$instance['title'] = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
+		
+		$title = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
+		
 		echo $args['before_widget'];
+		
+		if ( $title ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
+		
+		do_action( 'mdjm_before_availability_widget' );
+		
+		mdjm_locate_template( 'availability-widget.php', true );
+		
+		do_action( 'mdjm_after_availability_widget' );
+		
+		echo $args['after_widget'];
 	} // widget
 
 } // class mdjm_availability_widget

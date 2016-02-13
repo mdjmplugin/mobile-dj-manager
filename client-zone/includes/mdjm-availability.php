@@ -32,7 +32,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			
 			add_action( 'template_redirect', array( __CLASS__, 'check_availability' ) );
 			
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );		
+			//add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );		
 		} // __construct
 		
 		/**
@@ -186,9 +186,13 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			 * Initialise the datepicker script
 			 */
 			?>
-            <script type="text/javascript">
-            <?php mdjm_jquery_datepicker_script( array( 'custom_date', 'check_date', '', 'today' ) ); ?>
-			</script>
+            <?php mdjm_insert_datepicker(
+				array( 
+					'class'		=> 'custom_date',
+					'altfield'	=> 'check_date',
+					'mindate'	=> 'today'
+				)
+			); ?>
 			<?php
 			echo '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
 			
@@ -225,7 +229,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 				echo '<br />' . "\r\n";
 			
 			// Input field
-            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_jquery_short_date() . '"';
+            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_format_datepicker_date() . '"';
 			
 			// Input Wrap
 			if( !empty( $args['field_wrap'] ) && $args['field_wrap'] == 'false' )

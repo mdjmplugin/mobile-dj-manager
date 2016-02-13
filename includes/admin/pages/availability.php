@@ -151,17 +151,26 @@
 		}
 	}
 
-    wp_enqueue_script('jquery-ui-datepicker');
-    wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-
+	mdjm_insert_datepicker(
+		array(
+			'class'		=> 'from_custom_date',
+			'altfield'	=> 'from_date'
+		)
+	); // Holiday from
+	mdjm_insert_datepicker(
+		array(
+			'class'		=> 'to_custom_date',
+			'altfield'	=> 'to_date'
+		)
+	); // Holiday to
+	mdjm_insert_datepicker(
+		array(
+			'class'		=> 'check_custom_date',
+			'altfield'	=> 'check_date',
+			'mindate'	=> 'today'
+		)
+	); // Availability check
 	?>
-	<script type="text/javascript">
-	<?php
-	mdjm_jquery_datepicker_script( array( 'from_custom_date', 'from_date' ) ); // Holiday from
-	mdjm_jquery_datepicker_script( array( 'to_custom_date', 'to_date' ) ); // Holiday to
-	mdjm_jquery_datepicker_script( array( 'check_custom_date', 'check_date' ) ); // Availability check
-	?>
-    </script>
     <div class="wrap">
     <div id="icon-themes" class="icon32"></div>
     <h2>Availability</h2>

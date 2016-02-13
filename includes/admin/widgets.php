@@ -115,7 +115,12 @@
 		?>
         <script type="text/javascript">
 		<?php
-		mdjm_jquery_datepicker_script( array( 'check_custom_date', 'check_date' ) );
+		mdjm_insert_datepicker(
+			array(
+				'class'		=> 'check_custom_date',
+				'altfield'	=> 'check_date'
+			)
+		);
 		?>
 		
         </script>

@@ -98,14 +98,16 @@
 			} // if( isset( $_POST['mdjm_avail_submit'] ) ...
 			
             /* We need the jQuery Calendar */
-            wp_enqueue_script('jquery-ui-datepicker');
-            wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
             ?>
-            <script type="text/javascript">
 			<?php
-			mdjm_jquery_datepicker_script( array( 'mdjm_widget_date', 'widget_check_date', '', 'today' ) );
+			mdjm_insert_datepicker(
+				array(
+					'class'		=> 'mdjm_widget_date',
+					'altfield'	=> 'widget_check_date',
+					'mindate'	=> 'today'
+				)
+			);
 			?>
-            </script>
             <?php
 			if( isset( $instance['intro'] ) && !empty( $instance['intro'] ) )	{
 				if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
@@ -137,8 +139,8 @@
 				}
 			}
 			
-			$widget = mdjm_get_template_part( 'availability', 'widget', false );
-			include_once( $widget );
+			$widget_template = mdjm_get_template_part( 'availability', 'widget', false );
+			include_once( $widget_template );
 			
 			?>
             

@@ -342,7 +342,7 @@
 					wp_enqueue_style( 'mdjm-posts' );
 					
 					/* -- jQuery -- */
-					wp_enqueue_script( 'jquery' );
+					//wp_enqueue_script( 'jquery' );
 					
 					/* -- jQuery Validation -- */
 					wp_enqueue_script( 'jquery-validation-plugin' );

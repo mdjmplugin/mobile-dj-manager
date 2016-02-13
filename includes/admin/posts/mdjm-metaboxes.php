@@ -163,9 +163,13 @@
         </div>
         <!-- End first row -->
         <?php
-        echo '<script type="text/javascript">' . "\r\n";
-		mdjm_jquery_datepicker_script( array( 'trans_date', 'transaction_date', 'today' ) );
-		echo '</script>' . "\r\n";
+		mdjm_insert_datepicker(
+			array(
+				'class'		=> 'trans_date',
+				'altfield'	=> 'transaction_date',
+				'mindate'	=> 'today'
+			)
+		);
 		
 		echo '<div class="mdjm-post-row">' . "\r\n";
 			echo '<div class="mdjm-post-3column">' . "\r\n";

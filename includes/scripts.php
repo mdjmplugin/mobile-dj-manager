@@ -32,6 +32,12 @@ function mdjm_load_scripts()	{
 		
 	) ) );
 	
+	wp_enqueue_script( 'jquery-ui-datepicker' );
+	
+	wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
+	wp_enqueue_script( 'jquery-validation-plugin');
+	wp_enqueue_script('jquery-ui-datepicker');
+	
 } // mdjm_load_scripts
 add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
 
@@ -46,6 +52,7 @@ add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
 function mdjm_register_styles()	{
 	$file          = 'mdjm.css';
 	$templates_dir = mdjm_get_theme_template_dir_name();
+	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
 	
 	$child_theme_style_sheet    = trailingslashit( get_stylesheet_directory() ) . $templates_dir . $file;
 	$parent_theme_style_sheet   = trailingslashit( get_template_directory()   ) . $templates_dir . $file;
@@ -65,5 +72,45 @@ function mdjm_register_styles()	{
 	
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
+	
+	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
+	wp_enqueue_style( 'jquery-ui-css' );
+	
 } // mdjm_register_styles
 add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
+
+/**
+ * Load Admin Styles
+ *
+ * Enqueues the required styles for admin.
+ *
+ * @since	1.3
+ * @return	void
+ */
+function mdjm_register_admin_styles( $hook )	{
+	$file          = 'mdjm-admin-styles.css';
+	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
+	
+	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
+	wp_enqueue_style( 'jquery-ui-css' );
+		
+} // mdjm_register_styles
+add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
+
+/**
+ * Load Admin Scripts
+ *
+ * Enqueues the required scripts for admin.
+ *
+ * @since	1.3
+ * @return	void
+ */
+function mdjm_register_admin_scripts( $hook )	{
+	wp_enqueue_script( 'jquery-ui-datepicker' );
+	
+	if( strpos( $hook, 'mdjm' ) )	{
+		wp_enqueue_script( 'jquery' );
+		
+	}
+} // mdjm_register_styles
+add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_scripts' );

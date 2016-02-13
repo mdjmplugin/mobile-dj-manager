@@ -349,9 +349,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
 	?>
-	<script type="text/javascript">
-	<?php mdjm_jquery_datepicker_script(); ?>
-	</script>
+	<?php mdjm_insert_datepicker(); ?>
 	<!-- Start of first row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
@@ -900,9 +898,12 @@ function mdjm_event_metabox_administration( $post )	{
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
 			
 	?>
-	<script type="text/javascript">
-	<?php mdjm_jquery_datepicker_script( array( 'mdjm_setup_date', '_mdjm_event_djsetup' ) ); ?>
-	</script>
+	<?php mdjm_insert_datepicker(
+		array(
+			'class'		=> 'mdjm_setup_date',
+			'altfield'	=> '_mdjm_event_djsetup'
+		)
+	); ?>
 	<!-- Start of first row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
@@ -1023,9 +1024,13 @@ function mdjm_event_metabox_transactions( $post )	{
 	
 	/* -- Display New Transaction Form -- */
 	echo '<hr size="1" />' . "\r\n";
-	echo '<script type="text/javascript">' . "\r\n";
-	mdjm_jquery_datepicker_script( array( 'trans_date', 'transaction_date', 'today' ) );
-	echo '</script>' . "\r\n";
+	mdjm_insert_datepicker(
+		array(
+			'class'		=> 'trans_date',
+			'altfield'	=> 'transaction_date',
+			'maxdate'	=> 'today'
+		)
+	);
 	
 	echo '<div class="mdjm-post-row">' . "\r\n";
 		echo '<div class="mdjm-post-3column">' . "\r\n";
