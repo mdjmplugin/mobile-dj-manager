@@ -39,6 +39,7 @@ class mdjm_availability_widget extends WP_Widget {
 			array( 'description' => __( 'Enables clients to check your availability', 'mobile-dj-manager' ) )
 		);
 		
+		add_action( 'wp_head', 'datepicker' );
 		add_filter( 'mdjm_ajax_script_vars', array( &$this, 'ajax' ) );
 	} // __construct
 	
@@ -64,6 +65,23 @@ class mdjm_availability_widget extends WP_Widget {
 		
 		return array_merge( $vars, $availability_vars );
 	} // ajax
+	
+	/**
+	 * Pass required variables to the jQuery script.
+	 *
+	 * @since	1.3
+	 * @param
+	 * @return 	void
+	 */
+	public function datepicker()	{
+		mdjm_insert_datepicker(
+			array(
+				'class'		=> 'mdjm_widget_date',
+				'altfield'	=> 'mdjm_enquiry_date_hidden_widget',
+				'mindate'	=> 'today'
+			)
+		);
+	} // datepicker
 	
 	/**
 	 * Front-end display of widget.
