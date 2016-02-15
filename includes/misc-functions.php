@@ -263,57 +263,72 @@ function mdjm_messages( $key )	{
 			'10'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	=> __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
+				'message'	  => __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
 			),
 			'11'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'Unable to sign event contract.', 'mobile-dj-manager' )
+				'message'	  => __( 'Unable to sign event contract.', 'mobile-dj-manager' )
 			),
 			'12'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	=> __( 'Please ensure all fields have been completed, you have accepted the terms, confirmed your identity and re-entered your password.', 'mobile-dj-manager' )
+				'message'	  => __( 'Please ensure all fields have been completed, you have accepted the terms, confirmed your identity and re-entered your password.', 'mobile-dj-manager' )
 			),
 			'20'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	=> __( 'Playlist entry added.', 'mobile-dj-manager' )
+				'message'	  => __( 'Playlist entry added.', 'mobile-dj-manager' )
 			),
 			'21'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
+				'message'	  => __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
 			),
 			'22'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	=> __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
 			),
 			'23'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	=> __( 'Playlist entry removed.', 'mobile-dj-manager' )
+				'message'	  => __( 'Playlist entry removed.', 'mobile-dj-manager' )
 			),
 			'24'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'Unable to remove playlist entry.', 'mobile-dj-manager' )
+				'message'	  => __( 'Unable to remove playlist entry.', 'mobile-dj-manager' )
 			),
 			'25'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'No playlist entry selected.', 'mobile-dj-manager' )
+				'message'	  => __( 'No playlist entry selected.', 'mobile-dj-manager' )
+			),
+			'60'	=> array(
+				'class'		=> 'mdjm_available',
+				'title'		=> __( 'Good News', 'mobile-dj-manager' ),
+				'message'	  => __( 'The date you selected is available.', 'mobile-dj-manager' )
+			),
+			'61'	=> array(
+				'class'		=> 'mdjm_notavailable',
+				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
+				'message'	  => __( "We're not available on the selected date.", 'mobile-dj-manager' )
+			),
+			'62'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Ooops', 'mobile-dj-manager' ),
+				'message'	  => __( 'You forgot to enter a date.', 'mobile-dj-manager' )
 			),
 			'90'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	=> __( "We seem to be missing the event details.", 'mobile-dj-manager' )
+				'message'	  => __( "We seem to be missing the event details.", 'mobile-dj-manager' )
 			),
 			'99'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'Security verification failed.', 'mobile-dj-manager' )
+				'message'	  => __( 'Security verification failed.', 'mobile-dj-manager' )
 			)
 		)
 	);

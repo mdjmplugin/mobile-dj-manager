@@ -16,6 +16,19 @@ p.head-nav	{
 	colour: #7B7D80;
 }
 
+/* =Errors
+-------------------------------------------------------------- */
+.mdjm_form_error {
+	color: #FF0000;
+}
+input.mdjm_form_error {
+	border: solid 1px #FF0000;
+	color: #000000;
+}
+.mdjm_form_valid {
+	color: inherit;
+}
+
 /* =Notifications
 -------------------------------------------------------------- */
 .mdjm-notice, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validate	{
@@ -180,8 +193,30 @@ p.head-nav	{
 	font-size: small;
 }
 
-/* =Availability Checker
+/* =Availability Widget
 -------------------------------------------------------------- */
-#mdjm-availability-checker	{
+
+#mdjm_availability_widget	{
 	
+}
+
+#mdjm_availability_widget label	{
+	font-weight: bold;
+}
+
+#mdjm_availability_widget .mdjm_datepicker_widget	{
+	z-index:99;
+}
+
+#mdjm_availability_widget .mdjm_available	{
+	font-weight: bold;
+}
+
+#mdjm_availability_widget .mdjm_notavailable	{
+	font-weight: bold;
+	color: #FF0000;
+}
+
+#mdjm_availability_widget .mdjm_pleasewait	{
+	display: none;
 }
