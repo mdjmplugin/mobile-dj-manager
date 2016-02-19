@@ -112,9 +112,6 @@
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 		
-		?>
-        <script type="text/javascript">
-		<?php
 		mdjm_insert_datepicker(
 			array(
 				'class'		=> 'check_custom_date',
@@ -123,7 +120,6 @@
 		);
 		?>
 		
-        </script>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <?php /* Display Availability Overview */ ?>
 		<?php get_availability_activity( 0, 0 ); ?>

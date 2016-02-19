@@ -218,7 +218,7 @@ function mdjm_add_employee( $post_data )	{
  */
 function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	{			
 	// We'll work with an array of roles
-	if( !empty( $roles ) && !is_array( $roles ) )
+	if( ! empty( $roles ) && ! is_array( $roles ) )
 		$roles = array( $roles );
 				
 	// Define the default query	

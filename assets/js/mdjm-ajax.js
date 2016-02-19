@@ -1,7 +1,7 @@
 var mdjm_scripts;
 jQuery(document).ready(function ($) {
 	/** Availability Widget */
-	$('#mdjm_availability_check_widget').submit(function(event)	{
+	$('#mdjm_availability_check_widget_ajax').submit(function(event)	{
 		if( !$("#mdjm_enquiry_date_widget").val() )	{
 			return false;
 		}

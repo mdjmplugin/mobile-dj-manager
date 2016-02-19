@@ -136,7 +136,7 @@ function mdjm_register_post_types()	{
 	$signed_contract_args = array(
 		'labels'                 => $signed_contract_labels,
 		'description'			=> __( 'Signed Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
+		'publicly_queryable' 	 => false,
 		'rewrite'            	=> array( 'slug' => 'mdjm-signed-contract' ),
 		'capability_type'    	=> array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
 		'map_meta_cap'		   => true,

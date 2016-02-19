@@ -276,7 +276,7 @@ function mdjm_shortcode_availability( $atts )	{
 	);
 	
 	ob_start();
-	MDJM_Availability_Checker::availability_form( $args );
+	//MDJM_Availability_Checker::availability_form( $args );
 	
 	return ob_get_clean();
 } // mdjm_shortcode_availability

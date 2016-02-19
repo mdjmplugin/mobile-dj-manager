@@ -51,18 +51,17 @@ class mdjm_availability_widget extends WP_Widget {
 	 * @return 	void
 	 */
 	public function ajax( $vars )	{
-		$widget_options_all = get_option($this->option_name);
+		$widget_options_all = get_option( $this->option_name );
 		$instance = $widget_options_all[ $this->number ];
 		
-		if( empty( $instance['ajax'] ) )	{
-			return;
+		if( ! empty( $instance['ajax'] ) )	{
+			$availability_vars = array(
+				'pass_redirect'           => $instance['available_action'] != 'text' ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
+				'fail_redirect'           => $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true ) : ''
+			);
 		}
 		
-		$availability_vars = array(
-			'pass_redirect'           => $instance['available_action'] != 'text' ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
-			'fail_redirect'           => $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true ) : '',
-			'required_date_widget'	=> __( 'Please select a date', 'mobile-dj-manager' )
-		);
+		$availability_vars['required_date_widget'] = __( 'Please select a date', 'mobile-dj-manager' );
 		
 		return array_merge( $vars, $availability_vars );
 	} // ajax
