@@ -52,7 +52,7 @@ class MDJM_Availability_Checker {
 	 *
 	 * @since	1.3
 	 */
-	public $result = array();
+	public $result;
 	
 	/**
 	 * Get things going
@@ -127,7 +127,7 @@ class MDJM_Availability_Checker {
 				$this->result['unavailable'][] = $employee;
 			}
 		}
-		
+				
 		if( ! empty( $this->result['available'] ) )	{
 			return true;
 		}

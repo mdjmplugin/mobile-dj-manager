@@ -26,7 +26,9 @@ function mdjm_availability_check( $data )	{
 	else	{
 		$result = mdjm_do_availability_check( $data['mdjm_enquiry_date_widget'] );
 		
-		if( mdjm_do_availability_check( $data['mdjm_enquiry_date_widget'] ) )	{
+		wp_die( var_dump( $result ) );
+		
+		if( !empty( $result['available'] ) )	{
 			$message = 60;
 		}
 		else	{
