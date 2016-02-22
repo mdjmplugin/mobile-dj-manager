@@ -12,6 +12,8 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-guest.php
  */
+
+// These global vars must remain
 global $mdjm_event, $mdjm_notice;
 ?>
 
@@ -45,35 +47,35 @@ global $mdjm_event, $mdjm_notice;
         <?php if( $mdjm_event->playlist_is_open() ) : ?>
         
             <form id="mdjm-guest-playlist-form" name="mdjm-guest-playlist-form" action="" method="post">
-                <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
-                <?php mdjm_action_field( 'add_playlist_entry' ); ?>
+                <?php wp_nonce_field( 'add_guest_playlist_entry', 'mdjm_nonce', true, true ); ?>
+                <?php mdjm_action_field( 'add_guest_playlist_entry' ); ?>
                 <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event->ID; ?>" />
                 
                 <table id="mdjm-guest-playlist-form-table">
                     <tr>
-                        <td class="mdjm-guest-playlist-song-cell">
-                            <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" />
+                        <td class="mdjm-guest-playlist-firstname-cell">
+                            <label for="entry_guest_firstname"><?php _e( 'First Name', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_guest_firstname" id="entry_guest_firstname" data-placeholder="<?php _e( 'First Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['firstname'] ) ) : echo $mdjm_guest['firstname']; endif; ?>" />
                         </td>
                         
-                        <td class="mdjm-guest-playlist-artist-cell">
-                            <label for="entry_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_artist" id="entry_artist" data-placeholder="<?php _e( 'Artist Name', 'mobile-dj-manager' ); ?>" />
+                        <td class="mdjm-guest-playlist-lastname-cell">
+                            <label for="entry_guest_lastname"><?php _e( 'Last Name', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_guest_lastname" id="entry_guest_lastname" data-placeholder="<?php _e( 'Last Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['lastname'] ) ) : echo $mdjm_guest['lastname']; endif; ?>" />
                         </td>
                         
                         <td class="mdjm-guest-playlist-category-cell">
-                            <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
-                            <?php mdjm_playlist_category_dropdown(); ?>
+                            <label for="entry_guest_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_guest_song" id="entry_guest_song" data-placeholder="<?php _e( 'Song', 'mobile-dj-manager' ); ?>" />
                         </td>
                         
                         <td class="mdjm-guest-playlist-djnotes-cell">
-                            <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?></label><br />
-                            <textarea name="entry_djnotes" id="entry_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>"></textarea>
+                            <label for="entry_guest_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
+                            <input type="text" name="entry_guest_artist" id="entry_guest_artist" data-placeholder="<?php _e( 'Artist', 'mobile-dj-manager' ); ?>" />
                         </td>
                     </tr>
                     <tr>
                     	<td class="mdjm-guest-playlist-addnew-cell" colspan="4">
-                            <input type="submit" name="entry_addnew" id="entry_addnew" value="<?php _e( 'Add to Playlist', 'mobile-dj-manager' ); ?>" />
+                            <input type="submit" name="entry_guest_addnew" id="entry_guest_addnew" value="<?php _e( 'Suggest Song', 'mobile-dj-manager' ); ?>" />
                         </td>
                     </tr>
                 </table>

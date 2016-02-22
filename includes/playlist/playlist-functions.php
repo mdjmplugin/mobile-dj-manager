@@ -158,6 +158,65 @@ function mdjm_remove_stored_playlist_entry( $entry_id )	{
 } // mdjm_remove_stored_playlist_entry
 
 /**
+ * Store a guest playlist entry.
+ *
+ * @since	1.3
+ * @param	arr		$details	Playlist entry data
+ * @return	bool	Whether or not the entry was created.
+ */
+function mdjm_store_guest_playlist_entry( $details )	{
+	$meta = array(
+		'song'      => isset( $details['entry_guest_song'] )      ? $details['entry_guest_song']		: '',
+		'artist'    => isset( $details['entry_guest_artist'] )	? $details['entry_guest_artist']		: '',
+		'added_by'  => ucwords( $details['entry_guest_firstname'] . ' ' . $details['entry_guest_lastname'] ),
+		'to_mdjm'   => '',
+		'uploaded'  => false,
+	);
+	
+	$guest_term = get_term_by( 'name', 'Guest', 'playlist-category' );
+	
+	if( ! empty( $guest_term ) )	{
+		(int)$term   = $guest_term->term_id;
+	}
+	
+	$event_id	= $details['entry_event'];
+	
+	// Add the playlist entry
+	$meta = apply_filters( 'mdjm_insert_guest_playlist_entry', $meta );
+
+	do_action( 'mdjm_insert_guest_playlist_entry_before', $meta );
+
+	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
+				mdjm_get_option( 'event_prefix', '' ) . $event_id,
+				$meta['song'],
+				$meta['artist'] );
+
+	$entry_id = wp_insert_post(
+		array(
+			'post_type'     => 'mdjm-playlist',
+			'post_title'    => $title,
+			'post_author'	=> 1,
+			'post_status'   => 'publish',
+			'post_parent'   => $event_id,
+			'post_category' => array( $term )
+		)
+	);
+	
+	if( ! empty( $term ) )	{
+		mdjm_set_playlist_entry_category( $entry_id, $term );
+	}
+
+	foreach( $meta as $key => $value ) {
+		update_post_meta( $entry_id, '_mdjm_playlist_entry_' . $key, $value );
+	}
+
+	do_action( 'mdjm_insert_guest_playlist_entry_after', $meta, $entry_id );
+
+	// Playlist entry added
+	return $entry_id;
+} // mdjm_store_guest_playlist_entry
+
+/**
  * Checks to see if a playlist entry already exists.
  *
  * @since	1.3

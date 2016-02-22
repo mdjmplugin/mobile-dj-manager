@@ -85,16 +85,13 @@ function mdjm_add_playlist_entry_action( $data )	{
 	
 		foreach ( $data as $key => $value ) {
 	
-			if ( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_addnew' ) {
-	
-				if ( is_string( $value ) || is_int( $value ) ) {
-	
+			if( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_addnew' ) {
+				if( is_string( $value ) || is_int( $value ) )	{
 					$posted[ $key ] = strip_tags( addslashes( $value ) );
 	
-				} elseif ( is_array( $value ) ) {
-	
+				}
+				elseif( is_array( $value ) )	{
 					$posted[ $key ] = array_map( 'absint', $value );
-	
 				}
 			}
 		}
@@ -159,3 +156,59 @@ function mdjm_remove_playlist_entry_action( $data )	{
 	die();
 } // mdjm_remove_playlist_entry
 add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_action' );
+
+/**
+ * Add a song from a guest to the playlist.
+ *
+ * Add a new entry from a guest to the event playlist.
+ *
+ * @since	1.3
+ * @param	arr		$data	Form data from the $_POST super global.
+ * @return	void
+ */
+function mdjm_add_guest_playlist_entry_action( $data )	{	
+	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'add_guest_playlist_entry' ) )	{
+		$message = 99;
+	}
+	
+	elseif( ! isset( $data[ 'entry_guest_firstname' ], $data[ 'entry_guest_lastname' ], $data[ 'entry_guest_song' ], $data[ 'entry_guest_artist' ] ) )	{
+		$message = 28;
+	}
+	
+	else	{
+		// Setup the playlist entry details
+		$posted = array();
+	
+		foreach ( $data as $key => $value ) {
+			if( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_guest_addnew' ) {
+				if( is_string( $value ) || is_int( $value ) )	{
+					$posted[ $key ] = strip_tags( addslashes( $value ) );
+	
+				}
+				elseif( is_array( $value ) )	{
+					$posted[ $key ] = array_map( 'absint', $value );
+				}
+			}
+		}
+		
+		$entry = mdjm_store_guest_playlist_entry( $posted );
+		
+		if( $entry )	{
+			$message = 26;
+		}
+		else	{
+			$message = 27;
+		}
+	}
+	
+	wp_redirect(
+		add_query_arg(
+			array(
+				'mdjm_message'	=> $message
+			),
+			 mdjm_guest_playlist_url( $data['entry_event'] )
+		)
+	);
+	die();
+} // mdjm_add_guest_playlist_entry
+add_action( 'mdjm_add_guest_playlist_entry', 'mdjm_add_guest_playlist_entry_action' );

@@ -305,6 +305,21 @@ function mdjm_messages( $key )	{
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
 				'message'	  => __( 'No playlist entry selected.', 'mobile-dj-manager' )
 			),
+			'26'	=> array(
+				'class'		=> 'success',
+				'title'		=> __( 'Done', 'mobile-dj-manager' ),
+				'message'	  => __( 'Playlist suggestion submitted.', 'mobile-dj-manager' )
+			),
+			'27'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'Unable to add playlist suggestion.', 'mobile-dj-manager' )
+			),
+			'28'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
+				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+			),
 			'60'	=> array(
 				'class'		=> 'mdjm_available',
 				'title'		=> __( 'Good News', 'mobile-dj-manager' ),
@@ -324,6 +339,11 @@ function mdjm_messages( $key )	{
 				'class'		=> 'error',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
 				'message'	  => __( "We seem to be missing the event details.", 'mobile-dj-manager' )
+			),
+			'95'   => array(
+				'class'		=> 'error',
+				'title'		=> __( 'Password Error', 'mobile-dj-manager' ),
+				'message'	  => __( 'An incorrect password was entered', 'mobile-dj-manager' )
 			),
 			'99'   => array(
 				'class'		=> 'error',

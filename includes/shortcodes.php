@@ -228,8 +228,7 @@ function mdjm_shortcode_playlist( $atts )	{
 	
 	if( $visitor == 'client' )	{
 		if( ! is_user_logged_in() )	{
-			echo mdjm_login_form( add_query_arg( 'event_id', $_GET['event_id'], mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) 
-		) );
+			echo mdjm_login_form( add_query_arg( 'event_id', $_GET['event_id'], mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) ) );
 		}
 	}
 	

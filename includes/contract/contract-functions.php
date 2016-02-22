@@ -13,6 +13,19 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Returns the event contract ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int		The post ID of the event contract.
+ */
+function mdjm_get_event_contract( $event_id )	{
+	$event = new MDJM_Event( $event_id );
+	
+	return $event->get_contract();
+} // mdjm_get_event_contract
+
+/**
  * Retrieve the contract.
  *
  * @since	1.3
@@ -112,3 +125,72 @@ function mdjm_get_contract_signatory_ip( $contract_id )	{
 	
 	return apply_filters( 'mdjm_get_contract_signatory_ip', $ip, $contract_id );
 } // mdjm_get_contract_signatory_ip
+
+/**
+ * Sign the event contract
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID
+ * @param	arr		$details	Contract and event info
+ * @return	bool	Whether or not the contract was signed
+ */
+function mdjm_sign_event_contract( $event_id, $details )	{
+	$event = new MDJM_Event( $event_id );
+	
+	if( ! $event )	{
+		return false;
+	}
+	
+	$contract_template = mdjm_get_contract( mdjm_get_event_contract( $event->ID ) );
+	
+	if( ! $contract_template )	{
+		return false;
+	}
+	
+	do_action( 'mdjm_pre_sign_event_contract', $event_id, $details );
+	
+	// Prepare the content for the contract.
+	$contract_content = $contract_template->post_content;
+	$contract_content = apply_filters( 'the_content', $contract_content );
+	$contract_content = str_replace( ']]>', ']]&gt;', $contract_content );
+	$contract_content = mdjm_do_content_tags( $contract_content, $event->ID, $event->client );
+	
+	// The signatory information displayed at the foot of the contract
+	$contract_signatory_content = '<hr>' . "\r\n";
+	$contract_signatory_content .= '<p style="font-weight: bold">' . __( 'Signatory', 'mobile-dj-manager' ) . ': <span style="text-decoration: underline;">' . 
+		ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) . '</span></p>' . "\r\n";
+		
+	$contract_signatory_content .= '<p style="font-weight: bold">' . __( 'Date of Signature', 'mobile-dj-manager' ) . ': <span style="text-decoration: underline;">' . date( 'jS F Y' ) . '</span></p>' . "\r\n";
+	$contract_signatory_content .= '<p style="font-weight: bold">' . __( 'Verification Method', 'mobile-dj-manager' ) . ': ' . __( 'User Password Confirmation', 'mobile-dj-manager' ) . '</p>' . "\r\n";
+	$contract_signatory_content .= '<p style="font-weight: bold">' . __( 'IP Address Used', 'mobile-dj-manager' ) . ': ' . $_SERVER['REMOTE_ADDR'] . '</p>' . "\r\n";
+	
+	$contract_signatory_content = apply_filters( 'mdjm_contract_signatory', $contract_signatory_content );
+	
+	$contract_content = $contract_content . $contract_signatory_content;
+	
+	// The signed contract post data
+	$signed_contract = apply_filters( 'mdjm_signed_contract_data',
+		array(
+			'post_title'		=> 'Event Contract: ' . mdjm_get_option( 'event_prefix' ) . $event->ID,
+			'post_author'	   => get_current_user_id(),
+			'post_type'		 => 'mdjm-signed-contract',
+			'post_status'	   => 'publish',
+			'post_content'      => $contract_content,
+			'post_parent'	   => $event->ID,
+			'ping_status'	   => 'closed',
+			'comment_status'	=> 'closed'
+		),
+		$event->ID, $event
+	);
+	
+	$signed_contract_id = wp_insert_post( $signed_contract, true );
+	
+	if( is_wp_error( $signed_contract_id ) )	{
+		return true;
+	}
+	
+	add_post_meta( $signed_contract, '_mdjm_contract_signed_name', ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ), true );
+	
+	do_action( 'mdjm_pre_sign_event_contract', $event_id, $details );
+	
+} // mdjm_sign_event_contract

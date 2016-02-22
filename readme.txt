@@ -76,8 +76,9 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 
 == Changelog ==
 = 1.3 =
-<strong>Released XXXX XXXX, 2015</strong>
+<strong>Released XXXX XXXX, 2016</strong>
 <ui>
+	<li>New: Use fully customisable templates for all MDJM Client Zone pages</li>
 	<li>New: Employee interface replaces the old "DJ List"</li>
 	<li>New: Updated Client interface replaces the old "Client List"</li>
 	<li>New: Create custom MDJM employee roles and assign permissions to each role</li>
@@ -87,11 +88,15 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>New: Admin availability checker can check for availability by role</li>
 	<li>New: Added availability checker setting. Specify which roles need to be available on the given date for you to be available</li>
 	<li>New: Content tags re-written and made into an API which developers can hook into when creating extensions or customising</li>
+	<li>New: Settings API which developers can hook into</li>
 	<li>Tweak: Custom post meta box functions re-written to enable cleaner hooks for developers</li>
 	<li>Tweak: Shortcodes have been re-written and cleaned up</li>
 	<li>Tweak: Main MDJM class is now a singleton class</li>
 	<li>Tweak: Post actions and filters no longer in classes</li>
 	<li>Tweak: Replaced get_link method with mdjm_get_formatted_url function</li>
+	<li>Tweak: New mdjm.css file. Can be customised</li>
+	<li>Tweak: New mdjm.js file</li>
+	<li>Tweak:Cleaner directory structure</li>
 </ui>
 
 = 1.2.7.5 =

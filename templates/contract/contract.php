@@ -96,7 +96,7 @@ global $mdjm_event, $mdjm_notice;
                     <p><input type="checkbox" name="mdjm_confirm_client" id="mdjm_confirm_client" value="yes"<?php echo $disabled; ?> /> <label for="mdjm_confirm_client"><?php _e( 'I hereby confirm that the person named within the above contract is me and that all associated details are correct', 'mobile-dj-manager' ); ?></label></p>
                 </div>
                 
-                <div class="row mdjm-contract-signatary-client">
+                <div class="row mdjm-contract-signatary-password">
                     <p><label for="mdjm_verify_password"><?php _e( 'Enter Your Password:', 'mobile-dj-manager' ); ?></label><br />
                         <input type="password" name="mdjm_verify_password" id="mdjm_verify_password" size="20"<?php echo $disabled; ?> /></p>
                 </div>
