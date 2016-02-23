@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param
  * @return	void
  */
-function mdjm_availability_check( $data )	{
+function mdjm_availability_check_action( $data )	{
 	if( ! isset( $data['mdjm_enquiry_date_widget'] ) )	{
 		$message = 62;
 	}
@@ -37,5 +37,5 @@ function mdjm_availability_check( $data )	{
 	}
 	wp_die( $message );
 	die();
-} // mdjm_availability_check
-add_action( 'mdjm_availability_check_widget', 'mdjm_availability_check' );
+} // mdjm_availability_check_action
+add_action( 'mdjm_availability_check_widget', 'mdjm_availability_check_action' );

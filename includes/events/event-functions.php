@@ -236,3 +236,51 @@ function mdjm_time_until_event( $event_id )	{
 		return apply_filters( 'mdjm_time_until_event', $length );
 	}
 } // mdjm_time_until_event
+
+/**
+ * Update the event status.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$new_status	The new event status.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	void
+ */
+function mdjm_update_event_status( $event_id, $new_status, $old_status, $args=array() )	{
+	do_action( 'mdjm_pre_event_status_change', $event_id, $new_status, $old_status, $args );
+	
+	do_action( "mdjm_pre_update_event_status_{$new_status}", $event_id, $old_status, $args );
+	
+	$func = 'mdjm_set_event_status_' . str_replace( '-', '_', $new_status );
+	
+	$func( $event_id, $old_status, $args );
+	
+	do_action( "mdjm_post_update_event_status_{$new_status}", $event_id, $old_status, $args );
+	
+	do_action( 'mdjm_post_event_status_change', $event_id, $new_status, $old_status, $args );
+} // mdjm_update_event_status
+
+/**
+ * Update event status to mdjm-approved.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	str		The length of the event.
+ */
+function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
+	wp_update_post(
+		array( 
+			'ID'			=> $event_id,
+			'post_status'	=> 'mdjm-approved'
+		)
+	);
+	
+	update_post_meta(
+		$event_id,
+		'_mdjm_event_last_updated_by',
+		( is_user_logged_in() ) ? get_current_user_id() : 1
+	);
+} // mdjm_set_event_status_mdjm_approved

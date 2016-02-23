@@ -172,12 +172,12 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$signed_contract = apply_filters( 'mdjm_signed_contract_data',
 		array(
 			'post_title'		=> 'Event Contract: ' . mdjm_get_option( 'event_prefix' ) . $event->ID,
-			'post_author'	   => get_current_user_id(),
-			'post_type'		 => 'mdjm-signed-contract',
-			'post_status'	   => 'publish',
+			'post_author'	   	=> get_current_user_id(),
+			'post_type'		 	=> 'mdjm-signed-contract',
+			'post_status'	   	=> 'publish',
 			'post_content'      => $contract_content,
-			'post_parent'	   => $event->ID,
-			'ping_status'	   => 'closed',
+			'post_parent'	   	=> $event->ID,
+			'ping_status'	   	=> 'closed',
 			'comment_status'	=> 'closed'
 		),
 		$event->ID, $event
@@ -186,11 +186,25 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$signed_contract_id = wp_insert_post( $signed_contract, true );
 	
 	if( is_wp_error( $signed_contract_id ) )	{
-		return true;
+		return false;
 	}
 	
 	add_post_meta( $signed_contract, '_mdjm_contract_signed_name', ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ), true );
 	
-	do_action( 'mdjm_pre_sign_event_contract', $event_id, $details );
+	$event_meta = array(
+		'_mdjm_signed_contract'				=> $signed_contract_id,
+		'_mdjm_event_contract_approved'		=> current_time( 'mysql' ),
+		'_mdjm_event_contract_approver'		=> strip_tags( addslashes( ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) ) ),
+		'_mdjm_event_contract_approver_ip'	=> $_SERVER['REMOTE_ADDR'],
+		'_mdjm_event_last_updated_by'		=> get_current_user_id()
+	);
 	
+	// Add contract data to the event
+	foreach( $event_meta as $key => $value )	{
+		update_post_meta( $event->ID, $key, $value );
+	}
+	
+	
+
+	do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
 } // mdjm_sign_event_contract
