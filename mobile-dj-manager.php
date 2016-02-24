@@ -128,6 +128,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				$mdjm_posts						= new MDJM_Posts(); // REMOVE POST 1.3
 				self::$instance->content_tags	  = new MDJM_Content_Tags();
 				self::$instance->cron			  = new MDJM_Cron();
+				self::$instance->emails			= new MDJM_Emails();
 				self::$instance->users			 = new MDJM_Users();
 				self::$instance->roles			 = new MDJM_Roles();
 				self::$instance->permissions	   = new MDJM_Permissions();
@@ -211,6 +212,9 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-actions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/journal-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/emails/class-mdjm-emails.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/emails/email-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/availability/class-mdjm-availability-checker.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/availability/availability-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/availability/availability-actions.php' );

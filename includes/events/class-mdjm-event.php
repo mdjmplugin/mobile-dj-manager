@@ -208,6 +208,18 @@ class MDJM_Event {
 	} // get_client
 	
 	/**
+	 * Retrieve the events primary employee
+	 *
+	 * @since	1.3
+	 * @return	int
+	 */
+	public function get_employee() {
+		if( ! isset( $this->employee_id ) )	{
+			$this->employee_id = get_post_meta( $this->ID, '_mdjm_event_dj', true );
+		}
+	} // get_employee
+	
+	/**
 	 * Retrieve the event contract.
 	 *
 	 * @since	1.3

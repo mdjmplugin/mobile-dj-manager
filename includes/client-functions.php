@@ -110,3 +110,18 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
 	
 	return $events;
 } // mdjm_get_client_events
+
+/**
+ * Check whether the user is a client.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	bool	True if user has the client role, or false.
+ */
+function mdjm_user_is_client( $user_id )	{
+	if( user_can( 'client', $user_id ) || user_can( 'inactive_client', $user_id ) )	{
+		return true;
+	}
+	
+	return false;
+} // mdjm_user_is_client

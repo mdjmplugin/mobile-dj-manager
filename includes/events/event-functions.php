@@ -271,6 +271,8 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args=ar
  * @return	str		The length of the event.
  */
 function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
 	wp_update_post(
 		array( 
 			'ID'			=> $event_id,
@@ -283,4 +285,6 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
 		'_mdjm_event_last_updated_by',
 		( is_user_logged_in() ) ? get_current_user_id() : 1
 	);
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 } // mdjm_set_event_status_mdjm_approved

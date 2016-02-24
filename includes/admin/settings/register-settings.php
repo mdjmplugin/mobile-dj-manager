@@ -433,7 +433,8 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'track_client_emails',
 						'name'        => __( 'Track Client Emails?', 'mobile-dj-manager' ),
 						'desc'        => __( 'Some email clients may not support this feature.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'		 => '1'
 					),
 					'bcc_dj_to_client' => array(
 						'id'          => 'bcc_dj_to_client',
@@ -492,7 +493,7 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
-							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
 						)
 					),
 					'contract_templates' => array(
@@ -521,7 +522,7 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
-							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
 						)
 					),
 					'booking_conf_templates' => array(
@@ -550,7 +551,7 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
-							'dj'      => mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
 						)
 					),
 					'booking_conf_to_dj' => array(
@@ -1413,7 +1414,7 @@ function mdjm_number_callback( $args ) {
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
 	echo $html;
-}
+} // mdjm_number_callback
 
 /**
  * Textarea Callback

@@ -204,7 +204,24 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		update_post_meta( $event->ID, $key, $value );
 	}
 	
+	mdjm_update_event_status(
+		$event->ID,
+		'mdjm-approved',
+		$event->post_status,
+		$args=array()
+	);
 	
-
+	mdjm_add_journal( 
+		array(
+			'user' 			=> $my_mdjm['me']->ID,
+			'event'		   => $this->event->ID,
+			'comment_content' => __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
+		),
+		array(
+			'type'			=> 'update-event',
+			'visibility'	  => '2'
+		)
+	);
+	
 	do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
 } // mdjm_sign_event_contract
