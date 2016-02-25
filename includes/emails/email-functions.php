@@ -29,7 +29,7 @@ function mdjm_email_booking_confirmation( $event_id )	{
 
 	$to_email     = get_userdata( $event->client )->user_email;
 
-	$subject      = mdjm_get_email_template_subject( mdjm_get_option( 'booking_conf_client', false ), 'booking_conf' );
+	$subject      = mdjm_email_set_subject( mdjm_get_option( 'booking_conf_client', false ), 'booking_conf' );
 	$subject      = apply_filters( 'mdjm_booking_conf_subject', wp_strip_all_tags( $subject ) );
 	$subject      = mdjm_do_email_tags( $subject, $event_id, $event->client );
 
@@ -43,13 +43,12 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$emails->__set( 'event_id', $event->ID );
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
-	$emails->__set( 'content', $message );
 
 
 	$headers = apply_filters( 'mdjm_booking_conf_headers', $emails->get_headers(), $event );
 	$emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments );
+	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
 	
 	// Send a copy of this email to the primary employee
 	if ( mdjm_get_option( 'booking_conf_to_dj', false ) )	{
@@ -65,7 +64,7 @@ function mdjm_email_booking_confirmation( $event_id )	{
  * @param	str|bool	$email_type		The type of email.
  * @return	str		$subject		The subject (title) of the template.
  */
-function mdjm_get_email_template_subject( $template_id, $email_type = false )	{
+function mdjm_email_set_subject( $template_id, $email_type = false )	{
 	$subject = get_the_title( $template_id );
 	
 	if( ! empty( $email_type ) )	{
@@ -73,7 +72,7 @@ function mdjm_get_email_template_subject( $template_id, $email_type = false )	{
 	}
 	
 	return apply_filters( 'mdjm_email_subject', $subject, $template_id );
-} // mdjm_get_email_template_subject
+} // mdjm_email_set_subject
 
 /**
  * Set the email from name.
@@ -159,16 +158,16 @@ function mdjm_get_email_template_content( $template_id, $email_type = false )	{
  * @param	obj			$mdjm_email		MDJM_Emails class instance
  * @return	int|bool	The post ID on success, or false.
  */
-function mdjm_insert_email_tracking_post( $to, $subject, $message, $attachments, $mdjm_email )	{
+function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments, $mdjm_email, $source = '' )	{
 	$args = apply_filters( 'mdjm_email_tracking_post_args',
 		array(
-			'post_title' 		  => $subject,
+			'post_title'		=> $subject,
 			'post_content'		=> $message,
-			'post_status'		 => 'ready to send',
-			'post_author'		 => ( get_current_user_id() ) ? get_current_user_id() : 1,
-			'post_type'		   => 'mdjm_communication',
-			'ping_status'		 => false,
-			'comment_status'	  => 'closed'
+			'post_status'		=> 'ready to send',
+			'post_author'		=> ( get_current_user_id() ) ? get_current_user_id() : 1,
+			'post_type'			=> 'mdjm_communication',
+			'ping_status'		=> false,
+			'comment_status'	=> 'closed'
 		)
 	);
 	
@@ -176,7 +175,7 @@ function mdjm_insert_email_tracking_post( $to, $subject, $message, $attachments,
 		array(
 			'date_sent'	=> current_time( 'mysql' ),
 			'recipient'	=> $to,
-			'source'	   => $source,
+			'source'	=> $source,
 			'event'		=> $mdjm_email->event_id
 		)
 	);
@@ -184,15 +183,18 @@ function mdjm_insert_email_tracking_post( $to, $subject, $message, $attachments,
 	$tracking_id = wp_insert_post( $args );
 	
 	if( $tracking_id )	{
+		
 		foreach( $meta as $key => $value )	{
 			add_post_meta( $tracking_id, '_' . $key, $value );	
 		}
 		
 		if( ! empty( $attachments ) && is_array( $attachments ) )	{
+			
 			foreach( $attachments as $file )	{
 				if( ! file_exists( $file ) )	{							
 					continue;
 				}
+				
 				$file_type = wp_check_filetype( basename( $file ), null );
 				
 				$upload_dir = wp_upload_dir();
@@ -213,8 +215,54 @@ function mdjm_insert_email_tracking_post( $to, $subject, $message, $attachments,
 				$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 				wp_update_attachment_metadata( $attach_id, $attach_data );
 			}
+			
 		}
+		
 		return $tracking_id;
 	}
 	
-} // mdjm_insert_email_tracking_post
+} // mdjm_email_insert_tracking_post
+
+/**
+ * Insert a tracking image into the email body.
+ *
+ * @since	1.3
+ * @param	str			$message		The email message.
+ * @param	obj			$mdjm_email		MDJM_Emails class instance.
+ * @return	str			$message		The email message with the tracking image included.
+ */
+function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
+	$image = sprintf(
+		'<img alt="" src="%s/?mdjm-api=%s&post=%s&action=%s" border="0" height="3" width="37" />',
+		home_url(),
+		'MDJM_EMAIL_RCPT',
+		$mdjm_email->tracking_id,
+		'open_email'
+	);
+	
+	$image = apply_filters( 'mdjm_tracking_image', $image );
+	
+	return $message . $image;
+} // mdjm_email_insert_tracking_image
+
+/**
+ * Change the status of a tracked email.
+ *
+ * @since	1.3
+ * @param	int			$tracker_id		The tracked email ID.
+ * @param	str			$status			The new status.
+ * @return	void
+ */
+function mdjm_email_set_tracking_status( $tracking_id, $status )	{
+	do_action( 'mdjm_email_pre_set_tracking_status', $tracking_id, $status );
+	
+	wp_update_post(
+		array(
+			'ID'			=> $tracking_id,
+			'post_status'	=> $status
+		)
+	);
+	update_post_meta( $tracker_id, '_status_change', current_time( 'timestamp' ) );
+	
+	do_action( 'mdjm_email_post_set_tracking_status', $tracker_id, $status );
+} // mdjm_email_set_tracking_status

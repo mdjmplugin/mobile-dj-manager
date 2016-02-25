@@ -227,7 +227,7 @@ class MDJM_Emails {
 	 * @param	str|arr	$attachments	Attachments to the email in a format supported by wp_mail()
 	 * @since	1.3
 	 */
-	public function send( $to, $subject, $message, $attachments = '' ) {
+	public function send( $to, $subject, $message, $attachments = '', $source = '' ) {
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
 			_doing_it_wrong( __FUNCTION__, __( 'You cannot send email with MDJM_Emails until init/admin_init has been reached', 'mobile-dj-manager' ), null );
 			return false;
@@ -244,7 +244,7 @@ class MDJM_Emails {
 
 		$attachments = apply_filters( 'mdjm_email_attachments', $attachments, $this );
 		
-		$message = $this->add_tracking( $to, $subject, $message, $attachments );
+		$message = $this->log_email( $to, $subject, $message, $attachments, $source );
 		
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers(), $attachments );
 
@@ -302,26 +302,26 @@ class MDJM_Emails {
 	 *
 	 * @since	1.3
 	 */
-	public function add_tracking( $message, $attachments ) {
+	public function log_email( $to, $subject, $message, $attachments, $source ) {
 		if ( true === $this->track && ( 'text/html' == $this->content_type || true === $this->html ) ) {
-			$this->add_tracking_post( $message, $attachments );
+			$this->add_tracking_post( $to, $subject, $message, $attachments, $source );
 			
-			if( $this->tracking_id )	{
-				
+			if( ! empty( $this->tracking_id ) )	{
+				$this->add_tracking_image( $message );
 			}
 		}
 
 		return $message;
-	} // add_tracking
+	} // log_email
 	
 	/**
 	 * Store the communication.
 	 *
 	 * @since	1.3
 	 */
-	public function add_tracking_post( $message, $attachments )	{
-		$this->tracking_id = mdjm_insert_email_tracking_post( $message, $attachments, $this );
-	}
+	public function add_tracking_post( $to, $subject, $message, $attachments, $source )	{
+		$this->tracking_id = mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments, $this, $source );
+	} // add_tracking_post
 	
 	/**
 	 * Add the tracking image.
@@ -329,16 +329,6 @@ class MDJM_Emails {
 	 * @since	1.3
 	 */
 	public function add_tracking_image( $message )	{
-		$image = sprintf(
-			'<img alt="" src="%s/?mdjm-api=%s&post=%s&action=%s" border="0" height="3"  width="37" />',
-			home_url(),
-			'MDJM_EMAIL_RCPT',
-			$this->tracking_id,
-			'open_email'
-		);
-		
-		$image = apply_filters( 'mdjm_tracking_image', $image );
-		
-		return $message . $image;
+		return mdjm_email_insert_tracking_image( $message, $this );
 	} // add_tracking_image
 } // MDJM_Emails class

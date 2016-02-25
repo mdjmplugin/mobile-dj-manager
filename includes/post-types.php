@@ -510,6 +510,19 @@ function mdjm_get_default_labels() {
 } // mdjm_get_default_labels
 
 /**
+ * Get Post Status Label
+ *
+ * @since	1.3
+ * @param	str		$status		The post status
+ * @return	arr		$defaults	Default labels
+ */
+function mdjm_get_post_status_label( $status ) {
+	$object = get_post_status_object( $status );
+	
+	return apply_filters( 'mdjm_post_status_label_{$status}', $object->label );
+} // mdjm_get_post_status_label
+
+/**
  * Get Singular Label
  *
  * @since	1.3
@@ -518,7 +531,7 @@ function mdjm_get_default_labels() {
  */
 function mdjm_get_label_singular( $lowercase = false ) {
 	$defaults = mdjm_get_default_labels();
-	return ($lowercase) ? strtolower( $defaults['singular'] ) : $defaults['singular'];
+	return ( $lowercase ) ? strtolower( $defaults['singular'] ) : $defaults['singular'];
 } // mdjm_get_label_singular
 
 /**
