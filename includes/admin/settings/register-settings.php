@@ -32,6 +32,85 @@ function mdjm_get_option( $key = '', $default = false )	{
 } // mdjm_get_option
 
 /**
+ * Update an option
+ *
+ * Updates an mdjm setting value in both the db and the global variable.
+ * Warning: Passing in an empty, false or null string value will remove
+ *          the key from the mdjm_options array.
+ *
+ * @since 2.3
+ * @param string $key The Key to update
+ * @param string|bool|int $value The value to set the key to
+ * @return boolean True if updated, false if not.
+ */
+function mdjm_update_option( $key = '', $value = false ) {
+	// If no key, exit
+	if ( empty( $key ) ){
+		return false;
+	}
+
+	if ( empty( $value ) ) {
+		$remove_option = mdjm_delete_option( $key );
+		return $remove_option;
+	}
+
+	// First let's grab the current settings
+	$options = get_option( 'mdjm_settings' );
+
+	// Let's let devs alter that value coming in
+	$value = apply_filters( 'mdjm_update_option', $value, $key );
+
+	// Next let's try to update the value
+	$options[ $key ] = $value;
+	$did_update = update_option( 'mdjm_settings', $options );
+
+	// If it updated, let's update the global variable
+	if ( $did_update ){
+		global $mdjm_options;
+		$mdjm_options[ $key ] = $value;
+
+	}
+
+	return $did_update;
+} // mdjm_update_option
+
+/**
+ * Remove an option
+ *
+ * Removes an mdjm setting value in both the db and the global variable.
+ *
+ * @since	1.3
+ * @param	str		$key	The Key to delete
+ * @return	bool	True if updated, false if not.
+ */
+function mdjm_delete_option( $key = '' ) {
+	// If no key, exit
+	if ( empty( $key ) ){
+		return false;
+	}
+
+	// First let's grab the current settings
+	$options = get_option( 'mdjm_settings' );
+
+	// Next let's try to update the value
+	if( isset( $options[ $key ] ) ) {
+
+		unset( $options[ $key ] );
+
+	}
+
+	$did_update = update_option( 'mdjm_settings', $options );
+
+	// If it updated, let's update the global variable
+	if ( $did_update ){
+		global $mdjm_options;
+		$mdjm_options = $options;
+	}
+
+	return $did_update;
+} // mdjm_delete_option
+
+/**
  * Get Settings
  *
  * Retrieves all plugin settings
@@ -57,6 +136,8 @@ function mdjm_get_settings() {
 		$payments_settings     = is_array( get_option( 'mdjm_payment_settings' ) )      ? get_option( 'mdjm_payment_settings' )      : array();
 		$permissions_settings  = is_array( get_option( 'mdjm_plugin_permissions' ) )    ? get_option( 'mdjm_plugin_permissions' )    : array();
 		$api_settings          = is_array( get_option( 'mdjm_api_data' ) )              ? get_option( 'mdjm_api_data' )              : array();
+		$ext_settings          = is_array( get_option( 'mdjm_settings_extensions' ) )   ? get_option( 'mdjm_settings_extensions' )   : array();
+		$license_settings      = is_array( get_option( 'mdjm_settings_licenses' ) )     ? get_option( 'mdjm_settings_licenses' )     : array();
 		$uninstall_settings    = is_array( get_option( 'mdjm_uninst' ) )                ? get_option( 'mdjm_uninst' )                : array();
 		
 		$settings = array_merge(
@@ -72,6 +153,8 @@ function mdjm_get_settings() {
 			$payments_settings,
 			$permissions_settings,
 			$api_settings,
+			$ext_settings,
+			$license_settings,
 			$uninstall_settings
 		);
 
@@ -986,7 +1069,14 @@ function mdjm_get_registered_settings()	{
 					)
 				)
 			)
-		)
+		),
+		/** Extension Settings */
+		'extensions' => apply_filters( 'mdjm_settings_extensions',
+			array()
+		),
+		'licenses' => apply_filters( 'mdjm_settings_licenses',
+			array()
+		),
 	);
 	
 	return apply_filters( 'mdjm_registered_settings', $mdjm_settings );
@@ -1461,8 +1551,9 @@ function mdjm_password_callback( $args ) {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
+	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
+	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"' . $readonly . '/>';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
@@ -1515,7 +1606,7 @@ function mdjm_select_callback( $args ) {
 	} else {
 		$chosen = '';
 	}
-
+		
 	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
@@ -1715,6 +1806,170 @@ function mdjm_color_callback( $args ) {
 function mdjm_descriptive_text_callback( $args ) {
 	echo wp_kses_post( $args['desc'] );
 } // mdjm_descriptive_text_callback
+
+/**
+ * Registers the license field callback for Software Licensing
+ *
+ * @since 1.5
+ * @param array $args Arguments passed by the setting
+ * @global $mdjm_options Array of all the MDJM options
+ * @return void
+ */
+if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
+	function mdjm_license_key_callback( $args ) {
+		global $mdjm_options;
+
+		$messages = array();
+		$license  = get_option( $args['options']['is_valid_license_option'] );
+
+		if ( isset( $mdjm_options[ $args['id'] ] ) ) {
+			$value = $mdjm_options[ $args['id'] ];
+		} else {
+			$value = isset( $args['std'] ) ? $args['std'] : '';
+		}
+
+		if( ! empty( $license ) && is_object( $license ) ) {
+
+			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
+			if ( false === $license->success ) {
+
+				switch( $license->error ) {
+
+					case 'expired' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager' ),
+							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
+							'http://mdjm.co.uk/checkout/?edd_license_key=' . $value . '&utm_campaign=admin&utm_source=licenses&utm_medium=expired'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'missing' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'mobile-dj-manager' ),
+							'http://mdjm.co.uk/your-account?utm_campaign=admin&utm_source=licenses&utm_medium=missing'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'invalid' :
+					case 'site_inactive' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'mobile-dj-manager' ),
+							$args['name'],
+							'http://mdjm.co.uk/your-account?utm_campaign=admin&utm_source=licenses&utm_medium=invalid'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'item_name_mismatch' :
+
+						$class = 'error';
+						$messages[] = sprintf( __( 'This is not a %s.', 'mobile-dj-manager' ), $args['name'] );
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'no_activations_left':
+
+						$class = 'error';
+						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/your-account/' );
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+				}
+
+			} else {
+
+				switch( $license->license ) {
+
+					case 'valid' :
+					default:
+
+						$class = 'valid';
+
+						$now        = current_time( 'timestamp' );
+						$expiration = strtotime( $license->expires, current_time( 'timestamp' ) );
+
+						if( 'lifetime' === $license->expires ) {
+
+							$messages[] = __( 'License key never expires.', 'mobile-dj-manager' );
+
+							$license_status = 'license-lifetime-notice';
+
+						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
+
+							$messages[] = sprintf(
+								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'mobile-dj-manager' ),
+								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
+								'http://mdjm.co.uk/checkout/?edd_license_key=' . $value . '&utm_campaign=admin&utm_source=licenses&utm_medium=renew'
+							);
+
+							$license_status = 'license-expires-soon-notice';
+
+						} else {
+
+							$messages[] = sprintf(
+								__( 'Your license key expires on %s.', 'mobile-dj-manager' ),
+								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) )
+							);
+
+							$license_status = 'license-expiration-date-notice';
+
+						}
+
+						break;
+
+				}
+
+			}
+
+		} else {
+			$license_status = null;
+		}
+
+		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
+
+		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
+			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'mobile-dj-manager' ) . '"/>';
+		}
+		$html .= '<label for="mdjm_settings[' . $args['id'] . ']">'  . $args['desc'] . '</label>';
+
+		if ( ! empty( $messages ) ) {
+			foreach( $messages as $message ) {
+
+				$html .= '<div class="mdjm-license-data mdjm-license-' . $class . '">';
+					$html .= '<p class="description">' . $message . '</p>';
+				$html .= '</div>';
+
+			}
+		}
+
+		wp_nonce_field( $args['id'] . '-nonce', $args['id'] . '-nonce' );
+
+		if ( isset( $license_status ) ) {
+			echo '<div class="' . $license_status . '">' . $html . '</div>';
+		} else {
+			echo '<div class="license-null">' . $html . '</div>';
+		}
+	}
+} // mdjm_license_key_callback
 
 /**
  * Hook Callback
