@@ -1248,7 +1248,7 @@ function mdjm_get_registered_settings_sections() {
 			'pages'              => __( 'Pages', 'mobile-dj-manager' ),
 			'availability'       => __( 'Availability Checker', 'mobile-dj-manager' )
 		) ),
-		'payments'        => apply_filters( 'mdjm_settings_sections_taxes', array(
+		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(

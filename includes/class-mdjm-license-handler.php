@@ -80,8 +80,8 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		 * @return	void
 		 */
 		private function includes() {
-			if ( ! class_exists( 'MDJM_SL_Plugin_Updater' ) )	{
-				require_once 'MDJM_SL_Plugin_Updater.php';
+			if ( ! class_exists( 'MDJM_Plugin_Updater' ) )	{
+				require_once 'MDJM_Plugin_Updater.php';
 			}
 		} // includes
 	
@@ -115,9 +115,12 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		 * @return  void
 		 */
 		public function auto_updater() {
-	
-			if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) )
+			
+			$license = get_option( $this->item_shortname . '_license_active' );
+			
+			if ( ! $license || 'valid' !== $license->license )	{
 				return;
+			}
 	
 			$args = array(
 				'version'   => $this->version,
@@ -132,7 +135,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			}
 	
 			// Setup the updater
-			$mdjm_updater = new MDJM_SL_Plugin_Updater(
+			$mdjm_updater = new MDJM_Plugin_Updater(
 				$this->api_url,
 				$this->file,
 				$args

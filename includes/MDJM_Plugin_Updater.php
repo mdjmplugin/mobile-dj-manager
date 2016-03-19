@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @version 1.6
  */
-class MDJM_SL_Plugin_Updater {
+class MDJM_Plugin_Updater {
     private $api_url   = '';
     private $api_data  = array();
     private $name      = '';
@@ -37,7 +37,7 @@ class MDJM_SL_Plugin_Updater {
 
         // Set up hooks.
         $this->init();
-        add_action( 'admin_init', array( $this, 'show_changelog' ) );
+        add_action( 'admin_init', array( $this, 'show_changelog' ) );		
     } // __construct
 
     /**
@@ -332,4 +332,4 @@ class MDJM_SL_Plugin_Updater {
 
         exit;
     } // show_changelog
-} // class MDJM_SL_Plugin_Updater
+} // class MDJM_Plugin_Updater
