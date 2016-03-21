@@ -412,7 +412,7 @@ function mdjm_get_registered_settings()	{
 					),
 					'default_contract' => array(
 						'id'          => 'default_contract',
-						'name'        => __( 'Time Format', 'mobile-dj-manager' ),
+						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
 						'type'        => 'select',
 						'options' => mdjm_list_templates( 'contract' )
@@ -494,7 +494,7 @@ function mdjm_get_registered_settings()	{
 				)
 			)
 		),
-		/** Events Settings */
+		/** Email Settings */
 		'emails' => apply_filters( 'mdjm_settings_emails',
 			array(
 				'main' => array(

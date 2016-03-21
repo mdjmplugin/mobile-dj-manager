@@ -96,34 +96,34 @@ function mdjm_show_contract( $contract_id, $event )	{
  * Retrieve the contract signatory name.
  *
  * @since	1.3
- * @param	$contract_id	The contract ID.
+ * @param	$event_id		The event ID.
  * @return	str|bool		The name of the person who signed the contract.
  */
-function mdjm_get_contract_signatory_name( $contract_id )	{	
-	$name = get_post_meta( $contract_id, '_mdjm_contract_signed_name', true );
+function mdjm_get_contract_signatory_name( $event_id )	{	
+	$name = get_post_meta( $event_id, '_mdjm_event_contract_approver', true );
 	
 	if( empty( $name ) )	{
 		$name = __( 'Name not recorded', 'mobile-dj-manager' );
 	}
 	
-	return apply_filters( 'mdjm_get_contract_signatory_name', $name, $contract_id );
+	return apply_filters( 'mdjm_get_contract_signatory_name', $name, $event_id );
 } // mdjm_get_contract_signatory_name
 
 /**
  * Retrieve the contract signatory IP address.
  *
  * @since	1.3
- * @param	$contract_id	The contract ID.
+ * @param	$event_id		The event ID.
  * @return	str|bool		The IP address used by the person who signed the contract.
  */
-function mdjm_get_contract_signatory_ip( $contract_id )	{	
-	$ip = get_post_meta( $contract_id, '_mdjm_contract_signed_ip', true );
+function mdjm_get_contract_signatory_ip( $event_id )	{	
+	$ip = get_post_meta( $event_id, '_mdjm_event_contract_approver_ip', true );
 	
 	if( empty( $ip ) )	{
 		$ip = __( 'IP address not recorded', 'mobile-dj-manager' );
 	}
 	
-	return apply_filters( 'mdjm_get_contract_signatory_ip', $ip, $contract_id );
+	return apply_filters( 'mdjm_get_contract_signatory_ip', $ip, $event_id );
 } // mdjm_get_contract_signatory_ip
 
 /**
@@ -138,12 +138,14 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$event = new MDJM_Event( $event_id );
 	
 	if( ! $event )	{
+		error_log( '111', 0 );
 		return false;
 	}
 	
 	$contract_template = mdjm_get_contract( mdjm_get_event_contract( $event->ID ) );
 	
 	if( ! $contract_template )	{
+		error_log( '222', 0 );
 		return false;
 	}
 	
@@ -186,6 +188,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$signed_contract_id = wp_insert_post( $signed_contract, true );
 	
 	if( is_wp_error( $signed_contract_id ) )	{
+		error_log( '333', 0 );
 		return false;
 	}
 	
@@ -213,15 +216,18 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	
 	mdjm_add_journal( 
 		array(
-			'user' 			=> $my_mdjm['me']->ID,
-			'event'		   => $this->event->ID,
-			'comment_content' => __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
+			'user' 				=> get_current_user_id(),
+			'event'				=> $event->ID,
+			'comment_content'	=> __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
 		),
 		array(
-			'type'			=> 'update-event',
-			'visibility'	  => '2'
+			'type'				=> 'update-event',
+			'visibility'		=> '2'
 		)
 	);
+	
+	// Send the email confirmations
+	mdjm_email_booking_confirmation( $event_id );
 	
 	do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
 } // mdjm_sign_event_contract

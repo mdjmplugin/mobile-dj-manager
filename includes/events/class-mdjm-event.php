@@ -226,7 +226,9 @@ class MDJM_Event {
 	 * @return	int
 	 */
 	public function get_contract() {
-		if( 'false' === $this->get_contract_status() )	{
+		$status = $this->get_contract_status();
+		
+		if( ! $status || empty( $status ) )	{
 			$contract = get_post_meta( $this->ID, '_mdjm_event_contract', true );
 		}
 		else	{
@@ -246,16 +248,18 @@ class MDJM_Event {
 		if( isset( $this->ID ) )	{
 			$signed_contract_id = get_post_meta( $this->ID, '_mdjm_signed_contract', true );
 			
-			if( ! empty( $signed_contract_id ) && mdjm_contract_exists( $signed_contract_id ) )	{
-				$return = $signed_contract_id;
-			}
-			
-			if( $this->post_status != 'mdjm-approved' || $this->post_status != 'mdjm-completed' )	{
-				$return = false;
+			if( $signed_contract_id && mdjm_contract_exists( $signed_contract_id ) && ( $this->post_status == 'mdjm-approved' || $this->post_status == 'mdjm-completed' ) )	{
+				
+				apply_filters( 'mdjm_get_contract_status', $signed_contract_id, $this->ID );
+				
+			} else	{
+				
+				return false;
+				
 			}
 		}
-				
-		return apply_filters( 'mdjm_get_contract_status', $return, $this->ID );
+		
+		return false;
 	} // get_contract_status
 	
 	/**

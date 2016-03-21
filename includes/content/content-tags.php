@@ -587,7 +587,7 @@ function mdjm_content_tag_application_home()	{
  * @return	str		The customised name of the Client Zone.
  */
 function mdjm_content_tag_application_name()	{
-	return MDJM_APP;
+	return mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) );
 } // mdjm_content_tag_application_name
 
 /**
@@ -647,7 +647,7 @@ function mdjm_content_tag_contact_page()	{
  * @return	str		The current date in short format.
  */
 function mdjm_content_tag_ddmmyyyy()	{
-	return date( MDJM_SHORTDATE_FORMAT );
+	return date( mdjm_get_option( 'short_date_format', 'd/m/Y' ) );
 } // mdjm_content_tag_ddmmyyyy
 
 /**
@@ -990,10 +990,10 @@ function mdjm_content_tag_contract_date( $event_id='' )	{
 	$signed = get_post_meta( $event_id, '_mdjm_event_contract_approved', true );
 	
 	if( !empty( $signed ) )	{
-		$return	= $return = date( MDJM_SHORTDATE_FORMAT, strtotime( $signed ) );
+		$return	= $return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $signed ) );
 	}
 	else	{
-		$return = date( MDJM_SHORTDATE_FORMAT );
+		$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ) );
 	}
 	
 	return $return;
@@ -1029,10 +1029,8 @@ function mdjm_content_tag_contract_signatory( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
-	
-	$contract_id = mdjm_get_event_contract( $event_id );
-	
-	return mdjm_get_contract_signatory_name( $contract_id );
+		
+	return mdjm_get_contract_signatory_name( $event_id );
 } // mdjm_content_tag_contract_signatory
 
 /**
@@ -1048,10 +1046,8 @@ function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
-	
-	$contract_id = mdjm_get_event_contract( $event_id );
-	
-	return mdjm_get_contract_signatory_ip( $contract_id );
+		
+	return mdjm_get_contract_signatory_ip( $event_id );
 } // mdjm_content_tag_contract_signatory_ip
 
 /**
@@ -1287,7 +1283,7 @@ function mdjm_content_tag_dj_setup_time( $event_id='' )	{
 	$time = get_post_meta( $event_id, '_mdjm_event_djsetup_time', true );
 	
 	if( !empty( $time ) )	{
-		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+		$return = date( mdjm_get_option( 'time_format', 'H:i' ), strtotime( $time ) );
 	}
 	
 	return $return;
@@ -1312,7 +1308,7 @@ function mdjm_content_tag_end_time( $event_id='' )	{
 	$time = get_post_meta( $event_id, '_mdjm_event_finish', true );
 	
 	if( !empty( $time ) )	{
-		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+		$return = date( mdjm_get_option( 'time_format', 'H:i' ), strtotime( $time ) );
 	}
 	
 	return $return;
@@ -1337,7 +1333,7 @@ function mdjm_content_tag_end_date( $event_id='' )	{
 	$date = get_post_meta( $event_id, '_mdjm_event_end_date', true );
 	
 	if( !empty( $date ) )	{
-		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
+		$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
 	}
 	
 	return $return;
@@ -1387,7 +1383,7 @@ function mdjm_content_tag_event_date_short( $event_id='' )	{
 	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	
 	if( !empty( $date ) )	{
-		$return = date( MDJM_SHORTDATE_FORMAT, strtotime( $date ) );
+		$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
 	}
 	
 	return $return;
@@ -1611,7 +1607,7 @@ function mdjm_content_tag_start_time( $event_id='' )	{
 	$time = get_post_meta( $event_id, '_mdjm_event_start', true );
 	
 	if( !empty( $time ) )	{
-		$return = date( MDJM_TIME_FORMAT, strtotime( $time ) );
+		$return = date( mdjm_get_option( 'time_format', 'H:i' ), strtotime( $time ) );
 	}
 	
 	return $return;

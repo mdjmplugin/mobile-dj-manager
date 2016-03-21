@@ -73,7 +73,7 @@ class MDJM_Emails {
 	 *
 	 * @since	1.3
 	 */
-	private $event_id = 0;
+	public $event_id = 0;
 	
 	/**
 	 * Get things going

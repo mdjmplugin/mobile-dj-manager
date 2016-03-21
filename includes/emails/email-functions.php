@@ -27,23 +27,23 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$from_email   = mdjm_email_set_from_address( 'booking_conf', $event );
 	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'booking_conf', $event );
 
-	$to_email     = get_userdata( $event->client )->user_email;
+	$client		  = get_userdata( $event->client );
+	$to_email     = $client->user_email;
 
 	$subject      = mdjm_email_set_subject( mdjm_get_option( 'booking_conf_client', false ), 'booking_conf' );
 	$subject      = apply_filters( 'mdjm_booking_conf_subject', wp_strip_all_tags( $subject ) );
-	$subject      = mdjm_do_email_tags( $subject, $event_id, $event->client );
+	$subject      = mdjm_do_content_tags( $subject, $event_id, $event->client );
 
 	$attachments  = apply_filters( 'mdjm_booking_conf_attachments', array(), $event );
 	
 	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'booking_conf_client', false ), 'booking_conf' );
-	$message      = mdjm_do_email_tags( $message, $event_id, $event->client );
+	$message      = mdjm_do_content_tags( $message, $event_id, $event->client );
 
 	$emails = MDJM()->emails;
 
 	$emails->__set( 'event_id', $event->ID );
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
-
 
 	$headers = apply_filters( 'mdjm_booking_conf_headers', $emails->get_headers(), $event );
 	$emails->__set( 'headers', $headers );
@@ -60,9 +60,9 @@ function mdjm_email_booking_confirmation( $event_id )	{
  * Retrieve the email subject for the given template.
  *
  * @since	1.3
- * @param	int		$template_id	The post ID of the email template.
+ * @param	int			$template_id	The post ID of the email template.
  * @param	str|bool	$email_type		The type of email.
- * @return	str		$subject		The subject (title) of the template.
+ * @return	str			$subject		The subject (title) of the template.
  */
 function mdjm_email_set_subject( $template_id, $email_type = false )	{
 	$subject = get_the_title( $template_id );
