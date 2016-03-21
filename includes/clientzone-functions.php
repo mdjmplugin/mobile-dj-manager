@@ -92,5 +92,5 @@ function mdjm_get_event_action_buttons( $event_id, $min=false )	{
 		);
 	}
 	
-	return apply_filters( 'mdjm_event_action_buttons', $buttons );
+	return apply_filters( 'mdjm_event_action_buttons', $buttons, $event_id );
 } // mdjm_get_event_action_buttons
