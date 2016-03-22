@@ -193,6 +193,17 @@ function mdjm_get_balance_label() {
 } // mdjm_get_balance_label
 
 /**
+ * Get the label used for custom payment amounts.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for the other_amount_label option
+ */
+function mdjm_get_other_amount_label() {
+	return mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) );
+} // mdjm_get_other_amount_label
+
+/**
  * Get the current page URL
  *
  * @since	1.3
