@@ -1010,7 +1010,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Display name of the label shown to clients to select the payment they wish to make.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
-						'std'         => __( 'Balance', 'mobile-dj-manager' )
+						'std'         => __( 'Make a Payment Towards', 'mobile-dj-manager' )
 					),
 					'other_amount_label' => array(
 						'id'          => 'other_amount_label',
