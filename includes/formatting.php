@@ -197,6 +197,24 @@ add_filter( 'mdjm_sanitize_amount_decimals', 'mdjm_currency_decimal_filter' );
 add_filter( 'mdjm_format_amount_decimals', 'mdjm_currency_decimal_filter' );
 
 /**
+ * Set the shortdate format for the given date
+ *
+ * @since	1.3
+ * @param	int		$date		Date to format
+ * @return	int		$date
+*/
+function mdjm_format_short_date( $date )	{
+	
+	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
+		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), $date );
+	} else	{
+		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
+	}
+		
+	return apply_filters( 'mdjm_format_short_date', $short_date, $date ); 
+} // mdjm_format_short_date
+
+/**
  * Generate an MDJM URL based upon the sites permalink settings.
  *
  * @since	1.3

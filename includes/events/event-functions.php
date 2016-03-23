@@ -177,6 +177,22 @@ function mdjm_get_event_type( $event_id='' )	{
 } // mdjm_get_event_type
 
 /**
+ * Returns the date for an event in short format.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The date of the event.
+ */
+function mdjm_get_event_date( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return mdjm_format_short_date( $event->get_date() );
+} // mdjm_get_event_date
+
+/**
  * Returns the price for an event.
  *
  * @since	1.3

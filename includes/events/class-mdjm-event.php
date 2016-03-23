@@ -319,7 +319,15 @@ class MDJM_Event {
 			$this->date = get_post_meta( $this->ID, '_mdjm_event_date', true );
 		}
 		
-		return $this->date;
+		/**
+		 * Override the event date.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$date The event price.
+		 * @param	str		$date The event date.
+		 */
+		return apply_filters( 'mdjm_get_event_date', $this->date, $this->ID );
 	} // get_date
 	
 	/**
