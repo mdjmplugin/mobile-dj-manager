@@ -62,6 +62,48 @@ class MDJM_Event {
 	private $employees;
 	
 	/**
+	 * The event price
+	 *
+	 * @since	1.3
+	 */
+	private $price;
+	
+	/**
+	 * The event deposit
+	 *
+	 * @since	1.3
+	 */
+	private $deposit;
+	
+	/**
+	 * The deposit status
+	 *
+	 * @since	1.3
+	 */
+	private $deposit_status;
+	
+	/**
+	 * The event balance
+	 *
+	 * @since	1.3
+	 */
+	private $balance;
+	
+	/**
+	 * The balance status
+	 *
+	 * @since	1.3
+	 */
+	private $balance_status;
+		
+	/**
+	 * The remaining balance
+	 *
+	 * @since	1.3
+	 */
+	private $income;
+	
+	/**
 	 * The event guest playlist code
 	 *
 	 * @since	1.3
@@ -205,6 +247,8 @@ class MDJM_Event {
 		if( ! isset( $this->client ) )	{
 			$this->client = get_post_meta( $this->ID, '_mdjm_event_client', true );
 		}
+		
+		return $this->client;
 	} // get_client
 	
 	/**
@@ -217,6 +261,8 @@ class MDJM_Event {
 		if( ! isset( $this->employee_id ) )	{
 			$this->employee_id = get_post_meta( $this->ID, '_mdjm_event_dj', true );
 		}
+		
+		return $this->employee_id;
 	} // get_employee
 	
 	/**
@@ -272,6 +318,8 @@ class MDJM_Event {
 		if( ! isset( $this->date ) )	{
 			$this->date = get_post_meta( $this->ID, '_mdjm_event_date', true );
 		}
+		
+		return $this->date;
 	} // get_date
 	
 	/**
@@ -349,6 +397,228 @@ class MDJM_Event {
 					
 		return apply_filters( 'mdjm_event_type', $return, $this->ID );
 	} // get_type
+	
+	/**
+	 * Retrieve the event price
+	 *
+	 * @since 	1.3
+	 * @return	float
+	 */
+	public function get_price() {
+
+		if ( ! isset( $this->price ) ) {
+
+			$this->price = get_post_meta( $this->ID, '_mdjm_event_cost', true );
+
+			if ( $this->price ) {
+
+				$this->price = mdjm_sanitize_amount( $this->price );
+
+			} else {
+
+				$this->price = 0;
+
+			}
+			
+		}
+
+		/**
+		 * Override the event price.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$price The event price.
+		 * @param	str|int	$id The event ID.
+		 */
+		return apply_filters( 'mdjm_get_event_price', $this->price, $this->ID );
+	} // get_price
+	
+	/**
+	 * Retrieve the event deposit
+	 *
+	 * @since 	1.3
+	 * @return	float
+	 */
+	public function get_deposit() {
+
+		if ( ! isset( $this->deposit ) ) {
+
+			$this->deposit = get_post_meta( $this->ID, '_mdjm_event_deposit', true );
+
+			if ( $this->deposit ) {
+
+				$this->deposit = mdjm_sanitize_amount( $this->deposit );
+
+			} else {
+
+				$this->deposit = 0;
+
+			}
+			
+		}
+
+		/**
+		 * Override the event deposit.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$deposit	The event deposit.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'mdjm_get_event_deposit', $this->deposit, $this->ID );
+	} // get_deposit
+	
+	/**
+	 * Retrieve the event deposit status
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_deposit_status() {
+
+		if ( ! isset( $this->deposit_status ) ) {
+
+			$this->deposit_status = get_post_meta( $this->ID, '_mdjm_event_deposit_status', true );
+
+			if ( ! $this->deposit_status || $this->deposit_status != 'Paid' || $this->get_deposit() > 0 ) {
+
+				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+				
+				if ( $this->get_total_income() >= $this->get_deposit() )	{
+					
+					$this->deposit_status = __( 'Paid', 'mobile-dj-manager' );
+					
+				}
+
+			} else	{
+			
+				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+				
+			}
+			
+		}
+
+		/**
+		 * Override the event deposit status.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$deposit_status	The event deposit_status.
+		 * @param	str|int	$id				The event ID.
+		 */
+		return apply_filters( 'mdjm_get_event_deposit_status', $this->deposit_status, $this->ID );
+	} // get_deposit_status
+	
+	/**
+	 * Retrieve the event balance status
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_balance_status() {
+
+		if ( ! isset( $this->balance_status ) ) {
+
+			$this->balance_status = get_post_meta( $this->ID, '_mdjm_event_balance_status', true );
+
+			if ( ! $this->balance_status || $this->balance_status != 'Paid' || $this->get_price() > 0 ) {
+
+				$this->balance_status = __( 'Due', 'mobile-dj-manager' );
+
+			} else	{
+			
+				if ( $this->get_total_income() >= $this->get_price() )	{
+					
+					$this->balance_status = __( 'Paid', 'mobile-dj-manager' );
+					
+				} else	{
+			
+					$this->balance_status = __( 'Due', 'mobile-dj-manager' );
+					
+				}
+				
+			}
+			
+		}
+
+		/**
+		 * Override the event balance status.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$balance_status	The event balance_status.
+		 * @param	str|int	$id				The event ID.
+		 */
+		return apply_filters( 'mdjm_get_event_balance_status', $this->balance_status, $this->ID );
+	} // get_balance_status
+	
+	/**
+	 * Retrieve the event balance
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_balance() {
+
+		if ( ! isset( $this->balance ) ) {
+			
+			$income = $this->get_total_income();
+			
+			if ( ! empty( $this->income ) && $this->income != '0.00' )	{
+				
+				$this->balance = ( $this->get_price() - $this->income );
+				
+			} else	{
+				
+				$this->balance = $this->get_price();
+				
+			}
+			
+		}
+
+		/**
+		 * Override the event balance.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$income		The event balance.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'mdjm_get_event_balance', $this->balance, $this->ID );
+	} // get_balance
+	
+	/**
+	 * Retrieve the total income for this event
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_total_income()	{
+		if ( ! isset( $this->income ) )	{
+			
+			$rcvd = MDJM()->txns->get_transactions( $this->ID, 'mdjm-income' );
+			
+			if ( ! empty ( $rcvd ) )	{
+				
+				$this->income = $rcvd;
+				
+			} else	{
+				
+				$this->income = '0.00';
+				
+			}
+		}
+		
+		/**
+		 * Override the income for this event.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$income		The income for the event.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'get_event_income', $this->income, $this->ID );
+	} // get_total_income
 	
 	/**
 	 * Retrieve the guest playlist access code.

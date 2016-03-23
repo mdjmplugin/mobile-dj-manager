@@ -175,6 +175,86 @@ function mdjm_get_event_type( $event_id='' )	{
 	// Return the label for the status
 	return $event->get_type();
 } // mdjm_get_event_type
+
+/**
+ * Returns the price for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The price of the event.
+ */
+function mdjm_get_event_price( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_price();
+} // mdjm_get_event_price
+
+/**
+ * Returns the deposit price for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The deposit price of the event.
+ */
+function mdjm_get_event_deposit( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_deposit();
+} // mdjm_get_event_deposit
+
+/**
+ * Returns the deposit status for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The deposit status of the event.
+ */
+function mdjm_get_event_deposit_status( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_deposit_status();
+} // mdjm_get_event_deposit_status
+
+/**
+ * Returns the balance status for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The balance status of the event.
+ */
+function mdjm_get_event_balance_status( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_balance_status();
+} // mdjm_get_event_balance_status
+
+/**
+ * Returns the balance owed for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The balance owed for the event.
+ */
+function mdjm_get_event_balance( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_balance();
+} // mdjm_get_event_balance
 	
 /**
  * Returns the URL for an event.
