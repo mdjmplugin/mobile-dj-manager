@@ -36,7 +36,7 @@ function mdjm_get_event_by_id( $event_id )	{
 } // mdjm_get_event_by_id
 
 /**
- * Retrieve all of this clients events.
+ * Retrieve an event by the guest playlist code.
  *
  * @since	1.3
  * @param	int		$access_code	The access code for the event playlist.
@@ -255,6 +255,38 @@ function mdjm_get_event_balance( $event_id )	{
 	$event = new MDJM_Event( $event_id );
 	return $event->get_balance();
 } // mdjm_get_event_balance
+
+/**
+ * Returns the total income for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The income for the event.
+ */
+function mdjm_get_event_income( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_total_income();
+} // mdjm_get_event_income
+
+/**
+ * Returns the client ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int					The user ID of the event client.
+ */
+function mdjm_get_event_client_id( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_client();
+} // mdjm_get_event_client_id
 	
 /**
  * Returns the URL for an event.

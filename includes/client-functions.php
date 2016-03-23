@@ -125,3 +125,72 @@ function mdjm_user_is_client( $user_id )	{
 	
 	return false;
 } // mdjm_user_is_client
+
+/**
+ * Retrieve a clients first name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The first name of the client.
+ */
+function mdjm_get_client_firstname( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->first_name ) )	{
+		$first_name = $client->first_name;
+	} else	{
+		$first_name = __( 'First name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_firstname', $first_name, $user_id );
+} // mdjm_get_client_firstname
+
+/**
+ * Retrieve a clients last name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The last name of the client.
+ */
+function mdjm_get_client_lastname( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->last_name ) )	{
+		$last_name = $client->last_name;
+	} else	{
+		$last_name = __( 'Last name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_lastname', $last_name, $user_id );
+} // mdjm_get_client_lastname
+
+/**
+ * Retrieve a clients email address.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The first name of the client.
+ */
+function mdjm_get_client_email( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->user_email ) )	{
+		$email = $client->user_email;
+	} else	{
+		$email = __( 'Email address not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_email', $email, $user_id );
+} // mdjm_get_client_email
