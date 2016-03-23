@@ -566,7 +566,7 @@ class MDJM_Event {
 			
 			if ( ! empty( $this->income ) && $this->income != '0.00' )	{
 				
-				$this->balance = ( $this->get_price() - $this->income );
+				$this->balance = mdjm_sanitize_amount( ( $this->get_price() - $this->income ) );
 				
 			} else	{
 				
