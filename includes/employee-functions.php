@@ -23,6 +23,18 @@ function mdjm_is_employer()	{
 } // mdjm_is_employer
 
 /**
+ * Whether or not the employee has the priviledge.
+ *
+ * @since	1.3
+ * @param	$int		Optional: The user ID of the employee
+ * @param	$role		The role to check
+ * @return	bool		True if multi employee, otherwise false
+ */
+function mdjm_employee_can( $user_id='', $role )	{
+	return MDJM()->permissions->employee_can( $role, $user_id );
+} // mdjm_employee_can
+
+/**
  * Display a dropdown select list with all employees. The label must be handled seperately.
  *
  * @param	arr		$args			Settings for the dropdown

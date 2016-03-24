@@ -183,7 +183,7 @@
 			 */
 	 		public function notices()	{
 				/* -- Unattended Events -- */
-				$this->unattended_events_notice();
+				//$this->unattended_events_notice();
 								
 			} // notices
 	
