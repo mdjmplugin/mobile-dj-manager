@@ -629,7 +629,7 @@
 							// DJ details as object array
 							'dj'				  => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned', 'mobile-dj-manager' ) ),
 							// DJ Wages
-							'dj_wage'   		     => ( !empty( $dj_wage ) ? display_price( $dj_wage ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							'dj_wage'   		     => ( !empty( $dj_wage ) ? mdjm_currency_filter( mdjm_sanitize_amount( $dj_wage ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Event Start
 							'start'			   => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Event Finish
@@ -641,12 +641,12 @@
 							// DJ Setup time
 							'setup_time'		  => ( !empty( $setup_time ) ? date( MDJM_TIME_FORMAT, strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Total cost
-							'cost'				=> ( !empty( $cost ) ? display_price( $cost ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							'cost'				=> ( !empty( $cost ) ? mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							// Deposit fee
-							'deposit'			 => ( !empty( $deposit ) ? display_price( $deposit ) : '0.00' ),
+							'deposit'			 => ( !empty( $deposit ) ? mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) ) : '0.00' ),
 							// Balance remaining
 							'balance'			 => ( !empty( $paid ) && $paid != '0.00' && !empty( $cost ) ? 
-								display_price( ( $cost - $paid ) ) : display_price( $cost ) ),
+								mdjm_currency_filter( mdjm_sanitize_amount( ( $cost - $paid ) ) ) : mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) ),
 								
 							// Deposit status
 							'deposit_status'	  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due', 'mobile-dj-manager' ) ),

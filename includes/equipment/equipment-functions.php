@@ -117,7 +117,7 @@ function mdjm_get_packages_by_employee( $employee_id, $all=true )	{
 function mdjm_get_package_price( $package_id )	{
 	$cost = get_post_meta( $package_id, '_mdjm_cost', true );
 	
-	return display_price( $cost );
+	return mdjm_currency_filter( mdjm_sanitize_amount( $cost ) );
 } // mdjm_get_package_price
 
 /**

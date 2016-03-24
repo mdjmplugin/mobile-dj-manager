@@ -104,7 +104,7 @@ function mdjm_add_txn( $data )	{
 	
 	// Set the transaction type (category)
 	if ( ! empty( $txn_data['post_category'] ) )	{
-		wp_set_post_terms( $txn_id, $txn_data['post_category']->term_id, 'transaction-types' );
+		wp_set_post_terms( $txn_id, $txn_data['post_category'], 'transaction-types' );
 	}
 	
 	do_action( 'mdjm_post_add_txn', $txn_id, $txn_data );

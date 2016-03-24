@@ -188,7 +188,7 @@
 					
 			} // End foreach( $events as $event )
 			
-			return display_price( $earnings );
+			return mdjm_currency_filter( mdjm_sanitize_amount( $earnings ) );
 		} // period_earnings
 				
 	} // Class

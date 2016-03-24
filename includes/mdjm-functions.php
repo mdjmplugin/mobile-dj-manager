@@ -744,7 +744,7 @@
 						
 		
 		return stripslashes( esc_attr( $packages[$event_package]['name'] ) ) . ( !empty( $price ) ? ' ' . 
-			display_price( $packages[$event_package]['cost'], true ) : '' );
+			mdjm_currency_filter( mdjm_sanitize_amount( $packages[$event_package]['cost'] ) ) : '' );
 				
 	} // get_event_package
 	
@@ -768,10 +768,10 @@
 				
 				if( !empty( $dj ) )	{
 					if( in_array( $dj, explode( ',', $package['djs'] ) ) )
-						$available[] = stripslashes( esc_attr( $package['name'] ) ). ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+						$available[] = stripslashes( esc_attr( $package['name'] ) ). ( !empty( $price ) ? ' ' . mdjm_currency_filter( mdjm_sanitize_amount( $package['cost'] ) ) : '' );
 				}
 				else
-					$available[] = stripslashes( esc_attr( $package['name'] ) ) . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+					$available[] = stripslashes( esc_attr( $package['name'] ) ) . ( !empty( $price ) ? ' ' . mdjm_currency_filter( mdjm_sanitize_amount( $package['cost'] ) ) : '' );
 			}
 			$i = 1;
 			$the_packages = '';
@@ -810,7 +810,7 @@
 		
 		foreach( $event_addons as $event_addon )	{
 			$addons .= stripslashes( esc_attr( $all_addons[$event_addon][0] ) ) . ( !empty( $price ) ? ' ' . 
-				display_price( $all_addons[$event_addon][7], true ) : '' ) . ( $i < count( $event_addons ) ? 
+				mdjm_currency_filter( mdjm_sanitize_amount( $all_addons[$event_addon][7] ) ) : '' ) . ( $i < count( $event_addons ) ? 
 				'<br />' : '' );
 			$i++;
 		}
@@ -979,7 +979,7 @@
 				$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . stripslashes( esc_textarea( $package['desc'] ) ) . '"' : '' );
 				$mdjm_select .= ( isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>' ) ;
 				$mdjm_select .= stripslashes( esc_attr( $package['name'] ) ) . 
-					( $select_cost == true ? ' - ' . display_price( $package['cost'] ) : '' ) . '</option>' . "\r\n";
+					( $select_cost == true ? ' - ' . mdjm_currency_filter( mdjm_sanitize_amount( $package['cost'] ) ) : '' ) . '</option>' . "\r\n";
 			}
 		}
 		
@@ -1268,7 +1268,7 @@
 								$mdjm_select .= ' selected="selected"';
 							
 							$mdjm_select .= '>' . stripslashes( esc_attr( $item[0] ) ) . 
-								( $select_cost == true ? ' - ' . display_price( $item[7] ) : '' ) . '</option>' . "\r\n";
+								( $select_cost == true ? ' - ' . mdjm_currency_filter( mdjm_sanitize_amount( $item[7] ) ) : '' ) . '</option>' . "\r\n";
 					}
 					
 				}
@@ -1367,7 +1367,7 @@
 							
 							$mdjm_check .= '<label for="' . $check_name . '_' . stripslashes( esc_attr( $item[1] ) ) . '">' . stripslashes( $item[0] );
 							
-							$mdjm_check .= ( $check_cost == true ? ' - ' . display_price( $item[7] ) : '' );
+							$mdjm_check .= ( $check_cost == true ? ' - ' . mdjm_currency_filter( mdjm_sanitize_amount( $item[7] ) ) : '' );
 							
 							$mdjm_check .= '</label>' . ( !empty( $settings['title'] ) && !empty( $item[4] ) ? '</span>' : '' ) . '<br />' .  "\r\n";
 					}

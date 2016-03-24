@@ -313,7 +313,7 @@ function mdjm_list_event_employees( $event_id )	{
 				$output .= '<td style="text-align:left;">' . $details->display_name . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">';
 					if( MDJM()->permissions->employee_can( 'manage_txns' ) )	{
-						$output .= display_price( $employee['wage'], true );
+						$output .= mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) );
 					}
 					else	{
 						$output .= '&mdash;';

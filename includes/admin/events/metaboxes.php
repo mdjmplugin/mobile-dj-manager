@@ -527,7 +527,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			<div class="mdjm-post-2column">
 			<label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
 			<?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
-				value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+				value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" /> 
 				<span class="mdjm-description">No <?php echo mdjm_currency_symbol(); ?> symbol needed.</span>
 			</div>
 			<?php
@@ -541,7 +541,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			<div class="mdjm-post-last-2column">
 			<label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( mdjm_get_deposit_label() . ':' ); ?></label><br />
 			<?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
-				value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo display_price( '0', false ); ?>" /> 
+				value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" /> 
 				<span class="mdjm-description">No <?php echo mdjm_currency_symbol(); ?> symbol needed</span>
 			</div>
 		</div><!-- mdjm-post-row -->
@@ -732,7 +732,7 @@ function mdjm_event_metabox_event_employees( $post )	{
                     ?>
                     <label for="event_new_employee_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                     <?php echo mdjm_currency_symbol(); ?><input type="text" name="event_new_employee_wage" id="event_new_employee_wage" class="mdjm-input-currency" 
-                    value="" placeholder="<?php echo display_price( '0', false ); ?>" />
+                    value="" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" />
                     <?php
                 }
                 ?>
@@ -1036,7 +1036,7 @@ function mdjm_event_metabox_transactions( $post )	{
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
 				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="mdjm-input-currency" placeholder="' . 
-					display_price( '10', false ) . '" />' . "\r\n";
+					mdjm_format_amount( '10' ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 	
 		echo '<div class="mdjm-post-3column">' . "\r\n";

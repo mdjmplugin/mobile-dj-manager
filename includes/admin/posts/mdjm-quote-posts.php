@@ -79,7 +79,7 @@ function mdjm_quote_posts_custom_column( $column_name, $post_id )	{
 		
 		// Cost
 		case 'quote_value':
-			echo display_price( get_post_meta( $parent, '_mdjm_event_cost', true ) );
+			echo mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $parent, '_mdjm_event_cost', true ) ) );
 		break;
 		
 		// Date Viewed

@@ -413,7 +413,7 @@
 											echo ( !empty( $eventinfo['package'] ) ? '<a title="' . ( !empty( $eventinfo['package']['desc'] ) ? 
 											$eventinfo['package']['desc'] : '' ) . 
 											( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
-												display_price( $eventinfo['package']['cost'] ) : '' ) . '">' . 
+												mdjm_currency_filter( mdjm_sanitize_amount( $eventinfo['package']['cost'] ) ) : '' ) . '">' . 
 											$eventinfo['package']['name'] . '</a>' : 'None' );
 										}
 										else	{
@@ -429,7 +429,7 @@
 												$item = get_addon_details( $addon );
 												echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . 
 												( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
-													display_price( $item['cost'] ) : '' ) . '">' . $item['name'] . '</a>';
+													mdjm_currency_filter( mdjm_sanitize_amount( $item['cost'] ) ) : '' ) . '">' . $item['name'] . '</a>';
 												echo ( $i < count( $eventinfo['addons'] ) ? '<br />' : '' );
 												$i++;	
 											}

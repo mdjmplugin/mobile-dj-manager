@@ -175,7 +175,7 @@
 			echo '<div class="mdjm-post-3column">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
 					mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' . 
-					display_price( '10', false ) . '" value="' . get_post_meta( $post->ID, '_mdjm_txn_total', true ) . '" />' . "\r\n";
+					mdjm_format_amount( '10' ) . '" value="' . get_post_meta( $post->ID, '_mdjm_txn_total', true ) . '" />' . "\r\n";
 			echo '</div>' . "\r\n";
 		
 			echo '<div class="mdjm-post-3column">' . "\r\n";

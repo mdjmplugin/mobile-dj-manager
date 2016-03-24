@@ -364,7 +364,7 @@ function mdjm_shortcode_addons_list( $atts )	{
 				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
 					$output = '<span class="' . $args['cost_class'] . '">';
 				
-				$output .= '&nbsp;&ndash;&nbsp;' . display_price( $item[7] );
+				$output .= '&nbsp;&ndash;&nbsp;' . mdjm_currency_filter( mdjm_sanitize_amount( $item[7] ) );
 				
 				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
 					$output = '</span>';

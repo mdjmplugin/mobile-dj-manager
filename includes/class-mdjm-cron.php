@@ -1227,7 +1227,7 @@
 							'Date: ' . $eventinfo['date'] . "\r\n" . 
 							'Client: ' . $eventinfo['client'] . "\r\n" . 
 							'DJ: ' . $eventinfo['djinfo']->display_name . "\r\n" . 
-							mdjm_get_deposit_label() . ': ' . display_price( $eventinfo['deposit'] ) . "\r\n" . 
+							mdjm_get_deposit_label() . ': ' . mdjm_currency_filter( mdjm_sanitize_amount( $eventinfo['deposit'] ) ) . "\r\n" . 
 							'Link: ' . get_edit_post_link( $eventinfo['id'], '' ) . "\r\n" .
 							'----------------------------------------' . 
 							'----------------------------------------' . "\r\n";
@@ -1244,7 +1244,7 @@
 							'Date: ' . $eventinfo['date'] . "\r\n" . 
 							'Client: ' . $eventinfo['client'] . "\r\n" . 
 							'DJ: ' . $eventinfo['djinfo']->display_name . "\r\n" . 
-							mdjm_get_balance_label() . ' Due: ' . display_price( $eventinfo['cost'] - $eventinfo['deposit'] ) . "\r\n" . 
+							mdjm_get_balance_label() . ' Due: ' . mdjm_currency_filter( mdjm_sanitize_amount( $eventinfo['cost'] - $eventinfo['deposit'] ) ) . "\r\n" . 
 							'Link: ' . get_edit_post_link( $eventinfo['id'], '' ) . "\r\n" .
 							'----------------------------------------' . 
 							'----------------------------------------' . "\r\n";

@@ -966,10 +966,10 @@ function mdjm_content_tag_balance( $event_id='' )	{
 	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
 	
 	if( !empty( $rcvd ) && $rcvd != '0.00' && !empty( $cost ) )	{
-		return display_price( ( $cost - $rcvd ) );	
+		return mdjm_currency_filter( mdjm_sanitize_amount( ( $cost - $rcvd ) ) );	
 	}
 	
-	return display_price( $cost );
+	return mdjm_currency_filter( mdjm_sanitize_amount( $cost ) );
 } // mdjm_content_tag_balance
 
 /**
@@ -1084,7 +1084,7 @@ function mdjm_content_tag_deposit( $event_id='' )	{
 	$deposit = get_post_meta( $event_id, '_mdjm_event_deposit', true );
 	
 	if( !empty( $deposit ) )	{
-		$return = display_price( $deposit );
+		$return = mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) );
 	}
 	else	{
 		$return = '';
@@ -1631,7 +1631,7 @@ function mdjm_content_tag_total_cost( $event_id='' )	{
 	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
 	
 	if( !empty( $cost ) )	{
-		$return = display_price( $cost );
+		$return = mdjm_currency_filter( mdjm_sanitize_amount( $cost ) );
 	}
 	
 	return $return;

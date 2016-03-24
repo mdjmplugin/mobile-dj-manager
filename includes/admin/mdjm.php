@@ -919,7 +919,7 @@
 					'{EVENT_NAME}'		   => ( !empty( $eventinfo['name'] ) ? $eventinfo['name'] : '' ),
 					'{EVENT_STATUS}'		 => ( !empty( $eventinfo['status'] ) ? $eventinfo['status'] : '' ),
 					'{EVENT_TYPE}'		   => ( !empty( $eventinfo['type'] ) ? $eventinfo['type'] : '' ),
-					//'{PAYMENT_AMOUNT}'	   => ( isset( $_POST['mc_gross'] ) ? display_price( $_POST['mc_gross'] ) : '' ),
+					//'{PAYMENT_AMOUNT}'	   => ( isset( $_POST['mc_gross'] ) ? mdjm_currency_filter( mdjm_sanitize_amount( $_POST['mc_gross'] ) ) : '' ),
 					//'{PAYMENT_DATE}'		 => ( isset( $_POST['payment_date'] ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['payment_date'] ) ) : '' ),
 					//'{PAYMENT_FOR}'		  => ( isset( $_POST['custom'] ) ? $_POST['custom'] : '' ),
 					'{PAYMENT_URL}'		  => ( !empty( $e ) ? mdjm_get_formatted_url( MDJM_PAYMENT_PAGE ) . 'event_id=' . $e->ID : '' ),

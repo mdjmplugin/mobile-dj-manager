@@ -66,7 +66,7 @@
 					
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-income' )	{
-						$transactions .= display_price( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
+						$transactions .= mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) ) );
 						$total_in += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
 					}
 					else	{
@@ -76,7 +76,7 @@
 					
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-expenditure' )	{
-						$transactions .= display_price( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
+						$transactions .= mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) ) );
 						$total_out += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
 					}
 					else	{
@@ -97,9 +97,9 @@
 				$transactions .= '<tfoot>' . "\r\n";
 				$transactions .= '<tr class="border_top">' . "\r\n";
 				$transactions .= '<th width="25%" align="left">&nbsp;</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . display_price(  $total_in ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . display_price(  $total_out ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">Earnings: ' . display_price(  $total_in - $total_out ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_in ) ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_out ) ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">Earnings: ' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_in - $total_out ) ) . '</th>' . "\r\n";
 				$transactions .= '</tr>' . "\r\n";
 				$transactions .= '</tfoot>' . "\r\n";
 				$transactions .= '</table>' . "\r\n";
@@ -379,7 +379,7 @@
 			
 						$txn_type = !is_wp_error( $types ) && !empty( $types ) ? $types[0]->name : '';
 						
-						$output = display_price( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) );
+						$output = mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) ) );
 						$output .=  ' ';
 						$output .=  'on ' . date( MDJM_SHORTDATE_FORMAT, strtotime( $txn->post_date ) ) . ' (' . $txn_type . ')';
 						

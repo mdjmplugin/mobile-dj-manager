@@ -72,9 +72,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			if( MDJM()->permissions->employee_can( 'read_events' ) )	{
 				echo sprintf( '<a href="' . admin_url( 'post.php?post=%s&action=edit' ) . '">%s</a>', 
 					$post_id, date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) );
-			}
-			else
+			} else	{
 				echo date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) );
+			}
 		break;
 			
 		// Client
@@ -84,18 +84,18 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			$user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_' . $column_name, true ) );
 			
 			if( !empty( $user ) )	{
-				if( MDJM()->permissions->employee_can( 'send_comms' ) )
+				if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
 					echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
 						$user->ID . '&event_id=' . $post_id . '">' . 
 						$user->display_name . '</a>';
-						
-				else
+				} else	{
 					echo $user->display_name;
-			}
-			else
+				}
+			} else	{
 				printf( __( '%sNot Assigned%s', 'mobile-dj-manager' ),
 					'<span class="mdjm-form-error">',
 					'</span>' );
+			}
 		break;
 								
 		// Status
@@ -103,10 +103,11 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			echo get_post_status_object( $post->post_status )->label;
 			
 			if( isset( $_GET['availability'] ) && $post_id == $_GET['e_id'] )	{
-				if( is_dj() )
+				if( is_dj() )	{
 					$dj_avail = mdjm_availability_check( $_GET['availability'], $current_user->ID );
-				else
+				} else	{
 					$dj_avail = mdjm_availability_check( $_GET['availability'] );
+				}
 			}
 		break;
 			
@@ -123,22 +124,21 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 		// Value
 		case 'value':
-			if( MDJM()->permissions->employee_can( 'edit_txns' ) )
-				echo ( !empty( $value ) ? display_price( $value ) : '<span class="mdjm-form-error">' . display_price( '0.00' ) . '</span>' );
-			
-			else	
+			if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+				echo ( !empty( $value ) ? mdjm_currency_filter( mdjm_sanitize_amount( $value ) ) : '<span class="mdjm-form-error">' . mdjm_currency_filter( mdjm_sanitize_amount( '0.00' ) ) . '</span>' );
+			} else	{
 				echo '&mdash;';
+			}
 		break;
 			
 		// Balance
 		case 'balance':
 			if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{				
 				$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
-				echo ( !empty( $rcvd ) && $rcvd != '0.00' ? display_price( ( $value - $rcvd ) ) : display_price( $value ) );
-			}
-			
-			else	
+				echo ( !empty( $rcvd ) && $rcvd != '0.00' ? mdjm_currency_filter( mdjm_sanitize_amount( ( $value - $rcvd ) ) ) : mdjm_currency_filter( mdjm_sanitize_amount( $value ) ) );
+			} else	{
 				echo '&mdash;';
+			}
 		break;
 			
 		/* -- Playlist -- */
@@ -147,9 +147,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				$total = MDJM()->events->count_playlist_entries( $post_id );
 				echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post_id . '">' . $total . ' ' . 
 					_n( 'Song', 'Songs', $total, 'mobile-dj-manager' ) . '</a>' . "\r\n";
-			}
-			else
+			} else	{
 				echo '&mdash;';
+			}
 		break;
 		
 		// Journal
@@ -160,9 +160,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 					$total . ' ' . 
 					_n( 'Entry', 'Entries', $total, 'mobile-dj-manager' ) . 
 					'</a>' . "\r\n";
-			}
-			else
+			} else	{
 				echo '&mdash;';
+			}
 		break;
 	} // switch
 	
