@@ -203,7 +203,11 @@ add_filter( 'mdjm_format_amount_decimals', 'mdjm_currency_decimal_filter' );
  * @param	int		$date		Date to format
  * @return	int		$date
 */
-function mdjm_format_short_date( $date )	{
+function mdjm_format_short_date( $date='' )	{
+	
+	if ( empty( $date ) )	{
+		$date = current_time( 'timestamp' );
+	}
 	
 	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
 		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), $date );

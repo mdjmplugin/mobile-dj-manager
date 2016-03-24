@@ -366,6 +366,38 @@ function mdjm_time_until_event( $event_id )	{
 } // mdjm_time_until_event
 
 /**
+ * Update event meta.
+ *
+ * We don't currently delete empty meta keys or values, instead we update with an empty value
+ * if an empty value is passed to the function.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	arr		$data		The appropriately formatted meta data values.
+ * @return	void
+ */
+function mdjm_add_event_meta( $event_id, $data )	{
+	
+	$meta = get_post_meta( $event_id, '_mdjm_event_data', true );
+	
+	foreach( $data as $key => $value )	{
+		
+		if( $key == 'mdjm_nonce' || $key == 'mdjm_action' ) {
+			continue;
+		}
+		
+		// For backwards comaptibility
+		update_post_meta( $event_id, $key, $value );
+		
+		$meta[ $key ] = $value;
+		
+	}
+	
+	update_post_meta( $event_id, '_mdjm_event_data', $meta );
+	
+} // mdjm_add_event_meta
+
+/**
  * Update the event status.
  *
  * @since	1.3
