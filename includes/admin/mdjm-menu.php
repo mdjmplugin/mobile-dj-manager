@@ -62,6 +62,7 @@
 					'mdjm-settings',
 					'mdjm_options_page'
 				);
+				
 				// Contract Templates
 				if( MDJM()->permissions->employee_can( 'manage_templates' ) )	{
 					$mdjm_contract_template_page = add_submenu_page(

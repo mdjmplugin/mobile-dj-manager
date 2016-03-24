@@ -57,7 +57,6 @@
 				
 				add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
 				add_action( 'wp_login', array( &$this, 'last_login' ), 10, 2 ); // Login timestamp
-				add_action( 'admin_notices', array( &$this, 'notices' ) ); // Hook into the admin notices hook
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
 			} // __construct
 			
@@ -170,22 +169,6 @@
 				/* -- Initiate the API listener -- */
 				$this->api_listener();	
 			} // all_plugins_loaded	
-/*
- * --
- * ADMIN_NOTICES HOOK
- * --
- */
-	 		/*
-			 * Functions called from the admin_notices hook
-			 * 
-			 * 
-			 *
-			 */
-	 		public function notices()	{
-				/* -- Unattended Events -- */
-				//$this->unattended_events_notice();
-								
-			} // notices
 	
 /*
  * --
@@ -264,34 +247,6 @@
 			public function last_login( $user_login, $user ) {
 				update_user_meta( $user->ID, 'last_login', date( 'Y-m-d H:i:s' ) );
 			} // last_login
-
-/*
- * --
- * ADMIN NOTICES
- * --
- */
-			/*
-			 * Display an alert if there are outstanding unattended events
-			 * and the settings dictate to do so
-			 * 
-			 *
-			 */
-			public function unattended_events_notice()	{
-				global $mdjm_settings;
-				
-				if( current_user_can( 'administrator' ) && !empty( $mdjm_settings['events']['warn_unattended'] ) )	{
-					$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
-					
-					if( !empty( $unattended ) && $unattended > 0 )
-						mdjm_update_notice( 'update-nag', 
-											'There are currently ' . $unattended . ' <a href="' . mdjm_get_admin_page( 'events', 'str' ) . 
-											'&post_status=mdjm-unattended">Unattended ' . _n( 'Enquiry', 'Enquiries', $unattended ) . 
-											'</a> that require your attention. ' . 
-											'<a href="' . mdjm_get_admin_page( 'events', 'str' ) . '&post_status=mdjm-unattended">' . 
-											'Click here to review and action ' . _n( 'this enquiry', 'these enquiries', $unattended ) . ' now</a>'
-											 );
-				}
-			} // unattended_events_notice			
 
 /*
  * --

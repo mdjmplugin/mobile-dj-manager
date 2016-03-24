@@ -254,13 +254,15 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
 			if( is_admin() )	{ // Required for admin only
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' ); // Plugin settings
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/equipment/metaboxes.php' );
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' ); // WP Dashboard Widgets
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' );
 				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/formatting/mdjm-formatting.php' );
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' ); // Plugin settings
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );
+				
 			}
 			else	{ // Required for front end only
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
