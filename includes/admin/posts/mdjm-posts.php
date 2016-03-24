@@ -21,7 +21,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			$this->includes();
 
 			/* -- Register actions -- */
-			add_action( 'contextual_help', array( &$this, 'help_text' ), 10, 3 ); // Contextual help
 															
 			if( is_admin() )	{
 				add_filter( 'posts_clauses', array( &$this, 'sort_post_by_column' ), 1, 2 );
@@ -586,36 +585,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					'high' );
 			}
 		} // define_metabox
-
-/**
-* -- HELP PAGES
-*/
-		/**
-		 * Contextual help messages
-		 *
-		 * @param   str		$contextual_help
-		 *			str		$screen_id
-		 *			str 	$screen
-		 *
-		 * @return   str	$contextual_help	The contextual help messages
-		 * @since    1.1.3
-		 */
-		public function help_text( $contextual_help, $screen_id, $screen )	{
-			global $mdjm_post_types;
-			
-			if( !in_array( $screen->post_type, $mdjm_post_types ) )
-				return $contextual_help;
-			
-			if( $screen->post_type == MDJM_EVENT_POSTS )	{
-				$contextual_help = 
-					'<p>' . __( 'For assistance, refer to our <a href="' . mdjm_get_admin_page( 'user_guides' ) . '" target="_blank">User Guides</a>' .
-					' or visit the <a href="' . mdjm_get_admin_page( 'mydjplanner' ) . '" target="_blank">' . MDJM_NAME . '</a> ' . 
-					'<a href="' . mdjm_get_admin_page( 'mdjm_forums' ) . '" target="_blank">Support Forums' ) . '</a></p>' . "\r\n";
-			}
-			
-			return $contextual_help;
-		}
-
 
 /**
 * -- GENERAL POST FUNCTIONS
