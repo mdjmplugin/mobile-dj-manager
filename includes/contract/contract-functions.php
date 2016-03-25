@@ -226,6 +226,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		)
 	);
 	
+	return true;
 	// Send the email confirmations
 	mdjm_email_booking_confirmation( $event_id );
 	

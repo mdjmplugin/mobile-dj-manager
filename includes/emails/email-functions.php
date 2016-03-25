@@ -173,7 +173,7 @@ function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments,
 	
 	$meta = apply_filters( 'mdjm_email_tracking_post_meta',
 		array(
-			'date_sent'	=> current_time( 'mysql' ),
+			'date_sent'	=> current_time( 'timestamp' ),
 			'recipient'	=> $to,
 			'source'	=> $source,
 			'event'		=> $mdjm_email->event_id

@@ -57,7 +57,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 			switch( $column_name ) {
 				// Date Sent
 				case 'date_sent':
-					echo date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, get_post_meta( $post_id, '_date_sent', true ) );
+					echo date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) );
 					break;
 				
 				// From	
@@ -84,18 +84,18 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 				case 'event':
 					$event = get_post_meta( $post_id, '_event', true );
 					
-					echo ( !empty( $event ) ? '<a href="'. get_edit_post_link( $event ) . '">' . MDJM_EVENT_PREFIX . $event . '</a>' : 'N/A' );
+					echo ( !empty( $event ) ? '<a href="'. get_edit_post_link( $event ) . '">' . mdjm_get_option( 'event_prefix' ) . $event . '</a>' : 'N/A' );
 					
 					break;
 				
 				// Status
 				case 'current_status':							
-					$change_date = !empty( $post->post_modified ) && $post->post_status == 'opened' ? date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( $post->post_modified ) ) : '';
+					$change_date = !empty( $post->post_modified ) && $post->post_status == 'opened' ? date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) : '';
 					$open_count = !empty( $count ) && $post->post_status == 'opened' ? ' (' . $count . ')' : '';
 					
 					echo ucwords( $post->post_status ) . ' ' . 
 					( !empty( $post->post_modified ) && $post->post_status == 'opened' ? 
-					date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( $post->post_modified ) ) : '' );
+					date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) : '' );
 					break;
 				
 				// Source
@@ -126,7 +126,7 @@ if( !class_exists( 'MDJM_Comms_Posts' ) ) :
 		public static function custom_comm_post_query( $query )	{
 			global $pagenow;
 			
-			if( !is_post_type_archive( MDJM_COMM_POSTS ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )
+			if( !is_post_type_archive( 'mdjm-communication' ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )
 				return $query;
 				
 			if( !current_user_can( 'manage_mdjm' ) )	{

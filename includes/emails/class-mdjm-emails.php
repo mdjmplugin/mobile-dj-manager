@@ -255,9 +255,9 @@ class MDJM_Emails {
 		 */
 		do_action( 'mdjm_email_send_after', $this );
 		
-		if( $sent && true === $this->track )	{
+		/**if( $sent && true === $this->track )	{
 			$this->log_email( $message, $attachments, $this );
-		}
+		}*/
 		
 		return $sent;
 	} // send
