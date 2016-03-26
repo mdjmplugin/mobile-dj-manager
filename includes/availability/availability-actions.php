@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_availability_check_action( $data )	{
 	if( ! isset( $data['mdjm_enquiry_date_widget'] ) )	{
-		$message = 62;
+		$message = 'missing_date';
 	}
 	
 	else	{
@@ -29,10 +29,10 @@ function mdjm_availability_check_action( $data )	{
 		wp_die( var_dump( $result ) );
 		
 		if( !empty( $result['available'] ) )	{
-			$message = 60;
+			$message = 'available';
 		}
 		else	{
-			$message = 61;
+			$message = 'not_available';
 		}
 	}
 	wp_die( $message );

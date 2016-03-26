@@ -50,10 +50,10 @@ function mdjm_sign_event_contract_action( $data )	{
 	$password_confirmation = wp_authenticate( $user->user_login, $data['mdjm_verify_password'] );
 	
 	if( is_wp_error( $password_confirmation ) )	{
-		$message = 95;
+		$message = 'password_error';
 	}
 	elseif( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'sign_contract' ) )	{
-		$message = 99;
+		$message = 'nonce_fail';
 	}
 	else	{
 		// Setup the signed contract details
@@ -84,10 +84,10 @@ function mdjm_sign_event_contract_action( $data )	{
 		}
 		
 		if( mdjm_sign_event_contract( $data['event_id'], $posted ) )	{
-			$message = 10;
+			$message = 'contract_signed';
 		}
 		else	{
-			$message = 11;
+			$message = 'contract_not_signed';
 		}
 	}
 	

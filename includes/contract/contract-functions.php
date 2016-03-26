@@ -138,14 +138,12 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$event = new MDJM_Event( $event_id );
 	
 	if( ! $event )	{
-		error_log( '111', 0 );
 		return false;
 	}
 	
 	$contract_template = mdjm_get_contract( mdjm_get_event_contract( $event->ID ) );
 	
 	if( ! $contract_template )	{
-		error_log( '222', 0 );
 		return false;
 	}
 	
@@ -188,7 +186,6 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	$signed_contract_id = wp_insert_post( $signed_contract, true );
 	
 	if( is_wp_error( $signed_contract_id ) )	{
-		error_log( '333', 0 );
 		return false;
 	}
 	

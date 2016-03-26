@@ -72,11 +72,11 @@ add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist_action' );
  */
 function mdjm_add_playlist_entry_action( $data )	{
 	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'add_playlist_entry' ) )	{
-		$message = 99;
+		$message = 'nonce_fail';
 	}
 	
 	elseif( ! isset( $data[ 'mdjm_playlist_song' ], $data[ 'mdjm_playlist_artist' ] ) )	{
-		$message = 22;
+		$message = 'playlist_data_missing';
 	}
 	
 	else	{
@@ -97,10 +97,10 @@ function mdjm_add_playlist_entry_action( $data )	{
 		}
 		
 		if( mdjm_store_playlist_entry( $posted ) )	{
-			$message = 20;
+			$message = 'playlist_added';
 		}
 		else	{
-			$message = 21;
+			$message = 'playlist_not_added';
 		}
 	}
 	
@@ -128,19 +128,19 @@ add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry_action' );
  */
 function mdjm_remove_playlist_entry_action( $data )	{
 	if( ! isset( $data['id'] ) )	{
-		$message = 25;
+		$message = 'playlist_not_selected';
 	}
 	
 	elseif( ! wp_verify_nonce( $data['mdjm_nonce'], 'remove_playlist_entry' ) )	{
-		$message = 99;
+		$message = 'nonce_fail';
 	}
 	
 	else	{
 		if( mdjm_remove_stored_playlist_entry( $data['id'] ) )	{
-			$message = 23;
+			$message = 'playlist_removed';
 		}
 		else	{
-			$message =24;
+			$message = 'playlist_not_removed';
 		}
 	}
 	
@@ -168,11 +168,11 @@ add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_action' );
  */
 function mdjm_add_guest_playlist_entry_action( $data )	{	
 	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'add_guest_playlist_entry' ) )	{
-		$message = 99;
+		$message = 'nonce_fail';
 	}
 	
 	elseif( ! isset( $data[ 'entry_guest_firstname' ], $data[ 'entry_guest_lastname' ], $data[ 'entry_guest_song' ], $data[ 'entry_guest_artist' ] ) )	{
-		$message = 28;
+		$message = 'playlist_guest_data_missing';
 	}
 	
 	else	{
@@ -194,10 +194,10 @@ function mdjm_add_guest_playlist_entry_action( $data )	{
 		$entry = mdjm_store_guest_playlist_entry( $posted );
 		
 		if( $entry )	{
-			$message = 26;
+			$message = 'playlist_guest_added';
 		}
 		else	{
-			$message = 27;
+			$message = 'playlist_guest_error';
 		}
 	}
 	
