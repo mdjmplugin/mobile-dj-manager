@@ -45,9 +45,7 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 
-	add_filter( 'mdjm_email_headers', 'mdjm_set_booking_conf_headers' );
 	$emails->__set( 'headers', $headers );
-	remove_filter( 'mdjm_email_headers', 'mdjm_set_booking_conf_headers' );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
 	
