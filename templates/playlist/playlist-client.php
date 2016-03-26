@@ -129,22 +129,18 @@ global $mdjm_event, $mdjm_notice;
                         <div class="mdjm-playlist-artist col"><?php echo $entry_data['artist']; ?></div>
                         
                         <div class="mdjm-playlist-info col">
-							<?php if( $category == 'Guest Added' ) : ?>
+							<?php if( $category == 'Guest' ) : ?>
                             
-                            	<?php echo $entry_data['added_by']; ?>
+                            	<?php echo stripslashes( $entry_data['added_by'] ); ?>
                             
-							<?php else : ?>
-								
-								<?php if( ! empty( $entry_data['djnotes'] ) ) : ?>
+							<?php elseif( ! empty( $entry_data['djnotes'] ) ) : ?>
 									
-									<?php echo stripslashes( $entry_data['djnotes'] ); ?>
+								<?php echo stripslashes( $entry_data['djnotes'] ); ?>
                                 
-								<?php else : ?>
+							<?php else : ?>
                                 	
-									<?php echo '&ndash;'; ?>
+								<?php echo '&ndash;'; ?>
 								
-								<?php endif; // endif( ! empty( $entry_data['djnotes'] ) ) ?>
-                            
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         

@@ -168,7 +168,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	
 	$contract_content = $contract_content . $contract_signatory_content;
 	
-	// The signed contract post data
+	// Filter the signed contract post data
 	$signed_contract = apply_filters( 'mdjm_signed_contract_data',
 		array(
 			'post_title'		=> 'Event Contract: ' . mdjm_get_option( 'event_prefix' ) . $event->ID,
@@ -204,6 +204,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		update_post_meta( $event->ID, $key, $value );
 	}
 	
+	// Update the event status
 	mdjm_update_event_status(
 		$event->ID,
 		'mdjm-approved',

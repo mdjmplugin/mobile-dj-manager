@@ -357,7 +357,7 @@ function mdjm_messages( $key )	{
 			'missing_event'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	  => __( "We seem to be missing the event details.", 'mobile-dj-manager' )
+				'message'	  => __( 'We seem to be missing the event details.', 'mobile-dj-manager' )
 			),
 			'password_error'   => array(
 				'class'		=> 'error',

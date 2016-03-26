@@ -75,7 +75,7 @@ function mdjm_add_playlist_entry_action( $data )	{
 		$message = 'nonce_fail';
 	}
 	
-	elseif( ! isset( $data[ 'mdjm_playlist_song' ], $data[ 'mdjm_playlist_artist' ] ) )	{
+	elseif( ! isset( $data[ 'entry_song' ], $data[ 'entry_artist' ] ) )	{
 		$message = 'playlist_data_missing';
 	}
 	
@@ -148,7 +148,7 @@ function mdjm_remove_playlist_entry_action( $data )	{
 		add_query_arg( 
 			array(
 				'event_id'	  => $data['event_id'],
-				'mdjm-message'  => $message
+				'mdjm_message'  => $message
 			),
 			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) )
 		)
