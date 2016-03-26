@@ -173,7 +173,7 @@ class MDJM_Emails {
 	public function get_templates() {
 		$template_posts = get_posts(
 			array(
-				'post_type'        => $post_type,
+				'post_type'        => 'email_template',
 				'post_status'      => 'publish',
 				'posts_per_page'   => -1,
 				'orderby'          => 'post_title',
