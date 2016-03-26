@@ -178,8 +178,7 @@ function mdjm_shortcode_contract( $atts )	{
 				// Do not replace tags in a signed contract
 				if( $status == 'signed' )	{
 					$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
-				}
-				else	{
+				} else	{
 					$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
 				}
 				ob_get_clean();

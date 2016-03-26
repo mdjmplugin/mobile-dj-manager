@@ -480,12 +480,12 @@ function mdjm_setup_content_tags() {
 		array(
 			'tag'         => 'playlist_close',
 			'description' => __( 'The number of days before the event that the playlist closes', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_payment_url'
+			'function'    => 'mdjm_content_tag_playlist_close'
 		),
 		array(
 			'tag'         => 'playlist_url',
 			'description' => __( 'The URL to your event playlist page for clients', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_payment_url'
+			'function'    => 'mdjm_content_tag_playlist_url'
 		),
 		array(
 			'tag'         => 'quotes_url',

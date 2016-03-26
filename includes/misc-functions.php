@@ -254,7 +254,15 @@ function mdjm_print_notices()	{
 		return;
 	}
 	
-	echo mdjm_display_notice( $_GET['mdjm_message'] );
+	if ( isset( $_GET['event_id'] ) )	{
+		
+		$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+		
+		echo mdjm_do_content_tags( mdjm_display_notice( $_GET['mdjm_message'] ), $mdjm_event->ID, $mdjm_event->client );
+	
+	} else	{
+		echo mdjm_display_notice( $_GET['mdjm_message'] );
+	}
 } // mdjm_print_notices
 add_action( 'mdjm_print_notices', 'mdjm_print_notices' );
 

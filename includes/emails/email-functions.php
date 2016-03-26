@@ -45,8 +45,9 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 
-	$headers = apply_filters( 'mdjm_booking_conf_headers', $emails->get_headers(), $event );
+	add_filter( 'mdjm_email_headers', 'mdjm_set_booking_conf_headers' );
 	$emails->__set( 'headers', $headers );
+	remove_filter( 'mdjm_email_headers', 'mdjm_set_booking_conf_headers' );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
 	
@@ -164,17 +165,19 @@ function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments,
 			'post_title'		=> $subject,
 			'post_content'		=> $message,
 			'post_status'		=> 'ready to send',
-			'post_author'		=> ( get_current_user_id() ) ? get_current_user_id() : 1,
+			'post_author'		=> ! empty( $from ) ? $from : 1,
 			'post_type'			=> 'mdjm_communication',
 			'ping_status'		=> false,
 			'comment_status'	=> 'closed'
 		)
 	);
 	
+	$recipient = get_user_by( 'email', $to );
+	
 	$meta = apply_filters( 'mdjm_email_tracking_post_meta',
 		array(
 			'date_sent'	=> current_time( 'timestamp' ),
-			'recipient'	=> $to,
+			'recipient'	=> ! empty( $recipient ) ? $recipient->ID : '',
 			'source'	=> $source,
 			'event'		=> $mdjm_email->event_id
 		)

@@ -32,6 +32,13 @@ class MDJM_Emails {
 	 * @since	1.3
 	 */
 	private $from_name;
+	
+	/**
+	 * Holds the from address
+	 *
+	 * @since	1.3
+	 */
+	private $from_email;
 
 	/**
 	 * Holds the email content type
@@ -150,8 +157,8 @@ class MDJM_Emails {
 	 */
 	public function get_headers() {
 		if ( ! $this->headers ) {
-			$this->headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
-			$this->headers .= "Reply-To: {$this->get_from_address()}\r\n";
+			$this->headers  = "From: {$this->from_name()} <{$this->from_address()}>\r\n";
+			$this->headers .= "Reply-To: {$this->from_address()}\r\n";
 			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 		}
 
@@ -254,11 +261,7 @@ class MDJM_Emails {
 		 * @since	1.3
 		 */
 		do_action( 'mdjm_email_send_after', $this );
-		
-		/**if( $sent && true === $this->track )	{
-			$this->log_email( $message, $attachments, $this );
-		}*/
-		
+				
 		return $sent;
 	} // send
 
