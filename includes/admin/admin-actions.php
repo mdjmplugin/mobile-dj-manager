@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_process_actions() {
 	if ( isset( $_POST['mdjm-action'] ) ) {
-		do_action( 'mdjm_' . $_POST['edd-action'], $_POST );
+		do_action( 'mdjm_' . $_POST['mdjm-action'], $_POST );
 	}
 
 	if ( isset( $_GET['mdjm-action'] ) ) {
