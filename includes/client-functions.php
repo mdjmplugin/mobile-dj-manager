@@ -74,7 +74,7 @@ function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
  * @return	$arr	$employees	or false if no employees for the specified roles
  */
 function mdjm_get_client_id( $event_id )	{
-	return get_post_meta( $event_id, '_mdjm_event_client', true );
+	return mdjm_get_event_client_id( $event_id );
 } // mdjm_get_client_id
 
 /**
@@ -171,6 +171,29 @@ function mdjm_get_client_lastname( $user_id )	{
 	
 	return apply_filters( 'mdjm_get_client_lastname', $last_name, $user_id );
 } // mdjm_get_client_lastname
+
+/**
+ * Retrieve a clients display name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The display name of the client.
+ */
+function mdjm_get_client_display_name( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->display_name ) )	{
+		$display_name = $client->display_name;
+	} else	{
+		$display_name = __( 'Display name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_display_name', $display_name, $user_id );
+} // mdjm_get_client_display_name
 
 /**
  * Retrieve a clients email address.

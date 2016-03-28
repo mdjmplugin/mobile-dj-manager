@@ -261,6 +261,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/equipment/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' );
 				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/playlist/playlist.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/formatting/mdjm-formatting.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );

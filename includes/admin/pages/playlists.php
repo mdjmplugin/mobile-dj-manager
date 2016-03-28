@@ -1,29 +1,25 @@
 <?php
-	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-	}
 
 /**
-* * * * * * * * * * * * * * * MDJM * * * * * * * * * * * * * * *
-* events.php
-*
-* Displays table of events & enables adding new / editing existing
-*
-* Calls: class-mdjm-event-table.php
-*
-* @since 1.0
-*
-*/
-
-/**
- * Display playlist entries for event within the Admin UI
- * 
- * Calls: class-wp-list-table.php; class-wp-list-table.php
+ * Displays the playlist page within the admin UI
  *
- * @since 1.0
-*/	
-	function f_mdjm_render_playlist_table()	{
+ * @package		MDJM
+ * @subpackage	Events/Playlists
+ * @since		1.3
+ */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Display the playlist entries for the event.
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+	function mdjm_show_event_playlist_table()	{
 		global $mdjm;
 		
 		if( empty( $_GET['event_id'] ) )
@@ -39,7 +35,7 @@
 		}
 	
 		if( !class_exists( 'MDJM_PlayList_Table' ) ) {
-			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-playlist-table.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/admin/class-playlist-table.php' );
 		}
 		
 		$playlist_table = new MDJM_PlayList_Table();
@@ -63,7 +59,7 @@
         <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back' ); ?>"><?php _e( 'Back' ); ?></a>
         </div>
         <?php 
-	} // f_mdjm_render_playlist_table
+	} // mdjm_show_event_playlist_table
 
 /**
  * Show printable playlist
@@ -71,7 +67,7 @@
  *
  * @since 1.0
 */
-	function f_mdjm_print_playlist( $post_data )	{
+	function mdjm_print_playlist( $post_data )	{
 		global $wpdb;
 		
 		if( empty( $post_data['event_id'] ) )
@@ -205,7 +201,7 @@
         <p style="text-align: center" class="description">Powered by <a style="color:#F90" href="<?php echo mdjm_get_admin_page( 'mydjplanner' ); ?> 
 					" target="_blank"><?php echo MDJM_NAME; ?></a>, version <?php echo MDJM_VERSION_NUM; ?></p>
         <?php
-	} // f_mdjm_print_playlist
+	} // mdjm_print_playlist
 		
 	
 /**
@@ -214,9 +210,11 @@
  *
  * @since 1.0
 */
-	if( isset( $_POST['print_pl'] ) && $_POST['print_pl'] == 'Print this List' )
-		f_mdjm_print_playlist( $_POST );
+	if( isset( $_POST['print_pl'] ) && $_POST['print_pl'] == 'Print this List' )	{
+		mdjm_print_playlist( $_POST );
+	}
 
-	if( empty( $_POST['print_pl'] ) || $_POST['print_pl'] != 'Print this List' )
-		f_mdjm_render_playlist_table();	
+	if( empty( $_POST['print_pl'] ) || $_POST['print_pl'] != 'Print this List' )	{
+		mdjm_show_event_playlist_table();
+	}
 ?> 

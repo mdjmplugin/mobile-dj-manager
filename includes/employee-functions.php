@@ -274,7 +274,7 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
  * @return		int|bool				User ID of the primary employee, or false if not set.
  */
 function mdjm_get_event_primary_employee( $event_id )	{
-	return get_post_meta( $event_id, '_mdjm_event_dj', true );
+	return mdjm_get_event_primary_employee_id( $event_id );
 } // mdjm_get_event_primary_employee
 
 /**
@@ -289,6 +289,98 @@ function mdjm_get_event_primary_employee( $event_id )	{
 function mdjm_get_event_employees( $event_id )	{
 	return get_post_meta( $event_id, '_mdjm_event_employees', true );
 } // mdjm_get_event_employees
+
+/**
+ * Retrieve an employees first name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The first name of the employee.
+ */
+function mdjm_get_employee_firstname( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	
+	if( $employee && ! empty( $employee->first_name ) )	{
+		$first_name = $employee->first_name;
+	} else	{
+		$first_name = __( 'First name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_firstname', $first_name, $user_id );
+} // mdjm_get_employee_firstname
+
+/**
+ * Retrieve an employees last name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The last name of the employee.
+ */
+function mdjm_get_employee_lastname( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	
+	if( $employee && ! empty( $employee->last_name ) )	{
+		$last_name = $employee->last_name;
+	} else	{
+		$last_name = __( 'Last name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_lastname', $last_name, $user_id );
+} // mdjm_get_employee_lastname
+
+/**
+ * Retrieve an employees display name.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The display name of the employee.
+ */
+function mdjm_get_employee_display_name( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	
+	if( $employee && ! empty( $employee->display_name ) )	{
+		$display_name = $employee->display_name;
+	} else	{
+		$display_name = __( 'Display name not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_display_name', $display_name, $user_id );
+} // mdjm_get_employee_display_name
+
+/**
+ * Retrieve an employees email address.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The email address of the employee.
+ */
+function mdjm_get_employee_email( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	
+	if( $employee && ! empty( $employee->user_email ) )	{
+		$email = $employee->user_email;
+	} else	{
+		$email = __( 'Email address not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_email', $email, $user_id );
+} // mdjm_get_employee_email
 
 /**
  * Generate a list of all event employees and output as a HTML table.

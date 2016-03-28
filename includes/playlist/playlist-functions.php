@@ -44,18 +44,24 @@ function mdjm_get_playlist_entry( $entry_id = 0 ) {
  * @param	int		$entry_id	Entry ID
  * @return	obj		
  */
-function mdjm_get_playlist_entries( $event_id )	{
-	$entries = get_posts(
-		apply_filters( 
-			'mdjm_get_playlist_entries',
-			array(
-				'post_type'			=> 'mdjm-playlist',
-				'posts_per_page' 	=> -1,
-				'post_status'		=> 'publish',
-				'post_parent'		=> $event_id
-			)
-		)
+function mdjm_get_playlist_entries( $event_id, $args=array() )	{
+	
+	$defaults = array(
+		'post_type'			=> 'mdjm-playlist',
+		'posts_per_page' 	=> -1,
+		'post_status'		=> 'publish',
+		'post_parent'		=> $event_id,
+		'orderby'			=> 'post_date',
+		'order'				=> 'ASC',
+		'meta_query'		=> array()
 	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$entries = get_posts( $args );
+	
+	return apply_filters( 'mdjm_get_playlist_entries', $entries, $event_id );
+	
 } // mdjm_get_playlist_entries
 
 /**
@@ -151,8 +157,6 @@ function mdjm_remove_stored_playlist_entry( $entry_id )	{
 	else	{
 		$entry = false;
 	}
-	// Process actions after removing song.
-	do_action( 'mdjm_delete_playlist_entry_after', $entry_id, $entry );
 	
 	return $entry;
 } // mdjm_remove_stored_playlist_entry
@@ -255,11 +259,18 @@ function mdjm_set_playlist_entry_category( $event_id, $term_id )	{
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
+ * @param	arr		$args		See codex get_terms
  * @return	obj		$playlist	Array of all playlist entries.
  */
-function mdjm_get_playlist_by_category( $event_id )	{
+function mdjm_get_playlist_by_category( $event_id, $args=array() )	{
 	
-	$terms    = mdjm_get_event_playlist_categories( $event_id );
+	$defaults = array(
+		'orderby'		=> 'name',
+		'order'			=> 'ASC',
+		'hide_empty'	=> false
+	);
+	
+	$terms    = mdjm_get_event_playlist_categories( $event_id, $args );
 	$playlist = array();
 	
 	if( ! $terms )	{
@@ -303,10 +314,11 @@ function mdjm_get_playlist_by_category( $event_id )	{
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
+ * @param	arr		$args		See codex get_terms
  * @return	arr		Array of all unique playlist categories.
  */
-function mdjm_get_event_playlist_categories( $event_id )	{
-	$terms		= mdjm_get_playlist_categories();
+function mdjm_get_event_playlist_categories( $event_id, $args=array() )	{
+	$terms		= mdjm_get_playlist_categories( $args );
 	$categories = array();
 	
 	if( ! $terms )	{
@@ -464,11 +476,12 @@ function mdjm_guest_playlist_url( $event_id )	{
  * Retrieve all playlist categories.
  *
  * @since	1.3
- * @param
+ * @param	arr			$args		See codex get_terms
  * @return	obj|bool	Array of categories, or false if none.
  */
-function mdjm_get_playlist_categories()	{
-	$terms = get_terms( 'playlist-category' );
+function mdjm_get_playlist_categories( $args=array() )	{
+		
+	$terms = get_terms( 'playlist-category', $args );
 	
 	if ( ! empty( $terms ) && ! is_wp_error( $terms ) )	{
 		return $terms;
@@ -498,7 +511,7 @@ function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 		'child_of'           => 0,
 		'exclude'            => '',
 		'echo'               => 0,
-		'selected'           => 0,
+		'selected'           => mdjm_get_option( 'playlist_default_cat', 0 ),
 		'hierarchical'       => 0, 
 		'name'               => 'entry_category',
 		'id'                 => 'entry_category',

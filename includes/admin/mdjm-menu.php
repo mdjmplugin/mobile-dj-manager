@@ -521,7 +521,18 @@
 						'title'  => __( 'Event Types', 'mobile-dj-manager' ),
 						'href'   => admin_url( 'edit-tags.php?taxonomy=event-types&post_type=' . MDJM_EVENT_POSTS ),
 						'meta'   => array(
-							'title' => __( 'View / Edit Event Types', 'mobile-dj-manager' ),
+							'title' => __( 'Manage Event Types', 'mobile-dj-manager' ),
+						),
+					) );
+					
+					// Playlist Categories
+					$admin_bar->add_menu( array(
+						'id'     => 'mdjm-playlist-cats',
+						'parent' => 'mdjm-events',
+						'title'  => __( 'Playlist Categories', 'mobile-dj-manager' ),
+						'href'   => admin_url( 'edit-tags.php?taxonomy=playlist-category&post_type=mdjm-playlist' ),
+						'meta'   => array(
+							'title' => __( 'Manage Playlist Categories', 'mobile-dj-manager' ),
 						),
 					) );
 				}
@@ -745,7 +756,7 @@
 			 *
 			 */
 			public function mdjm_playlists_page()	{
-				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/playlists.php' );
+				mdjm_display_event_playlist_page();
 			} // mdjm_playlists_page
 			
 			/*

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @global	$mdjm_options	Array of all the MDJM Options
  * @return void
  */
-function mdjm_admin_messages() {
+function mdjm_admin_notices() {
 	global $mdjm_options;
 
 	// Unattended events
@@ -36,10 +36,55 @@ function mdjm_admin_messages() {
 					'<a href="' . mdjm_get_admin_page( 'events', 'str' ) . '&post_status=mdjm-unattended">',
 					'</a>'
 				),
-				'update-nag'
+				'updated'
 			);
+	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'song_removed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-removed-song',
+			__( 'The selected songs were removed.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'song_remove_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-remove-faled',
+			__( 'The songs count not be removed.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'security_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-security-failed',
+			__( 'Security verification failed. Action not completed.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'playlist_emailed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-playlist-emailed',
+			__( 'The playlist was emailed successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'playlist_email_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-playlist-email-failed',
+			__( 'The playlist could not be emailed.', 'mobile-dj-manager' ),
+			'error'
+		);
 	}
 
 	settings_errors( 'mdjm-notices' );
 } // mdjm_admin_messages
-add_action( 'admin_notices', 'mdjm_admin_messages' );
+add_action( 'admin_notices', 'mdjm_admin_notices' );

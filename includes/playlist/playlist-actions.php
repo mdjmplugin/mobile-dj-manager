@@ -212,3 +212,57 @@ function mdjm_add_guest_playlist_entry_action( $data )	{
 	die();
 } // mdjm_add_guest_playlist_entry
 add_action( 'mdjm_add_guest_playlist_entry', 'mdjm_add_guest_playlist_entry_action' );
+
+/**
+ * Print the playlist.
+ *
+ * @since	1.3
+ * @param	arr		$data	Form data from the $_POST super global.
+ * @return	void
+ */
+function mdjm_print_playlist_action( $data )	{
+	if( ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'print_playlist' ) )	{
+		$message = 'nonce_fail';
+	}
+	
+	elseif( ! isset( $data[ 'event_id' ] ) )	{
+		$message = 'playlist_data_missing';
+	}
+	
+	else	{
+		// Setup the playlist entry details
+		$posted = array();
+	
+		foreach ( $data as $key => $value ) {
+	
+			if( $key != 'mdjm_nonce' && $key != 'mdjm_action' && $key != 'mdjm_redirect' && $key != 'entry_addnew' ) {
+				if( is_string( $value ) || is_int( $value ) )	{
+					$posted[ $key ] = strip_tags( addslashes( $value ) );
+	
+				}
+				elseif( is_array( $value ) )	{
+					$posted[ $key ] = array_map( 'absint', $value );
+				}
+			}
+		}
+		
+		if( mdjm_store_playlist_entry( $posted ) )	{
+			$message = 'playlist_added';
+		}
+		else	{
+			$message = 'playlist_not_added';
+		}
+	}
+	
+	wp_redirect(
+		add_query_arg(
+			array(
+				'event_id'	 => $data['entry_event'],
+				'mdjm_message' => $message
+			),
+			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) )
+		)
+	);
+	die();
+} // mdjm_add_playlist_entry
+add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry_action' );

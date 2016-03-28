@@ -10,6 +10,72 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
+/**
+ * Sends an email with generic content.
+ *
+ * @since	1.3
+ * @param	arr		$args		Array of arguments for the email. See $defaults.
+ * @return	bool	True if the email is sent, or false.
+ */
+function mdjm_send_email_content( $args )	{
+	global $current_user;
+	
+	$defaults = array(
+		'to_email'		=> $current_user->user_email,
+		'from_name'		=> mdjm_get_option( 'company_name' ),
+		'from_email'	=> mdjm_get_option( 'system_email' ),
+		'event_id'		=> 0,
+		'client_id'		=> 0,
+		'subject'		=> sprintf( __( 'Email from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ),
+		'attachments'	=> array(),
+		'message'		=> '',
+		'track'			=> false
+		
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$event_id = ! empty( $args['event_id'] ) ? $args['event_id'] : 0;
+
+	$from_name    = $args['from_name'];
+	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'generic', $event_id );
+
+	$from_email   = $args['from_email'];
+	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'generic', $event_id );
+
+	$client		  = ! empty( $args['client_id'] ) ? get_userdata( $args['client_id'] ) : 0;
+	$to_email     = $args['to_email'];
+
+	$subject      = $args['subject'];
+	$subject      = apply_filters( 'mdjm_generic_email_subject', wp_strip_all_tags( $subject ) );
+	$subject      = mdjm_do_content_tags( $subject, $event_id, $args['client_id'] );
+
+	$attachments  = apply_filters( 'mdjm_generic_email_attachments', array(), $event_id );
+	
+	$message	  = $args['message'];
+	$message      = mdjm_do_content_tags( $message, $event_id, $args['client_id'] );
+
+	$emails = MDJM()->emails;
+
+	$emails->__set( 'event_id', $event_id );
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_address', $from_email );
+
+	$headers = apply_filters( 'mdjm_generic_headers', $emails->get_headers(), $event_id, $args['client_id'] );
+	$emails->__set( 'headers', $headers );
+
+	$emails->__set( 'track', $args['track'] );
+
+	$sent = $emails->send( $to_email, $subject, $message, $attachments, '' );
+	
+	// Send a copy of this email to the primary employee
+	//if ( mdjm_get_option( 'booking_conf_to_dj', false ) )	{
+		//do_action( 'mdjm_employee_booking_conf_notice', $event_id );
+	//}
+	
+	return $sent;
+} // mdjm_send_email_content
 	
 /**
  * Email the booking confirmation to the client from a customisable email template.
@@ -43,8 +109,9 @@ function mdjm_email_booking_confirmation( $event_id )	{
 
 	$emails->__set( 'event_id', $event->ID );
 	$emails->__set( 'from_name', $from_name );
-	$emails->__set( 'from_email', $from_email );
-
+	$emails->__set( 'from_address', $from_email );
+	
+	$headers = apply_filters( 'mdjm_booking_conf_headers', $emails->get_headers(), $event_id, $event->client );
 	$emails->__set( 'headers', $headers );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
@@ -77,7 +144,7 @@ function mdjm_email_set_subject( $template_id, $email_type = false )	{
  * Set the email from name.
  *
  * @since	1.3
- * @param	str		$event_type		The type of email we're sending.
+ * @param	str		$email_type		The type of email we're sending.
  * @param	obj		$event			MDJM_Event class object
  * @return	str		The from name to use in the email
  */

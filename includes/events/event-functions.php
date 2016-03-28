@@ -177,6 +177,21 @@ function mdjm_get_event_type( $event_id='' )	{
 } // mdjm_get_event_type
 
 /**
+ * Returns the contract ID for the event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The contract ID for the event.
+ */
+function mdjm_get_event_contract_id( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	return mdjm_get_option( 'event_prefix', '' ) . $event_id;
+} // mdjm_get_event_contract_id
+
+/**
  * Returns the date for an event in short format.
  *
  * @since	1.3
@@ -191,6 +206,22 @@ function mdjm_get_event_date( $event_id )	{
 	$event = new MDJM_Event( $event_id );
 	return mdjm_format_short_date( $event->get_date() );
 } // mdjm_get_event_date
+
+/**
+ * Returns the date for an event in long format.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The date of the event.
+ */
+function mdjm_get_event_long_date( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_long_date();
+} // mdjm_get_event_long_date
 
 /**
  * Returns the price for an event.
@@ -303,6 +334,22 @@ function mdjm_get_event_client_id( $event_id )	{
 	$event = new MDJM_Event( $event_id );
 	return $event->get_client();
 } // mdjm_get_event_client_id
+
+/**
+ * Returns the primary employee ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int					The user ID of the events primary employee.
+ */
+function mdjm_get_event_primary_employee_id( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_employee();
+} // mdjm_get_event_primary_employee_id
 	
 /**
  * Returns the URL for an event.
