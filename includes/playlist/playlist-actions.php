@@ -18,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) )
  * @param
  * @return	void
  */
-function mdjm_goto_playlist_action()	{
-	if( ! isset( $_GET['event_id'] ) )	{
+function mdjm_goto_playlist_action( $data )	{
+	if( ! isset( $data['event_id'] ) )	{
 		return;
 	}
 	
-	if( ! mdjm_event_exists( $_GET['event_id'] ) )	{
+	if( ! mdjm_event_exists( $data['event_id'] ) )	{
 		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
 	}
 	
 	wp_redirect( 
-		add_query_arg( 'event_id', $_GET['event_id'], 
+		add_query_arg( 'event_id', $data['event_id'], 
 		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 	);
 	die();
@@ -42,19 +42,19 @@ add_action( 'mdjm_goto_playlist', 'mdjm_goto_playlist_action' );
  * @param
  * @return	void
  */
-function mdjm_goto_guest_playlist_action()	{
-	if( ! isset( $_GET['playlist'] ) )	{
+function mdjm_goto_guest_playlist_action( $data )	{
+	if( ! isset( $data['playlist'] ) )	{
 		return;
 	}
 	
-	$event = mdjm_get_event_by_playlist_code( $_GET['playlist'] );
+	$event = mdjm_get_event_by_playlist_code( $data['playlist'] );
 	
 	if( ! $event )	{
 		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
 	}
 	
 	wp_redirect( 
-		add_query_arg( 'guest_playlist', $_GET['playlist'], 
+		add_query_arg( 'guest_playlist', $data['playlist'], 
 		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 	);
 	die();
@@ -201,15 +201,10 @@ function mdjm_add_guest_playlist_entry_action( $data )	{
 		}
 	}
 	
-	wp_redirect(
-		add_query_arg(
-			array(
-				'mdjm_message'	=> $message
-			),
-			 mdjm_guest_playlist_url( $data['entry_event'] )
-		)
-	);
+	wp_redirect( add_query_arg( 'mdjm_message', $message, mdjm_guest_playlist_url( $data['entry_event'] ) )	);
+	
 	die();
+	
 } // mdjm_add_guest_playlist_entry
 add_action( 'mdjm_add_guest_playlist_entry', 'mdjm_add_guest_playlist_entry_action' );
 

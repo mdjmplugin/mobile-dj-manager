@@ -45,68 +45,7 @@
 					$this->display_events();
 				
 			} // __construct
-			
-			/*
-			 * Return the possible actions for the given event via a drop down menu
-			 *
-			 * @param	int		$id			The event id is required or $post global var must be set
-			 *			str		$status		The event status is required or $post global var must be set					
-			 *
-			 */
-			public function event_actions_dropdown( $id='', $status='' )	{
-				global $post, $mdjm;
-				
-				if( empty( $post ) && empty( $id ) )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
-				}
-				
-				if( empty( $post ) && empty( $status ) )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
-				}
-				
-				$event_id = !empty( $post ) ? $post->ID : $id;
-				$event_status = !empty( $post ) ? $post->post_status : $status;
-				
-				// The link to view event details is always available
-				$selections['view_event'] = __( 'View Details', 'mobile-dj-manager' );
-				
-				switch( $event_status )	{
-					case 'mdjm-unattended':
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-enquiry':
-						$selections['accept_enquiry'] = __( 'Book Event', 'mobile-dj-manager' );
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-contract':
-						$selections['sign_contract'] = __( 'Sign Contract', 'mobile-dj-manager' );
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-approved':
-						// Payment Option
-						$balance_status = get_post_meta( $event_id, '_mdjm_event_balance_status', true );
-						$deposit_status = get_post_meta( $event_id, '_mdjm_event_deposit_status', true );
 						
-						if( $deposit_status != 'Paid' || $balance_status != 'Paid' )
-							$selections['make_payment'] = __( 'Make a Payment', 'mobile-dj-manager' );
-					break;
-				} // End switch
-				
-				$actions = '<select name="event_action_' . $event_id . '" id="event_action_' . $event_id . '">' . "\r\n" . 
-						   '<option value="">--- ' . __( 'Select Action', 'mobile-dj-manager' ) . ' ---</option>' . "\r\n";
-				
-				foreach( $selections as $key => $value )	{
-					$actions .= '<option value="' . $key . '">' . $value . '</option>' . "\r\n";	
-				}
-				
-				$actions .= '</select>' . "\r\n";
-				
-				return $actions;
-				
-			} // event_actions_dropdown
-			
 			/*
 			 * Display the action buttons for the given event.
 			 * The $actions array is ordered by the array key which is int

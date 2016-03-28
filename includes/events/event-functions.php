@@ -436,7 +436,7 @@ function mdjm_add_event_meta( $event_id, $data )	{
 		// For backwards comaptibility
 		update_post_meta( $event_id, $key, $value );
 		
-		$meta[ $key ] = $value;
+		$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 		
 	}
 	
@@ -461,12 +461,42 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args=ar
 	
 	$func = 'mdjm_set_event_status_' . str_replace( '-', '_', $new_status );
 	
-	$func( $event_id, $old_status, $args );
+	$result = $func( $event_id, $old_status, $args );
 	
 	do_action( "mdjm_post_update_event_status_{$new_status}", $event_id, $old_status, $args );
 	
 	do_action( 'mdjm_post_event_status_change', $event_id, $new_status, $old_status, $args );
+	
+	return $result;
 } // mdjm_update_event_status
+
+/**
+ * Update event status to mdjm-contract.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	void
+ */
+function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args )	{
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	$update = wp_update_post(
+		array( 
+			'ID'			=> $event_id,
+			'post_status'	=> 'mdjm-contract'
+		)
+	);
+	
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	
+	mdjm_add_event_meta( $event_id, $args['meta'] );
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	return $update;
+} // mdjm_set_event_status_mdjm_contract
 
 /**
  * Update event status to mdjm-approved.
@@ -475,12 +505,12 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args=ar
  * @param	int		$event_id	The event ID.
  * @param	str		$old_status	The old event status.
  * @param	arr		$args		Array of data required for transition.
- * @return	str		The length of the event.
+ * @return	void
  */
 function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
-	wp_update_post(
+	$update = wp_update_post(
 		array( 
 			'ID'			=> $event_id,
 			'post_status'	=> 'mdjm-approved'
@@ -494,4 +524,7 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
 	);
 	
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	return $update;
 } // mdjm_set_event_status_mdjm_approved
+

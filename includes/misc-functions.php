@@ -279,40 +279,55 @@ function mdjm_messages( $key )	{
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
+			'missing_event'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	=> __( 'We could not locate the details of your event.', 'mobile-dj-manager' )
+			),
+			'enquiry_accepted'	=> array(
+				'class'		=> 'success',
+				'title'		=> __( 'Thanks', 'mobile-dj-manager' ),
+				'message'	=> __( 'You have accepted our quote and details of your contract are now on their way to you via email.', 'mobile-dj-manager' )
+			),
+			'enquiry_accept_fail'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
+				'message'	=> __( 'We could not process your request.', 'mobile-dj-manager' )
+			),
 			'contract_signed'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
+				'message'	=> __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
 			),
 			'contract_not_signed'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Unable to sign event contract.', 'mobile-dj-manager' )
+				'message'	=> __( 'Unable to sign event contract.', 'mobile-dj-manager' )
 			),
 			'contract_data_missing'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	  => __( 'Please ensure all fields have been completed, you have accepted the terms, confirmed your identity and re-entered your password.', 'mobile-dj-manager' )
+				'message'	=> __( 'Please ensure all fields have been completed, you have accepted the terms, confirmed your identity and re-entered your password.', 'mobile-dj-manager' )
 			),
 			'playlist_added'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'Playlist entry added.', 'mobile-dj-manager' )
+				'message'	=> __( 'Playlist entry added.', 'mobile-dj-manager' )
 			),
 			'playlist_not_added'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Unable to add playlist entry.', 'mobile-dj-manager' )
 			),
 			'playlist_data_missing'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
 			),
 			'playlist_removed'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'Playlist entry removed.', 'mobile-dj-manager' )
+				'message'	=> __( 'Playlist entry removed.', 'mobile-dj-manager' )
 			),
 			'playlist_not_removed'	=> array(
 				'class'		=> 'error',
@@ -322,52 +337,52 @@ function mdjm_messages( $key )	{
 			'playlist_not_selected'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'No playlist entry selected.', 'mobile-dj-manager' )
+				'message'	=> __( 'No playlist entry selected.', 'mobile-dj-manager' )
 			),
 			'playlist_guest_added'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	  => __( 'Playlist suggestion submitted.', 'mobile-dj-manager' )
+				'message'	=> __( 'Playlist suggestion submitted.', 'mobile-dj-manager' )
 			),
 			'playlist_guest_error'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Unable to add playlist suggestion.', 'mobile-dj-manager' )
+				'message'	=> __( 'Unable to add playlist suggestion.', 'mobile-dj-manager' )
 			),
 			'playlist_guest_data_missing'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Data missing', 'mobile-dj-manager' ),
-				'message'	  => __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
+				'message'	=> __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
 			),
 			'available'	=> array(
 				'class'		=> 'mdjm_available',
 				'title'		=> __( 'Good News', 'mobile-dj-manager' ),
-				'message'	  => __( 'The date you selected is available.', 'mobile-dj-manager' )
+				'message'	=> __( 'The date you selected is available.', 'mobile-dj-manager' )
 			),
 			'not_available'	=> array(
 				'class'		=> 'mdjm_notavailable',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	  => __( "We're not available on the selected date.", 'mobile-dj-manager' )
+				'message'	=> __( "We're not available on the selected date.", 'mobile-dj-manager' )
 			),
 			'missing_date'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Ooops', 'mobile-dj-manager' ),
-				'message'	  => __( 'You forgot to enter a date.', 'mobile-dj-manager' )
+				'message'	=> __( 'You forgot to enter a date.', 'mobile-dj-manager' )
 			),
 			'missing_event'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	  => __( 'We seem to be missing the event details.', 'mobile-dj-manager' )
+				'message'	=> __( 'We seem to be missing the event details.', 'mobile-dj-manager' )
 			),
 			'password_error'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Password Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'An incorrect password was entered', 'mobile-dj-manager' )
+				'message'	=> __( 'An incorrect password was entered', 'mobile-dj-manager' )
 			),
 			'nonce_fail'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	  => __( 'Security verification failed.', 'mobile-dj-manager' )
+				'message'	=> __( 'Security verification failed.', 'mobile-dj-manager' )
 			)
 		)
 	);

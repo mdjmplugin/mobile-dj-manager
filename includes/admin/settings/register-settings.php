@@ -469,20 +469,6 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'small',
 						'std'		 => '5'
 					),
-					'playlist_cats'    => array(
-						'id'          => 'playlist_cats',
-						'name'        => __( 'Playlist Song Categories', 'mobile-dj-manager' ),
-						'desc'        => __( 'The options clients can select for when songs are to be played when adding to the playlist. One per line.', 'mobile-dj-manager' ),
-						'type'        => 'textarea',
-						'std'         => __( 'General', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'First Dance', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Second Dance', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Last Song', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Father & Bride', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Mother & Son', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'DO NOT PLAY', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Other', 'mobile-dj-manager' )
-					),
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
 						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
