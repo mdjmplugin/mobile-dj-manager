@@ -84,99 +84,10 @@ input.mdjm-form-error {
 }
 
 /** -- Event styling -- */
-.mdjm-event-heading	{
-	font-size: larger;
-	font-weight: bold;
-}
-.mdjm-event-label	{
-	font-style: italic;
-	text-decoration:underline;
-}
-.mdjm-edit	{
-	font-style: normal;
-	font-weight: normal;
-	font-size: 11px;
-}
+
+
 
 /* -- Home Page -- */
-
-	/* -- Updates -- */
-	#mdjm_event_updated	{
-		display: none;	
-	}
-	
-	/* -- Multi Event display table -- */
-	#mdjm-events-list	{
-		width: 100%;	
-	}
-	#mdjm-events-list td, #mdjm-events-list th	{
-		padding-top: 3px;
-		padding-right: 7px;
-		padding-bottom: 2px;
-		padding-left: 7px;
-	}
-	#mdjm-events-list th	{
-		text-align: left;
-		padding-top: 5px;
-		padding-bottom: 4px;
-		font-weight: bold;
-	}
-	
-	/* -- Single Event display table -- */
-	#mdjm-event-listing	{
-		border-collapse: collapse;
-		width: 100%;	
-	}
-	#mdjm-event-listing td, #mdjm-event-listing th	{
-		border: hidden;
-		padding-top: 3px;
-		padding-right: 7px;
-		padding-bottom: 2px;
-		padding-left: 7px;
-		vertical-align: top;
-	}
-	#mdjm-event-listing th	{
-		text-align: left;
-		padding-top: 5px;
-		padding-bottom: 4px;
-		font-weight: bold;
-	}
-	
-	/* -- Single Events Container -- */
-	#mdjm-event-container	{
-		width:100%;
-		margin:0 auto;
-		font-size: 12px;	
-	}
-	
-	#mdjm-event-table	{
-		float:left;
-		width:100%;	
-	}
-	
-	#mdjm-actions-table	{
-		float:left;
-		width:100%;	
-	}
-	#mdjm-event-actions	{
-		border-collapse: collapse;
-		width: 100%;	
-	}
-	#mdjm-event-actions td, #mdjm-event-actions th	{
-		border: hidden;
-		padding: 5px;
-		vertical-align: top;
-	}
-	#mdjm-event-actions th	{
-		text-align: left;
-		padding: 5px;
-		font-weight: normal;
-	}
-	#mdjm-event-actions button	{
-		font-size: 10px;
-		width: 15em;
-		height: 4em;
-	}
 /* -- Profile Page -- */
 	#mdjm-user-profile-container	{
 		width:100%;

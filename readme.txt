@@ -91,6 +91,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	<li>New: Settings API which developers can hook into</li>
 	<li>New: Added contextual help to setings and events page</li>
 	<li>New: Added Playlist Categories menu option to admin tool bar</li>
+	<li>New: Added `mdjm_event_action_buttons` filter to re-order event action buttons</li>
 	<li>Tweak: Custom post meta box functions re-written to enable cleaner hooks for developers</li>
 	<li>Tweak: Shortcodes have been re-written and cleaned up</li>
 	<li>Tweak: Main MDJM class is now a singleton class</li>

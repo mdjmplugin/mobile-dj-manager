@@ -30,7 +30,7 @@ global $mdjm_event, $mdjm_notice;
 	 */
 	?>
 	<div id="mdjm-singlevent-action-buttons">
-		<?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID ); ?>
+		<?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID, false ); ?>
         <?php $cells   = 3; // Number of cells ?>
         <?php $i       = 1; // Counter for the current cell ?>
         
@@ -43,7 +43,7 @@ global $mdjm_event, $mdjm_notice;
                     <tr>
                 <?php endif; ?><!-- endif( $i == 1 ) -->
                 
-                        <td><?php printf( '<a href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+                        <td style="text-align: center;"><?php printf( '<a class="mdjm-action-button mdjm-action-button-blue" href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
                         
                 <?php if( $i == $cells ) : ?>
                     </tr>
