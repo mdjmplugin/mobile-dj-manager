@@ -103,6 +103,7 @@ function mdjm_shortcode_home( $atts )	{
 			$client_events = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
 			
 			if( $client_events )	{
+				
 				$slug = 'single';
 				
 				if( count ( $client_events ) > 1 )	{

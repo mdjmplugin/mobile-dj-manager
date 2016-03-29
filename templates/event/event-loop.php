@@ -23,7 +23,7 @@ global $mdjm_event, $mdjm_notice;
 			</th>
             <th class="mdjm-event-heading right-align"><?php _e( 'ID:', 'mobile-dj-manager' ); ?> {contract_id}<br />
 				<?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}<br />
-				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), add_query_arg( 'event_id', $mdjm_event->ID, mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) ) ); ?></span>
+				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), '{event_url}' ); ?></span>
             </th>
 		</tr>
 		<tr>
@@ -46,8 +46,8 @@ global $mdjm_event, $mdjm_notice;
         <tr>
         	<td><span class="mdjm-event-label"><?php _e( 'Cost Summary', 'mobile-dj-manager' ); ?></span><br />
 				<?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?> {total_cost}<br />
-                <?php echo mdjm_get_option( 'deposit_label', __( 'Deposit', 'mobile-dj-manager' ) ) ?>: {deposit} ({deposit_status})<br />
-                <?php echo mdjm_get_option( 'balance_label', __( 'Balance Due', 'mobile-dj-manager' ) ) ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
+                <?php echo mdjm_get_deposit_label(); ?>: {deposit} ({deposit_status})<br />
+                <?php echo mdjm_get_balance_label(); ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
 			</td>
         </tr>
         

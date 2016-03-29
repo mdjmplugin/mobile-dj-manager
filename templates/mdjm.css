@@ -75,11 +75,9 @@ input.mdjm_form_error {
 	-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
 	-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
 	box-shadow: 0px 0px 0px 2px #9fb4f2;
-	background-color:#3d61bd;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	border: 1px solid #3b8dbd;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
 	display: inline-block;
 	cursor: pointer;
 	color: #ffffff;
@@ -95,6 +93,22 @@ input.mdjm_form_error {
 .mdjm-action-button:active {
 	position:relative;
 	top:1px;
+}
+.mdjm-action-button-blue	{
+	background-color: #3d61bd;
+	border: 1px solid #3b8dbd;
+}
+.mdjm-action-button-green	{
+	background-color: #287a3e;
+	border: 1px solid #18ab29;
+}
+.mdjm-action-button-red	{
+	background-color: #942911;
+	border: 1px solid #bc3315;
+}
+.mdjm-action-button-turquoise	{
+	background-color: #408c99;
+	border: 1px solid #29668f;
 }
 
 /* =Events Page

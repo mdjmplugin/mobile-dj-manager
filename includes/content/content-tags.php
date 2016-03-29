@@ -463,6 +463,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_type'
 		),
 		array(
+			'tag'         => 'event_url',
+			'description' => __( 'The URL of the event page', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_url'
+		),
+		array(
 			'tag'         => 'guest_playlist_url',
 			'description' => __( 'The URL to your event playlist page for guests', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_guest_playlist_url'
@@ -1477,6 +1482,23 @@ function mdjm_content_tag_event_type( $event_id='' )	{
 	
 	return mdjm_get_event_type( $event_id );
 } // mdjm_content_tag_event_type
+
+/**
+ * Content tag: event_url.
+ * The current event url.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The current event type label.
+ */
+function mdjm_content_tag_event_url( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_get_event_uri( $event_id );
+} // mdjm_content_tag_event_url
 
 /**
  * Content tag: guest_playlist_url.

@@ -16,13 +16,14 @@ global $mdjm_event, $mdjm_notice;
 ?>
 <?php do_action( 'mdjm_pre_event_detail', $mdjm_event->ID, $mdjm_event ); ?>
 <div id="post-<?php echo $mdjm_event->ID; ?>" class="mdjm-<?php echo $mdjm_event->post_status; ?>">
+	
 	<?php do_action( 'mdjm_print_notices' ); ?>
-
+    
 	<p><?php printf( __( 'Details of your event taking place on %s are shown below.', 'mobile-dj-manager' ),
 			'{event_date}' ); ?></p>
             
     <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ),
-			mdjm_get_formatted_url( mdjm_get_option( 'contact_page', '#' ), false ) ); ?></p>
+			'{contact_page}' ); ?></p>
                 
     <?php
 	/**
@@ -43,7 +44,7 @@ global $mdjm_event, $mdjm_notice;
                     <tr>
                 <?php endif; ?><!-- endif( $i == 1 ) -->
                 
-                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-blue" href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'green' ), $button['url'] ); ?></td>
                         
                 <?php if( $i == $cells ) : ?>
                     </tr>

@@ -721,6 +721,26 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Select to display event package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'        => 'checkbox'
+					),
+				),
+				'styles' => array(
+					'client_zone_styles'    => array(
+						'id'          => 'client_zone_styles',
+						'name'        => '<h3>' . __( 'Styling', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'action_button_colour'      => array(
+						'id'          => 'action_button_colour',
+						'name'        => __( 'Action Button Colour', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select your preferred colour for the event action buttons', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+							'blue'		=> 'Blue',
+							'green'		=> 'Green',
+							'red'		=> 'Red',
+							'turquoise'	=> 'Turquoise'
+						)
 					)
 				),
 				'pages' => array(
@@ -1231,6 +1251,7 @@ function mdjm_get_registered_settings_sections() {
 		) ),
 		'client_zone'     => apply_filters( 'mdjm_settings_sections_styles', array(
 			'main'               => __( 'Client Zone Settings', 'mobile-dj-manager' ),
+			'styles'             => __( 'Styles', 'mobile-dj-manager' ),
 			'pages'              => __( 'Pages', 'mobile-dj-manager' ),
 			'availability'       => __( 'Availability Checker', 'mobile-dj-manager' )
 		) ),
