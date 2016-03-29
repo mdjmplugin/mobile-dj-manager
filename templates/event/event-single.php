@@ -43,7 +43,7 @@ global $mdjm_event, $mdjm_notice;
                     <tr>
                 <?php endif; ?><!-- endif( $i == 1 ) -->
                 
-                        <td style="text-align: center;"><?php printf( '<a class="mdjm-action-button mdjm-action-button-blue" href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-blue" href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
                         
                 <?php if( $i == $cells ) : ?>
                     </tr>
