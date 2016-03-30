@@ -120,14 +120,14 @@
 				if( current_user_can( 'manage_options' ) )
 					do_action( 'mdjm_dcf_menu_items' );
 				
-				// DJ availability
+				// Employee Availability
 				$mdjm_availability_page = add_submenu_page(
 					'mdjm-dashboard',
-					sprintf( __( '%s  Availability', 'mobile-dj-manager' ), MDJM_DJ ),
-					sprintf( __( '%s  Availability', 'mobile-dj-manager' ), MDJM_DJ ),
+					__( 'Employee Availability', 'mobile-dj-manager' ),
+					__( 'Employee Availability', 'mobile-dj-manager' ),
 					'manage_mdjm',
 					'mdjm-availability',
-					array( &$this, 'mdjm_dj_availability_page' )
+					array( &$this, 'mdjm_employee_availability_page' )
 				);
 														
 				// Employees
@@ -319,11 +319,17 @@
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-settings-client-zone',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => sprintf( __( '%s Settings', 'mobile-dj-manager' ), MDJM_APP ),
-						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client-zone' ),
+						'title'	 => sprintf( 
+										__( '%s Settings', 'mobile-dj-manager' ), 
+										mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) )
+									),
+						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_zone' ),
 						'meta'	  => array(
-							'title' => sprintf( __( '%s Settings', 'mobile-dj-manager' ), MDJM_APP )
-						),
+							'title'	 => sprintf( 
+											__( '%s Settings', 'mobile-dj-manager' ), 
+											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) )
+										),
+						)
 					) );
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-settings-payments',
@@ -348,14 +354,14 @@
 						),
 					) );
 
-					/* -- DJ Availability -- */
+					/* -- Employee Availability -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-availability',
 						'parent'	=> 'mdjm',
-						'title'	 => sprintf( __(  '%s Availability', 'mobile-dj-manager' ), MDJM_DJ ),
+						'title'	 => __(  'Employee Availability', 'mobile-dj-manager' ),
 						'href'	  => admin_url( 'admin.php?page=mdjm-availability' ),
 						'meta'	  => array(
-							'title' => sprintf( __(  '%s Availability', 'mobile-dj-manager' ), MDJM_DJ ),
+							'title' => __(  'Employee Availability', 'mobile-dj-manager' ),
 						),
 					) );
 				}
@@ -707,12 +713,12 @@
 				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/comms.php' );
 			} // mdjm_comms_page
 			/*
-			 * mdjm_dj_availability_page
+			 * mdjm_employee_availability_page
 			 * The MDJM DJ Availability page
 			 */			
-			public function mdjm_dj_availability_page()	{				
+			public function mdjm_employee_availability_page()	{				
 				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
-			} // mdjm_dj_availability_page
+			} // mdjm_employee_availability_page
 			/*
 			 * mdjm_packages_page
 			 * The MDJM DJ Availability page

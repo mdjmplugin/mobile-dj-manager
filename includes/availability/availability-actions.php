@@ -19,15 +19,20 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_availability_check_action( $data )	{
-	if( ! isset( $data['mdjm_enquiry_date_widget'] ) )	{
+	
+	$widget = '';
+	
+	if( $data['mdjm_action'] == 'availability_check_widget' )	{
+		$widget = '_widget';
+	}
+	
+	if( ! isset( $data[ 'mdjm_enquiry_date' . $widget ] ) )	{
 		$message = 'missing_date';
 	}
 	
 	else	{
-		$result = mdjm_do_availability_check( $data['mdjm_enquiry_date_widget'] );
-		
-		wp_die( var_dump( $result ) );
-		
+		$result = mdjm_do_availability_check( $data[ 'mdjm_enquiry_date' . $widget ] );
+				
 		if( !empty( $result['available'] ) )	{
 			$message = 'available';
 		}

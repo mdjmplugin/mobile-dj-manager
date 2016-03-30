@@ -22,15 +22,12 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_get_packages( $args=array( '' ) )	{
 	// The default args can be filtered
-	$defaults = apply_filters(
-		'mdjm_get_package_args',
-		array(
-			'posts_per_page'   => -1,
-			'orderby'          => 'post_title',
-			'order'            => 'DESC',
-			'post_type'        => 'mdjm-package',
-			'post_status'      => 'publish'
-		)
+	$defaults = array(
+		'posts_per_page'   => -1,
+		'orderby'          => 'post_title',
+		'order'            => 'DESC',
+		'post_type'        => 'mdjm-package',
+		'post_status'      => 'publish'
 	);
 	
 	$package_args = wp_parse_args( $args, $defaults );
@@ -75,6 +72,7 @@ function mdjm_get_package_by( $field, $value )	{
  * @return	obj			The WP Post objects for the employee's packages.		
  */
 function mdjm_get_packages_by_employee( $employee_id, $all=true )	{
+	
 	$employee_meta_query = array(
 		'key'     => '_mdjm_employees',
 		'value'   => array( $employee_id ),
@@ -167,4 +165,3 @@ function mdjm_list_available_packages( $employee_id='', $show_price=false )	{
 	
 	return $return;
 } // mdjm_list_available_packages
-?>

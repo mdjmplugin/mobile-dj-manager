@@ -228,8 +228,8 @@
 		mdjm_employee_dropdown( 
 			array(
 				'name'				=> 'check_employee',
-				'first_entry'		=> __( 'All', 'mobile-dj-manager' ),
-				'first_entry_val'	=> 'all',
+				'first_entry'		=> '--- ' . __( 'Select Employee', 'mobile-dj-manager' ) . ' ---',
+				'first_entry_val'	=> '0',
 				'selected'			=> $current_user->ID,
 				'structure'			=> false,
 				'group'				=> false

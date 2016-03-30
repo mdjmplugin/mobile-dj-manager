@@ -21,11 +21,13 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr|bool				Array of available employees or roles, or false if not available.
  */
 function mdjm_do_availability_check( $date, $employees='', $roles='', $status='' )	{
+	
 	$check = new MDJM_Availability_Checker( $date, $employees, $roles, $status );
 	
-	$check->perform_lookup();
-		
+	$check->check_availability();
+	wp_die( print_r( $check->result ) );
 	return $check->result;
+	
 } // mdjm_do_availability_check
 
 /**
@@ -84,7 +86,6 @@ function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{
 	$event = apply_filters( 'mdjm_employee_is_working', $event, $date, $employee_id );
 	
 	if( $event )	{
-		wp_die( var_dump( $event ) );
 		return true;
 	}
 	

@@ -52,7 +52,7 @@ class MDJM_Availability_Checker {
 	 *
 	 * @since	1.3
 	 */
-	public $result;
+	public $result = array();
 	
 	/**
 	 * Get things going
@@ -99,7 +99,7 @@ class MDJM_Availability_Checker {
 				
 		$this->employees	= $employees;
 		$this->roles		= ( ! empty( $_roles ) )	 ? $_roles	: mdjm_get_roles();
-		$this->status	   = ( ! empty( $_status ) )	? $_status   : mdjm_get_option( 'availability_status', 'any' );
+		$this->status	    = ( ! empty( $_status ) )	? $_status   : mdjm_get_option( 'availability_status', 'any' );
 		
 		if( ! is_array( $this->roles ) )	{
 			array( $this->roles );
@@ -118,13 +118,13 @@ class MDJM_Availability_Checker {
 	 * @param
 	 * @return	bool
 	 */
-	public function perform_lookup()	{
-		foreach( $this->employees as $employee )	{
-			if( ! $this->employee_has_event( $employee ) )	{
-				$this->result['available'][] = $employee;
+	public function check_availability()	{
+		foreach( $this->employees as $employee_id )	{
+			if( ! $this->employee_working( $employee_id ) )	{
+				$this->result['available'][] = $employee_id;
 			}
 			else	{
-				$this->result['unavailable'][] = $employee;
+				$this->result['unavailable'][] = $employee_id;
 			}
 		}
 				
@@ -133,19 +133,19 @@ class MDJM_Availability_Checker {
 		}
 		
 		return false;
-	} // perform_lookup
+	} // check_availability
 	
 	/**
-	 * Determine if the employee has an event on the given day.
+	 * Determine if the employee is working on the given day.
 	 *
 	 * @since	1.3
 	 * @param	int		$employee	The employee ID
 	 * @param	int		$date		The date
 	 * @return	bool	True if the employee has an event, or false
 	 */
-	public function employee_has_event( $employee_id )	{
+	public function employee_working( $employee_id )	{
 		return mdjm_employee_is_working( $this->date, $employee_id, $this->status );
-	} // employee_has_event
+	} // employee_working
 	
 	/**
 	 * Determine if the employee has vacation on the given day.
