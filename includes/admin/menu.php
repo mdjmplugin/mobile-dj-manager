@@ -212,15 +212,6 @@
 					array( &$this, 'mdjm_playlists_page' )
 				);
 				
-				// This is for the about page, does not display on menu			  
-				add_submenu_page( 
-					  null,
-					__( 'About MDJM', 'mobile-dj-manager' ),
-					__( 'About MDJM', 'mobile-dj-manager' ),
-					'mdjm_employee',
-					'mdjm-about',
-					array( &$this, 'mdjm_about_page' )
-				);
 			} // mdjm_menu
 			
 			/*
@@ -765,14 +756,5 @@
 				mdjm_display_event_playlist_page();
 			} // mdjm_playlists_page
 			
-			/*
-			 * The MDJM About page displays plugin information and is generally called following an update
-			 *
-			 *
-			 *
-			 */
-			public function mdjm_about_page()	{
-				include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-about.php' );
-			} // mdjm_about_page
 		} // class
 	}
