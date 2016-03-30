@@ -254,6 +254,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
 			if( is_admin() )	{ // Required for admin only
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/metaboxes.php' );

@@ -62,30 +62,6 @@
 			
 /*
  * --
- * PROCEDURES
- * --
- */				  
-			/*
-			 * Determine if we need to run any plugin upgrade procedures
-			 * @called by all_plugins_loaded hook
-			 *
-			 */
-			function mdjm_upgrade_check( $current_version )	{
-				add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
-				if( $current_version < MDJM_VERSION_NUM )	{
-					
-					// Instantiate the update class which will execute the updates
-					include_once( '/includes/admin/procedures/mdjm-upgrade.php' );
-					
-					// Update the stored version
-					update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
-					
-					// Update the updated key so we know to redirect
-					update_option( 'mdjm_updated', '1' );
-				}
-			} // mdjm_upgrade_check
-/*
- * --
  * INIT HOOK
  * --
  */
@@ -112,11 +88,6 @@
 			 *
 			 */
 	 		public function mdjm_admin_init()	{
-				/* -- Register the settings -- */
-				/*if( get_option( 'mdjm_plugin_settings' ) )	{
-					$this->mdjm_init_settings();
-					//$this->mdjm_role_caps();
-				}*/
 				// Release notes check
 				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
 					MDJM()->debug->log_it( '*** Redirect to release notes ***' );
@@ -161,11 +132,6 @@
 			 *
 			 */
 			public function wp_fully_loaded()	{
-			/* -- Check version against DB -- */
-				$current_version = get_option( MDJM_VERSION_KEY );
-				if( $current_version < MDJM_VERSION_NUM ) // Update needed
-					$this->mdjm_upgrade_check( $current_version );
-
 				/* -- Initiate the API listener -- */
 				$this->api_listener();	
 			} // all_plugins_loaded	
