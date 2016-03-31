@@ -148,6 +148,61 @@ function mdjm_get_event_status( $event_id='' )	{
 } // mdjm_get_event_status
 
 /**
+ * Return a select list of possible event statuses
+ * 
+ *	@since	1.1.3
+ *	@param	arr		$args	array of options. See $defaults
+ *	@return	str		HTML for the select list
+ */
+function mdjm_event_status_dropdown( $args='' )	{
+	global $mdjm, $post;
+	
+	$defaults = array(
+		'name'				 => 'mdjm_event_status',
+		'id'				   => 'mdjm_event_status',
+		'selected'			 => ! empty( $post ) ? $post->post_status : 'mdjm-unattended',
+		'first_entry'		  => '',
+		'first_entry_value'	=> '0',
+		'small'				=> false,
+		'return_type'		  => 'list'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$event_status = mdjm_all_event_status();
+	
+	if( empty( $event_status ) )	{		
+		return false;
+	}
+	
+	if( ! empty( $post->ID ) && array_key_exists( $post->post_status, $event_status ) )	{
+		$current_status = $post->post_status;
+	}
+					
+	$output = '<select name="' . $args['name'] . '" id="' . $args['id'] . '"';
+	$output .= ( !empty( $args['small'] ) ? ' style="font-size: 11px;"' : '' );
+	$output .= '>' . "\r\n";
+	
+	if( !empty( $first_entry ) )	{
+		$output .= '<option value="' . $args['first_entry_value'] . '">' . $args['first_entry'] . '</option>' . "\r\n";
+	}
+	
+	foreach( $event_status as $slug => $label )	{
+		$output .= '<option value="' . $slug . '"';
+		$output .= $args['selected'] == $slug ? ' selected="selected"' : '';
+		$output .= '>' . $label . '</option>' . "\r\n";	
+	}
+	
+	$output .= '</select>' . "\r\n";
+	
+	if( $args['return_type'] == 'list' )	{
+		echo $output;
+	}
+
+	return $output;
+} // mdjm_event_status_dropdown
+
+/**
  * Return the event type label for given event ID.
  *
  * @since	1.3
