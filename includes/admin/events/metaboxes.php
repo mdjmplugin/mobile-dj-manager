@@ -147,6 +147,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 		if( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
+		
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -266,21 +267,21 @@ function mdjm_event_metabox_client_details( $post )	{
 	</script>
 		<div class="mdjm-post-row">
 			<div class="mdjm-post-2column">
-				<label for="client_firstname" class="mdjm-label"><?php _e( 'First Name:' ); ?></label><br />
+				<label for="client_firstname" class="mdjm-label"><?php _e( 'First Name:', 'mobile-dj-manager' ); ?></label><br />
 				<input type="text" id="client_firstname" name="client_firstname" value="" />
 			</div>
 			<div class="mdjm-post-last-2column">
-				<label for="client_last_name" class="mdjm-label"><?php _e( 'Last Name:' ); ?>&nbsp;<span class="description"><?php _e( '(optional)' ); ?></span></label><br />
+				<label for="client_last_name" class="mdjm-label"><?php _e( 'Last Name:', 'mobile-dj-manager' ); ?>&nbsp;<span class="description"><?php _e( '(optional)', 'mobile-dj-manager' ); ?></span></label><br />
 				<input type="text" name="client_lastname" id="client_lastname" value="" />
 			</div>
 		</div>
 		<div class="mdjm-post-row">
 			<div class="mdjm-post-2column">
-				<label for="client_email" class="mdjm-label"><?php _e( 'Email:' ); ?></label><br />
+				<label for="client_email" class="mdjm-label"><?php _e( 'Email:', 'mobile-dj-manager' ); ?></label><br />
 				<input type="text" id="client_email" name="client_email" value="" />
 			</div>
 			<div class="mdjm-post-last-2column">
-			<label for="client_phone" class="mdjm-label"><?php _e( 'Phone:' ); ?>&nbsp;<span class="description"><?php _e( '(optional)' ); ?></span></label><br />
+			<label for="client_phone" class="mdjm-label"><?php _e( 'Phone:', 'mobile-dj-manager' ); ?>&nbsp;<span class="description"><?php _e( '(optional)', 'mobile-dj-manager' ); ?></span></label><br />
 			<input type="text" name="client_phone" id="client_phone" value="" />
 			</div>
 		</div><!-- mdjm-post-row -->
@@ -316,11 +317,11 @@ function mdjm_event_metabox_client_details( $post )	{
 					<div class="mdjm-post-1column">
 						<p><span class="mdjm-label"><?php _e( 'Online Quote Status', 'mobile-dj-manager' ); ?></span>:<br />
 							<?php 
-							if( get_post_status( $quote ) == 'mdjm-quote-viewed' )
-								echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
-								
-							else
+							if( get_post_status( $quote ) == 'mdjm-quote-viewed' )	{
+								echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
+							} else	{
 								echo __( 'Not viewed yet', 'mobile-dj-manager' );
+							}
 							?>
 							</p>
 					</div>
@@ -343,7 +344,7 @@ function mdjm_event_metabox_client_details( $post )	{
  * @return
  */
 function mdjm_event_metabox_event_details( $post )	{
-	global $current_user, $mdjm_settings, $pagenow;
+	global $current_user, $pagenow;
 	
 	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -357,7 +358,7 @@ function mdjm_event_metabox_event_details( $post )	{
 		echo '<label for="_mdjm_event_name" class="mdjm-label">' . sprintf( __( '%s Name:', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</label><br />' . "\r\n" . 
 		'<input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="' . 
 			esc_attr( get_post_meta( $post->ID, '_mdjm_event_name', true ) ) . '" size="50" /> <span class="mdjm-description">' . 
-			__( 'Optional: Display name in ' . mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</span>' . "\r\n";
+			sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</span>' . "\r\n";
 		?>
 		</div>
 	</div>
@@ -512,14 +513,15 @@ function mdjm_event_metabox_event_details( $post )	{
 	<!-- Start of third row -->
 	<?php
 	if( empty( $existing_event ) )	{
-		if( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
-			$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
-			
-		else
-			$deposit = '0.00';	
+		if( mdjm_get_option( 'deposit_type' ) == 'fixed' )	{
+			$deposit = mdjm_format_amount( mdjm_get_option( 'deposit_amount' ) );
+		} else	{
+			$deposit = mdjm_format_amount( '0' );
+		}
 	}
-	else
+	else	{
 		$deposit = esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) );
+	}
 	
 	if( mdjm_employee_can( 'edit_txns' ) )	{
 		?>
@@ -534,7 +536,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			
 			// Determine whether or not the deposit needs to dynamically update
 			echo '<input type="hidden" name="mdjm_update_deposit" id="mdjm_update_deposit" value="' . 
-				( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' ? 
+				( ! empty( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' ? 
 					'1' : '0' ) . '" />' . "\r\n";
 			
 			?>
@@ -648,7 +650,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	<!-- End of fifth row -->
 	<?php
 	// Update event deposit when manually updating cost field
-	if( !empty( $mdjm_settings['payments']['deposit_type'] ) && $mdjm_settings['payments']['deposit_type'] == 'percentage' )	{
+	if( ! empty( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) 	{
@@ -893,7 +895,6 @@ function mdjm_event_metabox_venue_details( $post )	{
  * @return
  */
 function mdjm_event_metabox_administration( $post )	{
-	global $mdjm_settings;
 		
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
 			
@@ -910,7 +911,7 @@ function mdjm_event_metabox_administration( $post )	{
 		<label for="_mdjm_event_enquiry_source" class="mdjm-label"><?php _e( 'Enquiry Source:', 'mobile-dj-manager' ); ?></label><br />
 		<select name="_mdjm_event_enquiry_source" id="_mdjm_event_enquiry_source">
 		<?php
-		$sources = explode( "\r\n", $mdjm_settings['events']['enquiry_sources'] );
+		$sources = explode( "\r\n", mdjm_get_option( 'enquiry_sources' ) );
 		asort( $sources );
 		foreach( $sources as $enquiry_source )	{
 			echo '<option value="' . $enquiry_source . '"';
@@ -1207,8 +1208,7 @@ function mdjm_event_metabox_event_history( $post )	{
  * @return
  */
 function mdjm_event_metabox_event_options( $post )	{
-	global $mdjm_settings;
-		
+			
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
 	
 	?>
@@ -1279,7 +1279,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					'orderby' => 'post_title',
 					'order' => 'ASC',
 					'numberposts' => -1,
-					'exclude' => is_dj() && isset( $mdjm_settings['permissions']['dj_disable_template'] ) ? $mdjm_settings['permissions']['dj_disable_template'] : '',
+					'exclude' => is_dj() && isset( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
 				)
 			);
 			
@@ -1289,7 +1289,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					selected( $event_contract, $contract_template->ID );
 				}
 				else	{
-					selected( $mdjm_settings['events']['default_contract'], $contract_template->ID );
+					selected( mdjm_get_option( 'default_contract' ), $contract_template->ID );
 				}
 				/* -- If the event is past enquiry we only display the contract that is selected
 						and add a link to view it -- */
@@ -1354,14 +1354,13 @@ function mdjm_event_metabox_event_options( $post )	{
 						'orderby' => 'post_title',
 						'order' => 'ASC',
 						'numberposts' => -1,
-						'exclude' => is_dj() && isset( $mdjm_settings['permissions']['dj_disable_template'] ) ? 
-							$mdjm_settings['permissions']['dj_disable_template'] : '',
+						'exclude' => is_dj() && ! empty( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
 					)
 				);
 				
 				foreach( $email_templates as $email_template )	{
 					echo '<option value="' . $email_template->ID . '"';
-					selected( $mdjm_settings['templates']['enquiry'], $email_template->ID );
+					selected( mdjm_get_option( 'enquiry' ), $email_template->ID );
 					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
 				}
 				?>
@@ -1377,7 +1376,7 @@ function mdjm_event_metabox_event_options( $post )	{
 				<?php
 				foreach( $email_templates as $email_template )	{
 					echo '<option value="' . $email_template->ID . '"';
-					selected( $mdjm_settings['templates']['online_enquiry'], $email_template->ID );
+					selected( mdjm_get_option( 'online_enquiry' ), $email_template->ID );
 					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
 				}
 				?>
