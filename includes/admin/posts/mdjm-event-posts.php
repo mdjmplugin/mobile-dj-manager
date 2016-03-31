@@ -17,21 +17,22 @@
  */
 function mdjm_event_post_columns( $columns ) {
 	$columns = array(
-			'cb'			=> '<input type="checkbox" />',
-			'title'			=> __( 'Event ID', 'mobile-dj-manager' ),
-			'event_date'	=> __( 'Date', 'mobile-dj-manager' ),
-			'client'		=> __( 'Client', 'mobile-dj-manager' ),
-			'dj'			=> MDJM_DJ,
+			'cb'			  => '<input type="checkbox" />',
+			'event_date'	  => __( 'Date', 'mobile-dj-manager' ),
+			'title'		   => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'client'		  => __( 'Client', 'mobile-dj-manager' ),
+			'dj'			  => MDJM_DJ,
 			'event_status'	=> __( 'Status', 'mobile-dj-manager' ),
-			'event_type'	=> __( 'Event Type', 'mobile-dj-manager' ),
-			'value'			=> __( 'Value', 'mobile-dj-manager' ),
-			'balance'		=> __( 'Due', 'mobile-dj-manager' ),
+			'event_type'	  => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'value'		   => __( 'Value', 'mobile-dj-manager' ),
+			'balance'		 => __( 'Due', 'mobile-dj-manager' ),
 			'playlist'		=> __( 'Playlist', 'mobile-dj-manager' ),
-			'journal'		=> __( 'Journal', 'mobile-dj-manager' ),
+			'journal'		 => __( 'Journal', 'mobile-dj-manager' ),
 		);
 	
-	if( !mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )
+	if( ! mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )	{
 		unset( $columns['cb'] );
+	}
 	
 	return $columns;
 } // mdjm_event_post_columns
@@ -70,10 +71,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		// Event Date
 		case 'event_date':
 			if( mdjm_employee_can( 'read_events' ) )	{
-				echo sprintf( '<a href="' . admin_url( 'post.php?post=%s&action=edit' ) . '">%s</a>', 
-					$post_id, date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) );
+				echo '<strong><a href="' . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . '">' . date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) . '</a>';
 			} else	{
-				echo date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) );
+				echo '<strong>' . date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) . '</strong>';
 			}
 		break;
 			
@@ -276,7 +276,7 @@ function mdjm_event_type_filter_dropdown()	{
 	}
 	?>
 	<select name="mdjm_filter_type">
-		<option value=""><?php echo __( 'All Event Types', 'mobile-dj-manager' ); ?></option>
+		<option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
 		<?php
 		$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
 		if( !empty( $values ) )	{
@@ -387,7 +387,7 @@ function mdjm_event_client_filter_dropdown()	{
  */
 function mdjm_event_view_filters( $views )	{
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-	if( mdjm_employee_can( 'read_events_all' ) || !is_post_type_archive( MDJM_EVENT_POSTS ) )
+	if( mdjm_employee_can( 'read_events_all' ) || !is_post_type_archive( 'mdjm-event' ) )
 		return $views;
 	
 	// The All filter
