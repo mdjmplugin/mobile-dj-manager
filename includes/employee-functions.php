@@ -26,11 +26,11 @@ function mdjm_is_employer()	{
  * Whether or not the employee has the priviledge.
  *
  * @since	1.3
- * @param	$int		Optional: The user ID of the employee
  * @param	$role		The role to check
+ * @param	$int		Optional: The user ID of the employee
  * @return	bool		True if multi employee, otherwise false
  */
-function mdjm_employee_can( $user_id='', $role )	{
+function mdjm_employee_can( $role, $user_id='' )	{
 	return MDJM()->permissions->employee_can( $role, $user_id );
 } // mdjm_employee_can
 
@@ -416,7 +416,7 @@ function mdjm_list_event_employees( $event_id )	{
 				$output .= '<td style="text-align:left;">' . $employee['role'] . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">' . $details->display_name . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">';
-					if( MDJM()->permissions->employee_can( 'manage_txns' ) )	{
+					if( mdjm_employee_can( 'manage_txns' ) )	{
 						$output .= mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) );
 					}
 					else	{

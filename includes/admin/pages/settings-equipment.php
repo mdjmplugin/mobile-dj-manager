@@ -1,6 +1,6 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	if( !MDJM()->permissions->employee_can( 'manage_packages' ) )	{
+	if( !mdjm_employee_can( 'manage_packages' ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage equipment packages.', 'mobile-dj-manager' ) . '</p>',

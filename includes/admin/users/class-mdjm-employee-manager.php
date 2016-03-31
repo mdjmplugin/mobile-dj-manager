@@ -1,7 +1,7 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
-	if( !MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage employees or permissions.', 'mobile-dj-manager' ) . '</p>',
@@ -173,7 +173,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 		 */
 		public static function add_employee_form()	{
 			// Ensure user has permssion to add an employee
-			if( !MDJM()->permissions->employee_can( 'manage_staff' ) )
+			if( !mdjm_employee_can( 'manage_staff' ) )
 				return;
 				
 			?>

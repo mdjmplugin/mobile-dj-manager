@@ -139,7 +139,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 		}
 		
 		// Permission check
-		if( ! empty( $metabox['permission'] ) && !MDJM()->permissions->employee_can( $metabox['permission'] ) )	{
+		if( ! empty( $metabox['permission'] ) && !mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
 		
@@ -191,7 +191,7 @@ function mdjm_event_metabox_client_details( $post )	{
 			<?php
 				/* -- Build the drop down box -- */
 				echo ( !empty( $clients ) && $existing_event == false ? '<option value="">--- Select Client ---</option>' . "\r\n" : '' );
-				echo ( $existing_event == false && ( MDJM()->permissions->employee_can( 'list_all_clients' ) ) ? '<option value="add_new">--- Add New Client ---</option>' . "\r\n" : '' );
+				echo ( $existing_event == false && ( mdjm_employee_can( 'list_all_clients' ) ) ? '<option value="add_new">--- Add New Client ---</option>' . "\r\n" : '' );
 				foreach( $clients as $client )	{
 					echo '<option value="' . $client->ID . '"';
 					selected( $client->ID, $client_id );
@@ -200,7 +200,7 @@ function mdjm_event_metabox_client_details( $post )	{
 			?>
 			</select>
 			<?php
-			if( MDJM()->permissions->employee_can( 'view_clients_list' ) && $post->post_status != 'auto-draft' && !empty( $client_id ) )
+			if( mdjm_employee_can( 'view_clients_list' ) && $post->post_status != 'auto-draft' && !empty( $client_id ) )
 				echo '<a style="font-size: 11px;" id="client_details_show" href="#">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
 			?>
 		</div>
@@ -298,7 +298,7 @@ function mdjm_event_metabox_client_details( $post )	{
 			</div>
 			<div class="mdjm-post-last-2column">
 				<?php
-				if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
+				if( mdjm_employee_can( 'send_comms' ) )	{
 					?>
 					<p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
 						<?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
@@ -308,7 +308,7 @@ function mdjm_event_metabox_client_details( $post )	{
 			</div>
 		</div>
 		<?php
-		if( MDJM()->permissions->employee_can( 'list_own_quotes' ) )	{
+		if( mdjm_employee_can( 'list_own_quotes' ) )	{
 			$quote = MDJM()->events->retrieve_quote( $post->ID );
 			if( !empty( $quote ) )	{
 				?>
@@ -369,7 +369,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			 * If a Multi Employee business, display dropdown of all employees.
 			 * But only if the user is permitted to view all employees.
 			 */
-			if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+			if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
 				mdjm_employee_dropdown( 
 					array(
 						'name'            => '_mdjm_event_dj',
@@ -521,7 +521,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	else
 		$deposit = esc_attr( get_post_meta( $post->ID, '_mdjm_event_deposit', true ) );
 	
-	if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+	if( mdjm_employee_can( 'edit_txns' ) )	{
 		?>
 		<div class="mdjm-post-row">
 			<div class="mdjm-post-2column">
@@ -683,7 +683,7 @@ function mdjm_event_metabox_event_employees( $post )	{
      * if the current user is allowed to manage users
      */
      
-    if( MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+    if( mdjm_employee_can( 'manage_employees' ) )	{
         ?>
         <div class="mdjm-post-row">
             <div class="mdjm-post-3column">
@@ -728,7 +728,7 @@ function mdjm_event_metabox_event_employees( $post )	{
             
             <div class="mdjm-post-last-3column">
                 <?php
-                if( MDJM_PAYMENTS == true && MDJM()->permissions->employee_can( 'manage_txns' ) )	{
+                if( MDJM_PAYMENTS == true && mdjm_employee_can( 'manage_txns' ) )	{
                     ?>
                     <label for="event_new_employee_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                     <?php echo mdjm_currency_symbol(); ?><input type="text" name="event_new_employee_wage" id="event_new_employee_wage" class="mdjm-input-currency" 
@@ -868,7 +868,7 @@ function mdjm_event_metabox_venue_details( $post )	{
 	</div>
 	<!-- End of sixth row -->
 	<?php 
-	if( MDJM()->permissions->employee_can( 'add_venues' ) )	{
+	if( mdjm_employee_can( 'add_venues' ) )	{
 		?>
 		<!-- Start of seventh row -->
 		<div class="mdjm-post-row-single">
@@ -1237,7 +1237,7 @@ function mdjm_event_metabox_event_options( $post )	{
 				)
 			);
 											
-			if( MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
+			if( mdjm_employee_can( 'manage_all_events' ) )	{
 				?>
 				<a id="new_event_type" class="side-meta" href="#">Add New</a>
 				<?php
@@ -1408,7 +1408,7 @@ function mdjm_event_metabox_event_options( $post )	{
 												'60px' : '40px' ); ?> !important;">
 		<div class="mdjm-left-col">
 		<?php
-		if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+		if( mdjm_employee_can( 'manage_events' ) )	{
 			submit_button( 
 						( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
 						'primary',
@@ -1417,7 +1417,7 @@ function mdjm_event_metabox_event_options( $post )	{
 						array( 'id' => 'save-post' ) );
 		}
 													
-		if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' && MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
+		if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' && mdjm_employee_can( 'manage_all_events' ) )	{
 			echo '<br />' . 
 			'<br />' .
 			'<a style="color:#a00" href="' . get_delete_post_link( $post->ID ) . '">Delete this event</a>' . 

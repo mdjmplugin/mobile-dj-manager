@@ -42,7 +42,7 @@
             <td width="30%">Active Bookings:</td>
             <td width="70%"><?php echo $dj_event_count['active_month']; ?></td>
           </tr>
-          <?php if( MDJM()->permissions->employee_can( 'read_events' ) )	{
+          <?php if( mdjm_employee_can( 'read_events' ) )	{
 			  ?>
               <tr>
                 <td><a href="<?php echo mdjm_get_admin_page( 'enquiries' ) . '&mdjm_filter_type&mdjm_filter_date=' . 
@@ -65,7 +65,7 @@
 				'&mdjm_filter_type'; ?>">Completed Bookings:</a></td>
             <td><?php echo $dj_event_count['completed_month']; ?></td>
           </tr>
-		<?php if( MDJM()->permissions->employee_can( 'manage_events' ))	{
+		<?php if( mdjm_employee_can( 'manage_events' ))	{
 			?>
           <tr>
             <td>Potential Earnings: </td>
@@ -81,7 +81,7 @@
           <tr>
             <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
             </tr>
-         <?php if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+         <?php if( mdjm_employee_can( 'manage_events' ) )	{
 			 ?>
           <tr>
             <td><a href="<?php echo mdjm_get_admin_page( 'enquiries' ); ?>">Outstanding Enquiries:</a></td>
@@ -101,7 +101,7 @@
             <td>Completed Bookings:</td>
             <td><?php echo $dj_event_count['completed_year']; ?></td>
           </tr>
-          <?php if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+          <?php if( mdjm_employee_can( 'manage_events' ) )	{
 			  ?>
           <tr>
             <td>Potential Earnings:</td>

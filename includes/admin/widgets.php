@@ -46,7 +46,7 @@
 			?>
             </td>
           </tr>
-          <?php if( MDJM()->permissions->employee_can( 'read_events_all' ) )	{
+          <?php if( mdjm_employee_can( 'read_events_all' ) )	{
 			  ?>
               <tr>
                 <th align="left">Outstanding Enquiries:</th>
@@ -88,7 +88,7 @@
 				}
 			}
 		?>
-            <li><?php if( MDJM()->permissions->employee_can( 'manage_events' ) ) { ?><a href="<?php echo admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ); ?>">Add New Event</a> | <?php } ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-dashboard' ); ?>">View Dashboard</a> | <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">Edit Settings</a>
+            <li><?php if( mdjm_employee_can( 'manage_events' ) ) { ?><a href="<?php echo admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ); ?>">Add New Event</a> | <?php } ?><a href="<?php echo admin_url( 'admin.php?page=mdjm-dashboard' ); ?>">View Dashboard</a> | <a href="<?php echo admin_url( 'admin.php?page=mdjm-settings' ); ?>">Edit Settings</a>
             
             </li>
         </ul>

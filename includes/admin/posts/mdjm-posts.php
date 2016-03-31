@@ -529,7 +529,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					'low'
 				);
 				
-				if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+				if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && mdjm_employee_can( 'edit_txns' ) )	{
 					add_meta_box(
 						'mdjm-event-transactions',
 						__( 'Transactions', 'mobile-dj-manager' ), 

@@ -128,7 +128,7 @@ function mdjm_custom_quote_post_query( $query )	{
 		return $query;
 	
 	// If the current user cannot list all quotes, lets limit the results	
-	if( !MDJM()->permissions->employee_can( 'list_all_quotes' ) )	{
+	if( !mdjm_employee_can( 'list_all_quotes' ) )	{
 		global $user_ID;
 		
 		$events = $total = MDJM()->events->dj_events( $user_ID );
@@ -156,7 +156,7 @@ add_action( 'pre_get_posts', 'mdjm_custom_quote_post_query' );
  */
 function mdjm_quote_view_filters( $views )	{
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-	if( MDJM()->permissions->employee_can( 'list_all_quotes' ) || !is_post_type_archive( MDJM_QUOTE_POSTS ) )
+	if( mdjm_employee_can( 'list_all_quotes' ) || !is_post_type_archive( MDJM_QUOTE_POSTS ) )
 		return $views;
 	
 	global $user_ID;

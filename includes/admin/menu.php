@@ -64,7 +64,7 @@
 				);
 				
 				// Contract Templates
-				if( MDJM()->permissions->employee_can( 'manage_templates' ) )	{
+				if( mdjm_employee_can( 'manage_templates' ) )	{
 					$mdjm_contract_template_page = add_submenu_page(
 						'mdjm-dashboard',
 						__( 'Contract Templates', 'mobile-dj-manager' ),
@@ -93,7 +93,7 @@
 					array( &$this, 'mdjm_auto_tasks_page' )
 				);
 				// Clients
-				if( MDJM()->permissions->employee_can( 'view_clients_list' ) )	{
+				if( mdjm_employee_can( 'view_clients_list' ) )	{
 					$mdjm_clients_page = add_submenu_page(
 						'mdjm-dashboard',
 						__( 'Clients', 'mobile-dj-manager' ),
@@ -104,7 +104,7 @@
 					);
 				}
 				// Communications Page
-				if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
+				if( mdjm_employee_can( 'send_comms' ) )	{
 					$mdjm_comms_page = add_submenu_page( 
 						'mdjm-dashboard',
 						__( 'Communications', 'mobile-dj-manager' ),
@@ -356,7 +356,7 @@
 						),
 					) );
 				}
-				if( MDJM()->permissions->employee_can( 'view_clients_list' ) )	{
+				if( mdjm_employee_can( 'view_clients_list' ) )	{
 					/* -- Clients -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-clients',
@@ -368,7 +368,7 @@
 						),
 					) );
 				}
-				if( MDJM()->permissions->employee_can( 'list_all_clients' ) )	{
+				if( mdjm_employee_can( 'list_all_clients' ) )	{
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-add-client',
 						'parent'	=> 'mdjm-clients',
@@ -380,7 +380,7 @@
 					)) ;
 				}
 				/* -- Communications -- */
-				if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
+				if( mdjm_employee_can( 'send_comms' ) )	{
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-comms',
 						'parent'	=> 'mdjm',
@@ -402,7 +402,7 @@
 				}
 				// Filter for MDJM DCF Admin Bar Items
 				do_action( 'mdjm_dcf_admin_bar_items', $admin_bar );
-				if( MDJM()->permissions->employee_can( 'manage_templates' ) )	{
+				if( mdjm_employee_can( 'manage_templates' ) )	{
 					/* -- Contract Templates -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-contracts',
@@ -423,7 +423,7 @@
 						),
 					) );
 				}
-				if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+				if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
 					// Employees
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-employees',
@@ -435,7 +435,7 @@
 						),
 					) );
 				}
-				if( MDJM()->permissions->employee_can( 'manage_templates' ) )	{
+				if( mdjm_employee_can( 'manage_templates' ) )	{
 					/* -- Email Templates -- */
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-email-templates',
@@ -457,7 +457,7 @@
 					) );
 				}
 				/* -- Equipment Packages & Add-ons -- */
-				if( MDJM_PACKAGES == true && MDJM()->permissions->employee_can( 'manage_packages' ) )	{
+				if( MDJM_PACKAGES == true && mdjm_employee_can( 'manage_packages' ) )	{
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-equipment',
 						'parent'	=> 'mdjm',
@@ -468,7 +468,7 @@
 						),
 					) );
 				}
-				if( MDJM()->permissions->employee_can( 'read_events' ) )	{
+				if( mdjm_employee_can( 'read_events' ) )	{
 					/* -- Events -- */
 					$admin_bar->add_menu( array(
 						'id'    	=> 'mdjm-events',
@@ -481,7 +481,7 @@
 					) );
 				}
 								
-				if( MDJM()->permissions->employee_can( 'manage_all_events' ) )	{
+				if( mdjm_employee_can( 'manage_all_events' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-add-events',
 						'parent' => 'mdjm-events',
@@ -546,7 +546,7 @@
 					) );
 				}
 				// Event Quotes
-				if( MDJM_ONLINE_QUOTES == true && MDJM()->permissions->employee_can( 'list_own_quotes' ) )	{
+				if( MDJM_ONLINE_QUOTES == true && mdjm_employee_can( 'list_own_quotes' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-quotes',
 						'parent' => 'mdjm-events',
@@ -569,7 +569,7 @@
 						),
 					) );	
 				}*/
-				if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+				if( mdjm_employee_can( 'edit_txns' ) )	{
 				/* -- Transactions -- */
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-transactions',
@@ -600,7 +600,7 @@
 						),
 					) );
 				}
-				if( MDJM()->permissions->employee_can( 'list_venues' ) )	{
+				if( mdjm_employee_can( 'list_venues' ) )	{
 					/* -- Venues -- */
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-venues',
@@ -611,7 +611,7 @@
 							'title' => __( 'Venues', 'mobile-dj-manager' ),
 						),
 					) );
-					if( MDJM()->permissions->employee_can( 'add_venues' ) )	{
+					if( mdjm_employee_can( 'add_venues' ) )	{
 						$admin_bar->add_menu( array(
 							'id'     => 'mdjm-add-venue',
 							'parent' => 'mdjm-venues',

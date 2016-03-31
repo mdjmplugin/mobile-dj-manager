@@ -762,7 +762,7 @@
 					} // End if( !empty( $notify_admin ) && $notify_admin == 'Y' )
 					
 					/* Prepare DJ notification email data array */
-					if( !empty( $notify_dj ) && $notify_dj == 'Y' && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+					if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
 						if( MDJM_DEBUG == true )
 							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
 							
@@ -812,7 +812,7 @@
 				}// if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 				
 				/* -- Prepare the DJ notification email -- */
-				if( !empty( $notify_dj ) && $notify_dj == 'Y' && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+				if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
 					foreach( $notify['dj'] as $notify_dj )	{
 						foreach( $notify_dj as $dj )	{
 							$notify_email_args = array(
@@ -1026,7 +1026,7 @@
 					} // End if( !empty( $notify_admin ) && $notify_admin == 'Y' )
 					
 					/* Prepare DJ notification email data array */
-					if( !empty( $notify_dj ) && $notify_dj == 'Y' && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+					if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
 						if( MDJM_DEBUG == true )
 							MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
 							
@@ -1076,7 +1076,7 @@
 				}// if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
 				
 				/* -- Prepare the DJ notification email -- */
-				if( !empty( $notify_dj ) && $notify_dj == 'Y' && MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+				if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
 					foreach( $notify['dj'] as $notify_dj )	{
 						foreach( $notify_dj as $dj )	{
 							$notify_email_args = array(

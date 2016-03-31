@@ -219,7 +219,7 @@
     <th scope="row" width="25%"><label for="employee">Employee:</label></th>
     <td><select name="employee" id="employee">
     <?php
-	if( !MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		?>
 		<option value="<?php echo $current_user->ID; ?>"><?php echo $current_user->display_name; ?></option>
       	<?php
@@ -269,7 +269,7 @@
     <th scope="row"><label for="check_employee">Employee</label></th>
     <td><select name="check_employee" id="check_employee">
     <?php
-	if( !MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		?>
 		<option value="<?php echo get_current_user_id(); ?>"><?php echo $current_user->display_name; ?></option>
       	<?php
@@ -292,7 +292,7 @@
     <th scope="row"><label for="check_roles"><?php _e( 'or Roles', 'mobile-dj-manager' ); ?></label></th>
     <td><select name="check_roles[]" id="check_roles" multiple="multiple">
     <?php
-	if( !MDJM()->permissions->employee_can( 'manage_employees' ) )	{
+	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		?>
 		<option value="" disabled="disabled"><?php _( 'You cannot view roles', 'mobile-dj-manager' ); ?></option>
       	<?php

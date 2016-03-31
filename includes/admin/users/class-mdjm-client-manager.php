@@ -1,7 +1,7 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
-	if( !MDJM()->permissions->employee_can( 'view_clients_list' ) )	{
+	if( !mdjm_employee_can( 'view_clients_list' ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
@@ -59,7 +59,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			if( empty( $_POST ) || !empty( $_POST['action'] ) || !empty( $_POST['action2'] ) )	{
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
-					( !MDJM()->permissions->employee_can( 'list_all_clients' ) ? get_current_user_id() : '' ),
+					( !mdjm_employee_can( 'list_all_clients' ) ? get_current_user_id() : '' ),
 					self::$orderby,
 					self::$order
 				);

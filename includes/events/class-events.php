@@ -793,7 +793,7 @@
 				MDJM()->debug->log_it( '*** Starting Unattended Enquiry procedures ***' . "\r\n", true );
 						
 		/* -- Permission Check -- */
-			if( !MDJM()->permissions->employee_can( 'manage_events' ) )
+			if( !mdjm_employee_can( 'manage_events' ) )
 				return $post_id;	
 			
 										

@@ -30,7 +30,7 @@ function mdjm_event_post_columns( $columns ) {
 			'journal'		=> __( 'Journal', 'mobile-dj-manager' ),
 		);
 	
-	if( !MDJM()->permissions->employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )
+	if( !mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )
 		unset( $columns['cb'] );
 	
 	return $columns;
@@ -63,13 +63,13 @@ add_filter( 'manage_edit-mdjm-event_sortable_columns', 'mdjm_event_post_sortable
 function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	global $post;
 	
-	if( MDJM()->permissions->employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )
+	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )
 		$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
 		
 	switch ( $column_name ) {
 		// Event Date
 		case 'event_date':
-			if( MDJM()->permissions->employee_can( 'read_events' ) )	{
+			if( mdjm_employee_can( 'read_events' ) )	{
 				echo sprintf( '<a href="' . admin_url( 'post.php?post=%s&action=edit' ) . '">%s</a>', 
 					$post_id, date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) );
 			} else	{
@@ -84,7 +84,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			$user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_' . $column_name, true ) );
 			
 			if( !empty( $user ) )	{
-				if( MDJM()->permissions->employee_can( 'send_comms' ) )	{
+				if( mdjm_employee_can( 'send_comms' ) )	{
 					echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
 						$user->ID . '&event_id=' . $post_id . '">' . 
 						$user->display_name . '</a>';
@@ -124,7 +124,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 		// Value
 		case 'value':
-			if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{
+			if( mdjm_employee_can( 'edit_txns' ) )	{
 				echo ( !empty( $value ) ? mdjm_currency_filter( mdjm_sanitize_amount( $value ) ) : '<span class="mdjm-form-error">' . mdjm_currency_filter( mdjm_sanitize_amount( '0.00' ) ) . '</span>' );
 			} else	{
 				echo '&mdash;';
@@ -133,7 +133,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 		// Balance
 		case 'balance':
-			if( MDJM()->permissions->employee_can( 'edit_txns' ) )	{				
+			if( mdjm_employee_can( 'edit_txns' ) )	{				
 				$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
 				echo ( !empty( $rcvd ) && $rcvd != '0.00' ? mdjm_currency_filter( mdjm_sanitize_amount( ( $value - $rcvd ) ) ) : mdjm_currency_filter( mdjm_sanitize_amount( $value ) ) );
 			} else	{
@@ -143,7 +143,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 		/* -- Playlist -- */
 		case 'playlist':
-			if( MDJM()->permissions->employee_can( 'manage_events' ) )	{
+			if( mdjm_employee_can( 'manage_events' ) )	{
 				$total = mdjm_count_playlist_entries( $post_id );
 				
 				echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post_id . '">' . $total . ' ' . 
@@ -155,7 +155,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		
 		// Journal
 		case 'journal':
-			if( MDJM()->permissions->employee_can( 'read_events_all' ) )	{
+			if( mdjm_employee_can( 'read_events_all' ) )	{
 				$total = wp_count_comments( $post_id )->approved;
 				echo '<a href="' . admin_url( '/edit-comments.php?p=' . $post_id ) . '">' . 
 					$total . ' ' . 
@@ -197,10 +197,10 @@ function mdjm_event_post_filter_list()	{
 	
 	mdjm_event_date_filter_dropdown();
 	mdjm_event_type_filter_dropdown();
-	if( MDJM_MULTI == true && MDJM()->permissions->employee_can( 'manage_employees' ) )
+	if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )
 		mdjm_event_dj_filter_dropdown();
 		
-	if( MDJM()->permissions->employee_can( 'list_all_clients' ) )
+	if( mdjm_employee_can( 'list_all_clients' ) )
 		mdjm_event_client_filter_dropdown();	
 } // mdjm_event_post_filter_list
 add_action( 'restrict_manage_posts', 'mdjm_event_post_filter_list' );
@@ -387,7 +387,7 @@ function mdjm_event_client_filter_dropdown()	{
  */
 function mdjm_event_view_filters( $views )	{
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-	if( MDJM()->permissions->employee_can( 'read_events_all' ) || !is_post_type_archive( MDJM_EVENT_POSTS ) )
+	if( mdjm_employee_can( 'read_events_all' ) || !is_post_type_archive( MDJM_EVENT_POSTS ) )
 		return $views;
 	
 	// The All filter
@@ -492,7 +492,7 @@ function mdjm_custom_event_post_query( $query )	{
 	/**
 	 * If current user is restricted, filter to their own events only
 	 */	
-	if( !MDJM()->permissions->employee_can( 'read_events_all' ) )	{
+	if( !mdjm_employee_can( 'read_events_all' ) )	{
 		global $user_ID;
 		
 		$query->set(
@@ -529,7 +529,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 		return;
 		
 	// Permission Check
-	if( !MDJM()->permissions->employee_can( 'manage_events' ) )	{
+	if( !mdjm_employee_can( 'manage_events' ) )	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit venues' );
 		 

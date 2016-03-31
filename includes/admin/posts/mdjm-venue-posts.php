@@ -146,7 +146,7 @@ function mdjm_save_venue_post( $ID, $post, $update )	{
 		return;
 		
 	// Permission Check
-	if( !MDJM()->permissions->employee_can( 'add_venues' ) )	{
+	if( !mdjm_employee_can( 'add_venues' ) )	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit venues' );
 		 
