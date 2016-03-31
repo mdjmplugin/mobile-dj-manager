@@ -1229,7 +1229,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					'hide_empty' 		  => 0,
 					'name' 				=> 'mdjm_event_type',
 					'id' 				  => 'mdjm_event_type',
-					'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : '' ),
+					'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : mdjm_get_option( 'event_type_default', '' ) ),
 					'orderby' 			 => 'name',
 					'hierarchical' 		=> 0,
 					'show_option_none' 	=> __( 'Select Event Type' ),

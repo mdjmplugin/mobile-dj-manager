@@ -258,11 +258,13 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/metaboxes.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/taxonomies.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/contextual-help.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/equipment/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' );
 				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/playlist/playlist.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/playlist-page.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/event-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/formatting/mdjm-formatting.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );
