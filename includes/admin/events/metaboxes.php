@@ -1270,7 +1270,7 @@ function mdjm_event_metabox_event_options( $post )	{
 	</script>
 	<div class="mdjm-meta-row" style="height: 50px !important">
 		<div class="mdjm-left-col">
-			<label for="_mdjm_event_contract" class="mdjm-label"><?php _e( 'Event Contract:' ); ?></label><br />
+			<label for="_mdjm_event_contract" class="mdjm-label"><?php printf( __( 'Event Contract:' ), mdjm_get_label_singular() ); ?></label><br />
 			<select name="_mdjm_event_contract" id="_mdjm_event_contract" class="mdjm-meta">
 			<?php
 			$contract_templates = get_posts(
@@ -1279,7 +1279,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					'orderby' => 'post_title',
 					'order' => 'ASC',
 					'numberposts' => -1,
-					'exclude' => is_dj() && isset( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
+					'exclude' => is_dj() && ! empty( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
 				)
 			);
 			
@@ -1428,7 +1428,7 @@ function mdjm_event_metabox_event_options( $post )	{
 		<?php
 		if( mdjm_employee_can( 'manage_events' ) )	{
 			submit_button( 
-						( $post->post_status == 'auto-draft' ? 'Add Event' : 'Update Event' ),
+						( $post->post_status == 'auto-draft' ? sprintf( __( 'Add %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) : sprintf( __( 'Update %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) ),
 						'primary',
 						'save',
 						false,

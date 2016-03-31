@@ -36,8 +36,8 @@
 				
 				// Build out the menu structure
 				$mdjm_dahboard_page         = add_menu_page( 
-					__( 'MDJM Events' ),
-					__( 'MDJM Events', 'mobile-dj-manager' ), 
+					sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+					sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
 					'mdjm_employee',
 					'mdjm-dashboard',
 					array( &$this, 'mdjm_dashboard_page' ),
@@ -156,10 +156,10 @@
 				// Events
 				$mdjm_events_page = add_submenu_page(
 					'mdjm-dashboard',
-					__( 'Events', 'mobile-dj-manager' ),
-					__( 'Events', 'mobile-dj-manager' ),
+					mdjm_get_label_plural(),
+					mdjm_get_label_plural(),
 					'mdjm_event_read_own',
-					'edit.php?post_type=' . MDJM_EVENT_POSTS,
+					'edit.php?post_type=mdjm-event',
 					''
 				);
 				
@@ -244,7 +244,7 @@
 				/* -- Build out the toolbar menu structure -- */
 				$admin_bar->add_menu( array(
 					'id'		=> 'mdjm',
-					'title'	 => __( 'MDJM Events', 'mobile-dj-manager' ),
+					'title'	 => sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
 					'href'	  => admin_url( 'admin.php?page=mdjm-dashboard' ),
 					'meta'	  => array(
 						'title' => __( 'MDJM Event Management', 'mobile-dj-manager' ),            
@@ -283,7 +283,7 @@
 					$admin_bar->add_menu( array(
 						'id'		=> 'mdjm-settings-events',
 						'parent'	=> 'mdjm-settings',
-						'title'	 => __( 'Events', 'mobile-dj-manager' ),
+						'title'	 => mdjm_get_label_plural(),
 						'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=events' ),
 						'meta'	  => array(
 							'title' => __( 'MDJM Event Settings', 'mobile-dj-manager' ),
@@ -473,10 +473,10 @@
 					$admin_bar->add_menu( array(
 						'id'    	=> 'mdjm-events',
 						'parent' 	=> 'mdjm',
-						'title' 	 => __( 'Events', 'mobile-dj-manager' ),
-						'href'  	  => admin_url( 'edit.php?post_type=' . MDJM_EVENT_POSTS ),
+						'title' 	 => mdjm_get_label_plural(),
+						'href'  	  => admin_url( 'edit.php?post_type=mdjm-event' ),
 						'meta'  	  => array(
-							'title' => __( 'MDJM Events', 'mobile-dj-manager' ),
+							'title' =>sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
 						),
 					) );
 				}
@@ -485,10 +485,10 @@
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-add-events',
 						'parent' => 'mdjm-events',
-						'title'  => __( 'Create Event', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'post-new.php?post_type=' . MDJM_EVENT_POSTS ),
+						'title'  => sprintf( __( 'create %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'href'   => admin_url( 'post-new.php?post_type=mdjm-event' ),
 						'meta'   => array(
-							'title' => __( 'Create New Event', 'mobile-dj-manager' ),
+							'title' => sprintf( __( 'Create New %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						),
 					) );
 					/* -- Enquiries -- */
@@ -505,7 +505,7 @@
 							'id'     => 'mdjm-' . str_replace( ' ', '-', strtolower( $display ) ),
 							'parent' => 'mdjm-events',
 							'title'  => $display . ' (' . $status_count . ')',
-							'href'   => admin_url( 'edit.php?post_status=' . $current_status . ' &post_type=' . MDJM_EVENT_POSTS ),
+							'href'   => admin_url( 'edit.php?post_status=' . $current_status . ' &post_type=mdjm-event' ),
 							'meta'   => array(
 								'title' => $display,
 							),
@@ -515,10 +515,10 @@
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-types',
 						'parent' => 'mdjm-events',
-						'title'  => __( 'Event Types', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'edit-tags.php?taxonomy=event-types&post_type=' . MDJM_EVENT_POSTS ),
+						'title'  =>sprintf( __( '%s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'href'   => admin_url( 'edit-tags.php?taxonomy=event-types&post_type=mdjm-event' ),
 						'meta'   => array(
-							'title' => __( 'Manage Event Types', 'mobile-dj-manager' ),
+							'title' => sprintf( __( 'Manage %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						),
 					) );
 					
@@ -538,10 +538,10 @@
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-fields',
 						'parent' => 'mdjm-events',
-						'title'  => __( 'Custom Event Fields', 'mobile-dj-manager' ),
+						'title'  => sprintf( __( 'Custom %s Fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'href'   => admin_url( 'admin.php?page=mdjm-settings&tab=events&section=mdjm_custom_event_fields' ),
 						'meta'   => array(
-							'title' => __( 'Manage Custom Event Fields', 'mobile-dj-manager' ),
+							'title' => sprintf( __( 'Manage Custom %s Fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						)
 					) );
 				}
@@ -550,10 +550,10 @@
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-quotes',
 						'parent' => 'mdjm-events',
-						'title'  => __( 'Event Quotes', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'edit.php?post_type=' . MDJM_QUOTE_POSTS ),
+						'title'  => sprintf( __( '%s Quotes', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'href'   => admin_url( 'edit.php?post_type=mdjm-quotes' ),
 						'meta'   => array(
-							'title' => __( 'View Event Quotes', 'mobile-dj-manager' ),
+							'title' => sprintf( __( 'View %s Quotes', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						),
 				) );	
 				}
@@ -575,7 +575,7 @@
 						'id'     => 'mdjm-transactions',
 						'parent' => 'mdjm',
 						'title'  => __( 'Transactions', 'mobile-dj-manager' ),
-						'href'   => 'edit.php?post_type=' . MDJM_TRANS_POSTS,
+						'href'   => 'edit.php?post_type=mdjm-transaction',
 						'meta'   => array(
 							'title' => __( 'MDJM Transactions', 'mobile-dj-manager' ),
 						),
@@ -584,7 +584,7 @@
 						'id'     => 'mdjm-add-transaction',
 						'parent' => 'mdjm-transactions',
 						'title'  => __( 'Add Transaction', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'post-new.php?post_type=' . MDJM_TRANS_POSTS ),
+						'href'   => admin_url( 'post-new.php?post_type=mdjm-transaction' ),
 						'meta'   => array(
 							'title' => __( 'Add Transaction', 'mobile-dj-manager' ),
 						),
@@ -594,7 +594,7 @@
 						'id'     => 'mdjm-transaction-types',
 						'parent' => 'mdjm-transactions',
 						'title'  => __( 'Transaction Types', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'edit-tags.php?taxonomy=transaction-types&post_type=' . MDJM_TRANS_POSTS ),
+						'href'   => admin_url( 'edit-tags.php?taxonomy=transaction-types&post_type=mdjm-transaction' ),
 						'meta'   => array(
 							'title' => __( 'View / Edit Transaction Types', 'mobile-dj-manager' ),
 						),
@@ -606,7 +606,7 @@
 						'id'     => 'mdjm-venues',
 						'parent' => 'mdjm',
 						'title'  => __( 'Venues', 'mobile-dj-manager' ),
-						'href'   => admin_url( 'edit.php?post_type=' . MDJM_VENUE_POSTS ),
+						'href'   => admin_url( 'edit.php?post_type=mdjm-venue' ),
 						'meta'   => array(
 							'title' => __( 'Venues', 'mobile-dj-manager' ),
 						),
@@ -616,7 +616,7 @@
 							'id'     => 'mdjm-add-venue',
 							'parent' => 'mdjm-venues',
 							'title'  => __( 'Add Venue', 'mobile-dj-manager' ),
-							'href'   => admin_url( 'post-new.php?post_type=' . MDJM_VENUE_POSTS ),
+							'href'   => admin_url( 'post-new.php?post_type=mdjm-venue' ),
 							'meta'   => array(
 								'title' => __( 'Add New Venue', 'mobile-dj-manager' ),
 							),
@@ -625,7 +625,7 @@
 							'id'     => 'mdjm-venue-details',
 							'parent' => 'mdjm-venues',
 							'title'  => __( 'Venue Details', 'mobile-dj-manager' ),
-							'href'   => admin_url( 'edit-tags.php?taxonomy=venue-details&post_type=' . MDJM_VENUE_POSTS ),
+							'href'   => admin_url( 'edit-tags.php?taxonomy=venue-details&post_type=mdjm-venue' ),
 							'meta'   => array(
 								'title' => __( 'View / Edit Venue Details', 'mobile-dj-manager' ),
 							),

@@ -19,8 +19,8 @@ global $mdjm_event, $mdjm_notice;
 	
 	<?php do_action( 'mdjm_print_notices' ); ?>
     
-	<p><?php printf( __( 'Details of your event taking place on %s are shown below.', 'mobile-dj-manager' ),
-			'{event_date}' ); ?></p>
+	<p><?php printf( __( 'Details of your %s taking place on %s are shown below.', 'mobile-dj-manager' ),
+			mdjm_get_label_singular( true ), '{event_date}' ); ?></p>
             
     <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ),
 			'{contact_page}' ); ?></p>
