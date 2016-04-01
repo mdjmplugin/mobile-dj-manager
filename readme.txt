@@ -94,6 +94,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **New**: Added Playlist Categories menu option to admin tool bar
 	* **New**: Added `mdjm_event_action_buttons` filter to re-order event action buttons
 	* **New**: Added Styles setting within Client Zone settings to set colour of Event Action Buttons
+	* **Tweak**: Delete an entire range of an employee's holiday rather than only a single day
 	* **Tweak**: Custom post meta box functions re-written to enable cleaner hooks for developers
 	* **Tweak**: Shortcodes have been re-written and cleaned up
 	* **Tweak**: Main MDJM class is now a singleton class
@@ -102,7 +103,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **Tweak**: New mdjm.css file. Can be customised
 	* **Tweak**: New mdjm.js file
 	* **Tweak**: Added content filters for emailing and printing the event playlist
-	* **Tweak**:Cleaner directory structure
+	* **Tweak**: Cleaner directory structure
 
 
 = 1.2.7.5 =

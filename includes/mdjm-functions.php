@@ -455,13 +455,13 @@
 	 *
 	 * 
 	 */
-	function mdjm_remove_holiday( $entry )	{
+	function mdjm_remove_holiday( $entry_id )	{
 		global $wpdb;
-		if( empty( $entry ) )	{
+		if( empty( $entry_id ) )	{
 			return mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
 		
-		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'id' => $entry, ) ) )	{
+		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'entry_id' => $entry_id, ) ) )	{
 			mdjm_update_notice( 'updated', 'The entry was <strong>deleted</strong> successfully' );					
 		}
 		else	{
@@ -653,7 +653,7 @@
 					?>
 					<tr>
                     <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $dj->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
-					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php mdjm_get_admin_page( 'availability', 'echo' ); ?>&action=del_entry&entry=<?php echo $holiday->id; ?>">Delete Entry</a></td>
+					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php mdjm_get_admin_page( 'availability', 'echo' ); ?>&action=del_entry&entry_id=<?php echo $holiday->entry_id; ?>">Delete Entry</a></td>
                     </tr>
                     <?php
 				}

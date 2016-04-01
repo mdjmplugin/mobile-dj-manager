@@ -113,12 +113,12 @@ function mdjm_employee_is_on_vacation( $date, $employee='' )	{
 	$query = "SELECT * FROM " . $wpdb->prefix . "mdjm_avail
 			  WHERE DATE(date_from) = '$date' 
 			  AND `user_id` = '$employee'";
-			  
+			  			  
 	$result = $wpdb->get_results( $query );
 	
 	$result = apply_filters( 'mdjm_employee_is_on_vacation', $result, $date, $employee );
 	
-	if( $result )	{
+	if( ! empty( $result ) )	{
 		return true;
 	}
 	return false;

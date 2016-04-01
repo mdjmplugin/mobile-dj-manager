@@ -142,11 +142,11 @@
 	}
 	elseif( !empty( $_GET['action'] ) )	{
 		if( $_GET['action'] == 'del_entry' )	{
-			if( empty( $_GET['entry'] ) )	{
+			if( empty( $_GET['entry_id'] ) )	{
 				return;	
 			}
 			else	{
-				mdjm_remove_holiday( $_GET['entry'] );
+				mdjm_remove_holiday( $_GET['entry_id'] );
 			}
 		}
 	}
