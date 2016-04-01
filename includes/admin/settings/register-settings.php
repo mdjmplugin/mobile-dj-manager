@@ -384,7 +384,7 @@ function mdjm_get_registered_settings()	{
 					),
 					'event_prefix'     => array(
 						'id'          => 'event_prefix',
-						'name'        => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'name'        => sprintf( __( '%s Prefix', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'desc'        => sprintf( __( 'The prefix you enter here will be added to each unique %s, contract and invoice ID', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small'
@@ -652,7 +652,7 @@ function mdjm_get_registered_settings()	{
 					'manual_payment_cfm_template' => array(
 						'id'          => 'manual_payment_cfm_template',
 						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager', mdjm_get_label_singular( true ) ) ),
+						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
 					)

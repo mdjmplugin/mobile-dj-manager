@@ -16,6 +16,14 @@
  */
 function mdjm_display_event_playlist_page()	{
 	
+	if( ! mdjm_employee_can( 'read_events' ) )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You do not have permission to manage equipment packages.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
+	}
+	
 	if ( ! class_exists( 'MDJM_PlayList_Table' ) )	{
 		require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/class-mdjm-playlist-table.php' );
 	}
