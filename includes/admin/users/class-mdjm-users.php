@@ -15,7 +15,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 */
 		public function __construct()	{
 			// Capture form submissions
-			add_action( 'init', array( &$this, 'init' ) );
+			add_action( 'init', array( &$this, 'remove_client_admin' ) );
 						
 			// Display custom user fields
 			add_action( 'show_user_profile', array( &$this, 'profile_custom_fields' ) ); // User profile screen
@@ -30,21 +30,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			// Display admin notices
 			add_action( 'admin_notices', array( &$this, 'messages' ) );
 		}
-		
-		/**
-		 * Hook into the init action to process form submissions
-		 *
-		 *
-		 *
-		 *
-		 */
-		public function init()	{
-			if( isset( $_POST['mdjm-add-employee'] ) )
-				$this->add( $_POST );
 				
-			$this->remove_client_admin();
-		} // init
-		
 		/**
 		 * Display admin notices to the user
 		 *
@@ -57,14 +43,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				return;
 			
 			$messages = array(
-				1 => array( 'updated', __( 'Employee added.', 'mobile-dj-manager' ) ),
-				2 => array( 'updated', __( 'Employees deleted.', 'mobile-dj-manager' ) ),
-				3 => array( 'updated', __( '', 'mobile-dj-manager' ) ),
-				4 => array( 'updated', __( '', 'mobile-dj-manager' ) ),
-				5 => array( 'error', __( 'Insufficient information to create employee.', 'mobile-dj-manager' ) ),
-				6 => array( 'error', __( 'Unable to create employee.', 'mobile-dj-manager' ) ),
-				7 => array( 'updated', __( '', 'mobile-dj-manager' ) ) );
-				
+				2 => array( 'updated', __( 'Employees deleted.', 'mobile-dj-manager' ) )
+			);				
 			mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
 		} // messages
 				
@@ -322,12 +302,14 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
 					$default_fields->add_cap( 'mdjm_employee' );
 					$default_fields->add_cap( 'manage_mdjm' );
+					$default_fields->add_cap( 'dj' );
 				}
 					
 				else	{
 					delete_user_meta( $user_id, '_mdjm_event_staff' );
 					$default_fields->remove_cap( 'manage_mdjm' );
 					$default_fields->remove_cap( 'mdjm_employee' );
+					$default_fields->remove_cap( 'dj' );
 				}
 			}
 			

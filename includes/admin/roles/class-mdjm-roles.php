@@ -76,7 +76,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 						
 			// Loop through the $raw_roles and filter for mdjm specific roles
 			foreach( $raw_roles as $role_id => $role_name )	{
-				if( $role_id == 'administrator' || $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{
+				if( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{
 					$mdjm_roles[$role_id] = $role_name;
 				}
 			}
@@ -91,12 +91,19 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 * Retrieve all MDJM user roles and display return them as <options>
 		 *
 		 * @params	arr		$args					Arguments to pass to the select list
-		 *						'selected'			Optional: Initially selected $role_id
-		 *						'disable_default'	Optional: true to make the options for default roles disabled
 		 *
 		 * @return	str		$output			HTML code for the <options>
 		 */
 		public function roles_dropdown( $args='' )	{
+			$defaults = array(
+				'selected'		=> '',
+				'disable_default' => false,
+				'first_entry'	 => '',
+				'first_entry_val' => 0
+			);
+			
+			$args = wp_parse_args( $args, $defaults );
+			
 			$mdjm_roles = $this->get_roles();
 			
 			// Filter the roles
@@ -107,6 +114,11 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				
 			else	{
 				$output = '';
+				
+				if ( ! empty( $args['first_entry'] ) )	{
+					$output .= '<option value="' . $args['first_entry_val'] . '">' . $args['first_entry'] . '</option>' . "\r\n";
+				}
+				
 				foreach( $mdjm_roles as $role_id => $role )	{
 					$output .= '<option value="' . $role_id . '"';
 					
@@ -143,7 +155,9 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				
 				if ( null !== $result ) {
 					$return['type'] = 'success';
-					$updated_roles = $this->roles_dropdown();
+					
+					$updated_roles = '<option value="">' . __( 'Select Role', 'mobile-dj-manager' ) . '...</option>' . "\r\n" . $this->roles_dropdown();
+					
 					$return['options'] = $updated_roles;
 					$result->add_cap( 'mdjm_employee' );
 				}

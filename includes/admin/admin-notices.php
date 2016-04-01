@@ -84,7 +84,33 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	
+	if( isset( $_GET['mdjm-message'] ) && 'employee_added' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-employee_added',
+			__( 'Employee added.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'employee_add_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-employee_add-failed',
+			__( 'Could not add employee.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'employee_info_missing' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-employee_info-missing',
+			__( 'Insufficient information to create employee.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
+	
 } // mdjm_admin_messages
 add_action( 'admin_notices', 'mdjm_admin_notices' );

@@ -75,31 +75,37 @@ class MDJM_Availability_Checker {
 			$date = date( 'Y-m-d' );
 		}
 		
-		$this->date		 = ( ! empty( $date ) )		  ? strtotime( $date ) : date( 'Y-m-d' );
+		$this->date		 = ! empty( $date ) ? strtotime( $date ) : date( 'Y-m-d' );
 		
 		if( empty( $_employees ) && ! empty( $_roles ) )	{
-			$theemployees = mdjm_get_employees( array_merge( array( 'administrator' ), $_roles ) );
-		}
-		elseif( empty( $_employees ) )	{
-			$theemployees = mdjm_get_employees( array_merge( array( 'administrator' ), mdjm_get_roles( false ) ) );
-		}
-		else	{
+			
+			$theemployees = mdjm_get_employees( $_roles );
+			
+		} elseif( empty( $_employees ) )	{
+			
+			$theemployees = mdjm_get_employees( mdjm_get_option( 'availability_roles' ) );
+			
+		} else	{
+			
 			$theemployees = is_array( $_employees ) ? $_employees : $_employees;
+			
 		}
 		
 		$employees = array();
+		
 		foreach( $theemployees as $employee )	{
+			
 			if( is_object( $employee ) )	{
 				$employees[] = $employee->ID;
-			}
-			else	{
+			} else	{
 				$employees[] = $employee;
 			}
+			
 		}
 				
 		$this->employees	= $employees;
-		$this->roles		= ( ! empty( $_roles ) )	 ? $_roles	: mdjm_get_roles();
-		$this->status	    = ( ! empty( $_status ) )	? $_status   : mdjm_get_option( 'availability_status', 'any' );
+		$this->roles		= ! empty( $_roles )	 ? $_roles	: mdjm_get_roles( mdjm_get_option( 'availability_roles' ) );
+		$this->status	   = ! empty( $_status )	? $_status   : mdjm_get_option( 'availability_status', 'any' );
 		
 		if( ! is_array( $this->roles ) )	{
 			array( $this->roles );
@@ -119,11 +125,12 @@ class MDJM_Availability_Checker {
 	 * @return	bool
 	 */
 	public function check_availability()	{
+		
 		foreach( $this->employees as $employee_id )	{
-			if( ! $this->employee_working( $employee_id ) )	{
+			
+			if( ! $this->employee_working( $employee_id ) && ! $this->employee_has_vacation( $employee_id ) )	{
 				$this->result['available'][] = $employee_id;
-			}
-			else	{
+			} else	{
 				$this->result['unavailable'][] = $employee_id;
 			}
 		}
@@ -156,6 +163,6 @@ class MDJM_Availability_Checker {
 	 * @return	bool	True if the employee has vacation, or false
 	 */
 	public function employee_has_vacation( $employee_id )	{
-		return mdjm_employee_is_on_vacation( $this->date, $this->employee );
+		return mdjm_employee_is_on_vacation( $this->date, $employee_id );
 	} // employee_has_vacation
 } // class MDJM_Availability_Checker

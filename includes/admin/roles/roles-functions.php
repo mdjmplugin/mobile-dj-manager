@@ -17,25 +17,30 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.3
  * @global	$wp_roles
- * @param	bool	$exclude_admin	True exlucdes the Administrator role from the results. False includes.
- * @return	arr		$mdjm_roles		Array of MDJM registered roles
+ * @param	str|arr		$which_roles	Which roles to retrieve
+ * @return	arr			$mdjm_roles		Array of MDJM registered roles
  */
-function mdjm_get_roles( $exclude_admin=true )	{
+function mdjm_get_roles( $which_roles = array() )	{
 	global $wp_roles;
 	
 	// Retrieve all roles within this WP instance
 	$roles = $wp_roles->get_names();
+	
+	if ( ! empty( $which_roles ) && ! is_array( $which_roles ) )	{
+		$which_roles = array( $which_roles );
+	}
 				
 	// Loop through the $raw_roles and filter for mdjm specific roles
 	foreach( $roles as $role_id => $role_name )	{
-		if( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{
-			// Ignore administrators if $exclude_admin is true
-			if( $role_id == 'administrator' && empty( $exclude_admin ) )	{
-				continue;
-			}
-			
+		
+		if( ! empty( $which_roles ) && ! in_array( $role_id, $which_roles ) )	{
+			continue;
+		}
+		
+		if( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{			
 			$mdjm_roles[$role_id] = $role_name;
 		}
+		
 	}
 		
 	// Filter the roles

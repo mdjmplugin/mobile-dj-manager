@@ -163,9 +163,9 @@ function mdjm_employee_dropdown( $args='' )	{
  * @return	void
  */
 function mdjm_add_employee( $post_data )	{
+	
 	if( empty( $post_data['first_name'] ) || empty( $post_data['last_name'] ) || empty( $post_data['user_email'] ) || empty( $post_data['employee_role'] ) )	{
-		wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=5' );
-		exit;
+		return false;
 	}
 	
 	// We don't need to execute the hooks for user saves
@@ -207,15 +207,13 @@ function mdjm_add_employee( $post_data )	{
 			);
 		}
 		
-		wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=1' );
-		exit;
+		return true;
 	}
 	else	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'ERROR: Unable to add employee. ' . $user_id->get_error_message(), true );
 			
-		wp_redirect( $_SERVER['HTTP_REFERER'] . '&user_action=1&message=6' );
-		exit;
+		return false;
 	}			
 } // mdjm_add_employee
 
@@ -235,7 +233,7 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
 				
 	// Define the default query	
 	if( empty( $roles ) )
-		$roles = mdjm_get_roles( false );
+		$roles = mdjm_get_roles();
 				
 	// This array will store our employees
 	$employees = array();

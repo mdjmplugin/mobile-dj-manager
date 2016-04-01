@@ -25,7 +25,7 @@ function mdjm_do_availability_check( $date, $employees='', $roles='', $status=''
 	$check = new MDJM_Availability_Checker( $date, $employees, $roles, $status );
 	
 	$check->check_availability();
-	wp_die( print_r( $check->result ) );
+	
 	return $check->result;
 	
 } // mdjm_do_availability_check
@@ -39,6 +39,7 @@ function mdjm_do_availability_check( $date, $employees='', $roles='', $status=''
  * @return	bool	True if the employee is working, otherwise false.
  */
 function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{	
+	
 	if( empty( $employee_id ) && is_user_logged_in() )	{
 		$employee_id = get_current_user_id();
 	}

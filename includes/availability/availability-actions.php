@@ -40,7 +40,9 @@ function mdjm_availability_check_action( $data )	{
 			$message = 'not_available';
 		}
 	}
-	wp_die( $message );
+	
+	print_r( $result );
+	
 	die();
 } // mdjm_availability_check_action
 add_action( 'mdjm_availability_check_widget', 'mdjm_availability_check_action' );

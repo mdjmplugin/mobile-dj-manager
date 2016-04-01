@@ -63,7 +63,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 			self::page_header();
 			
 			// Retrieve all MDJM roles
-			self::$mdjm_roles = mdjm_get_roles( false );
+			self::$mdjm_roles = mdjm_get_roles();
 			self::$total_roles = count( self::$mdjm_roles );
 			
 			// Determine the page to display
@@ -173,12 +173,15 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 		 */
 		public static function add_employee_form()	{
 			// Ensure user has permssion to add an employee
-			if( !mdjm_employee_can( 'manage_staff' ) )
+			if( ! mdjm_employee_can( 'manage_staff' ) )	{
 				return;
+			}
 				
 			?>
             <h3><?php _e( 'Employee Quick Add', 'mobile-dj-manager' ); ?></h3>
             <form name="mdjm_employee_add" id="mdjm_employee_add" method="post">
+            <?php mdjm_admin_action_field( 'add_employee' ); ?>
+            <?php wp_nonce_field( 'add_employee', 'mdjm_nonce', true, true ); ?>
             <table class="widefat">
             <tr>
 			<td style="width: 250px;"><label class="mdjm-label" for="first_name"><?php _e( 'First Name', 'mobile-dj-manager' ); ?>:</label><br />
@@ -197,9 +200,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 			<select name="employee_role" id="employee_role" required>
                 <option value=""><?php _e( 'Select Role', 'mobile-dj-manager' ); ?>&hellip;</option>
                 <?php 
-                add_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
                 echo MDJM()->roles->roles_dropdown();
-                remove_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
                 ?>
             </select>
             </td>
@@ -580,13 +581,18 @@ endif;
 		public function column_role( $item ) {
 			global $wp_roles;
 			
-			if( !empty( $item->roles ) )	{
+			if( ! empty( $item->roles ) )	{
+				
 				foreach( $item->roles as $role )	{
-					if( array_key_exists( $role, MDJM_Employee_Manager::$mdjm_roles ) )
+					
+					if( array_key_exists( $role, MDJM_Employee_Manager::$mdjm_roles ) )	{
 						$roles[$role] = MDJM_Employee_Manager::$mdjm_roles[$role];
+					}
+					
 				}
+				
 			}
-			if( !empty( $roles ) )	{
+			if( ! empty( $roles ) )	{
 				$i = 1;
 				foreach( $roles as $role_id => $role )	{
 					printf( '%s%s%s',

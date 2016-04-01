@@ -43,12 +43,12 @@ if( !class_exists( 'MDJM_Permissions' ) ) :
 				return;
 			
 			$fields = array( 
-				'comm_permissions'	      	=> 'mdjm_comms',
+				'comm_permissions'	      => 'mdjm_comms',
 				'client_permissions'        => 'mdjm_client',
 				'employee_permissions'      => 'mdjm_employee',
 				'event_permissions'         => 'mdjm_event',
 				'package_permissions'       => 'mdjm_package',
-				'quote_permissions'	     	=> 'mdjm_quote',
+				'quote_permissions'	     => 'mdjm_quote',
 				'template_permissions'      => 'mdjm_template',
 				'txn_permissions'           => 'mdjm_txn',
 				'venue_permissions'         => 'mdjm_venue'

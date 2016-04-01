@@ -134,7 +134,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
-		if( isset( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
+		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
 		

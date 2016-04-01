@@ -34,7 +34,7 @@
  *
  */
  
-if( !class_exists( 'Mobile_DJ_Manager' ) ) :
+if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
 		
@@ -265,6 +265,7 @@ if( !class_exists( 'Mobile_DJ_Manager' ) ) :
 				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/playlist-page.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/event-actions.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/employee-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/formatting/mdjm-formatting.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );
