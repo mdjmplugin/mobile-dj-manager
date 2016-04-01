@@ -44,7 +44,7 @@ global $mdjm_event, $mdjm_notice;
                     <tr>
                 <?php endif; ?><!-- endif( $i == 1 ) -->
                 
-                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'green' ), $button['url'] ); ?></td>
+                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'blue' ), $button['url'] ); ?></td>
                         
                 <?php if( $i == $cells ) : ?>
                     </tr>
@@ -88,7 +88,7 @@ global $mdjm_event, $mdjm_notice;
             </tr>
             
             <tr>
-            	<th><?php _e( 'Event Type:', 'mobile-dj-manager' ); ?></th>
+            	<th><?php printf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></th>
                 <td>{event_type}</td>
                 <th><?php printf(  __( 'Your %s:', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mogile-dj-manager' ) ) ); ?></th>
                 <td>{dj_fullname}</td>

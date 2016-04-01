@@ -22,12 +22,12 @@ global $mdjm_event, $mdjm_notice;
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  _e( 'Back to Event', 'mobile-dj-manager' ); ?></a></p>
+        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singularl() ); ?></a></p>
         
     	<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
                         
-        <p><?php printf( __( 'The contract for your event taking place on %s is displayed below.', 'mobile-dj-manager' ),
-                '{event_date}' ); ?></p>
+        <p><?php printf( __( 'The contract for your %s taking place on %s is displayed below.', 'mobile-dj-manager' ),
+                mdjm_get_label_singularl( true ), '{event_date}' ); ?></p>
         
         <p class="mdjm-contract-signed"><span><?php _e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
             <?php printf( __( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),

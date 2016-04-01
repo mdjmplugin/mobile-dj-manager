@@ -23,7 +23,7 @@ global $mdjm_event, $mdjm_notice;
 			</th>
             <th class="mdjm-event-heading right-align"><?php _e( 'ID:', 'mobile-dj-manager' ); ?> {contract_id}<br />
 				<?php _e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}<br />
-				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage Event</a>', 'mobile-dj-manager' ), '{event_url}' ); ?></span>
+				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), '{event_url}', mdjm_get_label_singular() ); ?></span>
             </th>
 		</tr>
 		<tr>
@@ -39,7 +39,7 @@ global $mdjm_event, $mdjm_notice;
 			</td>
 		</tr>
         <tr>
-        	<td><span class="mdjm-event-label"><?php _e( 'Event Type', 'mobile-dj-manager' ); ?></span><br />
+        	<td><span class="mdjm-event-label"><?php printf( __( '%s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span><br />
 				{event_type}
 			</td>
         </tr>

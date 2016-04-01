@@ -35,8 +35,9 @@ global $mdjm_event, $mdjm_notice;
 				'{event_type}',
 				'{event_date}' ); ?></p>
                 
-        <p><?php printf( __( '%1$s has invited you to provide input for the music that will be played during their event. Simply add your selections below and %1$s will be able to review them.', 'mobile-dj-manager' ),
-                    '{client_firstname}' ); ?></p>
+        <p><?php printf( __( '%1$s has invited you to provide input for the music that will be played during their %2$s. Simply add your selections below and %1$s will be able to review them.', 'mobile-dj-manager' ),
+                    '{client_firstname}',
+					mdjm_get_label_singular( true ) ); ?></p>
     
     	<?php do_action( 'mdjm_guest_playlist_header_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-header -->

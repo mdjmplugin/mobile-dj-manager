@@ -267,7 +267,7 @@ function mdjm_get_registered_settings()	{
 					'time_format'      => array(
 						'id'      => 'time_format',
 						'name'    => __( 'Time Format', 'mobile-dj-manager' ),
-						'desc'    => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
+						'desc'    => sprintf( __( 'Select the format in which you want your %s times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'    => 'select',
 						'options' => array(
 							'g:i A'		=> date( 'g:i A', current_time( 'timestamp' ) ),
@@ -378,14 +378,14 @@ function mdjm_get_registered_settings()	{
 				'main' => array(
 					'event_settings'  => array(
 						'id'         => 'event_settings',
-						'name'       => '<h3>' . __( 'Event Settings', 'mobile-dj-manager' ) . '</h3>',
+						'name'       => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</h3>',
 						'desc'       => '',
 						'type'       => 'header'
 					),
 					'event_prefix'     => array(
 						'id'          => 'event_prefix',
-						'name'        => __( 'Event Prefix', 'mobile-dj-manager' ),
-						'desc'        => __( 'The prefix you enter here will be added to each unique event, contract and invoice ID', 'mobile-dj-manager' ),
+						'name'        => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'        => sprintf( __( 'The prefix you enter here will be added to each unique %s, contract and invoice ID', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small'
 					),
@@ -413,7 +413,7 @@ function mdjm_get_registered_settings()	{
 					'default_contract' => array(
 						'id'          => 'default_contract',
 						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select the format in which you want your event times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select the format in which you want your %s times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options' => mdjm_list_templates( 'contract' )
 					),
@@ -438,7 +438,7 @@ function mdjm_get_registered_settings()	{
 					'journaling'       => array(
 						'id'          => 'journaling',
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
-						'desc'        => __( 'Log and track all client &amp; event actions (recommended).', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Log and track all client &amp; %s actions (recommended).', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'type'        => 'checkbox',
 						'std'		 => '1'
 					)
@@ -452,8 +452,8 @@ function mdjm_get_registered_settings()	{
 					),
 					'enable_playlists' => array(
 						'id'          => 'enable_playlists',
-						'name'        => __( 'Enable Event Playlists by Default?', 'mobile-dj-manager' ),
-						'desc'        => __( 'Check to enable Client Playlist features by default. Can be overridden per event.', 'mobile-dj-manager' ),
+						'name'        => sprintf( __( 'Enable %s Playlists by Default?', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'        => sprintf( __( 'Check to enable Client Playlist features by default. Can be overridden per %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
@@ -464,7 +464,7 @@ function mdjm_get_registered_settings()	{
 											'<code>',
 											'</code>'
 										),
-						'desc'        => __( 'Number of days before event that the playlist should close to new entries.', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Number of days before %s that the playlist should close to new entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'		 => '5'
@@ -472,9 +472,9 @@ function mdjm_get_registered_settings()	{
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
 						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
-						'desc'        => __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' . 
+						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' . 
 										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' . 
-										'Only song, artist and the event type information is transmitted.', 'mobile-dj-manager' ),
+										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					)
 				)
@@ -551,7 +551,7 @@ function mdjm_get_registered_settings()	{
 					'unavailable'      => array(
 						'id'          => 'unavailable',
 						'name'        => __( 'Unavailability Template', 'mobile-dj-manager' ),
-						'desc'        => __( 'This is the default template used when responding to enquiries that you are unavailable for the event', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'This is the default template used when responding to enquiries that you are unavailable for the %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
@@ -574,7 +574,7 @@ function mdjm_get_registered_settings()	{
 					'contract_to_client' => array(
 						'id'          => 'contract_to_client',
 						'name'        => __( 'Contract Notification Email?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Do you want to auto send an email to the client when their event changes to the %sAwaiting Contract%s status?', 'mobile-dj-manager' ), '<em>', '</em>' ),
+						'desc'        => sprintf( __( 'Do you want to auto send an email to the client when their %s changes to the <em>Awaiting Contract<em> status?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					),
 					'contract'         => array(
@@ -652,7 +652,7 @@ function mdjm_get_registered_settings()	{
 					'manual_payment_cfm_template' => array(
 						'id'          => 'manual_payment_cfm_template',
 						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select an email template to be sent to clients when you manually mark an event payment as received', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager', mdjm_get_label_singular( true ) ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
 					)
@@ -690,7 +690,7 @@ function mdjm_get_registered_settings()	{
 					'pass_length'      => array(
 						'id'          => 'pass_length',
 						'name'        => __( 'Default Password Length', 'mobile-dj-manager' ),
-						'desc'        => __( 'If opting to generate or reset a user password during event creation, how many characters should the password be?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If opting to generate or reset a user password during %s creation, how many characters should the password be?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => array(
 							'5'  => '5',
@@ -711,14 +711,15 @@ function mdjm_get_registered_settings()	{
 					),
 					'client_zone_event_settings'  => array(
 						'id'          => 'client_zone_event_settings',
-						'name'        => '<h3>' . __( 'Event Settings', 'mobile-dj-manager' ) . '</h3>',
+						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</h3>',
 						'desc'        => '',
 						'type'        => 'header'
 					),
 					'package_prices'   => array(
 						'id'          => 'package_prices',
 						'name'        => __( 'Display Package Price?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select to display event package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select to display %s package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
+											mdjm_get_label_singular( true ),
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'        => 'checkbox'
 					),
@@ -733,7 +734,7 @@ function mdjm_get_registered_settings()	{
 					'action_button_colour'      => array(
 						'id'          => 'action_button_colour',
 						'name'        => __( 'Action Button Colour', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select your preferred colour for the event action buttons', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select your preferred colour for the %s action buttons', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => array(
 							'blue'		=> 'Blue',
@@ -763,9 +764,7 @@ function mdjm_get_registered_settings()	{
 					'quotes_page'      => array(
 						'id'          => 'quotes_page',
 						'name'        => __( 'Online Quotes Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select the page to use for online event quotes. Needs to contain the shortcode %s[mdjm-online-quote]%s", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( "Select the page to use for online %s quotes. Needs to contain the shortcode <code>[mdjm-online-quote]</code>", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
@@ -823,7 +822,7 @@ function mdjm_get_registered_settings()	{
 					'availability_status' => array(
 						'id'          => 'availability_status',
 						'name'        => __( 'Unavailable Statuses', 'mobile-dj-manager' ),
-						'desc'        => __( "CTRL (cmd on MAC) + Click to select event status' that you want availability checker to report as unavailable", 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select %s status' that you want availability checker to report as unavailable", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'multiple_select',
 						'options'     => mdjm_all_event_status()
 					),
@@ -954,27 +953,22 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => array(
 							'0'          => 'Not required',
-							'percentage' => __( '% of event value', 'mobile-dj-manager' ),
+							'percentage' => sprintf( __( '% of &s value', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 							'fixed'      => __( 'Fixed price', 'mobile-dj-manager' )
 						)
 					),
 					'deposit_amount'   => array(
 						'id'          => 'deposit_amount',
 						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Amount', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "If your %s's are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format 0.00", 'mobile-dj-manager' ),
-											mdjm_get_deposit_label() ),
+						'desc'        => sprintf( __( "If your %s's are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format %s", 'mobile-dj-manager' ),
+											mdjm_get_deposit_label(), mdjm_format_amount( '0' ) ),
 						'type'        => 'text',
 						'size'        => 'small'
 					),
 					'deposit_label'    => array(
 						'id'          => 'deposit_label',
 						'name'        => __( 'Label for Deposit', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "If you don't use the word %sDeposit%s, you can change it here. Many prefer the term %sBooking Fee%s. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>',
-											'<code>',
-											'</code>'
-										 ),
+						'desc'        => __( "If you don't use the word <code>Deposit</code>, you can change it here. Many prefer the term <code>Booking Fee</code>. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
 						'std'         => __( 'Deposit', 'mobile-dj-manager' )
@@ -982,10 +976,7 @@ function mdjm_get_registered_settings()	{
 					'balance_label'    => array(
 						'id'          => 'balance_label',
 						'name'        => __( 'Label for Balance', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "If you don't use the word %sBalance%s, you can change it here. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>'
-										 ),
+						'desc'        => __( "If you don't use the word <code>Balance</code>, you can change it here. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
 						'std'         => __( 'Balance', 'mobile-dj-manager' )
@@ -993,7 +984,8 @@ function mdjm_get_registered_settings()	{
 					'default_type'     => array(
 						'id'          => 'default_type',
 						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an event %s as paid how should we log it?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an %s %s as paid how should we log it?', 'mobile-dj-manager' ),
+											mdjm_get_label_singular( true ),
 											mdjm_get_balance_label()
 										),
 						'type'        => 'select',
@@ -1242,12 +1234,12 @@ function mdjm_get_registered_settings_sections() {
 			'uninstall'          => __( 'Uninstall Actions', 'mobile-dj-manager' )
 		) ),
 		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
-			'main'               => __( 'Event Settings', 'mobile-dj-manager' ),
+			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' )
 		) ),
 		'emails'          => apply_filters( 'mdjm_settings_sections_emails', array(
 			'main'               => __( 'General Email Settings', 'mobile-dj-manager' ),
-			'templates'          => __( 'Event Templates', 'mobile-dj-manager' )
+			'templates'          => sprintf( __( '%s Templates', 'mobile-dj-manager' ), mdjm_get_label_singular() )
 		) ),
 		'client_zone'     => apply_filters( 'mdjm_settings_sections_styles', array(
 			'main'               => __( 'Client Zone Settings', 'mobile-dj-manager' ),

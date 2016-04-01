@@ -22,12 +22,12 @@ global $mdjm_event, $mdjm_notice;
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  _e( 'Back to Event', 'mobile-dj-manager' ); ?></a></p>
+        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singularl() ); ?></a></p>
         
     	<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
                         
-        <p><?php printf( __( 'The contract for your event taking place on %s is displayed below.', 'mobile-dj-manager' ),
-                '{event_date}' ); ?></p>
+        <p><?php printf( __( 'The contract for your %s taking place on %s is displayed below.', 'mobile-dj-manager' ),
+                mdjm_get_label_singularl( true ), '{event_date}' ); ?></p>
                 
         <?php if( $mdjm_event->post_status == 'mdjm-contract' ) : ?>
         	
@@ -37,8 +37,8 @@ global $mdjm_event, $mdjm_notice;
             <p><?php _e( 'Once the contract is signed, you will receive a confirmation email from us.', 'mobile-dj-manager' ); ?></p>
             
         <?php else : ?>
-            <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your event. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
-				mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
+            <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %s. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
+				mdjm_get_label_singularl( true ), mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
             
         <?php endif; // endif( $mdjm_event->post_status == 'mdjm-contract' ) ?>
     
@@ -65,8 +65,8 @@ global $mdjm_event, $mdjm_notice;
         <?php if( $mdjm_event->post_status != 'mdjm-contract' ) : ?>
             
             <?php $disabled = ' disabled="disabled"'; ?>
-            <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your event. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
-            mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
+            <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %s. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
+            mdjm_get_label_singularl( true ), mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
             
         <?php endif; // endif( $mdjm_event->post_status != 'mdjm-contract' ) ?>
             
