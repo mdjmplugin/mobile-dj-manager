@@ -136,7 +136,7 @@ function mdjm_register_post_types()	{
 	$signed_contract_args = array(
 		'labels'                 => $signed_contract_labels,
 		'description'			=> __( 'Signed Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => false,
+		'publicly_queryable' 	 => true,
 		'rewrite'            	=> array( 'slug' => 'mdjm-signed-contract' ),
 		'capability_type'    	=> array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
 		'map_meta_cap'		   => true,
@@ -148,7 +148,7 @@ function mdjm_register_post_types()	{
 	
 	// Custom Field Post Type
 	$custom_field_labels = apply_filters( 
-		'mdjm_signed_contract_labels',
+		'mdjm_custom_field_contract_labels',
 		array(
 			'name'               => _x( 'Custom Event Fields', 'post type general name', 'mobile-dj-manager' ),
 			'singular_name'      => _x( 'Custom Event Field', 'post type singular name', 'mobile-dj-manager' ),

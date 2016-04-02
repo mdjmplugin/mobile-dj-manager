@@ -485,7 +485,7 @@
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-add-events',
 						'parent' => 'mdjm-events',
-						'title'  => sprintf( __( 'create %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'title'  => sprintf( __( 'Create %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'href'   => admin_url( 'post-new.php?post_type=mdjm-event' ),
 						'meta'   => array(
 							'title' => sprintf( __( 'Create New %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),

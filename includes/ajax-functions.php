@@ -260,11 +260,11 @@ function update_event_cost_from_package()	{
 	
 	if( !empty( $cost ) )	{
 		$result['type'] = 'success';
-		$result['cost'] = number_format( (float)$cost, 2, '.', '' );	
+		$result['cost'] = mdjm_format_amount( (float)$cost );	
 	}
 	else	{
 		$result['type'] = 'success';
-		$result['cost'] = number_format( 0, 2, '.', '' );
+		$result['cost'] = mdjm_format_amount( 0 );
 	}
 	
 	$result = json_encode( $result );
@@ -315,11 +315,11 @@ function update_event_cost_from_addons()	{
 	
 	if( !empty( $cost ) )	{
 		$result['type'] = 'success';
-		$result['cost'] = number_format( (float)$cost, 2, '.', '' );	
+		$result['cost'] = mdjm_format_amount( (float)$cost );	
 	}
 	else	{
 		$result['type'] = 'success';
-		$result['cost'] = number_format( 0, 2, '.', '' );
+		$result['cost'] = mdjm_format_amount( 0 );
 	}
 	
 	$result = json_encode( $result );
@@ -397,7 +397,7 @@ function mdjm_update_event_deposit()	{
 			
 	if( !empty( $deposit ) )	{
 		$result['type'] = 'success';
-		$result['deposit'] = number_format( (float)$deposit, 2, '.', '' );
+		$result['deposit'] = mdjm_format_amount( (float)$deposit );
 	}
 	else	{
 		$result['type'] = 'error';

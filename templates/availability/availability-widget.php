@@ -11,12 +11,19 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/availability/availability-widget.php
  */
-global $mdjm_notice;
 ?>
 <div id="mdjm_availability_widget">
-	<div id="mdjm_availability_widget_intro"><p><?php echo ( !isset( $mdjm_notice ) ) ? $instance['intro'] : $mdjm_notice; ?></p></div>
+	    
+    <div id="mdjm_availability_widget_intro">
+    
+    	<p><?php echo $instance['intro']; ?></p>
+        
+    </div>
+    
     <form name="mdjm_availability_check_widget" id="mdjm_availability_check_widget" method="post">
-    	<?php echo mdjm_action_field( 'availability_check_widget' ); ?>
+    	
+		<?php echo mdjm_action_field( 'availability_check_widget' ); ?>
+        
         <p><label for="mdjm_show_date_widget"><?php echo $instance['label']; ?></label>
         <input type="text" name="mdjm_show_date_widget" id="mdjm_show_date_widget" class="mdjm_datepicker_widget" placeholder="<?php mdjm_format_datepicker_date(); ?>" /></p>
         
@@ -25,5 +32,7 @@ global $mdjm_notice;
         <p<?php if( $instance['submit_centre'] == 'Y' ) : echo ' style="text-align: center;";'; endif; ?>><input type="submit" name="submit" id="submit" class="mdjm_submit" value="<?php echo $instance['submit_text']; ?>" /></p>
         
         <div class="mdjm_pleasewait"><?php _e( 'Please wait...', 'mobile-dj-manager' ); ?><img src="/wp-admin/images/loading.gif" alt="<?php _e( 'Please wait...', 'mobile-dj-manager' ); ?>" /></div>
+    
     </form>
+
 </div>

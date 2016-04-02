@@ -12,7 +12,7 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-single.php
  */
-global $mdjm_event, $mdjm_notice;
+global $mdjm_event;
 ?>
 <?php do_action( 'mdjm_pre_event_detail', $mdjm_event->ID, $mdjm_event ); ?>
 <div id="post-<?php echo $mdjm_event->ID; ?>" class="mdjm-<?php echo $mdjm_event->post_status; ?>">

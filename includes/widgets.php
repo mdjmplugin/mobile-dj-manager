@@ -123,7 +123,7 @@ class mdjm_availability_widget extends WP_Widget {
 		$defaults = array( 
 					'title'              => __( 'Availability Checker', 'mobile-dj-manager' ),
 					'ajax'			   => true,
-					'intro'              => __( 'Check my availability for your event by entering the date below', 'mobile-dj-manager' ),
+					'intro'              => sprintf( __( 'Check my availability for your %s by entering the date below', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 					'label'              => __( 'Select Date:', 'mobile-dj-manager' ),
 					'submit_text'        => __( 'Check Availability', 'mobile-dj-manager' ),
 					'submit_centre'      => 'Y',

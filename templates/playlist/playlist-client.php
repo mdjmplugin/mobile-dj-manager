@@ -12,7 +12,7 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-client.php
  */
-global $mdjm_event, $mdjm_notice;
+global $mdjm_event;
 ?>
 
 <div id="mdjm-playlist-wrapper">
@@ -23,8 +23,6 @@ global $mdjm_event, $mdjm_notice;
         <?php do_action( 'mdjm_print_notices' ); ?>
         
     	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event->ID ); ?>
-        
-        <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>
         
         <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         

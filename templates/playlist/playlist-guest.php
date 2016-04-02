@@ -14,7 +14,7 @@
  */
 
 // These global vars must remain
-global $mdjm_event, $mdjm_notice;
+global $mdjm_event;
 ?>
 
 <div id="mdjm-guest-playlist-wrapper">
@@ -25,9 +25,7 @@ global $mdjm_event, $mdjm_notice;
         <?php do_action( 'mdjm_print_notices' ); ?>
         
     	<?php do_action( 'mdjm_guest_playlist_header_top', $mdjm_event->ID ); ?>
-        
-        <?php if( ! empty( $mdjm_notice ) ) : echo $mdjm_notice; endif; ?>
-                
+                        
         <p><?php printf( __( 'Welcome to the %s %s music playlist management system for %s %s taking place on %s.', 'mobile-dj-manager' ),
                 mdjm_get_option( 'company_name' ),
 				mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),

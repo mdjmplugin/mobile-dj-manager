@@ -47,7 +47,7 @@
 									sanitize_text_field( $_POST['equip_desc'] ),
 									$_POST['equip_cat'],
 									$_POST['addon_avail'],
-									number_format( $_POST['addon_cost'], 2 ),
+									mdjm_format_amount( $_POST['addon_cost'] ),
 									$djs_have
 								);
 			update_option( 'mdjm_equipment', $items );
@@ -81,7 +81,7 @@
 									sanitize_text_field( $_POST['equip_desc'] ),
 									$_POST['equip_cat'],
 									$_POST['addon_avail'],
-									number_format( $_POST['addon_cost'], 2 ),
+									mdjm_format_amount( $_POST['addon_cost'] ),
 									$djs_have
 									);
 			update_option( 'mdjm_equipment', $equipment );

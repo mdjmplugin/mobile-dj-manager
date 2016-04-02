@@ -204,35 +204,52 @@
 			$num_order = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
-						'post_status'	  => $status,
-						'posts_per_page'   => -1,
-						'meta_key'		 => $orderby,
-						'orderby'		  => ( in_array( $orderby, $num_order ) ? 'meta_value_num' : 'meta_value' ),
-						'order' 			=> $order,
-						);
+				'post_type' 		=> MDJM_EVENT_POSTS,
+				'post_status'	  => $status,
+				'posts_per_page'   => -1,
+				'meta_key'		 => $orderby,
+				'orderby'		  => ( in_array( $orderby, $num_order ) ? 'meta_value_num' : 'meta_value' ),
+				'order' 			=> $order,
+			);
+			
 			if( empty( $date ) )	{
 				$args['meta_query'] = array(
-											'key'		=> '_mdjm_event_dj',
-											'value'  	  => $dj,
-											'compare'	=> '==',
-											);
+					'relation'	=> 'OR',
+					array(
+						'key'		=> '_mdjm_event_dj',
+						'value'  	  => $dj,
+						'compare'	=> '=='
+					),
+					array(
+						'key'		=> '_mdjm_event_employees',
+						'value'		=> sprintf( ':"%s";', $dj ),
+						'compare'	=> 'LIKE'
+					)
+				);
 			}
 			else	{
 				$args['meta_query'] = array(
-										'relation' => 'AND',
-										array(
-											'key'		=> '_mdjm_event_dj',
-											'value'  	  => $dj,
-											'compare'	=> ( is_array( $dj ) ? 'IN' : '=' ),
-											),
-										array(
-											'key'		=> '_mdjm_event_date',
-											'value'  	  => $date,
-											'compare'	=> '=',
-											'type'	   => 'date',
-											),
-										);
+					'relation' => 'AND',
+					array(
+						'relation' => 'OR',
+						array(
+							'key'		=> '_mdjm_event_dj',
+							'value'  	  => $dj,
+							'compare'	=> ( is_array( $dj ) ? 'IN' : '=' ),
+						),
+						array(
+							'key'		=> '_mdjm_event_employees',
+							'value'		=> sprintf( ':"%s";', $dj ),
+							'compare'	=> is_array( $dj ) ? 'IN' : 'LIKE'
+						)
+					),
+					array(
+						'key'		=> '_mdjm_event_date',
+						'value'  	  => $date,
+						'compare'	=> '=',
+						'type'	   => 'date',
+					)
+				);
 			}
 						
 			$events = get_posts( $args );

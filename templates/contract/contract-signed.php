@@ -12,7 +12,7 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/contract/contract.php
  */
-global $mdjm_event, $mdjm_notice;
+global $mdjm_event;
 ?>
 
 <div id="mdjm-contract-wrapper">

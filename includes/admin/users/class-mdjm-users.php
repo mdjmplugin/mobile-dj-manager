@@ -329,7 +329,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				 * For new users, remove the admin bar 
 				 * and set the action to created
 				 */
-				if( $_POST['action'] == 'createuser' )	{
+				if( isset( $_POST['action'] ) && $_POST['action'] == 'createuser' )	{
 					update_user_option( $user_id, 'show_admin_bar_front', false );
 					if( !empty( $default_fields->first_name ) && !empty( $default_fields->last_name ) )	{
 						update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );

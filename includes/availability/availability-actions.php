@@ -33,7 +33,7 @@ function mdjm_availability_check_action( $data )	{
 	else	{
 		$result = mdjm_do_availability_check( $data[ 'mdjm_enquiry_date' . $widget ] );
 				
-		if( !empty( $result['available'] ) )	{
+		if( ! empty( $result['available'] ) )	{
 			$message = 'available';
 		}
 		else	{
@@ -41,7 +41,7 @@ function mdjm_availability_check_action( $data )	{
 		}
 	}
 	
-	print_r( $result );
+	
 	
 	die();
 } // mdjm_availability_check_action

@@ -274,7 +274,7 @@ function mdjm_save_txn_post( $ID, $post, $update )	{
 	// Set the post meta		
 	$trans_meta['_mdjm_txn_status'] = sanitize_text_field( $_POST['transaction_status'] );
 	$trans_meta['_mdjm_txn_source'] = sanitize_text_field( $_POST['transaction_src'] );
-	$trans_meta['_mdjm_txn_total'] = number_format( $_POST['transaction_amount'], 2 );
+	$trans_meta['_mdjm_txn_total'] = mdjm_format_amount( $_POST['transaction_amount'] );
 	$trans_meta['_mdjm_txn_notes'] = sanitize_text_field( $_POST['transaction_description'] );
 	
 	if( $_POST['transaction_direction'] == 'In' )

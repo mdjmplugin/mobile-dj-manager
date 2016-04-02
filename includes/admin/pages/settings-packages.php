@@ -53,7 +53,7 @@
 				$packages[$package_id]['desc'] = sanitize_text_field( $_POST['package_desc'] );
 				$packages[$package_id]['djs'] = $djs_have;
 				$packages[$package_id]['equipment'] = $equip;
-				$packages[$package_id]['cost'] = number_format( $_POST['package_cost'], 2 );
+				$packages[$package_id]['cost'] = mdjm_format_amount( $_POST['package_cost'] );
 				
 				update_option( 'mdjm_packages', $packages );
 				$curr_action = 'created';

@@ -70,8 +70,8 @@ function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{
 				),
 				array(
 					'key'	  => '_mdjm_event_employees',
-					'value'		=> array( $employee_id ),
-					'compare'  => 'IN'
+					'value'		=> sprintf( ':"%s";', $employee_id ),
+					'compare'  => 'LIKE'
 				),
 			)
 		)

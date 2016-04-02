@@ -104,7 +104,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'priority'	=> 'low',
 				'args'		=> array(),
 				'dependancy'  => MDJM_PAYMENTS,
-				'permission'  => ''
+				'permission'  => 'edit_txns'
 			),
 			array(
 				'id'		  => 'mdjm-event-history',
@@ -114,14 +114,14 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'priority'	=> 'low',
 				'args'		=> array(),
 				'dependancy'  => '',
-				'permission'  => ''
+				'permission'  => 'manage_mdjm'
 			),
 			array(
 				'id'		  => 'mdjm-event-options',
 				'title'	   => sprintf( __( '%s Options', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'callback'	=> 'mdjm_event_metabox_event_options',
 				'context'	 => 'side',
-				'priority'	=> 'low',
+				'priority'	=> 'high',
 				'args'		=> array(),
 				'dependancy'  => '',
 				'permission'  => ''
@@ -147,13 +147,13 @@ function mdjm_add_event_meta_boxes( $post )	{
 		if( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-		
+				
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
 			$metabox['callback'],
 			'mdjm-event',
-			$metabox['context'].
+			$metabox['context'],
 			$metabox['priority'],
 			$metabox['args']
 		);
@@ -394,8 +394,10 @@ function mdjm_event_metabox_event_details( $post )	{
 				echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
 				echo '<input type="text" value="';
 				
-				if( '' != get_post_meta( $post->ID, '_mdjm_event_dj', true ) )
-					echo get_post_meta( $post->ID, '_mdjm_event_dj', true );
+				if( '' != get_post_meta( $post->ID, '_mdjm_event_dj', true ) )	{
+					$user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+					echo $user->display_name;
+				}
 				
 				else
 					echo $current_user->display_name;
@@ -1300,7 +1302,7 @@ function mdjm_event_metabox_event_options( $post )	{
 			?>
 			</select>
 			<?php
-			if( $post->post_status == 'mdjm-approved' || $post->post_status == 'mdjm-completed' )
+			if( mdjm_employee_can( 'manage_mdjm' ) && ( $post->post_status == 'mdjm-approved' || $post->post_status == 'mdjm-completed' ) )
 				echo '<a id="view_contract" class="side-meta" href="' . mdjm_get_formatted_url( get_post_meta( $post->ID, '_mdjm_signed_contract', true ), false ) . '" target="_blank">View Signed Contract</a>';
 			?>
 		</div>

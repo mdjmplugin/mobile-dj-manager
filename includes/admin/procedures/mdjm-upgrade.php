@@ -460,8 +460,8 @@ class MDJM_Upgrade	{
 				$event_meta['_mdjm_event_contract_approver'] = !empty( $event->contract_approver ) ? 
 																$event->contract_approver : '';
 				
-				$event_meta['_mdjm_event_cost'] = number_format( $event->cost, 2 );
-				$event_meta['_mdjm_event_deposit'] = number_format( $event->deposit, 2 );
+				$event_meta['_mdjm_event_cost'] = mdjm_format_amount( $event->cost );
+				$event_meta['_mdjm_event_deposit'] = mdjm_format_amount( $event->deposit );
 				$event_meta['_mdjm_event_deposit_status'] = !empty( $event->deposit_status ) ? 
 															$event->deposit_status : 'Due';
 															
@@ -535,7 +535,7 @@ class MDJM_Upgrade	{
 					/* -- Add the event meta -- */
 					foreach( $event_meta as $event_meta_key => $event_meta_value )	{
 						if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' )
-							$event_meta_value = number_format( (float)$event_meta_value, 2 );
+							$event_meta_value = mdjm_format_amount( (float)$event_meta_value );
 						
 						if( $event_meta_key == 'venue_postcode' && !empty( $event_meta_value ) )
 							$event_meta_value = strtoupper( $event_meta_value );

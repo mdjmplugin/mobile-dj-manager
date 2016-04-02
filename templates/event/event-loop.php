@@ -12,7 +12,7 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-loop.php
  */
-global $mdjm_event, $mdjm_notice;
+global $mdjm_event;
 ?>
 <?php do_action( 'mdjm_pre_event_loop' ); ?>
 <div id="post-<?php echo $mdjm_event->ID; ?>" class="<?php echo $mdjm_event->post_status; ?>">
