@@ -207,6 +207,8 @@ function mdjm_add_employee( $post_data )	{
 			);
 		}
 		
+		mdjm_send_employee_welcome_email( $user_id, $userdata );
+		
 		return true;
 	}
 	else	{
@@ -216,6 +218,60 @@ function mdjm_add_employee( $post_data )	{
 		return false;
 	}			
 } // mdjm_add_employee
+
+/**
+ * Send a welcome email to a new employee.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The new user ID
+ * @param	arr		$userdata	Array of new user data
+ * @return	void
+ */
+function mdjm_send_employee_welcome_email( $user_id, $userdata )	{
+	
+	global $wp_roles;
+	
+	$subject = sprintf( __( 'Your Employee Details from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) );
+	$subject = apply_filters( 'mdjm_new_employee_subject', $subject, $user_id, $userdata );
+	
+	$message =  '<p>' . sprintf( __( 'Hello %s,', 'mobile-dj-manager' ), $userdata['first_name'] ) . '</p>' . "\r\n" .
+				
+				'<p>' . sprintf( 
+							__( 'Your user account on the <a href="%s">%s website</a> is now ready for use.', 'mobile-dj-manager' ),
+							get_bloginfo( 'url' ),
+							mdjm_get_option( 'company_name' )
+						) . '</p>' . "\r\n" .
+				
+				'<hr />' . "\r\n" .
+				
+				'<p>' . sprintf( __( '<strong>Username</strong>: %s', 'mobile-dj-manager' ), $userdata['user_login'] ) .
+						'<br />' . "\r\n" .
+						sprintf( __( '<strong>Password</strong>: %s', 'mobile-dj-manager' ), $userdata['user_pass'] ) .
+						'<br />' . "\r\n" .
+						sprintf( __( '<strong>Employee Role</strong>: %s', 'mobile-dj-manager' ), translate_user_role( $wp_roles->roles[ $userdata['role'] ]['name'] ) ) .
+						'<br />' . "\r\n" .
+						sprintf( __( '<strong>Login URL</strong>: <a href="%1$s">%1$s</a>', 'mobile-dj-manager' ), admin_url() ) .
+				'</p>' . "\r\n" .
+				
+				'<p>' . __( 'Thanks', 'mobile-dj-manager' ) . 
+						'<br />' . "\r\n" .
+						mdjm_get_option( 'company_name' ) .
+				'</p>';
+	
+	$message = apply_filters( 'mdjm_new_employee_message', $message, $user_id, $userdata );
+					
+	$email_args = apply_filters( 'mdjm_new_employee_email',
+		array(
+			'to_email'		=> $userdata['user_email'],
+			'subject'		=> $subject,
+			'track'			=> false,
+			'message'		=> $message
+		)
+	);
+	
+	mdjm_send_email_content( $email_args );
+	
+} // mdjm_send_employee_welcome_email
 
 /**
  * Retrieve a list of all employees
@@ -287,6 +343,19 @@ function mdjm_get_event_primary_employee( $event_id )	{
 function mdjm_get_event_employees( $event_id )	{
 	return get_post_meta( $event_id, '_mdjm_event_employees', true );
 } // mdjm_get_event_employees
+
+/**
+ * Retrieve all event employees data.
+ *
+ * Does not return the primary employees data.
+ *
+ * @since		1.3
+ * @param		int			$event_id	The event for which we want employees data.
+ * @return		arr|bool				Array of event employees data or false if none.
+ */
+function mdjm_get_event_employees_data( $event_id )	{
+	return get_post_meta( $event_id, '_mdjm_event_employees_data', true );
+} // mdjm_get_event_employees_data
 
 /**
  * Retrieve an employees first name.
@@ -388,7 +457,9 @@ function mdjm_get_employee_email( $user_id )	{
  * @return
  */
 function mdjm_list_event_employees( $event_id )	{
-	$employees = mdjm_get_event_employees( $event_id );
+	global $wp_roles;
+	
+	$employees = mdjm_get_event_employees_data( $event_id );
 	
 	$output = '';
 		
@@ -411,7 +482,7 @@ function mdjm_list_event_employees( $event_id )	{
 		foreach( $employees as $employee )	{
 			$details = get_userdata( $employee['id'] );
 			$output .= '<tr>' . "\r\n";
-				$output .= '<td style="text-align:left;">' . $employee['role'] . '</td>' . "\r\n";
+				$output .= '<td style="text-align:left;">' . translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ) . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">' . $details->display_name . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">';
 					if( mdjm_employee_can( 'manage_txns' ) )	{
@@ -438,6 +509,7 @@ function mdjm_list_event_employees( $event_id )	{
  * @return		arr|bool				All employees attached to event, or false on failure.
  */
 function mdjm_add_employee_to_event( $event_id, $args )	{
+	
 	$defaults = array(
 		'id'		=> '',
 		'role'	  => '',
@@ -451,15 +523,21 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 		return false;
 	}
 
-	$employees = mdjm_get_event_employees( $event_id );
+	$employees		= mdjm_get_event_employees( $event_id );
+	$employees_data	= mdjm_get_event_employees_data( $event_id );
 	
-	$employees[] = $data;
-	
-	if( ! update_post_meta( $event_id, '_mdjm_event_employees', $employees ) )	{
-		return false;	
+	if ( empty( $employees ) )	{
+		$employees = array();
 	}
+	
+	array_push( $employees, $data['id'] );
+	$employees_data[]	= $data;
+	
+	update_post_meta( $event_id, '_mdjm_event_employees', $employees );
+	update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data );
 
 	return $employees;
+	
 } // mdjm_add_employee_to_event
 
 /**

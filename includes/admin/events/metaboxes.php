@@ -692,9 +692,9 @@ function mdjm_event_metabox_event_employees( $post )	{
                 <label for="event_new_employee" class="mdjm-label"><?php printf( __( 'Add Employee to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>:</label><br />
                 <?php
                 
-                $event_employees = get_post_meta( $post->ID, '_mdjm_event_employees', true );
+                $event_employees = mdjm_get_event_employees_data( $post->ID );
                 
-                if( !empty( $event_employees ) )	{
+                if( ! empty( $event_employees ) )	{
                     foreach( $event_employees as $employee )	{
                         $exclude[] = $employee['id'];
                     }
@@ -1446,4 +1446,3 @@ function mdjm_event_metabox_event_options( $post )	{
 	</div>
 	<?php
 } // mdjm_event_metabox_event_options
-?>
