@@ -118,8 +118,8 @@ global $mdjm_event;
             
             <tr>
                 <th colspan="4"><?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?> {total_cost}<br />
-					<?php echo mdjm_get_option( 'deposit_label', __( 'Deposit', 'mobile-dj-manager' ) ); ?>: {deposit} ({deposit_status})<br />
-					<?php echo mdjm_get_option( 'balance_label', __( 'Balance Due', 'mobile-dj-manager' ) ) ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
+					<?php echo mdjm_get_deposit_label(); ?>: {deposit} ({deposit_status})<br />
+					<?php echo mdjm_get_balance_label(); ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
                 </th>
             </tr>
             

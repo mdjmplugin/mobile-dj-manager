@@ -177,3 +177,79 @@ function mdjm_add_playlist_category_default_column_content( $content, $column_na
 	return $content;
 }
 add_filter( 'manage_playlist-category_custom_column', 'mdjm_add_playlist_category_default_column_content', 10, 3 );
+
+/**
+ * Ensure that built-in terms cannot be deleted by removing the 
+ * delete, edit and quick edit options from the hover menu on the edit screen.
+ * 
+ * @since	1.0
+ * @param	arr		$actions		The array of actions in the hover menu
+ * 			obj		$tag			The object array for the term
+ * @return	arr		$actions		The filtered array of actions in the hover menu
+ */
+function mdjm_guest_playlist_term_remove_row_actions( $actions, $tag )	{
+							
+	if ( $tag->slug == 'mdjm-playlist-guest' ) 
+		unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
+		
+	return $actions;
+	
+} // mdjm_guest_playlist_term_remove_row_actions
+add_filter( 'playlist-category_row_actions', 'mdjm_guest_playlist_term_remove_row_actions', 10, 2 );
+
+/**
+ * Ensure that built-in terms cannot be deleted by removing the 
+ * bulk action checkboxes
+ * 
+ * @param
+ *
+ * @return
+ */
+function mdjm_guest_playlist_term_remove_checkbox()	{
+	
+	if ( ! isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'playlist-category' )	{
+		return;
+	}
+	
+	$protected_terms = array( 'mdjm-playlist-guest' );
+	
+	?>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		<?php
+		foreach( $protected_terms as $term_slug )	{
+			
+			$obj_term = get_term_by( 'slug', $term_slug, 'playlist-category' );
+			
+			if( !empty( $obj_term ) )	{
+				?>$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();<?php
+			}
+			
+		}
+		?>
+	});
+	</script>
+	<?php
+} // mdjm_guest_playlist_term_remove_checkbox
+add_action( 'admin_footer-edit-tags.php', 'mdjm_guest_playlist_term_remove_checkbox' );
+
+/**
+ * Make the Guest term slug read-only when editing.
+ *
+ * @since	1.3
+ * @param	obj		$tag	The tag object
+ * @return	str
+ */
+function mdjm_set_guest_playlist_term_readonly( $tag )	{
+		
+	if( $tag->slug == 'mdjm-playlist-guest' )	{
+		?>
+        <script type="text/javascript">
+		jQuery().ready(function($)	{
+			$("#slug").attr('readonly','true');
+		});
+		</script>
+        <?php
+	}
+} // mdjm_set_guest_playlist_term_readonly
+add_action( 'playlist-category_edit_form_fields', 'mdjm_set_guest_playlist_term_readonly' );

@@ -479,6 +479,7 @@ function mdjm_list_event_employees( $event_id )	{
 		$output .= '</tr>' . "\r\n";
 		$output .= '</thead>' . "\r\n";
 		$output .= '<tbody>' . "\r\n";
+		
 		foreach( $employees as $employee )	{
 			$details = get_userdata( $employee['id'] );
 			$output .= '<tr>' . "\r\n";
@@ -492,7 +493,14 @@ function mdjm_list_event_employees( $event_id )	{
 						$output .= '&mdash;';
 					}
 			$output .= '</td>' . "\r\n";
+			$output .= '<td style="text-align:left;">' .
+				sprintf( 
+					__( '<a class="remove_event_employee" href="" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
+				) . '</td>' . "\r\n";
+				
+			$output .= '</tr>' . "\r\n";
 		}
+		
 		$output .= '</tbody>' . "\r\n";
 		$output .= '</table>' . "\r\n";
 	}
@@ -501,7 +509,7 @@ function mdjm_list_event_employees( $event_id )	{
 } // mdjm_list_event_employees
 
 /**
- * Retrieve the primary event employee.
+ * Add an employee event employee.
  *
  * @since		1.3
  * @param		int			$event_id	Required: The event to which we're adding the employee.
@@ -541,6 +549,46 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 } // mdjm_add_employee_to_event
 
 /**
+ * Remove an employee from an event.
+ *
+ * @since		1.3
+ * @param		int			$employee_id	The employee user ID.
+ * @param		int			$event_id		The event to which we're adding the employee.
+ * @return		void
+ */
+function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
+	
+	$employees		= mdjm_get_event_employees( $event_id );
+	$employees_data	= mdjm_get_event_employees_data( $event_id );
+	
+	if ( empty( $employees ) )	{
+		$employees = array();
+	}
+	
+	if( ! empty( $employees ) )	{
+		foreach( $employees as $key => $employee )	{
+			if( $employee == $employee_id )	{
+				unset( $employees[ $key ] );
+			}
+		}
+		
+		update_post_meta( $event_id, '_mdjm_event_employees', $employees );
+	}
+	
+	if ( ! empty( $employees_data ) )	{
+		foreach( $employees_data as $key => $employee_data )	{
+			if( $employee_data['id'] == $employee_id )	{
+				unset( $employees_data[ $key ] );
+			}
+		}
+		
+		update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data );
+
+	}
+	
+} // mdjm_remove_employee_from_event
+
+/**
  * Set the role for the given employees
  *
  * @param	int|arr		$employees		Required: Single user ID or array of user ID's to adjust
@@ -565,3 +613,108 @@ function mdjm_set_employee_role( $employees, $role )	{
 		$user->set_role( $role );
 	}
 } // mdjm_set_employee_role
+
+/**
+ * Retrieve the employees events
+ *
+ * @since	1.3
+ * @param	int		$employee_id	The employees user ID. Uses current user ID if not value is passed.
+ * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @return	mixed	$events			False if no events, otherwise an object array of all employees events.
+ */
+function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
+	
+	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	$defaults = array(
+		'date'				=> 0,
+		'orderby'			=> 'post_date',
+		'order'				=> 'ASC',
+		'status'			=> 'any',
+		'posts_per_page'	=> -1,
+		'meta_query'		=> array(
+			'relation' => 'OR',
+			array(
+				'key'		=> '_mdjm_event_dj',
+				'value'		=> $employee_id
+			),
+			array(
+				'key'		=> '_mdjm_event_employees',
+				'value'		=> sprintf( ':"%s";', $employee_id ),
+				'compare'	=> 'LIKE'
+			)
+		)
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['post_type'] = 'mdjm-event';
+	
+	$order_by_num = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
+	
+	if ( ! empty( $args['date'] ) )	{
+		$args['date_query']		= array(
+			'relation'	=> 'AND',
+			array(
+				'key'	=> '_mdjm_event_date',
+				'value'	=> $date,
+				'type'=> 'DATE'
+			)
+		);
+		
+		$args['meta_query'] = array_push( $args['date_query'], $args['meta_query'] );
+		
+	}
+	
+	// We don't need the date arg any longer
+	unset( $args['date'] );
+		
+	$events = get_posts( $args );
+	
+	// Return the results
+	if ( $events )	{
+		return $events;
+	} else	{
+		return false;
+	}
+	
+} // mdjm_get_employee_events
+
+/**
+ * Get the count of an employees events.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	The employees user ID. Uses current user ID if not value is passed.
+ * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @return	mixed	$events			False if no events, otherwise an object array of all employees events.
+ */
+function mdjm_count_employee_events( $employee_id = '', $args = array() )	{
+	
+	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	$defaults = array(
+		'post_type'			=> 'mdjm-event',
+		'date'				=> 0,
+		'orderby'			=> 'post_date',
+		'order'				=> 'ASC',
+		'status'			=> 'any',
+		'posts_per_page'	=> -1,
+		'meta_query'		=> array(
+			'relation' => 'OR',
+			array(
+				'key'		=> '_mdjm_event_dj',
+				'value'		=> $employee_id
+			),
+			array(
+				'key'		=> '_mdjm_event_employees',
+				'value'		=> sprintf( ':"%s";', $employee_id ),
+				'compare'	=> 'LIKE'
+			)
+		)
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+		
+	return count( mdjm_get_employee_events( $employee_id, $args ) );
+	
+} // mdjm_count_employee_events

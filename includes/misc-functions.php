@@ -171,39 +171,6 @@ function mdjm_get_currency_name( $code = 'USD' ) {
 } // mdjm_get_currency_name
 
 /**
- * Get the label used for deposits.
- *
- * @since	1.3
- * @param
- * @return	str		The label set for deposits
- */
-function mdjm_get_deposit_label() {
-	return mdjm_get_option( 'deposit_label', __( 'Deposit', 'mobile-dj-manager' ) );
-} // mdjm_get_deposit_label
-
-/**
- * Get the label used for balances.
- *
- * @since	1.3
- * @param
- * @return	str		The label set for balances
- */
-function mdjm_get_balance_label() {
-	return mdjm_get_option( 'balance_label', __( 'Balance', 'mobile-dj-manager' ) );
-} // mdjm_get_balance_label
-
-/**
- * Get the label used for custom payment amounts.
- *
- * @since	1.3
- * @param
- * @return	str		The label set for the other_amount_label option
- */
-function mdjm_get_other_amount_label() {
-	return mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) );
-} // mdjm_get_other_amount_label
-
-/**
  * Get the current page URL
  *
  * @since	1.3

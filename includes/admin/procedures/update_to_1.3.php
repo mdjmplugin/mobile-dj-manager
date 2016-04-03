@@ -23,8 +23,69 @@ function mdjm_create_playlist_terms()	{
 		}
 	}
 		
-	wp_insert_term( __( 'Guest', 'mobile-dj-manager' ), 'playlist-category' );
+	wp_insert_term(
+		__( 'Guest', 'mobile-dj-manager' ),
+		'playlist-category',
+		array(
+			'slug'			=> 'mdjm-playlist-guest',
+			'description'	=> __( 'Playlist entries added by guests are stored in this term.', 'mobile-dj-manager' )
+		)
+		
+	);
 } // mdjm_create_playlist_terms
+
+/**
+ * Create the Employee Wages term within Transactions and update other
+ * MDJM Txn term slugs
+ *
+ *
+ *
+ */
+function mdjm_terms_13()	{
+	
+	if( get_option( 'mdjm_txn_terms_13' ) )	{
+		return;
+	}
+	
+	wp_insert_term(
+		__( 'Employee Wages','mobile-dj-manager' ),
+		'transaction-types',
+		array(
+			'description'	=> __( 'All employee wage payments are assigned to this term','mobile-dj-manager' ),
+			'slug'			=> 'mdjm-employee-wages'
+		)
+	);
+	
+	$settings = get_option( 'mdjm_settings' );
+	
+	$terms = array(
+		$settings['balance_label']					=> array( 
+			'mdjm-balance-payment', __( 'Event balance payments are assigned to this term', 'mobile-dj-manager' ) ),
+		$settings['deposit_label']					=> array(
+			'mdjm-deposit-payment', __( 'Event deposit payments are assigned to this term', 'mobile-dj-manager' ) ),
+		__( 'Merchant Fees', 'mobile-dj-manager' )	=> array(
+			'mdjm-merchant-fees', __( 'Charges from payment gateways are assigned to this term', 'mobile-dj-manager' ) )
+	);
+	
+	foreach( $terms as $name => $args )	{
+		$term = get_term_by( 'name', $name, 'transaction-types' );
+		
+		if ( ! empty( $term ) )	{
+			wp_update_term(
+				(int) $term->term_id,
+				'transaction-types',
+				array(
+					'slug'			=> $args[0],
+					'description'	=> $args[1]
+				)
+			);
+		}
+	}
+	
+	update_option( 'mdjm_txn_terms_13', true );
+	
+} // mdjm_terms_13
+add_action( 'init', 'mdjm_terms_13', 15 );
 
 /**
  * Import playlist entries from custom DB table.
@@ -114,221 +175,221 @@ add_action( 'init', 'mdjm_import_playlist_entries', 15 );
  *
  *
  */
-	class MDJM_Upgrade_to_1_3	{
-		function __construct()	{
-			$this->update_caps();
+class MDJM_Upgrade_to_1_3	{
+	function __construct()	{
+		$this->update_caps();
+	}
+	
+	/**
+	 * Apply all methods for updating the caps
+	 *
+	 *
+	 */
+	public function update_caps()	{
+		$this->update_admin_caps();
+		$this->remove_old_caps();
+		$this->update_dj_caps();	
+	} // update_caps
+	
+	/**
+	 * Set all admin's to be DJ's. Users can turn off if they want to.
+	 * We'll also give these users the full admin rights over MDJM.
+	 * If the _mdjm_event_staff user meta is disabled in future, this cap will be removed
+	 *
+	 *
+	 */
+	public function update_admin_caps()	{
+		MDJM()->debug->log_it( 'Updating Administrator capabilities', true );
+		
+		$admins = get_users( array( 'role' => 'administrator' ) );
+		
+		// Remove the mdjm_employee and manage_mdjm caps from the administrator role
+		$role = get_role( 'administrator' );
+		$role->remove_cap( 'manage_mdjm' );
+		$role->remove_cap( 'mdjm_employee' );
+					
+		// Give each admin the additional caps of mdjm_employee and manage_mdjm
+		foreach( $admins as $user )	{
+			update_user_meta( $user->ID, '_mdjm_event_staff', true );
+			$user->add_cap( 'manage_mdjm' );
+			$user->add_cap( 'mdjm_employee' );
 		}
 		
-		/**
-		 * Apply all methods for updating the caps
-		 *
-		 *
-		 */
-		public function update_caps()	{
-			$this->update_admin_caps();
-			$this->remove_old_caps();
-			$this->update_dj_caps();	
-		} // update_caps
-		
-		/**
-		 * Set all admin's to be DJ's. Users can turn off if they want to.
-		 * We'll also give these users the full admin rights over MDJM.
-		 * If the _mdjm_event_staff user meta is disabled in future, this cap will be removed
-		 *
-		 *
-		 */
-		public function update_admin_caps()	{
-			MDJM()->debug->log_it( 'Updating Administrator capabilities', true );
+		// By default, admins can view and edit all post types
+		$caps = array(
+			// Clients
+			'mdjm_client_edit' => true, 'mdjm_client_edit_own' => true,
 			
-			$admins = get_users( array( 'role' => 'administrator' ) );
+			// Employees
+			'mdjm_employee_edit' => true,
 			
-			// Remove the mdjm_employee and manage_mdjm caps from the administrator role
-			$role = get_role( 'administrator' );
-			$role->remove_cap( 'manage_mdjm' );
-			$role->remove_cap( 'mdjm_employee' );
+			// Packages
+			'mdjm_package_edit_own' => true, 'mdjm_package_edit' => true,
 						
-			// Give each admin the additional caps of mdjm_employee and manage_mdjm
-			foreach( $admins as $user )	{
-				update_user_meta( $user->ID, '_mdjm_event_staff', true );
-				$user->add_cap( 'manage_mdjm' );
-				$user->add_cap( 'mdjm_employee' );
-			}
+			// Comm posts
+			'mdjm_comms_send' => true, 'edit_mdjm_comms' => true, 'edit_others_mdjm_comms' => true,
+			'publish_mdjm_comms' => true, 'read_private_mdjm_comms' => true, 
+			'edit_published_mdjm_comms' => true, 'delete_mdjm_comms' => true,
+			'delete_others_mdjm_comms' => true, 'delete_private_mdjm_comms' => true,
+			'delete_published_mdjm_comms' => true, 'edit_private_mdjm_comms' => true,
 			
-			// By default, admins can view and edit all post types
-			$caps = array(
-				// Clients
-				'mdjm_client_edit' => true, 'mdjm_client_edit_own' => true,
-				
-				// Employees
-				'mdjm_employee_edit' => true,
-				
-				// Packages
-				'mdjm_package_edit_own' => true, 'mdjm_package_edit' => true,
-							
-				// Comm posts
-				'mdjm_comms_send' => true, 'edit_mdjm_comms' => true, 'edit_others_mdjm_comms' => true,
-				'publish_mdjm_comms' => true, 'read_private_mdjm_comms' => true, 
-				'edit_published_mdjm_comms' => true, 'delete_mdjm_comms' => true,
-				'delete_others_mdjm_comms' => true, 'delete_private_mdjm_comms' => true,
-				'delete_published_mdjm_comms' => true, 'edit_private_mdjm_comms' => true,
-				
-				// Event posts
-				'mdjm_event_read' => true, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => true,
-				'mdjm_event_edit_own' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
-				'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
-				'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => true,
-				'delete_others_mdjm_events' => true, 'delete_private_mdjm_events' => true,
-				'delete_published_mdjm_events' => true,
-				
-				// Quote posts
-				'mdjm_quote_view_own' => true, 'mdjm_quote_view' => true, 'edit_mdjm_quotes' => true,
-				'edit_others_mdjm_quotes' => true, 'publish_mdjm_quotes' => true, 
-				'read_private_mdjm_quotes' => true, 'edit_published_mdjm_quotes' => true,
-				'edit_private_mdjm_quotes' => true, 'delete_mdjm_quotes' => true, 'delete_others_mdjm_quotes' => true,
-				'delete_private_mdjm_quotes' => true, 'delete_published_mdjm_quotes' => true,
-				
-				// Templates
-				'mdjm_template_edit' => true, 'edit_mdjm_templates' => true,
-				'edit_others_mdjm_templates' => true, 'publish_mdjm_templates' => true, 'read_private_mdjm_templates' => true,
-				'edit_published_mdjm_templates' => true, 'edit_private_mdjm_templates' => true, 'delete_mdjm_templates' => true,
-				'delete_others_mdjm_templates' => true, 'delete_private_mdjm_templates' => true,
-				'delete_published_mdjm_templates' => true,
-				
-				// Transaction posts
-				'mdjm_txn_edit' => true, 'edit_mdjm_txns' => true, 'edit_others_mdjm_txns' => true, 'publish_mdjm_txns' => true,
-				'read_private_mdjm_txns' => true, 'edit_published_mdjm_txns' => true, 'edit_private_mdjm_txns' => true,
-				'delete_mdjm_txns' => true, 'delete_others_mdjm_txns' => true, 'delete_private_mdjm_txns' => true,
-				'delete_published_mdjm_txns' => true,
-				
-				// Venue posts
-				'mdjm_venue_read' => true, 'mdjm_venue_edit' => true, 'edit_mdjm_venues' => true,
-				'edit_others_mdjm_venues' => true, 'publish_mdjm_venues' => true, 'read_private_mdjm_venues' => true,
-				'edit_published_mdjm_venues' => true, 'edit_private_mdjm_venues' => true, 'delete_mdjm_venues' => true,
-				'delete_others_mdjm_venues' => true, 'delete_private_mdjm_venues' => true,
-				'delete_published_mdjm_venues' => true
-			);
+			// Event posts
+			'mdjm_event_read' => true, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => true,
+			'mdjm_event_edit_own' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+			'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
+			'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => true,
+			'delete_others_mdjm_events' => true, 'delete_private_mdjm_events' => true,
+			'delete_published_mdjm_events' => true,
 			
-			foreach( $caps as $cap => $set )	{
-				$role->add_cap( $cap );					
-			}
+			// Quote posts
+			'mdjm_quote_view_own' => true, 'mdjm_quote_view' => true, 'edit_mdjm_quotes' => true,
+			'edit_others_mdjm_quotes' => true, 'publish_mdjm_quotes' => true, 
+			'read_private_mdjm_quotes' => true, 'edit_published_mdjm_quotes' => true,
+			'edit_private_mdjm_quotes' => true, 'delete_mdjm_quotes' => true, 'delete_others_mdjm_quotes' => true,
+			'delete_private_mdjm_quotes' => true, 'delete_published_mdjm_quotes' => true,
 			
-			MDJM()->debug->log_it( 'Completed updating Administrator capabilities', true );
-		} // update_admin_caps
+			// Templates
+			'mdjm_template_edit' => true, 'edit_mdjm_templates' => true,
+			'edit_others_mdjm_templates' => true, 'publish_mdjm_templates' => true, 'read_private_mdjm_templates' => true,
+			'edit_published_mdjm_templates' => true, 'edit_private_mdjm_templates' => true, 'delete_mdjm_templates' => true,
+			'delete_others_mdjm_templates' => true, 'delete_private_mdjm_templates' => true,
+			'delete_published_mdjm_templates' => true,
+			
+			// Transaction posts
+			'mdjm_txn_edit' => true, 'edit_mdjm_txns' => true, 'edit_others_mdjm_txns' => true, 'publish_mdjm_txns' => true,
+			'read_private_mdjm_txns' => true, 'edit_published_mdjm_txns' => true, 'edit_private_mdjm_txns' => true,
+			'delete_mdjm_txns' => true, 'delete_others_mdjm_txns' => true, 'delete_private_mdjm_txns' => true,
+			'delete_published_mdjm_txns' => true,
+			
+			// Venue posts
+			'mdjm_venue_read' => true, 'mdjm_venue_edit' => true, 'edit_mdjm_venues' => true,
+			'edit_others_mdjm_venues' => true, 'publish_mdjm_venues' => true, 'read_private_mdjm_venues' => true,
+			'edit_published_mdjm_venues' => true, 'edit_private_mdjm_venues' => true, 'delete_mdjm_venues' => true,
+			'delete_others_mdjm_venues' => true, 'delete_private_mdjm_venues' => true,
+			'delete_published_mdjm_venues' => true
+		);
 		
-		/**
-		 * Update the DJ capabilities
-		 * 
-		 * 
-		 *
-		 *
-		 */
-		public function update_dj_caps()	{
-			MDJM()->debug->log_it( 'Updating DJ capabilities', true );
-			
-			$role = get_role( 'dj' );
-			$role->add_cap( 'mdjm_employee' );
-			$role->add_cap( 'edit_posts' );
-			$role->add_cap( 'delete_posts' );
-			
-			MDJM()->debug->log_it( 'Completed updating DJ capabilities', true );
-		} // update_dj_caps
+		foreach( $caps as $cap => $set )	{
+			$role->add_cap( $cap );					
+		}
 		
-		/**
-		 * Remove old capabilities
-		 * 
-		 * 
-		 *
-		 *
-		 */
-		public function remove_old_caps()	{
-			MDJM()->debug->log_it( 'Removing deprecated capabilities', true );
-			
-			$roles = array( 'dj', 'inactive_dj', 'administrator' );
-			
-			foreach( $roles as $_role )	{
-				$role = get_role( $_role );
-				
-				$role->remove_cap( 'delete_mdjm_manage_events' );
-				$role->remove_cap( 'delete_mdjm_manage_quotes' );
-				$role->remove_cap( 'delete_mdjm_manage_transactions' );
-				$role->remove_cap( 'delete_mdjm_manage_venues' );
-				$role->remove_cap( 'delete_mdjm_signed_contracts' );
-				$role->remove_cap( 'delete_others_mdjm_manage_events' );
-				$role->remove_cap( 'delete_others_mdjm_manage_quotes' );
-				$role->remove_cap( 'delete_others_mdjm_manage_transactions' );
-				$role->remove_cap( 'delete_others_mdjm_manage_venues' );
-				$role->remove_cap( 'delete_others_mdjm_signed_contracts' );
-				$role->remove_cap( 'delete_private_mdjm_manage_events' );
-				$role->remove_cap( 'delete_private_mdjm_manage_quotes' );
-				$role->remove_cap( 'delete_private_mdjm_manage_transactions' );
-				$role->remove_cap( 'delete_private_mdjm_manage_venues' );
-				$role->remove_cap( 'delete_private_mdjm_signed_contracts' );
-				$role->remove_cap( 'delete_published_mdjm_manage_events' );
-				$role->remove_cap( 'delete_published_mdjm_manage_quotes' );
-				$role->remove_cap( 'delete_published_mdjm_manage_transactions' );
-				$role->remove_cap( 'delete_published_mdjm_manage_venues' );
-				$role->remove_cap( 'delete_published_mdjm_signed_contracts' );
-				$role->remove_cap( 'edit_mdjm_manage_event' );
-				$role->remove_cap( 'edit_mdjm_manage_events' );
-				$role->remove_cap( 'edit_mdjm_manage_quote' );
-				$role->remove_cap( 'edit_mdjm_manage_quotes' );
-				$role->remove_cap( 'edit_mdjm_manage_transaction' );
-				$role->remove_cap( 'edit_mdjm_manage_transactions' );
-				$role->remove_cap( 'edit_mdjm_manage_venue' );
-				$role->remove_cap( 'edit_mdjm_manage_venues' );
-				$role->remove_cap( 'edit_mdjm_signed_contract' );
-				$role->remove_cap( 'edit_mdjm_signed_contracts' );
-				$role->remove_cap( 'edit_others_comms' );
-				$role->remove_cap( 'edit_others_mdjm-events' );
-				$role->remove_cap( 'edit_others_mdjm_manage_events' );
-				$role->remove_cap( 'edit_others_mdjm_manage_quotes' );
-				$role->remove_cap( 'edit_others_mdjm_manage_transactions' );
-				$role->remove_cap( 'edit_others_mdjm_manage_venues' );
-				$role->remove_cap( 'edit_others_mdjm_signed_contracts' );
-				$role->remove_cap( 'edit_private_mdjm_manage_events' );
-				$role->remove_cap( 'edit_private_mdjm_manage_quotes' );
-				$role->remove_cap( 'edit_private_mdjm_signed_contracts' );
-				$role->remove_cap( 'edit_published_mdjm-events' );
-				$role->remove_cap( 'edit_published_mdjm_manage_events' );
-				$role->remove_cap( 'edit_published_mdjm_manage_quotes' );
-				$role->remove_cap( 'edit_published_mdjm_manage_transactions' );
-				$role->remove_cap( 'edit_published_mdjm_manage_venues' );
-				$role->remove_cap( 'edit_published_mdjm_signed_contracts' );
-				$role->remove_cap( 'publish_mdjm_manage_event' );
-				$role->remove_cap( 'publish_mdjm_manage_events' );
-				$role->remove_cap( 'publish_mdjm_manage_quotes' );
-				$role->remove_cap( 'publish_mdjm_manage_transactions' );
-				$role->remove_cap( 'publish_mdjm_manage_venues' );
-				$role->remove_cap( 'publish_mdjm_signed_contracts' );
-				$role->remove_cap( 'read_mdjm-event' );
-				$role->remove_cap( 'read_mdjm_event_quote' );
-				$role->remove_cap( 'read_mdjm_manage_event' );
-				$role->remove_cap( 'read_mdjm_manage_quote' );
-				$role->remove_cap( 'read_mdjm_manage_transaction' );
-				$role->remove_cap( 'read_mdjm_manage_venue' );
-				$role->remove_cap( 'read_mdjm_signed_contract' );
-				$role->remove_cap( 'read_private_mdjm-events' );
-				$role->remove_cap( 'read_private_mdjm_event_quotes' );
-				$role->remove_cap( 'read_private_mdjm_manage_events' );
-				$role->remove_cap( 'read_private_mdjm_manage_quotes' );
-				$role->remove_cap( 'read_private_mdjm_manage_transactions' );
-				$role->remove_cap( 'read_private_mdjm_manage_venues' );
-				$role->remove_cap( 'read_private_mdjm_signed_contracts' );
-			}
-			
-			MDJM()->debug->log_it( 'Completed removing deprecated capabilities', true );
-		} // remove_old_caps
-				
-		/*
-		 * Update MDJM settings
-		 *
-		 *
-		 *
-		 */
-		public function update_settings()	{
-			
-		} // update_settings
-				
-	} // class MDJM_Upgrade_to_1_3
+		MDJM()->debug->log_it( 'Completed updating Administrator capabilities', true );
+	} // update_admin_caps
 	
-	new MDJM_Upgrade_to_1_3();
+	/**
+	 * Update the DJ capabilities
+	 * 
+	 * 
+	 *
+	 *
+	 */
+	public function update_dj_caps()	{
+		MDJM()->debug->log_it( 'Updating DJ capabilities', true );
+		
+		$role = get_role( 'dj' );
+		$role->add_cap( 'mdjm_employee' );
+		$role->add_cap( 'edit_posts' );
+		$role->add_cap( 'delete_posts' );
+		
+		MDJM()->debug->log_it( 'Completed updating DJ capabilities', true );
+	} // update_dj_caps
+	
+	/**
+	 * Remove old capabilities
+	 * 
+	 * 
+	 *
+	 *
+	 */
+	public function remove_old_caps()	{
+		MDJM()->debug->log_it( 'Removing deprecated capabilities', true );
+		
+		$roles = array( 'dj', 'inactive_dj', 'administrator' );
+		
+		foreach( $roles as $_role )	{
+			$role = get_role( $_role );
+			
+			$role->remove_cap( 'delete_mdjm_manage_events' );
+			$role->remove_cap( 'delete_mdjm_manage_quotes' );
+			$role->remove_cap( 'delete_mdjm_manage_transactions' );
+			$role->remove_cap( 'delete_mdjm_manage_venues' );
+			$role->remove_cap( 'delete_mdjm_signed_contracts' );
+			$role->remove_cap( 'delete_others_mdjm_manage_events' );
+			$role->remove_cap( 'delete_others_mdjm_manage_quotes' );
+			$role->remove_cap( 'delete_others_mdjm_manage_transactions' );
+			$role->remove_cap( 'delete_others_mdjm_manage_venues' );
+			$role->remove_cap( 'delete_others_mdjm_signed_contracts' );
+			$role->remove_cap( 'delete_private_mdjm_manage_events' );
+			$role->remove_cap( 'delete_private_mdjm_manage_quotes' );
+			$role->remove_cap( 'delete_private_mdjm_manage_transactions' );
+			$role->remove_cap( 'delete_private_mdjm_manage_venues' );
+			$role->remove_cap( 'delete_private_mdjm_signed_contracts' );
+			$role->remove_cap( 'delete_published_mdjm_manage_events' );
+			$role->remove_cap( 'delete_published_mdjm_manage_quotes' );
+			$role->remove_cap( 'delete_published_mdjm_manage_transactions' );
+			$role->remove_cap( 'delete_published_mdjm_manage_venues' );
+			$role->remove_cap( 'delete_published_mdjm_signed_contracts' );
+			$role->remove_cap( 'edit_mdjm_manage_event' );
+			$role->remove_cap( 'edit_mdjm_manage_events' );
+			$role->remove_cap( 'edit_mdjm_manage_quote' );
+			$role->remove_cap( 'edit_mdjm_manage_quotes' );
+			$role->remove_cap( 'edit_mdjm_manage_transaction' );
+			$role->remove_cap( 'edit_mdjm_manage_transactions' );
+			$role->remove_cap( 'edit_mdjm_manage_venue' );
+			$role->remove_cap( 'edit_mdjm_manage_venues' );
+			$role->remove_cap( 'edit_mdjm_signed_contract' );
+			$role->remove_cap( 'edit_mdjm_signed_contracts' );
+			$role->remove_cap( 'edit_others_comms' );
+			$role->remove_cap( 'edit_others_mdjm-events' );
+			$role->remove_cap( 'edit_others_mdjm_manage_events' );
+			$role->remove_cap( 'edit_others_mdjm_manage_quotes' );
+			$role->remove_cap( 'edit_others_mdjm_manage_transactions' );
+			$role->remove_cap( 'edit_others_mdjm_manage_venues' );
+			$role->remove_cap( 'edit_others_mdjm_signed_contracts' );
+			$role->remove_cap( 'edit_private_mdjm_manage_events' );
+			$role->remove_cap( 'edit_private_mdjm_manage_quotes' );
+			$role->remove_cap( 'edit_private_mdjm_signed_contracts' );
+			$role->remove_cap( 'edit_published_mdjm-events' );
+			$role->remove_cap( 'edit_published_mdjm_manage_events' );
+			$role->remove_cap( 'edit_published_mdjm_manage_quotes' );
+			$role->remove_cap( 'edit_published_mdjm_manage_transactions' );
+			$role->remove_cap( 'edit_published_mdjm_manage_venues' );
+			$role->remove_cap( 'edit_published_mdjm_signed_contracts' );
+			$role->remove_cap( 'publish_mdjm_manage_event' );
+			$role->remove_cap( 'publish_mdjm_manage_events' );
+			$role->remove_cap( 'publish_mdjm_manage_quotes' );
+			$role->remove_cap( 'publish_mdjm_manage_transactions' );
+			$role->remove_cap( 'publish_mdjm_manage_venues' );
+			$role->remove_cap( 'publish_mdjm_signed_contracts' );
+			$role->remove_cap( 'read_mdjm-event' );
+			$role->remove_cap( 'read_mdjm_event_quote' );
+			$role->remove_cap( 'read_mdjm_manage_event' );
+			$role->remove_cap( 'read_mdjm_manage_quote' );
+			$role->remove_cap( 'read_mdjm_manage_transaction' );
+			$role->remove_cap( 'read_mdjm_manage_venue' );
+			$role->remove_cap( 'read_mdjm_signed_contract' );
+			$role->remove_cap( 'read_private_mdjm-events' );
+			$role->remove_cap( 'read_private_mdjm_event_quotes' );
+			$role->remove_cap( 'read_private_mdjm_manage_events' );
+			$role->remove_cap( 'read_private_mdjm_manage_quotes' );
+			$role->remove_cap( 'read_private_mdjm_manage_transactions' );
+			$role->remove_cap( 'read_private_mdjm_manage_venues' );
+			$role->remove_cap( 'read_private_mdjm_signed_contracts' );
+		}
+		
+		MDJM()->debug->log_it( 'Completed removing deprecated capabilities', true );
+	} // remove_old_caps
+			
+	/*
+	 * Update MDJM settings
+	 *
+	 *
+	 *
+	 */
+	public function update_settings()	{
+		
+	} // update_settings
+			
+} // class MDJM_Upgrade_to_1_3
+
+new MDJM_Upgrade_to_1_3();

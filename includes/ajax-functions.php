@@ -448,4 +448,27 @@ function mdjm_ajax_add_employee_to_event()	{
 
 } // mdjm_ajax_add_employee_to_event
 add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event' );
-?>
+
+/**
+ * Remove an employee from the event.
+ *
+ * @since	1.3
+ *
+ * @param
+ * @return
+ */
+function mdjm_ajax_remove_employee_from_event()	{
+	
+	mdjm_remove_employee_from_event( $_POST['employee_id'], $_POST['event_id'] );
+		
+	$result['type'] = 'success';
+	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
+			
+	$result = json_encode( $result );
+	
+	echo $result;
+	
+	die();
+
+} // mdjm_ajax_remove_employee_from_event
+add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_from_event' );

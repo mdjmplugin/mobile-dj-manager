@@ -350,5 +350,46 @@ jQuery(document).ready(function($) 	{
 			}
 		});
 		
-	});
+	}); // add_event_employee
+	
+	/**
+	 * Removes an employee from an event
+	 *
+	 *
+	 *
+	 */
+	$(".remove_event_employee").click(function() {
+        event.preventDefault();
+		var employeeId = $(this).data("employee_id");
+		var eventId = $('#post_ID').val();
+		
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: event_employee_remove.ajax_url,
+			data: {
+				event_id : eventId,
+				employee_id : employeeId,
+				action : "remove_employee_from_event"
+			},
+			beforeSend: function()	{
+				$("#event_employee_list").replaceWith('<div class="page-content" id="loader" style="color:#F90">Updating...<img src="/wp-admin/images/loading.gif" /></div>');
+			},
+			success: function(response)	{
+				if(response.type == "success") {
+					$("#loader").replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
+					$('#event_employee_list').click(function()	{
+						$("#event_employee_list").fadeToggle('fast');
+					});
+				}
+				else	{
+					alert('Error')
+					$("#loader").replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
+					$('#event_employee_list').click(function()	{
+						$("#event_employee_list").fadeToggle('fast');
+					});
+				}
+			}
+		});
+    }); // Remove employee from event
 });

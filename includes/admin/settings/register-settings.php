@@ -965,22 +965,6 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-					'deposit_label'    => array(
-						'id'          => 'deposit_label',
-						'name'        => __( 'Label for Deposit', 'mobile-dj-manager' ),
-						'desc'        => __( "If you don't use the word <code>Deposit</code>, you can change it here. Many prefer the term <code>Booking Fee</code>. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
-						'type'        => 'text',
-						'size'        => 'regular',
-						'std'         => __( 'Deposit', 'mobile-dj-manager' )
-					),
-					'balance_label'    => array(
-						'id'          => 'balance_label',
-						'name'        => __( 'Label for Balance', 'mobile-dj-manager' ),
-						'desc'        => __( "If you don't use the word <code>Balance</code>, you can change it here. Whatever you enter will be visible to all users", 'mobile-dj-manager' ),
-						'type'        => 'text',
-						'size'        => 'regular',
-						'std'         => __( 'Balance', 'mobile-dj-manager' )
-					),
 					'default_type'     => array(
 						'id'          => 'default_type',
 						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),

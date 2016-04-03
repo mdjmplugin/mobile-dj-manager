@@ -12,6 +12,74 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Get the label used for deposits.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for deposits
+ */
+function mdjm_get_deposit_label() {
+	
+	$term = get_term_by( 'slug', 'mdjm-deposit-payment', 'transaction-types' );
+	
+	if ( empty( $term ) )	{
+		return __( 'Term not found', 'mobile-dj-manager' );
+	}
+	
+	return $term->name;
+	
+} // mdjm_get_deposit_label
+
+/**
+ * Get the label used for balances.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for balances
+ */
+function mdjm_get_balance_label() {
+	
+	$term = get_term_by( 'slug', 'mdjm-balance-payment', 'transaction-types' );
+	
+	if ( empty( $term ) )	{
+		return __( 'Term not found', 'mobile-dj-manager' );
+	}
+	
+	return $term->name;
+	
+} // mdjm_get_balance_label
+
+/**
+ * Get the label used for merchant fees.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for merchant fees
+ */
+function mdjm_get_merchant_fees_label() {
+	
+	$term = get_term_by( 'slug', 'mdjm-merchant-fees', 'transaction-types' );
+	
+	if ( empty( $term ) )	{
+		return __( 'Term not found', 'mobile-dj-manager' );
+	}
+	
+	return $term->name;
+	
+} // mdjm_get_balance_label
+
+/**
+ * Get the label used for custom payment amounts.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for the other_amount_label option
+ */
+function mdjm_get_other_amount_label() {
+	return mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) );
+} // mdjm_get_other_amount_label
+
+/**
  * Retrieve a transaction.
  *
  * @since	1.3
@@ -184,7 +252,7 @@ add_action( 'mdjm_post_update_txn', 'mdjm_add_txn_save_post_action' );
  */
 function mdjm_update_txn_cat( $old_value, $new_value )	{
 	
-	$options = array( 'deposit_label', 'balance_label', 'other_amount_label' );
+	$options = array( 'other_amount_label' );
 
 	foreach ( $options as $key )	{
 		
@@ -199,7 +267,7 @@ function mdjm_update_txn_cat( $old_value, $new_value )	{
 			'transaction-types',
 			array(
 				'name'	=> $new_value[ $key ],
-				'slug'	=> sanitize_title($new_value[ $key ] )
+				'slug'	=> sanitize_title( $new_value[ $key ] )
 			)
 		);
 

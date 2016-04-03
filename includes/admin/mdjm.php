@@ -290,6 +290,8 @@
 						wp_localize_script( 'mdjm-event-js', 'mdjmsetdeposit', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 						wp_localize_script( 'mdjm-event-js', 'event_employee_add', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 						
+						wp_localize_script( 'mdjm-event-js', 'event_employee_remove', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+						
 						wp_enqueue_script( 'mdjm-dynamics' );
 						wp_localize_script( 'mdjm-dynamics', 'mdjmaddons', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 					}

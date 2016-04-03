@@ -164,66 +164,6 @@ function mdjm_transaction_type_filter_dropdown()	{
 	</select>
 	<?php
 } // mdjm_transaction_type_filter_dropdown
-		
-/**
- * Ensure that built-in terms cannot be deleted by removing the 
- * delete, edit and quick edit options from the hover menu
- * 
- * @param	arr		$actions		The array of actions in the hover menu
- * 			obj		$tag			The object array for the term
- * 
- * @return	arr		$actions		The filtered array of actions in the hover menu
- */
-function mdjm_transaction_term_row_actions( $actions, $tag )	{
-	$protected_terms = array(
-						__( 'Merchant Fees', 'mobile-dj-manager' ),
-						mdjm_get_deposit_label(),
-						mdjm_get_balance_label(),
-						$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
-						
-	if ( in_array( $tag->name, $protected_terms ) ) 
-		unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
-		
-	return $actions;
-} // mdjm_transaction_term_row_actions
-add_filter( 'transaction-types_row_actions', 'mdjm_transaction_term_row_actions', 10, 2 );
-		
-/**
- * Ensure that built-in terms cannot be deleted by removing the 
- * bulk action checkboxes
- * 
- * @param
- *
- * @return
- */
-function mdjm_transaction_term_checkboxes()	{
-	if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )
-		return;
-	
-	// Create an array with all terms that we should protect from deletion	
-	$protected_terms = array(
-						__( 'Merchant Fees', 'mobile-dj-manager' ),
-						mdjm_get_deposit_label(),
-						mdjm_get_balance_label(),
-						$GLOBALS['mdjm_settings']['payments']['other_amount_label'] );
-	?>
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		<?php
-		foreach( $protected_terms as $term_name )	{
-			$obj_term = get_term_by( 'name', $term_name, 'transaction-types' );
-			if( !empty( $obj_term ) )	{
-				?>
-				$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();
-				<?php
-			}
-		}
-		?>
-	});
-	</script>
-	<?php
-} // mdjm_transaction_term_checkboxes
-add_action( 'admin_footer-edit-tags.php', 'mdjm_transaction_term_checkboxes' );
 
 /**
  * Save the meta data for the transaction

@@ -114,8 +114,8 @@
 		float: left;
 	}
 	.mdjm-right-col	{
-		width: auto
-		float: right;
+		width: auto;
+		float: left;
 	}
 	select.mdjm-meta {
 		font-size: 11px;

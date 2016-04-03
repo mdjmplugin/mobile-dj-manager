@@ -649,7 +649,7 @@
 		public function set_mdjm_terms()	{
 			global $mdjm;
 			
-			if( !get_taxonomy( 'event-types' ) )	{
+			if( ! get_taxonomy( 'event-types' ) )	{
 				$tax_labels['mdjm-event'] = array(
 								'name'              		   => _x( 'Event Type', 'taxonomy general name' ),
 								'singular_name'     		  => _x( 'Event Type', 'taxonomy singular name' ),
@@ -677,7 +677,7 @@
 			}
 
 			/* -- Transaction Types -- */
-			if( !get_taxonomy( 'transaction-types' ) )	{
+			if( ! get_taxonomy( 'transaction-types' ) )	{
 				$tax_labels['mdjm-transaction'] = array(
 								'name'              		   => _x( 'Transaction Type', 'taxonomy general name' ),
 								'singular_name'     		  => _x( 'Transaction Type', 'taxonomy singular name' ),
@@ -692,7 +692,7 @@
 								'choose_from_most_used'	  => __( 'Choose from the most popular Transaction Types' ),
 								'not_found'				  => __( 'No transaction types found' ),
 								);
-				$tax_args[MDJM_TRANS_POSTS] = array(
+				$tax_args['mdjm-transaction'] = array(
 								'hierarchical'      	   => true,
 								'labels'            	 => $tax_labels['mdjm-transaction'],
 								'show_ui'           		=> true,
@@ -704,7 +704,7 @@
 				register_taxonomy( 'transaction-types', 'mdjm-transaction', $tax_args['mdjm-transaction'] );
 			}
 		/* -- Venue Details -- */
-			if( !get_taxonomy( 'venue-details' ) )	{
+			if( ! get_taxonomy( 'venue-details' ) )	{
 				$tax_labels['mdjm-venue'] = array(
 								'name'              		   => _x( 'Venue Details', 'taxonomy general name' ),
 								'singular_name'     		  => _x( 'Venue Detail', 'taxonomy singular name' ),
@@ -719,7 +719,7 @@
 								'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details' ),
 								'not_found'				  => __( 'No details found' ),
 								);
-				$tax_args[MDJM_VENUE_POSTS] = array(
+				$tax_args['mdjm-venue'] = array(
 								'hierarchical'      => true,
 								'labels'            => $tax_labels['mdjm-venue'],
 								'show_ui'           => true,
@@ -730,8 +730,8 @@
 				register_taxonomy( 'venue-details', 'mdjm-venue', $tax_args['mdjm-venue'] );
 			}
 			
+			// Event Terms
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Event Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
-			/* -- Event Terms -- */
 			wp_insert_term( __( '16th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( '18th Birthday Party', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( '21st Birthday Party', 'mobile-dj-manager' ), 'event-types' );
@@ -751,8 +751,8 @@
 			wp_insert_term( __( 'School Prom', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( 'Wedding', 'mobile-dj-manager' ), 'event-types' );
 			
+			// Playlist Terms
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Playlist Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
-			/* -- Playlist Terms -- */
 			wp_insert_term( __( 'General', 'mobile-dj-manager' ), 'playlist-category' );
 			wp_insert_term( __( 'First Dance', 'mobile-dj-manager' ), 'playlist-category' );
 			wp_insert_term( __( 'Second Dance', 'mobile-dj-manager' ), 'playlist-category' );
@@ -763,24 +763,52 @@
 			wp_insert_term( __( 'Other', 'mobile-dj-manager' ), 'playlist-category' );
 			wp_insert_term( __( 'Guest', 'mobile-dj-manager' ), 'playlist-category' );
 			
+			// Transaction Terms
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Transaction Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
-			
-			/* -- Transaction Terms -- */
-			wp_insert_term( __( 'Deposit', 'mobile-dj-manager' ), 'transaction-types' );
-			wp_insert_term( __( 'Balance', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term(
+				__( 'Deposit', 'mobile-dj-manager' ),
+				'transaction-types',
+				array(
+					'description'	=> __( 'Event deposit payments are assigned to this term','mobile-dj-manager' ),
+					'slug'			=> 'mdjm-deposit-payments'
+				)
+			);
+			wp_insert_term(
+				__( 'Balance', 'mobile-dj-manager' ),
+				'transaction-types',
+				array(
+					'description'	=> __( 'Event balance payments are assigned to this term','mobile-dj-manager' ),
+					'slug'			=> 'mdjm-balance-payments'
+				)
+			);
 			wp_insert_term( __( 'Certifications', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term(
+				__( 'Employee Wages','mobile-dj-manager' ),
+				'transaction-types',
+				array(
+					'description'	=> __( 'All employee wage payments are assigned to this term','mobile-dj-manager' ),
+					'slug'			=> 'mdjm-employee-wages'
+				)
+			);
 			wp_insert_term( __( 'Hardware', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Insurance', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Maintenance', 'mobile-dj-manager' ), 'transaction-types' );
-			wp_insert_term( __( 'Merchant Fees', 'mobile-dj-manager' ), 'transaction-types' );
+			wp_insert_term(
+				__( 'Merchant Fees', 'mobile-dj-manager' ),
+				'transaction-types',
+				array(
+					'description'	=> __( 'Charges from payment gateways are assigned to this term','mobile-dj-manager' ),
+					'slug'			=> 'mdjm-merchant-fees'
+				)
+			);
 			wp_insert_term( __( 'Music', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Parking', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Petrol', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Software', 'mobile-dj-manager' ), 'transaction-types' );
 			wp_insert_term( __( 'Vehicle', 'mobile-dj-manager' ), 'transaction-types' );
 			
+			// Venue Terms
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Venue Terms' . "\r\n", 3, MDJM_DEBUG_LOG );
-			/* -- Venue Terms -- */
 			wp_insert_term( __( 'Low Ceiling', 'mobile-dj-manager' ),
 				'venue-details', array( 'description' => 'Venue has a low ceiling' ) );
 				
@@ -798,7 +826,7 @@
 				
 			wp_insert_term( __( 'Via Stairs', 'mobile-dj-manager' ),
 				'venue-details', array( 'description' => 'Access to this Venue is via stairs' ) );
-		} //set_mdjm_terms
+		} // set_mdjm_terms
 		
 		public function install_db()	{
 			global $wpdb, $mdjm_db_version;
@@ -807,35 +835,18 @@
 				( !empty( $wpdb->collate ) ? ' COLLATE ' . $wpdb->collate : '' );
 			
 			$mdjm_db_tables = array(
-								/* PLAYLISTS TABLE */
-								'playlist'	=> "CREATE TABLE " . MDJM_PLAYLIST_TABLE . " (
-												id int(11) NOT NULL AUTO_INCREMENT,
-												event_id int(11) NOT NULL,
-												artist varchar(255) NOT NULL,
-												song varchar(255) NOT NULL,
-												play_when varchar(255) NOT NULL,
-												info text NOT NULL,
-												added_by varchar(255) NOT NULL,
-												date_added date NOT NULL,
-												date_to_mdjm datetime NULL,
-												upload_procedure int(11) DEFAULT '0' NOT NULL,
-												PRIMARY KEY  (id),
-												KEY event_id (event_id),
-												KEY artist (artist),
-												KEY song (song)
-												) " . $charset_collate . ";",
-								/* AVAILABILITY TABLE */
-								'holiday'	=> 'CREATE TABLE ' . MDJM_HOLIDAY_TABLE . ' (
-												id int(11) NOT NULL AUTO_INCREMENT,
-												user_id int(11) NOT NULL,
-												entry_id varchar(100) NOT NULL,
-												date_from date NOT NULL,
-												date_to date NOT NULL,
-												notes text NULL,
-												PRIMARY KEY  (id),
-												KEY user_id (user_id)
-												) ' . $charset_collate . ';',
-								);
+				// AVAILABILITY TABLE
+				'holiday'	=> 'CREATE TABLE ' . $wpdb->prefix . 'mdjm_avail (
+								id int(11) NOT NULL AUTO_INCREMENT,
+								user_id int(11) NOT NULL,
+								entry_id varchar(100) NOT NULL,
+								date_from date NOT NULL,
+								date_to date NOT NULL,
+								notes text NULL,
+								PRIMARY KEY  (id),
+								KEY user_id (user_id)
+								) ' . $charset_collate . ';'
+			);
 			
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			

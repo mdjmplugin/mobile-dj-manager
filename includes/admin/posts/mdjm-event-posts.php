@@ -254,7 +254,7 @@ function mdjm_event_post_filter_list()	{
 	mdjm_event_type_filter_dropdown();
 	
 	if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
-		mdjm_event_dj_filter_dropdown();
+		mdjm_event_employee_filter_dropdown();
 	}
 		
 	if( mdjm_employee_can( 'list_all_clients' ) )	{
@@ -362,41 +362,41 @@ function mdjm_event_type_filter_dropdown()	{
  *
  * @return
  */
-function mdjm_event_dj_filter_dropdown()	{
+function mdjm_event_employee_filter_dropdown()	{
 	global $wpdb;
 	
-	$dj_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
+	$employee_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
 		"` WHERE `meta_key` = '_mdjm_event_dj'";
 							
-	$djs = $wpdb->get_results( $dj_query );
-	$dj_count = count( $djs );
+	$employees = $wpdb->get_results( $employee_query );
+	$employee_count = count( $employees );
 	
-	if ( !$dj_count || 1 == $dj_count )	{
+	if ( ! $employee_count || 1 == $employee_count )	{
 		return;
 	}
 
-	$artist = isset( $_GET['mdjm_filter_dj'] ) ? (int) $_GET['mdjm_filter_dj'] : 0;
+	$artist = isset( $_GET['mdjm_filter_employee'] ) ? (int) $_GET['mdjm_filter_employee'] : 0;
 	
 	?>
-	<label for="filter-by-dj" class="screen-reader-text">Filter by <?php echo MDJM_DJ; ?></label>
-	<select name="mdjm_filter_dj" id="filter-by-dj">
-		<option value="0"<?php selected( $artist, 0, false ); ?>><?php printf( __( 'All %s', 'mobile-dj-manager' ), MDJM_DJ . '\'s' ); ?></option>
+	<label for="filter-by-dj" class="screen-reader-text"><?php _e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
+	<select name="mdjm_filter_employee" id="filter-by-dj">
+		<option value="0"<?php selected( $artist, 0, false ); ?>><?php _e( 'All Employees', 'mobile-dj-manager' ); ?></option>
 	<?php
-	foreach( $djs as $dj ) {
-		$djinfo = get_userdata( $dj->meta_value );
-		if( empty( $djinfo->display_name ) )
+	foreach( $employees as $employee ) {
+		$employee_info = get_userdata( $employee->meta_value );
+		if( empty( $employee_info->display_name ) )
 			continue;
 			
 		printf( "<option %s value='%s'>%s</option>\n",
-			selected( $artist, $dj->meta_value, false ),
-			$dj->meta_value,
-			$djinfo->display_name
+			selected( $artist, $employee->meta_value, false ),
+			$employee->meta_value,
+			$employee_info->display_name
 		);
 	}
 	?>
 	</select>
 	<?php			
-} // mdjm_event_dj_filter_dropdown
+} // mdjm_event_employee_filter_dropdown
 		
 /**
  * Display the filter drop down list to enable user to select and filter event by Client
@@ -450,30 +450,31 @@ function mdjm_event_client_filter_dropdown()	{
  */
 function mdjm_event_view_filters( $views )	{
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-	if( mdjm_employee_can( 'read_events_all' ) || ! is_post_type_archive( 'mdjm-event' ) )
+	if( mdjm_employee_can( 'read_events_all' ) || ! is_post_type_archive( 'mdjm-event' ) )	{
 		return $views;
+	}
 	
 	// The All filter
-	$views['all'] = preg_replace( '/\(.+\)/U', '(' . count( MDJM()->events->dj_events() ) . ')', $views['all'] ); 
+	$views['all'] = preg_replace( '/\(.+\)/U', '(' . mdjm_count_employee_events() . ')', $views['all'] ); 
 				
 	$event_stati = mdjm_all_event_status();
 	
 	foreach( $event_stati as $status => $label )	{
-		$events = MDJM()->events->dj_events( '', '', '', $status );
+		$events = mdjm_get_employee_events( '', array( 'post_status' => $status ) );
 		
 		if( empty( $events ) )	{
-			if( isset( $views[$status] ) )
-				unset( $views[$status] );
+			if( isset( $views[ $status ] ) )
+				unset( $views[ $status ] );
 			
 			continue;
 		}
 			
-		$views[$status] = preg_replace( '/\(.+\)/U', '(' . count( $events ) . ')', $views[$status] );	
+		$views[$status] = preg_replace( '/\(.+\)/U', '(' . count( $events ) . ')', $views[ $status ] );	
 	}
 	
 	// Only show the views we want
 	foreach( $views as $status => $link )	{
-		if( $status != 'all' && !array_key_exists( $status, $event_stati ) )
+		if( $status != 'all' && ! array_key_exists( $status, $event_stati ) )
 			unset( $views[$status] );	
 	}
 	
@@ -527,13 +528,11 @@ function mdjm_custom_event_post_query( $query )	{
 							array(
 								'key'		=> '_mdjm_event_dj',
 								'value'  	=> $user->ID,
-								'compare'	=> '==',
 								'type'		=> 'NUMERIC'
 							),
 							array(
 								'key'		=> '_mdjm_event_client',
 								'value'  	=> $user->ID,
-								'compare'	=> '==',
 								'type'		=> 'NUMERIC'
 							),
 							array(
