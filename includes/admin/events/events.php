@@ -445,8 +445,9 @@ function mdjm_event_client_filter_dropdown()	{
  * @return	arr		$views		Filtered Array of views
  */
 function mdjm_event_view_filters( $views )	{
+	
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
-	if( mdjm_employee_can( 'read_events_all' ) || ! is_post_type_archive( 'mdjm-event' ) )	{
+	if( ! is_post_type_archive( 'mdjm-event' ) || ( empty( $_GET['mdjm_filter_employee'] ) && mdjm_employee_can( 'read_events_all' ) ) )	{
 		return $views;
 	}
 	
@@ -465,13 +466,13 @@ function mdjm_event_view_filters( $views )	{
 			continue;
 		}
 			
-		$views[$status] = preg_replace( '/\(.+\)/U', '(' . count( $events ) . ')', $views[ $status ] );	
+		$views[ $status ] = preg_replace( '/\(.+\)/U', '(' . count( $events ) . ')', $views[ $status ] );	
 	}
 	
 	// Only show the views we want
 	foreach( $views as $status => $link )	{
 		if( $status != 'all' && ! array_key_exists( $status, $event_stati ) )
-			unset( $views[$status] );	
+			unset( $views[ $status ] );	
 	}
 	
 	return $views;
@@ -1150,7 +1151,7 @@ function mdjm_event_post_messages( $messages )	{
 	
 	global $post;
 	
-	if( 'mdjm-event' != get_post_type( $post_id ) )	{
+	if( 'mdjm-event' != get_post_type( $post->ID ) )	{
 		return;
 	}
 	
@@ -1164,7 +1165,7 @@ function mdjm_event_post_messages( $messages )	{
 		6 => sprintf( __( '%s created.' ), mdjm_get_label_singular() ),
 		7 => sprintf( __( '%s saved.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		8 => sprintf( __( '%s submitted.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		9 => sprintf( __( '%s scheduled for: %s.' ), mdjm_get_label_singular(), '<strong>' . $scheduled_date . '</strong>' ),
+		9 => sprintf( __( '%s scheduled.' ), mdjm_get_label_singular() ),
 		10 => sprintf( __( '%s draft updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() )
 	);
 	

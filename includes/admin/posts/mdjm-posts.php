@@ -183,13 +183,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					10 => sprintf( __( '%s draft updated.' ), $singular )
 			);
 			
-			$custom_messages[MDJM_TRANS_POSTS] = array(
-					1 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
-					4 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
-					6 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
-					7 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
-			);
-			
 			if( isset( $custom_messages[$post_type] ) )
 				$messages[$post_type] = array_replace( $messages[$post_type], $custom_messages[$post_type] );
 	

@@ -118,10 +118,13 @@ add_action( 'manage_mdjm-transaction_posts_custom_column' , 'mdjm_transaction_po
  * @return
  */
 function mdjm_transaction_post_filter_list()	{
-	if( !isset( $_GET['post_type'] ) || $_GET['post_type'] != MDJM_TRANS_POSTS )
+	
+	if( ! isset( $_GET['post_type'] ) || $_GET['post_type'] != 'mdjm-transaction' )	{
 		return;
+	}
 	
 	mdjm_transaction_type_filter_dropdown();
+	
 } // mdjm_transaction_post_filter_list
 add_action( 'restrict_manage_posts', 'mdjm_transaction_post_filter_list' );
 		
@@ -135,29 +138,31 @@ add_action( 'restrict_manage_posts', 'mdjm_transaction_post_filter_list' );
 function mdjm_transaction_type_filter_dropdown()	{			
 	$transaction_types = get_categories( 
 								array(
-									'type'			  => MDJM_TRANS_POSTS,
-									'taxonomy'		  => 'transaction-types',
+									'type'				=> 'mdjm-transaction',
+									'taxonomy'			=> 'transaction-types',
 									'pad_counts'		=> false,
 									'hide_empty'		=> true,
-									'orderby'		  => 'name' ) );
+									'orderby'			=> 'name'
+								)
+							);
 									
 	foreach( $transaction_types as $transaction_type )	{
-		$values[$transaction_type->term_id] = $transaction_type->name;
+		$values[ $transaction_type->term_id ] = $transaction_type->name;
 	}
 	?>
 	<select name="mdjm_filter_type">
 	<option value=""><?php echo __( 'All Transaction Types', 'mobile-dj-manager' ); ?></option>
 	<?php
-		$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+		$current_value = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
 		
 		if( !empty( $values ) )	{
 			foreach( $values as $value => $label ) {
 				printf(
-					'<option value="%s"%s>%s (%s)</option>',
+					'<option value="%s"%s>%3$s (%3$s)</option>',
 					$value,
-					$value == $current_v ? ' selected="selected"' : '',
-					$label,
-					$label );
+					$value == $current_value ? ' selected="selected"' : '',
+					$label
+				);
 			}
 		}
 	?>
@@ -179,18 +184,22 @@ function mdjm_transaction_type_filter_dropdown()	{
 function mdjm_save_txn_post( $ID, $post, $update )	{
 	global $mdjm_settings;
 	
-	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
+	}
 	
-	if( empty( $update ) )
+	if( empty( $update ) )	{
 		return;
+	}
 		
 	// Permission Check
-	if( !mdjm_employee_can( 'edit_txns' ) )	{
+	if( ! mdjm_employee_can( 'edit_txns' ) )	{
+		
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit transactions' );
 		 
 		return;
+		
 	}
 	
 	// Remove the save post action to avoid loops
@@ -208,7 +217,7 @@ function mdjm_save_txn_post( $ID, $post, $update )	{
 	$trans_data['edit_date'] = true;
 		
 	$trans_data['post_author'] = get_current_user_id();
-	$trans_data['post_type'] = MDJM_TRANS_POSTS;
+	$trans_data['post_type'] = 'mdjm-transaction';
 	$trans_data['post_category'] = array( $_POST['mdjm_transaction_type'] );	
 	
 	// Set the post meta		
@@ -217,45 +226,53 @@ function mdjm_save_txn_post( $ID, $post, $update )	{
 	$trans_meta['_mdjm_txn_total'] = mdjm_format_amount( $_POST['transaction_amount'] );
 	$trans_meta['_mdjm_txn_notes'] = sanitize_text_field( $_POST['transaction_description'] );
 	
-	if( $_POST['transaction_direction'] == 'In' )
+	if( $_POST['transaction_direction'] == 'In' )	{
 		$trans_meta['_mdjm_payment_from'] = sanitize_text_field( $_POST['transaction_payee'] );
+	}
 		
-	elseif( $_POST['transaction_direction'] == 'Out' )
+	elseif( $_POST['transaction_direction'] == 'Out' )	{
 		$trans_meta['_mdjm_payment_to'] = sanitize_text_field( $_POST['transaction_payee'] );
+	}
 									
 	$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['payments']['currency'];
 	
 	// Update the post
-	if( MDJM_DEBUG == true )
+	if( MDJM_DEBUG == true )	{
 		 MDJM()->debug->log_it( 'Updating the transaction' );
+	}
 	
 	wp_update_post( $trans_data );
 	
 	// Set the transaction Type
-	if( MDJM_DEBUG == true )
-		 MDJM()->debug->log_it( 'Setting the transaction type' );													
+	if( MDJM_DEBUG == true )	{
+		 MDJM()->debug->log_it( 'Setting the transaction type' );
+	}
 	
 	wp_set_post_terms( $ID, $_POST['mdjm_transaction_type'], 'transaction-types' );
 	
 	// Add the meta data
-	if( MDJM_DEBUG == true )
+	if( MDJM_DEBUG == true )	{
 		 MDJM()->debug->log_it( 'Updating the transaction post meta' );
+	}
 	
 	// Loop through the post meta and add/update/delete the meta keys. 
 	foreach( $trans_meta as $meta_key => $new_meta_value )	{
 		$current_meta_value = get_post_meta( $ID, $meta_key, true );
 		
 		// If we have a value and the key did not exist previously, add it.
-		if ( !empty( $new_meta_value ) && empty( $current_meta_value ) )
+		if ( !empty( $new_meta_value ) && empty( $current_meta_value ) )	{
 			add_post_meta( $ID, $meta_key, $new_meta_value, true );
+		}
 		
 		// If a value existed, but has changed, update it.
-		elseif ( !empty( $new_meta_value ) && $new_meta_value != $current_meta_value )
+		elseif ( !empty( $new_meta_value ) && $new_meta_value != $current_meta_value )	{
 			update_post_meta( $ID, $meta_key, $new_meta_value );
+		}
 			
 		// If there is no new meta value but an old value exists, delete it.
-		elseif ( empty( $new_meta_value ) && !empty( $current_meta_value ) )
+		elseif ( empty( $new_meta_value ) && !empty( $current_meta_value ) )	{
 			delete_post_meta( $ID, $meta_key, $new_meta_value );
+		}
 	}
 	
 	// Fire our post save hook
@@ -266,4 +283,38 @@ function mdjm_save_txn_post( $ID, $post, $update )	{
 	
 } // mdjm_save_txn_post
 add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
-?>
+
+/**
+ * Customise the messages associated with managing transaction posts
+ *
+ * @since	1.3
+ * @param	arr		$messages	The current messages
+ * @return	arr		$messages	Filtered messages
+ *
+ */
+function mdjm_txn_post_messages( $messages )	{
+	
+	global $post;
+	
+	if( 'mdjm-transaction' != get_post_type( $post->ID ) )	{
+		return;
+	}
+	
+	$messages = array(
+		0 => '', // Unused. Messages start at index 1.
+		1 => __( 'Transaction updated.', 'mobile-dj-manager' ),
+		2 => __( 'Custom field updated.' ),
+		3 => __( 'Custom field deleted.' ),
+		4 => __( 'Transaction updated.', 'mobile-dj-manager' ),
+		5 => isset( $_GET['revision'] ) ? sprintf( __( 'Transaction restored to revision from %s.', 'mobile-dj-manager' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6 => __( 'Transaction created.' ),
+		7 => __( 'Transaction saved.', 'mobile-dj-manager' ),
+		8 => __( 'Transaction submitted.', 'mobile-dj-manager' ),
+		9 => __( 'Transaction scheduled.', 'mobile-dj-manager' ),
+		10 => __( 'Transaction draft updated.', 'mobile-dj-manager' )
+	);
+	
+	return apply_filters( 'mdjm_txn_post_messages', $messages );
+	
+} // mdjm_txn_post_messages
+add_filter( 'post_updated_messages','mdjm_txn_post_messages' );

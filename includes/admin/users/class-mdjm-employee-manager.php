@@ -632,27 +632,24 @@ endif;
 		 * @return	str		The HTML output for the checkbox column
 		 */
 		public function column_events( $item ) {
-			$next = MDJM()->events->next_event( $item->ID, 'dj' );
-			$total = MDJM()->events->dj_events( $item->ID );
+			$next_event		= mdjm_get_employees_next_event( $item->ID, 'dj' );
+			$total_events	= mdjm_count_employee_events( $item->ID );
 			
 			printf( 
 				__( 'Next: %s', 'mobile-dj-manager' ), 
-				( !empty( $next ) ? 
-					'<a href="' . get_edit_post_link( $next[0]->ID ) . '">' . 
-					date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>'
-					:
-					__( 'None', 'mobile-dj-manager' ) )
+				! empty( $next_event ) ? '<a href="' . get_edit_post_link( $next_event->ID ) . '">' . 
+				mdjm_format_short_date( get_post_meta( $next_event->ID, '_mdjm_event_date', true ) ) . '</a>' :
+				__( 'None', 'mobile-dj-manager' ) 
 			);
 			
 			echo '<br />';
 			
 			printf( 
 				__( 'Total: %s', 'mobile-dj-manager' ), 
-				( !empty( $total ) ?
-					'<a href="' . admin_url( 'edit.php?s&post_type=' . MDJM_EVENT_POSTS . '?s&post_status=all' .
-					'&post_type=' . MDJM_EVENT_POSTS . '&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
-					'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) . '">' . count( $total ) . '</a>' : '0'
-				)
+				! empty( $total_events ) ? '<a href="' . admin_url( 'edit.php?s&post_type=mdjm-event&post_status=all' .
+					'&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
+					'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) . '">' . $total_events . '</a>' :
+					'0'
 			);    
 		} // column_events
 		

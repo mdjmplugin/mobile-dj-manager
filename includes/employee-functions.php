@@ -627,49 +627,52 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 	
 	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
 	
-	$defaults = array(
-		'date'				=> 0,
-		'orderby'			=> 'post_date',
-		'order'				=> 'ASC',
-		'status'			=> 'any',
-		'posts_per_page'	=> -1,
-		'meta_query'		=> array(
-			'relation' => 'OR',
-			array(
-				'key'		=> '_mdjm_event_dj',
-				'value'		=> $employee_id
-			),
-			array(
-				'key'		=> '_mdjm_event_employees',
-				'value'		=> sprintf( ':"%s";', $employee_id ),
-				'compare'	=> 'LIKE'
-			)
+	$employee_query	= array(
+		'relation'	=> 'OR',
+		array( 
+			'key'		=> '_mdjm_event_dj',
+			'value'		=> $employee_id,
+			'compare'	=> '=',
+			'type'		=> 'numeric'
+		),
+		array(
+			'key'		=> '_mdjm_event_employees',
+			'value'		=> sprintf( ':"%s";', $employee_id ),
+			'compare'	=> 'LIKE'
 		)
 	);
 	
+	$defaults = array(
+		'post_type'			=> 'mdjm-event',
+		'post_status'		=> 'any',
+		'posts_per_page'	=> -1,
+		'meta_query'		=> $employee_query,
+		'date'				=> false, // Required if checking for events on a specific date. Parse an array if querying a date range
+		'date_compare'		=> '='
+	);
+		
 	$args = wp_parse_args( $args, $defaults );
-	
-	$args['post_type'] = 'mdjm-event';
 	
 	$order_by_num = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
 	
-	if ( ! empty( $args['date'] ) )	{
-		$args['date_query']		= array(
+	if ( ! empty( $args['event_date'] ) )	{
+		$date_query = array(
 			'relation'	=> 'AND',
 			array(
-				'key'	=> '_mdjm_event_date',
-				'value'	=> $date,
-				'type'=> 'DATE'
+				'key'		=> '_mdjm_event_date',
+				'value'		=> $args['date'],
+				'type'		=> 'DATE',
+				'compare'	=> $args['date_compare']
 			)
 		);
 		
-		$args['meta_query'] = array_push( $args['date_query'], $args['meta_query'] );
+		$args['meta_query'] = array_merge( $employee_query, $date_query );
 		
 	}
 	
-	// We don't need the date arg any longer
-	unset( $args['date'] );
-		
+	// We don't need the date args any longer
+	unset( $args['date'], $args['date_compare'] );
+	
 	$events = get_posts( $args );
 	
 	// Return the results
@@ -686,36 +689,41 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
  *
  * @since	1.3
  * @param	int		$employee_id	The employees user ID. Uses current user ID if not value is passed.
- * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @param	arr		$args			Array of possible arguments. See mdjm_get_employee_events()->$defaults.
  * @return	mixed	$events			False if no events, otherwise an object array of all employees events.
  */
 function mdjm_count_employee_events( $employee_id = '', $args = array() )	{
-	
-	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
-	
-	$defaults = array(
-		'post_type'			=> 'mdjm-event',
-		'date'				=> 0,
-		'orderby'			=> 'post_date',
-		'order'				=> 'ASC',
-		'status'			=> 'any',
-		'posts_per_page'	=> -1,
-		'meta_query'		=> array(
-			'relation' => 'OR',
-			array(
-				'key'		=> '_mdjm_event_dj',
-				'value'		=> $employee_id
-			),
-			array(
-				'key'		=> '_mdjm_event_employees',
-				'value'		=> sprintf( ':"%s";', $employee_id ),
-				'compare'	=> 'LIKE'
-			)
-		)
-	);
-	
-	$args = wp_parse_args( $args, $defaults );
 		
-	return count( mdjm_get_employee_events( $employee_id, $args ) );
+	return count( mdjm_get_employee_events( $employee_id, apply_filters( 'mdjm_count_employee_events', $args ) ) );
 	
 } // mdjm_count_employee_events
+
+/**
+ * Get the employees next event.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	The employees user ID. Uses current user ID if not value is passed.
+ * @param	arr		$args			Array of possible arguments. See mdjm_get_employee_events()->$defaults.
+ * @return	mixed	$event			False if no events, otherwise an object array of the next event.
+ */
+function mdjm_get_employees_next_event( $employee_id = '' )	{
+	
+	$args = array(
+		'post_status'		=> mdjm_active_event_statuses(),
+		'posts_per_page'	=> 1,
+		'meta_key'			=> '_mdjm_event_date',
+		'date'				=> date( 'Y-m-d' ),
+		'date_compare'		=> '>=',
+		'orderby'			=> 'meta_value',
+		'order'				=> 'ASC'
+	);
+	
+	$next_event = mdjm_get_employee_events( $employee_id, $args );
+	
+	if ( $next_event )	{
+		return $next_event[0];
+	} else	{
+		false;
+	}
+	
+} // mdjm_get_employees_next_event
