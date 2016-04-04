@@ -156,7 +156,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				if ( null !== $result ) {
 					$return['type'] = 'success';
 					
-					$updated_roles = '<option value="">' . __( 'Select Role', 'mobile-dj-manager' ) . '...</option>' . "\r\n" . $this->roles_dropdown();
+					$updated_roles = $this->roles_dropdown();
 					
 					$return['options'] = $updated_roles;
 					$result->add_cap( 'mdjm_employee' );

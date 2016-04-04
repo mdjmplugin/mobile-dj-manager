@@ -106,6 +106,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **Tweak**: New mdjm.css file. Can be customised for front end
 	* **Tweak**: Added content filters for emailing and printing the event playlist
 	* **Tweak**: Cleaner directory structure
+	* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
 
 
 = 1.2.7.5 =

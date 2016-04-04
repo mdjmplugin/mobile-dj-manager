@@ -559,16 +559,28 @@ endif;
 		 * @return	str		The HTML output for the checkbox column
 		 */
 		public function column_name( $item ) {
-			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() )
+			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() )	{
 				$edit_users = true;
+			}
 		
-			if( !empty( $edit_users ) )
+			if( ! empty( $edit_users ) )	{
 				echo '<a href="' . get_edit_user_link( $item->ID ) . '">';
+			}
 			
 			echo $item->display_name;
 			
-			if( !empty( $edit_users ) )
-			echo '</a>';    
+			if( !empty( $edit_users ) )	{
+				echo '</a>';
+			}
+			
+			if ( mdjm_employee_can( 'manage_mdjm', $item->ID ) )	{
+				echo '<br />' . __( '<em>MDJM Admin</em>', 'mobile-dj-manager' );
+			}
+			
+			if ( user_can( $item->ID, 'administrator' ) )	{
+				echo '<br />' . __( '<em>WordPress Admin</em>', 'mobile-dj-manager' );
+			}
+			
 		} // column_name
 		
 		/**
@@ -592,6 +604,7 @@ endif;
 				}
 				
 			}
+			
 			if( ! empty( $roles ) )	{
 				$i = 1;
 				foreach( $roles as $role_id => $role )	{
