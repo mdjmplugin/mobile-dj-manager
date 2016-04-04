@@ -160,6 +160,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 					
 					$return['options'] = $updated_roles;
 					$result->add_cap( 'mdjm_employee' );
+					$result->add_cap( 'read' );
 				}
 				else {
 					$return['type'] = 'error';

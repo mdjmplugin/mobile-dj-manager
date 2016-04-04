@@ -701,6 +701,8 @@ function mdjm_event_metabox_event_employees( $post )	{
                         $exclude[] = $employee['id'];
                     }
                 }
+				
+				$exclude[] = mdjm_get_event_primary_employee( $post->ID );
                 
                 $mdjm_roles = mdjm_get_roles();
                 

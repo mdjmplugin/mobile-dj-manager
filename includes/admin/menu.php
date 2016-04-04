@@ -17,9 +17,7 @@
 			 */
 			public function __construct()	{
 				add_action( 'admin_menu', array( &$this, 'mdjm_menu' ) ); // Admin menu
-				add_action( 'admin_menu', array( &$this, 'menu_for_admin' ) ); // Remove Jetback for non-admins
 				add_action( 'admin_bar_menu', array( &$this, 'mdjm_toolbar' ), 99 ); // Admin bar menu
-				add_action( 'jetpack_admin_menu', array( &$this, 'remove_jetpack' ) ); // Remove Jetpack for non-Admins
 			} // __construct
 			
 			/*
@@ -29,8 +27,9 @@
 			 *
 			 */
 	 		public function mdjm_menu()	{
-				if( !current_user_can( 'mdjm_employee' ) )
+				if( !current_user_can( 'mdjm_employee' ) )	{
 					return;
+				}
 				
 				global $mdjm_settings_page;
 				
@@ -213,24 +212,7 @@
 				);
 				
 			} // mdjm_menu
-			
-			/*
-			 * Remove admin menu items for non WP Admins
-			 *
-			 * 
-			 *
-			 */
-			public function menu_for_admin()	{
-				global $mdjm_settings;
-				
-				if( !current_user_can( 'administrator' ) )	{
-					if( !isset( $mdjm_settings['permissions']['dj_see_wp_dash'] ) ) 
-						remove_menu_page( 'index.php' );
-					
-					remove_menu_page( 'profile.php' );
-				}	
-			} // menu_for_admin
-			
+						
 			/*
 			 * mdjm_toolbar
 			 * Build the MDJM Admin toolbar
@@ -665,18 +647,7 @@
 					));
 				}
 			} // mdjm_toolbar
-			
-			/*
-			 * remove_jetpack
-			 * Remove JetPack for non WP Admins
-			 * 
-			 *
-			 */
-			public function remove_jetpack()	{
-				if( !current_user_can( 'administrator' ) )
-					remove_menu_page( 'jetpack' );
-			} // remove_jetpack
-			
+						
 /*
  * --
  * ADMIN PAGES

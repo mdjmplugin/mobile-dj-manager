@@ -290,6 +290,7 @@ class MDJM_Upgrade_to_1_3	{
 		$role->add_cap( 'mdjm_employee' );
 		$role->add_cap( 'edit_posts' );
 		$role->add_cap( 'delete_posts' );
+		$role->add_cap( 'read' );
 		
 		MDJM()->debug->log_it( 'Completed updating DJ capabilities', true );
 	} // update_dj_caps
