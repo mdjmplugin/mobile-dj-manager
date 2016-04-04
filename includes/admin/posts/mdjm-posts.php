@@ -41,7 +41,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			include_once( 'mdjm-communications-posts.php' );
 			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-email-template-posts.php' );
-			include_once( 'mdjm-event-posts.php' );
 			include_once( 'mdjm-quote-posts.php' );
 			include_once( 'mdjm-transaction-posts.php' );
 			include_once( 'mdjm-venue-posts.php' );
