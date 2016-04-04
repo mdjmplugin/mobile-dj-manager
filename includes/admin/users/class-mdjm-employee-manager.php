@@ -650,7 +650,7 @@ endif;
 				__( 'Total: %s', 'mobile-dj-manager' ), 
 				( !empty( $total ) ?
 					'<a href="' . admin_url( 'edit.php?s&post_type=' . MDJM_EVENT_POSTS . '?s&post_status=all' .
-					'&post_type=' . MDJM_EVENT_POSTS . '&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_dj=' . $item->ID .
+					'&post_type=' . MDJM_EVENT_POSTS . '&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
 					'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) . '">' . count( $total ) . '</a>' : '0'
 				)
 			);    

@@ -11,8 +11,8 @@
 /**
  * Define the columns to be displayed for event posts
  *
- * @params	arr		$columns	Array of column names
- *
+ * @since	0.5
+ * @param	arr		$columns	Array of column names
  * @return	arr		$columns	Filtered array of column names
  */
 function mdjm_event_post_columns( $columns ) {
@@ -48,13 +48,13 @@ add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
 /**
  * Define which columns are sortable for event posts
  *
- * @params	arr		$sortable_columns	Array of event post sortable columns
- *
+ * @since	0.7
+ * @param	arr		$sortable_columns	Array of event post sortable columns
  * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
  */
 function mdjm_event_post_sortable_columns( $sortable_columns )	{
-	$sortable_columns['event_date'] = 'event_date';
-	$sortable_columns['value'] = 'value';
+	$sortable_columns['event_date']	= 'event_date';
+	$sortable_columns['value']		 = 'value';
 	
 	return $sortable_columns;
 } // mdjm_event_post_sortable_columns
@@ -63,10 +63,10 @@ add_filter( 'manage_edit-mdjm-event_sortable_columns', 'mdjm_event_post_sortable
 /**
  * Define the data to be displayed in each of the custom columns for the Communications post types
  *
+ * @since	0.9
  * @param	str		$column_name	The name of the column to display
- *			int		$post_id		The current post ID
- * 
- *
+ * @param	int		$post_id		The current post ID
+ * @return
  */
 function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	global $post;
@@ -194,7 +194,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			}
 		break;
 			
-		/* -- Playlist -- */
+		// Playlist
 		case 'playlist':
 			if( mdjm_employee_can( 'manage_events' ) )	{
 				$total = mdjm_count_playlist_entries( $post_id );
@@ -224,10 +224,10 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 add_action( 'manage_mdjm-event_posts_custom_column' , 'mdjm_event_posts_custom_column', 10, 2 );
 		
 /**
- * Remove the edit bulk action from the event posts list
+ * Remove the edit bulk action from the event posts list.
  *
- * @params	arr		$actions	Array of actions
- *
+ * @since	1.0
+ * @param	arr		$actions	Array of actions
  * @return	arr		$actions	Filtered Array of actions
  */
 function mdjm_event_bulk_action_list( $actions )	{
@@ -238,15 +238,15 @@ function mdjm_event_bulk_action_list( $actions )	{
 add_filter( 'bulk_actions-edit-mdjm-event', 'mdjm_event_bulk_action_list' );
 		
 /**
- * Add the filter dropdowns to the event post list
+ * Add the filter dropdowns to the event post list.
  *
- * @params
- *
- * @return
+ * @since	1.0
+ * @param
+ * @return	void
  */
 function mdjm_event_post_filter_list()	{
 	
-	if( !isset( $_GET['post_type'] ) || $_GET['post_type'] != 'mdjm-event' )	{
+	if( ! isset( $_GET['post_type'] ) || $_GET['post_type'] != 'mdjm-event' )	{
 		return;
 	}
 	
@@ -265,11 +265,11 @@ function mdjm_event_post_filter_list()	{
 add_action( 'restrict_manage_posts', 'mdjm_event_post_filter_list' );
 		
 /**
- * Display the filter drop down list to enable user to select and filter event by month/year
+ * Display the filter drop down list to enable user to select and filter event by month/year.
  * 
- * @params
- *
- * @return
+ * @since	1.0
+ * @param
+ * @return	void
  */
 function mdjm_event_date_filter_dropdown()	{
 	global $wpdb, $wp_locale;
@@ -308,7 +308,8 @@ function mdjm_event_date_filter_dropdown()	{
 			sprintf( 
 				__( '%1$s %2$d', 'mobile-dj-manager' ),
 				$wp_locale->get_month( $month ),
-				$year )
+				$year
+			)
 		);
 	}
 	?>
@@ -317,37 +318,40 @@ function mdjm_event_date_filter_dropdown()	{
 } // mdjm_event_date_filter_dropdown
 		
 /**
- * Display the filter drop down list to enable user to select and filter event by type
+ * Display the filter drop down list to enable user to select and filter event by type.
  * 
- * @params
- *
+ * @since	1.0
+ * @param
  * @return
  */
 function mdjm_event_type_filter_dropdown()	{			
 	$event_types = get_categories(
 						array(
-							'type'			  => MDJM_EVENT_POSTS,
+							'type'			  => 'mdjm-event',
 							'taxonomy'		  => 'event-types',
 							'pad_counts'		=> false,
 							'hide_empty'		=> true,
-							'orderby'		  => 'name' ) );
+							'orderby'		  => 'name'
+						)
+					);
 	
 	foreach( $event_types as $event_type )	{
-		$values[$event_type->term_id] = $event_type->name;
+		$values[ $event_type->term_id ] = $event_type->name;
 	}
 	?>
 	<select name="mdjm_filter_type">
 		<option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
 		<?php
-		$current_v = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+		$current_value = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
 		if( !empty( $values ) )	{
 			foreach( $values as $value => $label ) {
 				printf(
 					'<option value="%s"%s>%s (%s)</option>',
 					$value,
-					$value == $current_v ? ' selected="selected"' : '',
+					$value == $current_value ? ' selected="selected"' : '',
 					$label,
-					$label );
+					$label
+				);
 			}
 		}
 		?>
@@ -356,54 +360,46 @@ function mdjm_event_type_filter_dropdown()	{
 } // mdjm_event_type_filter_dropdown
 		
 /**
- * Display the filter drop down list to enable user to select and filter event by DJ
+ * Display the filter drop down list to enable user to select and filter event by Employee.
  * 
- * @params
- *
- * @return
+ * @since	1.0
+ * @param
+ * @return	str		Outputs the dropdown for the employee filter
  */
 function mdjm_event_employee_filter_dropdown()	{
-	global $wpdb;
 	
-	$employee_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
-		"` WHERE `meta_key` = '_mdjm_event_dj'";
-							
-	$employees = $wpdb->get_results( $employee_query );
+	$employees = mdjm_get_employees();
 	$employee_count = count( $employees );
 	
 	if ( ! $employee_count || 1 == $employee_count )	{
 		return;
 	}
-
-	$artist = isset( $_GET['mdjm_filter_employee'] ) ? (int) $_GET['mdjm_filter_employee'] : 0;
 	
 	?>
-	<label for="filter-by-dj" class="screen-reader-text"><?php _e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
-	<select name="mdjm_filter_employee" id="filter-by-dj">
-		<option value="0"<?php selected( $artist, 0, false ); ?>><?php _e( 'All Employees', 'mobile-dj-manager' ); ?></option>
-	<?php
-	foreach( $employees as $employee ) {
-		$employee_info = get_userdata( $employee->meta_value );
-		if( empty( $employee_info->display_name ) )
-			continue;
+	<label for="filter-by-employee" class="screen-reader-text"><?php _e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
+	
+    <?php
+	mdjm_employee_dropdown(
+		array(
+			'name'                => 'mdjm_filter_employee',
+			'id'				  => 'filter-by-employee',
+			'selected'            => isset( $_GET['mdjm_filter_employee'] ) ? $_GET['mdjm_filter_employee'] : 0,
+			'first_entry'         => __( 'All Employees', 'mobile-dj-manager' ),
+			'first_entry_val'     => 0,
+			'group'               => true,
+			'structure'           => true,
+			'echo'                => true
+		)
+	);
 			
-		printf( "<option %s value='%s'>%s</option>\n",
-			selected( $artist, $employee->meta_value, false ),
-			$employee->meta_value,
-			$employee_info->display_name
-		);
-	}
-	?>
-	</select>
-	<?php			
 } // mdjm_event_employee_filter_dropdown
 		
 /**
- * Display the filter drop down list to enable user to select and filter event by Client
+ * Display the filter drop down list to enable user to select and filter event by Client.
  * 
- * @params
- *
- * @return
+ * @since	1.0
+ * @param	arr
+ * @return	arr
  */
 function mdjm_event_client_filter_dropdown()	{
 	global $wpdb;
@@ -444,9 +440,9 @@ function mdjm_event_client_filter_dropdown()	{
 /**
  * Customise the view filter counts
  *
- * @called	views_edit-post hook
- *
- *
+ * @since	1.0
+ * @param	arr		$views		Array of views
+ * @return	arr		$views		Filtered Array of views
  */
 function mdjm_event_view_filters( $views )	{
 	// We only run this filter if the user has restrictive caps and the post type is mdjm-event
@@ -481,129 +477,307 @@ function mdjm_event_view_filters( $views )	{
 	return $views;
 } // mdjm_event_view_filters
 add_filter( 'views_edit-mdjm-event' , 'mdjm_event_view_filters' );
-		
+
 /**
- * Customise the event post query 
+ * Customise the post row actions on the event edit screen.
  *
- * @called	pre_get_posts
- *
- * @params	obj		$query		The WP_Query
- *
- * @return	obj		$query		The customised WP_Query
+ * @since	1.0
+ * @param	arr		$actions	Current post row actions
+ * @param	obj		$post		The WP_Post post object
  */
-function mdjm_custom_event_post_query( $query )	{
-	global $pagenow;
+function mdjm_event_post_row_actions( $actions, $post )	{
 	
-	if( ! is_post_type_archive( 'mdjm-event' ) || !$query->is_main_query() || !$query->is_admin || 'edit.php' != $pagenow )	{
+	if( $post->post_type != 'mdjm-event' )	{
+		return $actions;
+	}
+	
+	if( isset( $actions['trash'] ) )	{
+		unset( $actions['trash'] );
+	}
+	if( isset( $actions['view'] ) )	{
+		unset( $actions['view'] );
+	}
+	if( isset( $actions['edit'] ) )	{
+		unset( $actions['edit'] );
+	}
+	if( isset( $actions['inline hide-if-no-js'] ) )	{
+		unset( $actions['inline hide-if-no-js'] );
+	}
+	
+	// Unattended events have additional actions to allow one-click responses
+	if( $post->post_status == 'mdjm-unattended' )	{
+		
+		// Quote for event
+		$actions['quote'] = sprintf(
+								__( '<a href="%s">Quote</a>', 'mobile-dj-manager' ),
+								admin_url( 'post.php?post=' . $post->ID . '&action=edit&mdjm_action=respond' ) );
+		
+		// Check availability
+		$actions['availability'] = sprintf( 
+										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
+										mdjm_get_admin_page( 'events' ) .
+										'&availability=' . date( 'Y-m-d', ( strtotime( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) ) ) .
+										'%e_id=' . $post->ID );
+		// Respond Unavailable
+		$actions['respond_unavailable'] = sprintf( 
+												__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
+												admin_url( 'admin.php?page=mdjm-comms&template=' . 
+												mdjm_get_option( 'unavailable' ) . '&to_user=' . mdjm_get_client_id( $post->ID ) . 
+												'&event_id=' . $post->ID . '&action=respond_unavailable' ) );
+	}
+} // mdjm_event_post_row_actions
+add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
+
+/**
+ * Order posts.
+ *
+ * @since	1.3
+ * @param	obj		$query		The WP_Query object
+ * @return	void
+ */
+function mdjm_event_post_order( $query )	{
+	
+	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) )	{
 		return;
 	}
 	
-	/**
-	 * If searching it's only useful if we include clients and employees
-	 */
-	if( $query->is_search() )	{
-		$users = new WP_User_Query(
+	switch( $query->get( 'orderby' ) )	{
+		case 'event_date':
+		default:
+			$query->set( 'meta_key', '_mdjm_event_date' );
+			$query->set( 'orderby',  'meta_value' );
+            break;
+			
+		case 'title':
+			$query->set( 'orderby',  'post_id' );
+			break;
+			
+		case 'value':
+			$query->set( 'meta_key', '_mdjm_event_cost' );
+			$query->set( 'orderby',  'meta_value_num' );
+            break;
+		
+	}
+	
+} // mdjm_event_post_order
+add_action( 'pre_get_posts', 'mdjm_event_post_order' );
+
+/**
+ * Hook into pre_get_posts and limit employees events if their permissions are not full.
+ *
+ * @since	1.0
+ * @param	arr		$query		The WP_Query
+ * @return	void
+ */
+function mdjm_limit_results_to_employee_events( $query )	{
+	
+	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) || mdjm_employee_can( 'read_events_all' ) )	{
+		return;
+	}
+			
+	global $user_ID;
+	
+	$query->set(
+		'meta_query',
+		array(
+			'relation' => 'AND',
 			array(
-				'search'			=> $_GET['s'],
-				'search_columns'	=> array(
-					'user_login',
-					'user_email',
-					'user_nicename',
-					'display_name'
+				'relation'	=> 'OR',
+				array(
+					'key'		=> '_mdjm_event_dj',
+					'value'  	  => $user_ID,
+					'compare'	=> '=='
+				),
+				array(
+					'key'		=> '_mdjm_event_employees',
+					'value'		=> sprintf( ':"%s";', $user_ID ),
+					'compare'	=> 'LIKE'
 				)
 			)
-		); // WP_User_Query
-						
-		// Loop through WP_User_Query search looking for events where user is client or employee
-		if( !empty( $users->results ) )	{
-			
-			foreach( $users->results as $user )	{
+		)
+	);
+
+} // mdjm_limit_results_to_employee_events
+add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_events' );
+
+/**
+ * Adjust the query when the events are filtered.
+ *
+ * @since	1.3
+ * @param	arr		$query		The WP_Query
+ * @return	void
+ */
+function mdjm_event_post_filtered( $query )	{
+	
+	global $pagenow;
+	
+	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	
+	if ( 'edit.php' != $pagenow || 'mdjm-event' != $post_type || ! is_admin() )	{
+		return;
+	}
+	
+	// Filter by selected date
+	if( ! empty( $_GET['mdjm_filter_date'] ) )	{
+		
+		// Create the date start and end range
+		$start	= date( 'Y-m-d', strtotime( substr( $_GET['mdjm_filter_date'], 0, 4 ) . '-' . substr( $_GET['mdjm_filter_date'], -2 ) . '-01' ) );
+		$end	  = date( 'Y-m-t', strtotime( $start ) );
+		
+		$query->query_vars['meta_query'] = array(
+			array(
+				'key' => '_mdjm_event_date',
+				'value' => array( $start, $end ),
+				'compare' => 'BETWEEN'
+			)
+		);
+
+	}
+	
+	// Filter by event type
+	if( ! empty( $_GET['mdjm_filter_type'] ) )	{
+		
+		$type = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : 0;
 				
-				$results = get_posts(
+		if( $type != 0 ) {
+			$query->set(
+				'tax_query',
+				array(
 					array(
-						'post_type'      => 'mdjm-event',
-						'post_status'	=> 'any',
-						'meta_query'	=> array(
-							'relation'	=> 'OR',
-							array(
-								'key'		=> '_mdjm_event_dj',
-								'value'  	=> $user->ID,
-								'type'		=> 'NUMERIC'
-							),
-							array(
-								'key'		=> '_mdjm_event_client',
-								'value'  	=> $user->ID,
-								'type'		=> 'NUMERIC'
-							),
-							array(
-								'key'		=> '_mdjm_event_employees',
-								'value'		=> sprintf( ':"%s";', $user->ID ),
-								'compare'	=> 'LIKE'
-							)
+						'taxonomy'		=> 'event-types',
+						'field'		   => 'term_id',
+						'terms'		   => $type
+					)
+				)
+			);
+		}
+
+	}
+	
+	// Filter by selected employee
+	if( ! empty( $_GET['mdjm_filter_employee'] ) )	{
+		
+		$query->query_vars['meta_query'] = array(
+			'relation'	=> 'OR',
+			array(
+				'key' => '_mdjm_event_dj',
+				'value' => $_GET['mdjm_filter_employee']
+			),
+			array(
+				'key'		=> '_mdjm_event_employees',
+				'value'	  => sprintf( ':"%s";', $_GET['mdjm_filter_employee'] ),
+				'compare'	=> 'LIKE'
+			)
+		);
+
+	}
+	
+	// Filter by selected client
+	if( ! empty( $_GET['mdjm_filter_client'] ) )	{
+		
+		$query->query_vars['meta_query'] = array(
+			array(
+				'key' => '_mdjm_event_client',
+				'value' => $_GET['mdjm_filter_client']
+			)
+		);
+
+	}
+	
+} // mdjm_event_post_filtered
+add_filter( 'parse_query', 'mdjm_event_post_filtered' );
+		
+/**
+ * Customise the event post query during a search so that clients and employees are included in results.
+ *
+ * @since	1.0
+ * @param	arr		$query		The WP_Query
+ * @return	void
+ */
+function mdjm_event_post_search( $query )	{
+	global $pagenow;
+	
+	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) || ! $query->is_search() || 'edit.php' != $pagenow )	{
+		return;
+	}
+	
+	// If searching it's only useful if we include clients and employees		
+	$users = new WP_User_Query(
+		array(
+			'search'			=> $_GET['s'],
+			'search_columns'	=> array(
+				'user_login',
+				'user_email',
+				'user_nicename',
+				'display_name'
+			)
+		)
+	); // WP_User_Query
+	
+	$user_results = $users->get_results();
+			
+	// Loop through WP_User_Query search looking for events where user is client or employee
+	if( ! empty( $user_results ) )	{
+		
+		foreach( $user_results as $user )	{
+			
+			$results = get_posts(
+				array(
+					'post_type'       => 'mdjm-event',
+					'post_status'	 => 'any',
+					'posts_per_page'  => -1,
+					'meta_query'	  => array(
+						'relation'	=> 'OR',
+						array(
+							'key'		=> '_mdjm_event_dj',
+							'value'  	  => $user->ID,
+							'type'	   => 'NUMERIC'
+						),
+						array(
+							'key'		=> '_mdjm_event_client',
+							'value'  	  => $user->ID,
+							'type'	   => 'NUMERIC'
+						),
+						array(
+							'key'		=> '_mdjm_event_employees',
+							'value'	  => sprintf( ':"%s";', $user->ID ),
+							'compare'	=> 'LIKE'
 						)
 					)
-				); // get_posts
+				)
+			); // get_posts
+			
+			if( !empty( $results ) )	{
 				
-				if( !empty( $results ) )	{
+				foreach( $results as $result )	{
 					
-					foreach( $results as $result )	{
-						
-						$events[] = $result->ID;
-														
-					}
-					
+					$events[] = $result->ID;
+													
 				}
 				
-			} // foreach( $users as $user )
+			}
 			
-		} // if( !empty( $users ) )
+		} // foreach( $users as $user )
 		
 		if( ! empty( $events ) )	{
-			
+	
 			$query->set( 'post__in', $events );
 			$query->set( 'post_status', array( 'mdjm-unattended', 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved', 'mdjm-failed', 'mdjm-rejected', 'mdjm-completed' ) );
 			
 		}
-
-	} // if( $query->is_search() 
-	
-	/**
-	 * If current user is restricted, filter to their own events only
-	 */	
-	if( ! mdjm_employee_can( 'read_events_all' ) )	{
-		global $user_ID;
 		
-		$query->set(
-			'meta_query',
-			array(
-				'relation' => 'AND',
-				array(
-					'relation'	=> 'OR',
-					array(
-						'key'		=> '_mdjm_event_dj',
-						'value'  	  => $user_ID,
-						'compare'	=> '=='
-					),
-					array(
-						'key'		=> '_mdjm_event_employees',
-						'value'		=> sprintf( ':"%s";', $user_ID ),
-						'compare'	=> 'LIKE'
-					)
-				)
-			)
-		);
-	}
-} // mdjm_custom_event_post_query
-add_action( 'pre_get_posts', 'mdjm_custom_event_post_query' );
+	} // if( !empty( $users ) )
+		
+} // mdjm_event_post_search
+add_action( 'pre_get_posts', 'mdjm_event_post_search' );
 
 /**
  * Save the meta data for the event
  *
- * @called	save_post_mdjm-event
- *
+ * @since	0.7
  * @param	int		$ID				The current post ID.
- *			obj		$post			The current post object (WP_Post).
- *			bool	$update			Whether this is an existing post being updated or not.
+ * @param	obj		$post			The current post object (WP_Post).
+ * @param	bool	$update			Whether this is an existing post being updated or not.
  * 
  * @return	void
  */
@@ -963,4 +1137,38 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	
 } // mdjm_save_event_post
 add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-?>
+
+/**
+ * Customise the messages associated with managing event posts
+ *
+ * @since	1.3
+ * @param	arr		$messages	The current messages
+ * @return	arr		$messages	Filtered messages
+ *
+ */
+function mdjm_event_post_messages( $messages )	{
+	
+	global $post;
+	
+	if( 'mdjm-event' != get_post_type( $post_id ) )	{
+		return;
+	}
+	
+	$messages = array(
+		0 => '', // Unused. Messages start at index 1.
+		1 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		2 => __( 'Custom field updated.' ),
+		3 => __( 'Custom field deleted.' ),
+		4 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		5 => isset( $_GET['revision'] ) ? sprintf( __( '%s restored to revision from %s.' ), mdjm_get_label_singular(), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6 => sprintf( __( '%s created.' ), mdjm_get_label_singular() ),
+		7 => sprintf( __( '%s saved.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		8 => sprintf( __( '%s submitted.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		9 => sprintf( __( '%s scheduled for: %s.' ), mdjm_get_label_singular(), '<strong>' . $scheduled_date . '</strong>' ),
+		10 => sprintf( __( '%s draft updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+	);
+	
+	return apply_filters( 'mdjm_event_post_messages', $messages );
+	
+} // mdjm_event_post_messages
+add_filter( 'post_updated_messages','mdjm_event_post_messages' );

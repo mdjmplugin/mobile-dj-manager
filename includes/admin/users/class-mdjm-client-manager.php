@@ -261,7 +261,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			
 			echo ( !empty( $total ) ?
 				'<a href="' . admin_url( 'edit.php?s&post_type=' . MDJM_EVENT_POSTS . '?s&post_status=all' .
-				'&post_type=' . MDJM_EVENT_POSTS . '&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_dj=0' . 
+				'&post_type=' . MDJM_EVENT_POSTS . '&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=0' . 
 				'&mdjm_filter_client=' . $item->ID . '&filter_action=Filter&paged=1&action2=-1' ) . '">' . count( $total ) . '</a>' : '0'
 			);    
 		} // column_events

@@ -24,8 +24,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 															
 			if( is_admin() )	{
 				add_filter( 'posts_clauses', array( &$this, 'sort_post_by_column' ), 1, 2 );
-				//add_action( 'pre_get_posts', array( &$this, 'pre_post' ) ); // Actions for pre_get_posts
-				add_filter( 'parse_query', array( &$this, 'custom_post_filter' ) ); // Actions for filtered queries
 				
 				add_filter( 'post_row_actions', array( &$this, 'define_custom_post_row_actions' ), 10, 2 ); // Row actions
 				add_filter( 'post_updated_messages', array( &$this, 'custom_post_status_messages' ) ); // Status messages
@@ -60,154 +58,8 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 */
 		public function save_custom_post( $post_id, $post )	{
 							
-		} // save_custom_post
-
-/**
-* -- POST DATA
-*/
-		/*
-		 * pre_post
-		 * Actions during the pre_get_posts hook
-		 * 
-		 * @since 1.1.3
-		 * @params: 
-		 * @return: 
-		 */ 
-		public function pre_post( $query )	{
-			global $mdjm, $current_user;
-			
-			if( !is_user_logged_in() )
-				return;
-			
-			/* -- Set query for DJ's to see only their own events -- */
-			if( !current_user_can( 'administrator' ) || isset( $_GET['dj'] ) )
-				$this->dj_events_filter( $query );
-							
-			/* -- Filter events by Client -- */
-			if( isset( $_GET['client'] ) )	{
-				if( !current_user_can( 'administrator' ) && !MDJM()->events->is_my_client( $_GET['client'] ) )
-					wp_die( 'Tut tut... you can only search your own Clients' );
-				
-				$this->client_events_filter( $query );	
-			}
-			
-			/* -- Filter posts by Type -- */
-			if( isset( $_GET['mdjm_filter_type'] ) )
-				$this->post_types_query( $query );
-							
-		} // pre_post
-		
-		function custom_post_filter( $query ){
-			global $pagenow;
-			
-			if( !isset( $_GET['mdjm_filter_type'] ) || !isset( $_GET['mdjm_filter_date'] ) )
-				return;
-			
-			$type = 'post';
-			
-			if( isset( $_GET['post_type'] ) )
-				$type = $_GET['post_type'];
-			
-			if( MDJM_EVENT_POSTS == $type && is_admin() && $pagenow=='edit.php' )	{
-				if( isset( $_GET['mdjm_filter_date'] ) && $_GET['mdjm_filter_date'] != '' && $_GET['mdjm_filter_date'] != '0' )	{
-					$start = date( 'Y-m-d', strtotime( substr( $_GET['mdjm_filter_date'], 0, 4 ) . '-' . substr( $_GET['mdjm_filter_date'], -2 ) . '-01' ) );
-					$end = date( 'Y-m-t', strtotime( $start ) );
-					$query->query_vars['meta_query'] = array(
-														array(
-															  'key' => '_mdjm_event_date',
-															  'value' => array( $start, 
-																				$end ),
-															  'compare' => 'BETWEEN',
-														) );
-				}
-				if( isset( $_GET['mdjm_filter_dj'] ) && $_GET['mdjm_filter_dj'] != '0' )	{
-					$query->query_vars['meta_query'] = array(
-														array(
-															  'key' => '_mdjm_event_dj',
-															  'value' => $_GET['mdjm_filter_dj'],
-															  'compare' => '==',
-														) );
-				}
-				if( isset( $_GET['mdjm_filter_client'] ) && $_GET['mdjm_filter_client'] != '0' )	{
-					$query->query_vars['meta_query'] = array(
-														array(
-															  'key' => '_mdjm_event_client',
-															  'value' => $_GET['mdjm_filter_client'],
-															  'compare' => '==',
-														) );
-				}
-			}
-		} // custom_post_filter
-		
-		/*
-		 * client_events_filter
-		 * Adjust the post query for only this DJ's events
-		 * 
-		 * @since 1.1.3
-		 * @params: 
-		 * @return: 
-		 */
-		public function client_events_filter( $query )	{
-			global $current_user;
-			
-			if( $query->is_main_query() ) {
-				$query->set( 'meta_query', array(
-											'relation'	=> 'AND',
-												array(
-												'key'		=> '_mdjm_event_client',
-												'value'  	  => $_GET['client'],
-												'compare'	=> '=='
-												),
-											) );
-			}
-		} // client_events_filter
-		
-		/*
-		 * dj_events_filter
-		 * Adjust the post query for only this DJ's events
-		 * 
-		 * @since 1.1.3
-		 * @params: 
-		 * @return: 
-		 */
-		public function dj_events_filter( $query )	{
-			global $current_user;
-					
-			$dj = isset( $_GET['dj'] ) ? $_GET['dj'] : $current_user->ID;	
-					
-			if( $query->is_main_query() ) {
-				$query->set( 'meta_query', array(
-											'relation'	=> 'AND',
-												array(
-												'key'		=> '_mdjm_event_dj',
-												'value'  	  => $dj,
-												'compare'	=> '=='
-												),
-											) );
-			}
-		} // dj_events_filter
-		
-		/*
-		 * Run the query filter to display on the specified post types (terms)
-		 *
-		 *
-		 *
-		 */
-		public function post_types_query( $query )	{
-			$type = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
-			
-			if( !empty( $type ) ) {
-				$query->set( 'tax_query', array(
-													array(
-													'taxonomy'		=> $_GET['post_type'] == MDJM_EVENT_POSTS ? 'event-types' : 'transaction-types',
-													'field'		   => 'term_id',
-													'terms'		   => $type,
-													'operator'		=> 'IN'
-													), ) );
-			}
-			
-		} // post_types_query
-													
+		} // save_custom_post		
+																	
 /**
 * -- POST COLUMN SORTING
 */		
@@ -235,24 +87,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				if( !in_array( $order, array( 'ASC', 'DESC' ) ) )
 					$order = 'ASC';
 					
-				switch( $orderby )	{
-					/**
-					 * Event sorting
-					 */
-					// Order by event date
-					case 'event_date':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_ed ON mdjm_ed.post_id = {$wpdb->posts}.ID AND mdjm_ed.meta_key = '_mdjm_event_date'";
-						
-						$pieces[ 'orderby' ] = "STR_TO_DATE( mdjm_ed.meta_value,'%Y-%m-%d' ) $order, " . $pieces[ 'orderby' ];
-					break;
-					
-					// Order by event cost	
-					case 'value':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_event_cost'";
-						
-						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
-					break;
-					
+				switch( $orderby )	{					
 					/**
 					 * Quote sorting
 					 */	
@@ -349,12 +184,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 					10 => sprintf( __( '%s draft updated.' ), $singular )
 			);
 			
-			$custom_messages[MDJM_EVENT_POSTS] = array(
-					1 	 => __( 'Event updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-event' ) . '">Return to Events list</a>' ),
-					4 	 => __( 'Event updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-event' ) . '">Return to Events list</a>' ),
-					6 	 => __( 'Event updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-event' ) . '">Return to Events list</a>' ),
-					7 	 => __( 'Event updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-event' ) . '">Return to Events list</a>' ),
-			);
 			$custom_messages[MDJM_TRANS_POSTS] = array(
 					1 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
 					4 	 => __( 'Transaction updated successfully. <a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">Return to Transactions list</a>' ),
@@ -381,7 +210,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			global $mdjm_settings, $mdjm_post_types;
 			
 			/* -- No row actions for non custom post types -- */
-			if( !in_array( $post->post_type, $mdjm_post_types ) )
+			if( $post->post_type == 'mdjm-event' || !in_array( $post->post_type, $mdjm_post_types ) )
 				return $actions;
 				
 			elseif( $post->post_type == MDJM_COMM_POSTS )
@@ -395,35 +224,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			elseif( $post->post_type == MDJM_EMAIL_POSTS )	{			
 				if( isset( $actions['inline hide-if-no-js'] ) )
 					unset( $actions['inline hide-if-no-js'] );
-			}
-			
-			elseif( $post->post_type == MDJM_EVENT_POSTS )	{
-				if( isset( $actions['trash'] ) )
-					unset( $actions['trash'] );
-				if( isset( $actions['view'] ) )
-					unset( $actions['view'] );
-				if( isset( $actions['edit'] ) )
-					unset( $actions['edit'] );	
-				if( isset( $actions['inline hide-if-no-js'] ) )
-					unset( $actions['inline hide-if-no-js'] );
-				
-			/* -- Unattended Event Row Actions -- */
-				if( $post->post_status == 'mdjm-unattended' )	{
-					// Quote for event
-					$actions['quote'] = sprintf( 
-											'<a href="' . admin_url( 'post.php?post=%s&action=%s&mdjm_action=%s' ) . 
-											'">' . __( 'Quote', 'mobile-dj-manager' ) . '</a>', 
-											$post->ID, 'edit', 'respond' );
-					// Check availability
-					$actions['availability'] = sprintf( '<a href="%s&availability=%s&e_id=%s' . 
-						'">Availability</a>', mdjm_get_admin_page( 'events' ), date( 'Y-m-d', ( strtotime( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) ) ), 
-						$post->ID );
-					// Respond Unavailable
-					$actions['respond_unavailable'] = sprintf( '<span class="trash"><a href="' . 
-						admin_url( 'admin.php?page=%s&template=%s&to_user=%s&event_id=%s&action=%s' ) . 
-						'">Unavailable</a></span>', 'mdjm-comms', $mdjm_settings['templates']['unavailable'], 
-						get_post_meta( $post->ID, '_mdjm_event_client', true ), $post->ID, 'respond_unavailable' );	
-				}
 			}
 			
 			elseif( $post->post_type == MDJM_QUOTE_POSTS )	{			

@@ -194,7 +194,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			do_action( 'mdjm_user_fields_before_mdjm', $user );
 			
-			echo '<h3>Mobile DJ Manager Custom User Fields</h3>' . "\r\n";
+			echo '<h3>MDJM Event Management/h3>' . "\r\n";
 			echo '<table class="form-table">' . "\r\n";
 			
 			// Is event staff checkbox for WP admins

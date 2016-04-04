@@ -82,8 +82,8 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **New**: Use fully customisable templates for all MDJM Client Zone pages
 	* **New**: Employee interface replaces the old "DJ List"
 	* **New**: Updated Client interface replaces the old "Client List"
-	* **New**: Create custom MDJM employee roles and assign permissions to each role
-	* **New**: Assign multiple MDJM roles to each employee
+	* **New**: Create custom employee roles and assign permissions to each role
+	* **New**: Assign multiple roles to each employee
 	* **New**: Assign multiple employees to events
 	* **New**: Added Event Staff checkbox on user profile screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions
 	* **New**: Admin availability checker can check for availability by role
@@ -105,8 +105,10 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **Tweak**: Replaced get_link method with mdjm_get_formatted_url function
 	* **Tweak**: New mdjm.css file. Can be customised for front end
 	* **Tweak**: Added content filters for emailing and printing the event playlist
-	* **Tweak**: Cleaner directory structure
+	* **Tweak**: Cleaner files and directory structure
 	* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
+	* **Tweak**: Event posts are now ordered by event date by default
+	* **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
 
 
 = 1.2.7.5 =

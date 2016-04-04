@@ -37,7 +37,7 @@ function mdjm_employee_can( $role, $user_id='' )	{
 /**
  * Display a dropdown select list with all employees. The label must be handled seperately.
  *
- * @param	arr		$args			Settings for the dropdown
+ * @param	arr		$args			Settings for the dropdown. See $defaults
  *									'role' (str|arr)		Optional: Only display employees with the given role. Default empty (all).
  *									'name' (str)			Optional: The name of the input. Defaults to '_mdjm_employees'
  *									'id' (str)				Optional: ID for the field (uses name if not present)
@@ -60,14 +60,15 @@ function mdjm_employee_dropdown( $args='' )	{
 	$defaults = array(
 		'role'                => '',
 		'name'                => '_mdjm_employees',
+		'id'				  => '', // Uses name if not set
 		'class'               => '',
 		'selected'            => '',
 		'first_entry'         => '',
 		'first_entry_val'     => '0',
-		'multiple'			  => false,
+		'multiple'			=> false,
 		'group'               => false,
 		'structure'           => true,
-		'exclude'			  => false,
+		'exclude'			 => false,
 		'echo'                => true
 	);
 	
