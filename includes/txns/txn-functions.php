@@ -135,6 +135,21 @@ function mdjm_get_txn_date( $txn_id='' )	{
 } // mdjm_get_txn_date
 
 /**
+ * Calculate the total wages payable for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @return	str		Total wages amount for the event.
+ */
+function mdjm_get_event_total_wages( $event_id )	{
+	
+	$event = mdjm_get_event( $event_id );
+	
+	return $event->get_wages_total();
+	
+} // mdjm_get_event_total_wages
+
+/**
  * Registers a new transaction or updates an existing.
  *
  * @since	1.3
@@ -212,6 +227,35 @@ function mdjm_add_txn_meta( $txn_id, $data )	{
 	update_post_meta( $txn_id, '_mdjm_txn_data', $meta );
 		
 } // mdjm_add_txn_meta
+
+/**
+ * Mark event employees salaries as paid.
+ *
+ * @since	1.3
+ * @param	$event_id
+ * @return
+ */
+function mdjm_pay_event_employees( $event_id )	{
+	
+	$mdjm_event = mdjm_get_event( $event_id );
+	
+	if ( ! $mdjm_event )	{
+		return;
+	}
+	
+	do_action( 'mdjm_pre_pay_event_employees', $event_id, $mdjm_event );
+	
+	$mdjm_txn = new MDJM_Txn();
+	
+	
+	
+	do_action( "mdjm_pre_pay_employee_{$employee_id}", $event_id, $mdjm_event );
+	
+	do_action( "mdjm_post_pay_employee_{$employee_id}", $event_id, $mdjm_event );
+	
+	do_action( 'mdjm_post_pay_event_employees', $event_id, $mdjm_event );
+	
+} // mdjm_pay_event_employees
 
 /**
  * Remove the post save action whilst adding or updating transactions.

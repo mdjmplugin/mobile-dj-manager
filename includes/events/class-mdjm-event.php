@@ -266,6 +266,52 @@ class MDJM_Event {
 	} // get_employee
 	
 	/**
+	 * Retrieve all the events employees
+	 *
+	 * @since	1.3
+	 * @return	arr		Event employee user ID's, role and wages.
+	 */
+	public function get_all_employees() {
+		global $wp_roles;
+		
+		if ( ! isset( $this->employees ) )	{
+		
+			if( ! isset( $this->employee_id ) )	{
+				$this->get_employee();
+			}
+			
+			$employees = array();
+			
+			if ( ! empty( $this->employee_id ) )	{
+				
+				$employees[ $this->employee_id ] = array( 
+					'role_slug'	=> 'dj',
+					'role'		 => translate_user_role( $wp_roles->roles['dj']['name'] ),
+					'wage'		 => mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_event_dj_wage', true ) )
+				);
+				
+			}
+			
+			$employees_data = get_post_meta( $this->ID, '_mdjm_event_employees_data', true );
+			
+			if ( ! empty( $employees_data ) )	{
+				foreach( $employees_data as $employee_data )	{
+					$employees[ $employee_data['id'] ] = array(
+						'role_slug'	=> $employee_data['role'],
+						'role'		 => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
+						'wage'		 => $employee_data['wage']
+					);
+				}
+			}
+			
+		}
+		
+		$this->employees = $employees;
+		
+		return $this->employees;
+	} // get_all_employees
+	
+	/**
 	 * Retrieve the event contract.
 	 *
 	 * @since	1.3
@@ -627,6 +673,37 @@ class MDJM_Event {
 		 */
 		return apply_filters( 'get_event_income', $this->income, $this->ID );
 	} // get_total_income
+	
+	/**
+	 * Retrieve the total wages payable event
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_wages_total()	{
+		
+		if ( ! isset( $this->employees ) )	{
+			$this->get_all_employees();
+		}
+		
+		$wages = mdjm_format_amount( 0 );
+		
+		if( ! empty( $this->employees ) )	{
+			foreach( $this->employees as $employee => $employee_data )	{
+				$wages += $employee_data['wage'];
+			}
+		}
+		
+		/**
+		 * Override the income for this event.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$income		The income for the event.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'get_wages_total', mdjm_format_amount( $wages ), $this->ID, $this->employees );
+	} // get_wages_total
 	
 	/**
 	 * Retrieve the guest playlist access code.

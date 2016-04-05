@@ -750,3 +750,41 @@ function mdjm_employee_working_event( $event_id, $employee_id = '' )	{
 	}
 	
 } // mdjm_employee_working_event
+
+/**
+ * Get an employees wage for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @param	int		$employee_id	The employee user ID
+ * @return	str		Employees wage for the event.
+ */
+function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
+	
+	$employee_id = ! empty ( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	$wage = 0;
+	
+	if ( $employee_id == mdjm_get_event_primary_employee( $event_id ) )	{
+		
+		$wage = get_post_meta( $event_id, '_mdjm_event_dj_wage', true );
+	
+	} else	{
+		
+		$employees_data = mdjm_get_event_employees_data( $event_id );
+		
+		foreach( $employees_data as $employee_data )	{
+			
+			if ( $employee_data['id'] == $employee_id )	{
+				
+				$wage = $employee_data['wage'];
+				
+			}
+			
+		}
+	
+	}
+	
+	return mdjm_format_amount( $wage );
+	
+} // mdjm_get_employees_event_wage

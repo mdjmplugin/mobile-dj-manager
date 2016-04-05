@@ -137,7 +137,7 @@
 			$trans_data['post_status'] = 'mdjm-income';
 				
 			$trans_data['post_author'] = $user;
-			$trans_data['post_type'] = MDJM_TRANS_POSTS;
+			$trans_data['post_type'] = 'mdjm-transaction';
 			$trans_data['post_category'] = ( $type == mdjm_get_balance_label() ? array( mdjm_get_balance_label() ) : array( mdjm_get_deposit_label() ) );
 			$trans_data['post_parent'] = $event_id;
 			

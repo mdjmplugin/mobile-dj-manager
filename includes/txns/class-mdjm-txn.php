@@ -121,7 +121,7 @@ class MDJM_Txn {
 	 * Creates a transaction
 	 *
 	 * @since 	1.3
-	 * @param 	arr		$data Array of attributes for a transaction
+	 * @param 	arr		$data Array of attributes for a transaction. See $defaults.
 	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Transaction ID
 	 */
 	public function create( $data = array() ) {
@@ -131,19 +131,26 @@ class MDJM_Txn {
 
 		$defaults = array(
 			'post_type'   => 'mdjm-transaction',
-			'post_status' => 'mdjm-income',
-			'post_title'  => __( 'New Transaction', 'mobile-dj-manager' )
+			'post_status' => 'mdjm-pending',
+			'post_title'  => __( 'New Transaction', 'mobile-dj-manager' ),
+			'meta'		=> array(
+				'_mdjm_txn_source'	=> mdjm_get_option( 'default_type', __( 'Cash' ) ),
+				'_mdjm_txn_currency'  => mdjm_get_currency()
+			)
 		);
 
 		$args = wp_parse_args( $data, $defaults );
 
-		do_action( 'mdjm_txn_pre_create', $args );
+		$meta_data = $args['meta'];
+		unset( $args['meta'] );
+
+		do_action( 'mdjm_txn_pre_create', $args, $meta_data );
 
 		$id = wp_insert_post( $args, true );
 
 		$txn = WP_Post::get_instance( $id );
 
-		do_action( 'mdjm_txn_post_create', $id, $args );
+		do_action( 'mdjm_txn_post_create', $id, $args, $meta_data );
 
 		return $this->setup_txn( $txn );
 	} // create
@@ -157,6 +164,16 @@ class MDJM_Txn {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
+	
+	/**
+	 * Retrieve the transaction date
+	 *
+	 * @since	1.3
+	 * @return	str Y-m-d H:i:s
+	 */
+	public function get_date() {
+		return $this->post_date;
+	} // get_date
 	
 	
 	
