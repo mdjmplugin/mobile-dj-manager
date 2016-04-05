@@ -196,7 +196,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 		// Playlist
 		case 'playlist':
-			if( mdjm_employee_can( 'manage_events' ) )	{
+			if( mdjm_employee_can( 'read_events' ) )	{
 				$total = mdjm_count_playlist_entries( $post_id );
 				
 				echo '<a href="' . mdjm_get_admin_page( 'playlists' ) . $post_id . '">' . $total . ' ' . 

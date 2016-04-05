@@ -90,7 +90,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		/**
 		 * Retrieve all MDJM user roles and display return them as <options>
 		 *
-		 * @params	arr		$args					Arguments to pass to the select list
+		 * @params	arr		$args			Arguments to pass to the select list. See $defaults.
 		 *
 		 * @return	str		$output			HTML code for the <options>
 		 */

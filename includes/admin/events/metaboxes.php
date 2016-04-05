@@ -344,7 +344,7 @@ function mdjm_event_metabox_client_details( $post )	{
  * @return
  */
 function mdjm_event_metabox_event_details( $post )	{
-	global $current_user, $pagenow;
+	global $current_user;
 	
 	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -352,65 +352,20 @@ function mdjm_event_metabox_event_details( $post )	{
 	?>
 	<?php mdjm_insert_datepicker(); ?>
 	<!-- Start of first row -->
-	<div class="mdjm-post-row-single">
-		<div class="mdjm-post-1column">
+	<div class="mdjm-post-row">
+		<div class="mdjm-post-2column">
+			<label for="display_event_date" class="mdjm-label"><?php printf( __( '%s Date:' ), mdjm_get_label_singular() ); ?></label><br />
+			<input type="text" class="mdjm_date required" name="display_event_date" id="display_event_date" 
+				value="<?php echo( get_post_meta( $post->ID, '_mdjm_event_date', true ) ? mdjm_format_short_date( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) : '' ); ?>" />
+			<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="<?php echo ( get_post_meta( $post->ID, '_mdjm_event_date', true ) ? get_post_meta( $post->ID, '_mdjm_event_date', true ) : '' ); ?>" />
+		</div>
+        <div class="mdjm-post-last-2column">
 		<?php
 		echo '<label for="_mdjm_event_name" class="mdjm-label">' . sprintf( __( '%s Name:', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</label><br />' . "\r\n" . 
 		'<input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="' . 
 			esc_attr( get_post_meta( $post->ID, '_mdjm_event_name', true ) ) . '" size="50" /> <span class="mdjm-description">' . 
 			sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</span>' . "\r\n";
 		?>
-		</div>
-	</div>
-	<div class="mdjm-post-row">
-		<div class="mdjm-post-2column">
-			<label for="_mdjm_event_dj" class="mdjm-label"><?php printf( __( 'Select Primary %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>:</label><br />
-			<?php
-			/**
-			 * If a Multi Employee business, display dropdown of all employees.
-			 * But only if the user is permitted to view all employees.
-			 */
-			if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
-				mdjm_employee_dropdown( 
-					array(
-						'name'            => '_mdjm_event_dj',
-						'class'           => 'required',
-						'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) . ' ---',
-						'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
-						'group'           => true,
-					)
-				);
-				echo '<input type="hidden" name="event_dj" id="event_dj" value="';
-				echo ( $pagenow == 'post-new.php' ? 
-					get_current_user_id() : 
-					get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
-				echo '" />' . "\r\n";
-			}
-			/**
-			 * Otherwise the current user is the DJ
-			 */
-			else	{
-				echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
-				echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
-				echo '<input type="text" value="';
-				
-				if( '' != get_post_meta( $post->ID, '_mdjm_event_dj', true ) )	{
-					$user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
-					echo $user->display_name;
-				}
-				
-				else
-					echo $current_user->display_name;
-				
-				echo '" readonly="readonly" />' . "\r\n";	
-			}
-			?>
-		</div>
-		<div class="mdjm-post-last-2column">
-			<label for="display_event_date" class="mdjm-label"><?php printf( __( '%s Date:' ), mdjm_get_label_singular() ); ?></label><br />
-			<input type="text" class="mdjm_date required" name="display_event_date" id="display_event_date" 
-				value="<?php echo( get_post_meta( $post->ID, '_mdjm_event_date', true ) ? mdjm_format_short_date( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) : '' ); ?>" />
-			<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="<?php echo ( get_post_meta( $post->ID, '_mdjm_event_date', true ) ? get_post_meta( $post->ID, '_mdjm_event_date', true ) : '' ); ?>" />
 		</div>
 	</div>
 	<!-- End of first row -->
@@ -676,7 +631,65 @@ function mdjm_event_metabox_event_details( $post )	{
  * @return
  */
 function mdjm_event_metabox_event_employees( $post )	{
+	global $pagenow;
 	?>
+    <div class="mdjm-post-row">
+		<div class="mdjm-post-2column">
+		<label for="_mdjm_event_dj" class="mdjm-label"><?php printf( __( 'Select Primary %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>:</label><br />
+		<?php
+        /**
+         * If a Multi Employee business, display dropdown of all employees.
+         * But only if the user is permitted to view all employees.
+         */
+        if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
+            mdjm_employee_dropdown( 
+                array(
+                    'name'            => '_mdjm_event_dj',
+                    'class'           => 'required',
+                    'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) . ' ---',
+                    'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
+                    'group'           => true,
+                )
+            );
+            echo '<input type="hidden" name="event_dj" id="event_dj" value="';
+            echo ( $pagenow == 'post-new.php' ? 
+                get_current_user_id() : 
+                get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+            echo '" />' . "\r\n";
+        }
+        /**
+         * Otherwise the current user is the DJ
+         */
+        else	{
+            echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
+            echo '<input type="hidden" name="event_dj" id="event_dj" value="' . get_current_user_id() . '" />' . "\r\n";
+            echo '<input type="text" value="';
+            
+            if( '' != get_post_meta( $post->ID, '_mdjm_event_dj', true ) )	{
+                $user = get_userdata( get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+                echo $user->display_name;
+            }
+            
+            else
+                echo $current_user->display_name;
+            
+            echo '" readonly="readonly" />' . "\r\n";	
+        }
+        ?>
+		</div>
+        <div class="mdjm-post-last-2column">
+			<?php
+            if( MDJM_PAYMENTS == true && mdjm_employee_can( 'manage_txns' ) )	{
+                ?>
+                <label for="_mdjm_event_dj_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
+                <?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" class="mdjm-input-currency" 
+                value="<?php echo mdjm_format_amount( esc_attr( get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ) ) ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" />
+                <?php
+            }
+            ?>
+        </div>
+	</div>
+    <hr />
     <div id="event_employee_list">
         <?php echo mdjm_list_event_employees( $post->ID ); ?>
     </div>
@@ -710,7 +723,6 @@ function mdjm_event_metabox_event_employees( $post )	{
                     array(
                         'name'				=> 'event_new_employee',
                         'first_entry'		=> __( 'Add Employee', 'mobile-dj-manager' ),
-                        'first_entry_val'	=> '',
                         'group'				=> true,
                         'structure'			=> true,
                         'exclude'			=> !empty( $exclude ) ? $exclude : '',
@@ -723,6 +735,7 @@ function mdjm_event_metabox_event_employees( $post )	{
             <div class="mdjm-post-3column">
                 <label for="event_new_employee_role" class="mdjm-label"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
                 <select name="event_new_employee_role" id="event_new_employee_role">
+                <option value="0"><?php _e( 'Select Role', 'mobile-dj-manager' ); ?></option>
                 <?php									
                 foreach( $mdjm_roles as $role_id => $role_name )	{						
                     echo '<option value="' . $role_id . '">' . $role_name . '</option>' . "\r\n";

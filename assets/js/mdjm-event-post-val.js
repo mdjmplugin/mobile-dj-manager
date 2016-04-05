@@ -324,7 +324,7 @@ jQuery(document).ready(function($) 	{
 			url: event_employee_add.ajax_url,
 			data: {
 				event_id : event_id,
-				employee : employee_id,
+				employee_id : employee_id,
 				employee_role : employe_role,
 				employee_wage : employee_wage,
 				action : "add_employee_to_event"

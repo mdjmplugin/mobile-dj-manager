@@ -75,7 +75,7 @@ function mdjm_employee_dropdown( $args='' )	{
 	// Merge default args with those passed to function
 	$args = wp_parse_args( $args, $defaults );
 	
-	$args['id'] = isset( $args['id'] ) ? $args['id'] : $args['name'];
+	$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 	
 	if( !empty( $args['exclude'] ) && !is_array( $args['exclude'] ) )
 		$args['exclude'] = array( $args['exclude'] );
@@ -532,8 +532,8 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 		return false;
 	}
 
-	$employees		= mdjm_get_event_employees( $event_id );
-	$employees_data	= mdjm_get_event_employees_data( $event_id );
+	$employees         = mdjm_get_event_employees( $event_id );
+	$employees_data    = mdjm_get_event_employees_data( $event_id );
 	
 	if ( empty( $employees ) )	{
 		$employees = array();
@@ -542,10 +542,11 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	array_push( $employees, $data['id'] );
 	$employees_data[]	= $data;
 	
-	update_post_meta( $event_id, '_mdjm_event_employees', $employees );
-	update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data );
-
-	return $employees;
+	if( update_post_meta( $event_id, '_mdjm_event_employees', $employees ) && update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data ) )	{
+		return true;
+	} else	{
+		return false;
+	}
 	
 } // mdjm_add_employee_to_event
 
@@ -727,3 +728,25 @@ function mdjm_get_employees_next_event( $employee_id = '' )	{
 	}
 	
 } // mdjm_get_employees_next_event
+
+/**
+ * Determine if an employee is working a specific event
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @param	int		$employee_id	The employee user ID
+ * @return	bool	True if working the event, otherwise false
+ */
+function mdjm_employee_working_event( $event_id, $employee_id = '' )	{
+	
+	$event_employees = mdjm_get_event_employees( $event_id );
+	
+	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	if ( ! $event_employees || ! in_array( $employee_id, $event_employees ) )	{
+		return false;
+	} else	{
+		return true;
+	}
+	
+} // mdjm_employee_working_event

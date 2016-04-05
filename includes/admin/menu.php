@@ -206,7 +206,7 @@
 					  null,
 					__( 'Playlists', 'mobile-dj-manager' ),
 					__( 'Playlists', 'mobile-dj-manager' ),
-					'mdjm_event_edit_own',
+					'mdjm_event_read_own',
 					'mdjm-playlists',
 					array( &$this, 'mdjm_playlists_page' )
 				);

@@ -16,10 +16,10 @@
  */
 function mdjm_display_event_playlist_page()	{
 	
-	if( ! mdjm_employee_can( 'read_events' ) )	{
+	if( ! mdjm_employee_can( 'read_events' ) || ! mdjm_employee_working_event( $_GET['event_id'] ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
-			'<p>' . __( 'You do not have permission to manage equipment packages.', 'mobile-dj-manager' ) . '</p>',
+			'<p>' . __( 'You do not have permission to view this playlist.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
 	}
