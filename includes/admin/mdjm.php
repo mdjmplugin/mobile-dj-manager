@@ -743,21 +743,24 @@
 					/* -- Retrieve the user info -- */
 					$c = !is_array( $client ) ? get_userdata( $client ) : $client;
 					
-					/* -- Password -- */
-					$pass_action = get_user_meta( $c->ID, 'mdjm_pass_action', true );
+					// Client password reset action
+					$c_pw = sprintf( 
+						__( 'Please <a href="%s">click here</a> to reset your password', 'mobile-dj-manager' ),
+						home_url( '/wp-login.php?action=lostpassword' ) );
 					
-					/* -- Reset -- */
-					if( !empty( $pass_action ) )	{
+					$reset = get_user_meta( $c->ID, 'mdjm_pass_action', true );
+					
+					if( ! empty( $reset ) )	{
 						if( MDJM_DEBUG == true )
 							MDJM()->debug->log_it( '	-- Password reset for user ' . $c->ID );
 						
-						$c_pw = $pass_action;
-						wp_set_password( $c_pw, $c->ID );
+						$reset = wp_generate_password( mdjm_get_option( 'pass_length', 8 ), mdjm_get_option( 'complex_passwords', true ) );
+						
+						wp_set_password( $reset, $c->ID );
+						
+						$c_pw = $reset;
 					}
-					else	{
-						$c_pw = 'Please <a href="' . home_url( '/wp-login.php?action=lostpassword' ) . '">click here</a> to reset your password';
-					}
-					
+										
 					/* -- Client Address -- */
 					if( !empty( $c->address1 ) )	{
 						$c_address[] = $c->address1;

@@ -701,7 +701,15 @@ function mdjm_get_registered_settings()	{
 							'10' => '10',
 							'11' => '11',
 							'12' => '12'
-						)
+						),
+						'std'		  => '8'
+					),
+					'complex_passwords'      => array(
+						'id'          => 'complex_passwords',
+						'name'        => __( 'Use Complex Passwords?', 'mobile-dj-manager' ),
+						'desc'        => __( 'Generated passwords will contain <em>special</em> characters such as <code>!@#$%^&*()</code> as well as letters and numbers', 'mobile-dj-manager' ),
+						'type'        => 'checkbox',
+						'std'		  => '1'
 					),
 					'notify_profile'   => array(
 						'id'          => 'notify_profile',

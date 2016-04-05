@@ -910,29 +910,30 @@ function mdjm_content_tag_client_username( $event_id='', $client_id='' )	{
  * @return	str		The login password for the client.
  */
 function mdjm_content_tag_client_password( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
+	} elseif( ! empty( $event_id ) )	{
 		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} else	{
 		$user_id = '';
 	}
 	
 	$return = sprintf( 
-		__( 'Please %sclick here%s to reset your password', 'mobile-dj-manager' ),
-		'<a href="' . home_url( '/wp-login.php?action=lostpassword' ) . '">',
-		'</a>'
-	);
+		__( 'Please <a href="%s">click here</a> to reset your password', 'mobile-dj-manager' ),
+		home_url( '/wp-login.php?action=lostpassword' ) );
 	
 	$reset = get_user_meta( $user_id, 'mdjm_pass_action', true );
 	
-	if( !empty( $reset ) )	{
+	if( ! empty( $reset ) )	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( '	-- Password reset for user ' . $user_id );
 		
+		$reset = wp_generate_password( mdjm_get_option( 'pass_length', 8 ), mdjm_get_option( 'complex_passwords', true ) );
+		
 		wp_set_password( $reset, $user_id );
+		
+		delete_user_meta( $user_id, 'mdjm_pass_action' );
 		
 		$return = $reset;
 	}

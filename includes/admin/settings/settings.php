@@ -939,6 +939,17 @@ if( ! function_exists( 'mdjm_list_txn_sources' ) )	{
 									'section' => 'clientzone_client',
 									'page' => 'clientzone',
 									),
+							
+							'complex_passwords' => array(
+									'label' => 'Use Complex Password?',
+									'key' => 'mdjm_clientzone_settings',
+									'type' => 'checkbox',
+									'value' => ( ! empty( $mdjm_settings['clientzone']['complex_passwords'] ) ? '1' : '' ),
+									'text' => '',
+									'desc' => __( 'Generated passwords will contain <em>special</em> characters such as <code>!@#$%^&*()</code> as well as letters and numbers', 'mobile-dj-manager' ),
+									'section' => 'clientzone_client',
+									'page' => 'clientzone',
+									),
 									
 							'notify_profile' => array(
 									'label' => 'Incomplete Profile Warning?',

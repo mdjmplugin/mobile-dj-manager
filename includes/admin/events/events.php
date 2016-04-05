@@ -938,7 +938,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
 			
-		$pass_reset = MDJM()->user->prepare_user_pass_reset( $event_data['_mdjm_event_client'] );
+		update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', true );
 	}
 	
 	/**

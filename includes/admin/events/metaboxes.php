@@ -1233,7 +1233,12 @@ function mdjm_event_metabox_event_options( $post )	{
 		<div class="mdjm-rightt-col">
 			<label for="mdjm_event_status" class="mdjm-label"><?php printf( __( '%s Status:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
 			<?php
-			mdjm_event_status_dropdown( array( 'small' => true ) );
+			mdjm_event_status_dropdown(
+				array(
+					'selected'	=> $post->post_status == 'auto-draft' ? 'mdjm-unattended' : $post->post_status,
+					'small' => true
+				)
+			);
 			?>
 		</div>
 	</div>
@@ -1344,6 +1349,12 @@ function mdjm_event_metabox_event_options( $post )	{
 	<?php
 	if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )	{
 		?>
+        <div class="mdjm-meta-row">
+            <div class="mdjm-left-col">
+            <input type="checkbox" name="mdjm_reset_pw" id="mdjm_reset_pw" value="Y" />
+            </div>
+            <div class="mdjm-right-col"><?php _e( 'Reset Client Password?', 'mobile-dj-manager' ); ?></div>
+        </div>
 		<div id="email_template_fields">
 			<script type="text/javascript">
 			function showTemplateOptions(){
@@ -1355,12 +1366,6 @@ function mdjm_event_metabox_event_options( $post )	{
 				}
 			}
 			</script>
-			<div class="mdjm-meta-row">
-				<div class="mdjm-left-col">
-				<input type="checkbox" name="mdjm_reset_pw" id="mdjm_reset_pw" value="Y" />
-				</div>
-				<div class="mdjm-right-col"><?php _e( 'Reset Client Password?', 'mobile-dj-manager' ); ?></div>
-			</div>
 			<div class="mdjm-meta-row" style="height: 60px !important">
 				Email Quote Template:<br />
 				<select name="mdjm_email_template" id="mdjm_email_template" class="mdjm-meta" style="width: 200px;">
