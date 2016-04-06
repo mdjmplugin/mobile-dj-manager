@@ -952,7 +952,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	 * We store all times in H:i:s but the user may prefer a different format so we
 	 * determine their time format setting and adjust to H:i:s for saving.
 	 */
-	if( MDJM_TIME_FORMAT == 'H:i' )	{ // 24 Hr
+	if( mdjm_get_option( 'time_format', 'H:i' ) == 'H:i' )	{ // 24 Hr
 		$event_data['_mdjm_event_start'] = date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ); 
 		$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) );
 		$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] ) );

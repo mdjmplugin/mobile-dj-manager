@@ -1174,7 +1174,7 @@ function mdjm_event_metabox_event_history( $post )	{
 		echo date( 'd M', get_post_meta( $recent->ID, '_date_sent', true ) ) . 
 		' | '; ?> <?php edit_post_link( rtrim( $recent->post_title ), '', ' | ' . 
 		ucfirst( $recent->post_status ), $recent->ID ); ?> <?php _e( ' on ', 'mobile-dj-manager' ) . 
-		date( MDJM_SHORTDATE_FORMAT . ' \a\t ' . MDJM_TIME_FORMAT, strtotime( $recent->post_modified ) ) . 
+		mdjm_format_long_date( strtotime( $recent->post_modified ), true ) .
 		( $i < 3 && $i != count( $comms ) ? '<br />' : '' );
 		$i++;	 
 	}

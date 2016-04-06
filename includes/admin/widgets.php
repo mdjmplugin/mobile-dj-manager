@@ -25,7 +25,7 @@
 			<?php
 			echo ( !empty( $next_event ) && date( 'd-m-Y', strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_date', true ) ) ) == date( 'd-m-Y' ) 
 				? '<a href="' . admin_url( 'post.php?post=' . $next_event[0]->ID . '&action=edit' ) . '">Booked from ' . 
-					date( MDJM_TIME_FORMAT, strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_start', true ) ) ) . '</a>'
+					date( mdjm_get_option( 'time_format', 'H:i' ), strtotime( get_post_meta( $next_event[0]->ID, '_mdjm_event_start', true ) ) ) . '</a>'
 					 
 				: 'Available' );
 			?>
