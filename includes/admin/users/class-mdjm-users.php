@@ -198,7 +198,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				$user_id = ( $current_screen->id == 'profile' ) ? $user_ID : $_REQUEST['user_id'];
 			}
 			
-			do_action( 'mdjm_user_fields_before_mdjm', $user );
+			do_action( 'mdjm_pre_profile_custom_fields', $user );
 			
 			echo '<h3>MDJM Event Management</h3>' . "\r\n";
 			echo '<table class="form-table">' . "\r\n";
@@ -216,6 +216,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					echo ' />' . "\r\n";
 					echo '</td>' . "\r\n";
 					echo '</tr>' . "\r\n";
+					
 				} else	{
 					
 					echo '<input type="hidden" name="_mdjm_event_staff" id="_mdjm_event_staff" value="';
@@ -224,6 +225,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					
 				}
 			}
+			
+			do_action( 'mdjm_pre_profile_custom_user_fields', $user );
 			
 			// Get the custom user fields
 			$custom_fields = get_option( 'mdjm_client_fields' );
@@ -304,7 +307,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			echo '</table>' . "\r\n";
 			
-			do_action( 'mdjm_user_fields_after_mdjm', $user );
+			do_action( 'mdjm_post_profile_custom_fields', $user );
 			
 		} // profile_custom_fields
 		
