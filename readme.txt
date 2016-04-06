@@ -109,6 +109,8 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 	* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
 	* **Tweak**: Event posts are now ordered by event date by default
 	* **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
+	* **Tweak**: Removed debug option to backup DB tables. Other plugins are available for this task
+	* **Tweak**: Removed debug option to submit debug files. No longer required
 
 
 = 1.2.7.5 =
