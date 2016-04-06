@@ -110,6 +110,7 @@ class MDJM_Debug	{
 					
 					$this->log_it( 'Auto purge enabled for oversized log file ' . $name, true );
 					$this->delete_log( array( $name ) );
+					mdjm_update_option( 'debug_purged', current_time( 'timestamp' ) );
 					
 				} else	{
 					
