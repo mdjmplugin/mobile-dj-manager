@@ -312,8 +312,8 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Only enable if MDJM Support have asked you to do so. Performance may be impacted', 'mobile-dj-manager' ),
 						'type'        => 'checkbox',
 					),
-					'log_size'             => array(
-						'id'          => 'log_size',
+					'debug_log_size'       => array(
+						'id'          => 'debug_log_size',
 						'name'        => __( 'Maximum Log File Size', 'mobile-dj-manager' ),
 						'hint'        => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 
@@ -322,15 +322,15 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'small',
 						'std'         => '2'
 					),
-					'warn'                 => array(
-						'id'          => 'warn',
+					'debug_warn'           => array(
+						'id'          => 'debug_warn',
 						'name'        => __( 'Display Warning if Over Size', 'mobile-dj-manager' ),
 						'desc'        => __( 'Will display notice and allow removal and recreation of log files', 'mobile-dj-manager' ),
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
-					'auto_purge'           => array(
-						'id'          => 'auto_purge',
+					'debug_auto_purge'     => array(
+						'id'          => 'debug_auto_purge',
 						'name'        => __( 'Auto Purge Log Files', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'If selected, log files will be auto-purged when they reach the value of %sMaximum Log File Size%s',
 										'mobile-dj-manager' ), '<code>', '</code>' ),

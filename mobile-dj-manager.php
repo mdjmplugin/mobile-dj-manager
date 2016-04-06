@@ -249,7 +249,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' ); // Dynamic Ajax functions
 			require_once( MDJM_PLUGIN_DIR . '/includes/widgets.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/admin/debug/mdjm-debug.php' ); // Debug class
+			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-debug.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' ); // Transaction class
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
