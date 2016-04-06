@@ -103,11 +103,7 @@ add_action( 'pre_get_posts', 'mdjm_transaction_post_order' );
  * @return
  */
 function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
-	
-	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )	{
-		$value = get_post_meta( $post_id, '_mdjm_event_cost', true );
-	}
-		
+			
 	switch( $column_name ) {	
 		// Details
 		case 'detail':
@@ -306,7 +302,7 @@ add_action( 'restrict_manage_posts', 'mdjm_transaction_type_filter_dropdown' );
  * Save the meta data for the transaction
  *
  * @since	0.7
- * @param	int		$ID				The current post ID.
+ * @param	int		$post_id		The current post ID.
  * @param	obj		$post			The current post object (WP_Post).
  * @param	bool	$update			Whether this is an existing post being updated or not.
  * @return	void

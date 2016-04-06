@@ -36,8 +36,8 @@ function mdjm_remove_transaction_meta_boxes()	{
 add_action( 'admin_head', 'mdjm_remove_transaction_meta_boxes' );
 
 /**
- * Define and add the metaboxes for the mdjm-transaction post type.
- * Apply the `mdjm_transaction_add_metaboxes` filter to allow for filtering of metaboxes and settings.
+ * Define and add the metaboxes for the mdjm-event post type.
+ * Apply the `mdjm_event_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
  * @since	1.3

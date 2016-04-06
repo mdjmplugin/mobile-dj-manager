@@ -265,6 +265,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/txns.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/taxonomies.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/venues/venues.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/venues/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/widgets.php' );
 				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm-functions-admin.php' ); // Admin only functions
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/playlist-page.php' );

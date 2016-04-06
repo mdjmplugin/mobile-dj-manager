@@ -442,8 +442,7 @@ function mdjm_register_post_types()	{
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
 		'supports'			   => apply_filters( 'mdjm_transaction_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-transaction' ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'taxonomies'			 => array( 'mdjm-transaction' )
 	);
 	register_post_type( 'mdjm-transaction', apply_filters( 'mdjm_transaction_post_type_args', $txn_args ) );
 	
@@ -488,8 +487,7 @@ function mdjm_register_post_types()	{
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
 		'supports'			   => apply_filters( 'mdjm_venue_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-venue' ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'taxonomies'			 => array( 'mdjm-venue' )
 	);
 	register_post_type( 'mdjm-venue', apply_filters( 'mdjm_venue_post_type_args', $venue_args ) );
 } // mdjm_register_post_types

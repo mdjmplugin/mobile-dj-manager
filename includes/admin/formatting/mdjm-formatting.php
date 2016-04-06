@@ -29,37 +29,6 @@ function mdjm_remove_add_new() {
 add_action( 'admin_head', 'mdjm_remove_add_new' );
 
 /**
- * Removes filter from the post lists display for specified post types
- *
- * @params
- *
- * @return
- */
-function mdjm_remove_post_filters()	{
-	if( !isset( $_GET['post_type'] ) )
-		return;
-	
-	/**
-	 * Remove all filters from the venue post lists display for all posts within the 
-	 * $no_filter array
-	 */
-	$no_filter = array( MDJM_VENUE_POSTS );
-	
-	if( in_array( $_GET['post_type'], $no_filter ) )	{
-		?>
-		<style type="text/css">
-			#posts-filter .tablenav select[name=m],
-			#posts-filter .tablenav select[name=cat],
-			#posts-filter .tablenav #post-query-submit{
-				display:none;
-			}
-		</style>
-		<?php	
-	}
-} // mdjm_remove_post_filters
-add_action( 'admin_head', 'mdjm_remove_post_filters' );
-
-/**
  * Set the post title placeholder for custom post types
  * 
  *
@@ -79,9 +48,6 @@ function mdjm_post_title_placeholder( $title )	{
 		break;
 		case MDJM_EMAIL_POSTS:
 			return __( 'Enter Template name here. Used as email subject, shortcodes allowed', 'mobile-dj-manager' );
-		break;
-		case MDJM_VENUE_POSTS:
-			return __( 'Enter Venue name here...', 'mobile-dj-manager' );
 		break;
 		default:
 			return $title;
@@ -124,16 +90,7 @@ function mdjm_rename_publish_button( $translation, $text )	{
 			else
 				return $translation;
 		break;
-						
-		case MDJM_VENUE_POSTS:
-			if( $text == 'Publish' )
-				return __( 'Save Venue', 'mobile-dj-manager' );
-			elseif( $text == 'Update' )
-				return __( 'Update Venue', 'mobile-dj-manager' );
-			else
-				return $translation;
-		break;
-		
+								
 		default:
 			return $translation;
 		break;

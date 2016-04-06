@@ -42,7 +42,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-email-template-posts.php' );
 			include_once( 'mdjm-quote-posts.php' );
-			include_once( 'mdjm-venue-posts.php' );
 		} // includes
 
 /**
@@ -103,25 +102,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						
 						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
 					break;
-															
-					/**
-					 * Venue sorting
-					 */
-					
-					// Order by Venue town
-					case 'town':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_town ON mdjm_town.post_id = {$wpdb->posts}.ID AND mdjm_town.meta_key = '_venue_town'";
-						
-						$pieces[ 'orderby' ] = "mdjm_town.meta_value $order, " . $pieces[ 'orderby' ];
-					break;
-					
-					// Order by Venue county
-					case 'county':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_county ON mdjm_county.post_id = {$wpdb->posts}.ID AND mdjm_county.meta_key = '_venue_county'";
-						
-						$pieces[ 'orderby' ] = "mdjm_county.meta_value $order, " . $pieces[ 'orderby' ];
-					break;
-					
+																									
 				} // switch
 			}
 			
@@ -207,15 +188,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				if( isset( $actions['edit'] ) )
 					unset( $actions['edit'] );
 			}
-										
-			elseif( $post->post_type == MDJM_VENUE_POSTS )	{
-				if( isset( $actions['view'] ) )
-					unset( $actions['view'] );
-				
-				if( isset( $actions['inline hide-if-no-js'] ) )
-					unset( $actions['inline hide-if-no-js'] );
-			}
-			
+													
 			return $actions;
 		} // define_custom_post_row_actions
 		
@@ -254,18 +227,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			if( $post->post_type == MDJM_CONTRACT_POSTS )	{
 				/* -- Main Body -- */
 				add_meta_box( 'mdjm-contract-details', __( 'Contract Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_CONTRACT_POSTS ) . '_post_details_metabox', MDJM_CONTRACT_POSTS, 'side' );
-			}
-
-		/* -- Venues -- */
-			if( $post->post_type == MDJM_VENUE_POSTS )	{
-				/* -- Main Body -- */
-				add_meta_box(
-					'mdjm-venue-details',
-					__( 'Venue Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_VENUE_POSTS ) . '_post_main_metabox',
-					MDJM_VENUE_POSTS,
-					'normal',
-					'high' );
 			}
 		} // define_metabox
 
