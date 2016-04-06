@@ -48,12 +48,51 @@ function mdjm_transaction_post_sortable_columns( $sortable_columns )	{
 	
 	$sortable_columns['txn_date']	  = 'txn_date';
 	$sortable_columns['txn_status']	= 'txn_status';
+	$sortable_columns['event']		 = 'event';
 	$sortable_columns['txn_value']	 = 'txn_value';
 	
 	return $sortable_columns;
 	
 } // mdjm_transaction_post_sortable_columns
 add_filter( 'manage_edit-mdjm-transaction_sortable_columns', 'mdjm_transaction_post_sortable_columns' );
+
+/**
+ * Order posts.
+ *
+ * @since	1.3
+ * @param	obj		$query		The WP_Query object
+ * @return	void
+ */
+function mdjm_transaction_post_order( $query )	{
+	
+	if ( ! is_admin() || 'mdjm-transaction' != $query->get( 'post_type' ) )	{
+		return;
+	}
+	
+	switch( $query->get( 'orderby' ) )	{
+		
+		case 'txn_date':
+		default:
+			$query->set( 'orderby',  'post_date' );
+            break;
+						
+		case 'txn_status':
+			$query->set( 'orderby',  '_mdjm_txn_status' );
+			break;
+		
+		case 'event':
+			$query->set( 'orderby',  'post_parent' );
+            break;
+			
+		case 'txn_value':
+			$query->set( 'meta_key', '_mdjm_txn_total' );
+			$query->set( 'orderby',  'meta_value_num' );
+            break;
+		
+	}
+	
+} // mdjm_transaction_post_order
+add_action( 'pre_get_posts', 'mdjm_transaction_post_order' );
 
 /**
  * Define the data to be displayed in each of the custom columns for the Transaction post types
@@ -137,6 +176,28 @@ function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
 	
 } // mdjm_transaction_posts_custom_column
 add_action( 'manage_mdjm-transaction_posts_custom_column' , 'mdjm_transaction_posts_custom_column', 10, 2 );
+
+/**
+ * Customise the post row actions on the transaction edit screen.
+ *
+ * @since	1.0
+ * @param	arr		$actions	Current post row actions
+ * @param	obj		$post		The WP_Post post object
+ */
+function mdjm_transaction_post_row_actions( $actions, $post )	{
+	
+	if( $post->post_type != 'mdjm-transaction' )	{
+		return $actions;
+	}
+	
+	if( isset( $actions['inline hide-if-no-js'] ) )	{
+		unset( $actions['inline hide-if-no-js'] );
+	}
+
+	return $actions;
+	
+} // mdjm_event_post_row_actions
+add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
 
 /**
  * Add the dropdown filters for the transaction post categories.

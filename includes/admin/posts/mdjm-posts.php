@@ -42,7 +42,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-email-template-posts.php' );
 			include_once( 'mdjm-quote-posts.php' );
-			include_once( 'mdjm-transaction-posts.php' );
 			include_once( 'mdjm-venue-posts.php' );
 		} // includes
 
@@ -104,24 +103,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 						
 						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
 					break;
-										
-					/**
-					 * Transaction sorting
-					 */										
-					// Order by transaction status
-					case 'txn_status':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_status ON mdjm_status.post_id = {$wpdb->posts}.ID AND mdjm_status.meta_key = '_mdjm_txn_status'";
-						
-						$pieces[ 'orderby' ] = "mdjm_status.meta_value $order, " . $pieces[ 'orderby' ];
-					break;
-					
-					// Order by transaction value
-					case 'txn_value':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.ID AND mdjm_cost.meta_key = '_mdjm_txn_total'";
-						
-						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
-					break;
-					
+															
 					/**
 					 * Venue sorting
 					 */
@@ -202,7 +184,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			global $mdjm_settings, $mdjm_post_types;
 			
 			/* -- No row actions for non custom post types -- */
-			if( $post->post_type == 'mdjm-event' || !in_array( $post->post_type, $mdjm_post_types ) )
+			if( $post->post_type == 'mdjm-event' || $post->post_type == 'mdjm-transaction' || !in_array( $post->post_type, $mdjm_post_types ) )
 				return $actions;
 				
 			elseif( $post->post_type == MDJM_COMM_POSTS )
@@ -225,12 +207,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				if( isset( $actions['edit'] ) )
 					unset( $actions['edit'] );
 			}
-			
-			elseif( $post->post_type == MDJM_TRANS_POSTS )	{			
-				if( isset( $actions['inline hide-if-no-js'] ) )
-					unset( $actions['inline hide-if-no-js'] );
-			}
-							
+										
 			elseif( $post->post_type == MDJM_VENUE_POSTS )	{
 				if( isset( $actions['view'] ) )
 					unset( $actions['view'] );
@@ -278,93 +255,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 				/* -- Main Body -- */
 				add_meta_box( 'mdjm-contract-details', __( 'Contract Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_CONTRACT_POSTS ) . '_post_details_metabox', MDJM_CONTRACT_POSTS, 'side' );
 			}
-		/* -- Events -- */
-			if( $post->post_type == MDJM_EVENT_POSTS )	{
-				$event_stati = mdjm_all_event_status();
-				/* -- Main Body -- */
-				remove_meta_box( 'submitdiv', MDJM_EVENT_POSTS, 'side' );
-				remove_meta_box( 'event-typesdiv', MDJM_EVENT_POSTS, 'side' );
-				
-				add_meta_box(
-					'mdjm-event-details',
-					__( 'Event Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_event_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'high'
-				);
-				
-				add_meta_box(
-					'mdjm-event-employees',
-					__( 'Event Employees', 'mobile-dj-manager' ),
-					'mdjm_event_employee_mb',
-					MDJM_EVENT_POSTS,
-					'normal',
-					''
-				);
-				
-				add_meta_box(
-					'mdjm-event-venue',
-					__( 'Venue Details', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_venue_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					''
-				);
-				
-				add_meta_box(
-					'mdjm-event-admin',
-					__( 'Administration', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_admin_metabox',
-					MDJM_EVENT_POSTS,
-					'normal',
-					'low'
-				);
-				
-				if( MDJM_PAYMENTS == true && array_key_exists( $post->post_status, $event_stati ) && mdjm_employee_can( 'edit_txns' ) )	{
-					add_meta_box(
-						'mdjm-event-transactions',
-						__( 'Transactions', 'mobile-dj-manager' ), 
-						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_transactions_metabox',
-						MDJM_EVENT_POSTS,
-						'normal',
-						'low'
-					);	
-				}
-				
-				if( current_user_can( 'manage_mdjm' ) && array_key_exists( $post->post_status, $event_stati ) )	{
-					add_meta_box(
-						'mdjm-event-email-history',
-						__( 'Event History', 'mobile-dj-manager' ), 
-						str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_history_metabox',
-						MDJM_EVENT_POSTS,
-						'normal',
-						'low'
-					);
-				}
-				
-				/* -- Side -- */
-				add_meta_box(
-					'mdjm-event-options',
-					__( 'Event Options', 'mobile-dj-manager' ),
-					str_replace( '-', '_', MDJM_EVENT_POSTS ) . '_post_options_metabox',
-					MDJM_EVENT_POSTS,
-					'side',
-					'low'
-				);
-				
-				// Run action hook for mdjm_event_metabox
-				do_action( 'mdjm_event_metaboxes', $post );
-			}
-		/* -- Transactions -- */
-			if( $post->post_type == MDJM_TRANS_POSTS )	{
-				remove_meta_box( 'submitdiv', MDJM_TRANS_POSTS, 'side' );
-				remove_meta_box( 'transaction-typesdiv', MDJM_TRANS_POSTS, 'side' );
-				/* -- Side -- */
-				add_meta_box( 'mdjm-trans-save', __( 'Save Transaction', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_save_metabox', MDJM_TRANS_POSTS, 'side', 'high' );
-				/* -- Main -- */
-				add_meta_box( 'mdjm-trans-details', __( 'Transaction Details', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_TRANS_POSTS ) . '_post_details_metabox', MDJM_TRANS_POSTS, 'normal' );
-			}
+
 		/* -- Venues -- */
 			if( $post->post_type == MDJM_VENUE_POSTS )	{
 				/* -- Main Body -- */
