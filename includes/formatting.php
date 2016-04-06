@@ -203,7 +203,7 @@ add_filter( 'mdjm_format_amount_decimals', 'mdjm_currency_decimal_filter' );
  * @param	int		$date		Date to format
  * @return	int		$date
 */
-function mdjm_format_short_date( $date='' )	{
+function mdjm_format_short_date( $date = '' )	{
 	
 	if ( empty( $date ) )	{
 		$date = current_time( 'timestamp' );
@@ -217,6 +217,32 @@ function mdjm_format_short_date( $date='' )	{
 		
 	return apply_filters( 'mdjm_format_short_date', $short_date, $date ); 
 } // mdjm_format_short_date
+
+/**
+ * Set the long date format for the given date
+ *
+ * @since	1.3
+ * @param	int		$date		Date to format
+ * @param	bool	$time		True to include the time
+ * @return	int		$date
+*/
+function mdjm_format_long_date( $date = '', $time = false )	{
+	
+	if ( empty( $date ) )	{
+		$date = current_time( 'timestamp' );
+	}
+	
+	$format = get_option( 'date_format', true ) . ! empty( $time ) ? ' \a\t ' .  get_option( 'time_format', true ): '';
+	
+	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
+		$long_date = date( $format, $date );
+				
+	} else	{
+		$long_date = date( $format, strtotime( $date ) );
+	}
+		
+	return apply_filters( 'mdjm_format_long_date', $long_date, $date ); 
+} // mdjm_format_long_date
 
 /**
  * Generate an MDJM URL based upon the sites permalink settings.
