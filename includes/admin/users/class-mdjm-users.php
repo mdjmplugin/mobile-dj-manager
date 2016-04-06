@@ -39,13 +39,15 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 *
 		 */
 		public function messages()	{
-			if( !isset( $_GET['page'] ) || $_GET['page'] != 'mdjm-employees' || empty( $_GET['user_action'] ) || empty( $_GET['message'] ) )
+			if( !isset( $_GET['page'] ) || $_GET['page'] != 'mdjm-employees' || empty( $_GET['user_action'] ) || empty( $_GET['message'] ) )	{
 				return;
+			}
 			
 			$messages = array(
 				2 => array( 'updated', __( 'Employees deleted.', 'mobile-dj-manager' ) )
 			);				
-			mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
+			
+			mdjm_update_notice( $messages[$_GET['message']][0], $messages[ $_GET['message'] ][1], true );
 		} // messages
 				
 		/**
@@ -149,30 +151,32 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					'posts_per_page'   => 1,
 					'meta_key'		 => '_mdjm_event_date',
 					'meta_query'	   => array(
-											'relation'   => 'AND',
-											array( 
-											'key'		=> '_mdjm_event_dj',
-											'value'  	  => !empty( $employee ) ? $employee : $current_user->ID,
-											'compare'	=> '=',
-											),
-											array(
-											'key'		=> '_mdjm_event_client',
-											'value'  	  => $client,
-											'compare'	=> '=',
-											),
-										),
+						'relation'   => 'AND',
+						array( 
+							'key'		=> '_mdjm_event_dj',
+							'value'  	  => !empty( $employee ) ? $employee : $current_user->ID,
+							'compare'	=> '=',
+						),
+						array(
+							'key'		=> '_mdjm_event_client',
+							'value'  	  => $client,
+							'compare'	=> '=',
+						),
+					),
 					'orderby'		  => 'meta_value_num',
 					'order' 			=> 'ASC',
 					);
 					
-			if( empty( $event ) )
+			if( empty( $event ) )	{
 				return ( count( get_posts( $args ) ) == 1 ? true : false );
+			}
 				
 			$the_event = get_post( $event );
 			
 			// No events found return false
-			if( empty( $the_event ) )
+			if( empty( $the_event ) )	{
 				return false;
+			}
 				
 			return ( get_post_meta( $the_event->ID, '_mdjm_event_dj', true ) == $current_user->ID ) ? true : false;
 		} // is_employee_client
@@ -187,10 +191,12 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @return
 		 */
 		public function profile_custom_fields( $user )	{
+			
 			global $current_screen, $user_ID, $pagenow;
 							
-			if( $pagenow != 'user-new.php' )
+			if( $pagenow != 'user-new.php' )	{
 				$user_id = ( $current_screen->id == 'profile' ) ? $user_ID : $_REQUEST['user_id'];
+			}
 			
 			do_action( 'mdjm_user_fields_before_mdjm', $user );
 			
@@ -199,7 +205,9 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			// Is event staff checkbox for WP admins
 			if( isset( $user->ID ) && user_can( $user->ID, 'administrator' ) )	{
+				
 				if( $user->ID != get_current_user_id() )	{
+					
 					echo '<tr>' . "\r\n";
 					echo '<th><label for="_mdjm_event_staff">' . sprintf( __( '%s Event Staff?', 'mobile-dj-manager' ), MDJM_COMPANY ) . '</label></th>' . "\r\n";
 					echo '<td>' . "\r\n";
@@ -208,11 +216,12 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					echo ' />' . "\r\n";
 					echo '</td>' . "\r\n";
 					echo '</tr>' . "\r\n";
-				}
-				else	{
+				} else	{
+					
 					echo '<input type="hidden" name="_mdjm_event_staff" id="_mdjm_event_staff" value="';
 					echo get_user_meta( $user->ID, '_mdjm_event_staff', true );
 					echo '" />' . "\r\n";
+					
 				}
 			}
 			
@@ -221,38 +230,52 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			// Loop through the fields
 			foreach( $custom_fields as $custom_field )	{
-				if( $pagenow != 'user-new.php' )
+				
+				if( $pagenow != 'user-new.php' )	{
 					$field_value = get_user_meta( $user_id, $custom_field['id'], true );
+				}
 
 				// Display if configured
 				if( $custom_field['display'] == true && $custom_field['id'] != 'first_name' && $custom_field['id'] != 'last_name' && $custom_field['id'] != 'user_email' )	{
+					
 					echo '<tr>' . "\r\n" . 
 					'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" . 
 					'<td>' . "\r\n";
 					
 					// Checkbox Field
 					if( $custom_field['type'] == 'checkbox' )	{
+						
 						echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="Y" ';
-						if( $pagenow != 'user-new.php' )
+						
+						if( $pagenow != 'user-new.php' )	{
 							checked( $field_value, 'Y' );
-						else
+						} else	{
 							checked ( '', '' );
+						}
+						
 						echo ' />' . "\r\n";
 					}
 					// Select List
 					elseif( $custom_field['type'] == 'dropdown' )	{
+						
 						echo '<select name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '">';
 						
 						$option_data = explode( "\r\n", $custom_field['value'] );
 						
 						echo '<option value="empty"';
+						
 						if( $pagenow == 'user-new.php' || empty( $field_value ) || $field_value == 'empty' ) echo ' selected';
+						
 						echo '></option>' . "\r\n";
 						
 						foreach( $option_data as $option )	{
+							
 							echo '<option value="' . $option . '"';
-							if( $pagenow != 'user-new.php' )
+							
+							if( $pagenow != 'user-new.php' )	{
 								selected( $option, $field_value );
+							}
+							
 							echo '>' . $option . '</option>' . "\r\n";
 						}
 						
@@ -270,42 +293,47 @@ if( !class_exists( 'MDJM_Users' ) ) :
 						echo '<br />' . 
 						'<span class="description">' . $custom_field['desc'] . '</span>' . "\r\n";
 					}
+					
 					// End the table row
 					echo '</td>' . "\r\n" . 
 					'</tr>' . "\r\n";
+					
 				}
+				
 			}
 			
 			echo '</table>' . "\r\n";
 			
 			do_action( 'mdjm_user_fields_after_mdjm', $user );
+			
 		} // profile_custom_fields
 		
 		/**
 		 * Save the MDJM Custom User Fields
 		 * 
-		 * 
-		 *
-		 * @param    int    $user_id    The ID of the user
-		 * 
-		 * @return
+		 * @since	1.0
+		 * @param   int    $user_id    The ID of the user
+		 * @return	void
 		 */
 		public function save_custom_user_fields( $user_id )	{
+			
+			do_action( 'mdjm_pre_save_custom_user_fields', $user_id, $_POST );
+			
 			$custom_fields = get_option( 'mdjm_client_fields' );
 			$default_fields = get_user_by( 'id', $user_id );
 			
-			if( !current_user_can( 'edit_user', $user_id ) )
+			if( !current_user_can( 'edit_user', $user_id ) )	{
 				return;
+			}
 			
 			if( user_can( $user_id, 'administrator' ) )	{
+				
 				if( !empty( $_POST['_mdjm_event_staff'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
 					$default_fields->add_cap( 'mdjm_employee' );
 					$default_fields->add_cap( 'manage_mdjm' );
 					$default_fields->add_cap( 'dj' );
-				}
-					
-				else	{
+				} else	{
 					delete_user_meta( $user_id, '_mdjm_event_staff' );
 					$default_fields->remove_cap( 'manage_mdjm' );
 					$default_fields->remove_cap( 'mdjm_employee' );
@@ -315,30 +343,39 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			// Loop through the fields and update
 			foreach( $custom_fields as $custom_field )	{
+				
 				$field = $custom_field['id'];
 				
 				// Checkbox unchecked = N
-				if( $custom_field['type'] == 'checkbox' && empty( $_POST[$field] ) )
-					$_POST[$field] = 'N';
+				if( $custom_field['type'] == 'checkbox' && empty( $_POST[ $field ] ) )	{
+					$_POST[ $field ] = 'N';
+				}
 				
 				// Update the users meta data
-				if( !empty( $_POST[$field] ) )
-					update_user_meta( $user_id, $field, $_POST[$field] );
+				if( !empty( $_POST[ $field ] ) )	{
+					update_user_meta( $user_id, $field, $_POST[ $field ] );
+				}
 				
 				/**
 				 * For new users, remove the admin bar 
 				 * and set the action to created
 				 */
 				if( isset( $_POST['action'] ) && $_POST['action'] == 'createuser' )	{
+					
 					update_user_option( $user_id, 'show_admin_bar_front', false );
+					
 					if( !empty( $default_fields->first_name ) && !empty( $default_fields->last_name ) )	{
 						update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );
 					}
+					
 					$client_action = 'created';	
-				}
-				else
+				} else	{
 					$client_action = 'updated';
+				}
 			}
+			
+			do_action( 'mdjm_post_save_custom_user_fields', $user_id, $_POST );
+			
 		} // save_custom_user_fields
 		
 		/**
@@ -352,16 +389,21 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @return	void
 		 */
 		public function remove_client_admin() {
+			
 			if( current_user_can( 'client' ) || current_user_can( 'inactive_client' ) )	{
 				add_filter( 'show_admin_bar', '__return_false' );
 				
 				if( is_admin() )	{
+					
 					if( !defined( 'DOING_AJAX' ) || !DOING_AJAX )	{
 						wp_redirect( mdjm_get_formatted_url( MDJM_HOME, false ) );
 						exit;	
 					}
+					
 				}
-			}				
+				
+			}
+						
 		} // remove_client_admin
 		
 		/**
@@ -374,19 +416,23 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @return	bool				True on success, otherwise false.
 		 */
 		public function prepare_user_pass_reset( $user_id )	{
-			if( MDJM_DEBUG == true )
+
+			if( MDJM_DEBUG == true )	{
 				MDJM()->debug->log_it( 'Preparing user ' . $user_id . ' for password reset' );
+			}
 				
-			$reset =	update_user_meta(
-							$user_id,
-							'mdjm_pass_action',
-							wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] )
-						);
+			$reset = update_user_meta(
+				$user_id,
+				'mdjm_pass_action',
+				wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] )
+			);
 			
-			if( MDJM_DEBUG == true )
+			if( MDJM_DEBUG == true )	{
 				MDJM()->debug->log_it( 'Password preparation ' . !empty( $reset ) ? 'success' : 'fail' );
+			}
 			
 			return $reset;
+			
 		} // prepare_user_pass_reset
 	} // class MDJM_Users
 endif;
