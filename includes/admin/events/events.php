@@ -61,7 +61,7 @@ function mdjm_event_post_sortable_columns( $sortable_columns )	{
 add_filter( 'manage_edit-mdjm-event_sortable_columns', 'mdjm_event_post_sortable_columns' );
 		
 /**
- * Define the data to be displayed in each of the custom columns for the Communications post types
+ * Define the data to be displayed in each of the custom columns for the Transaction post types
  *
  * @since	0.9
  * @param	str		$column_name	The name of the column to display
