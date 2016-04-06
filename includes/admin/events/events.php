@@ -326,14 +326,14 @@ function mdjm_event_date_filter_dropdown()	{
  */
 function mdjm_event_type_filter_dropdown()	{			
 	$event_types = get_categories(
-						array(
-							'type'			  => 'mdjm-event',
-							'taxonomy'		  => 'event-types',
-							'pad_counts'		=> false,
-							'hide_empty'		=> true,
-							'orderby'		  => 'name'
-						)
-					);
+		array(
+			'type'			  => 'mdjm-event',
+			'taxonomy'		  => 'event-types',
+			'pad_counts'		=> false,
+			'hide_empty'		=> true,
+			'orderby'		  => 'name'
+		)
+	);
 	
 	foreach( $event_types as $event_type )	{
 		$values[ $event_type->term_id ] = $event_type->name;
@@ -526,8 +526,112 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 												mdjm_get_option( 'unavailable' ) . '&to_user=' . mdjm_get_client_id( $post->ID ) . 
 												'&event_id=' . $post->ID . '&action=respond_unavailable' ) );
 	}
+	
+	return $actions;
 } // mdjm_event_post_row_actions
 add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
+
+/**
+ * Set the event post title and set as readonly.
+ *
+ * @since	1.0
+ * @param	arr		$actions	Current post row actions
+ * @param	obj		$post		The WP_Post post object
+ */
+function mdjm_event_set_post_title( $post ) {
+	
+	if( 'mdjm-event' != $post->post_type )	{
+		return;
+	}
+	
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$("#title").val("<?php echo mdjm_get_event_contract_id( $post->ID ); ?>");
+			$("#title").prop("readonly", true);
+		});
+	</script>
+	<?php
+} // mdjm_event_set_post_title
+add_action( 'edit_form_after_title', 'mdjm_event_set_post_title' );
+
+/**
+ * Rename the Publish and Update post buttons for events
+ *
+ * @since	1.3
+ * @param	str		$translation	The current button text translation
+ * @param	str		$text			The text translation for the button
+ * @return	str		$translation	The filtererd text translation
+ */
+function mdjm_event_rename_publish_button( $translation, $text )	{
+	
+	global $post;
+	
+	if( ! isset( $post ) || 'mdjm-event' != $post->post_type )	{
+		return $translation;
+	}
+
+	$event_statuses = mdjm_all_event_status();
+			
+	if( $text == 'Publish' && isset( $event_statuses[ $post->post_status ] ) )	{
+		return __( 'Update Event', 'mobile-dj-manager' );
+	} elseif( $text == 'Publish' )	{
+		return __( 'Create Event', 'mobile-dj-manager' );
+	} elseif( $text == 'Update' )	{
+		return __( 'Update Event', 'mobile-dj-manager' );
+	} else
+		return $translation;
+	
+} // mdjm_event_rename_publish_button
+add_filter( 'gettext', 'mdjm_event_rename_publish_button', 10, 2 );
+
+/**
+ * Highlight unattended events rows within event post listings
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_event_highlight_unattended_event_rows()	{
+	
+	global $post;
+			
+	if( ! isset( $post ) || 'mdjm-event' != $post->post_type )	{
+		return;
+	}
+	
+	// Allow the colour to be filtered
+	$row_colour = apply_filters( 'mdjm_unattended_event_row_colour', '#FFEBE8' ); 
+	
+	?>
+	<style>
+	/* Color by post Status */
+	.status-mdjm-unattended	{
+		background: <?php echo $row_colour; ?> !important;
+	}
+	</style>
+	<?php
+	
+} // mdjm_event_highlight_unattended_event_rows
+add_action( 'admin_footer', 'mdjm_event_highlight_unattended_event_rows' );
+
+/**
+ * Remove the default date filter from the edit post screen since we store event dates in a meta key.
+ *
+ * @since	1.3
+ * @param
+ * @param
+ */
+function mdjm_event_remove_date_filter()	{
+	
+	if( ! isset( $_GET['post_type'] ) ||  $_GET['post_type'] != 'mdjm-event' )	{
+		return;
+	}
+	
+	add_filter( 'months_dropdown_results', '__return_empty_array' );
+	
+} // mdjm_event_remove_date_filter
+add_action( 'admin_head', 'mdjm_event_remove_date_filter' );
 
 /**
  * Order posts.

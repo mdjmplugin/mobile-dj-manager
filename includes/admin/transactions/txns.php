@@ -200,6 +200,58 @@ function mdjm_transaction_post_row_actions( $actions, $post )	{
 add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
 
 /**
+ * Set the transaction post title and set as readonly.
+ *
+ * @since	1.0
+ * @param	arr		$actions	Current post row actions
+ * @param	obj		$post		The WP_Post post object
+ */
+function mdjm_transaction_set_post_title( $post ) {
+	
+	if( 'mdjm-transaction' != $post->post_type )	{
+		return;
+	}
+	
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$("#title").val("<?php echo mdjm_get_event_contract_id( $post->ID ); ?>");
+			$("#title").prop("readonly", true);
+		});
+	</script>
+	<?php
+} // mdjm_transaction_set_post_title
+add_action( 'edit_form_after_title', 'mdjm_transaction_set_post_title' );
+
+/**
+ * Rename the Publish and Update post buttons for transaction
+ *
+ * @since	1.3
+ * @param	str		$translation	The current button text translation
+ * @param	str		$text			The text translation for the button
+ * @return	str		$translation	The filtererd text translation
+ */
+function mdjm_transaction_rename_publish_button( $translation, $text )	{
+	
+	global $post;
+	
+	if( ! isset( $post ) || 'mdjm-transaction' != $post->post_type )	{
+		return $translation;
+	}
+
+	$event_statuses = mdjm_all_event_status();
+			
+	if( $text == 'Publish' )	{
+		return __( 'Save Transaction', 'mobile-dj-manager' );
+	} elseif( $text == 'Update' )	{
+		return __( 'Update Transaction', 'mobile-dj-manager' );
+	} else
+		return $translation;
+	
+} // mdjm_transaction_rename_publish_button
+add_filter( 'gettext', 'mdjm_transaction_rename_publish_button', 10, 2 );
+
+/**
  * Add the dropdown filters for the transaction post categories.
  *
  * @since	1.0

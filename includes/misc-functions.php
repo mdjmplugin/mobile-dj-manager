@@ -12,6 +12,13 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
+/**
+ * Set the correct date format for the jQuery date picker
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
 function mdjm_format_datepicker_date()	{
 	$date_format = mdjm_get_option( 'short_date_format', 'd/m/Y' );
 	
@@ -22,6 +29,67 @@ function mdjm_format_datepicker_date()	{
 			
 	return apply_filters( 'mdjm_format_datepicker_date', $date_format );
 } // mdjm_format_datepicker_date
+
+/**
+ * Add the MDJM MCE Shortcode button.
+ * 
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_display_shortcode_button()	{    
+    
+	// Define the post types & screens within which the MCE button should be displayed
+    $post_types = array( 'email_template', 'contract', 'page' );
+    
+	$screens = array( 
+        'mdjm-events_page_mdjm-comms',
+        'mdjm-events_page_mdjm-settings' );
+    
+    // Add the MDJM TinyMCE buttons
+    $current_screen = get_current_screen();
+    
+	if( in_array( get_post_type(), $post_types ) || in_array( $current_screen->id, $screens ) )	{
+		
+		if ( 'true' == get_user_option( 'rich_editing' ) ) {
+			add_filter( 'mce_external_plugins', 'mdjm_register_mce_plugin' );
+			add_filter( 'mce_buttons', 'mdjm_register_mce_buttons' );
+		}
+	}  
+	  
+} // mdjm_display_shortcode_button
+add_action( 'admin_head', 'mdjm_display_shortcode_button' );
+
+/**
+ * Register the script that inserts ths MDJM Shortcodes into the content
+ * when the MDJM Shortcode button is used
+ *
+ * @since	1.3
+ * @param	arr		$plugin_array	Array of registered MCE plugins
+ * @return	arr		$plugin_array	Filtered array of registered MCE plugins
+ *
+ */
+function mdjm_register_mce_plugin( $plugin_array ) {
+	
+	$plugin_array['mdjm_shortcodes_btn'] = MDJM_PLUGIN_URL . '/assets/js/mdjm-tinymce-shortcodes.js';
+	
+	return $plugin_array;
+	
+} // mdjm_register_mce_plugin
+
+/*
+ * Register the MDJM Shortcode button within the TinyMCE interface
+ * 
+ * @since	1.3
+ * @params	arr		$buttons	Array of registered MCE buttons
+ * @return	arr		$buttons	Filtered array of registered MCE buttons
+ */
+function mdjm_register_mce_buttons( $buttons ) {
+	
+	array_push( $buttons, 'mdjm_shortcodes_btn' );
+	
+	return $buttons;
+} // mdjm_register_mce_buttons
 
 /**
  * Datepicker.

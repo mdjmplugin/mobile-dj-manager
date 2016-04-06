@@ -273,3 +273,22 @@ function mdjm_get_formatted_url( $page_id, $permalink=true, $echo=false )	{
 		return $return;
 	}
 } // mdjm_get_formatted_url
+
+/**
+ * Customise the WP admin footer text
+ *
+ * @since	1.3
+ * @param	str		$text	The footer text
+ * @return	str		Filtered footer text string
+ */
+function mdjm_wpadmin_footer_text( $text )	{
+	
+	$text .= ' ';
+	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
+		mdjm_get_admin_page( 'mydjplanner', 'str' ),
+		MDJM_VERSION_NUM ) . '</em>';
+		
+	return $text;
+	
+} // mdjm_wpadmin_footer_text
+add_filter( 'admin_footer_text', 'mdjm_wpadmin_footer_text' );
