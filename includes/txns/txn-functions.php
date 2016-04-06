@@ -182,7 +182,7 @@ function mdjm_currency_symbol( $currency = '' ) {
  * @param	str		$code	The currency code
  * @return	str		The currency's name
  */
-function mdjm_get_currency_name( $code = 'USD' ) {
+function mdjm_get_currency_name( $code = 'GBP' ) {
 	$currencies = mdjm_get_currencies();
 	$name       = isset( $currencies[ $code ] ) ? $currencies[ $code ] : $code;
 	
