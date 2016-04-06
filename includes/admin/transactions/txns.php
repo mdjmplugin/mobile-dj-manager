@@ -25,7 +25,7 @@ function mdjm_transaction_post_columns( $columns ) {
 		'payee'			=> __( 'To/From', 'mobile-dj-manager' ),
 		'txn_status'	   => __( 'Status', 'mobile-dj-manager' ),
 		'detail'		   => __( 'Details', 'mobile-dj-manager' ),
-		'event'			=> __( 'Event', 'mobile-dj-manager' ),
+		'event'			=> sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'txn_value'		=> __( 'Value', 'mobile-dj-manager' )
 	);
 	
@@ -34,7 +34,7 @@ function mdjm_transaction_post_columns( $columns ) {
 	}
 				
 	return $columns;
-} // mdjm_event_post_columns
+} // mdjm_transaction_post_columns
 add_filter( 'manage_mdjm-transaction_posts_columns' , 'mdjm_transaction_post_columns' );
 
 /**
@@ -192,8 +192,8 @@ function mdjm_transaction_post_row_actions( $actions, $post )	{
 
 	return $actions;
 	
-} // mdjm_event_post_row_actions
-add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
+} // mdjm_transaction_post_row_actions
+add_filter( 'post_row_actions', 'mdjm_transaction_post_row_actions', 10, 2 );
 
 /**
  * Set the transaction post title and set as readonly.

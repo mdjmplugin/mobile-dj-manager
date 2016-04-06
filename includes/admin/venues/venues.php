@@ -24,7 +24,7 @@ function mdjm_venue_post_columns( $columns ) {
 		'phone'		  => __( 'Phone', 'mobile-dj-manager' ),
 		'town'		   => __( 'Town', 'mobile-dj-manager' ),
 		'county'   		 => __( 'County', 'mobile-dj-manager' ),
-		'event_count'	=> __( 'Events', 'mobile-dj-manager' ),
+		'event_count'	=> sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
 		'info'		   => __( 'Information', 'mobile-dj-manager' ),
 		'details'	    => __( 'Details', 'mobile-dj-manager' ),
 	);
@@ -34,7 +34,7 @@ function mdjm_venue_post_columns( $columns ) {
 	}
 				
 	return $columns;
-} // mdjm_event_post_columns
+} // mdjm_venue_post_columns
 add_filter( 'manage_mdjm-venue_posts_columns' , 'mdjm_venue_post_columns' );
 
 /**
@@ -121,7 +121,7 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 		case 'event_count':
 			$events_at_venue = get_posts( 
 				array(
-					'post_type'	=> MDJM_EVENT_POSTS,
+					'post_type'	=> 'mdjm-event',
 					'meta_key'	 => '_mdjm_event_venue_id',
 					'meta_value'   => $post_id,
 					'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
@@ -182,7 +182,7 @@ function mdjm_venue_post_row_actions( $actions, $post )	{
 
 	return $actions;
 	
-} // mdjm_event_post_row_actions
+} // mdjm_venue_post_row_actions
 add_filter( 'post_row_actions', 'mdjm_venue_post_row_actions', 10, 2 );
 
 /**
@@ -224,7 +224,7 @@ function mdjm_venue_remove_filters()	{
     </style>
     <?php
 	
-} // mdjm_event_remove_date_filter
+} // mdjm_venue_remove_filters
 add_action( 'admin_head', 'mdjm_venue_remove_filters' );
 
 /**

@@ -103,7 +103,7 @@ function mdjm_add_transaction_meta_boxes( $post )	{
 	
 	// Runs after metabox output
 	do_action( 'mdjm_transaction_after_metaboxes' );
-} // mdjm_add_event_meta_boxes
+} // mdjm_add_transaction_meta_boxes
 add_action( 'add_meta_boxes_mdjm-transaction', 'mdjm_add_transaction_meta_boxes' );
 
 /**
@@ -168,7 +168,12 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	<!-- Start first row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<?php echo __( 'Go to the <a href="' . mdjm_get_admin_page( 'events', 'str' ) . '">Event Management Interface</a> to add a transaction associated to an event.' ); ?>
+			<?php printf( __( 'Go to the <a href="%s">%s Management Interface</a> to add a transaction associated to an %s.', 'mobile-dj-manager' ),
+					mdjm_get_admin_page( 'events', 'str' ),
+					mdjm_get_label_singular(),
+					mdjm_get_label_singular( true )
+				);
+			?>
 		</div>
 	</div>
 	<!-- End first row -->
@@ -190,7 +195,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_display_date">Date:</label><br />' . 
-			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . date( MDJM_SHORTDATE_FORMAT, strtotime( $post->post_date ) ) . '" />' .
+			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . mdjm_format_short_date( $post->post_date ) . '" />' .
 			'<input type="hidden" name="transaction_date" id="transaction_date" value="' . date( 'Y-m-d', strtotime( $post->post_date ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 	
@@ -305,4 +310,4 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	
 	do_action( 'mdjm_post_txn_details_metabox', $post );
 	
-} // mdjm_event_metabox_txn_details
+} // mdjm_transaction_metabox_txn_details

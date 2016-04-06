@@ -38,7 +38,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 *
 		 */
 		function includes()	{
-			include_once( 'mdjm-communications-posts.php' );
 			include_once( 'mdjm-contract-posts.php' );
 			include_once( 'mdjm-email-template-posts.php' );
 			include_once( 'mdjm-quote-posts.php' );
@@ -167,10 +166,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			/* -- No row actions for non custom post types -- */
 			if( $post->post_type == 'mdjm-event' || $post->post_type == 'mdjm-transaction' || !in_array( $post->post_type, $mdjm_post_types ) )
 				return $actions;
-				
-			elseif( $post->post_type == MDJM_COMM_POSTS )
-				return $actions = array();
-							
+											
 			elseif( $post->post_type == MDJM_CONTRACT_POSTS )	{			
 				if( isset( $actions['inline hide-if-no-js'] ) )
 					unset( $actions['inline hide-if-no-js'] );
@@ -214,15 +210,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			/* -- Our meta box functions -- */
 			require_once( 'mdjm-metaboxes.php' );
 			
-		/* -- Communications -- */
-			if( $post->post_type == MDJM_COMM_POSTS )	{
-				/* -- Sidebar -- */
-				remove_meta_box( 'submitdiv', MDJM_COMM_POSTS, 'side' );
-				add_meta_box( 'mdjm-email-details', __( 'Details', 'mobile-dj-manager' ), MDJM_COMM_POSTS . '_post_details_metabox', MDJM_COMM_POSTS, 'side', 'high' );
-				
-				/* -- Main Body -- */
-				add_meta_box( 'mdjm-email-review', __( 'Email Content', 'mobile-dj-manager' ), str_replace( '-', '_', MDJM_COMM_POSTS ) . '_post_output_metabox', MDJM_COMM_POSTS, 'normal', 'high' );
-			}
 		/* -- Contract Templates -- */
 			if( $post->post_type == MDJM_CONTRACT_POSTS )	{
 				/* -- Main Body -- */

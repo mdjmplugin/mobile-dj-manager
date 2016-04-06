@@ -2,71 +2,7 @@
 /*
  * Meta box layout, data & save actions
  */
-/* -- Communication Post Meta Boxes -- */
- 	/*
-	 * mdjm_communication_post_details_metabox
-	 * The layout and data for the email details meta box
-	 *
-	 * @since 1.1.2
-	 * @params: $post => array
-	 */
-	function mdjm_communication_post_details_metabox( $post )	{
-		global $mdjm_settings;
-		
-		$from = get_userdata( $post->post_author );
-		$recipient = get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
-		
-		$attachments = get_children( 
-			array(
-				'post_parent' 	=> $post->ID,
-				'post_type'	  	=> 'attachment',
-				'number_posts'	=> -1,
-				'post_status'	=> 'any' ) );
-		
-		?>
-        <p><strong>Date Sent</strong>: <?php echo date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, get_post_meta( $post->ID, '_date_sent', true ) ); ?></p>
-        <p><strong>From</strong>: <a href="<?php echo admin_url( '/user-edit.php?user_id=' . $from->ID ); ?>"><?php echo $from->display_name; ?></a></p>
-        <p><strong>Recipient</strong>: <a href="<?php echo admin_url( '/user-edit.php?user_id=' . $recipient->ID ); ?>"><?php echo $recipient->display_name; ?></a></p>
-        <p><strong>Status</strong>: <?php echo ucfirst( $post->post_status ) . 
-		( $post->post_status == 'opened' ? ' ' . date( MDJM_TIME_FORMAT . ' ' . MDJM_SHORTDATE_FORMAT, strtotime( $post->post_modified ) ) : '' );
-		; ?></p>
-        <p><strong>Event</strong>: <a href="<?php echo get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ); ?>"><?php echo MDJM_EVENT_PREFIX . stripslashes( get_post_meta( $post->ID, '_event', true ) ); ?></a></p>
-        
-        <?php
-		if( !empty( $attachments ) )	{
-			$i = 1;
-			?>
-            <p><strong>Attachments</strong>:<br />
-            	<?php
-				foreach( $attachments as $attachment )	{
-					echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
-					echo basename( get_attached_file( $attachment->ID ) );
-					echo '</a>';
-					echo ( $i < count( $attachments ) ? '<br />' : '' );
-					$i++;	
-				}
-				?>
-            </p>
-            <?php	
-		}
-		?>
-        
-        <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List' ); ?>"><?php _e( 'Back' ); ?></a>
-        
-        <?php
-	} // comm_post_details_metabox
 	
-	/*
-	 * mdjm_communication_post_output_metabox
-	 * Print out the email content within the Email Content meta box
-	 *
-	 * @since 1.1.2
-	 * @params: $post => array
-	 */
-	function mdjm_communication_post_output_metabox( $post )	{
-		echo $post->post_content;
-	} // mdjm_communication_post_output_metabox
-
 /* -- Contract Post Meta Boxes -- */
  	/*
 	 * contract_post_details_metabox

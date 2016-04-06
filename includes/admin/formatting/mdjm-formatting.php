@@ -14,7 +14,7 @@ function mdjm_remove_add_new() {
 	 * Remove the Add New button from the post lists display for all posts within the 
 	 * $no_add_new array
 	 */
-	$no_add_new = array( MDJM_COMM_POSTS, MDJM_QUOTE_POSTS );
+	$no_add_new = array( MDJM_QUOTE_POSTS );
 	
 	if( in_array( $_GET['post_type'], $no_add_new ) )	{
 		?>

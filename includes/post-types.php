@@ -63,8 +63,7 @@ function mdjm_register_post_types()	{
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_email_history_supports', array( 'title' ) ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'supports'			   => apply_filters( 'mdjm_email_history_supports', array( 'title' ) )
 	);
 	register_post_type( 'mdjm_communication', apply_filters( 'mdjm_email_history_post_type_args', $email_history_args ) );
 	

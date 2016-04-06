@@ -70,7 +70,7 @@ function mdjm_add_venue_meta_boxes( $post )	{
 	
 	// Runs after metabox output
 	do_action( 'mdjm_venue_after_metaboxes' );
-} // mdjm_add_event_meta_boxes
+} // mdjm_add_venue_meta_boxes
 add_action( 'add_meta_boxes_mdjm-venue', 'mdjm_add_venue_meta_boxes' );
 
 /**
