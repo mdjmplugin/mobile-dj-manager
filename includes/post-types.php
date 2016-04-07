@@ -313,7 +313,7 @@ function mdjm_register_post_types()	{
 	
 	// Playlist Post Type
 	$playlist_labels = apply_filters( 
-		'mdjm_event_labels',
+		'mdjm_playlist_labels',
 		array(
 			'name'               => _x( 'Playlist Entries', 'post type general name', 'mobile-dj-manager' ),
 			'singular_name'      => _x( 'Playlist Entry', 'post type singular name', 'mobile-dj-manager' ),

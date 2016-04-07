@@ -66,12 +66,12 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
 					'posts_per_page'	=> -1,
 					'meta_key'			=> '_mdjm_event_contract',
 					'meta_value'		=> $post_id,
-					'post_status'		=> 'any',
+					'post_status'		=> 'any'
 					)
 				);
 			
 			$total = count( $contract_events );
-			echo $total . ' ' . sprintf( _n( '%s', '%s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() );
+			echo $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() );
 			break;
 	} // switch
 				
