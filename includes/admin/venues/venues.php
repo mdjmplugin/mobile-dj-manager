@@ -261,8 +261,6 @@ function mdjm_venue_rename_publish_button( $translation, $text )	{
 	if( ! isset( $post ) || 'mdjm-venue' != $post->post_type )	{
 		return $translation;
 	}
-
-	$event_statuses = mdjm_all_event_status();
 			
 	if( $text == 'Publish' )	{
 		return __( 'Save Venue', 'mobile-dj-manager' );
@@ -368,19 +366,19 @@ function mdjm_venue_post_messages( $messages )	{
 	
 	$messages = array(
 		0 => '', // Unused. Messages start at index 1.
-		1 => __( 'Venue updated.', 'mobile-dj-manager' ),
+		1 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
 		2 => __( 'Custom field updated.' ),
 		3 => __( 'Custom field deleted.' ),
-		4 => __( 'Venue updated.', 'mobile-dj-manager' ),
-		5 => isset( $_GET['revision'] ) ? sprintf( __( 'Transaction restored to revision from %s.' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6 => __( 'Venue updated.', 'mobile-dj-manager' ),
-		7 => __( 'Venue saved.', 'mobile-dj-manager' ),
-		8 => __( 'Venue submitted.', 'mobile-dj-manager' ),
-		9 => __( 'Venue scheduled.' ),
-		10 => __( 'Venue draft updated.', 'mobile-dj-manager' )
+		4 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
+		5 => isset( $_GET['revision'] ) ? sprintf( __( '%s restored to revision from %s.' ), get_post_type_object( $post->post_type )->labels->singular_name, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
+		7 => sprintf( __( '%s saved.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
+		8 => sprintf( __( '%s submitted.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
+		9 => sprintf( __( '%s scheduled.' ), get_post_type_object( $post->post_type )->labels->singular_name ),
+		10 => sprintf( __( '%s draft updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name )
 	);
 	
 	return apply_filters( 'mdjm_venue_post_messages', $messages );
 	
-} // mdjm_transaction_post_messages
+} // mdjm_venue_post_messages
 add_filter( 'post_updated_messages','mdjm_venue_post_messages' );
