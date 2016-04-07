@@ -43,9 +43,6 @@ function mdjm_post_title_placeholder( $title )	{
 		return;
 	
 	switch( get_post_type() )	{
-		case MDJM_CONTRACT_POSTS:
-			return __( 'Enter Contract name here...', 'mobile-dj-manager' );
-		break;
 		case MDJM_EMAIL_POSTS:
 			return __( 'Enter Template name here. Used as email subject, shortcodes allowed', 'mobile-dj-manager' );
 		break;
@@ -73,15 +70,6 @@ function mdjm_rename_publish_button( $translation, $text )	{
 		return $translation;
 	
 	switch( get_post_type() )	{
-		case MDJM_CONTRACT_POSTS:
-			if( $text == 'Publish' )
-				return __( 'Save Contract', 'mobile-dj-manager' );
-			elseif( $text == 'Update' )
-				return __( 'Update Contract', 'mobile-dj-manager' );
-			else
-				return $translation;
-		break;
-		
 		case MDJM_EMAIL_POSTS:
 			if( $text == 'Publish' )
 				return __( 'Save Template', 'mobile-dj-manager' );

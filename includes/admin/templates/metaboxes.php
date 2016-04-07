@@ -4,7 +4,7 @@
  * Contains all metabox functions for the mdjm-venue post type
  *
  * @package		MDJM
- * @subpackage	Communications
+ * @subpackage	Templates
  * @since		1.3
  */
 
@@ -13,64 +13,32 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Remove unwanted metaboxes to for the mdjm_communication post type.
- * Apply the `mdjm_communication_remove_metaboxes` filter to allow for filtering of metaboxes to be removed.
- *
- * @since	1.3
- * @param
- * @return
- */
-function mdjm_remove_communication_meta_boxes()	{
-	$metaboxes = apply_filters( 
-		'mdjm_communication_remove_metaboxes',
-		array(
-			array( 'submitdiv', 'mdjm_communication', 'side' )
-		)
-	);
-	
-	foreach( $metaboxes as $metabox )	{
-		remove_meta_box( $metabox[0], $metabox[1], $metabox[2] );
-	}
-} // mdjm_remove_transaction_meta_boxes
-add_action( 'admin_head', 'mdjm_remove_communication_meta_boxes' );
-
-/**
- * Define and add the metaboxes for the mdjm_communication post type.
- * Apply the `mdjm_venue_add_metaboxes` filter to allow for filtering of metaboxes and settings.
+ * Define and add the metaboxes for the contract post type.
+ * Apply the `mdjm_contract_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
  * @since	1.3
  * @param
  * @return
  */
-function mdjm_add_communication_meta_boxes( $post )	{
+function mdjm_add_contract_meta_boxes( $post )	{
 	$metaboxes = apply_filters(
-		'mdjm_communication_add_metaboxes',
+		'mdjm_contract_add_metaboxes',
 		array(
 			array(
-				'id'			=> 'mdjm-email-details',
-				'title'			=> __( 'Details', 'mobile-dj-manager' ),
-				'callback'		=> 'mdjm_communication_details_metabox',
+				'id'			=> 'mdjm-contract-details',
+				'title'			=> sprintf( __( 'Contract Details', 'mobile-dj-manager' ), get_post_type_object( 'contract' )->labels->singular_name ),
+				'callback'		=> 'mdjm_contract_details_metabox',
 				'context'		=> 'side',
-				'priority'		=> 'high',
+				'priority'		=> 'default',
 				'args'			=> array(),
 				'dependancy'	=> '',
-				'permission'	=> 'mdjm_comms_send'
-			),
-			array(
-				'id'			=> 'mdjm-email-content',
-				'title'			=> __( 'Email Content', 'mobile-dj-manager' ),
-				'callback'		=> 'mdjm_communication_content_metabox',
-				'context'		=> 'normal',
-				'priority'		=> 'high',
-				'args'			=> array(),
-				'dependancy'	=> '',
-				'permission'	=> 'mdjm_comms_send'
+				'permission'	=> ''
 			)
 		)
 	);
 	// Runs before metabox output
-	do_action( 'mdjm_communication_before_metaboxes' );
+	do_action( 'mdjm_contract_before_metaboxes' );
 	
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
@@ -93,7 +61,7 @@ function mdjm_add_communication_meta_boxes( $post )	{
 			$metabox['id'],
 			$metabox['title'],
 			$metabox['callback'],
-			'mdjm_communication',
+			'contract',
 			$metabox['context'],
 			$metabox['priority'],
 			$metabox['args']
@@ -101,100 +69,70 @@ function mdjm_add_communication_meta_boxes( $post )	{
 	}
 	
 	// Runs after metabox output
-	do_action( 'mdjm_communication_after_metaboxes' );
+	do_action( 'mdjm_contract_after_metaboxes' );
 	
 } // mdjm_add_communication_meta_boxes
-add_action( 'add_meta_boxes_mdjm_communication', 'mdjm_add_communication_meta_boxes' );
+add_action( 'add_meta_boxes_contract', 'mdjm_add_contract_meta_boxes' );
 
 /**
- * Output for the Communication Details meta box.
+ * Output for the Contract Details meta box.
  *
  * @since	1.3
  * @param	obj		$post		The post object (WP_Post).
  * @return
  */
-function mdjm_communication_details_metabox( $post )	{
+function mdjm_contract_details_metabox( $post )	{
 	
-	do_action( 'mdjm_pre_communication_details_metabox', $post );
+	do_action( 'mdjm_pre_contract_details_metabox', $post );
 	
-	wp_nonce_field( basename( __FILE__ ), 'mdjm_communication' . '_nonce' );
-		
-	$from			= get_userdata( $post->post_author );
-	$recipient		= get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
+	wp_nonce_field( basename( __FILE__ ), 'mdjm-contract' . '_nonce' );
 	
-	$attachments	= get_children( 
+	$contract_events = get_posts(
 		array(
-			'post_parent' 	=> $post->ID,
-			'post_type'	  	=> 'attachment',
-			'number_posts'	=> -1,
-			'post_status'	=> 'any'
+			'post_type'			=> 'mdjm-event',
+			'posts_per_page'	=> -1,
+			'meta_key'			=> '_mdjm_event_contract',
+			'meta_value_num'	=> $post->ID,
+			'post_status'		=> 'any'
 		)
 	);
-	
-	?>
-    <p><?php printf( __( '<strong>Date Sent</strong>: %s', 'mobile-dj-manager' ),
-		date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) ); ?></p>
-        
-    <p><?php printf( __( '<strong>From</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( '/user-edit.php?user_id={$from->ID}' ),
-		$from->display_name ); ?></p>
-        
-    <p><?php printf( __( '<strong>Recipient</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( '/user-edit.php?user_id={$recipient->ID}' ), $recipient->display_name ); ?></p>
-    
-    <p><?php _e( '<strong>Status</strong>:', 'mobile-dj-manager' ); ?>
-    	
-		<?php echo get_post_status_object( $post->post_status )->label;
-		
-		if ( $post->post_status == 'opened' )	{
-			echo ' ' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) );
-		}
-		?></p>
-        
-    <p><strong><?php echo mdjm_get_label_singular(); ?></strong>: <a href="<?php echo get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ); ?>"><?php echo mdjm_get_event_contract_id( stripslashes( get_post_meta( $post->ID, '_event', true ) ) ); ?></a></p>
-    
-    <?php
-    if( ! empty( $attachments ) )	{
-		
-        $i = 1;
-        ?>
-        <p><strong><?php _e( 'Attachments', 'mobile-dj-manager' ); ?></strong>:<br />
-            
-			<?php
-            foreach( $attachments as $attachment )	{
-                echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
-                echo basename( get_attached_file( $attachment->ID ) );
-                echo '</a>';
-                echo ( $i < count( $attachments ) ? '<br />' : '' );
-                $i++;	
-            }
-            ?>
-        </p>
-        <?php	
-    }
-    ?>
-    
-    <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List', 'mobile-dj-manager' ); ?>"><?php _e( 'Back', 'mobile-dj-manager' ); ?></a>
-    
-    <?php
-	
-	do_action( 'mdjm_post_communication_details_metabox', $post );
-	
-} // mdjm_communication_details_metabox
 
-/**
- * Output for the Communication Content meta box.
- *
- * @since	1.3
- * @param	obj		$post		The post object (WP_Post).
- * @return
- */
-function mdjm_communication_content_metabox( $post )	{
+	$event_count = count( $contract_events );
+		
+	$total_events = sprintf( _n( ' %s', ' %s', $event_count ),
+						mdjm_get_label_singular(), mdjm_get_label_plural()
+					);
 	
-	do_action( 'mdjm_pre_communication_content_metabox', $post );		
+	$default_contract = mdjm_get_option( 'default_contract' ) == $post->ID ? __( 'Yes' ) : __( 'No' );
+			
+	?>
+	<script type="text/javascript">
+	document.getElementById("title").className += " required";
+	document.getElementById("content").className += " required";
+	</script>
 	
-	echo $post->post_content;
+	<p><?php printf( __( '<strong>Author</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
+				admin_url( "user-edit.php?user_id={$post->post_author}" ),
+				get_the_author_meta( 'display_name', $post->post_author ) ); ?>
+	</p>
 	
-	do_action( 'mdjm_post_communication_content_metabox', $post );
+	<p><?php _e( '<strong>Default</strong>?', 'mobile-dj-manager' );
+		echo ' ' . $default_contract; ?>
+    </p>
 	
-} // mdjm_communication_content_metabox
+	<p><?php _e( '<strong>Assigned To</strong>: ', 'mobile-dj-manager' );
+				printf( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count ),
+						mdjm_get_label_singular(), mdjm_get_label_plural() ); ?>
+    </p>
+	
+	<p><?php _e( '<strong>Description</strong>: <span class="description">(optional)</span>', 'mobile-dj-manager' ); ?>
+    	<br />
+        <input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
+        <textarea name="contract_description" id="contract_description" class="widefat" rows="5" placeholder="<?php _e( 'i.e To be used for Pubs/Clubs', 'mobile-dj-manager' ); ?>"><?php echo esc_attr( get_post_meta( $post->ID, '_contract_description', true ) ); ?></textarea>
+    </p>
+	
+	<?php
+	
+	do_action( 'mdjm_post_contract_details_metabox', $post );
+	
+} // mdjm_contract_details_metabox

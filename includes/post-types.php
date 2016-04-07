@@ -107,8 +107,7 @@ function mdjm_register_post_types()	{
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
-		'supports'           	   => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'supports'           	   => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) )
 	);
 	register_post_type( 'contract', apply_filters( 'mdjm_contract_post_type_args', $contract_args ) );
 	
@@ -140,8 +139,7 @@ function mdjm_register_post_types()	{
 		'capability_type'    	=> array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
-		'supports'           	   => array( '' ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'supports'           	   => array( '' )
 	);
 	register_post_type( 'mdjm-signed-contract', apply_filters( 'mdjm_signed_contract_post_type_args', $signed_contract_args ) );
 	
@@ -215,8 +213,7 @@ function mdjm_register_post_types()	{
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'supports'			   => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) )
 	);
 	register_post_type( 'email_template', apply_filters( 'mdjm_email_template_post_type_args', $email_template_args ) );
 	
@@ -395,8 +392,7 @@ function mdjm_register_post_types()	{
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
-		'supports'           	   => apply_filters( 'mdjm_quote_supports', array( 'title' ) ),
-		'register_meta_box_cb'   => array( $mdjm_posts, 'define_metabox' )
+		'supports'           	   => apply_filters( 'mdjm_quote_supports', array( 'title' ) )
 	);
 	register_post_type( 'mdjm-quotes', apply_filters( 'mdjm_quotes_post_type_args', $quote_args ) );
 	
