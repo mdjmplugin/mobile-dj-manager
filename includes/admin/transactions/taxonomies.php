@@ -112,3 +112,40 @@ function mdjm_set_protected_txn_terms_readonly( $tag )	{
 	}
 } // mdjm_set_protected_txn_terms_readonly
 add_action( 'transaction-types_edit_form_fields', 'mdjm_set_protected_txn_terms_readonly' );
+
+/**
+ * Update the transaction category name.
+ *
+ * Runs when the options are updated and checks if the Label for Deposit,
+ * Balance or Other Amount options have been changed
+ *
+ * @since	1.3
+ * @param	str		$old_value
+ * @param	str		$new_value
+ * @return	void
+ */
+function mdjm_update_txn_cat( $old_value, $new_value )	{
+	
+	$options = array( 'other_amount_label' );
+
+	foreach ( $options as $key )	{
+		
+		if ( $new_value[ $key ] == $old_value[ $key ] )	{
+			continue;
+		}
+		
+		$term = get_term_by( 'name', $old_value[ $key ], 'transaction-types' );
+	
+		wp_update_term(
+			$term->term_id,
+			'transaction-types',
+			array(
+				'name'	=> $new_value[ $key ],
+				'slug'	=> sanitize_title( $new_value[ $key ] )
+			)
+		);
+
+	}
+	
+} // mdjm_update_txn_deposit_cat
+add_action( 'update_option_mdjm_settings', 'mdjm_update_txn_cat', 10, 2 );
