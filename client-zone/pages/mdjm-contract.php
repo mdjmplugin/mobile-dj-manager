@@ -31,7 +31,7 @@
 						
 					$clientzone->no_permission();
 				}
-				elseif( empty( $contract_id ) || !$mdjm_posts->post_exists( $contract_id ) )	{
+				elseif( empty( $contract_id ) || !is_string( get_post_status( $contract_id ) ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'ERROR: No contract found for event', true );	
 						
@@ -172,7 +172,7 @@
 						$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : false;
 						$dj_email = isset( $mdjm_settings['templates']['email_dj_confirm'] ) ? $mdjm_settings['templates']['email_dj_confirm'] : false;
 						
-						if( !$mdjm_posts->post_exists( $client_email ) )	{
+						if( !is_string( get_post_status( $client_email ) ) )	{
 							if( MDJM_DEBUG == true )
 								MDJM()->debug->log_it( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
 							wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
@@ -491,7 +491,7 @@
 	if( !is_user_logged_in() )
 		$clientzone->login();	
 				
-	elseif( empty( $event ) || !$mdjm_posts->post_exists( $event ) )
+	elseif( empty( $event ) || !is_string( get_post_status( $event ) ) )
 		$clientzone->no_permission();	
 	
 	else

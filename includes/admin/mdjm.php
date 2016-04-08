@@ -533,7 +533,7 @@
 				/* -- Set the message content -- */
 				if( is_numeric( $content ) )	{
 					/* -- For a template -- */
-					if( !$mdjm_posts->post_exists( $content ) )	{
+					if( is_string( get_post_status( $content ) ) )	{
 						if( MDJM_DEBUG == true )
 							 MDJM()->debug->log_it( '	ERROR: Specified template `' . $content . '` does not exist' );
 							 

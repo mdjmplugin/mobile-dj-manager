@@ -203,7 +203,7 @@
 				$contact_client = !empty( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
 				$client_email = isset( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : false;
 				
-				if( !$mdjm_posts->post_exists( $client_email ) )	{
+				if( !is_string( get_post_status( $client_email ) ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'ERROR: No email template for the contract link has been found ' . __FUNCTION__, $stampit=true );
 					wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );

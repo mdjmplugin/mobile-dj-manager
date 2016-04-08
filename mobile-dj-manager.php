@@ -241,7 +241,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' ); // Call the main functions file
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
-			require_once( MDJM_PLUGIN_DIR . '/includes/formatting.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/html-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' ); // Scheduler
@@ -260,6 +259,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/communications/comms.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/communications/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/events.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/quotes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/taxonomies.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/contextual-help.php' );

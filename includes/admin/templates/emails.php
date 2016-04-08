@@ -74,6 +74,35 @@ function mdjm_email_template_title_placeholder( $title )	{
 add_filter( 'enter_title_here', 'mdjm_email_template_title_placeholder' );
 
 /**
+ * Rename the Publish and Update post buttons for events
+ *
+ * @since	1.3
+ * @param	str		$translation	The current button text translation
+ * @param	str		$text			The text translation for the button
+ * @return	str		$translation	The filtererd text translation
+ */
+function mdjm_email_template_rename_publish_button( $translation, $text )	{
+	
+	global $post;
+	
+	if( ! isset( $post ) || 'mdjm-quotes' != $post->post_type )	{
+		return $translation;
+	}
+
+	$event_statuses = mdjm_all_event_status();
+			
+	if( $text == 'Publish' )	{
+		return __( 'Save Template', 'mobile-dj-manager' );
+	} elseif( $text == 'Update' )	{
+		return __( 'Update Template', 'mobile-dj-manager' );
+	} else	{
+		return $translation;
+	}
+	
+} // mdjm_event_rename_publish_button
+add_filter( 'gettext', 'mdjm_email_template_rename_publish_button', 10, 2 );
+
+/**
  * Customise the messages associated with managing email template posts
  *
  * @since	1.3

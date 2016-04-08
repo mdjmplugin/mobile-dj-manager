@@ -17,30 +17,13 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		public function __construct()	{
 			global $mdjm_post_types;
 
-			// Include custom post files
-			$this->includes();
-
 			/* -- Register actions -- */
 															
 			if( is_admin() )	{
-				add_filter( 'posts_clauses', array( &$this, 'sort_post_by_column' ), 1, 2 );
-				
-				add_filter( 'post_row_actions', array( &$this, 'define_custom_post_row_actions' ), 10, 2 ); // Row actions
-				add_filter( 'post_updated_messages', array( &$this, 'custom_post_status_messages' ) ); // Status messages
 			}
 
 		} // __construct()
 		
-		/**
-		 * Call include files for custom post types
-		 *
-		 *
-		 *
-		 */
-		function includes()	{
-			include_once( 'mdjm-quote-posts.php' );
-		} // includes
-
 /**
 * -- POST SAVES
 */
@@ -52,129 +35,8 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 */
 		public function save_custom_post( $post_id, $post )	{
 							
-		} // save_custom_post		
-																	
-/**
-* -- POST COLUMN SORTING
-*/		
-		/**
-		 * The queries used to sort posts by selected column
-		 * 
-		 * 
-		 * @params: $query
-		 * @return:
-		 */
-		public function sort_post_by_column( $pieces, $query )	{
-			global $wpdb;
-			
-			if( !is_admin() )
-				return;
-			
-			/**
-			 * We only want our code to run in the main WP query
-			 * AND if an orderby query variable is designated.
-			 */
-			
-			if( $query->is_main_query() && ( $orderby = $query->get( 'orderby' ) ) )	{
-				$order = strtoupper( $query->get( 'order' ) );
-				
-				if( !in_array( $order, array( 'ASC', 'DESC' ) ) )
-					$order = 'ASC';
-					
-				switch( $orderby )	{					
-					/**
-					 * Quote sorting
-					 */	
-					// Order by quote view date
-					case 'quote_view_date':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_q ON mdjm_q.post_id = {$wpdb->posts}.ID AND mdjm_q.meta_key = '_mdjm_quote_viewed_date'";
-						
-						$pieces[ 'orderby' ] = "STR_TO_DATE( mdjm_q.meta_value,'%Y-%m-%d' ) $order, " . $pieces[ 'orderby' ];
-					
-					break;
-					
-					// Order by quote value	
-					case 'quote_value':
-						$pieces[ 'join' ] .= " LEFT JOIN $wpdb->postmeta mdjm_cost ON mdjm_cost.post_id = {$wpdb->posts}.post_parent AND mdjm_cost.meta_key = '_mdjm_event_cost'";
-						
-						$pieces[ 'orderby' ] = "cast(mdjm_cost.meta_value as unsigned) $order, " . $pieces[ 'orderby' ];
-					break;
-																									
-				} // switch
-			}
-			
-			return $pieces;
-		} // sort_post_by_column
-		
-/**
-* -- STYLES & CUSTOMISATIONS
-*/
-		/*
-		 * custom_post_status_messages
-		 * Set the messages displayed when updates are made
-		 * to the custom posts
-		 * 
-		 * @since 1.1.2
-		 * @params: $messages
-		 * @return: $messages
-		 */
-		public function custom_post_status_messages( $messages )	{
-			global $post, $mdjm_post_types;
-					
-			$post_id = $post->ID;
-			$post_type = get_post_type( $post_id );
-			
-			if( !in_array( $post_type, $mdjm_post_types ) )
-				return $messages;
-			
-			$singular = get_post_type_object( $post_type )->labels->singular_name;
-			
-			$messages[$post_type] = array(
-					0 => '', // Unused. Messages start at index 1.
-					1 => sprintf( __( '%s updated.' ), $singular ),
-					2 => __( 'Custom field updated.', 'mdjm' ),
-					3 => __( 'Custom field deleted.', 'mdjm' ),
-					4 => sprintf( __( '%s updated.', 'mdjm' ), $singular ),
-					5 => isset( $_GET['revision']) ? sprintf( __('%2$s restored to revision from %1$s', 'maxson' ), wp_post_revision_title( (int) $_GET['revision'], false ), $singular ) : false,
-					6 => sprintf( __( '%s published.' ), $singular ),
-					7 => sprintf( __( '%s saved.', 'mdjm' ), esc_attr( $singular ) ),
-					8 => sprintf( __( '%s submitted.' ), $singular ),
-					9 => sprintf( __( '%s scheduled for: <strong>%s</strong>. <a href="%s" target="_blank">Preview %s</a>' ), $singular, date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_id ) ), 'Template' ),
-					10 => sprintf( __( '%s draft updated.' ), $singular )
-			);
-			
-			if( isset( $custom_messages[$post_type] ) )
-				$messages[$post_type] = array_replace( $messages[$post_type], $custom_messages[$post_type] );
-	
-			return $messages;
-		} // custom_post_status_messages
-												
-		/*
-		 * define_custom_post_row_actions
-		 * Dictate which row action links are displayed for
-		 * each custom post type
-		 * 
-		 * @since 1.1.3
-		 * @params: $actions, $post => array
-		 * @return: $actions
-		 */
-		public function define_custom_post_row_actions( $actions, $post ) {
-			global $mdjm_settings, $mdjm_post_types;
-			
-			/* -- No row actions for non custom post types -- */
-			if( $post->post_type == 'mdjm-event' || $post->post_type == 'mdjm-transaction' || !in_array( $post->post_type, $mdjm_post_types ) )
-				return $actions;
-											
-			if( $post->post_type == MDJM_QUOTE_POSTS )	{			
-				if( isset( $actions['inline hide-if-no-js'] ) )
-					unset( $actions['inline hide-if-no-js'] );
-					
-				if( isset( $actions['edit'] ) )
-					unset( $actions['edit'] );
-			}
-													
-			return $actions;
-		} // define_custom_post_row_actions
+		} // save_custom_post														
+
 /**
 * -- GENERAL POST FUNCTIONS
 */

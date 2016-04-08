@@ -99,7 +99,7 @@
 					$passed = false;	
 				}
 				// Make sure the passed event exists
-				elseif( !$GLOBALS['mdjm_posts']->post_exists( $_GET['event_id'] ) )	{
+				elseif( !is_string( get_post_status( $_GET['event_id'] ) ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'Event does not exist ' . $_GET['event_id'], true );
 						
@@ -162,7 +162,7 @@
 				
 				$online_template = MDJM()->events->retrieve_quote( $event_id );
 				
-				if( empty( $online_template ) || !$mdjm_posts->post_exists( $online_template ) )	{
+				if( empty( $online_template ) || !is_string( get_post_status( $online_template ) ) )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'The online template associated with event with ID ' . $event_id . ' could not be found in ' . __METHOD__, true );
 					

@@ -583,3 +583,45 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
 	return $update;
 } // mdjm_set_event_status_mdjm_approved
 
+/**
+ * Retrieve the quote for the event.
+ *
+ * @since	1.3
+ * @param	int			$event_id	The event ID.
+ * @return	obj			Quote post object or false if no quote exists
+ */
+function mdjm_get_event_quote( $event_id )	{
+	$quote = get_posts( 
+		array( 
+			'numberposts'		=> 1,
+			'post_parent'		=> $event_id,
+			'post_type'		  => 'mdjm-quotes'
+		)
+	);
+								
+	if( $quote )	{
+		return $quote[0];
+	} else	{
+		return false;
+	}
+					
+} // mdjm_get_event_quote
+
+/**
+ * Retrieve the Quote ID for the event
+ *
+ * @since	1.3
+ * @param	int			$event_id	The event ID.
+ * @return	int			Quote post ID false if no quote exists
+ */
+function mdjm_get_event_quote_id( $event_id )	{
+	
+	$quote = mdjm_get_event_quote( $event_id );
+								
+	if( $quote )	{
+		return $quote->ID;
+	} else	{
+		return false;
+	}
+					
+} // mdjm_get_event_quote_id

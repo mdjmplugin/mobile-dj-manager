@@ -707,7 +707,7 @@
 						&& $this->schedules['request-deposit']['options']['email_client'] == 'Y'  ? true : false );
 						
 					$email_template = ( isset( $this->schedules['request-deposit']['options']['email_template'] ) && 
-						$mdjm_posts->post_exists( $this->schedules['request-deposit']['options']['email_template'] ) ? 
+						is_string( get_post_status( $this->schedules['request-deposit']['options']['email_template'] ) ) ? 
 						$this->schedules['request-deposit']['options']['email_template'] : false );
 					
 					/* -- Client Deposit Request Email -- */
@@ -971,7 +971,7 @@
 						&& $this->schedules['balance-reminder']['options']['email_client'] == 'Y'  ? true : false );
 						
 					$email_template = ( isset( $this->schedules['balance-reminder']['options']['email_template'] ) && 
-						$mdjm_posts->post_exists( $this->schedules['balance-reminder']['options']['email_template'] ) ? 
+						is_string( get_post_status( $this->schedules['balance-reminder']['options']['email_template'] ) ) ? 
 						$this->schedules['balance-reminder']['options']['email_template'] : false );
 					
 					/* -- Client Deposit Request Email -- */
