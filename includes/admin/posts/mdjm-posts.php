@@ -38,7 +38,6 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 		 *
 		 */
 		function includes()	{
-			include_once( 'mdjm-email-template-posts.php' );
 			include_once( 'mdjm-quote-posts.php' );
 		} // includes
 
@@ -166,12 +165,7 @@ if( !class_exists( 'MDJM_Posts' ) )	:
 			if( $post->post_type == 'mdjm-event' || $post->post_type == 'mdjm-transaction' || !in_array( $post->post_type, $mdjm_post_types ) )
 				return $actions;
 											
-			if( $post->post_type == MDJM_EMAIL_POSTS )	{			
-				if( isset( $actions['inline hide-if-no-js'] ) )
-					unset( $actions['inline hide-if-no-js'] );
-			}
-			
-			elseif( $post->post_type == MDJM_QUOTE_POSTS )	{			
+			if( $post->post_type == MDJM_QUOTE_POSTS )	{			
 				if( isset( $actions['inline hide-if-no-js'] ) )
 					unset( $actions['inline hide-if-no-js'] );
 					

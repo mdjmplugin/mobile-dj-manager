@@ -2,7 +2,7 @@
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
 /**
- * Manage the email and contract template posts
+ * Manage the contract template posts
  *
  *
  *
@@ -25,10 +25,8 @@ function mdjm_contract_post_columns( $columns ) {
 		'author'		=> __( 'Created By', 'mobile-dj-manager' ),
 		'date'			=> __( 'Date', 'mobile-dj-manager' )
 	);
-	
-	return $columns;
-	
-	if( ! mdjm_employee_can( 'manage_mdjm' ) && isset( $columns['cb'] ) )	{
+		
+	if( ! mdjm_employee_can( 'manage_templates' ) && isset( $columns['cb'] ) )	{
 		unset( $columns['cb'] );
 	}
 				
