@@ -18,13 +18,12 @@
 function mdjm_contract_post_columns( $columns ) {
 		
 	$columns = array(
-		'cb'			=> '<input type="checkbox" />',
-		'title'			=> __( 'Contract Name', 'mobile-dj-manager' ),
-		'event_default'	=> __( 'Is Default?', 'mobile-dj-manager' ),
-		'assigned'		=> __( 'Assigned To', 'mobile-dj-manager' ),
-		'author'		=> __( 'Created By', 'mobile-dj-manager' ),
-		'date'			=> __( 'Date', 'mobile-dj-manager' )
-	);
+			'cb'			=> '<input type="checkbox" />',
+			'title'			=> __( 'Contract Name', 'mobile-dj-manager' ),
+			'event_default'	=> __( 'Is Default?', 'mobile-dj-manager' ),
+			'assigned'		=> __( 'Assigned To', 'mobile-dj-manager' ),
+			'author'		=> __( 'Created By', 'mobile-dj-manager' ),
+			'date'			=> __( 'Date', 'mobile-dj-manager' ) );
 	
 	return $columns;
 	
