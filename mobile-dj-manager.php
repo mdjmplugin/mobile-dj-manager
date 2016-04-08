@@ -109,7 +109,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 * @return The one true Mobile_DJ_Manager
 		 */
 		public static function instance()	{
-			global $mdjm, $mdjm_debug, $mdjm_posts, $clientzone;
+			global $mdjm, $mdjm_debug, $clientzone;
 			
 			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
 				self::$instance = new Mobile_DJ_Manager;
@@ -125,7 +125,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->debug			 = new MDJM_Debug();
 				$mdjm_debug						= self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events			= new MDJM_Events();
-				$mdjm_posts						= new MDJM_Posts(); // REMOVE POST 1.3
 				self::$instance->content_tags	  = new MDJM_Content_Tags();
 				self::$instance->cron			  = new MDJM_Cron();
 				self::$instance->emails			= new MDJM_Emails();
@@ -228,7 +227,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/txns/txn-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/equipment/equipment-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/misc-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/admin/posts/mdjm-posts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/mdjm-custom-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/client-functions.php' );

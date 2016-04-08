@@ -116,7 +116,7 @@
 		 *
 		 */
 		public function manual_event_payment( $type, $event_id )	{
-			global $mdjm, $mdjm_posts, $mdjm_settings;
+			global $mdjm, $mdjm_settings;
 			
 			remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 			
@@ -215,7 +215,7 @@
 		 *
 		 */
 		public function add_event_transaction( $user='' )	{
-			global $mdjm, $mdjm_posts, $mdjm_settings, $current_user;
+			global $mdjm, $mdjm_settings, $current_user;
 			
 			/* -- Validation -- */
 			if( empty( $_POST['amount'] ) )	{

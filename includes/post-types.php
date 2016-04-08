@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_register_post_types()	{
-	global $mdjm_posts;
 	
 	// Communication History Post Type
 	$email_history_labels = apply_filters( 

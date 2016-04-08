@@ -598,7 +598,7 @@
 		 * @return	obj		$eventinfo	The event meta information
 		 */
 		public function event_detail( $post_id )	{
-			global $mdjm, $mdjm_posts;
+			global $mdjm;
 			
 			if( empty( $post_id ) || !is_string( get_post_status( $post_id ) ) )
 				return;
@@ -999,7 +999,7 @@
 		 * @since    1.1.3
 		 */
 		public function status_contract( $post_id, $post, $event_data, $field_updates )	{
-			global $mdjm_settings, $mdjm, $mdjm_posts;
+			global $mdjm_settings, $mdjm;
 			
 			if( $_POST['original_post_status'] == 'mdjm-contract' )
 				return;
@@ -1081,7 +1081,7 @@
 		 * @since    1.1.3
 		 */
 		public function status_approved( $post_id, $post, $event_data, $field_updates )	{
-			global $mdjm_settings, $mdjm, $mdjm_posts;
+			global $mdjm_settings, $mdjm;
 			
 			if( $_POST['original_post_status'] == 'mdjm-approved' )
 				return;
@@ -1195,7 +1195,7 @@
 		 * @return	bool	$result		true if successfully processed, false if not
 		 */
 		public function reject_event( $event_id, $user='', $reason='' )	{
-			global $mdjm, $mdjm_posts, $current_user;
+			global $mdjm, $current_user;
 			
 			/* -- Validation -- */
 			if( empty( $event_id ) )	{

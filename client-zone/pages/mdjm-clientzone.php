@@ -118,7 +118,7 @@
 			 * 
 			 */
 			public function accept_enquiry( $post )	{
-				global $mdjm, $my_mdjm, $mdjm_posts, $mdjm_settings;
+				global $mdjm, $my_mdjm, $mdjm_settings;
 				
 				if( empty( $post ) )	{
 					if( MDJM_DEBUG == true )

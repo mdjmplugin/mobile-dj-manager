@@ -392,7 +392,7 @@ class MDJM_Upgrade	{
 	 * @upgrade -> 1.1.3
 	 */
 	public function migrate_events_1_2()	{
-		global $mdjm, $mdjm_posts, $mdjm_settings, $wpdb;
+		global $mdjm, $mdjm_settings, $wpdb;
 		
 		if( !get_option( 'mdjm_migrate_events' ) )
 			return;
@@ -772,7 +772,7 @@ class MDJM_Upgrade	{
 	 * @upgrade -> 1.1.3
 	 */
 	public function migrate_transactions_1_2()	{
-		global $mdjm, $mdjm_posts, $wpdb;
+		global $mdjm, $wpdb;
 		
 		if( !get_option( 'mdjm_migrate_transactions' ) )
 			return;
@@ -916,7 +916,7 @@ class MDJM_Upgrade	{
 	 * @upgrade -> 1.1.3
 	 */
 	public function migrate_contact_forms_1_2()	{
-		global $mdjm, $mdjm_posts;
+		global $mdjm;
 		
 		if( !get_option( 'mdjm_migrate_contact_forms' ) )
 			return;

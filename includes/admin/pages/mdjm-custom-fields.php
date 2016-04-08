@@ -88,7 +88,6 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		function add_field()	{
-			global $mdjm_posts;
 						
 			$existing = mdjm_get_custom_fields( $_POST['_mdjm_field_section'], 'menu_order', 'DESC', 1 );
 			
@@ -159,7 +158,6 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		function update_field()	{
-			global $mdjm_posts;
 			
 			// Retrieve the existing settings for the field so we can compare
 			$existing = get_post( $_POST['custom_field_id'] );

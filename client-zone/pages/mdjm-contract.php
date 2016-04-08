@@ -17,7 +17,7 @@
 			 *
 			 */
 			public function __construct( $event )	{
-				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts;
+				global $clientzone, $my_mdjm, $mdjm;
 								
 				$this->event = get_post( $event );
 				
@@ -62,7 +62,7 @@
 			 *
 			 */
 			public function sign_contract()	{
-				global $mdjm, $mdjm_posts, $my_mdjm, $clientzone, $mdjm_settings;
+				global $mdjm, $my_mdjm, $clientzone, $mdjm_settings;
 				
 				/* -- Validate the nonce -- */
 				if( !isset( $_POST['mdjm_sign_event_contract'] ) || !wp_verify_nonce( $_POST['mdjm_sign_event_contract'], 'sign_event_contract' ) )	{
@@ -484,7 +484,7 @@
 	} // if( !class_exists( 'MDJM_Contract' ) )
 	
 /* -- Insantiate the MDJM_Contract class if the user is logged in-- */
-	global $clientzone, $mdjm_posts;
+	global $clientzone;
 	
 	$event = !empty( $_GET['event_id'] ) ? $_GET['event_id'] : '';
 	

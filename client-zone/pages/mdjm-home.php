@@ -654,7 +654,7 @@
 			 *
 			 */
 			function update_event()	{
-				global $mdjm, $mdjm_posts, $post, $my_mdjm, $clientzone;
+				global $mdjm, $post, $my_mdjm, $clientzone;
 				
 				$post = get_post( $_POST['event_id'] );
 				

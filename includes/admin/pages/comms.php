@@ -13,7 +13,7 @@
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 		
-	global $mdjm, $mdjm_posts, $mdjm_settings, $current_user;
+	global $mdjm, $mdjm_settings, $current_user;
 		
 	if( isset( $_POST['submit'] ) )	{
 		/* Validation */

@@ -59,7 +59,6 @@ add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_or
  *
  */
 function mdjm_update_custom_field_client_order()	{
-	global $mdjm_posts;
 			
 	foreach( $_POST['clientfields'] as $order => $id )	{
 		$menu = $order + 1;
@@ -79,7 +78,6 @@ add_action( 'wp_ajax_mdjm_update_custom_field_client_order', 'mdjm_update_custom
  *
  */
 function mdjm_update_custom_field_event_order()	{
-	global $mdjm_posts;
 			
 	foreach( $_POST['eventfields'] as $order => $id )	{
 		$menu = $order + 1;
@@ -99,7 +97,6 @@ add_action( 'wp_ajax_mdjm_update_custom_field_event_order', 'mdjm_update_custom_
  *
  */
 function mdjm_update_custom_field_venue_order()	{
-	global $mdjm_posts;
 			
 	foreach( $_POST['venuefields'] as $order => $id )	{
 		$menu = $order + 1;

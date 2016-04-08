@@ -158,7 +158,7 @@
 			 *
 			 */
 			function display_quote( $event_id )	{
-				global $mdjm, $mdjm_posts, $my_mdjm, $post;
+				global $mdjm, $my_mdjm, $post;
 				
 				$online_template = MDJM()->events->retrieve_quote( $event_id );
 				
@@ -244,7 +244,6 @@
 			 *
 			 */
 			function update_event_quote( $event_id, $quote_id )	{
-				global $mdjm_posts;
 				
 				// If the current user is not the client, do not log
 				if( get_post_meta( $event_id, '_mdjm_event_client', true ) != get_current_user_id() )

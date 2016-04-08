@@ -206,7 +206,7 @@
 		 *
 		 */
 		public function complete_event()	{
-			global $mdjm, $mdjm_posts, $mdjm_settings;
+			global $mdjm, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( '*** Starting the Complete Events task ***', true );
@@ -407,7 +407,7 @@
 		 *
 		 */
 		public function fail_enquiry()	{
-			global $mdjm, $mdjm_posts, $mdjm_settings;
+			global $mdjm, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( '*** Starting the Fail Enquiry task ***', true );
@@ -605,7 +605,7 @@
 		 *
 		 */
 		public function request_deposit()	{
-			global $mdjm, $mdjm_posts, $mdjm_settings;
+			global $mdjm, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( '*** Starting the Request Deposit task ***', true );
@@ -860,7 +860,7 @@
 		 *
 		 */
 		public function balance_reminder()	{
-			global $mdjm, $mdjm_posts, $mdjm_settings;
+			global $mdjm, $mdjm_settings;
 			
 			if( MDJM_DEBUG == true )
 				MDJM()->debug->log_it( '*** Starting the Request Balance task ***', true );

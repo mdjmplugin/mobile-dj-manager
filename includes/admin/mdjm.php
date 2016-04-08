@@ -17,7 +17,7 @@
 			 *
 			 */
 			public function __construct()	{
-				global $wpdb, $pagenow, $mdjm_post_types, $mdjm_posts, $clientzone;
+				global $wpdb, $pagenow, $mdjm_post_types, $clientzone;
 				
 				define( 'MDJM_COMM_POSTS', 'mdjm_communication' );
 				define( 'MDJM_CONTRACT_POSTS', 'contract' );
@@ -460,7 +460,7 @@
 			 * @since    1.1.3
 			 */
 			function send_email( $args )	{
-				global $mdjm_posts, $mdjm_settings;
+				global $mdjm_settings;
 				
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Starting ' . __FUNCTION__, true );
