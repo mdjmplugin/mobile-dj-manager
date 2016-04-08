@@ -144,7 +144,7 @@ class MDJM_Upgrade	{
 						'Table: {MDJM_TABLE} - {MDJM_DESC}' . "\n" . 
 						'Total Rows: {MDJM_ROWS}' . "\n" . 
 						"\n" . 
-						'Support: http://www.mydjplanner.co.uk' . "\n" . 
+						'Support: http://mdjm.co.uk' . "\n" . 
 						'         contact@mydjplanner.co.uk' . "\n" .
 						'-------------------------------------------*/' . "\n";
 		

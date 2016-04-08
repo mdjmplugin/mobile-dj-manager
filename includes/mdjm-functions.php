@@ -62,10 +62,10 @@
 						'transactions'		  => 'edit.php?post_type=' . MDJM_TRANS_POSTS,
 						'updated'			   => 'admin.php?page=mdjm-updated',
 						'about'			     => 'admin.php?page=mdjm-about',
-						'mydjplanner'           => 'http://www.mydjplanner.co.uk',
-						'user_guides'           => 'http://www.mydjplanner.co.uk/support/user-guides',
-						'mdjm_support'          => 'http://www.mydjplanner.co.uk/support',
-						'mdjm_forums'           => 'http://www.mydjplanner.co.uk/forums',
+						'mydjplanner'           => 'http://mdjm.co.uk',
+						'user_guides'           => 'http://mdjm.co.uk/support/user-guides',
+						'mdjm_support'          => 'http://mdjm.co.uk/support',
+						'mdjm_forums'           => 'http://mdjm.co.uk/forums',
 						);
 		if( in_array( $mdjm_page, $mydjplanner ) )	{
 			$mdjm_page = $mdjm_pages[$mdjm_page];	
@@ -788,7 +788,7 @@
 					_n( $i . ' user ', ' ' . $i . ' users ', $i, 'mobile-dj-manager' ),
 					$role_name[$role],
 					'<br />',
-					'<a href="http://www.mydjplanner.co.uk/forums/forum/bugs/" target="_blank" title="Report this bug">',
+					'<a href="http://mdjm.co.uk/forums/forum/bugs/" target="_blank" title="Report this bug">',
 					'</a>' );
 		}
 		elseif( !empty( $user_error ) && $i < $user_count )	{

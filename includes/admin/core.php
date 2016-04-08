@@ -46,9 +46,9 @@
 				if( strpos( $file, 'mobile-dj-manager.php' ) === false )
 					return $links;
 					
-				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/support/" target="_blank">' . __( 'Support' ) . '</a>';
-				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/donate/" target="_blank">' . __( 'Donate' ) . '</a>';
-				$mdjm_links[] = '<a href="http://www.mydjplanner.co.uk/product-category/mdjm/premium-add-ons/" target="_blank">' . __( 'Extensions' ) . '</a>';
+				$mdjm_links[] = '<a href="http://mdjm.co.uk/support/" target="_blank">' . __( 'Support Docs' ) . '</a>';
+				$mdjm_links[] = '<a href="http://mdjm.co.uk/donate/" target="_blank">' . __( 'Donate' ) . '</a>';
+				$mdjm_links[] = '<a href="http://http://mdjm.co.uk/add-ons/" target="_blank">' . __( 'Extensions' ) . '</a>';
 									
 				$links = array_merge( $links, $mdjm_links );
 		

@@ -568,7 +568,7 @@
 				if( isset( $sender_data ) )
 					$headers[] = 'Reply-To: ' . $sender_data->user_email . "\r\n";
 					
-				$headers[] = 'X-Mailer: ' . MDJM_NAME . ' version ' . MDJM_VERSION_NUM . ' (http://www.mydjplanner.co.uk)'; 
+				$headers[] = 'X-Mailer: ' . MDJM_NAME . ' version ' . MDJM_VERSION_NUM . ' (http://mdjm.co.uk)'; 
 				
 				// Filter the email headers
 				$headers = apply_filters( 'mdjm_email_headers', $headers );

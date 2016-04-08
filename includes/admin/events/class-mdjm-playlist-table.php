@@ -522,7 +522,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 			$email_body .= '<p>Regards</p>' . "\n";
 			$email_body .= '<p>' . MDJM_COMPANY . '</p>' . "\n";
 			$email_body .= '<p>&nbsp;</p>' . "\n";
-			$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n";
+			$email_body .= '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n";
 			$email_body .= '</body>' . "\n" . '</html>' . "\n";
 			
 			$headers = 'MIME-Version: 1.0' . "\r\n";

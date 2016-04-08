@@ -4,7 +4,7 @@ Description: Processes all front end Ajax processes
 Since Version: 1.2.3
 Date: 07 July 2015
 Author: My DJ Planner <contact@mydjplanner.co.uk>
-Author URI: http://www.mydjplanner.co.uk
+Author URI: http://mdjm.co.uk
 */
 	/*
 	 * Re-populate the addons select options when the package is changed

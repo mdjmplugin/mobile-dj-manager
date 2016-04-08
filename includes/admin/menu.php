@@ -619,7 +619,7 @@
 					'id'     => 'mdjm-user-guides',
 					'parent' => 'mdjm',
 					'title'  => sprintf( __( '%sUser Guides%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-					'href'   => 'http://www.mydjplanner.co.uk/support/user-guides/',
+					'href'   => 'http://http://mdjm.co.uk/add-ons/support/',
 					'meta'   => array(
 						'title' => __( 'MDJM User Guides', 'mobile-dj-manager' ),
 						'target' => '_blank'

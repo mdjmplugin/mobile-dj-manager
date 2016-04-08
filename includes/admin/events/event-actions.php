@@ -188,7 +188,7 @@ function mdjm_email_event_playlist_action( $data )	{
 		$html_content_end = '<p>' . __( 'Regards', 'mobile-dj-manager' ) . '</p>' . "\n" .
 					'<p>{company_name}</p>' . "\n";
 					'<p>&nbsp;</p>' . "\n";
-					'<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://www.mydjplanner.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n" .
+					'<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n" .
 					'</body>' . "\n" . '</html>';
 		
 		$args = array(

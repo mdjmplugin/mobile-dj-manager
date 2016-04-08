@@ -6,7 +6,7 @@ Tested up to: 4.4.1
 Stable tag: 1.2.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://www.mydjplanner.co.uk/donate/
+Donate link: http://mdjm.co.uk/donate/
 
 MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
 
@@ -52,7 +52,7 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 1. Click "Install Now"
 1. Once installation has finished, select "Activate Plugin"
 1. Once activation has completed, click the "Settings" link under the MDJM Event Management plugin
-1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://www.mydjplanner.co.uk/initial-configuration/">configure MDJM</a>.
+1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://mdjm.co.uk/docs/installation/">configure MDJM</a>.
 
 == Frequently Asked Questions ==
 
@@ -62,7 +62,7 @@ Support can be obtained via our online [Support Forums](http://www.mydjplanner.c
 
 = Is there a Pro version with additional features? =
 
-Premium addons are available to enhance the plugin at http://www.mydjplanner.co.uk
+Premium addons are available to enhance the plugin at http://mdjm.co.uk
 
 == Screenshots ==
 

@@ -2,12 +2,12 @@
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 /**
  * Plugin Name: MDJM Event Management
- * Plugin URI: http://www.mydjplanner.co.uk
+ * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
  * Version: 1.2.7.5
  * Date: 26 November 2015
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
- * Author URI: http://www.mydjplanner.co.uk
+ * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /lang
  * License: GPL2

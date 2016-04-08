@@ -5,7 +5,7 @@
  * Since Version: 1.2.3
  * Date: 07 July 2015
  * Author: My DJ Planner <contact@mydjplanner.co.uk>
- * Author URI: http://www.mydjplanner.co.uk
+ * Author URI: http://mdjm.co.uk
  */
  
 /**
