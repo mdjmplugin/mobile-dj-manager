@@ -880,23 +880,26 @@ add_action( 'pre_get_posts', 'mdjm_event_post_search' );
  * Save the meta data for the event
  *
  * @since	0.7
- * @param	int		$ID				The current post ID.
- * @param	obj		$post			The current post object (WP_Post).
+ * @param	int		$post_id		The current event post ID.
+ * @param	obj		$post			The current event post object (WP_Post).
  * @param	bool	$update			Whether this is an existing post being updated or not.
  * 
  * @return	void
  */
-function mdjm_save_event_post( $ID, $post, $update )	{
-	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+function mdjm_save_event_post( $post_id, $post, $update )	{
+		
+	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
+	}
 	
-	if( empty( $update ) )
+	if( empty( $update ) )	{
 		return;
+	}
 		
 	// Permission Check
-	if( !mdjm_employee_can( 'manage_events' ) )	{
+	if( ! mdjm_employee_can( 'manage_events' ) )	{
 		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit venues' );
+			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit events' );
 		 
 		return;
 	}
@@ -905,38 +908,41 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
 	// Fire our pre-save hook
-	do_action( 'mdjm_before_event_save', $ID, $post, $update );
+	do_action( 'mdjm_pre_event_save', $post_id, $post, $update );
 	
-	if( MDJM_DEBUG == true )
+	if( MDJM_DEBUG == true )	{
 		MDJM()->debug->log_it( 'Starting Event Save', true );
+	}
 				
 	// Get current meta data for the post so we can track changes within the journal.
-	$current_meta = get_post_meta( $ID );
+	$current_meta = get_post_meta( $post_id );
 	
 	/**
 	 * Get the Client ID and store it in the event data array.
 	 * If a client has been selected from the dropdown, we simply use that ID.
 	 * If adding a new client, call the method and use the returned user ID.
 	 */
-	$event_data['_mdjm_event_client'] = ( $_POST['client_name'] != 'add_new' ? 
-		$_POST['client_name'] : MDJM()->events->mdjm_add_client() );
+	$event_data['_mdjm_event_client'] = $_POST['client_name'] != 'add_new' ? $_POST['client_name'] : mdjm_add_client();
 		
-	if( !empty( $update ) && !empty( $_POST['client_name'] ) && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
-		$field_updates[] = '     | Client changed to ' . $_POST['client_name'];
+	if( ! empty( $update ) && ! empty( $_POST['client_name'] ) && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
+		$field_updates[] = '     | Client changed to ' . $event_data['_mdjm_event_client'];
 		
 	/**
 	 * For new events we fire the 'mdjm_add_new_event' action
 	 */
-	if( empty( $update ) )
-		do_action( 'mdjm_add_new_event', $post );
+	if( empty( $update ) )	{
+		do_action( 'mdjm_create_new_event', $post );
+	}
 	
 	/**
-	 * If the client is flagged to have their password reset, generate the new password and set the flag.
-	 * The flag will be checked and called during the content filter process.
+	 * If the client is flagged to have their password reset, set the flag.
+	 * The flag will be checked and processed during the content tag filtering process.
 	 */
 	if( !empty( $_POST['mdjm_reset_pw'] ) )	{
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( 'User ' . $event_data['_mdjm_event_client'] . ' flagged for password reset' );
+		
+		if( MDJM_DEBUG == true )	{
+			MDJM()->debug->log_it( sprintf( 'Client %s flagged for password reset' ), $event_data['_mdjm_event_client'] );
+		}
 			
 		update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', true );
 	}
@@ -945,83 +951,86 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	* Determine the Venue ID if an existing venue was selected.
 	* Otherwise, determine if we're using the client's address or adding a manual venue address
 	*/
-	if( $_POST['venue_id'] != 'manual' && $_POST['venue_id'] != 'client' )
+	if( $_POST['venue_id'] != 'manual' && $_POST['venue_id'] != 'client' )	{
 		$event_data['_mdjm_event_venue_id'] = $_POST['venue_id'];
-		
-	elseif( !empty( $_POST['_mdjm_event_venue_id'] ) && $_POST['_mdjm_event_venue_id'] == 'client' )
+	} elseif( !empty( $_POST['_mdjm_event_venue_id'] ) && $_POST['_mdjm_event_venue_id'] == 'client' )	{
 		$event_data['_mdjm_event_venue_id'] = 'client';
-		
-	else
+	} else	{
 		$event_data['_mdjm_event_venue_id'] = 'manual';
-	
-	if( empty( $update ) && 
-		isset( $current_meta['_mdjm_event_venue_id'][0] ) && 
-		$_POST['venue_id'] != $current_meta['_mdjm_event_venue_id'][0] )	{
-	
-		$field_updates[] = 'Venue changed from ' . ( $current_meta['_mdjm_event_venue_id'][0] != 'manual' ?
-			get_the_title( $current_meta['_mdjm_event_venue_id'][0] ) : $current_meta['_mdjm_event_venue_name'][0] ) 				. ' to ' . ( is_numeric( $_POST['venue_id'] ) && is_string( get_post_status( $_POST['venue_id'] ) ) ?
-			get_the_title( $_POST['venue_id'] ) : $_POST['venue_id'] );
 	}
-	
+		
 	/**
 	 * If the option was selected to save the venue, prepare the post and post meta data
 	 * for the venue.
 	 */
 	if( $_POST['venue_id'] == 'manual' && !empty( $_POST['save_venue'] ) )	{
+		
 		foreach( $_POST as $venue_key => $venue_value )	{
+			
 			if( substr( $venue_key, 0, 6 ) == 'venue_' )	{
+				
 				$venue_meta[$venue_key] = $venue_value;
 				
-				if( $venue_key == 'venue_postcode' && !empty( $venue_value ) )
-					$venue_meta[$venue_key] = strtoupper( $venue_value );
+				if( $venue_key == 'venue_postcode' && ! empty( $venue_value ) )	{
+					$venue_meta[ $venue_key ] = strtoupper( $venue_value );
+				} elseif( $venue_key == 'venue_email' && ! empty( $venue_value ) )	{
+					$venue_meta[ $venue_key ] = sanitize_email( $venue_value );
+				} else	{
+					$venue_meta[ $venue_key ] = sanitize_text_field( ucwords( $venue_value ) );
+				}
 				
-				if( $venue_key == 'venue_email' && !empty( $venue_value ) )
-					$venue_meta[$venue_key] = sanitize_email( $venue_value );
-					
-				else
-					$venue_meta[$venue_key] = sanitize_text_field( ucwords( $venue_value ) );
 			}
+			
 		}
-		// Create the venue post and store the post ID
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( 'New venue to be created' );
 		
 		// Remove the save post hook for venue posts and insert the new venue
 		remove_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
+		
 		$event_data['_mdjm_event_venue_id'] = MDJM()->events->mdjm_add_venue( 
-																	array( 'venue_name' => $_POST['venue_name'] ), 
-																	$venue_meta );
+			array( 'venue_name' => $_POST['venue_name'] ),
+			$venue_meta
+		);
+		
 		add_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
+		
 	}
 	
 	// The venue is set to manual or client for this event so store the values in event post meta data.
 	else	{
 		// Manual venue address entry
 		if( $_POST['venue_id'] != 'client' )	{ 
-			$event_data['_mdjm_event_venue_name'] = sanitize_text_field( ucwords( $_POST['venue_name'] ) );
-			$event_data['_mdjm_event_venue_contact'] = sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
-			$event_data['_mdjm_event_venue_phone'] = sanitize_text_field( $_POST['venue_phone'] );
-			$event_data['_mdjm_event_venue_email'] = sanitize_email( strtolower( $_POST['venue_email'] ) );
-			$event_data['_mdjm_event_venue_address1'] = sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
-			$event_data['_mdjm_event_venue_address2'] = sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
-			$event_data['_mdjm_event_venue_town'] = sanitize_text_field( ucwords( $_POST['venue_town'] ) );
-			$event_data['_mdjm_event_venue_county'] = sanitize_text_field( ucwords( $_POST['venue_county'] ) );
-			$event_data['_mdjm_event_venue_postcode'] = strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
-		}
-		// Using clients address
-		else	{
+		
+			$event_data['_mdjm_event_venue_name']		= sanitize_text_field( ucwords( $_POST['venue_name'] ) );
+			$event_data['_mdjm_event_venue_contact']	= sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
+			$event_data['_mdjm_event_venue_phone']		= sanitize_text_field( $_POST['venue_phone'] );
+			$event_data['_mdjm_event_venue_email']		= sanitize_email( strtolower( $_POST['venue_email'] ) );
+			$event_data['_mdjm_event_venue_address1']	= sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
+			$event_data['_mdjm_event_venue_address2']	= sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
+			$event_data['_mdjm_event_venue_town']		= sanitize_text_field( ucwords( $_POST['venue_town'] ) );
+			$event_data['_mdjm_event_venue_county']		= sanitize_text_field( ucwords( $_POST['venue_county'] ) );
+			$event_data['_mdjm_event_venue_postcode']	= strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
+
+		} else	{ // Using clients address
+		
 			$client_data = get_userdata( $event_data['_mdjm_event_client'] );
-			$event_data['_mdjm_event_venue_name'] = __( 'Client Address', 'mobile-dj-manager' );
-			$event_data['_mdjm_event_venue_contact'] = !empty( $client_data->first_name ) ? sanitize_text_field( $client_data->first_name ) : '';
-			$event_data['_mdjm_event_venue_contact'] .= ' ' . !empty( $client_data->last_name ) ? sanitize_text_field( $client_data->last_name ) : '';
-			$event_data['_mdjm_event_venue_phone'] = !empty( $client_data->phone1 ) ? $client_data->phone1 : '';
-			$event_data['_mdjm_event_venue_email'] = !empty( $client_data->user_email ) ? $client_data->user_email : '';
-			$event_data['_mdjm_event_venue_address1'] = !empty( $client_data->address1 ) ? $client_data->address1 : '';
-			$event_data['_mdjm_event_venue_address2'] = !empty( $client_data->address2 ) ? $client_data->address2 : '';
-			$event_data['_mdjm_event_venue_town'] = !empty( $client_data->town ) ? $client_data->town : '';
-			$event_data['_mdjm_event_venue_county'] = !empty( $client_data->county ) ? $client_data->county : '';
-			$event_data['_mdjm_event_venue_postcode'] = !empty( $client_data->postcode ) ? $client_data->postcode : '';
+			
+			$event_data['_mdjm_event_venue_name']		= __( 'Client Address', 'mobile-dj-manager' );
+			
+			$event_data['_mdjm_event_venue_contact']	= sprintf( '%s %s',
+				! empty( $client_data->first_name )		? sanitize_text_field( $client_data->first_name )	: '',
+				! empty( $client_data->last_name )		? sanitize_text_field( $client_data->last_name )	: ''
+			);
+			
+			$event_data['_mdjm_event_venue_phone']		= ! empty( $client_data->phone1 )		? $client_data->phone1		: '';
+			$event_data['_mdjm_event_venue_email']		= ! empty( $client_data->user_email )	? $client_data->user_email	: '';
+			$event_data['_mdjm_event_venue_address1']	= ! empty( $client_data->address1 )		? $client_data->address1	: '';
+			$event_data['_mdjm_event_venue_address2']	= ! empty( $client_data->address2 )		? $client_data->address2	: '';
+			$event_data['_mdjm_event_venue_town']		= ! empty( $client_data->town )			? $client_data->town		: '';
+			$event_data['_mdjm_event_venue_county']		= ! empty( $client_data->county )		? $client_data->county		: '';
+			$event_data['_mdjm_event_venue_postcode']	= ! empty( $client_data->postcode ) 	? $client_data->postcode	: '';
+
 		}
+
 	}
 	
 	/**
@@ -1033,23 +1042,29 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	 * Event name.
 	 * If no name is defined, use the event type.
 	 */
-	if( empty( $_POST['_mdjm_event_name'] ) )
+	if( empty( $_POST['_mdjm_event_name'] ) )	{
 		$_POST['_mdjm_event_name'] = get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
+	}
+	$_POST['_mdjm_event_name'] = apply_filters( 'mdjm_event_name', $_POST['_mdjm_event_name'], $post_id );
 		
 	// Generate the playlist reference for guest access						
 	if( empty( $update ) || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )
-		$event_data['_mdjm_event_playlist_access'] = MDJM()->events->playlist_ref();
+		$event_data['_mdjm_event_playlist_access'] = mdjm_generate_playlist_guest_code();
 	
 	// Set whether or not the playlist is enabled for the event
-	$event_data['_mdjm_event_playlist'] = !empty( $_POST['enable_playlist'] ) ? $_POST['enable_playlist'] : 'N';
+	$event_data['_mdjm_event_playlist'] = ! empty( $_POST['enable_playlist'] ) ? $_POST['enable_playlist'] : 'N';
 	
 	/**
 	 * All the remaining custom meta fields are prefixed with '_mdjm_event_'.
 	 * Loop through all $_POST data and put all event meta fields into the $event_data array
 	 */
 	foreach( $_POST as $key => $value )	{
-		if( substr( $key, 0, 12 ) == '_mdjm_event_' )
-			$event_data[$key] = $value;	
+		
+		if( substr( $key, 0, 12 ) == '_mdjm_event_' )	{
+						
+			$event_data[ $key ] = $value;
+
+		}
 	}
 	
 	/**
@@ -1057,47 +1072,48 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	 * determine their time format setting and adjust to H:i:s for saving.
 	 */
 	if( mdjm_get_option( 'time_format', 'H:i' ) == 'H:i' )	{ // 24 Hr
-		$event_data['_mdjm_event_start'] = date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ); 
-		$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) );
-		$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] ) );
-	}
 	
-	else	{ // 12 hr
-		$event_data['_mdjm_event_start'] = date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] . $_POST['event_start_period'] ) );
-		$event_data['_mdjm_event_finish'] = date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
-		$event_data['_mdjm_event_djsetup_time'] = date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
+		$event_data['_mdjm_event_start']		= date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ); 
+		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) );
+		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] ) );
+	} else	{ // 12 hr
+		$event_data['_mdjm_event_start']		= date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] . $_POST['event_start_period'] ) );
+		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
+		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
 	}
 	
 	/**
 	 * Set the event end date.
 	 * If the finish time is less than the start time, assume following day.
 	 */
-	if( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )
+	if( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )	{
 		$event_data['_mdjm_event_end_date'] = $_POST['_mdjm_event_date'];
-		
-	else // End date is following day
+	} else	{// End date is following day
 		$event_data['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $_POST['_mdjm_event_date'] ) ) );
+	}
 		
 	/**
 	 * Determine the state of the Deposit & Balance payments.
 	 * 
 	 */
-	$event_data['_mdjm_event_deposit_status'] = !empty( $_POST['deposit_paid'] ) ? $_POST['deposit_paid'] : 'Due';
-	$event_data['_mdjm_event_balance_status'] = !empty( $_POST['balance_paid'] ) ? $_POST['balance_paid'] : 'Due';
+	$event_data['_mdjm_event_deposit_status'] = ! empty( $_POST['deposit_paid'] ) ? $_POST['deposit_paid'] : 'Due';
+	$event_data['_mdjm_event_balance_status'] = ! empty( $_POST['balance_paid'] ) ? $_POST['balance_paid'] : 'Due';
 	
 	$deposit_payment = $event_data['_mdjm_event_deposit_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ? true : false;
 	
 	$balance_payment = $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ? true : false;
 	
 	// Add-Ons
-	if( MDJM_PACKAGES == true )
+	if( MDJM_PACKAGES == true )	{
 		$event_data['_mdjm_event_addons'] = !empty( $_POST['event_addons'] ) ? $_POST['event_addons'] : '';
+	}
 	
 	// Assign the event type
 	$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 	
-	if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )
+	if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )	{
 		$field_updates[] = 'Event Type changed to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
+	}
 	
 	MDJM()->events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
 	
@@ -1108,52 +1124,34 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	 * Loop through the $event_data array, arrange the data and then store it.
 	 */ 
 	foreach( $event_data as $event_meta_key => $event_meta_value )	{
+		
 		// Cost, deposit and main employee wage.		
-		if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit'
-			|| $event_meta_key == '_mdjm_event_dj_wage' )
+		if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' || $event_meta_key == '_mdjm_event_dj_wage' )	{
 			$event_meta_value = $event_meta_value;
-		
-		// Postcodes are uppercase.
-		if( $event_meta_key == 'venue_postcode' && !empty( $event_meta_value ) )
+		} elseif( $event_meta_key == 'venue_postcode' && ! empty( $event_meta_value ) )	{ // Postcodes are uppercase.
 			$event_meta_value = strtoupper( $event_meta_value );
-		
-		// Emails are lowercase	.
-		if( $event_meta_key == 'venue_email' && !empty( $event_meta_value ) )
+		} elseif( $event_meta_key == 'venue_email' && !empty( $event_meta_value ) )	{ // Emails are lowercase.
 			$event_meta_value = strtolower( $event_meta_value );
-		
-		if( $event_meta_key == '_mdjm_event_package' )
+		} elseif( $event_meta_key == '_mdjm_event_package' )	{
 			$event_meta_value = sanitize_text_field( strtolower( $event_meta_value ) );	
-			
-		elseif( $event_meta_key == '_mdjm_event_addons' )
+		} elseif( $event_meta_key == '_mdjm_event_addons' )	{
 			$event_meta_value = $event_meta_value;
-			
-		elseif( !strpos( $event_meta_key, 'notes' ) )
+		} elseif( !strpos( $event_meta_key, 'notes' ) )	{
 			$event_meta_value = sanitize_text_field( ucwords( $event_meta_value ) );
-			
-		else
+		} else	{
 			$event_meta_value = sanitize_text_field( ucfirst( $event_meta_value ) );
+		}
 		
 		// If we have a value and the key did not exist previously, add it.
-		if ( !empty( $event_meta_value ) && ( empty( $current_meta[$event_meta_key] ) || empty( $current_meta[$event_meta_key][0] ) ) )	{
-			add_post_meta( $ID, $event_meta_key, $event_meta_value );
+		if( ! empty( $event_meta_value ) && ( empty( $current_meta[ $event_meta_key ] ) || empty( $current_meta[ $event_meta_key ][0] ) ) )	{
+			add_post_meta( $post_id, $event_meta_key, $event_meta_value );
 			
-			if( !empty( $update ) )
-				$field_updates[] = 'Field ' . $event_meta_key . ' added: ' . $event_meta_value;
-		}
-		// If a value existed, but has changed, update it.
-		elseif ( !empty( $event_meta_value ) && $event_meta_value != $current_meta[$event_meta_key][0] )	{
-			update_post_meta( $ID, $event_meta_key, $event_meta_value );
-			if( !empty( $update ) )
-				$field_updates[] = 'Field ' . $event_meta_key . ' updated: ' . $current_meta[$event_meta_key][0] . ' replaced with ' . $event_meta_value;
+		} elseif ( !empty( $event_meta_value ) && $event_meta_value != $current_meta[ $event_meta_key ][0] )	{ // If a value existed, but has changed, update it.
+			update_post_meta( $post_id, $event_meta_key, $event_meta_value );
+		} elseif ( empty( $event_meta_value ) && !empty( $current_meta[ $event_meta_key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
+			delete_post_meta( $post_id, $event_meta_key, $event_meta_value );
 		}
 			
-		// If there is no new meta value but an old value exists, delete it.
-		elseif ( empty( $event_meta_value ) && !empty( $current_meta[$event_meta_key][0] ) )	{
-			delete_post_meta( $ID, $event_meta_key, $event_meta_value );
-			
-			if( !empty( $update ) )
-				$field_updates[] = 'Field ' . $event_meta_key . ' updated: ' . $current_meta[$event_meta_key][0] . ' removed';
-		}
 	}
 	
 	if( MDJM_DEBUG == true )	{
@@ -1173,7 +1171,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 			$type = mdjm_get_deposit_label();
 		
 		// Insert the event transaction
-		MDJM()->txns->manual_event_payment( $type, $ID );
+		MDJM()->txns->manual_event_payment( $type, $post_id );
 	}
 	
 	// Set the event status & initiate tasks based on the status
@@ -1186,12 +1184,12 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 			' to ' . $event_stati[$_POST['mdjm_event_status']];
 		
 		wp_transition_post_status( $_POST['mdjm_event_status'], $_POST['original_post_status'], $post );
-		wp_update_post( array( 'ID' => $ID, 'post_status' => $_POST['mdjm_event_status'] ) );
+		wp_update_post( array( 'ID' => $post_id, 'post_status' => $_POST['mdjm_event_status'] ) );
 		
 		$method = 'status_' . substr( $_POST['mdjm_event_status'], 5 );
 		
 		if( method_exists( MDJM()->events, $method ) )
-			MDJM()->events->$method( $ID, $post, $event_data, $field_updates );
+			MDJM()->events->$method( $post_id, $post, $event_data, $field_updates );
 		
 		// Remove password reset flag if set
 		if( !empty( $pass_reset ) )	{
@@ -1232,7 +1230,7 @@ function mdjm_save_event_post( $ID, $post, $update )	{
 	do_action( 'mdjm_save_event', $post, $_POST['mdjm_event_status'] );
 	
 	// Fire our post save hook
-	do_action( 'mdjm_after_event_save', $ID, $post, $update );
+	do_action( 'mdjm_after_event_save', $post_id, $post, $update );
 	
 	// Re-add the save post action to avoid loops
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );

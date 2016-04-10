@@ -80,6 +80,44 @@ function mdjm_get_other_amount_label() {
 } // mdjm_get_other_amount_label
 
 /**
+ * Get the label used for employee wages.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The label set for merchant fees
+ */
+function mdjm_get_employee_wages_label() {
+	
+	$term = get_term_by( 'slug', 'mdjm-employee-wages', 'transaction-types' );
+	
+	if ( empty( $term ) )	{
+		return __( 'Term not found', 'mobile-dj-manager' );
+	}
+	
+	return $term->name;
+	
+} // mdjm_get_employee_wages_label
+
+/**
+ * Get the category ID for the term.
+ *
+ * @since	1.3
+ * @param	str		$slug	The slug of the term for which we want the ID
+ * @return	int		The term ID
+ */
+function mdjm_get_txn_cat_id() {
+	
+	$term = get_term_by( 'slug', 'mdjm-employee-wages', 'transaction-types' );
+	
+	if ( empty( $term ) )	{
+		return __( 'Term not found', 'mobile-dj-manager' );
+	}
+	
+	return $term->term_id;
+	
+} // mdjm_get_txn_cat_id
+
+/**
  * Return all registered currencies.
  *
  * @since	1.3
@@ -355,8 +393,31 @@ function mdjm_pay_event_employees( $event_id )	{
 	
 	do_action( 'mdjm_pre_pay_event_employees', $event_id, $mdjm_event );
 	
-	$mdjm_txn = new MDJM_Txn();
+	$mdjm_event->get_all_employees();
 	
+	if ( ! $mdjm_event->employees )	{
+		return;
+	}
+	
+	foreach( $mdjm_event->employees as $employee_id => $employee_data )	{
+		
+		$mdjm_txn = new MDJM_Txn();
+
+		$mdjm_txn->create(
+			array(
+				'post_status'	=> 'mdjm-expenditure',
+				'post_author'	=> 1,
+				'post_parent'	=> $mdjm_event->ID,
+				'post_category'	=> array( mdjm_get_txn_cat_id( 'mdjm-employee-wages' ) ),
+				'meta'			=> array(
+					'_mdjm_txn_status'		=> 'Completed',
+					'_mdjm_payment_to'		=> $employee_id,
+					'_mdjm_txn_total'		=> $employee_data['wage']
+				)
+			)
+		);
+		
+	}
 	
 	
 	do_action( "mdjm_pre_pay_employee_{$employee_id}", $event_id, $mdjm_event );

@@ -7,51 +7,6 @@
 /*
  * Client functions
  */
-		/*
-		 * mdjm_add_client
-		 * Add new client
-		 * 
-		 * @param: 
-		 * @return: $client_id : false on fail
-		 */
-		public function mdjm_add_client()	{
-			global $mdjm_settings;
-			
-			/* -- Validation -- */
-			if( empty( $_POST['client_firstname'] ) || empty( $_POST['client_email'] ) )
-				return $mdjm_error = 'Client data is missing';
-									
-			/* -- Define the client data -- */
-			$clientdata['first_name'] = ucwords( $_POST['client_firstname'] );
-			$clientdata['last_name'] = !empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '';
-			$clientdata['display_name'] = $clientdata['first_name'] . ' ' . $clientdata['last_name'];
-			$clientdata['nice_name'] = $clientdata['first_name'];
-			
-			$clientdata['user_email'] = $_POST['client_email'];
-			$clientdata['user_login'] = $clientdata['user_email'];
-			$clientdata['user_pass'] = wp_generate_password( $mdjm_settings['clientzone']['pass_length'] );
-			$clientdata['role'] = 'client';
-			
-			/* -- Create the user -- */
-			$client_id = wp_insert_user( $clientdata );
-			
-			if( is_wp_error( $client_id ) )
-				return 'Error adding client. ' . $client_id->get_error_message();
-			
-			/* -- Update client meta fields -- */
-			wp_update_user( array( 'ID' => $client_id, 'show_admin_bar_front' => false ) );
-			
-			/* -- Update custom meta fields -- */
-			/* -- Marketing -- */
-			update_user_meta( $client_id, 'marketing', 'Y' );
-			
-			/* -- Primary Phone -- */
-			if( !empty( $_POST['client_phone'] ) )
-				 update_user_meta( $client_id, 'phone1', $_POST['client_phone'] );
-			
-			return $client_id;
-		} // mdjm_add_client
-
 		/**
 		 * Retrieve list of clients by specified role
 		 *
@@ -1320,19 +1275,7 @@
 				false : true );
 				
 		} // playlist_status
-		
-		/*
-		 * Generate an event playlist reference to be used by guests
-		 *
-		 * @param
-		 * @return		str		$pl_ref		The unique playlist reference
-		 */
-		public function playlist_ref()	{
-			$pl_ref = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ), 0, 9 );
 			
-			return $pl_ref;
-		} // playlist_ref
-		
 		/*
 		 * Retrieve the playlist for the current event grouped by category
 		 *

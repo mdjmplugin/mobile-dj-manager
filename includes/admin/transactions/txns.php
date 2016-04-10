@@ -137,7 +137,32 @@ function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
 			
 		// Source
 		case 'payee':
-			echo get_post_status( $post_id ) == 'mdjm-income' ? get_post_meta( $post_id, '_mdjm_payment_from', true ) : get_post_meta( $post_id, '_mdjm_payment_to', true );
+			
+			if ( 'mdjm-income' == get_post_status( $post_id ) )	{
+				
+				$payee = get_post_meta( $post_id, '_mdjm_payment_from', true );
+				
+			} else	{
+				
+				$payee = get_post_meta( $post_id, '_mdjm_payment_to', true );
+				
+			}
+			
+			if ( ! empty( $payee ) )	{
+				
+				if ( is_numeric( $payee ) )	{
+					
+					$user = get_userdata( $payee );
+					
+					echo $user->display_name;
+					
+				} else	{
+					echo $payee;
+				}
+				
+			} else	{
+				_e( 'N/A', 'mobile-dj-manager' );	
+			}
 			
 			break;
 				

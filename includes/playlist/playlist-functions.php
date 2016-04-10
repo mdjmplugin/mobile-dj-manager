@@ -533,3 +533,16 @@ function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 	}
 	
 } // mdjm_playlist_category_dropdown
+
+/*
+ * Set the playlist guest access code.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The guest playlist access code.
+ */
+function mdjm_generate_playlist_guest_code()	{
+	$code = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ), 0, 9 );
+	
+	return apply_filters( 'mdjm_generate_playlist_guest_code', $code );
+} // mdjm_generate_playlist_guest_code

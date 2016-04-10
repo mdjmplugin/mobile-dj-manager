@@ -295,13 +295,17 @@ class MDJM_Event {
 			$employees_data = get_post_meta( $this->ID, '_mdjm_event_employees_data', true );
 			
 			if ( ! empty( $employees_data ) )	{
+				
 				foreach( $employees_data as $employee_data )	{
+					
 					$employees[ $employee_data['id'] ] = array(
 						'role_slug'	=> $employee_data['role'],
 						'role'		 => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
 						'wage'		 => $employee_data['wage']
 					);
+					
 				}
+				
 			}
 			
 		}

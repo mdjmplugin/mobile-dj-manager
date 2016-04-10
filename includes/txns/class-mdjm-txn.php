@@ -130,12 +130,13 @@ class MDJM_Txn {
 		}
 
 		$defaults = array(
-			'post_type'   => 'mdjm-transaction',
-			'post_status' => 'mdjm-pending',
-			'post_title'  => __( 'New Transaction', 'mobile-dj-manager' ),
-			'meta'		=> array(
-				'_mdjm_txn_source'	=> mdjm_get_option( 'default_type', __( 'Cash' ) ),
-				'_mdjm_txn_currency'  => mdjm_get_currency()
+			'post_type'		=> 'mdjm-transaction',
+			'post_status'	=> 'mdjm-pending',
+			'post_title'	=> __( 'New Transaction', 'mobile-dj-manager' ),
+			'post_content'	=> '',
+			'meta'			=> array(
+				'_mdjm_txn_source'		=> mdjm_get_option( 'default_type', __( 'Cash' ) ),
+				'_mdjm_txn_currency'	=> mdjm_get_currency()
 			)
 		);
 
