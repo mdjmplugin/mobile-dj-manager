@@ -41,6 +41,9 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 		'post_status'	=> 'publish'
 	);
 	
+	// Remove the save post hook for venue posts to avoid loops
+	remove_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
+	
 	/**
 	 * Allow filtering of the venue post data
 	 *
@@ -93,6 +96,9 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 	 * @param	str		$venue_id	Post ID of new venue
 	 */
 	do_action( 'mdjm_post_add_venue', $venue_id );
+	
+	// Re-add the save post hook for venue posts
+	add_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
 	
 	if( ! empty( $debug ) && MDJM_DEBUG == true )	{
 		
