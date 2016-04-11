@@ -528,7 +528,7 @@
 					) );
 				}
 				// Event Quotes
-				if( MDJM_ONLINE_QUOTES == true && mdjm_employee_can( 'list_own_quotes' ) )	{
+				if( mdjm_get_option( 'online_enquiry', false ) && mdjm_employee_can( 'list_own_quotes' ) )	{
 					$admin_bar->add_menu( array(
 						'id'     => 'mdjm-event-quotes',
 						'parent' => 'mdjm-events',

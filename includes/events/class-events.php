@@ -629,7 +629,7 @@
 							// Event type
 							'type'				=> $this->get_event_type( $post_id ),
 							// Online Quote
-							'online_quote'		=> ( MDJM_ONLINE_QUOTES == true && !empty( $online_quote ) ? $online_quote : '' ),
+							'online_quote'		=> mdjm_get_option( 'online_enquiry', false ) && ! empty( $online_quote ) ? $online_quote : '',
 							// Contract template
 							'contract'			=> ( !empty( $contract ) ? $contract : '' ),
 							// Date contract signed
@@ -836,7 +836,7 @@
 			}
 			
 			/* -- Generate online quote if configured -- */
-			if( MDJM_ONLINE_QUOTES == true && !empty( $_POST['mdjm_online_quote'] ) )	{
+			if( mdjm_get_option( 'online_enquiry', false ) && ! empty( $_POST['mdjm_online_quote'] ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( '	-- Generating event quote for event ' . $post_id );
 				
