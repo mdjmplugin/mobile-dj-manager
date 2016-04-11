@@ -215,8 +215,16 @@ function mdjm_set_event_type( $event_id, $type )	{
 	if ( ! is_array( $type ) )	{
 		$type = array( $type );
 	}
-		
-	return wp_set_object_terms( $event_id, $type, 'event-types', false );
+	
+	(int)$event_id;
+	
+	$set_event_terms = wp_set_object_terms( $event_id, $type, 'event-types', false );
+	
+	if( is_wp_error( $set_event_terms ) )	{
+		MDJM()->debug->log_it( sprintf( 'Unable to assign term ID %d to Event %d: %s', $type, $event_id, $set_event_terms->get_error_message() ), true );
+	}
+	
+	return;
 } // mdjm_get_event_type
 
 /**
@@ -534,21 +542,21 @@ function mdjm_add_event_meta( $event_id, $data )	{
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
 			$debug = sprintf( 'Adding %s value as %s', $key, $value );
-			add_post_meta( $post_id, $key, $value );
+			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
 			$debug = sprintf( 'Updating %s value as %s', $key, $value );
-			update_post_meta( $post_id, $key, $value );
+			update_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
 		
 			$debug = sprintf( 'Removing ', $current_meta[ $key ][0] );
-			delete_post_meta( $post_id, $key, $value );
+			delete_post_meta( $event_id, $key, $value );
 			
 			if( isset( $meta[ str_replace( '_mdjm_event', '', $key ) ] ) )	{
 				unset( $meta[ str_replace( '_mdjm_event', '', $key ) ] );

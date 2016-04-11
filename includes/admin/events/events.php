@@ -1101,14 +1101,14 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Assign the event type
 	$existing_event_type = wp_get_object_terms( $post_id, 'event-types' );
 		
-	mdjm_set_event_type( $post_id, $_POST['mdjm_event_type'] );
+	mdjm_set_event_type( $post_id, (int)$_POST['mdjm_event_type'] );
 	
 	/**
 	 * Update the event post meta data
 	 */
 	$debug[] = 'Beginning Meta Updates';
 	
-	mdjm_add_event_meta( $event_id, $event_data );
+	mdjm_add_event_meta( $post_id, $event_data );
 		
 	$debug[] = 'Meta Updates Completed';
 	
