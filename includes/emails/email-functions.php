@@ -78,6 +78,48 @@ function mdjm_send_email_content( $args )	{
 } // mdjm_send_email_content
 
 /**
+ * Email the quote email to the client from a customisable email template.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @return	void
+ */
+function mdjm_email_quote( $event_id )	{
+	
+	$event = mdjm_get_event( $event_id );
+
+	$from_name    = mdjm_email_set_from_name( 'enquiry', $event );
+	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'enquiry', $event );
+
+	$from_email   = mdjm_email_set_from_address( 'enquiry', $event );
+	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'enquiry', $event );
+
+	$client       = get_userdata( $event->client );
+	$to_email     = $client->user_email;
+
+	$subject      = mdjm_email_set_subject( mdjm_get_option( 'enquiry', false ), 'enquiry' );
+	$subject      = apply_filters( 'mdjm_enquiry_subject', wp_strip_all_tags( $subject ) );
+	$subject      = mdjm_do_content_tags( $subject, $event_id, $event->client );
+
+	$attachments  = apply_filters( 'mdjm_enquiry_attachments', array(), $event );
+	
+	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'enquiry', false ), 'enquiry' );
+	$message      = mdjm_do_content_tags( $message, $event_id, $event->client );
+
+	$emails = MDJM()->emails;
+
+	$emails->__set( 'event_id', $event->ID );
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_address', $from_email );
+	
+	$headers = apply_filters( 'mdjm_enquiry_headers', $emails->get_headers(), $event_id, $event->client );
+	$emails->__set( 'headers', $headers );
+
+	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s quotation and status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $event->post_status ) ) );
+	
+} // mdjm_email_enquiry_accepted
+
+/**
  * Email the contract email to the client from a customisable email template.
  *
  * @since	1.3
@@ -85,6 +127,7 @@ function mdjm_send_email_content( $args )	{
  * @return	void
  */
 function mdjm_email_enquiry_accepted( $event_id )	{
+	
 	$event = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'contract', $event );
@@ -114,8 +157,7 @@ function mdjm_email_enquiry_accepted( $event_id )	{
 	$headers = apply_filters( 'mdjm_contract_headers', $emails->get_headers(), $event_id, $event->client );
 	$emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Enquiry accepted and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
-	
+	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Enquiry accepted and %s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $event->post_status ) ) );
 	
 } // mdjm_email_enquiry_accepted
 	
@@ -127,6 +169,7 @@ function mdjm_email_enquiry_accepted( $event_id )	{
  * @return	void
  */
 function mdjm_email_booking_confirmation( $event_id )	{
+	
 	$event = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'booking_conf', $event );
@@ -156,12 +199,13 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$headers = apply_filters( 'mdjm_booking_conf_headers', $emails->get_headers(), $event_id, $event->client );
 	$emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and Event Status set to %s', 'mobile-dj-manager' ), mdjm_get_post_status_label( $event->post_status ) ) );
+	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and %s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $event->post_status ) ) );
 	
 	// Send a copy of this email to the primary employee
 	if ( mdjm_get_option( 'booking_conf_to_dj', false ) )	{
 		do_action( 'mdjm_employee_booking_conf_notice', $event );
 	}
+	
 } // mdjm_email_booking_confirmation
 
 /**
