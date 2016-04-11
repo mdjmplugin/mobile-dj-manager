@@ -34,14 +34,14 @@ function mdjm_accept_enquiry( $data )	{
 	
 	do_action( 'mdjm_pre_event_accept_enquiry', $mdjm_event->ID, $data );
 	
-	if( ! mdjm_update_event_status( $mdjm_event->ID, 'mdjm-contract', $mdjm_event->post_status, $data ) )	{
-		return false;
-	}
-	
-	$meta = array(
+	$data['meta'] = array(
 		'_mdjm_event_enquiry_accepted'	   => current_time( 'mysql' ),
 		'_mdjm_event_enquiry_accepted_by'	=> $current_user->ID
 	);
+	
+	if( ! mdjm_update_event_status( $mdjm_event->ID, 'mdjm-contract', $mdjm_event->post_status, $data ) )	{
+		return false;
+	}
 	
 	mdjm_add_journal( 
 		array(
