@@ -198,16 +198,15 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		'_mdjm_event_contract_approver_ip'	=> $_SERVER['REMOTE_ADDR'],
 		'_mdjm_event_last_updated_by'		=> get_current_user_id()
 	);
-	
-	// Add contract data to the event
-	mdjm_add_event_meta( $event_id, $event_meta );
-	
+		
 	// Update the event status
 	mdjm_update_event_status(
 		$event->ID,
 		'mdjm-approved',
 		$event->post_status,
-		array()
+		array(
+			'meta'	=> $event_meta
+		)
 	);
 	
 	mdjm_add_journal( 
