@@ -209,7 +209,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		$event->ID,
 		'mdjm-approved',
 		$event->post_status,
-		$args=array()
+		array()
 	);
 	
 	mdjm_add_journal( 

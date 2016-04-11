@@ -12,6 +12,104 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Adds a new venue.
+ *
+ * @since	1.3
+ * @param	str			$venue_name		The name of the venue.
+ * @param	arr			$venue_meta		Meta data for the venue.
+ * @return	int|bool	$venue_id		Post ID of the new venue or false on failure.
+ */
+function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
+	
+	if( ! mdjm_employee_can( 'add_venues' ) )	{
+		return false;
+	}
+	
+	if( empty( $venue_name ) && empty( $_POST['venue_name'] ) )	{
+		return false;
+	} elseif( ! empty( $venue_name ) )	{
+		$name = $venue_name;
+	} else	{
+		$name = $_POST['venue_name'];
+	}
+	
+	$args = array(
+		'post_title'	 => $name,
+		'post_content'   => '',
+		'post_type'	  => 'mdjm-venue',
+		'post_author'	=> get_current_user_id(),
+		'post_status'	=> 'publish'
+	);
+	
+	/**
+	 * Allow filtering of the venue post data
+	 *
+	 * @since	1.3
+	 * @param	arr		$args	Array of user data
+	 */
+	$args = apply_filters( 'mdjm_add_venue', $args );
+	
+	/**
+	 * Fire the `mdjm_pre_add_venue` action.
+	 *
+	 * @since	1.3
+	 * @param	str		$name		Name of venue
+	 * @param	arr		$venue_meta	Array of venue meta data
+	 */
+	do_action( 'mdjm_pre_add_venue', $name, $venue_meta );
+	
+	$venue_id = wp_insert_post( $args );
+	
+	if( empty( $venue_id ) )	{
+		
+		$debug[] = 'Adding new venue failed';
+		
+		return false;
+		
+	}
+	
+	$debug = sprintf( 'New venue %s (ID %s) added', $name, $venue_id );
+	
+	if( ! empty( $venue_meta ) )	{
+		
+		foreach( $venue_meta as $key => $value )	{
+			
+			if( !empty( $value ) && $key != 'venue_name' )	{
+				
+				$debug[] = sprintf( 'Updating venue %s. Adding %s with value of %s.', $name, $key, $value );
+				
+				add_post_meta( $venue_id, '_' . $key, $value );
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Fire the `mdjm_post_add_venue` action.
+	 *
+	 * @since	1.3
+	 * @param	str		$venue_id	Post ID of new venue
+	 */
+	do_action( 'mdjm_post_add_venue', $venue_id );
+	
+	if( ! empty( $debug ) && MDJM_DEBUG == true )	{
+		
+		$true = true;
+		
+		foreach( $debug as $log )	{
+			MDJM()->debug->log_it( $log, $true );
+			$true = false;
+		}
+		
+	}
+	
+	return $venue_id;
+	
+} // mdjm_add_venue
+
+/**
  * Retrieve all venue meta data for the given event
  *
  * @since	1.3
