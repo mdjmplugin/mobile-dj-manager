@@ -203,6 +203,23 @@ function mdjm_event_status_dropdown( $args='' )	{
 } // mdjm_event_status_dropdown
 
 /**
+ * Set the event type label for given event ID.
+ *
+ * @since	1.3
+ * @param	int			$event_id	Event ID.
+ * @param	int|arr		$type		The term ID of the category to set for the event.
+ * @return	bool		True on success, or false.
+ */
+function mdjm_set_event_type( $event_id, $type )	{
+	
+	if ( ! is_array( $type ) )	{
+		$type = array( $type );
+	}
+		
+	return wp_set_object_terms( $event_id, $type, 'event-types', false );
+} // mdjm_get_event_type
+
+/**
  * Return the event type label for given event ID.
  *
  * @since	1.3
@@ -572,11 +589,8 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args )	{
 		)
 	);
 	
-	update_post_meta(
-		$event_id,
-		'_mdjm_event_last_updated_by',
-		( is_user_logged_in() ) ? get_current_user_id() : 1
-	);
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	mdjm_add_event_meta( $event_id, $args['meta'] );
 	
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
