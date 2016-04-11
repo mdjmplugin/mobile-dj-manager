@@ -1390,7 +1390,7 @@ function mdjm_event_metabox_event_options( $post )	{
 			</div>				
 		</div>
 		<?php
-		if( MDJM_ONLINE_QUOTES == true )	{
+		if( mdjm_get_option( 'online_enquiry', false ) )	{
 			?>
 			<div class="mdjm-meta-row" style="height: 60px !important">
 				Online Quote Template:<br />
