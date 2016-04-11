@@ -1139,21 +1139,22 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 			
 			$debug[] = 'Adding journal entry';
 				
-			MDJM()->events->add_journal(
+			mdjm_add_journal( 
 				array(
-					'user' 			=> get_current_user_id(),
-					'comment_content' => sprintf( '%s %s via Admin' . '<br />(%s)',
-											mdjm_get_label_singular(),
-											empty( $update ) ? 'created' : 'updated',
-											current_time( 'timestamp' )
-										),
-					'comment_type' 	=> 'mdjm-journal'
+					'user'               => get_current_user_id(),
+					'event'              => $mdjm_event->ID,
+					'comment_content'    => sprintf( '%s %s via Admin' . '<br />(%s)',
+												mdjm_get_label_singular(),
+												empty( $update ) ? 'created' : 'updated',
+												current_time( 'timestamp' )
+											),
 				),
 				array(
-					'type' 		  => 'create-event',
-					'visibility'	=> '1'
+					'type'               => 'update-event',
+					'visibility'         => '2'
 				)
 			);
+
 		} else	{
 			$debug[] = 'Journalling is disabled';	
 		}
