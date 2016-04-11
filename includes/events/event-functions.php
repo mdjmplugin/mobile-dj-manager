@@ -490,12 +490,19 @@ function mdjm_time_until_event( $event_id )	{
  * We don't currently delete empty meta keys or values, instead we update with an empty value
  * if an empty value is passed to the function.
  *
+ * We may soon move to a configuration where all meta key => value pairs are stored in a single
+ * meta key (_mdjm_event_data). As a result there is some duplication here, but performance
+ * impact is minimal.
+ *
  * @since	1.3
  * @param	int		$event_id	The event ID.
  * @param	arr		$data		The appropriately formatted meta data values.
  * @return	void
  */
 function mdjm_add_event_meta( $event_id, $data )	{
+	
+	// For backwards compatibility
+	$current_meta = get_post_meta( $event_id );
 	
 	$meta = get_post_meta( $event_id, '_mdjm_event_data', true );
 	
@@ -505,14 +512,61 @@ function mdjm_add_event_meta( $event_id, $data )	{
 			continue;
 		}
 		
-		// For backwards comaptibility
-		update_post_meta( $event_id, $key, $value );
+		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
+			$value = mdjm_format_amount( $value );
+		} elseif( $key == 'venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
+			$value = strtoupper( $value );
+		} elseif( $key == 'venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
+			$value = strtolower( $value );
+		} elseif( $key == '_mdjm_event_package' && ! empty( $value ) )	{
+			$value = sanitize_text_field( strtolower( $value ) );	
+		} elseif( $key == '_mdjm_event_addons' && ! empty( $value ) )	{
+			$value = $value;
+		} elseif( ! strpos( $key, 'notes' ) && ! empty( $value ) )	{
+			$value = sanitize_text_field( ucwords( $value ) );
+		} elseif( ! empty( $value ) )	{
+			$value = sanitize_text_field( ucfirst( $value ) );
+		} else	{
+			$value = '';
+		}
 		
-		$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
+		// If we have a value and the key did not exist previously, add it.
+		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
+			
+			$debug = sprintf( 'Adding %s value as %s', $key, $value );
+			add_post_meta( $post_id, $key, $value );
+			
+			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
+			
+		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
+		
+			$debug = sprintf( 'Updating %s value as %s', $key, $value );
+			update_post_meta( $post_id, $key, $value );
+			
+			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
+			
+		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
+		
+			$debug = sprintf( 'Removing ', $current_meta[ $key ][0] );
+			delete_post_meta( $post_id, $key, $value );
+			
+			if( isset( $meta[ str_replace( '_mdjm_event', '', $key ) ] ) )	{
+				unset( $meta[ str_replace( '_mdjm_event', '', $key ) ] );
+			}
+			
+		}
 		
 	}
 	
 	update_post_meta( $event_id, '_mdjm_event_data', $meta );
+	
+	if ( ! empty( $debug ) )	{
+		
+		foreach( $debug as $log )	{
+			MDJM()->log_it( $log, false );
+		}
+		
+	}
 	
 } // mdjm_add_event_meta
 

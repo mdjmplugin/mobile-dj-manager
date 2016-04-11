@@ -1103,50 +1103,13 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	mdjm_set_event_type( $post_id, $_POST['mdjm_event_type'] );
 	
+	/**
+	 * Update the event post meta data
+	 */
 	$debug[] = 'Beginning Meta Updates';
 	
-	/**
-	 * Loop through the $event_data array, arrange the data and then store it.
-	 */ 
-	foreach( $event_data as $event_meta_key => $event_meta_value )	{
+	mdjm_add_event_meta( $event_id, $event_data );
 		
-		// Cost, deposit and main employee wage.		
-		if( $event_meta_key == '_mdjm_event_cost' || $event_meta_key == '_mdjm_event_deposit' || $event_meta_key == '_mdjm_event_dj_wage' )	{
-			$event_meta_value = $event_meta_value;
-		} elseif( $event_meta_key == 'venue_postcode' && ! empty( $event_meta_value ) )	{ // Postcodes are uppercase.
-			$event_meta_value = strtoupper( $event_meta_value );
-		} elseif( $event_meta_key == 'venue_email' && !empty( $event_meta_value ) )	{ // Emails are lowercase.
-			$event_meta_value = strtolower( $event_meta_value );
-		} elseif( $event_meta_key == '_mdjm_event_package' )	{
-			$event_meta_value = sanitize_text_field( strtolower( $event_meta_value ) );	
-		} elseif( $event_meta_key == '_mdjm_event_addons' )	{
-			$event_meta_value = $event_meta_value;
-		} elseif( !strpos( $event_meta_key, 'notes' ) )	{
-			$event_meta_value = sanitize_text_field( ucwords( $event_meta_value ) );
-		} else	{
-			$event_meta_value = sanitize_text_field( ucfirst( $event_meta_value ) );
-		}
-		
-		// If we have a value and the key did not exist previously, add it.
-		if( ! empty( $event_meta_value ) && ( empty( $current_meta[ $event_meta_key ] ) || empty( $current_meta[ $event_meta_key ][0] ) ) )	{
-			
-			$debug = sprintf( 'Adding %s value as %s', $event_meta_key, $event_meta_value );
-			add_post_meta( $post_id, $event_meta_key, $event_meta_value );
-			
-		} elseif ( ! empty( $event_meta_value ) && $event_meta_value != $current_meta[ $event_meta_key ][0] )	{ // If a value existed, but has changed, update it.
-		
-			$debug = sprintf( 'Updating %s value as %s', $event_meta_key, $event_meta_value );
-			update_post_meta( $post_id, $event_meta_key, $event_meta_value );
-			
-		} elseif ( empty( $event_meta_value ) && ! empty( $current_meta[ $event_meta_key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
-		
-			$debug = sprintf( 'Removing ', $current_meta[ $event_meta_key ][0] );
-			delete_post_meta( $post_id, $event_meta_key, $event_meta_value );
-			
-		}
-			
-	}
-	
 	$debug[] = 'Meta Updates Completed';
 	
 	/**
