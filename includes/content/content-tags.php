@@ -1566,7 +1566,7 @@ function mdjm_content_tag_payment_url()	{
  * @return	int|str	The number of days until the playlist for the event closes, or 'never' if it does not.
  */
 function mdjm_content_tag_playlist_close( $event_id='' )	{
-	$close = $_GLOBALS['mdjm_settings']['playlist']['close'];
+	$close = mdjm_get_option( 'close' );
 	
 	return !empty( $close ) ? $close : 'never';
 } // mdjm_content_tag_playlist_close

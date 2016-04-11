@@ -155,16 +155,16 @@ function mdjm_get_event_status( $event_id='' )	{
  *	@return	str		HTML for the select list
  */
 function mdjm_event_status_dropdown( $args='' )	{
-	global $mdjm, $post;
+	global $post;
 	
 	$defaults = array(
-		'name'				 => 'mdjm_event_status',
-		'id'				   => 'mdjm_event_status',
-		'selected'			 => ! empty( $post ) ? $post->post_status : 'mdjm-unattended',
-		'first_entry'		  => '',
-		'first_entry_value'	=> '0',
-		'small'				=> false,
-		'return_type'		  => 'list'
+		'name'					=> 'mdjm_event_status',
+		'id'					=> 'mdjm_event_status',
+		'selected'				=> ! empty( $post ) ? $post->post_status : 'mdjm-unattended',
+		'first_entry'			=> '',
+		'first_entry_value'		=> '0',
+		'small'					=> false,
+		'return_type'			=> 'list'
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -225,7 +225,8 @@ function mdjm_set_event_type( $event_id, $type )	{
 	}
 	
 	return;
-} // mdjm_get_event_type
+
+} // mdjm_set_event_type
 
 /**
  * Return the event type label for given event ID.
@@ -235,15 +236,16 @@ function mdjm_set_event_type( $event_id, $type )	{
  * @return	str		Label for current event type.
  */
 function mdjm_get_event_type( $event_id='' )	{
+	
 	global $post, $post_id;
 	
-	if( !empty( $event_id ) )	{
+	if( ! empty( $event_id ) )	{
 		$id = $event_id;
 	}
-	elseif( !empty( $post_id ) )	{
+	elseif( ! empty( $post_id ) )	{
 		$id = $post_id;
 	}
-	elseif( !empty( $post ) )	{
+	elseif( ! empty( $post ) )	{
 		$id = $post->ID;
 	}
 	else	{
@@ -254,6 +256,7 @@ function mdjm_get_event_type( $event_id='' )	{
 	
 	// Return the label for the status
 	return $event->get_type();
+
 } // mdjm_get_event_type
 
 /**
@@ -264,11 +267,13 @@ function mdjm_get_event_type( $event_id='' )	{
  * @return	str					The contract ID for the event.
  */
 function mdjm_get_event_contract_id( $event_id )	{
+	
 	if( empty( $event_id ) )	{
 		return false;
 	}
 
 	return mdjm_get_option( 'event_prefix', '' ) . $event_id;
+
 } // mdjm_get_event_contract_id
 
 /**
@@ -279,12 +284,15 @@ function mdjm_get_event_contract_id( $event_id )	{
  * @return	str					The date of the event.
  */
 function mdjm_get_event_date( $event_id )	{
+	
 	if( empty( $event_id ) )	{
 		return false;
 	}
 
 	$event = new MDJM_Event( $event_id );
+
 	return mdjm_format_short_date( $event->get_date() );
+
 } // mdjm_get_event_date
 
 /**
@@ -295,12 +303,15 @@ function mdjm_get_event_date( $event_id )	{
  * @return	str					The date of the event.
  */
 function mdjm_get_event_long_date( $event_id )	{
+	
 	if( empty( $event_id ) )	{
 		return false;
 	}
 
 	$event = new MDJM_Event( $event_id );
+	
 	return $event->get_long_date();
+
 } // mdjm_get_event_long_date
 
 /**
@@ -479,17 +490,21 @@ function mdjm_event_duration( $event_id )	{
  * @return	str		The length of the event.
  */
 function mdjm_time_until_event( $event_id )	{
+	
 	$start_time = get_post_meta( $event_id, '_mdjm_event_start', true );
 	$start_date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	
 	if( ! empty( $start_time ) && ! empty( $start_date ) )	{
+		
 		$start  = strtotime( $start_time . ' ' . $start_date );
 		$end    = strtotime( $end_time . ' ' . $end_date );
 		
 		$length = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
 		
 		return apply_filters( 'mdjm_time_until_event', $length );
+		
 	}
+
 } // mdjm_time_until_event
 
 /**
@@ -590,7 +605,7 @@ function mdjm_add_event_meta( $event_id, $data )	{
  */
 function mdjm_update_event_status( $event_id, $new_status, $old_status, $args = array() )	{
 	
-	if ( ! employee_can( 'manage_events' ) )	{
+	if ( ! mdjm_employee_can( 'manage_events' ) )	{
 		return false;
 	}
 	
@@ -680,14 +695,22 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 	
 	mdjm_add_event_meta( $event_id, $args['meta'] );
 	
-	// Email the client
-	if( ! empty( $args['client_notices'] ) )	{
-		mdjm_email_quote( $event_id );
+	// Generate an online quote that is visible via the Client Zone
+	if( ! empty( mdjm_get_option( 'online_enquiry', false ) ) )	{
+		
+		$quote_template = isset( $args['quote_template'] ) ? $args['quote_template'] : mdjm_get_option( 'online_enquiry' );
+		
+		$quote_id = mdjm_create_online_quote( $event_id, $quote_template );
+
 	}
 	
-	// Generate an online quote that is visible via the Client Zone
-	if( ! empty( mdjm_get_option( 'online_enquiry', false ) ) || ! empty( $args['online_quote'] ) )	{
+	// Email the client
+	if( ! empty( $args['client_notices'] ) )	{
+
+		$email_template = isset( $args['email_template'] ) ? $args['email_template'] : mdjm_get_option( 'enquiry' );
 		
+		mdjm_email_quote( $event_id, $email_template );
+
 	}
 		
 	return $update;
@@ -820,10 +843,98 @@ function mdjm_get_event_quote_id( $event_id )	{
 /**
  * Generates a new online quote for the event.
  *
+ * Uses the quote template defined within settings unless $template_id is provided.
+ *
  * @since	1.3
- * @param	int			$event_id	The event ID.
- * @return	int			Quote post ID false if no quote exists
+ * @param	int			$event_id		The event ID.
+ * @param	int			$template_id	The template ID from which to create the quote.
+ * @return	int			$quote_id		The ID of the newly created post or false on fail.
  */
-function mdjm_generate_online_quote( $event_id )	{
+function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 	
-} // mdjm_generate_online_quote
+	$existing_id = mdjm_get_event_quote_id( $event_id );
+	
+	$template_id = ! empty( $template_id ) ? $template_id : mdjm_get_option( 'online_enquiry' );
+	
+	if ( empty( $template_id ) )	{
+		return false;
+	}
+	
+	/**
+	 * Allow filtering of the quote template.
+	 *
+	 * @since	1.3
+	 * @param	$template_id
+	 */
+	$template_id = apply_filters( 'mdjm_online_quote_template', $template_id );
+	
+	$template = get_post( $template_id );
+	
+	if ( ! $template )	{
+		return false;
+	}
+	
+	/**
+	 * Fire the `mdjm_pre_create_online_quote` hook.
+	 *
+	 * @since	1.3
+	 * @param	int		$event_id		The Event ID
+	 * @param	int		$template_id	The quote template ID
+	 * @param	obj		$template		The quote template WP_Post object
+	 */
+	do_action( 'mdjm_pre_create_online_quote', $event_id, $template_id, $template );
+	
+	$client_id = mdjm_get_event_client_id( $event_id );
+	
+	$content = $template->post_content;
+	$content = apply_filters( 'the_content', $content );
+	$content = str_replace( ']]>', ']]&gt;', $content );
+	$content = mdjm_do_content_tags( $content, $event_id, $client_id );
+	
+	$args = array(
+		'ID'			=> $existing_id,
+		'post_date'		=> current_time( 'mysql' ),
+		'post_modified'	=> current_time( 'mysql' ),
+		'post_title'	=> sprintf( __( 'Quote %s', 'mobile-dj-manager' ), mdjm_get_event_contract_id( $event_id ) ),
+		'post_content'	=> $content,
+		'post_type'		=> 'mdjm-quotes',
+		'post_status'	=> 'mdjm-quote-generated',
+		'post_author'	=> ! empty( $client_id ) ? $client_id : 1,
+		'post_parent'	=> $event_id,
+		'meta_input'	=> array(
+			'_mdjm_quote_viewed_date'	=> 0,
+			'_mdjm_quote_viewed_count'	=> 0
+		)
+	);
+	
+	/**
+	 * Allow filtering of the quote template args.
+	 *
+	 * @since	1.3
+	 * @param	$args
+	 */
+	$args = apply_filters( 'mdjm_create_online_quote_args', $args );
+	
+	$quote_id = wp_insert_post( $args );
+	
+	if ( ! $quote_id )	{
+		return false;
+	}
+	
+	// Reset view date and count for existing quotes
+	if( ! empty( $existing_id ) )	{
+		delete_post_meta( $quote_id, '_mdjm_quote_viewed_date' );
+		delete_post_meta( $quote_id, '_mdjm_quote_viewed_count' );
+	}
+	
+	/**
+	 * Fire the `mdjm_post_create_online_quote` hook.
+	 *
+	 * @since	1.3
+	 * @param	int		$quote_id		The new quote ID
+	 */
+	do_action( 'mdjm_pre_create_online_quote', $quote_id );
+	
+	return $quote_id;
+	
+} // mdjm_create_online_quote

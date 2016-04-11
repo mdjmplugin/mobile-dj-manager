@@ -1330,7 +1330,7 @@ function mdjm_event_metabox_event_options( $post )	{
 	<div class="mdjm-meta-row">
 		<div class="mdjm-left-col">
 		<?php
-		echo '<input type="checkbox" name="mdjm_block_emails" id="mdjm_block_emails" value="Y"';
+		echo '<input type="checkbox" name="mdjm_block_emails" id="mdjm_block_emails" value="1"';
 		
 		if( $post->post_status == 'mdjm-unattended' )
 			echo ' onclick="showTemplateOptions();"';

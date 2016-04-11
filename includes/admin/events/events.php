@@ -1131,33 +1131,34 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
 		
-		mdjm_update_event_status( $post_id, $_POST['mdjm_event_status'], $_POST['original_post_status'] );
+		mdjm_update_event_status(
+			$post_id,
+			$_POST['mdjm_event_status'],
+			$_POST['original_post_status'],
+			array(
+				'client_notices'	=> empty( $_POST['mdjm_block_emails'] )		? true							: false,
+				'email_template'	=> ! empty( $_POST['mdjm_email_template'] )	? $_POST['mdjm_email_template']	: false,
+				'quote_template'	=> ! empty( $_POST['mdjm_online_quote'] )	? $_POST['mdjm_online_quote']	: false
+			)
+		);
 				
 	} else	{ // Event status is un-changed so just log the changes to the journal		
-		
-		if( MDJM_JOURNAL == true )	{
-			
-			$debug[] = 'Adding journal entry';
-				
-			mdjm_add_journal( 
-				array(
-					'user'               => get_current_user_id(),
-					'event'              => $mdjm_event->ID,
-					'comment_content'    => sprintf( '%s %s via Admin' . '<br />(%s)',
-												mdjm_get_label_singular(),
-												empty( $update ) ? 'created' : 'updated',
-												current_time( 'timestamp' )
-											),
-				),
-				array(
-					'type'               => 'update-event',
-					'visibility'         => '2'
-				)
-			);
-
-		} else	{
-			$debug[] = 'Journalling is disabled';	
-		}
+						
+		mdjm_add_journal( 
+			array(
+				'user'               => get_current_user_id(),
+				'event'              => $post_id,
+				'comment_content'    => sprintf( '%s %s via Admin' . '<br />(%s)',
+											mdjm_get_label_singular(),
+											empty( $update ) ? 'created' : 'updated',
+											current_time( 'timestamp' )
+										),
+			),
+			array(
+				'type'               => 'update-event',
+				'visibility'         => '2'
+			)
+		);
 		
 	}
 	

@@ -904,7 +904,7 @@
 			}
 			
 			/* -- Send emails as required -- */
-			if( empty( $_POST['mdjm_block_emails'] ) || $_POST['mdjm_block_emails'] != 'Y' )	{
+			if( empty( $_POST['mdjm_block_emails'] ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( '	-- Generating Email' );
 				
@@ -980,7 +980,7 @@
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 			}
 			
-			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
+			if( ! empty( $_POST['mdjm_block_emails'] ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Overiding client email settings' );
 				$contact_client = false;
@@ -1065,7 +1065,7 @@
 				wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 			}
 			
-			if( !empty( $_POST['mdjm_block_emails'] ) && $_POST['mdjm_block_emails'] == 'Y' )	{
+			if( ! empty( $_POST['mdjm_block_emails'] ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Overiding client email settings' );
 				$contact_client = false;
