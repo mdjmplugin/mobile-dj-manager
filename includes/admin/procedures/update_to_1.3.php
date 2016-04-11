@@ -88,6 +88,27 @@ function mdjm_terms_13()	{
 add_action( 'init', 'mdjm_terms_13', 15 );
 
 /**
+ * Update the post meta key '_mdjm_signed_contract' to the correct
+ * naming format.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ *
+ */
+function mdjm_update_contract_meta_key_13()	{
+	global $wpdb;
+	
+	$wpdb->update(
+		$wpdb->postmeta,
+		array( 'meta_key' => '_mdjm_event_signed_contract' ),
+		array( 'meta_key' => '_mdjm_signed_contract' )
+	);
+	
+} // mdjm_update_contract_meta_key_13
+add_action( 'init', 'mdjm_update_contract_meta_key_13' );
+
+/**
  * Import playlist entries from custom DB table.
  *
  * Loop through all entries in the custom table, create posts for them and assign the terms.
