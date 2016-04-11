@@ -541,21 +541,21 @@ function mdjm_add_event_meta( $event_id, $data )	{
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
-			$debug = sprintf( 'Adding %s value as %s', $key, $value );
+			$debug[] = sprintf( __( 'Adding %s value as %s' ), $key, $value );
 			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
-			$debug = sprintf( 'Updating %s value as %s', $key, $value );
+			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, $value );
 			update_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
 		
-			$debug = sprintf( 'Removing ', $current_meta[ $key ][0] );
+			$debug[] = sprintf( __( 'Removing %s' ), $current_meta[ $key ][0] );
 			delete_post_meta( $event_id, $key, $value );
 			
 			if( isset( $meta[ str_replace( '_mdjm_event', '', $key ) ] ) )	{
@@ -571,7 +571,7 @@ function mdjm_add_event_meta( $event_id, $data )	{
 	if ( ! empty( $debug ) )	{
 		
 		foreach( $debug as $log )	{
-			MDJM()->log_it( $log, false );
+			MDJM()->debug->log_it( $log, false );
 		}
 		
 	}

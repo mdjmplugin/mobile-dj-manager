@@ -128,7 +128,7 @@
 						
 						/* -- Update the event -- */
 						$event_meta = array(
-							'_mdjm_signed_contract'				=> $signed_contract,
+							'_mdjm_event_signed_contract'				=> $signed_contract,
 							'_mdjm_event_contract_approved'		=> date( 'Y-m-d H:i:s' ),
 							'_mdjm_event_contract_approver'		=> ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] ),
 							'_mdjm_event_contract_approver_ip'	 => $_SERVER['REMOTE_ADDR'],
@@ -436,7 +436,7 @@
 				$contract = $this->event_contract;
 				
 				if( $this->event->post_status == 'mdjm-approved' || $this->event->post_status == 'mdjm-completed' )	{
-					$contract_id = get_post_meta( $this->event->ID, '_mdjm_signed_contract', true );
+					$contract_id = get_post_meta( $this->event->ID, '_mdjm_event_signed_contract', true );
 					$contract = get_post( $contract_id );
 					
 					$prefix = '<p class="signed">' . __( 'This contract has been signed' ) . '<br>' . "\r\n";

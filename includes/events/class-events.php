@@ -578,7 +578,7 @@
 			$setup_time = get_post_meta( $post_id, '_mdjm_event_djsetup_time', true );
 			$contract = get_post_meta( $post_id, '_mdjm_event_contract', true );
 			$contract_date = get_post_meta( $post_id, '_mdjm_event_contract_approved', true );
-			$signed_contract = get_post_meta( $post_id, '_mdjm_signed_contract', true );
+			$signed_contract = get_post_meta( $post_id, '_mdjm_event_signed_contract', true );
 			$notes = get_post_meta( $post_id, '_mdjm_event_notes', true );
 			$dj_notes = get_post_meta( $post_id, '_mdjm_event_dj_notes', true );
 			$admin_notes = get_post_meta( $post_id, '_mdjm_event_admin_notes', true );

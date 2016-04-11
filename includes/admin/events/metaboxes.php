@@ -1323,7 +1323,7 @@ function mdjm_event_metabox_event_options( $post )	{
 			</select>
 			<?php
 			if( mdjm_employee_can( 'manage_mdjm' ) && ( $post->post_status == 'mdjm-approved' || $post->post_status == 'mdjm-completed' ) )
-				echo '<a id="view_contract" class="side-meta" href="' . mdjm_get_formatted_url( get_post_meta( $post->ID, '_mdjm_signed_contract', true ), false ) . '" target="_blank">View Signed Contract</a>';
+				echo '<a id="view_contract" class="side-meta" href="' . mdjm_get_formatted_url( get_post_meta( $post->ID, '_mdjm_event_signed_contract', true ), false ) . '" target="_blank">View Signed Contract</a>';
 			?>
 		</div>
 	</div>

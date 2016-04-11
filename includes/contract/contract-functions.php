@@ -192,7 +192,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	add_post_meta( $signed_contract, '_mdjm_contract_signed_name', ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ), true );
 	
 	$event_meta = array(
-		'_mdjm_signed_contract'				=> $signed_contract_id,
+		'_mdjm_event_signed_contract'			=> $signed_contract_id,
 		'_mdjm_event_contract_approved'		=> current_time( 'mysql' ),
 		'_mdjm_event_contract_approver'		=> strip_tags( addslashes( ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) ) ),
 		'_mdjm_event_contract_approver_ip'	=> $_SERVER['REMOTE_ADDR'],
@@ -200,9 +200,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	);
 	
 	// Add contract data to the event
-	foreach( $event_meta as $key => $value )	{
-		update_post_meta( $event->ID, $key, $value );
-	}
+	mdjm_add_event_meta( $event_id, $event_meta );
 	
 	// Update the event status
 	mdjm_update_event_status(
