@@ -39,6 +39,8 @@ function mdjm_accept_enquiry( $data )	{
 		'_mdjm_event_enquiry_accepted_by'	=> $current_user->ID
 	);
 	
+	$data['client_notices'] = mdjm_get_option( 'contract_to_client' );
+	
 	if( ! mdjm_update_event_status( $mdjm_event->ID, 'mdjm-contract', $mdjm_event->post_status, $data ) )	{
 		return false;
 	}
@@ -54,12 +56,7 @@ function mdjm_accept_enquiry( $data )	{
 			'visibility'		=> '2'
 		)
 	);
-	
-	// Send the email confirmations
-	if( ! empty( mdjm_get_option( 'contract_to_client' ) ) )	{
-		mdjm_email_enquiry_accepted( $mdjm_event->ID );
-	}
-	
+		
 	$content = '<html>' . "\n" . '<body>' . "\n";
 	$content .= '<p>' . sprintf( 
 							__( 'Good news... %s has just accepted their %s quotation via %s', 'mobile-dj-manager' ), 

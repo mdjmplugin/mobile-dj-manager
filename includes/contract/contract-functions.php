@@ -205,7 +205,8 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		'mdjm-approved',
 		$event->post_status,
 		array(
-			'meta'	=> $event_meta
+			'meta'			  => $event_meta,
+			'client_notices'	=> mdjm_get_option( 'booking_conf_to_client' )
 		)
 	);
 	
