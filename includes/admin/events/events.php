@@ -898,8 +898,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	// Permission Check
 	if( ! mdjm_employee_can( 'manage_events' ) )	{
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit events' );
+		if( MDJM_DEBUG == true )	{
+			MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
+		}
 		 
 		return;
 	}
@@ -910,9 +911,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Fire our pre-save hook
 	do_action( 'mdjm_pre_event_save', $post_id, $post, $update );
 	
-	if( MDJM_DEBUG == true )	{
-		MDJM()->debug->log_it( 'Starting Event Save', true );
-	}
+	$debug[] = 'Starting Event Save';
 				
 	// Get current meta data for the post so we can track changes within the journal.
 	$current_meta = get_post_meta( $post_id );
@@ -923,9 +922,6 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * If adding a new client, call the method and use the returned user ID.
 	 */
 	$event_data['_mdjm_event_client'] = $_POST['client_name'] != 'add_new' ? $_POST['client_name'] : mdjm_add_client();
-		
-	if( ! empty( $update ) && ! empty( $_POST['client_name'] ) && $_POST['client_name'] != $current_meta['_mdjm_event_client'][0] )
-		$field_updates[] = '     | Client changed to ' . $event_data['_mdjm_event_client'];
 		
 	/**
 	 * For new events we fire the 'mdjm_add_new_event' action
@@ -940,9 +936,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 */
 	if( !empty( $_POST['mdjm_reset_pw'] ) )	{
 		
-		if( MDJM_DEBUG == true )	{
-			MDJM()->debug->log_it( sprintf( 'Client %s flagged for password reset' ), $event_data['_mdjm_event_client'] );
-		}
+		$debug[] = sprintf( 'Client %s flagged for password reset', $event_data['_mdjm_event_client'] );
 			
 		update_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action', true );
 	}
@@ -963,13 +957,13 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * If the option was selected to save the venue, prepare the post and post meta data
 	 * for the venue.
 	 */
-	if( $_POST['venue_id'] == 'manual' && !empty( $_POST['save_venue'] ) )	{
+	if( $_POST['venue_id'] == 'manual' && ! empty( $_POST['save_venue'] ) )	{
 		
 		foreach( $_POST as $venue_key => $venue_value )	{
 			
 			if( substr( $venue_key, 0, 6 ) == 'venue_' )	{
 				
-				$venue_meta[$venue_key] = $venue_value;
+				$venue_meta[ $venue_key ] = $venue_value;
 				
 				if( $venue_key == 'venue_postcode' && ! empty( $venue_value ) )	{
 					$venue_meta[ $venue_key ] = strtoupper( $venue_value );
@@ -983,16 +977,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 			
 		}
 		
-		// Remove the save post hook for venue posts and insert the new venue
-		remove_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
-		
-		$event_data['_mdjm_event_venue_id'] = MDJM()->events->mdjm_add_venue( 
-			array( 'venue_name' => $_POST['venue_name'] ),
-			$venue_meta
-		);
-		
-		add_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
-		
+		// Create the new venue		
+		$event_data['_mdjm_event_venue_id'] = mdjm_add_venue( $_POST['venue_name'], $venue_meta );
+				
 	}
 	
 	// The venue is set to manual or client for this event so store the values in event post meta data.
@@ -1018,7 +1005,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 			
 			$event_data['_mdjm_event_venue_contact']	= sprintf( '%s %s',
 				! empty( $client_data->first_name )		? sanitize_text_field( $client_data->first_name )	: '',
-				! empty( $client_data->last_name )		? sanitize_text_field( $client_data->last_name )	: ''
+				! empty( $client_data->last_name )		 ? sanitize_text_field( $client_data->last_name )	 : ''
 			);
 			
 			$event_data['_mdjm_event_venue_phone']		= ! empty( $client_data->phone1 )		? $client_data->phone1		: '';
@@ -1041,15 +1028,18 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	/**
 	 * Event name.
 	 * If no name is defined, use the event type.
+	 * Allow filtering of the event name with the `mdjm_event_name` filter.
 	 */
 	if( empty( $_POST['_mdjm_event_name'] ) )	{
 		$_POST['_mdjm_event_name'] = get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
 	}
+	
 	$_POST['_mdjm_event_name'] = apply_filters( 'mdjm_event_name', $_POST['_mdjm_event_name'], $post_id );
 		
 	// Generate the playlist reference for guest access						
-	if( empty( $update ) || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )
+	if( empty( $update ) || empty( $current_meta['_mdjm_event_playlist_access'][0] ) )	{
 		$event_data['_mdjm_event_playlist_access'] = mdjm_generate_playlist_guest_code();
+	}
 	
 	// Set whether or not the playlist is enabled for the event
 	$event_data['_mdjm_event_playlist'] = ! empty( $_POST['enable_playlist'] ) ? $_POST['enable_playlist'] : 'N';
@@ -1105,20 +1095,15 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	
 	// Add-Ons
 	if( MDJM_PACKAGES == true )	{
-		$event_data['_mdjm_event_addons'] = !empty( $_POST['event_addons'] ) ? $_POST['event_addons'] : '';
+		$event_data['_mdjm_event_addons'] = ! empty( $_POST['event_addons'] ) ? $_POST['event_addons'] : '';
 	}
 	
 	// Assign the event type
-	$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
+	$existing_event_type = wp_get_object_terms( $post_id, 'event-types' );
+		
+	mdjm_set_event_type( $post_id, $_POST['mdjm_event_type'] );
 	
-	if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )	{
-		$field_updates[] = 'Event Type changed to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
-	}
-	
-	MDJM()->events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
-	
-	if( MDJM_DEBUG == true )
-		 MDJM()->debug->log_it( 'Beginning Meta Updates' );
+	$debug[] = 'Beginning Meta Updates';
 	
 	/**
 	 * Loop through the $event_data array, arrange the data and then store it.
@@ -1144,31 +1129,37 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 		// If we have a value and the key did not exist previously, add it.
 		if( ! empty( $event_meta_value ) && ( empty( $current_meta[ $event_meta_key ] ) || empty( $current_meta[ $event_meta_key ][0] ) ) )	{
+			
+			$debug = sprintf( 'Adding %s value as %s', $event_meta_key, $event_meta_value );
 			add_post_meta( $post_id, $event_meta_key, $event_meta_value );
 			
-		} elseif ( !empty( $event_meta_value ) && $event_meta_value != $current_meta[ $event_meta_key ][0] )	{ // If a value existed, but has changed, update it.
+		} elseif ( ! empty( $event_meta_value ) && $event_meta_value != $current_meta[ $event_meta_key ][0] )	{ // If a value existed, but has changed, update it.
+		
+			$debug = sprintf( 'Updating %s value as %s', $event_meta_key, $event_meta_value );
 			update_post_meta( $post_id, $event_meta_key, $event_meta_value );
-		} elseif ( empty( $event_meta_value ) && !empty( $current_meta[ $event_meta_key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
+			
+		} elseif ( empty( $event_meta_value ) && ! empty( $current_meta[ $event_meta_key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
+		
+			$debug = sprintf( 'Removing ', $current_meta[ $event_meta_key ][0] );
 			delete_post_meta( $post_id, $event_meta_key, $event_meta_value );
+			
 		}
 			
 	}
 	
-	if( MDJM_DEBUG == true )	{
-		MDJM()->debug->log_it( 'Meta Updates Completed     ' . PHP_EOL . '| ' .
-			( !empty( $field_updates ) ? implode( "\r\n" . '     | ', $field_updates ) : '' )  );
-	}
+	$debug[] = 'Meta Updates Completed';
 	
 	/**
 	 * Check for manual payment received & process.
 	 * This needs to be completed before we send any emails to ensure shortcodes are correct.
 	 */
 	if( $deposit_payment == true || $balance_payment == true )	{
-		if( $balance_payment == true )
+		
+		if( $balance_payment == true )	{
 			$type = mdjm_get_balance_label();
-			
-		else
+		} else	{
 			$type = mdjm_get_deposit_label();
+		}
 		
 		// Insert the event transaction
 		MDJM()->txns->manual_event_payment( $type, $post_id );
@@ -1176,54 +1167,34 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
-		$event_stati = mdjm_all_event_status();
 		
-		$field_updates[] = 'Event status ' . 
-			( isset( $event_stati[$_POST['original_post_status']] ) ? 'set ' : 'changed from ' ) . 
-				( $_POST['original_post_status'] != 'auto-draft' ? $event_stati[$_POST['original_post_status']] : 'new' ) . 
-			' to ' . $event_stati[$_POST['mdjm_event_status']];
-		
-		wp_transition_post_status( $_POST['mdjm_event_status'], $_POST['original_post_status'], $post );
-		wp_update_post( array( 'ID' => $post_id, 'post_status' => $_POST['mdjm_event_status'] ) );
-		
-		$method = 'status_' . substr( $_POST['mdjm_event_status'], 5 );
-		
-		if( method_exists( MDJM()->events, $method ) )
-			MDJM()->events->$method( $post_id, $post, $event_data, $field_updates );
-		
-		// Remove password reset flag if set
-		if( !empty( $pass_reset ) )	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'Removing password reset flag' );
-			
-			delete_user_meta( $event_data['_mdjm_event_client'], 'mdjm_pass_action' );
-		}	
-	} // if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )
-	
-	// Event status is un-changed so simply log the changes to the journal
-	else	{		
-		if( MDJM_JOURNAL == true )	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'Adding journal entry' );
+		mdjm_update_event_status( $post_id, $_POST['mdjm_event_status'], $_POST['original_post_status'] );
 				
-			MDJM()->events->add_journal( array(
-						'user' 			=> get_current_user_id(),
-						'comment_content' => 'Event ' . ( empty( $update ) ? 
-												'created' : 'updated' ) . ' via Admin <br /><br />' .
-											 	( isset( $field_updates ) ? 
-													implode( '<br />', $field_updates ) : 
-												'' ) . '<br />(' . time() . ')',
-						'comment_type' 	=> 'mdjm-journal',
-						),
-						array(
-							'type' 		  => 'create-event',
-							'visibility'	=> '1',
-						) );
+	} else	{ // Event status is un-changed so just log the changes to the journal		
+		
+		if( MDJM_JOURNAL == true )	{
+			
+			$debug[] = 'Adding journal entry';
+				
+			MDJM()->events->add_journal(
+				array(
+					'user' 			=> get_current_user_id(),
+					'comment_content' => sprintf( '%s %s via Admin' . '<br />(%s)',
+											mdjm_get_label_singular(),
+											empty( $update ) ? 'created' : 'updated',
+											current_time( 'timestamp' )
+										),
+					'comment_type' 	=> 'mdjm-journal'
+				),
+				array(
+					'type' 		  => 'create-event',
+					'visibility'	=> '1'
+				)
+			);
+		} else	{
+			$debug[] = 'Journalling is disabled';	
 		}
-		else	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'Journalling is disabled' );	
-		}
+		
 	}
 	
 	// Fire the save event hook
@@ -1235,8 +1206,18 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Re-add the save post action to avoid loops
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
-	if( MDJM_DEBUG == true )
-		MDJM()->debug->log_it( 'Completed Event Save', true );
+	$debug[] = sprintf( 'Completed Event Save for event %s', $post_id );
+	
+	if( ! empty( $debug ) && MDJM_DEBUG == true )	{
+		
+		$true = true;
+		
+		foreach( $debug as $log )	{
+			MDJM()->debug->log_it( $log, $true );
+			$true = false;
+		}
+		
+	}
 	
 } // mdjm_save_event_post
 add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
