@@ -176,11 +176,14 @@ function mdjm_event_metabox_client_details( $post )	{
 		
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
 	
-	$clients = get_users( array(
-							'role' => 'client',
-							'orderby' => 'display_name',
-							'order' => 'ASC',
-							) );
+	$clients = get_users(
+		array(
+			'role' => 'client',
+			'orderby' => 'display_name',
+			'order' => 'ASC',
+		)
+	);
+	
 	$client_id = get_post_meta( $post->ID, '_mdjm_event_client', true );
 	
 	?>
@@ -294,7 +297,7 @@ function mdjm_event_metabox_client_details( $post )	{
 	<div id="client_details">
 		<div class="mdjm-post-row" style="height: 80px;">
 			<div class="mdjm-post-2column">
-				<p><span class="mdjm-label"><?php printf( __( 'Last Login to %s', 'mobile-dj-manager' ), MDJM_APP ); ?></span>:<br />
+				<p><span class="mdjm-label"><?php printf( __( 'Last Login to %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></span>:<br />
 					<?php echo ( !empty( $last_login ) ? date( 'H:i d M Y', strtotime( $last_login ) ) : 'Never' ); ?> </p>
 			</div>
 			<div class="mdjm-post-last-2column">
@@ -310,8 +313,8 @@ function mdjm_event_metabox_client_details( $post )	{
 		</div>
 		<?php
 		if( mdjm_employee_can( 'list_own_quotes' ) )	{
-			$quote = MDJM()->events->retrieve_quote( $post->ID );
-			if( !empty( $quote ) )	{
+			//$quote = mdjm_get_event_quote_id( $post->ID );
+			if( ! empty( $quote ) )	{
 				?>
 				<div class="mdjm-post-row-single" style="height: 80px;">
 					<div class="mdjm-post-1column">

@@ -805,11 +805,13 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
  * @return	obj			Quote post object or false if no quote exists
  */
 function mdjm_get_event_quote( $event_id )	{
+	
 	$quote = get_posts( 
 		array( 
-			'numberposts'		=> 1,
+			'posts_per_page'	 => 1,
 			'post_parent'		=> $event_id,
-			'post_type'		  => 'mdjm-quotes'
+			'post_type'		  => 'mdjm-quotes',
+			'post_status'		=> 'any'
 		)
 	);
 								
@@ -831,7 +833,7 @@ function mdjm_get_event_quote( $event_id )	{
 function mdjm_get_event_quote_id( $event_id )	{
 	
 	$quote = mdjm_get_event_quote( $event_id );
-								
+									
 	if( $quote )	{
 		return $quote->ID;
 	} else	{
