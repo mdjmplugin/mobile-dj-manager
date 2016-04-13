@@ -494,11 +494,17 @@ function mdjm_list_event_employees( $event_id )	{
 						$output .= '&mdash;';
 					}
 			$output .= '</td>' . "\r\n";
-			$output .= '<td style="text-align:left;">' .
-				sprintf( 
+			$output .= '<td style="text-align:left;">';
+			
+			if( mdjm_employee_can( 'mdjm_event_edit' ) )	{
+				$output .= sprintf( 
 					__( '<a class="remove_event_employee" href="" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
-				) . '</td>' . "\r\n";
-				
+				);
+			} else	{
+				$output .= '';
+			}
+			
+			$output .= '</td>' . "\r\n";	
 			$output .= '</tr>' . "\r\n";
 		}
 		
