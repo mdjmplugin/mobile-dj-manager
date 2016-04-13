@@ -561,10 +561,12 @@ function mdjm_get_playlist_entries_to_upload()	{
 		'post_status'		=> 'publish',
 		'posts_per_page'	=> -1,
 		'meta_query'		=> array(
-			'key'			=> '_mdjm_playlist_entry_uploaded',
-			'value'			=> true,
-			'compare'		=> '!=',
-			'type'			=> 'NUMERIC'
+			array(
+				'key'			=> '_mdjm_playlist_entry_uploaded',
+				'value'			=> true,
+				'compare'		=> '!=',
+				'type'			=> 'NUMERIC'
+			)
 		)
 	);
 	
@@ -705,7 +707,7 @@ function mdjm_process_playlist_upload()	{
  */
 function mdjm_get_pending_upload_playlist_entry_count()	{
 	
-	$entries = mdjm_prepare_playlist_upload_data();
+	$entries = mdjm_get_playlist_entries_to_upload();
 	
 	$count = 0;
 	
@@ -731,10 +733,12 @@ function mdjm_get_uploaded_playlist_entry_count()	{
 		'post_status'		=> 'publish',
 		'posts_per_page'	=> -1,
 		'meta_query'		=> array(
-			'key'			=> '_mdjm_playlist_entry_uploaded',
-			'value'			=> true,
-			'compare'		=> '=',
-			'type'			=> 'NUMERIC'
+			array(
+				'key'			=> '_mdjm_playlist_entry_uploaded',
+				'value'			=> true,
+				'compare'		=> '=',
+				'type'			=> 'NUMERIC'
+			)
 		)
 	);
 	

@@ -194,7 +194,7 @@
 				}
 				else	{
 					?>
-                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $schedule['active'], 'Y' ); ?> disabled="disabled" title="This setting is set on the General tab of the settings pages. it cannot be adjusted here" /></td>
+                    <td><input type="checkbox" name="task_id[]" id="task_id" value="<?php echo $schedule['slug']; ?>"<?php checked( $schedule['active'], 'Y' ); ?> disabled="disabled" title="This setting is set within Playlist Settings on the Events tab of the settings pages. It cannot be adjusted here" /></td>
                     <?php
 				}
 				?>
