@@ -877,6 +877,69 @@ function mdjm_event_post_search( $query )	{
 add_action( 'pre_get_posts', 'mdjm_event_post_search' );
 
 /**
+ * Map the meta capabilities
+ *
+ * @since	1.3
+ * @param	arr		$caps		The users actual capabilities
+ * @param	str		$cap		The capability name
+ * @param	int		$user_id	The user ID
+ * @param	arr		$args		Adds the context to the cap. Typically the object ID.
+ */
+function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args )	{
+	
+	// If editing, deleting, or reading an event, get the post and post type object.
+	if ( 'edit_mdjm_event' == $cap || 'delete_mdjm_event' == $cap || 'read_mdjm_event' == $cap || 'publish_mdjm_event' == $cap ) {
+		
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+		// Set an empty array for the caps.
+		$caps = array();
+		
+	}
+			
+	// If editing a event, assign the required capability. */
+	if ( 'edit_mdjm_event' == $cap )	{
+		
+		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
+			$caps[] = $post_type->cap->edit_posts;
+		} else	{
+			$caps[] = $post_type->cap->edit_others_posts;
+		}
+
+	}
+	
+	// If deleting a event, assign the required capability.
+	elseif ( 'delete_mdjm_event' == $cap ) {
+		
+		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
+			$caps[] = $post_type->cap->delete_posts;
+		} else	{
+			$caps[] = $post_type->cap->delete_others_posts;
+		}
+
+	}
+	
+	// If reading a private event, assign the required capability.
+	elseif ( 'read_mdjm_event' == $cap )	{
+
+		if ( 'private' != $post->post_status )	{
+			$caps[] = 'read';
+		} elseif ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
+			$caps[] = 'read';
+		} else	{
+			$caps[] = $post_type->cap->read_private_posts;
+		}
+
+	}
+	
+	// Return the capabilities required by the user.
+	return $caps;
+	
+} // mdjm_event_map_meta_cap
+add_filter( 'map_meta_cap', 'mdjm_event_map_meta_cap', 10, 4 );
+
+/**
  * Save the meta data for the event
  *
  * @since	0.7

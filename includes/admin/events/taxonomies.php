@@ -11,7 +11,7 @@ function mdjm_add_event_type_fields( $tag )	{
 	?>
     <div class="form-field term-group">
         <label for="event_type_default"><?php printf( __( 'Set as Default %s type?', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label>
-        <input type="checkbox" name="event_type_default" id="event_type_default" value="<?php echo $tag->term_id; ?>" />
+        <input type="checkbox" name="event_type_default" id="event_type_default" value="1" />
     </div>
     <?php
 	

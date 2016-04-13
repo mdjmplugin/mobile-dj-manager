@@ -634,7 +634,7 @@ function mdjm_event_metabox_event_details( $post )	{
  * @return
  */
 function mdjm_event_metabox_event_employees( $post )	{
-	global $pagenow;
+	global $pagenow, $current_user;
 	?>
     <div class="mdjm-post-row">
 		<div class="mdjm-post-2column">

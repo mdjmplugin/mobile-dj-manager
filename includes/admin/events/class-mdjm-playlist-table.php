@@ -197,7 +197,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 * @return	str
 	 */
 	public function column_song( $item )	{
-				
+						
 		$title = '<strong>' . $item['song'] . '</strong>';
 
 		$url = add_query_arg(
@@ -207,7 +207,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 				'mdjm_nonce'	=> wp_create_nonce( 'remove_playlist_entry' )
 			)
 		);
-		$actions['delete'] = sprintf( __( '<a href="%s">Delete</a>', 'mobile-dj-manager' ), $url );
+		$actions['delete'] = mdjm_employee_can( 'manage_events' ) ? sprintf( __( '<a href="%s">Delete</a>', 'mobile-dj-manager' ), $url ) : '';
 
 		return $title . $this->row_actions( $actions );
 		
@@ -263,6 +263,10 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 			'added_by'	=> __( 'Added By', 'mobile-dj-manager' ),
 			'date'		=> __( 'Date Added', 'mobile-dj-manager' )
 		);
+		
+		if( ! mdjm_employee_can( 'manage_events' ) )	{
+			unset( $columns['cb'] );
+		}
 
 		return $columns;
 		
@@ -298,7 +302,11 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 */
 	public function get_bulk_actions() {
 		
-		$actions['bulk-delete'] = 'Delete';
+		$actions = array();
+		
+		if( mdjm_employee_can( 'manage_events' ) )	{
+			$actions['bulk-delete'] = 'Delete';
+		}
 		
 		return $actions;
 		

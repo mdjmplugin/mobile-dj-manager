@@ -160,56 +160,66 @@ class MDJM_Permissions	{
 			case 'mdjm_event_none':
 				$caps = array( 
 					'mdjm_event_read' => false, 'mdjm_event_read_own' => false, 'mdjm_event_edit' => false,
-					'mdjm_event_edit_own' => false, 'edit_mdjm_events' => false, 'edit_others_mdjm_events' => false,
+					'mdjm_event_edit_own' => false, /*'edit_mdjm_events' => false, 'edit_others_mdjm_events' => false,
 					'publish_mdjm_events' => false, 'read_private_mdjm_events' => true,
 					'edit_published_mdjm_events' => false, 'edit_private_mdjm_events' => false, 'delete_mdjm_events' => false,
 					'delete_others_mdjm_events' => false, 'delete_private_mdjm_events' => false,
-					'delete_published_mdjm_events' => false
+					'delete_published_mdjm_events' => false*/
+					'publish_mdjm_events' => false, 'edit_mdjm_events' => false, 'edit_others_mdjm_events' => false,
+					'delete_mdjm_events' => false, 'delete_others_mdjm_events' => false, 'read_private_mdjm_events' => false
 				);
 				break;
 				
 			case 'mdjm_event_read_own':
 				$caps = array( 
 					'mdjm_event_read' => false, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => false,
-					'mdjm_event_edit_own' => false, 'edit_mdjm_event' => true, 'read_mdjm_event' => true, 
+					'mdjm_event_edit_own' => false, /*'edit_mdjm_event' => true, 'read_mdjm_event' => true, 
 					'delete_mdjm_event' => false, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
 					'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
 					'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => false,
 					'delete_others_mdjm_events' => false, 'delete_private_mdjm_events' => false,
-					'delete_published_mdjm_events' => false
+					'delete_published_mdjm_events' => false*/
+					'publish_mdjm_events' => false, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'delete_mdjm_events' => false, 'delete_others_mdjm_events' => false, 'read_private_mdjm_events' => true
 				);
 				break;
 				
 			case 'mdjm_event_read':
 				$caps = array( 
 					'mdjm_event_read' => true, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => false,
-					'mdjm_event_edit_own' => false, 'edit_mdjm_events' => true,'edit_others_mdjm_events' => true,
+					'mdjm_event_edit_own' => false, /*'edit_mdjm_events' => true,'edit_others_mdjm_events' => true,
 					'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
 					'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => false,
 					'delete_others_mdjm_events' => false, 'delete_private_mdjm_events' => false,
-					'delete_published_mdjm_events' => false
+					'delete_published_mdjm_events' => false*/
+					'publish_mdjm_events' => false, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'delete_mdjm_events' => false, 'delete_others_mdjm_events' => false, 'read_private_mdjm_events' => true
 				);
 				break;
 				
 			case 'mdjm_event_edit_own':
 				$caps = array( 
 					'mdjm_event_read' => false, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => false,
-					'mdjm_event_edit_own' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'mdjm_event_edit_own' => true, /*'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
 					'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
 					'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => false,
 					'delete_others_mdjm_events' => false, 'delete_private_mdjm_events' => false,
-					'delete_published_mdjm_events' => false
+					'delete_published_mdjm_events' => false*/
+					'publish_mdjm_events' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'delete_mdjm_events' => false, 'delete_others_mdjm_events' => false, 'read_private_mdjm_events' => true
 				);
 				break;
 				
 			case 'mdjm_event_edit':
 				$caps = array( 
 					'mdjm_event_read' => true, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => true,
-					'mdjm_event_edit_own' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'mdjm_event_edit_own' => true, /*'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
 					'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
 					'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => true,
 					'delete_others_mdjm_events' => true, 'delete_private_mdjm_events' => true,
-					'delete_published_mdjm_events' => true
+					'delete_published_mdjm_events' => true*/
+					'publish_mdjm_events' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+					'delete_mdjm_events' => true, 'delete_others_mdjm_events' => true, 'read_private_mdjm_events' => true
 				);
 				break;
 			/**
@@ -476,11 +486,13 @@ class MDJM_Permissions	{
 			
 			// Event posts
 			'mdjm_event_read' => true, 'mdjm_event_read_own' => true, 'mdjm_event_edit' => true,
-			'mdjm_event_edit_own' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+			'mdjm_event_edit_own' => true, /*'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
 			'publish_mdjm_events' => true, 'read_private_mdjm_events' => true,
 			'edit_published_mdjm_events' => true, 'edit_private_mdjm_events' => true, 'delete_mdjm_events' => true,
 			'delete_others_mdjm_events' => true, 'delete_private_mdjm_events' => true,
-			'delete_published_mdjm_events' => true,
+			'delete_published_mdjm_events' => true,*/
+			'publish_mdjm_events' => true, 'edit_mdjm_events' => true, 'edit_others_mdjm_events' => true,
+			'delete_mdjm_events' => true, 'delete_others_mdjm_events' => true, 'read_private_mdjm_events' => true,
 			
 			// Quote posts
 			'mdjm_quote_view_own' => true, 'mdjm_quote_view' => true, 'edit_mdjm_quotes' => true,

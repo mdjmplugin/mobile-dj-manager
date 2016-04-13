@@ -131,7 +131,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->users			 = new MDJM_Users();
 				self::$instance->roles			 = new MDJM_Roles();
 				self::$instance->permissions	   = new MDJM_Permissions();
-				self::$instance->menu			  = new MDJM_Menu();
 				self::$instance->txns			  = new MDJM_Transactions();
 				
 				// If we're on the front end, load the ClienZone class
