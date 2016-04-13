@@ -495,8 +495,12 @@
 		if( $mdjm_schedules[$task]['slug'] == 'upload-playlists' && $mdjm_schedules[$task]['active'] == 'Y' )	{
 			?>
             <tr>
-            <td>Entries Uploaded:</td>
-            <td><?php MDJM()->events->count_playlist_uploaded(); ?></td>
+            <td><?php _e( 'Pending Upload:', 'mobile-dj-manager' ); ?></td>
+            <td><?php echo mdjm_get_pending_upload_playlist_entry_count(); ?></td>
+            </tr>
+            <tr>
+            <td><?php _e( 'Total Uploaded:', 'mobile-dj-manager' ); ?></td>
+            <td><?php echo mdjm_get_uploaded_playlist_entry_count(); ?></td>
             </tr>
             <?php	
 		}
