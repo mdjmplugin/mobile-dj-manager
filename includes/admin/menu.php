@@ -41,7 +41,7 @@
 					'mdjm-dashboard',
 					array( &$this, 'mdjm_dashboard_page' ),
 					plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
-					'58.4'
+					defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : '58.4'
 				);
 				// Dashboard
 				$mdjm_dashboard_page = add_submenu_page(
