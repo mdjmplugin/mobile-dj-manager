@@ -79,38 +79,40 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk
 
 **Released XXXX XXXX, 2016**
 
-	* **New**: Use fully customisable templates for all MDJM Client Zone pages
-	* **New**: Employee interface replaces the old "DJ List"
-	* **New**: Updated Client interface replaces the old "Client List"
-	* **New**: Create custom employee roles and assign permissions to each role
-	* **New**: Assign multiple roles to each employee
-	* **New**: Assign multiple employees to events
-	* **New**: Added Event Staff checkbox on user profile screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions
-	* **New**: Admin availability checker can check for availability by role
-	* **New**: Added availability checker setting. Specify which roles need to be available on the given date for you to be available
-	* **New**: Content tags re-written and made into an API which developers can hook into when creating extensions or customising
-	* **New**: Emails class making it easier to send emails and for developers to hook into
-	* **New**: Settings API which developers can hook into
-	* **New**: Added contextual help to setings and events page
-	* **New**: Added Playlist Categories menu option to admin tool bar
-	* **New**: Added `mdjm_event_action_buttons` filter to re-order event action buttons
-	* **New**: Added Styles setting within Client Zone settings to set colour of Event Action Buttons
-	* **Tweak**: Removed setting option for deposit and balance labels. Use Transaction Types instead
-	* **Tweak**: Delete an entire range of an employee's holiday rather than only a single day
-	* **Tweak**: Custom post meta box functions re-written to enable cleaner hooks for developers
-	* **Tweak**: Event meta boxes are now only loaded if current user has been assigned a role with relevant permissions
-	* **Tweak**: Shortcodes have been re-written and cleaned up
-	* **Tweak**: Main MDJM class is now a singleton class
-	* **Tweak**: Post actions and filters no longer in classes
-	* **Tweak**: Replaced get_link method with mdjm_get_formatted_url function
-	* **Tweak**: New mdjm.css file. Can be customised for front end
-	* **Tweak**: Added content filters for emailing and printing the event playlist
-	* **Tweak**: Cleaner files and directory structure
-	* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
-	* **Tweak**: Event posts are now ordered by event date by default
-	* **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
-	* **Tweak**: Removed debug option to backup DB tables. Other plugins are available for this task
-	* **Tweak**: Removed debug option to submit debug files. No longer required
+* **New**: Use fully customisable templates for all MDJM Client Zone pages
+* **New**: Employee interface replaces the old "DJ List"
+* **New**: Updated Client interface replaces the old "Client List"
+* **New**: Create custom employee roles and assign permissions to each role
+* **New**: Assign multiple roles to each employee
+* **New**: Assign multiple employees to events
+* **New**: Added Event Staff checkbox on user profile screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions
+* **New**: Admin availability checker can check for availability by role
+* **New**: Added availability checker setting. Specify which roles need to be available on the given date for you to be available
+* **New**: Content tags re-written and made into an API which developers can hook into when creating extensions or customising
+* **New**: Emails class making it easier to send emails and for developers to hook into
+* **New**: Settings API which developers can hook into
+* **New**: Added contextual help to setings and events page
+* **New**: Added Playlist Categories menu option to admin tool bar
+* **New**: Added `mdjm_event_action_buttons` filter to re-order event action buttons
+* **New**: Added Styles setting within Client Zone settings to set colour of Event Action Buttons
+* **New**: Added mdjm_get_txns() to retrieve all transactions
+* **Tweak**: Removed setting option for deposit and balance labels. Use Transaction Types instead
+* **Tweak**: Delete an entire range of an employee's holiday rather than only a single day
+* **Tweak**: Custom post meta box functions re-written to enable cleaner hooks for developers
+* **Tweak**: Event meta boxes are now only loaded if current user has been assigned a role with relevant permissions
+* **Tweak**: Shortcodes have been re-written and cleaned up
+* **Tweak**: *MDJM Overview* dashboard widget has been updated and now displays event and earnings overviews for Month to Date, Year to Date and the previous year
+* **Tweak**: Main MDJM class is now a singleton class
+* **Tweak**: Post actions and filters no longer in classes
+* **Tweak**: Replaced get_link method with mdjm_get_formatted_url function
+* **Tweak**: New mdjm.css file. Can be customised for front end
+* **Tweak**: Added content filters for emailing and printing the event playlist
+* **Tweak**: Cleaner files and directory structure
+* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
+* **Tweak**: Event posts are now ordered by event date by default
+* **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
+* **Tweak**: Removed debug option to backup DB tables. Other plugins are available for this task
+* **Tweak**: Removed debug option to submit debug files. No longer required
 
 
 = 1.2.7.5 =
