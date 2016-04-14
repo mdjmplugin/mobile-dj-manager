@@ -252,6 +252,34 @@ function mdjm_get_txn_by_id( $txn_id )	{
 } // mdjm_get_txn_by_id
 
 /**
+ * Retrieve the transactions.
+ *
+ * @since	1.3
+ * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @return	mixed	$txns			False if no txns, otherwise an object array of all events.
+ */
+function mdjm_get_txns( $args = array() )	{
+		
+	$defaults = array(
+		'post_type'         => 'mdjm-transaction',
+		'post_status'       => 'any',
+		'posts_per_page'	=> -1,
+	);
+		
+	$args = wp_parse_args( $args, $defaults );
+		
+	$txns = get_posts( $args );
+	
+	// Return the results
+	if ( $txns )	{
+		return $txns;
+	} else	{
+		return false;
+	}
+	
+} // mdjm_get_txns
+
+/**
  * Return the type of transaction.
  *
  * @since	1.3
