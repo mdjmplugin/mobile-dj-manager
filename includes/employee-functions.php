@@ -604,22 +604,26 @@ function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
  *
  * @return	
  */
-function mdjm_set_employee_role( $employees, $role )	{			
-	if( !is_array( $employees ) )
+function mdjm_set_employee_role( $employees, $role )	{
+				
+	if( !is_array( $employees ) )	{
 		$employees = array( $employees );
+	}
 	
 	foreach( $employees as $employee )	{
+		
 		// Fetch the WP_User object of our user.
 		$user = new WP_User( $employee );
 		
-		if( !empty( $user ) )	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'Updating user role for ' . $employee . ' to ' . $role, true );	
+		if( ! empty( $user ) )	{
+			MDJM()->debug->log_it( sprintf( __( 'Updating user role for %d to $s', 'mobile-dj-manager' ), $employee, $role ), true );	
 		}
 		
 		// Replace the current role with specified role
 		$user->set_role( $role );
+		
 	}
+	
 } // mdjm_set_employee_role
 
 /**
