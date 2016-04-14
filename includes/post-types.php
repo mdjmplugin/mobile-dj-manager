@@ -612,6 +612,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_unattended_status',
 			array(
 				'label'                     => __( 'Unattended Enquiry', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Unattended Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -626,6 +627,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_enquiry_status',
 			array(
 				'label'                     => __( 'Enquiry', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -640,6 +642,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_approved_status',
 			array(
 				'label'                     => __( 'Confirmed', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Confirmed', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -654,6 +657,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_contract_status',
 			array(
 				'label'                     => __( 'Awaiting Contract', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Awaiting Contracts', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -668,6 +672,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_completed_status',
 			array(
 				'label'                     => __( 'Completed', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Completed', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -682,6 +687,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_cancelled_status',
 			array(
 				'label'                     => __( 'Cancelled', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Cancelled', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -696,6 +702,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_rejected_status',
 			array(
 				'label'                     => __( 'Rejected Enquiry', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Rejected Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -710,6 +717,7 @@ function mdjm_register_post_statuses()	{
 		apply_filters( 'mdjm_event_failed_status',
 			array(
 				'label'                     => __( 'Failed Enquiry', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Failed Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,

@@ -118,8 +118,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				
 				add_action( 'plugins_loaded', array( __CLASS__, 'mdjm_plugins_loaded' ) );
 				
-				add_action( 'wp_dashboard_setup', 'f_mdjm_add_wp_dashboard_widgets' );	
-				
 				self::$instance->includes();
 				$mdjm			  				  = new MDJM();
 				self::$instance->debug			 = new MDJM_Debug();

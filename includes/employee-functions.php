@@ -566,7 +566,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
  */
 function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
 	
-	$employees		= mdjm_get_event_employees( $event_id );
+	$employees		 = mdjm_get_event_employees( $event_id );
 	$employees_data	= mdjm_get_event_employees_data( $event_id );
 	
 	if ( empty( $employees ) )	{
@@ -666,7 +666,7 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 	
 	$order_by_num = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
 	
-	if ( ! empty( $args['event_date'] ) )	{
+	if ( ! empty( $args['date'] ) )	{
 		$date_query = array(
 			'relation'	=> 'AND',
 			array(

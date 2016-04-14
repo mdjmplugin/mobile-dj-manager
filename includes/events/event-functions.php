@@ -36,6 +36,112 @@ function mdjm_get_event_by_id( $event_id )	{
 } // mdjm_get_event_by_id
 
 /**
+ * Retrieve the events.
+ *
+ * @since	1.3
+ * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @return	mixed	$events			False if no events, otherwise an object array of all events.
+ */
+function mdjm_get_events( $args = array() )	{
+		
+	$defaults = array(
+		'post_type'         => 'mdjm-event',
+		'post_status'       => 'any',
+		'posts_per_page'	=> -1,
+	);
+		
+	$args = wp_parse_args( $args, $defaults );
+		
+	$events = get_posts( $args );
+	
+	// Return the results
+	if ( $events )	{
+		return $events;
+	} else	{
+		return false;
+	}
+	
+} // mdjm_get_events
+
+/**
+ * Retrieve the next event.
+ * If the current user is not an MDJM admin, only list their own event.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	User ID of employee. Leave empty to check for all employees.
+ * @return	obj		Events WP_Post object.
+ */
+function mdjm_get_next_event( $employee_id = '' )	{
+	
+	if ( ! empty( $employee_id ) && ! mdjm_employee_can( 'manage_all_events' ) && $employee_id != get_current_user_id() )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . sprintf( __( 'Your %s permissions do not permit you to search all %s!', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural( true ) ) . '</p>',
+			403
+		);
+	}
+	
+	if ( ! empty( $employee_id ) || ! mdjm_employee_can( 'manage_all_events' ) )	{
+	
+		$employee_id  = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+		$event		= mdjm_get_employees_next_event( $employee_id );
+		
+	} else	{
+		
+		$args = array(
+			'post_status'	  => mdjm_active_event_statuses(),
+			'posts_per_page'   => 1,
+			'meta_key'		 => '_mdjm_event_date',
+			'orderby'		  => 'meta_value',
+			'order' 			=> 'ASC',
+		);
+		
+		$event = mdjm_get_events( $args );
+		
+		if ( ! empty( $event ) )	{
+			$event = $event[0];
+		}
+		
+	}
+	
+	if ( empty( $event ) )	{
+		return false;
+	}
+	
+	return $event;
+	
+} // mdjm_get_next_event
+
+/**
+ * Retrieve the next event.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	User ID of employee. Leave empty to check for all employees.
+ * @return	obj		Events WP_Post object.
+ */
+function mdjm_get_todays_events( $employee_id = '' )	{
+	
+	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	$args = array(
+		'post_status'	  => mdjm_active_event_statuses(),
+		'posts_per_page'   => 1,
+		'meta_key'		 => '_mdjm_event_date',
+		'orderby'		  => 'meta_value',
+		'order' 			=> 'DESC',
+	);
+	
+	$event = mdjm_get_employee_events( $employee_id, $args );
+	
+	if ( empty( $event ) )	{
+		return false;
+	}
+	
+	return $event[0];
+	
+} // mdjm_get_next_event
+
+/**
  * Retrieve an event by the guest playlist code.
  *
  * @since	1.3
@@ -55,6 +161,46 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 	
 	return ( $result ? mdjm_get_event( $result->event_id ) : false );
 } // mdjm_get_event_by_playlist_code
+
+/**
+ * Retrieve events by date period.
+ *
+ * @since	1.3
+ * @param	str			$status		The event status.
+ * @return	obj|bool	The WP_Query results object.
+ */
+function mdjm_get_events_by_status( $status )	{
+	
+	$events = mdjm_get_events( array( 'post_status' => $status ) );
+	
+	if ( ! $events )	{
+		return false;
+	}
+	
+	return $events;
+	
+} // mdjm_get_events_by_status
+
+/**
+ * Retrieve a count of events by status.
+ *
+ * @since	1.3
+ * @param	str			$status		The event status.
+ * @return	int			The number of events with the status.
+ */
+function mdjm_count_events_by_status( $status )	{
+	
+	$count = 0;
+	
+	$events = mdjm_get_events_by_status( $status );
+	
+	if ( $events )	{
+		$count = count( $events );
+	}
+	
+	return $count;
+	
+} // mdjm_count_events_by_status
 
 /**
  * Determine if the event exists.
