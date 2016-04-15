@@ -171,6 +171,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_NAME', 'MDJM Event Management' );
 			
 			define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );
+			define( 'MDJM_CLIENT_FIELDS', 'mdjm_client_fields' );
 			
 			define( 'MDJM_DB_VERSION', get_option( 'mdjm_db_version' ) );
 			

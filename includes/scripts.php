@@ -92,7 +92,10 @@ function mdjm_register_admin_styles( $hook )	{
 	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
 	
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
+	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
+	
 	wp_enqueue_style( 'jquery-ui-css' );
+	wp_enqueue_style( 'font-awesome' );
 		
 } // mdjm_register_styles
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
