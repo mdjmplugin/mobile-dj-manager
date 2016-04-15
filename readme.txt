@@ -96,6 +96,8 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk
 * **New**: Added `mdjm_event_action_buttons` filter to re-order event action buttons
 * **New**: Added Styles setting within Client Zone settings to set colour of Event Action Buttons
 * **New**: Added mdjm_get_txns() to retrieve all transactions
+* **New**: Enquiry sources are now post categories. Manage via the *Enquiry Sources* menu option
+* **New**: Added MDJM_Stats class
 * **Tweak**: Removed setting option for deposit and balance labels. Use Transaction Types instead
 * **Tweak**: Delete an entire range of an employee's holiday rather than only a single day
 * **Tweak**: Custom post meta box functions re-written to enable cleaner hooks for developers
