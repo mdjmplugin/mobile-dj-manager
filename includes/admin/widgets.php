@@ -173,11 +173,9 @@ function mdjm_widget_events_overview_admin() {
         
         <p><?php echo 
         	sprintf( __( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ), admin_url( 'post-new.php?post_type=mdjm-event' ), mdjm_get_label_singular() ) .
-			' | ' .
+			'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' .
 			sprintf( __( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), admin_url( 'edit.php?post_type=mdjm-event' ), mdjm_get_label_plural() ) .
-			' | ' .
-			sprintf( __( '<a href="%s">Manage Employees</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-employees' ) ) .
-			' | ' .
+			'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' .
 			sprintf( __( '<a href="%s">MDJM Settings</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-settings' ) ); ?>
 			
 		</p>

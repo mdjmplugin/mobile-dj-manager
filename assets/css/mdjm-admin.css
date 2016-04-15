@@ -264,7 +264,7 @@ checkbox.mdjm-form-error {
 	text-align: left;
 }
 .mdjm_stat_grid table tbody td {
-	color: #DBDBDB;
+	color: #B0B0B0;
 	border-left: 1px solid #DBDBDB;
 	font-size: 12px;
 	border-bottom: none;
@@ -273,11 +273,12 @@ checkbox.mdjm-form-error {
 }
 .mdjm_stat_grid table tbody td:first-child {
 	border: none;
-	width: 33%;
+	width: 35%;
 }
 .mdjm_stat_grid table tbody th:first-child {
 	border: none;
 	text-align: left;
+	width: 35%;
 }
 .mdjm_stat_grid table tbody tr:last-child td {
 	border-bottom: none;
