@@ -830,18 +830,19 @@ function mdjm_register_taxonomies()	{
 	
 	/** Enquiry Sources */
 	$enquiry_source_labels = array(
-		'name'              		   => _x( 'Enquiry Source', 'taxonomy general name', 'mobile-dj-manager' ),
-		'singular_name'     		  => _x( 'Enquiry Source', 'taxonomy singular name', 'mobile-dj-manager' ),
-		'search_items'      		   => __( 'Search Enquiry Sources', 'mobile-dj-manager' ),
-		'all_items'         		  => __( 'All Enquiry Sources', 'mobile-dj-manager' ),
-		'edit_item'        		  => __( 'Edit Enquiry Source', 'mobile-dj-manager' ),
-		'update_item'       			=> __( 'Update Enquiry Source', 'mobile-dj-manager' ),
-		'add_new_item'      		   => __( 'Add New Enquiry Source', 'mobile-dj-manager' ),
-		'new_item_name'     		  => __( 'New Enquiry Source', 'mobile-dj-manager' ),
-		'menu_name'         		  => __( 'Enquiry Sources', 'mobile-dj-manager' ),
+		'name'                       => _x( 'Enquiry Sources', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'              => _x( 'Enquiry Source', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'               => __( 'Search Enquiry Sources', 'mobile-dj-manager' ),
+		'all_items'                  => __( 'All Enquiry Sources', 'mobile-dj-manager' ),
+		'edit_item'                  => __( 'Edit Enquiry Source', 'mobile-dj-manager' ),
+		'update_item'                => __( 'Update Enquiry Source', 'mobile-dj-manager' ),
+		'add_new_item'               => __( 'Add New Enquiry Source', 'mobile-dj-manager' ),
+		'new_item_name'              => __( 'New Enquiry Source', 'mobile-dj-manager' ),
+		'menu_name'                  => __( 'Enquiry Sources', 'mobile-dj-manager' ),
+		'popular_items'              => __( 'Most Enquiries from', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => NULL,
-		'choose_from_most_used'	  => __( 'Choose from the most popular Enquiry Sources', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No enquiry sources found', 'mobile-dj-manager' )
+		'choose_from_most_used'      => __( 'Choose from the most popular Enquiry Sources', 'mobile-dj-manager' ),
+		'not_found'                  => __( 'No enquiry sources found', 'mobile-dj-manager' )
 	);
 
 	$enquiry_source_args = apply_filters( 'mdjm_enquiry_source_args', array(

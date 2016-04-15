@@ -40,12 +40,6 @@
 		 */
 		public function default_settings()	{
 			global $mdjm;
-			$enquiry_sources = __( 'Website', 'mobile-dj-manager' ) . "\r\n" . 
-							   __( 'Google', 'mobile-dj-manager' ) . "\r\n" . 
-							   __( 'Facebook', 'mobile-dj-manager' ) . "\r\n" . 
-							   __( 'Email', 'mobile-dj-manager' ) . "\r\n" . 
-							   __( 'Telephone', 'mobile-dj-manager' ) . "\r\n" . 
-							   __( 'Other', 'mobile-dj-manager' );
 			
 			$payment_sources = __( 'BACS', 'mobile-dj-manager' ) . "\r\n" . 
 								__( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
@@ -53,16 +47,7 @@
 								__( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
 								__( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
 								__( 'Other', 'mobile-dj-manager' );
-								
-			$playlist_options = __( 'General', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'First Dance', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'Second Dance', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'Last Song', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'Father & Bride', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'Mother & Son', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'DO NOT PLAY', 'mobile-dj-manager' ) . "\r\n" . 
-								__( 'Other', 'mobile-dj-manager' );
-			
+											
 			$default_settings = array( 
 						'mdjm_plugin_settings' => array(
 							'company_name'            		=> get_bloginfo( 'name' ),
@@ -84,14 +69,12 @@
 							'enable_packages'				 => false,
 							'default_contract'        		=> 'N',
 							'warn_unattended'         		 => true,
-							'enquiry_sources'         		 => $enquiry_sources,
 							'journaling'              		  => true,
 						),
 						'mdjm_playlist_settings' => array(
 							'enable_playlists'				=> true,
 							'close'		           		   => '5',
-							'playlist_cats'				   => $playlist_options,
-							'upload_playlists'        		=> true,
+							'upload_playlists'        		=> true
 						),
 						'mdjm_templates_settings' => array(
 							'enquiry'           		   		 => 'N',
@@ -750,6 +733,16 @@
 			wp_insert_term( __( 'School Disco', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( 'School Prom', 'mobile-dj-manager' ), 'event-types' );
 			wp_insert_term( __( 'Wedding', 'mobile-dj-manager' ), 'event-types' );
+			
+			// Enquiry Sources
+			wp_insert_term( __( 'Business Card', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Email', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Facebook', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Flyer', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Google', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Other', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Telephone', 'mobile-dj-manager' ), 'enquiry-source' );
+			wp_insert_term( __( 'Website', 'mobile-dj-manager' ), 'enquiry-source' );
 			
 			// Playlist Terms
 			error_log(  date( 'd M Y H:i:s' ) . ' Adding Playlist Terms' . "\r\n", 3, MDJM_DEBUG_LOG );

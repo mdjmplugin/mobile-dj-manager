@@ -383,6 +383,17 @@ function mdjm_admin_toolbar( $admin_bar )	{
 				'title' => __( 'Manage Playlist Categories', 'mobile-dj-manager' ),
 			),
 		) );
+		
+		// Enquiry Sources
+		$admin_bar->add_menu( array(
+			'id'     => 'mdjm-enquiry-sources',
+			'parent' => 'mdjm-events',
+			'title'  => __( 'Enquiry Sources', 'mobile-dj-manager' ),
+			'href'   => admin_url( 'edit-tags.php?taxonomy=enquiry-source&post_type=mdjm-event' ),
+			'meta'   => array(
+				'title' => __( 'Manage Enquiry Sources', 'mobile-dj-manager' ),
+			),
+		) );
 	}
 	// Custom Event Fields
 	if( current_user_can( 'manage_mdjm' ) )	{
