@@ -845,10 +845,13 @@ function mdjm_register_taxonomies()	{
 	);
 
 	$enquiry_source_args = apply_filters( 'mdjm_enquiry_source_args', array(
-			'hierarchical'          => true,
+			'hierarchical'          => false,
 			'labels'                => apply_filters( 'mdjm_enquiry_source_labels', $enquiry_source_labels ),
+			'description'           => sprintf( __( 'Track how clients found %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name', get_bloginfo( 'name' ) ) ),
+			'public'                => false,
+			'show_ui'               => true,
 			'query_var'             => true,
-			'rewrite'               => array( 'slug' => 'event-types' ),
+			'rewrite'               => array( 'slug' => 'enquiry-source' ),
 			'capabilities'          => apply_filters( 'mdjm_event_type_caps', array(
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
@@ -858,8 +861,8 @@ function mdjm_register_taxonomies()	{
 			'update_count_callback' => '_update_generic_term_count'
 		)
 	);
-	register_taxonomy( 'enquiry-sources', array( 'mdjm-event' ), $enquiry_source_args );
-	register_taxonomy_for_object_type( 'enquiry-sources', 'mdjm-event' );
+	register_taxonomy( 'enquiry-source', array( 'mdjm-event' ), $enquiry_source_args );
+	register_taxonomy_for_object_type( 'enquiry-source', 'mdjm-event' );
 	
 	/** Playlist Category */
 	$playlist_category_labels = array(
