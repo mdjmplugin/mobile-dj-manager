@@ -828,6 +828,39 @@ function mdjm_register_taxonomies()	{
 	register_taxonomy( 'event-types', array( 'mdjm-event' ), $event_type_args );
 	register_taxonomy_for_object_type( 'event-types', 'mdjm-event' );
 	
+	/** Enquiry Sources */
+	$enquiry_source_labels = array(
+		'name'              		   => _x( 'Enquiry Source', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'     		  => _x( 'Enquiry Source', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'      		   => __( 'Search Enquiry Sources', 'mobile-dj-manager' ),
+		'all_items'         		  => __( 'All Enquiry Sources', 'mobile-dj-manager' ),
+		'edit_item'        		  => __( 'Edit Enquiry Source', 'mobile-dj-manager' ),
+		'update_item'       			=> __( 'Update Enquiry Source', 'mobile-dj-manager' ),
+		'add_new_item'      		   => __( 'Add New Enquiry Source', 'mobile-dj-manager' ),
+		'new_item_name'     		  => __( 'New Enquiry Source', 'mobile-dj-manager' ),
+		'menu_name'         		  => __( 'Enquiry Sources', 'mobile-dj-manager' ),
+		'separate_items_with_commas' => NULL,
+		'choose_from_most_used'	  => __( 'Choose from the most popular Enquiry Sources', 'mobile-dj-manager' ),
+		'not_found'				  => __( 'No enquiry sources found', 'mobile-dj-manager' )
+	);
+
+	$enquiry_source_args = apply_filters( 'mdjm_enquiry_source_args', array(
+			'hierarchical'          => true,
+			'labels'                => apply_filters( 'mdjm_enquiry_source_labels', $enquiry_source_labels ),
+			'query_var'             => true,
+			'rewrite'               => array( 'slug' => 'event-types' ),
+			'capabilities'          => apply_filters( 'mdjm_event_type_caps', array(
+				'manage_terms'          => 'manage_mdjm',
+				'edit_terms'            => 'manage_mdjm',
+				'delete_terms'          => 'manage_mdjm',
+				'assign_terms'          => 'mdjm_employee'
+			) ),
+			'update_count_callback' => '_update_generic_term_count'
+		)
+	);
+	register_taxonomy( 'enquiry-sources', array( 'mdjm-event' ), $enquiry_source_args );
+	register_taxonomy_for_object_type( 'enquiry-sources', 'mdjm-event' );
+	
 	/** Playlist Category */
 	$playlist_category_labels = array(
 		'name'              		   => _x( 'Playlist Categories', 'taxonomy general name', 'mobile-dj-manager' ),
