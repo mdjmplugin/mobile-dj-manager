@@ -68,6 +68,73 @@ add_action( 'create_event-types', 'mdjm_save_event_type', 10, 2 );
 add_action( 'edited_event-types', 'mdjm_save_event_type', 10, 2 );
 
 /**
+ * Add an option field to set the default enquiry source when adding a new source.
+ *
+ * @since	1.3
+ * @param	obj		$tag	The tag object
+ * @return	str
+ */
+function mdjm_add_enquiry_source_fields( $tag )	{
+	?>
+    <div class="form-field term-group">
+        <label for="enquiry_source_default"><?php _e( 'Set as Default Enquiry Source?', 'mobile-dj-manager' ); ?></label>
+        <input type="checkbox" name="enquiry_source_default" id="enquiry_source_default" value="1" />
+    </div>
+    <?php
+	
+} // mdjm_add_enquiry_source_fields
+add_action( 'enquiry-source_add_form_fields', 'mdjm_add_enquiry_source_fields' );
+
+/**
+ * Add an option field to set the default enquiry source when editing a new source.
+ *
+ * @since	1.3
+ * @param	obj		$tag	The tag object
+ * @return	str
+ */
+function mdjm_edit_enquiry_source_fields( $tag )	{
+	
+	?>
+    <tr class="form-field term-group-wrap">
+        <th scope="row"><label for="enquiry_source_default"><?php  _e( 'Set as Default Enquiry Source?', 'mobile-dj-manager' ); ?></label></th>
+        <td><input type="checkbox" id="enquiry_source_default" name="enquiry_source_default" value="<?php echo $tag->term_id; ?>" <?php checked( mdjm_get_option( 'enquiry_source_default' ), $tag->term_id ); ?>></td>
+    </tr>
+    <?php
+	
+} // mdjm_edit_enquiry_source_fields
+add_action( 'enquiry-source_edit_form_fields', 'mdjm_edit_enquiry_source_fields' );
+
+/**
+ * Fires when an event type is created or edited.
+ *
+ * Check whether the set as default option is set and update options.
+ *
+ * @since	1.3
+ * @param	int		$term_id	The term ID
+ * @param	int		$tt_id		The term taxonomy ID
+ * @return	str
+ */
+function mdjm_save_enquiry_source( $term_id, $tt_id )	{
+	
+    if( ! empty( $_POST['enquiry_source_default'] ) )	{
+	
+		mdjm_update_option( 'enquiry_source_default', $term_id );
+	
+    } else	{
+		
+		if( mdjm_get_option( 'enquiry_source_default' ) == $term_id )	{
+			
+			mdjm_delete_option( 'enquiry_source_default' );
+			
+		}
+		
+	}
+	
+} // mdjm_save_enquiry_source
+add_action( 'create_enquiry-source', 'mdjm_save_enquiry_source', 10, 2 );
+add_action( 'edited_enquiry-source', 'mdjm_save_enquiry_source', 10, 2 );
+
+/**
  * Add an option field to set the default category when adding a new category.
  *
  * @since	1.3
