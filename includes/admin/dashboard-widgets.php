@@ -105,6 +105,22 @@ function mdjm_widget_events_overview_admin() {
 			sprintf( __( '<a href="%s">Settings</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-settings' ) ); ?>
 			
 		</p>
+        <?php
+        $sources = $stats->get_enquiry_sources_by_date( 'this_month' );
+		
+		if ( ! empty( $sources ) )	{
+			
+			foreach( $sources as $count => $source )	{
+				printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month</p>', 'mobile-dj-manager' ),
+					$source,
+					(int)$count );
+					
+				break;
+			}
+			
+		}
+		
+		?>
         
     </div>
     

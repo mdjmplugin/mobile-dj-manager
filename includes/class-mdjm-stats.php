@@ -261,7 +261,7 @@ class MDJM_Stats	{
 	 * @since	1.3
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	int		$status		The transaction status' for which to collect the stats
-	 * @return	int		$total		The total value for all transactions that meet the criteria	
+	 * @return	int		$total		The total value for all transactions that meet the criteria
 	 */
 	public function get_txns_total_by_date( $period = 'this_week', $status = 'any' )	{
 		
@@ -309,5 +309,58 @@ class MDJM_Stats	{
 		return mdjm_format_amount( $total );
 		
 	} // get_txns_total_by_date
+	
+	/**
+	 * Retrieves the count of enquiry sources over given date period.
+	 *
+	 * @since	1.3
+	 * @param	str		$period		The date period for which to collect the stats
+	 * @param	int		$status		The transaction status' for which to collect the stats
+	 * @return	int		$total		The total value for all transactions that meet the criteria
+	 */
+	public function get_enquiry_sources_by_date( $period = 'this_week' )	{
+		
+		$sources = get_terms(
+			array(
+				'taxonomy'    => 'enquiry-source',
+				'hide_empty'  => true				
+			)
+		);
+		
+		$tax_count = array();
+		
+		if ( ! empty( $sources ) )	{
+			
+			foreach( $sources as $source )	{
+				
+				$tax_query = array(
+					'taxonomy' => 'enquiry-source',
+					'terms'    => $source->term_id
+				);
+				
+				$args = array(
+					'date_query'       => array(
+						$this->setup_dates( $period )
+					),
+					'tax_query'        => array(
+						$tax_query
+					)
+				);
+				
+				$events = mdjm_get_events( $args );
+				
+				if ( $events )	{
+					$tax_count[ count( $events ) ] = $source->name;
+				}
+
+			}
+			
+		}
+		
+		krsort( $tax_count );
+		
+		return $tax_count;
+				
+	} // get_enquiry_sources_by_date
 	
 } // class MDJM_Stats
