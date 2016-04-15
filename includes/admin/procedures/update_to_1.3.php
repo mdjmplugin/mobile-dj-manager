@@ -35,13 +35,92 @@ function mdjm_create_playlist_terms()	{
 } // mdjm_create_playlist_terms
 
 /**
+ * Create terms for each of the enquiry sources.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_create_enquiry_source_terms_13( $term )	{
+	global $wpdb;
+		
+	if ( empty( $term ) )	{
+		return false;
+	}
+	
+	$new_term = wp_insert_term( $term, 'enquiry-source' );
+			
+	if( is_wp_error( $new_term ) )	{
+		error_log( $new_term->get_error_message() );
+		return false;
+	} else	{
+		error_log( sprintf( 'Enquiry Source term %s created with ID %s', $term, $new_term['term_id'] ), 0 );
+	}
+	
+	return $new_term;
+
+} // mdjm_create_enquiry_source_terms_13
+
+/**
+ * Migrate events to new enquiry source categories.
+ *
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_migrate_event_enquiry_sources_13()	{
+
+	$cats = mdjm_get_option( 'enquiry_sources' );
+	
+	if ( empty( $cats ) )	{
+		return;
+	}
+	
+	$terms = explode( "\r\n", $cats );
+
+	foreach( $terms as $term )	{
+		
+		$new_term = mdjm_create_enquiry_source_terms_13( $term );
+		
+		if ( empty( $new_term ) )	{
+			continue;
+		}
+			
+		$events = get_posts(
+			array(
+				'post_type'      => 'mdjm-event',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'meta_key'       => '_mdjm_event_enquiry_source',
+				'meta_query'     => array(
+					array(
+						'key'    => '_mdjm_event_enquiry_source',
+						'value'  => $term
+					)
+				)
+			)
+		);
+		
+		if ( ! $events )	{
+			continue;
+		}
+		
+		foreach( $events as $event )	{
+			wp_set_object_terms( $event->ID, $new_term['term_id'], 'enquiry-source', true );
+		}
+		
+	}
+	
+} // mdjm_migrate_event_enquiry_sources_13
+
+/**
  * Create the Employee Wages term within Transactions and update other
  * MDJM Txn term slugs
  *
  *
  *
  */
-function mdjm_terms_13()	{
+function mdjm_txn_terms_13()	{
 	
 	if( get_option( 'mdjm_txn_terms_13' ) )	{
 		return;
@@ -84,8 +163,8 @@ function mdjm_terms_13()	{
 	
 	update_option( 'mdjm_txn_terms_13', true );
 	
-} // mdjm_terms_13
-add_action( 'init', 'mdjm_terms_13', 15 );
+} // mdjm_txn_terms_13
+add_action( 'init', 'mdjm_txn_terms_13', 15 );
 
 /**
  * Update the post meta key '_mdjm_signed_contract' to the correct

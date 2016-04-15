@@ -423,18 +423,6 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries.', 'mobile-dj-manager' ),
 						'type'        => 'checkbox'
 					),
-					'enquiry_sources'  => array(
-						'id'          => 'enquiry_sources',
-						'name'        => __( 'Enquiry Sources', 'mobile-dj-manager' ),
-						'desc'        => __( 'Enter possible sources of enquiries. One per line', 'mobile-dj-manager' ),
-						'type'        => 'textarea',
-						'std'         => __( 'Website', 'mobile-dj-manager' ) . "\r\n" .
-							             __( 'Google', 'mobile-dj-manager' ) . "\r\n" .
-							             __( 'Facebook', 'mobile-dj-manager' ) . "\r\n" .
-							             __( 'Email', 'mobile-dj-manager' ) . "\r\n" .
-							             __( 'Telephone', 'mobile-dj-manager' ) . "\r\n" .
-										 __( 'Other', 'mobile-dj-manager' )
-					),
 					'journaling'       => array(
 						'id'          => 'journaling',
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
