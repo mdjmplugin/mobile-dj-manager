@@ -1,19 +1,26 @@
-@charset "UTF-8";
 /**
- * mdjm-admin.css
- * 16/01/2015
- * @since 0.9.9.6
- * Stylesheet for admin pages
+ * MDJM Event Management Admin Styles
+ *
+ * @package     MDJM
+ * @subpackage  Admin/CSS
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
+
+@charset "UTF-8";
+
+/* =General
+-------------------------------------------------------------- */
 
 .mdjm-new	{
 	font-weight: bold;
 	color: #F90;	
 }
+
 .mdjm-bug	{
 	font-weight: bold;
 	color: #090;
 }
+
 .mdjm-general	{
 	font-weight: bold;
 }
@@ -21,17 +28,13 @@
 .mdjm-label {
 	font-weight: bold;
 }
+
 .mdjm-color	{
 	color: #F90;	
 }
 
-/*
- * Columns
- *
- *
- *
- */
-/* -- Client Fields Settings Screen -- */
+/* =Client Field Settings
+-------------------------------------------------------------- */
 .mdjm-client-field-container	{
 	overflow: hidden;
 }
@@ -47,7 +50,8 @@
 	width: 30%;
 }
 	
-/* -- Custom Event Fields Settings Screen -- */
+/* =Custom Event Fields
+-------------------------------------------------------------- */
 .mdjm-event-field-container	{
 	overflow: hidden;
 }
@@ -63,12 +67,8 @@
 	width: 30%;
 }
 	
-/*
- * Notifications
- *
- *
- *
- */
+/* =Notifications
+-------------------------------------------------------------- */
 .mdjm-info, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validation	{
 	border: 1px solid;
 	margin: 10px 0px;
@@ -112,38 +112,41 @@
 	color: #F90 !important;	
 }
 
-/*
- * Error classes used by jQuery validation
- * 
- *
- */
+/* =jQuery Validation
+-------------------------------------------------------------- */
 .mdjm-form-error {
 	color: #F00;
 	font-weight: bold;
 }
+
 input.mdjm-form-error {
 	border: solid 1px #F00;
 	color: #000000;
 	font-weight: normal;
 }
+
 select.mdjm-form-error {
 	border: solid 1px #F00;
 	color: #000000;
 	font-weight: normal;
 }
+
 textarea.mdjm-form-error {
 	border: solid 1px #F00;
 	color: #000000;
 	font-weight: normal;
 }
+
 checkbox.mdjm-form-error {
 	border: solid 1px #F00;
 	color: #000000;
 	font-weight: normal;
 }
+
 .mdjm-form-valid {
 	color: #000000;
 }
+
 .mdjm-input-currency {
 	width: 75px;
 }
@@ -152,38 +155,39 @@ checkbox.mdjm-form-error {
 	font-size: 11px;	
 }
 
-/*
- *
- * Sortable
- *
- */
+/* =Sortable
+-------------------------------------------------------------- */
 .mdjm-list-item	{
 	cursor: move;	
 }
+
 .mdjm-client-list-item	{
 	cursor: move;	
 }
+
 .mdjm-custom-client-list-item	{
 	cursor: move;	
 }
+
 .mdjm-custom-event-list-item	{
 	cursor: move;	
 }
+
 .mdjm-custom-venue-list-item	{
 	cursor: move;	
 }
-/**
- *
- * Footer text within admin UI
- *
- */
+
+/* =Footer Text
+-------------------------------------------------------------- */
 .mdjm-admin-footer	{
 	color: #F90;
 }
+
 .mdjm-admin-footer a	{
 	color: #F90;
 	text-decoration: none;
 }
+
 .mdjm-admin-footer a:link {
 	color: #F90;
 }
@@ -193,20 +197,19 @@ checkbox.mdjm-form-error {
 	text-decoration: underline;
 }
 
-/**
- * Admin Widgets
- *
- *
- */
+/* =Dashboard Widgets
+-------------------------------------------------------------- */
 #mdjm-events-overview	{
 	width: 100%;
 	border: none;
 	text-align: left;
 }
+
 #mdjm-events-overview th	{
 	font-weight: bold;
 	width: 40%;
 }
+
 #mdjm-events-overview th, td	{
 	vertical-align: top;
 }
@@ -217,9 +220,11 @@ checkbox.mdjm-form-error {
 	text-align: left;
 	font-size: smaller !important;
 }
+
 #mdjm_widget_overview_stats th	{
 	font-weight: bold;
 }
+
 #mdjm_widget_overview_stats th head	{
 	width: 40%;
 }
@@ -228,14 +233,17 @@ checkbox.mdjm-form-error {
 	border-collapse: collapse;
 	width: 100%;
 }
+
 .mdjm_stat_grid {
 	font: normal 12px/150% Arial, Helvetica, sans-serif;
 	background: #fff;
 	overflow: hidden;
 }
+
 .mdjm_stat_grid table td, .mdjm_stat_grid table th {
 	padding: 3px 10px;
 }
+
 .mdjm_stat_grid table thead th {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FFFFFF), color-stop(1, #FFFFFF) );
 	background:-moz-linear-gradient( center top, #FFFFFF 5%, #FFFFFF 100% );
@@ -247,6 +255,7 @@ checkbox.mdjm-form-error {
 	border-left: 1px solid #DBDBDB;
 	border-bottom: 1px solid #DBDBDB;
 }
+
 .mdjm_stat_grid table tbody th {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FFFFFF), color-stop(1, #FFFFFF) );
 	background:-moz-linear-gradient( center top, #FFFFFF 5%, #FFFFFF 100% );
@@ -257,12 +266,14 @@ checkbox.mdjm-form-error {
 	font-weight: bold;
 	border-left: 1px solid #DBDBDB;
 }
+
 .mdjm_stat_grid table thead th:first-child {
 	border-bottom: 1px solid #DBDBDB;
 	border-left: none;
 	width: 33%;
 	text-align: left;
 }
+
 .mdjm_stat_grid table tbody td {
 	color: #B0B0B0;
 	border-left: 1px solid #DBDBDB;
@@ -271,25 +282,31 @@ checkbox.mdjm-form-error {
 	font-weight: normal;
 	text-align: center;
 }
+
 .mdjm_stat_grid table tbody td:first-child {
 	border: none;
 	width: 35%;
 }
+
 .mdjm_stat_grid table tbody th:first-child {
 	border: none;
 	text-align: left;
 	width: 35%;
 }
+
 .mdjm_stat_grid table tbody tr:last-child td {
 	border-bottom: none;
 }
+
 .mdjm_stat_grid table tbody tr:nth-child(4) {
 	border-bottom: none;
 	border-top: 1px solid #DBDBDB;
 }
+
 .mdjm_stat_grid table tbody tr:last-child td {
 	border-bottom: none;
 }
+
 .mdjm_stat_grid p	{
 	text-align: center;
 	font-size: 12px;
