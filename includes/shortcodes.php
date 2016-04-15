@@ -215,6 +215,7 @@ add_shortcode( 'mdjm-contract', 'mdjm_shortcode_contract' );
  * @return	string
  */
 function mdjm_shortcode_playlist( $atts )	{
+	
 	global $mdjm_event;
 	
 	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
@@ -245,30 +246,35 @@ function mdjm_shortcode_playlist( $atts )	{
 	// Reset global var
 	$mdjm_event = '';
 	
-	return $output;
+	return apply_filters( 'mdjm_playlist_form', $output );
+	
 } // mdjm_shortcode_playlist
 add_shortcode( 'mdjm-playlist', 'mdjm_shortcode_playlist' );
 
 /**
- * Display the MDJM availability checker.
+ * MDJM Availability Checker Shortcode.
+ *
+ * Displays the MDJM Availability Checker form which allows clients to determine if you are
+ * available on their chosen event date.
  * 
  * @since	1.3
  *
  * @return	string
  */
 function mdjm_shortcode_availability( $atts )	{
+	
 	$args = shortcode_atts( 
 		array( // These are our default values
-			'label'			  => __( 'Select Date', 'mobile-dj-manager' ),
-			'label_wrap'		 => true,
-			'label_class'		=> false,
-			'field_wrap'		 => true,
-			'field_class'		=> false,
-			'submit_text'		=> __( 'Check Date', 'mobile-dj-manager' ),
-			'submit_wrap'		 => true,
-			'submit_class'	   => false,
-			'please_wait_text'   => __( 'Please wait...', 'mobile-dj-manager' ),
-			'please_wait_class'  => false
+			'label'             => __( 'Select Date', 'mobile-dj-manager' ),
+			'label_wrap'        => true,
+			'label_class'       => false,
+			'field_wrap'        => true,
+			'field_class'       => false,
+			'submit_text'       => __( 'Check Date', 'mobile-dj-manager' ),
+			'submit_wrap'       => true,
+			'submit_class'      => false,
+			'please_wait_text'  => __( 'Please wait...', 'mobile-dj-manager' ),
+			'please_wait_class' => false
 		),
 		$atts,
 		'mdjm-availability'
@@ -278,6 +284,7 @@ function mdjm_shortcode_availability( $atts )	{
 	//MDJM_Availability_Checker::availability_form( $args );
 	
 	return ob_get_clean();
+
 } // mdjm_shortcode_availability
 add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );
 
@@ -292,16 +299,17 @@ add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );
  *
  */
 function mdjm_shortcode_addons_list( $atts )	{
+	
 	$args = shortcode_atts( 
 		array( // These are our default values
-			'filter_by'	   => false,
-			'filter_value'	=> false,
-			'list'			=> 'p',
-			'desc'			=> false,
-			'cost'			=> false,
-			'addon_class'	 => false,
-			'cost_class'	 => false,
-			'desc_class'	=> false
+			'filter_by'    => false,
+			'filter_value' => false,
+			'list'         => 'p',
+			'desc'         => false,
+			'cost'         => false,
+			'addon_class'  => false,
+			'cost_class'   => false,
+			'desc_class'   => false
 		),
 		$atts,
 		'mdjm-addons'
@@ -310,91 +318,112 @@ function mdjm_shortcode_addons_list( $atts )	{
 	ob_start();
 	$output = '';
 	
-	if( isset( $args['filter_by'], $args['filter_value'] ) && 
-		$args['filter_by'] != 'false' && $args['filter_value'] != 'false' )	{
+	if( isset( $args['filter_by'], $args['filter_value'] ) && $args['filter_by'] != 'false' && $args['filter_value'] != 'false' )	{
 		
 		// Filter addons by user	
-		if( $args['filter_by'] == 'category' )
+		if( $args['filter_by'] == 'category' )	{
+			
 			$equipment = mdjm_addons_by_cat( $args['filter_value'] );
-		
-		elseif( $args['filter_by'] == 'package' )	{
+			
+		} elseif( $args['filter_by'] == 'package' )	{
+			
 			$equipment = mdjm_addons_by_package_slug( $args['filter_value'] );
 			
 			// If package not found by slug, try name
-			if( empty( $equipment ) )
+			if( empty( $equipment ) )	{
 				$equipment = mdjm_addons_by_package_name( $args['filter_value'] );
+			}
+
+		} elseif( $args['filter_by'] == 'user' )	{
+			
+			$equipment = mdjm_addons_by_dj( $args['filter_value'] );
+			
 		}
 		
-		elseif( $args['filter_by'] == 'user' )
-			$equipment = mdjm_addons_by_dj( $args['filter_value'] );
-		
-	}
-	else
+	} else	{
 		$equipment = mdjm_get_addons();
+	}
 	
 	/**
 	 * Output the results
 	 */
-	if( empty( $equipment ) )
+	if( empty( $equipment ) )	{
 		$output .= '<p>' . __( 'No addons available', 'mobile-dj-manager' ) . '</p>';
-	
-	else	{
+	} else	{
+		
 		// Check to start bullet list
-		if( $args['list'] == 'li' )
+		if( $args['list'] == 'li' )	{
 			$output .= '<ul>';
+		}
 			
 		foreach( $equipment as $item )	{
+			
 			// If the addon is not enabled, do not show it
-			if( empty( $item[6] ) || $item[6] != 'Y' )
+			if( empty( $item[6] ) || $item[6] != 'Y' )	{
 				continue;
+			}
 								
 			// Output the remaining addons
-			if( !empty( $args['list'] ) )
+			if( !empty( $args['list'] ) )	{
 				$output .= '<' . $args['list'] . '>';
+			}
 			
-			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )
+			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
 				$output = '<span class="' . $args['addon_class'] . '">';
+			}
 			
 			$output .= stripslashes( esc_textarea( $item[0] ) );
 			
-			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )
+			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
 				$output = '</span>';
+			}
 			
 			if( !empty( $args['cost'] ) && $args['cost'] != 'false' && !empty( $item[7] ) )	{
-				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
+				
+				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
 					$output = '<span class="' . $args['cost_class'] . '">';
+				}
 				
 				$output .= '&nbsp;&ndash;&nbsp;' . mdjm_currency_filter( mdjm_sanitize_amount( $item[7] ) );
 				
-				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )
+				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
 					$output = '</span>';
+				}
 				
 			}
 			
 			if( !empty( $atts['desc'] ) && $atts['desc'] != 'false' && !empty( $item[4] ) )	{
+				
 				$output .= '<br />';
 				
-				if( !empty( $args['desc_class'] ) && $args['desc_class'] != 'false' )
+				if( !empty( $args['desc_class'] ) && $args['desc_class'] != 'false' )	{
 					$output = '<span class="' . $args['desc_class'] . '">';
-				else	
+				} else	{
 					$output .= '<span style="font-style: italic; font-size: smaller;">';
+				}
 				
 				$output .= stripslashes( esc_textarea( $item[4] ) );
-				$output .= '</span>';	
+				$output .= '</span>';
+	
 			}
 				
-			if( !empty( $args['list'] ) )
-				$output .= '</' . $args['list'] . '>';							
+			if( !empty( $args['list'] ) )	{
+				$output .= '</' . $args['list'] . '>';
+			}
+			
 		}
 		
 		// Check to end bullet list	
-		if( $args['list'] == 'li' )
+		if( $args['list'] == 'li' )	{
 			$output .= '</ul>';
+		}
+
 	}
 	
-	echo $output;
+	echo apply_filters( 'mdjm_shortcode_addons_list', $output );
 		
 	return ob_get_clean();
+	
 } // mdjm_shortcode_addons_list
 add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
 
@@ -408,12 +437,14 @@ add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
  * @return	string
  */
 function mdjm_shortcode_login( $atts )	{
+	
 	extract( shortcode_atts( array(
 			'redirect' => '',
 		), $atts, 'mdjm-login' )
 	);
 	
 	return mdjm_login_form( $redirect );
+
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-login', 'mdjm_shortcode_login' );
 ?>

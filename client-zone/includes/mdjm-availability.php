@@ -63,11 +63,13 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			if( empty( self::$ajax ) )
 				return;
 				
-			if( $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )
+			if( mdjm_get_option( 'availability_check_pass_page' ) != 'text' )	{
 				$pass_redirect = true;
+			}
 				
-			if( $mdjm_settings['availability']['availability_check_fail_page'] != 'text' )
+			if( mdjm_get_option( 'availability_check_fail_page' ) != 'text' )	{
 				$fail_redirect = true;
+			}
 											
 			?>
             <script type="text/javascript">
@@ -146,8 +148,9 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		public static function check_availability()	{
 			global $mdjm, $mdjm_settings;
 			
-			if( !isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )
+			if( ! isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )	{
 				return;
+			}
 				
 			self::$dj_avail = dj_available( '', '', $_POST['check_date'] );
 			
