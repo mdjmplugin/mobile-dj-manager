@@ -349,7 +349,33 @@ function mdjm_event_status_dropdown( $args='' )	{
 } // mdjm_event_status_dropdown
 
 /**
- * Set the event type label for given event ID.
+ * Set the enquiry source for the event.
+ *
+ * @since	1.3
+ * @param	int			$event_id	Event ID.
+ * @param	int|arr		$type		The term ID of the category to set for the event.
+ * @return	bool		True on success, or false.
+ */
+function mdjm_set_enquiry_source( $event_id, $type )	{
+	
+	if ( ! is_array( $type ) )	{
+		$type = array( $type );
+	}
+	
+	(int)$event_id;
+	
+	$set_enquiry_source = wp_set_object_terms( $event_id, $type, 'enquiry-source', false );
+	
+	if( is_wp_error( $set_enquiry_source ) )	{
+		MDJM()->debug->log_it( sprintf( 'Unable to assign term ID %d to Event %d: %s', $type, $event_id, $set_enquiry_source->get_error_message() ), true );
+	}
+	
+	return;
+
+} // mdjm_set_enquiry_source
+
+/**
+ * Set the event type for the event.
  *
  * @since	1.3
  * @param	int			$event_id	Event ID.

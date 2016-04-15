@@ -1166,6 +1166,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	mdjm_set_event_type( $post_id, (int)$_POST['mdjm_event_type'] );
 	
+	// Assign the enquiry source
+	mdjm_set_enquiry_source( $post_id, (int)$_POST['mdjm_enquiry_source'] );
+	
 	/**
 	 * Update the event post meta data
 	 */

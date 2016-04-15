@@ -929,18 +929,22 @@ function mdjm_event_metabox_administration( $post )	{
 	<!-- Start of first row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-		<label for="_mdjm_event_enquiry_source" class="mdjm-label"><?php _e( 'Enquiry Source:', 'mobile-dj-manager' ); ?></label><br />
-		<select name="_mdjm_event_enquiry_source" id="_mdjm_event_enquiry_source">
-		<?php
-		$sources = explode( "\r\n", mdjm_get_option( 'enquiry_sources' ) );
-		asort( $sources );
-		foreach( $sources as $enquiry_source )	{
-			echo '<option value="' . $enquiry_source . '"';
-			selected( $enquiry_source, get_post_meta( $post->ID, '_mdjm_event_enquiry_source', true ) );
-			echo '>' . $enquiry_source . '</option>' . "\r\n";
-		}
-		?>
-		</select>
+		<label for="mdjm_enquiry_source" class="mdjm-label"><?php _e( 'Enquiry Source:', 'mobile-dj-manager' ); ?></label><br />
+        
+		<?php $existing_enquiry_source = wp_get_object_terms( $post->ID, 'enquiry-source' ); ?>
+		
+        <?php wp_dropdown_categories( 
+				array( 
+					'taxonomy' 			=> 'enquiry-source',
+					'hide_empty' 		  => 0,
+					'name' 				=> 'mdjm_enquiry_source',
+					'id' 				  => 'mdjm_enquiry_source',
+					'selected' 			=> ( isset( $existing_enquiry_source[0]->term_id ) ? $existing_enquiry_source[0]->term_id : mdjm_get_option( 'enquiry_source_default', '' ) ),
+					'orderby' 			 => 'name',
+					'hierarchical' 		=> 0
+				)
+			); ?>
+        
 		</div>
 	</div>
 	<!-- End of first row -->
