@@ -361,7 +361,7 @@ function mdjm_venue_post_messages( $messages )	{
 	global $post;
 	
 	if( 'mdjm-venue' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(

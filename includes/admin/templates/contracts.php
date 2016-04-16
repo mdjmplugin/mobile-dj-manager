@@ -218,7 +218,7 @@ function mdjm_contract_post_messages( $messages )	{
 	global $post;
 	
 	if( 'contract' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(

@@ -114,7 +114,7 @@ function mdjm_email_template_post_messages( $messages )	{
 	global $post;
 	
 	if( 'email_template' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(

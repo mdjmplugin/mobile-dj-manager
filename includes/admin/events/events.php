@@ -1266,7 +1266,7 @@ function mdjm_event_post_messages( $messages )	{
 	global $post;
 	
 	if( 'mdjm-event' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(

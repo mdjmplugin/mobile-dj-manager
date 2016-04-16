@@ -344,7 +344,7 @@ function mdjm_quote_post_messages( $messages )	{
 	global $post;
 	
 	if( 'mdjm-quotes' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(

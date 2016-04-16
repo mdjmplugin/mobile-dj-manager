@@ -448,7 +448,7 @@ function mdjm_transaction_post_messages( $messages )	{
 	global $post;
 	
 	if( 'mdjm-transaction' != get_post_type( $post->ID ) )	{
-		return;
+		return $messages;
 	}
 	
 	$messages = array(
