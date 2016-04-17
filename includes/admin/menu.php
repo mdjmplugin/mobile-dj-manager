@@ -77,7 +77,7 @@ function mdjm_admin_menu()	{
 	$mdjm_playlist_page = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_event_read_own', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	
 } // mdjm_admin_menu
-add_action( 'admin_menu', 'mdjm_admin_menu', 10 );
+add_action( 'admin_menu', 'mdjm_admin_menu', 9 );
 
 /*
  * Builds the admin toolbar
