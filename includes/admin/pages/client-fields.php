@@ -8,10 +8,7 @@
  */
 	
 	defined( 'ABSPATH' ) or die( 'Direct access to this page is disabled!!!' );
-	
-	if ( !current_user_can( 'manage_options' ) && !current_user_can( 'manage_mdjm' ) )
-		wp_die( __( 'You do not have sufficient permissions to access this page.', 'mobile-dj-manager' ) );
-		
+			
 	/* -- Build the MDJM_ClientFields class -- */
 	if( !class_exists( 'MDJM_ClientFields' ) )	{
 		class MDJM_ClientFields	{
@@ -474,6 +471,3 @@
 		} // class
 		
 	} // if( !class_exists( 'MDJM_ClientFields' ) )
-	
-/* -- Instantiate the class -- */
-	new MDJM_ClientFields();
