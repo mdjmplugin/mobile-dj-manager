@@ -447,22 +447,20 @@ function mdjm_transaction_post_messages( $messages )	{
 	
 	global $post;
 	
-	if( 'mdjm-transaction' != get_post_type( $post->ID ) )	{
+	if( 'mdjm-transaction' != $post->post_type )	{
 		return $messages;
 	}
 	
-	$messages = array(
+	$url1 = '<a href="' . admin_url( 'edit.php?post_type=mdjm-transaction' ) . '">';
+	$url2 = get_post_type_object( $post->post_type )->labels->singular_name;
+	$url3 = '</a>';
+	
+	$messages['mdjm-transaction'] = array(
 		0 => '', // Unused. Messages start at index 1.
-		1 => __( 'Transaction updated.', 'mobile-dj-manager' ),
-		2 => __( 'Custom field updated.' ),
-		3 => __( 'Custom field deleted.' ),
-		4 => __( 'Transaction updated.', 'mobile-dj-manager' ),
-		5 => isset( $_GET['revision'] ) ? sprintf( __( 'Transaction restored to revision from %s.' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6 => __( 'Transaction updated.', 'mobile-dj-manager' ),
-		7 => __( 'Transaction saved.', 'mobile-dj-manager' ),
-		8 => __( 'Transaction submitted.', 'mobile-dj-manager' ),
-		9 => __( 'Transaction scheduled.' ),
-		10 => __( 'Transaction draft updated.', 'mobile-dj-manager' )
+		1 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		4 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		6 => sprintf( __( '%2$s inserted. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 )
 	);
 	
 	return apply_filters( 'mdjm_transaction_post_messages', $messages );

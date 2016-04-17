@@ -1265,22 +1265,22 @@ function mdjm_event_post_messages( $messages )	{
 	
 	global $post;
 	
-	if( 'mdjm-event' != get_post_type( $post->ID ) )	{
+	if( 'mdjm-event' != $post->post_type )	{
 		return $messages;
 	}
 	
-	$messages = array(
+	$url1 = '<a href="' . admin_url( 'edit.php?post_type=mdjm-event' ) . '">';
+	$url2 = mdjm_get_label_singular();
+	$url3 = mdjm_get_label_plural();
+	$url4 = '</a>';
+		
+	$messages['mdjm-event'] = array(
 		0 => '', // Unused. Messages start at index 1.
-		1 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		2 => __( 'Custom field updated.' ),
-		3 => __( 'Custom field deleted.' ),
-		4 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		5 => isset( $_GET['revision'] ) ? sprintf( __( '%s restored to revision from %s.' ), mdjm_get_label_singular(), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6 => sprintf( __( '%s created.' ), mdjm_get_label_singular() ),
-		7 => sprintf( __( '%s saved.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		8 => sprintf( __( '%s submitted.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		9 => sprintf( __( '%s scheduled.' ), mdjm_get_label_singular() ),
-		10 => sprintf( __( '%s draft updated.', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+		1 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
+		4 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
+		6 => sprintf( __( '%2$s created. %1$s%3$s List%4$s.' ), $url1, $url2, $url3, $url4 ),
+		7 => sprintf( __( '%2$s saved. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
+		8 => sprintf( __( '%2$s submitted. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 )
 	);
 	
 	return apply_filters( 'mdjm_event_post_messages', $messages );

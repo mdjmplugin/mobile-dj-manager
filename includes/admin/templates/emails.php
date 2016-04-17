@@ -113,22 +113,22 @@ function mdjm_email_template_post_messages( $messages )	{
 	
 	global $post;
 	
-	if( 'email_template' != get_post_type( $post->ID ) )	{
+	if( 'email_template' != $post->post_type )	{
 		return $messages;
 	}
 	
-	$messages = array(
+	$url1 = '<a href="' . admin_url( 'edit.php?post_type=email_template' ) . '">';
+	$url2 = get_post_type_object( $post->post_type )->labels->singular_name;
+	$url3 = '</a>';
+	
+	$messages['email_template'] = array(
 		0 => '', // Unused. Messages start at index 1.
-		1 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		2 => __( 'Custom field updated.' ),
-		3 => __( 'Custom field deleted.' ),
-		4 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		5 => isset( $_GET['revision'] ) ? sprintf( __( 'Transaction restored to revision from %s.' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-		6 => sprintf( __( '%s updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		7 => sprintf( __( '%s saved.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		8 => sprintf( __( '%s submitted.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		9 => sprintf( __( '%s scheduled.' ), get_post_type_object( $post->post_type )->labels->singular_name ),
-		10 => sprintf( __( '%s draft updated.', 'mobile-dj-manager' ), get_post_type_object( $post->post_type )->labels->singular_name )
+		1 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		4 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.' ), $url2, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		6 => sprintf( __( '%2$s published. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
+		10 => sprintf( __( '%2$s draft updated. %1$s%2$s List%4$s..', 'mobile-dj-manager' ), $url1, $url2, $url3 )
 	);
 	
 	return apply_filters( 'mdjm_email_template_post_messages', $messages );
