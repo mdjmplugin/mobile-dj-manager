@@ -29,7 +29,7 @@ function mdjm_admin_menu()	{
 	global $mdjm_dashboard_page, $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page, 
 	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_availability_page,
 		   $mdjm_emp_page, $mdjm_packages_page, $mdjm_transactions_page, $mdjm_venues_page,
-		   $mdjm_addons_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page;
+		   $mdjm_addons_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page, $mdjm_custom_client_fields_page;
 	
 	
 	$mdjm_dashboard_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Dashboard', 'mobile-dj-manager' ), __( 'Dashboard', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-dashboard', 'mdjm_dashboard_page' );
