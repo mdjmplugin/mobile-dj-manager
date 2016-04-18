@@ -128,7 +128,7 @@ function mdjm_email_template_post_messages( $messages )	{
 		5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.' ), $url2, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 		6 => sprintf( __( '%2$s published. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
-		10 => sprintf( __( '%2$s draft updated. %1$s%2$s List%4$s..', 'mobile-dj-manager' ), $url1, $url2, $url3 )
+		10 => sprintf( __( '%2$s draft updated. %1$s%2$s List%3$s..', 'mobile-dj-manager' ), $url1, $url2, $url3 )
 	);
 	
 	return apply_filters( 'mdjm_email_template_post_messages', $messages );

@@ -57,7 +57,7 @@ register_activation_hook( MDJM_PLUGIN_FILE, 'mdjm_install' );
  */
 function mdjm_run_install()	{
 	
-	global $mdjm_options;
+	global $mdjm_options, $wpdb;
 	
 	// Setup custom post types
 	mdjm_register_post_types();
@@ -174,7 +174,7 @@ function mdjm_run_install()	{
 				'post_content'   => '<h1>' . __( 'Your DJ Enquiry from {company_name}', 'mobile-dj-manager' ) . '</h1>' .
 									__( 'Dear {client_firstname},', 'mobile-dj-manager' ) .
 									'<br /><br />' .
-									sprintf( __( 'Thank you for contacting {company_name} regarding your up and coming %s on {event_date}.', 'mobile-dj-manager' ), mdjm_get_label_singular() ) .
+									sprintf( __( 'Thank you for contacting {company_name} regarding your up and coming %s on {event_date}.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) .
 									'<br /><br />' .
 									__( 'I am pleased to tell you that we are available and would love to provide the disco for you.', 'mobile-dj-manager' ) .
 									'<br /><br />' .
@@ -200,6 +200,71 @@ function mdjm_run_install()	{
 			)
 		);
 		
+		$online_enquiry = wp_insert_post(
+			array(
+				'post_title'     => __( 'Default Online Quote', 'mobile-dj-manager' ),
+				'post_status'    => 'publish',
+				'post_type'		 => 'email_template',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+				'post_content'   => sprintf( '[caption id="" align="alignleft" width="128"]<a href="%1$s"><img title="%2$s" src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/10/icon-128x1281.png" alt="%2$s" width="128" height="128" /></a> %2$s[/caption]', '{website_url}', '{company_name}' ) .
+									'<h3>' . sprintf( __( '%s Quotation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{client_fullname}' ) . '</h3>' .
+									'<pre>' . sprintf( __( 'Prepared by: %s', 'mobile-dj-manager' ), '{dj_fullname}' ) .
+									'<br />' .
+									__( 'Date:', 'mobile-dj-manager' ) . ' {DDMMYYYY}' .
+									'<br />' .
+									__( 'Valid for: 2 weeks from date', 'mobile-dj-manager' ) . 
+									'</pre><br />' .
+									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{client_firstname}' ) .
+									'<br />' .
+									sprintf( __( 'It is with pleasure that I am providing you with the following costs for your %s on %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), '{event_date}' ) .
+									'<br /><br />' .
+									sprintf( __( 'I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on %1$s or at <a href="mailto: %2$s">%2$s</a>.', 'mobile-dj-manager' ), '{dj_primary_phone}', '{dj_email}' ) .
+									'<br />' .
+									'<table style="font-size: 11px;">' .
+									'<tbody>' .
+									'<tr>' .
+									'<td>' . sprintf( __( '%s Date:', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</td>' .
+									'<td>{event_date}</td>' .
+									'<td>' . sprintf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() )  . '</td>' .
+									'<td>{event_type}</td>' .
+									'</tr>' .
+									'<tr>' .
+									'<td>' . __( 'Start Time:', 'mobile-dj-manager' ) . '</td>' .
+									'<td>{start_time}</td>' .
+									'<td>' . __( 'End Time:', 'mobile-dj-manager' ) . '</td>' .
+									'<td>{end_time}</td>' .
+									'</tr>' .
+									'<tr>' .
+									'<td>' . __( 'Selected Package:', 'mobile-dj-manager' ) . '</td>' .
+									'<td>{event_package}</td>' .
+									'<td>' . __( 'Add-ons:', 'mobile-dj-manager' ) . '</td>' .
+									'<td>{event_addons}</td>' .
+									'</tr>' .
+									'<tr>' .
+									'<td>' . __( 'Venue Details:', 'mobile-dj-manager' ) . '</td>' .
+									'<td colspan="3">{venue_full_address}</td>' .
+									'</tr>' .
+									'<tr>' .
+									'<td colspan="4">' .
+									'<hr />' .
+									'</td>' .
+									'</tr>' .
+									'<tr style="font-weight: bold;">' .
+									'<td colspan="2">' . sprintf( __( '%s Cost:', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</td>' .
+									'<td colspan="2">{total_cost}</td>' .
+									'</tr>' .
+									'<tr style="font-weight: bold;">' .
+									'<td colspan="2">' . __( 'Booking Fee:', 'mobile-dj-manager' ) . '</td>' .
+									'<td colspan="2">{DEPOSIT} <span style="font-size: 9px;">(' . __( 'due at time of booking', 'mobile-dj-manager' ) . ')</span></td>' .
+									'</tr>' .
+									'</tbody>' .
+									'</table>' .
+									'<span style="color: #cccccc; font-size: 9px;"><a style="color: #cccccc;" href="#">' . __( 'Click here to view our list of terms and conditions', 'mobile-dj-manager' ) . '</a></span>'
+			)
+		);
+		
 		$contract = wp_insert_post(
 			array(
 				'post_title'     => __( 'Client Contract Review', 'mobile-dj-manager' ),
@@ -211,7 +276,7 @@ function mdjm_run_install()	{
 				'post_content'   => '<h2>' . sprintf( __( 'Your Booking with %s', 'mobile-dj-manager' ), '{company_name}' ) . '</h2>' .
 									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{client_firstname}' ) .
 									'<br /><br />' .
-									sprintf( __( 'Thank you for indicating that you wish to proceed with booking %s for your up and coming %s on %s', 'mobile-dj-manager' ), '{company_name}', mdjm_get_label_singular(), '{event_date}' ) .
+									sprintf( __( 'Thank you for indicating that you wish to proceed with booking %s for your up and coming %s on %s', 'mobile-dj-manager' ), '{company_name}', mdjm_get_label_singular( true ), '{event_date}' ) .
 									'<br /><br />' .
 									__( 'There are two final tasks to complete before your booking can be confirmed...', 'mobile-dj-manager' ) .
 									'<br />' .
@@ -237,7 +302,7 @@ function mdjm_run_install()	{
 		
 		$booking_conf_client = wp_insert_post(
 			array(
-				'post_title'     => 'Client Booking Confirmation',
+				'post_title'     => __( 'Client Booking Confirmation', 'mobile-dj-manager' ),
 				'post_status'   	=> 'publish',
 				'post_type'      => 'email_template',
 				'post_author'   	=> 1,
@@ -248,39 +313,155 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									sprintf( __( 'Thank you for booking your up and coming %s with %s. Your booking is now confirmed.', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{company_name}' ) .
 									'<br /><br />' .
-									sprintf( __( 'My name is %s and I will be your DJ on %s. Should you wish to contact me at any stage to discuss your %s, my details are at the end of this email.', 'mobile-dj-manager' ), '{dj_fullname}', '{event_date}', mdjm_get_label_singular() ) .
+									sprintf( __( 'My name is %s and I will be your DJ on %s. Should you wish to contact me at any stage to discuss your %s, my details are at the end of this email.', 'mobile-dj-manager' ), '{dj_fullname}', '{event_date}', mdjm_get_label_singular( true ) ) .
 									'<br />' .
 									'<h2>' . __( 'What Now?', 'mobile-dj-manager' ) . '</h2>' .
 									'<br />' .
 									'<strong>' . __( 'Music Selection & Playlists', 'mobile-dj-manager' ) . '</strong>' .
 									'<br /><br />' .
-									We have an online portal where you can add songs that you would like to ensure we play during your disco. To access this feature, head over to the {COMPANY_NAME} <a href="{APPLICATION_HOME}">{APPLICATION_NAME}</a>. The playlist feature will close {PLAYLIST_CLOSE} days before your event.<br />
-									<br />
-									You will need to login. Your username and password have already been sent to you in a previous email but if you no longer have this information, click on the lost password link and enter your user name, which is your email address. Instructions on resetting your password will then be sent to you.<br />
-									<br />
-									You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="{PLAYLIST_URL}">{PLAYLIST_URL}</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.<br />
-									<br />
-									Don\'t worry though, you have full control over your playlist so you can remove songs added by your guests if you do not like their choices.<br />
-									<br />
-									<strong>When will you next hear from me?</strong><br />
-									<br />
-									I generally contact you again approximately 2 weeks before your event to finalise details with you. However, if you have any questions, concerns, or just want a general chat about your disco, feel free to contact me at any time.<br />
-									<br />
-									Thanks again for choosing {COMPANY_NAME} to provide the DJ & Disco for your event. I look forward to partying with you on {EVENT_DATE}.<br />
-									<br />
-									Best Regards<br />
-									<br />
-									{DJ_FULLNAME}<br />
-									<br />
-									Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
-									Tel: {DJ_PRIMARY_PHONE}<br />
-									<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>'
+									sprintf( __( 'We have an online portal where you can add songs that you would like to ensure we play during your disco. To access this feature, head over to the %1$s <a href="%2$s">%2$s</a>. The playlist feature will close %3$s days before your %4$s.', 'mobile-dj-manager' ), '{company_name}', '{application_home}', '{playlist_close}', mdjm_get_label_singular( true ) ) .
+									'<br /><br />' .
+									__( 'You will need to login. Your username and password have already been sent to you in a previous email but if you no longer have this information, click on the lost password link and enter your user name, which is your email address. Instructions on resetting your password will then be sent to you.', 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									sprintf( __( 'You can also invite your guests to add songs to your playlist by providing them with your unique playlist URL - <a href="%1$s">%1$s</a>. We recommend creating a <a href="https://www.facebook.com/events/">Facebook Events Page</a> and sharing the link on there. Alternatively of course, you can email the URL to your guests.', 'mobile-dj-manager' ), '{playlist_url}' ) .
+									'<br /><br />' .
+									__( "Don\'t worry though, you have full control over your playlist so you can remove songs added by your guests if you do not like their choices.", 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									'<strong>' . __( 'When will you next hear from me?', 'mobile-dj-manager' ) . '</strong>' .
+									'<br /><br />' .
+									sprintf( __( 'I generally contact you again approximately 2 weeks before your %s to finalise details with you. However, if you have any questions, concerns, or just want a general chat about your disco, feel free to contact me at any time.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) .
+									'<br /><br />' .
+									sprintf( __( 'Thanks again for choosing %s to provide the DJ & Disco for your %s. I look forward to partying with you on %s.', 'mobile-dj-manager' ), '{company_name}', mdjm_get_label_singular( true ), '{event_date}' ) .
+									'<br /><br />' .
+									__( 'Best Regards', 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									'{dj_fullname}' .
+									'<br /><br />' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									'<br />' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									'<br />' .
+									'<a href="{website_url}">{website_url}</a>'
 			)
 		);
 		
-		$options['enquiry']  = $enquiry;
-		$options['contract'] = $contract;
+		$email_dj_confirm = wp_insert_post(
+			array(
+				'post_title'     => __( 'DJ Booking Confirmation', 'mobile-dj-manager' ),
+				'post_status'    => 'publish',
+				'post_type'      => 'email_template',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+				'post_content'   => '<h1>' . __( 'Booking Confirmation', 'mobile-dj-manager' ) . '</h1>' .
+									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{dj_firstname}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Your client %s has just confirmed their booking for you to DJ at their %s on %s.', 'mobile-dj-manager' ), '{client_fullname}', mdjm_get_label_singular( true ), '{event_date}' ) .
+									'<br /><br />' .
+									sprintf( __( 'A booking confirmation email has been sent to them and they now have your contact details and access to the online %s tools to create playlist entries etc.', 'mobile-dj-manager' ), '{application_name}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Make sure you login regularly to the <a href="%s">%s %s admin interface</a> to ensure you have all relevant information relating to their booking.', 'mobile-dj-manager' ), admin_url(), '{company_name}', '{application_name}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Remember it is your responsibility to remain in regular contact with your client regarding their %1$s as well as answer any queries or concerns they may have. Customer service is one of our key selling points and after the event, your client will be invited to provide feedback regarding the booking process, communication in the lead up to the %1$s, as well as the %1$s itself.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) .
+									'<br />' .
+									'<h2>' . sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</h2>' .
+									'<br />' .
+									__( 'Client Name: ', 'mobile-dj-manager' ) . '{client_fullname}' . '<br />' .
+									__( 'Event Date: ', 'mobile-dj-manager' ). '{event_date}' . '<br />' .
+									__( 'Type: ', 'mobile-dj-manager' ). '{event_type}' . '<br />' .
+									__( 'Start Time: ', 'mobile-dj-manager' ). '{start_time}' . '<br />' .
+									__( 'Finish Time: ', 'mobile-dj-manager' ). '{end_time}' . '<br />' .
+									__( 'Venue: ', 'mobile-dj-manager' ). '{venue}' . '<br />' .
+									__( 'Balance Due: ', 'mobile-dj-manager' ). '{balance}' . '<br />' .
+									'<br />' .
+									sprintf( __( 'Further information is available on the <a href="%s">%s %s admin interface</a>.', 'mobile-dj-manager' ), admin_url(), '{company_name}', '{application_home}' ) .
+									'<br /><br />' .
+									__( 'Regards', 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									'{company_name}'
+			)
+		);
 		
+		$unavailable = wp_insert_post(
+			array(
+				'post_title'     => sprintf( __( '%s is not Available', 'mobile-dj-manager' ), '{company_name}' ),
+				'post_status'    => 'publish',
+				'post_type'      => 'email_template',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+				'post_content'   => '<h1>' . sprintf( __( 'Your DJ Enquiry with %s', 'mobile-dj-manager' ), '{company_name}' ) . '</h1>' .
+									sprintf( __( 'Dear %s', 'mobile-dj-manager' ), '{client_firstname}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Thank you for contacting %s regarding your up and coming %s on %s.', 'mobile-dj-manager' ), '{company_name}', mdjm_get_label_singular( true ), '{event_date}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Unfortunately however, we are not available on the date you have selected for your %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) .
+									__( "If you have alternative dates you are looking at, we'd love to hear from you again.", 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									sprintf( __( 'Otherwise, we hope you have a great %s and hope to hear from you again next time.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) .
+									'<br /><br />' .
+									__( 'Best Regards', 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									'{dj_fullname}' .
+									'<br /><br />' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									'<br />' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									'<br />' .
+									'<a href="{website_url}">{website_url}</a>'
+			)
+		);
+		
+		$payment_cfm = wp_insert_post(
+			array(
+				'post_title'     => sprintf( __( '%s %s Payment Confirmation', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{payment_for}' ),
+				'post_status'    => 'publish',
+				'post_type'      => 'email_template',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+				'post_content'   => '<h4><span style="color: #ff9900;">' . sprintf( __( 'Thank you for your %s payment', 'mobile-dj-manager' ), '{payment_for}' ) . '</span></h4>' .
+									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{client_firstname}' ) .
+									'<br /><br />' .
+									sprintf( __( 'Thank you for your recent payment of <strong>%s</strong> towards the <strong>%s</strong> for you event on <strong>%s</strong>. Your payment has been received and your %s details have been updated.', 'mobile-dj-manager' ), '{payment_amount}', '{payment_for}', '{event_date}', mdjm_get_label_singular( true ) ) .
+									'<br /><br />' .
+									sprintf( __( 'You can view your event details and manage your playlist by logging onto our <a title="%1$s %2$s" href="%3$s">%2$s</a> event management system.', 'mobile-dj-manager' ), '{company_name}', '{application_name}', '{application_home}' ) .
+									'<br /><br />' .
+									sprintf( __( "Your username is %s and if you can't recall your password, you can reset it by clicking the <a title='Reset your password for the %s %s' href='%s'>Lost Password</a> link.", 'mobile-dj-manager' ), '{client_username}', '{company_name}', '{application_name}', wp_lostpassword_url() ) .
+									'<br /><br />' .
+									__( 'Best Regards', 'mobile-dj-manager' ) .
+									'<br /><br />' .
+									'{dj_fullname}' .
+									'<br /><br />' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									'<br />' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									'<br />' .
+									'<a href="{website_url}">{website_url}</a>'
+			)
+		);
+		
+		$default_contract = wp_insert_post(
+			array(
+				'post_title'     => __( 'General', 'mobile-dj-manager' ),
+				'post_status'    => 'publish',
+				'post_type'      => 'contract',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+				'post_content'   => '<h2 style="text-align: center;"><span style="text-decoration: underline;">Confirmation of Booking</span></h2><h3>Agreement Date: <span style="color: #ff0000;">{DDMMYYYY}</span></h3>This document sets out the terms and conditions verbally agreed by both parties and any non-fulfilment of the schedule below may render the defaulting party liable to damages.This agreement is between: <strong>{COMPANY_NAME}</strong> (hereinafter called the Artiste)and:<strong>{CLIENT_FULLNAME}</strong> (hereinafter called the Employer)<strong>of</strong><address><strong>{CLIENT_FULL_ADDRESS}{CLIENT_EMAIL}{CLIENT_PRIMARY_PHONE}</strong> </address><address> </address><address>in compliance with the schedule set out below.</address><h3 style="text-align: center;"><span style="text-decoration: underline;">Schedule</span></h3>It is agreed that the Artiste shall appear for the performance set out below for a total inclusive fee of <span style="color: #ff0000;"><strong>{TOTAL_COST}</strong></span>.Payment terms are: <strong><span style="color: #ff0000;">{DEPOSIT}</span> Deposit</strong> to be returned together with this form followed by <strong>CASH ON COMPLETION</strong> for the remaining balance of <strong><span style="color: #ff0000;">{BALANCE}</span>. </strong>Cheques will only be accepted by prior arrangement.Deposits can be made via bank transfer to the following account or via cheque made payable to <strong>XXXXXX</strong> and sent to the address at the top of this form.<strong>Bank Transfer Details: Name XXXXXX | Acct No. 10000000 | Sort Code | 30-00-00</strong><strong>The confirmation of this booking is secured upon receipt of the signed contract and any stated deposit amount</strong>.<h3 style="text-align: center;"><span style="text-decoration: underline;">Venue and Event</span></h3><table border="0" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td align="center"><table border="0" width="75%" cellspacing="0" cellpadding="0"><tbody><tr><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000; border-right-width: thin; border-right-style: solid; border-right-color: #000;" width="33%"><strong>Address</strong></td><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000; border-right-width: thin; border-right-style: solid; border-right-color: #000;" width="33%"><strong>Telephone Number</strong></td><td style="border-bottom-width: thin; border-bottom-style: solid; border-bottom-color: #000;" width="33%"><strong>Date</strong></td></tr><tr><td style="border-right-width: thin; border-right-style: solid; border-right-color: #000;" valign="top" width="33%"><span style="color: #ff0000;"><strong>{VENUE_FULL_ADDRESS}</strong></span></td><td style="border-right-width: thin; border-right-style: solid; border-right-color: #000;" valign="top" width="33%"><span style="color: #ff0000;"><strong>{VENUE_TELEPHONE}</strong></span></td><td valign="top" width="33%"><span style="color: #ff0000;"><strong>{EVENT_DATE}</strong></span></td></tr></tbody></table></td></tr></tbody></table>The Artiste will perform between the times of <span style="color: #ff0000;"><strong>{START_TIME}</strong></span> to <span style="color: #ff0000;"><strong>{END_TIME}</strong></span>. Any additional time will be charged at £50 per hour or part of.<hr /><h2 style="text-align: center;"> Terms &amp; Conditions</h2><ol>	<li>This contract may be cancelled by either party, giving the other not less than 28 days prior notice.</li>	<li>If the Employer cancels the contract in less than 28 days’ notice, the Employer is required to pay full contractual fee, unless a mutual written agreement has been made by the Artiste and Employer.</li>	<li>Deposits are non-refundable, unless cancellation notice is issued by the Artiste or by prior written agreement.</li>	<li>This contract is not transferable to any other persons/pub/club without written permission of the Artiste.</li>	<li>Provided the Employer pays the Artiste his full contractual fee, he may without giving any reason, prohibit the whole or any part of the Artiste performance.</li>	<li>Whilst all safeguards are assured the Artiste cannot be held responsible for any loss or damage, out of the Artiste’s control during any performance whilst on the Employers premises.</li>	<li>The Employer is under obligation to reprimand or if necessary remove any persons being repetitively destructive or abusive to the Artiste or their equipment.</li>	<li>It is the Employer’s obligation to ensure that the venue is available 90 minutes prior to the event start time and 90 minutes from event completion.</li>	<li>The venue must have adequate parking facilities and accessibility for the Artiste and his or her equipment.</li>	<li>The Artiste reserves the right to provide an alternative performer to the employer for the event. Any substitution will be advised in writing at least 7 days before the event date and the performer is guaranteed to be able to provide at least the same level of service as the Artiste.</li>	<li>Failing to acknowledge and confirm this contract 28 days prior to the performance date does not constitute a cancellation, however it may render the confirmation unsafe. If the employer does not acknowledge and confirm the contract within the 28 days, the Artiste is under no obligation to confirm this booking.</li>	<li>From time to time the Artiste, or a member of their crew, may take photographs of the performance. These photographs may include individuals attending the event. If you do not wish for photographs to be taken or used publicly such as on the Artiste’s websites or other advertising media, notify the Artiste in writing.</li></ol>'
+			)
+		);
+		
+		$options['enquiry']                     = $enquiry;
+		$options['online_enquiry']              = $online_enquiry;
+		$options['contract']                    = $contract;
+		$options['booking_conf_client']         = $booking_conf_client;
+		$options['email_dj_confirm']            = $email_dj_confirm;
+		$options['unavailable']                 = $unavailable;
+		$options['payment_cfm_template']        = $payment_cfm;
+		$options['manual_payment_cfm_template'] = $payment_cfm;
+		$options['default_contract']            = $default_contract;
 	}
 	
 	// Populate some default values
@@ -384,18 +565,37 @@ function mdjm_run_install()	{
 	// Make all admins MDJM employees and admins by default by assigning caps to the user directly
 	$administrators = get_users( array( 'role' => 'administrator' ) );
 	
+	$permissions = new MDJM_Permissions();
+	
 	foreach( $administrators as $user )	{
 		update_user_meta( $user->ID, '_mdjm_event_staff', true );
 		$user->add_cap( 'mdjm_employee' );
 		$user->add_cap( 'manage_mdjm' );
+		
+		// Assigned full MDJM caps to the manage_mdjm role
+		$permissions->make_admin( $user->ID );
 	}
-	
-	// Assigned full MDJM caps to the manage_mdjm role
-	$permissions = new MDJM_Permissions();
-	$permissions->make_admin( 'manage_mdjm' );
 	
 	// Assign the MDJM employee cap to the DJ role
 	$role = get_role( 'dj' );
 	$role->add_cap( 'mdjm_employee' );
+	
+	// Create the availability check DB table
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	
+	$sql = "CREATE TABLE " . $wpdb->prefix . "mdjm_avail (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		user_id int(11) NOT NULL,
+		entry_id varchar(100) NOT NULL,
+		date_from date NOT NULL,
+		date_to date NOT NULL,
+		notes text NULL,
+		PRIMARY KEY  (id),
+		KEY user_id (user_id)
+		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+
+		dbDelta( $sql );
+
+		update_option( 'mdjm_db_version', $mdjm_db_version );
 		
 } // mdjm_run_install

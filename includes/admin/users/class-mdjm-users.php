@@ -232,74 +232,77 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			$custom_fields = get_option( 'mdjm_client_fields' );
 			
 			// Loop through the fields
-			foreach( $custom_fields as $custom_field )	{
-				
-				if( $pagenow != 'user-new.php' )	{
-					$field_value = get_user_meta( $user_id, $custom_field['id'], true );
-				}
-
-				// Display if configured
-				if( $custom_field['display'] == true && $custom_field['id'] != 'first_name' && $custom_field['id'] != 'last_name' && $custom_field['id'] != 'user_email' )	{
+			if ( ! empty( $custom_fields ) )	{
+				foreach( $custom_fields as $custom_field )	{
 					
-					echo '<tr>' . "\r\n" . 
-					'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" . 
-					'<td>' . "\r\n";
-					
-					// Checkbox Field
-					if( $custom_field['type'] == 'checkbox' )	{
-						
-						echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="Y" ';
-						
-						if( $pagenow != 'user-new.php' )	{
-							checked( $field_value, 'Y' );
-						} else	{
-							checked ( '', '' );
-						}
-						
-						echo ' />' . "\r\n";
+					if( $pagenow != 'user-new.php' )	{
+						$field_value = get_user_meta( $user_id, $custom_field['id'], true );
 					}
-					// Select List
-					elseif( $custom_field['type'] == 'dropdown' )	{
+	
+					// Display if configured
+					if( $custom_field['display'] == true && $custom_field['id'] != 'first_name' && $custom_field['id'] != 'last_name' && $custom_field['id'] != 'user_email' )	{
 						
-						echo '<select name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '">';
+						echo '<tr>' . "\r\n" . 
+						'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" . 
+						'<td>' . "\r\n";
 						
-						$option_data = explode( "\r\n", $custom_field['value'] );
-						
-						echo '<option value="empty"';
-						
-						if( $pagenow == 'user-new.php' || empty( $field_value ) || $field_value == 'empty' ) echo ' selected';
-						
-						echo '></option>' . "\r\n";
-						
-						foreach( $option_data as $option )	{
+						// Checkbox Field
+						if( $custom_field['type'] == 'checkbox' )	{
 							
-							echo '<option value="' . $option . '"';
+							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="Y" ';
 							
 							if( $pagenow != 'user-new.php' )	{
-								selected( $option, $field_value );
+								checked( $field_value, 'Y' );
+							} else	{
+								checked ( '', '' );
 							}
 							
-							echo '>' . $option . '</option>' . "\r\n";
+							echo ' />' . "\r\n";
+						}
+						// Select List
+						elseif( $custom_field['type'] == 'dropdown' )	{
+							
+							echo '<select name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '">';
+							
+							$option_data = explode( "\r\n", $custom_field['value'] );
+							
+							echo '<option value="empty"';
+							
+							if( $pagenow == 'user-new.php' || empty( $field_value ) || $field_value == 'empty' ) echo ' selected';
+							
+							echo '></option>' . "\r\n";
+							
+							foreach( $option_data as $option )	{
+								
+								echo '<option value="' . $option . '"';
+								
+								if( $pagenow != 'user-new.php' )	{
+									selected( $option, $field_value );
+								}
+								
+								echo '>' . $option . '</option>' . "\r\n";
+							}
+							
+							echo '<select/>';
+						}
+						// Everything else
+						else	{
+							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . 
+							'" id="' . $custom_field['id'] . '" value="' . ( $pagenow != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'], $user->ID ) ) : '' ) . 
+							'" class="regular-text" />' . "\r\n";
 						}
 						
-						echo '<select/>';
+						// Description if set
+						if( $custom_field['desc'] != '' )	{
+							echo '<br />' . 
+							'<span class="description">' . $custom_field['desc'] . '</span>' . "\r\n";
+						}
+						
+						// End the table row
+						echo '</td>' . "\r\n" . 
+						'</tr>' . "\r\n";
+						
 					}
-					// Everything else
-					else	{
-						echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . 
-						'" id="' . $custom_field['id'] . '" value="' . ( $pagenow != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'], $user->ID ) ) : '' ) . 
-						'" class="regular-text" />' . "\r\n";
-					}
-					
-					// Description if set
-					if( $custom_field['desc'] != '' )	{
-						echo '<br />' . 
-						'<span class="description">' . $custom_field['desc'] . '</span>' . "\r\n";
-					}
-					
-					// End the table row
-					echo '</td>' . "\r\n" . 
-					'</tr>' . "\r\n";
 					
 				}
 				
@@ -345,36 +348,40 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			}
 			
 			// Loop through the fields and update
-			foreach( $custom_fields as $custom_field )	{
+			if ( ! empty( $custom_fields ) )	{
 				
-				$field = $custom_field['id'];
-				
-				// Checkbox unchecked = N
-				if( $custom_field['type'] == 'checkbox' && empty( $_POST[ $field ] ) )	{
-					$_POST[ $field ] = 'N';
-				}
-				
-				// Update the users meta data
-				if( !empty( $_POST[ $field ] ) )	{
-					update_user_meta( $user_id, $field, $_POST[ $field ] );
-				}
-				
-				/**
-				 * For new users, remove the admin bar 
-				 * and set the action to created
-				 */
-				if( isset( $_POST['action'] ) && $_POST['action'] == 'createuser' )	{
+				foreach( $custom_fields as $custom_field )	{
 					
-					update_user_option( $user_id, 'show_admin_bar_front', false );
+					$field = $custom_field['id'];
 					
-					if( !empty( $default_fields->first_name ) && !empty( $default_fields->last_name ) )	{
-						update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );
+					// Checkbox unchecked = N
+					if( $custom_field['type'] == 'checkbox' && empty( $_POST[ $field ] ) )	{
+						$_POST[ $field ] = 'N';
 					}
 					
-					$client_action = 'created';	
-				} else	{
-					$client_action = 'updated';
+					// Update the users meta data
+					if( !empty( $_POST[ $field ] ) )	{
+						update_user_meta( $user_id, $field, $_POST[ $field ] );
+					}
+					
+					/**
+					 * For new users, remove the admin bar 
+					 * and set the action to created
+					 */
+					if( isset( $_POST['action'] ) && $_POST['action'] == 'createuser' )	{
+						
+						update_user_option( $user_id, 'show_admin_bar_front', false );
+						
+						if( !empty( $default_fields->first_name ) && !empty( $default_fields->last_name ) )	{
+							update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );
+						}
+						
+						$client_action = 'created';	
+					} else	{
+						$client_action = 'updated';
+					}
 				}
+				
 			}
 			
 			do_action( 'mdjm_post_save_custom_user_fields', $user_id, $_POST );

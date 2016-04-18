@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_get_deposit_label() {
 	
-	$term = get_term_by( 'slug', 'mdjm-deposit-payment', 'transaction-types' );
+	$term = get_term_by( 'slug', 'mdjm-deposit-payments', 'transaction-types' );
 	
 	if ( empty( $term ) )	{
 		return __( 'Term not found', 'mobile-dj-manager' );
@@ -39,7 +39,7 @@ function mdjm_get_deposit_label() {
  */
 function mdjm_get_balance_label() {
 	
-	$term = get_term_by( 'slug', 'mdjm-balance-payment', 'transaction-types' );
+	$term = get_term_by( 'slug', 'mdjm-balance-payments', 'transaction-types' );
 	
 	if ( empty( $term ) )	{
 		return __( 'Term not found', 'mobile-dj-manager' );

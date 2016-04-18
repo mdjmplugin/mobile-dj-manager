@@ -253,7 +253,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' ); // Shortcodes
 			
 			if( is_admin() )	{ // Required for admin only
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
+				//require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/core.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/communications/comms.php' );
@@ -285,6 +285,9 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			else	{ // Required for front end only
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
+			
+			require_once MDJM_PLUGIN_DIR . '/includes/install.php';
+			
 		} // mdjm_includes
 	} //class  Mobile_DJ_Manager
 	
@@ -294,7 +297,7 @@ endif;
 		return Mobile_DJ_Manager::instance();
 	}
 
-	register_activation_hook( __FILE__, array( 'Mobile_DJ_Manager', 'mdjm_activate' ) );
+	//register_activation_hook( __FILE__, array( 'Mobile_DJ_Manager', 'mdjm_activate' ) );
 	register_deactivation_hook( __FILE__, array( 'Mobile_DJ_Manager', 'mdjm_deactivate' ) );
 
 	MDJM();
