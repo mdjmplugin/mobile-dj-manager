@@ -168,6 +168,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+			define( 'MDJM_PLUGIN_FILE', __FILE__ );
 			define( 'MDJM_NAME', 'MDJM Event Management' );
 			
 			define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );

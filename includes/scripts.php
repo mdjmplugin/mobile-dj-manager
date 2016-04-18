@@ -22,15 +22,22 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_load_scripts()	{
+	
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
 	
 	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-ajax' );
 
-	wp_localize_script( 'mdjm-ajax', 'mdjm_scripts', apply_filters( 'mdjm_ajax_script_vars', array(
-		'ajaxurl'                 => mdjm_get_ajax_url(),
-		
-	) ) );
+	wp_localize_script(
+		'mdjm-ajax',
+		'mdjm_scripts',
+		apply_filters(
+			'mdjm_ajax_script_vars',
+			array(
+				'ajaxurl' => mdjm_get_ajax_url()
+			)
+		)
+	);
 	
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
@@ -50,6 +57,7 @@ add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
  * @return	void
  */
 function mdjm_register_styles()	{
+
 	$file          = 'mdjm.css';
 	$templates_dir = mdjm_get_theme_template_dir_name();
 	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
@@ -62,11 +70,9 @@ function mdjm_register_styles()	{
 	// Allows users to copy the MDJM stylesheet to their theme DIR and customise.
 	if ( file_exists( $child_theme_style_sheet ) )	{
 		$url = trailingslashit( get_stylesheet_directory_uri() ) . $templates_dir . $file;
-	}
-	elseif ( file_exists( $parent_theme_style_sheet ) )	{
+	} elseif ( file_exists( $parent_theme_style_sheet ) )	{
 		$url = trailingslashit( get_template_directory_uri() ) . $templates_dir . $file;
-	}
-	elseif	( file_exists( $mdjm_plugin_style_sheet ) || file_exists( $mdjm_plugin_style_sheet ) )	{
+	} elseif	( file_exists( $mdjm_plugin_style_sheet ) || file_exists( $mdjm_plugin_style_sheet ) )	{
 		$url = trailingslashit( mdjm_get_templates_url() ) . $file;
 	}
 	
@@ -75,7 +81,7 @@ function mdjm_register_styles()	{
 	
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
 	wp_enqueue_style( 'jquery-ui-css' );
-	
+
 } // mdjm_register_styles
 add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
 
@@ -88,6 +94,7 @@ add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
  * @return	void
  */
 function mdjm_register_admin_styles( $hook )	{
+
 	$file          = 'mdjm-admin-styles.css';
 	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
 	
@@ -109,11 +116,13 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
  * @return	void
  */
 function mdjm_register_admin_scripts( $hook )	{
+
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
 	if( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
 		
 	}
+
 } // mdjm_register_styles
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_scripts' );

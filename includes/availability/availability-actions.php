@@ -41,7 +41,16 @@ function mdjm_availability_check_action( $data )	{
 		}
 	}
 	
+	$url = remove_query_arg( 'mdjm_message' );
 	
+	wp_redirect(
+		add_query_arg(
+			array(
+				'mdjm_message' => $message
+			),
+			$url
+		)
+	);
 	
 	die();
 } // mdjm_availability_check_action

@@ -51,29 +51,35 @@ class mdjm_availability_widget extends WP_Widget {
 	 * @return 	void
 	 */
 	public function ajax( $vars )	{
+		
 		$widget_options_all = get_option( $this->option_name );
 		$instance = $widget_options_all[ $this->number ];
 		
 		if( ! empty( $instance['ajax'] ) )	{
 			$availability_vars = array(
-				'pass_redirect'           => $instance['available_action'] != 'text' ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
-				'fail_redirect'           => $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true ) : ''
+				'pass_redirect'           => $instance['available_action'] != 'text'   ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
+				'fail_redirect'           => $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true )                    : '',
+				'avail'                   => $instance['available_text'],
+				'unavail'                 => $instance['unavailable_text'],
+				
 			);
 		}
 		
 		$availability_vars['required_date_widget'] = __( 'Please select a date', 'mobile-dj-manager' );
 		
 		return array_merge( $vars, $availability_vars );
+
 	} // ajax
 	
 	/**
-	 *Insert the datepicker.
+	 * Insert the datepicker.
 	 *
 	 * @since	1.3
 	 * @param
 	 * @return 	void
 	 */
 	public function datepicker()	{
+		
 		mdjm_insert_datepicker(
 			array(
 				'class'		=> 'mdjm_datepicker_widget',
@@ -81,6 +87,7 @@ class mdjm_availability_widget extends WP_Widget {
 				'mindate'	  => '1'
 			)
 		);
+		
 	} // datepicker
 	
 	/**

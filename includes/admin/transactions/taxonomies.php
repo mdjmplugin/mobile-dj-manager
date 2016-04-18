@@ -76,8 +76,8 @@ function mdjm_get_txn_protected_terms()	{
 	$other_amount_term = get_term_by( 'name', mdjm_get_option( 'other_amount_label' ), 'transaction-types' );
 	
 	$protected_terms = array(
-		'mdjm-balance-payment',
-		'mdjm-deposit-payment',
+		'mdjm-balance-payments',
+		'mdjm-deposit-payments',
 		'mdjm-employee-wages',
 		'mdjm-merchant-fees'
 	);

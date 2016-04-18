@@ -30,17 +30,23 @@
         <hr />
         <h2>
         <?php
-		$dj_event_count = MDJM()->events->count_events_by_status( 'dj', get_current_user_id() );
+		//$dj_event_count = MDJM()->events->count_events_by_status( 'dj', get_current_user_id() );
         ?></h2>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
           <tr>
             <td width="60%"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
           <tr>
-            <td colspan="2" class="alternate"><strong>Monthly DJ Overview for <?php echo date( 'F Y' ); ?></strong></td>
+            <td colspan="2" class="alternate"><strong><?php printf( __( 'Monthly %s Overview for %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ), date( 'F Y' ) ); ?></strong></td>
             </tr>
           <tr>
-            <td width="30%">Active Bookings:</td>
-            <td width="70%"><?php echo $dj_event_count['active_month']; ?></td>
+            <td width="30%"><?php _e( 'Active Bookings', 'mobile-dj-manager' ); ?>:</td>
+            <td width="70%"><?php echo mdjm_count_employee_events(
+				'',
+				array(
+					'post_status'  => mdjm_active_event_statuses(),
+					'date'         => array( date( 'Y-m-01' ), date( 'Y-m-t' ) ),
+					'date_compare' => 'BETWEEN'
+				) ); ?></td>
           </tr>
           <?php if( mdjm_employee_can( 'read_events' ) )	{
 			  ?>

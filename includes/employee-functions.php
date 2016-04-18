@@ -704,8 +704,16 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
  * @return	mixed	$events			False if no events, otherwise an object array of all employees events.
  */
 function mdjm_count_employee_events( $employee_id = '', $args = array() )	{
+	
+	$count = 0;
 		
-	return count( mdjm_get_employee_events( $employee_id, apply_filters( 'mdjm_count_employee_events', $args ) ) );
+	$events = mdjm_get_employee_events( $employee_id, $args );
+	
+	if ( $events )	{
+		$count = count( $events );
+	}
+	
+	return $count;
 	
 } // mdjm_count_employee_events
 

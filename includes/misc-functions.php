@@ -160,7 +160,9 @@ function mdjm_get_current_page_url() {
 function mdjm_display_notice( $m )	{	
 	$message = mdjm_messages( $m );
 	
-	$notice = '<div class="mdjm-' . $message['class'] . '"><span>' . $message['title'] . ': </span>' . $message['message'] . '</div>';
+	$notice = '<div class="mdjm-' . $message['class'] . '">';
+	$notice .= ! empty( $message['title'] ) ? '<span>' . $message['title'] . ': </span>' : '';
+	$notice .= $message['message'] . '</div>';
 
 	return apply_filters( 'mdjm_display_notice', $notice, $m );
 } // mdjm_display_notice
@@ -280,14 +282,12 @@ function mdjm_messages( $key )	{
 				'message'	=> __( 'Please provide at least a song and an artist for this entry.', 'mobile-dj-manager' )
 			),
 			'available'	=> array(
-				'class'		=> 'mdjm_available',
-				'title'		=> __( 'Good News', 'mobile-dj-manager' ),
-				'message'	=> __( 'The date you selected is available.', 'mobile-dj-manager' )
+				'class'        => 'mdjm_available',
+				'message'      => mdjm_get_option( 'availability_check_pass_text', __( 'The date you selected is available.', 'mobile-dj-manager' ) )
 			),
 			'not_available'	=> array(
 				'class'		=> 'mdjm_notavailable',
-				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	=> __( "We're not available on the selected date.", 'mobile-dj-manager' )
+				'message'	=>  mdjm_get_option( 'availability_check_fail_text', __( "We're not available on the selected date.", 'mobile-dj-manager' ) )
 			),
 			'missing_date'	=> array(
 				'class'		=> 'error',

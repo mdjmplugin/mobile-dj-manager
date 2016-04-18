@@ -87,7 +87,7 @@ class MDJM_Availability_Checker {
 			
 		} else	{
 			
-			$theemployees = is_array( $_employees ) ? $_employees : $_employees;
+			$theemployees = is_array( $_employees ) ? $_employees : array( $_employees );
 			
 		}
 		

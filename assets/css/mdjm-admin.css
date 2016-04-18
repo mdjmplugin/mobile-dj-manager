@@ -199,36 +199,6 @@ checkbox.mdjm-form-error {
 
 /* =Dashboard Widgets
 -------------------------------------------------------------- */
-#mdjm-events-overview	{
-	width: 100%;
-	border: none;
-	text-align: left;
-}
-
-#mdjm-events-overview th	{
-	font-weight: bold;
-	width: 40%;
-}
-
-#mdjm-events-overview th, td	{
-	vertical-align: top;
-}
-
-#mdjm_widget_overview_stats	{
-	width: 100%;
-	border: 1px solid #CCC;
-	text-align: left;
-	font-size: smaller !important;
-}
-
-#mdjm_widget_overview_stats th	{
-	font-weight: bold;
-}
-
-#mdjm_widget_overview_stats th head	{
-	width: 40%;
-}
-
 .mdjm_stat_grid table {
 	border-collapse: collapse;
 	width: 100%;
@@ -310,4 +280,22 @@ checkbox.mdjm-form-error {
 .mdjm_stat_grid p	{
 	text-align: center;
 	font-size: 12px;
+}
+
+.mdjm-current-day-overview	{
+	font-size: 12px;
+	color: #b0b0b0;
+	position: relative;
+	width: 100%;
+	padding: 8px;
+}
+
+.mdjm-current-day-overview .cell	{
+	height: 100%;
+	display: inline-block;
+}
+
+.mdjm-current-day-overview .cell:first-of-type{
+	width:25%;
+	height:100%;
 }

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_add_wp_dashboard_widgets() {
 	
-	wp_add_dashboard_widget( 'mdjm-widget-overview', sprintf( __( '%s Overview', 'mobile-dj-manager' ), mdjm_get_label_plural() ), 'mdjm_widget_events_overview' );
+	wp_add_dashboard_widget( 'mdjm-widget-overview', sprintf( __( '%s Overview', 'mobile-dj-manager' ), mdjm_get_option( 'company_name', 'MDJM' ) ), 'mdjm_widget_events_overview' );
 
 	wp_add_dashboard_widget( 'mdjm-availability-overview', 'MDJM Availability', 'f_mdjm_dash_availability' );
 
@@ -37,6 +37,8 @@ add_action( 'wp_dashboard_setup', 'mdjm_add_wp_dashboard_widgets' );
  * @return
  */
 function mdjm_widget_events_overview() {
+	
+	global $current_user;
 	
 	if ( mdjm_employee_can( 'manage_mdjm' ) )	{
 	
@@ -127,38 +129,6 @@ function mdjm_widget_events_overview() {
 		<?php
 	}
 	
-	$next_event = mdjm_get_next_event();
-	
-	$next_event = mdjm_get_next_event();
-		
-	?>
-    
-    <table id="mdjm-events-overview">
-    
-    	<tr>
-        	<th><?php _e( "Today's Status:", 'mobile-dj-manager' ); ?></th>
-            <td>-</td>
-        </tr>
-        
-        <tr>
-        	<th><?php printf( __( 'Next %s:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></th>
-            <td>
-            	<?php if ( ! empty( $next_event ) ) : ?>
-                
-                	<?php printf( '<a href="%s">%s</a>', admin_url( 'post.php?post=' . $next_event->ID . '&action=edit' ), mdjm_get_event_date( $next_event->ID ) ); ?>
-                    
-                <?php else : ?>
-                
-                	<?php printf( __( 'No %s scheduled', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?>
-                
-                <?php endif; ?>
-            </td>
-        </tr>
-    
-    </table>
-    
-    <?php
-
 } // mdjm_widget_events_overview
 	
 /*

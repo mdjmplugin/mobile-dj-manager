@@ -61,6 +61,60 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				
 			mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
 		} // messages
+		
+		/**
+		 * Add the default roles to MDJM
+		 *
+		 * @since	1.3
+		 * @param
+		 * @return	void
+		 */
+		public function add_roles()	{
+			
+			add_role( 
+				'inactive_client', 
+				__( 'Inactive Client', 'mobile-dj-manager' ), 
+				array( 'read' => true )
+			);
+			
+			add_role( 
+				'client', 
+				__( 'Client', 'mobile-dj-manager' ), 
+				array( 'read' => true )
+			);
+			
+			add_role(
+				'inactive_dj',
+				__( 'Inactive DJ', 'mobile-dj-manager' ),
+				array(
+					'read' => true, 
+					'create_users' => false,
+					'edit_users' => false,
+					'delete_users' => false,
+					'edit_posts' => false,
+					'delete_posts' => false,
+					'publish_posts' => false,
+					'upload_files' => false
+				)
+			);
+					
+			add_role(
+				'dj', 
+				__( 'DJ', 'mobile-dj-manager' ),
+				array(
+					'read' => true, 
+					'create_users' => false,
+					'edit_users' => false,
+					'delete_users' => false,
+					'edit_posts' => true,
+					'delete_posts' => true,
+					'publish_posts' => false,
+					'upload_files' => false
+				)
+			);
+			
+		} // add_roles
+		
 		/**
 		 * Retrieve all MDJM user roles by filtering through the registered WP roles
 		 *
