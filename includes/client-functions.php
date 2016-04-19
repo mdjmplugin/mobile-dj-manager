@@ -93,16 +93,16 @@ function mdjm_add_client( $user_data = array() )	{
 	}
 	
 	$defaults = array(
-		'first_name'	=> ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] )	: '',
-		'last_name'		=> ! empty( $_POST['client_lastname'] )		? ucwords( $_POST['client_lastname'] )	: '',
-		'user_email'	=> ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
-		'user_pass'		=> wp_generate_password( mdjm_get_option( 'pass_length' ) ),
-		'role'			=> 'client'
+		'first_name' => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] )	: '',
+		'last_name'  => ! empty( $_POST['client_lastname'] )		? ucwords( $_POST['client_lastname'] )	: '',
+		'user_email' => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
+		'user_pass'  => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
+		'role'       => 'client'
 	);
 	
-	$defaults['display_name']	= $defaults['first_name'] . ' ' . $clientdata['last_name'];
-	$defaults['nickname']		= $defaults['display_name'];
-	$defaults['user_login']		= is_email( $defaults['user_email'] );
+	$defaults['display_name'] = $defaults['first_name'] . ' ' . $defaults['last_name'];
+	$defaults['nickname']     = $defaults['display_name'];
+	$defaults['user_login']   = is_email( $defaults['user_email'] );
 	
 	$args = wp_parse_args( $user_data, $defaults );
 	
@@ -160,9 +160,7 @@ function mdjm_add_client( $user_data = array() )	{
 	 */
 	do_action( 'mdjm_post_create_client', $user_id );
 	
-	if( MDJM_DEBUG == true )	{
-		MDJM()->debug->log_it( sprintf( 'Client created with ID: %s' ), $user_id );
-	}
+	MDJM()->debug->log_it( sprintf( 'Client created with ID: %d', $user_id ) );
 	
 	return $user_id;
 	
