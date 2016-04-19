@@ -776,11 +776,7 @@ function mdjm_add_event_meta( $event_id, $data )	{
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_update_event_status( $event_id, $new_status, $old_status, $args = array() )	{
-	
-	if ( ! mdjm_employee_can( 'manage_events' ) )	{
-		return false;
-	}
-	
+		
 	if ( $new_status == $old_status )	{
 		return false;
 	}
