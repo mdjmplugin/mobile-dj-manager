@@ -59,6 +59,11 @@ function mdjm_run_install()	{
 	
 	global $mdjm_options, $wpdb;
 	
+	$current_version = get_option( 'mdjm_version' );
+	if ( $current_version ) {
+		return;
+	}
+	
 	// Setup custom post types
 	mdjm_register_post_types();
 	
@@ -71,12 +76,6 @@ function mdjm_run_install()	{
 	// Clear the permalinks
 	flush_rewrite_rules( false );
 	
-	// Add Upgraded From Option
-	$current_version = get_option( 'mdjm_version' );
-	if ( $current_version ) {
-		update_option( 'mdjm_version_upgraded_from', $current_version );
-	}
-
 	// Setup some default options
 	$options = array();
 
