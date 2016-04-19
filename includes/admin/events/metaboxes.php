@@ -645,7 +645,7 @@ function mdjm_event_metabox_event_employees( $post )	{
          * If a Multi Employee business, display dropdown of all employees.
          * But only if the user is permitted to view all employees.
          */
-        if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
+        if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
             mdjm_employee_dropdown( 
                 array(
                     'name'            => '_mdjm_event_dj',
