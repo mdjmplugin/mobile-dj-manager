@@ -707,6 +707,7 @@ function mdjm_run_install()	{
 	wp_insert_term( __( 'Maintenance', 'mobile-dj-manager' ), 'transaction-types' );
 	wp_insert_term( __( 'Merchant Fees', 'mobile-dj-manager' ), 'transaction-types', array( 'description' => __( 'Charges from payment gateways are assigned to this term', 'mobile-dj-manager' ), 'slug' => 'mdjm-merchant-fees' ) );
 	wp_insert_term( __( 'Music', 'mobile-dj-manager' ), 'transaction-types' );
+	wp_insert_term( __( 'Other Amount', 'mobile-dj-manager' ), 'transaction-types', array( 'description' => __( 'Term used for payments that are a contribution towards balance', 'mobile-dj-manager' ), 'slug' => 'mdjm-other-amount' ) );
 	wp_insert_term( __( 'Parking', 'mobile-dj-manager' ), 'transaction-types' );
 	wp_insert_term( __( 'Petrol', 'mobile-dj-manager' ), 'transaction-types' );
 	wp_insert_term( __( 'Software', 'mobile-dj-manager' ), 'transaction-types' );
@@ -734,7 +735,7 @@ function mdjm_run_install()	{
 		$user->add_cap( 'mdjm_employee' );
 		$user->add_cap( 'manage_mdjm' );
 		
-		// Assigned full MDJM caps to the manage_mdjm role
+		// Assigned full MDJM caps to administrators
 		$permissions->make_admin( $user->ID );
 	}
 	
@@ -756,8 +757,8 @@ function mdjm_run_install()	{
 		KEY user_id (user_id)
 		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
-		dbDelta( $sql );
+	dbDelta( $sql );
 
-		update_option( 'mdjm_db_version', $mdjm_db_version );
+	update_option( 'mdjm_db_version', $mdjm_db_version );
 		
 } // mdjm_run_install
