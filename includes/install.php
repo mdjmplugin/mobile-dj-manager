@@ -464,6 +464,164 @@ function mdjm_run_install()	{
 		$options['default_contract']            = $default_contract;
 	}
 	
+	// Setup default client fields
+	$client_fields = array(
+		'first_name' => array(
+			'label' => __( 'First Name', 'mobile-dj-manager' ),
+			'id' => 'first_name',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '0',
+		),
+		'last_name' => array(
+			'label' => __( 'Last Name', 'mobile-dj-manager' ),
+			'id' => 'last_name',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '1',
+		),
+		'user_email' => array(
+			'label' => __( 'Email Address', 'mobile-dj-manager' ),
+			'id' => 'user_email',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '2',
+		),
+		'address1' => array(
+			'label' => __( 'Address 1', 'mobile-dj-manager' ),
+			'id' => 'address1',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '3',
+		),
+		'address2' => array(
+			'label' => __( 'Address 2', 'mobile-dj-manager' ),
+			'id' => 'address2',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '0',
+			'desc' => '',
+			'default' => '1',
+			'position' => '4',
+		),
+		'town' => array(
+			'label' => __( 'Town / City', 'mobile-dj-manager' ),
+			'id' => 'town',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '5',
+		),
+		'county' => array(
+			'label' => __( 'County', 'mobile-dj-manager' ),
+			'id' => 'county',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '6',
+		),
+		'postcode' => array(
+			'label' => __( 'Post Code', 'mobile-dj-manager' ),
+			'id' => 'postcode',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '7',
+		),
+		'phone1' => array(
+			'label' => __( 'Primary Phone', 'mobile-dj-manager' ),
+			'id' => 'phone1',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'required' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '8',
+		),
+		'phone2' => array(
+			'label' => __( 'Alternative Phone', 'mobile-dj-manager' ),
+			'id' => 'phone2',
+			'type' => 'text',
+			'value' => '',
+			'checked' => '0',
+			'display' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '9',
+		),
+		'birthday' => array(
+			'label' => __( 'Birthday', 'mobile-dj-manager' ),
+			'id' => 'birthday',
+			'type' => 'dropdown',
+			'value' => __( 'January' ) . "\r\n" . 
+					   __( 'February' ) . "\r\n" .
+					   __( 'March' ) . "\r\n" . 
+					   __( 'April' ) . "\r\n" . 
+					   __( 'May' ) . "\r\n" . 
+					   __( 'June' ) . "\r\n" . 
+					   __( 'July' ) . "\r\n" . 
+					   __( 'August' ) . "\r\n" . 
+					   __( 'September' ) . "\r\n" . 
+					   __( 'October' ) . "\r\n" . 
+					   __( 'November' ) . "\r\n" . 
+					   __( 'December' ),
+			'checked' => '0',
+			'display' => '1',
+			'desc' => '',
+			'default' => '1',
+			'position' => '10',
+		),
+		'marketing' => array(
+			'label' => __( 'Marketing Info', 'mobile-dj-manager' ) . '?',
+			'id' => 'marketing',
+			'type' => 'checkbox',
+			'value' => '1',
+			'checked' => ' checked',
+			'display' => '1',
+			'desc' => __( 'Do we add the user to the mailing list', 'mobile-dj-manager' ) . '?',
+			'default' => '1',
+			'position' => '11',
+		)
+	);
+	
 	// Populate some default values
 	foreach( mdjm_get_registered_settings() as $tab => $sections ) {	
 		foreach( $sections as $section => $settings ) {
@@ -492,6 +650,10 @@ function mdjm_run_install()	{
 
 	update_option( 'mdjm_settings', $merged_options );
 	update_option( 'mdjm_version', MDJM_VERSION_NUM );
+	update_option( 'mdjm_client_fields', $client_fields );
+	
+	// Setup scheduled tasks
+	MDJM()->cron->create_tasks();
 	
 	// Create taxonomy terms
 	// Event Types

@@ -19,6 +19,140 @@ class MDJM_Cron	{
 		
 		add_action( 'mdjm_hourly_schedule', array( &$this, 'execute_cron' ) ); // Run the MDJM scheduler
 	} // __construct
+	
+	/*
+	 * Setup the tasks
+	 *
+	 * @since	1.3
+	 * @param
+	 * @return	void
+	 */
+	public function create_tasks()	{
+		global $mdjm_options;
+		
+		$time = current_time( 'timestamp' );
+		
+		if( isset( $mdjm_options['upload_playlists'] ) )	{
+			$playlist_nextrun = strtotime( '+1 day', $time );
+		} else	{
+			$playlist_nextrun = 'N/A';
+		}
+		
+		$mdjm_schedules = array(
+			'complete-events'    => array(
+				'slug'           => 'complete-events',
+				'name'           => 'Complete Events',
+				'active'         => 'Y',
+				'desc'           => sprintf( __( 'Mark %s as completed once the %s date has passed', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_label_singular( true ) ),
+				'frequency'      => 'Daily',
+				'nextrun'        => $time,
+				'lastran'        => 'Never',
+				'options'        => array(
+					'email_client'   => 'N',
+					'email_template' => '0',
+					'email_subject'  => sprintf( __( 'Task Complete %s has finished', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+					'email_from'     => 'admin',
+					'run_when'       => 'after_event',
+					'age'            => '1 HOUR',
+					'notify_admin'   => 'Y',
+					'notify_dj'      => 'N',
+				),
+				'function'       => 'complete_event',
+				'totalruns'      => '0',
+				'default'        => 'Y'
+			),			
+			'request-deposit'    => array(
+				'slug'           => 'request-deposit',
+				'name'           => 'Request Deposit',
+				'active'         => 'N',
+				'desc'           => sprintf( __( 'Send reminder email to client requesting deposit payment if %s status is Approved and deposit has not been received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+				'frequency'      => 'Daily',
+				'nextrun'        => 'N/A',
+				'lastran'        => 'Never',
+				'options'        => array(
+					'email_client'   => 'Y',
+					'email_template' => '0',
+					'email_subject'  => __( 'Request Deposit Task Complete', 'mobile-dj-manager' ),
+					'email_from'	 => 'admin',
+					'run_when'	   => 'after_approval',
+					'age'			=> '3 DAY',
+					'notify_admin'   => 'Y',
+					'notify_dj' 	  => 'N',
+				),
+				'function'       => 'request_deposit',
+				'totalruns'      => '0',
+				'default'        => 'Y'
+			),			
+			'balance-reminder'    => array(
+				'slug'            => 'balance-reminder',
+				'name'            => __( 'Balance Reminder', 'mobile-dj-manager' ),
+				'active'          => 'N',
+				'desc'            => sprintf( __( 'Send email to client requesting they pay remaining balance for %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+				'frequency'       => 'Daily',
+				'nextrun'         => 'N/A',
+				'lastran'         => 'Never',
+				'options'         => array(
+					'email_client'   => 'Y',
+					'email_template' => '0',
+					'email_subject'  => __( 'Balance Reminder Task Complete', 'mobile-dj-manager' ),
+					'email_from'     => 'admin',
+					'run_when'       => 'before_event',
+					'age'            => '2 WEEK',
+					'notify_admin'   => 'Y',
+					'notify_dj'      => 'N',
+				),
+				'function'        => 'balance_reminder',
+				'totalruns'       => '0',
+				'default'         => 'Y'
+			), 
+			'fail-enquiry'         => array(
+				'slug'             => 'fail-enquiry',
+				'name'             => __( 'Fail Enquiry', 'mobile-dj-manager' ),
+				'active'           => 'N',
+				'desc'             => __( 'Automatically fail enquiries that have not been updated within the specified amount of time', 'mobile-dj-manager' ),
+				'frequency'        => 'Daily',
+				'nextrun'          => 'N/A',
+				'lastran'          => 'Never',
+				'options'          => array(
+					'email_client'   => 'N',
+					'email_template' => '0',
+					'email_subject'  => __( 'Fail Enquiry Task Complete', 'mobile-dj-manager' ),
+					'email_from'	 => 'admin',
+					'run_when'	   => 'event_created',
+					'age'			=> '2 WEEK',
+					'notify_admin'   => 'Y',
+					'notify_dj' 	  => 'N',
+				),
+				'function'           => 'fail_enquiry',
+				'totalruns'          => '0',
+				'default'            => 'Y'
+			),		
+			'upload-playlists'      => array(
+				'slug'              => 'upload-playlists',
+				'name'              => __( 'Upload Playlists', 'mobile-dj-manager' ),
+				'active'            => 'Y',
+				'desc'              => __( 'Transmit playlist information back to the MDJM servers to help build an information library. This option is updated the MDJM Settings pages.', 'mobile-dj-manager' ),
+				'frequency'         => 'Twice Daily',
+				'nextrun'           => $playlist_nextrun,
+				'lastran'           => 'Never',
+				'options'           => array(
+					'email_client'    => 'N',
+					'email_template'  => '0',
+					'email_subject'   => '0',
+					'email_from'      => '0',
+					'run_when'        => 'after_event',
+					'age'             => '1 HOUR',
+					'notify_admin'    => 'N',
+					'notify_dj'       => 'N',
+				),
+				'function'            => 'submit_playlist',
+				'totalruns'           => '0',
+				'default'             => 'Y',
+			)
+		);
+		
+		update_option( 'mdjm_schedules', $mdjm_schedules );
+	} // create_tasks
 			
 	/*
 	 * Determine is a task is active and due to be executed
