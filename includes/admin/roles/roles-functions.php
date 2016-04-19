@@ -36,9 +36,9 @@ function mdjm_get_roles( $which_roles = array() )	{
 		if( ! empty( $which_roles ) && ! in_array( $role_id, $which_roles ) )	{
 			continue;
 		}
-		
+				
 		if( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{			
-			$mdjm_roles[$role_id] = $role_name;
+			$mdjm_roles[ $role_id ] = $role_name;
 		}
 		
 	}

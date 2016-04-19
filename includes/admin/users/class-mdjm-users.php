@@ -334,16 +334,20 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			if( user_can( $user_id, 'administrator' ) )	{
 				
-				if( !empty( $_POST['_mdjm_event_staff'] ) )	{
+				if( ! empty( $_POST['_mdjm_event_staff'] ) )	{
+					
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
 					$default_fields->add_cap( 'mdjm_employee' );
 					$default_fields->add_cap( 'manage_mdjm' );
 					$default_fields->add_cap( 'dj' );
+					
 				} else	{
+					
 					delete_user_meta( $user_id, '_mdjm_event_staff' );
 					$default_fields->remove_cap( 'manage_mdjm' );
 					$default_fields->remove_cap( 'mdjm_employee' );
 					$default_fields->remove_cap( 'dj' );
+					
 				}
 			}
 			
