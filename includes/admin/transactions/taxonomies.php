@@ -130,7 +130,7 @@ function mdjm_update_txn_cat( $old_value, $new_value )	{
 
 	foreach ( $options as $key )	{
 		
-		if ( $new_value[ $key ] == $old_value[ $key ] )	{
+		if ( $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] )	{
 			continue;
 		}
 		
@@ -141,7 +141,7 @@ function mdjm_update_txn_cat( $old_value, $new_value )	{
 			'transaction-types',
 			array(
 				'name'	=> $new_value[ $key ],
-				'slug'	=> sanitize_title( $new_value[ $key ] )
+				'slug'	=> 'mdjm-' . sanitize_title( $new_value[ $key ] )
 			)
 		);
 
