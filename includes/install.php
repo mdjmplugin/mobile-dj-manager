@@ -735,6 +735,7 @@ function mdjm_run_install()	{
 		$user->add_cap( 'mdjm_employee' );
 		$user->add_cap( 'manage_mdjm' );
 		
+		
 		// Assigned full MDJM caps to administrators
 		$permissions->make_admin( $user->ID );
 	}

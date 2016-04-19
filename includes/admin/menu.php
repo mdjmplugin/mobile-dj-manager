@@ -288,7 +288,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			),
 		) );
 	}
-	if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
+	if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
 		// Employees
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-employees',
