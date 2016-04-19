@@ -383,8 +383,10 @@ function mdjm_playlist_is_open( $event_id )	{
 	if( empty( $close ) )	{
 		return true;
 	}
-		
-	return time() > ( $date - ( $close * DAY_IN_SECONDS ) ) ? false : true;
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
+			
+	return time() > ( strtotime( $date ) - ( $close * DAY_IN_SECONDS ) ) ? false : true;
 } // mdjm_playlist_is_open
 
 /**
