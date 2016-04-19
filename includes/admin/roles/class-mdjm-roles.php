@@ -103,13 +103,8 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				__( 'DJ', 'mobile-dj-manager' ),
 				array(
 					'read' => true, 
-					'create_users' => false,
-					'edit_users' => false,
-					'delete_users' => false,
 					'edit_posts' => true,
-					'delete_posts' => true,
-					'publish_posts' => false,
-					'upload_files' => false
+					'delete_posts' => true
 				)
 			);
 			

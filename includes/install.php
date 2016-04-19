@@ -733,7 +733,7 @@ function mdjm_run_install()	{
 		update_user_meta( $user->ID, '_mdjm_event_staff', true );
 		$user->add_cap( 'mdjm_employee' );
 		$user->add_cap( 'manage_mdjm' );
-		
+		$user->add_role( 'dj' );
 		
 		// Assigned full MDJM caps to administrators
 		$permissions->make_admin( $user->ID );

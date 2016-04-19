@@ -27,6 +27,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
 			
+			add_action( 'mdjm_post_save_custom_user_fields', array( &$this, 'make_admin_dj' ), 10, 2 );
+			
 			// Display admin notices
 			add_action( 'admin_notices', array( &$this, 'messages' ) );
 		}
@@ -325,7 +327,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			do_action( 'mdjm_pre_save_custom_user_fields', $user_id, $_POST );
 			
-			$custom_fields = get_option( 'mdjm_client_fields' );
+			$custom_fields  = get_option( 'mdjm_client_fields' );
 			$default_fields = get_user_by( 'id', $user_id );
 			
 			if( !current_user_can( 'edit_user', $user_id ) )	{
@@ -349,6 +351,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					$default_fields->remove_cap( 'dj' );
 					
 				}
+
 			}
 			
 			// Loop through the fields and update
@@ -380,7 +383,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 							update_user_option( $user_id, 'display_name', $default_fields->first_name . ' ' . $default_fields->last_name );
 						}
 						
-						$client_action = 'created';	
+						$client_action = 'created';
+
 					} else	{
 						$client_action = 'updated';
 					}
@@ -391,6 +395,29 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			do_action( 'mdjm_post_save_custom_user_fields', $user_id, $_POST );
 			
 		} // save_custom_user_fields
+		
+		/**
+		 * Assign the 'DJ' role to an administrator
+		 *
+		 * @since	1.3
+		 * @param
+		 * @return
+		 */
+		public function make_admin_dj( $user_id, $data )	{
+			
+			if ( ! user_can( $user_id, 'administrator' ) )	{
+				return;
+			}
+			
+			$user = new WP_User( $user_id );
+			
+			if ( ! empty( $data['_mdjm_event_staff'] ) )	{
+				$user->add_cap( 'dj' );
+			} else	{
+				$user->remove_cap( 'dj' );
+			}
+			
+		} // make_admin_dj
 		
 		/**
 		 * Remove admin bar & do not allow admin UI for Clients.
