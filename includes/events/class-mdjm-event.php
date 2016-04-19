@@ -758,7 +758,9 @@ class MDJM_Event {
 			return true;
 		}
 		
-		return time() > ( $date - ( $close * DAY_IN_SECONDS ) ) ? false : true;
+		$date = get_post_meta( $this->ID, '_mdjm_event_date', true );
+			
+		return time() > ( strtotime( $date ) - ( $close * DAY_IN_SECONDS ) ) ? false : true;
 	} // is_playlist_open
 	
 } // class MDJM_Event
