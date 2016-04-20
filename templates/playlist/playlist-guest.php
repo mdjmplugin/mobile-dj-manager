@@ -27,8 +27,8 @@ global $mdjm_event;
     	<?php do_action( 'mdjm_guest_playlist_header_top', $mdjm_event->ID ); ?>
                         
         <p><?php printf( __( 'Welcome to the %s %s music playlist management system for %s %s taking place on %s.', 'mobile-dj-manager' ),
-                mdjm_get_option( 'company_name' ),
-				mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+                '{company_name}',
+				'{application_name}',
                 "{client_fullname}'s",
 				'{event_type}',
 				'{event_date}' ); ?></p>

@@ -14,12 +14,12 @@
 ?>
 <div id="client-no-events">
 	<p><?php _e( 'Hey', 'mobile-dj-manager' ); ?> {client_firstname}, <?php printf( __( 'welcome to the %s %s.', 'mobile-dj-manager' ),
-		mdjm_get_option( 'company_name' ),
-		mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+		'{company_name}',
+		'{application_name}' ); ?></p>
     
     <p><?php printf( __( 'You do not currently have any active %s booked with us.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?>
     
     <p><?php printf( 
 		__( 'If you are ready to plan your next %s, contact us <a href="%s">here</a>.', 'mobile-dj-manager' ),
-		mdjm_get_label_singular( true ), mdjm_get_formatted_url( mdjm_get_option( 'contact_page', '#' ), false ) ); ?></p>        
+		mdjm_get_label_singular( true ), '{contact_page}' ); ?></p>        
 </div>

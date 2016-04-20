@@ -22,7 +22,7 @@ global $mdjm_event;
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+        <p class="head-nav"><a href="{event_url}>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         
     	<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
                         
@@ -38,7 +38,7 @@ global $mdjm_event;
             
         <?php else : ?>
             <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %s. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
-				mdjm_get_label_singular( true ), mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
+				mdjm_get_label_singular( true ), '{event_url}' ); ?></p>
             
         <?php endif; // endif( $mdjm_event->post_status == 'mdjm-contract' ) ?>
     
@@ -66,7 +66,7 @@ global $mdjm_event;
             
             <?php $disabled = ' disabled="disabled"'; ?>
             <p class="mdjm-contract-notready"><?php printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %s. Please return to the <a href="%s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ),
-            mdjm_get_label_singular( true ), mdjm_get_event_uri( $mdjm_event->ID ) ); ?></p>
+            mdjm_get_label_singular( true ), '{event_url}' ); ?></p>
             
         <?php endif; // endif( $mdjm_event->post_status != 'mdjm-contract' ) ?>
             

@@ -18,8 +18,8 @@
     
 	<p><?php printf( __( 'Hello %s and welcome to the %s %s.', 'mobile-dj-manager' ),
 			'{client_firstname}',
-			mdjm_get_option( 'company_name' ),
-			mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?>
+			'{company_name}',
+			'{application_name}' ); ?>
     </p>
     
     <p><?php printf( __( 'The %s you have scheduled with us are listed below...', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></p>

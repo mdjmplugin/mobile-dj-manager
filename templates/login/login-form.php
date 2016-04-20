@@ -21,8 +21,8 @@ global $mdjm_login_redirect;
         <!-- MDJM login form header content starts -->
         <h2><?php _e( 'Please Login', 'mobile-dj-manager' ); ?></h2>
         <p><?php printf( __( 'You must be logged in to access the %s %s. Enter your login details below.', 'mobile-dj-manager' ),
-					mdjm_get_option( 'company_name' ),
-					mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+					'{company_name}',
+					'{application_name}' ); ?></p>
                     
         
         <!-- MDJM login form header content ends -->
@@ -46,7 +46,7 @@ global $mdjm_login_redirect;
             <p class="mdjm-login-remember"><label><input name="rememberme" type="checkbox" id="mdjm-login-rememberme" value="forever" /> <?php _e( 'Remember me', 'mobile-dj-manager' ); ?></label></p>
             
             <p class="mdjm-login-submit">
-                <input type="submit" name="wp-submit" id="mdjm-login-submit" class="button-primary" value="<?php printf( __( 'Login to %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?>" />
+                <input type="submit" name="wp-submit" id="mdjm-login-submit" class="button-primary" value="<?php printf( __( 'Login to %s', 'mobile-dj-manager' ), '{application_name}' ); ?>" />
                 <input type="hidden" name="redirect_to" value="<?php echo esc_url( $mdjm_login_redirect ); ?>" />
             </p>
             

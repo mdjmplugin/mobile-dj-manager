@@ -24,18 +24,17 @@ global $mdjm_event;
         
     	<?php do_action( 'mdjm_playlist_header_top', $mdjm_event->ID ); ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+        <p class="head-nav"><a href="{event_url}"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         
         <p><?php printf( __( 'The %s playlist management system enables you to give %s (your %s) an idea of the types of songs you would like played during your %s on %s.', 'mobile-dj-manager' ),
-                mdjm_get_option( 'company_name' ),
+                '{company_name}',
                 '{dj_firstname}',
-                mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ),
+                '{artist_label}',
 				mdjm_get_label_singular( true ),
                 '{event_date}' ); ?></p>
                 
         <p><?php printf( __( "Don't forget that you can invite your guests to add their suggestions to your playlist too. They won't be able to see any existing entries, and you will be able to filter through their suggestions if you do not feel they are suitable. Just tell them to visit <a href='%s'>%s</a> to get started.", 'mobile-dj-manager' ),
-                    '{guest_playlist_url}',
-                    '{guest_playlist_url}' ); ?></p>
+                    '{guest_playlist_url}', '{guest_playlist_url}' ); ?></p>
     
     	<?php do_action( 'mdjm_playlist_header_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-header -->
@@ -68,8 +67,8 @@ global $mdjm_event;
                         </td>
                         
                         <td class="mdjm-playlist-djnotes-cell">
-                            <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?></label><br />
-                            <textarea name="entry_djnotes" id="entry_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?>"></textarea>
+                            <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
+                            <textarea name="entry_djnotes" id="entry_djnotes" data-placeholder="<?php printf( __( 'Notes for your %s', 'mobile-dj-manager' ), '{artist_label}' ); ?>"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -105,9 +104,9 @@ global $mdjm_event;
         	<p><?php printf( __( 'Your playlist currently consists of %d %s and is approximately %s long. Your %s is %s long.', 'mobile-dj-manager' ),
 					$entries_in_playlist,
 					_n( 'track', 'tracks', $entries_in_playlist, 'mobile-dj-manager' ),
-					mdjm_playlist_duration( $mdjm_event->ID, $entries_in_playlist ),
+					'{playlist_duration}',
 					mdjm_get_label_singular(),
-					mdjm_event_duration( $mdjm_event->ID ) ); ?></p>
+					'{event_duration}' ); ?></p>
         
         	<?php foreach( $playlist as $category => $entries ) : ?>
             	

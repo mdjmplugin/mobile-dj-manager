@@ -23,7 +23,7 @@ global $mdjm_event;
     	
         <?php do_action( 'mdjm_print_notices' ); ?>
         
-        <p class="head-nav"><a href="<?php echo mdjm_get_event_uri( $mdjm_event->ID ); ?>"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+        <p class="head-nav"><a href="{event_url}"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         
     	<?php do_action( 'mdjm_pre_quote_header', $mdjm_event->ID ); ?>
                         

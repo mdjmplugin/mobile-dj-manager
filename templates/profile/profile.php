@@ -18,7 +18,7 @@ global $current_user;
 	<div id="mdjm-profile-header">
 		<?php do_action( 'mdjm_profile_before_header', $current_user ); ?>
         
-        <p><?php _( 'Please keep your details up to date as incorrect information may cause problems with your event.', 'mobile-dj-manager' ); ?></p>
+        <p><?php printf( __( 'Please keep your details up to date as incorrect information may cause problems with your %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
         
         <form action="" method="post" name="mdjm-user-profile" id="mdjm-user-profile">
         
