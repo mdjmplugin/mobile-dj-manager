@@ -202,50 +202,6 @@ add_action( 'create_playlist-category', 'mdjm_save_playlist_category', 10, 2 );
 add_action( 'edited_playlist-category', 'mdjm_save_playlist_category', 10, 2 );
 
 /**
- * Adds the Default column to the playlist category terms list.
- *
- * @since	1.3
- * @param	arr		$columns	The table columns
- * @return	arr		$columns	The table columns
- */
-function mdjm_add_playlist_category_default_column( $columns )	{
-    $columns['default'] = 'Default?';
-    
-	return $columns;
-} // mdjm_add_playlist_category_default_column
-add_filter( 'manage_edit-playlist-category_columns', 'mdjm_add_playlist_category_default_column' );
-
-/**
- * Adds the content to the Default column within the playlist category terms list.
- *
- * @since	1.3
- * @param	str		$content		The cell content
- * @param	str		$column_name	The column name
- * @param	int		$term_id		The term ID
- * @return	str		$content		The table columns
- */
-function mdjm_add_playlist_category_default_column_content( $content, $column_name, $term_id )	{
-	
-	$term = get_term( $term_id, 'playlist-category' );
-    
-	switch ( $column_name ) {
-        case 'default':
-            if( mdjm_get_option( 'playlist_default_cat' ) == $term_id )	{
-				$content = __( 'Yes', 'mobile-dj-manager' );
-			} else	{
-				$content = __( 'No', 'mobile-dj-manager' );
-			}
-            break;
-        
-		default:
-            break;
-    }
-	
-	return $content;
-}
-add_filter( 'manage_playlist-category_custom_column', 'mdjm_add_playlist_category_default_column_content', 10, 3 );
-
-/**
  * Ensure that built-in terms cannot be deleted by removing the 
  * delete, edit and quick edit options from the hover menu on the edit screen.
  * 
