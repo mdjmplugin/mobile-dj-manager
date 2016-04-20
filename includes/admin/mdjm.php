@@ -56,7 +56,6 @@
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
 				add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
-				add_action( 'wp_login', array( &$this, 'last_login' ), 10, 2 ); // Login timestamp
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
 			} // __construct
 			
@@ -203,16 +202,6 @@
 				define( 'MDJM_ONLINE_QUOTES', ( !empty( $mdjm_settings['templates']['online_enquiry'] ) ? true : false ) );
 				define( 'MDJM_NOTIFY_ADMIN', ( !empty( $mdjm_settings['clientzone']['status_notification'] ) ? true : false ) );
 			 } // mdjm_settings
-			 			
-			/**
-			 * Register the login action within the user meta
-			 * 
-			 *
-			 * @since 1.1.3
-			 */
-			public function last_login( $user_login, $user ) {
-				update_user_meta( $user->ID, 'last_login', date( 'Y-m-d H:i:s' ) );
-			} // last_login
 
 /*
  * --

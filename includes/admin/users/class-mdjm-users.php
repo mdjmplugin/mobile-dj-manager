@@ -27,6 +27,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'profile_update', array( &$this, 'add_dj_role_to_admin' ), 10, 2 );
+			
+			add_action( 'wp_login', array( &$this, 'datestamp_login' ), 10, 2 );
 						
 			// Display admin notices
 			add_action( 'admin_notices', array( &$this, 'messages' ) );
@@ -457,9 +459,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 */
 		public function prepare_user_pass_reset( $user_id )	{
 
-			if( MDJM_DEBUG == true )	{
-				MDJM()->debug->log_it( 'Preparing user ' . $user_id . ' for password reset' );
-			}
+			MDJM()->debug->log_it( 'Preparing user ' . $user_id . ' for password reset' );
 				
 			$reset = update_user_meta(
 				$user_id,
@@ -467,12 +467,22 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] )
 			);
 			
-			if( MDJM_DEBUG == true )	{
-				MDJM()->debug->log_it( 'Password preparation ' . !empty( $reset ) ? 'success' : 'fail' );
-			}
+			MDJM()->debug->log_it( 'Password preparation ' . !empty( $reset ) ? 'success' : 'fail' );
 			
 			return $reset;
 			
 		} // prepare_user_pass_reset
+		
+		/**
+		 * Log the users login time.
+		 *
+		 * @since	1.3
+		 * @param	str		$user_login	Username of the user
+		 * @param	obj		$user		WP_User object of the logged in user
+		 * @return	void
+		 */
+		public function datestamp_login( $user_login, $user )	{
+			update_user_meta( $user->ID, 'last_login', current_time( 'mysql' ) );
+		} // datestamp_login
 	} // class MDJM_Users
 endif;
