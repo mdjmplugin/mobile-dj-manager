@@ -46,13 +46,17 @@ function mdjm_get_templates_url() {
  * @uses get_template_part()
  */
 function mdjm_get_template_part( $slug, $name = null, $load = true ) {
+	
 	// Execute code for this part
 	do_action( 'get_template_part_' . $slug, $slug, $name );
 
 	// Setup possible parts
 	$templates = array();
-	if ( isset( $name ) )
+	
+	if ( isset( $name ) )	{
 		$templates[] = $slug . '/' . $slug . '-' . $name . '.php';
+	}
+	
 	$templates[] = $slug . '/' . $slug . '.php';
 
 	// Allow template parts to be filtered
@@ -60,6 +64,7 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
 
 	// Return the part that is found
 	return mdjm_locate_template( $templates, $load, false );
+
 } // mdjm_get_template_part
 
 /**
@@ -80,6 +85,7 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
  * @return string The template filename if one is located.
  */
 function mdjm_locate_template( $template_names, $load = false, $require_once = true ) {
+	
 	// No file found yet
 	$located = false;
 
@@ -87,8 +93,9 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 	foreach ( (array) $template_names as $template_name ) {
 
 		// Continue if template is empty
-		if ( empty( $template_name ) )
+		if ( empty( $template_name ) )	{
 			continue;
+		}
 
 		// Trim off any slashes from the template name
 		$template_name = ltrim( $template_name, '/' );
@@ -107,10 +114,12 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 		}
 	}
 
-	if ( ( true == $load ) && ! empty( $located ) )
+	if ( ( true == $load ) && ! empty( $located ) )	{
 		load_template( $located, $require_once );
+	}
 
 	return $located;
+
 } // mdjm_locate_template
 
 /**
@@ -124,9 +133,9 @@ function mdjm_get_theme_template_paths() {
 	$template_dir = mdjm_get_theme_template_dir_name();
 
 	$file_paths = array(
-		1	  	=> trailingslashit( get_stylesheet_directory() ) . $template_dir,
-		10	 	=> trailingslashit( get_template_directory() ) . $template_dir,
-		100		=> mdjm_get_templates_dir()
+		1        => trailingslashit( get_stylesheet_directory() ) . $template_dir,
+		10       => trailingslashit( get_template_directory() ) . $template_dir,
+		100      => mdjm_get_templates_dir()
 	);
 
 	$file_paths = apply_filters( 'mdjm_template_paths', $file_paths );
@@ -135,6 +144,7 @@ function mdjm_get_theme_template_paths() {
 	ksort( $file_paths, SORT_NUMERIC );
 
 	return array_map( 'trailingslashit', $file_paths );
+
 } // mdjm_get_theme_template_paths
 
 /**
