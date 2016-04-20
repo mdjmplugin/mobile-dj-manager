@@ -268,14 +268,19 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_admin_url'
 		),
 		array(
+			'tag'         => 'application_home',
+			'description' => __( 'The Client Zone application URL', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_application_home'
+		),
+		array(
 			'tag'         => 'application_name',
 			'description' => __( 'The name of this MDJM application', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_application_name'
 		),
 		array(
-			'tag'         => 'application_url',
-			'description' => __( 'The Client Zone application URL', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_application_url'
+			'tag'         => 'artist_label',
+			'description' => __( 'The label defined for artists (default is DJ).', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_artist_label'
 		),
 		array(
 			'tag'         => 'available_packages',
@@ -291,6 +296,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'balance',
 			'description' => __( 'The remaining balance owed for the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_balance'
+		),
+		array(
+			'tag'         => 'balance_label',
+			'description' => __( 'The label used for balance payments', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_balance_label'
 		),
 		array(
 			'tag'         => 'client_email',
@@ -376,6 +386,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'deposit',
 			'description' => __( 'The deposit amount for the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_deposit'
+		),
+		array(
+			'tag'         => 'deposit_label',
+			'description' => __( 'The label used for deposit payments', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_deposit_label'
 		),
 		array(
 			'tag'         => 'deposit_status',
@@ -488,6 +503,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_playlist_close'
 		),
 		array(
+			'tag'         => 'playlist_duration',
+			'description' => sprintf( __( 'The approximate length of the %s playlist', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_playlist_duration'
+		),
+		array(
 			'tag'         => 'playlist_url',
 			'description' => __( 'The URL to your event playlist page for clients', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_playlist_url'
@@ -594,6 +614,18 @@ function mdjm_content_tag_application_home()	{
 function mdjm_content_tag_application_name()	{
 	return mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) );
 } // mdjm_content_tag_application_name
+
+/**
+ * Content tag: artist_label.
+ * The label for the primary role (default DJ).
+ *
+ * @param	
+ *
+ * @return	str		The customised name of the primary employee role.
+ */
+function mdjm_content_tag_artist_label()	{
+	return mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) );
+} // mdjm_content_tag_artist_label
 
 /**
  * Content tag: available_packages.
@@ -979,6 +1011,19 @@ function mdjm_content_tag_balance( $event_id='' )	{
 } // mdjm_content_tag_balance
 
 /**
+ * Content tag: balance.
+ * The label used for balance.
+ *
+ * @param
+ * @param
+ *
+ * @return	str		The label for balances.
+ */
+function mdjm_content_tag_balance_label()	{	
+	return mdjm_get_balance_label();
+} // mdjm_content_tag_balance_label
+
+/**
  * Content tag: contract_date.
  * The date of the contract. If the contract is signed, return the signing date.
  * Otherwise, return the current date.
@@ -1098,6 +1143,19 @@ function mdjm_content_tag_deposit( $event_id='' )	{
 	
 	return $return;
 } // mdjm_content_tag_deposit
+
+/**
+ * Content tag: deposit_label.
+ * The label used for deposit.
+ *
+ * @param
+ * @param
+ *
+ * @return	str		The chosen label for deposit
+ */
+function mdjm_content_tag_deposit_label()	{
+	return mdjm_get_deposit_label();
+} // mdjm_content_tag_deposit_label
 
 /**
  * Content tag: deposit_status.
@@ -1570,6 +1628,21 @@ function mdjm_content_tag_playlist_close( $event_id='' )	{
 	
 	return !empty( $close ) ? $close : 'never';
 } // mdjm_content_tag_playlist_close
+
+/**
+ * Content tag: playlist_duration.
+ * The approximate length of the playlist.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	int|str	The approximate length of the playlist.
+ */
+function mdjm_content_tag_playlist_duration( $event_id='' )	{
+	$total_entries = mdjm_count_playlist_entries( $event_id );
+	
+	return mdjm_playlist_duration( $event_id, $total_entries );
+} // mdjm_content_tag_playlist_duration
 
 /**
  * Content tag: playlist_url.
