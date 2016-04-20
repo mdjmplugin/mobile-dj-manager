@@ -187,7 +187,7 @@ class MDJM_Welcome {
 				<h3><?php _e( 'Employee Management', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/24-employee-list.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-employee-list.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<p><?php _e( 'With MDJM Event Management version 1.3, you now have greater management of your employees.', 'mobile-dj-manager' );?></p>
@@ -219,10 +219,10 @@ class MDJM_Welcome {
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Improved Data Export', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Easily Accessible Statistics', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/24-export.png'; ?>" class="mdjm-welcome-screenshots"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/13-dashboard-overview-widget.png'; ?>" class="mdjm-welcome-screenshots"/>
 					</div>
 					<div class="feature-section-content">
 						<h4><?php _e( 'Big Data Support', 'mobile-dj-manager' );?></h4>
