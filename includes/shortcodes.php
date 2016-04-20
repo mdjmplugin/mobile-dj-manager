@@ -72,6 +72,7 @@ add_shortcode( 'MDJM', 'shortcode_mdjm' );
  * @return	string
  */
 function mdjm_shortcode_home( $atts )	{
+	
 	if ( is_user_logged_in() ) {
 		global $mdjm_event;
 		
@@ -151,6 +152,7 @@ function mdjm_shortcode_home( $atts )	{
 	else	{
 		echo mdjm_login_form();
 	}
+	
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
 
@@ -164,6 +166,7 @@ add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
  * @return	string
  */
 function mdjm_shortcode_contract( $atts )	{
+	
 	if( isset( $_GET['event_id'] ) && mdjm_event_exists( $_GET['event_id'] ) )	{
 		if( is_user_logged_in() )	{
 			global $mdjm_event;
@@ -185,7 +188,7 @@ function mdjm_shortcode_contract( $atts )	{
 				ob_get_clean();
 			}
 			else	{
-				wp_die( __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' ) );
+				wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
 			}
 			
 			// Reset global var
@@ -198,7 +201,7 @@ function mdjm_shortcode_contract( $atts )	{
 		}
 	}
 	else	{
-		wp_die( __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' ) );
+		wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
 	}
 	
 } // mdjm_shortcode_contract
@@ -250,6 +253,72 @@ function mdjm_shortcode_playlist( $atts )	{
 	
 } // mdjm_shortcode_playlist
 add_shortcode( 'mdjm-playlist', 'mdjm_shortcode_playlist' );
+
+/**
+ * MDJM Quote Shortcode.
+ *
+ * Displays the online quotation to the client.
+ * 
+ * @since	1.3
+ * @param	arr		$atts	Arguments passed with the shortcode
+ * @return	string
+ */
+function mdjm_shortcode_quote( $atts )	{
+	
+	$atts = shortcode_atts( 
+		array( // These are our default values
+			'button_loc'      => 'both',
+			'button_align'    => false,
+			'button_class'	=> '',
+			'button_text'     => sprintf( __( 'Book this %s', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+		),
+		$atts,
+		'mdjm-quote'
+	);
+	
+	if( isset( $_GET['event_id'] ) && mdjm_event_exists( $_GET['event_id'] ) )	{
+		
+		if( is_user_logged_in() )	{
+
+			global $mdjm_event, $mdjm_quote_button_atts;
+			
+			$mdjm_quote_button_atts = $atts;
+			
+			$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+						
+			if( $mdjm_event )	{
+				
+				// Some verification
+				if ( get_current_user_id() != $mdjm_event->client )	{
+					wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
+				}
+				
+				ob_start();
+				mdjm_get_template_part( 'quote' );
+				
+				$output = mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+				
+				ob_get_clean();
+
+			} else	{
+				wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
+			}
+			
+			// Reset global var
+			$mdjm_event = '';
+			
+			return $output;
+
+		} else	{
+			echo mdjm_login_form();
+		}
+
+	} else	{
+		wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
+	}
+	
+} // mdjm_shortcode_quote
+add_shortcode( 'mdjm-quote', 'mdjm_shortcode_quote' );
 
 /**
  * MDJM Availability Checker Shortcode.
