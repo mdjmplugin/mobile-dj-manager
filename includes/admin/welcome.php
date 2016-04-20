@@ -222,14 +222,11 @@ class MDJM_Welcome {
 				<h3><?php _e( 'Easily Accessible Statistics', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/13-dashboard-overview-widget.png'; ?>" class="mdjm-welcome-screenshots"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-dashboard-overview-widget.png'; ?>" class="mdjm-welcome-screenshots"/>
 					</div>
 					<div class="feature-section-content">
-						<h4><?php _e( 'Big Data Support', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'With the new export processing in Easy Digital Downloads 2.4, you can easily export massive amounts of data. Need to export 20,000 payment records? No problem.', 'mobile-dj-manager' );?></p>
-
-						<h4><?php _e( 'Standardized Customer Export', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'The Customer export has been standardized so it now produces the same data during export for all export options. It can also easily handle 20,000 or even 50,000 customer records in a single export.', 'mobile-dj-manager' );?></p>
+						<p><?php _e( 'From the moment you login you have important statistics visible to advise you how you are performing Month to Date, Year to Date and in comparison to the previous year.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'The intuitive dashboard widget displays the number of enquiries received and converted as well as the number of events completed within these timeframes and in addition, the amount your business has earned is readily available to you.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
