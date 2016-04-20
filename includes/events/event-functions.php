@@ -802,7 +802,7 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args = 
 } // mdjm_update_event_status
 
 /**
- * Update event status to mdjm-unattended.
+ * Update event status to Unattended Enquiry.
  *
  * If you're looking for hooks, see the mdjm_update_event_status() function.
  * Do not call this function directly, instead call mdjm_update_event_status() to ensure
@@ -837,7 +837,7 @@ function mdjm_set_event_status_mdjm_unattended( $event_id, $old_status, $args = 
 } // mdjm_set_event_status_mdjm_unattended
 
 /**
- * Update event status to mdjm-enquiry.
+ * Update event status to Enquiry.
  *
  * If you're looking for hooks, see the mdjm_update_event_status() function.
  * Do not call this function directly, instead call mdjm_update_event_status() to ensure
@@ -890,7 +890,7 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 } // mdjm_set_event_status_mdjm_enquiry
 
 /**
- * Update event status to mdjm-contract.
+ * Update event status to Awaiting Contract.
  *
  * If you're looking for hooks, see the mdjm_update_event_status() function.
  * Do not call this function directly, instead call mdjm_update_event_status() to ensure
@@ -930,7 +930,7 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 } // mdjm_set_event_status_mdjm_contract
 
 /**
- * Update event status to mdjm-approved.
+ * Update event status to Approved.
  *
  * If you're looking for hooks, see the mdjm_update_event_status() function.
  * Do not call this function directly, instead call mdjm_update_event_status() to ensure
@@ -968,6 +968,146 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
 	return $update;
 	
 } // mdjm_set_event_status_mdjm_approved
+
+/**
+ * Update event status to Completed.
+ *
+ * If you're looking for hooks, see the mdjm_update_event_status() function.
+ * Do not call this function directly, instead call mdjm_update_event_status() to ensure
+ * all hooks are processed.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
+ */
+function mdjm_set_event_status_mdjm_completed( $event_id, $old_status, $args = array() )	{
+	
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	$update = wp_update_post(
+		array( 
+			'ID'             => $event_id,
+			'post_status'    => 'mdjm-completed'
+		)
+	);
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	// Meta updates
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	
+	mdjm_add_event_meta( $event_id, $args['meta'] );
+		
+	return $update;
+	
+} // mdjm_set_event_status_mdjm_completed
+
+/**
+ * Update event status to Cancelled.
+ *
+ * If you're looking for hooks, see the mdjm_update_event_status() function.
+ * Do not call this function directly, instead call mdjm_update_event_status() to ensure
+ * all hooks are processed.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
+ */
+function mdjm_set_event_status_mdjm_cancelled( $event_id, $old_status, $args = array() )	{
+	
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	$update = wp_update_post(
+		array( 
+			'ID'             => $event_id,
+			'post_status'    => 'mdjm-cancelled'
+		)
+	);
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	// Meta updates
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	
+	mdjm_add_event_meta( $event_id, $args['meta'] );
+		
+	return $update;
+	
+} // mdjm_set_event_status_mdjm_cancelled
+
+/**
+ * Update event status to Failed Enquiry.
+ *
+ * If you're looking for hooks, see the mdjm_update_event_status() function.
+ * Do not call this function directly, instead call mdjm_update_event_status() to ensure
+ * all hooks are processed.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
+ */
+function mdjm_set_event_status_mdjm_failed( $event_id, $old_status, $args = array() )	{
+	
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	$update = wp_update_post(
+		array( 
+			'ID'             => $event_id,
+			'post_status'    => 'mdjm-failed'
+		)
+	);
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	// Meta updates
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	
+	mdjm_add_event_meta( $event_id, $args['meta'] );
+		
+	return $update;
+	
+} // mdjm_set_event_status_mdjm_failed
+
+/**
+ * Update event status to Rejected Enquiry.
+ *
+ * If you're looking for hooks, see the mdjm_update_event_status() function.
+ * Do not call this function directly, instead call mdjm_update_event_status() to ensure
+ * all hooks are processed.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	str		$old_status	The old event status.
+ * @param	arr		$args		Array of data required for transition.
+ * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
+ */
+function mdjm_set_event_status_mdjm_rejected( $event_id, $old_status, $args = array() )	{
+	
+	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	$update = wp_update_post(
+		array( 
+			'ID'             => $event_id,
+			'post_status'    => 'mdjm-rejected'
+		)
+	);
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+	
+	// Meta updates
+	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+	
+	mdjm_add_event_meta( $event_id, $args['meta'] );
+		
+	return $update;
+	
+} // mdjm_set_event_status_mdjm_rejected
 
 /**
  * Retrieve the quote for the event.
