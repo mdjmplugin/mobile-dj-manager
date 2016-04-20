@@ -138,7 +138,9 @@ class MDJM_Welcome {
 			<img class="mdjm-badge" src="<?php echo MDJM_PLUGIN_URL . '/assets/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'mobile-dj-manager' ); ?>" / >
 			<h1><?php printf( __( 'Welcome to MDJM Event Management %s', 'mobile-dj-manager' ), $display_version ); ?></h1>
 			<p class="about-text">
-				<?php printf( __( 'Thank you for updating to the latest version! MDJM Event Management %s is ready to make your events business even more efficient!', 'mobile-dj-manager' ), $display_version ); ?>
+				<?php _e( 'Thank you for updating to the latest version!', 'mobile-dj-manager' ); ?>
+                <br />
+                <?php printf( __( 'MDJM Event Management %s is ready to make your events business even more efficient!', 'mobile-dj-manager' ), $display_version ); ?>
 			</p>
 		</div>
 		<?php
@@ -207,12 +209,13 @@ class MDJM_Welcome {
 				<h3><?php _e( 'Theme Templates', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/24-category-earnings.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-mdjm-templates.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<p><?php printf( __( 'MDJM Event Management version 1.3 enables greater customisation of %s pages.', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
 
-						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
+						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your [child] theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
+                        <p><?php _e( "Use a child theme and you won't have to worry about your changes being overwritten when the MDJM plugin is update or your currently active theme is updated.", 'mobile-dj-manager' ); ?></p>
                         <p><?php _e( 'To make customisations even easier, all MDJM content tags are fully supported and if you use child themes, you can ensure that any changes you make are never overwritten with plugin or theme updates.', 'mobile-dj-manager' ); ?></p>
 					</div>
 				</div>
@@ -233,31 +236,32 @@ class MDJM_Welcome {
 
 			<div class="changelog">
 				<h3><?php _e( 'Additional Updates', 'mobile-dj-manager' );?></h3>
+                <hr />
 				<div class="feature-section three-col">
 					<div class="col">
-						<h4><?php _e( 'REST API Versioning', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'The REST API now supports a version parameter that allows you to specify which version of the API you wish to use.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'More Content Tags', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Even more content tags added to make displaying dynamic content quick and easy on any page.', 'mobile-dj-manager' );?></p>
+					</div>
+                    <div class="col">
+						<h4><?php _e( 'Better use of WordPress Taxonomies', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Playlist Categories and Enquiry Sources are now custom taxonomies enabling better reporting.' ,'mobile-dj-manager' );?></p>
 					</div>
 					<div class="col">
-						<h4><?php _e( 'Better Cart Tax Display', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Cart widgets now display estimated taxes for customers before reaching the checkout page.', 'mobile-dj-manager' );?></p>
-					</div>
-					<div class="col">
-						<h4><?php _e( 'Customer > User Synchronization', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Customer email addresses are now updated when the associated user account\'s email is changed.' ,'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Developer Friendly Code', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Well formatted and documented code with a large number of hooks to enable developer customisations and integrations.', 'mobile-dj-manager' );?></p>
 					</div>
 					<div class="clear">
 						<div class="col">
-							<h4><?php _e( 'Better Test Mode Settings', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( 'Test Mode has been improved by moving the option to the Payment Gateways screen. Sales / earnings stats are now incremented in test mode.', 'mobile-dj-manager' );?></p>
+							<h4><?php _e( 'Settings API', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( 'Hook into our settings API to easily add settings for your MDJM extension with just a few lines of code.', 'mobile-dj-manager' );?></p>
 						</div>
 						<div class="col">
-							<h4><?php _e( 'Exclude Taxes from Reports', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( 'Earnings and sales reports can now be shown exclusive of tax, allowing you to easily see how your store is performing after taxes.', 'mobile-dj-manager' );?></p>
+							<h4><?php _e( 'Playlist Entries are Posts', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( "We've removed the custom database table that stored playlist entries and imported all your entries as WordPress posts for better integration.", 'mobile-dj-manager' );?></p>
 						</div>
 						<div class="col">
-							<h4><?php _e( 'Default Gateway First', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( 'The gateway selected as the default option will always be displayed first on checkout.' ,'mobile-dj-manager' );?></p>
+							<h4><?php _e( 'Improved Event Filters', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( 'Easily filter your events listings by date, type, client, and employee.' ,'mobile-dj-manager' );?></p>
 						</div>
 					</div>
 				</div>
