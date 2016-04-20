@@ -26,9 +26,8 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			add_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
 			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-			
-			add_action( 'mdjm_post_save_custom_user_fields', array( &$this, 'make_admin_dj' ), 10, 2 );
-			
+			add_action( 'profile_update', array( &$this, 'add_dj_role_to_admin' ), 10, 2 );
+						
 			// Display admin notices
 			add_action( 'admin_notices', array( &$this, 'messages' ) );
 		}
@@ -330,30 +329,21 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			$custom_fields  = get_option( 'mdjm_client_fields' );
 			$default_fields = get_user_by( 'id', $user_id );
 			
-			if( !current_user_can( 'edit_user', $user_id ) )	{
+			if( ! current_user_can( 'edit_user', $user_id ) )	{
 				return;
 			}
 			
-			if( user_can( $user_id, 'administrator' ) )	{
-				
-				if( ! empty( $_POST['_mdjm_event_staff'] ) )	{
-					
+			// For administrators, determine if they should be an employee
+			if ( user_can( $user_id, 'administrator' ) )	{
+
+				if ( ! empty( $_POST['_mdjm_event_staff'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
-					$default_fields->add_cap( 'mdjm_employee' );
-					$default_fields->add_cap( 'manage_mdjm' );
-					$default_fields->add_cap( 'dj' );
-					
 				} else	{
-					
-					delete_user_meta( $user_id, '_mdjm_event_staff' );
-					$default_fields->remove_cap( 'manage_mdjm' );
-					$default_fields->remove_cap( 'mdjm_employee' );
-					$default_fields->remove_cap( 'dj' );
-					
+					update_user_meta( $user_id, '_mdjm_event_staff', false );
 				}
 
 			}
-			
+						
 			// Loop through the fields and update
 			if ( ! empty( $custom_fields ) )	{
 				
@@ -400,24 +390,33 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * Assign the 'DJ' role to an administrator
 		 *
 		 * @since	1.3
-		 * @param
+		 * @param	int	$user_id	User ID.
+		 * @param	int	$old_data	Object containing user's data prior to update.
 		 * @return
 		 */
-		public function make_admin_dj( $user_id, $data )	{
+		public function add_dj_role_to_admin( $user_id, $old_data )	{
 			
 			if ( ! user_can( $user_id, 'administrator' ) )	{
 				return;
 			}
 			
+			// Retrieve the current user object after the profile update
 			$user = new WP_User( $user_id );
 			
-			if ( ! empty( $data['_mdjm_event_staff'] ) )	{
-				$user->add_cap( 'dj' );
+			$is_staff = $user->__get( '_mdjm_event_staff' );
+			
+			if ( ! empty( $is_staff ) )	{
+				$user->add_role( 'dj' );
+				$user->add_cap( 'mdjm_employee' );
+				$user->add_cap( 'manage_mdjm' );
+				
 			} else	{
-				$user->remove_cap( 'dj' );
+				$user->remove_role( 'dj' );
+				$user->remove_cap( 'mdjm_employee' );
+				$user->remove_cap( 'manage_mdjm' );
 			}
 			
-		} // make_admin_dj
+		} // add_dj_role_to_admin
 		
 		/**
 		 * Remove admin bar & do not allow admin UI for Clients.

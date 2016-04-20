@@ -592,6 +592,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 * @return	str		The HTML output for the checkbox column
 	 */
 	public function column_role( $item ) {
+		
 		global $wp_roles;
 		
 		if( ! empty( $item->roles ) )	{
@@ -599,7 +600,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 			foreach( $item->roles as $role )	{
 				
 				if( array_key_exists( $role, MDJM_Employee_Manager::$mdjm_roles ) )	{
-					$roles[$role] = MDJM_Employee_Manager::$mdjm_roles[$role];
+					$roles[ $role ] = MDJM_Employee_Manager::$mdjm_roles[ $role ];
 				}
 				
 			}
@@ -607,22 +608,27 @@ class MDJM_Employee_Table extends WP_List_Table {
 		}
 		
 		if( ! empty( $roles ) )	{
+			
 			$i = 1;
 			foreach( $roles as $role_id => $role )	{
+
 				printf( '%s%s%s',
-					( $item->roles[0] != $role_id ? '<span style="font-style: italic;">' : '' ),
-					translate_user_role( $wp_roles->roles[$role_id]['name'] ),
-					( $item->roles[0] != $role_id ? '</span>' : '' )
+					$item->roles[0] != $role_id ? '<span style="font-style: italic;">' : '',
+					translate_user_role( $wp_roles->roles[ $role_id ]['name'] ),
+					$item->roles[0] != $role_id ? '</span>' : ''
 				);
 									
 				if( $i < count( $roles ) )
 					echo '<br />';
 				
 				$i++;
+
 			}
+
+		} else	{
+			echo __( 'No role assigned', 'mobile-dj-manager' );
 		}
-		else
-			echo __( 'No role assigned', 'mobile-dj-manager' );    
+
 	} // column_role
 	
 	/**
