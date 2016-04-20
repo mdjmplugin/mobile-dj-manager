@@ -393,7 +393,8 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'employer',
 						'name'        =>  __( 'I am an Employer', 'mobile-dj-manager' ),
 						'desc'        => __( 'Check if you employ staff other than yourself.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					),
 					'artist'           => array(
 						'id'          => 'artist',
