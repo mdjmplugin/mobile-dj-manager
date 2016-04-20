@@ -787,7 +787,11 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args = 
 	
 	$func = 'mdjm_set_event_status_' . str_replace( '-', '_', $new_status );
 	
-	$result = $func( $event_id, $old_status, $args );
+	if ( function_exists( $func ) )	{
+		$result = $func( $event_id, $old_status, $args );
+	} else	{
+		$result = true;
+	}
 	
 	do_action( "mdjm_post_update_event_status_{$new_status}", $event_id, $old_status, $args );
 	
