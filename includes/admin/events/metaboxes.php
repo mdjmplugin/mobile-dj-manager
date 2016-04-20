@@ -683,7 +683,7 @@ function mdjm_event_metabox_event_employees( $post )	{
 		</div>
         <div class="mdjm-post-last-2column">
 			<?php
-            if( MDJM_PAYMENTS == true && mdjm_employee_can( 'manage_txns' ) )	{
+            if( mdjm_employee_can( 'edit_txns' ) )	{
                 ?>
                 <label for="_mdjm_event_dj_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                 <?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" class="mdjm-input-currency" 
