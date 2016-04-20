@@ -681,52 +681,6 @@
 /*
  * -- END DJ FUNCTIONS
  */
-
-/*
- * -- START TRANSACTION FUNCTIONS
- */
-
-	/*
-	 * get_transaction_types
-	 * Retrieve all possible transaction types (taxonomy)
-	 *
-	 * @params:		$hide_empty		bool	false (default) to show all, true only those in use
-	 *				
-	 * @return: 	$trans_types	arr		Transaction type objects
-	 */
-	function get_transaction_types( $hide_empty=false )	{
-		$hide_empty = $hide_empty == false ? 0 : 1;
-		$trans_types = get_categories( array(
-										'type'		=> MDJM_TRANS_POSTS,
-										'taxonomy'	=> 'transaction-types',
-										'order_by'	=> 'name',
-										'order'	   => 'ASC',
-										'hide_empty'  => $hide_empty,
-										) );
-		return $trans_types;
-	} // get_transaction_types
-	
-	/*
-	 * get_transaction_source
-	 * Retrieve all possible transaction types (taxonomy)
-	 *
-	 * @params:		
-	 *				
-	 * @return: 	$trans_src	arr		Transaction sources
-	 */
-	function get_transaction_source()	{
-		global $mdjm_settings;
-		
-		$trans_src = explode( "\r\n", $mdjm_settings['payments']['payment_sources'] );
-			
-		asort( $trans_src );
-		
-		return $trans_src;
-	} // get_transaction_source
- 
-/*
- * -- END TRANSACTION FUNCTIONS
- */
   
 /*
  * -- START USER FUNCTIONS

@@ -294,6 +294,48 @@ function mdjm_get_txn_type( $txn_id )	{
 } // mdjm_get_txn_type
 
 /**
+ * Return all possible types of transaction.
+ *
+ * @since	1.3
+ * @param
+ * @return	obj		Transaction type term objects.
+ */
+function mdjm_get_txn_types( $hide_empty = false )	{
+	
+	$txn_types = get_categories( array(
+		'type'		=> 'mdjm-transaction',
+		'taxonomy'	=> 'transaction-types',
+		'order_by'	=> 'name',
+		'order'	   => 'ASC',
+		'hide_empty'  => $hide_empty,
+	) );
+	
+	return $txn_types;
+
+} // mdjm_get_txn_types
+
+/*
+ * Retrieve all possible transaction sources
+ *
+ * @since	1.3
+ * @param		
+ * @return	arr		$txn_src	Transaction sources
+ */
+function mdjm_get_txn_source()	{
+	
+	$src = array();
+	
+	$src = mdjm_get_option( 'payment_sources' );
+	
+	$txn_src = explode( "\r\n", $src );
+		
+	asort( $txn_src );
+	
+	return $txn_src;
+
+} // mdjm_get_txn_source
+
+/**
  * Returns the date for a transaction in short format.
  *
  * @since	1.3

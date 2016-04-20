@@ -1304,7 +1304,7 @@ function mdjm_list_pages( $force = false ) {
  * @return	arr		$txn_sources	An array of transaction sources
  */
 function mdjm_list_txn_sources() {
-	$sources = get_transaction_source();
+	$sources = mdjm_get_txn_source();
 	
 	foreach( $sources as $source )	{
 		$txn_sources[ $source ] = $source;	

@@ -1112,7 +1112,7 @@ function mdjm_event_metabox_transactions( $post )	{
 			echo '</div>' . "\r\n";
 		echo '</div>' . "\r\n";
 		
-		$types = get_transaction_types();
+		$types = mdjm_get_txn_types();
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_for">' . __( 'Details:', 'mobile-dj-manager' ) . '</label><br />' . 
 				'<select name"transaction_for" id="transaction_for">' . 
@@ -1123,7 +1123,7 @@ function mdjm_event_metabox_transactions( $post )	{
 				echo '</select>' . "\r\n";
 		echo '</div>' . "\r\n";
 		
-		$sources = get_transaction_source();
+		$sources = mdjm_get_txn_source();
 		echo '<div class="mdjm-post-last-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_src">' . __( 'Source:', 'mobile-dj-manager' ) . '</label><br />' . "\r\n" . 
 				'<select name="transaction_src" id="transaction_src">' . "\r\n" . 

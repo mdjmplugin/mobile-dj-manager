@@ -29,7 +29,7 @@ if( ! function_exists( 'mdjm_get_option' ) )	{
  */
 if( ! function_exists( 'mdjm_list_txn_sources' ) )	{
 	function mdjm_list_txn_sources() {
-		foreach( get_transaction_source() as $source )	{
+		foreach( mdjm_get_txn_source() as $source )	{
 			$txn_sources[ $source ] = $source;	
 		}
 		
