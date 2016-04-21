@@ -368,12 +368,12 @@ class MDJM_Permissions	{
 		}
 		
 		// MDJM Admins can do everything
-		if( user_can( $user->ID, 'manage_mdjm' ) )	{
+		if( mdjm_is_admin( $user->ID ) )	{
 			return true;
 		}
 		
 		// Non employees can't do anything	
-		if( ! user_can( $user->ID, 'mdjm_employee' ) )	{
+		if( ! mdjm_is_employee( $user->ID ) )	{
 			return false;
 		}
 			

@@ -26,13 +26,41 @@ function mdjm_is_employer()	{
  * Whether or not the employee has the priviledge.
  *
  * @since	1.3
- * @param	$role		The role to check
- * @param	$int		Optional: The user ID of the employee
- * @return	bool		True if multi employee, otherwise false
+ * @param	str		$role		The role to check
+ * @param	int		$user_id	The user ID of the employee
+ * @return	bool	True if multi employee, otherwise false
  */
-function mdjm_employee_can( $role, $user_id='' )	{
+function mdjm_employee_can( $role, $user_id = '' )	{
 	return MDJM()->permissions->employee_can( $role, $user_id );
 } // mdjm_employee_can
+
+/**
+ * Whether or not the user is an employee.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check
+ * @return	bool	True if an employee, otherwise false
+ */
+function mdjm_is_employee( $user_id = '' )	{
+	
+	$user_id = ! empty( $user_id ) ? $user_id : get_current_user_id();
+	
+	return user_can( $user_id, 'mdjm_employee' );
+} // mdjm_is_employee
+
+/**
+ * Whether or not the user is an MDJM Admin.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check
+ * @return	bool	True if an admin, otherwise false
+ */
+function mdjm_is_admin( $user_id = '' )	{
+	
+	$user_id = ! empty( $user_id ) ? $user_id : get_current_user_id();
+	
+	return user_can( $user_id, 'manage_mdjm' );
+} // mdjm_is_admin
 
 /**
  * Display a dropdown select list with all employees. The label must be handled seperately.

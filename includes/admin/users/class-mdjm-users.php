@@ -357,7 +357,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			}
 			
 			// For administrators, determine if they should be an employee
-			if ( user_can( $user_id, 'administrator' ) )	{
+			if ( user_can( $user_id, 'administrator' ) && mdjm_is_admin() )	{
 
 				if ( ! empty( $_POST['_mdjm_event_roles'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
@@ -436,6 +436,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			$is_staff       = $user->__get( '_mdjm_event_staff' );
 			$required_roles = $user->__get( '_mdjm_event_roles' );
+			$make_admin     = $user->__get( '_mdjm_event_admin' );
 			$mdjm_roles     = mdjm_get_roles();
 			
 			if ( ! empty( $is_staff ) && ! empty( $required_roles ) )	{
@@ -467,10 +468,12 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			
 			$permissions = new MDJM_Permissions();
 						
-			if ( ! empty( $user->__get( '_mdjm_event_admin' ) ) )	{
+			if ( ! empty( $make_admin ) )	{
 				$permissions->make_admin( $user->ID );
+				$user->add_cap( 'mdjm_employee' );
 			} else	{
 				$permissions->make_admin( $user->ID, true );
+				$user->remove_cap( 'mdjm_employee' );
 			}
 			
 		} // admin_user_rights

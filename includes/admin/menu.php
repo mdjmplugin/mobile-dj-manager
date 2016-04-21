@@ -53,13 +53,13 @@ function mdjm_admin_menu()	{
 	/**
 	 * Placeholder for the Contact Forms menu item
 	 */
-	if( current_user_can( 'manage_mdjm' ) )	{
+	if( mdjm_is_admin() )	{
 		do_action( 'mdjm_dcf_menu_items' );
 	}
 	
 	$mdjm_availability_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Employee Availability', 'mobile-dj-manager' ), __( 'Employee Availability', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-availability', 'mdjm_employee_availability_page' );
 											
-	if( ! empty( mdjm_get_option( 'employer' ) ) && mdjm_employee_can( 'manage_employees' ) )	{
+	if( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		$mdjm_emp_page = add_submenu_page(  'edit.php?post_type=mdjm-event', __(  'Employees', 'mobile-dj-manager' ), __(  'Employees', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-employees', array( MDJM()->users, 'employee_manager' ) );
 	}
 											
@@ -122,7 +122,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		),
 	) );
 	// Settings
-	if( current_user_can( 'manage_mdjm' ) )	{
+	if( mdjm_is_admin() )	{
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-settings',
 			'parent'	=> 'mdjm',
@@ -194,7 +194,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		) );
 	}
 	do_action( 'mdjm_admin_bar_settings_items', $admin_bar );
-	if( current_user_can( 'manage_mdjm' ) )	{				
+	if( mdjm_is_admin() )	{				
 	// Automated Tasks
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-tasks',
@@ -293,7 +293,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			),
 		) );
 	}
-	if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
+	if( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		// Employees
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-employees',
@@ -415,7 +415,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		) );
 	}
 	// Custom Event Fields
-	if( current_user_can( 'manage_mdjm' ) )	{
+	if( mdjm_is_admin() )	{
 		$admin_bar->add_menu( array(
 			'id'     => 'mdjm-event-fields',
 			'parent' => 'mdjm-events',
@@ -534,7 +534,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'target' => '_blank'
 		),
 	));
-	if( current_user_can( 'manage_mdjm' ) )	{
+	if( mdjm_is_admin() )	{
 		$admin_bar->add_menu( array(
 			'id'     => 'mdjm-extensions',
 			'parent' => 'mdjm',
