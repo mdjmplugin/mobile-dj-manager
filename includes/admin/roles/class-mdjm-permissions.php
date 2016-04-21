@@ -465,9 +465,12 @@ class MDJM_Permissions	{
 	 *
 	 * @return	void
 	 */
-	public function make_admin( $where )	{
+	public function make_admin( $where, $remove = false )	{
 					
 		$caps = array(
+			// MDJM Admin
+			'manage_mdjm' => true,
+			
 			// Clients
 			'mdjm_client_edit' => true, 'mdjm_client_edit_own' => true,
 			
@@ -529,7 +532,9 @@ class MDJM_Permissions	{
 		
 		foreach( $caps as $cap => $set )	{
 			
-			if( !empty( $set ) )	{
+			if ( ! empty( $remove ) )	{
+				$role->remove_cap( $cap );
+			} elseif ( ! empty( $set ) )	{
 				$role->add_cap( $cap );
 			} else	{
 				$role->remove_cap( $cap );

@@ -26,7 +26,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			add_action( 'user_register', array( &$this, 'save_custom_user_fields' ), 10, 1 );
 			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
-			add_action( 'profile_update', array( &$this, 'add_dj_role_to_admin' ), 10, 2 );
+			add_action( 'profile_update', array( &$this, 'admin_user_rights' ), 10, 2 );
 			
 			add_action( 'wp_login', array( &$this, 'datestamp_login' ), 10, 2 );
 						
@@ -189,7 +189,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * 
 		 * 
 		 *
-		 * @param    int    $user    The ID of the user
+		 * @param    int    $user    The WP_User object
 		 * 
 		 * @return
 		 */
@@ -209,22 +209,43 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			// Is event staff checkbox for WP admins
 			if( isset( $user->ID ) && user_can( $user->ID, 'administrator' ) )	{
 				
+				$mdjm_roles = mdjm_get_roles();
+						
 				if( $user->ID != get_current_user_id() )	{
 					
 					echo '<tr>' . "\r\n";
-					echo '<th><label for="_mdjm_event_staff">' . sprintf( __( '%s Event Staff?', 'mobile-dj-manager' ), MDJM_COMPANY ) . '</label></th>' . "\r\n";
+					echo '<th><label for="_mdjm_event_roles">' . sprintf( __( '%s Employee Role(s)', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ) . '</label></th>' . "\r\n";
 					echo '<td>' . "\r\n";
-					echo '<input type="checkbox" name="_mdjm_event_staff" id="_mdjm_event_staff" value="1"';
-						checked ( get_user_meta( $user->ID, '_mdjm_event_staff', true ), true );
-					echo ' />' . "\r\n";
+					echo '<select name="_mdjm_event_roles[]" id="_mdjm_event_roles" multiple="multiple">';
+					
+					foreach( $mdjm_roles as $role_id => $role_name )	{
+						echo '<option value="' . $role_id . '"';
+						
+						selected( in_array( $role_id, $user->roles ), true );
+						
+						echo '>' . $role_name . '</option>';
+					}
+					
+					echo '</select>' . "\r\n";
 					echo '</td>' . "\r\n";
 					echo '</tr>' . "\r\n";
 					
+					echo '<tr>';
+					
+					echo '<th><label for="_mdjm_event_admin">' . __( 'User is MDJM Admin?', 'mobile-dj-manager' ) . '</label></th>' . "\r\n";
+					echo '<td><input type="checkbox" name="_mdjm_event_admin" id="_mdjm_event_admin" value="1"';
+					checked( $user->__get( '_mdjm_event_admin' ), true );
+					echo ' /></td>';
+					
+					echo '</tr>';
+					
 				} else	{
 					
-					echo '<input type="hidden" name="_mdjm_event_staff" id="_mdjm_event_staff" value="';
-					echo get_user_meta( $user->ID, '_mdjm_event_staff', true );
-					echo '" />' . "\r\n";
+					foreach( $mdjm_roles as $role_id => $role_name )	{
+						if ( in_array( $role_id, $user->roles ) )	{
+							echo '<input type="hidden" name="_mdjm_event_roles[]" id="_mdjm_event_roles_' . $role_id . '" value="' . $role_id . '" />' . "\r\n";
+						}
+					}
 					
 				}
 			}
@@ -338,10 +359,18 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			// For administrators, determine if they should be an employee
 			if ( user_can( $user_id, 'administrator' ) )	{
 
-				if ( ! empty( $_POST['_mdjm_event_staff'] ) )	{
+				if ( ! empty( $_POST['_mdjm_event_roles'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
+					update_user_meta( $user_id, '_mdjm_event_roles', $_POST['_mdjm_event_roles'] );
 				} else	{
 					update_user_meta( $user_id, '_mdjm_event_staff', false );
+					update_user_meta( $user_id, '_mdjm_event_roles', false );
+				}
+				
+				if ( ! empty( $_POST['_mdjm_event_admin'] ) )	{
+					update_user_meta( $user_id, '_mdjm_event_admin', true );
+				} else	{
+					update_user_meta( $user_id, '_mdjm_event_admin', false );
 				}
 
 			}
@@ -396,7 +425,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		 * @param	int	$old_data	Object containing user's data prior to update.
 		 * @return
 		 */
-		public function add_dj_role_to_admin( $user_id, $old_data )	{
+		public function admin_user_rights( $user_id, $old_data )	{
 			
 			if ( ! user_can( $user_id, 'administrator' ) )	{
 				return;
@@ -405,20 +434,46 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			// Retrieve the current user object after the profile update
 			$user = new WP_User( $user_id );
 			
-			$is_staff = $user->__get( '_mdjm_event_staff' );
+			$is_staff       = $user->__get( '_mdjm_event_staff' );
+			$required_roles = $user->__get( '_mdjm_event_roles' );
+			$mdjm_roles     = mdjm_get_roles();
 			
-			if ( ! empty( $is_staff ) )	{
-				$user->add_role( 'dj' );
+			if ( ! empty( $is_staff ) && ! empty( $required_roles ) )	{
+				
+				// Reset roles and caps before applying updates due to some wierd bug
+				foreach( $mdjm_roles as $role_id => $role_name )	{
+					$user->remove_role( $role_id );
+				}
+				
+				$user->remove_cap( 'mdjm_employee' );
+				
+				foreach( $required_roles as $role_id )	{
+					$user->add_role( $role_id );
+				}
+				
 				$user->add_cap( 'mdjm_employee' );
-				$user->add_cap( 'manage_mdjm' );
+				
+				delete_user_meta( $user->ID, '_mdjm_event_roles' );
 				
 			} else	{
-				$user->remove_role( 'dj' );
+				
+				foreach( $mdjm_roles as $role_id => $role_name )	{
+					$user->remove_role( $role_id );
+				}
+				
 				$user->remove_cap( 'mdjm_employee' );
-				$user->remove_cap( 'manage_mdjm' );
+				
 			}
 			
-		} // add_dj_role_to_admin
+			$permissions = new MDJM_Permissions();
+						
+			if ( ! empty( $user->__get( '_mdjm_event_admin' ) ) )	{
+				$permissions->make_admin( $user->ID );
+			} else	{
+				$permissions->make_admin( $user->ID, true );
+			}
+			
+		} // admin_user_rights
 		
 		/**
 		 * Remove admin bar & do not allow admin UI for Clients.

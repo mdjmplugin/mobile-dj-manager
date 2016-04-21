@@ -114,8 +114,11 @@ function mdjm_employee_dropdown( $args='' )	{
 		$results = new stdClass();
 		$results->role = array();
 		foreach( $employees as $employee )	{
-			if( $employee->roles[0] == 'administrator' )
+			if( $employee->roles[0] == 'administrator' && ! empty( $employee->roles[1] ) )	{
+				$employee->roles[0] = $employee->roles[1];
+			} else	{
 				$employee->roles[0] = 'dj';
+			}
 			
 			if( !empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )
 				continue;
@@ -302,12 +305,7 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
 			'orderby'	 => $orderby,
 			'order'		 => $order
 		);
-							
-		if( !is_numeric( $role_id ) && $role_id == 'administrator' )	{
-			$args['meta_key'] = '_mdjm_event_staff';
-			$args['meta_value'] = true;
-		}
-		
+									
 		// Execute the query
 		$employee_query = new WP_User_Query( $args );
 		

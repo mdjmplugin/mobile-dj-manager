@@ -461,6 +461,7 @@ function mdjm_run_install()	{
 		$options['payment_cfm_template']        = $payment_cfm;
 		$options['manual_payment_cfm_template'] = $payment_cfm;
 		$options['default_contract']            = $default_contract;
+
 	}
 	
 	// Setup default client fields
@@ -731,12 +732,10 @@ function mdjm_run_install()	{
 	
 	foreach( $administrators as $user )	{
 		update_user_meta( $user->ID, '_mdjm_event_staff', true );
-		$user->add_cap( 'mdjm_employee' );
-		$user->add_cap( 'manage_mdjm' );
+		update_user_meta( $user->ID, '_mdjm_event_admin', true );
 		$user->add_role( 'dj' );
-		
-		// Assigned full MDJM caps to administrators
-		$permissions->make_admin( $user->ID );
+		$user->add_cap( 'mdjm_employee' );
+		$permissions->make_admin( $user->ID );	
 	}
 	
 	// Assign the MDJM employee cap to the DJ role
