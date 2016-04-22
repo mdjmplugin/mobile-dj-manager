@@ -28,7 +28,7 @@ function mdjm_get_option( $key = '', $default = false )	{
 	$value = ! empty( $mdjm_options[ $key ] ) ? $mdjm_options[ $key ] : $default;
 	$value = apply_filters( 'mdjm_get_option', $value, $key, $default );
 	
-	return apply_filters( 'mdjm_get_option' . $key, $value, $key, $default );
+	return apply_filters( "mdjm_get_option_{$key}", $value, $key, $default );
 } // mdjm_get_option
 
 /**
@@ -38,12 +38,13 @@ function mdjm_get_option( $key = '', $default = false )	{
  * Warning: Passing in an empty, false or null string value will remove
  *          the key from the mdjm_options array.
  *
- * @since 2.3
+ * @since 1.3
  * @param string $key The Key to update
  * @param string|bool|int $value The value to set the key to
  * @return boolean True if updated, false if not.
  */
 function mdjm_update_option( $key = '', $value = false ) {
+
 	// If no key, exit
 	if ( empty( $key ) ){
 		return false;
@@ -59,6 +60,7 @@ function mdjm_update_option( $key = '', $value = false ) {
 
 	// Let's let devs alter that value coming in
 	$value = apply_filters( 'mdjm_update_option', $value, $key );
+	$value = apply_filters( "mdjm_update_option_{$key}", $value );
 
 	// Next let's try to update the value
 	$options[ $key ] = $value;
@@ -68,10 +70,10 @@ function mdjm_update_option( $key = '', $value = false ) {
 	if ( $did_update ){
 		global $mdjm_options;
 		$mdjm_options[ $key ] = $value;
-
 	}
 
 	return $did_update;
+
 } // mdjm_update_option
 
 /**
@@ -84,6 +86,7 @@ function mdjm_update_option( $key = '', $value = false ) {
  * @return	bool	True if updated, false if not.
  */
 function mdjm_delete_option( $key = '' ) {
+
 	// If no key, exit
 	if ( empty( $key ) ){
 		return false;
@@ -108,6 +111,7 @@ function mdjm_delete_option( $key = '' ) {
 	}
 
 	return $did_update;
+
 } // mdjm_delete_option
 
 /**
