@@ -267,9 +267,6 @@ function mdjm_shortcode_quote( $atts )	{
 	
 	$atts = shortcode_atts( 
 		array( // These are our default values
-			'button_loc'      => 'both',
-			'button_align'    => false,
-			'button_class'	=> '',
 			'button_text'     => sprintf( __( 'Book this %s', 'mobile-dj-manager' ), mdjm_get_label_singular() )
 		),
 		$atts,
