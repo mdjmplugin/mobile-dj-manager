@@ -215,8 +215,16 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
  */
 function mdjm_display_book_event_button( $event_id, $args = array() )	{
 
+	if ( 'mdjm-enquiry' != mdjm_get_event_status( $event_id ) )	{
+		return;
+	}
+
 	$buttons = mdjm_get_event_action_buttons( $event_id );
 	
+	if ( empty( $buttons ) || empty( $buttons[10] ) )	{
+		return;
+	}
+
 	$book_button = $buttons[10];
 		
 	$defaults = array(
