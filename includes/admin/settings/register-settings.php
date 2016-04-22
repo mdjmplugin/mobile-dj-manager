@@ -497,8 +497,8 @@ function mdjm_get_registered_settings()	{
 					'bcc_dj_to_client' => array(
 						'id'          => 'bcc_dj_to_client',
 						'name'        => sprintf( __( 'Copy %s in Client Emails?', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
-						'desc'        => sprintf( __( 'Send a copy of client emails to the events primary %s', 'mobile-dj-manager' ),
-											mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+						'desc'        => sprintf( __( 'Send a copy of client emails to the %s primary %s', 'mobile-dj-manager' ),
+											mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
 										),
 											
 						'type'        => 'checkbox'
@@ -615,13 +615,15 @@ function mdjm_get_registered_settings()	{
 					'booking_conf_to_dj' => array(
 						'id'          => 'booking_conf_to_dj',
 						'name'        => __( 'Booking Confirmation to Employee?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Email events primary %s with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'desc'        => sprintf( __( 'Email %s primary %s with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ),
+											mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+										),
 						'type'        => 'checkbox'
 					),
 					'email_dj_confirm' => array(
 						'id'          => 'email_dj_confirm',
 						'name'        => sprintf( __( '%s Booking Confirmation Template', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
-						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to events primary %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
+						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to %s primary %s', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
@@ -654,8 +656,7 @@ function mdjm_get_registered_settings()	{
 				'main' => array(
 					'client_zone_settings' => array(
 						'id'          => 'client_zone_settings',
-						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ),
-													mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</h3>',
+						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</h3>',
 						'desc'        => '',
 						'type'        => 'header'
 					),
@@ -946,7 +947,8 @@ function mdjm_get_registered_settings()	{
 					'deposit_type'     => array(
 						'id'          => 'deposit_type',
 						'name'        => mdjm_get_deposit_label() . "'s " . __( 'are', 'mobile-dj-manager' ),
-						'desc'        => __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your events, how should they be calculated?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your %s, how should they be calculated?', 'mobile-dj-manager' ),
+											mdjm_get_label_plural( true ) ),
 						'type'        => 'select',
 						'options'     => array(
 							'0'          => 'Not required',
@@ -1159,9 +1161,9 @@ function mdjm_get_settings_tabs() {
 
 	$tabs                  = array();
 	$tabs['general']       = __( 'General', 'mobile-dj-manager' );
-	$tabs['events']        = __( 'Events', 'mobile-dj-manager' );
+	$tabs['events']        = sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() );
 	$tabs['emails']        = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
-	$tabs['client_zone']   = mdjm_get_option( 'app_name', 'mobile-dj-manager' );
+	$tabs['client_zone']   = mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) );
 	$tabs['payments']      = __( 'Payments', 'mobile-dj-manager' );
 
 	if( ! empty( $settings['extensions'] ) ) {
@@ -1223,7 +1225,7 @@ function mdjm_get_registered_settings_sections() {
 			'templates'          => sprintf( __( '%s Templates', 'mobile-dj-manager' ), mdjm_get_label_singular() )
 		) ),
 		'client_zone'     => apply_filters( 'mdjm_settings_sections_styles', array(
-			'main'               => __( 'Client Zone Settings', 'mobile-dj-manager' ),
+			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone Settings', 'mobile-dj-manager' ) ) ),
 			'styles'             => __( 'Styles', 'mobile-dj-manager' ),
 			'pages'              => __( 'Pages', 'mobile-dj-manager' ),
 			'availability'       => __( 'Availability Checker', 'mobile-dj-manager' )
