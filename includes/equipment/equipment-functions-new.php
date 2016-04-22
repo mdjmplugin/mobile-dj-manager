@@ -129,7 +129,7 @@ function mdjm_get_package_price( $package_id )	{
  */
 function mdjm_list_available_packages( $employee_id='', $show_price=false )	{
 	//If packages are not enabled
-	if( MDJM_PACKAGES == false )	{
+	if( ! mdjm_packages_enabled() )	{
 		return __( 'No packages available', 'mobile-dj-manager' );
 	}
 	

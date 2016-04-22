@@ -1157,7 +1157,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	$balance_payment = $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ? true : false;
 	
 	// Add-Ons
-	if( MDJM_PACKAGES == true )	{
+	if( mdjm_packages_enabled() )	{
 		$event_data['_mdjm_event_addons'] = ! empty( $_POST['event_addons'] ) ? $_POST['event_addons'] : '';
 	}
 	

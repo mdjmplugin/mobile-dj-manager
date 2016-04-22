@@ -521,7 +521,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	<!-- Start of fourth row -->
 	<?php
 	/* -- Equipment Packages & Add-ons -- */
-	if( MDJM_PACKAGES == true )	{
+	if( mdjm_packages_enabled() )	{
 		/* -- Retrieve packages and sort -- */
 		$packages = get_option( 'mdjm_packages' );
 		if( $packages )	{

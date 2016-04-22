@@ -327,7 +327,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		) );
 	}
 	// Equipment Packages & Add-ons
-	if( MDJM_PACKAGES == true && mdjm_employee_can( 'manage_packages' ) )	{
+	if( mdjm_packages_enabled() && mdjm_employee_can( 'manage_packages' ) )	{
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-equipment',
 			'parent'	=> 'mdjm',

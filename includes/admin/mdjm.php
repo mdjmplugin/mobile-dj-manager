@@ -182,7 +182,7 @@
 				define( 'MDJM_CREDITS', ( !empty( $mdjm_settings['main']['show_credits'] ) ? true : false ) );
 				define( 'MDJM_TRACK_EMAILS', ( !empty( $mdjm_settings['email']['track_client_emails'] ) ? true : false ) );
 				define( 'MDJM_MULTI', ( !empty( $mdjm_settings['events']['employer'] ) ? true : false ) );
-				define( 'MDJM_PACKAGES', ( !empty( $mdjm_settings['events']['enable_packages'] ) ? true : false ) );
+				define( 'MDJM_PACKAGES', mdjm_packages_enabled() );
 				define( 'MDJM_TIME_FORMAT', ( isset( $mdjm_settings['main']['time_format'] ) ? $mdjm_settings['main']['time_format'] : 'H:i' ) );
 				define( 'MDJM_SHORTDATE_FORMAT', isset( $mdjm_settings['main']['short_date_format'] ) ? $mdjm_settings['main']['short_date_format'] : 'd/m/Y' );
 				define( 'MDJM_EVENT_PREFIX', isset( $mdjm_settings['events']['event_prefix'] ) ? $mdjm_settings['events']['event_prefix'] : '' );
