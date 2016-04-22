@@ -1174,7 +1174,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 */
 	$debug[] = 'Beginning Meta Updates';
 	
-	mdjm_add_event_meta( $post_id, $event_data );
+	mdjm_update_event_meta( $post_id, $event_data );
 		
 	$debug[] = 'Meta Updates Completed';
 	

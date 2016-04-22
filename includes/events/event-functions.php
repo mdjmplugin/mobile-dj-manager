@@ -1252,3 +1252,67 @@ function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 	return $quote_id;
 	
 } // mdjm_create_online_quote
+
+/**
+ * Display the online quote.
+ *
+ * @since	1.3
+ * @param	int			$event_id		The event ID.
+ * @return	str			The content of the quote.
+ */
+function mdjm_display_quote( $event_id )	{
+	
+	$quote = mdjm_get_event_quote( $event_id );
+	
+	if ( ! $quote )	{
+		return apply_filters( 'mdjm_quote_not_found_msg', sprintf( __( 'Sorry but the quote for your %s could not be displayed.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
+	}
+	
+	$quote_content = $quote->post_content;
+	$quote_content = apply_filters( 'the_content', $quote_content );
+	$quote_content = str_replace( ']]>', ']]&gt;', $quote_content );
+	
+	return apply_filters( 'mdjm_display_quote', $quote_content, $event_id );
+	
+} // mdjm_display_quote
+
+/**
+ * Registers the online quote as viewed.
+ *
+ * Increase the view count.
+ *
+ * @since	1.3
+ * @param	int			$quote_id		The quote ID.
+ * @param	int			$event_id		The event ID.
+ * @return	void
+ */
+function mdjm_viewed_quote( $quote_id, $event_id )	{
+	
+	if ( get_current_user_id() != get_post_meta( $event_id, '_mdjm_event_client', true ) )	{
+		return;
+	}
+
+	if( wp_update_post( array( 'ID' => $quote_id, 'post_status' => 'mdjm-quote-viewed' ) ) )	{
+
+		$view_count = get_post_meta( $quote_id, '_mdjm_quote_viewed_count', true );
+
+		if( ! empty( $view_count ) )	{
+			$view_count++;
+		} else	{
+			$view_count = 1;
+		}
+
+		MDJM()->debug->log_it( 'Updating quote view count for Quote ID: ' . $quote_id . ' and event ID: ' . $event_id, true );
+		update_post_meta( $quote_id, '_mdjm_quote_viewed_count', $view_count );
+
+		// Only update the view date if this is the first viewing
+		if( $view_count == 1 )	{
+
+			MDJM()->debug->log_it( 'Updating quote viewed time', false );
+
+			update_post_meta( $quote_id, '_mdjm_quote_viewed_date', current_time( 'mysql' ) );
+		}
+
+	}
+
+} // mdjm_viewed_quote
