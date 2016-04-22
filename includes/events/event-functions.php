@@ -694,7 +694,7 @@ function mdjm_time_until_event( $event_id )	{
  * @param	arr		$data		The appropriately formatted meta data values.
  * @return	void
  */
-function mdjm_add_event_meta( $event_id, $data )	{
+function mdjm_update_event_meta( $event_id, $data )	{
 	
 	// For backwards compatibility
 	$current_meta = get_post_meta( $event_id );
@@ -763,7 +763,7 @@ function mdjm_add_event_meta( $event_id, $data )	{
 		
 	}
 	
-} // mdjm_add_event_meta
+} // mdjm_update_event_meta
 
 /**
  * Update the event status.
@@ -830,7 +830,7 @@ function mdjm_set_event_status_mdjm_unattended( $event_id, $old_status, $args = 
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 		
 	return $update;
 	
@@ -865,7 +865,7 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 	
 	// Generate an online quote that is visible via the Client Zone
 	if( ! empty( mdjm_get_option( 'online_enquiry', false ) ) )	{
@@ -918,7 +918,7 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 	
 	// Email the client
 	if( ! empty( $args['client_notices'] ) )	{
@@ -958,7 +958,7 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 	
 	// Email the client
 	if( ! empty( $args['client_notices'] ) )	{
@@ -998,7 +998,7 @@ function mdjm_set_event_status_mdjm_completed( $event_id, $old_status, $args = a
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 		
 	return $update;
 	
@@ -1033,7 +1033,7 @@ function mdjm_set_event_status_mdjm_cancelled( $event_id, $old_status, $args = a
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 		
 	return $update;
 	
@@ -1068,7 +1068,7 @@ function mdjm_set_event_status_mdjm_failed( $event_id, $old_status, $args = arra
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 		
 	return $update;
 	
@@ -1103,7 +1103,7 @@ function mdjm_set_event_status_mdjm_rejected( $event_id, $old_status, $args = ar
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
-	mdjm_add_event_meta( $event_id, $args['meta'] );
+	mdjm_update_event_meta( $event_id, $args['meta'] );
 		
 	return $update;
 	
@@ -1272,6 +1272,8 @@ function mdjm_display_quote( $event_id )	{
 	$quote_content = apply_filters( 'the_content', $quote_content );
 	$quote_content = str_replace( ']]>', ']]&gt;', $quote_content );
 	
+	mdjm_viewed_quote( $quote->ID, $event_id );
+	
 	return apply_filters( 'mdjm_display_quote', $quote_content, $event_id );
 	
 } // mdjm_display_quote
@@ -1288,6 +1290,7 @@ function mdjm_display_quote( $event_id )	{
  */
 function mdjm_viewed_quote( $quote_id, $event_id )	{
 	
+	// Only counts if the current user is the event client
 	if ( get_current_user_id() != get_post_meta( $event_id, '_mdjm_event_client', true ) )	{
 		return;
 	}
