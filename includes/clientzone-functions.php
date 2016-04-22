@@ -137,7 +137,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 		
 		$buttons[10] = apply_filters( 'mdjm_book_action_button',
 			array(
-				'label'		=> __( 'Book Event', 'mobile-dj-manager' ),
+				'label'		=> sprintf( __( 'Book %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'id'		=> 'mdjm-book-button',
 				'url'		=> add_query_arg( 
 					array( 
@@ -201,3 +201,34 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	
 	return $buttons;
 } // mdjm_get_event_action_buttons
+
+/**
+ * Output the book event button.
+ *
+ * If you are filtering the mdjm_get_action_buttons function you may need to adjust the array key
+ * within this function.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @param	arr		$args		Arguments for button display. See $defaults.
+ * @return	str		The Book Event button
+ */
+function mdjm_display_book_event_button( $event_id, $args = array() )	{
+
+	$buttons = mdjm_get_event_action_buttons( $event_id );
+	
+	$book_button = $buttons[10];
+	
+	$defaults = array(
+		'colour'   => mdjm_get_option( 'action_button_colour' ),
+		'label'    => $book_button['label'],
+		'url'      => $book_button['url']
+	);
+	
+	$args - wp_parse_args( $args, $defaults );
+	
+	$output = sprintf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">%s</a>', $args['colour'], $args['url'], $args['label'] );
+	
+	return apply_filters( 'mdjm_book_event_button', $output, $event_id, $args );
+	
+} // mdjm_display_book_event_button
