@@ -39,6 +39,13 @@ class MDJM_Emails {
 	 * @since	1.3
 	 */
 	private $from_email;
+	
+	/**
+	 * Holds the addresses that should receive a copy of the email
+	 *
+	 * @since	1.3
+	 */
+	private $copy_to = array();
 
 	/**
 	 * Holds the email content type
@@ -76,6 +83,13 @@ class MDJM_Emails {
 	private $track = true;
 	
 	/**
+	 * Post ID of the tracking post
+	 *
+	 * @since	1.3
+	 */
+	private $tracking_id = 0;
+	
+	/**
 	 * The event to which the email is associated
 	 *
 	 * @since	1.3
@@ -88,15 +102,18 @@ class MDJM_Emails {
 	 * @since	1.3
 	 */
 	public function __construct() {
+
 		if ( 'none' === $this->get_template() ) {
 			$this->html = false;
 		}
+
 		if( ! mdjm_get_option( 'track_client_emails', false ) )	{
 			$this->track = false;
 		}
 
 		add_action( 'mdjm_email_send_before', array( $this, 'send_before' ) );
 		add_action( 'mdjm_email_send_after', array( $this, 'send_after' ) );
+
 	} // __construct
 	
 	/**
@@ -235,6 +252,7 @@ class MDJM_Emails {
 	 * @since	1.3
 	 */
 	public function send( $to, $subject, $message, $attachments = '', $source = '' ) {
+		
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
 			_doing_it_wrong( __FUNCTION__, __( 'You cannot send email with MDJM_Emails until init/admin_init has been reached', 'mobile-dj-manager' ), null );
 			return false;
@@ -254,6 +272,15 @@ class MDJM_Emails {
 		$message = $this->log_email( $to, $subject, $message, $attachments, $source );
 		
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers(), $attachments );
+		
+		if ( ! empty( $this->copy_to ) )	{
+
+			$subject = empty( $this->tracking_id ) ? $subject : '';
+			$message = empty( $this->tracking_id ) ? $message : '';
+
+			$this->send_copy( $subject, $message, $attachments );
+
+		}
 
 		/**
 		 * Hooks after the email is sent
@@ -263,6 +290,7 @@ class MDJM_Emails {
 		do_action( 'mdjm_email_send_after', $this );
 				
 		return $sent;
+
 	} // send
 
 	/**
@@ -301,20 +329,78 @@ class MDJM_Emails {
 	} // text_to_html
 	
 	/**
+	 * Send a copy of the email.
+	 *
+	 * @since	1.3
+	 * @param	str		$subject		The email subject. If omitted, we'll use the title of the tracking post.
+	 * @param	str		$content		The email content. If omitted, we'll use the tracking ID.
+	 * @param	arr		$attachments	The email attachments.
+	 */
+	public function send_copy( $subject = '', $content = '', $attachments = array() )	{
+		
+		if ( empty( $this->copy_to ) )	{
+			return;
+		}
+		
+		if ( empty ( $content ) )	{
+			$tracker = get_post( $this->tracking_id );
+			
+			if ( ! $tracker )	{
+				return;
+			}
+			
+			$content = $tracker->post_content;
+			$content = apply_filters( 'the_content', $content );
+			$content = str_replace( ']]>', ']]&gt;', $content );
+			
+			if ( empty( $content ) )	{
+				return;
+			}
+			
+			$subject           = get_the_title( $tracker->ID );
+			
+		}
+		
+		foreach ( $this->copy_to as $recipient )	{
+			$args = array(
+				'to_email'       => $recipient,
+				'from_name'      => $this->from_name,
+				'from_email'     => $this->from_address,
+				'event_id'       => $this->event_id,
+				'client_id'      => ! empty( $this->event_id ) ? mdjm_get_event_client_id( $this->event_id ) : '',
+				'subject'        => ! empty( $subject ) ? $subject : sprintf( __( 'Copy of an email recently sent via %s', 'mobile-dj-manager' ), '{application_name}' ),
+				'attachments'    => $attachments,
+				'message'        => mdjm_email_set_copy_text() . $content,
+				'track'          => false
+			);
+			
+			mdjm_send_email_content( $args );
+			
+		}
+		
+	} // send_copy
+	
+	/**
 	 * Store the communication and insert the image which enables tracking of the email via our API.
 	 *
 	 * @since	1.3
 	 */
 	public function log_email( $to, $subject, $message, $attachments, $source ) {
-		if ( true === $this->track && ( 'text/html' == $this->content_type || true === $this->html ) ) {
+		
+		if ( $this->track && ( 'text/html' == $this->content_type || true === $this->html ) ) {
+			
+			MDJM()->debug->log_it( 'Adding tracking image to email' );
+			
 			$this->add_tracking_post( $to, $subject, $message, $attachments, $source );
 			
 			if( ! empty( $this->tracking_id ) )	{
-				$this->add_tracking_image( $message );
+				$message = $this->add_tracking_image( $message );
 			}
+
 		}
 
 		return $message;
+
 	} // log_email
 	
 	/**
