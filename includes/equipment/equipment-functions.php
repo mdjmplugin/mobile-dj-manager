@@ -13,6 +13,17 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not packages are enabled.
+ *
+ * @since	1.3
+ * @param
+ * @return	bool	True if packages are enabled, false if they are not
+ */
+function mdjm_packages_enabled()	{
+	return mdjm_get_option( 'enable_packages', false );
+} // mdjm_packages_enabled
+
+/**
  * Retrieve all packages
  *
  *
@@ -67,8 +78,10 @@ function mdjm_get_package_by_name( $name )	{
  * @return
  */
 function get_event_package( $event_id, $price=false )	{
-	if( MDJM_PACKAGES != true )
+	
+	if( ! mdjm_packages_enabled() )	{
 		return 'N/A';
+	}
 	
 	// Event package
 	$event_package = get_post_meta( $event_id, '_mdjm_event_package', true );
@@ -80,8 +93,7 @@ function get_event_package( $event_id, $price=false )	{
 	$packages = mdjm_get_packages();
 					
 	
-	return stripslashes( esc_attr( $packages[$event_package]['name'] ) ) . ( !empty( $price ) ? ' ' . 
-		display_price( $packages[$event_package]['cost'], true ) : '' );
+	return stripslashes( esc_attr( $packages[$event_package]['name'] ) ) . ' ' . ! empty( $price ) ? mdjm_currency_filter( mdjm_format_amount( $packages[$event_package]['cost'] ) ) : '';
 			
 } // get_event_package
 
@@ -92,8 +104,10 @@ function get_event_package( $event_id, $price=false )	{
  * @return
  */
 function get_available_packages( $dj='', $price=false )	{
-	if( MDJM_PACKAGES != true )
+	
+	if( ! mdjm_packages_enabled() )	{
 		return 'N/A';
+	}
 	
 	// All packages
 	$packages = mdjm_get_packages();
@@ -105,10 +119,10 @@ function get_available_packages( $dj='', $price=false )	{
 			
 			if( !empty( $dj ) )	{
 				if( in_array( $dj, explode( ',', $package['djs'] ) ) )
-					$available[] = stripslashes( esc_attr( $package['name'] ) ). ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+					$available[] = stripslashes( esc_attr( $package['name'] ) ) . ' ' . ! empty( $price ) ? mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) : '';
 			}
 			else
-				$available[] = stripslashes( esc_attr( $package['name'] ) ) . ( !empty( $price ) ? ' ' . display_price( $package['cost'], true ) : '' );
+				$available[] = stripslashes( esc_attr( $package['name'] ) ) . ' ' . ! empty( $price ) ? mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) : '';
 		}
 		$i = 1;
 		$the_packages = '';
@@ -130,8 +144,10 @@ function get_available_packages( $dj='', $price=false )	{
  * @return	arr|bool	$addons		array with package details, or false if no package assigned
  */
 function get_event_addons( $event_id, $price=false )	{
-	if( MDJM_PACKAGES != true )
+	
+	if( ! mdjm_packages_enabled() )	{
 		return 'N/A';
+	}
 	
 	// Event Addons
 	$event_addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
@@ -146,9 +162,9 @@ function get_event_addons( $event_id, $price=false )	{
 	$i = 1;
 	
 	foreach( $event_addons as $event_addon )	{
-		$addons .= stripslashes( esc_attr( $all_addons[$event_addon][0] ) ) . ( !empty( $price ) ? ' ' . 
-			display_price( $all_addons[$event_addon][7], true ) : '' ) . ( $i < count( $event_addons ) ? 
-			'<br />' : '' );
+		$addons .= stripslashes( esc_attr( $all_addons[$event_addon][0] ) ) . ' ' . ! empty( $price ) ? 
+			mdjm_currency_filter( mdjm_format_amount( $all_addons[$event_addon][7] ) ) : '' . $i < count( $event_addons ) ? 
+			'<br />' : '';
 		$i++;
 	}
 									
@@ -165,8 +181,10 @@ function get_event_addons( $event_id, $price=false )	{
  * @return
  */
 function get_available_addons( $dj='', $package='' )	{
-	if( MDJM_PACKAGES != true )
+	
+	if( ! mdjm_packages_enabled() )	{
 		return 'N/A';
+	}
 								
 	// All addons
 	$all_addons = mdjm_get_addons();
@@ -316,7 +334,7 @@ function mdjm_package_dropdown( $settings='', $structure=true )	{
 			$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . stripslashes( esc_textarea( $package['desc'] ) ) . '"' : '' );
 			$mdjm_select .= ( isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>' ) ;
 			$mdjm_select .= stripslashes( esc_attr( $package['name'] ) ) . 
-				( $select_cost == true ? ' - ' . display_price( $package['cost'] ) : '' ) . '</option>' . "\r\n";
+				$select_cost == true ? ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) : '' . '</option>' . "\r\n";
 		}
 	}
 	
@@ -605,7 +623,7 @@ function mdjm_addons_dropdown( $settings='', $structure=true )	{
 							$mdjm_select .= ' selected="selected"';
 						
 						$mdjm_select .= '>' . stripslashes( esc_attr( $item[0] ) ) . 
-							( $select_cost == true ? ' - ' . display_price( $item[7] ) : '' ) . '</option>' . "\r\n";
+							$select_cost == true ? ' - ' . mdjm_currency_filter( mdjm_format_amount( $item[7] ) ) : '' . '</option>' . "\r\n";
 				}
 				
 			}
@@ -704,7 +722,7 @@ function mdjm_addons_checkboxes( $settings='' )	{
 						
 						$mdjm_check .= '<label for="' . $check_name . '_' . stripslashes( esc_attr( $item[1] ) ) . '">' . stripslashes( $item[0] );
 						
-						$mdjm_check .= ( $check_cost == true ? ' - ' . display_price( $item[7] ) : '' );
+						$mdjm_check .= $check_cost == true ? ' - ' . mdjm_currency_filter( mdjm_format_amount( $item[7] ) ) : '';
 						
 						$mdjm_check .= '</label>' . ( !empty( $settings['title'] ) && !empty( $item[4] ) ? '</span>' : '' ) . '<br />' .  "\r\n";
 				}

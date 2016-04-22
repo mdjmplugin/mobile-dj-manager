@@ -97,46 +97,6 @@
 		echo '<p>' . __( $message, 'mobile-dj-manager' ) . '</p>';
 		echo '</div>';
 	} // mdjm_update_notice
-		
-	/*
-	 * Displays the price in the selected format per settings
-	 * basically determining where the currency symbol is displayed
-	 *
-	 * @param	str		$amount		The price to to display
-	 * 			bool	$symbol		true to display currency symbol (default)
-	 * @return	str					The formatted price with currency symbol
-	 */
-	function display_price( $amount, $symbol=true )	{
-		global $mdjm_settings;
-		
-		if( empty( $amount ) || !is_numeric( $amount ) )
-			$amount = '0.00';
-		
-		$symbol = ( isset( $symbol ) ? $symbol : true );
-		
-		$dec = $mdjm_settings['payments']['decimal'];
-		$tho = $mdjm_settings['payments']['thousands_seperator'];
-		
-		// Currency before price
-		if( $mdjm_settings['payments']['currency_format'] == 'before' )
-			return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
-		
-		// Currency before price with space
-		elseif( $mdjm_settings['payments']['currency_format'] == 'before with space' )
-			return ( !empty( $symbol ) ? mdjm_currency_symbol() . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
-			
-		// Currency after price
-		elseif( $mdjm_settings['payments']['currency_format'] == 'after' )
-			return number_format( $amount, 2, $dec, $tho ) . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
-			
-		// Currency after price with space
-		elseif( $mdjm_settings['payments']['currency_format'] == 'after with space' )
-			return number_format( $amount, 2, $dec, $tho ) . ' ' . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
-		
-		// Default	
-		return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
-		
-	} // display_price
 
 /*
  * -- START EVENT FUNCTIONS
