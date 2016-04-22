@@ -274,16 +274,13 @@ function mdjm_active_event_statuses()	{
 function mdjm_get_event_status( $event_id='' )	{
 	global $post, $post_id;
 	
-	if( !empty( $event_id ) )	{
+	if ( ! empty( $event_id ) )	{
 		$id = $event_id;
-	}
-	elseif( !empty( $post_id ) )	{
+	} elseif ( ! empty( $post_id ) )	{
 		$id = $post_id;
-	}
-	elseif( !empty( $post ) )	{
+	} elseif ( ! empty( $post ) )	{
 		$id = $post->ID;
-	}
-	else	{
+	} else	{
 		$id = '';
 	}
 	
