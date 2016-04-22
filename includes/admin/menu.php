@@ -563,22 +563,6 @@ function mdjm_comms_page()	{
 function mdjm_employee_availability_page()	{				
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
 } // mdjm_employee_availability_page
-
-function mdjm_packages_page()	{					
-	if( ! mdjm_get_option( 'enable_packages' ) )	{
-		wp_die(
-			'<h1>' . __( 'Ooops!' ) . '</h1>' .
-			'<p>' . 
-			sprintf( 
-				__( 'Equipment Packages & Add-ons are not enabled. You can enable them <a href="%s">here</a>', 'mobile-dj-manager' ),
-				mdjm_get_admin_page( 'settings' )
-			) . '</p>',
-			403
-		);
-	}
-		
-	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-packages-main.php' );
-} // mdjm_packages_page
 						
 function mdjm_dashboard_page()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/dash.php' );
