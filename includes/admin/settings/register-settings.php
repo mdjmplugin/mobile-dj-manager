@@ -393,8 +393,7 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'employer',
 						'name'        =>  __( 'I am an Employer', 'mobile-dj-manager' ),
 						'desc'        => __( 'Check if you employ staff other than yourself.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox',
-						'std'         => '1'
+						'type'        => 'checkbox'
 					),
 					'artist'           => array(
 						'id'          => 'artist',
@@ -403,7 +402,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
-						'std'		 => 'DJ'
+						'std'		 => __( 'DJ', 'mobile-dj-manager' )
 					),
 					'enable_packages'  => array(
 						'id'          => 'enable_packages',
@@ -422,7 +421,8 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'warn_unattended',
 						'name'        => __( 'New Enquiry Notification', 'mobile-dj-manager' ),
 						'desc'        => __( 'Displays a notification message at the top of the Admin pages to Administrators if there are outstanding Unattended Enquiries.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					),
 					'journaling'       => array(
 						'id'          => 'journaling',
@@ -510,7 +510,8 @@ function mdjm_get_registered_settings()	{
 											'<code>',
 											'</code>'
 										),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					)
 				),
 				'templates' => array(
@@ -552,7 +553,8 @@ function mdjm_get_registered_settings()	{
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
 							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
-						)
+						),
+						'std'         => 'admin'
 					),
 					'contract_templates' => array(
 						'id'          => 'contract_templates',
@@ -564,7 +566,8 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'contract_to_client',
 						'name'        => __( 'Contract Notification Email?', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Do you want to auto send an email to the client when their %s changes to the <em>Awaiting Contract<em> status?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					),
 					'contract'         => array(
 						'id'          => 'contract',
@@ -581,7 +584,8 @@ function mdjm_get_registered_settings()	{
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
 							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
-						)
+						),
+						'std'         => 'admin'
 					),
 					'booking_conf_templates' => array(
 						'id'          => 'booking_conf_templates',
@@ -593,7 +597,8 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'booking_conf_to_client',
 						'name'        => __( 'Booking Confirmation to Client', 'mobile-dj-manager' ),
 						'desc'        => __( 'Email client with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => '1'
 					),
 					'booking_conf_client' => array(
 						'id'          => 'booking_conf_client',
@@ -610,7 +615,8 @@ function mdjm_get_registered_settings()	{
 						'options'     => array(
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
 							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
-						)
+						),
+						'std'         => 'admin'
 					),
 					'booking_conf_to_dj' => array(
 						'id'          => 'booking_conf_to_dj',
@@ -735,11 +741,12 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Select your preferred colour for the %s action buttons', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => array(
-							'blue'		=> 'Blue',
-							'green'		=> 'Green',
-							'red'		=> 'Red',
-							'turquoise'	=> 'Turquoise'
-						)
+							'blue'      => __( 'Blue', 'mobile-dj-manager' ),
+							'green'     => __( 'Green', 'mobile-dj-manager' ),
+							'red'       => __( 'Red', 'mobile-dj-manager' ),
+							'turquoise' => __( 'Turquoise', 'mobile-dj-manager' )
+						),
+						'std'         => 'blue'
 					)
 				),
 				'pages' => array(
@@ -822,14 +829,16 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Unavailable Statuses', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select %s status' that you want availability checker to report as unavailable", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'multiple_select',
-						'options'     => mdjm_all_event_status()
+						'options'     => mdjm_all_event_status(),
+						'std'         => mdjm_active_event_statuses()
 					),
 					'availability_roles' => array(
 						'id'          => 'availability_roles',
 						'name'        => __( 'Employee Roles', 'mobile-dj-manager' ),
 						'desc'        => __( 'CTRL (cmd on MAC) + Click to select employee roles that need to be available', 'mobile-dj-manager' ),
 						'type'        => 'multiple_select',
-						'options'     => mdjm_get_roles()
+						'options'     => mdjm_get_roles(),
+						'std'         => array( 'dj' )
 					),
 					'avail_ajax'       => array(
 						'id'          => 'avail_ajax',
@@ -846,7 +855,8 @@ function mdjm_get_registered_settings()	{
 						'options'     => array_merge(
 											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
 											mdjm_list_pages()
-										)
+										),
+						'std'         => 'text'
 					),
 					'availability_check_pass_text' => array(
 						'id'          => 'availability_check_pass_text',
@@ -869,7 +879,8 @@ function mdjm_get_registered_settings()	{
 						'options'     => array_merge(
 											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
 											mdjm_list_pages()
-										)
+										),
+						'std'         => 'text'
 					),
 					'availability_check_fail_text' => array(
 						'id'          => 'availability_check_fail_text',
@@ -952,7 +963,7 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => array(
 							'0'          => 'Not required',
-							'percentage' => sprintf( __( '% of &s value', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+							'percentage' => '% ' . sprintf( __( 'of %s value', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 							'fixed'      => __( 'Fixed price', 'mobile-dj-manager' )
 						)
 					),
