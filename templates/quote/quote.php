@@ -33,11 +33,11 @@ global $mdjm_event;
     
     	<?php do_action( 'mdjm_pre_quote_content', $mdjm_event->ID ); ?>
         
-        <p class="head-nav"><?php mdjm_display_book_event_button( $mdjm_event->ID ); ?></p>
+        <p class="head-nav"><?php echo mdjm_display_book_event_button( $mdjm_event->ID ); ?></p>
         
         <?php echo mdjm_display_quote( $mdjm_event->ID ); ?>
         
-        <p class="head-nav"><?php mdjm_display_book_event_button( $mdjm_event->ID ); ?></p>
+        <p class="head-nav"><?php echo mdjm_display_book_event_button( $mdjm_event->ID ); ?></p>
         
         <?php do_action( 'mdjm_post_quote_content', $mdjm_event->ID ); ?>
     

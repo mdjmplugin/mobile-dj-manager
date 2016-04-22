@@ -218,14 +218,14 @@ function mdjm_display_book_event_button( $event_id, $args = array() )	{
 	$buttons = mdjm_get_event_action_buttons( $event_id );
 	
 	$book_button = $buttons[10];
-	
+		
 	$defaults = array(
 		'colour'   => mdjm_get_option( 'action_button_colour' ),
 		'label'    => $book_button['label'],
 		'url'      => $book_button['url']
 	);
 	
-	$args - wp_parse_args( $args, $defaults );
+	$args = wp_parse_args( $args, $defaults );
 	
 	$output = sprintf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">%s</a>', $args['colour'], $args['url'], $args['label'] );
 	
