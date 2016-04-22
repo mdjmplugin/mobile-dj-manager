@@ -46,8 +46,8 @@ global $mdjm_event;
         <tr>
         	<td><span class="mdjm-event-label"><?php _e( 'Cost Summary', 'mobile-dj-manager' ); ?></span><br />
 				<?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?> {total_cost}<br />
-                <?php echo mdjm_get_deposit_label(); ?>: {deposit} ({deposit_status})<br />
-                <?php echo mdjm_get_balance_label(); ?> <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
+                {deposit_label}: {deposit} ({deposit_status})<br />
+                {balance_label} <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>: {balance}
 			</td>
         </tr>
         
@@ -69,7 +69,7 @@ global $mdjm_event;
             	<tr>
             <?php endif; ?><!-- endif( $i == 1 ) -->
             
-            		<td><?php printf( '<a href="%s">' . $button['label'] . '</a>', $button['url'] ); ?></td>
+            		<td class="action-button"><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'blue' ), $button['url'] ); ?></td>
                     
 			<?php if( $i == $cells ) : ?>
                 </tr>
