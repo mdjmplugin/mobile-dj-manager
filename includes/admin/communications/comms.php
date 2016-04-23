@@ -52,16 +52,19 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 		// Date Sent
 		case 'date_sent':
 			echo date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) );
+
 			break;
 		
 		// From	
 		case 'from':
 			$author = get_userdata( $post->post_author );
+
 			if( $author )	{
 				printf( '<a href="%s">%s</a>', admin_url( "user-edit.php?user_id={$author->ID}" ), ucwords( $author->display_name ) );
 			} else	{
 				echo get_post_meta( $post_id, '_recipient' );	
 			}
+
 			break;
 		
 		// Recipient
@@ -73,6 +76,18 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo __( 'Recipient no longer exists', 'mobile-dj-manager' );	
 			}
+			
+			$copies = get_post_meta( $post_id, '_mdjm_copy_to', true );
+			
+			if ( ! empty( $copies ) )	{
+				foreach( $copies as $copy )	{
+					$user = get_user_by( 'email', $copy );
+					if ( $user )	{
+						echo "<br /><em>{$user->display_name} (copy)</em>";
+					}
+				}
+			}
+
 			break;
 			
 		// Associated Event
@@ -84,6 +99,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				_e( 'N/A', 'mobile-dj-manager' );
 			}
+
 			break;
 		
 		// Status
@@ -95,11 +111,13 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 				echo '<br />';
 				echo '<em>' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) . '</em>';
 			}
+
 			break;
 		
 		// Source
 		case 'source':
 			echo stripslashes( get_post_meta( $post_id, '_source', true ) );
+
 			break;
 	} // switch
 				

@@ -104,6 +104,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk
 * **Tweak**: Event meta boxes are now only loaded if current user has been assigned a role with relevant permissions
 * **Tweak**: Shortcodes have been re-written and cleaned up
 * **Tweak**: *MDJM Overview* dashboard widget has been updated and now displays event and earnings overviews for Month to Date, Year to Date and the previous year
+* **Tweak**: Display names of employees who received a copy of a tracked email within the Communication history page
 * **Tweak**: Main MDJM class is now a singleton class
 * **Tweak**: Post actions and filters no longer in classes
 * **Tweak**: Replaced get_link method with mdjm_get_formatted_url function
