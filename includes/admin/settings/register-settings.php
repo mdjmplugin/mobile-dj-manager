@@ -336,8 +336,7 @@ function mdjm_get_registered_settings()	{
 					'debug_auto_purge'     => array(
 						'id'          => 'debug_auto_purge',
 						'name'        => __( 'Auto Purge Log Files', 'mobile-dj-manager' ),
-						'desc'        => __( 'If selected, log files will be auto-purged when they reach the value of <code>Maximum Log File Size</code>', 'mobile-dj-manager' ) .
-										! empty( mdjm_get_option( 'debug_purged' ) ) ? '<br />' . sprintf( __( 'Last Purged %', 'mobile-dj-manager' ), mdjm_format_long_date( mdjm_get_option( 'debug_purged' ), true ) ) : '',
+						'desc'        => __( 'If selected, log files will be auto-purged when they reach the value of <code>Maximum Log File Size</code>', 'mobile-dj-manager' ),
 						'type'        => 'checkbox'
 					)
 				),
