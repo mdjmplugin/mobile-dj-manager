@@ -45,7 +45,7 @@ class MDJM_Emails {
 	 *
 	 * @since	1.3
 	 */
-	private $copy_to = array();
+	private $copy_to = false;
 
 	/**
 	 * Holds the email content type
@@ -241,6 +241,7 @@ class MDJM_Emails {
 		$message = $this->text_to_html( $message );
 
 		return apply_filters( 'mdjm_email_message', $message, $this );
+
 	} // build_email
 
 	/**
@@ -272,13 +273,13 @@ class MDJM_Emails {
 		$message = $this->log_email( $to, $subject, $message, $attachments, $source );
 		
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers(), $attachments );
-		
+				
 		if ( ! empty( $this->copy_to ) )	{
 
 			$subject = empty( $this->tracking_id ) ? $subject : '';
 			$message = empty( $this->tracking_id ) ? $message : '';
 
-			//$this->send_copy( $subject, $message, $attachments );
+			$this->send_copy( $subject, $message, $attachments );
 
 		}
 
@@ -363,23 +364,24 @@ class MDJM_Emails {
 			
 		}
 		
-		foreach ( $this->copy_to as $recipient )	{
-			$args = array(
-				'to_email'       => $recipient,
-				'from_name'      => $this->from_name,
-				'from_email'     => $this->from_address,
-				'event_id'       => $this->event_id,
-				'client_id'      => ! empty( $this->event_id ) ? mdjm_get_event_client_id( $this->event_id ) : '',
-				'subject'        => ! empty( $subject ) ? $subject : sprintf( __( 'Copy of an email recently sent via %s', 'mobile-dj-manager' ), '{application_name}' ),
-				'attachments'    => $attachments,
-				'message'        => mdjm_email_set_copy_text() . $content,
-				'track'          => false,
-				'copies'		 => false
-			);
-			
-			//mdjm_send_email_content( $args );
-			
+		$copies = $this->copy_to;
+		
+		$args = array(
+			'to_email'       => $this->copy_to,
+			'from_name'      => $this->from_name,
+			'from_email'     => $this->from_address,
+			'event_id'       => $this->event_id,
+			'client_id'      => ! empty( $this->event_id ) ? mdjm_get_event_client_id( $this->event_id ) : '',
+			'subject'        => ! empty( $subject ) ? $subject : sprintf( __( 'Copy of an email recently sent via %s', 'mobile-dj-manager' ), '{application_name}' ),
+			'attachments'    => $attachments,
+			'message'        => mdjm_email_set_copy_text() . $content,
+			'track'          => false
+		);
+		
+		if ( mdjm_send_email_content( $args ) )	{
+			update_post_meta( $tracker->ID, '_mdjm_copy_to', $copies );
 		}
+			
 		
 	} // send_copy
 	

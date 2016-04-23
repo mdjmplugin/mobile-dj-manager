@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	bool	True if the email is sent, or false.
  */
 function mdjm_send_email_content( $args )	{
+
 	global $current_user;
 	
 	$defaults = array(
@@ -30,8 +31,7 @@ function mdjm_send_email_content( $args )	{
 		'subject'        => sprintf( __( 'Email from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ),
 		'attachments'    => array(),
 		'message'        => '',
-		'track'          => false,
-		'copies'		 => true
+		'track'          => false
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -67,13 +67,12 @@ function mdjm_send_email_content( $args )	{
 
 	$emails->__set( 'track', $args['track'] );
 	
-	if ( ! empty( $args['copies'] ) )	{
-		$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
-	}
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
 	$sent = $emails->send( $to_email, $subject, $message, $attachments, '' );
 		
 	return $sent;
+
 } // mdjm_send_email_content
 
 /**
@@ -249,6 +248,7 @@ function mdjm_email_set_subject( $template_id, $email_type = false )	{
  * @return	str		The from name to use in the email
  */
 function mdjm_email_set_from_name( $email_type, $mdjm_event )	{
+	
 	$from_name = mdjm_get_option( 'company_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	
 	$setting = mdjm_get_option( $email_type . '_from', 'admin' );
@@ -262,6 +262,7 @@ function mdjm_email_set_from_name( $email_type, $mdjm_event )	{
 	}
 	
 	return apply_filters( 'mdjm_email_{$email_type}_from_name', $from_name, $mdjm_event );
+
 } // mdjm_email_set_from_name
 
 /**
@@ -273,6 +274,7 @@ function mdjm_email_set_from_name( $email_type, $mdjm_event )	{
  * @return	str		The from address to use in the email
  */
 function mdjm_email_set_from_address( $email_type, $mdjm_event )	{
+
 	$from_address = mdjm_get_option( 'system_email', get_bloginfo( 'admin_email' ) );
 	
 	$setting = mdjm_get_option( $email_type . '_from', 'admin' );
@@ -286,6 +288,7 @@ function mdjm_email_set_from_address( $email_type, $mdjm_event )	{
 	}
 	
 	return apply_filters( 'mdjm_email_{$email_type}_from_address', $from_address, $mdjm_event );
+
 } // mdjm_email_set_from_address
 
 /**
@@ -297,6 +300,7 @@ function mdjm_email_set_from_address( $email_type, $mdjm_event )	{
  * @return	str			$content		The content from the template.
  */
 function mdjm_get_email_template_content( $template_id, $email_type = false )	{
+
 	$template = get_post( $template_id );
 	
 	if( ! $template || 'email_template' != $template->post_type )	{
@@ -311,6 +315,7 @@ function mdjm_get_email_template_content( $template_id, $email_type = false )	{
 	}
 	
 	return apply_filters( 'mdjm_email_content', $content, $template_id );
+
 } // mdjm_get_email_template_content
 
 /**
@@ -402,6 +407,7 @@ function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments,
  * @return	str			$message		The email message with the tracking image included.
  */
 function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
+
 	$image = sprintf(
 		'<img alt="" src="%s/?mdjm-api=%s&post=%s&action=%s" border="0" height="3" width="37" />',
 		home_url(),
@@ -413,6 +419,7 @@ function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
 	$image = apply_filters( 'mdjm_tracking_image', $image );
 	
 	return $message . $image;
+
 } // mdjm_email_insert_tracking_image
 
 /**
@@ -424,6 +431,7 @@ function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
  * @return	void
  */
 function mdjm_email_set_tracking_status( $tracking_id, $status )	{
+
 	do_action( 'mdjm_email_pre_set_tracking_status', $tracking_id, $status );
 	
 	wp_update_post(
@@ -432,9 +440,11 @@ function mdjm_email_set_tracking_status( $tracking_id, $status )	{
 			'post_status'	=> $status
 		)
 	);
+
 	update_post_meta( $tracking_id, '_status_change', current_time( 'timestamp' ) );
 	
 	do_action( 'mdjm_email_post_set_tracking_status', $tracking_id, $status );
+
 } // mdjm_email_set_tracking_status
 
 /**
@@ -471,7 +481,11 @@ function mdjm_email_set_copy_text()	{
  * @return	arr		$copy_to	Array of addresses to send a copy of the email to
  */
 function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
-	return false;
+
+	if ( is_array( $recipient ) )	{
+		return;
+	}
+
 	if ( ! empty( $event_id ) )	{
 		$client    = get_userdata( mdjm_get_event_client_id( $event_id ) );
 		$employee  = get_userdata( mdjm_get_event_primary_employee( $event_id ) );
@@ -497,6 +511,6 @@ function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
 		$copy_to[] = $employee->user_email;
 	}
 	
-	return $copy_to;
+	return array_unique( $copy_to );
 
 } // mdjm_email_maybe_send_a_copy
