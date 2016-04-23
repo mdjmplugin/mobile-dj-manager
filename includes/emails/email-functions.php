@@ -409,11 +409,9 @@ function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments,
 function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
 
 	$image = sprintf(
-		'<img alt="" src="%s/?mdjm-api=%s&post=%s&action=%s" border="0" height="3" width="37" />',
+		'<img alt="" src="%s/?mdjm_action=track_open_email&tracker_id=%d" border="0" height="3" width="37" />',
 		home_url(),
-		'MDJM_EMAIL_RCPT',
-		$mdjm_email->tracking_id,
-		'open_email'
+		$mdjm_email->tracking_id
 	);
 	
 	$image = apply_filters( 'mdjm_tracking_image', $image );
@@ -421,6 +419,60 @@ function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
 	return $message . $image;
 
 } // mdjm_email_insert_tracking_image
+
+/**
+ * When a tracked email is opened.
+ *
+ * @since	1.3
+ * @param	arr			$data		Data from the $_GET request
+ * @return	void
+ */
+function mdjm_track_open_email( $data )	{
+	
+	if( ! isset( $data['tracker_id'] ) )	{
+		die();
+	}
+	
+	$tracking_id = $data['tracker_id'];
+	
+	$current_status = get_post_status( $tracking_id );
+	
+	if ( ! $current_status || 'opened' == $current_status )	{
+		die();
+	}
+	
+	do_action( 'mdjm_pre_track_email_opened', $tracking_id );
+	
+	header( 'Cache-Control: no-store, no-cache, must-revalidate' );
+	header( 'Cache-Control: post-check=0, pre-check=0', false );
+	header( 'Pragma: no-cache' );
+	
+	$invpicture = MDJM_PLUGIN_DIR . '/assets/images/invpicture.png';
+	
+	$invpicture = apply_filters( 'mdjm_email_track_invpicture', $invpicture );
+				
+	$handle = fopen( $invpicture, 'r' );
+
+	if( ! $handle )	{
+		die();
+	}
+	
+	header( 'Content-type: image/png' );
+	
+	$contents = fread( $handle, filesize( $invpicture ) );
+	
+	fclose( $handle );
+	
+	echo $contents;
+	
+	mdjm_email_set_tracking_status( $tracking_id, 'opened' );
+	
+	do_action( 'mdjm_post_track_email_opened', $tracking_id );
+	
+	die();
+	
+} // mdjm_track_open_email
+add_action( 'mdjm_track_open_email', 'mdjm_track_open_email' );
 
 /**
  * Change the status of a tracked email.
@@ -433,7 +485,7 @@ function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
 function mdjm_email_set_tracking_status( $tracking_id, $status )	{
 
 	do_action( 'mdjm_email_pre_set_tracking_status', $tracking_id, $status );
-	
+		
 	wp_update_post(
 		array(
 			'ID'			=> $tracking_id,

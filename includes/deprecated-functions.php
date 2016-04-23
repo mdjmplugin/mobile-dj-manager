@@ -15,10 +15,47 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Catch incoming API calls
+ *
+ *
+ * @since		1.3
+ * @remove		1.5
+ * @replacement	mdjm_get_actions
+ */
+function mdjm_api_listener()	{
+
+	$listener = isset( $_GET['mdjm-api'] ) ? $_GET['mdjm-api'] : '';
+				
+	if( empty( $listener ) )	{
+		return;
+	}
+	
+	switch( $listener )	{
+
+		case 'MDJM_EMAIL_RCPT':
+
+			_deprecated_function( __FUNCTION__, '1.3', 'mdjm_api_listener()' );
+
+			$data['tracker_id'] = ! empty( $_GET['post'] ) ? $_GET['post'] : '';
+
+			do_action( 'mdjm_track_open_email', $data );
+
+		break;
+		
+		default:
+			return;
+
+	} // switch	
+
+} // mdjm_api_listener
+add_action( 'wp_loaded', 'mdjm_api_listener' );
+
+/**
  * Format the date for the datepicker script
  *
  *
  * @since		1.3
+ * @remove		1.5
  * @replacement	mdjm_format_datepicker_date
  */
 function mdjm_jquery_short_date()	{	
@@ -43,6 +80,7 @@ function mdjm_jquery_short_date()	{
  *				[2] none
  *
  * @since		1.3
+ * @remove		1.5
  * @replacement	mdjm_insert_datepicker
  */
 function mdjm_jquery_datepicker_script( $args='' )	{
@@ -71,6 +109,7 @@ function mdjm_jquery_datepicker_script( $args='' )	{
  * 			bool	$symbol		true to display currency symbol (default)
  * @return	str					The formatted price with currency symbol
  * @since	1.3
+ * @remove		1.5
  */
 function display_price( $amount, $symbol=true )	{
 	_deprecated_function( __FUNCTION__, '1.3', 'display_price()' );

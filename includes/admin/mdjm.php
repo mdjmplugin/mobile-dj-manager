@@ -55,7 +55,7 @@
 				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
-				add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
+				//add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
 			} // __construct
 			
@@ -130,10 +130,9 @@
 			 *
 			 *
 			 */
-			public function wp_fully_loaded()	{
-				/* -- Initiate the API listener -- */
+			/*public function wp_fully_loaded()	{
 				$this->api_listener();	
-			} // all_plugins_loaded	
+			}*/ // all_plugins_loaded	
 	
 /*
  * --
@@ -311,25 +310,23 @@
 			 *
 			 * @since 1.1.1
 			 */
-			public function api_listener()	{
+			/*public function api_listener()	{
 				$listener = isset( $_GET['mdjm-api'] ) ? $_GET['mdjm-api'] : '';
 				
 				if( empty( $listener ) )
 					return;
 				
 				switch( $listener )	{
-					/* -- MDJM Email Tracking -- */
 					case 'MDJM_EMAIL_RCPT':
 						if( MDJM_DEBUG == true )
 							MDJM()->debug->log_it( 'MDJM Email API listener activated', true );
 						include( MDJM_PLUGIN_DIR . '/includes/api/mdjm-api-email-rcpt.php' );
 					break;
-					/* -- Default action -- */
 					default:
 						MDJM()->debug->log_it( 'WARNING: Rogue API request received - ' . $listener, true );
 						return;
 				} // switch				
-			} // api_listener
+			}*/ // api_listener
 /*
  * --
  * SCHEDULED TASKS
