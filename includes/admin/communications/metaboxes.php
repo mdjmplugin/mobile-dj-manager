@@ -142,6 +142,35 @@ function mdjm_communication_details_metabox( $post )	{
     <p><?php printf( __( '<strong>Recipient</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
 		admin_url( '/user-edit.php?user_id={$recipient->ID}' ), $recipient->display_name ); ?></p>
     
+    <?php
+    $copies = get_post_meta( $post->ID, '_mdjm_copy_to', true );
+	
+		if ( ! empty( $copies ) )	{
+			
+			?><p><?php
+
+				_e( '<strong>Copied To</strong>: ', 'mobile-dj-manager' ); ?>
+				<?php
+				
+				$i = 1;
+				foreach( $copies as $copy )	{
+					$user = get_user_by( 'email', $copy );
+					if ( $user )	{					
+						echo "<em>{$user->display_name}</em>";
+						
+						$i++;
+						
+						if ( $i < count( $copies ) )	{
+							echo '<br />';
+						}
+						
+					}
+				}
+				
+			?></p><?php
+		}
+    ?>
+
     <p><?php _e( '<strong>Status</strong>:', 'mobile-dj-manager' ); ?>
     	
 		<?php echo get_post_status_object( $post->post_status )->label;
