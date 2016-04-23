@@ -28,7 +28,7 @@ function mdjm_communication_post_columns( $columns ) {
 		'source'			=> __( 'Source', 'mobile-dj-manager' )
 	);
 	
-	if( ! mdjm_employee_can( 'manage_mdjm' ) && isset( $columns['cb'] ) )	{
+	if( ! mdjm_is_admin() && isset( $columns['cb'] ) )	{
 		unset( $columns['cb'] );
 	}
 				

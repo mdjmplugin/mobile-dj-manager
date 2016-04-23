@@ -192,7 +192,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			}
 	
-			if( ! current_user_can( 'manage_mdjm' ) ) {
+			if( ! mdjm_is_admin() ) {
 				return;
 			}
 	
@@ -264,7 +264,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			}
 	
-			if( ! current_user_can( 'manage_mdjm' ) ) {
+			if( ! mdjm_is_admin() ) {
 				return;
 			}
 	

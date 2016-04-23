@@ -574,7 +574,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 			echo '</a>';
 		}
 		
-		if ( mdjm_employee_can( 'manage_mdjm', $item->ID ) )	{
+		if ( mdjm_is_admin( $item->ID ) )	{
 			echo '<br />' . __( '<em>MDJM Admin</em>', 'mobile-dj-manager' );
 		}
 		

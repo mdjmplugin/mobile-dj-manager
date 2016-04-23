@@ -9,7 +9,7 @@
  *
  */
 	defined('ABSPATH') or die("Direct access to this page is disabled!!!");
-	if ( !current_user_can( 'manage_mdjm' ) )  {
+	if ( ! mdjm_is_admin() )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 		

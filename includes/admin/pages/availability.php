@@ -1,7 +1,7 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
-	if( !current_user_can( 'manage_mdjm' ) )  {
+	if( ! mdjm_is_admin() )  {
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'You are not allowed to access this page.', 'mobile-dj-manager' ) . '</p>',
