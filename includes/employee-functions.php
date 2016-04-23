@@ -757,8 +757,8 @@ function mdjm_get_employees_next_event( $employee_id = '' )	{
 		'post_status'		=> mdjm_active_event_statuses(),
 		'posts_per_page'	=> 1,
 		'meta_key'			=> '_mdjm_event_date',
-		'date'				=> date( 'Y-m-d' ),
-		'date_compare'		=> '>=',
+		'meta_value'		=> date( 'Y-m-d' ),
+		'meta_compare'		=> '>=',
 		'orderby'			=> 'meta_value',
 		'order'				=> 'ASC'
 	);

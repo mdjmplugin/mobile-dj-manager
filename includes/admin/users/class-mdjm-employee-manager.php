@@ -639,7 +639,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 * @return	str		The HTML output for the checkbox column
 	 */
 	public function column_events( $item ) {
-		$next_event		= mdjm_get_employees_next_event( $item->ID, 'dj' );
+		$next_event		= mdjm_get_employees_next_event( $item->ID );
 		$total_events	= mdjm_count_employee_events( $item->ID );
 		
 		printf( 
