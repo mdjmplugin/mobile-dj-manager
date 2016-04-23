@@ -87,7 +87,7 @@ class MDJM_Emails {
 	 *
 	 * @since	1.3
 	 */
-	private $tracking_id = 0;
+	public $tracking_id = 0;
 	
 	/**
 	 * The event to which the email is associated
@@ -278,7 +278,7 @@ class MDJM_Emails {
 			$subject = empty( $this->tracking_id ) ? $subject : '';
 			$message = empty( $this->tracking_id ) ? $message : '';
 
-			$this->send_copy( $subject, $message, $attachments );
+			//$this->send_copy( $subject, $message, $attachments );
 
 		}
 
@@ -313,6 +313,8 @@ class MDJM_Emails {
 		remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
 		remove_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
 		remove_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
+		
+		$this->update_tracking_status();
 	} // send_after
 
 	/**
@@ -371,10 +373,11 @@ class MDJM_Emails {
 				'subject'        => ! empty( $subject ) ? $subject : sprintf( __( 'Copy of an email recently sent via %s', 'mobile-dj-manager' ), '{application_name}' ),
 				'attachments'    => $attachments,
 				'message'        => mdjm_email_set_copy_text() . $content,
-				'track'          => false
+				'track'          => false,
+				'copies'		 => false
 			);
 			
-			mdjm_send_email_content( $args );
+			//mdjm_send_email_content( $args );
 			
 		}
 		
@@ -420,4 +423,18 @@ class MDJM_Emails {
 	public function add_tracking_image( $message )	{
 		return mdjm_email_insert_tracking_image( $message, $this );
 	} // add_tracking_image
+	
+	/**
+	 * Store the communication.
+	 *
+	 * @since	1.3
+	 */
+	public function update_tracking_status()	{
+		
+		if ( ! empty( $this->tracking_id ) )	{
+			mdjm_email_set_tracking_status( $this->tracking_id, 'sent' );
+		}
+		
+	} // add_tracking_post
+	
 } // MDJM_Emails class

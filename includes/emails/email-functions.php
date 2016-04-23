@@ -30,7 +30,8 @@ function mdjm_send_email_content( $args )	{
 		'subject'        => sprintf( __( 'Email from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ),
 		'attachments'    => array(),
 		'message'        => '',
-		'track'          => false
+		'track'          => false,
+		'copies'		 => true
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -66,8 +67,8 @@ function mdjm_send_email_content( $args )	{
 
 	$emails->__set( 'track', $args['track'] );
 	
-	if ( ! empty( $client ) )	{
-		$emails__set( 'copy_to', mdjm_email_maybe_send_a_copy_to( $event_id ) );
+	if ( ! empty( $args['copies'] ) )	{
+		$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 	}
 
 	$sent = $emails->send( $to_email, $subject, $message, $attachments, '' );
@@ -117,6 +118,8 @@ function mdjm_email_quote( $event_id, $template_id = '' )	{
 	$emails->__set( 'headers', $headers );
 	
 	$emails->__set( 'track', apply_filters( 'mdjm_track_email_quote', mdjm_get_option( 'track_client_emails' ) ) );
+	
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s quotation and status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 	
@@ -161,6 +164,8 @@ function mdjm_email_enquiry_accepted( $event_id )	{
 	$emails->__set( 'headers', $headers );
 	
 	$emails->__set( 'track', apply_filters( 'mdjm_track_email_enquiry_accepted', mdjm_get_option( 'track_client_emails' ) ) );
+	
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Enquiry accepted and %s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 	
@@ -205,6 +210,8 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	$emails->__set( 'headers', $headers );
 	
 	$emails->__set( 'track', apply_filters( 'mdjm_track_email_booking_confirmation', mdjm_get_option( 'track_client_emails' ) ) );
+	
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and %s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 	
@@ -412,7 +419,7 @@ function mdjm_email_insert_tracking_image( $message, $mdjm_email )	{
  * Change the status of a tracked email.
  *
  * @since	1.3
- * @param	int			$tracker_id		The tracked email ID.
+ * @param	int			$tracking_id		The tracked email ID.
  * @param	str			$status			The new status.
  * @return	void
  */
@@ -425,9 +432,9 @@ function mdjm_email_set_tracking_status( $tracking_id, $status )	{
 			'post_status'	=> $status
 		)
 	);
-	update_post_meta( $tracker_id, '_status_change', current_time( 'timestamp' ) );
+	update_post_meta( $tracking_id, '_status_change', current_time( 'timestamp' ) );
 	
-	do_action( 'mdjm_email_post_set_tracking_status', $tracker_id, $status );
+	do_action( 'mdjm_email_post_set_tracking_status', $tracking_id, $status );
 } // mdjm_email_set_tracking_status
 
 /**
@@ -464,7 +471,7 @@ function mdjm_email_set_copy_text()	{
  * @return	arr		$copy_to	Array of addresses to send a copy of the email to
  */
 function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
-
+	return false;
 	if ( ! empty( $event_id ) )	{
 		$client    = get_userdata( mdjm_get_event_client_id( $event_id ) );
 		$employee  = get_userdata( mdjm_get_event_primary_employee( $event_id ) );
@@ -472,7 +479,11 @@ function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
 		$client    = get_user_by( 'email', $recipient );		
 	}
 
-	if ( ! $client || ! mdjm_user_is_client( $client->ID ) )	{
+	if ( ! $client )	{
+		return;
+	}
+	
+	if ( ! mdjm_user_is_client( $client->ID ) )	{
 		return;
 	}
 

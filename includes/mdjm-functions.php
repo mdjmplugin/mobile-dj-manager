@@ -379,7 +379,7 @@
 		
 		/* Loop through the days */
 		foreach( $date_range as $day )	{
-			if( current_user_can( 'manage_mdjm' ) )	{
+			if( mdjm_is_admin() )	{
 				$event_args['meta_query'] = array(
 												array( 
 													'key'		=> '_mdjm_event_date',

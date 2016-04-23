@@ -592,7 +592,7 @@ function mdjm_get_event_client_id( $event_id )	{
 	}
 
 	$event = new MDJM_Event( $event_id );
-	return $event->get_client();
+	return $event->client;
 } // mdjm_get_event_client_id
 
 /**
