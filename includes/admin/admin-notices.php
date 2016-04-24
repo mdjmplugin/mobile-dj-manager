@@ -109,6 +109,30 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	if( isset( $_GET['mdjm-message'] ) && 'comm_missing_content' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-comm_content-missing',
+			__( 'Not all required fields have been completed.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'comm_sent' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-comm_sent',
+			__( 'Email sent successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'comm_not_sent' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-comm_not_sent',
+			__( 'Email not sent.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	

@@ -556,9 +556,9 @@ function mdjm_clients_page()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );	
 } // mdjm_clients_page
 
-function mdjm_comms_page()	{
+function mdjm_comms_page_old()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/comms.php' );
-} // mdjm_comms_page
+} // mdjm_comms_page_old
 
 function mdjm_employee_availability_page()	{				
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
