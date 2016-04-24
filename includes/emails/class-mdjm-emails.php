@@ -177,6 +177,7 @@ class MDJM_Emails {
 			$this->headers  = "From: {$this->from_name} <{$this->from_address}>\r\n";
 			$this->headers .= "Reply-To: {$this->from_address}\r\n";
 			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
+			$this->headers .= 'X-Mailer: MDJM Event Management version ' . MDJM_VERSION_NUM . ' (http://mdjm.co.uk)';
 		}
 
 		return apply_filters( 'mdjm_email_headers', $this->headers, $this );
