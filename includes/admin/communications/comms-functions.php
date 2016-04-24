@@ -29,7 +29,7 @@ function mdjm_comms_page()	{
 	}
 	
 	global $current_user;
-	
+		
 	if ( mdjm_employee_can( 'list_all_clients' ) )	{
 		$clients = mdjm_get_clients();
 	} else	{
