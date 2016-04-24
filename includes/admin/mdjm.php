@@ -218,8 +218,8 @@
 				global $mdjm_post_types, $mdjm_settings;
 				
 				/* -- Admin style sheet -- */
-				wp_register_style( 'mdjm-admin', MDJM_PLUGIN_URL . '/assets/css/mdjm-admin.css', '', MDJM_VERSION_NUM );
-				wp_enqueue_style( 'mdjm-admin' );
+				//wp_register_style( 'mdjm-admin', MDJM_PLUGIN_URL . '/assets/css/mdjm-admin.css', '', MDJM_VERSION_NUM );
+				//wp_enqueue_style( 'mdjm-admin' );
 				
 				// jQuery Validation
 				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
