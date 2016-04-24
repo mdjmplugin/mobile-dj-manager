@@ -796,6 +796,60 @@ function mdjm_employee_working_event( $event_id, $employee_id = '' )	{
 } // mdjm_employee_working_event
 
 /**
+ * Retrieve a list of the employee's clients.
+ *
+ * @since	1.3
+ * @param	int			$employee		The user ID of the employee.
+ * @param	bool		$active_only	True to only query active clients, false for all.
+ * @param	str			$return			Return resultset as WP_User OBJECTS or ARRAY of user ID's
+ * @return	arr|bool	Array of client user ID's or 
+ */
+function mdjm_get_employee_clients( $employee_id = '', $active_only = true, $return = 'OBJECT' )	{
+	
+	$employee_id         = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
+	$args['post_status'] = ! empty( $active_only ) ? 'any' : mdjm_active_event_statuses();
+	
+	// If we only want active events set an extra check for the event date.
+	/*if ( ! empty( $active_only ) )	{
+		$args['date']         = date( 'Y-m-d');
+		$args['date_compare'] = '>=';
+	}*/
+	
+	$events = mdjm_get_employee_events( $employee_id, $args );
+	
+	if ( ! $events )	{
+		return false;
+	}
+	
+	$clients = array();
+	
+	// Loop through the events and retrieve the client.
+	foreach ( $events as $event )	{
+		$clients[] = mdjm_get_event_client_id( $event->ID );
+	}
+	
+	if ( empty( $clients ) )	{
+		return false;
+	}
+	
+	$clients = array_unique( $clients );
+	$clients = apply_filters( 'mdjm_get_employee_clients', $clients, $employee_id );
+	
+	if ( $return != 'ARRAY' )	{
+		
+		foreach ( $clients as $client )	{
+			$client_objects[] = get_userdata( $client );
+		}
+		
+		$clients = $client_objects;
+		
+	}
+	
+	return $clients;
+	
+} // mdjm_get_employee_clients
+
+/**
  * Get an employees wage for an event.
  *
  * @since	1.3
