@@ -43,18 +43,19 @@ function mdjm_comms_page()	{
 	?>
     <div class="wrap">
 		<h1><?php _e( 'Client and Employee Communications', 'mobile-dj-manager' ); ?></h1>
-        <form name="form_send_comms" id="form_send_comms" method="post" enctype="multipart/form-data">
+        <form name="mdjm_form_send_comms" id="mdjm_form_send_comms" method="post" enctype="multipart/form-data">
         	<?php wp_nonce_field( 'send_comm_email', 'mdjm_nonce', true, true ); ?>
 			<?php mdjm_admin_action_field( 'send_comm_email' ); ?>
-            <input type="hidden" name="email_from_address" id="email_from_address" value="<?php echo $current_user->user_email; ?>" />
-            <input type="hidden" name="email_from_name" id="email_from_name" value="<?php echo $current_user->display_name; ?>" />
+            <input type="hidden" name="mdjm_email_from_address" id="mdjm_email_from_address" value="<?php echo $current_user->user_email; ?>" />
+            <input type="hidden" name="mdjm_email_from_name" id="mdjm_email_from_name" value="<?php echo $current_user->display_name; ?>" />
             <?php do_action( 'mdjm_pre_comms_table' ); ?>
             <table class="form-table">
                 <?php do_action( 'mdjm_add_comms_fields_before_recipient' ); ?>
                 <tr>
-                	<th scope="row"><label for="email_to"><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_to"><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
                     <td>
-                    	<select name="email_to" id="email_to">
+                    	<select name="mdjm_email_to" id="mdjm_email_to" class="required">
+                        	<option value=""><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></option>
                         	<optgroup label="<?php _e( 'Clients', 'mobile-dj-manager' ); ?>">
                             	<?php
 								if ( empty( $clients ) )	{
@@ -83,18 +84,18 @@ function mdjm_comms_page()	{
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
-                	<th scope="row"><label for="email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="text" name="email_subject" id="email_subject" class="regular-text" /></td>
+                	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" /></td>
                 </tr>
                 <tr>
-                	<th scope="row"><label for="email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="checkbox" name="email_copy_to" id="email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php _e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
+                	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php _e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_template' ); ?>
             	<tr>
-                	<th scope="row"><label for="email_template"><?php _e( 'Select a Template', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_template"><?php _e( 'Select a Template', 'mobile-dj-manager' ); ?></label></th>
                     <td>
-                    	<select name="email_template" id="email_template">
+                    	<select name="mdjm_email_template" id="mdjm_email_template">
                         	<option value="0"><?php _e( 'No Template', 'mobile-dj-manager' ); ?></option>
                         	<?php echo mdjm_comms_template_options(); ?>
                         </select>
@@ -102,9 +103,9 @@ function mdjm_comms_page()	{
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_event' ); ?>
                 <tr>
-                    <th scope="row"><label for="email_event"><?php printf( __( 'Associated %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
+                    <th scope="row"><label for="mdjm_email_event"><?php printf( __( 'Associated %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
                     <td>
-                    	<select name="email_event" id="email_event">
+                    	<select name="mdjm_email_event" id="mdjm_email_event">
                         <option value="0"><?php _e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
                         </select>
                         <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
@@ -112,8 +113,8 @@ function mdjm_comms_page()	{
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_file' ); ?>
                 <tr>
-                	<th scope="row"><label for="email_upload_file"><?php _e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="file" name="email_upload_file" id="email_upload_file" class="regular-text" value="" />
+                	<th scope="row"><label for="mdjm_email_upload_file"><?php _e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="file" name="mdjm_email_upload_file" id="mdjm_email_upload_file" class="regular-text" value="" />
                     	<p class="description"><?php printf( __( 'Max file size %dMB. Change php.ini <code>post_max_size</code> to increase', 'mobile-dj-manager' ), ini_get( 'post_max_size' ) ); ?></p>
                     </td>
                 </tr>
@@ -123,10 +124,11 @@ function mdjm_comms_page()	{
                         <?php
                             wp_editor(
                                 '',
-                                'email_content',
+                                'mdjm_email_content',
                                 array(
                                     'media_buttons' => true,
-                                    'textarea_rows' => '10'
+                                    'textarea_rows' => '10',
+									'editor_class'  => 'required'
                                 )
                             );
                         ?>
@@ -210,40 +212,38 @@ function mdjm_comms_template_options( $selected = 0 )	{
  * @return	void
  */
 function mdjm_send_comm_email( $data )	{
-	
+	error_log( var_export( $data, true ), 0 );
 	$url = remove_query_arg( 'mdjm-message' );
-	
-	$required = array( 'email_to', 'email_subject', 'email_content' );
-	
+		
 	if ( ! wp_verify_nonce( $data['mdjm_nonce'], 'send_comm_email' ) )	{
 		$message = 'nonce_fail';
-	} elseif ( empty( $data['email_to'] ) || empty( $data['email_subject'] ) || empty( $data['email_content'] ) )	{
+	} elseif ( empty( $data['mdjm_email_to'] ) || empty( $data['mdjm_email_subject'] ) || empty( $data['mdjm_email_content'] ) )	{
 		$message = 'comm_missing_content';
 	} else	{
 		
-		if( isset( $_FILES['email_upload_file'] ) && '' !== $_FILES['email_upload_file']['name'] )	{
+		if( isset( $_FILES['mdjm_email_upload_file'] ) && '' !== $_FILES['mdjm_email_upload_file']['name'] )	{
 			$upload_dir = wp_upload_dir();
 			
-			$file_name  = $_FILES['email_upload_file']['name'];
+			$file_name  = $_FILES['mdjm_email_upload_file']['name'];
 			$file_path  = $upload_dir['path'] . '/' . $file_name;
-			$tmp_path   = $_FILES['email_upload_file']['tmp_name'];
+			$tmp_path   = $_FILES['mdjm_email_upload_file']['tmp_name'];
 			
 			if( move_uploaded_file( $tmp_path, $file_path ) )	{
-				$attachments = array( $file_path );
+				$attachments[] = $file_path;
 			}
 		}
 		
 		$email_args = array(
-			'to_email'       => mdjm_get_client_email( $data['email_to'] ),
-			'from_name'      => $data['email_from_name'],
-			'from_email'     => $data['email_from_address'],
-			'event_id'       => $data['email_event'],
-			'client_id'      => $data['email_to'],
-			'subject'        => $data['email_subject'],
-			'attachments'    => ! empty( $attchments ) ? $attachments : array(),
-			'message'        => $data['email_content'],
+			'to_email'       => mdjm_get_client_email( $data['mdjm_email_to'] ),
+			'from_name'      => $data['mdjm_email_from_name'],
+			'from_email'     => $data['mdjm_email_from_address'],
+			'event_id'       => $data['mdjm_email_event'],
+			'client_id'      => $data['mdjm_email_to'],
+			'subject'        => $data['mdjm_email_subject'],
+			'attachments'    => ! empty( $attachments ) ? $attachments : array(),
+			'message'        => $data['mdjm_email_content'],
 			'track'          => true,
-			'copy_to'        => ! empty( $data['email_copy_to'] ) ? array( $data['email_copy_to'] ) : array(),
+			'copy_to'        => ! empty( $data['mdjm_email_copy_to'] ) ? array( $data['mdjm_email_copy_to'] ) : array(),
 			'source'         => __( 'Communication Feature', 'mobile-dj-manager' )
 		);
 		

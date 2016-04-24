@@ -53,7 +53,7 @@ function mdjm_send_email_content( $args )	{
 	$subject      = apply_filters( 'mdjm_generic_email_subject', wp_strip_all_tags( $subject ) );
 	$subject      = mdjm_do_content_tags( $subject, $event_id, $args['client_id'] );
 
-	$attachments  = apply_filters( 'mdjm_generic_email_attachments', array(), $event_id );
+	$attachments  = apply_filters( 'mdjm_generic_email_attachments', $args['attachments'], $event_id );
 	
 	$message	  = $args['message'];
 	$message      = mdjm_do_content_tags( $message, $event_id, $args['client_id'] );
@@ -305,7 +305,7 @@ function mdjm_get_email_template_content( $template_id, $email_type = false )	{
 
 	$template = get_post( $template_id );
 	
-	if( ! $template || 'email_template' != $template->post_type )	{
+	if( ! $template || ( 'email_template' != $template->post_type && 'contract' != $template->post_type ) )	{
 		return false;
 	}
 	

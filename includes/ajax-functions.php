@@ -469,3 +469,82 @@ function mdjm_ajax_remove_employee_from_event()	{
 
 } // mdjm_ajax_remove_employee_from_event
 add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_from_event' );
+
+/**
+ * Update the email content field with the selected template.
+ *
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_ajax_set_email_content()	{
+		
+	if ( empty( $_POST['template'] ) )	{
+		$result['type'] = 'success';
+		$result['updated_content'] = '';
+	} else	{
+		$content = mdjm_get_email_template_content( $_POST['template'] );
+		
+		if ( ! $content )	{
+			$result['type'] = 'error';
+			$result['msg']  = __( 'Unable to retrieve template content', 'mobile-dj-manager' );
+		} else	{
+			$result['type']            = 'success';
+			$result['updated_content'] = $content;
+			$result['updated_subject'] = get_the_title( $_POST['template'] );
+		}
+	}
+	
+	$result = json_encode( $result );
+	
+	echo $result;
+	
+	die();
+	
+} // mdjm_set_email_content
+add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content' );
+
+/**
+ * Update the email content field with the selected template.
+ *
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_ajax_user_events_dropdown()	{
+	error_log( var_export( $_POST, true ) );
+	$result['event_list'] = '<option value="0">' . __( 'Select an Event', 'mobile-dj-manager' ) . '</option>';
+	
+	if ( ! empty( $_POST['recipient'] ) )	{
+		
+		if ( mdjm_is_employee( $_POST['recipient'] ) )	{
+			$events = mdjm_get_employee_events( $_POST['recipient'], array( 'post_status' => mdjm_active_event_statuses() ) );
+		} else	{
+			$events = mdjm_get_client_events( $_POST['recipient'], mdjm_active_event_statuses() );
+		}
+		
+		if ( $events )	{
+			foreach ( $events as $event )	{
+				
+				$result['event_list'] .= '<option value="' . $event->ID . '">';
+				$result['event_list'] .= mdjm_get_event_date( $event->ID ) . ' ';
+				$result['event_list'] .= __( 'from', 'mobile-dj-manager' ) . ' ';
+				$result['event_list'] .= mdjm_get_event_start( $event->ID ) . ' ';
+				$result['event_list'] .= '(' . mdjm_get_event_status( $event->ID ) . ')';
+				$result['event_list'] .= '</option>';
+			}
+		}
+		
+	}
+	
+	$result['type'] = 'success';
+	$result = json_encode( $result );
+	
+	echo $result;
+	
+	die();
+	
+} // mdjm_ajax_client_events_dropdown
+add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown' );
