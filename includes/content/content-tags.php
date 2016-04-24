@@ -1420,7 +1420,7 @@ function mdjm_content_tag_end_time( $event_id='' )	{
  * @param	int		The event ID.
  * @param
  *
- * @return	str		The package name or "No addons are assigned to this event".
+ * @return	str		The add-on names or "No addons are assigned to this event".
  */
 function mdjm_content_tag_event_addons( $event_id='' )	{
 	if( empty( $event_id ) )	{
@@ -1429,6 +1429,23 @@ function mdjm_content_tag_event_addons( $event_id='' )	{
 	
 	return get_event_addons( $event_id );
 } // mdjm_content_tag_event_addons
+
+/**
+ * Content tag: event_addons_cost.
+ * The add-ons attached to the event and their cost.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The add-on names and cost or "No addons are assigned to this event".
+ */
+function mdjm_content_tag_event_addons_cost( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_event_addons( $event_id, true );
+} // mdjm_content_tag_event_addons_cost
 
 /**
  * Content tag: event_date.
@@ -1551,6 +1568,23 @@ function mdjm_content_tag_event_package( $event_id='' )	{
 	
 	return get_event_package( $event_id );
 } // mdjm_content_tag_event_package
+
+/**
+ * Content tag: event_package_cost.
+ * The package attached to the event and it's cost.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The package name and cost or "No Package".
+ */
+function mdjm_content_tag_event_package_cost( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_event_package( $event_id, true );
+} // mdjm_content_tag_event_package_cost
 
 /**
  * Content tag: event_status.
