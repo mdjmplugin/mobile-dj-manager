@@ -95,8 +95,11 @@ add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
  */
 function mdjm_register_admin_styles( $hook )	{
 
-	$file          = 'mdjm-admin-styles.css';
+	$file          = 'mdjm-admin.css';
 	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
+	
+	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
+	wp_enqueue_style( 'mdjm-admin' );
 	
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
@@ -117,12 +120,38 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
  */
 function mdjm_register_admin_scripts( $hook )	{
 
+	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
+
 	wp_enqueue_script( 'jquery-ui-datepicker' );
-	
+		
 	if( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
 		
 	}
+	
+	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
+	
+	if ( in_array( $hook, $require_validation ) )	{
+		
+		wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
+
+		wp_enqueue_script( 'jquery-validation-plugin' );
+
+	}
+	
+	wp_register_script( 'mdjm-admin-ajax', $js_dir . 'mdjm-admin-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_enqueue_script( 'mdjm-admin-ajax' );
+	
+	wp_localize_script(
+		'mdjm-admin-ajax',
+		'mdjm_admin_scripts',
+		apply_filters(
+			'mdjm_ajax_script_vars',
+			array(
+				'ajaxurl' => mdjm_get_ajax_url()
+			)
+		)
+	);
 
 } // mdjm_register_styles
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_scripts' );
