@@ -43,8 +43,8 @@ function mdjm_display_shortcode_button()	{
     $post_types = array( 'email_template', 'contract', 'page' );
     
 	$screens = array( 
-        'mdjm-events_page_mdjm-comms',
-        'mdjm-events_page_mdjm-settings' );
+        'mdjm-event_page_mdjm-comms',
+        'mdjm-event_page_mdjm-settings' );
     
     // Add the MDJM TinyMCE buttons
     $current_screen = get_current_screen();
