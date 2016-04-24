@@ -16,14 +16,13 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * Settings contextual help.
  *
- * @access      private
- * @since       1.4
+ * @since       1.3
  * @return      void
  */
 function mdjm_settings_contextual_help() {
 	$screen = get_current_screen();
 		
-	if ( $screen->id != 'mdjm-events_page_mdjm-settings' )
+	if ( $screen->id != 'mdjm-event_page_mdjm-settings' )
 		return;
 
 	$screen->set_help_sidebar(
@@ -46,6 +45,8 @@ function mdjm_settings_contextual_help() {
 					esc_url( 'http://mdjm.co.uk/add-ons/' )
 				) . '</p>'
 	);
+	
+	do_action( 'mdjm_pre_settings_contextual_help', $screen );
 
 	$screen->add_help_tab( array(
 		'id'	    => 'mdjm-settings-general',
@@ -55,10 +56,11 @@ function mdjm_settings_contextual_help() {
 
 	$screen->add_help_tab( array(
 		'id'	    => 'mdjm-settings-events',
-		'title'	    => __( 'Events', 'mobile-dj-manager' ),
+		'title'	    => mdjm_get_label_plural(),
 		'content'	=>
-			'<p>' . __( 'This screen enables to you configure options events and playlists. Select your events default contract template, whether or not you are an employer and enable equipment packages.', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . __( 'You can also toggle playlists on or off, select when a playlist should close choose whether or not to upload your playlists to the MDJM servers.', 'mobile-dj-manager' ) . '</p>'
+			'<p>' . sprintf( __( 'This screen enables to you configure options %1$s and playlists. Select your %1$s default contract template, whether or not you are an employer and enable equipment packages.', 'mobile-dj-manager' ) . '</p>' .
+			'<p>' . __( 'You can also toggle playlists on or off, select when a playlist should close choose whether or not to upload your playlists to the MDJM servers.', 'mobile-dj-manager' ),
+						mdjm_get_label_plural( true ) ) . '</p>'
 	) );
 
 	$screen->add_help_tab( array(
@@ -88,7 +90,7 @@ function mdjm_settings_contextual_help() {
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'edd-settings-licenses',
+		'id'	    => 'mdjm-settings-licenses',
 		'title'	    => __( 'Licenses', 'mobile-dj-manager' ),
 		'content'	=>
 			'<p>' . sprintf(
@@ -97,6 +99,6 @@ function mdjm_settings_contextual_help() {
 					) . '</p>'
 	) );
 
-	do_action( 'mdjm_settings_contextual_help', $screen );
+	do_action( 'mdjm_post_settings_contextual_help', $screen );
 }
-add_action( 'load-mdjm-events_page_mdjm-settings', 'mdjm_settings_contextual_help' );
+add_action( 'load-mdjm-event_page_mdjm-settings', 'mdjm_settings_contextual_help' );
