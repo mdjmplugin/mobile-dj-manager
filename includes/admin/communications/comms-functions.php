@@ -233,6 +233,8 @@ function mdjm_send_comm_email( $data )	{
 			}
 		}
 		
+		$attachments = apply_filters( 'mdjm_send_comm_email_attachments', $attachments, $data );
+		
 		$email_args = array(
 			'to_email'       => mdjm_get_client_email( $data['mdjm_email_to'] ),
 			'from_name'      => $data['mdjm_email_from_name'],
