@@ -19,30 +19,19 @@ if ( ! defined( 'ABSPATH' ) )
  *			str		$orderby	Optional: The field by which to order. Default display_name
  *			str		$order		Optional: ASC (default) | Desc
  *
- * @return	$arr	$employees	or false if no employees for the specified roles
+ * @return	$arr	$clients	or false if no clients for the specified roles
  */
-function mdjm_get_clients( $roles='', $employee='', $orderby='', $order='' )	{
-	$defaults = array(
-		'roles'		=> array( 'client', 'inactive_client' ),
-		'employee'	 => false,
-		'orderby'	  => 'display_name',
-		'order'		=> 'ASC'
-	);
-	
-	$roles = empty( $roles ) ? $defaults['roles'] : $roles;
-	$employee = empty( $employee ) ? $defaults['employee'] : $employee;
-	$orderby = empty( $orderby ) ? $defaults['orderby'] : $orderby;
-	$order = empty( $order ) ? $defaults['order'] : $order;
-	
+function mdjm_get_clients( $roles=array( 'client', 'inactive_client' ), $employee=false, $orderby='display_name', $order='ASC' )	{
+		
 	// We'll work with an array of roles
 	if( !empty( $roles ) && !is_array( $roles ) )
 		$roles = array( $roles );
 	
 	$all_clients = get_users( 
 		array(
-			'role__in'	 => $roles,
-			'orderby'	  => $orderby,
-			'order'		=> $order
+			'role__in'  => $roles,
+			'orderby'   => $orderby,
+			'order'     => $order
 		)
 	);
 	
