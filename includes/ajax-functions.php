@@ -514,7 +514,7 @@ add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content' );
  * @return
  */
 function mdjm_ajax_user_events_dropdown()	{
-	error_log( var_export( $_POST, true ) );
+
 	$result['event_list'] = '<option value="0">' . __( 'Select an Event', 'mobile-dj-manager' ) . '</option>';
 	
 	if ( ! empty( $_POST['recipient'] ) )	{
