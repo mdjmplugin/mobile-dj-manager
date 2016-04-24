@@ -31,7 +31,9 @@ function mdjm_send_email_content( $args )	{
 		'subject'        => sprintf( __( 'Email from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ),
 		'attachments'    => array(),
 		'message'        => '',
-		'track'          => false
+		'track'          => false,
+		'copy_to'        => array(),
+		'source'         => __( 'Not specified', 'mobile-dj-manager' )
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -67,9 +69,9 @@ function mdjm_send_email_content( $args )	{
 
 	$emails->__set( 'track', $args['track'] );
 	
-	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id, $args['copy_to'] ) );
 
-	$sent = $emails->send( $to_email, $subject, $message, $attachments, '' );
+	$sent = $emails->send( $to_email, $subject, $message, $attachments, $args['source'] );
 		
 	return $sent;
 
@@ -530,9 +532,10 @@ function mdjm_email_set_copy_text()	{
  * @since	1.3
  * @param	str		$recipient	The address of the original email recipient
  * @param	int		$event_id	Event ID to which the email is associated
+ * @param	arr		$others		Array of additional addresses to whom to send a copy of the email
  * @return	arr		$copy_to	Array of addresses to send a copy of the email to
  */
-function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
+function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '', $others = array() )	{
 
 	if ( is_array( $recipient ) )	{
 		return;
@@ -562,6 +565,8 @@ function mdjm_email_maybe_send_a_copy( $recipient, $event_id = '' )	{
 	if ( mdjm_get_option( 'bcc_dj_to_client' ) && ! empty( $employee ) )	{
 		$copy_to[] = $employee->user_email;
 	}
+	
+	$copy_to = array_merge( $others, $copy_to );
 	
 	return array_unique( $copy_to );
 

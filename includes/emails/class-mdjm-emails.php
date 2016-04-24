@@ -437,6 +437,6 @@ class MDJM_Emails {
 			mdjm_email_set_tracking_status( $this->tracking_id, 'sent' );
 		}
 		
-	} // add_tracking_post
+	} // update_tracking_status
 	
 } // MDJM_Emails class
