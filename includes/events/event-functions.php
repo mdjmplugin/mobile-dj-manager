@@ -484,6 +484,21 @@ function mdjm_get_event_long_date( $event_id )	{
 } // mdjm_get_event_long_date
 
 /**
+ * Returns the start time for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The date of the event.
+ */
+function mdjm_get_event_start( $event_id )	{
+	
+	$time = get_post_meta( $event_id, '_mdjm_event_start', true );
+	
+	return date( mdjm_get_option( 'time_format' ), strtotime( $time ) );
+
+} // mdjm_get_event_start
+
+/**
  * Returns the price for an event.
  *
  * @since	1.3
