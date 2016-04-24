@@ -14,10 +14,9 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Settings contextual help.
+ * Events contextual help.
  *
- * @access      private
- * @since       1.4
+ * @since       1.3
  * @return      void
  */
 function mdjm_events_contextual_help() {
