@@ -443,6 +443,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_end_time'
 		),
 		array(
+			'tag'         => 'event_addons',
+			'description' => __( 'The add-ons included with the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_addons'
+		),
+		array(
 			'tag'         => 'event_date',
 			'description' => __( 'The date of the event in long format', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_date'
@@ -466,6 +471,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'event_name',
 			'description' => __( 'The assigned name of the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_name'
+		),
+		array(
+			'tag'         => 'event_package',
+			'description' => sprintf( __( 'The package associated witht the %s or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_event_package'
 		),
 		array(
 			'tag'         => 'event_status',
@@ -1354,6 +1364,31 @@ function mdjm_content_tag_dj_setup_time( $event_id='' )	{
 } // mdjm_content_tag_dj_setup_time
 
 /**
+ * Content tag: end_date.
+ * The date the event completes.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Formatted date the event finishes.
+ */
+function mdjm_content_tag_end_date( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	$return = '';
+	
+	$date = get_post_meta( $event_id, '_mdjm_event_end_date', true );
+	
+	if( !empty( $date ) )	{
+		$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
+	}
+	
+	return $return;
+} // mdjm_content_tag_end_date
+
+/**
  * Content tag: end_time.
  * The time the event completes.
  *
@@ -1379,29 +1414,21 @@ function mdjm_content_tag_end_time( $event_id='' )	{
 } // mdjm_content_tag_end_time
 
 /**
- * Content tag: end_date.
- * The date the event completes.
+ * Content tag: event_addons.
+ * The add-ons attached to the event.
  *
  * @param	int		The event ID.
  * @param
  *
- * @return	str		Formatted date the event finishes.
+ * @return	str		The package name or "No addons are assigned to this event".
  */
-function mdjm_content_tag_end_date( $event_id='' )	{
+function mdjm_content_tag_event_addons( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
 	
-	$return = '';
-	
-	$date = get_post_meta( $event_id, '_mdjm_event_end_date', true );
-	
-	if( !empty( $date ) )	{
-		$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
-	}
-	
-	return $return;
-} // mdjm_content_tag_end_date
+	return get_event_addons( $event_id );
+} // mdjm_content_tag_event_addons
 
 /**
  * Content tag: event_date.
@@ -1507,6 +1534,23 @@ function mdjm_content_tag_event_name( $event_id='' )	{
 		
 	return $return;
 } // mdjm_content_tag_event_name
+
+/**
+ * Content tag: event_package.
+ * The package attached to the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The package name or "No Package".
+ */
+function mdjm_content_tag_event_package( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_event_package( $event_id );
+} // mdjm_content_tag_event_package
 
 /**
  * Content tag: event_status.
