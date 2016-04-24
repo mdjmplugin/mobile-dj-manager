@@ -22,12 +22,25 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_process_actions() {
 	if ( isset( $_POST['mdjm-action'] ) ) {
+
+		if ( isset( $_FILES ) )	{
+			$_POST['FILES'] = $_FILES;
+		}
+
 		do_action( 'mdjm-' . $_POST['mdjm-action'], $_POST );
+
 	}
 
 	if ( isset( $_GET['mdjm-action'] ) ) {
+
+		if ( isset( $_FILES ) )	{
+			$_POST['FILES'] = $_FILES;
+		}
+
 		do_action( 'mdjm-' . $_GET['mdjm-action'], $_GET );
+
 	}
+
 }
 add_action( 'admin_init', 'mdjm_process_actions' );
 
