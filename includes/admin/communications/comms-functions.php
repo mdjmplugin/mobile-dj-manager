@@ -212,7 +212,7 @@ function mdjm_comms_template_options( $selected = 0 )	{
  * @return	void
  */
 function mdjm_send_comm_email( $data )	{
-	error_log( var_export( $data, true ), 0 );
+
 	$url = remove_query_arg( 'mdjm-message' );
 		
 	if ( ! wp_verify_nonce( $data['mdjm_nonce'], 'send_comm_email' ) )	{
