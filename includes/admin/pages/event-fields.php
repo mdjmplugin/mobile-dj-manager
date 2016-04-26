@@ -18,7 +18,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function __construct()	{
 			add_action( 'admin_init', array( &$this, 'custom_fields_controller' ) );
 			
-			add_action( 'mdjm_add_content_tags', 'add_tags' );
+			add_action( 'mdjm_add_content_tags', array( &$this, 'add_tags' ) );
 			add_action( 'mdjm_events_client_metabox_last', array( &$this, 'custom_client_event_fields' ), 10, 2 );
 			add_action( 'mdjm_events_metabox_last', array( &$this, 'custom_event_details_fields' ) );
 			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
@@ -38,17 +38,15 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		public function add_tags()	{
 			
-			$fields = mdjm_get_custom_fields( $field_type );
-				
 			$query = mdjm_get_custom_fields();
 			$fields = $query->get_posts();
 			
 			if( $fields )	{
 				foreach( $fields as $field )	{
-					$custom_content_tags[] = array(
-						'tag'         => 'mdjm_cf_' . strtolower( str_replace( ' ', '_', get_the_title( $field->ID ) ) ),
-						'description' => $field->post_content,
-						'function'    => array( &$this, 'do_custom_field_tags' )
+					mdjm_add_content_tag( 
+						'mdjm_cf_' . strtolower( str_replace( ' ', '_', get_the_title( $field->ID ) ) ),
+						$field->post_content,
+						array( &$this, 'do_custom_field_tags' )
 					);
 				}
 			}
@@ -61,23 +59,26 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @since	1.3
 		 * @param	int		$event_id	The event ID.
 		 * @param	int		$client_id	The client ID (not used).
-		 * @param	arr		$args		An array of additional args passed to the function.
+		 * @param	str		$tag		The tag being processed.
 		 * @return	str		The value of the custom field for the event or an empty string.
 		 */
-		public function do_custom_field_tags( $event_id = '', $client_id = '', $args = array() )	{
-			
-			if ( empty ( $event_id ) || empty ( $args['field'] ) || empty ( $args['field_type'] ) )	{
+		public function do_custom_field_tags( $event_id = '', $client_id = '', $tag = '' )	{
+			error_log( 'TAG: ' . $tag, 0 );
+			if ( empty ( $event_id ) || empty ( $tag ) )	{
 				return '';
 			}
 			
-			$meta_key = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+			$tag = str_replace( array( '-', '(', ')', 'mdjm_cf_' ), array( '_', '', '', '' ), $tag );
+			
+			$meta_key = '_mdjm_event_' . str_replace( array( '-', '(', ')' ), array( '_', '', '' ), $tag );
+			error_log( 'KEY: ' . $meta_key );
 			$meta_value = get_post_meta( $event_id, $meta_key, true );
 			
 			if ( empty ( $meta_value ) )	{
 				return '';
 			}
 			
-			return apply_filters( "do_custom_field_tag_{$meta_key}", $meta_value, $event_id, $args );
+			return apply_filters( "do_custom_field_tag_{$meta_key}", $meta_value, $event_id, $tag );
 			
 		} // do_custom_field_tags
 					
@@ -113,17 +114,23 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return	HTML formatted list of tags.
 		 */
 		public static function list_custom_tags()	{
-			$query 	= mdjm_get_custom_fields();
-			$tags	= $query->get_posts();
+			$content_tags	= mdjm_get_content_tags();
 			$output	= '';
+
+			if( count( $content_tags ) > 0 )	{
+				foreach ( $content_tags as $content_tag )	{
+					if ( strpos( strtolower( $content_tag['tag'] ), 'mdjm_cf_') !== false) {
+						$custom_tags[] = $content_tag;
+					}
+				}
+			}
 			
-			if( $tags )	{
+			if( ! empty( $custom_tags ) )	{
 				$output .= '<ul>';
 				
-				foreach( $tags as $tag )	{
+				foreach( $custom_tags as $custom_tag )	{
 					$output .= '<li style="font-style: italic; font-size: smaller;">';
-					$output .= '{MDJM_CF_' . strtoupper( str_replace( ' ', '_', get_the_title( $tag->ID ) ) ) . '}';
-					$output .= ' ' . $tag->post_content;
+					$output .= "{{$custom_tag['tag']}} - {$custom_tag['description']}";
 					$output .= '</li>';
 				}
 				
@@ -167,7 +174,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'post_content'  => !empty( $_POST['field_desc'] ) ? $_POST['field_desc'] : '',
 					'post_status'   => 'publish',
 					'post_author'   => get_current_user_id(),
-					'post_type'	 => MDJM_CUSTOM_FIELD_POSTS,
+					'post_type'	 => 'mdjm-custom-fields',
 					'menu_order'	=> $menu_order ),
 				true );
 			
@@ -228,6 +235,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'ID'			=> $_POST['custom_field_id'],
 					'post_title'	=> wp_strip_all_tags( $_POST['field_label'] ),
 					'post_content'  => !empty( $_POST['field_desc'] ) ? $_POST['field_desc'] : '',
+					'post_name'     => sanitize_title( $_POST['field_label'] ),
 					'post_status'   => 'publish' ),
 				true );
 				
