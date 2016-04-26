@@ -18,6 +18,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function __construct()	{
 			add_action( 'admin_init', array( &$this, 'custom_fields_controller' ) );
 			
+			add_action( 'mdjm_add_content_tags', 'add_tags' );
 			add_action( 'mdjm_events_client_metabox_last', array( &$this, 'custom_client_event_fields' ), 10, 2 );
 			add_action( 'mdjm_events_metabox_last', array( &$this, 'custom_event_details_fields' ) );
 			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
@@ -27,6 +28,58 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			add_filter( 'dcf_mapping_fields', array( &$this, 'dcf_mapping_fields' ), 10, 2 );
 			add_filter( 'dcf_mapping_fields_on_submit', array( &$this, 'dcf_mapping_fields_on_submit' ), 10, 2 );
 		}
+		
+		/**
+		 * Load the custom tags into the MDJM_Content_Tags class.
+		 *
+		 * @since	1.3
+		 * @param
+		 * @return
+		 */
+		public function add_tags()	{
+			
+			$fields = mdjm_get_custom_fields( $field_type );
+				
+			$query = mdjm_get_custom_fields();
+			$fields = $query->get_posts();
+			
+			if( $fields )	{
+				foreach( $fields as $field )	{
+					$custom_content_tags[] = array(
+						'tag'         => 'mdjm_cf_' . strtolower( str_replace( ' ', '_', get_the_title( $field->ID ) ) ),
+						'description' => $field->post_content,
+						'function'    => array( &$this, 'do_custom_field_tags' )
+					);
+				}
+			}
+
+		} // add_tags
+		
+		/**
+		 * Process the custom field tags.
+		 *
+		 * @since	1.3
+		 * @param	int		$event_id	The event ID.
+		 * @param	int		$client_id	The client ID (not used).
+		 * @param	arr		$args		An array of additional args passed to the function.
+		 * @return	str		The value of the custom field for the event or an empty string.
+		 */
+		public function do_custom_field_tags( $event_id = '', $client_id = '', $args = array() )	{
+			
+			if ( empty ( $event_id ) || empty ( $args['field'] ) || empty ( $args['field_type'] ) )	{
+				return '';
+			}
+			
+			$meta_key = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+			$meta_value = get_post_meta( $event_id, $meta_key, true );
+			
+			if ( empty ( $meta_value ) )	{
+				return '';
+			}
+			
+			return apply_filters( "do_custom_field_tag_{$meta_key}", $meta_value, $event_id, $args );
+			
+		} // do_custom_field_tags
 					
 		/**
 		 * Determine if any actions need to be taken for custom fields
