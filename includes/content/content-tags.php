@@ -45,14 +45,7 @@ class MDJM_Content_Tags	{
 	 * @since	1.3
 	 */
 	private $client_id;
-	
-	/**
-	 * Args
-	 *
-	 * @since	1.3
-	 */
-	private $args = array();
-	
+		
 	/**
 	 * Add a content tag.
 	 *
@@ -118,7 +111,7 @@ class MDJM_Content_Tags	{
 	 *
 	 * @return	str		Content with tags filtered out.
 	 */
-	public function do_tags( $content, $event_id, $client_id, $args ) {
+	public function do_tags( $content, $event_id, $client_id ) {
 		// Check if there is at least one tag added
 		if ( empty( $this->tags ) || ! is_array( $this->tags ) ) {
 			return $content;
@@ -126,13 +119,11 @@ class MDJM_Content_Tags	{
 
 		$this->event_id     = $event_id;
 		$this->client_id	= $client_id;
-		$this->args         = $args;
 
-		$new_content = preg_replace_callback( "/{([A-z0-9\-\_]+)}/s", array( $this, 'do_tag' ), $content );
+		$new_content = preg_replace_callback( "/{([A-z0-9()\-\_]+)}/s", array( $this, 'do_tag' ), $content );
 
 		$this->event_id     = null;
 		$this->client_id	= null;
-		$this->args         = null;
 
 		return $new_content;
 	} // do_tags
@@ -155,7 +146,7 @@ class MDJM_Content_Tags	{
 			return $m[0];
 		}
 
-		return call_user_func( $this->tags[ $tag ]['func'], $this->event_id, $this->client_id, $this->args, $tag );
+		return call_user_func( $this->tags[ $tag ]['func'], $this->event_id, $this->client_id, $tag );
 	} // do_tag
 } // MDJM_Content_Tags
 
@@ -245,9 +236,9 @@ function mdjm_get_content_tags_list() {
  *
  * @return	str		Content with content tags filtered out.
  */
-function mdjm_do_content_tags( $content, $event_id='', $client_id='', $args = array() ) {
+function mdjm_do_content_tags( $content, $event_id='', $client_id='' ) {
 	// Replace all tags
-	$content = MDJM()->content_tags->do_tags( $content, $event_id, $client_id, $args );
+	$content = MDJM()->content_tags->do_tags( $content, $event_id, $client_id );
 
 	// Return content
 	return $content;
