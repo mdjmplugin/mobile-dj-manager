@@ -740,14 +740,14 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
-			$debug[] = sprintf( __( 'Adding %s value as %s' ), $key, $value );
+			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
-			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, $value );
+			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
 			update_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
