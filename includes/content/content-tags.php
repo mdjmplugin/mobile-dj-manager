@@ -1,6 +1,7 @@
 <?php
 /**
  * The MDJM Content tags API.
+ * Taken from Easy Digital Downloads.
  * Content tags are phrases wrapped in { } placed in HTML or email content
  * that are searched and replaced with MDJM content.
  *
@@ -8,10 +9,14 @@
  * {event_name}
  * {client_fullname}
  *
+ * To replace tags in content, use: mdjm_do_content_tags( $content, $event_id, $client_id );
+ *
+ * To add tags, use: mdjm_add_content_tag( $tag, $description, $func ). Be sure to wrap mdjm_add_content_tag()
+ * in a function hooked to the 'mdjm_add_content_tags' action
+ *
  * @package     MDJM
  * @subpackage  Content
  * @since       1.3
- * 
  */
  
 // Exit if accessed directly
