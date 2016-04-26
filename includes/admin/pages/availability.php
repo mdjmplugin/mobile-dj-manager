@@ -191,9 +191,11 @@
 	?>
     </select>&nbsp;&nbsp;&nbsp;
     <select name="show_year" id="show_year">
-    <option value="2014"<?php if( isset( $_POST['show_year'] ) ) { selected( '2014', $_POST['show_year'] ); } else { selected( '2014', date( 'Y' ) ); } ?>>2014</option>
     <option value="2015"<?php if( isset( $_POST['show_year'] ) ) { selected( '2015', $_POST['show_year'] ); } else { selected( '2015', date( 'Y' ) ); } ?>>2015</option>
     <option value="2016"<?php if( isset( $_POST['show_year'] ) ) { selected( '2016', $_POST['show_year'] ); } else { selected( '2016', date( 'Y' ) ); } ?>>2016</option>
+    <option value="2017"<?php if( isset( $_POST['show_year'] ) ) { selected( '2017', $_POST['show_year'] ); } else { selected( '2017', date( 'Y' ) ); } ?>>2017</option>
+    <option value="2018"<?php if( isset( $_POST['show_year'] ) ) { selected( '2018', $_POST['show_year'] ); } else { selected( '2017', date( 'Y' ) ); } ?>>2018</option>
+    <option value="2019"<?php if( isset( $_POST['show_year'] ) ) { selected( '2019', $_POST['show_year'] ); } else { selected( '2018', date( 'Y' ) ); } ?>>2019</option>
     </select>&nbsp;&nbsp;&nbsp;
     <?php submit_button( 'Go', 'secondary', 'submit', false, '' ); ?>
     </th>
