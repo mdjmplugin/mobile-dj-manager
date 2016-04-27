@@ -285,9 +285,10 @@ class MDJM_Event {
 			if ( ! empty( $this->employee_id ) )	{
 				
 				$employees[ $this->employee_id ] = array( 
-					'role_slug'	=> 'dj',
-					'role'		 => translate_user_role( $wp_roles->roles['dj']['name'] ),
-					'wage'		 => mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_event_dj_wage', true ) )
+					'role_slug'	  => 'dj',
+					'role'		   => translate_user_role( $wp_roles->roles['dj']['name'] ),
+					'wage'		   => mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_event_dj_wage', true ) ),
+					'payment_status' => get_post_meta( $this->ID, '_mdjm_event_dj_wage_status', true )
 				);
 				
 			}
@@ -299,9 +300,10 @@ class MDJM_Event {
 				foreach( $employees_data as $employee_data )	{
 					
 					$employees[ $employee_data['id'] ] = array(
-						'role_slug'	=> $employee_data['role'],
-						'role'		 => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
-						'wage'		 => $employee_data['wage']
+						'role_slug'	    => $employee_data['role'],
+						'role'		     => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
+						'wage'		     => $employee_data['wage'],
+						'payment_status'   => $employee_data['payment_status']
 					);
 					
 				}
