@@ -1722,10 +1722,10 @@ function mdjm_rich_editor_callback( $args ) {
 
 	if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
 		ob_start();
-		wp_editor( stripslashes( $value ), 'mdjm_settings_' . $args['id'], array( 'textarea_name' => 'mdjm_settings_[' . $args['id'] . ']', 'textarea_rows' => $rows ) );
+		wp_editor( stripslashes( $value ), 'mdjm_settings_' . $args['id'], array( 'textarea_name' => 'mdjm_settings[' . esc_attr( $args['id'] ) . ']', 'textarea_rows' => $rows ) );
 		$html = ob_get_clean();
 	} else {
-		$html = '<textarea class="large-text" rows="10" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+		$html = '<textarea class="large-text" rows="10" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	}
 
 	$html .= '<p class="description"<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
