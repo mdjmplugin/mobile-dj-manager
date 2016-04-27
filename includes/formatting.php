@@ -245,6 +245,31 @@ function mdjm_format_long_date( $date = '', $time = false )	{
 } // mdjm_format_long_date
 
 /**
+ * Set the time format for the given time
+ *
+ * @since	1.3
+ * @param	int		$time		Time to format
+ * @return	int		$date
+*/
+function mdjm_format_time( $time = '' )	{
+	
+	if ( empty( $time ) )	{
+		$time = current_time( 'timestamp' );
+	}
+	
+	$format = mdjm_get_option( 'time_format', 'H:i' );
+	
+	if( ( (string) (int) $time === $time ) && ( $time <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
+		$time_format = date( $format, $time );
+				
+	} else	{
+		$time_format = date( $format, strtotime( $time ) );
+	}
+		
+	return apply_filters( 'mdjm_format_time', $time_format, $time ); 
+} // mdjm_format_time
+
+/**
  * Generate an MDJM URL based upon the sites permalink settings.
  *
  * @since	1.3
