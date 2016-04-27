@@ -419,9 +419,10 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit' );
 function mdjm_ajax_add_employee_to_event()	{
 	
 	$args = array(
-		'id'		  => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
-		'role'		=> isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
-		'wage'		=> isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: ''
+		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
+		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
+		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
+		'payment_status'  => 'unpaid'
 	);
 	
 	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{

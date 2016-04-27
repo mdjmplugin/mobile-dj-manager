@@ -552,9 +552,10 @@ function mdjm_list_event_employees( $event_id )	{
 function mdjm_add_employee_to_event( $event_id, $args )	{
 	
 	$defaults = array(
-		'id'		=> '',
-		'role'	  => '',
-		'wage'	  => '0'
+		'id'		        => '',
+		'role'	          => '',
+		'wage'	          => '0',
+		'payment_status'    => 'unpaid'
 	);
 	
 	$data = wp_parse_args( $args, $defaults );
