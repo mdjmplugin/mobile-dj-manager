@@ -416,7 +416,7 @@ function mdjm_get_registered_settings()	{
 					'default_contract' => array(
 						'id'          => 'default_contract',
 						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select the format in which you want your %s times displayed. Applies to both admin and client pages', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc'        => sprintf( __( 'Select the default contract for your %s. Can be changed per %s', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options' => mdjm_list_templates( 'contract' )
 					),
