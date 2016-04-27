@@ -513,6 +513,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_payment_url'
 		),
 		array(
+			'tag'         => 'pdf_pagebreak',
+			'description' => __( 'Adds a page break into a PDF document', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_pdf_pagebreak'
+		),
+		array(
 			'tag'         => 'playlist_close',
 			'description' => __( 'The number of days before the event that the playlist closes', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_playlist_close'
@@ -1696,6 +1701,19 @@ function mdjm_content_tag_payment_history( $event_id='' )	{
 function mdjm_content_tag_payment_url()	{	
 	return mdjm_get_formatted_url( mdjm_get_option( 'payments_page' ), false );
 } // mdjm_content_tag_payment_url
+
+/**
+ * Content tag: pdf_pagebreak.
+ * A page break in a PDF document.
+ *
+ * @param
+ * @param
+ *
+ * @return	str		A page break in a PDF document.
+ */
+function mdjm_content_tag_pdf_pagebreak()	{	
+	return '<pagebreak />';
+} // mdjm_content_tag_pdf_pagebreak
 
 /**
  * Content tag: playlist_close.
