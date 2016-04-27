@@ -204,7 +204,7 @@ class MDJM_Emails {
 		$templates[0] = __( 'Disable', 'mobile-dj-manager' );
 		
 		foreach( $template_posts as $template )	{
-			$templates[ $template->ID ] = $template->post_title;	
+			$templates[ $template->ID ] = $template->post_title;
 		}
 
 		return apply_filters( 'mdjm_email_templates', $templates );
@@ -229,17 +229,65 @@ class MDJM_Emails {
 	 * Build the final email
 	 *
 	 * @since	1.3
+	 * @param	str	$to
+	 * @param	str	$subject
 	 * @param	str	$message
+	 * @param	str	$attachments
+	 * @param	str	$source
 	 *
 	 * @return	str
 	 */
-	public function build_email( $message ) {
+	public function build_email( $to, $subject, $message, $attachments, $source ) {
 
 		if ( false === $this->html ) {
 			return apply_filters( 'mdjm_email_message', wp_strip_all_tags( $message ), $this );
 		}
 
 		$message = $this->text_to_html( $message );
+		
+		$message = $this->log_email( $to, $subject, $message, $attachments, $source );
+		
+		ob_start();
+
+		mdjm_get_template_part( 'email', 'header', true );
+
+		/**
+		 * Hooks into the email header
+		 *
+		 * @since	1.3
+		 */
+		do_action( 'mdjm_email_header', $this );
+
+		if ( has_action( 'mdjm_email_template_' . $this->get_template() ) ) {
+			/**
+			 * Hooks into the template of the email
+			 *
+			 * @param string $this->template Gets the enabled email template
+			 * @since	1.3
+			 */
+			do_action( 'mdjm_email_template_' . $this->get_template() );
+		} else {
+			mdjm_get_template_part( 'email', 'body', true );
+		}
+		
+		/**
+		 * Hooks into the body of the email
+		 *
+		 * @since	1.3
+		 */
+		do_action( 'mdjm_email_body', $this );
+
+		mdjm_get_template_part( 'email', 'footer', true );
+
+		/**
+		 * Hooks into the footer of the email
+		 *
+		 * @since 2.1
+		 */
+		do_action( 'mdjm_email_footer', $this );
+
+		$body    = ob_get_clean();
+		$message = str_replace( '{email}', $message, $body );
 
 		return apply_filters( 'mdjm_email_message', $message, $this );
 
@@ -267,11 +315,9 @@ class MDJM_Emails {
 		 */
 		do_action( 'mdjm_email_send_before', $this );
 
-		$message = $this->build_email( $message );
+		$message = $this->build_email( $to, $subject, $message, $attachments, $source );
 
 		$attachments = apply_filters( 'mdjm_email_attachments', $attachments, $this );
-		
-		$message = $this->log_email( $to, $subject, $message, $attachments, $source );
 		
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers(), $attachments );
 				
