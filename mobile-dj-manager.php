@@ -6,7 +6,7 @@
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
  * Version: 1.2.7.5
  * Date: 26 November 2015
- * Author: My DJ Planner <contact@mydjplanner.co.uk>
+ * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /lang
