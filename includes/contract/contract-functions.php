@@ -13,6 +13,17 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Returns the default event contract ID.
+ *
+ * @since	1.3
+ * @param
+ * @return	int		The post ID of the default event contract.
+ */
+function mdjm_get_default_event_contract()	{
+	return mdjm_get_option( 'default_contract', false );
+} // mdjm_get_default_event_contract
+
+/**
  * Returns the event contract ID.
  *
  * @since	1.3
