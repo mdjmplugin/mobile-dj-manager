@@ -200,31 +200,49 @@ class MDJM_Event {
 	 * Creates an event
 	 *
 	 * @since 	1.3
-	 * @param 	arr		$data Array of attributes for an event
+	 * @param 	arr		$data Array of attributes for an event. See $defaults.
 	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Event ID
 	 */
 	public function create( $data = array() ) {
+
 		if ( $this->id != 0 ) {
 			return false;
 		}
 
 		$defaults = array(
-			'post_type'   => 'mdjm-event',
-			'post_status' => 'mdjm-enquiry',
-			'post_title'  => __( 'New Event', 'mobile-dj-manager' )
+			'post_type'    => 'mdjm-event',
+			'post_author'  => 1,
+			'post_content' => '',
+			'post_status'  => 'mdjm-enquiry',
+			'post_title'   => __( 'New Event', 'mobile-dj-manager' ),
+			'meta'         => array(
+				'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
+				'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
+				'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
+				'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
+				'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' )
+			)
 		);
 
 		$args = wp_parse_args( $data, $defaults );
 
 		do_action( 'mdjm_event_pre_create', $args );
+		
+		$meta = $args['meta'];
+		unset( $args['meta'] );
 
 		$id	= wp_insert_post( $args, true );
 
 		$event = WP_Post::get_instance( $id );
+		
+		if ( $event )	{
+			mdjm_update_event_meta( $event->ID, $meta );
+		}
 
 		do_action( 'mdjm_event_post_create', $id, $args );
 
 		return $this->setup_event( $event );
+
 	} // create
 	
 	/**
