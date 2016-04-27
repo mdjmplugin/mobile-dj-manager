@@ -5,8 +5,7 @@
  * @version			1.0
  * @author			Mike Howard
  * @since			1.3
- * @content_tag		client
- * @content_tag		event
+ * @content_tag		Not Supported
  * @shortcodes		Not Supported
  *
  * Do not customise this file!
@@ -16,5 +15,6 @@ if ( ! defined( 'ABSPATH' ) )
 	exit; 
 
 ?>
+
     </body>
 </html>

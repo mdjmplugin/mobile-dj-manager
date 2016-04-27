@@ -5,8 +5,7 @@
  * @version			1.0
  * @author			Mike Howard
  * @since			1.3
- * @content_tag		client
- * @content_tag		event
+ * @content_tag		Not Supported
  * @shortcodes		Not Supported
  *
  * Do not customise this file!
@@ -20,6 +19,6 @@ if ( ! defined( 'ABSPATH' ) )
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>{company_name}</title>
+		<title><?php echo mdjm_get_option( 'company_name' ); ?></title>
 	</head>
 	<body>
