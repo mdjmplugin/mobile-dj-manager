@@ -313,7 +313,7 @@ function mdjm_get_email_template_content( $template_id, $email_type = false )	{
 	$content = str_replace( ']]>', ']]&gt;', $content );
 	
 	if( ! empty( $email_type ) )	{
-		return apply_filters( 'mdjm_email_content_{$email_type}', $content, $template_id );
+		return apply_filters( "mdjm_email_content_{$email_type}", $content, $template_id );
 	}
 	
 	return apply_filters( 'mdjm_email_content', $content, $template_id );
