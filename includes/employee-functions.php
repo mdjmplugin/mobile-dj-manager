@@ -887,3 +887,41 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
 	return mdjm_format_amount( $wage );
 	
 } // mdjm_get_employees_event_wage
+
+/**
+ * Whether or not an employee has been paid for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @param	int		$employee_id	The employee user ID
+ * @return	bool	True if paid, otherwise false.
+ */
+function mdjm_get_employees_event_payment_status( $event_id, $employee_id = '' )	{
+	
+	$employee_id = ! empty ( $employee_id ) ? $employee_id : get_current_user_id();
+	
+	$payment_status = 'unpaid';
+	
+	if ( $employee_id == mdjm_get_event_primary_employee( $event_id ) )	{
+		
+		$payment_status = get_post_meta( $event_id, '_mdjm_event_dj_wage_status', true );
+	
+	} else	{
+		
+		$employees_data = mdjm_get_event_employees_data( $event_id );
+		
+		foreach( $employees_data as $employee_data )	{
+			
+			if ( $employee_data['id'] == $employee_id )	{
+				
+				$payment_status = $employee_data['payment_status'];
+				
+			}
+			
+		}
+	
+	}
+	
+	return $payment_status;
+	
+} // mdjm_get_employees_event_payment_status
