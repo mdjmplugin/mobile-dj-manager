@@ -461,13 +461,13 @@ function mdjm_pay_event_employees( $event_id )	{
 		return;
 	}
 	
-	do_action( 'mdjm_pre_pay_event_employees', $event_id, $mdjm_event );
-	
 	$mdjm_event->get_all_employees();
 	
 	if ( ! $mdjm_event->employees )	{
 		return;
 	}
+	
+	do_action( 'mdjm_pre_pay_event_employees', $event_id, $mdjm_event );
 	
 	foreach( $mdjm_event->employees as $employee_id => $employee_data )	{
 		
@@ -475,28 +475,52 @@ function mdjm_pay_event_employees( $event_id )	{
 
 		$mdjm_txn->create(
 			array(
-				'post_status'	=> 'mdjm-expenditure',
-				'post_author'	=> 1,
-				'post_parent'	=> $mdjm_event->ID,
-				'post_category'	=> array( mdjm_get_txn_cat_id( 'mdjm-employee-wages' ) ),
-				'meta'			=> array(
-					'_mdjm_txn_status'		=> 'Completed',
-					'_mdjm_payment_to'		=> $employee_id,
-					'_mdjm_txn_total'		=> $employee_data['wage']
+				'post_status'    => 'mdjm-expenditure',
+				'post_author'    => 1,
+				'post_parent'    => $mdjm_event->ID,
+				'post_category'  => array( mdjm_get_txn_cat_id( 'mdjm-employee-wages' ) ),
+				'meta'           => array(
+					'_mdjm_txn_status'    => 'Completed',
+					'_mdjm_payment_to'    => $employee_id,
+					'_mdjm_txn_total'     => mdjm_format_amount( $employee_data['wage'] )
 				)
 			)
 		);
 		
+		if ( empty( $mdjm_txn ) )	{
+			return false;
+		}
+		
+		
+		
 	}
 	
+	do_action( 'mdjm_post_pay_event_employees', $event_id, $mdjm_event, $mdjm_txn->ID );
+	
+} // mdjm_pay_event_employees
+
+/**
+ * Mark an event employee as paid.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	User ID of employee
+ * @param	int		$event_id		Event ID
+ * @param	int		$txn_id			The transaction ID associated with this payment.
+ * @return
+ */
+function mdjm_pay_employee( $employee_id, $event_id = 0, $txn_id = 0 )	{
+	
+	if ( ! mdjm_is_employee( $employee_id ) )	{
+		return false;
+	}
 	
 	do_action( "mdjm_pre_pay_employee_{$employee_id}", $event_id, $mdjm_event );
 	
-	do_action( "mdjm_post_pay_employee_{$employee_id}", $event_id, $mdjm_event );
 	
-	do_action( 'mdjm_post_pay_event_employees', $event_id, $mdjm_event );
 	
-} // mdjm_pay_event_employees
+	do_action( "mdjm_post_pay_employee_{$employee_id}", $event_id, $mdjm_event, $mdjm_txn->ID );
+	
+} // mdjm_pay_employee
 
 /**
  * Remove the post save action whilst adding or updating transactions.

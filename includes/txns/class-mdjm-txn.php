@@ -125,35 +125,37 @@ class MDJM_Txn {
 	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Transaction ID
 	 */
 	public function create( $data = array() ) {
+		
 		if ( $this->id != 0 ) {
 			return false;
 		}
 
 		$defaults = array(
-			'post_type'		=> 'mdjm-transaction',
-			'post_status'	=> 'mdjm-pending',
-			'post_title'	=> __( 'New Transaction', 'mobile-dj-manager' ),
-			'post_content'	=> '',
-			'meta'			=> array(
-				'_mdjm_txn_source'		=> mdjm_get_option( 'default_type', __( 'Cash' ) ),
-				'_mdjm_txn_currency'	=> mdjm_get_currency()
+			'post_type'      => 'mdjm-transaction',
+			'post_status'    => 'mdjm-pending',
+			'post_title'     => __( 'New Transaction', 'mobile-dj-manager' ),
+			'post_content'   => '',
+			'meta'  => array(
+				'_mdjm_txn_source'     => mdjm_get_option( 'default_type', __( 'Cash' ) ),
+				'_mdjm_txn_currency'   => mdjm_get_currency()
 			)
 		);
 
 		$args = wp_parse_args( $data, $defaults );
 
-		$meta_data = $args['meta'];
-		unset( $args['meta'] );
+		$meta_data = $data['meta'];
+		unset( $data['meta'] );
 
-		do_action( 'mdjm_txn_pre_create', $args, $meta_data );
+		do_action( 'mdjm_pre_txn_create', $data, $meta_data );
 
-		$id = wp_insert_post( $args, true );
+		$id = wp_insert_post( $data, true );
 
 		$txn = WP_Post::get_instance( $id );
 
-		do_action( 'mdjm_txn_post_create', $id, $args, $meta_data );
+		do_action( 'mdjm_post_txn_create', $id, $data, $meta_data );
 
 		return $this->setup_txn( $txn );
+
 	} // create
 	
 	/**
