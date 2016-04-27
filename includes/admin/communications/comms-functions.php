@@ -233,6 +233,10 @@ function mdjm_send_comm_email( $data )	{
 			}
 		}
 		
+		if ( empty( $attachments ) )	{
+			$attachments = array();
+		}
+		
 		$attachments = apply_filters( 'mdjm_send_comm_email_attachments', $attachments, $data );
 		
 		$email_args = array(
