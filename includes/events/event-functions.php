@@ -372,6 +372,59 @@ function mdjm_set_enquiry_source( $event_id, $type )	{
 } // mdjm_set_enquiry_source
 
 /**
+ * Return all event types.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	obj		Object array of all event type categories.
+ */
+function mdjm_get_event_types( $args )	{
+	
+	$defaults = array(
+		'taxonomy'      => 'event-types',
+		'hide_empty'    => false,
+		'orderby'       => 'name',
+		'order'         => 'ASC'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$event_types = get_categories( $args );
+	
+	return apply_filters( 'mdjm_get_event_types', $event_types, $args );
+	
+} // mdjm_get_event_types
+
+/**
+ * Generate a dropdown list of event types.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	str		HTML output for the dropdown list.
+ */
+function mdjm_event_types_dropdown( $args )	{
+	
+	$defaults = array(
+		'show_option_none'   => '',
+		'option_none_value'  => '',
+		'orderby'            => 'name', 
+		'order'              => 'ASC',
+		'hide_empty'         => false, 
+		'echo'               => true,
+		'selected'           => 0,
+		'name'               => 'mdjm_event_type',
+		'id'                 => '',
+		'class'              => 'postform',
+		'taxonomy'           => 'event-types'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$event_types = get_categories( $args );
+	
+} // mdjm_event_types_dropdown
+
+/**
  * Set the event type for the event.
  *
  * @since	1.3
