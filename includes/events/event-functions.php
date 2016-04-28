@@ -420,7 +420,7 @@ function mdjm_event_types_dropdown( $args )	{
 	
 	$args = wp_parse_args( $args, $defaults );
 	
-	$event_types = get_categories( $args );
+	return wp_dropdown_categories( $args );
 	
 } // mdjm_event_types_dropdown
 
