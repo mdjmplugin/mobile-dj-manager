@@ -562,39 +562,52 @@ function get_addon_details( $slug )	{
  *					$structure		bool				true create the select list, false just return values
  * @ return	HTML output for select field
  */
-function mdjm_addons_dropdown( $settings='', $structure=true )	{
+function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 	global $current_user;
 	
-	// Set the values based on the array passed
-	$select_name = isset( $settings['name'] ) ? $settings['name'] : 'event_addons';
-	$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-	$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() && !current_user_can( 'client' ) ? $current_user->ID : '' ) );
-	$select_cost = isset( $settings['cost'] ) ? $settings['cost'] : true;
+	$defaults = array(
+		'name'            => 'event_addons',
+		'id'              => '',
+		'class'           => '',
+ 		'selected'        => '',
+ 		'first_entry'     => '',
+ 		'first_entry_val' => '',
+		'dj'              => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
+ 		'package'         => '',
+ 		'title'           => '',
+ 		'cost'            => false
+	);
 	
+	$args = wp_parse_args( $args, $defaults );
+	
+	if ( empty ( $args['id'] ) )	{
+		$args['id'] = $args['name'];
+	}
+		
 	$mdjm_select = '';
 	
 	if( $structure == true )	{
-		$mdjm_select .= '<select name="' . $select_name . '[]" id="' . $select_id . '"';
-		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
+		$mdjm_select .= '<select name="' . $args['name'] . '[]" id="' . $args['id'] . '"';
+		$mdjm_select .= ! empty( $args['class'] ) ? ' class="' . $args['class'] . '"' : '';
 		$mdjm_select .= ' multiple="multiple">' . "\r\n";
 	}
 	
 	// First entry
-	$mdjm_select .= isset( $settings['first_entry'] ) ? 
-		'<option value="' . isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '0' . '">' . 
-		$settings['first_entry'] . '</option>' . "\r\n" : '';
+	$mdjm_select .= ! empty( $args['first_entry'] ) ? 
+		'<option value="' . ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '0' . '">' . 
+		$args['first_entry'] . '</option>' . "\r\n" : '';
 	
 	$equipment = mdjm_get_addons();
 	
-	if( empty( $equipment ) )
+	if( empty( $equipment ) )	{
 		$mdjm_select .= '<option value="0">' . __( 'No Addons Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-	
-	else	{
+	} else	{
 		asort( $equipment );
 	// All addons
 		$cats = get_option( 'mdjm_cats' );
-		if( !empty( $cats ) )
+		if( !empty( $cats ) )	{
 			asort( $cats );
+		}
 		
 		foreach( $cats as $cat_key => $cat_value )	{
 			if( !empty( $header ) )
@@ -609,19 +622,19 @@ function mdjm_addons_dropdown( $settings='', $structure=true )	{
 					continue;
 					
 				// If the addon is part of an assigned package, exclude it
-				if( !empty( $settings['package'] ) )	{
+				if( !empty( $args['package'] ) )	{
 					$packages = mdjm_get_packages();
-					$package_items = explode( ',', $packages[$settings['package']]['equipment'] );
+					$package_items = explode( ',', $packages[ $args['package'] ]['equipment'] );
 					
 					if( !empty( $package_items ) && in_array( $item[1], $package_items ) )
 						continue;	
 				}
 				
 				// If the specified DJ does not have the addon, do not show it	
-				if( !empty( $select_dj ) )	{
+				if( ! empty( $args['dj'] ) )	{
 					$djs_have = explode( ',', $item[8] );
 					
-					if( !in_array( $select_dj, $djs_have ) )
+					if( !in_array( $args['dj'], $djs_have ) )
 						continue;
 				}
 				
@@ -632,16 +645,16 @@ function mdjm_addons_dropdown( $settings='', $structure=true )	{
 					}
 						
 						$mdjm_select .= '<option value="' . $item[1] . '"';
-						$mdjm_select .= ! empty( $settings['title'] ) && ! empty( $item[4] ) ? ' title="' . stripslashes( esc_textarea( $item[4] ) ) . '"' : '';
+						$mdjm_select .= ! empty( $args['title'] ) && ! empty( $item[4] ) ? ' title="' . stripslashes( esc_textarea( $item[4] ) ) . '"' : '';
 						
-						if( !empty( $settings['selected'] ) && in_array( $item[1], $settings['selected'] ) )	{
+						if( ! empty( $args['selected'] ) && in_array( $item[1], $args['selected'] ) )	{
 							$mdjm_select .= ' selected="selected"';
 						}
 						
 						$mdjm_select .= '>';
 						$mdjm_select .= stripslashes( esc_attr( $item[0] ) );
 						
-						if ( $select_cost == true )	{
+						if ( ! empty( $args['cost'] ) )	{
 							$mdjm_select .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $item[7] ) );
 						}
 							
