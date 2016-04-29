@@ -285,46 +285,53 @@ function get_package_details( $slug )	{
 /*
  * Output HTML code for Package dropdown
  *
- * @param	arr		$settings		Settings for the dropdown
- *									'name'				Optional: The name of the input. Defaults to '_mdjm_event_package'
- *									'id'				Optional: ID for the field (uses name if not present)
- *									'class'				Optional: Class of the input field
- *									'selected'			Optional: Initially selected option
- *									'first_entry'		Optional: First entry to be displayed (default none)
- *									'first_entry_val'	Optional: First entry value
- *									'dj'				Optional: The ID of the DJ to present package for (default current user)
- *									'title'				Optional: Add package description to the title element of each option
- *									'cost'				Optional: Display the price of the package (default true)
+ * @param	arr		$settings		See $defaults
+ *
  *					$structure		bool				true create the select list, false just return values
  * @ return	HTML output for select field
  */
-function mdjm_package_dropdown( $settings='', $structure=true )	{
+function mdjm_package_dropdown( $args = array(), $structure = true )	{
 	global $current_user;
 	
+	$defaults = array(
+		'name'       => '_mdjm_event_package',
+		'id'         => '',
+		'class'      => '',
+		'selected'   => '',
+		'first_entry' => '',
+		'first_entry_val' => '',
+		'dj'         => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
+		'title'      => false,
+		'cost'       => true,
+		'required'   => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['required'] = ! empty( $args['required'] ) ? ' required' : '';
+	$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
+	
 	$packages = mdjm_get_packages();
-	// Set the values based on the array passed
-	$select_name = isset( $settings['name'] ) ? $settings['name'] : '_mdjm_event_package';
-	$select_id = isset( $settings['id'] ) ? $settings['id'] : $select_name;
-	$select_dj = ( !empty( $settings['dj'] ) ? $settings['dj'] : ( is_user_logged_in() && !current_user_can( 'client' ) ? $current_user->ID : '' ) );
-	$select_cost = ( isset( $settings['cost'] ) ? $settings['cost'] : true );
 	
 	$mdjm_select = '';
 	
 	if( $structure == true )	{
-		$mdjm_select = '<select name="' . $select_name . '" id="' . $select_id . '"';
-		$mdjm_select .= isset( $settings['class'] ) ? ' class="' . $settings['class'] . '"' : '';
-		$mdjm_select .= '>' . "\r\n";
+		$mdjm_select = sprintf( '<select name="%s" id="%s" class="%s"%s>',
+			$args['name'],
+			$args['id'],
+			$args['class'],
+			$args['required']
+		) . "\n";
 	}
 	
 	// First entry
-	$mdjm_select .= isset( $settings['first_entry'] ) && !empty( $settings['first_entry'] ) ? 
-		'<option value="' . ( isset( $settings['first_entry_val'] ) ? $settings['first_entry_val'] : '' ) . '">' . 
-		$settings['first_entry'] . '</option>' . "\r\n" : '';
+	$mdjm_select .= ! empty( $args['first_entry'] ) ? 
+		'<option value="' . ( ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '' ) . '">' . $args['first_entry'] . '</option>' . "\r\n" : '';
 		
 	$packages = mdjm_get_packages();
 	
 	if( empty( $packages ) )
-		$mdjm_select .= '<option value="0">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+		$mdjm_select .= '<option value="">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 	
 	else	{
 	// All packages
@@ -334,19 +341,19 @@ function mdjm_package_dropdown( $settings='', $structure=true )	{
 				continue;
 			
 			// If the specified DJ does not have the package, do not show it
-			if( !empty( $select_dj ) )	{	
+			if( ! empty( $args['dj'] ) )	{	
 				$djs_have = explode( ',', $package['djs'] );
 				
-				if( !in_array( $select_dj, $djs_have ) )
+				if( ! in_array( $args['dj'], $djs_have ) )
 					continue;
 			}
 			
 			$mdjm_select .= '<option value="' . $package['slug'] . '"';
-			$mdjm_select .= ( !empty( $settings['title'] ) && !empty( $package['desc'] ) ? ' title="' . stripslashes( esc_textarea( $package['desc'] ) ) . '"' : '' );
-			$mdjm_select .= ( isset( $settings['selected'] ) ? selected( $settings['selected'], $package['slug'], false ) . '>' : '>' ) ;
+			$mdjm_select .= ! empty( $args['title'] ) && ! empty( $package['desc'] ) ? ' title="' . stripslashes( esc_textarea( $package['desc'] ) ) . '"' : '';
+			$mdjm_select .= ! empty( $args['selected'] ) ? selected( $args['selected'], $package['slug'], false ) . '>' : '>' ;
 			$mdjm_select .= stripslashes( esc_attr( $package['name'] ) );
 			
-			if( $select_cost == true )	{
+			if( $args['cost'] == true )	{
 				$mdjm_select .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) ;
 			}
 			$mdjm_select .= '</option>' . "\r\n";
