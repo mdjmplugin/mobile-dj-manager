@@ -415,12 +415,44 @@ function mdjm_event_types_dropdown( $args )	{
 		'name'               => 'mdjm_event_type',
 		'id'                 => '',
 		'class'              => 'postform',
-		'taxonomy'           => 'event-types'
+		'taxonomy'           => 'event-types',
+		'required'           => false
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
 	
-	return wp_dropdown_categories( $args );
+	$args['id']                = ! empty( $args['id'] )                ? $args['id']                : $args['name'];
+	$args['required']          = ! empty( $args['required'] )          ? ' required'                : '';
+	$args['class']             = ! empty( $args['class'] )             ? $args['class']             : '';
+	
+	$types = mdjm_get_event_types();
+	
+	$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] );
+	
+	if ( ! empty( $args['show_option_none'] ) )	{
+		$output .= sprintf( '<option value="%s">%s</option>', $args['option_none_value'], $args['show_option_none'] );
+	}
+	
+	if ( empty( $types ) )	{
+		$output .= sprintf( '<option value="" disabled="disabled">%s</option>', apply_filters( 'mdjm_no_event_type_options', __( 'No options found', 'mobile-dj-manager' ) ) );
+	} else	{
+	
+		foreach( $types as $type )	{
+			$selected = selected( $type->term_id, $args['selected'], false );
+			
+			$output .= sprintf( '<option value="%s"%s>%s</option>', $type->term_id, $selected, esc_attr( $type->name ) ) . "\n";
+			
+		}
+		
+	}
+	
+	$output .= '</select>';
+	
+	if ( ! empty( $args['echo'] ) )	{
+		echo $output;
+	} else	{
+		return $output;
+	}
 	
 } // mdjm_event_types_dropdown
 
