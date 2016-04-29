@@ -378,7 +378,7 @@ function mdjm_set_enquiry_source( $event_id, $type )	{
  * @param	arr		$args	See $defaults.
  * @return	obj		Object array of all event type categories.
  */
-function mdjm_get_event_types( $args )	{
+function mdjm_get_event_types( $args = array() )	{
 	
 	$defaults = array(
 		'taxonomy'      => 'event-types',
