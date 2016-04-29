@@ -63,7 +63,6 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return	str		The value of the custom field for the event or an empty string.
 		 */
 		public function do_custom_field_tags( $event_id = '', $client_id = '', $tag = '' )	{
-			error_log( 'TAG: ' . $tag, 0 );
 			if ( empty ( $event_id ) || empty ( $tag ) )	{
 				return '';
 			}
@@ -71,7 +70,6 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$tag = str_replace( array( '-', '(', ')', 'mdjm_cf_' ), array( '_', '', '', '' ), $tag );
 			
 			$meta_key = '_mdjm_event_' . str_replace( array( '-', '(', ')' ), array( '_', '', '' ), $tag );
-			error_log( 'KEY: ' . $meta_key );
 			$meta_value = get_post_meta( $event_id, $meta_key, true );
 			
 			if ( empty ( $meta_value ) )	{
