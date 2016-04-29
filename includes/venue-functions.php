@@ -116,6 +116,28 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 } // mdjm_add_venue
 
 /**
+ * Retrieve all venues
+ *
+ * @since	1.3
+ * @param	arr		$args	Array of options to pass to get_posts. See $defaults.
+ * @return	obj		Post objects for all venues.
+ */
+function mdjm_get_venues( $args = array() )	{
+	
+	$defaults = array(
+		'post_type'	=> 'mdjm-venue',
+		'orderby'	  => 'title',
+		'order'		=> 'ASC',
+		'numberposts'  => -1
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	return get_posts( $args );
+
+} // mdjm_get_venues
+
+/**
  * Retrieve all venue meta data for the given event
  *
  * @since	1.3
@@ -133,6 +155,12 @@ function mdjm_get_event_venue_meta( $id, $field='' )	{
 			$return[] = get_post_meta( $id, $prefix . '_venue_town', true );
 			$return[] = get_post_meta( $id, $prefix . '_venue_county', true );
 			$return[] = get_post_meta( $id, $prefix . '_venue_postcode', true );
+			
+			$return = array_filter( $return );
+		break;
+		
+		case 'town' :
+			$return = get_post_meta( $id, $prefix . '_venue_town', true );
 		break;
 		
 		case 'contact' :
@@ -183,5 +211,63 @@ function mdjm_get_venue_details( $venue_id )	{
 	
 	return $venue_details;
 } // mdjm_get_venue_details
+
+/**
+ * Display a select list for venues.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	str		The select list.
+ */
+function mdjm_venue_dropdown( $args = array() )	{
 	
-?>
+	$defaults = array(
+		'name'                => '_mdjm_event_venue',
+		'id'                  => '',
+		'selected'            => '',
+		'first_entry'         => '',
+		'first_entry_value'   => '',
+		'class'               => '',
+		'required'            => false,
+		'echo'                => true
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
+	$required   = ! empty( $args['required'] ) ? ' required' : '';
+	
+	$output = '';
+	
+	$venues = mdjm_get_venues();
+	
+	$output .= '<select name="' . $args['name'] . '" id="' . $args['name'] . '" class="' . $args['class'] . '"' . $required . '>';
+	
+	if ( ! empty( $args['first_entry'] ) )	{
+		$output .= '<option value="' . $args['first_entry_value'] . '">' . esc_attr( $args['first_entry'] ) . '</option>';
+	}
+	
+	if ( ! empty( $venues ) )	{
+		foreach ( $venues as $venue )	{
+			$address  = mdjm_get_event_venue_meta( $venue->ID, 'address' );
+			$town     = mdjm_get_event_venue_meta( $venue->ID, 'town' );
+			$option   = esc_attr( $venue->post_title );
+			$option  .= ! empty( $town )             ? ' (' . esc_attr( $town ) . ')'                   : '';
+			$title    = ! empty ( $address )         ? implode( "\n", $address )                        : '';			
+			$selected = ! empty( $args['selected'] ) ? selected( $args['selected'], $venue->ID, false ) : '';
+			
+			$output .= '<option value="' . $venue->ID . '" title="' . $title . '"' . $selected . '>' . $option . '</option>';
+		}
+	} else	{
+		$output .= '<option value="" disabled="disabled">' . apply_filters( 'mdjm_no_venues', __( 'No venues exist', 'mobile-dj-manager' ) ) . '</option>';
+	}
+	
+	$output .= '</select>';
+	
+	if ( ! empty( $args['echo'] ) )	{
+		echo $output;
+	} else	{
+		return $output;
+	}
+	
+} // mdjm_venue_dropdown
