@@ -209,6 +209,8 @@ class MDJM_Event {
 			return false;
 		}
 
+		remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
 		$defaults = array(
 			'post_type'    => 'mdjm-event',
 			'post_author'  => 1,
@@ -240,6 +242,8 @@ class MDJM_Event {
 		}
 
 		do_action( 'mdjm_event_post_create', $id, $args );
+		
+		add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
 		return $this->setup_event( $event );
 
