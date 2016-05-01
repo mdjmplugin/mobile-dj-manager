@@ -295,3 +295,22 @@ function mdjm_get_client_email( $user_id )	{
 	
 	return apply_filters( 'mdjm_get_client_email', $email, $user_id );
 } // mdjm_get_client_email
+
+/**
+ * Retrieve the client fields.
+ *
+ * @since	1.3
+ * @param
+ * @return	arr|bool	Array of client fields or false.
+ */
+function mdjm_get_client_fields()	{
+	
+	$client_fields = get_option( 'mdjm_client_fields' );
+	
+	if ( ! empty( $client_fields ) )	{
+		return $client_fields;
+	} else	{
+		return false;
+	}
+		
+} // mdjm_get_client_fields
