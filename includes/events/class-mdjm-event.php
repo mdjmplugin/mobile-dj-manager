@@ -239,6 +239,8 @@ class MDJM_Event {
 		
 		if ( $event )	{
 			mdjm_update_event_meta( $event->ID, $meta );
+			
+			wp_update_post( array( 'ID' => $id, 'post_title' => mdjm_get_event_contract_id( $id ) ) );
 		}
 
 		do_action( 'mdjm_event_post_create', $id, $args );
