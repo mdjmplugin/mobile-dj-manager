@@ -255,9 +255,7 @@ class MDJM_Event {
 			if ( ! empty( $meta['mdjm_enquiry_source'] ) )	{
 				mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
 			}
-			
-			unset( $meta['event_type'], $meta['enquiry_source'] );
-			
+						
 			if ( ! empty( $meta['_mdjm_event_start'] ) && ! empty( $meta['_mdjm_event_finish'] ) )	{
 				
 				if( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', meta( $event_data['_mdjm_event_start'] ) ) )	{
