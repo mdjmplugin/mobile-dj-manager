@@ -353,7 +353,11 @@ function mdjm_event_status_dropdown( $args='' )	{
  * @param	int|arr		$type		The term ID of the category to set for the event.
  * @return	bool		True on success, or false.
  */
-function mdjm_set_enquiry_source( $event_id, $type )	{
+function mdjm_set_enquiry_source( $event_id, $type = '' )	{
+	
+	if ( empty( $type ) && ! empty( mdjm_get_option( 'enquiry_source_default' ) ) )	{
+		$type = mdjm_get_option( 'enquiry_source_default' );
+	}
 	
 	if ( ! is_array( $type ) )	{
 		$type = array( $type );
@@ -464,7 +468,11 @@ function mdjm_event_types_dropdown( $args )	{
  * @param	int|arr		$type		The term ID of the category to set for the event.
  * @return	bool		True on success, or false.
  */
-function mdjm_set_event_type( $event_id, $type )	{
+function mdjm_set_event_type( $event_id, $type = '' )	{
+	
+	if ( empty( $type ) && ! empty( mdjm_get_option( 'event_type_default' ) ) )	{
+		$type = mdjm_get_option( 'event_type_default' );
+	}
 	
 	if ( ! is_array( $type ) )	{
 		$type = array( $type );
