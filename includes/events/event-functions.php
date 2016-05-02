@@ -640,6 +640,36 @@ function mdjm_get_event_deposit_status( $event_id )	{
 } // mdjm_get_event_deposit_status
 
 /**
+ * Determine the event deposit value based upon event cost and
+ * payment settings
+ *
+ * @param	int|str		$price	Current price of event.
+ */
+function mdjm_calculate_deposit( $price = '' )	{
+	
+	if ( empty( $price ) )	{
+		$deposit = 0;
+	}
+	
+	$deposit_type = ( mdjm_get_option( 'deposit_type' ) );
+	
+	if ( empty( $deposit_type ) )	{
+		$deposit = '0';
+	} elseif( $deposit_type == 'fixed' )	{
+		$deposit = mdjm_get_option( 'deposit_amount' );
+	} elseif( $deposit_type == 'percentage' )	{
+		$percentage = mdjm_get_option( 'deposit_amount' );
+		
+		$deposit = ( !empty( $price ) && $price > 0 ? round( $percentage * ( $price / 100 ), 2 ) : 0 );
+	}
+	
+	apply_filters( 'mdjm_calculate_deposit', $deposit, $price );
+	
+	return mdjm_format_amount( $deposit );
+	
+} // mdjm_calculate_deposit
+
+/**
  * Returns the balance status for an event.
  *
  * @since	1.3
@@ -833,7 +863,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
-			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Adding %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
