@@ -109,7 +109,7 @@ function mdjm_jquery_datepicker_script( $args='' )	{
  * 			bool	$symbol		true to display currency symbol (default)
  * @return	str					The formatted price with currency symbol
  * @since	1.3
- * @remove		1.5
+ * @remove	1.5
  */
 function display_price( $amount, $symbol=true )	{
 	_deprecated_function( __FUNCTION__, '1.3', 'display_price()' );
@@ -144,3 +144,41 @@ function display_price( $amount, $symbol=true )	{
 	return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
 	
 } // display_price
+
+/*
+ * Determine the event deposit value based upon event cost and
+ * payment settings
+ *
+ * @param	str		$cost	Current cost of event
+ * @return	str		The amount of deposit to apply.
+ * @since	1.3
+ * @remove	1.5
+ */
+function get_deposit( $cost='' )	{
+	
+	_deprecated_function( __FUNCTION__, '1.3', 'get_deposit()' );
+		
+	// If no event cost is provided then we return 0
+	if( empty( $cost ) )	{
+		$deposit = '0.00';
+	}
+	
+	// If we don't need a deposit per settings, return 0
+	if( empty( mdjm_get_option( 'deposit_type' ) ) )
+		$deposit = '0.00';
+	
+	// Set fixed deposit amount
+	elseif( mdjm_get_option( 'deposit_type' ) == 'fixed' )
+		$deposit = number_format( mdjm_get_option( 'deposit_amount' ), 2 );
+	
+	// Set deposit based on % of total cost
+	elseif( mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
+		$percentage = mdjm_get_option( 'deposit_amount' ); // The % to apply
+		
+		$deposit = ( !empty( $cost ) && $cost > 0 ? round( $percentage * ( $cost / 100 ), 2 ) : '0.00' );
+	}
+	
+	return $deposit;
+	
+} // get_deposit
+

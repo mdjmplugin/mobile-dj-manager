@@ -390,9 +390,9 @@ add_action( 'wp_ajax_mdjm_update_dj_package_options', 'mdjm_update_dj_package_op
 function mdjm_update_event_deposit()	{
 	$event_cost = $_POST['current_cost'];
 	
-	$deposit = get_deposit( $event_cost );
+	$deposit = mdjm_calculate_deposit( $event_cost );
 			
-	if( !empty( $deposit ) )	{
+	if( ! empty( $deposit ) )	{
 		$result['type'] = 'success';
 		$result['deposit'] = mdjm_format_amount( (float)$deposit );
 	}

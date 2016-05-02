@@ -102,40 +102,6 @@
  * -- START EVENT FUNCTIONS
  */
 		
-	/*
-	 * Determine the event deposit value based upon event cost and
-	 * payment settings
-	 *
-	 * @param:		cost	str		Required: Current cost of event
-	 */
-	function get_deposit( $cost='' )	{
-		global $mdjm_settings;
-		
-		// If no event cost is provided then we return 0
-		if( empty( $cost ) )	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'No cost provided for event in ' . __FUNCTION__, true );
-			$deposit = '0.00';
-		}
-		
-		// If we don't need a deposit per settings, return 0
-		if( empty( $mdjm_settings['payments']['deposit_type'] ) )
-			$deposit = '0.00';
-		
-		// Set fixed deposit amount
-		elseif( $mdjm_settings['payments']['deposit_type'] == 'fixed' )
-			$deposit = number_format( $mdjm_settings['payments']['deposit_amount'], 2 );
-		
-		// Set deposit based on % of total cost
-		elseif( $mdjm_settings['payments']['deposit_type'] == 'percentage' )	{
-			$percentage = $mdjm_settings['payments']['deposit_amount']; // The % to apply
-			
-			$deposit = ( !empty( $cost ) && $cost > 0 ? round( $percentage * ( $cost / 100 ), 2 ) : '0.00' );
-		}
-		
-		return $deposit;
-		
-	} // get_deposit
 	
 /*
  * -- END EVENT FUNCTIONS
