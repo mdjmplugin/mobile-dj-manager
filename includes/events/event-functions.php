@@ -888,8 +888,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 			$debug[] = sprintf( __( 'Removing %s' ), $current_meta[ $key ][0] );
 			delete_post_meta( $event_id, $key, $value );
 			
-			if( isset( $meta[ str_replace( '_mdjm_event', '', $key ) ] ) )	{
-				unset( $meta[ str_replace( '_mdjm_event', '', $key ) ] );
+			if( isset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] ) )	{
+				unset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] );
 			}
 			
 		}
