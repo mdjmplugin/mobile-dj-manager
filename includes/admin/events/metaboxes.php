@@ -353,6 +353,8 @@ function mdjm_event_metabox_event_details( $post )	{
 	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
+	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
+	
 	?>
 	<?php mdjm_insert_datepicker(); ?>
 	<!-- Start of first row -->
