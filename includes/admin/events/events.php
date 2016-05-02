@@ -951,16 +951,20 @@ add_filter( 'map_meta_cap', 'mdjm_event_map_meta_cap', 10, 4 );
  */
 function mdjm_save_event_post( $post_id, $post, $update )	{
 		
-	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
 	}
 	
-	if( empty( $update ) )	{
+	if ( $post->post_status == 'trash' )	{
+		return;
+	}
+	
+	if ( empty( $update ) )	{
 		return;
 	}
 		
 	// Permission Check
-	if( ! mdjm_employee_can( 'manage_events' ) )	{
+	if ( ! mdjm_employee_can( 'manage_events' ) )	{
 		if( MDJM_DEBUG == true )	{
 			MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
 		}
