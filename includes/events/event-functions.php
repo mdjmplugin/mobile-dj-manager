@@ -848,7 +848,10 @@ function mdjm_update_event_meta( $event_id, $data )	{
 			continue;
 		}
 		
-		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
+		if( $key == '_mdjm_event_date' )	{
+			$value = date( 'Y-m-d', strtotime( $value ) );
+		}
+		elseif( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
 			$value = mdjm_format_amount( $value );
 		} elseif( $key == 'venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
