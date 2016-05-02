@@ -837,6 +837,8 @@ function mdjm_time_until_event( $event_id )	{
  */
 function mdjm_update_event_meta( $event_id, $data )	{
 	
+	do_action( 'mdjm_pre_update_event_meta', $data, $event_id );
+	
 	// For backwards compatibility
 	$current_meta = get_post_meta( $event_id );
 	
@@ -844,18 +846,15 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	
 	foreach( $data as $key => $value )	{
 		
-		if( $key == 'mdjm_nonce' || $key == 'mdjm_action' ) {
+		if( $key == 'mdjm_nonce' || $key == 'mdjm_action' || substr( $key, 0, 12 ) != '_mdjm_event_' ) {
 			continue;
 		}
 		
-		if( $key == '_mdjm_event_date' )	{
-			$value = date( 'Y-m-d', strtotime( $value ) );
-		}
-		elseif( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
+		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
 			$value = mdjm_format_amount( $value );
-		} elseif( $key == 'venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
+		} elseif( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
-		} elseif( $key == 'venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
+		} elseif( $key == '_mdjm_event_venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
 			$value = strtolower( $value );
 		} elseif( $key == '_mdjm_event_package' && ! empty( $value ) )	{
 			$value = sanitize_text_field( strtolower( $value ) );	
@@ -898,6 +897,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	}
 	
 	update_post_meta( $event_id, '_mdjm_event_data', $meta );
+	
+	do_action( 'mdjm_post_update_event_meta', $meta, $event_id );
 	
 	if ( ! empty( $debug ) )	{
 		
