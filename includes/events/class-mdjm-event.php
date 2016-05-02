@@ -222,6 +222,8 @@ class MDJM_Event {
 				'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
 				'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
 				'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
+				'_mdjm_event_cost'               => 0,
+				'_mdjm_event_deposit'            => 0,
 				'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
 				'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
 				'mdjm_event_type'                => false,
@@ -229,14 +231,14 @@ class MDJM_Event {
 			)
 		);
 
-		$args = wp_parse_args( $data, $defaults );
+		$data = wp_parse_args( $data, $defaults );
 
-		do_action( 'mdjm_event_pre_create', $args );
+		do_action( 'mdjm_event_pre_create', $data );
 		
-		$meta = $args['meta'];
-		unset( $args['meta'] );
+		$meta = $data['meta'];
+		unset( $data['meta'] );
 
-		$id	= wp_insert_post( $args, true );
+		$id	= wp_insert_post( $data, true );
 
 		$event = WP_Post::get_instance( $id );
 		
@@ -247,13 +249,27 @@ class MDJM_Event {
 			
 			unset( $meta['event_type'], $meta['enquiry_source'] );
 			
+			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
+				$meta['_mdjm_event_cost'] += mdjm_get_package_cost( $meta['_mdjm_event_package'] );
+			}
+			
+			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
+				foreach( $meta['_mdjm_event_addons'] as $addon )	{
+					$meta['_mdjm_event_cost'] += mdjm_get_addon_cost( $addon );
+				}
+			}
+			
+			if ( empty( $meta['_mdjm_event_deposit'] ) && ! empty( $meta['_mdjm_event_cost'] ) )	{
+				$meta['_mdjm_event_deposit'] = mdjm_calculate_deposit( $meta['_mdjm_event_cost'] );
+			}
+			
 			mdjm_update_event_meta( $event->ID, $meta );
 			
 			wp_update_post( array( 'ID' => $id, 'post_title' => mdjm_get_event_contract_id( $id ) ) );
 			
 		}
 
-		do_action( 'mdjm_event_post_create', $id, $args );
+		do_action( 'mdjm_event_post_create', $id, $data );
 		
 		add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
