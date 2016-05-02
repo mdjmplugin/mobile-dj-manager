@@ -363,6 +363,9 @@ function mdjm_set_enquiry_source( $event_id, $type = '' )	{
 		$type = array( $type );
 	}
 	
+	$type = array_map( 'intval', $type );
+	$type = array_unique( $type );
+	
 	(int)$event_id;
 	
 	$set_enquiry_source = wp_set_object_terms( $event_id, $type, 'enquiry-source', false );
@@ -477,6 +480,9 @@ function mdjm_set_event_type( $event_id, $type = '' )	{
 	if ( ! is_array( $type ) )	{
 		$type = array( $type );
 	}
+	
+	$type = array_map( 'intval', $type );
+	$type = array_unique( $type );
 	
 	(int)$event_id;
 	
