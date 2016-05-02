@@ -203,7 +203,7 @@ class MDJM_Event {
 	 * @param 	arr		$data Array of attributes for an event. See $defaults.
 	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Event ID
 	 */
-	public function create( $data = array() ) {
+	public function create( $data = array(), $meta = array() ) {
 
 		if ( $this->id != 0 ) {
 			return false;
@@ -217,28 +217,26 @@ class MDJM_Event {
 			'post_content' => '',
 			'post_status'  => 'mdjm-enquiry',
 			'post_title'   => __( 'New Event', 'mobile-dj-manager' ),
-			'meta'         => array(
-				'_mdjm_event_date'               => date( 'Y-m-d' ),
-				'_mdjm_event_end_date'           => date( 'Y-m-d' ),
-				'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
-				'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
-				'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
-				'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
-				'_mdjm_event_cost'               => 0,
-				'_mdjm_event_deposit'            => 0,
-				'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
-				'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
-				'mdjm_event_type'                => mdjm_get_option( 'event_type_default' ),
-				'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' ),
-			)
+		);
+		
+		$default_meta = array(
+			'_mdjm_event_date'               => date( 'Y-m-d' ),
+			'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
+			'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
+			'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
+			'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
+			'_mdjm_event_cost'               => 0,
+			'_mdjm_event_deposit'            => 0,
+			'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
+			'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
+			'mdjm_event_type'                => mdjm_get_option( 'event_type_default' ),
+			'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' )
 		);
 
 		$data = wp_parse_args( $data, $defaults );
+		$meta = wp_parse_args( $meta, $default_meta );
 
-		do_action( 'mdjm_event_pre_create', $data );
-		
-		$meta = $data['meta'];
-		unset( $data['meta'] );
+		do_action( 'mdjm_event_pre_create', $data, $meta );		
 
 		$id	= wp_insert_post( $data, true );
 
@@ -248,7 +246,7 @@ class MDJM_Event {
 			
 			if ( ! empty( $meta['mdjm_event_type'] ) )	{
 				mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
-				$meta['_mdjm_event_name'] = get_term( $meta['event_type'], 'event-types' )->name;
+				$meta['_mdjm_event_name'] = get_term( $meta['mdjm_event_type'], 'event-types' )->name;
 				$meta['_mdjm_event_name'] = apply_filters( 'mdjm_event_name', $meta['_mdjm_event_name'], $id );
 			}
 			
@@ -258,7 +256,7 @@ class MDJM_Event {
 						
 			if ( ! empty( $meta['_mdjm_event_start'] ) && ! empty( $meta['_mdjm_event_finish'] ) )	{
 				
-				if( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', meta( $event_data['_mdjm_event_start'] ) ) )	{
+				if( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $meta['_mdjm_event_start'] ) ) )	{
 					$meta['_mdjm_event_end_date'] = $meta['_mdjm_event_date'];
 				} else	{
 					$meta['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $meta['_mdjm_event_date'] ) ) );
