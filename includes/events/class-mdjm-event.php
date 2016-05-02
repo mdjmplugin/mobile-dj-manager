@@ -241,11 +241,16 @@ class MDJM_Event {
 		$id	= wp_insert_post( $data, true );
 
 		$event = WP_Post::get_instance( $id );
-		
+
 		if ( $event )	{
 			
-			mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
-			mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
+			if ( ! empty( $meta['mdjm_event_type'] ) )	{
+				mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
+			}
+			
+			if ( ! empty( $meta['mdjm_event_type'] ) )	{
+				mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
+			}
 			
 			unset( $meta['event_type'], $meta['enquiry_source'] );
 			
