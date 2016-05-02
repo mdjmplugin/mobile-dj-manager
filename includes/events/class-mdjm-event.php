@@ -218,11 +218,14 @@ class MDJM_Event {
 			'post_status'  => 'mdjm-enquiry',
 			'post_title'   => __( 'New Event', 'mobile-dj-manager' ),
 			'meta'         => array(
+				'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
 				'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
 				'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
 				'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
 				'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
-				'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' )
+				'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
+				'mdjm_event_type'                => false,
+				'mdjm_enquiry_source'            => false,
 			)
 		);
 
@@ -238,9 +241,16 @@ class MDJM_Event {
 		$event = WP_Post::get_instance( $id );
 		
 		if ( $event )	{
+			
+			mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
+			mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
+			
+			unset( $meta['event_type'], $meta['enquiry_source'] );
+			
 			mdjm_update_event_meta( $event->ID, $meta );
 			
 			wp_update_post( array( 'ID' => $id, 'post_title' => mdjm_get_event_contract_id( $id ) ) );
+			
 		}
 
 		do_action( 'mdjm_event_post_create', $id, $args );
