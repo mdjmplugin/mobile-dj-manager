@@ -67,7 +67,7 @@ function mdjm_send_email_content( $args )	{
 	$headers = apply_filters( 'mdjm_generic_headers', $emails->get_headers(), $event_id, $args['client_id'] );
 	$emails->__set( 'headers', $headers );
 
-	$emails->__set( 'track', $args['track'] );
+	$emails->__set( 'track', ! empty( $args['track'] ) ? true : false );
 	
 	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id, $args['copy_to'] ) );
 

@@ -429,7 +429,6 @@ class MDJM_Emails {
 			update_post_meta( $tracker->ID, '_mdjm_copy_to', $copies );
 		}
 			
-		
 	} // send_copy
 	
 	/**
@@ -439,7 +438,7 @@ class MDJM_Emails {
 	 */
 	public function log_email( $to, $subject, $message, $attachments, $source ) {
 		
-		if ( $this->track && ( 'text/html' == $this->content_type || true === $this->html ) ) {
+		if ( ! empty( $this->track ) && ( 'text/html' == $this->content_type || true === $this->html ) ) {
 			
 			MDJM()->debug->log_it( 'Adding tracking image to email' );
 			
