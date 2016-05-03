@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param 	arr			$meta
  * @return: int|bool	comment_id or false on failure
  */
-function mdjm_add_journal( $args, $meta )	{
+function mdjm_add_journal( $args = array(), $meta = array() )	{
 	// Return if journaling is disabled.
 	if( ! mdjm_get_option( 'journaling', false ) )	{
 		return false;
@@ -83,6 +83,8 @@ function mdjm_add_journal( $args, $meta )	{
 		'mdjm_to'			=> ( !empty( $meta['to'] ) ) ? $meta['to'] : '',
 		'mdjm_isread'		=> ( !empty( $meta['isread'] ) ) ? $meta['isread'] : '',
 	);
+	
+	$comment_meta = wp_parse_args( $meta, $comment_meta );
 	
 	foreach( $comment_meta as $key => $value )	{
 		if( ! empty( $value ) )	{
