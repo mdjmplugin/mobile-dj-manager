@@ -1,10 +1,7 @@
 var mdjm_vars;
 jQuery(document).ready(function ($) {
 	/** Availability Widget */
-	$('#mdjm_availability_check_widget_ajax').submit(function(event)	{
-		if( !$("#mdjm_enquiry_date_widget").val() )	{
-			return false;
-		}
+	$('#mdjm_availability_check_widget').submit(function(event)	{
 		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
 		var check_date = $("#mdjm_enquiry_date_widget").val();
 		var avail = "";
@@ -53,23 +50,19 @@ jQuery(document).ready(function ($) {
 	/** End of Availability Widget */
 	
 	/** End of Availability Widget Validation */
-	$('#mdjm_availability_check_widget').validate(
-		{
-			rules:
-			{
-				mdjm_show_date_widget: {
-					required: true,
-				},
-			}, // End rules
-			messages:
-			{
-				mdjm_show_date_widget: {
-					required: mdjm_vars.required_date_message,
-				},
-			}, // End messages
-			// Classes
-			errorClass: "mdjm_form_error",
-			validClass: "mdjm_form_valid",
-		} // End validate
-	); // Close validate
+	$('#mdjm_availability_check_widget').validate({
+		rules: {
+			mdjm_show_date_widget: {
+				required: true,
+			},
+		},
+		messages: {
+			mdjm_show_date_widget: {
+				required: mdjm_vars.required_date_message,
+			},
+		},
+
+		errorClass: "mdjm_form_error",
+		validClass: "mdjm_form_valid",
+	});
 });
