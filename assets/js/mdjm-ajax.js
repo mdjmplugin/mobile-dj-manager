@@ -1,4 +1,4 @@
-var mdjm_scripts;
+var mdjm_vars;
 jQuery(document).ready(function ($) {
 	/** Availability Widget */
 	$('#mdjm_availability_check_widget_ajax').submit(function(event)	{
@@ -13,7 +13,7 @@ jQuery(document).ready(function ($) {
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			url: mdjm_scripts.ajaxurl,
+			url: mdjm_vars.ajaxurl,
 			data: {
 				check_date : check_date,
 				avail_text: avail,
@@ -26,8 +26,8 @@ jQuery(document).ready(function ($) {
 			},
 			success: function(response)	{
 				if(response.result == "available") {
-					if( mdjm_scripts.pass_redirect != '' )	{
-						window.location.href = mdjm_scripts.pass_redirect + check_date;
+					if( mdjm_vars.pass_redirect != '' )	{
+						window.location.href = mdjm_vars.pass_redirect + check_date;
 					}
 					else	{
 						$("#mdjm_availability_widget_intro").replaceWith('<div id="mdjm_availability_response_widget"><p class="mdjm_available">' + response.message + '</p></div>');
@@ -37,8 +37,8 @@ jQuery(document).ready(function ($) {
 					$('input[type="submit"]').prop('disabled', false);
 				}
 				else	{
-					if( mdjm_scripts.fail_redirect != '' )	{
-						window.location.href = mdjm_scripts.fail_redirect;
+					if( mdjm_vars.fail_redirect != '' )	{
+						window.location.href = mdjm_vars.fail_redirect;
 					}
 					else	{
 						$("#mdjm_availability_widget_intro").replaceWith('<div id="mdjm_availability_response_widget"><p class="mdjm_notavailable">' + response.message + '</p></div>');
@@ -64,8 +64,8 @@ jQuery(document).ready(function ($) {
 			messages:
 			{
 				mdjm_show_date_widget: {
-						required: mdjm_scripts.required_date_widget,
-						},
+					required: mdjm_vars.required_date_message,
+				},
 			}, // End messages
 			// Classes
 			errorClass: "mdjm_form_error",
