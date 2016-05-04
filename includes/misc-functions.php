@@ -209,7 +209,7 @@ function mdjm_messages( $key )	{
 			'missing_event'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'We could not locate the details of your event.', 'mobile-dj-manager' )
+				'message'	=> sprintf( __( 'We could not locate the details of your %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
 			),
 			'enquiry_accepted'	=> array(
 				'class'		=> 'success',
@@ -224,12 +224,12 @@ function mdjm_messages( $key )	{
 			'contract_signed'	=> array(
 				'class'		=> 'success',
 				'title'		=> __( 'Done', 'mobile-dj-manager' ),
-				'message'	=> __( 'You have successfully signed your event contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' )
+				'message'	=> sprintf( __( 'You have successfully signed your %s contract. Confirmation will be sent to you via email in the next few minutes.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
 			),
 			'contract_not_signed'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
-				'message'	=> __( 'Unable to sign event contract.', 'mobile-dj-manager' )
+				'message'	=> sprintf( __( 'Unable to sign %s contract.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
 			),
 			'contract_data_missing'	=> array(
 				'class'		=> 'error',
@@ -297,7 +297,7 @@ function mdjm_messages( $key )	{
 			'missing_event'   => array(
 				'class'		=> 'error',
 				'title'		=> __( 'Sorry', 'mobile-dj-manager' ),
-				'message'	=> __( 'We seem to be missing the event details.', 'mobile-dj-manager' )
+				'message'	=> sprintf( __( 'We seem to be missing the %s details.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
 			),
 			'password_error'   => array(
 				'class'		=> 'error',
