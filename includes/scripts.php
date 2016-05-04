@@ -30,11 +30,12 @@ function mdjm_load_scripts()	{
 
 	wp_localize_script(
 		'mdjm-ajax',
-		'mdjm_scripts',
+		'mdjm_vars',
 		apply_filters(
-			'mdjm_ajax_script_vars',
+			'mdjm_script_vars',
 			array(
-				'ajaxurl' => mdjm_get_ajax_url()
+				'ajaxurl'               => mdjm_get_ajax_url(),
+				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' )
 			)
 		)
 	);
@@ -134,21 +135,21 @@ function mdjm_register_admin_scripts( $hook )	{
 	if ( in_array( $hook, $require_validation ) )	{
 		
 		wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
-
 		wp_enqueue_script( 'jquery-validation-plugin' );
 
 	}
 	
 	wp_register_script( 'mdjm-admin-ajax', $js_dir . 'mdjm-admin-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-ajax' );
-	
+
 	wp_localize_script(
 		'mdjm-admin-ajax',
-		'mdjm_admin_scripts',
+		'mdjm_admin_vars',
 		apply_filters(
-			'mdjm_ajax_script_vars',
+			'mdjm_admin_script_vars',
 			array(
-				'ajaxurl' => mdjm_get_ajax_url()
+				'ajaxurl' => mdjm_get_ajax_url(),
+				'curpage' => $hook
 			)
 		)
 	);
