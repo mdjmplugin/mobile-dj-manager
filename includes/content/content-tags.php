@@ -620,7 +620,7 @@ function mdjm_content_tag_admin_url()	{
  * @return	str		The URL to the Client Zone home page.
  */
 function mdjm_content_tag_application_home()	{
-	return mdjm_get_formatted_url( MDJM_HOME, false );
+	return mdjm_get_formatted_url( mdjm_get_option( 'app_home' ), false );
 } // mdjm_content_tag_application_home
 
 /**
