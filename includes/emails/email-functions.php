@@ -69,7 +69,9 @@ function mdjm_send_email_content( $args )	{
 
 	$emails->__set( 'track', ! empty( $args['track'] ) ? true : false );
 	
-	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id, $args['copy_to'] ) );
+	if ( $args['copy_to'] != 'disable' )	{
+		$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id, $args['copy_to'] ) );
+	}
 
 	$sent = $emails->send( $to_email, $subject, $message, $attachments, $args['source'] );
 		
