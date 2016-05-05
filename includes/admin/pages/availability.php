@@ -43,22 +43,19 @@
 			else	{
 				/* Run the availability check */
 				// Check roles.
-				if( $_POST['check_employee'] == 'all' && isset( $_POST['check_roles'] ) && !empty( $_POST['check_roles'] ) )
-					$dj_avail = dj_available( '', $_POST['check_roles'], $_POST['check_date'] );
-				
-				// Check individual employee.
-				elseif( isset( $_POST['check_employee'] ) && $_POST['check_employee'] != 'all' )
-					$dj_avail = dj_available( $_POST['check_employee'], '', $_POST['check_date'] );
-				
-				// Check all employees.
-				else
-					$dj_avail = dj_available( '', '', $_POST['check_date'] );
+				if( $_POST['check_employee'] == 'all' && isset( $_POST['check_roles'] ) && !empty( $_POST['check_roles'] ) )	{
+					$dj_avail = mdjm_do_availability_check( $_POST['check_date'], '', $_POST['check_roles'] );
+				} elseif( isset( $_POST['check_employee'] ) && $_POST['check_employee'] != 'all' )	{
+					$dj_avail = mdjm_do_availability_check( $_POST['check_date'], $_POST['check_employee'] );
+				} else	{
+					$dj_avail = mdjm_do_availability_check( $_POST['check_date'] );
+				}
 
 				
 				/* Print the availability result */
 				if( isset( $dj_avail ) )	{
 					// Roles check
-					if( !empty( $dj_avail['available'] ) && !empty( $_POST['check_roles'] ) )	{
+					if( ! empty( $dj_avail['available'] ) && ! empty( $_POST['check_roles'] ) )	{
 						global $wp_roles;
 						
 						$class = "updated";
@@ -68,7 +65,7 @@
 							
 							foreach( $_POST['check_roles'] as $role )	{
 								if( in_array( $role, $employee->roles ) )
-									$roles[translate_user_role( $wp_roles->roles[$role]['name'] )][] = $employee->ID;
+									$roles[ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = $employee->ID;
 							}
 						}
 						
@@ -97,7 +94,7 @@
 					}
 					// All employee check
 					elseif ( !empty( $dj_avail['available'] ) && $_POST['check_employee'] == 'all' )	{
-						$avail_message = count( $dj_avail['available'] ) . _n( ' DJ', ' DJ\'s', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
+						$avail_message = count( $dj_avail['available'] ) . _n( ' Employee', ' Employees', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
 						$class = 'updated';
 						?><ui><?php
 						foreach( $dj_avail['available'] as $dj_detail )	{
@@ -121,18 +118,14 @@
 								$roles[] = translate_user_role( $wp_roles->roles[$role]['name'] );
 							}
 							
-							$avail_message = sprintf( 
-												__( 'No %s available on %s', 'mobile-dj-manager' ),
-												implode( ' ' . __( 'or' ) . ' ', $roles ),
-												date( 'l, jS F Y', strtotime( $_POST['check_date'] ) )
-											);
+							$avail_message = sprintf( __( 'No %s available on %s', 'mobile-dj-manager' ), implode( ' ' . __( 'or' ) . ' ', $roles ), date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );
 						}
 						elseif( $_POST['check_employee'] == 'all' )	{
-							$avail_message = 'No DJ\'s available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) );
+							$avail_message = sprintf( __( 'No employee available on %s', 'mobile-dj-manager'), date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );
 						}
 						else	{
 							$dj = get_userdata( $_POST['check_employee'] );
-							$avail_message = $dj->display_name . ' is not available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) );
+							$avail_message = sprintf( __( '%s is not available on %s', 'mobile-dj-manager' ),$dj->display_name, date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );
 						}
 					}
 					mdjm_update_notice( $class, $avail_message );
@@ -215,10 +208,10 @@
     <form name="holiday-quick-entry" method="post" action="">
     <table class="widefat">
     <tr>
-    <th colspan="2" class="alternate"><strong>Quick Absence Entry</strong></th>
+    <th colspan="2" class="alternate"><strong><?php _e( 'Quick Absence Entry', 'mobile-dj-manager' ); ?></strong></th>
     </tr>
     <tr>
-    <th scope="row" width="25%"><label for="employee">Employee:</label></th>
+    <th scope="row" width="25%"><label for="employee"><?php _e( 'Employee:', 'mobile-dj-manager' ); ?></label></th>
     <td><select name="employee" id="employee">
     <?php
 	if( !mdjm_employee_can( 'manage_employees' ) )	{
@@ -242,11 +235,11 @@
     </select>
     </td>
     </tr>
-    <th scope="row"><label for="show_from_date">From:</label></th>
+    <th scope="row"><label for="show_from_date"><?php _e( 'From', 'mobile-dj-manager' ); ?>:</label></th>
     <td><input type="text" name="show_from_date" id="show_from_date" class="from_custom_date" required="required" /></td>
     <input type="hidden" name="from_date" id="from_date" />
     </tr>
-    <th scope="row"><label for="show_to_date">To:</label></th>
+    <th scope="row"><label for="show_to_date"><?php _e( 'To', 'mobile-dj-manager' ); ?>:</label></th>
     <td><input type="text" name="show_to_date" id="show_to_date" class="to_custom_date" required="required" /></td>
     <input type="hidden" name="to_date" id="to_date" />
     </tr>
@@ -263,12 +256,12 @@
     <th colspan="2" class="alternate"><strong><?php _e( 'Check Employee Availability', 'mobile-dj-manager' ); ?></strong></th>
     </tr>
     <tr>
-    <th scope="row" width="25%"><label for="show_check_date">Date:</label></th>
+    <th scope="row" width="25%"><label for="show_check_date"><?php _e( 'Date', 'mobile-dj-manager' ); ?>:</label></th>
     <td><input type="text" name="show_check_date" id="show_check_date" class="check_custom_date" required="required" /></td>
     <input type="hidden" name="check_date" id="check_date" />
     </tr>
     <tr>
-    <th scope="row"><label for="check_employee">Employee</label></th>
+    <th scope="row"><label for="check_employee"><?php _e( 'Employee', 'mobile-dj-manager' ); ?></label></th>
     <td><select name="check_employee" id="check_employee">
     <?php
 	if( !mdjm_employee_can( 'manage_employees' ) )	{
@@ -294,7 +287,7 @@
     <th scope="row"><label for="check_roles"><?php _e( 'or Roles', 'mobile-dj-manager' ); ?></label></th>
     <td><select name="check_roles[]" id="check_roles" multiple="multiple">
     <?php
-	if( !mdjm_employee_can( 'manage_employees' ) )	{
+	if( ! mdjm_employee_can( 'manage_employees' ) )	{
 		?>
 		<option value="" disabled="disabled"><?php _( 'You cannot view roles', 'mobile-dj-manager' ); ?></option>
       	<?php
@@ -317,7 +310,3 @@
     </tr>
     </table>
     </div>
-    
-    <?php
-	
-?>

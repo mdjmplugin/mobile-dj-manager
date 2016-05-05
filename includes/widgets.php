@@ -50,24 +50,82 @@ class mdjm_availability_widget extends WP_Widget {
 	 * @param
 	 * @return 	void
 	 */
-	public function ajax( $vars )	{
+	public function ajax( $args, $instance )	{
 		
-		$widget_options_all = get_option( $this->option_name );
-		$instance = $widget_options_all[ $this->number ];
-		
-		if( ! empty( $instance['ajax'] ) )	{
-			$availability_vars = array(
-				'pass_redirect'           => $instance['available_action'] != 'text'   ? mdjm_get_formatted_url( $instance['available_action'], true ) . 'mdjm_avail_date=' : '',
-				'fail_redirect'           => $instance['unavailable_action'] != 'text' ? mdjm_get_formatted_url( $instance['unavailable_action'], true )                    : '',
-				'avail'                   => $instance['available_text'],
-				'unavail'                 => $instance['unavailable_text'],
-				
-			);
+		if( $instance['available_action'] != 'text' )	{
+			$pass_redirect = true;
+		}
+			
+		if( $instance['unavailable_action'] != 'text' )	{
+			$fail_redirect = true;
 		}
 		
-		$availability_vars['required_date_widget'] = __( 'Please select a date', 'mobile-dj-manager' );
-		
-		return array_merge( $vars, $availability_vars );
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($) 	{
+			$('#mdjm-widget-availability-check').submit(function(event)	{
+				if( !$("#widget_check_date").val() )	{
+					return false;
+				}
+				event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+				var check_date = $("#widget_check_date").val();
+				var avail = "<?php echo $instance['available_text']; ?>";
+				var unavail = "<?php echo $instance['unavailable_text']; ?>";
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+					data: {
+						check_date : check_date,
+						avail_text: avail,
+						unavail_text : unavail,
+						action : "mdjm_do_availability_check"
+					},
+					beforeSend: function()	{
+						$('input[type="submit"]').prop('disabled', true);
+						$("#widget_pleasewait").show();
+					},
+					success: function(response)	{
+						if(response.result == "available") {
+							<?php
+							if( !empty( $pass_redirect ) )	{
+								?>
+								window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
+								<?php
+							} else	{
+								?>
+								$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
+								$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
+								$("#mdjm_widget_avail_submit").removeClass( "mdjm-updating" );
+								$("#widget_pleasewait").hide();
+								<?php
+							}
+							?>
+							$('input[type="submit"]').prop('disabled', false);
+						}
+						else	{
+							<?php
+							if( ! empty( $fail_redirect ) )	{
+								?>
+								window.location.href = '<?php echo $mdjm->get_link( $instance['unavailable_action'], true ); ?>';
+								<?php
+							} else	{
+								?>
+								$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
+								$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
+								$("#mdjm_widget_avail_submit").removeClass( "mdjm-updating" );
+								$("#widget_pleasewait").hide();
+								<?php
+							}
+							?>
+							$('input[type="submit"]').prop('disabled', false);
+						}
+					}
+				});
+			});
+		});
+		</script>
+		<?php
 
 	} // ajax
 	
@@ -82,8 +140,8 @@ class mdjm_availability_widget extends WP_Widget {
 		
 		mdjm_insert_datepicker(
 			array(
-				'class'		=> 'mdjm_datepicker_widget',
-				'altfield'	 => 'mdjm_enquiry_date_widget',
+				'class'		=> 'mdjm_widget_date',
+				'altfield'	 => 'widget_check_date',
 				'mindate'	  => '1'
 			)
 		);
@@ -99,24 +157,101 @@ class mdjm_availability_widget extends WP_Widget {
 	 * @param	arr		$instance	Saved values from database.
 	 */
 	public function widget( $args, $instance )	{
-		$instance['title'] = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
-		
-		$title = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
+		if( !empty( $instance['ajax'] ) )	{
+			self::ajax( $args, $instance );
+		}
 		
 		echo $args['before_widget'];
 		
-		if ( $title ) {
-			echo $args['before_title'] . $title . $args['after_title'];
+		if ( !empty( $instance['title'] ) )	{
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 		
-		do_action( 'mdjm_pre_availability_widget' );
+		/* Check for form submission & process */
+		if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
+			$dj_avail = dj_available( '', $_POST['widget_check_date'] );
+			
+			if( isset( $dj_avail ) )	{
+				if ( !empty( $dj_avail['available'] ) )	{
+					if( isset( $instance['available_action'] ) && $instance['available_action'] != 'text' )	{
+						?>
+						<script type="text/javascript">
+						window.location = '<?php echo mdjm_get_formatted_url( $instance['available_action'] ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['widget_check_date']; ?>';
+						</script>
+						<?php
+					}
+				} else	{
+					if( isset( $instance['unavailable_action'] ) && $instance['unavailable_action'] != 'text' )	{
+						?>
+						<script type="text/javascript">
+						window.location = '<?php echo mdjm_get_formatted_url( $instance['unavailable_action'] ); ?>';
+						</script>
+						<?php	
+					}
+				}
+			} // if( isset( $dj_avail ) )
+		} // if( isset( $_POST['mdjm_avail_submit'] ) ...
 		
-		$widget_template = mdjm_get_template_part( 'availability', 'widget', false );
-		include_once( $widget_template );
-		
-		do_action( 'mdjm_post_availability_widget' );
+		/* We need the jQuery Calendar */
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+		$this->datepicker();
+		if( isset( $instance['intro'] ) && !empty( $instance['intro'] ) )	{
+			if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
+				$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
+				$replace = array( date( 'l, jS F Y', strtotime( $_POST['widget_check_date'] ) ), 
+								mdjm_format_short_date( $_POST['widget_check_date'] ) );
+			}
+			if( !isset( $_POST['mdjm_widget_avail_submit'] ) || $_POST['mdjm_widget_avail_submit'] != $instance['submit_text'] )	{
+				echo '<div id="widget_avail_intro">' . $instance['intro'] . '</div>';
+			} else	{
+				if( !empty( $instance['ajax'] ) )	{
+					?>
+					<div id="widget_availability_result"></div>
+					<?php
+				} else	{
+					if( ! empty( $dj_avail['available'] ) && $instance['available_action'] == 'text' && !empty( $instance['available_text'] ) )	{
+						echo str_replace( $search, $replace, $instance['available_text'] );
+					} else	{
+						echo str_replace( $search, $replace, $instance['unavailable_text'] );	
+					}
+				}
+			}
+		}
+		?>
+		<form name="mdjm-widget-availability-check" id="mdjm-widget-availability-check" method="post">
+		<label for="widget_avail_date"><?php echo $instance['label']; ?></label>
+		<input type="text" name="widget_avail_date" id="widget_avail_date" class="mdjm_widget_date" style="z-index:99;" placeholder="<?php echo mdjm_format_datepicker_date(); ?>" />
+		<input type="hidden" name="widget_check_date" id="widget_check_date" value="" />
+		<p<?php echo ( isset( $instance['submit_centre'] ) && $instance['submit_centre'] == 'Y' ? ' style="text-align:center"' : '' ); ?>>
+		<input type="submit" name="mdjm_widget_avail_submit" id="mdjm_widget_avail_submit" value="<?php echo $instance['submit_text']; ?>" />
+		<div id="widget_pleasewait" class="page-content" style="display: none;"><?php _e( 'Please wait...', 'mobile-dj-manager' ); ?><img src="/wp-admin/images/loading.gif" alt="<?php _e( 'Please wait...', 'mobile-dj-manager' ); ?>" /></div>
+
+		</form>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			// Configure the field validator
+			$('#mdjm-widget-availability-check').validate({
+					rules:	{
+						widget_avail_date: {
+							required: true,
+						},
+					},
+					messages: {
+						widget_avail_date: {
+							required: "<?php _e( 'Please enter a date', 'mobile-dj-manager' ); ?>",
+						},
+					},
+					errorClass: "mdjm-form-error",
+					validClass: "mdjm-form-valid",
+				}
+			);
+		});
+		</script>
+		<?php
 		
 		echo $args['after_widget'];
+
 	} // widget
 	
 	/**
@@ -175,13 +310,15 @@ class mdjm_availability_widget extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id( 'available_action' ); ?>"><?php _e( 'Redirect on Available', 'mobile-dj-manager' ); ?>:</label>
 		<?php 
-		wp_dropdown_pages( array(
-								'selected'          => $instance['available_action'],
-								'name'              => $this->get_field_name( 'available_action' ),
-								'id'                => $this->get_field_id( 'available_action' ),
-								'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
-								'option_none_value' => 'text',
-								 ) );
+		wp_dropdown_pages(
+			array(
+				'selected'          => $instance['available_action'],
+				'name'              => $this->get_field_name( 'available_action' ),
+				'id'                => $this->get_field_id( 'available_action' ),
+				'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
+				'option_none_value' => 'text',
+			 )
+		);
 		?>
 		</p>
 		
@@ -193,13 +330,15 @@ class mdjm_availability_widget extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id( 'unavailable_action' ); ?>"><?php _e( 'Redirect on Unavailable', 'mobile-dj-manager' ); ?>:</label>
 		<?php 
-		wp_dropdown_pages( array(
-								'selected'          => $instance['unavailable_action'],
-								'name'              => $this->get_field_name( 'unavailable_action' ),
-								'id'                => $this->get_field_id( 'unavailable_action' ),
-								'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
-								'option_none_value' => 'text',
-								 ) );
+		wp_dropdown_pages(
+			array(
+				'selected'          => $instance['unavailable_action'],
+				'name'              => $this->get_field_name( 'unavailable_action' ),
+				'id'                => $this->get_field_id( 'unavailable_action' ),
+				'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
+				'option_none_value' => 'text',
+			 )
+		);
 		?>
 		</p>
 		

@@ -549,3 +549,44 @@ function mdjm_ajax_user_events_dropdown()	{
 	
 } // mdjm_ajax_client_events_dropdown
 add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown' );
+
+/**
+ * Check the availability status for the given date
+ *
+ * @since	1.3
+ * @param	Global $_POST
+ * @return	arr
+ */
+function mdjm_ajax_do_availability_check()	{
+	
+	$date = $_POST['check_date'];
+	
+	$avail_text   = ! empty( $_POST['avail_text'] )   ? $_POST['avail_text']   : mdjm_get_option( 'availability_check_pass_text' );
+	$unavail_text = ! empty( $_POST['unavail_text'] ) ? $_POST['unavail_text'] : mdjm_get_option( 'availability_check_fail_text' );
+	$search       = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
+	$replace      = array( date( 'l, jS F Y', strtotime( $date ) ), mdjm_format_short_date( $date ) );
+	
+	
+	
+	$result = mdjm_do_availability_check( $date );
+	
+	if( ! empty( $result['available'] ) )	{
+
+		$result['result']  = 'available';
+		$result['message'] = str_replace( $search, $replace, $avail_text );
+		$result['message'] = mdjm_do_content_tags( $result['message'] );
+
+	} else	{
+
+		$result['result'] = 'unavailable';
+		$result['message'] = str_replace( $search, $replace, $unavail_text );
+		$result['message'] = mdjm_do_content_tags( $result['message'] );
+
+	}
+	
+	echo json_encode( $result );
+	
+	die();
+} // mdjm_ajax_do_availability_check
+add_action( 'wp_ajax_mdjm_do_availability_check', 'mdjm_ajax_do_availability_check' );
+add_action( 'wp_ajax_nopriv_mdjm_do_availability_check', 'mdjm_ajax_do_availability_check' );
