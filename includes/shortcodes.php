@@ -29,10 +29,9 @@ function shortcode_mdjm( $atts )	{
 					
 	$args = shortcode_atts( $pairs, $atts, 'MDJM' );
 	
-	if( isset( $atts['page'] ) && !array_key_exists( $atts['page'], $pairs ) )
+	if( isset( $atts['page'] ) && !array_key_exists( $atts['page'], $pairs ) )	{
 		$output = __( 'ERROR: Unknown Page', 'mobile-dj-manager' );
-	
-	else	{
+	} else	{
 	/* Process pages */
 		if( !empty( $atts['page'] ) )	{
 			ob_start();
@@ -331,25 +330,52 @@ function mdjm_shortcode_availability( $atts )	{
 	
 	$args = shortcode_atts( 
 		array( // These are our default values
-			'label'             => __( 'Select Date', 'mobile-dj-manager' ),
-			'label_wrap'        => true,
-			'label_class'       => false,
-			'field_wrap'        => true,
-			'field_class'       => false,
-			'submit_text'       => __( 'Check Date', 'mobile-dj-manager' ),
-			'submit_wrap'       => true,
-			'submit_class'      => false,
+			'label'             => __( 'Select Date', 'mobile-dj-manager' ) . ':',
+			'label_class'       => 'mdjm-label',
+			'field_class'       => '',
+			'submit_text'       => __( 'Check Availability', 'mobile-dj-manager' ),
+			'submit_class'      => '',
 			'please_wait_text'  => __( 'Please wait...', 'mobile-dj-manager' ),
-			'please_wait_class' => false
+			'please_wait_class' => '',
+			'display'           => 'horizontal'
 		),
 		$atts,
 		'mdjm-availability'
 	);
 	
-	ob_start();
-	//MDJM_Availability_Checker::availability_form( $args );
+	$field_id = 'mdjm-availability-datepicker';
 	
-	return ob_get_clean();
+	$search  = array( '{label}', '{label_class}', '{field}', '{field_class}', '{submit_text}', '{submit_class}', '{please_wait_text}', '{please_wait_class}' );
+	$replace = array(
+		$args['label'], $args['label_class'], $field_id, $args['field_class'],
+		$args['submit_text'], $args['submit_class'], $args['please_wait_text'], $args['please_wait_class']
+	);
+	
+	ob_start();
+	
+	mdjm_insert_datepicker(
+		array(
+			'class'		=> '',
+			'id'           => $field_id,
+			'altfield'	 => 'availability_check_date',
+			'mindate'	  => '1'
+		)
+	);
+	
+	echo '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
+	echo '<form name="mdjm-availability-check" id="mdjm-availability-check" method="post">';
+	wp_nonce_field( 'do_availability_check', 'mdjm_nonce', true, true );
+	mdjm_action_field( 'do_availability_check' );
+	echo '<input type="hidden" name="availability_check_date" id="availability_check_date" />';
+	mdjm_get_template_part( 'availability', $args['display'], true );
+	echo '</form>';
+	
+	$output = ob_get_clean();
+	$output = str_replace( $search, $replace, $output );
+	$output = mdjm_do_content_tags( $output );
+	$output .= '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
+	
+	return apply_filters( 'mdjm_availability_form', $output );
 
 } // mdjm_shortcode_availability
 add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );

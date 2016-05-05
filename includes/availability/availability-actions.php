@@ -12,26 +12,18 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Process availability check from widget.
+ * Process availability check from shortcode.
  *
  * @since	1.3
- * @param
+ * @param	arr		$data	$_POST form data.
  * @return	void
  */
 function mdjm_availability_check_action( $data )	{
-	
-	$widget = '';
-	
-	if( $data['mdjm_action'] == 'availability_check_widget' )	{
-		$widget = '_widget';
-	}
-	
-	if( ! isset( $data[ 'mdjm_enquiry_date' . $widget ] ) )	{
+		
+	if( ! isset( $data['availability_check_date'] ) )	{
 		$message = 'missing_date';
-	}
-	
-	else	{
-		$result = mdjm_do_availability_check( $data[ 'mdjm_enquiry_date' . $widget ] );
+	} else	{
+		$result = mdjm_do_availability_check( $data['availability_check_date'] );
 				
 		if( ! empty( $result['available'] ) )	{
 			$message = 'available';
@@ -41,17 +33,19 @@ function mdjm_availability_check_action( $data )	{
 		}
 	}
 	
-	$url = remove_query_arg( 'mdjm_message' );
+	$url = remove_query_arg( array( 'mdjm_avail_date', 'mdjm_message' ) );
 	
 	wp_redirect(
 		add_query_arg(
 			array(
-				'mdjm_message' => $message
+				'mdjm_avail_date' => $data['availability_check_date'],
+				'mdjm_message'    => $message
 			),
 			$url
 		)
 	);
 	
 	die();
+
 } // mdjm_availability_check_action
-add_action( 'mdjm_availability_check_widget', 'mdjm_availability_check_action' );
+add_action( 'mdjm_do_availability_check', 'mdjm_availability_check_action' );

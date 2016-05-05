@@ -1,67 +1,66 @@
 var mdjm_vars;
 jQuery(document).ready(function ($) {
-	/** Availability Widget */
-	$('#mdjm_availability_check_widget').submit(function(event)	{
-		event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-		var check_date = $("#mdjm_enquiry_date_widget").val();
-		var avail = "";
-		var unavail = "";
-		
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			url: mdjm_vars.ajaxurl,
-			data: {
-				check_date : check_date,
-				avail_text: avail,
-				unavail_text : unavail,
-				action : "mdjm_availability_by_ajax"
-			},
-			beforeSend: function()	{
-				$('input[type="submit"]').prop('disabled', true);
-				$("#mdjm_availability_widget .mdjm_pleasewait").show();
-			},
-			success: function(response)	{
-				if(response.result == "available") {
-					if( mdjm_vars.pass_redirect != '' )	{
-						window.location.href = mdjm_vars.pass_redirect + check_date;
-					}
-					else	{
-						$("#mdjm_availability_widget_intro").replaceWith('<div id="mdjm_availability_response_widget"><p class="mdjm_available">' + response.message + '</p></div>');
-						$("#mdjm_availability_widget .mdjm_submit").fadeTo("slow", 1);
-						$("#mdjm_availability_widget .mdjm_pleasewait").hide();
-					}
-					$('input[type="submit"]').prop('disabled', false);
-				}
-				else	{
-					if( mdjm_vars.fail_redirect != '' )	{
-						window.location.href = mdjm_vars.fail_redirect;
-					}
-					else	{
-						$("#mdjm_availability_widget_intro").replaceWith('<div id="mdjm_availability_response_widget"><p class="mdjm_notavailable">' + response.message + '</p></div>');
-						$("#mdjm_availability_widget .mdjm_submit").fadeTo("slow", 1);
-						$("#mdjm_availability_widget .mdjm_pleasewait").hide();
-					}
-					$('input[type="submit"]').prop('disabled', false);
-				}
+	/*=Availability Checker
+	---------------------------------------------------- */
+	if( mdjm_vars.availability_ajax )	{
+		$('#mdjm-availability-check').submit(function(event)	{
+			if( !$("#availability_check_date").val() )	{
+				return false;
 			}
+			event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+			var check_date = $("#availability_check_date").val();
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url:  mdjm_vars.ajaxurl,
+				data: {
+					check_date : check_date,
+					action : "mdjm_do_availability_check"
+				},
+				beforeSend: function()	{
+					$('input[type="submit"]').prop('disabled', true);
+					$("#pleasewait").show();
+				},
+				success: function(response)	{
+					if(response.result == "available") {
+						if( mdjm_vars.available_redirect != 'text' )	{
+							window.location.href = mdjm_vars.available_redirect + 'mdjm_avail_date=' + check_date;
+						} else	{
+							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + response.message + '</div>');
+							$("#mdjm-submit-availability").fadeTo("slow", 1);
+							$("#mdjm-submit-availability").removeClass( "mdjm-updating" );
+							$("#pleasewait").hide();
+						}
+						$('input[type="submit"]').prop('disabled', false);
+					} else	{
+						if( mdjm_vars.unavailable_redirect != 'text' )	{
+							window.location.href = mdjm_vars.unavailable_redirect + 'mdjm_avail_date=' + check_date;
+						} else	{
+							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + response.message + '</div>');
+							$("#mdjm-submit-availability").fadeTo("slow", 1);
+							$("#mdjm-submit-availability").removeClass( "mdjm-updating" );
+							$("#pleasewait").hide();
+						}
+						
+						$('input[type="submit"]').prop('disabled', false);
+					}
+				}
+			});
 		});
-	});
-	/** End of Availability Widget */
-	
-	/** End of Availability Widget Validation */
-	$('#mdjm_availability_check_widget').validate({
+	}
+
+	$('#mdjm-availability-check').validate({
 		rules: {
-			mdjm_show_date_widget: {
+			'mdjm-availability-datepicker' : {
 				required: true,
 			},
 		},
 		messages: {
-			mdjm_show_date_widget: {
+			'mdjm-availability-datepicker': {
 				required: mdjm_vars.required_date_message,
 			},
 		},
-
+	
 		errorClass: "mdjm_form_error",
 		validClass: "mdjm_form_valid",
 	});
