@@ -35,15 +35,19 @@ function mdjm_load_scripts()	{
 			'mdjm_script_vars',
 			array(
 				'ajaxurl'               => mdjm_get_ajax_url(),
-				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' )
+				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' ),
+				'availability_ajax'     => mdjm_get_option( 'avail_ajax', false ),
+				'available_redirect'    => mdjm_get_option( 'availability_check_pass_page', 'text' ) != 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_pass_page' ) ) : 'text',
+				'available_text'        => mdjm_get_option( 'availability_check_pass_text', false ),
+				'unavailable_redirect'  => mdjm_get_option( 'availability_check_fail_page', 'text' ),
+				'unavailable_text'      => mdjm_get_option( 'availability_check_fail_text', false ),
 			)
 		)
 	);
-	
-	wp_enqueue_script( 'jquery-ui-datepicker' );
-	
+		
 	wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-validation-plugin');
+	
 	wp_enqueue_script('jquery-ui-datepicker');
 	
 } // mdjm_load_scripts
