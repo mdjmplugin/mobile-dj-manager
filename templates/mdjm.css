@@ -69,6 +69,10 @@ input.mdjm_form_error {
 	background-image: url('../assets/images/info-icon.png');
 }
 
+#pleasewait	{
+	display: none;
+}
+
 /* =Action Buttons
 -------------------------------------------------------------- */
 .mdjm-action-button {
