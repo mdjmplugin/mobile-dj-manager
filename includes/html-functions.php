@@ -33,7 +33,9 @@ function mdjm_login_form( $redirect = '' )	{
 	ob_start();
 
 	mdjm_get_template_part( 'login', 'form' );
+	
+	$output = ob_get_clean();
+	$output = mdjm_do_content_tags( $output ); 
 
-	return apply_filters( 'mdjm_login_form', ob_get_clean() );
+	return apply_filters( 'mdjm_login_form', $output );
 } // mdjm_login_form
-?>
