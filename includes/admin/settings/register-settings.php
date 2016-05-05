@@ -855,20 +855,13 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Available Redirect Page', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select a page to which users should be directed when an availability check is successful', 'mobile-dj-manager' ),
 						'type'        => 'select',
-						'options'     => array_merge(
-											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
-											mdjm_list_pages()
-										),
+						'options'     => mdjm_list_pages( array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ) ),
 						'std'         => 'text'
 					),
 					'availability_check_pass_text' => array(
 						'id'          => 'availability_check_pass_text',
 						'name'        => __( 'Available Text', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Text to be displayed when you are available - Only displayed if %sNO REDIRECT - USE TEXT%s is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes %s{event_date}%s &amp; %s{event_date_short}%s','mobile-dj-manager' ),
-											'<code>',
-											'</code>',
-											'<code>',
-											'</code>',
+						'desc'        => sprintf( __( 'Text to be displayed when you are available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes %1$s{event_date}%2$s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'rich_editor',
@@ -879,20 +872,13 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Unavailable Redirect Page', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select a page to which users should be directed when an availability check is not successful', 'mobile-dj-manager' ),
 						'type'        => 'select',
-						'options'     => array_merge(
-											array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ),
-											mdjm_list_pages()
-										),
+						'options'     => mdjm_list_pages( array( 'text' => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ) ) ),
 						'std'         => 'text'
 					),
 					'availability_check_fail_text' => array(
 						'id'          => 'availability_check_fail_text',
 						'name'        => __( 'Unavailable Text', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Text to be displayed when you are not available - Only displayed if %sNO REDIRECT - USE TEXT%s is selected above. Valid shortcodes %s{event_date}%s &amp; %s{event_date_short}%s','mobile-dj-manager' ),
-											'<code>',
-											'</code>',
-											'<code>',
-											'</code>',
+						'desc'        => sprintf( __( 'Text to be displayed when you are not available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above. Valid shortcodes %1$s{event_date}2$%s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
 											'<code>',
 											'</code>' ),
 						'type'        => 'rich_editor',
@@ -1291,10 +1277,11 @@ function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ) )
  * On large sites this can be expensive, so only load if on the settings page or $force is set to true
  *
  * @since	1.3
+ * @param	arr		$first			The first option in the list.
  * @param	bool	$force			Force the pages to be loaded even if not on settings
  * @return	arr		$pages_options	An array of the pages
  */
-function mdjm_list_pages( $force = false ) {
+function mdjm_list_pages( $first = array(), $force = false ) {
 
 	$pages_options = array( '' => '' ); // Blank option
 
@@ -1303,6 +1290,12 @@ function mdjm_list_pages( $force = false ) {
 	}
 
 	$pages = get_pages();
+	
+	if ( ! empty( $first ) && is_array( $first ) )	{
+		foreach ( $first as $key => $value )	{
+			$pages_options[ $key ] = $value;
+		}
+	}
 	
 	if ( $pages ) {
 		foreach ( $pages as $page ) {
