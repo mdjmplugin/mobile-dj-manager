@@ -347,10 +347,10 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			),
 		) );
 		$admin_bar->add_menu( array(
-			'id'		=> 'edit.php?post_type=' . MDJM_COMM_POSTS,
+			'id'		=> 'edit.php?post_type=mdjm_communication',
 			'parent'	=> 'mdjm-comms',
 			'title'	 => __( 'Communication History', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'edit.php?post_type=' . MDJM_COMM_POSTS ),
+			'href'	  => admin_url( 'edit.php?post_type=mdjm_communication' ),
 			'meta'	  => array(
 				'title' => __( 'Communication History', 'mobile-dj-manager' ),
 			),
@@ -364,7 +364,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'id'		=> 'mdjm-contracts',
 			'parent'	=> 'mdjm',
 			'title'	 => __( 'Contract Templates', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'edit.php?post_type=' . MDJM_CONTRACT_POSTS ),
+			'href'	  => admin_url( 'edit.php?post_type=contract' ),
 			'meta'	  => array(
 				'title' => __( 'Contract Templates', 'mobile-dj-manager' ),
 			),
@@ -373,7 +373,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'id'		=> 'mdjm-new-contract',
 			'parent'	=> 'mdjm-contracts',
 			'title'	 => __( 'Add Contract Template', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'post-new.php?post_type=' . MDJM_CONTRACT_POSTS ),
+			'href'	  => admin_url( 'post-new.php?post_type=contract' ),
 			'meta'	  => array(
 				'title' => __( 'New Contract Template', 'mobile-dj-manager' ),
 			),
@@ -385,7 +385,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'id'		=> 'mdjm-email-templates',
 			'parent'	=> 'mdjm',
 			'title'	 => __( 'Email Templates', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'edit.php?post_type=' . MDJM_EMAIL_POSTS ),
+			'href'	  => admin_url( 'edit.php?post_type=email_template' ),
 			'meta'	  => array(
 				'title' => __( 'Email Templates', 'mobile-dj-manager' ),
 			),
@@ -394,7 +394,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'id'		=> 'mdjm-new-email-template',
 			'parent'	=> 'mdjm-email-templates',
 			'title'	 => __( 'Add Template', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'post-new.php?post_type=' . MDJM_EMAIL_POSTS ),
+			'href'	  => admin_url( 'post-new.php?post_type=email_template' ),
 			'meta'	  => array(
 				'title' => __( 'New Email Template', 'mobile-dj-manager' ),
 			),
