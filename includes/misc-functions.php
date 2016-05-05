@@ -110,10 +110,16 @@ function mdjm_insert_datepicker( $args = array() )	{
 	
 	$args = wp_parse_args( $args, $defaults );
 	
+	if ( ! empty( $args['id'] ) )	{
+		$field = '#' . $args['id'];
+	} else	{
+		$field = '.' . $args['class'];
+	}
+	
 	?>
     <script type="text/javascript">
 	jQuery(document).ready( function($)	{
-		$(".<?php echo $args['class']; ?>").datepicker({
+		$("<?php echo $field; ?>").datepicker({
 			dateFormat  : "<?php echo mdjm_format_datepicker_date(); ?>",
 			altField    : "#<?php echo $args['altfield']; ?>",
 			altFormat   : "<?php echo $args['altformat']; ?>",
