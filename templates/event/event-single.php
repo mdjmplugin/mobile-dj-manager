@@ -100,17 +100,18 @@ global $mdjm_event;
                 <th><?php _e( 'Completes:', 'mobile-dj-manager' ); ?></th>
                 <td>{end_time} ({end_date})</td>
             </tr>
-            
-            <tr>
-            	<th colspan="4"><?php _e( 'Package Details:', 'mobile-dj-manager' ); ?></th>
-            </tr>
-            
-            <tr>
-            	<th><?php _e( 'Package:', 'mobile-dj-manager' ); ?></th>
-                <td>{event_package}</td>
-                <th><?php _e( 'Add-ons:', 'mobile-dj-manager' ); ?></th>
-                <td>{event_addons}</td>
-            </tr>
+            <?php if ( mdjm_get_option( 'enable_packages' ) ) : ?>
+                <tr>
+                    <th colspan="4"><?php _e( 'Package Details:', 'mobile-dj-manager' ); ?></th>
+                </tr>
+                
+                <tr>
+                    <th><?php _e( 'Package:', 'mobile-dj-manager' ); ?></th>
+                    <td>{event_package}</td>
+                    <th><?php _e( 'Add-ons:', 'mobile-dj-manager' ); ?></th>
+                    <td>{event_addons}</td>
+                </tr>
+            <?php endif; ?>
             
             <tr>
             	<th colspan="4"><?php _e( 'Pricing', 'mobile-dj-manager' ); ?></th>
