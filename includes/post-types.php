@@ -12,7 +12,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-	
+
 /**
  * Registers and sets up the MDJM Event Management custom post types
  *
@@ -267,7 +267,7 @@ function mdjm_register_post_types()	{
 			'name'               => _x( '%2$s', 'post type general name', 'mobile-dj-manager' ),
 			'singular_name'      => _x( '%1$s', 'post type singular name', 'mobile-dj-manager' ),
 			'menu_name'          => _x( 'MDJM %2$s', 'admin menu', 'mobile-dj-manager' ),
-			'name_admin_bar'     => _x( 'Event', 'add new on admin bar', 'mobile-dj-manager' ),
+			'name_admin_bar'     => _x( '%1$s', 'add new on admin bar', 'mobile-dj-manager' ),
 			'add_new'            => __( 'Create %1$s', 'mobile-dj-manager' ),
 			'add_new_item'       => __( 'Create New %1$s', 'mobile-dj-manager' ),
 			'new_item'           => __( 'New %1$s', 'mobile-dj-manager' ),
