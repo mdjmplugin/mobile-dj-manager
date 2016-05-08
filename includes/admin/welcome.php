@@ -74,21 +74,12 @@ class MDJM_Welcome {
 			array( $this, 'getting_started_screen' )
 		);
 
-		// Credits Page
-		add_dashboard_page(
-			__( 'The people that build Easy Digital Downloads', 'mobile-dj-manager' ),
-			__( 'The people that build Easy Digital Downloads', 'mobile-dj-manager' ),
-			$this->minimum_capability,
-			'mdjm-credits',
-			array( $this, 'credits_screen' )
-		);
-
 		// Now remove them from the menus so plugins that allow customizing the admin menu don't show them
 		remove_submenu_page( 'index.php', 'mdjm-about' );
 		remove_submenu_page( 'index.php', 'mdjm-changelog' );
 		remove_submenu_page( 'index.php', 'mdjm-getting-started' );
-		remove_submenu_page( 'index.php', 'mdjm-credits' );
-	}
+
+	} // admin_menus
 
 	/**
 	 * Hide Individual Dashboard Pages
@@ -122,7 +113,7 @@ class MDJM_Welcome {
 			/*]]>*/
 		</style>
 		<?php
-	}
+	} // admin_head
 
 	/**
 	 * Welcome message
@@ -144,7 +135,7 @@ class MDJM_Welcome {
 			</p>
 		</div>
 		<?php
-	}
+	} // welcome_message
 
 	/**
 	 * Navigation tabs
@@ -163,12 +154,9 @@ class MDJM_Welcome {
 			<a class="nav-tab <?php echo $selected == 'mdjm-getting-started' ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'mdjm-getting-started' ), 'index.php' ) ) ); ?>">
 				<?php _e( 'Getting Started', 'mobile-dj-manager' ); ?>
 			</a>
-			<a class="nav-tab <?php echo $selected == 'mdjm-credits' ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'mdjm-credits' ), 'index.php' ) ) ); ?>">
-				<?php _e( 'Credits', 'mobile-dj-manager' ); ?>
-			</a>
 		</h1>
 		<?php
-	}
+	} // tabs
 
 	/**
 	 * Render About Screen
@@ -273,7 +261,7 @@ class MDJM_Welcome {
 			</div>
 		</div>
 		<?php
-	}
+	} // about_screen
 
 	/**
 	 * Render Changelog Screen
@@ -303,7 +291,7 @@ class MDJM_Welcome {
 			</div>
 		</div>
 		<?php
-	}
+	} // changelog_screen
 
 	/**
 	 * Render Getting Started Screen
@@ -320,57 +308,81 @@ class MDJM_Welcome {
 				$this->welcome_message();
 				$this->tabs();
 			?>
-			<p class="about-description"><?php _e( 'Use the tips below to get started using Easy Digital Downloads. You will be up and running in no time!', 'mobile-dj-manager' ); ?></p>
+			<p class="about-description"><?php _e( "Now that MDJM Event Management is installed, you're ready to get started. It works out of the box, but there are some customisations you can configure to match your business needs.", 'mobile-dj-manager' ); ?></p>
 
 			<div class="changelog">
-				<h3><?php _e( 'Creating Your First Download Product', 'mobile-dj-manager' );?></h3>
+				<h3><?php printf( __( 'Creating Your First %s', 'mobile-dj-manager' ), mdjm_get_label_singular() );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/edit-download.png'; ?>" class="mdjm-welcome-screenshots"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/mdjm-first-event.png'; ?>" class="mdjm-welcome-screenshots"/>
 					</div>
 					<div class="feature-section-content">
-						<h4><a href="<?php echo admin_url( 'post-new.php?post_type=download' ) ?>"><?php printf( __( '%s &rarr; Add New', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></a></h4>
-						<p><?php printf( __( 'The %s menu is your access point for all aspects of your Easy Digital Downloads product creation and setup. To create your first product, simply click Add New and then fill out the product details.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></p>
+						<h4><a href="<?php echo admin_url( 'post-new.php?post_type=mdjm-event' ); ?>"><?php printf( __( 'MDJM %s &rarr; Create %s', 'mobile-dj-manager' ), mdjm_get_label_plural(), mdjm_get_label_singular() ); ?></a></h4>
+						<p><?php printf( __( 'The MDJM %1$s menu is your access point to all aspects of your %2$s creation and setup. To create your first %2$s, simply click Add New and then fill out the %2$s details.', 'mobile-dj-manager' ), mdjm_get_label_plural(), mdjm_get_label_singular( true ) ); ?></p>
 
+						<h4><?php _e( 'Create a Client', 'mobile-dj-manager' ); ?></h4>
+						<p><?php printf( __( 'Create clients directly from the %s screen by selected <strong>Add New Client</strong> from the <em>Select Client</em> dropdown to reveal a few additional fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>
 
-						<h4><?php _e( 'Download Files', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Uploading the downloadable files is simple. Click <em>Upload File</em> in the Download Files section and choose your download file. To add more than one file, simply click the <em>Add New</em> button.', 'mobile-dj-manager' );?></p>
+						<h4><?php printf( __( 'Add %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></h4>
+						<p><?php printf( __( 'If the %1$s type does not exist for the %1$s you are creating, click the <em>Add New</em> link next to the %2$s Type dropdown, enter the %2$s Type name in the text box that is revealed and click <em>Add</em>.<br />To manage all %2$s Types, go to <a href="%4$s">MDJM %3$s &rarr; %2$s Types</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_singular(), mdjm_get_label_plural(), admin_url( 'edit-tags.php?taxonomy=event-types&post_type=mdjm-event' ) ); ?></p>
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Display a Product Grid', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Setup Templates for Complete Automation', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/grid.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/mdjm-edit-template.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<h4><?php _e( 'Flexible Product Grids','mobile-dj-manager' );?></h4>
-						<p><?php _e( 'The [downloads] shortcode will display a product grid that works with any theme, no matter the size. It is even responsive!', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Email Templates','mobile-dj-manager' ); ?></h4>
+						<p><?php printf( __( 'Email templates can be configured to be sent automatically during an %1$s status change. Supporting our vast collection of <a href="%2$s" target="_blank">content tags</a> each email can be completley customised and tailored to the %1$s and client details.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), 'http://mdjm.co.uk/docs/content-tags/' ); ?></p>
+                        <p><?php _e( 'With email tracking enabled, you can even be sure that your client received your email and know when they have read it.', 'mobile-dj-manager' ); ?></p>
 
-						<h4><?php _e( 'Change the Number of Columns', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'You can easily change the number of columns by adding the columns="x" parameter:', 'mobile-dj-manager' );?></p>
-						<p><pre>[downloads columns="4"]</pre></p>
-
-						<h4><?php _e( 'Additional Display Options', 'mobile-dj-manager' ); ?></h4>
-						<p><?php printf( __( 'The product grids can be customized in any way you wish and there is <a href="%s">extensive documentation</a> to assist you.', 'mobile-dj-manager' ), 'http://docs.easydigitaldownloads.com/' ); ?></p>
+						<h4><?php _e( 'Contract Templates', 'mobile-dj-manager' ); ?></h4>
+						<p><?php printf( __( 'Create contract templates that be assigned to your %s. Clients will be able to review and <strong>Digitally Sign</strong> the contract via the %2$s.', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Purchase Buttons Anywhere', 'mobile-dj-manager' );?></h3>
+				<h3><?php printf( __( 'Create %s Packages &amp; Add-ons', 'mobile-dj-manager' ), mdjm_get_label_singular() );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . 'assets/images/screenshots/purchase-link.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/mdjm-edit-packages.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<h4><?php _e( 'The <em>[purchase_link]</em> Shortcode','mobile-dj-manager' );?></h4>
-						<p><?php _e( 'With easily accessible shortcodes to display purchase buttons, you can add a Buy Now or Add to Cart button for any product anywhere on your site in seconds.', 'mobile-dj-manager' );?></p>
+						<h4><?php printf( __( '%1$s Packages','mobile-dj-manager' ), mdjm_get_label_singular() ); ?></h4>
+						<p><?php printf( __( 'Packages are a pre-defined collection of add-ons that you can offer to your clients for their %s. Define a price for the package and upon selection, the %1$s %2$s and %3$s will be automatically and dynamically re-calculated. Add-ons included within the package, will no longer be available for selection within the add-ons list for this %2$s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_balance_label(), mdjm_get_deposit_label() ); ?></p>
 
-						<h4><?php _e( 'Buy Now Buttons', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Purchase buttons can behave as either Add to Cart or Buy Now buttons. With Buy Now buttons customers are taken straight to PayPal, giving them the most frictionless purchasing experience possible.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Add-ons', 'mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'Add-ons are additional equipment items that can be selected for an %1$s. Each add-on is assigned an individual price and when selected the %1$s %2$s and %3$s are automatically and dynamically re-calculated.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_balance_label(), mdjm_get_deposit_label() );?></p>
+                        <p><?php printf( __( 'Once you have enabled %1$s Packages &amp; Add-ons within the <a href="%3$s">MDJM %2$s Settings page</a>, manage them within <a href="%4$s">MDJM %2$s &rarr; Equipment Packages</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural(), admin_url( 'admin.php?page=mdjm-settings&tab=events' ), admin_url( 'admin.php?&page=mdjm-packages' ) ); ?></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="changelog">
+				<h3><?php _e( 'Event More Features', 'mobile-dj-manager' );?></h3>
+				<div class="feature-section two-col">
+					<div class="col">
+						<h4><?php _e( 'Integrated Client Portal','mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'Known as the <em>Client Zone</em> by default, a password protected portal is available to your clients where they can review their %1$s, view and accept your quote, digitally sign their contract, and manage their %1$s playlist. All %2$s pages use a template system and are fully customisable.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+					</div>
+					<div class="col">
+						<h4><?php _e( 'Digitally Sign Contracts', 'mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'Via the %s, clients are able to review and digitally sign their %s contract. Signing requires confirmation of their name and password for verification to maintain security.', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ), mdjm_get_label_singular() );?></p>
+					</div>
+				</div>
+                <div class="feature-section two-col">
+					<div class="col">
+						<h4><?php _e( 'Transaction Logging','mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'Log all payments your business receives and all expenses you have with the MDJM Event Management Transactions system. Instantly know how profitable your %s are as well as how much money your company has made over differing periods of time.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></p>
+					</div>
+					<div class="col">
+						<h4><?php _e( 'Multi Employee Aware', 'mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'MDJM Event Management supports as many employees as you need at no additional cost. Easily create new employees, set permissions for them to ensure they only have access to what they need, and then assign as many employees to an %s as you need.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) );?></p>
 					</div>
 				</div>
 			</div>
@@ -379,12 +391,12 @@ class MDJM_Welcome {
 				<h3><?php _e( 'Need Help?', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
-						<h4><?php _e( 'Phenomenal Support','mobile-dj-manager' );?></h4>
-						<p><?php _e( 'We do our best to provide the best support we can. If you encounter a problem or have a question, simply open a ticket using our <a href="https://easydigitaldownloads.com/support">support form</a>.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Excellent Support','mobile-dj-manager' );?></h4>
+						<p><?php _e( 'We pride ourselves on our level of support and excellent response times. If you are experiencing an issue, submit a support ticket and we will respond quickly.', 'mobile-dj-manager' );?></p>
 					</div>
 					<div class="col">
-						<h4><?php _e( 'Need Even Faster Support?', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Our <a href="https://easydigitaldownloads.com/support/pricing/">Priority Support</a> system is there for customers that need faster and/or more in-depth assistance.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Join our Facebook User Group', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Our <a href="https://www.facebook.com/groups/mobile-dj-manager/" target="_blank">MDJM Facebook User Group</a> is a great way to exchange knowledge with other users and gain tips for use.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
@@ -393,12 +405,12 @@ class MDJM_Welcome {
 				<h3><?php _e( 'Stay Up to Date', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
-						<h4><?php _e( 'Get Notified of Extension Releases','mobile-dj-manager' );?></h4>
-						<p><?php _e( 'New extensions that make Easy Digital Downloads even more powerful are released nearly every single week. Subscribe to the newsletter to stay up to date with our latest releases. <a href="http://eepurl.com/kaerz" target="_blank">Sign up now</a> to ensure you do not miss a release!', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Get Notified of Add-on Releases','mobile-dj-manager' );?></h4>
+						<p><?php _e( 'New add-ons make MDJM Event Management even more powerful. Subscribe to the newsletter to stay up to date with our latest releases. <a href="http://eepurl.com/bTRkZj" target="_blank">Sign up now</a> to ensure you do not miss a release!', 'mobile-dj-manager' );?></p>
 					</div>
 					<div class="col">
 						<h4><?php _e( 'Get Alerted About New Tutorials', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( '<a href="http://eepurl.com/kaerz" target="_blank">Sign up now</a> to hear about the latest tutorial releases that explain how to take Easy Digital Downloads further.', 'mobile-dj-manager' );?></p>
+						<p><?php _e( '<a href="http://eepurl.com/bTRkZj" target="_blank">Sign up now</a> to hear about the latest tutorial releases that explain how to take MDJM Event Management further.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
@@ -418,30 +430,7 @@ class MDJM_Welcome {
 			</div>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Render Credits Screen
-	 *
-	 * @access public
-	 * @since 1.4
-	 * @return void
-	 */
-	public function credits_screen() {
-		?>
-		<div class="wrap about-wrap mdjm-about-wrap">
-			<?php
-				// load welcome message and content tabs
-				$this->welcome_message();
-				$this->tabs();
-			?>
-			<p class="about-description"><?php _e( 'MDJM Event Management is created by developers who aim to provide the #1 platform for managing events with WordPress.', 'mobile-dj-manager' ); ?></p>
-
-			<?php echo $this->contributors(); ?>
-		</div>
-		<?php
-	}
-
+	} // getting_started_screen
 
 	/**
 	 * Parse the MDJM readme.txt file
@@ -468,69 +457,7 @@ class MDJM_Welcome {
 		}
 
 		return $readme;
-	}
-
-
-	/**
-	 * Render Contributors List
-	 *
-	 * @since 1.4
-	 * @uses MDJM_Welcome::get_contributors()
-	 * @return string $contributor_list HTML formatted list of all the contributors for MDJM
-	 */
-	public function contributors() {
-		$contributors = $this->get_contributors();
-
-		if ( empty( $contributors ) )
-			return '';
-
-		$contributor_list = '<ul class="wp-people-group">';
-
-		foreach ( $contributors as $contributor ) {
-			$contributor_list .= '<li class="wp-person">';
-			$contributor_list .= sprintf( '<a href="%s" title="%s">',
-				esc_url( 'https://github.com/' . $contributor->login ),
-				esc_html( sprintf( __( 'View %s', 'mobile-dj-manager' ), $contributor->login ) )
-			);
-			$contributor_list .= sprintf( '<img src="%s" width="64" height="64" class="gravatar" alt="%s" />', esc_url( $contributor->avatar_url ), esc_html( $contributor->login ) );
-			$contributor_list .= '</a>';
-			$contributor_list .= sprintf( '<a class="web" href="%s">%s</a>', esc_url( 'https://github.com/' . $contributor->login ), esc_html( $contributor->login ) );
-			$contributor_list .= '</a>';
-			$contributor_list .= '</li>';
-		}
-
-		$contributor_list .= '</ul>';
-
-		return $contributor_list;
-	}
-
-	/**
-	 * Retreive list of contributors from GitHub.
-	 *
-	 * @access public
-	 * @since 1.4
-	 * @return array $contributors List of contributors
-	 */
-	public function get_contributors() {
-		$contributors = get_transient( 'mdjm_contributors' );
-
-		if ( false !== $contributors )
-			return $contributors;
-
-		$response = wp_remote_get( 'https://api.github.com/repos/mydjplanner/mobile-dj-manager/contributors?per_page=999', array( 'sslverify' => false ) );
-
-		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) )
-			return array();
-
-		$contributors = json_decode( wp_remote_retrieve_body( $response ) );
-
-		if ( ! is_array( $contributors ) )
-			return array();
-
-		set_transient( 'mdjm_contributors', $contributors, 3600 );
-
-		return $contributors;
-	}
+	} // parse_readme
 
 	/**
 	 * Sends user to the Welcome page on first activation of MDJM as well as each
@@ -542,15 +469,17 @@ class MDJM_Welcome {
 	 */
 	public function welcome() {
 		// Bail if no activation redirect
-		if ( ! get_transient( '_mdjm_activation_redirect' ) )
+		if ( ! get_transient( '_mdjm_activation_redirect' ) )	{
 			return;
+		}
 
 		// Delete the redirect transient
 		delete_transient( '_mdjm_activation_redirect' );
 
 		// Bail if activating from network, or bulk
-		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )
+		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )	{
 			return;
+		}
 
 		$upgrade = get_option( 'mdjm_version_upgraded_from' );
 
@@ -559,6 +488,6 @@ class MDJM_Welcome {
 		} else { // Update
 			wp_safe_redirect( admin_url( 'index.php?page=mdjm-about' ) ); exit;
 		}
-	}
+	} // welcome
 }
 new MDJM_Welcome();
