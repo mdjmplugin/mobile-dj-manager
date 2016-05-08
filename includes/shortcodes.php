@@ -18,12 +18,13 @@
 function shortcode_mdjm( $atts )	{
 	// Array mapping the args to the pages/functions
 	$pairs = array(
-				'Home'			=> MDJM_CLIENTZONE . '/pages/mdjm-home.php',
-				'Profile'		 => MDJM_CLIENTZONE . '/pages/mdjm-profile.php',
-				'Playlist'		=> MDJM_CLIENTZONE . '/pages/mdjm-playlist.php',
-				'Contract'		=> MDJM_CLIENTZONE . '/pages/mdjm-contract.php',
-				'Availability'	=> 'f_mdjm_availability_form',
-				'Online Quote'	=> MDJM_CLIENTZONE . '/pages/mdjm-onlinequote.php' );
+		'Home'          => 'mdjm_shortcode_home',
+		'Profile'       => MDJM_CLIENTZONE . '/pages/mdjm-profile.php',
+		'Playlist'      => 'mdjm_shortcode_playlist',
+		'Contract'      => 'mdjm_shortcode_contract',
+		'Availability'  => 'f_mdjm_availability_form',
+		'Online Quote'  => 'mdjm_shortcode_quote',
+	);
 	
 	$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
 					
@@ -35,11 +36,17 @@ function shortcode_mdjm( $atts )	{
 	/* Process pages */
 		if( !empty( $atts['page'] ) )	{
 			ob_start();
-			include_once( $args[$atts['page']] );
-			if( $atts['page'] == 'Contact Form' )
-				do_action( 'mdjm_dcf_execute_shortcode', $atts );
-
-			$output = ob_get_clean();
+			
+			if ( function_exists( $args[ $atts['page'] ] ) )	{
+				$func = $args[ $atts['page'] ];
+				return $func( $atts );
+			} else	{
+				include_once( $args[$atts['page']] );
+				if( $atts['page'] == 'Contact Form' )
+					do_action( 'mdjm_dcf_execute_shortcode', $atts );
+	
+				$output = ob_get_clean();
+			}
 		}
 		/* Process Functions */
 		elseif( !empty( $atts['function'] ) )	{
