@@ -55,7 +55,6 @@
 				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
-				//add_action( 'wp_loaded', array( &$this, 'wp_fully_loaded' ) ); // For when WP is loaded
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
 			} // __construct
 			
@@ -94,7 +93,7 @@
 					update_option( 'mdjm_updated', '0' );
 					
 					// Redirect to the release notes after upgrade
-					wp_redirect( admin_url( 'admin.php?page=mdjm-about' ) );
+					wp_redirect( admin_url( 'index.php?page=mdjm-about' ) );
 					exit;
 				}
 			} // mdjm_admin_init
@@ -118,40 +117,12 @@
 					$mdjm_db->update_db();
 				}								
 			} // all_plugins_loaded
-			
-/*
- *
- * WP LOADED HOOK
- *
- */
-			/*
-			 * Methods to run during wp loaded hook
-			 *
-			 *
-			 *
-			 */
-			/*public function wp_fully_loaded()	{
-				$this->api_listener();	
-			}*/ // all_plugins_loaded	
 	
 /*
  * --
  * SETTINGS
  * --
- */
-	 		/*
-			 * mdjm_init_settings
-			 * Register the plugin settings
-			 * 
-			 *
-			 */
-	 		/*public function mdjm_init_settings()	{
-				if( !class_exists( 'MDJM_Settings' ) )
-					require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/class-mdjm-settings.php' );
-					
-				$this->settings = new MDJM_Settings();
-			} // mdjm_init_settings*/
-			
+ */			
 			/*
 			 * mdjm_settings
 			 * 18/03/2015
@@ -301,52 +272,9 @@
 			
 /*
  * --
- * API LISTENER
- * --
- */
-			/**
-			 * Initiate the MDJM API Listener
-			 * Used for PayPal IPN and email tracking
-			 *
-			 * @since 1.1.1
-			 */
-			/*public function api_listener()	{
-				$listener = isset( $_GET['mdjm-api'] ) ? $_GET['mdjm-api'] : '';
-				
-				if( empty( $listener ) )
-					return;
-				
-				switch( $listener )	{
-					case 'MDJM_EMAIL_RCPT':
-						if( MDJM_DEBUG == true )
-							MDJM()->debug->log_it( 'MDJM Email API listener activated', true );
-						include( MDJM_PLUGIN_DIR . '/includes/api/mdjm-api-email-rcpt.php' );
-					break;
-					default:
-						MDJM()->debug->log_it( 'WARNING: Rogue API request received - ' . $listener, true );
-						return;
-				} // switch				
-			}*/ // api_listener
-/*
- * --
  * SCHEDULED TASKS
  * --
- */
-			/**
-			 * scheduler_activate
-			 * Register the scheduled tasks within WP
-			 *
-			 * @param	
-			 * @return
-			 * @since	1.1.3
-			 * @called wp action hook
-			 */
-			public function scheduler_activate()	{
-				if ( !wp_next_scheduled( 'hook_mdjm_hourly_schedule' ) )	{
-					wp_schedule_event( time(), 'hourly', 'hook_mdjm_hourly_schedule' );
-				}
-			} // scheduler_activate
-			
+ */			
 			/**
 			 * cron
 			 * Initiates the scheduled tasks

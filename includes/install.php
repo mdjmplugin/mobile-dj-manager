@@ -76,6 +76,9 @@ function mdjm_run_install()	{
 	// Clear the permalinks
 	flush_rewrite_rules( false );
 	
+	// Schedule the hourly tasks.
+	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
+	
 	// Setup some default options
 	$options = array();
 
@@ -759,5 +762,22 @@ function mdjm_run_install()	{
 	dbDelta( $sql );
 
 	update_option( 'mdjm_db_version', $mdjm_db_version );
+	
+	// Add the transient to redirect
+	set_transient( '_mdjm_activation_redirect', true, 30 );
 		
 } // mdjm_run_install
+
+/**
+ * Run during plugin deactivation.
+ * 
+ * Clear the scheduled hook for hourly tasks.
+ * 
+ * @since	1.3
+ * @param
+ * @return	void
+ */
+function mdjm_deactivate()	{
+	wp_clear_scheduled_hook( 'mdjm_hourly_schedule' );
+} // mdjm_deactivate
+register_deactivation_hook( MDJM_PLUGIN_FILE, 'mdjm_deactivate' );

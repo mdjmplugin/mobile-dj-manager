@@ -6,15 +6,17 @@
  * The upgrade procedures for MDJM
  */
 class MDJM_Upgrade	{
+
 	public function __construct()	{
+
 		global $mdjm, $upgrade_error;
 		
-		/* -- Use the WP Error Class -- */
+		// Use the WP Error Class
 		$upgrade_error = new WP_Error;
 		
 		MDJM()->debug->log_it( '** THE MDJM UPGRADE PROCEDURE IS STARTING **', true );
 		
-		/* -- Extend the script time out as we may have a lot of entries -- */
+		// Extend the script time out as we may have a lot of entries
 		set_time_limit( 180 );
 		
 		// Ensure 1.2 procedures have run as these are major
@@ -23,11 +25,14 @@ class MDJM_Upgrade	{
 		// Check for additional updates and execute
 		$update = get_option( 'mdjm_update_me' );
 		
-		if( !empty( $update ) )
+		if( ! empty( $update ) )	{
 			$this->execute_updates();
+		}
 		
-		if( !wp_next_scheduled( 'mdjm_hourly_schedule' ) )	
+		if( ! wp_next_scheduled( 'mdjm_hourly_schedule' ) )		{
 			wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );	
+		}
+
 	} // __construct
 	
 	/*
