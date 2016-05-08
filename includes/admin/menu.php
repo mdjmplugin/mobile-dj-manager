@@ -63,7 +63,7 @@ function mdjm_admin_menu()	{
 		$mdjm_emp_page = add_submenu_page(  'edit.php?post_type=mdjm-event', __(  'Employees', 'mobile-dj-manager' ), __(  'Employees', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-employees', array( MDJM()->users, 'employee_manager' ) );
 	}
 											
-	if( ! empty( mdjm_get_option( 'enable_packages' ) ) && mdjm_employee_can( 'manage_packages' ) )	{
+	if( ( mdjm_get_option( 'enable_packages' ) ) && mdjm_employee_can( 'manage_packages' ) )	{
 		$mdjm_packages_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Equipment Packages', 'mobile-dj-manager' ), __( 'Equipment Packages', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'mdjm-packages', 'mdjm_packages_page' );
 	}
 	

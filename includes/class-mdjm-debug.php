@@ -95,7 +95,7 @@ class MDJM_Debug	{
 			$this->delete_log( $_POST['delete_files'] );
 		}
 		
-		if( empty( mdjm_get_option( 'debug_warn', false ) ) && empty( mdjm_get_option( 'debug_auto_purge' ) ) )	{
+		if( ! ( mdjm_get_option( 'debug_warn', false ) ) && ! ( mdjm_get_option( 'debug_auto_purge' ) ) )	{
 			return;
 		}
 					
@@ -106,7 +106,7 @@ class MDJM_Debug	{
 			
 			if( file_exists( $conf[0] ) && filesize( $conf[0] ) > $bytes )	{
 				
-				if( ! empty( mdjm_get_option( 'debug_auto_purge' ) ) )	{
+				if( ! ! ( mdjm_get_option( 'debug_auto_purge' ) ) )	{
 					
 					$this->log_it( 'Auto purge enabled for oversized log file ' . $name, true );
 					$this->delete_log( array( $name ) );
@@ -114,7 +114,7 @@ class MDJM_Debug	{
 					
 				} else	{
 					
-					if( empty( mdjm_get_option( 'debug_warn' ) ) )	{ // If warnings are disabled, skip
+					if( ! ( mdjm_get_option( 'debug_warn' ) ) )	{ // If warnings are disabled, skip
 						continue;
 					}
 					

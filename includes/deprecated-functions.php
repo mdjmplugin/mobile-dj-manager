@@ -164,7 +164,7 @@ function get_deposit( $cost='' )	{
 	}
 	
 	// If we don't need a deposit per settings, return 0
-	if( empty( mdjm_get_option( 'deposit_type' ) ) )
+	if( ! mdjm_get_option( 'deposit_type' ) )
 		$deposit = '0.00';
 	
 	// Set fixed deposit amount

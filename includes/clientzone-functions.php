@@ -125,7 +125,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	
 	// Buttons for events in enquiry state
 	if( $event_status == 'mdjm-enquiry' )	{
-		if( ! empty( mdjm_get_option( 'online_enquiry', '0' ) ) )	{
+		if( ( mdjm_get_option( 'online_enquiry', '0' ) ) )	{
 			$buttons[5] = apply_filters( 'mdjm_quote_action_button',
 				array(
 					'label'		=> __( 'View Quote', 'mobile-dj-manager' ),

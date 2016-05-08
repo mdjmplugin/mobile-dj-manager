@@ -234,7 +234,7 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	);
 	
 	// Send the email confirmations
-	if( ! empty( mdjm_get_option( 'booking_conf_to_client' ) ) )	{
+	if( mdjm_get_option( 'booking_conf_to_client' ) )	{
 		mdjm_email_booking_confirmation( $event_id );
 	}
 	

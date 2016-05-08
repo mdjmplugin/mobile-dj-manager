@@ -355,7 +355,7 @@ function mdjm_event_status_dropdown( $args='' )	{
  */
 function mdjm_set_enquiry_source( $event_id, $type = '' )	{
 	
-	if ( empty( $type ) && ! empty( mdjm_get_option( 'enquiry_source_default' ) ) )	{
+	if ( empty( $type ) && mdjm_get_option( 'enquiry_source_default' ) )	{
 		$type = mdjm_get_option( 'enquiry_source_default' );
 	}
 	
@@ -473,7 +473,7 @@ function mdjm_event_types_dropdown( $args )	{
  */
 function mdjm_set_event_type( $event_id, $type = '' )	{
 	
-	if ( empty( $type ) && ! empty( mdjm_get_option( 'event_type_default' ) ) )	{
+	if ( empty( $type ) && mdjm_get_option( 'event_type_default' ) )	{
 		$type = mdjm_get_option( 'event_type_default' );
 	}
 	
@@ -1013,7 +1013,7 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 	mdjm_update_event_meta( $event_id, $args['meta'] );
 	
 	// Generate an online quote that is visible via the Client Zone
-	if( ! empty( mdjm_get_option( 'online_enquiry', false ) ) )	{
+	if( mdjm_get_option( 'online_enquiry', false ) )	{
 		
 		$quote_template = isset( $args['quote_template'] ) ? $args['quote_template'] : mdjm_get_option( 'online_enquiry' );
 		

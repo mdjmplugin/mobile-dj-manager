@@ -24,7 +24,7 @@ function mdjm_admin_notices() {
 	global $mdjm_options;
 
 	// Unattended events
-	if( mdjm_employee_can( 'manage_all_events' ) && ! empty( mdjm_get_option( 'warn_unattended' ) ) )	{
+	if( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
 		$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
 		
 		if( ! empty( $unattended ) && $unattended > 0 )

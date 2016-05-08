@@ -499,7 +499,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			
 			// Determine whether or not the deposit needs to dynamically update
 			echo '<input type="hidden" name="mdjm_update_deposit" id="mdjm_update_deposit" value="' . 
-				( ! empty( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' ? 
+				( ( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' ? 
 					'1' : '0' ) . '" />' . "\r\n";
 			
 			?>
@@ -613,7 +613,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	<!-- End of fifth row -->
 	<?php
 	// Update event deposit when manually updating cost field
-	if( ! empty( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
+	if( ( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) 	{
@@ -1311,7 +1311,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					'orderby' => 'post_title',
 					'order' => 'ASC',
 					'numberposts' => -1,
-					'exclude' => is_dj() && ! empty( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
+					'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
 				)
 			);
 			
@@ -1386,7 +1386,7 @@ function mdjm_event_metabox_event_options( $post )	{
 						'orderby' => 'post_title',
 						'order' => 'ASC',
 						'numberposts' => -1,
-						'exclude' => is_dj() && ! empty( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
+						'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
 					)
 				);
 				
