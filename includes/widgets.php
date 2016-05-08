@@ -38,9 +38,6 @@ class mdjm_availability_widget extends WP_Widget {
 			__( 'MDJM Availability Checker', 'mobile-dj-manager' ),
 			array( 'description' => __( 'Enables clients to check your availability', 'mobile-dj-manager' ) )
 		);
-		
-		add_action( 'wp_head', array( &$this, 'datepicker' ) );
-		add_filter( 'mdjm_ajax_script_vars', array( &$this, 'ajax' ) );
 	} // __construct
 	
 	/**
@@ -130,33 +127,15 @@ class mdjm_availability_widget extends WP_Widget {
 	} // ajax
 	
 	/**
-	 * Insert the datepicker.
-	 *
-	 * @since	1.3
-	 * @param
-	 * @return 	void
-	 */
-	public function datepicker()	{
-		
-		mdjm_insert_datepicker(
-			array(
-				'class'		=> 'mdjm_widget_date',
-				'altfield'	 => 'widget_check_date',
-				'mindate'	  => '1'
-			)
-		);
-		
-	} // datepicker
-	
-	/**
 	 * Front-end display of widget.
 	 *
-	 * @see WP_Widget::widget()
+	 * @see		WP_Widget::widget()
 	 *
 	 * @param	arr		$args		Widget arguments.
 	 * @param	arr		$instance	Saved values from database.
 	 */
 	public function widget( $args, $instance )	{
+		add_action( 'wp_head', array( &$this, 'datepicker' ) );
 		if( !empty( $instance['ajax'] ) )	{
 			self::ajax( $args, $instance );
 		}
@@ -195,7 +174,15 @@ class mdjm_availability_widget extends WP_Widget {
 		/* We need the jQuery Calendar */
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-		$this->datepicker();
+		
+		mdjm_insert_datepicker(
+			array(
+				'class'		=> 'mdjm_widget_date',
+				'altfield'	 => 'widget_check_date',
+				'mindate'	  => '1'
+			)
+		);
+		
 		if( isset( $instance['intro'] ) && !empty( $instance['intro'] ) )	{
 			if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
 				$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
@@ -257,9 +244,9 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Back-end widget form.
 	 *
-	 * @see WP_Widget::form()
+	 * @see		WP_Widget::form()
 	 *
-	 * @param array $instance Previously saved values from database.
+	 * @param	arr		$instance	Previously saved values from database.
 	 */
 	public function form( $instance ) {							
 		$defaults = array( 
@@ -353,12 +340,12 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Sanitize widget form values as they are saved.
 	 *
-	 * @see WP_Widget::update()
+	 * @see		WP_Widget::update()
 	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
+	 * @param	arr		$new_instance	Values just sent to be saved.
+	 * @param	arr		$old_instance	Previously saved values from database.
 	 *
-	 * @return array Updated safe values to be saved.
+	 * @return	arr		Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
