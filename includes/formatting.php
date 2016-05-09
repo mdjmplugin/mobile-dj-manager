@@ -163,7 +163,7 @@ function mdjm_currency_filter( $price = '', $currency = '' ) {
 	endif;
 
 	if( $negative ) {
-		// Prepend the mins sign before the currency sign
+		// Prepend the minus sign before the currency sign
 		$formatted = '-' . $formatted;
 	}
 
@@ -282,19 +282,17 @@ function mdjm_get_formatted_url( $page_id, $permalink=true, $echo=false )	{
 	// The URL
 	$return = get_permalink( $page_id );
 	
-	if( !empty( $permalink ) )	{
+	if ( ! empty( $permalink ) )	{
 		if( get_option( 'permalink_structure', false ) )	{
 			$return .= '?';
-		}
-		else	{
+		} else	{
 			$return .= '&amp;';	
 		}
 	}
 	
-	if( !empty( $echo ) )	{
+	if ( ! empty( $echo ) )	{
 		echo $return;	
-	}
-	else	{
+	} else	{
 		return $return;
 	}
 } // mdjm_get_formatted_url
@@ -310,7 +308,7 @@ function mdjm_wpadmin_footer_text( $text )	{
 	
 	$text .= ' ';
 	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
-		mdjm_get_admin_page( 'mydjplanner', 'str' ),
+		'http://mdjm.co.uk',
 		MDJM_VERSION_NUM ) . '</em>';
 		
 	return $text;
