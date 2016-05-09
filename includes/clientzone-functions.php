@@ -11,6 +11,45 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
+/**
+ * Print the MDJM footer text.
+ *
+ * @since	1.3
+ * @param
+ * @return	str		The footer text if enabled, otherwise an empty string.
+ */
+function mdjm_show_footer_in_client_zone()	{
+	
+	if ( mdjm_get_option( 'show_credits', false ) )	{
+		echo '<div id="mdjm-cz-footer">';
+		echo '<p>';
+		
+		printf( __( 'Powered by <a href="%s" target="_blank">MDJM Event Management</a>, version %s', 'mobile-dj-manager' ), 'http://mdjm.co.uk', MDJM_VERSION_NUM );
+		
+		echo '</p>';
+		echo '</div>';
+	}
+	
+} // mdjm_show_footer_in_client_zone
+add_action( 'wp_footer', 'mdjm_show_footer_in_client_zone' );
+
+/**
+ * Remove comments and comments links from the front end for non-admins.
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_no_comments()	{
+	
+	add_filter( 'get_comments_number', '__return_false' );
+	
+	if( ! current_user_can( 'edit_posts' ) && ( mdjm_is_employee() || current_user_can( 'client' ) ) )	{
+		add_filter( 'get_edit_post_link', '__return_false' );
+	}
+}
+add_action( 'init', 'mdjm_no_comments' );
 	
 /**
  * Accept an enquiry.

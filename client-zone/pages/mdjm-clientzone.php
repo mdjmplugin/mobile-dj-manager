@@ -25,11 +25,8 @@
 																				
 				/* -- Hooks -- */
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
-				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
 				add_action( 'init', array( &$this, 'init' ) ); // Init actions
-				
-				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 			} // __construct
 			
 			/**
@@ -41,7 +38,6 @@
 			 */
 			function init()	{
 				$this->includes();
-				$this->no_comments();
 			} // init
 			
 			/**
@@ -54,20 +50,6 @@
 			function includes()	{
 				require_once( MDJM_CLIENTZONE . '/includes/mdjm-availability.php' );
 			} // includes
-			
-			/**
-			 * Stop comments being displayed within the Client Zone pages
-			 *
-			 *
-			 *
-			 */
-			function no_comments()	{
-				add_filter( 'get_comments_number', '__return_false' );
-				
-				if( is_dj() || is_client() )
-					add_filter( 'get_edit_post_link', '__return_false' );
-			} // no_comments
-
 /*
  * --
  * CLIENT EVENT ACTIONS
@@ -403,18 +385,11 @@
 			public function client_zone_enqueue()	{
 				
 				wp_register_style( 'mobile-dj-manager', MDJM_PLUGIN_URL . '/assets/css/mdjm-styles.css', '', MDJM_VERSION_NUM );
-				//wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
-				//wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 				
 				/* -- Dynamics Ajax -- */
 				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/assets/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
 								
-				//wp_enqueue_script( 'jquery' );
 				wp_enqueue_style( 'mobile-dj-manager');
-				//wp_enqueue_script( 'google-hosted-jquery');
-				//wp_enqueue_script( 'jquery-validation-plugin');
-				
-				//wp_register_script( 'mdjm-validation', MDJM_PLUGIN_URL . '/assets/js/mdjm-validation.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 				
 			} // client_zone_enqueue
 			
@@ -485,21 +460,6 @@
 									
 			} // display_message
 			
-			/**
-			 * print_credit
-			 * Write out the MDJM credit information to the footer 
-			 * of all Client Zone pages, if settings allow us to
-			 * 
-			 * 
-			 */
-			public function print_credit()	{
-				if ( MDJM_CREDITS == true )
-					echo '<div id="mdjm-cz-footer"> ' . "\r\n" . 
-					'<p>Powered by ' .
-					'<a href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '" target="_blank">' . MDJM_NAME . 
-					'</a>, version ' . MDJM_VERSION_NUM . '</p>' . "\r\n" . 
-					'</div>' . "\r\n";
-			} // print_credit
 /*
  * --
  * LOGIN & CUSTOM TEXT
@@ -528,16 +488,6 @@
 				wp_login_form();		
 			} // login
 			
-			/**
-			 * Display Lost Password text and link on login page
-			 *
-			 *
-			 *
-			 */
-			function lost_password_link()	{
-				return '<a href="/wp-login.php?action=lostpassword">' . __( 'Lost Password' ) . '?</a>';	
-			} // lost_password_link
-
 			/**
 			 *
 			 *
