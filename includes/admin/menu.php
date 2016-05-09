@@ -29,7 +29,7 @@ function mdjm_admin_menu()	{
 	global $mdjm_dashboard_page, $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page, 
 	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_availability_page,
 		   $mdjm_emp_page, $mdjm_packages_page, $mdjm_transactions_page, $mdjm_venues_page,
-		   $mdjm_addons_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page, $mdjm_custom_client_fields_page;
+		   $mdjm_playlist_page, $mdjm_custom_event_fields_page, $mdjm_custom_client_fields_page;
 	
 	
 	//$mdjm_dashboard_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Dashboard', 'mobile-dj-manager' ), __( 'Dashboard', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-dashboard', 'mdjm_dashboard_page' );
@@ -77,9 +77,7 @@ function mdjm_admin_menu()	{
 	if ( mdjm_employee_can( 'list_venues' ) )	{
 		$mdjm_venues_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Venues', 'mobile-dj-manager' ), __( 'Venues', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm-venue', '' );
 	}
-											  
-	$mdjm_addons_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Extensions', 'mobile-dj-manager' ), __( 'Extensions', 'mobile-dj-manager' ), 'manage_mdjm', 'admin.php?page=mdjm-settings&tab=addons', '' );
-					
+											  					
 	$mdjm_playlist_page = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	
 	$mdjm_custom_event_fields_page = add_submenu_page( null, __( 'Custom Event Fields', 'mobile-dj-manager' ), __( 'Custom Event Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-event-fields', array( 'MDJM_Event_Fields', 'custom_event_field_settings' ) );
@@ -533,17 +531,6 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'target' => '_blank'
 		),
 	));
-	if( mdjm_is_admin() )	{
-		$admin_bar->add_menu( array(
-			'id'     => 'mdjm-extensions',
-			'parent' => 'mdjm',
-			'title'  => sprintf( __( '%sExtensions%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-			'href'   => admin_url( 'admin.php?page=mdjm-settings&tab=addons' ),
-			'meta'   => array(
-				'title' => __( 'MDJM Extensions', 'mobile-dj-manager' )
-			),
-		));
-	}
 } // mdjm_admin_toolbar
 add_action( 'admin_bar_menu', 'mdjm_admin_toolbar', 99 );
 						
