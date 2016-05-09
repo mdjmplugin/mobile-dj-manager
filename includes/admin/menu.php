@@ -283,7 +283,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		// Employee Availability
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-availability',
-			'parent'	=> 'mdjm-employees',
+			'parent'	=> mdjm_is_employer() ? 'mdjm-employees' : 'mdjm',
 			'title'	 => __(  'Employee Availability', 'mobile-dj-manager' ),
 			'href'	  => admin_url( 'admin.php?page=mdjm-availability' ),
 			'meta'	  => array(
