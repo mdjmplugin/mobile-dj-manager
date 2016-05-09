@@ -104,7 +104,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 	$admin_bar->add_menu( array(
 		'id'		=> 'mdjm',
 		'title'	 => sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
-		'href'	  => '#',
+		'href'	  => mdjm_employee_can( 'read_events' ) ? admin_url( 'edit.php?post_type=mdjm-event' ) : '#',
 		'meta'	  => array(
 			'title' => __( 'MDJM Event Management', 'mobile-dj-manager' ),            
 		),
