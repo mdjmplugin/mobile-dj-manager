@@ -32,6 +32,10 @@ class MDJM_Upgrade	{
 		if( ! wp_next_scheduled( 'mdjm_hourly_schedule' ) )		{
 			wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );	
 		}
+		
+		if( ! wp_next_scheduled( 'mdjm_weekly_scheduled_events' ) )		{
+			wp_schedule_event( current_time( 'timestamp' ), 'weekly', 'mdjm_weekly_scheduled_events' );
+		}
 
 	} // __construct
 	

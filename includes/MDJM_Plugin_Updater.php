@@ -37,7 +37,6 @@ class MDJM_Plugin_Updater {
 
         // Set up hooks.
         $this->init();
-        add_action( 'admin_init', array( $this, 'show_changelog' ) );		
     } // __construct
 
     /**
@@ -51,8 +50,9 @@ class MDJM_Plugin_Updater {
 
         add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
         add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
-
+		remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row', 10, 2 );
         add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 10, 2 );
+		add_action( 'admin_init', array( $this, 'show_changelog' ) );
     } // init
 
     /**
@@ -88,13 +88,9 @@ class MDJM_Plugin_Updater {
 
                 if( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
-					if ( empty( $version_info->plugin ) ) {
-						$version_info->plugin = $this->name;
-					}
+					$_transient_data->response[ $this->name ] = $version_info;
 
-                    $_transient_data->response[ $this->name ] = $version_info;
-
-                }
+				}
 
                 $_transient_data->last_checked = time();
                 $_transient_data->checked[ $this->name ] = $this->version;
@@ -130,8 +126,10 @@ class MDJM_Plugin_Updater {
         remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ), 10 );
 
         $update_cache = get_site_transient( 'update_plugins' );
+		
+		$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
 
-        if ( ! is_object( $update_cache ) || empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
+        if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
 
             $cache_key    = md5( 'mdjm_plugin_' .sanitize_key( $this->name ) . '_version_info' );
             $version_info = get_transient( $cache_key );
@@ -142,7 +140,6 @@ class MDJM_Plugin_Updater {
 
                 set_transient( $cache_key, $version_info, 3600 );
             }
-
 
             if( ! is_object( $version_info ) ) {
                 return;
@@ -208,16 +205,13 @@ class MDJM_Plugin_Updater {
      * @return object $_data
      */
     function plugins_api_filter( $_data, $_action = '', $_args = null ) {
-        if ( $_action != 'plugin_information' ) {
-
+        
+		if ( $_action != 'plugin_information' ) {
             return $_data;
-
         }
 
         if ( ! isset( $_args->slug ) || ( $_args->slug != $this->slug ) ) {
-
             return $_data;
-
         }
 
         $to_send = array(
@@ -229,13 +223,27 @@ class MDJM_Plugin_Updater {
             )
         );
 
-        $api_response = $this->api_request( 'plugin_information', $to_send );
+        $cache_key = 'mdjm_api_request_' . substr( md5( serialize( $this->slug ) ), 0, 15 );
 
-        if ( false !== $api_response ) {
-            $_data = $api_response;
-        }
+		//Get the transient where we store the api request for this plugin for 24 hours
+		$mdjm_api_request_transient = get_site_transient( $cache_key );
 
-        return $_data;
+		//If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
+		if ( empty( $mdjm_api_request_transient ) ){
+
+			$api_response = $this->api_request( 'plugin_information', $to_send );
+
+			//Expires in 1 day
+			set_site_transient( $cache_key, $api_response, DAY_IN_SECONDS );
+
+			if ( false !== $api_response ) {
+				$_data = $api_response;
+			}
+
+		}
+
+		return $_data;
+
     } // plugins_api_filter
 
 
@@ -271,11 +279,9 @@ class MDJM_Plugin_Updater {
 
         $data = array_merge( $this->api_data, $_data );
 
-        if ( $data['slug'] != $this->slug )
+        if ( $data['slug'] != $this->slug )	{
             return;
-
-        if ( empty( $data['license'] ) )
-            return;
+		}
 
         if( $this->api_url == home_url() ) {
             return false; // Don't allow a plugin to ping itself
@@ -283,7 +289,7 @@ class MDJM_Plugin_Updater {
 
         $api_params = array(
             'edd_action' => 'get_version',
-            'license'    => $data['license'],
+            'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
             'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
             'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
             'slug'       => $data['slug'],
@@ -307,6 +313,7 @@ class MDJM_Plugin_Updater {
     } // api_request
 
     public function show_changelog() {
+
         if( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'] ) {
             return;
         }
@@ -329,7 +336,7 @@ class MDJM_Plugin_Updater {
             echo '<div style="background:#fff;padding:10px;">' . $response->sections['changelog'] . '</div>';
         }
 
-
         exit;
+
     } // show_changelog
 } // class MDJM_Plugin_Updater

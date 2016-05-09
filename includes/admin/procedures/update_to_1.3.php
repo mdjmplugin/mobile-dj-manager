@@ -23,6 +23,8 @@ function mdjm_run_update_13()	{
 
 	// Update signed contract meta key name.
 	mdjm_update_contract_meta_key_13();
+	
+	wp_schedule_event( current_time( 'timestamp' ), 'weekly', 'mdjm_weekly_scheduled_events' );
 
 }
 add_action( 'init', 'mdjm_run_update_13', 15 );
