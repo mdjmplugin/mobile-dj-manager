@@ -40,15 +40,16 @@
 				$this->mdjm_events = new MDJM_Events(); // REMOVE
 								
 				$mdjm_post_types = array(
-					MDJM_COMM_POSTS,
-					MDJM_CONTRACT_POSTS,
-					MDJM_CUSTOM_FIELD_POSTS,
-					MDJM_SIGNED_CONTRACT_POSTS,
-					MDJM_EMAIL_POSTS,
-					MDJM_EVENT_POSTS,
-					MDJM_QUOTE_POSTS,
-					MDJM_TRANS_POSTS,
-					MDJM_VENUE_POSTS );
+					'mdjm_communication',
+					'contract',
+					'mdjm-custom-fields',
+					'mdjm-signed-contract',
+					'email_template',
+					'mdjm-event',
+					'mdjm-quotes',
+					'mdjm-transaction',
+					'mdjm-venue'
+				);
 												
 				/* -- Hooks -- */
 				add_action( 'init', array( &$this, 'mdjm_init' ) ); // init processes

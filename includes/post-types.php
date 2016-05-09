@@ -964,3 +964,26 @@ function mdjm_register_taxonomies()	{
 	register_taxonomy_for_object_type( 'venue-details', 'mdjm-venue' );
 } // mdjm_register_taxonomies
 add_action( 'init', 'mdjm_register_taxonomies', 0 );
+
+/**
+ * Retrieve all MDJM Post Types.
+ *
+ * @since	1.3
+ * @param
+ * @return	arr
+ */
+function mdjm_get_post_types()	{
+	$post_types = array(
+		'mdjm_communication',
+		'contract',
+		'mdjm-custom-fields',
+		'mdjm-signed-contract',
+		'email_template',
+		'mdjm-event',
+		'mdjm-quotes',
+		'mdjm-transaction',
+		'mdjm-venue'
+	);
+	
+	return apply_filters( 'mdjm_post_types', $post_types );
+} // mdjm_get_post_types
