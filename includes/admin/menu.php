@@ -510,12 +510,12 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			) );
 		}
 	}
-	// My DJ Planner Links
+	// MDJM Links
 	$admin_bar->add_menu( array(
 		'id'     => 'mdjm-user-guides',
 		'parent' => 'mdjm',
 		'title'  => sprintf( __( '%sUser Guides%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-		'href'   => 'http://mdjm.co.uk/add-ons/support/',
+		'href'   => 'http://mdjm.co.uk/support/',
 		'meta'   => array(
 			'title' => __( 'MDJM User Guides', 'mobile-dj-manager' ),
 			'target' => '_blank'
@@ -525,7 +525,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		'id'     => 'mdjm-support',
 		'parent' => 'mdjm',
 		'title'  => sprintf( __( '%sSupport%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-		'href'   => 'http://www.mydjplanner.co.uk/support/',
+		'href'   => 'http://www.mydjplanner.co.uk/forums/',
 		'meta'   => array(
 			'title' => __( 'MDJM Support Forums', 'mobile-dj-manager' ),
 			'target' => '_blank'
