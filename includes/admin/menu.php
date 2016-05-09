@@ -514,10 +514,10 @@ function mdjm_admin_toolbar( $admin_bar )	{
 	$admin_bar->add_menu( array(
 		'id'     => 'mdjm-user-guides',
 		'parent' => 'mdjm',
-		'title'  => sprintf( __( '%sUser Guides%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
+		'title'  => sprintf( __( '%sDocumentation%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
 		'href'   => 'http://mdjm.co.uk/support/',
 		'meta'   => array(
-			'title' => __( 'MDJM User Guides', 'mobile-dj-manager' ),
+			'title' => __( 'Documentation', 'mobile-dj-manager' ),
 			'target' => '_blank'
 		),
 	));
