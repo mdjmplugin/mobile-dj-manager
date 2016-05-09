@@ -12,47 +12,47 @@
 					menu: [{
 						text: 'Admin URL',
 						onclick: function () {
-							editor.insertContent('{ADMIN_URL}');
+							editor.insertContent('{admin_url}');
 						}
 					}, {
 						text: 'Application Home Page',
 						onclick: function () {
-							editor.insertContent('{APPLICATION_HOME}');
+							editor.insertContent('{application_home}');
 						}
 					}, {
 						text: 'Application Contracts Page',
 						onclick: function () {
-							editor.insertContent('{CONTRACT_URL}');
+							editor.insertContent('{contract_url}');
 						}
 					}, {
 						text: 'Application Payments Page',
 						onclick: function () {
-							editor.insertContent('{PAYMENT_URL}');
+							editor.insertContent('{payment_url}');
 						}
 					}, {
 						text: 'Application Quotes Page',
 						onclick: function () {
-							editor.insertContent('{QUOTES_URL}');
+							editor.insertContent('{quotes_url}');
 						}
 					}, {
 						text: 'Application Name',
 						onclick: function () {
-							editor.insertContent('{APPLICATION_NAME}');
+							editor.insertContent('{application_name}');
 						}
 					}, {
 						text: 'Company Name',
 						onclick: function () {
-							editor.insertContent('{COMPANY_NAME}');
+							editor.insertContent('{company_name}');
 						}
 					}, {
 						text: 'Contact Page',
 						onclick: function () {
-							editor.insertContent('{CONTACT_PAGE}');
+							editor.insertContent('{contact_page}');
 						}
 					}, {
 						text: 'Website Home Page',
 						onclick: function () {
-							editor.insertContent('{WEBSITE_URL}');
+							editor.insertContent('{website_url}');
 						}
 					}]
 				}, {
@@ -60,47 +60,47 @@
 					menu: [{
 						text: 'Client Firstname',
 						onclick: function () {
-							editor.insertContent('{CLIENT_FIRSTNAME}');
+							editor.insertContent('{client_firstname}');
 						}
 					}, {
 						text: 'Client Lastname',
 						onclick: function () {
-							editor.insertContent('{CLIENT_LASTNAME}');
+							editor.insertContent('{client_lastname}');
 						}
 					}, {
 						text: 'Client Fullname',
 						onclick: function () {
-							editor.insertContent('{CLIENT_FULLNAME}');
+							editor.insertContent('{client_fullname}');
 						}
 					}, {
 						text: 'Client Username',
 						onclick: function () {
-							editor.insertContent('{CLIENT_USERNAME}');
+							editor.insertContent('{client_username}');
 						}
 					}, {
 						text: 'Client Password',
 						onclick: function () {
-							editor.insertContent('{CLIENT_PASSWORD}');
+							editor.insertContent('{client_password}');
 						}
 					}, {
 						text: 'Client Full Address',
 						onclick: function () {
-							editor.insertContent('{CLIENT_FULL_ADDRESS}');
+							editor.insertContent('{client_full_address}');
 						}
 					}, {
 						text: 'Client Email',
 						onclick: function () {
-							editor.insertContent('{CLIENT_EMAIL}');
+							editor.insertContent('{client_email}');
 						}
 					}, {
 						text: 'Client Primary Phone',
 						onclick: function () {
-							editor.insertContent('{CLIENT_PRIMARY_PHONE}');
+							editor.insertContent('{client_primary_phone}');
 						}
 					}, {
 						text: 'Payment History',
 						onclick: function () {
-							editor.insertContent('{PAYMENT_HISTORY}');
+							editor.insertContent('{payment_history}');
 						}
 					}]
 				}, {
@@ -108,22 +108,22 @@
 					menu: [{
 						text: 'DJ Firstname',
 						onclick: function () {
-							editor.insertContent('{DJ_FIRSTNAME}');
+							editor.insertContent('{dj_firstname}');
 						}
 					}, {
 						text: 'DJ Fullname',
 						onclick: function () {
-							editor.insertContent('{DJ_FULLNAME}');
+							editor.insertContent('{dj_fullname}');
 						}
 					}, {
 						text: 'DJ Email',
 						onclick: function () {
-							editor.insertContent('{DJ_EMAIL}');
+							editor.insertContent('{dj_email}');
 						}
 					}, {
 						text: 'DJ Phone',
 						onclick: function () {
-							editor.insertContent('{DJ_PRIMARY_PHONE}');
+							editor.insertContent('{dj_primary_phone}');
 						}
 					}]
 				}, {
@@ -131,42 +131,42 @@
 					menu: [{
 						text: 'Available Addons',
 						onclick: function () {
-							editor.insertContent('{AVAILABLE_ADDONS}');
+							editor.insertContent('{available_addons}');
 						}
 					}, {
 						text: 'Available Addons with Cost',
 						onclick: function () {
-							editor.insertContent('{AVAILABLE_ADDONS_COST}');
+							editor.insertContent('{available_addons_cost}');
 						}
 					}, {
 						text: 'Available Packages',
 						onclick: function () {
-							editor.insertContent('{AVAILABLE_PACKAGES}');
+							editor.insertContent('{available_packages}');
 						}
 					}, {
 						text: 'Available Packages with Cost',
 						onclick: function () {
-							editor.insertContent('{AVAILABLE_PACKAGES_COST}');
+							editor.insertContent('{available_packages_cost}');
 						}
 					}, {
 						text: 'Event Addons',
 						onclick: function () {
-							editor.insertContent('{EVENT_ADDONS}');
+							editor.insertContent('{event_addons}');
 						}
 					}, {
 						text: 'Event Addons with Cost',
 						onclick: function () {
-							editor.insertContent('{EVENT_ADDONS_COST}');
+							editor.insertContent('{event_addons_cost}');
 						}
 					}, {
 						text: 'Event Package',
 						onclick: function () {
-							editor.insertContent('{EVENT_PACKAGE}');
+							editor.insertContent('{event_package}');
 						}
 					}, {
 						text: 'Event Package with Cost',
 						onclick: function () {
-							editor.insertContent('{EVENT_PACKAGE_COST}');
+							editor.insertContent('{event_package_cost}');
 						}
 					}]
 				}, {
@@ -174,133 +174,133 @@
 					menu: [{
 						text: 'Event Name',
 						onclick: function () {
-							editor.insertContent('{EVENT_NAME}');
+							editor.insertContent('{event_name}');
 						}
 					}, {
 						text: 'Contract Date',
 						onclick: function () {
-							editor.insertContent('{CONTRACT_DATE}');
+							editor.insertContent('{contract_date}');
 						}
 					}, {
 						text: 'Contract ID',
 						onclick: function () {
-							editor.insertContent('{CONTRACT_ID}');
+							editor.insertContent('{contract_id}');
 						}
 					}, {
 						text: 'Event Date (Long)',
 						onclick: function () {
-							editor.insertContent('{EVENT_DATE}');
+							editor.insertContent('{event_date}');
 						}
 					}, {
 						text: 'Event Date (DD/MM/YYYY)',
 						onclick: function () {
-							editor.insertContent('{EVENT_DATE_SHORT}');
+							editor.insertContent('{event_date_short}');
 						}
 					}, {
 						text: 'Event Start Time',
 						onclick: function () {
-							editor.insertContent('{START_TIME}');
+							editor.insertContent('{start_time}');
 						}
 					}, {
 						text: 'Event End Date (DD/MM/YYYY)',
 						onclick: function () {
-							editor.insertContent('{END_DATE}');
+							editor.insertContent('{end_date}');
 						}
 					}, 
 					{
 						text: 'Event End Time',
 						onclick: function () {
-							editor.insertContent('{END_TIME}');
+							editor.insertContent('{end_time}');
 						}
 					}, {
 						text: 'Event Setup Time',
 						onclick: function () {
-							editor.insertContent('{DJ_SETUP_TIME}');
+							editor.insertContent('{dj_setup_time}');
 						}
 					}, {
 						text: 'Event Setup Date',
 						onclick: function () {
-							editor.insertContent('{DJ_SETUP_DATE}');
+							editor.insertContent('{dj_setup_date}');
 						}
 					}, {
 						text: 'Event Type',
 						onclick: function () {
-							editor.insertContent('{EVENT_TYPE}');
+							editor.insertContent('{event_type}');
 						}
 					}, {
 						text: 'Event Description',
 						onclick: function () {
-							editor.insertContent('{EVENT_DESCRIPTION}');
+							editor.insertContent('{event_description}');
 						}
 					}, {
 						text: 'DJ Notes',
 						onclick: function () {
-							editor.insertContent('{DJ_NOTES}');
+							editor.insertContent('{dj_notes}');
 						}
 					}, {
 						text: 'Admin Notes',
 						onclick: function () {
-							editor.insertContent('{ADMIN_NOTES}');
+							editor.insertContent('{admin_notes}');
 						}
 					}, {
 						text: 'Playlist Closes',
 						onclick: function () {
-							editor.insertContent('{PLAYLIST_CLOSE}');
+							editor.insertContent('{playlist_close}');
 						}
 					}, {
 						text: 'Playlist URL',
 						onclick: function () {
-							editor.insertContent('{PLAYLIST_URL}');
+							editor.insertContent('{playlist_url}');
 						}
 					}, {
 						text: 'Guest Playlist URL',
 						onclick: function () {
-							editor.insertContent('{GUEST_PLAYLIST_URL}');
+							editor.insertContent('{guest_playlist_url}');
 						}
 					}, {
 						text: 'Total Cost',
 						onclick: function () {
-							editor.insertContent('{TOTAL_COST}');
+							editor.insertContent('{total_cost}');
 						}
 					}, {
 						text: 'Deposit Amount',
 						onclick: function () {
-							editor.insertContent('{DEPOSIT}');
+							editor.insertContent('{deposit}');
 						}
 					}, {
 						text: 'Deposit Status',
 						onclick: function () {
-							editor.insertContent('{DEPOSIT_STATUS}');
+							editor.insertContent('{deposit_status}');
 						}
 					}, {
 						text: 'Balance Owed',
 						onclick: function () {
-							editor.insertContent('{BALANCE}');
+							editor.insertContent('{balance}');
 						}
 					}, {
 						text: 'Venue',
 						onclick: function () {
-							editor.insertContent('{VENUE}');
+							editor.insertContent('{venue}');
 						}
 					}, {
 						text: 'Venue Contact',
 						onclick: function () {
-							editor.insertContent('{VENUE_CONTACT}');
+							editor.insertContent('{venue_contact}');
 						}
 					}, {
 						text: 'Venue Full Address',
 						onclick: function () {
-							editor.insertContent('{VENUE_FULL_ADDRESS}');
+							editor.insertContent('{venue_full_address}');
 						}
 					}, {
 						text: 'Venue Phone',
 						onclick: function () {
-							editor.insertContent('{VENUE_TELEPHONE}');
+							editor.insertContent('{venue_telephone}');
 						}
 					}, {
 						text: 'Venue Email',
 						onclick: function () {
-							editor.insertContent('{VENUE_EMAIL}');
+							editor.insertContent('{venue_email}');
 						}
 					}]
 				}, {
@@ -308,17 +308,17 @@
 					menu: [{
 						text: 'Payment Amount',
 						onclick: function () {
-							editor.insertContent('{PAYMENT_AMOUNT}');
+							editor.insertContent('{payment_amount}');
 						}
 					}, {
 						text: 'Payment Date',
 						onclick: function () {
-							editor.insertContent('{PAYMENT_DATE}');
+							editor.insertContent('{payment_date}');
 						}
 					}, {
 						text: 'Payment For',
 						onclick: function () {
-							editor.insertContent('{PAYMENT_FOR}');
+							editor.insertContent('{payment_for}');
 						}
 					}]
 				}, {
@@ -326,7 +326,7 @@
 					menu: [{
 						text: 'Date DD/MM/YYYY',
 						onclick: function () {
-							editor.insertContent('{DDMMYYYY}');
+							editor.insertContent('{ddmmyyyy}');
 						}
 					}]
 				}]
@@ -348,27 +348,27 @@
 				menu: [{
 					text: 'Client Zone Home',
 					onclick: function () {
-						editor.insertContent('[MDJM page="Home"]');
+						editor.insertContent('[mdjm-home]');
 					}
 				}, {
 					text: 'Client Contract',
 					onclick: function () {
-						editor.insertContent('[MDJM page="Contract"]');
+						editor.insertContent('[mdjm-contract]');
 					}
 				}, {
 					text: 'Client Payments',
 					onclick: function () {
-						editor.insertContent('[MDJM page="Payments"]');
+						editor.insertContent('[mdjm-payments]');
 					}
 				}, {
 					text: 'Client Playlist',
 					onclick: function () {
-						editor.insertContent('[MDJM page="Playlist"]');
+						editor.insertContent('[mdjm-playlist]');
 					}
 				}, {
 					text: 'Client Profile',
 					onclick: function () {
-						editor.insertContent('[MDJM page="Profile"]');
+						editor.insertContent('[mdjm-profile]');
 					}
 				}]
 			}, {
@@ -391,7 +391,7 @@
 				}, {
 					text: 'PDF Page Break',
 					onclick: function() {
-						editor.insertContent('{PDF_PAGEBREAK}');
+						editor.insertContent('{pdf_pagebreak}');
 					}
 				}]
 			}]
