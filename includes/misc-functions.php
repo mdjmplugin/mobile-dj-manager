@@ -209,6 +209,7 @@ add_action( 'mdjm_print_notices', 'mdjm_print_notices' );
  * @return	arr		Array containing message text, title and class.
  */
 function mdjm_messages( $key )	{
+	
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
@@ -319,8 +320,10 @@ function mdjm_messages( $key )	{
 	);
 	
 	// Return a single message
-	if( isset( $key ) && array_key_exists( $key, $messages ) )	{
+	if ( isset( $key ) && array_key_exists( $key, $messages ) )	{
 		return $messages[ $key ];
+	} elseif ( isset( $key ) && ! array_key_exists( $key, $messages ) )	{
+		return;
 	}
 	
 	// Return all messages
