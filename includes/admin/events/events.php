@@ -155,13 +155,13 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		case 'event_status':
 			echo get_post_status_object( $post->post_status )->label;
 			
-			if( isset( $_GET['availability'] ) && $post_id == $_GET['e_id'] )	{
+			/*if( isset( $_GET['availability'], $_GET['event_id'] ) && $post_id == $_GET['event_id'] )	{
 				if( is_dj() )	{
 					$dj_avail = mdjm_availability_check( $_GET['availability'], $current_user->ID );
 				} else	{
 					$dj_avail = mdjm_availability_check( $_GET['availability'] );
 				}
-			}
+			}*/
 		break;
 			
 		// Event Type
@@ -514,11 +514,11 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 								admin_url( 'post.php?post=' . $post->ID . '&action=edit&mdjm_action=respond' ) );
 		
 		// Check availability
-		$actions['availability'] = sprintf( 
+		/*$actions['availability'] = sprintf( 
 										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
 										mdjm_get_admin_page( 'events' ) .
 										'&availability=' . date( 'Y-m-d', ( strtotime( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) ) ) .
-										'%e_id=' . $post->ID );
+										'&event_id=' . $post->ID );*/
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf( 
 												__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
