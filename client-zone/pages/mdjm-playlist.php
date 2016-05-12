@@ -21,9 +21,7 @@
 			 */
 			function __construct()	{
 				global $mdjm, $my_mdjm, $post;
-				
-				mdjm_page_visit( MDJM_APP . ' Playlist' );
-				
+								
 				if( !is_user_logged_in() )	{
 					$playlist = ( isset( $_GET['mdjmeventid'] ) ? $this->playlist_exists( $_GET['mdjmeventid'] ) 
 						: false );
@@ -34,7 +32,7 @@
 												'No event found. Please check the URL you have been sent and try again' );
 					// Playlist code exists
 					elseif( isset( $_GET['mdjmeventid'] ) && !empty( $playlist ) )	{
-						$this->eventinfo = $mdjm->mdjm_events->event_detail( $this->event->ID );
+						$this->eventinfo = MDJM()->events->event_detail( $this->event->ID );
 						$post = $this->event;
 						$this->guest_form( $playlist );
 					}
@@ -52,7 +50,7 @@
 					
 					$post = $this->event;
 					
-					$this->eventinfo = $mdjm->mdjm_events->event_detail( $this->event->ID );
+					$this->eventinfo = MDJM()->events->event_detail( $this->event->ID );
 					
 					$this->client_form();
 				}
@@ -72,12 +70,12 @@
 										array( 'id' => $song ) );
 										
 				if( !empty( $query ) )	{
-					$GLOBALS['mdjm_debug']->log_it( 'Song removed from playlist by ' . $my_mdjm['me']->display_name, true );
+					MDJM()->debug->log_it( 'Song removed from playlist by ' . $my_mdjm['me']->display_name, true );
 					parent::display_notice( 2,
 												__( 'The song was successfully removed' ) );	
 				}
 				else	{
-					$GLOBALS['mdjm_debug']->log_it( 'Song could not be removed from playlist ' . $wpdb->print_error(), true );
+					MDJM()->debug->log_it( 'Song could not be removed from playlist ' . $wpdb->print_error(), true );
 					parent::display_notice( 4,
 												__( 'An error occurred. Please try again.' ) );	
 				}
@@ -95,7 +93,7 @@
 				
 				// Firstly, our security check
 				if( !isset( $_POST['__mdjm_playlist'] ) || !wp_verify_nonce( $_POST['__mdjm_playlist'], 'manage_playlist' ) )	{
-					$GLOBALS['mdjm_debug']->log_it( 'Security verification failed during playlist addition. No update occured', false );
+					MDJM()->debug->log_it( 'Security verification failed during playlist addition. No update occured', false );
 					return parent::display_message( 4, 4 );	
 				}
 				// Passed Security
@@ -123,7 +121,7 @@
 					if( !empty( $update_id ) )	{ // Success
 						// Journal Entry
 						if( MDJM_JOURNAL == true )	{
-							$mdjm->mdjm_events->add_journal( array(
+							MDJM()->events->add_journal( array(
 											'user'			=> $this->eventinfo['client']->ID,
 											'event'		   => $this->event->ID,
 											'comment_content' => 'Song added to playlist by ' . $by,
@@ -134,7 +132,7 @@
 						}
 						
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'Song added to Event ID: ' . $this->event->ID . ' Playlist by ' . $by, true );
+							MDJM()->debug->log_it( 'Song added to Event ID: ' . $this->event->ID . ' Playlist by ' . $by, true );
 						
 						// Create an array we can use to display the entries from this session
 						$this->current_songs[] = $wpdb->insert_id;
@@ -146,7 +144,7 @@
 					
 					else	{ // Failed
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'ERROR: Could not add song to playlist. ' . $wpdb->print_error(), true );
+							MDJM()->debug->log_it( 'ERROR: Could not add song to playlist. ' . $wpdb->print_error(), true );
 						
 						parent::display_notice( 4,
 												__( 'An error occurred. Please try again.' ) );
@@ -164,7 +162,7 @@
 			function playlist_exists( $id )	{
 				global $mdjm;
 								
-				$event = $mdjm->mdjm_events->mdjm_event_by( 'playlist', $id );
+				$event = MDJM()->events->mdjm_event_by( 'playlist', $id );
 							
 				return ( $event ) ? $this->event = $event : false;
 							
@@ -200,12 +198,12 @@
 									   '<p>Add your playlist requests within in the form below. All fields are required.</p>' );
 				
 				// If the playlist is open, display it
-				if( $mdjm->mdjm_events->playlist_status( $this->eventinfo['date'] ) == true )	{					   
+				if( MDJM()->events->playlist_status( $this->eventinfo['date'] ) == true )	{					   
 					// Display the form
                     echo '<hr />' . "\r\n";
 					echo '<div id="mdjm-playlist-container">' . "\r\n";
 					echo '<div id="mdjm-playlist-table">' . "\r\n";
-					echo '<form action="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
+					echo '<form action="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
 						'" method="post" enctype="multipart/form-data" name="guest-playlist" id="guest-playlist">' . "\r\n";
 					
 					wp_nonce_field( 'manage_playlist', '__mdjm_playlist' ) . "\r\n";
@@ -296,7 +294,7 @@
 					echo $entry->artist . "\r\n";
 					echo '</div>' . "\r\n";echo '<div class="mdjm-playlist-3column">' . "\r\n";
 					echo '<div class="mdjm-playlist-last-3column">' . "\r\n";
-					echo '<a href="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
+					echo '<a href="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $_GET['mdjmeventid'] . 
 						'&remove_id=' . $entry->event_id . '"></a>' . "\r\n";
 					echo '</div>' . "\r\n";	
 				}
@@ -339,19 +337,19 @@
 					echo parent::__text( 'playlist_edit',
 										 '<p>You are currently editing the playlist for your event on ' . 
 										 date( 'l, jS F Y', $this->eventinfo['date'] ) . '. To edit the playlist for one of your other events, ' . 
-										 'return to the <a href="' . $mdjm->get_link( MDJM_HOME, false ) . '">' . MDJM_APP . 
+										 'return to the <a href="' . mdjm_get_formatted_url( MDJM_HOME, false ) . '">' . MDJM_APP . 
 										 ' home page</a> and select Edit Playlist from the drop down list displayed next to the event for ' . 
 										 'which you want to edit the playlist.</p>' );
 				} // if( count( $my_mdjm['active'] ) > 1 )
 				
-				$num_songs = $mdjm->mdjm_events->count_playlist_entries( $this->event->ID );
+				$num_songs = MDJM()->events->count_playlist_entries( $this->event->ID );
 				
 				/* Display the form to add songs to playlist */
-				if( $mdjm->mdjm_events->playlist_status( $this->eventinfo['date'] ) )	{ // Display form
+				if( MDJM()->events->playlist_status( $this->eventinfo['date'] ) )	{ // Display form
 					echo '<hr />' . "\r\n";
 					echo '<div id="mdjm-playlist-container">' . "\r\n";
 					echo '<div id="mdjm-playlist-table">' . "\r\n";
-					echo '<form action="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 'event_id=' . $this->event->ID . 
+					echo '<form action="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'event_id=' . $this->event->ID . 
 						'" method="post" enctype="multipart/form-data" name="client-playlist" id="client-playlist">' . "\r\n";
 					
 					wp_nonce_field( 'manage_playlist', '__mdjm_playlist' ) . "\r\n";
@@ -404,7 +402,7 @@
 				/* -- Display existing entries if we have them -- */
 				if( $num_songs > 0 )	{ // Songs to display
 				
-					$categories = $mdjm->mdjm_events->get_playlist_by_cat( $this->event->ID );
+					$categories = MDJM()->events->get_playlist_by_cat( $this->event->ID );
 				
 					echo '<div id="mdjm_song_container">' . "\r\n";
 					foreach( $categories as $category => $songs )	{
@@ -425,7 +423,7 @@
 								echo '<td>' . ( !empty( $song->info ) ? stripslashes( $song->info ) : '' ) . '</td>' . "\r\n";
 							}
 							
-							echo '<td style="text-align: right;"><a href="' . $mdjm->get_link( MDJM_PLAYLIST_PAGE ) . 
+							echo '<td style="text-align: right;"><a href="' . mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 
 								'remove_song=' . $song->id . '">' . __( 'Remove' ) . '</a></td>' . "\r\n";
 								
 							echo '</tr>' . "\r\n";

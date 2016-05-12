@@ -32,7 +32,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			
 			add_action( 'template_redirect', array( __CLASS__, 'check_availability' ) );
 			
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );		
+			//add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );		
 		} // __construct
 		
 		/**
@@ -63,11 +63,13 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			if( empty( self::$ajax ) )
 				return;
 				
-			if( $mdjm_settings['availability']['availability_check_pass_page'] != 'text' )
+			if( mdjm_get_option( 'availability_check_pass_page' ) != 'text' )	{
 				$pass_redirect = true;
+			}
 				
-			if( $mdjm_settings['availability']['availability_check_fail_page'] != 'text' )
+			if( mdjm_get_option( 'availability_check_fail_page' ) != 'text' )	{
 				$fail_redirect = true;
+			}
 											
 			?>
             <script type="text/javascript">
@@ -95,7 +97,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 								<?php
 								if( !empty( $pass_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>mdjm_avail_date=' + check_date;
+									window.location.href = '<?php echo mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_pass_page'], true ); ?>mdjm_avail_date=' + check_date;
 									<?php
 								}
 								else	{
@@ -113,7 +115,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 								<?php
 								if( !empty( $fail_redirect ) )	{
 									?>
-									window.location.href = '<?php echo $mdjm->get_link( $mdjm_settings['availability']['availability_check_fail_page'], true ); ?>';
+									window.location.href = '<?php echo mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_fail_page'], true ); ?>';
 									<?php
 								}
 								else	{
@@ -146,10 +148,11 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 		public static function check_availability()	{
 			global $mdjm, $mdjm_settings;
 			
-			if( !isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )
+			if( ! isset( $_POST['mdjm_avail_submit'] ) || !isset( $_POST['check_date'] ) )	{
 				return;
+			}
 				
-			self::$dj_avail = dj_available( '', $_POST['check_date'] );
+			self::$dj_avail = dj_available( '', '', $_POST['check_date'] );
 			
 			if( isset( self::$dj_avail ) )	{
 				// Available & redirect activatated
@@ -157,7 +160,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 					isset( $mdjm_settings['availability']['availability_check_pass_page'] ) && 
 					$mdjm_settings['availability']['availability_check_pass_page'] != 'text' )	{
 					
-					wp_redirect( $mdjm->get_link( $mdjm_settings['availability']['availability_check_pass_page'] ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date'] );
+					wp_redirect( mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_pass_page'] ) . 'mdjm_avail=1&mdjm_avail_date=' . $_POST['check_date'] );
 					exit;	
 				}
 				
@@ -165,7 +168,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 				else	{
 					if( isset( $mdjm_settings['availability']['availability_check_fail_page'] ) && 
 					$mdjm_settings['availability']['availability_check_fail_page'] != 'text' )	{
-						wp_redirect( $mdjm->get_link( $mdjm_settings['availability']['availability_check_fail_page'] ) );
+						wp_redirect( mdjm_get_formatted_url( $mdjm_settings['availability']['availability_check_fail_page'] ) );
 						exit;
 					}
 				}
@@ -186,9 +189,13 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 			 * Initialise the datepicker script
 			 */
 			?>
-            <script type="text/javascript">
-            <?php mdjm_jquery_datepicker_script( array( 'custom_date', 'check_date', '', 'today' ) ); ?>
-			</script>
+            <?php mdjm_insert_datepicker(
+				array( 
+					'class'		=> 'custom_date',
+					'altfield'	=> 'check_date',
+					'mindate'	=> 'today'
+				)
+			); ?>
 			<?php
 			echo '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
 			
@@ -225,7 +232,7 @@ if( !class_exists( 'MDJM_Availability_Checker' ) ) :
 				echo '<br />' . "\r\n";
 			
 			// Input field
-            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_jquery_short_date() . '"';
+            echo '<input type="text" name="avail_date" id="avail_date" class="custom_date" placeholder="' . mdjm_format_datepicker_date() . '"';
 			
 			// Input Wrap
 			if( !empty( $args['field_wrap'] ) && $args['field_wrap'] == 'false' )

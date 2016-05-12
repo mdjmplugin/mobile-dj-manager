@@ -26,7 +26,7 @@
 					
 				else	{
 					// We need the custom fields
-					$this->fields = get_option( MDJM_CLIENT_FIELDS );
+					$this->fields = get_option( 'mdjm_client_fields' );
 					foreach( $this->fields as $key => $row )	{
 						$field[$key] = $row['position'];	
 					}
@@ -47,13 +47,13 @@
 			 *
 			 */
 			function update_profile()	{
-				global $mdjm, $my_mdjm, $mdjm_debug;
+				global $mdjm, $my_mdjm;
 				
-				$mdjm_debug->log_it( 'Starting user profile update for user ' . $my_mdjm['me']->display_name, true );
+				MDJM()->debug->log_it( 'Starting user profile update for user ' . $my_mdjm['me']->display_name, true );
 				
 				// Firstly, our security check
 				if( !isset( $_POST['__mdjm_user'] ) || !wp_verify_nonce( $_POST['__mdjm_user'], 'manage_client_profile' ) )	{
-					$mdjm_debug->log_it( 'Security verification failed during update. No update occured', false );
+					MDJM()->debug->log_it( 'Security verification failed during update. No update occured', false );
 					return parent::display_message( 4, 4 );	
 				}
 					
@@ -89,10 +89,10 @@
 					// Process field updates starting with custom fields
 					foreach ( $update_meta as $meta_key => $meta_value ) {
 						if( update_user_meta ( $my_mdjm['me']->ID, $meta_key, $meta_value ) )
-							$mdjm_debug->log_it( 'Success: User profile field ' . $meta_key . ' updated with value ' . $meta_value, false );
+							MDJM()->debug->log_it( 'Success: User profile field ' . $meta_key . ' updated with value ' . $meta_value, false );
 							
 						else
-							$mdjm_debug->log_it( 'Failure: User profile field ' . $meta_key . ' could not be updated with value ' . $meta_value, false  );
+							MDJM()->debug->log_it( 'Failure: User profile field ' . $meta_key . ' could not be updated with value ' . $meta_value, false  );
 					}
 					
 					// And now built-in fields
@@ -100,11 +100,11 @@
 					
 					// If we changed the password, we need to logout
 					if( isset( $update_fields['user_pass'] ) )	{
-						$mdjm_debug->log_it( 'User password was changed. Logging user out', false  );
+						MDJM()->debug->log_it( 'User password was changed. Logging user out', false  );
 						wp_logout();
 						?>
 						<script type="text/javascript">
-                        window.location.replace("<?php echo $mdjm->get_link( MDJM_PROFILE_PAGE ); ?>");
+                        window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_PROFILE_PAGE ); ?>");
                         </script>
                         <?php
 						exit;
@@ -150,7 +150,7 @@
 				
 				echo parent::__text( 'profile_intro', $default_text );
 				
-				echo '<form action="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . '" method="post" enctype="multipart/form-data" name="mdjm-user-profile" id="mdjm-user-profile">' . "\r\n";
+				echo '<form action="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . '" method="post" enctype="multipart/form-data" name="mdjm-user-profile" id="mdjm-user-profile">' . "\r\n";
 				// For security
 				wp_nonce_field( 'manage_client_profile', '__mdjm_user' ) . "\r\n";
 				 

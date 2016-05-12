@@ -1,0 +1,360 @@
+/**
+ * MDJM Event Management Styles
+ *
+ * @package     MDJM
+ * @subpackage  CSS
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
+
+@charset "UTF-8";
+
+/* =General
+-------------------------------------------------------------- */
+p.head-nav	{
+	font-size: 11px;
+	text-align: right;
+	colour: #7B7D80;
+}
+
+/* =Errors
+-------------------------------------------------------------- */
+.mdjm_form_error {
+	color: #FF0000;
+}
+input.mdjm_form_error {
+	border: solid 1px #FF0000;
+	color: #000000;
+}
+.mdjm_form_valid {
+	color: inherit;
+}
+
+/* =Notifications
+-------------------------------------------------------------- */
+.mdjm-notice, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validate	{
+	border: 1px solid;
+	margin: 10px 0px;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+}
+
+.mdjm-info {
+	color: #00529B;
+	background-color: #BDE5F8;
+	background-image: url('../assets/images/info-icon.png');
+}
+
+.mdjm-success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image: url('../assets/images/success-icon.png');
+}
+
+.mdjm-warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+	background-image: url('../assets/images/warning-icon.png');
+}
+
+.mdjm-error {
+	color: #D8000C;
+	background-color: #FFBABA;
+	background-image: url('../assets/images/error-icon.png');
+}
+
+.mdjm-validate {
+	color: #D63301;
+	background-color: #FFCCBA;
+	background-image: url('../assets/images/info-icon.png');
+}
+
+#pleasewait	{
+	display: none;
+}
+
+/* =Action Buttons
+-------------------------------------------------------------- */
+.mdjm-action-button {
+	-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
+	-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
+	box-shadow: 0px 0px 0px 2px #9fb4f2;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-size: 10px;
+	padding: 6px 25px;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #283966;
+	text-align: center;
+	min-width: 175px;
+}
+.mdjm-action-button:hover {
+	color: #ffffff;
+}
+.mdjm-action-button:active {
+	position:relative;
+	top:1px;
+}
+.mdjm-action-button-blue	{
+	background-color: #3d61bd;
+	border: 1px solid #3b8dbd;
+}
+.mdjm-action-button-green	{
+	background-color: #287a3e;
+	border: 1px solid #18ab29;
+}
+.mdjm-action-button-red	{
+	background-color: #942911;
+	border: 1px solid #bc3315;
+}
+.mdjm-action-button-turquoise	{
+	background-color: #408c99;
+	border: 1px solid #29668f;
+}
+
+/* =Events Page
+-------------------------------------------------------------- */
+.mdjm-event-heading	{
+	font-size: larger;
+	font-weight: bold;
+}
+.mdjm-event-label	{
+	font-style: italic;
+	text-decoration:underline;
+}
+.mdjm-edit	{
+	font-style: normal;
+	font-weight: normal;
+	font-size: 11px;
+}
+
+.mdjm-singleevent-overview th	{
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.mdjm-event-overview td	{
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.action-button	{
+	text-align: center;
+}
+
+/* =Contracts Page
+-------------------------------------------------------------- */
+#mdjm-contract-signature-form .col	{
+    padding-right: 5px;
+	float: left;
+    width: 50%;
+}
+
+#mdjm-contract-signature-form .last	{
+	padding-left: 5px;
+	float: right;
+    width: 50%;
+}
+
+#mdjm-contract-signature-form .row	{
+    height: auto;
+    overflow: auto;
+}
+
+#mdjm-contract-signature-form input,
+#mdjm-contract-signature-form select	{
+	font-size: smaller;
+}
+
+.mdjm-contract-signed	{
+	border: 1px solid;
+	margin: 10px 0px;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image: url('../assets/images/success-icon.png');
+}
+
+.mdjm-contract-signed span	{
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.mdjm-contract-notready	{
+	border: 1px solid;
+	margin: 10px 0px;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	color: #00529B;
+	background-color: #BDE5F8;
+	background-image: url('../assets/images/info-icon.png');
+}
+
+/* =Playlist Page
+-------------------------------------------------------------- */
+
+#mdjm-playlist-header	{
+	float: left;
+}
+
+/* Playlist Table */
+#mdjm-playlist-form-table	{
+	border-collapse: collapse;
+	border: none;
+	font-size: smaller;
+}
+
+#mdjm-playlist-form-table td	{
+	text-align: left;
+	vertical-align: top;
+	border: none;
+	padding: 5px;
+}
+
+#mdjm-playlist-form-table td label	{
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#mdjm-playlist-form-table td input,
+#mdjm-playlist-form-table td select,
+#mdjm-playlist-form-table td textarea	{
+	font-size: smaller;
+}
+
+#mdjm-playlist-form-table .mdjm-playlist-addnew-cell	{
+	text-align: right;
+}
+
+/* Playlist Entries */
+#mdjm-playlist-entries .col	{
+    float: left;
+    width: 25%;
+}
+
+#mdjm-playlist-entries .last	{
+    float: right;
+    width: 25%;
+}
+
+#mdjm-playlist-entries .category	{
+    float: left;
+    width: 100%;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+#mdjm-playlist-entries .row	{
+    height: auto;
+    overflow: auto;
+}
+
+#mdjm-playlist-entries .mdjm-playlist-entry:hover	{
+	background-color: #DFF2BF;
+}
+
+#mdjm-playlist-entries .cat-count	{
+	font-style: italic;
+	font-weight: normal;
+	font-size: small;
+}
+
+/* =Guest Playlist
+-------------------------------------------------------------- */
+
+#mdjm-guest-playlist-header	{
+	float: left;
+}
+
+/* Playlist Table */
+#mdjm-guest-playlist-form-table	{
+	border-collapse: collapse;
+	border: none;
+	font-size: smaller;
+}
+
+#mdjm-guest-playlist-form-table td	{
+	text-align: left;
+	vertical-align: top;
+	border: none;
+	padding: 5px;
+}
+
+#mdjm-guest-playlist-form-table td label	{
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#mdjm-guest-playlist-form-table td input,
+#mdjm-guest-playlist-form-table td select,
+#mdjm-guest-playlist-form-table td textarea	{
+	font-size: smaller;
+}
+
+#mdjm-guest-playlist-form-table .mdjm-playlist-addnew-cell	{
+	text-align: right;
+}
+
+/* Playlist Entries */
+#mdjm-guest-playlist-entries .col	{
+    float: left;
+    width: 25%;
+}
+
+#mdjm-guest-playlist-entries .last	{
+    float: right;
+    width: 25%;
+}
+
+#mdjm-guest-playlist-entries .category	{
+    float: left;
+    width: 100%;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+#mdjm-guest-playlist-entries .row	{
+    height: auto;
+    overflow: auto;
+}
+
+#mdjm-guest-playlist-entries .mdjm-guest-playlist-entry:hover	{
+	background-color: #DFF2BF;
+}
+
+/* =Availability Widget
+-------------------------------------------------------------- */
+
+#mdjm_availability_widget	{
+	
+}
+
+#mdjm_availability_widget label	{
+	font-weight: bold;
+}
+
+#mdjm_availability_widget .mdjm_datepicker_widget	{
+	z-index:99;
+}
+
+#mdjm_availability_widget .mdjm_available	{
+	font-weight: bold;
+}
+
+#mdjm_availability_widget .mdjm_notavailable	{
+	font-weight: bold;
+	color: #FF0000;
+}
+
+#mdjm_availability_widget .mdjm_pleasewait	{
+	display: none;
+}

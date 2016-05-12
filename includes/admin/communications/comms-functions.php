@@ -1,0 +1,269 @@
+<?php
+/**
+ * Contains the communication page for sending manual emails.
+ *
+ * @package		MDJM
+ * @subpackage	Comms
+ * @since		1.3
+ */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Display the send email form on the communications page.
+ *
+ * @since	1.3
+ * @param
+ * @return	Outputs the page content
+ */
+function mdjm_comms_page()	{
+	
+	if( ! mdjm_employee_can( 'send_comms' ) )  {
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>' . __( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
+			403
+		);
+	}
+	
+	global $current_user;
+		
+	if ( mdjm_employee_can( 'list_all_clients' ) )	{
+		$clients = mdjm_get_clients();
+	} else	{
+		$clients = mdjm_get_employee_clients();
+	}
+	
+	if ( mdjm_employee_can( 'mdjm_employee_edit' ) )	{
+		$employees = mdjm_get_employees();
+	}
+
+	?>
+    <div class="wrap">
+		<h1><?php _e( 'Client and Employee Communications', 'mobile-dj-manager' ); ?></h1>
+        <form name="mdjm_form_send_comms" id="mdjm_form_send_comms" method="post" enctype="multipart/form-data">
+        	<?php wp_nonce_field( 'send_comm_email', 'mdjm_nonce', true, true ); ?>
+			<?php mdjm_admin_action_field( 'send_comm_email' ); ?>
+            <input type="hidden" name="mdjm_email_from_address" id="mdjm_email_from_address" value="<?php echo $current_user->user_email; ?>" />
+            <input type="hidden" name="mdjm_email_from_name" id="mdjm_email_from_name" value="<?php echo $current_user->display_name; ?>" />
+            <?php do_action( 'mdjm_pre_comms_table' ); ?>
+            <table class="form-table">
+                <?php do_action( 'mdjm_add_comms_fields_before_recipient' ); ?>
+                <tr>
+                	<th scope="row"><label for="mdjm_email_to"><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
+                    <td>
+                    	<select name="mdjm_email_to" id="mdjm_email_to" class="required">
+                        	<option value=""><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></option>
+                        	<optgroup label="<?php _e( 'Clients', 'mobile-dj-manager' ); ?>">
+                            	<?php
+								if ( empty( $clients ) )	{
+									echo '<option disabled="disabled">' . __( 'No Clients Found', 'mobile-dj-manager' ) . '</option>';
+								} else	{
+									foreach( $clients as $client )	{
+										echo '<option value="' . $client->ID . '">' . $client->display_name . '</option>';
+									}
+								}
+								?>
+                            </optgroup>
+                            <?php
+							if ( ! empty( $employees ) )	{
+								
+								echo '<optgroup label="' . __( 'Employees', 'mobile-dj-manager' ) . '">';
+								
+								foreach( $employees as $employee )	{
+									echo '<option value="' . $employee->ID . '">' . $employee->display_name . '</option>';
+								}
+								
+								echo '</optgroup>';
+							}
+							?>
+                        </select>
+                    </td>
+                </tr>
+                <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
+                <tr>
+                	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" /></td>
+                </tr>
+                <tr>
+                	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php _e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
+                </tr>
+                <?php do_action( 'mdjm_add_comms_fields_before_template' ); ?>
+            	<tr>
+                	<th scope="row"><label for="mdjm_email_template"><?php _e( 'Select a Template', 'mobile-dj-manager' ); ?></label></th>
+                    <td>
+                    	<select name="mdjm_email_template" id="mdjm_email_template">
+                        	<option value="0"><?php _e( 'No Template', 'mobile-dj-manager' ); ?></option>
+                        	<?php echo mdjm_comms_template_options(); ?>
+                        </select>
+                    </td>
+                </tr>
+                <?php do_action( 'mdjm_add_comms_fields_before_event' ); ?>
+                <tr>
+                    <th scope="row"><label for="mdjm_email_event"><?php printf( __( 'Associated %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
+                    <td>
+                    	<select name="mdjm_email_event" id="mdjm_email_event">
+                        <option value="0"><?php _e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
+                        </select>
+                        <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+                    </td>
+                </tr>
+                <?php do_action( 'mdjm_add_comms_fields_before_file' ); ?>
+                <tr>
+                	<th scope="row"><label for="mdjm_email_upload_file"><?php _e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="file" name="mdjm_email_upload_file" id="mdjm_email_upload_file" class="regular-text" value="" />
+                    	<p class="description"><?php printf( __( 'Max file size %dMB. Change php.ini <code>post_max_size</code> to increase', 'mobile-dj-manager' ), ini_get( 'post_max_size' ) ); ?></p>
+                    </td>
+                </tr>
+                <?php do_action( 'mdjm_add_comms_fields_before_content' ); ?>
+                <tr>
+                    <td colspan="2">
+                        <?php
+                            wp_editor(
+                                '',
+                                'mdjm_email_content',
+                                array(
+                                    'media_buttons' => true,
+                                    'textarea_rows' => '10',
+									'editor_class'  => 'required'
+                                )
+                            );
+                        ?>
+                    </td>
+                </tr>
+            </table>
+            <?php do_action( 'mdjm_post_comms_table' ); ?>
+            <?php submit_button( __( 'Send Email', 'mobile-dj-manager' ), 'primary', 'submit', true ); ?>
+        </form>
+    </div>
+    <?php
+	
+} // mdjm_comms_page
+
+/**
+ * Retrieve the templates
+ *
+ * @since	1.3
+ * @param	str|arr		$type	The type of template to retrieve
+ * @return	obj|bool	WP_Query object or false if none found
+ */
+function mdjm_get_templates( $type = array( 'contract', 'email_template' ) )	{
+	
+	$templates = get_posts(
+		array(
+			'post_type'      => $type,
+			'posts_per_page' => -1,
+			'post_status'    => 'publish'
+		)
+	);
+	
+	return $templates;
+	
+} // mdjm_get_templates
+
+/**
+ * Generates the options for a select list of templates grouped by post type
+ *
+ * @since	1.3
+ * @param	int		$selected	The ID of the template that should be initially selected.
+ * @return	str		HTML Output for the select options.
+ */
+function mdjm_comms_template_options( $selected = 0 )	{
+	
+	$templates = mdjm_get_templates();
+
+	$output    = '';
+	
+	if ( ! $templates )	{
+		$output .= '<option disabled>' . __( 'No Templates Found', 'mobile-dj-manager' ) . '</option>';
+	} else	{
+		
+		foreach( $templates as $template )	{
+			
+			$comms_templates[ $template->post_type ][ $template->ID ] = $template->post_title;
+			
+		}
+		
+		foreach( $comms_templates as $group => $comms_template )	{
+			$output .= '<optgroup label="' . strtoupper( get_post_type_object( $group )->label ) . '">';
+			
+			foreach( $comms_template as $template_id => $template_name )	{
+				
+				$output .= '<option value="' . $template_id . '"' . selected( $selected, $template_id, false ) . '>' . $template_name . '</option>';
+			}
+			
+			$output .= '</optgroup>';
+		}
+		
+	}
+	
+	return $output;
+	
+} // mdjm_comms_template_options
+
+/**
+ * Process the sending of the email
+ *
+ * @since	1.3
+ * @param	arr		$data	Super global $_POST array
+ * @return	void
+ */
+function mdjm_send_comm_email( $data )	{
+
+	$url = remove_query_arg( 'mdjm-message' );
+		
+	if ( ! wp_verify_nonce( $data['mdjm_nonce'], 'send_comm_email' ) )	{
+		$message = 'nonce_fail';
+	} elseif ( empty( $data['mdjm_email_to'] ) || empty( $data['mdjm_email_subject'] ) || empty( $data['mdjm_email_content'] ) )	{
+		$message = 'comm_missing_content';
+	} else	{
+		
+		if( isset( $_FILES['mdjm_email_upload_file'] ) && '' !== $_FILES['mdjm_email_upload_file']['name'] )	{
+			$upload_dir = wp_upload_dir();
+			
+			$file_name  = $_FILES['mdjm_email_upload_file']['name'];
+			$file_path  = $upload_dir['path'] . '/' . $file_name;
+			$tmp_path   = $_FILES['mdjm_email_upload_file']['tmp_name'];
+			
+			if( move_uploaded_file( $tmp_path, $file_path ) )	{
+				$attachments[] = $file_path;
+			}
+		}
+		
+		if ( empty( $attachments ) )	{
+			$attachments = array();
+		}
+		
+		$attachments = apply_filters( 'mdjm_send_comm_email_attachments', $attachments, $data );
+		
+		$email_args = array(
+			'to_email'       => mdjm_get_client_email( $data['mdjm_email_to'] ),
+			'from_name'      => $data['mdjm_email_from_name'],
+			'from_email'     => $data['mdjm_email_from_address'],
+			'event_id'       => $data['mdjm_email_event'],
+			'client_id'      => $data['mdjm_email_to'],
+			'subject'        => $data['mdjm_email_subject'],
+			'attachments'    => ! empty( $attachments ) ? $attachments : array(),
+			'message'        => $data['mdjm_email_content'],
+			'track'          => true,
+			'copy_to'        => ! empty( $data['mdjm_email_copy_to'] ) ? array( $data['mdjm_email_copy_to'] ) : array(),
+			'source'         => __( 'Communication Feature', 'mobile-dj-manager' )
+		);
+		
+		if ( mdjm_send_email_content( $email_args ) )	{
+			$message = 'comm_sent';
+		} else	{
+			$message = 'comm_not_sent';
+		}
+		
+	}
+	
+	wp_redirect( add_query_arg( 'mdjm-message', $message, $url ) );
+	
+	die();
+	
+} // mdjm_send_comm_email
+add_action( 'mdjm-send_comm_email', 'mdjm_send_comm_email' );

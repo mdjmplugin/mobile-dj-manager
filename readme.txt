@@ -1,12 +1,12 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
-Requires at least: 3.9.1
-Tested up to: 4.4.1
-Stable tag: 1.2.7.5
+Requires at least: 4.4
+Tested up to: 4.5.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://www.mydjplanner.co.uk/donate/
+Donate link: http://mdjm.co.uk/donate/
 
 MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
 
@@ -35,14 +35,14 @@ All in all MDJM Event Management helps you to run your DJ business efficiently.
 
 == Installation ==
 
-<strong>Automated Installation</strong>
+**Automated Installation**
 
 1. Login to your WordPress administration screen and select "Plugins" -> "Add New" from the menu
 1. Enter "MDJM Event Management" into the Search Plugins text box and hit Enter
 1. Click "Install Now" within the MDJM Event Management plugin box
 1. Activate the plugin once installation is completed
 
-<strong>Manual Installation</strong>
+**Manual Installation**
 
 Once you have downloaded the plugin zip file, follow these simple instructions to get going;
 
@@ -52,7 +52,7 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 1. Click "Install Now"
 1. Once installation has finished, select "Activate Plugin"
 1. Once activation has completed, click the "Settings" link under the MDJM Event Management plugin
-1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://www.mydjplanner.co.uk/initial-configuration/">configure MDJM</a>.
+1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://mdjm.co.uk/docs/installation/">configure MDJM</a>.
 
 == Frequently Asked Questions ==
 
@@ -62,7 +62,7 @@ Support can be obtained via our online [Support Forums](http://www.mydjplanner.c
 
 = Is there a Pro version with additional features? =
 
-Premium addons are available to enhance the plugin at http://www.mydjplanner.co.uk
+Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Screenshots ==
 
@@ -75,7 +75,52 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3 =
+
+**Released Thursday 12th May, 2016**
+
+* **New**: Use fully customisable templates for all MDJM Client Zone pages
+* **New**: Employee interface replaces the old "DJ List"
+* **New**: Updated Client interface replaces the old "Client List"
+* **New**: Create custom employee roles and assign permissions to each role
+* **New**: Assign multiple roles to each employee
+* **New**: Assign multiple employees to events
+* **New**: Added Event Staff checkbox on user profile screen for administrators. Check to tell MDJM that the admin is an MDJM employee otherwise they have no MDJM permissions
+* **New**: Admin availability checker can check for availability by role
+* **New**: Added availability checker setting. Specify which roles need to be available on the given date for you to be available
+* **New**: Content tags re-written and made into an API which developers can hook into when creating extensions or customising
+* **New**: Emails class making it easier to send emails and for developers to hook into
+* **New**: Settings API which developers can hook into
+* **New**: Added contextual help to setings and events page
+* **New**: Added Playlist Categories menu option to admin tool bar
+* **New**: Added `mdjm_event_action_buttons` filter to re-order event action buttons
+* **New**: Added Styles setting within Client Zone settings to set colour of Event Action Buttons
+* **New**: Added mdjm_get_txns() to retrieve all transactions
+* **New**: Enquiry sources are now post categories. Manage via the *Enquiry Sources* menu option
+* **New**: Added MDJM_Stats class
+* **Tweak**: Removed setting option for deposit and balance labels. Use Transaction Types instead
+* **Tweak**: Delete an entire range of an employee's holiday rather than only a single day
+* **Tweak**: Custom post meta box functions re-written to enable cleaner hooks for developers
+* **Tweak**: Event meta boxes are now only loaded if current user has been assigned a role with relevant permissions
+* **Tweak**: Shortcodes have been re-written and cleaned up
+* **Tweak**: *MDJM Overview* dashboard widget has been updated and now displays event and earnings overviews for Month to Date, Year to Date and the previous year
+* **Tweak**: Display names of employees who received a copy of a tracked email within the Communication history page
+* **Tweak**: Main MDJM class is now a singleton class
+* **Tweak**: Post actions and filters no longer in classes
+* **Tweak**: Replaced get_link method with mdjm_get_formatted_url function
+* **Tweak**: New mdjm.css file. Can be customised for front end
+* **Tweak**: Added content filters for emailing and printing the event playlist
+* **Tweak**: Cleaner files and directory structure
+* **Tweak**: Don't restrict access to JetPack and don't hide WP menus for MDJM roles. Caused some conflicts with other plugins
+* **Tweak**: Event posts are now ordered by event date by default
+* **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
+* **Tweak**: Removed debug option to backup DB tables. Other plugins are available for this task
+* **Tweak**: Removed debug option to submit debug files. No longer required
+* **TODO**: Availability checker on events list screen is currently missing
+
+
 = 1.2.7.5 =
+
 **Released 22nd January, 2016**
 
 * **New**: Attach files from computer to email composed via communication feature
@@ -85,6 +130,7 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 * **Bug Fix**: Venue contact name missing a space if venue is set to client address
 
 = 1.2.7.4 =
+
 **Released 19th January, 2016**
 
 * **Bug Fix**: Custom event fields did not display on the event screen if your deposit type was not set as percentage
@@ -94,469 +140,495 @@ Premium addons are available to enhance the plugin at http://www.mydjplanner.co.
 * **Bug Fix**: Contract sign notification email to admin did not display client name. Filter content before passing to send_email method.
 
 = 1.2.7.3 =
-<strong>Released 25th November, 2015</strong>
-<ui>
-	<li>Bug Fix: Missing number_format param was causing payment gateway API to not record merchant fees</li>
-	<li>General: Accomodate changes in other MDJM plugins</li>
-	<li>General: Update playlist task via update_option_{$option_name} when setting changes</li>
-	<li>General: get_event_types now accepts args</li>
-</ui>
+
+**Released 25th November, 2015**
+
+	* **Bug Fix**: Missing number_format param was causing payment gateway API to not record merchant fees
+	* **Tweak**: Accomodate changes in other MDJM plugins
+	* **Tweak**: Update playlist task via update_option_{$option_name} when setting changes
+	* **Tweak**: get_event_types now accepts args
+
 
 = 1.2.7.2 =
-<strong>Released 25th November, 2015</strong>
-<ui>
-	<li>Bug Fix: Availability checker ajax scripts did not work if using a Firefox web browser</li>
-	<li>Bug Fix: Field wrap now functions as expected for Availability Checker</li>
-	<li>Bug Fix: PHP Notice written to log file if WP debugging enabled when saving event that has empty fields</li>
-	<li>Bug Fix: Unattended event availability check now calls correct function and does not generate error</li>
-	<li>Bug Fix: Backwards compatibility issue with front end availability checker</li>
-	<li>Bug Fix: Put availability checker fields on their own line if field wrap is true</li>
-	<li>Bug Fix: Redirect failed after client password change</li>
-	<li><strong>Bug Fix</strong>: Image now displays on about page</li>
-	<li>General: Ignore communication posts during custom post type save</li>
-	<li>General: Removed custom text playlist setting for No Active Event</li>
-	<li>General: Do not write to log file if no client fields are set as required</li>
-	<li>General: Adjust folder structure within client zone</li>
-	<li>New: Added submit_wrap option for availability shortcode</li>
-</ui>
+
+**Released 25th November, 2015**
+
+	* **Bug Fix**: Availability checker ajax scripts did not work if using a Firefox web browser
+	* **Bug Fix**: Field wrap now functions as expected for Availability Checker
+	* **Bug Fix**: PHP Notice written to log file if WP debugging enabled when saving event that has empty fields
+	* **Bug Fix**: Unattended event availability check now calls correct function and does not generate error
+	* **Bug Fix**: Backwards compatibility issue with front end availability checker
+	* **Bug Fix**: Put availability checker fields on their own line if field wrap is true
+	* **Bug Fix**: Redirect failed after client password change
+	* **Bug Fix**: Image now displays on about page
+	* **Tweak**: Ignore communication posts during custom post type save
+	* **Tweak**: Removed custom text playlist setting for No Active Event
+	* **Tweak**: Do not write to log file if no client fields are set as required
+	* **Tweak**: Adjust folder structure within client zone
+	* **New**: Added submit_wrap option for availability shortcode
+
 = 1.2.7.1 =
-<strong>Released 22nd November, 2015</strong>
-<ui>
-	<li>New: Shortcodes added for Addons List and Availability checker</li>
-	<li>New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
-	<li>New: Text replacement shortcodes available for custom fields</li>
-	<li>New: Option to use AJAX for Availability Checker to avoid page refresh</li>
-	<li>New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
-	<li>New: Display name for DJ is now updated within user roles</li>
-	<li>New: Development hooks added to event post metaboxes</li>
-	<li>General: Availability checker re-write</li>
-	<li>General: MDJM Shortcodes button renamed to MDJM and new structure and options added</li>
-	<li>General: Client fields settings page is now translation ready</li>
-	<li>General: Updated the uninstallation procedure</li>
-	<li>General: Added column ordering to transactions</li>
-	<li>General: Added column ordering to quotes</li>
-	<li>General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets</li>
-	<li>General: Change title to MDJM Event Management in MDJM dashboard</li>
-	<li>Bug Fix: User roles should only register during install</li>
-	<li>Bug Fix: WP Dashboard MDJM Overview now has correct edit URL</li>
-	<li>Bug Fix: Ordering by event value column in event list now accurate</li>
-	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
-	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
-</ui>
+
+**Released 22nd November, 2015**
+
+	* **New**: Shortcodes added for Addons List and Availability checker
+	* **New**: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
+	* **New**: Text replacement shortcodes available for custom fields
+	* **New**: Option to use AJAX for Availability Checker to avoid page refresh
+	* **New**: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved
+	* **New**: Display name for DJ is now updated within user roles
+	* **New**: Development hooks added to event post metaboxes
+	* **Tweak**: Availability checker re-write
+	* **Tweak**: MDJM Shortcodes button renamed to MDJM and new structure and options added
+	* **Tweak**: Client fields settings page is now translation ready
+	* **Tweak**: Updated the uninstallation procedure
+	* **Tweak**: Added column ordering to transactions
+	* **Tweak**: Added column ordering to quotes
+	* **Tweak**: Replace Mobile DJ Manager with MDJM in WP dashboard widgets
+	* **Tweak**: Change title to MDJM Event Management in MDJM dashboard
+	* **Bug Fix**: User roles should only register during install
+	* **Bug Fix**: WP Dashboard MDJM Overview now has correct edit URL
+	* **Bug Fix**: Ordering by event value column in event list now accurate
+	* **Bug Fix**: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
+	* **Bug Fix**: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event
+
 = 1.2.7 =
-<strong>Released 22nd November, 2015</strong>
-<ui>
-	<li>New: Shortcodes added for Addons List and Availability checker</li>
-	<li>New: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen</li>
-	<li>New: Text replacement shortcodes available for custom fields</li>
-	<li>New: Option to use AJAX for Availability Checker to avoid page refresh</li>
-	<li>New: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved</li>
-	<li>New: Display name for DJ is now updated within user roles</li>
-	<li>New: Development hooks added to event post metaboxes</li>
-	<li>General: Availability checker re-write</li>
-	<li>General: MDJM Shortcodes button renamed to MDJM and new structure and options added</li>
-	<li>General: Client fields settings page is now translation ready</li>
-	<li>General: Updated the uninstallation procedure</li>
-	<li>General: Added column ordering to transactions</li>
-	<li>General: Added column ordering to quotes</li>
-	<li>General: Replace Mobile DJ Manager with MDJM in WP dashboard widgets</li>
-	<li>General: Change title to MDJM Event Management in MDJM dashboard</li>
-	<li>Bug Fix: User roles should only register during install</li>
-	<li>Bug Fix: WP Dashboard MDJM Overview now has correct edit URL</li>
-	<li>Bug Fix: Ordering by event value column in event list now accurate</li>
-	<li>Bug Fix: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update</li>
-	<li>Bug Fix: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event</li>
-</ui>
+
+**Released 22nd November, 2015**
+
+	* **New**: Shortcodes added for Addons List and Availability checker
+	* **New**: Add your own custom fields to Client, Event, and Venue Details metaboxes within the events screen
+	* **New**: Text replacement shortcodes available for custom fields
+	* **New**: Option to use AJAX for Availability Checker to avoid page refresh
+	* **New**: New setting added Unavailable Statuses within Availability Settings so you now dictate which event status' should report as unavailable. By default we have set Enquiry, Awaiting Contract and Approved
+	* **New**: Display name for DJ is now updated within user roles
+	* **New**: Development hooks added to event post metaboxes
+	* **Tweak**: Availability checker re-write
+	* **Tweak**: MDJM Shortcodes button renamed to MDJM and new structure and options added
+	* **Tweak**: Client fields settings page is now translation ready
+	* **Tweak**: Updated the uninstallation procedure
+	* **Tweak**: Added column ordering to transactions
+	* **Tweak**: Added column ordering to quotes
+	* **Tweak**: Replace Mobile DJ Manager with MDJM in WP dashboard widgets
+	* **Tweak**: Change title to MDJM Event Management in MDJM dashboard
+	* **Bug Fix**: User roles should only register during install
+	* **Bug Fix**: WP Dashboard MDJM Overview now has correct edit URL
+	* **Bug Fix**: Ordering by event value column in event list now accurate
+	* **Bug Fix**: Adjusted the order in which the deposit and balance status' are updated for events so as to ensure manual payments are captured during manual event update
+	* **Bug Fix**: Depending on PHP notice display settings, warning may be displayed on front end when client clicks Book this Event
+
 
 = 1.2.6 =
-<strong>Released 31st October, 2015</strong>
-<ui>
-	<li>New: {PAYMENT_HISTORY} client shortcode added. Displays a simple list of client payments for the current event</li>
-	<li>New: Click the Details button on the event screen to reveal additional information</li>
-	<li>General: Added Domain Path for translations</li> 
-	<li>General: Removed deprecated journal DB table</li>
-	<li>General: Preparation for MDJM to PDF extension</li>
-	<li>General: Rebranded to MDJM Event Management on the plugin screen</li>
-	<li>General: Rebranded to MDJM Events on the menu and admin bar</li>
-	<li>Bug Fix: Client Zone playlist now displays guest entries and which guest added</li>
-	<li>Bug Fix: Client Zone playlist now displays content from the info</li>
-	<li>Bug Fix: Removed blank line after Event End Date shortcode in list of shortcodes</li>
-	<li>Bug Fix: DB Backup time was always 00:00</li>
-	<li>Bug Fix: Client Zone was logging an error when booking was accepted</li>
-	<li>Bug Fix: Scheduled task was logging an error in the log file due to missing variable</li>
-	<li>Bug Fix: If no events exist, it was possible an error would be written to the log file relating to the Event Type filter</li>
-	<li>Bug Fix: Installation was trying to create a DB table that is no longer required and could possibly generate an on screen warning notification</li>
-</ui>
+
+**Released 31st October, 2015**
+
+	* **New**: {PAYMENT_HISTORY} client shortcode added. Displays a simple list of client payments for the current event
+	* **New**: Click the Details button on the event screen to reveal additional information
+	* **Tweak**: Added Domain Path for translations 
+	* **Tweak**: Removed deprecated journal DB table
+	* **Tweak**: Preparation for MDJM to PDF extension
+	* **Tweak**: Rebranded to MDJM Event Management on the plugin screen
+	* **Tweak**: Rebranded to MDJM Events on the menu and admin bar
+	* **Bug Fix**: Client Zone playlist now displays guest entries and which guest added
+	* **Bug Fix**: Client Zone playlist now displays content from the info
+	* **Bug Fix**: Removed blank line after Event End Date shortcode in list of shortcodes
+	* **Bug Fix**: DB Backup time was always 00:00
+	* **Bug Fix**: Client Zone was logging an error when booking was accepted
+	* **Bug Fix**: Scheduled task was logging an error in the log file due to missing variable
+	* **Bug Fix**: If no events exist, it was possible an error would be written to the log file relating to the Event Type filter
+	* **Bug Fix**: Installation was trying to create a DB table that is no longer required and could possibly generate an on screen warning notification
+
 
 = 1.2.5.3 =
-<strong>Released 25th October, 2015</strong>
-<ul>
-	<li>New: Added setting to enable event playlist (enabled by default)</li>
-    <li>New: Event playlists can now be controlled per event. If not enabled, the Manage Playlist action button is not displayed within the Client Zone</li>
-	<li>New: Option to select Client Address as event venue</li>
-	<li>New: On event screen added <code>Contact</code> link next to client list. Click to immediately contact regarding event</li>
-	<li>New: On event listing screen click the Client's or DJ's name to contact them regarding that event</li>
-	<li>New: Added `mdjm_event_metaboxes` developer action hook</li>
-	<li>Bug Fix: Depending on WP Debug settings, error may be displayed on client login screen (unlikely)</li>
-	<li>Bug Fix: In event listing error may be displayed if no events exist for the current status</li>
-	<li>Bug Fix: Unable to set Client's and DJ's as Active/Inactive</li>
-</ul>
+
+**Released 25th October, 2015**
+
+	* **New**: Added setting to enable event playlist (enabled by default)
+    * **New**: Event playlists can now be controlled per event. If not enabled, the Manage Playlist action button is not displayed within the Client Zone
+	* **New**: Option to select Client Address as event venue
+	* **New**: On event screen added <code>Contact</code> link next to client list. Click to immediately contact regarding event
+	* **New**: On event listing screen click the Client's or DJ's name to contact them regarding that event
+	* **New**: Added `mdjm_event_metaboxes` developer action hook
+	* **Bug Fix**: Depending on WP Debug settings, error may be displayed on client login screen (unlikely)
+	* **Bug Fix**: In event listing error may be displayed if no events exist for the current status
+	* **Bug Fix**: Unable to set Client's and DJ's as Active/Inactive
+
 = 1.2.5.2 =
-<strong>Released 22nd October, 2015</strong>
-<ul>
-	<li>New: Added new currencies for AUS, CAD, NZD and SGD</li>
-	<li>New: Order your event listings by ID, Date, or Value by clicking on the relevant column header</li>
-	<li>New: Order your venue listings by Name, Town or County by clicking on the relevant column header</li>
-	<li>New: Support for MDJM Google Calendar Sync add-on</li>
-	<li>New: Added a few developer hooks and filters</li>
-	<li>New: Added new shortcode {END_DATE} which will display the date on which the event completes in short date format</li>
-	<li>New: Adjusted branding</li>
-	<li>Bug Fix: Fixed availability checker function on MDJM Dashboard</li>
-	<li>Bug Fix: {DJ_NOTES} shortcode was displaying event notes</li>
-</ul>
+
+**Released 22nd October, 2015**
+
+	* **New**: Added new currencies for AUS, CAD, NZD and SGD
+	* **New**: Order your event listings by ID, Date, or Value by clicking on the relevant column header
+	* **New**: Order your venue listings by Name, Town or County by clicking on the relevant column header
+	* **New**: Support for MDJM Google Calendar Sync add-on
+	* **New**: Added a few developer hooks and filters
+	* **New**: Added new shortcode {END_DATE} which will display the date on which the event completes in short date format
+	* **New**: Adjusted branding
+	* **Bug Fix**: Fixed availability checker function on MDJM Dashboard
+	* **Bug Fix**: {DJ_NOTES} shortcode was displaying event notes
+
 = 1.2.5.1 =
-<strong>Released 10 October, 2015</strong>
-<ul>
-	<li>Bug Fix: Added 'stripslashes' to communication content and subject to ensure ' is not represented as \'s</li>
-</ul>
+
+**Released 10 October, 2015**
+
+	* **Bug Fix**: Added 'stripslashes' to communication content and subject to ensure ' is not represented as \'s
+
 = 1.2.5 =
-<strong>Released 09 October, 2015</strong>
-<ul>
-	<li>Bug Fix: DJ & Client admin pages were referring to a deprecated function which generated an error</li>
-	<li>Bug Fix: Hosted JS files are now loaded via HTTPS</li>
-	<li>Bug Fix: Enquiry email template saved correctly, but did not correctly display which enquiry was default</li>
-	<li>New: <code>Premium Addons</code> tab added to the Settings screen. If you have purchased Premium addons, enter your API key here</li>
-</ul>
+
+**Released 09 October, 2015**
+
+	* **Bug Fix**: DJ & Client admin pages were referring to a deprecated function which generated an error
+	* **Bug Fix**: Hosted JS files are now loaded via HTTPS
+	* **Bug Fix**: Enquiry email template saved correctly, but did not correctly display which enquiry was default
+	* **New**: <code>Premium Addons</code> tab added to the Settings screen. If you have purchased Premium addons, enter your API key here
+
 = 1.2.4.1 =
-<strong>Released Wednesday, 23rd September, 2015</strong>
-<ul>
-	<li>New: Section headings introduced for Contact Forms</li>
-	<li>New: Horizontal rules introduced for Contact Forms</li>
-	<li>New: Custom CSS introduced for Contact Forms</li>
-	<li>New: Event addons now available as checkbox list in dynamic contact forms</li>
-	<li>New: Contact form submission now also adds the deposit amount</li>
-	<li>Bug Fix: Packages, Equipment and categories now support special characters - quotes, double quotes etc.</li>
-	<li>Bug Fix: Online quote template was not changed on selection in event screen</li>
-	<li>Bug Fix: Contact form settings may not save as expected</li>
-	<li>Bug Fix: To address conflicts with the WP reserved names, added prefix to all contact form field slugs</li>
-	<li>Bug Fix: Client Zone re-directs did not work in some cases</li>
-	<li>Bug Fix: DJ list was not showing users that were assigned the DJ role</li>
-	<li>Bug Fix: DJ list may have displayed an on screen error if no active events were in the system</li>
-	<li>Bug Fix: Contact Form configuration settings were not always saving correctly</li>
-	<li>Bug Fix: Do not update a users profile upon Contact Form submssion if the user is logged in</li>
-	<li>Bug Fix: Venue fields now display by default if Unattended enquiry has venue details entered manually</li>
-	<li>General: Dynamic addons list not longer displays on screen alert for "No addons available" and instead displays, "No addons available" within select list as a disabled option</li>
-	<li>General: Added Extensions row to the application settings screen. More on this soon!</li>
-	<li>General: Removed the colon (:) which was displayed after the "Other Label" on the PayPal form</li>
-	<li>General: Added OOP code for MDJM extensions - coming soon</li>
-	<li>General: /includes/config.inc.php is deprecated</li>
-	<li>General: Lots of old code removed</li>
-</ul>
+
+**Released Wednesday, 23rd September, 2015**
+
+	* **New**: Section headings introduced for Contact Forms
+	* **New**: Horizontal rules introduced for Contact Forms
+	* **New**: Custom CSS introduced for Contact Forms
+	* **New**: Event addons now available as checkbox list in dynamic contact forms
+	* **New**: Contact form submission now also adds the deposit amount
+	* **Bug Fix**: Packages, Equipment and categories now support special characters - quotes, double quotes etc.
+	* **Bug Fix**: Online quote template was not changed on selection in event screen
+	* **Bug Fix**: Contact form settings may not save as expected
+	* **Bug Fix**: To address conflicts with the WP reserved names, added prefix to all contact form field slugs
+	* **Bug Fix**: Client Zone re-directs did not work in some cases
+	* **Bug Fix**: DJ list was not showing users that were assigned the DJ role
+	* **Bug Fix**: DJ list may have displayed an on screen error if no active events were in the system
+	* **Bug Fix**: Contact Form configuration settings were not always saving correctly
+	* **Bug Fix**: Do not update a users profile upon Contact Form submssion if the user is logged in
+	* **Bug Fix**: Venue fields now display by default if Unattended enquiry has venue details entered manually
+	* **Tweak**: Dynamic addons list not longer displays on screen alert for "No addons available" and instead displays, "No addons available" within select list as a disabled option
+	* **Tweak**: Added Extensions row to the application settings screen. More on this soon!
+	* **Tweak**: Removed the colon (:) which was displayed after the "Other Label" on the PayPal form
+	* **Tweak**: Added OOP code for MDJM extensions - coming soon
+	* **Tweak**: /includes/config.inc.php is deprecated
+	* **Tweak**: Lots of old code removed
+
 = 1.2.4 =
-<strong>Released Saturday 12th September, 2015</strong>
-<ul>
-	<li>New: Introduction of PayFast as a payment gateway to accept online payments using the ZAR currency</li>
-	<li>New: Addition of new built-in Transaction Type Merchant Fees</li>
-	<li>New: When your client makes an online payment, if the Payment Gateway charges for the transaction, that charge is recorded within MDJM</li>
-	<li>New: Removed obvious deletion links from the required transaction types - Merchant Fees, Deposit, Balance, and Other Amount</li>
-	<li>New: Payment confirmation email to admin now includes the remaining balance owed for the booking plus additional information relating to the transaction</li>
-	<li>New: Using Transaction Post ID as the invoice number for online transactions (PayPal only)</li>
-	<li>New: Payment confirmation email to admin now includes the remaining balance for the booking</li>
-	<li>New: Transactions list now includes To/From column to identify the payer/payee</li>
-	<li>New: Events list now includes a Due column displaying the balance owed on the event</li>
-	<li>New: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?></li>
-	<li>Bug Fix: PayPal API now correctly processes non deposit/balance payments</li>
-	<li>Bug Fix: Dynamic coding did not update values under certain circumstances</li>
-</ul>
+
+**Released Saturday 12th September, 2015**
+
+	* **New**: Introduction of PayFast as a payment gateway to accept online payments using the ZAR currency
+	* **New**: Addition of new built-in Transaction Type Merchant Fees
+	* **New**: When your client makes an online payment, if the Payment Gateway charges for the transaction, that charge is recorded within MDJM
+	* **New**: Removed obvious deletion links from the required transaction types - Merchant Fees, Deposit, Balance, and Other Amount
+	* **New**: Payment confirmation email to admin now includes the remaining balance owed for the booking plus additional information relating to the transaction
+	* **New**: Using Transaction Post ID as the invoice number for online transactions (PayPal only)
+	* **New**: Payment confirmation email to admin now includes the remaining balance for the booking
+	* **New**: Transactions list now includes To/From column to identify the payer/payee
+	* **New**: Events list now includes a Due column displaying the balance owed on the event
+	* **New**: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?>
+	* **Bug Fix**: PayPal API now correctly processes non deposit/balance payments
+	* **Bug Fix**: Dynamic coding did not update values under certain circumstances
+
 = 1.2.3.6 =
-<strong>Released Friday 4th September, 2015</strong>
-<ul>
-	<li>General: Added custom payment amount option to the PayPal form</li>
-	<li>General: PayPal form now uses radio buttons rather than select list</li>
-	<li>General: Added setting to use standard HTML submit button with customised text for PayPal form</li>
-	<li>General: Added ZAR currency for South Africa</li>
-</ul>
+
+**Released Friday 4th September, 2015**
+
+	* **Tweak**: Added custom payment amount option to the PayPal form
+	* **Tweak**: PayPal form now uses radio buttons rather than select list
+	* **Tweak**: Added setting to use standard HTML submit button with customised text for PayPal form
+	* **Tweak**: Added ZAR currency for South Africa
+
 
 = 1.2.3.5 =
-<strong>Released Friday 4th September, 2015</strong>
-<ul>
-	<li>Bug Fix: Completed event automated task sets event as completed incorrectly</li>
-	<li>Bug Fix: Adding event transaction hung when the "Paid From" field was populated with a value</li>
-	<li>Bug Fix: 12hr time format was not registering event time from the Dynamic Contact Form or Events page</li>
-	<li>Bug Fix: Some themes displayed comments in footer of client zone page. Addition of action hook to ensure none are displayed</li>
-	<li>Bug Fix: Redirect "may" not have worked when signing of contract was completed</li>
-	<li>General: Remove page/post edit link from Client Zone pages for clients and DJ's</li>
-	<li>General: Added Balance Due to event listing screen</li>
-	<li>General: More translation preparation</li>
-</ul>
+
+**Released Friday 4th September, 2015**
+
+	* **Bug Fix**: Completed event automated task sets event as completed incorrectly
+	* **Bug Fix**: Adding event transaction hung when the "Paid From" field was populated with a value
+	* **Bug Fix**: 12hr time format was not registering event time from the Dynamic Contact Form or Events page
+	* **Bug Fix**: Some themes displayed comments in footer of client zone page. Addition of action hook to ensure none are displayed
+	* **Bug Fix**: Redirect "may" not have worked when signing of contract was completed
+	* **Tweak**: Remove page/post edit link from Client Zone pages for clients and DJ's
+	* **Tweak**: Added Balance Due to event listing screen
+	* **Tweak**: More translation preparation
+
 
 = 1.2.3.4 =
-<strong>Released 31st August, 2015</strong>
-<ul>
-	<li>Bug Fix: Address an issue impacting availability within WordPress plugin repository</li>
-	<li>Bug Fix: Option to select Online Quote Template is now available even if Email Quote to Client is not selected on the event screen</li>
-</ul>
+
+**Released 31st August, 2015**
+
+	* **Bug Fix**: Address an issue impacting availability within WordPress plugin repository
+	* **Bug Fix**: Option to select Online Quote Template is now available even if Email Quote to Client is not selected on the event screen
+
 
 = 1.2.3.3 =
-<strong>Released Monday 24th August, 2015</strong>
-<ul>
-	<li>New: Online quotes are now available in addition to email quotes. Clients can view quotes online and via a fully customisable button, accept the quote and book the event</li>
-	<li>New: Setting added to Client Zone tab enabling you to choose whether or not to display package & add-on prices within Client Zone</li>
-	<li>General: Updated WP Admin header tags per 4.3 release</li>
-	<li>General: Support for long field names in Contact Form for validation and Dynamic addon updates</li>
-	<li>Bug Fix: If event venue was entered manually, fields were not displayed on the screen until you changed the dropdown selection</li>
-	<li>Bug Fix: Saving playlist entries failed</li>
-	<li>Bug Fix: Removed updating of email address via dynamic contact form as potential problems with login</li>
-	<li>Bug Fix: Events not displaying on Clients page when filtered</li>
-	<li>Bug Fix: Default transaction type was not displaying all options</li>
-	<li>Bug Fix: Transaction source was not displaying all options on Events screen</li>
-	<li>Bug Fix: Is Default? column was not populated within Contract Template screen. May have generated on screen error</li>
-	<li>Bug Fix: Warning may have been displayed on Client Login screen and some admin screens dependant on PHP/WP settings</li>
-</ul>
+
+**Released Monday 24th August, 2015**
+
+	* **New**: Online quotes are now available in addition to email quotes. Clients can view quotes online and via a fully customisable button, accept the quote and book the event
+	* **New**: Setting added to Client Zone tab enabling you to choose whether or not to display package & add-on prices within Client Zone
+	* **Tweak**: Updated WP Admin header tags per 4.3 release
+	* **Tweak**: Support for long field names in Contact Form for validation and Dynamic addon updates
+	* **Bug Fix**: If event venue was entered manually, fields were not displayed on the screen until you changed the dropdown selection
+	* **Bug Fix**: Saving playlist entries failed
+	* **Bug Fix**: Removed updating of email address via dynamic contact form as potential problems with login
+	* **Bug Fix**: Events not displaying on Clients page when filtered
+	* **Bug Fix**: Default transaction type was not displaying all options
+	* **Bug Fix**: Transaction source was not displaying all options on Events screen
+	* **Bug Fix**: Is Default? column was not populated within Contract Template screen. May have generated on screen error
+	* **Bug Fix**: Warning may have been displayed on Client Login screen and some admin screens dependant on PHP/WP settings
+
 
 = 1.2.3.2 =
-<strong>Released Monday 24th August, 2015</strong>
-<ul>
-	<li>New: Settings added to the Payments tab to configure default event deposit based on fixed rate or % of event value</li>
-	<li>New: Define initially selected package within a dynamic contact form</li>
-	<li>New: Venue list has been added to contact forms</li>
-	<li>General: Optimized Dynamic Contact Form front end coding. Slight enhancement to load time</li>
-	<li>General: Refresh available packages & Add-ons when DJ selection changes on Event Management screen</li>
-	<li>General: Updated WP Admin header tags per 4.3 release</li>
-	<li>General: Updated jQuery version for validation. Now works with IE versions < 11</li>
-	<li>Bug Fix: Restored missing folder which was causing custom DB table backups to fail since version 1.2.3</li>
-	<li>Bug Fix: Contact form creation did not always correctly define default behaviours correctly</li>
-	<li>Bug Fix: Error displayed when deleting Contact Form field</li>
-	<li>Bug Fix: Error displayed upon Contact Form creation</li>
-	<li>Bug Fix: Depending on PHP/WP config an unwanted notice may have been displayed on client screen</li>
-	<li>Bug Fix: Only obtain event data when an event with the given ID exists. Unnecessary PHP notice logging</li>
-	<li>Bug Fix: Removed the random "r" character from the top of contact forms with layout set as table</li>
-	<li>New: Preliminary translation work</li>
-</ul>
+
+**Released Monday 24th August, 2015**
+
+	* **New**: Settings added to the Payments tab to configure default event deposit based on fixed rate or % of event value
+	* **New**: Define initially selected package within a dynamic contact form
+	* **New**: Venue list has been added to contact forms
+	* **Tweak**: Optimized Dynamic Contact Form front end coding. Slight enhancement to load time
+	* **Tweak**: Refresh available packages & Add-ons when DJ selection changes on Event Management screen
+	* **Tweak**: Updated WP Admin header tags per 4.3 release
+	* **Tweak**: Updated jQuery version for validation. Now works with IE versions < 11
+	* **Bug Fix**: Restored missing folder which was causing custom DB table backups to fail since version 1.2.3
+	* **Bug Fix**: Contact form creation did not always correctly define default behaviours correctly
+	* **Bug Fix**: Error displayed when deleting Contact Form field
+	* **Bug Fix**: Error displayed upon Contact Form creation
+	* **Bug Fix**: Depending on PHP/WP config an unwanted notice may have been displayed on client screen
+	* **Bug Fix**: Only obtain event data when an event with the given ID exists. Unnecessary PHP notice logging
+	* **Bug Fix**: Removed the random "r" character from the top of contact forms with layout set as table
+	* **New**: Preliminary translation work
+
 
 = 1.2.3.1 =
-<strong>Released Thursday 20th August, 2015</strong>
-<ul>
-	<li>Bug Fix: issue with validation of the date field when used with #MDJM Contact Forms</li>
-</ul>
+
+**Released Thursday 20th August, 2015**
+
+	* **Bug Fix**: issue with validation of the date field when used with #MDJM Contact Forms
+
 
 = 1.2.3 =
-<strong>Released Wednesday 19th August, 2015</strong>
-<ul>
-	<li>General: Full support for WordPress 4.3</li>
-	<li>New: Updating the package for an Event in the Events Management screen, now dynamically updates the addons available for selection</li>
-	<li>New: Packages and Addons now displayed within Event Overview on the Client Zone screen. When a client hovers over the package or addon, the description and price is displayed</li>
-	<li>New: New settings added to the Plugin Removal settings screen so you can manipulate what data to/not to delete during deletion of plugin</li>
-	<li>Bug Fix: Resolved coding conflict which <em>may</em> have interferred with other plugins Ajax requests</li>
-	<li>Bug Fix: Empty equipment add-on categories no longer display</li>
-	<li>Bug Fix: Playlist upload to #MDJM error</li>
-	<li>Bug Fix: Changing Packages &amp; Addons for existing events now correctly re-calculates the event cost</li>
-	<li>Bug Fix: Playlist entries are now successfully submitted to the MDJM servers when songs and artists contain apostraphe's</li>
-	<li>General: Enhanced the shortcode replacement procedure to make it cleaner and faster</li>
-	<li>General: Log files are now auto-purged regardless of the admin page you are visiting. Previously only auto-purged whilst viewing Debug Settings</li>
-	<li>General: Refreshed and cleaned up the uninstallation script</li>
-</ul>
+
+**Released Wednesday 19th August, 2015**
+
+	* **Tweak**: Full support for WordPress 4.3
+	* **New**: Updating the package for an Event in the Events Management screen, now dynamically updates the addons available for selection
+	* **New**: Packages and Addons now displayed within Event Overview on the Client Zone screen. When a client hovers over the package or addon, the description and price is displayed
+	* **New**: New settings added to the Plugin Removal settings screen so you can manipulate what data to/not to delete during deletion of plugin
+	* **Bug Fix**: Resolved coding conflict which <em>may</em> have interferred with other plugins Ajax requests
+	* **Bug Fix**: Empty equipment add-on categories no longer display
+	* **Bug Fix**: Playlist upload to #MDJM error
+	* **Bug Fix**: Changing Packages &amp; Addons for existing events now correctly re-calculates the event cost
+	* **Bug Fix**: Playlist entries are now successfully submitted to the MDJM servers when songs and artists contain apostraphe's
+	* **Tweak**: Enhanced the shortcode replacement procedure to make it cleaner and faster
+	* **Tweak**: Log files are now auto-purged regardless of the admin page you are visiting. Previously only auto-purged whilst viewing Debug Settings
+	* **Tweak**: Refreshed and cleaned up the uninstallation script
+
 = 1.2.2 =
-<strong>Released Friday 3rd July, 2015</strong>
-<ul>
-	<li>Bug Fix: Addons available within Events screen when Available as Addon setting was not selected</li>
-	<li>Bug Fix: Debugging was stuck on/off depending on your setting prior to the 1.2.1 upgrade</li>
-	<li>Bug Fix: Unable to toggle the PayPal Enabled setting since upgrade to 1.2.1</li>
-	<li>Bug Fix: Cleared an error that may display if WP Debugging is enabled, whilst adding new equipment and/or package</li>
-	<li>Bug Fix: No more comment approval requests caused by journaling</li>
-	<li>General: Slight adjustment to codebase for debugging as a tidy up</li>
-</ul>
+
+**Released Friday 3rd July, 2015**
+
+	* **Bug Fix**: Addons available within Events screen when Available as Addon setting was not selected
+	* **Bug Fix**: Debugging was stuck on/off depending on your setting prior to the 1.2.1 upgrade
+	* **Bug Fix**: Unable to toggle the PayPal Enabled setting since upgrade to 1.2.1
+	* **Bug Fix**: Cleared an error that may display if WP Debugging is enabled, whilst adding new equipment and/or package
+	* **Bug Fix**: No more comment approval requests caused by journaling
+	* **Tweak**: Slight adjustment to codebase for debugging as a tidy up
+
 These issues appear to impact new installations more than existing due to the fact that the settings are set correctly, but not adjustable. However we recommend checking that both the Enable PayPal? and Enable Debugging? settings are set as expected.
+
 = 1.2.1 =
-<strong>Released Sunday 28th June, 2015</strong>
-<ul>
-	<li>Refreshed the Settings Options layout</li>
-	<li>HTML5/CSS3 compatibility on all front end pages</li>
-	<li>Updated Client fields</li>
-	<li><strong>New</strong>: Additional shortcodes for equipment & packages</li>
-	<li><strong>New</strong>: IP address captured during client contract signing and displayed in contract view</li>
-	<li><strong>General</strong>: More improvements to debugging</li>
-	<li><strong>Bug Fix</strong>: Addressed Email Tracking reliability</li>
-	<li><strong>Bug Fix</strong>: {EVENT_TYPE} shortcode was returning ID rather than name</li>
-	<li><strong>Bug Fix</strong>: Playlist submission to MDJM date error</li>
-	<li><strong>Bug Fix</strong>: Broken event link when reviewing sent communication</li>
-</ul>
+
+**Released Sunday 28th June, 2015**
+
+	* Refreshed the Settings Options layout
+	* HTML5/CSS3 compatibility on all front end pages
+	* Updated Client fields
+	* **New**: Additional shortcodes for equipment & packages
+	* **New**: IP address captured during client contract signing and displayed in contract view
+	* **Tweak**: More improvements to debugging
+	* **Bug Fix**: Addressed Email Tracking reliability
+	* **Bug Fix**: {EVENT_TYPE} shortcode was returning ID rather than name
+	* **Bug Fix**: Playlist submission to MDJM date error
+	* **Bug Fix**: Broken event link when reviewing sent communication
+
 
 = 1.2 =
-<strong>Released Tuesday 2nd June, 2015</strong>
+
+**Released Tuesday 2nd June, 2015**
 A complete revamp of how Events, Transactions, and Venues work plus much much more.
 Join our Facebook group for all the latest discussions, news and more - https://www.facebook.com/groups/mobiledjmanager
-<ul>
-	<li><strong>New</strong>: Drag &amp; drop your Contact Form fields to re-order them easily</li>
-	<li><strong>New</strong>: Edit field settings without having to delete and re-create</li>
-	<li><strong>New</strong>: All transactions are now logged, whether automated via PayPal or manually entered by the Admin</li>
-	<li><strong>New</strong>: Notifications to clients when payments are entered manually for events</li>
-	<li><strong>New</strong>: Event Transaction overview is displayed on each event page</li>
-	<li><strong>New</strong>: Transaction Types have been moved and no longer reside within settings</li>
-	<li><strong>General</strong>: Email tracking accuracy has been improved. If it says it has been opened, 
-		you can be sure that the Client has received and opened the email</li>
-	<li><strong>Bug Fix</strong>: Printing playlist no longer shows menu</li>
-	<li><strong>Bug Fix</strong>: Email playlist corrections</li>
-	<li><strong>General</strong>: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
+
+	* **New**: Drag &amp; drop your Contact Form fields to re-order them easily
+	* **New**: Edit field settings without having to delete and re-create
+	* **New**: All transactions are now logged, whether automated via PayPal or manually entered by the Admin
+	* **New**: Notifications to clients when payments are entered manually for events
+	* **New**: Event Transaction overview is displayed on each event page
+	* **New**: Transaction Types have been moved and no longer reside within settings
+	* **Tweak**: Email tracking accuracy has been improved. If it says it has been opened, 
+		you can be sure that the Client has received and opened the email
+	* **Bug Fix**: Printing playlist no longer shows menu
+	* **Bug Fix**: Email playlist corrections
+	* **Tweak**: All outbound emails are sent from the defined system address. If your settings dictate that emails come from DJ's,
 		the DJ's name will be displayed and the reply-to address will be set to that of the DJ too. This also addresses an issue whereby
 		DJ's who have email addresses that do not end in the same domain name as the website where MDJM is installed, cannot send emails
-		due to security controls</li>
-	<li><strong>General</strong>: Digital contract signing now requires the client to re-enter their password as an additional verification step</li>
-	<li><strong>Bug Fix</strong>: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content</li>
-	<li><strong>General</strong>: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed</li>
-	<li><strong>New</strong>: Create backups of the MDJM database tables and download within the debugging screen</li>
-	<li><strong>General</strong>: Significant improvements to the application debugging. No annoying notification when debugging
-		is enabled, however we still only recommend to enable when you are experiencing an issue</li>
-</ul>
+		due to security controls
+	* **Tweak**: Digital contract signing now requires the client to re-enter their password as an additional verification step
+	* **Bug Fix**: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content
+	* **Tweak**: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed
+	* **New**: Create backups of the MDJM database tables and download within the debugging screen
+	* **Tweak**: Significant improvements to the application debugging. No annoying notification when debugging
+		is enabled, however we still only recommend to enable when you are experiencing an issue
+
 
 = 1.1.3.3 =
-<strong>Released Thursday 14th May, 2015</strong>
-<ul>
-	<li><strong>General</strong>: You can now add custom content above MDJM shortcode content within Client Zone pages</li>
-        <li><strong>General</strong>: Support for WordPress 4.2.3 (currently in alpha)</li>
-</ul>
+
+**Released Thursday 14th May, 2015**
+
+	* **Tweak**: You can now add custom content above MDJM shortcode content within Client Zone pages
+        * **Tweak**: Support for WordPress 4.2.3 (currently in alpha)
+
 
 = 1.1.3.2 =
-<strong>Released Friday 8th May, 2015</strong>
-<ul>
-	<li><strong>General</strong>: Full support for WordPress version 4.2.2</li>
-        <li><strong>Bug Fix</strong>: Missing space within Client Zone playlist management page...&quot;Your playlist currently has ...entries&quot;</li>
-        <li><strong>Bug Fix</strong>: CSS Correction within Availability widget</li>
-        <li><strong>Bug Fix</strong>: Error when sending playlist via email</li>
-</ul>
+
+**Released Friday 8th May, 2015**
+
+	* **Tweak**: Full support for WordPress version 4.2.2
+        * **Bug Fix**: Missing space within Client Zone playlist management page...&quot;Your playlist currently has ...entries&quot;
+        * **Bug Fix**: CSS Correction within Availability widget
+        * **Bug Fix**: Error when sending playlist via email
+
 
 = 1.1.3.1 =
-<strong>Released Monday, 27th April 2015</strong>
+
+**Released Monday, 27th April 2015**
+
 This is a bug-fix release only
-<ul>
-	<li><strong>Bug Fix</strong>: In certain circumstances, if you do not have events in the <code>Approved</code> status, no events were displayed in the events list</li>
-	<li><strong>Bug Fix</strong>: Relating to the above, the status links did not work in the events list</li>
-</ul>
+
+	* **Bug Fix**: In certain circumstances, if you do not have events in the <code>Approved</code> status, no events were displayed in the events list
+	* **Bug Fix**: Relating to the above, the status links did not work in the events list
+
 Watch out for the next major release of MDJM...coming soon to include a re-designed Event interface, greater email tracking, faster response times and much more!
 
 = 1.1.3 =
-<strong>Released Tuesday, 21st April 2015</strong>
-<ul>
-	<li><strong>New</strong>: Officially supporting WordPress 4.2</li>
-	<li><strong>General</strong>: Removed Add New option from Automated Tasks - this feature is still in development</li>
-</ul>
+
+**Released Tuesday, 21st April 2015**
+
+	* **New**: Officially supporting WordPress 4.2
+	* **Tweak**: Removed Add New option from Automated Tasks - this feature is still in development
+
 Watch out for the next major release of MDJM...coming soon to include a re-designed Event interface, greater email tracking, faster response times and much more!
 
 = 1.1.2 =
-<strong>Released Tuesday, 17th March 2015</strong>
-<ul>
-	<li><strong>New</strong>: All emails sent via the system to clients and DJ's are logged</li>
-	<li><strong>New</strong>: Track your clients opening of emails</li>
-	<li><strong>New</strong>: Re-designed the Venues feature and added additional functionality</li>
-	<li><strong>Bug Fix</strong>: If your web theme utilises white text some playlist entries where not visible within the front end</li>
-	<li><strong>General</strong>: Cleaner Email and Contract Template tables</li>
-	<li><strong>General</strong>: Code improvements, efficiency and cleanliness</li>
-</ul>
+
+**Released Tuesday, 17th March 2015**
+
+	* **New**: All emails sent via the system to clients and DJ's are logged
+	* **New**: Track your clients opening of emails
+	* **New**: Re-designed the Venues feature and added additional functionality
+	* **Bug Fix**: If your web theme utilises white text some playlist entries where not visible within the front end
+	* **Tweak**: Cleaner Email and Contract Template tables
+	* **Tweak**: Code improvements, efficiency and cleanliness
+
 
 = 1.1.1 =
+
 <u>Released Tuesday, 10th March 2015</u>
-<ul>
-	<li>New Settings options added - Payment Types & Transaction Types. Used for adding Event transactions</li>
-	<li><strong>Bug Fix</strong>: Manage Playlist link was missing on the client home page when viewing a single event</li>
-	<li><strong>Bug Fix</strong>: Mapped field not removed from Contact Form list if already assigned to field</li>
-	<li><strong>Bug Fix</strong>: DJ's only see their own events and clients within the Events page</li>
-	<li><strong>Bug Fix</strong>: Emails sent via the Communication Feature without a template failed</li>
-	<li><strong>General</strong>: Client first and last names always have a capital letter when created via new event or contact form</li>
-	<li><strong>General</strong>: Events table defaults to sorted by event date</li>
-	<li><strong>General</strong>: Added colour picker when setting error text colour for Contact Forms</li>
-	<li><strong>General</strong>: Custom verification messages for Contract and Email Template updates</li>
-	<li><strong>General</strong>: Further improvements to the Debugging system</li>
-	<li><strong>General</strong>: Updated the uninstallation script</li>
-</ul>
+
+	* New Settings options added - Payment Types & Transaction Types. Used for adding Event transactions
+	* **Bug Fix**: Manage Playlist link was missing on the client home page when viewing a single event
+	* **Bug Fix**: Mapped field not removed from Contact Form list if already assigned to field
+	* **Bug Fix**: DJ's only see their own events and clients within the Events page
+	* **Bug Fix**: Emails sent via the Communication Feature without a template failed
+	* **Tweak**: Client first and last names always have a capital letter when created via new event or contact form
+	* **Tweak**: Events table defaults to sorted by event date
+	* **Tweak**: Added colour picker when setting error text colour for Contact Forms
+	* **Tweak**: Custom verification messages for Contract and Email Template updates
+	* **Tweak**: Further improvements to the Debugging system
+	* **Tweak**: Updated the uninstallation script
+
 
 = 1.1 =
-<strong>New Features</strong>
-<strong>PayPal Integration</strong> for online Client Payments via your website<br />
+
+**New Features**
+**PayPal Integration** for online Client Payments via your website<br />
 MDJM Event Management for WordPress is now fully integrated with PayPal enabling you to take online payments securely via your website.
-<ul>
-	<li>No PayPal account is needed by Clients in order to make payments</li>
-	<li>Accepts payments from all major credit cards, as well as funds within the Client's PayPal account</li>
-	<li>Clients can choose to pay the Booking Fee/Deposit, or the full event balance</li>
-	<li>Full PayPal integration means the MDJM application receives information from the PayPal IPN API system and updates the booking and journal automatically after verifying payment is completed</li>
-	<li>Automatically sends your client an email based on a template of your choosing when payment is verified</li>
-	<li>Ability to apply taxes</li>
-	<li>Multi-Currency support for GBP, EUR, & USD</li>
-	<li>Supports customised PayPal checkout pages</li>
-	<li>Customise the display of the payment form</li>
-	<li>Immediate notifications in the Admin interface when you have new "Unattended" enquiries</li>
-	<li>Supports the PayPal sandbox environment so full testing can take place without real payments</li>
-</ul>
-<strong>Transaction Page</strong><br />
+
+	* No PayPal account is needed by Clients in order to make payments
+	* Accepts payments from all major credit cards, as well as funds within the Client's PayPal account
+	* Clients can choose to pay the Booking Fee/Deposit, or the full event balance
+	* Full PayPal integration means the MDJM application receives information from the PayPal IPN API system and updates the booking and journal automatically after verifying payment is completed
+	* Automatically sends your client an email based on a template of your choosing when payment is verified
+	* Ability to apply taxes
+	* Multi-Currency support for GBP, EUR, & USD
+	* Supports customised PayPal checkout pages
+	* Customise the display of the payment form
+	* Immediate notifications in the Admin interface when you have new "Unattended" enquiries
+	* Supports the PayPal sandbox environment so full testing can take place without real payments
+
+**Transaction Page**
 A new Transactions page has been added to the MDJM system and is available via the MDJM Event Management menu's within the WordPress admin interface.
 
 This page is only available to Admins and if the Payment features is enabled and has been introduced to compliment the new online payments system as described above.
 
 For now, the page simply lists any transactions that have been processed via PayPal and any other data relevant to that transaction. We will continue to develop this feature in up and coming versions.
 
-<strong>Events Table</strong><br />
+**Events Table**<br />
 The Events page has been updated slightly to be a little more intuitive. Unattended enquiries are now listed as priority and with a red background.
 
 The majority of updates to this page were to do with better, cleaner coding resulting in faster loading times and more efficient lookups.
 
-<strong>Bug Fixes &amp; Minor Enhancements</strong>
-	<ul>
-		<li><strong>New</strong>: Added <code>Make A Payment</code> link to the Client home page if PayPal is enabled for Client events that are due a deposit of balance payment</li>
-		<li><strong>New</strong>: Enabled the <strong>Add Media</strong> button within the Communications page. You can now include images in your Client Communications</li>
-		<li><strong>New</strong>: Added buttons in Playlist view to email the event playlist to yourself or print it</li>
-		<li><strong>New</strong>: <strong>Payments</strong> tab added to the Settings page to support the new <a href="https://www.paypal.com/" target="_blank" title="PayPal">PayPal</a> online payments feaure</li>
-		<li><strong>New</strong>: Added sub-menu items to the admin toolbar Settings item</li>
-		<li><strong>New</strong>: <strong>{CONTACT_URL}</strong> <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> added</li>
-		<li><strong>New</strong>: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> added to support the new online payments system. To be used within the verification email template</li>
-		<ul>
-			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_AMOUNT}</strong>: Inserts the amount received by the payment</li>
-			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_DATE}</strong>: Inserts the date payment was received as determined by PayPal</li>
-			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{PAYMENT_FOR}</strong>: Inserts <strong>Deposit</strong> or <strong>Balance</strong> depending on the payment received</li>
-		</ul>
-		<li><strong>New</strong>: Setting added <strong>Deposit Label</strong> enabling you to change the terminology used on both the front end and backend of your website. Some people prefer <code>Booking Fee</code> for example. Defaults to <strong>Deposit</strong>. Remember to update any email or contract templates as necessary</li>
-		 <li><strong>New</strong>: Setting added <strong>Balance Label</strong> enabling you to change the terminology used on both the front end and backend of your website. Defaults to <code>Balance</code>. Remember to update any email or contract templates as necessary</li>
-		<li><strong>Bug Fix</strong>: Slight adjustment to the Contact Forms validation scripts. In some instances determined during testing (no bug reports) the jQuery validation did not work correctly</li>
-		<li><strong>Bug Fix</strong>: WordPress "reserves" some form field names such as <strong>name</strong> so if you used this field name within the MDJM Contact Forms, the form did not submit correctly. This is rectified</li>
-		<li><strong>General</strong>: Updated the uninstall script</li>
-		<li><strong>General</strong>: Added the <code>Date Added</code> column to the playlist table admin view. List is sorted by this column as default</li>
-		<li><strong>TODO</strong>: Editing and ordering of Contact Form fields</li>
-	</ul>
+**Bug Fixes &amp; Minor Enhancements**
+	
+		* **New**: Added <code>Make A Payment</code> link to the Client home page if PayPal is enabled for Client events that are due a deposit of balance payment
+		* **New**: Enabled the **Add Media** button within the Communications page. You can now include images in your Client Communications
+		* **New**: Added buttons in Playlist view to email the event playlist to yourself or print it
+		* **New**: **Payments** tab added to the Settings page to support the new <a href="https://www.paypal.com/" target="_blank" title="PayPal">PayPal</a> online payments feaure
+		* **New**: Added sub-menu items to the admin toolbar Settings item
+		* **New**: **{CONTACT_URL}** <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> added
+		* **New**: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> added to support the new online payments system. To be used within the verification email template
+		
+			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_AMOUNT}**: Inserts the amount received by the payment
+			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_DATE}**: Inserts the date payment was received as determined by PayPal
+			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_FOR}**: Inserts **Deposit** or **Balance** depending on the payment received
+		
+		* **New**: Setting added **Deposit Label** enabling you to change the terminology used on both the front end and backend of your website. Some people prefer <code>Booking Fee</code> for example. Defaults to **Deposit**. Remember to update any email or contract templates as necessary
+		 * **New**: Setting added **Balance Label** enabling you to change the terminology used on both the front end and backend of your website. Defaults to <code>Balance</code>. Remember to update any email or contract templates as necessary
+		* **Bug Fix**: Slight adjustment to the Contact Forms validation scripts. In some instances determined during testing (no bug reports) the jQuery validation did not work correctly
+		* **Bug Fix**: WordPress "reserves" some form field names such as **name** so if you used this field name within the MDJM Contact Forms, the form did not submit correctly. This is rectified
+		* **Tweak**: Updated the uninstall script
+		* **Tweak**: Added the <code>Date Added</code> column to the playlist table admin view. List is sorted by this column as default
+		* **TODO**: Editing and ordering of Contact Form fields
+	
 
 = 1.0 =
-<h2>New Features</h2>
+
+**New Features**
 Our fully customisable Contact Forms enable full management of events from the initial client enquiry all the way through to the completion of the event.
 
-<ul>
-	<li>Create as many Contact Forms as you need and display them either on a single page in amongst your own contact, or via a widget that is displayed on multiple pages</li>
-	<li>Configure each individual form to meet your requirements</li>
-	<li>Map form fields directly to Client or Event fields</li>
-	<li>Create clients and event enquiries when the form is submitted</li>
-	<li>Immediately respond to the client once they submit the form with a pre-defined template</li>
-	<li>Customise each individual field as necessary</li>
-	<li>
-		<ul>
-			<li>Include a date picker</li>
-			<li>Specify which fields are required to be completed before submission</li>
-			<li>Specify your own CSS class</li>
-			<li>Include placeholder hints</li>
-			<li>& more</li>
-		</ul>
-	</li>
-	<li>Include text fields, free text areas, checkboxes, date fields, select (drop down) fields & more</li>
-	<li>jQuery Validation</li>
-	<li>Point successful Availability Checks to your MDJM Contact Form page for additional functionality</li>
-</ul>
 
-<h2>Bug Fixes &amp; Minor Enhancements</h2>
-<ul>
-	<li><strong>New</strong>: Create Clients directly from the Add New Event screen as part of the event creation process</li>
-	<li><strong>New</strong>: MDJM Contact Form Widget enabling you to add your MDJM Contact Form to multiple web pages quickly and easily</li>
-	<li><strong>New</strong>: Setting added <strong>New Enquiry Notifications</strong>. When checked, a notification will be displayed at the top of the WP Admin pages if there are new <strong>Unattended Enquiries</strong> that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default</li>
-	<li><strong>New</strong>: Once an event is Approved, you can now click on the status within the Event Listing page and view the Client's signed contract</li>
-	<li><strong>Bug Fix</strong>: The Year drop down list within the Availability page was showing blank instead of 2015</li>
-	<li><strong>Bug Fix</strong>: If you had your WordPress Permalink Settings set to the default of <strong>Default</strong> (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in</li>
-	<li><strong>Bug Fix</strong>: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration</li>
-</ul>
+	* Create as many Contact Forms as you need and display them either on a single page in amongst your own contact, or via a widget that is displayed on multiple pages
+	* Configure each individual form to meet your requirements
+	* Map form fields directly to Client or Event fields
+	* Create clients and event enquiries when the form is submitted
+	* Immediately respond to the client once they submit the form with a pre-defined template
+	* Customise each individual field as necessary
+	* *
+		
+			* Include a date picker
+			* Specify which fields are required to be completed before submission
+			* Specify your own CSS class
+			* Include placeholder hints
+			* & more
+		
+	
+	* Include text fields, free text areas, checkboxes, date fields, select (drop down) fields & more
+	* jQuery Validation
+	* Point successful Availability Checks to your MDJM Contact Form page for additional functionality
 
-== Upgrade Notice ==
-= 1.2.7.5 =
-Minor update with some bug fixes and small additions. Version 1.3 is pending with new features.
+
+**Bug Fixes &amp; Minor Enhancements**
+
+	* **New**: Create Clients directly from the Add New Event screen as part of the event creation process
+	* **New**: MDJM Contact Form Widget enabling you to add your MDJM Contact Form to multiple web pages quickly and easily
+	* **New**: Setting added **New Enquiry Notifications**. When checked, a notification will be displayed at the top of the WP Admin pages if there are new **Unattended Enquiries** that need attention. These notifications are only displayed to Administrators. The Setting is enabled by default
+	* **New**: Once an event is Approved, you can now click on the status within the Event Listing page and view the Client's signed contract
+	* **Bug Fix**: The Year drop down list within the Availability page was showing blank instead of 2015
+	* **Bug Fix**: If you had your WordPress Permalink Settings set to the default of **Default** (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in
+	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration

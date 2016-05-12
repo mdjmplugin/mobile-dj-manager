@@ -28,21 +28,7 @@
 				if( isset( $_GET['message'], $_GET['class'] ) )
 					$clientzone->display_message( $_GET['message'], $_GET['class'] );
 				
-				if( current_user_can( 'administrator' ) || is_dj() )	{
-					$clientzone->display_notice(
-						1,
-						sprintf(
-							__( 'The %s is reserved for clients. %s should use the %sWordPress admin area%s.%s To test %s functionality, log in with a test client account.', 'mobile-dj-manager' ),
-							MDJM_APP,
-							MDJM_DJ . "'s",
-							'<a href="' . admin_url() . '">',
-							'</a>',
-							'<br /><br />',
-							MDJM_APP
-						)
-					);
-				}
-				elseif( isset( $_GET['action'] ) )	{
+				if( isset( $_GET['action'] ) )	{
 					if( $_GET['action'] == 'view_event' )
 						$this->single_event();
 						
@@ -59,68 +45,7 @@
 					$this->display_events();
 				
 			} // __construct
-			
-			/*
-			 * Return the possible actions for the given event via a drop down menu
-			 *
-			 * @param	int		$id			The event id is required or $post global var must be set
-			 *			str		$status		The event status is required or $post global var must be set					
-			 *
-			 */
-			public function event_actions_dropdown( $id='', $status='' )	{
-				global $post, $mdjm;
-				
-				if( empty( $post ) && empty( $id ) )	{
-					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
-				}
-				
-				if( empty( $post ) && empty( $status ) )	{
-					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
-				}
-				
-				$event_id = !empty( $post ) ? $post->ID : $id;
-				$event_status = !empty( $post ) ? $post->post_status : $status;
-				
-				// The link to view event details is always available
-				$selections['view_event'] = __( 'View Details', 'mobile-dj-manager' );
-				
-				switch( $event_status )	{
-					case 'mdjm-unattended':
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-enquiry':
-						$selections['accept_enquiry'] = __( 'Book Event', 'mobile-dj-manager' );
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-contract':
-						$selections['sign_contract'] = __( 'Sign Contract', 'mobile-dj-manager' );
-						$selections['cancel_event'] = __( 'Cancel Event', 'mobile-dj-manager' );
-					break;
-					case 'mdjm-approved':
-						// Payment Option
-						$balance_status = get_post_meta( $event_id, '_mdjm_event_balance_status', true );
-						$deposit_status = get_post_meta( $event_id, '_mdjm_event_deposit_status', true );
 						
-						if( $deposit_status != 'Paid' || $balance_status != 'Paid' )
-							$selections['make_payment'] = __( 'Make a Payment', 'mobile-dj-manager' );
-					break;
-				} // End switch
-				
-				$actions = '<select name="event_action_' . $event_id . '" id="event_action_' . $event_id . '">' . "\r\n" . 
-						   '<option value="">--- ' . __( 'Select Action', 'mobile-dj-manager' ) . ' ---</option>' . "\r\n";
-				
-				foreach( $selections as $key => $value )	{
-					$actions .= '<option value="' . $key . '">' . $value . '</option>' . "\r\n";	
-				}
-				
-				$actions .= '</select>' . "\r\n";
-				
-				return $actions;
-				
-			} // event_actions_dropdown
-			
 			/*
 			 * Display the action buttons for the given event.
 			 * The $actions array is ordered by the array key which is int
@@ -134,12 +59,12 @@
 				
 				if( empty( $post ) && empty( $id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $id was parsed in ' . __METHOD__, true );
 				}
 				
 				if( empty( $post ) && empty( $status ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No global $post variable is set and no $status was parsed in ' . __METHOD__, true );
 				}
 				
 				$event_id = !empty( $id ) ? $id : $post->ID;
@@ -148,20 +73,20 @@
 				switch( $event_status )	{
 					case 'mdjm-enquiry':
 						$actions[0] = ( MDJM_ONLINE_QUOTES == true ? '<button type="reset" onclick="location.href=\'' . 
-							$mdjm->get_link( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $event_id . '\'">' . 
+							mdjm_get_formatted_url( MDJM_QUOTES_PAGE, true ) . 'event_id=' . $event_id . '\'">' . 
 							__( 'View Event Quote', 'mobile-dj-manager' ) . '</button>' : '' );
 							
-						$actions[1] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_HOME, true ) . 
+						$actions[1] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_HOME, true ) . 
 							'action=accept_enquiry&amp;event_id=' . $event_id, 'book_event', '__mdjm_verify' ) . '\'">' . 
 							__( 'Book this Event', 'mobile-dj-manager' ) . '</button>';
 					break;
 					case 'mdjm-contract':
-						$actions[5] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_CONTRACT_PAGE, true ) . 
+						$actions[5] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 
 							'event_id=' . $event_id, 'sign_contract', '__mdjm_verify' ) . '\'">' . 
 							__( 'Review &amp; Approve Contract', 'mobile-dj-manager' ) . '</button>';
 					break;
 					case 'mdjm-approved':
-						$actions[10] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_CONTRACT_PAGE, true ) . 
+						$actions[10] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_CONTRACT_PAGE, true ) . 
 							'event_id=' . $event_id, 'view_contract', '__mdjm_verify' ) . '\'">' . 
 							__( 'View Contract', 'mobile-dj-manager' ) . '</button>';
 					break;
@@ -169,15 +94,14 @@
 				
 				if( 'Y' == get_post_meta( $event_id, '_mdjm_event_playlist', true ) )	{
 					if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )
-						$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PLAYLIST_PAGE, true ) . 
-								'event_id=' . $event_id, 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
+						$actions[20] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE, true ), 'manage_playlist', '__mdjm_verify' ) . '\'">' . 
 								__( 'Manage Playlist', 'mobile-dj-manager' ) . '</button>';
 				}
 							
-				$actions[25] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( $mdjm->get_link( MDJM_PROFILE_PAGE, false ), 'manage_profile', '__mdjm_verify' ) . 
+				$actions[25] = '<button type="reset" onclick="location.href=\'' . wp_nonce_url( mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ), 'manage_profile', '__mdjm_verify' ) . 
 							 '\'">' . __( 'Update Profile', 'mobile-dj-manager' ) . '</button>';
 							 
-				$actions[30] = '<button type="reset" onclick="location.href=\'' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
+				$actions[30] = '<button type="reset" onclick="location.href=\'' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . 
 							 '\'">' . __( 'Book Another Event', 'mobile-dj-manager' ) . '</button>';
 				
 				// Filter the event action buttons
@@ -236,7 +160,7 @@
 				
 				if( empty( $action ) || empty( $event_id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Unable to process event action as ' . ( empty( $action ) ? 'the action is missing' : 
+						MDJM()->debug->log_it( 'ERROR: Unable to process event action as ' . ( empty( $action ) ? 'the action is missing' : 
 							'the event ID is missing' ) . 'in . ' . __METHOD__, true );
 				}
 				
@@ -269,7 +193,7 @@
 					echo $clientzone->__text( 
 										'home_noevents',
 										'<p>You currently have no upcoming events. Please <a title="Contact ' . get_bloginfo( 'name' ) .
-										'" href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . '">contact me</a> now to start planning your next event.</p>' );
+										'" href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . '">contact me</a> now to start planning your next event.</p>' );
 				}
 				// Single active event
 				elseif( count( $my_mdjm['active'] ) == 1 )	{
@@ -294,9 +218,9 @@
 				// Incomplete Profile warning
 				if( !$clientzone->client_profile_complete( $my_mdjm['me']->ID ) && $clientzone->warn_profile() )
 					$clientzone->display_notice( 3, 
-												 'Your <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
-												 '">profile</a> appears to be incomplete. Please <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
-												 '">click here</a> to update it now. Incorrect <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
+												 'Your <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
+												 '">profile</a> appears to be incomplete. Please <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
+												 '">click here</a> to update it now. Incorrect <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
 												 '">profile</a> information can cause problems with your booking.' );
 				
 				echo '<p>' . __( 'Click on an event date below to begin managing that event.' ) . '</p>' . "\r\n";
@@ -314,9 +238,9 @@
 							setup_postdata( $post );
 							if( $post->post_status == 'mdjm-unattended' )
 								continue; // We don't display unattended events here
-							$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID ); // The event details
+							$eventinfo = MDJM()->events->event_detail( $post->ID ); // The event details
 							echo '<tr>' . "\r\n";
-								echo '<td><a href="' . $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&amp;event_id=' . $post->ID . '">' . 
+								echo '<td><a href="' . mdjm_get_formatted_url( MDJM_HOME, true ) . 'action=view_event&amp;event_id=' . $post->ID . '">' . 
 									date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) . '</a></td>' . "\r\n";
 									
 								echo '<td>' . get_post_status_object( $post->post_status )->label . '</td>' . "\r\n";
@@ -344,15 +268,15 @@
 				
 				$post = $event;
 				
-				if( !$mdjm->mdjm_events->is_my_event( $event->ID ) )	{
+				if( !MDJM()->events->is_my_event( $event->ID ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: ' . get_current_user_id() . ' is attempting to access event ID ' . $event->ID . 
+						MDJM()->debug->log_it( 'ERROR: ' . get_current_user_id() . ' is attempting to access event ID ' . $event->ID . 
 											 ' which is not theirs. In ' . __METHOD__, true );
 											 
 					wp_die( $clientzone->display_message( 9, 5 ), 'Event Ownership Error' );
 				}
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $event->ID );
+				$eventinfo = MDJM()->events->event_detail( $event->ID );
 				
 				$expired = array( 'mdjm-failed', 'mdjm-cancelled', 'mdjm-completed' );
 				
@@ -360,7 +284,7 @@
 				if( in_array( $event->post_status, $expired ) )	{
 					echo $clientzone->__text( 
 					'home_notactive', 
-					'<p>The selected event is no longer active. <a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
+					'<p>The selected event is no longer active. <a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . 
 					'" title="Begin planning your next event with us">Contact us now</a> begin planning your next event.</p>' 
 					);
 				}
@@ -374,9 +298,9 @@
 					// Incomplete Profile warning
 					if( !$clientzone->client_profile_complete( $my_mdjm['me']->ID ) && $clientzone->warn_profile() )
 						$clientzone->display_notice( 3, 
-													 'Your <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
-													 '">profile</a> appears to be incomplete. Please <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
-													 '">click here</a> to update it now. Incorrect <a href="' . $mdjm->get_link( MDJM_PROFILE_PAGE, false ) . 
+													 'Your <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
+													 '">profile</a> appears to be incomplete. Please <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
+													 '">click here</a> to update it now. Incorrect <a href="' . mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . 
 													 '">profile</a> information can cause problems with your booking.' );
 					
 					
@@ -428,7 +352,7 @@
 											echo ( !empty( $eventinfo['package'] ) ? '<a title="' . ( !empty( $eventinfo['package']['desc'] ) ? 
 											$eventinfo['package']['desc'] : '' ) . 
 											( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
-												display_price( $eventinfo['package']['cost'] ) : '' ) . '">' . 
+												mdjm_currency_filter( mdjm_sanitize_amount( $eventinfo['package']['cost'] ) ) : '' ) . '">' . 
 											$eventinfo['package']['name'] . '</a>' : 'None' );
 										}
 										else	{
@@ -444,7 +368,7 @@
 												$item = get_addon_details( $addon );
 												echo '<a title="' . ( !empty( $item['desc'] ) ? $item['desc'] : '' ) . 
 												( !empty( $mdjm_settings['clientzone']['package_prices'] ) ? ' - ' . 
-													display_price( $item['cost'] ) : '' ) . '">' . $item['name'] . '</a>';
+													mdjm_currency_filter( mdjm_sanitize_amount( $item['cost'] ) ) : '' ) . '">' . $item['name'] . '</a>';
 												echo ( $i < count( $eventinfo['addons'] ) ? '<br />' : '' );
 												$i++;	
 											}
@@ -458,11 +382,11 @@
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Total Cost:' ) . '</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['cost'] . '</td>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( MDJM_DEPOSIT_LABEL ) . ':</th>' . "\r\n";
+									echo '<th style="width: 15%;">' . __( mdjm_get_deposit_label() ) . ':</th>' . "\r\n";
 									echo '<td style="width: 35%;">' . $eventinfo['deposit'] . ' (' . __( $eventinfo['deposit_status'] ) . ')</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								echo '<tr>' . "\r\n";
-									echo '<th style="width: 15%;">' . __( MDJM_BALANCE_LABEL ) . ':</th>' . "\r\n";
+									echo '<th style="width: 15%;">' . __( mdjm_get_balance_label() ) . ':</th>' . "\r\n";
 									echo '<td colspan="3">' . $eventinfo['balance'] . ' (' . __( $eventinfo['balance_status'] ) . ')</td>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								
@@ -478,7 +402,7 @@
 								echo '</tr>' . "\r\n";
 								echo '<tr>' . "\r\n";
 									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Your Contact Details' ) . '</span>&nbsp;&nbsp;&nbsp;<a href="' . 
-									$mdjm->get_link( MDJM_PROFILE_PAGE, false ) . '">' . 
+									mdjm_get_formatted_url( MDJM_PROFILE_PAGE, false ) . '">' . 
 									__( 'edit' ) . '</a></th>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								
@@ -503,7 +427,7 @@
 									echo '<th colspan="4"><span style="text-decoration: underline;">' . __( 'Venue Details' ) . '</span></th>' . "\r\n";
 								echo '</tr>' . "\r\n";
 								
-								$venue_details = $mdjm->mdjm_events->mdjm_get_venue_details( get_post_meta( $event->ID, '_mdjm_event_venue_id', true ), $event->ID );
+								$venue_details = MDJM()->events->mdjm_get_venue_details( get_post_meta( $event->ID, '_mdjm_event_venue_id', true ), $event->ID );
 																
 								echo '<tr>' . "\r\n";
 									echo '<th style="width: 15%;">' . __( 'Venue:' ) . '</th>' . "\r\n";
@@ -531,11 +455,11 @@
 				
 				$post = get_post( $event_id );
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				$eventinfo = MDJM()->events->event_detail( $post->ID );
 				
 				$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 								
-				echo '<form name="edit_client_event" id="edit_client_event" method="post" action="' . $mdjm->get_link( MDJM_HOME, true ) . 
+				echo '<form name="edit_client_event" id="edit_client_event" method="post" action="' . mdjm_get_formatted_url( MDJM_HOME, true ) . 
 					'action=view_event&event_id=' . $event_id . '">' . "\r\n";
 				
 				echo '<input type="hidden" name="event_id" id="event_id" value="' . $post->ID . '" />' . "\r\n";
@@ -712,7 +636,7 @@
 							
 							echo '<tr>' . "\r\n";
 								echo '<td colspan="2"><input type="submit" name="submit" id="submit" value="Submit Changes" /></td>' . "\r\n";
-								echo '<td colspan="2"><button type="reset" onclick="location.href=\'' . $mdjm->get_link( MDJM_HOME, true ) . 
+								echo '<td colspan="2"><button type="reset" onclick="location.href=\'' . mdjm_get_formatted_url( MDJM_HOME, true ) . 
 								'action=view_event&amp;event_id=' . $post->ID . '\'">' . __( 'Cancel Changes' ) . '</button></td>' . "\r\n";
 							echo '</tr>' . "\r\n";
 							
@@ -730,14 +654,14 @@
 			 *
 			 */
 			function update_event()	{
-				global $mdjm, $mdjm_posts, $post, $my_mdjm, $clientzone;
+				global $mdjm, $post, $my_mdjm, $clientzone;
 				
 				$post = get_post( $_POST['event_id'] );
 				
-				$eventinfo = $mdjm->mdjm_events->event_detail( $post->ID );
+				$eventinfo = MDJM()->events->event_detail( $post->ID );
 				
 				if( MDJM_DEBUG == true )
-					$GLOBALS['mdjm_debug']->log_it( 'Event ID ' . $post->ID . ' is being updated by ' . $eventinfo['client']->display_name, true );
+					MDJM()->debug->log_it( 'Event ID ' . $post->ID . ' is being updated by ' . $eventinfo['client']->display_name, true );
 								
 				// Prepare the meta data
 				$event_data['_mdjm_event_last_updated_by'] = $my_mdjm['me']->ID;
@@ -758,13 +682,13 @@
 				$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
 				if( !isset( $existing_event_type[0] ) || $existing_event_type[0]->term_id != $_POST['mdjm_event_type'] )	{
 					$field_updates[] = 'Event Type changed from ' . $existing_event_type[0]->name . ' to ' . get_term( $_POST['mdjm_event_type'], 'event-types' )->name;
-					$mdjm->mdjm_events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
+					MDJM()->events->mdjm_assign_event_type( $_POST['mdjm_event_type'] );
 				}
 					
 				// Event Times
 				if( date( 'H:i', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) != $eventinfo['start'] )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Event start time updating to ' . $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] );
+						MDJM()->debug->log_it( 'Event start time updating to ' . $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] );
 						
 					$event_data['_mdjm_event_start'] = MDJM_TIME_FORMAT == 'H:i' ? 
 						date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ) : 
@@ -773,7 +697,7 @@
 				}
 				if( date( 'H:i', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) != $eventinfo['finish'] )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Event finish time updating to ' . $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] );
+						MDJM()->debug->log_it( 'Event finish time updating to ' . $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] );
 						
 					$event_data['_mdjm_event_finish'] = MDJM_TIME_FORMAT == 'H:i' ? 
 						date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) ) : 
@@ -781,7 +705,7 @@
 						isset( $_POST['event_finish_period'] ) ? $_POST['event_finish_period'] : '' ) );	
 				}
 									
-				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+				remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 				// Update event
 				wp_update_post( array( 'ID' => $post->ID ) );
 				
@@ -806,15 +730,15 @@
 					
 					// Log changes to debug file
 					if( MDJM_DEBUG == true && !empty( $field_updates ) )
-						$GLOBALS['mdjm_debug']->log_it( 'Event Updates Completed     ' . "\r\n" . '| ' .
+						MDJM()->debug->log_it( 'Event Updates Completed     ' . "\r\n" . '| ' .
 							implode( "\r\n" . '     | ', $field_updates ) );
 					
 				}
 				
-				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+				add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 				
 				// Update journal
-				$mdjm->mdjm_events->add_journal( array(
+				MDJM()->events->add_journal( array(
 										'user' 			=> $my_mdjm['me']->ID,
 										'event'		   => $post->ID,
 										'comment_content' => $my_mdjm['me']->display_name . ' updated event - ' . $post->ID . '<br />(' . time() . ')',
@@ -845,7 +769,7 @@
 				$date = get_post_meta( $event_id, '_mdjm_event_date', true );
 				
 				if( time() > ( $date - ( MDJM_EDIT_EVENT_DISABLE * DAY_IN_SECONDS ) ) )	{
-					return '<a href="' . $mdjm->get_link( MDJM_HOME, true ) . 'action=edit_event_detail&event_id=' . $event_id . '">' . 
+					return '<a href="' . mdjm_get_formatted_url( MDJM_HOME, true ) . 'action=edit_event_detail&event_id=' . $event_id . '">' . 
 					$text . '</a>';
 				}
 					

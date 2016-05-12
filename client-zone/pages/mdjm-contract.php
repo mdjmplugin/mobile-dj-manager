@@ -17,7 +17,7 @@
 			 *
 			 */
 			public function __construct( $event )	{
-				global $clientzone, $my_mdjm, $mdjm, $mdjm_posts;
+				global $clientzone, $my_mdjm, $mdjm;
 								
 				$this->event = get_post( $event );
 				
@@ -27,20 +27,20 @@
 				
 				if( empty( $event_client ) )	{ 
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No client found for event', true );
+						MDJM()->debug->log_it( 'ERROR: No client found for event', true );
 						
 					$clientzone->no_permission();
 				}
-				elseif( empty( $contract_id ) || !$mdjm_posts->post_exists( $contract_id ) )	{
+				elseif( empty( $contract_id ) || !is_string( get_post_status( $contract_id ) ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No contract found for event', true );	
+						MDJM()->debug->log_it( 'ERROR: No contract found for event', true );	
 						
 					$clientzone->no_permission();
 				}
 					
 				elseif( $my_mdjm['me']->ID != $event_client && !current_user_can( 'administrator' ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: Unauthorised access to contract / event', true );	
+						MDJM()->debug->log_it( 'ERROR: Unauthorised access to contract / event', true );	
 					
 					$clientzone->no_permission();
 				}
@@ -62,7 +62,7 @@
 			 *
 			 */
 			public function sign_contract()	{
-				global $mdjm, $mdjm_posts, $my_mdjm, $clientzone, $mdjm_settings;
+				global $mdjm, $my_mdjm, $clientzone, $mdjm_settings;
 				
 				/* -- Validate the nonce -- */
 				if( !isset( $_POST['mdjm_sign_event_contract'] ) || !wp_verify_nonce( $_POST['mdjm_sign_event_contract'], 'sign_event_contract' ) )	{
@@ -84,7 +84,7 @@
 				/* -- Sign the contract -- */
 				else	{
 					/* -- Remove the save post hook to avoid loops -- */
-					remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+					remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 					/* -- Create a new signed contract instance -- */
 					$contract_data = array(
 										'post_title'	 => 'Event Contract: ' . MDJM_EVENT_PREFIX . $this->event->ID,
@@ -122,13 +122,13 @@
 					// Success
 					if( !is_wp_error( $signed_contract ) )	{
 						if( MDJM_DEBUG == true )
-							$mdjm->debug_logger( 'Client event signed contract created (' . $signed_contract . ')', true );
+							MDJM()->debug->log_it( 'Client event signed contract created (' . $signed_contract . ')', true );
 						
 						add_post_meta( $signed_contract, '_mdjm_contract_signed_name', ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] ), true );
 						
 						/* -- Update the event -- */
 						$event_meta = array(
-							'_mdjm_signed_contract'				=> $signed_contract,
+							'_mdjm_event_signed_contract'				=> $signed_contract,
 							'_mdjm_event_contract_approved'		=> date( 'Y-m-d H:i:s' ),
 							'_mdjm_event_contract_approver'		=> ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] ),
 							'_mdjm_event_contract_approver_ip'	 => $_SERVER['REMOTE_ADDR'],
@@ -148,9 +148,9 @@
 						/* -- Update Journal with event updates -- */
 						if( MDJM_JOURNAL == true )	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( '	-- Adding journal entry' );
+								MDJM()->debug->log_it( '	-- Adding journal entry' );
 								
-							$mdjm->mdjm_events->add_journal( array(
+							MDJM()->events->add_journal( array(
 										'user' 			=> $my_mdjm['me']->ID,
 										'event'		   => $this->event->ID,
 										'comment_content' => 'Contract Approval completed by ' . ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] . '<br>' ),
@@ -163,7 +163,7 @@
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( '	-- Journalling is disabled' );	
+								MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 						}
 						
 						/* -- Email booking confirmations -- */
@@ -172,18 +172,18 @@
 						$client_email = isset( $mdjm_settings['templates']['booking_conf_client'] ) ? $mdjm_settings['templates']['booking_conf_client'] : false;
 						$dj_email = isset( $mdjm_settings['templates']['email_dj_confirm'] ) ? $mdjm_settings['templates']['email_dj_confirm'] : false;
 						
-						if( !$mdjm_posts->post_exists( $client_email ) )	{
+						if( !is_string( get_post_status( $client_email ) ) )	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
+								MDJM()->debug->log_it( 'ERROR: No email template for the contract has been found ' . __FUNCTION__, $stampit=true );
 							wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 						}
 						
 						if( $contact_client == true )	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Configured to email client with template ID ' . $client_email );
+								MDJM()->debug->log_it( 'Configured to email client with template ID ' . $client_email );
 							
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Generating email...' );
+								MDJM()->debug->log_it( 'Generating email...' );
 							
 							$email_args = array( 
 								'content'	=> $client_email,
@@ -204,23 +204,23 @@
 							
 							if( $approval_email )	{
 								if( MDJM_DEBUG == true )
-									 $mdjm->debug_logger( '	-- Confrmation email sent to client ' );
+									 MDJM()->debug->log_it( '	-- Confrmation email sent to client ' );
 							}
 							else	{
 								if( MDJM_DEBUG == true )
-									 $mdjm->debug_logger( '	ERROR: Confrmation email was not sent' );	
+									 MDJM()->debug->log_it( '	ERROR: Confrmation email was not sent' );	
 							}	
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Not configured to email client' );	
+								MDJM()->debug->log_it( 'Not configured to email client' );	
 						}
 						if( $contact_dj == true )	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Configured to email DJ with template ID ' . $dj_email );
+								MDJM()->debug->log_it( 'Configured to email DJ with template ID ' . $dj_email );
 							
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Generating email...' );	
+								MDJM()->debug->log_it( 'Generating email...' );	
 								$approval_dj_email = $mdjm->send_email( array( 
 														'content'	=> $dj_email,
 														'to'		 => get_post_meta( $this->event->ID, '_mdjm_event_dj', true ),
@@ -234,28 +234,28 @@
 													) );
 								if( $approval_dj_email )	{
 									if( MDJM_DEBUG == true )
-										 $mdjm->debug_logger( '	-- Approval email sent to DJ ' );
+										 MDJM()->debug->log_it( '	-- Approval email sent to DJ ' );
 								}
 								else	{
 									if( MDJM_DEBUG == true )
-										 $mdjm->debug_logger( '	ERROR: Approval email was not sent to DJ' );	
+										 MDJM()->debug->log_it( '	ERROR: Approval email was not sent to DJ' );	
 								}	
 						}
 						else	{
 							if( MDJM_DEBUG == true )
-								$mdjm->debug_logger( 'Not configured to email DJ' );	
+								MDJM()->debug->log_it( 'Not configured to email DJ' );	
 						}
 					}
 					/* -- Re-add the save post hook -- */
-					add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+					add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 					
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'Completed client signing of contract ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'Completed client signing of contract ' . __METHOD__, true );
 						
 					/* -- Email admin to notify of changes -- */
 					if( MDJM_NOTIFY_ADMIN == true )	{
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'Sending event status change notification to admin (Contract Signed)' );
+							MDJM()->debug->log_it( 'Sending event status change notification to admin (Contract Signed)' );
 							
 						$content = '<html>' . "\n" . '<body>' . "\n";
 						$content .= '<p>' . sprintf( __( 'Good news... %s has just signed their event contract via %s', 'mobile-dj-manager' ), 
@@ -267,9 +267,9 @@
 							
 						$content .= '<p>' . "\n";
 						$content .= __( 'Date', 'mobile-dj-manager' ) . ': {EVENT_DATE}<br />' . "\n";
-						$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . $mdjm->mdjm_events->get_event_type( $this->event->ID ) . '<br />' . "\n";
+						$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . MDJM()->events->get_event_type( $this->event->ID ) . '<br />' . "\n";
 						
-						$event_stati = get_event_stati();
+						$event_stati = mdjm_all_event_status();
 						
 						$content .= __( 'Status', 'mobile-dj-manager' ) . ': ' . $event_stati[get_post_status( $this->event->ID )] . '<br />' . "\n";
 						$content .= __( 'Client', 'mobile-dj-manager' ) . ': {CLIENT_FULLNAME}<br />' . "\n";
@@ -289,32 +289,30 @@
 										 . '</p>' . "\n";
 						
 						$content .= '</body>' . "\n" . '</html>' . "\n";
-						
-						$mdjm->send_email(
-							array(
-								'content'		=> $mdjm->filter_content( 
-									get_post_meta( $this->event->ID,'_mdjm_event_client', true ),
-									$this->event->ID,
-									$content 
-								),
-								'to'			 => $mdjm_settings['email']['system_email'],
-								'subject'		=> __( 'Event Contract Signed', 'mobile-dj-manager' ),			
-								'journal'		=> false,
-								'event_id'	   => $this->event->ID,
-								'cc_dj'		  => false,
-								'cc_admin'	   => false,
-								'filter'		 => false,
-								'log_comm'	   => false
-							)
-						);
+												
+						$mdjm->send_email( array(
+											'content'		=> $mdjm->filter_content( 
+												get_post_meta( $this->event->ID,'_mdjm_event_client', true ),
+												$this->event->ID,
+												$content 
+											),
+											'to'			 => $mdjm_settings['email']['system_email'],
+											'subject'		=> __( 'Event Contract Signed', 'mobile-dj-manager' ),
+												
+											'journal'		=> false,
+											'event_id'	   => $this->event->ID,
+											'cc_dj'		  => false,
+											'cc_admin'	   => false,
+											'filter'		 => false,
+											'log_comm'	   => false ) );
 					}
 					else
 						if( MDJM_DEBUG == true )
-							$GLOBALS['mdjm_debug']->log_it( 'Skipping admin notification' );
+							MDJM()->debug->log_it( 'Skipping admin notification' );
 
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_CONTRACT_PAGE ) . 'event_id=' . $this->event->ID . '&message=3&class=2'; ?>");
                     </script>
                     <?php
 					exit;
@@ -438,7 +436,7 @@
 				$contract = $this->event_contract;
 				
 				if( $this->event->post_status == 'mdjm-approved' || $this->event->post_status == 'mdjm-completed' )	{
-					$contract_id = get_post_meta( $this->event->ID, '_mdjm_signed_contract', true );
+					$contract_id = get_post_meta( $this->event->ID, '_mdjm_event_signed_contract', true );
 					$contract = get_post( $contract_id );
 					
 					$prefix = '<p class="signed">' . __( 'This contract has been signed' ) . '<br>' . "\r\n";
@@ -486,14 +484,14 @@
 	} // if( !class_exists( 'MDJM_Contract' ) )
 	
 /* -- Insantiate the MDJM_Contract class if the user is logged in-- */
-	global $clientzone, $mdjm_posts;
+	global $clientzone;
 	
 	$event = !empty( $_GET['event_id'] ) ? $_GET['event_id'] : '';
 	
 	if( !is_user_logged_in() )
 		$clientzone->login();	
 				
-	elseif( empty( $event ) || !$mdjm_posts->post_exists( $event ) )
+	elseif( empty( $event ) || !is_string( get_post_status( $event ) ) )
 		$clientzone->no_permission();	
 	
 	else

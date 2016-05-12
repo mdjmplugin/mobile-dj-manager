@@ -25,11 +25,8 @@
 																				
 				/* -- Hooks -- */
 				add_action( 'wp_enqueue_scripts', array( &$this, 'client_zone_enqueue' ) ); // Styles & Scripts
-				add_action( 'wp_footer', array( &$this, 'print_credit' ) ); // Add the MDJM credit text to the footer of Client Zone pages
 				add_action( 'wp_loaded', array( &$this, 'my_events' ) ); // Current users events
 				add_action( 'init', array( &$this, 'init' ) ); // Init actions
-				
-				add_action( 'login_form_middle', array( &$this, 'lost_password_link' ) );
 			} // __construct
 			
 			/**
@@ -41,7 +38,6 @@
 			 */
 			function init()	{
 				$this->includes();
-				$this->no_comments();
 			} // init
 			
 			/**
@@ -54,20 +50,6 @@
 			function includes()	{
 				require_once( MDJM_CLIENTZONE . '/includes/mdjm-availability.php' );
 			} // includes
-			
-			/**
-			 * Stop comments being displayed within the Client Zone pages
-			 *
-			 *
-			 *
-			 */
-			function no_comments()	{
-				add_filter( 'get_comments_number', '__return_false' );
-				
-				if( is_dj() || is_client() )
-					add_filter( 'get_edit_post_link', '__return_false' );
-			} // no_comments
-
 /*
  * --
  * CLIENT EVENT ACTIONS
@@ -90,20 +72,20 @@
 							
 				$c = !empty( $client ) ? $client : $current_user->ID;
 				
-				$event_stati = get_event_stati();
+				$event_stati = mdjm_all_event_status();
 				
 				$my_mdjm = array();
 				
 				$my_mdjm['me'] = get_userdata( $c );
 				
 				if( is_dj() || current_user_can( 'administrator' ) )	{
-					$my_mdjm['next'] = $mdjm->mdjm_events->next_event( '', 'dj' );
-					$my_mdjm['active'] = $mdjm->mdjm_events->active_events( '', 'dj' );
+					$my_mdjm['next'] = MDJM()->events->next_event( '', 'dj' );
+					$my_mdjm['active'] = MDJM()->events->active_events( '', 'dj' );
 				}
 					
 				else	{
-					$my_mdjm['next'] = $mdjm->mdjm_events->next_event();
-					$my_mdjm['active'] = $mdjm->mdjm_events->active_events();
+					$my_mdjm['next'] = MDJM()->events->next_event();
+					$my_mdjm['active'] = MDJM()->events->active_events();
 				}
 			} // my_events
 			
@@ -118,44 +100,41 @@
 			 * 
 			 */
 			public function accept_enquiry( $post )	{
-				global $mdjm, $my_mdjm, $mdjm_posts, $mdjm_settings;
+				global $mdjm, $my_mdjm, $mdjm_settings;
 				
 				if( empty( $post ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No event object was provided in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No event object was provided in ' . __METHOD__, true );
 						
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4'; ?>");
                     </script>
                     <?php
 					exit;
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=2&class=4' );
 				}
 				if( get_current_user_id() != get_post_meta( $post->ID, '_mdjm_event_client', true ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
 						
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
                     </script>
                     <?php
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				
 				/* -- Security verification -- */
 				if( !isset( $_GET['__mdjm_verify'] ) || !wp_verify_nonce( $_GET['__mdjm_verify'], 'book_event' ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: User ' . get_current_user_id() . ' is not authorised to accept this enquiry (' . $post->ID . ') in ' . __METHOD__, true );
 					
 					?>
 					<script type="text/javascript">
-                    window.location.replace("<?php echo $mdjm->get_link( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
+                    window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_HOME ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4'; ?>");
                     </script>
                     <?php
-					//wp_redirect( $mdjm->get_link( MDJM_HOME, true ) . 'action=view_event&event_id=' . $post->ID . '&message=6&class=4' );
 					exit;
 				}
 				
@@ -167,7 +146,7 @@
 							);
 							
 				/* -- Remove the save post hook to avoid loops -- */
-				remove_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+				remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 				
 				/* -- Initiate actions for status change -- */
 				wp_transition_post_status( 'mdjm-contract', $post->post_status, $post );
@@ -184,9 +163,9 @@
 				/* -- Update Journal with event updates -- */
 				if( MDJM_JOURNAL == true )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( '	-- Adding journal entry' );
+						MDJM()->debug->log_it( '	-- Adding journal entry' );
 						
-					$mdjm->mdjm_events->add_journal( array(
+					MDJM()->events->add_journal( array(
 								'user' 			=> $my_mdjm['me']->ID,
 								'event'		   => $post->ID,
 								'comment_content' => 'Enquiry accepted by ' . $my_mdjm['me']->display_name,
@@ -199,25 +178,25 @@
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( '	-- Journalling is disabled' );	
+						MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 				}
 				
 				/* -- Email Contract Link -- */
 				$contact_client = !empty( $mdjm_settings['templates']['contract_to_client'] ) ? true : false;
 				$client_email = isset( $mdjm_settings['templates']['contract'] ) ? $mdjm_settings['templates']['contract'] : false;
 				
-				if( !$mdjm_posts->post_exists( $client_email ) )	{
+				if( !is_string( get_post_status( $client_email ) ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No email template for the contract link has been found ' . __FUNCTION__, $stampit=true );
+						MDJM()->debug->log_it( 'ERROR: No email template for the contract link has been found ' . __FUNCTION__, $stampit=true );
 					wp_die( 'ERROR: Either no email template is defined or an error has occured. Check your Settings.' );
 				}
 				
 				if( $contact_client == true )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'Configured to email client with template ID ' . $client_email );
+						MDJM()->debug->log_it( 'Configured to email client with template ID ' . $client_email );
 					
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'Generating email...' );
+						MDJM()->debug->log_it( 'Generating email...' );
 					
 					$email_args = array( 
 						'content'	=> $client_email,
@@ -238,25 +217,25 @@
 					
 					if( $contract_email )	{
 						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	-- Contract link email sent to client ' );
+							 MDJM()->debug->log_it( '	-- Contract link email sent to client ' );
 					}
 					else	{
 						if( MDJM_DEBUG == true )
-							 $mdjm->debug_logger( '	ERROR: Contract link email was not sent' );	
+							 MDJM()->debug->log_it( '	ERROR: Contract link email was not sent' );	
 					}	
 				}
 				else	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'Not configured to email client' );	
+						MDJM()->debug->log_it( 'Not configured to email client' );	
 				}
 				
 				/* -- Re-add the save post hook -- */
-				add_action( 'save_post', array( $mdjm_posts, 'save_custom_post' ), 10, 2 );
+				add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 				
 				/* -- Email admin to notify of changes -- */
 				if( MDJM_NOTIFY_ADMIN == true )	{
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Sending event status change notification to admin' );
+						MDJM()->debug->log_it( 'Sending event status change notification to admin' );
 						
 					$content = '<html>' . "\n" . '<body>' . "\n";
 					$content .= '<p>' . sprintf( __( 'Good news... %s has just accepted their event quotation via %s', 'mobile-dj-manager' ), 
@@ -268,9 +247,9 @@
 						
 					$content .= '<p>' . "\n";
 					$content .= __( 'Date', 'mobile-dj-manager' ) . ': {EVENT_DATE}<br />' . "\n";
-					$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . $mdjm->mdjm_events->get_event_type( $post->ID ) . '<br />' . "\n";
+					$content .= __( 'Type', 'mobile-dj-manager' ) . ': ' . MDJM()->events->get_event_type( $post->ID ) . '<br />' . "\n";
 					
-					$event_stati = get_event_stati();
+					$event_stati = mdjm_all_event_status();
 					
 					$content .= __( 'Status', 'mobile-dj-manager' ) . ': ' . $event_stati[get_post_status( $post->ID )] . '<br />' . "\n";
 					$content .= __( 'Client', 'mobile-dj-manager' ) . ': {CLIENT_FULLNAME}<br />' . "\n";
@@ -304,10 +283,10 @@
 				}
 				else
 					if( MDJM_DEBUG == true )
-						$GLOBALS['mdjm_debug']->log_it( 'Skipping admin notification' );
+						MDJM()->debug->log_it( 'Skipping admin notification' );
 				
 				if( MDJM_DEBUG == true )
-					$mdjm->debug_logger( 'Completed enquiry acceptance via ' . MDJM_APP . ' in ' .  __METHOD__, true );
+					MDJM()->debug->log_it( 'Completed enquiry acceptance via ' . MDJM_APP . ' in ' .  __METHOD__, true );
 					
 				$this->display_message( 1, 2 );
 			} // accept_enquiry
@@ -329,14 +308,14 @@
 				
 				if( empty( $client_id ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No client ID was parsed for checking in ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No client ID was parsed for checking in ' . __METHOD__, true );
 					return false;	
 				}
 				
 				$client_data = get_userdata( $client_id );
 				
 				/* -- Check the fields marked as required within Custom Client Fields -- */
-				$custom_fields = get_option( MDJM_CLIENT_FIELDS );
+				$custom_fields = get_option( 'mdjm_client_fields' );
 				foreach( $custom_fields as $field )	{
 					if( !empty( $field['required'] ) )
 						$required_fields[] = $field['id'];
@@ -405,19 +384,12 @@
 			 */
 			public function client_zone_enqueue()	{
 				
-				wp_register_style( 'mobile-dj-manager', MDJM_PLUGIN_URL . '/client-zone/includes/css/mdjm-styles.css', '', MDJM_VERSION_NUM );
-				//wp_register_script( 'google-hosted-jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false );
-				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
+				wp_register_style( 'mobile-dj-manager', MDJM_PLUGIN_URL . '/assets/css/mdjm-styles.css', '', MDJM_VERSION_NUM );
 				
 				/* -- Dynamics Ajax -- */
-				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
+				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/assets/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
 								
-				//wp_enqueue_script( 'jquery' );
 				wp_enqueue_style( 'mobile-dj-manager');
-				//wp_enqueue_script( 'google-hosted-jquery');
-				wp_enqueue_script( 'jquery-validation-plugin');
-				
-				wp_register_script( 'mdjm-validation', MDJM_PLUGIN_URL . '/client-zone/includes/js/mdjm-validation.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 				
 			} // client_zone_enqueue
 			
@@ -442,7 +414,7 @@
 				/* -- If no message was parsed, log it and return -- */
 				if( empty( $msg ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'Instruction to display message could not be fulfilled as no message present in ' . __METHOD__, true);
+						MDJM()->debug->log_it( 'Instruction to display message could not be fulfilled as no message present in ' . __METHOD__, true);
 						
 					return;
 				}
@@ -472,7 +444,7 @@
 										 ( !empty( $mdjm_settings['templates']['contract_to_client'] ) ? 
 										 '<br />You will receive confirmation via email shortly.' : '' ),
 										 
-									2	=> 'An error has occured whilst confirming your event. Please <a href="' . $mdjm->get_link( MDJM_CONTACT_PAGE, false ) . 
+									2	=> 'An error has occured whilst confirming your event. Please <a href="' . mdjm_get_formatted_url( MDJM_CONTACT_PAGE, false ) . 
 										'">contact me for assistance</a>',
 										
 									3	=> $this->__text( 'contract_sign_success', 'Thank you. Your contract has been successfully signed and your event is now <strong>confirmed</strong>.<br />' . 
@@ -481,28 +453,13 @@
 									5	=> 'Security verification failed. We could not update the playlist at this time',
 									6	=> 'Security verification failed. We could not update your event at this time',
 									9	=> 'This event does not belong to you.<br />' . 
-											'<a href="' . $mdjm->get_link( MDJM_HOME, false ) . '">' . MDJM_COMPANY . ' ' . MDJM_APP . ' Home Page</a>',
+											'<a href="' . mdjm_get_formatted_url( MDJM_HOME, false ) . '">' . MDJM_COMPANY . ' ' . MDJM_APP . ' Home Page</a>',
 									);
 									
 				$this->display_notice( $class, $mdjm_messages[$msg] );
 									
 			} // display_message
 			
-			/**
-			 * print_credit
-			 * Write out the MDJM credit information to the footer 
-			 * of all Client Zone pages, if settings allow us to
-			 * 
-			 * 
-			 */
-			public function print_credit()	{
-				if ( MDJM_CREDITS == true )
-					echo '<div id="mdjm-cz-footer"> ' . "\r\n" . 
-					'<p>Powered by ' .
-					'<a href="' . mdjm_get_admin_page( 'mydjplanner', 'str' ) . '" target="_blank">' . MDJM_NAME . 
-					'</a>, version ' . MDJM_VERSION_NUM . '</p>' . "\r\n" . 
-					'</div>' . "\r\n";
-			} // print_credit
 /*
  * --
  * LOGIN & CUSTOM TEXT
@@ -532,16 +489,6 @@
 			} // login
 			
 			/**
-			 * Display Lost Password text and link on login page
-			 *
-			 *
-			 *
-			 */
-			function lost_password_link()	{
-				return '<a href="/wp-login.php?action=lostpassword">' . __( 'Lost Password' ) . '?</a>';	
-			} // lost_password_link
-
-			/**
 			 *
 			 *
 			 *
@@ -552,7 +499,7 @@
 				
 				echo '<p>' . __( 'ERROR: You do not have permission to view this page. ') . '</p>' . "\r\n" . 
 				'<p>' . __( 'Please contact the <a href="mailto:' . $mdjm_settings['email']['system_email'] . 
-				'">website administrator</a> or <a href="' . $mdjm->get_link( MDJM_HOME ) . '">' . 
+				'">website administrator</a> or <a href="' . mdjm_get_formatted_url( MDJM_HOME ) . '">' . 
 				'Click here to return to the ' . MDJM_COMPANY . ' ' . MDJM_APP . ' home page.' ) . '</p>';
 			
 			} // no_permission
@@ -596,7 +543,7 @@
 				
 				if( empty( $section ) )	{
 					if( MDJM_DEBUG == true )
-						$mdjm->debug_logger( 'ERROR: No page section was parsed. ' . __METHOD__, true );
+						MDJM()->debug->log_it( 'ERROR: No page section was parsed. ' . __METHOD__, true );
 						
 					wp_die( 'An error has occured. Please <a href="mailto:' . $mdjm_settings['email']['system_email'] . '">' . 
 						'Contact Us</a> for assistance' );	
