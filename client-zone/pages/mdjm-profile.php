@@ -47,9 +47,9 @@
 			 *
 			 */
 			function update_profile()	{
-				global $mdjm, $my_mdjm;
+				global $mdjm, $current_user;
 				
-				MDJM()->debug->log_it( 'Starting user profile update for user ' . $my_mdjm['me']->display_name, true );
+				MDJM()->debug->log_it( 'Starting user profile update for user ' . $current_user->display_name, true );
 				
 				// Firstly, our security check
 				if( !isset( $_POST['__mdjm_user'] ) || !wp_verify_nonce( $_POST['__mdjm_user'], 'manage_client_profile' ) )	{
@@ -59,7 +59,7 @@
 					
 				else	{
 					// Set our variables for updating
-					$update_fields = array ( 'ID' => $my_mdjm['me']->ID );
+					$update_fields = array ( 'ID' => $current_user->ID );
 					$update_meta = array ();
 					
 					// Process the standard fields
@@ -88,7 +88,7 @@
 				
 					// Process field updates starting with custom fields
 					foreach ( $update_meta as $meta_key => $meta_value ) {
-						if( update_user_meta ( $my_mdjm['me']->ID, $meta_key, $meta_value ) )
+						if( update_user_meta ( $current_user->ID, $meta_key, $meta_value ) )
 							MDJM()->debug->log_it( 'Success: User profile field ' . $meta_key . ' updated with value ' . $meta_value, false );
 							
 						else
@@ -104,7 +104,7 @@
 						wp_logout();
 						?>
 						<script type="text/javascript">
-                        window.location.replace("<?php echo mdjm_get_formatted_url( MDJM_PROFILE_PAGE ); ?>");
+                        window.location.replace("<?php echo mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ) ); ?>");
                         </script>
                         <?php
 						exit;
@@ -241,7 +241,7 @@
 			 *
 			 */
 			function display_profile()	{
-				global $my_mdjm;
+				global $current_user;
 								
 				$i = 0; // Counter to ensure the table format remains correct
 				$x = 1;
@@ -314,7 +314,7 @@
 			 *
 			 */
 			function display_field( $field )	{
-				global $my_mdjm;
+				global $current_user;
 				
 				if( empty( $field ) )
 					return;
@@ -327,7 +327,7 @@
 						if( !empty( $field['required'] ) )
 							echo ' class="required"';
 							
-						echo ' value="' . ( !empty( $my_mdjm['me']->$field['id'] ) ? $my_mdjm['me']->$field['id'] : '' ) . '" />' . "\r\n";
+						echo ' value="' . get_user_meta( $current_user->ID, $field['id'], true ) . '" />' . "\r\n";
 					break;
 					
 					case 'dropdown':
@@ -341,7 +341,7 @@
 							
 							// Initially selected
 							if( !empty( $my_mdjm['me']->$field['id'] ) )
-								selected( $value, $my_mdjm['me']->$field['id'] );
+								selected( $value, $current_user->$field['id'] );
 							
 							echo '>' . $value . '</option>' . "\r\n";	
 						}
@@ -354,8 +354,8 @@
 						echo '<input name="' . $field['id'] . '" id="' . $field['id'] . '" type="' . $field['type'] . '" value="' . $field['value'] . '"';
 						
 						// Initially checked?
-						if( !empty( $my_mdjm['me']->$field['id'] ) )
-							checked( $field['value'], $my_mdjm['me']->$field['id'] );
+						if( !empty( $current_user->$field['id'] ) )
+							checked( $field['value'], $current_user->$field['id'] );
 							
 						echo ' />' . "\r\n";
 					break;

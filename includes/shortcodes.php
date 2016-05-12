@@ -26,7 +26,7 @@ function shortcode_mdjm( $atts )	{
 		'Online Quote'  => 'mdjm_shortcode_quote',
 	);
 	
-	$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
+	//$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
 					
 	$args = shortcode_atts( $pairs, $atts, 'MDJM' );
 	
@@ -212,6 +212,22 @@ function mdjm_shortcode_contract( $atts )	{
 	
 } // mdjm_shortcode_contract
 add_shortcode( 'mdjm-contract', 'mdjm_shortcode_contract' );
+
+/**
+ * MDJM Profile Shortcode.
+ *
+ * Displays the MDJM user Profile page.
+ * 
+ * @since	1.3
+ * @param	arr		$atts
+ * @return	string
+ */
+function mdjm_shortcode_profile( $atts )	{
+	
+	return do_shortcode( '[MDJM Page="Profile"]' );
+	
+} // mdjm_shortcode_profile
+add_shortcode( 'mdjm-profile', 'mdjm_shortcode_profile' );
 
 /**
  * MDJM Playlist Shortcode.
