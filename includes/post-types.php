@@ -780,7 +780,7 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Ougoing Payment <span class="count">(%s)</span>', 'Ougoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Outgoing Payment <span class="count">(%s)</span>', 'Outgoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
 			)
 		)
 	);
