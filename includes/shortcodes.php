@@ -26,7 +26,7 @@ function shortcode_mdjm( $atts )	{
 		'Online Quote'  => 'mdjm_shortcode_quote',
 	);
 	
-	//$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
+	$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
 					
 	$args = shortcode_atts( $pairs, $atts, 'MDJM' );
 	
