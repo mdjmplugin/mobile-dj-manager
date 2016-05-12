@@ -59,6 +59,10 @@ function mdjm_run_install()	{
 	
 	global $mdjm_options, $wpdb;
 	
+	// Schedule the hourly tasks.
+	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
+	wp_schedule_event( current_time( 'timestamp' ), 'weekly', 'mdjm_weekly_scheduled_events' );
+	
 	$current_version = get_option( 'mdjm_version' );
 	if ( $current_version ) {
 		return;
@@ -75,10 +79,6 @@ function mdjm_run_install()	{
 	
 	// Clear the permalinks
 	flush_rewrite_rules( false );
-	
-	// Schedule the hourly tasks.
-	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
-	wp_schedule_event( current_time( 'timestamp' ), 'weekly', 'mdjm_weekly_scheduled_events' );
 	
 	// Setup some default options
 	$options = array();
