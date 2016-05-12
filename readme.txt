@@ -77,7 +77,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 == Changelog ==
 = 1.3 =
 
-**Released XXXX XXXX, 2016**
+**Released Thursday 12th May, 2016**
 
 * **New**: Use fully customisable templates for all MDJM Client Zone pages
 * **New**: Employee interface replaces the old "DJ List"
@@ -116,6 +116,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * **Tweak**: Event posts first column changed to date for easier viewing on mobile devices
 * **Tweak**: Removed debug option to backup DB tables. Other plugins are available for this task
 * **Tweak**: Removed debug option to submit debug files. No longer required
+* **TODO**: Availability checker on events list screen is currently missing
 
 
 = 1.2.7.5 =
