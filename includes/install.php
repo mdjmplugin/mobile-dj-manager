@@ -780,5 +780,6 @@ function mdjm_run_install()	{
  */
 function mdjm_deactivate()	{
 	wp_clear_scheduled_hook( 'mdjm_hourly_schedule' );
+	wp_clear_scheduled_hook( 'mdjm_weekly_scheduled_events' );
 } // mdjm_deactivate
 register_deactivation_hook( MDJM_PLUGIN_FILE, 'mdjm_deactivate' );
