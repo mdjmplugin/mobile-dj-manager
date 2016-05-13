@@ -155,10 +155,7 @@ function mdjm_get_event_venue_meta( $id, $field='' )	{
 		$prefix = '';
 		$id     = $venue_id;
 	}
-	
-	
-	
-	error_log( 'Post Type:	' . get_post_type( $id ) . ' Prefix: ' . $prefix, 0 );
+		
 	switch( $field )	{
 		case 'address' :
 			$return[] = get_post_meta( $id, $prefix . '_venue_address1', true );
