@@ -21,11 +21,12 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @return	$arr	$clients	or false if no clients for the specified roles
  */
-function mdjm_get_clients( $roles=array( 'client', 'inactive_client' ), $employee=false, $orderby='display_name', $order='ASC' )	{
+function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $employee = false, $orderby = 'display_name', $order = 'ASC' )	{
 		
 	// We'll work with an array of roles
-	if( !empty( $roles ) && !is_array( $roles ) )
+	if( ! empty( $roles ) && ! is_array( $roles ) )	{
 		$roles = array( $roles );
+	}
 	
 	$all_clients = get_users( 
 		array(
@@ -36,16 +37,21 @@ function mdjm_get_clients( $roles=array( 'client', 'inactive_client' ), $employe
 	);
 	
 	// If we are only quering an employee's client, we need to filter	
-	if( !empty( $employee ) )	{
+	if( ! empty( $employee ) )	{
 		foreach( $all_clients as $client )	{
-			if( !MDJM()->users->is_employee_client( $client->ID, $employee ) )
+			
+			if( ! MDJM()->users->is_employee_client( $client->ID, $employee ) )	{
 				continue;
+			}
 				
-			$clients[] = $client;	
+			$clients[] = $client;
+
 		}
+
 		// No clients for employee
-		if( empty( $clients ) )
+		if( empty( $clients ) )	{
 			return false;
+		}
 			
 		$all_clients = $clients;
 	}

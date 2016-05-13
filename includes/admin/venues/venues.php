@@ -118,12 +118,16 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 			echo get_post_meta( $post_id, '_venue_county', true );
 			break;
 		
+		// Event Count
 		case 'event_count':
 			$events_at_venue = get_posts( 
 				array(
 					'post_type'	=> 'mdjm-event',
-					'meta_key'	 => '_mdjm_event_venue_id',
-					'meta_value'   => $post_id,
+					'meta_query'   => array(
+						'key'	  => '_mdjm_event_venue_id',
+						'value'    => $post_id,
+						'type'     => 'NUMERIC'
+					),
 					'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
 				)
 			);
@@ -366,7 +370,7 @@ function mdjm_venue_post_messages( $messages )	{
 	
 	$url1 = '<a href="' . admin_url( 'edit.php?post_type=mdjm-venue' ) . '">';
 	$url2 = get_post_type_object( $post->post_type )->labels->singular_name;
-	$url4 = '</a>';
+	$url3 = '</a>';
 	
 	$messages['mdjm-venue'] = array(
 		0 => '', // Unused. Messages start at index 1.
