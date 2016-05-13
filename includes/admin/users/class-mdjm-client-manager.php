@@ -90,6 +90,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			}
 			
 			self::$total_clients = count( mdjm_get_clients() );
+
 		} // get_clients
 					
 		/**
