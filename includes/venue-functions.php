@@ -146,8 +146,19 @@ function mdjm_get_venues( $args = array() )	{
  * @return	arr		Array of all venue data
  */
 function mdjm_get_event_venue_meta( $id, $field='' )	{
-	$prefix = 'mdjm-venue' == get_post_type( $id ) ? '' : '_mdjm_event';
 	
+	$prefix   = '_mdjm_event';
+	$venue_id = get_post_meta( $id, '_mdjm_event_venue_id', true );
+	
+	
+	if ( ! empty( $venue_id ) && is_numeric( $venue_id ) )	{
+		$prefix = '';
+		$id     = $venue_id;
+	}
+	
+	
+	
+	error_log( 'Post Type:	' . get_post_type( $id ) . ' Prefix: ' . $prefix, 0 );
 	switch( $field )	{
 		case 'address' :
 			$return[] = get_post_meta( $id, $prefix . '_venue_address1', true );
@@ -176,7 +187,7 @@ function mdjm_get_event_venue_meta( $id, $field='' )	{
 		break;
 		
 		case 'name' :
-			$return = empty( $prefix ) ? get_post_title( $id ) : get_post_meta( $id, $prefix . '_venue_name', true );
+			$return = empty( $prefix ) ? get_the_title( $id ) : get_post_meta( $id, $prefix . '_venue_name', true );
 		break;
 		
 		case 'notes' :
