@@ -55,7 +55,6 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			self::$orderby      = ! empty( $_GET['orderby'] )      ? $_GET['orderby']      : 'display_name';
 			self::$order        = ! empty( $_GET['order'] )        ? $_GET['order']        : 'ASC';
 			
-			// Retrieve client list
 			// Searching
 			if( ! empty( $_POST['s'] ) )	{
 
