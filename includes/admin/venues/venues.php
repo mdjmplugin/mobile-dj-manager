@@ -118,6 +118,7 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 			echo get_post_meta( $post_id, '_venue_county', true );
 			break;
 		
+		// Event Count
 		case 'event_count':
 			$events_at_venue = get_posts( 
 				array(
