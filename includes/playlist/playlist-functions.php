@@ -401,9 +401,10 @@ function mdjm_playlist_is_open( $event_id )	{
  */
 function mdjm_count_playlist_entries( $event_id, $category = false )	{
 	$entry_query = array(
-		'post_type'		=> 'mdjm-playlist',
+		'post_type'	  => 'mdjm-playlist',
 		'post_status'	=> 'publish',
-		'post_parent'	=> $event_id
+		'post_parent'	=> $event_id,
+		'posts_per_page' => -1
 	);
 	
 	if( ! empty( $category ) )	{
