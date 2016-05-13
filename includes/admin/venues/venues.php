@@ -366,7 +366,7 @@ function mdjm_venue_post_messages( $messages )	{
 	
 	$url1 = '<a href="' . admin_url( 'edit.php?post_type=mdjm-venue' ) . '">';
 	$url2 = get_post_type_object( $post->post_type )->labels->singular_name;
-	$url4 = '</a>';
+	$url3 = '</a>';
 	
 	$messages['mdjm-venue'] = array(
 		0 => '', // Unused. Messages start at index 1.
