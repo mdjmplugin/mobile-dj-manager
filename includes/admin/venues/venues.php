@@ -122,8 +122,11 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 			$events_at_venue = get_posts( 
 				array(
 					'post_type'	=> 'mdjm-event',
-					'meta_key'	 => '_mdjm_event_venue_id',
-					'meta_value'   => $post_id,
+					'meta_query'   => array(
+						'key'	  => '_mdjm_event_venue_id',
+						'value'    => $post_id,
+						'type'     => 'NUMERIC'
+					),
 					'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
 				)
 			);
