@@ -77,7 +77,7 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 				self::$mdjm_employee_table = new MDJM_Employee_Table();
 				self::$mdjm_employee_table->process_bulk_actions();
 				// Retrieve employee list
-				self::$employees = mdjm_get_employees( self::$display_role, self::$orderby, self::$order );
+				self::$employees = empty ( $_POST['s'] ) ? mdjm_get_employees( self::$display_role, self::$orderby, self::$order ) : self::search();
 				self::$total_employees = count( mdjm_get_employees() );
 				self::$mdjm_employee_table->prepare_items();
 				
@@ -85,6 +85,31 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 				self::employee_page();
 			}
 		} // init
+		
+		public static function search()	{
+			
+			foreach( self::$mdjm_roles as $role => $label )	{
+				$roles[] = $role;
+			}
+			
+			$employees = array();
+			
+			$args = array(
+				'search'         => '*' . $_POST['s'] . '*',
+				'role__in'       => $roles
+			);
+										
+			// Execute the query
+			$employee_query = new WP_User_Query( $args );
+			
+			$results = $employee_query->get_results();
+			
+			$employees = array_merge( $employees, $results );
+			$employees = array_unique( $employees, SORT_REGULAR );
+			
+			return $employees;
+			
+		}
 			
 		/**
 		 * Display the page header for the user management interface
@@ -639,8 +664,8 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 * @return	str		The HTML output for the checkbox column
 	 */
 	public function column_events( $item ) {
-		$next_event		= mdjm_get_employees_next_event( $item->ID );
-		$total_events	= mdjm_count_employee_events( $item->ID );
+		$next_event     = mdjm_get_employees_next_event( $item->ID );
+		$total_events   = mdjm_count_employee_events( $item->ID );
 		
 		printf( 
 			__( 'Next: %s', 'mobile-dj-manager' ), 
