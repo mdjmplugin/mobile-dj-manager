@@ -656,7 +656,7 @@ function mdjm_content_tag_artist_label()	{
  * @return	str		The list of available packages. No cost.
  */
 function mdjm_content_tag_available_packages()	{
-	return mdjm_list_available_packages();
+	return get_available_packages();
 } // mdjm_content_tag_available_packages
 
 /**
@@ -668,7 +668,7 @@ function mdjm_content_tag_available_packages()	{
  * @return	str		The list of available packages. With cost.
  */
 function mdjm_content_tag_available_packages_cost()	{
-	return mdjm_list_available_packages( '', true );
+	return get_available_packages( '', true );
 } // mdjm_content_tag_available_packages_cost
 
 /**
