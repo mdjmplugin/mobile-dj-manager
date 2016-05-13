@@ -75,6 +75,19 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.2 =
+
+* **Bug Fix**: Issue #17. Venue details not displayed for saved venues when using content tags - `{venue_*}`
+* **Bug Fix**: Using incorrect vairable name whilst setting venue admin notices
+* **Bug Fix**: Issue #13. Incorrect spelling of *outgoing* for Transaction view
+* **Bug Fix**: Issue #18. Event count not displaying against venues
+* **Bug Fix**: Issue #19. Employee search returned zero results. Needed wildcard
+* **Bug Fix**: Issue #12. Client search returned zero results. Needed wildcard
+* **Bug Fix**: Issue #12. Client view `all` was empty
+* **Bug Fix**: Issue #12. Client view not ordered. Default to display name ascending
+* **Bug Fix**: Issue #16. Removed WP_Query pagination to ensure playlist count on event screen is correct
+* **Tweak**: Removed deprecated `send_to_email()` method within the `MDJM_PlayList_Table` class
+
 = 1.3.1 =
 
 * **Bug Fix**: Ensure scheduled tasks are re-registered when re-activating the plugin
