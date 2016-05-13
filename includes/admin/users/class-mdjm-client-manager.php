@@ -51,41 +51,42 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		
 		public function get_clients()	{
 			// Filter our search by role if we need to
-			self::$display_role = !empty( $_GET['display_role'] ) ? $_GET['display_role'] : '';
-			self::$orderby = !empty( $_GET['orderby'] ) ? $_GET['orderby'] : '';
-			self::$order = !empty( $_GET['order'] ) ? $_GET['order'] : '';
+			self::$display_role = ! empty( $_GET['display_role'] ) ? $_GET['display_role'] : array( 'client', 'inactive_client' );
+			self::$orderby      = ! empty( $_GET['orderby'] )      ? $_GET['orderby']      : 'display_name';
+			self::$order        = ! empty( $_GET['order'] )        ? $_GET['order']        : 'ASC';
 			
 			// Retrieve client list
-			if( empty( $_POST ) || !empty( $_POST['action'] ) || !empty( $_POST['action2'] ) )	{
+			// Searching
+			if( ! empty( $_POST['s'] ) )	{
+
+				// Build out the query args for the WP_User_Query
+				self::$clients = get_users(
+					array(
+						'search'  => $_POST['s'],
+						'role__in'=> array( 'client', 'inactive_client' ),
+						'orderby' => self::$orderby,
+						'order'   => self::$order
+					)
+				);
+
+			} elseif( ! empty( $_POST['filter_client'] ) )	{
+	
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
-					( !mdjm_employee_can( 'list_all_clients' ) ? get_current_user_id() : '' ),
+					$_POST['filter_client'],
 					self::$orderby,
 					self::$order
 				);
-			}
-			// We need to filter
-			else	{
-				// Searching
-				if( !empty( $_POST['s'] ) )	{
-					// Build out the query args for the WP_User_Query
-					self::$clients = get_users(
-						array(
-							'search'  => $_POST['s'],
-							'role__in'=> array( 'client', 'inactive_client' ),
-							'orderby' => self::$orderby,
-							'order'   => self::$order
-						)
-					);
-				}
-				if( !empty( $_POST['filter_client'] ) )	{
-					self::$clients = mdjm_get_clients(
-						self::$display_role,
-						$_POST['filter_client'],
-						self::$orderby,
-						self::$order
-					);	
-				}
+
+			} else	{
+
+				self::$clients = mdjm_get_clients(
+					self::$display_role,
+					! mdjm_employee_can( 'list_all_clients' ) ? get_current_user_id() : '',
+					self::$orderby,
+					self::$order
+				);
+
 			}
 			
 			self::$total_clients = count( mdjm_get_clients() );
