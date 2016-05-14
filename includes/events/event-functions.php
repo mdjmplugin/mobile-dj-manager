@@ -871,21 +871,21 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
-			$debug[] = sprintf( __( 'Adding %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Adding %s value as %s' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
-			$debug[] = sprintf( __( 'Updating %s value as %s' ), $key, is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Updating %s with %s' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			update_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
 		
-			$debug[] = sprintf( __( 'Removing %s' ), $current_meta[ $key ][0] );
+			$debug[] = sprintf( __( 'Removing %s from %s' ), $current_meta[ $key ][0], mdjm_event_get_meta_label( $key ) );
 			delete_post_meta( $event_id, $key, $value );
 			
 			if( isset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] ) )	{
@@ -898,6 +898,16 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	
 	update_post_meta( $event_id, '_mdjm_event_data', $meta );
 	
+	$journal_args = array(
+		'user_id'          => is_user_logged_in() ? get_current_user_id() : 1,
+		'event_id'         => $event_id,
+		'comment_content'  => sprintf( __( '%s Updated', 'mobile-dj-manager' ) . ':<br />    %s',
+								mdjm_get_label_singular(), implode( '<br />', $debug ) ),
+		'comment_type'     => 'update-event'
+	);
+	
+	mdjm_add_journal( $journal_args );
+	
 	do_action( 'mdjm_post_update_event_meta', $meta, $event_id );
 	
 	if ( ! empty( $debug ) )	{
@@ -909,6 +919,65 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	}
 	
 } // mdjm_update_event_meta
+
+/**
+ * Retrieve a readable name for the meta key.
+ *
+ * @since	1.3
+ * @param	str		$key	The meta key.
+ * @return	str		The readable label
+ */
+function mdjm_event_get_meta_label( $key )	{
+	
+	$keys = array(
+		'_mdjm_event_name'              => sprintf( __( '%s Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_date'              => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_start'             => __( 'Start Time', 'mobile-dj-manager' ),
+		'_mdjm_event_finish'            => __( 'End Time', 'mobile-dj-manager' ),
+		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
+		'_mdjm_event_addons'            => __( 'Add-ons', 'mobile-dj-manager' ),
+		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
+		'_mdjm_event_notes'             => __( 'Description', 'mobile-dj-manager' ),
+		'_mdjm_event_client'            => __( 'Client', 'mobile-dj-manager' ),
+		'_mdjm_event_enquiry_source'    => __( 'Enquiry Source', 'mobile-dj-manager' ),
+		'_mdjm_event_cost'              => __( 'Total Cost', 'mobile-dj-manager' ),
+		'_mdjm_event_deposit'           => mdjm_get_deposit_label(),
+		'_mdjm_event_venue_id'          => __( 'Venue ID', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_name'        => __( 'Venue Name', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_contact'     => __( 'Venue Contact', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_phone'       => __( 'Venue Phone Number', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_email'       => __( 'Venue Email Address', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_address1'    => __( 'Venue Address Line 1', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_address2'    => __( 'Venue Address Line 2', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_town'        => __( 'Venue Post Town', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_county'      => __( 'Venue County', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_postcode'    => __( 'Venue Post Code', 'mobile-dj-manager' ),
+		'_mdjm_event_contract'          => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
+		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
+		'_mdjm_event_dj'                => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ) ),
+		'_mdjm_event_djsetup_time'      => sprintf( __( '%s Setup Time', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_djsetup_date'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_deposit_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+		'_mdjm_event_balance_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_balance_label() ),
+		'_mdjm_event_contract_approved' => __( 'Contract Approved Date', 'mobile-dj-manager' ),
+		'_mdjm_event_contract_approver' => __( 'Contract Approved By', 'mobile-dj-manager' ),
+		'_mdjm_event_employees'         => __( 'Employees', 'mobile-dj-manager' ),
+		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
+		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
+		'_mdjm_event_dj_notes'          => __( 'Employee Notes', 'mobile-dj-manager' ),
+		'_mdjm_event_admin_notes'       => __( 'Admin Notes', 'mobile-dj-manager' )
+	);
+	
+	$keys = apply_filters( 'mdjm_event_meta_labels', $keys );
+	
+	if ( array_key_exists( $key, $keys ) )	{
+		return $keys[ $key ];
+	} else	{
+		return $key;
+	}
+	
+} // mdjm_event_get_meta_label
 
 /**
  * Update the event status.
