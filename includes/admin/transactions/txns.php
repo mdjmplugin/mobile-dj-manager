@@ -95,6 +95,46 @@ function mdjm_transaction_post_order( $query )	{
 add_action( 'pre_get_posts', 'mdjm_transaction_post_order' );
 
 /**
+ * Adjust the query when the transactions are filtered.
+ *
+ * @since	1.3
+ * @param	arr		$query		The WP_Query
+ * @return	void
+ */
+function mdjm_transaction_post_filtered( $query )	{
+	
+	global $pagenow;
+	
+	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	
+	if ( 'edit.php' != $pagenow || 'mdjm-transaction' != $post_type || ! is_admin() )	{
+		return;
+	}
+	
+	// Filter by transaction type
+	if( ! empty( $_GET['mdjm_filter_type'] ) )	{
+		
+		$type = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : 0;
+				
+		if( $type != 0 ) {
+			$query->set(
+				'tax_query',
+				array(
+					array(
+						'taxonomy' => 'transaction-types',
+						'field'    => 'term_id',
+						'terms'    => $type
+					)
+				)
+			);
+		}
+
+	}
+	
+} // mdjm_transaction_post_filtered
+add_filter( 'parse_query', 'mdjm_transaction_post_filtered' );
+
+/**
  * Define the data to be displayed in each of the custom columns for the Transaction post types
  *
  * @since	0.9
