@@ -142,7 +142,7 @@ function f_mdjm_dash_availability()	{
 	
 	/* Enqueue the jQuery Datepicker Scripts */
 	wp_enqueue_script('jquery-ui-datepicker');
-	wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+	wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 	
 	mdjm_insert_datepicker(
 		array(

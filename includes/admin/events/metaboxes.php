@@ -351,7 +351,7 @@ function mdjm_event_metabox_client_details( $post )	{
 function mdjm_event_metabox_event_details( $post )	{
 	global $current_user;
 	
-	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+	wp_enqueue_style( 'jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
