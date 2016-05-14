@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.2.1
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/donate/
@@ -75,6 +75,21 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.3 =
+
+* **Bug Fix**: Client contact link should auto set recipient on communication page
+* **Bug Fix**: Issue #23. Datepicker css styling not being enqueued
+* **Bug Fix**: Issue #24. Select historic dates but not future within manual transactions
+* **Bug Fix**: Issue #25. Unable to filter by Transaction Type
+* **Bug Fix**: Issue #26. Re-added auto population of communication fields and ability to click to communicate with employees and clients
+* **Bug Fix**: Issue #27. Custom Event fields with a `\` in the name do not get processed. Re-check your custom content tags at *MDJM -> Events -> Custom Event Fields*
+* **Bug Fix**: Issue #28. Restored availability checker within unattended events row actions
+* **Tweak**: Restored Communication History to menu
+* **Tweak**: Moved Employees menu item above availability
+* **Tweak**: Do not restrict loading of jquery-ui.css to non SSL
+* **Tweak**: Added ability to enter reject reason to journal
+* **Tweak**: Removed deprecated file mdjm-functions-admin.php
+
 = 1.3.2.1 =
 
 * **Bug Fix**: Issue #22. The `{available_packages}` and `{available_packages_cost}` content tags result in a fatal error due to an incorrect function call
