@@ -1237,12 +1237,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 						
 		mdjm_add_journal( 
 			array(
-				'user'               => get_current_user_id(),
-				'event'              => $post_id,
-				'comment_content'    => sprintf( '%s %s via Admin' . '<br />(%s)',
+				'user_id'            => get_current_user_id(),
+				'event_id'           => $post_id,
+				'comment_content'    => sprintf( '%s %s via Admin',
 											mdjm_get_label_singular(),
-											empty( $update ) ? 'created' : 'updated',
-											current_time( 'timestamp' )
+											empty( $update ) ? 'created' : 'updated'
 										),
 			),
 			array(
