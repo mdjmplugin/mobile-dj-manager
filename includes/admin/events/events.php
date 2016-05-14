@@ -91,9 +91,13 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			
 			if( ! empty( $client ) )	{
 				if( mdjm_employee_can( 'send_comms' ) )	{
-					echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
-						$client->ID . '&event_id=' . $post_id . '">' . 
-						$client->display_name . '</a>';
+					printf( '<a href="%s">%s</a>', 
+						add_query_arg(
+							array('recipient' => $client->ID, 'event_id'  => $post_id ),
+							admin_url( 'admin.php?page=mdjm-comms' )
+						),
+						$client->display_name
+					);
 				} else	{
 					echo $client->display_name;
 				}
@@ -112,9 +116,14 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			if ( ! empty( $primary ) )	{
 				
 				if( mdjm_employee_can( 'send_comms' ) )	{
-					echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
-						$primary->ID . '&event_id=' . $post_id . '" title="' . mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) . '">' . 
-						$primary->display_name . '</a>';
+					printf( '<a href="%s" title="%s">%s</a>', 
+						add_query_arg(
+							array('recipient' => $primary->ID, 'event_id'  => $post_id ),
+							admin_url( 'admin.php?page=mdjm-comms' )
+						),
+						mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ),
+						$primary->display_name
+					);				
 				} else	{
 					echo '<a title="' . mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) . '">' . $primary->display_name . '</a>';
 				}
@@ -132,9 +141,14 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 					echo '<em>';
 										
 					if( mdjm_employee_can( 'send_comms' ) )	{
-						echo '<a href="' . mdjm_get_admin_page( 'comms') . '&to_user=' . 
-							$employee['id'] . '&event_id=' . $post_id . '" title="' . translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ) . '">' . 
-							mdjm_get_employee_display_name( $employee['id'] ) . '</a>';
+						printf( '<a href="%s" title="%s">%s</a>', 
+							add_query_arg(
+								array('recipient' => $employee['id'], 'event_id'  => $post_id ),
+								admin_url( 'admin.php?page=mdjm-comms' )
+							),
+							translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ),
+							mdjm_get_employee_display_name( $employee['id'] )
+						);					
 					} else	{
 						echo '<a title="' . translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ) . '">' . mdjm_get_employee_display_name( $employee['id'] ) . '</a>';
 					}
@@ -521,10 +535,17 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 										'&event_id=' . $post->ID );*/
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf( 
-												__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
-												admin_url( 'admin.php?page=mdjm-comms&template=' . 
-												mdjm_get_option( 'unavailable' ) . '&to_user=' . mdjm_get_client_id( $post->ID ) . 
-												'&event_id=' . $post->ID . '&action=respond_unavailable' ) );
+			__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
+			add_query_arg( 
+				array( 
+					'recipient'   => mdjm_get_client_id( $post->ID ),
+					'template'    => mdjm_get_option( 'unavailable' ),
+					'event_id'    => $post->ID,
+					'mdjm-action' => 'respond_unavailable'
+				),
+				admin_url( 'admin.php?page=mdjm-comms' )
+			)
+		);
 	}
 	
 	return $actions;
