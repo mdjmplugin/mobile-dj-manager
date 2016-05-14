@@ -938,9 +938,9 @@ function mdjm_update_event_status( $event_id, $new_status, $old_status, $args = 
 		$result = true;
 	}
 	
-	do_action( "mdjm_post_update_event_status_{$new_status}", $event_id, $old_status, $args );
+	do_action( "mdjm_post_update_event_status_{$new_status}", $result, $event_id, $old_status, $args );
 	
-	do_action( 'mdjm_post_event_status_change', $event_id, $new_status, $old_status, $args );
+	do_action( 'mdjm_post_event_status_change', $result, $event_id, $new_status, $old_status, $args );
 	
 	return $result;
 	
