@@ -2,6 +2,11 @@ var mdjm_admin_vars;
 jQuery(document).ready(function ($) {
 	
 	if ( mdjm_admin_vars.curpage == 'mdjm-event_page_mdjm-comms' )	{
+		// Look for initial load values
+		if( mdjm_admin_vars.load_recipient )	{
+			$('#mdjm_email_to').val(mdjm_admin_vars.load_recipient);
+			load_recipient_events(mdjm_admin_vars.load_recipient);
+		}
 	/*= Communication form functions
 	****************************************************************/
 	/**
@@ -83,6 +88,10 @@ jQuery(document).ready(function ($) {
 		$('#mdjm_email_to').on('change', '', function()	{
 			var recipient = $("#mdjm_email_to").val();
 			
+			load_recipient_events(recipient);
+		});
+		
+		function load_recipient_events(recipient)	{
 			$.ajax({
 				type: "POST",
 				dataType: "json",
@@ -110,6 +119,7 @@ jQuery(document).ready(function ($) {
 					}
 				}
 			});
-		});
+		}
+		
 	} // if ( mdjm_admin_vars.curpage == 'mdjm-event_page_mdjm-comms' )
 });

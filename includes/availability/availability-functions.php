@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr|bool				Array of available employees or roles, or false if not available.
  */
 function mdjm_do_availability_check( $date, $employees='', $roles='', $status='' )	{
-	
+
 	$check = new MDJM_Availability_Checker( $date, $employees, $roles, $status );
 	
 	$check->check_availability();

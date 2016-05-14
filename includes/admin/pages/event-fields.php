@@ -44,7 +44,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( $fields )	{
 				foreach( $fields as $field )	{
 					mdjm_add_content_tag( 
-						'mdjm_cf_' . strtolower( str_replace( ' ', '_', get_the_title( $field->ID ) ) ),
+						'mdjm_cf_' . strtolower( str_replace( array( ' ', '/' ), array( '_', '' ), get_the_title( $field->ID ) ) ),
 						$field->post_content,
 						array( &$this, 'do_custom_field_tags' )
 					);
@@ -66,10 +66,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if ( empty ( $event_id ) || empty ( $tag ) )	{
 				return '';
 			}
-			
 			$tag = str_replace( array( '-', '(', ')', 'mdjm_cf_' ), array( '_', '', '', '' ), $tag );
 			
 			$meta_key = '_mdjm_event_' . str_replace( array( '-', '(', ')' ), array( '_', '', '' ), $tag );
+
 			$meta_value = get_post_meta( $event_id, $meta_key, true );
 			
 			if ( empty ( $meta_value ) )	{

@@ -158,10 +158,7 @@ function mdjm_transaction_metabox_save_txn( $post )	{
 function mdjm_transaction_metabox_txn_details( $post )	{
 	
 	do_action( 'mdjm_pre_txn_details_metabox', $post );
-	
-	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
-	wp_enqueue_script( 'jquery-ui-datepicker' );
-	
+		
 	?>
     
 	<input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
@@ -182,7 +179,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 		array(
 			'class'		=> 'trans_date',
 			'altfield'	=> 'transaction_date',
-			'mindate'	=> 'today'
+			'maxdate'	=> 'today'
 		)
 	);
 	

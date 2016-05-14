@@ -85,7 +85,7 @@ function mdjm_comms_page()	{
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" /></td>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
                 </tr>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
@@ -97,7 +97,8 @@ function mdjm_comms_page()	{
                     <td>
                     	<select name="mdjm_email_template" id="mdjm_email_template">
                         	<option value="0"><?php _e( 'No Template', 'mobile-dj-manager' ); ?></option>
-                        	<?php echo mdjm_comms_template_options(); ?>
+                            <?php $template = isset( $_GET['template'] ) ? $_GET['template'] : 0; ?>
+                        	<?php echo mdjm_comms_template_options( $template ); ?>
                         </select>
                     </td>
                 </tr>
@@ -105,9 +106,20 @@ function mdjm_comms_page()	{
                 <tr>
                     <th scope="row"><label for="mdjm_email_event"><?php printf( __( 'Associated %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
                     <td>
-                    	<select name="mdjm_email_event" id="mdjm_email_event">
-                        <option value="0"><?php _e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
-                        </select>
+                    	<?php if ( isset( $_GET['event_id'] ) || ( isset( $_GET['mdjm-action'] ) && $_GET['mdjm-action'] == 'respond_unavailable' ) )	: ?>
+                        	<?php
+							$value = mdjm_get_event_date( $_GET['event_id'] ) . ' ';
+							$value .= __( 'from', 'mobile-dj-manager' ) . ' ';
+							$value .= mdjm_get_event_start( $_GET['event_id'] ) . ' ';
+							$value .= '(' . mdjm_get_event_status( $_GET['event_id'] ) . ')';
+							?>
+							<input type="text" name="mdjm_email_event_show" id="mdjm_email_event_show" value="<?php echo $value; ?>" readonly="readonly" size="50" />
+                            <input type="hidden" name="mdjm_email_event" id="mdjm_email_event" value="<?php echo $_GET['event_id']; ?>" />
+                        <?php else : ?>
+                            <select name="mdjm_email_event" id="mdjm_email_event">
+                            <option value="0"><?php _e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
+                            </select>
+                        <?php endif; ?>
                         <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
                     </td>
                 </tr>
@@ -122,8 +134,10 @@ function mdjm_comms_page()	{
                 <tr>
                     <td colspan="2">
                         <?php
+							$content = isset( $_GET['template'] ) ? mdjm_get_email_template_content( $_GET['template'] ) : '';
+							
                             wp_editor(
-                                '',
+                                $content,
                                 'mdjm_email_content',
                                 array(
                                     'media_buttons' => true,
@@ -213,7 +227,7 @@ function mdjm_comms_template_options( $selected = 0 )	{
  */
 function mdjm_send_comm_email( $data )	{
 
-	$url = remove_query_arg( 'mdjm-message' );
+	$url = remove_query_arg( array( 'mdjm-message', 'event_id', 'template', 'recipient', 'mdjm-action' ) );
 		
 	if ( ! wp_verify_nonce( $data['mdjm_nonce'], 'send_comm_email' ) )	{
 		$message = 'nonce_fail';
@@ -255,6 +269,16 @@ function mdjm_send_comm_email( $data )	{
 		
 		if ( mdjm_send_email_content( $email_args ) )	{
 			$message = 'comm_sent';
+			
+			if ( ! empty( $data['mdjm_email_reject_reason'] ) )	{
+				
+				$args = array(
+					'reject_reason' => $data['mdjm_email_reject_reason']
+				);
+				
+				mdjm_update_event_status( $email_args['event_id'], 'mdjm-rejected', get_post_status( $email_args['event_id'] ), $args );
+			}
+			
 		} else	{
 			$message = 'comm_not_sent';
 		}
@@ -267,3 +291,28 @@ function mdjm_send_comm_email( $data )	{
 	
 } // mdjm_send_comm_email
 add_action( 'mdjm-send_comm_email', 'mdjm_send_comm_email' );
+
+/**
+ * Add the comment field to record why an event is being rejected.
+ *
+ * @since	1.3.3
+ * @param
+ * @return
+ */
+function mdjm_add_reject_reason_field()	{
+    
+	if ( ! isset( $_GET['mdjm-action'] ) || $_GET['mdjm-action'] != 'respond_unavailable' )	{
+		return;
+	}
+	
+	$output = '<tr>';
+    $output .= '<th scope="row"><label for="mdjm_email_reject_reason">' . __( 'Rejection Reason', 'mobile-dj-manager' ) . '</label></th>';
+	$output .= '<td><textarea name="mdjm_email_reject_reason" id="mdjm_email_reject_reason" cols="50" rows="3" clas="class="large-text code"></textarea>';
+	$output .= '<p class="description">' . __( 'Optional. If completed, this entry will be added to the event journal.', 'mobile-dj-manager' ) . '</p>';
+	$output .= '</td>';
+    $output .= '</tr>';
+	
+	echo apply_filters( 'mdjm_add_reject_reason_field', $output );
+	
+} // mdjm_add_reject_reason_field
+add_action( 'mdjm_add_comms_fields_before_file', 'mdjm_add_reject_reason_field' );

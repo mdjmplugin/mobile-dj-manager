@@ -306,7 +306,8 @@ function mdjm_event_metabox_client_details( $post )	{
 				if( mdjm_employee_can( 'send_comms' ) )	{
 					?>
 					<p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
-						<?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
+						<?php printf( __( '<a id="contact_client" href="%s">Contact</a>', 'mobile-dj-manager' ), 
+								add_query_arg( 'recipient', $client_id, admin_url( 'admin.php?page=mdjm-comms' ) ) ); ?></p>
 					<?php
 				}
 				?>
@@ -350,7 +351,7 @@ function mdjm_event_metabox_client_details( $post )	{
 function mdjm_event_metabox_event_details( $post )	{
 	global $current_user;
 	
-	wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+	wp_enqueue_style( 'jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
@@ -653,7 +654,7 @@ function mdjm_event_metabox_event_employees( $post )	{
                     'name'            => '_mdjm_event_dj',
                     'class'           => 'required',
                     'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) . ' ---',
-                    'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
+                    'selected'        => isset( $_GET['primary_employee'] ) ? $_GET['primary_employee'] : get_post_meta( $post->ID, '_mdjm_event_dj', true ),
                     'group'           => true,
                 )
             );
