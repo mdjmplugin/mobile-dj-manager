@@ -163,21 +163,13 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				
 			}
 			
-		break;
-								
+			break;
+				
 		// Status
 		case 'event_status':
 			echo get_post_status_object( $post->post_status )->label;
-			
-			/*if( isset( $_GET['availability'], $_GET['event_id'] ) && $post_id == $_GET['event_id'] )	{
-				if( is_dj() )	{
-					$dj_avail = mdjm_availability_check( $_GET['availability'], $current_user->ID );
-				} else	{
-					$dj_avail = mdjm_availability_check( $_GET['availability'] );
-				}
-			}*/
-		break;
-			
+			break;
+
 		// Event Type
 		case 'event_type':
 			$event_types = get_the_terms( $post_id, 'event-types' );
@@ -187,8 +179,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				}
 				echo implode( "<br/>", $event_types );
 			}
-		break;
-			
+			break;
+
 		// Value
 		case 'value':
 			if( mdjm_employee_can( 'edit_txns' ) )	{
@@ -196,8 +188,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo '&mdash;';
 			}
-		break;
-			
+			break;
+
 		// Balance
 		case 'balance':
 			if( mdjm_employee_can( 'edit_txns' ) )	{				
@@ -206,8 +198,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo '&mdash;';
 			}
-		break;
-			
+			break;
+
 		// Playlist
 		case 'playlist':
 			if( mdjm_employee_can( 'read_events' ) )	{
@@ -218,8 +210,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo '&mdash;';
 			}
-		break;
-		
+			break;
+
 		// Journal
 		case 'journal':
 			if( mdjm_employee_can( 'read_events_all' ) )	{
@@ -231,7 +223,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo '&mdash;';
 			}
-		break;
+			break;
+
 	} // switch
 	
 } // mdjm_event_posts_custom_column
@@ -521,13 +514,25 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 	
 	// Unattended events have additional actions to allow one-click responses
 	if( $post->post_status == 'mdjm-unattended' )	{
-		
+
+		$url = remove_query_arg( array( 'mdjm-action', 'event_id' ) );
+
 		// Quote for event
 		$actions['quote'] = sprintf(
 								__( '<a href="%s">Quote</a>', 'mobile-dj-manager' ),
 								admin_url( 'post.php?post=' . $post->ID . '&action=edit&mdjm_action=respond' ) );
 		
 		// Check availability
+		$actions['availability'] = sprintf(
+										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
+										add_query_arg(
+											array(
+												'mdjm-action' => 'get_event_availability',
+												'event_id'    => $post->ID
+											),
+											wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
+										)
+									);
 		/*$actions['availability'] = sprintf( 
 										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
 										mdjm_get_admin_page( 'events' ) .

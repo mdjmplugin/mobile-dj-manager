@@ -138,21 +138,42 @@ function mdjm_admin_notices() {
 			return;
 		} else	{
 			
-			$date = strtotime( mdjm_get_event_date( $_GET['event_id'] ) );
+			$date = get_post_meta( $_GET['event_id'], '_mdjm_event_date', true );
 			
 			$result = mdjm_do_availability_check( $date );
 			
 			if( ! empty( $result['available'] ) )	{
+
+				$notice = '<ul>';
+
+				foreach( $result['available'] as $employee_id )	{
+					$notice .= '<li>' . sprintf( __( '<a href="%s" title="Assign &amp; Respond to Enquiry">Assign %s &amp; respond to enquiry</a>', 'mobile-dj-manager' ),
+											add_query_arg(
+							'primary_employee',
+							$employee_id,
+							get_edit_post_link( $_GET['event_id'] )
+						),
+						mdjm_get_employee_display_name( $employee_id )
+					) .'</li>';
+
+				}
+				
+				$notice .= '</ul>';
+
 				echo '<div class="notice notice-info is-dismissible">';
         		echo '<p>' .
 						sprintf(
-							__( 'There are no employees available to work %s %s on %s', 'mobile-dj-manager' ),
+							__( 'You have %d employees available to work %s %s on %s.', 'mobile-dj-manager' ),
+							count( $result['available'] ),
 							mdjm_get_label_singular( true ),
 							mdjm_get_event_contract_id( $_GET['event_id'] ),
 							mdjm_get_event_long_date( $_GET['event_id'] )
-						) . '</p>';
+						) .
+						$notice . '</p>';
     			echo '</div>';
+
 			} else	{
+
 				echo '<div class="notice notice-error is-dismissible">';
         		echo '<p>' .
 						sprintf(
@@ -162,6 +183,7 @@ function mdjm_admin_notices() {
 							mdjm_get_event_long_date( $_GET['event_id'] )
 						) . '</p>';
     			echo '</div>';
+
 			}
 			
 		}

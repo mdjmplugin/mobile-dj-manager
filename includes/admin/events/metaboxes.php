@@ -654,7 +654,7 @@ function mdjm_event_metabox_event_employees( $post )	{
                     'name'            => '_mdjm_event_dj',
                     'class'           => 'required',
                     'first_entry'     => '--- ' . sprintf( __( 'Select a %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) . ' ---',
-                    'selected'        => get_post_meta( $post->ID, '_mdjm_event_dj', true ),
+                    'selected'        => isset( $_GET['primary_employee'] ) ? $_GET['primary_employee'] : get_post_meta( $post->ID, '_mdjm_event_dj', true ),
                     'group'           => true,
                 )
             );
