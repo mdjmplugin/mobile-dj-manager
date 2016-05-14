@@ -48,7 +48,7 @@ function mdjm_load_scripts()	{
 	wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-validation-plugin');
 	
-	wp_enqueue_script('jquery-ui-datepicker');
+	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
 	
 } // mdjm_load_scripts
 add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
@@ -84,8 +84,8 @@ function mdjm_register_styles()	{
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
 	
-	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
-	wp_enqueue_style( 'jquery-ui-css' );
+	wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+  	wp_enqueue_style( 'jquery-ui' );
 
 } // mdjm_register_styles
 add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
@@ -106,10 +106,10 @@ function mdjm_register_admin_styles( $hook )	{
 	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-admin' );
 	
-	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui.css' );
+	wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
 	
-	wp_enqueue_style( 'jquery-ui-css' );
+  	wp_enqueue_style( 'jquery-ui' );
 	wp_enqueue_style( 'font-awesome' );
 		
 } // mdjm_register_styles
@@ -127,7 +127,7 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
 
-	wp_enqueue_script( 'jquery-ui-datepicker' );
+	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
 		
 	if( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
