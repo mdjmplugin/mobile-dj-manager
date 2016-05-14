@@ -28,16 +28,13 @@ function mdjm_admin_notices() {
 		$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
 		
 		if( ! empty( $unattended ) && $unattended > 0 )
-			add_settings_error( 
-				'mdjm-notices',
-				'mdjm-unattended-events',
-				sprintf( 
-					__( 'You have unattended enquiries. %sClick here%s to manage.', 'mobile-dj-manager' ),
-					'<a href="' . mdjm_get_admin_page( 'events', 'str' ) . '&post_status=mdjm-unattended">',
-					'</a>'
-				),
-				'updated'
-			);
+			echo '<div class="notice notice-info is-dismissible">';
+			echo '<p>' .
+					sprintf( 
+						__( 'You have unattended enquiries. <a href="%s">Click here</a> to manage.', 'mobile-dj-manager' ),
+						admin_url( 'edit.php?post_type=mdjm-event&post_status=mdjm-unattended' )
+					). '</p>';
+			echo '</div>';
 	}
 	
 	if( isset( $_GET['mdjm-message'] ) && 'song_removed' == $_GET['mdjm-message'] )	{
@@ -132,6 +129,42 @@ function mdjm_admin_notices() {
 			__( 'Email not sent.', 'mobile-dj-manager' ),
 			'error'
 		);
+	}
+	if( isset( $_GET['mdjm-action'] ) && 'get_event_availability' == $_GET['mdjm-action'] )	{
+		
+		if( ! wp_verify_nonce( $_GET[ 'mdjm_nonce' ], 'get_event_availability' ) )	{
+			return;
+		} elseif( ! isset( $_GET['event_id'] ) )	{
+			return;
+		} else	{
+			
+			$date = strtotime( mdjm_get_event_date( $_GET['event_id'] ) );
+			
+			$result = mdjm_do_availability_check( $date );
+			
+			if( ! empty( $result['available'] ) )	{
+				echo '<div class="notice notice-info is-dismissible">';
+        		echo '<p>' .
+						sprintf(
+							__( 'There are no employees available to work %s %s on %s', 'mobile-dj-manager' ),
+							mdjm_get_label_singular( true ),
+							mdjm_get_event_contract_id( $_GET['event_id'] ),
+							mdjm_get_event_long_date( $_GET['event_id'] )
+						) . '</p>';
+    			echo '</div>';
+			} else	{
+				echo '<div class="notice notice-error is-dismissible">';
+        		echo '<p>' .
+						sprintf(
+							__( 'There are no employees available to work %s %s on %s', 'mobile-dj-manager' ),
+							mdjm_get_label_singular( true ),
+							mdjm_get_event_contract_id( $_GET['event_id'] ),
+							mdjm_get_event_long_date( $_GET['event_id'] )
+						) . '</p>';
+    			echo '</div>';
+			}
+			
+		}
 	}
 
 	settings_errors( 'mdjm-notices' );
