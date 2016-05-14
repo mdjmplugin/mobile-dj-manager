@@ -85,7 +85,7 @@ function mdjm_comms_page()	{
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" /></td>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
                 </tr>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
@@ -97,7 +97,8 @@ function mdjm_comms_page()	{
                     <td>
                     	<select name="mdjm_email_template" id="mdjm_email_template">
                         	<option value="0"><?php _e( 'No Template', 'mobile-dj-manager' ); ?></option>
-                        	<?php echo mdjm_comms_template_options(); ?>
+                            <?php $template = isset( $_GET['template'] ) ? $_GET['template'] : 0; ?>
+                        	<?php echo mdjm_comms_template_options( $template ); ?>
                         </select>
                     </td>
                 </tr>
@@ -122,8 +123,10 @@ function mdjm_comms_page()	{
                 <tr>
                     <td colspan="2">
                         <?php
+							$content = isset( $_GET['template'] ) ? mdjm_get_email_template_content( $_GET['template'] ) : '';
+							
                             wp_editor(
-                                '',
+                                $content,
                                 'mdjm_email_content',
                                 array(
                                     'media_buttons' => true,

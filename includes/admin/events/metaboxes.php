@@ -306,7 +306,8 @@ function mdjm_event_metabox_client_details( $post )	{
 				if( mdjm_employee_can( 'send_comms' ) )	{
 					?>
 					<p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
-						<?php echo '<a id="contact_client" href="' . mdjm_get_admin_page( 'comms' ) . '&to_user=' . $client_id . '&event_id=' . $post->ID . '">' . __( 'Contact', 'mobile-dj-manager' ) . '</a>'; ?></p>
+						<?php printf( __( '<a id="contact_client" href="%s">Contact</a>', 'mobile-dj-manager' ), 
+								add_query_arg( 'recipient', $client_id, admin_url( 'admin.php?page=mdjm-comms' ) ) ); ?></p>
 					<?php
 				}
 				?>

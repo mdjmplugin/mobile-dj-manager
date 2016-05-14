@@ -152,8 +152,9 @@ function mdjm_register_admin_scripts( $hook )	{
 		apply_filters(
 			'mdjm_admin_script_vars',
 			array(
-				'ajaxurl' => mdjm_get_ajax_url(),
-				'curpage' => $hook
+				'ajaxurl'        => mdjm_get_ajax_url(),
+				'curpage'        => $hook,
+				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false
 			)
 		)
 	);
