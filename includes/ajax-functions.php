@@ -520,10 +520,23 @@ function mdjm_ajax_user_events_dropdown()	{
 	
 	if ( ! empty( $_POST['recipient'] ) )	{
 		
+		$statuses = 'any';
+		
 		if ( mdjm_is_employee( $_POST['recipient'] ) )	{
-			$events = mdjm_get_employee_events( $_POST['recipient'], array( 'post_status' => mdjm_active_event_statuses() ) );
+
+			if ( mdjm_get_option( 'comms_show_active_events_only' ) )	{
+				$statuses = array( 'post_status' => mdjm_active_event_statuses() );
+			}
+
+			$events = mdjm_get_employee_events( $_POST['recipient'], $statuses );
+
 		} else	{
-			$events = mdjm_get_client_events( $_POST['recipient'], mdjm_active_event_statuses() );
+
+			if ( mdjm_get_option( 'comms_show_active_events_only' ) )	{
+				$statuses = mdjm_active_event_statuses();
+			}
+
+			$events = mdjm_get_client_events( $_POST['recipient'], $statuses );
 		}
 		
 		if ( $events )	{

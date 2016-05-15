@@ -490,6 +490,12 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'regular',
 						'std'         => get_bloginfo( 'admin_email' )
 					),
+					'comms_show_active_events_only' => array(
+						'id'          => 'comms_show_active_events_only',
+						'name'        => __( 'Communicate Active Events Only', 'mobile-dj-manager' ),
+						'desc'        => __( "Check to only retrieve a client's/employee's active events on the communication page.", 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
 					'track_client_emails' => array(
 						'id'          => 'track_client_emails',
 						'name'        => __( 'Track Client Emails?', 'mobile-dj-manager' ),
