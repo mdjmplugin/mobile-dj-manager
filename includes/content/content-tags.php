@@ -484,8 +484,13 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'event_package',
-			'description' => sprintf( __( 'The package associated witht the %s or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'description' => sprintf( __( 'The package associated with the %s or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 			'function'    => 'mdjm_content_tag_event_package'
+		),
+		array(
+			'tag'         => 'event_package_cost',
+			'description' => sprintf( __( 'The package associated with the %s and its cost, or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_event_package_cost'
 		),
 		array(
 			'tag'         => 'event_status',
