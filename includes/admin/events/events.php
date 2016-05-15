@@ -1144,7 +1144,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	foreach( $_POST as $key => $value )	{
 		
 		if( substr( $key, 0, 12 ) == '_mdjm_event_' )	{
-						
+			
+			if ( $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' )	{
+				$value = mdjm_format_amount( $value );
+			}
+					
 			$event_data[ $key ] = $value;
 
 		}
