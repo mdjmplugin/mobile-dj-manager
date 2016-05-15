@@ -712,7 +712,7 @@ function mdjm_content_tag_available_addons( $event_id='' )	{
  *
  * @return	str		The list of available add-ons. With cost.
  */
-function mdjm_content_tag_available_addons_cost()	{
+function mdjm_content_tag_available_addons_cost( $event_id='' )	{
 
 	$output = '';
 	
