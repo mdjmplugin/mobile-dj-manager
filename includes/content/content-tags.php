@@ -453,6 +453,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_addons'
 		),
 		array(
+			'tag'         => 'event_addons_cost',
+			'description' => __( 'The add-ons included with the event, with costs', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_addons_cost'
+		),
+		array(
 			'tag'         => 'event_date',
 			'description' => __( 'The date of the event in long format', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_date'
