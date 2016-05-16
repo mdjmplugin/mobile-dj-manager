@@ -769,6 +769,11 @@ function mdjm_event_metabox_event_employees( $post )	{
                 <a href="#" id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
             </div>
         </div>
+        <div class="mdjm-post-row-single">
+            <div class="mdjm-post-1column">
+                <a href="<?php echo wp_nonce_url( add_query_arg( array( 'mdjm-action' => 'pay_event_employees', 'event_id' => $post->ID ), admin_url( 'admin.php' ) ), 'pay_event_employees', 'mdjm_nonce' ); ?>" id="pay_event_employees" class="button button-primary button-small"><?php printf( __( 'Pay %s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a>
+            </div>
+        </div>
     
     <?php
     }

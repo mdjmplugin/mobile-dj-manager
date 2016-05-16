@@ -143,10 +143,10 @@ function get_available_packages( $dj='', $price=false )	{
 } // get_available_packages
 
 /*
- * Get the addon information for the given event
+ * Get the add-on information for the given event
  *
  * @param	int			$event_id	The event ID
- * @return	arr|bool	$addons		array with package details, or false if no package assigned
+ * @return	str			$addons		Array with add-ons details, or false if no add-ons assigned
  */
 function get_event_addons( $event_id, $price=false )	{
 	
@@ -157,8 +157,9 @@ function get_event_addons( $event_id, $price=false )	{
 	// Event Addons
 	$event_addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
 			
-	if( empty( $event_addons ) )
+	if( empty( $event_addons ) )	{
 		return __( 'No addons are assigned to this event', 'mobile-dj-manager' );
+	}
 		
 	// All addons
 	$all_addons = mdjm_get_addons();
@@ -167,10 +168,10 @@ function get_event_addons( $event_id, $price=false )	{
 	$i = 1;
 	
 	foreach( $event_addons as $event_addon )	{
-		$addons .= stripslashes( esc_attr( $all_addons[$event_addon][0] ) );
+		$addons .= stripslashes( esc_attr( $all_addons[ $event_addon ][0] ) );
 		
 		if ( ! empty( $price ) )	{
-			$addons .= ' ' . mdjm_currency_filter( mdjm_format_amount( $all_addons[$event_addon][7] ) );
+			$addons .= ' ' . mdjm_currency_filter( mdjm_format_amount( $all_addons[ $event_addon ][7] ) );
 		}
 		if ( $i < count( $event_addons ) )	{
 			$addons .= '<br />';
@@ -187,11 +188,12 @@ function get_event_addons( $event_id, $price=false )	{
  * Get the addons available
  *
  *
- * @param	int			$dj			Optional: The user ID of the DJ
- *			str			$package	Optional: The slug of a package where the package contents need to be excluded
- * @return
+ * @param	int		$dj			The user ID of the Employee.
+ * @param	str		$package	The slug of a package where the package contents need to be excluded.
+ * @param	int		$event_id	Event ID to check if the add-on is already assigned.
+ * @return	arr		Array of available addons and their details.
  */
-function get_available_addons( $dj='', $package='' )	{
+function get_available_addons( $employee = '', $package = '', $event_id = '' )	{
 	
 	if( ! mdjm_packages_enabled() )	{
 		return 'N/A';
@@ -200,28 +202,43 @@ function get_available_addons( $dj='', $package='' )	{
 	// All addons
 	$all_addons = mdjm_get_addons();
 	
-	if( empty( $all_addons ) )
+	if( empty( $all_addons ) )	{
 		return __( 'No addons are available', 'mobile-dj-manager' );
+	}
 	
 	$addons = array();
 	
 	foreach( $all_addons as $all_addon )	{
 		// If the addon is not enabled, do not display
-		if( !isset( $all_addon[6] ) || $all_addon[6] != 'Y' )
+		if( ! isset( $all_addon[6] ) || $all_addon[6] != 'Y' )	{
 			continue;
+		}
 		
 		// If a package is parsed, remove the package items from the available addons
-		if( !empty( $package ) )	{
+		if( ! empty( $package ) )	{
+
 			$packages = mdjm_get_packages();
 			$current_items = explode( ',', $packages[$package]['equipment'] );
 			
-			if( !empty( $current_items ) && in_array( $all_addon[1], $current_items ) )
+			if( !empty( $current_items ) && in_array( $all_addon[1], $current_items ) )	{
 				continue;
+			}
+
 		}
 		
-		// If a DJ is parsed, only show their available addons
-		if( !empty( $dj ) && !in_array( $dj, explode( ',', $all_addon[8] ) ) )
+		// If an Employee is parsed, only show their available addons
+		if( ! empty( $employee ) && ! in_array( $employee, explode( ',', $all_addon[8] ) ) )	{
 			continue;
+		}
+		
+		// If an event is parsed, only show the add-on if it is not already included
+		if ( ! empty( $event_id ) )	{
+			$event_addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
+			
+			if ( ! empty( $event_addons ) && in_array( $all_addon[1], $event_addons ) )	{
+				continue;
+			}
+		}
 
 		$addons[$all_addon[1]]['cat'] = '';
 		$addons[$all_addon[1]]['slug'] = $all_addon[1];

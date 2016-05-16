@@ -189,6 +189,54 @@ function mdjm_admin_notices() {
 			
 		}
 	}
+	if( isset( $_GET['mdjm-message'] ) && 'payment_event_missing' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_event_missing',
+			__( 'Event not identified.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'pay_employee_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_employee_failed',
+			__( 'Unable to make payment to employee.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_employees_failed',
+			__( 'Unable to make payment to employees.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_some_success' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_all_employees_some_success',
+			__( 'Not all employees could be paid.', 'mobile-dj-manager' ),
+			'notice-info'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'pay_employee_success' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_employeee_success',
+			__( 'Employee successfully paid.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_success' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-payment_all_employeees_success',
+			__( 'Employees successfully paid.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	

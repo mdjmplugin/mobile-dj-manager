@@ -379,6 +379,10 @@ function mdjm_save_txn_post( $post_id, $post, $update )	{
 		return;
 	}
 	
+	if ( $post->post_status == 'trash' )	{
+		return;
+	}
+	
 	if( empty( $update ) )	{
 		return;
 	}

@@ -33,6 +33,13 @@ class MDJM_Txn {
 	 * @since	1.3
 	 */
 	private $date;
+	
+	/**
+	 * The transaction price
+	 *
+	 * @since	1.3
+	 */
+	private $price = 0;
 		
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
@@ -99,6 +106,8 @@ class MDJM_Txn {
 					break;
 			}
 		}
+		
+		$this->get_price();
 				
 		return true;
 	} // setup_txn
@@ -124,35 +133,56 @@ class MDJM_Txn {
 	 * @param 	arr		$data Array of attributes for a transaction. See $defaults.
 	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Transaction ID
 	 */
-	public function create( $data = array() ) {
+	public function create( $data = array(), $meta = array() ) {
 		
 		if ( $this->id != 0 ) {
 			return false;
 		}
 
-		$defaults = array(
+		remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
+
+		$default_data = array(
 			'post_type'      => 'mdjm-transaction',
-			'post_status'    => 'mdjm-pending',
+			'post_status'    => 'mdjm-income',
 			'post_title'     => __( 'New Transaction', 'mobile-dj-manager' ),
-			'post_content'   => '',
-			'meta'  => array(
-				'_mdjm_txn_source'     => mdjm_get_option( 'default_type', __( 'Cash' ) ),
-				'_mdjm_txn_currency'   => mdjm_get_currency()
-			)
+			'post_content'   => ''
 		);
 
-		$args = wp_parse_args( $data, $defaults );
+		$default_meta = array(
+			'_mdjm_txn_source'     => mdjm_get_option( 'default_type', __( 'Cash' ) ),
+			'_mdjm_txn_currency'   => mdjm_get_currency(),
+			'_mdjm_txn_status'     => 'Pending'
+		);
+		
+		$data = wp_parse_args( $data, $default_data );
+		$meta = wp_parse_args( $meta, $default_meta );
 
-		$meta_data = $data['meta'];
-		unset( $data['meta'] );
-
-		do_action( 'mdjm_pre_txn_create', $data, $meta_data );
+		do_action( 'mdjm_pre_txn_create', $data, $meta );
 
 		$id = wp_insert_post( $data, true );
+		
+		if ( is_wp_error( $id ) )	{
+			MDJM()->debug->log_it( 'ERROR: ' . $id->get_error_message() );
+		}
 
 		$txn = WP_Post::get_instance( $id );
+		
+		if ( $txn )	{
+			
+			mdjm_update_txn_meta( $txn->ID, $meta );
+			
+			wp_update_post(
+				array(
+					'ID'         => $id,
+					'post_title' => mdjm_get_option( 'event_prefix' ) . $id,
+					'post_name'  => mdjm_get_option( 'event_prefix' ) . $id
+				)
+			);
+		}
 
-		do_action( 'mdjm_post_txn_create', $id, $data, $meta_data );
+		do_action( 'mdjm_post_txn_create', $id, $data, $meta );
+
+		add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 
 		return $this->setup_txn( $txn );
 
@@ -177,6 +207,20 @@ class MDJM_Txn {
 	public function get_date() {
 		return $this->post_date;
 	} // get_date
+	
+	/**
+	 * Retrieve the transaction price
+	 *
+	 * @since	1.3
+	 * @return	str Y-m-d H:i:s
+	 */
+	public function get_price() {
+		if ( empty( $this->price ) )	{
+			$this->price = mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_txn_total', true ) );
+		}
+		
+		return $this->price;
+	} // get_price
 	
 	
 	

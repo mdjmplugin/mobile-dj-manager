@@ -288,6 +288,16 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_artist_label'
 		),
 		array(
+			'tag'         => 'available_addons',
+			'description' => __( 'The list of add-ons available. No price. If an event can be referenced, only lists add-ons not already assigned to the event, or included in the event package', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_available_addons'
+		),
+		array(
+			'tag'         => 'available_addons_cost',
+			'description' => __( 'The list of add-ons available. With price. If an event can be referenced, only lists add-ons not already assigned to the event, or included in the event package', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_available_addons_cost'
+		),
+		array(
 			'tag'         => 'available_packages',
 			'description' => __( 'The list of packages available. No price', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_available_packages'
@@ -453,6 +463,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_addons'
 		),
 		array(
+			'tag'         => 'event_addons_cost',
+			'description' => __( 'The add-ons included with the event, with costs', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_addons_cost'
+		),
+		array(
 			'tag'         => 'event_date',
 			'description' => __( 'The date of the event in long format', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_date'
@@ -479,8 +494,13 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'event_package',
-			'description' => sprintf( __( 'The package associated witht the %s or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'description' => sprintf( __( 'The package associated with the %s or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 			'function'    => 'mdjm_content_tag_event_package'
+		),
+		array(
+			'tag'         => 'event_package_cost',
+			'description' => sprintf( __( 'The package associated with the %s and its cost, or "No Package".', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_event_package_cost'
 		),
 		array(
 			'tag'         => 'event_status',
@@ -646,6 +666,77 @@ function mdjm_content_tag_application_name()	{
 function mdjm_content_tag_artist_label()	{
 	return mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) );
 } // mdjm_content_tag_artist_label
+
+/**
+ * Content tag: available_addons.
+ * The list of add-ons available with line breaks. No price.
+ * If an event can be referenced, only lists add-ons not already assigned to the event,
+ * or included within the event package
+ *
+ * @param	int		$event_id	Event ID if applicable.
+ *
+ * @return	str		The list of available addo-ns. No cost.
+ */
+function mdjm_content_tag_available_addons( $event_id='' )	{
+	
+	$output = '';
+	
+	$available_addons = get_available_addons( '', '', $event_id );
+	
+	if ( ! empty( $available_addons ) )	{
+		
+		foreach ( $available_addons as $addon )	{
+			
+			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . '</strong><br />' .
+				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
+			
+		}
+		
+		$output .= implode( '', $available );
+		
+	} else	{
+		$output .= __( 'No packages available', 'mobile-dj-manager' );
+	}
+	
+	return $output;
+
+} // mdjm_content_tag_available_addons
+
+/**
+ * Content tag: available_addons_cost.
+ * The list of add-ons available with line breaks. With price.
+ * If an event can be referenced, only lists add-ons not already assigned to the event,
+ * or included within the event package
+ *
+ * @param	
+ *
+ * @return	str		The list of available add-ons. With cost.
+ */
+function mdjm_content_tag_available_addons_cost( $event_id='' )	{
+
+	$output = '';
+	
+	$available_addons = get_available_addons( '', '', $event_id );
+	
+	if ( ! empty( $available_addons ) )	{
+		
+		foreach ( $available_addons as $addon )	{
+			
+			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . ' - ' .
+				mdjm_currency_filter( mdjm_format_amount( $addon['cost'] ) ) . '</strong><br />' .
+				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
+			
+		}
+		
+		$output .= implode( '', $available );
+		
+	} else	{
+		$output .= __( 'No packages available', 'mobile-dj-manager' );
+	}
+	
+	return $output;
+
+} // mdjm_content_tag_available_addons_cost
 
 /**
  * Content tag: available_packages.
