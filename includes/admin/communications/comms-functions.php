@@ -259,7 +259,7 @@ function mdjm_send_comm_email( $data )	{
 			'from_email'     => $data['mdjm_email_from_address'],
 			'event_id'       => $data['mdjm_email_event'],
 			'client_id'      => $data['mdjm_email_to'],
-			'subject'        => $data['mdjm_email_subject'],
+			'subject'        => stripslashes( $data['mdjm_email_subject'] ),
 			'attachments'    => ! empty( $attachments ) ? $attachments : array(),
 			'message'        => $data['mdjm_email_content'],
 			'track'          => true,
