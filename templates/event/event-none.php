@@ -17,7 +17,7 @@
 		'{company_name}',
 		'{application_name}' ); ?></p>
     
-    <p><?php printf( __( 'You do not currently have any active %s booked with us.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?>
+    <p><?php printf( __( 'You do not currently have any active %s booked with us.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></p>
     
     <p><?php printf( 
 		__( 'If you are ready to plan your next %s, contact us <a href="%s">here</a>.', 'mobile-dj-manager' ),
