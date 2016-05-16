@@ -243,30 +243,45 @@ function mdjm_shortcode_playlist( $atts )	{
 	
 	global $mdjm_event;
 	
-	$visitor = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
-	$output  = '';
+	$visitor  = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
+	$output   = '';
+	$event_id = '';
 	
-	if( ! isset( $_GET['event_id'] ) && ! isset( $_GET['guest_playlist'] ) )	{
-		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
-	}
-	
-	$mdjm_event = ( $visitor == 'client' ? mdjm_get_event( $_GET['event_id'] ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] ) );
-	
-	if( $visitor == 'client' )	{
-		if( ! is_user_logged_in() )	{
-			echo mdjm_login_form( add_query_arg( 'event_id', $_GET['event_id'], mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) ) );
+	if ( ! empty( $_GET['event_id'] ) )	{
+		$event_id = $_GET['event_id'];
+	} else	{
+		$next_event = mdjm_get_clients_next_event( get_current_user_id(), 'client' );
+		
+		if ( $next_event )	{
+			$event_id = $next_event[0]->ID;
 		}
 	}
 	
-	if( $mdjm_event )	{
-		ob_start();
-		mdjm_get_template_part( 'playlist', $visitor );
-		$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
-		ob_get_clean();		
-	}
-	else	{
+	if( ! isset( $event_id ) && ! isset( $_GET['guest_playlist'] ) && ! is_admin() )	{
 		wp_die( __( 'Sorry an error occured. Please try again.', 'mobile-dj-manager' ) );
 	}
+	
+	$mdjm_event = ( $visitor == 'client' ? mdjm_get_event( $event_id ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] ) );
+	
+	if( $visitor == 'client' )	{
+		if( ! is_user_logged_in() )	{
+			
+			echo mdjm_login_form( add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) ) );
+		}
+	}
+	
+	ob_start();
+	
+	if( $mdjm_event )	{
+		mdjm_get_template_part( 'playlist', $visitor );
+		$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
+	}
+	else	{
+		mdjm_get_template_part( 'playlist', 'noevent' );
+		$output .= mdjm_do_content_tags( ob_get_contents(), '', '' );
+	}
+	
+	ob_get_clean();
 	
 	// Reset global var
 	$mdjm_event = '';
@@ -333,7 +348,7 @@ function mdjm_shortcode_quote( $atts )	{
 		}
 
 	} else	{
-		wp_die( sprintf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) );
+		printf( __( "Ooops! There seems to be a slight issue and we've been unable to find your %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) );
 	}
 	
 } // mdjm_shortcode_quote
@@ -562,4 +577,3 @@ function mdjm_shortcode_login( $atts )	{
 
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-login', 'mdjm_shortcode_login' );
-?>
