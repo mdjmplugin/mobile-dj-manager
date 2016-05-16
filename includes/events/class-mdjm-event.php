@@ -370,10 +370,10 @@ class MDJM_Event {
 				foreach( $employees_data as $employee_data )	{
 					
 					$employees[ $employee_data['id'] ] = array(
-						'role_slug'	    => $employee_data['role'],
-						'role'		     => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
-						'wage'		     => $employee_data['wage'],
-						'payment_status'   => $employee_data['payment_status']
+						'role_slug'      => $employee_data['role'],
+						'role'           => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
+						'wage'           => ! empty( $employee_data['wage'] ) ? $employee_data['wage'] : 0,
+						'payment_status' => ! empty( $employee_data['payment_status'] ) ? $employee_data['payment_status'] : 'unpaid'
 					);
 					
 				}
@@ -381,7 +381,7 @@ class MDJM_Event {
 			}
 			
 		}
-		
+
 		$this->employees = $employees;
 		
 		return $this->employees;

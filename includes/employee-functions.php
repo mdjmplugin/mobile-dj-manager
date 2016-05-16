@@ -573,7 +573,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	}
 	
 	array_push( $employees, $data['id'] );
-	$employees_data[]	= $data;
+	$employees_data[ $data['id'] ] = $data;
 	
 	if( update_post_meta( $event_id, '_mdjm_event_employees', $employees ) && update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data ) )	{
 		return true;
@@ -593,7 +593,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
  */
 function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
 	
-	$employees		 = mdjm_get_event_employees( $event_id );
+	$employees      = mdjm_get_event_employees( $event_id );
 	$employees_data	= mdjm_get_event_employees_data( $event_id );
 	
 	if ( empty( $employees ) )	{
