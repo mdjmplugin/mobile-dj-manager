@@ -1122,8 +1122,8 @@ function mdjm_content_tag_balance( $event_id='' )	{
 } // mdjm_content_tag_balance
 
 /**
- * Content tag: balance.
- * The label used for balance.
+ * Content tag: balance_label.
+ * The label used for the balance label term.
  *
  * @param
  * @param

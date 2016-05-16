@@ -116,96 +116,63 @@
 		 *
 		 */
 		public function manual_event_payment( $type, $event_id )	{
-			global $mdjm, $mdjm_settings;
 			
 			remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 			
-			// Add the transaction
-			/* -- Create default post (auto-draft) so we can use the ID etc -- */
-			require_once( ABSPATH . 'wp-admin/includes/post.php' );
-			$trans_post = get_default_post_to_edit( MDJM_TRANS_POSTS, true );
+			$mdjm_event = new MDJM_Event( $event_id );
+			$mdjm_txn   = new MDJM_Txn();
 			
-			$trans_id = $trans_post->ID;
-			$trans_type = get_term_by( 'name', $type, 'transaction-types' );
+			$mdjm_txn->create(
+				array(
+					'post_parent'           => $event_id,
+					'post_author'           => $mdjm_event->client
+				),
+				array(
+					'_mdjm_payment_from'    => $mdjm_event->client,
+					'_mdjm_txn_total'       => ( $type == mdjm_get_balance_label() ) ? mdjm_format_amount( $mdjm_event->get_balance() ) : $mdjm_event->get_deposit(),
+					'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+					'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+					'_mdjm_payer_email'     => mdjm_get_client_lastname( $mdjm_event->client ),
+					'_mdjm_payment_from'    => mdjm_get_client_email( $mdjm_event->client )
+				)
+			);			
 			
-			// Event info
-			$eventinfo = MDJM()->events->event_detail( $event_id );
-
-			/* -- Post Data -- */
-			$trans_data['ID'] = $trans_id;
-			$trans_data['post_title'] = MDJM_EVENT_PREFIX . $trans_id;
-			$trans_data['post_status'] = 'mdjm-income';
-				
-			$trans_data['post_author'] = $user;
-			$trans_data['post_type'] = 'mdjm-transaction';
-			$trans_data['post_category'] = ( $type == mdjm_get_balance_label() ? array( mdjm_get_balance_label() ) : array( mdjm_get_deposit_label() ) );
-			$trans_data['post_parent'] = $event_id;
-			
-			/* -- Post Meta -- */
-			$trans_meta['_mdjm_txn_status'] = 'Completed';
-			$trans_meta['_mdjm_txn_source'] = $mdjm_settings['payments']['default_type'];
-			$trans_meta['_mdjm_txn_total'] = ( $type == mdjm_get_balance_label() ? str_replace( mdjm_currency_symbol(), '', $eventinfo['balance'] ) 
-				: str_replace( mdjm_currency_symbol(), '', $eventinfo['deposit'] ) );
-					
-			$trans_meta['_mdjm_payer_firstname'] = !empty( $eventinfo['client']->first_name ) ? $eventinfo['client']->first_name : '';
-													
-			$trans_meta['_mdjm_payer_lastname'] = !empty( $eventinfo['client']->last_name ) ? $eventinfo['client']->last_name : '';
-													
-			$trans_meta['_mdjm_payer_email'] = !empty( $eventinfo['client']->user_email ) ? $eventinfo['client']->user_email : '';
-			
-			$trans_meta['_mdjm_payment_from'] = $eventinfo['client']->display_name;
-																				
-			$trans_meta['_mdjm_txn_currency'] = $mdjm_settings['payments']['currency'];
-			
-			/* -- Create the transaction post -- */
-			wp_update_post( $trans_data );
-			
-			/* -- Set the transaction Type -- */													
-			wp_set_post_terms( $trans_id, $trans_type->term_id, 'transaction-types' );
-			
-			/* -- Add the meta data -- */
-			foreach( $trans_meta as $trans_meta_key => $trans_meta_value )	{
-				add_post_meta( $trans_id, $trans_meta_key, $trans_meta_value );	
+			if ( empty( $mdjm_txn ) )	{
+				return false;
 			}
+			
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-employee-wages' ) );
+										
+			/* -- Create the transaction post -- */
+			wp_update_post(
+				array(
+					'ID'         => $mdjm_txn->ID,
+					'post_title' => mdjm_get_option( 'event_prefix', '' ) . $mdjm_txn->ID,
+					'post_name'  => mdjm_get_option( 'event_prefix', '' ) . $mdjm_txn->ID
+				)
+			);
 			
 			MDJM()->debug->log_it( 'Event Transaction procedure complete' );
 			
-			// Email client with defined template
-			if( !empty( $mdjm_settings['templates']['manual_payment_cfm_template'] ) && $mdjm_settings['templates']['manual_payment_cfm_template'] != 0 )	{
+			if( mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+				
 				MDJM()->debug->log_it( 'Configured to email client with payment receipt confirmation' );
-												
-				$filters = array(
-							'{PAYMENT_FOR}'		=> ( $type == mdjm_get_balance_label() ? mdjm_get_balance_label() : mdjm_get_deposit_label() ),
-							'{PAYMENT_AMOUNT}'	 => ( $type == mdjm_get_balance_label() ? $eventinfo['balance'] : $eventinfo['deposit'] ),
-							'{PAYMENT_DATE}'	   => date( MDJM_SHORTDATE_FORMAT ),
-							);
-							
-				/* -- Get the template and perform the {PAYMENT_*) filter replacements -- */
-				$template = get_post( $mdjm_settings['templates']['manual_payment_cfm_template'] );
-				$message = $template->post_content;
-				$message = apply_filters( 'the_content', $message );
-				$message = str_replace( ']]>', ']]&gt;', $message );
 				
-				foreach( $filters as $key => $value )	{
-					$search[] = $key;
-					$replace[] = $value;	
-				}
+				$for    = ( $type == mdjm_get_balance_label() ) ? 'mdjm_content_tag_balance_label' : 'mdjm_content_tag_deposit_label';
+				$amount = ( $type == mdjm_get_balance_label() ) ? 'mdjm_content_tag_balance'       : 'mdjm_content_tag_deposit';
 				
-				$confirm_payment = $mdjm->send_email( array(
-													'content'	=> str_replace( $search, $replace, $message ),
-													'to'		 => $eventinfo['client']->ID,
-													'subject'	=> str_replace( $search, $replace, get_the_title( $template->ID ) ),
-													'event_id'   => $event_id,
-													'html'	   => true,
-													'source'	 => 'Event Admin',
-													) );
+				mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), $for );
+				mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), $amount );
+				mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+															
+				mdjm_email_manual_payment_confirmation( $event_id );
 				
-			}
-			else	{
+			} else	{
 				MDJM()->debug->log_it( 'Skipping email as no template is defined for manual payment in ' . __METHOD__ );
 			}
-			add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 			
+			add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
+
 		} // manual_event_payment
 				
 		/*

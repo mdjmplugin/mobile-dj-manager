@@ -38,7 +38,7 @@ function mdjm_send_email_content( $args )	{
 	
 	$args = wp_parse_args( $args, $defaults );
 	
-	$event_id = ! empty( $args['event_id'] ) ? $args['event_id'] : 0;
+	$event_id     = ! empty( $args['event_id'] ) ? $args['event_id'] : 0;
 
 	$from_name    = $args['from_name'];
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'generic', $event_id );
@@ -91,7 +91,7 @@ function mdjm_email_quote( $event_id, $template_id = '' )	{
 	
 	$template_id = ! empty( $template_id ) ? $template_id : mdjm_get_option( 'enquiry' );
 	
-	$mdjm_event = mdjm_get_event( $event_id );
+	$mdjm_event   = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'enquiry', $mdjm_event );
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'enquiry', $mdjm_event );
@@ -137,7 +137,7 @@ function mdjm_email_quote( $event_id, $template_id = '' )	{
  */
 function mdjm_email_enquiry_accepted( $event_id )	{
 	
-	$mdjm_event = mdjm_get_event( $event_id );
+	$mdjm_event   = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'contract', $mdjm_event );
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'contract', $mdjm_event );
@@ -183,7 +183,7 @@ function mdjm_email_enquiry_accepted( $event_id )	{
  */
 function mdjm_email_booking_confirmation( $event_id )	{
 	
-	$mdjm_event = mdjm_get_event( $event_id );
+	$mdjm_event   = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'booking_conf', $mdjm_event );
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'booking_conf', $mdjm_event );
@@ -224,6 +224,56 @@ function mdjm_email_booking_confirmation( $event_id )	{
 	}
 	
 } // mdjm_email_booking_confirmation
+
+/**
+ * Email the manual payment confirmation to the client from a customisable email template.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID
+ * @return	void
+ */
+function mdjm_email_manual_payment_confirmation( $event_id )	{
+	
+	$mdjm_event   = mdjm_get_event( $event_id );
+
+	$from_name    = mdjm_email_set_from_name( 'manual_payment', $mdjm_event );
+	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'manual_payment', $mdjm_event );
+
+	$from_email   = mdjm_email_set_from_address( 'manual_payment', $mdjm_event );
+	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'manual_payment', $mdjm_event );
+
+	$client       = get_userdata( $mdjm_event->client );
+	$to_email     = $client->user_email;
+
+	$subject      = mdjm_email_set_subject( mdjm_get_option( 'manual_payment_cfm_template', false ) );
+	$subject      = apply_filters( 'mdjm_manual_payment_subject', wp_strip_all_tags( $subject ) );
+	$subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
+
+	$attachments  = apply_filters( 'mdjm_manual_payment_attachments', array(), $mdjm_event );
+	
+	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'manual_payment_cfm_template', false ) );
+	$message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
+
+	$emails = MDJM()->emails;
+
+	$emails->__set( 'event_id', $mdjm_event->ID );
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_address', $from_email );
+	
+	$headers = apply_filters( 'mdjm_manual_payment_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
+	$emails->__set( 'headers', $headers );
+	
+	$emails->__set( 'track', apply_filters( 'mdjm_track_email_manual_payment', mdjm_get_option( 'track_client_emails' ) ) );
+	
+	if ( mdjm_get_option( 'bcc_admin_to_client' ) )	{
+		$emails->__set( 'copy_to', mdjm_get_option( 'system_email' ) );
+	}
+	
+	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
+
+	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) );
+	
+} // mdjm_email_manual_payment_confirmation
 
 /**
  * Retrieve the email subject for the given template.
