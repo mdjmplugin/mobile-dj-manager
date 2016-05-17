@@ -1054,6 +1054,35 @@ function mdjm_get_registered_settings()	{
 								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'Other', 'mobile-dj-manager' )
 					)
+				),
+			// Employee Paymenty Settings
+				'employee_payments' => array(
+					'employee_payment_settings' => array(
+						'id'          => 'employee_payment_settings',
+						'name'        => '<h3>' . __( 'Employee Payment Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'enable_employee_payments'  => array(
+						'id'          => 'enable_employee_payments',
+						'name'        => __( 'Enable Employee Payments', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Enable this option to be able to record employee wage payments for %s.', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+						'type'        => 'checkbox'
+					),
+					'employee_pay_status'        => array(
+						'id'          => 'employee_pay_status',
+						'name'        => __( 'Payment Statuses', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select %s status' that an event must be at before employee payments can be made.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'        => 'multiple_select',
+						'options'     => mdjm_all_event_status(),
+						'std'         => array( 'completed' )
+					),
+					'employee_auto_pay_complete' => array(
+						'id'          => 'employee_auto_pay_complete',
+						'name'        => sprintf( __( 'Pay when %s Completes', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'        => sprintf( __( 'Enable this option to automatically pay employees once an %s completes.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'type'        => 'checkbox'
+					)
 				)
 			)
 		),
@@ -1238,6 +1267,7 @@ function mdjm_get_registered_settings_sections() {
 		) ),
 		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
+			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )

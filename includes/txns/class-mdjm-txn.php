@@ -40,6 +40,13 @@ class MDJM_Txn {
 	 * @since	1.3
 	 */
 	private $price = 0;
+	
+	/**
+	 * The transaction recipient
+	 *
+	 * @since	1.3
+	 */
+	private $recipient_id = 0;
 		
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
@@ -108,6 +115,7 @@ class MDJM_Txn {
 		}
 		
 		$this->get_price();
+		$this->get_recipient_id();
 				
 		return true;
 	} // setup_txn
@@ -222,6 +230,18 @@ class MDJM_Txn {
 		return $this->price;
 	} // get_price
 	
-	
+	/**
+	 * Retrieve the transaction price
+	 *
+	 * @since	1.3
+	 * @return	str Y-m-d H:i:s
+	 */
+	public function get_recipient_id() {
+		if ( empty( $this->recipient_id ) )	{
+			$this->recipient_id = get_post_meta( $this->ID, '_mdjm_payment_to', true );
+		}
+		
+		return $this->recipient_id;
+	} // get_recipient_id
 	
 } // class MDJM_Txn

@@ -71,7 +71,7 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 		
 	}
 	
-	$debug = sprintf( 'New venue %s (ID %s) added', $name, $venue_id );
+	$debug[] = sprintf( 'New venue %s (ID %s) added', $name, $venue_id );
 	
 	if( ! empty( $venue_meta ) )	{
 		

@@ -110,6 +110,9 @@ class MDJM_Upgrade	{
 			
 		if( $version < '1.3' )
 			$this->update_to_1_3();
+			
+		if( $version < '1.3.4' )
+			$this->update_to_1_3_4();
 		
 	} // execute_updates
 	
@@ -1440,6 +1443,23 @@ class MDJM_Upgrade	{
 		delete_option( 'mdjm_update_me' );
 		
 		MDJM()->debug->log_it( 'COMPLETED update to 1.3', true );
+	} // update_to_1_3
+	
+	/*
+	 * Execute upgrade for version 1.3.4
+	 *
+	 *
+	 *
+	 */
+	function update_to_1_3_4()	{
+		
+		MDJM()->debug->log_it( 'UPDATING to 1.3.4', true );
+		
+		include_once( 'update_to_1.3.4.php' );
+		
+		delete_option( 'mdjm_update_me' );
+		
+		MDJM()->debug->log_it( 'COMPLETED update to 1.3.4', true );
 	} // update_to_1_3
 	
 } // class
