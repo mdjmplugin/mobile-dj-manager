@@ -243,6 +243,10 @@ function mdjm_shortcode_playlist( $atts )	{
 	
 	global $mdjm_event;
 	
+	if ( isset( $_GET['mdjmeventid'] ) )	{
+		$_GET['guest_playlist'] = $_GET['mdjmeventid'];
+	}
+	
 	$visitor  = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
 	$output   = '';
 	$event_id = '';
