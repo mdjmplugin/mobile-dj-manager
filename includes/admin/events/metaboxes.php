@@ -650,7 +650,7 @@ function mdjm_event_metabox_event_employees( $post )	{
          */
         if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
             
-			if ( empty( get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) )	{
+			if ( ! get_post_meta( $post->ID, '_mdjm_event_dj', true ) )	{
 				$primary_employee_payment_status = false;
 			} else	{
 				$primary_employee_payment_status = mdjm_event_employees_paid( $post->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
