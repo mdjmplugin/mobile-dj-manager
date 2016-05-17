@@ -537,6 +537,10 @@ function mdjm_pay_event_employees( $event_id, $_employee_id = 0, $amount = 0 )	{
 	
 	foreach( $employees as $employee_id => $employee_data )	{
 		
+		if ( $employee_data['payment_status'] == 'paid' )	{
+			MDJM()->debug->log_it( sprintf( 'Skipping payment to %s. Employee already paid.', mdjm_get_employee_display_name( $employee_id ) ) );
+		}
+		
 		$mdjm_txn = new MDJM_Txn( $employee_data['txn_id'] );
 		
 		if ( ! $mdjm_txn )	{

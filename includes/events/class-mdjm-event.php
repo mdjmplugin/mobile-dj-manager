@@ -361,7 +361,7 @@ class MDJM_Event {
 					'role'		   => translate_user_role( $wp_roles->roles['dj']['name'] ),
 					'wage'		   => mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_event_dj_wage', true ) ),
 					'payment_status' => $payment_status,
-					'txn_id'         => ! empty( $payment_status ) ? $payment_status['txn_id'] : ''
+					'txn_id'         => ! empty( $payment_status['txn_id'] ) ? $payment_status['txn_id'] : ''
 				);
 				
 			}
@@ -377,7 +377,7 @@ class MDJM_Event {
 						'role'           => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
 						'wage'           => ! empty( $employee_data['wage'] ) ? $employee_data['wage'] : 0,
 						'payment_status' => ! empty( $employee_data['payment_status'] ) ? $employee_data['payment_status'] : 'unpaid',
-						'txn_id'         => $employee_data['txn_id']
+						'txn_id'         => ! empty( $employee_data['txn_id'] ) ? $employee_data['txn_id'] : ''
 					);
 					
 				}

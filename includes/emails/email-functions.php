@@ -23,7 +23,7 @@ function mdjm_send_email_content( $args )	{
 	global $current_user;
 	
 	$defaults = array(
-		'to_email'       => $current_user->user_email,
+		'to_email'       => is_user_logged_in() ? $current_user->user_email : mdjm_get_option( 'system_email' ),
 		'from_name'      => mdjm_get_option( 'company_name' ),
 		'from_email'     => mdjm_get_option( 'system_email' ),
 		'event_id'       => 0,
@@ -269,8 +269,6 @@ function mdjm_email_manual_payment_confirmation( $event_id )	{
 		$emails->__set( 'copy_to', mdjm_get_option( 'system_email' ) );
 	}
 	
-	$emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
-
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) );
 	
 } // mdjm_email_manual_payment_confirmation

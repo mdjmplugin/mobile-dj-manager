@@ -650,9 +650,13 @@ function mdjm_event_metabox_event_employees( $post )	{
          */
         if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
             
-			$primary_employee_payment_status = mdjm_event_employees_paid( $post->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+			if ( empty( get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) )	{
+				$primary_employee_payment_status = false;
+			} else	{
+				$primary_employee_payment_status = mdjm_event_employees_paid( $post->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+			}
 			
-			if ( mdjm_get_option( 'enable_employee_payments' ) && $primary_employee_payment_status == 'paid' || $primary_employee_payment_status == 'part-paid' )	{
+			if ( mdjm_get_option( 'enable_employee_payments' ) && $primary_employee_payment_status )	{
 				echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . mdjm_get_event_primary_employee( $post->ID ) . '" />' . "\r\n";
 				echo '<input type="hidden" name="event_dj" id="event_dj" value="' . mdjm_get_event_primary_employee( $post->ID ) . '" />' . "\r\n";
 				echo '<input type="text" value="' . mdjm_get_employee_display_name( get_post_meta( $post->ID, '_mdjm_event_dj', true ) ) . '" readonly="readonly" />' . "\r\n";

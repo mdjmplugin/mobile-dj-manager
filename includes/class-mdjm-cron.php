@@ -254,19 +254,19 @@ class MDJM_Cron	{
 		$cron_start = microtime(true);
 		
 		$args = array(
-					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
-					'post_status'	   => 'mdjm-approved',
-					'meta_key'		  => '_mdjm_event_date',
-					'orderby'		   => 'meta_value',
-					'order'			 => 'ASC',
-					'meta_query'		=> array(
-												'key'		=> '_mdjm_event_date',
-												'value'	  => date( 'Y-m-d' ),
-												'type' 	   => 'date',
-												'compare'	=> '<'
-											)
-					);
+			'posts_per_page'	=> -1,
+			'post_type'		 => MDJM_EVENT_POSTS,
+			'post_status'	   => 'mdjm-approved',
+			'meta_key'		  => '_mdjm_event_date',
+			'orderby'		   => 'meta_value',
+			'order'			 => 'ASC',
+			'meta_query'		=> array(
+				'key'		=> '_mdjm_event_date',
+				'value'	  => date( 'Y-m-d' ),
+				'type' 	   => 'date',
+				'compare'	=> '<'
+			)
+		);
 								
 		$events = get_posts( $args );
 		
@@ -298,6 +298,10 @@ class MDJM_Cron	{
 				
 				update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
 				update_post_meta( $event->ID, '_mdjm_event_tasks', json_encode( $cron_update ) );
+				
+				if ( mdjm_get_option( 'employee_auto_pay_complete' ) )	{
+					mdjm_pay_event_employees( $event->ID );
+				}
 				
 				/* -- Update Journal -- */
 				if( MDJM_JOURNAL == true )	{
