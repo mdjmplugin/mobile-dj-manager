@@ -132,8 +132,8 @@
 					'_mdjm_txn_total'       => ( $type == mdjm_get_balance_label() ) ? mdjm_format_amount( $mdjm_event->get_balance() ) : $mdjm_event->get_deposit(),
 					'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
 					'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
-					'_mdjm_payer_email'     => mdjm_get_client_lastname( $mdjm_event->client ),
-					'_mdjm_payment_from'    => mdjm_get_client_email( $mdjm_event->client )
+					'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+					'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client )
 				)
 			);			
 			
