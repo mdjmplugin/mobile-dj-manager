@@ -500,7 +500,13 @@ function mdjm_list_event_employees( $event_id )	{
 		$output .= '<tr>' . "\r\n";
 		$output .= '<th style="text-align:left; width:25%;">' . __( 'Role', 'mobile-dj-manager' ) . '</th>' . "\r\n";
 		$output .= '<th style="text-align:left; width:25%;">' . __( 'Employee', 'mobile-dj-manager' ) . '</th>' . "\r\n";
-		$output .= '<th style="text-align:left; width:20%;">' . __( 'Wage', 'mobile-dj-manager' ) . '</th>' . "\r\n";
+		$output .= '<th style="text-align:left; width:20%;">';
+			if( mdjm_get_option( 'enable_employee_payments' ) )	{
+				$output .= __( 'Wage', 'mobile-dj-manager' );
+			} else	{
+				$output .= '';
+			}
+		$output .= '</th>' . "\r\n";
 		$output .= '<th style="text-align:left; width:15%;">&nbsp;</th>' . "\r\n";
 		$output .= '<th style="text-align:left; width:15%;">&nbsp;</th>' . "\r\n";
 		$output .= '</tr>' . "\r\n";
@@ -513,19 +519,24 @@ function mdjm_list_event_employees( $event_id )	{
 				$output .= '<td style="text-align:left;">' . translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ) . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">' . $details->display_name . '</td>' . "\r\n";
 				$output .= '<td style="text-align:left;">';
-					if( mdjm_employee_can( 'manage_txns' ) )	{
+					if( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) )	{
 						$output .= mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) );
-					}
-					else	{
+					} elseif( ! mdjm_employee_can( 'manage_txns' ) )	{
 						$output .= '&mdash;';
+					} else	{
+						$output .= '';
 					}
 			$output .= '</td>' . "\r\n";
 			$output .= '<td style="text-align:left;">';
 			
 			if( mdjm_employee_can( 'mdjm_event_edit' ) )	{
-				$output .= sprintf( 
-					__( '<a class="remove_event_employee" href="" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
-				);
+				if ( mdjm_get_employees_event_payment_status( $event_id, $employee['id'] ) != 'paid' )	{
+					$output .= sprintf( 
+						__( '<a class="remove_event_employee" href="" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
+					);
+				} elseif ( mdjm_get_option( 'enable_employee_payments' ) )	{
+					$output .= __( 'Employee has been paid', 'mobile-dj-manager' );
+				}
 			} else	{
 				$output .= '';
 			}
@@ -559,6 +570,8 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	);
 	
 	$data = wp_parse_args( $args, $defaults );
+	
+	$data['wage'] = mdjm_format_amount( $data['wage'] );
 
 	// If we're missing data then we fail.
 	if( empty( $data['id'] ) || empty( $data['role'] ) )	{
@@ -571,6 +584,28 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	if ( empty( $employees ) )	{
 		$employees = array();
 	}
+	
+	$mdjm_txn = new MDJM_Txn();
+	
+	$mdjm_txn->create(
+		array(
+			'post_title'     => sprintf( __( 'Wage payment to %s for %d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $data['id'] ), $event_id ),
+			'post_status'    => 'mdjm-expenditure',
+			'post_author'    => 1,
+			'post_parent'    => $event_id
+		),
+		array(
+			'_mdjm_txn_status'    => 'Pending',
+			'_mdjm_payment_to'    => $data['id'],
+			'_mdjm_txn_total'     => mdjm_format_amount( $data['wage'] )
+		)
+	);
+	
+	if ( ! empty( $mdjm_txn ) )	{
+		$data['txn_id'] = $mdjm_txn->ID;
+	}
+	
+	mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-employee-wages' ) );
 	
 	array_push( $employees, $data['id'] );
 	$employees_data[ $data['id'] ] = $data;
@@ -594,7 +629,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
 	
 	$employees      = mdjm_get_event_employees( $event_id );
-	$employees_data	= mdjm_get_event_employees_data( $event_id );
+	$employees_data = mdjm_get_event_employees_data( $event_id );
 	
 	if ( empty( $employees ) )	{
 		$employees = array();
@@ -611,12 +646,19 @@ function mdjm_remove_employee_from_event( $employee_id, $event_id )	{
 	}
 	
 	if ( ! empty( $employees_data ) )	{
+		
+		remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
+		
 		foreach( $employees_data as $key => $employee_data )	{
 			if( $employee_data['id'] == $employee_id )	{
+				if ( ! empty( $employee_data['txn_id'] ) )	{
+					wp_delete_post( $employee_data['txn_id'] );
+				}
 				unset( $employees_data[ $key ] );
 			}
 		}
-		
+
+		add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 		update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data );
 
 	}
@@ -876,7 +918,9 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
 			
 			if ( $employee_data['id'] == $employee_id )	{
 				
-				$wage = $employee_data['wage'];
+				if ( ! empty ( $employee_data['wage'] ) )	{
+					$wage = $employee_data['wage'];
+				}
 				
 			}
 			
@@ -887,6 +931,44 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
 	return mdjm_format_amount( $wage );
 	
 } // mdjm_get_employees_event_wage
+
+/**
+ * Checks if event employees have been paid in full.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID.
+ * @param	int		$employee_id	User ID of employee to check
+ * @return	bool	True if all employees, or selected employee have been paid.
+ *					False if one employee, or the selected employee has not been paid.
+ *					If no employees are assigned, a true value is returned.
+ */
+function mdjm_event_employees_paid( $event_id, $employee_id = '' )	{
+	
+	$employees = mdjm_get_all_event_employees( $event_id );
+		
+	if ( empty( $employees ) )	{
+		return true;
+	}
+	
+	if ( ! empty( $employee_id ) )	{
+
+		if ( $employees[ $employee_id ]['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employees[ $employee_id ]['txn_id'], '_mdjm_txn_status', true ) )	{
+			return false;
+		}
+
+	} else	{
+		
+		foreach( $employees as $employee )	{
+			if ( $employee['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employee['txn_id'], '_mdjm_txn_status', true ) )	{
+				return false;
+			}
+		}
+		
+	}
+	
+	return true;
+	
+} // mdjm_event_employees_paid
 
 /**
  * Whether or not an employee has been paid for an event.
@@ -904,17 +986,23 @@ function mdjm_get_employees_event_payment_status( $event_id, $employee_id = '' )
 	
 	if ( $employee_id == mdjm_get_event_primary_employee( $event_id ) )	{
 		
-		$payment_status = get_post_meta( $event_id, '_mdjm_event_dj_wage_status', true );
+		$payment_data   = get_post_meta( $event_id, '_mdjm_event_dj_payment_status', true );
+		
+		$payment_status = empty( $payment_data ) ? 'unpaid' : $payment_data['payment_status'];
 	
 	} else	{
 		
 		$employees_data = mdjm_get_event_employees_data( $event_id );
 		
-		foreach( $employees_data as $employee_data )	{
-			
-			if ( $employee_data['id'] == $employee_id )	{
+		if ( ! empty( $employees_data ) )	{
+		
+			foreach( $employees_data as $employee_data )	{
 				
-				$payment_status = $employee_data['payment_status'];
+				if ( $employee_data['id'] == $employee_id )	{
+					
+					$payment_status = $employee_data['payment_status'];
+					
+				}
 				
 			}
 			
@@ -925,3 +1013,236 @@ function mdjm_get_employees_event_payment_status( $event_id, $employee_id = '' )
 	return $payment_status;
 	
 } // mdjm_get_employees_event_payment_status
+
+/**
+ * Mark an event employee as paid.
+ *
+ * @since	1.3
+ * @param	int		$employee_id	User ID of employee
+ * @param	int		$event_id		Event ID
+ * @param	int		$txn_id			The transaction ID associated with this payment.
+ * @return	bool	True if payment data updated for event employee, otherwise false.
+ */
+function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
+	
+	global $wp_roles;
+	
+	if ( ! mdjm_get_option( 'enable_employee_payments' ) )	{
+		return;
+	}
+	
+	if ( ! mdjm_is_employee( $employee_id ) )	{
+		error_log( '111', 0 );
+		return false;
+	}
+	
+	$return = false;
+	
+	if ( $employee_id == mdjm_get_event_primary_employee( $event_id ) )	{
+
+		/**
+		 *
+		 * Hook fires before marking event employee as paid.
+		 *
+		 * @since	1.3
+		 * @param	int	$event_id	The event ID.
+		 */
+		do_action( "mdjm_pre_mdjm_set_employee_paid_{$employee_id}", $event_id );
+		
+		$role    = 'dj';
+		$payment = mdjm_get_txn_price( $txn_id );
+		
+		$payment_data = get_post_meta( $event_id, '_mdjm_event_dj_payment_status', true );
+		
+		$payment_data['payment_status'] = mdjm_get_employees_event_wage( $event_id, $employee_id ) > $payment ? 'part-paid' : 'paid';
+		$payment_data['payment_date']   = current_time( 'mysql' );
+		$payment_data['txn_id']         = $txn_id;
+		$payment_data['payment_amount'] = $payment;
+
+		$payment_update = update_post_meta( $event_id, '_mdjm_event_dj_payment_status', $payment_data );
+			
+		if ( ! empty( $payment_update ) )	{
+			
+			MDJM()->debug->log_it( sprintf( '%s successfully paid %s for Event %d',
+				mdjm_get_employee_display_name( $employee_id ), mdjm_currency_filter( mdjm_get_txn_price( $txn_id ) ), $event_id ) );
+			
+			$return = true;
+			
+		} else	{
+			MDJM()->debug->log_it( sprintf( 'Unable to pay %s for Event %d', mdjm_get_employee_display_name( $employee_id ), $event_id ) );
+			error_log( '111', 0 );
+			$return = false;
+		}
+
+	} else	{
+	
+		$payment_data = get_post_meta( $event_id, '_mdjm_event_employees_data', true );
+		
+		if ( ! mdjm_employee_working_event( $event_id, $employee_id ) )	{
+	
+			MDJM()->debug->log_it( 'Employee not working this event' );
+			error_log( '333', 0 );
+			return false;
+	
+		} else	{
+			
+			/**
+			 *
+			 * Hook fires before marking event employee as paid.
+			 *
+			 * @since	1.3
+			 * @param	int	$event_id	The event ID.
+			 */
+			do_action( "mdjm_pre_mdjm_set_employee_paid_{$employee_id}", $event_id );
+			
+			$role    = $payment_data[ $employee_id ]['role'];
+			$payment = mdjm_get_txn_price( $payment_data[ $employee_id ]['txn_id'] );
+			
+			$payment_data[ $employee_id ]['payment_status'] = mdjm_get_employees_event_wage( $event_id, $employee_id ) > $payment ? 'part-paid' : 'paid';
+			$payment_data[ $employee_id ]['payment_date']   = current_time( 'mysql' );
+			$payment_data[ $employee_id ]['payment_amount'] = $payment;
+			
+			$payment_update = mdjm_update_txn_meta( $payment_data[ $employee_id ]['txn_id'], array( '_mdjm_txn_status' => 'Completed' ) );
+
+			if ( ! empty( $payment_update ) )	{
+				$payment_update = update_post_meta( $event_id, '_mdjm_event_employees_data', $payment_data );
+			}
+			
+			if ( ! empty( $payment_update ) )	{
+				
+				MDJM()->debug->log_it( sprintf( '%s successfully paid %s for Event %d',
+					mdjm_get_employee_display_name( $employee_id ), mdjm_currency_filter( mdjm_get_txn_price( $txn_id ) ), $event_id ) );
+				
+				$return = true;
+				
+			} else	{
+				
+				MDJM()->debug->log_it( sprintf( 'Unable to pay %s for Event %d', mdjm_get_employee_display_name( $employee_id ), $event_id ) );
+				
+				$return = false;
+	
+			}
+			
+		}
+			
+	}
+	
+	if ( ! empty( $return ) )	{
+		
+		$journal_args = array(
+			'user_id'          => 1,
+			'event_id'         => $event_id,
+			'comment_content'  => sprintf( __( 'Employee %s paid %s for their role as %s', 'mobile-dj-manager' ),
+				mdjm_get_employee_display_name( $employee_id ), $payment, translate_user_role( $wp_roles->roles[ $role ]['name'] ) ),
+			'comment_type'     => 'mdjm-journal',
+			'comment_date'     => current_time( 'timestamp' )
+		);
+		
+		$journal_meta = array(
+			'mdjm_visibility'   => ! empty( $meta['visibility'] ) ? $meta['visibility'] : '2'
+		);
+		
+		mdjm_add_journal( $journal_args, $journal_meta );
+		
+		/**
+		 *
+		 * Hook fires after successfully marking event employee as paid.
+		 *
+		 * @since	1.3
+		 * @param	int	$event_id	The event ID.
+		 * @param	int	$txn_id		The transaction ID associated with the payment
+		 */
+		do_action( "mdjm_post_mdjm_set_employee_paid_{$employee_id}", $event_id, $txn_id );
+	}
+	
+	return $return;
+	
+} // mdjm_set_employee_paid
+
+/**
+ * Log the primary employees payment settings and update if employee or wage changes.
+ *
+ * @since	1.3
+ * @param	int			$event_id	Event ID.
+ * @param	arr			$old_meta	Old meta values from before event save.
+ * @param	arr			$new_meta	New meta values after event save.
+ * @return	void
+ */
+function mdjm_manage_primary_employee_payment_status( $event_id, $old_meta, $new_meta )	{
+
+	if ( ! mdjm_get_option( 'enable_employee_payments' ) )	{
+		return;
+	}
+
+	$mdjm_event = new MDJM_Event( $event_id );
+	
+	$employee_id    = $mdjm_event->get_employee();
+	
+	if ( empty( $employee_id ) )	{
+		return;
+	}
+	
+	$payment_amount = mdjm_get_employees_event_wage( $event_id, $employee_id );
+	$payment_status = get_post_meta( $event_id, '_mdjm_event_dj_payment_status', true );
+	
+	if ( empty( $payment_status ) )	{
+		
+		if ( empty( $payment_amount ) || $payment_amount < 1 )	{
+			return;
+		}
+
+		$mdjm_txn = new MDJM_Txn();
+
+		$mdjm_txn->create(
+			array(
+				'post_title'     => sprintf( __( 'Wage payment to %s for %d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $employee_id ), $event_id ),
+				'post_status'    => 'mdjm-expenditure',
+				'post_author'    => 1,
+				'post_parent'    => $event_id
+			),
+			array(
+				'_mdjm_txn_status'    => 'Pending',
+				'_mdjm_payment_to'    => $employee_id,
+				'_mdjm_txn_total'     => $payment_amount
+			)
+		);
+
+		if ( ! empty( $mdjm_txn ) )	{
+			$data['txn_id'] = $mdjm_txn->ID;
+		}
+
+		mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-employee-wages' ) );
+		
+		$payment_data = array(
+			'payment_status' => 'unpaid',
+			'payment_date'   => '',
+			'txn_id'         => $mdjm_txn->ID,
+			'payment_amount' => ''
+		);
+		
+		update_post_meta( $event_id, '_mdjm_event_dj_payment_status', $payment_data );
+		
+	} else	{
+				
+		if ( $payment_status['payment_status'] == 'paid' )	{
+			return;
+		}
+		
+		if ( in_array( $mdjm_event->post_status, array( 'mdjm-cancelled', 'mdjm-rejected', 'mdjm-failed' ) ) )	{
+			update_post_meta( $mdjm_txn->ID, '_mdjm_txn_status', 'Cancelled' );
+		}
+		
+		$mdjm_txn = new MDJM_Txn( $payment_status['txn_id'] );
+		
+		if ( $mdjm_txn->recipient_id != $employee_id )	{
+			update_post_meta( $mdjm_txn->ID, '_mdjm_payment_to', $employee_id );
+		}
+		
+		if ( $payment_amount != $mdjm_txn->price )	{
+			update_post_meta( $mdjm_txn->ID, '_mdjm_txn_total', $payment_amount );
+		}
+		
+	}
+	
+} // mdjm_manage_primary_employee_payment_status
+add_action( 'mdjm_primary_employee_payment_status', 'mdjm_manage_primary_employee_payment_status', 10, 3 );

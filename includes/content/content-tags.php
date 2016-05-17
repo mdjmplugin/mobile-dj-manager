@@ -523,6 +523,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_guest_playlist_url'
 		),
 		array(
+			'tag'         => 'part_payment_label',
+			'description' => 'The label used for Part Payments. i.e. Not the full amount',
+			'function'    => 'mdjm_content_tag_part_payment_label'
+		),
+		array(
 			'tag'         => 'payment_history',
 			'description' => __( 'An overview of payments made by the client for the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_payment_history'
@@ -1094,7 +1099,7 @@ function mdjm_content_tag_client_password( $event_id='', $client_id='' )	{
  * @return	str		Event admin notes.
  */
 function mdjm_content_tag_admin_notes( $event_id='' )	{	
-	return !empty( $event_id ) ? get_post_meta( $event_id, '_mdjm_admin_notes', true ) : '';
+	return ! empty( $event_id ) ? get_post_meta( $event_id, '_mdjm_event_admin_notes', true ) : '';
 } // mdjm_content_tag_admin_notes
 
 /**
@@ -1122,8 +1127,8 @@ function mdjm_content_tag_balance( $event_id='' )	{
 } // mdjm_content_tag_balance
 
 /**
- * Content tag: balance.
- * The label used for balance.
+ * Content tag: balance_label.
+ * The label used for the balance label term.
  *
  * @param
  * @param
@@ -1612,7 +1617,7 @@ function mdjm_content_tag_event_description( $event_id='' )	{
 		return '';
 	}
 		
-	$return = get_post_meta( $event_id, '_mdjm_event_description', true );
+	$return = get_post_meta( $event_id, '_mdjm_event_notes', true );
 		
 	return $return;
 } // mdjm_content_tag_event_description
@@ -1762,6 +1767,19 @@ function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
 		
 	return $return;
 } // mdjm_content_tag_guest_playlist_url
+
+/**
+ * Content tag: part_payment_label.
+ * The label used for part payments.
+ *
+ * @param
+ * @param
+ *
+ * @return	str		The label used for part payments.
+ */
+function mdjm_content_tag_part_payment_label()	{	
+	return mdjm_get_other_amount_label();
+} // mdjm_content_tag_part_payment_label
 
 /**
  * Content tag: payment_history.

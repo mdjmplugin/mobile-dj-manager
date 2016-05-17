@@ -347,7 +347,7 @@
 			$user_type = !empty( $user_type ) ? $user_type : 'client';
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
+						'post_type' 		=> 'mdjm-event',
 						'post_status'	  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
 						'posts_per_page'   => 1,
 						'meta_key'		 => '_mdjm_event_date',

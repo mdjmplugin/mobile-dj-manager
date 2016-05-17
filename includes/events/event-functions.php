@@ -740,6 +740,19 @@ function mdjm_get_event_client_id( $event_id )	{
 } // mdjm_get_event_client_id
 
 /**
+ * Retrieve the event employees.
+ *
+ * @since	1.3
+ * @param	int		$event_id
+ * @return	arr		Array of all event employees and data.
+ */
+function mdjm_get_all_event_employees( $event_id )	{
+	$mdjm_event = new MDJM_Event( $event_id );
+	
+	return $mdjm_event->get_all_employees();
+} // mdjm_get_event_employees
+
+/**
  * Returns the primary employee ID.
  *
  * @since	1.3
@@ -833,16 +846,17 @@ function mdjm_time_until_event( $event_id )	{
  * @since	1.3
  * @param	int		$event_id	The event ID.
  * @param	arr		$data		The appropriately formatted meta data values.
- * @return	void
+ * @return	mixed	See get_post_meta()
  */
 function mdjm_update_event_meta( $event_id, $data )	{
 	
-	do_action( 'mdjm_pre_update_event_meta', $data, $event_id );
+	do_action( 'mdjm_pre_update_event_meta', $event_id, $data );
 	
 	// For backwards compatibility
 	$current_meta = get_post_meta( $event_id );
 	
-	$meta = get_post_meta( $event_id, '_mdjm_event_data', true );
+	$debug = array();
+	$meta  = get_post_meta( $event_id, '_mdjm_event_data', true );
 	
 	foreach( $data as $key => $value )	{
 		
@@ -851,7 +865,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		}
 		
 		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
-			$value = mdjm_format_amount( $value );
+			$value = mdjm_format_amount( $value );			
 		} elseif( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
 		} elseif( $key == '_mdjm_event_venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
@@ -896,7 +910,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		
 	}
 	
-	update_post_meta( $event_id, '_mdjm_event_data', $meta );
+	$update = update_post_meta( $event_id, '_mdjm_event_data', $meta );
 	
 	$journal_args = array(
 		'user_id'          => is_user_logged_in() ? get_current_user_id() : 1,
@@ -908,7 +922,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	
 	mdjm_add_journal( $journal_args );
 	
-	do_action( 'mdjm_post_update_event_meta', $meta, $event_id );
+	do_action( 'mdjm_primary_employee_payment_status', $event_id, $current_meta, $data );
+	do_action( 'mdjm_post_update_event_meta', $event_id, $current_meta, $data, $meta );
 	
 	if ( ! empty( $debug ) )	{
 		
@@ -917,6 +932,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		}
 		
 	}
+	
+	return $update;
 	
 } // mdjm_update_event_meta
 
@@ -930,43 +947,44 @@ function mdjm_update_event_meta( $event_id, $data )	{
 function mdjm_event_get_meta_label( $key )	{
 	
 	$keys = array(
-		'_mdjm_event_name'              => sprintf( __( '%s Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_date'              => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_start'             => __( 'Start Time', 'mobile-dj-manager' ),
-		'_mdjm_event_finish'            => __( 'End Time', 'mobile-dj-manager' ),
-		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
 		'_mdjm_event_addons'            => __( 'Add-ons', 'mobile-dj-manager' ),
-		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
-		'_mdjm_event_notes'             => __( 'Description', 'mobile-dj-manager' ),
-		'_mdjm_event_client'            => __( 'Client', 'mobile-dj-manager' ),
-		'_mdjm_event_enquiry_source'    => __( 'Enquiry Source', 'mobile-dj-manager' ),
-		'_mdjm_event_cost'              => __( 'Total Cost', 'mobile-dj-manager' ),
-		'_mdjm_event_deposit'           => mdjm_get_deposit_label(),
-		'_mdjm_event_venue_id'          => __( 'Venue ID', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_name'        => __( 'Venue Name', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_contact'     => __( 'Venue Contact', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_phone'       => __( 'Venue Phone Number', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_email'       => __( 'Venue Email Address', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_address1'    => __( 'Venue Address Line 1', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_address2'    => __( 'Venue Address Line 2', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_town'        => __( 'Venue Post Town', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_county'      => __( 'Venue County', 'mobile-dj-manager' ),
-		'_mdjm_event_venue_postcode'    => __( 'Venue Post Code', 'mobile-dj-manager' ),
-		'_mdjm_event_contract'          => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
-		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
-		'_mdjm_event_dj'                => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ) ),
-		'_mdjm_event_djsetup_time'      => sprintf( __( '%s Setup Time', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_djsetup_date'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_deposit_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+		'_mdjm_event_admin_notes'       => __( 'Admin Notes', 'mobile-dj-manager' ),
 		'_mdjm_event_balance_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_balance_label() ),
+		'_mdjm_event_client'            => __( 'Client', 'mobile-dj-manager' ),
+		'_mdjm_event_contract'          => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_contract_approved' => __( 'Contract Approved Date', 'mobile-dj-manager' ),
 		'_mdjm_event_contract_approver' => __( 'Contract Approved By', 'mobile-dj-manager' ),
-		'_mdjm_event_employees'         => __( 'Employees', 'mobile-dj-manager' ),
-		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
-		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
+		'_mdjm_event_cost'              => __( 'Total Cost', 'mobile-dj-manager' ),
+		'_mdjm_event_date'              => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_deposit'           => mdjm_get_deposit_label(),
+		'_mdjm_event_deposit_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+		'_mdjm_event_dj'                => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ) ),
 		'_mdjm_event_dj_notes'          => __( 'Employee Notes', 'mobile-dj-manager' ),
-		'_mdjm_event_admin_notes'       => __( 'Admin Notes', 'mobile-dj-manager' )
+		'_mdjm_event_dj_payment_status' => sprintf( __( 'Primary Employee %s Payment Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_djsetup_date'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_djsetup_time'      => sprintf( __( '%s Setup Time', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_dj_wage'           => sprintf( __( 'Primary Employee %s Wage', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_employees'         => __( 'Employees', 'mobile-dj-manager' ),
+		'_mdjm_event_employees_data'    => __( 'Employees Payment Data', 'mobile-dj-manager' ),
+		'_mdjm_event_enquiry_source'    => __( 'Enquiry Source', 'mobile-dj-manager' ),
+		'_mdjm_event_finish'            => __( 'End Time', 'mobile-dj-manager' ),
+		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
+		'_mdjm_event_name'              => sprintf( __( '%s Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_notes'             => __( 'Description', 'mobile-dj-manager' ),
+		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
+		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
+		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
+		'_mdjm_event_start'             => __( 'Start Time', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_address1'    => __( 'Venue Address Line 1', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_address2'    => __( 'Venue Address Line 2', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_contact'     => __( 'Venue Contact', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_county'      => __( 'Venue County', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_email'       => __( 'Venue Email Address', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_id'          => __( 'Venue ID', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_name'        => __( 'Venue Name', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_phone'       => __( 'Venue Phone Number', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_postcode'    => __( 'Venue Post Code', 'mobile-dj-manager' ),
+		'_mdjm_event_venue_town'        => __( 'Venue Post Town', 'mobile-dj-manager' )
 	);
 	
 	$keys = apply_filters( 'mdjm_event_meta_labels', $keys );

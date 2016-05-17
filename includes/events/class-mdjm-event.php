@@ -354,11 +354,14 @@ class MDJM_Event {
 			
 			if ( ! empty( $this->employee_id ) )	{
 				
+				$payment_status = get_post_meta( $this->ID, '_mdjm_event_dj_payment_status', true );
+				
 				$employees[ $this->employee_id ] = array( 
 					'role_slug'	  => 'dj',
 					'role'		   => translate_user_role( $wp_roles->roles['dj']['name'] ),
 					'wage'		   => mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_event_dj_wage', true ) ),
-					'payment_status' => get_post_meta( $this->ID, '_mdjm_event_dj_wage_status', true )
+					'payment_status' => $payment_status,
+					'txn_id'         => ! empty( $payment_status['txn_id'] ) ? $payment_status['txn_id'] : ''
 				);
 				
 			}
@@ -373,7 +376,8 @@ class MDJM_Event {
 						'role_slug'      => $employee_data['role'],
 						'role'           => translate_user_role( $wp_roles->roles[ $employee_data['role'] ]['name'] ),
 						'wage'           => ! empty( $employee_data['wage'] ) ? $employee_data['wage'] : 0,
-						'payment_status' => ! empty( $employee_data['payment_status'] ) ? $employee_data['payment_status'] : 'unpaid'
+						'payment_status' => ! empty( $employee_data['payment_status'] ) ? $employee_data['payment_status'] : 'unpaid',
+						'txn_id'         => ! empty( $employee_data['txn_id'] ) ? $employee_data['txn_id'] : ''
 					);
 					
 				}

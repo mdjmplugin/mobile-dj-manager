@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains all role functions.
+ * Contains all Client Zone functions.
  *
  * @package		MDJM
  * @subpackage	Client Zone

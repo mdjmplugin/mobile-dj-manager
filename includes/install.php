@@ -649,6 +649,8 @@ function mdjm_run_install()	{
 
 	}
 
+	$options['employee_pay_status'] = array( 'mdjm-completed' );
+
 	$merged_options = array_merge( $mdjm_options, $options );
 	$mdjm_options   = $merged_options;
 

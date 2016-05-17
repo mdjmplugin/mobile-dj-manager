@@ -190,10 +190,25 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
 		)
 	);
 	
-	$events = get_posts( $args );
+	$events = mdjm_get_events( $args );
 	
 	return $events;
 } // mdjm_get_client_events
+
+/**
+ * Retrieve the client's next event.
+ *
+ * @since	1.3
+ * @param	int	$client_id	The user ID for the client.
+ * @return	WP_Post object for clients next event, or false
+ */
+function mdjm_get_clients_next_event( $client_id = '' )	{
+	
+	$client_id = ! empty( $client_id ) ? $client_id : get_current_user_id();
+	
+	return MDJM()->events->next_event( $client_id, 'client' );
+	
+} // mdjm_get_clients_next_event
 
 /**
  * Check whether the user is a client.

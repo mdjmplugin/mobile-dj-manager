@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/donate/
@@ -75,6 +75,29 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.4 =
+
+* **New**: Record employee event payments feature. See [Employee Event Payments](http://mdjm.co.uk/docs/employee-event-payments/ "MDJM Employee Event Payments")
+* **New**: Added setting **Communicate Active Events Only**. If checked, only active events will be displayed on the communication screen
+* **New**: Added `{available_addons}` and `{available_addons_cost}` content tags. See [Content Tags](http://mdjm.co.uk/docs/content-tags/ "Content Tags Available with MDJM Event Management")
+* **New**: Added `mdjm_get_clients_next_event()` function
+* **Bug Fix**: Issue #36. Saving venue within event can generate fatal error
+* **Bug Fix**: Issue #30. Content tag `{event_addons_cost}` missing
+* **Bug Fix**: Issue #31. Content tag `{event_package_cost}` missing
+* **Bug Fix**: Issue #32. Bulk sending transactions to trash generates error
+* **Bug Fix**: Missing close tag in event-none template file
+* **Bug Fix**: Issue #33. Playlist page throws an error by design if no event_id is present
+* **Bug Fix**: Issue #35. Shortcodes shouldn't use wp_die()
+* **Bug Fix**: Issue #37. Content tags `{payment_for}` `{payment_amount}` `{payment_date}` missing for manual transactions
+* **Bug Fix**: Issue #38. Content tags `{event_description}` `{admin_notes}` not generating output
+* **Bug Fix**: Writing client email address instead of display_name to post meta
+* **Bug Fix**: Issue #39. Check for `mdjmeventid` on guest playlist access to maintain backwards compatibility for existing events
+* **Tweak**: Improved license handler class
+* **Tweak**: Renamed core.php to plugins.php
+* **Tweak**: Removed use of deprecated `MDJM_EVENT_POSTS` constant
+* **Tweak**: Stripslashes from subject of communication page emails
+
+
 = 1.3.3 =
 
 * **Bug Fix**: Client contact link should auto set recipient on communication page
@@ -668,3 +691,8 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: The Year drop down list within the Availability page was showing blank instead of 2015
 	* **Bug Fix**: If you had your WordPress Permalink Settings set to the default of **Default** (also referred to as "Ugly") the Client Zone links did not work correctly for Clients when logged in
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
+
+== Upgrade Notice ==
+
+= 1.3.4 =
+This version addresses an issue that may result in a fatal error when selecting to save a venue during event updates. Update immediately.
