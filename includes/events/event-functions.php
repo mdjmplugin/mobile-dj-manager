@@ -740,6 +740,19 @@ function mdjm_get_event_client_id( $event_id )	{
 } // mdjm_get_event_client_id
 
 /**
+ * Retrieve the event employees.
+ *
+ * @since	1.3
+ * @param	int		$event_id
+ * @return	arr		Array of all event employees and data.
+ */
+function mdjm_get_all_event_employees( $event_id )	{
+	$mdjm_event = new MDJM_Event( $event_id );
+	
+	return $mdjm_event->get_all_employees();
+} // mdjm_get_event_employees
+
+/**
  * Returns the primary employee ID.
  *
  * @since	1.3
@@ -842,7 +855,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	// For backwards compatibility
 	$current_meta = get_post_meta( $event_id );
 	
-	$meta = get_post_meta( $event_id, '_mdjm_event_data', true );
+	$debug = array();
+	$meta  = get_post_meta( $event_id, '_mdjm_event_data', true );
 	
 	foreach( $data as $key => $value )	{
 		
@@ -949,6 +963,7 @@ function mdjm_event_get_meta_label( $key )	{
 		'_mdjm_event_dj_payment_status' => sprintf( __( 'Primary Employee %s Payment Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_djsetup_date'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_djsetup_time'      => sprintf( __( '%s Setup Time', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_dj_wage'           => sprintf( __( 'Primary Employee %s Wage', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_employees'         => __( 'Employees', 'mobile-dj-manager' ),
 		'_mdjm_event_employees_data'    => __( 'Employees Payment Data', 'mobile-dj-manager' ),
 		'_mdjm_event_enquiry_source'    => __( 'Enquiry Source', 'mobile-dj-manager' ),

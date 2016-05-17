@@ -614,7 +614,7 @@ function mdjm_event_metabox_event_details( $post )	{
 	<!-- End of fifth row -->
 	<?php
 	// Update event deposit when manually updating cost field
-	if( ( mdjm_get_option( 'deposit_type' ) ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
+	if ( mdjm_get_option( 'deposit_type' ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) 	{
@@ -650,7 +650,7 @@ function mdjm_event_metabox_event_employees( $post )	{
          */
         if( mdjm_get_option( 'employer' ) == true && mdjm_employee_can( 'manage_employees' ) )	{
             
-			$primary_employee_payment_status = mdjm_get_employees_event_payment_status( $post->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
+			$primary_employee_payment_status = mdjm_event_employees_paid( $post->ID, get_post_meta( $post->ID, '_mdjm_event_dj', true ) );
 			
 			if ( mdjm_get_option( 'enable_employee_payments' ) && $primary_employee_payment_status == 'paid' || $primary_employee_payment_status == 'part-paid' )	{
 				echo '<input type="hidden" name="_mdjm_event_dj" id="_mdjm_event_dj" value="' . mdjm_get_event_primary_employee( $post->ID ) . '" />' . "\r\n";
@@ -728,7 +728,7 @@ function mdjm_event_metabox_event_employees( $post )	{
      * if the current user is allowed to manage users
      */
      
-    if( mdjm_employee_can( 'manage_employees' ) )	{
+    if( mdjm_employee_can( 'manage_employees' ) && ! in_array( $post->post_status, array( 'mdjm-completed', 'mdjm-failed', 'mdjm-rejected' ) ) )	:
         ?>
         <div class="mdjm-post-row">
             <div class="mdjm-post-3column">
@@ -790,13 +790,13 @@ function mdjm_event_metabox_event_employees( $post )	{
                 <a href="#" id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
             </div>
         </div>
+	<?php endif; ?>
         
-        <?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
+        <?php if ( mdjm_get_option( 'enable_employee_payments' ) && in_array( $post->post_status, mdjm_get_option( 'employee_pay_status' ) ) && mdjm_employee_can( 'manage_txns' ) && ! mdjm_event_employees_paid( $post->ID ) ) : ?>
             <p style="text-align: right"><a href="<?php echo wp_nonce_url( add_query_arg( array( 'mdjm-action' => 'pay_event_employees', 'event_id' => $post->ID ), admin_url( 'admin.php' ) ), 'pay_event_employees', 'mdjm_nonce' ); ?>" id="pay_event_employees" class="button button-secondary button-small"><?php printf( __( 'Pay %s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         <?php endif; ?>
     
     <?php
-    }
 } // mdjm_event_metabox_event_employees
 
 /**

@@ -7,10 +7,10 @@
  * @param
  * @return.
  */
-function mdjm_run_update_14()	{
+function mdjm_run_update_134()	{
 
-	mdjm_update_option( 'employee_pay_status', array( 'completed' ) );
+	mdjm_update_option( 'employee_pay_status', array( 'mdjm-completed' ) );
 
 }
-add_action( 'init', 'mdjm_run_update_14', 15 );
+add_action( 'init', 'mdjm_run_update_134', 15 );
 

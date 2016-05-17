@@ -933,6 +933,44 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
 } // mdjm_get_employees_event_wage
 
 /**
+ * Checks if event employees have been paid in full.
+ *
+ * @since	1.3
+ * @param	int		$event_id		The event ID.
+ * @param	int		$employee_id	User ID of employee to check
+ * @return	bool	True if all employees, or selected employee have been paid.
+ *					False if one employee, or the selected employee has not been paid.
+ *					If no employees are assigned, a true value is returned.
+ */
+function mdjm_event_employees_paid( $event_id, $employee_id = '' )	{
+	
+	$employees = mdjm_get_all_event_employees( $event_id );
+		
+	if ( empty( $employees ) )	{
+		return true;
+	}
+	
+	if ( ! empty( $employee_id ) )	{
+
+		if ( $employees[ $employee_id ]['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employees[ $employee_id ]['txn_id'], '_mdjm_txn_status', true ) )	{
+			return false;
+		}
+
+	} else	{
+		
+		foreach( $employees as $employee )	{
+			if ( $employee['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employee['txn_id'], '_mdjm_txn_status', true ) )	{
+				return false;
+			}
+		}
+		
+	}
+	
+	return true;
+	
+} // mdjm_event_employees_paid
+
+/**
  * Whether or not an employee has been paid for an event.
  *
  * @since	1.3

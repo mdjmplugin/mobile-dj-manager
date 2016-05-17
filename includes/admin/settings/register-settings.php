@@ -1075,7 +1075,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select %s status' that an event must be at before employee payments can be made.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'multiple_select',
 						'options'     => mdjm_all_event_status(),
-						'std'         => array( 'completed' )
+						'std'         => array( 'mdjm-completed' )
 					),
 					'employee_auto_pay_complete' => array(
 						'id'          => 'employee_auto_pay_complete',

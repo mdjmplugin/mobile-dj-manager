@@ -517,6 +517,10 @@ function mdjm_update_txn_meta( $txn_id, $data )	{
  */
 function mdjm_pay_event_employees( $event_id, $_employee_id = 0, $amount = 0 )	{
 	
+	if ( ! mdjm_get_option( 'enable_employee_payments' ) )	{
+		return;
+	}
+	
 	$mdjm_event = mdjm_get_event( $event_id );
 	
 	if ( ! $mdjm_event )	{
