@@ -747,7 +747,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 			
 		foreach( MDJM_Employee_Manager::$mdjm_roles as $role_id => $role )	{
 			if( $role_id !== 'administrator' )	{
-				$actions['add_role_' . $role_id] = 'Add ' . $role . ' Role';
+				$actions['add_role_' . $role_id] = sprintf( __( 'Add %s Role', 'mobile-dj-manager' ), $role );
 			}
 		}
 		
