@@ -270,10 +270,10 @@ function mdjm_send_comm_email( $data )	{
 		if ( mdjm_send_email_content( $email_args ) )	{
 			$message = 'comm_sent';
 			
-			if ( ! empty( $data['mdjm_email_reject_reason'] ) )	{
-				
+			if ( ! empty( $data['mdjm_event_reject'] ) )	{
+								
 				$args = array(
-					'reject_reason' => $data['mdjm_email_reject_reason']
+					'reject_reason' => ! empty( $data['mdjm_email_reject_reason'] ) ? $data['mdjm_email_reject_reason'] : __( 'No reason specified', 'mobile-dj-manager' )
 				);
 				
 				mdjm_update_event_status( $email_args['event_id'], 'mdjm-rejected', get_post_status( $email_args['event_id'] ), $args );
@@ -309,6 +309,7 @@ function mdjm_add_reject_reason_field()	{
     $output .= '<th scope="row"><label for="mdjm_email_reject_reason">' . __( 'Rejection Reason', 'mobile-dj-manager' ) . '</label></th>';
 	$output .= '<td><textarea name="mdjm_email_reject_reason" id="mdjm_email_reject_reason" cols="50" rows="3" clas="class="large-text code"></textarea>';
 	$output .= '<p class="description">' . __( 'Optional. If completed, this entry will be added to the event journal.', 'mobile-dj-manager' ) . '</p>';
+	$output .= '<input type="hidden" name="mdjm_event_reject" id="mdjm_event_reject" value="1" />';
 	$output .= '</td>';
     $output .= '</tr>';
 	
