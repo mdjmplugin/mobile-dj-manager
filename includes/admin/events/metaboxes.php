@@ -546,7 +546,9 @@ function mdjm_event_metabox_event_details( $post )	{
 							if( get_post_meta( $post->ID, '_mdjm_event_dj', true ) == $dj_with_package )	{
 								echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
 								selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
-								echo '>' . esc_attr( $package['name'] ) . '</option>' . "\r\n";
+								echo '>' . esc_attr( $package['name'] );
+								echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
+								echo '</option>' . "\r\n";
 							}	
 						}
 					}
@@ -554,7 +556,9 @@ function mdjm_event_metabox_event_details( $post )	{
 					else	{
 						echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
 						selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
-						echo '>' . esc_attr( $package['name'] ) . '</option>' . "\r\n";	
+						echo '>' . esc_attr( $package['name'] );
+						echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
+						echo '</option>' . "\r\n";
 					}
 				}
 				?>
