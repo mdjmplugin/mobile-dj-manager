@@ -245,6 +245,81 @@ function mdjm_event_bulk_action_list( $actions )	{
 add_filter( 'bulk_actions-edit-mdjm-event', 'mdjm_event_bulk_action_list' );
 
 /**
+ * Adds custom bulk actions.
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_event_add_reject_bulk_actions()	{
+	
+	global $post;
+	
+	$current_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : false;
+	
+	if ( $post->post_type != 'mdjm-event' || $current_status != 'mdjm-unattended' )	{
+		return;
+	}
+	
+	?>
+    <script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('<option>').val('reject_enquiry').text('<?php _e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action']");
+		jQuery('<option>').val('reject_enquiry').text('<?php _e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action2']");
+	});
+	</script>
+    <?php
+	
+} // mdjm_event_add_custom_bulk_actions
+add_action( 'admin_footer-edit.php', 'mdjm_event_add_reject_bulk_actions' );
+
+/**
+ * Process reject enquiry bulk action requests.
+ *
+ * @since	1.3
+ * @param
+ * @return
+ */
+function mdjm_event_instant_reject()	{
+
+	if ( ! isset( $_REQUEST['post_status'] ) || $_REQUEST['post_status'] != 'mdjm-unattended' || isset( $_REQUEST['mdjm-message'] ) )	{
+		return;
+	}
+	
+	if ( isset( $_REQUEST['action'] ) )	{
+		$action = $_REQUEST['action'];
+	} elseif ( isset( $_REQUEST['action2'] ) )	{
+		$action = $_REQUEST['action2'];
+	} else	{
+		$action = '';
+	}
+	
+	if ( empty( $action ) || $action != 'reject_enquiry' || empty( $_REQUEST['post'] ) )	{
+		return;
+	}
+	
+	if ( ! mdjm_employee_can( 'manage_all_events' ) )	{
+		return;
+	}
+	
+	$args    = array( 'reject_reason' => __( 'No reason specified', 'mobile-dj-manager' ) );
+	$message = 'unattended_enquiries_rejected_success';
+	
+	
+	foreach( $_REQUEST['post'] as $event_id )	{
+		if ( ! mdjm_update_event_status( $event_id, 'mdjm-rejected', get_post_status( $email_args['event_id'] ), $args ) )	{
+			$message = 'unattended_enquiries_rejected_failed';
+		}
+	}
+		
+	wp_redirect( add_query_arg( 'mdjm-message' ) );
+	
+	die();
+	
+} // mdjm_event_instant_reject
+add_action( 'load-edit.php', 'mdjm_event_instant_reject' );
+		
+/**
  * Add the filter dropdowns to the event post list.
  *
  * @since	1.0
@@ -533,11 +608,6 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 											wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
 										)
 									);
-		/*$actions['availability'] = sprintf( 
-										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
-										mdjm_get_admin_page( 'events' ) .
-										'&availability=' . date( 'Y-m-d', ( strtotime( get_post_meta( $post->ID, '_mdjm_event_date', true ) ) ) ) .
-										'&event_id=' . $post->ID );*/
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf( 
 			__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),

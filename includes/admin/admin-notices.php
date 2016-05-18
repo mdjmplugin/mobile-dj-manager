@@ -237,6 +237,22 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
+	if( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_success' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-unattended_enquiries_rejected_success',
+			sprintf( __( '%s successfully rejected.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'updated'
+		);
+	}
+	if( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-unattended_enquiries_rejected_failed',
+			sprintf( __( '%s successfully rejected.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'updated'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	
