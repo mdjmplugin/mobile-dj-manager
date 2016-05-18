@@ -69,7 +69,7 @@ function mdjm_sign_event_contract_action( $data )	{
 								'event_id'	 => $data['event_id'],
 								'mdjm_message' => 12
 							),
-							mdjm_get_formatted_url( mdjm_get_option( 'contract_page' ) )
+							mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) )
 						)
 					);
 					die();
@@ -97,7 +97,7 @@ function mdjm_sign_event_contract_action( $data )	{
 				'event_id'	 => $data['event_id'],
 				'mdjm_message' => $message
 			),
-			mdjm_get_formatted_url( mdjm_get_option( 'contract_page' ) )
+			mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) )
 		)
 	);
 	die();
