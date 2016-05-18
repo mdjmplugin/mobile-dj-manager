@@ -261,7 +261,7 @@ function mdjm_send_comm_email( $data )	{
 			'client_id'      => $data['mdjm_email_to'],
 			'subject'        => stripslashes( $data['mdjm_email_subject'] ),
 			'attachments'    => ! empty( $attachments ) ? $attachments : array(),
-			'message'        => $data['mdjm_email_content'],
+			'message'        => stripslashes( $data['mdjm_email_content'] ),
 			'track'          => true,
 			'copy_to'        => ! empty( $data['mdjm_email_copy_to'] ) ? array( $data['mdjm_email_copy_to'] ) : array(),
 			'source'         => __( 'Communication Feature', 'mobile-dj-manager' )
