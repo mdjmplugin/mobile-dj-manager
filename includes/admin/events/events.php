@@ -305,14 +305,20 @@ function mdjm_event_instant_reject()	{
 	$args    = array( 'reject_reason' => __( 'No reason specified', 'mobile-dj-manager' ) );
 	$message = 'unattended_enquiries_rejected_success';
 	
+	$i = 0;
 	
 	foreach( $_REQUEST['post'] as $event_id )	{
-		if ( ! mdjm_update_event_status( $event_id, 'mdjm-rejected', get_post_status( $email_args['event_id'] ), $args ) )	{
+		if ( ! mdjm_update_event_status( $event_id, 'mdjm-rejected', get_post_status( $event_id ), $args ) )	{
 			$message = 'unattended_enquiries_rejected_failed';
 		}
+		else	{
+			$i++;
+		}
 	}
-		
-	wp_redirect( add_query_arg( 'mdjm-message' ) );
+
+	$url = admin_url( 'edit.php?post_status=mdjm-unattended&post_type=mdjm-event&paged=1' );
+
+	wp_redirect( add_query_arg( array( 'mdjm-message' => $message, 'mdjm-count' => $i ), $url ) );
 	
 	die();
 	

@@ -241,7 +241,11 @@ function mdjm_admin_notices() {
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_success',
-			sprintf( __( '%s successfully rejected.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			sprintf( _n( '%1$s %2$s successfully rejected.', '%1$s %3$s successfully rejected.', $_GET['mdjm-count'], 'mobile-dj-manager' ),
+				$_GET['mdjm-count'],
+				mdjm_get_label_singular(),
+				mdjm_get_label_plural()
+			),
 			'updated'
 		);
 	}
@@ -249,8 +253,8 @@ function mdjm_admin_notices() {
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_failed',
-			sprintf( __( '%s successfully rejected.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'updated'
+			__( 'Errors were encountered.', 'mobile-dj-manager' ),
+			'error'
 		);
 	}
 
