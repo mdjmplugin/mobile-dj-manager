@@ -1231,7 +1231,7 @@ function mdjm_content_tag_contract_url( $event_id='' )	{
 		return '';
 	}
 	
-	return mdjm_get_formatted_url( mdjm_get_option( 'contract_page' ) ) . 'event_id=' . $event_id;
+	return mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) . 'event_id=' . $event_id;
 } // mdjm_content_tag_contract_url
 
 /**
