@@ -273,7 +273,7 @@ class MDJM_Event {
 				}
 			}
 			
-			if ( empty( $meta['_mdjm_event_deposit'] ) && ! empty( $meta['_mdjm_event_cost'] ) )	{
+			if ( empty( $meta['_mdjm_event_deposit'] ) )	{
 				$meta['_mdjm_event_deposit'] = mdjm_calculate_deposit( $meta['_mdjm_event_cost'] );
 			}
 			

@@ -657,7 +657,7 @@ function mdjm_calculate_deposit( $price = '' )	{
 		$deposit = 0;
 	}
 	
-	$deposit_type = ( mdjm_get_option( 'deposit_type' ) );
+	$deposit_type = mdjm_get_option( 'deposit_type' );
 	
 	if ( empty( $deposit_type ) )	{
 		$deposit = '0';
