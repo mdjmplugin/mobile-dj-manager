@@ -239,11 +239,11 @@ add_action( 'manage_mdjm-event_posts_custom_column' , 'mdjm_event_posts_custom_c
  */
 function mdjm_event_bulk_action_list( $actions )	{
 	unset( $actions['edit'] );
-	
+		
 	return $actions;
 } // mdjm_event_bulk_action_list
 add_filter( 'bulk_actions-edit-mdjm-event', 'mdjm_event_bulk_action_list' );
-		
+
 /**
  * Add the filter dropdowns to the event post list.
  *
