@@ -407,7 +407,7 @@ class MDJM_Emails {
 				return;
 			}
 			
-			$subject           = get_the_title( $tracker->ID );
+			$subject           = html_entity_decode( get_the_title( $tracker->ID ) );
 			
 		}
 		
