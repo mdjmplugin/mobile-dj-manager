@@ -30,46 +30,47 @@ global $mdjm_event;
 	 * Display event action buttons
 	 */
 	?>
-	<div id="mdjm-singlevent-action-buttons">
+    <div class="container">
+
 		<?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID, false ); ?>
         <?php $cells   = 3; // Number of cells ?>
         <?php $i       = 1; // Counter for the current cell ?>
         
         <?php do_action( 'mdjm_pre_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
         
-        <table>
         	<?php foreach( $buttons as $button ) : ?>
         	
 				<?php if( $i == 1 ) : ?>
-                    <tr>
-                <?php endif; ?><!-- endif( $i == 1 ) -->
+                    <div class="row">
+                <?php endif; // endif( $i == 1 ) ?>
                 
-                        <td><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'blue' ), $button['url'] ); ?></td>
+                        <div class="col three"><?php printf( '<a href="%s" class="btn btn-dark-blue"><i class="%s"></i> %s</a>', $button['url'], $button['fa'], $button['label'] ); ?></div>
                         
                 <?php if( $i == $cells ) : ?>
-                    </tr>
+                    </div><!-- mdjm-a-button-row -->
                     <?php $i = 0; ?>
-                <?php endif; ?><!-- endif( $i == $cells ) -->
+                <?php endif; // endif( $i == $cells ) ?>
                 
                 <?php $i++; ?>
                 
-            <?php endforeach; ?><!-- endforeach( $buttons as $button ) -->
+            <?php endforeach; // endforeach( $buttons as $button ) ?>
         
 			<?php // Write out empty cells to complete the table row ?>
 			<?php if( $i != 1 ) : ?>
                 
                 <?php while( $i <= $cells ) : ?>
-                    <td>&nbsp;</td>
+                    <div class="col three">&nbsp;</div>
                     <?php $i++; ?>
-                    <?php if( $i == $cells ) : ?> </tr> <?php endif; ?>
-                <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
-            </tr>    
-            <?php endif; ?><!-- endif( $i < $cells ) -->
-        </table>
+                    <?php if( $i == $cells ) : ?>
+                    	</div>
+					<?php endif; ?>
+                <?php endwhile; // endwhile( $i <= $cells ) ?>
+            </div>    
+            <?php endif; // endif( $i < $cells ) ?>
         
         <?php do_action( 'mdjm_post_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
         
-    </div>
+    </div><!--mdjm-a-button-container-->
 
 	<?php
 	/**

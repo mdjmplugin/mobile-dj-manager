@@ -75,6 +75,45 @@ input.mdjm_form_error {
 
 /* =Action Buttons
 -------------------------------------------------------------- */
+.container { width: 100%; margin: 0 auto; }
+.container .row { float: left; clear: both; width: 100%; }
+.container .col { float: left; margin: 0 0 1.2em; padding-right: 1.2em; padding-left: 1.2em; }
+.container .col.one, .container .col.two, .container .col.three, .container .col.four, .container .col.five, .container .col.six, .container .col.seven, .container .col.eight, .container .col.nine, .container .col.ten, .container .col.eleven, .container .col.twelve { width: 100%; }
+
+
+@media screen and (min-width: 767px) {
+  .container{width: 100%; max-width: 1080px; margin: 0 auto;}
+  .container .row{width:100%; float:left; clear:both;}
+  .container .col{float: left; margin: 0 0 1em; padding-right: .5em; padding-left: .5em;}
+  .container .col.one { width: 8.33%; }
+  .container .col.two { width: 16.66%; }
+  .container .col.three { width: 24.99%; }
+  .container .col.four { width: 50%; }
+  .container .col.five { width: 41.65%; }
+  .container .col.six { width: 49.98%; }
+  .container .col.seven { width: 58.31%; }
+  .container .col.eight { width: 66.64%; }
+  .container .col.nine { width: 74.97%; }
+  .container .col.ten { width: 83.3%; }
+  .container .col.eleven { width: 91.65%; }
+  .container .col.tweleve { width: 100%; }
+}
+
+/*All the button styles*/
+
+* {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+a{text-decoration:none;}
+
+.btn {font-size: 14px; white-space:nowrap; width:100%; padding:.8em 1.5em; font-family: Open Sans, Helvetica,Arial,sans-serif; line-height:18px; display: inline-block;zoom: 1; color: #fff; text-align: center; position:relative; -webkit-transition: border .25s linear, color .25s linear, background-color .25s linear; transition: border .25s linear, color .25s linear, background-color .25s linear;}
+
+.btn.btn-dark-blue{background-color: #237fbc; border-color: #237fbc; -webkit-box-shadow: 0 3px 0 #1a5c87; box-shadow: 0 3px 0 #1a5c87;}
+.btn.btn-dark-blue:hover{background-color:#166ea8;}
+.btn.btn-dark-blue:active{ top: 3px; outline: none; -webkit-box-shadow: none; box-shadow: none;}
+		
+.btn i {padding-right:0.8em; line-height:22px;}
+
+/********/
+
 .mdjm-action-button {
 	-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
 	-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
@@ -92,16 +131,19 @@ input.mdjm_form_error {
 	text-align: center;
 	min-width: 175px;
 }
-.mdjm-action-button:hover {
-	color: #ffffff;
+.mdjm-action-button-blue:hover {
+	background-color:#166ea8;
 }
-.mdjm-action-button:active {
-	position:relative;
-	top:1px;
+.mdjm-action-button-blue:active {
+	top: 3px; outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 }
 .mdjm-action-button-blue	{
 	background-color: #3d61bd;
-	border: 1px solid #3b8dbd;
+	border-color: #237fbc;
+	-webkit-box-shadow: 0 3px 0 #1a5c87;
+	box-shadow: 0 3px 0 #1a5c87;
 }
 .mdjm-action-button-green	{
 	background-color: #287a3e;

@@ -159,26 +159,33 @@ function mdjm_accept_enquiry( $data )	{
  * @return	arr		Array of event action buttons.
  */
 function mdjm_get_event_action_buttons( $event_id, $min=true )	{
-	$event_status	= get_post_status( $event_id );
-	$buttons 		 = array();
+	$event_status = get_post_status( $event_id );
+	$buttons      = array();
 	
 	// Buttons for events in enquiry state
 	if( $event_status == 'mdjm-enquiry' )	{
 		if( ( mdjm_get_option( 'online_enquiry', '0' ) ) )	{
 			$buttons[5] = apply_filters( 'mdjm_quote_action_button',
 				array(
-					'label'		=> __( 'View Quote', 'mobile-dj-manager' ),
-					'id'		=> 'mdjm-quote-button',
-					'url'		=> mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true ) . 'event_id=' . $event_id
+					'label' => __( 'View Quote', 'mobile-dj-manager' ),
+					'id'    => 'mdjm-quote-button',
+					'fa'    => 'fa fa-file',
+					'url'   => add_query_arg(
+						array(
+							'event_id' => $event_id
+						),
+						mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true )
+					)
 				)
 			);
 		}
 		
 		$buttons[10] = apply_filters( 'mdjm_book_action_button',
 			array(
-				'label'		=> sprintf( __( 'Book %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'id'		=> 'mdjm-book-button',
-				'url'		=> add_query_arg( 
+				'label' => sprintf( __( 'Book %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'id'    => 'mdjm-book-button',
+				'fa'    => 'fa fa-thumbs-o-up',
+				'url'   => add_query_arg( 
 					array( 
 						'mdjm_action' => 'accept_enquiry',
 						'mdjm_nonce'  => wp_create_nonce( 'accept_enquiry' )
@@ -193,9 +200,15 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	if( $event_status == 'mdjm-contract' )	{
 		$buttons[15] = apply_filters( 'mdjm_sign_contract_action_button',
 			array(
-				'label'		=> __( 'Review &amp; Sign Contract', 'mobile-dj-manager' ),
-				'id'		=> 'mdjm-sign-contract-button',
-				'url'		=> mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true ) . 'event_id=' . $event_id
+				'label' => __( 'Review &amp; Sign Contract', 'mobile-dj-manager' ),
+				'id'    => 'mdjm-sign-contract-button',
+				'fa'    => 'fa fa-file-text',
+				'url'   => add_query_arg( 
+					array(
+						'event_id=' => $event_id
+					),
+					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
+				)
 			)
 		);
 	}
@@ -204,9 +217,15 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	if( $event_status == 'mdjm-approved' )	{
 		$buttons[20] = apply_filters( 'mdjm_view_contract_action_button',
 			array(
-				'label'		=> __( 'View Contract', 'mobile-dj-manager' ),
-				'id'		   => 'mdjm-view-contract-button',
-				'url'		  => mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true ) . 'event_id=' . $event_id
+				'label' => __( 'View Contract', 'mobile-dj-manager' ),
+				'id'    => 'mdjm-view-contract-button',
+				'fa'    => 'fa fa-file-text',
+				'url'   => add_query_arg( 
+					array(
+						'event_id=' => $event_id
+					),
+					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
+				)
 			)
 		);
 	}
@@ -216,9 +235,15 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 		if( $event_status == 'mdjm-approved' || $event_status == 'mdjm-contract' )	{
 			$buttons[25] = apply_filters( 'mdjm_manage_playlist_action_button',
 				array(
-					'label'		=> __( 'Manage Playlist', 'mobile-dj-manager' ),
-					'id'		   => 'mdjm-manage-playlist-button',
-					'url'		  => mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true ) . 'event_id=' . $event_id
+					'label' => __( 'Manage Playlist', 'mobile-dj-manager' ),
+					'id'    => 'mdjm-manage-playlist-button',
+					'fa'    => 'fa fa-music',
+					'url'   => add_query_arg( 
+						array(
+							'event_id=' => $event_id
+						),
+						mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true )
+					)
 				)
 			);
 		}
@@ -227,9 +252,10 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	if( empty( $min ) )	{		
 		$buttons[50] = apply_filters( 'mdjm_update_profile_action_button',
 			array(
-				'label'		=> __( 'Update Profile', 'mobile-dj-manager' ),
-				'id'		   => 'mdjm-update-profile-button',
-				'url'		  => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ), false )
+				'label' => __( 'Update Profile', 'mobile-dj-manager' ),
+				'id'    => 'mdjm-update-profile-button',
+				'fa'    => 'fa fa-phone',
+				'url'   => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ), false )
 			)
 		);
 		
@@ -269,6 +295,7 @@ function mdjm_display_book_event_button( $event_id, $args = array() )	{
 	$defaults = array(
 		'colour'   => mdjm_get_option( 'action_button_colour' ),
 		'label'    => $book_button['label'],
+		'fa'    => 'fa fa-thumbs-o-up',
 		'url'      => $book_button['url']
 	);
 	
