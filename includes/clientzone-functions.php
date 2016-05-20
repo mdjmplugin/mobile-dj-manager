@@ -149,6 +149,58 @@ function mdjm_accept_enquiry( $data )	{
 } // mdjm_accept_enquiry
 
 /**
+ * Print out the relevant action buttons for the event.
+ *
+ * @since	1.3
+ * @param	int	$event_id	Event ID.
+ * @return	str	Output the action buttons HTML
+ */
+function mdjm_do_action_buttons( $event_id )	{
+	
+	$buttons = mdjm_get_event_action_buttons( $event_id, false );
+	$cells   = (int)count( $buttons );
+    $i       = 0;
+	$output  = '';
+	
+	do_action( 'mdjm_pre_event_action_buttons', $event_id );
+
+	if ( empty ( $buttons ) )	{
+		return false;
+	}
+	
+	foreach ( $buttons as $button )	{
+		if ( $i == 0 )	{
+			$output .= "\n\t\t\t" . '<div class="row">' . "\n";
+		}
+		
+		$output .= "\n\t\t\t\t" . '<div class="col three">' . "\n";
+
+		$output .= sprintf( '<a href="%s" class="btn btn-%s"><i class="%s"></i> %s</a>',
+			$button['url'],
+			mdjm_get_option( 'action_button_colour', 'blue' ),
+			$button['fa'],
+			$button['label']
+		);
+		
+		$i++;
+
+		$output .= '</div>'; // <div class="mdjm-action-btn-col three">
+		
+		if ( $i == $cells )	{
+			$output .= '</div>'; // <div class="mdjm-action_btn-row">
+			$i       = 0;
+		}
+	}
+	
+	$output .= '</div>';
+	
+	do_action( 'mdjm_post_event_action_buttons', $event_id );
+	
+	return apply_filters( 'mdjm_do_action_buttons', $output, $event_id );
+	
+} // mdjm_do_action_buttons
+
+/**
  * Return all relevant action buttons for the event.
  *
  * Allow filtering of the buttons so they can be re-ordered, re-named etc.
@@ -200,7 +252,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	if( $event_status == 'mdjm-contract' )	{
 		$buttons[15] = apply_filters( 'mdjm_sign_contract_action_button',
 			array(
-				'label' => __( 'Review &amp; Sign Contract', 'mobile-dj-manager' ),
+				'label' => __( 'Sign Contract', 'mobile-dj-manager' ),
 				'id'    => 'mdjm-sign-contract-button',
 				'fa'    => 'fa fa-file-text',
 				'url'   => add_query_arg( 

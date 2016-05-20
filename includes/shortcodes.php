@@ -95,6 +95,15 @@ function mdjm_shortcode_home( $atts )	{
 			
 			if( ! empty( $mdjm_event->ID ) )	{
 				ob_start();
+				
+				//$output .= mdjm_do_action_buttons( $event->ID );
+					
+				mdjm_add_content_tag(
+					'event_action_buttons',
+					sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name' ) ),
+					'mdjm_do_action_buttons'
+				);
+				
 				mdjm_get_template_part( 'event', 'single' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $client_id );
 				ob_get_clean();
@@ -129,6 +138,7 @@ function mdjm_shortcode_home( $atts )	{
 					$mdjm_event = new MDJM_Event( $event->ID );
 					
 					ob_start();
+
 					mdjm_get_template_part( 'event', $slug );
 					$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $client_id );
 					ob_get_clean();

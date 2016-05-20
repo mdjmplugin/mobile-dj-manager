@@ -30,46 +30,8 @@ global $mdjm_event;
 	 * Display event action buttons
 	 */
 	?>
-    <div class="container">
-
-		<?php $buttons = mdjm_get_event_action_buttons( $mdjm_event->ID, false ); ?>
-        <?php $cells   = 3; // Number of cells ?>
-        <?php $i       = 1; // Counter for the current cell ?>
-        
-        <?php do_action( 'mdjm_pre_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
-        
-        	<?php foreach( $buttons as $button ) : ?>
-        	
-				<?php if( $i == 1 ) : ?>
-                    <div class="row">
-                <?php endif; // endif( $i == 1 ) ?>
-                
-                        <div class="col three"><?php printf( '<a href="%s" class="btn btn-dark-blue"><i class="%s"></i> %s</a>', $button['url'], $button['fa'], $button['label'] ); ?></div>
-                        
-                <?php if( $i == $cells ) : ?>
-                    </div><!-- mdjm-a-button-row -->
-                    <?php $i = 0; ?>
-                <?php endif; // endif( $i == $cells ) ?>
-                
-                <?php $i++; ?>
-                
-            <?php endforeach; // endforeach( $buttons as $button ) ?>
-        
-			<?php // Write out empty cells to complete the table row ?>
-			<?php if( $i != 1 ) : ?>
-                
-                <?php while( $i <= $cells ) : ?>
-                    <div class="col three">&nbsp;</div>
-                    <?php $i++; ?>
-                    <?php if( $i == $cells ) : ?>
-                    	</div>
-					<?php endif; ?>
-                <?php endwhile; // endwhile( $i <= $cells ) ?>
-            </div>    
-            <?php endif; // endif( $i < $cells ) ?>
-        
-        <?php do_action( 'mdjm_post_event_action_buttons', $mdjm_event->ID, $mdjm_event ); ?>
-        
+    <div class="mdjm-action-btn-container">
+        {event_action_buttons}
     </div><!--mdjm-a-button-container-->
 
 	<?php
@@ -78,6 +40,7 @@ global $mdjm_event;
 	 */
 	?>
     <?php do_action( 'mdjm_pre_event_details', $mdjm_event->ID, $mdjm_event ); ?>
+    
     <div id="mdjm-singleevent-details">
         <table class="mdjm-singleevent-overview">
             <tr>
@@ -155,7 +118,7 @@ global $mdjm_event;
             </tr>
             
         </table>
-    </div>
+    
     
     <?php do_action( 'mdjm_post_event_details', $mdjm_event->ID, $mdjm_event ); ?>
 
