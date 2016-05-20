@@ -170,10 +170,10 @@ function mdjm_do_action_buttons( $event_id )	{
 	
 	foreach ( $buttons as $button )	{
 		if ( $i == 0 )	{
-			$output .= "\n\t\t\t" . '<div class="row">' . "\n";
+			$output .= '<div class="row">' . "\n";
 		}
 		
-		$output .= "\n\t\t\t\t" . '<div class="col three">' . "\n";
+		$output .= '<div class="col three">' . "\n";
 
 		$output .= sprintf( '<a href="%s" class="btn btn-%s"><i class="%s"></i> %s</a>',
 			$button['url'],
@@ -236,7 +236,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 			array(
 				'label' => sprintf( __( 'Book %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'id'    => 'mdjm-book-button',
-				'fa'    => 'fa fa-thumbs-o-up',
+				'fa'    => 'fa fa-check',
 				'url'   => add_query_arg( 
 					array( 
 						'mdjm_action' => 'accept_enquiry',
@@ -254,7 +254,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 			array(
 				'label' => __( 'Sign Contract', 'mobile-dj-manager' ),
 				'id'    => 'mdjm-sign-contract-button',
-				'fa'    => 'fa fa-file-text',
+				'fa'    => 'fa fa-pencil',
 				'url'   => add_query_arg( 
 					array(
 						'event_id=' => $event_id
@@ -306,7 +306,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 			array(
 				'label' => __( 'Update Profile', 'mobile-dj-manager' ),
 				'id'    => 'mdjm-update-profile-button',
-				'fa'    => 'fa fa-phone',
+				'fa'    => 'fa fa-user',
 				'url'   => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ), false )
 			)
 		);
