@@ -80,6 +80,7 @@ add_shortcode( 'MDJM', 'shortcode_mdjm' );
 function mdjm_shortcode_home( $atts )	{
 	
 	if ( is_user_logged_in() ) {
+
 		global $mdjm_event;
 		
 		$mdjm_event = '';
@@ -264,7 +265,7 @@ function mdjm_shortcode_playlist( $atts )	{
 	if ( ! empty( $_GET['event_id'] ) )	{
 		$event_id = $_GET['event_id'];
 	} else	{
-		$next_event = mdjm_get_clients_next_event( get_current_user_id(), 'client' );
+		$next_event = mdjm_get_clients_next_event( get_current_user_id() );
 		
 		if ( $next_event )	{
 			$event_id = $next_event[0]->ID;
@@ -332,7 +333,7 @@ function mdjm_shortcode_quote( $atts )	{
 	if ( ! empty( $_GET['event_id'] ) )	{
 		$event_id = $_GET['event_id'];
 	} else	{
-		$next_event = mdjm_get_clients_next_event( get_current_user_id(), 'client' );
+		$next_event = mdjm_get_clients_next_event( get_current_user_id() );
 		
 		if ( $next_event )	{
 			$event_id = $next_event[0]->ID;
