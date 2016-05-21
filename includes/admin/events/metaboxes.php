@@ -104,7 +104,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'context'	 => 'normal',
 				'priority'	=> 'low',
 				'args'		=> array(),
-				'dependancy'  => MDJM_PAYMENTS,
+				'dependancy'  => '',
 				'permission'  => 'edit_txns'
 			),
 			array(
