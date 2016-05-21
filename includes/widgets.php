@@ -87,7 +87,7 @@ class mdjm_availability_widget extends WP_Widget {
 							<?php
 							if( !empty( $pass_redirect ) )	{
 								?>
-								window.location.href = '<?php echo $mdjm->get_link( $instance['available_action'], true ); ?>mdjm_avail_date=' + check_date;
+								window.location.href = '<?php echo mdjm_get_formatted_url( $instance['available_action'] ); ?>mdjm_avail_date=' + check_date;
 								<?php
 							} else	{
 								?>
@@ -104,7 +104,7 @@ class mdjm_availability_widget extends WP_Widget {
 							<?php
 							if( ! empty( $fail_redirect ) )	{
 								?>
-								window.location.href = '<?php echo $mdjm->get_link( $instance['unavailable_action'], true ); ?>';
+								window.location.href = '<?php echo mdjm_get_formatted_url( $instance['unavailable_action'] ); ?>';
 								<?php
 							} else	{
 								?>
