@@ -178,7 +178,7 @@ function mdjm_do_action_buttons( $event_id )	{
 		$output .= sprintf( '<a href="%s" class="btn btn-%s"><i class="%s"></i> %s</a>',
 			$button['url'],
 			mdjm_get_option( 'action_button_colour', 'blue' ),
-			$button['fa'],
+			isset ( $button['fa'] ) ? $button['fa'] : '',
 			$button['label']
 		);
 		
