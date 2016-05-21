@@ -46,9 +46,7 @@ global $mdjm_event;
     
     <div id="mdjm-quote-footer">
     	<?php do_action( 'mdjm_pre_quote_footer', $mdjm_event->ID ); ?>
-        
-        </div><!-- end mdjm-signature-form -->
-                
+                        
         <?php do_action( 'mdjm_post_quote_footer', $mdjm_event->ID ); ?>
     </div><!-- end mdjm-quote-footer -->
 	
