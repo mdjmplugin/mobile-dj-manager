@@ -626,8 +626,11 @@ class MDJM_Event {
 
 			} else	{
 			
-				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
-				
+				if ( empty( $this->deposit ) || $this->deposit == '0.00' )	{
+					$this->deposit_status = __( 'Paid', 'mobile-dj-manager' );
+				} else	{
+					$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+				}
 			}
 			
 		}
