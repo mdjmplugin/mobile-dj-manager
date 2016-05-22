@@ -89,6 +89,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * **Bug Fix**: Re-added package and add-on pricing to events edit screen
 * **Tweak**: Added translation to bulk action entry `Add Role`
 * **Tweak**: Removed deprecated constant MDJM_PAYMENTS
+* **Tweak**: Added `mdjm_compare_template_version()` and `mdjm_get_template_files()` functions
 
 = 1.3.4.1 =
 
