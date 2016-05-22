@@ -2,7 +2,7 @@
 /**
  * This template is used to display the details of a single event to the client.
  *
- * @version 		1.0
+ * @version 		1.0.1
  * @author			Mike Howard
  * @since			1.3
  * @content_tag		{client_*}
