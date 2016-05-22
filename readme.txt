@@ -77,9 +77,10 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 == Changelog ==
 = 1.3.5
 
-* **New**: Event action buttons within Client Zone are now responsive on the single event page
+* **New**: Event action buttons within Client Zone are now responsive on the single event page. **`event-single.php` copies need updating**
 * **New**: Added Font Awesome icons to event action buttons within Client Zone
 * **New**: Added Quick Reject to Unattended Events view Bulk Actions
+* **New**: Added Deposit status icons to event list due colukn
 * **Bug Fix**: Issue [#50](https://github.com/mydjplanner/mobile-dj-manager/issues/50 "Issue 50"). Extra div close tag on quotes page
 * **Bug Fix**: Issue [#51](https://github.com/mydjplanner/mobile-dj-manager/issues/51 "Issue 51"). Availability widget does not redirect with Ajax turned on
 * **Bug Fix**: Issue [#49](https://github.com/mydjplanner/mobile-dj-manager/issues/49 "Issue 49"). Correctly decode html entities within email subject
