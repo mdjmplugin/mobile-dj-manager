@@ -257,7 +257,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 				'fa'    => 'fa fa-pencil',
 				'url'   => add_query_arg( 
 					array(
-						'event_id=' => $event_id
+						'event_id' => $event_id
 					),
 					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
 				)
@@ -274,7 +274,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 				'fa'    => 'fa fa-file-text',
 				'url'   => add_query_arg( 
 					array(
-						'event_id=' => $event_id
+						'event_id' => $event_id
 					),
 					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
 				)
@@ -292,7 +292,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 					'fa'    => 'fa fa-music',
 					'url'   => add_query_arg( 
 						array(
-							'event_id=' => $event_id
+							'event_id' => $event_id
 						),
 						mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true )
 					)

@@ -96,9 +96,7 @@ function mdjm_shortcode_home( $atts )	{
 			
 			if( ! empty( $mdjm_event->ID ) )	{
 				ob_start();
-				
-				//$output .= mdjm_do_action_buttons( $event->ID );
-					
+									
 				mdjm_add_content_tag(
 					'event_action_buttons',
 					sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name' ) ),
