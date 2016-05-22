@@ -32,7 +32,7 @@ global $mdjm_event;
 	?>
     <div class="mdjm-action-btn-container">
         {event_action_buttons}
-    </div><!--mdjm-a-button-container-->
+    </div><!--mdjm-action-button-container-->
 
 	<?php
 	/**
@@ -118,7 +118,6 @@ global $mdjm_event;
             </tr>
             
         </table>
-    
     
     <?php do_action( 'mdjm_post_event_details', $mdjm_event->ID, $mdjm_event ); ?>
 
