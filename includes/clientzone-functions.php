@@ -159,6 +159,7 @@ function mdjm_do_action_buttons( $event_id )	{
 	
 	$buttons = mdjm_get_event_action_buttons( $event_id, false );
 	$cells   = (int)count( $buttons );
+	$cells   = apply_filters( 'mdjm_action_buttons_in_row', $cells );
     $i       = 0;
 	$output  = '';
 	
