@@ -282,7 +282,7 @@ function mdjm_event_add_reject_bulk_actions()	{
 	
 	$current_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : false;
 	
-	if ( $post->post_type != 'mdjm-event' || $current_status != 'mdjm-unattended' )	{
+	if ( $current_status != 'mdjm-unattended' || $post->post_type != 'mdjm-event' )	{
 		return;
 	}
 	

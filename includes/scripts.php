@@ -84,6 +84,9 @@ function mdjm_register_styles()	{
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
 	
+	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );	
+	wp_enqueue_style( 'font-awesome' );
+	
 	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
   	wp_enqueue_style( 'jquery-ui' );
 
