@@ -381,7 +381,7 @@ function mdjm_shortcode_quote( $atts )	{
 	} else	{
 		ob_start();
 		mdjm_get_template_part( 'quote', 'noevent' );
-		$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
+		$output = mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
 		ob_get_clean();
 	}
 	
