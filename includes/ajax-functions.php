@@ -394,7 +394,7 @@ function mdjm_update_event_deposit()	{
 			
 	if( ! empty( $deposit ) )	{
 		$result['type'] = 'success';
-		$result['deposit'] = mdjm_format_amount( (float)$deposit );
+		$result['deposit'] = $deposit;
 	}
 	else	{
 		$result['type'] = 'error';
