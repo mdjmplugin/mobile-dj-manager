@@ -156,7 +156,7 @@ function display_price( $amount, $symbol=true )	{
  */
 function get_deposit( $cost='' )	{
 	
-	_deprecated_function( __FUNCTION__, '1.3', 'get_deposit()' );
+	_deprecated_function( __FUNCTION__, '1.3', 'mdjm_calculate_deposit()' );
 		
 	// If no event cost is provided then we return 0
 	if( empty( $cost ) )	{

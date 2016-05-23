@@ -3,10 +3,10 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.4.1
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://mdjm.co.uk/donate/
+Donate link: http://mdjm.co.uk/support-our-work/
 
 MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
 
@@ -75,6 +75,22 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.5
+
+* **New**: Event action buttons within Client Zone are now responsive on the single event page. **`event-single.php` copies need updating**
+* **New**: Added Font Awesome icons to event action buttons within Client Zone
+* **New**: Added Quick Reject to Unattended Events view Bulk Actions
+* **New**: Added Deposit status icon to event list due column. Icon indicates balance has been paid
+* **Bug Fix**: Issue [#50](https://github.com/mydjplanner/mobile-dj-manager/issues/50 "Issue 50"). Extra div close tag on quotes page
+* **Bug Fix**: Issue [#51](https://github.com/mydjplanner/mobile-dj-manager/issues/51 "Issue 51"). Availability widget does not redirect with Ajax turned on
+* **Bug Fix**: Issue [#49](https://github.com/mydjplanner/mobile-dj-manager/issues/49 "Issue 49"). Correctly decode html entities within email subject
+* **Bug Fix**: Issue [#47](https://github.com/mydjplanner/mobile-dj-manager/issues/47 "Issue 47"). `{quotes_url}` content tag missing event ID
+* **Bug Fix**: Issue [#46](https://github.com/mydjplanner/mobile-dj-manager/issues/46 "Issue 46"). Fixed deposits not inserted if event has zero cost
+* **Bug Fix**: Re-added package and add-on pricing to events edit screen
+* **Tweak**: Added translation to bulk action entry `Add Role`
+* **Tweak**: Removed deprecated constant MDJM_PAYMENTS
+* **Tweak**: Added `mdjm_compare_template_version()` and `mdjm_get_template_files()` functions
+
 = 1.3.4.1 =
 
 * **Bug Fix**: Issue [#41](https://github.com/mydjplanner/mobile-dj-manager/issues/41 "Issue 41"). Rejected enquiries need to have status updated even if no reject reason is provided.

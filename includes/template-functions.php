@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 /**
  * Returns the path to the MDJM templates directory
  *
- * @since 1.3
- * @return string
+ * @since	1.3
+ * @return	str
  */
 function mdjm_get_templates_dir() {
 	return MDJM_PLUGIN_DIR . '/templates';
@@ -23,27 +23,78 @@ function mdjm_get_templates_dir() {
 /**
  * Returns the URL to the MDJM templates directory
  *
- * @since 1.3
- * @return string
+ * @since	1.3
+ * @return	str
  */
 function mdjm_get_templates_url() {
 	return MDJM_PLUGIN_URL . '/templates';
 } // mdjm_get_templates_url
 
 /**
+ * Returns the MDJM template files.
+ *
+ * @since	1.3
+ * @return	arr
+ */
+function mdjm_get_template_files() {
+	
+	$template_files = array(
+		'availability' => array(
+			'availability-horizontal.php',
+			'availability-vertical.php'
+		),
+		'contract' => array(
+			'contract.php',
+			'contract-signed.php',
+		),
+		'contract' => array(
+			'contract.php',
+			'contract-signed.php',
+		),
+		'email' => array(
+			'email-body.php',
+			'email-footer.php',
+			'email-header.php'
+		),
+		'event' => array(
+			'event-loop-footer.php',
+			'event-loop-header.php',
+			'event-loop.php',
+			'event-none.php',
+			'event-single.php'
+		),
+		'login' => array(
+			'login-form.php'
+		),
+		'playlist' => array(
+			'playlist-client.php',
+			'playlist-guest.php',
+			'playlist-noevent.php'
+		),
+		'quote' => array(
+			'quote-noevent.php',
+			'quote.php'
+		)
+	);
+	
+	return apply_filters( 'mdjm_template_files', $template_files );
+	
+} // mdjm_get_template_files
+
+/**
  * Retrieves a template part
  *
- * @since v1.3
+ * @since	1.3
  *
- * @param string $slug
- * @param string $name Optional. Default null
- * @param bool   $load
+ * @param	str	$slug
+ * @param	str $name Optional. Default null
+ * @param	bool   $load
  *
- * @return string
+ * @return	str
  *
- * @uses mdjm_locate_template()
- * @uses load_template()
- * @uses get_template_part()
+ * @uses	mdjm_locate_template()
+ * @uses	load_template()
+ * @uses	get_template_part()
  */
 function mdjm_get_template_part( $slug, $name = null, $load = true ) {
 	
@@ -76,13 +127,13 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
  *
  * Taken from bbPress
  *
- * @since 1.2
+ * @since	1.3
  *
- * @param string|array $template_names Template file(s) to search for, in order.
- * @param bool $load If true the template file will be loaded if it is found.
- * @param bool $require_once Whether to require_once or require. Default true.
+ * @param	str|arr	$template_names Template file(s) to search for, in order.
+ * @param	bool	$load If true the template file will be loaded if it is found.
+ * @param	bool	$require_once Whether to require_once or require. Default true.
  *   Has no effect if $load is false.
- * @return string The template filename if one is located.
+ * @return	str		The template filename if one is located.
  */
 function mdjm_locate_template( $template_names, $load = false, $require_once = true ) {
 	
@@ -125,8 +176,8 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 /**
  * Returns a list of paths to check for template locations
  *
- * @since 1.3
- * @return mixed|void
+ * @since	1.3
+ * @return	mixed|void
  */
 function mdjm_get_theme_template_paths() {
 
@@ -152,9 +203,57 @@ function mdjm_get_theme_template_paths() {
  *
  * Themes can filter this by using the mdjm_templates_dir filter.
  *
- * @since 1.6.2
- * @return string
+ * @since	1.3
+ * @return	str
 */
 function mdjm_get_theme_template_dir_name() {
 	return trailingslashit( apply_filters( 'mdjm_templates_dir', 'mdjm-templates' ) );
 } // mdjm_get_theme_template_dir_name
+
+/**
+ * Compare the version of the template file in use against the current MDJM version.
+ *
+ * @since	1.3
+ * @param	str		$slug	The slug of the template file.
+ * @param	str		$name	The name of the template file.
+ * @return	bool	true if the correct version is in use, or false.
+ *						If the [child] theme version does not have the headers, returns false.
+*/
+function mdjm_compare_template_version( $slug, $name ) {
+	
+	$mdjm_template_file  = trailingslashit( mdjm_get_templates_dir() ) . trailingslashit( $slug ) . $name;
+	$name                = str_replace( $slug . '-', '', $name );
+	$name                = ( $slug == str_replace( '.php', '', $name ) ) ? '' : str_replace( '.php', '', $name );
+	$theme_template_file = mdjm_get_template_part( $slug, $name, false );
+	
+	$fp = fopen( $mdjm_template_file, 'r' );
+	$file_data = fread( $fp, 8192 );
+	fclose( $fp );
+	$file_data = str_replace( "\r", "\n", $file_data );
+	$mdjm_version   = '';
+
+	if ( preg_match( '/^[ \t\/*#@]*' . preg_quote( '@version', '/' ) . '(.*)$/mi', $file_data, $match ) && $match[1] )	{
+		$mdjm_version = _cleanup_header_comment( $match[1] );
+	}
+	
+	$fp = fopen( $theme_template_file, 'r' );
+	$file_data = fread( $fp, 8192 );
+	fclose( $fp );
+	$file_data = str_replace( "\r", "\n", $file_data );
+	$custom_version   = '';
+
+	if ( preg_match( '/^[ \t\/*#@]*' . preg_quote( '@version', '/' ) . '(.*)$/mi', $file_data, $match ) && $match[1] )	{
+		$custom_version = _cleanup_header_comment( $match[1] );
+	}
+	
+	if ( empty( $mdjm_version ) || empty( $custom_version ) )	{
+		return false;
+	}
+	
+	if ( version_compare( $mdjm_version, $custom_version, '>' ) )	{
+		return false;
+	}
+	
+	return true;
+	
+} // mdjm_compare_template_version

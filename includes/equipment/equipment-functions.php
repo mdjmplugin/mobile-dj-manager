@@ -633,7 +633,7 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 		'dj'              => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
  		'package'         => '',
  		'title'           => '',
- 		'cost'            => false
+ 		'cost'            => true
 	);
 	
 	$args = wp_parse_args( $args, $defaults );

@@ -282,7 +282,7 @@ function mdjm_email_manual_payment_confirmation( $event_id )	{
  * @return	str			$subject		The subject (title) of the template.
  */
 function mdjm_email_set_subject( $template_id, $email_type = false )	{
-	$subject = get_the_title( $template_id );
+	$subject = html_entity_decode( get_the_title( $template_id ) );
 	
 	if( ! empty( $email_type ) )	{
 		return apply_filters( 'mdjm_email_subject_{$email_type}', $subject, $template_id );

@@ -273,7 +273,7 @@ class MDJM_Event {
 				}
 			}
 			
-			if ( empty( $meta['_mdjm_event_deposit'] ) && ! empty( $meta['_mdjm_event_cost'] ) )	{
+			if ( empty( $meta['_mdjm_event_deposit'] ) )	{
 				$meta['_mdjm_event_deposit'] = mdjm_calculate_deposit( $meta['_mdjm_event_cost'] );
 			}
 			
@@ -626,8 +626,11 @@ class MDJM_Event {
 
 			} else	{
 			
-				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
-				
+				if ( empty( $this->deposit ) || $this->deposit == '0.00' )	{
+					$this->deposit_status = __( 'Paid', 'mobile-dj-manager' );
+				} else	{
+					$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+				}
 			}
 			
 		}

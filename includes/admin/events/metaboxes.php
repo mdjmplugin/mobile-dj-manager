@@ -104,7 +104,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'context'	 => 'normal',
 				'priority'	=> 'low',
 				'args'		=> array(),
-				'dependancy'  => MDJM_PAYMENTS,
+				'dependancy'  => '',
 				'permission'  => 'edit_txns'
 			),
 			array(
@@ -306,8 +306,16 @@ function mdjm_event_metabox_client_details( $post )	{
 				if( mdjm_employee_can( 'send_comms' ) )	{
 					?>
 					<p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
-						<?php printf( __( '<a id="contact_client" href="%s">Contact</a>', 'mobile-dj-manager' ), 
-								add_query_arg( 'recipient', $client_id, admin_url( 'admin.php?page=mdjm-comms' ) ) ); ?></p>
+						<?php	printf( __( '<a id="contact_client" href="%s">Contact</a>', 'mobile-dj-manager' ), 
+									add_query_arg(
+										array(
+											'recipient' => $client_id,
+											'event_id'  => $post->ID
+										),
+										admin_url( 'admin.php?page=mdjm-comms' )
+									)
+								);
+						?></p>
 					<?php
 				}
 				?>
@@ -546,7 +554,9 @@ function mdjm_event_metabox_event_details( $post )	{
 							if( get_post_meta( $post->ID, '_mdjm_event_dj', true ) == $dj_with_package )	{
 								echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
 								selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
-								echo '>' . esc_attr( $package['name'] ) . '</option>' . "\r\n";
+								echo '>' . esc_attr( $package['name'] );
+								echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
+								echo '</option>' . "\r\n";
 							}	
 						}
 					}
@@ -554,7 +564,9 @@ function mdjm_event_metabox_event_details( $post )	{
 					else	{
 						echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
 						selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
-						echo '>' . esc_attr( $package['name'] ) . '</option>' . "\r\n";	
+						echo '>' . esc_attr( $package['name'] );
+						echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
+						echo '</option>' . "\r\n";
 					}
 				}
 				?>

@@ -493,7 +493,7 @@ function mdjm_ajax_set_email_content()	{
 		} else	{
 			$result['type']            = 'success';
 			$result['updated_content'] = $content;
-			$result['updated_subject'] = get_the_title( $_POST['template'] );
+			$result['updated_subject'] = html_entity_decode( get_the_title( $_POST['template'] ) );
 		}
 	}
 	

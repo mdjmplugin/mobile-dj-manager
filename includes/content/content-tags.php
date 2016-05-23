@@ -1886,13 +1886,14 @@ function mdjm_content_tag_playlist_url( $event_id='' )	{
  * @return	str		The online quote page URL for clients.
  */
 function mdjm_content_tag_quotes_url( $event_id='' )	{
-	$return = mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true );
-
-	if( empty( $event_id ) )	{
-		$return .= 'event_id=' . $event_id;
-	}
+	$return = add_query_arg(
+		array(
+			'event_id' => $event_id
+		),
+		mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true )
+	);
 	
-	return $return;
+	return apply_filters( 'mdjm_content_tag_quotes_url', $return, $event_id );
 } // mdjm_content_tag_quotes_url
 
 /**
