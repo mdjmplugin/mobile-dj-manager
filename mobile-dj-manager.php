@@ -5,7 +5,7 @@
  * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
  * Version: 1.3.5
- * Date: 18 May 2015
+ * Date: 23 May 2015
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager

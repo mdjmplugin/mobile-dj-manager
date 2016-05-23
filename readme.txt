@@ -59,6 +59,7 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 = Is any support provided? =
 
 Support can be obtained via our online [Support Forums](http://www.mydjplanner.co.uk/support/ "MDJM Support Forums") at or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
+Support is provided on a best-endeavours basis. For premium support you must be an active license holder for on of the [MDJM Event Management add-ons](http://mdjm.co.uk/add-ons/ "MDJM Event Management add-ons")
 
 = Is there a Pro version with additional features? =
 
