@@ -80,7 +80,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 * **Bug Fix**:  Issue [#53](https://github.com/mydjplanner/mobile-dj-manager/issues/53 "Issue 53") Do not double format the event deposit cost
 * **Bug Fix**:  Issue [#54](https://github.com/mydjplanner/mobile-dj-manager/issues/50 "Issue 54") Display action buttons even when no event ID is passed
-* **Tweak**: Allow filtering of the number of action buttons being displayed via `add_filter( 'mdjm_action_buttons_in_row', '*your_function*' );`. Default is the number of buttons being produced
+* **Tweak**: Allow filtering of the number of action buttons being displayed via `add_filter( 'mdjm_action_buttons_in_row', '*your_function*' );`. Default is 4
 * **Tweak**: Reduced font on action buttons to 12pt
 * **Tweak**: Updated translation POT file
 
