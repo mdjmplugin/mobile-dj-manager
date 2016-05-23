@@ -1021,6 +1021,11 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	if ( 'edit_mdjm_event' == $cap || 'delete_mdjm_event' == $cap || 'read_mdjm_event' == $cap || 'publish_mdjm_event' == $cap ) {
 		
 		$post = get_post( $args[0] );
+		
+		if ( empty( $post ) )	{
+			return $caps;
+		}
+		
 		$post_type = get_post_type_object( $post->post_type );
 
 		// Set an empty array for the caps.
