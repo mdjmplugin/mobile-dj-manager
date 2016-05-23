@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the MDJM Event Management package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.3\n"
+"Project-Id-Version: MDJM Event Management 1.3.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mobile-dj-"
 "manager\n"
-"POT-Creation-Date: 2016-05-12 11:30:40+00:00\n"
+"POT-Creation-Date: 2016-05-23 10:46:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,16 +14,16 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: client-zone/includes/mdjm-availability.php:200
-#: client-zone/includes/mdjm-availability.php:286 includes/shortcodes.php:372
-#: includes/shortcodes.php:383 includes/widgets.php:38
+#: client-zone/includes/mdjm-availability.php:286 includes/shortcodes.php:437
+#: includes/shortcodes.php:448 includes/widgets.php:38
 #: widgets/class-mdjm-widget.php:25
 msgid "MDJM Availability Checker"
 msgstr ""
 
 #: client-zone/includes/mdjm-availability.php:279
 #: client-zone/includes/mdjm-availability.php:281
-#: includes/admin/users/class-mdjm-employee-manager.php:152
-#: includes/shortcodes.php:345 includes/widgets.php:215
+#: includes/admin/users/class-mdjm-employee-manager.php:177
+#: includes/shortcodes.php:410 includes/widgets.php:215
 msgid "Please wait..."
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Please enter a date"
 msgstr ""
 
-#: client-zone/includes/mdjm-dynamic.php:35 includes/shortcodes.php:450
+#: client-zone/includes/mdjm-dynamic.php:35 includes/shortcodes.php:515
 msgid "No addons available"
 msgstr ""
 
@@ -74,9 +74,10 @@ msgstr ""
 
 #: client-zone/pages/mdjm-clientzone.php:255
 #: client-zone/pages/mdjm-contract.php:275 includes/admin/events/events.php:24
-#: includes/admin/events/events.php:420 includes/admin/events/quotes.php:24
+#: includes/admin/events/events.php:533 includes/admin/events/quotes.php:24
 #: includes/admin/roles/class-mdjm-roles.php:82
 #: includes/clientzone-functions.php:120
+#: includes/events/event-functions.php:953
 msgid "Client"
 msgstr ""
 
@@ -89,7 +90,8 @@ msgstr ""
 
 #: client-zone/pages/mdjm-clientzone.php:262
 #: client-zone/pages/mdjm-contract.php:282
-#: includes/clientzone-functions.php:123 includes/install.php:705
+#: includes/clientzone-functions.php:123 includes/install.php:707
+#: includes/txns/txn-functions.php:26
 msgid "Deposit"
 msgstr ""
 
@@ -117,7 +119,8 @@ msgid "ERROR: You do not have permission to view this page. "
 msgstr ""
 
 #: client-zone/pages/mdjm-contract.php:51
-#: client-zone/pages/mdjm-contract.php:418 templates/contract/contract.php:105
+#: client-zone/pages/mdjm-contract.php:418
+#: includes/clientzone-functions.php:255 templates/contract/contract.php:105
 msgid "Sign Contract"
 msgstr ""
 
@@ -206,15 +209,15 @@ msgstr ""
 msgid "Review &amp; Approve Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:91 includes/clientzone-functions.php:207
+#: client-zone/pages/mdjm-home.php:91 includes/clientzone-functions.php:272
 msgid "View Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:98 includes/clientzone-functions.php:219
+#: client-zone/pages/mdjm-home.php:98 includes/clientzone-functions.php:290
 msgid "Manage Playlist"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:102 includes/clientzone-functions.php:230
+#: client-zone/pages/mdjm-home.php:102 includes/clientzone-functions.php:307
 msgid "Update Profile"
 msgstr ""
 
@@ -239,7 +242,7 @@ msgid "Event Name:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:327 templates/event/event-loop.php:25
-#: templates/event/event-single.php:87
+#: templates/event/event-single.php:51
 msgid "Status:"
 msgstr ""
 
@@ -252,17 +255,17 @@ msgid "Event Type:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:340 client-zone/pages/mdjm-home.php:504
-#: includes/admin/events/metaboxes.php:381 includes/install.php:237
+#: includes/admin/events/metaboxes.php:390 includes/install.php:237
 msgid "Start Time:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:342 client-zone/pages/mdjm-home.php:547
-#: includes/admin/events/metaboxes.php:428 includes/install.php:239
+#: includes/admin/events/metaboxes.php:437 includes/install.php:239
 msgid "End Time:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:347 client-zone/pages/mdjm-home.php:596
-#: templates/event/event-single.php:109
+#: templates/event/event-single.php:73
 msgid "Package:"
 msgstr ""
 
@@ -270,8 +273,8 @@ msgstr ""
 msgid "Addons:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:383 includes/admin/events/metaboxes.php:493
-#: templates/event/event-loop.php:48 templates/event/event-single.php:121
+#: client-zone/pages/mdjm-home.php:383 includes/admin/events/metaboxes.php:502
+#: templates/event/event-loop.php:48 templates/event/event-single.php:85
 msgid "Total Cost:"
 msgstr ""
 
@@ -287,40 +290,40 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:410 templates/event/event-single.php:132
+#: client-zone/pages/mdjm-home.php:410 templates/event/event-single.php:96
 msgid "Name:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:412 includes/admin/events/metaboxes.php:288
-#: templates/event/event-single.php:134
+#: templates/event/event-single.php:98
 msgid "Phone:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:417 includes/admin/events/metaboxes.php:284
 #: includes/install.php:198 includes/install.php:343 includes/install.php:410
-#: includes/install.php:439 templates/event/event-single.php:139
+#: includes/install.php:439 templates/event/event-single.php:103
 msgid "Email:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:419 client-zone/pages/mdjm-home.php:435
-#: templates/event/event-single.php:141 templates/event/event-single.php:152
+#: templates/event/event-single.php:105 templates/event/event-single.php:116
 msgid "Address:"
 msgstr ""
 
 #: client-zone/pages/mdjm-home.php:427
 #: includes/admin/events/contextual-help.php:141
-#: includes/admin/events/metaboxes.php:82 includes/admin/menu.php:505
-#: includes/admin/procedures/mdjm-upgrade.php:693
+#: includes/admin/events/metaboxes.php:82 includes/admin/menu.php:508
+#: includes/admin/procedures/mdjm-upgrade.php:696
 #: includes/admin/venues/metaboxes.php:30 includes/post-types.php:943
-#: templates/event/event-single.php:146
+#: templates/event/event-single.php:110
 msgid "Venue Details"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:433 templates/event/event-single.php:150
+#: client-zone/pages/mdjm-home.php:433 templates/event/event-single.php:114
 msgid "Venue:"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:627 includes/admin/events/metaboxes.php:609
+#: client-zone/pages/mdjm-home.php:627 includes/admin/events/metaboxes.php:622
 msgid "Notes:"
 msgstr ""
 
@@ -452,52 +455,100 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: includes/admin/admin-notices.php:35
-msgid "You have unattended enquiries. %sClick here%s to manage."
+#: includes/admin/admin-notices.php:34
+msgid "You have unattended enquiries. <a href=\"%s\">Click here</a> to manage."
 msgstr ""
 
-#: includes/admin/admin-notices.php:47
+#: includes/admin/admin-notices.php:45
 msgid "The selected songs were removed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:56
+#: includes/admin/admin-notices.php:54
 msgid "The songs count not be removed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:65
+#: includes/admin/admin-notices.php:63
 msgid "Security verification failed. Action not completed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:74
+#: includes/admin/admin-notices.php:72
 msgid "The playlist was emailed successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:83
+#: includes/admin/admin-notices.php:81
 msgid "The playlist could not be emailed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:92
+#: includes/admin/admin-notices.php:90
 msgid "Employee added."
 msgstr ""
 
-#: includes/admin/admin-notices.php:100
+#: includes/admin/admin-notices.php:98
 msgid "Could not add employee."
 msgstr ""
 
-#: includes/admin/admin-notices.php:108
+#: includes/admin/admin-notices.php:106
 msgid "Insufficient information to create employee."
 msgstr ""
 
-#: includes/admin/admin-notices.php:116
+#: includes/admin/admin-notices.php:114
 msgid "Not all required fields have been completed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:124
+#: includes/admin/admin-notices.php:122
 msgid "Email sent successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:132
+#: includes/admin/admin-notices.php:130
 msgid "Email not sent."
+msgstr ""
+
+#: includes/admin/admin-notices.php:151
+msgid ""
+"<a href=\"%s\" title=\"Assign &amp; Respond to Enquiry\">Assign %s &amp; "
+"respond to enquiry</a>"
+msgstr ""
+
+#: includes/admin/admin-notices.php:167
+msgid "You have %d employees available to work %s %s on %s."
+msgstr ""
+
+#: includes/admin/admin-notices.php:181
+msgid "There are no employees available to work %s %s on %s"
+msgstr ""
+
+#: includes/admin/admin-notices.php:196
+msgid "Event not identified."
+msgstr ""
+
+#: includes/admin/admin-notices.php:204
+msgid "Unable to make payment to employee."
+msgstr ""
+
+#: includes/admin/admin-notices.php:212
+msgid "Unable to make payment to employees."
+msgstr ""
+
+#: includes/admin/admin-notices.php:220
+msgid "Not all employees could be paid."
+msgstr ""
+
+#: includes/admin/admin-notices.php:228
+msgid "Employee successfully paid."
+msgstr ""
+
+#: includes/admin/admin-notices.php:236
+msgid "Employees successfully paid."
+msgstr ""
+
+#: includes/admin/admin-notices.php:244
+msgid "%1$s %2$s successfully rejected."
+msgid_plural "%1$s %3$s successfully rejected."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/admin/admin-notices.php:256
+msgid "Errors were encountered."
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:25
@@ -527,9 +578,9 @@ msgid "Select a Recipient"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:59
-#: includes/admin/menu.php:46 includes/admin/menu.php:309
-#: includes/admin/menu.php:312
-#: includes/admin/users/class-mdjm-employee-manager.php:256
+#: includes/admin/menu.php:47 includes/admin/menu.php:312
+#: includes/admin/menu.php:315
+#: includes/admin/users/class-mdjm-employee-manager.php:281
 msgid "Clients"
 msgstr ""
 
@@ -538,9 +589,10 @@ msgid "No Clients Found"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:73
-#: includes/admin/events/events.php:25 includes/admin/menu.php:63
-#: includes/admin/menu.php:275 includes/admin/menu.php:278
-#: includes/admin/users/class-mdjm-employee-manager.php:272
+#: includes/admin/events/events.php:25 includes/admin/menu.php:64
+#: includes/admin/menu.php:278 includes/admin/menu.php:281
+#: includes/admin/users/class-mdjm-employee-manager.php:297
+#: includes/events/event-functions.php:967
 msgid "Employees"
 msgstr ""
 
@@ -564,39 +616,57 @@ msgstr ""
 msgid "No Template"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:106
+#: includes/admin/communications/comms-functions.php:107
 msgid "Associated %s"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:109
+#: includes/admin/communications/comms-functions.php:112
+#: includes/ajax-functions.php:547
+msgid "from"
+msgstr ""
+
+#: includes/admin/communications/comms-functions.php:120
 #: includes/ajax-functions.php:519
 msgid "Select an Event"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:111
+#: includes/admin/communications/comms-functions.php:123
 msgid ""
 "If no %s is selected <code>{event_*}</code> content tags may not be used"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:116
+#: includes/admin/communications/comms-functions.php:128
 msgid "Attach a File"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:118
+#: includes/admin/communications/comms-functions.php:130
 msgid ""
 "Max file size %dMB. Change php.ini <code>post_max_size</code> to increase"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:139
+#: includes/admin/communications/comms-functions.php:153
 msgid "Send Email"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:181
+#: includes/admin/communications/comms-functions.php:195
 msgid "No Templates Found"
 msgstr ""
 
-#: includes/admin/communications/comms-functions.php:253
+#: includes/admin/communications/comms-functions.php:267
 msgid "Communication Feature"
+msgstr ""
+
+#: includes/admin/communications/comms-functions.php:276
+#: includes/admin/events/events.php:330
+msgid "No reason specified"
+msgstr ""
+
+#: includes/admin/communications/comms-functions.php:309
+msgid "Rejection Reason"
+msgstr ""
+
+#: includes/admin/communications/comms-functions.php:311
+msgid "Optional. If completed, this entry will be added to the event journal."
 msgstr ""
 
 #: includes/admin/communications/comms.php:22
@@ -619,7 +689,7 @@ msgstr ""
 
 #: includes/admin/communications/comms.php:26
 #: includes/admin/pages/event-fields.php:791
-#: includes/admin/settings/register-settings.php:1164
+#: includes/admin/settings/register-settings.php:1199
 #: includes/admin/transactions/txns.php:28 includes/admin/venues/venues.php:27
 msgid "%s"
 msgstr ""
@@ -634,8 +704,8 @@ msgstr ""
 
 #: includes/admin/communications/comms.php:100
 #: includes/admin/events/quotes.php:153 includes/admin/events/quotes.php:178
-#: includes/admin/transactions/txns.php:164
-#: includes/admin/transactions/txns.php:182
+#: includes/admin/transactions/txns.php:204
+#: includes/admin/transactions/txns.php:222
 msgid "N/A"
 msgstr ""
 
@@ -682,8 +752,8 @@ msgid "View <a href=\"%s\">add-ons</a>."
 msgstr ""
 
 #: includes/admin/communications/contextual-help.php:55
-#: includes/admin/menu.php:50 includes/admin/menu.php:341
-#: includes/admin/menu.php:344
+#: includes/admin/menu.php:51 includes/admin/menu.php:344
+#: includes/admin/menu.php:347
 msgid "Communications"
 msgstr ""
 
@@ -787,29 +857,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: includes/admin/core.php:33
-msgid "Dashboard"
-msgstr ""
-
-#: includes/admin/core.php:34 includes/admin/menu.php:36
-#: includes/admin/menu.php:202
-msgid "Settings"
-msgstr ""
-
-#: includes/admin/core.php:49
-msgid "Support Docs"
-msgstr ""
-
-#: includes/admin/core.php:50
-msgid "Donate"
-msgstr ""
-
-#: includes/admin/core.php:51 includes/admin/settings/contextual-help.php:88
-#: includes/admin/settings/register-settings.php:1170
-#: includes/admin/welcome.php:419
-msgid "Extensions"
-msgstr ""
-
 #: includes/admin/dashboard-widgets.php:25
 msgid "%s Overview"
 msgstr ""
@@ -897,7 +944,7 @@ msgid "<a href=\"%s\">Delete</a>"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:259
-#: includes/admin/events/events.php:203
+#: includes/admin/events/events.php:234
 #: includes/admin/events/playlist-page.php:153
 #: templates/playlist/playlist-client.php:55
 #: templates/playlist/playlist-guest.php:66
@@ -1162,8 +1209,8 @@ msgid "Check the <em>Save this Venue</em> option to save the venue."
 msgstr ""
 
 #: includes/admin/events/contextual-help.php:149
-#: includes/admin/events/metaboxes.php:102 includes/admin/menu.php:74
-#: includes/admin/menu.php:455
+#: includes/admin/events/metaboxes.php:102 includes/admin/menu.php:77
+#: includes/admin/menu.php:458
 msgid "Transactions"
 msgstr ""
 
@@ -1235,10 +1282,10 @@ msgstr ""
 #: includes/events/class-events.php:624 includes/events/class-events.php:626
 #: includes/events/class-mdjm-event.php:230
 #: includes/events/class-mdjm-event.php:231
-#: includes/events/class-mdjm-event.php:615
-#: includes/events/class-mdjm-event.php:625
-#: includes/events/class-mdjm-event.php:656
-#: includes/events/class-mdjm-event.php:666
+#: includes/events/class-mdjm-event.php:619
+#: includes/events/class-mdjm-event.php:632
+#: includes/events/class-mdjm-event.php:663
+#: includes/events/class-mdjm-event.php:673
 msgid "Due"
 msgstr ""
 
@@ -1250,91 +1297,104 @@ msgstr ""
 msgid "Journal"
 msgstr ""
 
-#: includes/admin/events/events.php:101 includes/admin/events/events.php:123
+#: includes/admin/events/events.php:105 includes/admin/events/events.php:132
 msgid "<span class=\"mdjm-form-error\">Not Assigned</span>"
 msgstr ""
 
-#: includes/admin/events/events.php:116 includes/admin/events/events.php:119
-#: includes/admin/events/metaboxes.php:644
-#: includes/admin/events/metaboxes.php:655
-#: includes/admin/events/metaboxes.php:955
-#: includes/admin/events/metaboxes.php:1014
-#: includes/admin/events/metaboxes.php:1025
+#: includes/admin/events/events.php:124 includes/admin/events/events.php:128
+#: includes/admin/events/metaboxes.php:657
+#: includes/admin/events/metaboxes.php:681
+#: includes/admin/events/metaboxes.php:997
+#: includes/admin/events/metaboxes.php:1056
+#: includes/admin/events/metaboxes.php:1067
 #: includes/admin/roles/class-mdjm-roles.php:103
 #: includes/admin/settings/register-settings.php:408
-#: includes/admin/settings/register-settings.php:502
-#: includes/admin/settings/register-settings.php:504
-#: includes/admin/settings/register-settings.php:628
+#: includes/admin/settings/register-settings.php:508
+#: includes/admin/settings/register-settings.php:510
 #: includes/admin/settings/register-settings.php:634
-#: includes/admin/settings/register-settings.php:635
-#: includes/content/content-tags.php:647 templates/event/event-single.php:93
+#: includes/admin/settings/register-settings.php:640
+#: includes/admin/settings/register-settings.php:641
+#: includes/content/content-tags.php:672 templates/event/event-single.php:57
 msgid "DJ"
 msgstr ""
 
-#: includes/admin/events/events.php:215
+#: includes/admin/events/events.php:217
+msgid ""
+"<i title=\"%s %s paid\" class=\"fa fa-check-square-o\" aria-hidden=\"true\">"
+msgstr ""
+
+#: includes/admin/events/events.php:246
 msgid "Entry"
 msgid_plural "Entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/events/events.php:293
+#: includes/admin/events/events.php:292 includes/admin/events/events.php:293
+msgid "Reject"
+msgstr ""
+
+#: includes/admin/events/events.php:406
 msgid "All Dates"
 msgstr ""
 
 #. translators: 1: month name, 2: 4-digit year
-#: includes/admin/events/events.php:309
+#: includes/admin/events/events.php:422
 msgid "%1$s %2$d"
 msgstr ""
 
-#: includes/admin/events/events.php:343
+#: includes/admin/events/events.php:456
 msgid "All %s Types"
 msgstr ""
 
-#: includes/admin/events/events.php:379
+#: includes/admin/events/events.php:492
 msgid "Filter by Employee"
 msgstr ""
 
-#: includes/admin/events/events.php:387
+#: includes/admin/events/events.php:500
 msgid "All Employees"
 msgstr ""
 
-#: includes/admin/events/events.php:422
+#: includes/admin/events/events.php:535
 msgid "All Client's"
 msgstr ""
 
-#: includes/admin/events/events.php:513
+#: includes/admin/events/events.php:628
 msgid "<a href=\"%s\">Quote</a>"
 msgstr ""
 
-#: includes/admin/events/events.php:524
+#: includes/admin/events/events.php:633
+msgid "<a href=\"%s\">Availability</a>"
+msgstr ""
+
+#: includes/admin/events/events.php:644
 msgid "<span class=\"trash\"><a href=\"%s\">Unavailable</a></span>"
 msgstr ""
 
-#: includes/admin/events/events.php:577 includes/admin/events/events.php:581
+#: includes/admin/events/events.php:704 includes/admin/events/events.php:708
 msgid "Update Event"
 msgstr ""
 
-#: includes/admin/events/events.php:579
+#: includes/admin/events/events.php:706
 msgid "Create Event"
 msgstr ""
 
-#: includes/admin/events/events.php:1071
+#: includes/admin/events/events.php:1203
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/events.php:1283 includes/admin/events/events.php:1284
+#: includes/admin/events/events.php:1418 includes/admin/events/events.php:1419
 msgid "%2$s updated. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1285
+#: includes/admin/events/events.php:1420
 msgid "%2$s created. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1286
+#: includes/admin/events/events.php:1421
 msgid "%2$s saved. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1287
+#: includes/admin/events/events.php:1422
 msgid "%2$s submitted. %1$s%3$s List%4$s."
 msgstr ""
 
@@ -1368,20 +1428,20 @@ msgid "Last Login to %s"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:301
-#: includes/admin/events/metaboxes.php:373 includes/admin/menu.php:249
-#: includes/admin/menu.php:255 includes/admin/settings/contextual-help.php:75
+#: includes/admin/events/metaboxes.php:382 includes/admin/menu.php:252
+#: includes/admin/menu.php:258 includes/admin/settings/contextual-help.php:75
 #: includes/admin/settings/contextual-help.php:76
 #: includes/admin/settings/register-settings.php:302
-#: includes/admin/settings/register-settings.php:538
-#: includes/admin/settings/register-settings.php:668
-#: includes/admin/settings/register-settings.php:681
-#: includes/admin/settings/register-settings.php:730
-#: includes/admin/settings/register-settings.php:764
-#: includes/admin/settings/register-settings.php:766
-#: includes/admin/settings/register-settings.php:1166
+#: includes/admin/settings/register-settings.php:544
+#: includes/admin/settings/register-settings.php:674
+#: includes/admin/settings/register-settings.php:687
+#: includes/admin/settings/register-settings.php:736
+#: includes/admin/settings/register-settings.php:770
+#: includes/admin/settings/register-settings.php:772
+#: includes/admin/settings/register-settings.php:1201
 #: includes/admin/welcome.php:203 includes/admin/welcome.php:344
 #: includes/admin/welcome.php:371 includes/admin/welcome.php:375
-#: includes/content/content-tags.php:635 includes/install.php:95
+#: includes/content/content-tags.php:660 includes/install.php:95
 msgid "Client Zone"
 msgstr ""
 
@@ -1389,298 +1449,306 @@ msgstr ""
 msgid "Communicate"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:309 includes/admin/venues/venues.php:23
-msgid "Contact"
+#: includes/admin/events/metaboxes.php:309
+msgid "<a id=\"contact_client\" href=\"%s\">Contact</a>"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:322
+#: includes/admin/events/metaboxes.php:331
 msgid "Online Quote Status"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:325 includes/post-types.php:749
+#: includes/admin/events/metaboxes.php:334 includes/post-types.php:749
 msgid "Viewed"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:327
+#: includes/admin/events/metaboxes.php:336
 msgid "Not viewed yet"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:363 includes/install.php:231
+#: includes/admin/events/metaboxes.php:372 includes/install.php:231
 msgid "%s Date:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:370
+#: includes/admin/events/metaboxes.php:379
 msgid "%s Name:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:373
+#: includes/admin/events/metaboxes.php:382
 msgid "Optional: Display name in %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:534
+#: includes/admin/events/metaboxes.php:543
 msgid "Select an %s Package:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:536
+#: includes/admin/events/metaboxes.php:545
 msgid "No Package"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:581
+#: includes/admin/events/metaboxes.php:594
 msgid "Select Add-ons:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:581
+#: includes/admin/events/metaboxes.php:594
 msgid "(Optional)"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:610
+#: includes/admin/events/metaboxes.php:623
 msgid "Enter any information you feel relevant"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:644
+#: includes/admin/events/metaboxes.php:657
 msgid "Select Primary %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:655
+#: includes/admin/events/metaboxes.php:681
 msgid "Select a %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:690
-#: includes/admin/events/metaboxes.php:758 includes/employee-functions.php:503
+#: includes/admin/events/metaboxes.php:725
+#: includes/admin/events/metaboxes.php:796 includes/employee-functions.php:505
 msgid "Wage"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:713
+#: includes/admin/events/metaboxes.php:730 includes/employee-functions.php:538
+msgid "Employee has been paid"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:751
 msgid "Add Employee to %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:731
-#: includes/admin/users/class-mdjm-employee-manager.php:209
+#: includes/admin/events/metaboxes.php:769
+#: includes/admin/users/class-mdjm-employee-manager.php:234
 msgid "Add Employee"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:742
-#: includes/admin/users/class-mdjm-employee-manager.php:199
+#: includes/admin/events/metaboxes.php:780
+#: includes/admin/users/class-mdjm-employee-manager.php:224
 #: includes/employee-functions.php:501
 msgid "Role"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:744
-#: includes/admin/users/class-mdjm-employee-manager.php:201
+#: includes/admin/events/metaboxes.php:782
+#: includes/admin/users/class-mdjm-employee-manager.php:226
 msgid "Select Role"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:768
-#: includes/admin/events/metaboxes.php:1296
+#: includes/admin/events/metaboxes.php:806
+#: includes/admin/events/metaboxes.php:1338
 msgid "Add"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:791
+#: includes/admin/events/metaboxes.php:812
+msgid "Pay %s Employees"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:833
 msgid " Select Venue:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:797
+#: includes/admin/events/metaboxes.php:839
 msgid "Enter Manually"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:798
+#: includes/admin/events/metaboxes.php:840
 msgid "Use Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:842
+#: includes/admin/events/metaboxes.php:884
 msgid "Venue Name:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:846
+#: includes/admin/events/metaboxes.php:888
 msgid "Contact Name:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:854
+#: includes/admin/events/metaboxes.php:896
 #: includes/admin/venues/metaboxes.php:105
 msgid "Contact Phone:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:858
+#: includes/admin/events/metaboxes.php:900
 msgid "Contact Email:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:866
+#: includes/admin/events/metaboxes.php:908
 #: includes/admin/venues/metaboxes.php:122
 msgid "Address Line 1:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:870
+#: includes/admin/events/metaboxes.php:912
 #: includes/admin/venues/metaboxes.php:128
 msgid "Address Line 2:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:878
+#: includes/admin/events/metaboxes.php:920
 #: includes/admin/venues/metaboxes.php:138
 msgid "Town:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:882
+#: includes/admin/events/metaboxes.php:924
 #: includes/admin/venues/metaboxes.php:144
 msgid "County:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:890
+#: includes/admin/events/metaboxes.php:932
 msgid "Postcode:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:901
+#: includes/admin/events/metaboxes.php:943
 msgid "Save this venue?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:934
+#: includes/admin/events/metaboxes.php:976
 msgid "Enquiry Source:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:955
+#: includes/admin/events/metaboxes.php:997
 msgid "%s Setup:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:962
+#: includes/admin/events/metaboxes.php:1004
 msgid "Setup Time:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1000
+#: includes/admin/events/metaboxes.php:1042
 msgid "AM"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1003
+#: includes/admin/events/metaboxes.php:1045
 msgid "PM"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1014
+#: includes/admin/events/metaboxes.php:1056
 msgid ""
 "Notes entered here can be seen by the %s %s and Admins only. Clients will "
 "not see this information"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1024
+#: includes/admin/events/metaboxes.php:1066
 msgid "Admin Notes:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1025
+#: includes/admin/events/metaboxes.php:1067
 msgid ""
 "Notes entered here can be seen by Admins only. Clients &amp; %s's will not "
 "see this information"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1064
+#: includes/admin/events/metaboxes.php:1106
 msgid "Amount:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1070 includes/install.php:218
+#: includes/admin/events/metaboxes.php:1112 includes/install.php:218
 msgid "Date:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1076
+#: includes/admin/events/metaboxes.php:1118
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1078
+#: includes/admin/events/metaboxes.php:1120
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1079
+#: includes/admin/events/metaboxes.php:1121
 msgid "Outgoing"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1105
+#: includes/admin/events/metaboxes.php:1147
 msgid "Paid From:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1107
+#: includes/admin/events/metaboxes.php:1149
 msgid "Leave empty if from client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1111
+#: includes/admin/events/metaboxes.php:1153
 msgid "Paid To:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1113
+#: includes/admin/events/metaboxes.php:1155
 msgid "Leave empty if to client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1119
+#: includes/admin/events/metaboxes.php:1161
 msgid "Details:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1121
-#: includes/admin/events/metaboxes.php:1132
+#: includes/admin/events/metaboxes.php:1163
+#: includes/admin/events/metaboxes.php:1174
 msgid "--- Select ---"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1130
+#: includes/admin/events/metaboxes.php:1172
 msgid "Source:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1141 includes/admin/menu.php:464
-#: includes/admin/menu.php:467 includes/post-types.php:409
+#: includes/admin/events/metaboxes.php:1183 includes/admin/menu.php:467
+#: includes/admin/menu.php:470 includes/post-types.php:409
 msgid "Add Transaction"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1180
+#: includes/admin/events/metaboxes.php:1222
 msgid "Emails <span class=\"count\">(%s) total"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1186
+#: includes/admin/events/metaboxes.php:1228
 msgid " on "
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1210
+#: includes/admin/events/metaboxes.php:1252
 msgid ""
 "Journal Entries <span class=\"count\"><a href=\"%s\">(%s total)</a></span>"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1244
+#: includes/admin/events/metaboxes.php:1286
 msgid "%s Status:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1265 includes/install.php:233
-#: templates/event/event-single.php:91
+#: includes/admin/events/metaboxes.php:1307 includes/install.php:233
+#: templates/event/event-single.php:55
 msgid "%s Type:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1278
+#: includes/admin/events/metaboxes.php:1320
 msgid "Select %s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1285
+#: includes/admin/events/metaboxes.php:1327
 msgid "Add New"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1295
+#: includes/admin/events/metaboxes.php:1337
 msgid "%s Type Name"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1305
+#: includes/admin/events/metaboxes.php:1347
 msgid "Event Contract:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1357
+#: includes/admin/events/metaboxes.php:1399
 msgid "Disable Client Update Emails"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1366
+#: includes/admin/events/metaboxes.php:1408
 msgid "Reset Client Password?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1449
+#: includes/admin/events/metaboxes.php:1491
 msgid "Enable %s Playlist?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1463
+#: includes/admin/events/metaboxes.php:1505
 msgid "Add %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1463
+#: includes/admin/events/metaboxes.php:1505
 msgid "Update %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1473
+#: includes/admin/events/metaboxes.php:1515
 msgid "Delete this event"
 msgstr ""
 
@@ -1772,7 +1840,7 @@ msgstr ""
 msgid "Set as Default Category?"
 msgstr ""
 
-#: includes/admin/mdjm.php:663 includes/content/content-tags.php:975
+#: includes/admin/mdjm.php:663 includes/content/content-tags.php:1071
 msgid "Please <a href=\"%s\">click here</a> to reset your password"
 msgstr ""
 
@@ -1797,243 +1865,257 @@ msgstr ""
 msgid "Field deleted successfully"
 msgstr ""
 
-#: includes/admin/menu.php:39 includes/admin/menu.php:364
-#: includes/admin/menu.php:367 includes/admin/welcome.php:343
+#: includes/admin/menu.php:37 includes/admin/menu.php:205
+#: includes/admin/plugins.php:23
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/menu.php:40 includes/admin/menu.php:367
+#: includes/admin/menu.php:370 includes/admin/welcome.php:343
 msgid "Contract Templates"
 msgstr ""
 
-#: includes/admin/menu.php:40 includes/admin/menu.php:385
-#: includes/admin/menu.php:388 includes/admin/welcome.php:339
+#: includes/admin/menu.php:41 includes/admin/menu.php:388
+#: includes/admin/menu.php:391 includes/admin/welcome.php:339
 msgid "Email Templates"
 msgstr ""
 
-#: includes/admin/menu.php:43 includes/admin/menu.php:297
-#: includes/admin/menu.php:300
+#: includes/admin/menu.php:44 includes/admin/menu.php:300
+#: includes/admin/menu.php:303
 msgid "Automated Tasks"
 msgstr ""
 
-#: includes/admin/menu.php:60 includes/admin/menu.php:287
-#: includes/admin/menu.php:290
+#: includes/admin/menu.php:53 includes/admin/menu.php:353
+#: includes/admin/menu.php:356
+msgid "Communication History"
+msgstr ""
+
+#: includes/admin/menu.php:53
+msgid "History"
+msgstr ""
+
+#: includes/admin/menu.php:67 includes/admin/menu.php:290
+#: includes/admin/menu.php:293
 msgid "Employee Availability"
 msgstr ""
 
 #: includes/admin/menu.php:67
+msgid "Availability"
+msgstr ""
+
+#: includes/admin/menu.php:70
 msgid "Equipment Packages"
 msgstr ""
 
-#: includes/admin/menu.php:78 includes/admin/menu.php:486
-#: includes/admin/menu.php:489
-#: includes/admin/users/class-mdjm-employee-manager.php:380
+#: includes/admin/menu.php:81 includes/admin/menu.php:489
+#: includes/admin/menu.php:492
+#: includes/admin/users/class-mdjm-employee-manager.php:405
 msgid "Venues"
 msgstr ""
 
-#: includes/admin/menu.php:81
+#: includes/admin/menu.php:84
 msgid "Playlists"
 msgstr ""
 
-#: includes/admin/menu.php:83
+#: includes/admin/menu.php:86
 msgid "Custom Event Fields"
 msgstr ""
 
-#: includes/admin/menu.php:85 includes/admin/menu.php:329
+#: includes/admin/menu.php:88 includes/admin/menu.php:332
 msgid "Custom Client Fields"
 msgstr ""
 
-#: includes/admin/menu.php:106 includes/admin/menu.php:120
+#: includes/admin/menu.php:109 includes/admin/menu.php:123
 msgid "MDJM %s"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: includes/admin/menu.php:109 includes/admin/welcome.php:129
+#: includes/admin/menu.php:112 includes/admin/welcome.php:129
 msgid "MDJM Event Management"
 msgstr ""
 
-#: includes/admin/menu.php:128
+#: includes/admin/menu.php:131
 msgid "Create %s"
 msgstr ""
 
-#: includes/admin/menu.php:131
+#: includes/admin/menu.php:134
 msgid "Create New %s"
 msgstr ""
 
-#: includes/admin/menu.php:136 includes/post-types.php:615
+#: includes/admin/menu.php:139 includes/post-types.php:615
 msgid "Unattended Enquiries"
 msgstr ""
 
-#: includes/admin/menu.php:137
+#: includes/admin/menu.php:140
 msgid "View Enquiries"
 msgstr ""
 
-#: includes/admin/menu.php:158
+#: includes/admin/menu.php:161
 msgid "%s Types"
 msgstr ""
 
-#: includes/admin/menu.php:161
+#: includes/admin/menu.php:164
 msgid "Manage %s Types"
 msgstr ""
 
-#: includes/admin/menu.php:169 includes/post-types.php:872
+#: includes/admin/menu.php:172 includes/post-types.php:872
 msgid "Playlist Categories"
 msgstr ""
 
-#: includes/admin/menu.php:172
+#: includes/admin/menu.php:175
 msgid "Manage Playlist Categories"
 msgstr ""
 
-#: includes/admin/menu.php:180 includes/post-types.php:841
+#: includes/admin/menu.php:183 includes/post-types.php:841
 msgid "Enquiry Sources"
 msgstr ""
 
-#: includes/admin/menu.php:183
+#: includes/admin/menu.php:186
 msgid "Manage Enquiry Sources"
 msgstr ""
 
-#: includes/admin/menu.php:205
+#: includes/admin/menu.php:208
 msgid "MDJM Settings"
 msgstr ""
 
-#: includes/admin/menu.php:211 includes/admin/settings/contextual-help.php:53
-#: includes/admin/settings/register-settings.php:1163 includes/install.php:449
-#: includes/install.php:694
+#: includes/admin/menu.php:214 includes/admin/settings/contextual-help.php:53
+#: includes/admin/settings/register-settings.php:1198 includes/install.php:449
+#: includes/install.php:696
 msgid "General"
 msgstr ""
 
-#: includes/admin/menu.php:214
+#: includes/admin/menu.php:217
 msgid "MDJM General Settings"
 msgstr ""
 
-#: includes/admin/menu.php:223
+#: includes/admin/menu.php:226
 msgid "MDJM Event Settings"
 msgstr ""
 
-#: includes/admin/menu.php:229
-#: includes/admin/users/class-mdjm-employee-manager.php:108
-#: includes/admin/users/class-mdjm-employee-manager.php:232
+#: includes/admin/menu.php:232
+#: includes/admin/users/class-mdjm-employee-manager.php:133
+#: includes/admin/users/class-mdjm-employee-manager.php:257
 msgid "Permissions"
 msgstr ""
 
-#: includes/admin/menu.php:232
+#: includes/admin/menu.php:235
 msgid "MDJM Permission Settings"
 msgstr ""
 
-#: includes/admin/menu.php:238
+#: includes/admin/menu.php:241
 msgid "Email %s Template Settings"
 msgstr ""
 
-#: includes/admin/menu.php:241
+#: includes/admin/menu.php:244
 msgid "MDJM Email %s Template Settings"
 msgstr ""
 
-#: includes/admin/menu.php:248 includes/admin/menu.php:254
+#: includes/admin/menu.php:251 includes/admin/menu.php:257
 #: includes/admin/settings/register-settings.php:384
-#: includes/admin/settings/register-settings.php:668
-#: includes/admin/settings/register-settings.php:721
-#: includes/admin/settings/register-settings.php:1220
-#: includes/admin/settings/register-settings.php:1228
+#: includes/admin/settings/register-settings.php:674
+#: includes/admin/settings/register-settings.php:727
+#: includes/admin/settings/register-settings.php:1255
+#: includes/admin/settings/register-settings.php:1263
 msgid "%s Settings"
 msgstr ""
 
-#: includes/admin/menu.php:262
-#: includes/admin/settings/register-settings.php:896
-#: includes/admin/settings/register-settings.php:1234
+#: includes/admin/menu.php:265
+#: includes/admin/settings/register-settings.php:902
+#: includes/admin/settings/register-settings.php:1269
 msgid "Payment Settings"
 msgstr ""
 
-#: includes/admin/menu.php:265
+#: includes/admin/menu.php:268
 msgid "MDJM Payment Settings"
 msgstr ""
 
-#: includes/admin/menu.php:320
+#: includes/admin/menu.php:323
 msgid "Add Client"
 msgstr ""
 
-#: includes/admin/menu.php:323
+#: includes/admin/menu.php:326
 msgid "Add New Client"
 msgstr ""
 
-#: includes/admin/menu.php:332
+#: includes/admin/menu.php:335
 msgid "Custom Client Field"
 msgstr ""
 
-#: includes/admin/menu.php:350 includes/admin/menu.php:353
-msgid "Communication History"
-msgstr ""
-
-#: includes/admin/menu.php:373 includes/post-types.php:77
+#: includes/admin/menu.php:376 includes/post-types.php:77
 msgid "Add Contract Template"
 msgstr ""
 
-#: includes/admin/menu.php:376 includes/post-types.php:79
+#: includes/admin/menu.php:379 includes/post-types.php:79
 msgid "New Contract Template"
 msgstr ""
 
-#: includes/admin/menu.php:394 includes/post-types.php:181
+#: includes/admin/menu.php:397 includes/post-types.php:181
 msgid "Add Template"
 msgstr ""
 
-#: includes/admin/menu.php:397
+#: includes/admin/menu.php:400
 msgid "New Email Template"
 msgstr ""
 
-#: includes/admin/menu.php:406 includes/admin/menu.php:409
+#: includes/admin/menu.php:409 includes/admin/menu.php:412
 msgid "Equipment %s Packages"
 msgstr ""
 
-#: includes/admin/menu.php:419
+#: includes/admin/menu.php:422
 msgid "Custom %s Fields"
 msgstr ""
 
-#: includes/admin/menu.php:422
+#: includes/admin/menu.php:425
 msgid "Manage Custom %s Fields"
 msgstr ""
 
-#: includes/admin/menu.php:431 includes/install.php:146
+#: includes/admin/menu.php:434 includes/install.php:146
 msgid "%s Quotes"
 msgstr ""
 
-#: includes/admin/menu.php:434
+#: includes/admin/menu.php:437
 msgid "View %s Quotes"
 msgstr ""
 
-#: includes/admin/menu.php:458
+#: includes/admin/menu.php:461
 msgid "MDJM Transactions"
 msgstr ""
 
-#: includes/admin/menu.php:474 includes/admin/procedures/mdjm-upgrade.php:666
+#: includes/admin/menu.php:477 includes/admin/procedures/mdjm-upgrade.php:669
 #: includes/post-types.php:910
 msgid "Transaction Types"
 msgstr ""
 
-#: includes/admin/menu.php:477
+#: includes/admin/menu.php:480
 msgid "View / Edit Transaction Types"
 msgstr ""
 
-#: includes/admin/menu.php:496 includes/post-types.php:454
+#: includes/admin/menu.php:499 includes/post-types.php:454
 msgid "Add Venue"
 msgstr ""
 
-#: includes/admin/menu.php:499 includes/post-types.php:455
+#: includes/admin/menu.php:502 includes/post-types.php:455
 msgid "Add New Venue"
 msgstr ""
 
-#: includes/admin/menu.php:508
+#: includes/admin/menu.php:511
 msgid "View / Edit Venue Details"
 msgstr ""
 
-#: includes/admin/menu.php:517
+#: includes/admin/menu.php:520
 msgid "%sDocumentation%s"
 msgstr ""
 
-#: includes/admin/menu.php:520
+#: includes/admin/menu.php:523
 msgid "Documentation"
 msgstr ""
 
-#: includes/admin/menu.php:527
+#: includes/admin/menu.php:530
 msgid "%sSupport%s"
 msgstr ""
 
-#: includes/admin/menu.php:530
+#: includes/admin/menu.php:533
 msgid "MDJM Support Forums"
 msgstr ""
 
@@ -2093,8 +2175,8 @@ msgid "Employee"
 msgstr ""
 
 #: includes/admin/pages/availability.php:276
-#: includes/admin/users/class-mdjm-client-manager.php:318
-#: includes/admin/users/class-mdjm-employee-manager.php:692
+#: includes/admin/users/class-mdjm-client-manager.php:319
+#: includes/admin/users/class-mdjm-employee-manager.php:717
 msgid "All"
 msgstr ""
 
@@ -2152,6 +2234,7 @@ msgstr ""
 #: includes/admin/pages/event-fields.php:338
 #: includes/admin/pages/event-fields.php:392
 #: includes/admin/pages/event-fields.php:554
+#: includes/events/event-functions.php:973
 msgid "Description"
 msgstr ""
 
@@ -2169,7 +2252,7 @@ msgstr ""
 
 #: includes/admin/pages/client-fields.php:228
 #: includes/admin/pages/event-fields.php:363
-#: includes/admin/users/class-mdjm-employee-manager.php:390
+#: includes/admin/users/class-mdjm-employee-manager.php:415
 msgid "Edit"
 msgstr ""
 
@@ -2347,152 +2430,167 @@ msgstr ""
 msgid "Total Uploaded:"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:435
+#: includes/admin/plugins.php:44
+msgid "Support Docs"
+msgstr ""
+
+#: includes/admin/plugins.php:45
+msgid "Donate"
+msgstr ""
+
+#: includes/admin/plugins.php:46
+#: includes/admin/settings/contextual-help.php:88
+#: includes/admin/settings/register-settings.php:1205
+#: includes/admin/welcome.php:419
+msgid "Extensions"
+msgstr ""
+
+#: includes/admin/procedures/mdjm-upgrade.php:438
 msgid " event found"
 msgid_plural " events found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:575
-#: includes/admin/procedures/mdjm-upgrade.php:582
-#: includes/admin/procedures/mdjm-upgrade.php:601
+#: includes/admin/procedures/mdjm-upgrade.php:578
+#: includes/admin/procedures/mdjm-upgrade.php:585
+#: includes/admin/procedures/mdjm-upgrade.php:604
 msgid " entry "
 msgid_plural " entries "
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:630 includes/post-types.php:800
+#: includes/admin/procedures/mdjm-upgrade.php:633 includes/post-types.php:800
 msgctxt "taxonomy general name"
 msgid "Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:631 includes/post-types.php:801
+#: includes/admin/procedures/mdjm-upgrade.php:634 includes/post-types.php:801
 msgctxt "taxonomy singular name"
 msgid "Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:632 includes/post-types.php:802
+#: includes/admin/procedures/mdjm-upgrade.php:635 includes/post-types.php:802
 msgid "Search Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:633 includes/post-types.php:803
+#: includes/admin/procedures/mdjm-upgrade.php:636 includes/post-types.php:803
 msgid "All Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:634 includes/post-types.php:804
+#: includes/admin/procedures/mdjm-upgrade.php:637 includes/post-types.php:804
 msgid "Edit Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:635 includes/post-types.php:805
+#: includes/admin/procedures/mdjm-upgrade.php:638 includes/post-types.php:805
 msgid "Update Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:636 includes/post-types.php:806
+#: includes/admin/procedures/mdjm-upgrade.php:639 includes/post-types.php:806
 msgid "Add New Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:637 includes/post-types.php:807
+#: includes/admin/procedures/mdjm-upgrade.php:640 includes/post-types.php:807
 msgid "New Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:638 includes/post-types.php:808
+#: includes/admin/procedures/mdjm-upgrade.php:641 includes/post-types.php:808
 msgid "Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:640 includes/post-types.php:810
+#: includes/admin/procedures/mdjm-upgrade.php:643 includes/post-types.php:810
 msgid "Choose from the most popular Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:641 includes/post-types.php:811
+#: includes/admin/procedures/mdjm-upgrade.php:644 includes/post-types.php:811
 msgid "No event types found"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:658 includes/post-types.php:902
+#: includes/admin/procedures/mdjm-upgrade.php:661 includes/post-types.php:902
 msgctxt "taxonomy general name"
 msgid "Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:659 includes/post-types.php:903
+#: includes/admin/procedures/mdjm-upgrade.php:662 includes/post-types.php:903
 msgctxt "taxonomy singular name"
 msgid "Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:660 includes/post-types.php:904
+#: includes/admin/procedures/mdjm-upgrade.php:663 includes/post-types.php:904
 msgid "Search Transaction Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:661
-#: includes/admin/transactions/txns.php:304 includes/post-types.php:905
+#: includes/admin/procedures/mdjm-upgrade.php:664
+#: includes/admin/transactions/txns.php:344 includes/post-types.php:905
 msgid "All Transaction Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:662 includes/post-types.php:906
+#: includes/admin/procedures/mdjm-upgrade.php:665 includes/post-types.php:906
 msgid "Edit Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:663 includes/post-types.php:907
+#: includes/admin/procedures/mdjm-upgrade.php:666 includes/post-types.php:907
 msgid "Update Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:664 includes/post-types.php:908
+#: includes/admin/procedures/mdjm-upgrade.php:667 includes/post-types.php:908
 msgid "Add New Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:665 includes/post-types.php:909
+#: includes/admin/procedures/mdjm-upgrade.php:668 includes/post-types.php:909
 msgid "New Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:668 includes/post-types.php:912
+#: includes/admin/procedures/mdjm-upgrade.php:671 includes/post-types.php:912
 msgid "Choose from the most popular Transaction Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:669 includes/post-types.php:913
+#: includes/admin/procedures/mdjm-upgrade.php:672 includes/post-types.php:913
 msgid "No transaction types found"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:685 includes/post-types.php:935
+#: includes/admin/procedures/mdjm-upgrade.php:688 includes/post-types.php:935
 msgctxt "taxonomy general name"
 msgid "Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:686 includes/post-types.php:936
+#: includes/admin/procedures/mdjm-upgrade.php:689 includes/post-types.php:936
 msgctxt "taxonomy singular name"
 msgid "Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:687 includes/post-types.php:937
+#: includes/admin/procedures/mdjm-upgrade.php:690 includes/post-types.php:937
 msgid "Search Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:688 includes/post-types.php:938
+#: includes/admin/procedures/mdjm-upgrade.php:691 includes/post-types.php:938
 msgid "All Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:689 includes/post-types.php:939
+#: includes/admin/procedures/mdjm-upgrade.php:692 includes/post-types.php:939
 msgid "Edit Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:690 includes/post-types.php:940
+#: includes/admin/procedures/mdjm-upgrade.php:693 includes/post-types.php:940
 msgid "Update Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:691 includes/post-types.php:941
+#: includes/admin/procedures/mdjm-upgrade.php:694 includes/post-types.php:941
 msgid "Add New Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:692 includes/post-types.php:942
+#: includes/admin/procedures/mdjm-upgrade.php:695 includes/post-types.php:942
 msgid "New Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:695 includes/post-types.php:945
+#: includes/admin/procedures/mdjm-upgrade.php:698 includes/post-types.php:945
 msgid "Choose from the most popular Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:696 includes/post-types.php:946
+#: includes/admin/procedures/mdjm-upgrade.php:699 includes/post-types.php:946
 msgid "No details found"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:800
+#: includes/admin/procedures/mdjm-upgrade.php:803
 msgid " transaction found"
 msgid_plural " transactions found"
 msgstr[0] ""
@@ -2503,9 +2601,9 @@ msgid "Pay Now"
 msgstr ""
 
 #: includes/admin/procedures/update_to_1.2.3.6.php:27
-#: includes/admin/settings/register-settings.php:1002
-#: includes/admin/settings/register-settings.php:1006
-#: includes/admin/settings/register-settings.php:1008 includes/install.php:714
+#: includes/admin/settings/register-settings.php:1008
+#: includes/admin/settings/register-settings.php:1012
+#: includes/admin/settings/register-settings.php:1014 includes/install.php:716
 #: includes/txns/txn-functions.php:79
 msgid "Other Amount"
 msgstr ""
@@ -2518,7 +2616,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/admin/procedures/update_to_1.2.4.php:81
-#: includes/admin/procedures/update_to_1.3.php:370 includes/install.php:712
+#: includes/admin/procedures/update_to_1.3.php:370 includes/install.php:714
 msgid "Merchant Fees"
 msgstr ""
 
@@ -2526,7 +2624,7 @@ msgstr ""
 msgid "Used to track fees for using payment gateways such as PayPal"
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:252 includes/install.php:702
+#: includes/admin/procedures/update_to_1.3.php:252 includes/install.php:704
 msgid "Guest"
 msgstr ""
 
@@ -2534,23 +2632,23 @@ msgstr ""
 msgid "Playlist entries added by guests are stored in this term."
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:355 includes/install.php:708
+#: includes/admin/procedures/update_to_1.3.php:355 includes/install.php:710
 msgid "Employee Wages"
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:358 includes/install.php:708
+#: includes/admin/procedures/update_to_1.3.php:358 includes/install.php:710
 msgid "All employee wage payments are assigned to this term"
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:367 includes/install.php:706
+#: includes/admin/procedures/update_to_1.3.php:367 includes/install.php:708
 msgid "Event balance payments are assigned to this term"
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:369 includes/install.php:705
+#: includes/admin/procedures/update_to_1.3.php:369 includes/install.php:707
 msgid "Event deposit payments are assigned to this term"
 msgstr ""
 
-#: includes/admin/procedures/update_to_1.3.php:371 includes/install.php:712
+#: includes/admin/procedures/update_to_1.3.php:371 includes/install.php:714
 msgid "Charges from payment gateways are assigned to this term"
 msgstr ""
 
@@ -2565,8 +2663,8 @@ msgid "Financials"
 msgstr ""
 
 #: includes/admin/reports/mdjm-reports.php:63
-#: includes/admin/users/class-mdjm-employee-manager.php:314
-#: includes/admin/users/class-mdjm-employee-manager.php:477
+#: includes/admin/users/class-mdjm-employee-manager.php:339
+#: includes/admin/users/class-mdjm-employee-manager.php:502
 #: includes/post-types.php:502
 msgid "Events"
 msgstr ""
@@ -2631,7 +2729,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:68
-#: includes/admin/settings/register-settings.php:1165
+#: includes/admin/settings/register-settings.php:1200
 msgid "Emails &amp; Templates"
 msgstr ""
 
@@ -2649,7 +2747,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:81
-#: includes/admin/settings/register-settings.php:1167
+#: includes/admin/settings/register-settings.php:1202
 msgid "Payments"
 msgstr ""
 
@@ -2667,7 +2765,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:94
-#: includes/admin/settings/register-settings.php:1173
+#: includes/admin/settings/register-settings.php:1208
 msgid "Licenses"
 msgstr ""
 
@@ -2859,7 +2957,7 @@ msgid "Log and track all client &amp; %s actions (recommended)."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:441
-#: includes/admin/settings/register-settings.php:1221
+#: includes/admin/settings/register-settings.php:1256
 msgid "Playlist Settings"
 msgstr ""
 
@@ -2902,397 +3000,407 @@ msgid "The email address you want generic emails from MDJM to come from."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:495
-msgid "Track Client Emails?"
+msgid "Communicate Active Events Only"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:496
-msgid "Some email clients may not support this feature."
+msgid ""
+"Check to only retrieve a client's/employee's active events on the "
+"communication page."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:501
+msgid "Track Client Emails?"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:502
+msgid "Some email clients may not support this feature."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:508
 msgid "Copy %s in Client Emails?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:503
+#: includes/admin/settings/register-settings.php:509
 msgid "Send a copy of client emails to the %s primary %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:511
+#: includes/admin/settings/register-settings.php:517
 msgid "Copy Admin in Client Emails?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:512
+#: includes/admin/settings/register-settings.php:518
 msgid "Send a copy of client emails to %sDefault From Address%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:523
+#: includes/admin/settings/register-settings.php:529
 msgid "Quote Template Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:529
+#: includes/admin/settings/register-settings.php:535
 msgid "Quote Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:530
+#: includes/admin/settings/register-settings.php:536
 msgid ""
 "This is the default template used when sending quotes via email to clients"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:536
+#: includes/admin/settings/register-settings.php:542
 msgid "Online Quote Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:537
+#: includes/admin/settings/register-settings.php:543
 msgid ""
 "This is the default template used for clients viewing quotes online via the "
 "%s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:541
+#: includes/admin/settings/register-settings.php:547
 msgid "Disable Online Quotes"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:546
+#: includes/admin/settings/register-settings.php:552
 msgid "Unavailability Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:547
+#: includes/admin/settings/register-settings.php:553
 msgid ""
 "This is the default template used when responding to enquiries that you are "
 "unavailable for the %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:553
-#: includes/admin/settings/register-settings.php:584
-#: includes/admin/settings/register-settings.php:615
+#: includes/admin/settings/register-settings.php:559
+#: includes/admin/settings/register-settings.php:590
+#: includes/admin/settings/register-settings.php:621
 msgid "Emails From?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:554
+#: includes/admin/settings/register-settings.php:560
 msgid "Who should enquiries and unavailability emails to be sent by?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:557
-#: includes/admin/settings/register-settings.php:588
-#: includes/admin/settings/register-settings.php:619
+#: includes/admin/settings/register-settings.php:563
+#: includes/admin/settings/register-settings.php:594
+#: includes/admin/settings/register-settings.php:625
 msgid "Admin"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:558
-#: includes/admin/settings/register-settings.php:589
-#: includes/admin/settings/register-settings.php:620
+#: includes/admin/settings/register-settings.php:564
+#: includes/admin/settings/register-settings.php:595
+#: includes/admin/settings/register-settings.php:626
 msgid "Primary Employee"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:564
+#: includes/admin/settings/register-settings.php:570
 msgid "Awaiting Contract Template Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:570
+#: includes/admin/settings/register-settings.php:576
 msgid "Contract Notification Email?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:571
+#: includes/admin/settings/register-settings.php:577
 msgid ""
 "Do you want to auto send an email to the client when their %s changes to the "
 "<em>Awaiting Contract<em> status?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:577
+#: includes/admin/settings/register-settings.php:583
 msgid "Contract Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:578
+#: includes/admin/settings/register-settings.php:584
 msgid "Only applies if %sContract Notification Email%s is enabled"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:585
+#: includes/admin/settings/register-settings.php:591
 msgid "Who should contract notification emails to be sent by?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:595
+#: includes/admin/settings/register-settings.php:601
 msgid "Booking Confirmation Template Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:601
+#: includes/admin/settings/register-settings.php:607
 msgid "Booking Confirmation to Client"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:602
+#: includes/admin/settings/register-settings.php:608
 msgid ""
 "Email client with selected template when booking is confirmed i.e. contract "
 "accepted, or status changed to Approved"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:608
+#: includes/admin/settings/register-settings.php:614
 msgid "Client Booking Confirmation Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:609
+#: includes/admin/settings/register-settings.php:615
 msgid ""
 "Select an email template to be used when sending the Booking Confirmation to "
 "Clients"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:616
+#: includes/admin/settings/register-settings.php:622
 msgid "Who should booking confirmation emails to be sent by?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:626
+#: includes/admin/settings/register-settings.php:632
 msgid "Booking Confirmation to Employee?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:627
+#: includes/admin/settings/register-settings.php:633
 msgid ""
 "Email %s primary %s with selected template when booking is confirmed i.e. "
 "contract accepted, or status changed to Approved"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:634
+#: includes/admin/settings/register-settings.php:640
 msgid "%s Booking Confirmation Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:635
+#: includes/admin/settings/register-settings.php:641
 msgid ""
 "Select an email template to be used when sending the Booking Confirmation to "
 "%s primary %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:641
+#: includes/admin/settings/register-settings.php:647
 msgid "Payment Confirmation Template Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:647
+#: includes/admin/settings/register-settings.php:653
 msgid "Payment Received Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:648
+#: includes/admin/settings/register-settings.php:654
 msgid ""
 "Select an email template to be sent to clients when confirming receipt of a "
 "payment"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:654
+#: includes/admin/settings/register-settings.php:660
 msgid "Manual Payment Template"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:655
+#: includes/admin/settings/register-settings.php:661
 msgid ""
 "Select an email template to be sent to clients when you manually mark an %s "
 "payment as received"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:674
+#: includes/admin/settings/register-settings.php:680
 msgid "Application Name"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:675
+#: includes/admin/settings/register-settings.php:681
 msgid "Default is %sClient Zone%s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:678
+#: includes/admin/settings/register-settings.php:684
 msgid "Choose your own name for the application."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:685
+#: includes/admin/settings/register-settings.php:691
 msgid "Client Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:691
+#: includes/admin/settings/register-settings.php:697
 msgid "Default Password Length"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:692
+#: includes/admin/settings/register-settings.php:698
 msgid ""
 "If opting to generate or reset a user password during %s creation, how many "
 "characters should the password be?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:708
+#: includes/admin/settings/register-settings.php:714
 msgid "Use Complex Passwords?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:709
+#: includes/admin/settings/register-settings.php:715
 msgid ""
 "Generated passwords will contain <em>special</em> characters such as <code>!"
 "@#$%^&*()</code> as well as letters and numbers"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:715
+#: includes/admin/settings/register-settings.php:721
 msgid "Incomplete Profile Warning?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:716
+#: includes/admin/settings/register-settings.php:722
 msgid ""
 "Display notice to Clients when they login if their Profile is incomplete? (i."
 "e. Required field is empty)"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:727
+#: includes/admin/settings/register-settings.php:733
 msgid "Display Package Price?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:728
+#: includes/admin/settings/register-settings.php:734
 msgid ""
 "Select to display %s package &amp; Add-on prices within hover text within "
 "the %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:737
+#: includes/admin/settings/register-settings.php:743
 msgid "Styling"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:743
+#: includes/admin/settings/register-settings.php:749
 msgid "Action Button Colour"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:744
+#: includes/admin/settings/register-settings.php:750
 msgid "Select your preferred colour for the %s action buttons"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:747
+#: includes/admin/settings/register-settings.php:753
 msgid "Blue"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:748
+#: includes/admin/settings/register-settings.php:754
 msgid "Green"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:749
+#: includes/admin/settings/register-settings.php:755
 msgid "Red"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:750
+#: includes/admin/settings/register-settings.php:756
 msgid "Turquoise"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:758
+#: includes/admin/settings/register-settings.php:764
 msgid "Page Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:764
+#: includes/admin/settings/register-settings.php:770
 msgid "Home Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:765
+#: includes/admin/settings/register-settings.php:771
 msgid ""
 "Select the home page for the %s application. Needs to contain the shortcode "
 "%s[mdjm-home]%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:774
+#: includes/admin/settings/register-settings.php:780
 msgid "Online Quotes Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:775
+#: includes/admin/settings/register-settings.php:781
 msgid ""
 "Select the page to use for online %s quotes. Needs to contain the shortcode "
 "<code>[mdjm-online-quote]</code>"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:781
+#: includes/admin/settings/register-settings.php:787
 msgid "Contact Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:782
+#: includes/admin/settings/register-settings.php:788
 msgid "Select your website's contact page so we can correctly direct visitors."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:788
+#: includes/admin/settings/register-settings.php:794
 msgid "Contracts Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:789
+#: includes/admin/settings/register-settings.php:795
 msgid ""
 "Select your website's contracts page. Needs to contain the shortcode %s[mdjm-"
 "contract]%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:797
+#: includes/admin/settings/register-settings.php:803
 msgid "Payments Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:798
+#: includes/admin/settings/register-settings.php:804
 msgid ""
 "Select your website's payments page. Needs to contain the shortcode %s[mdjm-"
 "payments]%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:806
+#: includes/admin/settings/register-settings.php:812
 msgid "Playlist Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:807
+#: includes/admin/settings/register-settings.php:813
 msgid ""
 "Select your website's playlist page. Needs to contain the shortcode %s[mdjm-"
 "playlist]%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:815
+#: includes/admin/settings/register-settings.php:821
 msgid "Profile Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:816
+#: includes/admin/settings/register-settings.php:822
 msgid ""
 "Select your website's profile page. Needs to contain the shortcode %s[mdjm-"
 "profile]%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:826
+#: includes/admin/settings/register-settings.php:832
 msgid "Availability Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:832
+#: includes/admin/settings/register-settings.php:838
 msgid "Unavailable Statuses"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:833
+#: includes/admin/settings/register-settings.php:839
 msgid ""
 "CTRL (cmd on MAC) + Click to select %s status' that you want availability "
 "checker to report as unavailable"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:840
+#: includes/admin/settings/register-settings.php:846
 msgid "Employee Roles"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:841
+#: includes/admin/settings/register-settings.php:847
 msgid ""
 "CTRL (cmd on MAC) + Click to select employee roles that need to be available"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:848 includes/widgets.php:274
+#: includes/admin/settings/register-settings.php:854 includes/widgets.php:274
 #: widgets/class-mdjm-widget.php:185
 msgid "Use Ajax?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:849
+#: includes/admin/settings/register-settings.php:855
 msgid "Perform checks without page refresh"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:855
+#: includes/admin/settings/register-settings.php:861
 msgid "Available Redirect Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:856
+#: includes/admin/settings/register-settings.php:862
 msgid ""
 "Select a page to which users should be directed when an availability check "
 "is successful"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:858
-#: includes/admin/settings/register-settings.php:875 includes/widgets.php:305
+#: includes/admin/settings/register-settings.php:864
+#: includes/admin/settings/register-settings.php:881 includes/widgets.php:305
 #: includes/widgets.php:325 widgets/class-mdjm-widget.php:215
 #: widgets/class-mdjm-widget.php:233
 msgid "NO REDIRECT - USE TEXT"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:863 includes/widgets.php:313
+#: includes/admin/settings/register-settings.php:869 includes/widgets.php:313
 #: widgets/class-mdjm-widget.php:222
 msgid "Available Text"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:864
+#: includes/admin/settings/register-settings.php:870
 msgid ""
 "Text to be displayed when you are available - Only displayed if %1$sNO "
 "REDIRECT - USE TEXT%2$s is selected above, unless you are redirecting to an "
@@ -3300,324 +3408,358 @@ msgid ""
 "{event_date_short}%2$s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:868
+#: includes/admin/settings/register-settings.php:874
 msgid ""
 "Good news, we are available on the date you entered. Please contact us now"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:872
+#: includes/admin/settings/register-settings.php:878
 msgid "Unavailable Redirect Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:873
+#: includes/admin/settings/register-settings.php:879
 msgid ""
 "Select a page to which users should be directed when an availability check "
 "is not successful"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:880 includes/widgets.php:333
+#: includes/admin/settings/register-settings.php:886 includes/widgets.php:333
 #: widgets/class-mdjm-widget.php:240
 msgid "Unavailable Text"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:881
+#: includes/admin/settings/register-settings.php:887
 msgid ""
 "Text to be displayed when you are not available - Only displayed if %1$sNO "
 "REDIRECT - USE TEXT%2$s is selected above. Valid shortcodes %1$s{event_date}"
 "2$%s &amp; %1$s{event_date_short}%2$s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:885
+#: includes/admin/settings/register-settings.php:891
 msgid ""
 "Unfortunately we do not appear to be available on the date you selected. Why "
 "not try another date below..."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:902
+#: includes/admin/settings/register-settings.php:908
 msgid "Payment Gateway"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:907
+#: includes/admin/settings/register-settings.php:913
 #: includes/emails/class-mdjm-emails.php:204
 msgid "Disable"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:913
+#: includes/admin/settings/register-settings.php:919
 msgid "Currency"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:921
+#: includes/admin/settings/register-settings.php:927
 msgid "Currency Position"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:922
+#: includes/admin/settings/register-settings.php:928
 msgid "Where to display the currency symbol."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:925
+#: includes/admin/settings/register-settings.php:931
 msgid "before price"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:926
+#: includes/admin/settings/register-settings.php:932
 msgid "after price"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:927
+#: includes/admin/settings/register-settings.php:933
 msgid "before price with space"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:928
+#: includes/admin/settings/register-settings.php:934
 msgid "after price with space"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:933
+#: includes/admin/settings/register-settings.php:939
 msgid "Decimal Separator"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:934
+#: includes/admin/settings/register-settings.php:940
 msgid "The symbol to separate decimal points. (Usually . or ,)"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:941
+#: includes/admin/settings/register-settings.php:947
 msgid "Thousands Separator"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:949
+#: includes/admin/settings/register-settings.php:955
 msgid "are"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:955
+#: includes/admin/settings/register-settings.php:961
 msgid "of %s value"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:956
+#: includes/admin/settings/register-settings.php:962
 msgid "Fixed price"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:961
+#: includes/admin/settings/register-settings.php:967
 msgid "Amount"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:962
+#: includes/admin/settings/register-settings.php:968
 msgid ""
 "If your %s's are a percentage enter the value (i.e 20). For fixed prices, "
 "enter the amount in the format %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:969
+#: includes/admin/settings/register-settings.php:975
 msgid "Default Payment Type"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:970
+#: includes/admin/settings/register-settings.php:976
 msgid ""
 "What is the default method of payment? i.e. if you select an %s %s as paid "
 "how should we log it?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:979
+#: includes/admin/settings/register-settings.php:985
 msgid "Form Layout"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:980
+#: includes/admin/settings/register-settings.php:986
 msgid "How do you want the payment form displayed on your page?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:990
+#: includes/admin/settings/register-settings.php:996
 msgid "Payment Label"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:991
+#: includes/admin/settings/register-settings.php:997
 msgid ""
 "Display name of the label shown to clients to select the payment they wish "
 "to make."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:994
+#: includes/admin/settings/register-settings.php:1000
 msgid "Make a Payment Towards"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:998
+#: includes/admin/settings/register-settings.php:1004
 msgid "Label for Other Amount"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:999
+#: includes/admin/settings/register-settings.php:1005
 msgid "Enter your desired label for the other amount radio button."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1006
+#: includes/admin/settings/register-settings.php:1012
 msgid "Default"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1007
+#: includes/admin/settings/register-settings.php:1013
 msgid "Enter the default amount to be used in the %s field."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1016
+#: includes/admin/settings/register-settings.php:1022
 msgid "Enable Taxes?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1017
+#: includes/admin/settings/register-settings.php:1023
 msgid "Enable if you need to add taxes to online payments"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1022
+#: includes/admin/settings/register-settings.php:1028
 msgid "Apply Tax As"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1023
+#: includes/admin/settings/register-settings.php:1029
 msgid "How do you apply tax?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1026
+#: includes/admin/settings/register-settings.php:1032
 msgid "% of total"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1027
+#: includes/admin/settings/register-settings.php:1033
 msgid "Fixed rate"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1033
+#: includes/admin/settings/register-settings.php:1039
 msgid "Tax Rate"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1034
+#: includes/admin/settings/register-settings.php:1040
 msgid ""
 "If you apply tax based on a fixed percentage (i.e. VAT) enter the value (i.e "
 "20). For fixed rates, enter the amount in the format 0.00. Taxes will only "
 "be applied during checkout."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1041
+#: includes/admin/settings/register-settings.php:1047
 msgid "Payment Types"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1042
+#: includes/admin/settings/register-settings.php:1048
 msgid "Enter methods of payment."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1044
+#: includes/admin/settings/register-settings.php:1050
 msgid "BACS"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1045
-#: includes/txns/class-mdjm-txn.php:139
+#: includes/admin/settings/register-settings.php:1051
+#: includes/txns/class-mdjm-txn.php:160
 msgid "Cash"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1046
+#: includes/admin/settings/register-settings.php:1052
 msgid "Cheque"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1047
+#: includes/admin/settings/register-settings.php:1053
 msgid "PayPal"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1048
+#: includes/admin/settings/register-settings.php:1054
 msgid "PayFast"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1049 includes/install.php:678
-#: includes/install.php:689 includes/install.php:701
+#: includes/admin/settings/register-settings.php:1055 includes/install.php:680
+#: includes/install.php:691 includes/install.php:703
 msgid "Other"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1135
+#: includes/admin/settings/register-settings.php:1062
+msgid "Employee Payment Settings"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1068
+msgid "Enable Employee Payments"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1069
+msgid "Enable this option to be able to record employee wage payments for %s."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1074
+msgid "Payment Statuses"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1075
+msgid ""
+"CTRL (cmd on MAC) + Click to select %s status' that an event must be at "
+"before employee payments can be made."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1082
+msgid "Pay when %s Completes"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1083
+msgid "Enable this option to automatically pay employees once an %s completes."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1170
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1215
+#: includes/admin/settings/register-settings.php:1250
 msgid "Application Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1216
+#: includes/admin/settings/register-settings.php:1251
 msgid "Debug Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1217
+#: includes/admin/settings/register-settings.php:1252
 msgid "Uninstall Actions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1224
+#: includes/admin/settings/register-settings.php:1259
 msgid "General Email Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1225
+#: includes/admin/settings/register-settings.php:1260
 msgid "%s Templates"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1228
+#: includes/admin/settings/register-settings.php:1263
 msgid "Client Zone Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1229
+#: includes/admin/settings/register-settings.php:1264
 msgid "Styles"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1230
+#: includes/admin/settings/register-settings.php:1265
 msgid "Pages"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1231 includes/widgets.php:253
+#: includes/admin/settings/register-settings.php:1266 includes/widgets.php:253
 #: widgets/class-mdjm-widget.php:164
 msgid "Availability Checker"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1237
+#: includes/admin/settings/register-settings.php:1270
+msgid "Employee Payments"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1273
 msgid "Main"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1563
+#: includes/admin/settings/register-settings.php:1599
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1750
+#: includes/admin/settings/register-settings.php:1786
 msgid "Upload File"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1831
+#: includes/admin/settings/register-settings.php:1867
 msgid ""
 "Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Renew your license key\">renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1844
+#: includes/admin/settings/register-settings.php:1880
 msgid ""
 "Invalid license. Please <a href=\"%s\" target=\"_blank\" title=\"Visit "
 "account page\">visit your account page</a> and verify it."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1857
+#: includes/admin/settings/register-settings.php:1893
 msgid ""
 "Your %s is not active for this URL. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Visit account page\">visit your account page</a> to manage your "
 "license key URLs."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1869
+#: includes/admin/settings/register-settings.php:1905
 msgid "This is not a %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1878
+#: includes/admin/settings/register-settings.php:1914
 msgid ""
 "Your license key has reached its activation limit. <a href=\"%s\">View "
 "possible upgrades</a> now."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1900
+#: includes/admin/settings/register-settings.php:1936
 msgid "License key never expires."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1907
+#: includes/admin/settings/register-settings.php:1943
 msgid ""
 "Your license key expires soon! It expires on %s. <a href=\"%s\" target="
 "\"_blank\" title=\"Renew license\">Renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1917
+#: includes/admin/settings/register-settings.php:1953
 msgid "Your license key expires on %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1939
+#: includes/admin/settings/register-settings.php:1975
 msgid "Deactivate License"
 msgstr ""
 
@@ -3727,9 +3869,9 @@ msgstr ""
 #: includes/admin/templates/contracts.php:231
 #: includes/admin/templates/emails.php:126
 #: includes/admin/templates/emails.php:127
-#: includes/admin/transactions/txns.php:460
-#: includes/admin/transactions/txns.php:461
-#: includes/admin/venues/venues.php:373 includes/admin/venues/venues.php:374
+#: includes/admin/transactions/txns.php:504
+#: includes/admin/transactions/txns.php:505
+#: includes/admin/venues/venues.php:381 includes/admin/venues/venues.php:382
 msgid "%2$s updated. %1$s%2$s List%3$s."
 msgstr ""
 
@@ -3745,8 +3887,8 @@ msgstr ""
 
 #: includes/admin/templates/contracts.php:234
 #: includes/admin/templates/emails.php:130
-#: includes/admin/transactions/txns.php:463
-#: includes/admin/venues/venues.php:376
+#: includes/admin/transactions/txns.php:507
+#: includes/admin/venues/venues.php:384
 msgid "%2$s saved. %1$s%2$s List%3$s."
 msgstr ""
 
@@ -3802,12 +3944,24 @@ msgstr ""
 msgid "No transactions exist for this event yet."
 msgstr ""
 
-#: includes/admin/transactions/mdjm-transactions.php:372
+#: includes/admin/transactions/mdjm-transactions.php:164
+msgid "Reason for payment"
+msgstr ""
+
+#: includes/admin/transactions/mdjm-transactions.php:165
+msgid "Payment amount"
+msgstr ""
+
+#: includes/admin/transactions/mdjm-transactions.php:166
+msgid "Date of payment"
+msgstr ""
+
+#: includes/admin/transactions/mdjm-transactions.php:339
 msgid "No Payments Found"
 msgstr ""
 
 #: includes/admin/transactions/metaboxes.php:53
-#: includes/admin/transactions/txns.php:266
+#: includes/admin/transactions/txns.php:306
 msgid "Save Transaction"
 msgstr ""
 
@@ -3815,13 +3969,13 @@ msgstr ""
 msgid "Transaction Details"
 msgstr ""
 
-#: includes/admin/transactions/metaboxes.php:171
+#: includes/admin/transactions/metaboxes.php:168
 msgid ""
 "Go to the <a href=\"%s\">%s Management Interface</a> to add a transaction "
 "associated to an %s."
 msgstr ""
 
-#: includes/admin/transactions/metaboxes.php:266
+#: includes/admin/transactions/metaboxes.php:263
 #: includes/ajax-functions.php:193
 msgid "Select Transaction Type"
 msgstr ""
@@ -3838,19 +3992,19 @@ msgstr ""
 msgid "To/From"
 msgstr ""
 
-#: includes/admin/transactions/txns.php:129
+#: includes/admin/transactions/txns.php:169
 msgid "In"
 msgstr ""
 
-#: includes/admin/transactions/txns.php:133
+#: includes/admin/transactions/txns.php:173
 msgid "Out"
 msgstr ""
 
-#: includes/admin/transactions/txns.php:268
+#: includes/admin/transactions/txns.php:308
 msgid "Update Transaction"
 msgstr ""
 
-#: includes/admin/transactions/txns.php:462
+#: includes/admin/transactions/txns.php:506
 msgid "%2$s inserted. %1$s%2$s List%3$s."
 msgstr ""
 
@@ -3858,59 +4012,59 @@ msgstr ""
 msgid "You do not have permission to manage clients."
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:104
+#: includes/admin/users/class-mdjm-client-manager.php:105
 msgid "%s Clients"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:125
+#: includes/admin/users/class-mdjm-client-manager.php:126
 msgid "Only show"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:130
+#: includes/admin/users/class-mdjm-client-manager.php:131
 msgid "Show clients of"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:137
+#: includes/admin/users/class-mdjm-client-manager.php:138
 msgid "Go!"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:140
-#: includes/admin/users/class-mdjm-employee-manager.php:461
+#: includes/admin/users/class-mdjm-client-manager.php:141
+#: includes/admin/users/class-mdjm-employee-manager.php:486
 msgid "Search"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:154
-#: includes/admin/users/class-mdjm-employee-manager.php:475
+#: includes/admin/users/class-mdjm-client-manager.php:155
+#: includes/admin/users/class-mdjm-employee-manager.php:500
 msgid "Name"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:155
+#: includes/admin/users/class-mdjm-client-manager.php:156
 msgid "Total Events"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:156
+#: includes/admin/users/class-mdjm-client-manager.php:157
 msgid "Next Event"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:157
-#: includes/admin/users/class-mdjm-employee-manager.php:479
+#: includes/admin/users/class-mdjm-client-manager.php:158
+#: includes/admin/users/class-mdjm-employee-manager.php:504
 msgid "Last Login"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:200
+#: includes/admin/users/class-mdjm-client-manager.php:201
 msgid "No Client's found."
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:299
-#: includes/admin/users/class-mdjm-employee-manager.php:675
+#: includes/admin/users/class-mdjm-client-manager.php:300
+#: includes/admin/users/class-mdjm-employee-manager.php:700
 msgid "Never"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:337
+#: includes/admin/users/class-mdjm-client-manager.php:338
 msgid "Search Results"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-client-manager.php:353
+#: includes/admin/users/class-mdjm-client-manager.php:354
 msgid "Delete Client"
 msgstr ""
 
@@ -3922,178 +4076,182 @@ msgstr ""
 msgid "Employee roles updated."
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:99
+#: includes/admin/users/class-mdjm-employee-manager.php:124
 msgid "Employee's &amp; Roles"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:103
+#: includes/admin/users/class-mdjm-employee-manager.php:128
 msgid "Employees & Roles"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:142
+#: includes/admin/users/class-mdjm-employee-manager.php:167
 msgid "Hold CTRL & click to select multiple entries"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:147
+#: includes/admin/users/class-mdjm-employee-manager.php:172
 msgid "Delete Selected Role(s)"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:152
+#: includes/admin/users/class-mdjm-employee-manager.php:177
 msgid "Add Role"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:181
+#: includes/admin/users/class-mdjm-employee-manager.php:206
 msgid "Employee Quick Add"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:187
+#: includes/admin/users/class-mdjm-employee-manager.php:212
 #: includes/install.php:474 templates/contract/contract.php:82
 #: templates/playlist/playlist-guest.php:56
 #: templates/playlist/playlist-guest.php:57
 msgid "First Name"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:191
+#: includes/admin/users/class-mdjm-employee-manager.php:216
 #: includes/install.php:486 templates/contract/contract.php:87
 #: templates/playlist/playlist-guest.php:61
 #: templates/playlist/playlist-guest.php:62
 msgid "Last Name"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:195
+#: includes/admin/users/class-mdjm-employee-manager.php:220
 #: includes/install.php:498
 msgid "Email Address"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:230
+#: includes/admin/users/class-mdjm-employee-manager.php:255
 msgid "Roles"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:231
+#: includes/admin/users/class-mdjm-employee-manager.php:256
 msgid "MDJM Admin"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:258
-#: includes/admin/users/class-mdjm-employee-manager.php:274
-#: includes/admin/users/class-mdjm-employee-manager.php:287
+#: includes/admin/users/class-mdjm-employee-manager.php:283
 #: includes/admin/users/class-mdjm-employee-manager.php:299
-#: includes/admin/users/class-mdjm-employee-manager.php:316
-#: includes/admin/users/class-mdjm-employee-manager.php:340
-#: includes/admin/users/class-mdjm-employee-manager.php:353
-#: includes/admin/users/class-mdjm-employee-manager.php:366
-#: includes/admin/users/class-mdjm-employee-manager.php:382
-#: includes/admin/users/class-mdjm-employee-manager.php:649
+#: includes/admin/users/class-mdjm-employee-manager.php:312
+#: includes/admin/users/class-mdjm-employee-manager.php:324
+#: includes/admin/users/class-mdjm-employee-manager.php:341
+#: includes/admin/users/class-mdjm-employee-manager.php:365
+#: includes/admin/users/class-mdjm-employee-manager.php:378
+#: includes/admin/users/class-mdjm-employee-manager.php:391
+#: includes/admin/users/class-mdjm-employee-manager.php:407
+#: includes/admin/users/class-mdjm-employee-manager.php:674
 msgid "None"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:262
-#: includes/admin/users/class-mdjm-employee-manager.php:303
+#: includes/admin/users/class-mdjm-employee-manager.php:287
 #: includes/admin/users/class-mdjm-employee-manager.php:328
+#: includes/admin/users/class-mdjm-employee-manager.php:353
 msgid "Edit Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:266
-#: includes/admin/users/class-mdjm-employee-manager.php:307
+#: includes/admin/users/class-mdjm-employee-manager.php:291
 #: includes/admin/users/class-mdjm-employee-manager.php:332
-#: includes/admin/users/class-mdjm-employee-manager.php:344
 #: includes/admin/users/class-mdjm-employee-manager.php:357
+#: includes/admin/users/class-mdjm-employee-manager.php:369
+#: includes/admin/users/class-mdjm-employee-manager.php:382
 msgid "Edit All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:278
+#: includes/admin/users/class-mdjm-employee-manager.php:303
 msgid "Manage"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:285
+#: includes/admin/users/class-mdjm-employee-manager.php:310
 msgid "Comms"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:291
+#: includes/admin/users/class-mdjm-employee-manager.php:316
 msgid "Send"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:297
+#: includes/admin/users/class-mdjm-employee-manager.php:322
 msgid "Packages"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:320
+#: includes/admin/users/class-mdjm-employee-manager.php:345
 msgid "Read Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:324
+#: includes/admin/users/class-mdjm-employee-manager.php:349
 msgid "Read All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:338
+#: includes/admin/users/class-mdjm-employee-manager.php:363
 msgid "Templates"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:351
+#: includes/admin/users/class-mdjm-employee-manager.php:376
 msgid "Txns"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:364
+#: includes/admin/users/class-mdjm-employee-manager.php:389
 msgid "Quotes"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:370
+#: includes/admin/users/class-mdjm-employee-manager.php:395
 msgid "View Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:374
+#: includes/admin/users/class-mdjm-employee-manager.php:399
 msgid "View All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:386
+#: includes/admin/users/class-mdjm-employee-manager.php:411
 msgid "View"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:404
+#: includes/admin/users/class-mdjm-employee-manager.php:429
 msgid "Update Permissions"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:449
-#: includes/admin/users/class-mdjm-employee-manager.php:451
+#: includes/admin/users/class-mdjm-employee-manager.php:474
+#: includes/admin/users/class-mdjm-employee-manager.php:476
 msgid "Change role to"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:458
+#: includes/admin/users/class-mdjm-employee-manager.php:483
 msgid "Change"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:476
+#: includes/admin/users/class-mdjm-employee-manager.php:501
 msgid "Role(s)"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:518
+#: includes/admin/users/class-mdjm-employee-manager.php:543
 msgid "No Employee's found."
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:578
+#: includes/admin/users/class-mdjm-employee-manager.php:603
 msgid "<em>MDJM Admin</em>"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:582
+#: includes/admin/users/class-mdjm-employee-manager.php:607
 msgid "<em>WordPress Admin</em>"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:629
+#: includes/admin/users/class-mdjm-employee-manager.php:654
 msgid "No role assigned"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:646
+#: includes/admin/users/class-mdjm-employee-manager.php:671
 msgid "Next: %s"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:655
+#: includes/admin/users/class-mdjm-employee-manager.php:680
 msgid "Total: %s"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:720
+#: includes/admin/users/class-mdjm-employee-manager.php:745
 msgid "Delete Employee"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:748
+#: includes/admin/users/class-mdjm-employee-manager.php:750
+msgid "Add %s Role"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:773
 msgid "Employee(s) deleted."
 msgstr ""
 
@@ -4129,6 +4287,10 @@ msgstr ""
 msgid "Venue"
 msgstr ""
 
+#: includes/admin/venues/venues.php:23
+msgid "Contact"
+msgstr ""
+
 #: includes/admin/venues/venues.php:24
 msgid "Phone"
 msgstr ""
@@ -4145,19 +4307,19 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: includes/admin/venues/venues.php:244
+#: includes/admin/venues/venues.php:248
 msgid "Enter Venue name here..."
 msgstr ""
 
-#: includes/admin/venues/venues.php:266
+#: includes/admin/venues/venues.php:270
 msgid "Save Venue"
 msgstr ""
 
-#: includes/admin/venues/venues.php:268
+#: includes/admin/venues/venues.php:272
 msgid "Update Venue"
 msgstr ""
 
-#: includes/admin/venues/venues.php:375
+#: includes/admin/venues/venues.php:383
 msgid "%2$s added. %1$s%2$s List%3$s."
 msgstr ""
 
@@ -4452,7 +4614,7 @@ msgid ""
 "within the add-ons list for this %2$s."
 msgstr ""
 
-#: includes/admin/welcome.php:359
+#: includes/admin/welcome.php:359 includes/events/event-functions.php:950
 msgid "Add-ons"
 msgstr ""
 
@@ -4612,10 +4774,6 @@ msgstr ""
 msgid "Unable to retrieve template content"
 msgstr ""
 
-#: includes/ajax-functions.php:534
-msgid "from"
-msgstr ""
-
 #: includes/availability/availability-functions.php:49
 msgid "Ooops, an error occured."
 msgstr ""
@@ -4674,20 +4832,20 @@ msgid ""
 "information library. This option is updated the MDJM Settings pages."
 msgstr ""
 
-#: includes/class-mdjm-cron.php:278 includes/class-mdjm-cron.php:687
-#: includes/class-mdjm-cron.php:951
+#: includes/class-mdjm-cron.php:278 includes/class-mdjm-cron.php:691
+#: includes/class-mdjm-cron.php:955
 msgid "event"
 msgid_plural "events"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-mdjm-cron.php:476
+#: includes/class-mdjm-cron.php:480
 msgid "enquiry"
 msgid_plural "enquiries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-mdjm-cron.php:767
+#: includes/class-mdjm-cron.php:771
 msgid "Request Deposit Scheduled Task"
 msgstr ""
 
@@ -4768,19 +4926,19 @@ msgstr ""
 msgid "Improper date provided."
 msgstr ""
 
-#: includes/client-functions.php:224 includes/employee-functions.php:404
+#: includes/client-functions.php:245 includes/employee-functions.php:404
 msgid "First name not set"
 msgstr ""
 
-#: includes/client-functions.php:247 includes/employee-functions.php:427
+#: includes/client-functions.php:268 includes/employee-functions.php:427
 msgid "Last name not set"
 msgstr ""
 
-#: includes/client-functions.php:270 includes/employee-functions.php:450
+#: includes/client-functions.php:291 includes/employee-functions.php:450
 msgid "Display name not set"
 msgstr ""
 
-#: includes/client-functions.php:293 includes/employee-functions.php:473
+#: includes/client-functions.php:314 includes/employee-functions.php:473
 msgid "Email address not set"
 msgstr ""
 
@@ -4814,16 +4972,12 @@ msgstr ""
 msgid "%s Quotation Accepted"
 msgstr ""
 
-#: includes/clientzone-functions.php:170 includes/post-types.php:370
+#: includes/clientzone-functions.php:222 includes/post-types.php:370
 msgid "View Quote"
 msgstr ""
 
-#: includes/clientzone-functions.php:179
+#: includes/clientzone-functions.php:237
 msgid "Book %s"
-msgstr ""
-
-#: includes/clientzone-functions.php:196
-msgid "Review &amp; Sign Contract"
 msgstr ""
 
 #: includes/content/content-tags.php:267
@@ -4847,261 +5001,290 @@ msgid "The label defined for artists (default is DJ)."
 msgstr ""
 
 #: includes/content/content-tags.php:292
-msgid "The list of packages available. No price"
+msgid ""
+"The list of add-ons available. No price. If an event can be referenced, only "
+"lists add-ons not already assigned to the event, or included in the event "
+"package"
 msgstr ""
 
 #: includes/content/content-tags.php:297
-msgid "The list of packages available. With price"
+msgid ""
+"The list of add-ons available. With price. If an event can be referenced, "
+"only lists add-ons not already assigned to the event, or included in the "
+"event package"
 msgstr ""
 
 #: includes/content/content-tags.php:302
-msgid "The remaining balance owed for the event"
+msgid "The list of packages available. No price"
 msgstr ""
 
 #: includes/content/content-tags.php:307
-msgid "The label used for balance payments"
+msgid "The list of packages available. With price"
 msgstr ""
 
 #: includes/content/content-tags.php:312
-msgid "The event clients email address"
+msgid "The remaining balance owed for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:317
-msgid "The event clients first name"
+msgid "The label used for balance payments"
 msgstr ""
 
 #: includes/content/content-tags.php:322
-msgid "The event clients full address"
+msgid "The event clients email address"
 msgstr ""
 
 #: includes/content/content-tags.php:327
-msgid "The event clients full name"
+msgid "The event clients first name"
 msgstr ""
 
 #: includes/content/content-tags.php:332
-msgid "The event clients last name"
+msgid "The event clients full address"
 msgstr ""
 
 #: includes/content/content-tags.php:337
-msgid "The event clients password for logging into %s"
+msgid "The event clients full name"
 msgstr ""
 
 #: includes/content/content-tags.php:342
-msgid "The event clients primary phone number"
+msgid "The event clients last name"
 msgstr ""
 
 #: includes/content/content-tags.php:347
-msgid "The event clients username for logging into %s"
+msgid "The event clients password for logging into %s"
 msgstr ""
 
 #: includes/content/content-tags.php:352
-msgid "The name of your company"
+msgid "The event clients primary phone number"
 msgstr ""
 
 #: includes/content/content-tags.php:357
-msgid "The URL to your websites contact page"
+msgid "The event clients username for logging into %s"
 msgstr ""
 
 #: includes/content/content-tags.php:362
-msgid "The date the event contract was signed, or today's date"
+msgid "The name of your company"
 msgstr ""
 
 #: includes/content/content-tags.php:367
-msgid "The contract / event ID"
+msgid "The URL to your websites contact page"
 msgstr ""
 
 #: includes/content/content-tags.php:372
-msgid "The name of the person who signed the contract"
+msgid "The date the event contract was signed, or today's date"
 msgstr ""
 
 #: includes/content/content-tags.php:377
-msgid "The IP address recorded during contract signing"
+msgid "The contract / event ID"
 msgstr ""
 
 #: includes/content/content-tags.php:382
-msgid "The URL for the client to access their event contract"
+msgid "The name of the person who signed the contract"
 msgstr ""
 
 #: includes/content/content-tags.php:387
-msgid "Todays date in shortdate format"
+msgid "The IP address recorded during contract signing"
 msgstr ""
 
 #: includes/content/content-tags.php:392
-msgid "The deposit amount for the event"
+msgid "The URL for the client to access their event contract"
 msgstr ""
 
 #: includes/content/content-tags.php:397
-msgid "The label used for deposit payments"
+msgid "Todays date in shortdate format"
 msgstr ""
 
 #: includes/content/content-tags.php:402
-msgid "The deposit payment status. Generally 'Paid' or 'Due'"
+msgid "The deposit amount for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:407
-msgid "The email address of the events assigned primary employee"
+msgid "The label used for deposit payments"
 msgstr ""
 
 #: includes/content/content-tags.php:412
-msgid "The first name of the events assigned primary employee"
+msgid "The deposit payment status. Generally 'Paid' or 'Due'"
 msgstr ""
 
 #: includes/content/content-tags.php:417
-msgid "The full name of the events assigned primary employee"
+msgid "The email address of the events assigned primary employee"
 msgstr ""
 
 #: includes/content/content-tags.php:422
-msgid "The DJ notes that have been entered against the event"
+msgid "The first name of the events assigned primary employee"
 msgstr ""
 
 #: includes/content/content-tags.php:427
-msgid "The primary phone number of the events assigned primary employee"
+msgid "The full name of the events assigned primary employee"
 msgstr ""
 
 #: includes/content/content-tags.php:432
-msgid "The setup date for the event"
+msgid "The DJ notes that have been entered against the event"
 msgstr ""
 
 #: includes/content/content-tags.php:437
-msgid "The setup time for the event"
+msgid "The primary phone number of the events assigned primary employee"
 msgstr ""
 
 #: includes/content/content-tags.php:442
-msgid "The date the event completes"
+msgid "The setup date for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:447
-msgid "The time the event completes"
+msgid "The setup time for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:452
-msgid "The add-ons included with the event"
+msgid "The date the event completes"
 msgstr ""
 
 #: includes/content/content-tags.php:457
-msgid "The date of the event in long format"
+msgid "The time the event completes"
 msgstr ""
 
 #: includes/content/content-tags.php:462
-msgid "The date of the event in short format"
+msgid "The add-ons included with the event"
 msgstr ""
 
 #: includes/content/content-tags.php:467
-msgid "The contents of the event description field"
+msgid "The add-ons included with the event, with costs"
 msgstr ""
 
 #: includes/content/content-tags.php:472
-msgid "The duration of the event"
+msgid "The date of the event in long format"
 msgstr ""
 
 #: includes/content/content-tags.php:477
-msgid "The assigned name of the event"
+msgid "The date of the event in short format"
 msgstr ""
 
 #: includes/content/content-tags.php:482
-msgid "The package associated witht the %s or \"No Package\"."
+msgid "The contents of the event description field"
 msgstr ""
 
 #: includes/content/content-tags.php:487
-msgid "The current status of the event"
+msgid "The duration of the event"
 msgstr ""
 
 #: includes/content/content-tags.php:492
-msgid "The type of event"
+msgid "The assigned name of the event"
 msgstr ""
 
 #: includes/content/content-tags.php:497
-msgid "The URL of the event page"
+msgid "The package associated with the %s or \"No Package\"."
 msgstr ""
 
 #: includes/content/content-tags.php:502
-msgid "The URL to your event playlist page for guests"
+msgid "The package associated with the %s and its cost, or \"No Package\"."
 msgstr ""
 
 #: includes/content/content-tags.php:507
-msgid "An overview of payments made by the client for the event"
+msgid "The current status of the event"
 msgstr ""
 
 #: includes/content/content-tags.php:512
-msgid "The URL to your payments page"
+msgid "The type of event"
 msgstr ""
 
 #: includes/content/content-tags.php:517
-msgid "Adds a page break into a PDF document"
+msgid "The URL of the event page"
 msgstr ""
 
 #: includes/content/content-tags.php:522
-msgid "The number of days before the event that the playlist closes"
-msgstr ""
-
-#: includes/content/content-tags.php:527
-msgid "The approximate length of the %s playlist"
+msgid "The URL to your event playlist page for guests"
 msgstr ""
 
 #: includes/content/content-tags.php:532
-msgid "The URL to your event playlist page for clients"
+msgid "An overview of payments made by the client for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:537
-msgid "The URL to your online quotes page"
+msgid "The URL to your payments page"
 msgstr ""
 
 #: includes/content/content-tags.php:542
-msgid "The event start time"
+msgid "Adds a page break into a PDF document"
 msgstr ""
 
 #: includes/content/content-tags.php:547
-msgid "The total cost of the event"
+msgid "The number of days before the event that the playlist closes"
 msgstr ""
 
 #: includes/content/content-tags.php:552
-msgid "The name of the event venue"
+msgid "The approximate length of the %s playlist"
 msgstr ""
 
 #: includes/content/content-tags.php:557
-msgid "The name of the contact at event venue"
+msgid "The URL to your event playlist page for clients"
 msgstr ""
 
 #: includes/content/content-tags.php:562
-msgid "Details stored for the venue"
+msgid "The URL to your online quotes page"
 msgstr ""
 
 #: includes/content/content-tags.php:567
-msgid "The email address of the event venue"
+msgid "The event start time"
 msgstr ""
 
 #: includes/content/content-tags.php:572
-msgid "The full address of the event venue"
+msgid "The total cost of the event"
 msgstr ""
 
 #: includes/content/content-tags.php:577
-msgid "Notes associated with the event venue"
+msgid "The name of the event venue"
 msgstr ""
 
 #: includes/content/content-tags.php:582
-msgid "The phone number of the event venue"
+msgid "The name of the contact at event venue"
 msgstr ""
 
 #: includes/content/content-tags.php:587
+msgid "Details stored for the venue"
+msgstr ""
+
+#: includes/content/content-tags.php:592
+msgid "The email address of the event venue"
+msgstr ""
+
+#: includes/content/content-tags.php:597
+msgid "The full address of the event venue"
+msgstr ""
+
+#: includes/content/content-tags.php:602
+msgid "Notes associated with the event venue"
+msgstr ""
+
+#: includes/content/content-tags.php:607
+msgid "The phone number of the event venue"
+msgstr ""
+
+#: includes/content/content-tags.php:612
 msgid "The URL to your website"
 msgstr ""
 
-#: includes/content/content-tags.php:942
+#: includes/content/content-tags.php:703 includes/content/content-tags.php:739
+#: includes/equipment/equipment-functions-new.php:133
+#: includes/equipment/equipment-functions-new.php:146
+#: includes/equipment/equipment-functions.php:141
+msgid "No packages available"
+msgstr ""
+
+#: includes/content/content-tags.php:1038
 msgid "Client data not set"
 msgstr ""
 
-#: includes/content/content-tags.php:1340
-#: includes/content/content-tags.php:1365
-#: includes/content/content-tags.php:1826
+#: includes/content/content-tags.php:1436
+#: includes/content/content-tags.php:1461
+#: includes/content/content-tags.php:1936
 #: includes/emails/email-functions.php:36
 msgid "Not specified"
 msgstr ""
 
-#: includes/content/content-tags.php:1665
+#: includes/content/content-tags.php:1761
 msgid "Guest playlist is disabled."
 msgstr ""
 
-#: includes/content/content-tags.php:1758
+#: includes/content/content-tags.php:1867
 msgid "Event playlist disabled"
 msgstr ""
 
@@ -5158,11 +5341,15 @@ msgstr ""
 msgid "Contract Signed and %s Status set to %s"
 msgstr ""
 
-#: includes/emails/email-functions.php:520
+#: includes/emails/email-functions.php:272
+msgid "Payment received confirmation for %s"
+msgstr ""
+
+#: includes/emails/email-functions.php:568
 msgid "The following email was recently sent to %s via %s."
 msgstr ""
 
-#: includes/emails/email-functions.php:522
+#: includes/emails/email-functions.php:570
 msgid ""
 "You are receiving a copy of this message either because you chose to do so, "
 "or the %s application settings dictate that you do so."
@@ -5209,36 +5396,38 @@ msgstr ""
 msgid "No employees assigned."
 msgstr ""
 
-#: includes/employee-functions.php:527
+#: includes/employee-functions.php:535
 msgid ""
 "<a class=\"remove_event_employee\" href=\"\" data-employee_id=\"%1$d\" id="
 "\"remove-employee-%1$d\">Remove</a>"
 msgstr ""
 
-#: includes/employee-functions.php:646
+#: includes/employee-functions.php:592 includes/employee-functions.php:1198
+msgid "Wage payment to %s for %d"
+msgstr ""
+
+#: includes/employee-functions.php:688
 msgid "Updating user role for %d to $s"
 msgstr ""
 
-#: includes/equipment/equipment-functions-new.php:133
-#: includes/equipment/equipment-functions-new.php:146
-#: includes/equipment/equipment-functions.php:141
-msgid "No packages available"
+#: includes/employee-functions.php:1135
+msgid "Employee %s paid %s for their role as %s"
 msgstr ""
 
 #: includes/equipment/equipment-functions.php:161
 msgid "No addons are assigned to this event"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:204
+#: includes/equipment/equipment-functions.php:206
 msgid "No addons are available"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:351
+#: includes/equipment/equipment-functions.php:368
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:644
-#: includes/equipment/equipment-functions.php:743
+#: includes/equipment/equipment-functions.php:661
+#: includes/equipment/equipment-functions.php:760
 msgid "No Addons Available"
 msgstr ""
 
@@ -5251,7 +5440,7 @@ msgid "Unavailable"
 msgstr ""
 
 #: includes/events/class-mdjm-event.php:195
-#: includes/txns/class-mdjm-txn.php:116
+#: includes/txns/class-mdjm-txn.php:133
 msgid "Can't get property %s"
 msgstr ""
 
@@ -5259,13 +5448,18 @@ msgstr ""
 msgid "New Event"
 msgstr ""
 
-#: includes/events/class-mdjm-event.php:525
+#: includes/events/class-mdjm-event.php:529
 msgid "No event type set"
 msgstr ""
 
-#: includes/events/class-mdjm-event.php:619
-#: includes/events/class-mdjm-event.php:662
+#: includes/events/class-mdjm-event.php:623
+#: includes/events/class-mdjm-event.php:630
+#: includes/events/class-mdjm-event.php:669
 msgid "Paid"
+msgstr ""
+
+#: includes/events/event-actions.php:95
+msgid "%s status updated to %s.%s"
 msgstr ""
 
 #: includes/events/event-functions.php:79
@@ -5276,23 +5470,153 @@ msgstr ""
 msgid "No options found"
 msgstr ""
 
-#: includes/events/event-functions.php:874
+#: includes/events/event-functions.php:888
 msgid "Adding %s value as %s"
 msgstr ""
 
-#: includes/events/event-functions.php:881
-msgid "Updating %s value as %s"
+#: includes/events/event-functions.php:895
+msgid "Updating %s with %s"
 msgstr ""
 
-#: includes/events/event-functions.php:888
-msgid "Removing %s"
+#: includes/events/event-functions.php:902
+msgid "Removing %s from %s"
 msgstr ""
 
-#: includes/events/event-functions.php:1357
+#: includes/events/event-functions.php:918
+msgid "%s Updated"
+msgstr ""
+
+#: includes/events/event-functions.php:951
+msgid "Admin Notes"
+msgstr ""
+
+#: includes/events/event-functions.php:952
+#: includes/events/event-functions.php:960
+msgid "%s Status"
+msgstr ""
+
+#: includes/events/event-functions.php:954
+#: includes/events/event-functions.php:961 includes/install.php:120
+msgid "%s Contract"
+msgstr ""
+
+#: includes/events/event-functions.php:955
+msgid "Contract Approved Date"
+msgstr ""
+
+#: includes/events/event-functions.php:956
+msgid "Contract Approved By"
+msgstr ""
+
+#: includes/events/event-functions.php:957
+msgid "Total Cost"
+msgstr ""
+
+#: includes/events/event-functions.php:958
+msgid "%s Date"
+msgstr ""
+
+#: includes/events/event-functions.php:962
+msgid "Employee Notes"
+msgstr ""
+
+#: includes/events/event-functions.php:963
+msgid "Primary Employee %s Payment Details"
+msgstr ""
+
+#: includes/events/event-functions.php:964
+msgid "%s Setup Date"
+msgstr ""
+
+#: includes/events/event-functions.php:965
+msgid "%s Setup Time"
+msgstr ""
+
+#: includes/events/event-functions.php:966
+msgid "Primary Employee %s Wage"
+msgstr ""
+
+#: includes/events/event-functions.php:968
+msgid "Employees Payment Data"
+msgstr ""
+
+#: includes/events/event-functions.php:969
+msgid "Enquiry Source"
+msgstr ""
+
+#: includes/events/event-functions.php:970
+msgid "End Time"
+msgstr ""
+
+#: includes/events/event-functions.php:971
+msgid "Last Updated By"
+msgstr ""
+
+#: includes/events/event-functions.php:972
+msgid "%s Name"
+msgstr ""
+
+#: includes/events/event-functions.php:974
+msgid "Package"
+msgstr ""
+
+#: includes/events/event-functions.php:975
+msgid "Playlist Enabled"
+msgstr ""
+
+#: includes/events/event-functions.php:976
+msgid "Playlist Guest Access Code"
+msgstr ""
+
+#: includes/events/event-functions.php:977
+msgid "Start Time"
+msgstr ""
+
+#: includes/events/event-functions.php:978
+msgid "Venue Address Line 1"
+msgstr ""
+
+#: includes/events/event-functions.php:979
+msgid "Venue Address Line 2"
+msgstr ""
+
+#: includes/events/event-functions.php:980
+msgid "Venue Contact"
+msgstr ""
+
+#: includes/events/event-functions.php:981
+msgid "Venue County"
+msgstr ""
+
+#: includes/events/event-functions.php:982
+msgid "Venue Email Address"
+msgstr ""
+
+#: includes/events/event-functions.php:983
+msgid "Venue ID"
+msgstr ""
+
+#: includes/events/event-functions.php:984
+msgid "Venue Name"
+msgstr ""
+
+#: includes/events/event-functions.php:985
+msgid "Venue Phone Number"
+msgstr ""
+
+#: includes/events/event-functions.php:986
+msgid "Venue Post Code"
+msgstr ""
+
+#: includes/events/event-functions.php:987
+msgid "Venue Post Town"
+msgstr ""
+
+#: includes/events/event-functions.php:1444
 msgid "Quote %s"
 msgstr ""
 
-#: includes/events/event-functions.php:1413
+#: includes/events/event-functions.php:1500
 msgid "Sorry but the quote for your %s could not be displayed."
 msgstr ""
 
@@ -5302,12 +5626,8 @@ msgid ""
 "Event Management, version %s</a>."
 msgstr ""
 
-#: includes/install.php:107 templates/event/event-single.php:128
+#: includes/install.php:107 templates/event/event-single.php:92
 msgid "Your Details"
-msgstr ""
-
-#: includes/install.php:120
-msgid "%s Contract"
 msgstr ""
 
 #: includes/install.php:133
@@ -5416,7 +5736,7 @@ msgstr ""
 msgid "Selected Package:"
 msgstr ""
 
-#: includes/install.php:245 templates/event/event-single.php:111
+#: includes/install.php:245 templates/event/event-single.php:75
 msgid "Add-ons:"
 msgstr ""
 
@@ -5791,215 +6111,215 @@ msgstr ""
 msgid "Do we add the user to the mailing list"
 msgstr ""
 
-#: includes/install.php:664
+#: includes/install.php:666
 msgid "16th Birthday Party"
 msgstr ""
 
-#: includes/install.php:665
+#: includes/install.php:667
 msgid "18th Birthday Party"
 msgstr ""
 
-#: includes/install.php:666
+#: includes/install.php:668
 msgid "21st Birthday Party"
 msgstr ""
 
-#: includes/install.php:667
+#: includes/install.php:669
 msgid "30th Birthday Party"
 msgstr ""
 
-#: includes/install.php:668
+#: includes/install.php:670
 msgid "40th Birthday Party"
 msgstr ""
 
-#: includes/install.php:669
+#: includes/install.php:671
 msgid "50th Birthday Party"
 msgstr ""
 
-#: includes/install.php:670
+#: includes/install.php:672
 msgid "60th Birthday Party"
 msgstr ""
 
-#: includes/install.php:671
+#: includes/install.php:673
 msgid "70th Birthday Party"
 msgstr ""
 
-#: includes/install.php:672
+#: includes/install.php:674
 msgid "Anniversary Party"
 msgstr ""
 
-#: includes/install.php:673
+#: includes/install.php:675
 msgid "Child Birthday Party"
 msgstr ""
 
-#: includes/install.php:674
+#: includes/install.php:676
 msgid "Corporate Event"
 msgstr ""
 
-#: includes/install.php:675
+#: includes/install.php:677
 msgid "Engagement Party"
 msgstr ""
 
-#: includes/install.php:676
+#: includes/install.php:678
 msgid "Halloween Party"
 msgstr ""
 
-#: includes/install.php:677
+#: includes/install.php:679
 msgid "New Years Eve Party"
 msgstr ""
 
-#: includes/install.php:679
+#: includes/install.php:681
 msgid "School Disco"
 msgstr ""
 
-#: includes/install.php:680
+#: includes/install.php:682
 msgid "School Prom"
 msgstr ""
 
-#: includes/install.php:681
+#: includes/install.php:683
 msgid "Wedding"
 msgstr ""
 
-#: includes/install.php:684
+#: includes/install.php:686
 msgid "Business Card"
 msgstr ""
 
-#: includes/install.php:685
+#: includes/install.php:687
 msgid "Email"
 msgstr ""
 
-#: includes/install.php:686
+#: includes/install.php:688
 msgid "Facebook"
 msgstr ""
 
-#: includes/install.php:687
+#: includes/install.php:689
 msgid "Flyer"
 msgstr ""
 
-#: includes/install.php:688
+#: includes/install.php:690
 msgid "Google"
 msgstr ""
 
-#: includes/install.php:690
+#: includes/install.php:692
 msgid "Telephone"
 msgstr ""
 
-#: includes/install.php:691
+#: includes/install.php:693
 msgid "Website"
 msgstr ""
 
-#: includes/install.php:695
+#: includes/install.php:697
 msgid "First Dance"
 msgstr ""
 
-#: includes/install.php:696
+#: includes/install.php:698
 msgid "Second Dance"
 msgstr ""
 
-#: includes/install.php:697
+#: includes/install.php:699
 msgid "Last Song"
 msgstr ""
 
-#: includes/install.php:698
+#: includes/install.php:700
 msgid "Father & Bride"
 msgstr ""
 
-#: includes/install.php:699
+#: includes/install.php:701
 msgid "Mother & Son"
 msgstr ""
 
-#: includes/install.php:700
+#: includes/install.php:702
 msgid "DO NOT PLAY"
 msgstr ""
 
-#: includes/install.php:706
+#: includes/install.php:708 includes/txns/txn-functions.php:45
 msgid "Balance"
 msgstr ""
 
-#: includes/install.php:707
+#: includes/install.php:709
 msgid "Certifications"
 msgstr ""
 
-#: includes/install.php:709
+#: includes/install.php:711
 msgid "Hardware"
 msgstr ""
 
-#: includes/install.php:710
+#: includes/install.php:712
 msgid "Insurance"
 msgstr ""
 
-#: includes/install.php:711
+#: includes/install.php:713
 msgid "Maintenance"
 msgstr ""
 
-#: includes/install.php:713
+#: includes/install.php:715
 msgid "Music"
 msgstr ""
 
-#: includes/install.php:714
+#: includes/install.php:716
 msgid "Term used for payments that are a contribution towards balance"
 msgstr ""
 
-#: includes/install.php:715
+#: includes/install.php:717
 msgid "Parking"
 msgstr ""
 
-#: includes/install.php:716
+#: includes/install.php:718
 msgid "Petrol"
 msgstr ""
 
-#: includes/install.php:717
+#: includes/install.php:719
 msgid "Software"
 msgstr ""
 
-#: includes/install.php:718
+#: includes/install.php:720
 msgid "Vehicle"
 msgstr ""
 
-#: includes/install.php:721
+#: includes/install.php:723
 msgid "Low Ceiling"
 msgstr ""
 
-#: includes/install.php:721
+#: includes/install.php:723
 msgid "Venue has a low ceiling"
 msgstr ""
 
-#: includes/install.php:722
+#: includes/install.php:724
 msgid "PAT Required"
 msgstr ""
 
-#: includes/install.php:722
+#: includes/install.php:724
 msgid "Venue requires a copy of the PAT certificate"
 msgstr ""
 
-#: includes/install.php:723
+#: includes/install.php:725
 msgid "PLI Required"
 msgstr ""
 
-#: includes/install.php:723
+#: includes/install.php:725
 msgid "Venue requires proof of PLI"
 msgstr ""
 
-#: includes/install.php:724
+#: includes/install.php:726
 msgid "Smoke/Fog Allowed"
 msgstr ""
 
-#: includes/install.php:724
+#: includes/install.php:726
 msgid "Venue allows the use of Smoke/Fog/Haze"
 msgstr ""
 
-#: includes/install.php:725
+#: includes/install.php:727
 msgid "Sound Limiter"
 msgstr ""
 
-#: includes/install.php:725
+#: includes/install.php:727
 msgid "Venue has a sound limiter"
 msgstr ""
 
-#: includes/install.php:726
+#: includes/install.php:728
 msgid "Via Stairs"
 msgstr ""
 
-#: includes/install.php:726
+#: includes/install.php:728
 msgid "Access to this Venue is via stairs"
 msgstr ""
 
@@ -6132,23 +6452,23 @@ msgstr ""
 msgid "Security verification failed."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:650
+#: includes/playlist/playlist-functions.php:651
 msgid "There are no playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:660
+#: includes/playlist/playlist-functions.php:661
 msgid "%d playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:678
+#: includes/playlist/playlist-functions.php:679
 msgid "%s by %s successfully uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:684
+#: includes/playlist/playlist-functions.php:685
 msgid "%s by %s could not be uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:691
+#: includes/playlist/playlist-functions.php:692
 msgid "%d out of %d entries successfully uploaded."
 msgstr ""
 
@@ -6689,7 +7009,7 @@ msgstr ""
 msgid "Add New Transaction"
 msgstr ""
 
-#: includes/post-types.php:411 includes/txns/class-mdjm-txn.php:136
+#: includes/post-types.php:411 includes/txns/class-mdjm-txn.php:155
 msgid "New Transaction"
 msgstr ""
 
@@ -6936,8 +7256,8 @@ msgid "Expenditure"
 msgstr ""
 
 #: includes/post-types.php:783
-msgid "Ougoing Payment <span class=\"count\">(%s)</span>"
-msgid_plural "Ougoing Payments <span class=\"count\">(%s)</span>"
+msgid "Outgoing Payment <span class=\"count\">(%s)</span>"
+msgid_plural "Outgoing Payments <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -7045,150 +7365,147 @@ msgstr ""
 msgid "An error has occurred"
 msgstr ""
 
-#: includes/shortcodes.php:197 includes/shortcodes.php:210
-#: includes/shortcodes.php:296 includes/shortcodes.php:307
-#: includes/shortcodes.php:320
+#: includes/shortcodes.php:102
+msgid "%s action buttons within %s"
+msgstr ""
+
+#: includes/shortcodes.php:206 includes/shortcodes.php:219
 msgid ""
 "Ooops! There seems to be a slight issue and we've been unable to find your "
 "%s."
 msgstr ""
 
-#: includes/shortcodes.php:234 includes/shortcodes.php:252
-msgid "Sorry an error occured. Please try again."
-msgstr ""
-
-#: includes/shortcodes.php:276
+#: includes/shortcodes.php:323
 msgid "Book this %s"
 msgstr ""
 
-#: includes/shortcodes.php:340
+#: includes/shortcodes.php:405
 msgid "Select Date"
 msgstr ""
 
-#: includes/shortcodes.php:343 includes/widgets.php:257
+#: includes/shortcodes.php:408 includes/widgets.php:257
 #: widgets/class-mdjm-widget.php:168
 msgid "Check Availability"
 msgstr ""
 
-#: includes/txns/txn-functions.php:26 includes/txns/txn-functions.php:45
 #: includes/txns/txn-functions.php:64 includes/txns/txn-functions.php:94
 #: includes/txns/txn-functions.php:113
 msgid "Term not found"
 msgstr ""
 
-#: includes/txns/txn-functions.php:130
+#: includes/txns/txn-functions.php:133
 msgid "Pounds Sterling (&pound;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:131
+#: includes/txns/txn-functions.php:134
 msgid "US Dollars (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:132
+#: includes/txns/txn-functions.php:135
 msgid "Euros (&euro;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:133
+#: includes/txns/txn-functions.php:136
 msgid "Australian Dollars (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:134
+#: includes/txns/txn-functions.php:137
 msgid "Brazilian Real (R&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:135
+#: includes/txns/txn-functions.php:138
 msgid "Canadian Dollars (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:136
+#: includes/txns/txn-functions.php:139
 msgid "Czech Koruna"
 msgstr ""
 
-#: includes/txns/txn-functions.php:137
+#: includes/txns/txn-functions.php:140
 msgid "Danish Krone"
 msgstr ""
 
-#: includes/txns/txn-functions.php:138
+#: includes/txns/txn-functions.php:141
 msgid "Hong Kong Dollar (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:139
+#: includes/txns/txn-functions.php:142
 msgid "Hungarian Forint"
 msgstr ""
 
-#: includes/txns/txn-functions.php:140
+#: includes/txns/txn-functions.php:143
 msgid "Israeli Shekel (&#8362;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:141
+#: includes/txns/txn-functions.php:144
 msgid "Japanese Yen (&yen;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:142
+#: includes/txns/txn-functions.php:145
 msgid "Malaysian Ringgits"
 msgstr ""
 
-#: includes/txns/txn-functions.php:143
+#: includes/txns/txn-functions.php:146
 msgid "Mexican Peso (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:144
+#: includes/txns/txn-functions.php:147
 msgid "New Zealand Dollar (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:145
+#: includes/txns/txn-functions.php:148
 msgid "Norwegian Krone"
 msgstr ""
 
-#: includes/txns/txn-functions.php:146
+#: includes/txns/txn-functions.php:149
 msgid "Philippine Pesos"
 msgstr ""
 
-#: includes/txns/txn-functions.php:147
+#: includes/txns/txn-functions.php:150
 msgid "Polish Zloty"
 msgstr ""
 
-#: includes/txns/txn-functions.php:148
+#: includes/txns/txn-functions.php:151
 msgid "Singapore Dollar (&#36;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:149
+#: includes/txns/txn-functions.php:152
 msgid "South African Rand"
 msgstr ""
 
-#: includes/txns/txn-functions.php:150
+#: includes/txns/txn-functions.php:153
 msgid "Swedish Krona"
 msgstr ""
 
-#: includes/txns/txn-functions.php:151
+#: includes/txns/txn-functions.php:154
 msgid "Swiss Franc"
 msgstr ""
 
-#: includes/txns/txn-functions.php:152
+#: includes/txns/txn-functions.php:155
 msgid "Taiwan New Dollars"
 msgstr ""
 
-#: includes/txns/txn-functions.php:153
+#: includes/txns/txn-functions.php:156
 msgid "Thai Baht (&#3647;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:154
+#: includes/txns/txn-functions.php:157
 msgid "Indian Rupee (&#8377;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:155
+#: includes/txns/txn-functions.php:158
 msgid "Turkish Lira (&#8378;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:156
+#: includes/txns/txn-functions.php:159
 msgid "Iranian Rial (&#65020;)"
 msgstr ""
 
-#: includes/txns/txn-functions.php:157
+#: includes/txns/txn-functions.php:160
 msgid "Russian Rubles"
 msgstr ""
 
-#: includes/venue-functions.php:262
+#: includes/venue-functions.php:270
 msgid "No venues exist"
 msgstr ""
 
@@ -7319,7 +7636,7 @@ msgstr ""
 msgid "Cost Summary"
 msgstr ""
 
-#: templates/event/event-loop.php:50 templates/event/event-single.php:123
+#: templates/event/event-loop.php:50 templates/event/event-single.php:87
 msgid "Remaining"
 msgstr ""
 
@@ -7350,23 +7667,23 @@ msgid ""
 "us</a> with any adjustments."
 msgstr ""
 
-#: templates/event/event-single.php:93
+#: templates/event/event-single.php:57
 msgid "Your %s:"
 msgstr ""
 
-#: templates/event/event-single.php:98
+#: templates/event/event-single.php:62
 msgid "Starts:"
 msgstr ""
 
-#: templates/event/event-single.php:100
+#: templates/event/event-single.php:64
 msgid "Completes:"
 msgstr ""
 
-#: templates/event/event-single.php:105
+#: templates/event/event-single.php:69
 msgid "Package Details:"
 msgstr ""
 
-#: templates/event/event-single.php:117
+#: templates/event/event-single.php:81
 msgid "Pricing"
 msgstr ""
 
@@ -7477,10 +7794,11 @@ msgid ""
 "suggestions."
 msgstr ""
 
-#: templates/profile/profile.php:21
+#: templates/playlist/playlist-noevent.php:16
+#: templates/quote/quote-noevent.php:16
 msgid ""
-"Please keep your details up to date as incorrect information may cause "
-"problems with your %s."
+"We haven't been able to locate your %s. Please return to our <a href='%s'>"
+"%s</a> page to see a list of your %s."
 msgstr ""
 
 #: widgets/class-mdjm-widget.php:166
@@ -7497,9 +7815,9 @@ msgid ""
 "another date below..."
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://mdjm.co.uk"
 msgstr ""

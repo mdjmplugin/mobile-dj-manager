@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.5
+Stable tag: 1.3.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,14 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.5.1
+
+* **Bug Fix**:  Issue [#53](https://github.com/mydjplanner/mobile-dj-manager/issues/53 "Issue 53") Do not double format the event deposit cost
+* **Bug Fix**:  Issue [#54](https://github.com/mydjplanner/mobile-dj-manager/issues/50 "Issue 54") Display action buttons even when no event ID is passed
+* **Tweak**: Allow filtering of the number of action buttons being displayed via `add_filter( 'mdjm_action_buttons_in_row', '*your_function*' );`. Default is 4
+* **Tweak**: Reduced font on action buttons to 12pt
+* **Tweak**: Updated translation POT file
+
 = 1.3.5
 
 * **New**: Event action buttons within Client Zone are now responsive on the single event page. **`event-single.php` copies need updating**

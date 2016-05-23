@@ -91,17 +91,17 @@ function mdjm_shortcode_home( $atts )	{
 		
 		$client_id = get_current_user_id();
 		
+		mdjm_add_content_tag(
+			'event_action_buttons',
+			sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name' ) ),
+			'mdjm_do_action_buttons'
+		);
+		
 		if( isset( $_GET['event_id'] ) )	{
 			$mdjm_event = mdjm_get_event( $_GET['event_id'] );
 			
 			if( ! empty( $mdjm_event->ID ) )	{
 				ob_start();
-									
-				mdjm_add_content_tag(
-					'event_action_buttons',
-					sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name' ) ),
-					'mdjm_do_action_buttons'
-				);
 				
 				mdjm_get_template_part( 'event', 'single' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $client_id );
@@ -113,8 +113,7 @@ function mdjm_shortcode_home( $atts )	{
 				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
 				ob_get_clean();
 			}
-		}
-		else	{
+		} else	{
 			$client_events = mdjm_get_client_events( $client_id, mdjm_active_event_statuses() );
 			
 			if( $client_events )	{
@@ -152,9 +151,7 @@ function mdjm_shortcode_home( $atts )	{
 					do_action( 'mdjm_post_event_loop', $client_events );
 					ob_get_clean();
 				}
-			}
-			// No events
-			else	{
+			} else	{
 				mdjm_get_template_part( 'event', 'none' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
 				ob_get_clean();
@@ -381,7 +378,7 @@ function mdjm_shortcode_quote( $atts )	{
 	} else	{
 		ob_start();
 		mdjm_get_template_part( 'quote', 'noevent' );
-		$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
+		$output = mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
 		ob_get_clean();
 	}
 	
