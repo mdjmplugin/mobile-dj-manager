@@ -57,7 +57,7 @@ function shortcode_mdjm( $atts )	{
 				$output = ob_get_clean();
 			}
 			else	{
-				wp_die( __( 'An error has occurred', 'mobile-dj-manager' ) );	
+				return __( 'An error has occurred', 'mobile-dj-manager' );
 			}
 		}
 		else
