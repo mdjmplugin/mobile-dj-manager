@@ -151,9 +151,7 @@ function mdjm_shortcode_home( $atts )	{
 					do_action( 'mdjm_post_event_loop', $client_events );
 					ob_get_clean();
 				}
-			}
-			// No events
-			else	{
+			} else	{
 				mdjm_get_template_part( 'event', 'none' );
 				$output .= mdjm_do_content_tags( ob_get_contents(), '', $client_id );
 				ob_get_clean();
