@@ -76,6 +76,12 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.5.1
+
+* **Bug Fix**:  Issue [#53](https://github.com/mydjplanner/mobile-dj-manager/issues/53 "Issue 53") Do not double format the event deposit cost
+* **Bug Fix**:  Issue [#54](https://github.com/mydjplanner/mobile-dj-manager/issues/50 "Issue 54") Display action buttons even when no event ID is passed
+* **Tweak**: Updated translation POT file
+
 = 1.3.5
 
 * **New**: Event action buttons within Client Zone are now responsive on the single event page. **`event-single.php` copies need updating**
