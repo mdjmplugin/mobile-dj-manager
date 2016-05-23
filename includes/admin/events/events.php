@@ -213,12 +213,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				
 				$deposit_status = mdjm_get_event_deposit_status( $post_id );
 				
-				if( 'Due' == mdjm_get_event_deposit_status( $post_id ) )	{
-					printf( __( '<i title="%s not paid" class="fa fa-square-o" aria-hidden="true">', 'mobile-dj-manager' ),
-						mdjm_get_deposit_label()
-					);
-				} else	{
-					printf( __( '<i title="%s paid" class="fa fa-check-square-o" aria-hidden="true">', 'mobile-dj-manager' ),
+				if( 'Paid' == mdjm_get_event_deposit_status( $post_id ) )	{
+					printf( __( '<i title="%s %s paid" class="fa fa-check-square-o" aria-hidden="true">', 'mobile-dj-manager' ),
+						mdjm_currency_filter( mdjm_sanitize_amount( mdjm_get_event_deposit( $post_id ) ) ),
 						mdjm_get_deposit_label()
 					);
 				}
