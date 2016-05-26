@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the MDJM Event Management package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.3.5\n"
+"Project-Id-Version: MDJM Event Management 1.3.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mobile-dj-"
 "manager\n"
-"POT-Creation-Date: 2016-05-23 10:46:34+00:00\n"
+"POT-Creation-Date: 2016-05-26 16:08:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,8 +14,8 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: client-zone/includes/mdjm-availability.php:200
-#: client-zone/includes/mdjm-availability.php:286 includes/shortcodes.php:437
-#: includes/shortcodes.php:448 includes/widgets.php:38
+#: client-zone/includes/mdjm-availability.php:286 includes/shortcodes.php:434
+#: includes/shortcodes.php:445 includes/widgets.php:38
 #: widgets/class-mdjm-widget.php:25
 msgid "MDJM Availability Checker"
 msgstr ""
@@ -23,7 +23,7 @@ msgstr ""
 #: client-zone/includes/mdjm-availability.php:279
 #: client-zone/includes/mdjm-availability.php:281
 #: includes/admin/users/class-mdjm-employee-manager.php:177
-#: includes/shortcodes.php:410 includes/widgets.php:215
+#: includes/shortcodes.php:407 includes/widgets.php:215
 msgid "Please wait..."
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Please enter a date"
 msgstr ""
 
-#: client-zone/includes/mdjm-dynamic.php:35 includes/shortcodes.php:515
+#: client-zone/includes/mdjm-dynamic.php:35 includes/shortcodes.php:512
 msgid "No addons available"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 
 #: client-zone/pages/mdjm-clientzone.php:255
 #: client-zone/pages/mdjm-contract.php:275 includes/admin/events/events.php:24
-#: includes/admin/events/events.php:533 includes/admin/events/quotes.php:24
+#: includes/admin/events/events.php:544 includes/admin/events/quotes.php:24
 #: includes/admin/roles/class-mdjm-roles.php:82
 #: includes/clientzone-functions.php:120
 #: includes/events/event-functions.php:953
@@ -120,7 +120,7 @@ msgstr ""
 
 #: client-zone/pages/mdjm-contract.php:51
 #: client-zone/pages/mdjm-contract.php:418
-#: includes/clientzone-functions.php:255 templates/contract/contract.php:105
+#: includes/clientzone-functions.php:256 templates/contract/contract.php:105
 msgid "Sign Contract"
 msgstr ""
 
@@ -209,15 +209,15 @@ msgstr ""
 msgid "Review &amp; Approve Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:91 includes/clientzone-functions.php:272
+#: client-zone/pages/mdjm-home.php:91 includes/clientzone-functions.php:273
 msgid "View Contract"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:98 includes/clientzone-functions.php:290
+#: client-zone/pages/mdjm-home.php:98 includes/clientzone-functions.php:291
 msgid "Manage Playlist"
 msgstr ""
 
-#: client-zone/pages/mdjm-home.php:102 includes/clientzone-functions.php:307
+#: client-zone/pages/mdjm-home.php:102 includes/clientzone-functions.php:308
 msgid "Update Profile"
 msgstr ""
 
@@ -1314,7 +1314,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:634
 #: includes/admin/settings/register-settings.php:640
 #: includes/admin/settings/register-settings.php:641
-#: includes/content/content-tags.php:672 templates/event/event-single.php:57
+#: includes/content/content-tags.php:677 templates/event/event-single.php:57
 msgid "DJ"
 msgstr ""
 
@@ -1354,47 +1354,47 @@ msgstr ""
 msgid "All Employees"
 msgstr ""
 
-#: includes/admin/events/events.php:535
+#: includes/admin/events/events.php:546
 msgid "All Client's"
 msgstr ""
 
-#: includes/admin/events/events.php:628
+#: includes/admin/events/events.php:640
 msgid "<a href=\"%s\">Quote</a>"
 msgstr ""
 
-#: includes/admin/events/events.php:633
+#: includes/admin/events/events.php:645
 msgid "<a href=\"%s\">Availability</a>"
 msgstr ""
 
-#: includes/admin/events/events.php:644
+#: includes/admin/events/events.php:656
 msgid "<span class=\"trash\"><a href=\"%s\">Unavailable</a></span>"
 msgstr ""
 
-#: includes/admin/events/events.php:704 includes/admin/events/events.php:708
+#: includes/admin/events/events.php:716 includes/admin/events/events.php:720
 msgid "Update Event"
 msgstr ""
 
-#: includes/admin/events/events.php:706
+#: includes/admin/events/events.php:718
 msgid "Create Event"
 msgstr ""
 
-#: includes/admin/events/events.php:1203
+#: includes/admin/events/events.php:1215
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/events.php:1418 includes/admin/events/events.php:1419
+#: includes/admin/events/events.php:1430 includes/admin/events/events.php:1431
 msgid "%2$s updated. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1420
+#: includes/admin/events/events.php:1432
 msgid "%2$s created. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1421
+#: includes/admin/events/events.php:1433
 msgid "%2$s saved. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/events/events.php:1422
+#: includes/admin/events/events.php:1434
 msgid "%2$s submitted. %1$s%3$s List%4$s."
 msgstr ""
 
@@ -1441,7 +1441,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:1201
 #: includes/admin/welcome.php:203 includes/admin/welcome.php:344
 #: includes/admin/welcome.php:371 includes/admin/welcome.php:375
-#: includes/content/content-tags.php:660 includes/install.php:95
+#: includes/content/content-tags.php:665 includes/install.php:95
 msgid "Client Zone"
 msgstr ""
 
@@ -1840,7 +1840,7 @@ msgstr ""
 msgid "Set as Default Category?"
 msgstr ""
 
-#: includes/admin/mdjm.php:663 includes/content/content-tags.php:1071
+#: includes/admin/mdjm.php:663 includes/content/content-tags.php:1076
 msgid "Please <a href=\"%s\">click here</a> to reset your password"
 msgstr ""
 
@@ -1929,7 +1929,7 @@ msgstr ""
 msgid "MDJM %s"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/admin/menu.php:112 includes/admin/welcome.php:129
 msgid "MDJM Event Management"
@@ -4972,11 +4972,11 @@ msgstr ""
 msgid "%s Quotation Accepted"
 msgstr ""
 
-#: includes/clientzone-functions.php:222 includes/post-types.php:370
+#: includes/clientzone-functions.php:223 includes/post-types.php:370
 msgid "View Quote"
 msgstr ""
 
-#: includes/clientzone-functions.php:237
+#: includes/clientzone-functions.php:238
 msgid "Book %s"
 msgstr ""
 
@@ -5179,112 +5179,116 @@ msgid "The package associated with the %s and its cost, or \"No Package\"."
 msgstr ""
 
 #: includes/content/content-tags.php:507
-msgid "The current status of the event"
+msgid "The description of the package associated with the %s."
 msgstr ""
 
 #: includes/content/content-tags.php:512
-msgid "The type of event"
+msgid "The current status of the event"
 msgstr ""
 
 #: includes/content/content-tags.php:517
-msgid "The URL of the event page"
+msgid "The type of event"
 msgstr ""
 
 #: includes/content/content-tags.php:522
+msgid "The URL of the event page"
+msgstr ""
+
+#: includes/content/content-tags.php:527
 msgid "The URL to your event playlist page for guests"
 msgstr ""
 
-#: includes/content/content-tags.php:532
+#: includes/content/content-tags.php:537
 msgid "An overview of payments made by the client for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:537
+#: includes/content/content-tags.php:542
 msgid "The URL to your payments page"
 msgstr ""
 
-#: includes/content/content-tags.php:542
+#: includes/content/content-tags.php:547
 msgid "Adds a page break into a PDF document"
 msgstr ""
 
-#: includes/content/content-tags.php:547
+#: includes/content/content-tags.php:552
 msgid "The number of days before the event that the playlist closes"
 msgstr ""
 
-#: includes/content/content-tags.php:552
+#: includes/content/content-tags.php:557
 msgid "The approximate length of the %s playlist"
 msgstr ""
 
-#: includes/content/content-tags.php:557
+#: includes/content/content-tags.php:562
 msgid "The URL to your event playlist page for clients"
 msgstr ""
 
-#: includes/content/content-tags.php:562
+#: includes/content/content-tags.php:567
 msgid "The URL to your online quotes page"
 msgstr ""
 
-#: includes/content/content-tags.php:567
+#: includes/content/content-tags.php:572
 msgid "The event start time"
 msgstr ""
 
-#: includes/content/content-tags.php:572
+#: includes/content/content-tags.php:577
 msgid "The total cost of the event"
 msgstr ""
 
-#: includes/content/content-tags.php:577
+#: includes/content/content-tags.php:582
 msgid "The name of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:582
+#: includes/content/content-tags.php:587
 msgid "The name of the contact at event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:587
+#: includes/content/content-tags.php:592
 msgid "Details stored for the venue"
 msgstr ""
 
-#: includes/content/content-tags.php:592
+#: includes/content/content-tags.php:597
 msgid "The email address of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:597
+#: includes/content/content-tags.php:602
 msgid "The full address of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:602
+#: includes/content/content-tags.php:607
 msgid "Notes associated with the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:607
+#: includes/content/content-tags.php:612
 msgid "The phone number of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:612
+#: includes/content/content-tags.php:617
 msgid "The URL to your website"
 msgstr ""
 
-#: includes/content/content-tags.php:703 includes/content/content-tags.php:739
+#: includes/content/content-tags.php:708 includes/content/content-tags.php:744
 #: includes/equipment/equipment-functions-new.php:133
 #: includes/equipment/equipment-functions-new.php:146
-#: includes/equipment/equipment-functions.php:141
+#: includes/equipment/equipment-functions.php:169
 msgid "No packages available"
 msgstr ""
 
-#: includes/content/content-tags.php:1038
+#: includes/content/content-tags.php:1043
 msgid "Client data not set"
 msgstr ""
 
-#: includes/content/content-tags.php:1436
-#: includes/content/content-tags.php:1461
-#: includes/content/content-tags.php:1936
+#: includes/content/content-tags.php:1441
+#: includes/content/content-tags.php:1466
+#: includes/content/content-tags.php:1958
 #: includes/emails/email-functions.php:36
 msgid "Not specified"
 msgstr ""
 
-#: includes/content/content-tags.php:1761
+#: includes/content/content-tags.php:1783
 msgid "Guest playlist is disabled."
 msgstr ""
 
-#: includes/content/content-tags.php:1867
+#: includes/content/content-tags.php:1889
 msgid "Event playlist disabled"
 msgstr ""
 
@@ -5306,6 +5310,10 @@ msgstr ""
 
 #: includes/contract/contract-functions.php:176
 msgid "IP Address Used"
+msgstr ""
+
+#: includes/contract/contract-functions.php:185
+msgid "Event Contract: %s"
 msgstr ""
 
 #: includes/contract/contract-functions.php:228
@@ -5414,20 +5422,20 @@ msgstr ""
 msgid "Employee %s paid %s for their role as %s"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:161
+#: includes/equipment/equipment-functions.php:189
 msgid "No addons are assigned to this event"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:206
+#: includes/equipment/equipment-functions.php:234
 msgid "No addons are available"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:368
+#: includes/equipment/equipment-functions.php:396
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/equipment/equipment-functions.php:661
-#: includes/equipment/equipment-functions.php:760
+#: includes/equipment/equipment-functions.php:689
+#: includes/equipment/equipment-functions.php:788
 msgid "No Addons Available"
 msgstr ""
 
@@ -7365,25 +7373,25 @@ msgstr ""
 msgid "An error has occurred"
 msgstr ""
 
-#: includes/shortcodes.php:102
+#: includes/shortcodes.php:96
 msgid "%s action buttons within %s"
 msgstr ""
 
-#: includes/shortcodes.php:206 includes/shortcodes.php:219
+#: includes/shortcodes.php:203 includes/shortcodes.php:216
 msgid ""
 "Ooops! There seems to be a slight issue and we've been unable to find your "
 "%s."
 msgstr ""
 
-#: includes/shortcodes.php:323
+#: includes/shortcodes.php:320
 msgid "Book this %s"
 msgstr ""
 
-#: includes/shortcodes.php:405
+#: includes/shortcodes.php:402
 msgid "Select Date"
 msgstr ""
 
-#: includes/shortcodes.php:408 includes/widgets.php:257
+#: includes/shortcodes.php:405 includes/widgets.php:257
 #: widgets/class-mdjm-widget.php:168
 msgid "Check Availability"
 msgstr ""
@@ -7815,9 +7823,9 @@ msgid ""
 "another date below..."
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://mdjm.co.uk"
 msgstr ""
