@@ -1704,15 +1704,15 @@ function mdjm_content_tag_event_package_cost( $event_id='' )	{
  * @param	int		The event ID.
  * @param
  *
- * @return	str		The package name or "No Package".
+ * @return	str		The package description.
  */
-function mdjm_content_tag_event_package_desciption( $event_id='' )	{
+function mdjm_content_tag_event_package_description( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
 	
 	return get_event_package_description( $event_id );
-} // mdjm_content_tag_event_package
+} // mdjm_content_tag_event_package_description
 
 /**
  * Content tag: event_status.
