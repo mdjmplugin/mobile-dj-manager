@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mdjm/mobile-dj-manager.svg?branch=master)](https://travis-ci.org/mdjm/mobile-dj-manager)
 <h1>MDJM Event Management plugin for WordPress</h1>
 
 <h2>Welcome to our GitHub repository!</h2>
