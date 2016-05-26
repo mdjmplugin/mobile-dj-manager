@@ -39,8 +39,8 @@ function mdjm_comms_email_contextual_help() {
 				) . '</p>' .
 		'<p>' . sprintf(
 					__( '<a href="%s">Post an issue</a> on <a href="%s">GitHub</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://github.com/mydjplanner/mobile-dj-manager/issues' ),
-					esc_url( 'https://github.com/mydjplanner/mobile-dj-manager/' )
+					esc_url( 'https://github.com/mdjm/mobile-dj-manager/issues' ),
+					esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
 				) . '</p>' .
 		'<p>' . sprintf(
 					__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
