@@ -546,6 +546,20 @@ a	{
 	background-color: #DFF2BF;
 }
 
+/* =Login Form
+-------------------------------------------------------------- */
+#mdjm-login-form fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#mdjm-login-form .mdjm-input,
+#mdjm-login-form label {
+	display: inline-block;
+	width: 200px;
+}
+
 /* =Availability Widget
 -------------------------------------------------------------- */
 
