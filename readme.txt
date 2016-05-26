@@ -142,7 +142,6 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * **Tweak**: Removed use of deprecated `MDJM_EVENT_POSTS` constant
 * **Tweak**: Stripslashes from subject of communication page emails
 
-
 = 1.3.3 =
 
 * **Bug Fix**: Client contact link should auto set recipient on communication page
