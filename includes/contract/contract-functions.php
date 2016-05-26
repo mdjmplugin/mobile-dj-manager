@@ -177,19 +177,19 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	
 	$contract_signatory_content = apply_filters( 'mdjm_contract_signatory', $contract_signatory_content );
 	
-	$contract_content = $contract_content . $contract_signatory_content;
+	$contract_content .= $contract_signatory_content;
 	
 	// Filter the signed contract post data
 	$signed_contract = apply_filters( 'mdjm_signed_contract_data',
 		array(
-			'post_title'		=> 'Event Contract: ' . mdjm_get_option( 'event_prefix' ) . $event->ID,
-			'post_author'	   	=> get_current_user_id(),
-			'post_type'		 	=> 'mdjm-signed-contract',
-			'post_status'	   	=> 'publish',
-			'post_content'      => $contract_content,
-			'post_parent'	   	=> $event->ID,
-			'ping_status'	   	=> 'closed',
-			'comment_status'	=> 'closed'
+			'post_title'     => sprintf( __( 'Event Contract: %s', 'mobile-dj-manager' ), mdjm_get_option( 'event_prefix' ) . $event->ID ),
+			'post_author'    => get_current_user_id(),
+			'post_type'      => 'mdjm-signed-contract',
+			'post_status'    => 'publish',
+			'post_content'   => $contract_content,
+			'post_parent'    => $event->ID,
+			'ping_status'    => 'closed',
+			'comment_status' => 'closed'
 		),
 		$event->ID, $event
 	);
@@ -203,11 +203,11 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 	add_post_meta( $signed_contract, '_mdjm_contract_signed_name', ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ), true );
 	
 	$event_meta = array(
-		'_mdjm_event_signed_contract'			=> $signed_contract_id,
-		'_mdjm_event_contract_approved'		=> current_time( 'mysql' ),
-		'_mdjm_event_contract_approver'		=> strip_tags( addslashes( ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) ) ),
-		'_mdjm_event_contract_approver_ip'	=> $_SERVER['REMOTE_ADDR'],
-		'_mdjm_event_last_updated_by'		=> get_current_user_id()
+		'_mdjm_event_signed_contract'      => $signed_contract_id,
+		'_mdjm_event_contract_approved'    => current_time( 'mysql' ),
+		'_mdjm_event_contract_approver'    => strip_tags( addslashes( ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) ) ),
+		'_mdjm_event_contract_approver_ip' => $_SERVER['REMOTE_ADDR'],
+		'_mdjm_event_last_updated_by'      => get_current_user_id()
 	);
 		
 	// Update the event status

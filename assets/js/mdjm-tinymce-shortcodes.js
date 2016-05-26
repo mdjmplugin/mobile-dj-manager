@@ -168,6 +168,11 @@
 						onclick: function () {
 							editor.insertContent('{event_package_cost}');
 						}
+					}, {
+						text: 'Event Package Description',
+						onclick: function () {
+							editor.insertContent('{event_package_description}');
+						}
 					}]
 				}, {
 					text: 'Event Shortcodes',

@@ -102,6 +102,34 @@ function get_event_package( $event_id, $price=false )	{
 			
 } // get_event_package
 
+/**
+ * Get the description of the package for the event.
+ *
+ * @param	int			$event_id	The event ID
+ * @return
+ */
+function get_event_package_description( $event_id )	{
+	
+	if( ! mdjm_packages_enabled() )	{
+		return;
+	}
+	
+	// Event package
+	$event_package = get_post_meta( $event_id, '_mdjm_event_package', true );
+	
+	if( empty( $event_package ) )	{
+		return;
+	}
+	
+	// All packages
+	$packages = mdjm_get_packages();
+	
+	$return = stripslashes( esc_attr( $packages[ $event_package ]['desc'] ) );
+	
+	return $return;
+			
+} // get_event_package_description
+
 /*
  * Get the package information
  *

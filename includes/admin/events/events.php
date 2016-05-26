@@ -481,7 +481,7 @@ function mdjm_event_type_filter_dropdown()	{
  */
 function mdjm_event_employee_filter_dropdown()	{
 	
-	$employees = mdjm_get_employees();
+	$employees      = mdjm_get_employees();
 	$employee_count = count( $employees );
 	
 	if ( ! $employee_count || 1 == $employee_count )	{
@@ -515,34 +515,46 @@ function mdjm_event_employee_filter_dropdown()	{
  * @return	arr
  */
 function mdjm_event_client_filter_dropdown()	{
-	global $wpdb;
-					
-	$client_query = "SELECT DISTINCT meta_value FROM `" . $wpdb->postmeta . 
-		"` WHERE `meta_key` = '_mdjm_event_client'";
-											
-	$clients = $wpdb->get_results( $client_query );
-	$client_count = count( $clients );
+
+	$roles    = array( 'client', 'inactive_client' );
+	$employee = ! mdjm_employee_can( 'read_events_all' ) ? get_current_user_id() : false;
+		
+	$all_clients = mdjm_get_clients( $roles, $employee );
 	
-	if ( !$client_count || 1 == $client_count )	{
+	if ( ! $all_clients || 1 == count( $all_clients ) )	{
 		return;
 	}
-
-	$c = isset( $_GET['mdjm_filter_client'] ) ? (int) $_GET['mdjm_filter_client'] : 0;
+	
+	$selected = isset( $_GET['mdjm_filter_client'] ) ? (int) $_GET['mdjm_filter_client'] : 0;
+	
+	foreach( $all_clients as $_client )	{
+		$client_events = mdjm_get_client_events( $_client->ID );
+		
+		if ( $client_events )	{
+			$clients[ $_client->ID ] = $_client->display_name;
+		}
+		
+	}
+	
+	if ( ! $clients )	{
+		return;
+	}
 	
 	?>
 	<label for="filter-by-client" class="screen-reader-text">Filter by <?php _e( 'Client', 'mobile-dj-manager' ); ?></label>
 	<select name="mdjm_filter_client" id="mdjm_filter_client-by-dj">
-		<option value="0"<?php selected( $c, 0, false ); ?>><?php _e( "All Client's", 'mobile-dj-manager' ); ?></option>
+		<option value="0"<?php selected( $selected, 0, false ); ?>><?php _e( "All Client's", 'mobile-dj-manager' ); ?></option>
 	<?php
-	foreach( $clients as $client ) {
-		$clientinfo = get_userdata( $client->meta_value );
-		if( empty( $clientinfo->display_name ) )
+	foreach( $clients as $ID => $display_name ) {
+		
+		if( empty( $display_name ) )	{
 			continue;
+		}
 		
 		printf( "<option %s value='%s'>%s</option>\n",
-			selected( $c, $client->meta_value, false ),
-			$client->meta_value,
-			$clientinfo->display_name
+			selected( $selected, $ID, false ),
+			$ID,
+			$display_name
 		);
 	}
 	?>
@@ -1252,7 +1264,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		if( substr( $key, 0, 12 ) == '_mdjm_event_' )	{
 			
 			if ( $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' )	{
-				$value = mdjm_format_amount( $value );
+				$value = mdjm_sanitize_amount( $value );
 			}
 					
 			$event_data[ $key ] = $value;

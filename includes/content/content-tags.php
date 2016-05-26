@@ -503,6 +503,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_package_cost'
 		),
 		array(
+			'tag'         => 'event_package_description',
+			'description' => sprintf( __( 'The description of the package associated with the %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_event_package_description'
+		),
+		array(
 			'tag'         => 'event_status',
 			'description' => __( 'The current status of the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_status'
@@ -1691,6 +1696,23 @@ function mdjm_content_tag_event_package_cost( $event_id='' )	{
 	
 	return get_event_package( $event_id, true );
 } // mdjm_content_tag_event_package_cost
+
+/**
+ * Content tag: event_package_desciption.
+ * The package attached to the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The package name or "No Package".
+ */
+function mdjm_content_tag_event_package_desciption( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return get_event_package_description( $event_id );
+} // mdjm_content_tag_event_package
 
 /**
  * Content tag: event_status.
