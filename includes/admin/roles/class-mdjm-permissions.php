@@ -72,9 +72,7 @@ class MDJM_Permissions	{
 			$role->add_cap( 'mdjm_employee' );
 			
 			foreach( $fields as $field => $prefix )	{
-				
-				echo $field . ' ' . $prefix . ' ' . $_POST[$field . '_' . $_role];
-				
+								
 				$caps = empty( $_POST[$field . '_' . $_role] ) ? 
 					$this->get_capabilities( $prefix . '_none' ) : 
 					$this->get_capabilities( $_POST[$field . '_' . $_role]
