@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.5.1
+Stable tag: 1.3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,16 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.5.2
+
+* **Bug Fix**: Corrected output for contract signed date
+* **Bug Fix**: Issue [#60](https://github.com/mdjm/mobile-dj-manager/issues/60/ "Issue 60") Random echo statement causes PHP notice on employee permission update
+* **Tweak**: Added content tag `{event_package_description}`
+* **Tweak**: Better formatting for event price
+* **Tweak**: Client filter is sorted alphabetically
+* **Tweak**: GitHub links now direct to organisation
+
+
 = 1.3.5.1
 
 * **Bug Fix**:  Issue [#53](https://github.com/mdjm/mobile-dj-manager/issues/53/ "Issue 53") Do not double format the event deposit cost
