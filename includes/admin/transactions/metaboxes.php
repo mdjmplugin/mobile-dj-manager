@@ -187,7 +187,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
 				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' . 
-				mdjm_format_amount( '10' ) . '" value="' . get_post_meta( $post->ID, '_mdjm_txn_total', true ) . '" />' . "\r\n";
+				mdjm_sanitize_amount( '10' ) . '" value="' . mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_txn_total', true ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 	
 		echo '<div class="mdjm-post-3column">' . "\r\n";

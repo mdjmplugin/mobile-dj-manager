@@ -486,9 +486,9 @@ function mdjm_event_metabox_event_details( $post )	{
 	<?php
 	if( empty( $existing_event ) )	{
 		if( mdjm_get_option( 'deposit_type' ) == 'fixed' )	{
-			$deposit = mdjm_format_amount( mdjm_get_option( 'deposit_amount' ) );
+			$deposit = mdjm_get_option( 'deposit_amount' );
 		} else	{
-			$deposit = mdjm_format_amount( '0' );
+			$deposit = '0';
 		}
 	}
 	else	{
@@ -501,7 +501,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			<div class="mdjm-post-2column">
 			<label for="_mdjm_event_cost" class="mdjm-label"><?php _e( 'Total Cost:' ); ?></label><br />
 			<?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_cost" id="_mdjm_event_cost" class="mdjm-input-currency required" 
-				value="<?php echo get_post_meta( $post->ID, '_mdjm_event_cost', true ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" /> 
+				value="<?php echo mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_event_cost', true ) ); ?>" placeholder="<?php echo mdjm_sanitize_amount( '0' ); ?>" /> 
 				<span class="mdjm-description">No <?php echo mdjm_currency_symbol(); ?> symbol needed.</span>
 			</div>
 			<?php
@@ -515,7 +515,7 @@ function mdjm_event_metabox_event_details( $post )	{
 			<div class="mdjm-post-last-2column">
 			<label for="_mdjm_event_deposit" class="mdjm-label"><?php _e( mdjm_get_deposit_label() . ':' ); ?></label><br />
 			<?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_deposit" id="_mdjm_event_deposit" class="mdjm-input-currency" 
-				value="<?php echo ( !empty( $deposit ) ? $deposit : '' ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" /> 
+				value="<?php echo ( !empty( $deposit ) ? mdjm_sanitize_amount( $deposit ) : '' ); ?>" placeholder="<?php echo mdjm_sanitize_amount( '0' ); ?>" /> 
 				<span class="mdjm-description">No <?php echo mdjm_currency_symbol(); ?> symbol needed</span>
 			</div>
 		</div><!-- mdjm-post-row -->
@@ -552,7 +552,7 @@ function mdjm_event_metabox_event_details( $post )	{
 						$djs_with_package = explode( ',', $package['djs'] );
 						foreach( $djs_with_package as $dj_with_package )	{
 							if( get_post_meta( $post->ID, '_mdjm_event_dj', true ) == $dj_with_package )	{
-								echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
+								echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_sanitize_amount( $package['cost'] ) . '"';
 								selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
 								echo '>' . esc_attr( $package['name'] );
 								echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
@@ -562,7 +562,7 @@ function mdjm_event_metabox_event_details( $post )	{
 					}
 					/* -- Otherwise, display all packages -- */
 					else	{
-						echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_format_amount( $package['cost'] ) . '"';
+						echo '<option value="' . $package['slug'] . '" data-price="' . mdjm_sanitize_amount( $package['cost'] ) . '"';
 						selected( $package['slug'], get_post_meta( $post->ID, '_mdjm_event_package', true ) );
 						echo '>' . esc_attr( $package['name'] );
 						echo ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) );
@@ -724,7 +724,7 @@ function mdjm_event_metabox_event_employees( $post )	{
                 ?>
                 <label for="_mdjm_event_dj_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                 <?php echo mdjm_currency_symbol(); ?><input type="text" name="_mdjm_event_dj_wage" id="_mdjm_event_dj_wage" class="mdjm-input-currency" 
-                value="<?php echo mdjm_format_amount( esc_attr( get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ) ) ); ?>" placeholder="<?php echo mdjm_format_amount( '0' ); ?>"<?php echo $readonly; ?> />
+                value="<?php echo mdjm_sanitize_amount( esc_attr( get_post_meta( $post->ID, '_mdjm_event_dj_wage', true ) ) ); ?>" placeholder="<?php echo mdjm_sanitize_amount( '0' ); ?>"<?php echo $readonly; ?> />
                 <?php
 				if ( $primary_employee_payment_status == 'paid' )	{
 					_e( 'Employee has been paid', 'mobile-dj-manager' );
@@ -795,7 +795,7 @@ function mdjm_event_metabox_event_employees( $post )	{
                     ?>
                     <label for="event_new_employee_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                     <?php echo mdjm_currency_symbol(); ?><input type="text" name="event_new_employee_wage" id="event_new_employee_wage" class="mdjm-input-currency" 
-                    value="" placeholder="<?php echo mdjm_format_amount( '0' ); ?>" />
+                    value="" placeholder="<?php echo mdjm_sanitize_amount( '0' ); ?>" />
                     <?php
                 }
                 ?>
@@ -1105,7 +1105,7 @@ function mdjm_event_metabox_transactions( $post )	{
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_amount">' . __( 'Amount:', 'mobile-dj-manager' ) . '</label><br />' . 
 				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="mdjm-input-currency" placeholder="' . 
-					mdjm_format_amount( '10' ) . '" />' . "\r\n";
+					mdjm_sanitize_amount( '10' ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 	
 		echo '<div class="mdjm-post-3column">' . "\r\n";

@@ -290,14 +290,14 @@ class MDJM_Stats	{
 				if ( $args['post_status'] == 'any' )	{
 					
 					if ( $txn->post_status == 'mdjm-income' )	{
-						$total += get_post_meta( $txn->ID, '_mdjm_txn_total', true );
+						$total += mdjm_sanitize_amount( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) );
 					} else	{
-						$total -= get_post_meta( $txn->ID, '_mdjm_txn_total', true );
+						$total -= mdjm_sanitize_amount( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) );
 					}
 					
 				} else	{
 					
-					$total += get_post_meta( $txn->ID, '_mdjm_txn_total', true );
+					$total += mdjm_sanitize_amount( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) );
 					
 				}
 			}
@@ -306,7 +306,7 @@ class MDJM_Stats	{
 		
 		$total = apply_filters( 'get_txns_total_by_date', $total, $period, $status );
 		
-		return mdjm_format_amount( $total );
+		return mdjm_currency_filter( mdjm_format_amount( $total ) );
 		
 	} // get_txns_total_by_date
 	

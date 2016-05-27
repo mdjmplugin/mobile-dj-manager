@@ -66,8 +66,8 @@
 					
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-income' )	{
-						$transactions .= mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) ) );
-						$total_in += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
+						$transactions .= mdjm_currency_filter( mdjm_format_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) ) );
+						$total_in += mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
 					}
 					else	{
 						$transactions .= '&ndash;';	
@@ -77,7 +77,7 @@
 					$transactions .= '<td>';
 					if ( $transaction->post_status == 'mdjm-expenditure' )	{
 						$transactions .= mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) ) );
-						$total_out += get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
+						$total_out += mdjm_sanitize_amount( get_post_meta( $transaction->ID, '_mdjm_txn_total', true ) );
 					}
 					else	{
 						$transactions .= '&ndash;';	
@@ -97,9 +97,9 @@
 				$transactions .= '<tfoot>' . "\r\n";
 				$transactions .= '<tr class="border_top">' . "\r\n";
 				$transactions .= '<th width="25%" align="left">&nbsp;</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_in ) ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_out ) ) . '</th>' . "\r\n";
-				$transactions .= '<th width="25%" align="left">Earnings: ' . mdjm_currency_filter( mdjm_sanitize_amount(  $total_in - $total_out ) ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_format_amount(  $total_in ) ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">' . mdjm_currency_filter( mdjm_format_amount(  $total_out ) ) . '</th>' . "\r\n";
+				$transactions .= '<th width="25%" align="left">Earnings: ' . mdjm_currency_filter( mdjm_format_amount(  $total_in - $total_out ) ) . '</th>' . "\r\n";
 				$transactions .= '</tr>' . "\r\n";
 				$transactions .= '</tfoot>' . "\r\n";
 				$transactions .= '</table>' . "\r\n";

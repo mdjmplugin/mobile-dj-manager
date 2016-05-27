@@ -1304,9 +1304,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	$event_data['_mdjm_event_deposit_status'] = ! empty( $_POST['deposit_paid'] ) ? $_POST['deposit_paid'] : 'Due';
 	$event_data['_mdjm_event_balance_status'] = ! empty( $_POST['balance_paid'] ) ? $_POST['balance_paid'] : 'Due';
 	
-	$deposit_payment = $event_data['_mdjm_event_deposit_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ? true : false;
+	$deposit_payment = ( $event_data['_mdjm_event_deposit_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ) ? true : false;
 	
-	$balance_payment = $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ? true : false;
+	$balance_payment = ( $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ) ? true : false;
 	
 	// Add-Ons
 	if( mdjm_packages_enabled() )	{
