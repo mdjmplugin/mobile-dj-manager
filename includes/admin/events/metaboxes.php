@@ -206,7 +206,7 @@ function mdjm_event_metabox_client_details( $post )	{
 			</select>
 			<?php
 			if( mdjm_employee_can( 'view_clients_list' ) && $post->post_status != 'auto-draft' && !empty( $client_id ) )
-				echo '<a style="font-size: 11px;" id="client_details_show" href="#">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
+				echo '<a style="font-size: 11px;" id="client_details_show">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
 			?>
 		</div>
 	</div>
@@ -803,7 +803,7 @@ function mdjm_event_metabox_event_employees( $post )	{
         </div>
         <div class="mdjm-post-row-single">
             <div class="mdjm-post-1column">
-                <a href="#" id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+                <a id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
             </div>
         </div>
 	<?php endif; ?>
@@ -1082,8 +1082,6 @@ function mdjm_event_metabox_administration( $post )	{
  * @return
  */
 function mdjm_event_metabox_transactions( $post )	{
-	wp_enqueue_script( 'event-trans', MDJM_PLUGIN_URL . '/assets/js/mdjm-save-transaction.js' );
-	wp_localize_script( 'event-trans', 'posttrans', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 											
 	echo '<div id="transaction">' . "\r\n";
 	
@@ -1324,7 +1322,7 @@ function mdjm_event_metabox_event_options( $post )	{
 											
 			if( mdjm_employee_can( 'manage_all_events' ) )	{
 				?>
-				<a id="new_event_type" class="side-meta" href="#"><?php _e( 'Add New', 'mobile-dj-manager' ); ?></a>
+				<a id="new_event_type" class="button button-secondary button-small side-meta"><?php _e( 'Add New', 'mobile-dj-manager' ); ?></a>
 				<?php
 			}
 			?>
@@ -1335,7 +1333,7 @@ function mdjm_event_metabox_event_options( $post )	{
 			<div class="mdjm-meta-row" style="height: 50px !important">
 				<div class="mdjm-left-col"><br />
 						<input type="text" name="event_type_name" id="event_type_name" class="mdjm-meta" placeholder="<?php printf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>" />&nbsp;
-							<a href="#" id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+							<a id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
 				</div>
 			</div>
 		</div>
