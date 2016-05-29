@@ -54,12 +54,12 @@ global $mdjm_event;
                     <tr>
                         <td class="mdjm-guest-playlist-firstname-cell">
                             <label for="entry_guest_firstname"><?php _e( 'First Name', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_guest_firstname" id="entry_guest_firstname" data-placeholder="<?php _e( 'First Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['firstname'] ) ) : echo $mdjm_guest['firstname']; endif; ?>" />
+                            <input type="text" name="entry_guest_firstname" id="entry_guest_firstname" data-placeholder="<?php _e( 'First Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['firstname'] ) ) : echo $mdjm_guest['firstname']; endif; ?>" required />
                         </td>
                         
                         <td class="mdjm-guest-playlist-lastname-cell">
                             <label for="entry_guest_lastname"><?php _e( 'Last Name', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_guest_lastname" id="entry_guest_lastname" data-placeholder="<?php _e( 'Last Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['lastname'] ) ) : echo $mdjm_guest['lastname']; endif; ?>" />
+                            <input type="text" name="entry_guest_lastname" id="entry_guest_lastname" data-placeholder="<?php _e( 'Last Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['lastname'] ) ) : echo $mdjm_guest['lastname']; endif; ?>" required />
                         </td>
                         
                         <td class="mdjm-guest-playlist-category-cell">
