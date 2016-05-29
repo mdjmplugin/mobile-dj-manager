@@ -258,7 +258,7 @@ jQuery(document).ready(function ($) {
 						if(response.type == "success") {
 							$('#event_addons').empty();
 							$('#event_addons').append(response.addons);
-							$("#event_addons").fadeTo("slow", 1);
+							$("#event_addons").fadeTo('slow', 1);
 						} else	{
 							alert(response.msg);
 						}	
@@ -341,7 +341,7 @@ jQuery(document).ready(function ($) {
 					to              : $('#transaction_to').val(),
 					for             : $('#transaction_for').val(),
 					src             : $('#transaction_src').val(),
-					action          : "add_event_transaction"
+					action          : 'add_event_transaction'
 				};
 				
 				$.ajax({
@@ -363,10 +363,10 @@ jQuery(document).ready(function ($) {
 						} else	{
 							alert(response.msg)
 						}
-						$("#mdjm-loading").replaceWith('<div id="transaction">' + response.transactions + '</div>')
+						$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
 					}
 				}).fail(function (data) {
-					$("#mdjm-loading").replaceWith('<div id="transaction">' + response.transactions + '</div>')
+					$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -377,4 +377,116 @@ jQuery(document).ready(function ($) {
 		
 	}
 	MDJM_Events.init();
+	
+	/**
+	 * Communications screen JS
+	 */
+	var MDJM_Comms = {
+
+		init : function()	{
+			this.content();
+		},
+
+		content: function()	{
+
+			// Set initial event list when page loads
+			if( mdjm_admin_vars.load_recipient )	{
+				$('#mdjm_email_to').val(mdjm_admin_vars.load_recipient);
+				loadEvents(mdjm_admin_vars.load_recipient);
+			}
+
+			// Update event list when recipient changes
+			$( document.body ).on( 'change', '#mdjm_email_to', function(event) {
+
+				event.preventDefault();
+
+				var recipient = $("#mdjm_email_to").val();
+				loadEvents(recipient);
+
+			});
+
+			// Refresh the events list for the current recipient
+			var loadEvents = function(recipient)	{
+				var postData         = {
+					recipient : recipient,
+					action    : 'mdjm_user_events_dropdown'
+				};
+				
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+						$('#mdjm_email_event').addClass('mdjm-updating');
+						$('#mdjm_email_event').fadeTo('slow', 0.5);
+					},
+					success: function (response) {
+						$('#mdjm_email_event').empty();
+						$('#mdjm_email_event').append(response.event_list);
+						$('#mdjm_email_event').fadeTo('slow', 1);
+						$('#mdjm_email_event').removeClass('mdjm-updating');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			};
+
+			// Update event list when recipient changes
+			$( document.body ).on( 'change', '#mdjm_email_template', function(event) {
+
+				event.preventDefault();
+
+				var postData         = {
+					template : $('#mdjm_email_template').val(),
+					action   : 'mdjm_set_email_content'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+						$('#mdjm_email_subject').addClass('mdjm-updating');
+						$('#mdjm_email_subject').fadeTo('slow', 0.5);
+						$('#mdjm_email_content').addClass('mdjm-updating');
+						$('#mdjm_email_content').fadeTo('slow', 0.5);
+						$('#mdjm_email_template').addClass('mdjm-updating');
+						$('#mdjm_email_template').fadeTo('slow', 0.5);
+						tinymce.execCommand('mceToggleEditor',false,'mdjm_email_content');
+					},
+					success: function (response) {
+						if(response.type == 'success') {
+							$('#mdjm_email_content').empty();
+							tinyMCE.activeEditor.setContent('');
+							$('#mdjm_email_subject').val(response.updated_subject);
+							tinyMCE.activeEditor.setContent(response.updated_content);
+							$('#mdjm_email_content').val(response.updated_content);
+						} else	{
+							alert(response.msg);
+						}
+						$('#mdjm_email_subject').fadeTo('slow', 1);
+						$('#mdjm_email_subject').removeClass('mdjm-updating');
+						$('#mdjm_email_content').fadeTo('slow', 1);
+						$('#mdjm_email_content').removeClass('mdjm-updating');
+						$('#mdjm_email_template').removeClass('mdjm-updating');
+						$('#mdjm_email_template').fadeTo('slow', 1);
+						tinymce.execCommand('mceToggleEditor',false,'mdjm_email_content');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+
+	}
+	MDJM_Comms.init();
+	
 });

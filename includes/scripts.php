@@ -147,24 +147,8 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	}
 	
-	wp_register_script( 'mdjm-admin-ajax', $js_dir . 'mdjm-admin-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
-	wp_enqueue_script( 'mdjm-admin-ajax' );
-	
 	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-scripts' );
-
-	wp_localize_script(
-		'mdjm-admin-ajax',
-		'mdjm_admin_vars',
-		apply_filters(
-			'mdjm_admin_script_vars',
-			array(
-				'ajaxurl'        => mdjm_get_ajax_url(),
-				'curpage'        => $hook,
-				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false
-			)
-		)
-	);
 	
 	wp_localize_script(
 		'mdjm-admin-scripts',
@@ -173,7 +157,7 @@ function mdjm_register_admin_scripts( $hook )	{
 			'mdjm_admin_script_vars',
 			array(
 				'ajaxurl'        => mdjm_get_ajax_url(),
-				'curpage'        => $hook,
+				'current_page'   => $hook,
 				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false,
 				'ajax_loader'    => MDJM_PLUGIN_URL . '/assets/images/loading.gif'
 			)

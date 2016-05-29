@@ -54,7 +54,7 @@ function mdjm_comms_page()	{
                 <tr>
                 	<th scope="row"><label for="mdjm_email_to"><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
                     <td>
-                    	<select name="mdjm_email_to" id="mdjm_email_to" class="required">
+                    	<select name="mdjm_email_to" id="mdjm_email_to">
                         	<option value=""><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></option>
                         	<optgroup label="<?php _e( 'Clients', 'mobile-dj-manager' ); ?>">
                             	<?php
@@ -85,7 +85,7 @@ function mdjm_comms_page()	{
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" class="required" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
                 </tr>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
