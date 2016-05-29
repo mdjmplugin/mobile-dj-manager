@@ -186,11 +186,11 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			if( mdjm_employee_can( 'edit_txns' ) )	{
 				if ( ! empty( $value ) )	{
 
-					echo mdjm_currency_filter( mdjm_sanitize_amount( $value ) );
+					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
 					echo '<br />';
 
 				} else	{
-					echo '<span class="mdjm-form-error">' . mdjm_currency_filter( mdjm_sanitize_amount( '0.00' ) ) . '</span>';
+					echo '<span class="mdjm-form-error">' . mdjm_currency_filter( mdjm_format_amount( '0.00' ) ) . '</span>';
 				}
 			} else	{
 				echo '&mdash;';
@@ -204,9 +204,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
 				
 				if( ! empty( $rcvd ) && $rcvd != '0.00' )	{
-					echo mdjm_currency_filter( mdjm_sanitize_amount( ( $value - $rcvd ) ) );
+					echo mdjm_currency_filter( mdjm_format_amount( ( $value - $rcvd ) ) );
 				} else	{
-					echo mdjm_currency_filter( mdjm_sanitize_amount( $value ) );
+					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
 				}
 				
 				echo '<br />';
@@ -215,7 +215,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				
 				if( 'Paid' == mdjm_get_event_deposit_status( $post_id ) )	{
 					printf( __( '<i title="%s %s paid" class="fa fa-check-square-o" aria-hidden="true">', 'mobile-dj-manager' ),
-						mdjm_currency_filter( mdjm_sanitize_amount( mdjm_get_event_deposit( $post_id ) ) ),
+						mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_deposit( $post_id ) ) ),
 						mdjm_get_deposit_label()
 					);
 				}

@@ -35,6 +35,7 @@ function mdjm_load_scripts()	{
 			'mdjm_script_vars',
 			array(
 				'ajaxurl'               => mdjm_get_ajax_url(),
+				'ajax_loader'           => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' ),
 				'availability_ajax'     => mdjm_get_option( 'avail_ajax', false ),
 				'available_redirect'    => mdjm_get_option( 'availability_check_pass_page', 'text' ) != 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_pass_page' ) ) : 'text',
@@ -45,7 +46,7 @@ function mdjm_load_scripts()	{
 		)
 	);
 		
-	wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
+	wp_register_script( 'jquery-validation-plugin', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-validation-plugin');
 	
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
@@ -148,6 +149,9 @@ function mdjm_register_admin_scripts( $hook )	{
 	
 	wp_register_script( 'mdjm-admin-ajax', $js_dir . 'mdjm-admin-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-ajax' );
+	
+	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_enqueue_script( 'mdjm-admin-scripts' );
 
 	wp_localize_script(
 		'mdjm-admin-ajax',
@@ -158,6 +162,20 @@ function mdjm_register_admin_scripts( $hook )	{
 				'ajaxurl'        => mdjm_get_ajax_url(),
 				'curpage'        => $hook,
 				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false
+			)
+		)
+	);
+	
+	wp_localize_script(
+		'mdjm-admin-scripts',
+		'mdjm_admin_vars',
+		apply_filters(
+			'mdjm_admin_script_vars',
+			array(
+				'ajaxurl'        => mdjm_get_ajax_url(),
+				'curpage'        => $hook,
+				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false,
+				'ajax_loader'    => MDJM_PLUGIN_URL . '/assets/images/loading.gif'
 			)
 		)
 	);

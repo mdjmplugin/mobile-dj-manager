@@ -188,17 +188,10 @@
 			 */
 	 		public function admin_enqueue()	{
 				global $mdjm_post_types, $mdjm_settings;
-				
-				/* -- Admin style sheet -- */
-				//wp_register_style( 'mdjm-admin', MDJM_PLUGIN_URL . '/assets/css/mdjm-admin.css', '', MDJM_VERSION_NUM );
-				//wp_enqueue_style( 'mdjm-admin' );
-				
+								
 				// jQuery Validation
 				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
-				
-				/* -- Dynamics Ajax -- */
-				wp_register_script( 'mdjm-dynamics', MDJM_PLUGIN_URL . '/assets/js/mdjm-dynamic.js', array( 'jquery' ), MDJM_VERSION_NUM );
-				
+								
 				// Users JS for Ajax
 				wp_register_script(
 					'mdjm-users-js',
@@ -244,16 +237,6 @@
 					if( get_post_type() == MDJM_EVENT_POSTS )	{
 						wp_register_script( 'mdjm-event-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-event-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-event-js' );
-						wp_localize_script( 'mdjm-event-js', 'event_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
-						wp_localize_script( 'mdjm-event-js', 'mdjmeventcost', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-						wp_localize_script( 'mdjm-event-js', 'mdjmdjpackages', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-						wp_localize_script( 'mdjm-event-js', 'mdjmsetdeposit', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-						wp_localize_script( 'mdjm-event-js', 'event_employee_add', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-						
-						wp_localize_script( 'mdjm-event-js', 'event_employee_remove', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-						
-						wp_enqueue_script( 'mdjm-dynamics' );
-						wp_localize_script( 'mdjm-dynamics', 'mdjmaddons', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 					}
 					
 				/* -- Transaction Posts Only -- */

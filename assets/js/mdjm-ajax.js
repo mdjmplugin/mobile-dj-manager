@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
 					action : "mdjm_do_availability_check"
 				},
 				beforeSend: function()	{
-					$('input[type="submit"]').prop('disabled', true);
+					$('input[type="submit"]').hide();//prop('disabled', true);
 					$("#pleasewait").show();
 				},
 				success: function(response)	{
