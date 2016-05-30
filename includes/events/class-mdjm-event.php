@@ -603,6 +603,24 @@ class MDJM_Event {
 	} // get_deposit
 	
 	/**
+	 * Retrieve the remaining event deposit
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_remaining_deposit()	{
+		
+		$income = $this->get_total_income();
+		
+		if ( $income >= $this->get_deposit() )	{
+			return '0';
+		}
+		
+		return apply_filters( 'mdjm_remaining_deposit', ( $this->get_deposit() - $income ), $this->ID );
+		
+	} // get_remaining_deposit
+	
+	/**
 	 * Retrieve the event deposit status
 	 *
 	 * @since 	1.3
