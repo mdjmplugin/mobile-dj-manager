@@ -80,6 +80,9 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			$copies = get_post_meta( $post_id, '_mdjm_copy_to', true );
 			
 			if ( ! empty( $copies ) )	{
+				if ( ! is_array( $copies ) )	{
+					$copies = array( $copies );
+				}
 				foreach( $copies as $copy )	{
 					$user = get_user_by( 'email', $copy );
 					if ( $user )	{
