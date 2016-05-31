@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the MDJM Event Management package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.3.5.2\n"
+"Project-Id-Version: MDJM Event Management 1.3.5.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mobile-dj-"
 "manager\n"
-"POT-Creation-Date: 2016-05-26 16:08:46+00:00\n"
+"POT-Creation-Date: 2016-05-31 10:30:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: client-zone/includes/mdjm-availability.php:279
 #: client-zone/includes/mdjm-availability.php:281
-#: includes/admin/users/class-mdjm-employee-manager.php:177
+#: includes/admin/users/class-mdjm-employee-manager.php:538
 #: includes/shortcodes.php:407 includes/widgets.php:215
 msgid "Please wait..."
 msgstr ""
@@ -314,7 +314,7 @@ msgstr ""
 #: includes/admin/events/contextual-help.php:141
 #: includes/admin/events/metaboxes.php:82 includes/admin/menu.php:508
 #: includes/admin/procedures/mdjm-upgrade.php:696
-#: includes/admin/venues/metaboxes.php:30 includes/post-types.php:943
+#: includes/admin/venues/metaboxes.php:30 includes/post-types.php:944
 #: templates/event/event-single.php:110
 msgid "Venue Details"
 msgstr ""
@@ -580,7 +580,7 @@ msgstr ""
 #: includes/admin/communications/comms-functions.php:59
 #: includes/admin/menu.php:47 includes/admin/menu.php:312
 #: includes/admin/menu.php:315
-#: includes/admin/users/class-mdjm-employee-manager.php:281
+#: includes/admin/users/class-mdjm-employee-manager.php:642
 msgid "Clients"
 msgstr ""
 
@@ -591,7 +591,7 @@ msgstr ""
 #: includes/admin/communications/comms-functions.php:73
 #: includes/admin/events/events.php:25 includes/admin/menu.php:64
 #: includes/admin/menu.php:278 includes/admin/menu.php:281
-#: includes/admin/users/class-mdjm-employee-manager.php:297
+#: includes/admin/users/class-mdjm-employee-manager.php:658
 #: includes/events/event-functions.php:967
 msgid "Employees"
 msgstr ""
@@ -702,7 +702,7 @@ msgstr ""
 msgid "Recipient no longer exists"
 msgstr ""
 
-#: includes/admin/communications/comms.php:100
+#: includes/admin/communications/comms.php:103
 #: includes/admin/events/quotes.php:153 includes/admin/events/quotes.php:178
 #: includes/admin/transactions/txns.php:204
 #: includes/admin/transactions/txns.php:222
@@ -881,7 +881,7 @@ msgstr ""
 msgid "%s Completed"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:78 includes/post-types.php:764
+#: includes/admin/dashboard-widgets.php:78 includes/post-types.php:765
 msgid "Income"
 msgstr ""
 
@@ -1278,14 +1278,14 @@ msgstr ""
 msgid "%s type"
 msgstr ""
 
-#: includes/admin/events/events.php:29 includes/admin/mdjm.php:739
+#: includes/admin/events/events.php:29 includes/admin/mdjm.php:722
 #: includes/events/class-events.php:624 includes/events/class-events.php:626
 #: includes/events/class-mdjm-event.php:230
 #: includes/events/class-mdjm-event.php:231
-#: includes/events/class-mdjm-event.php:619
-#: includes/events/class-mdjm-event.php:632
-#: includes/events/class-mdjm-event.php:663
-#: includes/events/class-mdjm-event.php:673
+#: includes/events/class-mdjm-event.php:637
+#: includes/events/class-mdjm-event.php:650
+#: includes/events/class-mdjm-event.php:681
+#: includes/events/class-mdjm-event.php:691
 msgid "Due"
 msgstr ""
 
@@ -1457,7 +1457,7 @@ msgstr ""
 msgid "Online Quote Status"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:334 includes/post-types.php:749
+#: includes/admin/events/metaboxes.php:334 includes/post-types.php:750
 msgid "Viewed"
 msgstr ""
 
@@ -1519,23 +1519,23 @@ msgid "Add Employee to %s"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:769
-#: includes/admin/users/class-mdjm-employee-manager.php:234
+#: includes/admin/users/class-mdjm-employee-manager.php:595
 msgid "Add Employee"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:780
-#: includes/admin/users/class-mdjm-employee-manager.php:224
+#: includes/admin/users/class-mdjm-employee-manager.php:585
 #: includes/employee-functions.php:501
 msgid "Role"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:782
-#: includes/admin/users/class-mdjm-employee-manager.php:226
+#: includes/admin/users/class-mdjm-employee-manager.php:587
 msgid "Select Role"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:806
-#: includes/admin/events/metaboxes.php:1338
+#: includes/admin/events/metaboxes.php:1336
 msgid "Add"
 msgstr ""
 
@@ -1636,119 +1636,119 @@ msgid ""
 "see this information"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1106
+#: includes/admin/events/metaboxes.php:1104
 msgid "Amount:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1112 includes/install.php:218
+#: includes/admin/events/metaboxes.php:1110 includes/install.php:218
 msgid "Date:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1118
+#: includes/admin/events/metaboxes.php:1116
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1120
+#: includes/admin/events/metaboxes.php:1118
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1121
+#: includes/admin/events/metaboxes.php:1119
 msgid "Outgoing"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1147
+#: includes/admin/events/metaboxes.php:1145
 msgid "Paid From:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1149
+#: includes/admin/events/metaboxes.php:1147
 msgid "Leave empty if from client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1153
+#: includes/admin/events/metaboxes.php:1151
 msgid "Paid To:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1155
+#: includes/admin/events/metaboxes.php:1153
 msgid "Leave empty if to client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1161
+#: includes/admin/events/metaboxes.php:1159
 msgid "Details:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1163
-#: includes/admin/events/metaboxes.php:1174
+#: includes/admin/events/metaboxes.php:1161
+#: includes/admin/events/metaboxes.php:1172
 msgid "--- Select ---"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1172
+#: includes/admin/events/metaboxes.php:1170
 msgid "Source:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1183 includes/admin/menu.php:467
-#: includes/admin/menu.php:470 includes/post-types.php:409
+#: includes/admin/events/metaboxes.php:1181 includes/admin/menu.php:467
+#: includes/admin/menu.php:470 includes/post-types.php:410
 msgid "Add Transaction"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1222
+#: includes/admin/events/metaboxes.php:1220
 msgid "Emails <span class=\"count\">(%s) total"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1228
+#: includes/admin/events/metaboxes.php:1226
 msgid " on "
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1252
+#: includes/admin/events/metaboxes.php:1250
 msgid ""
 "Journal Entries <span class=\"count\"><a href=\"%s\">(%s total)</a></span>"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1286
+#: includes/admin/events/metaboxes.php:1284
 msgid "%s Status:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1307 includes/install.php:233
+#: includes/admin/events/metaboxes.php:1305 includes/install.php:233
 #: templates/event/event-single.php:55
 msgid "%s Type:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1320
+#: includes/admin/events/metaboxes.php:1318
 msgid "Select %s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1327
+#: includes/admin/events/metaboxes.php:1325
 msgid "Add New"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1337
+#: includes/admin/events/metaboxes.php:1335
 msgid "%s Type Name"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1347
+#: includes/admin/events/metaboxes.php:1345
 msgid "Event Contract:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1399
+#: includes/admin/events/metaboxes.php:1397
 msgid "Disable Client Update Emails"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1408
+#: includes/admin/events/metaboxes.php:1406
 msgid "Reset Client Password?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1491
+#: includes/admin/events/metaboxes.php:1489
 msgid "Enable %s Playlist?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1505
+#: includes/admin/events/metaboxes.php:1503
 msgid "Add %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1505
+#: includes/admin/events/metaboxes.php:1503
 msgid "Update %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1515
+#: includes/admin/events/metaboxes.php:1513
 msgid "Delete this event"
 msgstr ""
 
@@ -1788,7 +1788,7 @@ msgstr ""
 msgid "The playlist for this event does not contain any entries!"
 msgstr ""
 
-#: includes/admin/events/quotes.php:22 includes/post-types.php:735
+#: includes/admin/events/quotes.php:22 includes/post-types.php:736
 msgid "Generated"
 msgstr ""
 
@@ -1840,16 +1840,16 @@ msgstr ""
 msgid "Set as Default Category?"
 msgstr ""
 
-#: includes/admin/mdjm.php:663 includes/content/content-tags.php:1076
+#: includes/admin/mdjm.php:646 includes/content/content-tags.php:1076
 msgid "Please <a href=\"%s\">click here</a> to reset your password"
 msgstr ""
 
-#: includes/admin/mdjm.php:740 includes/events/class-events.php:602
+#: includes/admin/mdjm.php:723 includes/events/class-events.php:602
 msgid "Not Assigned"
 msgstr ""
 
-#: includes/admin/mdjm.php:746 includes/admin/mdjm.php:751
-#: includes/admin/mdjm.php:754 includes/admin/mdjm.php:757
+#: includes/admin/mdjm.php:729 includes/admin/mdjm.php:734
+#: includes/admin/mdjm.php:737 includes/admin/mdjm.php:740
 #: includes/events/class-events.php:595 includes/events/class-events.php:598
 #: includes/events/class-events.php:604 includes/events/class-events.php:606
 #: includes/events/class-events.php:608 includes/events/class-events.php:612
@@ -1857,11 +1857,11 @@ msgstr ""
 msgid "Not Specified"
 msgstr ""
 
-#: includes/admin/mdjm.php:768
+#: includes/admin/mdjm.php:751
 msgid "No payments"
 msgstr ""
 
-#: includes/admin/mdjm.php:842
+#: includes/admin/mdjm.php:825
 msgid "Field deleted successfully"
 msgstr ""
 
@@ -1909,7 +1909,7 @@ msgstr ""
 
 #: includes/admin/menu.php:81 includes/admin/menu.php:489
 #: includes/admin/menu.php:492
-#: includes/admin/users/class-mdjm-employee-manager.php:405
+#: includes/admin/users/class-mdjm-employee-manager.php:766
 msgid "Venues"
 msgstr ""
 
@@ -1929,7 +1929,7 @@ msgstr ""
 msgid "MDJM %s"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.4)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/admin/menu.php:112 includes/admin/welcome.php:129
 msgid "MDJM Event Management"
@@ -1943,7 +1943,7 @@ msgstr ""
 msgid "Create New %s"
 msgstr ""
 
-#: includes/admin/menu.php:139 includes/post-types.php:615
+#: includes/admin/menu.php:139 includes/post-types.php:616
 msgid "Unattended Enquiries"
 msgstr ""
 
@@ -1959,7 +1959,7 @@ msgstr ""
 msgid "Manage %s Types"
 msgstr ""
 
-#: includes/admin/menu.php:172 includes/post-types.php:872
+#: includes/admin/menu.php:172 includes/post-types.php:873
 msgid "Playlist Categories"
 msgstr ""
 
@@ -1967,7 +1967,7 @@ msgstr ""
 msgid "Manage Playlist Categories"
 msgstr ""
 
-#: includes/admin/menu.php:183 includes/post-types.php:841
+#: includes/admin/menu.php:183 includes/post-types.php:842
 msgid "Enquiry Sources"
 msgstr ""
 
@@ -1994,8 +1994,8 @@ msgid "MDJM Event Settings"
 msgstr ""
 
 #: includes/admin/menu.php:232
-#: includes/admin/users/class-mdjm-employee-manager.php:133
-#: includes/admin/users/class-mdjm-employee-manager.php:257
+#: includes/admin/users/class-mdjm-employee-manager.php:494
+#: includes/admin/users/class-mdjm-employee-manager.php:618
 msgid "Permissions"
 msgstr ""
 
@@ -2083,7 +2083,7 @@ msgid "MDJM Transactions"
 msgstr ""
 
 #: includes/admin/menu.php:477 includes/admin/procedures/mdjm-upgrade.php:669
-#: includes/post-types.php:910
+#: includes/post-types.php:911
 msgid "Transaction Types"
 msgstr ""
 
@@ -2091,11 +2091,11 @@ msgstr ""
 msgid "View / Edit Transaction Types"
 msgstr ""
 
-#: includes/admin/menu.php:499 includes/post-types.php:454
+#: includes/admin/menu.php:499 includes/post-types.php:455
 msgid "Add Venue"
 msgstr ""
 
-#: includes/admin/menu.php:502 includes/post-types.php:455
+#: includes/admin/menu.php:502 includes/post-types.php:456
 msgid "Add New Venue"
 msgstr ""
 
@@ -2176,7 +2176,7 @@ msgstr ""
 
 #: includes/admin/pages/availability.php:276
 #: includes/admin/users/class-mdjm-client-manager.php:319
-#: includes/admin/users/class-mdjm-employee-manager.php:717
+#: includes/admin/users/class-mdjm-employee-manager.php:286
 msgid "All"
 msgstr ""
 
@@ -2252,7 +2252,7 @@ msgstr ""
 
 #: includes/admin/pages/client-fields.php:228
 #: includes/admin/pages/event-fields.php:363
-#: includes/admin/users/class-mdjm-employee-manager.php:415
+#: includes/admin/users/class-mdjm-employee-manager.php:776
 msgid "Edit"
 msgstr ""
 
@@ -2459,134 +2459,134 @@ msgid_plural " entries "
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:633 includes/post-types.php:800
+#: includes/admin/procedures/mdjm-upgrade.php:633 includes/post-types.php:801
 msgctxt "taxonomy general name"
 msgid "Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:634 includes/post-types.php:801
+#: includes/admin/procedures/mdjm-upgrade.php:634 includes/post-types.php:802
 msgctxt "taxonomy singular name"
 msgid "Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:635 includes/post-types.php:802
+#: includes/admin/procedures/mdjm-upgrade.php:635 includes/post-types.php:803
 msgid "Search Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:636 includes/post-types.php:803
+#: includes/admin/procedures/mdjm-upgrade.php:636 includes/post-types.php:804
 msgid "All Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:637 includes/post-types.php:804
+#: includes/admin/procedures/mdjm-upgrade.php:637 includes/post-types.php:805
 msgid "Edit Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:638 includes/post-types.php:805
+#: includes/admin/procedures/mdjm-upgrade.php:638 includes/post-types.php:806
 msgid "Update Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:639 includes/post-types.php:806
+#: includes/admin/procedures/mdjm-upgrade.php:639 includes/post-types.php:807
 msgid "Add New Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:640 includes/post-types.php:807
+#: includes/admin/procedures/mdjm-upgrade.php:640 includes/post-types.php:808
 msgid "New Event Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:641 includes/post-types.php:808
+#: includes/admin/procedures/mdjm-upgrade.php:641 includes/post-types.php:809
 msgid "Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:643 includes/post-types.php:810
+#: includes/admin/procedures/mdjm-upgrade.php:643 includes/post-types.php:811
 msgid "Choose from the most popular Event Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:644 includes/post-types.php:811
+#: includes/admin/procedures/mdjm-upgrade.php:644 includes/post-types.php:812
 msgid "No event types found"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:661 includes/post-types.php:902
+#: includes/admin/procedures/mdjm-upgrade.php:661 includes/post-types.php:903
 msgctxt "taxonomy general name"
 msgid "Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:662 includes/post-types.php:903
+#: includes/admin/procedures/mdjm-upgrade.php:662 includes/post-types.php:904
 msgctxt "taxonomy singular name"
 msgid "Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:663 includes/post-types.php:904
+#: includes/admin/procedures/mdjm-upgrade.php:663 includes/post-types.php:905
 msgid "Search Transaction Types"
 msgstr ""
 
 #: includes/admin/procedures/mdjm-upgrade.php:664
-#: includes/admin/transactions/txns.php:344 includes/post-types.php:905
+#: includes/admin/transactions/txns.php:344 includes/post-types.php:906
 msgid "All Transaction Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:665 includes/post-types.php:906
+#: includes/admin/procedures/mdjm-upgrade.php:665 includes/post-types.php:907
 msgid "Edit Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:666 includes/post-types.php:907
+#: includes/admin/procedures/mdjm-upgrade.php:666 includes/post-types.php:908
 msgid "Update Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:667 includes/post-types.php:908
+#: includes/admin/procedures/mdjm-upgrade.php:667 includes/post-types.php:909
 msgid "Add New Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:668 includes/post-types.php:909
+#: includes/admin/procedures/mdjm-upgrade.php:668 includes/post-types.php:910
 msgid "New Transaction Type"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:671 includes/post-types.php:912
+#: includes/admin/procedures/mdjm-upgrade.php:671 includes/post-types.php:913
 msgid "Choose from the most popular Transaction Types"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:672 includes/post-types.php:913
+#: includes/admin/procedures/mdjm-upgrade.php:672 includes/post-types.php:914
 msgid "No transaction types found"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:688 includes/post-types.php:935
+#: includes/admin/procedures/mdjm-upgrade.php:688 includes/post-types.php:936
 msgctxt "taxonomy general name"
 msgid "Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:689 includes/post-types.php:936
+#: includes/admin/procedures/mdjm-upgrade.php:689 includes/post-types.php:937
 msgctxt "taxonomy singular name"
 msgid "Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:690 includes/post-types.php:937
+#: includes/admin/procedures/mdjm-upgrade.php:690 includes/post-types.php:938
 msgid "Search Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:691 includes/post-types.php:938
+#: includes/admin/procedures/mdjm-upgrade.php:691 includes/post-types.php:939
 msgid "All Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:692 includes/post-types.php:939
+#: includes/admin/procedures/mdjm-upgrade.php:692 includes/post-types.php:940
 msgid "Edit Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:693 includes/post-types.php:940
+#: includes/admin/procedures/mdjm-upgrade.php:693 includes/post-types.php:941
 msgid "Update Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:694 includes/post-types.php:941
+#: includes/admin/procedures/mdjm-upgrade.php:694 includes/post-types.php:942
 msgid "Add New Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:695 includes/post-types.php:942
+#: includes/admin/procedures/mdjm-upgrade.php:695 includes/post-types.php:943
 msgid "New Venue Detail"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:698 includes/post-types.php:945
+#: includes/admin/procedures/mdjm-upgrade.php:698 includes/post-types.php:946
 msgid "Choose from the most popular Venue Details"
 msgstr ""
 
-#: includes/admin/procedures/mdjm-upgrade.php:699 includes/post-types.php:946
+#: includes/admin/procedures/mdjm-upgrade.php:699 includes/post-types.php:947
 msgid "No details found"
 msgstr ""
 
@@ -2656,17 +2656,6 @@ msgstr ""
 #: includes/playlist/playlist-functions.php:110
 #: includes/playlist/playlist-functions.php:193
 msgid "Event ID: %s %s %s"
-msgstr ""
-
-#: includes/admin/reports/mdjm-reports.php:62
-msgid "Financials"
-msgstr ""
-
-#: includes/admin/reports/mdjm-reports.php:63
-#: includes/admin/users/class-mdjm-employee-manager.php:339
-#: includes/admin/users/class-mdjm-employee-manager.php:502
-#: includes/post-types.php:502
-msgid "Events"
 msgstr ""
 
 #: includes/admin/roles/class-mdjm-roles.php:54
@@ -4029,12 +4018,12 @@ msgid "Go!"
 msgstr ""
 
 #: includes/admin/users/class-mdjm-client-manager.php:141
-#: includes/admin/users/class-mdjm-employee-manager.php:486
+#: includes/admin/users/class-mdjm-employee-manager.php:55
 msgid "Search"
 msgstr ""
 
 #: includes/admin/users/class-mdjm-client-manager.php:155
-#: includes/admin/users/class-mdjm-employee-manager.php:500
+#: includes/admin/users/class-mdjm-employee-manager.php:69
 msgid "Name"
 msgstr ""
 
@@ -4047,7 +4036,7 @@ msgid "Next Event"
 msgstr ""
 
 #: includes/admin/users/class-mdjm-client-manager.php:158
-#: includes/admin/users/class-mdjm-employee-manager.php:504
+#: includes/admin/users/class-mdjm-employee-manager.php:73
 msgid "Last Login"
 msgstr ""
 
@@ -4056,7 +4045,7 @@ msgid "No Client's found."
 msgstr ""
 
 #: includes/admin/users/class-mdjm-client-manager.php:300
-#: includes/admin/users/class-mdjm-employee-manager.php:700
+#: includes/admin/users/class-mdjm-employee-manager.php:269
 msgid "Never"
 msgstr ""
 
@@ -4072,187 +4061,193 @@ msgstr ""
 msgid "You do not have permission to manage employees or permissions."
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:47
-msgid "Employee roles updated."
+#: includes/admin/users/class-mdjm-employee-manager.php:43
+#: includes/admin/users/class-mdjm-employee-manager.php:45
+msgid "Change role to"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:124
-msgid "Employee's &amp; Roles"
+#: includes/admin/users/class-mdjm-employee-manager.php:52
+msgid "Change"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:128
-msgid "Employees & Roles"
+#: includes/admin/users/class-mdjm-employee-manager.php:70
+msgid "Role(s)"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:167
-msgid "Hold CTRL & click to select multiple entries"
+#: includes/admin/users/class-mdjm-employee-manager.php:71
+#: includes/admin/users/class-mdjm-employee-manager.php:700
+#: includes/post-types.php:503
+msgid "Events"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:112
+msgid "No Employee's found."
 msgstr ""
 
 #: includes/admin/users/class-mdjm-employee-manager.php:172
+msgid "<em>MDJM Admin</em>"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:176
+msgid "<em>WordPress Admin</em>"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:223
+msgid "No role assigned"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:240
+msgid "Next: %s"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:243
+#: includes/admin/users/class-mdjm-employee-manager.php:644
+#: includes/admin/users/class-mdjm-employee-manager.php:660
+#: includes/admin/users/class-mdjm-employee-manager.php:673
+#: includes/admin/users/class-mdjm-employee-manager.php:685
+#: includes/admin/users/class-mdjm-employee-manager.php:702
+#: includes/admin/users/class-mdjm-employee-manager.php:726
+#: includes/admin/users/class-mdjm-employee-manager.php:739
+#: includes/admin/users/class-mdjm-employee-manager.php:752
+#: includes/admin/users/class-mdjm-employee-manager.php:768
+msgid "None"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:249
+msgid "Total: %s"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:314
+msgid "Delete Employee"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:319
+msgid "Add %s Role"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:342
+msgid "Employee(s) deleted."
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:408
+msgid "Employee roles updated."
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:485
+msgid "Employee's &amp; Roles"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:489
+msgid "Employees & Roles"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:528
+msgid "Hold CTRL & click to select multiple entries"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:533
 msgid "Delete Selected Role(s)"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:177
+#: includes/admin/users/class-mdjm-employee-manager.php:538
 msgid "Add Role"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:206
+#: includes/admin/users/class-mdjm-employee-manager.php:567
 msgid "Employee Quick Add"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:212
+#: includes/admin/users/class-mdjm-employee-manager.php:573
 #: includes/install.php:474 templates/contract/contract.php:82
 #: templates/playlist/playlist-guest.php:56
 #: templates/playlist/playlist-guest.php:57
 msgid "First Name"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:216
+#: includes/admin/users/class-mdjm-employee-manager.php:577
 #: includes/install.php:486 templates/contract/contract.php:87
 #: templates/playlist/playlist-guest.php:61
 #: templates/playlist/playlist-guest.php:62
 msgid "Last Name"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:220
+#: includes/admin/users/class-mdjm-employee-manager.php:581
 #: includes/install.php:498
 msgid "Email Address"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:255
+#: includes/admin/users/class-mdjm-employee-manager.php:616
 msgid "Roles"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:256
+#: includes/admin/users/class-mdjm-employee-manager.php:617
 msgid "MDJM Admin"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:283
-#: includes/admin/users/class-mdjm-employee-manager.php:299
-#: includes/admin/users/class-mdjm-employee-manager.php:312
-#: includes/admin/users/class-mdjm-employee-manager.php:324
-#: includes/admin/users/class-mdjm-employee-manager.php:341
-#: includes/admin/users/class-mdjm-employee-manager.php:365
-#: includes/admin/users/class-mdjm-employee-manager.php:378
-#: includes/admin/users/class-mdjm-employee-manager.php:391
-#: includes/admin/users/class-mdjm-employee-manager.php:407
-#: includes/admin/users/class-mdjm-employee-manager.php:674
-msgid "None"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:287
-#: includes/admin/users/class-mdjm-employee-manager.php:328
-#: includes/admin/users/class-mdjm-employee-manager.php:353
+#: includes/admin/users/class-mdjm-employee-manager.php:648
+#: includes/admin/users/class-mdjm-employee-manager.php:689
+#: includes/admin/users/class-mdjm-employee-manager.php:714
 msgid "Edit Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:291
-#: includes/admin/users/class-mdjm-employee-manager.php:332
-#: includes/admin/users/class-mdjm-employee-manager.php:357
-#: includes/admin/users/class-mdjm-employee-manager.php:369
-#: includes/admin/users/class-mdjm-employee-manager.php:382
+#: includes/admin/users/class-mdjm-employee-manager.php:652
+#: includes/admin/users/class-mdjm-employee-manager.php:693
+#: includes/admin/users/class-mdjm-employee-manager.php:718
+#: includes/admin/users/class-mdjm-employee-manager.php:730
+#: includes/admin/users/class-mdjm-employee-manager.php:743
 msgid "Edit All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:303
+#: includes/admin/users/class-mdjm-employee-manager.php:664
 msgid "Manage"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:310
+#: includes/admin/users/class-mdjm-employee-manager.php:671
 msgid "Comms"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:316
+#: includes/admin/users/class-mdjm-employee-manager.php:677
 msgid "Send"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:322
+#: includes/admin/users/class-mdjm-employee-manager.php:683
 msgid "Packages"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:345
+#: includes/admin/users/class-mdjm-employee-manager.php:706
 msgid "Read Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:349
+#: includes/admin/users/class-mdjm-employee-manager.php:710
 msgid "Read All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:363
+#: includes/admin/users/class-mdjm-employee-manager.php:724
 msgid "Templates"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:376
+#: includes/admin/users/class-mdjm-employee-manager.php:737
 msgid "Txns"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:389
+#: includes/admin/users/class-mdjm-employee-manager.php:750
 msgid "Quotes"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:395
+#: includes/admin/users/class-mdjm-employee-manager.php:756
 msgid "View Own"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:399
+#: includes/admin/users/class-mdjm-employee-manager.php:760
 msgid "View All"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:411
+#: includes/admin/users/class-mdjm-employee-manager.php:772
 msgid "View"
 msgstr ""
 
-#: includes/admin/users/class-mdjm-employee-manager.php:429
+#: includes/admin/users/class-mdjm-employee-manager.php:790
 msgid "Update Permissions"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:474
-#: includes/admin/users/class-mdjm-employee-manager.php:476
-msgid "Change role to"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:483
-msgid "Change"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:501
-msgid "Role(s)"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:543
-msgid "No Employee's found."
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:603
-msgid "<em>MDJM Admin</em>"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:607
-msgid "<em>WordPress Admin</em>"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:654
-msgid "No role assigned"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:671
-msgid "Next: %s"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:680
-msgid "Total: %s"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:745
-msgid "Delete Employee"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:750
-msgid "Add %s Role"
-msgstr ""
-
-#: includes/admin/users/class-mdjm-employee-manager.php:773
-msgid "Employee(s) deleted."
 msgstr ""
 
 #: includes/admin/users/class-mdjm-users.php:50
@@ -5406,8 +5401,9 @@ msgstr ""
 
 #: includes/employee-functions.php:535
 msgid ""
-"<a class=\"remove_event_employee\" href=\"\" data-employee_id=\"%1$d\" id="
-"\"remove-employee-%1$d\">Remove</a>"
+"<a class=\"button button-secondary button-small remove_event_employee\" "
+"style=\"margin: 6px 0 10px;\" data-employee_id=\"%1$d\" id=\"remove-employee-"
+"%1$d\">Remove</a>"
 msgstr ""
 
 #: includes/employee-functions.php:592 includes/employee-functions.php:1198
@@ -5460,9 +5456,9 @@ msgstr ""
 msgid "No event type set"
 msgstr ""
 
-#: includes/events/class-mdjm-event.php:623
-#: includes/events/class-mdjm-event.php:630
-#: includes/events/class-mdjm-event.php:669
+#: includes/events/class-mdjm-event.php:641
+#: includes/events/class-mdjm-event.php:648
+#: includes/events/class-mdjm-event.php:687
 msgid "Paid"
 msgstr ""
 
@@ -6993,375 +6989,375 @@ msgstr ""
 msgid "MDJM Event Management Quotes"
 msgstr ""
 
-#: includes/post-types.php:405
+#: includes/post-types.php:406
 msgctxt "post type general name"
 msgid "Transactions"
-msgstr ""
-
-#: includes/post-types.php:406
-msgctxt "post type singular name"
-msgid "Transaction"
 msgstr ""
 
 #: includes/post-types.php:407
+msgctxt "post type singular name"
+msgid "Transaction"
+msgstr ""
+
+#: includes/post-types.php:408
 msgctxt "admin menu"
 msgid "Transactions"
 msgstr ""
 
-#: includes/post-types.php:408
+#: includes/post-types.php:409
 msgctxt "add new on admin bar"
 msgid "Transaction"
 msgstr ""
 
-#: includes/post-types.php:410
+#: includes/post-types.php:411
 msgid "Add New Transaction"
 msgstr ""
 
-#: includes/post-types.php:411 includes/txns/class-mdjm-txn.php:155
+#: includes/post-types.php:412 includes/txns/class-mdjm-txn.php:155
 msgid "New Transaction"
 msgstr ""
 
-#: includes/post-types.php:412
+#: includes/post-types.php:413
 msgid "Edit Transaction"
 msgstr ""
 
-#: includes/post-types.php:413
+#: includes/post-types.php:414
 msgid "View Transaction"
 msgstr ""
 
-#: includes/post-types.php:414
+#: includes/post-types.php:415
 msgid "All Transactions"
 msgstr ""
 
-#: includes/post-types.php:415
+#: includes/post-types.php:416
 msgid "Search Transactions"
 msgstr ""
 
-#: includes/post-types.php:416
+#: includes/post-types.php:417
 msgid "No Transactions found."
 msgstr ""
 
-#: includes/post-types.php:417
+#: includes/post-types.php:418
 msgid "No Transactions found in Trash."
 msgstr ""
 
-#: includes/post-types.php:423
+#: includes/post-types.php:424
 msgid "Transactions for the MDJM Event Management plugin"
 msgstr ""
 
-#: includes/post-types.php:450
+#: includes/post-types.php:451
 msgctxt "post type general name"
 msgid "Venues"
 msgstr ""
 
-#: includes/post-types.php:451
+#: includes/post-types.php:452
 msgctxt "post type singular name"
 msgid "Venue"
 msgstr ""
 
-#: includes/post-types.php:452
+#: includes/post-types.php:453
 msgctxt "admin menu"
 msgid "Venues"
 msgstr ""
 
-#: includes/post-types.php:453
+#: includes/post-types.php:454
 msgctxt "add new on admin bar"
 msgid "Venue"
 msgstr ""
 
-#: includes/post-types.php:456
+#: includes/post-types.php:457
 msgid "New Venue"
 msgstr ""
 
-#: includes/post-types.php:457
+#: includes/post-types.php:458
 msgid "Edit Venue"
 msgstr ""
 
-#: includes/post-types.php:458
+#: includes/post-types.php:459
 msgid "View Venue"
 msgstr ""
 
-#: includes/post-types.php:459
+#: includes/post-types.php:460
 msgid "All Venues"
 msgstr ""
 
-#: includes/post-types.php:460
+#: includes/post-types.php:461
 msgid "Search Venues"
 msgstr ""
 
-#: includes/post-types.php:461
+#: includes/post-types.php:462
 msgid "No Venues found."
 msgstr ""
 
-#: includes/post-types.php:462
+#: includes/post-types.php:463
 msgid "No Venues found in Trash."
 msgstr ""
 
-#: includes/post-types.php:468
+#: includes/post-types.php:469
 msgid "Venues stored for the MDJM Event Management plugin"
 msgstr ""
 
-#: includes/post-types.php:501
+#: includes/post-types.php:502
 msgid "Event"
 msgstr ""
 
-#: includes/post-types.php:557
+#: includes/post-types.php:558
 msgid "Ready to Send"
 msgstr ""
 
-#: includes/post-types.php:562
+#: includes/post-types.php:563
 msgid "Ready to Send <span class=\"count\">(%s)</span>"
 msgid_plural "Ready to Send <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:571
+#: includes/post-types.php:572
 msgid "Sent"
 msgstr ""
 
-#: includes/post-types.php:576
+#: includes/post-types.php:577
 msgid "Sent <span class=\"count\">(%s)</span>"
 msgid_plural "Sent <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:585
+#: includes/post-types.php:586
 msgid "Opened"
 msgstr ""
 
-#: includes/post-types.php:590
+#: includes/post-types.php:591
 msgid "Opened <span class=\"count\">(%s)</span>"
 msgid_plural "Opened <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:599
+#: includes/post-types.php:600
 msgid "Failed"
 msgstr ""
 
-#: includes/post-types.php:604
+#: includes/post-types.php:605
 msgid "Failed <span class=\"count\">(%s)</span>"
 msgid_plural "Failed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:614
+#: includes/post-types.php:615
 msgid "Unattended Enquiry"
 msgstr ""
 
-#: includes/post-types.php:620
+#: includes/post-types.php:621
 msgid "Unattended Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Unattended Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:629
+#: includes/post-types.php:630
 msgid "Enquiry"
 msgstr ""
 
-#: includes/post-types.php:630
+#: includes/post-types.php:631
 msgid "Enquiries"
 msgstr ""
 
-#: includes/post-types.php:635
+#: includes/post-types.php:636
 msgid "Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:644 includes/post-types.php:645
+#: includes/post-types.php:645 includes/post-types.php:646
 msgid "Confirmed"
 msgstr ""
 
-#: includes/post-types.php:650
+#: includes/post-types.php:651
 msgid "Confirmed <span class=\"count\">(%s)</span>"
 msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:659
+#: includes/post-types.php:660
 msgid "Awaiting Contract"
 msgstr ""
 
-#: includes/post-types.php:660
+#: includes/post-types.php:661
 msgid "Awaiting Contracts"
 msgstr ""
 
-#: includes/post-types.php:665
+#: includes/post-types.php:666
 msgid "Awaiting Contract <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting Contracts <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:674 includes/post-types.php:675
+#: includes/post-types.php:675 includes/post-types.php:676
 msgid "Completed"
 msgstr ""
 
-#: includes/post-types.php:680
+#: includes/post-types.php:681
 msgid "Completed <span class=\"count\">(%s)</span>"
 msgid_plural "Completed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:689 includes/post-types.php:690
+#: includes/post-types.php:690 includes/post-types.php:691
 msgid "Cancelled"
 msgstr ""
 
-#: includes/post-types.php:695
+#: includes/post-types.php:696
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:704
+#: includes/post-types.php:705
 msgid "Rejected Enquiry"
 msgstr ""
 
-#: includes/post-types.php:705
+#: includes/post-types.php:706
 msgid "Rejected Enquiries"
 msgstr ""
 
-#: includes/post-types.php:710
+#: includes/post-types.php:711
 msgid "Rejected Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Rejected Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:719
+#: includes/post-types.php:720
 msgid "Failed Enquiry"
 msgstr ""
 
-#: includes/post-types.php:720
+#: includes/post-types.php:721
 msgid "Failed Enquiries"
 msgstr ""
 
-#: includes/post-types.php:725
+#: includes/post-types.php:726
 msgid "Failed Enquiry <span class=\"count\">(%s)</span>"
 msgid_plural "Failed Enquiries <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:740
+#: includes/post-types.php:741
 msgid "Generated Quote <span class=\"count\">(%s)</span>"
 msgid_plural "Generated Quotes <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:754
+#: includes/post-types.php:755
 msgid "Viewed Quote <span class=\"count\">(%s)</span>"
 msgid_plural "Viewed Quotes <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:769
+#: includes/post-types.php:770
 msgid "Received Payment <span class=\"count\">(%s)</span>"
 msgid_plural "Received Payments <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:778
+#: includes/post-types.php:779
 msgid "Expenditure"
 msgstr ""
 
-#: includes/post-types.php:783
+#: includes/post-types.php:784
 msgid "Outgoing Payment <span class=\"count\">(%s)</span>"
 msgid_plural "Outgoing Payments <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:833
+#: includes/post-types.php:834
 msgctxt "taxonomy general name"
 msgid "Enquiry Sources"
 msgstr ""
 
-#: includes/post-types.php:834
+#: includes/post-types.php:835
 msgctxt "taxonomy singular name"
 msgid "Enquiry Source"
 msgstr ""
 
-#: includes/post-types.php:835
+#: includes/post-types.php:836
 msgid "Search Enquiry Sources"
 msgstr ""
 
-#: includes/post-types.php:836
+#: includes/post-types.php:837
 msgid "All Enquiry Sources"
 msgstr ""
 
-#: includes/post-types.php:837
+#: includes/post-types.php:838
 msgid "Edit Enquiry Source"
 msgstr ""
 
-#: includes/post-types.php:838
+#: includes/post-types.php:839
 msgid "Update Enquiry Source"
 msgstr ""
 
-#: includes/post-types.php:839
+#: includes/post-types.php:840
 msgid "Add New Enquiry Source"
 msgstr ""
 
-#: includes/post-types.php:840
+#: includes/post-types.php:841
 msgid "New Enquiry Source"
 msgstr ""
 
-#: includes/post-types.php:842
+#: includes/post-types.php:843
 msgid "Most Enquiries from"
 msgstr ""
 
-#: includes/post-types.php:844
+#: includes/post-types.php:845
 msgid "Choose from the most popular Enquiry Sources"
 msgstr ""
 
-#: includes/post-types.php:845
+#: includes/post-types.php:846
 msgid "No enquiry sources found"
 msgstr ""
 
-#: includes/post-types.php:851
+#: includes/post-types.php:852
 msgid "Track how clients found %s"
 msgstr ""
 
-#: includes/post-types.php:870
+#: includes/post-types.php:871
 msgctxt "taxonomy general name"
 msgid "Playlist Categories"
 msgstr ""
 
-#: includes/post-types.php:871
+#: includes/post-types.php:872
 msgctxt "taxonomy singular name"
 msgid "Playlist Category"
 msgstr ""
 
-#: includes/post-types.php:873
+#: includes/post-types.php:874
 msgid "All Playlist Categories"
 msgstr ""
 
-#: includes/post-types.php:874
+#: includes/post-types.php:875
 msgid "Edit Playlist Category"
 msgstr ""
 
-#: includes/post-types.php:875
+#: includes/post-types.php:876
 msgid "Update Playlist Category"
 msgstr ""
 
-#: includes/post-types.php:876
+#: includes/post-types.php:877
 msgid "Add New Playlist Category"
 msgstr ""
 
-#: includes/post-types.php:877
+#: includes/post-types.php:878
 msgid "New Playlist Category"
 msgstr ""
 
-#: includes/post-types.php:878
+#: includes/post-types.php:879
 msgid "Event Playlist Categories"
 msgstr ""
 
-#: includes/post-types.php:880
+#: includes/post-types.php:881
 msgid "Choose from the most popular Playlist Categories"
 msgstr ""
 
-#: includes/post-types.php:881
+#: includes/post-types.php:882
 msgid "No playlist categories found"
 msgstr ""
 
-#: includes/scripts.php:38 widgets/class-mdjm-widget.php:51
+#: includes/scripts.php:39 widgets/class-mdjm-widget.php:51
 msgid "Please select a date"
 msgstr ""
 
@@ -7695,40 +7691,40 @@ msgstr ""
 msgid "Pricing"
 msgstr ""
 
-#: templates/login/login-form.php:22
+#: templates/login/login-form.php:21
 msgid "Please Login"
 msgstr ""
 
-#: templates/login/login-form.php:23
+#: templates/login/login-form.php:22
 msgid ""
 "You must be logged in to access the %s %s. Enter your login details below."
 msgstr ""
 
-#: templates/login/login-form.php:35
-msgid "Email address:"
-msgstr ""
-
-#: templates/login/login-form.php:40
-msgid "Password:"
-msgstr ""
-
-#: templates/login/login-form.php:46
-msgid "Remember me"
-msgstr ""
-
-#: templates/login/login-form.php:49
+#: templates/login/login-form.php:33 templates/login/login-form.php:50
 msgid "Login to %s"
 msgstr ""
 
-#: templates/login/login-form.php:54
-msgid "Lost Password"
+#: templates/login/login-form.php:36
+msgid "Email address:"
+msgstr ""
+
+#: templates/login/login-form.php:41
+msgid "Password:"
+msgstr ""
+
+#: templates/login/login-form.php:47
+msgid "Remember me"
 msgstr ""
 
 #: templates/login/login-form.php:55
+msgid "Lost Password"
+msgstr ""
+
+#: templates/login/login-form.php:56
 msgid "Lost Password?"
 msgstr ""
 
-#: templates/login/login-form.php:74
+#: templates/login/login-form.php:68
 msgid "You are already logged in"
 msgstr ""
 
@@ -7823,9 +7819,9 @@ msgid ""
 "another date below..."
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.4)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.2)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (MDJM Event Management 1.3.5.4)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://mdjm.co.uk"
 msgstr ""
