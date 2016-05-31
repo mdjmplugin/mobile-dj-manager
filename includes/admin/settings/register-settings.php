@@ -660,7 +660,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template' )
+						'options'     => array_merge( array( '' => __( 'None', 'mobile-dj-manager' ) ), mdjm_list_templates( 'email_template' ) )
 					)
 				)
 			)
