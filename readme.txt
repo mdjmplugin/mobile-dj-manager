@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.5.3
+Stable tag: 1.3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,14 +76,17 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
-= 1.3.6 =
+= 1.3.5.4 =
 
-* **Bug Fix**: Incorrect formatting caused transactions over 999.99 to be displayed as 1
+* **Bug Fix**: Issue [#63](https://github.com/mdjm/mobile-dj-manager/issues/63/ "Issue 63") Incorrect formatting caused transactions over 999.99 to be displayed as 1
 * **Bug Fix**: Adding event transaction ajax function now works in Firefox browser
+* **Bug Fix**: Correctly manage arrays within the $copy_to var in the communication page
 * **Tweak**  : All admin ajax functions re-written and consolidated into single file except for soon to be deprecated validation
+* **Tweak**  : Added `Added method get_remaining_deposit()` to MDJM_Event class
 * **Tweak**  : Changed ajax loader image from spinner
 * **Tweak**  : Added button class to Add New link for Event Types on events screen
 * **Tweak**  : Added button class to Remove Employee link events screen
+* **Tweak**  : Moved `MDJM_Employee_Table` class to start of file 
 * **Tweak**  : Removed New -> Quote from admin bar
 
 = 1.3.5.3 =
