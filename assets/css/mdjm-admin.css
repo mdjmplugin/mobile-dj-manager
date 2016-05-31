@@ -10,6 +10,18 @@
 
 /* =General
 -------------------------------------------------------------- */
+.mdjm-hidden { display: none; }
+.mdjm-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
+.mdjm-wrap a { text-decoration: none; }
+a.mdjm-delete { color: #a00; }
+a.mdjm-delete:hover { color: #f00; }
+#mdjm-loader	{
+	max-width: 20px;
+	margin: auto;
+	border: none;
+	background-image: url('../images/loading.gif');
+	background-repeat: no-repeat;
+}
 
 .mdjm-new	{
 	font-weight: bold;
@@ -121,24 +133,28 @@
 
 input.mdjm-form-error {
 	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
 	color: #000000;
 	font-weight: normal;
 }
 
 select.mdjm-form-error {
 	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
 	color: #000000;
 	font-weight: normal;
 }
 
 textarea.mdjm-form-error {
 	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
 	color: #000000;
 	font-weight: normal;
 }
 
 checkbox.mdjm-form-error {
 	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
 	color: #000000;
 	font-weight: normal;
 }

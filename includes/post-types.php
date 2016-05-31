@@ -42,27 +42,27 @@ function mdjm_register_post_types()	{
 	);
 		
 	$email_history_args = array(
-		'labels'                 => $email_history_labels,
-		'description'			=> __( 'Communication used by the MDJM Event Management for WordPress plugin', 'mobile-dj-manager' ),
-		'exclude_from_search'	=> true,
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'		   => 'edit.php?post_type=mdjm_communication',
-		'show_in_admin_bar'	  => false,
-		'rewrite' 			    => array( 'slug' => 'mdjm-communications' ),
-		'capability_type'	    => 'mdjm_comm',
+		'labels'              => $email_history_labels,
+		'description'         => __( 'Communication used by the MDJM Event Management for WordPress plugin', 'mobile-dj-manager' ),
+		'exclude_from_search'    => true,
+		'publicly_queryable'     => true,
+		'show_ui'                => true,
+		'show_in_menu'           => 'edit.php?post_type=mdjm_communication',
+		'show_in_admin_bar'      => false,
+		'rewrite'                => array( 'slug' => 'mdjm-communications' ),
+		'capability_type'        => 'mdjm_comm',
 		'capabilities'           => apply_filters( 'mdjm_communications_caps', array(
-			'edit_post'             => 'edit_mdjm_comm',
-			'read_post'             => 'read_mdjm_comm',
-			'delete_post'           => 'delete_mdjm_comm',
-			'edit_posts'            => 'edit_mdjm_comms',
-			'edit_others_posts'     => 'edit_others_mdjm_comms',
-			'publish_posts'         => 'publish_mdjm_comms',
-			'read_private_posts'    => 'read_private_mdjm_comms'
+			'edit_post'          => 'edit_mdjm_comm',
+			'read_post'          => 'read_mdjm_comm',
+			'delete_post'        => 'delete_mdjm_comm',
+			'edit_posts'         => 'edit_mdjm_comms',
+			'edit_others_posts'  => 'edit_others_mdjm_comms',
+			'publish_posts'      => 'publish_mdjm_comms',
+			'read_private_posts' => 'read_private_mdjm_comms'
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_email_history_supports', array( 'title' ) )
+		'map_meta_cap'           => true,
+		'has_archive'            => true,
+		'supports'               => apply_filters( 'mdjm_email_history_supports', array( 'title' ) )
 	);
 	register_post_type( 'mdjm_communication', apply_filters( 'mdjm_email_history_post_type_args', $email_history_args ) );
 	
@@ -88,25 +88,25 @@ function mdjm_register_post_types()	{
 		
 	$contract_args = array(
 		'labels'                 => $contract_labels,
-		'description'			=> __( 'Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
-		'exclude_from_search'	=> true,
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'	   	   => 'edit.php?post_type=contract',
-		'rewrite'            	=> array( 'slug' => 'contract-templates' ),
-		'capability_type'	    => array( 'mdjm_template', 'mdjm_templates' ),
+		'description'            => __( 'Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
+		'exclude_from_search'    => true,
+		'publicly_queryable'     => true,
+		'show_ui'                => true,
+		'show_in_menu'           => 'edit.php?post_type=contract',
+		'rewrite'                => array( 'slug' => 'contract-templates' ),
+		'capability_type'        => array( 'mdjm_template', 'mdjm_templates' ),
 		'capabilities'           => apply_filters( 'mdjm_contract_caps', array(
-			'edit_post'             => 'edit_mdjm_template',
-			'read_post'             => 'read_mdjm_template',
-			'delete_post'           => 'delete_mdjm_template',
-			'edit_posts'            => 'edit_mdjm_templates',
-			'edit_others_posts'     => 'edit_others_mdjm_templates',
-			'publish_posts'         => 'publish_mdjm_templates',
-			'read_private_posts'    => 'read_private_mdjm_templates'
+			'edit_post'          => 'edit_mdjm_template',
+			'read_post'          => 'read_mdjm_template',
+			'delete_post'        => 'delete_mdjm_template',
+			'edit_posts'         => 'edit_mdjm_templates',
+			'edit_others_posts'  => 'edit_others_mdjm_templates',
+			'publish_posts'      => 'publish_mdjm_templates',
+			'read_private_posts' => 'read_private_mdjm_templates'
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'           	   => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) )
+		'map_meta_cap'           => true,
+		'has_archive'            => true,
+		'supports'               => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) )
 	);
 	register_post_type( 'contract', apply_filters( 'mdjm_contract_post_type_args', $contract_args ) );
 	
@@ -131,14 +131,14 @@ function mdjm_register_post_types()	{
 	);
 		
 	$signed_contract_args = array(
-		'labels'                 => $signed_contract_labels,
-		'description'			=> __( 'Signed Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
-		'rewrite'            	=> array( 'slug' => 'mdjm-signed-contract' ),
-		'capability_type'    	=> array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'           	   => array( '' )
+		'labels'             => $signed_contract_labels,
+		'description'        => __( 'Signed Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
+		'publicly_queryable' => true,
+		'rewrite'            => array( 'slug' => 'mdjm-signed-contract' ),
+		'capability_type'    => array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
+		'map_meta_cap'       => true,
+		'has_archive'        => true,
+		'supports'           => array( '' )
 	);
 	register_post_type( 'mdjm-signed-contract', apply_filters( 'mdjm_signed_contract_post_type_args', $signed_contract_args ) );
 	
@@ -163,10 +163,10 @@ function mdjm_register_post_types()	{
 	);
 		
 	$custom_field_args = array(
-		'labels'                 => $custom_field_labels,
-		'description'         	=> __( 'This is where you can add Custom Event Fields for use in the event screen.', 'mobile-dj-manager' ),
-		'rewrite' 			 	=> array( 'slug' => 'mdjm-custom-fields' ),
-		'supports'               => array( 'title' )
+		'labels'      => $custom_field_labels,
+		'description' => __( 'This is where you can add Custom Event Fields for use in the event screen.', 'mobile-dj-manager' ),
+		'rewrite'     => array( 'slug' => 'mdjm-custom-fields' ),
+		'supports'    => array( 'title' )
 	);
 	register_post_type( 'mdjm-custom-field', apply_filters( 'mdjm_custom_field_post_type_args', $custom_field_args ) );
 	
@@ -381,6 +381,7 @@ function mdjm_register_post_types()	{
 		'publicly_queryable' 	 => true,
 		'show_ui'				=> true,
 		'show_in_menu'	   	   => 'edit.php?post_type=mdjm-quotes',
+		'show_in_admin_bar'    => false,
 		'rewrite'            	=> array( 'slug' => 'mdjm-quotes' ),
 		'capability_type'	    => 'mdjm_quote',
 		'capabilities'           => apply_filters( 'mdjm_quote_caps', array(

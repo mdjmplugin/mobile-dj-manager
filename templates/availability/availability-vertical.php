@@ -23,5 +23,5 @@
 	<p><label for="{field}" class="{label_class}">{label}</label><br />
     <input type="text" name="{field}" id="{field}" class="{field_class}" size="20" placeholder="<?php echo mdjm_format_datepicker_date(); ?>" /></p>
     <p><input type="submit" name="mdjm-submit-availability" id="mdjm-submit-availability" class="{submit_class}" value="{submit_text}" /></p>
-	<span id="pleasewait" class="{please_wait_class}">{please_wait_text} <img src="/wp-admin/images/loading.gif" alt="{please_wait_text}" /></span>
+	<span id="pleasewait" class="{please_wait_class}">{please_wait_text} <img src="<?php echo MDJM_PLUGIN_URL; ?>/assets/images/loading.gif" alt="{please_wait_text}" /></span>
 </div>

@@ -532,7 +532,7 @@ function mdjm_list_event_employees( $event_id )	{
 			if( mdjm_employee_can( 'mdjm_event_edit' ) )	{
 				if ( mdjm_get_employees_event_payment_status( $event_id, $employee['id'] ) != 'paid' )	{
 					$output .= sprintf( 
-						__( '<a class="remove_event_employee" href="" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
+						__( '<a class="button button-secondary button-small remove_event_employee" style="margin: 6px 0 10px;" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
 					);
 				} elseif ( mdjm_get_option( 'enable_employee_payments' ) )	{
 					$output .= __( 'Employee has been paid', 'mobile-dj-manager' );

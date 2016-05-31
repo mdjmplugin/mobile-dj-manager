@@ -53,12 +53,12 @@ global $mdjm_event;
                     <tr>
                         <td class="mdjm-playlist-song-cell">
                             <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" />
+                            <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" required />
                         </td>
                         
                         <td class="mdjm-playlist-artist-cell">
                             <label for="entry_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
-                            <input type="text" name="entry_artist" id="entry_artist" data-placeholder="<?php _e( 'Artist Name', 'mobile-dj-manager' ); ?>" />
+                            <input type="text" name="entry_artist" id="entry_artist" data-placeholder="<?php _e( 'Artist Name', 'mobile-dj-manager' ); ?>" required />
                         </td>
                         
                         <td class="mdjm-playlist-category-cell">
