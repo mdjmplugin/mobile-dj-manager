@@ -389,22 +389,6 @@ jQuery(document).ready(function ($) {
 
 		content: function()	{
 
-			// Set initial event list when page loads
-			if( mdjm_admin_vars.load_recipient )	{
-				$('#mdjm_email_to').val(mdjm_admin_vars.load_recipient);
-				loadEvents(mdjm_admin_vars.load_recipient);
-			}
-
-			// Update event list when recipient changes
-			$( document.body ).on( 'change', '#mdjm_email_to', function(event) {
-
-				event.preventDefault();
-
-				var recipient = $("#mdjm_email_to").val();
-				loadEvents(recipient);
-
-			});
-
 			// Refresh the events list for the current recipient
 			var loadEvents = function(recipient)	{
 				var postData         = {
@@ -434,6 +418,22 @@ jQuery(document).ready(function ($) {
 				});
 
 			};
+			
+			// Set initial event list when page loads
+			if( mdjm_admin_vars.load_recipient )	{
+				$('#mdjm_email_to').val(mdjm_admin_vars.load_recipient);
+				loadEvents(mdjm_admin_vars.load_recipient);
+			}
+
+			// Update event list when recipient changes
+			$( document.body ).on( 'change', '#mdjm_email_to', function(event) {
+
+				event.preventDefault();
+
+				var recipient = $("#mdjm_email_to").val();
+				loadEvents(recipient);
+
+			});
 
 			// Update event list when recipient changes
 			$( document.body ).on( 'change', '#mdjm_email_template', function(event) {
