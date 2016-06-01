@@ -30,9 +30,7 @@ global $mdjm_event;
 	 * Display event action buttons
 	 */
 	?>
-    <div class="mdjm-action-btn-container">
-        {event_action_buttons}
-    </div><!--mdjm-action-button-container-->
+    <div class="mdjm-action-btn-container">{event_action_buttons}</div>
 
 	<?php
 	/**
