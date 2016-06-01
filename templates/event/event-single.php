@@ -118,7 +118,7 @@ global $mdjm_event;
             </tr>
             
         </table>
-    
+    </div>
     <?php do_action( 'mdjm_post_event_details', $mdjm_event->ID, $mdjm_event ); ?>
 
 </div>
