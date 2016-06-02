@@ -27,12 +27,12 @@ global $mdjm_login_redirect;
 			<?php do_action( 'mdjm_login_form_top' ); ?>
             <p class="mdjm-login-username">
                 <label for="mdjm-login-username"><?php _e( 'Email address:', 'mobile-dj-manager' ); ?></label>
-                <input type="text" name="mdjm_user_login" id="mdjm-login-username" class="mdjm-input" value="" size="20" />
+                <input type="text" name="mdjm_user_login" id="mdjm-login-username" class="mdjm-input" value="" size="20" required />
             </p>
             
             <p class="mdjm-login-password">
                 <label for="mdjm-login-password"><?php _e( 'Password:', 'mobile-dj-manager' ); ?></label>
-                <input type="password" name="mdjm_user_pass" id="mdjm-login-password" class="mdjm-input" value="" size="20" />
+                <input type="password" name="mdjm_user_pass" id="mdjm-login-password" class="mdjm-input" value="" size="20" required />
             </p>
             
             <?php do_action( 'mdjm_login_form_middle' ); ?>

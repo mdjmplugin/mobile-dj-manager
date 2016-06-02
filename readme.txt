@@ -76,6 +76,12 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+= 1.3.6 =
+
+* **New**    : MDJM now uses internal login functions for the Client Zone login process
+* **New**    : Added `[mdjm-login]` shortcode to present a login form on any page
+* **Bug Fix**: Issue [#68](https://github.com/mdjm/mobile-dj-manager/issues/68/ "Issue 68") `{guest_playlist_url}` is missing part of the string
+
 = 1.3.5.5 =
 
 * **Bug Fix**: Issue [#66](https://github.com/mdjm/mobile-dj-manager/issues/63/ "Issue 66") Template content does not load when a recipient is auto loaded into the communication page
