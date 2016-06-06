@@ -197,6 +197,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/login.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );
@@ -242,7 +243,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			}
 			else	{ // Required for front end only
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
-				require_once( MDJM_PLUGIN_DIR . '/includes/login.php' );
 			}
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/install.php' );
