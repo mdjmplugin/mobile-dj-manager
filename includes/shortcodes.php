@@ -162,7 +162,7 @@ function mdjm_shortcode_home( $atts )	{
 		return $output;
 	}
 	else	{
-		echo mdjm_login_form();
+		echo mdjm_login_form( mdjm_get_current_page_url() );
 	}
 	
 } // mdjm_shortcode_home
@@ -209,7 +209,7 @@ function mdjm_shortcode_contract( $atts )	{
 			return $output;
 		}
 		else	{
-			echo mdjm_login_form();
+			echo mdjm_login_form( mdjm_get_current_page_url() );
 		}
 	}
 	else	{
@@ -372,7 +372,7 @@ function mdjm_shortcode_quote( $atts )	{
 			return $output;
 
 		} else	{
-			echo mdjm_login_form();
+			echo mdjm_login_form( mdjm_get_current_page_url() );
 		}
 
 	} else	{

@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
- * Version: 1.3.5.5
- * Date: 01 June 2015
+ * Version: 1.3.6
+ * Date: 06 June 2015
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -119,7 +119,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.3.5.5' );
+			define( 'MDJM_VERSION_NUM', '1.3.6' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -196,8 +196,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
-			require_once( MDJM_PLUGIN_DIR . '/includes/html-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/login.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );

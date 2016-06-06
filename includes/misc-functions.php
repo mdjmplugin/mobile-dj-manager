@@ -213,6 +213,16 @@ function mdjm_messages( $key )	{
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
+			'password_incorrect'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	=> __( 'Incorrect password.', 'mobile-dj-manager' )
+			),
+			'username_incorrect'	=> array(
+				'class'		=> 'error',
+				'title'		=> __( 'Error', 'mobile-dj-manager' ),
+				'message'	=> __( 'Unknown username.', 'mobile-dj-manager' )
+			),
 			'missing_event'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),

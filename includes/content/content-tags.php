@@ -488,6 +488,16 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_duration'
 		),
 		array(
+			'tag'         => 'event_employees',
+			'description' => __( 'The list of employees working their event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_employees'
+		),
+		array(
+			'tag'         => 'event_employees_roles',
+			'description' => __( 'The list of employees working their event and their assigned role', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_employees_roles'
+		),
+		array(
 			'tag'         => 'event_name',
 			'description' => __( 'The assigned name of the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_name'
@@ -1369,8 +1379,6 @@ function mdjm_content_tag_dj_fullname( $event_id='' )	{
 	
 	$return = '';
 	
-	$return = '';
-	
 	if( !empty( $user_id ) )	{
 		$return = get_user_meta( $user_id, 'first_name', true );
 		
@@ -1643,6 +1651,64 @@ function mdjm_content_tag_event_duration( $event_id='' )	{
 				
 	return mdjm_event_duration( $event_id );
 } // event_duration
+
+/**
+ * Content tag: event_employees.
+ * List of event employees.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		List of employees working the event.
+ */
+function mdjm_content_tag_event_employees( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+
+	$employees = mdjm_get_all_event_employees( $event_id );
+	
+	if ( empty( $employees ) )	{
+		return '';
+	}
+	
+	foreach ( $employees as $employee_id => $employee_data )	{
+		$event_employees[] = mdjm_get_employee_display_name( $employee_id );
+	}
+	
+	$return = implode( '<br />', $event_employees );
+
+	return $return;
+} // mdjm_content_tag_event_employees
+
+/**
+ * Content tag: event_employees.
+ * List of event employees.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		List of employees working the event.
+ */
+function mdjm_content_tag_event_employees_roles( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+
+	$employees = mdjm_get_all_event_employees( $event_id );
+	
+	if ( empty( $employees ) )	{
+		return '';
+	}
+	
+	foreach ( $employees as $employee_id => $employee_data )	{
+		$event_employees[] = mdjm_get_employee_display_name( $employee_id ) . ' - ' . $employee_data['role'];
+	}
+	
+	$return = implode( '<br />', $event_employees );
+
+	return $return;
+} // mdjm_content_tag_event_employees_roles
 
 /**
  * Content tag: event_name.
