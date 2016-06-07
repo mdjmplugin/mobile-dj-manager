@@ -88,11 +88,12 @@ function mdjm_add_client( $user_data = array() )	{
 	}
 	
 	$defaults = array(
-		'first_name' => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] )	: '',
-		'last_name'  => ! empty( $_POST['client_lastname'] )		? ucwords( $_POST['client_lastname'] )	: '',
-		'user_email' => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
-		'user_pass'  => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
-		'role'       => 'client'
+		'first_name'   => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] ) : '',
+		'last_name'    => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
+		'user_email'   => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
+		'user_pass'    => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
+		'role'         => 'client',
+		'client_phone' => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: ''
 	);
 	
 	$defaults['display_name'] = $defaults['first_name'] . ' ' . $defaults['last_name'];
