@@ -1161,8 +1161,6 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 		)
 	);
 	
-	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
@@ -1172,6 +1170,8 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 	if( ! empty( $args['client_notices'] ) )	{
 		mdjm_email_enquiry_accepted( $event_id );
 	}
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
 	return $update;
 	
