@@ -224,7 +224,7 @@ class MDJM_Txn {
 	 */
 	public function get_price() {
 		if ( empty( $this->price ) )	{
-			$this->price = mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_txn_total', true ) );
+			$this->price = mdjm_sanitize_amount( get_post_meta( $this->ID, '_mdjm_txn_total', true ) );
 		}
 		
 		return $this->price;
