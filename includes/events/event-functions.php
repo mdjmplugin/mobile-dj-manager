@@ -646,6 +646,22 @@ function mdjm_get_event_deposit_status( $event_id )	{
 } // mdjm_get_event_deposit_status
 
 /**
+ * Returns the remaining deposit due for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The remaining deposit value due for the event.
+ */
+function mdjm_get_event_remaining_deposit( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_remaining_deposit();
+} // mdjm_get_event_remaining_deposit
+
+/**
  * Determine the event deposit value based upon event cost and
  * payment settings
  *
