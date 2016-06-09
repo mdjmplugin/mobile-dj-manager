@@ -613,10 +613,12 @@ class MDJM_Event {
 		$income = $this->get_total_income();
 		
 		if ( $income >= $this->get_deposit() )	{
-			return '0';
+			$return = '0';
+		} else	{
+			$return = ( $this->get_deposit() - $income );
 		}
 		
-		return apply_filters( 'mdjm_remaining_deposit', ( $this->get_deposit() - $income ), $this->ID );
+		return apply_filters( 'mdjm_get_remaining_deposit', mdjm_sanitize_amount( $return ), $this->ID );
 		
 	} // get_remaining_deposit
 	
