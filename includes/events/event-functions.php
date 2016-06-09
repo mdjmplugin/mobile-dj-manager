@@ -464,6 +464,91 @@ function mdjm_event_types_dropdown( $args )	{
 } // mdjm_event_types_dropdown
 
 /**
+ * Return all enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	obj		Object array of all enqury source categories.
+ */
+function mdjm_get_enquiry_sources( $args = array() )	{
+	
+	$defaults = array(
+		'taxonomy'      => 'enquiry-source',
+		'hide_empty'    => false,
+		'orderby'       => 'name',
+		'order'         => 'ASC'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$enquiry_sources = get_categories( $args );
+	
+	return apply_filters( 'mdjm_get_enquiry_sources', $enquiry_sources, $args );
+	
+} // mdjm_get_enquiry_sources
+
+/**
+ * Generate a dropdown list of enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	str		HTML output for the dropdown list.
+ */
+function mdjm_enquiry_sources_dropdown( $args )	{
+	
+	$defaults = array(
+		'show_option_none'   => '',
+		'option_none_value'  => '',
+		'orderby'            => 'name', 
+		'order'              => 'ASC',
+		'hide_empty'         => false, 
+		'echo'               => true,
+		'selected'           => 0,
+		'name'               => 'mdjm_enquiry_source',
+		'id'                 => '',
+		'class'              => 'postform',
+		'taxonomy'           => 'event-types',
+		'required'           => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['id']                = ! empty( $args['id'] )                ? $args['id']                : $args['name'];
+	$args['required']          = ! empty( $args['required'] )          ? ' required'                : '';
+	$args['class']             = ! empty( $args['class'] )             ? $args['class']             : '';
+	
+	$enquiry_sources = mdjm_get_enquiry_sources();
+	
+	$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] );
+	
+	if ( ! empty( $args['show_option_none'] ) )	{
+		$output .= sprintf( '<option value="%s">%s</option>', $args['option_none_value'], $args['show_option_none'] );
+	}
+	
+	if ( empty( $enquiry_sources ) )	{
+		$output .= sprintf( '<option value="" disabled="disabled">%s</option>', apply_filters( 'mdjm_no_enquiry_source_options', __( 'No sources found', 'mobile-dj-manager' ) ) );
+	} else	{
+	
+		foreach( $enquiry_sources as $enquiry_source )	{
+			$selected = selected( $enquiry_source->term_id, $args['selected'], false );
+			
+			$output .= sprintf( '<option value="%s"%s>%s</option>', $enquiry_source->term_id, $selected, esc_attr( $enquiry_source->name ) ) . "\n";
+			
+		}
+		
+	}
+	
+	$output .= '</select>';
+	
+	if ( ! empty( $args['echo'] ) )	{
+		echo $output;
+	} else	{
+		return $output;
+	}
+	
+} // mdjm_enquiry_sources_dropdown
+
+/**
  * Set the event type for the event.
  *
  * @since	1.3
