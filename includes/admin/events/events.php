@@ -1306,7 +1306,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	
 	$deposit_payment = ( $event_data['_mdjm_event_deposit_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ) ? true : false;
 	
-	$balance_payment = ( $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_deposit_status'][0] != 'Paid' ) ? true : false;
+	$balance_payment = ( $event_data['_mdjm_event_balance_status'] == 'Paid' && $current_meta['_mdjm_event_balance_status'][0] != 'Paid' ) ? true : false;
 	
 	// Add-Ons
 	if( mdjm_packages_enabled() )	{
@@ -1321,6 +1321,18 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Assign the enquiry source
 	mdjm_set_enquiry_source( $post_id, (int)$_POST['mdjm_enquiry_source'] );
 	
+	if( $deposit_payment == true || $balance_payment == true )	{
+		
+		if( $balance_payment == true )	{
+			unset( $event_data['_mdjm_event_balance_status'] );
+			mdjm_mark_event_balance_paid( $post_id );
+		} else	{
+			unset( $event_data['_mdjm_event_deposit_status'] );
+			mdjm_mark_event_deposit_paid( $post_id );
+		}
+		
+	}
+	
 	/**
 	 * Update the event post meta data
 	 */
@@ -1334,17 +1346,17 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * Check for manual payment received & process.
 	 * This needs to be completed before we send any emails to ensure shortcodes are correct.
 	 */
-	if( $deposit_payment == true || $balance_payment == true )	{
+	/*if( $deposit_payment == true || $balance_payment == true )	{
 		
 		if( $balance_payment == true )	{
 			$type = mdjm_get_balance_label();
 		} else	{
-			$type = mdjm_get_deposit_label();
+			mdjm_mark_event_deposit_paid( $post_id );
 		}
 		
 		// Insert the event transaction
 		MDJM()->txns->manual_event_payment( $type, $post_id );
-	}
+	}*/
 	
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{

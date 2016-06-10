@@ -777,6 +777,150 @@ function mdjm_calculate_deposit( $price = '' )	{
 } // mdjm_calculate_deposit
 
 /**
+ * Mark the event deposit as paid.
+ *
+ * Determines if any deposit remains and if so, assumes it has been paid and
+ * creates an associted transaction.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	void
+ */
+function mdjm_mark_event_deposit_paid( $event_id )	{
+
+	$mdjm_event = new MDJM_Event( $event_id );
+	$txn_id     = 0;
+	
+	if ( 'Paid' == $mdjm_event->get_deposit_status() )	{
+		return;
+	}
+
+	$remaining = $mdjm_event->get_remaining_deposit();
+
+	do_action( 'mdjm_pre_mark_event_deposit_paid', $event_id, $remaining );
+
+	if ( ! empty( $remaining ) && $remaining > 0 )	{
+		$mdjm_txn = new MDJM_Txn;
+		
+		$txn_meta = array(
+			'_mdjm_txn_source'      => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
+			'_mdjm_txn_currency'    => mdjm_get_currency(),
+			'_mdjm_txn_status'      => 'Completed',
+			'_mdjm_txn_total'       => $remaining,
+			'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+			'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+			'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+			'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
+		);
+		
+		$mdjm_txn->create( array( 'post_parent' => $event_id ), $txn_meta );
+		
+		if ( $mdjm_txn->ID > 0 )	{
+
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-deposit-payments' ) );
+
+			$args = array(
+				'user_id'          => get_current_user_id(),
+				'event_id'         => $event_id,
+				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
+					mdjm_get_deposit_label(),
+					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
+				),
+				'comment_type'     => 'mdjm-journal',
+				'comment_date'     => current_time( 'timestamp' )
+			);
+			
+			mdjm_add_journal( $args );
+
+			mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), 'mdjm_content_tag_deposit_label' );
+			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
+			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+			
+			do_action( 'mdjm_post_add_manual_txn', $event_id, $mdjm_txn->ID );
+			
+		}
+
+	}
+
+	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
+
+	do_action( 'mdjm_post_mark_event_deposit_paid', $event_id );
+
+} // mdjm_mark_event_deposit_paid
+
+/**
+ * Mark the event balance as paid.
+ *
+ * Determines if any balance remains and if so, assumes it has been paid and
+ * creates an associted transaction.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	void
+ */
+function mdjm_mark_event_balance_paid( $event_id )	{
+
+	$mdjm_event = new MDJM_Event( $event_id );
+	$txn_id     = 0;
+	
+	if ( 'Paid' == $mdjm_event->get_balance_status() )	{
+		return;
+	}
+
+	$remaining = $mdjm_event->get_balance();
+
+	do_action( 'mdjm_pre_mark_event_balance_paid', $event_id, $remaining );
+
+	if ( ! empty( $remaining ) && $remaining > 0 )	{
+		$mdjm_txn = new MDJM_Txn;
+		
+		$txn_meta = array(
+			'_mdjm_txn_source'      => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
+			'_mdjm_txn_currency'    => mdjm_get_currency(),
+			'_mdjm_txn_status'      => 'Completed',
+			'_mdjm_txn_total'       => $remaining,
+			'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+			'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+			'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+			'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
+		);
+		
+		$mdjm_txn->create( array( 'post_parent' => $event_id ), $txn_meta );
+		
+		if ( $mdjm_txn->ID > 0 )	{
+
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-balance-payments' ) );
+
+			$args = array(
+				'user_id'          => get_current_user_id(),
+				'event_id'         => $event_id,
+				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
+					mdjm_get_balance_label(),
+					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
+				),
+				'comment_type'     => 'mdjm-journal',
+				'comment_date'     => current_time( 'timestamp' )
+			);
+			
+			mdjm_add_journal( $args );
+
+			mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), 'mdjm_content_tag_balance_label' );
+			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
+			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+			
+			do_action( 'mdjm_post_add_manual_txn', $event_id, $mdjm_txn->ID );
+			
+		}
+
+	}
+
+	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_balance_status' => 'Paid' ) );
+
+	do_action( 'mdjm_post_mark_event_balance_paid', $event_id );
+
+} // mdjm_mark_event_balance_paid
+
+/**
  * Returns the balance status for an event.
  *
  * @since	1.3

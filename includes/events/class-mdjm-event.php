@@ -581,7 +581,7 @@ class MDJM_Event {
 
 			if ( $this->deposit ) {
 
-				$this->deposit = mdjm_sanitize_amount( $this->deposit );
+				$this->deposit = $this->deposit;
 
 			} else {
 
@@ -618,7 +618,7 @@ class MDJM_Event {
 			$return = ( $this->get_deposit() - $income );
 		}
 		
-		return apply_filters( 'mdjm_get_remaining_deposit', mdjm_sanitize_amount( $return ), $this->ID );
+		return apply_filters( 'mdjm_get_remaining_deposit', $return, $this->ID );
 		
 	} // get_remaining_deposit
 	
@@ -723,7 +723,7 @@ class MDJM_Event {
 			
 			if ( ! empty( $this->income ) && $this->income != '0.00' )	{
 				
-				$this->balance = mdjm_sanitize_amount( ( $this->get_price() - $this->income ) );
+				$this->balance = ( $this->get_price() - $this->income );
 				
 			} else	{
 				
