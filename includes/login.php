@@ -27,7 +27,7 @@ function mdjm_login_form( $redirect = '' )	{
 		$redirect = mdjm_do_content_tags( '{application_home}' );
 	}
 
-	$mdjm_login_redirect = $redirect;
+	$mdjm_login_redirect = remove_query_arg( 'mdjm_message', $redirect );
 	
 	ob_start();
 
