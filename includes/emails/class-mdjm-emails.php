@@ -411,10 +411,10 @@ class MDJM_Emails {
 			
 		}
 		
-		$copies = $this->copy_to;
+		$copies = array_unique( $this->copy_to );
 		
 		$args = array(
-			'to_email'       => $this->copy_to,
+			'to_email'       => $copies,
 			'from_name'      => $this->from_name,
 			'from_email'     => $this->from_address,
 			'event_id'       => $this->event_id,

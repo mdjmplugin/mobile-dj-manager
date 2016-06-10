@@ -138,6 +138,7 @@
 			);			
 			
 			if ( empty( $mdjm_txn ) )	{
+				error_log( '111', 0 );
 				return false;
 			}
 			
