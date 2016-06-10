@@ -660,7 +660,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
-						'options'     => array_merge( array( '' => __( 'None', 'mobile-dj-manager' ) ), mdjm_list_templates( 'email_template' ) )
+						'options'     => mdjm_list_templates( 'email_template', true )
 					)
 				)
 			)
@@ -1287,7 +1287,7 @@ function mdjm_get_registered_settings_sections() {
  * @param	str		$post_type	Optional: 'contract' or 'email_template'. If omitted, fetch both.
  * @return	arr		Array of templates, id => title.
  */
-function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ) )	{
+function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ), $show_none=false )	{
 	$template_posts = get_posts(
 		array(
 			'post_type'        => $post_type,
@@ -1299,6 +1299,10 @@ function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ) )
 	);
 	
 	$templates = array();
+	
+	if ( ! empty( $show_none ) )	{
+		$templates[0] = __( 'None', 'mobile-dj-manager' );
+	}
 	
 	foreach( $template_posts as $template )	{
 		$templates[ $template->ID ] = $template->post_title;	
