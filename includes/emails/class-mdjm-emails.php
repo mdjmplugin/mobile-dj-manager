@@ -411,7 +411,7 @@ class MDJM_Emails {
 			
 		}
 		
-		$copies = array_unique( $this->copy_to );
+		$copies = is_array( $this->copy_to ) ? array_unique( $this->copy_to ) : $this->copy_to;
 		
 		$args = array(
 			'to_email'       => $copies,

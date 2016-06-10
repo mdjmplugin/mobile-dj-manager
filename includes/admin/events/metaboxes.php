@@ -1373,11 +1373,11 @@ function mdjm_event_metabox_event_options( $post )	{
 			</select>
 		</div>
 	</div>
-    <?php if( mdjm_is_admin() && ( $post->post_status == 'mdjm-approved' || $post->post_status == 'mdjm-completed' ) ) : ?>
+    <?php if( mdjm_employee_can( 'manage_events' ) && mdjm_contract_is_signed( $post->ID ) ) : ?>
 		<div class="mdjm-meta-row">
 			<div class="mdjm-left-col">
 		<?php
-		echo '<a id="view_contract" class="side-meta" href="' . mdjm_get_formatted_url( get_post_meta( $post->ID, '_mdjm_event_signed_contract', true ), false ) . '" target="_blank">View Signed Contract</a>';
+		echo '<a id="view_contract" class="side-meta" href="' . esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $post->ID ), home_url() ) ) . '" target="_blank">View Signed Contract</a>';
 		?>
 			</div>
 		</div>
