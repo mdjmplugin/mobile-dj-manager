@@ -119,18 +119,17 @@
 			
 			remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 			
-			$mdjm_event = mdjm_get_event_by_id( $event_id );
+			$mdjm_event = new MDJM_Event( $event_id );
 			$mdjm_txn   = new MDJM_Txn();
 			
 			$mdjm_txn->create(
 				array(
 					'post_parent'           => $event_id,
-					'post_author'           => mdjm_get_event_client_id( $event_id ),
-					'post_date'             => current_time( 'mysql' )
+					'post_author'           => $mdjm_event->client,
 				),
 				array(
-					'_mdjm_payment_from'    =>  mdjm_get_event_client_id( $event_id ),
-					'_mdjm_txn_total'       => $type == mdjm_get_balance_label() ? mdjm_get_event_balance( $event_id ) : mdjm_get_event_remaining_deposit( $event_id ),
+					'_mdjm_payment_from'    => $mdjm_event->client,
+					'_mdjm_txn_total'       => $type == mdjm_get_balance_label() ? $mdjm_event->get_balance() : $mdjm_event->get_deposit(),
 					'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
 					'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
 					'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
