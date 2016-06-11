@@ -76,6 +76,28 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.7 =
+
+**New**
+* Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
+* Checking the balance paid checkbox auto sets the deposit to the paid status
+* Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
+* Manual event payments from the events screen now generate an email using the selected `Manual Payment Template`
+* Added content tag `{deposit_remaining}`
+
+**Tweaks**
+* Added function `mdjm_get_event_remaining_deposit()`
+* Added method `get_remaining_deposit()` to MDJM_Event class
+* Better formatting of currencies
+* Added functions `mdjm_get_enquiry_sources()` and `mdjm_enquiry_sources_dropdown()`
+
+**Bug Fixes**
+* If deposit type is set to percentage of total cost, a JS error ocurred when focusing out of the total cost field
+* Issue [#70](https://github.com/mdjm/mobile-dj-manager/issues/70/ "Issue 70") Client phone number does not save when created on the events screen
+* Issue [#72](https://github.com/mdjm/mobile-dj-manager/issues/72/ "Issue 72") Use remove_query_arg for redirect link on login page
+* Issue [#73](https://github.com/mdjm/mobile-dj-manager/issues/73/ "Issue 73") Admin is unable to review signed contracts
+
 = 1.3.6 =
 
 * **New**    : MDJM now uses internal login functions for the Client Zone login process
@@ -763,6 +785,9 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
 
 == Upgrade Notice ==
+
+= 1.3.7 =
+Enhanced the manual event payments feature. See changelog for details.
 
 = 1.3.4.1 =
 This version addresses an issue that may result in a fatal error when selecting to save a venue during event updates. The `{contract_url}` content tag was generating incorrect output.
