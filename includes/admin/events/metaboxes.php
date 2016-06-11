@@ -625,20 +625,6 @@ function mdjm_event_metabox_event_details( $post )	{
 	</div>
 	<!-- End of fifth row -->
 	<?php
-	// Update event deposit when manually updating cost field
-	if ( mdjm_get_option( 'deposit_type' ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
-		?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($) 	{
-			$('#_mdjm_event_cost').on('focusout', '', function()	{
-				var current_cost = $("#_mdjm_event_cost").val(); // Current event cost
-				
-				set_deposit($);
-			});
-		});
-		</script>
-		<?php
-	}
 	do_action( 'mdjm_events_metabox_last', $post );
 } // mdjm_event_metabox_event_details
 

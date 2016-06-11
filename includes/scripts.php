@@ -163,7 +163,8 @@ function mdjm_register_admin_scripts( $hook )	{
 				'no_txn_amount'  => __( 'Enter a transaction value', 'mobile-dj-manager' ),
 				'no_txn_date'    => __( 'Enter a transaction date', 'mobile-dj-manager' ),
 				'no_txn_for'     => __( 'What is the transaction for?', 'mobile-dj-manager' ),
-				'no_txn_src'     => __( 'Enter a transaction source', 'mobile-dj-manager' )
+				'no_txn_src'     => __( 'Enter a transaction source', 'mobile-dj-manager' ),
+				'deposit_is_pct' => ( mdjm_get_option( 'deposit_type' ) && mdjm_get_option( 'deposit_type' ) == 'percentage' ) ? true : false
 			)
 		)
 	);

@@ -103,6 +103,12 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function(event) {
 				setCost();
 			});
+			
+			$( document.body ).on( 'focusout', '#_mdjm_event_cost', function(event) {
+				if( mdjm_admin_vars.deposit_is_pct )	{
+					setDeposit();
+				}
+			});
 
 			// Set the deposit value for the event
 			var setDeposit = function()	{
