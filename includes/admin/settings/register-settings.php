@@ -427,6 +427,13 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
+					'set_client_inactive'  => array(
+						'id'          => 'set_client_inactive',
+						'name'        => __( 'Set Client Inactive?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Set a client to inactive when their %s is cancelled, rejected or marked as a failed enquiry and they have no other upcoming %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural( true ) ),
+						'type'        => 'checkbox',
+						'std'         => '1'
+					),
 					'journaling'       => array(
 						'id'          => 'journaling',
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
