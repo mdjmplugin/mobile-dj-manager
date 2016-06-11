@@ -115,12 +115,105 @@ add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_
  *
  *
  */
-function save_event_transaction()	{				
-	$result = MDJM()->txns->add_event_transaction();
+function mdjm_save_event_transaction()	{				
+	//$result = MDJM()->txns->add_event_transaction();
+	$result = array();
+
+	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
+	$mdjm_txn   = new MDJM_Txn();
 	
+	$txn_data = array(
+		'post_parent'           => $_POST['event_id'],
+		'post_author'           => $mdjm_event->client,
+		'post_status'           => $_POST['direction'] == 'Out' ? 'mdjm-expenditure' : 'mdjm-income',
+		'post_date'             => date( 'Y-m-d H:i:s', strtotime( $_POST['date'] ) )
+	);
+
+	$txn_meta = array(
+		'_mdjm_txn_status'      => 'Completed',
+		'_mdjm_payment_from'    => $mdjm_event->client,
+		'_mdjm_txn_total'       => $_POST['amount'],
+		'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+		'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+		'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+		'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
+		'_mdjm_txn_source'      => $_POST['src']
+	);
+	
+	if ( $_POST['direction'] == 'In' )	{
+		if ( ! empty( $_POST['from'] ) )	{
+			$txn_meta['_mdjm_payment_from'] = sanitize_text_field( $_POST['from'] );
+		} else	{
+			$txn_meta['_mdjm_payment_from'] = mdjm_get_client_display_name( $mdjm_event->client );
+		}
+	}
+	
+	if ( $_POST['direction'] == 'Out' )	{
+		if ( ! empty( $_POST['to'] ) )	{
+			$txn_meta['_mdjm_payment_to'] = sanitize_text_field( $_POST['to'] );
+		} else	{
+			$txn_meta['_mdjm_payment_to'] = mdjm_get_client_display_name( $mdjm_event->client );
+		}
+	}
+
+	$mdjm_txn->create( $txn_data, $txn_meta );
+
+	if ( $mdjm_txn->ID > 0 )	{
+		$result['type'] = 'success';
+		mdjm_set_txn_type( $mdjm_txn->ID, $_POST['for'] );
+		
+		$args = array(
+			'user_id'          => get_current_user_id(),
+			'event_id'         => $_POST['event_id'],
+			'comment_content'  => sprintf( __( '%1$s payment of %2$s received for %3$s %4$s.', 'mobile-dj-manager' ),
+				$_POST['direction'] == 'In' ? __( 'Incoming', 'mobile-dj-manager' ) : __( 'Outgoing', 'mobile-dj-manager' ),
+				mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) ),
+				mdjm_get_label_singular( true ),
+				mdjm_get_event_contract_id( $_POST['event_id'] )
+			),
+			'comment_type'     => 'mdjm-journal',
+			'comment_date'     => current_time( 'timestamp' )
+		);
+		
+		mdjm_add_journal( $args );
+		
+		$payment_for = $mdjm_txn->get_type();
+		$amount      = mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) );
+
+		mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), function() use ( $payment_for ) { return $payment_for; } );
+
+		mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $amount ) { return $amount; } );
+
+		mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+		
+		do_action( 'mdjm_post_add_manual_txn', $_POST['event_id'], $mdjm_txn->ID );
+
+		$result['deposit_paid'] = 'N';
+		$result['balance_paid'] = 'N';
+
+		if ( $mdjm_event->get_remaining_deposit() < 1 )	{
+			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
+			$result['deposit_paid'] = 'Y';
+		}
+		if ( $mdjm_event->get_balance() < 1 )	{
+			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_balance_status' => 'Paid' ) );
+			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
+			$result['balance_paid'] = 'Y';
+			$result['deposit_paid'] = 'Y';
+		}
+
+	} else	{
+		$result['type'] = 'error';
+		$result['msg']  = __( 'Unable to add transaction', 'mobile-dj-manager' );
+	}
+
+	$result['transactions'] = MDJM()->txns->show_event_transactions( $_POST['event_id'] );
+
+	echo json_encode( $result );
+
 	die();
 } // save_event_transaction
-add_action( 'wp_ajax_add_event_transaction', 'save_event_transaction' );
+add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction' );
 	
 /**
  * Add a new event type

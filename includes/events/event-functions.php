@@ -914,7 +914,13 @@ function mdjm_mark_event_balance_paid( $event_id )	{
 
 	}
 
-	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_balance_status' => 'Paid' ) );
+	mdjm_update_event_meta(
+		$mdjm_event->ID,
+		array(
+			'_mdjm_event_deposit_status' => 'Paid',
+			'_mdjm_event_balance_status' => 'Paid'
+		)
+	);
 
 	do_action( 'mdjm_post_mark_event_balance_paid', $event_id );
 

@@ -244,4 +244,23 @@ class MDJM_Txn {
 		return $this->recipient_id;
 	} // get_recipient_id
 	
+	/**
+	 * Retrieve the transaction type.
+	 *
+	 * @since	1.3
+	 * @return	bool
+	 */
+	public function get_type() {
+		$types = wp_get_object_terms( $this->ID, 'transaction-types' );
+			
+		if( !empty( $types ) )	{
+			$return = $types[0]->name;
+		}
+		else	{
+			$return = __( 'No transaction type set', 'mobile-dj-manager' );
+		}
+					
+		return apply_filters( 'mdjm_transaction_type', $return, $this->ID );
+	} // get_type
+	
 } // class MDJM_Txn

@@ -330,6 +330,23 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#save_transaction', function(event) {
 				
 				event.preventDefault();
+
+				if ( $('#transaction_amount').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_amount );
+					return false;
+				}
+				if ( $('#transaction_date').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_date );
+					return false;
+				}
+				if ( $('#transaction_for').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_for );
+					return false;
+				}
+				if ( $('#transaction_src').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_src );
+					return false;
+				}
 				
 				var postData         = {
 					event_id        : $('#post_ID').val(),
@@ -354,10 +371,10 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if(response.type == "success") {
-							if(response.key == "deposit")	{
+							if(response.deposit_paid == "Y")	{
 								$('#deposit_paid').prop('checked', true );	
 							}
-							if(response.key == 'balance')	{
+							if(response.balance_paid == 'Y')	{
 								$('#balance_paid').prop('checked', true );	
 							}
 						} else	{

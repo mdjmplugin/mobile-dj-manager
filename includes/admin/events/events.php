@@ -1325,6 +1325,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 		if( $balance_payment == true )	{
 			unset( $event_data['_mdjm_event_balance_status'] );
+			unset( $event_data['_mdjm_event_deposit_status'] );
 			mdjm_mark_event_balance_paid( $post_id );
 		} else	{
 			unset( $event_data['_mdjm_event_deposit_status'] );

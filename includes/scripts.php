@@ -159,7 +159,11 @@ function mdjm_register_admin_scripts( $hook )	{
 				'ajaxurl'        => mdjm_get_ajax_url(),
 				'current_page'   => $hook,
 				'load_recipient' => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false,
-				'ajax_loader'    => MDJM_PLUGIN_URL . '/assets/images/loading.gif'
+				'ajax_loader'    => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
+				'no_txn_amount'  => __( 'Enter a transaction value', 'mobile-dj-manager' ),
+				'no_txn_date'    => __( 'Enter a transaction date', 'mobile-dj-manager' ),
+				'no_txn_for'     => __( 'What is the transaction for?', 'mobile-dj-manager' ),
+				'no_txn_src'     => __( 'Enter a transaction source', 'mobile-dj-manager' )
 			)
 		)
 	);
