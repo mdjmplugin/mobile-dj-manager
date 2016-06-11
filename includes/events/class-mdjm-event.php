@@ -97,11 +97,18 @@ class MDJM_Event {
 	private $balance_status;
 		
 	/**
-	 * The remaining balance
+	 * The total income
 	 *
 	 * @since	1.3
 	 */
 	private $income;
+	
+	/**
+	 * The total outgoings
+	 *
+	 * @since	1.3
+	 */
+	private $outgoings;
 	
 	/**
 	 * The event guest playlist code
@@ -776,6 +783,60 @@ class MDJM_Event {
 		 */
 		return apply_filters( 'get_event_income', $this->income, $this->ID );
 	} // get_total_income
+	
+	/**
+	 * Retrieve the total outgoings for this event
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_total_outgoings()	{
+		if ( ! isset( $this->outgoings ) )	{
+			
+			$out = MDJM()->txns->get_transactions( $this->ID, 'mdjm-expenditure' );
+			
+			if ( ! empty ( $out ) )	{
+				
+				$this->outgoings = $out;
+				
+			} else	{
+				
+				$out->outgoings = '0.00';
+				
+			}
+		}
+		
+		/**
+		 * Override the income for this event.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$income		The income for the event.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'get_event_outgoings', $this->outgoings, $this->ID );
+	} // get_total_outgoings
+	
+	/**
+	 * Retrieve the total profit for this event
+	 *
+	 * @since 	1.3
+	 * @return	str
+	 */
+	public function get_total_profit()	{
+
+		$profit = ( $this->get_total_income() - $this->get_total_outgoings() );
+		
+		/**
+		 * Override the profit for this event.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$profit		The profit for the event.
+		 * @param	str|int	$id			The event ID.
+		 */
+		return apply_filters( 'get_event_profit', $profit, $this->ID );
+	} // get_total_profit
 	
 	/**
 	 * Retrieve the total wages payable event

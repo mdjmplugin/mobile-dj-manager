@@ -836,7 +836,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
 			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
 			
-			do_action( 'mdjm_post_add_manual_txn', $event_id, $mdjm_txn->ID );
+			do_action( 'mdjm_post_add_manual_txn_in', $event_id, $mdjm_txn->ID );
 			
 		}
 
@@ -908,7 +908,7 @@ function mdjm_mark_event_balance_paid( $event_id )	{
 			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
 			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
 			
-			do_action( 'mdjm_post_add_manual_txn', $event_id, $mdjm_txn->ID );
+			do_action( 'mdjm_post_add_manual_txn_in', $event_id, $mdjm_txn->ID );
 			
 		}
 
@@ -973,6 +973,93 @@ function mdjm_get_event_income( $event_id )	{
 	$event = new MDJM_Event( $event_id );
 	return $event->get_total_income();
 } // mdjm_get_event_income
+
+/**
+ * Displays all event transactions within a table.
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @param	int		$event_id
+ * @return	str
+ */
+function mdjm_do_event_txn_table( $event_id )	{
+
+	global $mdjm_event;
+
+	$event_txns = apply_filters( 'mdjm_event_txns', mdjm_get_txns(
+		array(
+			'post_parent' => $event_id,
+			'orderby'		=> 'post_status',
+			'meta_key'	   => '_mdjm_txn_status',										
+			'meta_query'	 => array(
+				'key'		=> '_mdjm_txn_status',
+				'value'  	  => 'Completed'
+			)
+		)
+	) );
+
+	$in  = 0;
+	$out = 0;
+
+	?>
+
+	<table class="widefat mdjm_event_txn_list">
+        <thead>
+            <tr>
+                <th style="width: 20%"><?php _e( 'Date', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 15%"><?php _e( 'In', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 15%"><?php _e( 'Out', 'mobile-dj-manager' ); ?></th>
+                <th><?php _e( 'Details', 'mobile-dj-manager' ); ?></th>
+                <?php do_action( 'mdjm_event_txn_table_head', $event_id ); ?>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if ( $event_txns ) :  ?>
+            <?php foreach ( $event_txns as $event_txn ) : ?>
+
+                <?php $txn = new MDJM_Txn( $event_txn->ID ); ?>
+
+                <tr class="mdjm_field_wrapper">
+                    <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
+                    <td>
+                        <?php if ( 	$txn->post_status == 'mdjm-income' ) : ?>
+                            <?php $in += $txn->price; ?>
+                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                        <?php else : ?>
+                            <?php echo '&ndash;' ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ( 	$txn->post_status == 'mdjm-expenditure' ) : ?>
+                            <?php $out += $txn->price; ?>
+                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                        <?php else : ?>
+                            <?php echo '&ndash;' ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $txn->get_type(); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else : ?>
+        <tr>            
+            <td colspan="4"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+        </tr>
+        <?php endif; ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th style="width: 20%">&nbsp;</th>
+            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
+            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
+            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( $mdjm_event->get_total_profit() ) ); ?></strong></th>
+        </tr>
+        <?php do_action( 'mdjm_event_txn_table_foot', $event_id ); ?>
+        </tfoot>
+    </table>
+
+	<?php
+
+} // mdjm_do_event_txn_table
 
 /**
  * Returns the client ID.

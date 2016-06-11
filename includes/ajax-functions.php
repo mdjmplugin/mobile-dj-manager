@@ -116,7 +116,8 @@ add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_
  *
  */
 function mdjm_save_event_transaction()	{				
-	//$result = MDJM()->txns->add_event_transaction();
+	global $mdjm_event;
+
 	$result = array();
 
 	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
@@ -185,8 +186,17 @@ function mdjm_save_event_transaction()	{
 		mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $amount ) { return $amount; } );
 
 		mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
-		
-		do_action( 'mdjm_post_add_manual_txn', $_POST['event_id'], $mdjm_txn->ID );
+
+		/**
+		 * Allow hooks into this payment. The hook is suffixed with 'in' or 'out' depending
+		 * on the payment direction. i.e. mdjm_post_add_manual_txn_in and mdjm_post_add_manual_txn_out
+		 *
+		 * @since	1.3.7
+		 * @param	int		$event_id
+		 * @param	obj		$txn_id
+		 */
+
+		do_action( 'mdjm_post_add_manual_txn_' . strtolower( $_POST['direction'] ), $_POST['event_id'], $mdjm_txn->ID );
 
 		$result['deposit_paid'] = 'N';
 		$result['balance_paid'] = 'N';
@@ -207,7 +217,10 @@ function mdjm_save_event_transaction()	{
 		$result['msg']  = __( 'Unable to add transaction', 'mobile-dj-manager' );
 	}
 
-	$result['transactions'] = MDJM()->txns->show_event_transactions( $_POST['event_id'] );
+	ob_start();
+	mdjm_do_event_txn_table( $_POST['event_id'] );
+	$result['transactions'] = ob_get_contents();
+	ob_get_clean();
 
 	echo json_encode( $result );
 

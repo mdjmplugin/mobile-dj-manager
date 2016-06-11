@@ -331,25 +331,44 @@ jQuery(document).ready(function ($) {
 		},
 		
 		txns : function()	{
+
+			// Show/Hide transaction table
+			$( document.body ).on( 'click', '#mdjm_txn_toggle', function(event) {
+				$('#mdjm_txn_show').addClass('mdjm-hidden');
+				$('#mdjm_txn_hide').removeClass('mdjm-hidden');
+				$('#mdjm_event_txn_table').toggle();
+			});
 			
+			// Transaction direction
+			$( document.body ).on( 'change', '#mdjm_txn_direction', function(event) {
+				if ( 'In' == $('#mdjm_txn_direction').val() )	{
+					$('#mdjm_txn_from_container').removeClass('mdjm-hidden');
+					$('#mdjm_txn_to_container').addClass('mdjm-hidden');
+				}
+				if ( 'Out' == $('#mdjm_txn_direction').val() || '' == $('#mdjm_txn_direction').val() )	{
+					$('#mdjm_txn_to_container').removeClass('mdjm-hidden');
+					$('#mdjm_txn_from_container').addClass('mdjm-hidden');
+				}
+			});
+
 			// Save an event transation
 			$( document.body ).on( 'click', '#save_transaction', function(event) {
 				
 				event.preventDefault();
 
-				if ( $('#transaction_amount').val().length < 1 )	{
+				if ( $('#mdjm_txn_amount').val().length < 1 )	{
 					alert( mdjm_admin_vars.no_txn_amount );
 					return false;
 				}
-				if ( $('#transaction_date').val().length < 1 )	{
+				if ( $('#mdjm_txn_date').val().length < 1 )	{
 					alert( mdjm_admin_vars.no_txn_date );
 					return false;
 				}
-				if ( $('#transaction_for').val().length < 1 )	{
+				if ( $('#mdjm_txn_for').val().length < 1 )	{
 					alert( mdjm_admin_vars.no_txn_for );
 					return false;
 				}
-				if ( $('#transaction_src').val().length < 1 )	{
+				if ( $('#mdjm_txn_src').val().length < 1 )	{
 					alert( mdjm_admin_vars.no_txn_src );
 					return false;
 				}
@@ -357,13 +376,13 @@ jQuery(document).ready(function ($) {
 				var postData         = {
 					event_id        : $('#post_ID').val(),
 					client          : $('#client_name').val(),
-					amount          : $('#transaction_amount').val(),
-					date            : $('#transaction_date').val(),
-					direction       : $('#transaction_direction').val(),
-					from            : $('#transaction_from').val(),
-					to              : $('#transaction_to').val(),
-					for             : $('#transaction_for').val(),
-					src             : $('#transaction_src').val(),
+					amount          : $('#mdjm_txn_amount').val(),
+					date            : $('#mdjm_txn_date').val(),
+					direction       : $('#mdjm_txn_direction').val(),
+					from            : $('#mdjm_txn_from').val(),
+					to              : $('#mdjm_txn_to').val(),
+					for             : $('#mdjm_txn_for').val(),
+					src             : $('#mdjm_txn_src').val(),
 					action          : 'add_event_transaction'
 				};
 				
@@ -373,7 +392,7 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#transaction').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('#mdjm_event_txn_table').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 					},
 					success: function (response) {
 						if(response.type == "success") {
@@ -386,10 +405,10 @@ jQuery(document).ready(function ($) {
 						} else	{
 							alert(response.msg)
 						}
-						$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
+						$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
+					$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
