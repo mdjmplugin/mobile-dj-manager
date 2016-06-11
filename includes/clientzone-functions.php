@@ -268,7 +268,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	}
 	
 	// Buttons for events in approved state
-	if( $event_status == 'mdjm-approved' )	{
+	if( $event_status == 'mdjm-approved' && mdjm_contract_is_signed( $event_id ) )	{
 		$buttons[20] = apply_filters( 'mdjm_view_contract_action_button',
 			array(
 				'label' => __( 'View Contract', 'mobile-dj-manager' ),
