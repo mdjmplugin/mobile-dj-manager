@@ -399,6 +399,50 @@ function mdjm_get_client_email( $user_id )	{
 } // mdjm_get_client_email
 
 /**
+ * Retrieve the full address of the client.
+ *
+ * @since	1.3.7
+ * @param	int		The client ID.
+ * @return	str		The address of the client.
+ */
+function mdjm_get_client_full_address( $client_id )	{
+
+	$return = '';
+	
+	$client = get_userdata( $client_id );	
+	
+	if( ! empty( $client ) )	{
+
+		if( ! empty( $client->address1 ) )	{
+
+			$return[] = $client->address1;
+			
+			if( ! empty( $client->address2 ) )	{
+				$return[] = $client->address2;
+			}
+			
+			if( ! empty( $client->town ) )	{
+				$return[] = $client->town;
+			}
+			
+			if( ! empty( $client->county ) )	{
+				$return[] = $client->county;
+			}
+			
+			if( ! empty( $client->postcode ) )	{
+				$return[] = $client->postcode;
+			}
+
+		}
+
+	}
+	
+	$return = apply_filters( 'mdjm_get_client_full_address', $return );
+	
+	return is_array( $return ) ? implode( '<br />', $return ) : $return;
+} // mdjm_get_client_full_address
+
+/**
  * Retrieve a clients phone number.
  *
  * @since	1.3
@@ -422,6 +466,26 @@ function mdjm_get_client_phone( $user_id )	{
 } // mdjm_get_client_phone
 
 /**
+ * Retrieve a clients last login timestamp.
+ *
+ * @since	1.3
+ * @param	int		$client_id	The ID of the user to check.
+ * @return	str		The phone number of the client.
+ */
+function mdjm_get_client_last_login( $client_id )	{
+	
+	$client = get_userdata( $client_id );
+	
+	if( $client && ! empty( $client->last_login ) )	{
+		$login = $client->last_login;
+	} else	{
+		$login = __( 'Never', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_last_login', $login, $client_id );
+} // mdjm_get_client_last_login
+
+/**
  * Retrieve the client fields.
  *
  * @since	1.3
@@ -439,3 +503,47 @@ function mdjm_get_client_fields()	{
 	}
 		
 } // mdjm_get_client_fields
+
+/**
+ * Output the clients details.
+ *
+ * @since	1.3.7
+ * @param	int		$client_id	Client user ID
+ * @return	str
+ */
+function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
+
+	$client = get_userdata( $client_id );
+	
+	if ( ! $client )	{
+		return;
+	}
+
+	?>
+    <div id="mdjm-event-client-details" class="mdjm-hidden">
+        <table class="widefat mdjm_event_txn_list">
+            <tbody>
+            	<tr>
+                	<td><strong><?php _e( 'Phone', 'mobile-dj-manager' ); ?></strong><br />
+                    <?php echo '' == $client->phone1 ? __( 'No number stored', 'mobile-dj-manager' ) : $client->phone1; ?></td>
+                  	
+                	<td><strong><?php _e( 'Email', 'mobile-dj-manager' ); ?></strong><br />
+                    <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>
+                	<td rowspan="2"><strong><?php _e( 'Address', 'mobile-dj-manager' ); ?></strong><br />
+                    <?php echo mdjm_get_client_full_address( $client->ID ); ?></td>
+           		</tr>
+                
+                <tr>
+                	<td><strong><?php _e( 'Last Login', 'mobile-dj-manager' ); ?></strong><br />
+                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>
+                  	
+                	<td><strong></strong><br />
+                    </td>
+           		</tr>
+            </tbody>
+        </table>
+    </div>
+
+    <?php
+
+} // mdjm_do_client_details_table
