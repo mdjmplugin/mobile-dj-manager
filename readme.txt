@@ -80,13 +80,18 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.3.7 =
 
 **New**
+* Event transactions metabox has had a facelift
 * Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
 * Checking the balance paid checkbox auto sets the deposit to the paid status
 * Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
 * Manual event payments from the events screen now generate an email using the selected `Manual Payment Template`
 * Added content tag `{deposit_remaining}`
+* New setting `Set Client Inactive?`. When enabled, a client will be set as inactive when their event is cancelled, failed, or rejected and they have no further upcoming events
 
 **Tweaks**
+* Added function `mdjm_get_clients_next_event()` to replace method in deprecated MDJM_Events class
+* Don't display view contract link if contract not digitally signed. Applies to both admin and Client Zone
+* Make sure client is shown in dropdown when viewing a non-active event and the client is set as inactive
 * Added function `mdjm_get_event_remaining_deposit()`
 * Added method `get_remaining_deposit()` to MDJM_Event class
 * Better formatting of currencies
