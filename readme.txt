@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -80,7 +80,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.3.7 =
 
 **New**
-* Event transactions metabox has had a facelift
+* Event transactions metabox has had a facelift. Remaining metaboxes to TODO
 * Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
 * Checking the balance paid checkbox auto sets the deposit to the paid status
 * Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
