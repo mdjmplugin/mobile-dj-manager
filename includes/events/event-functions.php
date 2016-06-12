@@ -464,6 +464,91 @@ function mdjm_event_types_dropdown( $args )	{
 } // mdjm_event_types_dropdown
 
 /**
+ * Return all enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	obj		Object array of all enqury source categories.
+ */
+function mdjm_get_enquiry_sources( $args = array() )	{
+	
+	$defaults = array(
+		'taxonomy'      => 'enquiry-source',
+		'hide_empty'    => false,
+		'orderby'       => 'name',
+		'order'         => 'ASC'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$enquiry_sources = get_categories( $args );
+	
+	return apply_filters( 'mdjm_get_enquiry_sources', $enquiry_sources, $args );
+	
+} // mdjm_get_enquiry_sources
+
+/**
+ * Generate a dropdown list of enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	str		HTML output for the dropdown list.
+ */
+function mdjm_enquiry_sources_dropdown( $args )	{
+	
+	$defaults = array(
+		'show_option_none'   => '',
+		'option_none_value'  => '',
+		'orderby'            => 'name', 
+		'order'              => 'ASC',
+		'hide_empty'         => false, 
+		'echo'               => true,
+		'selected'           => 0,
+		'name'               => 'mdjm_enquiry_source',
+		'id'                 => '',
+		'class'              => 'postform',
+		'taxonomy'           => 'event-types',
+		'required'           => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['id']                = ! empty( $args['id'] )                ? $args['id']                : $args['name'];
+	$args['required']          = ! empty( $args['required'] )          ? ' required'                : '';
+	$args['class']             = ! empty( $args['class'] )             ? $args['class']             : '';
+	
+	$enquiry_sources = mdjm_get_enquiry_sources();
+	
+	$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] );
+	
+	if ( ! empty( $args['show_option_none'] ) )	{
+		$output .= sprintf( '<option value="%s">%s</option>', $args['option_none_value'], $args['show_option_none'] );
+	}
+	
+	if ( empty( $enquiry_sources ) )	{
+		$output .= sprintf( '<option value="" disabled="disabled">%s</option>', apply_filters( 'mdjm_no_enquiry_source_options', __( 'No sources found', 'mobile-dj-manager' ) ) );
+	} else	{
+	
+		foreach( $enquiry_sources as $enquiry_source )	{
+			$selected = selected( $enquiry_source->term_id, $args['selected'], false );
+			
+			$output .= sprintf( '<option value="%s"%s>%s</option>', $enquiry_source->term_id, $selected, esc_attr( $enquiry_source->name ) ) . "\n";
+			
+		}
+		
+	}
+	
+	$output .= '</select>';
+	
+	if ( ! empty( $args['echo'] ) )	{
+		echo $output;
+	} else	{
+		return $output;
+	}
+	
+} // mdjm_enquiry_sources_dropdown
+
+/**
  * Set the event type for the event.
  *
  * @since	1.3
@@ -646,6 +731,22 @@ function mdjm_get_event_deposit_status( $event_id )	{
 } // mdjm_get_event_deposit_status
 
 /**
+ * Returns the remaining deposit due for an event.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	str					The remaining deposit value due for the event.
+ */
+function mdjm_get_event_remaining_deposit( $event_id )	{
+	if( empty( $event_id ) )	{
+		return false;
+	}
+
+	$event = new MDJM_Event( $event_id );
+	return $event->get_remaining_deposit();
+} // mdjm_get_event_remaining_deposit
+
+/**
  * Determine the event deposit value based upon event cost and
  * payment settings
  *
@@ -674,6 +775,156 @@ function mdjm_calculate_deposit( $price = '' )	{
 	return mdjm_format_amount( $deposit );
 	
 } // mdjm_calculate_deposit
+
+/**
+ * Mark the event deposit as paid.
+ *
+ * Determines if any deposit remains and if so, assumes it has been paid and
+ * creates an associted transaction.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	void
+ */
+function mdjm_mark_event_deposit_paid( $event_id )	{
+
+	$mdjm_event = new MDJM_Event( $event_id );
+	$txn_id     = 0;
+	
+	if ( 'Paid' == $mdjm_event->get_deposit_status() )	{
+		return;
+	}
+
+	$remaining = $mdjm_event->get_remaining_deposit();
+
+	do_action( 'mdjm_pre_mark_event_deposit_paid', $event_id, $remaining );
+
+	if ( ! empty( $remaining ) && $remaining > 0 )	{
+		$mdjm_txn = new MDJM_Txn;
+		
+		$txn_meta = array(
+			'_mdjm_txn_source'      => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
+			'_mdjm_txn_currency'    => mdjm_get_currency(),
+			'_mdjm_txn_status'      => 'Completed',
+			'_mdjm_txn_total'       => $remaining,
+			'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+			'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+			'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+			'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
+		);
+		
+		$mdjm_txn->create( array( 'post_parent' => $event_id ), $txn_meta );
+		
+		if ( $mdjm_txn->ID > 0 )	{
+
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-deposit-payments' ) );
+
+			$args = array(
+				'user_id'          => get_current_user_id(),
+				'event_id'         => $event_id,
+				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
+					mdjm_get_deposit_label(),
+					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
+				),
+				'comment_type'     => 'mdjm-journal',
+				'comment_date'     => current_time( 'timestamp' )
+			);
+			
+			mdjm_add_journal( $args );
+
+			mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), 'mdjm_content_tag_deposit_label' );
+			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
+			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+			
+			do_action( 'mdjm_post_add_manual_txn_in', $event_id, $mdjm_txn->ID );
+			
+		}
+
+	}
+
+	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
+
+	do_action( 'mdjm_post_mark_event_deposit_paid', $event_id );
+
+} // mdjm_mark_event_deposit_paid
+
+/**
+ * Mark the event balance as paid.
+ *
+ * Determines if any balance remains and if so, assumes it has been paid and
+ * creates an associted transaction.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	void
+ */
+function mdjm_mark_event_balance_paid( $event_id )	{
+
+	$mdjm_event = new MDJM_Event( $event_id );
+	$txn_id     = 0;
+	
+	if ( 'Paid' == $mdjm_event->get_balance_status() )	{
+		return;
+	}
+
+	$remaining = $mdjm_event->get_balance();
+
+	do_action( 'mdjm_pre_mark_event_balance_paid', $event_id, $remaining );
+
+	if ( ! empty( $remaining ) && $remaining > 0 )	{
+		$mdjm_txn = new MDJM_Txn;
+		
+		$txn_meta = array(
+			'_mdjm_txn_source'      => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
+			'_mdjm_txn_currency'    => mdjm_get_currency(),
+			'_mdjm_txn_status'      => 'Completed',
+			'_mdjm_txn_total'       => $remaining,
+			'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
+			'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
+			'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
+			'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
+		);
+		
+		$mdjm_txn->create( array( 'post_parent' => $event_id ), $txn_meta );
+		
+		if ( $mdjm_txn->ID > 0 )	{
+
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-balance-payments' ) );
+
+			$args = array(
+				'user_id'          => get_current_user_id(),
+				'event_id'         => $event_id,
+				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
+					mdjm_get_balance_label(),
+					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
+				),
+				'comment_type'     => 'mdjm-journal',
+				'comment_date'     => current_time( 'timestamp' )
+			);
+			
+			mdjm_add_journal( $args );
+
+			mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), 'mdjm_content_tag_balance_label' );
+			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
+			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
+			
+			do_action( 'mdjm_post_add_manual_txn_in', $event_id, $mdjm_txn->ID );
+			
+		}
+
+	}
+
+	mdjm_update_event_meta(
+		$mdjm_event->ID,
+		array(
+			'_mdjm_event_deposit_status' => 'Paid',
+			'_mdjm_event_balance_status' => 'Paid'
+		)
+	);
+
+	do_action( 'mdjm_post_mark_event_balance_paid', $event_id );
+
+} // mdjm_mark_event_balance_paid
 
 /**
  * Returns the balance status for an event.
@@ -722,6 +973,93 @@ function mdjm_get_event_income( $event_id )	{
 	$event = new MDJM_Event( $event_id );
 	return $event->get_total_income();
 } // mdjm_get_event_income
+
+/**
+ * Displays all event transactions within a table.
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @param	int		$event_id
+ * @return	str
+ */
+function mdjm_do_event_txn_table( $event_id )	{
+
+	global $mdjm_event;
+
+	$event_txns = apply_filters( 'mdjm_event_txns', mdjm_get_txns(
+		array(
+			'post_parent' => $event_id,
+			'orderby'		=> 'post_status',
+			'meta_key'	   => '_mdjm_txn_status',										
+			'meta_query'	 => array(
+				'key'		=> '_mdjm_txn_status',
+				'value'  	  => 'Completed'
+			)
+		)
+	) );
+
+	$in  = 0;
+	$out = 0;
+
+	?>
+
+	<table class="widefat mdjm_event_txn_list">
+        <thead>
+            <tr>
+                <th style="width: 20%"><?php _e( 'Date', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 15%"><?php _e( 'In', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 15%"><?php _e( 'Out', 'mobile-dj-manager' ); ?></th>
+                <th><?php _e( 'Details', 'mobile-dj-manager' ); ?></th>
+                <?php do_action( 'mdjm_event_txn_table_head', $event_id ); ?>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if ( $event_txns ) :  ?>
+            <?php foreach ( $event_txns as $event_txn ) : ?>
+
+                <?php $txn = new MDJM_Txn( $event_txn->ID ); ?>
+
+                <tr class="mdjm_field_wrapper">
+                    <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
+                    <td>
+                        <?php if ( 	$txn->post_status == 'mdjm-income' ) : ?>
+                            <?php $in += $txn->price; ?>
+                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                        <?php else : ?>
+                            <?php echo '&ndash;' ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ( 	$txn->post_status == 'mdjm-expenditure' ) : ?>
+                            <?php $out += $txn->price; ?>
+                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                        <?php else : ?>
+                            <?php echo '&ndash;' ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $txn->get_type(); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else : ?>
+        <tr>            
+            <td colspan="4"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+        </tr>
+        <?php endif; ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th style="width: 20%">&nbsp;</th>
+            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
+            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
+            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( $mdjm_event->get_total_profit() ) ); ?></strong></th>
+        </tr>
+        <?php do_action( 'mdjm_event_txn_table_foot', $event_id ); ?>
+        </tfoot>
+    </table>
+
+	<?php
+
+} // mdjm_do_event_txn_table
 
 /**
  * Returns the client ID.
@@ -1145,8 +1483,6 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 		)
 	);
 	
-	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 	
@@ -1156,6 +1492,8 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
 	if( ! empty( $args['client_notices'] ) )	{
 		mdjm_email_enquiry_accepted( $event_id );
 	}
+	
+	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
 	return $update;
 	

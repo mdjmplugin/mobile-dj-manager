@@ -125,11 +125,11 @@
 			$mdjm_txn->create(
 				array(
 					'post_parent'           => $event_id,
-					'post_author'           => $mdjm_event->client
+					'post_author'           => $mdjm_event->client,
 				),
 				array(
 					'_mdjm_payment_from'    => $mdjm_event->client,
-					'_mdjm_txn_total'       => ( $type == mdjm_get_balance_label() ) ? mdjm_format_amount( $mdjm_event->get_balance() ) : $mdjm_event->get_deposit(),
+					'_mdjm_txn_total'       => $type == mdjm_get_balance_label() ? $mdjm_event->get_balance() : $mdjm_event->get_deposit(),
 					'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
 					'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
 					'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
@@ -141,7 +141,7 @@
 				return false;
 			}
 			
-			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-employee-wages' ) );
+			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'name', $type ) );
 										
 			/* -- Create the transaction post -- */
 			wp_update_post(

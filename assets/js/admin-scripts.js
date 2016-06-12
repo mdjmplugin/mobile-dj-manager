@@ -9,6 +9,7 @@ jQuery(document).ready(function ($) {
 			this.client();
 			this.employee();
 			this.equipment();
+			this.time();
 			this.type();
 			this.txns();
 		},
@@ -102,6 +103,12 @@ jQuery(document).ready(function ($) {
 
 			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function(event) {
 				setCost();
+			});
+			
+			$( document.body ).on( 'focusout', '#_mdjm_event_cost', function(event) {
+				if( mdjm_admin_vars.deposit_is_pct )	{
+					setDeposit();
+				}
 			});
 
 			// Set the deposit value for the event
@@ -277,6 +284,15 @@ jQuery(document).ready(function ($) {
 
 		},
 		
+		time : function()	{
+			// Set the DJ Setup Date
+			$( document.body ).on( 'change', '#display_event_date', function() {
+				if( $('#dj_setup_date').val().length < 1 )	{
+					$('#dj_setup_date').val($('#display_event_date').val());
+				}
+			});
+		},
+		
 		type : function()	{
 			// Display the text input for a new event type
 			$( document.body ).on( 'click', '#new_event_type', function() {
@@ -325,22 +341,58 @@ jQuery(document).ready(function ($) {
 		},
 		
 		txns : function()	{
+
+			// Show/Hide transaction table
+			$( document.body ).on( 'click', '#mdjm_txn_toggle', function(event) {
+				$('#mdjm_txn_show').addClass('mdjm-hidden');
+				$('#mdjm_txn_hide').removeClass('mdjm-hidden');
+				$('#mdjm_event_txn_table').toggle("slow");
+			});
 			
+			// Transaction direction
+			$( document.body ).on( 'change', '#mdjm_txn_direction', function(event) {
+				if ( 'In' == $('#mdjm_txn_direction').val() )	{
+					$('#mdjm_txn_from_container').removeClass('mdjm-hidden');
+					$('#mdjm_txn_to_container').addClass('mdjm-hidden');
+				}
+				if ( 'Out' == $('#mdjm_txn_direction').val() || '' == $('#mdjm_txn_direction').val() )	{
+					$('#mdjm_txn_to_container').removeClass('mdjm-hidden');
+					$('#mdjm_txn_from_container').addClass('mdjm-hidden');
+				}
+			});
+
 			// Save an event transation
 			$( document.body ).on( 'click', '#save_transaction', function(event) {
 				
 				event.preventDefault();
+
+				if ( $('#mdjm_txn_amount').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_amount );
+					return false;
+				}
+				if ( $('#mdjm_txn_date').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_date );
+					return false;
+				}
+				if ( $('#mdjm_txn_for').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_for );
+					return false;
+				}
+				if ( $('#mdjm_txn_src').val().length < 1 )	{
+					alert( mdjm_admin_vars.no_txn_src );
+					return false;
+				}
 				
 				var postData         = {
 					event_id        : $('#post_ID').val(),
 					client          : $('#client_name').val(),
-					amount          : $('#transaction_amount').val(),
-					date            : $('#transaction_date').val(),
-					direction       : $('#transaction_direction').val(),
-					from            : $('#transaction_from').val(),
-					to              : $('#transaction_to').val(),
-					for             : $('#transaction_for').val(),
-					src             : $('#transaction_src').val(),
+					amount          : $('#mdjm_txn_amount').val(),
+					date            : $('#mdjm_txn_date').val(),
+					direction       : $('#mdjm_txn_direction').val(),
+					from            : $('#mdjm_txn_from').val(),
+					to              : $('#mdjm_txn_to').val(),
+					for             : $('#mdjm_txn_for').val(),
+					src             : $('#mdjm_txn_src').val(),
 					action          : 'add_event_transaction'
 				};
 				
@@ -350,23 +402,23 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#transaction').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('#mdjm_event_txn_table').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 					},
 					success: function (response) {
 						if(response.type == "success") {
-							if(response.key == "deposit")	{
+							if(response.deposit_paid == "Y")	{
 								$('#deposit_paid').prop('checked', true );	
 							}
-							if(response.key == 'balance')	{
+							if(response.balance_paid == 'Y')	{
 								$('#balance_paid').prop('checked', true );	
 							}
 						} else	{
 							alert(response.msg)
 						}
-						$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
+						$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').replaceWith('<div id="transaction">' + response.transactions + '</div>')
+					$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}

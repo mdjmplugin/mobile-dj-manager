@@ -137,7 +137,8 @@ function mdjm_accept_enquiry( $data )	{
 		'event_id'		=> $mdjm_event->ID,
 		'client_id'		=> $mdjm_event->client,
 		'subject'		=> sprintf( __( '%s Quotation Accepted', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'message'		=> $content
+		'message'		=> $content,
+		'copy_to'       => 'disabled'
 	);
 	
 	mdjm_send_email_content( $args );
@@ -267,7 +268,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 	}
 	
 	// Buttons for events in approved state
-	if( $event_status == 'mdjm-approved' )	{
+	if( $event_status == 'mdjm-approved' && mdjm_contract_is_signed( $event_id ) )	{
 		$buttons[20] = apply_filters( 'mdjm_view_contract_action_button',
 			array(
 				'label' => __( 'View Contract', 'mobile-dj-manager' ),

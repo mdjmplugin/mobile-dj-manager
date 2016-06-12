@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,33 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.7 =
+
+**New**
+* Event transactions metabox has had a facelift. Remaining metaboxes to TODO
+* Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
+* Checking the balance paid checkbox auto sets the deposit to the paid status
+* Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
+* Manual event payments from the events screen now generate an email using the selected `Manual Payment Template`
+* Added content tag `{deposit_remaining}`
+* New setting `Set Client Inactive?`. When enabled, a client will be set as inactive when their event is cancelled, failed, or rejected and they have no further upcoming events
+
+**Tweaks**
+* Added function `mdjm_get_clients_next_event()` to replace method in deprecated MDJM_Events class
+* Don't display view contract link if contract not digitally signed. Applies to both admin and Client Zone
+* Make sure client is shown in dropdown when viewing a non-active event and the client is set as inactive
+* Added function `mdjm_get_event_remaining_deposit()`
+* Added method `get_remaining_deposit()` to MDJM_Event class
+* Better formatting of currencies
+* Added functions `mdjm_get_enquiry_sources()` and `mdjm_enquiry_sources_dropdown()`
+
+**Bug Fixes**
+* If deposit type is set to percentage of total cost, a JS error ocurred when focusing out of the total cost field
+* Issue [#70](https://github.com/mdjm/mobile-dj-manager/issues/70/ "Issue 70") Client phone number does not save when created on the events screen
+* Issue [#72](https://github.com/mdjm/mobile-dj-manager/issues/72/ "Issue 72") Use remove_query_arg for redirect link on login page
+* Issue [#73](https://github.com/mdjm/mobile-dj-manager/issues/73/ "Issue 73") Admin is unable to review signed contracts
+
 = 1.3.6 =
 
 * **New**    : MDJM now uses internal login functions for the Client Zone login process
@@ -763,6 +790,9 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
 
 == Upgrade Notice ==
+
+= 1.3.7 =
+Enhanced the manual event payments feature. See changelog for details.
 
 = 1.3.4.1 =
 This version addresses an issue that may result in a fatal error when selecting to save a venue during event updates. The `{contract_url}` content tag was generating incorrect output.

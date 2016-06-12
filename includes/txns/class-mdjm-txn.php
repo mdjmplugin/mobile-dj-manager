@@ -224,7 +224,7 @@ class MDJM_Txn {
 	 */
 	public function get_price() {
 		if ( empty( $this->price ) )	{
-			$this->price = mdjm_format_amount( get_post_meta( $this->ID, '_mdjm_txn_total', true ) );
+			$this->price = get_post_meta( $this->ID, '_mdjm_txn_total', true );
 		}
 		
 		return $this->price;
@@ -243,5 +243,24 @@ class MDJM_Txn {
 		
 		return $this->recipient_id;
 	} // get_recipient_id
+	
+	/**
+	 * Retrieve the transaction type.
+	 *
+	 * @since	1.3
+	 * @return	bool
+	 */
+	public function get_type() {
+		$types = wp_get_object_terms( $this->ID, 'transaction-types' );
+			
+		if( !empty( $types ) )	{
+			$return = $types[0]->name;
+		}
+		else	{
+			$return = __( 'No transaction type set', 'mobile-dj-manager' );
+		}
+					
+		return apply_filters( 'mdjm_transaction_type', $return, $this->ID );
+	} // get_type
 	
 } // class MDJM_Txn

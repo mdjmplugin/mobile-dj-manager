@@ -460,24 +460,19 @@ class MDJM_Cron	{
 		
 		$expired = date( 'Y-m-d', strtotime( "-" . $this->schedules['fail-enquiry']['options']['age'] ) );
 		
-		$args = array(
-					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
-					'post_status'	   => 'mdjm-enquiry',
-					'date_query'		=> array(
-											'before'	=> $expired,
-											),
-					);
-		
 		// Retrieve expired enquiries
-		$enquiries = get_posts( $args );
+		$enquiries = mdjm_get_events( array(
+			'post_status' => 'mdjm-enquiry',
+			'date_query'  => array(
+				'before'	=> $expired
+			)
+		) );
 		
 		$notify = array();
 		$x = 0;
 		
 		if( count( $enquiries ) > 0 )	{ // Enquiries to process
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( count( $enquiries ) . ' ' . _n( 'enquiry', 'enquiries', count( $enquiries ) ) . ' to expire' );
+			MDJM()->debug->log_it( count( $enquiries ) . ' ' . _n( 'enquiry', 'enquiries', count( $enquiries ) ) . ' to expire' );
 			
 			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 			
@@ -494,31 +489,32 @@ class MDJM_Cron	{
 				
 				$cron_update[$this->schedules['fail-enquiry']['slug']] = time();
 				
-				wp_update_post( array( 'ID' => $enquiry->ID, 'post_status' => 'mdjm-failed' ) );
-				
-				update_post_meta( $enquiry->ID, '_mdjm_event_last_updated_by', 0 );
-				update_post_meta( $enquiry->ID, '_mdjm_event_tasks', json_encode( $cron_update ) );
+				mdjm_update_event_status(
+					$enquiry->ID,
+					'mdjm-failed',
+					$enquiry->post_status,
+					array(
+						'meta' => array(
+							'_mdjm_event_tasks' => json_encode( $cron_update )
+						)
+					)
+				);
 				
 				/* -- Update Journal -- */
-				if( MDJM_JOURNAL == true )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Adding journal entry' );
-							
-					MDJM()->events->add_journal( array(
-								'user' 			=> 1,
-								'event'		   => $enquiry->ID,
-								'comment_content' => 'Enquiry marked as lost via Scheduled Task <br /><br />' . time(),
-								'comment_type' 	=> 'mdjm-journal',
-								),
-								array(
-									'type' 		  => 'update-event',
-									'visibility'	=> '1',
-								) );
-				} // End if( MDJM_JOURNAL == true )
-				else	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Journalling is disabled' );	
-				}
+				MDJM()->debug->log_it( '	-- Adding journal entry' );
+						
+				MDJM()->events->add_journal(
+					array(
+						'user' 			=> 1,
+						'event'		   => $enquiry->ID,
+						'comment_content' => 'Enquiry marked as lost via Scheduled Task <br /><br />' . time(),
+						'comment_type' 	=> 'mdjm-journal',
+					),
+					array(
+						'type' 		  => 'update-event',
+						'visibility'	=> '1',
+					)
+				);
 				
 				$notify_dj = isset( $this->schedules['fail-enquiry']['options']['notify_dj'] ) ? $this->schedules['fail-enquiry']['options']['notify_dj'] : '';
 				$notify_admin = isset( $this->schedules['fail-enquiry']['options']['notify_admin'] ) ? $this->schedules['fail-enquiry']['options']['notify_admin'] : '';
@@ -536,8 +532,7 @@ class MDJM_Cron	{
 			
 				/* Prepare admin notification email data array */
 				if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+					MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
 						
 					if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
 					
@@ -553,8 +548,7 @@ class MDJM_Cron	{
 				
 				/* Prepare DJ notification email data array */
 				if( !empty( $notify_dj ) && $notify_dj == 'Y' )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+					MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
 						
 					if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
 					$notify['dj'][$dj] = array();
@@ -630,8 +624,7 @@ class MDJM_Cron	{
 		} // if( count( $enquiries ) > 0 )
 		
 		else	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'No enquiries to process as failed' );	
+			MDJM()->debug->log_it( 'No enquiries to process as failed' );	
 		}
 					
 		// Prepare next run time

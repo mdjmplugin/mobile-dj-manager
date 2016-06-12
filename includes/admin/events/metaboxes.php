@@ -45,12 +45,23 @@ add_action( 'admin_head', 'mdjm_remove_event_meta_boxes' );
  * @return
  */
 function mdjm_add_event_meta_boxes( $post )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$save              = __( 'Create', 'kb-support' );
+	$mdjm_event_update = false;
+	$mdjm_event        = new MDJM_Event( $post->ID );
+	
+	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status )	{
+		$mdjm_event_update = true;
+	}
+
 	$metaboxes = apply_filters( 'mdjm_event_add_metaboxes',
 		array(
 			array(
 				'id'		  => 'mdjm-event-client',
 				'title'	   => __( 'Client Details', 'mobile-dj-manager' ),
-				'callback'	=> 'mdjm_event_metabox_client_details',
+				'callback'	=> 'mdjm_event_metabox_client_callback',
 				'context'	 => 'normal',
 				'priority'	=> 'high',
 				'args'		=> array(),
@@ -100,7 +111,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 			array(
 				'id'		  => 'mdjm-event-transactions',
 				'title'	   => __( 'Transactions', 'mobile-dj-manager' ),
-				'callback'	=> 'mdjm_event_metabox_transactions',
+				'callback'	=> 'mdjm_event_metabox_transactions_callback',
 				'context'	 => 'normal',
 				'priority'	=> 'low',
 				'args'		=> array(),
@@ -172,9 +183,19 @@ add_action( 'add_meta_boxes_mdjm-event', 'mdjm_add_event_meta_boxes' );
  * @param	obj		$post		Required: The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_client_details( $post )	{
+function mdjm_event_metabox_client_callback( $post )	{
+
+	/*global $post, $mdjm_event, $mdjm_event_update;
+
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-event' . '_nonce' );
-		
+
+	/*
+	 * Output the items for the client metabox
+	 * @since	1.3.7
+	 * @param	int	$post_id	The Event post ID
+	 */
+	//do_action( 'mdjm_event_client_fields', $post->ID );
+
 	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
 	
 	$clients = get_users(
@@ -197,6 +218,9 @@ function mdjm_event_metabox_client_details( $post )	{
 				/* -- Build the drop down box -- */
 				echo !empty( $clients ) && $existing_event == false ? '<option value="">' . __( '--- Select Client ---', 'mobile-dj-manager' ) . '</option>' . "\r\n" : '';
 				echo ( $existing_event == false && ( mdjm_employee_can( 'list_all_clients' ) ) ? '<option value="add_new">' . __( '--- Add New Client ---', 'mobile-dj-manager' ) . '</option>' . "\r\n" : '' );
+				if ( ! empty( $client_id ) && ( 'mdjm-cancelled' == $post->post_status || 'mdjm-failed' == $post->post_status || 'mdjm-rejected' == $post->post_status ) ) : ?>
+                    <option value="<?php echo $client_id; ?>"><?php echo mdjm_get_client_display_name( $client_id ); ?></option>
+			<?php endif;
 				foreach( $clients as $client )	{
 					echo '<option value="' . $client->ID . '"';
 					selected( $client->ID, $client_id );
@@ -344,10 +368,10 @@ function mdjm_event_metabox_client_details( $post )	{
 		}
 		?>
 	</div>
-	
 	<?php
+	
 	do_action( 'mdjm_events_client_metabox_last', $post, $client_id );
-} // mdjm_event_metabox_client_details
+} // mdjm_event_metabox_client_callback
 
 /**
  * Output for the Event Details meta box.
@@ -625,20 +649,6 @@ function mdjm_event_metabox_event_details( $post )	{
 	</div>
 	<!-- End of fifth row -->
 	<?php
-	// Update event deposit when manually updating cost field
-	if ( mdjm_get_option( 'deposit_type' ) && mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
-		?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($) 	{
-			$('#_mdjm_event_cost').on('focusout', '', function()	{
-				var current_cost = $("#_mdjm_event_cost").val(); // Current event cost
-				
-				set_deposit($);
-			});
-		});
-		</script>
-		<?php
-	}
 	do_action( 'mdjm_events_metabox_last', $post );
 } // mdjm_event_metabox_event_details
 
@@ -1078,108 +1088,24 @@ function mdjm_event_metabox_administration( $post )	{
  * Output for the Event Transactions meta box.
  *
  * @since	1.3
- * @param	obj		$post		Required: The post object (WP_Post).
+ * @global	obj		$post				WP_Post object
+ * @global	obj		$mdjm_event			MDJM_Ticket class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new
+ * @param	obj		$post				The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_transactions( $post )	{
-											
-	echo '<div id="transaction">' . "\r\n";
-	
-	$transactions = MDJM()->txns->show_event_transactions( $post->ID );
-	echo $transactions;
-	echo '</div>' . "\r\n";
-	
-	/* -- Display New Transaction Form -- */
-	echo '<hr size="1" />' . "\r\n";
-	mdjm_insert_datepicker(
-		array(
-			'class'		=> 'trans_date',
-			'altfield'	=> 'transaction_date',
-			'maxdate'	=> 'today'
-		)
-	);
-	
-	echo '<div class="mdjm-post-row">' . "\r\n";
-		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_amount">' . __( 'Amount:', 'mobile-dj-manager' ) . '</label><br />' . 
-				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="mdjm-input-currency" placeholder="' . 
-					mdjm_sanitize_amount( '10' ) . '" />' . "\r\n";
-		echo '</div>' . "\r\n";
-	
-		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_display_date">' . __( 'Date:', 'mobile-dj-manager' ) . '</label><br />' . 
-			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date" />' .
-			'<input type="hidden" name="transaction_date" id="transaction_date" />' . "\r\n";
-		echo '</div>' . "\r\n";
-	
-		echo '<div class="mdjm-post-last-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_direction">' . __( 'Direction:', 'mobile-dj-manager' ) . '</label><br />' . 
-			'<select name="transaction_direction" id="transaction_direction" onChange="displayPaid();">' . "\r\n" . 
-			'<option value="In">' . __( 'Incoming', 'mobile-dj-manager' ) . '</option>' . "\r\n" . 
-			'<option value="Out">' . __( 'Outgoing', 'mobile-dj-manager' ) . '</option>' . "\r\n" . 
-			'</select>' . "\r\n";
-		echo '</div>' . "\r\n";
-	echo '</div>' . "\r\n";	
-	?>
-	<script type="text/javascript">
-	function displayPaid() {
-		var direction  =  document.getElementById("transaction_direction");
-		var direction_val = direction.options[direction.selectedIndex].value;
-		var paid_from_div =  document.getElementById("paid_from_field");
-		var paid_to_div =  document.getElementById("paid_to_field");
-	
-	  if (direction_val == 'Out') {
-		  paid_from_div.style.display = "none";
-		  paid_to_div.style.display = "block";
-	  }
-	  else {
-		  paid_from_div.style.display = "block";
-		  paid_to_div.style.display = "none";
-	  }  
-	} 
-	</script>
-	<?php
-	echo '<div class="mdjm-post-row">' . "\r\n";
-		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<div id="paid_from_field">' . "\r\n";
-				echo '<label class="mdjm-label" for="transaction_from">' . __( 'Paid From:', 'mobile-dj-manager' ) . '</label><br />' . 
-					'<input type="text" name="transaction_from" id="transaction_from" class="regular_text" /> ' . 
-					'<span class="description">' . __( 'Leave empty if from client', 'mobile-dj-manager' ) . '</span>';	
-			echo '</div>' . "\r\n";
-			
-			echo '<div id="paid_to_field">' . "\r\n";
-				echo '<label class="mdjm-label" for="transaction_to">' . __( 'Paid To:', 'mobile-dj-manager' ) . '</label><br />' . 
-					'<input type="text" name="transaction_to" id="transaction_to" class="regular_text" /> ' . 
-					'<span class="description">' . __( 'Leave empty if to client', 'mobile-dj-manager' ) . '</span>';
-			echo '</div>' . "\r\n";
-		echo '</div>' . "\r\n";
-		
-		$types = mdjm_get_txn_types();
-		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_for">' . __( 'Details:', 'mobile-dj-manager' ) . '</label><br />' . 
-				'<select name"transaction_for" id="transaction_for">' . 
-				'<option value="">' . __( '--- Select ---', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-				foreach( $types as $type )	{
-					echo '<option value="' . $type->term_id . '">' . $type->name . '</option>' . "\r\n";	
-				}
-				echo '</select>' . "\r\n";
-		echo '</div>' . "\r\n";
-		
-		$sources = mdjm_get_txn_source();
-		echo '<div class="mdjm-post-last-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_src">' . __( 'Source:', 'mobile-dj-manager' ) . '</label><br />' . "\r\n" . 
-				'<select name="transaction_src" id="transaction_src">' . "\r\n" . 
-				'<option value="">' . __( '--- Select ---', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-				foreach( $sources as $source )	{
-					echo '<option value="' . $source . '"' . 
-						selected( $GLOBALS['mdjm_settings']['payments']['default_type'], $source, false ) . 
-						'>' . $source . '</option>' . "\r\n";	
-				}
-				echo '</select>' . "\r\n";
-		echo '</div>' . "\r\n";
-		echo '</div>' . "\r\n";
-	echo '<p><input type="button" name="save_transaction" id="save_transaction" class="button button-secondary button-small" value="' . __( 'Add Transaction', 'mobile-dj-manager' ) . '" /></p>' . "\r\n";
-} // mdjm_event_metabox_transactions
+function mdjm_event_metabox_transactions_callback( $post )	{
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+	/*
+	 * Output the items for the event transactions metabox
+	 * @since	1.3.7
+	 * @param	int	$post_id	The Event post ID
+	 */
+	do_action( 'mdjm_event_txn_fields', $post->ID );
+									
+} // mdjm_event_metabox_transactions_callback
 
 /**
  * Output for the Event History meta box.
@@ -1373,11 +1299,11 @@ function mdjm_event_metabox_event_options( $post )	{
 			</select>
 		</div>
 	</div>
-    <?php if( mdjm_is_admin() && ( $post->post_status == 'mdjm-approved' || $post->post_status == 'mdjm-completed' ) ) : ?>
+    <?php if( mdjm_employee_can( 'manage_events' ) && mdjm_contract_is_signed( $post->ID ) ) : ?>
 		<div class="mdjm-meta-row">
 			<div class="mdjm-left-col">
 		<?php
-		echo '<a id="view_contract" class="side-meta" href="' . mdjm_get_formatted_url( get_post_meta( $post->ID, '_mdjm_event_signed_contract', true ), false ) . '" target="_blank">View Signed Contract</a>';
+		echo '<a id="view_contract" class="side-meta" href="' . esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $post->ID ), home_url() ) ) . '" target="_blank">View Signed Contract</a>';
 		?>
 			</div>
 		</div>
@@ -1523,3 +1449,187 @@ function mdjm_event_metabox_event_options( $post )	{
 	</div>
 	<?php
 } // mdjm_event_metabox_event_options
+
+/**
+ * Output the event client row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_client_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$clients = mdjm_get_clients( 'client' );
+
+	?>
+	<div class="mdjm_form_fields">
+        <label for="client_name"><?php _e(' Select Client:' ); ?></label><br />
+        <select name="client_name" id="client_name">
+        <?php if ( ! $mdjm_event_update ) : ?>
+            <option value=""><?php _e( '--- Select Client ---', 'mobile-dj-manager' ); ?></option>
+        <?php endif; ?>
+
+        <?php if ( $mdjm_event->client ) : ?>
+            <option value="<?php echo $mdjm_event->client; ?>"><?php echo mdjm_get_client_display_name( $mdjm_event->client ); ?></option>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $clients ) ) : ?>
+            <?php foreach( $clients as $client ) : ?>
+                <option value="<?php echo $client->ID; ?>"><?php echo $client->display_name; ?></option>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        </select>
+        <?php if ( mdjm_employee_can( 'view_clients_list' ) && $mdjm_event_update && $mdjm_event->client ) : ?>
+            <span class="description"><a style="font-size: 11px;" id="client_details"><?php _e( 'Display Client Details', 'mobile-dj-manager' ); ?></a></span>
+        <?php endif; ?>
+	</div>
+	<?php
+} // mdjm_event_metabox_client_row
+//add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_row', 10 );
+
+/**
+ * Output the event client details row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_client_details_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	if( ! mdjm_employee_can( 'view_clients_list' ) )	{
+		return;
+	}
+
+	$client = get_userdata( $mdjm_event->client );
+	
+	if ( ! $client )	{
+		return;
+	}
+
+	?>
+    <div id="mdjm_event_client_details" class="mdjm_form_fields">
+    	<div class="col3">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+        <div class="col3">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+        <div class="col3-last">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+    </div>
+    <?php
+} // mdjm_event_metabox_client_details_row
+//add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
+
+/**
+ * Output the event transaction list table
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_txn_table( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+	<p><strong><?php _e( 'All Transactions', 'mobile-dj-manager' ); ?></strong> <span class="mdjm-small">(<a id="mdjm_txn_toggle"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</span></p>
+	<div id="mdjm_event_txn_table" class="mdjm_meta_table_wrap">
+        <?php mdjm_do_event_txn_table( $event_id ); ?>
+	</div>
+	<?php
+} // mdjm_event_metabox_txn_table
+add_action( 'mdjm_event_txn_fields', 'mdjm_event_metabox_txn_table', 10 );
+
+/**
+ * Output the event transaction list table
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_add_txn_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+	
+	mdjm_insert_datepicker(
+		array(
+			'id'		=> 'mdjm_txn_display_date',
+			'altfield'	=> 'mdjm_txn_date',
+			'maxdate'	=> 'today'
+		)
+	);
+
+	?>
+    <p><strong><?php _e( 'Add Transaction', 'mobile-dj-manager' ); ?></strong></p>
+    <div class="mdjm_form_fields">
+		<div class="col3">
+            <p><label for="mdjm_txn_amount"><?php _e( 'Amount', 'mobile-dj-manager' ); ?></label><br />
+                <input type="text" name="mdjm_txn_amount" id="mdjm_txn_amount" class="mdjm-input-currency" placeholder="<?php echo mdjm_sanitize_amount( '10' ); ?>" />
+            </p>
+        </div>
+        <div class="col3">
+            <p><label for="mdjm_txn_display_date"><?php _e( 'Date', 'mobile-dj-manager' ); ?></label><br />
+               <input type="text" name="mdjm_txn_display_date" id="mdjm_txn_display_date" />
+               <input type="hidden" name="mdjm_txn_date" id="mdjm_txn_date" />
+            </p>
+        </div>
+        <div class="col3-last">
+            <p><label for="mdjm_txn_direction"><?php _e( 'Direction', 'mobile-dj-manager' ); ?></label><br />
+                <select name="mdjm_txn_direction" id="mdjm_txn_direction">
+                    <option value="In"><?php _e( 'Incoming', 'mobile-dj-manager' ); ?></option>
+                    <option value="Out"><?php _e( 'Outgoing', 'mobile-dj-manager' ); ?></option>
+                </select>
+            </p>
+        </div>
+        <div id="mdjm_txn_from_container" class="col3">
+            <p><label for="mdjm_txn_from"><?php _e( 'From', 'mobile-dj-manager' ); ?></label><br />
+                <input type="text" name="mdjm_txn_from" id="mdjm_txn_from" class="mdjm-input" placeholder="<?php _e( 'Leave empty if client', 'mobile-dj-manager' ); ?>" /><br />
+            </p>
+        </div>
+        <div id="mdjm_txn_to_container" class="col3 mdjm-hidden">
+            <p><label for="mdjm_txn_to"><?php _e( 'To', 'mobile-dj-manager' ); ?></label><br />
+                <input type="text" name="mdjm_txn_to" id="mdjm_txn_to" class="mdjm-input" placeholder="<?php _e( 'Leave empty if client', 'mobile-dj-manager' ); ?>" />
+            </p>
+        </div>
+        <div class="col3">
+            <p><label for="mdjm_txn_for"><?php _e( 'For', 'mobile-dj-manager' ); ?></label><br />
+               <select name="mdjm_txn_for" id="mdjm_txn_for">
+               		<option value=""><?php _e( '--- Select ---', 'mobile-dj-manager' ); ?></option>
+                    <?php foreach( mdjm_get_txn_types() as $type ) : ?>
+                        <option value="<?php echo $type->term_id; ?>"><?php echo esc_attr( $type->name ); ?></option>
+                    <?php endforeach; ?>
+               </select>
+            </p>
+        </div>
+        <div class="col3-last">
+            <p><label for="mdjm_txn_src"><?php _e( ' Source', 'mobile-dj-manager' ); ?></label><br />
+                <select name="mdjm_txn_src" id="mdjm_txn_src">
+               		<option value=""><?php _e( '--- Select ---', 'mobile-dj-manager' ); ?></option>
+                    <?php foreach( mdjm_get_txn_source() as $source ) : ?>
+                        <option value="<?php echo esc_attr( $source ); ?>"<?php selected( mdjm_get_option( 'default_type' ), $source ); ?>><?php echo esc_attr( $source ); ?></option>
+                    <?php endforeach; ?>
+               </select>
+            </p>
+        </div>
+        <p><a id="save_transaction" class="button button-secondary button-small"><?php _e( 'Add Transaction', 'mobile-dj-manager' ); ?></a></p>
+    </div>
+	<?php
+} // mdjm_event_metabox_add_txn_row
+add_action( 'mdjm_event_txn_fields', 'mdjm_event_metabox_add_txn_row', 20 );

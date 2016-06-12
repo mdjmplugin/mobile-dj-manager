@@ -233,7 +233,11 @@ function mdjm_email_booking_confirmation( $event_id )	{
  * @return	void
  */
 function mdjm_email_manual_payment_confirmation( $event_id )	{
-	
+
+	if( ! mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+		return;
+	}
+
 	$mdjm_event   = mdjm_get_event( $event_id );
 
 	$from_name    = mdjm_email_set_from_name( 'manual_payment', $mdjm_event );
@@ -266,12 +270,13 @@ function mdjm_email_manual_payment_confirmation( $event_id )	{
 	$emails->__set( 'track', apply_filters( 'mdjm_track_email_manual_payment', mdjm_get_option( 'track_client_emails' ) ) );
 	
 	if ( mdjm_get_option( 'bcc_admin_to_client' ) )	{
-		$emails->__set( 'copy_to', mdjm_get_option( 'system_email' ) );
+		$emails->__set( 'copy_to', array( mdjm_get_option( 'system_email' ) ) );
 	}
 	
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) );
 	
 } // mdjm_email_manual_payment_confirmation
+add_action( 'mdjm_post_add_manual_txn_in', 'mdjm_email_manual_payment_confirmation' );
 
 /**
  * Retrieve the email subject for the given template.

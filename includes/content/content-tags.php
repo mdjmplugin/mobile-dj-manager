@@ -408,6 +408,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_deposit_label'
 		),
 		array(
+			'tag'         => 'deposit_remaining',
+			'description' => sprintf( __( 'The remaining %s value due for the %s', 'mobile-dj-manager' ), mdjm_get_deposit_label(), mdjm_get_label_singular( true ) ),
+			'function'    => 'mdjm_content_tag_deposit_remaining'
+		),
+		array(
 			'tag'         => 'deposit_status',
 			'description' => __( "The deposit payment status. Generally 'Paid' or 'Due'", 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_deposit_status'
@@ -1135,10 +1140,10 @@ function mdjm_content_tag_balance( $event_id='' )	{
 	$cost = get_post_meta( $event_id, '_mdjm_event_cost', true );
 	
 	if( !empty( $rcvd ) && $rcvd != '0.00' && !empty( $cost ) )	{
-		return mdjm_currency_filter( mdjm_sanitize_amount( ( $cost - $rcvd ) ) );	
+		return mdjm_currency_filter( mdjm_format_amount( ( $cost - $rcvd ) ) );	
 	}
 	
-	return mdjm_currency_filter( mdjm_sanitize_amount( $cost ) );
+	return mdjm_currency_filter( mdjm_format_amount( $cost ) );
 } // mdjm_content_tag_balance
 
 /**
@@ -1266,7 +1271,7 @@ function mdjm_content_tag_deposit( $event_id='' )	{
 	$deposit = get_post_meta( $event_id, '_mdjm_event_deposit', true );
 	
 	if( !empty( $deposit ) )	{
-		$return = mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) );
+		$return = mdjm_currency_filter( mdjm_format_amount( $deposit ) );
 	}
 	else	{
 		$return = '';
@@ -1287,6 +1292,23 @@ function mdjm_content_tag_deposit( $event_id='' )	{
 function mdjm_content_tag_deposit_label()	{
 	return mdjm_get_deposit_label();
 } // mdjm_content_tag_deposit_label
+
+/**
+ * Content tag: deposit_remaining.
+ * Value of deposit remaining to be paid.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The remaining amount to be paid towards the deposit.
+ */
+function mdjm_content_tag_deposit_remaining( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return '';
+	}
+	
+	return mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_remaining_deposit( $event_id ) ) );
+} // mdjm_content_tag_deposit_remaining
 
 /**
  * Content tag: deposit_status.

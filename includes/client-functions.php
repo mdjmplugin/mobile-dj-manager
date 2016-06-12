@@ -88,11 +88,12 @@ function mdjm_add_client( $user_data = array() )	{
 	}
 	
 	$defaults = array(
-		'first_name' => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] )	: '',
-		'last_name'  => ! empty( $_POST['client_lastname'] )		? ucwords( $_POST['client_lastname'] )	: '',
-		'user_email' => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
-		'user_pass'  => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
-		'role'       => 'client'
+		'first_name'   => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] ) : '',
+		'last_name'    => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
+		'user_email'   => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
+		'user_pass'    => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
+		'role'         => 'client',
+		'client_phone' => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: ''
 	);
 	
 	$defaults['display_name'] = $defaults['first_name'] . ' ' . $defaults['last_name'];
@@ -205,8 +206,31 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
 function mdjm_get_clients_next_event( $client_id = '' )	{
 	
 	$client_id = ! empty( $client_id ) ? $client_id : get_current_user_id();
-	
-	return MDJM()->events->next_event( $client_id, 'client' );
+
+	$args = array(
+		'post_status'     => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
+		'posts_per_page'  => 1,
+		'meta_key'        => '_mdjm_event_date',
+		'meta_query'      => array(
+			'relation'    => 'AND',
+			array( 
+				'key'     => '_mdjm_event_client',
+				'value'   => $client_id
+			),
+			array(
+				'key'     => '_mdjm_event_date',
+				'value'   => date( 'Y-m-d' ),
+				'compare' => '>=',
+				'type'    => 'date',
+			)
+		),
+		'orderby'         => 'meta_value',
+		'order'           => 'ASC'
+	);
+				
+	$next_event = mdjm_get_events( $args );
+		
+	return apply_filters( 'mdjm_get_clients_next_event', $next_event );	
 	
 } // mdjm_get_clients_next_event
 
@@ -224,6 +248,63 @@ function mdjm_user_is_client( $client_id )	{
 	
 	return false;
 } // mdjm_user_is_client
+
+/**
+ * Updates a clients status.
+ *
+ * @since	1.3.7
+ * @param	int		$client_id	The client user ID
+ * @param	str		$status		'active' or 'inactive'
+ * @return	void
+ */
+function mdjm_update_client_status( $client_id, $status = 'active' )	{
+
+	if ( $status == 'inactive' )	{
+		$role = 'inactive_client';
+	} else	{
+		$role = 'client';
+	}
+
+	$user = new WP_User( $client_id );
+					
+	$user->set_role( $role );
+
+} // mdjm_update_client_status
+
+/**
+ * Listen for event status changes and update the client status.
+ *
+ * @since	1.3.7
+ * @param	bool	$result		True if the event status change was successful, false if not
+ * @param	int		$event_id
+ * @return	void
+ */
+function mdjm_set_client_status_inactive( $result, $event_id )	{
+
+	if ( ! mdjm_get_option( 'set_client_inactive' ) )	{
+		return;
+	}
+
+	if ( ! $result )	{
+		return;
+	}
+	
+	$client_id = mdjm_get_event_client_id( $event_id );
+	
+	if ( empty( $client_id ) )	{
+		return;
+	}
+	
+	$next_event = mdjm_get_clients_next_event( $client_id );
+	
+	if ( ! $next_event )	{
+		mdjm_update_client_status( $client_id, 'inactive' );
+	}
+
+} // mdjm_set_client_status_inactive
+add_action( 'mdjm_post_update_event_status_mdjm-cancelled', 'mdjm_set_client_status_inactive', 10, 2 );
+add_action( 'mdjm_post_update_event_status_mdjm-failed', 'mdjm_set_client_status_inactive', 10, 2 );
+add_action( 'mdjm_post_update_event_status_mdjm-rejected', 'mdjm_set_client_status_inactive', 10, 2 );
 
 /**
  * Retrieve a clients first name.
@@ -299,7 +380,7 @@ function mdjm_get_client_display_name( $user_id )	{
  *
  * @since	1.3
  * @param	int		$user_id	The ID of the user to check.
- * @return	str		The first name of the client.
+ * @return	str		The email address of the client.
  */
 function mdjm_get_client_email( $user_id )	{
 	if( empty( $user_id ) )	{
@@ -316,6 +397,29 @@ function mdjm_get_client_email( $user_id )	{
 	
 	return apply_filters( 'mdjm_get_client_email', $email, $user_id );
 } // mdjm_get_client_email
+
+/**
+ * Retrieve a clients phone number.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The phone number of the client.
+ */
+function mdjm_get_client_phone( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->phone1 ) )	{
+		$phone = $client->phone1;
+	} else	{
+		$phone = __( 'Phone number not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_phone', $phone, $user_id );
+} // mdjm_get_client_phone
 
 /**
  * Retrieve the client fields.

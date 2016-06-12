@@ -315,3 +315,21 @@ checkbox.mdjm-form-error {
 	width:25%;
 	height:100%;
 }
+
+/* =Metaboxes
+-------------------------------------------------------------- */
+.mdjm_field_wrapper { position: relative; }
+.mdjm_form_fields input,
+.mdjm_form_fields select,
+.mdjm_form_fields textarea { margin: 4px; min-width: 150px; }
+.mdjm_form_fields textarea { width: 100%; }
+.mdjm_form_fields .submit input { width: auto; }
+.mdjm_form_fields label { font-weight: bold; }
+.mdjm_form_fields.description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
+
+.mdjm_event_txn_add_wrap { width: 100%; }
+
+.col2 { float: left; width: 50%; }
+.col2-last { float: right; width: 50%; }
+.col3 { float: left; width: 33%; }
+.col3-last { float: right; width: 33%; }
