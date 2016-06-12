@@ -15,6 +15,7 @@
 .mdjm-wrap a { text-decoration: none; }
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
+a.mdjm-fake { cursor: pointer; cursor: hand; }
 #mdjm-loader	{
 	max-width: 20px;
 	margin: auto;
@@ -318,7 +319,7 @@ checkbox.mdjm-form-error {
 
 /* =Metaboxes
 -------------------------------------------------------------- */
-.mdjm_field_wrapper { position: relative; }
+.mdjm_form_fields { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
 .mdjm_form_fields textarea { margin: 4px; min-width: 150px; }
@@ -333,3 +334,5 @@ checkbox.mdjm-form-error {
 .col2-last { float: right; width: 50%; }
 .col3 { float: left; width: 33%; }
 .col3-last { float: right; width: 33%; }
+
+#mdjm-event-client-details { padding-top: 5px; }

@@ -185,7 +185,7 @@ add_action( 'add_meta_boxes_mdjm-event', 'mdjm_add_event_meta_boxes' );
  */
 function mdjm_event_metabox_client_callback( $post )	{
 
-	/*global $post, $mdjm_event, $mdjm_event_update;
+	global $post, $mdjm_event, $mdjm_event_update;
 
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-event' . '_nonce' );
 
@@ -194,183 +194,8 @@ function mdjm_event_metabox_client_callback( $post )	{
 	 * @since	1.3.7
 	 * @param	int	$post_id	The Event post ID
 	 */
-	//do_action( 'mdjm_event_client_fields', $post->ID );
+	do_action( 'mdjm_event_client_fields', $post->ID );
 
-	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
-	
-	$clients = get_users(
-		array(
-			'role' => 'client',
-			'orderby' => 'display_name',
-			'order' => 'ASC',
-		)
-	);
-	
-	$client_id = get_post_meta( $post->ID, '_mdjm_event_client', true );
-	
-	?>
-	<div class="mdjm-post-row-single">
-		<div class="mdjm-post-1column">
-			<input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
-			<label for="client_name" class="mdjm-label"><?php _e(' Select Client:' ); ?></label><br />
-			<select name="client_name" id="client_name" class="required" onchange="displayClientFields();">
-			<?php
-				/* -- Build the drop down box -- */
-				echo !empty( $clients ) && $existing_event == false ? '<option value="">' . __( '--- Select Client ---', 'mobile-dj-manager' ) . '</option>' . "\r\n" : '';
-				echo ( $existing_event == false && ( mdjm_employee_can( 'list_all_clients' ) ) ? '<option value="add_new">' . __( '--- Add New Client ---', 'mobile-dj-manager' ) . '</option>' . "\r\n" : '' );
-				if ( ! empty( $client_id ) && ( 'mdjm-cancelled' == $post->post_status || 'mdjm-failed' == $post->post_status || 'mdjm-rejected' == $post->post_status ) ) : ?>
-                    <option value="<?php echo $client_id; ?>"><?php echo mdjm_get_client_display_name( $client_id ); ?></option>
-			<?php endif;
-				foreach( $clients as $client )	{
-					echo '<option value="' . $client->ID . '"';
-					selected( $client->ID, $client_id );
-					echo '>' . $client->display_name . '</option>' . "\r\n";
-				}
-			?>
-			</select>
-			<?php
-			if( mdjm_employee_can( 'view_clients_list' ) && $post->post_status != 'auto-draft' && !empty( $client_id ) )
-				echo '<a style="font-size: 11px;" id="client_details_show">' . __( 'Display Client Details', 'mobile-dj-manager' ) . '</a>';
-			?>
-		</div>
-	</div>
-	<style>
-	#client_fields	{
-		display: <?php echo ( empty( $clients ) ? 'block;' : 'none;' ); ?>
-	}
-	#client_details	{
-		display: none;
-	}
-	</style>
-	<div id="client_fields">
-	<script type="text/javascript">
-	function displayClientFields() {
-		var user = document.getElementById("client_name");
-		var user_val = user.options[user.selectedIndex].value;
-		var client_div =  document.getElementById("client_fields");
-		<?php
-		if( $existing_event == false )	{
-			?>
-			var block_emails = document.getElementById("mdjm_block_emails");
-			var reset_pw = document.getElementById("mdjm_reset_pw");
-			<?php
-		}
-		?>
-		var client_firstname = document.getElementById("client_firstname");
-		var client_email = document.getElementById("client_email");
-	
-		if (user_val == 'add_new') {
-			client_div.style.display = "block";
-			<?php
-			if( $existing_event == false )	{
-				?>
-				block_emails.checked = false;
-				reset_pw.checked = true;
-				<?php
-			}
-			?>
-			client_firstname.className = client_firstname.className +("required");
-			client_email.className = client_email.className +("required");
-			}
-		else {
-			client_div.style.display = "none";
-			<?php
-			if( $existing_event == false )	{
-				?>
-				reset_pw.checked = false;
-				<?php
-			}
-			?>
-			client_firstname.className = "";
-			client_email.className = "";
-		}
-		<?php
-		if( $existing_event == false )	{
-			?>
-			showTemplateOptions();
-			<?php
-		}
-		?>
-	}
-	</script>
-		<div class="mdjm-post-row">
-			<div class="mdjm-post-2column">
-				<label for="client_firstname" class="mdjm-label"><?php _e( 'First Name:', 'mobile-dj-manager' ); ?></label><br />
-				<input type="text" id="client_firstname" name="client_firstname" value="" />
-			</div>
-			<div class="mdjm-post-last-2column">
-				<label for="client_last_name" class="mdjm-label"><?php _e( 'Last Name:', 'mobile-dj-manager' ); ?>&nbsp;<span class="description"><?php _e( '(optional)', 'mobile-dj-manager' ); ?></span></label><br />
-				<input type="text" name="client_lastname" id="client_lastname" value="" />
-			</div>
-		</div>
-		<div class="mdjm-post-row">
-			<div class="mdjm-post-2column">
-				<label for="client_email" class="mdjm-label"><?php _e( 'Email:', 'mobile-dj-manager' ); ?></label><br />
-				<input type="text" id="client_email" name="client_email" value="" />
-			</div>
-			<div class="mdjm-post-last-2column">
-			<label for="client_phone" class="mdjm-label"><?php _e( 'Phone:', 'mobile-dj-manager' ); ?>&nbsp;<span class="description"><?php _e( '(optional)', 'mobile-dj-manager' ); ?></span></label><br />
-			<input type="text" name="client_phone" id="client_phone" value="" />
-			</div>
-		</div><!-- mdjm-post-row -->
-	</div><!-- client_fields -->
-	
-	<?php
-		$last_login = get_user_meta( $client_id, 'last_login', true );
-	?>
-	
-	<div id="client_details">
-		<div class="mdjm-post-row" style="height: 80px;">
-			<div class="mdjm-post-2column">
-				<p><span class="mdjm-label"><?php printf( __( 'Last Login to %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></span>:<br />
-					<?php echo ( !empty( $last_login ) ? date( 'H:i d M Y', strtotime( $last_login ) ) : 'Never' ); ?> </p>
-			</div>
-			<div class="mdjm-post-last-2column">
-				<?php
-				if( mdjm_employee_can( 'send_comms' ) )	{
-					?>
-					<p><span class="mdjm-label"><?php _e( 'Communicate', 'mobile-dj-manager' ); ?></span>:<br />
-						<?php	printf( __( '<a id="contact_client" href="%s">Contact</a>', 'mobile-dj-manager' ), 
-									add_query_arg(
-										array(
-											'recipient' => $client_id,
-											'event_id'  => $post->ID
-										),
-										admin_url( 'admin.php?page=mdjm-comms' )
-									)
-								);
-						?></p>
-					<?php
-				}
-				?>
-			</div>
-		</div>
-		<?php
-		if( mdjm_employee_can( 'list_own_quotes' ) )	{
-			//$quote = mdjm_get_event_quote_id( $post->ID );
-			if( ! empty( $quote ) )	{
-				?>
-				<div class="mdjm-post-row-single" style="height: 80px;">
-					<div class="mdjm-post-1column">
-						<p><span class="mdjm-label"><?php _e( 'Online Quote Status', 'mobile-dj-manager' ); ?></span>:<br />
-							<?php 
-							if( get_post_status( $quote ) == 'mdjm-quote-viewed' )	{
-								echo __( 'Viewed', 'mobile-dj-manager' ) . ' ' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( get_post_meta( $quote, '_mdjm_quote_viewed_date', true ) ) );
-							} else	{
-								echo __( 'Not viewed yet', 'mobile-dj-manager' );
-							}
-							?>
-							</p>
-					</div>
-				</div>
-				<?php
-			}
-		}
-		?>
-	</div>
-	<?php
-	
-	do_action( 'mdjm_events_client_metabox_last', $post, $client_id );
 } // mdjm_event_metabox_client_callback
 
 /**
@@ -1467,10 +1292,11 @@ function mdjm_event_metabox_client_row( $event_id )	{
 
 	?>
 	<div class="mdjm_form_fields">
-        <label for="client_name"><?php _e(' Select Client:' ); ?></label><br />
+        <label for="client_name"><?php _e(' Select Client:' ); ?></label> 
         <select name="client_name" id="client_name">
         <?php if ( ! $mdjm_event_update ) : ?>
             <option value=""><?php _e( '--- Select Client ---', 'mobile-dj-manager' ); ?></option>
+            <option value="mdjm_add_client"><?php _e( '--- Add New ---', 'mobile-dj-manager' ); ?></option>
         <?php endif; ?>
 
         <?php if ( $mdjm_event->client ) : ?>
@@ -1484,12 +1310,66 @@ function mdjm_event_metabox_client_row( $event_id )	{
         <?php endif; ?>
         </select>
         <?php if ( mdjm_employee_can( 'view_clients_list' ) && $mdjm_event_update && $mdjm_event->client ) : ?>
-            <span class="description"><a style="font-size: 11px;" id="client_details"><?php _e( 'Display Client Details', 'mobile-dj-manager' ); ?></a></span>
+            <span class="description"><a style="font-size: 11px;" id="toggle_client_details" class="mdjm-fake"><?php _e( 'Toggle Client Details', 'mobile-dj-manager' ); ?></a></span>
         <?php endif; ?>
 	</div>
 	<?php
 } // mdjm_event_metabox_client_row
-//add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_row', 10 );
+add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_row', 10 );
+
+/**
+ * Output the event add new client row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_add_new_client_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	if( ! mdjm_employee_can( 'view_clients_list' ) )	{
+		return;
+	}
+
+	?>
+    <div id="mdjm-event-add-new-client-fields" class="mdjm-hidden">
+    	<table class="widefat mdjm_event_add_client_table mdjm_form_fields">
+        	<tbody>
+                <tr>
+                    <td><label for="client_firstname"><?php _e( 'First Name:', 'mobile-dj-manager' ); ?></label><br />
+                        <input type="text" id="client_firstname" name="client_firstname" /></td>
+
+                    <td><label for="client_lastname"><?php _e( 'Last Name:', 'mobile-dj-manager' ); ?></label><br />
+                        <input type="text" name="client_lastname" id="client_lastname" placeholder="<?php _e( 'Optional', 'mobile-dj-manager' ); ?>" /></td>
+
+                    <td><label for="client_email"><?php _e( 'Email:', 'mobile-dj-manager' ); ?></label><br />
+                        <input type="email" id="client_email" name="client_email" /></td>
+                </tr>
+                
+                <tr>
+                	<td><label for="client_phone"><?php _e( 'Phone:', 'mobile-dj-manager' ); ?></label><br />
+                        <input type="text" name="client_phone" id="client_phone" placeholder="<?php _e( 'Optional', 'mobile-dj-manager' ); ?>" /></td>
+
+					<td><label for="client_phone2"><?php _e( 'Alt. Phone:', 'mobile-dj-manager' ); ?></label><br />
+                        <input type="text" name="client_phone2" id="client_phone2" placeholder="<?php _e( 'Optional', 'mobile-dj-manager' ); ?>" /></td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                	<td colspan="3">
+                    	<a id="mdjm-add-client" class="button button-primary button-small"><?php _e( 'Add Client', 'mobile-dj-manager' ); ?></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <?php
+
+} // mdjm_event_metabox_client_details_row
+add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_add_new_client_row', 15 );
 
 /**
  * Output the event client details row
@@ -1508,30 +1388,10 @@ function mdjm_event_metabox_client_details_row( $event_id )	{
 		return;
 	}
 
-	$client = get_userdata( $mdjm_event->client );
-	
-	if ( ! $client )	{
-		return;
-	}
+	mdjm_do_client_details_table( $mdjm_event->client, $event_id );
 
-	?>
-    <div id="mdjm_event_client_details" class="mdjm_form_fields">
-    	<div class="col3">
-        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
-				<?php echo $client->phone1; ?></p>
-        </div>
-        <div class="col3">
-        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
-				<?php echo $client->phone1; ?></p>
-        </div>
-        <div class="col3-last">
-        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
-				<?php echo $client->phone1; ?></p>
-        </div>
-    </div>
-    <?php
 } // mdjm_event_metabox_client_details_row
-//add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
+add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
 
 /**
  * Output the event transaction list table
@@ -1547,7 +1407,7 @@ function mdjm_event_metabox_txn_table( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	?>
-	<p><strong><?php _e( 'All Transactions', 'mobile-dj-manager' ); ?></strong> <span class="mdjm-small">(<a id="mdjm_txn_toggle"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</span></p>
+	<p><strong><?php _e( 'All Transactions', 'mobile-dj-manager' ); ?></strong> <span class="mdjm-small">(<a id="mdjm_txn_toggle" class="mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</span></p>
 	<div id="mdjm_event_txn_table" class="mdjm_meta_table_wrap">
         <?php mdjm_do_event_txn_table( $event_id ); ?>
 	</div>

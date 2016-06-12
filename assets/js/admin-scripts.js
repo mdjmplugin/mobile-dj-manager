@@ -20,6 +20,106 @@ jQuery(document).ready(function ($) {
 				$('#client_details').toggle();
 			});
 			
+			$( document.body ).on( 'click', '#toggle_client_details', function() {
+				$('#mdjm-event-client-details').toggle("slow");
+			});
+			
+			// Update the client details when the client selection changes
+			$( document.body ).on( 'change', '#client_name', function(event) {
+				
+				event.preventDefault();
+				
+				if ( '' == $('#client_name').val() )	{
+					$('#mdjm-event-add-new-client-fields').show("slow");
+					return;
+				} else if ( 'mdjm_add_client' == $('#client_name').val() )	{
+					$('#mdjm-event-add-new-client-fields').show("slow");
+				} else	{
+				
+					var postData = {
+						client_id  : $('#client_name').val(),
+						event_id   : $('#post_ID').val(),
+						action     : 'mdjm_refresh_client_details'
+					};
+	
+					$.ajax({
+						type       : 'POST',
+						dataType   : 'json',
+						data       : postData,
+						url        : ajaxurl,
+						beforeSend : function()	{
+							$('#mdjm-event-client-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						},
+						success: function (response) {
+							$('#mdjm-loading').replaceWith(response.client_details);
+	
+						}
+					}).fail(function (data) {
+						$('#mdjm-event-client-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+	
+						if ( window.console && window.console.log ) {
+							console.log( data );
+						}
+					});
+
+				}
+
+			});
+
+			// Add a new client from the event screen
+			$( document.body ).on( 'click', '#mdjm-add-client', function(event) {
+				
+				event.preventDefault();
+				
+				if ( $('#client_firstname').val().length < 1 )	{
+					alert(mdjm_admin_vars.no_client_first_name);
+					return;
+				}
+				if ( $('#client_email').val().length < 1 )	{
+					alert(mdjm_admin_vars.no_client_email);
+					return;
+				}
+				
+				var postData = {
+					client_firstname : $('#client_firstname').val(),
+					client_lastname  : $('#client_lastname').val(),
+					client_email     : $('#client_email').val(),
+					client_phone     : $('#client_phone').val(),
+					client_phone2    : $('#client_phone2').val(),
+					action           : 'mdjm_event_add_client'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+						$('#mdjm-add-client').hide();
+						$('#mdjm-event-add-new-client-fields').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+					},
+					success: function (response) {
+						$('#client_name').empty();
+						$('#client_name').append(response.client_list);
+						$('#mdjm-add-client').show();
+						$('#mdjm-loading').remove();
+						$('#mdjm_block_emails').prop('checked', true );
+						$('#mdjm_reset_pw').prop('checked', true );
+
+						if ( response.type == 'error' )	{
+							alert(response.message);
+						}
+
+					}
+				}).fail(function (data) {
+					$('#mdjm-loading').remove();
+
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
 			
 		},
 		
@@ -47,7 +147,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if(response.type != 'success') {
-							alert('Error')
+							alert('Error');
 						}
 						$('#mdjm-loading').replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
 
@@ -344,8 +444,6 @@ jQuery(document).ready(function ($) {
 
 			// Show/Hide transaction table
 			$( document.body ).on( 'click', '#mdjm_txn_toggle', function(event) {
-				$('#mdjm_txn_show').addClass('mdjm-hidden');
-				$('#mdjm_txn_hide').removeClass('mdjm-hidden');
 				$('#mdjm_event_txn_table').toggle("slow");
 			});
 			

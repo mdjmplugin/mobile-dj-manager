@@ -54,6 +54,93 @@ function save_mdjm_client_field_order()	{
 add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_order' );
 
 /**
+ * Refresh the data within the client details table.
+ *
+ * @since	1.3.7
+ *
+ */
+function mdjm_refresh_client_details_ajax()	{
+
+	$result = array();
+
+	ob_start();
+	mdjm_do_client_details_table( $_POST['client_id'], $_POST['event_id'] );
+	$result['client_details'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_refresh_client_details
+add_action( 'wp_ajax_mdjm_refresh_client_details', 'mdjm_refresh_client_details_ajax' );
+
+/**
+ * Adds a new client from the event field.
+ *
+ * @since	1.3.7
+ * @global	arr		$_POST
+ * @return	arr
+ */
+function mdjm_add_client_ajax()	{
+
+	$client_id   = false;
+	$client_list = '';
+	$result      = array();
+	$message     = array();
+
+	if ( ! is_email( $_POST['client_email'] ) )	{
+		$message[] = __( 'Email address is invalid', 'mobile-dj-manager' );
+	} elseif ( email_exists( $_POST['client_email'] ) )	{
+		$message[] = __( 'Email address is already in use', 'mobile-dj-manager' );
+	} else	{
+
+		$user_data = array(
+			'first_name'    => $_POST['client_firstname'],
+			'last_name'     => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
+			'user_email'    => $_POST['client_email'],
+			'client_phone'  => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: '',
+			'client_phone2' => ! empty( $_POST['client_phone2'] )		? $_POST['client_phone2']				: ''
+		);
+
+		$client_id = mdjm_add_client( $user_data );
+
+	}
+	
+	$clients = mdjm_get_clients( 'client' );
+		
+	if ( ! empty( $clients ) )	{
+		foreach( $clients as $client )	{
+			$client_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				$client->ID,
+				$client->ID == $client_id ? ' selected="selected"' : '',
+				$client->display_name
+			);
+		}
+	}
+	
+	if ( empty( $client_id ) )	{
+		$result = array(
+			'type'    => 'error',
+			'message' => explode( "\n", $message )
+		);
+	} else	{
+
+		$result = array(
+			'type'        => 'success',
+			'client_id'   => $client_id,
+			'client_list' => $client_list
+		);
+	}
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_event_add_client
+add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
+
+/**
  * Save the custom event fields order for clients
  *
  *
@@ -82,10 +169,7 @@ function mdjm_update_custom_field_event_order()	{
 	foreach( $_POST['eventfields'] as $order => $id )	{
 		$menu = $order + 1;
 		
-		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
+		wp_update_post( array( 'ID' => $id, 'menu_order' => $menu ) );	
 	}
 	die();
 } // mdjm_update_custom_field_event_order
@@ -445,20 +529,24 @@ function mdjm_update_dj_package_options()	{
 	$event_addons = ( !empty( $_POST['addons'] ) ? $_POST['addons'] : '' );
 	
 	$packages = mdjm_package_dropdown( array(
-										'name'			=> '_mdjm_event_package',
-										'dj'			  => !empty( $dj ) ? $dj : '',
-										'selected'		=> !empty( $event_package ) ? $event_package : '',
-										'first_entry'	 => 'No Package',
-										'first_entry_val' => '0'
-										), false );
+		'name'			=> '_mdjm_event_package',
+		'dj'			  => !empty( $dj ) ? $dj : '',
+		'selected'		=> !empty( $event_package ) ? $event_package : '',
+		'first_entry'	 => 'No Package',
+		'first_entry_val' => '0'
+		),
+		false
+	);
 	
 	
 	$addons = mdjm_addons_dropdown( array( 
-										'name'		=> 'event_addons',
-										'dj'		=> !empty( $dj ) ? $dj : '',
-										'package'	=> !empty( $event_package ) ? $event_package : '',
-										//'selected'	=> !empty( $event_addons ) ? $event_addons : '',
-										), false );
+		'name'		=> 'event_addons',
+		'dj'		=> !empty( $dj ) ? $dj : '',
+		'package'	=> !empty( $event_package ) ? $event_package : '',
+		//'selected'	=> !empty( $event_addons ) ? $event_addons : '',
+		),
+		false
+	);
 			
 	if( !empty( $addons ) || !empty( $packages ) )	{
 		$result['type'] = 'success';

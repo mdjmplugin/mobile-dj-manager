@@ -133,7 +133,8 @@ function mdjm_add_client( $user_data = array() )	{
 	$user_meta = array(
 		'show_admin_bar_front'	=> false,
 		'marketing'				=> 'Y',
-		'phone1'				=> isset( $args['client_phone'] ) ? $args['client_phone'] : ''
+		'phone1'				=> isset( $args['client_phone'] )  ? $args['client_phone']  : '',
+		'phone2'				=> isset( $args['client_phone2'] ) ? $args['client_phone2'] : ''
 	);
 	
 	/**
@@ -154,7 +155,7 @@ function mdjm_add_client( $user_data = array() )	{
 	 * @since	1.3
 	 * @param	int		$user_id	ID of the new client
 	 */
-	do_action( 'mdjm_post_create_client', $user_id );
+	do_action( 'mdjm_post_add_client', $user_id );
 	
 	MDJM()->debug->log_it( sprintf( 'Client created with ID: %d', $user_id ) );
 	
@@ -521,11 +522,11 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
 
 	?>
     <div id="mdjm-event-client-details" class="mdjm-hidden">
-        <table class="widefat mdjm_event_txn_list">
+        <table class="widefat mdjm_event_client_details">
             <tbody>
             	<tr>
                 	<td><strong><?php _e( 'Phone', 'mobile-dj-manager' ); ?></strong><br />
-                    <?php echo '' == $client->phone1 ? __( 'No number stored', 'mobile-dj-manager' ) : $client->phone1; ?></td>
+                    <?php echo $client->phone1; echo '' != $client->phone2 ? ' / ' . $client->phone2 : '' ?></td>
                   	
                 	<td><strong><?php _e( 'Email', 'mobile-dj-manager' ); ?></strong><br />
                     <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>

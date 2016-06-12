@@ -1051,7 +1051,7 @@ function mdjm_do_event_txn_table( $event_id )	{
             <th style="width: 20%">&nbsp;</th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
-            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( $mdjm_event->get_total_profit() ) ); ?></strong></th>
+            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( ( $in - $out ) ) ); ?></strong></th>
         </tr>
         <?php do_action( 'mdjm_event_txn_table_foot', $event_id ); ?>
         </tfoot>
