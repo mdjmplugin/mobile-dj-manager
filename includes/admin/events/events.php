@@ -72,7 +72,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	global $post;
 	
 	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )	{
-		$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
+		$value = mdjm_get_event_price( $post_id );
 	}
 		
 	switch ( $column_name ) {
@@ -184,7 +184,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		// Value
 		case 'value':
 			if( mdjm_employee_can( 'edit_txns' ) )	{
-				if ( ! empty( $value ) )	{
+				if ( ! empty( $value ) && $value != '0.00' )	{
 
 					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
 					echo '<br />';
@@ -201,13 +201,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		case 'balance':
 			if( mdjm_employee_can( 'edit_txns' ) )	{				
 				
-				$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
-				
-				if( ! empty( $rcvd ) && $rcvd != '0.00' )	{
-					echo mdjm_currency_filter( mdjm_format_amount( ( $value - $rcvd ) ) );
-				} else	{
-					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
-				}
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_balance( $post_id ) ) );
 				
 				echo '<br />';
 				

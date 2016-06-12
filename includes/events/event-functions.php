@@ -1023,7 +1023,7 @@ function mdjm_do_event_txn_table( $event_id )	{
                     <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
                     <td>
                         <?php if ( 	$txn->post_status == 'mdjm-income' ) : ?>
-                            <?php $in += $txn->price; ?>
+                            <?php $in += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>
@@ -1031,7 +1031,7 @@ function mdjm_do_event_txn_table( $event_id )	{
                     </td>
                     <td>
                         <?php if ( 	$txn->post_status == 'mdjm-expenditure' ) : ?>
-                            <?php $out += $txn->price; ?>
+                            <?php $out += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>

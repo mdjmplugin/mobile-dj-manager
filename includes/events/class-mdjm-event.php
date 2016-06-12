@@ -764,7 +764,7 @@ class MDJM_Event {
 			
 			if ( ! empty ( $rcvd ) )	{
 				
-				$this->income = $rcvd;
+				$this->income = mdjm_sanitize_amount( $rcvd );
 				
 			} else	{
 				
@@ -801,7 +801,7 @@ class MDJM_Event {
 				
 			} else	{
 				
-				$out->outgoings = '0.00';
+				$this->outgoings = '0.00';
 				
 			}
 		}
