@@ -369,6 +369,7 @@ function mdjm_event_metabox_client_callback( $post )	{
 		?>
 	</div>
 	<?php
+	
 	do_action( 'mdjm_events_client_metabox_last', $post, $client_id );
 } // mdjm_event_metabox_client_callback
 
@@ -1465,8 +1466,8 @@ function mdjm_event_metabox_client_row( $event_id )	{
 	$clients = mdjm_get_clients( 'client' );
 
 	?>
-	<div class="mdjm_form_fields ">
-        <label for="client_name" class="mdjm-label"><?php _e(' Select Client:' ); ?></label><br />
+	<div class="mdjm_form_fields">
+        <label for="client_name"><?php _e(' Select Client:' ); ?></label><br />
         <select name="client_name" id="client_name">
         <?php if ( ! $mdjm_event_update ) : ?>
             <option value=""><?php _e( '--- Select Client ---', 'mobile-dj-manager' ); ?></option>
@@ -1487,8 +1488,50 @@ function mdjm_event_metabox_client_row( $event_id )	{
         <?php endif; ?>
 	</div>
 	<?php
-} // mdjm_event_metabox_txn_table
+} // mdjm_event_metabox_client_row
 //add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_row', 10 );
+
+/**
+ * Output the event client details row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_client_details_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	if( ! mdjm_employee_can( 'view_clients_list' ) )	{
+		return;
+	}
+
+	$client = get_userdata( $mdjm_event->client );
+	
+	if ( ! $client )	{
+		return;
+	}
+
+	?>
+    <div id="mdjm_event_client_details" class="mdjm_form_fields">
+    	<div class="col3">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+        <div class="col3">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+        <div class="col3-last">
+        	<p><label><?php _e( 'Phone', 'mobile-dj-manager' ); ?></label><br />
+				<?php echo $client->phone1; ?></p>
+        </div>
+    </div>
+    <?php
+} // mdjm_event_metabox_client_details_row
+//add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
 
 /**
  * Output the event transaction list table
