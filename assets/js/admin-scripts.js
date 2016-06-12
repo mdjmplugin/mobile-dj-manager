@@ -9,6 +9,7 @@ jQuery(document).ready(function ($) {
 			this.client();
 			this.employee();
 			this.equipment();
+			this.time();
 			this.type();
 			this.txns();
 		},
@@ -281,6 +282,15 @@ jQuery(document).ready(function ($) {
 
 			});
 
+		},
+		
+		time : function()	{
+			// Set the DJ Setup date
+			$( document.body ).on( 'change', '#display_event_date', function() {
+				if( $('#dj_setup_date').val().length < 1 )	{
+					$('#dj_setup_date').val($('#display_event_date').val());
+				}
+			});
 		},
 		
 		type : function()	{
