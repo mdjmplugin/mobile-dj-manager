@@ -148,7 +148,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 				'id'     => 'mdjm-' . str_replace( ' ', '-', strtolower( $display ) ),
 				'parent' => 'mdjm-events',
 				'title'  => $display . ' (' . $status_count . ')',
-				'href'   => admin_url( 'edit.php?post_status=' . $current_status . ' &post_type=mdjm-event' ),
+				'href'   => admin_url( 'edit.php?post_status=' . $current_status . '&post_type=mdjm-event' ),
 				'meta'   => array(
 					'title' => $display,
 				),
