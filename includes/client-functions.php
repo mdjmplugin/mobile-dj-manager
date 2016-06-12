@@ -380,7 +380,7 @@ function mdjm_get_client_display_name( $user_id )	{
  *
  * @since	1.3
  * @param	int		$user_id	The ID of the user to check.
- * @return	str		The first name of the client.
+ * @return	str		The email address of the client.
  */
 function mdjm_get_client_email( $user_id )	{
 	if( empty( $user_id ) )	{
@@ -397,6 +397,29 @@ function mdjm_get_client_email( $user_id )	{
 	
 	return apply_filters( 'mdjm_get_client_email', $email, $user_id );
 } // mdjm_get_client_email
+
+/**
+ * Retrieve a clients phone number.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The phone number of the client.
+ */
+function mdjm_get_client_phone( $user_id )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->phone1 ) )	{
+		$phone = $client->phone1;
+	} else	{
+		$phone = __( 'Phone number not set', 'mobile-dj-manager' );
+	}
+	
+	return apply_filters( 'mdjm_get_client_phone', $phone, $user_id );
+} // mdjm_get_client_phone
 
 /**
  * Retrieve the client fields.
