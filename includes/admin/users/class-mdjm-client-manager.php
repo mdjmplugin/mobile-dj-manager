@@ -151,11 +151,11 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 */
 		public function get_columns(){
 			$columns = array(
-				'cb'		=> '<input type="checkbox" />',
-				'name'	  => __( 'Name', 'mobile-dj-manager' ),
-				'events'	=> __( 'Total Events', 'mobile-dj-manager' ),
-				'next'	  => __( 'Next Event', 'mobile-dj-manager' ),
-				'login'	 => __( 'Last Login', 'mobile-dj-manager' ) );
+				'cb'     => '<input type="checkbox" />',
+				'name'   => __( 'Name', 'mobile-dj-manager' ),
+				'events' => __( 'Total Events', 'mobile-dj-manager' ),
+				'next'   => __( 'Next Event', 'mobile-dj-manager' ),
+				'login'  => __( 'Last Login', 'mobile-dj-manager' ) );
 			
 			return $columns;
 		} // get_columns
@@ -238,16 +238,19 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * @return	str		The HTML output for the name column
 		 */
 		public function column_name( $item ) {
-			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() )
+			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() )	{
 				$edit_users = true;
+			}
 		
-			if( !empty( $edit_users ) )
+			if( ! empty( $edit_users ) )	{
 				echo '<a href="' . get_edit_user_link( $item->ID ) . '">';
+			}
 			
 			echo $item->display_name;
 			
-			if( !empty( $edit_users ) )
-				echo '</a>';    
+			if( !empty( $edit_users ) )	{
+				echo '</a>';
+			}
 		} // column_name
 				
 		/**
@@ -275,14 +278,14 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * @return	str		The HTML output for the next event column
 		 */
 		public function column_next( $item ) {
-			$next = MDJM()->events->next_event( $item->ID, 'client' );
+			$next = mdjm_get_clients_next_event( $item->ID );
 			
-			echo ( !empty( $next ) ? 
-					'<a href="' . get_edit_post_link( $next[0]->ID ) . '">' . 
-					date( MDJM_SHORTDATE_FORMAT, strtotime( get_post_meta( $next[0]->ID, '_mdjm_event_date', true ) ) ) . '</a>'
-					:
-					'N/A'
-			);			
+			if ( ! empty( $next ) )	{
+				echo '<a href="' . get_edit_post_link( $next[0]->ID ) . '">' . mdjm_get_event_date( $next[0]->ID ) . '</a>';
+			} else	{
+				echo __( 'N/A', 'mobile-dj-manager' );
+			}
+						
 		} // column_next
 		
 		/**
