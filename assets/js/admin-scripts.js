@@ -285,7 +285,7 @@ jQuery(document).ready(function ($) {
 		},
 		
 		time : function()	{
-			// Set the DJ Setup date
+			// Set the DJ Setup Date
 			$( document.body ).on( 'change', '#display_event_date', function() {
 				if( $('#dj_setup_date').val().length < 1 )	{
 					$('#dj_setup_date').val($('#display_event_date').val());
