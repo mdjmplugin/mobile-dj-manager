@@ -321,7 +321,7 @@ checkbox.mdjm-form-error {
 .mdjm_field_wrapper { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
-.mdjm_form_fields textarea { margin: 4px; width: 80%; }
+.mdjm_form_fields textarea { margin: 4px; min-width: 150px; }
 .mdjm_form_fields textarea { width: 100%; }
 .mdjm_form_fields .submit input { width: auto; }
 .mdjm_form_fields label { font-weight: bold; }
@@ -329,10 +329,7 @@ checkbox.mdjm-form-error {
 
 .mdjm_event_txn_add_wrap { width: 100%; }
 
-.mdjm_form_fields.mdjm_field_row { width: 100% }
-.mdjm_form_fields.mdjm_field_row.3col { width: 33%; float: left; }
-.mdjm_form_fields.mdjm_field_row.3col-last { width: 33%; float: right; }
-
-.add-txn-left{ float: left; width: 33%; }
-.add-txn-right{ float: right; width: 33%; }
-.add-txn-centre{ display: inline-block; width: 33%; }
+.col2 { float: left; width: 50%; }
+.col2-last { float: right; width: 50%; }
+.col3 { float: left; width: 33%; }
+.col3-last { float: right; width: 33%; }

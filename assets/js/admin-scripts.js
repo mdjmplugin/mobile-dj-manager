@@ -336,7 +336,7 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#mdjm_txn_toggle', function(event) {
 				$('#mdjm_txn_show').addClass('mdjm-hidden');
 				$('#mdjm_txn_hide').removeClass('mdjm-hidden');
-				$('#mdjm_event_txn_table').toggle();
+				$('#mdjm_event_txn_table').toggle("slow");
 			});
 			
 			// Transaction direction
