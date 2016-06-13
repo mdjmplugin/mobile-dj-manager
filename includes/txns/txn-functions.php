@@ -408,7 +408,35 @@ function mdjm_get_txn_recipient_id( $txn_id )	{
 	$mdjm_txn = new MDJM_Txn( $txn_id );
 	
 	return $mdjm_txn->recipient_id;
-} // mdjm_get_txn_price
+} // mdjm_get_txn_recipient_id
+
+/**
+ * Retrieve the transaction recipient name.
+ *
+ * @since	1.3
+ * @param	int		$txn_id		The transaction ID
+ * @return	str		The recipient of the transaction.
+ */
+function mdjm_get_txn_recipient_name( $txn_id )	{
+	$recipient_id = mdjm_get_txn_recipient_id( $txn_id );
+	$recipient    = __( 'N/A', 'mobile-dj-manager' );
+	
+	if ( ! empty( $recipient_id ) )	{
+				
+		if ( is_numeric( $recipient_id ) )	{
+			
+			$user = get_userdata( $recipient_id );
+			
+			$recipient = $user->display_name;
+			
+		} else	{
+			$recipient = $recipient_id;
+		}
+		
+	}
+
+	return $recipient;
+} // mdjm_get_txn_recipient_name
 
 /**
  * Calculate the total wages payable for an event.

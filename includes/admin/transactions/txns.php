@@ -143,7 +143,7 @@ add_filter( 'parse_query', 'mdjm_transaction_post_filtered' );
  * @return
  */
 function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
-			
+
 	switch( $column_name ) {	
 		// Details
 		case 'detail':
@@ -151,7 +151,7 @@ function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
 			
 			if( is_array( $trans_types ) )	{
 				foreach( $trans_types as $key => $trans_type ) {
-					$trans_types[$key] = $trans_type->name;
+					$trans_types[ $key ] = $trans_type->name;
 				}
 				echo implode( "<br/>", $trans_types );
 			}
@@ -177,32 +177,8 @@ function mdjm_transaction_posts_custom_column( $column_name, $post_id )	{
 			
 		// Source
 		case 'payee':
-			
-			if ( 'mdjm-income' == get_post_status( $post_id ) )	{
-				
-				$payee = get_post_meta( $post_id, '_mdjm_payment_from', true );
-				
-			} else	{
-				
-				$payee = get_post_meta( $post_id, '_mdjm_payment_to', true );
-				
-			}
-			
-			if ( ! empty( $payee ) )	{
-				
-				if ( is_numeric( $payee ) )	{
-					
-					$user = get_userdata( $payee );
-					
-					echo $user->display_name;
-					
-				} else	{
-					echo $payee;
-				}
-				
-			} else	{
-				_e( 'N/A', 'mobile-dj-manager' );	
-			}
+						
+			echo mdjm_get_txn_recipient_name( $post_id );
 			
 			break;
 				

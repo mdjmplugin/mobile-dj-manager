@@ -1007,6 +1007,7 @@ function mdjm_do_event_txn_table( $event_id )	{
         <thead>
             <tr>
                 <th style="width: 20%"><?php _e( 'Date', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 20%"><?php _e( 'To/From', 'mobile-dj-manager' ); ?></th>
                 <th style="width: 15%"><?php _e( 'In', 'mobile-dj-manager' ); ?></th>
                 <th style="width: 15%"><?php _e( 'Out', 'mobile-dj-manager' ); ?></th>
                 <th><?php _e( 'Details', 'mobile-dj-manager' ); ?></th>
@@ -1021,8 +1022,9 @@ function mdjm_do_event_txn_table( $event_id )	{
 
                 <tr class="mdjm_field_wrapper">
                     <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
+                    <td><?php echo esc_attr( mdjm_get_txn_recipient_name( $txn->ID ) ); ?></td>
                     <td>
-                        <?php if ( 	$txn->post_status == 'mdjm-income' ) : ?>
+                        <?php if ( $txn->post_status == 'mdjm-income' ) : ?>
                             <?php $in += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
@@ -1030,7 +1032,7 @@ function mdjm_do_event_txn_table( $event_id )	{
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if ( 	$txn->post_status == 'mdjm-expenditure' ) : ?>
+                        <?php if ( $txn->post_status == 'mdjm-expenditure' ) : ?>
                             <?php $out += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
@@ -1042,12 +1044,13 @@ function mdjm_do_event_txn_table( $event_id )	{
             <?php endforeach; ?>
         <?php else : ?>
         <tr>            
-            <td colspan="4"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+            <td colspan="5"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
         </tr>
         <?php endif; ?>
         </tbody>
         <tfoot>
         <tr>
+            <th style="width: 20%">&nbsp;</th>
             <th style="width: 20%">&nbsp;</th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
