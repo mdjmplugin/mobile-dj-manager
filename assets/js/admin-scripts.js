@@ -16,10 +16,6 @@ jQuery(document).ready(function ($) {
 		
 		client : function()	{
 			// Display client details
-			$( document.body ).on( 'click', '#client_details_show', function() {
-				$('#client_details').toggle();
-			});
-			
 			$( document.body ).on( 'click', '#toggle_client_details', function() {
 				$('#mdjm-event-client-details').toggle("slow");
 			});
@@ -30,12 +26,14 @@ jQuery(document).ready(function ($) {
 				event.preventDefault();
 				
 				if ( '' == $('#client_name').val() )	{
-					$('#mdjm-event-add-new-client-fields').show("slow");
+					$('#mdjm-event-add-new-client-fields').hide("slow");
 					return;
 				} else if ( 'mdjm_add_client' == $('#client_name').val() )	{
 					$('#mdjm-event-add-new-client-fields').show("slow");
 				} else	{
-				
+
+					$('#mdjm-event-add-new-client-fields').hide("slow");
+
 					var postData = {
 						client_id  : $('#client_name').val(),
 						event_id   : $('#post_ID').val(),
@@ -119,6 +117,19 @@ jQuery(document).ready(function ($) {
 					}
 				});
 
+			});
+			
+			// Display custom client fields
+			$( document.body ).on( 'click', '#toggle_custom_client_fields', function() {
+				$('#mdjm_custom_client_fields_table tbody').toggle("slow");
+			});
+			// Display custom event fields
+			$( document.body ).on( 'click', '#toggle_custom_event_fields', function() {
+				$('#mdjm_custom_event_fields_table tbody').toggle("slow");
+			});
+			// Display custom venue fields
+			$( document.body ).on( 'click', '#toggle_custom_venue_fields', function() {
+				$('#mdjm_custom_venue_fields_table tbody').toggle("slow");
 			});
 			
 		},

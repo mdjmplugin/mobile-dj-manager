@@ -1337,22 +1337,6 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	$debug[] = 'Meta Updates Completed';
 	
-	/**
-	 * Check for manual payment received & process.
-	 * This needs to be completed before we send any emails to ensure shortcodes are correct.
-	 */
-	/*if( $deposit_payment == true || $balance_payment == true )	{
-		
-		if( $balance_payment == true )	{
-			$type = mdjm_get_balance_label();
-		} else	{
-			mdjm_mark_event_deposit_paid( $post_id );
-		}
-		
-		// Insert the event transaction
-		MDJM()->txns->manual_event_payment( $type, $post_id );
-	}*/
-	
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
 		

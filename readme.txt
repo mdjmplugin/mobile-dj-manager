@@ -80,28 +80,34 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.3.7 =
 
 **New**
-* Event transactions metabox has had a facelift. Remaining metaboxes to TODO
+* Client metabox has had a facelift
+* Event transactions metabox has had a facelift
 * Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
 * Checking the balance paid checkbox auto sets the deposit to the paid status
 * Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
 * Manual event payments from the events screen now generate an email using the selected `Manual Payment Template`
 * Added content tag `{deposit_remaining}`
 * New setting `Set Client Inactive?`. When enabled, a client will be set as inactive when their event is cancelled, failed, or rejected and they have no further upcoming events
+* Added content tag `{client_alt_phone}` to display the clients additional phone # if provided
 
 **Tweaks**
 * Added function `mdjm_get_clients_next_event()` to replace method in deprecated MDJM_Events class
 * Don't display view contract link if contract not digitally signed. Applies to both admin and Client Zone
 * Make sure client is shown in dropdown when viewing a non-active event and the client is set as inactive
+* Custom client fields are now displayed two fields per row
 * Added function `mdjm_get_event_remaining_deposit()`
 * Added method `get_remaining_deposit()` to MDJM_Event class
 * Better formatting of currencies
 * Added functions `mdjm_get_enquiry_sources()` and `mdjm_enquiry_sources_dropdown()`
+* Added client functions `mdjm_get_client_full_address()`, `mdjm_get_client_last_login()`, `mdjm_do_client_details_table`
+* Removed deprecated methods from soon to be deprecated MDJM_Txns class
 
 **Bug Fixes**
 * If deposit type is set to percentage of total cost, a JS error ocurred when focusing out of the total cost field
 * Issue [#70](https://github.com/mdjm/mobile-dj-manager/issues/70/ "Issue 70") Client phone number does not save when created on the events screen
 * Issue [#72](https://github.com/mdjm/mobile-dj-manager/issues/72/ "Issue 72") Use remove_query_arg for redirect link on login page
 * Issue [#73](https://github.com/mdjm/mobile-dj-manager/issues/73/ "Issue 73") Admin is unable to review signed contracts
+* Issue [#75](https://github.com/mdjm/mobile-dj-manager/issues/75/ "Issue 75") `Unattended Enquiry` and `Enquiry` admin bar links had extra whitespace causing link to malfunction
 
 = 1.3.6 =
 

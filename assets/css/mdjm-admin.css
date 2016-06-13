@@ -335,4 +335,7 @@ checkbox.mdjm-form-error {
 .col3 { float: left; width: 33%; }
 .col3-last { float: right; width: 33%; }
 
-#mdjm-event-client-details { padding-top: 5px; }
+#mdjm-event-client-details,
+#mdjm_event_custom_client_fields,
+#mdjm_event_custom_event_fields,
+#mdjm_event_custom_venue_fields { padding-top: 5px; }

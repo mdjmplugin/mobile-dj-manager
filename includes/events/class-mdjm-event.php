@@ -504,7 +504,27 @@ class MDJM_Event {
 		
 		return apply_filters( 'mdjm_event_short_date', $return, $this->date, $this->ID );
 	} // get_short_date
-	
+
+	/**
+	 * Retrieve the event name
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_name() {
+		$name = get_post_meta( $this->ID, '_mdjm_event_name', true );
+		
+		/**
+		 * Override the event date.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$date The event price.
+		 * @param	str		$date The event date.
+		 */
+		return apply_filters( 'mdjm_get_event_name', $name, $this->ID );
+	} // get_name
+
 	/**
 	 * Retrieve the event status.
 	 *

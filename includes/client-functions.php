@@ -523,6 +523,11 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
 	?>
     <div id="mdjm-event-client-details" class="mdjm-hidden">
         <table class="widefat mdjm_event_client_details">
+        	<thead>
+            	<tr>
+                	<th colspan="4"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?></th>
+                </tr>
+            </thead>
             <tbody>
             	<tr>
                 	<td><strong><?php _e( 'Phone', 'mobile-dj-manager' ); ?></strong><br />

@@ -205,6 +205,26 @@ function mdjm_event_metabox_client_callback( $post )	{
  * @param	obj		$post		Required: The post object (WP_Post).
  * @return
  */
+function mdjm_event_metabox_event_callback( $post )	{
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+	/*
+	 * Output the items for the client metabox
+	 * @since	1.3.7
+	 * @param	int	$post_id	The Event post ID
+	 */
+	do_action( 'mdjm_event_details_fields', $post->ID );
+
+} // mdjm_event_metabox_event_callback
+
+/**
+ * Output for the Event Details meta box.
+ *
+ * @since	1.3
+ * @param	obj		$post		Required: The post object (WP_Post).
+ * @return
+ */
 function mdjm_event_metabox_event_details( $post )	{
 	global $current_user;
 	
@@ -227,7 +247,7 @@ function mdjm_event_metabox_event_details( $post )	{
 		<?php
 		echo '<label for="_mdjm_event_name" class="mdjm-label">' . sprintf( __( '%s Name:', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</label><br />' . "\r\n" . 
 		'<input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="' . 
-			esc_attr( get_post_meta( $post->ID, '_mdjm_event_name', true ) ) . '" size="50" /> <span class="mdjm-description">' . 
+			esc_attr( get_post_meta( $post->ID, '_mdjm_event_name', true ) ) . '" size="40" /> <span class="mdjm-description">' . 
 			sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</span>' . "\r\n";
 		?>
 		</div>
@@ -1310,10 +1330,11 @@ function mdjm_event_metabox_client_row( $event_id )	{
         <?php endif; ?>
         </select>
         <?php if ( mdjm_employee_can( 'view_clients_list' ) && $mdjm_event_update && $mdjm_event->client ) : ?>
-            <span class="description"><a style="font-size: 11px;" id="toggle_client_details" class="mdjm-fake"><?php _e( 'Toggle Client Details', 'mobile-dj-manager' ); ?></a></span>
+            <a id="toggle_client_details" class="mdjm-small mdjm-fake"><?php _e( 'Toggle Client Details', 'mobile-dj-manager' ); ?></a>
         <?php endif; ?>
 	</div>
 	<?php
+
 } // mdjm_event_metabox_client_row
 add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_row', 10 );
 
@@ -1337,6 +1358,11 @@ function mdjm_event_metabox_add_new_client_row( $event_id )	{
 	?>
     <div id="mdjm-event-add-new-client-fields" class="mdjm-hidden">
     	<table class="widefat mdjm_event_add_client_table mdjm_form_fields">
+        	<thead>
+            	<tr>
+                	<th colspan="3"><?php _e( 'New Client Details', 'mobile-dj-manager' ); ?></th>
+                </tr>
+            </thead>
         	<tbody>
                 <tr>
                     <td><label for="client_firstname"><?php _e( 'First Name:', 'mobile-dj-manager' ); ?></label><br />
@@ -1392,6 +1418,50 @@ function mdjm_event_metabox_client_details_row( $event_id )	{
 
 } // mdjm_event_metabox_client_details_row
 add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
+
+/**
+ * Output the event details row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_event_details_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+	
+	mdjm_insert_datepicker();
+
+	?>
+    <table class="widefat mdjm_event_details_table mdjm_form_fields">
+        <tbody>
+        	<tr>
+            	<td><label for="display_event_date" class="mdjm-label"><?php printf( __( '%s Date:' ), mdjm_get_label_singular() ); ?></label><br />
+					<input type="text" class="mdjm_date required" name="display_event_date" id="display_event_date" value="<?php echo ! empty( $mdjm_event->date ) ? mdjm_format_short_date( $mdjm_event->date ) : ''; ?>" />
+			<input type="hidden" name="_mdjm_event_date" id="_mdjm_event_date" value="<?php echo $mdjm_event->date; ?>" />
+            	</td>
+                
+                <td><label for="_mdjm_event_name" class="mdjm-label"><?php printf( __( '%s Name:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
+					<input type="text" name="_mdjm_event_name" id="_mdjm_event_name" value="<?php echo esc_attr( $mdjm_event->get_name() ); ?>" /><br />
+                    <span class="mdjm-description"><?php printf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></span>
+                </td>
+            </tr>
+            
+            <tr>
+            	<td>
+                </td>
+                
+                <td>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <?php
+
+} // mdjm_event_metabox_event_details_row
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_event_details_row', 10 );
 
 /**
  * Output the event transaction list table
