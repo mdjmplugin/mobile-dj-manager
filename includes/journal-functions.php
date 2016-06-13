@@ -99,3 +99,14 @@ function mdjm_add_journal( $args = array(), $meta = array() )	{
 	
 	return $comment_id;
 } // mdjm_add_journal
+
+/**
+ * Retrieve journal entries for the event.
+ *
+ * @since	1.3.7
+ * @param	int		$event_id	The event ID
+ * @result	obj		Journal entries
+ */
+function mdjm_get_journal_entries( $event_id )	{
+	return get_comments( array( 'post_id' => $event_id ) );
+} // mdjm_get_journal_entries
