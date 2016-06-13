@@ -1904,3 +1904,34 @@ function mdjm_viewed_quote( $quote_id, $event_id )	{
 	}
 
 } // mdjm_viewed_quote
+
+/**
+ * Retrieve the emails associated with the event.
+ *
+ * @since	1.3.7
+ * @param	int		$event_id	Event ID
+ * @return	obj		The email post objects.
+ */
+function mdjm_event_get_emails( $event_id )	{
+
+	if ( ! mdjm_employee_can( 'read_events' ) )	{
+		return false;
+	}
+
+	$args = array(
+		'post_type'      => 'mdjm_communication',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
+		'post_parent'    => $event_id,
+		'order'          => 'DESC'
+	);
+
+	if ( ! mdjm_employee_can( 'read_events_all' ) )	{
+		$args['post_author'] = get_current_user_id();
+	}
+
+	$emails = get_posts( $args );
+
+	return apply_filters( 'mdjm_event_get_emails', $emails, $event_id );
+
+} // mdjm_event_get_emails
