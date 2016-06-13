@@ -197,6 +197,29 @@ add_filter( 'mdjm_sanitize_amount_decimals', 'mdjm_currency_decimal_filter' );
 add_filter( 'mdjm_format_amount_decimals', 'mdjm_currency_decimal_filter' );
 
 /**
+ * Sanitizes a string key for MDJM Settings
+ *
+ * Keys are used as internal identifiers. Alphanumeric characters, dashes, underscores, stops, colons and slashes are allowed
+ *
+ * @since 	1.3.7
+ * @param	str		$key	String key
+ * @return	str		Sanitized key
+ */
+function mdjm_sanitize_key( $key ) {
+	$raw_key = $key;
+	$key = preg_replace( '/[^a-zA-Z0-9_\-\.\:\/]/', '', $key );
+
+	/**
+	 * Filter a sanitized key string.
+	 *
+	 * @since 	1.3.7
+	 * @param	str	$key     Sanitized key.
+	 * @param	str $raw_key The key prior to sanitization.
+	 */
+	return apply_filters( 'mdjm_sanitize_key', $key, $raw_key );
+} // mdjm_sanitize_key
+
+/**
  * Set the shortdate format for the given date
  *
  * @since	1.3
