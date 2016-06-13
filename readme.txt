@@ -81,7 +81,9 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **New**
 * Client metabox has had a facelift
+* Event Details metabox has had a facelift
 * Event transactions metabox has had a facelift
+* Client list is searchable on event screen
 * Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
 * Checking the balance paid checkbox auto sets the deposit to the paid status
 * Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
@@ -94,9 +96,17 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Added function `mdjm_get_clients_next_event()` to replace method in deprecated MDJM_Events class
 * Don't display view contract link if contract not digitally signed. Applies to both admin and Client Zone
 * Make sure client is shown in dropdown when viewing a non-active event and the client is set as inactive
+* New class `MDJM_HTML_Elements` for easier display of input fields
 * Custom client fields are now displayed two fields per row
+* Custom event fields are now displayed two fields per row
 * Added function `mdjm_get_event_remaining_deposit()`
+* Added functions `mdjm_get_taxonomy_labels()` and `mdjm_get_post_statuses()`
+* Added function `mdjm_month_num_to_name()`
+* Added function `mdjm_sanitize_key()`
+* Added function `mdjm_get_event_deposit_type()`
+* Added `get_start_time()`, `get_finish_time(`, `get_package()`, `get_addons()` to MDJM_Event class
 * Added method `get_remaining_deposit()` to MDJM_Event class
+* Make sure all ajax functions are prefixed `mdjm_` and suffixed `_ajax`
 * Better formatting of currencies
 * Added functions `mdjm_get_enquiry_sources()` and `mdjm_enquiry_sources_dropdown()`
 * Added client functions `mdjm_get_client_full_address()`, `mdjm_get_client_last_login()`, `mdjm_do_client_details_table`
