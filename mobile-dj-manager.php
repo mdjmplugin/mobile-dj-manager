@@ -38,23 +38,25 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
 		
-		public $events;
-		
-		public $posts;
+		public $content_tags;
 		
 		public $cron;
 		
-		public $users;
+		public $debug;
+		
+		public $emails;
+		
+		public $events;
+		
+		public $html;
+				
+		public $permissions;
 		
 		public $roles;
 		
-		public $permissions;
-		
-		public $menu;
-		
 		public $txns;
 		
-		public $content_tags;
+		public $users;
 		
 		/**
 		 * Ensure we only have one instance of MDJM loaded into memory at any time.
@@ -82,6 +84,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->content_tags   = new MDJM_Content_Tags();
 				self::$instance->cron           = new MDJM_Cron();
 				self::$instance->emails         = new MDJM_Emails();
+				self::$instance->html           = new MDJM_HTML_Elements();
 				self::$instance->users          = new MDJM_Users();
 				self::$instance->roles          = new MDJM_Roles();
 				self::$instance->permissions    = new MDJM_Permissions();
@@ -164,6 +167,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-event.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-html-elements.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/event-actions.php' );
