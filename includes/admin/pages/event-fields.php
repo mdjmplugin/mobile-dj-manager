@@ -20,7 +20,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			
 			add_action( 'mdjm_add_content_tags', array( &$this, 'add_tags' ) );
 			add_action( 'mdjm_event_client_fields', array( &$this, 'custom_client_event_fields' ), 90 );
-			add_action( 'mdjm_events_metabox_last', array( &$this, 'custom_event_details_fields' ) );
+			add_action( 'mdjm_event_details_fields', array( &$this, 'custom_event_details_fields' ), 90 );
 			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
 			
 			add_filter( 'mdjm_shortcode_filter_pairs', array( &$this, 'custom_event_fields_shortcode_pairs' ), 10, 3 );
@@ -608,11 +608,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		
 		/**
 		 * Add the custom fields to the end of the event client details metabox.
-		 * @called: mdjm_events_client_metabox_last hook
-		 *
-		 * @params	obj		$post		Required: The current event post object
-		 *			int		$client_id	Required: The ID of the current client
-		 *
+		 * 
+		 * @since	1.3.7
+		 * @called: mdjm_event_client_fields
+		 * @param	int		$event_id	The Event ID
 		 * @return	str		$output		This function must output the full required HTML
 		 */
 		function custom_client_event_fields( $event_id )	{
@@ -675,14 +674,15 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		
 		/**
 		 * Add the custom fields to the end of the event Event Details metabox.
-		 * @called: mdjm_events_metabox_last hook
-		 *
-		 * @params	obj		$post		Required: The current event post object
-		 *
-		 *
+		 * 
+		 * @since	1.3.7
+		 * @called: mdjm_event_details_fields
+		 * @param	int		$event_id	The Event ID
 		 * @return	str		$output		This function must output the full required HTML
 		 */
-		function custom_event_details_fields( $post )	{
+		function custom_event_details_fields( $event_id )	{
+			global $mdjm_event, $mdjm_event_update;
+
 			$query = mdjm_get_custom_fields( 'event' );
 			$fields = $query->get_posts();
 			
@@ -706,7 +706,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						if ( $i == 0 )	{
 							?><tr><?php
 						}
-						self::display_input( $field, $post );
+						self::display_input( $field, $mdjm_event );
 						$i++;
 						$x++;
 						if ( $i == 2 )	{
@@ -820,7 +820,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$height = array( 'textarea', 'multi select' );
 			
 			?>
-            	<td width="50%">
+            	<td>
 					<?php
 					// Checkbox fields appear before and on the same line as the label
 					if( $type == 'checkbox' )	{

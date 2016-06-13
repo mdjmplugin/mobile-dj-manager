@@ -45,7 +45,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-color	{
 	color: #F90;	
 }
-.mdjm-select-chosen { min-width: 150px; }
+.mdjm-select-chosen { min-width: 200px; }
 
 /* =Client Field Settings
 -------------------------------------------------------------- */
@@ -321,15 +321,21 @@ checkbox.mdjm-form-error {
 /* =Metaboxes
 -------------------------------------------------------------- */
 .mdjm_form_fields { position: relative; }
-.mdjm_form_fields input:not([type='checkbox']),
+.mdjm_form_fields input,
 .mdjm_form_fields select,
-.mdjm_form_fields textarea { margin: 4px; min-width: 150px; }
-.mdjm_form_fields input[type='checkbox'] { margin: 4px; }
+.mdjm_form_fields textarea { margin: 4px }
+
+.mdjm_form_fields input:not([type='checkbox']),
+.mdjm_form_fields textarea { min-width: 150px; }
+
 .mdjm_form_fields textarea { width: 100%; }
 .mdjm_form_fields .submit input { width: auto; }
 .mdjm_form_fields label { font-weight: bold; }
 .mdjm_form_fields.description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
+.mdjm_form_fields input .mdjm-currency { max-width: 75px; }
+.mdjm_form_fields select .mdjm-time { max-width: 10px; }
 
+.mdjm-client-select { padding-left: 3px; padding-bottom: 5px; }
 
 .mdjm_event_txn_add_wrap { width: 100%; }
 
@@ -338,7 +344,21 @@ checkbox.mdjm-form-error {
 .col3 { float: left; width: 33%; }
 .col3-last { float: right; width: 33%; }
 
+#mdjm-event-add-new-client-fields
 #mdjm-event-client-details,
 #mdjm_event_custom_client_fields,
 #mdjm_event_custom_event_fields,
-#mdjm_event_custom_venue_fields { padding-top: 5px; }
+#mdjm_event_custom_venue_fields,
+#mdjm_event_details_table,
+#mdjm_event_packages_table { padding-top: 5px; }
+
+/* 3 column table */
+#mdjm-event-add-new-client-fields table td { width: 33%; max-width: 33%; }
+
+/* 2 column table */
+#mdjm-event-client-details table td,
+#mdjm_event_custom_client_fields table td,
+#mdjm_event_custom_event_fields table td,
+#mdjm_event_custom_venue_fields table td,
+#mdjm_event_details_table table td,
+#mdjm_event_packages_table table td { width: 50%; max-width: 50%; }

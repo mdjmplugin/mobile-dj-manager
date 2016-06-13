@@ -288,7 +288,7 @@ jQuery(document).ready(function ($) {
 						if(response.type == "success") {
 							$('#_mdjm_event_cost').val(response.cost);
 
-							if( '1' == $('#mdjm_update_deposit').val() )	{
+							if( mdjm_admin_vars.update_deposit )	{
 								setDeposit();
 							}
 
@@ -316,8 +316,8 @@ jQuery(document).ready(function ($) {
 				var postData        = {
 					package  : $("#_mdjm_event_package option:selected").val(),
 					addons   : $("#event_addons").val() || [],
-					dj       : $("#_mdjm_event_dj").val(),
-					action   : 'mdjm_update_dj_package_options'
+					employee : $("#_mdjm_event_dj").val(),
+					action   : 'refresh_employee_package_options'
 				};
 
 				$.ajax({
@@ -366,7 +366,7 @@ jQuery(document).ready(function ($) {
 				var postData        = {
 					package  : $("#_mdjm_event_package option:selected").val(),
 					dj       : $("#_mdjm_event_dj").val(),
-					action   : 'mdjm_update_addon_options'
+					action   : 'refresh_addon_options'
 				};
 
 				$.ajax({
