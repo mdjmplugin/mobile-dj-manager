@@ -31,91 +31,91 @@ class MDJM_Event {
 	 *
 	 * @since	1.3
 	 */
-	private $date;
+	public $date;
 	
 	/**
 	 * The event short date
 	 *
 	 * @since	1.3
 	 */
-	private $short_date;
+	public $short_date;
 	
 	/**
 	 * The client ID
 	 *
 	 * @since	1.3
 	 */
-	private $client;
+	public $client;
 	
 	/**
 	 * The primary employee ID
 	 *
 	 * @since	1.3
 	 */
-	private $employee_id;
+	public $employee_id;
 	
 	/**
 	 * The event employees
 	 *
 	 * @since	1.3
 	 */
-	private $employees;
+	public $employees;
 	
 	/**
 	 * The event price
 	 *
 	 * @since	1.3
 	 */
-	private $price;
+	public $price;
 	
 	/**
 	 * The event deposit
 	 *
 	 * @since	1.3
 	 */
-	private $deposit;
+	public $deposit;
 	
 	/**
 	 * The deposit status
 	 *
 	 * @since	1.3
 	 */
-	private $deposit_status;
+	public $deposit_status;
 	
 	/**
 	 * The event balance
 	 *
 	 * @since	1.3
 	 */
-	private $balance;
+	public $balance;
 	
 	/**
 	 * The balance status
 	 *
 	 * @since	1.3
 	 */
-	private $balance_status;
+	public $balance_status;
 		
 	/**
 	 * The total income
 	 *
 	 * @since	1.3
 	 */
-	private $income;
+	public $income;
 	
 	/**
 	 * The total outgoings
 	 *
 	 * @since	1.3
 	 */
-	private $outgoings;
+	public $outgoings;
 	
 	/**
 	 * The event guest playlist code
 	 *
 	 * @since	1.3
 	 */
-	private $playlist_code;
+	public $playlist_code;
 		
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
@@ -185,6 +185,8 @@ class MDJM_Event {
 		
 		$this->get_client();
 		$this->get_date();
+		$this->get_price();
+		$this->get_deposit();
 		
 		return true;
 	} // setup_event
@@ -506,6 +508,30 @@ class MDJM_Event {
 	} // get_short_date
 
 	/**
+	 * Retrieve the event start time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_start_time() {
+		$start = get_post_meta( $this->ID, '_mdjm_event_start', true );
+		
+		return apply_filters( 'mdjm_event_start', $start, $start, $this->ID );
+	} // get_start_time
+
+	/**
+	 * Retrieve the event finish time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_finish_time() {
+		$finish = get_post_meta( $this->ID, '_mdjm_event_finish', true );
+		
+		return apply_filters( 'mdjm_event_finish', $finish, $finish, $this->ID );
+	} // get_finish_time
+
+	/**
 	 * Retrieve the event name
 	 *
 	 * @since	1.3.7
@@ -519,11 +545,48 @@ class MDJM_Event {
 		 *
 		 * @since	1.3
 		 *
-		 * @param	str		$date The event price.
-		 * @param	str		$date The event date.
+		 * @param	str		$name The event name.
 		 */
 		return apply_filters( 'mdjm_get_event_name', $name, $this->ID );
 	} // get_name
+	
+	/**
+	 * Retrieve the event package
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_package() {
+		$package = get_post_meta( $this->ID, '_mdjm_event_package', true );
+		
+		/**
+		 * Override the event package.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$package The event price.
+		 */
+		return apply_filters( 'mdjm_get_event_package', $package, $this->ID );
+	} // get_package
+
+	/**
+	 * Retrieve the event addons
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_addons() {
+		$addons = get_post_meta( $this->ID, '_mdjm_event_addons', true );
+		
+		/**
+		 * Override the event package.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$package The event price.
+		 */
+		return apply_filters( 'mdjm_get_event_addons', $addons, $this->ID );
+	} // get_addons
 
 	/**
 	 * Retrieve the event status.
@@ -573,7 +636,7 @@ class MDJM_Event {
 
 			if ( $this->price ) {
 
-				$this->price = mdjm_sanitize_amount( $this->price );
+				$this->price = $this->price;
 
 			} else {
 
