@@ -1313,7 +1313,7 @@ function mdjm_event_metabox_client_row( $event_id )	{
 	?>
 	<div class="mdjm_form_fields">
         <label for="client_name"><?php _e(' Select Client:' ); ?></label> 
-        <select name="client_name" id="client_name">
+        <select name="client_name" id="client_name" class="mdjm-select-chosen">
         <?php if ( ! $mdjm_event_update ) : ?>
             <option value=""><?php _e( '--- Select Client ---', 'mobile-dj-manager' ); ?></option>
             <option value="mdjm_add_client"><?php _e( '--- Add New ---', 'mobile-dj-manager' ); ?></option>

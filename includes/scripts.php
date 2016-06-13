@@ -106,13 +106,16 @@ function mdjm_register_admin_styles( $hook )	{
 
 	$file          = 'mdjm-admin.css';
 	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
-	
+
+	wp_register_style( 'jquery-chosen', $css_dir . 'chosen.css', array(), MDJM_PLUGIN_URL );
+
 	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-admin' );
 	
 	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
-	
+
+	wp_enqueue_style( 'jquery-chosen' );
   	wp_enqueue_style( 'jquery-ui' );
 	wp_enqueue_style( 'font-awesome' );
 		
@@ -130,6 +133,9 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
 function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
+
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_PLUGIN_URL );
+	wp_enqueue_script( 'jquery-chosen' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
 		

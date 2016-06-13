@@ -1,5 +1,10 @@
 jQuery(document).ready(function ($) {
 
+	// Setup Chosen menus
+	$('.mdjm-select-chosen').chosen({
+		inherit_select_classes: true
+	});
+
 	/**
 	 * Events screen JS
 	 */
@@ -103,6 +108,7 @@ jQuery(document).ready(function ($) {
 						$('#mdjm-loading').remove();
 						$('#mdjm_block_emails').prop('checked', true );
 						$('#mdjm_reset_pw').prop('checked', true );
+						$("#client_name").trigger("chosen:updated");
 
 						if ( response.type == 'error' )	{
 							alert(response.message);

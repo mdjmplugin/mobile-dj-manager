@@ -45,6 +45,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-color	{
 	color: #F90;	
 }
+.mdjm-select-chosen { min-width: 150px; }
 
 /* =Client Field Settings
 -------------------------------------------------------------- */
