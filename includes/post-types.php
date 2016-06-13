@@ -543,6 +543,41 @@ function mdjm_get_label_plural( $lowercase = false ) {
 } // mdjm_get_label_plural
 
 /**
+ * Get the singular and plural labels for custom taxonomies.
+ *
+ * @since	0.1
+ * @param	str		$taxonomy	The Taxonomy to get labels for
+ * @return	arr		Associative array of labels (name = plural)
+ */
+function mdjm_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
+
+	$allowed_taxonomies = apply_filters(
+		'kbs_allowed_taxonomies',
+		array( 'event-types', 'mdjm-playlist', 'enquiry-source', 'mdjm-transactions', 'venue-details' )
+	);
+
+	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
+		return false;
+	}
+
+	$labels   = array();
+	$taxonomy = get_taxonomy( $taxonomy );
+
+	if ( false !== $taxonomy ) {
+		$singular = $taxonomy->labels->singular_name;
+		$name     = $taxonomy->labels->name;
+
+		$labels = array(
+			'name'          => $name,
+			'singular_name' => $singular,
+		);
+	}
+
+	return apply_filters( 'mdjm_get_taxonomy_labels', $labels, $taxonomy );
+
+} // mdjm_get_taxonomy_labels
+
+/**
  * Registers Custom Post Statuses which are used by the Communication, 
  * Event, Transaction and Quote custom post types.
  *
@@ -618,7 +653,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -633,7 +669,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Enquiry <span class="count">(%s)</span>', 'Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Enquiry <span class="count">(%s)</span>', 'Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -648,7 +685,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -663,7 +701,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -678,7 +717,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -693,7 +733,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -708,7 +749,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Rejected Enquiry <span class="count">(%s)</span>', 'Rejected Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Rejected Enquiry <span class="count">(%s)</span>', 'Rejected Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -723,7 +765,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Failed Enquiry <span class="count">(%s)</span>', 'Failed Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Failed Enquiry <span class="count">(%s)</span>', 'Failed Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
 			)
 		)
 	);
@@ -767,7 +810,8 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Received Payment <span class="count">(%s)</span>', 'Received Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Received Payment <span class="count">(%s)</span>', 'Received Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm'                      => true
 			)
 		)
 	);
@@ -781,12 +825,29 @@ function mdjm_register_post_statuses()	{
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Outgoing Payment <span class="count">(%s)</span>', 'Outgoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Outgoing Payment <span class="count">(%s)</span>', 'Outgoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm'                      => true
 			)
 		)
 	);
 } // mdjm_register_post_statuses
 add_action( 'init', 'mdjm_register_post_statuses', 2 );
+
+/**
+ * Retrieve all MDJM Event custom post statuses.
+ *
+ * @since	1.0
+ * @uses	get_post_stati()
+ * @param	str		$output		The type of output to return, either 'names' or 'objects'. Default 'names'.
+ * @return	arr|obj		
+ */
+function mdjm_get_post_statuses( $output = 'names' )	{
+	$args['mdjm-event'] = true;
+		
+	$mdjm_post_statuses = get_post_stati( $args, $output );
+	
+	return $mdjm_post_statuses;
+} // mdjm_get_post_statuses
 
 /**
  * Registers the custom taxonomies for the Event, Playlist.
