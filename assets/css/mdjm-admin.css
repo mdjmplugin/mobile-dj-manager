@@ -344,18 +344,20 @@ checkbox.mdjm-form-error {
 .col3 { float: left; width: 33%; }
 .col3-last { float: right; width: 33%; }
 
-#mdjm-event-add-new-client-fields
+#mdjm-event-add-new-client-fields,
 #mdjm-event-client-details,
 #mdjm_event_custom_client_fields,
 #mdjm_event_custom_event_fields,
 #mdjm_event_custom_venue_fields,
+#mdjm-event-emails-table,
 #mdjm_event_details_table,
+#mdjm-event-journal-table,
 #mdjm_event_packages_table { padding-top: 5px; }
 
-/* 3 column table */
+/* 3 column tables */
 #mdjm-event-add-new-client-fields table td { width: 33%; max-width: 33%; }
 
-/* 2 column table */
+/* 2 column tables */
 #mdjm-event-client-details table td,
 #mdjm_event_custom_client_fields table td,
 #mdjm_event_custom_event_fields table td,

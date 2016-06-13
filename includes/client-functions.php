@@ -522,7 +522,7 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
 
 	?>
     <div id="mdjm-event-client-details" class="mdjm-hidden">
-        <table class="widefat mdjm_event_client_details">
+        <table class="widefat mdjm_event_client_details mdjm_form_fields">
         	<thead>
             	<tr>
                 	<th colspan="4"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?></th>
@@ -530,17 +530,19 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
             </thead>
             <tbody>
             	<tr>
-                	<td><strong><?php _e( 'Phone', 'mobile-dj-manager' ); ?></strong><br />
+                	<td><i class="fa fa-phone" aria-hidden="true" title="<?php _e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo $client->phone1; echo '' != $client->phone2 ? ' / ' . $client->phone2 : '' ?></td>
-                  	
-                	<td><strong><?php _e( 'Email', 'mobile-dj-manager' ); ?></strong><br />
-                    <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>
-                	<td rowspan="2"><strong><?php _e( 'Address', 'mobile-dj-manager' ); ?></strong><br />
-                    <?php echo mdjm_get_client_full_address( $client->ID ); ?></td>
+
+                	<td rowspan="3"><?php echo mdjm_get_client_full_address( $client->ID ); ?></td>
            		</tr>
                 
                 <tr>
-                	<td><strong><?php _e( 'Last Login', 'mobile-dj-manager' ); ?></strong><br />
+					<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
+                    <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>
+				</tr>
+
+				<tr>
+                	<td><i class="fa fa-sign-in" aria-hidden="true" title="<?php _e( 'Last Login', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo mdjm_get_client_last_login( $client_id ); ?></td>
                   	
                 	<td><strong></strong><br />
