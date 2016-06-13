@@ -689,7 +689,7 @@ function mdjm_get_event_start( $event_id )	{
  * @param	int		$event_id	The event ID.
  * @return	int|str				The price of the event.
  */
-function mdjm_get_event_price( $event_id )	{
+function mdjm_get_event_price( $event_id = 0 )	{
 	if( empty( $event_id ) )	{
 		return false;
 	}
@@ -699,14 +699,26 @@ function mdjm_get_event_price( $event_id )	{
 } // mdjm_get_event_price
 
 /**
+ * Returns the deposit type.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The deposit type.
+ */
+function mdjm_get_event_deposit_type()	{
+	return mdjm_get_option( 'deposit_type', 'fixed' );
+} // mdjm_get_event_deposit_type
+
+/**
  * Returns the deposit price for an event.
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
  * @return	int|str				The deposit price of the event.
  */
-function mdjm_get_event_deposit( $event_id )	{
+function mdjm_get_event_deposit( $event_id = 0 )	{
 	if( empty( $event_id ) )	{
+		
 		return false;
 	}
 
@@ -754,11 +766,11 @@ function mdjm_get_event_remaining_deposit( $event_id )	{
  */
 function mdjm_calculate_deposit( $price = '' )	{
 	
-	if ( empty( $price ) )	{
+	$deposit_type = mdjm_get_event_deposit_type();
+
+	if ( empty( $price ) && 'fixed' != $deposit_type )	{
 		$deposit = 0;
 	}
-	
-	$deposit_type = mdjm_get_option( 'deposit_type' );
 	
 	if ( empty( $deposit_type ) )	{
 		$deposit = '0';
@@ -772,7 +784,7 @@ function mdjm_calculate_deposit( $price = '' )	{
 	
 	apply_filters( 'mdjm_calculate_deposit', $deposit, $price );
 	
-	return mdjm_format_amount( $deposit );
+	return mdjm_sanitize_amount( $deposit );
 	
 } // mdjm_calculate_deposit
 
