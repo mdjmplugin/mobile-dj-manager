@@ -1104,10 +1104,6 @@ function mdjm_do_event_txn_table( $event_id )	{
  * @return	int					The user ID of the event client.
  */
 function mdjm_get_event_client_id( $event_id )	{
-	if( empty( $event_id ) )	{
-		return false;
-	}
-
 	$event = new MDJM_Event( $event_id );
 	return $event->client;
 } // mdjm_get_event_client_id
