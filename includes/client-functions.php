@@ -251,6 +251,52 @@ function mdjm_user_is_client( $client_id )	{
 } // mdjm_user_is_client
 
 /**
+ * Determine if a client is active.
+ *
+ * @since	1.3.7
+ * @param	int		$client_id	The client user ID
+ * @return	bool	True if active, otherwise false.
+ */
+function mdjm_is_client_active( $client_id )	{
+
+	$return = false;
+	$user   = get_userdata( $client_id );
+
+	if ( $user )	{
+		if ( ! in_array( 'inactive_client', $user->roles ) )	{
+			return true;
+		}
+	}
+
+	return apply_filters( 'mdjm_is_client_active', $return, $client_id );
+
+} // mdjm_is_client_active
+
+/**
+ * Activate a client a client if needed.
+ *
+ * @since	1.3.7
+ * @param	int		$event_id	The Event ID
+ * @return	void
+ */
+function mdjm_maybe_activate_client( $event_id )	{
+
+	$client_id = mdjm_get_event_client_id( $event_id );
+
+	if ( ! empty( $client_id ) )	{
+		if ( ! mdjm_is_client_active( $client_id ) )	{
+			mdjm_update_client_status( $client_id );
+		}
+	}
+
+} // mdjm_maybe_activate_client
+add_action( 'mdjm_pre_update_event_status_mdjm-unattended', 'mdjm_maybe_activate_client' );
+add_action( 'mdjm_pre_update_event_status_mdjm-enquiry', 'mdjm_maybe_activate_client' );
+add_action( 'mdjm_pre_update_event_status_mdjm-contract', 'mdjm_maybe_activate_client' );
+add_action( 'mdjm_pre_update_event_status_mdjm-approved', 'mdjm_maybe_activate_client' );
+add_action( 'mdjm_pre_update_event_status_mdjm-completed', 'mdjm_maybe_activate_client' );
+
+/**
  * Updates a clients status.
  *
  * @since	1.3.7
