@@ -141,6 +141,28 @@ function mdjm_add_client_ajax()	{
 add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
 
 /**
+ * Refresh the data within the venue details table.
+ *
+ * @since	1.3.7
+ *
+ */
+function mdjm_refresh_venue_details_ajax()	{
+
+	$result = array();
+
+	ob_start();
+	mdjm_do_venue_details_table( $_POST['event_id'], $_POST['venue_id'] );
+	$result['venue_details'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_refresh_venue_details_ajax
+add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );
+
+/**
  * Save the custom event fields order for clients
  *
  *
@@ -261,7 +283,13 @@ function mdjm_save_event_transaction_ajax()	{
 		);
 		
 		mdjm_add_journal( $args );
-		
+
+		// Email overide
+		if ( empty( $_POST['send_notice'] ) && mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+			$manual_email_template = mdjm_get_option( 'manual_payment_cfm_template' );
+			mdjm_update_option( 'manual_payment_cfm_template', 0 );
+		}
+
 		$payment_for = $mdjm_txn->get_type();
 		$amount      = mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) );
 
@@ -279,8 +307,12 @@ function mdjm_save_event_transaction_ajax()	{
 		 * @param	int		$event_id
 		 * @param	obj		$txn_id
 		 */
-
 		do_action( 'mdjm_post_add_manual_txn_' . strtolower( $_POST['direction'] ), $_POST['event_id'], $mdjm_txn->ID );
+
+		// Email overide
+		if ( empty( $_POST['send_notice'] ) && isset( $manual_email_template ) )	{
+			mdjm_update_option( 'manual_payment_cfm_template', $manual_email_template );
+		}
 
 		$result['deposit_paid'] = 'N';
 		$result['balance_paid'] = 'N';

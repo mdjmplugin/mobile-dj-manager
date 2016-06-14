@@ -525,7 +525,7 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
         <table class="widefat mdjm_event_client_details mdjm_form_fields">
         	<thead>
             	<tr>
-                	<th colspan="4"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?></th>
+                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -543,10 +543,7 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
 
 				<tr>
                 	<td><i class="fa fa-sign-in" aria-hidden="true" title="<?php _e( 'Last Login', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>
-                  	
-                	<td><strong></strong><br />
-                    </td>
+                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>                  	
            		</tr>
             </tbody>
         </table>

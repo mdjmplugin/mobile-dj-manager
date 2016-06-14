@@ -42,7 +42,7 @@ class MDJM_HTML_Elements {
 			'name'             => $name,
 			'selected'         => $selected,
 			'options'          => $options,
-			'show_option_all'  => '',
+			'show_option_all'  => false,
 			'show_option_none' => false
 		) );
 
@@ -59,8 +59,17 @@ class MDJM_HTML_Elements {
 	 * @return	str		$output		Category dropdown
 	 */
 	public function enquiry_source_dropdown( $name = 'mdjm_enquiry_source', $selected = 0 ) {
-		$categories = get_terms( 'enquiry-source', apply_filters( 'mdjm_enquiry_source_dropdown', array() ) );
+
+		$args = array(
+			'hide_empty' => false
+		);
+
+		$categories = get_terms( 'enquiry-source', apply_filters( 'mdjm_enquiry_source_dropdown', $args ) );
 		$options    = array();
+
+		if ( empty( $selected ) )	{
+			$selected = mdjm_get_option( 'enquiry_source_default' );
+		}
 
 		foreach ( $categories as $category ) {
 			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
@@ -71,12 +80,92 @@ class MDJM_HTML_Elements {
 			'name'             => $name,
 			'selected'         => $selected,
 			'options'          => $options,
-			'show_option_all'  => sprintf( _x( 'All %s', 'plural: Example: "All Sources"', 'mobile-dj-manager' ), $category_labels['name'] ),
+			'show_option_all'  => false,
 			'show_option_none' => false
 		) );
 
 		return $output;
 	} // enquiry_source_dropdown
+
+	/**
+	 * Renders an HTML Dropdown of all Transaction Types
+	 *
+	 * @access	public
+	 * @since	1.3.7
+	 * @param	str		$name		Name attribute of the dropdown
+	 * @param	int		$selected	Category to select automatically
+	 * @return	str		$output		Category dropdown
+	 */
+	public function txn_type_dropdown( $name = 'mdjm_txn_for', $selected = 0 ) {
+
+		$args = array(
+			'hide_empty' => false
+		);
+
+		$categories = get_terms( 'transaction-types', apply_filters( 'mdjm_txn_types_dropdown', $args ) );
+		$options    = array();
+
+		foreach ( $categories as $category ) {
+			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
+		}
+
+		$category_labels = mdjm_get_taxonomy_labels( 'transaction-types' );
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => $options,
+			'show_option_all'  => __( ' - Select Txn Type - ' ),
+			'show_option_none' => false
+		) );
+
+		return $output;
+	} // txn_type_dropdown
+	
+	/**
+	 * Renders an HTML Dropdown of all Transaction Types
+	 *
+	 * @access	public
+	 * @since	1.3.7
+	 * @param	arr		$args		See @defaults
+	 * @return	str		$output		Venue dropdown
+	 */
+	public function venue_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'venue_id',
+			'class'            => 'mdjm-venue-select',
+			'id'               => '',
+			'selected'         => 0,
+			'chosen'           => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'allow_add'        => true,
+			'show_option_all'  => __( ' - Select Venue - ' ),
+			'show_option_none' => false,
+			'data'             => array()
+		);
+		
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( $args['allow_add'] )	{
+			$args['options']  = array(
+				'manual' => __( '  - Enter Manually - ', 'mobile-dj-manager' ),
+				'client' => __( '  - Use Client Address - ', 'mobile-dj-manager' )
+			);
+		}
+
+		$venues = mdjm_get_venues();
+
+		if ( $venues )	{
+			foreach ( $venues as $venue ) {
+				$args['options'][ $venue->ID ] = $venue->post_title;
+			}
+		}
+
+		$output = $this->select( $args );
+
+		return $output;
+	} // venue_dropdown
 
 	/**
 	 * Renders an HTML Dropdown of years
@@ -221,8 +310,8 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_none' => false,
+			'show_option_all'  => __( 'No Package', 'mobile-dj-manager' ),
 			'chosen'           => false,
 			'employee'         => false,
 			'placeholder'      => null,
@@ -273,8 +362,8 @@ class MDJM_HTML_Elements {
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
-			'show_option_none' => $packages ? $args['show_option_none'] : __( 'No packages available', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_none' => false,
+			'show_option_all'  => $packages ? $args['show_option_all'] : __( 'No packages available', 'mobile-dj-manager' ),
 			'data'             => $args['data']
 		) );
 
@@ -295,8 +384,8 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_none' => false,
+			'show_option_all'  => __( 'No Package', 'mobile-dj-manager' ),
 			'chosen'           => false,
 			'employee'         => false,
 			'placeholder'      => null,
@@ -365,8 +454,8 @@ class MDJM_HTML_Elements {
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
-			'show_option_none' => $addons ? $args['show_option_none'] : __( 'No add-ons available', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_none' => false,
+			'show_option_all'  => $addons ? $args['show_option_all'] : __( 'No add-ons available', 'mobile-dj-manager' ),
 			'data'             => $args['data']
 		) );
 

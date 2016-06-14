@@ -459,8 +459,8 @@ class MDJM_Event {
 		 *
 		 * @since	1.3
 		 *
-		 * @param	str		$date The event price.
 		 * @param	str		$date The event date.
+		 * @param	int		$ID   The event ID.
 		 */
 		return apply_filters( 'mdjm_get_event_date', $this->date, $this->ID );
 	} // get_date
@@ -516,7 +516,7 @@ class MDJM_Event {
 	public function get_start_time() {
 		$start = get_post_meta( $this->ID, '_mdjm_event_start', true );
 		
-		return apply_filters( 'mdjm_event_start', $start, $start, $this->ID );
+		return apply_filters( 'mdjm_event_start', $start, $this->ID );
 	} // get_start_time
 
 	/**
@@ -528,8 +528,40 @@ class MDJM_Event {
 	public function get_finish_time() {
 		$finish = get_post_meta( $this->ID, '_mdjm_event_finish', true );
 		
-		return apply_filters( 'mdjm_event_finish', $finish, $finish, $this->ID );
+		return apply_filters( 'mdjm_event_finish', $finish, $this->ID );
 	} // get_finish_time
+
+	/**
+	 * Retrieve the event setup date
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_setup_date() {
+		$setup_date = get_post_meta( $this->ID, '_mdjm_event_djsetup', true );
+		
+		/**
+		 * Override the event setup date.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$setup_date The event setup date.
+		 * @param	int		$ID 		The event ID.
+		 */
+		return apply_filters( 'mdjm_event_setup_date', $setup_date, $this->ID );
+	} // get_setup_date
+
+	/**
+	 * Retrieve the event setup time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_setup_time() {
+		$setup_time = get_post_meta( $this->ID, '_mdjm_event_djsetup_time', true );
+		
+		return apply_filters( 'mdjm_event_setup_time', $setup_time, $this->ID );
+	} // get_setup_time
 
 	/**
 	 * Retrieve the event name
@@ -547,7 +579,7 @@ class MDJM_Event {
 		 *
 		 * @param	str		$name The event name.
 		 */
-		return apply_filters( 'mdjm_get_event_name', $name, $this->ID );
+		return apply_filters( 'mdjm_event_name', $name, $this->ID );
 	} // get_name
 	
 	/**
@@ -566,7 +598,7 @@ class MDJM_Event {
 		 *
 		 * @param	str		$package The event price.
 		 */
-		return apply_filters( 'mdjm_get_event_package', $package, $this->ID );
+		return apply_filters( 'mdjm_event_package', $package, $this->ID );
 	} // get_package
 
 	/**
@@ -585,7 +617,7 @@ class MDJM_Event {
 		 *
 		 * @param	str		$package The event price.
 		 */
-		return apply_filters( 'mdjm_get_event_addons', $addons, $this->ID );
+		return apply_filters( 'mdjm_event_addons', $addons, $this->ID );
 	} // get_addons
 
 	/**
@@ -951,7 +983,25 @@ class MDJM_Event {
 		 */
 		return apply_filters( 'get_wages_total', mdjm_format_amount( $wages ), $this->ID, $this->employees );
 	} // get_wages_total
-	
+
+	/**
+	 * Retrieve the venue ID
+	 *
+	 * @since	1.3.7
+	 * @return	int|str
+	 */
+	public function get_venue_id() {
+		$addons = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
+		
+		/**
+		 * Override the venue id.
+		 *
+		 * @since	1.3.7
+		 * @param	str		$package The event price.
+		 */
+		return apply_filters( 'mdjm_event_venue_id', $addons, $this->ID );
+	} // get_venue_id
+
 	/**
 	 * Retrieve the guest playlist access code.
 	 *

@@ -45,7 +45,8 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-color	{
 	color: #F90;	
 }
-.mdjm-select-chosen { min-width: 200px; }
+.mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
+.mdjm-select-chosen label { padding-right: 3px; }
 
 /* =Client Field Settings
 -------------------------------------------------------------- */
@@ -320,6 +321,28 @@ checkbox.mdjm-form-error {
 
 /* =Metaboxes
 -------------------------------------------------------------- */
+#mdjm_field_wrap {    
+    text-align: justify;
+    -ms-text-justify: distribute-all-lines;
+    text-justify: distribute-all-lines;    
+}
+
+#mdjm_field_wrap > div {
+    width: 150px;
+    height: 125px;
+    vertical-align: top;
+    display: inline-block;
+    *display: inline;
+    zoom: 1
+}
+#mdjm_field_wrap:after {
+    content: '';
+    width: 100%;
+    display: inline-block;
+    font-size: 0;
+    line-height: 0
+}
+
 .mdjm_form_fields { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
@@ -328,14 +351,15 @@ checkbox.mdjm-form-error {
 .mdjm_form_fields input:not([type='checkbox']),
 .mdjm_form_fields textarea { min-width: 150px; }
 
-.mdjm_form_fields textarea { width: 100%; }
+.mdjm_form_fields textarea { width: 100%; height: 5em; }
 .mdjm_form_fields .submit input { width: auto; }
 .mdjm_form_fields label { font-weight: bold; }
 .mdjm_form_fields.description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
 .mdjm_form_fields input .mdjm-currency { max-width: 75px; }
 .mdjm_form_fields select .mdjm-time { max-width: 10px; }
 
-.mdjm-client-select { padding-left: 3px; padding-bottom: 5px; }
+#mdjm-event-employee-setup-row { display: inline; }
+#mdjm-event-employee-setup-row select { vertical-align: top; }
 
 .mdjm_event_txn_add_wrap { width: 100%; }
 
@@ -344,7 +368,13 @@ checkbox.mdjm-form-error {
 .col3 { float: left; width: 33%; }
 .col3-last { float: right; width: 33%; }
 
+#mdjm-event-client,
+#mdjm-event-venue { margin: 4px; padding-bottom: 5px; }
+#mdjm-event-client label,
+#mdjm-event-client label { padding-right: 3px; }
+
 #mdjm-event-add-new-client-fields,
+#mdjm-event-add-txn-table,
 #mdjm-event-client-details,
 #mdjm_event_custom_client_fields,
 #mdjm_event_custom_event_fields,
@@ -352,10 +382,15 @@ checkbox.mdjm-form-error {
 #mdjm-event-emails-table,
 #mdjm_event_details_table,
 #mdjm-event-journal-table,
-#mdjm_event_packages_table { padding-top: 5px; }
+#mdjm_event_packages_table,
+#mdjm-event-add-txn-table,
+#mdjm-event-add-new-venue-fields { padding-top: 5px; }
 
 /* 3 column tables */
-#mdjm-event-add-new-client-fields table td { width: 33%; max-width: 33%; }
+#mdjm-event-add-new-client-fields table td,
+#mdjm-event-add-txn-table table td,
+#mdjm-event-add-new-venue-fields table td,
+#mdjm-event-venue-details table td { width: 33%; max-width: 33%; }
 
 /* 2 column tables */
 #mdjm-event-client-details table td,

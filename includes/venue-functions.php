@@ -126,6 +126,7 @@ function mdjm_get_venues( $args = array() )	{
 	
 	$defaults = array(
 		'post_type'	=> 'mdjm-venue',
+		'post_status'  => 'publish',
 		'orderby'	  => 'title',
 		'order'		=> 'ASC',
 		'numberposts'  => -1
@@ -133,7 +134,9 @@ function mdjm_get_venues( $args = array() )	{
 	
 	$args = wp_parse_args( $args, $defaults );
 	
-	return get_posts( $args );
+	$venues = get_posts( $args );
+	
+	return apply_filters( 'mdjm_get_venues', $venues );
 
 } // mdjm_get_venues
 
@@ -213,6 +216,8 @@ function mdjm_get_event_venue_meta( $id, $field='' )	{
 function mdjm_get_venue_details( $venue_id )	{
 	$details = wp_get_object_terms( $venue_id, 'venue-details' );
 	
+	$venue_details = array();
+	
 	foreach( $details as $detail ) 	{
 		$venue_details[] = $detail->name;
 	}
@@ -279,3 +284,46 @@ function mdjm_venue_dropdown( $args = array() )	{
 	}
 	
 } // mdjm_venue_dropdown
+
+/**
+ * Output the venues details.
+ *
+ * @since	1.3.7
+ * @param	int		$event_id	Event ID
+ * @return	str
+ */
+function mdjm_do_venue_details_table( $event_id, $venue_id )	{
+
+	?>
+    <div id="mdjm-event-venue-details" class="mdjm-hidden">
+        <table class="widefat mdjm_event_venue_details mdjm_form_fields">
+        	<thead>
+            	<tr>
+                	<th colspan="3"><?php printf( __( 'Details for %s', 'mobile-dj-manager' ), mdjm_get_event_venue_meta( $event_id, 'name' ) ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            	<tr>
+                	<td><i class="fa fa-user" aria-hidden="true" title="<?php _e( 'Contact Name', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo mdjm_get_event_venue_meta( $event_id, 'contact' ); ?></td>
+
+                	<td rowspan="3"><?php echo implode( '<br />', mdjm_get_event_venue_meta( $event_id, 'address' ) ); ?></td>
+                    <td rowspan="3"><?php echo implode( '<br />', mdjm_get_venue_details( $venue_id ) ); ?></td>
+           		</tr>
+                
+                <tr>
+                	<td><i class="fa fa-phone" aria-hidden="true" title="<?php _e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo mdjm_get_event_venue_meta( $event_id, 'phone' ); ?></td>
+				</tr>
+
+				<tr>
+                	<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo mdjm_get_event_venue_meta( $event_id, 'email' ); ?></td>                  	
+           		</tr>
+            </tbody>
+        </table>
+    </div>
+
+    <?php
+
+} // mdjm_do_client_details_table
