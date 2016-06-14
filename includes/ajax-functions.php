@@ -797,15 +797,15 @@ add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown
  */
 function mdjm_refresh_addon_options_ajax()	{
 
-	$employee = $_POST['dj'];
+	$employee = isset( $_POST['dj'] ) ? $_POST['dj'] : false;
 	$package  = $_POST['package'];
 	$addons   = mdjm_addons_dropdown( array(
-					'name'    => 'event_addons',
-					'dj'      => !empty( $dj ) ? $dj : '',
-					'package' => !empty( $event_package ) ? $event_package : '',
-					),
-					false
-				);
+		'name'    => 'event_addons',
+		'dj'      => ! empty( $employee ) ? $employee  : '',
+		'package' => ! empty( $package )  ? $package   : '',
+		),
+		false
+	);
 
 	$result['type'] = 'success';
 
