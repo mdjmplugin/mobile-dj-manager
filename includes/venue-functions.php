@@ -63,26 +63,20 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 	
 	$venue_id = wp_insert_post( $args );
 	
-	if( empty( $venue_id ) )	{
-		
-		$debug[] = 'Adding new venue failed';
-		
+	if( empty( $venue_id ) )	{		
 		return false;
-		
 	}
-	
-	$debug[] = sprintf( 'New venue %s (ID %s) added', $name, $venue_id );
 	
 	if( ! empty( $venue_meta ) )	{
 		
 		foreach( $venue_meta as $key => $value )	{
 			
+			if ( $key == 'venue_email' && ! is_email( $value ) )	{
+				continue;
+			}
+			
 			if( ! empty( $value ) && $key != 'venue_name' )	{
-				
-				$debug[] = sprintf( 'Updating venue %s. Adding %s with value of %s.', $name, $key, $value );
-				
 				add_post_meta( $venue_id, '_' . $key, $value );
-				
 			}
 			
 		}
@@ -99,17 +93,6 @@ function mdjm_add_venue( $venue_name = '', $venue_meta = array() )	{
 	
 	// Re-add the save post hook for venue posts
 	add_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
-	
-	if( ! empty( $debug ) && MDJM_DEBUG == true )	{
-		
-		$true = true;
-		
-		foreach( $debug as $log )	{
-			MDJM()->debug->log_it( $log, $true );
-			$true = false;
-		}
-		
-	}
 	
 	return $venue_id;
 	
@@ -171,8 +154,9 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_town', true );
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_county', true );
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
-			
+
 			$return = array_filter( $return );
+			
 			break;
 
 		case 'address1' :
@@ -223,7 +207,16 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			
 		break;
 	}
-	
+
+	if ( ! empty( $return ) ) 	{
+		if ( is_array( $return ) )	{
+			$return = array_map( 'stripslashes', $return );
+			$return = array_map( 'esc_html', $return );
+		} else	{
+			$return = esc_html( stripslashes( $return ) );
+		}
+	}
+
 	return empty ( $return ) ? '' : $return;
 } // mdjm_get_event_venue_meta
 
