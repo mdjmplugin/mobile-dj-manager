@@ -114,8 +114,8 @@ class MDJM_HTML_Elements {
 			'name'             => $name,
 			'selected'         => $selected,
 			'options'          => $options,
-			'show_option_all'  => __( ' - Select Txn Type - ' ),
-			'show_option_none' => false
+			'show_option_all'  => false,
+			'show_option_none' => __( ' - Select Txn Type - ' )
 		) );
 
 		return $output;
@@ -140,8 +140,8 @@ class MDJM_HTML_Elements {
 			'placeholder'      => null,
 			'multiple'         => false,
 			'allow_add'        => true,
-			'show_option_all'  => __( ' - Select Venue - ' ),
-			'show_option_none' => false,
+			'show_option_all'  => false,
+			'show_option_none' => __( ' - Select Venue - ' ),
 			'data'             => array()
 		);
 		
@@ -310,8 +310,8 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => false,
-			'show_option_all'  => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
 			'placeholder'      => null,
@@ -362,8 +362,8 @@ class MDJM_HTML_Elements {
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
-			'show_option_none' => false,
-			'show_option_all'  => $packages ? $args['show_option_all'] : __( 'No packages available', 'mobile-dj-manager' ),
+			'show_option_none' => $packages ? $args['show_option_none'] : __( 'No packages available', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
 			'data'             => $args['data']
 		) );
 
@@ -384,8 +384,8 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => false,
-			'show_option_all'  => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
 			'placeholder'      => null,
@@ -454,8 +454,8 @@ class MDJM_HTML_Elements {
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
-			'show_option_none' => false,
-			'show_option_all'  => $addons ? $args['show_option_all'] : __( 'No add-ons available', 'mobile-dj-manager' ),
+			'show_option_none' => $addons ? $args['show_option_none'] : __( 'No add-ons available', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
 			'data'             => $args['data']
 		) );
 
@@ -651,9 +651,9 @@ class MDJM_HTML_Elements {
 
 		if ( $args['show_option_all'] ) {
 			if( $args['multiple'] ) {
-				$selected = selected( true, in_array( 0, $args['selected'] ), false );
+				$selected = selected( true, in_array( 'all', $args['selected'] ), false );
 			} else {
-				$selected = selected( $args['selected'], 0, false );
+				$selected = selected( $args['selected'], 'all', false );
 			}
 			$output .= '<option value="all"' . $selected . '>' . esc_html( $args['show_option_all'] ) . '</option>' . "\r\n";
 		}
@@ -662,11 +662,11 @@ class MDJM_HTML_Elements {
 
 			if ( $args['show_option_none'] ) {
 				if( $args['multiple'] ) {
-					$selected = selected( true, in_array( -1, $args['selected'] ), false );
+					$selected = selected( true, in_array( 0, $args['selected'] ), false );
 				} else {
-					$selected = selected( $args['selected'], -1, false );
+					$selected = selected( $args['selected'], 0, false );
 				}
-				$output .= '<option value="-1"' . $selected . '>' . esc_html( $args['show_option_none'] ) . '</option>' . "\r\n";
+				$output .= '<option value="0"' . $selected . '>' . esc_html( $args['show_option_none'] ) . '</option>' . "\r\n";
 			}
 
 			if ( ! isset( $args['options']['groups'] ) )	{
@@ -882,6 +882,7 @@ class MDJM_HTML_Elements {
 			'desc'         => isset( $desc )  ? $desc  : null,
 			'placeholder'  => '',
 			'class'        => 'regular-text',
+			'readonly'     => false,
 			'disabled'     => false,
 			'autocomplete' => '',
 			'required'     => false,
@@ -894,9 +895,13 @@ class MDJM_HTML_Elements {
 
 		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$disabled = '';
+		$readonly = '';
 		$required = '';
 		if( $args['disabled'] ) {
 			$disabled = ' disabled="disabled"';
+		}
+		if( $args['readonly'] ) {
+			$readonly = ' readonly="readonly"';
 		}
 		if( $args['required'] ) {
 			$required = ' required';
@@ -913,7 +918,7 @@ class MDJM_HTML_Elements {
 
 		$output .= '<label for="' . mdjm_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-		$output .= '<input type="' . $args['type'] . '" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $disabled . '' . $required . '/>';
+		$output .= '<input type="' . $args['type'] . '" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $disabled . '' . $readonly . '' . $required . '/>';
 		
 		$output .= '</span>';
 		

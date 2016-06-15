@@ -349,7 +349,7 @@ function mdjm_event_metabox_event_options( $post )	{
 					'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : mdjm_get_option( 'event_type_default', '' ) ),
 					'orderby' 			 => 'name',
 					'hierarchical' 		=> 0,
-					'show_option_all'     => sprintf( __( 'Select %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+					'show_option_none'    => sprintf( __( 'Select %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 					'class'			   => 'mdjm-meta required'
 				)
 			);
@@ -743,22 +743,41 @@ function mdjm_event_metabox_client_select_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	$clients = mdjm_get_clients( 'client' );
-
 	?>
 	<div id="mdjm-event-client" class="mdjm_form_fields">
-        <label for="client_name"><?php _e(' Select Client:' ); ?></label> 
-        <?php echo MDJM()->html->client_dropdown( array(
-			'selected'         => $mdjm_event->client,
-			'class'            => '',
-			'roles'            => array( 'client' ),
-			'chosen'           => true,
-			'placeholder'      => __( 'Select a Client', 'mobile-dj-manager' ),
-			'null_value'       => array( '' => __( 'Select a Client', 'mobile-dj-manager' ) ),
-			'add_new'          => empty( $mdjm_event->client ) ? true : false,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) ); ?>
+    	<label for="client_name"><?php _e( 'Client:' ); ?></label> 
+    	<?php if ( mdjm_event_is_active( $event_id ) ) : ?>
+
+            <?php $clients = mdjm_get_clients( 'client' ); ?>
+            
+            <?php echo MDJM()->html->client_dropdown( array(
+                'selected'         => $mdjm_event->client,
+                'class'            => '',
+                'roles'            => array( 'client' ),
+                'chosen'           => true,
+                'placeholder'      => __( 'Select a Client', 'mobile-dj-manager' ),
+                'null_value'       => array( '' => __( 'Select a Client', 'mobile-dj-manager' ) ),
+                'add_new'          => empty( $mdjm_event->client ) ? true : false,
+                'show_option_all'  => false,
+                'show_option_none' => false
+            ) ); ?>
+
+        <?php else : ?>
+
+			<?php echo MDJM()->html->text( array(
+                'name'     => 'client_name_display',
+                'class'    => '',
+				'value'    => mdjm_get_client_display_name( $mdjm_event->client ),
+				'readonly' => true
+            ) ); ?>
+            
+            <?php echo MDJM()->html->hidden( array(
+                'name'  => 'client_name',
+                'class' => '',
+				'value' =>$mdjm_event->client
+            ) ); ?>
+
+        <?php endif; ?>
         <?php if ( mdjm_employee_can( 'view_clients_list' ) && $mdjm_event_update && $mdjm_event->client ) : ?>
             <a id="toggle_client_details" class="mdjm-small mdjm-fake"><?php _e( 'Toggle Client Details', 'mobile-dj-manager' ); ?></a>
         <?php endif; ?>
@@ -1037,13 +1056,13 @@ function mdjm_event_metabox_details_packages_table( $event_id )	{
             <tbody>
     
                 <tr>
-                    <td><label for="_mdjm_event_package"><?php printf( __( 'Select an %s Package:' ), mdjm_get_label_singular() ); ?></label><br />
+                    <td><label for="_mdjm_event_package"><?php _e( 'Package:', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->packages_dropdown( array(
-                            'employee' => $employee,
-                            'selected' => $package
+                            'employee'         => $employee,
+                            'selected'         => $package
                         ) ); ?></td>
                     
-                    <td><label for="event_addons"><?php _e( 'Select Add-ons:', 'mobile-dj-manager' ); ?></label><br />
+                    <td><label for="event_addons"><?php _e( 'Add-ons:', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->addons_dropdown( array(
 							'selected'         => $addons,
 							'show_option_none' => false,
