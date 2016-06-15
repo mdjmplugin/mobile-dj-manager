@@ -151,7 +151,7 @@ function mdjm_refresh_venue_details_ajax()	{
 	$result = array();
 
 	ob_start();
-	mdjm_do_venue_details_table( $_POST['event_id'], $_POST['venue_id'] );
+	mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] );
 	$result['venue_details'] = ob_get_contents();
 	ob_get_clean();
 
@@ -161,6 +161,65 @@ function mdjm_refresh_venue_details_ajax()	{
 
 } // mdjm_refresh_venue_details_ajax
 add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );
+
+/**
+ * Adds a new venue from the events screen.
+ *
+ * @since	1.3.7
+ *
+ */
+function mdjm_add_venue_ajax()	{
+
+	$venue_id   = false;
+	$venue_list = '';
+	$result     = array();
+	$venue_name = '';
+	$venue_meta = array();
+
+	foreach( $_POST as $key => $value )	{
+		if ( $key == 'action' )	{
+			continue;
+		} elseif( $key == 'venue_name' )	{
+			$venue_name = $value;
+		} else	{
+			$venue_meta[ $key ] = strip_tags( addslashes( $value ) );
+		}
+	}
+
+	$venue_id = mdjm_add_venue( $venue_name, $venue_meta );
+
+	$venues = mdjm_get_venues();
+		
+	if ( ! empty( $venues ) )	{
+		foreach( $venues as $venue )	{
+			$venue_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				$venue->ID,
+				$venue->ID == $venue_id ? ' selected="selected"' : '',
+				$venue->post_name
+			);
+		}
+	}
+
+	if ( empty( $venue_id ) )	{
+		$result = array(
+			'type'    => 'error',
+			'message' => __( 'Unable to add venue', 'mobile-dj-manager' )
+		);
+	} else	{
+		$result = array(
+			'type'       => 'success',
+			'venue_id'   => $venue_id,
+			'venue_list' => $client_list
+		);
+		
+	}
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_add_venue_ajax
+add_action( 'wp_ajax_mdjm_add_venue_details', 'mdjm_add_venue_ajax' );
 
 /**
  * Save the custom event fields order for clients

@@ -464,6 +464,17 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#mdjm_txn_toggle', function(event) {
 				$('#mdjm_event_txn_table').toggle("slow");
 			});
+
+			// Show/Hide transaction table
+			$( document.body ).on( 'click', '#toggle_add_txn_fields', function(event) {
+				$('#mdjm_event_add_txn_table tbody').toggle("slow");
+				$('#save-event-txn').toggle("fast");
+				if ( 'show form' == $('#toggle_add_txn_fields').text() )	{
+					$('#toggle_add_txn_fields').text('hide form');
+				} else	{
+					$('#toggle_add_txn_fields').text('show form');
+				}
+			});
 			
 			// Transaction direction
 			$( document.body ).on( 'change', '#mdjm_txn_direction', function(event) {
@@ -567,21 +578,21 @@ jQuery(document).ready(function ($) {
 				$('#mdjm-event-venue-details').toggle("slow");
 			});
 			
-			// Update the client details when the client selection changes
+			// Update the venue details when the venue selection changes
 			$( document.body ).on( 'change', '#venue_id', function(event) {
 				
 				event.preventDefault();
 				
 				if ( 'manual' == $('#venue_id').val() )	{
+					$('#mdjm-event-venue-details').hide("slow");
 					$('#mdjm-event-add-new-venue-fields').show("slow");
 					$('#mdjm-save-venue').removeClass('mdjm-hidden');
 					$('#toggle_venue_details').addClass('mdjm-hidden');
 				} else	{
-
-					$('#mdjm-event-add-new-venue-fields').hide("slow");
 					$('#mdjm-save-venue').addClass('mdjm-hidden');
+					$('#mdjm-event-add-new-venue-fields').hide("slow");
 					
-					if( '-1' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
+					if(  '0' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
 						$('#toggle_venue_details').removeClass('mdjm-hidden');
 					} else	{
 						$('#toggle_venue_details').addClass('mdjm-hidden');
@@ -592,18 +603,20 @@ jQuery(document).ready(function ($) {
 						event_id   : $('#post_ID').val(),
 						action     : 'mdjm_refresh_venue_details'
 					};
-	
+
 					$.ajax({
 						type       : 'POST',
 						dataType   : 'json',
 						data       : postData,
 						url        : ajaxurl,
 						beforeSend : function()	{
+							if ( $('#mdjm-event-venue-details').hasClass("mdjm-hidden") )	{
+								$.needClass = false;
+							}
 							$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 						},
 						success: function (response) {
 							$('#mdjm-loading').replaceWith(response.venue_details);
-	
 						}
 					}).fail(function (data) {
 						$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
@@ -637,7 +650,7 @@ jQuery(document).ready(function ($) {
 					venue_county      : $('#venue_county').val(),
 					venue_postcode    : $('#venue_postcode').val(),
 					venue_phone       : $('#venue_phone').val(),
-					action            : 'mdjm_event_add_venue'
+					action            : 'mdjm_add_venue'
 				};
 
 				$.ajax({

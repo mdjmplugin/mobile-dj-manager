@@ -991,15 +991,15 @@ class MDJM_Event {
 	 * @return	int|str
 	 */
 	public function get_venue_id() {
-		$addons = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
+		$venue_id = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
 		
 		/**
 		 * Override the venue id.
 		 *
 		 * @since	1.3.7
-		 * @param	str		$package The event price.
+		 * @param	str		$venue_id The venue ID.
 		 */
-		return apply_filters( 'mdjm_event_venue_id', $addons, $this->ID );
+		return apply_filters( 'mdjm_event_venue_id', $venue_id, $this->ID );
 	} // get_venue_id
 
 	/**
