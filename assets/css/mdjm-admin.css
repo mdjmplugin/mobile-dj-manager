@@ -16,6 +16,7 @@
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
 a.mdjm-fake { cursor: pointer; cursor: hand; }
+
 #mdjm-loader	{
 	max-width: 20px;
 	margin: auto;
@@ -47,6 +48,17 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 }
 .mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
 .mdjm-select-chosen label { padding-right: 3px; }
+
+/* General Settings Styles
+-------------------------------------------------------------- */
+.mdjm-event_page_mdjm-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
+.mdjm-event_page_mdjm-settings .form-table select + label,
+.mdjm-event_page_mdjm-settings .form-table input.regular-text ~ label { display:block; }
+.mdjm-event_page_mdjm-settings .form-table input.small-text ~ label,
+.mdjm-event_page_mdjm-settings .form-table input[type="checkbox"] + label { display: inline; }
+.mdjm-event_page_mdjm-settings .form-table tr > th > strong,
+.mdjm-event_page_mdjm-settings .form-table tr > th > h3
+{ font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
 /* =Client Field Settings
 -------------------------------------------------------------- */
@@ -399,3 +411,38 @@ checkbox.mdjm-form-error {
 #mdjm_event_custom_venue_fields table td,
 #mdjm_event_details_table table td,
 #mdjm_event_packages_table table td { width: 50%; max-width: 50%; }
+
+/* Side Metaboxes */
+#mdjm-event-actions hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #fafafa;
+}
+#minor-publishing label,
+#mdjm-event-actions label {
+	display: inline-block;
+	width: 60px;
+}
+#mdjm-event-actions a {
+	display: inline-block;
+	width: 100px;
+}
+#mdjm-event-actions input[type=submit] {
+	float: right;
+	width: auto;
+}
+#minor-publishing input[type='text'],
+#mdjm-event-actions input[type='text'],
+#minor-publishing select,
+#mdjm-event-actions select {
+	width: 150px;
+}
+#mdjm-event-actions .description {
+	color: #666;
+	font-size: 11px;
+	font-style: italic;
+	float: right;
+}
+#mdjm-event-actions #event-type-add { cursor: pointer; }
+
+#mdjm-new-event-type-row { display: none; vertical-align: top; }

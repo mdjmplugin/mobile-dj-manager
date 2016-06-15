@@ -627,32 +627,51 @@ function mdjm_set_event_type( $event_id, $type = '' )	{
  * Return the event type label for given event ID.
  *
  * @since	1.3
- * @param	int		$event_id	Optional: ID of the current event. If not set, check for global $post and $post_id.
+ * @param	int		$event_id	ID of the current event. If not set, check for global $post and $post_id.
+ * @param	bool	$raw		True to return the raw slug of the event type, false for the label
  * @return	str		Label for current event type.
  */
-function mdjm_get_event_type( $event_id='' )	{
+function mdjm_get_event_type( $event_id='', $raw = false )	{
 	
 	global $post, $post_id;
 	
 	if( ! empty( $event_id ) )	{
 		$id = $event_id;
-	}
-	elseif( ! empty( $post_id ) )	{
+	} elseif( ! empty( $post_id ) )	{
 		$id = $post_id;
-	}
-	elseif( ! empty( $post ) )	{
+	} elseif( ! empty( $post ) )	{
 		$id = $post->ID;
-	}
-	else	{
+	} else	{
 		$id = '';
 	}
-	
+
+	if ( $raw )	{
+		return mdjm_get_event_type_raw( $id );
+	}
+
 	$event = new MDJM_Event( $id );
 	
 	// Return the label for the status
 	return $event->get_type();
 
 } // mdjm_get_event_type
+
+/**
+ * Return the event type slug for given event ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	ID of the current event. If not set, check for global $post and $post_id.
+ * @return	str		Slug for current event type.
+ */
+function mdjm_get_event_type_raw( $event_id )	{
+	$event_type =  wp_get_object_terms( $event_id, 'event-types' );
+	
+	if ( $event_type )	{
+		return absint( $event_type[0]->term_id );
+	}
+
+	return false;
+} // mdjm_get_event_type_raw
 
 /**
  * Returns the contract ID for the event.

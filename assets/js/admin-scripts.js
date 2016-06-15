@@ -14,6 +14,7 @@ jQuery(document).ready(function ($) {
 			this.client();
 			this.employee();
 			this.equipment();
+			this.event_options();
 			this.time();
 			this.type();
 			this.txns();
@@ -400,6 +401,13 @@ jQuery(document).ready(function ($) {
 
 			});
 
+		},
+		
+		event_options : function()	{
+
+			$( document.body ).on( 'click', '#event-type-add', function(event) {
+				$('#mdjm-new-event-type-row').toggle("fast");
+			});
 		},
 		
 		time : function()	{

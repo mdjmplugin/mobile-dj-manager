@@ -59,6 +59,16 @@ function mdjm_add_event_meta_boxes( $post )	{
 	$metaboxes = apply_filters( 'mdjm_event_add_metaboxes',
 		array(
 			array(
+				'id'         => 'mdjm-event-options',
+				'title'      => sprintf( __( '%s Options', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'callback'   => 'mdjm_event_metabox_options_callback',
+				'context'    => 'side',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => ''
+			),
+			array(
 				'id'         => 'mdjm-event-client',
 				'title'      => __( 'Client Details', 'mobile-dj-manager' ),
 				'callback'   => 'mdjm_event_metabox_client_callback',
@@ -127,16 +137,6 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'args'       => array(),
 				'dependancy' => '',
 				'permission' => 'manage_mdjm'
-			),
-			array(
-				'id'         => 'mdjm-event-options',
-				'title'      => sprintf( __( '%s Options', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'callback'   => 'mdjm_event_metabox_event_options',
-				'context'    => 'side',
-				'priority'   => 'high',
-				'args'       => array(),
-				'dependancy' => '',
-				'permission' => ''
 			)
 		)
 	);
@@ -175,6 +175,50 @@ function mdjm_add_event_meta_boxes( $post )	{
 	do_action( 'mdjm_event_after_metaboxes' );
 } // mdjm_add_event_meta_boxes
 add_action( 'add_meta_boxes_mdjm-event', 'mdjm_add_event_meta_boxes' );
+
+/**
+ * Output for the Event Options meta box.
+ *
+ * @since	1.3
+ * @param	obj		$post	The post object (WP_Post).
+ * @return
+ */
+function mdjm_event_metabox_options_callback( $post )	{
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+	?>
+
+	<div class="submitbox" id="submitpost">
+		<div id="minor-publishing">
+        	<div id="minor-publishing-actions">
+            
+            </div><!-- #minor-publishing-actions -->
+            <div id="mdjm-event-actions">
+            	
+                <?php
+				/*
+				 * Output the items for the options metabox
+				 * These items go inside the mdjm-event-actions div
+				 * @since	1.3.7
+				 * @param	int	$post_id	The Event post ID
+				 */
+				do_action( 'mdjm_event_options_fields', $post->ID ); ?>
+            </div><!-- #mdjm-event-actions -->
+            <?php
+			/*
+			 * Output the items for the options settings
+			 * These items go outside the mdjm-event-actions div
+			 * @since	1.3.7
+			 * @param	int	$post_id	The Event post ID
+			 */
+			do_action( 'mdjm_event_options_fields_settings', $post->ID );
+			?>
+        </div><!-- #minor-publishing -->
+    </div><!-- #submitpost -->
+	<?php
+
+} // mdjm_event_metabox_options_callback
 
 /**
  * Output for the Client Details meta box.
@@ -302,261 +346,219 @@ function mdjm_event_metabox_transactions_callback( $post )	{
 } // mdjm_event_metabox_transactions_callback
 
 /**
- * Output for the Event Options meta box.
+ * Output the event options status row
  *
- * @since	1.3
- * @param	obj		$post		Required: The post object (WP_Post).
- * @return
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
  */
-function mdjm_event_metabox_event_options( $post )	{
-			
-	$existing_event = ( $post->post_status == 'unattended' || $post->post_status == 'enquiry' || $post->post_status == 'auto-draft' ? false : true );
-	
+function mdjm_event_metabox_options_status_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
 	?>
-	<div class="mdjm-meta-row" style="height: 50px !important">
-		<div class="mdjm-rightt-col">
-			<label for="mdjm_event_status" class="mdjm-label"><?php printf( __( '%s Status:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
-			<?php
-			mdjm_event_status_dropdown(
-				array(
-					'selected'	=> $post->post_status == 'auto-draft' ? 'mdjm-unattended' : $post->post_status,
-					'small' => true
-				)
-			);
-			?>
-		</div>
-	</div>
-	<?php
+    <p class="dashicons-before dashicons-post-status"><label for="mdjm_event_status"><?php _e( 'Status:' ); ?></label>
+		<?php echo MDJM()->html->event_status_dropdown( 'mdjm_event_status', $mdjm_event->post_status ); ?></p>
+    <?php
+
+} // mdjm_event_metabox_options_status_row
+add_action( 'mdjm_event_options_fields', 'mdjm_event_metabox_options_status_row', 10 );
+
+/**
+ * Output the event options type row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_type_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$event_type = mdjm_get_event_type( $event_id, true );
 	
-	/* -- The current event type -- */
-	$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
-	
-	/* -- Catch empty selections -- */
-	?>
-	<input type="hidden" name="mdjm_event_type" value="0" />
-		<div class="mdjm-meta-row" style="height: 50px !important">
-			<div class="mdjm-left-col">
-				<label for="mdjm_event_type" class="mdjm-label"><?php printf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
-		<div id="event_types">
-			<?php
-			/* -- Display the drop down selection -- */    
-			wp_dropdown_categories( 
-				array( 
-					'taxonomy' 			=> 'event-types',
-					'hide_empty' 		  => 0,
-					'name' 				=> 'mdjm_event_type',
-					'id' 				  => 'mdjm_event_type',
-					'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : mdjm_get_option( 'event_type_default', '' ) ),
-					'orderby' 			 => 'name',
-					'hierarchical' 		=> 0,
-					'show_option_none'    => sprintf( __( 'Select %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-					'class'			   => 'mdjm-meta required'
-				)
-			);
-											
-			if( mdjm_employee_can( 'manage_all_events' ) )	{
-				?>
-				<a id="new_event_type" class="button button-secondary button-small side-meta"><?php _e( 'Add New', 'mobile-dj-manager' ); ?></a>
-				<?php
-			}
-			?>
-		</div>
-			</div>
-		</div>
-		<div id="new_event_type_div">
-			<div class="mdjm-meta-row" style="height: 50px !important">
-				<div class="mdjm-left-col"><br />
-						<input type="text" name="event_type_name" id="event_type_name" class="mdjm-meta" placeholder="<?php printf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>" />&nbsp;
-							<a id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
-				</div>
-			</div>
-		</div>
-	<script type="text/javascript">
-	jQuery("#mdjm_event_type option:first").val(null);
-	</script>
-	<div class="mdjm-meta-row" style="height: 50px !important">
-		<div class="mdjm-left-col">
-			<label for="_mdjm_event_contract" class="mdjm-label"><?php printf( __( 'Event Contract:' ), mdjm_get_label_singular() ); ?></label><br />
-			<select name="_mdjm_event_contract" id="_mdjm_event_contract" class="mdjm-meta">
-			<?php
-			$contract_templates = get_posts(
-				array(
-					'post_type' => 'contract',
-					'orderby' => 'post_title',
-					'order' => 'ASC',
-					'numberposts' => -1,
-					'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
-				)
-			);
-			
-			foreach( $contract_templates as $contract_template )	{
-				echo '<option value="' . $contract_template->ID . '"';
-				if( $event_contract = get_post_meta( $post->ID, '_mdjm_event_contract', true ) )	{
-					selected( $event_contract, $contract_template->ID );
-				}
-				else	{
-					selected( mdjm_get_option( 'default_contract' ), $contract_template->ID );
-				}
-				/* -- If the event is past enquiry we only display the contract that is selected
-						and add a link to view it -- */
-				echo ( $post->post_status != 'auto-draft' && $post->post_status != 'mdjm-unattended' && $post->post_status != 'mdjm-enquiry' && $post->post_status != 'mdjm-contract' && $event_contract != $contract_template->ID ? ' disabled="disabled"' : '' );
-				
-				echo '>' . $contract_template->post_title . '</option>' . "\r\n";
-			}
-			?>
-			</select>
-		</div>
-	</div>
-    <?php if( mdjm_employee_can( 'manage_events' ) && mdjm_contract_is_signed( $post->ID ) ) : ?>
-		<div class="mdjm-meta-row">
-			<div class="mdjm-left-col">
-		<?php
-		echo '<a id="view_contract" class="side-meta" href="' . esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $post->ID ), home_url() ) ) . '" target="_blank">View Signed Contract</a>';
-		?>
-			</div>
-		</div>
-    <?php endif; ?>
-	<div class="mdjm-meta-row">
-		<div class="mdjm-left-col">
-		<?php
-		echo '<input type="checkbox" name="mdjm_block_emails" id="mdjm_block_emails" value="1"';
-		
-		if( $post->post_status == 'mdjm-unattended' )
-			echo ' onclick="showTemplateOptions();"';
-			
-		if( $post->post_status == 'mdjm-enquiry' )
-			checked( 'contract_to_client', false );
-			
-		if( $post->post_status == 'mdjm-enquiry' )
-			checked( 'booking_conf_to_client', false );
-		
-		echo ' />' . "\r\n";
-		?>
-		</div>
-		<div class="mdjm-right-col"><?php _e( 'Disable Client Update Emails', 'mobile-dj-manager' ) . '?'; ?></div>
-	</div>
-	<?php
-	if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )	{
-		?>
-        <div class="mdjm-meta-row">
-            <div class="mdjm-left-col">
-            <input type="checkbox" name="mdjm_reset_pw" id="mdjm_reset_pw" value="Y" />
-            </div>
-            <div class="mdjm-right-col"><?php _e( 'Reset Client Password?', 'mobile-dj-manager' ); ?></div>
-        </div>
-		<div id="email_template_fields">
-			<script type="text/javascript">
-			function showTemplateOptions(){
-				if (mdjm_block_emails.checked == 1)	{
-					document.getElementById('email_template_fields').style.display = "none";
-				}
-				else	{
-					document.getElementById('email_template_fields').style.display = "block";	
-				}
-			}
-			</script>
-			<div class="mdjm-meta-row" style="height: 60px !important">
-				Email Quote Template:<br />
-				<select name="mdjm_email_template" id="mdjm_email_template" class="mdjm-meta" style="width: 200px;">
-				<?php
-				$email_templates = get_posts(
-					array(
-						'post_type' => 'email_template',
-						'orderby' => 'post_title',
-						'order' => 'ASC',
-						'numberposts' => -1,
-						'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
-					)
-				);
-				
-				foreach( $email_templates as $email_template )	{
-					echo '<option value="' . $email_template->ID . '"';
-					selected( mdjm_get_option( 'enquiry' ), $email_template->ID );
-					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
-				}
-				?>
-				</select>
-			</div>				
-		</div>
-		<?php
-		if( mdjm_get_option( 'online_enquiry', false ) )	{
-			?>
-			<div class="mdjm-meta-row" style="height: 60px !important">
-				Online Quote Template:<br />
-				<select name="mdjm_online_quote" id="mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
-				<?php
-				foreach( $email_templates as $email_template )	{
-					echo '<option value="' . $email_template->ID . '"';
-					selected( mdjm_get_option( 'online_enquiry' ), $email_template->ID );
-					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
-				}
-				?>
-				</select>
-			</div>
-			<?php
-		}
+	if ( ! $event_type )	{
+		$event_type = mdjm_get_option( 'event_type_default', '' );
 	}
+
 	?>
-	<div class="mdjm-meta-row">
-		<div class="mdjm-left-col">
-		<input type="checkbox" name="deposit_paid" id="deposit_paid" value="Paid"<?php checked( get_post_meta( $post->ID, '_mdjm_event_deposit_status', true ), 'Paid' ); ?> />
-		</div>
-		<div class="mdjm-right-col"><?php _e( mdjm_get_deposit_label() . ' paid?' ); ?></div>
-	</div>
-	<div class="mdjm-meta-row">
-		<div class="mdjm-left-col">
-		<input type="checkbox" name="balance_paid" id="balance_paid" value="Paid"<?php checked( get_post_meta( $post->ID, '_mdjm_event_balance_status', true ), 'Paid' ); ?> />
-		</div>
-		<div class="mdjm-right-col"><?php _e( mdjm_get_balance_label() . ' paid?' ); ?></div>
-	</div>
-	
-	<div class="mdjm-meta-row">
-		<div class="mdjm-left-col">
-		<input type="checkbox" name="_mdjm_event_playlist" id="_mdjm_event_playlist" value="Y"<?php 
-			if( $existing_event == false )	{
-				if( mdjm_get_option( 'enable_playlists', true ) == true )	{
-					echo ' checked = "checked"';
-				}
-			}
-			else	{	
-				if( get_post_meta( $post->ID, '_mdjm_event_playlist', true ) == 'Y' )	{
-					echo ' checked = "checked"';
-				}
-			}
-			?> />
-		</div>
-		<div class="mdjm-right-col"><?php printf( __( 'Enable %s Playlist?', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></div>
-	</div>
-	
-	<?php 
-		// Execute actions before the update/save event button
-		do_action( 'mdjm_event_options_meta_content_last', $post );
+    <p>&nbsp;<i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;<label for="mdjm_event_type"><?php _e( 'Type:', 'mobile-dj-manager' ); ?></label>
+		<?php echo MDJM()->html->event_type_dropdown( 'mdjm_event_type', $event_type ); ?>
+
+		<?php if( mdjm_is_admin() ) : ?>
+            <i id="event-type-add" class="fa fa-plus" aria-hidden="true"></i>
+
+            <div id="mdjm-new-event-type-row">
+            	<?php echo MDJM()->html->text( array(
+					'name'        => 'event_type_name',
+					'placeholder' => sprintf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+				) ); ?> 
+                <button id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></button>
+            </div>
+
+        <?php endif; ?>
+    </p>
+    <?php
+
+} // mdjm_event_metabox_options_type_row
+add_action( 'mdjm_event_options_fields', 'mdjm_event_metabox_options_type_row', 20 );
+
+/**
+ * Output the event options type row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_contract_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$contract        = $mdjm_event->get_contract();
+	$contract_status = $mdjm_event->get_contract_status();
+
 	?>
-	
-	<div class="mdjm-meta-row" style="height: <?php echo ( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' ? 
-												'60px' : '40px' ); ?> !important;">
-		<div class="mdjm-left-col">
-		<?php
-		if( mdjm_employee_can( 'manage_events' ) )	{
-			submit_button( 
-						( $post->post_status == 'auto-draft' ? sprintf( __( 'Add %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) : sprintf( __( 'Update %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) ),
-						'primary',
-						'save',
-						false,
-						array( 'id' => 'save-post' ) );
-		}
-													
-		if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' && mdjm_employee_can( 'manage_all_events' ) )	{
-			echo '<br />' . 
-			'<br />' .
-			'<a style="color:#a00" href="' . get_delete_post_link( $post->ID ) . '">' . sprintf( __( 'Delete this event', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</a>' . 
-			"\r\n";
-		}
-		?>
-		</div>
-	</div>
+
+	<p>&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;<label for="_mdjm_event_contract"><?php _e( 'Contract:', 'mobile-dj-manager' ); ?></label>
+	<?php if ( ! $contract_status ) : ?>
+			<?php echo MDJM()->html->select( array(
+                'name'     => '_mdjm_event_contract',
+				'options'  => mdjm_list_templates( 'contract' ),
+                'selected' => ! empty( $contract ) ? $contract : mdjm_get_option( 'default_contract' )
+            ) ); ?>
+        <?php else : ?>
+			<?php if( mdjm_employee_can( 'manage_events' ) ) : ?>
+				<a id="view_contract" href="<?php echo esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $event_id ), home_url() ) ); ?>" target="_blank"><?php _e( 'Signed Contract', 'mobile-dj-manager' ); ?></a>
+			<?php else : ?>
+				<?php _e( 'Contract is Signed', 'mobile-dj-manager' ); ?>
+			<?php endif; ?>
+		<?php endif; ?></p>
 	<?php
-} // mdjm_event_metabox_event_options
+
+} // mdjm_event_metabox_options_contract_row
+add_action( 'mdjm_event_options_fields', 'mdjm_event_metabox_options_contract_row', 30 );
+
+/**
+ * Output the event options block emails row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_block_emails_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+    
+    <p><?php echo MDJM()->html->checkbox( array(
+        'name'     => 'mdjm_block_emails',
+        'current'  => get_post_meta( $event_id, '_mdjm_event_block_emails', true )
+    ) ); ?> <?php _e( 'Disable Client Emails?', 'mobile-dj-manager' ); ?></p>
+    <?php
+
+} // mdjm_event_metabox_options_block_emails_row
+add_action( 'mdjm_event_options_fields_settings', 'mdjm_event_metabox_options_block_emails_row', 10 );
+
+/**
+ * Output the event options reset password row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_reset_pw_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+	
+	if ( $mdjm_event_update && $mdjm_event->post_status != 'mdjm-unattended' )	{
+		return;
+	}
+
+	?>
+    
+    <p><?php echo MDJM()->html->checkbox( array(
+        'name'  => 'mdjm_reset_pw',
+        'value' => 'Y'
+    ) ); ?> <?php _e( 'Reset Client Password?', 'mobile-dj-manager' ); ?></p>
+    <?php
+
+} // mdjm_event_metabox_options_block_emails_row
+add_action( 'mdjm_event_options_fields_settings', 'mdjm_event_metabox_options_reset_pw_row', 15 );
+
+/**
+ * Output the event options email template row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_email_template_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+	
+	if ( $mdjm_event_update && $mdjm_event->post_status != 'mdjm-unattended' )	{
+		return;
+	}
+
+	?>
+    
+    <p><label for="mdjm_email_template"><?php _e( 'Quote:', 'mobile-dj-manager' ); ?></label>
+		<?php echo MDJM()->html->select( array(
+			'name'     => 'mdjm_email_template',
+			'options'  => mdjm_list_templates( 'email_template' ),
+			'selected' => mdjm_get_option( 'enquiry' )
+		) ); ?></p>
+    <?php
+
+} // mdjm_event_metabox_options_email_template_row
+add_action( 'mdjm_event_options_fields_settings', 'mdjm_event_metabox_options_email_template_row', 20 );
+
+/**
+ * Output the event options online quote template row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_options_quote_template_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+	
+	if ( $mdjm_event_update && $mdjm_event->post_status != 'mdjm-unattended' )	{
+		return;
+	}
+	
+	if( ! mdjm_get_option( 'online_enquiry', false ) )	{
+		return;
+	}
+
+	?>
+    
+    <p><label for="mdjm_email_template"><?php _e( 'Online Quote:', 'mobile-dj-manager' ); ?></label>
+		<?php echo MDJM()->html->select( array(
+			'name'     => 'mdjm_online_quote',
+			'options'  => mdjm_list_templates( 'email_template' ),
+			'selected' => mdjm_get_option( 'online_enquiry' )
+		) ); ?></p>
+    <?php
+
+} // mdjm_event_metabox_options_quote_template_row
+add_action( 'mdjm_event_options_fields_settings', 'mdjm_event_metabox_options_quote_template_row', 25 );
 
 /**
  * Output for the Event Employees meta box.
@@ -1665,3 +1667,250 @@ function mdjm_event_metabox_history_emails_table( $event_id )	{
 	<?php
 } // mdjm_event_metabox_emails_table
 add_action( 'mdjm_event_history_fields', 'mdjm_event_metabox_history_emails_table', 20 );
+
+function old_options()	{
+	?>
+		<div class="mdjm-meta-row" style="height: 50px !important">
+		<div class="mdjm-rightt-col">
+			<label for="mdjm_event_status" class="mdjm-label"><?php printf( __( '%s Status:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
+			<?php
+			mdjm_event_status_dropdown(
+				array(
+					'selected'	=> $post->post_status == 'auto-draft' ? 'mdjm-unattended' : $post->post_status,
+					'small' => true
+				)
+			);
+			?>
+		</div>
+	</div>
+	<?php
+	
+	/* -- The current event type -- */
+	$existing_event_type = wp_get_object_terms( $post->ID, 'event-types' );
+	
+	/* -- Catch empty selections -- */
+	?>
+	<input type="hidden" name="mdjm_event_type" value="0" />
+		<div class="mdjm-meta-row" style="height: 50px !important">
+			<div class="mdjm-left-col">
+				<label for="mdjm_event_type" class="mdjm-label"><?php printf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
+		<div id="event_types">
+			<?php
+			/* -- Display the drop down selection -- */    
+			wp_dropdown_categories( 
+				array( 
+					'taxonomy' 			=> 'event-types',
+					'hide_empty' 		  => 0,
+					'name' 				=> 'mdjm_event_type',
+					'id' 				  => 'mdjm_event_type',
+					'selected' 			=> ( isset( $existing_event_type[0]->term_id ) ? $existing_event_type[0]->term_id : mdjm_get_option( 'event_type_default', '' ) ),
+					'orderby' 			 => 'name',
+					'hierarchical' 		=> 0,
+					'show_option_none'    => sprintf( __( 'Select %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+					'class'			   => 'mdjm-meta required'
+				)
+			);
+											
+			if( mdjm_employee_can( 'manage_all_events' ) )	{
+				?>
+				<a id="new_event_type" class="button button-secondary button-small side-meta"><?php _e( 'Add New', 'mobile-dj-manager' ); ?></a>
+				<?php
+			}
+			?>
+		</div>
+			</div>
+		</div>
+		<div id="new_event_type_div">
+			<div class="mdjm-meta-row" style="height: 50px !important">
+				<div class="mdjm-left-col"><br />
+						<input type="text" name="event_type_name" id="event_type_name" class="mdjm-meta" placeholder="<?php printf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>" />&nbsp;
+							<a id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+				</div>
+			</div>
+		</div>
+	<script type="text/javascript">
+	jQuery("#mdjm_event_type option:first").val(null);
+	</script>
+	<div class="mdjm-meta-row" style="height: 50px !important">
+		<div class="mdjm-left-col">
+			<label for="_mdjm_event_contract" class="mdjm-label"><?php printf( __( 'Event Contract:' ), mdjm_get_label_singular() ); ?></label><br />
+			<select name="_mdjm_event_contract" id="_mdjm_event_contract" class="mdjm-meta">
+			<?php
+			$contract_templates = get_posts(
+				array(
+					'post_type' => 'contract',
+					'orderby' => 'post_title',
+					'order' => 'ASC',
+					'numberposts' => -1,
+					'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
+				)
+			);
+			
+			foreach( $contract_templates as $contract_template )	{
+				echo '<option value="' . $contract_template->ID . '"';
+				if( $event_contract = get_post_meta( $post->ID, '_mdjm_event_contract', true ) )	{
+					selected( $event_contract, $contract_template->ID );
+				}
+				else	{
+					selected( mdjm_get_option( 'default_contract' ), $contract_template->ID );
+				}
+				/* -- If the event is past enquiry we only display the contract that is selected
+						and add a link to view it -- */
+				echo ( $post->post_status != 'auto-draft' && $post->post_status != 'mdjm-unattended' && $post->post_status != 'mdjm-enquiry' && $post->post_status != 'mdjm-contract' && $event_contract != $contract_template->ID ? ' disabled="disabled"' : '' );
+				
+				echo '>' . $contract_template->post_title . '</option>' . "\r\n";
+			}
+			?>
+			</select>
+		</div>
+	</div>
+    <?php if( mdjm_employee_can( 'manage_events' ) && mdjm_contract_is_signed( $post->ID ) ) : ?>
+		<div class="mdjm-meta-row">
+			<div class="mdjm-left-col">
+		<?php
+		echo '<a id="view_contract" class="side-meta" href="' . esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $post->ID ), home_url() ) ) . '" target="_blank">View Signed Contract</a>';
+		?>
+			</div>
+		</div>
+    <?php endif; ?>
+	<div class="mdjm-meta-row">
+		<div class="mdjm-left-col">
+		<?php
+		echo '<input type="checkbox" name="mdjm_block_emails" id="mdjm_block_emails" value="1"';
+		
+		if( $post->post_status == 'mdjm-unattended' )
+			echo ' onclick="showTemplateOptions();"';
+			
+		if( $post->post_status == 'mdjm-enquiry' )
+			checked( 'contract_to_client', false );
+			
+		if( $post->post_status == 'mdjm-enquiry' )
+			checked( 'booking_conf_to_client', false );
+		
+		echo ' />' . "\r\n";
+		?>
+		</div>
+		<div class="mdjm-right-col"><?php _e( 'Disable Client Update Emails', 'mobile-dj-manager' ) . '?'; ?></div>
+	</div>
+	<?php
+	if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' )	{
+		?>
+        <div class="mdjm-meta-row">
+            <div class="mdjm-left-col">
+            <input type="checkbox" name="mdjm_reset_pw" id="mdjm_reset_pw" value="Y" />
+            </div>
+            <div class="mdjm-right-col"><?php _e( 'Reset Client Password?', 'mobile-dj-manager' ); ?></div>
+        </div>
+		<div id="email_template_fields">
+			<script type="text/javascript">
+			function showTemplateOptions(){
+				if (mdjm_block_emails.checked == 1)	{
+					document.getElementById('email_template_fields').style.display = "none";
+				}
+				else	{
+					document.getElementById('email_template_fields').style.display = "block";	
+				}
+			}
+			</script>
+			<div class="mdjm-meta-row" style="height: 60px !important">
+				Email Quote Template:<br />
+				<select name="mdjm_email_template" id="mdjm_email_template" class="mdjm-meta" style="width: 200px;">
+				<?php
+				$email_templates = get_posts(
+					array(
+						'post_type' => 'email_template',
+						'orderby' => 'post_title',
+						'order' => 'ASC',
+						'numberposts' => -1,
+						'exclude' => is_dj() && ( mdjm_get_option( 'dj_disable_template' ) ) ? mdjm_get_option( 'dj_disable_template' ) : '',
+					)
+				);
+				
+				foreach( $email_templates as $email_template )	{
+					echo '<option value="' . $email_template->ID . '"';
+					selected( mdjm_get_option( 'enquiry' ), $email_template->ID );
+					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
+				}
+				?>
+				</select>
+			</div>				
+		</div>
+		<?php
+		if( mdjm_get_option( 'online_enquiry', false ) )	{
+			?>
+			<div class="mdjm-meta-row" style="height: 60px !important">
+				Online Quote Template:<br />
+				<select name="mdjm_online_quote" id="mdjm_online_quote" class="mdjm-meta" style="width: 200px;">
+				<?php
+				foreach( $email_templates as $email_template )	{
+					echo '<option value="' . $email_template->ID . '"';
+					selected( mdjm_get_option( 'online_enquiry' ), $email_template->ID );
+					echo '>' . $email_template->post_title . '</option>' . "\r\n";	
+				}
+				?>
+				</select>
+			</div>
+			<?php
+		}
+	}
+	?>
+	<div class="mdjm-meta-row">
+		<div class="mdjm-left-col">
+		<input type="checkbox" name="deposit_paid" id="deposit_paid" value="Paid"<?php checked( get_post_meta( $post->ID, '_mdjm_event_deposit_status', true ), 'Paid' ); ?> />
+		</div>
+		<div class="mdjm-right-col"><?php _e( mdjm_get_deposit_label() . ' paid?' ); ?></div>
+	</div>
+	<div class="mdjm-meta-row">
+		<div class="mdjm-left-col">
+		<input type="checkbox" name="balance_paid" id="balance_paid" value="Paid"<?php checked( get_post_meta( $post->ID, '_mdjm_event_balance_status', true ), 'Paid' ); ?> />
+		</div>
+		<div class="mdjm-right-col"><?php _e( mdjm_get_balance_label() . ' paid?' ); ?></div>
+	</div>
+	
+	<div class="mdjm-meta-row">
+		<div class="mdjm-left-col">
+		<input type="checkbox" name="_mdjm_event_playlist" id="_mdjm_event_playlist" value="Y"<?php 
+			if( $existing_event == false )	{
+				if( mdjm_get_option( 'enable_playlists', true ) == true )	{
+					echo ' checked = "checked"';
+				}
+			}
+			else	{	
+				if( get_post_meta( $post->ID, '_mdjm_event_playlist', true ) == 'Y' )	{
+					echo ' checked = "checked"';
+				}
+			}
+			?> />
+		</div>
+		<div class="mdjm-right-col"><?php printf( __( 'Enable %s Playlist?', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></div>
+	</div>
+	
+	<?php 
+		// Execute actions before the update/save event button
+		do_action( 'mdjm_event_options_meta_content_last', $post );
+	?>
+	
+	<div class="mdjm-meta-row" style="height: <?php echo ( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' ? 
+												'60px' : '40px' ); ?> !important;">
+		<div class="mdjm-left-col">
+		<?php
+		if( mdjm_employee_can( 'manage_events' ) )	{
+			submit_button( 
+						( $post->post_status == 'auto-draft' ? sprintf( __( 'Add %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) : sprintf( __( 'Update %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) ),
+						'primary',
+						'save',
+						false,
+						array( 'id' => 'save-post' ) );
+		}
+													
+		if( $post->post_status == 'mdjm-unattended' || $post->post_status == 'auto-draft' && mdjm_employee_can( 'manage_all_events' ) )	{
+			echo '<br />' . 
+			'<br />' .
+			'<a style="color:#a00" href="' . get_delete_post_link( $post->ID ) . '">' . sprintf( __( 'Delete this event', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</a>' . 
+			"\r\n";
+		}
+		?>
+		</div>
+	</div>
+	<?php
+}

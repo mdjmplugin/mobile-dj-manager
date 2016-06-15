@@ -32,7 +32,7 @@ class MDJM_HTML_Elements {
 	 */
 	public function event_status_dropdown( $name = 'post_status', $selected = 0 ) {
 		$event_statuses = mdjm_get_post_statuses( 'labels' );
-		$options    = array();
+		$options        = array();
 		
 		foreach ( $event_statuses as $event_statuses ) {
 			$options[ $event_statuses->name ] = esc_html( $event_statuses->label );
@@ -49,6 +49,43 @@ class MDJM_HTML_Elements {
 		return $output;
 	} // event_status_dropdown
 
+	/**
+	 * Renders an HTML Dropdown of all the Enquiry Sources
+	 *
+	 * @access	public
+	 * @since	1.3.7
+	 * @param	str		$name		Name attribute of the dropdown
+	 * @param	int		$selected	Category to select automatically
+	 * @return	str		$output		Category dropdown
+	 */
+	public function event_type_dropdown( $name = 'mdjm_event_type', $selected = 0 ) {
+
+		$args = array(
+			'hide_empty' => false
+		);
+
+		$categories = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $args ) );
+		$options    = array();
+
+		if ( empty( $selected ) )	{
+			$selected = mdjm_get_option( 'event_type_default' );
+		}
+
+		foreach ( $categories as $category ) {
+			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
+		}
+
+		$category_labels = mdjm_get_taxonomy_labels( 'event-types' );
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => $options,
+			'show_option_all'  => false,
+			'show_option_none' => false
+		) );
+
+		return $output;
+	} // event_type_dropdown
 	/**
 	 * Renders an HTML Dropdown of all the Enquiry Sources
 	 *
@@ -616,8 +653,8 @@ class MDJM_HTML_Elements {
 			'chosen'           => false,
 			'placeholder'      => null,
 			'multiple'         => false,
-			'show_option_all'  => _x( 'All', 'all dropdown items', 'mobile-dj-manager' ),
-			'show_option_none' => _x( 'None', 'no dropdown items', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
+			'show_option_none' => false,
 			'data'             => array(),
 		);
 
@@ -735,6 +772,7 @@ class MDJM_HTML_Elements {
 			'name'     => null,
 			'current'  => null,
 			'class'    => 'mdjm-checkbox',
+			'value'    => 1,
 			'options'  => array(
 				'disabled' => false,
 				'readonly' => false
@@ -751,7 +789,7 @@ class MDJM_HTML_Elements {
 			$options .= ' readonly';
 		}
 
-		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" ' . checked( 1, $args['current'], false ) . ' />';
+		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $args['value'] ) . '"class="' . $class . ' ' . esc_attr( $args['name'] ) . '" ' . checked( 1, $args['current'], false ) . ' />';
 
 		return $output;
 	} // checkbox
