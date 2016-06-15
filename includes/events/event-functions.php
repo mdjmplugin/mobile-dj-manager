@@ -64,6 +64,28 @@ function mdjm_get_events( $args = array() )	{
 } // mdjm_get_events
 
 /**
+ * Whether or not the event is currently active.
+ *
+ * @since	1.3
+ * @param	int		$event_id	Event ID.
+ * @return	bool	True if active, false if not.
+ */
+function mdjm_event_is_active( $event_id = '' )	{
+
+	$event_statuses   = mdjm_active_event_statuses();
+	$event_statuses[] = 'mdjm-unattended';
+	$event_statuses[] = 'auto-draft';
+	$event_statuses[] = 'draft';
+
+	if ( in_array( get_post_status( $event_id ), $event_statuses ) )	{
+		return true;	
+	}
+
+	return false;
+
+} // mdjm_event_is_active
+
+/**
  * Retrieve the next event.
  * If the current user is not an MDJM admin, only list their own event.
  *
@@ -113,7 +135,7 @@ function mdjm_get_next_event( $employee_id = '' )	{
 } // mdjm_get_next_event
 
 /**
- * Retrieve the next event.
+ * Retrieve today's events.
  *
  * @since	1.3
  * @param	int		$employee_id	User ID of employee. Leave empty to check for all employees.
@@ -139,7 +161,7 @@ function mdjm_get_todays_events( $employee_id = '' )	{
 	
 	return $event[0];
 	
-} // mdjm_get_next_event
+} // mdjm_get_todays_events
 
 /**
  * Retrieve an event by the guest playlist code.

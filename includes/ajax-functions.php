@@ -189,13 +189,16 @@ function mdjm_add_venue_ajax()	{
 	$venue_id = mdjm_add_venue( $venue_name, $venue_meta );
 
 	$venues = mdjm_get_venues();
-		
+
+	$venue_list .= '<option value="manual">' . __( '  - Enter Manually - ', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+	$venue_list .= '<option value="client">' . __( '  - Use Client Address - ', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+
 	if ( ! empty( $venues ) )	{
 		foreach( $venues as $venue )	{
 			$venue_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
 				$venue->ID,
 				$venue->ID == $venue_id ? ' selected="selected"' : '',
-				$venue->post_name
+				$venue->post_title
 			);
 		}
 	}
@@ -209,7 +212,7 @@ function mdjm_add_venue_ajax()	{
 		$result = array(
 			'type'       => 'success',
 			'venue_id'   => $venue_id,
-			'venue_list' => $client_list
+			'venue_list' => $venue_list
 		);
 		
 	}
@@ -219,7 +222,7 @@ function mdjm_add_venue_ajax()	{
 	die();
 
 } // mdjm_add_venue_ajax
-add_action( 'wp_ajax_mdjm_add_venue_details', 'mdjm_add_venue_ajax' );
+add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
 
 /**
  * Save the custom event fields order for clients
