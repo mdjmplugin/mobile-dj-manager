@@ -143,12 +143,12 @@ function mdjm_register_admin_scripts( $hook )	{
 		wp_enqueue_script( 'jquery' );
 		
 	}
-	
+
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
 	
 	if ( in_array( $hook, $require_validation ) )	{
 		
-		wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
+		wp_register_script( 'jquery-validation-plugin', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
 		wp_enqueue_script( 'jquery-validation-plugin' );
 
 	}

@@ -795,9 +795,29 @@ jQuery(document).ready(function ($) {
 				});
 
 			});
+
 		}
 
 	}
 	MDJM_Comms.init();
+
+/*
+ * Validation Rules
+ ******************************************/
+// Comms page
+	$('#mdjm_form_send_comms').validate({
+		errorClass: "mdjm-form-error",
+		validClass: "mdjm-form-valid",
+		focusInvalid: false,
+		
+		rules:	{
+		},
+		
+		messages:	{
+			mdjm_email_to      : null,
+			mdjm_email_subject : null,
+			mdjm_email_content : null
+		}
+	});
 	
 });
