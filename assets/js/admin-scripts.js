@@ -465,7 +465,7 @@ jQuery(document).ready(function ($) {
 			});
 
 			// Show/Hide the email templates when the disable emails checkbox is toggles
-			$( document.body ).on( 'click', '#_mdjm_event_block_emails', function(event) {
+			$( document.body ).on( 'click', '#mdjm_block_emails', function(event) {
 				$('#mdjm-event-email-templates').toggle("fast");
 			});
 
