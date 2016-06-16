@@ -144,7 +144,23 @@ function mdjm_register_admin_scripts( $hook )	{
 		
 	}
 
+	$editing_event      = false;
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
+	
+	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
+		
+		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
+			$editing_event = true;
+		}
+		if ( isset( $_GET['post_type'] ) && 'mdjm-event' == $_GET['post_type'] )	{
+			$editing_event = true;
+		}
+		
+		if ( $editing_event )	{
+			$require_validation[] = 'post.php';
+			$require_validation[] = 'post-new.php';
+		}
+	}
 	
 	if ( in_array( $hook, $require_validation ) )	{
 		
@@ -155,7 +171,7 @@ function mdjm_register_admin_scripts( $hook )	{
 	
 	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-scripts' );
-	
+
 	wp_localize_script(
 		'mdjm-admin-scripts',
 		'mdjm_admin_vars',
@@ -164,6 +180,7 @@ function mdjm_register_admin_scripts( $hook )	{
 			array(
 				'ajaxurl'              => mdjm_get_ajax_url(),
 				'current_page'         => $hook,
+				'editing_event'        => $editing_event,
 				'load_recipient'       => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false,
 				'ajax_loader'          => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'no_client_first_name' => __( 'Enter a first name for the client', 'mobile-dj-manager' ),

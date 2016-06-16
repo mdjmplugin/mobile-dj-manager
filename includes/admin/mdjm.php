@@ -234,10 +234,10 @@
 					}
 				
 				/* -- Event Posts Only -- */
-					if( get_post_type() == MDJM_EVENT_POSTS )	{
+					/*if( get_post_type() == MDJM_EVENT_POSTS )	{
 						wp_register_script( 'mdjm-event-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-event-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-event-js' );
-					}
+					}*/
 					
 				/* -- Transaction Posts Only -- */
 					if( get_post_type() == MDJM_TRANS_POSTS )	{

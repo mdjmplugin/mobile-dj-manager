@@ -412,48 +412,32 @@ add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' 
  *
  */
 function mdjm_add_event_type_ajax()	{
-	global $mdjm;
-	
-	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
-		
-	$args = array( 
-				'taxonomy'			=> 'event-types',
-				'hide_empty' 		  => 0,
-				'name' 				=> 'mdjm_event_type',
-				'id' 				=> 'mdjm_event_type',
-				'orderby' 			 => 'name',
-				'hierarchical' 		=> 0,
-				'show_option_none' 	=> __( 'Select Event Type' ),
-				'class'			   => 'mdjm-meta required',
-				'echo'				=> 0,
-			);
 			
-	/* -- Validate that we have an Event Type to add -- */
 	if( empty( $_POST['type'] ) )	{
+
 		$result['type'] = 'Error';
-		$result['msg'] = 'Please enter a name for the new Event Type';
-	}
-	/* -- Add the new Event Type (term) -- */
-	else	{
+		$result['msg']  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
+
+	} else	{
+
 		$term = wp_insert_term( $_POST['type'], 'event-types' );
-		if( is_array( $term ) )	{
+
+		if ( is_array( $term ) )	{
 			$result['type'] = 'success';
-		}
-		else	{
+		} else	{
 			$result['type'] = 'error';
 		}
+
 	}
 	
-	MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+	$selected = ( $result['type'] == 'success' ) ? $term['term_id'] : $_POST['current'];
 	
-	$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
+	$result['event_types'] = MDJM()->html->event_type_dropdown( 'mdjm_event_type', $selected );
 	
-	$result['event_types'] = wp_dropdown_categories( $args );
-	
-	$result = json_encode($result);
-	echo $result;
+	echo json_encode($result);
 	
 	die();
+
 } // mdjm_add_event_type_ajax
 add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
 	

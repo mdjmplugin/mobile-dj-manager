@@ -141,7 +141,8 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 
 /* =jQuery Validation
 -------------------------------------------------------------- */
-.mdjm-form-error {
+.mdjm-form-error,
+.mdjm-select-chosen .mdjm-form-error {
 	color: #F00;
 	font-weight: bold;
 }
@@ -418,7 +419,6 @@ checkbox.mdjm-form-error {
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #fafafa;
 }
-#minor-publishing label,
 #mdjm-event-actions label {
 	display: inline-block;
 	width: 60px;
@@ -427,13 +427,12 @@ checkbox.mdjm-form-error {
 	display: inline-block;
 	width: 100px;
 }
-#mdjm-event-actions input[type=submit] {
+#mdjm-event-actions input[type=submit],
+#mdjm-event-actions button {
 	float: right;
 	width: auto;
 }
-#minor-publishing input[type='text'],
 #mdjm-event-actions input[type='text'],
-#minor-publishing select,
 #mdjm-event-actions select {
 	width: 150px;
 }

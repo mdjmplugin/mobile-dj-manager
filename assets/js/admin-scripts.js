@@ -14,7 +14,6 @@ jQuery(document).ready(function ($) {
 			this.client();
 			this.employee();
 			this.equipment();
-			this.event_options();
 			this.time();
 			this.type();
 			this.txns();
@@ -108,7 +107,7 @@ jQuery(document).ready(function ($) {
 						$('#client_name').append(response.client_list);
 						$('#mdjm-add-client').show();
 						$('#mdjm-loading').remove();
-						$('#mdjm_block_emails').prop('checked', true );
+						$('#_mdjm_event_block_emails').prop('checked', false );
 						$('#mdjm_reset_pw').prop('checked', true );
 						$("#client_name").trigger("chosen:updated");
 
@@ -403,13 +402,6 @@ jQuery(document).ready(function ($) {
 
 		},
 		
-		event_options : function()	{
-
-			$( document.body ).on( 'click', '#event-type-add', function(event) {
-				$('#mdjm-new-event-type-row').toggle("fast");
-			});
-		},
-		
 		time : function()	{
 			// Set the DJ Setup Date
 			$( document.body ).on( 'change', '#display_event_date', function() {
@@ -420,9 +412,9 @@ jQuery(document).ready(function ($) {
 		},
 		
 		type : function()	{
-			// Display the text input for a new event type
-			$( document.body ).on( 'click', '#new_event_type', function() {
-				$('#new_event_type_div').fadeToggle('fast');
+			// Reveal the input fields to add a new event type
+			$( document.body ).on( 'click', '#event-type-add', function(event) {
+				$('#mdjm-new-event-type-row').toggle("fast");
 			});
 			
 			// Save a new event type
@@ -442,28 +434,41 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#event_types').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('#add_event_type').hide();
+						$('#mdjm-event-type-loader').show();
 					},
 					success: function (response) {
 						if(response.type == 'success') {
 							$('#event_type_name').val('');
-							$('#new_event_type_div').fadeToggle('fast');
+							$('#mdjm-new-event-type-row').toggle("fast");
+							$('#mdjm_event_type').show();
+							$('#mdjm_event_type').replaceWith(response.event_types);
 						} else	{
 							alert(response.msg)
 						}
-						
-						$('#mdjm-loading').replaceWith('<div id="event_types">' + response.event_types + '<a id="new_event_type" class="side-meta" href="#">Add New</a></div>');
-						
+
+						$('#mdjm-event-type-loader').hide();
+						$('#add_event_type').show();
+
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').replaceWith('<div id="event_types">' + response.event_types + '<a id="new_event_type" class="side-meta" href="#">Add New</a></div>');
+					$('#mdjm_event_type').show();
+					$('#mdjm-new-event-type-row').toggle("fast");
+					$('#mdjm-event-type-loader').hide();
+					$('#add_event_type').show();
+
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
 				});
-				
+		
 			});
-			
+
+			// Show/Hide the email templates when the disable emails checkbox is toggles
+			$( document.body ).on( 'click', '#_mdjm_event_block_emails', function(event) {
+				$('#mdjm-event-email-templates').toggle("fast");
+			});
+
 		},
 		
 		txns : function()	{
@@ -573,7 +578,7 @@ jQuery(document).ready(function ($) {
 					$('#mdjm-save-venue-button-row').removeClass('mdjm-hidden');
 					$('#toggle_venue_details').addClass('mdjm-hidden');
 				} else	{
-					if ( '' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
+					if ( '0' != $('#venue_id').val() && '' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
 						$('#mdjm-save-venue-button-row').addClass('mdjm-hidden');
 						$('#toggle_venue_details').removeClass('mdjm-hidden');
 					}
@@ -812,20 +817,45 @@ jQuery(document).ready(function ($) {
 /*
  * Validation Rules
  ******************************************/
-// Comms page
-	$('#mdjm_form_send_comms').validate({
-		errorClass: "mdjm-form-error",
-		validClass: "mdjm-form-valid",
-		focusInvalid: false,
-		
-		rules:	{
-		},
-		
-		messages:	{
-			mdjm_email_to      : null,
-			mdjm_email_subject : null,
-			mdjm_email_content : null
-		}
-	});
+	// Comms page
+	if ( 'mdjm-event_page_mdjm-comms' == mdjm_admin_vars.current_page )	{
+		$('#mdjm_form_send_comms').validate({
+			errorClass: "mdjm-form-error",
+			validClass: "mdjm-form-valid",
+			focusInvalid: false,
+			
+			rules:	{
+			},
+			
+			messages:	{
+				mdjm_email_to      : null,
+				mdjm_email_subject : null,
+				mdjm_email_content : null
+			}
+		});
+	}
+	
+	// Events page
+	if ( mdjm_admin_vars.editing_event )	{
+		$('#post').validate({
+			errorClass: "mdjm-form-error",
+			validClass: "mdjm-form-valid",
+			focusInvalid: false,
+			
+			rules:	{
+				client_name : { required: true, minlength : 1 },
+				display_event_date : { required: true },
+				_mdjm_event_cost : { number: true },
+				_mdjm_event_deposit : { number: true }
+			},
+			
+			messages:	{
+				client_name      : null,
+				display_event_date : null,
+				_mdjm_event_cost : null,
+				_mdjm_event_deposit : null
+			}
+		});
+	}
 	
 });
