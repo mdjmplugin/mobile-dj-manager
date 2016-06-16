@@ -334,11 +334,11 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					<thead>
 					<tr>
                     	<th style="width: 20px;"></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
-                        <th style="width: 15%; font-weight: bold;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
-						<th style="font-weight: bold;"><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 30%;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
+                        <th style="width: 15%;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
+						<th><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -353,7 +353,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						$fields->the_post();
 						?>
 						<tr id="customfields_<?php echo $fields->post->ID; ?>" class="
-							<?php echo ( $i == 0 ? 'alternate mdjm-custom-' . $field_type . '-list-item' : 'mdjm-custom-' . $field_type . '-list-item' ); ?>">
+							<?php echo ( $i == 0 ? 'alternate mdjm_sortable_row' : 'mdjm_sortable_row' ); ?>" data-key="<?php echo $fields->post->ID; ?>">
                             <td><span class="mdjm_draghandle"></span></td>
                             <td><?php the_title(); ?></td>
                             <td><?php echo ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ); ?></td>
@@ -379,7 +379,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				else	{
 					?>
 					<tr>
-						<td colspan="5"><?php printf( __( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), ucfirst( $field_type ) ); ?></td>
+						<td colspan="6"><?php printf( __( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), ucfirst( $field_type ) ); ?></td>
 					</tr>
 					<?php
 				}
@@ -389,11 +389,11 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					<tfoot>
 					<tr style="font-weight: bold;">
                     	<th style="width: 20px;"></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
-                        <th style="width: 15%; font-weight: bold;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
-						<th style="font-weight: bold;"><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 25%;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
+                        <th style="width: 15%;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
+						<th><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
 					</tr>
 					</tfoot>
 				</table>

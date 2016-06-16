@@ -19,7 +19,8 @@ jQuery(document).ready(function ($) {
 			// Sortable Client Fields
 			jQuery(document).ready(function($) 	{
 				$('.mdjm-client-list-item').sortable({
-					items: '.mdjm-client-list-item',
+					handle: '.mdjm_draghandle',
+					items: '.mdjm_sortable_row',
 					opacity: 0.6,
 					cursor: 'move',
 					axis: 'y',
@@ -35,7 +36,8 @@ jQuery(document).ready(function ($) {
 			// Sortable Custom Event Fields
 			$('.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item').sortable({
 				
-				items: '.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item',
+				handle: '.mdjm_draghandle',
+				items: '.mdjm_sortable_row',
 				opacity: 0.6,
 				cursor: 'move',
 				axis: 'y',

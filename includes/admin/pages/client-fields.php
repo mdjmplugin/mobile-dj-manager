@@ -198,14 +198,14 @@
 				
 				foreach( $this->fields as $field )	{
 					if( $i == 0 && $field['display'] == true )
-						$class = 'alternate mdjm-client-list-item';
+						$class = 'alternate mdjm_sortable_row';
 					elseif( empty( $field['display'] ) )
-						$class = 'form-invalid mdjm-client-list-item';
+						$class = 'form-invalid mdjm_sortable_row';
 					else
-						$class = 'mdjm-client-list-item';
+						$class = 'mdjm_sortable_row';
 						
 					echo '<tr id="fields=' . $field['id'] . '"' . 
-						' class="' . $class . '">' . "\r\n";
+						' class="' . $class . '" data-key="' . esc_attr( $field['id'] ) . '">' . "\r\n";
 						
 					echo '<td><span class="mdjm_draghandle"></span></td>' . "\r\n";
 					echo '<td>' . $field['label'] . '</td>' . "\r\n";
