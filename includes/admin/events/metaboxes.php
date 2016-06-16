@@ -1166,6 +1166,7 @@ function mdjm_event_metabox_details_packages_table( $event_id )	{
 							'employee'         => $employee,
 							'package'          => $package,
 							'cost'             => true,
+							'chosen'           => true,
 							'data'             => array()
 						) ); ?></td>
                 </tr>
