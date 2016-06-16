@@ -315,7 +315,27 @@ class MDJM_Event {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
-	
+
+	/**
+	 * Retrieve event meta
+	 *
+	 * @since	1.3.7
+	 * @return	mixed
+	 */
+	public function get_meta( $_key )	{
+
+		if ( ! is_array( $_key ) )	{
+			$return = get_post_meta( $this->ID, $_key, true );
+		} else	{
+			foreach ( $_key as $key )	{
+				$return[ $key ] = get_post_meta( $this->ID, $key, true );
+			}
+		}
+
+		return $return;
+
+	} // get_meta
+
 	/**
 	 * Retrieve the event client
 	 *
