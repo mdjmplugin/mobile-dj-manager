@@ -146,7 +146,8 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$editing_event      = false;
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	
+	$sortable           = array( 'admin_page_mdjm-custom-event-fields' );
+
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 		
 		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
@@ -167,6 +168,10 @@ function mdjm_register_admin_scripts( $hook )	{
 		wp_register_script( 'jquery-validation-plugin', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
 		wp_enqueue_script( 'jquery-validation-plugin' );
 
+	}
+
+	if ( in_array( $hook, $sortable ) )	{
+		wp_enqueue_script( 'jquery-ui-sortable' );
 	}
 	
 	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );

@@ -330,7 +330,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			foreach( $field_types as $field_type )	{
 				?>
 				<h3><?php printf( __( '%s Fields', 'mobile-dj-manager' ), ucfirst( $field_type ) ) ; ?></h3>
-				<table class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
+				<table id="mdjm_custom-<?php echo $field_type; ?>" class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
 					<thead>
 					<tr>
 						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
@@ -351,7 +351,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					while( $fields->have_posts() ) {
 						$fields->the_post();
 						?>
-						<tr id="<?php echo $field_type . 'fields_' . $fields->post->ID; ?>" class="
+						<tr id="customfields_<?php echo $fields->post->ID; ?>" class="
 							<?php echo ( $i == 0 ? 'alternate mdjm-custom-' . $field_type . '-list-item' : 'mdjm-custom-' . $field_type . '-list-item' ); ?>">
                             
                             <td><?php the_title(); ?></td>

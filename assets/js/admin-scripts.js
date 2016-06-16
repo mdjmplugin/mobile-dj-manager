@@ -6,6 +6,34 @@ jQuery(document).ready(function ($) {
 	});
 
 	/**
+	 * General Settings Screens JS
+	 */
+	var MDJM_Settings = {
+		init : function()	{
+			if ( 'admin_page_mdjm-custom-event-fields' == mdjm_admin_vars.current_page )	{
+				this.custom_fields();
+			}
+		},
+		
+		custom_fields : function(event)	{
+			$('.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item').sortable({
+				
+				items: '.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item',
+				opacity: 0.6,
+				cursor: 'move',
+				axis: 'y',
+				update: function(event)	{
+					var order = $(this).sortable('serialize') + '&action=order_custom_event_fields';
+					$.post(ajaxurl, order, function(response)	{
+						// Success
+					});
+				}
+			});
+		}
+	}
+	MDJM_Settings.init();
+
+	/**
 	 * Events screen JS
 	 */
 	var MDJM_Events = {

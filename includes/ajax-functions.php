@@ -223,60 +223,29 @@ function mdjm_add_venue_ajax()	{
 
 } // mdjm_add_venue_ajax
 add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
+	
+/**
+ * Save the custom event fields order
+ *
+ * @since	1.3.7
+ * @param	$_POST
+ * @return	void
+ */
+function mdjm_order_custom_event_fields_ajax()	{
 
-/**
- * Save the custom event fields order for clients
- *
- *
- */
-function mdjm_update_custom_field_client_order_ajax()	{
-			
-	foreach( $_POST['clientfields'] as $order => $id )	{
-		$menu = $order + 1;
-		
+	foreach( $_POST['customfields'] as $order => $id )	{
+		$order++;
+
 		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
+			'ID' => $id,
+			'menu_order' => $order
+		) );	
 	}
+
 	die();
-} // mdjm_update_custom_field_client_order_ajax
-add_action( 'wp_ajax_mdjm_update_custom_field_client_order', 'mdjm_update_custom_field_client_order_ajax' );
-	
-/**
- * Save the custom event fields order for events
- *
- *
- */
-function mdjm_update_custom_field_event_order_ajax()	{
-			
-	foreach( $_POST['eventfields'] as $order => $id )	{
-		$menu = $order + 1;
-		
-		wp_update_post( array( 'ID' => $id, 'menu_order' => $menu ) );	
-	}
-	die();
-} // mdjm_update_custom_field_event_order_ajax
-add_action( 'wp_ajax_mdjm_update_custom_field_event_order', 'mdjm_update_custom_field_event_order_ajax' );
-	
-/**
- * Save the custom event fields order for venues
- *
- *
- */
-function mdjm_update_custom_field_venue_order_ajax()	{
-			
-	foreach( $_POST['venuefields'] as $order => $id )	{
-		$menu = $order + 1;
-		
-		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
-	}
-	die();
-} // mdjm_update_custom_field_venue_order_ajax
-add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_field_venue_order_ajax' );
+
+} // mdjm_order_custom_event_field_ajax
+add_action( 'wp_ajax_order_custom_event_fields', 'mdjm_order_custom_event_fields_ajax' );
 	
 /**
  * Save the event transaction
