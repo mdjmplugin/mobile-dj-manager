@@ -10,12 +10,29 @@ jQuery(document).ready(function ($) {
 	 */
 	var MDJM_Settings = {
 		init : function()	{
-			if ( 'admin_page_mdjm-custom-event-fields' == mdjm_admin_vars.current_page )	{
+			if ( 'admin_page_mdjm-custom-event-fields' == mdjm_admin_vars.current_page || 'admin_page_mdjm-custom-client-fields' == mdjm_admin_vars.current_page )	{
 				this.custom_fields();
 			}
 		},
 		
 		custom_fields : function(event)	{
+			// Sortable Client Fields
+			jQuery(document).ready(function($) 	{
+				$('.mdjm-client-list-item').sortable({
+					items: '.mdjm-client-list-item',
+					opacity: 0.6,
+					cursor: 'move',
+					axis: 'y',
+					update: function()	{
+						var order = $(this).sortable('serialize', { expression: /(.+)=(.+)/ } ) + '&action=mdjm_update_client_field_order';
+						$.post(ajaxurl, order, function(response)	{
+							// Success
+						});
+					}
+				});
+			});
+
+			// Sortable Custom Event Fields
 			$('.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item').sortable({
 				
 				items: '.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item',

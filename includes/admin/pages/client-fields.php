@@ -163,18 +163,6 @@
 			} // update_field
 			
 			/*
-			 * Enqueue scripts for drag and drop functionality
-			 *
-			 * @param		none
-			 * @return		none
-			 *
-			 */
-			public function drag_n_drop()	{
-				wp_enqueue_script( 'jquery-ui-sortable' );
-				wp_enqueue_script( 'update-order-client-fields', MDJM_PLUGIN_URL . '/assets/js/mdjm-order-list.js' );
-			} // drag_n_drop
-			
-			/*
 			 * Display the client fields admin interface
 			 *
 			 *
@@ -182,7 +170,6 @@
 			 */
 			function display_fields()	{			
 				/* -- Enable drag & drop -- */
-				$this->drag_n_drop();
 				
 				$dir = MDJM_PLUGIN_URL . '/assets/images/form-icons';
 				

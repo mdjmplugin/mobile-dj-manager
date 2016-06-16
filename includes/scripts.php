@@ -146,7 +146,7 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$editing_event      = false;
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	$sortable           = array( 'admin_page_mdjm-custom-event-fields' );
+	$sortable           = array( 'admin_page_mdjm-custom-event-fields', 'admin_page_mdjm-custom-client-fields' );
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 		
