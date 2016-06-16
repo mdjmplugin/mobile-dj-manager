@@ -571,7 +571,8 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
         <table class="widefat mdjm_event_client_details mdjm_form_fields">
         	<thead>
             	<tr>
-                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?></th>
+                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?> 
+                    	<span class="description">(<a href="<?php echo add_query_arg( array( 'user_id' => $client_id ), admin_url( 'user-edit.php' ) ); ?>"><?php _e( 'edit', 'mobile-dj-manager' ); ?></a>)</span></th>
                 </tr>
             </thead>
             <tbody>
