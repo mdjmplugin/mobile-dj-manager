@@ -197,6 +197,7 @@
 				echo '<table class="widefat mdjm-client-list-item" style="width:90%">' . "\r\n";
 				echo '<thead>' . "\r\n";
 				echo '<tr>' . "\r\n";
+				echo '<th style="width: 20px;"></th>' . "\r\n";
 				echo '<th style="width: 15%;">' . __( 'Label' ) . '</th>' . "\r\n";
 				echo '<th style="width: 15%;">' . __( 'Type' ) . '</th>' . "\r\n";
 				echo '<th style="width: 35%;">' . __( 'Description' ) . '</th>' . "\r\n";
@@ -219,6 +220,7 @@
 					echo '<tr id="fields=' . $field['id'] . '"' . 
 						' class="' . $class . '">' . "\r\n";
 						
+					echo '<td><span class="mdjm_draghandle"></span></td>' . "\r\n";
 					echo '<td>' . $field['label'] . '</td>' . "\r\n";
 					echo '<td>' . ucfirst( str_replace( 'dropdown', 'select', $field['type'] ) ) . ' Field</td>' . "\r\n";
 					echo '<td>' . ( !empty( $field['desc'] ) ? esc_attr( $field['desc'] ) : '' ) . '</td>' . "\r\n";

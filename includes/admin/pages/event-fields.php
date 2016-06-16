@@ -333,6 +333,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				<table id="mdjm_custom-<?php echo $field_type; ?>" class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
 					<thead>
 					<tr>
+                    	<th style="width: 20px;"></th>
 						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
 						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
 						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
@@ -353,7 +354,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						?>
 						<tr id="customfields_<?php echo $fields->post->ID; ?>" class="
 							<?php echo ( $i == 0 ? 'alternate mdjm-custom-' . $field_type . '-list-item' : 'mdjm-custom-' . $field_type . '-list-item' ); ?>">
-                            
+                            <td><span class="mdjm_draghandle"></span></td>
                             <td><?php the_title(); ?></td>
                             <td><?php echo ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ); ?></td>
                             <td><?php the_content(); ?></td>
@@ -387,6 +388,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					</tbody>
 					<tfoot>
 					<tr style="font-weight: bold;">
+                    	<th style="width: 20px;"></th>
 						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
 						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
 						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
