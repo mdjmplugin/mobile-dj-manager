@@ -669,8 +669,10 @@ class MDJM_HTML_Elements {
 
 		if( $args['multiple'] ) {
 			$multiple = ' MULTIPLE';
+			$multi    = '[]';
 		} else {
 			$multiple = '';
+			$multi    = '';
 		}
 
 		if( $args['chosen'] ) {
@@ -684,7 +686,7 @@ class MDJM_HTML_Elements {
 		}
 
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+		$output = '<select name="' . esc_attr( $args['name'] ) . '' . $multi . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
 
 		if ( $args['show_option_all'] ) {
 			if( $args['multiple'] ) {
