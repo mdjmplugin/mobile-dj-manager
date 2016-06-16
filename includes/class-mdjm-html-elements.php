@@ -269,6 +269,89 @@ class MDJM_HTML_Elements {
 	} // month_dropdown
 
 	/**
+	 * Renders a dropdown list of employees.
+	 *
+	 * @since	1.3.7
+	 * @param	arr		$args	@see $default
+	 * @return	str
+	 */
+	public function employee_dropdown( $args = array() )	{
+		global $wp_roles;
+
+		$defaults = array(
+			'name'             => '_mdjm_event_dj',
+			'id'               => '',
+			'class'            => '',
+			'selected'         => '',
+			'show_option_none' => __( ' - Select Employee -', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
+			'chosen'           => false,
+			'employee'         => false,
+			'role'             => '',
+			'group'            => false,
+			'exclude'          => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'package'          => '',
+			'cost'             => true,
+			'data'             => array()
+		);
+		
+		$args    = wp_parse_args( $args, $defaults );
+		$options = array();
+
+		$employees = mdjm_get_employees( $args['role'] );
+
+		if ( $employees )	{
+			$results['role'] = array();
+
+			foreach( $employees as $employee )	{
+				if( $employee->roles[0] == 'administrator' && ! empty( $employee->roles[1] ) )	{
+					$employee->roles[0] = $employee->roles[1];
+				} else	{
+					$employee->roles[0] = 'dj';
+				}
+				
+				if( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )	{
+					continue;
+				}
+				
+				$results['role'][ $employee->roles[0] ][] = $employee;
+			}
+
+			foreach( $results['role'] as $role => $userobj )	{
+
+				foreach( $userobj as $user )	{
+					$employee_list[ $user->ID ] = $user->display_name;
+				}
+
+				if( $args['group'] )	{
+					$groups[ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = $employee_list;
+				}
+	
+			}
+
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'class'            => $args['class'],
+			'id'               => $args['id'],
+			'selected'         => $args['selected'],
+			'options'          => empty( $args['group'] ) ? $employee_list : array( 'groups' => $groups ),
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder'],
+			'multiple'         => $args['multiple'],
+			'show_option_none' => $employees ? $args['show_option_none'] : __( 'No Employees', 'mobile-dj-manager' ),
+			'show_option_all'  => false,
+			'data'             => $args['data']
+		) );
+
+		return $output;
+
+	} // employee_dropdown
+
+	/**
 	 * Renders an HTML Dropdown of clients
 	 *
 	 * @access	public
