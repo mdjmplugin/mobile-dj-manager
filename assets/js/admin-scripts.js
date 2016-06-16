@@ -393,7 +393,7 @@ jQuery(document).ready(function ($) {
 
 						$('#_mdjm_event_package').fadeTo('slow', 1);
 						$('#_mdjm_event_package').removeClass('mdjm-updating');
-						$('#event_addons').fadeTo('§slow', 1);
+						$('#event_addons').fadeTo('slow', 1);
 						$('#event_addons').removeClass('mdjm-updating');
 
 					}
