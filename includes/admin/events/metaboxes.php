@@ -79,21 +79,21 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'permission' => ''
 			),
 			array(
-				'id'         => 'mdjm-event-details',
-				'title'      => sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'callback'   => 'mdjm_event_metabox_details_callback',
-				'context'    => 'normal',
+				'id'         => 'mdjm-event-employees',
+				'title'      => sprintf( __( '%s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'callback'   => 'mdjm_event_metabox_event_employees',
+				'context'    => '',
 				'priority'   => 'high',
 				'args'       => array(),
 				'dependancy' => '',
 				'permission' => ''
 			),
 			array(
-				'id'         => 'mdjm-event-employees',
-				'title'      => sprintf( __( '%s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'callback'   => 'mdjm_event_metabox_event_employees',
+				'id'         => 'mdjm-event-details',
+				'title'      => sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'callback'   => 'mdjm_event_metabox_details_callback',
 				'context'    => 'normal',
-				'priority'   => '',
+				'priority'   => 'high',
 				'args'       => array(),
 				'dependancy' => '',
 				'permission' => ''
@@ -233,6 +233,26 @@ function mdjm_event_metabox_client_callback( $post )	{
 	do_action( 'mdjm_event_client_fields', $post->ID );
 
 } // mdjm_event_metabox_client_callback
+
+/**
+ * Output for the Employees meta box.
+ *
+ * @since	1.3
+ * @param	obj		$post	The post object (WP_Post).
+ * @return
+ */
+function mdjm_event_metabox_employees_callback( $post )	{
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+	/*
+	 * Output the items for the employee metabox
+	 * @since	1.3.7
+	 * @param	int	$post_id	The Event post ID
+	 */
+	do_action( 'mdjm_event_employee_fields', $post->ID );
+
+} // mdjm_event_metabox_employees_callback
 
 /**
  * Output for the Event Details meta box.
@@ -985,6 +1005,34 @@ function mdjm_event_metabox_client_details_row( $event_id )	{
 add_action( 'mdjm_event_client_fields', 'mdjm_event_metabox_client_details_row', 20 );
 
 /**
+ * Output the event employee selection row
+ *
+ * @since	1.3.7
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_employee_select_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+	<table style="width: 100%" class="mdjm_form_fields">
+    	<tr>
+        	<td><label for="display_event_date"><?php _e( 'Primary Employee:', 'mobile-dj-manager' ); ?></label><br />
+            	<?php echo MDJM()->html->employee_dropdown( array(
+					'selected' => $mdjm_event->employee_id,
+					'group'    => true
+				) ); ?></td>
+        </tr>
+    </table>
+	<?php
+
+} // mdjm_event_metabox_employee_select_row
+add_action( 'mdjm_event_employee_fields', 'mdjm_event_metabox_employee_select_row', 10 );
+
+/**
  * Output the event details row
  *
  * @since	1.3.7
@@ -1166,7 +1214,7 @@ function mdjm_event_metabox_details_packages_table( $event_id )	{
 							'employee'         => $employee,
 							'package'          => $package,
 							'cost'             => true,
-							'chosen'           => true,
+							'chosen'           => false,
 							'data'             => array()
 						) ); ?></td>
                 </tr>
