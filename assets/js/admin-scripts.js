@@ -175,15 +175,15 @@ jQuery(document).ready(function ($) {
 			
 			// Display custom client fields
 			$( document.body ).on( 'click', '#toggle_custom_client_fields', function() {
-				$('#mdjm_custom_client_fields_table tbody').toggle("slow");
+				$('#mdjm_event_custom_client_fields').toggle("fast");
 			});
 			// Display custom event fields
 			$( document.body ).on( 'click', '#toggle_custom_event_fields', function() {
-				$('#mdjm_custom_event_fields_table tbody').toggle("slow");
+				$('#mdjm_event_custom_event_fields').toggle("fast");
 			});
 			// Display custom venue fields
 			$( document.body ).on( 'click', '#toggle_custom_venue_fields', function() {
-				$('#mdjm_custom_venue_fields_table tbody').toggle("slow");
+				$('#mdjm_event_custom_venue_fields').toggle("fast");
 			});
 			
 		},

@@ -622,56 +622,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$query = mdjm_get_custom_fields( 'client' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				?>
-                <div id="mdjm_event_custom_client_fields">
-                <table id="mdjm_custom_client_fields_table" class="widefat mdjm_event_custom_client_fields_table mdjm_form_fields">
-                	<thead>
-                    	<tr>
-                        	<th colspan="2"><?php _e( 'Custom Client Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_client_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-					<?php
-					$i = 0;
-					$x = 1;
-                    foreach( $fields as $field )	{
-						if ( $i == 0 )	{
-							?><tr><?php
-						}
-                        self::display_input( $field, $mdjm_event );
-						$i++;
-						$x++;
-						if ( $i == 2 )	{
-							?></tr><?php
-							if ( $x < count( $fields ) )	{
-								$i = 0;
-							}
-						}
-                    }
-					while( $i < 2 )	{
-						echo '<td>&nbsp;</td>';
-						$i++;
-						if ( $i == 2 )	{
-							echo '</tr>';
-						}
-					}
-                    ?>
-                	</tbody>
-                </table>
+			if( $fields ) : ?>
+                <?php _e( 'Custom Client Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_client_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_client_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php
-				
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+            <?php endif;
 		} // custom_client_event_fields
 		
 		/**
@@ -688,55 +648,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$query = mdjm_get_custom_fields( 'event' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				?>
-				<div id="mdjm_event_custom_event_fields">
-                <table id="mdjm_custom_event_fields_table" class="widefat mdjm_event_custom_event_fields_table mdjm_form_fields">
-                	<thead>
-                    	<tr>
-                        	<th colspan="2"><?php printf( __( 'Custom %s Fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> (<a id="toggle_custom_event_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-					<?php
-					$i = 0;
-					$x = 1;
-					foreach( $fields as $field )	{
-						if ( $i == 0 )	{
-							?><tr><?php
-						}
-						self::display_input( $field, $mdjm_event );
-						$i++;
-						$x++;
-						if ( $i == 2 )	{
-							?></tr><?php
-							if ( $x < count( $fields ) )	{
-								$i = 0;
-							}
-						}
-					}
-					while( $i < 2 )	{
-						echo '<td>&nbsp;</td>';
-						$i++;
-						if ( $i == 2 )	{
-							echo '</tr>';
-						}
-					}
-                    ?>
-                	</tbody>
-                </table>
+			if( $fields ) : ?>
+                <strong><?php printf( __( 'Custom %s Fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong> (<a id="toggle_custom_event_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_event_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+            <?php endif;
 		} // custom_event_details_fields
 		
 		/**
@@ -753,55 +674,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$query = mdjm_get_custom_fields( 'venue' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				?>
-				<div id="mdjm_event_custom_venue_fields">
-                <table id="mdjm_custom_venue_fields_table" class="widefat mdjm_event_custom_venue_fields_table mdjm_form_fields">
-                	<thead>
-                    	<tr>
-                        	<th colspan="2"><?php _e( 'Custom Venue Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_venue_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-					<?php
-					$i = 0;
-					$x = 1;
-					foreach( $fields as $field )	{
-						if ( $i == 0 )	{
-							?><tr><?php
-						}
-						self::display_input( $field, $mdjm_event );
-						$i++;
-						$x++;
-						if ( $i == 2 )	{
-							?></tr><?php
-							if ( $x < count( $fields ) )	{
-								$i = 0;
-							}
-						}
-					}
-					while( $i < 2 )	{
-						echo '<td>&nbsp;</td>';
-						$i++;
-						if ( $i == 2 )	{
-							echo '</tr>';
-						}
-					}
-                    ?>
-                	</tbody>
-                </table>
+			if( $fields ) : ?>
+                <?php _e( 'Custom Venue Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_venue_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_venue_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+            <?php endif;
 		} // custom_venue_event_fields
 		
 		/**

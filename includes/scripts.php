@@ -118,7 +118,7 @@ function mdjm_register_admin_styles( $hook )	{
 	wp_enqueue_style( 'jquery-chosen' );
   	wp_enqueue_style( 'jquery-ui' );
 	wp_enqueue_style( 'font-awesome' );
-		
+
 } // mdjm_register_styles
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
 
@@ -195,6 +195,7 @@ function mdjm_register_admin_scripts( $hook )	{
 				'no_txn_for'           => __( 'What is the transaction for?', 'mobile-dj-manager' ),
 				'no_txn_src'           => __( 'Enter a transaction source', 'mobile-dj-manager' ),
 				'no_venue_name'        => __( 'Enter a name for the venue', 'mobile-dj-manager' ),
+				'currency_symbol'      => mdjm_currency_symbol(),
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false
 			)
