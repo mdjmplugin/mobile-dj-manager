@@ -317,26 +317,12 @@ checkbox.mdjm-form-error {
 
 /* =Metaboxes
 -------------------------------------------------------------- */
-#mdjm_field_wrap {    
-    text-align: justify;
-    -ms-text-justify: distribute-all-lines;
-    text-justify: distribute-all-lines;    
-}
-
-#mdjm_field_wrap > div {
-    width: 150px;
-    height: 125px;
+.mdjm_field_wrap	{
+	width: 100%;
     vertical-align: top;
     display: inline-block;
     *display: inline;
     zoom: 1
-}
-#mdjm_field_wrap:after {
-    content: '';
-    width: 100%;
-    display: inline-block;
-    font-size: 0;
-    line-height: 0
 }
 
 .mdjm_form_fields { position: relative; }
@@ -359,11 +345,6 @@ checkbox.mdjm-form-error {
 
 .mdjm_event_txn_add_wrap { width: 100%; }
 
-.col2 { float: left; width: 50%; }
-.col2-last { float: right; width: 50%; }
-.col3 { float: left; width: 33%; }
-.col3-last { float: right; width: 33%; }
-
 #mdjm-event-client,
 #mdjm-event-venue { margin: 4px; padding-bottom: 5px; }
 #mdjm-event-client label,
@@ -381,6 +362,12 @@ checkbox.mdjm-form-error {
 #mdjm_event_packages_table,
 #mdjm-event-add-txn-table,
 #mdjm-event-add-new-venue-fields { padding-top: 5px; }
+
+.mdjm_field_wrap .col2	{
+	width: 50%;
+    float: left;
+}
+
 
 /* 3 column tables */
 #mdjm-event-add-new-client-fields table td,
