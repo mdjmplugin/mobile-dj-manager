@@ -45,7 +45,6 @@ function mdjm_register_post_types()	{
 		'labels'              => $email_history_labels,
 		'description'         => __( 'Communication used by the MDJM Event Management for WordPress plugin', 'mobile-dj-manager' ),
 		'exclude_from_search'    => true,
-		'publicly_queryable'     => true,
 		'show_ui'                => true,
 		'show_in_menu'           => 'edit.php?post_type=mdjm_communication',
 		'show_in_admin_bar'      => false,
@@ -90,7 +89,6 @@ function mdjm_register_post_types()	{
 		'labels'                 => $contract_labels,
 		'description'            => __( 'Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
 		'exclude_from_search'    => true,
-		'publicly_queryable'     => true,
 		'show_ui'                => true,
 		'show_in_menu'           => 'edit.php?post_type=contract',
 		'rewrite'                => array( 'slug' => 'contract-templates' ),
@@ -133,7 +131,6 @@ function mdjm_register_post_types()	{
 	$signed_contract_args = array(
 		'labels'             => $signed_contract_labels,
 		'description'        => __( 'Signed Contracts used by the MDJM plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' => true,
 		'rewrite'            => array( 'slug' => 'mdjm-signed-contract' ),
 		'capability_type'    => array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
 		'map_meta_cap'       => true,
@@ -191,28 +188,27 @@ function mdjm_register_post_types()	{
 	);
 		
 	$email_template_args = array(
-		'labels'                 => $email_template_labels,
-		'description'			=> __( 'Email Templates for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'		   => 'edit.php?post_type=email_template',
-		'show_in_admin_bar'	  => true,
-		'rewrite'            	=> array( 'slug' => 'email-template' ),
-		'capability_type'	    => 'mdjm_template',
-		'capabilities'           => apply_filters( 'mdjm_email_template_caps', array(
-			'publish_posts'          => 'publish_mdjm_templates',
-			'edit_posts'             => 'edit_mdjm_templates',
-			'edit_others_posts'      => 'edit_others_mdjm_templates',
-			'delete_posts'           => 'delete_mdjm_templates',
-			'delete_others_posts'	=> 'delete_others_mdjm_templates',
-			'read_private_posts'     => 'read_private_mdjm_templates',
-			'edit_post'              => 'edit_mdjm_template',
-			'delete_post' 			=> 'delete_mdjm_template',
-			'read_post'              => 'read_mdjm_template',
+		'labels'                  => $email_template_labels,
+		'description'             => __( 'Email Templates for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+		'show_ui'                 => true,
+		'show_in_menu'            => 'edit.php?post_type=email_template',
+		'show_in_admin_bar'       => true,
+		'rewrite'                 => array( 'slug' => 'email-template' ),
+		'capability_type'         => 'mdjm_template',
+		'capabilities'            => apply_filters( 'mdjm_email_template_caps', array(
+			'publish_posts'       => 'publish_mdjm_templates',
+			'edit_posts'          => 'edit_mdjm_templates',
+			'edit_others_posts'   => 'edit_others_mdjm_templates',
+			'delete_posts'        => 'delete_mdjm_templates',
+			'delete_others_posts' => 'delete_others_mdjm_templates',
+			'read_private_posts'  => 'read_private_mdjm_templates',
+			'edit_post'           => 'edit_mdjm_template',
+			'delete_post'         => 'delete_mdjm_template',
+			'read_post'           => 'read_mdjm_template',
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) )
+		'map_meta_cap'            => true,
+		'has_archive'             => true,
+		'supports'                => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) )
 	);
 	register_post_type( 'email_template', apply_filters( 'mdjm_email_template_post_type_args', $email_template_args ) );
 	
@@ -237,26 +233,25 @@ function mdjm_register_post_types()	{
 	);
 		
 	$package_args = array(
-		'labels'                 => $package_labels,
-		'description'            => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'publicly_queryable'     => true,
-		'show_ui'                => true,
-		'show_in_menu'           => 'edit.php?post_type=mdjm-package',
-		'capability_type'		=> 'mdjm_template',
-		'capabilities'           => apply_filters( 'mdjm_package_caps', array(
-			'publish_posts'          => 'publish_mdjm_packages',
-			'edit_posts'             => 'edit_mdjm_packages',
-			'edit_others_posts'      => 'edit_others_mdjm_packages',
-			'delete_posts'           => 'delete_mdjm_packages',
-			'delete_others_posts'    => 'delete_others_mdjm_packages',
-			'read_private_posts'     => 'read_private_mdjm_packages',
-			'edit_post'              => 'edit_mdjm_package',
-			'delete_post'            => 'delete_mdjm_package',
-			'read_post'              => 'read_mdjm_package',
+		'labels'                  => $package_labels,
+		'description'             => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+		'show_ui'                 => true,
+		'show_in_menu'            => 'edit.php?post_type=mdjm-package',
+		'capability_type'		  => 'mdjm_template',
+		'capabilities'            => apply_filters( 'mdjm_package_caps', array(
+			'publish_posts'       => 'publish_mdjm_packages',
+			'edit_posts'          => 'edit_mdjm_packages',
+			'edit_others_posts'   => 'edit_others_mdjm_packages',
+			'delete_posts'        => 'delete_mdjm_packages',
+			'delete_others_posts' => 'delete_others_mdjm_packages',
+			'read_private_posts'  => 'read_private_mdjm_packages',
+			'edit_post'           => 'edit_mdjm_package',
+			'delete_post'         => 'delete_mdjm_package',
+			'read_post'           => 'read_mdjm_package',
 		) ),
-		'map_meta_cap'           => true,
-		'has_archive'            => true,
-		'supports'               => apply_filters( 'mdjm_package_supports', array( 'title' ) )
+		'map_meta_cap'            => true,
+		'has_archive'             => true,
+		'supports'                => apply_filters( 'mdjm_package_supports', array( 'title' ) )
 	);
 	register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
 	
@@ -285,31 +280,29 @@ function mdjm_register_post_types()	{
 	}
 		
 	$event_args = array(
-		'labels'                 => $event_labels,
-		'description'			=> __( 'MDJM Events', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'		   => true,
-		'menu_position'		  => defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : 58.4,
-		'show_in_admin_bar'	  => true,
-		'rewrite'            	=> array( 'slug' => 'mdjm-event' ),
-		'capability_type'	    => 'mdjm_event',
-		'capabilities'           => apply_filters( 'mdjm_event_caps', array(
-			'publish_posts'		  => 'publish_mdjm_events',
-			'edit_posts'			 => 'edit_mdjm_events',
-			'edit_others_posts'	  => 'edit_others_mdjm_events',
-			'delete_posts'		   => 'delete_mdjm_events',
-			'delete_others_posts'	=> 'delete_others_mdjm_events',
-			'read_private_posts'	 => 'read_private_mdjm_events',
-			'edit_post'			  => 'edit_mdjm_event',
-			'delete_post'			=> 'delete_mdjm_event',
-			'read_post'			  => 'read_mdjm_event',
+		'labels'                  => $event_labels,
+		'description'             => __( 'MDJM Events', 'mobile-dj-manager' ),
+		'show_ui'                 => true,
+		'show_in_menu'            => true,
+		'menu_position'           => defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : 58.4,
+		'show_in_admin_bar'       => true,
+		'capability_type'         => 'mdjm_event',
+		'capabilities'            => apply_filters( 'mdjm_event_caps', array(
+			'publish_posts'       => 'publish_mdjm_events',
+			'edit_posts'          => 'edit_mdjm_events',
+			'edit_others_posts'   => 'edit_others_mdjm_events',
+			'delete_posts'        => 'delete_mdjm_events',
+			'delete_others_posts' => 'delete_others_mdjm_events',
+			'read_private_posts'  => 'read_private_mdjm_events',
+			'edit_post'           => 'edit_mdjm_event',
+			'delete_post'         => 'delete_mdjm_event',
+			'read_post'           => 'read_mdjm_event',
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_event_supports', array( 'title' ) ),
-		'menu_icon'			  => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
-		'taxonomies'			 => array( 'mdjm-event' )
+		'map_meta_cap'            => true,
+		'has_archive'             => true,
+		'supports'                => apply_filters( 'mdjm_event_supports', array( 'title' ) ),
+		'menu_icon'               => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
+		'taxonomies'              => array( 'mdjm-event' )
 	);
 	register_post_type( 'mdjm-event', apply_filters( 'mdjm_event_post_type_args', $event_args ) );
 	
@@ -335,22 +328,21 @@ function mdjm_register_post_types()	{
 		
 	$playlist_args = array(
 		'labels'                 => $playlist_labels,
-		'description'			=> __( 'MDJM Event Management Playlist Entries', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'	   	   => false,
-		'capability_type'	    => 'mdjm_playlist',
+		'description'			 => __( 'MDJM Event Management Playlist Entries', 'mobile-dj-manager' ),
+		'show_ui'				 => true,
+		'show_in_menu'	   	     => false,
+		'capability_type'	     => 'mdjm_playlist',
 		'capabilities'           => apply_filters( 'mdjm_playlist_caps', array(
-			'edit_post'             => 'edit_mdjm_playlist',
-			'read_post'             => 'read_mdjm_playlist',
-			'delete_post'           => 'delete_mdjm_playlist',
-			'edit_posts'            => 'edit_mdjm_playlists',
-			'edit_others_posts'     => 'edit_others_mdjm_playlists',
-			'publish_posts'         => 'publish_mdjm_playlists',
-			'read_private_posts'    => 'read_private_mdjm_playlists'
+			'edit_post'          => 'edit_mdjm_playlist',
+			'read_post'          => 'read_mdjm_playlist',
+			'delete_post'        => 'delete_mdjm_playlist',
+			'edit_posts'         => 'edit_mdjm_playlists',
+			'edit_others_posts'  => 'edit_others_mdjm_playlists',
+			'publish_posts'      => 'publish_mdjm_playlists',
+			'read_private_posts' => 'read_private_mdjm_playlists'
 		) ),
-		'map_meta_cap'		   => true,
-		'supports'           	   => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
+		'map_meta_cap'           => true,
+		'supports'           	 => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
 		'taxonomies'			 => array( 'mdjm-playlist' )
 	);
 	register_post_type( 'mdjm-playlist', apply_filters( 'mdjm_playlist_post_type_args', $playlist_args ) );
@@ -377,25 +369,24 @@ function mdjm_register_post_types()	{
 		
 	$quote_args = array(
 		'labels'                 => $quote_labels,
-		'description'			=> __( 'MDJM Event Management Quotes', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
-		'show_ui'				=> true,
-		'show_in_menu'	   	   => 'edit.php?post_type=mdjm-quotes',
-		'show_in_admin_bar'    => false,
-		'rewrite'            	=> array( 'slug' => 'mdjm-quotes' ),
-		'capability_type'	    => 'mdjm_quote',
+		'description'			 => __( 'MDJM Event Management Quotes', 'mobile-dj-manager' ),
+		'show_ui'				 => true,
+		'show_in_menu'	   	     => 'edit.php?post_type=mdjm-quotes',
+		'show_in_admin_bar'      => false,
+		'rewrite'            	 => array( 'slug' => 'mdjm-quotes' ),
+		'capability_type'	     => 'mdjm_quote',
 		'capabilities'           => apply_filters( 'mdjm_quote_caps', array(
-			'edit_post'             => 'edit_mdjm_quote',
-			'read_post'             => 'read_mdjm_quote',
-			'delete_post'           => 'delete_mdjm_quote',
-			'edit_posts'            => 'edit_mdjm_quotes',
-			'edit_others_posts'     => 'edit_others_mdjm_quotes',
-			'publish_posts'         => 'publish_mdjm_quotes',
-			'read_private_posts'    => 'read_private_mdjm_quotes'
+			'edit_post'          => 'edit_mdjm_quote',
+			'read_post'          => 'read_mdjm_quote',
+			'delete_post'        => 'delete_mdjm_quote',
+			'edit_posts'         => 'edit_mdjm_quotes',
+			'edit_others_posts'  => 'edit_others_mdjm_quotes',
+			'publish_posts'      => 'publish_mdjm_quotes',
+			'read_private_posts' => 'read_private_mdjm_quotes'
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'           	   => apply_filters( 'mdjm_quote_supports', array( 'title' ) )
+		'map_meta_cap'           => true,
+		'has_archive'            => true,
+		'supports'               => apply_filters( 'mdjm_quote_supports', array( 'title' ) )
 	);
 	register_post_type( 'mdjm-quotes', apply_filters( 'mdjm_quotes_post_type_args', $quote_args ) );
 	
@@ -422,7 +413,6 @@ function mdjm_register_post_types()	{
 	$txn_args = array(
 		'labels'                 => $txn_labels,
 		'description'			=> __( 'Transactions for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
 		'show_ui'				=> true,
 		'show_in_menu'		   => 'edit.php?post_type=mdjm-transaction',
 		'show_in_admin_bar'	  => true,
@@ -467,7 +457,6 @@ function mdjm_register_post_types()	{
 	$venue_args = array(
 		'labels'                 => $venue_labels,
 		'description'			=> __( 'Venues stored for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'publicly_queryable' 	 => true,
 		'show_ui'				=> true,
 		'show_in_menu'		   => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
 		'show_in_admin_bar'	  => true,
