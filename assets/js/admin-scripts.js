@@ -189,6 +189,16 @@ jQuery(document).ready(function ($) {
 		},
 		
 		employee : function()	{
+			// Display form to add event employee
+			$( document.body ).on( 'click', '#toggle_add_employee_fields', function() {
+				$('#mdjm_event_add_employee_table tbody').toggle("slow");
+				if ( 'show form' == $('#toggle_add_employee_fields').text() )	{
+					$('#toggle_add_employee_fields').text('hide form');
+				} else	{
+					$('#toggle_add_employee_fields').text('show form');
+				}
+			});
+
 			// Add an employee to the event
 			$( document.body ).on( 'click', '#add_event_employee', function(event) {
 				
@@ -208,17 +218,17 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#event_employee_list').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 					},
 					success: function (response) {
 						if(response.type != 'success') {
-							alert('Error');
+							alert(response.msg);
 						}
-						$('#mdjm-loading').replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
+						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
 
 					}
 				}).fail(function (data) {
-					$('#event_employee_list').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
@@ -244,17 +254,17 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#event_employee_list').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 					},
 					success: function (response) {
 						if(response.type != 'success') {
 							alert('Error');
 						}
-						$('#mdjm-loading').replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
+						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').replaceWith('<div id="event_employee_list">' + response.employees + '</div>');
+					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );

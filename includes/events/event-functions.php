@@ -1117,7 +1117,7 @@ function mdjm_do_event_txn_table( $event_id )	{
             <?php endforeach; ?>
         <?php else : ?>
         <tr>            
-            <td colspan="5"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+            <td colspan="5"><?php printf( __( 'There are currently no transactions for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
         </tr>
         <?php endif; ?>
         </tbody>

@@ -656,36 +656,35 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
  * @param
  * @return
  */
-function mdjm_ajax_add_employee_to_event_ajax()	{
-	
+function mdjm_add_employee_to_event_ajax()	{
+
 	$args = array(
 		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
 		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
 		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
 		'payment_status'  => 'unpaid'
 	);
-	
+
 	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
-		
+
 		$result['type'] = 'error';
 		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );
-	
+
 	} else	{
-		
 		$result['type'] = 'success';
-	
 	}
-	
-	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
-		
-	$result = json_encode( $result );
-	
-	echo $result;
-	
+
+	ob_start();
+	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	$result['employees'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
 	die();
 
-} // mdjm_ajax_add_employee_to_event_ajax
-add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event_ajax' );
+} // mdjm_add_employee_to_event_ajax
+add_action( 'wp_ajax_add_employee_to_event', 'mdjm_add_employee_to_event_ajax' );
 
 /**
  * Remove an employee from the event.
@@ -695,21 +694,23 @@ add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event_aj
  * @param
  * @return
  */
-function mdjm_ajax_remove_employee_from_event_ajax()	{
-	
+function mdjm_remove_employee_from_event_ajax()	{
+
 	mdjm_remove_employee_from_event( $_POST['employee_id'], $_POST['event_id'] );
-		
+
 	$result['type'] = 'success';
-	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
-			
-	$result = json_encode( $result );
-	
-	echo $result;
-	
+
+	ob_start();
+	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	$result['employees'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
 	die();
 
-} // mdjm_ajax_remove_employee_from_event_ajax
-add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_from_event_ajax' );
+} // mdjm_remove_employee_from_event_ajax
+add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_event_ajax' );
 
 /**
  * Update the email content field with the selected template.
@@ -719,7 +720,7 @@ add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_fro
  * @param
  * @return
  */
-function mdjm_ajax_set_email_content_ajax()	{
+function mdjm_set_email_content_ajax()	{
 		
 	if ( empty( $_POST['template'] ) )	{
 		$result['type'] = 'success';
@@ -743,8 +744,8 @@ function mdjm_ajax_set_email_content_ajax()	{
 	
 	die();
 	
-} // mdjm_ajax_set_email_content_ajax
-add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content_ajax' );
+} // mdjm_set_email_content_ajax
+add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_set_email_content_ajax' );
 
 /**
  * Update the email content field with the selected template.
@@ -754,7 +755,7 @@ add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content_ajax'
  * @param
  * @return
  */
-function mdjm_ajax_user_events_dropdown_ajax()	{
+function mdjm_user_events_dropdown_ajax()	{
 
 	$result['event_list'] = '<option value="0">' . __( 'Select an Event', 'mobile-dj-manager' ) . '</option>';
 	
@@ -800,8 +801,8 @@ function mdjm_ajax_user_events_dropdown_ajax()	{
 	
 	die();
 	
-} // mdjm_ajax_user_events_dropdown_ajax
-add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown_ajax' );
+} // mdjm_user_events_dropdown_ajax
+add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_user_events_dropdown_ajax' );
 
 /**
  * Refresh the addons options when the package selection is updated.

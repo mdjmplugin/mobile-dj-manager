@@ -16,7 +16,13 @@
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
 a.mdjm-fake { cursor: pointer; cursor: hand; }
+.mdjm-input-currency {
+	width: 75px;
+}
 
+.mdjm-small	{
+	font-size: 11px;	
+}
 #mdjm-loader	{
 	max-width: 20px;
 	margin: auto;
@@ -177,14 +183,6 @@ checkbox.mdjm-form-error {
 
 .mdjm-form-valid {
 	color: #000000;
-}
-
-.mdjm-input-currency {
-	width: 75px;
-}
-
-.mdjm-small	{
-	font-size: 11px;	
 }
 
 /* =Sortable
@@ -357,6 +355,7 @@ checkbox.mdjm-form-error {
 #mdjm_event_packages_table,
 #mdjm-event-add-txn-table,
 #mdjm-event-add-new-venue-fields { padding-top: 5px; }
+#mdjm-event-employee-list { padding-bottom: 5px; }
 
 .mdjm_field_wrap .mdjm_col	{
     float: left;
