@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.7
+Stable tag: 1.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -80,28 +80,52 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.3.7 =
 
 **New**
-* Event transactions metabox has had a facelift. Remaining metaboxes to TODO
+* Event screen metabox facelift
+* Client list is searchable on event screen
 * Checking the deposit or balance paid checkboxes on the events screen now creates transactions for the remaining amounts
 * Checking the balance paid checkbox auto sets the deposit to the paid status
 * Manual event payments from the events screen now determine if the deposit and/or balance for the event is paid and mark as appropriate
 * Manual event payments from the events screen now generate an email using the selected `Manual Payment Template`
 * Added content tag `{deposit_remaining}`
 * New setting `Set Client Inactive?`. When enabled, a client will be set as inactive when their event is cancelled, failed, or rejected and they have no further upcoming events
+* Determine if a client needs re-activating when an event is recovered
+* Request [#76](https://github.com/mdjm/mobile-dj-manager/issues/76/ "Request #76") Added content tag `{client_alt_phone}` to display the clients additional phone # if provided
+* Request [#79](https://github.com/mdjm/mobile-dj-manager/issues/79/ "Request #79") Form validation on communication page
+* Add a new venue directly from the event screen
+* Toggle details for clients, venues, and transactions on event screen
+
 
 **Tweaks**
+* Client list is readonly if event is no longer active
+* Pre-load $employee_id within the MDJM_Event class
 * Added function `mdjm_get_clients_next_event()` to replace method in deprecated MDJM_Events class
 * Don't display view contract link if contract not digitally signed. Applies to both admin and Client Zone
 * Make sure client is shown in dropdown when viewing a non-active event and the client is set as inactive
+* New class `MDJM_HTML_Elements` for easier display of input fields
+* Custom client fields are now displayed two fields per row
+* Custom event fields are now displayed two fields per row
 * Added function `mdjm_get_event_remaining_deposit()`
+* Added functions `mdjm_get_taxonomy_labels()` and `mdjm_get_post_statuses()`
+* Added function `mdjm_month_num_to_name()`
+* Added function `mdjm_sanitize_key()`
+* Added function `mdjm_get_event_deposit_type()`
+* Added `get_start_time()`, `get_finish_time(`, `get_package()`, `get_addons()` to MDJM_Event class
 * Added method `get_remaining_deposit()` to MDJM_Event class
+* Make sure all ajax functions are prefixed `mdjm_` and suffixed `_ajax`
 * Better formatting of currencies
 * Added functions `mdjm_get_enquiry_sources()` and `mdjm_enquiry_sources_dropdown()`
+* Added client functions `mdjm_get_client_full_address()`, `mdjm_get_client_last_login()`, `mdjm_do_client_details_table`
+* Removed deprecated methods from soon to be deprecated MDJM_Txns class
+* Correctly sanitize venue details for display
 
 **Bug Fixes**
+* Events should not be publicy queryable
 * If deposit type is set to percentage of total cost, a JS error ocurred when focusing out of the total cost field
 * Issue [#70](https://github.com/mdjm/mobile-dj-manager/issues/70/ "Issue 70") Client phone number does not save when created on the events screen
 * Issue [#72](https://github.com/mdjm/mobile-dj-manager/issues/72/ "Issue 72") Use remove_query_arg for redirect link on login page
 * Issue [#73](https://github.com/mdjm/mobile-dj-manager/issues/73/ "Issue 73") Admin is unable to review signed contracts
+* Issue [#75](https://github.com/mdjm/mobile-dj-manager/issues/75/ "Issue 75") `Unattended Enquiry` and `Enquiry` admin bar links had extra whitespace causing link to malfunction
+* Issue [#77](https://github.com/mdjm/mobile-dj-manager/issues/77/ "Issue 77") `{application_home}` content tag not correctly returning URL
 
 = 1.3.6 =
 

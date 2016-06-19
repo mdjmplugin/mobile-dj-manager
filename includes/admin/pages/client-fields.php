@@ -163,18 +163,6 @@
 			} // update_field
 			
 			/*
-			 * Enqueue scripts for drag and drop functionality
-			 *
-			 * @param		none
-			 * @return		none
-			 *
-			 */
-			public function drag_n_drop()	{
-				wp_enqueue_script( 'jquery-ui-sortable' );
-				wp_enqueue_script( 'update-order-client-fields', MDJM_PLUGIN_URL . '/assets/js/mdjm-order-list.js' );
-			} // drag_n_drop
-			
-			/*
 			 * Display the client fields admin interface
 			 *
 			 *
@@ -182,7 +170,6 @@
 			 */
 			function display_fields()	{			
 				/* -- Enable drag & drop -- */
-				$this->drag_n_drop();
 				
 				$dir = MDJM_PLUGIN_URL . '/assets/images/form-icons';
 				
@@ -197,6 +184,7 @@
 				echo '<table class="widefat mdjm-client-list-item" style="width:90%">' . "\r\n";
 				echo '<thead>' . "\r\n";
 				echo '<tr>' . "\r\n";
+				echo '<th style="width: 20px;"></th>' . "\r\n";
 				echo '<th style="width: 15%;">' . __( 'Label' ) . '</th>' . "\r\n";
 				echo '<th style="width: 15%;">' . __( 'Type' ) . '</th>' . "\r\n";
 				echo '<th style="width: 35%;">' . __( 'Description' ) . '</th>' . "\r\n";
@@ -210,15 +198,16 @@
 				
 				foreach( $this->fields as $field )	{
 					if( $i == 0 && $field['display'] == true )
-						$class = 'alternate mdjm-client-list-item';
+						$class = 'alternate mdjm_sortable_row';
 					elseif( empty( $field['display'] ) )
-						$class = 'form-invalid mdjm-client-list-item';
+						$class = 'form-invalid mdjm_sortable_row';
 					else
-						$class = 'mdjm-client-list-item';
+						$class = 'mdjm_sortable_row';
 						
 					echo '<tr id="fields=' . $field['id'] . '"' . 
-						' class="' . $class . '">' . "\r\n";
+						' class="' . $class . '" data-key="' . esc_attr( $field['id'] ) . '">' . "\r\n";
 						
+					echo '<td><span class="mdjm_draghandle"></span></td>' . "\r\n";
 					echo '<td>' . $field['label'] . '</td>' . "\r\n";
 					echo '<td>' . ucfirst( str_replace( 'dropdown', 'select', $field['type'] ) ) . ' Field</td>' . "\r\n";
 					echo '<td>' . ( !empty( $field['desc'] ) ? esc_attr( $field['desc'] ) : '' ) . '</td>' . "\r\n";

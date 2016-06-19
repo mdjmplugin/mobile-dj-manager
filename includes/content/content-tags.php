@@ -353,6 +353,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_client_primary_phone'
 		),
 		array(
+			'tag'         => 'client_alt_phone',
+			'description' => __( 'The event clients alternative phone number', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_client_alt_phone'
+		),
+		array(
 			'tag'         => 'client_username',
 			'description' => sprintf( __( 'The event clients username for logging into %s', 'mobile-dj-manager' ), 'Client Zone' ),
 			'function'    => 'mdjm_content_tag_client_username'
@@ -665,7 +670,7 @@ function mdjm_content_tag_admin_url()	{
  * @return	str		The URL to the Client Zone home page.
  */
 function mdjm_content_tag_application_home()	{
-	return mdjm_get_formatted_url( mdjm_get_option( 'app_home' ), false );
+	return mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ), false );
 } // mdjm_content_tag_application_home
 
 /**
@@ -1034,6 +1039,35 @@ function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
 	
 	return $return;
 } // mdjm_content_tag_client_primary_phone
+
+/**
+ * Content tag: client_alt_phone.
+ * The client phone number.
+ *
+ * @param	int		The event ID.
+ * @param	int		The client ID.
+ *
+ * @return	str		The alternative phone number of the client.
+ */
+function mdjm_content_tag_client_alt_phone( $event_id='', $client_id='' )	{
+	if( !empty( $client_id ) )	{
+		$user_id = $client_id;
+	}
+	elseif( !empty( $event_id ) )	{
+		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
+	}
+	else	{
+		$user_id = '';
+	}
+	
+	$return = '';
+	
+	if( !empty( $user_id ) )	{
+		$return = get_user_meta( $user_id, 'phone2', true );
+	}
+	
+	return $return;
+} // mdjm_content_tag_client_alt_phone
 
 /**
  * Content tag: client_username.

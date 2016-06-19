@@ -31,91 +31,91 @@ class MDJM_Event {
 	 *
 	 * @since	1.3
 	 */
-	private $date;
+	public $date;
 	
 	/**
 	 * The event short date
 	 *
 	 * @since	1.3
 	 */
-	private $short_date;
+	public $short_date;
 	
 	/**
 	 * The client ID
 	 *
 	 * @since	1.3
 	 */
-	private $client;
+	public $client;
 	
 	/**
 	 * The primary employee ID
 	 *
 	 * @since	1.3
 	 */
-	private $employee_id;
+	public $employee_id;
 	
 	/**
 	 * The event employees
 	 *
 	 * @since	1.3
 	 */
-	private $employees;
+	public $employees;
 	
 	/**
 	 * The event price
 	 *
 	 * @since	1.3
 	 */
-	private $price;
+	public $price;
 	
 	/**
 	 * The event deposit
 	 *
 	 * @since	1.3
 	 */
-	private $deposit;
+	public $deposit;
 	
 	/**
 	 * The deposit status
 	 *
 	 * @since	1.3
 	 */
-	private $deposit_status;
+	public $deposit_status;
 	
 	/**
 	 * The event balance
 	 *
 	 * @since	1.3
 	 */
-	private $balance;
+	public $balance;
 	
 	/**
 	 * The balance status
 	 *
 	 * @since	1.3
 	 */
-	private $balance_status;
+	public $balance_status;
 		
 	/**
 	 * The total income
 	 *
 	 * @since	1.3
 	 */
-	private $income;
+	public $income;
 	
 	/**
 	 * The total outgoings
 	 *
 	 * @since	1.3
 	 */
-	private $outgoings;
+	public $outgoings;
 	
 	/**
 	 * The event guest playlist code
 	 *
 	 * @since	1.3
 	 */
-	private $playlist_code;
+	public $playlist_code;
 		
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
@@ -184,7 +184,10 @@ class MDJM_Event {
 		}
 		
 		$this->get_client();
+		$this->get_employee();
 		$this->get_date();
+		$this->get_price();
+		$this->get_deposit();
 		
 		return true;
 	} // setup_event
@@ -313,7 +316,27 @@ class MDJM_Event {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
-	
+
+	/**
+	 * Retrieve event meta
+	 *
+	 * @since	1.3.7
+	 * @return	mixed
+	 */
+	public function get_meta( $_key )	{
+
+		if ( ! is_array( $_key ) )	{
+			$return = get_post_meta( $this->ID, $_key, true );
+		} else	{
+			foreach ( $_key as $key )	{
+				$return[ $key ] = get_post_meta( $this->ID, $key, true );
+			}
+		}
+
+		return $return;
+
+	} // get_meta
+
 	/**
 	 * Retrieve the event client
 	 *
@@ -457,8 +480,8 @@ class MDJM_Event {
 		 *
 		 * @since	1.3
 		 *
-		 * @param	str		$date The event price.
 		 * @param	str		$date The event date.
+		 * @param	int		$ID   The event ID.
 		 */
 		return apply_filters( 'mdjm_get_event_date', $this->date, $this->ID );
 	} // get_date
@@ -504,7 +527,120 @@ class MDJM_Event {
 		
 		return apply_filters( 'mdjm_event_short_date', $return, $this->date, $this->ID );
 	} // get_short_date
+
+	/**
+	 * Retrieve the event start time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_start_time() {
+		$start = get_post_meta( $this->ID, '_mdjm_event_start', true );
+		
+		return apply_filters( 'mdjm_event_start', $start, $this->ID );
+	} // get_start_time
+
+	/**
+	 * Retrieve the event finish time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_finish_time() {
+		$finish = get_post_meta( $this->ID, '_mdjm_event_finish', true );
+		
+		return apply_filters( 'mdjm_event_finish', $finish, $this->ID );
+	} // get_finish_time
+
+	/**
+	 * Retrieve the event setup date
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_setup_date() {
+		$setup_date = get_post_meta( $this->ID, '_mdjm_event_djsetup', true );
+		
+		/**
+		 * Override the event setup date.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$setup_date The event setup date.
+		 * @param	int		$ID 		The event ID.
+		 */
+		return apply_filters( 'mdjm_event_setup_date', $setup_date, $this->ID );
+	} // get_setup_date
+
+	/**
+	 * Retrieve the event setup time
+	 *
+	 * @since	1.3
+	 * @return	str
+	 */
+	public function get_setup_time() {
+		$setup_time = get_post_meta( $this->ID, '_mdjm_event_djsetup_time', true );
+		
+		return apply_filters( 'mdjm_event_setup_time', $setup_time, $this->ID );
+	} // get_setup_time
+
+	/**
+	 * Retrieve the event name
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_name() {
+		$name = get_post_meta( $this->ID, '_mdjm_event_name', true );
+		
+		/**
+		 * Override the event date.
+		 *
+		 * @since	1.3
+		 *
+		 * @param	str		$name The event name.
+		 */
+		return apply_filters( 'mdjm_event_name', $name, $this->ID );
+	} // get_name
 	
+	/**
+	 * Retrieve the event package
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_package() {
+		$package = get_post_meta( $this->ID, '_mdjm_event_package', true );
+		
+		/**
+		 * Override the event package.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$package The event price.
+		 */
+		return apply_filters( 'mdjm_event_package', $package, $this->ID );
+	} // get_package
+
+	/**
+	 * Retrieve the event addons
+	 *
+	 * @since	1.3.7
+	 * @return	str
+	 */
+	public function get_addons() {
+		$addons = get_post_meta( $this->ID, '_mdjm_event_addons', true );
+		
+		/**
+		 * Override the event package.
+		 *
+		 * @since	1.3.7
+		 *
+		 * @param	str		$package The event price.
+		 */
+		return apply_filters( 'mdjm_event_addons', $addons, $this->ID );
+	} // get_addons
+
 	/**
 	 * Retrieve the event status.
 	 *
@@ -553,7 +689,7 @@ class MDJM_Event {
 
 			if ( $this->price ) {
 
-				$this->price = mdjm_sanitize_amount( $this->price );
+				$this->price = $this->price;
 
 			} else {
 
@@ -764,7 +900,7 @@ class MDJM_Event {
 			
 			if ( ! empty ( $rcvd ) )	{
 				
-				$this->income = $rcvd;
+				$this->income = mdjm_sanitize_amount( $rcvd );
 				
 			} else	{
 				
@@ -801,7 +937,7 @@ class MDJM_Event {
 				
 			} else	{
 				
-				$out->outgoings = '0.00';
+				$this->outgoings = '0.00';
 				
 			}
 		}
@@ -868,7 +1004,25 @@ class MDJM_Event {
 		 */
 		return apply_filters( 'get_wages_total', mdjm_format_amount( $wages ), $this->ID, $this->employees );
 	} // get_wages_total
-	
+
+	/**
+	 * Retrieve the venue ID
+	 *
+	 * @since	1.3.7
+	 * @return	int|str
+	 */
+	public function get_venue_id() {
+		$venue_id = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
+		
+		/**
+		 * Override the venue id.
+		 *
+		 * @since	1.3.7
+		 * @param	str		$venue_id The venue ID.
+		 */
+		return apply_filters( 'mdjm_event_venue_id', $venue_id, $this->ID );
+	} // get_venue_id
+
 	/**
 	 * Retrieve the guest playlist access code.
 	 *

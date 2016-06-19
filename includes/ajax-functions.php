@@ -38,7 +38,7 @@ function mdjm_get_ajax_url() {
  *
  *
  */
-function save_mdjm_client_field_order()	{
+function mdjm_save_client_field_order_ajax()	{
 	$client_fields = get_option( 'mdjm_client_fields' );
 			
 	foreach( $_POST['fields'] as $order => $field )	{
@@ -50,72 +50,209 @@ function save_mdjm_client_field_order()	{
 	update_option( 'mdjm_client_fields', $client_fields );
 	
 	die();
-} // save_mdjm_client_field_order
-add_action( 'wp_ajax_mdjm_update_client_field_order', 'save_mdjm_client_field_order' );
+} // mdjm_save_client_field_order_ajax
+add_action( 'wp_ajax_mdjm_update_client_field_order', 'mdjm_save_client_field_order_ajax' );
 
 /**
- * Save the custom event fields order for clients
+ * Refresh the data within the client details table.
  *
+ * @since	1.3.7
  *
  */
-function mdjm_update_custom_field_client_order()	{
-			
-	foreach( $_POST['clientfields'] as $order => $id )	{
-		$menu = $order + 1;
-		
-		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
-	}
+function mdjm_refresh_client_details_ajax()	{
+
+	$result = array();
+
+	ob_start();
+	mdjm_do_client_details_table( $_POST['client_id'], $_POST['event_id'] );
+	$result['client_details'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
 	die();
-} // mdjm_update_custom_field_client_order
-add_action( 'wp_ajax_mdjm_update_custom_field_client_order', 'mdjm_update_custom_field_client_order' );
+
+} // mdjm_refresh_client_details_ajax
+add_action( 'wp_ajax_mdjm_refresh_client_details', 'mdjm_refresh_client_details_ajax' );
+
+/**
+ * Adds a new client from the event field.
+ *
+ * @since	1.3.7
+ * @global	arr		$_POST
+ * @return	arr
+ */
+function mdjm_add_client_ajax()	{
+
+	$client_id   = false;
+	$client_list = '';
+	$result      = array();
+	$message     = array();
+
+	if ( ! is_email( $_POST['client_email'] ) )	{
+		$message[] = __( 'Email address is invalid', 'mobile-dj-manager' );
+	} elseif ( email_exists( $_POST['client_email'] ) )	{
+		$message[] = __( 'Email address is already in use', 'mobile-dj-manager' );
+	} else	{
+
+		$user_data = array(
+			'first_name'    => $_POST['client_firstname'],
+			'last_name'     => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
+			'user_email'    => $_POST['client_email'],
+			'client_phone'  => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: '',
+			'client_phone2' => ! empty( $_POST['client_phone2'] )		? $_POST['client_phone2']				: ''
+		);
+
+		$client_id = mdjm_add_client( $user_data );
+
+	}
+	
+	$clients = mdjm_get_clients( 'client' );
+		
+	if ( ! empty( $clients ) )	{
+		foreach( $clients as $client )	{
+			$client_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				$client->ID,
+				$client->ID == $client_id ? ' selected="selected"' : '',
+				$client->display_name
+			);
+		}
+	}
+	
+	if ( empty( $client_id ) )	{
+		$result = array(
+			'type'    => 'error',
+			'message' => explode( "\n", $message )
+		);
+	} else	{
+
+		$result = array(
+			'type'        => 'success',
+			'client_id'   => $client_id,
+			'client_list' => $client_list
+		);
+	}
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_add_client_ajax
+add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
+
+/**
+ * Refresh the data within the venue details table.
+ *
+ * @since	1.3.7
+ *
+ */
+function mdjm_refresh_venue_details_ajax()	{
+
+	$result = array();
+
+	ob_start();
+	mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] );
+	$result['venue_details'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_refresh_venue_details_ajax
+add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );
+
+/**
+ * Adds a new venue from the events screen.
+ *
+ * @since	1.3.7
+ *
+ */
+function mdjm_add_venue_ajax()	{
+
+	$venue_id   = false;
+	$venue_list = '';
+	$result     = array();
+	$venue_name = '';
+	$venue_meta = array();
+
+	foreach( $_POST as $key => $value )	{
+		if ( $key == 'action' )	{
+			continue;
+		} elseif( $key == 'venue_name' )	{
+			$venue_name = $value;
+		} else	{
+			$venue_meta[ $key ] = strip_tags( addslashes( $value ) );
+		}
+	}
+
+	$venue_id = mdjm_add_venue( $venue_name, $venue_meta );
+
+	$venues = mdjm_get_venues();
+
+	$venue_list .= '<option value="manual">' . __( '  - Enter Manually - ', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+	$venue_list .= '<option value="client">' . __( '  - Use Client Address - ', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+
+	if ( ! empty( $venues ) )	{
+		foreach( $venues as $venue )	{
+			$venue_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				$venue->ID,
+				$venue->ID == $venue_id ? ' selected="selected"' : '',
+				$venue->post_title
+			);
+		}
+	}
+
+	if ( empty( $venue_id ) )	{
+		$result = array(
+			'type'    => 'error',
+			'message' => __( 'Unable to add venue', 'mobile-dj-manager' )
+		);
+	} else	{
+		$result = array(
+			'type'       => 'success',
+			'venue_id'   => $venue_id,
+			'venue_list' => $venue_list
+		);
+		
+	}
+
+	echo json_encode( $result );
+
+	die();
+
+} // mdjm_add_venue_ajax
+add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
 	
 /**
- * Save the custom event fields order for events
+ * Save the custom event fields order
  *
- *
+ * @since	1.3.7
+ * @param	$_POST
+ * @return	void
  */
-function mdjm_update_custom_field_event_order()	{
-			
-	foreach( $_POST['eventfields'] as $order => $id )	{
-		$menu = $order + 1;
-		
+function mdjm_order_custom_event_fields_ajax()	{
+
+	foreach( $_POST['customfields'] as $order => $id )	{
+		$order++;
+
 		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
+			'ID' => $id,
+			'menu_order' => $order
+		) );	
 	}
+
 	die();
-} // mdjm_update_custom_field_event_order
-add_action( 'wp_ajax_mdjm_update_custom_field_event_order', 'mdjm_update_custom_field_event_order' );
-	
-/**
- * Save the custom event fields order for venues
- *
- *
- */
-function mdjm_update_custom_field_venue_order()	{
-			
-	foreach( $_POST['venuefields'] as $order => $id )	{
-		$menu = $order + 1;
-		
-		wp_update_post( array(
-							'ID'			=> $id,
-							'menu_order'	=> $menu,
-							) );	
-	}
-	die();
-} // mdjm_update_custom_field_venue_order
-add_action( 'wp_ajax_mdjm_update_custom_field_venue_order', 'mdjm_update_custom_field_venue_order' );
+
+} // mdjm_order_custom_event_field_ajax
+add_action( 'wp_ajax_order_custom_event_fields', 'mdjm_order_custom_event_fields_ajax' );
 	
 /**
  * Save the event transaction
  *
  *
  */
-function mdjm_save_event_transaction()	{				
+function mdjm_save_event_transaction_ajax()	{				
 	global $mdjm_event;
 
 	$result = array();
@@ -177,7 +314,13 @@ function mdjm_save_event_transaction()	{
 		);
 		
 		mdjm_add_journal( $args );
-		
+
+		// Email overide
+		if ( empty( $_POST['send_notice'] ) && mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+			$manual_email_template = mdjm_get_option( 'manual_payment_cfm_template' );
+			mdjm_update_option( 'manual_payment_cfm_template', 0 );
+		}
+
 		$payment_for = $mdjm_txn->get_type();
 		$amount      = mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) );
 
@@ -195,8 +338,12 @@ function mdjm_save_event_transaction()	{
 		 * @param	int		$event_id
 		 * @param	obj		$txn_id
 		 */
-
 		do_action( 'mdjm_post_add_manual_txn_' . strtolower( $_POST['direction'] ), $_POST['event_id'], $mdjm_txn->ID );
+
+		// Email overide
+		if ( empty( $_POST['send_notice'] ) && isset( $manual_email_template ) )	{
+			mdjm_update_option( 'manual_payment_cfm_template', $manual_email_template );
+		}
 
 		$result['deposit_paid'] = 'N';
 		$result['balance_paid'] = 'N';
@@ -225,66 +372,50 @@ function mdjm_save_event_transaction()	{
 	echo json_encode( $result );
 
 	die();
-} // save_event_transaction
-add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction' );
+} // mdjm_save_event_transaction_ajax
+add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' );
 	
 /**
  * Add a new event type
  * Initiated from the Event Post screen
  *
  */
-function add_event_type()	{
-	global $mdjm;
-	
-	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
-		
-	$args = array( 
-				'taxonomy'			=> 'event-types',
-				'hide_empty' 		  => 0,
-				'name' 				=> 'mdjm_event_type',
-				'id' 				=> 'mdjm_event_type',
-				'orderby' 			 => 'name',
-				'hierarchical' 		=> 0,
-				'show_option_none' 	=> __( 'Select Event Type' ),
-				'class'			   => 'mdjm-meta required',
-				'echo'				=> 0,
-			);
+function mdjm_add_event_type_ajax()	{
 			
-	/* -- Validate that we have an Event Type to add -- */
 	if( empty( $_POST['type'] ) )	{
+
 		$result['type'] = 'Error';
-		$result['msg'] = 'Please enter a name for the new Event Type';
-	}
-	/* -- Add the new Event Type (term) -- */
-	else	{
+		$result['msg']  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
+
+	} else	{
+
 		$term = wp_insert_term( $_POST['type'], 'event-types' );
-		if( is_array( $term ) )	{
+
+		if ( is_array( $term ) )	{
 			$result['type'] = 'success';
-		}
-		else	{
+		} else	{
 			$result['type'] = 'error';
 		}
+
 	}
 	
-	MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Event Type from Event Post form', true );
+	$selected = ( $result['type'] == 'success' ) ? $term['term_id'] : $_POST['current'];
 	
-	$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
+	$result['event_types'] = MDJM()->html->event_type_dropdown( 'mdjm_event_type', $selected );
 	
-	$result['event_types'] = wp_dropdown_categories( $args );
-	
-	$result = json_encode($result);
-	echo $result;
+	echo json_encode($result);
 	
 	die();
-} // add_event_type
-add_action( 'wp_ajax_add_event_type', 'add_event_type' );
+
+} // mdjm_add_event_type_ajax
+add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
 	
 /**
  * Add a new transaction type
  * Initiated from the Transaction Post screen
  *
  */
-function add_transaction_type()	{
+function mdjm_add_transaction_type_ajax()	{
 	global $mdjm;
 	
 	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
@@ -327,8 +458,8 @@ function add_transaction_type()	{
 	echo $result;
 	
 	die();
-} // add_transaction_type
-add_action( 'wp_ajax_add_transaction_type', 'add_transaction_type' );
+} // mdjm_add_transaction_type_ajax
+add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
 	
 /**
  * Update the event cost as the package changes
@@ -336,7 +467,7 @@ add_action( 'wp_ajax_add_transaction_type', 'add_transaction_type' );
  *
  *
  */
-function update_event_cost_from_package()	{
+function mdjm_update_event_cost_from_package_ajax()	{
 	$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
 	$current_addons = get_post_meta( $_POST['event_id'], '_mdjm_event_addons', true );
 	$packages = get_option( 'mdjm_packages' );
@@ -375,8 +506,8 @@ function update_event_cost_from_package()	{
 	
 	die();
 	
-} // update_event_cost_from_package
-add_action( 'wp_ajax_update_event_cost_from_package', 'update_event_cost_from_package' );
+} // mdjm_update_event_cost_from_package_ajax
+add_action( 'wp_ajax_update_event_cost_from_package', 'mdjm_update_event_cost_from_package_ajax' );
 	
 /**
  * Update the event cost as the addons change
@@ -384,7 +515,7 @@ add_action( 'wp_ajax_update_event_cost_from_package', 'update_event_cost_from_pa
  *
  *
  */
-function update_event_cost_from_addons()	{
+function mdjm_update_event_cost_from_addons_ajax()	{
 	$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
 	$current_addons = get_post_meta( $_POST['event_id'], '_mdjm_event_addons', true );
 	$packages = get_option( 'mdjm_packages' );
@@ -430,62 +561,65 @@ function update_event_cost_from_addons()	{
 	
 	die();
 	
-} // update_event_cost_from_addons
-add_action( 'wp_ajax_update_event_cost_from_addons', 'update_event_cost_from_addons' );
+} // mdjm_update_event_cost_from_addons_ajax
+add_action( 'wp_ajax_update_event_cost_from_addons', 'mdjm_update_event_cost_from_addons_ajax' );
 
 /**
  * Update the available list of packages and addons when selected event DJ changes
  *
- *
- *
+ * @since	1.0
+ * @return	arr
  */
-function mdjm_update_dj_package_options()	{
-	$dj = $_POST['dj'];
-	$event_package = ( !empty( $_POST['package'] ) ? $_POST['package'] : '' );
-	$event_addons = ( !empty( $_POST['addons'] ) ? $_POST['addons'] : '' );
+function mdjm_refresh_employee_package_options_ajax()	{
+
+	$employee        = $_POST['employee'];
+	$current_package = ( !empty( $_POST['package'] ) ? $_POST['package'] : '' );
+	$current_addons  = ( !empty( $_POST['addons'] )  ? $_POST['addons']  : '' );
 	
 	$packages = mdjm_package_dropdown( array(
-										'name'			=> '_mdjm_event_package',
-										'dj'			  => !empty( $dj ) ? $dj : '',
-										'selected'		=> !empty( $event_package ) ? $event_package : '',
-										'first_entry'	 => 'No Package',
-										'first_entry_val' => '0'
-										), false );
+		'name'			=> '_mdjm_event_package',
+		'dj'			  => ! empty( $employee ) ? $employee : '',
+		'selected'		=> ! empty( $current_package ) ? $current_package : '',
+		'first_entry'	 => __( 'No Package', 'mobile-dj-manager' ),
+		'first_entry_val' => '0'
+		),
+		false
+	);
 	
 	
 	$addons = mdjm_addons_dropdown( array( 
-										'name'		=> 'event_addons',
-										'dj'		=> !empty( $dj ) ? $dj : '',
-										'package'	=> !empty( $event_package ) ? $event_package : '',
-										//'selected'	=> !empty( $event_addons ) ? $event_addons : '',
-										), false );
+		'name'    => 'event_addons',
+		'dj'      => ! empty( $employee )        ? $employee        : '',
+		'package' => ! empty( $current_package ) ? $current_package : ''
+		),
+		false
+	);
 			
-	if( !empty( $addons ) || !empty( $packages ) )	{
+	if( ! empty( $addons ) || ! empty( $packages ) )	{
 		$result['type'] = 'success';
-	}
-	else	{
+	} else	{
 		$result['type'] = 'error';
-		$result['msg'] = 'No packages or addons available';
+		$result['msg']  = __( 'No packages or addons available', 'mobile-dj-manager' );
 	}
 	
-	if( !empty( $packages ) )
+	if(  !empty( $packages ) )	{
 		$result['packages'] = $packages;
+	} else	{
+		$result['packages'] = __( 'No Packages Available', 'mobile-dj-manager' );
+	}
 		
-	else
-		$result['packages'] = 'No Packages Available';
-		
-	if( !empty( $addons ) && $packages != '<option value="0">No Packages Available</option>' )
+	if( ! empty( $addons ) && $packages != '<option value="0">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' )	{
 		$result['addons'] = $addons;
-		
-	else
-		$result['addons'] = 'No Addons Available';
+	} else	{
+		$result['addons'] = __( 'No Addons Available', 'mobile-dj-manager' );
+	}
 	
-	$result = json_encode( $result );
-	echo $result;
+	echo json_encode( $result );
 	
 	die();
-} // mdjm_update_dj_package_options
-add_action( 'wp_ajax_mdjm_update_dj_package_options', 'mdjm_update_dj_package_options' );
+
+} // mdjm_refresh_employee_package_options_ajax
+add_action( 'wp_ajax_refresh_employee_package_options', 'mdjm_refresh_employee_package_options_ajax' );
 
 /**
  * Update the event deposit amount based upon the event cost
@@ -493,7 +627,7 @@ add_action( 'wp_ajax_mdjm_update_dj_package_options', 'mdjm_update_dj_package_op
  *
  *
  */
-function mdjm_update_event_deposit()	{
+function mdjm_update_event_deposit_ajax()	{
 	$event_cost = $_POST['current_cost'];
 	
 	$deposit = mdjm_calculate_deposit( $event_cost );
@@ -511,8 +645,8 @@ function mdjm_update_event_deposit()	{
 	echo $result;
 	
 	die();
-} // mdjm_update_event_deposit
-add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit' );
+} // mdjm_update_event_deposit_ajax
+add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
 	
 /**
  * Add an employee to the event.
@@ -522,36 +656,35 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit' );
  * @param
  * @return
  */
-function mdjm_ajax_add_employee_to_event()	{
-	
+function mdjm_add_employee_to_event_ajax()	{
+
 	$args = array(
 		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
 		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
 		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
 		'payment_status'  => 'unpaid'
 	);
-	
+
 	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
-		
+
 		$result['type'] = 'error';
 		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );
-	
+
 	} else	{
-		
 		$result['type'] = 'success';
-	
 	}
-	
-	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
-		
-	$result = json_encode( $result );
-	
-	echo $result;
-	
+
+	ob_start();
+	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	$result['employees'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
 	die();
 
-} // mdjm_ajax_add_employee_to_event
-add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event' );
+} // mdjm_add_employee_to_event_ajax
+add_action( 'wp_ajax_add_employee_to_event', 'mdjm_add_employee_to_event_ajax' );
 
 /**
  * Remove an employee from the event.
@@ -561,21 +694,23 @@ add_action( 'wp_ajax_add_employee_to_event', 'mdjm_ajax_add_employee_to_event' )
  * @param
  * @return
  */
-function mdjm_ajax_remove_employee_from_event()	{
-	
+function mdjm_remove_employee_from_event_ajax()	{
+
 	mdjm_remove_employee_from_event( $_POST['employee_id'], $_POST['event_id'] );
-		
+
 	$result['type'] = 'success';
-	$result['employees'] = mdjm_list_event_employees( $_POST['event_id'] );
-			
-	$result = json_encode( $result );
-	
-	echo $result;
-	
+
+	ob_start();
+	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	$result['employees'] = ob_get_contents();
+	ob_get_clean();
+
+	echo json_encode( $result );
+
 	die();
 
-} // mdjm_ajax_remove_employee_from_event
-add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_from_event' );
+} // mdjm_remove_employee_from_event_ajax
+add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_event_ajax' );
 
 /**
  * Update the email content field with the selected template.
@@ -585,7 +720,7 @@ add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_ajax_remove_employee_fro
  * @param
  * @return
  */
-function mdjm_ajax_set_email_content()	{
+function mdjm_set_email_content_ajax()	{
 		
 	if ( empty( $_POST['template'] ) )	{
 		$result['type'] = 'success';
@@ -609,8 +744,8 @@ function mdjm_ajax_set_email_content()	{
 	
 	die();
 	
-} // mdjm_set_email_content
-add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content' );
+} // mdjm_set_email_content_ajax
+add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_set_email_content_ajax' );
 
 /**
  * Update the email content field with the selected template.
@@ -620,7 +755,7 @@ add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_ajax_set_email_content' );
  * @param
  * @return
  */
-function mdjm_ajax_user_events_dropdown()	{
+function mdjm_user_events_dropdown_ajax()	{
 
 	$result['event_list'] = '<option value="0">' . __( 'Select an Event', 'mobile-dj-manager' ) . '</option>';
 	
@@ -666,8 +801,43 @@ function mdjm_ajax_user_events_dropdown()	{
 	
 	die();
 	
-} // mdjm_ajax_client_events_dropdown
-add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown' );
+} // mdjm_user_events_dropdown_ajax
+add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_user_events_dropdown_ajax' );
+
+/**
+ * Refresh the addons options when the package selection is updated.
+ *
+ * @since	1.3.7
+ * @param	$_POST
+ * @return	arr
+ */
+function mdjm_refresh_addon_options_ajax()	{
+
+	$employee = isset( $_POST['dj'] ) ? $_POST['dj'] : false;
+	$package  = $_POST['package'];
+	$addons   = mdjm_addons_dropdown( array(
+		'name'    => 'event_addons',
+		'dj'      => ! empty( $employee ) ? $employee  : '',
+		'package' => ! empty( $package )  ? $package   : '',
+		),
+		false
+	);
+
+	$result['type'] = 'success';
+
+	if( ! empty( $addons ) )	{
+		$result['addons'] = $addons;
+	} else	{
+		$result['addons'] = '<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>';
+	}
+
+	echo json_encode( $result );
+	
+	die();
+
+} // mdjm_refresh_addon_options_ajax
+add_action( 'wp_ajax_refresh_addon_options', 'mdjm_refresh_addon_options_ajax' );
+add_action( 'wp_ajax_nopriv_refresh_addon_options', 'mdjm_refresh_addon_options_ajax' );
 
 /**
  * Check the availability status for the given date
@@ -676,7 +846,7 @@ add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_ajax_user_events_dropdown
  * @param	Global $_POST
  * @return	arr
  */
-function mdjm_ajax_do_availability_check()	{
+function mdjm_do_availability_check_ajax()	{
 	
 	$date = $_POST['check_date'];
 	
@@ -706,6 +876,6 @@ function mdjm_ajax_do_availability_check()	{
 	echo json_encode( $result );
 	
 	die();
-} // mdjm_ajax_do_availability_check
-add_action( 'wp_ajax_mdjm_do_availability_check', 'mdjm_ajax_do_availability_check' );
-add_action( 'wp_ajax_nopriv_mdjm_do_availability_check', 'mdjm_ajax_do_availability_check' );
+} // mdjm_do_availability_check_ajax
+add_action( 'wp_ajax_mdjm_do_availability_check', 'mdjm_do_availability_check_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_do_availability_check', 'mdjm_do_availability_check_ajax' );

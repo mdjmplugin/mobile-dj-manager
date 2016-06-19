@@ -72,7 +72,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	global $post;
 	
 	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )	{
-		$value = get_post_meta( $post->ID, '_mdjm_event_cost', true );
+		$value = mdjm_get_event_price( $post_id );
 	}
 		
 	switch ( $column_name ) {
@@ -184,7 +184,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		// Value
 		case 'value':
 			if( mdjm_employee_can( 'edit_txns' ) )	{
-				if ( ! empty( $value ) )	{
+				if ( ! empty( $value ) && $value != '0.00' )	{
 
 					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
 					echo '<br />';
@@ -201,13 +201,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		case 'balance':
 			if( mdjm_employee_can( 'edit_txns' ) )	{				
 				
-				$rcvd = MDJM()->txns->get_transactions( $post->ID, 'mdjm-income' );
-				
-				if( ! empty( $rcvd ) && $rcvd != '0.00' )	{
-					echo mdjm_currency_filter( mdjm_format_amount( ( $value - $rcvd ) ) );
-				} else	{
-					echo mdjm_currency_filter( mdjm_format_amount( $value ) );
-				}
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_balance( $post_id ) ) );
 				
 				echo '<br />';
 				
@@ -1342,22 +1336,6 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	mdjm_update_event_meta( $post_id, $event_data );
 		
 	$debug[] = 'Meta Updates Completed';
-	
-	/**
-	 * Check for manual payment received & process.
-	 * This needs to be completed before we send any emails to ensure shortcodes are correct.
-	 */
-	/*if( $deposit_payment == true || $balance_payment == true )	{
-		
-		if( $balance_payment == true )	{
-			$type = mdjm_get_balance_label();
-		} else	{
-			mdjm_mark_event_deposit_paid( $post_id );
-		}
-		
-		// Insert the event transaction
-		MDJM()->txns->manual_event_payment( $type, $post_id );
-	}*/
 	
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{

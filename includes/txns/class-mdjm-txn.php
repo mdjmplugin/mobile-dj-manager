@@ -231,17 +231,24 @@ class MDJM_Txn {
 	} // get_price
 	
 	/**
-	 * Retrieve the transaction price
+	 * Retrieve the transaction recipient
 	 *
 	 * @since	1.3
 	 * @return	str Y-m-d H:i:s
 	 */
 	public function get_recipient_id() {
+
 		if ( empty( $this->recipient_id ) )	{
-			$this->recipient_id = get_post_meta( $this->ID, '_mdjm_payment_to', true );
+		
+			if ( 'mdjm-income' == get_post_status( $this->ID ) )	{
+				$this->recipient_id = get_post_meta( $this->ID, '_mdjm_payment_from', true );
+			} else	{
+				$this->recipient_id = get_post_meta( $this->ID, '_mdjm_payment_to', true );
+			}
+
 		}
 		
-		return $this->recipient_id;
+		return apply_filters( 'mdjm_get_recipient_id', $this->recipient_id );
 	} // get_recipient_id
 	
 	/**

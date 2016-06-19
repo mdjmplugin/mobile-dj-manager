@@ -5,62 +5,41 @@
 	 *
 	 *
 	 */
-	jQuery().ready(function()	{
-		jQuery("#post").validate(	{
-			
-			/* -- Classes -- */
+	jQuery().ready(function($)	{
+		$("#post").validate(	{
 			errorClass: "mdjm-form-error",
 			validClass: "mdjm-form-valid",
 			focusInvalid: false,
-			
-			/* -- Rules -- */
 			rules:	{
-				_mdjm_event_cost:	{
-					number: true	
-				},
-				_mdjm_event_deposit:	{
-					number: true	
-				},
-			}, // End rules
-			
+				client_name         : { required : true, minlength : 1 },
+				_mdjm_event_cost    : { number   : true },
+				_mdjm_event_deposit : { number   : true }
+			},
 			messages:	{
-				client_name:				" Select a Client",
-				
-				client_firstname:		" Enter client's name",
-				
-				client_email:	{
-					required:			" Enter client's email",
-					email:				" Enter a valid email address",	
+				client_name         : " ",
+				client_firstname    :	 " ",
+				client_email        :	{
+					required        : " ",
+					email           : " "
 				},
-				
-				_mdjm_event_dj: 		" No DJ selected",
-				
-				display_event_date:	{
-					required:		 	" A date is required",
-					date:				" Must be a valid date (use date picker)",
+				_mdjm_event_dj      : " ",
+				display_event_date  :	{
+					required        : " ",
+					date            : " "
 				},
-				
-				_mdjm_event_cost:	{
-					required:			" Enter a cost",
-					number:				" Accepted format example 10.00",
+				_mdjm_event_cost    :	{
+					required        : " ",
+					number          : " "
 				},
-				
-				_mdjm_event_deposit:	{
-					number:				" Accepted format example 10.00",
+				_mdjm_event_deposit :	{
+					number          : " "
 				},
-				
-				mdjm_event_type:		" Required",
-				
-				venue_id:			 	" Select a venue",
-				
-				venue_name:				" Enter a venue name",
-				
-				venue_address1:			" An address is needed",
-				
-				venue_town:				" A town is needed",
-				
-				venue_county:			" A county is needed",								
+				mdjm_event_type     : " ",
+				venue_id            : " ",
+				venue_name          : " ",
+				venue_address1      : " ",
+				venue_town          : " ",
+				venue_county        : " "								
 			}
-			
-		} ); // Validate
-	} ); // function
+		} );
+	} );

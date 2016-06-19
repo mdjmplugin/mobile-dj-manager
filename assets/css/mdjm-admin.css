@@ -15,6 +15,14 @@
 .mdjm-wrap a { text-decoration: none; }
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
+a.mdjm-fake { cursor: pointer; cursor: hand; }
+.mdjm-input-currency {
+	width: 75px;
+}
+
+.mdjm-small	{
+	font-size: 11px;	
+}
 #mdjm-loader	{
 	max-width: 20px;
 	margin: auto;
@@ -44,6 +52,19 @@ a.mdjm-delete:hover { color: #f00; }
 .mdjm-color	{
 	color: #F90;	
 }
+.mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
+.mdjm-select-chosen label { padding-right: 3px; }
+
+/* General Settings Styles
+-------------------------------------------------------------- */
+.mdjm-event_page_mdjm-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
+.mdjm-event_page_mdjm-settings .form-table select + label,
+.mdjm-event_page_mdjm-settings .form-table input.regular-text ~ label { display:block; }
+.mdjm-event_page_mdjm-settings .form-table input.small-text ~ label,
+.mdjm-event_page_mdjm-settings .form-table input[type="checkbox"] + label { display: inline; }
+.mdjm-event_page_mdjm-settings .form-table tr > th > strong,
+.mdjm-event_page_mdjm-settings .form-table tr > th > h3
+{ font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
 /* =Client Field Settings
 -------------------------------------------------------------- */
@@ -126,7 +147,8 @@ a.mdjm-delete:hover { color: #f00; }
 
 /* =jQuery Validation
 -------------------------------------------------------------- */
-.mdjm-form-error {
+.mdjm-form-error,
+.mdjm-select-chosen .mdjm-form-error {
 	color: #F00;
 	font-weight: bold;
 }
@@ -163,35 +185,10 @@ checkbox.mdjm-form-error {
 	color: #000000;
 }
 
-.mdjm-input-currency {
-	width: 75px;
-}
-
-.mdjm-small	{
-	font-size: 11px;	
-}
-
 /* =Sortable
 -------------------------------------------------------------- */
-.mdjm-list-item	{
-	cursor: move;	
-}
-
-.mdjm-client-list-item	{
-	cursor: move;	
-}
-
-.mdjm-custom-client-list-item	{
-	cursor: move;	
-}
-
-.mdjm-custom-event-list-item	{
-	cursor: move;	
-}
-
-.mdjm-custom-venue-list-item	{
-	cursor: move;	
-}
+.mdjm_draghandle { display: block; width: 20px; height: 20px; background: url(../images/mdjm-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
+.mdjm_sortable_row td { vertical-align: middle }
 
 /* =Footer Text
 -------------------------------------------------------------- */
@@ -318,18 +315,99 @@ checkbox.mdjm-form-error {
 
 /* =Metaboxes
 -------------------------------------------------------------- */
-.mdjm_field_wrapper { position: relative; }
+.mdjm_field_wrap	{
+	width: 100%;
+    vertical-align: top;
+    display: inline-block;
+    *display: inline;
+    zoom: 1
+}
+
+.mdjm_form_fields { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
-.mdjm_form_fields textarea { margin: 4px; min-width: 150px; }
-.mdjm_form_fields textarea { width: 100%; }
+.mdjm_form_fields textarea { margin: 4px }
+
+.mdjm_form_fields input:not([type='checkbox']),
+.mdjm_form_fields textarea { min-width: 150px; }
+
+.mdjm_form_fields textarea { width: 100%; height: 5em; }
 .mdjm_form_fields .submit input { width: auto; }
 .mdjm_form_fields label { font-weight: bold; }
 .mdjm_form_fields.description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
+.mdjm_form_fields input .mdjm-currency { max-width: 75px; }
+.mdjm_form_fields select .mdjm-time { max-width: 10px; }
+
+#mdjm-event-employee-setup-row { display: inline; }
+#mdjm-event-employee-setup-row select { vertical-align: top; }
 
 .mdjm_event_txn_add_wrap { width: 100%; }
 
-.col2 { float: left; width: 50%; }
-.col2-last { float: right; width: 50%; }
-.col3 { float: left; width: 33%; }
-.col3-last { float: right; width: 33%; }
+#mdjm-event-add-new-client-fields,
+#mdjm-event-add-txn-table,
+#mdjm-event-client-details,
+#mdjm_event_custom_client_fields,
+#mdjm_event_custom_event_fields,
+#mdjm_event_custom_venue_fields,
+#mdjm-event-emails-table,
+#mdjm_event_details_table,
+#mdjm-event-journal-table,
+#mdjm_event_packages_table,
+#mdjm-event-add-txn-table,
+#mdjm-event-add-new-venue-fields { padding-top: 5px; }
+#mdjm-event-employee-list { padding-bottom: 5px; }
+
+.mdjm_field_wrap .mdjm_col	{
+    float: left;
+	min-height: 60px;
+	vertical-align: baseline;
+}
+.mdjm_field_wrap .mdjm_col.col2 { width: 50%; }
+.mdjm_field_wrap .mdjm_col.col3 { width: 33%; }
+
+/* 3 column tables */
+#mdjm-event-add-new-client-fields table td,
+#mdjm-event-add-txn-table table td,
+#mdjm-event-add-new-venue-fields table td,
+#mdjm-event-venue-details table td { width: 33%; max-width: 33%; }
+
+/* 2 column tables */
+#mdjm-event-client-details table td,
+#mdjm_event_custom_client_fields table td,
+#mdjm_event_custom_event_fields table td,
+#mdjm_event_custom_venue_fields table td,
+#mdjm_event_details_table table td,
+#mdjm_event_packages_table table td { width: 50%; max-width: 50%; }
+
+/* Side Metaboxes */
+#mdjm-event-actions hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #fafafa;
+}
+#mdjm-event-actions label {
+	display: inline-block;
+	width: 60px;
+}
+#mdjm-event-actions a {
+	display: inline-block;
+	width: 100px;
+}
+#mdjm-event-actions input[type=submit],
+#mdjm-event-actions button {
+	float: right;
+	width: auto;
+}
+#mdjm-event-actions input[type='text'],
+#mdjm-event-actions select {
+	width: 150px;
+}
+#mdjm-event-actions .description {
+	color: #666;
+	font-size: 11px;
+	font-style: italic;
+	float: right;
+}
+#mdjm-event-actions #event-type-add { cursor: pointer; }
+
+#mdjm-new-event-type-row { display: none; vertical-align: top; }

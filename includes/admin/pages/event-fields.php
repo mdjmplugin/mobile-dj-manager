@@ -19,9 +19,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			add_action( 'admin_init', array( &$this, 'custom_fields_controller' ) );
 			
 			add_action( 'mdjm_add_content_tags', array( &$this, 'add_tags' ) );
-			add_action( 'mdjm_events_client_metabox_last', array( &$this, 'custom_client_event_fields' ), 10, 2 );
-			add_action( 'mdjm_events_metabox_last', array( &$this, 'custom_event_details_fields' ) );
-			add_action( 'mdjm_events_venue_metabox_last', array( &$this, 'custom_venue_event_fields' ) );
+			add_action( 'mdjm_event_client_fields', array( &$this, 'custom_client_event_fields' ), 90 );
+			add_action( 'mdjm_event_details_fields', array( &$this, 'custom_event_details_fields' ), 90 );
+			add_action( 'mdjm_event_venue_fields', array( &$this, 'custom_venue_event_fields' ), 90 );
 			
 			add_filter( 'mdjm_shortcode_filter_pairs', array( &$this, 'custom_event_fields_shortcode_pairs' ), 10, 3 );
 			
@@ -330,14 +330,15 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			foreach( $field_types as $field_type )	{
 				?>
 				<h3><?php printf( __( '%s Fields', 'mobile-dj-manager' ), ucfirst( $field_type ) ) ; ?></h3>
-				<table class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
+				<table id="mdjm_custom-<?php echo $field_type; ?>" class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
 					<thead>
 					<tr>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
-                        <th style="width: 15%; font-weight: bold;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
-						<th style="font-weight: bold;"><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
+                    	<th style="width: 20px;"></th>
+						<th style="width: 15%;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 30%;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
+                        <th style="width: 15%;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
+						<th><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -351,9 +352,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					while( $fields->have_posts() ) {
 						$fields->the_post();
 						?>
-						<tr id="<?php echo $field_type . 'fields_' . $fields->post->ID; ?>" class="
-							<?php echo ( $i == 0 ? 'alternate mdjm-custom-' . $field_type . '-list-item' : 'mdjm-custom-' . $field_type . '-list-item' ); ?>">
-                            
+						<tr id="customfields_<?php echo $fields->post->ID; ?>" class="
+							<?php echo ( $i == 0 ? 'alternate mdjm_sortable_row' : 'mdjm_sortable_row' ); ?>" data-key="<?php echo $fields->post->ID; ?>">
+                            <td><span class="mdjm_draghandle"></span></td>
                             <td><?php the_title(); ?></td>
                             <td><?php echo ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ); ?></td>
                             <td><?php the_content(); ?></td>
@@ -378,7 +379,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				else	{
 					?>
 					<tr>
-						<td colspan="5"><?php printf( __( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), ucfirst( $field_type ) ); ?></td>
+						<td colspan="6"><?php printf( __( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), ucfirst( $field_type ) ); ?></td>
 					</tr>
 					<?php
 				}
@@ -387,11 +388,12 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					</tbody>
 					<tfoot>
 					<tr style="font-weight: bold;">
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 15%; font-weight: bold;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 35%; font-weight: bold;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
-                        <th style="width: 15%; font-weight: bold;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
-						<th style="font-weight: bold;"><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
+                    	<th style="width: 20px;"></th>
+						<th style="width: 15%;"><?php _e( 'Label', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 15%;"><?php _e( 'Type', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 25%;"><?php _e( 'Description', 'mobile-dj-manager' ); ?></th>
+                        <th style="width: 15%;"><?php _e( 'Options', 'mobile-dj-manager' ); ?></th>
+						<th><?php _e( 'Actions', 'mobile-dj-manager' ); ?></th>
 					</tr>
 					</tfoot>
 				</table>
@@ -608,89 +610,80 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		
 		/**
 		 * Add the custom fields to the end of the event client details metabox.
-		 * @called: mdjm_events_client_metabox_last hook
-		 *
-		 * @params	obj		$post		Required: The current event post object
-		 *			int		$client_id	Required: The ID of the current client
-		 *
+		 * 
+		 * @since	1.3.7
+		 * @called: mdjm_event_client_fields
+		 * @param	int		$event_id	The Event ID
 		 * @return	str		$output		This function must output the full required HTML
 		 */
-		function custom_client_event_fields( $post, $client_id )	{
+		function custom_client_event_fields( $event_id )	{
+			global $mdjm_event, $mdjm_event_update;
+
 			$query = mdjm_get_custom_fields( 'client' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				foreach( $fields as $field )	{
-					self::display_input( $field, $post );
-				}
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+			if( $fields ) : ?>
+                <?php _e( 'Custom Client Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_client_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_client_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif;
 		} // custom_client_event_fields
 		
 		/**
 		 * Add the custom fields to the end of the event Event Details metabox.
-		 * @called: mdjm_events_metabox_last hook
-		 *
-		 * @params	obj		$post		Required: The current event post object
-		 *
-		 *
+		 * 
+		 * @since	1.3.7
+		 * @called: mdjm_event_details_fields
+		 * @param	int		$event_id	The Event ID
 		 * @return	str		$output		This function must output the full required HTML
 		 */
-		function custom_event_details_fields( $post )	{
+		function custom_event_details_fields( $event_id )	{
+			global $mdjm_event, $mdjm_event_update;
+
 			$query = mdjm_get_custom_fields( 'event' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				foreach( $fields as $field )	{
-					self::display_input( $field, $post );
-				}
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+			if( $fields ) : ?>
+                <strong><?php printf( __( 'Custom %s Fields', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong> (<a id="toggle_custom_event_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_event_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif;
 		} // custom_event_details_fields
 		
 		/**
 		 * Add the custom fields to the end of the event Venue Details metabox.
-		 * @called: mdjm_events_venue_metabox_last hook
 		 *
-		 * @params	obj		$post		Required: The current event post object
-		 *
-		 *
+		 * @since	1.3.7
+		 * @called: mdjm_event_venue_fields
+		 * @param	int		$event_id	The Event ID
 		 * @return	str		$output		This function must output the full required HTML
 		 */
-		function custom_venue_event_fields( $post )	{
+		function custom_venue_event_fields( $event_id )	{
+			global $mdjm_event, $mdjm_event_update;
+
 			$query = mdjm_get_custom_fields( 'venue' );
 			$fields = $query->get_posts();
 			
-			/**
-			* We have fields so let's display them
-			*/
-			if( $fields )	{
-				foreach( $fields as $field )	{
-					self::display_input( $field, $post );
-				}
-			}
-			
-			/**
-			* No fields so do nothing and return
-			*/
-			else
-				return;
+			if( $fields ) : ?>
+                <?php _e( 'Custom Venue Fields', 'mobile-dj-manager' ); ?> (<a id="toggle_custom_venue_fields" class="mdjm-small mdjm-fake"><?php _e( 'toggle', 'mobile-dj-manager' ); ?></a>)
+                <div id="mdjm_event_custom_venue_fields" class="mdjm_field_wrap mdjm_form_fields">
+					<?php foreach( $fields as $field ) : ?>
+                    	<div class="mdjm_col col2">
+							<?php self::display_input( $field, $mdjm_event ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif;
 		} // custom_venue_event_fields
 		
 		/**
@@ -712,8 +705,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$height = array( 'textarea', 'multi select' );
 			
 			?>
-			<div class="mdjm-post-row-single"<?php if( in_array( $type, $height ) ) echo ' style="height: auto !important;"'; ?>>
-				<div class="mdjm-post-1column">
+            	<td>
 					<?php
 					// Checkbox fields appear before and on the same line as the label
 					if( $type == 'checkbox' )	{
@@ -764,8 +756,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						echo '</textarea>' . "\r\n";
 					}
 					?>
-				</div>
-			</div>
+                    </td>
 			<?php
 		} // display_input
 				

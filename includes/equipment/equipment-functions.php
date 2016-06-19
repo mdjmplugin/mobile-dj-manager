@@ -31,7 +31,9 @@ function mdjm_packages_enabled()	{
  *
  */
 function mdjm_get_packages()	{
-	return get_option( 'mdjm_packages' );
+	$packages = get_option( 'mdjm_packages' );
+	asort( $packages );
+	return $packages;
 } // mdjm_get_packages
 
 /**
@@ -437,7 +439,9 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
  * @return	arr		$addons		Array of all addons
  */
 function mdjm_get_addons()	{
-	return get_option( 'mdjm_equipment' );
+	$addons = get_option( 'mdjm_equipment' );
+	asort( $addons );
+	return $addons;
 } // mdjm_get_addons
 
 /**

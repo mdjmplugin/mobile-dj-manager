@@ -64,6 +64,28 @@ function mdjm_get_events( $args = array() )	{
 } // mdjm_get_events
 
 /**
+ * Whether or not the event is currently active.
+ *
+ * @since	1.3
+ * @param	int		$event_id	Event ID.
+ * @return	bool	True if active, false if not.
+ */
+function mdjm_event_is_active( $event_id = '' )	{
+
+	$event_statuses   = mdjm_active_event_statuses();
+	$event_statuses[] = 'mdjm-unattended';
+	$event_statuses[] = 'auto-draft';
+	$event_statuses[] = 'draft';
+
+	if ( in_array( get_post_status( $event_id ), $event_statuses ) )	{
+		return true;	
+	}
+
+	return false;
+
+} // mdjm_event_is_active
+
+/**
  * Retrieve the next event.
  * If the current user is not an MDJM admin, only list their own event.
  *
@@ -113,7 +135,7 @@ function mdjm_get_next_event( $employee_id = '' )	{
 } // mdjm_get_next_event
 
 /**
- * Retrieve the next event.
+ * Retrieve today's events.
  *
  * @since	1.3
  * @param	int		$employee_id	User ID of employee. Leave empty to check for all employees.
@@ -139,7 +161,7 @@ function mdjm_get_todays_events( $employee_id = '' )	{
 	
 	return $event[0];
 	
-} // mdjm_get_next_event
+} // mdjm_get_todays_events
 
 /**
  * Retrieve an event by the guest playlist code.
@@ -346,6 +368,50 @@ function mdjm_event_status_dropdown( $args='' )	{
 } // mdjm_event_status_dropdown
 
 /**
+ * Retrieve the enquiry source for the event.
+ *
+ * @since	1.3
+ * @param	int			$event_id	Event ID.
+ * @return	obj|bool	The enquiry source for the event, or false if not set
+ */
+function mdjm_get_enquiry_source( $event_id )	{
+
+	$enquiry_source = wp_get_object_terms( $event_id, 'enquiry-source' );
+	$return         = (bool) false;
+
+	if ( isset( $enquiry_source[0]->term_id ) )	{
+		$return = $enquiry_source[0];
+	}
+	
+	return $return;
+
+} // mdjm_get_enquiry_source
+
+/**
+ * Return all enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	obj		Object array of all enqury source categories.
+ */
+function mdjm_get_enquiry_sources( $args = array() )	{
+	
+	$defaults = array(
+		'taxonomy'      => 'enquiry-source',
+		'hide_empty'    => false,
+		'orderby'       => 'name',
+		'order'         => 'ASC'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$enquiry_sources = get_categories( $args );
+	
+	return apply_filters( 'mdjm_get_enquiry_sources', $enquiry_sources, $args );
+	
+} // mdjm_get_enquiry_sources
+
+/**
  * Set the enquiry source for the event.
  *
  * @since	1.3
@@ -377,6 +443,67 @@ function mdjm_set_enquiry_source( $event_id, $type = '' )	{
 	return;
 
 } // mdjm_set_enquiry_source
+
+/**
+ * Generate a dropdown list of enquiry sources.
+ *
+ * @since	1.3
+ * @param	arr		$args	See $defaults.
+ * @return	str		HTML output for the dropdown list.
+ */
+function mdjm_enquiry_sources_dropdown( $args )	{
+	
+	$defaults = array(
+		'show_option_none'   => '',
+		'option_none_value'  => '',
+		'orderby'            => 'name', 
+		'order'              => 'ASC',
+		'hide_empty'         => false, 
+		'echo'               => true,
+		'selected'           => 0,
+		'name'               => 'mdjm_enquiry_source',
+		'id'                 => '',
+		'class'              => 'postform',
+		'taxonomy'           => 'event-types',
+		'required'           => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$args['id']                = ! empty( $args['id'] )                ? $args['id']                : $args['name'];
+	$args['required']          = ! empty( $args['required'] )          ? ' required'                : '';
+	$args['class']             = ! empty( $args['class'] )             ? $args['class']             : '';
+	
+	$enquiry_sources = mdjm_get_enquiry_sources();
+	
+	$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] );
+	
+	if ( ! empty( $args['show_option_none'] ) )	{
+		$output .= sprintf( '<option value="%s">%s</option>', $args['option_none_value'], $args['show_option_none'] );
+	}
+	
+	if ( empty( $enquiry_sources ) )	{
+		$output .= sprintf( '<option value="" disabled="disabled">%s</option>', apply_filters( 'mdjm_no_enquiry_source_options', __( 'No sources found', 'mobile-dj-manager' ) ) );
+	} else	{
+	
+		foreach( $enquiry_sources as $enquiry_source )	{
+			$selected = selected( $enquiry_source->term_id, $args['selected'], false );
+			
+			$output .= sprintf( '<option value="%s"%s>%s</option>', $enquiry_source->term_id, $selected, esc_attr( $enquiry_source->name ) ) . "\n";
+			
+		}
+		
+	}
+	
+	$output .= '</select>';
+	
+	if ( ! empty( $args['echo'] ) )	{
+		echo $output;
+	} else	{
+		return $output;
+	}
+	
+} // mdjm_enquiry_sources_dropdown
 
 /**
  * Return all event types.
@@ -464,91 +591,6 @@ function mdjm_event_types_dropdown( $args )	{
 } // mdjm_event_types_dropdown
 
 /**
- * Return all enquiry sources.
- *
- * @since	1.3
- * @param	arr		$args	See $defaults.
- * @return	obj		Object array of all enqury source categories.
- */
-function mdjm_get_enquiry_sources( $args = array() )	{
-	
-	$defaults = array(
-		'taxonomy'      => 'enquiry-source',
-		'hide_empty'    => false,
-		'orderby'       => 'name',
-		'order'         => 'ASC'
-	);
-	
-	$args = wp_parse_args( $args, $defaults );
-	
-	$enquiry_sources = get_categories( $args );
-	
-	return apply_filters( 'mdjm_get_enquiry_sources', $enquiry_sources, $args );
-	
-} // mdjm_get_enquiry_sources
-
-/**
- * Generate a dropdown list of enquiry sources.
- *
- * @since	1.3
- * @param	arr		$args	See $defaults.
- * @return	str		HTML output for the dropdown list.
- */
-function mdjm_enquiry_sources_dropdown( $args )	{
-	
-	$defaults = array(
-		'show_option_none'   => '',
-		'option_none_value'  => '',
-		'orderby'            => 'name', 
-		'order'              => 'ASC',
-		'hide_empty'         => false, 
-		'echo'               => true,
-		'selected'           => 0,
-		'name'               => 'mdjm_enquiry_source',
-		'id'                 => '',
-		'class'              => 'postform',
-		'taxonomy'           => 'event-types',
-		'required'           => false
-	);
-	
-	$args = wp_parse_args( $args, $defaults );
-	
-	$args['id']                = ! empty( $args['id'] )                ? $args['id']                : $args['name'];
-	$args['required']          = ! empty( $args['required'] )          ? ' required'                : '';
-	$args['class']             = ! empty( $args['class'] )             ? $args['class']             : '';
-	
-	$enquiry_sources = mdjm_get_enquiry_sources();
-	
-	$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] );
-	
-	if ( ! empty( $args['show_option_none'] ) )	{
-		$output .= sprintf( '<option value="%s">%s</option>', $args['option_none_value'], $args['show_option_none'] );
-	}
-	
-	if ( empty( $enquiry_sources ) )	{
-		$output .= sprintf( '<option value="" disabled="disabled">%s</option>', apply_filters( 'mdjm_no_enquiry_source_options', __( 'No sources found', 'mobile-dj-manager' ) ) );
-	} else	{
-	
-		foreach( $enquiry_sources as $enquiry_source )	{
-			$selected = selected( $enquiry_source->term_id, $args['selected'], false );
-			
-			$output .= sprintf( '<option value="%s"%s>%s</option>', $enquiry_source->term_id, $selected, esc_attr( $enquiry_source->name ) ) . "\n";
-			
-		}
-		
-	}
-	
-	$output .= '</select>';
-	
-	if ( ! empty( $args['echo'] ) )	{
-		echo $output;
-	} else	{
-		return $output;
-	}
-	
-} // mdjm_enquiry_sources_dropdown
-
-/**
  * Set the event type for the event.
  *
  * @since	1.3
@@ -585,32 +627,51 @@ function mdjm_set_event_type( $event_id, $type = '' )	{
  * Return the event type label for given event ID.
  *
  * @since	1.3
- * @param	int		$event_id	Optional: ID of the current event. If not set, check for global $post and $post_id.
+ * @param	int		$event_id	ID of the current event. If not set, check for global $post and $post_id.
+ * @param	bool	$raw		True to return the raw slug of the event type, false for the label
  * @return	str		Label for current event type.
  */
-function mdjm_get_event_type( $event_id='' )	{
+function mdjm_get_event_type( $event_id='', $raw = false )	{
 	
 	global $post, $post_id;
 	
 	if( ! empty( $event_id ) )	{
 		$id = $event_id;
-	}
-	elseif( ! empty( $post_id ) )	{
+	} elseif( ! empty( $post_id ) )	{
 		$id = $post_id;
-	}
-	elseif( ! empty( $post ) )	{
+	} elseif( ! empty( $post ) )	{
 		$id = $post->ID;
-	}
-	else	{
+	} else	{
 		$id = '';
 	}
-	
+
+	if ( $raw )	{
+		return mdjm_get_event_type_raw( $id );
+	}
+
 	$event = new MDJM_Event( $id );
 	
 	// Return the label for the status
 	return $event->get_type();
 
 } // mdjm_get_event_type
+
+/**
+ * Return the event type slug for given event ID.
+ *
+ * @since	1.3
+ * @param	int		$event_id	ID of the current event. If not set, check for global $post and $post_id.
+ * @return	str		Slug for current event type.
+ */
+function mdjm_get_event_type_raw( $event_id )	{
+	$event_type =  wp_get_object_terms( $event_id, 'event-types' );
+	
+	if ( $event_type )	{
+		return absint( $event_type[0]->term_id );
+	}
+
+	return false;
+} // mdjm_get_event_type_raw
 
 /**
  * Returns the contract ID for the event.
@@ -689,7 +750,7 @@ function mdjm_get_event_start( $event_id )	{
  * @param	int		$event_id	The event ID.
  * @return	int|str				The price of the event.
  */
-function mdjm_get_event_price( $event_id )	{
+function mdjm_get_event_price( $event_id = 0 )	{
 	if( empty( $event_id ) )	{
 		return false;
 	}
@@ -699,14 +760,26 @@ function mdjm_get_event_price( $event_id )	{
 } // mdjm_get_event_price
 
 /**
+ * Returns the deposit type.
+ *
+ * @since	1.3
+ * @param	int		$event_id	The event ID.
+ * @return	int|str				The deposit type.
+ */
+function mdjm_get_event_deposit_type()	{
+	return mdjm_get_option( 'deposit_type', 'fixed' );
+} // mdjm_get_event_deposit_type
+
+/**
  * Returns the deposit price for an event.
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
  * @return	int|str				The deposit price of the event.
  */
-function mdjm_get_event_deposit( $event_id )	{
+function mdjm_get_event_deposit( $event_id = 0 )	{
 	if( empty( $event_id ) )	{
+		
 		return false;
 	}
 
@@ -754,11 +827,11 @@ function mdjm_get_event_remaining_deposit( $event_id )	{
  */
 function mdjm_calculate_deposit( $price = '' )	{
 	
-	if ( empty( $price ) )	{
+	$deposit_type = mdjm_get_event_deposit_type();
+
+	if ( empty( $price ) && 'fixed' != $deposit_type )	{
 		$deposit = 0;
 	}
-	
-	$deposit_type = mdjm_get_option( 'deposit_type' );
 	
 	if ( empty( $deposit_type ) )	{
 		$deposit = '0';
@@ -772,7 +845,7 @@ function mdjm_calculate_deposit( $price = '' )	{
 	
 	apply_filters( 'mdjm_calculate_deposit', $deposit, $price );
 	
-	return mdjm_format_amount( $deposit );
+	return mdjm_sanitize_amount( $deposit );
 	
 } // mdjm_calculate_deposit
 
@@ -1007,6 +1080,7 @@ function mdjm_do_event_txn_table( $event_id )	{
         <thead>
             <tr>
                 <th style="width: 20%"><?php _e( 'Date', 'mobile-dj-manager' ); ?></th>
+                <th style="width: 20%"><?php _e( 'To/From', 'mobile-dj-manager' ); ?></th>
                 <th style="width: 15%"><?php _e( 'In', 'mobile-dj-manager' ); ?></th>
                 <th style="width: 15%"><?php _e( 'Out', 'mobile-dj-manager' ); ?></th>
                 <th><?php _e( 'Details', 'mobile-dj-manager' ); ?></th>
@@ -1021,17 +1095,18 @@ function mdjm_do_event_txn_table( $event_id )	{
 
                 <tr class="mdjm_field_wrapper">
                     <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
+                    <td><?php echo esc_attr( mdjm_get_txn_recipient_name( $txn->ID ) ); ?></td>
                     <td>
-                        <?php if ( 	$txn->post_status == 'mdjm-income' ) : ?>
-                            <?php $in += $txn->price; ?>
+                        <?php if ( $txn->post_status == 'mdjm-income' ) : ?>
+                            <?php $in += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if ( 	$txn->post_status == 'mdjm-expenditure' ) : ?>
-                            <?php $out += $txn->price; ?>
+                        <?php if ( $txn->post_status == 'mdjm-expenditure' ) : ?>
+                            <?php $out += mdjm_sanitize_amount( $txn->price ); ?>
                             <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>
@@ -1042,16 +1117,17 @@ function mdjm_do_event_txn_table( $event_id )	{
             <?php endforeach; ?>
         <?php else : ?>
         <tr>            
-            <td colspan="4"><?php printf( __( 'There are currently no %s transactions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+            <td colspan="5"><?php printf( __( 'There are currently no transactions for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
         </tr>
         <?php endif; ?>
         </tbody>
         <tfoot>
         <tr>
             <th style="width: 20%">&nbsp;</th>
+            <th style="width: 20%">&nbsp;</th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
             <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
-            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( $mdjm_event->get_total_profit() ) ); ?></strong></th>
+            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( ( $in - $out ) ) ); ?></strong></th>
         </tr>
         <?php do_action( 'mdjm_event_txn_table_foot', $event_id ); ?>
         </tfoot>
@@ -1069,10 +1145,6 @@ function mdjm_do_event_txn_table( $event_id )	{
  * @return	int					The user ID of the event client.
  */
 function mdjm_get_event_client_id( $event_id )	{
-	if( empty( $event_id ) )	{
-		return false;
-	}
-
 	$event = new MDJM_Event( $event_id );
 	return $event->client;
 } // mdjm_get_event_client_id
@@ -1889,3 +1961,34 @@ function mdjm_viewed_quote( $quote_id, $event_id )	{
 	}
 
 } // mdjm_viewed_quote
+
+/**
+ * Retrieve the emails associated with the event.
+ *
+ * @since	1.3.7
+ * @param	int		$event_id	Event ID
+ * @return	obj		The email post objects.
+ */
+function mdjm_event_get_emails( $event_id )	{
+
+	if ( ! mdjm_employee_can( 'read_events' ) )	{
+		return false;
+	}
+
+	$args = array(
+		'post_type'      => 'mdjm_communication',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
+		'post_parent'    => $event_id,
+		'order'          => 'DESC'
+	);
+
+	if ( ! mdjm_employee_can( 'read_events_all' ) )	{
+		$args['post_author'] = get_current_user_id();
+	}
+
+	$emails = get_posts( $args );
+
+	return apply_filters( 'mdjm_event_get_emails', $emails, $event_id );
+
+} // mdjm_event_get_emails

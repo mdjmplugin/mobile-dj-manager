@@ -437,7 +437,7 @@ function mdjm_get_employee_lastname( $user_id )	{
  * @param	int		$user_id	The ID of the user to check.
  * @return	str		The display name of the employee.
  */
-function mdjm_get_employee_display_name( $user_id )	{
+function mdjm_get_employee_display_name( $user_id = '' )	{
 	if( empty( $user_id ) )	{
 		return false;
 	}
@@ -483,74 +483,62 @@ function mdjm_get_employee_email( $user_id )	{
  * @param
  * @return
  */
-function mdjm_list_event_employees( $event_id )	{
+function mdjm_do_event_employees_list_table( $event_id )	{
 	global $wp_roles;
 	
 	$employees = mdjm_get_event_employees_data( $event_id );
-	
-	$output = '';
 		
-	if( empty( $employees ) )	{
-		$output .= __( 'No employees assigned.', 'mobile-dj-manager' );
+	if( ! $employees )	{
+		return;
 	}
-	
-	else	{
-		$output .= '<table width="100%" id="mdjm-event-employees">' . "\r\n";
-		$output .= '<thead>' . "\r\n";
-		$output .= '<tr>' . "\r\n";
-		$output .= '<th style="text-align:left; width:25%;">' . __( 'Role', 'mobile-dj-manager' ) . '</th>' . "\r\n";
-		$output .= '<th style="text-align:left; width:25%;">' . __( 'Employee', 'mobile-dj-manager' ) . '</th>' . "\r\n";
-		$output .= '<th style="text-align:left; width:20%;">';
-			if( mdjm_get_option( 'enable_employee_payments' ) )	{
-				$output .= __( 'Wage', 'mobile-dj-manager' );
-			} else	{
-				$output .= '';
-			}
-		$output .= '</th>' . "\r\n";
-		$output .= '<th style="text-align:left; width:15%;">&nbsp;</th>' . "\r\n";
-		$output .= '<th style="text-align:left; width:15%;">&nbsp;</th>' . "\r\n";
-		$output .= '</tr>' . "\r\n";
-		$output .= '</thead>' . "\r\n";
-		$output .= '<tbody>' . "\r\n";
-		
-		foreach( $employees as $employee )	{
-			$details = get_userdata( $employee['id'] );
-			$output .= '<tr>' . "\r\n";
-				$output .= '<td style="text-align:left;">' . translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ) . '</td>' . "\r\n";
-				$output .= '<td style="text-align:left;">' . $details->display_name . '</td>' . "\r\n";
-				$output .= '<td style="text-align:left;">';
-					if( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) )	{
-						$output .= mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) );
-					} elseif( ! mdjm_employee_can( 'manage_txns' ) )	{
-						$output .= '&mdash;';
-					} else	{
-						$output .= '';
-					}
-			$output .= '</td>' . "\r\n";
-			$output .= '<td style="text-align:left;">';
-			
-			if( mdjm_employee_can( 'mdjm_event_edit' ) )	{
-				if ( mdjm_get_employees_event_payment_status( $event_id, $employee['id'] ) != 'paid' )	{
-					$output .= sprintf( 
-						__( '<a class="button button-secondary button-small remove_event_employee" style="margin: 6px 0 10px;" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] 
-					);
-				} elseif ( mdjm_get_option( 'enable_employee_payments' ) )	{
-					$output .= __( 'Employee has been paid', 'mobile-dj-manager' );
-				}
-			} else	{
-				$output .= '';
-			}
-			
-			$output .= '</td>' . "\r\n";	
-			$output .= '</tr>' . "\r\n";
-		}
-		
-		$output .= '</tbody>' . "\r\n";
-		$output .= '</table>' . "\r\n";
-	}
-	
-	return $output;
-} // mdjm_list_event_employees
+
+	?>
+    <table class="widefat mdjm_event_employee_list">
+        <thead>
+            <tr>
+                <th style="text-align:left; width:25%;"><?php _e( 'Role', 'mobile-dj-manager' ); ?></th>
+                <th style="text-align:left; width:25%;"><?php _e( 'Name', 'mobile-dj-manager' ); ?></th>
+                <th style="text-align:left; width:20%;"><?php _e( 'Wage', 'mobile-dj-manager' ); ?></th>
+                <th style="text-align:left;"><?php _e( 'Status', 'mobile-dj-manager' ); ?></th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach( $employees as $employee ) : ?>
+
+                <tr class="mdjm_field_wrapper">
+                    <td><?php echo translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ); ?></td>
+                    <td><?php echo mdjm_get_employee_display_name( $employee['id'] ); ?></td>
+                    <td>
+                        <?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
+                            <?php echo mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) ); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ( mdjm_employee_can( 'mdjm_event_edit' ) ) : ?>
+                            <?php if ( 'paid' != mdjm_get_employees_event_payment_status( $event_id, $employee['id'] ) ) : ?>
+
+                                <?php printf( __( '<a class="button button-secondary button-small remove_event_employee" style="margin: 6px 0 10px;" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] ); ?>
+
+
+                            <?php elseif ( mdjm_get_option( 'enable_employee_payments' ) ) : ?>
+
+                                <?php printf( __( '<a href="%s">Paid</a>', 'mobile-dj-manager' ), ! empty( $employee['txn_id'] ) ? get_edit_post_link( $employee['txn_id'] ) : '' ); ?>
+
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+        </tbody>
+
+    </table>
+
+	<?php
+
+} // mdjm_do_event_employees_list_table
 
 /**
  * Add an employee event employee.
@@ -563,15 +551,15 @@ function mdjm_list_event_employees( $event_id )	{
 function mdjm_add_employee_to_event( $event_id, $args )	{
 	
 	$defaults = array(
-		'id'		        => '',
-		'role'	          => '',
-		'wage'	          => '0',
-		'payment_status'    => 'unpaid'
+		'id'             => '',
+		'role'           => '',
+		'wage'           => '0',
+		'payment_status' => 'unpaid'
 	);
 	
 	$data = wp_parse_args( $args, $defaults );
 	
-	$data['wage'] = mdjm_format_amount( $data['wage'] );
+	$data['wage'] = $data['wage'];
 
 	// If we're missing data then we fail.
 	if( empty( $data['id'] ) || empty( $data['role'] ) )	{
@@ -597,7 +585,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 		array(
 			'_mdjm_txn_status'    => 'Pending',
 			'_mdjm_payment_to'    => $data['id'],
-			'_mdjm_txn_total'     => mdjm_format_amount( $data['wage'] )
+			'_mdjm_txn_total'     => $data['wage']
 		)
 	);
 	
@@ -913,22 +901,26 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
 	} else	{
 		
 		$employees_data = mdjm_get_event_employees_data( $event_id );
-		
-		foreach( $employees_data as $employee_data )	{
-			
-			if ( $employee_data['id'] == $employee_id )	{
+
+		if ( $employees_data )	{
+
+			foreach( $employees_data as $employee_data )	{
 				
-				if ( ! empty ( $employee_data['wage'] ) )	{
-					$wage = $employee_data['wage'];
+				if ( $employee_data['id'] == $employee_id )	{
+					
+					if ( ! empty ( $employee_data['wage'] ) )	{
+						$wage = $employee_data['wage'];
+					}
+					
 				}
-				
+
 			}
-			
+
 		}
 	
 	}
 	
-	return mdjm_format_amount( $wage );
+	return $wage;
 	
 } // mdjm_get_employees_event_wage
 
@@ -943,7 +935,11 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' )	{
  *					If no employees are assigned, a true value is returned.
  */
 function mdjm_event_employees_paid( $event_id, $employee_id = '' )	{
-	
+
+	if ( ! mdjm_get_option( 'enable_employee_payments' ) )	{
+		return false;
+	}
+
 	$employees = mdjm_get_all_event_employees( $event_id );
 		
 	if ( empty( $employees ) )	{
