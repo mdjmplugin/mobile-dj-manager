@@ -184,6 +184,7 @@ class MDJM_Event {
 		}
 		
 		$this->get_client();
+		$this->get_employee();
 		$this->get_date();
 		$this->get_price();
 		$this->get_deposit();
