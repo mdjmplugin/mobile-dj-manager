@@ -352,6 +352,37 @@ class MDJM_HTML_Elements {
 	} // employee_dropdown
 
 	/**
+	 * Renders an HTML Dropdown of employee roles
+	 *
+	 * @access	public
+	 * @since	1.3.7
+	 * @param	arr		$args		Select list arguments. See @defaults.
+	 * @return	str		$output		Client dropdown
+	 */
+	public function roles_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'mdjm_employee_roles',
+			'value'            => '',
+			'options'          => mdjm_get_roles(),
+			'show_option_none' => __( ' - Select Role -', 'mobile-dj-manager' )
+		);
+
+		$args     = wp_parse_args( $args, $defaults );
+		$options  = array();
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'value'            => $args['value'],
+			'options'          => mdjm_get_roles(),
+			'show_option_none' => $args['show_option_none']
+		) );
+
+		return $output;
+
+	} // roles_dropdown
+
+	/**
 	 * Renders an HTML Dropdown of clients
 	 *
 	 * @access	public
@@ -874,7 +905,7 @@ class MDJM_HTML_Elements {
 			$options .= ' readonly';
 		}
 
-		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $args['value'] ) . '"class="' . $class . ' ' . esc_attr( $args['name'] ) . '" ' . checked( 1, $args['current'], false ) . ' />';
+		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $args['value'] ) . '"class="' . $class . ' ' . esc_attr( $args['name'] ) . '" ' . checked( esc_attr( $args['value'] ), $args['current'], false ) . ' />';
 
 		return $output;
 	} // checkbox
