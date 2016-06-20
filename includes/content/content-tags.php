@@ -2177,14 +2177,18 @@ function mdjm_content_tag_venue_email( $event_id='' )	{
  */
 function mdjm_content_tag_venue_full_address( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$address = mdjm_get_event_venue_meta( $event_id, 'address' );
 	$return = '';
-	
+
+	if ( empty( $address ) )	{
+		return;
+	}
+
 	$i = 0;
-	
+
 	foreach( $address as $add )	{
 		if( !empty( $add ) )	{
 			if( $i > 0 )	{
