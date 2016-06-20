@@ -77,6 +77,16 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.3.7.1 =
+
+**Released, Monday 20th June 2016**
+**Bug Fixes**
+* Make sure we catch custom event fields that are set as checkboxes during event save
+* Possible PHP notice generated during event save if no venue address defined
+
+**Tweaks**
+* Display venue information field on event screen
+
 = 1.3.7 =
 
 **Released, Sunday 19th June 2016**
@@ -95,7 +105,6 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Request [#79](https://github.com/mdjm/mobile-dj-manager/issues/79/ "Request #79") Form validation on communication page
 * Add a new venue directly from the event screen
 * Toggle details for clients, venues, and transactions on event screen
-
 
 **Tweaks**
 * Client list is readonly if event is no longer active
