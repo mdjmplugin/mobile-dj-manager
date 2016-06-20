@@ -329,6 +329,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_county   = mdjm_get_event_venue_meta( $venue_id, 'county' );
 	$venue_postcode = mdjm_get_event_venue_meta( $venue_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
+	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
 
 	?>
@@ -360,6 +361,12 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                 	<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
                     <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></td>                  	
            		</tr>
+
+               <tr>
+                	<td><i class="fa fa-comments-o" aria-hidden="true" title="<?php _e( 'Information', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo $venue_notes; ?></td>                  	
+           		</tr>
+
             </tbody>
         </table>
     </div>
