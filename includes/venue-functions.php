@@ -155,8 +155,9 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_county', true );
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
 
-			$return = array_filter( $return );
-			
+			if ( ! empty( $return ) )	{
+				$return = array_filter( $return );
+			}
 			break;
 
 		case 'address1' :
@@ -204,7 +205,7 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			break;
 		
 		default :
-			
+			$return = '';
 		break;
 	}
 
@@ -364,7 +365,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 
                <tr>
                 	<td><i class="fa fa-comments-o" aria-hidden="true" title="<?php _e( 'Information', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo $venue_notes; ?></td>                  	
+                    <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
            		</tr>
 
             </tbody>
