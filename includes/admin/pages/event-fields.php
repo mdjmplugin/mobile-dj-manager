@@ -22,6 +22,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			add_action( 'mdjm_event_client_fields', array( &$this, 'custom_client_event_fields' ), 90 );
 			add_action( 'mdjm_event_details_fields', array( &$this, 'custom_event_details_fields' ), 90 );
 			add_action( 'mdjm_event_venue_fields', array( &$this, 'custom_venue_event_fields' ), 90 );
+			add_action( 'mdjm_save_event', array( &$this, 'manage_custom_fields_on_event_save' ), 10 );
 			
 			add_filter( 'mdjm_shortcode_filter_pairs', array( &$this, 'custom_event_fields_shortcode_pairs' ), 10, 3 );
 			
@@ -689,15 +690,19 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		/**
 		 * Output the input field for the current field
 		 *
-		 * @param	obj		$field		Required: The post object for the custom field we are displaying
-		 *			obj		$post		Required: The post object for the current event
+		 * @param	obj		$field		The post object for the custom field we are displaying
+		 *			obj		$mdjm_event	The MDJM Event object for the event
 		 *
 		 */
-		function display_input( $field, $post )	{
-			$name = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
-			$type = get_post_meta( $field->ID, '_mdjm_field_type', true );
-			$selected = get_post_meta( $field->ID, '_mdjm_field_checked', true );
-			
+		function display_input( $field, $mdjm_event )	{
+			$name     = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+			$type     = get_post_meta( $field->ID, '_mdjm_field_type', true );
+			$current  = get_post_meta( $field->ID, '_mdjm_field_checked', true );
+
+			if ( 'draft' != $mdjm_event->post_status && 'auto-draft' != $mdjm_event->post_status )	{
+				$current = $mdjm_event->get_meta( $name );
+			}
+
 			$value = $type == 'checkbox' ? 
 				get_post_meta( $field->ID, '_mdjm_field_value', true ) : 
 				get_post_meta( $field->ID, '_mdjm_field_options', true );
@@ -712,7 +717,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						echo '<input type="checkbox"';
 						echo ' name="' . $name . '" id="' . $name . '"';
 						echo ' value="' . $value . '"';
-						if( !empty( $selected ) )
+						if( ! empty( $current ) )
 							echo ' checked="checked"';
 							
 						echo ' />' . "\r\n";
@@ -728,7 +733,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					if( $type == 'text' )	{
 						echo '<input type="text"';
 						echo ' name="' . $name . '" id="' . $name . '"';
-						echo ' value="' . get_post_meta( $post->ID, $name, true ) . '" />' . "\r\n";
+						echo ' value="' . get_post_meta( $mdjm_event->ID, $name, true ) . '" />' . "\r\n";
 					}
 						
 					elseif( $type == 'select' || $type == 'multi select' )	{
@@ -742,7 +747,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						
 						foreach( $values as $option )	{
 							echo '<option value="' . $option . '"';
-							selected( $option, get_post_meta( $post->ID, $name, true ) );
+							selected( $option, get_post_meta( $mdjm_event->ID, $name, true ) );
 							echo '>' . $option . '</option>' . "\r\n";
 						}
 						
@@ -759,6 +764,40 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
                     </td>
 			<?php
 		} // display_input
+		
+		/**
+		 * Manage checkboxes on event save.
+		 * When an event is saved on the event screen and a checkbox is not checked,
+		 * no value is posted and therefore the event meta key is not updated.
+		 *
+		 * @params	obj		$post	The events WP_POST object
+		 * @return	void
+		 */
+		function manage_custom_fields_on_event_save( $post )	{
+
+			$mdjm_event    = new MDJM_Event( $post->ID );
+			$query         = mdjm_get_custom_fields();
+			$custom_fields = $query->get_posts();
+			
+			foreach ( $custom_fields as $custom_field )	{
+
+				if ( 'checkbox' != get_post_meta( $custom_field->ID, '_mdjm_field_type', true ) )	{
+					continue;
+				}
+
+				$key = '_mdjm_event_' . str_replace( '-', '_', $custom_field->post_name );
+
+				if ( $mdjm_event->get_meta( $key ) && empty( $_POST[ $key ] ) )	{
+					$meta[ $key ] = '';
+				}
+
+			}
+			
+			if ( ! empty( $meta ) )	{
+				mdjm_update_event_meta( $mdjm_event->ID, $meta );
+			}
+			
+		} // manage_custom_fields_on_event_save
 				
 		/**
 		 * Append the custom event fields to the Contact Form mapping options
