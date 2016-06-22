@@ -610,7 +610,7 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
     <p><?php echo MDJM()->html->checkbox( array(
 			'name'     => '_mdjm_event_playlist',
 			'value'    => 'Y',
-			'current'  => $enable_playlist
+			'current'  => $enable_playlist ? 'Y' : 0,
 		) ); ?> <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?></p>
 
     <?php
