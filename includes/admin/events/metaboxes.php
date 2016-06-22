@@ -569,13 +569,13 @@ function mdjm_event_metabox_options_payments_row( $event_id )	{
 
     <p><?php echo MDJM()->html->checkbox( array(
 			'name'     => 'deposit_paid',
-			'value'    => 'Paid',
+			'value'    => __( 'Paid', 'mobile-dj-manager' ),
 			'current'  => $mdjm_event->get_deposit_status()
 		) ); ?> <?php printf( __( '%s Paid?', 'mobile-dj-manager' ), mdjm_get_deposit_label() ); ?></p>
 
 	<p><?php echo MDJM()->html->checkbox( array(
 			'name'     => 'balance_paid',
-			'value'    => 'Paid',
+			'value'    => __( 'Paid', 'mobile-dj-manager' ),
 			'current'  => $mdjm_event->get_balance_status()
 		) ); ?> <?php printf( __( '%s Paid?', 'mobile-dj-manager' ), mdjm_get_balance_label() ); ?></p>
 

@@ -777,7 +777,7 @@ class MDJM_Event {
 
 			$this->deposit_status = get_post_meta( $this->ID, '_mdjm_event_deposit_status', true );
 
-			if ( ! $this->deposit_status || $this->deposit_status != 'Paid' || $this->get_deposit() > 0 ) {
+			if ( ! $this->deposit_status || $this->deposit_status != __( 'Paid', 'mobile-dj-manager' ) && $this->get_deposit() > 0 ) {
 
 				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
 				
