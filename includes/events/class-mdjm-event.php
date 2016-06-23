@@ -1017,6 +1017,10 @@ class MDJM_Event {
 	public function get_venue_id() {
 		$venue_id = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
 		
+		if ( 'Manual' == $venue_id )	{
+			$venue_id = $this->ID;
+		}
+		
 		/**
 		 * Override the venue id.
 		 *
