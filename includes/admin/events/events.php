@@ -1114,9 +1114,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	// Permission Check
 	if ( ! mdjm_employee_can( 'manage_events' ) )	{
-		if( MDJM_DEBUG == true )	{
-			MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
-		}
+		MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
 		 
 		return;
 	}
@@ -1291,7 +1289,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
 		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
 	}
-	
+
+	if ( empty( $_POST['_mdjm_event_djsetup'] ) )	{
+		$event_data['_mdjm_event_djsetup'] = $_POST['_mdjm_event_date'];
+	}
+
 	/**
 	 * Set the event end date.
 	 * If the finish time is less than the start time, assume following day.
