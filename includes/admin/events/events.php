@@ -769,23 +769,38 @@ function mdjm_event_post_order( $query )	{
 	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) )	{
 		return;
 	}
-	
-	switch( $query->get( 'orderby' ) )	{
+
+	$orderby = '' == $query->get( 'orderby' ) ? mdjm_get_option( 'events_order_by', 'event_date' ) : $query->get( 'orderby' );
+	$order   = '' == $query->get( 'order' )   ? mdjm_get_option( 'events_order', 'event_date' )    : $query->get( 'order' );
+
+	switch( $orderby )	{
+		case 'ID':
+			$query->set( 'orderby',  'ID' );
+			$query->set( 'order',  $order );
+			break;
+
+		case 'post_date':
+			$query->set( 'orderby',  'post_date' );
+			$query->set( 'order',  $order );
+			break;
+
 		case 'event_date':
 		default:
 			$query->set( 'meta_key', '_mdjm_event_date' );
 			$query->set( 'orderby',  'meta_value' );
+			$query->set( 'order',  $order );
             break;
-			
+
 		case 'title':
-			$query->set( 'orderby',  'post_id' );
+			$query->set( 'orderby',  'ID' );
+			$query->set( 'order',  $order );
 			break;
 			
 		case 'value':
 			$query->set( 'meta_key', '_mdjm_event_cost' );
 			$query->set( 'orderby',  'meta_value_num' );
+			$query->set( 'order',  $order );
             break;
-		
 	}
 	
 } // mdjm_event_post_order

@@ -427,6 +427,30 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
+					'events_order_by'  => array(
+						'id'          => 'events_order_by',
+						'name'        => __( 'Default Order By', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select how you want to see %s ordered within the %s admin list', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_label_singular( true ) ),
+						'type'        => 'select',
+						'options'     => array(
+							'ID'          => __( 'Contract ID', 'mobile-dj-manager' ),
+							'post_date'   => __( 'Creation Date', 'mobile-dj-manager' ),
+							'event_date'  => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+							'value'       => __( 'Total Cost', 'mobile-dj-manager' )
+						),
+						'std'         => 'event_date'
+					),
+					'events_order'  => array(
+						'id'          => 'events_order',
+						'name'        => __( 'Default Order', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => array(
+							'ASC'  => __( 'Ascending', 'mobile-dj-manager' ),
+							'DESC' => __( 'Descending', 'mobile-dj-manager' )
+						),
+						'std'         => 'DESC'
+					),
 					'set_client_inactive'  => array(
 						'id'          => 'set_client_inactive',
 						'name'        => __( 'Set Client Inactive?', 'mobile-dj-manager' ),
