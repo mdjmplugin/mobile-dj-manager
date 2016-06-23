@@ -477,6 +477,9 @@ function mdjm_get_employee_address( $user_id = '' )	{
 	if ( ! empty( $employee->town ) )	{
 		$address[] = stripslashes( $employee->town );
 	}
+	if ( ! empty( $employee->county ) )	{
+		$address[] = stripslashes( $employee->county );
+	}
 	if ( ! empty( $employee->postcode ) )	{
 		$address[] = stripslashes( $employee->postcode );
 	}
