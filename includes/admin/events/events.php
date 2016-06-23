@@ -360,7 +360,7 @@ function mdjm_event_post_filter_list()	{
 	mdjm_event_date_filter_dropdown();
 	mdjm_event_type_filter_dropdown();
 	
-	if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
+	if ( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		mdjm_event_employee_filter_dropdown();
 	}
 		
