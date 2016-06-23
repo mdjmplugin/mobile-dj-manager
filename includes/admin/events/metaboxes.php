@@ -563,20 +563,28 @@ function mdjm_event_metabox_options_payments_row( $event_id )	{
 		return;
 	}
 
+	$deposit_status = __( 'Due', 'mobile-dj-manager' );
+	$balance_status = __( 'Due', 'mobile-dj-manager' );
+	
+	if ( $mdjm_event_update )	{
+		$deposit_status = $mdjm_event->get_deposit_status();
+		$balance_status = $mdjm_event->get_balance_status();
+	}
+
 	?>
 
 	<p><strong><?php _e( 'Payments', 'mobile-dj-manager' ); ?></strong></p>
 
     <p><?php echo MDJM()->html->checkbox( array(
 			'name'     => 'deposit_paid',
-			'value'    => __( 'Paid', 'mobile-dj-manager' ),
-			'current'  => $mdjm_event->get_deposit_status()
+			'value'    => 'Paid',
+			'current'  => $deposit_status
 		) ); ?> <?php printf( __( '%s Paid?', 'mobile-dj-manager' ), mdjm_get_deposit_label() ); ?></p>
 
 	<p><?php echo MDJM()->html->checkbox( array(
 			'name'     => 'balance_paid',
-			'value'    => __( 'Paid', 'mobile-dj-manager' ),
-			'current'  => $mdjm_event->get_balance_status()
+			'value'    => 'Paid',
+			'current'  => $balance_status
 		) ); ?> <?php printf( __( '%s Paid?', 'mobile-dj-manager' ), mdjm_get_balance_label() ); ?></p>
 
     <?php
