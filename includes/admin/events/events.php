@@ -18,17 +18,17 @@
 function mdjm_event_post_columns( $columns ) {
 		
 	$columns = array(
-			'cb'			=> '<input type="checkbox" />',
-			'event_date'	=> __( 'Date', 'mobile-dj-manager' ),
-			'title'			=> sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'client'		=> __( 'Client', 'mobile-dj-manager' ),
-			'employees'		=> __( 'Employees', 'mobile-dj-manager' ),
-			'event_status'	=> __( 'Status', 'mobile-dj-manager' ),
-			'event_type'	=> sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'value'			=> __( 'Value', 'mobile-dj-manager' ),
-			'balance'		=> __( 'Due', 'mobile-dj-manager' ),
-			'playlist'		=> __( 'Playlist', 'mobile-dj-manager' ),
-			'journal'		=> __( 'Journal', 'mobile-dj-manager' ),
+			'cb'           => '<input type="checkbox" />',
+			'event_date'   => __( 'Date', 'mobile-dj-manager' ),
+			'title'        => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'client'       => __( 'Client', 'mobile-dj-manager' ),
+			'employees'    => __( 'Employees', 'mobile-dj-manager' ),
+			'event_status' => __( 'Status', 'mobile-dj-manager' ),
+			'event_type'   => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'value'        => __( 'Value', 'mobile-dj-manager' ),
+			'balance'      => __( 'Due', 'mobile-dj-manager' ),
+			'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
+			'journal'      => __( 'Journal', 'mobile-dj-manager' ),
 		);
 	
 	if( ! mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )	{
@@ -53,8 +53,8 @@ add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
  * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
  */
 function mdjm_event_post_sortable_columns( $sortable_columns )	{
-	$sortable_columns['event_date']	= 'event_date';
-	$sortable_columns['value']		 = 'value';
+	$sortable_columns['event_date'] = 'event_date';
+	$sortable_columns['value']      = 'value';
 	
 	return $sortable_columns;
 } // mdjm_event_post_sortable_columns
@@ -840,7 +840,8 @@ function mdjm_event_post_filtered( $query )	{
 	
 	global $pagenow;
 	
-	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	$post_type   = isset( $_GET['post_type'] )   ? $_GET['post_type']   : '';
+	$post_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : '';
 	
 	if ( 'edit.php' != $pagenow || 'mdjm-event' != $post_type || ! is_admin() )	{
 		return;
@@ -912,7 +913,11 @@ function mdjm_event_post_filtered( $query )	{
 		);
 
 	}
-	
+
+	if ( ! empty( $post_status ) )	{
+		$query->set( 'post_status', $post_status );
+	}
+
 } // mdjm_event_post_filtered
 add_filter( 'parse_query', 'mdjm_event_post_filtered' );
 		
