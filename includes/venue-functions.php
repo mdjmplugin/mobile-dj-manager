@@ -141,12 +141,11 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 		$venue_id = get_post_meta( $item_id, '_mdjm_event_venue_id', true );
 		$prefix   = '_mdjm_event';
 	}
-	
-	
+
 	if ( empty( $venue_id ) )	{
-		return $field = 'address' ? array() : '';
+		return;
 	}
-		
+
 	switch( $field )	{
 		case 'address' :
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_address1', true );
@@ -155,8 +154,9 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_county', true );
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
 
-			$return = array_filter( $return );
-			
+			if ( ! empty( $return ) )	{
+				$return = array_filter( $return );
+			}
 			break;
 
 		case 'address1' :
@@ -204,7 +204,7 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			break;
 		
 		default :
-			
+			$return = '';
 		break;
 	}
 
@@ -329,6 +329,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_county   = mdjm_get_event_venue_meta( $venue_id, 'county' );
 	$venue_postcode = mdjm_get_event_venue_meta( $venue_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
+	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
 
 	?>
@@ -360,6 +361,12 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                 	<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
                     <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></td>                  	
            		</tr>
+
+               <tr>
+                	<td><i class="fa fa-comments-o" aria-hidden="true" title="<?php _e( 'Information', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
+           		</tr>
+
             </tbody>
         </table>
     </div>

@@ -1259,7 +1259,7 @@ function mdjm_time_until_event( $event_id )	{
  * @return	mixed	See get_post_meta()
  */
 function mdjm_update_event_meta( $event_id, $data )	{
-	
+
 	do_action( 'mdjm_pre_update_event_meta', $event_id, $data );
 	
 	// For backwards compatibility

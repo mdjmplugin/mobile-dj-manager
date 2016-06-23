@@ -454,6 +454,62 @@ function mdjm_get_employee_display_name( $user_id = '' )	{
 } // mdjm_get_employee_display_name
 
 /**
+ * Retrieve an employees post code.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The display name of the employee.
+ */
+function mdjm_get_employee_post_code( $user_id = '' )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	$postcode = '';
+
+	if( $employee && ! empty( $employee->postcode ) )	{
+		$postcode = stripslashes( $employee->postcode );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_post_code', $postcode, $user_id );
+} // mdjm_get_employee_post_code
+
+/**
+ * Retrieve an employees address.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The address of the employee.
+ */
+function mdjm_get_employee_address( $user_id = '' )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	$address  = array();
+
+	if ( ! empty( $employee->address1 ) )	{
+		$address[] = stripslashes( $employee->address1 );
+	}
+	if ( ! empty( $employee->address2 ) )	{
+		$address[] = stripslashes( $employee->address2 );
+	}
+	if ( ! empty( $employee->town ) )	{
+		$address[] = stripslashes( $employee->town );
+	}
+	if ( ! empty( $employee->county ) )	{
+		$address[] = stripslashes( $employee->county );
+	}
+	if ( ! empty( $employee->postcode ) )	{
+		$address[] = stripslashes( $employee->postcode );
+	}
+
+	return apply_filters( 'mdjm_get_employee_address', $address, $user_id );
+} // mdjm_get_employee_address
+
+/**
  * Retrieve an employees email address.
  *
  * @since	1.3
