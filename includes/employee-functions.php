@@ -454,6 +454,28 @@ function mdjm_get_employee_display_name( $user_id = '' )	{
 } // mdjm_get_employee_display_name
 
 /**
+ * Retrieve an employees post code.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The display name of the employee.
+ */
+function mdjm_get_employee_post_code( $user_id = '' )	{
+	if( empty( $user_id ) )	{
+		return false;
+	}
+	
+	$employee = get_userdata( $user_id );
+	$postcode = '';
+
+	if( $employee && ! empty( $employee->postcode ) )	{
+		$postcode = stripslashes( $employee->postcode );
+	}
+	
+	return apply_filters( 'mdjm_get_employee_post_code', $postcode, $user_id );
+} // mdjm_get_employee_post_code
+
+/**
  * Retrieve an employees address.
  *
  * @since	1.3
@@ -485,7 +507,7 @@ function mdjm_get_employee_address( $user_id = '' )	{
 	}
 
 	return apply_filters( 'mdjm_get_employee_address', $address, $user_id );
-} // mdjm_get_employee_display_name
+} // mdjm_get_employee_address
 
 /**
  * Retrieve an employees email address.
