@@ -18,17 +18,17 @@
 function mdjm_event_post_columns( $columns ) {
 		
 	$columns = array(
-			'cb'			=> '<input type="checkbox" />',
-			'event_date'	=> __( 'Date', 'mobile-dj-manager' ),
-			'title'			=> sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'client'		=> __( 'Client', 'mobile-dj-manager' ),
-			'employees'		=> __( 'Employees', 'mobile-dj-manager' ),
-			'event_status'	=> __( 'Status', 'mobile-dj-manager' ),
-			'event_type'	=> sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'value'			=> __( 'Value', 'mobile-dj-manager' ),
-			'balance'		=> __( 'Due', 'mobile-dj-manager' ),
-			'playlist'		=> __( 'Playlist', 'mobile-dj-manager' ),
-			'journal'		=> __( 'Journal', 'mobile-dj-manager' ),
+			'cb'           => '<input type="checkbox" />',
+			'event_date'   => __( 'Date', 'mobile-dj-manager' ),
+			'title'        => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'client'       => __( 'Client', 'mobile-dj-manager' ),
+			'employees'    => __( 'Employees', 'mobile-dj-manager' ),
+			'event_status' => __( 'Status', 'mobile-dj-manager' ),
+			'event_type'   => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'value'        => __( 'Value', 'mobile-dj-manager' ),
+			'balance'      => __( 'Due', 'mobile-dj-manager' ),
+			'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
+			'journal'      => __( 'Journal', 'mobile-dj-manager' ),
 		);
 	
 	if( ! mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) )	{
@@ -53,8 +53,8 @@ add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
  * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
  */
 function mdjm_event_post_sortable_columns( $sortable_columns )	{
-	$sortable_columns['event_date']	= 'event_date';
-	$sortable_columns['value']		 = 'value';
+	$sortable_columns['event_date'] = 'event_date';
+	$sortable_columns['value']      = 'value';
 	
 	return $sortable_columns;
 } // mdjm_event_post_sortable_columns
@@ -360,7 +360,7 @@ function mdjm_event_post_filter_list()	{
 	mdjm_event_date_filter_dropdown();
 	mdjm_event_type_filter_dropdown();
 	
-	if( MDJM_MULTI == true && mdjm_employee_can( 'manage_employees' ) )	{
+	if ( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		mdjm_event_employee_filter_dropdown();
 	}
 		
@@ -432,38 +432,29 @@ function mdjm_event_date_filter_dropdown()	{
  * @return
  */
 function mdjm_event_type_filter_dropdown()	{			
-	$event_types = get_categories(
-		array(
-			'type'			  => 'mdjm-event',
-			'taxonomy'		  => 'event-types',
-			'pad_counts'		=> false,
-			'hide_empty'		=> true,
-			'orderby'		  => 'name'
-		)
-	);
-	
-	foreach( $event_types as $event_type )	{
-		$values[ $event_type->term_id ] = $event_type->name;
-	}
+
+	$event_types = get_categories( array(
+		'type'			  => 'mdjm-event',
+		'taxonomy'		  => 'event-types',
+		'pad_counts'		=> false,
+		'hide_empty'		=> true,
+		'orderby'		  => 'name'
+	) );
+
+	$current = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+
 	?>
-	<select name="mdjm_filter_type">
-		<option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
-		<?php
-		$current_value = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
-		if( !empty( $values ) )	{
-			foreach( $values as $value => $label ) {
-				printf(
-					'<option value="%s"%s>%s (%s)</option>',
-					$value,
-					$value == $current_value ? ' selected="selected"' : '',
-					$label,
-					$label
-				);
-			}
-		}
-		?>
-	</select>
-	<?php
+
+	<?php if ( $event_types ) : ?>
+        <select name="mdjm_filter_type">
+            <option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
+			<?php foreach ( $event_types as $event_type ) : ?>
+				<option value="<?php echo $event_type->term_id; ?>"><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count );?>)</option>
+			<?php endforeach; ?>
+        </select>
+
+	<?php endif;
+
 } // mdjm_event_type_filter_dropdown
 		
 /**
@@ -778,23 +769,38 @@ function mdjm_event_post_order( $query )	{
 	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) )	{
 		return;
 	}
-	
-	switch( $query->get( 'orderby' ) )	{
+
+	$orderby = '' == $query->get( 'orderby' ) ? mdjm_get_option( 'events_order_by', 'event_date' ) : $query->get( 'orderby' );
+	$order   = '' == $query->get( 'order' )   ? mdjm_get_option( 'events_order', 'event_date' )    : $query->get( 'order' );
+
+	switch( $orderby )	{
+		case 'ID':
+			$query->set( 'orderby',  'ID' );
+			$query->set( 'order',  $order );
+			break;
+
+		case 'post_date':
+			$query->set( 'orderby',  'post_date' );
+			$query->set( 'order',  $order );
+			break;
+
 		case 'event_date':
 		default:
 			$query->set( 'meta_key', '_mdjm_event_date' );
 			$query->set( 'orderby',  'meta_value' );
+			$query->set( 'order',  $order );
             break;
-			
+
 		case 'title':
-			$query->set( 'orderby',  'post_id' );
+			$query->set( 'orderby',  'ID' );
+			$query->set( 'order',  $order );
 			break;
 			
 		case 'value':
 			$query->set( 'meta_key', '_mdjm_event_cost' );
 			$query->set( 'orderby',  'meta_value_num' );
+			$query->set( 'order',  $order );
             break;
-		
 	}
 	
 } // mdjm_event_post_order
@@ -849,7 +855,8 @@ function mdjm_event_post_filtered( $query )	{
 	
 	global $pagenow;
 	
-	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	$post_type   = isset( $_GET['post_type'] )   ? $_GET['post_type']   : '';
+	$post_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : '';
 	
 	if ( 'edit.php' != $pagenow || 'mdjm-event' != $post_type || ! is_admin() )	{
 		return;
@@ -921,7 +928,11 @@ function mdjm_event_post_filtered( $query )	{
 		);
 
 	}
-	
+
+	if ( ! empty( $post_status ) )	{
+		$query->set( 'post_status', $post_status );
+	}
+
 } // mdjm_event_post_filtered
 add_filter( 'parse_query', 'mdjm_event_post_filtered' );
 		
@@ -1103,9 +1114,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		
 	// Permission Check
 	if ( ! mdjm_employee_can( 'manage_events' ) )	{
-		if( MDJM_DEBUG == true )	{
-			MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
-		}
+		MDJM()->debug->log_it( sprintf( 'PERMISSION ERROR: User %s is not allowed to edit events', get_current_user_id() ) );
 		 
 		return;
 	}
@@ -1280,7 +1289,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] . $_POST['event_finish_period'] ) );
 		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( $_POST['dj_setup_hr'] . ':' . $_POST['dj_setup_min'] . $_POST['dj_setup_period'] ) );
 	}
-	
+
+	if ( empty( $_POST['_mdjm_event_djsetup'] ) )	{
+		$event_data['_mdjm_event_djsetup'] = $_POST['_mdjm_event_date'];
+	}
+
 	/**
 	 * Set the event end date.
 	 * If the finish time is less than the start time, assume following day.

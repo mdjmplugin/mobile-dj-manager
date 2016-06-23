@@ -779,21 +779,22 @@ class MDJM_Event {
 
 			if ( ! $this->deposit_status || $this->deposit_status != 'Paid' || $this->get_deposit() > 0 ) {
 
-				$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+				$this->deposit_status = 'Due';
 				
 				if ( $this->get_total_income() >= $this->get_deposit() )	{
 					
-					$this->deposit_status = __( 'Paid', 'mobile-dj-manager' );
+					$this->deposit_status = 'Paid';
 					
 				}
 
 			} else	{
 			
 				if ( empty( $this->deposit ) || $this->deposit == '0.00' )	{
-					$this->deposit_status = __( 'Paid', 'mobile-dj-manager' );
+					$this->deposit_status ='Paid';
 				} else	{
-					$this->deposit_status = __( 'Due', 'mobile-dj-manager' );
+					$this->deposit_status = 'Due';
 				}
+
 			}
 			
 		}
@@ -823,20 +824,22 @@ class MDJM_Event {
 
 			if ( ! $this->balance_status || $this->balance_status != 'Paid' || $this->get_price() > 0 ) {
 
-				$this->balance_status = __( 'Due', 'mobile-dj-manager' );
+				$this->balance_status ='Due';
 
-			} else	{
-			
 				if ( $this->get_total_income() >= $this->get_price() )	{
 					
-					$this->balance_status = __( 'Paid', 'mobile-dj-manager' );
-					
-				} else	{
-			
-					$this->balance_status = __( 'Due', 'mobile-dj-manager' );
+					$this->balance_status = 'Paid';
 					
 				}
-				
+
+			} else	{
+						
+				if ( empty( $this->price ) || $this->price == '0.00' )	{
+					$this->balance_status ='Paid';
+				} else	{
+					$this->balance_status = 'Due';
+				}
+					
 			}
 			
 		}
@@ -1013,6 +1016,10 @@ class MDJM_Event {
 	 */
 	public function get_venue_id() {
 		$venue_id = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
+		
+		if ( 'Manual' == $venue_id )	{
+			$venue_id = $this->ID;
+		}
 		
 		/**
 		 * Override the venue id.

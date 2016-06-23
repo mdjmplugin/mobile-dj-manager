@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.7.1
+Stable tag: 1.3.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,25 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.7.2 =
+
+**Released, Thursday 23rd June 2016**
+**New**
+* Select how you want events to be sorted on the admin screen. `Default Order By` and `Default Order` setting options added within MDJM->Settings->Events
+
+**Bug Fixes**
+* Issue [#94(https://github.com/mdjm/mobile-dj-manager/issues/94/ "Issue #94") Venue content tags not returning correct values
+* Issue [#84(https://github.com/mdjm/mobile-dj-manager/issues/84/ "Issue #84") `Enable Playlist` not remaining checked
+* Issue [#93(https://github.com/mdjm/mobile-dj-manager/issues/93/ "Issue #93") Event type filter should display event count for each event type
+* Issue [#92(https://github.com/mdjm/mobile-dj-manager/issues/92/ "Issue #92") Maintain current event status view when using event filters
+* Issue [#90(https://github.com/mdjm/mobile-dj-manager/issues/90/ "Issue #90") Save the `DJ` setup date value when after it is auto populated
+* Issues [#88(https://github.com/mdjm/mobile-dj-manager/issues/88/ "Issue #88") and [#83(https://github.com/mdjm/mobile-dj-manager/issues/83/ "Issue #83") Deposit Paid should not be checked when creating a new event. Ensure that the Balance Paid checkbox holds is checked status
+
+**Tweaks**
+* Remove deprecated use of `MDJM_MULTI` from the `mdjm_event_post_filter_list()` function
+* Added `mdjm_get_employee_address()` function
+* Added `mdjm_get_employee_post_code()` function
 
 = 1.3.7.1 =
 
@@ -825,6 +844,9 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
 
 == Upgrade Notice ==
+
+= 1.3.7.2 =
+Fixes issue with venue content tags not always returning the correct (or any) data. Upgrade ASAP.
 
 = 1.3.7 =
 Enhanced the manual event payments feature. See changelog for details.

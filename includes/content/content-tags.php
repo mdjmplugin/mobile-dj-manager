@@ -2100,8 +2100,10 @@ function mdjm_content_tag_venue( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
-	
-	return mdjm_get_event_venue_meta( $event_id, 'name' );
+
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	return mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'name' );
 } // mdjm_content_tag_total_venue
 
 /**
@@ -2117,7 +2119,9 @@ function mdjm_content_tag_venue_contact( $event_id='' )	{
 		return '';
 	}
 	
-	return mdjm_get_event_venue_meta( $event_id, 'contact' );
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	return mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'contact' );
 } // mdjm_content_tag_venue_contact
 
 /**
@@ -2133,20 +2137,16 @@ function mdjm_content_tag_venue_details( $event_id='' )	{
 		return '';
 	}
 	
-	$details = mdjm_get_event_venue_meta( $event_id, 'details' );
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	$details = mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'details' );
 	$return = '';
-	
-	$i = 0;
-	
-	foreach( $details as $detail )	{
-		if( $i > 0 )	{
-			$return .= '<br />';
-		}
-		
-		$return .= $detail;
-		
-		$i++;
+
+	if ( empty( $details ) )	{
+		return;
 	}
+
+	$return = is_array( $details ) ? implode( '<br />', $details ) : $details;
 	
 	return $return;
 } // mdjm_content_tag_venue_details
@@ -2164,7 +2164,9 @@ function mdjm_content_tag_venue_email( $event_id='' )	{
 		return '';
 	}
 	
-	return mdjm_get_event_venue_meta( $event_id, 'email' );
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	return mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'email' );
 } // mdjm_content_tag_venue_email
 
 /**
@@ -2179,28 +2181,18 @@ function mdjm_content_tag_venue_full_address( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
-	
-	$address = mdjm_get_event_venue_meta( $event_id, 'address' );
+
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	$address = mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'address' );
 	$return = '';
 
 	if ( empty( $address ) )	{
 		return;
 	}
 
-	$i = 0;
+	$return = is_array( $address ) ? implode( '<br />', $address ) : $address;
 
-	foreach( $address as $add )	{
-		if( !empty( $add ) )	{
-			if( $i > 0 )	{
-				$return .= '<br />';
-			}
-			
-			$return .= $add;
-			
-			$i++;
-		}
-	}
-	
 	return $return;
 } // mdjm_content_tag_venue_full_address
 
@@ -2216,8 +2208,10 @@ function mdjm_content_tag_venue_notes( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
+
+	$mdjm_event = new MDJM_Event( $event_id );
 	
-	return mdjm_get_event_venue_meta( $event_id, 'notes' );
+	return mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'notes' );
 } // mdjm_content_tag_venue_notes
 
 
@@ -2233,7 +2227,8 @@ function mdjm_content_tag_venue_telephone( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return '';
 	}
-	
-	return mdjm_get_event_venue_meta( $event_id, 'phone' );
+
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	return mdjm_get_event_venue_meta( $mdjm_event->get_venue_id(), 'phone' );
 } // mdjm_content_tag_venue_telephone
-?>

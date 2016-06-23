@@ -141,12 +141,11 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 		$venue_id = get_post_meta( $item_id, '_mdjm_event_venue_id', true );
 		$prefix   = '_mdjm_event';
 	}
-	
-	
+
 	if ( empty( $venue_id ) )	{
-		return $field = 'address' ? array() : '';
+		return;
 	}
-		
+
 	switch( $field )	{
 		case 'address' :
 			$return[] = get_post_meta( $item_id, $prefix . '_venue_address1', true );

@@ -427,6 +427,30 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
+					'events_order_by'  => array(
+						'id'          => 'events_order_by',
+						'name'        => __( 'Default Order By', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select how you want to see %s ordered within the %s admin list', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_label_singular( true ) ),
+						'type'        => 'select',
+						'options'     => array(
+							'ID'          => __( 'Contract ID', 'mobile-dj-manager' ),
+							'post_date'   => __( 'Creation Date', 'mobile-dj-manager' ),
+							'event_date'  => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+							'value'       => __( 'Total Cost', 'mobile-dj-manager' )
+						),
+						'std'         => 'event_date'
+					),
+					'events_order'  => array(
+						'id'          => 'events_order',
+						'name'        => __( 'Default Order', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => array(
+							'ASC'  => __( 'Ascending', 'mobile-dj-manager' ),
+							'DESC' => __( 'Descending', 'mobile-dj-manager' )
+						),
+						'std'         => 'DESC'
+					),
 					'set_client_inactive'  => array(
 						'id'          => 'set_client_inactive',
 						'name'        => __( 'Set Client Inactive?', 'mobile-dj-manager' ),
@@ -1062,7 +1086,7 @@ function mdjm_get_registered_settings()	{
 								         __( 'Other', 'mobile-dj-manager' )
 					)
 				),
-			// Employee Paymenty Settings
+			// Employee Payment Settings
 				'employee_payments' => array(
 					'employee_payment_settings' => array(
 						'id'          => 'employee_payment_settings',
@@ -1089,6 +1113,74 @@ function mdjm_get_registered_settings()	{
 						'name'        => sprintf( __( 'Pay when %s Completes', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'desc'        => sprintf( __( 'Enable this option to automatically pay employees once an %s completes.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'type'        => 'checkbox'
+					)
+				),
+				'travel' => array(
+					'travel_settings' => array(
+						'id'          => 'travel_settings',
+						'name'        => '<h3>' . __( 'Travel Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'travel_add_cost' => array(
+						'id'          => 'travel_add_cost',
+						'name'        => __( 'Add Travel Cost to Price?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If selected, the travel cost will be added to the overall %s cost', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'        => 'checkbox'
+					),
+					'travel_primary' => array(
+						'id'          => 'travel_primary',
+						'name'        => __( 'Primary Post/Zip Code', 'mobile-dj-manager' ), mdjm_get_label_singular(),
+						'desc'        => __( 'When the primary employee has no address in their profile, this post code will be used to calculate the distance to the venue.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'std'         => mdjm_get_employee_post_code( 1 )
+					),
+					'travel_units' => array(
+						'id'          => 'travel_units',
+						'name'        => __( 'Calculate in?', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => array(
+							'imperial'    => __( 'Miles', 'mobile-dj-manager' ),
+							'metric'      => __( 'Kilometers', 'mobile-dj-manager' )
+						),
+						'std'         => 'imperial'
+					),
+					'cost_per_unit' => array(
+						'id'          => 'cost_per_unit',
+						'name'        => sprintf( __( 'Cost per %s', 'mobile-dj-manager' ), mdjm_travel_unit_label() ),
+						'desc'        => __( 'Enter the cost per mile that should be calculated. i.e. 0.45', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => '0.45'
+					),
+					'travel_cost_round' => array(
+						'id'          => 'travel_cost_round',
+						'name'        => __( 'Round Cost', 'mobile-dj-manager' ),
+						'desc'        => __( 'Do you want to round costs up or down?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+						    '0'       => __( 'No', 'mobile-dj-manager' ),
+							'up'      => __( 'Up', 'mobile-dj-manager' ),
+							'down'    => __( 'Down', 'mobile-dj-manager' )
+						),
+						'std'         => 'up'
+					),
+					'travel_round_to' => array(
+						'id'          => 'travel_round_to',
+						'name'        => __( 'Round to Nearest', 'mobile-dj-manager' ),
+						'hint'        => mdjm_get_currency() . ' i.e. 5',
+						'type'        => 'number',
+						'size'        => 'small',
+						'std'         => '5'
+					),
+					'travel_min_distance'      => array(
+						'id'          => 'travel_min_distance',
+						'name'        => __( "Don't add if below", 'mobile-dj-manager' ),
+						'hint'        => mdjm_travel_unit_label( false, true ),
+						'type'        => 'number',
+						'size'        => 'small',
+						'std'         => '30'
 					)
 				)
 			)
@@ -1274,7 +1366,8 @@ function mdjm_get_registered_settings_sections() {
 		) ),
 		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
-			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' )
+			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
+			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
