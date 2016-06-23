@@ -432,38 +432,29 @@ function mdjm_event_date_filter_dropdown()	{
  * @return
  */
 function mdjm_event_type_filter_dropdown()	{			
-	$event_types = get_categories(
-		array(
-			'type'			  => 'mdjm-event',
-			'taxonomy'		  => 'event-types',
-			'pad_counts'		=> false,
-			'hide_empty'		=> true,
-			'orderby'		  => 'name'
-		)
-	);
-	
-	foreach( $event_types as $event_type )	{
-		$values[ $event_type->term_id ] = $event_type->name;
-	}
+
+	$event_types = get_categories( array(
+		'type'			  => 'mdjm-event',
+		'taxonomy'		  => 'event-types',
+		'pad_counts'		=> false,
+		'hide_empty'		=> true,
+		'orderby'		  => 'name'
+	) );
+
+	$current = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
+
 	?>
-	<select name="mdjm_filter_type">
-		<option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
-		<?php
-		$current_value = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : '';
-		if( !empty( $values ) )	{
-			foreach( $values as $value => $label ) {
-				printf(
-					'<option value="%s"%s>%s (%s)</option>',
-					$value,
-					$value == $current_value ? ' selected="selected"' : '',
-					$label,
-					$label
-				);
-			}
-		}
-		?>
-	</select>
-	<?php
+
+	<?php if ( $event_types ) : ?>
+        <select name="mdjm_filter_type">
+            <option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
+			<?php foreach ( $event_types as $event_type ) : ?>
+				<option value="<?php echo $event_type->term_id; ?>"><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count );?>)</option>
+			<?php endforeach; ?>
+        </select>
+
+	<?php endif;
+
 } // mdjm_event_type_filter_dropdown
 		
 /**
