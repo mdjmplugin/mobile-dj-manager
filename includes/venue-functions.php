@@ -314,9 +314,6 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 		return;
 	} else	{
 		if ( empty ( $venue_id ) )	{
-			if ( empty( $event_id ) )	{
-				return;
-			}
 			$venue_id = $event_id;
 		}
 	}
@@ -331,7 +328,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
-
+	
 	?>
     <div id="mdjm-event-venue-details" class="mdjm-hidden">
         <table class="widefat mdjm_event_venue_details mdjm_form_fields">
