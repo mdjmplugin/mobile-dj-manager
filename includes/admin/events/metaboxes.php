@@ -1295,7 +1295,7 @@ function mdjm_event_metabox_venue_select_row( $event_id )	{
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_select_row', 10 );
 
 /**
- * Output the event client details row
+ * Output the event venue details row
  *
  * @since	1.3.7
  * @global	obj		$mdjm_event			MDJM_Event class object
@@ -1434,6 +1434,24 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
     <?php
 } // mdjm_event_metabox_venue_add_new_table
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_add_new_table', 30 );
+
+/**
+ * Output the event venue distance row
+ *
+ * @since	1.3.8
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_venue_distance_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	mdjm_travel_get_distance( $mdjm_event );
+
+} // mdjm_event_metabox_venue_details_row
+add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_distance_row', 40 );
 
 /**
  * Output the event enquiry source row

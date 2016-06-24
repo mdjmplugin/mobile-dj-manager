@@ -1367,7 +1367,7 @@ function mdjm_get_registered_settings_sections() {
 		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
-			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
+			'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
