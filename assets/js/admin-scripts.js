@@ -631,7 +631,7 @@ jQuery(document).ready(function ($) {
 			// Show manual venue details if pre-selected on event load
 			if ( mdjm_admin_vars.current_page == 'post.php' )	{
 				if ( 'manual' == $('#venue_id').val() )	{
-					$('#mdjm-event-add-new-venue-fields').removeClass('mdjm-hidden');
+					$('#mdjm-event-add-new-venue-fields').show();
 					$('#mdjm-save-venue-button-row').removeClass('mdjm-hidden');
 					$('#toggle_venue_details').addClass('mdjm-hidden');
 				} else	{
