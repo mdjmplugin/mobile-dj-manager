@@ -1277,7 +1277,7 @@ function mdjm_event_metabox_venue_select_row( $event_id )	{
 
 	$venue_id = $mdjm_event->get_venue_id();
 
-	if ( empty( $venue_id ) || $venue_id == $event_id )	{
+	if ( ! empty( $venue_id ) && $venue_id == $event_id )	{
 		$venue_id = 'manual';
 	}
 
