@@ -1466,7 +1466,7 @@ function mdjm_event_metabox_travel_data_row( $event_id )	{
 	<?php endif;
 
 } // mdjm_event_metabox_travel_data_row
-add_action( 'mdjm_event_metabox_travel_data_row', 'mdjm_event_metabox_travel_data_row', 10 );
+//add_action( 'mdjm_event_metabox_travel_data_row', 'mdjm_event_metabox_travel_data_row', 10 );
 
 /**
  * Output the event enquiry source row
