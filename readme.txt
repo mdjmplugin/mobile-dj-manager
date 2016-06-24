@@ -78,14 +78,14 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 == Changelog ==
 
 = 1.3.7.3 =
-**Released, Thursday 23rd June 2016**
+**Released, Friday 24th June 2016**
 **Bug Fixes**
 * Issue [#97(https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
 * Issue [#96(https://github.com/mdjm/mobile-dj-manager/issues/96/ "Issue #96") Corrected display of un-saved event address fields and ensure that the correct value is initially selected for the venue list
 
 = 1.3.7.2 =
 
-**Released, Friday 24th June 2016**
+**Released, Thursday 23rd June 2016**
 **New**
 * Select how you want events to be sorted on the admin screen. `Default Order By` and `Default Order` setting options added within MDJM->Settings->Events
 
