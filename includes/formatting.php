@@ -197,6 +197,53 @@ add_filter( 'mdjm_sanitize_amount_decimals', 'mdjm_currency_decimal_filter' );
 add_filter( 'mdjm_format_amount_decimals', 'mdjm_currency_decimal_filter' );
 
 /**
+ * Returns a nicely formatted distance.
+ *
+ * @since 1.3.8
+ *
+ * @param	str		$distance	The distance to format
+ * @param	bool	$singular	Whether to return a singular value or plural
+ * @param	bool	$lowercase	True to return a lowercase label, otherwise false.
+ * @return	str		$distance	Newly formatted distance
+ */
+function mdjm_format_distance( $distance, $singular = false, $lowercase = false ) {
+
+	$label   = mdjm_travel_unit_label( $singular, $lowercase );
+	$search  = array( 'km', 'mi', ' ' );
+	$replace = '';
+
+	$formatted = trim( str_replace( $search, $replace, $distance ) );
+	$formatted = mdjm_format_amount( $formatted, false );
+	$formatted = $formatted . ' ' . $label;
+
+	return apply_filters( 'mdjm_format_distance', $formatted, $distance );
+
+} // mdjm_format_distance
+
+/**
+ * Returns a nicely formatted time from an input of seconds.
+ *
+ * @since 1.3.8
+ *
+ * @param	str		$seconds	The number of seconds to format
+ * @return	str		$time		Newly formatted time
+ */
+function mdjm_seconds_to_time( $seconds ) {
+
+	if ( ! is_numeric( $seconds ) )	{
+		return;
+	}
+
+	$start = current_time( 'timestamp' );
+	$end   = $start + $seconds;
+
+	$time = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
+
+	return apply_filters( 'mdjm_seconds_to_time', $time, $seconds );
+
+} // mdjm_seconds_to_time
+
+/**
  * Sanitizes a string key for MDJM Settings
  *
  * Keys are used as internal identifiers. Alphanumeric characters, dashes, underscores, stops, colons and slashes are allowed

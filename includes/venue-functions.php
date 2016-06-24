@@ -367,6 +367,10 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                     <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
            		</tr>
 
+				<?php if ( ! empty( $event_id ) ) : ?>
+                	<?php do_action( 'mdjm_event_metabox_travel_data_row', $event_id ); ?>
+                <?php endif; ?>
+
             </tbody>
         </table>
     </div>

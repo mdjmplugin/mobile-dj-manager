@@ -1160,7 +1160,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Do you want to round costs up or down?', 'mobile-dj-manager' ),
 						'type'        => 'select',
 						'options'     => array(
-						    '0'       => __( 'No', 'mobile-dj-manager' ),
+						    false     => __( 'No', 'mobile-dj-manager' ),
 							'up'      => __( 'Up', 'mobile-dj-manager' ),
 							'down'    => __( 'Down', 'mobile-dj-manager' )
 						),
