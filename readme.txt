@@ -78,6 +78,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 == Changelog ==
 
 = 1.3.7.3 =
+
 **Released, Friday 24th June 2016**
 **Bug Fixes**
 * Issue [#97(https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
