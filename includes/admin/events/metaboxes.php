@@ -1277,13 +1277,17 @@ function mdjm_event_metabox_venue_select_row( $event_id )	{
 
 	$venue_id = $mdjm_event->get_venue_id();
 
+	if ( empty( $venue_id ) || $venue_id == $event_id )	{
+		$venue_id = 'manual';
+	}
+
 	?>
 	<div class="mdjm_field_wrap mdjm_form_fields">
     	<div class="mdjm_col">
             <label for="venue_id"><?php _e(' Select Venue:' ); ?></label> 
             <?php echo MDJM()->html->venue_dropdown( array(
                 'name'        => 'venue_id',
-                'selected'    => ! empty( $venue_id ) ? strtolower( $venue_id ) : '',
+                'selected'    => $venue_id,
                 'placeholder' => __( 'Select a Venue', 'mobile-dj-manager' ),
                 'chosen'      => true
             ) ); ?> 
@@ -1295,7 +1299,7 @@ function mdjm_event_metabox_venue_select_row( $event_id )	{
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_select_row', 10 );
 
 /**
- * Output the event client details row
+ * Output the event venue details row
  *
  * @since	1.3.7
  * @global	obj		$mdjm_event			MDJM_Event class object
@@ -1328,12 +1332,12 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
 	$venue_name     = mdjm_get_event_venue_meta( $event_id, 'name' );
 	$venue_contact  = mdjm_get_event_venue_meta( $event_id, 'contact' );
 	$venue_email    = mdjm_get_event_venue_meta( $event_id, 'email' );
-	$venue_address1 = mdjm_get_event_venue_meta( $event_id, 'venue_address1' );
-	$venue_address2 = mdjm_get_event_venue_meta( $event_id, 'venue_address2' );
+	$venue_address1 = mdjm_get_event_venue_meta( $event_id, 'address1' );
+	$venue_address2 = mdjm_get_event_venue_meta( $event_id, 'address2' );
 	$venue_town     = mdjm_get_event_venue_meta( $event_id, 'town' );
-	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'venue_county' );
-	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'venue_postcode' );
-	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'venue_phone' );
+	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
+	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
+	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
 
 	?>
     <div id="mdjm-event-add-new-venue-fields" class="mdjm-hidden">
@@ -1434,6 +1438,35 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
     <?php
 } // mdjm_event_metabox_venue_add_new_table
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_add_new_table', 30 );
+
+/**
+ * Output the event venue distance row
+ *
+ * @since	1.3.8
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_travel_data_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$travel_data = mdjm_travel_get_distance( $event_id );
+
+	if ( ! empty( $travel_data ) ) : ?>
+		<tr>
+            <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
+				<?php echo mdjm_format_distance( $travel_data['distance'], false, true ); ?></td>
+            <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
+            	<?php echo mdjm_seconds_to_time( $travel_data['duration'] ); ?></td>
+            <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
+            	<?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $travel_data['distance'] ) ) ); ?></td>
+        </tr>
+	<?php endif;
+
+} // mdjm_event_metabox_travel_data_row
+//add_action( 'mdjm_event_metabox_travel_data_row', 'mdjm_event_metabox_travel_data_row', 10 );
 
 /**
  * Output the event enquiry source row

@@ -1328,6 +1328,15 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Assign the enquiry source
 	mdjm_set_enquiry_source( $post_id, (int)$_POST['mdjm_enquiry_source'] );
 	
+	/**
+	 * Update the event post meta data
+	 */
+	$debug[] = 'Beginning Meta Updates';
+	
+	mdjm_update_event_meta( $post_id, $event_data );
+		
+	$debug[] = 'Meta Updates Completed';
+
 	if( $deposit_payment == true || $balance_payment == true )	{
 		
 		if( $balance_payment == true )	{
@@ -1340,16 +1349,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		}
 		
 	}
-	
-	/**
-	 * Update the event post meta data
-	 */
-	$debug[] = 'Beginning Meta Updates';
-	
-	mdjm_update_event_meta( $post_id, $event_data );
-		
-	$debug[] = 'Meta Updates Completed';
-	
+
 	// Set the event status & initiate tasks based on the status
 	if( $_POST['original_post_status'] != $_POST['mdjm_event_status'] )	{
 		
