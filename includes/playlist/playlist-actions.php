@@ -60,6 +60,31 @@ function mdjm_goto_guest_playlist_action( $data )	{
 	die();
 } // mdjm_goto_guest_playlist
 add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist_action' );
+
+/**
+ * Redirect to playlist.
+ *
+ * Catches incorrect redirects and forwards to the playlist page.
+ * @see https://github.com/mdjm/mobile-dj-manager/issues/101
+ *
+ * @since	1.3.7
+ * @param
+ * @return	void
+ */
+function mdjm_correct_guest_playlist_url_action()	{
+	if( ! isset( $_GET['guest_playlist'] ) )	{
+		return;
+	}
+
+	if ( ! is_page( mdjm_get_option( 'playlist_page' ) ) )	{
+		wp_redirect( 
+			add_query_arg( 'guest_playlist', $_GET['guest_playlist'], 
+			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
+		);
+		die();
+	}
+} // mdjm_correct_guest_playlist_url_action
+add_action( 'template_redirect', 'mdjm_correct_guest_playlist_url_action' );
 	
 /**
  * Add a song to the playlist.
