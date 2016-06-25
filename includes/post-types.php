@@ -538,10 +538,10 @@ function mdjm_get_label_plural( $lowercase = false ) {
  * @param	str		$taxonomy	The Taxonomy to get labels for
  * @return	arr		Associative array of labels (name = plural)
  */
-function mdjm_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
+function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 
 	$allowed_taxonomies = apply_filters(
-		'kbs_allowed_taxonomies',
+		'mdjm_allowed_taxonomies',
 		array( 'event-types', 'mdjm-playlist', 'enquiry-source', 'mdjm-transactions', 'venue-details' )
 	);
 
