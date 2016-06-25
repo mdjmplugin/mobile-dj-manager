@@ -426,7 +426,7 @@ function mdjm_count_playlist_entries( $event_id, $category = false )	{
 	}
 	
 	$entries = new WP_Query( $query );
-	
+
 	return ( $entries ? $entries->post_count : 0 );
 } // mdjm_count_playlist_entries
 
@@ -469,7 +469,7 @@ function mdjm_guest_playlist_url( $event_id )	{
 	}
 	
 	else	{
-		$url = mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ), true ) . 'guest_playlist=' . $access_code;
+		$url = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true ) . 'guest_playlist=' . $access_code;
 	}
 	
 	return $url;
