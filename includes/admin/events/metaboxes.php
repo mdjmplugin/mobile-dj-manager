@@ -566,7 +566,7 @@ function mdjm_event_metabox_options_payments_row( $event_id )	{
 	$deposit_status = __( 'Due', 'mobile-dj-manager' );
 	$balance_status = __( 'Due', 'mobile-dj-manager' );
 	
-	if ( $mdjm_event_update )	{
+	if ( $mdjm_event_update && 'mdjm-unattended' != $mdjm_event->post_status )	{
 		$deposit_status = $mdjm_event->get_deposit_status();
 		$balance_status = $mdjm_event->get_balance_status();
 	}
