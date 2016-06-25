@@ -449,7 +449,7 @@ function mdjm_event_type_filter_dropdown()	{
         <select name="mdjm_filter_type">
             <option value=""><?php printf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></option>
 			<?php foreach ( $event_types as $event_type ) : ?>
-				<option value="<?php echo $event_type->term_id; ?>"><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count );?>)</option>
+				<option value="<?php echo $event_type->term_id; ?>"<?php selected( $event_type->term_id, $current ); ?>><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count );?>)</option>
 			<?php endforeach; ?>
         </select>
 
@@ -521,7 +521,7 @@ function mdjm_event_client_filter_dropdown()	{
 		
 	}
 	
-	if ( ! $clients )	{
+	if ( empty( $clients ) )	{
 		return;
 	}
 	
@@ -861,7 +861,11 @@ function mdjm_event_post_filtered( $query )	{
 	if ( 'edit.php' != $pagenow || 'mdjm-event' != $post_type || ! is_admin() )	{
 		return;
 	}
-	
+
+	if ( ! isset( $_GET['filter_action'] ) )	{
+		return;
+	}
+
 	// Filter by selected date
 	if( ! empty( $_GET['mdjm_filter_date'] ) )	{
 		
