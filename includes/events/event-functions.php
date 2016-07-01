@@ -1048,6 +1048,64 @@ function mdjm_get_event_income( $event_id )	{
 } // mdjm_get_event_income
 
 /**
+ * Retrieve event transactions.
+ *
+ * @since	1.3.8
+ * @param	int		$event_id		Event ID.
+ * @param	arr		$args			@see get_posts
+ * @return	obj						Array of event transactions.
+ */
+function mdjm_get_event_txns( $event_id, $args = array() )	{
+
+	$defaults = array(
+		'post_parent' => $event_id,
+		'post_status' => 'any',
+		'meta_key'    => '_mdjm_txn_status',										
+		'meta_query'  => array(
+			'key'     => '_mdjm_txn_status',
+			'value'   => 'Completed',
+			'compare' => '='
+		)
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	return mdjm_get_txns ( $args );
+
+} // mdjm_get_event_txns
+
+/**
+ * Generate a list of event transactions.
+ *
+ * @since	1.3.8
+ * @param	int		$event_id		Event ID.
+ * @return	arr		$event_txns		Array of event transactions.
+ */
+function mdjm_list_event_txns( $event_id )	{
+
+	$args = array( 'post_status' => 'mdjm-income' );
+
+	$event_txns = mdjm_get_event_txns( $event_id, $args );
+
+	$txns = array();
+
+	if ( $event_txns )	{
+		foreach ( $event_txns as $txn )	{
+			$mdjm_txn = new MDJM_Txn( $txn->ID );
+
+			$txns[] = mdjm_currency_filter( mdjm_format_amount( $mdjm_txn->price ) ) .
+						' on ' .
+						mdjm_format_short_date( $mdjm_txn->post_date ) .
+						' (' . $mdjm_txn->get_type() . ')';
+
+		}
+	}
+
+	return implode( '<br />', $txns );
+
+} // mdjm_list_event_txns
+
+/**
  * Displays all event transactions within a table.
  *
  * @since	1.3.7
@@ -1059,16 +1117,9 @@ function mdjm_do_event_txn_table( $event_id )	{
 
 	global $mdjm_event;
 
-	$event_txns = apply_filters( 'mdjm_event_txns', mdjm_get_txns(
-		array(
-			'post_parent' => $event_id,
-			'orderby'		=> 'post_status',
-			'meta_key'	   => '_mdjm_txn_status',										
-			'meta_query'	 => array(
-				'key'		=> '_mdjm_txn_status',
-				'value'  	  => 'Completed'
-			)
-		)
+	$event_txns = apply_filters( 'mdjm_event_txns', mdjm_get_event_txns(
+		$event_id,
+		array( 'orderby' => 'post_status' )
 	) );
 
 	$in  = 0;
