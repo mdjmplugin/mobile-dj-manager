@@ -1326,7 +1326,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		}
 		
 		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
-			$value = mdjm_format_amount( $value );			
+			$value = $value;
 		} elseif( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
 		} elseif( $key == '_mdjm_event_venue_email' && ! empty( $value ) )	{ // Emails are lowercase.

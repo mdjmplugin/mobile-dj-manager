@@ -498,7 +498,7 @@ function mdjm_update_event_cost_from_package_ajax()	{
 	}
 	else	{
 		$result['type'] = 'success';
-		$result['cost'] = mdjm_format_amount( 0 );
+		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
 	
 	$result = json_encode( $result );
@@ -553,7 +553,7 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 	}
 	else	{
 		$result['type'] = 'success';
-		$result['cost'] = mdjm_format_amount( 0 );
+		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
 	
 	$result = json_encode( $result );
