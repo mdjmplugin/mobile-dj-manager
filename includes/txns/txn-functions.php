@@ -265,7 +265,7 @@ function mdjm_get_txns( $args = array() )	{
 		
 	$defaults = array(
 		'post_type'         => 'mdjm-transaction',
-		'post_status'       => 'publish',
+		'post_status'       => 'any',
 		'posts_per_page'	=> -1,
 	);
 		

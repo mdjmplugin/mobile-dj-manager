@@ -1070,7 +1070,7 @@ function mdjm_get_event_txns( $event_id, $args = array() )	{
 
 	$args = wp_parse_args( $args, $defaults );
 
-	return mdjm_get_txns ( $args );
+	return mdjm_get_txns( $args );
 
 } // mdjm_get_event_txns
 
