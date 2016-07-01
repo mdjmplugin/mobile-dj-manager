@@ -873,7 +873,7 @@ class MDJM_Event {
 			}
 			
 		}
-MDJM()->debug->log_it( 'balance is ' . $this->balance );
+
 		/**
 		 * Override the event balance.
 		 *
