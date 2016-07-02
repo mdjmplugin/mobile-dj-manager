@@ -258,7 +258,7 @@ function mdjm_get_txn_by_id( $txn_id )	{
  * Retrieve the transactions.
  *
  * @since	1.3
- * @param	arr		$args			Array of possible arguments. See $defaults.
+ * @param	arr		$args			Array of possible arguments. See @get_posts.
  * @return	mixed	$txns			False if no txns, otherwise an object array of all events.
  */
 function mdjm_get_txns( $args = array() )	{

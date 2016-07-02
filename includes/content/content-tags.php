@@ -1935,11 +1935,9 @@ function mdjm_content_tag_part_payment_label()	{
  * @return	str		The events payment history.
  */
 function mdjm_content_tag_payment_history( $event_id='' )	{
-	if( empty( $event_id ) )	{
-		return '';
+	if ( ! empty( $event_id ) )	{
+		return mdjm_list_event_txns( $event_id );
 	}
-	
-	return MDJM()->txns->list_event_transactions( $event_id );
 } // mdjm_content_tag_payment_history
 
 /**

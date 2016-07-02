@@ -32,21 +32,21 @@ class MDJM_Txn {
 	 *
 	 * @since	1.3
 	 */
-	private $date;
+	public $date;
 	
 	/**
 	 * The transaction price
 	 *
 	 * @since	1.3
 	 */
-	private $price = 0;
+	public $price = 0;
 	
 	/**
 	 * The transaction recipient
 	 *
 	 * @since	1.3
 	 */
-	private $recipient_id = 0;
+	public $recipient_id = 0;
 		
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
