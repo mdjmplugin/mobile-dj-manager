@@ -16,6 +16,9 @@ p.head-nav	{
 	colour: #7B7D80;
 }
 
+.mdjm-hidden { display: none; }
+
+/** Old Error Styles */
 /* =Errors
 -------------------------------------------------------------- */
 .mdjm_form_error {
@@ -27,6 +30,49 @@ input.mdjm_form_error {
 }
 .mdjm_form_valid {
 	color: inherit;
+}
+/** End Old Error Styles */
+
+/* =Alerts
+-------------------------------------------------------------- */
+/* Alert Styles */
+.mdjm-alert {
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	margin-bottom: 20px;
+	padding: 10px;
+	border: 1px solid transparent;
+	vertical-align: middle;
+}
+.mdjm-alert p {
+	padding: 0;
+}
+.mdjm-alert p:not(:last-child) {
+	margin-bottom: 5px;
+}
+.mdjm-alert p:last-child {
+	margin-bottom: 0;
+}
+.mdjm-alert-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+.mdjm-alert-success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color:#3c763d;
+}
+.mdjm-alert-info {
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+.mdjm-alert-warn {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #faebcc;
 }
 
 /* =Notifications
