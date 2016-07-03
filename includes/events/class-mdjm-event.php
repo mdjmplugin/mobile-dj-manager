@@ -826,7 +826,7 @@ class MDJM_Event {
 
 				$this->balance_status ='Due';
 
-				if ( $this->get_total_income() >= $this->get_price() )	{
+				if ( mdjm_sanitize_amount( $this->get_total_income() ) >= mdjm_sanitize_amount( $this->get_price() ) )	{
 					
 					$this->balance_status = 'Paid';
 					
