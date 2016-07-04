@@ -42,6 +42,8 @@ function mdjm_load_scripts()	{
 				'available_text'        => mdjm_get_option( 'availability_check_pass_text', false ),
 				'unavailable_redirect'  => mdjm_get_option( 'availability_check_fail_page', 'text' ),
 				'unavailable_text'      => mdjm_get_option( 'availability_check_fail_text', false ),
+				'is_payment'            => is_page( mdjm_get_option( 'payments_page' ) ) ? '1' : '0',
+				'default_gateway'       => mdjm_get_default_gateway(),
 			)
 		)
 	);

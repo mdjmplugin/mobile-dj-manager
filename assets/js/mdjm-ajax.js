@@ -1,5 +1,35 @@
 var mdjm_vars;
 jQuery(document).ready(function ($) {
+	/*=Payments Form
+	---------------------------------------------------- */
+	// Load the fields for the selected payment method
+	$('select#mdjm-gateway, input.mdjm-gateway').change( function (e) {
+
+		var payment_mode = $('#mdjm-gateway option:selected, input.mdjm-gateway:checked').val();
+
+		if( payment_mode == '0' )
+			return false;
+
+		mdjm_load_gateway( payment_mode );
+
+		return false;
+	});
+
+	// Auto load first payment gateway
+	if( mdjm_vars.is_payment == '1' && $('select#mdjm-gateway, input.mdjm-gateway').length ) {
+		setTimeout( function() {
+			mdjm_load_gateway( mdjm_vars.default_gateway );
+		}, 200);
+	}
+
+	$( document.body ).on( 'click', '#mdjm-payment-part', function() {
+		$('#mdjm-payment-custom').show("fast");
+	});
+
+	$( document.body ).on( 'click', '#mdjm-payment-deposit, #mdjm-payment-balance', function() {
+		$('#mdjm-payment-custom').hide("fast");
+	});
+
 	/*=Availability Checker
 	---------------------------------------------------- */
 	if( mdjm_vars.availability_ajax )	{
@@ -65,3 +95,28 @@ jQuery(document).ready(function ($) {
 		validClass: "mdjm_form_valid",
 	});
 });
+
+function mdjm_load_gateway( payment_mode ) {
+
+	// Show the ajax loader
+	jQuery('.mdjm-cart-ajax').show();
+	jQuery('#mdjm_payment_form_wrap').html('<img src="' + mdjm_vars.ajax_loader + '"/>');
+
+	var url = mdjm_vars.ajaxurl;
+
+	if ( url.indexOf( '?' ) > 0 ) {
+		url = url + '&';
+	} else {
+		url = url + '?';
+	}
+
+	url = url + 'payment-mode=' + payment_mode;
+
+	jQuery.post(url, { action: 'mdjm_load_gateway', mdjm_payment_mode: payment_mode },
+		function(response){
+			jQuery('#mdjm_payment_form_wrap').html(response);
+			jQuery('.mdjm-no-js').hide();
+		}
+	);
+
+}

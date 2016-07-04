@@ -608,6 +608,27 @@ a	{
 
 /* =Payment Form
 -------------------------------------------------------------- */
+.mdjm_clearfix:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#mdjm_payment_wrap fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#mdjm_payment_wrap input[type='text'],
+#mdjm_payment_wrap label {
+	display: inline-block;
+	width: 200px;
+}
+
 #mdjm_secure_site_wrapper {
 	padding: 4px 4px 4px 0;
 	font-weight: bold;
@@ -616,8 +637,8 @@ a	{
 	content: '\f160';
 	display: inline-block;
 	-webkit-font-smoothing: antialiased;
-	font: normal 20px/1 'dashicons';
-	vertical-align: top;
+	font: normal 40px/1 'dashicons';
+	vertical-align: middle;
 }
 
 /* =Availability Widget

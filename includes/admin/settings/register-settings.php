@@ -934,16 +934,19 @@ function mdjm_get_registered_settings()	{
 						'desc'        => '',
 						'type'        => 'header'
 					),
+					'gateways' => array(
+						'id'      => 'gateways',
+						'name'    => __( 'Payment Gateways', 'mobile-dj-manager' ),
+						'desc'    => __( 'Choose the payment gateways you want to enable.', 'mobile-dj-manager' ),
+						'type'    => 'gateways',
+						'options' => mdjm_get_payment_gateways()
+					),
 					'payment_gateway'  => array(
 						'id'          => 'payment_gateway',
-						'name'        => __( 'Payment Gateway', 'mobile-dj-manager' ),
-						'desc'        => '',
-						'type'        => 'select',
-						'options'     => apply_filters( 'mdjm_payment_gateways',
-							array( 
-								'0'   => __( 'Disable', 'mobile-dj-manager' )
-							)
-						)
+						'name'        => __( 'Default Gateway', 'mobile-dj-manager' ),
+						'desc'        => __( 'This gateway will be loaded automatically with the payments page.', 'mobile-dj-manager' ),
+						'type'        => 'gateway_select',
+						'options'     => mdjm_get_payment_gateways()
 					),
 					'currency'         => array(
 						'id'          => 'currency',
@@ -952,7 +955,6 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => mdjm_get_currencies()
 					),
-		
 					'currency_format'  => array(
 						'id'          => 'currency_format',
 						'name'        => __( 'Currency Position', 'mobile-dj-manager' ),
@@ -1082,7 +1084,8 @@ function mdjm_get_registered_settings()	{
 								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" .
+										 __( 'Stripe', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'Other', 'mobile-dj-manager' )
 					)
 				),
@@ -1559,6 +1562,65 @@ function mdjm_radio_callback( $args ) {
 
 	echo '<p class="description">' . $args['desc'] . '</p>';
 } // mdjm_radio_callback
+
+/**
+ * Gateways Callback
+ *
+ * Renders gateways fields.
+ *
+ * @since	1.8
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_gateways_callback( $args )	{
+
+	$mdjm_option = mdjm_get_option( $args['id'] );
+
+	$html = '';
+
+	foreach ( $args['options'] as $key => $option )	{
+		if ( isset( $mdjm_option[ $key ] ) )
+			$enabled = '1';
+		else
+			$enabled = null;
+
+		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']"" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked('1', $enabled, false) . '/>&nbsp;';
+		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']">' . esc_html( $option['admin_label'] ) . '</label><br/>';
+	}
+
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+
+} // mdjm_gateways_callback
+
+/**
+ * Gateways Callback (drop down)
+ *
+ * Renders gateways select menu
+ *
+ * @since	1.8
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_gateway_select_callback( $args ) {
+	$mdjm_option = mdjm_get_option( $args['id'] );
+
+	$html = '';
+
+	$html .= '<select name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']">';
+
+	foreach ( $args['options'] as $key => $option ) :
+		$selected = isset( $mdjm_option ) ? selected( $key, $mdjm_option, false ) : '';
+		$html .= '<option value="' . mdjm_sanitize_key( $key ) . '"' . $selected . '>' . esc_html( $option['admin_label'] ) . '</option>';
+	endforeach;
+
+	$html .= '</select>';
+	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+
+} // mdjm_gateway_select_callback
 
 /**
  * Text Callback
