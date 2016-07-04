@@ -182,8 +182,8 @@ function mdjm_get_current_page_url() {
 function mdjm_display_notice( $m )	{	
 	$message = mdjm_messages( $m );
 	
-	$notice = '<div class="mdjm-' . $message['class'] . '">';
-	$notice .= ! empty( $message['title'] ) ? '<span>' . $message['title'] . ': </span>' : '';
+	$notice = '<div class="mdjm-alert mdjm-alert-' . $message['class'] . '">';
+	$notice .= ! empty( $message['title'] ) ? '<span><strong>' . $message['title'] . '</strong></span><br />' : '';
 	$notice .= $message['message'] . '</div>';
 
 	return apply_filters( 'mdjm_display_notice', $notice, $m );
