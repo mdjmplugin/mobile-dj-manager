@@ -606,6 +606,20 @@ a	{
 	width: 200px;
 }
 
+/* =Payment Form
+-------------------------------------------------------------- */
+#mdjm_secure_site_wrapper {
+	padding: 4px 4px 4px 0;
+	font-weight: bold;
+}
+#mdjm_secure_site_wrapper span.padlock:before {
+	content: '\f160';
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 20px/1 'dashicons';
+	vertical-align: top;
+}
+
 /* =Availability Widget
 -------------------------------------------------------------- */
 
