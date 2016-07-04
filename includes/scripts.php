@@ -91,6 +91,10 @@ function mdjm_register_styles()	{
 	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
   	wp_enqueue_style( 'jquery-ui' );
 
+	if ( is_page( mdjm_get_option( 'payments_page' ) ) && is_ssl() ) {
+		wp_enqueue_style( 'dashicons' );
+	}
+
 } // mdjm_register_styles
 add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
 
