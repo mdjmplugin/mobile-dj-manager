@@ -226,6 +226,65 @@ function mdjm_email_booking_confirmation( $event_id )	{
 } // mdjm_email_booking_confirmation
 
 /**
+ * Email the payment receipt for payments received via a gateway.
+ *
+ * This function is triggered from mdjm_complete_event_payment_process() or a gateway extension.
+ *
+ * @since	1.3.8
+ * @param	int		$event_id	Event ID.
+ * @return	bool	True if the email process completed, otherwise false.
+ */
+function mdjm_send_gateway_receipt( $event_id )	{
+
+	if ( ! mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+		return;
+	}
+
+	$mdjm_event   = mdjm_get_event( $event_id );
+
+	$from_name    = mdjm_email_set_from_name( 'payment_receipt', $mdjm_event );
+	$from_name    = apply_filters( 'mdjm_stripe_email_from_name', $from_name, 'payment_receipt', $mdjm_event );
+
+	$from_email   = mdjm_email_set_from_address( 'payment_receipt', $mdjm_event );
+	$from_email   = apply_filters( 'mdjm_stripe_email_from_address', $from_email, 'payment_receipt', $mdjm_event );
+
+	$client       = get_userdata( $mdjm_event->client );
+	$to_email     = $client->user_email;
+
+	$subject      = mdjm_email_set_subject( mdjm_get_option( 'payment_cfm_template', false ) );
+	$subject      = apply_filters( 'mdjm_stripe_payment_receipt_subject', wp_strip_all_tags( $subject ) );
+	$subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
+
+	$attachments  = apply_filters( 'mdjm_stripe_payment_receipt_attachments', array(), $mdjm_event );
+	
+	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'payment_cfm_template', false ) );
+	$message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
+
+	$emails = MDJM()->emails;
+
+	$emails->__set( 'event_id', $mdjm_event->ID );
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_address', $from_email );
+	
+	$headers = apply_filters( 'mdjm_stripe_payment_receipt_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
+	$emails->__set( 'headers', $headers );
+	
+	$emails->__set( 'track', apply_filters( 'mdjm_stripe_track_email_payment_receipt', mdjm_get_option( 'track_client_emails' ) ) );
+	
+	$emails->__set( 'copy_to', array() );
+	
+	if ( mdjm_get_option( 'bcc_admin_to_client' ) )	{
+		$emails->__set( 'copy_to', mdjm_get_option( 'system_email' ) );
+	}
+	
+	$sent = $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mdjm-stripe-payments' ), mdjm_get_label_singular() ) );
+	
+	return $sent;
+
+} // mdjm_send_gateway_email_receipt
+add_action( 'mdjm_send_gateway_receipt', 'mdjm_send_gateway_receipt' );
+
+/**
  * Email the manual payment confirmation to the client from a customisable email template.
  *
  * @since	1.3
@@ -234,7 +293,7 @@ function mdjm_email_booking_confirmation( $event_id )	{
  */
 function mdjm_email_manual_payment_confirmation( $event_id )	{
 
-	if( ! mdjm_get_option( 'manual_payment_cfm_template' ) )	{
+	if ( ! mdjm_get_option( 'manual_payment_cfm_template' ) )	{
 		return;
 	}
 
