@@ -36,6 +36,6 @@ if ( ! empty( $balance_disabled ) && ! empty( $deposit_disabled ) )	{
     
         <input type="radio" name="mdjm_payment_amount" id="mdjm-payment-part" value="part_payment" /> <?php echo mdjm_get_other_amount_label(); ?> <span id="mdjm-payment-custom"<?php echo $other_amount_style; ?>><?php echo mdjm_currency_symbol(); ?>
         <input type="text" class="mdjm_other_amount_input" name="part_payment" placeholder="0.00" value="<?php echo mdjm_sanitize_amount( mdjm_get_option( 'other_amount_default', true, false ) ); ?>" /></span>
-    <span class="mdjm-description"><?php printf( __( 'To pay a custom amount, select <strong>%s</strong> and enter the value into the text field.', 'mobile-dj-manager' ), mdjm_get_other_amount_label() ); ?></span>
+    <span class="mdjm-description"><?php printf( __( 'To pay a custom amount, select %s and enter the value into the text field.', 'mobile-dj-manager' ), mdjm_get_other_amount_label() ); ?></span>
     </p>
 </fieldset>

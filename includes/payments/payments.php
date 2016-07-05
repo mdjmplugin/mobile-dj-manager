@@ -13,6 +13,29 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not a payment is in progress.
+ *
+ * @since	1.3.8
+ * @param	bool	$ssl	True if SSL required, otherwise false.
+ * @return	bool	True if a payment is in progress, otherwise false.
+ */
+function mdjm_is_payment( $ssl = false )	{
+
+	$is_payment = is_page( mdjm_get_option( 'payments_page' ) );
+
+	if ( isset( $_GET['mdjm_action'] ) && 'process_payment' == $_GET['mdjm_action'] )	{
+		$is_payment == true;
+	}
+
+	if ( $ssl && ! is_ssl() )	{
+		$is_payment = false;
+	}
+
+	return apply_filters( 'mdjm_is_payment', $is_payment, $ssl );
+
+} // mdjm_is_payment
+
+/**
  * Returns a list of all available gateways.
  *
  * @since	1.3.8
@@ -114,7 +137,7 @@ function mdjm_get_gateway_admin_label( $gateway ) {
 } // mdjm_get_gateway_admin_label
 
 /**
- * Returns the checkout label for the specified gateway
+ * Returns the payment label for the specified gateway
  *
  * @since	1.3.8
  * @param	str		$gateway	Name of the gateway to retrieve a label for
@@ -155,6 +178,22 @@ function mdjm_get_chosen_gateway() {
 } // mdjm_get_chosen_gateway
 
 /**
+ * Sends all the payment data to the specified gateway
+ *
+ * @since	1.3.8
+ * @param	str		$gateway		Name of the gateway
+ * @param	arr		$payment_data	All the payment data to be sent to the gateway
+ * @return void
+*/
+function mdjm_send_to_gateway( $gateway, $payment_data ) {
+
+	$payment_data['gateway_nonce'] = wp_create_nonce( 'mdjm-gateway' );
+
+	// $gateway must match the ID used when registering the gateway
+	do_action( 'mdjm_gateway_' . $gateway, $payment_data );
+} // mdjm_send_to_gateway
+
+/**
  * Determines if the gateway menu should be shown
  *
  * @since	1.3.8
@@ -172,3 +211,64 @@ function mdjm_show_gateways() {
 
 	return apply_filters( 'mdjm_show_gateways', $show_gateways );
 } // mdjm_show_gateways
+
+/**
+ * Returns the text for the payment button.
+ *
+ * @since	1.3.8
+ * @return	str		Button text
+ */
+function mdjm_get_payment_button_text()	{
+	$button_text = mdjm_get_option( 'payment_button', __( 'Pay Now', 'mobile-dj-manager' ) );
+
+	$button_text = esc_attr( apply_filters( 'mdjm_get_payment_button_text', $button_text ) );
+
+	return $button_text;
+
+} // mdjm_get_payment_button_text
+
+/**
+ * Generates a transaction for a new payment during processing.
+ *
+ * The transaction status will be set to Pending.
+ * Payment gateways should update this txn once payment is verified.
+ *
+ * @since	1.3.8
+ * @param	arr		$payment_data	Array of data collected from payment form validation.
+ * @return	int		Transaction ID	ID of the newly created transaction.
+ */
+function mdjm_create_payment_txn( $payment_data )	{
+
+	$gateway_label = mdjm_get_gateway_admin_label( $payment_data['gateway'] );
+
+	do_action( 'mdjm_create_payment_before_txn', $payment_data );
+
+	$mdjm_txn = new MDJM_Txn();
+	
+	$mdjm_txn->create(
+		array(
+			'post_title'  => sprintf( __( '%s payment for %s', 'mdjm-stripe-payments' ), $gateway_label, $event_id ),
+			'post_status' => 'mdjm-income',
+			'post_author' => 1,
+			'post_parent' => $payment_data['event_id']
+		),
+		array(
+			'_mdjm_txn_source'      => $gateway_label,
+			'_mdjm_txn_status'      => 'Pending',
+			'_mdjm_payment_from'    => $payment_data['client_id'],
+			'_mdjm_txn_total'       => $payment_data['total'],
+			'_mdjm_payer_firstname' => $payment_data['client_data']['first_name'],
+			'_mdjm_payer_lastname'  => $payment_data['client_data']['last_name'],
+			'_mdjm_payer_email'     => $payment_data['client_data']['email'],
+			'_mdjm_payer_ip'        => $payment_data['client_ip'],
+			'_mdjm_payment_from'    => $payment_data['client_data']['display_name']
+		)
+	);
+
+	mdjm_set_txn_type( $payment_data['event_id'], mdjm_get_txn_cat_id( 'name', $payment_data['type'] ) );
+
+	do_action( 'mdjm_create_payment_after_txn', $mdjm_txn->ID, $payment_data );
+
+	return $mdjm_txn->ID;
+
+} // mdjm_create_payment_txn

@@ -7,8 +7,9 @@ jQuery(document).ready(function ($) {
 
 		var payment_mode = $('#mdjm-gateway option:selected, input.mdjm-gateway:checked').val();
 
-		if( payment_mode == '0' )
+		if( payment_mode == '0' )	{
 			return false;
+		}
 
 		mdjm_load_gateway( payment_mode );
 

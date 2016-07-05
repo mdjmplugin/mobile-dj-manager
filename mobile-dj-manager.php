@@ -168,6 +168,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/payments/actions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/payments/payments.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/payments/process-payments.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/payments/template.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-event.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-html-elements.php' );

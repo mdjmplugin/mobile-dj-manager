@@ -32,6 +32,7 @@ function mdjm_payment_form()	{
 			<div id="mdjm_payments_form_wrap" class="mdjm_clearfix">
 				<?php do_action( 'mdjm_before_purchase_form' ); ?>
 				<form id="mdjm_payment_form" class="mdjm_form" action="" method="POST" autocomplete="off">
+                    <input type="hidden" name="event_id" id="mdjm-event-id" value="<?php echo $mdjm_event->ID; ?>" />
 					<?php
 					/**
 					 * Hooks in at the top of the payment form
@@ -70,8 +71,6 @@ function mdjm_payment_form()	{
  * @return	void
  */
 function mdjm_payment_items()	{
-	global $mdjm_event;
-
 	do_action( 'mdjm_before_payment_items' );
 	echo '<form id="mdjm_payment_items_form" method="post" autocomplete="off" class="mdjm_form">';
 		echo '<div id="mdjm_payment_wrap">';
@@ -203,17 +202,31 @@ add_action( 'mdjm_cc_form', 'mdjm_get_cc_form' );
  * @return	void
  */
 function mdjm_payment_submit() {
-?>
-	<fieldset id="mdjm_purchase_submit">
+	ob_start(); ?>
+
+	<fieldset id="mdjm_payment_submit">
 		<?php do_action( 'mdjm_payment_form_before_submit' ); ?>
 
-		<?php //edd_checkout_hidden_fields(); ?>
+		<?php mdjm_payment_hidden_fields(); ?>
 
-		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php _e( 'Pay Now', 'mobile-dj-manager' ); ?>" />
+		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php echo mdjm_get_payment_button_text(); ?>" />
 
 		<?php do_action( 'mdjm_payment_form_after_submit' ); ?>
 
 	</fieldset>
-<?php
+	<?php echo ob_get_clean();
 } // mdjm_payment_submit
 add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
+
+/**
+ * Renders the hidden Payment fields
+ *
+ * @since	1.3.8
+ * @return	void
+ */
+function mdjm_payment_hidden_fields() {
+?>
+	<?php mdjm_action_field( 'event_payment' ); ?>
+	<input type="hidden" name="mdjm_gateway" value="<?php echo mdjm_get_chosen_gateway(); ?>" />
+<?php
+} // mdjm_payment_hidden_fields

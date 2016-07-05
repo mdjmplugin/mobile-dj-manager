@@ -42,7 +42,7 @@ function mdjm_load_scripts()	{
 				'available_text'        => mdjm_get_option( 'availability_check_pass_text', false ),
 				'unavailable_redirect'  => mdjm_get_option( 'availability_check_fail_page', 'text' ),
 				'unavailable_text'      => mdjm_get_option( 'availability_check_fail_text', false ),
-				'is_payment'            => is_page( mdjm_get_option( 'payments_page' ) ) ? '1' : '0',
+				'is_payment'            => mdjm_is_payment() ? '1' : '0',
 				'default_gateway'       => mdjm_get_default_gateway(),
 			)
 		)
@@ -93,7 +93,7 @@ function mdjm_register_styles()	{
 	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
   	wp_enqueue_style( 'jquery-ui' );
 
-	if ( is_page( mdjm_get_option( 'payments_page' ) ) && is_ssl() ) {
+	if ( mdjm_is_payment( true ) ) {
 		wp_enqueue_style( 'dashicons' );
 	}
 

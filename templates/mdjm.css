@@ -631,30 +631,35 @@ a	{
 	width: 200px;
 }
 
-#mdjm_payment_form_wrap fieldset {
+#mdjm_payments_form_wrap fieldset {
 	border: 1px solid #eee;
 	padding: 1.387em;
 	margin: 0 0 21px;
 }
-#mdjm_payment_form_wrap #mdjm_purchase_submit {
+#mdjm_payments_form_wrap #mdjm_payment_submit {
 	padding: 0;
 	border: none;
 }
-#mdjm_payment_form_wrap fieldset fieldset {
+#mdjm_payments_form fieldset fieldset {
 	margin: 0;
 	border: none;
 	padding: 0;
 }
 
+#mdjm_payments_form_wrap span.mdjm-description	{
+	text-indent: 205px;
+}
+
 #mdjm_secure_site_wrapper {
 	padding: 4px 4px 4px 0;
 	font-weight: bold;
+	text-align: right;
 }
 #mdjm_secure_site_wrapper span.padlock:before {
 	content: '\f160';
 	display: inline-block;
 	-webkit-font-smoothing: antialiased;
-	font: normal 40px/1 'dashicons';
+	font: normal 20px/1 'dashicons';
 	vertical-align: middle;
 }
 
