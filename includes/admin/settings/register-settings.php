@@ -672,26 +672,6 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to %s primary %s', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
-					),
-					'payment_conf_templates' => array(
-						'id'          => 'payment_conf_templates',
-						'name'        => '<h3>' . __( 'Payment Confirmation Template Settings', 'mobile-dj-manager' ) . '</h3>',
-						'desc'        => '',
-						'type'        => 'header'
-					),
-					'payment_cfm_template' => array(
-						'id'          => 'payment_cfm_template',
-						'name'        => __( 'Payment Received Template', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select an email template to be sent to clients when confirming receipt of a payment', 'mobile-dj-manager' ),
-						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template', true )
-					),
-					'manual_payment_cfm_template' => array(
-						'id'          => 'manual_payment_cfm_template',
-						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template', true )
 					)
 				)
 			)
@@ -1145,6 +1125,30 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox'
 					)
 				),
+			// Receipts
+				'receipts' => array(
+					'payment_conf_templates' => array(
+						'id'          => 'payment_conf_templates',
+						'name'        => '<h3>' . __( 'Payment Receipts', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'payment_cfm_template' => array(
+						'id'          => 'payment_cfm_template',
+						'name'        => __( 'Gateway Payment Receipt', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent as a receipt to clients when a gateway payment is received.', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template', true )
+					),
+					'manual_payment_cfm_template' => array(
+						'id'          => 'manual_payment_cfm_template',
+						'name'        => __( 'Manual Payment Receipt', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent as a receipt to clients when you manually log a payment.', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template', true )
+					)
+				),
+			// Travel
 				'travel' => array(
 					'travel_settings' => array(
 						'id'          => 'travel_settings',
@@ -1397,6 +1401,7 @@ function mdjm_get_registered_settings_sections() {
 		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
+			'receipts'           => __( 'Receipts', 'mobile-dj-manager' )
 			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
