@@ -684,7 +684,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Payment Received Template', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select an email template to be sent to clients when confirming receipt of a payment', 'mobile-dj-manager' ),
 						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template' )
+						'options'     => mdjm_list_templates( 'email_template', true )
 					),
 					'manual_payment_cfm_template' => array(
 						'id'          => 'manual_payment_cfm_template',
