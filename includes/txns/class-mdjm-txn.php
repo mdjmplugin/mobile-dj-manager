@@ -269,5 +269,17 @@ class MDJM_Txn {
 					
 		return apply_filters( 'mdjm_transaction_type', $return, $this->ID );
 	} // get_type
-	
+
+	/**
+	 * Retrieve the transaction gateway.
+	 *
+	 * @since	1.3.8
+	 * @return	str
+	 */
+	public function get_gateway() {			
+		$gateway = get_post_meta( $this->ID, '_mdjm_txn_gateway', true );
+					
+		return apply_filters( 'mdjm_transaction_gateway', $gateway, $this->ID );
+	} // get_gateway
+
 } // class MDJM_Txn
