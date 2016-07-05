@@ -171,6 +171,24 @@ function mdjm_get_current_page_url() {
 } // mdjm_get_current_page_url
 
 /**
+ * Retrieve the visitors IP address.
+ *
+ * @since	1.3.8
+ * @return	str
+ */
+function mdjm_get_user_ip()	{
+	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) )	{
+		$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )	{
+		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+		$ip_address = $_SERVER['REMOTE_ADDR'];
+	}
+
+	return apply_filters( 'mdjm_get_user_ip', $ip_address );
+} // mdjm_get_user_ip
+
+/**
  * Display a Notice.
  *
  * Display a notice on the front end.
