@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * Returns a list of all available gateways.
  *
- * @since 1.8
+ * @since	1.3.8
  * @return	arr		$gateways	All the available gateways
  */
 function mdjm_get_payment_gateways() {
@@ -33,13 +33,13 @@ function mdjm_get_payment_gateways() {
 /**
  * Returns a list of all enabled gateways.
  *
- * @since	1.8
+ * @since	1.3.8
  * @param	bool	$sort			If true, the default gateway will be first
  * @return	arr		$gateway_list	All the available gateways
  */
 function mdjm_get_enabled_payment_gateways( $sort = false ) {
 	$gateways = mdjm_get_payment_gateways();
-	$enabled  = mdjm_get_option( 'gateways', false );
+	$enabled  = (array) mdjm_get_option( 'gateways', false );
 
 	$gateway_list = array();
 
@@ -70,7 +70,7 @@ function mdjm_get_enabled_payment_gateways( $sort = false ) {
 /**
  * Checks whether a specified gateway is activated.
  *
- * @since	1.8
+ * @since	1.3.8
  * @param	str		$gateway	Name of the gateway to check for
  * @return	bool	true if enabled, false otherwise
  */
@@ -83,11 +83,11 @@ function mdjm_is_gateway_active( $gateway ) {
 /**
  * Gets the default payment gateway selected from the MDJM Settings
  *
- * @since	1.8
+ * @since	1.3.8
  * @return	str		Gateway ID
  */
 function mdjm_get_default_gateway() {
-	$default = mdjm_get_option( 'payment_gateway' );
+	$default = mdjm_get_option( 'payment_gateway', 'disabled' );
 
 	if( ! mdjm_is_gateway_active( $default ) ) {
 		$gateways = mdjm_get_enabled_payment_gateways();
@@ -101,7 +101,7 @@ function mdjm_get_default_gateway() {
 /**
  * Returns the admin label for the specified gateway
  *
- * @since	1.8
+ * @since	1.3.8
  * @param	str		$gateway	Name of the gateway to retrieve a label for
  * @return	str		Gateway admin label
  */
@@ -116,7 +116,7 @@ function mdjm_get_gateway_admin_label( $gateway ) {
 /**
  * Returns the checkout label for the specified gateway
  *
- * @since	1.8
+ * @since	1.3.8
  * @param	str		$gateway	Name of the gateway to retrieve a label for
  * @return	str		Checkout label for the gateway
  */

@@ -1580,12 +1580,16 @@ function mdjm_gateways_callback( $args )	{
 	$html = '';
 
 	foreach ( $args['options'] as $key => $option )	{
-		if ( isset( $mdjm_option[ $key ] ) )
+		if ( $key == 'disabled' )	{
+			continue;
+		}
+		if ( isset( $mdjm_option[ $key ] ) )	{
 			$enabled = '1';
-		else
+		} else	{
 			$enabled = null;
+		}
 
-		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']"" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked('1', $enabled, false) . '/>&nbsp;';
+		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked('1', $enabled, false) . '/>&nbsp;';
 		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']">' . esc_html( $option['admin_label'] ) . '</label><br/>';
 	}
 
@@ -1608,12 +1612,14 @@ function mdjm_gateway_select_callback( $args ) {
 
 	$html = '';
 
-	$html .= '<select name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']">';
+	$html .= '<select name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']">';
 
-	foreach ( $args['options'] as $key => $option ) :
+	foreach ( $args['options'] as $key => $option )	{
+
 		$selected = isset( $mdjm_option ) ? selected( $key, $mdjm_option, false ) : '';
 		$html .= '<option value="' . mdjm_sanitize_key( $key ) . '"' . $selected . '>' . esc_html( $option['admin_label'] ) . '</option>';
-	endforeach;
+
+	}
 
 	$html .= '</select>';
 	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';

@@ -22,14 +22,14 @@ function mdjm_payment_form()	{
 	global $mdjm_event;
 
 	$payment_mode = mdjm_get_chosen_gateway();
-echo $payment_mode;
+
 	ob_start();
 		echo '<div id="mdjm_payment_wrap">';
 			do_action( 'mdjm_print_notices' );
 			echo '<p class="head-nav"><a href="' . mdjm_get_event_uri( $mdjm_event->ID ) . '">' . __( 'Back to Event', 'mobile-dj-manager' ) . '</a></p>';
 			mdjm_payment_items();
 ?>
-			<div id="mdjm_payment_form_wrap" class="mdjm_clearfix">
+			<div id="mdjm_payments_form_wrap" class="mdjm_clearfix">
 				<?php do_action( 'mdjm_before_purchase_form' ); ?>
 				<form id="mdjm_payment_form" class="mdjm_form" action="" method="POST" autocomplete="off">
 					<?php
@@ -40,11 +40,11 @@ echo $payment_mode;
 					 */
 					do_action( 'mdjm_payment_form_top' );
 
-					//if ( mdjm_show_gateways() ) {
+					if ( mdjm_show_gateways() ) {
 						do_action( 'mdjm_payment_mode_select'  );
-					//} else {
-					//	do_action( 'mdjm_payment_form' );
-					//}
+					} else {
+						do_action( 'mdjm_payment_form' );
+					}
 
 					/**
 					 * Hooks in at the bottom of the checkout form
@@ -55,7 +55,7 @@ echo $payment_mode;
 					?>
 				</form>
 				<?php do_action( 'mdjm_after_purchase_form' ); ?>
-			</div><!--end #mdjm_payment_form_wrap-->
+			</div><!--end #mdjm_payments_form_wrap-->
 <?php
 		echo '</div><!--end #mdjm_payment_wrap-->';
 
@@ -75,7 +75,7 @@ function mdjm_payment_items()	{
 	do_action( 'mdjm_before_payment_items' );
 	echo '<form id="mdjm_payment_items_form" method="post" autocomplete="off" class="mdjm_form">';
 		echo '<div id="mdjm_payment_wrap">';
-			mdjm_get_template_part( 'payments' );
+			mdjm_get_template_part( 'payments', 'items' );
 		echo '</div>';
 	echo '</form>';
 	do_action( 'mdjm_after_payment_items' );
@@ -95,9 +95,9 @@ function mdjm_payment_mode_select() {
 	$page_URL = mdjm_get_current_page_url();
 	do_action( 'mdjm_payment_mode_top' ); ?>
 		<fieldset id="mdjm_payment_mode_select">
+        	<legend><?php _e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
 			<?php do_action( 'mdjm_payment_mode_before_gateways_wrap' ); ?>
 			<div id="mdjm-payment-mode-wrap">
-				<span class="mdjm-payment-mode-label"><?php _e( 'Select Payment Method', 'mobile-dj-manager' ); ?></span><br/>
 				<?php
 
 				do_action( 'mdjm_payment_mode_before_gateways' );
@@ -107,7 +107,7 @@ function mdjm_payment_mode_select() {
 					$checked = checked( $gateway_id, mdjm_get_default_gateway(), false );
 					$checked_class = $checked ? ' mdjm-gateway-option-selected' : '';
 					echo '<label for="mdjm-gateway-' . esc_attr( $gateway_id ) . '" class="mdjm-gateway-option' . $checked_class . '" id="mdjm-gateway-option-' . esc_attr( $gateway_id ) . '">';
-						echo '<input type="radio" name="payment-mode" class="mdjm-gateway" id="mdjm-gateway-' . esc_attr( $gateway_id ) . '" value="' . esc_attr( $gateway_id ) . '"' . $checked . '>' . esc_html( $gateway['checkout_label'] );
+						echo '<input type="radio" name="payment-mode" class="mdjm-gateway" id="mdjm-gateway-' . esc_attr( $gateway_id ) . '" value="' . esc_attr( $gateway_id ) . '"' . $checked . '>' . esc_html( $gateway['payment_label'] );
 					echo '</label>';
 				}
 
@@ -117,12 +117,103 @@ function mdjm_payment_mode_select() {
 			</div>
 			<?php do_action( 'mdjm_payment_mode_after_gateways_wrap' ); ?>
 		</fieldset>
-		<fieldset id="mdjm_payment_mode_submit" class="mdjm-no-js">
-			<p id="mdjm-next-submit-wrap">
-				<?php echo mdjm_checkout_button_next(); ?>
-			</p>
-		</fieldset>
 	<div id="mdjm_payment_form_wrap"></div><!-- the fields are loaded into this-->
-	<?php do_action('mdjm_payment_mode_bottom');
+	<?php do_action( 'mdjm_payment_mode_bottom' );
 } // mdjm_payment_mode_select
 add_action( 'mdjm_payment_mode_select', 'mdjm_payment_mode_select' );
+
+/**
+ * Renders the Payment Form, hooks are provided to add to the payment form.
+ * The default Payment Form rendered displays a list of the enabled payment
+ * gateways and a credit card info form if credit cards are enabled.
+ *
+ * @since	1.3.8
+ * @return	str
+ */
+function mdjm_show_payment_form()	{
+
+	$payment_mode = mdjm_get_chosen_gateway();
+
+	/**
+	 * Hooks in at the top of the purchase form
+	 *
+	 * @since	1.3.8
+	 */
+	do_action( 'mdjm_payment_form_top' );
+
+	do_action( 'mdjm_payment_form_after_user_info' );
+
+	/**
+	 * Hooks in before Credit Card Form
+	 *
+	 * @since	1.3.8
+	 */
+	do_action( 'mdjm_payment_form_before_cc_form' );
+
+
+	// Load the credit card form and allow gateways to load their own if they wish
+	if ( has_action( 'mdjm_' . $payment_mode . '_cc_form' ) ) {
+		do_action( 'mdjm_' . $payment_mode . '_cc_form' );
+	} else {
+		do_action( 'mdjm_cc_form' );
+	}
+
+
+	/**
+	 * Hooks in after Credit Card Form
+	 *
+	 * @since	1.3.8
+	 */
+	do_action( 'mdjm_payment_form_after_cc_form' );
+
+	/**
+	 * Hooks in at the bottom of the payment form
+	 *
+	 * @since	1.3.8
+	 */
+	do_action( 'mdjm_payment_form_bottom' );
+
+} // mdjm_show_payment_form
+add_action( 'mdjm_payment_form', 'mdjm_show_payment_form' );
+
+/**
+ * Renders the credit card info form.
+ *
+ * @since	1.3.8
+ * @return	void
+ */
+function mdjm_get_cc_form() {
+	ob_start(); ?>
+
+	<?php do_action( 'mdjm_before_cc_fields' ); ?>
+
+		<?php mdjm_get_template_part( 'payments', 'cc' ); ?>
+
+	<?php
+	do_action( 'mdjm_after_cc_fields' );
+
+	echo ob_get_clean();
+} // mdjm_get_cc_form
+add_action( 'mdjm_cc_form', 'mdjm_get_cc_form' );
+
+/**
+ * Renders the Payment Submit section
+ *
+ * @since	1.3.8
+ * @return	void
+ */
+function mdjm_payment_submit() {
+?>
+	<fieldset id="mdjm_purchase_submit">
+		<?php do_action( 'mdjm_payment_form_before_submit' ); ?>
+
+		<?php //edd_checkout_hidden_fields(); ?>
+
+		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php _e( 'Pay Now', 'mobile-dj-manager' ); ?>" />
+
+		<?php do_action( 'mdjm_payment_form_after_submit' ); ?>
+
+	</fieldset>
+<?php
+} // mdjm_payment_submit
+add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
