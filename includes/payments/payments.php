@@ -36,6 +36,27 @@ function mdjm_is_payment( $ssl = false )	{
 } // mdjm_is_payment
 
 /**
+ * Removes gateway receipt email setting if no gateways are enabled.
+ *
+ * @since	1.3.8
+ * @param	$mdjm_settings	arr		MDJM Settings array.
+ * @return	$mdjm_settings	arr		MDJM Settings array.
+ */
+function mdjm_filter_gateway_receipt_setting( $mdjm_settings )	{
+
+	// Remove gateway receipt template if no gateway is enabled.
+	$enabled_gateways = $gateways = mdjm_get_enabled_payment_gateways();
+
+	if ( empty( $enabled_gateways ) || count( $enabled_gateways ) < 1 )	{
+		unset( $mdjm_settings['payments']['receipts']['payment_cfm_template'] );
+	}
+
+	return $mdjm_settings;
+
+} // mdjm_filter_gateway_receipt_setting
+add_filter( 'mdjm_registered_settings', 'mdjm_filter_gateway_receipt_setting' );
+
+/**
  * Returns a list of all available gateways.
  *
  * @since	1.3.8
@@ -240,6 +261,7 @@ function mdjm_get_payment_button_text()	{
 function mdjm_create_payment_txn( $payment_data )	{
 
 	$gateway_label = mdjm_get_gateway_admin_label( $payment_data['gateway'] );
+	$event_id      = $payment_data['event_id'];
 
 	do_action( 'mdjm_create_payment_before_txn', $payment_data );
 
@@ -250,25 +272,113 @@ function mdjm_create_payment_txn( $payment_data )	{
 			'post_title'  => sprintf( __( '%s payment for %s', 'mdjm-stripe-payments' ), $gateway_label, $event_id ),
 			'post_status' => 'mdjm-income',
 			'post_author' => 1,
-			'post_parent' => $payment_data['event_id']
+			'post_parent' => $event_id
 		),
 		array(
 			'_mdjm_txn_source'      => $gateway_label,
+			'_mdjm_txn_gateway'     => $payment_data['gateway'],
 			'_mdjm_txn_status'      => 'Pending',
 			'_mdjm_payment_from'    => $payment_data['client_id'],
 			'_mdjm_txn_total'       => $payment_data['total'],
 			'_mdjm_payer_firstname' => $payment_data['client_data']['first_name'],
 			'_mdjm_payer_lastname'  => $payment_data['client_data']['last_name'],
 			'_mdjm_payer_email'     => $payment_data['client_data']['email'],
-			'_mdjm_payer_ip'        => $payment_data['client_ip'],
+			'_mdjm_payer_ip'        => $payment_data['ip'],
 			'_mdjm_payment_from'    => $payment_data['client_data']['display_name']
 		)
 	);
 
-	mdjm_set_txn_type( $payment_data['event_id'], mdjm_get_txn_cat_id( 'name', $payment_data['type'] ) );
+	mdjm_set_txn_type( $txn_id, mdjm_get_txn_cat_id( 'name', $payment_data['type'] ) );
 
 	do_action( 'mdjm_create_payment_after_txn', $mdjm_txn->ID, $payment_data );
 
 	return $mdjm_txn->ID;
 
 } // mdjm_create_payment_txn
+
+/**
+ * Records the merchant fee transaction.
+ *
+ * @since	1.0
+ * @param	int		$event_id		The event ID.
+ * @param	int		$txn_id			Transaction ID to which this is associated.
+ * @param	arr		$merchant_data	Merchant data for transaction.
+ */
+function mdjm_create_merchant_fee_txn( $event_id, $txn_data, $merchant_data )	{
+
+	if ( isset( $merchant_data['gateway'] ) )	{
+		$gateway = mdjm_get_gateway_admin_label( $merchant_data['gateway'] );
+	} else	{
+		$gateway = mdjm_get_gateway_admin_label( mdjm_get_default_gateway() );
+	}
+
+	$txn_data = apply_filters(
+		'mdjm_merchant_fee_transaction_data',
+		array(
+			'post_author' => mdjm_get_event_client( $event_id ),
+			'post_type'   => 'mdjm-transaction',
+			'post_title'  => sprintf( __( '%s Merchant Fee for Transaction %s', 'mobile-dj-manager' ),
+				mdjm_get_gateway_label( $gateway ),
+				$txn_id
+			),
+			'post_status' => 'mdjm-expenditure',
+			'post_parent' => $event_id
+		)
+	);
+	
+	$txn_meta = apply_filters(
+		'mdjm_merchant_fee_transaction_meta',
+		array(
+			'_mdjm_txn_status'   => 'Completed',
+			'_mdjm_txn_source'   => $gateway,
+			'_mdjm_txn_currency' => $merchant_data['currency'],
+			'_mdjm_txn_total'    => $merchant_data['fee'],
+			'_mdjm_payment_to'   => $gateway
+		)
+	);
+
+	$mdjm_txn = new MDJM_Txn();
+
+	$mdjm_txn->create(
+		$txn_data,
+		$txn_meta
+	);
+	
+	$merchant_fee_id = $mdjm_txn->ID;
+	
+	if ( ! empty( $merchant_fee_id ) )	{
+		mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-merchant-fees' ) );
+	}
+
+	return $merchant_fee_id;
+
+} // mdjm_create_merchant_fee_txn
+
+/**
+ * Completes an event payment process.
+ *
+ * @since	1.3.8
+ * @param	arr		$txn_data	Transaction data.
+ * @return	void
+ */
+function mdjm_complete_event_payment_process( $txn_data )	{
+
+	// Allow filtering of the transaction data.
+	$txn_data = apply_filters( 'mdjm_complete_event_payment_data', $txn_data );
+
+	$event_id = $txn_data['event_id'];
+
+	do_action( 'mdjm_before_complete_event_payment_process', $txn_data );
+
+	// Trigger the email receipt and allow extensions to send their own.
+	if ( isset( $txn_data['gateway'] ) && has_action( 'mdjm_send_' . $txn_data['gateway'] . '_gateway_receipt' ) ) {
+		do_action( 'mdjm_send_' . $txn_data['gateway'] . '_gateway_receipt', $event_id );
+	} else {
+		do_action( 'mdjm_send_gateway_receipt', $event_id );
+	}
+
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	do_action( 'mdjm_after_complete_event_payment_process', $txn_data );
+
+} // mdjm_complete_event_payment_process
