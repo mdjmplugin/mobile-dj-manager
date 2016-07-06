@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return      void
  */
 function mdjm_process_payment_form() {
-wp_die( var_export( $_POST ), true );
+
 	do_action( 'mdjm_pre_process_payment' );
 
 	// Validate the form $_POST data
