@@ -27,13 +27,13 @@ function mdjm_payment_form()	{
 		echo '<div id="mdjm_payment_wrap">';
 			do_action( 'mdjm_print_notices' );
 			echo '<p class="head-nav"><a href="' . mdjm_get_event_uri( $mdjm_event->ID ) . '">' . __( 'Back to Event', 'mobile-dj-manager' ) . '</a></p>';
-			mdjm_payment_items();
 ?>
 			<div id="mdjm_payments_form_wrap" class="mdjm_clearfix">
 				<?php do_action( 'mdjm_before_purchase_form' ); ?>
 				<form id="mdjm_payment_form" class="mdjm_form" action="" method="POST" autocomplete="off">
                     <input type="hidden" name="event_id" id="mdjm-event-id" value="<?php echo $mdjm_event->ID; ?>" />
 					<?php
+					mdjm_payment_items();
 					/**
 					 * Hooks in at the top of the payment form
 					 *
@@ -72,11 +72,9 @@ function mdjm_payment_form()	{
  */
 function mdjm_payment_items()	{
 	do_action( 'mdjm_before_payment_items' );
-	echo '<form id="mdjm_payment_items_form" method="post" autocomplete="off" class="mdjm_form">';
-		echo '<div id="mdjm_payment_wrap">';
+		echo '<div id="mdjm_payment_items_wrap">';
 			mdjm_get_template_part( 'payments', 'items' );
 		echo '</div>';
-	echo '</form>';
 	do_action( 'mdjm_after_payment_items' );
 } // mdjm_payment_items
 
