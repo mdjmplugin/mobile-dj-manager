@@ -359,6 +359,16 @@ function mdjm_messages( $key )	{
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
 				'message'	=> __( 'Security verification failed.', 'mobile-dj-manager' )
+			),
+			'payment_success' => array(
+				'class'   => 'success',
+				'title'   => __( 'Thank you', 'mobile-dj-manager' ),
+				'message' => __( 'Your payment has completed successfully', 'mobile-dj-manager' )
+			),
+			'payment_failed' => array(
+				'class'   => 'error',
+				'title'   => __( 'There was an error processing your payment', 'mobile-dj-manager' ),
+				'message' => __( 'To process your payment again, please follow the steps below', 'mobile-dj-manager' )
 			)
 		)
 	);
