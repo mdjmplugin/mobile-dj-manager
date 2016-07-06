@@ -646,7 +646,7 @@ a	{
 	padding: 0;
 }
 
-#mdjm_payments_form_wrap span.mdjm-description	{
+#mdjm_payments_form_wrap span.mdjm-description.mdjm-cc-description	{
 	text-indent: 205px;
 }
 
