@@ -409,7 +409,7 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 		mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-merchant-fees' ) );
 
 		// Update the incoming transaction meta to include the merchant txn ID.
-		mdjm_update_txn_meta( $gateway_data['txn_id'], array( '_mdjm_txn_id' => $merchant_fee_id ) );
+		mdjm_update_txn_meta( $gateway_data['txn_id'], array( '_mdjm_merchant_fee_txn_id' => $merchant_fee_id ) );
 	}
 
 	do_action( 'mdjm_after_create_merchant_fee', $merchant_fee_id, $gateway_data );
