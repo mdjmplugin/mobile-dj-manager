@@ -151,6 +151,16 @@ function mdjm_month_num_to_name( $n ) {
 } // mdjm_month_num_to_name
 
 /**
+ * Get PHP Arg Separator Output
+ *
+ * @since	1.3.8
+ * @return	str		Arg separator output
+ */
+function mdjm_get_php_arg_separator_output() {
+	return ini_get( 'arg_separator.output' );
+} // mdjm_get_php_arg_separator_output
+
+/**
  * Get the current page URL
  *
  * @since	1.3
