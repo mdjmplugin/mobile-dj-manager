@@ -448,6 +448,11 @@ function mdjm_complete_event_payment( $txn_data )	{
 	do_action( 'mdjm_after_send_gateway_receipt', $txn_data );
 
 	do_action( 'mdjm_after_complete_event_payment', $txn_data );
+	
+	// Fire an action for the gateway
+	if ( isset ( $txn_data['gateway'] ) )	{
+		do_action( 'mdjm_after_complete_event_payment_' . $txn_data['gateway'], $txn_data );
+	}
 
 } // mdjm_complete_event_payment
 
@@ -637,38 +642,3 @@ function mdjm_update_event_after_payment( $txn_data )	{
 
 } // mdjm_update_event_after_payment
 add_action( 'mdjm_after_update_payment_from_gateway', 'mdjm_update_event_after_payment', 11 );
-
-/**
- * Redirect after payment process completes
- *
- * @since	1.3.8
- * @param	$arr	$txn_data	Transaction data from gateway
- * @return	void
- */
-function mdjm_redirect_after_payment( $txn_data )	{
-
-	$redirect_to = 'payments_page';
-
-	if ( isset( $txn_data['redirect'] ) )	{
-		$redirect_to = mdjm_get_option( $txn_data['redirect'] );
-	}
-
-	if ( isset( $txn_data['redirect_message'] ) )	{
-		$redirect_message = $txn_data['redirect_message'];
-	} else	{
-		$redirect_message = 'payment_success';
-	}
-
-	wp_redirect( add_query_arg(
-		array(
-			'event_id'     => $txn_data['event_id'],
-			'mdjm_message' => $redirect_message
-		),
-		mdjm_get_formatted_url( $redirect_to )
-		)
-	);
-
-	die();
-
-} // mdjm_redirect_after_payment
-add_action( 'mdjm_after_complete_event_payment', 'mdjm_redirect_after_payment', 999 );
