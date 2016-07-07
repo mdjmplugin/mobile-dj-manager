@@ -260,7 +260,7 @@ function mdjm_get_payment_button_text()	{
  */
 function mdjm_create_payment_txn( $payment_data )	{
 
-	$gateway_label = mdjm_get_gateway_admin_label( $payment_data['gateway'] );
+	$gateway_label = mdjm_get_gateway_payment_label( $payment_data['gateway'] );
 	$event_id      = $payment_data['event_id'];
 
 	do_action( 'mdjm_create_payment_before_txn', $payment_data );
@@ -364,9 +364,9 @@ add_action( 'mdjm_complete_event_payment_txn', 'mdjm_update_payment_from_gateway
 function mdjm_create_merchant_fee_txn( $gateway_data )	{
 
 	if ( isset( $gateway_data['gateway'] ) )	{
-		$gateway = mdjm_get_gateway_admin_label( $gateway_data['gateway'] );
+		$gateway = mdjm_get_gateway_payment_label( $gateway_data['gateway'] );
 	} else	{
-		$gateway = mdjm_get_gateway_admin_label( mdjm_get_default_gateway() );
+		$gateway = mdjm_get_gateway_payment_label( mdjm_get_default_gateway() );
 	}
 
 	if ( ! isset( $gateway_data['fee'] ) || $gateway_data['fee'] < '0.01' )	{
