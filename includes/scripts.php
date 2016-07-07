@@ -44,6 +44,8 @@ function mdjm_load_scripts()	{
 				'unavailable_text'      => mdjm_get_option( 'availability_check_fail_text', false ),
 				'is_payment'            => mdjm_is_payment() ? '1' : '0',
 				'default_gateway'       => mdjm_get_default_gateway(),
+				'payment_loading'       => __( 'Please Wait...', 'mobile-dj-manager' ),
+				'complete_payment'      => mdjm_get_payment_button_text()
 			)
 		)
 	);
