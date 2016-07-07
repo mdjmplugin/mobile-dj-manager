@@ -72,6 +72,8 @@ function mdjm_process_payment_form() {
 	die();
 } // mdjm_process_payment_form
 add_action( 'mdjm_event_payment', 'mdjm_process_payment_form' );
+add_action( 'wp_ajax_mdjm_event_payment', 'mdjm_process_payment_form' );
+add_action( 'wp_ajax_nopriv_mdjm_event_payment', 'mdjm_process_payment_form' );
 
 /**
  * Payment Form Validate Fields
