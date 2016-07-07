@@ -369,6 +369,10 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 		$gateway = mdjm_get_gateway_admin_label( mdjm_get_default_gateway() );
 	}
 
+	if ( ! isset( $gateway_data['fee'] ) || $gateway_data['fee'] < '0.01' )	{
+		return;
+	}
+
 	$txn_data = apply_filters(
 		'mdjm_merchant_fee_transaction_data',
 		array(
@@ -448,11 +452,6 @@ function mdjm_complete_event_payment( $txn_data )	{
 	do_action( 'mdjm_after_send_gateway_receipt', $txn_data );
 
 	do_action( 'mdjm_after_complete_event_payment', $txn_data );
-	
-	// Fire an action for the gateway
-	if ( isset ( $txn_data['gateway'] ) )	{
-		do_action( 'mdjm_after_complete_event_payment_' . $txn_data['gateway'], $txn_data );
-	}
 
 } // mdjm_complete_event_payment
 
