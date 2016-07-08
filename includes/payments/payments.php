@@ -36,6 +36,25 @@ function mdjm_is_payment( $ssl = false )	{
 } // mdjm_is_payment
 
 /**
+ * Whether or not there is a gateway.
+ *
+ * @since	1.3.8
+ * @param
+ * @return	bool	True if there is a gateway, otherwise false.
+ */
+function mdjm_has_gateway()	{
+
+	$enabled_gateways = mdjm_get_enabled_payment_gateways();
+
+	if ( ! empty( $enabled_gateways ) && count( $enabled_gateways ) >= 1 )	{
+		return true;
+	}
+
+	return false;
+
+} // mdjm_has_gateway
+
+/**
  * Removes gateway receipt email setting if no gateways are enabled.
  *
  * @since	1.3.8
@@ -45,7 +64,7 @@ function mdjm_is_payment( $ssl = false )	{
 function mdjm_filter_gateway_receipt_setting( $mdjm_settings )	{
 
 	// Remove gateway receipt template if no gateway is enabled.
-	$enabled_gateways = $gateways = mdjm_get_enabled_payment_gateways();
+	$enabled_gateways = mdjm_get_enabled_payment_gateways();
 
 	if ( empty( $enabled_gateways ) || count( $enabled_gateways ) < 1 )	{
 		unset( $mdjm_settings['payments']['receipts']['payment_cfm_template'] );
