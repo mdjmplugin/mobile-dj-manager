@@ -45,6 +45,7 @@ function mdjm_load_scripts()	{
 				'is_payment'            => mdjm_is_payment() ? '1' : '0',
 				'default_gateway'       => mdjm_get_default_gateway(),
 				'payment_loading'       => __( 'Please Wait...', 'mobile-dj-manager' ),
+				'no_payment_amount'     => __( 'Select Payment Amount', 'mobile-dj-manager' ),
 				'complete_payment'      => mdjm_get_payment_button_text()
 			)
 		)

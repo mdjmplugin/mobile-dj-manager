@@ -31,6 +31,20 @@ jQuery(document).ready(function ($) {
 		$('#mdjm-payment-custom').hide("fast");
 	});
 
+	$("#mdjm_payment_form").submit(function(event)	{
+		event.preventDefault();
+
+		var form = $("#mdjm_payment_form");
+
+		$('#mdjm-payment-submit').prop("disabled", true);
+		$('#mdjm-payment-submit').val(mdjm_vars.payment_loading);
+
+		var response = mdjm_validate_payment_form(event,form);
+
+		
+
+	});
+
 	/*=Availability Checker
 	---------------------------------------------------- */
 	if( mdjm_vars.availability_ajax )	{
@@ -96,6 +110,19 @@ jQuery(document).ready(function ($) {
 		validClass: "mdjm_form_valid",
 	});
 });
+
+function mdjm_validate_payment_form(e, form) {
+
+	var payment_amount = '';
+	var payment = jQuery("input[type='radio'][name='mdjm_payment_amount']:checked");
+	if (payment.length > 0) {
+		payment_amount = payment.val();
+	} else	{
+		form.find('.mdjm-alert').show("fast");
+		form.find('.mdjm-alert').text(mdjm_vars.no_payment_amount);
+	}
+
+}
 
 function mdjm_load_gateway( payment_mode ) {
 
