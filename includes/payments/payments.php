@@ -660,3 +660,34 @@ function mdjm_update_event_after_payment( $txn_data )	{
 
 } // mdjm_update_event_after_payment
 add_action( 'mdjm_after_update_payment_from_gateway', 'mdjm_update_event_after_payment', 11 );
+
+/**
+ * Write to the gateway log file.
+ *
+ * @since	1.3.8
+ * @param	str		$msg		The message to be logged.
+ * @param	bool	$stampit	True to log with date/time.
+ * @return	void
+ */
+function mdjm_record_gateway_log( $msg, $stampit = false )	{
+		
+	$debug_log = $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg;
+	
+	error_log( $debug_log . "\r\n", 3, MDJM_PLUGIN_DIR, '/includes/payments/gateway-logs.log' );
+
+} // mdjm_record_gateway_log
+
+/**
+ * Register the log file for core MDJM debugging class
+ *
+ * @since	1.0
+ * @param	arr		$files		Log files.
+ * @return	arr		$files		Filtered log files.
+ */
+function mdjm_payments_register_logs( $files )	{
+	
+	$files['MDJM Payment Gateways'] = array( MDJM_PLUGIN_DIR, '/includes/payments/gateway-logs.log' );
+	
+	return $files;
+} // mdjm_payments_register_logs
+add_filter( 'mdjm_log_files', 'mdjm_payments_register_logs' );

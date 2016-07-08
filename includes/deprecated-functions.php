@@ -182,3 +182,17 @@ function get_deposit( $cost='' )	{
 	
 } // get_deposit
 
+/**
+ * Write to the gateway log file.
+ *
+ * @since	1.3.8
+ * @param	str		$msg		The message to be logged.
+ * @param	bool	$stampit	True to log with date/time.
+ * @remove	1.6
+ */
+function mdjm_payments_write( $msg, $stampit = false )	{
+	_deprecated_function( __FUNCTION__, '1.3.8', 'mdjm_record_gateway_log()' );
+	
+	return mdjm_record_gateway_log( $msg, $stampit = false );
+	
+} // mdjm_payments_write
