@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.7.8
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,29 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.8 =
+
+**Released Friday 7th July, 2016
+
+**New**
+* MDJM now supports multiple payment gateways
+
+**Bug Fixes**
+* Issue [#108(https://github.com/mdjm/mobile-dj-manager/issues/108/ "Issue #108") When creating an event set the default venue ID as manual to capture fields from Contact Forms
+
+**Tweaks**
+* Updated payment settings page
+* Display payment button in Client Zone if a gateway is defined
+* Updated Client Zone alert CSS classes
+* Added `mdjm_update_txn_status()` function for easier status updates of transactions
+* Added `mdjm_has_gateway()` function to check if a gateway is enabled
+* Record the transaction ID of the merchant fee in the main incoming transaction
+* Added generic payment success, cancel, fail messages in the event that a gateway extension does not provide
+* Added `mdjm_send_gateway_receipt()` function which is called as part of the `complete event payment process` hooks
+* Added function `mdjm_get_user_ip()` to determine users IP address
+* Enqueue dashicons on the payments page
+* Display a padlock and message if the payment page is SSL
 
 = 1.3.7.8 =
 
