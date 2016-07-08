@@ -79,15 +79,18 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.3.8 =
 
-**Released Friday 7th July, 2016
+**Released Friday 7th July, 2016**
 
 **New**
+
 * MDJM now supports multiple payment gateways
 
 **Bug Fixes**
-* Issue [#108(https://github.com/mdjm/mobile-dj-manager/issues/108/ "Issue #108") When creating an event set the default venue ID as manual to capture fields from Contact Forms
+
+* Issue [#108](https://github.com/mdjm/mobile-dj-manager/issues/108/ "Issue #108") When creating an event set the default venue ID as manual to capture fields from Contact Forms
 
 **Tweaks**
+
 * Updated payment settings page
 * Display payment button in Client Zone if a gateway is defined
 * Updated Client Zone alert CSS classes
@@ -130,7 +133,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 **Released, Sunday 26th June 2016**
 **Bug Fixes**
 
-* Issue [#100(https://github.com/mdjm/mobile-dj-manager/issues/100/ "Issue #100") PLaylist count was not displayed correctly when using view filters
+* Issue [#100](https://github.com/mdjm/mobile-dj-manager/issues/100/ "Issue #100") PLaylist count was not displayed correctly when using view filters
 * Unattended events should not have the deposit/balance checkboxes checked
 * Hold the selection when the Event Type filter is used
 * Remove possibility of PHP notice generation when no client events are within filter
@@ -140,14 +143,14 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Released, Saturday 25th June 2016**
 **Bug Fixes**
-* Issue [#101(https://github.com/mdjm/mobile-dj-manager/issues/101/ "Issue #101") Corrected {guest_playlist_url} output and redirect visits to incorrect URL
+* Issue [#101](https://github.com/mdjm/mobile-dj-manager/issues/101/ "Issue #101") Corrected {guest_playlist_url} output and redirect visits to incorrect URL
 
 = 1.3.7.4 =
 
 **Released, Friday 24th June 2016**
 **Bug Fixes**
-* Issue [#97(https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
-* Issue [#96(https://github.com/mdjm/mobile-dj-manager/issues/96/ "Issue #96") Corrected display of un-saved event address fields and ensure that the correct value is initially selected for the venue list
+* Issue [#97](https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
+* Issue [#96](https://github.com/mdjm/mobile-dj-manager/issues/96/ "Issue #96") Corrected display of un-saved event address fields and ensure that the correct value is initially selected for the venue list
 
 **Tweaks**
 * When creating a new event default to ` - Select Venue - `
@@ -157,8 +160,8 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Released, Friday 24th June 2016**
 **Bug Fixes**
-* Issue [#97(https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
-* Issue [#96(https://github.com/mdjm/mobile-dj-manager/issues/96/ "Issue #96") Corrected display of un-saved event address fields and ensure that the correct value is initially selected for the venue list
+* Issue [#97](https://github.com/mdjm/mobile-dj-manager/issues/97/ "Issue #97") Process deposit/balance payments after meta updates in case their values have changed
+* Issue [#96](https://github.com/mdjm/mobile-dj-manager/issues/96/ "Issue #96") Corrected display of un-saved event address fields and ensure that the correct value is initially selected for the venue list
 
 = 1.3.7.2 =
 
@@ -167,12 +170,12 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Select how you want events to be sorted on the admin screen. `Default Order By` and `Default Order` setting options added within MDJM->Settings->Events
 
 **Bug Fixes**
-* Issue [#94(https://github.com/mdjm/mobile-dj-manager/issues/94/ "Issue #94") Venue content tags not returning correct values
-* Issue [#84(https://github.com/mdjm/mobile-dj-manager/issues/84/ "Issue #84") `Enable Playlist` not remaining checked
-* Issue [#93(https://github.com/mdjm/mobile-dj-manager/issues/93/ "Issue #93") Event type filter should display event count for each event type
-* Issue [#92(https://github.com/mdjm/mobile-dj-manager/issues/92/ "Issue #92") Maintain current event status view when using event filters
-* Issue [#90(https://github.com/mdjm/mobile-dj-manager/issues/90/ "Issue #90") Save the `DJ` setup date value when after it is auto populated
-* Issues [#88(https://github.com/mdjm/mobile-dj-manager/issues/88/ "Issue #88") and [#83(https://github.com/mdjm/mobile-dj-manager/issues/83/ "Issue #83") Deposit Paid should not be checked when creating a new event. Ensure that the Balance Paid checkbox holds is checked status
+* Issue [#94](https://github.com/mdjm/mobile-dj-manager/issues/94/ "Issue #94") Venue content tags not returning correct values
+* Issue [#84](https://github.com/mdjm/mobile-dj-manager/issues/84/ "Issue #84") `Enable Playlist` not remaining checked
+* Issue [#93](https://github.com/mdjm/mobile-dj-manager/issues/93/ "Issue #93") Event type filter should display event count for each event type
+* Issue [#92](https://github.com/mdjm/mobile-dj-manager/issues/92/ "Issue #92") Maintain current event status view when using event filters
+* Issue [#90](https://github.com/mdjm/mobile-dj-manager/issues/90/ "Issue #90") Save the `DJ` setup date value when after it is auto populated
+* Issues [#88](https://github.com/mdjm/mobile-dj-manager/issues/88/ "Issue #88") and [#83(https://github.com/mdjm/mobile-dj-manager/issues/83/ "Issue #83") Deposit Paid should not be checked when creating a new event. Ensure that the Balance Paid checkbox holds is checked status
 
 **Tweaks**
 * Remove deprecated use of `MDJM_MULTI` from the `mdjm_event_post_filter_list()` function
