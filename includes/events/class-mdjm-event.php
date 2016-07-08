@@ -240,7 +240,8 @@ class MDJM_Event {
 			'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
 			'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
 			'mdjm_event_type'                => mdjm_get_option( 'event_type_default' ),
-			'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' )
+			'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' ),
+			'_mdjm_event_venue_id'           => 'Manual'
 		);
 
 		$data = wp_parse_args( $data, $defaults );
