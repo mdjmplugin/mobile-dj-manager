@@ -200,6 +200,11 @@ add_action( 'mdjm_cc_form', 'mdjm_get_cc_form' );
  * @return	void
  */
 function mdjm_payment_submit() {
+
+	if ( ! mdjm_has_gateway() )	{
+		return;
+	}
+
 	ob_start(); ?>
 
 	<fieldset id="mdjm_payment_submit">
@@ -225,6 +230,29 @@ add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
 function mdjm_payment_hidden_fields() {
 ?>
 	<?php mdjm_action_field( 'event_payment' ); ?>
-	<input type="hidden" name="mdjm_gateway" value="<?php echo mdjm_get_chosen_gateway(); ?>" />
+	<input type="hidden" name="mdjm_gateway" id="mdjm_gateway" value="<?php echo mdjm_get_chosen_gateway(); ?>" />
 <?php
 } // mdjm_payment_hidden_fields
+
+/**
+ * Renders an alert if no gateways are defined.
+ *
+ * @since	1.3.8
+ * @return	void
+ */
+function mdjm_no_gateway_notice()	{
+
+	if ( mdjm_has_gateway() )	{
+		return;
+	}
+
+	ob_start();
+
+	$notice = __( 'A gateway must be installed and enabled within MDJM Event Management before payments can be processed.', 'mobile-dj-manager' );
+	?>
+    <div class="mdjm-alert mdjm-alert-error"><?php echo $notice; ?></div>
+
+	<?php echo ob_get_clean();
+
+} // mdjm_alert_no_gateway
+add_action( 'mdjm_before_payment_items', 'mdjm_no_gateway_notice' );
