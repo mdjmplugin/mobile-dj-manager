@@ -225,10 +225,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 					'id'    => 'mdjm-quote-button',
 					'fa'    => 'fa fa-file',
 					'url'   => add_query_arg(
-						array(
-							'event_id' => $event_id
-						),
-						mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true )
+						'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true )
 					)
 				)
 			);
@@ -258,10 +255,7 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 				'id'    => 'mdjm-sign-contract-button',
 				'fa'    => 'fa fa-pencil',
 				'url'   => add_query_arg( 
-					array(
-						'event_id' => $event_id
-					),
-					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
+					'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
 				)
 			)
 		);
@@ -274,11 +268,8 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 				'label' => __( 'View Contract', 'mobile-dj-manager' ),
 				'id'    => 'mdjm-view-contract-button',
 				'fa'    => 'fa fa-file-text',
-				'url'   => add_query_arg( 
-					array(
-						'event_id' => $event_id
-					),
-					mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
+				'url'   => add_query_arg(
+					'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ), true )
 				)
 			)
 		);
@@ -293,16 +284,27 @@ function mdjm_get_event_action_buttons( $event_id, $min=true )	{
 					'id'    => 'mdjm-manage-playlist-button',
 					'fa'    => 'fa fa-music',
 					'url'   => add_query_arg( 
-						array(
-							'event_id' => $event_id
-						),
-						mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true )
+						'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true )
 					)
 				)
 			);
 		}
 	}
-	
+
+	// Payment button
+	if( mdjm_has_gateway() && mdjm_get_event_balance( $event_id ) > 0 )	{
+		$buttons[30] = apply_filters( 'mdjm_make_payment_button',
+			array(
+				'label' => __( 'Make a Payment', 'mobile-dj-manager' ),
+				'id'    => 'mdjm-make-a-payment-button',
+				'fa'    => 'fa fa-credit-card-alt',
+				'url'   => add_query_arg(
+					'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'payments_page' ), true )
+				)
+			)
+		);
+	}
+
 	if( empty( $min ) )	{		
 		$buttons[50] = apply_filters( 'mdjm_update_profile_action_button',
 			array(

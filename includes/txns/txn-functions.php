@@ -501,6 +501,18 @@ function mdjm_add_txn( $data )	{
 } // mdjm_add_txn
 
 /**
+ * Update the transaction status.
+ *
+ * @since	1.3.8
+ * @param	int		$txn_id			The transaction ID.
+ * @param	str		$new_status		The new transaction status.
+ * @return	void
+ */
+function mdjm_update_txn_status( $txn_id, $new_status )	{
+	mdjm_update_txn_meta( $txn_id, array( '_mdjm_txn_status' => $new_status ) );
+} // mdjm_update_txn_status
+
+/**
  * Add or Update transaction meta data.
  *
  * We don't currently delete empty meta keys or values, instead we update with an empty value

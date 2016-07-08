@@ -15,8 +15,60 @@ p.head-nav	{
 	text-align: right;
 	colour: #7B7D80;
 }
-
+#pleasewait,
 .mdjm-hidden { display: none; }
+
+.mdjm-icon-spinner:before {
+	content: "\71";
+}
+
+.mdjm-icon-spin {
+	display: inline-block;
+	-moz-animation: mdjm-icon-spin 2s infinite linear;
+	-o-animation: mdjm-icon-spin 2s infinite linear;
+	-webkit-animation: mdjm-icon-spin 2s infinite linear;
+	animation: mdjm-icon-spin 2s infinite linear;
+}
+@-moz-keyframes mdjm-icon-spin {
+	0% {
+		-moz-transform: rotate(0deg)
+	}
+	100% {
+		-moz-transform: rotate(359deg)
+	}
+}
+@-webkit-keyframes mdjm-icon-spin {
+	0% {
+		-webkit-transform: rotate(0deg)
+	}
+	100% {
+		-webkit-transform: rotate(359deg)
+	}
+}
+@-o-keyframes mdjm-icon-spin {
+	0% {
+		-o-transform: rotate(0deg)
+	}
+	100% {
+		-o-transform: rotate(359deg)
+	}
+}
+@-ms-keyframes mdjm-icon-spin {
+	0% {
+		-ms-transform: rotate(0deg)
+	}
+	100% {
+		-ms-transform: rotate(359deg)
+	}
+}
+@keyframes mdjm-icon-spin {
+	0% {
+		transform: rotate(0deg)
+	}
+	100% {
+		transform: rotate(359deg)
+	}
+}
 
 /** Old Error Styles */
 /* =Errors
@@ -30,49 +82,6 @@ input.mdjm_form_error {
 }
 .mdjm_form_valid {
 	color: inherit;
-}
-/** End Old Error Styles */
-
-/* =Alerts
--------------------------------------------------------------- */
-/* Alert Styles */
-.mdjm-alert {
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	margin-bottom: 20px;
-	padding: 10px;
-	border: 1px solid transparent;
-	vertical-align: middle;
-}
-.mdjm-alert p {
-	padding: 0;
-}
-.mdjm-alert p:not(:last-child) {
-	margin-bottom: 5px;
-}
-.mdjm-alert p:last-child {
-	margin-bottom: 0;
-}
-.mdjm-alert-error {
-	color: #a94442;
-	background-color: #f2dede;
-	border-color: #ebccd1;
-}
-.mdjm-alert-success {
-	background-color: #dff0d8;
-	border-color: #d6e9c6;
-	color:#3c763d;
-}
-.mdjm-alert-info {
-	color: #31708f;
-	background-color: #d9edf7;
-	border-color: #bce8f1;
-}
-.mdjm-alert-warn {
-	color: #8a6d3b;
-	background-color: #fcf8e3;
-	border-color: #faebcc;
 }
 
 /* =Notifications
@@ -114,9 +123,48 @@ input.mdjm_form_error {
 	background-color: #FFCCBA;
 	background-image: url('../assets/images/info-icon.png');
 }
+/** End Old Error & Alert Styles */
 
-#pleasewait	{
-	display: none;
+/* =Alerts
+-------------------------------------------------------------- */
+/* Alert Styles */
+.mdjm-alert {
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	margin-bottom: 20px;
+	padding: 10px;
+	border: 1px solid transparent;
+	vertical-align: middle;
+}
+.mdjm-alert p {
+	padding: 0;
+}
+.mdjm-alert p:not(:last-child) {
+	margin-bottom: 5px;
+}
+.mdjm-alert p:last-child {
+	margin-bottom: 0;
+}
+.mdjm-alert-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+.mdjm-alert-success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color:#3c763d;
+}
+.mdjm-alert-info {
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+.mdjm-alert-warn {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #faebcc;
 }
 
 /* =Action Buttons
@@ -355,7 +403,7 @@ a	{
 	background-color: #408c99;
 	border: 1px solid #29668f;
 }
-
+/* End Old Button Styles */
 /* =Events Page
 -------------------------------------------------------------- */
 .mdjm-single-event-container {
@@ -604,6 +652,89 @@ a	{
 #mdjm-login-form label {
 	display: inline-block;
 	width: 200px;
+}
+
+/* =Payment Form
+-------------------------------------------------------------- */
+.mdjm_clearfix:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#mdjm_payment_wrap span.mdjm-description {
+	color: #666;
+	font-size: 80%;
+	display: block;
+	margin: 0 0 5px;
+}
+
+#mdjm_payment_wrap fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#mdjm_payment_wrap input[type='text'],
+#mdjm_payment_wrap label {
+	display: inline-block;
+	width: 200px;
+}
+
+#mdjm_payments_form_wrap fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
+}
+#mdjm_payments_form_wrap #mdjm_payment_submit {
+	padding: 0;
+	border: none;
+}
+#mdjm_payments_form fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
+}
+
+#mdjm_payments_form_wrap span.mdjm-description.mdjm-cc-description	{
+	text-indent: 205px;
+}
+
+#mdjm_payments_form_wrap .mdjm-payment-ajax {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+#mdjm_payment_submit .mdjm-payment-ajax {
+	display: none;
+	position: relative;
+	left: -35px;
+}
+
+#mdjm_secure_site_wrapper {
+	padding: 4px 4px 4px 0;
+	font-weight: bold;
+	text-align: right;
+}
+#mdjm_secure_site_wrapper span.padlock:before {
+	content: '\f160';
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 20px/1 'dashicons';
+	vertical-align: middle;
+}
+
+.mdjm-payment-ajax {
+	margin: 0 8px 0 4px;
+	position: relative;
+	top: 2px;
+	background: none;
+	border: none;
+	padding: 0;
 }
 
 /* =Availability Widget

@@ -126,7 +126,20 @@ function mdjm_run_install()	{
 				'comment_status' => 'closed'
 			)
 		);
-		
+
+		// Payments Page
+		$payments = wp_insert_post(
+			array(
+				'post_title'     => __( 'Payments', 'mobile-dj-manager' ),
+				'post_content'   => '[mdjm-payments]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'post_parent'    => $client_zone,
+				'comment_status' => 'closed'
+			)
+		);
+
 		// Playlist Management Page
 		$playlist = wp_insert_post(
 			array(
@@ -154,11 +167,12 @@ function mdjm_run_install()	{
 		);
 		
 		// Store the page IDs in MDJM options
-		$options['app_home_page']         = $client_zone;
-		$options['contracts_page']        = $contract;
-		$options['playlist_page']         = $playlist;
-		$options['profile_page']          = $profile;
-		$options['quotes_page']           = $quotes;
+		$options['app_home_page']  = $client_zone;
+		$options['contracts_page'] = $contract;
+		$options['payments_page']  = $payments;
+		$options['playlist_page']  = $playlist;
+		$options['profile_page']   = $profile;
+		$options['quotes_page']    = $quotes;
 		
 	}
 	
@@ -171,8 +185,8 @@ function mdjm_run_install()	{
 				'post_title'     => __( 'Client Enquiry', 'mobile-dj-manager' ),
 				'post_status'    => 'publish',
 				'post_type'      => 'email_template',
-				'post_author'   	=> 1,
-				'ping_status'   	=> 'closed',
+				'post_author'    => 1,
+				'ping_status'    => 'closed',
 				'comment_status' => 'closed',
 				'post_content'   => '<h1>' . __( 'Your DJ Enquiry from {company_name}', 'mobile-dj-manager' ) . '</h1>' .
 									__( 'Dear {client_firstname},', 'mobile-dj-manager' ) .

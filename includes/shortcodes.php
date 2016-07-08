@@ -220,6 +220,55 @@ function mdjm_shortcode_contract( $atts )	{
 add_shortcode( 'mdjm-contract', 'mdjm_shortcode_contract' );
 
 /**
+ * Payment Form shortcode.
+ *
+ * Displays the payment form to collect event payments.
+ *
+ * @since	1.3.8
+ * @param	arr		$atts
+ * @return	string
+ */
+function mdjm_shortcode_payment( $atts )	{
+
+	if ( is_user_logged_in() )	{
+
+		global $mdjm_event;
+
+		if ( isset( $_GET['event_id'] ) )	{
+			$event_id = $_GET['event_id'];
+		} else	{
+			$next_event = mdjm_get_clients_next_event( get_current_user_id() );
+			
+			if ( $next_event )	{
+				$event_id = $next_event[0]->ID;
+			}
+		}
+		
+		if ( ! isset( $event_id ) )	{
+			return __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' );
+		}
+		
+		$mdjm_event = new MDJM_Event( $event_id );
+					
+		if ( $mdjm_event )	{
+
+			return mdjm_payment_form();
+
+		} else	{
+			return __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' );
+		}
+		
+		// Reset global var
+		$mdjm_event = '';
+		
+	} else	{
+		echo mdjm_login_form();
+	}
+
+} // mdjm_shortcode_payment
+add_shortcode( 'mdjm-payments', 'mdjm_shortcode_payment' );
+
+/**
  * MDJM Profile Shortcode.
  *
  * Displays the MDJM user Profile page.

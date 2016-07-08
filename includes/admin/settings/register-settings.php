@@ -672,26 +672,6 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to %s primary %s', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template' )
-					),
-					'payment_conf_templates' => array(
-						'id'          => 'payment_conf_templates',
-						'name'        => '<h3>' . __( 'Payment Confirmation Template Settings', 'mobile-dj-manager' ) . '</h3>',
-						'desc'        => '',
-						'type'        => 'header'
-					),
-					'payment_cfm_template' => array(
-						'id'          => 'payment_cfm_template',
-						'name'        => __( 'Payment Received Template', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select an email template to be sent to clients when confirming receipt of a payment', 'mobile-dj-manager' ),
-						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template' )
-					),
-					'manual_payment_cfm_template' => array(
-						'id'          => 'manual_payment_cfm_template',
-						'name'        => __( 'Manual Payment Template', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select an email template to be sent to clients when you manually mark an %s payment as received', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template', true )
 					)
 				)
 			)
@@ -928,22 +908,31 @@ function mdjm_get_registered_settings()	{
 		'payments' => apply_filters( 'mdjm_settings_payments',
 			array(
 				'main' => array(
-					'payment_settings' => array(
-						'id'          => 'payment_settings',
-						'name'        => '<h3>' . __( 'Payment Settings', 'mobile-dj-manager' ) . '</h3>',
+					'gateway_settings' => array(
+						'id'          => 'gateway_settings',
+						'name'        => '<h3>' . __( 'Gateway Settings', 'mobile-dj-manager' ) . '</h3>',
 						'desc'        => '',
 						'type'        => 'header'
 					),
+					'gateways' => array(
+						'id'      => 'gateways',
+						'name'    => __( 'Payment Gateways', 'mobile-dj-manager' ),
+						'desc'    => __( 'Choose the payment gateways you want to enable.', 'mobile-dj-manager' ),
+						'type'    => 'gateways',
+						'options' => mdjm_get_payment_gateways()
+					),
 					'payment_gateway'  => array(
 						'id'          => 'payment_gateway',
-						'name'        => __( 'Payment Gateway', 'mobile-dj-manager' ),
+						'name'        => __( 'Default Gateway', 'mobile-dj-manager' ),
+						'desc'        => __( 'This gateway will be loaded automatically with the payments page.', 'mobile-dj-manager' ),
+						'type'        => 'gateway_select',
+						'options'     => mdjm_get_payment_gateways()
+					),
+					'currency_settings' => array(
+						'id'          => 'currency_settings',
+						'name'        => '<h3>' . __( 'Currency Settings', 'mobile-dj-manager' ) . '</h3>',
 						'desc'        => '',
-						'type'        => 'select',
-						'options'     => apply_filters( 'mdjm_payment_gateways',
-							array( 
-								'0'   => __( 'Disable', 'mobile-dj-manager' )
-							)
-						)
+						'type'        => 'header'
 					),
 					'currency'         => array(
 						'id'          => 'currency',
@@ -952,7 +941,6 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => mdjm_get_currencies()
 					),
-		
 					'currency_format'  => array(
 						'id'          => 'currency_format',
 						'name'        => __( 'Currency Position', 'mobile-dj-manager' ),
@@ -981,6 +969,12 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'small',
 						'std'         => ',',
 					),
+					'deposit_settings' => array(
+						'id'          => 'deposit_settings',
+						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_deposit_label() ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
 					'deposit_type'     => array(
 						'id'          => 'deposit_type',
 						'name'        => mdjm_get_deposit_label() . "'s " . __( 'are', 'mobile-dj-manager' ),
@@ -1001,26 +995,11 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-					'default_type'     => array(
-						'id'          => 'default_type',
-						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an %s %s as paid how should we log it?', 'mobile-dj-manager' ),
-											mdjm_get_label_singular( true ),
-											mdjm_get_balance_label()
-										),
-						'type'        => 'select',
-						'options'     => mdjm_list_txn_sources()
-					),
-					'form_layout'      => array(
-						'id'          => 'form_layout',
-						'name'        => __( 'Form Layout', 'mobile-dj-manager' ),
-						'desc'        => __( 'How do you want the payment form displayed on your page?', 'mobile-dj-manager' ),
-						'type'        => 'select',
-						'options'     => array( 
-							'horizontal' => 'Horizontal',
-							'vertical'   => 'Vertical',
-						),
-						'std'         => 'horizontal'
+					'payment_form_settings' => array(
+						'id'          => 'payment_form_settings',
+						'name'        => '<h3>' . __( 'Payment Form Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
 					),
 					'payment_label'    => array(
 						'id'          => 'payment_label',
@@ -1038,6 +1017,14 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'regular',
 						'std'         => __( 'Other Amount', 'mobile-dj-manager' )
 					),
+					'payment_button' => array(
+						'id'          => 'payment_button',
+						'name'        => __( 'Payment Button Text', 'mobile-dj-manager' ),
+						'desc'        => __( 'The text you want to appear on the Payment Form submit button.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'regular',
+						'std'         => __( 'Pay Now', 'mobile-dj-manager' )
+					),
 					'other_amount_default' => array(
 						'id'          => 'other_amount_default',
 						'name'        => __( 'Default', 'mobile-dj-manager' ) . ' ' . mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) ),
@@ -1047,6 +1034,12 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'         => '50.00'
+					),
+					'tax_settings' => array(
+						'id'          => 'tax_settings',
+						'name'        => '<h3>' . __( 'Tax Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
 					),
 					'enable_tax'       => array(
 						'id'          => 'enable_tax',
@@ -1073,6 +1066,12 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'small',
 						'std'         => '20'
 					),
+					'payment_types' => array(
+						'id'          => 'payment_types',
+						'name'        => '<h3>' . __( 'Payment Types', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
 					'payment_sources'  => array(
 						'id'          => 'payment_sources',
 						'name'        => __( 'Payment Types', 'mobile-dj-manager' ),
@@ -1082,8 +1081,19 @@ function mdjm_get_registered_settings()	{
 								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" . 
+								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" .
+										 __( 'Stripe', 'mobile-dj-manager' ) . "\r\n" . 
 								         __( 'Other', 'mobile-dj-manager' )
+					),
+					'default_type'     => array(
+						'id'          => 'default_type',
+						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an %s %s as paid how should we log it?', 'mobile-dj-manager' ),
+											mdjm_get_label_singular( true ),
+											mdjm_get_balance_label()
+										),
+						'type'        => 'select',
+						'options'     => mdjm_list_txn_sources()
 					)
 				),
 			// Employee Payment Settings
@@ -1115,6 +1125,30 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox'
 					)
 				),
+			// Receipts
+				'receipts' => array(
+					'payment_conf_templates' => array(
+						'id'          => 'payment_conf_templates',
+						'name'        => '<h3>' . __( 'Payment Receipts', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'payment_cfm_template' => array(
+						'id'          => 'payment_cfm_template',
+						'name'        => __( 'Gateway Payment Receipt', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent as a receipt to clients when a gateway payment is received.', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template', true )
+					),
+					'manual_payment_cfm_template' => array(
+						'id'          => 'manual_payment_cfm_template',
+						'name'        => __( 'Manual Payment Receipt', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select an email template to be sent as a receipt to clients when you manually log a payment.', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => mdjm_list_templates( 'email_template', true )
+					)
+				),
+			// Travel
 				'travel' => array(
 					'travel_settings' => array(
 						'id'          => 'travel_settings',
@@ -1367,6 +1401,7 @@ function mdjm_get_registered_settings_sections() {
 		'payments'        => apply_filters( 'mdjm_settings_sections_payments', array(
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
+			'receipts'           => __( 'Receipts', 'mobile-dj-manager' )
 			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
@@ -1559,6 +1594,71 @@ function mdjm_radio_callback( $args ) {
 
 	echo '<p class="description">' . $args['desc'] . '</p>';
 } // mdjm_radio_callback
+
+/**
+ * Gateways Callback
+ *
+ * Renders gateways fields.
+ *
+ * @since	1.8
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_gateways_callback( $args )	{
+
+	$mdjm_option = mdjm_get_option( $args['id'] );
+
+	$html = '';
+
+	foreach ( $args['options'] as $key => $option )	{
+		if ( $key == 'disabled' )	{
+			continue;
+		}
+		if ( isset( $mdjm_option[ $key ] ) )	{
+			$enabled = '1';
+		} else	{
+			$enabled = null;
+		}
+
+		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked('1', $enabled, false) . '/>&nbsp;';
+		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']">' . esc_html( $option['admin_label'] ) . '</label><br/>';
+	}
+
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+
+} // mdjm_gateways_callback
+
+/**
+ * Gateways Callback (drop down)
+ *
+ * Renders gateways select menu
+ *
+ * @since	1.8
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM Options
+ * @return	void
+ */
+function mdjm_gateway_select_callback( $args ) {
+	$mdjm_option = mdjm_get_option( $args['id'] );
+
+	$html = '';
+
+	$html .= '<select name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']">';
+
+	foreach ( $args['options'] as $key => $option )	{
+
+		$selected = isset( $mdjm_option ) ? selected( $key, $mdjm_option, false ) : '';
+		$html .= '<option value="' . mdjm_sanitize_key( $key ) . '"' . $selected . '>' . esc_html( $option['admin_label'] ) . '</option>';
+
+	}
+
+	$html .= '</select>';
+	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+
+} // mdjm_gateway_select_callback
 
 /**
  * Text Callback

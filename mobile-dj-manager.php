@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
- * Version: 1.3.7.8
- * Date: 03 July 2016
+ * Version: 1.3.8
+ * Date: 07 July 2016
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -122,7 +122,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.3.7.8' );
+			define( 'MDJM_VERSION_NUM', '1.3.8' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -166,6 +166,10 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/payments/actions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/payments/payments.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/payments/process-payments.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/payments/template.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-event.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-html-elements.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-events.php' );

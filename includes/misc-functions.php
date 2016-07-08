@@ -151,6 +151,16 @@ function mdjm_month_num_to_name( $n ) {
 } // mdjm_month_num_to_name
 
 /**
+ * Get PHP Arg Separator Output
+ *
+ * @since	1.3.8
+ * @return	str		Arg separator output
+ */
+function mdjm_get_php_arg_separator_output() {
+	return ini_get( 'arg_separator.output' );
+} // mdjm_get_php_arg_separator_output
+
+/**
  * Get the current page URL
  *
  * @since	1.3
@@ -171,6 +181,24 @@ function mdjm_get_current_page_url() {
 } // mdjm_get_current_page_url
 
 /**
+ * Retrieve the visitors IP address.
+ *
+ * @since	1.3.8
+ * @return	str
+ */
+function mdjm_get_user_ip()	{
+	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) )	{
+		$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )	{
+		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+		$ip_address = $_SERVER['REMOTE_ADDR'];
+	}
+
+	return apply_filters( 'mdjm_get_user_ip', $ip_address );
+} // mdjm_get_user_ip
+
+/**
  * Display a Notice.
  *
  * Display a notice on the front end.
@@ -182,8 +210,8 @@ function mdjm_get_current_page_url() {
 function mdjm_display_notice( $m )	{	
 	$message = mdjm_messages( $m );
 	
-	$notice = '<div class="mdjm-' . $message['class'] . '">';
-	$notice .= ! empty( $message['title'] ) ? '<span>' . $message['title'] . ': </span>' : '';
+	$notice = '<div class="mdjm-alert mdjm-alert-' . $message['class'] . '">';
+	$notice .= ! empty( $message['title'] ) ? '<span><strong>' . $message['title'] . '</strong></span><br />' : '';
 	$notice .= $message['message'] . '</div>';
 
 	return apply_filters( 'mdjm_display_notice', $notice, $m );
@@ -341,6 +369,16 @@ function mdjm_messages( $key )	{
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),
 				'message'	=> __( 'Security verification failed.', 'mobile-dj-manager' )
+			),
+			'payment_success' => array(
+				'class'   => 'success',
+				'title'   => __( 'Thank you', 'mobile-dj-manager' ),
+				'message' => __( 'Your payment has completed successfully', 'mobile-dj-manager' )
+			),
+			'payment_failed' => array(
+				'class'   => 'error',
+				'title'   => __( 'There was an error processing your payment', 'mobile-dj-manager' ),
+				'message' => __( 'To process your payment again, please follow the steps below', 'mobile-dj-manager' )
 			)
 		)
 	);
