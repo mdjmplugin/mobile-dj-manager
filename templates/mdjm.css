@@ -255,7 +255,7 @@ input.mdjm_form_error {
 	}
 }
 
-*	{
+.mdjm-action-btn-container *	{
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -682,6 +682,10 @@ a	{
 #mdjm_payment_wrap label {
 	display: inline-block;
 	width: 200px;
+}
+
+#mdjm_payments_form_wrap input.mdjm-input.error	{
+	border-color: #c4554e;
 }
 
 #mdjm_payments_form_wrap fieldset {
