@@ -268,6 +268,55 @@ function mdjm_get_payment_button_text()	{
 } // mdjm_get_payment_button_text
 
 /**
+ * Get the required fields on a payment form.
+ *
+ * @since	1.3.8.1
+ * @param
+ * @return	arr		$required_fields	Array of required fields.
+ */
+function mdjm_get_required_payment_fields()	{
+
+	// Array format should be (arr)$gateway => (str)$name => (bool)$php_ignore
+	$required_fields = array();
+
+	// Allow filtering of the required fields.
+	$required_fields = apply_filters( 'mdjm_required_payment_fields', $required_fields );
+
+	ksort( $required_fields );
+
+	return $required_fields;
+
+} // mdjm_get_required_payment_fields
+
+/**
+ * Whether or not the payment field is required.
+ *
+ * @since	1.3.8.1
+ * @param	str		$gateway		Payment gateway
+ * @param	str		$name			The ID or name of the payment field.
+ * @param	bool	$php_ignore		True to ignore the validation within PHP.
+ * @return	bool	True if required.
+ */
+function mdjm_required_payment_field( $gateway, $name, $php_ignore = false )	{
+
+	$required_fields = mdjm_get_required_payment_fields();
+	$required        = false;
+
+	if ( array_key_exists( $gateway, $required_fields ) )	{
+		$gateway_fields = $required_fields[ $gateway ];
+		$required       = array_key_exists( $name, $gateway_fields );
+	
+		if ( $php_ignore )	{
+			$required = $required_fields[ $gateway ][ $name ];
+		}
+
+	}
+
+	return (bool)$required;
+
+} // mdjm_required_payment_field
+
+/**
  * Generates a transaction for a new payment during processing.
  *
  * The transaction status will be set to Pending.
