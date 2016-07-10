@@ -46,6 +46,7 @@ function mdjm_load_scripts()	{
 				'default_gateway'       => mdjm_get_default_gateway(),
 				'payment_loading'       => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'no_payment_amount'     => __( 'Select Payment Amount', 'mobile-dj-manager' ),
+				'no_card_name'          => __( 'Enter the name printed on your card', 'mobile-dj-manager' ),
 				'complete_payment'      => mdjm_get_payment_button_text()
 			)
 		)

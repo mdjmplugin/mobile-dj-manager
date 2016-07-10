@@ -211,7 +211,7 @@ function mdjm_payment_submit() {
 		<?php do_action( 'mdjm_payment_form_before_submit' ); ?>
 
 		<?php mdjm_payment_hidden_fields(); ?>
-
+		<div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
 		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php echo mdjm_get_payment_button_text(); ?>" />
 
 		<?php do_action( 'mdjm_payment_form_after_submit' ); ?>

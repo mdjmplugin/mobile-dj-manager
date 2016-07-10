@@ -31,17 +31,38 @@ jQuery(document).ready(function ($) {
 		$('#mdjm-payment-custom').hide("fast");
 	});
 
-	$("#mdjm_payment_form").submit(function(event)	{
-		event.preventDefault();
+	$(document).on('click', '#mdjm_payment_form #mdjm_payment_submit input[type=submit]', function(e) {
+		var mdjmPurchaseform = document.getElementById('mdjm_payment_form');
 
-		var form = $("#mdjm_payment_form");
+		if( typeof mdjmPurchaseform.checkValidity === "function" && false === mdjmPurchaseform.checkValidity() ) {
+			return;
+		}
 
-		$('#mdjm-payment-submit').prop("disabled", true);
-		$('#mdjm-payment-submit').val(mdjm_vars.payment_loading);
+		e.preventDefault();
 
-		var response = mdjm_validate_payment_form(event,form);
+		var complete_purchase_val = $(this).val();
 
-		
+		$(this).val(mdjm_vars.payment_loading);
+		$(this).prop("disabled", true);
+		$(this).after('<span class="mdjm-payment-ajax"><i class="mdjm-icon-spinner mdjm-icon-spin"></i></span>');
+
+		var valid = mdjm_validate_payment_form(mdjmPurchaseform);
+
+		if ( valid.type == 'success' )	{
+			$(mdjmPurchaseform).find('.mdjm-alert').hide("fast");
+			$(mdjmPurchaseform).find('.error').removeClass("error");
+			$(mdjmPurchaseform).submit();
+		} else	{
+			$(mdjmPurchaseform).find('.mdjm-alert').show("fast");
+			$(mdjmPurchaseform).find('.mdjm-alert').text(valid.msg);
+
+			if ( valid.field )	{
+				$('#' + valid.field).addClass("error");
+			}
+
+			$(this).val(mdjm_vars.complete_payment);
+			$(this).prop("disabled", false);
+		}
 
 	});
 
@@ -111,16 +132,27 @@ jQuery(document).ready(function ($) {
 	});
 });
 
-function mdjm_validate_payment_form(e, form) {
+function mdjm_validate_payment_form(mdjmPurchaseform) {
 
-	var payment_amount = '';
+	var msg = false;
+
+	// Make sure an amount is selected
 	var payment = jQuery("input[type='radio'][name='mdjm_payment_amount']:checked");
-	if (payment.length > 0) {
-		payment_amount = payment.val();
-	} else	{
-		form.find('.mdjm-alert').show("fast");
-		form.find('.mdjm-alert').text(mdjm_vars.no_payment_amount);
+
+	if ( payment.length == 0 ) {
+		return( {msg:mdjm_vars.no_payment_amount} );
 	}
+
+	// If part payment, make sure the value is greater than 0
+	if ( 'part_payment' == payment.val() )	{
+		var amount = jQuery('#part-payment').val();
+
+		if ( ! jQuery.isNumeric(amount) )	{
+			return( {type:"error", field:"part-payment", msg:mdjm_vars.no_payment_amount} );
+		}
+	} 
+
+	return( {type:"success"} );
 
 }
 
