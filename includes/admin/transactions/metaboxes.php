@@ -294,6 +294,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 			<option value="Pending"<?php selected( 'Pending', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Pending</option>
 			<option value="Refunded"<?php selected( 'Refunded', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Refunded</option>
 			<option value="Cancelled"<?php selected( 'Cancelled', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Cancelled</option>
+            <option value="Failed"<?php selected( 'Failed', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Completed</option>
 			</select>
 		</div>
 	</div>
