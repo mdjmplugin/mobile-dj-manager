@@ -672,16 +672,22 @@ a	{
 	margin: 0 0 5px;
 }
 
+#mdjm_payment_wrap input.mdjm-input,
+#mdjm_payments_form_wrap input.mdjm-input	{
+	display: inline-block;
+	width: 70%;
+}
+
 #mdjm_payment_wrap fieldset legend	{
 	padding-left: 1.5px;
 	padding-right: 1.5px;
 	font-weight: bold;
 }
 
-#mdjm_payment_wrap input[type='text'],
-#mdjm_payment_wrap label {
-	display: inline-block;
-	width: 200px;
+#mdjm_payments_form_wrap fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
 }
 
 #mdjm_payments_form_wrap fieldset {
@@ -693,39 +699,49 @@ a	{
 	padding: 0;
 	border: none;
 }
-#mdjm_payments_form fieldset fieldset {
-	margin: 0;
-	border: none;
-	padding: 0;
-}
 
-#mdjm_payments_form_wrap span.mdjm-description.mdjm-cc-description	{
-	text-indent: 205px;
-}
-
-#mdjm_payments_form_wrap .mdjm-payment-ajax {
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-
-#mdjm_payment_submit .mdjm-payment-ajax {
-	display: none;
+#mdjm_payments_form_wrap label {
+	font-weight: bold;
+	display: block;
 	position: relative;
-	left: -35px;
+	line-height: 100%;
+	font-size: 95%;
+	margin: 0 0 5px;
+}
+
+#mdjm_payments_form_wrap label:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	height: 0;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#mdjm_payments_form_wrap span.mdjm-required-indicator {
+	color: #b94a48;
+	display: inline;
 }
 
 #mdjm_secure_site_wrapper {
-	padding: 4px 4px 4px 0;
+	padding: 0px 0px 8px 0;
 	font-weight: bold;
 	text-align: right;
 }
+
 #mdjm_secure_site_wrapper span.padlock:before {
 	content: '\f160';
 	display: inline-block;
 	-webkit-font-smoothing: antialiased;
 	font: normal 20px/1 'dashicons';
 	vertical-align: middle;
+}
+
+#mdjm_payment_mode_select label {
+	font-weight: normal;
+	width: 200px;
+	display: inline-block;
 }
 
 .mdjm-payment-ajax {
@@ -735,6 +751,12 @@ a	{
 	background: none;
 	border: none;
 	padding: 0;
+}
+
+#mdjm_payment_submit .mdjm-payment-ajax {
+	display: none;
+	position: relative;
+	left: -35px;
 }
 
 /* =Availability Widget
