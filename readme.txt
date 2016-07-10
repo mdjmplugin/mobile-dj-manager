@@ -86,6 +86,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Issue [#108](https://github.com/mdjm/mobile-dj-manager/issues/108/ "Issue #108") - Missing css class selector for event action buttons
 
 **Tweaks**
+
 * Added `Failed` as transaction status
 * Added function `mdjm_get_required_payment_fields()` function to enable registration of required fields on the payments form
 * Added function `mdjm_required_payment_field()` function to determine if a payment form field is required
