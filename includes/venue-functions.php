@@ -371,7 +371,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                     <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
            		</tr>
 
-				<?php do_action( 'mdjm_venue_details_table_after_info', $venue_id = '', $event_id = '' ); ?>
+				<?php do_action( 'mdjm_venue_details_table_after_info', $event_id, $venue_id ); ?>
 
             </tbody>
         </table>
