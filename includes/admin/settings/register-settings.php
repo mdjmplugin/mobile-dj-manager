@@ -1169,6 +1169,14 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'std'         => mdjm_get_employee_post_code( 1 )
 					),
+					'travel_status' => array(
+						'id'          => 'travel_status',
+						'name'        => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select which %s status' can have travel costs updated.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'        => 'multiple_select',
+						'options'     => mdjm_all_event_status(),
+						'std'         => array( 'mdjm-unattended', 'mdjm-enquiry', 'mdjm-contract' )
+					),
 					'travel_units' => array(
 						'id'          => 'travel_units',
 						'name'        => __( 'Calculate in?', 'mobile-dj-manager' ),
@@ -1386,7 +1394,8 @@ function mdjm_get_registered_settings_sections() {
 		) ),
 		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
 			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' )
+			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' ),
+			'travel'             => __( 'Travel Settings', 'mobile-dj-manager' )
 		) ),
 		'emails'          => apply_filters( 'mdjm_settings_sections_emails', array(
 			'main'               => __( 'General Email Settings', 'mobile-dj-manager' ),
@@ -1402,7 +1411,6 @@ function mdjm_get_registered_settings_sections() {
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
 			'receipts'           => __( 'Receipts', 'mobile-dj-manager' )
-			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
