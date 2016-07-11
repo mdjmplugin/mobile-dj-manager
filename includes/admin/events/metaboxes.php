@@ -1432,41 +1432,14 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
                     </tr>
                 <?php endif; ?>
 
+				<?php do_action( 'mdjm_venue_details_table_after_save', $event_id ); ?>
+
             </tbody>
         </table>
     </div>
     <?php
 } // mdjm_event_metabox_venue_add_new_table
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_add_new_table', 30 );
-
-/**
- * Output the event venue distance row
- *
- * @since	1.3.8
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_metabox_travel_data_row( $event_id )	{
-
-	global $mdjm_event, $mdjm_event_update;
-
-	$travel_data = mdjm_travel_get_distance( $event_id );
-
-	if ( ! empty( $travel_data ) ) : ?>
-		<tr>
-            <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-				<?php echo mdjm_format_distance( $travel_data['distance'], false, true ); ?></td>
-            <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-            	<?php echo mdjm_seconds_to_time( $travel_data['duration'] ); ?></td>
-            <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-            	<?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $travel_data['distance'] ) ) ); ?></td>
-        </tr>
-	<?php endif;
-
-} // mdjm_event_metabox_travel_data_row
-//add_action( 'mdjm_event_metabox_travel_data_row', 'mdjm_event_metabox_travel_data_row', 10 );
 
 /**
  * Output the event enquiry source row
