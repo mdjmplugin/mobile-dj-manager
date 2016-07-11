@@ -213,7 +213,7 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			$return = array_map( 'stripslashes', $return );
 			$return = array_map( 'esc_html', $return );
 		} else	{
-			$return = esc_html( stripslashes( $return ) );
+			$return = esc_html( stripslashes( trim( $return ) ) );
 		}
 	}
 
@@ -328,7 +328,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
-	
+
 	?>
     <div id="mdjm-event-venue-details" class="mdjm-hidden">
         <table class="widefat mdjm_event_venue_details mdjm_form_fields">
@@ -339,6 +339,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                 </tr>
             </thead>
             <tbody>
+            	<?php do_action( 'mdjm_venue_details_table_before_contact_name', $venue_id = '', $event_id = '' ); ?>
             	<tr>
                 	<td><i class="fa fa-user" aria-hidden="true" title="<?php _e( 'Contact Name', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo ! empty( $venue_contact ) ? $venue_contact : ''; ?></td>
@@ -346,11 +347,15 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                 	<td rowspan="3"><?php echo ! empty( $venue_address ) ? implode( '<br />', $venue_address ) : ''; ?></td>
                     <td rowspan="3"><?php echo ! empty( $venue_details ) ? implode( '<br />', $venue_details ) : ''; ?></td>
            		</tr>
-                
+
+				<?php do_action( 'mdjm_venue_details_table_after_contact_name', $venue_id = '', $event_id = '' ); ?>
+
                 <tr>
                 	<td><i class="fa fa-phone" aria-hidden="true" title="<?php _e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo ! empty( $venue_phone ) ? $venue_phone : ''; ?></td>
 				</tr>
+
+				<?php do_action( 'mdjm_venue_details_table_after_contact_phone', $venue_id = '', $event_id = '' ); ?>
 
 				<?php $email = ! empty( $venue_email ) ? $venue_email : ''; ?>
 
@@ -359,14 +364,14 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                     <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></td>                  	
            		</tr>
 
+				<?php do_action( 'mdjm_venue_details_table_after_contact_email', $venue_id = '', $event_id = '' ); ?>
+
                <tr>
                 	<td><i class="fa fa-comments-o" aria-hidden="true" title="<?php _e( 'Information', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
            		</tr>
 
-				<?php if ( ! empty( $event_id ) ) : ?>
-                	<?php do_action( 'mdjm_event_metabox_travel_data_row', $event_id ); ?>
-                <?php endif; ?>
+				<?php do_action( 'mdjm_venue_details_table_after_info', $venue_id = '', $event_id = '' ); ?>
 
             </tbody>
         </table>
