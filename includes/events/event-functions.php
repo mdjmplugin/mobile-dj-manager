@@ -1321,23 +1321,23 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	
 	foreach( $data as $key => $value )	{
 		
-		if( $key == 'mdjm_nonce' || $key == 'mdjm_action' || substr( $key, 0, 12 ) != '_mdjm_event_' ) {
+		if ( $key == 'mdjm_nonce' || $key == 'mdjm_action' || substr( $key, 0, 12 ) != '_mdjm_event_' ) {
 			continue;
 		}
 		
-		if( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
+		if ( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_travel_cost' )	{
 			$value = $value;
-		} elseif( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
+		} elseif ( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
-		} elseif( $key == '_mdjm_event_venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
+		} elseif ( $key == '_mdjm_event_venue_email' && ! empty( $value ) )	{ // Emails are lowercase.
 			$value = strtolower( $value );
-		} elseif( $key == '_mdjm_event_package' && ! empty( $value ) )	{
+		} elseif ( $key == '_mdjm_event_package' && ! empty( $value ) )	{
 			$value = sanitize_text_field( strtolower( $value ) );	
-		} elseif( $key == '_mdjm_event_addons' && ! empty( $value ) )	{
+		} elseif ( $key == '_mdjm_event_addons' && ! empty( $value ) )	{
 			$value = $value;
-		} elseif( ! strpos( $key, 'notes' ) && ! empty( $value ) )	{
+		} elseif ( ! strpos( $key, 'notes' ) && ! empty( $value ) )	{
 			$value = sanitize_text_field( ucwords( $value ) );
-		} elseif( ! empty( $value ) )	{
+		} elseif ( ! empty( $value ) )	{
 			$value = sanitize_text_field( ucfirst( $value ) );
 		} else	{
 			$value = '';
@@ -1374,11 +1374,12 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	$update = update_post_meta( $event_id, '_mdjm_event_data', $meta );
 	
 	$journal_args = array(
-		'user_id'          => is_user_logged_in() ? get_current_user_id() : 1,
-		'event_id'         => $event_id,
-		'comment_content'  => sprintf( __( '%s Updated', 'mobile-dj-manager' ) . ':<br />    %s',
-								mdjm_get_label_singular(), implode( '<br />', $debug ) ),
-		'comment_type'     => 'update-event'
+		'user_id'         => is_user_logged_in() ? get_current_user_id() : 1,
+		'event_id'        => $event_id,
+		'comment_content' => sprintf( __( '%s Updated', 'mobile-dj-manager' ) . ':<br />    %s',
+			mdjm_get_label_singular(), implode( '<br />', $debug )
+		),
+		'comment_type'    => 'update-event'
 	);
 	
 	mdjm_add_journal( $journal_args );
