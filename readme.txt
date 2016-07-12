@@ -81,10 +81,9 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Released Tuesday 12th July, 2016**
 
-**Bug Fixes**
-
 **Tweaks**
 
+* Corrected shortcode `[mdjm-quote]` in description for `quotes_page` setting option. Props @nikmartin
 * Added hooks to the new client table on the events screen
 * Added hooks `mdjm_before_add_new_client` and `mdjm_after_add_new_client`
 * Corrected hook name within `mdjm_process_payment_form()`
