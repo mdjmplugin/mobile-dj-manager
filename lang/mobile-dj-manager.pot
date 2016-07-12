@@ -3284,7 +3284,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:781
 msgid ""
 "Select the page to use for online %s quotes. Needs to contain the shortcode "
-"<code>[mdjm-online-quote]</code>"
+"<code>[mdjm-quote]</code>"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:787

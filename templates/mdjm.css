@@ -694,6 +694,10 @@ a	{
 	border-color: #c4554e;
 }
 
+#mdjm_payments_form_wrap input.mdjm-input.error	{
+	border-color: #c4554e;
+}
+
 #mdjm_payments_form_wrap fieldset {
 	border: 1px solid #eee;
 	padding: 1.387em;
