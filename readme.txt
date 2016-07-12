@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.8.1
+Stable tag: 1.3.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,20 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.8.2 =
+
+**Released Tuesday 12th July, 2016**
+
+**Bug Fixes**
+
+**Tweaks**
+
+* Added hooks to the new client table on the events screen
+* Added hooks `mdjm_before_add_new_client` and `mdjm_after_add_new_client`
+* Corrected hook name within `mdjm_process_payment_form()`
+* Added hooks `mdjm_before_events_overview` and `mdjm_after_events_overview` to overview widget
+* Display notices above and below payment form
 
 = 1.3.8.1 =
 
