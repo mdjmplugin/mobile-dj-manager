@@ -789,7 +789,7 @@ function mdjm_get_registered_settings()	{
 					'quotes_page'      => array(
 						'id'          => 'quotes_page',
 						'name'        => __( 'Online Quotes Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select the page to use for online %s quotes. Needs to contain the shortcode <code>[mdjm-online-quote]</code>", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc'        => sprintf( __( "Select the page to use for online %s quotes. Needs to contain the shortcode <code>[mdjm-quote]</code>", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
