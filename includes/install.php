@@ -61,7 +61,7 @@ function mdjm_run_install()	{
 	
 	// Schedule the hourly tasks.
 	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
-	wp_schedule_event( current_time( 'timestamp' ), 'weekly', 'mdjm_weekly_scheduled_events' );
+	wp_schedule_event( time(), 'weekly', 'mdjm_weekly_scheduled_events' );
 	
 	$current_version = get_option( 'mdjm_version' );
 	if ( $current_version ) {
