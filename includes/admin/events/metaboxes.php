@@ -761,6 +761,7 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
 
 	?>
     <div id="mdjm-event-add-new-client-fields" class="mdjm-hidden">
+		<?php do_action( 'mdjm_event_add_client_before_table' ); ?>
     	<table class="widefat mdjm_event_add_client_table mdjm_form_fields">
         	<thead>
             	<tr>
@@ -789,7 +790,7 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
 							'type'  => 'email'
 						) ); ?></td>
                 </tr>
-                
+                <?php do_action( 'mdjm_event_add_client_after_email' ); ?>
                 <tr>
                 	<td><label for="client_phone"><?php _e( 'Phone:', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->text( array(
@@ -806,7 +807,7 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
 						) ); ?></td>
                     <td></td>
                 </tr>
-                
+				<?php do_action( 'mdjm_event_add_client_after_phone' ); ?>
                 <tr>
                 	<td colspan="3">
                     	<a id="mdjm-add-client" class="button button-primary button-small"><?php _e( 'Add Client', 'mobile-dj-manager' ); ?></a>
@@ -814,6 +815,7 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
                 </tr>
             </tbody>
         </table>
+        <?php do_action( 'mdjm_event_add_client_after_table' ); ?>
     </div>
     <?php
 

@@ -45,7 +45,7 @@ function mdjm_process_payment_form() {
 	);
 
 	// Allow themes and plugins to hook before the gateway
-	do_action( 'mdjm_checkout_before_gateway', $_POST, $payment_data );
+	do_action( 'mdjm_payment_before_gateway', $_POST, $payment_data );
 
 	// Allow the payment data to be modified before a transaction is created
 	$payment_data = apply_filters(
