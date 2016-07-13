@@ -103,6 +103,10 @@ function mdjm_add_client_ajax()	{
 			'client_phone2' => ! empty( $_POST['client_phone2'] )		? $_POST['client_phone2']				: ''
 		);
 
+		$user_data = apply_filters( 'mdjm_event_new_client_data', $user_data );
+
+		do_action( 'mdjm_before_add_new_client', $user_data );
+
 		$client_id = mdjm_add_client( $user_data );
 
 	}
@@ -125,12 +129,12 @@ function mdjm_add_client_ajax()	{
 			'message' => explode( "\n", $message )
 		);
 	} else	{
-
 		$result = array(
 			'type'        => 'success',
 			'client_id'   => $client_id,
 			'client_list' => $client_list
 		);
+		do_action( 'mdjm_after_add_new_client', $user_data );
 	}
 
 	echo json_encode( $result );

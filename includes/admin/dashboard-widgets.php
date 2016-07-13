@@ -46,6 +46,7 @@ function mdjm_widget_events_overview() {
 		
 		?>
 		<div class="mdjm_stat_grid">
+        	<?php do_action( 'mdjm_before_events_overview' ); ?>
 			<table>
 				<thead>
 					<tr>
@@ -121,7 +122,9 @@ function mdjm_widget_events_overview() {
 				}
 				
 			}
-			
+
+			do_action( 'mdjm_after_events_overview' );
+
 			?>
 			
 		</div>
