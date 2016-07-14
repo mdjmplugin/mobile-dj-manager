@@ -20,6 +20,12 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	width: 75px;
 }
 
+.mdjm-tick	{
+	background-image: url(../images/tick.png);
+	background-repeat: no-repeat;
+	background-position: 98% 50%;
+}
+
 .mdjm-small	{
 	font-size: 11px;	
 }
