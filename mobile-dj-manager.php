@@ -38,6 +38,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
 		
+		public $api;
+		
 		public $content_tags;
 		
 		public $cron;
@@ -81,6 +83,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->debug          = new MDJM_Debug();
 				$mdjm_debug                     = self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events         = new MDJM_Events();
+				self::$instance->api            = new MDJM_API();
 				self::$instance->content_tags   = new MDJM_Content_Tags();
 				self::$instance->cron           = new MDJM_Cron();
 				self::$instance->emails         = new MDJM_Emails();
@@ -163,6 +166,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			}
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/api/class-mdjm-api.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
