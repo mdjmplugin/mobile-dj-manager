@@ -2,8 +2,7 @@
 /**
  * MDJM Rest API
  *
- * This class provides a front-facing JSON API that makes it possible to
- * query data from the business.
+ * Extends the WordPress REST API to provide an API interface.
  *
  * The primary purpose of this class is for availability checking and
  * event queries.
@@ -25,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since	1.4
  */
-class MDJM_API	{
+class MDJM_API extends WP_REST_Controller 	{
 
 	/**
 	 * Latest API Version
@@ -35,7 +34,7 @@ class MDJM_API	{
 	/**
 	 * Namespace
 	 */
-	const NAME_SPACE = 'mdjm/v';
+	public $namespace;
 
 	/**
 	 * Log API requests?
@@ -70,6 +69,7 @@ class MDJM_API	{
 	 * @since	1.4
 	 */
 	public function __construct()	{
+		$this->namespace = 'mdjm/v' . self::VERSION;
 		add_action( 'rest_api_init', array( $this, 'register_endpoints' ) );
 	} // __construct
 
@@ -81,7 +81,6 @@ class MDJM_API	{
 	 */
 	public function register_endpoints()	{
 
-		$namespace = self::NAME_SPACE . self::VERSION;
 		$endpoints = $this->define_endpoints();
 
 		if ( $endpoints )	{
@@ -114,8 +113,7 @@ class MDJM_API	{
 				'callback' => 'mdjm_aff_authenticate_api',
 				'args'     => array(
 					'api_key' => array(
-						'required'          => true,
-						'validate_callback' => 'mdjm_aff_validate_date'
+						'required'          => true
 					)
 				)
 			),
@@ -127,6 +125,19 @@ class MDJM_API	{
 						'required'          => true
 					)
 				)
+			),
+			'/events/' => array(
+				'methods'  => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback' => array( $this, '' ),
+				'args'     => array(
+					'date' => array(
+						'required'          => true
+					)
+				)
+			),
+			'/events/create' => array(
+				'methods'  => array( WP_REST_Server::WRITEABLE, WP_REST_Server::CREATABLE ),
+				'callback' => array( $this, '' )
 			)
 		);
 
