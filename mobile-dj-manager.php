@@ -240,6 +240,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/emails.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/contextual-help.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/metaboxes.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/tools.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/txns.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/taxonomies.php' );
