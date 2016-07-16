@@ -416,7 +416,38 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			do_action( 'mdjm_post_save_custom_user_fields', $user_id, $_POST );
 			
 		} // save_custom_user_fields
+
+		/**
+		 * Generate and Save API key
+		 *
+		 * Generates the key requested by user_key_field and stores it in the database
+		 *
+		 * @since	1.4
+		 * @param	int		$user_id
+		 * @return	void
+		 */
+		function update_user_api_key( $user_id )	{
+
+			if ( current_user_can( 'edit_user', $user_id ) && isset( $_POST['mdjm_set_api_key'] ) ) {
 		
+				$user       = get_userdata( $user_id );
+				$public_key = MDJM()->api->get_user_public_key( $user_id );
+		
+				if ( empty( $public_key ) )	{
+
+					$new_public_key = MDJM()->api->generate_public_key( $user->user_email );
+					$new_secret_key = MDJM()->api->generate_private_key( $user->ID );
+
+					update_user_meta( $user_id, $new_public_key, 'mdjm_user_public_key' );
+					update_user_meta( $user_id, $new_secret_key, 'mdjm_user_secret_key' );
+
+				} else {
+					MDJM()->api->revoke_api_key( $user_id );
+				}
+			}
+
+		} // update_user_api_key
+
 		/**
 		 * Assign the 'DJ' role to an administrator
 		 *
