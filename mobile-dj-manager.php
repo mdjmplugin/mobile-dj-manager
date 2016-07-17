@@ -68,7 +68,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 * @return	The one true Mobile_DJ_Manager
 		 */
 		public static function instance()	{
-			global $mdjm, $mdjm_debug, $clientzone;
+			global $mdjm, $mdjm_debug, $clientzone, $wp_version;
 			
 			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
 				self::$instance = new Mobile_DJ_Manager;
@@ -83,7 +83,11 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->debug          = new MDJM_Debug();
 				$mdjm_debug                     = self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events         = new MDJM_Events();
-				self::$instance->api            = new MDJM_API();
+
+				if ( version_compare( floatval( $wp_version ), '4.4', '>=' ) )	{
+					self::$instance->api            = new MDJM_API();
+				}
+
 				self::$instance->content_tags   = new MDJM_Content_Tags();
 				self::$instance->cron           = new MDJM_Cron();
 				self::$instance->emails         = new MDJM_Emails();
