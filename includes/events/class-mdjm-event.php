@@ -414,10 +414,10 @@ class MDJM_Event {
 				}
 				
 			}
+		
+			$this->employees = $employees;
 			
 		}
-
-		$this->employees = $employees;
 		
 		return $this->employees;
 	} // get_all_employees
