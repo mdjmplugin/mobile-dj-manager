@@ -39,7 +39,7 @@ function mdjm_get_event_by_id( $event_id )	{
  *
  * @since	1.4
  * @param	str		$date		The date to query (Y-m-d).
- * @return	mixed	$event		WP_Query object or false.
+ * @return	array	$events		Array of event WP_Query objects or false.
  */
 function mdjm_get_events_by_date( $date )	{
 	$args['meta_key']   = '_mdjm_event_date';
