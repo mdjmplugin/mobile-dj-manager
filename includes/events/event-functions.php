@@ -26,7 +26,6 @@ function mdjm_get_event( $event_id )	{
  * Retrieve an event by ID.
  *
  * @param	int		$event_id	The WP post ID for the event.
- *
  * @return	mixed	$event		WP_Query object or false.
  */
 function mdjm_get_event_by_id( $event_id )	{
@@ -34,6 +33,32 @@ function mdjm_get_event_by_id( $event_id )	{
 	
 	return ( !empty( $event->ID ) ? $event : false );
 } // mdjm_get_event_by_id
+
+/**
+ * Retrieve an event by date.
+ *
+ * @since	1.4
+ * @param	str		$date		The date to query (Y-m-d).
+ * @return	mixed	$event		WP_Query object or false.
+ */
+function mdjm_get_events_by_date( $date )	{
+	$args = array(
+		'meta_query' => array(
+			'key'		=> '_mdjm_event_date',
+			'value'		=> $args['date'],
+			'type'		=> 'DATE',
+			'compare'	=> $args['date_compare']
+		)
+	);
+
+	$events = mdjm_get_events( $args );
+
+	if ( $events )	{
+		return $events;
+	}
+
+	return false;
+} // mdjm_get_events_by_date
 
 /**
  * Retrieve the events.
@@ -79,6 +104,7 @@ function mdjm_get_event_data( $event )	{
 	}
 
 	$contract_status = $mdjm_event->get_contract_status();
+	$source = mdjm_get_enquiry_source( $mdjm_event->ID );
 
 	$event_data = array(
 		'client'              => $mdjm_event->client,
@@ -112,7 +138,7 @@ function mdjm_get_event_data( $event )	{
 		),
 		'setup_date'          => $mdjm_event->get_setup_date(),
 		'setup_time'          => $mdjm_event->get_setup_time(),
-		'source'              => mdjm_get_enquiry_source( $mdjm_event->ID )->name,
+		'source'              => ! empty( $source ) ? $source->name : '',
 		'status'              => $mdjm_event->get_status(),
 		'start_time'          => $mdjm_event->get_start_time(),
 		'type'                => $mdjm_event->get_type(),
@@ -262,7 +288,7 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 } // mdjm_get_event_by_playlist_code
 
 /**
- * Retrieve events by date period.
+ * Retrieve events by status.
  *
  * @since	1.3
  * @param	str			$status		The event status.
