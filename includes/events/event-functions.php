@@ -42,14 +42,8 @@ function mdjm_get_event_by_id( $event_id )	{
  * @return	mixed	$event		WP_Query object or false.
  */
 function mdjm_get_events_by_date( $date )	{
-	$args = array(
-		'meta_query' => array(
-			'key'		=> '_mdjm_event_date',
-			'value'		=> $args['date'],
-			'type'		=> 'DATE',
-			'compare'	=> $args['date_compare']
-		)
-	);
+	$args['meta_key']   = '_mdjm_event_date';
+	$args['meta_value'] = $date;
 
 	$events = mdjm_get_events( $args );
 
