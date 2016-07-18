@@ -98,11 +98,13 @@ class MDJM_API 	{
 	 */
 	public function __construct()	{
 		$this->namespace = 'mdjm/v' . self::VERSION;
+		
 
 		add_action( 'rest_api_init',         array( $this, 'register_endpoints' ) );
 		add_action( 'mdjm-process_api_key',  array( $this, 'process_api_key'    ) );
 		add_action( '/mdjm/v1/availability', array( $this, 'availability_check' ) );
 		add_action( '/mdjm/v1/client',       array( $this, 'get_client'         ) );
+		add_action( '/mdjm/v1/employee',     array( $this, 'get_employee'       ) );
 		add_action( '/mdjm/v1/event',        array( $this, 'get_event'          ) );
 		add_action( '/mdjm/v1/events',       array( $this, 'list_events'        ) );
 	} // __construct
@@ -138,23 +140,33 @@ class MDJM_API 	{
 		$endpoints = array(
 			// For checking agency availability
 			'/availability/' => array(
-				'methods'    => array( WP_REST_Server::READABLE ),
-				'callback'   => array( $this, 'process_request' ),
+				'methods'      => array( WP_REST_Server::READABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
 			),
 			// Single client
 			'/client/' => array(
-				'methods'   => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
-				'callback'  => array( $this, 'process_request' ),
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => true
+			),
+			// Single employee
+			'/employee/' => array(
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => true
 			),
 			// Single event
 			'/event/' => array(
-				'methods'   => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
-				'callback'  => array( $this, 'process_request' ),
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				//'require_auth' => true
 			),
 			// Multiple events
 			'/events/' => array(
-				'methods'   => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
-				'callback'  => array( $this, 'process_request' ),
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				//'require_auth' => true
 			)
 		);
 
@@ -171,7 +183,14 @@ class MDJM_API 	{
 	 */
 	private function validate_user()	{
 
-		if ( empty( $this->request['api_key'] ) || empty( $this->request['token'] ) )	{
+		$endpoints = $this->define_endpoints();
+		$endpoint  = trailingslashit( str_replace( '/' . $this->namespace, '', $this->request->get_route() ) );
+
+		if ( array_key_exists( 'require_auth', $endpoints[ $endpoint ] ) && false === $endpoints[ $endpoint ]['require_auth'] )	{
+
+			$this->is_valid_user = true;
+
+		} elseif ( empty( $this->request['api_key'] ) || empty( $this->request['token'] ) )	{
 
 			$this->missing_auth();
 
@@ -654,12 +673,12 @@ class MDJM_API 	{
 	 */
 	public function output( $status_code = 200 )	{
 
-		$response = new WP_REST_Response();
+		$response = new WP_REST_Response( array( 'result' => true ) );
 		$response->set_status( $status_code );
 		$response->header( 'Content-type', 'application/json' );
 		$response->set_data( $this->data );
 		
-		echo json_encode( $response );
+		echo wp_json_encode( $response );
 		
 		die();
 	} // output
@@ -681,22 +700,15 @@ class MDJM_API 	{
 
 			do_action( 'mdjm_before_api_availability_check', $this );
 
-			$response['data'] = array(
-				'request' => __( 'Availability Check', 'mobile-dj-manager' ),
-				'params'  => $this->request
-			);
-
 			$date      = $this->request['date'];
-			$employees = isset ( $this->request['employees'] ) ? $this->request['employees'] : '';
-			$roles     = isset ( $this->request['roles'] )     ? $this->request['roles']     : '';
+			$employees = isset ( $this->request['employees'] ) ? explode( ',', $this->request['employees'] ) : '';
+			$roles     = isset ( $this->request['roles'] )     ? explode( ',', $this->request['roles'] )     : '';
 		
 			$result = mdjm_do_availability_check( $date, $employees, $roles );
 			
 		}
 	
 		if ( $result )	{
-
-			$this->is_valid_request = true;
 
 			if( ! empty( $result['available'] ) )	{
 				$response['availability'] = array(
@@ -717,7 +729,7 @@ class MDJM_API 	{
 		do_action( 'mdjm_after_api_availability_check', $this );
 
 		$this->data = array_merge( $this->data, $response );
-		$this->output( 200 );
+		$this->output();
 
 	} // availability_check
 
@@ -736,11 +748,6 @@ class MDJM_API 	{
 		}
 
 		do_action( 'mdjm_before_api_get_client', $this );
-
-		$response['data'] = array(
-			'request' => __( 'Retrieve Client', 'mobile-dj-manager' ),
-			'params'  => $this->request
-		);
 
 		if ( ! user_can( $this->request['client_id'], 'client' ) && ! user_can( $this->request['client_id'], 'inactive_client' ) )	{
 			$response['error'] = __( 'Error retrieving client.', 'mobile-dj-manager' );
@@ -772,7 +779,6 @@ class MDJM_API 	{
 			'first_name' => $client->first_name,
 			'last_name'  => $client->last_name,
 			'email'      => $client->user_email,
-			'login'      => $client->user_login,
 			'last_login' => $client->last_login,
 			'events'     => $events,
 			'next_event' => array(
@@ -788,6 +794,87 @@ class MDJM_API 	{
 		$this->output();
 
 	} // get_client
+
+	/**
+	 * Retrieve an employee.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function get_employee()	{
+
+		global $wp_roles;
+
+		$response = array();
+
+		if ( ! isset( $this->request['employee_id'] ) )	{
+			$this->missing_params( 'employee_id' );
+		}
+
+		do_action( 'mdjm_before_api_get_employee', $this );
+
+		if ( ! mdjm_is_employee( $this->request['employee_id'] ) )	{
+			$response['error'] = __( 'Error retrieving employee.', 'mobile-dj-manager' );
+			
+			$this->data = array_merge( $response, $this->data );
+			$this->output();
+		}
+
+		$employee = get_userdata( $this->request['employee_id'] );
+
+		if ( ! $employee )	{
+			$response['error'] = __( 'Employee could not be found.', 'mobile-dj-manager' );
+			
+			$this->data = array_merge( $response, $this->data );
+			$this->output();
+		}
+
+		$events          = array();
+		$roles           = array();
+		$mdjm_roles      = MDJM()->roles->get_roles();
+		$employee_events = mdjm_get_employee_events( $employee->ID );
+		$next_event      = mdjm_get_employees_next_event( $employee->ID );
+		$i = 0;
+
+		if ( $employee_events )	{
+			foreach( $employee_events as $event )	{
+				$events[ $event->ID ] = get_post_meta( $event->ID, '_mdjm_event_date', true );
+				$i++;
+			}
+		}
+
+		if( ! empty( $employee->roles ) )	{
+			
+			foreach( $employee->roles as $role )	{
+				if( array_key_exists( $role, $mdjm_roles ) )	{
+					$roles[ $role ] = $mdjm_roles[ $role ];
+				}
+				
+			}
+			
+		}
+
+		$response['employee'] = array(
+			'first_name'   => $employee->first_name,
+			'last_name'    => $employee->last_name,
+			'email'        => $employee->user_email,
+			'roles'        => $roles,
+			'last_login'   => $employee->last_login,
+			'events'       => $events,
+			'next_event'   => array(
+				'id'           => ! empty( $next_event ) ? $next_event->ID : '',
+				'date'         => ! empty( $next_event ) ? get_post_meta( $next_event->ID, '_mdjm_event_date', true ) : '',
+			),
+			'total_events' => $i
+		);
+
+		$this->data = array_merge( $this->data, $response );
+
+		do_action( 'mdjm_after_api_get_employee', $this );
+
+		$this->output();
+
+	} // get_employee
 
 	/**
 	 * Retrieve a single event by id.
@@ -809,16 +896,11 @@ class MDJM_API 	{
 
 		do_action( 'mdjm_before_api_get_event', $this );
 
-		$response['data'] = array(
-			'request' => __( 'Retrieve Event', 'mobile-dj-manager' ),
-			'params'  => $this->request
-		);
-
 		$mdjm_event = mdjm_get_event( $this->request['event_id'] );
 
 		if ( ! $mdjm_event )	{
 			$error = array();
-			$error['error'] = __( 'Event does not exist.', 'mobile-dj-manager' );
+			$error['error'] = sprintf( __( '%s does not exist.', 'mobile-dj-manager' ), mdjm_get_label_singular() );
 			
 			$this->data = $error;
 			$this->output();
@@ -837,7 +919,7 @@ class MDJM_API 	{
 	} // get_event
 
 	/**
-	 * Retrieve events. Either all or filtered by event ID, employees, date.
+	 * Retrieve events filtered by employee, client, date or status.
 	 *
 	 * @since	1.0
 	 * @return	void
@@ -845,9 +927,6 @@ class MDJM_API 	{
 	public function list_events()	{
 
 		$response       = array();
-		$event_args     = array();
-		$employee_args  = array();
-		$date_args      = array();
 
 		if ( ! mdjm_employee_can( 'read_events', $this->user_id ) )	{
 			$this->no_permsission();
@@ -859,91 +938,41 @@ class MDJM_API 	{
 
 		do_action( 'mdjm_before_api_event_list', $this );
 
-		$response['data'] = array(
-			'request' => __( 'Event List', 'mobile-dj-manager' ),
-			'params'  => $this->request
-		);
+		if ( isset( $this->request['employee_id'] ) )	{
+			$events = mdjm_get_employee_events( $this->request['employee_id'] );
+		} elseif ( isset( $this->request['client_id'] ) )	{
+			$events = mdjm_get_client_events( $this->request['client_id'] );
+		} elseif ( isset( $this->request['date'] ) )	{
+			$events = mdjm_get_events_by_date( $this->request['date'] );
+		} elseif ( isset( $this->request['status'] ) )	{
+			$events = mdjm_get_events_by_status( $this->request['status'] );
+		} else	{
+			$events = mdjm_get_events();
+		}
 
-		if ( isset ( $this->request['event_id'] ) )	{
-			$mdjm_event = mdjm_get_event( $this->request['event_id'] );
+		if ( ! $events )	{
+			$error = array();
+			$error['error'] = sprintf( __( 'No %s found.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) );
 
-			if ( ! $mdjm_event )	{
-				$error = array();
-				$error['error'] = __( 'Event does not exist', 'mobile-dj-manager' );
-				
-				$this->data = $error;
-				$this->output();
-			}
-
-			$response = mdjm_get_event_data( $mdjm_event );
-
-			$this->data = array_merge( $this->data, $response );
+			$this->data = $error;
 			$this->output();
 		}
 
-		if ( isset ( $this->request['employee_id'] ) )	{
-			$employee_args = array(
-				'relation'	=> 'OR',
-				array( 
-					'key'		=> '_mdjm_event_dj',
-					'value'		=> $this->request['employee_id'],
-					'compare'	=> '=',
-					'type'		=> 'numeric'
-				),
-				array(
-					'key'		=> '_mdjm_event_employees',
-					'value'		=> sprintf( ':"%s";', $this->request['employee_id'] ),
-					'compare'	=> 'LIKE'
-				)
-			);
+		$response['events'] = array();
+		$i = 0;
 
-			$event_args = array_merge( $event_args, $employee_args );
+		foreach ( $events as $event )	{
+			$response['events'][ $event->ID ] = mdjm_get_event_data( $event->ID );
+			$i++;
 		}
 
-		if ( isset ( $this->request['event_date'] ) )	{
-			$date_args = array(
-				'relation'	=> 'AND',
-				array(
-					'key'		=> '_mdjm_event_date',
-					'value'		=> $this->request['event_date'],
-					'type'		=> 'DATE'
-				)
-			);
-
-			$event_args = array_merge( $event_args, $date_args );
-		}
-
-			$date      = $this->request['date'];
-			$employees = isset ( $this->request['employees'] ) ? $this->request['employees'] : '';
-			$roles     = isset ( $this->request['roles'] )     ? $this->request['roles']     : '';
-		
-			$result = mdjm_do_availability_check( $date, $employees, $roles );
-			
-	
-		if ( $result )	{
-
-			$this->is_valid_request = true;
-
-			if( ! empty( $result['available'] ) )	{
-				$response['availability'] = array(
-					'date'      => $date,
-					'response'  => 'available',
-					'employees' => $result['available']
-				);
-			} else	{
-				$response['availability'] = array(
-					'date'      => $date,
-					'response'  => 'unavailable',
-					'employees' => ''
-				);
-			}
-
-		}
-
-		do_action( 'mdjm_after_api_availability_check', $this );
+		$response['count'] = $i;
 
 		$this->data = array_merge( $this->data, $response );
-		$this->output( 200 );
+
+		do_action( 'mdjm_after_api_event_list', $this );
+
+		$this->output();
 
 	} // list_events
 
