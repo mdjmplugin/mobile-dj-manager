@@ -13,26 +13,27 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Get all packages.
- * 
  *
- * @since	1.3
- * @param
- * @param
- * @return	arr|bool		Package details, or false if none.
+ * @since	1.4
+ * @param	arr			$args	Array of arguments. See @get_posts.
+ * @return	arr|bool	Package details, or false if none.
  */
-function mdjm_get_packages( $args=array( '' ) )	{
-	// The default args can be filtered
+function mdjm_get_packages( $args = array() )	{
+
 	$defaults = array(
-		'posts_per_page'   => -1,
-		'orderby'          => 'post_title',
-		'order'            => 'DESC',
-		'post_type'        => 'mdjm-package',
-		'post_status'      => 'publish'
+		'posts_per_page' => -1,
+		'orderby'        => 'post_title',
+		'order'          => 'DESC',
+		'post_type'      => 'mdjm-package',
+		'post_status'    => 'publish'
 	);
-	
+
 	$package_args = wp_parse_args( $args, $defaults );
-	
-	return get_posts( $package_args );
+
+	$package_args = apply_filters( 'mdjm_get_packages_args', $package_args );
+
+	return apply_filters( 'mdjm_get_packages', get_posts( $package_args ) );
+
 } // mdjm_get_packages
 
 /**
@@ -40,39 +41,50 @@ function mdjm_get_packages( $args=array( '' ) )	{
  *
  * Retrieve a package by the given field.
  *
- * @since	1.3
+ * @since	1.4
  * @param	str			$field		The field by which to retrieve.
  * @param	mixed		$value		The value of the field to match.
- * @return	obj						The WP Post object.		
+ * @return	obj			The WP Post object.		
  */
 function mdjm_get_package_by( $field, $value )	{
+
+	if ( 'ID' == $field )	{
+		$field = 'id';
+	}
+
 	switch( $field )	{
-		case 'id' :
+		case 'id':
+		default:
 			$package = get_post( $value );
-		break;
+			break;
 		
-		case 'name' :
+		case 'name':
 			$package = get_page_by_title( $value, 'OBJECT', 'mdjm-package' );
-		break;
+			break;
 		
-		case 'slug' :
+		case 'slug':
 			$package = get_page_by_path( $value, 'OBJECT', 'mdjm-package' );
-		break;
+			break;
 	}
 	
 	return $package;
+
 } // mdjm_get_package_by
 
 /**
  * Get all packages for the given employee.
  *
  * @since	1.3
- * @param	int			$employee_id	Required: The employee ID whose packages we want.
- * @param	bool		$all			Optional: True returns all the packages, false only those that are enabled.
+ * @param	int			$employee_id	The employee ID whose packages we want.
+ * @param	bool		$enabled		True returns only enabled packages, false returns all.
  * @return	obj			The WP Post objects for the employee's packages.		
  */
-function mdjm_get_packages_by_employee( $employee_id, $all=true )	{
-	
+function mdjm_get_packages_by_employee( $employee_id = 0, $enabled = true )	{
+
+	if ( empty( $employee_id ) )	{
+		$employee_id = get_current_user_id();
+	}
+
 	$employee_meta_query = array(
 		'key'     => '_mdjm_employees',
 		'value'   => array( $employee_id ),
@@ -81,41 +93,46 @@ function mdjm_get_packages_by_employee( $employee_id, $all=true )	{
 	
 	$meta_query = array( $employee_meta_query );
 	
-	if( ! empty( $all ) )	{
+	if( $enabled )	{
 		$meta_query = array(
 			'relation'	=> 'AND',
 			array(
-				'key'     => '_mdjm_status',
+				'key'     => '_package_status',
 				'value'   => 'enabled',
 				'compare' => '='
 			),
 			$employee_meta_query
 		);
 	}
-	
-	return get_posts(
-		array(
-			'posts_per_page'	=> -1,
-			'orderby'			=> 'post_title',
-			'order'				=> 'DESC',
-			'post_type'			=> 'mdjm-package',
-			'post_status'		=> 'publish',
-			'meta_query'		=> array( $meta_query )
-		)
+
+	$args = array(
+		'posts_per_page' => -1,
+		'orderby'        => 'post_title',
+		'order'          => 'DESC',
+		'post_type'      => 'mdjm-package',
+		'post_status'    => 'publish',
+		'meta_query'     => array( $meta_query )
 	);
+
+	$args = apply_filters( 'mdjm_get_packages_by_employee_args', $args );
+
+	$packages = get_posts( $args );
+
+	return apply_filters( 'mdjm_get_packages_by_employee', $packages );
+
 } // mdjm_get_packages_by_employee
 
 /**
  * Retrieve the cost of the given package.
  *
  * @since	1.3
- * @param	int		$package_id		Required: The post ID of the package.
- * @return	str		Formatted cost of the package.
+ * @param	int		$package_id		The post ID of the package.
+ * @return	str		Cost of the package.
  */
 function mdjm_get_package_price( $package_id )	{
 	$cost = get_post_meta( $package_id, '_mdjm_cost', true );
-	
-	return mdjm_currency_filter( mdjm_sanitize_amount( $cost ) );
+
+	return apply_filters( 'mdjm_get_package_price', $cost );
 } // mdjm_get_package_price
 
 /**
@@ -123,45 +140,43 @@ function mdjm_get_package_price( $package_id )	{
  * employee can provide only.
  *
  * @since	1.3
- * @param	int		$employee_id	Optional: An employee user ID, otherwise query current user.
- * @param	bool	$show_price		Optional: True to display the formatted package price
+ * @param	int		$employee_id	An employee user ID, otherwise query current user.
+ * @param	bool	$price			True to display the formatted package price
  * @return	str		HTML formatted string listing package information
  */
-function mdjm_list_available_packages( $employee_id='', $show_price=false )	{
-	//If packages are not enabled
+function mdjm_list_available_packages( $employee_id = 0, $price = false )	{
+
 	if( ! mdjm_packages_enabled() )	{
 		return __( 'No packages available', 'mobile-dj-manager' );
 	}
 	
-	// Get the packages
 	if( ! empty( $employee_id ) )	{
 		$packages = mdjm_get_packages_by_employee( $employee_id, false );
-	}
-	else	{
+	} else	{
 		$packages = mdjm_get_packages();
 	}
 	
-	// No packages
 	if( empty( $packages ) )	{
 		return __( 'No packages available', 'mobile-dj-manager' );
 	}
 	
-	$return = '';
+	$output = '';
 	$i = 0;
 	
 	foreach( $packages as $package )	{
 		if( $i > 0 )	{
-			$return .= '<br>';
+			$output .= '<br>';
 		}
 		
-		$return .= get_the_title( $package->ID );
+		$output .= get_the_title( $package->ID );
 		
-		if( ! empty( $show_price ) )	{
-			$return .= ' ' . mdjm_get_package_price( $package->ID );
+		if( $price )	{
+			$output .= ' ' . mdjm_get_package_price( $package->ID );
 		}
 		
 		$i++;
 	}
 	
-	return $return;
+	return $output;
+
 } // mdjm_list_available_packages
