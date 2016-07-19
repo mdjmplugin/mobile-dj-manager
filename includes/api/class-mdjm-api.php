@@ -743,20 +743,28 @@ class MDJM_API 	{
 
 		$response = array();
 
-		if ( ! isset( $this->request['client_id'] ) )	{
-			$this->missing_params( 'client_id' );
+		if ( ! isset( $this->request['client_id'] ) && ! isset( $this->request['client_email'] ) )	{
+			$this->missing_params( 'client_id or client_email' );
 		}
 
 		do_action( 'mdjm_before_api_get_client', $this );
 
-		if ( ! user_can( $this->request['client_id'], 'client' ) && ! user_can( $this->request['client_id'], 'inactive_client' ) )	{
+		if ( isset( $this->request['client_email'] ) && ! isset( $this->request['client_id'] ) )	{
+			$field = 'email';
+			$value = $this->request['client_email'];
+		} else	{
+			$field = 'id';
+			$value = $this->request['client_id'];
+		}
+
+		$client = get_user_by( $field, $value );
+
+		if ( ! user_can( $client->ID, 'client' ) && ! user_can( $client->ID, 'inactive_client' ) )	{
 			$response['error'] = __( 'Error retrieving client.', 'mobile-dj-manager' );
 			
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
-
-		$client = get_userdata( $this->request['client_id'] );
 
 		if ( ! $client )	{
 			$response['error'] = __( 'Client could not be found.', 'mobile-dj-manager' );
@@ -776,6 +784,7 @@ class MDJM_API 	{
 		}
 
 		$response['client'] = array(
+			'ID'         => $client->ID,
 			'first_name' => $client->first_name,
 			'last_name'  => $client->last_name,
 			'email'      => $client->user_email,
@@ -805,25 +814,31 @@ class MDJM_API 	{
 
 		global $wp_roles;
 
-		$response = array();
-
-		if ( ! isset( $this->request['employee_id'] ) )	{
-			$this->missing_params( 'employee_id' );
+		if ( ! isset( $this->request['employee_id'] ) && ! isset( $this->request['employee_email'] ) )	{
+			$this->missing_params( 'employee_id or employee_email' );
 		}
 
 		do_action( 'mdjm_before_api_get_employee', $this );
 
-		if ( ! mdjm_is_employee( $this->request['employee_id'] ) )	{
-			$response['error'] = __( 'Error retrieving employee.', 'mobile-dj-manager' );
+		if ( isset( $this->request['employee_email'] ) && ! isset( $this->request['employee_id'] ) )	{
+			$field = 'email';
+			$value = $this->request['employee_email'];
+		} else	{
+			$field = 'id';
+			$value = $this->request['employee_id'];
+		}
+
+		$employee = get_user_by( $field, $value );
+
+		if ( ! $employee )	{
+			$response['error'] = __( 'Employee could not be found.', 'mobile-dj-manager' );
 			
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
 
-		$employee = get_userdata( $this->request['employee_id'] );
-
-		if ( ! $employee )	{
-			$response['error'] = __( 'Employee could not be found.', 'mobile-dj-manager' );
+		if ( ! mdjm_is_employee( $employee->ID ) )	{
+			$response['error'] = __( 'Error retrieving employee.', 'mobile-dj-manager' );
 			
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
@@ -855,6 +870,7 @@ class MDJM_API 	{
 		}
 
 		$response['employee'] = array(
+			'ID'           => $employee->ID,
 			'first_name'   => $employee->first_name,
 			'last_name'    => $employee->last_name,
 			'email'        => $employee->user_email,
