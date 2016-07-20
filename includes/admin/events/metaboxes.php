@@ -900,7 +900,7 @@ function mdjm_event_metabox_employee_select_row( $event_id )	{
 			<?php $wage = mdjm_get_employees_event_wage( $event_id, $employee_id ); ?>
 
 			<div class="mdjm_col col2">
-				<label for="_mdjm_event_dj_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
+				<label for="_mdjm_event_dj_wage"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                 <?php echo mdjm_currency_symbol() . MDJM()->html->text( array(
 					'name'        => '_mdjm_event_dj_wage',
 					'class'       => 'mdjm-currency',
@@ -992,21 +992,21 @@ function mdjm_event_metabox_add_employee_fields( $event_id )	{
 
 			<tbody class="mdjm-hidden">
             	<tr>
-                	<td><label for="event_new_employee" class="mdjm-label"><?php _e( 'Employee', 'mobile-dj-manager' ); ?>:</label><br />
+                	<td><label for="event_new_employee"><?php _e( 'Employee', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->employee_dropdown( array(
 							'name'     => 'event_new_employee',
 							'exclude'  => $exclude,
 							'group'    => true
 						) ); ?></td>
 
-					<td><label for="event_new_employee_role" class="mdjm-label"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
+					<td><label for="event_new_employee_role"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->roles_dropdown( array(
 							'name'  => 'event_new_employee_role'
 						) ); ?></td>
 
 					<td>
 						<?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
-                    		<label for="event_new_employee_wage" class="mdjm-label"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
+                    		<label for="event_new_employee_wage"><?php _e( 'Wage', 'mobile-dj-manager' ); ?>:</label><br />
                             <?php echo mdjm_currency_symbol() . MDJM()->html->text( array(
 								'name'        => 'event_new_employee_wage',
 								'class'       => 'mdjm-currency',

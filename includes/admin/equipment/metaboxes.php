@@ -237,12 +237,12 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
-        <div id="addon-variable-price">
+        <div id="addon-monthly-price">
         	 <p><?php echo MDJM()->html->checkbox( array(
-                'name'     => '_addon_variable_pricing',
+                'name'     => '_addon_monthly_pricing',
 				'current'  => $variable
             ) ); ?>
-            <label for="_addon_variable_pricing"><?php _e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_variable_pricing"><?php _e( 'Enable monthly pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
 
 		<div id="mdjm-addon-regular-price-field" class="edd_pricing_fields"<?php echo $price_display; ?>>
@@ -273,3 +273,79 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 
 } // mdjm_addon_metabox_pricing_options_row
 add_action( 'mdjm_addon_price_fields', 'mdjm_addon_metabox_pricing_options_row', 10 );
+
+/**
+ * Individual Price Row
+ *
+ * Used to output a table row for each price associated with an add-on.
+ * Can be called directly, or attached to an action.
+ *
+ * @since 1.3.9
+ *
+ * @param       $key
+ * @param array $args
+ * @param       $post_id
+ */
+function mdjm_addon_metabox_price_row( $key, $args = array(), $post_id, $index ) {
+
+	$defaults = array(
+		'name'   => null,
+		'amount' => null
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$default_price_id  = mdjm_get_default_variable_price( $post_id );
+	$currency_position = mdjm_get_option( 'currency_format', 'before' );
+
+?>
+	<td>
+		<span class="edd_draghandle"></span>
+		<input type="hidden" name="mdjm_monthly_prices[<?php echo $key; ?>][index]" class="mdjm_repeatable_index" value="<?php echo $index; ?>"/>
+	</td>
+	<td>
+		<?php echo MDJM()->html->text( array(
+			'name'  => '_addon_monthly_prices[' . $key . '][name]',
+			'value' => esc_attr( $args['name'] ),
+			'placeholder' => __( 'Option Name', 'mobile-dj-manager' ),
+			'class' => 'mdjm_monthly_prices_name large-text'
+		) ); ?>
+	</td>
+
+	<td>
+		<?php
+			$price_args = array(
+				'name'  => '_addon_monthly_prices[' . $key . '][amount]',
+				'value' => $args['amount'],
+				'placeholder' => mdjm_format_amount( 9.99 ),
+				'class' => 'mdjm-currency'
+			);
+		?>
+
+		<?php if( $currency_position == 'before' ) : ?>
+			<span><?php echo mdjm_currency_filter( '' ); ?></span>
+			<?php echo MDJM()->html->text( $price_args ); ?>
+		<?php else : ?>
+			<?php echo MDJM()->html->text( $price_args ); ?>
+			<?php echo mdjm_currency_filter( '' ); ?>
+		<?php endif; ?>
+	</td>
+	<td class="mdjm_repeatable_default_wrapper">
+		<label class="mdjm-default-price">
+			<input type="radio" <?php checked( $default_price_id, $key, true ); ?> class="mdjm_repeatable_default_input" name="_mdjm_addon_default_price_id" value="<?php echo $key; ?>" />
+			<span class="screen-reader-text"><?php printf( __( 'Set ID %s as default price', 'mobile-dj-manager' ), $key ); ?></span>
+		</label>
+	</td>
+
+	<td>
+		<span class="mdjm_price_id"><?php echo $key; ?></span>
+	</td>
+
+	<?php do_action( 'mdjm_addon_price_table_row', $post_id, $key, $args ); ?>
+
+	<td>
+		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+	</td>
+<?php
+}
+add_action( 'mdjm_addon_render_price_row', 'mdjm_addon_metabox_price_row', 10, 4 );

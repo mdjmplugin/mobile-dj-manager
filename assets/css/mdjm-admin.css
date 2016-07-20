@@ -20,6 +20,12 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	width: 75px;
 }
 
+.mdjm-tick	{
+	background-image: url(../images/tick.png);
+	background-repeat: no-repeat;
+	background-position: 98% 50%;
+}
+
 .mdjm-small	{
 	font-size: 11px;	
 }
@@ -333,7 +339,6 @@ checkbox.mdjm-form-error {
 
 .mdjm_form_fields textarea { width: 100%; height: 5em; }
 .mdjm_form_fields .submit input { width: auto; }
-.mdjm_form_fields label { font-weight: bold; }
 .mdjm_form_fields.description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
 .mdjm_form_fields input .mdjm-currency { max-width: 75px; }
 .mdjm_form_fields select .mdjm-time { max-width: 10px; }

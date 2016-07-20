@@ -543,6 +543,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_url'
 		),
 		array(
+			'tag'         => 'final_balance',
+			'description' => __( 'The final balance payment for an event which is the total cost minus deposit, even if the deposit is unpaid.', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_final_balance'
+		),
+		array(
 			'tag'         => 'guest_playlist_url',
 			'description' => __( 'The URL to your event playlist page for guests', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_guest_playlist_url'
@@ -1881,11 +1886,39 @@ function mdjm_content_tag_event_type( $event_id='' )	{
  */
 function mdjm_content_tag_event_url( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_get_event_uri( $event_id );
 } // mdjm_content_tag_event_url
+
+/**
+ * Content tag: final_balance.
+ * The event ID.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The event final balance (cost - unpaid deposit).
+ */
+function mdjm_content_tag_final_balance( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+
+	$final_balance = get_post_meta( $event_id, '_mdjm_event_cost', true );
+	$deposit       = get_post_meta( $event_id, '_mdjm_event_deposit', true );
+
+	if ( ! $final_balance )	{
+		return;
+	}
+
+	if ( $deposit )	{
+		$final_balance = $final_balance - $deposit;
+	}
+
+	return mdjm_currency_filter( mdjm_sanitize_amount( $final_balance ) );
+} // mdjm_content_tag_final_balance
 
 /**
  * Content tag: guest_playlist_url.

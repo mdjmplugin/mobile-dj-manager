@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.8.2
+Stable tag: 1.3.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,21 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.8.3 =
+
+**Released Wednesday 20th July, 2016**
+
+**Bug Fixes**
+* Corrected hook for setting custom artist label. `DJ` will now be correctly substituted. Fixes issue [#104](https://github.com/mdjm/mobile-dj-manager/issues/104/ "Issue #104")
+* `mdjm_get_addons()` and `mdjm_get_packages()` may have generated a PHP notice if no add-ons/packages were defined. Fixes issue [#118](https://github.com/mdjm/mobile-dj-manager/issues/118/ "Issue #118")
+
+**New**
+* Added `{final_balance}` content tag. Outputs the final balance payment for an event. Total cost minus deposit, even if the deposit is unpaid
+
+**Tweaks**
+* Added `mdjm-tick` css class within admin
+* Input labels are no longer bold on the admin event screen
 
 = 1.3.8.2 =
 

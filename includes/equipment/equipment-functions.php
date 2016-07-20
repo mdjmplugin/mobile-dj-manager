@@ -196,9 +196,9 @@ function mdjm_get_addons( $args = array() )	{
 		'post_status'    => 'publish'
 	);
 
-	$package_args = wp_parse_args( $args, $defaults );
+	$addon_args = wp_parse_args( $args, $defaults );
 
-	return apply_filters( 'mdjm_get_addons', get_posts( $package_args ) );
+	return apply_filters( 'mdjm_get_addons', get_posts( $addon_args ) );
 
 } // mdjm_get_addons
 
