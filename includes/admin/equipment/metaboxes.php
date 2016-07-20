@@ -177,7 +177,7 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
                 'name'     => '_addon_restrict_date',
 				'current'  => mdjm_addon_is_restricted_by_date( $post->ID )
             ) ); ?>
-            <label for="employees"><?php _e( 'Restrict availability by month?', 'mobile-dj-manager' ); ?></label><br />
+            <label for="_addon_restrict_date"><?php _e( 'Restrict availability by month?', 'mobile-dj-manager' ); ?></label><br />
         </div>
     </div>
     <?php
