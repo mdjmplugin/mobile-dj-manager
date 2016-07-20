@@ -163,20 +163,21 @@ function mdjm_addon_metabox_pricing_callback( $post )	{
  */
 function mdjm_addon_metabox_availability_employee_row( $post )	{
 
+	$employees_with = mdjm_get_employees_with_addon( $post->ID );
+
 	if ( mdjm_is_employer() ) : ?>
         <div class="mdjm_field_wrap mdjm_form_fields">
             <div id="addon-employee-select">
-                <p><label for="_addon_employees"><?php _e( 'Employees with this addon:', 'mobile-dj-manager' ); ?></label><br />
+                <p><label for="_addon_employees"><?php _e( 'Employees with this addon', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_addon_employees',
-                    'selected'         => mdjm_get_employees_with_addon( $post->ID ),
+                    'selected'         => $employees_with ? $employees_with : array( 'all' ),
                     'show_option_none' => false,
-                    'show_option_all'  => false,
-                    'chosen'           => true,
+                    'show_option_all'  => __( 'All Employees', 'mobile-dj-manager' ),
                     'group'            => true,
                     'multiple'         => true,
 					'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
-                ) ); ?> <span class="description"><?php _e( 'Leave empty for all', 'mobile-dj-manager' ); ?></span></p>
+                ) ); ?></p>
             </div>
         </div>
     <?php else : ?>
@@ -207,11 +208,11 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
                 'name'     => '_addon_restrict_date',
 				'current'  => $restricted
             ) ); ?>
-            <label for="_addon_restrict_date"><?php _e( 'Restrict availability by month?', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_restrict_date"><?php _e( 'Select if this add-on is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
         </div>
         
         <div id="mdjm-addon-month-selection"<?php echo $class; ?>>
-        	 <p><label for="_addon_months"><?php _e( 'Months this add-on is available:', 'mobile-dj-manager' ); ?></label><br />
+        	 <p><label for="_addon_months"><?php _e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->month_dropdown( '_addon_months', mdjm_addon_get_months_available( $post->ID ), true, true ); ?></p>
         </div>
     </div>

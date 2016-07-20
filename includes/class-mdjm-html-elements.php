@@ -346,7 +346,7 @@ class MDJM_HTML_Elements {
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
 			'show_option_none' => $employees ? $args['show_option_none'] : __( 'No Employees', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_all'  => $args['show_option_all'],
 			'data'             => $args['data']
 		) );
 
