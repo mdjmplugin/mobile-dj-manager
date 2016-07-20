@@ -265,14 +265,14 @@ function mdjm_addon_get_price( $addon_id )	{
 } // mdjm_addon_get_price
 
 /**
- * Whether or not the addon has variable pricing.
+ * Whether or not the addon has monthly pricing.
  *
  * @since	1.4
  * @param	int		$addon_id	ID of the addon.
  * @return	bool	True if variable pricing is enabled.
  */
-function mdjm_addon_has_variable_pricing( $addon_id )	{
-	$variable_pricing = get_post_meta( $addon_id, '_addon_variable_pricing', true );
+function mdjm_addon_has_monthly_pricing( $addon_id )	{
+	$variable_pricing = get_post_meta( $addon_id, '_addon_monthly_pricing', true );
 
-	return apply_filters( 'mdjm_addon_has_variable_pricing', $variable_pricing, $addon_id );
-} // mdjm_addon_has_variable_pricing
+	return apply_filters( 'mdjm_addon_has_monthly_pricing', $variable_pricing, $addon_id );
+} // mdjm_addon_has_monthly_pricing
