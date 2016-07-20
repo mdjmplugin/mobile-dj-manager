@@ -142,12 +142,15 @@ function mdjm_insert_datepicker( $args = array() )	{
  * @since	1.0
  *
  * @param	int		$n
+ * @param	bool	$full	True to output the full month name
  * @return	str		Short month name
  */
-function mdjm_month_num_to_name( $n ) {
+function mdjm_month_num_to_name( $n, $full = false ) {
 	$timestamp = mktime( 0, 0, 0, $n, 1, 2005 );
 
-	return date_i18n( "M", $timestamp );
+	$output = $full ? 'F' : 'M';
+
+	return date_i18n( $output, $timestamp );
 } // mdjm_month_num_to_name
 
 /**

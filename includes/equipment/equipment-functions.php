@@ -227,7 +227,7 @@ function mdjm_addon_is_restricted_by_date( $addon_id )	{
 
 	// If the addon is restricted, there needs to be months set for availability
 	if ( $restricted )	{
-		$months = get_post_meta( $addon_id, '_addon_months_available', true );
+		$months = mdjm_addon_get_months_available( $addon_id );
 
 		if ( ! $months )	{
 			$restricted = false;
@@ -237,3 +237,42 @@ function mdjm_addon_is_restricted_by_date( $addon_id )	{
 	return apply_filters( 'mdjm_addon_is_restricted_by_date', $restricted, $addon_id );
 
 } // mdjm_addon_is_restricted_by_date
+
+/**
+ * Retrieve the months the addon is available.
+ *
+ * @since	1.4
+ * @param	int			$addon_id	ID of the addon.
+ * @return	arr|false	Array of month numbers this addon is available, otherwise false.
+ */
+function mdjm_addon_get_months_available( $addon_id )	{
+	$months = get_post_meta( $addon_id, '_addon_months_available', true );
+
+	return apply_filters( 'mdjm_addon_months_available', $months, $addon_id );
+} // mdjm_addon_get_months_available
+
+/**
+ * Retrieve the price of the addon.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the addon.
+ * @return	str		The cost of the addon.
+ */
+function mdjm_addon_get_price( $addon_id )	{
+	$price = get_post_meta( $addon_id, '_addon_price', true );
+
+	return apply_filters( 'mdjm_addon_price', $price, $addon_id );
+} // mdjm_addon_get_price
+
+/**
+ * Whether or not the addon has variable pricing.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the addon.
+ * @return	bool	True if variable pricing is enabled.
+ */
+function mdjm_addon_has_variable_pricing( $addon_id )	{
+	$variable_pricing = get_post_meta( $addon_id, '_addon_variable_pricing', true );
+
+	return apply_filters( 'mdjm_addon_has_variable_pricing', $variable_pricing, $addon_id );
+} // mdjm_addon_has_variable_pricing

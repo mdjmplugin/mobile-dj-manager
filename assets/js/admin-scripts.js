@@ -276,6 +276,10 @@ jQuery(document).ready(function ($) {
 		
 		equipment : function()	{
 
+			$( document.body ).on( 'click', '#_addon_restrict_date', function(event) {
+				$('#mdjm-addon-month-selection').toggle("fast");
+			});
+
 			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function(event) {
 				setCost();
 			});

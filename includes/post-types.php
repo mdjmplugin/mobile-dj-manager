@@ -295,7 +295,7 @@ function mdjm_register_post_types()	{
 			) ),
 			'map_meta_cap'            => true,
 			'has_archive'             => true,
-			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt' ) )
+			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
 		);
 		register_post_type( 'mdjm-addon', apply_filters( 'mdjm_addon_post_type_args', $addon_args ) );
 

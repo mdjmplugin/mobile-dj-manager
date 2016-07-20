@@ -245,15 +245,17 @@ class MDJM_HTML_Elements {
 	 * @since	1.3.7
 	 * @param	str		$name		Name attribute of the dropdown
 	 * @param	int		$selected	Month to select automatically
+	 * @param	bool	$fullname	True to display the full month name
+	 * @param	bool	$multiple	True to output a multiple select field
 	 * @return	str		$output		Month dropdown
 	 */
-	public function month_dropdown( $name = 'month', $selected = 0 ) {
+	public function month_dropdown( $name = 'month', $selected = 0, $fullname = false, $multiple = false ) {
 		$month   = 1;
 		$options = array();
-		$selected = empty( $selected ) ? date( 'n' ) : $selected;
+		$selected = ( empty( $selected ) && ! $multiple ) ? date( 'n' ) : $selected;
 
 		while ( $month <= 12 ) {
-			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month );
+			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $fullname );
 			$month++;
 		}
 
@@ -262,7 +264,8 @@ class MDJM_HTML_Elements {
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_none' => false,
+			'multiple'         => $multiple
 		) );
 
 		return $output;
