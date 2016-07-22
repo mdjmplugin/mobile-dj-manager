@@ -207,7 +207,9 @@ function mdjm_register_admin_scripts( $hook )	{
 				'no_venue_name'        => __( 'Enter a name for the venue', 'mobile-dj-manager' ),
 				'currency_symbol'      => mdjm_currency_symbol(),
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
-				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false
+				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
+				'select_months'        => __( 'Select Months', 'mobile-dj-manager' ),
+				'one_month_min'        => __( 'You must have a pricing option for at least one month', 'mobile-dj-manager' )
 			)
 		)
 	);

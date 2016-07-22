@@ -243,29 +243,40 @@ class MDJM_HTML_Elements {
 	 *
 	 * @access	public
 	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Month to select automatically
-	 * @param	bool	$fullname	True to display the full month name
-	 * @param	bool	$multiple	True to output a multiple select field
+	 * @param	arr		$args		see @defaults.
 	 * @return	str		$output		Month dropdown
 	 */
-	public function month_dropdown( $name = 'month', $selected = 0, $fullname = false, $multiple = false ) {
+	public function month_dropdown( $args ) {
+
+		$defaults = array(
+			'name'        => 'month',
+			'selected'    => 0,
+			'fullname'    => false,
+			'multiple'    => false,
+			'chosen'      => false,
+			'placeholder' => __( 'Select a Month', 'mobile-dj-manager' )
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
 		$month   = 1;
 		$options = array();
-		$selected = ( empty( $selected ) && ! $multiple ) ? date( 'n' ) : $selected;
+		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? date( 'n' ) : $args['selected'];
 
 		while ( $month <= 12 ) {
-			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $fullname );
+			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $args['fullname'] );
 			$month++;
 		}
 
 		$output = $this->select( array(
-			'name'             => $name,
+			'name'             => $args['name'],
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
 			'show_option_none' => false,
-			'multiple'         => $multiple
+			'multiple'         => $args['multiple'],
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder']
 		) );
 
 		return $output;

@@ -119,6 +119,26 @@ function mdjm_register_addon_meta_boxes( $post )	{
 add_action( 'add_meta_boxes_mdjm-addon', 'mdjm_register_addon_meta_boxes' );
 
 /**
+ * Returns default MDJM Addon meta fields.
+ *
+ * @since	1.4
+ * @return	arr		$fields		Array of fields.
+ */
+function mdjm_addons_metabox_fields() {
+
+	$fields = array(
+			'_addon_employees',
+			'_addon_restrict_date',
+			'_addon_months',
+			'_addon_variable_pricing',
+			'_addon_price',
+			'_addon_variable_prices'
+		);
+
+	return apply_filters( 'mdjm_addons_metabox_fields_save', $fields );
+} // mdjm_addons_metabox_fields
+
+/**
  * Output for the Addon Options meta box.
  *
  * @since	1.4
@@ -152,6 +172,8 @@ function mdjm_addon_metabox_pricing_callback( $post )	{
 	 */
 	do_action( 'mdjm_addon_price_fields', $post );
 
+	wp_nonce_field( 'mdjm-addon', 'mdjm_addon_meta_box_nonce' );
+
 } // mdjm_addon_metabox_pricing_callback
 
 /**
@@ -168,7 +190,7 @@ function mdjm_addon_metabox_availability_employee_row( $post )	{
 	if ( mdjm_is_employer() ) : ?>
         <div class="mdjm_field_wrap mdjm_form_fields">
             <div id="addon-employee-select">
-                <p><label for="_addon_employees"><?php _e( 'Employees with this addon', 'mobile-dj-manager' ); ?></label><br />
+                <p><label for="_addon_employees"><?php _e( 'Employees with this addon', '' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_addon_employees',
                     'selected'         => $employees_with ? $employees_with : array( 'all' ),
@@ -208,12 +230,17 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
                 'name'     => '_addon_restrict_date',
 				'current'  => $restricted
             ) ); ?>
-            <label for="_addon_restrict_date"><?php _e( 'Select if this add-on is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_restrict_date"><?php _e( 'Select if this add-on is only available during certain months of the year', '' ); ?></label></p>
         </div>
         
         <div id="mdjm-addon-month-selection"<?php echo $class; ?>>
-        	 <p><label for="_addon_months"><?php _e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
-                <?php echo MDJM()->html->month_dropdown( '_addon_months', mdjm_addon_get_months_available( $post->ID ), true, true ); ?></p>
+        	 <p><label for="_addon_months"><?php _e( 'Select the months this add-on is available', '' ); ?></label><br />
+                <?php echo MDJM()->html->month_dropdown( array(
+					'name'     => '_addon_months',
+					'selected' => mdjm_addon_get_months_available( $post->ID ),
+					'fullname' => true,
+					'multiple' => true
+				) ); ?></p>
         </div>
     </div>
 
@@ -231,43 +258,89 @@ add_action( 'mdjm_addon_availability_fields', 'mdjm_addon_metabox_availability_p
  */
 function mdjm_addon_metabox_pricing_options_row( $post )	{
 
-	$price              = mdjm_addon_get_price( $post->ID );
-	$variable           = mdjm_addon_has_variable_pricing( $post->ID );
-	$price_display      = $variable ? ' style="display:none;"' : '';
-	$currency_position  = mdjm_get_option( 'currency_format', 'before' );
+	$month             = 1;
+	$price             = mdjm_addon_get_price( $post->ID );
+	$variable          = mdjm_addon_has_variable_prices( $post->ID );
+	$prices            = mdjm_addon_get_variable_prices( $post->ID );
+	$price_display     = $variable ? ' style="display:none;"' : '';
+	$variable_display  = $variable ? ''                       : ' style="display:none;"';
+	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
-        <div id="addon-monthly-price">
+        <div id="addon-variable-price">
         	 <p><?php echo MDJM()->html->checkbox( array(
-                'name'     => '_addon_monthly_pricing',
+                'name'     => '_addon_variable_pricing',
 				'current'  => $variable
             ) ); ?>
-            <label for="_addon_variable_pricing"><?php _e( 'Enable monthly pricing', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_variable_pricing"><?php _e( 'Enable variable pricing', '' ); ?></label></p>
         </div>
 
-		<div id="mdjm-addon-regular-price-field" class="edd_pricing_fields"<?php echo $price_display; ?>>
+		<div id="mdjm-addon-regular-price-field" class="mdjm_pricing_fields"<?php echo $price_display; ?>>
 		<?php
 				$price_args = array(
-					'name'  => '_addon_price',
-					'value' => isset( $price ) ? esc_attr( $price ) : '',
-					'class' => 'mdjm-currency'
+					'name'        => '_addon_price',
+					'value'       => isset( $price ) ? esc_attr( $price ) : '',
+					'class'       => 'mdjm-currency',
+					'placeholder' => mdjm_format_amount( '10.00' )
 				);
 			?>
-	
+			<p><label for="<?php echo $price_args['name']; ?>"><?php _e( 'Standard Price', '' ); ?></label><br />
 			<?php if ( $currency_position == 'before' ) : ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
 				<?php echo MDJM()->html->text( $price_args ); ?>
 			<?php else : ?>
 				<?php echo MDJM()->html->text( $price_args ); ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
-			<?php endif; ?>
+			<?php endif; ?></p>
 	
 			<?php do_action( 'mdjm_addon_price_field', $post->ID ); ?>
 		</div>
-
 		<?php do_action( 'mdjm_after_addon_price_field', $post->ID ); ?>
+    </div>
 
+	<div id="mdjm-addon-variable-price-fields" class="mdjm_pricing_fields" <?php echo $variable_display; ?>>
+		<input type="hidden" id="mdjm_variable_prices" class="mdjm_variable_prices_name_field" value=""/>
+        <div id="mdjm_price_fields" class="mdjm_meta_table_wrap">
+			<table class="widefat mdjm_repeatable_table">
+            	<thead>
+					<tr>
+						<th style="width: 50px;"><?php _e( 'Month', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 100px;"><?php _e( 'Price', 'mobile-dj-manager' ); ?></th>
+						<?php do_action( 'mdjm_addon_price_table_head', $post->ID ); ?>
+                        <th style="width: 2%"></th>
+					</tr>
+				</thead>
+                <tbody>
+                	<?php
+						if ( ! empty( $prices ) ) :
+							foreach ( $prices as $key => $value ) :
+								$name   = isset( $value['name'] )   ? $value['name']   : '';
+								$amount = isset( $value['amount'] ) ? $value['amount'] : '';
+								$index  = isset( $value['index'] )  ? $value['index']  : $key;
+								$args = apply_filters( 'mdjm_price_row_args', compact( 'name', 'amount' ), $value );
+								?>
+								<tr class="mdjm_variable_prices_wrapper mdjm_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
+									<?php do_action( 'mdjm_render_addon_price_row', $key, $args, $post->ID, $index ); ?>
+								</tr>
+							<?php
+							endforeach;
+						else :
+					?>
+						<tr class="mdjm_variable_prices_wrapper mdjm_repeatable_row" data-key="1">
+							<?php do_action( 'mdjm_render_addon_price_row', 1, array(), $post->ID, 1 ); ?>
+						</tr>
+					<?php endif; ?>
+
+                    <tr>
+						<td class="submit" colspan="4" style="float: none; clear:both; background:#fff;">
+							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
+						</td>
+					</tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <?php
@@ -283,11 +356,12 @@ add_action( 'mdjm_addon_price_fields', 'mdjm_addon_metabox_pricing_options_row',
  *
  * @since 1.3.9
  *
- * @param       $key
- * @param array $args
- * @param       $post_id
+ * @param	int	$key
+ * @param	arr	$args
+ * @param	int $post_id
+ * @param	int	$index
  */
-function mdjm_addon_metabox_price_row( $key, $args = array(), $post_id, $index ) {
+function mdjm_addon_metabox_price_row( $key, $args, $post_id, $index ) {
 
 	$defaults = array(
 		'name'   => null,
@@ -296,30 +370,27 @@ function mdjm_addon_metabox_price_row( $key, $args = array(), $post_id, $index )
 
 	$args = wp_parse_args( $args, $defaults );
 
-	$default_price_id  = mdjm_get_default_variable_price( $post_id );
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 ?>
 	<td>
-		<span class="edd_draghandle"></span>
-		<input type="hidden" name="mdjm_monthly_prices[<?php echo $key; ?>][index]" class="mdjm_repeatable_index" value="<?php echo $index; ?>"/>
-	</td>
-	<td>
-		<?php echo MDJM()->html->text( array(
-			'name'  => '_addon_monthly_prices[' . $key . '][name]',
-			'value' => esc_attr( $args['name'] ),
-			'placeholder' => __( 'Option Name', 'mobile-dj-manager' ),
-			'class' => 'mdjm_monthly_prices_name large-text'
+		<?php echo MDJM()->html->month_dropdown( array(
+			'name'        => '_addon_variable_prices[' . $key . '][months]',
+			'selected'    => '',
+			'fullname'    => true,
+			'multiple'    => true,
+			'chosen'      => true,
+			'placeholder' => __( 'Select Months', 'mobile-dj-manager' )
 		) ); ?>
 	</td>
 
 	<td>
 		<?php
 			$price_args = array(
-				'name'  => '_addon_monthly_prices[' . $key . '][amount]',
-				'value' => $args['amount'],
-				'placeholder' => mdjm_format_amount( 9.99 ),
-				'class' => 'mdjm-currency'
+				'name'        => '_addon_variable_prices[' . $key . '][amount]',
+				'value'       => $args['amount'],
+				'placeholder' => mdjm_format_amount( 10.00 ),
+				'class'       => 'mdjm-price-field'
 			);
 		?>
 
@@ -331,22 +402,12 @@ function mdjm_addon_metabox_price_row( $key, $args = array(), $post_id, $index )
 			<?php echo mdjm_currency_filter( '' ); ?>
 		<?php endif; ?>
 	</td>
-	<td class="mdjm_repeatable_default_wrapper">
-		<label class="mdjm-default-price">
-			<input type="radio" <?php checked( $default_price_id, $key, true ); ?> class="mdjm_repeatable_default_input" name="_mdjm_addon_default_price_id" value="<?php echo $key; ?>" />
-			<span class="screen-reader-text"><?php printf( __( 'Set ID %s as default price', 'mobile-dj-manager' ), $key ); ?></span>
-		</label>
-	</td>
-
-	<td>
-		<span class="mdjm_price_id"><?php echo $key; ?></span>
-	</td>
 
 	<?php do_action( 'mdjm_addon_price_table_row', $post_id, $key, $args ); ?>
 
 	<td>
 		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
 	</td>
-<?php
+	<?php
 }
-add_action( 'mdjm_addon_render_price_row', 'mdjm_addon_metabox_price_row', 10, 4 );
+add_action( 'mdjm_render_addon_price_row', 'mdjm_addon_metabox_price_row', 10, 4 );

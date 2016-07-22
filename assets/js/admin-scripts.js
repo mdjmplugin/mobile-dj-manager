@@ -276,10 +276,6 @@ jQuery(document).ready(function ($) {
 		
 		equipment : function()	{
 
-			$( document.body ).on( 'click', '#_addon_restrict_date', function(event) {
-				$('#mdjm-addon-month-selection').toggle("fast");
-			});
-
 			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function(event) {
 				setCost();
 			});
@@ -762,7 +758,151 @@ jQuery(document).ready(function ($) {
 		
 	}
 	MDJM_Events.init();
-	
+
+	/**
+	 * Packages & Addons screen JS
+	 */
+	var MDJM_Equipment = {
+
+		init : function()	{
+			this.add();
+			this.remove();
+			this.price();
+		},
+
+		clone_repeatable : function(row) {
+
+			// Retrieve the highest current key
+			var key = highest = 1;
+			row.parent().find( 'tr.mdjm_repeatable_row' ).each(function() {
+				var current = $(this).data( 'key' );
+				if( parseInt( current ) > highest ) {
+					highest = current;
+				}
+			});
+			key = highest += 1;
+
+			clone = row.clone();
+
+			/** manually update any select box values */
+			clone.find( 'select' ).each(function() {
+				$( this ).val( row.find( 'select[name="' + $( this ).attr( 'name' ) + '"]' ).val() );
+			});
+
+			clone.removeClass( 'mdjm_add_blank' );
+
+			clone.attr( 'data-key', key );
+			clone.find( 'td input, td select, textarea' ).val( '' );
+			clone.find( 'input, select, textarea' ).each(function() {
+				var name = $( this ).attr( 'name' );
+				var id   = $( this ).attr( 'id' );
+
+				if( name ) {
+
+					name = name.replace( /\[(\d+)\]/, '[' + parseInt( key ) + ']');
+					$( this ).attr( 'name', name );
+
+				}
+
+				if( typeof id != 'undefined' ) {
+
+					id = id.replace( /(\d+)/, parseInt( key ) );
+					$( this ).attr( 'id', id );
+
+				}
+
+			});
+
+			clone.find( 'span.mdjm_price_id' ).each(function() {
+				$( this ).text( parseInt( key ) );
+			});
+
+			clone.find( 'span.mdjm_file_id' ).each(function() {
+				$( this ).text( parseInt( key ) );
+			});
+
+			clone.find( '.mdjm_repeatable_default_input' ).each( function() {
+				$( this ).val( parseInt( key ) ).removeAttr('checked');
+			})
+
+			// Remove Chosen elements
+			clone.find( '.search-choice' ).remove();
+			clone.find( '.chosen-container' ).remove();
+
+			return clone;
+		},
+
+		add : function() {
+			$( document.body ).on( 'click', '.submit .mdjm_add_repeatable', function(e) {
+				e.preventDefault();
+				var button = $( this ),
+				row = button.parent().parent().prev( 'tr' ),
+				clone = MDJM_Equipment.clone_repeatable(row);
+
+				clone.insertAfter( row ).find('input, textarea, select').filter(':visible').eq(0).focus();
+
+				// Setup chosen fields again if they exist
+				clone.find('.mdjm-select-chosen').chosen({
+					inherit_select_classes: true,
+					placeholder_text_multiple: mdjm_admin_vars.select_months,
+				});
+			});
+		},
+
+		remove : function() {
+			$( document.body ).on( 'click', '.mdjm_remove_repeatable', function(e) {
+				e.preventDefault();
+
+				var row   = $(this).parent().parent( 'tr' ),
+					count = row.parent().find( 'tr' ).length - 1,
+					type  = $(this).data('type'),
+					repeatable = 'tr.mdjm_repeatable_' + type + 's';
+
+				if ( type === 'price' ) {
+					var price_row_id = row.data('key');
+					/** remove from price condition */
+					$( '.mdjm_repeatable_condition_field option[value="' + price_row_id + '"]' ).remove();
+				}
+
+				if( count > 1 ) {
+					$( 'input, select', row ).val( '' );
+					row.fadeOut( 'fast' ).remove();
+				} else {
+					switch( type ) {
+						case 'price' :
+							alert( mdjm_admin_vars.one_month_min );
+							break;
+						default:
+							alert( mdjm_admin_vars.one_month_min );
+							break;
+					}
+				}
+
+				/* re-index after deleting */
+				$(repeatable).each( function( rowIndex ) {
+					$(this).find( 'input, select' ).each(function() {
+						var name = $( this ).attr( 'name' );
+						name = name.replace( /\[(\d+)\]/, '[' + rowIndex+ ']');
+						$( this ).attr( 'name', name ).attr( 'id', name );
+					});
+				});
+			});
+		},
+
+		price : function()	{
+			$( document.body ).on( 'click', '#_addon_restrict_date', function() {
+				$('#mdjm-addon-month-selection').toggle("fast");
+			});
+
+			$( document.body ).on( 'click', '#_addon_variable_pricing', function()	{
+				$('#mdjm-addon-regular-price-field').toggle("fast");
+				$('#mdjm-addon-variable-price-fields').toggle("fast");
+			});
+
+		}
+	}
+	MDJM_Equipment.init();
+
 	/**
 	 * Communications screen JS
 	 */
