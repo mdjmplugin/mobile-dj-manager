@@ -392,19 +392,14 @@ function mdjm_get_event_employees_data( $event_id )	{
  * @return	str		The first name of the employee.
  */
 function mdjm_get_employee_firstname( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
-	$employee = get_userdata( $user_id );
-	
+	$first_name = '';
+	$employee   = get_userdata( $user_id );
+
 	if( $employee && ! empty( $employee->first_name ) )	{
-		$first_name = $employee->first_name;
-	} else	{
-		$first_name = __( 'First name not set', 'mobile-dj-manager' );
+		$first_name = ucwords( $employee->first_name );
 	}
 	
-	return apply_filters( 'mdjm_get_employee_firstname', $first_name, $user_id );
+	return apply_filters( 'mdjm_employee_firstname', $first_name, $user_id );
 } // mdjm_get_employee_firstname
 
 /**
@@ -415,19 +410,14 @@ function mdjm_get_employee_firstname( $user_id )	{
  * @return	str		The last name of the employee.
  */
 function mdjm_get_employee_lastname( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
-	$employee = get_userdata( $user_id );
+	$last_name = '';
+	$employee  = get_userdata( $user_id );
 	
 	if( $employee && ! empty( $employee->last_name ) )	{
-		$last_name = $employee->last_name;
-	} else	{
-		$last_name = __( 'Last name not set', 'mobile-dj-manager' );
+		$last_name = ucwords( $employee->last_name );
 	}
 	
-	return apply_filters( 'mdjm_get_employee_lastname', $last_name, $user_id );
+	return apply_filters( 'mdjm_employee_lastname', $last_name, $user_id );
 } // mdjm_get_employee_lastname
 
 /**
@@ -441,17 +431,47 @@ function mdjm_get_employee_display_name( $user_id = '' )	{
 	if( empty( $user_id ) )	{
 		return false;
 	}
-	
-	$employee = get_userdata( $user_id );
+
+	$display_name = '';
+	$employee     = get_userdata( $user_id );
 	
 	if( $employee && ! empty( $employee->display_name ) )	{
-		$display_name = $employee->display_name;
-	} else	{
-		$display_name = __( 'Display name not set', 'mobile-dj-manager' );
+		$display_name = ucwords( $employee->display_name );
 	}
 	
-	return apply_filters( 'mdjm_get_employee_display_name', $display_name, $user_id );
+	return apply_filters( 'mdjm_employee_display_name', $display_name, $user_id );
 } // mdjm_get_employee_display_name
+
+/**
+ * Retrieve an employees phone number.
+ *
+ * @since	1.3
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The phone number of the employee.
+ */
+function mdjm_get_employee_phone( $user_id )	{
+	$phone  = '';
+	$employee = get_userdata( $user_id );
+	
+	if( $employee && ! empty( $employee->phone1 ) )	{
+		$phone = $employee->phone1;
+	}
+	
+	return apply_filters( 'mdjm_employee_phone', $phone, $user_id );
+} // mdjm_get_employee_phone
+
+/**
+ * Retrieve an employees alternative phone number.
+ *
+ * @since	1.3.8.9
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The alternative phone number of the employee.
+ */
+function mdjm_get_employee_alt_phone( $user_id )	{
+	$alt_phone = get_user_meta( $user_id, 'phone2', true );
+	
+	return apply_filters( 'mdjm_employee_alt_phone', $alt_phone, $user_id );
+} // mdjm_get_employee_alt_phone
 
 /**
  * Retrieve an employees post code.
