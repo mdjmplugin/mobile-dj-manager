@@ -22,10 +22,15 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_addon_post_columns( $columns ) {
 
+	$category_labels = mdjm_get_taxonomy_labels( 'addon-category' );
+
 	$columns = array(
-			'cb'     => '<input type="checkbox" />',
-			'title'  => __( 'Addon', 'mobile-dj-manager' ),
-			'price'  => __( 'Price', 'mobile-dj-manager' )
+			'cb'             => '<input type="checkbox" />',
+			'title'          => __( 'Addon', 'mobile-dj-manager' ),
+			'addon_category' => $category_labels['column_name'],
+			'availability'   => __( 'Availability', 'mobile-dj-manager' ),
+			'employees'      => __( 'Employees', 'mobile-dj-manager' ),
+			'price'          => __( 'Price', 'mobile-dj-manager' )
 		);
 
 	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
@@ -60,24 +65,85 @@ add_filter( 'manage_edit-mdjm-addon_sortable_columns', 'mdjm_addon_post_sortable
  */
 function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 	global $post;
-	
-	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )	{
-		$value = mdjm_get_event_price( $post_id );
-	}
 		
 	switch ( $column_name ) {
-		// Addon Price
-		case 'price':
-			if( mdjm_employee_can( 'read_events' ) )	{
-				echo '<strong><a href="' . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . '">' . date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) . '</a>';
+		// Category
+		case 'addon_category':
+			echo get_the_term_list( $post_id, 'addon-category', '', ', ', '');
+			break;
+
+		// Availability
+		case 'availability':
+			if ( ! mdjm_addon_is_restricted_by_date( $post_id ) )	{
+				$output = __( 'Always', 'mobile-dj-manager' );
 			} else	{
-				echo '<strong>' . date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) . '</strong>';
+				$availability = mdjm_addon_get_months_available( $post_id );
+
+				if ( ! $availability )	{
+					$output = __( 'Always', 'mobile-dj-manager' );
+				} else	{
+					$i      = 0;
+					$output = '';
+
+					foreach( $availability as $month )	{
+
+						$output .= mdjm_month_num_to_name( $availability[ $i ] );
+						$i++;
+						if ( $i < count( $availability ) )	{
+							$output .= ', ';
+						}
+
+					}
+				}
+			}
+
+			echo $output;
+
+			break;
+
+		// Employees
+		case 'employees':
+			$employees = mdjm_get_employees_with_addon( $post_id );
+			$output = '';
+
+			if ( in_array( 'all', $employees ) )	{
+				$output .= __( 'All Employees', 'mobile-dj-manager' );
+			} else	{
+				$i      = 0;
+				foreach( $employees as $employee )	{
+					if ( 'all' == $employee )	{
+						continue;
+					}
+					$output .= mdjm_get_employee_display_name( $employee );
+					$i++;
+					if ( $i < count( $employees ) )	{
+						$output .= '<br />';
+					}
+				}
+				
+			}
+			echo $output;
+
+			break;
+
+		// Price
+		case 'price':
+			if ( mdjm_addon_has_variable_prices( $post_id ) )	{
+
+				$range = mdjm_addon_get_price_range( $post_id );
+
+				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
+				echo ' &mdash; ';
+				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
+
+			} else	{
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $post_id ) ) );
 			}
 		break;
 
 	} // switch
 	
-} // mdjm_event_posts_custom_column
+} // mdjm_addon_posts_custom_column
 add_action( 'manage_mdjm-addon_posts_custom_column' , 'mdjm_addon_posts_custom_column', 10, 2 );
 
 /**
@@ -174,8 +240,7 @@ add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_addons' );
 function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	
 	// If editing, deleting, or reading a package or addon, get the post and post type object.
-	if ( 'edit_mdjm_package' == $cap || 'delete_mdjm_package' == $cap || 'read_mdjm_package' == $cap || 'publish_mdjm_package' == $cap ||
-		 'edit_mdjm_addon' == $cap || 'delete_mdjm_addon' == $cap || 'read_mdjm_addon' == $cap || 'publish_mdjm_addon' == $cap ) {
+	if ( 'edit_mdjm_package' == $cap || 'delete_mdjm_package' == $cap || 'read_mdjm_package' == $cap || 'publish_mdjm_package' == $cap ) {
 		
 		$post = get_post( $args[0] );
 		
@@ -191,7 +256,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	}
 			
 	// If editing a package or an addon, assign the required capability. */
-	if ( 'read_mdjm_package' == $cap || 'edit_mdjm_addon' == $cap )	{
+	if ( 'read_mdjm_package' == $cap )	{
 		
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->edit_posts;
@@ -202,7 +267,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	}
 	
 	// If deleting a package or an addon, assign the required capability.
-	elseif ( 'delete_mdjm_package' == $cap || 'delete_mdjm_addon' == $cap ) {
+	elseif ( 'delete_mdjm_package' == $cap ) {
 		
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->delete_posts;
@@ -213,7 +278,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	}
 	
 	// If reading a private package or addon, assign the required capability.
-	elseif ( 'read_mdjm_package' == $cap || 'read_mdjm_addon' == $cap )	{
+	elseif ( 'read_mdjm_package' == $cap )	{
 
 		if ( 'private' != $post->post_status )	{
 			$caps[] = 'read';
@@ -294,7 +359,7 @@ function mdjm_addon_post_messages( $messages )	{
 	$url3 = __( 'Add-ons', 'mobile-dj-manager' );
 	$url4 = '</a>';
 		
-	$messages['mdjm-event'] = array(
+	$messages['mdjm-addon'] = array(
 		0 => '', // Unused. Messages start at index 1.
 		1 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
 		4 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),

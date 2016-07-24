@@ -839,9 +839,8 @@ class MDJM_HTML_Elements {
 			if ( ! isset( $args['options']['groups'] ) )	{
 
 				foreach( $args['options'] as $key => $option ) {
-	
 					if( $args['multiple'] && is_array( $args['selected'] ) ) {
-						$selected = selected( true, in_array( $key, $args['selected'], true ), false );
+						$selected = selected( true, in_array( $key, $args['selected'] ), false );
 					} else {
 						$selected = selected( $args['selected'], $key, false );
 					}
@@ -862,7 +861,7 @@ class MDJM_HTML_Elements {
 						foreach ( $options as $key => $option )	{
 	
 							if( $args['multiple'] && is_array( $args['selected'] ) ) {
-								$selected = selected( true, in_array( $key, $args['selected'], true ), false );
+								$selected = selected( true, in_array( $key, $args['selected'] ), false );
 							} else {
 								$selected = selected( $args['selected'], $key, false );
 							}

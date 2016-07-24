@@ -67,7 +67,7 @@ function mdjm_admin_menu()	{
 	$mdjm_availability_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Employee Availability', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Availability', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-availability', 'mdjm_employee_availability_page' );
 											
 	if( ( mdjm_get_option( 'enable_packages' ) ) && mdjm_employee_can( 'manage_packages' ) )	{
-		$mdjm_packages_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Equipment Packages', 'mobile-dj-manager' ), __( 'Equipment Packages', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'mdjm-packages', 'mdjm_packages_page' );
+		$mdjm_packages_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Packages', 'mobile-dj-manager' ), __( 'Packages', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-package', '' );
 		$mdjm_addons_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Addons', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Addons', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-addon', '' );
 	}
 	
@@ -407,12 +407,21 @@ function mdjm_admin_toolbar( $admin_bar )	{
 	// Equipment Packages & Add-ons
 	if( mdjm_packages_enabled() && mdjm_employee_can( 'manage_packages' ) )	{
 		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-equipment',
-			'parent'	=> 'mdjm',
-			'title'	 => sprintf( __( 'Equipment %s Packages', 'mobile-dj-manager' ), '&amp;' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-packages' ),
-			'meta'	  => array(
-				'title' => sprintf( __( 'Equipment %s Packages', 'mobile-dj-manager' ), '&amp;' ),
+			'id'     => 'mdjm-packages',
+			'parent' => 'mdjm',
+			'title'  => __( 'Packages', 'mobile-dj-manager' ),
+			'href'   => admin_url( 'edit.php?post_type=mdjm-package' ),
+			'meta'   => array(
+				'title' => __( 'Packages', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'     => 'mdjm-addons',
+			'parent' => 'mdjm-packages',
+			'title'  => __( 'Add-ons', 'mobile-dj-manager' ),
+			'href'   => admin_url( 'edit.php?post_type=mdjm-addon' ),
+			'meta'   => array(
+				'title' => __( 'Add-ons', 'mobile-dj-manager' ),
 			),
 		) );
 	}

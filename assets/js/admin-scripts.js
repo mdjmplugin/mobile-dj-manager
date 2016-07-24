@@ -844,7 +844,7 @@ jQuery(document).ready(function ($) {
 				// Setup chosen fields again if they exist
 				clone.find('.mdjm-select-chosen').chosen({
 					inherit_select_classes: true,
-					placeholder_text_multiple: mdjm_admin_vars.select_months,
+					placeholder_text_multiple: mdjm_admin_vars.select_months
 				});
 			});
 		},
@@ -890,8 +890,17 @@ jQuery(document).ready(function ($) {
 		},
 
 		price : function()	{
+			$( document.body ).on( 'click', '#_package_restrict_date', function() {
+				$('#mdjm-package-month-selection').toggle("fast");
+			});
+
 			$( document.body ).on( 'click', '#_addon_restrict_date', function() {
 				$('#mdjm-addon-month-selection').toggle("fast");
+			});
+
+			$( document.body ).on( 'click', '#_package_variable_pricing', function()	{
+				$('#mdjm-package-regular-price-field').toggle("fast");
+				$('#mdjm-package-variable-price-fields').toggle("fast");
 			});
 
 			$( document.body ).on( 'click', '#_addon_variable_pricing', function()	{
