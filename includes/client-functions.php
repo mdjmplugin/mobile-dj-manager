@@ -354,6 +354,24 @@ add_action( 'mdjm_post_update_event_status_mdjm-failed', 'mdjm_set_client_status
 add_action( 'mdjm_post_update_event_status_mdjm-rejected', 'mdjm_set_client_status_inactive', 10, 2 );
 
 /**
+ * Retrieve a clients login.
+ *
+ * @since	1.3.8.9
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The login ID of the client.
+ */
+function mdjm_get_client_login( $user_id )	{
+	$login  = '';
+	$client = get_userdata( $user_id );
+	
+	if( $client && ! empty( $client->user_login ) )	{
+		$login = $client->user_login;
+	}
+	
+	return apply_filters( 'mdjm_client_login', $login, $user_id );
+} // mdjm_get_client_login
+
+/**
  * Retrieve a clients first name.
  *
  * @since	1.3
@@ -361,19 +379,14 @@ add_action( 'mdjm_post_update_event_status_mdjm-rejected', 'mdjm_set_client_stat
  * @return	str		The first name of the client.
  */
 function mdjm_get_client_firstname( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
-	$client = get_userdata( $user_id );
+	$first_name = '';
+	$client     = get_userdata( $user_id );
 	
 	if( $client && ! empty( $client->first_name ) )	{
-		$first_name = $client->first_name;
-	} else	{
-		$first_name = __( 'First name not set', 'mobile-dj-manager' );
+		$first_name = ucwords( $client->first_name );
 	}
 	
-	return apply_filters( 'mdjm_get_client_firstname', $first_name, $user_id );
+	return apply_filters( 'mdjm_client_firstname', $first_name, $user_id );
 } // mdjm_get_client_firstname
 
 /**
@@ -384,19 +397,14 @@ function mdjm_get_client_firstname( $user_id )	{
  * @return	str		The last name of the client.
  */
 function mdjm_get_client_lastname( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
-	$client = get_userdata( $user_id );
+	$last_name = '';
+	$client    = get_userdata( $user_id );
 	
 	if( $client && ! empty( $client->last_name ) )	{
-		$last_name = $client->last_name;
-	} else	{
-		$last_name = __( 'Last name not set', 'mobile-dj-manager' );
+		$last_name = ucwords( $client->last_name );
 	}
 	
-	return apply_filters( 'mdjm_get_client_lastname', $last_name, $user_id );
+	return apply_filters( 'mdjm_client_lastname', $last_name, $user_id );
 } // mdjm_get_client_lastname
 
 /**
@@ -407,19 +415,14 @@ function mdjm_get_client_lastname( $user_id )	{
  * @return	str		The display name of the client.
  */
 function mdjm_get_client_display_name( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
-	$client = get_userdata( $user_id );
+	$display_name = '';
+	$client       = get_userdata( $user_id );
 	
 	if( $client && ! empty( $client->display_name ) )	{
-		$display_name = $client->display_name;
-	} else	{
-		$display_name = __( 'Display name not set', 'mobile-dj-manager' );
+		$display_name = ucwords( $client->display_name );
 	}
 	
-	return apply_filters( 'mdjm_get_client_display_name', $display_name, $user_id );
+	return apply_filters( 'mdjm_client_display_name', $display_name, $user_id );
 } // mdjm_get_client_display_name
 
 /**
@@ -430,19 +433,15 @@ function mdjm_get_client_display_name( $user_id )	{
  * @return	str		The email address of the client.
  */
 function mdjm_get_client_email( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
 	$client = get_userdata( $user_id );
 	
 	if( $client && ! empty( $client->user_email ) )	{
-		$email = $client->user_email;
+		$email = strtolower( $client->user_email );
 	} else	{
-		$email = __( 'Email address not set', 'mobile-dj-manager' );
+		$email = '';
 	}
 	
-	return apply_filters( 'mdjm_get_client_email', $email, $user_id );
+	return apply_filters( 'mdjm_client_email', $email, $user_id );
 } // mdjm_get_client_email
 
 /**
@@ -484,7 +483,7 @@ function mdjm_get_client_full_address( $client_id )	{
 
 	}
 	
-	$return = apply_filters( 'mdjm_get_client_full_address', $return );
+	$return = apply_filters( 'mdjm_client_full_address', $return );
 	
 	return is_array( $return ) ? implode( '<br />', $return ) : $return;
 } // mdjm_get_client_full_address
@@ -497,20 +496,28 @@ function mdjm_get_client_full_address( $client_id )	{
  * @return	str		The phone number of the client.
  */
 function mdjm_get_client_phone( $user_id )	{
-	if( empty( $user_id ) )	{
-		return false;
-	}
-	
+	$phone  = '';
 	$client = get_userdata( $user_id );
 	
 	if( $client && ! empty( $client->phone1 ) )	{
 		$phone = $client->phone1;
-	} else	{
-		$phone = __( 'Phone number not set', 'mobile-dj-manager' );
 	}
 	
-	return apply_filters( 'mdjm_get_client_phone', $phone, $user_id );
+	return apply_filters( 'mdjm_client_phone', $phone, $user_id );
 } // mdjm_get_client_phone
+
+/**
+ * Retrieve a clients alternative phone number.
+ *
+ * @since	1.3.8.9
+ * @param	int		$user_id	The ID of the user to check.
+ * @return	str		The alternative phone number of the client.
+ */
+function mdjm_get_client_alt_phone( $user_id )	{
+	$alt_phone = get_user_meta( $user_id, 'phone2', true );
+	
+	return apply_filters( 'mdjm_client_alt_phone', $alt_phone, $user_id );
+} // mdjm_get_client_alt_phone
 
 /**
  * Retrieve a clients last login timestamp.
@@ -529,7 +536,7 @@ function mdjm_get_client_last_login( $client_id )	{
 		$login = __( 'Never', 'mobile-dj-manager' );
 	}
 	
-	return apply_filters( 'mdjm_get_client_last_login', $login, $client_id );
+	return apply_filters( 'mdjm_client_last_login', $login, $client_id );
 } // mdjm_get_client_last_login
 
 /**
