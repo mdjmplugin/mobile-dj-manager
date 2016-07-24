@@ -463,7 +463,7 @@ function mdjm_get_employee_phone( $user_id )	{
 /**
  * Retrieve an employees alternative phone number.
  *
- * @since	1.3.8.9
+ * @since	1.3.8.4
  * @param	int		$user_id	The ID of the user to check.
  * @return	str		The alternative phone number of the employee.
  */

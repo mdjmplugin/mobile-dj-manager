@@ -356,7 +356,7 @@ add_action( 'mdjm_post_update_event_status_mdjm-rejected', 'mdjm_set_client_stat
 /**
  * Retrieve a clients login.
  *
- * @since	1.3.8.9
+ * @since	1.3.8.4
  * @param	int		$user_id	The ID of the user to check.
  * @return	str		The login ID of the client.
  */
@@ -509,7 +509,7 @@ function mdjm_get_client_phone( $user_id )	{
 /**
  * Retrieve a clients alternative phone number.
  *
- * @since	1.3.8.9
+ * @since	1.3.8.4
  * @param	int		$user_id	The ID of the user to check.
  * @return	str		The alternative phone number of the client.
  */
