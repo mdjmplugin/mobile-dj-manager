@@ -557,6 +557,7 @@ class MDJM_HTML_Elements {
 			'multiple'         => true,
 			'package'          => '',
 			'cost'             => true,
+			'desc'             => false,
 			'data'             => array()
 		);
 		
@@ -566,10 +567,6 @@ class MDJM_HTML_Elements {
 
 		$categories = get_terms( 'addon-category', array( 'hide_empty' => true ) );
 		$options    = array();
-
-		if ( empty( $selected ) )	{
-			$selected = mdjm_get_option( 'event_type_default' );
-		}
 
 		foreach ( $categories as $category ) {
 			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
@@ -604,13 +601,22 @@ class MDJM_HTML_Elements {
 						}
 					}
 
-					if( in_category( $category_key, $addon ) )	{
+					if( has_term( $category_value->name, 'addon-category', $addon->ID ) )	{
 						$price = '';
 						if( $args['cost'] == true )	{
 							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $addon->ID ) ) ) ;
 						}
+						$desc           = '';
+						$excerpt_length = apply_filters( 'addon_excerpt_length', 30 );
+						if( $args['desc'] == true )	{
+							if ( has_excerpt( $addon->ID ) )	{
+								$desc .= ' - ' . apply_filters( 'mdjm_addon_excerpt', wp_trim_words( get_post_field( 'post_excerpt', $addon->ID ), $excerpt_length ) );
+							} else	{
+								$desc .= ' - ' . apply_filters( 'mdjm_addon_excerpt', wp_trim_words( get_post_field( 'post_content', $addon->ID ), $excerpt_length ) );
+							}
+						}
 
-						$options['groups'][ $category_value ][] = array( $addon->ID => $addon->post_title . $price );
+						$options['groups'][ $category_value->name ][] = array( $addon->ID => $addon->post_title . $price . $desc );
 
 					}
 

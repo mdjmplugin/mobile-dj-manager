@@ -448,6 +448,27 @@ function mdjm_get_addon_by( $field, $value )	{
 } // mdjm_get_addon_by
 
 /**
+ * Retrieve all add-ons in the given category.
+ *
+ * @since	1.4
+ * @param	int|arr		$terms	The category ID.
+ * @return	arr|bool	Addons.
+ */
+function mdjm_get_addons_in_category_id( $term_id )	{
+
+	$args = array(
+		'tax_query' => array(
+			'taxonomy'         => 'addon-category',
+			'terms'            => $term_id,
+			'include_children' => false
+		)
+	);
+
+	return mdjm_get_addons( $args );
+
+} // mdjm_get_addons_in_category_id
+
+/**
  * Retrieve an addons name.
  *
  * @since	1.4

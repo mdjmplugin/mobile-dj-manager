@@ -333,8 +333,10 @@ function mdjm_package_metabox_item_row( $key, $args, $post_id, $index ) {
 			'show_option_none' => false,
 			'show_option_all'  => false,
 			'employee'         => false,
-			'placeholder'      => __( 'Select some add-ons', 'mobile-dj-manager' ),
+			'chosen'           => true,
+			'placeholder'      => __( 'Select an add-on', 'mobile-dj-manager' ),
 			'cost'             => true,
+			'desc'             => true,
 			'multiple'         => false
 		) ); ?>
 	</td>
@@ -361,7 +363,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 	$price             = mdjm_package_get_price( $post->ID );
 	$variable          = mdjm_package_has_variable_prices( $post->ID );
 	$prices            = mdjm_package_get_variable_prices( $post->ID );
-	$variable_display  = $variable ? ''                       : ' style="display:none;"';
+	$variable_display  = $variable ? '' : ' style="display:none;"';
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
@@ -372,7 +374,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 					'name'        => '_package_price',
 					'value'       => isset( $price ) ? esc_attr( mdjm_format_amount( $price ) ) : '',
 					'class'       => 'mdjm-currency',
-					'desc'        => __( 'Will be used if variable pricing it not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
+					'desc'        => __( 'Will be used if variable pricing is not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
 					'placeholder' => mdjm_format_amount( '10.00' )
 				);
 			?>
@@ -389,9 +391,9 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 		</div>
 		<?php do_action( 'mdjm_after_package_price_field', $post->ID ); ?>
         <div id="package-variable-price">
-        	 <p><?php echo MDJM()->html->checkbox( array(
-                'name'     => '_package_variable_pricing',
-				'current'  => $variable
+        	<p><?php echo MDJM()->html->checkbox( array(
+                'name'    => '_package_variable_pricing',
+				'current' => $variable
             ) ); ?>
             <label for="_package_variable_pricing"><?php _e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
@@ -730,19 +732,19 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 	$price             = mdjm_addon_get_price( $post->ID );
 	$variable          = mdjm_addon_has_variable_prices( $post->ID );
 	$prices            = mdjm_addon_get_variable_prices( $post->ID );
-	$variable_display  = $variable ? ''                       : ' style="display:none;"';
+	$variable_display  = $variable ? '' : ' style="display:none;"';
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
-		<div id="mdjm-addon-regular-price-field" class="mdjm_pricing_fields"<?php echo $price_display; ?>>
+		<div id="mdjm-addon-regular-price-field" class="mdjm_pricing_fields">
 		<?php
 				$price_args = array(
 					'name'        => '_addon_price',
 					'value'       => isset( $price ) ? esc_attr( mdjm_format_amount( $price ) ) : '',
 					'class'       => 'mdjm-currency',
 					'placeholder' => mdjm_format_amount( '10.00' ),
-					'desc'        => __( 'Will be used if variable pricing it not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
+					'desc'        => __( 'Will be used if variable pricing is not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
 				);
 			?>
 			<p><label for="<?php echo $price_args['name']; ?>"><?php _e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
@@ -758,9 +760,9 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 		</div>
 		<?php do_action( 'mdjm_after_addon_price_field', $post->ID ); ?>
         <div id="addon-variable-price">
-        	 <p><?php echo MDJM()->html->checkbox( array(
-                'name'     => '_addon_variable_pricing',
-				'current'  => $variable
+        	<p><?php echo MDJM()->html->checkbox( array(
+                'name'    => '_addon_variable_pricing',
+				'current' => $variable
             ) ); ?>
             <label for="_addon_variable_pricing"><?php _e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
