@@ -12,6 +12,214 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
+/**
+ * Define the columns to be displayed for package posts
+ *
+ * @since	1.4
+ * @param	arr		$columns	Array of column names
+ * @return	arr		$columns	Filtered array of column names
+ */
+function mdjm_package_post_columns( $columns ) {
+
+	$category_labels = mdjm_get_taxonomy_labels( 'package-category' );
+
+	$columns = array(
+			'cb'               => '<input type="checkbox" />',
+			'title'            => __( 'Package', 'mobile-dj-manager' ),
+			'items'            => __( 'Items', 'mobile-dj-manager' ),
+			'package_category' => $category_labels['column_name'],
+			'availability'     => __( 'Availability', 'mobile-dj-manager' ),
+			'employees'        => __( 'Employees', 'mobile-dj-manager' ),
+			'price'            => __( 'Price', 'mobile-dj-manager' )
+		);
+
+	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
+		unset( $columns['cb'] );
+	}
+		
+	return $columns;
+} // mdjm_package_post_columns
+add_filter( 'manage_mdjm-package_posts_columns' , 'mdjm_package_post_columns' );
+
+/**
+ * Define which columns are sortable for package posts
+ *
+ * @since	1.4
+ * @param	arr		$sortable_columns	Array of package post sortable columns
+ * @return	arr		$sortable_columns	Filtered Array of package post sortable columns
+ */
+function mdjm_package_post_sortable_columns( $sortable_columns )	{
+	$sortable_columns['price'] = 'price';
+	
+	return $sortable_columns;
+} // mdjm_package_post_sortable_columns
+add_filter( 'manage_edit-mdjm-package_sortable_columns', 'mdjm_package_post_sortable_columns' );
+		
+/**
+ * Define the data to be displayed in each of the custom columns for the Package post types
+ *
+ * @since	1.4
+ * @param	str		$column_name	The name of the column to display
+ * @param	int		$post_id		The current post ID
+ * @return
+ */
+function mdjm_package_posts_custom_column( $column_name, $post_id )	{
+	global $post;
+		
+	switch ( $column_name ) {
+		// Items
+		case 'items':
+			$items = mdjm_package_get_items( $post_id );
+
+			if ( $items )	{
+				$i = 0;
+				foreach ( $items as $item )	{
+					echo mdjm_get_addon_name( $item->ID );
+					$i++;
+					if ( $i < count( $items ) )	{
+						echo '<br />';
+					}
+				}
+			}
+
+			break;
+
+		// Category
+		case 'package_category':
+			echo get_the_term_list( $post_id, 'package-category', '', ', ', '');
+			break;
+
+		// Availability
+		case 'availability':
+			if ( ! mdjm_package_is_restricted_by_date( $post_id ) )	{
+				$output = __( 'Always', 'mobile-dj-manager' );
+			} else	{
+				$availability = mdjm_package_get_months_available( $post_id );
+
+				if ( ! $availability )	{
+					$output = __( 'Always', 'mobile-dj-manager' );
+				} else	{
+					$i      = 0;
+					$output = '';
+
+					foreach( $availability as $month )	{
+
+						$output .= mdjm_month_num_to_name( $availability[ $i ] );
+						$i++;
+						if ( $i < count( $availability ) )	{
+							$output .= ', ';
+						}
+
+					}
+				}
+			}
+
+			echo $output;
+
+			break;
+
+		// Employees
+		case 'employees':
+			$employees = mdjm_get_employees_with_package( $post_id );
+			$output = '';
+
+			if ( in_array( 'all', $employees ) )	{
+				$output .= __( 'All Employees', 'mobile-dj-manager' );
+			} else	{
+				$i      = 0;
+				foreach( $employees as $employee )	{
+					if ( 'all' == $employee )	{
+						continue;
+					}
+					$output .= mdjm_get_employee_display_name( $employee );
+					$i++;
+					if ( $i < count( $employees ) )	{
+						$output .= '<br />';
+					}
+				}
+				
+			}
+			echo $output;
+
+			break;
+
+		// Price
+		case 'price':
+			if ( mdjm_package_has_variable_prices( $post_id ) )	{
+
+				$range = mdjm_package_get_price_range( $post_id );
+
+				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
+				echo ' &mdash; ';
+				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
+
+			} else	{
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_package_get_price( $post_id ) ) );
+			}
+		break;
+
+	} // switch
+	
+} // mdjm_package_posts_custom_column
+add_action( 'manage_mdjm-package_posts_custom_column' , 'mdjm_package_posts_custom_column', 10, 2 );
+
+/**
+ * Set the package post placeholder title.
+ *
+ * @since	1.4
+ * @param	str		$title	Current post placeholder title
+ * @return	str		$title	Post placeholder title
+ */
+function mdjm_package_set_post_title_placeholder( $title ) {
+	
+	$screen = get_current_screen();
+
+	if ( 'mdjm-addon' == $screen->post_type )	{
+		$title = __( 'Enter a name for this package', 'mobile-dj-manager' );
+	}
+
+	return $title;
+
+} // mdjm_package_set_post_title_placeholder
+add_action( 'enter_title_here', 'mdjm_package_set_post_title_placeholder' );
+
+/**
+ * Order package posts.
+ *
+ * @since	1.4
+ * @param	obj		$query		The WP_Query object
+ * @return	void
+ */
+function mdjm_package_post_order( $query )	{
+	
+	if ( ! is_admin() || 'mdjm-package' != $query->get( 'post_type' ) )	{
+		return;
+	}
+
+	$orderby = $query->get( 'orderby' );
+	$order   = $query->get( 'order' );
+
+	switch( $orderby )	{
+		case 'ID':
+		default:
+			$query->set( 'orderby',  'ID' );
+			$query->set( 'order',  $order );
+			break;
+
+		case 'price':
+			$query->set( 'meta_key', '_package_price' );
+			$query->set( 'orderby',  'meta_value' );
+			$query->set( 'order',  $order );
+            break;
+	}
+	
+} // mdjm_package_post_order
+add_action( 'pre_get_posts', 'mdjm_package_post_order' );
+
+/***********************************************************
+ * Addons
+ **********************************************************/
 		
 /**
  * Define the columns to be displayed for addon posts
@@ -163,7 +371,7 @@ function mdjm_addon_set_post_title_placeholder( $title ) {
 
 	return $title;
 
-} // mdjm_addon_set_post_title
+} // mdjm_addon_set_post_title_placeholder
 add_action( 'enter_title_here', 'mdjm_addon_set_post_title_placeholder' );
 
 /**
@@ -196,7 +404,7 @@ function mdjm_addon_post_order( $query )	{
             break;
 	}
 	
-} // mdjm_event_post_order
+} // mdjm_addon_post_order
 add_action( 'pre_get_posts', 'mdjm_addon_post_order' );
 
 /**

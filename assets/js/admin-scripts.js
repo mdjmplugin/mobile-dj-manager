@@ -849,6 +849,22 @@ jQuery(document).ready(function ($) {
 			});
 		},
 
+		move : function() {
+
+			$(".mdjm_repeatable_table tbody").sortable({
+				handle: '.mdjm_draghandle', items: '.mdjm_repeatable_row', opacity: 0.6, cursor: 'move', axis: 'y', update: function() {
+					var count  = 0;
+					$(this).find( 'tr' ).each(function() {
+						$(this).find( 'input.mdjm_repeatable_index' ).each(function() {
+							$( this ).val( count );
+						});
+						count++;
+					});
+				}
+			});
+
+		},
+
 		remove : function() {
 			$( document.body ).on( 'click', '.mdjm_remove_repeatable', function(e) {
 				e.preventDefault();
@@ -899,12 +915,10 @@ jQuery(document).ready(function ($) {
 			});
 
 			$( document.body ).on( 'click', '#_package_variable_pricing', function()	{
-				$('#mdjm-package-regular-price-field').toggle("fast");
 				$('#mdjm-package-variable-price-fields').toggle("fast");
 			});
 
 			$( document.body ).on( 'click', '#_addon_variable_pricing', function()	{
-				$('#mdjm-addon-regular-price-field').toggle("fast");
 				$('#mdjm-addon-variable-price-fields').toggle("fast");
 			});
 

@@ -119,6 +119,19 @@ function mdjm_get_package_by( $field, $value )	{
 } // mdjm_get_package_by
 
 /**
+ * Retrieve a package name.
+ *
+ * @since	1.4
+ * @param	int		$package_id		ID of the package.
+ * @return	str		The package title.
+ */
+function mdjm_get_package_name( $package_id )	{
+	$title = get_the_title( $package_id );
+
+	return apply_filters( 'mdjm_package_name', $title, $addon_id );
+} // mdjm_get_package_name
+
+/**
  * Retrieve all employees with package.
  *
  * @since	1.4
@@ -433,6 +446,19 @@ function mdjm_get_addon_by( $field, $value )	{
 	return $addon;
 
 } // mdjm_get_addon_by
+
+/**
+ * Retrieve an addons name.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the addon.
+ * @return	str		The addon title.
+ */
+function mdjm_get_addon_name( $addon_id )	{
+	$title = get_the_title( $addon_id );
+
+	return apply_filters( 'mdjm_addon_name', $title, $addon_id );
+} // mdjm_get_addon_name
 
 /**
  * Retrieve all employees with addon.

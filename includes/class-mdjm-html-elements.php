@@ -549,7 +549,7 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_none' => __( 'No Addons', 'mobile-dj-manager' ),
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
@@ -562,45 +562,55 @@ class MDJM_HTML_Elements {
 		
 		$args    = wp_parse_args( $args, $defaults );
 		$options = array();
+		$addons  = mdjm_get_addons();
 
-		$addons     = mdjm_get_addons();
-		$categories = get_option( 'mdjm_cats' );
-		if( $categories )	{
-			asort( $categories );
+		$categories = get_terms( 'addon-category', array( 'hide_empty' => true ) );
+		$options    = array();
+
+		if ( empty( $selected ) )	{
+			$selected = mdjm_get_option( 'event_type_default' );
+		}
+
+		foreach ( $categories as $category ) {
+			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
 		}
 
 		if ( $addons )	{
 			foreach( $categories as $category_key => $category_value )	{
 				
 				foreach( $addons as $addon )	{
-					if ( empty( $addon[6] ) || $addon[6] != 'Y' )	{
-						continue;
-					}
 
 					if ( ! empty( $args['package'] ) )	{
-						$packages = mdjm_get_packages();
-						$package_items = explode( ',', $packages[ $args['package'] ]['equipment'] );
-						
-						if ( ! empty( $package_items ) && in_array( $addon[1], $package_items ) )	{
+						if ( is_numeric( $args['package'] ) )	{
+							$package = mdjm_get_package( $args['package'] );
+						} else	{
+							$package = mdjm_get_package_by( 'slug', $args['package'] );
+						}
+
+						if ( $package )	{
+							$package_items = mdjm_package_get_items( $package->ID );
+						}
+
+						if ( $package_items && in_array( $addon->ID, $package_items ) )	{
 							continue;
 						}
 					}
 
 					if( $args['employee'] )	{	
-						$employees_with = explode( ',', $addon[8] );
+						$employees_with = mdjm_get_employees_with_addon( $addon->ID );
 						
 						if( ! in_array( $args['employee'], $employees_with ) )	{
 							continue;
 						}
 					}
 
-					if( $addon[5] == $category_key )	{
+					if( in_category( $category_key, $addon ) )	{
 						$price = '';
 						if( $args['cost'] == true )	{
-							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $addon[7] ) ) ;
+							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $addon->ID ) ) ) ;
 						}
 
-						$options['groups'][ $category_value ][] = array( $addon[1] => stripslashes( esc_attr( $addon[0] ) ) . $price );
+						$options['groups'][ $category_value ][] = array( $addon->ID => $addon->post_title . $price );
 
 					}
 
