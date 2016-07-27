@@ -67,7 +67,7 @@ function mdjm_sign_event_contract_action( $data )	{
 						add_query_arg(
 							array(
 								'event_id'	 => $data['event_id'],
-								'mdjm_message' => 12
+								'mdjm_message' => 'contract_data_missing'
 							),
 							mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) )
 						)
