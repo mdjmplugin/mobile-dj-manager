@@ -253,7 +253,7 @@ function mdjm_register_post_types()	{
 			'map_meta_cap'            => true,*/
 			'has_archive'             => true,
 			'rewrite'            	  => array( 'slug' => 'packages' ),
-			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
+			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
 		);
 		register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
 	

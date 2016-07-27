@@ -846,6 +846,7 @@ jQuery(document).ready(function ($) {
 					inherit_select_classes: true,
 					placeholder_text_multiple: mdjm_admin_vars.select_months
 				});
+				clone.find( '.package-items' ).css( 'width', '100%' );
 			});
 		},
 
@@ -885,8 +886,11 @@ jQuery(document).ready(function ($) {
 					row.fadeOut( 'fast' ).remove();
 				} else {
 					switch( type ) {
-						case 'price' :
+						case 'price':
 							alert( mdjm_admin_vars.one_month_min );
+							break;
+						case 'item':
+							alert( mdjm_admin_vars.one_item_min );
 							break;
 						default:
 							alert( mdjm_admin_vars.one_month_min );

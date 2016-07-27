@@ -104,8 +104,9 @@ function mdjm_packages_metabox_fields() {
 			'_package_employees',
 			'_package_restrict_date',
 			'_package_months',
+			'_package_items',
+			'_package_price',
 			'_package_variable_pricing',
-			'_packagen_price',
 			'_package_variable_prices'
 		);
 
@@ -284,7 +285,7 @@ function mdjm_package_metabox_items_row( $post )	{
                     <?php endif; ?>
 
 					<tr>
-						<td class="submit" colspan="4" style="float: none; clear:both; background:#fff;">
+						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
 							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Item', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
@@ -328,12 +329,13 @@ function mdjm_package_metabox_item_row( $key, $args, $post_id, $index ) {
 	</td>
 	<td>
 		<?php echo MDJM()->html->addons_dropdown( array(
-			'name'             => '_package_items[' . $key . '][items]',
+			'name'             => '_package_items[]',
 			'selected'         => ! empty( $args['items'] ) ? $args['items'] : '',
 			'show_option_none' => false,
 			'show_option_all'  => false,
 			'employee'         => false,
 			'chosen'           => true,
+			'class'            => 'package-items',
 			'placeholder'      => __( 'Select an add-on', 'mobile-dj-manager' ),
 			'cost'             => true,
 			'desc'             => true,
@@ -344,7 +346,7 @@ function mdjm_package_metabox_item_row( $key, $args, $post_id, $index ) {
 	<?php do_action( 'mdjm_package_item_table_row', $post_id, $key, $args ); ?>
 
 	<td>
-		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+		<a href="#" class="mdjm_remove_repeatable" data-type="item" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
 	</td>
 	<?php
 } // mdjm_package_metabox_item_row
@@ -434,7 +436,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 					<?php endif; ?>
 
                     <tr>
-						<td class="submit" colspan="4" style="float: none; clear:both; background:#fff;">
+						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
 							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
@@ -600,8 +602,8 @@ function mdjm_addons_metabox_fields() {
 			'_addon_employees',
 			'_addon_restrict_date',
 			'_addon_months',
-			'_addon_variable_pricing',
 			'_addon_price',
+			'_addon_variable_pricing',
 			'_addon_variable_prices'
 		);
 
@@ -803,7 +805,7 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 					<?php endif; ?>
 
                     <tr>
-						<td class="submit" colspan="4" style="float: none; clear:both; background:#fff;">
+						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
 							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>

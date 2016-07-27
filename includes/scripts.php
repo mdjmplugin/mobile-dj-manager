@@ -144,7 +144,7 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
 
-	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_PLUGIN_URL );
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
@@ -156,10 +156,18 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$editing_event      = false;
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	$sortable           = array( 'admin_page_mdjm-custom-event-fields', 'admin_page_mdjm-custom-client-fields' );
+	$sortable           = array(
+		'admin_page_mdjm-custom-event-fields',
+		'admin_page_mdjm-custom-client-fields'
+	);
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-		
+
+		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
+			$sortable[] = 'post.php';
+			$sortable[] = 'post-new.php';
+		}
+
 		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
 			$editing_event = true;
 		}
@@ -209,7 +217,8 @@ function mdjm_register_admin_scripts( $hook )	{
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'select_months'        => __( 'Select Months', 'mobile-dj-manager' ),
-				'one_month_min'        => __( 'You must have a pricing option for at least one month', 'mobile-dj-manager' )
+				'one_month_min'        => __( 'You must have a pricing option for at least one month', 'mobile-dj-manager' ),
+				'one_item_min'         => __( 'Select at least one Add-on', 'mobile-dj-manager' )
 			)
 		)
 	);

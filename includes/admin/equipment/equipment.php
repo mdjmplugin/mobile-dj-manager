@@ -75,7 +75,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			if ( $items )	{
 				$i = 0;
 				foreach ( $items as $item )	{
-					echo mdjm_get_addon_name( $item->ID );
+					echo '<a href="' . admin_url( "post.php?post={$item}&action=edit" ) . '">' . mdjm_get_addon_name( $item ) . '</a>';
 					$i++;
 					if ( $i < count( $items ) )	{
 						echo '<br />';
@@ -175,7 +175,7 @@ function mdjm_package_set_post_title_placeholder( $title ) {
 	
 	$screen = get_current_screen();
 
-	if ( 'mdjm-addon' == $screen->post_type )	{
+	if ( 'mdjm-package' == $screen->post_type )	{
 		$title = __( 'Enter a name for this package', 'mobile-dj-manager' );
 	}
 
@@ -216,6 +216,77 @@ function mdjm_package_post_order( $query )	{
 	
 } // mdjm_package_post_order
 add_action( 'pre_get_posts', 'mdjm_package_post_order' );
+
+/**
+ * Hook into pre_get_posts and limit employees packages if their permissions are not full.
+ *
+ * @since	1.4
+ * @param	arr		$query		The WP_Query
+ * @return	void
+ */
+function mdjm_limit_results_to_employee_packages( $query )	{
+	
+	if ( ! is_admin() || 'mdjm-package' != $query->get( 'post_type' ) || mdjm_employee_can( 'mdjm_package_edit' ) )	{
+		return;
+	}
+			
+	global $user_ID;
+	
+	$query->set(
+		'meta_query',
+		array(
+			array(
+				'key'     => '_package_employees',
+				'value'   => sprintf( ':"%s";', $user_ID ),
+				'compare' => 'LIKE'
+			)
+		)
+	);
+
+} // mdjm_limit_results_to_employee_packages
+add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_packages' );
+
+/**
+ * Save the meta data for the package
+ *
+ * @since	1.4
+ * @param	int		$post_id		The current event post ID.
+ * @param	obj		$post			The current event post object (WP_Post).
+ * 
+ * @return	void
+ */
+function mdjm_save_package_post( $post_id, $post )	{
+
+	if ( ! isset( $_POST['mdjm_package_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['mdjm_package_meta_box_nonce'], 'mdjm-package' ) ) {
+		return;
+	}
+	
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
+		return;
+	}
+
+	if ( isset( $post->post_type ) && 'revision' == $post->post_type ) {
+		return;
+	}
+
+	// The default fields that get saved
+	$fields = mdjm_packages_metabox_fields();
+
+	foreach ( $fields as $field )	{
+
+		if ( ! empty( $_POST[ $field ] ) ) {
+			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, $_POST[ $field ] );
+			update_post_meta( $post_id, $field, $new_value );
+		} else {
+			delete_post_meta( $post_id, $field );
+		}
+
+	}
+
+	do_action( 'mdjm_save_package', $post_id, $post );
+
+} // mdjm_save_package_post
+add_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
 
 /***********************************************************
  * Addons
