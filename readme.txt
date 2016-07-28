@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.8.4
+Stable tag: 1.3.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,21 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.8.5 =
+
+**Released Thursday 28th July, 2016**
+
+**Bug Fixes**
+
+* Corrected message parameter when data is missing from contract signing form. Fixes issue [#124](https://github.com/mdjm/mobile-dj-manager/issues/124/ "Issue #124")
+* Better validation of checkboxes for contract signing form. Fixes issue [#126](https://github.com/mdjm/mobile-dj-manager/issues/126/ "Issue #126")
+* User ID is not converted to integer value in URL string. Fixes issue [#125](https://github.com/mdjm/mobile-dj-manager/issues/125/ "Issue #125")
+* Spelling correction in div class
+
+**Tweaks**
+
+* Use new alert class when contract is signed
 
 = 1.3.8.4 =
 
