@@ -119,15 +119,15 @@ function mdjm_communication_details_metabox( $post )	{
 	
 	wp_nonce_field( basename( __FILE__ ), 'mdjm_communication' . '_nonce' );
 		
-	$from			= get_userdata( $post->post_author );
-	$recipient		= get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
+	$from      = get_userdata( $post->post_author );
+	$recipient = get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
 	
-	$attachments	= get_children( 
+	$attachments = get_children( 
 		array(
-			'post_parent' 	=> $post->ID,
-			'post_type'	  	=> 'attachment',
-			'number_posts'	=> -1,
-			'post_status'	=> 'any'
+			'post_parent'  => $post->ID,
+			'post_type'    => 'attachment',
+			'number_posts' => -1,
+			'post_status'  => 'any'
 		)
 	);
 	
@@ -136,11 +136,11 @@ function mdjm_communication_details_metabox( $post )	{
 		date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) ); ?></p>
         
     <p><?php printf( __( '<strong>From</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( '/user-edit.php?user_id={$from->ID}' ),
+		admin_url( "/user-edit.php?user_id={$from->ID}" ),
 		$from->display_name ); ?></p>
         
     <p><?php printf( __( '<strong>Recipient</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( '/user-edit.php?user_id={$recipient->ID}' ), $recipient->display_name ); ?></p>
+		admin_url( "/user-edit.php?user_id={$recipient->ID}" ), $recipient->display_name ); ?></p>
     
     <?php
     $copies = get_post_meta( $post->ID, '_mdjm_copy_to', true );
