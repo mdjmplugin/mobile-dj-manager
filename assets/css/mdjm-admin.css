@@ -416,3 +416,7 @@ checkbox.mdjm-form-error {
 #mdjm-event-actions #event-type-add { cursor: pointer; }
 
 #mdjm-new-event-type-row { display: none; vertical-align: top; }
+
+/* System Info page styles
+-------------------------------------------------------------- */
+#system-info-textarea { width: 800px; height: 400px; font-family: Menlo, Monaco, monospace; background: none; white-space: pre; overflow: auto; display: block; }
