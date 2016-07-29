@@ -448,7 +448,7 @@ class MDJM_API 	{
 				} else {
 
 					wp_redirect( add_query_arg(
-						array( 'mdjm-message', 'api-key-failed' ),
+						array( 'mdjm-message' => 'api-key-failed' ),
 						'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 					) );
 					exit();
@@ -462,7 +462,7 @@ class MDJM_API 	{
 				delete_transient( 'mdjm-total-api-keys' );
 
 				wp_redirect( add_query_arg( 
-					array( 'mdjm-message', 'api-key-regenerated' ),
+					array( 'mdjm-message' => 'api-key-regenerated' ),
 					'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 				) );
 				exit();
@@ -473,7 +473,7 @@ class MDJM_API 	{
 				delete_transient( 'mdjm-total-api-keys' );
 
 				wp_redirect( add_query_arg(
-					array( 'mdjm-message', 'api-key-revoked' ),
+					array( 'mdjm-message' => 'api-key-revoked' ),
 					'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 				) );
 				exit();
