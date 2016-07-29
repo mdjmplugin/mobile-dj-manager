@@ -574,9 +574,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
-						'options'     => array_merge( 
-											array( '0' => __( 'Disable Online Quotes', 'mobile-dj-manager' ) ),
-											mdjm_list_templates( 'email_template' ) )
+						'options'     => mdjm_list_templates( 'email_template', true )
 					),
 					'unavailable'      => array(
 						'id'          => 'unavailable',
