@@ -860,6 +860,10 @@ function mdjm_event_metabox_employee_select_row( $event_id )	{
 	$employee_id    = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
 	$payment_status = $mdjm_event->employee_id ? mdjm_event_employees_paid( $event_id, $mdjm_event->employee_id ) : false;
 
+	if ( isset( $_GET['primary_employee'] ) )	{
+		$employee_id = $_GET['primary_employee'];
+	}
+
 	echo MDJM()->html->hidden( array(
 		'name'  => 'event_dj',
 		'value' => $employee_id
