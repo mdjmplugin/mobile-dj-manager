@@ -721,21 +721,21 @@ function mdjm_content_tag_available_addons( $event_id='' )	{
 	
 	$output = '';
 	
-	$available_addons = get_available_addons( '', '', $event_id );
+	$available_addons = mdjm_get_available_addons( array( 'event_id' => $event_id ) );
 	
 	if ( ! empty( $available_addons ) )	{
 		
 		foreach ( $available_addons as $addon )	{
 			
-			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . '</strong><br />' .
-				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
+			$available[] = '<p><strong>' . stripslashes( $addon->post_title ) . '</strong><br />' .
+				'<em>' . mdjm_get_addon_excerpt( $addon->ID ) . '</em></p>';
 			
 		}
 		
 		$output .= implode( '', $available );
 		
 	} else	{
-		$output .= __( 'No packages available', 'mobile-dj-manager' );
+		$output .= __( 'No addons available', 'mobile-dj-manager' );
 	}
 	
 	return $output;
@@ -748,30 +748,29 @@ function mdjm_content_tag_available_addons( $event_id='' )	{
  * If an event can be referenced, only lists add-ons not already assigned to the event,
  * or included within the event package
  *
- * @param	
- *
+ * @param	int		event_id	The event ID.	
  * @return	str		The list of available add-ons. With cost.
  */
 function mdjm_content_tag_available_addons_cost( $event_id='' )	{
 
 	$output = '';
 	
-	$available_addons = get_available_addons( '', '', $event_id );
+	$available_addons = mdjm_get_available_addons( array( 'event_id' => $event_id ) );
 	
 	if ( ! empty( $available_addons ) )	{
 		
 		foreach ( $available_addons as $addon )	{
 			
-			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . ' - ' .
-				mdjm_currency_filter( mdjm_format_amount( $addon['cost'] ) ) . '</strong><br />' .
-				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
+			$available[] = '<p><strong>' . stripslashes( $addon->post_title ) . ' - ' .
+				mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $addon->ID ) ) ) . '</strong><br />' .
+				'<em>' . mdjm_get_addon_excerpt( $addon->ID ) . '</em></p>';
 			
 		}
 		
 		$output .= implode( '', $available );
 		
 	} else	{
-		$output .= __( 'No packages available', 'mobile-dj-manager' );
+		$output .= __( 'No addons available', 'mobile-dj-manager' );
 	}
 	
 	return $output;
