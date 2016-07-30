@@ -196,3 +196,36 @@ function mdjm_payments_write( $msg, $stampit = false )	{
 	return mdjm_record_gateway_log( $msg, $stampit = false );
 	
 } // mdjm_payments_write
+
+/*
+ * Get the addons available
+ *
+ * @since	1.4
+ * @param	int		$employee	The user ID of the Employee.
+ * @param	str		$package	The slug of a package where the package contents need to be excluded.
+ * @param	int		$event_id	Event ID to check if the add-on is already assigned.
+ * @return	arr		Array of available addons and their details.
+ */
+function get_available_addons( $employee = '', $package = '', $event_id = '' )	{
+
+	_deprecated_function( __FUNCTION__, '1.3.8', 'mdjm_get_available_addons()' );
+
+	$addons  = array();
+	$_addons = mdjm_get_available_addons( array(
+		'employee' => $employee,
+		'event_id' => $event_id,
+		'package'  => $package
+	) );
+	
+	foreach( $_addons as $addon )	{
+		$terms = get_the_terms( $addon->ID, 'addon-category' );
+		$addons[ $all_addon[1] ]['cat']  = $terms[0];
+		$addons[ $all_addon[1] ]['slug'] = $addon->post_name;
+		$addons[ $all_addon[1] ]['name'] = $addon->post_title;
+		$addons[ $all_addon[1] ]['cost'] = mdjm_addon_get_price( $addon->ID );
+		$addons[ $all_addon[1] ]['desc'] = mdjm_get_addon_excerpt( $addon->ID );
+	}
+									
+	return $addons;
+			
+} // get_available_addons
