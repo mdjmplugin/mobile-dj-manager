@@ -653,6 +653,60 @@ function mdjm_get_event_addons( $event_id )	{
 } // mdjm_get_event_addons
 
 /**
+ * Retrieve a list of available addons.
+ *
+ * @param	arr		$args	Array of arguments. See @defaults
+ * @return	arr		Array of WP_Post objects for available addons.
+ */
+function mdjm_get_available_addons( $args = array() )	{
+
+	if ( ! mdjm_packages_enabled() )	{
+		return __( 'No addons are available', 'mobile-dj-manager' );
+	}
+
+	$defaults = array(
+		'employee' => 0,
+		'event_id' => 0,
+		'package'  => 0
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$addon_args = array();
+
+	if ( ! empty( $args['employee'] ) )	{
+		$addon_args['meta_query'] = array(
+			'key'     => '_mdjm_employees',
+			'value'   => array( $args['employee'] ),
+			'compare' => 'IN'
+		);
+	}
+
+	if ( ! empty( $args['event_id'] ) )	{
+		$event_addons = mdjm_get_event_addons( $args['event_id'] );
+
+		if ( $event_addons )	{
+			$addon_args['post__not_in'] = $event_addons;
+		}
+	}
+
+	if ( ! empty( $args['package'] ) )	{
+		if ( 'mdjm-package' == get_post_type( $args['package_id'] ) )	{
+			$package_items = mdjm_package_get_items( $args['package_id'] );
+
+			if ( $package_items )	{
+				if ( ! empty( $addon_args['post__not_in'] ) )	{
+					$addon_args['post__not_in'] = array_merge( $addon_args['post__not_in'], $package_items );
+				}
+			}
+		}
+	}
+
+	return mdjm_get_addons( $addon_args );
+
+} // mdjm_get_available_addons
+
+/**
  * List all available addons. If an employee ID is provided, list what that 
  * employee can provide only.
  *
@@ -663,17 +717,17 @@ function mdjm_get_event_addons( $event_id )	{
  */
 function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
 
-	if( ! mdjm_packages_enabled() )	{
+	if ( ! mdjm_packages_enabled() )	{
 		return __( 'No addons available', 'mobile-dj-manager' );
 	}
 	
-	if( ! empty( $employee_id ) )	{
+	if ( ! empty( $employee_id ) )	{
 		$addons = mdjm_get_addons_by_employee( $employee_id, false );
 	} else	{
 		$addons = mdjm_get_addons();
 	}
 	
-	if( ! $addons )	{
+	if ( ! $addons )	{
 		return __( 'No addons available', 'mobile-dj-manager' );
 	}
 	
@@ -681,13 +735,13 @@ function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
 	$i = 0;
 	
 	foreach( $addons as $addon )	{
-		if( $i > 0 )	{
+		if ( $i > 0 )	{
 			$output .= '<br>';
 		}
 		
 		$output .= get_the_title( $addon->ID );
 		
-		if( $price )	{
+		if ( $price )	{
 			$output .= ' ' . mdjm_package_get_price( $addon->ID );
 		}
 		
@@ -697,3 +751,30 @@ function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
 	return $output;
 
 } // mdjm_list_available_addons
+
+/**
+ * Retrieve an addons excerpt.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	The ID of the addon.
+ * @return	str
+ */
+function mdjm_get_addon_excerpt( $addon_id, $length = 0 )	{
+
+	if ( empty( $length ) )	{
+		$length = mdjm_get_option( 'package_excerpt_length', 50 );
+	}
+
+	if ( has_excerpt( $addon_id ) )	{
+		$description = get_post_field( 'post_excerpt', $addon_id );
+	} else	{
+		$description = get_post_field( 'post_content', $addon_id );
+	}
+
+	if ( ! empty( $length ) )	{
+		$description = wp_trim_words( $description, $length );
+	}
+
+	return apply_filters( 'mdjm_addon_excerpt', $description );
+
+} // mdjm_get_addon_excerpt
