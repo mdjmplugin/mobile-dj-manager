@@ -607,13 +607,9 @@ class MDJM_HTML_Elements {
 							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $addon->ID ) ) ) ;
 						}
 						$desc           = '';
-						$excerpt_length = apply_filters( 'addon_excerpt_length', 30 );
+
 						if( $args['desc'] == true )	{
-							if ( has_excerpt( $addon->ID ) )	{
-								$desc .= ' - ' . apply_filters( 'mdjm_addon_excerpt', wp_trim_words( get_post_field( 'post_excerpt', $addon->ID ), $excerpt_length ) );
-							} else	{
-								$desc .= ' - ' . apply_filters( 'mdjm_addon_excerpt', wp_trim_words( get_post_field( 'post_content', $addon->ID ), $excerpt_length ) );
-							}
+							$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, 30 );
 						}
 
 						$options['groups'][ $category_value->name ][] = array( $addon->ID => $addon->post_title . $price . $desc );
