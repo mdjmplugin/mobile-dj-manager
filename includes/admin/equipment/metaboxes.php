@@ -228,7 +228,7 @@ function mdjm_package_metabox_availability_period_row( $post )	{
         	 <p><label for="_package_months"><?php _e( 'Select the months this package is available', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->month_dropdown( array(
 					'name'        => '_package_months',
-					'selected'    => mdjm_package_get_months_available( $post->ID ),
+					'selected'    => mdjm_get_package_months_available( $post->ID ),
 					'fullname'    => true,
 					'multiple'    => true,
 					'chosen'      => true,
@@ -251,7 +251,7 @@ add_action( 'mdjm_package_availability_fields', 'mdjm_package_metabox_availabili
  */
 function mdjm_package_metabox_items_row( $post )	{
 
-	$items             = mdjm_package_get_items( $post->ID );
+	$items             = mdjm_get_package_items( $post->ID );
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
@@ -362,9 +362,9 @@ add_action( 'mdjm_render_item_row', 'mdjm_package_metabox_item_row', 10, 4 );
 function mdjm_package_metabox_pricing_options_row( $post )	{
 
 	$month             = 1;
-	$price             = mdjm_package_get_price( $post->ID );
+	$price             = mdjm_get_package_price( $post->ID );
 	$variable          = mdjm_package_has_variable_prices( $post->ID );
-	$prices            = mdjm_package_get_variable_prices( $post->ID );
+	$prices            = mdjm_get_package_variable_prices( $post->ID );
 	$variable_display  = $variable ? '' : ' style="display:none;"';
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
@@ -707,7 +707,7 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
         	 <p><label for="_addon_months"><?php _e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->month_dropdown( array(
 					'name'        => '_addon_months',
-					'selected'    => mdjm_addon_get_months_available( $post->ID ),
+					'selected'    => mdjm_get_addon_months_available( $post->ID ),
 					'fullname'    => true,
 					'multiple'    => true,
 					'chosen'      => true,
@@ -731,9 +731,9 @@ add_action( 'mdjm_addon_availability_fields', 'mdjm_addon_metabox_availability_p
 function mdjm_addon_metabox_pricing_options_row( $post )	{
 
 	$month             = 1;
-	$price             = mdjm_addon_get_price( $post->ID );
+	$price             = mdjm_get_addon_price( $post->ID );
 	$variable          = mdjm_addon_has_variable_prices( $post->ID );
-	$prices            = mdjm_addon_get_variable_prices( $post->ID );
+	$prices            = mdjm_get_addon_variable_prices( $post->ID );
 	$variable_display  = $variable ? '' : ' style="display:none;"';
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 

@@ -585,7 +585,7 @@ class MDJM_HTML_Elements {
 						}
 
 						if ( $package )	{
-							$package_items = mdjm_package_get_items( $package->ID );
+							$package_items = mdjm_get_package_items( $package->ID );
 						}
 
 						if ( $package_items && in_array( $addon->ID, $package_items ) )	{
@@ -604,7 +604,7 @@ class MDJM_HTML_Elements {
 					if( has_term( $category_value->name, 'addon-category', $addon->ID ) )	{
 						$price = '';
 						if( $args['cost'] == true )	{
-							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $addon->ID ) ) ) ;
+							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
 						}
 						$desc           = '';
 

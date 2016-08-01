@@ -156,7 +156,7 @@ function mdjm_package_is_restricted_by_date( $package_id )	{
 
 	// If the package is restricted, there needs to be months set for availability
 	if ( $restricted )	{
-		$months = mdjm_addon_get_months_available( $package_id );
+		$months = mdjm_get_addon_months_available( $package_id );
 
 		if ( ! $months )	{
 			$restricted = false;
@@ -174,11 +174,11 @@ function mdjm_package_is_restricted_by_date( $package_id )	{
  * @param	int			$package_id	ID of the package.
  * @return	arr|false	Array of month numbers this package is available, otherwise false.
  */
-function mdjm_package_get_months_available( $package_id )	{
+function mdjm_get_package_months_available( $package_id )	{
 	$months = get_post_meta( $package_id, '_package_months', true );
 
 	return apply_filters( 'mdjm_package_months_available', $months, $package_id );
-} // mdjm_package_get_months_available
+} // mdjm_get_package_months_available
 
 /**
  * Retrieve the price of the package.
@@ -187,11 +187,11 @@ function mdjm_package_get_months_available( $package_id )	{
  * @param	int		$package_id	ID of the package.
  * @return	str		The cost of the package.
  */
-function mdjm_package_get_price( $package_id )	{
+function mdjm_get_package_price( $package_id )	{
 	$price = get_post_meta( $package_id, '_package_price', true );
 
 	return apply_filters( 'mdjm_package_price', $price, $package_id );
-} // mdjm_package_get_price
+} // mdjm_get_package_price
 
 /**
  * Whether or not the package has monthly prices.
@@ -213,11 +213,11 @@ function mdjm_package_has_variable_prices( $package_id )	{
  * @param	int		$addon_id	ID of the package.
  * @return	bool	True if variable pricing is enabled.
  */
-function mdjm_package_get_variable_prices( $package_id )	{
+function mdjm_get_package_variable_prices( $package_id )	{
 	$variable_pricing = get_post_meta( $package_id, '_package_variable_prices', true );
 
 	return apply_filters( 'mdjm_package_monthly_pricing', $variable_pricing, $package_id );
-} // mdjm_package_get_variable_prices
+} // mdjm_get_package_variable_prices
 
 /**
  * Retrieve a packages price range.
@@ -226,7 +226,7 @@ function mdjm_package_get_variable_prices( $package_id )	{
  * @param	int		$package_id	ID of the package.
  * @return	arr		Array of low and high prices.
  */
-function mdjm_package_get_price_range( $package_id )	{
+function mdjm_get_package_price_range( $package_id )	{
 
 	if ( ! mdjm_package_has_variable_prices( $package_id ) )	{
 		return;
@@ -234,7 +234,7 @@ function mdjm_package_get_price_range( $package_id )	{
 
 	$range = array();
 
-	$prices = mdjm_package_get_variable_prices( $package_id );
+	$prices = mdjm_get_package_variable_prices( $package_id );
 
 	foreach ( $prices as $price )	{
 
@@ -250,7 +250,7 @@ function mdjm_package_get_price_range( $package_id )	{
 
 	return apply_filters( 'mdjm_package_price_range', $range, $package_id );
 
-} // mdjm_package_get_price_range
+} // mdjm_get_package_price_range
 
 /**
  * Retrieve the items in a package.
@@ -259,11 +259,11 @@ function mdjm_package_get_price_range( $package_id )	{
  * @param	int			$package_id		The package ID.
  * @return	arr|false	Array of addon ID's in this package, or false if none.		
  */
-function mdjm_package_get_items( $package_id )	{
+function mdjm_get_package_items( $package_id )	{
 	$items = get_post_meta( $package_id, '_package_items', true );
 
 	return apply_filters( 'mdjm_package_items', $items, $package_id );
-} // mdjm_package_get_items
+} // mdjm_get_package_items
 
 /**
  * Get all packages for the given employee.
@@ -315,6 +315,43 @@ function mdjm_get_event_package( $event_id )	{
 	return apply_filters( 'mdjm_event_package', $package );
 } // mdjm_get_event_package
 
+/*
+ * Retrieve the available packages.
+ *
+ * Availability can be dependant on an employee, month and event type.
+ *
+ * @param	arr			$args	Arguments for package retrieval. See @defaults.
+ * @return	arr|false	Array of WP_Post objects.
+ */
+function mdjm_get_available_packages( $args )	{
+
+	if( ! mdjm_packages_enabled() )	{
+		return false;
+	}
+
+	$defaults = array(
+		'employee'   => false,
+		'date'       => false,
+		'event_type' => false
+	);
+
+	$args         = wp_parse_args( $args, $defaults );
+	$package_args = array();
+
+	if ( ! empty( $args['employee'] ) )	{
+		$package_args['meta_query'] = array(
+			'key'     => '_mdjm_employees',
+			'value'   => array( $args['employee'] ),
+			'compare' => 'IN'
+		);
+	}
+
+	$packages = mdjm_get_packages( $package_args );
+
+	return apply_filters( 'mdjm_available_packages', $packages );
+
+} // mdjm_get_available_packages
+
 /**
  * List all available packages. If an employee ID is provided, list what that 
  * employee can provide only.
@@ -340,26 +377,51 @@ function mdjm_list_available_packages( $employee_id = 0, $price = false )	{
 		return __( 'No packages available', 'mobile-dj-manager' );
 	}
 	
-	$output = '';
-	$i = 0;
+	$return = array();
 	
 	foreach( $packages as $package )	{
-		if( $i > 0 )	{
-			$output .= '<br>';
-		}
-		
-		$output .= get_the_title( $package->ID );
-		
+		$package_price = '';
+
 		if( $price )	{
-			$output .= ' ' . mdjm_package_get_price( $package->ID );
+			$package_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $package->ID ) ) );
 		}
-		
-		$i++;
-	}
 	
-	return $output;
+		$return[] = get_the_title( $package->ID ) . '' . $package_price;
+	}
+
+	$return = apply_filters( 'mdjm_list_packages', $return, $price );
+
+	return implode( '<br />', $return );
 
 } // mdjm_list_available_packages
+
+/**
+ * Retrieve a packages excerpt.
+ *
+ * @since	1.4
+ * @param	int		$package_id	The ID of the package.
+ * @param	int		$length		The length of the excerpt.
+ * @return	str
+ */
+function mdjm_get_package_excerpt( $package_id, $length = 0 )	{
+
+	if ( empty( $length ) )	{
+		$length = mdjm_get_option( 'package_excerpt_length', 55 );
+	}
+
+	if ( has_excerpt( $package_id ) )	{
+		$description = get_post_field( 'post_excerpt', $package_id );
+	} else	{
+		$description = get_post_field( 'post_content', $package_id );
+	}
+
+	if ( ! empty( $length ) )	{
+		$description = wp_trim_words( $description, $length );
+	}
+
+	return apply_filters( 'mdjm_package_excerpt', $description );
+
+} // mdjm_get_package_excerpt
 
 /***********************************************************
  * Addon Functions
@@ -506,7 +568,7 @@ function mdjm_addon_is_restricted_by_date( $addon_id )	{
 
 	// If the addon is restricted, there needs to be months set for availability
 	if ( $restricted )	{
-		$months = mdjm_addon_get_months_available( $addon_id );
+		$months = mdjm_get_addon_months_available( $addon_id );
 
 		if ( ! $months )	{
 			$restricted = false;
@@ -524,11 +586,11 @@ function mdjm_addon_is_restricted_by_date( $addon_id )	{
  * @param	int			$addon_id	ID of the addon.
  * @return	arr|false	Array of month numbers this addon is available, otherwise false.
  */
-function mdjm_addon_get_months_available( $addon_id )	{
+function mdjm_get_addon_months_available( $addon_id )	{
 	$months = get_post_meta( $addon_id, '_addon_months', true );
 
 	return apply_filters( 'mdjm_addon_months_available', $months, $addon_id );
-} // mdjm_addon_get_months_available
+} // mdjm_get_addon_months_available
 
 /**
  * Retrieve the price of the addon.
@@ -537,11 +599,11 @@ function mdjm_addon_get_months_available( $addon_id )	{
  * @param	int		$addon_id	ID of the addon.
  * @return	str		The cost of the addon.
  */
-function mdjm_addon_get_price( $addon_id )	{
+function mdjm_get_addon_price( $addon_id )	{
 	$price = get_post_meta( $addon_id, '_addon_price', true );
 
 	return apply_filters( 'mdjm_addon_price', $price, $addon_id );
-} // mdjm_addon_get_price
+} // mdjm_get_addon_price
 
 /**
  * Whether or not the addon has monthly prices.
@@ -563,11 +625,11 @@ function mdjm_addon_has_variable_prices( $addon_id )	{
  * @param	int		$addon_id	ID of the addon.
  * @return	bool	True if variable pricing is enabled.
  */
-function mdjm_addon_get_variable_prices( $addon_id )	{
+function mdjm_get_addon_variable_prices( $addon_id )	{
 	$variable_pricing = get_post_meta( $addon_id, '_addon_variable_prices', true );
 
 	return apply_filters( 'mdjm_addon_monthly_pricing', $variable_pricing, $addon_id );
-} // mdjm_addon_get_variable_prices
+} // mdjm_get_addon_variable_prices
 
 /**
  * Retrieve an add-ons price range.
@@ -576,7 +638,7 @@ function mdjm_addon_get_variable_prices( $addon_id )	{
  * @param	int		$addon_id	ID of the addon.
  * @return	arr		Array of low and high prices.
  */
-function mdjm_addon_get_price_range( $addon_id )	{
+function mdjm_get_addon_price_range( $addon_id )	{
 
 	if ( ! mdjm_addon_has_variable_prices( $addon_id ) )	{
 		return;
@@ -584,7 +646,7 @@ function mdjm_addon_get_price_range( $addon_id )	{
 
 	$range = array();
 
-	$prices = mdjm_addon_get_variable_prices( $addon_id );
+	$prices = mdjm_get_addon_variable_prices( $addon_id );
 
 	foreach ( $prices as $price )	{
 
@@ -600,7 +662,7 @@ function mdjm_addon_get_price_range( $addon_id )	{
 
 	return apply_filters( 'mdjm_addon_price_range', $range, $addon_id );
 
-} // mdjm_addon_get_price_range
+} // mdjm_get_addon_price_range
 
 /**
  * Get all packages for the given employee.
@@ -653,6 +715,45 @@ function mdjm_get_event_addons( $event_id )	{
 } // mdjm_get_event_addons
 
 /**
+ * Lists an events addons.
+ *
+ * @since	1.4
+ * @param	int			$event_id	The event ID.
+ * @param	bool		$price		True to include the addon price.
+ * @return	int|false	The event addons or false if no addons.
+ */
+function mdjm_list_event_addons( $event_id, $price = false )	{
+
+	$output = __( 'No addons are assigned to this event', 'mobile-dj-manager' );
+
+	if( ! mdjm_packages_enabled() )	{
+		return $output;
+	}
+
+	$event_addons = mdjm_get_event_addons( $event_id );
+
+	if ( $event_addons )	{
+		$addons = array();
+
+		foreach ( $event_addons as $event_addon )	{
+			$addon_price = '';
+
+			if ( $price )	{
+				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $event_addon->ID ) ) );
+			}
+
+			$addons[] = $event_addon->post_title . '' . $addon_price;
+		}
+
+		$output = implode( '<br />', $addons );
+
+	}
+
+	return apply_filters( 'mdjm_list_event_addons', $output );
+
+} // mdjm_list_event_addons
+
+/**
  * Retrieve a list of available addons.
  *
  * @param	arr		$args	Array of arguments. See @defaults
@@ -692,7 +793,7 @@ function mdjm_get_available_addons( $args = array() )	{
 
 	if ( ! empty( $args['package'] ) )	{
 		if ( 'mdjm-package' == get_post_type( $args['package_id'] ) )	{
-			$package_items = mdjm_package_get_items( $args['package_id'] );
+			$package_items = mdjm_get_package_items( $args['package_id'] );
 
 			if ( $package_items )	{
 				if ( ! empty( $addon_args['post__not_in'] ) )	{
@@ -702,7 +803,9 @@ function mdjm_get_available_addons( $args = array() )	{
 		}
 	}
 
-	return mdjm_get_addons( $addon_args );
+	$addons = mdjm_get_addons( $addon_args );
+
+	return apply_filters( 'mdjm_available_addons', $addons ); 
 
 } // mdjm_get_available_addons
 
@@ -731,24 +834,21 @@ function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
 		return __( 'No addons available', 'mobile-dj-manager' );
 	}
 	
-	$output = '';
-	$i = 0;
+	$return = array();
 	
 	foreach( $addons as $addon )	{
-		if ( $i > 0 )	{
-			$output .= '<br>';
-		}
-		
-		$output .= get_the_title( $addon->ID );
-		
+		$addon_price = '';
+
 		if ( $price )	{
-			$output .= ' ' . mdjm_package_get_price( $addon->ID );
+			$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $addon->ID ) ) );
 		}
-		
-		$i++;
+
+		$return[] = get_the_title( $addon->ID ) . '' . $addon_price;	
 	}
-	
-	return $output;
+
+	$return = apply_filters( 'mdjm_list_available_addons', $return, $price );
+
+	return implode( '<br />', $return );
 
 } // mdjm_list_available_addons
 
@@ -757,12 +857,13 @@ function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
  *
  * @since	1.4
  * @param	int		$addon_id	The ID of the addon.
+ * @param	int		$length		The length of the excerpt.
  * @return	str
  */
 function mdjm_get_addon_excerpt( $addon_id, $length = 0 )	{
 
 	if ( empty( $length ) )	{
-		$length = mdjm_get_option( 'package_excerpt_length', 50 );
+		$length = mdjm_get_option( 'package_excerpt_length', 55 );
 	}
 
 	if ( has_excerpt( $addon_id ) )	{

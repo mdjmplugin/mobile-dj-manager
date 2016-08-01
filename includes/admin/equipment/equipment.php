@@ -70,7 +70,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 	switch ( $column_name ) {
 		// Items
 		case 'items':
-			$items = mdjm_package_get_items( $post_id );
+			$items = mdjm_get_package_items( $post_id );
 
 			if ( $items )	{
 				$i = 0;
@@ -95,7 +95,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			if ( ! mdjm_package_is_restricted_by_date( $post_id ) )	{
 				$output = __( 'Always', 'mobile-dj-manager' );
 			} else	{
-				$availability = mdjm_package_get_months_available( $post_id );
+				$availability = mdjm_get_package_months_available( $post_id );
 
 				if ( ! $availability )	{
 					$output = __( 'Always', 'mobile-dj-manager' );
@@ -148,14 +148,14 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 		case 'price':
 			if ( mdjm_package_has_variable_prices( $post_id ) )	{
 
-				$range = mdjm_package_get_price_range( $post_id );
+				$range = mdjm_get_package_price_range( $post_id );
 
 				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
 				echo ' &mdash; ';
 				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
 
 			} else	{
-				echo mdjm_currency_filter( mdjm_format_amount( mdjm_package_get_price( $post_id ) ) );
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $post_id ) ) );
 			}
 		break;
 
@@ -356,7 +356,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 			if ( ! mdjm_addon_is_restricted_by_date( $post_id ) )	{
 				$output = __( 'Always', 'mobile-dj-manager' );
 			} else	{
-				$availability = mdjm_addon_get_months_available( $post_id );
+				$availability = mdjm_get_addon_months_available( $post_id );
 
 				if ( ! $availability )	{
 					$output = __( 'Always', 'mobile-dj-manager' );
@@ -409,14 +409,14 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 		case 'price':
 			if ( mdjm_addon_has_variable_prices( $post_id ) )	{
 
-				$range = mdjm_addon_get_price_range( $post_id );
+				$range = mdjm_get_addon_price_range( $post_id );
 
 				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
 				echo ' &mdash; ';
 				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
 
 			} else	{
-				echo mdjm_currency_filter( mdjm_format_amount( mdjm_addon_get_price( $post_id ) ) );
+				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $post_id ) ) );
 			}
 		break;
 
