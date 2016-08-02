@@ -261,7 +261,6 @@ function mdjm_package_metabox_items_row( $post )	{
 			<table class="widefat mdjm_repeatable_table">
             	<thead>
 					<tr>
-                    	<th style="width: 20px"></th>
 						<th style="width: 50px;"><?php _e( 'Item', 'mobile-dj-manager' ); ?></th>
 						<?php do_action( 'mdjm_package_price_table_head', $post->ID ); ?>
                         <th style="width: 2%"></th>
@@ -269,18 +268,14 @@ function mdjm_package_metabox_items_row( $post )	{
 				</thead>
                 <tbody>
                 	<?php if ( ! empty( $items ) ) : ?>
-						<?php foreach ( $items as $key => $value ) :
-                            $index  = isset( $value['index'] )    ? $value['index']    : $key;
-							$items  = isset( $value['items'] )    ? $value['items']    : '';
-                            $args = apply_filters( 'mdjm_item_row_args', compact( $items ), $value );
-                            ?>
-                            <tr class="mdjm_items_wrapper mdjm_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
-                                <?php do_action( 'mdjm_render_item_row', $key, $args, $post->ID, $index ); ?>
+						<?php foreach ( $items as $item ) : ?>
+                            <tr class="mdjm_items_wrapper mdjm_repeatable_row">
+                                <?php do_action( 'mdjm_render_item_row', $item, $post->ID ); ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php else : ?>
-                        <tr class="mdjm_items_wrapper mdjm_repeatable_row" data-key="1">
-                            <?php do_action( 'mdjm_render_item_row', 1, null, $post->ID, 1 ); ?>
+                        <tr class="mdjm_items_wrapper mdjm_repeatable_row">
+                            <?php do_action( 'mdjm_render_item_row', null, $post->ID ); ?>
                         </tr>
                     <?php endif; ?>
 
@@ -307,30 +302,18 @@ add_action( 'mdjm_package_items_fields', 'mdjm_package_metabox_items_row', 10 );
  *
  * @since 1.3.9
  *
- * @param	int	$key
- * @param	arr	$args
+ * @param	str	$item
  * @param	int $post_id
- * @param	int	$index
  */
-function mdjm_package_metabox_item_row( $key, $args, $post_id, $index ) {
-
-	$defaults = array(
-		'name'   => null
-	);
-
-	$args = wp_parse_args( $args, $defaults );
+function mdjm_package_metabox_item_row( $item, $post_id ) {
 
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
-    <td>
-		<span class="mdjm_draghandle"></span>
-		<input type="hidden" name="mdjm_items[<?php echo $key; ?>][index]" class="mdjm_repeatable_index" value="<?php echo $index; ?>" />
-	</td>
 	<td>
 		<?php echo MDJM()->html->addons_dropdown( array(
 			'name'             => '_package_items[]',
-			'selected'         => ! empty( $args['items'] ) ? $args['items'] : '',
+			'selected'         => ! empty( $item ) ? $item : '',
 			'show_option_none' => false,
 			'show_option_all'  => false,
 			'employee'         => false,
@@ -343,7 +326,7 @@ function mdjm_package_metabox_item_row( $key, $args, $post_id, $index ) {
 		) ); ?>
 	</td>
 
-	<?php do_action( 'mdjm_package_item_table_row', $post_id, $key, $args ); ?>
+	<?php do_action( 'mdjm_package_item_table_row', $post_id, $item ); ?>
 
 	<td>
 		<a href="#" class="mdjm_remove_repeatable" data-type="item" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
