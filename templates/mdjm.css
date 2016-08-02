@@ -70,6 +70,12 @@ p.head-nav	{
 	}
 }
 
+.mdjm-tick	{
+	background-image: url(../assets/images/tick.png);
+	background-repeat: no-repeat;
+	background-position: 98% 50%;
+}
+
 /** Old Error Styles */
 /* =Errors
 -------------------------------------------------------------- */

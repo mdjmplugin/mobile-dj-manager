@@ -433,6 +433,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_dj_firstname'
 		),
 		array(
+			'tag'         => 'dj_lastname',
+			'description' => __( 'The last name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_dj_lastname'
+		),
+		array(
 			'tag'         => 'dj_fullname',
 			'description' => __( 'The full name of the events assigned primary employee', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_dj_fullname'
@@ -541,6 +546,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'event_url',
 			'description' => __( 'The URL of the event page', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_url'
+		),
+		array(
+			'tag'         => 'final_balance',
+			'description' => __( 'The final balance payment for an event which is the total cost minus deposit, even if the deposit is unpaid.', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_final_balance'
 		),
 		array(
 			'tag'         => 'guest_playlist_url',
@@ -850,23 +860,23 @@ function mdjm_content_tag_website_url()	{
  * @return	str		The first name of the client.
  */
 function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$first_name = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'first_name', true );
+	if( ! empty( $user_id ) )	{
+		$first_name = mdjm_get_client_firstname( $user_id );
 	}
 	
-	return ucfirst( $return );
+	return $first_name;
+
 } // mdjm_content_tag_client_firstname
 
 /**
@@ -879,23 +889,23 @@ function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
  * @return	str		The last name of the client.
  */
 function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$last_name = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'last_name', true );
+	if( ! empty( $user_id ) )	{
+		$last_name = mdjm_get_client_lastname( $user_id );
 	}
 	
-	return ucfirst( $return );
+	return $last_name;
+
 } // mdjm_content_tag_client_lastname
 
 /**
@@ -908,27 +918,21 @@ function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
  * @return	str		The full name (display name) of the client.
  */
 function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
-		
-	$return = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'first_name', true );
-		
-		if( !empty( $return ) )	{
-			$return .= ' ' . get_user_meta( $user_id, 'last_name', true );
-		}
+	$full_name = '';
+	
+	if( ! empty( $user_id ) )	{
+		$full_name = mdjm_get_client_display_name( $user_id );
 	}
 	
-	return ucwords( $return );
+	return $full_name;
 } // mdjm_content_tag_client_fullname
 
 /**
@@ -941,45 +945,21 @@ function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
  * @return	str		The address of the client.
  */
 function mdjm_content_tag_client_full_address( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$address = '';
 	
-	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+	if( ! empty( $user_id ) )	{
+		$address = mdjm_get_client_full_address( $user_id );
 	}
 	
-	if( !empty( $client ) )	{
-		if( !empty( $client->address1 ) )	{
-			$return[] = $client->address1;
-			
-			if( !empty( $client->address2 ) )	{
-				$return[] = $client->address2;
-			}
-			
-			if( !empty( $client->town ) )	{
-				$return[] = $client->town;
-			}
-			
-			if( !empty( $client->county ) )	{
-				$return[] = $client->county;
-			}
-			
-			if( !empty( $client->postcode ) )	{
-				$return[] = $client->postcode;
-			}
-		}
-	}
-	
-	return is_array( $return ) ? implode( '<br />', $return ) : $return;
+	return $address;
 } // mdjm_content_tag_client_full_address
 
 /**
@@ -992,23 +972,21 @@ function mdjm_content_tag_client_full_address( $event_id='', $client_id='' )	{
  * @return	str		The email address of the client.
  */
 function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$email = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'user_email', true );	
+	if( ! empty( $user_id ) )	{
+		$email = mdjm_get_client_email( $user_id );
 	}
 	
-	return strtolower( $return );
+	return $email;
 } // mdjm_content_tag_client_email
 
 /**
@@ -1021,23 +999,21 @@ function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
  * @return	str		The primary phone number of the client.
  */
 function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$primary_phone = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'phone1', true );
+	if( ! empty( $user_id ) )	{
+		$primary_phone = mdjm_get_client_phone( $user_id );
 	}
 	
-	return $return;
+	return $primary_phone;
 } // mdjm_content_tag_client_primary_phone
 
 /**
@@ -1050,23 +1026,21 @@ function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
  * @return	str		The alternative phone number of the client.
  */
 function mdjm_content_tag_client_alt_phone( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = '';
+	$alt_phone = '';
 	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'phone2', true );
+	if( ! empty( $user_id ) )	{
+		$alt_phone = mdjm_get_client_alt_phone( $user_id );
 	}
 	
-	return $return;
+	return $alt_phone;
 } // mdjm_content_tag_client_alt_phone
 
 /**
@@ -1079,27 +1053,21 @@ function mdjm_content_tag_client_alt_phone( $event_id='', $client_id='' )	{
  * @return	str		The login name of the client.
  */
 function mdjm_content_tag_client_username( $event_id='', $client_id='' )	{
-	if( !empty( $client_id ) )	{
+	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
-	}
-	elseif( !empty( $event_id ) )	{
-		$user_id = get_post_meta( $event_id, '_mdjm_event_client', true );
-	}
-	else	{
+	} elseif( ! empty( $event_id ) )	{
+		$user_id = mdjm_get_event_client_id( $event_id );
+	} else	{
 		$user_id = '';
 	}
 	
-	$return = __( 'Client data not set', 'mobile-dj-manager' );
+	$login = '';
 	
-	if( !empty( $user_id ) )	{
-		$client = get_userdata( $user_id );	
+	if( ! empty( $user_id ) )	{
+		$login = mdjm_get_client_login( $user_id );
 	}
 	
-	if( !empty( $client ) && !empty( $client->user_login ) )	{
-		$return = $client->user_login;
-	}
-	
-	return $return;
+	return $login;
 } // mdjm_content_tag_client_username
 
 /**
@@ -1397,53 +1365,65 @@ function mdjm_content_tag_dj_email( $event_id='' )	{
  * First name of primary employee assigned to event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The first name of the primary employee assigned to the event.
  */
 function mdjm_content_tag_dj_firstname( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
+	}
+
+	$first_name = '';
+	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if( ! empty( $user_id ) )	{
+		$first_name = mdjm_get_employee_firstname( $user_id );
 	}
 	
-	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
-	
-	$return = '';
-	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'first_name', true );
-	}
-	
-	return $return;
+	return $first_name;
 } // mdjm_content_tag_dj_firstname
+
+/**
+ * Content tag: dj_lastname.
+ * Last name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @return	str		The last name of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_dj_lastname( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+
+	$last_name = '';
+	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if( ! empty( $user_id ) )	{
+		$last_name = mdjm_get_employee_lastname( $user_id );
+	}
+	
+	return $last_name;
+} // mdjm_content_tag_dj_lastname
 
 /**
  * Content tag: dj_fullname.
  * Full name of primary employee assigned to event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The full name (display name) of the primary employee assigned to the event.
  */
 function mdjm_content_tag_dj_fullname( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
+	}
+
+	$full_name = '';
+	$user_id   = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if( ! empty( $user_id ) )	{
+		$full_name = mdjm_get_employee_display_name( $user_id );
 	}
 	
-	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
-	
-	$return = '';
-	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'first_name', true );
-		
-		if( !empty( $return ) )	{
-			$return .= ' ' . get_user_meta( $user_id, 'last_name', true );
-		}
-	}
-	
-	return ucwords( $return );
+	return $full_name;
 } // mdjm_content_tag_dj_fullname
 
 /**
@@ -1457,18 +1437,17 @@ function mdjm_content_tag_dj_fullname( $event_id='' )	{
  */
 function mdjm_content_tag_dj_primary_phone( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
+	}
+
+	$phone   = '';
+	$user_id = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if( ! empty( $user_id ) )	{
+		$phone = mdjm_get_employee_phone( $user_id );
 	}
 	
-	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
-	
-	$return = '';
-	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'phone1', true );
-	}
-		
-	return $return;
+	return $phone;
 } // mdjm_content_tag_dj_primary_phone
 
 /**
@@ -1881,11 +1860,39 @@ function mdjm_content_tag_event_type( $event_id='' )	{
  */
 function mdjm_content_tag_event_url( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_get_event_uri( $event_id );
 } // mdjm_content_tag_event_url
+
+/**
+ * Content tag: final_balance.
+ * The event ID.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The event final balance (cost - unpaid deposit).
+ */
+function mdjm_content_tag_final_balance( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+
+	$final_balance = get_post_meta( $event_id, '_mdjm_event_cost', true );
+	$deposit       = get_post_meta( $event_id, '_mdjm_event_deposit', true );
+
+	if ( ! $final_balance )	{
+		return;
+	}
+
+	if ( $deposit )	{
+		$final_balance = $final_balance - $deposit;
+	}
+
+	return mdjm_currency_filter( mdjm_sanitize_amount( $final_balance ) );
+} // mdjm_content_tag_final_balance
 
 /**
  * Content tag: guest_playlist_url.

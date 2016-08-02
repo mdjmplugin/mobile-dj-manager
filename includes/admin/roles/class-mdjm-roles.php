@@ -18,7 +18,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 			add_action( 'init', array( &$this, 'init' ) );
 			
 			// Runs after Events settings are updated
-			add_action ( 'update_option_mdjm_event_settings', array( &$this, 'rename_dj_role' ), 10, 2 );
+			add_action ( 'update_option_mdjm_settings', array( &$this, 'rename_dj_role' ), 10, 2 );
 			
 			// Ajax event for adding new roles
 			add_action( 'wp_ajax_mdjm_add_role', array( &$this, 'add_role' ) );
