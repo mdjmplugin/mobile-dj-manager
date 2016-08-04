@@ -405,7 +405,10 @@ function mdjm_add_event_type_ajax()	{
 	
 	$selected = ( $result['type'] == 'success' ) ? $term['term_id'] : $_POST['current'];
 	
-	$result['event_types'] = MDJM()->html->event_type_dropdown( 'mdjm_event_type', $selected );
+	$result['event_types'] = MDJM()->html->event_type_dropdown( array(
+		'name'     => 'mdjm_event_type',
+		'selected' => $selected
+	) );
 	
 	echo json_encode($result);
 	

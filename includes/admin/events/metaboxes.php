@@ -399,7 +399,10 @@ function mdjm_event_metabox_options_type_row( $event_id )	{
 
 	?>
     <p>&nbsp;<i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;<label for="mdjm_event_type"><?php _e( 'Type:', 'mobile-dj-manager' ); ?></label>
-		<?php echo MDJM()->html->event_type_dropdown( 'mdjm_event_type', $event_type ); ?>
+		<?php echo MDJM()->html->event_type_dropdown( array(
+			'name'     => 'mdjm_event_type',
+			'selected' => $event_type
+		) ); ?>
 
 		<?php if ( mdjm_is_admin() ) : ?>
             <i id="event-type-add" class="fa fa-plus" aria-hidden="true"></i>
