@@ -416,12 +416,30 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			),
 		) );
 		$admin_bar->add_menu( array(
+			'id'     => 'mdjm-package-cats',
+			'parent' => 'mdjm-packages',
+			'title'  => __( 'Package Categories', 'mobile-dj-manager' ),
+			'href'   => admin_url( 'edit-tags.php?taxonomy=package-category&post_type=mdjm-package' ),
+			'meta'   => array(
+				'title' => __( 'Package Categories', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
 			'id'     => 'mdjm-addons',
 			'parent' => 'mdjm-packages',
 			'title'  => __( 'Add-ons', 'mobile-dj-manager' ),
 			'href'   => admin_url( 'edit.php?post_type=mdjm-addon' ),
 			'meta'   => array(
 				'title' => __( 'Add-ons', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'     => 'mdjm-addon-cats',
+			'parent' => 'mdjm-packages',
+			'title'  => __( 'Addon Categories', 'mobile-dj-manager' ),
+			'href'   => admin_url( 'edit-tags.php?taxonomy=addon-category&post_type=mdjm-addon' ),
+			'meta'   => array(
+				'title' => __( 'Addon Categories', 'mobile-dj-manager' ),
 			),
 		) );
 	}
