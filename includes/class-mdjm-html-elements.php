@@ -58,34 +58,40 @@ class MDJM_HTML_Elements {
 	 * @param	int		$selected	Category to select automatically
 	 * @return	str		$output		Category dropdown
 	 */
-	public function event_type_dropdown( $name = 'mdjm_event_type', $selected = 0 ) {
+	public function event_type_dropdown( $args = array() ) {
 
-		$args = array(
+		$defaults = array(
+			'name'             => null,
+			'class'            => '',
+			'id'               => '',
+			'selected'         => mdjm_get_option( 'event_type_default' ),
+			'chosen'           => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'show_option_all'  => false,
+			'show_option_none' => false
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$cat_args = array(
 			'hide_empty' => false
 		);
 
-		$categories = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $args ) );
-		$options    = array();
-
-		if ( empty( $selected ) )	{
-			$selected = mdjm_get_option( 'event_type_default' );
-		}
+		$categories      = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $cat_args ) );
+		$args['options'] = array();
 
 		foreach ( $categories as $category ) {
-			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
+			$args['options'][ absint( $category->term_id ) ] = esc_html( $category->name );
 		}
 
 		$category_labels = mdjm_get_taxonomy_labels( 'event-types' );
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+		$output = $this->select( $args );
 
 		return $output;
+
 	} // event_type_dropdown
+
 	/**
 	 * Renders an HTML Dropdown of all the Enquiry Sources
 	 *
@@ -495,24 +501,20 @@ class MDJM_HTML_Elements {
 		if ( $packages )	{
 
 			foreach( $packages as $package )	{
-				if ( empty( $package['enabled'] ) || $package['enabled'] != 'Y' )	{
-					continue;
-				}
 
 				if( $args['employee'] )	{	
-					$employees_with = explode( ',', $package['djs'] );
 					
-					if( ! in_array( $args['employee'], $employees_with ) )	{
+					if( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
 						continue;
 					}
 				}
 
 				$price = '';
 				if( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) ;
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $package->ID ) ) ) ;
 				}
 
-				$options[ $package['slug'] ] = stripslashes( esc_attr( $package['name'] ) ) . $price;
+				$options[ $package->ID ] = $package->post_title . '' . $price;
 
 			}
 
@@ -527,7 +529,7 @@ class MDJM_HTML_Elements {
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
-			'show_option_none' => $packages ? $args['show_option_none'] : __( 'No packages available', 'mobile-dj-manager' ),
+			'show_option_none' => $packages ? $args['show_option_none'] : __( 'No package', 'mobile-dj-manager' ),
 			'show_option_all'  => false,
 			'data'             => $args['data']
 		) );
