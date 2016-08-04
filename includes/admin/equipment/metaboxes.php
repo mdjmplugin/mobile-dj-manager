@@ -102,6 +102,7 @@ function mdjm_packages_metabox_fields() {
 
 	$fields = array(
 			'_package_employees',
+			'_package_event_types',
 			'_package_restrict_date',
 			'_package_months',
 			'_package_items',
@@ -179,10 +180,13 @@ function mdjm_package_metabox_pricing_callback( $post )	{
 function mdjm_package_metabox_availability_employee_row( $post )	{
 
 	$employees_with = mdjm_get_employees_with_package( $post->ID );
+	$event_types    = mdjm_get_package_event_types( $post->ID );
+	$event_label    = mdjm_get_label_singular( true );
 
-	if ( mdjm_is_employer() ) : ?>
-        <div class="mdjm_field_wrap mdjm_form_fields">
-            <div id="package-employee-select">
+	?>
+    <div class="mdjm_field_wrap mdjm_form_fields">
+		<?php if ( mdjm_is_employer() ) : ?>
+            <div id="package-employee-select" class="mdjm_col col2">
                 <p><label for="_package_employees"><?php _e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_package_employees',
@@ -190,14 +194,29 @@ function mdjm_package_metabox_availability_employee_row( $post )	{
                     'show_option_none' => false,
                     'show_option_all'  => __( 'All Employees', 'mobile-dj-manager' ),
                     'group'            => true,
+					'chosen'           => true,
                     'multiple'         => true,
-					'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
+                    'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
                 ) ); ?></p>
             </div>
-        </div>
-    <?php else : ?>
-        <input type="hidden" name="_package_employees" value="all" />
-	<?php endif;
+        <?php else : ?>
+            <input type="hidden" name="_package_employees" value="all" />
+        <?php endif; ?>
+
+			<div id="package-event-type" class="mdjm_col col2">
+				<p><label for="_package_event_types"><?php printf( __( 'Available for %s types', 'mobile-dj-manager' ), $event_label ); ?></label><br />
+                <?php echo MDJM()->html->event_type_dropdown( array(
+                    'name'             => '_package_event_types',
+                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ),
+                    'show_option_none' => false,
+                    'show_option_all'  => sprintf( __( 'All %s Types', 'mobile-dj-manager' ), ucfirst( $event_label ) ),
+                    'multiple'         => true,
+					'chosen'           => true,
+                    'placeholder'      => sprintf( __( 'Click to select %s types', 'mobile-dj-manager' ), $event_label )
+                ) ); ?></p>
+			</div>
+	</div>
+    <?php
 
 } // mdjm_package_metabox_availability_employee_row
 add_action( 'mdjm_package_availability_fields', 'mdjm_package_metabox_availability_employee_row', 10 );
@@ -583,6 +602,7 @@ function mdjm_addons_metabox_fields() {
 
 	$fields = array(
 			'_addon_employees',
+			'_addon_event_types',
 			'_addon_restrict_date',
 			'_addon_months',
 			'_addon_price',
@@ -641,25 +661,43 @@ function mdjm_addon_metabox_pricing_callback( $post )	{
 function mdjm_addon_metabox_availability_employee_row( $post )	{
 
 	$employees_with = mdjm_get_employees_with_addon( $post->ID );
+	$event_types    = mdjm_get_addon_event_types( $post->ID );
+	$event_label    = mdjm_get_label_singular( true );
 
-	if ( mdjm_is_employer() ) : ?>
-        <div class="mdjm_field_wrap mdjm_form_fields">
-            <div id="addon-employee-select">
-                <p><label for="_addon_employees"><?php _e( 'Employees with this addon', 'mobile-dj-manager' ); ?></label><br />
+	?>
+    <div class="mdjm_field_wrap mdjm_form_fields">
+		<?php if ( mdjm_is_employer() ) : ?>
+            <div id="addon-employee-select" class="mdjm_col col2">
+                <p><label for="_addon_employees"><?php _e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_addon_employees',
                     'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ),
                     'show_option_none' => false,
                     'show_option_all'  => __( 'All Employees', 'mobile-dj-manager' ),
                     'group'            => true,
+					'chosen'           => true,
                     'multiple'         => true,
-					'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
+                    'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
                 ) ); ?></p>
             </div>
-        </div>
-    <?php else : ?>
-        <input type="hidden" name="_addon_employees" value="all" />
-	<?php endif;
+        <?php else : ?>
+            <input type="hidden" name="_package_employees" value="all" />
+        <?php endif; ?>
+
+			<div id="addon-event-type" class="mdjm_col col2">
+				<p><label for="_addon_event_types"><?php printf( __( 'Available for %s types', 'mobile-dj-manager' ), $event_label ); ?></label><br />
+                <?php echo MDJM()->html->event_type_dropdown( array(
+                    'name'             => '_addon_event_types',
+                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ),
+                    'show_option_none' => false,
+                    'show_option_all'  => sprintf( __( 'All %s Types', 'mobile-dj-manager' ), ucfirst( $event_label ) ),
+                    'multiple'         => true,
+					'chosen'           => true,
+                    'placeholder'      => sprintf( __( 'Click to select %s types', 'mobile-dj-manager' ), $event_label )
+                ) ); ?></p>
+			</div>
+	</div>
+    <?php
 
 } // mdjm_addon_metabox_availability_employee_row
 add_action( 'mdjm_addon_availability_fields', 'mdjm_addon_metabox_availability_employee_row', 10 );

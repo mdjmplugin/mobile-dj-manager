@@ -145,6 +145,19 @@ function mdjm_get_employees_with_package( $package_id )	{
 } // mdjm_get_employees_with_package
 
 /**
+ * Retrieve all event types for which the package is available.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the package.
+ * @return	arr		Array of event types the package is available.
+ */
+function mdjm_get_package_event_types( $package_id )	{
+	$event_types = get_post_meta( $package_id, '_package_event_types', true );
+
+	return apply_filters( 'mdjm_package_event_types', $event_types, $package_id );
+} // mdjm_get_package_event_types
+
+/**
  * Whether or not this package is restricted by date.
  *
  * @since	1.4
@@ -327,6 +340,28 @@ function mdjm_employee_has_package( $package_id, $employee_id = 0 )	{
 	return false;
 
 } // mdjm_employee_has_package
+
+/**
+ * Whether or not a package is available for the event type.
+ *
+ * @since	1.4
+ * @param	int		$package_id			The package ID.
+ * @param	int|str	$event_type_terms	The event type term ID's to check.
+ * @return	bool	True if the package is available for the event type, or false if not.
+ */
+function mdjm_package_is_available_for_event_type( $package_id, $event_type_term = '' )	{
+
+	$event_types = mdjm_get_package_event_types( $package_id );
+
+	if ( $event_types )	{
+		if ( in_array( 'all', $event_types ) || in_array( $event_type_term, $event_types ) )	{
+			return true;
+		}
+	}
+
+	return false;
+
+} // mdjm_package_is_available_for_event_type
 
 /**
  * Retrieve an events package.
@@ -666,6 +701,19 @@ function mdjm_get_employees_with_addon( $addon_id )	{
 } // mdjm_get_employees_with_addon
 
 /**
+ * Retrieve all event types for which the addon is available.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the addon.
+ * @return	arr		Array of event types the addon is available.
+ */
+function mdjm_get_addon_event_types( $addon_id )	{
+	$event_types = get_post_meta( $addon_id, '_addon_event_types', true );
+
+	return apply_filters( 'mdjm_addon_event_types', $event_types, $addon_id );
+} // mdjm_get_addon_event_types
+
+/**
  * Whether or not this addon is restricted by date.
  *
  * @since	1.4
@@ -848,6 +896,28 @@ function mdjm_get_event_addons( $event_id )	{
 
 	return apply_filters( 'mdjm_event_addons', $addon );
 } // mdjm_get_event_addons
+
+/**
+ * Whether or not an addon is available for the event type.
+ *
+ * @since	1.4
+ * @param	int		$addon_id			The package ID.
+ * @param	int|str	$event_type_terms	The event type term ID's to check.
+ * @return	bool	True if the addon is available for the event type, or false if not.
+ */
+function mdjm_addon_is_available_for_event_type( $addon_id, $event_type_term = '' )	{
+
+	$event_types = mdjm_get_addon_event_types( $addon_id );
+
+	if ( $event_types )	{
+		if ( in_array( 'all', $event_types ) || in_array( $event_type_term, $event_types ) )	{
+			return true;
+		}
+	}
+
+	return false;
+
+} // mdjm_addon_is_available_for_event_type
 
 /**
  * Lists an events addons.
