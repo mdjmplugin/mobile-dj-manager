@@ -185,23 +185,6 @@ function get_addon_name( $slug )	{
 	
 } // get_addon_name
 
-/**
- * Retrieve the cost of an addon.
- *
- * @since	1.3
- * @param	str		$slug	The slug identifier for the addon.
- * @return	int		The cost of the addon.
- */
-function mdjm_get_addon_cost( $slug )	{
-	
-	$addon = get_addon_details( $slug );
-	
-	if ( ! empty ( $addon ) )	{
-		return mdjm_format_amount( $addon['cost'] );
-	}
-
-} // mdjm_get_addon_cost
-
 /*
  * Retrieve the addon category, name, decription & cost
  *

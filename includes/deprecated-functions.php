@@ -385,3 +385,20 @@ function get_package_name( $slug )	{
 function get_event_addons( $event_id, $price=false )	{									
 	return mdjm_list_event_addons( $event_id, $price );
 } // get_event_addons
+
+/**
+ * Retrieve the cost of an addon.
+ *
+ * @since	1.4
+ * @param	str		$slug	The slug identifier for the addon.
+ * @return	int		The cost of the addon.
+ */
+function mdjm_get_addon_cost( $slug )	{
+
+	$addon = mdjm_get_addon_by( 'slug', $slug );
+
+	if ( $addon )	{
+		return mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) );
+	}
+
+} // mdjm_get_addon_cost
