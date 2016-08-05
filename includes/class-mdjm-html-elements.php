@@ -303,7 +303,7 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( ' - Select Employee -', 'mobile-dj-manager' ),
+			'show_option_none' => '',
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
@@ -323,34 +323,34 @@ class MDJM_HTML_Elements {
 		$employees = mdjm_get_employees( $args['role'] );
 
 		if ( $employees )	{
-			$results['role'] = array();
-
 			foreach( $employees as $employee )	{
-				if( $employee->roles[0] == 'administrator' && ! empty( $employee->roles[1] ) )	{
-					$employee->roles[0] = $employee->roles[1];
-				} else	{
-					$employee->roles[0] = 'dj';
+				$roles = array_values( $employee->roles );
+				$role  = $roles[0];
+
+				if( $role == 'administrator' )	{
+					if ( ! empty( $roles[1] ) )	{
+						$role = $roles[1];
+					} else	{
+						$role = 'dj';
+					}
 				}
-				
+
 				if( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )	{
 					continue;
 				}
-				
-				$results['role'][ $employee->roles[0] ][] = $employee;
-			}
 
-			foreach( $results['role'] as $role => $userobj )	{
-
-				foreach( $userobj as $user )	{
-					$employee_list[ $user->ID ] = $user->display_name;
+				if ( ! empty( $args['group'] ) )	{
+					$options['groups'][ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = array( $employee->ID => $employee->display_name );
+				} else	{
+					$options[ $user->ID ] = $user->display_name;
 				}
-
-				if( $args['group'] )	{
-					$groups[ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = $employee_list;
-				}
-	
 			}
+		}
 
+		if ( ! empty( $options['groups'] ) )	{
+			ksort( $options['groups'] );
+		} else	{
+			asort( $options );
 		}
 
 		$output = $this->select( array(
@@ -358,7 +358,7 @@ class MDJM_HTML_Elements {
 			'class'            => $args['class'],
 			'id'               => $args['id'],
 			'selected'         => $args['selected'],
-			'options'          => empty( $args['group'] ) ? $employee_list : array( 'groups' => $groups ),
+			'options'          => $options,
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
@@ -503,7 +503,6 @@ class MDJM_HTML_Elements {
 			foreach( $packages as $package )	{
 
 				if( $args['employee'] )	{	
-					
 					if( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
 						continue;
 					}
@@ -567,63 +566,54 @@ class MDJM_HTML_Elements {
 		$options = array();
 		$addons  = mdjm_get_addons();
 
-		$categories = get_terms( 'addon-category', array( 'hide_empty' => true ) );
-		$options    = array();
-
-		foreach ( $categories as $category ) {
-			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
-		}
-
 		if ( $addons )	{
-			foreach( $categories as $category_key => $category_value )	{
-				
-				foreach( $addons as $addon )	{
-
-					if ( ! empty( $args['package'] ) )	{
-						if ( is_numeric( $args['package'] ) )	{
-							$package = mdjm_get_package( $args['package'] );
-						} else	{
-							$package = mdjm_get_package_by( 'slug', $args['package'] );
-						}
-
-						if ( $package )	{
-							$package_items = mdjm_get_package_items( $package->ID );
-						}
-
-						if ( $package_items && in_array( $addon->ID, $package_items ) )	{
-							continue;
-						}
+			foreach( $addons as $addon )	{
+				if ( ! empty( $args['package'] ) )	{
+					if ( is_numeric( $args['package'] ) )	{
+						$package = mdjm_get_package( $args['package'] );
+					} else	{
+						$package = mdjm_get_package_by( 'slug', $args['package'] );
 					}
 
-					if( $args['employee'] )	{	
-						$employees_with = mdjm_get_employees_with_addon( $addon->ID );
-						
-						if( ! in_array( $args['employee'], $employees_with ) )	{
-							continue;
-						}
+					if ( $package )	{
+						$package_items = mdjm_get_package_items( $package->ID );
 					}
 
-					if( has_term( $category_value->name, 'addon-category', $addon->ID ) )	{
-						$price = '';
-						if( $args['cost'] == true )	{
-							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
-						}
-						$desc           = '';
-
-						if( $args['desc'] == true )	{
-							$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, 30 );
-						}
-
-						$options['groups'][ $category_value->name ][] = array( $addon->ID => $addon->post_title . $price . $desc );
-
+					if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) )	{
+						continue;
 					}
-
 				}
-				
-			}
 
+				if( ! empty( $args['employee'] ) )	{
+					if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) )	{
+						continue;
+					}
+				}
+
+				$price = '';
+				if( $args['cost'] == true )	{
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
+				}
+				$desc           = '';
+
+				if( $args['desc'] == true )	{
+					$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, 30 );
+				}
+
+				$term  = '';
+				$terms = get_the_terms( $addon->ID, 'addon-category' );
+
+				if ( ! empty( $terms ) )	{
+					$term = esc_html( $terms[0]->name );
+				}
+
+				$options['groups'][ $term ][] = array( $addon->ID => $addon->post_title . $price . $desc );
+
+			}
 		}
-		
+
+		ksort( $options['groups'] );
+
 		$output = $this->select( array(
 			'name'             => $args['name'],
 			'class'            => $args['class'],
