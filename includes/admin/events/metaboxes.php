@@ -890,8 +890,10 @@ function mdjm_event_metabox_employee_select_row( $event_id )	{
                 <?php else : ?>
 
 					<?php echo MDJM()->html->employee_dropdown( array(
-                        'selected' => $employee_id,
-                        'group'    => true
+                        'selected'    => $employee_id,
+                        'group'       => true,
+						'chosen'      => true,
+						'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
                     ) ); ?>
             
                 <?php endif; ?>
@@ -1215,7 +1217,8 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
             <label for="_mdjm_event_package"><?php _e( 'Package:', 'mobile-dj-manager' ); ?></label><br />
 			<?php echo MDJM()->html->packages_dropdown( array(
                 'employee'         => $employee,
-                'selected'         => $package
+                'selected'         => $package,
+				'chosen'           => true
             ) ); ?>
 		</div>
 
@@ -1228,7 +1231,7 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
                 'employee'         => $employee,
                 'package'          => $package,
                 'cost'             => true,
-                'chosen'           => false,
+                'chosen'           => true,
                 'data'             => array()
             ) ); ?></span>
 		</div>
