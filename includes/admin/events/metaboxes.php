@@ -999,14 +999,17 @@ function mdjm_event_metabox_add_employee_fields( $event_id )	{
             	<tr>
                 	<td><label for="event_new_employee"><?php _e( 'Employee', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->employee_dropdown( array(
-							'name'     => 'event_new_employee',
-							'exclude'  => $exclude,
-							'group'    => true
+							'name'        => 'event_new_employee',
+							'exclude'     => $exclude,
+							'group'       => true,
+							'chosen'      => true,
+							'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
 						) ); ?></td>
 
 					<td><label for="event_new_employee_role"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->roles_dropdown( array(
-							'name'  => 'event_new_employee_role'
+							'name'   => 'event_new_employee_role',
+							'chosen' => true
 						) ); ?></td>
 
 					<td>
@@ -1150,8 +1153,8 @@ function mdjm_event_metabox_details_price_row( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	if ( mdjm_employee_can( 'edit_txns' ) ) : ?>
-
-        <div class="mdjm_field_wrap mdjm_form_fields">
+		<span id="mdjm-price-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
+        <div  id="mdjm-event-price-row" class="mdjm_field_wrap mdjm_form_fields">
             <div class="mdjm_col col2">
                 <label for="_mdjm_event_deposit"><?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?></label><br />
 				<?php echo mdjm_currency_symbol() . MDJM()->html->text( array(
@@ -1212,7 +1215,8 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
 	$employee = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
 
 	?>
-    <div class="mdjm_field_wrap mdjm_form_fields">
+    <span id="mdjm-equipment-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
+    <div id="mdjm-event-equipment-row" class="mdjm_field_wrap mdjm_form_fields">
         <div class="mdjm_col col2">
             <label for="_mdjm_event_package"><?php _e( 'Package:', 'mobile-dj-manager' ); ?></label><br />
 			<?php echo MDJM()->html->packages_dropdown( array(
@@ -1231,6 +1235,7 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
                 'employee'         => $employee,
                 'package'          => $package,
                 'cost'             => true,
+				'placeholder'      => __( 'Select Add-ons', 'mobile-dj-manager' ),
                 'chosen'           => true,
                 'data'             => array()
             ) ); ?></span>
