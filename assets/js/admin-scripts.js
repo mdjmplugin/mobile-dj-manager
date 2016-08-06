@@ -300,8 +300,8 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#_mdjm_event_deposit').fadeTo('fast', 0.5);
-						$('#_mdjm_event_deposit').addClass('mdjm-updating');
+						$('#_mdjm_event_deposit').attr("readonly", true );
+						$('#_mdjm_event_deposit').addClass("mdjm-loader");
 					},
 					success: function (response) {
 						if(response.type == 'success') {
@@ -310,8 +310,8 @@ jQuery(document).ready(function ($) {
 							alert(response.msg);
 							$('#_mdjm_event_deposit').val(current_deposit);
 						}
-						$('#_mdjm_event_deposit').fadeTo('fast', 1);
-						$('#_mdjm_event_deposit').removeClass('mdjm-updating');						
+						$('#_mdjm_event_deposit').removeClass("mdjm-loader");
+						$('#_mdjm_event_deposit').attr("readonly", false );				
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
@@ -339,8 +339,8 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#_mdjm_event_cost').fadeTo('fast', 0.5);
-						$('#_mdjm_event_cost').addClass( 'mdjm-updating' );
+						$('#_mdjm_event_cost').addClass("mdjm-loader");
+						$('#_mdjm_event_cost').attr("readonly", true);
 					},
 					success: function (response) {
 						if(response.type == "success") {
@@ -355,8 +355,8 @@ jQuery(document).ready(function ($) {
 							$('#_mdjm_event_cost').val(current_cost);
 						}
 
-						$('#_mdjm_event_cost').fadeTo('fast', 1);
-						$('#_mdjm_event_cost').removeClass('mdjm-updating');
+						$('#_mdjm_event_cost').removeClass("mdjm-loader");
+						$('#_mdjm_event_cost').attr("readonly", false);
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
@@ -384,27 +384,29 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#_mdjm_event_package').addClass( 'mdjm-updating' );
-						$('#_mdjm_event_package').fadeTo('slow', 0.5);
-						$('#event_addons').addClass('mdjm-updating');
-						$('#event_addons').fadeTo('slow', 0.5);
+						$('#mdjm-event-equipment-row').hide();
+						$('#mdjm-equipment-loader').show();
 					},
 					success: function (response) {
 						if(response.type == "success") {
 							$('#_mdjm_event_package').empty(); // Remove existing package options
 							$('#_mdjm_event_package').append(response.packages);
+							$('#_mdjm_event_package').trigger("chosen:updated");
 							
 							$('#event_addons').empty(); // Remove existing addon options
 							$('#event_addons').append(response.addons);
+							$('#event_addons').trigger("chosen:updated");
+
+							$('#mdjm-equipment-loader').hide();
+							$('#mdjm-event-equipment-row').show();
+
 							setCost();
 						} else	{
 							alert(response.msg);
 						}						
 
-						$('#_mdjm_event_package').fadeTo('slow', 1);
-						$('#_mdjm_event_package').removeClass('mdjm-updating');
-						$('#event_addons').fadeTo('slow', 1);
-						$('#event_addons').removeClass('mdjm-updating');
+						$('#mdjm-equipment-loader').hide();
+						$('#mdjm-event-equipment-row').show();
 
 					}
 				}).fail(function (data) {
@@ -423,7 +425,8 @@ jQuery(document).ready(function ($) {
 
 				var postData        = {
 					package  : $("#_mdjm_event_package option:selected").val(),
-					dj       : $("#_mdjm_event_dj").val(),
+					employee : $("#_mdjm_event_dj").val(),
+					selected : $('#event_addons').val() || [],
 					action   : 'refresh_addon_options'
 				};
 
@@ -433,21 +436,23 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#event_addons').addClass('mdjm-updating');
-						$('#event_addons').fadeTo('slow', 0.5);
+						$('#mdjm-event-equipment-row').hide();
+						$('#mdjm-equipment-loader').show();
 					},
 					success: function (response) {
 						if(response.type == "success") {
 							$('#event_addons').empty();
 							$('#event_addons').append(response.addons);
-							$("#event_addons").fadeTo('slow', 1);
+							$('#event_addons').trigger("chosen:updated");
+
+							$('#mdjm-equipment-loader').hide();
+							$('#mdjm-event-equipment-row').show();
 						} else	{
 							alert(response.msg);
 						}	
-						
-						$('#event_addons').fadeTo('slow', 1);
-						$('#event_addons').removeClass('mdjm-updating', 1);
 
+						$('#mdjm-equipment-loader').hide();
+						$('#mdjm-event-equipment-row').show();
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
