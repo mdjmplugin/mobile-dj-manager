@@ -273,6 +273,8 @@ function get_available_packages( $dj='', $price=false )	{
  */
 function get_event_package( $event_id, $price=false )	{
 
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_event_package()' );
+
 	$return        = __( 'No package is assigned to this event', 'mobile-dj-manager' );
 	$package_price = '';
 
@@ -300,6 +302,8 @@ function get_event_package( $event_id, $price=false )	{
  */
 function get_event_package_description( $event_id )	{
 
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_package_excerpt()' );
+
 	$return = '';
 
 	$package_id = mdjm_get_event_package( $event_id );
@@ -323,6 +327,7 @@ function get_event_package_description( $event_id )	{
  * @return	obj|bool	$packages	The package details
  */
 function mdjm_get_package_by_slug( $slug )	{
+	_deprecated_function( __FUNCTION__, '1.4', "mdjm_get_package_by('field', 'value')" );
 	return mdjm_get_package_by( 'slug', $slug );
 } // mdjm_get_package_by_slug
 
@@ -334,6 +339,7 @@ function mdjm_get_package_by_slug( $slug )	{
  * @return	obj|bool	$packages	The package details
  */
 function mdjm_get_package_by_name( $name )	{
+	_deprecated_function( __FUNCTION__, '1.4', "mdjm_get_package_by( 'field', 'value' )" );
 	return mdjm_get_package_by( 'name', $name );
 } // mdjm_get_package_by_name
 
@@ -345,6 +351,7 @@ function mdjm_get_package_by_name( $name )	{
  * @return	int		The cost of the package.
  */
 function mdjm_get_package_cost( $slug )	{
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_package_price()' );
 	$package = mdjm_get_package_by( 'slug', $slug );
 
 	if ( $package )	{
@@ -361,7 +368,7 @@ function mdjm_get_package_cost( $slug )	{
  * @return	str		$package	The display name of the package	
  */
 function get_package_name( $slug )	{	
-
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_package_name()' );
 	$return = false;
 
 	$package = mdjm_get_package_by( 'slug', $slug );
@@ -382,7 +389,8 @@ function get_package_name( $slug )	{
  * @param	bool		$price		True to include the add-on price.
  * @return	str			$addons		Array with add-ons details, or false if no add-ons assigned
  */
-function get_event_addons( $event_id, $price=false )	{									
+function get_event_addons( $event_id, $price=false )	{	
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_list_event_addons()' );								
 	return mdjm_list_event_addons( $event_id, $price );
 } // get_event_addons
 
@@ -394,7 +402,7 @@ function get_event_addons( $event_id, $price=false )	{
  * @return	int		The cost of the addon.
  */
 function mdjm_get_addon_cost( $slug )	{
-
+	_deprecated_function( __FUNCTION__, '1.4', "mdjm_get_addon_by( 'field', 'value' )" );
 	$addon = mdjm_get_addon_by( 'slug', $slug );
 
 	if ( $addon )	{
@@ -402,3 +410,24 @@ function mdjm_get_addon_cost( $slug )	{
 	}
 
 } // mdjm_get_addon_cost
+
+/**
+ * Retrieve all addons within the given package slug
+ *
+ * @since	1.4
+ * @param	str		$slug		Required: Slug of the package for which to search
+ * @return	arr		$addons		Array of all addons
+ */
+function mdjm_addons_by_package_slug( $slug )	{
+
+	_deprecated_function( __FUNCTION__, '1.4', "mdjm_get_addons_by_package()" );
+	$package = mdjm_get_package_by( 'slug', strtolower( $slug ) );
+	
+	// No package returns false
+	if( empty( $package ) )	{
+		return false;
+	}
+	
+	return mdjm_get_package_items( $package->ID );
+	
+} // mdjm_addons_by_package_slug

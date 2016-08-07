@@ -101,38 +101,6 @@ function mdjm_addons_by_cat( $cat )	{
 } // mdjm_addons_by_cat
 
 /**
- * Retrieve all addons within the given package slug
- *
- * @param	str		$slug		Required: Slug of the package for which to search
- *
- * @return	arr		$addons		Array of all addons
- */
-function mdjm_addons_by_package_slug( $slug )	{
-	$package = mdjm_get_package_by_slug( strtolower( $slug ) );
-	
-	// No package or the package has no addons, return false
-	if( empty( $package ) || empty( $package['equipment'] ) )
-		return false;
-	
-	$package_items = explode( ',', $package['equipment'] );
-	$equipment = mdjm_get_addons();
-	
-	// No addons, return false
-	if( empty( $equipment ) )
-		return false;
-	
-	foreach( $equipment as $addon )	{
-		if( !in_array( $addon[1], $package_items ) )
-			continue;
-			
-		$addons[] = $addon;	
-	}
-	
-	// Return the results, or false if none
-	return !empty( $addons ) ? $addons : false;
-} // mdjm_addons_by_package_slug
-
-/**
  * Retrieve all addons within the given package
  *
  * @param	str		$name		Required: Name of the package for which to search
