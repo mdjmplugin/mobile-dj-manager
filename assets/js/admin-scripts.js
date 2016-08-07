@@ -366,16 +366,17 @@ jQuery(document).ready(function ($) {
 
 			};
 
-			// Update package and add-on options when the primary employee is updated.
-			$( document.body ).on( 'change', '#_mdjm_event_dj', function(event) {
-				
+			// Update package and add-on options when the event type, date or primary employee are updated.
+			$( document.body ).on( 'change', '#_mdjm_event_dj,#mdjm_event_type,#display_event_date', function(event) {
 				event.preventDefault();
 				var current_deposit = $('#_mdjm_event_deposit').val();
 				var postData        = {
-					package  : $("#_mdjm_event_package option:selected").val(),
-					addons   : $("#event_addons").val() || [],
-					employee : $("#_mdjm_event_dj").val(),
-					action   : 'refresh_employee_package_options'
+					package    : $("#_mdjm_event_package option:selected").val(),
+					addons     : $("#event_addons").val() || [],
+					employee   : $("#_mdjm_event_dj").val(),
+					event_type : $("#mdjm_event_type").val(),
+					event_date : $("#_mdjm_event_date").val(),
+					action     : 'refresh_event_package_options'
 				};
 
 				$.ajax({
@@ -426,8 +427,10 @@ jQuery(document).ready(function ($) {
 				var postData        = {
 					package  : $("#_mdjm_event_package option:selected").val(),
 					employee : $("#_mdjm_event_dj").val(),
+					event_type : $("#mdjm_event_type").val(),
+					event_date : $("#_mdjm_event_date").val(),
 					selected : $('#event_addons').val() || [],
-					action   : 'refresh_addon_options'
+					action   : 'refresh_event_addon_options'
 				};
 
 				$.ajax({
