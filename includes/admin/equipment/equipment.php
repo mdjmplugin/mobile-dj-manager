@@ -30,6 +30,7 @@ function mdjm_package_post_columns( $columns ) {
 			'items'            => __( 'Items', 'mobile-dj-manager' ),
 			'package_category' => $category_labels['column_name'],
 			'availability'     => __( 'Availability', 'mobile-dj-manager' ),
+			'event_types'      => sprintf( __( '%s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'employees'        => __( 'Employees', 'mobile-dj-manager' ),
 			'price'            => __( 'Price', 'mobile-dj-manager' )
 		);
@@ -92,55 +93,68 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 
 		// Availability
 		case 'availability':
+			$output = array();
+
 			if ( ! mdjm_package_is_restricted_by_date( $post_id ) )	{
-				$output = __( 'Always', 'mobile-dj-manager' );
+				$output[] = __( 'Always', 'mobile-dj-manager' );
 			} else	{
 				$availability = mdjm_get_package_months_available( $post_id );
 
 				if ( ! $availability )	{
-					$output = __( 'Always', 'mobile-dj-manager' );
+					$output[] = __( 'Always', 'mobile-dj-manager' );
 				} else	{
-					$i      = 0;
-					$output = '';
-
+					$i = 0;
 					foreach( $availability as $month )	{
 
-						$output .= mdjm_month_num_to_name( $availability[ $i ] );
+						$output[] = mdjm_month_num_to_name( $availability[ $i ] );
 						$i++;
-						if ( $i < count( $availability ) )	{
-							$output .= ', ';
-						}
-
 					}
 				}
 			}
 
-			echo $output;
+			echo implode( ', ', $output );
+
+			break;
+
+		// Event Types
+		case 'event_types':
+			$output      = array();
+			$event_label = mdjm_get_label_singular();
+			$event_types = mdjm_get_package_event_types( $post_id );
+
+			if ( in_array( 'all', $event_types ) )	{
+				$output[] = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), $event_label );
+			} else	{
+				foreach ( $event_types as $event_type )	{
+					$term = get_term( $event_type, 'event-types' );
+
+					if ( ! empty( $term ) )	{
+						$output[] = $term->name;
+					}
+				}
+			}
+
+			echo implode( ', ', $output );
 
 			break;
 
 		// Employees
 		case 'employees':
 			$employees = mdjm_get_employees_with_package( $post_id );
-			$output = '';
+			$output = array();
 
 			if ( in_array( 'all', $employees ) )	{
-				$output .= __( 'All Employees', 'mobile-dj-manager' );
+				$output[] .= __( 'All Employees', 'mobile-dj-manager' );
 			} else	{
-				$i      = 0;
 				foreach( $employees as $employee )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output .= mdjm_get_employee_display_name( $employee );
-					$i++;
-					if ( $i < count( $employees ) )	{
-						$output .= '<br />';
-					}
+					$output[] = mdjm_get_employee_display_name( $employee );
 				}
 				
 			}
-			echo $output;
+			echo implode( '<br />', $output );
 
 			break;
 
@@ -308,6 +322,7 @@ function mdjm_addon_post_columns( $columns ) {
 			'title'          => __( 'Addon', 'mobile-dj-manager' ),
 			'addon_category' => $category_labels['column_name'],
 			'availability'   => __( 'Availability', 'mobile-dj-manager' ),
+			'event_types'    => sprintf( __( '%s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'employees'      => __( 'Employees', 'mobile-dj-manager' ),
 			'price'          => __( 'Price', 'mobile-dj-manager' )
 		);
@@ -353,55 +368,68 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 
 		// Availability
 		case 'availability':
+			$output = array();
+
 			if ( ! mdjm_addon_is_restricted_by_date( $post_id ) )	{
-				$output = __( 'Always', 'mobile-dj-manager' );
+				$output[] = __( 'Always', 'mobile-dj-manager' );
 			} else	{
 				$availability = mdjm_get_addon_months_available( $post_id );
 
 				if ( ! $availability )	{
-					$output = __( 'Always', 'mobile-dj-manager' );
+					$output[] = __( 'Always', 'mobile-dj-manager' );
 				} else	{
-					$i      = 0;
-					$output = '';
-
+					$i = 0;
 					foreach( $availability as $month )	{
 
-						$output .= mdjm_month_num_to_name( $availability[ $i ] );
+						$output[] = mdjm_month_num_to_name( $availability[ $i ] );
 						$i++;
-						if ( $i < count( $availability ) )	{
-							$output .= ', ';
-						}
-
 					}
 				}
 			}
 
-			echo $output;
+			echo implode( ', ', $output );
+
+			break;
+
+		// Event Types
+		case 'event_types':
+			$output      = array();
+			$event_label = mdjm_get_label_singular();
+			$event_types = mdjm_get_addon_event_types( $post_id );
+
+			if ( in_array( 'all', $event_types ) )	{
+				$output[] = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), $event_label );
+			} else	{
+				foreach ( $event_types as $event_type )	{
+					$term = get_term( $event_type, 'event-types' );
+
+					if ( ! empty( $term ) )	{
+						$output[] = $term->name;
+					}
+				}
+			}
+
+			echo implode( ', ', $output );
 
 			break;
 
 		// Employees
 		case 'employees':
 			$employees = mdjm_get_employees_with_addon( $post_id );
-			$output = '';
+			$output = array();
 
 			if ( in_array( 'all', $employees ) )	{
-				$output .= __( 'All Employees', 'mobile-dj-manager' );
+				$output[] = __( 'All Employees', 'mobile-dj-manager' );
 			} else	{
-				$i      = 0;
 				foreach( $employees as $employee )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output .= mdjm_get_employee_display_name( $employee );
-					$i++;
-					if ( $i < count( $employees ) )	{
-						$output .= '<br />';
-					}
+					$output[] = mdjm_get_employee_display_name( $employee );
 				}
 				
 			}
-			echo $output;
+			echo implode( '<br />', $output );
 
 			break;
 

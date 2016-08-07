@@ -1210,9 +1210,15 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
 		return;
 	}
 
-	$package  = $mdjm_event->get_package();
-	$addons   = $mdjm_event->get_addons();
-	$employee = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
+	$package    = $mdjm_event->get_package();
+	$addons     = $mdjm_event->get_addons();
+	$employee   = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
+	$event_type = mdjm_get_event_type( $event_id, true );
+	$event_date = $mdjm_event->date ? $mdjm_event->date : false;
+	
+	if ( ! $event_type )	{
+		$event_type = mdjm_get_option( 'event_type_default', '' );
+	}
 
 	?>
     <span id="mdjm-equipment-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
@@ -1220,9 +1226,11 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
         <div class="mdjm_col col2">
             <label for="_mdjm_event_package"><?php _e( 'Package:', 'mobile-dj-manager' ); ?></label><br />
 			<?php echo MDJM()->html->packages_dropdown( array(
-                'employee'         => $employee,
-                'selected'         => $package,
-				'chosen'           => true
+                'employee'   => $employee,
+				'event_type' => $event_type,
+				'event_date' => $event_date,
+                'selected'   => $package,
+				'chosen'     => true
             ) ); ?>
 		</div>
 
@@ -1233,6 +1241,8 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
                 'show_option_none' => false,
                 'show_option_all'  => false,
                 'employee'         => $employee,
+				'event_type'       => $event_type,
+				'event_date'       => $event_date,
                 'package'          => $package,
                 'cost'             => true,
 				'placeholder'      => __( 'Select Add-ons', 'mobile-dj-manager' ),

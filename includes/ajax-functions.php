@@ -597,24 +597,29 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 add_action( 'wp_ajax_update_event_cost_from_addons', 'mdjm_update_event_cost_from_addons_ajax' );
 
 /**
- * Update the available list of packages and addons when the primary event employee changes.
+ * Update the available list of packages and addons when the primary event employee
+ * the event type, or the event date changes.
  *
  * @since	1.0
  * @return	void
  */
-function mdjm_refresh_employee_package_options_ajax()	{
+function mdjm_refresh_event_package_options_ajax()	{
 
-	$employee        = ( !empty( $_POST['employee'] ) ? $_POST['employee'] : '' );
-	$current_package = ( !empty( $_POST['package'] )  ? $_POST['package']  : '' );
-	$current_addons  = ( !empty( $_POST['addons'] )   ? $_POST['addons']   : '' );
+	$employee        = ( ! empty( $_POST['employee'] )   ? $_POST['employee']   : '' );
+	$current_package = ( ! empty( $_POST['package'] )    ? $_POST['package']    : '' );
+	$current_addons  = ( ! empty( $_POST['addons'] )     ? $_POST['addons']     : '' );
+	$event_type      = ( ! empty( $_POST['event_type'] ) ? $_POST['event_type'] : '' );
+	$event_date      = ( ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : '' );
 
 	$packages = MDJM()->html->packages_dropdown( array(
-		'selected'         => $current_package,
-		'chosen'           => true,
-		'employee'         => $employee,
-		'options_only'     => true,
-		'blank_first'      => true,
-		'data'             => array()
+		'selected'     => $current_package,
+		'chosen'       => true,
+		'employee'     => $employee,
+		'event_type'   => $event_type,
+		'event_date'   => $event_date,
+		'options_only' => true,
+		'blank_first'  => true,
+		'data'         => array()
 	) );
 
 	$selected_addons = ! empty( $_POST['addons'] ) ? $_POST['addons'] : array();
@@ -625,6 +630,8 @@ function mdjm_refresh_employee_package_options_ajax()	{
 		'show_option_all'  => false,
 		'employee'         => $employee,
 		'package'          => $current_package,
+		'event_type'       => $event_type,
+		'event_date'       => $event_date,
 		'cost'             => true,
 		'placeholder'      => __( 'Select Add-ons', 'mobile-dj-manager' ),
 		'chosen'           => true,
@@ -656,8 +663,8 @@ function mdjm_refresh_employee_package_options_ajax()	{
 
 	die();
 
-} // mdjm_refresh_employee_package_options_ajax
-add_action( 'wp_ajax_refresh_employee_package_options', 'mdjm_refresh_employee_package_options_ajax' );
+} // mdjm_refresh_event_package_options_ajax
+add_action( 'wp_ajax_refresh_event_package_options', 'mdjm_refresh_event_package_options_ajax' );
 
 /**
  * Update the event deposit amount based upon the event cost
@@ -842,17 +849,21 @@ add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_user_events_dropdown_ajax
  * @since	1.3.7
  * @return	void
  */
-function mdjm_refresh_addon_options_ajax()	{
+function mdjm_refresh_event_addon_options_ajax()	{
 
-	$package  = $_POST['package'];
-	$employee = isset( $_POST['employee'] )   ? $_POST['employee'] : false;
-	$selected = ! empty( $_POST['selected'] ) ? $_POST['selected'] : array();
+	$package     = $_POST['package'];
+	$employee    = ( isset( $_POST['employee'] )     ? $_POST['employee']   : false   );
+	$selected    = ( ! empty( $_POST['selected'] )   ? $_POST['selected']   : array() );
+	$event_type  = ( ! empty( $_POST['event_type'] ) ? $_POST['event_type'] : ''      );
+	$event_date  = ( ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : ''      );
 
 	$addons = MDJM()->html->addons_dropdown( array(
 		'selected'         => $selected,
 		'show_option_none' => false,
 		'show_option_all'  => false,
 		'employee'         => $employee,
+		'event_type'       => $event_type,
+		'event_date'       => $event_date,
 		'package'          => $package,
 		'cost'             => true,
 		'placeholder'      => __( 'Select Add-ons', 'mobile-dj-manager' ),
@@ -873,9 +884,9 @@ function mdjm_refresh_addon_options_ajax()	{
 
 	die();
 
-} // mdjm_refresh_addon_options_ajax
-add_action( 'wp_ajax_refresh_addon_options', 'mdjm_refresh_addon_options_ajax' );
-add_action( 'wp_ajax_nopriv_refresh_addon_options', 'mdjm_refresh_addon_options_ajax' );
+} // mdjm_refresh_event_addon_options_ajax
+add_action( 'wp_ajax_refresh_event_addon_options', 'mdjm_refresh_event_addon_options_ajax' );
+add_action( 'wp_ajax_nopriv_refresh_event_addon_options', 'mdjm_refresh_event_addon_options_ajax' );
 
 /**
  * Check the availability status for the given date

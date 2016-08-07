@@ -482,6 +482,8 @@ class MDJM_HTML_Elements {
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
+			'event_type'       => false,
+			'event_date'       => false,
 			'placeholder'      => __( 'Select a Package', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'cost'             => true,
@@ -503,6 +505,18 @@ class MDJM_HTML_Elements {
 
 				if( $args['employee'] )	{	
 					if( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_type'] )	{
+					if ( ! mdjm_package_is_available_for_event_type( $package->ID, $args['event_type'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_date'] )	{
+					if ( ! mdjm_package_is_available_for_event_date( $package->ID, $args['event_date'] ) )	{
 						continue;
 					}
 				}
@@ -545,6 +559,8 @@ class MDJM_HTML_Elements {
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
+			'event_type'       => false,
+			'event_date'       => false,
 			'placeholder'      => null,
 			'multiple'         => true,
 			'package'          => '',
@@ -577,8 +593,20 @@ class MDJM_HTML_Elements {
 					}
 				}
 
-				if( ! empty( $args['employee'] ) )	{
+				if ( ! empty( $args['employee'] ) )	{
 					if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_type'] )	{
+					if ( ! mdjm_addon_is_available_for_event_type( $addon->ID, $args['event_type'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_date'] )	{
+					if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
 						continue;
 					}
 				}

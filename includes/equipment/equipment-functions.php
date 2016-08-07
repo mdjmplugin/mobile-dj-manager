@@ -169,7 +169,7 @@ function mdjm_package_is_restricted_by_date( $package_id )	{
 
 	// If the package is restricted, there needs to be months set for availability
 	if ( $restricted )	{
-		$months = mdjm_get_addon_months_available( $package_id );
+		$months = mdjm_get_package_months_available( $package_id );
 
 		if ( ! $months )	{
 			$restricted = false;
@@ -346,10 +346,14 @@ function mdjm_employee_has_package( $package_id, $employee_id = 0 )	{
  *
  * @since	1.4
  * @param	int		$package_id			The package ID.
- * @param	int|str	$event_type_terms	The event type term ID's to check.
+ * @param	int|str	$event_type_term	The event type term ID's to check.
  * @return	bool	True if the package is available for the event type, or false if not.
  */
 function mdjm_package_is_available_for_event_type( $package_id, $event_type_term = '' )	{
+
+	if ( empty( $event_type_term ) )	{
+		return true;
+	}
 
 	$event_types = mdjm_get_package_event_types( $package_id );
 
@@ -362,6 +366,35 @@ function mdjm_package_is_available_for_event_type( $package_id, $event_type_term
 	return false;
 
 } // mdjm_package_is_available_for_event_type
+
+/**
+ * Whether or not a package is available for the event date.
+ *
+ * @since	1.4
+ * @param	int		$package_id		The package ID.
+ * @param	str		$event_date		The event date.
+ * @return	bool	True if the package is available for the event date, or false if not.
+ */
+function mdjm_package_is_available_for_event_date( $package_id, $event_date = '' )	{
+
+	if ( empty( $event_date ) )	{
+		return true;
+	}
+
+	if ( ! mdjm_package_is_restricted_by_date( $package_id ) )	{
+		return true;
+	}
+
+	$event_months = mdjm_get_package_months_available( $package_id );
+	$event_month  = date( 'n', strtotime( $event_date ) );
+
+	if ( in_array( $event_month, $event_months ) )	{
+		return true;
+	}
+
+	return false;
+
+} // mdjm_package_is_available_for_event_date
 
 /**
  * Retrieve an events package.
@@ -885,19 +918,6 @@ function mdjm_employee_has_addon( $addon_id, $employee_id = 0 )	{
 } // mdjm_employee_has_addon
 
 /**
- * Retrieve an events addons.
- *
- * @since	1.4
- * @param	int			$event_id	The event ID.
- * @return	int|false	The event addons or false if no addons.
- */
-function mdjm_get_event_addons( $event_id )	{
-	$addon = get_post_meta( $event_id, '_mdjm_event_addons', true );
-
-	return apply_filters( 'mdjm_event_addons', $addon );
-} // mdjm_get_event_addons
-
-/**
  * Whether or not an addon is available for the event type.
  *
  * @since	1.4
@@ -906,6 +926,10 @@ function mdjm_get_event_addons( $event_id )	{
  * @return	bool	True if the addon is available for the event type, or false if not.
  */
 function mdjm_addon_is_available_for_event_type( $addon_id, $event_type_term = '' )	{
+
+	if ( empty( $event_type_term ) )	{
+		return true;
+	}
 
 	$event_types = mdjm_get_addon_event_types( $addon_id );
 
@@ -918,6 +942,48 @@ function mdjm_addon_is_available_for_event_type( $addon_id, $event_type_term = '
 	return false;
 
 } // mdjm_addon_is_available_for_event_type
+
+/**
+ * Whether or not an addon is available for the event date.
+ *
+ * @since	1.4
+ * @param	int		$addon_id		The addon ID.
+ * @param	str		$event_date		The event date.
+ * @return	bool	True if the addon is available for the event date, or false if not.
+ */
+function mdjm_addon_is_available_for_event_date( $addon_id, $event_date = '' )	{
+
+	if ( empty( $event_date ) )	{
+		return true;
+	}
+
+	if ( ! mdjm_addon_is_restricted_by_date( $addon_id ) )	{
+		return true;
+	}
+
+	$event_months = mdjm_get_addon_months_available( $addon_id );
+	$event_month  = date( 'n', strtotime( $event_date ) );
+
+	if ( in_array( $event_month, $event_months ) )	{
+		return true;
+	}
+
+	return false;
+
+} // mdjm_addon_is_available_for_event_date
+
+/**
+ * Retrieve an events addons.
+ *
+ * @since	1.4
+ * @param	int			$event_id	The event ID.
+ * @return	int|false	The event addons or false if no addons.
+ */
+function mdjm_get_event_addons( $event_id )	{
+	$addon = get_post_meta( $event_id, '_mdjm_event_addons', true );
+
+	return apply_filters( 'mdjm_event_addons', $addon );
+} // mdjm_get_event_addons
 
 /**
  * Lists an events addons.
