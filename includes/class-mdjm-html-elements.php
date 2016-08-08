@@ -346,10 +346,12 @@ class MDJM_HTML_Elements {
 			}
 		}
 
-		if ( ! empty( $options['groups'] ) )	{
-			ksort( $options['groups'] );
-		} else	{
-			asort( $options );
+		if ( ! empty( $options ) )	{
+			if ( ! empty( $options['groups'] ) )	{
+				ksort( $options['groups'] );
+			} else	{
+				asort( $options );
+			}
 		}
 
 		$output = $this->select( array(
@@ -633,7 +635,9 @@ class MDJM_HTML_Elements {
 			}
 		}
 
-		ksort( $args['options']['groups'] );
+		if ( ! empty( $args['options']['groups'] ) )	{
+			ksort( $args['options']['groups'] );
+		}
 
 		$output = $this->select( $args );
 
