@@ -1273,3 +1273,21 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 	return $mdjm_select;
 		
 } // mdjm_addons_dropdown
+
+/**
+ * Set the addon category.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	The addon ID.
+ * @param	int		$term_id	The category term ID.
+ * @return	bool	True on success, otherwise false.
+ */
+function mdjm_set_addon_category( $addon_id, $term_id )	{
+	$set_entry_type = wp_set_post_terms( $addon_id, $term_id, 'addon-category' );
+	
+	if ( is_wp_error( $set_entry_type ) )	{
+		return false;
+	}
+
+	return true;
+} // mdjm_set_addon_category
