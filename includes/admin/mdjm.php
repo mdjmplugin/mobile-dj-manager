@@ -53,7 +53,6 @@
 												
 				/* -- Hooks -- */
 				add_action( 'init', array( &$this, 'mdjm_init' ) ); // init processes
-				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
@@ -74,31 +73,7 @@
 				/* -- Obtain the plugin settings -- */
 				$this->mdjm_settings();				
 			} // mdjm_init
-	
-/*
- * --
- * ADMIN_INIT HOOK
- * --
- */
-	 		/*
-			 * mdjm_admin_init
-			 * functions called from the admin_init hook
-			 * 
-			 *
-			 */
-	 		public function mdjm_admin_init()	{
-				// Release notes check
-				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
-					MDJM()->debug->log_it( '*** Redirect to release notes ***' );
-					// Reset the key telling us an update occured
-					update_option( 'mdjm_updated', '0' );
-					
-					// Redirect to the release notes after upgrade
-					wp_redirect( admin_url( 'index.php?page=mdjm-about' ) );
-					exit;
-				}
-			} // mdjm_admin_init
-			
+				
 /*
  *
  * PLUGINS LOADED HOOK
