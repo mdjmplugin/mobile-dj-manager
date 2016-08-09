@@ -40,6 +40,8 @@ function mdjm_import_addons_as_posts_14()	{
 		return false;
 	}
 
+	remove_action( 'save_post_mdjm-addon', 'mdjm_save_addon_post', 10, 2 );
+
 	foreach( $existing_items as $slug => $existing_item )	{
 
 		$employees = array( 'all' );
@@ -84,6 +86,8 @@ function mdjm_import_addons_as_posts_14()	{
 
 	}
 
+	add_action( 'save_post_mdjm-addon', 'mdjm_save_addon_post', 10, 2 );
+
 	update_option( 'mdjm_upgrade_14_import_addons', true );
 
 	return $items;
@@ -113,10 +117,12 @@ function mdjm_import_packages_as_posts_14( $items )	{
 
 	$packages  = array();
 
+	remove_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
+
 	foreach ( $existing_packages as $slug => $existing_package )	{
 
-		$addons = array();
-
+		$addons    = array();
+		$equipment = array();
 		$employees = array( 'all' );
 
 		if ( ! empty( $existing_package['djs'] ) )	{
@@ -133,8 +139,6 @@ function mdjm_import_packages_as_posts_14( $items )	{
 					$addons[] = $items[ $item ];
 				}
 			}
-		} else	{
-			$addons = array();
 		}
 
 		$args = array(
@@ -162,6 +166,8 @@ function mdjm_import_packages_as_posts_14( $items )	{
 		}
 
 	}
+
+	add_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
 
 	update_option( 'mdjm_upgrade_14_import_packages', true );
 
