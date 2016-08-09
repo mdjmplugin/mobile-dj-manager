@@ -32,7 +32,8 @@ function mdjm_package_post_columns( $columns ) {
 			'availability'     => __( 'Availability', 'mobile-dj-manager' ),
 			'event_types'      => sprintf( __( '%s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'employees'        => __( 'Employees', 'mobile-dj-manager' ),
-			'price'            => __( 'Price', 'mobile-dj-manager' )
+			'price'            => __( 'Price', 'mobile-dj-manager' ),
+			'usage'            => __( 'Usage', 'mobile-dj-manager' )
 		);
 
 	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
@@ -173,6 +174,11 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			}
 		break;
 
+		case 'usage':
+			$count = mdjm_count_events_with_package( $post_id );
+			echo $count . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $count, 'mobile-dj-manager' );
+			break;
+
 	} // switch
 	
 } // mdjm_package_posts_custom_column
@@ -303,7 +309,7 @@ function mdjm_save_package_post( $post_id, $post )	{
 add_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
 
 /**
- * Removes a package from events when its being deleted or trashed.
+ * Fires when a package is being deleted or trashed.
  *
  * @since	1.4
  * @param	int		$post_id	The Package post ID.
@@ -465,7 +471,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $post_id ) ) );
 			}
-		break;
+			break;
 
 	} // switch
 	
@@ -665,7 +671,7 @@ function mdjm_save_addon_post( $post_id, $post )	{
 add_action( 'save_post_mdjm-addon', 'mdjm_save_addon_post', 10, 2 );
 
 /**
- * Removes items from packages and events when an addon is being deleted or trashed.
+ * Fires when an addon is being deleted or trashed.
  *
  * @since	1.4
  * @param	int		$post_id	The Addon post ID.

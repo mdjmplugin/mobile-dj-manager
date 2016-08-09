@@ -449,6 +449,37 @@ function mdjm_get_events_with_package( $package_id )	{
 	) );
 } // mdjm_get_events_with_package
 
+/**
+ * Retrieve the count of events with the given package assigned.
+ *
+ * @since	1.4
+ * @param	int		$package_id
+ * @return	int
+ */
+function mdjm_count_events_with_package( $package_id )	{
+	global $wpdb;
+
+	$query = $wpdb->prepare(
+		"
+			SELECT COUNT(*) 
+			FROM $wpdb->postmeta 
+			WHERE meta_key = %s 
+			AND
+			meta_value = %d
+		",
+		'_mdjm_event_package', $package_id
+	);
+
+	$event_count = $wpdb->get_var( $query );
+
+	if ( ! empty( $event_count ) )	{
+		return $event_count;
+	}
+
+	return 0;
+
+} // mdjm_count_events_with_package
+
 /*
  * Retrieve the available packages.
  *
