@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
- * Version: 1.3.8.5
- * Date: 28 July 2016
+ * Version: 1.4
+ * Date: 09 August 2016
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -73,7 +73,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				
 				self::$instance->setup_constants();
 
-				add_action( 'init', array( __CLASS__, 'update' ) );
 				add_action( 'plugins_loaded', array( __CLASS__, 'load_textdomain' ) );
 				
 				self::$instance->includes();
@@ -122,7 +121,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.3.8.5' );
+			define( 'MDJM_VERSION_NUM', '1.4' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -218,7 +217,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' );
 			
-			if( is_admin() )	{
+			if ( is_admin() )	{
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/plugins.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/communications/comms.php' );
@@ -248,10 +247,11 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/employee-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
 				
-			}
-			else	{ // Required for front end only
+			} else	{ // Required for front end only
 				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 			
@@ -275,39 +275,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			);
 		} // load_textdomain
 		
-		/*
-		 * Determine if we need to run any plugin upgrade procedures
-		 *
-		 * @since	1.3
-		 * @param
-		 * @return	void
-		 */
-		public static function update()	{
-
-			$current_version = get_option( MDJM_VERSION_KEY );
-				
-			if( $current_version < MDJM_VERSION_NUM )	{
-
-				add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
-	
-				if( $current_version < MDJM_VERSION_NUM )	{
-	
-					// Instantiate the update class which will execute the updates
-					include_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
-	
-					// Update the stored version
-					update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
-	
-					// Update the updated key so we know to redirect
-					update_option( 'mdjm_updated', '1' );
-	
-				}
-				
-			}
-
-		} // update
-		
-	}
+	} // class Mobile_DJ_Manager
 	
 endif;
 
