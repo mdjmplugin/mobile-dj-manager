@@ -396,3 +396,40 @@ function mdjm_messages( $key )	{
 	// Return all messages
 	return $messages;
 } // mdjm_messages
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @since  2.3
+ * @param  string $upgrade_action The upgrade action to check completion for
+ * @return bool                   If the action has been added to the copmleted actions array
+ */
+function mdjm_has_upgrade_completed( $upgrade_action = '' )	{
+
+	if ( empty( $upgrade_action ) )	{
+		return false;
+	}
+
+	$completed_upgrades = mdjm_get_completed_upgrades();
+
+	return in_array( $upgrade_action, $completed_upgrades );
+
+} // mdjm_has_upgrade_completed
+
+/**
+ * Retrieve the array of completed upgrade actions.
+ *
+ * @since 	1.4
+ * @return	arr		The array of completed upgrades.
+ */
+function mdjm_get_completed_upgrades()	{
+
+	$completed_upgrades = get_option( 'mdjm_completed_upgrades' );
+
+	if ( false === $completed_upgrades ) {
+		$completed_upgrades = array();
+	}
+
+	return $completed_upgrades;
+
+} // mdjm_get_completed_upgrades
