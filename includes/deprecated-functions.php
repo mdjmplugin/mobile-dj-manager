@@ -428,6 +428,6 @@ function mdjm_addons_by_package_slug( $slug )	{
 		return false;
 	}
 	
-	return mdjm_get_package_items( $package->ID );
+	return mdjm_get_package_addons( $package->ID );
 	
 } // mdjm_addons_by_package_slug

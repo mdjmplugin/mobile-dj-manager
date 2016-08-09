@@ -71,7 +71,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 	switch ( $column_name ) {
 		// Items
 		case 'items':
-			$items = mdjm_get_package_items( $post_id );
+			$items = mdjm_get_package_addons( $post_id );
 
 			if ( $items )	{
 				$i = 0;
@@ -301,6 +301,25 @@ function mdjm_save_package_post( $post_id, $post )	{
 
 } // mdjm_save_package_post
 add_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
+
+/**
+ * Removes a package from events when its being deleted or trashed.
+ *
+ * @since	1.4
+ * @param	int		$post_id	The Package post ID.
+ * @return	void
+ */
+function mdjm_deleting_package( $post_id )	{
+
+	if ( 'mdjm-package' != get_post_type( $post_id ) )	{
+		return;
+	}
+
+	do_action( 'mdjm_delete_package', $post_id );
+
+} // mdjm_deleting_package
+add_action( 'before_delete_post', 'mdjm_deleting_package' );
+add_action( 'wp_trash_post', 'mdjm_deleting_package' );
 
 /***********************************************************
  * Addons
@@ -658,7 +677,7 @@ function mdjm_deleting_addon( $post_id )	{
 		return;
 	}
 
-	mdjm_remove_items_from_packages( $post_id );
+	do_action( 'mdjm_delete_addon', $post_id );
 
 } // mdjm_delete_addon
 add_action( 'before_delete_post', 'mdjm_deleting_addon' );

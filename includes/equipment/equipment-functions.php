@@ -272,11 +272,11 @@ function mdjm_get_package_price_range( $package_id )	{
  * @param	int			$package_id		The package ID.
  * @return	arr|false	Array of addon ID's in this package, or false if none.		
  */
-function mdjm_get_package_items( $package_id )	{
+function mdjm_get_package_addons( $package_id )	{
 	$items = get_post_meta( $package_id, '_package_items', true );
 
 	return apply_filters( 'mdjm_package_items', $items, $package_id );
-} // mdjm_get_package_items
+} // mdjm_get_package_addons
 
 /**
  * Retrieve all packages with the given addon(s).
@@ -294,7 +294,7 @@ function mdjm_get_packages_with_addons( $addon_ids )	{
 	return mdjm_get_packages( array(
 		'meta_query'  => array(
 			'key'     => '_package_items',
-			'value'   => $addons,
+			'value'   => $addon_ids,
 			'compare' => 'IN'
 		)
 	) );
@@ -432,6 +432,23 @@ function mdjm_get_event_package( $event_id )	{
 	return apply_filters( 'mdjm_event_package', $package );
 } // mdjm_get_event_package
 
+/**
+ * Retrieve all events with the given package.
+ *
+ * @since	1.4
+ * @param	int			$package_id		The package ID.
+ * @return	arr|false	Array of WP_Post objects or false.
+ */
+function mdjm_get_events_with_package( $package_id )	{
+	return mdjm_get_events( array(
+		'meta_query'  => array(
+			'key'     => '_mdjm_event_package',
+			'value'   => $package_id,
+			'compare' => '='
+		)
+	) );
+} // mdjm_get_events_with_package
+
 /*
  * Retrieve the available packages.
  *
@@ -541,54 +558,6 @@ function mdjm_get_package_excerpt( $package_id, $length = 0 )	{
 } // mdjm_get_package_excerpt
 
 /**
- * Remove items from packages.
- *
- * @since	1.4
- * @param	int|arr		$addon_ids	ID (or array of IDs) of the addon(s) to remove.
- * @return	void
- */
-function mdjm_remove_items_from_packages( $addon_ids )	{
-
-	if ( ! is_array( $addon_ids ) )	{
-		$addon_ids = array( $addon_ids );
-	}
-
-	$packages = mdjm_get_packages_with_addons( $addon_ids );
-
-	if ( $packages )	{
-		foreach ( $packages as $package )	{
-			foreach ( $addon_ids as $addon_id )	{
-				mdjm_remove_item_from_package( $package->ID, $addon_id );
-			}
-		}
-	}
-
-} // mdjm_remove_items_from_packages
-
-/**
- * Removes an item from a package.
- *
- * @since	1.4
- * @param	int		$package_id		The package ID from which to remove the addon.
- * @param	int		$addon_id		The ID of the addon to remove
- */
-function mdjm_remove_item_from_package( $package_id, $addon_id )	{
-
-	$addons  = mdjm_get_package_items( $package_id );
-	$items   = array();
-
-	if ( $addons )	{
-		foreach ( $addons as $addon )	{
-			if ( $addon_id != $addon )	{
-				$items[] = $addon;
-			}
-		}
-		update_post_meta( $package_id, '_package_items', $items );
-	}
-
-} // mdjm_remove_item_from_package
-
-/**
  * Renders HTML code for Package dropdown.
  *
  * @param	arr		$settings		See @$defaults
@@ -670,6 +639,26 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 	return $mdjm_select;
 		
 } // mdjm_package_dropdown
+
+/**
+ * Remove package from events.
+ *
+ * @since	1.4
+ * @param	int|arr		$package_id	ID of the package to remove.
+ * @return	void
+ */
+function mdjm_remove_package_from_events( $package_id )	{
+
+	$events = mdjm_get_events_with_package( $package_id );
+
+	if ( $events )	{
+		foreach ( $events as $event )	{
+			delete_post_meta( $event->ID, '_mdjm_event_package' );
+		}
+	}
+
+} // mdjm_remove_addons_from_events
+add_action( 'mdjm_delete_package', 'mdjm_remove_package_from_events' );
 
 /***********************************************************
  * Addon Functions
@@ -1051,10 +1040,33 @@ function mdjm_addon_is_available_for_event_date( $addon_id, $event_date = '' )	{
  * @return	int|false	The event addons or false if no addons.
  */
 function mdjm_get_event_addons( $event_id )	{
-	$addon = get_post_meta( $event_id, '_mdjm_event_addons', true );
+	$addons = get_post_meta( $event_id, '_mdjm_event_addons', true );
 
-	return apply_filters( 'mdjm_event_addons', $addon );
+	return apply_filters( 'mdjm_event_addons', $addons );
 } // mdjm_get_event_addons
+
+/**
+ * Retrieve all events with the given addon(s).
+ *
+ * @since	1.4
+ * @param	int|arr		$addon_ids		ID(s) of addons to look for.
+ * @return	mixed		Array of WP_Post objects or false.
+ */
+function mdjm_get_events_with_addons( $addon_ids )	{
+
+	if ( ! is_array( $addon_ids ) )	{
+		$addon_ids = array( $addon_ids );
+	}
+
+	return mdjm_get_events( array(
+		'meta_query'  => array(
+			'key'     => '_mdjm_event_addons',
+			'value'   => $addon_ids,
+			'compare' => 'IN'
+		)
+	) );
+	
+} // mdjm_get_events_with_addons
 
 /**
  * Lists an events addons.
@@ -1135,7 +1147,7 @@ function mdjm_get_available_addons( $args = array() )	{
 
 	if ( ! empty( $args['package'] ) )	{
 		if ( 'mdjm-package' == get_post_type( $args['package_id'] ) )	{
-			$package_items = mdjm_get_package_items( $args['package_id'] );
+			$package_items = mdjm_get_package_addons( $args['package_id'] );
 
 			if ( $package_items )	{
 				if ( ! empty( $addon_args['post__not_in'] ) )	{
@@ -1292,7 +1304,7 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 						$package_id = $args['package'];
 					}
 
-					$package_items = mdjm_get_package_items( $package_id );
+					$package_items = mdjm_get_package_addons( $package_id );
 
 					if ( $package_items && in_array( $item->ID, $package_items ) )	{
 						continue;
@@ -1363,4 +1375,100 @@ function mdjm_set_addon_category( $addon_id, $term_id )	{
 	return true;
 } // mdjm_set_addon_category
 
+/**
+ * Remove addons from packages.
+ *
+ * @since	1.4
+ * @param	int|arr		$addon_ids	ID (or array of IDs) of the addon(s) to remove.
+ * @return	void
+ */
+function mdjm_remove_addons_from_packages( $addon_ids )	{
 
+	if ( ! is_array( $addon_ids ) )	{
+		$addon_ids = array( $addon_ids );
+	}
+
+	$packages = mdjm_get_packages_with_addons( $addon_ids );
+
+	if ( $packages )	{
+		foreach ( $packages as $package )	{
+			foreach ( $addon_ids as $addon_id )	{
+				mdjm_remove_addon_from_package( $package->ID, $addon_id );
+			}
+		}
+	}
+
+} // mdjm_remove_addons_from_packages
+add_action( 'mdjm_delete_addon', 'mdjm_remove_addons_from_packages', 10 );
+
+/**
+ * Removes an addon from a package.
+ *
+ * @since	1.4
+ * @param	int		$package_id		The package ID from which to remove the addon.
+ * @param	int		$addon_id		The ID of the addon to remove
+ */
+function mdjm_remove_addon_from_package( $package_id, $addon_id )	{
+
+	$addons  = mdjm_get_package_addons( $package_id );
+	$items   = array();
+
+	if ( $addons )	{
+		foreach ( $addons as $addon )	{
+			if ( $addon_id != $addon )	{
+				$items[] = $addon;
+			}
+		}
+		update_post_meta( $package_id, '_package_items', $items );
+	}
+
+} // mdjm_remove_addon_from_package
+
+/**
+ * Remove addons from events.
+ *
+ * @since	1.4
+ * @param	int|arr		$addon_ids	ID (or array of IDs) of the addon(s) to remove.
+ * @return	void
+ */
+function mdjm_remove_addons_from_events( $addon_ids )	{
+
+	if ( ! is_array( $addon_ids ) )	{
+		$addon_ids = array( $addon_ids );
+	}
+
+	$events = mdjm_get_events_with_addons( $addon_ids );
+
+	if ( $events )	{
+		foreach ( $events as $event )	{
+			foreach ( $addon_ids as $addon_id )	{
+				mdjm_remove_addon_from_event( $event->ID, $addon_id );
+			}
+		}
+	}
+
+} // mdjm_remove_addons_from_events
+add_action( 'mdjm_delete_addon', 'mdjm_remove_addons_from_events', 15 );
+
+/**
+ * Removes an addon from an event.
+ *
+ * @since	1.4
+ * @param	int		$event_id		The event ID from which to remove the addon.
+ * @param	int		$addon_id		The ID of the addon to remove
+ */
+function mdjm_remove_addon_from_event( $event_id, $addon_id )	{
+
+	$addons  = mdjm_get_event_addons( $event_id );
+	$items   = array();
+
+	if ( $addons )	{
+		foreach ( $addons as $addon )	{
+			if ( $addon_id != $addon )	{
+				$items[] = $addon;
+			}
+		}
+		update_post_meta( $event_id, '_mdjm_event_addons', $items );
+	}
+
+} // mdjm_remove_addon_from_event

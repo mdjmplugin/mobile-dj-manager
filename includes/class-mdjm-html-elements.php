@@ -587,7 +587,7 @@ class MDJM_HTML_Elements {
 					}
 
 					if ( $package )	{
-						$package_items = mdjm_get_package_items( $package->ID );
+						$package_items = mdjm_get_package_addons( $package->ID );
 					}
 
 					if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) )	{

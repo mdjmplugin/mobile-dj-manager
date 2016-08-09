@@ -270,7 +270,7 @@ add_action( 'mdjm_package_availability_fields', 'mdjm_package_metabox_availabili
  */
 function mdjm_package_metabox_items_row( $post )	{
 
-	$items             = mdjm_get_package_items( $post->ID );
+	$items             = mdjm_get_package_addons( $post->ID );
 	$currency_position = mdjm_get_option( 'currency_format', 'before' );
 
 	?>
