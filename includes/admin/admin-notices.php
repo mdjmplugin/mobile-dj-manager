@@ -37,7 +37,16 @@ function mdjm_admin_notices() {
 			echo '</div>';
 		}
 	}
-	
+
+	if( isset( $_GET['mdjm-message'] ) && 'upgrade-completed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-upgraded',
+			__( 'MDJM Event Management has been upgraded successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+
 	if( isset( $_GET['mdjm-message'] ) && 'song_removed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',

@@ -164,6 +164,20 @@ function mdjm_get_php_arg_separator_output() {
 } // mdjm_get_php_arg_separator_output
 
 /**
+ * Checks whether function is disabled.
+ *
+ * @since	1.4
+ *
+ * @param	str		$function	Name of the function.
+ * @return	bool	Whether or not function is disabled.
+ */
+function mdjm_is_func_disabled( $function ) {
+	$disabled = explode( ',',  ini_get( 'disable_functions' ) );
+
+	return in_array( $function, $disabled );
+} // mdjm_is_func_disabled
+
+/**
  * Get the current page URL
  *
  * @since	1.3

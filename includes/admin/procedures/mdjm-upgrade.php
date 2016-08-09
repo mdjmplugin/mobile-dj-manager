@@ -1492,10 +1492,6 @@ function mdjm_update_checker()	{
 		
 		$mdjm_upgrade = new MDJM_Upgrade();
 		
-		update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
-				
-		// Update the updated key so we know to redirect
-		update_option( 'mdjm_updated', '1' );
 	}
 	
 } // mdjm_update_checker
