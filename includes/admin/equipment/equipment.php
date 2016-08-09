@@ -646,6 +646,25 @@ function mdjm_save_addon_post( $post_id, $post )	{
 add_action( 'save_post_mdjm-addon', 'mdjm_save_addon_post', 10, 2 );
 
 /**
+ * Removes items from packages and events when an addon is being deleted or trashed.
+ *
+ * @since	1.4
+ * @param	int		$post_id	The Addon post ID.
+ * @return	void
+ */
+function mdjm_deleting_addon( $post_id )	{
+
+	if ( 'mdjm-addon' != get_post_type( $post_id ) )	{
+		return;
+	}
+
+	mdjm_remove_items_from_packages( $post_id );
+
+} // mdjm_delete_addon
+add_action( 'before_delete_post', 'mdjm_deleting_addon' );
+add_action( 'wp_trash_post', 'mdjm_deleting_addon' );
+
+/**
  * Customise the messages associated with managing addon posts
  *
  * @since	1.4

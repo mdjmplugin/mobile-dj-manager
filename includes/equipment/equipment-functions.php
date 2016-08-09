@@ -279,6 +279,29 @@ function mdjm_get_package_items( $package_id )	{
 } // mdjm_get_package_items
 
 /**
+ * Retrieve all packages with the given addon(s).
+ *
+ * @since	1.4
+ * @param	int|arr		$addon_ids		ID(s) of addons to look for.
+ * @return	mixed		Array of WP_Post objects or false.
+ */
+function mdjm_get_packages_with_addons( $addon_ids )	{
+
+	if ( ! is_array( $addon_ids ) )	{
+		$addon_ids = array( $addon_ids );
+	}
+
+	return mdjm_get_packages( array(
+		'meta_query'  => array(
+			'key'     => '_package_items',
+			'value'   => $addons,
+			'compare' => 'IN'
+		)
+	) );
+	
+} // mdjm_get_packages_with_addons
+
+/**
  * Get all packages for the given employee.
  *
  * @since	1.3
@@ -516,6 +539,54 @@ function mdjm_get_package_excerpt( $package_id, $length = 0 )	{
 	return apply_filters( 'mdjm_package_excerpt', $description );
 
 } // mdjm_get_package_excerpt
+
+/**
+ * Remove items from packages.
+ *
+ * @since	1.4
+ * @param	int|arr		$addon_ids	ID (or array of IDs) of the addon(s) to remove.
+ * @return	void
+ */
+function mdjm_remove_items_from_packages( $addon_ids )	{
+
+	if ( ! is_array( $addon_ids ) )	{
+		$addon_ids = array( $addon_ids );
+	}
+
+	$packages = mdjm_get_packages_with_addons( $addon_ids );
+
+	if ( $packages )	{
+		foreach ( $packages as $package )	{
+			foreach ( $addon_ids as $addon_id )	{
+				mdjm_remove_item_from_package( $package->ID, $addon_id );
+			}
+		}
+	}
+
+} // mdjm_remove_items_from_packages
+
+/**
+ * Removes an item from a package.
+ *
+ * @since	1.4
+ * @param	int		$package_id		The package ID from which to remove the addon.
+ * @param	int		$addon_id		The ID of the addon to remove
+ */
+function mdjm_remove_item_from_package( $package_id, $addon_id )	{
+
+	$addons  = mdjm_get_package_items( $package_id );
+	$items   = array();
+
+	if ( $addons )	{
+		foreach ( $addons as $addon )	{
+			if ( $addon_id != $addon )	{
+				$items[] = $addon;
+			}
+		}
+		update_post_meta( $package_id, '_package_items', $items );
+	}
+
+} // mdjm_remove_item_from_package
 
 /**
  * Renders HTML code for Package dropdown.
@@ -1291,3 +1362,5 @@ function mdjm_set_addon_category( $addon_id, $term_id )	{
 
 	return true;
 } // mdjm_set_addon_category
+
+
