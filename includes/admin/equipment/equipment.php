@@ -150,7 +150,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output[] = mdjm_get_employee_display_name( $employee );
+					$output[] = '<a href="' . get_edit_user_link( $employee ) . '">' . mdjm_get_employee_display_name( $employee ) . '</a>';
 				}
 				
 			}
@@ -425,7 +425,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output[] = mdjm_get_employee_display_name( $employee );
+					$output[] = '<a href="' . get_edit_user_link( $employee ) . '">' . mdjm_get_employee_display_name( $employee ) . '</a>';
 				}
 				
 			}
