@@ -619,8 +619,8 @@ class MDJM_HTML_Elements {
 				}
 				$desc           = '';
 
-				if( $args['desc'] == true )	{
-					$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, 30 );
+				if( $args['desc'] )	{
+					$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, $args['desc'] );
 				}
 
 				$term  = '';
