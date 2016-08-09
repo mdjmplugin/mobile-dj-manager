@@ -299,7 +299,7 @@ function mdjm_package_metabox_items_row( $post )	{
                     <?php endif; ?>
 
 					<tr>
-						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
+						<td class="submit" colspan="2" style="float: none; clear:both; background:#fff;">
 							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Item', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
@@ -339,8 +339,9 @@ function mdjm_package_metabox_item_row( $item, $post_id ) {
 			'chosen'           => true,
 			'class'            => 'package-items',
 			'placeholder'      => __( 'Select an add-on', 'mobile-dj-manager' ),
-			'cost'             => true,
-			'desc'             => true,
+			'cost'             => false,
+			'desc'             => 7,
+			'blank_first'      => true,
 			'multiple'         => false
 		) ); ?>
 	</td>
