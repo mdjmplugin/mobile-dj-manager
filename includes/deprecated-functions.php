@@ -390,7 +390,7 @@ function get_package_name( $slug )	{
  * @return	str			$addons		Array with add-ons details, or false if no add-ons assigned
  */
 function get_event_addons( $event_id, $price=false )	{	
-	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_list_event_addons()' );								
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_list_event_addons()' );							
 	return mdjm_list_event_addons( $event_id, $price );
 } // get_event_addons
 
@@ -431,3 +431,177 @@ function mdjm_addons_by_package_slug( $slug )	{
 	return mdjm_get_package_addons( $package->ID );
 	
 } // mdjm_addons_by_package_slug
+
+/*
+ * Retrieve the package name, description, cost
+ *
+ * @since	1.4
+ * @param	str		$slug		Slug name of the package
+ */
+function get_package_details( $slug )	{
+	_deprecated_function( __FUNCTION__, '1.4' );
+	if( empty( $slug ) )
+		return false;
+	
+	$packages = mdjm_get_packages();
+	
+	if( empty( $packages[$slug] ) )
+		return false;
+	
+	$package['slug'] = $slug;
+	$package['name'] = stripslashes( esc_attr( $packages[$slug]['name'] ) );
+	$package['desc'] = stripslashes( esc_textarea( $packages[$slug]['desc'] ) );
+	$package['equipment'] = $packages[$slug]['equipment'];
+	$package['cost'] = $packages[$slug]['cost'];
+	
+	return $package;
+	
+} // get_package_details
+
+/**
+ * Retrieve all addons by dj
+ *
+ * @since	1.4
+ * @param	int|arr	$user_id	Required: User ID of DJ, or array of DJ User ID's
+ * @return	arr		$addons		Array of all addons
+ */
+function mdjm_addons_by_dj( $user_id )	{
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_addons_by_employee()' );
+	// We work with an array
+	if( !is_array( $user_id ) )
+		$users = array( $user_id );
+		
+	$equipment = mdjm_get_addons();
+	
+	// No addons, return false
+	if( empty( $equipment ) )
+		return false;
+		
+	asort( $equipment );
+	
+	// Loop through the addons and filter for the given user(s)
+	foreach( $equipment as $addon )	{
+		$users_have = explode( ',', $addon[8] );
+		
+		foreach( $users as $user )	{			
+			if( !in_array( $user, $users_have ) )
+				continue 2; // Continue from the foreach( $equipment as $addon ) loop
+		}
+			
+		$addons[] = $addon;
+	}
+	// Return the results, or false if none
+	return !empty( $addons ) ? $addons : false;
+} // mdjm_addons_by_dj
+
+/**
+ * Retrieve all addons within the given category
+ *
+ * @param	str		$cat		Required: Slug of the category for which to search
+ *
+ * @return	arr		$addons		Array of all addons
+ */
+function mdjm_addons_by_cat( $cat )	{
+	_deprecated_function( __FUNCTION__, '1.4' );
+	$equipment = mdjm_get_addons();
+	
+	// No addons, return false
+	if( empty( $equipment ) )
+		return false;
+		
+	asort( $equipment );
+	
+	// Loop through the addons and filter for the given category
+	foreach( $equipment as $addon )	{
+		if( $addon[5] != $cat )
+			continue;
+		
+		$addons[] = $addon;	
+	}
+	// Return the results, or false if none
+	return !empty( $addons ) ? $addons : false;
+} // mdjm_addons_by_cat
+
+/**
+ * Retrieve all addons within the given package
+ *
+ * @since	1.4
+ * @param	str		$name		Required: Name of the package for which to search
+ * @return	arr		$addons		Array of all addons
+ */
+function mdjm_addons_by_package_name( $name )	{
+	_deprecated_function( __FUNCTION__, '1.4' );
+	$package = mdjm_get_package_by_name( $name );
+	
+	// No package or the package has no addons, return false
+	if( empty( $package ) || empty( $package['equipment'] ) )
+		return false;
+	
+	$package_items = explode( ',', $package['equipment'] );
+	$equipment = mdjm_get_addons();
+	
+	// No addons, return false
+	if( empty( $equipment ) )
+		return false;
+	
+	foreach( $equipment as $addon )	{
+		if( !in_array( $addon[1], $package_items ) )
+			continue;
+			
+		$addons[] = $addon;	
+	}
+	
+	// Return the results, or false if none
+	return !empty( $addons ) ? $addons : false;
+} // mdjm_addons_by_package_name
+
+/*
+ * Retrieve the addon name
+ *
+ * @since	1.4
+ * @param	str		$slug	The slug name of the addon
+ * @return	str		$addon	The display name of the addon
+ */
+function get_addon_name( $slug )	{
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_addon_name()' );
+	if( empty( $slug ) )
+		return false;
+			
+	$equipment = mdjm_get_addons();
+	
+	if( empty( $equipment[$slug] ) || empty( $equipment[$slug][0] ) )
+		return false;
+		
+	$addon = stripslashes( esc_attr( $equipment[$slug][0] ) );
+	
+	return $addon;
+	
+} // get_addon_name
+
+/*
+ * Retrieve the addon category, name, decription & cost
+ *
+ * @since	1.4
+ *
+ */
+function get_addon_details( $slug )	{
+	_deprecated_function( __FUNCTION__, '1.4' );
+	if( empty( $slug ) )
+		return false;
+		
+	$cats = get_option( 'mdjm_cats' );
+	
+	$equipment = mdjm_get_addons();
+	
+	if( empty( $equipment[$slug] ) )
+		return false;
+		
+	$addon['slug'] = $slug;
+	$addon['cat'] = stripslashes( esc_attr( $cats[$equipment[$slug][5]] ) );
+	$addon['name'] = stripslashes( esc_attr( $equipment[$slug][0] ) );
+	$addon['desc'] = stripslashes( esc_textarea( $equipment[$slug][4] ) );
+	$addon['cost'] = $equipment[$slug][7];
+	
+	return $addon;
+	
+} // get_addon_details
