@@ -302,6 +302,32 @@ function mdjm_get_packages_with_addons( $addon_ids )	{
 } // mdjm_get_packages_with_addons
 
 /**
+ * Retrieve the count of packages containing the given addon.
+ *
+ * @since	1.4
+ * @param	int		$addon_id
+ * @return	int
+ */
+function mdjm_count_packages_with_addon( $addon_id )	{
+
+	$count    = 0;
+	$packages = mdjm_get_packages();
+
+	if ( $packages )	{
+		foreach( $packages as $package )	{
+			$addons = mdjm_get_package_addons( $package->ID );
+
+			if ( $addons && in_array( $addon_id, $addons ) )	{
+				$count++;
+			}
+		}
+	}
+
+	return $count;
+
+} // mdjm_count_packages_with_addon
+
+/**
  * Get all packages for the given employee.
  *
  * @since	1.3
@@ -1098,6 +1124,40 @@ function mdjm_get_events_with_addons( $addon_ids )	{
 	) );
 	
 } // mdjm_get_events_with_addons
+
+/**
+ * Retrieve the count of events that have the given addon associated.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	The addon ID.
+ * @return	int
+ */
+function mdjm_get_events_with_addon( $addon_id )	{
+
+	global $wpdb;
+
+	$count   = 0;
+	$query   = "SELECT * FROM $wpdb->postmeta WHERE meta_value != '' AND meta_key = '_mdjm_event_addons'";
+	$events  = $wpdb->get_results( $query );
+
+	if ( $events )	{
+		foreach( $events as $event )	{
+			$addons = mdjm_get_event_addons( $event->post_id );
+
+			// For backwards compatibility
+			if ( $addons && ! is_array( $addons ) )	{
+				$addons = explode( ',', $addons );
+			}
+
+			if ( $addons && in_array( $addon_id, $addons ) )	{
+				$count++;
+			}
+		}
+	}
+
+	return $count;
+
+} // mdjm_get_events_with_addon
 
 /**
  * Lists an events addons.

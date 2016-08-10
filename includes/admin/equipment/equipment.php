@@ -349,7 +349,8 @@ function mdjm_addon_post_columns( $columns ) {
 			'availability'   => __( 'Availability', 'mobile-dj-manager' ),
 			'event_types'    => sprintf( __( '%s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'employees'      => __( 'Employees', 'mobile-dj-manager' ),
-			'price'          => __( 'Price', 'mobile-dj-manager' )
+			'price'          => __( 'Price', 'mobile-dj-manager' ),
+			'usage'          => __( 'Usage', 'mobile-dj-manager' )
 		);
 
 	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
@@ -471,6 +472,16 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $post_id ) ) );
 			}
+			break;
+
+		// Usage
+		case 'usage':
+			$packages = mdjm_count_packages_with_addon( $post_id );
+			$events   = mdjm_get_events_with_addon( $post_id );
+
+			echo $packages . _n( ' Package', ' Packages', $packages, 'mobile-dj-manager' ) . '<br />';
+			echo $events . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $events, 'mobile-dj-manager' );
+				
 			break;
 
 	} // switch
