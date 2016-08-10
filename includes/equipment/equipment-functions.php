@@ -650,19 +650,19 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 	
 	$packages = mdjm_get_packages();
 	
-	$mdjm_select = '';
+	$output = '';
 	
 	if( $structure == true )	{
-		$mdjm_select = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] ) . "\n";
+		$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] ) . "\n";
 	}
 	
 	// First entry
-	$mdjm_select .= ( ! empty( $args['first_entry'] ) ) ? '<option value="' . ( ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '' ) . '">' . $args['first_entry'] . '</option>' . "\r\n" : '';
+	$output .= ( ! empty( $args['first_entry'] ) ) ? '<option value="' . ( ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '' ) . '">' . $args['first_entry'] . '</option>' . "\r\n" : '';
 		
 	$packages = mdjm_get_packages();
 	
 	if( ! $packages )	{
-		$mdjm_select .= '<option value="">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+		$output .= '<option value="">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 	} else	{
 
 		foreach( $packages as $package )	{
@@ -674,26 +674,26 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 
 			$package_desc = mdjm_get_package_excerpt( $package->ID );
 
-			$mdjm_select .= '<option value="' . $package->ID . '"';
-			$mdjm_select .= ( ! empty( $args['title'] ) && ! empty( $package_desc ) ) ? ' title="' . $package_desc . '"' : '';
-			$mdjm_select .= ( ! empty( $args['selected'] ) ) ? selected( $args['selected'], $package->ID, false ) . '>' : '>' ;
-			$mdjm_select .= $package->post_title;
+			$output .= '<option value="' . $package->ID . '"';
+			$output .= ( ! empty( $args['title'] ) && ! empty( $package_desc ) ) ? ' title="' . $package_desc . '"' : '';
+			$output .= ( ! empty( $args['selected'] ) ) ? selected( $args['selected'], $package->ID, false ) . '>' : '>' ;
+			$output .= $package->post_title;
 			
 			if( $args['cost'] == true )	{
-				$mdjm_select .= ' - ' . mdjm_currency_filter( mdjm_format_amount(  mdjm_get_package_price( $package->ID ) ) ) ;
+				$output .= ' - ' . mdjm_currency_filter( mdjm_format_amount(  mdjm_get_package_price( $package->ID ) ) ) ;
 			}
 
-			$mdjm_select .= '</option>' . "\r\n";
+			$output .= '</option>' . "\r\n";
 
 		}
 
 	}
 	
 	if( $structure == true )	{
-		$mdjm_select .= '</select>' . "\r\n";
+		$output .= '</select>' . "\r\n";
 	}
 	
-	return $mdjm_select;
+	return $output;
 		
 } // mdjm_package_dropdown
 
@@ -1334,119 +1334,187 @@ function mdjm_get_addon_excerpt( $addon_id, $length = 0 )	{
  */
 function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 	global $current_user;
-	
+
 	$defaults = array(
-		'name'            => 'event_addons',
-		'id'              => '',
-		'class'           => '',
- 		'selected'        => '',
- 		'first_entry'     => '',
- 		'first_entry_val' => '',
-		'employee'        => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
- 		'package'         => '',
- 		'title'           => '',
- 		'cost'            => true
+		'name'             => 'event_addons',
+		'id'               => '',
+		'class'            => '',
+		'selected'         => '',
+		'first_entry'      => '',
+		'first_entry_val'  => '',
+		'employee'         => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
+		'event_type'       => false,
+		'event_date'       => false,
+		'package'          => '',
+		'cost'             => true,
+		'title'            => false,
 	);
+
+	$args = wp_parse_args( $args, $defaults );
 
 	// For backwards compatibility
 	if ( isset( $args['dj'] ) )	{
 		$args['employee'] = $args['dj'];
 	}
 
-	$args = wp_parse_args( $args, $defaults );
-
 	if ( empty ( $args['id'] ) )	{
 		$args['id'] = $args['name'];
 	}
 
-	$mdjm_select = '';
+	$output = '';
 
 	if( $structure == true )	{
-		$mdjm_select .= '<select name="' . $args['name'] . '[]" id="' . $args['id'] . '"';
-		$mdjm_select .= ! empty( $args['class'] ) ? ' class="' . $args['class'] . '"' : '';
-		$mdjm_select .= ' multiple="multiple">' . "\r\n";
+		$output .= '<select name="' . esc_attr( $args['name'] ) . '[]" id="' . esc_attr( $args['id'] ) . '"';
+		$output .= ! empty( $args['class'] ) ? ' class="' . sanitize_html_class( $args['class'] ) . '"' : '';
+		$output .= ' MULTIPLE>' . "\n";
 	}
 
-	// First entry
-	$mdjm_select .= ( ! empty( $args['first_entry'] ) ) ? '<option value="' . ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '0' . '">' . $args['first_entry'] . '</option>' . "\r\n" : '';
+	$args = array_merge( $args, array(
+		'show_option_none' => ! empty( $args['first_entry'] ) ? $args['first_entry'] : false,
+		'show_option_all'  => false,
+		'options_only'     => true
+	) );
 	
-	$items      = mdjm_get_addons();
-	$categories = get_terms( 'addon-category', array( 'hide_empty' => true ) );
-
-	if( ! $items )	{
-		$mdjm_select .= '<option value="0" disabled="disabled">' . __( 'No Addons Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-	} else	{
-		foreach( $categories as $category )	{
-			if( ! empty( $header ) )	{
-				$mdjm_select .= '</optgroup>' . "\r\n";
-			}
-			
-			$header = false;
-			
-			// Create an array of options grouped by category
-			foreach( $items as $item )	{					
-				// If the addon is part of an assigned package, exclude it
-				if( ! empty( $args['package'] ) )	{
-
-					if ( ! is_numeric( $args['package'] ) )	{
-						$package    = mdjm_get_package_by( 'slug', $args['package'] );
-						$package_id = $package->ID;
-					} else	{
-						$package_id = $args['package'];
-					}
-
-					$package_items = mdjm_get_package_addons( $package_id );
-
-					if ( $package_items && in_array( $item->ID, $package_items ) )	{
-						continue;
-					}
-
-				}
-				
-				// If the specified Employee does not have the addon, do not show it	
-				if( ! empty( $args['employee'] ) && ! mdjm_employee_has_addon( $item->ID, $args['employee'] ) )	{
-					continue;
-				}
-				
-				if( has_term( $category->name, 'addon-category', $item->ID ) )	{
-
-					if( empty( $header ) )	{
-						$mdjm_select .= '<optgroup label="' . $category->name . '">' . "\r\n";
-						$header = true;
-					}
-
-					$mdjm_select .= '<option value="' . $item->ID . '"';
-
-					$item_desc = mdjm_get_addon_excerpt( $item->ID );
-
-					$mdjm_select .= ( ! empty( $args['title'] ) && ! empty( $item_desc ) ) ? ' title="' . $item_desc . '"' : '';
-
-					if( ! empty( $args['selected'] ) && in_array( $item->ID, $args['selected'] ) )	{
-						$mdjm_select .= ' selected="selected"';
-					}
-
-					$mdjm_select .= '>';
-					$mdjm_select .= $item->post_title;
-
-					if ( ! empty( $args['cost'] ) )	{
-						$mdjm_select .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $item->ID ) ) );
-					}
-
-					$mdjm_select .= '</option>' . "\r\n";
-
-				}
-				
-			}
-		}
-	}
+	$output .= MDJM()->html->addons_dropdown( $args );
 	
 	if( $structure == true )	{
-		$mdjm_select .= '</select>' . "\r\n";
+		$output .= '</select>' . "\r\n";
 	}
 	
-	return $mdjm_select;
+	return $output;
 		
 } // mdjm_addons_dropdown
+
+/**
+ * Renders the HTML code for an Addons checkbox list
+ *
+ * @since	1.0
+ * @param	arr		$args	See @defaultsSettings for the dropdown
+ * @return	HTML output for checkboxes
+ */
+function mdjm_addons_checkboxes( $args = array() )	{
+	global $current_user;
+
+	$defaults = array(
+		'name'            => 'event_addons',
+		'id'              => '',
+		'class'           => '',
+ 		'current'         => array(),
+		'employee'        => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
+ 		'package'         => '',
+		'event_type'      => false,
+		'event_date'      => false,
+ 		'title'           => true,
+ 		'cost'            => false
+	);
+
+	$args    = wp_parse_args( $args, $defaults );
+	$output  = '';
+	$options = array();
+	$addons  = mdjm_get_addons();
+
+	if ( empty( $args['id'] ) )	{
+		$args['id'] = $args['name'];
+	}
+
+	// For backwards compatibility
+	if ( isset( $args['dj'] ) )	{
+		$args['employee'] = $args['dj'];
+	}
+
+	if ( $addons )	{
+		foreach( $addons as $addon )	{
+			if ( ! empty( $args['package'] ) )	{
+				if ( is_numeric( $args['package'] ) )	{
+					$package = mdjm_get_package( $args['package'] );
+				} else	{
+					$package = mdjm_get_package_by( 'slug', $args['package'] );
+				}
+
+				if ( $package )	{
+					$package_items = mdjm_get_package_addons( $package->ID );
+				}
+
+				if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) )	{
+					continue;
+				}
+			}
+
+			if ( ! empty( $args['employee'] ) )	{
+				if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) )	{
+					continue;
+				}
+			}
+
+			if ( $args['event_type'] )	{
+				if ( ! mdjm_addon_is_available_for_event_type( $addon->ID, $args['event_type'] ) )	{
+					continue;
+				}
+			}
+
+			if ( $args['event_date'] )	{
+				if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
+					continue;
+				}
+			}
+
+			$price = '';
+			if( $args['cost'] == true )	{
+				$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
+			}
+
+			$term  = '';
+			$terms = get_the_terms( $addon->ID, 'addon-category' );
+
+			if ( ! empty( $terms ) )	{
+				$term = esc_html( $terms[0]->name );
+			}
+
+			$options[ $term ][] = array( $addon->ID => $addon->post_title . $price );
+
+		}
+
+	}
+
+	if ( ! empty( $options ) )	{
+		ksort( $options );
+
+		$i = 0;
+		foreach ( $options as $term => $addons )	{
+			if ( $i == 0 )	{
+				$output .= '<strong>' . $term . '</strong><br />' . "\n";
+			}
+
+			foreach( $addons as $items )	{
+				foreach ( $items as $item_id => $item )	{
+					$output .= sprintf(
+						'<input type="checkbox" name="%1$s[]" id="%1$s-%2$d" class="%3$s" value="%2$d" $3%s />',
+						esc_attr( $args['name'] ),
+						$item_id,
+						sanitize_html_class( $args['class'] ),
+						checked( in_array( $item_id, $args['current'] ), true, false ) 
+					);
+					$output .= '<label for="' . esc_attr( $args['name'] ) . '-' . $item_id . '" title="' . mdjm_get_addon_excerpt( $item_id, 999 ) . '">';
+					$output .= esc_html( $item );
+					$output .= '</label>';
+					$output .= '<br />';
+	
+					$i++;
+					if ( $i >= count( $items ) )	{
+						$i = 0;
+					}
+				}
+			}
+
+		}
+
+	} else	{
+		$output .= __( 'No add-ons are available', 'mobile-dj-manager' );
+	}
+	
+	return $output;
+	
+} // mdjm_addons_checkboxes
 
 /**
  * Set the addon category.
