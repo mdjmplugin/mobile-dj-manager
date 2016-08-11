@@ -515,7 +515,7 @@ function mdjm_shortcode_addons_list( $atts )	{
 			'filter_value' => false,
 			'list'         => 'p',
 			'desc'         => false,
-			'desc_length'  => 999,
+			'desc_length'  => mdjm_get_option( 'package_excerpt_length', 55 ),
 			'cost'         => false,
 			'addon_class'  => false,
 			'cost_class'   => false,

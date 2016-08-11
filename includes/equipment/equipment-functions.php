@@ -625,9 +625,9 @@ function mdjm_list_available_packages( $employee_id = 0, $price = false )	{
  * @param	int		$length		The length of the excerpt.
  * @return	str
  */
-function mdjm_get_package_excerpt( $package_id, $length = 0 )	{
+function mdjm_get_package_excerpt( $package_id, $length = NULL )	{
 
-	if ( empty( $length ) )	{
+	if ( ! isset( $length ) )	{
 		$length = mdjm_get_option( 'package_excerpt_length', 55 );
 	}
 
@@ -1328,9 +1328,9 @@ function mdjm_list_available_addons( $employee_id = 0, $price = false )	{
  * @param	int		$length		The length of the excerpt.
  * @return	str
  */
-function mdjm_get_addon_excerpt( $addon_id, $length = 0 )	{
+function mdjm_get_addon_excerpt( $addon_id, $length = NULL )	{
 
-	if ( empty( $length ) )	{
+	if ( ! isset( $length ) )	{
 		$length = mdjm_get_option( 'package_excerpt_length', 55 );
 	}
 
@@ -1517,7 +1517,7 @@ function mdjm_addons_checkboxes( $args = array() )	{
 						sanitize_html_class( $args['class'] ),
 						checked( in_array( $item_id, $args['current'] ), true, false ) 
 					);
-					$output .= '<label for="' . esc_attr( $args['name'] ) . '-' . $item_id . '" title="' . mdjm_get_addon_excerpt( $item_id, 999 ) . '">';
+					$output .= '<label for="' . esc_attr( $args['name'] ) . '-' . $item_id . '" title="' . mdjm_get_addon_excerpt( $item_id ) . '">';
 					$output .= esc_html( $item );
 					$output .= '</label>';
 					$output .= '<br />';

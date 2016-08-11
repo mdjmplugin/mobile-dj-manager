@@ -532,7 +532,7 @@ class MDJM_HTML_Elements {
 				$args['options'][ $package->ID ] = $package->post_title . '' . $price;
 
 				if ( $args['titles'] )	{
-					$titles[ $package->ID ] = mdjm_get_package_excerpt( $package->ID, 999 );
+					$titles[ $package->ID ] = mdjm_get_package_excerpt( $package->ID );
 				}
 
 			}
@@ -644,7 +644,7 @@ class MDJM_HTML_Elements {
 				$args['options']['groups'][ $term ][] = array( $addon->ID => $addon->post_title . $price . $desc );
 
 				if ( $args['titles'] )	{
-					$titles[ $addon->ID ] = mdjm_get_addon_excerpt( $addon->ID, 999 );
+					$titles[ $addon->ID ] = mdjm_get_addon_excerpt( $addon->ID );
 				}
 
 			}
