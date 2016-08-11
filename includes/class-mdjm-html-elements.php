@@ -892,6 +892,7 @@ class MDJM_HTML_Elements {
 						$selected = selected( $args['selected'], $key, false );
 					}
 
+					$title = '';
 					if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
 						$title = ' title="' . $args['titles'][ $key ] . '"';
 					}

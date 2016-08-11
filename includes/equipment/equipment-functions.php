@@ -85,10 +85,7 @@ function mdjm_get_package_by( $field, $value )	{
 		case 'slug':
 		case 'name':
 			$package = get_posts( array(
-				'post_type'      => 'mdjm-package',
-				'name'           => $value,
-				'posts_per_page' => 1,
-				'post_status'    => 'any'
+				'name'           => $value
 			) );
 
 			if( $package ) {
@@ -117,6 +114,32 @@ function mdjm_get_package_by( $field, $value )	{
 	return $package;
 
 } // mdjm_get_package_by
+
+/**
+ * Retrieve all packages in the given category.
+ *
+ * @since	1.4
+ * @param	int|arr		$terms	The category IDs or names to search.
+ * @return	arr|bool	Packages.
+ */
+function mdjm_get_packages_in_category( $term_id )	{
+
+	$field = is_numeric( $term_id ) ? 'term_id' : 'name';
+
+	$args = array(
+		'tax_query' => array(
+			array(
+				'taxonomy'         => 'package-category',
+				'field'            => $field,
+				'terms'            => $term_id,
+				'include_children' => false
+			)
+		)
+	);
+
+	return mdjm_get_packages( $args );
+
+} // mdjm_get_packages_in_category
 
 /**
  * Retrieve a package name.
@@ -337,17 +360,13 @@ function mdjm_count_packages_with_addon( $addon_id )	{
  */
 function mdjm_get_packages_by_employee( $employee_id = 0, $enabled = true )	{
 
-	if ( empty( $employee_id ) )	{
+	if ( empty( $employee_id ) && is_user_logged_in() )	{
 		$employee_id = get_current_user_id();
 	}
 
-	$employee_meta_query = array(
-		'key'     => '_mdjm_employees',
-		'value'   => array( $employee_id ),
-		'compare' => 'IN'
-	);
-
-	$meta_query = array( $employee_meta_query );
+	if ( empty( $employee_id ) )	{
+		return false;
+	}
 
 	$args = array(
 		'posts_per_page' => -1,
@@ -355,10 +374,22 @@ function mdjm_get_packages_by_employee( $employee_id = 0, $enabled = true )	{
 		'order'          => 'DESC',
 		'post_type'      => 'mdjm-package',
 		'post_status'    => $enabled ? 'publish' : 'any',
-		'meta_query'     => array( $meta_query )
+		'meta_query'     => array(
+			'relation'   => 'OR',
+			array(
+				'key'     => '_addon_employees',
+				'value'   => sprintf( ':"%s";', $employee_id ),
+				'compare' => 'LIKE'
+			),
+			array(
+				'key'     => '_addon_employees',
+				'value'   => sprintf( ':"all";' ),
+				'compare' => 'LIKE'
+			)
+		)
 	);
 
-	$packages = get_posts( $args );
+	$packages = mdjm_get_packages( $args );
 
 	return apply_filters( 'mdjm_get_packages_by_employee', $packages );
 
@@ -720,9 +751,9 @@ function mdjm_get_addons( $args = array() )	{
 		'post_status'    => 'publish'
 	);
 
-	$addon_args = wp_parse_args( $args, $defaults );
+	$args = wp_parse_args( $args, $defaults );
 
-	return apply_filters( 'mdjm_get_addons', get_posts( $addon_args ) );
+	return apply_filters( 'mdjm_get_addons', get_posts( $args ) );
 
 } // mdjm_get_addons
 
@@ -766,11 +797,8 @@ function mdjm_get_addon_by( $field, $value )	{
 
 		case 'slug':
 		case 'name':
-			$addon = get_posts( array(
-				'post_type'      => 'mdjm-addon',
-				'name'           => $value,
-				'posts_per_page' => 1,
-				'post_status'    => 'any'
+			$addon = mdjm_get_addons( array(
+				'name'           => $value
 			) );
 
 			if( $addon ) {
@@ -789,22 +817,27 @@ function mdjm_get_addon_by( $field, $value )	{
  * Retrieve all add-ons in the given category.
  *
  * @since	1.4
- * @param	int|arr		$terms	The category ID.
+ * @param	int|arr		$terms	The category IDs or names to search.
  * @return	arr|bool	Addons.
  */
-function mdjm_get_addons_in_category_id( $term_id )	{
+function mdjm_get_addons_in_category( $term_id )	{
+
+	$field = is_numeric( $term_id ) ? 'term_id' : 'name';
 
 	$args = array(
 		'tax_query' => array(
-			'taxonomy'         => 'addon-category',
-			'terms'            => $term_id,
-			'include_children' => false
+			array(
+				'taxonomy'         => 'addon-category',
+				'field'            => $field,
+				'terms'            => $term_id,
+				'include_children' => false
+			)
 		)
 	);
 
 	return mdjm_get_addons( $args );
 
-} // mdjm_get_addons_in_category_id
+} // mdjm_get_addons_in_category
 
 /**
  * Retrieve an addons name.
@@ -963,17 +996,13 @@ function mdjm_get_addon_price_range( $addon_id )	{
  */
 function mdjm_get_addons_by_employee( $employee_id = 0, $enabled = true )	{
 
-	if ( empty( $employee_id ) )	{
+	if ( empty( $employee_id ) && is_user_logged_in() )	{
 		$employee_id = get_current_user_id();
 	}
 
-	$employee_meta_query = array(
-		'key'     => '_mdjm_employees',
-		'value'   => array( $employee_id ),
-		'compare' => 'IN'
-	);
-
-	$meta_query = array( $employee_meta_query );
+	if ( empty( $employee_id ) )	{
+		return false;
+	}
 
 	$args = array(
 		'posts_per_page' => -1,
@@ -981,10 +1010,22 @@ function mdjm_get_addons_by_employee( $employee_id = 0, $enabled = true )	{
 		'order'          => 'DESC',
 		'post_type'      => 'mdjm-addon',
 		'post_status'    => $enabled ? 'publish' : 'any',
-		'meta_query'     => array( $meta_query )
+		'meta_query'     => array(
+			'relation'   => 'OR',
+			array(
+				'key'     => '_addon_employees',
+				'value'   => sprintf( ':"%s";', $employee_id ),
+				'compare' => 'LIKE'
+			),
+			array(
+				'key'     => '_addon_employees',
+				'value'   => sprintf( ':"all";' ),
+				'compare' => 'LIKE'
+			)
+		)
 	);
 
-	$addons = get_posts( $args );
+	$addons = mdjm_get_addons( $args );
 
 	return apply_filters( 'mdjm_get_addons_by_employee', $addons );
 

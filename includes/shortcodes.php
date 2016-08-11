@@ -499,125 +499,123 @@ function mdjm_shortcode_availability( $atts )	{
 add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );
 
 /**
- * The mdjm-addons shortcode replacement.
+ * Addons List Shortcode.
  * 
- * @params	str		$filter_by			Optional: category, package or user. Default false (all).
- *			str|int	$filter_value		Optional: The value to which to filter $filter_by. Default false (all).
- *			str		$list				Optional: List type to display. li for bulleted. Default p.
- *			bool	$cost				Optional: Whether or not display the price. Default false.
+ * @param	arr		$atts		Shortcode attributes. See $args.
+ * @param	str|int	$filter_value	The value to which to filter $filter_by. Default false (all).
+ * @param	str		$list			List type to display. li for bulleted. Default p.
+ * @param	bool	$cost			Whether or not display the price. Default false.
  *
  *
  */
 function mdjm_shortcode_addons_list( $atts )	{
-	
-	$args = shortcode_atts( 
-		array( // These are our default values
+
+	$args = shortcode_atts( array( // These are our default values
 			'filter_by'    => false,
 			'filter_value' => false,
 			'list'         => 'p',
 			'desc'         => false,
+			'desc_length'  => 999,
 			'cost'         => false,
 			'addon_class'  => false,
 			'cost_class'   => false,
 			'desc_class'   => false
-		),
-		$atts,
-		'mdjm-addons'
-	);
-	
+	), $atts, 'mdjm-addons' );
+
 	ob_start();
 	$output = '';
-	
-	if( isset( $args['filter_by'], $args['filter_value'] ) && $args['filter_by'] != 'false' && $args['filter_value'] != 'false' )	{
-		
+
+	if ( ! empty( $args['filter_by'] ) && ! empty( $args['filter_value'] ) && $args['filter_by'] != 'false' && $args['filter_value'] != 'false' )	{
+
 		// Filter addons by user	
-		if( $args['filter_by'] == 'category' )	{
-			
-			$equipment = mdjm_addons_by_cat( $args['filter_value'] );
-			
-		} elseif( $args['filter_by'] == 'package' )	{
-			
-			$equipment = mdjm_addons_by_package_slug( $args['filter_value'] );
-			
-			// If package not found by slug, try name
-			if( empty( $equipment ) )	{
-				$equipment = mdjm_addons_by_package_name( $args['filter_value'] );
+		if ( $args['filter_by'] == 'category' )	{
+
+			$addons = mdjm_get_addons_in_category( $args['filter_value'] );
+
+		} elseif ( $args['filter_by'] == 'package' )	{
+			if ( ! is_numeric( $args['filter_value'] ) )	{ // For backwards compatibility
+				$package = mdjm_get_package_by( 'slug', $args['filter_value'] );
+				if ( $package )	{
+					$args['filter_value'] = $package->ID;
+				}
 			}
 
-		} elseif( $args['filter_by'] == 'user' )	{
-			
-			$equipment = mdjm_addons_by_dj( $args['filter_value'] );
-			
+			$package_addons = mdjm_get_package_addons( $args['filter_value'] );
+
+			$addons = array();
+			foreach ( $package_addons as $package )	{
+				$addons[] = mdjm_get_addon( $package );
+			}
+
+		} elseif ( $args['filter_by'] == 'user' )	{
+			$addons = mdjm_get_addons_by_employee( $args['filter_value'] );
 		}
 		
 	} else	{
-		$equipment = mdjm_get_addons();
+		$addons = mdjm_get_addons();
 	}
 	
 	/**
 	 * Output the results
 	 */
-	if( empty( $equipment ) )	{
+	if ( ! $addons )	{
 		$output .= '<p>' . __( 'No addons available', 'mobile-dj-manager' ) . '</p>';
 	} else	{
-		
+
 		// Check to start bullet list
-		if( $args['list'] == 'li' )	{
+		if ( $args['list'] == 'li' )	{
 			$output .= '<ul>';
 		}
 			
-		foreach( $equipment as $item )	{
-			
-			// If the addon is not enabled, do not show it
-			if( empty( $item[6] ) || $item[6] != 'Y' )	{
-				continue;
-			}
+		foreach( $addons as $addon )	{
 								
 			// Output the remaining addons
-			if( !empty( $args['list'] ) )	{
+			if ( ! empty( $args['list'] ) )	{
 				$output .= '<' . $args['list'] . '>';
 			}
 			
-			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
+			if ( ! empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
 				$output = '<span class="' . $args['addon_class'] . '">';
 			}
 			
-			$output .= stripslashes( esc_textarea( $item[0] ) );
+			$output .= $addon->post_title;
 			
-			if( !empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
+			if ( ! empty( $args['addon_class'] ) && $args['addon_class'] != 'false' )	{
 				$output = '</span>';
 			}
-			
-			if( !empty( $args['cost'] ) && $args['cost'] != 'false' && !empty( $item[7] ) )	{
+
+			$cost = mdjm_get_addon_price( $addon->ID );
+			if ( ! empty( $args['cost'] ) && $args['cost'] != 'false' && ! empty( $cost ) )	{
 				
-				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
+				if ( ! empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
 					$output = '<span class="' . $args['cost_class'] . '">';
 				}
 				
-				$output .= '&nbsp;&ndash;&nbsp;' . mdjm_currency_filter( mdjm_sanitize_amount( $item[7] ) );
+				$output .= '&nbsp;&ndash;&nbsp;' . mdjm_currency_filter( mdjm_format_amount( $cost ) );
 				
-				if( !empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
+				if ( ! empty( $args['cost_class'] ) && $args['cost_class'] != 'false' )	{
 					$output = '</span>';
 				}
 				
 			}
-			
-			if( !empty( $atts['desc'] ) && $atts['desc'] != 'false' && !empty( $item[4] ) )	{
+
+			$desc = mdjm_get_addon_excerpt( $addon->ID, $args['desc_length'] );
+			if ( ! empty( $args['desc'] ) && $args['desc'] != 'false' && ! empty( $desc ) )	{
 				
 				$output .= '<br />';
 				
-				if( !empty( $args['desc_class'] ) && $args['desc_class'] != 'false' )	{
+				if ( ! empty( $args['desc_class'] ) && $args['desc_class'] != 'false' )	{
 					$output = '<span class="' . $args['desc_class'] . '">';
 				} else	{
 					$output .= '<span style="font-style: italic; font-size: smaller;">';
 				}
 				
-				$output .= stripslashes( esc_textarea( $item[4] ) );
+				$output .= $desc;
 				$output .= '</span>';
 	
 			}
 				
-			if( !empty( $args['list'] ) )	{
+			if ( ! empty( $args['list'] ) )	{
 				$output .= '</' . $args['list'] . '>';
 			}
 			
