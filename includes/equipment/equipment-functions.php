@@ -618,7 +618,7 @@ function mdjm_get_package_excerpt( $package_id, $length = 0 )	{
  * Renders HTML code for Package dropdown.
  *
  * @param	arr		$settings		See @$defaults
- * @param	bool	$structure		True returns the select input structure, false just return values
+ * @param	bool	$structure		True to echo the select field structure, false just returns options.
  * @return	HTML output for select field
  */
 function mdjm_package_dropdown( $args = array(), $structure = true )	{
@@ -633,64 +633,46 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 		'first_entry'     => '',
 		'first_entry_val' => '',
 		'employee'        => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : '',
-		'title'           => false,
+		'event_type'      => false,
+		'event_date'      => false,
+		'titles'          => true,
 		'cost'            => true,
 		'required'        => false
 	);
+
+	$args = wp_parse_args( $args, $defaults );
 
 	// For backwards compatibility
 	if ( isset( $args['dj'] ) )	{
 		$args['employee'] = $args['dj'];
 	}
 
-	$args = wp_parse_args( $args, $defaults );
-	
 	$args['required'] = ! empty( $args['required'] ) ? ' required' : '';
 	$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
 	
-	$packages = mdjm_get_packages();
-	
 	$output = '';
-	
-	if( $structure == true )	{
-		$output = sprintf( '<select name="%s" id="%s" class="%s"%s>', $args['name'], $args['id'], $args['class'], $args['required'] ) . "\n";
+
+	if ( $structure )	{
+		$output = sprintf(
+			'<select name="%s" id="%s" class="%s"%s>',
+			esc_attr( $args['name'] ),
+			esc_attr( mdjm_sanitize_key( $args['id'] ) ),
+			sanitize_html_class( $args['class'] ),
+			$args['required']
+		) . "\n";
 	}
+
+	$args = array_merge( $args, array(
+		'show_option_none' => ! empty( $args['first_entry'] ) ? $args['first_entry'] : false,
+		'show_option_all'  => false,
+		'options_only'     => true,
+		'blank_first'      => false
+	) );
 	
-	// First entry
-	$output .= ( ! empty( $args['first_entry'] ) ) ? '<option value="' . ( ! empty( $args['first_entry_val'] ) ? $args['first_entry_val'] : '' ) . '">' . $args['first_entry'] . '</option>' . "\r\n" : '';
-		
-	$packages = mdjm_get_packages();
+	$output .= MDJM()->html->packages_dropdown( $args );
 	
-	if( ! $packages )	{
-		$output .= '<option value="">' . __( 'No Packages Available', 'mobile-dj-manager' ) . '</option>' . "\r\n";
-	} else	{
-
-		foreach( $packages as $package )	{
-			
-			// If the specified employee does not have the package, do not show it
-			if( ! empty( $args['employee'] ) && ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
-				continue;
-			}
-
-			$package_desc = mdjm_get_package_excerpt( $package->ID );
-
-			$output .= '<option value="' . $package->ID . '"';
-			$output .= ( ! empty( $args['title'] ) && ! empty( $package_desc ) ) ? ' title="' . $package_desc . '"' : '';
-			$output .= ( ! empty( $args['selected'] ) ) ? selected( $args['selected'], $package->ID, false ) . '>' : '>' ;
-			$output .= $package->post_title;
-			
-			if( $args['cost'] == true )	{
-				$output .= ' - ' . mdjm_currency_filter( mdjm_format_amount(  mdjm_get_package_price( $package->ID ) ) ) ;
-			}
-
-			$output .= '</option>' . "\r\n";
-
-		}
-
-	}
-	
-	if( $structure == true )	{
-		$output .= '</select>' . "\r\n";
+	if ( $structure )	{
+		$output .= '</select>' . "\n";
 	}
 	
 	return $output;
@@ -1329,7 +1311,7 @@ function mdjm_get_addon_excerpt( $addon_id, $length = 0 )	{
  * Renders the HTML code for Addons multiple select dropdown.
  *
  * @param	arr		$args		Settings for the dropdown. See @$defaults.
- * @param	bool	$structure	True creates the select list, false just return values
+ * @param	bool	$structure	True to echo the select field structure, false just returns options.
  * @return	HTML output for select field
  */
 function mdjm_addons_dropdown( $args = array(), $structure = true )	{
@@ -1342,12 +1324,12 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 		'selected'         => '',
 		'first_entry'      => '',
 		'first_entry_val'  => '',
-		'employee'         => is_user_logged_in() && ! current_user_can( 'client' ) ? $current_user->ID : '',
+		'employee'         => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : false,
 		'event_type'       => false,
 		'event_date'       => false,
 		'package'          => '',
 		'cost'             => true,
-		'title'            => false,
+		'titles'           => true
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -1374,11 +1356,11 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 		'show_option_all'  => false,
 		'options_only'     => true
 	) );
-	
+
 	$output .= MDJM()->html->addons_dropdown( $args );
 	
-	if( $structure == true )	{
-		$output .= '</select>' . "\r\n";
+	if ( $structure == true )	{
+		$output .= '</select>' . "\n";
 	}
 	
 	return $output;

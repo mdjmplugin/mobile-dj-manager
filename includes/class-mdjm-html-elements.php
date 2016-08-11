@@ -489,6 +489,7 @@ class MDJM_HTML_Elements {
 			'placeholder'      => __( 'Select a Package', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'cost'             => true,
+			'titles'           => false,
 			'options_only'     => false,
 			'blank_first'      => true,
 			'data'             => array()
@@ -530,12 +531,20 @@ class MDJM_HTML_Elements {
 
 				$args['options'][ $package->ID ] = $package->post_title . '' . $price;
 
+				if ( $args['titles'] )	{
+					$titles[ $package->ID ] = mdjm_get_package_excerpt( $package->ID, 999 );
+				}
+
 			}
 
 		} 
 
 		if ( empty( $args['options'] ) )	{
 			$args['placeholder'] = __( 'No Packages Available', 'mobile-dj-manager' );
+		}
+
+		if ( ! empty( $titles ) )	{
+			$args['titles'] = $titles;
 		}
 
 		$output = $this->select( $args );
@@ -568,6 +577,7 @@ class MDJM_HTML_Elements {
 			'package'          => '',
 			'cost'             => true,
 			'desc'             => false,
+			'titles'           => false,
 			'options_only'     => false,
 			'blank_first'      => false,
 			'data'             => array()
@@ -575,6 +585,7 @@ class MDJM_HTML_Elements {
 		
 		$args    = wp_parse_args( $args, $defaults );
 		$options = array();
+		$titles  = array();
 		$addons  = mdjm_get_addons();
 
 		if ( $addons )	{
@@ -632,11 +643,19 @@ class MDJM_HTML_Elements {
 
 				$args['options']['groups'][ $term ][] = array( $addon->ID => $addon->post_title . $price . $desc );
 
+				if ( $args['titles'] )	{
+					$titles[ $addon->ID ] = mdjm_get_addon_excerpt( $addon->ID, 999 );
+				}
+
 			}
 		}
 
 		if ( ! empty( $args['options']['groups'] ) )	{
 			ksort( $args['options']['groups'] );
+		}
+
+		if ( ! empty( $titles ) )	{
+			$args['titles'] = $titles;
 		}
 
 		$output = $this->select( $args );
@@ -802,6 +821,7 @@ class MDJM_HTML_Elements {
 			'show_option_all'  => false,
 			'show_option_none' => false,
 			'options_only'     => false,
+			'titles'           => false,
 			'data'             => array(),
 		);
 
@@ -871,8 +891,12 @@ class MDJM_HTML_Elements {
 					} else {
 						$selected = selected( $args['selected'], $key, false );
 					}
-	
-					$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+
+					if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+						$title = ' title="' . $args['titles'][ $key ] . '"';
+					}
+
+					$output .= '<option value="' . esc_attr( $key ) . '"' . $title . '' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 				}
 				
 			} else	{
@@ -886,14 +910,19 @@ class MDJM_HTML_Elements {
 
 					foreach( $items as $options ) {
 						foreach ( $options as $key => $option )	{
-	
+
+							$title = '';
 							if( $args['multiple'] && is_array( $args['selected'] ) ) {
 								$selected = selected( true, in_array( $key, $args['selected'] ), false );
 							} else {
 								$selected = selected( $args['selected'], $key, false );
 							}
-			
-							$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+
+							if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+								$title = ' title="' . $args['titles'][ $key ] . '"';
+							}
+
+							$output .= '<option value="' . esc_attr( $key ) . '"' . $title . '' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 						}
 					}
 
