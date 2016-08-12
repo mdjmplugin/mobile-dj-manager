@@ -56,7 +56,7 @@
 			}
 			
 			$args = array(
-					'post_type' 		=> MDJM_EVENT_POSTS,
+					'post_type' 		=> 'mdjm-event',
 					'post_status'	  => 'any',
 					'posts_per_page'   => 1,
 					'meta_key'		 => '_mdjm_event_date',
@@ -114,7 +114,7 @@
 			$order = !empty( $order ) ? $order : 'DESC';
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
+						'post_type' 		=> 'mdjm-event',
 						'post_status'	  => $status,
 						'posts_per_page'   => -1,
 						'meta_key'		 => $orderby,
@@ -159,7 +159,7 @@
 			$num_order = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
 			
 			$args = array(
-				'post_type' 		=> MDJM_EVENT_POSTS,
+				'post_type' 		=> 'mdjm-event',
 				'post_status'	  => $status,
 				'posts_per_page'   => -1,
 				'meta_key'		 => $orderby,
@@ -227,7 +227,7 @@
 			$dj = !empty( $dj ) ?  $dj : $current_user->ID;
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
+						'post_type' 		=> 'mdjm-event',
 						'post_status'	  	=> 'mdjm-approved',
 						'posts_per_page'   	=> -1,
 						'meta_key'		 	=> '_mdjm_event_date',
@@ -282,7 +282,7 @@
 				case 'playlist': // Lookup by playlist guest access string
 					$event_details = get_posts( array(
 							'posts_per_page'	=> 1,
-							'post_type'		 => MDJM_EVENT_POSTS,
+							'post_type'		 => 'mdjm-event',
 							'post_status'	   => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
 							'meta_key'		  => '_mdjm_event_date',
 							'meta_query'		=> array(
@@ -393,7 +393,7 @@
 			$user_type = !empty( $user_type ) ? $user_type : 'client';
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
+						'post_type' 		=> 'mdjm-event',
 						'post_status'	  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
 						'posts_per_page'   => -1,
 						'meta_key'		 => '_mdjm_event_date',
@@ -519,7 +519,7 @@
 			$user_type = !empty( $user_type ) ? $user_type : 'client';
 			
 			$args = array(
-						'post_type' 		=> MDJM_EVENT_POSTS,
+						'post_type' 		=> 'mdjm-event',
 						'post_status'	  => 'mdjm-completed',
 						'posts_per_page'   => -1,
 						'meta_key'		 => '_mdjm_event_date',
@@ -672,7 +672,7 @@
 			if( empty( $event_status ) )
 				return;
 			
-			$status_count = wp_count_posts( MDJM_EVENT_POSTS )->$event_status;
+			$status_count = wp_count_posts( 'mdjm-event' )->$event_status;
 			
 			return $status_count;
 		} // mdjm_count_event_status
@@ -740,7 +740,7 @@
 		public function get_event_types( $hide_empty=false, $orderby='name', $order='ASC' )	{
 			$hide_empty = $hide_empty == false ? 0 : 1;
 			$event_types = get_categories( array(
-											'type'		=> MDJM_EVENT_POSTS,
+											'type'		=> 'mdjm-event',
 											'taxonomy'	=> 'event-types',
 											'order_by'	=> $orderby,
 											'order'	   => $order,
@@ -869,7 +869,7 @@
 							
 						$post_args['post_title'] = 'Quote ' . MDJM_EVENT_PREFIX . $post_id;
 						$post_args['post_content'] = $content;
-						$post_args['post_type'] = MDJM_QUOTE_POSTS;
+						$post_args['post_type'] = 'mdjm-quotes';
 						$post_args['post_status'] = 'mdjm-quote-generated';
 						$post_args['post_author'] = ( !empty( $event_data['_mdjm_event_client'] ) ? $event_data['_mdjm_event_client'] : get_current_user_id() );
 						$post_args['post_parent'] = $post_id;
@@ -959,7 +959,7 @@
 			if( $_POST['original_post_status'] == 'mdjm-contract' )
 				return;
 			
-			if( $post->post_type != MDJM_EVENT_POSTS )
+			if( $post->post_type != 'mdjm-event' )
 				return;
 			
 			if( empty( $post_id ) || empty( $post ) )
@@ -1041,7 +1041,7 @@
 			if( $_POST['original_post_status'] == 'mdjm-approved' )
 				return;
 			
-			if( $post->post_type != MDJM_EVENT_POSTS )
+			if( $post->post_type != 'mdjm-event' )
 				return;
 			
 			if( empty( $post_id ) || empty( $post ) )
@@ -1252,7 +1252,7 @@
 										'numberposts'		=> 1,
 										'post_parent'		=> $event_id,
 										'post_status'		=> $status,
-										'post_type'		  => MDJM_QUOTE_POSTS ) );
+										'post_type'		  => 'mdjm-quotes' ) );
 										
 			if( empty( $quote ) )
 				return false;
@@ -1343,7 +1343,7 @@
 		 */
 		public function mdjm_get_venues()	{
 			$venues = get_posts( array(
-									'post_type'	=> MDJM_VENUE_POSTS,
+									'post_type'	=> 'mdjm-venue',
 									'orderby'	  => 'title',
 									'order'		=> 'ASC',
 									)
@@ -1373,7 +1373,7 @@
 			/* -- Insert the Venue -- */
 			$post_data['post_title'] = !empty( $venue_data['venue_name'] ) ? $venue_data['venue_name'] : '';
 			$post_data['post_content'] = '';
-			$post_data['post_type'] = MDJM_VENUE_POSTS;
+			$post_data['post_type'] = 'mdjm-venue';
 			$post_data['post_author'] = get_current_user_id();
 			$post_data['post_status'] = 'publish';
 			$post_data['ping_status'] = 'closed';

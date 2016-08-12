@@ -89,7 +89,7 @@
 					$contract_data = array(
 										'post_title'	 => 'Event Contract: ' . MDJM_EVENT_PREFIX . $this->event->ID,
 										'post_author' 	 => $my_mdjm['me']->ID, // Author
-										'post_type' 	 => MDJM_SIGNED_CONTRACT_POSTS,
+										'post_type' 	 => 'mdjm-signed-contract',
 										'post_status'	 => 'publish', // Contract Status
 										'post_parent'	 => $this->event->ID,
 										'ping_status'	 => 'closed',

@@ -272,7 +272,7 @@ class MDJM_Cron	{
 		
 		$args = array(
 			'posts_per_page'	=> -1,
-			'post_type'		 => MDJM_EVENT_POSTS,
+			'post_type'		 => 'mdjm-event',
 			'post_status'	   => 'mdjm-approved',
 			'meta_key'		  => '_mdjm_event_date',
 			'orderby'		   => 'meta_value',
@@ -668,7 +668,7 @@ class MDJM_Cron	{
 					
 		$args = array(
 					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
+					'post_type'		 => 'mdjm-event',
 					'post_status'	   => 'mdjm-approved',
 					'meta_query'		=> array(
 											'relation'	=> 'AND',
@@ -926,7 +926,7 @@ class MDJM_Cron	{
 					
 		$args = array(
 					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
+					'post_type'		 => 'mdjm-event',
 					'post_status'	   => 'mdjm-approved',
 					'meta_query'		=> array(
 											'relation'	=> 'AND',
