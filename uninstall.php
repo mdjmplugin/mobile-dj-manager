@@ -85,13 +85,13 @@
 	// If the option to remove the tables is not selected, skip
 	if( !empty( $settings['uninst_remove_db'] ) )	{	
 		$tables = array( 
-					 'Playlist'		 => $wpdb->prefix . 'mdjm_playlists',
 					 'Availability'	 => $wpdb->prefix . 'mdjm_avail' );
 		
 		foreach( $tables as $table_display => $table_name )	{
 			$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $table_name . "'" );
-			if( $results )
+			if( $results )	{
 				$wpdb->query( 'DROP TABLE IF EXISTS ' . $table_name );
+			}
 		}
 	}
 	

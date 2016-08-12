@@ -181,6 +181,7 @@ function mdjm_set_upgrade_complete( $upgrade_action = '' ) {
  * @return	void
  */
 function mdjm_v14_upgrades()	{
+	global $wpdb;
 
 	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
@@ -190,6 +191,12 @@ function mdjm_v14_upgrades()	{
 
 	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
 		@set_time_limit( 0 );
+	}
+
+	// Drop the deprecated Playlists table
+	$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $wpdb->prefix . 'mdjm_playlists' . "'" );
+	if( $results )	{
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'mdjm_playlists' );
 	}
 
 	$items             = array();
