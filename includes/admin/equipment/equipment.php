@@ -477,7 +477,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 		// Usage
 		case 'usage':
 			$packages = mdjm_count_packages_with_addon( $post_id );
-			$events   = mdjm_get_events_with_addon( $post_id );
+			$events   = mdjm_count_events_with_addon( $post_id );
 
 			echo $packages . _n( ' Package', ' Packages', $packages, 'mobile-dj-manager' ) . '<br />';
 			echo $events . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $events, 'mobile-dj-manager' );

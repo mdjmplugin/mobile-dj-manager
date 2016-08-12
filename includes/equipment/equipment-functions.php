@@ -85,7 +85,7 @@ function mdjm_get_package_by( $field, $value )	{
 		case 'slug':
 		case 'name':
 			$package = get_posts( array(
-				'name'           => $value
+				'name' => $value
 			) );
 
 			if( $package ) {
@@ -114,6 +114,105 @@ function mdjm_get_package_by( $field, $value )	{
 	return $package;
 
 } // mdjm_get_package_by
+
+/**
+ * Retrieve data for a package.
+ *
+ * @since	1.4
+ * @param	int|obj	$package	The package WP_Post object, or post ID.
+ * @return	arr
+ */
+function mdjm_get_package_data( $package )	{
+
+	$package_id = is_object( $package ) ? $package->ID : $package;
+	$events     = mdjm_get_package_event_types( $package_id );
+	$users      = mdjm_get_employees_with_package( $package_id );
+	$items      = mdjm_get_package_addons( $package_id );
+	$cats       = get_the_terms( $package_id, 'package-category' );
+	$employees  = array();
+	$months     = array();
+	$addons     = array();
+	$categories = array();
+
+	if ( ! mdjm_package_is_restricted_by_date( $package_id ) )	{
+		$months[] = __( 'Always', 'mobile-dj-manager' );
+	} else	{
+		$availability = mdjm_get_package_months_available( $package_id );
+
+		if ( ! $availability )	{
+			$months[] = __( 'Always', 'mobile-dj-manager' );
+		} else	{
+			$i = 0;
+			foreach( $availability as $month )	{
+
+				$months[] = mdjm_month_num_to_name( $availability[ $i ] );
+				$i++;
+			}
+		}
+	}
+
+	if ( in_array( 'all', $users ) )	{
+		$employees[] = __( 'All Employees', 'mobile-dj-manager' );
+	} else	{
+		foreach( $users as $employee_id )	{
+			if ( 'all' == $employee_id )	{
+				continue;
+			}
+			$employees[] = array( $employee_id => mdjm_get_employee_display_name( $employee_id ) );
+		}
+	}
+
+	if ( in_array( 'all', $events ) )	{
+		$event_types = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() );
+	} else	{
+		foreach ( $events as $event )	{
+			$term = get_term( $event, 'event-types' );
+
+			if ( ! empty( $term ) )	{
+				$event_types[] = $term->name;
+			}
+		}
+	}
+
+	if ( mdjm_package_has_variable_prices( $package_id ) )	{
+		$range = mdjm_get_package_price_range( $package_id );
+
+		$price = mdjm_get_currency() . ' ' . mdjm_format_amount( $range['low'] ) . ' &mdash; ' . mdjm_format_amount( $range['high'] );
+
+	} else	{
+		$price = mdjm_get_currency() . ' ' . mdjm_format_amount( mdjm_get_package_price( $package_id ) );
+	}
+
+	if ( $items )	{
+		foreach ( $items as $addon_id )	{
+			$addons[] = array( $addon_id => mdjm_get_addon_name( $addon_id ) );
+		}
+	}
+
+	if ( $cats )	{
+		foreach ( $cats as $cat )	{
+			$categories[] = $cat->name;
+		}
+	}
+
+	$package_data = array(
+		'name'         => mdjm_get_package_name( $package_id ),
+		'categories'   => get_the_term_list( $package_id, 'package-category', '', ', ', '' ),
+		'availability' => array(
+			'months'      => $months,
+			'employees'   => $employees,
+			'event_types' => $event_types
+		),
+		'price'        => $price,
+		'items'        => $addons,
+		'usage'        => array(
+			'events'  => mdjm_count_events_with_package( $package_id )
+		)
+	);
+
+	return apply_filters( 'mdjm_get_package_data', $package_data );
+
+} // mdjm_get_package_data
 
 /**
  * Retrieve all packages in the given category.
@@ -151,7 +250,7 @@ function mdjm_get_packages_in_category( $term_id )	{
 function mdjm_get_package_name( $package_id )	{
 	$title = get_the_title( $package_id );
 
-	return apply_filters( 'mdjm_package_name', $title, $addon_id );
+	return apply_filters( 'mdjm_package_name', $title, $package_id );
 } // mdjm_get_package_name
 
 /**
@@ -310,15 +409,13 @@ function mdjm_get_package_addons( $package_id )	{
  */
 function mdjm_get_packages_with_addons( $addon_ids )	{
 
-	if ( ! is_array( $addon_ids ) )	{
-		$addon_ids = array( $addon_ids );
-	}
-
 	return mdjm_get_packages( array(
-		'meta_query'  => array(
-			'key'     => '_package_items',
-			'value'   => $addon_ids,
-			'compare' => 'IN'
+		'meta_query' => array(
+			array(
+				'key'     => '_package_items',
+				'value'   => sprintf( ':"%s";', $addon_ids ),
+				'compare' => 'LIKE'
+			)
 		)
 	) );
 	
@@ -377,12 +474,12 @@ function mdjm_get_packages_by_employee( $employee_id = 0, $enabled = true )	{
 		'meta_query'     => array(
 			'relation'   => 'OR',
 			array(
-				'key'     => '_addon_employees',
+				'key'     => '_package_employees',
 				'value'   => sprintf( ':"%s";', $employee_id ),
 				'compare' => 'LIKE'
 			),
 			array(
-				'key'     => '_addon_employees',
+				'key'     => '_package_employees',
 				'value'   => sprintf( ':"all";' ),
 				'compare' => 'LIKE'
 			)
@@ -452,7 +549,7 @@ function mdjm_package_is_available_for_event_type( $package_id, $event_type_term
  *
  * @since	1.4
  * @param	int		$package_id		The package ID.
- * @param	str		$event_date		The event date.
+ * @param	int|str	$event_date		The event date (YYYY-mm-dd) or the month as a numeric value (12).
  * @return	bool	True if the package is available for the event date, or false if not.
  */
 function mdjm_package_is_available_for_event_date( $package_id, $event_date = '' )	{
@@ -466,7 +563,12 @@ function mdjm_package_is_available_for_event_date( $package_id, $event_date = ''
 	}
 
 	$event_months = mdjm_get_package_months_available( $package_id );
-	$event_month  = date( 'n', strtotime( $event_date ) );
+
+	if ( is_numeric( $event_date ) )	{
+		$event_month = $event_date;
+	} else	{
+		$event_month  = date( 'n', strtotime( $event_date ) );
+	}
 
 	if ( in_array( $event_month, $event_months ) )	{
 		return true;
@@ -814,6 +916,106 @@ function mdjm_get_addon_by( $field, $value )	{
 } // mdjm_get_addon_by
 
 /**
+ * Retrieve data for an addon.
+ *
+ * @since	1.4
+ * @param	int|obj	$package	The addon WP_Post object, or post ID.
+ * @return	arr
+ */
+function mdjm_get_addon_data( $addon )	{
+
+	$addon_id = is_object( $addon ) ? $addon->ID : $addon;
+	$events      = mdjm_get_addon_event_types( $addon_id );
+	$users       = mdjm_get_employees_with_addon( $addon_id );
+	$packages    = mdjm_get_packages_with_addons( $addon_id );
+	$cats        = get_the_terms( $addon_id, 'addon-category' );
+	$employees   = array();
+	$months      = array();
+	$categories  = array();
+	$in_packages = array();
+
+	if ( ! mdjm_addon_is_restricted_by_date( $addon_id ) )	{
+		$months[] = __( 'Always', 'mobile-dj-manager' );
+	} else	{
+		$availability = mdjm_get_addon_months_available( $addon_id );
+
+		if ( ! $availability )	{
+			$months[] = __( 'Always', 'mobile-dj-manager' );
+		} else	{
+			$i = 0;
+			foreach( $availability as $month )	{
+
+				$months[] = mdjm_month_num_to_name( $availability[ $i ] );
+				$i++;
+			}
+		}
+	}
+
+	if ( in_array( 'all', $users ) )	{
+		$employees[] = __( 'All Employees', 'mobile-dj-manager' );
+	} else	{
+		foreach( $users as $employee_id )	{
+			if ( 'all' == $employee_id )	{
+				continue;
+			}
+			$employees[] = array( $employee_id => mdjm_get_employee_display_name( $employee_id ) );
+		}
+	}
+
+	if ( in_array( 'all', $events ) )	{
+		$event_types = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() );
+	} else	{
+		foreach ( $events as $event )	{
+			$term = get_term( $event, 'event-types' );
+
+			if ( ! empty( $term ) )	{
+				$event_types[] = $term->name;
+			}
+		}
+	}
+
+	if ( mdjm_addon_has_variable_prices( $addon_id ) )	{
+		$range = mdjm_get_addon_price_range( $addon_id );
+
+		$price = mdjm_get_currency() . ' ' . mdjm_format_amount( $range['low'] ) . ' &mdash; ' . mdjm_format_amount( $range['high'] );
+
+	} else	{
+		$price = mdjm_get_currency() . ' ' . mdjm_format_amount( mdjm_get_addon_price( $addon_id ) );
+	}
+
+	if ( $packages )	{
+		foreach ( $packages as $package )	{
+			$in_packages[] = array( $package->ID => mdjm_get_package_name( $package->ID ) );
+		}
+	}
+
+	if ( $cats )	{
+		foreach ( $cats as $cat )	{
+			$categories[] = $cat->name;
+		}
+	}
+
+	$addon_data = array(
+		'name'         => mdjm_get_addon_name( $addon_id ),
+		'categories'   => $categories,
+		'availability' => array(
+			'months'      => $months,
+			'employees'   => $employees,
+			'event_types' => $event_types
+		),
+		'price'        => $price,
+		'packages'     => $in_packages,
+		'usage'        => array(
+			'packages' => mdjm_count_packages_with_addon( $addon_id ),
+			'events'   => mdjm_count_events_with_addon( $addon_id )
+		)
+	);
+
+	return apply_filters( 'mdjm_get_addon_data', $addon_data );
+
+} // mdjm_get_addon_data
+
+/**
  * Retrieve all add-ons in the given category.
  *
  * @since	1.4
@@ -1155,7 +1357,7 @@ function mdjm_get_events_with_addons( $addon_ids )	{
  * @param	int		$addon_id	The addon ID.
  * @return	int
  */
-function mdjm_get_events_with_addon( $addon_id )	{
+function mdjm_count_events_with_addon( $addon_id )	{
 
 	global $wpdb;
 
@@ -1180,7 +1382,7 @@ function mdjm_get_events_with_addon( $addon_id )	{
 
 	return $count;
 
-} // mdjm_get_events_with_addon
+} // mdjm_count_events_with_addon
 
 /**
  * Lists an events addons.

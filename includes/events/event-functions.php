@@ -121,8 +121,8 @@ function mdjm_get_event_data( $event )	{
 		'end_date'            => $mdjm_event->get_meta( '_mdjm_event_end_date' ),
 		'end_time'            => $mdjm_event->get_finish_time(),
 		'equipment'           => array(
-			'package'             => get_event_package( $mdjm_event->ID ),
-			'addons'              => get_event_addons( $mdjm_event->ID )
+			'package'             => mdjm_get_package_name( $mdjm_event->ID ),
+			'addons'              => mdjm_get_event_addons( $mdjm_event->ID )
 		),
 		'name'                => $mdjm_event->get_name(),
 		'playlist'            => array(

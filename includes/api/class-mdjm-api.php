@@ -99,7 +99,6 @@ class MDJM_API 	{
 	public function __construct()	{
 		$this->namespace = 'mdjm/v' . self::VERSION;
 		
-
 		add_action( 'rest_api_init',         array( $this, 'register_endpoints' ) );
 		add_action( 'mdjm-process_api_key',  array( $this, 'process_api_key'    ) );
 		add_action( '/mdjm/v1/availability', array( $this, 'availability_check' ) );
@@ -107,6 +106,10 @@ class MDJM_API 	{
 		add_action( '/mdjm/v1/employee',     array( $this, 'get_employee'       ) );
 		add_action( '/mdjm/v1/event',        array( $this, 'get_event'          ) );
 		add_action( '/mdjm/v1/events',       array( $this, 'list_events'        ) );
+		add_action( '/mdjm/v1/package',      array( $this, 'get_package'        ) );
+		add_action( '/mdjm/v1/packages',     array( $this, 'list_packages'      ) );
+		add_action( '/mdjm/v1/addon',        array( $this, 'get_addon'          ) );
+		add_action( '/mdjm/v1/addons',       array( $this, 'list_addons'        ) );
 	} // __construct
 
 	/**
@@ -167,6 +170,30 @@ class MDJM_API 	{
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
 				//'require_auth' => true
+			),
+			// Retrieving a Package
+			'/package/' => array(
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
+			),
+			// Retrieving Multiple Packages
+			'/packages/' => array(
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
+			),
+			// Retrieving an Addon
+			'/addon/' => array(
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
+			),
+			// Retrieving Multiple Addons
+			'/addons/' => array(
+				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
 			)
 		);
 
@@ -900,7 +927,7 @@ class MDJM_API 	{
 	 */
 	public function get_event()	{
 
-		$response   = array();
+		$response = array();
 
 		if ( ! isset( $this->request['event_id'] ) )	{
 			$this->missing_params( 'event_id' );
@@ -942,7 +969,7 @@ class MDJM_API 	{
 	 */
 	public function list_events()	{
 
-		$response       = array();
+		$response = array();
 
 		if ( ! mdjm_employee_can( 'read_events', $this->user_id ) )	{
 			$this->no_permsission();
@@ -991,5 +1018,231 @@ class MDJM_API 	{
 		$this->output();
 
 	} // list_events
+
+	/**
+	 * Retrieve a single package by ID, name, or slug.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function get_package()	{
+
+		$response = array();
+
+		if ( ! isset( $this->request['package'] ) )	{
+			$this->missing_params( 'package' );
+		}
+
+		do_action( 'mdjm_before_api_get_package', $this );
+
+		if ( ! is_numeric( $this->request['package'] ) )	{ // Using name or slug
+			$package = mdjm_get_package_by( 'name', $this->request['package'] );
+		} else	{
+			$package = mdjm_get_package( $this->request['package'] );
+		}
+
+		if ( ! $package )	{
+			$error = array();
+			$error['error'] = __( 'Package does not exist.', 'mobile-dj-manager' );
+			
+			$this->data = $error;
+			$this->output();
+		}
+
+		$response['package'] = mdjm_get_package_data( $package );
+
+		$response['package'] = array_merge( array( 'id' => $package->ID ), $response['package'] );
+
+		$this->data = array_merge( $this->data, $response );
+
+		do_action( 'mdjm_after_api_get_package', $this );
+
+		$this->output();
+
+	} // get_package
+
+	/**
+	 * Retrieve packages filtered by employee, event month, event type or category.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function list_packages()	{
+
+		$response = array();
+		$packages = array();
+
+		do_action( 'mdjm_before_api_list_packages', $this );
+
+		$all_packages = mdjm_get_packages( array( 'suppress_filters' => false ) );
+
+		if ( $all_packages )	{
+			foreach( $all_packages as $package )	{
+				if ( isset( $this->request['employee_id'] ) && ! mdjm_employee_has_package( $package->ID, $this->request['employee_id'] ) )	{
+					continue;
+				}
+				if ( isset( $this->request['event_month'] ) && ! mdjm_package_is_available_for_event_date( $package->ID, $this->request['event_month'] ) )	{
+					continue;
+				}
+				if ( isset( $this->request['event_type'] ) && ! mdjm_package_is_available_for_event_type( $package->ID, $this->request['event_type'] ) )	{
+					continue;
+				}
+
+				$packages[] = $package->ID;
+
+			}
+		}			
+
+		if ( empty( $packages ) )	{
+			$error = array();
+			$error['error'] = __( 'No packages found.', 'mobile-dj-manager' );
+			
+			$this->data = $error;
+			$this->output();
+		}
+
+		$response['packages'] = array();
+		$i = 0;
+
+		foreach ( $packages as $package )	{
+			$response['packages'][ $package ] = mdjm_get_package_data( $package );
+			$i++;
+		}
+
+		$response['count'] = $i;
+
+		$this->data = array_merge( $this->data, $response );
+
+		do_action( 'mdjm_after_api_list_packages', $this );
+
+		$this->output();
+
+	} // list_packages
+
+	/**
+	 * Retrieve a single addon by ID, name, or slug.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function get_addon()	{
+
+		$response = array();
+
+		if ( ! isset( $this->request['addon'] ) )	{
+			$this->missing_params( 'addon' );
+		}
+
+		do_action( 'mdjm_before_api_get_addon', $this );
+
+		if ( ! is_numeric( $this->request['addon'] ) )	{ // Using name or slug
+			$addon = mdjm_get_addon_by( 'name', $this->request['addon'] );
+		} else	{
+			$addon = mdjm_get_addon( $this->request['addon'] );
+		}
+
+		if ( ! $addon )	{
+			$error = array();
+			$error['error'] = __( 'Addon does not exist.', 'mobile-dj-manager' );
+			
+			$this->data = $error;
+			$this->output();
+		}
+
+		$response['addon'] = mdjm_get_addon_data( $addon );
+
+		$response['addon'] = array_merge( array( 'id' => $addon->ID ), $response['addon'] );
+
+		$this->data = array_merge( $this->data, $response );
+
+		do_action( 'mdjm_after_api_get_addon', $this );
+
+		$this->output();
+
+	} // get_addon
+
+	/**
+	 * Retrieve addons filtered by package, employee, event month, event type or category.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function list_addons()	{
+
+		$response       = array();
+		$package_addons = array();
+		$addons         = array();
+
+		do_action( 'mdjm_before_api_list_addons', $this );
+
+		if ( isset( $this->request['package'] ) )	{
+			if ( ! is_numeric( $this->request['package'] ) )	{ // Using name or slug
+				$package    = mdjm_get_package_by( 'name', $this->request['package'] );
+
+				if ( $package )	{
+					$package_id = $package->ID;
+				}
+			} else	{
+				$package_id = $this->request['package'];
+			}
+
+			if ( ! empty( $package_id ) )	{
+				$package_addons = mdjm_get_package_addons( $package_id );
+
+				if ( $package_addons )	{
+					foreach( $package_addons as $package_addon )	{
+						$all_addons[] = mdjm_get_addon( $package_addon );
+					}
+				}
+
+			}
+
+		} else	{
+			$all_addons = mdjm_get_addons( array( 'suppress_filters' => false ) );
+		}
+
+		if ( ! empty( $all_addons ) )	{
+
+			foreach( $all_addons as $addon )	{
+				if ( isset( $this->request['employee_id'] ) && ! mdjm_employee_has_addon( $addon->ID, $this->request['employee_id'] ) )	{
+					continue;
+				}
+				if ( isset( $this->request['event_month'] ) && ! mdjm_addon_is_available_for_event_date( $addon->ID, $this->request['event_month'] ) )	{
+					continue;
+				}
+				if ( isset( $this->request['event_type'] ) && ! mdjm_addon_is_available_for_event_type( $addon->ID, $this->request['event_type'] ) )	{
+					continue;
+				}
+
+				$addons[] = $addon->ID;
+
+			}
+		}			
+
+		if ( empty( $addons ) )	{
+			$error = array();
+			$error['error'] = __( 'No addons found.', 'mobile-dj-manager' );
+			
+			$this->data = $error;
+			$this->output();
+		}
+
+		$response['addons'] = array();
+		$i = 0;
+
+		foreach ( $addons as $addon )	{
+			$response['addons'][ $addon ] = mdjm_get_addon_data( $addon );
+			$i++;
+		}
+
+		$response['count'] = $i;
+
+		$this->data = array_merge( $this->data, $response );
+
+		do_action( 'mdjm_after_api_list_addons', $this );
+
+		$this->output();
+
+	} // list_addons
 
 } // MDJM_API
