@@ -637,7 +637,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 	return $caps;
 	
 } // mdjm_addon_map_meta_cap
-add_filter( 'map_meta_cap', 'mdjm_addon_map_meta_cap', 10, 4 );
+//add_filter( 'map_meta_cap', 'mdjm_addon_map_meta_cap', 10, 4 );
 
 /**
  * Save the meta data for the addon

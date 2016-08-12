@@ -98,7 +98,7 @@ function mdjm_register_post_types()	{
 			'description'             => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
 			'public'                  => true,
 			'show_in_menu'            => 'edit.php?post_type=mdjm-package',
-			'capability_type'		  => 'post',
+			//'capability_type'		  => 'post',
 			/*'capabilities'            => apply_filters( 'mdjm_package_caps', array(
 				'publish_posts'       => 'publish_mdjm_packages',
 				'edit_posts'          => 'edit_mdjm_packages',
@@ -142,20 +142,6 @@ function mdjm_register_post_types()	{
 			'description'             => __( 'Equipment Addons for the MDJM Event Management plugin', 'mobile-dj-manager' ),
 			'public'                  => true,
 			'show_in_menu'            => 'edit.php?post_type=mdjm-addon',
-			'capability_type'		  => 'post',
-			/*'capabilities'            => apply_filters( 'mdjm_package_caps', array(
-
-				'publish_posts'       => 'publish_mdjm_packages',
-				'edit_posts'          => 'edit_mdjm_packages',
-				'edit_others_posts'   => 'edit_others_mdjm_packages',
-				'delete_posts'        => 'delete_mdjm_packages',
-				'delete_others_posts' => 'delete_others_mdjm_packages',
-				'read_private_posts'  => 'read_private_mdjm_packages',
-				'edit_post'           => 'edit_mdjm_package',
-				'delete_post'         => 'delete_mdjm_package',
-				'read_post'           => 'read_mdjm_package',
-			) ),
-			'map_meta_cap'            => true,*/
 			'has_archive'             => true,
 			'rewrite'            	  => array( 'slug' => 'addons' ),
 			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
