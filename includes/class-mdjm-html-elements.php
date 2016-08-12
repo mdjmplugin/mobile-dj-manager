@@ -449,6 +449,59 @@ class MDJM_HTML_Elements {
 	} // client_dropdown
 
 	/**
+	 * Renders an HTML Dropdown of all users
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @param	arr		$args		Select list arguments. See @defaults.
+	 * @return	str		$output		Users dropdown
+	 */
+	public function users_dropdown( $args = array() ) {
+		$options  = array();
+
+		$defaults = array(
+			'name'             => 'users',
+			'class'            => '',
+			'id'               => '',
+			'selected'         => 0,
+			'chosen'           => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'show_option_all'  => _x( 'All Users', 'all dropdown items', 'mobile-dj-manager' ),
+			'show_option_none' => _x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' ),
+			'data'             => array()
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$selected = empty( $args['selected'] ) ? 0 : $args['selected'];
+
+		$users = get_users();
+				
+		if ( $users )	{
+			foreach( $users as $user )	{
+				$options[ $user->ID ] = $user->display_name;
+			}
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'class'            => $args['class'],
+			'id'               => $args['id'],
+			'selected'         => $selected,
+			'options'          => $options,
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder'],
+			'multiple'         => $args['multiple'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data']
+		) );
+
+		return $output;
+	} // users_dropdown
+
+	/**
 	 * Renders a dropdown list of packages.
 	 *
 	 * @since	1.3.7

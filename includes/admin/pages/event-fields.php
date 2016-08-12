@@ -465,7 +465,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			?>
 			
             <p>
-			<label class="mdjm-label" for="_mdjm_field_section"><?php _e( 'Section', 'mobile-dj-manager' ); ?>:</label><br />
+			<label for="_mdjm_field_section"><?php _e( 'Section', 'mobile-dj-manager' ); ?>:</label><br />
 			<select name="_mdjm_field_section" id="_mdjm_field_section">
 			<?php
 			foreach( $field_types as $type )	{
@@ -479,13 +479,13 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			</p>
             
 			<p>
-			<label class="mdjm-label" for="field_label"><?php _e( 'Label', 'mobile-dj-manager' ); ?>:</label><br />
+			<label for="field_label"><?php _e( 'Label', 'mobile-dj-manager' ); ?>:</label><br />
 			<input type="text" name="field_label" id="field_label" class="regular-text" value="<?php echo ( !empty( $editing ) ? 
 			get_the_title( $_GET['id'] ) : '' ); ?>" class="regular-text" required="required" />
 			</p>
 			
 			<p>
-			<label class="mdjm-label" for="_mdjm_field_type"><?php _e( 'Type', 'mobile-dj-manager' ); ?>:</label><br />
+			<label for="_mdjm_field_type"><?php _e( 'Type', 'mobile-dj-manager' ); ?>:</label><br />
 			<select name="_mdjm_field_type" id="_mdjm_field_type" onChange="whichField();">
 			<?php
 			foreach( $types as $type )	{
@@ -509,7 +509,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
             
             <div id="value_field_select">
 				<p>
-				<label class="mdjm-label" for="_mdjm_field_options"><?php _e( 'Selectable Options', 'mobile-dj-manager' ); ?>:</label><br />
+				<label for="_mdjm_field_options"><?php _e( 'Selectable Options', 'mobile-dj-manager' ); ?>:</label><br />
 				<textarea name="_mdjm_field_options" id="_mdjm_field_options" class="all-options" rows="5"><?php 
 					echo ( !empty( $editing ) ? get_post_meta( $_GET['id'], '_mdjm_field_options', true ) : '' ); ?></textarea><br />
                 <span class="description"><?php _e( 'One entry per line', 'mobile-dj-manager' ); ?></span>
@@ -517,7 +517,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
             </div>
             <div id="value_field_checkbox">
 				<p>
-				<label class="mdjm-label" for="_mdjm_field_value"><?php _e( 'Checked Value', 'mobile-dj-manager' ); ?>:</label><br />
+				<label for="_mdjm_field_value"><?php _e( 'Checked Value', 'mobile-dj-manager' ); ?>:</label><br />
 				<input type="text" name="_mdjm_field_value" id="_mdjm_field_value" value="<?php echo ( !empty( $editing ) ? 
 					get_post_meta( $_GET['id'], '_mdjm_field_value', true ) : '1' ); ?>" class="small-text" />
 				</p>
@@ -528,7 +528,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					if( !empty( $editing ) )
 						checked( '1', get_post_meta( $_GET['id'], '_mdjm_field_checked', true ) );
 					?> 
-                    />&nbsp;<label class="mdjm-label" for="_mdjm_field_checked"><?php _e( 'Checked by Default', 'mobile-dj-manager' ); ?>?</label>
+                    />&nbsp;<label for="_mdjm_field_checked"><?php _e( 'Checked by Default', 'mobile-dj-manager' ); ?>?</label>
 				</p>
             </div>
             
@@ -554,7 +554,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
             </script>
             
 			<p>
-			<label class="mdjm-label" for="field_desc"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
+			<label for="field_desc"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
 			<input type="text" name="field_desc" id="field_desc" value="<?php echo ( !empty( $editing ) ? 
 			get_the_content( $_GET['id'] ) : '' ); ?>" class="regular-text" /><br />
 			<span class="description"><?php _e( "Not visible to client's", 'mobile-dj-manager' ); ?></span>
@@ -724,7 +724,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 						
 					}
 					?>
-					<label for="<?php echo $name; ?>" class="mdjm-label"><?php echo get_the_title( $field->ID ); ?>:</label>
+					<label for="<?php echo $name; ?>"><?php echo get_the_title( $field->ID ); ?>:</label>
 					
 					<?php
 					if( $type != 'checkbox' )

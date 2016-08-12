@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.8.2
+Stable tag: 1.3.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,50 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.3.8.5 =
+
+**Released Thursday 28th July, 2016**
+
+**Bug Fixes**
+
+* Corrected message parameter when data is missing from contract signing form. Fixes issue [#124](https://github.com/mdjm/mobile-dj-manager/issues/124/ "Issue #124")
+* Better validation of checkboxes for contract signing form. Fixes issue [#126](https://github.com/mdjm/mobile-dj-manager/issues/126/ "Issue #126")
+* User ID is not converted to integer value in URL string. Fixes issue [#125](https://github.com/mdjm/mobile-dj-manager/issues/125/ "Issue #125")
+* Spelling correction in div class
+
+**Tweaks**
+
+* Use new alert class when contract is signed
+
+= 1.3.8.4 =
+
+**Released Sunday 24th July, 2016**
+
+**Bug Fixes**
+* Corrected content tag for retrieving `{dj_email}`. Fixes issue [#121](https://github.com/mdjm/mobile-dj-manager/issues/121/ "Issue #121")
+
+**New**
+* Added `{dj_lastname}` content tag.
+
+**Tweaks**
+* Added `mdjm_get_employee_phone()` and `mdjm_get_employee_alt_phone()` functions
+* Added `mdjm_get_client_login()` and `mdjm_get_client_alt_phone()` functions
+
+= 1.3.8.3 =
+
+**Released Wednesday 20th July, 2016**
+
+**Bug Fixes**
+* Corrected hook for setting custom artist label. `DJ` will now be correctly substituted. Fixes issue [#104](https://github.com/mdjm/mobile-dj-manager/issues/104/ "Issue #104")
+* `mdjm_get_addons()` and `mdjm_get_packages()` may have generated a PHP notice if no add-ons/packages were defined. Fixes issue [#118](https://github.com/mdjm/mobile-dj-manager/issues/118/ "Issue #118")
+
+**New**
+* Added `{final_balance}` content tag. Outputs the final balance payment for an event. Total cost minus deposit, even if the deposit is unpaid
+
+**Tweaks**
+* Added `mdjm-tick` css class within admin
+* Input labels are no longer bold on the admin event screen
 
 = 1.3.8.2 =
 

@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
  * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
- * Version: 1.3.8.2
- * Date: 12 July 2016
+ * Version: 1.3.8.5
+ * Date: 28 July 2016
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -38,6 +38,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
 		
+		public $api;
+		
 		public $content_tags;
 		
 		public $cron;
@@ -66,7 +68,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 * @return	The one true Mobile_DJ_Manager
 		 */
 		public static function instance()	{
-			global $mdjm, $mdjm_debug, $clientzone;
+			global $mdjm, $mdjm_debug, $clientzone, $wp_version;
 			
 			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
 				self::$instance = new Mobile_DJ_Manager;
@@ -81,6 +83,11 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->debug          = new MDJM_Debug();
 				$mdjm_debug                     = self::$instance->debug; // REMOVE POST 1.3
 				self::$instance->events         = new MDJM_Events();
+
+				if ( version_compare( floatval( $wp_version ), '4.4', '>=' ) )	{
+					self::$instance->api            = new MDJM_API();
+				}
+
 				self::$instance->content_tags   = new MDJM_Content_Tags();
 				self::$instance->cron           = new MDJM_Cron();
 				self::$instance->emails         = new MDJM_Emails();
@@ -122,7 +129,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.3.8.2' );
+			define( 'MDJM_VERSION_NUM', '1.3.8.5' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -163,6 +170,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			}
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/api/class-mdjm-api.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
@@ -236,6 +244,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/emails.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/contextual-help.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/templates/metaboxes.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/tools.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/txns.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/metaboxes.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/taxonomies.php' );

@@ -414,10 +414,10 @@ class MDJM_Event {
 				}
 				
 			}
+		
+			$this->employees = $employees;
 			
 		}
-
-		$this->employees = $employees;
 		
 		return $this->employees;
 	} // get_all_employees
@@ -1038,7 +1038,7 @@ class MDJM_Event {
 	 */
 	public function get_playlist_code() {
 		if ( ! isset( $this->playlist_code ) ) {
-			$this->playlist_code = get_post_meta( $this->ID, '_mdjm_playlist_access', true );
+			$this->playlist_code = get_post_meta( $this->ID, '_mdjm_event_playlist_access', true );
 		}
 		
 		return apply_filters( 'mdjm_guest_playlist_code', $this->playlist_code, $this->ID );

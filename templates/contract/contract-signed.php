@@ -29,7 +29,7 @@ global $mdjm_event;
         <p><?php printf( __( 'The contract for your %s taking place on %s is displayed below.', 'mobile-dj-manager' ),
                 mdjm_get_label_singular( true ), '{event_date}' ); ?></p>
         
-        <p class="mdjm-contract-signed"><span><?php _e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
+        <p class="mdjm-alert mdjm-alert-success"><span style="font-weight: bold;"><?php _e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
             <?php printf( __( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
                 '{contract_date}',
                 '{contract_signatory}' ); ?><br />
