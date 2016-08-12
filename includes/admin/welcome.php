@@ -131,7 +131,13 @@ class MDJM_Welcome {
 			<p class="about-text">
 				<?php _e( 'Thank you for updating to the latest version!', 'mobile-dj-manager' ); ?>
                 <br />
-                <?php printf( __( 'MDJM Event Management %s is ready to make your events business even more efficient!', 'mobile-dj-manager' ), $display_version ); ?>
+                <?php
+                	printf(
+						__( 'MDJM Event Management %s is ready to make your %s business even more efficient!', 'mobile-dj-manager' ),
+						$display_version,
+						mdjm_get_label_plural( true )
+					);
+				?>
 			</p>
 		</div>
 		<?php

@@ -53,7 +53,6 @@
 												
 				/* -- Hooks -- */
 				add_action( 'init', array( &$this, 'mdjm_init' ) ); // init processes
-				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
 				
 				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
@@ -74,31 +73,7 @@
 				/* -- Obtain the plugin settings -- */
 				$this->mdjm_settings();				
 			} // mdjm_init
-	
-/*
- * --
- * ADMIN_INIT HOOK
- * --
- */
-	 		/*
-			 * mdjm_admin_init
-			 * functions called from the admin_init hook
-			 * 
-			 *
-			 */
-	 		public function mdjm_admin_init()	{
-				// Release notes check
-				if( get_option( 'mdjm_updated' ) == 1 && is_admin() )	{
-					MDJM()->debug->log_it( '*** Redirect to release notes ***' );
-					// Reset the key telling us an update occured
-					update_option( 'mdjm_updated', '0' );
-					
-					// Redirect to the release notes after upgrade
-					wp_redirect( admin_url( 'index.php?page=mdjm-about' ) );
-					exit;
-				}
-			} // mdjm_admin_init
-			
+				
 /*
  *
  * PLUGINS LOADED HOOK
@@ -199,19 +174,12 @@
 					array( 'jquery' ),
 					MDJM_VERSION_NUM
 				);
-								
-				/* -- YouTube Suscribe Script -- */
-				// Needs to be enqueued as and when required
-				wp_register_script( 'youtube-subscribe', 'https://apis.google.com/js/platform.js' );
 				
 				if( in_array( get_post_type(), $mdjm_post_types ) || ( isset( $_GET['section'] ) && $_GET['section'] == 'mdjm_custom_event_fields' ) )	{
 					/* -- mdjm-posts.css: The CSS script for all custom post pages -- */
 					wp_register_style( 'mdjm-posts', MDJM_PLUGIN_URL . '/assets/css/mdjm-posts.css', '', MDJM_VERSION_NUM );
 					wp_enqueue_style( 'mdjm-posts' );
-					
-					/* -- jQuery -- */
-					//wp_enqueue_script( 'jquery' );
-					
+										
 					/* -- jQuery Validation -- */
 					wp_enqueue_script( 'jquery-validation-plugin' );
 								
@@ -226,13 +194,7 @@
 						wp_register_script( 'mdjm-email-val', MDJM_PLUGIN_URL . '/assets/js/mdjm-email-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-email-val' );
 					}
-				
-				/* -- Event Posts Only -- */
-					/*if( get_post_type() == MDJM_EVENT_POSTS )	{
-						wp_register_script( 'mdjm-event-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-event-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
-						wp_enqueue_script( 'mdjm-event-js' );
-					}*/
-					
+									
 				/* -- Transaction Posts Only -- */
 					if( get_post_type() == MDJM_TRANS_POSTS )	{
 						wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
@@ -293,21 +255,6 @@
  * GENERAL
  * --
  */			
-			/**
-			 * Send the specified message to the debug file
-			 *
-			 * @param       str             Required: $debug_msg    The message to log
-			 *                      bool    Optional: $stampit      true to include timestamp otherwise false
-			 * @return
-			 * @since       1.1.3
-			 * @called From back and front
-			 */
-			public function debug_logger( $debug_msg='', $stampit=false )   {
-				if( empty( $debug_msg ) )
-					return;
-			   
-				MDJM()->debug->log_it( $debug_msg, $stampit );
-			} // debug_logger
  
 			/**
 			 * Provide the correct page link dependant on permalink settings
