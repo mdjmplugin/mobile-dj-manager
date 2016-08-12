@@ -29,12 +29,10 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-small	{
 	font-size: 11px;	
 }
-#mdjm-loader	{
-	max-width: 20px;
-	margin: auto;
-	border: none;
-	background-image: url('../images/loading.gif');
+.mdjm-loader	{
+	background-image: url(../images/loading.gif);
 	background-repeat: no-repeat;
+	background-position: 98% 50%;
 }
 
 .mdjm-new	{
@@ -329,6 +327,12 @@ checkbox.mdjm-form-error {
     zoom: 1
 }
 
+.mdjm_remove_repeatable { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
+.mdjm_remove_repeatable:active,
+.mdjm_remove_repeatable:hover {
+	background-position: -10px 0!important
+}
+
 .mdjm_form_fields { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
@@ -416,3 +420,7 @@ checkbox.mdjm-form-error {
 #mdjm-event-actions #event-type-add { cursor: pointer; }
 
 #mdjm-new-event-type-row { display: none; vertical-align: top; }
+
+/* System Info page styles
+-------------------------------------------------------------- */
+#system-info-textarea { width: 800px; height: 400px; font-family: Menlo, Monaco, monospace; background: none; white-space: pre; overflow: auto; display: block; }

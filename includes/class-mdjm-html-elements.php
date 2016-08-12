@@ -58,34 +58,40 @@ class MDJM_HTML_Elements {
 	 * @param	int		$selected	Category to select automatically
 	 * @return	str		$output		Category dropdown
 	 */
-	public function event_type_dropdown( $name = 'mdjm_event_type', $selected = 0 ) {
+	public function event_type_dropdown( $args = array() ) {
 
-		$args = array(
+		$defaults = array(
+			'name'             => null,
+			'class'            => '',
+			'id'               => '',
+			'selected'         => mdjm_get_option( 'event_type_default' ),
+			'chosen'           => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'show_option_all'  => false,
+			'show_option_none' => false
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$cat_args = array(
 			'hide_empty' => false
 		);
 
-		$categories = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $args ) );
-		$options    = array();
-
-		if ( empty( $selected ) )	{
-			$selected = mdjm_get_option( 'event_type_default' );
-		}
+		$categories      = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $cat_args ) );
+		$args['options'] = array();
 
 		foreach ( $categories as $category ) {
-			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
+			$args['options'][ absint( $category->term_id ) ] = esc_html( $category->name );
 		}
 
 		$category_labels = mdjm_get_taxonomy_labels( 'event-types' );
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+		$output = $this->select( $args );
 
 		return $output;
+
 	} // event_type_dropdown
+
 	/**
 	 * Renders an HTML Dropdown of all the Enquiry Sources
 	 *
@@ -243,26 +249,40 @@ class MDJM_HTML_Elements {
 	 *
 	 * @access	public
 	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Month to select automatically
+	 * @param	arr		$args		see @defaults.
 	 * @return	str		$output		Month dropdown
 	 */
-	public function month_dropdown( $name = 'month', $selected = 0 ) {
+	public function month_dropdown( $args ) {
+
+		$defaults = array(
+			'name'        => 'month',
+			'selected'    => 0,
+			'fullname'    => false,
+			'multiple'    => false,
+			'chosen'      => false,
+			'placeholder' => __( 'Select a Month', 'mobile-dj-manager' )
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
 		$month   = 1;
 		$options = array();
-		$selected = empty( $selected ) ? date( 'n' ) : $selected;
+		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? date( 'n' ) : $args['selected'];
 
 		while ( $month <= 12 ) {
-			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month );
+			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $args['fullname'] );
 			$month++;
 		}
 
 		$output = $this->select( array(
-			'name'             => $name,
+			'name'             => $args['name'],
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_none' => false,
+			'multiple'         => $args['multiple'],
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder']
 		) );
 
 		return $output;
@@ -283,17 +303,16 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( ' - Select Employee -', 'mobile-dj-manager' ),
+			'show_option_none' => '',
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
 			'role'             => '',
 			'group'            => false,
 			'exclude'          => false,
-			'placeholder'      => null,
+			'placeholder'      => __( 'Select an Employee', 'mobile-dj-manager' ),
 			'multiple'         => false,
-			'package'          => '',
-			'cost'             => true,
+			'blank_first'      => true,
 			'data'             => array()
 		);
 		
@@ -303,34 +322,36 @@ class MDJM_HTML_Elements {
 		$employees = mdjm_get_employees( $args['role'] );
 
 		if ( $employees )	{
-			$results['role'] = array();
-
 			foreach( $employees as $employee )	{
-				if( $employee->roles[0] == 'administrator' && ! empty( $employee->roles[1] ) )	{
-					$employee->roles[0] = $employee->roles[1];
-				} else	{
-					$employee->roles[0] = 'dj';
+				$roles = array_values( $employee->roles );
+				$role  = $roles[0];
+
+				if( $role == 'administrator' )	{
+					if ( ! empty( $roles[1] ) )	{
+						$role = $roles[1];
+					} else	{
+						$role = 'dj';
+					}
 				}
-				
+
 				if( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )	{
 					continue;
 				}
-				
-				$results['role'][ $employee->roles[0] ][] = $employee;
-			}
 
-			foreach( $results['role'] as $role => $userobj )	{
-
-				foreach( $userobj as $user )	{
-					$employee_list[ $user->ID ] = $user->display_name;
+				if ( ! empty( $args['group'] ) )	{
+					$options['groups'][ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = array( $employee->ID => $employee->display_name );
+				} else	{
+					$options[ $user->ID ] = $user->display_name;
 				}
-
-				if( $args['group'] )	{
-					$groups[ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = $employee_list;
-				}
-	
 			}
+		}
 
+		if ( ! empty( $options ) )	{
+			if ( ! empty( $options['groups'] ) )	{
+				ksort( $options['groups'] );
+			} else	{
+				asort( $options );
+			}
 		}
 
 		$output = $this->select( array(
@@ -338,12 +359,13 @@ class MDJM_HTML_Elements {
 			'class'            => $args['class'],
 			'id'               => $args['id'],
 			'selected'         => $args['selected'],
-			'options'          => empty( $args['group'] ) ? $employee_list : array( 'groups' => $groups ),
+			'options'          => $options,
 			'chosen'           => $args['chosen'],
 			'placeholder'      => $args['placeholder'],
 			'multiple'         => $args['multiple'],
 			'show_option_none' => $employees ? $args['show_option_none'] : __( 'No Employees', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
+			'show_option_all'  => $args['show_option_all'],
+			'blank_first'      => $args['blank_first'],
 			'data'             => $args['data']
 		) );
 
@@ -362,21 +384,18 @@ class MDJM_HTML_Elements {
 	public function roles_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'             => 'mdjm_employee_roles',
-			'value'            => '',
-			'options'          => mdjm_get_roles(),
-			'show_option_none' => __( ' - Select Role -', 'mobile-dj-manager' )
+			'name'        => 'mdjm_employee_roles',
+			'value'       => '',
+			'options'     => mdjm_get_roles(),
+			'blank_first' => true,
+			'placeholder' => __( 'Select Role', 'mobile-dj-manager' ),
+			'chosen'      => false
 		);
 
-		$args     = wp_parse_args( $args, $defaults );
-		$options  = array();
+		$args             = wp_parse_args( $args, $defaults );
+		$args['options']  = mdjm_get_roles();
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'value'            => $args['value'],
-			'options'          => mdjm_get_roles(),
-			'show_option_none' => $args['show_option_none']
-		) );
+		$output = $this->select( $args );
 
 		return $output;
 
@@ -449,6 +468,59 @@ class MDJM_HTML_Elements {
 	} // client_dropdown
 
 	/**
+	 * Renders an HTML Dropdown of all users
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @param	arr		$args		Select list arguments. See @defaults.
+	 * @return	str		$output		Users dropdown
+	 */
+	public function users_dropdown( $args = array() ) {
+		$options  = array();
+
+		$defaults = array(
+			'name'             => 'users',
+			'class'            => '',
+			'id'               => '',
+			'selected'         => 0,
+			'chosen'           => false,
+			'placeholder'      => null,
+			'multiple'         => false,
+			'show_option_all'  => _x( 'All Users', 'all dropdown items', 'mobile-dj-manager' ),
+			'show_option_none' => _x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' ),
+			'data'             => array()
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$selected = empty( $args['selected'] ) ? 0 : $args['selected'];
+
+		$users = get_users();
+				
+		if ( $users )	{
+			foreach( $users as $user )	{
+				$options[ $user->ID ] = $user->display_name;
+			}
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'class'            => $args['class'],
+			'id'               => $args['id'],
+			'selected'         => $selected,
+			'options'          => $options,
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder'],
+			'multiple'         => $args['multiple'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data']
+		) );
+
+		return $output;
+	} // users_dropdown
+
+	/**
 	 * Renders a dropdown list of packages.
 	 *
 	 * @since	1.3.7
@@ -465,9 +537,14 @@ class MDJM_HTML_Elements {
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
-			'placeholder'      => null,
+			'event_type'       => false,
+			'event_date'       => false,
+			'placeholder'      => __( 'Select a Package', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'cost'             => true,
+			'titles'           => false,
+			'options_only'     => false,
+			'blank_first'      => true,
 			'data'             => array()
 		);
 		
@@ -481,42 +558,49 @@ class MDJM_HTML_Elements {
 		if ( $packages )	{
 
 			foreach( $packages as $package )	{
-				if ( empty( $package['enabled'] ) || $package['enabled'] != 'Y' )	{
-					continue;
-				}
 
 				if( $args['employee'] )	{	
-					$employees_with = explode( ',', $package['djs'] );
-					
-					if( ! in_array( $args['employee'], $employees_with ) )	{
+					if( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_type'] )	{
+					if ( ! mdjm_package_is_available_for_event_type( $package->ID, $args['event_type'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_date'] )	{
+					if ( ! mdjm_package_is_available_for_event_date( $package->ID, $args['event_date'] ) )	{
 						continue;
 					}
 				}
 
 				$price = '';
 				if( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $package['cost'] ) ) ;
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $package->ID ) ) ) ;
 				}
 
-				$options[ $package['slug'] ] = stripslashes( esc_attr( $package['name'] ) ) . $price;
+				$args['options'][ $package->ID ] = $package->post_title . '' . $price;
+
+				if ( $args['titles'] )	{
+					$titles[ $package->ID ] = mdjm_get_package_excerpt( $package->ID );
+				}
 
 			}
 
+		} 
+
+		if ( empty( $args['options'] ) )	{
+			$args['placeholder'] = __( 'No Packages Available', 'mobile-dj-manager' );
 		}
-		
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'class'            => $args['class'],
-			'id'               => $args['id'],
-			'selected'         => $args['selected'],
-			'options'          => $options,
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder'],
-			'multiple'         => $args['multiple'],
-			'show_option_none' => $packages ? $args['show_option_none'] : __( 'No packages available', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
-			'data'             => $args['data']
-		) );
+
+		if ( ! empty( $titles ) )	{
+			$args['titles'] = $titles;
+		}
+
+		$output = $this->select( $args );
 
 		return $output;
 
@@ -535,80 +619,99 @@ class MDJM_HTML_Elements {
 			'id'               => '',
 			'class'            => '',
 			'selected'         => '',
-			'show_option_none' => __( 'No Package', 'mobile-dj-manager' ),
+			'show_option_none' => __( 'No Addons', 'mobile-dj-manager' ),
 			'show_option_all'  => false,
 			'chosen'           => false,
 			'employee'         => false,
+			'event_type'       => false,
+			'event_date'       => false,
 			'placeholder'      => null,
 			'multiple'         => true,
 			'package'          => '',
 			'cost'             => true,
+			'desc'             => false,
+			'titles'           => false,
+			'options_only'     => false,
+			'blank_first'      => false,
 			'data'             => array()
 		);
 		
 		$args    = wp_parse_args( $args, $defaults );
 		$options = array();
-
-		$addons     = mdjm_get_addons();
-		$categories = get_option( 'mdjm_cats' );
-		if( $categories )	{
-			asort( $categories );
-		}
+		$titles  = array();
+		$addons  = mdjm_get_addons();
 
 		if ( $addons )	{
-			foreach( $categories as $category_key => $category_value )	{
-				
-				foreach( $addons as $addon )	{
-					if ( empty( $addon[6] ) || $addon[6] != 'Y' )	{
+			foreach( $addons as $addon )	{
+				if ( ! empty( $args['package'] ) )	{
+					if ( is_numeric( $args['package'] ) )	{
+						$package = mdjm_get_package( $args['package'] );
+					} else	{
+						$package = mdjm_get_package_by( 'slug', $args['package'] );
+					}
+
+					if ( $package )	{
+						$package_items = mdjm_get_package_addons( $package->ID );
+					}
+
+					if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) )	{
 						continue;
 					}
-
-					if ( ! empty( $args['package'] ) )	{
-						$packages = mdjm_get_packages();
-						$package_items = explode( ',', $packages[ $args['package'] ]['equipment'] );
-						
-						if ( ! empty( $package_items ) && in_array( $addon[1], $package_items ) )	{
-							continue;
-						}
-					}
-
-					if( $args['employee'] )	{	
-						$employees_with = explode( ',', $addon[8] );
-						
-						if( ! in_array( $args['employee'], $employees_with ) )	{
-							continue;
-						}
-					}
-
-					if( $addon[5] == $category_key )	{
-						$price = '';
-						if( $args['cost'] == true )	{
-							$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $addon[7] ) ) ;
-						}
-
-						$options['groups'][ $category_value ][] = array( $addon[1] => stripslashes( esc_attr( $addon[0] ) ) . $price );
-
-					}
-
 				}
-				
-			}
 
+				if ( ! empty( $args['employee'] ) )	{
+					if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_type'] )	{
+					if ( ! mdjm_addon_is_available_for_event_type( $addon->ID, $args['event_type'] ) )	{
+						continue;
+					}
+				}
+
+				if ( $args['event_date'] )	{
+					if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
+						continue;
+					}
+				}
+
+				$price = '';
+				if( $args['cost'] == true )	{
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
+				}
+				$desc           = '';
+
+				if( $args['desc'] )	{
+					$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, $args['desc'] );
+				}
+
+				$term  = '';
+				$terms = get_the_terms( $addon->ID, 'addon-category' );
+
+				if ( ! empty( $terms ) )	{
+					$term = esc_html( $terms[0]->name );
+				}
+
+				$args['options']['groups'][ $term ][] = array( $addon->ID => $addon->post_title . $price . $desc );
+
+				if ( $args['titles'] )	{
+					$titles[ $addon->ID ] = mdjm_get_addon_excerpt( $addon->ID );
+				}
+
+			}
 		}
-		
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'class'            => $args['class'],
-			'id'               => $args['id'],
-			'selected'         => $args['selected'],
-			'options'          => $options,
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder'],
-			'multiple'         => $args['multiple'],
-			'show_option_none' => $addons ? $args['show_option_none'] : __( 'No add-ons available', 'mobile-dj-manager' ),
-			'show_option_all'  => false,
-			'data'             => $args['data']
-		) );
+
+		if ( ! empty( $args['options']['groups'] ) )	{
+			ksort( $args['options']['groups'] );
+		}
+
+		if ( ! empty( $titles ) )	{
+			$args['titles'] = $titles;
+		}
+
+		$output = $this->select( $args );
 
 		return $output;
 
@@ -767,8 +870,11 @@ class MDJM_HTML_Elements {
 			'chosen'           => false,
 			'placeholder'      => null,
 			'multiple'         => false,
+			'blank_first'      => false,
 			'show_option_all'  => false,
 			'show_option_none' => false,
+			'options_only'     => false,
+			'titles'           => false,
 			'data'             => array(),
 		);
 
@@ -799,8 +905,16 @@ class MDJM_HTML_Elements {
 			$placeholder = '';
 		}
 
+		$output = '';
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select name="' . esc_attr( $args['name'] ) . '' . $multi . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+
+		if ( ! $args['options_only'] )	{
+			$output .= '<select name="' . esc_attr( $args['name'] ) . '' . $multi . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+		}
+
+		if ( $args['blank_first'] )	{
+			$output .= '<option value=""></option>' . "\n";
+		}
 
 		if ( $args['show_option_all'] ) {
 			if( $args['multiple'] ) {
@@ -825,14 +939,18 @@ class MDJM_HTML_Elements {
 			if ( ! isset( $args['options']['groups'] ) )	{
 
 				foreach( $args['options'] as $key => $option ) {
-	
 					if( $args['multiple'] && is_array( $args['selected'] ) ) {
-						$selected = selected( true, in_array( $key, $args['selected'], true ), false );
+						$selected = selected( true, in_array( $key, $args['selected'] ), false );
 					} else {
 						$selected = selected( $args['selected'], $key, false );
 					}
-	
-					$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+
+					$title = '';
+					if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+						$title = ' title="' . $args['titles'][ $key ] . '"';
+					}
+
+					$output .= '<option value="' . esc_attr( $key ) . '"' . $title . '' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 				}
 				
 			} else	{
@@ -846,14 +964,19 @@ class MDJM_HTML_Elements {
 
 					foreach( $items as $options ) {
 						foreach ( $options as $key => $option )	{
-	
+
+							$title = '';
 							if( $args['multiple'] && is_array( $args['selected'] ) ) {
-								$selected = selected( true, in_array( $key, $args['selected'], true ), false );
+								$selected = selected( true, in_array( $key, $args['selected'] ), false );
 							} else {
 								$selected = selected( $args['selected'], $key, false );
 							}
-			
-							$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+
+							if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+								$title = ' title="' . $args['titles'][ $key ] . '"';
+							}
+
+							$output .= '<option value="' . esc_attr( $key ) . '"' . $title . '' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 						}
 					}
 
@@ -869,7 +992,9 @@ class MDJM_HTML_Elements {
 			}
 		}
 
-		$output .= '</select>' . "\r\n";
+		if ( ! $args['options_only'] )	{
+			$output .= '</select>' . "\r\n";
+		}
 
 		return $output;
 	} // select

@@ -20,7 +20,136 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_register_post_types()	{
+
+	// Event Post Type
+	$event_labels = apply_filters( 
+		'mdjm_event_labels',
+		array(
+			'name'               => _x( '%2$s', 'post type general name', 'mobile-dj-manager' ),
+			'singular_name'      => _x( '%1$s', 'post type singular name', 'mobile-dj-manager' ),
+			'menu_name'          => _x( 'MDJM %2$s', 'admin menu', 'mobile-dj-manager' ),
+			'name_admin_bar'     => _x( '%1$s', 'add new on admin bar', 'mobile-dj-manager' ),
+			'add_new'            => __( 'Create %1$s', 'mobile-dj-manager' ),
+			'add_new_item'       => __( 'Create New %1$s', 'mobile-dj-manager' ),
+			'new_item'           => __( 'New %1$s', 'mobile-dj-manager' ),
+			'edit_item'          => __( 'Edit %1$s', 'mobile-dj-manager' ),
+			'view_item'          => __( 'View %1$s', 'mobile-dj-manager' ),
+			'all_items'          => __( 'All %2$s', 'mobile-dj-manager' ),
+			'search_items'       => __( 'Search %2$s', 'mobile-dj-manager' ),
+			'not_found'          => __( 'No %3$s found.', 'mobile-dj-manager' ),
+			'not_found_in_trash' => __( 'No %3$s found in Trash.', 'mobile-dj-manager' )
+		)
+	);
 	
+	foreach ( $event_labels as $key => $value ) {
+	   $event_labels[ $key ] = sprintf( $value, mdjm_get_label_singular(), mdjm_get_label_plural(), mdjm_get_label_plural( true ) );
+	}
+		
+	$event_args = array(
+		'labels'                  => $event_labels,
+		'description'             => __( 'MDJM Events', 'mobile-dj-manager' ),
+		'show_ui'                 => true,
+		'show_in_menu'            => true,
+		'menu_position'           => defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : 58.4,
+		'show_in_admin_bar'       => true,
+		'capability_type'         => 'mdjm_event',
+		'capabilities'            => apply_filters( 'mdjm_event_caps', array(
+			'publish_posts'       => 'publish_mdjm_events',
+			'edit_posts'          => 'edit_mdjm_events',
+			'edit_others_posts'   => 'edit_others_mdjm_events',
+			'delete_posts'        => 'delete_mdjm_events',
+			'delete_others_posts' => 'delete_others_mdjm_events',
+			'read_private_posts'  => 'read_private_mdjm_events',
+			'edit_post'           => 'edit_mdjm_event',
+			'delete_post'         => 'delete_mdjm_event',
+			'read_post'           => 'read_mdjm_event',
+		) ),
+		'map_meta_cap'            => true,
+		'has_archive'             => true,
+		'supports'                => apply_filters( 'mdjm_event_supports', array( 'title' ) ),
+		'menu_icon'               => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
+		'taxonomies'              => array( 'mdjm-event' )
+	);
+	register_post_type( 'mdjm-event', apply_filters( 'mdjm_event_post_type_args', $event_args ) );
+
+	if ( mdjm_packages_enabled() )	{
+		// Packages Post Type
+		$package_labels = apply_filters( 
+			'mdjm_package_labels',
+			array(
+				'name'                  => _x( 'Packages', 'post type general name', 'mobile-dj-manager' ),
+				'singular_name'         => _x( 'Package', 'post type singular name', 'mobile-dj-manager' ),
+				'menu_name'             => _x( 'Packages', 'admin menu', 'mobile-dj-manager' ),
+				'name_admin_bar'        => _x( 'Package', 'add new on admin bar', 'mobile-dj-manager' ),
+				'add_new'               => __( 'Add Package', 'mobile-dj-manager' ),
+				'add_new_item'          => __( 'Add New Package', 'mobile-dj-manager' ),
+				'new_item'              => __( 'New Package', 'mobile-dj-manager' ),
+				'edit_item'             => __( 'Edit Package', 'mobile-dj-manager' ),
+				'view_item'             => __( 'View Package', 'mobile-dj-manager' ),
+				'all_items'             => __( 'All Packages', 'mobile-dj-manager' ),
+				'search_items'          => __( 'Search Packages', 'mobile-dj-manager' ),
+				'not_found'             => __( 'No packages found.', 'mobile-dj-manager' ),
+				'not_found_in_trash'	=> __( 'No packages found in Trash.', 'mobile-dj-manager' )
+			)
+		);
+			
+		$package_args = array(
+			'labels'                  => $package_labels,
+			'description'             => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+			'public'                  => true,
+			'show_in_menu'            => 'edit.php?post_type=mdjm-package',
+			//'capability_type'		  => 'post',
+			/*'capabilities'            => apply_filters( 'mdjm_package_caps', array(
+				'publish_posts'       => 'publish_mdjm_packages',
+				'edit_posts'          => 'edit_mdjm_packages',
+				'edit_others_posts'   => 'edit_others_mdjm_packages',
+				'delete_posts'        => 'delete_mdjm_packages',
+				'delete_others_posts' => 'delete_others_mdjm_packages',
+				'read_private_posts'  => 'read_private_mdjm_packages',
+				'edit_post'           => 'edit_mdjm_package',
+				'delete_post'         => 'delete_mdjm_package',
+				'read_post'           => 'read_mdjm_package',
+			) ),
+			'map_meta_cap'            => true,*/
+			'has_archive'             => true,
+			'rewrite'            	  => array( 'slug' => 'packages' ),
+			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
+		);
+		register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
+	
+		// Addons Post Type
+		$addon_labels = apply_filters( 
+			'mdjm_addon_labels',
+			array(
+				'name'                  => _x( 'Addons', 'post type general name', 'mobile-dj-manager' ),
+				'singular_name'         => _x( 'Addon', 'post type singular name', 'mobile-dj-manager' ),
+				'menu_name'             => _x( 'Addons', 'admin menu', 'mobile-dj-manager' ),
+				'name_admin_bar'        => _x( 'Addon', 'add new on admin bar', 'mobile-dj-manager' ),
+				'add_new'               => __( 'Add Addon', 'mobile-dj-manager' ),
+				'add_new_item'          => __( 'Add New Addon', 'mobile-dj-manager' ),
+				'new_item'              => __( 'New Addon', 'mobile-dj-manager' ),
+				'edit_item'             => __( 'Edit Addon', 'mobile-dj-manager' ),
+				'view_item'             => __( 'View Addon', 'mobile-dj-manager' ),
+				'all_items'             => __( 'All Addons', 'mobile-dj-manager' ),
+				'search_items'          => __( 'Search Addons', 'mobile-dj-manager' ),
+				'not_found'             => __( 'No addons found.', 'mobile-dj-manager' ),
+				'not_found_in_trash'	=> __( 'No addons found in Trash.', 'mobile-dj-manager' )
+			)
+		);
+			
+		$addon_args = array(
+			'labels'                  => $addon_labels,
+			'description'             => __( 'Equipment Addons for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+			'public'                  => true,
+			'show_in_menu'            => 'edit.php?post_type=mdjm-addon',
+			'has_archive'             => true,
+			'rewrite'            	  => array( 'slug' => 'addons' ),
+			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
+		);
+		register_post_type( 'mdjm-addon', apply_filters( 'mdjm_addon_post_type_args', $addon_args ) );
+
+	}
+
 	// Communication History Post Type
 	$email_history_labels = apply_filters( 
 		'mdjm_email_history_labels',
@@ -212,100 +341,6 @@ function mdjm_register_post_types()	{
 	);
 	register_post_type( 'email_template', apply_filters( 'mdjm_email_template_post_type_args', $email_template_args ) );
 	
-	// Packages Post Type
-	$package_labels = apply_filters( 
-		'mdjm_package_labels',
-		array(
-			'name'                  => _x( 'Event Packages', 'post type general name', 'mobile-dj-manager' ),
-			'singular_name'         => _x( 'Event Package', 'post type singular name', 'mobile-dj-manager' ),
-			'menu_name'             => _x( 'Event Packages', 'admin menu', 'mobile-dj-manager' ),
-			'name_admin_bar'        => _x( 'Event Package', 'add new on admin bar', 'mobile-dj-manager' ),
-			'add_new'               => __( 'Add Package', 'mobile-dj-manager' ),
-			'add_new_item'          => __( 'Add New Package', 'mobile-dj-manager' ),
-			'new_item'              => __( 'New Package', 'mobile-dj-manager' ),
-			'edit_item'             => __( 'Edit Package', 'mobile-dj-manager' ),
-			'view_item'             => __( 'View Package', 'mobile-dj-manager' ),
-			'all_items'             => __( 'All Packages', 'mobile-dj-manager' ),
-			'search_items'          => __( 'Search Packages', 'mobile-dj-manager' ),
-			'not_found'             => __( 'No packages found.', 'mobile-dj-manager' ),
-			'not_found_in_trash'	=> __( 'No packages found in Trash.', 'mobile-dj-manager' )
-		)
-	);
-		
-	$package_args = array(
-		'labels'                  => $package_labels,
-		'description'             => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'show_ui'                 => true,
-		'show_in_menu'            => 'edit.php?post_type=mdjm-package',
-		'capability_type'		  => 'mdjm_template',
-		'capabilities'            => apply_filters( 'mdjm_package_caps', array(
-			'publish_posts'       => 'publish_mdjm_packages',
-			'edit_posts'          => 'edit_mdjm_packages',
-			'edit_others_posts'   => 'edit_others_mdjm_packages',
-			'delete_posts'        => 'delete_mdjm_packages',
-			'delete_others_posts' => 'delete_others_mdjm_packages',
-			'read_private_posts'  => 'read_private_mdjm_packages',
-			'edit_post'           => 'edit_mdjm_package',
-			'delete_post'         => 'delete_mdjm_package',
-			'read_post'           => 'read_mdjm_package',
-		) ),
-		'map_meta_cap'            => true,
-		'has_archive'             => true,
-		'supports'                => apply_filters( 'mdjm_package_supports', array( 'title' ) )
-	);
-	register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
-	
-	// Event Post Type
-	$event_labels = apply_filters( 
-		'mdjm_event_labels',
-		array(
-			'name'               => _x( '%2$s', 'post type general name', 'mobile-dj-manager' ),
-			'singular_name'      => _x( '%1$s', 'post type singular name', 'mobile-dj-manager' ),
-			'menu_name'          => _x( 'MDJM %2$s', 'admin menu', 'mobile-dj-manager' ),
-			'name_admin_bar'     => _x( '%1$s', 'add new on admin bar', 'mobile-dj-manager' ),
-			'add_new'            => __( 'Create %1$s', 'mobile-dj-manager' ),
-			'add_new_item'       => __( 'Create New %1$s', 'mobile-dj-manager' ),
-			'new_item'           => __( 'New %1$s', 'mobile-dj-manager' ),
-			'edit_item'          => __( 'Edit %1$s', 'mobile-dj-manager' ),
-			'view_item'          => __( 'View %1$s', 'mobile-dj-manager' ),
-			'all_items'          => __( 'All %2$s', 'mobile-dj-manager' ),
-			'search_items'       => __( 'Search %2$s', 'mobile-dj-manager' ),
-			'not_found'          => __( 'No %3$s found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No %3$s found in Trash.', 'mobile-dj-manager' )
-		)
-	);
-	
-	foreach ( $event_labels as $key => $value ) {
-	   $event_labels[ $key ] = sprintf( $value, mdjm_get_label_singular(), mdjm_get_label_plural(), mdjm_get_label_plural( true ) );
-	}
-		
-	$event_args = array(
-		'labels'                  => $event_labels,
-		'description'             => __( 'MDJM Events', 'mobile-dj-manager' ),
-		'show_ui'                 => true,
-		'show_in_menu'            => true,
-		'menu_position'           => defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : 58.4,
-		'show_in_admin_bar'       => true,
-		'capability_type'         => 'mdjm_event',
-		'capabilities'            => apply_filters( 'mdjm_event_caps', array(
-			'publish_posts'       => 'publish_mdjm_events',
-			'edit_posts'          => 'edit_mdjm_events',
-			'edit_others_posts'   => 'edit_others_mdjm_events',
-			'delete_posts'        => 'delete_mdjm_events',
-			'delete_others_posts' => 'delete_others_mdjm_events',
-			'read_private_posts'  => 'read_private_mdjm_events',
-			'edit_post'           => 'edit_mdjm_event',
-			'delete_post'         => 'delete_mdjm_event',
-			'read_post'           => 'read_mdjm_event',
-		) ),
-		'map_meta_cap'            => true,
-		'has_archive'             => true,
-		'supports'                => apply_filters( 'mdjm_event_supports', array( 'title' ) ),
-		'menu_icon'               => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
-		'taxonomies'              => array( 'mdjm-event' )
-	);
-	register_post_type( 'mdjm-event', apply_filters( 'mdjm_event_post_type_args', $event_args ) );
-	
 	// Playlist Post Type
 	$playlist_labels = apply_filters( 
 		'mdjm_playlist_labels',
@@ -328,10 +363,10 @@ function mdjm_register_post_types()	{
 		
 	$playlist_args = array(
 		'labels'                 => $playlist_labels,
-		'description'			 => __( 'MDJM Event Management Playlist Entries', 'mobile-dj-manager' ),
-		'show_ui'				 => true,
-		'show_in_menu'	   	     => false,
-		'capability_type'	     => 'mdjm_playlist',
+		'description'            => __( 'MDJM Event Management Playlist Entries', 'mobile-dj-manager' ),
+		'show_ui'                => true,
+		'show_in_menu'           => false,
+		'capability_type'        => 'mdjm_playlist',
 		'capabilities'           => apply_filters( 'mdjm_playlist_caps', array(
 			'edit_post'          => 'edit_mdjm_playlist',
 			'read_post'          => 'read_mdjm_playlist',
@@ -342,8 +377,8 @@ function mdjm_register_post_types()	{
 			'read_private_posts' => 'read_private_mdjm_playlists'
 		) ),
 		'map_meta_cap'           => true,
-		'supports'           	 => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-playlist' )
+		'supports'               => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
+		'taxonomies'             => array( 'mdjm-playlist' )
 	);
 	register_post_type( 'mdjm-playlist', apply_filters( 'mdjm_playlist_post_type_args', $playlist_args ) );
 	
@@ -542,7 +577,9 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 
 	$allowed_taxonomies = apply_filters(
 		'mdjm_allowed_taxonomies',
-		array( 'event-types', 'mdjm-playlist', 'enquiry-source', 'mdjm-transactions', 'venue-details' )
+		array(
+			'addon-category', 'event-types', 'mdjm-playlist', 'enquiry-source', 'mdjm-transactions',
+			'package-category', 'venue-details' )
 	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
@@ -555,10 +592,12 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 	if ( false !== $taxonomy ) {
 		$singular = $taxonomy->labels->singular_name;
 		$name     = $taxonomy->labels->name;
+		$column   = ! empty( $taxonomy->labels->post_column_name ) ? $taxonomy->labels->post_column_name : false;
 
 		$labels = array(
 			'name'          => $name,
 			'singular_name' => $singular,
+			'column_name'   => $column ? $column : ''
 		);
 	}
 
@@ -846,6 +885,75 @@ function mdjm_get_post_statuses( $output = 'names' )	{
  * @return	void
  */
 function mdjm_register_taxonomies()	{
+
+	/** Packages */
+	$package_category_labels = array(
+		'name'                       => _x( 'Package Category', 'taxonomy general name', 'mobile-dj-manager' ),
+		'post_column_name'           => __( 'Categories', 'mobile-dj-manager' ),
+		'singular_name'              => _x( 'Package Category', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'               => __( 'Search Package Categories', 'mobile-dj-manager' ),
+		'all_items'                  => __( 'All Package Categories', 'mobile-dj-manager' ),
+		'edit_item'                  => __( 'Edit Package Category', 'mobile-dj-manager' ),
+		'update_item'                => __( 'Update Package Category', 'mobile-dj-manager' ),
+		'add_new_item'               => __( 'Add New Package Category', 'mobile-dj-manager' ),
+		'new_item_name'              => __( 'New Package Category', 'mobile-dj-manager' ),
+		'menu_name'                  => __( 'Event Package Categories', 'mobile-dj-manager' ),
+		'separate_items_with_commas' => NULL,
+		'choose_from_most_used'      => __( 'Choose from the most popular Package Categories', 'mobile-dj-manager' ),
+		'not_found'                  => __( 'No package categories found', 'mobile-dj-manager' )
+	);
+
+	$package_category_args = apply_filters( 'mdjm_package_category_args', array(
+			'hierarchical'          => true,
+			'labels'                => apply_filters( 'mdjm_package_category_labels', $package_category_labels ),
+			'query_var'             => true,
+			'rewrite'               => array( 'slug' => 'package-category' ),
+			'capabilities'          => apply_filters( 'mdjm_package_category_caps', array(
+				'manage_terms'          => 'manage_mdjm',
+				'edit_terms'            => 'manage_mdjm',
+				'delete_terms'          => 'manage_mdjm',
+				'assign_terms'          => 'mdjm_employee'
+			) ),
+			'update_count_callback' => '_update_generic_term_count'
+		)
+	);
+	register_taxonomy( 'package-category', array( 'mdjm-package' ), $package_category_args );
+	register_taxonomy_for_object_type( 'package-category', 'mdjm-package' );
+
+	/** Addons */
+	$addon_category_labels = array(
+		'name'                       => _x( 'Add-on Category', 'taxonomy general name', 'mobile-dj-manager' ),
+		'post_column_name'           => __( 'Categories', 'mobile-dj-manager' ),
+		'singular_name'              => _x( 'Add-on Category', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'               => __( 'Search Add-on Categories', 'mobile-dj-manager' ),
+		'all_items'                  => __( 'All Add-on Categories', 'mobile-dj-manager' ),
+		'edit_item'                  => __( 'Edit Add-on Category', 'mobile-dj-manager' ),
+		'update_item'                => __( 'Update Add-on Category', 'mobile-dj-manager' ),
+		'add_new_item'               => __( 'Add New Add-on Category', 'mobile-dj-manager' ),
+		'new_item_name'              => __( 'New Add-on Category', 'mobile-dj-manager' ),
+		'menu_name'                  => __( 'Event Add-on Categories', 'mobile-dj-manager' ),
+		'separate_items_with_commas' => NULL,
+		'choose_from_most_used'      => __( 'Choose from the most popular Add-on Categories', 'mobile-dj-manager' ),
+		'not_found'                  => __( 'No add-ons categories found', 'mobile-dj-manager' )
+	);
+
+	$addon_category_args = apply_filters( 'mdjm_addon_category_args', array(
+			'hierarchical'          => true,
+			'labels'                => apply_filters( 'mdjm_addon_category_labels', $addon_category_labels ),
+			'query_var'             => true,
+			'rewrite'               => array( 'slug' => 'addon-category' ),
+			'capabilities'          => apply_filters( 'mdjm_addon_category_caps', array(
+				'manage_terms'          => 'manage_mdjm',
+				'edit_terms'            => 'manage_mdjm',
+				'delete_terms'          => 'manage_mdjm',
+				'assign_terms'          => 'mdjm_employee'
+			) ),
+			'update_count_callback' => '_update_generic_term_count'
+		)
+	);
+	register_taxonomy( 'addon-category', array( 'mdjm-addon' ), $addon_category_args );
+	register_taxonomy_for_object_type( 'addon-category', 'mdjm-addon' );
+
 	/** Event Types */
 	$event_type_labels = array(
 		'name'              		   => _x( 'Event Type', 'taxonomy general name', 'mobile-dj-manager' ),

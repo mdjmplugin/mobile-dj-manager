@@ -24,7 +24,7 @@ function mdjm_admin_notices() {
 	global $mdjm_options;
 
 	// Unattended events
-	if( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
+	if ( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
 		$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
 		
 		if( ! empty( $unattended ) && $unattended > 0 )	{
@@ -37,7 +37,16 @@ function mdjm_admin_notices() {
 			echo '</div>';
 		}
 	}
-	
+
+	if( isset( $_GET['mdjm-message'] ) && 'upgrade-completed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-upgraded',
+			__( 'MDJM Event Management has been upgraded successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+
 	if( isset( $_GET['mdjm-message'] ) && 'song_removed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -47,7 +56,7 @@ function mdjm_admin_notices() {
 		);
 	}
 	
-	if( isset( $_GET['mdjm-message'] ) && 'song_remove_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'song_remove_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-remove-faled',
@@ -56,7 +65,7 @@ function mdjm_admin_notices() {
 		);
 	}
 	
-	if( isset( $_GET['mdjm-message'] ) && 'security_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'security_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-security-failed',
@@ -65,7 +74,7 @@ function mdjm_admin_notices() {
 		);
 	}
 	
-	if( isset( $_GET['mdjm-message'] ) && 'playlist_emailed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'playlist_emailed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-playlist-emailed',
@@ -74,7 +83,7 @@ function mdjm_admin_notices() {
 		);
 	}
 	
-	if( isset( $_GET['mdjm-message'] ) && 'playlist_email_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'playlist_email_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-playlist-email-failed',
@@ -83,7 +92,7 @@ function mdjm_admin_notices() {
 		);
 	}
 	
-	if( isset( $_GET['mdjm-message'] ) && 'employee_added' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'employee_added' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-employee_added',
@@ -91,7 +100,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'employee_add_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'employee_add_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-employee_add-failed',
@@ -99,7 +108,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'employee_info_missing' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'employee_info_missing' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-employee_info-missing',
@@ -107,7 +116,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'comm_missing_content' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'comm_missing_content' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-comm_content-missing',
@@ -115,7 +124,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'comm_sent' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'comm_sent' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-comm_sent',
@@ -123,7 +132,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'comm_not_sent' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'comm_not_sent' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-comm_not_sent',
@@ -131,11 +140,11 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-action'] ) && 'get_event_availability' == $_GET['mdjm-action'] )	{
+	if ( isset( $_GET['mdjm-action'] ) && 'get_event_availability' == $_GET['mdjm-action'] )	{
 		
-		if( ! wp_verify_nonce( $_GET[ 'mdjm_nonce' ], 'get_event_availability' ) )	{
+		if ( ! wp_verify_nonce( $_GET[ 'mdjm_nonce' ], 'get_event_availability' ) )	{
 			return;
-		} elseif( ! isset( $_GET['event_id'] ) )	{
+		} elseif ( ! isset( $_GET['event_id'] ) )	{
 			return;
 		} else	{
 			
@@ -189,7 +198,7 @@ function mdjm_admin_notices() {
 			
 		}
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'payment_event_missing' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'payment_event_missing' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_event_missing',
@@ -197,7 +206,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'pay_employee_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'pay_employee_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_employee_failed',
@@ -205,7 +214,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_employees_failed',
@@ -213,7 +222,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_some_success' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_some_success' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_all_employees_some_success',
@@ -221,7 +230,7 @@ function mdjm_admin_notices() {
 			'notice-info'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'pay_employee_success' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'pay_employee_success' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_employeee_success',
@@ -229,7 +238,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_success' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'pay_all_employees_success' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-payment_all_employeees_success',
@@ -237,7 +246,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_success' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_success' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_success',
@@ -249,11 +258,43 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	if( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_failed' == $_GET['mdjm-message'] )	{
+	if ( isset( $_GET['mdjm-message'] ) && 'unattended_enquiries_rejected_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_failed',
 			__( 'Errors were encountered.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'api-key-generated' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-api-key-generated',
+			__( 'API keys generated.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'api-key-regenerated' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-api-key-regenerated',
+			__( 'API keys re-generated.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'api-key-revoked' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-api-key-revoked',
+			__( 'API keys revoked.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'api-key-failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-api-key-failed',
+			__( 'Generating API keys failed.', 'mobile-dj-manager' ),
 			'error'
 		);
 	}

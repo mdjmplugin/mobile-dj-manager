@@ -275,7 +275,7 @@ class MDJM_Event {
 			}
 			
 			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
-				$meta['_mdjm_event_cost'] += mdjm_get_package_cost( $meta['_mdjm_event_package'] );
+				$meta['_mdjm_event_cost'] += mdjm_get_package_price( $meta['_mdjm_event_package'] );
 			}
 			
 			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
@@ -414,10 +414,10 @@ class MDJM_Event {
 				}
 				
 			}
+		
+			$this->employees = $employees;
 			
 		}
-
-		$this->employees = $employees;
 		
 		return $this->employees;
 	} // get_all_employees
@@ -608,38 +608,20 @@ class MDJM_Event {
 	 * Retrieve the event package
 	 *
 	 * @since	1.3.7
-	 * @return	str
+	 * @return	int|false
 	 */
 	public function get_package() {
-		$package = get_post_meta( $this->ID, '_mdjm_event_package', true );
-		
-		/**
-		 * Override the event package.
-		 *
-		 * @since	1.3.7
-		 *
-		 * @param	str		$package The event package.
-		 */
-		return apply_filters( 'mdjm_event_package', $package, $this->ID );
+		return mdjm_get_event_package( $this->ID );
 	} // get_package
 
 	/**
 	 * Retrieve the event addons
 	 *
 	 * @since	1.3.7
-	 * @return	str
+	 * @return	int|false
 	 */
 	public function get_addons() {
-		$addons = get_post_meta( $this->ID, '_mdjm_event_addons', true );
-		
-		/**
-		 * Override the event package.
-		 *
-		 * @since	1.3.7
-		 *
-		 * @param	str		$package The event package.
-		 */
-		return apply_filters( 'mdjm_event_addons', $addons, $this->ID );
+		return mdjm_get_event_addons( $this->ID );
 	} // get_addons
 
 	/**
@@ -1038,7 +1020,7 @@ class MDJM_Event {
 	 */
 	public function get_playlist_code() {
 		if ( ! isset( $this->playlist_code ) ) {
-			$this->playlist_code = get_post_meta( $this->ID, '_mdjm_playlist_access', true );
+			$this->playlist_code = get_post_meta( $this->ID, '_mdjm_event_playlist_access', true );
 		}
 		
 		return apply_filters( 'mdjm_guest_playlist_code', $this->playlist_code, $this->ID );

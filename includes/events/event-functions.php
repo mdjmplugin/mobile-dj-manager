@@ -26,7 +26,6 @@ function mdjm_get_event( $event_id )	{
  * Retrieve an event by ID.
  *
  * @param	int		$event_id	The WP post ID for the event.
- *
  * @return	mixed	$event		WP_Query object or false.
  */
 function mdjm_get_event_by_id( $event_id )	{
@@ -34,6 +33,26 @@ function mdjm_get_event_by_id( $event_id )	{
 	
 	return ( !empty( $event->ID ) ? $event : false );
 } // mdjm_get_event_by_id
+
+/**
+ * Retrieve an event by date.
+ *
+ * @since	1.4
+ * @param	str		$date		The date to query (Y-m-d).
+ * @return	array	$events		Array of event WP_Query objects or false.
+ */
+function mdjm_get_events_by_date( $date )	{
+	$args['meta_key']   = '_mdjm_event_date';
+	$args['meta_value'] = $date;
+
+	$events = mdjm_get_events( $args );
+
+	if ( $events )	{
+		return $events;
+	}
+
+	return false;
+} // mdjm_get_events_by_date
 
 /**
  * Retrieve the events.
@@ -62,6 +81,84 @@ function mdjm_get_events( $args = array() )	{
 	}
 	
 } // mdjm_get_events
+
+/**
+ * Retrieve the event data.
+ *
+ * @since	1.4
+ * @param	int|obj		$event	An event ID, or an MDJM_Event object.
+ * @return	arr			Event meta.
+ */
+function mdjm_get_event_data( $event )	{
+
+	if ( is_numeric( $event ) )	{
+		$mdjm_event = new MDJM_Event( $event );
+	} else	{
+		$mdjm_event = $event;
+	}
+
+	$contract_status = $mdjm_event->get_contract_status();
+	$source = mdjm_get_enquiry_source( $mdjm_event->ID );
+
+	$event_data = array(
+		'client'              => $mdjm_event->client,
+		'contract'            => $mdjm_event->get_contract(),
+		'contract_status'     => $contract_status ? __( 'Signed', 'mobile-dj-manager' ) : __( 'Unsigned', 'mobile-dj-manager' ),
+		'cost'                => array(
+			'balance'             => $mdjm_event->get_balance(),
+			'balance_status'      => $mdjm_event->get_balance_status(),
+			'deposit'             => $mdjm_event->deposit,
+			'deposit_status'      => $mdjm_event->get_deposit_status(),
+			'remaining_deposit'   => $mdjm_event->get_remaining_deposit(),
+			'cost'                => $mdjm_event->price
+		),
+		'date'                => $mdjm_event->date,
+		'duration'            => mdjm_event_duration( $mdjm_event->ID ),
+		'employees'           => array(
+			'employees'           => $mdjm_event->get_all_employees(),
+			'primary_employee'    => $mdjm_event->employee_id
+		),
+		'end_date'            => $mdjm_event->get_meta( '_mdjm_event_end_date' ),
+		'end_time'            => $mdjm_event->get_finish_time(),
+		'equipment'           => array(
+			'package'             => mdjm_get_package_name( $mdjm_event->ID ),
+			'addons'              => mdjm_get_event_addons( $mdjm_event->ID )
+		),
+		'name'                => $mdjm_event->get_name(),
+		'playlist'            => array(
+			'playlist_enabled'    => $mdjm_event->playlist_is_enabled(),
+			'playlist_guest_code' => $mdjm_event->get_playlist_code(),
+			'playlist_status'     => $mdjm_event->playlist_is_open()
+		),
+		'setup_date'          => $mdjm_event->get_setup_date(),
+		'setup_time'          => $mdjm_event->get_setup_time(),
+		'source'              => ! empty( $source ) ? $source->name : '',
+		'status'              => $mdjm_event->get_status(),
+		'start_time'          => $mdjm_event->get_start_time(),
+		'type'                => $mdjm_event->get_type(),
+		'venue'               => array(
+			'id'                  => $mdjm_event->get_meta( '_mdjm_event_venue_id' ),
+			'name'                => mdjm_get_event_venue_meta( $mdjm_event->ID, 'name' ),
+			'address'             => mdjm_get_event_venue_meta( $mdjm_event->ID, 'address' ),
+			'contact'             => mdjm_get_event_venue_meta( $mdjm_event->ID, 'contact' ),
+			'details'             => mdjm_get_venue_details( $mdjm_event->get_venue_id() ),
+			'email'               => mdjm_get_event_venue_meta( $mdjm_event->ID, 'email' ),
+			'phone'               => mdjm_get_event_venue_meta( $mdjm_event->ID, 'phone' ),
+			'notes'               => mdjm_get_event_venue_meta( $mdjm_event->ID, 'notes' )
+		)
+	);
+
+	$employees = $mdjm_event->get_all_employees();
+
+	if ( ! empty( $employees ) )	{
+		$event_data['employees']['employees'] = $employees;
+	}
+
+	$event_data = apply_filters( 'mdjm_get_event_data', $event_data, $mdjm_event->ID );
+
+	return $event_data;
+
+} // mdjm_get_event_data
 
 /**
  * Whether or not the event is currently active.
@@ -185,7 +282,7 @@ function mdjm_get_event_by_playlist_code( $access_code )	{
 } // mdjm_get_event_by_playlist_code
 
 /**
- * Retrieve events by date period.
+ * Retrieve events by status.
  *
  * @since	1.3
  * @param	str			$status		The event status.

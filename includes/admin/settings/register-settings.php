@@ -407,12 +407,6 @@ function mdjm_get_registered_settings()	{
 						'size'        => 'regular',
 						'std'		 => __( 'DJ', 'mobile-dj-manager' )
 					),
-					'enable_packages'  => array(
-						'id'          => 'enable_packages',
-						'name'        => __( 'Enable Packages', 'mobile-dj-manager' ),
-						'desc'        => __( 'Check this to enable Equipment Packages & Inventories.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					),
 					'default_contract' => array(
 						'id'          => 'default_contract',
 						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),
@@ -500,6 +494,31 @@ function mdjm_get_registered_settings()	{
 										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					)
+				),
+				// Packages & Addons
+				'packages' => array(
+					'package_settings' => array(
+						'id'          => 'package_settings',
+						'name'        => '<h3>' . __( 'Package &amp; Addon Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'enable_packages'  => array(
+						'id'          => 'enable_packages',
+						'name'        => __( 'Enable Packages', 'mobile-dj-manager' ),
+						'desc'        => __( 'Check this to enable Equipment Packages & Add-ons.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
+					'package_excerpt_length'  => array(
+						'id'          => 'package_excerpt_length',
+						'name'        => __( 'Description Length', 'mobile-dj-manager' ),
+						'desc'        => __( 'The maximum number of characters for the package/addon description.', 'mobile-dj-manager' ),
+						'hint'        => __( 'Entering <code>0</code> will render the full exceprt if it exists, otherwise the description', 'mobile-dj-manager' ),
+						'type'        => 'number',
+						'size'        => 'small',
+						'step'        => '5',
+						'std'         => '50'
+					),
 				),
 				// Travel
 				'travel' => array(
@@ -651,9 +670,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
-						'options'     => array_merge( 
-											array( '0' => __( 'Disable Online Quotes', 'mobile-dj-manager' ) ),
-											mdjm_list_templates( 'email_template' ) )
+						'options'     => mdjm_list_templates( 'email_template', true )
 					),
 					'unavailable'      => array(
 						'id'          => 'unavailable',
@@ -1395,6 +1412,7 @@ function mdjm_get_registered_settings_sections() {
 		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
 			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' ),
+			'packages'           => __( 'Packages &amp; Add-ons', 'mobile-dj-manager' ),
 			'travel'             => __( 'Travel Settings', 'mobile-dj-manager' )
 		) ),
 		'emails'          => apply_filters( 'mdjm_settings_sections_emails', array(
