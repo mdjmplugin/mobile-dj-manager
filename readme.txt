@@ -77,6 +77,51 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4 =
+
+**Released XXXX, 2016**
+
+**New**
+
+**[REST API](http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/ "MDJM REST API") introduced**
+
+A number of [API endpoints](http://mdjm.co.uk/docs/api/mdjm-rest-api-endpoints/) have been introduced enabling developers to easily and securely integrate and query MDJM.
+
+In order to use an API endpoint, a user must have an API key and token which can be generated under *MDJM->Tools->API Keys*. Exceptions for the Availability and all Package/Addon related endpoints, which are public and require no authentication to generate a response.
+
+**Endpoints Include**
+
+* [/event/](http://mdjm.co.uk/docs/api/mdjm-rest-api-event/ "Event REST API Endpoint") to query a single event by ID
+* [/events/](http://mdjm.co.uk/docs/api/mdjm-rest-api-events/ "Events REST API Endpoint") to retrieve all events or query multiple events by date, employee, client, or status
+* [/employee/](http://mdjm.co.uk/docs/api/mdjm-rest-api-employee/ "Employee REST API Endpoint") to retrieve an employees details by their user ID
+* [/client/](http://mdjm.co.uk/docs/api/mdjm-rest-api-client/ "Client REST API Endpoint") to retrieve a clients details by their user ID
+* [/availability/](http://mdjm.co.uk/docs/api/mdjm-rest-api-availability/ "Availability REST API Endpoint") to query availability by date. Further filtering by employees or roles is also possible
+* [/package/](http://mdjm.co.uk/docs/api/mdjm-rest-api-package/ "Package REST API Endpoint") to retrieve information regarding a single equipment package
+* [/packages/](http://mdjm.co.uk/docs/api/mdjm-rest-api-packages/ "Packages REST API Endpoint") to retrieve multiple equipment packages. Filtering possible
+* [/addon/](http://mdjm.co.uk/docs/api/mdjm-rest-api-addon/ "Addon REST API Endpoint") to retrieve information regarding a single addon
+* [/addons/](http://mdjm.co.uk/docs/api/mdjm-rest-api-addons/ "Addons REST API Endpoint") to retrieve multiple equipment addons. Filtering possible.
+
+**Equipment Packages and Addons**
+
+* Now treated as posts enabling you to write detailed descriptions and add multiple images
+* Easy to showcase within your website content
+* Packages and Addons can be categorised and marked as available at all times or during certain months, event types, or for certain employees
+* Variable pricing is possible for individual (or grouped) months of the year
+* Settings for Packages and Addons have been moved to *MDJM -> Settings -> Events -> Packages & Add-ons*
+
+**Tweaks**
+* Added System Info data under *MDJM->tools*. May be requested during support requests
+* New upgrade procedures. Initiated via Ajax and informative whilst running
+* Removed deprecated Playlists custom DB table
+* Re-ordered some items within the WP Toolbar *New* Admin menu
+* Added API Keys interface to manage users API keys
+* Removed a number of deprecated constants related to post types
+* Availability checker on the front end now uses MDJM REST API if Ajax enabled
+
+
+**Bug Fixes**
+
+
 = 1.3.8.5 =
 
 **Released Thursday 28th July, 2016**
