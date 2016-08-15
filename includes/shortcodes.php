@@ -473,10 +473,10 @@ function mdjm_shortcode_availability( $atts )	{
 	
 	mdjm_insert_datepicker(
 		array(
-			'class'		=> '',
-			'id'           => $field_id,
-			'altfield'	 => 'availability_check_date',
-			'mindate'	  => '1'
+			'class'    => '',
+			'id'       => $field_id,
+			'altfield' => 'availability_check_date',
+			'mindate'  => '1'
 		)
 	);
 	

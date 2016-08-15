@@ -35,6 +35,7 @@ function mdjm_load_scripts()	{
 			'mdjm_script_vars',
 			array(
 				'ajaxurl'               => mdjm_get_ajax_url(),
+				'rest_url'              => esc_url_raw( rest_url( 'mdjm/v1/' ) ),
 				'ajax_loader'           => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' ),
 				'availability_ajax'     => mdjm_get_option( 'avail_ajax', false ),

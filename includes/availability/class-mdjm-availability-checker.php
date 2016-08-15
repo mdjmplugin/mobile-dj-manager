@@ -10,7 +10,8 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * MDJM_Availability_Checker Class
@@ -71,17 +72,17 @@ class MDJM_Availability_Checker {
 	 * @return	bool
 	 */
 	public function setup_check( $date, $_employees, $_roles, $_status )	{
-		if( empty( $date ) )	{
+		if ( empty( $date ) )	{
 			$date = date( 'Y-m-d' );
 		}
 		
 		$this->date		 = ! empty( $date ) ? strtotime( $date ) : date( 'Y-m-d' );
 		
-		if( empty( $_employees ) && ! empty( $_roles ) )	{
+		if ( empty( $_employees ) && ! empty( $_roles ) )	{
 			
 			$theemployees = mdjm_get_employees( $_roles );
 			
-		} elseif( empty( $_employees ) )	{
+		} elseif ( empty( $_employees ) )	{
 			
 			$theemployees = mdjm_get_employees( mdjm_get_option( 'availability_roles' ) );
 			
@@ -95,7 +96,7 @@ class MDJM_Availability_Checker {
 		
 		foreach( $theemployees as $employee )	{
 			
-			if( is_object( $employee ) )	{
+			if ( is_object( $employee ) )	{
 				$employees[] = $employee->ID;
 			} else	{
 				$employees[] = $employee;
@@ -103,14 +104,14 @@ class MDJM_Availability_Checker {
 			
 		}
 				
-		$this->employees	= $employees;
-		$this->roles		= ! empty( $_roles )	 ? $_roles	: mdjm_get_roles( mdjm_get_option( 'availability_roles' ) );
-		$this->status	   = ! empty( $_status )	? $_status   : mdjm_get_option( 'availability_status', 'any' );
+		$this->employees = $employees;
+		$this->roles     = ! empty( $_roles )  ? $_roles  : mdjm_get_roles( mdjm_get_option( 'availability_roles' ) );
+		$this->status    = ! empty( $_status ) ? $_status : mdjm_get_option( 'availability_status', 'any'           );
 		
-		if( ! is_array( $this->roles ) )	{
+		if ( ! is_array( $this->roles ) )	{
 			array( $this->roles );
 		}
-		if( ! is_array( $this->status ) )	{
+		if ( ! is_array( $this->status ) )	{
 			array( $this->status );
 		}
 		
@@ -128,14 +129,14 @@ class MDJM_Availability_Checker {
 		
 		foreach( $this->employees as $employee_id )	{
 			
-			if( ! $this->employee_working( $employee_id ) && ! $this->employee_has_vacation( $employee_id ) )	{
+			if ( ! $this->employee_working( $employee_id ) && ! $this->employee_has_vacation( $employee_id ) )	{
 				$this->result['available'][] = $employee_id;
 			} else	{
 				$this->result['unavailable'][] = $employee_id;
 			}
 		}
 				
-		if( ! empty( $this->result['available'] ) )	{
+		if ( ! empty( $this->result['available'] ) )	{
 			return true;
 		}
 		
