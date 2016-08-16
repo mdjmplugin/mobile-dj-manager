@@ -1186,7 +1186,7 @@ function mdjm_get_addon_price( $addon_id, $date = null )	{
 function mdjm_get_addon_price_for_month( $addon_id, $date = null )	{
 
 	if ( ! mdjm_addon_has_variable_prices( $addon_id ) )	{
-		return mdjm_get_package_price( $addon_id );
+		return mdjm_get_addon_price( $addon_id );
 	}
 
 	$price = mdjm_get_addon_price( $addon_id );
