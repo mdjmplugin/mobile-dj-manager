@@ -320,13 +320,54 @@ function mdjm_get_package_months_available( $package_id )	{
  *
  * @since	1.4
  * @param	int		$package_id	ID of the package.
+ * @param	int|str	$date		Month number (1-12) or date (Y-m-d).
  * @return	str		The cost of the package.
  */
-function mdjm_get_package_price( $package_id )	{
-	$price = get_post_meta( $package_id, '_package_price', true );
+function mdjm_get_package_price( $package_id, $date = null )	{
+	if ( isset( $date ) )	{
+		$price = mdjm_get_package_price_for_month( $package_id, $date );
+	} else	{
+		$price = get_post_meta( $package_id, '_package_price', true );
+	}
 
 	return apply_filters( 'mdjm_package_price', $price, $package_id );
 } // mdjm_get_package_price
+
+/**
+ * Retrieves the price of a for a given month.
+ *
+ * @since	1.4
+ * @param	int		$package_id	ID of the package.
+ * @param	int|str	$date		Either a numerical value for the month (1-12) or the date (Y-m-d)
+ * @return	str		The cost of the package.
+ */
+function mdjm_get_package_price_for_month( $package_id, $date = null )	{
+
+	if ( ! mdjm_package_has_variable_prices( $package_id ) )	{
+		return mdjm_get_package_price( $package_id );
+	}
+
+	$price = mdjm_get_package_price( $package_id );
+
+	if ( ! isset( $date ) )	{
+		$date = date( 'n' );
+	}
+
+	if ( ! is_numeric( $date ) )	{
+		$date  = date( 'n', strtotime( $date ) );
+	}
+
+	$monthly_prices = mdjm_get_package_variable_prices( $package_id );
+
+	foreach( $monthly_prices as $data )	{
+		if ( in_array( $date, $data['months'] ) )	{
+			$price = $data['amount'];
+		}
+	}
+
+	return $price;
+
+} // mdjm_get_package_price_for_month
 
 /**
  * Whether or not the package has monthly prices.
@@ -1121,13 +1162,54 @@ function mdjm_get_addon_months_available( $addon_id )	{
  *
  * @since	1.4
  * @param	int		$addon_id	ID of the addon.
+ * @param	int|str	$date		Month number (1-12) or date (Y-m-d).
  * @return	str		The cost of the addon.
  */
-function mdjm_get_addon_price( $addon_id )	{
-	$price = get_post_meta( $addon_id, '_addon_price', true );
+function mdjm_get_addon_price( $addon_id, $date = null )	{
+	if ( isset( $date ) )	{
+		$price = mdjm_get_addon_price_for_month( $addon_id, $date );
+	} else	{
+		$price = get_post_meta( $addon_id, '_addon_price', true );
+	}
 
 	return apply_filters( 'mdjm_addon_price', $price, $addon_id );
 } // mdjm_get_addon_price
+
+/**
+ * Retrieves the price of an addon for a given month.
+ *
+ * @since	1.4
+ * @param	int		$addon_id	ID of the addon.
+ * @param	int|str	$date		Either a numerical value for the month (1-12) or the date (Y-m-d)
+ * @return	str		The cost of the addon.
+ */
+function mdjm_get_addon_price_for_month( $addon_id, $date = null )	{
+
+	if ( ! mdjm_addon_has_variable_prices( $addon_id ) )	{
+		return mdjm_get_package_price( $addon_id );
+	}
+
+	$price = mdjm_get_addon_price( $addon_id );
+
+	if ( ! isset( $date ) )	{
+		$date = date( 'n' );
+	}
+
+	if ( ! is_numeric( $date ) )	{
+		$date  = date( 'n', strtotime( $date ) );
+	}
+
+	$monthly_prices = mdjm_get_addon_variable_prices( $addon_id );
+
+	foreach( $monthly_prices as $data )	{
+		if ( in_array( $date, $data['months'] ) )	{
+			$price = $data['amount'];
+		}
+	}
+
+	return $price;
+
+} // mdjm_get_addon_price_for_month
 
 /**
  * Whether or not the addon has monthly prices.
@@ -1400,19 +1482,22 @@ function mdjm_list_event_addons( $event_id, $price = false )	{
 		return $output;
 	}
 
-	$event_addons = mdjm_get_event_addons( $event_id );
+	$mdjm_event = new MDJM_Event( $event_id );
+
+	$event_addons = $mdjm_event->get_addons();
+	$event_date   = $mdjm_event->date;
 
 	if ( $event_addons )	{
 		$addons = array();
 
-		foreach ( $event_addons as $event_addon )	{
+		foreach ( $event_addons as $addon_id )	{
 			$addon_price = '';
 
 			if ( $price )	{
-				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $event_addon->ID ) ) );
+				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $addon_id, $event_date ) ) );
 			}
 
-			$addons[] = $event_addon->post_title . '' . $addon_price;
+			$addons[] = mdjm_get_addon_name( $addon_id ) . '' . $addon_price;
 		}
 
 		$output = implode( '<br />', $addons );
@@ -1681,11 +1766,13 @@ function mdjm_addons_checkboxes( $args = array() )	{
 				if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
 					continue;
 				}
+			} else	{
+				$args['event_date'] = NULL;
 			}
 
 			$price = '';
 			if( $args['cost'] == true )	{
-				$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
+				$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID, $args['event_date'] ) ) ) ;
 			}
 
 			$term  = '';

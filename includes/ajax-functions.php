@@ -481,9 +481,10 @@ function mdjm_update_event_cost_from_package_ajax()	{
 	$package    = $mdjm_event->get_package();
 	$addons     = $mdjm_event->get_addons();
 	$event_cost = $mdjm_event->price;
+	$event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
 	$base_cost  = '0.00';
 
-	$package_price = ( $package ) ? (float) mdjm_get_package_price( $package->ID ) : false;
+	$package_price = ( $package ) ? (float) mdjm_get_package_price( $package->ID, $event_date ) : false;
 
 	if ( $event_cost )	{
 		$event_cost = (float) $event_cost;
@@ -492,7 +493,7 @@ function mdjm_update_event_cost_from_package_ajax()	{
 
 	if ( $addons )	{
 		foreach( $addons as $addon )	{
-			$addon_cost = mdjm_get_package_price( $addon->ID );
+			$addon_cost = mdjm_get_package_price( $addon->ID, $event_date );
 			$base_cost  = $base_cost - (float) $addon_cost;	
 		}
 	}
@@ -500,7 +501,7 @@ function mdjm_update_event_cost_from_package_ajax()	{
 	$cost = $base_cost;
 
 	$new_package       = $_POST['package'];
-	$new_package_price = ( ! empty( $new_package ) ) ? mdjm_get_package_price( $new_package ) : false;
+	$new_package_price = ( ! empty( $new_package ) ) ? mdjm_get_package_price( $new_package, $event_date ) : false;
 
 	if ( $new_package_price )	{
 		$cost = $base_cost + (float) $new_package_price;
@@ -536,6 +537,7 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 	$package    = $mdjm_event->get_package();
 	$addons     = $mdjm_event->get_addons();
 	$event_cost = $mdjm_event->price;
+	$event_date = $event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
 	$base_cost  = '0.00';
 
 	$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
@@ -551,13 +553,13 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 	}
 
 	if ( $package )	{
-		$package_price = mdjm_get_addon_price( $package->ID );
+		$package_price = mdjm_get_addon_price( $package->ID, $event_date );
 		$base_cost     = $event_cost - $package_price;
 	}
 
 	if ( $addons )	{
 		foreach( $addons as $addon )	{
-			$addon_price = mdjm_get_addon_price( $addon->ID );
+			$addon_price = mdjm_get_addon_price( $addon->ID, $event_date );
 			$base_cost   = $base_cost - (float) $addon_price;	
 		}
 	}
@@ -568,13 +570,13 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 	$cost = $base_cost;
 
 	if ( $new_package )	{
-		$new_package_price = mdjm_get_package_price( $new_package );
+		$new_package_price = mdjm_get_package_price( $new_package, $event_date );
 		$cost += (float) $new_package_price;
 	}
 
 	if( $new_addons )	{
 		foreach( $new_addons as $new_addon )	{
-			$new_addon_price = mdjm_get_addon_price( $new_addon );
+			$new_addon_price = mdjm_get_addon_price( $new_addon, $event_date );
 
 			$cost += (float) $new_addon_price;
 		}

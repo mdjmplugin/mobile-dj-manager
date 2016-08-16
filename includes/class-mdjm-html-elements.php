@@ -575,11 +575,13 @@ class MDJM_HTML_Elements {
 					if ( ! mdjm_package_is_available_for_event_date( $package->ID, $args['event_date'] ) )	{
 						continue;
 					}
+				} else	{
+					$args['event_date'] = NULL;
 				}
 
 				$price = '';
 				if( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $package->ID ) ) ) ;
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $package->ID, $args['event_date'] ) ) ) ;
 				}
 
 				$args['options'][ $package->ID ] = $package->post_title . '' . $price;
@@ -675,11 +677,13 @@ class MDJM_HTML_Elements {
 					if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
 						continue;
 					}
+				} else	{
+					$args['event_date'] = NULL;
 				}
 
 				$price = '';
 				if( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID ) ) ) ;
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon->ID, $args['event_date'] ) ) ) ;
 				}
 				$desc           = '';
 

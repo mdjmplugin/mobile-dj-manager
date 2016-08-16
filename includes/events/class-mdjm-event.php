@@ -275,12 +275,12 @@ class MDJM_Event {
 			}
 			
 			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
-				$meta['_mdjm_event_cost'] += mdjm_get_package_price( $meta['_mdjm_event_package'] );
+				$meta['_mdjm_event_cost'] += mdjm_get_package_price( $meta['_mdjm_event_package'], $meta['_mdjm_event_date'] );
 			}
 			
 			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
 				foreach( $meta['_mdjm_event_addons'] as $addon )	{
-					$meta['_mdjm_event_cost'] += mdjm_get_addon_cost( $addon );
+					$meta['_mdjm_event_cost'] += mdjm_get_addon_price( $addon );
 				}
 			}
 			

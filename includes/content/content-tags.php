@@ -714,7 +714,6 @@ function mdjm_content_tag_artist_label()	{
  * or included within the event package
  *
  * @param	int		$event_id	Event ID if applicable.
- *
  * @return	str		The list of available addo-ns. No cost.
  */
 function mdjm_content_tag_available_addons( $event_id='' )	{
@@ -1537,16 +1536,14 @@ function mdjm_content_tag_event_addons( $event_id='' )	{
  * The add-ons attached to the event and their cost.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The add-on names and cost or "No addons are assigned to this event".
  */
 function mdjm_content_tag_event_addons_cost( $event_id='' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
-	
-	return mdjm_list_event_addons( $event_id );
+
+	return mdjm_list_event_addons( $event_id, true );
 } // mdjm_content_tag_event_addons_cost
 
 /**
@@ -1717,14 +1714,14 @@ function mdjm_content_tag_event_name( $event_id='' )	{
  * The package attached to the event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package name or "No Package".
  */
 function mdjm_content_tag_event_package( $event_id='' )	{
 	$return = __( 'No package is assigned to this event', 'mobile-dj-manager' );
 
 	if ( ! empty( $event_id ) )	{
+
+		$package_id = mdjm_get_event_package( $event_id );
 
 		$package_name = mdjm_get_package_name( $package_id );
 	
@@ -1742,16 +1739,24 @@ function mdjm_content_tag_event_package( $event_id='' )	{
  * The package attached to the event and it's cost.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package name and cost or "No Package".
  */
 function mdjm_content_tag_event_package_cost( $event_id='' )	{
-	if( empty( $event_id ) )	{
-		return;
-	}
+	$return = '0.00';
 	
-	return get_event_package( $event_id, true );
+	if ( ! empty( $event_id ) )	{
+		$mdjm_event = new MDJM_Event( $event_id );
+		$package_id = $mdjm_event->get_package();
+
+		$package_price = mdjm_get_package_price( $package_id, $mdjm_event->date );
+	
+		if ( ! empty( $package_price ) )	{
+			$return = $package_price;
+		}
+
+	}
+
+	return mdjm_currency_filter( mdjm_format_amount( $return ) );
 } // mdjm_content_tag_event_package_cost
 
 /**
@@ -1759,8 +1764,6 @@ function mdjm_content_tag_event_package_cost( $event_id='' )	{
  * The package attached to the event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package description.
  */
 function mdjm_content_tag_event_package_description( $event_id='' )	{

@@ -972,9 +972,7 @@ function mdjm_get_registered_settings()	{
 					'availability_check_pass_text' => array(
 						'id'          => 'availability_check_pass_text',
 						'name'        => __( 'Available Text', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Text to be displayed when you are available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes %1$s{event_date}%2$s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => __( 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' )
 					),
@@ -989,9 +987,7 @@ function mdjm_get_registered_settings()	{
 					'availability_check_fail_text' => array(
 						'id'          => 'availability_check_fail_text',
 						'name'        => __( 'Unavailable Text', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Text to be displayed when you are not available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above. Valid shortcodes %1$s{event_date}2$%s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => __( 'Text to be displayed when you are not available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...', 'mobile-dj-manager' )
 					)

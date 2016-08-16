@@ -330,6 +330,7 @@ jQuery(document).ready(function ($) {
 					package      : $('#_mdjm_event_package option:selected').val(),
 					event_id     : $('#post_ID').val(),
 					current_cost : $('#_mdjm_event_cost').val(),
+					event_date   : $('#_mdjm_event_date').val(),
 					action       : 'update_event_cost_from_addons'
 				};
 
