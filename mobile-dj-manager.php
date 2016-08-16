@@ -255,6 +255,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/employee-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/contextual-help.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/reporting-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
