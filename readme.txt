@@ -117,6 +117,8 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Added API Keys interface to manage users API keys
 * Removed a number of deprecated constants related to post types
 * Availability checker on the front end now uses MDJM REST API if Ajax enabled
+* Improved licensing validation for addons
+* 
 
 
 **Bug Fixes**

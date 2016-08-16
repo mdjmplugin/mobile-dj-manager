@@ -157,7 +157,7 @@ function mdjm_validate_payment_form(mdjmPurchaseform) {
 function mdjm_load_gateway( payment_mode ) {
 
 	// Show the ajax loader
-	jQuery('.mdjm-cart-ajax').show();
+	jQuery('.mdjm-payment-ajax').show();
 	jQuery('#mdjm_payment_form_wrap').html('<img src="' + mdjm_vars.ajax_loader + '"/>');
 
 	var url = mdjm_vars.ajaxurl;
@@ -174,6 +174,7 @@ function mdjm_load_gateway( payment_mode ) {
 		function(response){
 			jQuery('#mdjm_payment_form_wrap').html(response);
 			jQuery('.mdjm-no-js').hide();
+			jQuery('.mdjm-payment-ajax').hide();
 		}
 	);
 
