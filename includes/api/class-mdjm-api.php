@@ -99,18 +99,19 @@ class MDJM_API 	{
 	public function __construct()	{
 		$this->namespace = 'mdjm/v' . self::VERSION;
 		
-		add_action( 'rest_api_init',           array( $this, 'register_endpoints' ) );
-		add_action( 'mdjm-process_api_key',    array( $this, 'process_api_key'    ) );
-		add_action( '/mdjm/v1/availability',   array( $this, 'availability_check' ) );
-		add_action( '/mdjm/v1/client',         array( $this, 'get_client'         ) );
-		add_action( '/mdjm/v1/employee',       array( $this, 'get_employee'       ) );
-		add_action( '/mdjm/v1/event',          array( $this, 'get_event'          ) );
-		add_action( '/mdjm/v1/events',         array( $this, 'list_events'        ) );
-		add_action( '/mdjm/v1/package',        array( $this, 'get_package'        ) );
-		add_action( '/mdjm/v1/packages',       array( $this, 'list_packages'      ) );
-		add_action( '/mdjm/v1/addon',          array( $this, 'get_addon'          ) );
-		add_action( '/mdjm/v1/addons',         array( $this, 'list_addons'        ) );
-		add_action( '/mdjm/v1/addons/options', array( $this, 'addon_options'      ) );
+		add_action( 'rest_api_init',             array( $this, 'register_endpoints' ) );
+		add_action( 'mdjm-process_api_key',      array( $this, 'process_api_key'    ) );
+		add_action( '/mdjm/v1/availability',     array( $this, 'availability_check' ) );
+		add_action( '/mdjm/v1/client',           array( $this, 'get_client'         ) );
+		add_action( '/mdjm/v1/employee',         array( $this, 'get_employee'       ) );
+		add_action( '/mdjm/v1/event',            array( $this, 'get_event'          ) );
+		add_action( '/mdjm/v1/events',           array( $this, 'list_events'        ) );
+		add_action( '/mdjm/v1/package',          array( $this, 'get_package'        ) );
+		add_action( '/mdjm/v1/packages',         array( $this, 'list_packages'      ) );
+		add_action( '/mdjm/v1/packages/options', array( $this, 'package_options'    ) );
+		add_action( '/mdjm/v1/addon',            array( $this, 'get_addon'          ) );
+		add_action( '/mdjm/v1/addons',           array( $this, 'list_addons'        ) );
+		add_action( '/mdjm/v1/addons/options',   array( $this, 'addon_options'      ) );
 	} // __construct
 
 	/**
@@ -181,6 +182,12 @@ class MDJM_API 	{
 			// Retrieving Multiple Packages
 			'/packages/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
+				'callback'     => array( $this, 'process_request' ),
+				'require_auth' => false
+			),
+			// Retrieving Multiple Packages
+			'/packages/options/' => array(
+				'methods'      => array( WP_REST_Server::READABLE ),
 				'callback'     => array( $this, 'process_request' ),
 				'require_auth' => false
 			),
@@ -1138,6 +1145,44 @@ class MDJM_API 	{
 	} // list_packages
 
 	/**
+	 * Retrieve package options.
+	 *
+	 * @since	1.4
+	 * @return	void
+	 */
+	public function package_options()	{
+
+		$response = array();
+
+		$event_type   = ! empty( $this->request['event_type'] ) ? $this->request['event_type']  : false;
+		$event_date   = ! empty( $this->request['event_date'] ) ? $this->request['event_date']  : false;
+		$package_cost = isset( $this->request['package_cost'] ) ? true                          : false;
+		$selected     = isset( $this->request['selected'] )     ? $this->request['selected']    : '';
+			
+		$args   = array(
+			'event_type' => $event_type,
+			'event_date' => $event_date,
+			'cost'       => $package_cost,
+			'selected'   => $selected
+		);
+
+		$packages = mdjm_package_dropdown( $args, false );
+	
+		if ( ! empty( $packages ) )	{
+			$response['type']     = 'success';
+			$response['packages'] = $packages;
+		} else	{
+			$response['type']     = 'success';
+			$response['packages'] = '<option value="0" disabled="disabled">' . __( 'No packages available', 'mobile-dj-manager' ) . '</option>';
+		}
+	
+		$this->data = array_merge( $this->data, $response );
+	
+		$this->output();
+
+	} // package_options
+
+	/**
 	 * Retrieve a single addon by ID, name, or slug.
 	 *
 	 * @since	1.4
@@ -1273,11 +1318,12 @@ class MDJM_API 	{
 
 		$response = array();
 
-		$event_package = ! empty( $this->request['package']     ) ? $this->request['package']     : false;
-		$event_type    = ! empty( $this->request['event_type']  ) ? $this->request['event_type']  : false;
-		$event_date    = ! empty( $this->request['event_date']  ) ? $this->request['event_date']  : false;
-		$addons_type   = isset( $this->request['addons_type']   ) ? $this->request['addons_type'] : 'dropdown';
-		$addons_cost   = isset( $this->request['addons_cost']   ) ? true                          : false;
+		$event_package = ! empty( $this->request['package']     ) ? $this->request['package']                  : false;
+		$event_type    = ! empty( $this->request['event_type']  ) ? $this->request['event_type']               : false;
+		$event_date    = ! empty( $this->request['event_date']  ) ? $this->request['event_date']               : false;
+		$addons_type   = isset( $this->request['addons_type']   ) ? $this->request['addons_type']              : 'dropdown';
+		$addons_cost   = isset( $this->request['addons_cost']   ) ? true                                       : false;
+		$selected      = isset( $this->request['selected']      ) ? explode( ',', $this->request['selected'] ) : '';
 			
 		$func   = 'mdjm_addons_' . $addons_type;
 		$args   = array(
@@ -1285,6 +1331,7 @@ class MDJM_API 	{
 			'event_type' => $event_type,
 			'event_date' => $event_date,
 			'cost'       => $addons_cost,
+			'selected'   => $selected
 		);
 
 		$addons = $func( $args, false );
