@@ -423,4 +423,4 @@ checkbox.mdjm-form-error {
 
 /* System Info page styles
 -------------------------------------------------------------- */
-#system-info-textarea { width: 800px; height: 400px; font-family: Menlo, Monaco, monospace; background: none; white-space: pre; overflow: auto; display: block; }
+#system-info-textarea { width: 800px; height: 400px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
