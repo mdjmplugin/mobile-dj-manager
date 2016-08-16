@@ -174,7 +174,15 @@ function mdjm_travel_get_start( $event = '' )	{
 		}
 	}
 
-	$start = isset( $mdjm_event ) ? mdjm_get_employee_address( $mdjm_event->get_employee() ) : mdjm_get_option( 'travel_primary' );
+	$employee = $mdjm_event->get_employee();
+
+	if ( $employee )	{
+		$address = mdjm_get_employee_address( $employee );
+	} else	{
+		$address = mdjm_get_option( 'travel_primary' );
+	}
+
+	$start = $address;
 
 	if ( empty( $start ) )	{
 		return;
@@ -284,4 +292,4 @@ function mdjm_show_travel_data_row( $event_id = '', $venue_id = '' )	{
 
 } // mdjm_show_travel_data_row
 add_action( 'mdjm_venue_details_table_after_info', 'mdjm_show_travel_data_row', 10, 2 );
-add_action( 'mdjm_venue_details_table_after_save', 'mdjm_show_travel_data_row' );
+add_action( 'mdjm_venue_details_table_after_save', 'mdjm_show_travel_data_row', 10, 2 );
