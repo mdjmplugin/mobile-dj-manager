@@ -175,42 +175,43 @@ class MDJM_Welcome {
 		?>
 		<div class="wrap about-wrap mdjm-about-wrap">
 			<?php
-				// load welcome message and content tabs
+				// Load welcome message and content tabs
 				$this->welcome_message();
 				$this->tabs();
 			?>
 			<div class="changelog">
-				<h3><?php _e( 'Employee Management', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Packages &amp; Addons', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
 						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-employee-list.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php _e( 'With MDJM Event Management version 1.3, you now have greater management of your employees.', 'mobile-dj-manager' );?></p>
+						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business products.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'In addition you can utilise a variety of plugins to show off your business products effectively and entice more clients to get in touch.', 'mobile-dj-manager' );?></p>
 
-						<h4><?php _e( 'An Improved Interface', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'The intuitive employee interface enables you to easily manage your employees, add  new or remove existing, change their role, or assign additional roles.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Variable Pricing', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( "Assign variable prices to your packages and addons depending on month's of the year.", 'mobile-dj-manager' );?><br />
+							<?php _e( 'Perhaps you have a full wedding package that is cheaper during winter months than in the summer.', 'mobile-dj-manager' ); ?></p>
 
-						<h4><?php _e( 'Granular Permission Management', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Determine which actions each employee role is able to fulfill. For example, maybe you have an admin who needs to be able to view all events and employees to help with logistics, but not edit them. Or you want your accountant to be able to read all transactions but not see anything else.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'Additionally, users assigned the <em>Administrator</em> role are no longer assumed to be employees unless you specifically specify that they are.', 'mobile-dj-manager' );?></p>
-
+						<h4><?php _e( 'Set Availability Options', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'You can now specify the conditions under which individual packages and addons are available for use. Options include availability during certain months of the year, for specific event types, and for individual employees.', 'mobile-dj-manager' );?></p>                        
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Theme Templates', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'REST API', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
 						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-mdjm-templates.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php printf( __( 'MDJM Event Management version 1.3 enables greater customisation of %s pages.', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+						<p><?php _e( 'MDJM Event Management version 1.4 extends the WordPress REST API enabling easy, yet secure, access to a multitude of data via third party tools and integrations.', 'mobile-dj-manager' ); ?></p>
 
 						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your [child] theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
                         <p><?php _e( "Use a child theme and you won't have to worry about your changes being overwritten when the MDJM plugin is update or your currently active theme is updated.", 'mobile-dj-manager' ); ?></p>
-                        <p><?php _e( 'To make customisations even easier, all MDJM content tags are fully supported and if you use child themes, you can ensure that any changes you make are never overwritten with plugin or theme updates.', 'mobile-dj-manager' ); ?></p>
+                        <p><?php printf( __( 'More information on the MDJM REST API can be found within the <a href="%s" target="_blank">Support Documentation</a>.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); ?></p>
 					</div>
 				</div>
 			</div>

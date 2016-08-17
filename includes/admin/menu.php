@@ -71,9 +71,6 @@ function mdjm_admin_menu()	{
 		$mdjm_addons_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Addons', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Addons', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-addon', '' );
 	}
 	
-	// Reporting
-	/*$mdjm_reports_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Reports', 'mobile-dj-manager' ), __( 'Reports', 'mobile-dj-manager' ), 'mdjm_employee', admin_url( 'admin.php?page=mdjm-reports' ) );*/
-	
 	if ( mdjm_employee_can( 'edit_txns' ) )	{									   
 		$mdjm_transactions_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Transactions', 'mobile-dj-manager' ), __( 'Transactions', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm-transaction', '' );
 	}
@@ -83,7 +80,7 @@ function mdjm_admin_menu()	{
 	}
 
 	$mdjm_tools_page                = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Tools', 'mobile-dj-manager' ), __( 'Tools', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-tools', 'mdjm_tools_page' );
-	$mdjm_reports_page              = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Reports', 'mobile-dj-manager' ), __( 'Reports', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-reports', 'mdjm_reports_page' );
+	//$mdjm_reports_page              = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Reports', 'mobile-dj-manager' ), __( 'Reports', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-reports', 'mdjm_reports_page' );
 	$mdjm_playlist_page             = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	$mdjm_custom_event_fields_page  = add_submenu_page( null, __( 'Custom Event Fields', 'mobile-dj-manager' ), __( 'Custom Event Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-event-fields', array( 'MDJM_Event_Fields', 'custom_event_field_settings' ) );
 	$mdjm_custom_client_fields_page = add_submenu_page( null, __( 'Custom Client Fields', 'mobile-dj-manager' ), __( 'Custom Client Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-client-fields', 'mdjm_custom_client_fields_page' );
