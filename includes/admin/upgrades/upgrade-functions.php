@@ -55,6 +55,7 @@ function mdjm_do_automatic_upgrades() {
 			set_transient( '_mdjm_activation_redirect', true, 30 );
 		}
 
+		update_option( 'mdjm_version_upgraded_from', get_option( 'mdjm_version' ) );
 		update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 
 	}
