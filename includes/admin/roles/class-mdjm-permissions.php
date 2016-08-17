@@ -49,6 +49,7 @@ class MDJM_Permissions	{
 			'event_permissions'    => 'mdjm_event',
 			'package_permissions'  => 'mdjm_package',
 			'quote_permissions'    => 'mdjm_quote',
+			'report_permissions'   => 'mdjm_reports',
 			'template_permissions' => 'mdjm_template',
 			'txn_permissions'      => 'mdjm_txn',
 			'venue_permissions'    => 'mdjm_venue'
@@ -261,6 +262,19 @@ class MDJM_Permissions	{
 				);
 				break;
 			/**
+			 * Reports
+			 */
+			case 'mdjm_reports_none':
+				$caps = array( 
+					'view_event_reports' => false
+				);
+				break;
+			case 'mdjm_reports_run':
+				$caps = array( 
+					'view_event_reports' => true
+				);
+				break;
+			/**
 			 * Templates
 			 */
 			case 'mdjm_template_none':
@@ -430,7 +444,9 @@ class MDJM_Permissions	{
 			case 'send_comms':
 				$allowed_roles = array( 'mdjm_comms_send' );
 				break;
-		
+
+			case 'run_reports':
+				$allowed_roles = array( 'view_event_reports' );
 			default:
 				return false;
 				break;
@@ -494,7 +510,10 @@ class MDJM_Permissions	{
 			'read_private_mdjm_quotes' => true, 'edit_published_mdjm_quotes' => true,
 			'edit_private_mdjm_quotes' => true, 'delete_mdjm_quotes' => true, 'delete_others_mdjm_quotes' => true,
 			'delete_private_mdjm_quotes' => true, 'delete_published_mdjm_quotes' => true,
-			
+
+			// Reports
+			'view_event_reports' => true,
+
 			// Templates
 			'mdjm_template_edit' => true, 'edit_mdjm_templates' => true,
 			'edit_others_mdjm_templates' => true, 'publish_mdjm_templates' => true, 'read_private_mdjm_templates' => true,

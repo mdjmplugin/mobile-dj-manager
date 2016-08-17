@@ -91,7 +91,7 @@ function mdjm_get_reporting_view( $default = 'earnings' ) {
  */
 function mdjm_reports_tab_reports() {
 
-	if( ! current_user_can( 'view_event_reports' ) ) {
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
 		wp_die( __( 'You do not have permission to access this report', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -114,7 +114,7 @@ add_action( 'mdjm_reports_tab_reports', 'mdjm_reports_tab_reports' );
  */
 function mdjm_report_views() {
 
-	if( ! current_user_can( 'view_event_reports' ) ) {
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
@@ -149,7 +149,7 @@ function mdjm_report_views() {
  */
 function mdjm_reports_events_table() {
 
-	if( ! current_user_can( 'view_event_reports' ) ) {
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
@@ -172,7 +172,7 @@ add_action( 'mdjm_reports_view_events', 'mdjm_reports_events_table' );
  */
 function mdjm_reports_earnings() {
 
-	if( ! current_user_can( 'view_event_reports' ) ) {
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 	?>
