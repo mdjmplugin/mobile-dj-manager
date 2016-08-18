@@ -510,6 +510,8 @@ add_shortcode( 'mdjm-availability', 'mdjm_shortcode_availability' );
  */
 function mdjm_shortcode_addons_list( $atts )	{
 
+	global $post;
+
 	$atts = shortcode_atts( array( // These are our default values
 			'filter_by'    => false,
 			'filter_value' => false,
@@ -525,7 +527,14 @@ function mdjm_shortcode_addons_list( $atts )	{
 	ob_start();
 	$output = '';
 
-	if ( ! empty( $atts['filter_by'] ) && ! empty( $atts['filter_value'] ) && $atts['filter_by'] != 'false' && $atts['filter_value'] != 'false' )	{
+	if ( ! empty( $post ) && 'mdjm-package' == get_post_type( $post->ID ) )	{
+		$package_addons = mdjm_get_package_addons( $post->ID );
+
+		$addons = array();
+		foreach ( $package_addons as $package )	{
+			$addons[] = mdjm_get_addon( $package );
+		}
+	} elseif ( ! empty( $atts['filter_by'] ) && ! empty( $atts['filter_value'] ) && $atts['filter_by'] != 'false' && $atts['filter_value'] != 'false' )	{
 
 		// Filter addons by user	
 		if ( $atts['filter_by'] == 'category' )	{

@@ -120,9 +120,9 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Improved licensing validation for addons
 * 
 
-
 **Bug Fixes**
 
+* MDJM Event Management user fields not updating within Admin user profile if value is removed
 
 = 1.3.8.5 =
 
