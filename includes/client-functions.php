@@ -445,6 +445,37 @@ function mdjm_get_client_email( $user_id )	{
 } // mdjm_get_client_email
 
 /**
+ * Retrieve a clients address.
+ *
+ * @since	1.4
+ * @param	int		$client_id	The ID of the client to check.
+ * @return	arr		The address of the client.
+ */
+function mdjm_get_client_address( $client_id )	{
+	
+	$client  = get_userdata( $client_id );
+	$address = array();
+
+	if ( ! empty( $client->address1 ) )	{
+		$address[] = stripslashes( $client->address1 );
+	}
+	if ( ! empty( $client->address2 ) )	{
+		$address[] = stripslashes( $client->address2 );
+	}
+	if ( ! empty( $client->town ) )	{
+		$address[] = stripslashes( $client->town );
+	}
+	if ( ! empty( $client->county ) )	{
+		$address[] = stripslashes( $client->county );
+	}
+	if ( ! empty( $client->postcode ) )	{
+		$address[] = stripslashes( $client->postcode );
+	}
+
+	return apply_filters( 'mdjm_get_client_address', $address, $client_id );
+} // mdjm_get_client_address
+
+/**
  * Retrieve the full address of the client.
  *
  * @since	1.3.7
@@ -453,39 +484,11 @@ function mdjm_get_client_email( $user_id )	{
  */
 function mdjm_get_client_full_address( $client_id )	{
 
-	$return = '';
+	$address = mdjm_get_client_address( $client_id );
 	
-	$client = get_userdata( $client_id );	
+	$address = apply_filters( 'mdjm_client_full_address', $address );
 	
-	if( ! empty( $client ) )	{
-
-		if( ! empty( $client->address1 ) )	{
-
-			$return[] = $client->address1;
-			
-			if( ! empty( $client->address2 ) )	{
-				$return[] = $client->address2;
-			}
-			
-			if( ! empty( $client->town ) )	{
-				$return[] = $client->town;
-			}
-			
-			if( ! empty( $client->county ) )	{
-				$return[] = $client->county;
-			}
-			
-			if( ! empty( $client->postcode ) )	{
-				$return[] = $client->postcode;
-			}
-
-		}
-
-	}
-	
-	$return = apply_filters( 'mdjm_client_full_address', $return );
-	
-	return is_array( $return ) ? implode( '<br />', $return ) : $return;
+	return is_array( $address ) ? implode( '<br />', $address ) : '';
 } // mdjm_get_client_full_address
 
 /**

@@ -62,6 +62,7 @@ jQuery(document).ready(function ($) {
 			this.employee();
 			this.equipment();
 			this.time();
+			this.travel();
 			this.type();
 			this.txns();
 			this.venue();
@@ -476,7 +477,55 @@ jQuery(document).ready(function ($) {
 				}
 			});
 		},
-		
+
+		travel : function()	{
+			// Update the travel data when the primary employee is updated
+			$( document.body ).on( 'change', '#_mdjm_event_dj', function() {
+				if ( 'manual' == $('#venue_id').val() )	{
+					var venue = [
+						$('#venue_address1').val(),
+						$('#venue_address2').val(),
+						$('#venue_town').val(),
+						$('#venue_county').val(),
+						$('#venue_postcode').val(),
+					];
+				} else	{
+					var venue = $('#venue_id').val();
+				}
+				var postData = {
+					employee_id : $('#_mdjm_event_dj').val(),
+					venue : venue,
+					action  : 'mdjm_update_travel_data'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					success: function (response) {
+						if(response.type == 'success') {
+							$('#mdjm-travel-distance').removeClass("mdjm-hidden");
+							$('#mdjm-travel-time').removeClass("mdjm-hidden");
+							$('#mdjm-travel-cost').removeClass("mdjm-hidden");
+							$('#mdjm-travel-distance').replaceWith('<span id="mdjm-travel-distance">' + response.distance + '</span>');
+							$('#mdjm-travel-time').replaceWith('<span id="mdjm-travel-time">' + response.time + '</span>');
+							$('#mdjm-travel-cost').replaceWith('<span id="mdjm-travel-cost">' + response.cost + '</span>');
+						} else	{
+							$('#mdjm-travel-distance').addClass("mdjm-hidden");
+							$('#mdjm-travel-time').addClass("mdjm-hidden");
+							$('#mdjm-travel-cost').addClass("mdjm-hidden");
+						}
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		},
+
 		type : function()	{
 			// Reveal the input fields to add a new event type
 			$( document.body ).on( 'click', '#event-type-add', function(event) {

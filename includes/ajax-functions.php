@@ -170,7 +170,6 @@ add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_aj
  * Adds a new venue from the events screen.
  *
  * @since	1.3.7
- *
  */
 function mdjm_add_venue_ajax()	{
 
@@ -227,13 +226,45 @@ function mdjm_add_venue_ajax()	{
 
 } // mdjm_add_venue_ajax
 add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
-	
+
+/**
+ * Refresh the travel data for an event.
+ *
+ * @since	1.4
+ */
+function mdjm_update_event_travel_data_ajax()	{
+	$employee_id = $_POST['employee_id'];
+	$dest        = $_POST['venue'];
+	$dest        = maybe_unserialize( $dest );
+
+	$mdjm_travel = new MDJM_Travel;
+
+	if ( ! empty( $employee_id ) )	{
+		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
+	}
+
+	$mdjm_travel->set_destination( $dest );
+	$mdjm_travel->get_travel_data();
+
+	if ( ! empty( $mdjm_travel->data ) )	{
+		$response = array(
+			'type'     => 'success',
+			'distance' => mdjm_format_distance( $mdjm_travel->data['distance'], false, true ),
+			'time'     => mdjm_seconds_to_time( $mdjm_travel->data['duration'] ),
+			'cost'     => mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) )
+		);
+	} else	{
+		$response = array( 'type' => 'error' );
+	}
+
+	wp_send_json( $response );
+} // mdjm_update_event_travel_data_ajax
+add_action( 'wp_ajax_mdjm_update_travel_data', 'mdjm_update_event_travel_data_ajax' );
+
 /**
  * Save the custom event fields order
  *
  * @since	1.3.7
- * @param	$_POST
- * @return	void
  */
 function mdjm_order_custom_event_fields_ajax()	{
 

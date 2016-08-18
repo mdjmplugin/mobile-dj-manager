@@ -329,8 +329,6 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
 
-	$travel_data    = mdjm_travel_get_distance( $event_id, $venue_id );
-
 	?>
     <div id="mdjm-event-venue-details" class="mdjm-hidden">
         <table class="widefat mdjm_event_venue_details mdjm_form_fields">
@@ -373,16 +371,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                     <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
            		</tr>
 
-				<?php if ( ! empty( $travel_data ) ) : ?>
-                    <tr>
-                        <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-                            <?php echo mdjm_format_distance( $travel_data['distance'], false, true ); ?></td>
-                        <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-                            <?php echo mdjm_seconds_to_time( $travel_data['duration'] ); ?></td>
-                        <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-                            <?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $travel_data['distance'] ) ) ); ?></td>
-                    </tr>
-                <?php endif; ?>
+				<?php do_action( 'mdjm_after_venue_notes', $venue_address ); ?>
 
             </tbody>
         </table>

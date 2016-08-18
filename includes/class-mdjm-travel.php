@@ -21,18 +21,18 @@ if ( ! defined( 'ABSPATH' ) )
 class MDJM_Travel {
 
 	/**
-	 * The start location
+	 * The start address
 	 *
 	 * @since	1.4
 	 */
-	public $start;
+	public $start_address;
 
 	/**
-	 * The end location
+	 * The destination address
 	 *
 	 * @since	1.4
 	 */
-	public $end;
+	public $destination_address;
 
 	/**
 	 * The distance of travel
@@ -83,7 +83,7 @@ class MDJM_Travel {
 	 * @access	private
 	 * @since	1.4
 	 */
-	private $maps = 'https://maps.googleapis.com/maps/api/distancematrix/json/';
+	private $maps = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 
 	/**
 	 * The query.
@@ -99,7 +99,7 @@ class MDJM_Travel {
 	 * @since	1.4
 	 */
 	public function __construct( $args = array() ) {
-		
+		$this->init();
 	} // __construct
 
 	/**
@@ -109,8 +109,8 @@ class MDJM_Travel {
 	 * @since	1.4
 	 */
 	private function init()	{
-		if ( ! isset( $this->start ) )	{
-			$this->start = mdjm_get_option( 'travel_primary' );
+		if ( ! isset( $this->start_address ) )	{
+			$this->start_address = mdjm_get_option( 'travel_primary' );
 		}
 		if ( ! isset( $this->units ) )	{
 			$this->units = mdjm_get_option( 'travel_units' );
@@ -146,15 +146,23 @@ class MDJM_Travel {
 	 * @since	1.4
 	 */
 	private function prepare_query()	{
-		if ( ! isset( $this->end ) )	{
+		if ( ! isset( $this->destination_address ) )	{
 			return false;
 		}
 
+		if ( is_array( $this->start_address ) )	{
+			$this->start_address = implode( ',', $this->start_address );
+		}
+
+		if ( is_array( $this->destination_address ) )	{
+			$this->destination_address = implode( ',', $this->destination_address );
+		}
+
 		$query_args = array(
-			'units'       => $this->units,
-			'mode'        => $this->mode,
-			'origin'      => str_replace( '%2C', ',', urlencode( $this->start ) ),
-			'destination' => str_replace( '%2C', ',', urlencode( $this->end ) )
+			'units'        => $this->units,
+			'mode'         => $this->mode,
+			'origins'      => str_replace( '%2C', ',', urlencode( $this->start_address ) ),
+			'destinations' => str_replace( '%2C', ',', urlencode( $this->destination_address ) )
 		);
 
 		/*
@@ -166,6 +174,74 @@ class MDJM_Travel {
 
 		$this->query = add_query_arg( $query_args, $this->maps );
 	} // prepare_query
+
+	/**
+	 * Process the query.
+	 *
+	 * @since	1.4
+	 */
+	public function process_query()	{
+		$this->prepare_query();
+
+		if ( ! isset( $this->query ) )	{
+			return false;
+		}
+
+		$response = wp_remote_get( $this->query );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$travel_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( empty( $travel_data ) || $travel_data->status != 'OK' )	{
+			return false;
+		}
+
+		if ( empty( $travel_data->rows ) )	{
+			return false;
+		}
+	
+		if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) )	{
+			return false;
+		}
+	
+		if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) )	{
+			return false;
+		}
+	
+		$travel = array(
+			'origin'      => $travel_data->origin_addresses[0],
+			'destination' => $travel_data->destination_addresses[0],
+			'duration'    => $travel_data->rows[0]->elements[0]->duration->value,
+			'distance'    => str_replace(
+				array( 'km', 'mi' ),
+				array( '', '' ),
+				$travel_data->rows[0]->elements[0]->distance->text
+			),
+		);
+
+		$travel = apply_filters( 'mdjm_traveL_data', $travel, $travel_data );
+
+		return $travel;
+
+	} // process_query
+
+	/**
+	 * Retrieve the travel data.
+	 *
+	 * @since	1.4
+	 */
+	public function get_travel_data()	{
+		if ( ! isset( $this->destination_address ) )	{
+			return false;
+		}
+
+		$this->data = $this->process_query();
+
+		return apply_filters( 'mdjm_get_travel_data', $this->data, $this );
+	} // get_travel_data
 
 	/**
 	 * Retrieve the cost of the trip.
@@ -199,5 +275,91 @@ class MDJM_Travel {
 
 		return apply_filters( 'mdjm_travel_cost', $this->cost, $this );
 	} // get_cost
+
+	/**
+	 * Retrieve a venue address.
+	 *
+	 * @since	1.4
+	 * @param	int			$id			Post ID of either an event or venue.
+	 * @return	arr|false	$address	Array of address fields, or false.
+	 */
+	public function get_venue_address( $id )	{
+		$post_type = get_post_type( $id );
+
+		if ( 'mdjm-event' != $post_type && 'mdjm-venue' != $post_type )	{
+			return false;
+		}
+
+		$venue_address = mdjm_get_event_venue_meta( $id, 'address' );
+
+		$address = ! empty( $venue_address ) ? $venue_address : false;
+		$address = apply_filters( 'mdjm_get_venue_address', $address, $id );
+
+		return $address;
+	} // get_venue_address
+
+	/**
+	 * Retrieve an employees address.
+	 *
+	 * @since	1.4
+	 * @param	int			$employee_id	User ID of an employee.
+	 * @return	arr|false	$address		Array of address fields, or false.
+	 */
+	public function get_employee_address( $employee_id )	{
+
+		if ( ! mdjm_is_employee( $employee_id ) )	{
+			return false;
+		}
+
+		$employee_address = mdjm_get_employee_address( $employee_id );
+
+		if ( is_array( $employee_address ) )	{
+			$employee_address = implode( ',', array_filter( $employee_address ) );
+		}
+
+		// To filter this use apply_filters( 'mdjm_get_employee_address', $address, $user_id );
+		$address = ! empty( $employee_address ) ? $employee_address : false;
+
+		return $address;
+	} // get_employee_address
+
+	/**
+	 * Retrieve a clients address.
+	 *
+	 * @since	1.4
+	 * @param	int			$client_id	User ID of an employee.
+	 * @return	arr|false	$address	Array of address fields, or false.
+	 */
+	public function get_client_address( $client_id )	{
+		$client_address = mdjm_get_client_address( $client_id );
+
+		if ( is_array( $client_address ) )	{
+			$client_address = implode( ',', array_filter( $client_address ) );
+		}
+
+		// To filter this use apply_filters( 'mdjm_get_client_address', $address, $client_id );
+		$address = ! empty( $client_address ) ? $client_address : false;
+
+		return $address;
+	} // get_client_address
+
+	/**
+	 * Set the destination address.
+	 *
+	 * @since	1.4
+	 * @param	int|arr|obj		$destination	An event ID or object, or a venue post ID or an address array.
+	 * @return	void
+	 */
+	public function set_destination( $dest )	{
+		if ( is_array( $dest ) )	{ // Address array is passed
+			$dest = implode( ',', array_filter( $dest ) );
+			$this->destination_address = $dest;
+		} elseif ( is_object( $dest ) )	{ // Event object is passed
+			$mdjm_event = new MDJM_Event( $event );
+			$this->destination_address = $this->get_venue_address( $mdjm_event->get_venue_id() );
+		} elseif ( is_numeric( $dest ) )	{ // Event or Venue ID is passed
+			$this->destination_address = $this->get_venue_address( $dest );
+		}
+	} // set_destination
 
 } // class MDJM_Travel

@@ -267,29 +267,48 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true )	{
  * Adds the travel data row to the venue details metabox on the event screen.
  *
  * @since	1.4
- * @param	int		$event_id	The event ID
- * @param	int		$venue_id	The venue ID
+ * @param	int|arr|obj	$dest			An address array, event ID, event object or venue ID.
+ * @param	int			$employee_id	An employee user ID.
  * @return	void
  */
-function mdjm_show_travel_data_row( $event_id = '', $venue_id = '' )	{
+function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 
-	if ( empty( $event_id ) && empty( $venue_id ) )	{
-		return;
+	$mdjm_travel = new MDJM_Travel;
+
+	if ( ! empty( $employee_id ) )	{
+		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
 	}
 
-	$travel_data    = mdjm_travel_get_distance( $event_id, $venue_id ); ?>
+	$mdjm_travel->set_destination( $dest );
 
-    <?php if ( ! empty( $travel_data ) ) : ?>
-        <tr>
+	if ( empty( $employee_id ) )	{
+		if ( is_object( $dest ) )	{
+			$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $dest->employee_id ) );
+		} elseif ( is_numeric( $dest ) )	{
+			if ( 'mdjm-event' == get_post_type( $dest ) )	{
+				$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( mdjm_get_event_primary_employee_id( $dest ) ) );
+			}
+		}
+	}
+
+	$mdjm_travel->get_travel_data();
+
+    if ( ! empty( $mdjm_travel->data ) ) : ?>
+    	<?php ob_start(); ?>
+        <tr id="mdjm-travel-data">
             <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-                <?php echo mdjm_format_distance( $travel_data['distance'], false, true ); ?></td>
+                <span id="mdjm-travel-distance"><?php echo mdjm_format_distance( $mdjm_travel->data['distance'], false, true ); ?></span></td>
             <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-                <?php echo mdjm_seconds_to_time( $travel_data['duration'] ); ?></td>
+                <span id="mdjm-travel-time"><?php echo mdjm_seconds_to_time( $mdjm_travel->data['duration'] ); ?></span></td>
             <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-                <?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $travel_data['distance'] ) ) ); ?></td>
+                <span id="mdjm-travel-cost"><?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) ); ?></span></td>
         </tr>
-	<?php endif;
+        <?php $travel_data_row = ob_get_contents();
+		ob_end_clean();
+
+		echo $travel_data_row;
+	endif;
 
 } // mdjm_show_travel_data_row
-add_action( 'mdjm_venue_details_table_after_info', 'mdjm_show_travel_data_row', 10, 2 );
-add_action( 'mdjm_venue_details_table_after_save', 'mdjm_show_travel_data_row', 10, 2 );
+add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row'         );
+add_action( 'mdjm_venue_details_travel_data', 'mdjm_show_travel_data_row' );

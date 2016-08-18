@@ -1362,6 +1362,8 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
 	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
 
+	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode	);
+
 	?>
     <div id="mdjm-event-add-new-venue-fields" class="mdjm-hidden">
     	<table class="widefat mdjm_event_add_venue_table mdjm_form_fields">
@@ -1456,6 +1458,7 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
                 <?php endif; ?>
 
 				<?php do_action( 'mdjm_venue_details_table_after_save', $event_id ); ?>
+                <?php do_action( 'mdjm_venue_details_travel_data', $venue_address ); ?>
 
             </tbody>
         </table>
