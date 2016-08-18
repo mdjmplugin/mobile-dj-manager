@@ -219,7 +219,8 @@ function mdjm_register_admin_scripts( $hook )	{
 				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'select_months'        => __( 'Select Months', 'mobile-dj-manager' ),
 				'one_month_min'        => __( 'You must have a pricing option for at least one month', 'mobile-dj-manager' ),
-				'one_item_min'         => __( 'Select at least one Add-on', 'mobile-dj-manager' )
+				'one_item_min'         => __( 'Select at least one Add-on', 'mobile-dj-manager' ),
+				'min_travel_distance'  => mdjm_get_option( 'travel_min_distance' )
 			)
 		)
 	);

@@ -86,6 +86,14 @@ class MDJM_Travel {
 	private $maps = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 
 	/**
+	 * Directions.
+	 *
+	 * @access	private
+	 * @since	1.4
+	 */
+	private $directions = 'https://maps.google.com/maps';
+
+	/**
 	 * The query.
 	 *
 	 * @access	private
@@ -222,7 +230,7 @@ class MDJM_Travel {
 			),
 		);
 
-		$travel = apply_filters( 'mdjm_traveL_data', $travel, $travel_data );
+		$travel = apply_filters( 'mdjm_travel_data', $travel, $travel_data );
 
 		return $travel;
 
@@ -361,5 +369,33 @@ class MDJM_Travel {
 			$this->destination_address = $this->get_venue_address( $dest );
 		}
 	} // set_destination
+
+	/**
+	 * Retrieve the URL for directions.
+	 *
+	 * @since	1.4
+	 */
+	function get_directions_url()	{
+		if ( ! isset( $this->destination_address ) )	{
+			return false;
+		}
+
+		if ( is_array( $this->start_address ) )	{
+			$this->start_address = implode( ',', $this->start_address );
+		}
+
+		if ( is_array( $this->destination_address ) )	{
+			$this->destination_address = implode( ',', $this->destination_address );
+		}
+
+		$url = add_query_arg( array(
+			'dirflg' => 'd',
+			'saddr'  => urlencode( $this->start_address ),
+			'daddr'  => urlencode( $this->destination_address )
+		), $this->directions );
+
+		return apply_filters( 'mdjm_directions_url', $url, $this );
+
+	} // get_directions_url
 
 } // class MDJM_Travel

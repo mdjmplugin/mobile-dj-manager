@@ -1013,6 +1013,24 @@ class MDJM_Event {
 	} // get_venue_id
 
 	/**
+	 * Retrieve the travel data
+	 *
+	 * @since	1.4
+	 * @return	arr|false
+	 */
+	public function get_travel_data() {
+		$travel_data = $this->get_meta( '_mdjm_event_travel_data' );
+		
+		/**
+		 * Override the travel data.
+		 *
+		 * @since	1.4
+		 * @param	arr		$travel_data The travel data array.
+		 */
+		return apply_filters( 'mdjm_event_travel_data', $travel_data, $this->ID );
+	} // get_travel_data
+
+	/**
 	 * Retrieve the guest playlist access code.
 	 *
 	 * @since	1.3

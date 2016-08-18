@@ -1361,8 +1361,9 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
 	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
 	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
+	$employee_id    = ! empty( $mdjm_event->employee_id ) ? $mdjm_event->employee_id : '';
 
-	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode	);
+	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
 
 	?>
     <div id="mdjm-event-add-new-venue-fields" class="mdjm-hidden">
@@ -1458,7 +1459,7 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
                 <?php endif; ?>
 
 				<?php do_action( 'mdjm_venue_details_table_after_save', $event_id ); ?>
-                <?php do_action( 'mdjm_venue_details_travel_data', $venue_address ); ?>
+                <?php do_action( 'mdjm_venue_details_travel_data', $venue_address, $employee_id ); ?>
 
             </tbody>
         </table>
@@ -1466,6 +1467,30 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
     <?php
 } // mdjm_event_metabox_venue_add_new_table
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_add_new_table', 30 );
+
+/**
+ * Output the event travel costs hidden fields
+ *
+ * @since	1.4
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_travel_costs_fields( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	$travel_fields = mdjm_get_event_travel_fields();
+	$travel_data   = $mdjm_event->get_travel_data();
+
+	foreach( $travel_fields as $field ) : ?>
+    	<?php $value = ! empty( $travel_data[ $field ] ) ? $travel_data[ $field ] : ''; ?>
+		<input type="hidden" name="travel_<?php echo $field; ?>" id="mdjm_travel_<?php echo $field; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach;
+
+} // mdjm_event_metabox_travel_costs_fields
+add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_travel_costs_fields', 40 );
 
 /**
  * Output the event enquiry source row

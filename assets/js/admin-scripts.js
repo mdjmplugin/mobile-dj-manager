@@ -327,12 +327,14 @@ jQuery(document).ready(function ($) {
 
 				var current_cost = $('#_mdjm_event_cost').val();
 				var postData     = {
-					addons       : $('#event_addons').val() || [],
-					package      : $('#_mdjm_event_package option:selected').val(),
-					event_id     : $('#post_ID').val(),
-					current_cost : $('#_mdjm_event_cost').val(),
-					event_date   : $('#_mdjm_event_date').val(),
-					action       : 'update_event_cost_from_addons'
+					addons          : $('#event_addons').val() || [],
+					package         : $('#_mdjm_event_package option:selected').val(),
+					event_id        : $('#post_ID').val(),
+					current_cost    : $('#_mdjm_event_cost').val(),
+					event_date      : $('#_mdjm_event_date').val(),
+					travel_cost     : $('#travel_cost').val(),
+					travel_distance : $('#travel_distance').val(),
+					action          : 'mdjm_update_event_cost'
 				};
 
 				$.ajax({
@@ -479,8 +481,8 @@ jQuery(document).ready(function ($) {
 		},
 
 		travel : function()	{
-			// Update the travel data when the primary employee is updated
-			$( document.body ).on( 'change', '#_mdjm_event_dj', function() {
+			// Update the travel data when the primary employee or venue fields are updated
+			$( document.body ).on( 'change', '#_mdjm_event_dj,#venue_address1,#venue_address2,#venue_town,#venue_county,#venue_postcode', function() {
 				if ( 'manual' == $('#venue_id').val() )	{
 					var venue = [
 						$('#venue_address1').val(),
@@ -505,16 +507,28 @@ jQuery(document).ready(function ($) {
 					url        : ajaxurl,
 					success: function (response) {
 						if(response.type == 'success') {
-							$('#mdjm-travel-distance').removeClass("mdjm-hidden");
-							$('#mdjm-travel-time').removeClass("mdjm-hidden");
-							$('#mdjm-travel-cost').removeClass("mdjm-hidden");
-							$('#mdjm-travel-distance').replaceWith('<span id="mdjm-travel-distance">' + response.distance + '</span>');
-							$('#mdjm-travel-time').replaceWith('<span id="mdjm-travel-time">' + response.time + '</span>');
-							$('#mdjm-travel-cost').replaceWith('<span id="mdjm-travel-cost">' + response.cost + '</span>');
+							$('.mdjm-travel-distance').removeClass("mdjm-hidden");
+							$('.mdjm-travel-time').removeClass("mdjm-hidden");
+							$('.mdjm-travel-cost').removeClass("mdjm-hidden");
+							$('.mdjm-travel-directions').removeClass("mdjm-hidden");
+							$('.mdjm-travel-distance').html(response.distance);
+							$('.mdjm-travel-time').html(response.time);
+							$('.mdjm-travel-cost').html(response.cost);
+							$("#travel_directions").attr("href", response.directions_url);
+							$('#mdjm_travel_distance').val(response.distance);
+							$('#mdjm_travel_time').val(response.time);
+							$('#mdjm_travel_cost').val(response.cost);
+							$('#mdjm_travel_directions_url').val(response.directions_url);
 						} else	{
-							$('#mdjm-travel-distance').addClass("mdjm-hidden");
-							$('#mdjm-travel-time').addClass("mdjm-hidden");
-							$('#mdjm-travel-cost').addClass("mdjm-hidden");
+							$('.mdjm-travel-distance').addClass("mdjm-hidden");
+							$('.mdjm-travel-time').addClass("mdjm-hidden");
+							$('.mdjm-travel-cost').addClass("mdjm-hidden");
+							$('#travel-directions').attr("href", '' );
+							$('.mdjm-travel-directions_url').addClass("mdjm-hidden");
+							$('#mdjm_travel_distance').val('');
+							$('#mdjm_travel_time').val('');
+							$('#mdjm_travel_cost').val('');
+							$('#mdjm_travel_directions_url').val('');
 						}
 					}
 				}).fail(function (data) {

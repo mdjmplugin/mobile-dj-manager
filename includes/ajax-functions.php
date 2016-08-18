@@ -248,10 +248,11 @@ function mdjm_update_event_travel_data_ajax()	{
 
 	if ( ! empty( $mdjm_travel->data ) )	{
 		$response = array(
-			'type'     => 'success',
-			'distance' => mdjm_format_distance( $mdjm_travel->data['distance'], false, true ),
-			'time'     => mdjm_seconds_to_time( $mdjm_travel->data['duration'] ),
-			'cost'     => mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) )
+			'type'           => 'success',
+			'distance'       => mdjm_format_distance( $mdjm_travel->data['distance'], false, true ),
+			'time'           => mdjm_seconds_to_time( $mdjm_travel->data['duration'] ),
+			'cost'           => mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) ),
+			'directions_url' => $mdjm_travel->get_directions_url()
 		);
 	} else	{
 		$response = array( 'type' => 'error' );
@@ -498,85 +499,25 @@ function mdjm_add_transaction_type_ajax()	{
 	die();
 } // mdjm_add_transaction_type_ajax
 add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
+
 	
 /**
- * Calculate the event cost as the package changes
+ * Calculate the event cost as event elements change
  *
  * @since	1.0
  * @return	void
  */
-function mdjm_update_event_cost_from_package_ajax()	{
+function mdjm_update_event_cost_ajax()	{
 
 	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
 
-	$package    = $mdjm_event->get_package();
-	$addons     = $mdjm_event->get_addons();
-	$event_cost = $mdjm_event->price;
-	$event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
-	$base_cost  = '0.00';
-
-	$package_price = ( $package ) ? (float) mdjm_get_package_price( $package->ID, $event_date ) : false;
-
-	if ( $event_cost )	{
-		$event_cost = (float) $event_cost;
-		$base_cost  = ( $package_price ) ? $event_cost - $package_price : $event_cost;
-	}
-
-	if ( $addons )	{
-		foreach( $addons as $addon )	{
-			$addon_cost = mdjm_get_package_price( $addon->ID, $event_date );
-			$base_cost  = $base_cost - (float) $addon_cost;	
-		}
-	}
-
-	$cost = $base_cost;
-
-	$new_package       = $_POST['package'];
-	$new_package_price = ( ! empty( $new_package ) ) ? mdjm_get_package_price( $new_package, $event_date ) : false;
-
-	if ( $new_package_price )	{
-		$cost = $base_cost + (float) $new_package_price;
-	}
-
-	if ( ! empty( $cost ) )	{
-		$result['type'] = 'success';
-		$result['cost'] = mdjm_sanitize_amount( (float) $cost );	
-	} else	{
-		$result['type'] = 'success';
-		$result['cost'] = mdjm_sanitize_amount( 0 );
-	}
-
-	$result = json_encode( $result );
-
-	echo $result;
-
-	die();
-
-} // mdjm_update_event_cost_from_package_ajax
-add_action( 'wp_ajax_update_event_cost_from_package', 'mdjm_update_event_cost_from_package_ajax' );
-	
-/**
- * Calculate the event cost as the addons change
- *
- * @since	1.0
- * @return	void
- */
-function mdjm_update_event_cost_from_addons_ajax()	{
-
-	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
-
-	$package    = $mdjm_event->get_package();
-	$addons     = $mdjm_event->get_addons();
-	$event_cost = $mdjm_event->price;
-	$event_date = $event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
-	$base_cost  = '0.00';
-
-	$current_package = get_post_meta( $_POST['event_id'], '_mdjm_event_package', true );
-	$current_addons = get_post_meta( $_POST['event_id'], '_mdjm_event_addons', true );
-	$packages = get_option( 'mdjm_packages' );
-	$equipment = get_option( 'mdjm_equipment' );
-
-	$event_cost = get_post_meta( $_POST['event_id'], '_mdjm_event_cost', true );
+	$event_cost    = $mdjm_event->price;
+	$event_date    = $event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
+	$base_cost     = '0.00';
+	$package       = $mdjm_event->get_package();
+	$package_price = $package ? mdjm_get_package_price( $package->ID, $event_date ) : '0.00';
+	$addons        = $mdjm_event->get_addons();
+	$travel_data   = $mdjm_event->get_travel_data();
 	
 	if ( $event_cost )	{
 		$event_cost = (float) $event_cost;
@@ -584,19 +525,23 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 	}
 
 	if ( $package )	{
-		$package_price = mdjm_get_addon_price( $package->ID, $event_date );
-		$base_cost     = $event_cost - $package_price;
+		$base_cost = $event_cost - $package_price;
 	}
 
 	if ( $addons )	{
 		foreach( $addons as $addon )	{
 			$addon_price = mdjm_get_addon_price( $addon->ID, $event_date );
-			$base_cost   = $base_cost - (float) $addon_price;	
+			$base_cost   = $base_cost - (float) $addon_price;
 		}
 	}
 
-	$new_package = ( ! empty( $_POST['package'] ) ? $_POST['package'] : false );
-	$new_addons  = ( ! empty( $_POST['addons'] )  ? $_POST['addons']  : false );
+	if ( $travel_data && ! empty( $travel_data['cost'] ) )	{
+		$base_cost = $base_cost - (float) $travel_data['cost'];
+	}
+
+	$new_package = ! empty( $_POST['package'] )      ? $_POST['package']      : false;
+	$new_addons  = ! empty( $_POST['addons']  )      ? $_POST['addons']       : false;
+	$new_travel  = ! empty( $_POST['travel_cost']  ) ? $_POST['travel_cost']  : false;
 
 	$cost = $base_cost;
 
@@ -605,12 +550,16 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 		$cost += (float) $new_package_price;
 	}
 
-	if( $new_addons )	{
+	if ( $new_addons )	{
 		foreach( $new_addons as $new_addon )	{
 			$new_addon_price = mdjm_get_addon_price( $new_addon, $event_date );
 
 			$cost += (float) $new_addon_price;
 		}
+	}
+
+	if ( $new_travel && $_POST['travel_distance'] >= mdjm_get_option( 'travel_min_distance' ) )	{
+		$cost += (float) $new_travel;
 	}
 
 	if ( ! empty( $cost ) )	{
@@ -621,13 +570,10 @@ function mdjm_update_event_cost_from_addons_ajax()	{
 		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
 
-	$result = json_encode( $result );
-	echo $result;
+	wp_send_json( $result );
 
-	die();
-
-} // mdjm_update_event_cost_from_addons_ajax
-add_action( 'wp_ajax_update_event_cost_from_addons', 'mdjm_update_event_cost_from_addons_ajax' );
+} // mdjm_update_event_cost_ajax
+add_action( 'wp_ajax_mdjm_update_event_cost', 'mdjm_update_event_cost_ajax' );
 
 /**
  * Update the available list of packages and addons when the primary event employee

@@ -388,8 +388,10 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					}
 					
 					// Update the users meta data
-					if( !empty( $_POST[ $field ] ) )	{
+					if( ! empty( $_POST[ $field ] ) )	{
 						update_user_meta( $user_id, $field, $_POST[ $field ] );
+					} else	{
+						delete_user_meta( $user_id, $field );
 					}
 					
 					/**
