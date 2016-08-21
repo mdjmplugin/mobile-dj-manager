@@ -326,14 +326,27 @@ jQuery(document).ready(function ($) {
 			var setCost = function()	{
 
 				var current_cost = $('#_mdjm_event_cost').val();
+
+				if ( 'manual' == $('#venue_id').val() )	{
+					var venue = [
+						$('#venue_address1').val(),
+						$('#venue_address2').val(),
+						$('#venue_town').val(),
+						$('#venue_county').val(),
+						$('#venue_postcode').val(),
+					];
+				} else	{
+					var venue = $('#venue_id').val();
+				}
+
 				var postData     = {
 					addons          : $('#event_addons').val() || [],
 					package         : $('#_mdjm_event_package option:selected').val(),
 					event_id        : $('#post_ID').val(),
 					current_cost    : $('#_mdjm_event_cost').val(),
 					event_date      : $('#_mdjm_event_date').val(),
-					travel_cost     : $('#travel_cost').val(),
-					travel_distance : $('#travel_distance').val(),
+					venue           : venue,
+					employee_id     : $('#_mdjm_event_dj').val(),
 					action          : 'mdjm_update_event_cost'
 				};
 
@@ -355,7 +368,6 @@ jQuery(document).ready(function ($) {
 							}
 
 						} else	{
-							alert(response.msg);
 							$('#_mdjm_event_cost').val(current_cost);
 						}
 
@@ -517,7 +529,7 @@ jQuery(document).ready(function ($) {
 							$("#travel_directions").attr("href", response.directions_url);
 							$('#mdjm_travel_distance').val(response.distance);
 							$('#mdjm_travel_time').val(response.time);
-							$('#mdjm_travel_cost').val(response.cost);
+							$('#mdjm_travel_cost').val(response.raw_cost);
 							$('#mdjm_travel_directions_url').val(response.directions_url);
 						} else	{
 							$('.mdjm-travel-distance').addClass("mdjm-hidden");
@@ -752,9 +764,6 @@ jQuery(document).ready(function ($) {
 						data       : postData,
 						url        : ajaxurl,
 						beforeSend : function()	{
-							if ( $('#mdjm-event-venue-details').hasClass("mdjm-hidden") )	{
-								$.needClass = false;
-							}
 							$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 						},
 						success: function (response) {
@@ -769,7 +778,7 @@ jQuery(document).ready(function ($) {
 					});
 
 				}
-
+				$('#_mdjm_event_package').trigger('change');
 			});
 
 			// Add a new venue from the event screen

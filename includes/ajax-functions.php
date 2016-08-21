@@ -252,7 +252,8 @@ function mdjm_update_event_travel_data_ajax()	{
 			'distance'       => mdjm_format_distance( $mdjm_travel->data['distance'], false, true ),
 			'time'           => mdjm_seconds_to_time( $mdjm_travel->data['duration'] ),
 			'cost'           => mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) ),
-			'directions_url' => $mdjm_travel->get_directions_url()
+			'directions_url' => $mdjm_travel->get_directions_url(),
+			'raw_cost'       => mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ),
 		);
 	} else	{
 		$response = array( 'type' => 'error' );
@@ -509,15 +510,19 @@ add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
  */
 function mdjm_update_event_cost_ajax()	{
 
-	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
+	$mdjm_event  = new MDJM_Event( $_POST['event_id'] );
+	$mdjm_travel = new MDJM_Travel;
 
 	$event_cost    = $mdjm_event->price;
 	$event_date    = $event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
 	$base_cost     = '0.00';
 	$package       = $mdjm_event->get_package();
-	$package_price = $package ? mdjm_get_package_price( $package->ID, $event_date ) : '0.00';
+	$package_price = $package ? mdjm_get_package_price( $package, $event_date ) : '0.00';
 	$addons        = $mdjm_event->get_addons();
 	$travel_data   = $mdjm_event->get_travel_data();
+	$employee_id   = $_POST['employee_id'];
+	$dest          = $_POST['venue'];
+	$dest          = maybe_unserialize( $dest );
 	
 	if ( $event_cost )	{
 		$event_cost = (float) $event_cost;
@@ -530,7 +535,7 @@ function mdjm_update_event_cost_ajax()	{
 
 	if ( $addons )	{
 		foreach( $addons as $addon )	{
-			$addon_price = mdjm_get_addon_price( $addon->ID, $event_date );
+			$addon_price = mdjm_get_addon_price( $addon, $event_date );
 			$base_cost   = $base_cost - (float) $addon_price;
 		}
 	}
@@ -541,7 +546,6 @@ function mdjm_update_event_cost_ajax()	{
 
 	$new_package = ! empty( $_POST['package'] )      ? $_POST['package']      : false;
 	$new_addons  = ! empty( $_POST['addons']  )      ? $_POST['addons']       : false;
-	$new_travel  = ! empty( $_POST['travel_cost']  ) ? $_POST['travel_cost']  : false;
 
 	$cost = $base_cost;
 
@@ -558,7 +562,16 @@ function mdjm_update_event_cost_ajax()	{
 		}
 	}
 
-	if ( $new_travel && $_POST['travel_distance'] >= mdjm_get_option( 'travel_min_distance' ) )	{
+	if ( ! empty( $employee_id ) )	{
+		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
+	}
+
+	$mdjm_travel->set_destination( $dest );
+	$mdjm_travel->get_travel_data();
+
+	$new_travel = ! empty( $mdjm_travel->data ) ? mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) : false;
+
+	if ( $new_travel && (float) preg_replace( '/[^0-9.]*/', '', $mdjm_travel->data['distance'] ) >= mdjm_get_option( 'travel_min_distance' ) )	{
 		$cost += (float) $new_travel;
 	}
 
