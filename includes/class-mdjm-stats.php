@@ -309,7 +309,153 @@ class MDJM_Stats	{
 		return mdjm_currency_filter( mdjm_format_amount( $total ) );
 		
 	} // get_txns_total_by_date
+
+	/**
+	 * Get Income By Date Range.
+	 *
+	 * Has no consideration for any expenditure within given date range.
+	 *
+	 * @since	1.4
+	 * @param	int		$day			Day number
+	 * @param	int		$month_num		Month number
+	 * @param	int		$year			Year
+	 * @param	int		$hour			Hour
+	 * @return	int		$income			Earnings
+	 */
+	public function get_income_by_date_range( $day = null, $month_num, $year = null, $hour = null )	{
+		global $wpdb;
+
+		$args = array(
+			'post_type'              => 'mdjm-transaction',
+			'nopaging'               => true,
+			'year'                   => $year,
+			'monthnum'               => $month_num,
+			'post_status'            => 'mdjm-income',
+			'meta_key'               => '_mdjm_txn_status',
+			'meta_value'             => 'Completed',
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false
+		);
+
+		if ( ! empty( $day ) )	{
+			$args['day'] = $day;
+		}
 	
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
+		}
+
+		$args     = apply_filters( 'mdjm_get_income_by_date_range_args', $args );
+	
+		$txns = mdjm_get_txns( $args );
+		$income = 0;
+		if ( $txns ) {
+			$txns = implode( ',', $txns );
+
+			$income = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_mdjm_txn_total' AND post_id IN ({$txns})" );
+
+		}
+	
+		return round( $income, 2 );
+
+	} // get_income_by_date_range
+
+	/**
+	 * Get Expense By Date Range.
+	 *
+	 * @since	1.4
+	 * @param	int		$day			Day number
+	 * @param	int		$month_num		Month number
+	 * @param	int		$year			Year
+	 * @param	int		$hour			Hour
+	 * @return	int		$expense		Expenses
+	 */
+	public function get_expenses_by_date_range( $day = null, $month_num, $year = null, $hour = null )	{
+		global $wpdb;
+
+		$args = array(
+			'post_type'              => 'mdjm-transaction',
+			'nopaging'               => true,
+			'year'                   => $year,
+			'monthnum'               => $month_num,
+			'post_status'            => 'mdjm-expenditure',
+			'meta_key'               => '_mdjm_txn_status',
+			'meta_value'             => 'Completed',
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false
+		);
+
+		if ( ! empty( $day ) )	{
+			$args['day'] = $day;
+		}
+	
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
+		}
+
+		$args     = apply_filters( 'mdjm_get_expenses_by_date_range_args', $args );
+	
+		$txns    = mdjm_get_txns( $args );
+		$expense = 0;
+		if ( $txns ) {
+			$txns = implode( ',', $txns );
+
+			$expense = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_mdjm_txn_total' AND post_id IN ({$txns})" );
+
+		}
+	
+		return round( $expense, 2 );
+
+	} // get_expenses_by_date_range
+
+	/**
+	 * Get Earnings By Date
+	 *
+	 * @since	1.4
+	 * @param	int		$day Day number
+	 * @param	int		$month_num Month number
+	 * @param	int		$year Year
+	 * @return	int		$earnings Earnings
+	 */
+	public function get_earnings_by_date_range( $day = null, $month_num, $year = null )	{
+		global $wpdb;
+
+		$args = array(
+			'post_type'              => 'mdjm-transaction',
+			'nopaging'               => true,
+			'year'                   => $year,
+			'monthnum'               => $month_num,
+			'post_status'            => array( 'mdjm-income', 'mdjm-expenditure' ),
+			'meta_key'               => '_mdjm_txn_status',
+			'meta_value'             => 'Completed',
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false
+		);
+		if ( ! empty( $day ) )	{
+			$args['day'] = $day;
+		}
+	
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
+		}
+	
+		$args     = apply_filters( 'mdjm_get_earnings_by_date_range_args', $args );
+		$key      = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
+		$earnings = get_transient( $key );
+	
+		if( false === $earnings ) {
+			$income   = $this->get_income_by_date_range( $day = null, $month_num, $year = null, $hour = null );
+			$expense  = $this->get_expenses_by_date_range( $day = null, $month_num, $year = null, $hour = null );
+
+			$earnings = $income - $expense;
+
+			// Cache the results for one hour
+			set_transient( $key, $earnings, HOUR_IN_SECONDS );
+		}
+
+		return round( $earnings, 2 );
+	} // get_earnings_by_date_range
+
 	/**
 	 * Retrieves the count of enquiry sources over given date period.
 	 *
@@ -362,5 +508,5 @@ class MDJM_Stats	{
 		return $tax_count;
 				
 	} // get_enquiry_sources_by_date
-	
+
 } // class MDJM_Stats

@@ -23,11 +23,13 @@ function mdjm_reports_graph() {
 	// Retrieve the queried dates
 	$dates = mdjm_get_report_dates();
 
+	$stats = new MDJM_Stats();
+
 	// Determine graph options
 	switch ( $dates['range'] ) :
 		case 'today' :
 		case 'yesterday' :
-			$day_by_day	= true;
+			$day_by_day = true;
 			break;
 		case 'last_year' :
 		case 'this_year' :
@@ -50,21 +52,23 @@ function mdjm_reports_graph() {
 	endswitch;
 
 	$earnings_totals = 0.00; // Total earnings for time period shown
-	$event_totals    = 0;    // Total events for time period shown
+	$events_totals   = 0;    // Total events for time period shown
 
-	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' ) {
+	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{		
 		// Hour by hour
 		$hour  = 1;
 		$month = $dates['m_start'];
 		while ( $hour <= 23 ) {
-
+			$date = date( 'Y-m-d', strtotime( $dates['year'] . '-' . $month . '-' . $dates['day'] ) );
+			error_log( $date, 0 );
 			$events   = mdjm_get_events_by_date( $dates['day'], $month, $dates['year'], $hour );
-			$earnings = mdjm_get_earnings_by_date( $dates['day'], $month, $dates['year'], $hour, $include_taxes );
+			$earnings = $stats->get_earnings_by_date_range( $dates['day'], $month, $dates['year'] );
 
 			$events_totals   += $events;
 			$earnings_totals += $earnings;
 
 			$date            = mktime( $hour, 0, 0, $month, $dates['day'], $dates['year'] ) * 1000;
+			error_log( $date, 0 );
 			$events_data[]   = array( $date, $events );
 			$earnings_data[] = array( $date, $earnings );
 
@@ -100,11 +104,11 @@ function mdjm_reports_graph() {
 			$events = mdjm_get_events_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
 			$events_totals += $events;
 
-			$earnings        = mdjm_get_earnings_by_date( $report_date['day'], $report_date['month'], $report_date['year'] , null, $include_taxes );
+			$earnings        = $stats->get_earnings_by_date_range( $report_date['day'], $report_date['month'], $report_date['year'] );
 			$earnings_totals += $earnings;
 
 			$date            = mktime( 0, 0, 0,  $report_date['month'], $report_date['day'], $report_date['year']  ) * 1000;
-			$sales_data[]    = array( $date, $sales );
+			$events_data[]   = array( $date, $events );
 			$earnings_data[] = array( $date, $earnings );
 		}
 
@@ -159,11 +163,11 @@ function mdjm_reports_graph() {
 
 				while ( $d <= $num_of_days ) {
 
-					$earnings         = mdjm_get_earnings_by_date( $d, $i, $y, null, $include_taxes );
+					$earnings         = $stats->get_earnings_by_date_range( $d, $i, $y );
 					$earnings_totals += $earnings;
 
-					$events         = mdjm_get_events_by_date( $d, $i, $y );
-					$events_totals += $events;
+					$events         = mdjm_get_events_by_date( $y . '-' . $i . '-' . $d );
+					$events_totals += count( $events );
 
 					$temp_data['earnings'][ $y ][ $i ][ $d ] = $earnings;
 					$temp_data['events'][ $y ][ $i ][ $d ]   = $events;
@@ -179,7 +183,7 @@ function mdjm_reports_graph() {
 			$y++;
 		}
 
-		$events_data    = array();
+		$events_data   = array();
 		$earnings_data = array();
 
 		// When using 3 months or smaller as the custom range, show each day individually on the graph
@@ -263,7 +267,7 @@ function mdjm_reports_graph() {
 	<div id="mdjm-dashboard-widgets-wrap">
 		<div class="metabox-holder" style="padding-top: 0;">
 			<div class="postbox">
-				<h3><span><?php _e('Earnings Over Time','mobile-dj-manager' ); ?></span></h3>
+				<h3><span><?php _e( 'Earnings Over Time', 'mobile-dj-manager' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
@@ -273,9 +277,6 @@ function mdjm_reports_graph() {
 					$graph->set( 'multiple_y_axes', true );
 					$graph->display();
 
-					if( ! empty( $dates['range'] ) && 'this_month' == $dates['range'] ) {
-						$estimated = mdjm_estimated_monthly_stats( $include_taxes );
-					}
 					?>
 
 					<p class="mdjm_graph_totals">
@@ -285,26 +286,8 @@ function mdjm_reports_graph() {
 								echo mdjm_currency_filter( mdjm_format_amount( $earnings_totals ) );
 							?>
 						</strong>
-						<?php if ( ! $include_taxes ) : ?>
-							<sup>&dagger;</sup>
-						<?php endif; ?>
 					</p>
 					<p class="mdjm_graph_totals"><strong><?php printf( __( 'Total %s for period shown: ', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); echo mdjm_format_amount( $events_totals, false ); ?></strong></p>
-
-					<?php if ( ! empty( $dates['range'] ) && 'this_month' == $dates['range'] ) : ?>
-						<p class="mdjm_graph_totals">
-							<strong>
-								<?php
-									_e( 'Estimated monthly earnings: ', 'mobile-dj-manager' );
-									echo mdjm_currency_filter( mdjm_format_amount( $estimated['earnings'] ) );
-								?>
-							</strong>
-							<?php if ( ! $include_taxes ) : ?>
-								<sup>&dagger;</sup>
-							<?php endif; ?>
-						</p>
-						<p class="mdjm_graph_totals"><strong><?php printf( __( 'Estimated monthly %s: ', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); echo mdjm_format_amount( $estimated['events'], false ); ?></strong></p>
-					<?php endif; ?>
 
 					<?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
 
@@ -428,7 +411,7 @@ function mdjm_get_report_dates() {
 
 	$current_time = current_time( 'timestamp' );
 
-	$dates['range'] = isset( $_GET['range'] )   ? $_GET['range']   : 'this_month';
+	$dates['range'] = isset( $_GET['range'] ) ? $_GET['range'] : 'this_month';
 
 	if ( 'custom' !== $dates['range'] ) {
 		$dates['year']     = isset( $_GET['year'] )     ? $_GET['year']     : date( 'Y' );
@@ -611,7 +594,6 @@ function mdjm_parse_report_dates( $data ) {
 
 	$view          = mdjm_get_reporting_view();
 	$id            = isset( $_GET['event-id'] ) ? $_GET['event-id'] : null;
-	$exclude_taxes = isset( $_GET['exclude_taxes'] ) ? $_GET['exclude_taxes'] : null;
 
 	wp_redirect( add_query_arg( $dates, admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=' . esc_attr( $view ) . '&event-id=' . absint( $id ) ) ) );
 	wp_die();

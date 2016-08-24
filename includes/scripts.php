@@ -215,6 +215,8 @@ function mdjm_register_admin_scripts( $hook )	{
 				'no_txn_src'           => __( 'Enter a transaction source', 'mobile-dj-manager' ),
 				'no_venue_name'        => __( 'Enter a name for the venue', 'mobile-dj-manager' ),
 				'currency_symbol'      => mdjm_currency_symbol(),
+				'currency_sign'        => mdjm_currency_filter( '' ),
+				'currency_position'    => mdjm_get_option( 'currency_format', 'before' ),
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'select_months'        => __( 'Select Months', 'mobile-dj-manager' ),
@@ -226,5 +228,8 @@ function mdjm_register_admin_scripts( $hook )	{
 		)
 	);
 
-} // mdjm_register_styles
+	wp_register_script( 'jquery-flot', $js_dir . 'jquery.flot.js' );
+	wp_enqueue_script( 'jquery-flot' );
+
+} // mdjm_register_admin_scripts
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_scripts' );
