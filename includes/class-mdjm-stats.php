@@ -6,13 +6,14 @@
  * @subpackage  Classes/Stats
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.3
+ * @since       1.4
  *
  * Largely based on Easy Digital Downloads EDD_Stats class
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * MDJM_Stats Class
@@ -20,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Base class for other MDJM Stat classes.
  * Primary function is to convert date parameters to queries.
  *
- * @since	1.3
+ * @since	1.4
  */
 class MDJM_Stats	{
 	/**
@@ -33,7 +34,7 @@ class MDJM_Stats	{
 	 * this_quarter, last_quarter, this_year, last_year
 	 *
 	 * @access	public
-	 * @since	1.3
+	 * @since	1.4
 	 */
 	public $start_date;
 
@@ -50,14 +51,14 @@ class MDJM_Stats	{
 	 * The end date is optional
 	 *
 	 * @access	public
-	 * @since	1.3
+	 * @since	1.4
 	 */
 	public $end_date;
 	
 	/**
 	 *
 	 * @access	public
-	 * @since	1.3
+	 * @since	1.4
 	 * @return	void
 	 */
 	public function __construct() {
@@ -68,7 +69,7 @@ class MDJM_Stats	{
 	 * Get the predefined date periods permitted
 	 *
 	 * @access	public
-	 * @since	1.3
+	 * @since	1.4
 	 * @return	array
 	 */
 	public function get_predefined_dates() {
@@ -96,7 +97,7 @@ class MDJM_Stats	{
 	 * This calls the convert_date() member function to ensure the dates are formatted correctly
 	 *
 	 * @access	public
-	 * @since	1.3
+	 * @since	1.4
 	 * @return	void
 	 */
 	public function setup_dates( $_start_date = 'this_month', $_end_date = false ) {
@@ -113,9 +114,9 @@ class MDJM_Stats	{
 	/**
 	 * Converts a date to a WP_Query date query.
 	 *
-	 * @access public
-	 * @since 1.8
-	 * @return array|WP_Error If the date is invalid, a WP_Error object will be returned
+	 * @access	public
+	 * @since	1.4
+	 * @return	arr|WP_Error	If the date is invalid, a WP_Error object will be returned
 	 */
 	public function convert_date( $date, $end_date = false ) {
 
@@ -203,7 +204,7 @@ class MDJM_Stats	{
 	/**
 	 * Retrieves the number of events over the given date period.
 	 *
-	 * @since	1.3
+	 * @since	1.4
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	str|arr	$status		The event status' for which to collect the stats
 	 * @return	int		$count		The total number of events that match the criteria
@@ -229,11 +230,53 @@ class MDJM_Stats	{
 		return $count;
 		
 	} // events_by_date
+
+	/**
+	 * Get Events by Date.
+	 *
+	 * @since	1.4
+	 * @param	int		$day			Day number
+	 * @param	int		$month_num		Month number
+	 * @param	int		$year			Year
+	 * @return	int		$events			Events
+	 */
+	public function get_events_by_date( $day = null, $month_num, $year = null )	{
+		global $wpdb;
+
+		$args = array(
+			'post_type'              => 'mdjm-event',
+			'nopaging'               => true,
+			'year'                   => $year,
+			'monthnum'               => $month_num,
+			'post_status'            => 'mdjm-completed',
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false
+		);
+
+		if ( ! empty( $day ) )	{
+			$args['day'] = $day;
+		}
+
+		$args   = apply_filters( 'mdjm_get_events_by_date_args', $args );
+		$key    = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
+		$events = get_transient( $key );
 	
+		if( false === $events )	{
+			$query  = new WP_Query( $args );
+			$events += $query->found_posts;
+
+			// Cache the results for one hour
+			set_transient( $key, $events, HOUR_IN_SECONDS );
+		}
+
+		return $events;
+
+	} // get_events_by_date
+
 	/**
 	 * Retrieves the total income taken over the given date period.
 	 *
-	 * @since	1.3
+	 * @since	1.4
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	str|arr	$status		The event status' for which to collect the stats
 	 * @return	int		$total		The total value for all transactions that meet the criteria
@@ -245,7 +288,7 @@ class MDJM_Stats	{
 	/**
 	 * Retrieves the total income taken over the given date period.
 	 *
-	 * @since	1.3
+	 * @since	1.4
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	str|arr	$status		The event status' for which to collect the stats
 	 * @return	int		$total		The total value for all transactions that meet the criteria
@@ -258,7 +301,7 @@ class MDJM_Stats	{
 	 * Retrieves the total of all transactions over the given date period.
 	 * Total income - total expenditure if $status = any
 	 *
-	 * @since	1.3
+	 * @since	1.4
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	int		$status		The transaction status' for which to collect the stats
 	 * @return	int		$total		The total value for all transactions that meet the criteria
@@ -311,7 +354,7 @@ class MDJM_Stats	{
 	} // get_txns_total_by_date
 
 	/**
-	 * Get Income By Date Range.
+	 * Get Income By Date.
 	 *
 	 * Has no consideration for any expenditure within given date range.
 	 *
@@ -319,10 +362,9 @@ class MDJM_Stats	{
 	 * @param	int		$day			Day number
 	 * @param	int		$month_num		Month number
 	 * @param	int		$year			Year
-	 * @param	int		$hour			Hour
 	 * @return	int		$income			Earnings
 	 */
-	public function get_income_by_date_range( $day = null, $month_num, $year = null, $hour = null )	{
+	public function get_income_by_date( $day = null, $month_num, $year = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -340,12 +382,8 @@ class MDJM_Stats	{
 		if ( ! empty( $day ) )	{
 			$args['day'] = $day;
 		}
-	
-		if ( ! empty( $hour ) )	{
-			$args['hour'] = $hour;
-		}
 
-		$args     = apply_filters( 'mdjm_get_income_by_date_range_args', $args );
+		$args     = apply_filters( 'mdjm_get_income_by_date_args', $args );
 	
 		$txns = mdjm_get_txns( $args );
 		$income = 0;
@@ -358,19 +396,18 @@ class MDJM_Stats	{
 	
 		return round( $income, 2 );
 
-	} // get_income_by_date_range
+	} // get_income_by_date
 
 	/**
-	 * Get Expense By Date Range.
+	 * Get Expense By Date.
 	 *
 	 * @since	1.4
 	 * @param	int		$day			Day number
 	 * @param	int		$month_num		Month number
 	 * @param	int		$year			Year
-	 * @param	int		$hour			Hour
 	 * @return	int		$expense		Expenses
 	 */
-	public function get_expenses_by_date_range( $day = null, $month_num, $year = null, $hour = null )	{
+	public function get_expenses_by_date( $day = null, $month_num, $year = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -388,12 +425,8 @@ class MDJM_Stats	{
 		if ( ! empty( $day ) )	{
 			$args['day'] = $day;
 		}
-	
-		if ( ! empty( $hour ) )	{
-			$args['hour'] = $hour;
-		}
 
-		$args     = apply_filters( 'mdjm_get_expenses_by_date_range_args', $args );
+		$args     = apply_filters( 'mdjm_get_expenses_by_date_args', $args );
 	
 		$txns    = mdjm_get_txns( $args );
 		$expense = 0;
@@ -406,10 +439,10 @@ class MDJM_Stats	{
 	
 		return round( $expense, 2 );
 
-	} // get_expenses_by_date_range
+	} // get_expenses_by_date
 
 	/**
-	 * Get Earnings By Date
+	 * Get Earnings By Date.
 	 *
 	 * @since	1.4
 	 * @param	int		$day Day number
@@ -417,7 +450,7 @@ class MDJM_Stats	{
 	 * @param	int		$year Year
 	 * @return	int		$earnings Earnings
 	 */
-	public function get_earnings_by_date_range( $day = null, $month_num, $year = null )	{
+	public function get_earnings_by_date( $day = null, $month_num, $year = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -431,21 +464,18 @@ class MDJM_Stats	{
 			'fields'                 => 'ids',
 			'update_post_term_cache' => false
 		);
+
 		if ( ! empty( $day ) )	{
 			$args['day'] = $day;
 		}
-	
-		if ( ! empty( $hour ) )	{
-			$args['hour'] = $hour;
-		}
-	
-		$args     = apply_filters( 'mdjm_get_earnings_by_date_range_args', $args );
+
+		$args     = apply_filters( 'mdjm_get_earnings_by_date_args', $args );
 		$key      = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
 		$earnings = get_transient( $key );
 	
 		if( false === $earnings ) {
-			$income   = $this->get_income_by_date_range( $day = null, $month_num, $year = null, $hour = null );
-			$expense  = $this->get_expenses_by_date_range( $day = null, $month_num, $year = null, $hour = null );
+			$income   = $this->get_income_by_date( $day, $month_num, $year );
+			$expense  = $this->get_expenses_by_date( $day, $month_num, $year );
 
 			$earnings = $income - $expense;
 
@@ -454,12 +484,12 @@ class MDJM_Stats	{
 		}
 
 		return round( $earnings, 2 );
-	} // get_earnings_by_date_range
+	} // get_earnings_by_date
 
 	/**
 	 * Retrieves the count of enquiry sources over given date period.
 	 *
-	 * @since	1.3
+	 * @since	1.4
 	 * @param	str		$period		The date period for which to collect the stats
 	 * @param	int		$status		The transaction status' for which to collect the stats
 	 * @return	int		$total		The total value for all transactions that meet the criteria

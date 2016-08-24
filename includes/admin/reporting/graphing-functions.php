@@ -59,16 +59,14 @@ function mdjm_reports_graph() {
 		$hour  = 1;
 		$month = $dates['m_start'];
 		while ( $hour <= 23 ) {
-			$date = date( 'Y-m-d', strtotime( $dates['year'] . '-' . $month . '-' . $dates['day'] ) );
-			error_log( $date, 0 );
-			$events   = mdjm_get_events_by_date( $dates['day'], $month, $dates['year'], $hour );
-			$earnings = $stats->get_earnings_by_date_range( $dates['day'], $month, $dates['year'] );
+			$events   = $stats->get_events_by_date( $dates['day'], $month, $dates['year'] );
+			$earnings = $stats->get_earnings_by_date( $dates['day'], $month, $dates['year'] );
 
 			$events_totals   += $events;
 			$earnings_totals += $earnings;
 
 			$date            = mktime( $hour, 0, 0, $month, $dates['day'], $dates['year'] ) * 1000;
-			error_log( $date, 0 );
+
 			$events_data[]   = array( $date, $events );
 			$earnings_data[] = array( $date, $earnings );
 
@@ -101,10 +99,10 @@ function mdjm_reports_graph() {
 		}
 
 		foreach ( $report_dates as $report_date ) {
-			$events = mdjm_get_events_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
+			$events = $stats->get_events_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
 			$events_totals += $events;
 
-			$earnings        = $stats->get_earnings_by_date_range( $report_date['day'], $report_date['month'], $report_date['year'] );
+			$earnings        = $stats->get_earnings_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
 			$earnings_totals += $earnings;
 
 			$date            = mktime( 0, 0, 0,  $report_date['month'], $report_date['day'], $report_date['year']  ) * 1000;
@@ -163,10 +161,10 @@ function mdjm_reports_graph() {
 
 				while ( $d <= $num_of_days ) {
 
-					$earnings         = $stats->get_earnings_by_date_range( $d, $i, $y );
+					$earnings         = $stats->get_earnings_by_date( $d, $i, $y );
 					$earnings_totals += $earnings;
 
-					$events         = mdjm_get_events_by_date( $y . '-' . $i . '-' . $d );
+					$events         = $stats->get_events_by_date( $d, $i, $y );
 					$events_totals += count( $events );
 
 					$temp_data['earnings'][ $y ][ $i ][ $d ] = $earnings;
@@ -287,7 +285,17 @@ function mdjm_reports_graph() {
 							?>
 						</strong>
 					</p>
-					<p class="mdjm_graph_totals"><strong><?php printf( __( 'Total %s for period shown: ', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); echo mdjm_format_amount( $events_totals, false ); ?></strong></p>
+					<p class="mdjm_graph_totals">
+                    	<strong>
+							<?php
+                            	printf(
+									__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
+									mdjm_get_label_plural( true )
+								);
+								echo $events_totals;
+							?>
+                        </strong>
+                    </p>
 
 					<?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
 
