@@ -247,13 +247,14 @@ function mdjm_update_event_travel_data_ajax()	{
 	$mdjm_travel->get_travel_data();
 
 	if ( ! empty( $mdjm_travel->data ) )	{
+		$travel_cost = $mdjm_travel->get_cost();
 		$response = array(
 			'type'           => 'success',
 			'distance'       => mdjm_format_distance( $mdjm_travel->data['distance'], false, true ),
 			'time'           => mdjm_seconds_to_time( $mdjm_travel->data['duration'] ),
-			'cost'           => mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) ),
+			'cost'           => ! empty( $travel_cost ) ? mdjm_currency_filter( mdjm_format_amount( $travel_cost ) ) : mdjm_currency_filter( mdjm_format_amount( 0 ) ),
 			'directions_url' => $mdjm_travel->get_directions_url(),
-			'raw_cost'       => mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ),
+			'raw_cost'       => $travel_cost,
 		);
 	} else	{
 		$response = array( 'type' => 'error' );
@@ -562,17 +563,19 @@ function mdjm_update_event_cost_ajax()	{
 		}
 	}
 
-	if ( ! empty( $employee_id ) )	{
-		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
-	}
-
-	$mdjm_travel->set_destination( $dest );
-	$mdjm_travel->get_travel_data();
-
-	$new_travel = ! empty( $mdjm_travel->data ) ? mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) : false;
-
-	if ( $new_travel && (float) preg_replace( '/[^0-9.]*/', '', $mdjm_travel->data['distance'] ) >= mdjm_get_option( 'travel_min_distance' ) )	{
-		$cost += (float) $new_travel;
+	if ( $mdjm_travel->add_travel_cost )	{
+		if ( ! empty( $employee_id ) )	{
+			$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
+		}
+	
+		$mdjm_travel->set_destination( $dest );
+		$mdjm_travel->get_travel_data();
+	
+		$new_travel = ! empty( $mdjm_travel->data ) ? $mdjm_travel->get_cost() : false;
+	
+		if ( $new_travel && (float) preg_replace( '/[^0-9.]*/', '', $mdjm_travel->data['distance'] ) >= mdjm_get_option( 'travel_min_distance' ) )	{
+			$cost += (float) $new_travel;
+		}
 	}
 
 	if ( ! empty( $cost ) )	{

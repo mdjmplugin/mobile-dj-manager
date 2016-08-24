@@ -49,6 +49,13 @@ class MDJM_Travel {
 	public $cost = '0.00';
 
 	/**
+	 * Whether or not to add travel costs to an event
+	 *
+	 * @since	1.4
+	 */
+	public $add_travel_cost = false;
+
+	/**
 	 * The travel data.
 	 *
 	 * @since	1.4
@@ -120,9 +127,9 @@ class MDJM_Travel {
 		if ( ! isset( $this->start_address ) )	{
 			$this->start_address = mdjm_get_option( 'travel_primary' );
 		}
-		if ( ! isset( $this->units ) )	{
-			$this->units = mdjm_get_option( 'travel_units' );
-		}
+
+		$this->units = mdjm_get_option( 'travel_units' );
+		$this->add_travel_cost = mdjm_get_option( 'travel_add_cost' );
 	} // init
 
 	/**
@@ -218,16 +225,18 @@ class MDJM_Travel {
 		if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) )	{
 			return false;
 		}
-	
+
+		$this->distance = str_replace(
+			array( 'km', 'mi' ),
+			array( '', '' ),
+			$travel_data->rows[0]->elements[0]->distance->text
+		);
+
 		$travel = array(
 			'origin'      => $travel_data->origin_addresses[0],
 			'destination' => $travel_data->destination_addresses[0],
 			'duration'    => $travel_data->rows[0]->elements[0]->duration->value,
-			'distance'    => str_replace(
-				array( 'km', 'mi' ),
-				array( '', '' ),
-				$travel_data->rows[0]->elements[0]->distance->text
-			),
+			'distance'    => $this->distance,
 		);
 
 		$travel = apply_filters( 'mdjm_travel_data', $travel, $travel_data );
@@ -257,25 +266,23 @@ class MDJM_Travel {
 	 * @since	1.4
 	 */
 	function get_cost()	{
-		if ( ! isset( $this->cost ) )	{
-			$min       = mdjm_get_option( 'travel_min_distance' );
-			$unit_cost = mdjm_get_option( 'cost_per_unit' );
-			$round     = mdjm_get_option( 'travel_cost_round' );
+		$min       = mdjm_get_option( 'travel_min_distance' );
+		$unit_cost = mdjm_get_option( 'cost_per_unit' );
+		$round     = mdjm_get_option( 'travel_cost_round' );
+	
+		if ( intval( $this->distance ) >= $min )	{
+			$this->cost = $this->distance * $unit_cost;
 		
-			if ( intval( $this->distance ) >= $min )	{
-				$this->cost = $this->distance * $unit_cost;
+			if ( $round )	{
+				$nearest = mdjm_get_option( 'travel_round_to' );
 			
-				if ( $round )	{
-					$nearest = mdjm_get_option( 'travel_round_to' );
-				
-					if ( intval( $this->cost ) == $this->cost && ! is_float( intval( $this->cost ) / $nearest ) )	{
-						$this->cost = intval( $this->cost );
+				if ( intval( $this->cost ) == $this->cost && ! is_float( intval( $this->cost ) / $nearest ) )	{
+					$this->cost = intval( $this->cost );
+				} else	{
+					if ( $round == 'up' )	{
+						$this->cost = round( ( $this->cost + $nearest / 2 ) / $nearest ) * $nearest;
 					} else	{
-						if ( $round == 'up' )	{
-							$this->cost = round( ( $this->cost + $nearest / 2 ) / $nearest ) * $nearest;
-						} else	{
-							$this->cost = floor( ( $this->cost + $nearest / 2 ) / $nearest ) * $nearest;
-						}
+						$this->cost = floor( ( $this->cost + $nearest / 2 ) / $nearest ) * $nearest;
 					}
 				}
 			}

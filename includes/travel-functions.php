@@ -85,37 +85,10 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
  * @return	str|int		The cost of travel.
  */
 function mdjm_get_travel_cost( $distance )	{
+	$mdjm_travel = new MDJM_Travel;
+	$mdjm_travel->__set( 'distance', $distance );
 
-	$min       = mdjm_get_option( 'travel_min_distance' );
-	$unit_cost = mdjm_get_option( 'cost_per_unit' );
-	$round     = mdjm_get_option( 'travel_cost_round' );
-
-	if ( intval( $distance ) < $min )	{
-		return '0.00';
-	}
-
-	$cost = $distance * $unit_cost;
-
-	if ( $round )	{
-
-		$nearest = mdjm_get_option( 'travel_round_to' );
-	
-		if ( intval( $cost ) == $cost && ! is_float( intval( $cost ) / $nearest ) )	{
-			$cost = intval( $cost );
-		} else	{
-			if ( $round == 'up' )	{
-				$cost = round( ( $cost + $nearest / 2 ) / $nearest ) * $nearest;
-			} else	{
-				$cost = floor( ( $cost + $nearest / 2 ) / $nearest ) * $nearest;
-			}
-		}
-
-	} else	{
-		$cost = $cost;
-	}
-
-	return apply_filters( 'mdjm_get_travel_cost', $cost, $distance );
-
+	return $mdjm_travel->get_cost();
 } // mdjm_get_travel_cost
 
 /**
@@ -312,31 +285,40 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 	}
 
 	$mdjm_travel->get_travel_data();
-	$directions = $mdjm_travel->get_directions_url();
+	$distance       = '';
+	$duration       = '';
+	$cost           = '';
+	$directions_url = '';
+	$directions     = $mdjm_travel->get_directions_url();
+	$class          = 'mdjm-hidden';
 
-    if ( ! empty( $mdjm_travel->data ) ) : ?>
-    	<?php ob_start(); ?>
-        <tr id="mdjm-travel-data">
-            <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-                <span class="mdjm-travel-distance"><?php echo mdjm_format_distance( $mdjm_travel->data['distance'], false, true ); ?></span></td>
-            <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-                <span class="mdjm-travel-time"><?php echo mdjm_seconds_to_time( $mdjm_travel->data['duration'] ); ?></span></td>
-            <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-                <span class="mdjm-travel-cost"><?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $mdjm_travel->data['distance'] ) ) ); ?></span></td>
-        </tr>
+    if ( ! empty( $mdjm_travel->data ) )	{
+		$distance       = mdjm_format_distance( $mdjm_travel->data['distance'], false, true );
+		$duration       = mdjm_seconds_to_time( $mdjm_travel->data['duration'] );
+		$cost           = mdjm_currency_filter( mdjm_format_amount( $mdjm_travel->get_cost() ) );
+		$directions_url = $directions ? $directions : '';
+		$class          = '';
+	}
 
-		<?php if ( $directions ) : ?>
-            <tr id="mdjm-travel-directions">
-                <td colspan="3"><i class="fa fa-map-signs" aria-hidden="true" title="<?php _e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
-                <span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions; ?>" target="_blank"><?php _e( 'Directions', 'mobile-dj-manager' ); ?></a></span></td>
-            </tr>
-        <?php endif; ?>
+	ob_start(); ?>
+	<tr id="mdjm-travel-data" class="<?php echo $class; ?>">
+		<td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-distance"><?php echo $distance; ?></span></td>
+		<td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-time"><?php echo $duration; ?></span></td>
+		<td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-cost"><?php echo $cost; ?></span></td>
+	</tr>
 
-        <?php $travel_data_row = ob_get_contents();
-		ob_end_clean();
+    <tr id="mdjm-travel-directions" class="<?php echo $class; ?>">
+        <td colspan="3"><i class="fa fa-map-signs" aria-hidden="true" title="<?php _e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
+        <span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url; ?>" target="_blank"><?php _e( 'Directions', 'mobile-dj-manager' ); ?></a></span></td>
+    </tr>
 
-		echo $travel_data_row;
-	endif;
+	<?php $travel_data_row = ob_get_contents();
+	ob_end_clean();
+
+	echo $travel_data_row;
 
 } // mdjm_show_travel_data_row
 add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row', 10, 2         );

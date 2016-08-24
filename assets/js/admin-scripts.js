@@ -519,10 +519,8 @@ jQuery(document).ready(function ($) {
 					url        : ajaxurl,
 					success: function (response) {
 						if(response.type == 'success') {
-							$('.mdjm-travel-distance').removeClass("mdjm-hidden");
-							$('.mdjm-travel-time').removeClass("mdjm-hidden");
-							$('.mdjm-travel-cost').removeClass("mdjm-hidden");
-							$('.mdjm-travel-directions').removeClass("mdjm-hidden");
+							$(".mdjm-travel-distance").parents("tr").show();
+							$('.mdjm-travel-directions').parents("tr").show();
 							$('.mdjm-travel-distance').html(response.distance);
 							$('.mdjm-travel-time').html(response.time);
 							$('.mdjm-travel-cost').html(response.cost);
@@ -532,11 +530,9 @@ jQuery(document).ready(function ($) {
 							$('#mdjm_travel_cost').val(response.raw_cost);
 							$('#mdjm_travel_directions_url').val(response.directions_url);
 						} else	{
-							$('.mdjm-travel-distance').addClass("mdjm-hidden");
-							$('.mdjm-travel-time').addClass("mdjm-hidden");
-							$('.mdjm-travel-cost').addClass("mdjm-hidden");
+							$(".mdjm-travel-distance").parents("tr").hide();
 							$('#travel-directions').attr("href", '' );
-							$('.mdjm-travel-directions_url').addClass("mdjm-hidden");
+							$('.mdjm-travel-directions').parents("tr").hide();
 							$('#mdjm_travel_distance').val('');
 							$('#mdjm_travel_time').val('');
 							$('#mdjm_travel_cost').val('');
@@ -548,7 +544,7 @@ jQuery(document).ready(function ($) {
 						console.log( data );
 					}
 				});
-
+				$('#_mdjm_event_package').trigger('change');
 			});
 		},
 

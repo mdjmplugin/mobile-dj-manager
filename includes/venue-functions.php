@@ -305,6 +305,7 @@ function mdjm_venue_dropdown( $args = array() )	{
  * Output the venues details.
  *
  * @since	1.3.7
+ * @param	int		$venue_id	Venue ID
  * @param	int		$event_id	Event ID
  * @return	str
  */
@@ -329,6 +330,10 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
 	$employee_id    = ! empty( $event_id ) ? mdjm_get_event_primary_employee_id( $event_id ) : '';
+
+	if ( empty( $employee_id ) )	{
+		$employee_id = get_current_user_id();
+	}
 
 	?>
     <div id="mdjm-event-venue-details" class="mdjm-hidden">
