@@ -204,7 +204,7 @@ class MDJM_Welcome {
 				<h3><?php _e( 'REST API', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-mdjm-templates.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-rest-api.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<p><?php _e( 'MDJM Event Management version 1.4 extends the WordPress REST API enabling easy, yet secure, access to a multitude of data via third party tools and integrations.', 'mobile-dj-manager' ); ?></p>
