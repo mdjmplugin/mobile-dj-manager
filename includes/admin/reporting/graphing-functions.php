@@ -358,15 +358,15 @@ function mdjm_transactions_reports_graph() {
 		$hour  = 1;
 		$month = $dates['m_start'];
 		while ( $hour <= 23 ) {
-			$income  = $stats->get_income_by_date( $dates['day'], $month, $dates['year'] );
-			$expense = $stats->get_expenses_by_date( $dates['day'], $month, $dates['year'] );
-			$events  = $stats->get_events_by_date( $dates['day'], $month, $dates['year'] );
+			$income  = $stats->get_income_by_date( $dates['day'], $month, $dates['year'], $hour );
+			$expense = $stats->get_expenses_by_date( $dates['day'], $month, $dates['year'], $hour );
+			$events  = $stats->get_events_by_date( $dates['day'], $month, $dates['year'], $hour );
 
 			$income_totals  += $income;
 			$expense_totals += $expense;
 			$events_totals  += $events;
 
-			$date            = mktime( $hour, 0, 0, $month, $dates['day'], $dates['year'] ) * 1000;
+			$date           = mktime( $hour, 0, 0, $month, $dates['day'], $dates['year'] ) * 1000;
 
 			$income_data[]  = array( $date, $income );
 			$expense_data[] = array( $date, $expense );
@@ -676,8 +676,8 @@ function mdjm_transactions_reports_graph() {
 */
 function mdjm_reports_graph_controls() {
 	$date_options = apply_filters( 'mdjm_report_date_options', array(
-		'today'        => __( 'Today', 'mobile-dj-manager' ),
-		'yesterday'    => __( 'Yesterday', 'mobile-dj-manager' ),
+		//'today'        => __( 'Today', 'mobile-dj-manager' ),
+		//'yesterday'    => __( 'Yesterday', 'mobile-dj-manager' ),
 		'this_week'    => __( 'This Week', 'mobile-dj-manager' ),
 		'last_week'    => __( 'Last Week', 'mobile-dj-manager' ),
 		'this_month'   => __( 'This Month', 'mobile-dj-manager' ),
