@@ -67,7 +67,7 @@ class MDJM_Welcome {
 
 		// Getting Started Page
 		add_dashboard_page(
-			__( 'Getting started with MDJM Event Managements', 'mobile-dj-manager' ),
+			__( 'Getting started with MDJM Event Management', 'mobile-dj-manager' ),
 			__( 'Getting started with MDJM Event Management', 'mobile-dj-manager' ),
 			$this->minimum_capability,
 			'mdjm-getting-started',
@@ -179,11 +179,41 @@ class MDJM_Welcome {
 				$this->welcome_message();
 				$this->tabs();
 			?>
+
+			<div class="changelog">
+				<h3><?php _e( 'Reporting', 'mobile-dj-manager' );?></h3>
+				<div class="feature-section">
+					<div class="feature-section-media">
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-reports.png'; ?>"/>
+					</div>
+					<div class="feature-section-content">
+						<p><?php _e( "Knowing how your business is performing is key to its long term success. With MDJM Event Management version 1.4 we've provided easy access to a number of reports so you have this information at your fingertips at all times.", 'mobile-dj-manager' ); ?></p>
+
+						<p><?php printf( __( "Reports include income and expenditure, most popular %s types, most successful enquiry sources and more.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="changelog">
+				<h3><?php _e( 'Travel Data', 'mobile-dj-manager' );?></h3>
+				<div class="feature-section">
+					<div class="feature-section-media">
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-travel-costs.png'; ?>"/>
+					</div>
+					<div class="feature-section-content">
+						<p><?php printf( __( 'From version 1.4 you can configure settings to automatically add the cost of %1$s travel to the overall %1$s cost.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+
+						<p><?php _e( "Travel costs are determined by connecting to Google's distance matrix API and calculating the distance from the primary employees address (or the default address per settings) to the venue address. You define the per cost per mile/kilometer and a few other settings to match your preferences and MDJM will do the rest for you.", 'mobile-dj-manager' ); ?></p>
+                        <p><?php printf( __( "Handy shortcodes are also available to provide directions to a venue which you can include within automated emails received by employees ahead of an %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+					</div>
+				</div>
+			</div>
+
 			<div class="changelog">
 				<h3><?php _e( 'Packages &amp; Addons', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-employee-list.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-list.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business products.', 'mobile-dj-manager' );?></p>
@@ -212,19 +242,6 @@ class MDJM_Welcome {
 						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your [child] theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
                         <p><?php _e( "Use a child theme and you won't have to worry about your changes being overwritten when the MDJM plugin is update or your currently active theme is updated.", 'mobile-dj-manager' ); ?></p>
                         <p><?php printf( __( 'More information on the MDJM REST API can be found within the <a href="%s" target="_blank">Support Documentation</a>.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); ?></p>
-					</div>
-				</div>
-			</div>
-
-			<div class="changelog">
-				<h3><?php _e( 'Easily Accessible Statistics', 'mobile-dj-manager' );?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-dashboard-overview-widget.png'; ?>" class="mdjm-welcome-screenshots"/>
-					</div>
-					<div class="feature-section-content">
-						<p><?php _e( 'From the moment you login you have important statistics visible to advise you how you are performing Month to Date, Year to Date and in comparison to the previous year.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'The intuitive dashboard widget displays the number of enquiries received and converted as well as the number of events completed within these timeframes and in addition, the amount your business has earned is readily available to you.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
