@@ -50,10 +50,11 @@ function mdjm_reports_default_views() {
 	$event_label = mdjm_get_label_singular();
 
 	$views = array(
-		'earnings'   => __( 'Earnings', 'mobile-dj-manager' ),
-		'types'      => sprintf( __( 'Earnings by %s Type', 'mobile-dj-manager' ), $event_label ),
-		'events'     => mdjm_get_label_plural(),
-		'gateways'   => __( 'Payment Methods', 'mobile-dj-manager' )
+		'earnings'     => __( 'Earnings', 'mobile-dj-manager' ),
+		'transactions' => __( 'Transactions', 'mobile-dj-manager' ),
+		'types'        => sprintf( __( 'Earnings by %s Type', 'mobile-dj-manager' ), $event_label ),
+		'events'       => mdjm_get_label_plural(),
+		'gateways'     => __( 'Payment Methods', 'mobile-dj-manager' )
 	);
 
 	$views = apply_filters( 'mdjm_report_views', $views );
@@ -153,8 +154,9 @@ function mdjm_reports_events_table() {
 		return;
 	}
 
-	if( isset( $_GET['event-id'] ) )
+	if( isset( $_GET['event-id'] ) )	{
 		return;
+	}
 
 	include( dirname( __FILE__ ) . '/class-event-reports-table.php' );
 
@@ -180,6 +182,26 @@ function mdjm_reports_earnings() {
 		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
 	</div>
 	<?php
-	mdjm_reports_graph();
+	mdjm_earnings_reports_graph();
 } // mdjm_reports_earnings
 add_action( 'mdjm_reports_view_earnings', 'mdjm_reports_earnings' );
+
+/**
+ * Renders the Reports Transactions Graphs
+ *
+ * @since	1.4
+ * @return	void
+ */
+function mdjm_reports_transactions() {
+
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
+		return;
+	}
+	?>
+	<div class="tablenav top">
+		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
+	</div>
+	<?php
+	mdjm_transactions_reports_graph();
+} // mdjm_reports_transactions
+add_action( 'mdjm_reports_view_transactions', 'mdjm_reports_transactions' );

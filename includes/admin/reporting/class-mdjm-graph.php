@@ -181,8 +181,8 @@ class MDJM_Graph {
 							},
 							bars: {
 								show: <?php echo $this->options['bars'] ? 'true' : 'false'; ?>,
-								barWidth: 12,
-								aling: 'center'
+								barWidth: 12*24*60*60*300,
+								align: 'center'
 							},
 							lines: {
 								show: <?php echo $this->options['lines'] ? 'true' : 'false'; ?>

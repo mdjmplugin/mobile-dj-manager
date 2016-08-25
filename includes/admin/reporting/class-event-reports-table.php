@@ -10,7 +10,8 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 // Load WP_List_Table if not loaded
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -27,22 +28,22 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class MDJM_Event_Reports_Table extends WP_List_Table {
 
 	/**
-	 * @var int Number of items per page
-	 * @since 1.5
+	 * @var		int		Number of items per page
+	 * @since	1.4
 	 */
 	public $per_page = 30;
 
 	/**
-	 * @var object Query results
-	 * @since 1.5.2
+	 * @var		obj		Query results
+	 * @since	1.4
 	 */
-	private $products;
+	private $events;
 
 	/**
 	 * Get things started
 	 *
-	 * @since 1.5
-	 * @see WP_List_Table::__construct()
+	 * @since	1.4
+	 * @see		WP_List_Table::__construct()
 	 */
 	public function __construct() {
 		global $status, $page;
@@ -69,7 +70,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	 * @return	str		Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
-		return 'title';
+		return 'date';
 	} // get_primary_column_name
 
 	/**
@@ -91,7 +92,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 			case 'average_earnings' :
 				return mdjm_currency_filter( mdjm_format_amount( $item[ $column_name ] ) );
 			case 'details' :
-				return '<a href="' . admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'mobile-dj-manager' ) . '</a>';
+				return '<a href="' . admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=event&event-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'mobile-dj-manager' ) . '</a>';
 			default:
 				return $item[ $column_name ];
 		}
@@ -201,7 +202,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	} // category_filter
 
 	/**
-	 * Performs the products query
+	 * Performs the events query
 	 *
 	 * @access	public
 	 * @since	1.4
@@ -237,9 +238,9 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 				$args['orderby'] = 'title';
 				break;
 
-			case 'sales' :
+			case 'date' :
 				$args['orderby'] = 'meta_value_num';
-				$args['meta_key'] = '_edd_download_sales';
+				$args['meta_key'] = '_mdjm_event_date';
 				break;
 
 			case 'earnings' :
@@ -250,7 +251,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 
 		$args = apply_filters( 'mdjm_event_reports_prepare_items_args', $args, $this );
 
-		$this->products = new WP_Query( $args );
+		$this->events = new WP_Query( $args );
 
 	} // query
 
@@ -264,24 +265,23 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	public function reports_data() {
 		$reports_data = array();
 
-		$events = $this->products->posts;
+		$events = $this->events->posts;
 
 		if ( $events ) {
 			foreach ( $events as $event ) {
 				$reports_data[] = array(
 					'ID'               => $event,
-					'title'            => get_the_title( $download ),
-					'sales'            => edd_get_download_sales_stats( $download ),
-					'earnings'         => edd_get_download_earnings_stats( $download ),
-					'average_sales'    => edd_get_average_monthly_download_sales( $download ),
-					'average_earnings' => edd_get_average_monthly_download_earnings( $download ),
+					'title'            => get_the_title( $event ),
+					//'sales'            => edd_get_download_sales_stats( $event ),
+					//'earnings'         => edd_get_download_earnings_stats( $event ),
+					//'average_sales'    => edd_get_average_monthly_download_sales( $event ),
+					//'average_earnings' => edd_get_average_monthly_download_earnings( $event ),
 				);
 			}
 		}
 
 		return $reports_data;
 	} // reports_data
-
 
 	/**
 	 * Setup the final data for the table

@@ -14,12 +14,12 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Show report graphs
+ * Show report graphs for earnings.
  *
  * @since	1.4
  * @return	void
-*/
-function mdjm_reports_graph() {
+ */
+function mdjm_earnings_reports_graph() {
 	// Retrieve the queried dates
 	$dates = mdjm_get_report_dates();
 
@@ -165,7 +165,7 @@ function mdjm_reports_graph() {
 					$earnings_totals += $earnings;
 
 					$events         = $stats->get_events_by_date( $d, $i, $y );
-					$events_totals += count( $events );
+					$events_totals += $events;
 
 					$temp_data['earnings'][ $y ][ $i ][ $d ] = $earnings;
 					$temp_data['events'][ $y ][ $i ][ $d ]   = $events;
@@ -309,7 +309,364 @@ function mdjm_reports_graph() {
 	ob_end_clean();
 
 	echo $output;
-} // mdjm_reports_graph
+} // mdjm_earnings_reports_graph
+
+/**
+ * Show report graphs for earnings.
+ *
+ * @since	1.4
+ * @return	void
+*/
+function mdjm_transactions_reports_graph() {
+	// Retrieve the queried dates
+	$dates = mdjm_get_report_dates();
+
+	$stats = new MDJM_Stats();
+
+	// Determine graph options
+	switch ( $dates['range'] ) :
+		case 'today' :
+		case 'yesterday' :
+			$day_by_day = true;
+			break;
+		case 'last_year' :
+		case 'this_year' :
+			$day_by_day = false;
+			break;
+		case 'last_quarter' :
+		case 'this_quarter' :
+			$day_by_day = true;
+			break;
+		case 'other' :
+			if( $dates['m_end'] - $dates['m_start'] >= 3 || ( $dates['year_end'] > $dates['year'] && ( $dates['m_start'] - $dates['m_end'] ) != 10 ) ) {
+				$day_by_day = false;
+			} else {
+				$day_by_day = true;
+			}
+			break;
+		default:
+			$day_by_day = true;
+			break;
+	endswitch;
+
+	$income_totals  = 0.00; // Total income for time period shown
+	$expense_totals = 0.00; // Total expense for time period shown
+	$events_totals  = 0; // Total events for the time period shown
+	
+	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{		
+		// Hour by hour
+		$hour  = 1;
+		$month = $dates['m_start'];
+		while ( $hour <= 23 ) {
+			$income  = $stats->get_income_by_date( $dates['day'], $month, $dates['year'] );
+			$expense = $stats->get_expenses_by_date( $dates['day'], $month, $dates['year'] );
+			$events  = $stats->get_events_by_date( $dates['day'], $month, $dates['year'] );
+
+			$income_totals  += $income;
+			$expense_totals += $expense;
+			$events_totals  += $events;
+
+			$date            = mktime( $hour, 0, 0, $month, $dates['day'], $dates['year'] ) * 1000;
+
+			$income_data[]  = array( $date, $income );
+			$expense_data[] = array( $date, $expense );
+			$events_data[]  = array( $date, $events );
+
+			$hour++;
+		}
+
+	} elseif ( $dates['range'] == 'this_week' || $dates['range'] == 'last_week' ) {
+
+		$num_of_days = cal_days_in_month( CAL_GREGORIAN, $dates['m_start'], $dates['year'] );
+
+		$report_dates = array();
+		$i = 0;
+		while ( $i <= 6 ) {
+
+			if ( ( $dates['day'] + $i ) <= $num_of_days ) {
+				$report_dates[ $i ] = array(
+					'day'   => (string) $dates['day'] + $i,
+					'month' => $dates['m_start'],
+					'year'  => $dates['year'],
+				);
+			} else {
+				$report_dates[ $i ] = array(
+					'day'   => (string) $i,
+					'month' => $dates['m_end'],
+					'year'  => $dates['year_end'],
+				);
+			}
+
+			$i++;
+		}
+
+		foreach ( $report_dates as $report_date ) {
+			$income         = $stats->get_income_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
+			$income_totals  += $income;
+
+			$expense        = $stats->get_expenses_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
+			$expense_totals += $expense;
+
+			$events         = $stats->get_events_by_date( $report_date['day'], $report_date['month'], $report_date['year'] );
+			$events_totals  += $events;
+
+			$date           = mktime( 0, 0, 0,  $report_date['month'], $report_date['day'], $report_date['year']  ) * 1000;
+			$income_data[]  = array( $date, $income );
+			$expense_data[] = array( $date, $expense );
+			$events_data[]  = array( $date, $events );
+		}
+
+	} else {
+
+		$y = $dates['year'];
+		$temp_data = array(
+			'income'  => array(),
+			'expense' => array(),
+		);
+
+		while( $y <= $dates['year_end'] ) {
+
+			$last_year = false;
+
+			if( $dates['year'] == $dates['year_end'] ) {
+				$month_start = $dates['m_start'];
+				$month_end   = $dates['m_end'];
+				$last_year   = true;
+			} elseif( $y == $dates['year'] ) {
+				$month_start = $dates['m_start'];
+				$month_end   = 12;
+			} elseif ( $y == $dates['year_end'] ) {
+				$month_start = 1;
+				$month_end   = $dates['m_end'];
+			} else {
+				$month_start = 1;
+				$month_end   = 12;
+			}
+
+			$i = $month_start;
+			while ( $i <= $month_end ) {
+
+
+				$d = $dates['day'];
+
+				if( $i == $month_end ) {
+
+					$num_of_days = $dates['day_end'];
+
+					if ( $month_start < $month_end ) {
+
+						$d = 1;
+
+					}
+
+				} else {
+
+					$num_of_days = cal_days_in_month( CAL_GREGORIAN, $i, $y );
+
+				}
+
+				while ( $d <= $num_of_days ) {
+
+					$income         = $stats->get_income_by_date( $d, $i, $y );
+					$income_totals += $income;
+
+					$expense         = $stats->get_expenses_by_date( $d, $i, $y );
+					$expense_totals += $expense;
+
+					$events         = $stats->get_events_by_date( $d, $i, $y );
+					$events_totals  += $events;
+
+					$temp_data['income'][ $y ][ $i ][ $d ]  = $income;
+					$temp_data['expense'][ $y ][ $i ][ $d ] = $expense;
+					$temp_data['events'][ $y ][ $i ][ $d ]  = $events;
+
+					$d++;
+
+				}
+
+				$i++;
+
+			}
+
+			$y++;
+		}
+
+		$income_data  = array();
+		$expense_data = array();
+
+		// When using 3 months or smaller as the custom range, show each day individually on the graph
+		if ( $day_by_day ) {
+
+			foreach ( $temp_data[ 'income' ] as $year => $months ) {
+				foreach( $months as $month => $days ) {
+					foreach ( $days as $day => $income ) {
+						$date          = mktime( 0, 0, 0, $month, $day, $year ) * 1000;
+						$income_data[] = array( $date, $income );
+					}
+
+				}
+			}
+
+			foreach ( $temp_data[ 'expense' ] as $year => $months ) {
+				foreach( $months as $month => $days ) {
+					foreach ( $days as $day => $expense ) {
+						$date         = mktime( 0, 0, 0, $month, $day, $year ) * 1000;
+						$expense_data[] = array( $date, $expense );
+					}
+
+				}
+			}
+
+			foreach ( $temp_data[ 'events' ] as $year => $months ) {
+				foreach( $months as $month => $days ) {
+					foreach ( $days as $day => $events ) {
+						$date          = mktime( 0, 0, 0, $month, $day, $year ) * 1000;
+						$events_data[] = array( $date, $events );
+					}
+
+				}
+			}
+
+		// When showing more than 3 months of results, group them by month, by the first (except for the last month, group on the last day of the month selected)
+		} else {
+
+			foreach ( $temp_data[ 'income' ] as $year => $months ) {
+
+				$month_keys = array_keys( $months );
+				$last_month = end( $month_keys );
+
+				foreach( $months as $month => $days ) {
+
+					$day_keys = array_keys( $days );
+					$last_day = end( $day_keys );
+
+					$consolidated_date = $month === $last_month ? $last_day : 1;
+
+					$income        = array_sum( $days );
+					$date          = mktime( 0, 0, 0, $month, $consolidated_date, $year ) * 1000;
+					$income_data[] = array( $date, $income );
+
+				}
+
+			}
+
+			foreach ( $temp_data[ 'expense' ] as $year => $months ) {
+
+				$month_keys = array_keys( $months );
+				$last_month = end( $month_keys );
+
+				foreach( $months as $month => $days ) {
+
+					$day_keys = array_keys( $days );
+					$last_day = end( $day_keys );
+
+					$consolidated_date = $month === $last_month ? $last_day : 1;
+
+					$expense        = array_sum( $days );
+					$date           = mktime( 0, 0, 0, $month, $consolidated_date, $year ) * 1000;
+					$expense_data[] = array( $date, $expense );
+
+				}
+
+			}
+
+			foreach ( $temp_data[ 'events' ] as $year => $months ) {
+
+				$month_keys = array_keys( $months );
+				$last_month = end( $month_keys );
+
+				foreach( $months as $month => $days ) {
+
+					$day_keys = array_keys( $days );
+					$last_day = end( $day_keys );
+
+					$consolidated_date = $month === $last_month ? $last_day : 1;
+
+					$events         = array_sum( $days );
+					$date           = mktime( 0, 0, 0, $month, $consolidated_date, $year ) * 1000;
+					$events_data[]  = array( $date, $events );
+
+				}
+
+			}
+
+		}
+
+	}
+
+	$data = array(
+		__( 'Income', 'mobile-dj-manager' )  => $income_data,
+		__( 'Expense', 'mobile-dj-manager' ) => $expense_data,
+		mdjm_get_label_plural()              => $events_data
+	);
+
+	// start our own output buffer
+	ob_start();
+	?>
+	<div id="mdjm-dashboard-widgets-wrap">
+		<div class="metabox-holder" style="padding-top: 0;">
+			<div class="postbox">
+				<h3><span><?php _e( 'Transactions Over Time', 'mobile-dj-manager' ); ?></span></h3>
+
+				<div class="inside">
+					<?php
+					mdjm_reports_graph_controls();
+					$graph = new MDJM_Graph( $data );
+					$graph->set( 'x_mode', 'time' );
+					$graph->set( 'multiple_y_axes', false );
+					$graph->display();
+
+					?>
+
+					<p class="mdjm_graph_totals">
+						<strong>
+							<?php
+								_e( 'Total income for period shown: ', 'mobile-dj-manager' );
+								echo mdjm_currency_filter( mdjm_format_amount( $income_totals ) );
+							?>
+						</strong>
+					</p>
+					<p class="mdjm_graph_totals">
+						<strong>
+							<?php
+								_e( 'Total expense for period shown: ', 'mobile-dj-manager' );
+								echo mdjm_currency_filter( mdjm_format_amount( $expense_totals ) );
+							?>
+						</strong>
+					</p>
+                    <p class="mdjm_graph_totals">
+						<strong>
+							<?php
+								_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
+								echo mdjm_currency_filter( mdjm_format_amount( $income_totals - $expense_totals ) );
+							?>
+						</strong>
+					</p>
+					<p class="mdjm_graph_totals">
+						<strong>
+							<?php
+								printf(
+									__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
+									mdjm_get_label_plural()
+								);
+								echo $events_totals;
+							?>
+						</strong>
+					</p>
+
+					<?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+	// get output buffer contents and end our own buffer
+	$output = ob_get_contents();
+	ob_end_clean();
+
+	echo $output;
+} // mdjm_transactions_reports_graph
 
 /**
  * Show report graph date filters

@@ -241,21 +241,20 @@ class MDJM_Stats	{
 	 * @return	int		$events			Events
 	 */
 	public function get_events_by_date( $day = null, $month_num, $year = null )	{
-		global $wpdb;
 
 		$args = array(
 			'post_type'              => 'mdjm-event',
 			'nopaging'               => true,
-			'year'                   => $year,
-			'monthnum'               => $month_num,
-			'post_status'            => 'mdjm-completed',
+			'post_status'            => 'any',
 			'fields'                 => 'ids',
+			'meta_key'               => '_mdjm_event_date',
+			'meta_value'             => date( 'Y-m-d' ),
 			'update_post_term_cache' => false
 		);
 
-		if ( ! empty( $day ) )	{
-			$args['day'] = $day;
-		}
+		$date = date( 'Y-m-d', strtotime( $year . '-' . $month_num . '-' . $day ) );
+
+		$args['meta_value'] = $date;
 
 		$args   = apply_filters( 'mdjm_get_events_by_date_args', $args );
 		$key    = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
@@ -383,7 +382,7 @@ class MDJM_Stats	{
 			$args['day'] = $day;
 		}
 
-		$args     = apply_filters( 'mdjm_get_income_by_date_args', $args );
+		$args = apply_filters( 'mdjm_get_income_by_date_args', $args );
 	
 		$txns = mdjm_get_txns( $args );
 		$income = 0;
