@@ -70,7 +70,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	 * @return	str		Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
-		return 'date';
+		return 'type';
 	} // get_primary_column_name
 
 	/**
@@ -78,7 +78,7 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	 *
 	 * @access	public
 	 * @since	1.4
-	 * @param	arr		$item			Contains all the data of the downloads
+	 * @param	arr		$item			Contains all the data of the events
 	 * @param	str		$column_name	The name of the column
 	 *
 	 * @return	str		Column Name
@@ -86,10 +86,6 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	public function column_default( $item, $column_name ) {
 		switch( $column_name ){
 			case 'earnings' :
-				return mdjm_currency_filter( mdjm_format_amount( $item[ $column_name ] ) );
-			case 'average_events' :
-				return round( $item[ $column_name ] );
-			case 'average_earnings' :
 				return mdjm_currency_filter( mdjm_format_amount( $item[ $column_name ] ) );
 			case 'details' :
 				return '<a href="' . admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=event&event-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'mobile-dj-manager' ) . '</a>';
@@ -106,15 +102,11 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	 * @return	arr		$columns	Array of all the list table columns
 	 */
 	public function get_columns() {
-		$events_label = mdjm_get_label_plural();
-
 		$columns = array(
-			'title'            => mdjm_get_label_singular(),
-			'events'           => $events_label,
-			'earnings'         => __( 'Earnings', 'mobile-dj-manager' ),
-			'average_sales'    => sprintf( __( 'Monthly Average %s', 'mobile-dj-manager' ), $events_label ),
-			'average_earnings' => __( 'Monthly Average Earnings', 'mobile-dj-manager' ),
-			'details'          => __( 'Detailed Report', 'mobile-dj-manager' ),
+			'type'     => __( 'Type', 'mobile-dj-manager' ),
+			'events'   => mdjm_get_label_plural(),
+			'earnings' => __( 'Earnings', 'mobile-dj-manager' ),
+			'details'  => __( 'Detailed Report', 'mobile-dj-manager' ),
 		);
 
 		return $columns;
@@ -129,9 +121,9 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 	 */
 	public function get_sortable_columns() {
 		return array(
-			'title'    => array( 'title', true ),
-			'events'   => array( 'events', false ),
-			'earnings' => array( 'earnings', false ),
+			'type'      => array( 'type', true ),
+			'events'    => array( 'events', false ),
+			'earnings'  => array( 'earnings', false ),
 		);
 	} // get_sortable_columns
 
@@ -234,17 +226,17 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 		}
 
 		switch ( $orderby ) :
-			case 'title' :
-				$args['orderby'] = 'title';
+			case 'type' :
+				$args['orderby'] = 'type';
 				break;
 
 			case 'date' :
-				$args['orderby'] = 'meta_value_num';
+				$args['orderby']  = 'meta_value_num';
 				$args['meta_key'] = '_mdjm_event_date';
 				break;
 
 			case 'earnings' :
-				$args['orderby'] = 'meta_value_num';
+				$args['orderby']  = 'meta_value_num';
 				$args['meta_key'] = '_edd_download_earnings';
 				break;
 		endswitch;
@@ -269,11 +261,12 @@ class MDJM_Event_Reports_Table extends WP_List_Table {
 
 		if ( $events ) {
 			foreach ( $events as $event ) {
+				$mdjm_event = new MDJM_Event( $event );
 				$reports_data[] = array(
-					'ID'               => $event,
-					'title'            => get_the_title( $event ),
-					//'sales'            => edd_get_download_sales_stats( $event ),
-					//'earnings'         => edd_get_download_earnings_stats( $event ),
+					'ID'       => $event,
+					'type'     => get_the_title( $event ),
+					'events'   => count( $event ),
+					'earnings' => $mdjm_event->get_total_profit(),
 					//'average_sales'    => edd_get_average_monthly_download_sales( $event ),
 					//'average_earnings' => edd_get_average_monthly_download_earnings( $event ),
 				);

@@ -238,9 +238,10 @@ class MDJM_Stats	{
 	 * @param	int		$day			Day number
 	 * @param	int		$month_num		Month number
 	 * @param	int		$year			Year
+	 * @param	int		$hour			Hour
 	 * @return	int		$events			Events
 	 */
-	public function get_events_by_date( $day = null, $month_num, $year = null )	{
+	public function get_events_by_date( $day = null, $month_num, $year = null, $hour = null )	{
 
 		$args = array(
 			'post_type'              => 'mdjm-event',
@@ -255,6 +256,31 @@ class MDJM_Stats	{
 		$date = date( 'Y-m-d', strtotime( $year . '-' . $month_num . '-' . $day ) );
 
 		$args['meta_value'] = $date;
+
+		if ( ! empty( $hour ) )	{
+			if ( $hour < 10 )	{
+				$hour = '0' . $hour;
+			}
+			$args['meta_query'] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_mdjm_event_start',
+					'value'   => $hour . ':00:00'
+				),
+				array(
+					'key'     => '_mdjm_event_start',
+					'value'   => $hour . ':15:00'
+				),
+				array(
+					'key'     => '_mdjm_event_start',
+					'value'   => $hour . ':30:00'
+				),
+				array(
+					'key'     => '_mdjm_event_start',
+					'value'   => $hour . ':45:00'
+				)
+			);
+		}
 
 		$args   = apply_filters( 'mdjm_get_events_by_date_args', $args );
 		$key    = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
@@ -361,9 +387,10 @@ class MDJM_Stats	{
 	 * @param	int		$day			Day number
 	 * @param	int		$month_num		Month number
 	 * @param	int		$year			Year
+	 * @param	int		$hour			Hour
 	 * @return	int		$income			Earnings
 	 */
-	public function get_income_by_date( $day = null, $month_num, $year = null )	{
+	public function get_income_by_date( $day = null, $month_num, $year = null, $hour = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -380,6 +407,10 @@ class MDJM_Stats	{
 
 		if ( ! empty( $day ) )	{
 			$args['day'] = $day;
+		}
+
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
 		}
 
 		$args = apply_filters( 'mdjm_get_income_by_date_args', $args );
@@ -404,9 +435,10 @@ class MDJM_Stats	{
 	 * @param	int		$day			Day number
 	 * @param	int		$month_num		Month number
 	 * @param	int		$year			Year
+	 * @param	int		$hour			Hour
 	 * @return	int		$expense		Expenses
 	 */
-	public function get_expenses_by_date( $day = null, $month_num, $year = null )	{
+	public function get_expenses_by_date( $day = null, $month_num, $year = null, $hour = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -423,6 +455,10 @@ class MDJM_Stats	{
 
 		if ( ! empty( $day ) )	{
 			$args['day'] = $day;
+		}
+
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
 		}
 
 		$args     = apply_filters( 'mdjm_get_expenses_by_date_args', $args );
@@ -444,12 +480,13 @@ class MDJM_Stats	{
 	 * Get Earnings By Date.
 	 *
 	 * @since	1.4
-	 * @param	int		$day Day number
-	 * @param	int		$month_num Month number
-	 * @param	int		$year Year
-	 * @return	int		$earnings Earnings
+	 * @param	int		$day 		Day number
+	 * @param	int		$month_num 	Month number
+	 * @param	int		$year		Year
+	 * @param	int		$hour		Hour
+	 * @return	int		$earnings	Earnings
 	 */
-	public function get_earnings_by_date( $day = null, $month_num, $year = null )	{
+	public function get_earnings_by_date( $day = null, $month_num, $year = null, $hour = null )	{
 		global $wpdb;
 
 		$args = array(
@@ -468,13 +505,17 @@ class MDJM_Stats	{
 			$args['day'] = $day;
 		}
 
+		if ( ! empty( $hour ) )	{
+			$args['hour'] = $hour;
+		}
+
 		$args     = apply_filters( 'mdjm_get_earnings_by_date_args', $args );
 		$key      = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
 		$earnings = get_transient( $key );
 	
 		if( false === $earnings ) {
-			$income   = $this->get_income_by_date( $day, $month_num, $year );
-			$expense  = $this->get_expenses_by_date( $day, $month_num, $year );
+			$income   = $this->get_income_by_date( $day, $month_num, $year, $hour );
+			$expense  = $this->get_expenses_by_date( $day, $month_num, $year, $hour );
 
 			$earnings = $income - $expense;
 

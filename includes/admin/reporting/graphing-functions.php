@@ -59,8 +59,8 @@ function mdjm_earnings_reports_graph() {
 		$hour  = 1;
 		$month = $dates['m_start'];
 		while ( $hour <= 23 ) {
-			$events   = $stats->get_events_by_date( $dates['day'], $month, $dates['year'] );
-			$earnings = $stats->get_earnings_by_date( $dates['day'], $month, $dates['year'] );
+			$events   = $stats->get_events_by_date( $dates['day'], $month, $dates['year'], $hour );
+			$earnings = $stats->get_earnings_by_date( $dates['day'], $month, $dates['year'], $hour );
 
 			$events_totals   += $events;
 			$earnings_totals += $earnings;
