@@ -141,6 +141,32 @@ function mdjm_report_views() {
 } // mdjm_report_views
 
 /**
+ * Renders the Reports Event Types Table
+ *
+ * @since	1.4
+ * @uses	MDJM_Types_Reports_Table::prepare_items()
+ * @uses	MDJM_Types_Reports_Table::display()
+ * @return	void
+ */
+function mdjm_reports_types_table() {
+
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
+		return;
+	}
+
+	if( isset( $_GET['event-id'] ) )	{
+		return;
+	}
+
+	include( dirname( __FILE__ ) . '/class-types-reports-table.php' );
+
+	$events_table = new MDJM_Types_Reports_Table();
+	$events_table->prepare_items();
+	$events_table->display();
+} // mdjm_reports_types_table
+add_action( 'mdjm_reports_view_types', 'mdjm_reports_types_table' );
+
+/**
  * Renders the Reports Events Table
  *
  * @since	1.4
@@ -160,9 +186,9 @@ function mdjm_reports_events_table() {
 
 	include( dirname( __FILE__ ) . '/class-event-reports-table.php' );
 
-	$downloads_table = new MDJM_Event_Reports_Table();
-	$downloads_table->prepare_items();
-	$downloads_table->display();
+	$events_table = new MDJM_Event_Reports_Table();
+	$events_table->prepare_items();
+	$events_table->display();
 } // mdjm_reports_events_table
 add_action( 'mdjm_reports_view_events', 'mdjm_reports_events_table' );
 

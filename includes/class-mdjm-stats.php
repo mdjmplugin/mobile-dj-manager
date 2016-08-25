@@ -232,6 +232,54 @@ class MDJM_Stats	{
 	} // events_by_date
 
 	/**
+	 * Retrieve event stats.
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @param	int			$event_id	The event to retrieve stats for. If false, gets stats for all events.
+	 * @param	str|bool	$start_date The starting date for which we'd like to filter our event stats. If false, we'll use the default start date of `this_month`
+	 * @param	str|bool	$end_date	The end date for which we'd like to filter our event stats. If false, we'll use the default end date of `this_month`
+	 * @param	str|ar		$status		The event status(es) to count. Only valid when retrieving global stats
+	 * @return	float|int	Total amount of events based on the passed arguments.
+	 */
+	public function get_events( $event_id = 0, $start_date = false, $end_date = false, $status = 'any' ) {
+
+		$this->setup_dates( $start_date, $end_date );
+
+		// Make sure start date is valid
+		if ( is_wp_error( $this->start_date ) )	{
+			return $this->start_date;
+		}
+
+		// Make sure end date is valid
+		if ( is_wp_error( $this->end_date ) )	{
+			return $this->end_date;
+		}
+
+		if( empty( $event_id ) ) {
+
+			if( is_array( $status ) ) {
+				$count = 0;
+				foreach( $status as $event_status ) {
+					$count += mdjm_count_events_by_status( $event_status );
+				}
+			} else {
+				$count = mdjm_count_events_by_status( $status );
+			}
+
+		} else {
+
+			$this->timestamp = false;
+
+			$count = mdjm_count_events_by_status( 'any' );
+
+		}
+
+		return $count;
+
+	} // get_events
+
+	/**
 	 * Get Events by Date.
 	 *
 	 * @since	1.4
