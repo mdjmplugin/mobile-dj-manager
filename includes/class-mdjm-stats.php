@@ -390,7 +390,8 @@ class MDJM_Stats	{
 			),
 			'meta_query'       => array(
 				array(
-					'_mdjm_txn_status'    => 'Completed'
+					'key'     => '_mdjm_txn_status',
+					'value'   => 'Completed'
 				)
 			)
 		);

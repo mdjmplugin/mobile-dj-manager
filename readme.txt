@@ -124,6 +124,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 **Bug Fixes**
 
 * MDJM Event Management user fields not updating within Admin user profile if value is removed
+* Overview dashboard widget was displaying income/expenditure that was not in the completed status
 
 = 1.3.8.5 =
 
