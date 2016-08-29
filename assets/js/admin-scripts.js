@@ -1119,6 +1119,133 @@ jQuery(document).ready(function ($) {
 	}
 	MDJM_Comms.init();
 
+	/**
+	 * Reports / Exports screen JS
+	 */
+	var MDJM_Reports = {
+
+		init : function() {
+			this.date_options();
+		},
+
+		date_options : function() {
+
+			// Show hide extended date options
+			$( '#mdjm-graphs-date-options' ).change( function() {
+				var $this = $(this),
+					date_range_options = $( '#mdjm-date-range-options' );
+
+				if ( 'other' === $this.val() ) {
+					date_range_options.show();
+				} else {
+					date_range_options.hide();
+				}
+			});
+
+		}
+
+	};
+	MDJM_Reports.init();
+
+	/**
+	 * Export screen JS
+	 */
+	var MDJM_Export = {
+
+		init : function() {
+			this.submit();
+			this.dismiss_message();
+		},
+
+		submit : function() {
+
+			var self = this;
+
+			$( document.body ).on( 'submit', '.mdjm-export-form', function(e) {
+				e.preventDefault();
+
+				var submitButton = $(this).find( 'input[type="submit"]' );
+
+				if ( ! submitButton.hasClass( 'button-disabled' ) ) {
+
+					var data = $(this).serialize();
+
+					submitButton.addClass( 'button-disabled' );
+					$(this).find('.notice-wrap').remove();
+					$(this).append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="mdjm-progress"><div></div></div></div>' );
+
+					// start the process
+					self.process_step( 1, data, self );
+
+				}
+
+			});
+		},
+
+		process_step : function( step, data, self ) {
+
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					form: data,
+					action: 'mdjm_do_ajax_export',
+					step: step,
+				},
+				dataType: "json",
+				success: function( response ) {
+					if( 'done' == response.step || response.error || response.success ) {
+
+						// We need to get the actual in progress form, not all forms on the page
+						var export_form    = $('.mdjm-export-form').find('.mdjm-progress').parent().parent();
+						var notice_wrap    = export_form.find('.notice-wrap');
+
+						export_form.find('.button-disabled').removeClass('button-disabled');
+
+						if ( response.error ) {
+
+							var error_message = response.message;
+							notice_wrap.html('<div class="updated error"><p>' + error_message + '</p></div>');
+
+						} else if ( response.success ) {
+
+							var success_message = response.message;
+							notice_wrap.html('<div id="mdjm-batch-success" class="updated notice is-dismissible"><p>' + success_message + '<span class="notice-dismiss"></span></p></div>');
+
+						} else {
+
+							notice_wrap.remove();
+							window.location = response.url;
+
+						}
+
+					} else {
+						$('.mdjm-progress div').animate({
+							width: response.percentage + '%',
+						}, 50, function() {
+							// Animation complete.
+						});
+						self.process_step( parseInt( response.step ), data, self );
+					}
+
+				}
+			}).fail(function (response) {
+				if ( window.console && window.console.log ) {
+					console.log( response );
+				}
+			});
+
+		},
+
+		dismiss_message : function() {
+			$('body').on( 'click', '#mdjm-batch-success .notice-dismiss', function() {
+				$('#mdjm-batch-success').parent().slideUp('fast');
+			});
+		}
+
+	};
+	MDJM_Export.init();
+
 /*
  * Validation Rules
  ******************************************/
@@ -1164,3 +1291,45 @@ jQuery(document).ready(function ($) {
 	}
 	
 });
+
+var mdjmFormatCurrency = function (value) {
+	// Convert the value to a floating point number in case it arrives as a string.
+	var numeric = parseFloat(value);
+	// Specify the local currency.
+	var eventCurrency = mdjm_admin_vars.currency;
+	var decimalPlaces = mdjm_admin_vars.currency_decimals;
+	return numeric.toLocaleString(eventCurrency, { style: 'currency', currency: eventCurrency, minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
+}
+
+var mdjmFormatNumber = function(value) {
+	// Convert the value to a floating point number in case it arrives as a string.
+	var numeric = parseFloat(value);
+	// Specify the local currency.
+	var eventCurrency = mdjm_admin_vars.currency;
+	var decimalPlaces = mdjm_admin_vars.currency_decimals;
+	return numeric.toLocaleString(eventCurrency, { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+var mdjmLabelFormatter = function (label, series) {
+	return '<div style="font-size:12px; text-align:center; padding:2px">' + label + '</div>';
+}
+
+var mdjmLegendFormatterSources = function (label, series) {
+	var slug  = label.toLowerCase().replace(/\s/g, '-');
+	var color = '<div class="mdjm-legend-color" style="background-color: ' + series.color + '"></div>';
+	var value = '<div class="mdjm-pie-legend-item">' + label + ': ' + Math.round(series.percent) + '% (' + mdjmFormatNumber(series.data[0][1]) + ')</div>';
+	var item = '<div id="' + series.mdjm_vars.id + slug + '" class="mdjm-legend-item-wrapper">' + color + value + '</div>';
+
+	jQuery('#mdjm-pie-legend-' + series.mdjm_vars.id).append( item );
+	return item;
+}
+
+var mdjmLegendFormatterEarnings = function (label, series) {
+	var slug  = label.toLowerCase().replace(/\s/g, '-');
+	var color = '<div class="mdjm-legend-color" style="background-color: ' + series.color + '"></div>';
+	var value = '<div class="mdjm-pie-legend-item">' + label + ': ' + Math.round(series.percent) + '% (' + mdjmFormatCurrency(series.data[0][1]) + ')</div>';
+	var item = '<div id="' + series.mdjm_vars.id + slug + '" class="mdjm-legend-item-wrapper">' + color + value + '</div>';
+
+	jQuery('#mdjm-pie-legend-' + series.mdjm_vars.id).append( item );
+	return item;
+}

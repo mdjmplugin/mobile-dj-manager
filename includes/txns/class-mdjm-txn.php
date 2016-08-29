@@ -293,6 +293,18 @@ class MDJM_Txn {
 	} // get_type
 
 	/**
+	 * Retrieve the transaction method.
+	 *
+	 * @since	1.4
+	 * @return	bool
+	 */
+	public function get_method() {
+		$method = get_post_meta( $this->ID, '_mdjm_txn_source', true );
+					
+		return apply_filters( 'mdjm_transaction_method', $method, $this->ID );
+	} // get_method
+
+	/**
 	 * Retrieve the transaction gateway.
 	 *
 	 * @since	1.3.8

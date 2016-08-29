@@ -27,14 +27,14 @@ function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $emplo
 	if( ! empty( $roles ) && ! is_array( $roles ) )	{
 		$roles = array( $roles );
 	}
-	
-	$all_clients = get_users( 
-		array(
-			'role__in'  => $roles,
-			'orderby'   => $orderby,
-			'order'     => $order
-		)
-	);
+
+	$client_args = apply_filters( 'mdjm_get_clients_args', array(
+		'role__in'  => $roles,
+		'orderby'   => $orderby,
+		'order'     => $order
+	) );
+
+	$all_clients = get_users( $client_args );
 	
 	// If we are only quering an employee's client, we need to filter	
 	if( ! empty( $employee ) )	{
@@ -60,6 +60,31 @@ function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $emplo
 				
 	return $clients;
 } // mdjm_get_clients
+
+/**
+ * Returns a count of clients.
+ *
+ * @since	1.4
+ * @param	bool	$inactive		True to include inactive clients, false to ignore.
+ * @return	int		Client count.
+ */
+function mdjm_client_count( $inactive = true )	{
+	$roles = array( 'client' );
+
+	if ( $inactive )	{
+		$roles[] = 'inactive_client';
+	}
+
+	$args = array(
+		'role__in'    => $roles,
+		'count_total' => true
+	);
+
+	$clients = new WP_User_Query( $args );
+
+	return $clients->get_total();
+
+} // mdjm_client_count
 
 /**
  * Retrieve the client ID from the event

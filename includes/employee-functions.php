@@ -1104,7 +1104,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 	}
 	
 	if ( ! mdjm_is_employee( $employee_id ) )	{
-		error_log( '111', 0 );
+
 		return false;
 	}
 	
@@ -1142,7 +1142,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 			
 		} else	{
 			MDJM()->debug->log_it( sprintf( 'Unable to pay %s for Event %d', mdjm_get_employee_display_name( $employee_id ), $event_id ) );
-			error_log( '111', 0 );
+
 			$return = false;
 		}
 
@@ -1153,7 +1153,6 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 		if ( ! mdjm_employee_working_event( $event_id, $employee_id ) )	{
 	
 			MDJM()->debug->log_it( 'Employee not working this event' );
-			error_log( '333', 0 );
 			return false;
 	
 		} else	{
