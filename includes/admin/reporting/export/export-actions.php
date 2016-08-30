@@ -66,6 +66,30 @@ function mdjm_register_batch_exporters() {
 add_action( 'plugins_loaded', 'mdjm_register_batch_exporters' );
 
 /**
+ * Register the events batch exporter
+ * @since	1.4
+ */
+function mdjm_register_events_batch_export() {
+	add_action( 'mdjm_batch_export_class_include', 'mdjm_include_events_batch_processer', 10, 1 );
+} // mdjm_register_txns_batch_export
+add_action( 'mdjm_register_batch_exporter', 'mdjm_register_events_batch_export', 10 );
+
+/**
+ * Loads the events batch process if needed
+ *
+ * @since 	1.4
+ * @param	str		$class	The class being requested to run for the batch export
+ * @return	void
+ */
+function mdjm_include_events_batch_processer( $class ) {
+
+	if ( 'MDJM_Batch_Export_Events' === $class ) {
+		require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/export/class-batch-export-events.php' );
+	}
+
+} // mdjm_include_txns_batch_processer
+
+/**
  * Register the transactions batch exporter
  * @since	1.4
  */
@@ -75,7 +99,7 @@ function mdjm_register_txns_batch_export() {
 add_action( 'mdjm_register_batch_exporter', 'mdjm_register_txns_batch_export', 10 );
 
 /**
- * Loads the customers batch process if needed
+ * Loads the transactions batch process if needed
  *
  * @since 	1.4
  * @param	str		$class	The class being requested to run for the batch export

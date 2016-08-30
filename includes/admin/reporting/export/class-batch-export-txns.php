@@ -67,13 +67,13 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 		$offset = 30 * ( $this->step - 1 );
 
 		$txn_args = array(
-			'post_type'   => 'mdjm-transaction',
-			'number'      => 30,
-			'offset'      => $offset,
-			'paged'       => $this->step,
-			'post_status' => array( 'mdjm-income', 'mdjm-expenditure' ),
-			'order'       => 'ASC',
-			'orderby'     => 'date'
+			'post_type'      => 'mdjm-transaction',
+			'posts_per_page' => 30,
+			'offset'         => $offset,
+			'paged'          => $this->step,
+			'post_status'    => array( 'mdjm-income', 'mdjm-expenditure' ),
+			'order'          => 'ASC',
+			'orderby'        => 'date'
 		);
 
 		if ( ! empty( $this->start ) || ! empty( $this->end ) )	{
@@ -132,17 +132,7 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 				}
 
 				$i++;
-				if ( $i == count( $all_txns ) )	{
-					$data[ $i ]['id']      = '';
-					$data[ $i ]['date']    = __( 'TOTALS', 'mobile-dj-manager' );
-					$data[ $i ]['income']  = mdjm_format_amount( $income );
-					$data[ $i ]['expense'] = mdjm_format_amount( $expense );
-					$data[ $i ]['to_from'] = '';
-					$data[ $i ]['type']    = '';
-					$data[ $i ]['source']  = '';
-					$data[ $i ]['gateway'] = '';
-					$data[ $i ]['event']   = '';
-				}
+
 			}
 	
 			$data = apply_filters( 'mdjm_export_get_data', $data );
@@ -227,9 +217,9 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 	 * @param	arr		$request	The Form Data passed into the batch processing
 	 */
 	public function set_properties( $request ) {
-		$this->start      = isset( $request['start'] )    ? sanitize_text_field( $request['start'] )          : '';
-		$this->end        = isset( $request['end']  )     ? sanitize_text_field( $request['end']  )           : '';
-		$this->status     = ! empty( $request['status'] ) ? array( sanitize_text_field( $request['status']  ) )         : false;
+		$this->start      = isset( $request['start'] )    ? sanitize_text_field( $request['start'] )            : '';
+		$this->end        = isset( $request['end']  )     ? sanitize_text_field( $request['end']  )             : '';
+		$this->status     = ! empty( $request['status'] ) ? array( sanitize_text_field( $request['status']  ) ) : false;
 	} // set_properties
 
 } // MDJM_Batch_Export_Txns

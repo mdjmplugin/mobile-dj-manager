@@ -83,6 +83,27 @@ function mdjm_get_events( $args = array() )	{
 } // mdjm_get_events
 
 /**
+ * Retrieve the total event count.
+ *
+ * @since	1.4
+ * @param	str|arr	$status			Post statuses.
+ * @return	int		Event count
+ */
+function mdjm_event_count( $status = 'any' )	{
+	$args = array(
+		'post_type'      => 'mdjm-event',
+		'post_status'    => $status,
+		'posts_per_page' => -1
+	);
+
+	$args = apply_filters( 'mdjm_event_count_args', $args );
+
+	$events = new WP_Query( $args );
+
+	return $events->found_posts;
+} // mdjm_event_count
+
+/**
  * Retrieve the event data.
  *
  * @since	1.4

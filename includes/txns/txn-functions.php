@@ -292,8 +292,9 @@ function mdjm_get_txns( $args = array() )	{
  */
 function mdjm_txn_count( $status = array( 'mdjm-income', 'mdjm-expenditure' ), $txn_statuses = 'any' )	{
 	$txn_args = array(
-		'post_type'    => 'mdjm-transaction',
-		'post_status'  => $status
+		'post_type'      => 'mdjm-transaction',
+		'post_status'    => $status,
+		'posts_per_page' => -1
 	);
 
 	if ( is_array( $txn_statuses ) )	{

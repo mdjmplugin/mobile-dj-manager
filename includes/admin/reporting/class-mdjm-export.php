@@ -30,6 +30,23 @@ class MDJM_Export {
 	public $export_type = 'default';
 
 	/**
+	 * Event labels.
+	 * @var		str
+	 * @since	1.4
+	 */
+	public $event_label_single;
+	public $event_label_plural;
+
+	/**
+	 * Constructor.
+	 * @since	1.4
+	 */
+	public function __construct()	{
+		$this->event_label_single = mdjm_get_label_singular();
+		$this->event_label_plural = mdjm_get_label_plural();
+	} // __construct
+
+	/**
 	 * Can we export?
 	 *
 	 * @access	public
