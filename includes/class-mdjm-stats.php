@@ -443,7 +443,94 @@ class MDJM_Stats	{
 		return apply_filters( 'mdjm_stats_date', $date, $end_date, $this );
 
 	} // convert_date
-	
+
+	/**
+	 * Modifies the WHERE flag for txn counts
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @return	str
+	 */
+	public function count_txns_where( $where = '' ) {
+		// Only get transactions in our date range
+
+		$start_where = '';
+		$end_where   = '';
+
+		if( $this->start_date ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 00:00:00';
+			}
+
+			$start_date  = date( $format, $this->start_date );
+			$start_where = " AND p.post_date >= '{$start_date}'";
+		}
+
+		if( $this->end_date ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 23:59:59';
+			}
+
+			$end_date  = date( $format, $this->end_date );
+
+			$end_where = " AND p.post_date <= '{$end_date}'";
+		}
+
+		$where .= "{$start_where}{$end_where}";
+
+		return $where;
+	} // count_txns_where
+
+	/**
+	 * Modifies the WHERE flag for payment queries
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @return	str
+	 */
+	public function txns_where( $where = '' ) {
+
+		global $wpdb;
+
+		$start_where = '';
+		$end_where   = '';
+
+		if( ! is_wp_error( $this->start_date ) ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 00:00:00';
+			}
+
+			$start_date  = date( $format, $this->start_date );
+			$start_where = " AND $wpdb->posts.post_date >= '{$start_date}'";
+		}
+
+		if( ! is_wp_error( $this->end_date ) ) {
+
+			if ( $this->timestamp ) {
+				$format = 'Y-m-d 00:00:00';
+			} else {
+				$format = 'Y-m-d 23:59:59';
+			}
+
+			$end_date  = date( $format, $this->end_date );
+
+			$end_where = " AND $wpdb->posts.post_date <= '{$end_date}'";
+		}
+
+		$where .= "{$start_where}{$end_where}";
+
+		return $where;
+	} // txns_where
+
 	/**
 	 * Retrieves the number of events over the given date period.
 	 *

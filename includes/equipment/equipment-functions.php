@@ -442,6 +442,20 @@ function mdjm_get_package_addons( $package_id )	{
 } // mdjm_get_package_addons
 
 /**
+ * Whether or not a package contains an addon.
+ *
+ * @since	1.4
+ * @param	$package_id	The package ID.
+ * @param	$addon_id	The addon ID to check if within the package.
+ * @return	bool		True if the addon exists in the package, otherwise false.
+ */
+function mdjm_package_has_addon( $package_id, $addon_id )	{
+	$addons = mdjm_get_package_addons( $addon_id );
+
+	return in_array( $addon_id, $addons );
+} // mdjm_package_has_addon
+
+/**
  * Retrieve all packages with the given addon(s).
  *
  * @since	1.4
@@ -705,9 +719,11 @@ function mdjm_get_available_packages( $args )	{
 
 	if ( ! empty( $args['employee'] ) )	{
 		$package_args['meta_query'] = array(
-			'key'     => '_mdjm_employees',
-			'value'   => array( $args['employee'] ),
-			'compare' => 'IN'
+			array(
+				'key'     => '_mdjm_employees',
+				'value'   => sprintf( ':"%s";', $args['employee'] ),
+				'compare' => 'LIKE'
+			)
 		);
 	}
 
@@ -1422,14 +1438,23 @@ function mdjm_get_events_with_addons( $addon_ids )	{
 		$addon_ids = array( $addon_ids );
 	}
 
-	return mdjm_get_events( array(
-		'meta_query'  => array(
+	$meta_query = array();
+
+	foreach( $addon_ids as $addon_id )	{
+		$meta_query[] = array(
 			'key'     => '_mdjm_event_addons',
-			'value'   => $addon_ids,
-			'compare' => 'IN'
-		)
-	) );
-	
+			'value'   => sprintf( ':"%s";', $addon_id ),
+			'compare' => 'LIKE'
+		);
+	}
+
+	$args['meta_query'] = array(
+		'relation' => 'OR',
+		$meta_query
+	);
+
+	return mdjm_get_events( $args );
+
 } // mdjm_get_events_with_addons
 
 /**

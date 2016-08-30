@@ -150,13 +150,31 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 	
 					$event_count  = 0;
 					$total_value  = 0;
-	
-					$events = mdjm_get_events_with_package( $package->ID );
+
+					$event_args = array(
+						'fields'     => 'ids',
+						'meta_query' => array(
+							'relation' => 'AND',
+							array(
+								'key'		=> '_mdjm_event_package',
+								'value'		=> $package->ID,
+								'type'		=> 'NUMERIC'
+							),
+							array(
+								'key'		=> '_mdjm_event_date',
+								'value'		=> array( date( 'Y-m-d', $stats->start_date ), date( 'Y-m-d', $stats->end_date ) ),
+								'type'		=> 'date',
+								'compare'	=> 'BETWEEN',
+							)
+						)
+					);
+
+					$events = mdjm_get_events( $event_args );
 	
 					if ( $events )	{
 						foreach ( $events as $event ) {
 							$event_count++;
-							$event_date  = get_post_meta( $event->ID, '_mdjm_event_date', true );
+							$event_date  = get_post_meta( $event, '_mdjm_event_date', true );
 							$total_value += mdjm_get_package_price( $package->ID, $event_date );
 						}
 					} else	{

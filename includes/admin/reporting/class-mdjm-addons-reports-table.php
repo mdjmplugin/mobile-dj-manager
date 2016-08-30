@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Conversions by Enquiry Source Reports Table Class
+ * Events by Addon Reports Table Class
  *
  * @package     MDJM
  * @subpackage  Admin/Reports
@@ -19,13 +19,13 @@ if ( !class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * MDJM_Conversions_Reports_Table Class
+ * MDJM_Addons_Reports_Table Class
  *
  * Renders the Conversions Reports table
  *
  * @since	1.4
  */
-class MDJM_Conversions_Reports_Table extends WP_List_Table {
+class MDJM_Addons_Reports_Table extends WP_List_Table {
 
 	private $label_single;
 	private $label_plural;
@@ -42,7 +42,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		// Set parent defaults
 		parent::__construct( array(
 			'singular'  => mdjm_get_label_singular(),    // Singular name of the listed records
-			'plural'    => mdjm_get_label_plural(),    // Plural name of the listed records
+			'plural'    => mdjm_get_label_plural(),     // Plural name of the listed records
 			'ajax'      => false             			// Does this table support ajax?
 		) );
 		$this->label_single = mdjm_get_label_singular();
@@ -58,7 +58,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	 * @return	str		Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
-		return 'source';
+		return 'addon';
 	}
 
 	/**
@@ -85,10 +85,9 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'source'            => __( 'Source', 'mobile-dj-manager' ),
-			'total_events'      => __( 'Total Enquiries', 'mobile-dj-manager' ),
-			'total_conversions' => __( 'Successful Conversions', 'mobile-dj-manager' ),
-			'total_earnings'    => __( 'Total Earnings', 'mobile-dj-manager' )
+			'addon' => __( 'Addon', 'mobile-dj-manager' ),
+			'events'  => sprintf( __( 'Total %s', 'mobile-dj-manager' ), $this->label_plural ),
+			'value'   => __( 'Total Value', 'mobile-dj-manager' )
 		);
 
 		return $columns;
@@ -143,68 +142,54 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 				'hierarchical' => 0,
 			);
 
-			$categories = get_terms( 'enquiry-source', $term_args );
+			$addons = mdjm_get_addons();
 
-			foreach ( $categories as $category_id => $category )	{
+			if ( $addons )	{
 
-				$conversions     = 0;
-				$avg_conversions = 0;
-				$event_count     = 0;
+				foreach ( $addons as $addon )	{
+	
+					$event_count  = 0;
+					$total_value  = 0;
 
-				$category_slugs = array( $category->slug );
-
-				$all_event_args = array(
-					'post_status'    => 'any',
-					'fields'         => 'ids',
-					'tax_query'      => array(
-						array(
-							'taxonomy' => 'enquiry-source',
-							'field'    => 'slug',
-							'terms'    => $category_slugs,
+					$event_args = array(
+						'fields'     => 'ids',
+						'meta_query' => array(
+							'relation' => 'AND',
+							array(
+								'key'		=> '_mdjm_event_addons',
+								'value'		=> sprintf( ':"%s";', $addon->ID ),
+								'compare'	=> 'LIKE'
+							),
+							array(
+								'key'		=> '_mdjm_event_date',
+								'value'		=> array( date( 'Y-m-d', $stats->start_date ), date( 'Y-m-d', $stats->end_date ) ),
+								'type'		=> 'date',
+								'compare'	=> 'BETWEEN',
+							)
 						)
-					),
-					'date_query'             => array(
-						array( 
-							'after'        => date( 'Y-m-d', $stats->start_date ),
-							'before'       => date( 'Y-m-d', $stats->end_date ),
-							'inclusive'    => true
-						)
-					)
-				);
+					);
 
-				$earnings        = 0.00;
-
-				$events     = mdjm_get_events( $all_event_args );
-				$statuses   = mdjm_active_event_statuses();
-				$statuses[] = 'mdjm-completed';
-
-				if ( $events )	{
-					foreach ( $events as $event ) {
-						$event_count++;
-
-						$mdjm_event = new MDJM_Event( $event );
-
-						if ( in_array( $mdjm_event->post_status, $statuses ) )	{
-							$current_earnings = $mdjm_event->get_total_profit();
-							$earnings        += $current_earnings;
+					$events = mdjm_get_events( $event_args );
+	
+					if ( $events )	{
+						foreach ( $events as $event ) {
+							$event_count++;
+							$event_date  = get_post_meta( $event, '_mdjm_event_date', true );
+							$total_value += mdjm_get_addon_price( $addon->ID, $event_date );
 						}
+					} else	{
+						continue;
 					}
-				} else	{
-					continue;
+	
+					$reports_data[] = array(
+						'ID'        => $addon->ID,
+						'addon'     => mdjm_get_addon_name( $addon->ID ),
+						'events'    => $event_count,
+						'value'     => mdjm_currency_filter( mdjm_format_amount( $total_value ) ),
+						'value_raw' => $total_value
+					);
+	
 				}
-
-				$conversions += $stats->get_conversions( $events, 'enquiry-source', $category_slugs, $stats->start_date, $stats->end_date );
-
-				$reports_data[] = array(
-					'ID'                    => $category->term_id,
-					'source'                => $category->name,
-					'total_events'          => $event_count,
-					'total_conversions'     => $conversions,
-					'total_earnings'        => mdjm_currency_filter( mdjm_format_amount( $earnings ) ),
-					'total_earnings_raw'    => $earnings,
-					'is_child'              => false,
-				);
-
 			}
 		}
 
@@ -212,7 +197,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	} // reports_data
 
 	/**
-	 * Output the Sources Events Mix Pie Chart
+	 * Output the Addon Events Mix Pie Chart
 	 *
 	 * @since	1.4
 	 * @return	str		The HTML for the outputted graph
@@ -226,21 +211,21 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		$total_events = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_events += $item[ 'total_events' ];
+			$total_events += $item[ 'events' ];
 
-			$data[ $item[ 'source' ] ] = $item[ 'total_events' ];
+			$data[ $item[ 'addon' ] ] = $item[ 'events' ];
 		}
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . sprintf( __( 'No %s for dates provided.', 'mobile-dj-manager' ), strtolower( $this->label_plural ) ) . '</em></p>';
+			echo '<p><em>' . __( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
 		arsort( $data );
-		$data = apply_filters( 'mdjm_sources_graph_data', $data );
+		$data = apply_filters( 'mdjm_addon_graph_data', $data );
 
-		$options = apply_filters( 'mdjm_sources_graph_options', array(
+		$options = apply_filters( 'mdjm_addon_graph_options', array(
 			'legend_formatter' => 'mdjmLegendFormatterSources',
 		), $data );
 
@@ -249,7 +234,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	} // output_source_graph
 
 	/**
-	 * Output the Sources Earnings Mix Pie Chart
+	 * Output the Addon Earnings Mix Pie Chart
 	 *
 	 * @since	1.4
 	 * @return	str		The HTML for the outputted graph
@@ -263,9 +248,9 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		$total_earnings = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_earnings += $item[ 'total_earnings_raw' ];
+			$total_earnings += $item[ 'value_raw' ];
 
-			$data[ $item[ 'source' ] ] = $item[ 'total_earnings_raw' ];
+			$data[ $item[ 'addon' ] ] = $item[ 'value_raw' ];
 
 		}
 
@@ -275,9 +260,9 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 
 		// Sort High to Low, prior to filter so people can reorder if they please
 		arsort( $data );
-		$data = apply_filters( 'mdjm_sources_earnings_graph_data', $data );
+		$data = apply_filters( 'mdjm_addon_earnings_graph_data', $data );
 
-		$options = apply_filters( 'mdjm_sources_earnings_graph_options', array(
+		$options = apply_filters( 'mdjm_addon_earnings_graph_options', array(
 			'legend_formatter' => 'mdjmLegendFormatterEarnings',
 		), $data );
 
@@ -311,4 +296,5 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->items           = $this->reports_data();
 	} // prepare_items
-} // MDJM_Conversions_Reports_Table
+
+} // MDJM_Addons_Reports_Table

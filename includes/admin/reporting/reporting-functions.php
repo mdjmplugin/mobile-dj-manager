@@ -59,6 +59,7 @@ function mdjm_reports_default_views() {
 		'employees'    => sprintf( __( '%s by Employee', 'mobile-dj-manager' ), $event_label_plural ),
 		'types'        => sprintf( __( '%s by Type', 'mobile-dj-manager' ), $event_label_plural ),
 		'packages'     => sprintf( __( '%s by Package', 'mobile-dj-manager' ), $event_label_plural ),
+		'addons'       => sprintf( __( '%s by Addon', 'mobile-dj-manager' ), $event_label_plural ),
 		'events'       => $event_label_plural,
 		'gateways'     => __( 'Payment Methods', 'mobile-dj-manager' )
 	);
@@ -69,6 +70,7 @@ function mdjm_reports_default_views() {
 
 	if ( ! mdjm_packages_enabled() )	{
 		unset( $views['packages'] );
+		unset( $views['addons'] );
 	}
 
 	$views = apply_filters( 'mdjm_report_views', $views );
@@ -302,7 +304,7 @@ function mdjm_reports_conversions_table() {
 add_action( 'mdjm_reports_view_conversions', 'mdjm_reports_conversions_table' );
 
 /**
- * Renders the Reports Event Conversions Table
+ * Renders the Reports Event Packages Table
  *
  * @since	1.4
  * @uses	MDJM_Conversions_Reports_Table::prepare_items()
@@ -346,6 +348,52 @@ function mdjm_reports_packages_table() {
 	<?php
 } // mdjm_reports_packages_table
 add_action( 'mdjm_reports_view_packages', 'mdjm_reports_packages_table' );
+
+/**
+ * Renders the Reports Event Packages Table
+ *
+ * @since	1.4
+ * @uses	MDJM_Conversions_Reports_Table::prepare_items()
+ * @uses	MDJM_Conversions_Reports_Table::display()
+ * @return	void
+ */
+function mdjm_reports_addons_table() {
+
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
+		return;
+	}
+
+	include( dirname( __FILE__ ) . '/class-mdjm-addons-reports-table.php' );
+
+	?>
+
+	<div class="inside">
+		<?php
+
+        $addons_table = new MDJM_Addons_Reports_Table();
+        $addons_table->prepare_items();
+        $addons_table->display();
+        ?>
+
+        <?php echo $addons_table->load_scripts(); ?>
+
+        <div class="mdjm-mix-totals">
+            <div class="mdjm-mix-chart">
+                <strong><?php printf( __( '%s Addons Mix: ', 'mobile-dj-manager' ), mdjm_get_label_Plural() ); ?></strong>
+                <?php $addons_table->output_source_graph(); ?>
+            </div>
+            <div class="mdjm-mix-chart">
+                <strong><?php _e( 'Addon Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <?php $addons_table->output_earnings_graph(); ?>
+            </div>
+        </div>
+
+        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+
+    </div>
+	<?php
+} // mdjm_reports_addons_table
+add_action( 'mdjm_reports_view_addons', 'mdjm_reports_addons_table' );
 
 /**
  * Renders the Reports Events Table
