@@ -140,7 +140,7 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 					'status'              => $event_data['status'],
 					'client'              => $client,
 					'primary_employee'    => '(' . $event_data['employees']['primary_employee'] . ') ' . mdjm_get_client_display_name( $event_data['employees']['primary_employee'] ),
-					'employees'           => implode( "\r\n", $employees ),
+					'employees'           => implode( ',', $employees ),
 					'package'             => $event_data['equipment'],
 					'addons'              => $event_data['equipment']['addons'],
 					'cost'                => mdjm_format_amount( $event_data['cost']['cost'] ),

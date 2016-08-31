@@ -1,6 +1,6 @@
 <?php
 /**
- * Batch Clients Export Class
+ * Batch Employees Export Class
  *
  * This class handles client export
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.4
  */
-class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
+class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
@@ -28,7 +28,7 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	 * @var		str
 	 * @since	1.4
 	 */
-	public $export_type = 'clients';
+	public $export_type = 'employees';
 
 	/**
 	 * Set the CSV columns
@@ -44,7 +44,10 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 			'name'      => __( 'Name',   'mobile-dj-manager' ),
 			'email'     => __( 'Email', 'mobile-dj-manager' ),
 			'events'    => sprintf( __( 'Number of %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
-			'amount'    => __( 'Client Value', 'mobile-dj-manager' )
+			'roles'     => __( 'Roles', 'mobile-dj-manager' ),
+			'wages'     => __( 'Total Wages', 'mobile-dj-manager' ),
+			'paid'      => __( 'Paid Wages', 'mobile-dj-manager' ),
+			'owed'      => __( 'Owed Wages', 'mobile-dj-manager' )
 		);
 
 		return $cols;
@@ -75,36 +78,65 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	 */
 	public function get_data() {
 
-		$data = array();
+		global $wp_roles;
 
-		// Export all clients
-		add_filter( 'mdjm_get_clients_args', array( $this, 'filter_args' ) );
-		$clients = mdjm_get_clients();
-		remove_filter( 'mdjm_get_clients_args', array( $this, 'filter_args' ) );
+		$data = array();
+		$mdjm_roles = mdjm_get_roles();
+		$roles      = array();
+		$offset     = 30 * ( $this->step - 1 );
+	
+		foreach ( $mdjm_roles as $role_id => $role_name )	{
+			$roles[] = $role_id;
+		}
+
+		$args = array(
+			'number'   => 30,
+			'offset'   => $offset,
+			'paged'    => $this->step,
+			'role__in' => $roles
+		);
+
+		$employee_query = new WP_User_Query( $args );
+		$employees      = $employee_query->get_results();
 
 		$i = 0;
 
-		foreach ( $clients as $client ) {
+		if ( $employees )	{
+			foreach ( $employees as $employee ) {
+	
+				$events = mdjm_get_employee_events( $employee->ID );
+				$wages  = 0;
+				$paid   = 0;
 
-			$events = mdjm_get_client_events( $client->ID );
-			$amount = 0;
-
-			$data[$i]['id']     = $client->ID;
-			$data[$i]['name']   = $client->display_name;
-			$data[$i]['email']  = $client->user_email;
-			$data[$i]['events'] = $events ? count( $events ) : 0;
-
-			if ( $events )	{
-				foreach ( $events as $event )	{
-					$amount += mdjm_get_event_price( $event->ID );
+				$role_names = array();
+				foreach( $employee->roles as $role )	{
+					$role_names[] = translate_user_role( $wp_roles->roles[ $role ]['name'] );
 				}
+	
+				$data[$i]['id']     = $employee->ID;
+				$data[$i]['name']   = $employee->display_name;
+				$data[$i]['email']  = $employee->user_email;
+				$data[$i]['events'] = $events ? count( $events ) : 0;
+				$data[$i]['roles']  = implode( ', ', $role_names );
+	
+				if ( $events )	{
+					foreach ( $events as $event )	{
+						$event_wage = mdjm_get_employees_event_wage( $event->ID, $employee->ID );
+						$wages      += $event_wage;
+	
+						if ( ! empty( $event_wage ) && 'paid' == mdjm_get_employees_event_payment_status( $event->ID, $employee->ID ) )	{
+							$paid += $wages;
+						}
+					}
+				}
+	
+				$data[$i]['wages'] = mdjm_format_amount( $wages );
+				$data[$i]['paid']  = mdjm_format_amount( $paid );
+				$data[$i]['owed']  = mdjm_format_amount( $wages - $paid );
+	
+				$i++;
 			}
-
-			$data[$i]['amount'] = mdjm_format_amount( $amount );
-
-			$i++;
 		}
-
 		$data = apply_filters( 'mdjm_export_get_data', $data );
 		$data = apply_filters( 'mdjm_export_get_data_' . $this->export_type, $data );
 
@@ -121,9 +153,8 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 
 		$percentage = 0;
 
-		// We can't count the number when getting them for a specific download
-		$total = mdjm_client_count();
-
+		$total = mdjm_employee_count();//count( mdjm_get_employees() );
+error_log( $total );
 		if ( $total > 0 ) {
 			$percentage = ( ( 30 * $this->step ) / $total ) * 100;
 		}
@@ -146,4 +177,4 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 		$this->end      = isset( $request['end']   ) ? sanitize_text_field( $request['end']   ) : '';
 	} // set_properties
 
-} // MDJM_Batch_Export_Clients
+} // MDJM_Batch_Export_Employees

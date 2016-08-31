@@ -1242,11 +1242,12 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * Travel data
 	 */
 	$travel_fields = mdjm_get_event_travel_fields();
+	error_log( var_export( $_POST, true ), 0 );
 	foreach( $travel_fields as $travel_field )	{
-		if ( 'cost' == $travel_field && ! empty( $_POST[ $travel_field ] ) )	{
+		if ( 'cost' == $travel_field && ! empty( $_POST[ 'travel_' . $travel_field ] ) )	{
 			$event_data['_mdjm_event_travel_data'][ $travel_field ] = mdjm_sanitize_amount( $_POST[ $travel_field ] );
 		} else	{
-			$event_data['_mdjm_event_travel_data'][ $travel_field ] = ! empty( $_POST[ $travel_field ] ) ? $_POST[ $travel_field ] : '';
+			$event_data['_mdjm_event_travel_data'][ $travel_field ] = ! empty( $_POST[ 'travel_' . $travel_field ] ) ? $_POST[ 'travel_' . $travel_field ] : '';
 		}
 	}
 

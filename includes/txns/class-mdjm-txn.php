@@ -28,6 +28,13 @@ class MDJM_Txn {
 	public $ID = 0;
 
 	/**
+	 * The transaction payment status
+	 *
+	 * @since	1.4
+	 */
+	public $payment_status;
+
+	/**
 	 * The transaction date
 	 *
 	 * @since	1.3
@@ -121,6 +128,7 @@ class MDJM_Txn {
 			}
 		}
 
+		$this->get_status();
 		$this->get_currency();
 		$this->get_price();
 		$this->get_recipient_id();
@@ -223,6 +231,20 @@ class MDJM_Txn {
 	public function get_date() {
 		return $this->post_date;
 	} // get_date
+
+	/**
+	 * Retrieve the payment status
+	 *
+	 * @since	1.4
+	 * @return	str
+	 */
+	public function get_status() {
+		if ( empty( $this->payment_status ) )	{
+			$this->payment_status = get_post_meta( $this->ID, '_mdjm_txn_status', true );
+		}
+
+		return $this->payment_status;
+	} // get_status
 
 	/**
 	 * Retrieve the transaction currency

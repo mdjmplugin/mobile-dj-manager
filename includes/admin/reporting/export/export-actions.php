@@ -123,7 +123,7 @@ function mdjm_register_clients_batch_export() {
 add_action( 'mdjm_register_batch_exporter', 'mdjm_register_clients_batch_export', 10 );
 
 /**
- * Loads the customers batch process if needed
+ * Loads the clients batch process if needed
  *
  * @since 	1.4
  * @param	str		$class	The class being requested to run for the batch export
@@ -136,3 +136,27 @@ function mdjm_include_clients_batch_processer( $class ) {
 	}
 
 } // mdjm_include_clients_batch_processer
+
+/**
+ * Register the employees batch exporter
+ * @since	1.4
+ */
+function mdjm_register_employees_batch_export() {
+	add_action( 'mdjm_batch_export_class_include', 'mdjm_include_employees_batch_processer', 10, 1 );
+} // mdjm_register_clients_batch_export
+add_action( 'mdjm_register_batch_exporter', 'mdjm_register_employees_batch_export', 10 );
+
+/**
+ * Loads the employees batch process if needed
+ *
+ * @since 	1.4
+ * @param	str		$class	The class being requested to run for the batch export
+ * @return	void
+ */
+function mdjm_include_employees_batch_processer( $class ) {
+
+	if ( 'MDJM_Batch_Export_Employees' === $class ) {
+		require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/export/class-batch-export-employees.php' );
+	}
+
+} // mdjm_include_employees_batch_processer

@@ -40,8 +40,9 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 	public function csv_cols() {
 
 		$cols = array(
-			'id'        => __( 'ID',   'mobile-dj-manager' ),
-			'date'      => __( 'Date',   'mobile-dj-manager' ),
+			'id'        => __( 'ID', 'mobile-dj-manager' ),
+			'date'      => __( 'Date', 'mobile-dj-manager' ),
+			'status'    => __( 'Status', 'mobile-dj-manager' ),
 			'income'    => __( 'Income', 'mobile-dj-manager' ),
 			'expense'   => __( 'Expense', 'mobile-dj-manager' ),
 			'to_from'   => __( 'To / From', 'mobile-dj-manager' ),
@@ -117,6 +118,7 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 	
 				$data[ $i ]['id']      = $mdjm_txn->ID;
 				$data[ $i ]['date']    = date( 'd-M-Y', strtotime( $mdjm_txn->post_date ) );
+				$data[ $i ]['status']  = $mdjm_txn->payment_status;
 				$data[ $i ]['income']  = 'mdjm-income' == $mdjm_txn->post_status ? mdjm_format_amount( $mdjm_txn->price ) : '';
 				$data[ $i ]['expense'] = 'mdjm-expenditure' == $mdjm_txn->post_status ? mdjm_format_amount( $mdjm_txn->price ) : '';
 				$data[ $i ]['to_from'] = mdjm_get_txn_recipient_name( $mdjm_txn->ID );

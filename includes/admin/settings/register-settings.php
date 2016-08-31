@@ -401,7 +401,7 @@ function mdjm_get_registered_settings()	{
 					'artist'           => array(
 						'id'          => 'artist',
 						'name'        => __( 'Refer to Performers as', 'mobile-dj-manager' ),
-						'hint'        => sprintf( __( '%sDefault is DJ%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
+						'hint'        => '<code>' . __( 'Default is DJ', 'mobile-dj-manager' ) . '</code>',
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',

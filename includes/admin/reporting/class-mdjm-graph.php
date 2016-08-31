@@ -249,7 +249,7 @@ class MDJM_Graph {
 							$("#mdjm-flot-tooltip").remove();
 							var x = item.datapoint[0].toFixed(2),
 							y = item.datapoint[1].toFixed(2);
-							if( item.series.id == 'earnings' ) {
+							if( item.series.id == 'earnings' || item.series.id == 'income' || item.series.id == 'expense' ) {
 								if( mdjm_admin_vars.currency_position == 'before' ) {
 									mdjm_flot_tooltip( item.pageX, item.pageY, item.series.label + ' ' + mdjm_admin_vars.currency_sign + y );
 								} else {

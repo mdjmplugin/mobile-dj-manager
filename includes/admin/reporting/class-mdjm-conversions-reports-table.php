@@ -29,6 +29,9 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 
 	private $label_single;
 	private $label_plural;
+	private $total_enquiries    = 0;
+	private $total_conversions  = 0;
+	private $total_value        = 0;
 
 	/**
 	 * Get things started
@@ -47,6 +50,8 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		) );
 		$this->label_single = mdjm_get_label_singular();
 		$this->label_plural = mdjm_get_label_plural();
+
+		add_action( 'mdjm_reports_conversions_graph_additional_stats', array( $this, 'graph_totals' ) );
 	}
 
 	/**
@@ -88,7 +93,8 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 			'source'            => __( 'Source', 'mobile-dj-manager' ),
 			'total_events'      => __( 'Total Enquiries', 'mobile-dj-manager' ),
 			'total_conversions' => __( 'Successful Conversions', 'mobile-dj-manager' ),
-			'total_earnings'    => __( 'Total Earnings', 'mobile-dj-manager' )
+			'conversion_ratio'  => __( 'Conversion %', 'mobile-dj-manager' ),
+			'total_value'       => __( 'Total Value', 'mobile-dj-manager' )
 		);
 
 		return $columns;
@@ -148,7 +154,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 			foreach ( $categories as $category_id => $category )	{
 
 				$conversions     = 0;
-				$avg_conversions = 0;
+				$ratio           = 0;
 				$event_count     = 0;
 
 				$category_slugs = array( $category->slug );
@@ -172,7 +178,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 					)
 				);
 
-				$earnings        = 0.00;
+				$value        = 0.00;
 
 				$events     = mdjm_get_events( $all_event_args );
 				$statuses   = mdjm_active_event_statuses();
@@ -185,8 +191,8 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 						$mdjm_event = new MDJM_Event( $event );
 
 						if ( in_array( $mdjm_event->post_status, $statuses ) )	{
-							$current_earnings = $mdjm_event->get_total_profit();
-							$earnings        += $current_earnings;
+							$current_value = $mdjm_event->get_total_profit();
+							$value        += $current_value;
 						}
 					}
 				} else	{
@@ -195,15 +201,22 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 
 				$conversions += $stats->get_conversions( $events, 'enquiry-source', $category_slugs, $stats->start_date, $stats->end_date );
 
+				$ratio = round( (float) ( $conversions / $event_count ) * 100 );
+
 				$reports_data[] = array(
 					'ID'                    => $category->term_id,
 					'source'                => $category->name,
 					'total_events'          => $event_count,
 					'total_conversions'     => $conversions,
-					'total_earnings'        => mdjm_currency_filter( mdjm_format_amount( $earnings ) ),
-					'total_earnings_raw'    => $earnings,
+					'conversion_ratio'      => $ratio . '%',
+					'total_value'           => mdjm_currency_filter( mdjm_format_amount( $value ) ),
+					'total_value_raw'       => $value,
 					'is_child'              => false,
 				);
+
+				$this->total_enquiries   += $event_count;
+				$this->total_value       += $value;
+				$this->total_conversions += $conversions;
 
 			}
 		}
@@ -260,16 +273,16 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		}
 
 		$data           = array();
-		$total_earnings = 0;
+		$total_value = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_earnings += $item[ 'total_earnings_raw' ];
+			$total_value += $item[ 'total_value_raw' ];
 
-			$data[ $item[ 'source' ] ] = $item[ 'total_earnings_raw' ];
+			$data[ $item[ 'source' ] ] = $item[ 'total_value_raw' ];
 
 		}
 
-		if ( empty( $total_earnings ) ) {
+		if ( empty( $total_value ) ) {
 			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
@@ -284,6 +297,52 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		$pie_graph = new MDJM_Pie_Graph( $data, $options );
 		$pie_graph->display();
 	} // output_earnings_graph
+
+	/**
+	 * Display graph totals.
+	 *
+	 * @since	1.4
+	 */
+	public function graph_totals()	{
+		if ( empty( $this->total_enquiries ) )	{
+			return;
+		}
+
+		?>
+        <p class="mdjm_graph_totals">
+            <strong>
+                <?php
+                    _e( 'Total enquiries for period shown: ', 'mobile-dj-manager' );
+                    echo $this->total_enquiries;
+                ?>
+            </strong>
+        </p>
+        <p class="mdjm_graph_totals">
+            <strong>
+                <?php
+                    _e( 'Total Conversions for period shown: ', 'mobile-dj-manager' );
+                    echo $this->total_conversions;
+                ?>
+            </strong>
+        </p>
+        <p class="mdjm_graph_totals">
+            <strong>
+                <?php
+                    _e( 'Conversion ratio for period shown: ', 'mobile-dj-manager' );
+                    echo round( (float) ( $this->total_conversions / $this->total_enquiries ) * 100 ) . '%';
+                ?>
+            </strong>
+        </p>
+        <p class="mdjm_graph_totals">
+            <strong>
+                <?php
+                    _e( 'Total Value for period shown: ', 'mobile-dj-manager' );
+                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_value ) );
+                ?>
+            </strong>
+        </p>
+        <?php
+	} // graph_totals
 
 	/**
 	 * The output when no records are found.

@@ -55,13 +55,11 @@ function mdjm_reports_default_views() {
 		'earnings'     => __( 'Earnings', 'mobile-dj-manager' ),
 		'transactions' => __( 'Transactions', 'mobile-dj-manager' ),
 		'txn-types'    => __( 'Transactions by Type', 'mobile-dj-manager' ),
-		'conversions'  => __( 'Earnings by Source', 'mobile-dj-manager' ),
+		'conversions'  => __( 'Enquiries by Source', 'mobile-dj-manager' ),
 		'employees'    => sprintf( __( '%s by Employee', 'mobile-dj-manager' ), $event_label_plural ),
 		'types'        => sprintf( __( '%s by Type', 'mobile-dj-manager' ), $event_label_plural ),
 		'packages'     => sprintf( __( '%s by Package', 'mobile-dj-manager' ), $event_label_plural ),
-		'addons'       => sprintf( __( '%s by Addon', 'mobile-dj-manager' ), $event_label_plural ),
-		'events'       => $event_label_plural,
-		'gateways'     => __( 'Payment Methods', 'mobile-dj-manager' )
+		'addons'       => sprintf( __( '%s by Addon', 'mobile-dj-manager' ), $event_label_plural )
 	);
 
 	if ( ! mdjm_is_employer() )	{
@@ -89,7 +87,7 @@ function mdjm_reports_default_views() {
  * @return	str		$view	Report View
  *
  */
-function mdjm_get_reporting_view( $default = 'earnings' ) {
+function mdjm_get_reporting_view( $default = 'events' ) {
 
 	if ( ! isset( $_GET['view'] ) || ! in_array( $_GET['view'], array_keys( mdjm_reports_default_views() ) ) ) {
 		$view = $default;
@@ -120,7 +118,7 @@ function mdjm_reports_tab_reports() {
 
 	do_action( 'mdjm_reports_view_' . $current_view );
 
-}
+} // mdjm_reports_tab_reports
 add_action( 'mdjm_reports_tab_reports', 'mdjm_reports_tab_reports' );
 
 /**
@@ -155,6 +153,46 @@ function mdjm_report_views() {
 	<?php
 	do_action( 'mdjm_report_view_actions_after' );
 } // mdjm_report_views
+
+/**
+ * Renders the Reports Earnings Graphs
+ *
+ * @since	1.4
+ * @return	void
+ */
+function mdjm_reports_earnings() {
+
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
+		return;
+	}
+	?>
+	<div class="tablenav top">
+		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
+	</div>
+	<?php
+	mdjm_earnings_reports_graph();
+} // mdjm_reports_earnings
+add_action( 'mdjm_reports_view_earnings', 'mdjm_reports_earnings' );
+
+/**
+ * Renders the Reports Transactions Graphs
+ *
+ * @since	1.4
+ * @return	void
+ */
+function mdjm_reports_transactions() {
+
+	if( ! mdjm_employee_can( 'run_reports' ) ) {
+		return;
+	}
+	?>
+	<div class="tablenav top">
+		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
+	</div>
+	<?php
+	mdjm_transactions_reports_graph();
+} // mdjm_reports_transactions
+add_action( 'mdjm_reports_view_transactions', 'mdjm_reports_transactions' );
 
 /**
  * Renders the Reports Event Employees Table
@@ -195,7 +233,7 @@ function mdjm_reports_employees_table() {
             </div>
         </div>
 
-        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+        <?php do_action( 'mdjm_reports_employees_graph_additional_stats' ); ?>
 
 		<p class="mdjm-graph-notes">
             <span>
@@ -241,7 +279,7 @@ function mdjm_reports_types_table() {
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Type Conversions Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php printf( __( '%s Types Mix: ', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong>
                 <?php $types_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
@@ -250,7 +288,13 @@ function mdjm_reports_types_table() {
             </div>
         </div>
 
-        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+        <?php do_action( 'mdjm_reports_types_graph_additional_stats' ); ?>
+
+		<p class="mdjm-graph-notes">
+            <span>
+                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+            </span>
+        </p>
 
     </div>
 	<?php
@@ -287,16 +331,22 @@ function mdjm_reports_conversions_table() {
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Source Conversions Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php _e( 'Enquiry Source Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $conversions_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Source Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php _e( 'Source Values Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $conversions_table->output_earnings_graph(); ?>
             </div>
         </div>
 
-        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+        <?php do_action( 'mdjm_reports_conversions_graph_additional_stats' ); ?>
+
+		<p class="mdjm-graph-notes">
+            <span>
+                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all enquiries that were received within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+            </span>
+        </p>
 
     </div>
 	<?php
@@ -342,7 +392,13 @@ function mdjm_reports_packages_table() {
             </div>
         </div>
 
-        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+        <?php do_action( 'mdjm_reports_packages_graph_additional_stats' ); ?>
+
+		<p class="mdjm-graph-notes">
+            <span>
+                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+            </span>
+        </p>
 
     </div>
 	<?php
@@ -388,7 +444,13 @@ function mdjm_reports_addons_table() {
             </div>
         </div>
 
-        <?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+        <?php do_action( 'mdjm_reports_addons_graph_additional_stats' ); ?>
+
+		<p class="mdjm-graph-notes">
+            <span>
+                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+            </span>
+        </p>
 
     </div>
 	<?php
@@ -396,78 +458,12 @@ function mdjm_reports_addons_table() {
 add_action( 'mdjm_reports_view_addons', 'mdjm_reports_addons_table' );
 
 /**
- * Renders the Reports Events Table
- *
- * @since	1.4
- * @uses	MDJM_Event_Reports_Table::prepare_items()
- * @uses	MDJM_Event_Reports_Table::display()
- * @return	void
- */
-function mdjm_reports_events_table() {
-
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
-		return;
-	}
-
-	if( isset( $_GET['event-id'] ) )	{
-		return;
-	}
-
-	include( dirname( __FILE__ ) . '/class-event-reports-table.php' );
-
-	$events_table = new MDJM_Event_Reports_Table();
-	$events_table->prepare_items();
-	$events_table->display();
-} // mdjm_reports_events_table
-add_action( 'mdjm_reports_view_events', 'mdjm_reports_events_table' );
-
-/**
- * Renders the Reports Earnings Graphs
- *
- * @since	1.4
- * @return	void
- */
-function mdjm_reports_earnings() {
-
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
-		return;
-	}
-	?>
-	<div class="tablenav top">
-		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
-	</div>
-	<?php
-	mdjm_earnings_reports_graph();
-} // mdjm_reports_earnings
-add_action( 'mdjm_reports_view_earnings', 'mdjm_reports_earnings' );
-
-/**
  * Renders the Reports Transactions Graphs
  *
  * @since	1.4
  * @return	void
  */
-function mdjm_reports_transactions() {
-
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
-		return;
-	}
-	?>
-	<div class="tablenav top">
-		<div class="alignleft actions"><?php mdjm_report_views(); ?></div>
-	</div>
-	<?php
-	mdjm_transactions_reports_graph();
-} // mdjm_reports_transactions
-add_action( 'mdjm_reports_view_transactions', 'mdjm_reports_transactions' );
-
-/**
- * Renders the Reports Transactions Graphs
- *
- * @since	1.4
- * @return	void
- */
-function mdjm_reports_txn_types() {
+function mdjm_reports_txn_types_table() {
 
 	if( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
@@ -502,8 +498,8 @@ function mdjm_reports_txn_types() {
 
     </div>
 	<?php
-} // mdjm_reports_txn_types
-add_action( 'mdjm_reports_view_txn-types', 'mdjm_reports_txn_types' );
+} // mdjm_reports_txn_types_table
+add_action( 'mdjm_reports_view_txn-types', 'mdjm_reports_txn_types_table' );
 
 /**
  * Renders the 'Export' tab on the Reports Page
@@ -629,6 +625,20 @@ function mdjm_reports_tab_export()	{
 							</form>
 						</div><!-- .inside -->
 					</div><!-- .postbox -->
+
+					<?php if ( mdjm_is_employer() ) : ?>
+                        <div class="postbox mdjm-export-employees">
+                            <h3><span><?php _e( 'Export Employees','mobile-dj-manager' ); ?></span></h3>
+                            <div class="inside">
+                                <p><?php _e( 'Download a CSV of employees.', 'mobile-dj-manager' ); ?></p>
+                                <form id="mdjm-export-employees" class="mdjm-export-form mdjm-import-export-form" method="post">
+                                    <?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
+                                    <input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Employees"/>
+                                    <input type="submit" value="<?php _e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
+                                </form>
+                            </div><!-- .inside -->
+                        </div><!-- .postbox -->
+                    <?php endif; ?>
 
 				</div><!-- .post-body-content -->
 			</div><!-- .post-body -->

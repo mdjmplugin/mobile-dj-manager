@@ -488,7 +488,7 @@ class MDJM_Stats	{
 	} // count_txns_where
 
 	/**
-	 * Modifies the WHERE flag for payment queries
+	 * Modifies the WHERE flag for txn queries
 	 *
 	 * @access	public
 	 * @since	1.4

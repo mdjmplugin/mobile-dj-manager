@@ -297,7 +297,13 @@ function mdjm_earnings_reports_graph() {
                         </strong>
                     </p>
 
-					<?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+					<?php do_action( 'mdjm_reports_earnings_graph_additional_stats' ); ?>
+
+					<p class="mdjm-graph-notes">
+                        <span>
+                            <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                        </span>
+                    </p>
 
 				</div>
 			</div>
@@ -654,7 +660,13 @@ function mdjm_transactions_reports_graph() {
 						</strong>
 					</p>
 
-					<?php do_action( 'mdjm_reports_graph_additional_stats' ); ?>
+					<?php do_action( 'mdjm_reports_transactions_graph_additional_stats' ); ?>
+
+					<p class="mdjm-graph-notes">
+                        <span>
+                            <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                        </span>
+                    </p>
 
 				</div>
 			</div>
