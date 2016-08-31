@@ -167,6 +167,43 @@ function mdjm_refresh_venue_details_ajax()	{
 add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );
 
 /**
+ * Sets the venue address as the client address.
+ *
+ * @since	1.4
+ */
+function mdjm_set_client_venue_ajax()	{
+
+	$client_id = $_POST['client_id'];
+	$response  = array();
+
+	$client = get_userdata( $client_id );
+
+	if ( $client )	{
+		if ( ! empty( $client->address1 ) )	{
+			$response['address1'] = stripslashes( $client->address1 );
+		}
+		if ( ! empty( $client->address2 ) )	{
+			$response['address2'] = stripslashes( $client->address2 );
+		}
+		if ( ! empty( $client->town ) )	{
+			$response['town'] = stripslashes( $client->town );
+		}
+		if ( ! empty( $client->county ) )	{
+			$response['county'] = stripslashes( $client->county );
+		}
+		if ( ! empty( $client->postcode ) )	{
+			$response['postcode'] = stripslashes( $client->postcode );
+		}
+	}
+
+	$response['type'] = 'success';
+
+	wp_send_json( $response );
+
+} // mdjm_use_client_address
+add_action( 'wp_ajax_mdjm_set_client_venue', 'mdjm_set_client_venue_ajax' );
+
+/**
  * Adds a new venue from the events screen.
  *
  * @since	1.3.7

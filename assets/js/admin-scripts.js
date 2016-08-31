@@ -5,6 +5,101 @@ jQuery(document).ready(function ($) {
 		inherit_select_classes: true
 	});
 
+	// Set the deposit value for the event
+	var setDeposit = function()	{
+		var current_deposit = $('#_mdjm_event_deposit').val();
+		var postData        = {
+			current_cost : $('#_mdjm_event_cost').val(),
+			action       : 'update_event_deposit'
+		};
+		
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : postData,
+			url        : ajaxurl,
+			beforeSend : function()	{
+				$('#_mdjm_event_deposit').attr("readonly", true );
+				$('#_mdjm_event_deposit').addClass("mdjm-loader");
+			},
+			success: function (response) {
+				if(response.type == 'success') {
+					$('#_mdjm_event_deposit').val(response.deposit);
+				} else	{
+					alert(response.msg);
+					$('#_mdjm_event_deposit').val(current_deposit);
+				}
+				$('#_mdjm_event_deposit').removeClass("mdjm-loader");
+				$('#_mdjm_event_deposit').attr("readonly", false );				
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+			$('#_mdjm_event_deposit').val(current_deposit);
+		});
+	};
+	
+	// Set the event cost.
+	var setCost = function()	{
+		
+		var current_cost = $('#_mdjm_event_cost').val();
+
+		if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
+			var venue = [
+				$('#venue_address1').val(),
+				$('#venue_address2').val(),
+				$('#venue_town').val(),
+				$('#venue_county').val(),
+				$('#venue_postcode').val(),
+			];
+		} else	{
+			var venue = $('#venue_id').val();
+		}
+
+		var postData     = {
+			addons          : $('#event_addons').val() || [],
+			package         : $('#_mdjm_event_package option:selected').val(),
+			event_id        : $('#post_ID').val(),
+			current_cost    : $('#_mdjm_event_cost').val(),
+			event_date      : $('#_mdjm_event_date').val(),
+			venue           : venue,
+			employee_id     : $('#_mdjm_event_dj').val(),
+			action          : 'mdjm_update_event_cost'
+		};
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : postData,
+			url        : ajaxurl,
+			beforeSend : function()	{
+				$('#_mdjm_event_cost').addClass("mdjm-loader");
+				$('#_mdjm_event_cost').attr("readonly", true);
+			},
+			success: function (response) {
+				if(response.type == "success") {
+					$('#_mdjm_event_cost').val(response.cost);
+
+					if( mdjm_admin_vars.update_deposit )	{
+						setDeposit();
+					}
+
+				} else	{
+					$('#_mdjm_event_cost').val(current_cost);
+				}
+
+				$('#_mdjm_event_cost').removeClass("mdjm-loader");
+				$('#_mdjm_event_cost').attr("readonly", false);
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+
+	};
+
 	/**
 	 * General Settings Screens JS
 	 */
@@ -287,101 +382,6 @@ jQuery(document).ready(function ($) {
 				}
 			});
 
-			// Set the deposit value for the event
-			var setDeposit = function()	{
-				var current_deposit = $('#_mdjm_event_deposit').val();
-				var postData        = {
-					current_cost : $('#_mdjm_event_cost').val(),
-					action       : 'update_event_deposit'
-				};
-				
-				$.ajax({
-					type       : 'POST',
-					dataType   : 'json',
-					data       : postData,
-					url        : ajaxurl,
-					beforeSend : function()	{
-						$('#_mdjm_event_deposit').attr("readonly", true );
-						$('#_mdjm_event_deposit').addClass("mdjm-loader");
-					},
-					success: function (response) {
-						if(response.type == 'success') {
-							$('#_mdjm_event_deposit').val(response.deposit);
-						} else	{
-							alert(response.msg);
-							$('#_mdjm_event_deposit').val(current_deposit);
-						}
-						$('#_mdjm_event_deposit').removeClass("mdjm-loader");
-						$('#_mdjm_event_deposit').attr("readonly", false );				
-					}
-				}).fail(function (data) {
-					if ( window.console && window.console.log ) {
-						console.log( data );
-					}
-					$('#_mdjm_event_deposit').val(current_deposit);
-				});
-			};
-			
-			// Set the event cost.
-			var setCost = function()	{
-
-				var current_cost = $('#_mdjm_event_cost').val();
-
-				if ( 'manual' == $('#venue_id').val() )	{
-					var venue = [
-						$('#venue_address1').val(),
-						$('#venue_address2').val(),
-						$('#venue_town').val(),
-						$('#venue_county').val(),
-						$('#venue_postcode').val(),
-					];
-				} else	{
-					var venue = $('#venue_id').val();
-				}
-
-				var postData     = {
-					addons          : $('#event_addons').val() || [],
-					package         : $('#_mdjm_event_package option:selected').val(),
-					event_id        : $('#post_ID').val(),
-					current_cost    : $('#_mdjm_event_cost').val(),
-					event_date      : $('#_mdjm_event_date').val(),
-					venue           : venue,
-					employee_id     : $('#_mdjm_event_dj').val(),
-					action          : 'mdjm_update_event_cost'
-				};
-
-				$.ajax({
-					type       : 'POST',
-					dataType   : 'json',
-					data       : postData,
-					url        : ajaxurl,
-					beforeSend : function()	{
-						$('#_mdjm_event_cost').addClass("mdjm-loader");
-						$('#_mdjm_event_cost').attr("readonly", true);
-					},
-					success: function (response) {
-						if(response.type == "success") {
-							$('#_mdjm_event_cost').val(response.cost);
-
-							if( mdjm_admin_vars.update_deposit )	{
-								setDeposit();
-							}
-
-						} else	{
-							$('#_mdjm_event_cost').val(current_cost);
-						}
-
-						$('#_mdjm_event_cost').removeClass("mdjm-loader");
-						$('#_mdjm_event_cost').attr("readonly", false);
-					}
-				}).fail(function (data) {
-					if ( window.console && window.console.log ) {
-						console.log( data );
-					}
-				});
-
-			};
-
 			// Update package and add-on options when the event type, date or primary employee are updated.
 			$( document.body ).on( 'change', '#_mdjm_event_dj,#mdjm_event_type,#display_event_date', function(event) {
 				event.preventDefault();
@@ -493,9 +493,19 @@ jQuery(document).ready(function ($) {
 		},
 
 		travel : function()	{
+			$( document.body ).on( 'change', '#venue_id', function()	{
+				if( 'client' == $('#venue_id').val() )	{
+					setClientAddress();
+				}
+			});
 			// Update the travel data when the primary employee or venue fields are updated
 			$( document.body ).on( 'change', '#_mdjm_event_dj,#venue_address1,#venue_address2,#venue_town,#venue_county,#venue_postcode', function() {
-				if ( 'manual' == $('#venue_id').val() )	{
+				setTravelData();
+				$('#_mdjm_event_package').trigger('change');
+			});
+
+			var setTravelData = function()	{
+				if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
 					var venue = [
 						$('#venue_address1').val(),
 						$('#venue_address2').val(),
@@ -544,8 +554,51 @@ jQuery(document).ready(function ($) {
 						console.log( data );
 					}
 				});
-				$('#_mdjm_event_package').trigger('change');
-			});
+			};
+
+			var setClientAddress = function(){
+				if( $('#client_name').length )	{
+					var client = $('#client_name').val();
+					var postData = {
+						client_id : client,
+						action    : 'mdjm_set_client_venue'
+					};
+					$.ajax({
+						type       : 'POST',
+						dataType   : 'json',
+						data       : postData,
+						url        : ajaxurl,
+						success: function (response) {
+							if(response.address1)	{
+								$('#venue_address1').val(response.address1);
+							}
+							if(response.address2)	{
+								$('#venue_address2').val(response.address2);
+							}
+							if(response.town)	{
+								$('#venue_town').val(response.town);
+							}
+							if(response.county)	{
+								$('#venue_county').val(response.county);
+							}
+							if(response.postcode)	{
+								$('#venue_postcode').val(response.postcode);
+							}
+							setTimeout(function(){
+								setTravelData();
+							}, 1000);
+							setTimeout(function(){
+								setCost();
+							}, 1750);
+						}
+					}).fail(function (data) {
+						if ( window.console && window.console.log ) {
+							console.log( data );
+						}
+					});
+				}
+			};
+
 		},
 
 		type : function()	{
@@ -733,7 +786,8 @@ jQuery(document).ready(function ($) {
 				
 				event.preventDefault();
 				
-				if ( 'manual' == $('#venue_id').val() )	{
+				if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
+
 					$('#mdjm-event-venue-details').hide("slow");
 					$('#mdjm-event-add-new-venue-fields').show("slow");
 					$('#mdjm-save-venue').removeClass('mdjm-hidden');
@@ -742,7 +796,7 @@ jQuery(document).ready(function ($) {
 					$('#mdjm-save-venue').addClass('mdjm-hidden');
 					$('#mdjm-event-add-new-venue-fields').hide("slow");
 					
-					if(  '0' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
+					if( '0' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
 						$('#toggle_venue_details').removeClass('mdjm-hidden');
 					} else	{
 						$('#toggle_venue_details').addClass('mdjm-hidden');
