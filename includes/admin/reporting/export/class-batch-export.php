@@ -71,6 +71,13 @@ class MDJM_Batch_Export extends MDJM_Export {
 	public $status;
 
 	/**
+	 * Type to export
+	 *
+	 * @since	1.4
+	 */
+	public $type;
+
+	/**
 	 * Event to export data for
 	 *
 	 * @since	1.4
@@ -192,6 +199,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 			foreach ( $data as $row ) {
 				$i = 1;
 				foreach ( $row as $col_id => $column ) {
+					if ( is_array( $column ) )	{
+						error_log( $col_id . ' - ' . var_export( $column, true ), 0 );	
+					}
 					// Make sure the column is valid
 					if ( array_key_exists( $col_id, $cols ) ) {
 						$row_data .= '"' . addslashes( preg_replace( "/\"/","'", $column ) ) . '"';

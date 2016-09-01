@@ -531,7 +531,7 @@ function mdjm_reports_tab_export()	{
 							<form id="mdjm-export-txns" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-txn-export-start',
-									'altfield' => 'start'
+									'altfield' => 'txn_start'
 								) ); ?>
                                 <?php echo MDJM()->html->date_field( array(
 									'id'          => 'mdjm-txn-export-start',
@@ -539,11 +539,11 @@ function mdjm_reports_tab_export()	{
 									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
 								) ); ?>
 								<?php echo MDJM()->html->hidden( array( 
-									'name' => 'start'
+									'name' => 'txn_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-txn-export-end',
-									'altfield' => 'end'
+									'altfield' => 'txn_end'
 								) ); ?>
                                 <?php echo MDJM()->html->date_field( array(
 									'id'          => 'mdjm-txn-export-end',
@@ -551,9 +551,9 @@ function mdjm_reports_tab_export()	{
 									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
 								<?php echo MDJM()->html->hidden( array( 
-									'name' => 'end'
+									'name' => 'txn_end'
 								) ); ?>
-								<select name="status">
+								<select name="txn_status">
 									<option value=""><?php _e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
                                     <option value="Completed"><?php _e( 'Completed', 'mobile-dj-manager' ); ?></option>
                                     <option value="Pending"><?php _e( 'Pending', 'mobile-dj-manager' ); ?></option>
@@ -576,7 +576,7 @@ function mdjm_reports_tab_export()	{
 							<form id="mdjm-export-events" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-event-export-start',
-									'altfield' => 'start'
+									'altfield' => 'event_start'
 								) ); ?>
                                 <?php echo MDJM()->html->date_field( array(
 									'id'          => 'mdjm-event-export-start',
@@ -584,11 +584,11 @@ function mdjm_reports_tab_export()	{
 									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
 								) ); ?>
 								<?php echo MDJM()->html->hidden( array( 
-									'name' => 'start'
+									'name' => 'event_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-event-export-end',
-									'altfield' => 'end'
+									'altfield' => 'event_end'
 								) ); ?>
                                 <?php echo MDJM()->html->date_field( array(
 									'id'          => 'mdjm-event-export-end',
@@ -596,9 +596,9 @@ function mdjm_reports_tab_export()	{
 									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
 								<?php echo MDJM()->html->hidden( array( 
-									'name' => 'end'
+									'name' => 'event_end'
 								) ); ?>
-								<select name="status">
+								<select name="event_status">
 									<option value="any"><?php _e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
                                     <?php foreach( mdjm_all_event_status() as $status => $label ) : ?>
                                     	<option value="<?php echo $status; ?>"><?php echo $label; ?></option>

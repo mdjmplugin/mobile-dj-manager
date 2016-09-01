@@ -56,6 +56,22 @@ class MDJM_Stats	{
 	public $end_date;
 
 	/**
+	 * The event date for the period we're getting stats for
+	 *
+	 * Can be a timestamp, formatted date, date string (such as August 3, 2013),
+	 * an array containing 'start' and 'end' dates, or a predefined date string, such as last_week or this_month
+	 *
+	 * Predefined date options are: today, yesterday, this_week, last_week, this_month, last_month
+	 * this_quarter, last_quarter, this_year, last_year
+	 *
+	 * The event date is optional
+	 *
+	 * @access	public
+	 * @since	1.4
+	 */
+	public $event_date;
+
+	/**
 	 * Flag to determine if current query is based on timestamps
 	 *
 	 * @access	public
@@ -108,7 +124,7 @@ class MDJM_Stats	{
 	 * @since	1.4
 	 * @return	void
 	 */
-	public function setup_dates( $_start_date = 'this_month', $_end_date = false ) {
+	public function setup_dates( $_start_date = 'this_month', $_end_date = false, $_event_date = false ) {
 
 		if( empty( $_start_date ) ) {
 			$_start_date = 'this_month';
@@ -118,8 +134,28 @@ class MDJM_Stats	{
 			$_end_date = $_start_date;
 		}
 
+		if ( ! empty( $_event_date ) )	{
+			if ( is_array( $_event_date ) )	{
+				if ( empty( $_event_date['start'] ) )	{
+					$_event_date['start'] = 'this_month';
+				}
+				if ( empty( $_event_date['end'] ) )	{
+					$_event_date['end'] = $_event_date['start'];
+				}
+			} else	{
+				$_event_date = array( 'start' => $_event_date );
+			}
+		}
+
 		$this->start_date = $this->convert_date( $_start_date );
 		$this->end_date   = $this->convert_date( $_end_date, true );
+
+		if ( ! empty( $_event_date ) )	{
+			$this->event_date = array( 'start' => $this->convert_date( $_event_date ) );
+			if ( ! empty( $_event_date['end'] ) )	{
+				$this->event_date['end'] = $this->convert_date( $_event_date, true );
+			}
+		}
 
 	} // setup_dates
 	
@@ -445,6 +481,93 @@ class MDJM_Stats	{
 	} // convert_date
 
 	/**
+	 * Modifies the WHERE flag for event counts
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @return	str
+	 */
+	public function count_events_where( $where = '' ) {
+		// Only get events in our date range
+
+		$start_where = '';
+		$end_where   = '';
+
+		if( $this->start_date ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 00:00:00';
+			}
+
+			$start_date  = date( $format, $this->start_date );
+			$start_where = " AND p.post_date >= '{$start_date}'";
+		}
+
+		if( $this->end_date ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 23:59:59';
+			}
+
+			$end_date  = date( $format, $this->end_date );
+
+			$end_where = " AND p.post_date <= '{$end_date}'";
+		}
+
+		$where .= "{$start_where}{$end_where}";
+
+		return $where;
+	} // count_events_where
+
+	/**
+	 * Modifies the WHERE flag for event queries
+	 *
+	 * @access	public
+	 * @since	1.4
+	 * @return	str
+	 */
+	public function events_where( $where = '' ) {
+
+		global $wpdb;
+
+		$start_where = '';
+		$end_where   = '';
+
+		if( ! is_wp_error( $this->start_date ) ) {
+
+			if( $this->timestamp ) {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = 'Y-m-d 00:00:00';
+			}
+
+			$start_date  = date( $format, $this->start_date );
+			$start_where = " AND $wpdb->posts.post_date >= '{$start_date}'";
+		}
+
+		if( ! is_wp_error( $this->end_date ) ) {
+
+			if ( $this->timestamp ) {
+				$format = 'Y-m-d 00:00:00';
+			} else {
+				$format = 'Y-m-d 23:59:59';
+			}
+
+			$end_date  = date( $format, $this->end_date );
+
+			$end_where = " AND $wpdb->posts.post_date <= '{$end_date}'";
+		}
+
+		$where .= "{$start_where}{$end_where}";
+
+		return $where;
+	} // events_where
+
+	/**
 	 * Modifies the WHERE flag for txn counts
 	 *
 	 * @access	public
@@ -560,54 +683,6 @@ class MDJM_Stats	{
 		return $count;
 		
 	} // events_by_date
-
-	/**
-	 * Retrieve event stats.
-	 *
-	 * @access	public
-	 * @since	1.4
-	 * @param	int			$event_id	The event to retrieve stats for. If false, gets stats for all events.
-	 * @param	str|bool	$start_date The starting date for which we'd like to filter our event stats. If false, we'll use the default start date of `this_month`
-	 * @param	str|bool	$end_date	The end date for which we'd like to filter our event stats. If false, we'll use the default end date of `this_month`
-	 * @param	str|ar		$status		The event status(es) to count. Only valid when retrieving global stats
-	 * @return	float|int	Total amount of events based on the passed arguments.
-	 */
-	public function get_events( $event_id = 0, $start_date = false, $end_date = false, $status = 'any' ) {
-
-		$this->setup_dates( $start_date, $end_date );
-
-		// Make sure start date is valid
-		if ( is_wp_error( $this->start_date ) )	{
-			return $this->start_date;
-		}
-
-		// Make sure end date is valid
-		if ( is_wp_error( $this->end_date ) )	{
-			return $this->end_date;
-		}
-
-		if( empty( $event_id ) ) {
-
-			if( is_array( $status ) ) {
-				$count = 0;
-				foreach( $status as $event_status ) {
-					$count += mdjm_count_events_by_status( $event_status );
-				}
-			} else {
-				$count = mdjm_count_events_by_status( $status );
-			}
-
-		} else {
-
-			$this->timestamp = false;
-
-			$count = mdjm_count_events_by_status( 'any' );
-
-		}
-
-		return $count;
-
-	} // get_events
 
 	/**
 	 * Get Events by Date.

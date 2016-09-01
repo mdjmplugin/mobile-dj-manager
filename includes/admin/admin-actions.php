@@ -13,6 +13,13 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
+function mike_test()	{
+	$count = mdjm_count_events( array( 'date' => array( '2016-07-28', '2016-07-30' ), 'client' => '62' ) );
+	$c = 'mdjm-unattended';
+	error_log( $count->$c, 0 );
+}
+//add_action( 'init', 'mike_test' );
+
 /**
  * Processes all MDJM actions sent via POST and GET by looking for the 'mdjm-action'
  * request and running do_action() to call the function

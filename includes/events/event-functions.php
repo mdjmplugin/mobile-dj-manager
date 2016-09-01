@@ -83,6 +83,191 @@ function mdjm_get_events( $args = array() )	{
 } // mdjm_get_events
 
 /**
+ * Count Events
+ *
+ * Returns the total number of events.
+ *
+ * @since	1.4
+ * @param	arr	$args	List of arguments to base the event count on
+ * @return	arr	$count	Number of events sorted by event date
+ */
+function mdjm_count_events( $args = array() ) {
+
+	global $wpdb;
+
+	$defaults = array(
+		'employee'   => null,
+		'client'     => null,
+		's'          => null,
+		'start-date' => null, // This is the post date - Enquiry received date
+		'end-date'   => null,
+		'date'       => null, // This is an event date or an array of dates if we want to search between
+		'type'       => null,
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$select = "SELECT p.post_status,count( * ) AS num_posts";
+	$join = '';
+	$where = "WHERE p.post_type = 'mdjm-event'";
+
+	// Count events for a specific employee
+	if( ! empty( $args['employee'] ) ) {
+
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+
+		$where .= "
+				AND m.meta_key = '_mdjm_event_dj'
+				AND m.meta_value = '{$args['employee']}'
+				OR m.meta_key = '_mdjm_event_employees'
+				AND m.meta_value LIKE '%:\"{$args['employee']}\";%'";
+	// Count events for a specific client
+	} elseif ( ! empty( $args['client'] ) ) {
+
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		$where .= "
+			AND m.meta_key = '_mdjm_event_client'
+			AND m.meta_value = '{$args['client']}'";
+
+	// Count event for a search
+	} elseif( ! empty( $args['s'] ) ) {
+
+		if ( is_email( $args['s'] ) || strlen( $args['s'] ) == 32 ) {
+
+			if( is_email( $args['s'] ) )	{
+				$field = '_mdjm_event_client';
+			}
+
+			$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = %s
+				AND m.meta_value = %s",
+				$field,
+				$args['s']
+			);
+
+		} elseif ( is_numeric( $args['s'] ) ) {
+
+			$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = '_mdjm_event_client'
+				AND m.meta_value = %d",
+				$args['s']
+			);
+
+		} else {
+			$search = $wpdb->esc_like( $args['s'] );
+			$search = '%' . $search . '%';
+
+			$where .= $wpdb->prepare( "AND ((p.post_title LIKE %s) OR (p.post_content LIKE %s))", $search, $search );
+		}
+
+	}
+
+	// Limit events count by received date
+	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '/' ) ) {
+
+		$date_parts = explode( '/', $args['start-date'] );
+		$month      = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$day        = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$year       = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['start-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date >= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+		// Fixes an issue with the events list table counts when no end date is specified (partly with stats class)
+		if ( empty( $args['end-date'] ) ) {
+			$args['end-date'] = $args['start-date'];
+		}
+
+	}
+
+	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '/' ) ) {
+
+		$date_parts = explode( '/', $args['end-date'] );
+
+		$month      = ! empty( $date_parts[0] ) ? $date_parts[0] : 0;
+		$day        = ! empty( $date_parts[1] ) ? $date_parts[1] : 0;
+		$year       = ! empty( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['end-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date <= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+	}
+
+	if ( ! empty( $args['date'] ) )	{
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		if ( is_array( $args['date'] ) )	{
+			$start_date = new DateTime( $args['date'][0] );
+			$end_date   = new DateTime( $args['date'][1] );
+
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = '_mdjm_event_date'
+				AND m.meta_value BETWEEN '%s'
+					AND '%s'",
+				$start_date->format( 'Y-m-d' ),
+				$end_date->format( 'Y-m-d' )
+			);
+		} else	{
+			$date = new DateTime( $args['date'] );
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = '_mdjm_event_date'
+				AND m.meta_value = '%s'",
+				$date->format( 'Y-m-d' )
+			);
+		}
+	}
+
+	$where = apply_filters( 'mdjm_count_events_where', $where );
+	$join  = apply_filters( 'mdjm_count_events_where', $join );
+
+	$query = "$select
+		FROM $wpdb->posts p
+		$join
+		$where
+		GROUP BY p.post_status
+	";
+
+	$cache_key = md5( $query );
+
+	$count = wp_cache_get( $cache_key, 'counts' );
+	if ( false !== $count ) {
+		return $count;
+	}
+
+	$count = $wpdb->get_results( $query, ARRAY_A );
+
+	$stats    = array();
+	$statuses = mdjm_all_event_status();
+	if( isset( $statuses['private'] ) && empty( $args['s'] ) ) {
+		unset( $statuses['private'] );
+	}
+
+	foreach ( array_keys( $statuses ) as $state ) {
+		$stats[ $state ] = 0;
+	}
+
+	foreach ( (array) $count as $row ) {
+		$stats[ $row['post_status'] ] = $row['num_posts'];
+	}
+
+	$stats = (object) $stats;
+	wp_cache_set( $cache_key, $stats, 'counts' );
+
+	return $stats;
+} // mdjm_count_events
+
+/**
  * Retrieve the total event count.
  *
  * @since	1.4
@@ -142,7 +327,7 @@ function mdjm_get_event_data( $event )	{
 		'end_date'            => $mdjm_event->get_meta( '_mdjm_event_end_date' ),
 		'end_time'            => $mdjm_event->get_finish_time(),
 		'equipment'           => array(
-			'package'             => mdjm_get_package_name( $mdjm_event->ID ),
+			'package'             => mdjm_get_package_name( mdjm_get_event_package( $mdjm_event->ID ) ),
 			'addons'              => mdjm_get_event_addons( $mdjm_event->ID )
 		),
 		'name'                => $mdjm_event->get_name(),

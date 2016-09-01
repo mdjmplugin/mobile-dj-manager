@@ -222,6 +222,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/widgets.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-stats.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-events-query.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-debug.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' );

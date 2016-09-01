@@ -120,6 +120,8 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 	
 				$event_data = mdjm_get_event_data( $event->ID );
 				$employees  = array();
+				$package    = '';
+				$addons     = array();
 
 				if ( ! empty( $event_data['client'] ) )	{
 					$client = '(' . $event_data['client'] . ') ' . mdjm_get_client_display_name( $event_data['client'] );
@@ -132,6 +134,14 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 						$employees[] = '(' . $employee_id . ') ' . mdjm_get_employee_display_name( $employee_id );
 					}
 				}
+				if ( ! empty( $event_data['equipment']['package'] ) )	{
+					$package = $event_data['equipment']['package'];
+				}
+				if ( ! empty( $event_data['equipment']['addons'] ) )	{
+					foreach( $event_data['equipment']['addons'] as $addon_id )	{
+						$addons[] = mdjm_get_addon_name( $addon_id );
+					}
+				}
 
 				$data[ $i ] = array(
 					'id'                  => $event->ID,
@@ -141,8 +151,8 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 					'client'              => $client,
 					'primary_employee'    => '(' . $event_data['employees']['primary_employee'] . ') ' . mdjm_get_client_display_name( $event_data['employees']['primary_employee'] ),
 					'employees'           => implode( ',', $employees ),
-					'package'             => $event_data['equipment'],
-					'addons'              => $event_data['equipment']['addons'],
+					'package'             => $package,
+					'addons'              => implode( ', ', $addons ),
 					'cost'                => mdjm_format_amount( $event_data['cost']['cost'] ),
 					'deposit'             => mdjm_format_amount( $event_data['cost']['deposit'] ),
 					'deposit_status'      => $event_data['cost']['deposit_status'],
@@ -161,7 +171,7 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 					'source'              => $event_data['source'],
 					'converted'           => $event_data['contract_status'],
 					'venue'               => $event_data['venue']['name'],
-					'address'             => $event_data['venue']['address']
+					'address'             => ! empty( $event_data['venue']['address'] ) ? implode( ', ', $event_data['venue']['address'] ) : ''
 				);
 
 				$i++;
@@ -240,9 +250,10 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 	 * @param	arr		$request	The Form Data passed into the batch processing
 	 */
 	public function set_properties( $request ) {
-		$this->start      = isset( $request['start'] )    ? sanitize_text_field( $request['start'] ) : '';
-		$this->end        = isset( $request['end']  )     ? sanitize_text_field( $request['end']  )  : '';
-		$this->status     = isset( $request['status'] )   ? $request['status']                       : 'any';
+		$this->start  = isset( $request['event_start'] )    ? sanitize_text_field( $request['event_start'] ) : '';
+		$this->end    = isset( $request['event_end']  )     ? sanitize_text_field( $request['event_end']  )  : '';
+		$this->status = isset( $request['event_status'] )   ? $request['event_status']                       : 'any';
+		$this->type   = isset( $request['event_type'] )     ? get_term( (int) $request['event_type'], 'event-type' )                   : false;
 	} // set_properties
 
 } // MDJM_Batch_Export_Events

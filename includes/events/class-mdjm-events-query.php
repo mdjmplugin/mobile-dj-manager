@@ -36,11 +36,11 @@ class MDJM_Events_Query extends MDJM_Stats {
 	/**
 	 * The events found based on the criteria set
 	 *
-	 * @var		array
+	 * @var		array|false
 	 * @access	public
 	 * @since	1.4
 	 */
-	public $events = array();
+	public $events = false;
 
 	/**
 	 * Default query arguments.
@@ -54,24 +54,27 @@ class MDJM_Events_Query extends MDJM_Stats {
 	 */
 	public function __construct( $args = array() ) {
 		$defaults = array(
-			'output'          => 'events', // Use 'posts' to get standard post objects
-			'post_type'       => array( 'mdjm-event' ),
-			'start_date'      => false,
-			'end_date'        => false,
-			'number'          => 20,
-			'page'            => null,
-			'orderby'         => 'date',
-			'order'           => 'DESC',
-			'employee'        => null,
-			'client'          => null,
-			'status'          => 'any',
-			'meta_key'        => null,
-			'year'            => null,
-			'month'           => null,
-			'day'             => null,
-			's'               => null,
-			'fields'          => null,
-			'event'           => null
+			'output'           => 'events', // Use 'posts' to get standard post objects
+			'post_type'        => array( 'mdjm-event' ),
+			'start_date'       => false,
+			'end_date'         => false,
+			'number'           => 20,
+			'page'             => null,
+			'orderby'          => 'date',
+			'order'            => 'DESC',
+			'event_date_start' => null,
+			'event_date_end'   => null,
+			'employee'         => null,
+			'client'           => null,
+			'status'           => 'any',
+			'source'           => null,
+			'type'             => null,
+			'meta_key'         => null,
+			'year'             => null,
+			'month'            => null,
+			'day'              => null,
+			's'                => null,
+			'fields'           => null
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
@@ -110,18 +113,20 @@ class MDJM_Events_Query extends MDJM_Stats {
 	 * @return	void
 	 */
 	public function init() {
-
-		add_action( 'mdjm_pre_get_events', array( $this, 'date_filter_pre' ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'date_filter_pre'  ) );
 		add_action( 'mdjm_post_get_events', array( $this, 'date_filter_post' ) );
 
-		add_action( 'mdjm_pre_get_events', array( $this, 'orderby' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'status' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'month' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'per_page' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'page' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'employee' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'client' ) );
-		add_action( 'mdjm_pre_get_events', array( $this, 'search' ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'orderby'    ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'status'     ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'month'      ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'per_page'   ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'page'       ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'event_date' ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'employee'   ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'client'     ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'search'     ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'source'     ) );
+		add_action( 'mdjm_pre_get_events',  array( $this, 'type'       ) );
 	} // init
 
 	/**
@@ -136,7 +141,6 @@ class MDJM_Events_Query extends MDJM_Stats {
 	 * @return	obj
 	 */
 	public function get_events() {
-
 		do_action( 'mdjm_pre_get_events', $this );
 
 		$query = new WP_Query( $this->args );
@@ -155,7 +159,7 @@ class MDJM_Events_Query extends MDJM_Stats {
 				$query->the_post();
 
 				$event_id = get_post()->ID;
-				$event    = new MDJM_Event( $txn_id );
+				$event    = new MDJM_Event( $event_id );
 
 				$this->events[] = apply_filters( 'mdjm_event', $event, $event_id, $this );
 			}
@@ -285,6 +289,10 @@ class MDJM_Events_Query extends MDJM_Stats {
 				$this->__set( 'orderby', 'meta_value_num' );
 				$this->__set( 'meta_key', '_mdjm_event_date' );
 			break;
+			case 'value' :
+				$this->__set( 'orderby', 'meta_value_num' );
+				$this->__set( 'meta_key', '_mdjm_event_cost' );
+			break;
 			default :
 				$this->__set( 'orderby', $this->args['orderby'] );
 			break;
@@ -300,8 +308,6 @@ class MDJM_Events_Query extends MDJM_Stats {
 	 */
 	public function event_date() {
 		if ( empty( $this->args['event_date_start'] ) ) {
-			$this->__unset( 'event_date_start' );
-			$this->__unset( 'event_date_end' );
 			return;
 		}
 
@@ -314,7 +320,8 @@ class MDJM_Events_Query extends MDJM_Stats {
 					$this->args['event_date_start'],
 					$this->args['event_date_end']
 				),
-				'compare' => 'BETWEEN'
+				'compare' => 'BETWEEN',
+				'type'    => 'DATE'
 			);
 		} else	{
 			$query = array(
@@ -326,7 +333,7 @@ class MDJM_Events_Query extends MDJM_Stats {
 		$this->__set( 'meta_query', $query );
 		$this->__unset( 'event_date_start' );
 		$this->__unset( 'event_date_end' );
-	} // employee
+	} // event_date
 
 	/**
 	 * Specific client id
@@ -424,7 +431,6 @@ class MDJM_Events_Query extends MDJM_Stats {
 	 */
 	public function employee() {
 		if ( empty( $this->args['employee'] ) || $this->args['employee'] == 'all' ) {
-			$this->__unset( 'employee' );
 			return;
 		}
 
@@ -443,5 +449,69 @@ class MDJM_Events_Query extends MDJM_Stats {
 
 		$this->__set( 'meta_query', $query );
 	} // employee
+
+	/**
+	 * Specific enquiry source
+	 *
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
+	 */
+	public function source() {
+		if ( is_null( $this->args['source'] ) ) {
+			return;
+		}
+
+		$source = $this->args['source'];
+
+		if ( is_numeric( $source ) )	{
+			$field = 'term_id';
+			(int) $source;
+		} elseif ( strpos( $source, '-') !== false || $type == strtolower( $source ) )	{
+			$field = 'slug';
+		} else	{
+			$field = 'name';
+		}
+
+		$query = array(
+			'taxonomy' => 'enquiry-source',
+			'field'    => $field,
+			'terms'    => $source
+		);
+
+		$this->__set( 'tax_query', $query );
+	} // source
+
+	/**
+	 * Specific event type
+	 *
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
+	 */
+	public function type() {
+		if ( is_null( $this->args['type'] ) ) {
+			return;
+		}
+
+		$type = $this->args['type'];
+
+		if ( is_numeric( $type ) )	{
+			$field = 'term_id';
+			(int) $type;
+		} elseif ( strpos( $type, '-') !== false || $type == strtolower( $type ) )	{
+			$field = 'slug';
+		} else	{
+			$field = 'name';
+		}
+
+		$query = array(
+			'taxonomy' => 'event-type',
+			'field'    => $field,
+			'terms'    => $this->args['type']
+		);
+
+		$this->__set( 'tax_query', $query );
+	} // type
 
 } // MDJM_Events_Query
