@@ -213,7 +213,7 @@ function mdjm_format_distance( $distance, $singular = false, $lowercase = false 
 	$replace = '';
 
 	$formatted = trim( str_replace( $search, $replace, $distance ) );
-	$formatted = mdjm_format_amount( $formatted, false );
+	$formatted = mdjm_format_amount( $formatted, true );
 	$formatted = $formatted . ' ' . $label;
 
 	return apply_filters( 'mdjm_format_distance', $formatted, $distance );

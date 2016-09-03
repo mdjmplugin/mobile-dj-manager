@@ -251,43 +251,6 @@ class MDJM_Upgrade	{
 		}
 		
 		MDJM()->debug->log_it( 'Starting database upgrade procedures', true );														
-		
-		/* PLAYLISTS TABLE */
-		$playlists_sql = "CREATE TABLE ". MDJM_PLAYLIST_TABLE . " (
-							id int(11) NOT NULL AUTO_INCREMENT,
-							event_id int(11) NOT NULL,
-							artist varchar(255) NOT NULL,
-							song varchar(255) NOT NULL,
-							play_when varchar(255) NOT NULL,
-							info text NOT NULL,
-							added_by varchar(255) NOT NULL,
-							date_added date NOT NULL,
-							date_to_mdjm datetime NULL,
-							PRIMARY KEY  (id)
-							);";
-							
-		/* PLAYLISTS LIBRARY TABLE */
-		$music_library_sql = "CREATE TABLE ". MDJM_PLAYLIST_LIBRARY_TABLE . " (
-							id int(11) NOT NULL AUTO_INCREMENT,
-							library varchar(255) NULL,
-							library_slug varchar(255) NOT NULL,
-							song varchar(255) NOT NULL,
-							artist varchar(255) NOT NULL,
-							album varchar(255) NULL,
-							genre varchar(255) NULL,
-							year varchar(10) NULL,
-							comments text NULL,
-							rating varchar(10) NULL,
-							dj int(11) NOT NULL,
-							date_added date NULL,
-							PRIMARY KEY  (id),
-							KEY library (library),
-							KEY song (song),
-							KEY artist (artist),
-							KEY year (year),
-							KEY genre (genre),
-							KEY dj (dj)
-							);";
 							
 		/* AVAILABILITY TABLE */
 		$holiday_sql = "CREATE TABLE ". MDJM_HOLIDAY_TABLE . " (
@@ -302,8 +265,6 @@ class MDJM_Upgrade	{
 							);";
 																		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $playlists_sql );
-		dbDelta( $music_library_sql );
 		dbDelta( $holiday_sql );
 	
 		update_option( 'mdjm_db_version', $mdjm->db_version );
@@ -1492,10 +1453,6 @@ function mdjm_update_checker()	{
 		
 		$mdjm_upgrade = new MDJM_Upgrade();
 		
-		update_option( MDJM_VERSION_KEY, MDJM_VERSION_NUM );
-				
-		// Update the updated key so we know to redirect
-		update_option( 'mdjm_updated', '1' );
 	}
 	
 } // mdjm_update_checker

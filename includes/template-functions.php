@@ -1,6 +1,7 @@
 <?php
 
-defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Contains all template related functions
@@ -9,6 +10,73 @@ defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
  * @subpackage	Templates
  * @since		1.3
  */
+
+/**
+ * Append Enquire Link to Packages.
+ *
+ * Automatically appends the enquiry link to package content, if enabled.
+ *
+ * @since	1.4
+ * @param	int		package_id	Package ID
+ * @return	void
+ */
+
+function mdjm_append_package_enquiry_link( $package_id ) {
+	if ( mdjm_get_option( 'package_contact_btn', false ) ) {
+		echo mdjm_get_enquire_now_button( array( 'id' => $package_id ) );
+	}
+} // mdjm_append_package_enquiry_link
+add_action( 'mdjm_after_package_content', 'mdjm_append_package_enquiry_link' );
+
+/**
+ * Append Enquire Link to Addons.
+ *
+ * Automatically appends the enquiry link to addon content, if enabled.
+ *
+ * @since	1.4
+ * @param	int		addon_id	Addon ID
+ * @return	void
+ */
+
+function mdjm_append_addon_enquiry_link( $addon_id ) {
+	if ( mdjm_get_option( 'package_contact_btn', false ) ) {
+		echo mdjm_get_enquire_now_button( array( 'type' => 'addon', 'id' => $addon_id ) );
+	}
+} // mdjm_append_addon_enquiry_link
+add_action( 'mdjm_after_addon_content', 'mdjm_append_addon_enquiry_link' );
+
+/**
+ * Generates an enquire now button.
+ *
+ * @since	1.4
+ * @param	arr		Array of arguments. See @defaults.
+ * @return	str		Enquire Now HTML button
+ */
+function mdjm_get_enquire_now_button( $args )	{
+
+	$defaults = array(
+		'type' => 'package',
+		'id'   => 0
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$label = esc_html( mdjm_get_option( 'package_contact_btn_text', __( 'Enquire Now', 'mobile-dj-manager' ) ) );
+	$label = apply_filters( 'mdjm_enquire_now_' . $args['type'] . '_label', $label );
+	$name  = 'mdjm-' . $args['type'] . '-enquiry-button';
+	$class = 'mdjm_' . $args['type'] . '_enquiry_button';
+	$value = 'test';
+
+	ob_start();
+	?>
+    <a href="<?php echo mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ) ) . $args['type'] . '=' . $args['id']; ?>">
+        <button type="button" name="<?php echo $name; ?>" class="<?php echo $class; ?>" formmethod="get" value="test"><?php echo $label; ?></button>
+    </a>
+    <?php
+	$enquire_link = ob_get_clean();
+
+	return apply_filters( 'mdjm_enquire_now_' . $args['type'] . '_button', $enquire_link, $args );
+} // mdjm_get_enquire_now_button
 
 /**
  * Returns the path to the MDJM templates directory
@@ -214,49 +282,97 @@ function mdjm_get_theme_template_dir_name() {
 } // mdjm_get_theme_template_dir_name
 
 /**
- * Compare the version of the template file in use against the current MDJM version.
+ * Before Package Content
  *
- * @since	1.3
- * @param	str		$slug	The slug of the template file.
- * @param	str		$name	The name of the template file.
- * @return	bool	true if the correct version is in use, or false.
- *						If the [child] theme version does not have the headers, returns false.
-*/
-function mdjm_compare_template_version( $slug, $name ) {
-	
-	$mdjm_template_file  = trailingslashit( mdjm_get_templates_dir() ) . trailingslashit( $slug ) . $name;
-	$name                = str_replace( $slug . '-', '', $name );
-	$name                = ( $slug == str_replace( '.php', '', $name ) ) ? '' : str_replace( '.php', '', $name );
-	$theme_template_file = mdjm_get_template_part( $slug, $name, false );
-	
-	$fp = fopen( $mdjm_template_file, 'r' );
-	$file_data = fread( $fp, 8192 );
-	fclose( $fp );
-	$file_data = str_replace( "\r", "\n", $file_data );
-	$mdjm_version   = '';
+ * Adds an action to the beginning of a packages post content that can be hooked to
+ * by other functions.
+ *
+ * @since	1.4
+ * @global	$post
+ * @param	$content	The the_content field of the package object
+ * @return	str			The content with any additional data attached
+ */
+function mdjm_before_package_content( $content ) {
+	global $post;
 
-	if ( preg_match( '/^[ \t\/*#@]*' . preg_quote( '@version', '/' ) . '(.*)$/mi', $file_data, $match ) && $match[1] )	{
-		$mdjm_version = _cleanup_header_comment( $match[1] );
+	if ( $post && $post->post_type == 'mdjm-package' && is_singular( 'mdjm-package' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'mdjm_before_package_content', $post->ID );
+		$content = ob_get_clean() . $content;
 	}
-	
-	$fp = fopen( $theme_template_file, 'r' );
-	$file_data = fread( $fp, 8192 );
-	fclose( $fp );
-	$file_data = str_replace( "\r", "\n", $file_data );
-	$custom_version   = '';
 
-	if ( preg_match( '/^[ \t\/*#@]*' . preg_quote( '@version', '/' ) . '(.*)$/mi', $file_data, $match ) && $match[1] )	{
-		$custom_version = _cleanup_header_comment( $match[1] );
+	return $content;
+}
+add_filter( 'the_content', 'mdjm_before_package_content' );
+
+/**
+ * After Package Content
+ *
+ * Adds an action to the end of a packages post content that can be hooked to by
+ * other functions.
+ *
+ * @since	1.4
+ * @global	$post
+ * @param	$content	The the_content field of the package object
+ * @return	str			The content with any additional data attached
+ */
+function mdjm_after_package_content( $content ) {
+	global $post;
+
+	if ( $post && $post->post_type == 'mdjm-package' && is_singular( 'mdjm-package' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'mdjm_after_package_content', $post->ID );
+		$content .= ob_get_clean();
 	}
-	
-	if ( empty( $mdjm_version ) || empty( $custom_version ) )	{
-		return false;
+
+	return $content;
+}
+add_filter( 'the_content', 'mdjm_after_package_content' );
+
+/**
+ * Before Addon Content
+ *
+ * Adds an action to the beginning of an addona post content that can be hooked to
+ * by other functions.
+ *
+ * @since	1.4
+ * @global	$post
+ * @param	$content	The the_content field of the addon object
+ * @return	str			The content with any additional data attached
+ */
+function mdjm_before_addon_content( $content ) {
+	global $post;
+
+	if ( $post && $post->post_type == 'mdjm-addon' && is_singular( 'mdjm-addon' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'mdjm_before_addon_content', $post->ID );
+		$content = ob_get_clean() . $content;
 	}
-	
-	if ( version_compare( $mdjm_version, $custom_version, '>' ) )	{
-		return false;
+
+	return $content;
+}
+add_filter( 'the_content', 'mdjm_before_addon_content' );
+
+/**
+ * After Addon Content
+ *
+ * Adds an action to the end of an addons post content that can be hooked to by
+ * other functions.
+ *
+ * @since	1.4
+ * @global	$post
+ * @param	$content	The the_content field of the addon object
+ * @return	str			The content with any additional data attached
+ */
+function mdjm_after_addon_content( $content ) {
+	global $post;
+
+	if ( $post && $post->post_type == 'mdjm-addon' && is_singular( 'mdjm-addon' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'mdjm_after_addon_content', $post->ID );
+		$content .= ob_get_clean();
 	}
-	
-	return true;
-	
-} // mdjm_compare_template_version
+
+	return $content;
+}
+add_filter( 'the_content', 'mdjm_after_addon_content' );

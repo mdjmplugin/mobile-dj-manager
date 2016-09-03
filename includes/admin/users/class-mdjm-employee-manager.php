@@ -377,7 +377,7 @@ class MDJM_Employee_Table extends WP_List_Table {
  *
  *
  */
-if( !class_exists( 'MDJM_Employee_Manager' ) ) : 
+if( ! class_exists( 'MDJM_Employee_Manager' ) ) : 
 	class MDJM_Employee_Manager	{
 		private static $active_tab;
 		public static $display_role;
@@ -413,9 +413,9 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 			self::$all_roles = $wp_roles;
 			
 			// Filter our search by role if we need to
-			self::$display_role = !empty( $_GET['display_role'] ) ? $_GET['display_role'] : '';
-			self::$orderby = !empty( $_GET['orderby'] ) ? $_GET['orderby'] : '';
-			self::$order = !empty( $_GET['order'] ) ? $_GET['order'] : '';
+			self::$display_role = ! empty( $_GET['display_role'] ) ? $_GET['display_role'] : '';
+			self::$orderby      = ! empty( $_GET['orderby']      ) ? $_GET['orderby']      : '';
+			self::$order        = ! empty( $_GET['order']        ) ? $_GET['order']        : '';
 			
 			// Which tab?
 			self::$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'user_roles';
@@ -743,7 +743,19 @@ if( !class_exists( 'MDJM_Employee_Manager' ) ) :
 					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 					
 					echo '</select>' . "\r\n";
-					
+
+					echo '<br /><br />' . "\r\n";
+
+					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Reports', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="report_permissions_' . $role_id . '" id="report_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_reports_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+																
+					echo '<option value="mdjm_reports_run"';
+					if( !empty( $caps->capabilities['mdjm_reports_run'] ) ) echo ' selected="selected"';
+					echo '>' . __( 'Run', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+												
+					echo '</select>' . "\r\n";
+
 				echo '</td>' . "\r\n";
 				
 				echo '<td scope="row" style="font-size: small;">';

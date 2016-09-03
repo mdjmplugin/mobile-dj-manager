@@ -329,9 +329,9 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
 	// Create and execute the WP_User_Query for each role	
 	foreach( $roles as $role_id => $role_name )	{
 		$args = array(
-			'role'		 => is_numeric( $role_id ) ? $role_name : $role_id,
-			'orderby'	 => $orderby,
-			'order'		 => $order
+			'role'    => is_numeric( $role_id ) ? $role_name : $role_id,
+			'orderby' => $orderby,
+			'order'   => $order
 		);
 									
 		// Execute the query
@@ -346,6 +346,32 @@ function mdjm_get_employees( $roles='', $orderby='display_name', $order='ASC' )	
 	
 	return $employees;
 } // mdjm_get_employees
+
+/**
+ * Returns a count of employees.
+ *
+ * @since	1.4
+ * @return	int		Employee count.
+ */
+function mdjm_employee_count()	{
+
+	$mdjm_roles = mdjm_get_roles();
+	$roles      = array();
+
+	foreach ( $mdjm_roles as $role_id => $role_name )	{
+		$roles[] = $role_id;
+	}
+
+	$args = array(
+		'role__in'    => $roles,
+		'count_total' => true
+	);
+
+	$employees = new WP_User_Query( $args );
+
+	return $employees->get_total();
+
+} // mdjm_employee_count
 
 /**
  * Retrieve the primary event employee.
@@ -772,27 +798,27 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
 	
 	$employee_query	= array(
-		'relation'	=> 'OR',
+		'relation' => 'OR',
 		array( 
-			'key'		=> '_mdjm_event_dj',
-			'value'		=> $employee_id,
-			'compare'	=> '=',
-			'type'		=> 'numeric'
+			'key'     => '_mdjm_event_dj',
+			'value'   => $employee_id,
+			'compare' => '=',
+			'type'    => 'numeric'
 		),
 		array(
-			'key'		=> '_mdjm_event_employees',
-			'value'		=> sprintf( ':"%s";', $employee_id ),
-			'compare'	=> 'LIKE'
+			'key'     => '_mdjm_event_employees',
+			'value'   => sprintf( ':"%s";', $employee_id ),
+			'compare' => 'LIKE'
 		)
 	);
 	
 	$defaults = array(
-		'post_type'			=> 'mdjm-event',
-		'post_status'		=> 'any',
-		'posts_per_page'	=> -1,
-		'meta_query'		=> $employee_query,
-		'date'				=> false, // Required if checking for events on a specific date. Parse an array if querying a date range
-		'date_compare'		=> '='
+		'post_type'      => 'mdjm-event',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
+		'meta_query'     => $employee_query,
+		'date'           => false, // Required if checking for events on a specific date. Parse an array if querying a date range
+		'date_compare'   => '='
 	);
 		
 	$args = wp_parse_args( $args, $defaults );
@@ -801,12 +827,12 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 	
 	if ( ! empty( $args['date'] ) )	{
 		$date_query = array(
-			'relation'	=> 'AND',
+			'relation' => 'AND',
 			array(
-				'key'		=> '_mdjm_event_date',
-				'value'		=> $args['date'],
-				'type'		=> 'DATE',
-				'compare'	=> $args['date_compare']
+				'key'     => '_mdjm_event_date',
+				'value'   => $args['date'],
+				'type'    => 'DATE',
+				'compare' => $args['date_compare']
 			)
 		);
 		
@@ -1104,7 +1130,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 	}
 	
 	if ( ! mdjm_is_employee( $employee_id ) )	{
-		error_log( '111', 0 );
+
 		return false;
 	}
 	
@@ -1142,7 +1168,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 			
 		} else	{
 			MDJM()->debug->log_it( sprintf( 'Unable to pay %s for Event %d', mdjm_get_employee_display_name( $employee_id ), $event_id ) );
-			error_log( '111', 0 );
+
 			$return = false;
 		}
 
@@ -1153,7 +1179,6 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 		if ( ! mdjm_employee_working_event( $event_id, $employee_id ) )	{
 	
 			MDJM()->debug->log_it( 'Employee not working this event' );
-			error_log( '333', 0 );
 			return false;
 	
 		} else	{
