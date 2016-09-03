@@ -6,7 +6,7 @@
  */
 	
 	/* -- Build the MDJM class -- */
-	if( !class_exists( 'MDJM' ) )	{
+	if ( ! class_exists( 'MDJM' ) )	{
 		class MDJM	{
 			// Publicise the Events class so we can use it throughout
 			public $mdjm_events;			
@@ -69,26 +69,6 @@
 				/* -- Obtain the plugin settings -- */
 				$this->mdjm_settings();				
 			} // mdjm_init
-				
-/*
- *
- * PLUGINS LOADED HOOK
- *
- */
-			/*
-			 * Methods to run during plugins loaded hook
-			 *
-			 *
-			 *
-			 */
-			public function all_plugins_loaded()	{
-			/* -- Database update -- */
-				if( MDJM_DB_VERSION != $this->db_version )	{ // DB Update needed
-					require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-db.php' );
-					$mdjm_db = new MDJM_DB;
-					$mdjm_db->update_db();
-				}								
-			} // all_plugins_loaded
 	
 /*
  * --
