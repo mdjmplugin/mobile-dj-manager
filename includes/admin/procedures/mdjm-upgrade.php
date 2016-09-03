@@ -410,7 +410,7 @@ class MDJM_Upgrade	{
 					date( 'Y-m-d H:i:s', strtotime( $event->date_added ) ) : date( 'Y-m-d H:i:s' ) );
 					
 				$event_data['post_author'] = $event->added_by;
-				$event_data['post_type'] = MDJM_EVENT_POSTS;
+				$event_data['post_type'] = 'mdjm-event';
 				$event_data['post_category'] = array( $event_type->term_id );
 				$event_data['post_modified'] = !empty( $event->last_updated ) ? 
 							date( 'Y-m-d H:i:s', strtotime( $event->last_updated ) ) : date( 'Y-m-d H:i:s' );
@@ -552,7 +552,7 @@ class MDJM_Upgrade	{
 					MDJM()->debug->log_it( 'Updating Communications' );
 					$i = 0;
 					$comms = get_posts( array(
-								'post_type'		 => MDJM_COMM_POSTS,
+								'post_type'		 => 'mdjm_communication',
 								'meta_key'	 	  => '_event',
 								'meta_value'   		=> $event->event_id,
 								'order_by'  		  => 'post_date',
@@ -635,7 +635,7 @@ class MDJM_Upgrade	{
 							'choose_from_most_used'	  => __( 'Choose from the most popular Transaction Types' ),
 							'not_found'				  => __( 'No transaction types found' ),
 							);
-			$tax_args[MDJM_TRANS_POSTS] = array(
+			$tax_args['mdjm-transaction'] = array(
 							'hierarchical'      	   => true,
 							'labels'            	 => $tax_labels['mdjm-transaction'],
 							'show_ui'           		=> true,
@@ -662,7 +662,7 @@ class MDJM_Upgrade	{
 							'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details' ),
 							'not_found'				  => __( 'No details found' ),
 							);
-			$tax_args[MDJM_VENUE_POSTS] = array(
+			$tax_args['mdjm-venue'] = array(
 							'hierarchical'      => true,
 							'labels'            => $tax_labels['mdjm-venue'],
 							'show_ui'           => true,
@@ -771,7 +771,7 @@ class MDJM_Upgrade	{
 				
 				/* -- Create default post (auto-draft) so we can use the ID etc -- */
 				require_once( ABSPATH . 'wp-admin/includes/post.php' );
-				$trans_post = get_default_post_to_edit( MDJM_TRANS_POSTS, true );
+				$trans_post = get_default_post_to_edit( 'mdjm-transaction', true );
 				
 				$trans_id = $trans_post->ID;
 				
@@ -783,7 +783,7 @@ class MDJM_Upgrade	{
 				$trans_data['edit_date'] = true;
 					
 				$trans_data['post_author'] = get_post_meta( $transaction->event_id, '_mdjm_event_client', true );
-				$trans_data['post_type'] = MDJM_TRANS_POSTS;
+				$trans_data['post_type'] = 'mdjm-transaction';
 				$trans_data['post_category'] = array( $trans_type->term_id );
 				$trans_data['post_parent'] = $transaction->event_id;
 				$trans_data['post_modified'] = strtotime( $transaction->payment_date );

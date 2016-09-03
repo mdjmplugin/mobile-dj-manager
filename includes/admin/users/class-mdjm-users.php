@@ -149,7 +149,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			global $current_user;
 			
 			$args = array(
-					'post_type' 		=> MDJM_EVENT_POSTS,
+					'post_type' 		=> 'mdjm-event',
 					'post_status'	  => 'any',
 					'posts_per_page'   => 1,
 					'meta_key'		 => '_mdjm_event_date',

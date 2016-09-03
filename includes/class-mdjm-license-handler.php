@@ -114,6 +114,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			add_action( 'admin_notices', array( $this, 'notices' ) );
 			
 			add_action( 'in_plugin_update_message-' . plugin_basename( $this->file ), array( $this, 'plugin_row_license_missing' ), 10, 2 );
+
 		} // hooks
 	
 		/**
@@ -123,31 +124,26 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		 * @return  void
 		 */
 		public function auto_updater() {
-			
-			$license = get_option( $this->item_shortname . '_license_active' );
-			
-			if ( ! $license || 'valid' !== $license->license )	{
-				return;
-			}
 	
 			$args = array(
 				'version'   => $this->version,
 				'license'   => $this->license,
 				'author'    => $this->author
 			);
-	
+
 			if( ! empty( $this->item_id ) ) {
 				$args['item_id']   = $this->item_id;
 			} else {
 				$args['item_name'] = $this->item_name;
 			}
-	
+
 			// Setup the updater
 			$mdjm_updater = new MDJM_Plugin_Updater(
 				$this->api_url,
 				$this->file,
 				$args
 			);
+
 		} // auto_updater
 	
 		/**
@@ -404,7 +400,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 				return;
 			}
 	
-			if( ! current_user_can( 'manage_shop_settings' ) ) {
+			if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 				return;
 			}
 	
@@ -461,6 +457,6 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			}
 	
 		} // plugin_row_license_missing
-		
+
 	} // class MDJM_License
 endif; // end class_exists check

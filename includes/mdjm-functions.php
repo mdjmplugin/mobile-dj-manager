@@ -36,30 +36,30 @@
 						'add_client'            => 'user-new.php',
 						'edit_client'           => 'user-edit.php?user_id=',
 						'comms'                 => 'admin.php?page=mdjm-comms',
-						'email_history'         => 'edit.php?post_type=' . MDJM_COMM_POSTS,
-						'contract'              => 'edit.php?post_type=' . MDJM_CONTRACT_POSTS,
-						'signed_contract'	   => 'edit.php?post_type=' . MDJM_SIGNED_CONTRACT_POSTS,
-						'add_contract'          => 'post-new.php?post_type=' . MDJM_CONTRACT_POSTS,
+						'email_history'         => 'edit.php?post_type=mdjm_communication',
+						'contract'              => 'edit.php?post_type=contract',
+						'signed_contract'	   => 'edit.php?post_type=mdjm-signed-contract',
+						'add_contract'          => 'post-new.php?post_type=contract',
 						'djs'                   => 'admin.php?page=mdjm-djs',
 						'inactive_djs'          => 'admin.php?page=mdjm-djs&display=inactive_dj',
-						'email_template'        => 'edit.php?post_type=' . MDJM_EMAIL_POSTS,
-						'add_email_template'    => 'post-new.php?post_type=' . MDJM_EMAIL_POSTS,
+						'email_template'        => 'edit.php?post_type=email_template',
+						'add_email_template'    => 'post-new.php?post_type=email_template',
 						'equipment'             => 'admin.php?page=mdjm-packages',
-						'events'                => 'edit.php?post_type=' . MDJM_EVENT_POSTS,
-						'add_event'             => 'post-new.php?post_type=' . MDJM_EVENT_POSTS,
-						'enquiries'             => 'edit.php?post_status=mdjm-enquiry&post_type=' . MDJM_EVENT_POSTS,
-						'unattended'            => 'edit.php?post_status=mdjm-unattended&post_type=' . MDJM_EVENT_POSTS,
+						'events'                => 'edit.php?post_type=mdjm-event',
+						'add_event'             => 'post-new.php?post_type=mdjm-event',
+						'enquiries'             => 'edit.php?post_status=mdjm-enquiry&post_type=mdjm-event',
+						'unattended'            => 'edit.php?post_status=mdjm-unattended&post_type=mdjm-event',
 						'playlists'             => 'admin.php?page=mdjm-playlists&event_id=',
 						'custom_event_fields'   => 'admin.php?page=mdjm-custom-event-fields',
-						'venues'                => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
-						'add_venue'             => 'post-new.php?post_type=' . MDJM_VENUE_POSTS,
+						'venues'                => 'edit.php?post_type=mdjm-venue',
+						'add_venue'             => 'post-new.php?post_type=mdjm-venue',
 						'tasks'                 => 'admin.php?page=mdjm-tasks',
 						'client_text'           => 'admin.php?page=mdjm-settings&tab=client-zone&section=mdjm_app_text',
 						'client_fields'         => 'admin.php?page=mdjm-custom-client-fields',
 						'availability'          => 'admin.php?page=mdjm-availability',
 						'debugging'             => 'admin.php?page=mdjm-settings&tab=general&section=mdjm_app_debugging',
 						'contact_forms'         => 'admin.php?page=mdjm-contact-forms',
-						'transactions'		  => 'edit.php?post_type=' . MDJM_TRANS_POSTS,
+						'transactions'		  => 'edit.php?post_type=mdjm-transaction',
 						'updated'			   => 'admin.php?page=mdjm-updated',
 						'about'			     => 'admin.php?page=mdjm-about',
 						'mydjplanner'           => 'http://mdjm.co.uk',
@@ -333,7 +333,7 @@
 		
 		$event_args = array(
 						'posts_per_page'	=> -1,
-						'post_type'			=> MDJM_EVENT_POSTS,
+						'post_type'			=> 'mdjm-event',
 						'post_status'		=> array( 'mdjm-unattended',
 													  'mdjm-enquiry',
 													  'mdjm-contract',
@@ -558,7 +558,7 @@
 			$custom_fields = new WP_Query(
 								array(
 									'posts_per_page'	=> $limit,
-									'post_type'		 => MDJM_CUSTOM_FIELD_POSTS,
+									'post_type'		 => 'mdjm-custom-fields',
 									'post_status'  	   => 'publish',
 									'meta_query'		=> array(
 										'field_clause'	=> array(
@@ -572,7 +572,7 @@
 			$custom_fields = new WP_Query(
 								array(
 									'posts_per_page'	=> $limit,
-									'post_type'		 => MDJM_CUSTOM_FIELD_POSTS,
+									'post_type'		 => 'mdjm-custom-fields',
 									'post_status'  	   => 'publish',
 									'meta_query'		=> array(
 										'field_clause'	=> array(

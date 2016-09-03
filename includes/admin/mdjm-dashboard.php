@@ -59,7 +59,7 @@
 						
 			$args = array( 
 						'posts_per_page'	=> -1,
-						'post_type'			=> MDJM_EVENT_POSTS,
+						'post_type'			=> 'mdjm-event',
 						'post_status'		=> $status,
 						'meta_key'			=> '_mdjm_event_date',
 						'orderby'			=> 'meta_value',
@@ -128,7 +128,7 @@
 			$user_id = !empty( $user_id ) ? $user_id : '';
 			
 			$args = array(
-						'post_type'			=> MDJM_EVENT_POSTS,
+						'post_type'			=> 'mdjm-event',
 						'posts_per_page'	=> -1,
 						'meta_key'			=> '_mdjm_event_date',
 						'orderby'			=> 'meta_value',

@@ -180,12 +180,12 @@
         <?php
 		$email_args = array(
 								'posts_per_page'	=> -1,
-								'post_type'			=> MDJM_EMAIL_POSTS,
+								'post_type'			=> 'email_template',
 								'orderby'			=> 'name',
 								'order'				=> 'ASC',
 								);
 		$contract_args = array(
-								'post_type'			=> MDJM_CONTRACT_POSTS,
+								'post_type'			=> 'contract',
 								'posts_per_page'	=> -1,
 								'orderby'			=> 'name',
 								'order'				=> 'ASC',
