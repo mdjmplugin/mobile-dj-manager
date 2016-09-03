@@ -20,14 +20,15 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_availability_check_action( $data )	{
 		
-	if ( ! isset( $data['availability_check_date'] ) )	{
+	if( ! isset( $data['availability_check_date'] ) )	{
 		$message = 'missing_date';
 	} else	{
 		$result = mdjm_do_availability_check( $data['availability_check_date'] );
 				
-		if ( ! empty( $result['available'] ) )	{
+		if( ! empty( $result['available'] ) )	{
 			$message = 'available';
-		} else	{
+		}
+		else	{
 			$message = 'not_available';
 		}
 	}

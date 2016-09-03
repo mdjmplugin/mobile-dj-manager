@@ -401,11 +401,17 @@ function mdjm_get_registered_settings()	{
 					'artist'           => array(
 						'id'          => 'artist',
 						'name'        => __( 'Refer to Performers as', 'mobile-dj-manager' ),
-						'hint'        => '<code>' . __( 'Default is DJ', 'mobile-dj-manager' ) . '</code>',
+						'hint'        => sprintf( __( '%sDefault is DJ%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
 						'std'		 => __( 'DJ', 'mobile-dj-manager' )
+					),
+					'enable_packages'  => array(
+						'id'          => 'enable_packages',
+						'name'        => __( 'Enable Packages', 'mobile-dj-manager' ),
+						'desc'        => __( 'Check this to enable Equipment Packages & Inventories.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
 					),
 					'default_contract' => array(
 						'id'          => 'default_contract',
@@ -494,122 +500,6 @@ function mdjm_get_registered_settings()	{
 										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					)
-				),
-				// Packages & Addons
-				'packages' => array(
-					'package_settings' => array(
-						'id'          => 'package_settings',
-						'name'        => '<h3>' . __( 'Package &amp; Addon Settings', 'mobile-dj-manager' ) . '</h3>',
-						'desc'        => '',
-						'type'        => 'header'
-					),
-					'enable_packages'  => array(
-						'id'          => 'enable_packages',
-						'name'        => __( 'Enable Packages', 'mobile-dj-manager' ),
-						'desc'        => __( 'Check this to enable Equipment Packages & Add-ons.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					),
-					'package_excerpt_length' => array(
-						'id'          => 'package_excerpt_length',
-						'name'        => __( 'Description Length', 'mobile-dj-manager' ),
-						'desc'        => __( 'The maximum number of characters for the package/addon description.', 'mobile-dj-manager' ),
-						'hint'        => __( 'Entering <code>0</code> will render the full exceprt if it exists, otherwise the description', 'mobile-dj-manager' ),
-						'type'        => 'number',
-						'size'        => 'small',
-						'step'        => '5',
-						'std'         => '55'
-					),
-					'package_contact_btn' => array(
-						'id'          => 'package_contact_btn',
-						'name'        => __( 'Add Contact Button?', 'mobile-dj-manager' ),
-						'hint'        => sprintf( __( 'Select to auto add a contact button to the end of package/addons post content. The link will redirect to the <code>Contact Page</code>page as defined in <a href="%s">Pages</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-settings&tab=client_zone&section=pages' ) ),
-						'desc'        => sprintf( __( 'If you use the <a href="%s" target="_blank">Dynamic Contact Forms</a> add-on, the package/addon will be auto selected on page load', 'mobile-dj-manager' ), 'http://mdjm.co.uk/products/dynamic-contact-forms/' ),
-						'type'        => 'checkbox'
-					),
-					'package_contact_btn_text' => array(
-						'id'          => 'package_contact_btn_text',
-						'name'        => __( 'Text for Contact Button', 'mobile-dj-manager' ),
-						'desc'        => '',
-						'type'        => 'text',
-						'std'         => __( 'Enquire Now', 'mobile-dj-manager' )
-					)
-				),
-				// Travel
-				'travel' => array(
-					'travel_settings' => array(
-						'id'          => 'travel_settings',
-						'name'        => '<h3>' . __( 'Travel Settings', 'mobile-dj-manager' ) . '</h3>',
-						'desc'        => '',
-						'type'        => 'header'
-					),
-					'travel_add_cost' => array(
-						'id'          => 'travel_add_cost',
-						'name'        => __( 'Add Travel Cost to Price?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'If selected, the travel cost will be added to the overall %s cost', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'checkbox'
-					),
-					'travel_primary' => array(
-						'id'          => 'travel_primary',
-						'name'        => __( 'Primary Post/Zip Code', 'mobile-dj-manager' ), mdjm_get_label_singular(),
-						'desc'        => __( 'When the primary employee has no address in their profile, this post code will be used to calculate the distance to the venue.', 'mobile-dj-manager' ),
-						'type'        => 'text',
-						'std'         => mdjm_get_employee_post_code( 1 )
-					),
-					'travel_status' => array(
-						'id'          => 'travel_status',
-						'name'        => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-						'desc'        => sprintf( __( "CTRL (cmd on MAC) + Click to select which %s status' can have travel costs updated.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'multiple_select',
-						'options'     => mdjm_all_event_status(),
-						'std'         => array( 'mdjm-unattended', 'mdjm-enquiry', 'mdjm-contract' )
-					),
-					'travel_units' => array(
-						'id'          => 'travel_units',
-						'name'        => __( 'Calculate in?', 'mobile-dj-manager' ),
-						'desc'        => '',
-						'type'        => 'select',
-						'options'     => array(
-							'imperial'    => __( 'Miles', 'mobile-dj-manager' ),
-							'metric'      => __( 'Kilometers', 'mobile-dj-manager' )
-						),
-						'std'         => 'imperial'
-					),
-					'cost_per_unit' => array(
-						'id'          => 'cost_per_unit',
-						'name'        => sprintf( __( 'Cost per %s', 'mobile-dj-manager' ), mdjm_travel_unit_label() ),
-						'desc'        => __( 'Enter the cost per mile that should be calculated. i.e. 0.45', 'mobile-dj-manager' ),
-						'type'        => 'text',
-						'size'        => 'small',
-						'std'         => '0.45'
-					),
-					'travel_cost_round' => array(
-						'id'          => 'travel_cost_round',
-						'name'        => __( 'Round Cost', 'mobile-dj-manager' ),
-						'desc'        => __( 'Do you want to round costs up or down?', 'mobile-dj-manager' ),
-						'type'        => 'select',
-						'options'     => array(
-						    false     => __( 'No', 'mobile-dj-manager' ),
-							'up'      => __( 'Up', 'mobile-dj-manager' ),
-							'down'    => __( 'Down', 'mobile-dj-manager' )
-						),
-						'std'         => 'up'
-					),
-					'travel_round_to' => array(
-						'id'          => 'travel_round_to',
-						'name'        => __( 'Round to Nearest', 'mobile-dj-manager' ),
-						'hint'        => mdjm_get_currency() . ' i.e. 5',
-						'type'        => 'number',
-						'size'        => 'small',
-						'std'         => '5'
-					),
-					'travel_min_distance'      => array(
-						'id'          => 'travel_min_distance',
-						'name'        => __( "Don't add if below", 'mobile-dj-manager' ),
-						'hint'        => mdjm_travel_unit_label( false, true ),
-						'type'        => 'number',
-						'size'        => 'small',
-						'std'         => '30'
-					)
 				)
 			)
 		),
@@ -684,7 +574,9 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
 											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
-						'options'     => mdjm_list_templates( 'email_template', true )
+						'options'     => array_merge( 
+											array( '0' => __( 'Disable Online Quotes', 'mobile-dj-manager' ) ),
+											mdjm_list_templates( 'email_template' ) )
 					),
 					'unavailable'      => array(
 						'id'          => 'unavailable',
@@ -986,7 +878,9 @@ function mdjm_get_registered_settings()	{
 					'availability_check_pass_text' => array(
 						'id'          => 'availability_check_pass_text',
 						'name'        => __( 'Available Text', 'mobile-dj-manager' ),
-						'desc'        => __( 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Text to be displayed when you are available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes %1$s{event_date}%2$s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
+											'<code>',
+											'</code>' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' )
 					),
@@ -1001,7 +895,9 @@ function mdjm_get_registered_settings()	{
 					'availability_check_fail_text' => array(
 						'id'          => 'availability_check_fail_text',
 						'name'        => __( 'Unavailable Text', 'mobile-dj-manager' ),
-						'desc'        => __( 'Text to be displayed when you are not available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Text to be displayed when you are not available - Only displayed if %1$sNO REDIRECT - USE TEXT%2$s is selected above. Valid shortcodes %1$s{event_date}2$%s &amp; %1$s{event_date_short}%2$s','mobile-dj-manager' ),
+											'<code>',
+											'</code>' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...', 'mobile-dj-manager' )
 					)
@@ -1251,6 +1147,75 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template', true )
 					)
+				),
+			// Travel
+				'travel' => array(
+					'travel_settings' => array(
+						'id'          => 'travel_settings',
+						'name'        => '<h3>' . __( 'Travel Settings', 'mobile-dj-manager' ) . '</h3>',
+						'desc'        => '',
+						'type'        => 'header'
+					),
+					'travel_add_cost' => array(
+						'id'          => 'travel_add_cost',
+						'name'        => __( 'Add Travel Cost to Price?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If selected, the travel cost will be added to the overall %s cost', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'        => 'checkbox'
+					),
+					'travel_primary' => array(
+						'id'          => 'travel_primary',
+						'name'        => __( 'Primary Post/Zip Code', 'mobile-dj-manager' ), mdjm_get_label_singular(),
+						'desc'        => __( 'When the primary employee has no address in their profile, this post code will be used to calculate the distance to the venue.', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'std'         => mdjm_get_employee_post_code( 1 )
+					),
+					'travel_units' => array(
+						'id'          => 'travel_units',
+						'name'        => __( 'Calculate in?', 'mobile-dj-manager' ),
+						'desc'        => '',
+						'type'        => 'select',
+						'options'     => array(
+							'imperial'    => __( 'Miles', 'mobile-dj-manager' ),
+							'metric'      => __( 'Kilometers', 'mobile-dj-manager' )
+						),
+						'std'         => 'imperial'
+					),
+					'cost_per_unit' => array(
+						'id'          => 'cost_per_unit',
+						'name'        => sprintf( __( 'Cost per %s', 'mobile-dj-manager' ), mdjm_travel_unit_label() ),
+						'desc'        => __( 'Enter the cost per mile that should be calculated. i.e. 0.45', 'mobile-dj-manager' ),
+						'type'        => 'text',
+						'size'        => 'small',
+						'std'         => '0.45'
+					),
+					'travel_cost_round' => array(
+						'id'          => 'travel_cost_round',
+						'name'        => __( 'Round Cost', 'mobile-dj-manager' ),
+						'desc'        => __( 'Do you want to round costs up or down?', 'mobile-dj-manager' ),
+						'type'        => 'select',
+						'options'     => array(
+						    false     => __( 'No', 'mobile-dj-manager' ),
+							'up'      => __( 'Up', 'mobile-dj-manager' ),
+							'down'    => __( 'Down', 'mobile-dj-manager' )
+						),
+						'std'         => 'up'
+					),
+					'travel_round_to' => array(
+						'id'          => 'travel_round_to',
+						'name'        => __( 'Round to Nearest', 'mobile-dj-manager' ),
+						'hint'        => mdjm_get_currency() . ' i.e. 5',
+						'type'        => 'number',
+						'size'        => 'small',
+						'std'         => '5'
+					),
+					'travel_min_distance'      => array(
+						'id'          => 'travel_min_distance',
+						'name'        => __( "Don't add if below", 'mobile-dj-manager' ),
+						'hint'        => mdjm_travel_unit_label( false, true ),
+						'type'        => 'number',
+						'size'        => 'small',
+						'std'         => '30'
+					)
 				)
 			)
 		),
@@ -1421,9 +1386,7 @@ function mdjm_get_registered_settings_sections() {
 		) ),
 		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
 			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' ),
-			'packages'           => __( 'Packages &amp; Add-ons', 'mobile-dj-manager' ),
-			'travel'             => __( 'Travel Settings', 'mobile-dj-manager' )
+			'playlist'           => __( 'Playlist Settings', 'mobile-dj-manager' )
 		) ),
 		'emails'          => apply_filters( 'mdjm_settings_sections_emails', array(
 			'main'               => __( 'General Email Settings', 'mobile-dj-manager' ),
@@ -1439,6 +1402,7 @@ function mdjm_get_registered_settings_sections() {
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
 			'receipts'           => __( 'Receipts', 'mobile-dj-manager' )
+			//'travel'             => __( 'Travel Costs', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )

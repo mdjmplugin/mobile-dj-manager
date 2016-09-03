@@ -28,13 +28,6 @@ class MDJM_Txn {
 	public $ID = 0;
 
 	/**
-	 * The transaction payment status
-	 *
-	 * @since	1.4
-	 */
-	public $payment_status;
-
-	/**
 	 * The transaction date
 	 *
 	 * @since	1.3
@@ -128,7 +121,6 @@ class MDJM_Txn {
 			}
 		}
 
-		$this->get_status();
 		$this->get_currency();
 		$this->get_price();
 		$this->get_recipient_id();
@@ -233,20 +225,6 @@ class MDJM_Txn {
 	} // get_date
 
 	/**
-	 * Retrieve the payment status
-	 *
-	 * @since	1.4
-	 * @return	str
-	 */
-	public function get_status() {
-		if ( empty( $this->payment_status ) )	{
-			$this->payment_status = get_post_meta( $this->ID, '_mdjm_txn_status', true );
-		}
-
-		return $this->payment_status;
-	} // get_status
-
-	/**
 	 * Retrieve the transaction currency
 	 *
 	 * @since	1.3.8
@@ -313,18 +291,6 @@ class MDJM_Txn {
 					
 		return apply_filters( 'mdjm_transaction_type', $return, $this->ID );
 	} // get_type
-
-	/**
-	 * Retrieve the transaction method.
-	 *
-	 * @since	1.4
-	 * @return	bool
-	 */
-	public function get_method() {
-		$method = get_post_meta( $this->ID, '_mdjm_txn_source', true );
-					
-		return apply_filters( 'mdjm_transaction_method', $method, $this->ID );
-	} // get_method
 
 	/**
 	 * Retrieve the transaction gateway.

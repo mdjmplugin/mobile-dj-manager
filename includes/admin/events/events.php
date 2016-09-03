@@ -1205,56 +1205,39 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		// Manual venue address entry
 		if( $_POST['venue_id'] != 'client' )	{ 
 		
-			$event_data['_mdjm_event_venue_name']     = sanitize_text_field( ucwords( $_POST['venue_name'] ) );
-			$event_data['_mdjm_event_venue_contact']  = sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
-			$event_data['_mdjm_event_venue_phone']    = sanitize_text_field( $_POST['venue_phone'] );
-			$event_data['_mdjm_event_venue_email']    = sanitize_email( strtolower( $_POST['venue_email'] ) );
-			$event_data['_mdjm_event_venue_address1'] = sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
-			$event_data['_mdjm_event_venue_address2'] = sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
-			$event_data['_mdjm_event_venue_town']     = sanitize_text_field( ucwords( $_POST['venue_town'] ) );
-			$event_data['_mdjm_event_venue_county']   = sanitize_text_field( ucwords( $_POST['venue_county'] ) );
-			$event_data['_mdjm_event_venue_postcode'] = strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
+			$event_data['_mdjm_event_venue_name']		= sanitize_text_field( ucwords( $_POST['venue_name'] ) );
+			$event_data['_mdjm_event_venue_contact']	= sanitize_text_field( ucwords( $_POST['venue_contact'] ) );
+			$event_data['_mdjm_event_venue_phone']		= sanitize_text_field( $_POST['venue_phone'] );
+			$event_data['_mdjm_event_venue_email']		= sanitize_email( strtolower( $_POST['venue_email'] ) );
+			$event_data['_mdjm_event_venue_address1']	= sanitize_text_field( ucwords( $_POST['venue_address1'] ) );
+			$event_data['_mdjm_event_venue_address2']	= sanitize_text_field( ucwords( $_POST['venue_address2'] ) );
+			$event_data['_mdjm_event_venue_town']		= sanitize_text_field( ucwords( $_POST['venue_town'] ) );
+			$event_data['_mdjm_event_venue_county']		= sanitize_text_field( ucwords( $_POST['venue_county'] ) );
+			$event_data['_mdjm_event_venue_postcode']	= strtoupper( sanitize_text_field( $_POST['venue_postcode'] ) );
 
 		} else	{ // Using clients address
 		
 			$client_data = get_userdata( $event_data['_mdjm_event_client'] );
 			
-			$event_data['_mdjm_event_venue_name'] = __( 'Client Address', 'mobile-dj-manager' );
+			$event_data['_mdjm_event_venue_name']		= __( 'Client Address', 'mobile-dj-manager' );
 			
-			$event_data['_mdjm_event_venue_contact'] = sprintf( '%s %s',
-				! empty( $client_data->first_name ) ? sanitize_text_field( $client_data->first_name ) : '',
-				! empty( $client_data->last_name )  ? sanitize_text_field( $client_data->last_name )  : ''
+			$event_data['_mdjm_event_venue_contact']	= sprintf( '%s %s',
+				! empty( $client_data->first_name )		? sanitize_text_field( $client_data->first_name )	: '',
+				! empty( $client_data->last_name )		 ? sanitize_text_field( $client_data->last_name )	 : ''
 			);
 			
-			$event_data['_mdjm_event_venue_phone']    = ! empty( $client_data->phone1 )     ? $client_data->phone1     : '';
-			$event_data['_mdjm_event_venue_email']    = ! empty( $client_data->user_email ) ? $client_data->user_email : '';
-			$event_data['_mdjm_event_venue_address1'] = ! empty( $client_data->address1 )   ? $client_data->address1   : '';
-			$event_data['_mdjm_event_venue_address2'] = ! empty( $client_data->address2 )   ? $client_data->address2   : '';
-			$event_data['_mdjm_event_venue_town']     = ! empty( $client_data->town )       ? $client_data->town       : '';
-			$event_data['_mdjm_event_venue_county']   = ! empty( $client_data->county )     ? $client_data->county     : '';
-			$event_data['_mdjm_event_venue_postcode'] = ! empty( $client_data->postcode )   ? $client_data->postcode   : '';
+			$event_data['_mdjm_event_venue_phone']		= ! empty( $client_data->phone1 )		? $client_data->phone1		: '';
+			$event_data['_mdjm_event_venue_email']		= ! empty( $client_data->user_email )	? $client_data->user_email	: '';
+			$event_data['_mdjm_event_venue_address1']	= ! empty( $client_data->address1 )		? $client_data->address1	: '';
+			$event_data['_mdjm_event_venue_address2']	= ! empty( $client_data->address2 )		? $client_data->address2	: '';
+			$event_data['_mdjm_event_venue_town']		= ! empty( $client_data->town )			? $client_data->town		: '';
+			$event_data['_mdjm_event_venue_county']		= ! empty( $client_data->county )		? $client_data->county		: '';
+			$event_data['_mdjm_event_venue_postcode']	= ! empty( $client_data->postcode ) 	? $client_data->postcode	: '';
 
 		}
 
 	}
-
-	/**
-	 * Travel data
-	 */
-	$travel_fields = mdjm_get_event_travel_fields();
-
-	foreach( $travel_fields as $travel_field )	{
-		$field       = 'travel_' . $travel_field;
-
-		$travel_data[ $travel_field ] = ! empty( $_POST[ $field ] ) ? $_POST[ $field ] : '';
-
-		if ( 'cost' == $travel_field && ! empty( $_POST[ $field ] ) )	{
-			$travel_data[ $travel_field ] = mdjm_sanitize_amount( $_POST[ $field ] );
-		}
-	}
-
-	$event_data['_mdjm_event_travel_data'] = $travel_data;
-error_log( var_export( $event_data['_mdjm_event_travel_data'], true ), 0 );
+	
 	/**
 	 * Prepare the remaining event meta data.
 	 */
@@ -1290,7 +1273,7 @@ error_log( var_export( $event_data['_mdjm_event_travel_data'], true ), 0 );
 			if ( $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' )	{
 				$value = mdjm_sanitize_amount( $value );
 			}
-		
+					
 			$event_data[ $key ] = $value;
 
 		}
