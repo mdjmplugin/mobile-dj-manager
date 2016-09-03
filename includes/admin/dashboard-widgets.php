@@ -181,38 +181,3 @@ function f_mdjm_dash_availability()	{
 	</table>
 	<?php	
 }
-
-/**
- * Add event count to At a glance widget
- *
- * @since	1.4
- * @return	void
- */
-function mdjm_dashboard_at_a_glance_widget( $items ) {
-	$num_posts = wp_count_posts( 'mdjm-event' );
-	$count     = 0;
-	$statuses  = mdjm_all_event_status();
-
-	foreach( $statuses as $status => $label )	{
-		if ( $num_posts->$status )	{
-			$count += $num_posts->$status;
-		}
-	}
-
-	if ( $num_posts && $count > 0 ) {
-		$text = _n( '%s ' . mdjm_get_label_singular(), '%s ' . mdjm_get_label_plural(), $count, 'mobile-dj-manager' );
-
-		$text = sprintf( $text, number_format_i18n( $count ) );
-
-		if ( mdjm_employee_can( 'read_events' ) ) {
-			$text = sprintf( '<a class="event-count" href="edit.php?post_type=mdjm-event">%1$s</a>', $text );
-		} else {
-			$text = sprintf( '<span class="event-count">%1$s</span>', $text );
-		}
-
-		$items[] = $text;
-	}
-
-	return $items;
-} // mdjm_dashboard_at_a_glance_widget
-add_filter( 'dashboard_glance_items', 'mdjm_dashboard_at_a_glance_widget', 1 );

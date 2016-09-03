@@ -12,41 +12,6 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Adds an entry to the playlist from the admin interface.
- *
- * @since	1.4
- * @param	arr		Array of form post data.
- */
-function mdjm_add_event_playlist_entry_action( $data )	{
-	if ( empty( $data['entry_song'] ) || empty( $data['entry_artist'] ) )	{
-		$message = 'adding_song_failed';
-	}
-	elseif ( ! wp_verify_nonce( $data['mdjm_nonce'], 'add_playlist_entry' ) )	{
-		$message = 'security_failed';
-	} else	{
-		if( mdjm_store_playlist_entry( $data ) )	{
-			$message = 'song_added';
-		}
-		else	{
-			$message = 'adding_song_failed';
-		}
-	}
-	
-	$url = remove_query_arg( array( 'mdjm-action', 'mdjm_nonce', 'mdjm-message' ) );
-	
-	wp_redirect( 
-		add_query_arg( 
-			array(
-				'mdjm-message'  => $message
-			),
-			$url
-		)
-	);
-	die();
-} // mdjm_add_event_playlist_entry_action
-add_action( 'mdjm-add_playlist_entry', 'mdjm_add_event_playlist_entry_action' );
-
-/**
  * Process song removals from bulk action
  *
  * @since	1.3

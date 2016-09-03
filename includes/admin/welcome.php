@@ -67,7 +67,7 @@ class MDJM_Welcome {
 
 		// Getting Started Page
 		add_dashboard_page(
-			__( 'Getting started with MDJM Event Management', 'mobile-dj-manager' ),
+			__( 'Getting started with MDJM Event Managements', 'mobile-dj-manager' ),
 			__( 'Getting started with MDJM Event Management', 'mobile-dj-manager' ),
 			$this->minimum_capability,
 			'mdjm-getting-started',
@@ -131,13 +131,7 @@ class MDJM_Welcome {
 			<p class="about-text">
 				<?php _e( 'Thank you for updating to the latest version!', 'mobile-dj-manager' ); ?>
                 <br />
-                <?php
-                	printf(
-						__( 'MDJM Event Management %s is ready to make your %s business even more efficient!', 'mobile-dj-manager' ),
-						$display_version,
-						mdjm_get_label_plural( true )
-					);
-				?>
+                <?php printf( __( 'MDJM Event Management %s is ready to make your events business even more efficient!', 'mobile-dj-manager' ), $display_version ); ?>
 			</p>
 		</div>
 		<?php
@@ -175,73 +169,55 @@ class MDJM_Welcome {
 		?>
 		<div class="wrap about-wrap mdjm-about-wrap">
 			<?php
-				// Load welcome message and content tabs
+				// load welcome message and content tabs
 				$this->welcome_message();
 				$this->tabs();
 			?>
-
 			<div class="changelog">
-				<h3><?php _e( 'Reports &amp; Export', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Employee Management', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-reports.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-employee-list.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php _e( "Knowing how your business is performing is key to its long term success. With MDJM Event Management version 1.4 we've provided easy access to a number of reports so you have this information at your fingertips at all times.", 'mobile-dj-manager' ); ?></p>
+						<p><?php _e( 'With MDJM Event Management version 1.3, you now have greater management of your employees.', 'mobile-dj-manager' );?></p>
 
-						<p><?php printf( __( "Reports include income and expenditure, most popular %s types, most successful enquiry sources and more.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+						<h4><?php _e( 'An Improved Interface', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'The intuitive employee interface enables you to easily manage your employees, add  new or remove existing, change their role, or assign additional roles.', 'mobile-dj-manager' );?></p>
 
-						<p><?php printf( __( "Export %s, transaction, client and employee data to CSV files enabling you to subsequently import into other systems, such as accounting tools.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+						<h4><?php _e( 'Granular Permission Management', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Determine which actions each employee role is able to fulfill. For example, maybe you have an admin who needs to be able to view all events and employees to help with logistics, but not edit them. Or you want your accountant to be able to read all transactions but not see anything else.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'Additionally, users assigned the <em>Administrator</em> role are no longer assumed to be employees unless you specifically specify that they are.', 'mobile-dj-manager' );?></p>
+
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Travel Data', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Theme Templates', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-travel-costs.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-mdjm-templates.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php printf( __( 'From version 1.4 you can configure settings to automatically add the cost of %1$s travel to the overall %1$s cost.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+						<p><?php printf( __( 'MDJM Event Management version 1.3 enables greater customisation of %s pages.', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
 
-						<p><?php _e( "Travel costs are determined by connecting to Google's distance matrix API and calculating the distance from the primary employees address (or the default address per settings) to the venue address. You define the per cost per mile/kilometer and a few other settings to match your preferences and MDJM will do the rest for you.", 'mobile-dj-manager' ); ?></p>
-                        <p><?php printf( __( "Handy shortcodes (see below) are also available to provide directions to a venue which you can include within automated emails received by employees ahead of an %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your [child] theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
+                        <p><?php _e( "Use a child theme and you won't have to worry about your changes being overwritten when the MDJM plugin is update or your currently active theme is updated.", 'mobile-dj-manager' ); ?></p>
+                        <p><?php _e( 'To make customisations even easier, all MDJM content tags are fully supported and if you use child themes, you can ensure that any changes you make are never overwritten with plugin or theme updates.', 'mobile-dj-manager' ); ?></p>
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Packages &amp; Addons', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Easily Accessible Statistics', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-list.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/13-dashboard-overview-widget.png'; ?>" class="mdjm-welcome-screenshots"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business and products.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'In addition you can utilise a variety of plugins to show off your business products effectively and entice more clients to get in touch.', 'mobile-dj-manager' );?></p>
-
-						<h4><?php _e( 'Variable Pricing', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( "Assign variable prices to your packages and addons depending on month's of the year.", 'mobile-dj-manager' );?><br />
-							<?php _e( 'Perhaps you have a full wedding package that is cheaper during winter months than in the summer.', 'mobile-dj-manager' ); ?></p>
-
-						<h4><?php _e( 'Set Availability Options', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'You can now specify the conditions under which individual packages and addons are available for use. Options include availability during certain months of the year, for specific event types, and for individual employees.', 'mobile-dj-manager' );?></p>                        
-					</div>
-				</div>
-			</div>
-
-			<div class="changelog">
-				<h3><?php _e( 'REST API', 'mobile-dj-manager' );?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-rest-api.png'; ?>"/>
-					</div>
-					<div class="feature-section-content">
-						<p><?php _e( 'MDJM Event Management version 1.4 extends the WordPress REST API enabling easy, yet secure, access to a multitude of data via third party tools and integrations.', 'mobile-dj-manager' ); ?></p>
-
-						<p><?php printf( __( 'Endpoints are available to retrieve data for %s, clients, employees, packages and add-ons, and availability. For more information visit the <a href="%s" target="_blank">Support Documentation</a>', 'mobile-dj-manager' ), mdjm_get_label_plural(), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); ?></p>
+						<p><?php _e( 'From the moment you login you have important statistics visible to advise you how you are performing Month to Date, Year to Date and in comparison to the previous year.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'The intuitive dashboard widget displays the number of enquiries received and converted as well as the number of events completed within these timeframes and in addition, the amount your business has earned is readily available to you.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
@@ -251,16 +227,30 @@ class MDJM_Welcome {
                 <hr />
 				<div class="feature-section three-col">
 					<div class="col">
-						<h4><?php _e( 'Travel Content Tags', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( '<code>{travel_cost}</code>, <code>{travel_directions}</code>, <code>{travel_distance}</code>, and <code>{travel_time}</code> content tags added.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'More Content Tags', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Even more content tags added to make displaying dynamic content quick and easy on any page.', 'mobile-dj-manager' );?></p>
 					</div>
                     <div class="col">
-						<h4><?php _e( 'Playlist Entries', 'mobile-dj-manager' );?></h4>
-						<p><?php printf( __( 'Employees can now add entries to a playlist via admin. Navigate to the %s screen and click on the playlist entries column.' ,'mobile-dj-manager' ), mdjm_get_label_plural( true ) );?></p>
+						<h4><?php _e( 'Better use of WordPress Taxonomies', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Playlist Categories and Enquiry Sources are now custom taxonomies enabling better reporting.' ,'mobile-dj-manager' );?></p>
 					</div>
 					<div class="col">
-						<h4><?php _e( 'Improved Upgrade Procedures', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Re-designed plugin update procedures providing a cleaner and more reliable upgrade procedure.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Developer Friendly Code', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Well formatted and documented code with a large number of hooks to enable developer customisations and integrations.', 'mobile-dj-manager' );?></p>
+					</div>
+					<div class="clear">
+						<div class="col">
+							<h4><?php _e( 'Settings API', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( 'Hook into our settings API to easily add settings for your MDJM extension with just a few lines of code.', 'mobile-dj-manager' );?></p>
+						</div>
+						<div class="col">
+							<h4><?php _e( 'Playlist Entries are Posts', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( "We've removed the custom database table that stored playlist entries and imported all your entries as WordPress posts for better integration.", 'mobile-dj-manager' );?></p>
+						</div>
+						<div class="col">
+							<h4><?php _e( 'Improved Event Filters', 'mobile-dj-manager' );?></h4>
+							<p><?php _e( 'Easily filter your events listings by date, type, client, and employee.' ,'mobile-dj-manager' );?></p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -360,7 +350,7 @@ class MDJM_Welcome {
 				<h3><?php printf( __( 'Create %s Packages &amp; Add-ons', 'mobile-dj-manager' ), mdjm_get_label_singular() );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-options.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/mdjm-edit-packages.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<h4><?php printf( __( '%1$s Packages','mobile-dj-manager' ), mdjm_get_label_singular() ); ?></h4>
@@ -368,13 +358,13 @@ class MDJM_Welcome {
 
 						<h4><?php _e( 'Add-ons', 'mobile-dj-manager' );?></h4>
 						<p><?php printf( __( 'Add-ons are additional equipment items that can be selected for an %1$s. Each add-on is assigned an individual price and when selected the %1$s %2$s and %3$s are automatically and dynamically re-calculated.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_balance_label(), mdjm_get_deposit_label() );?></p>
-                        <p><?php printf( __( 'Once you have enabled %1$s Packages &amp; Add-ons within the <a href="%3$s">MDJM %2$s Settings page</a>, manage them within <a href="%4$s">MDJM %2$s &rarr; Equipment Packages</a> and a href="%5$s">MDJM %2$s &rarr; Equipment Add-ons</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural(), admin_url( 'admin.php?page=mdjm-settings&tab=events' ), admin_url( 'edit.php?post_type=mdjm-package' ), admin_url( 'edit.php?post_type=mdjm-addon' ) ); ?></p>
+                        <p><?php printf( __( 'Once you have enabled %1$s Packages &amp; Add-ons within the <a href="%3$s">MDJM %2$s Settings page</a>, manage them within <a href="%4$s">MDJM %2$s &rarr; Equipment Packages</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural(), admin_url( 'admin.php?page=mdjm-settings&tab=events' ), admin_url( 'admin.php?&page=mdjm-packages' ) ); ?></p>
 					</div>
 				</div>
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Even More Features', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Event More Features', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
 						<h4><?php _e( 'Integrated Client Portal','mobile-dj-manager' );?></h4>

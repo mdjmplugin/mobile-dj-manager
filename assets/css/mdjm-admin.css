@@ -29,10 +29,12 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-small	{
 	font-size: 11px;	
 }
-.mdjm-loader	{
-	background-image: url(../images/loading.gif);
+#mdjm-loader	{
+	max-width: 20px;
+	margin: auto;
+	border: none;
+	background-image: url('../images/loading.gif');
 	background-repeat: no-repeat;
-	background-position: 98% 50%;
 }
 
 .mdjm-new	{
@@ -327,12 +329,6 @@ checkbox.mdjm-form-error {
     zoom: 1
 }
 
-.mdjm_remove_repeatable { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
-.mdjm_remove_repeatable:active,
-.mdjm_remove_repeatable:hover {
-	background-position: -10px 0!important
-}
-
 .mdjm_form_fields { position: relative; }
 .mdjm_form_fields input,
 .mdjm_form_fields select,
@@ -420,124 +416,3 @@ checkbox.mdjm-form-error {
 #mdjm-event-actions #event-type-add { cursor: pointer; }
 
 #mdjm-new-event-type-row { display: none; vertical-align: top; }
-
-/* System Info page styles
--------------------------------------------------------------- */
-#system-info-textarea { width: 800px; height: 400px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
-
-/* Reports Styles
--------------------------------------------------------------- */
-
-#mdjm-dashboard-widgets-wrap .postbox h3 {
-	cursor: default;
-}
-#mdjm-graphs-date-options,
-#mdjm-date-range-options {
-	float: left;
-}
-#mdjm-date-range-options span {
-	float: left;
-	line-height: 24px;
-	height: 24px;
-	margin-right: 6px;
-}
-.mdjm-import-export-form {
-	position: relative;
-}
-.mdjm-import-export-form .mdjm-progress {
-	background: #ddd;
-	position: absolute;
-	bottom: 15px;
-	width: 95%;
-	height: 15px;
-}
-.mdjm-import-export-form .mdjm-progress div {
-	background: #ccc;
-	height: 100%;
-	width: 0;
-}
-.mdjm-import-export-form .notice-wrap {
-	background-color: #f4f4f4;
-	border-style: solid;
-	border-width: 1px 0;
-	border-color: #eae9e9;
-	padding: 12px 12px 4px;
-	overflow: auto;
-	margin: 20px -12px -23px;
-}
-.mdjm-import-export-form .notice-wrap .spinner {
-	margin: 4px 10px 8px;
-}
-.admin-color-fresh .mdjm-import-export-form .mdjm-progress div {
-	background: #0073aa;
-}
-.admin-color-light .mdjm-import-export-form .mdjm-progress div {
-	background: #888;
-}
-.admin-color-blue .mdjm-import-export-form .mdjm-progress div {
-	background: #096484;
-}
-.admin-color-coffee .mdjm-import-export-form .mdjm-progress div {
-	background: #c7a589;
-}
-.admin-color-ectoplasm .mdjm-import-export-form .mdjm-progress div {
-	background: #a3b745;
-}
-.admin-color-midnight .mdjm-import-export-form .mdjm-progress div {
-	background: #e14d43;
-}
-.admin-color-sunrise .mdjm-import-export-form .mdjm-progress div {
-	background: #dd823b;
-}
-#mdjm-graphs-filter label {
-	vertical-align: inherit;
-}
-#mdjm-graphs-filter .graph-option-section {
-	float: left;
-	line-height: 2.5em;
-	padding-right: 5px;
-}
-.mdjm-mix-totals {
-	background-color: #fff;
-	border: 1px solid #e5e5e5;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-	padding: 10px;
-}
-.mdjm-mix-chart {
-	display: inline-block;
-	width: 49%;
-	vertical-align: top;
-}
-.mdjm-graph-notes {
-	color: #9c9c9c;
-}
-.mdjm-graph-notes span {
-	display: block;
-}
-.mdjm-pie-graph .legend {
-	display: none;
-}
-.mdjm-pie-legend {
-	overflow: auto;
-	margin-top: 10px;
-}
-.mdjm-legend-item-wrapper {
-	color: #333;
-	display: inline-block;
-	font-size: 8pt;
-	padding: 2px 5px 0px 5px;
-	width: 48%;
-	height: 20px;
-}
-.mdjm-legend-color {
-	border: 1px solid #cfcfcf;
-	display: inline-block;
-	margin-right: 5px;
-	width: 20px;
-	height: 15px;
-}
-.mdjm-pie-legend-item {
-	display: inline-block;
-	vertical-align: top;
-	width: 80%;
-}

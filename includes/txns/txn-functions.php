@@ -283,39 +283,6 @@ function mdjm_get_txns( $args = array() )	{
 } // mdjm_get_txns
 
 /**
- * Retrieve the total transaction count.
- *
- * @since	1.4
- * @param	str|arr	$status			Post statuses.
- * @param	arr		$txn_statuses	Txn statuses to count. 'any' to count all statuses
- * @return	int		Transaction count
- */
-function mdjm_txn_count( $status = array( 'mdjm-income', 'mdjm-expenditure' ), $txn_statuses = 'any' )	{
-	$txn_args = array(
-		'post_type'      => 'mdjm-transaction',
-		'post_status'    => $status,
-		'posts_per_page' => -1
-	);
-
-	if ( is_array( $txn_statuses ) )	{
-		$meta_query = array( 'relation' => 'OR' );
-		
-		foreach( $txn_statuses as $txn_status )	{
-			$meta_query[] = array(
-				'key'   => '_mdjm_txn_status',
-				'value' => $txn_status
-			);
-		}
-	}
-
-	$txn_args = apply_filters( 'mdjm_txn_count_args', $txn_args );
-
-	$txns = new WP_Query( $txn_args );
-
-	return $txns->found_posts;
-} // mdjm_txn_count
-
-/**
  * Return the type of transaction.
  *
  * @since	1.3

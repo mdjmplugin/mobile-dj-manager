@@ -41,44 +41,45 @@ function mdjm_do_availability_check( $date, $employees='', $roles='', $status=''
  */
 function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{	
 	
-	if ( empty( $employee_id ) && is_user_logged_in() )	{
+	if( empty( $employee_id ) && is_user_logged_in() )	{
 		$employee_id = get_current_user_id();
 	}
 	
-	if ( empty( $employee_id ) )	{
+	if( empty( $employee_id ) )	{
 		wp_die( __( 'Ooops, an error occured.', 'mobile-dj-manager' ) );
 	}
 	
-	if ( empty( $status ) )	{
+	if( empty( $status ) )	{
 		$status = mdjm_get_option( 'availability_status', 'any' );
 	}
 	
-	$event = mdjm_get_events(
+	$event = get_posts(
 		array(
-			'post_status'    => $status,
-			'posts_per_page' => 1,
-			'meta_key'       => '_mdjm_event_date',
-			'meta_value'     => date( 'Y-m-d', $date ),
-			'meta_query'     => array(
-				'relation' => 'OR',
+			'post_type' 		=> 'mdjm-event',
+			'post_status'	  => $status,
+			'posts_per_page'   => 1,
+			'meta_key'		 => '_mdjm_event_date',
+			'meta_value'	 => date( 'Y-m-d', $date ),
+			'meta_query'	   => array(
+				'relation'	 => 'OR',
 				array(
-					'key'     => '_mdjm_event_dj',
-					'value'   => $employee_id,
-					'compare' => '=',
-					'type'    => 'NUMERIC'
+					'key'	  => '_mdjm_event_dj',
+					'value'	=> $employee_id,
+					'compare'  => '=',
+					'type'	 => 'NUMERIC'
 				),
 				array(
-					'key'     => '_mdjm_event_employees',
-					'value'   => sprintf( ':"%s";', $employee_id ),
-					'compare' => 'LIKE'
-				)
+					'key'	  => '_mdjm_event_employees',
+					'value'		=> sprintf( ':"%s";', $employee_id ),
+					'compare'  => 'LIKE'
+				),
 			)
 		)
 	);
 	
 	$event = apply_filters( 'mdjm_employee_is_working', $event, $date, $employee_id );
 	
-	if ( $event )	{
+	if( $event )	{
 		return true;
 	}
 	
@@ -102,12 +103,9 @@ function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
 	
 	$date = date( 'Y-m-d', $date );
 	
-	$query = "
-		SELECT COUNT(*) FROM 
-		" . $wpdb->prefix . "mdjm_avail 
-		WHERE DATE(date_from) = '$date' 
-		AND `user_id` = '$employee_id'
-	";
+	$query = "SELECT COUNT(*) FROM " . $wpdb->prefix . "mdjm_avail
+			  WHERE DATE(date_from) = '$date' 
+			  AND `user_id` = '$employee_id'";
 			  			  
 	$result = $wpdb->get_var( $query );
 		
@@ -116,6 +114,5 @@ function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
 	if( $result )	{
 		return true;
 	}
-
 	return false;
 } // mdjm_employee_is_on_vacation

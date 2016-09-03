@@ -99,7 +99,7 @@ function mdjm_store_playlist_entry( $details )	{
 		'uploaded'  => false,
 	);
 	
-	(int)$term  = isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
+	(int)$term   = isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
 	$event_id	= isset( $details['entry_event'] )		? $details['entry_event']       : '';
 	
 	// Add the playlist entry
