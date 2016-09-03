@@ -93,7 +93,7 @@ function mdjm_show_upgrade_notice()	{
 
 		if ( version_compare( $mdjm_version, '1.4', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_packages' ) )	{
 			printf(
-				'<div class="notice notice-warning"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %s Packages and Add-ons. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %s Packages and Add-ons. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
 				mdjm_get_label_singular( true ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_packages&&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
