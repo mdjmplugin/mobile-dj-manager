@@ -44,6 +44,7 @@ function mdjm_display_event_playlist_page()	{
 			}
             
 			$playlist_obj->display();
+			$playlist_obj->entry_form();
             ?>
         </form>
         <br class="clear">

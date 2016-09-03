@@ -99,7 +99,7 @@ function mdjm_count_events( $args = array() ) {
 		'employee'   => null,
 		'client'     => null,
 		's'          => null,
-		'start-date' => null, // This is the post date - Enquiry received date
+		'start-date' => null, // This is the post date aka Enquiry received date
 		'end-date'   => null,
 		'date'       => null, // This is an event date or an array of dates if we want to search between
 		'type'       => null,
@@ -121,6 +121,7 @@ function mdjm_count_events( $args = array() ) {
 				AND m.meta_value = '{$args['employee']}'
 				OR m.meta_key = '_mdjm_event_employees'
 				AND m.meta_value LIKE '%:\"{$args['employee']}\";%'";
+
 	// Count events for a specific client
 	} elseif ( ! empty( $args['client'] ) ) {
 
@@ -164,7 +165,7 @@ function mdjm_count_events( $args = array() ) {
 
 	}
 
-	// Limit events count by received date
+	// Limit event count by received date
 	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '/' ) ) {
 
 		$date_parts = explode( '/', $args['start-date'] );
@@ -206,7 +207,9 @@ function mdjm_count_events( $args = array() ) {
 	}
 
 	if ( ! empty( $args['date'] ) )	{
+
 		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+
 		if ( is_array( $args['date'] ) )	{
 			$start_date = new DateTime( $args['date'][0] );
 			$end_date   = new DateTime( $args['date'][1] );
@@ -218,14 +221,18 @@ function mdjm_count_events( $args = array() ) {
 				$start_date->format( 'Y-m-d' ),
 				$end_date->format( 'Y-m-d' )
 			);
+
 		} else	{
+
 			$date = new DateTime( $args['date'] );
 			$where .= $wpdb->prepare( "
 				AND m.meta_key = '_mdjm_event_date'
 				AND m.meta_value = '%s'",
 				$date->format( 'Y-m-d' )
 			);
+
 		}
+
 	}
 
 	$where = apply_filters( 'mdjm_count_events_where', $where );
@@ -241,15 +248,17 @@ function mdjm_count_events( $args = array() ) {
 	$cache_key = md5( $query );
 
 	$count = wp_cache_get( $cache_key, 'counts' );
+
 	if ( false !== $count ) {
 		return $count;
 	}
 
 	$count = $wpdb->get_results( $query, ARRAY_A );
-
 	$stats    = array();
+	$total    = 0;
 	$statuses = mdjm_all_event_status();
-	if( isset( $statuses['private'] ) && empty( $args['s'] ) ) {
+
+	if ( isset( $statuses['private'] ) && empty( $args['s'] ) ) {
 		unset( $statuses['private'] );
 	}
 
@@ -258,6 +267,9 @@ function mdjm_count_events( $args = array() ) {
 	}
 
 	foreach ( (array) $count as $row ) {
+		if ( ! array_key_exists( $row['post_status'], mdjm_all_event_status() ) )	{
+			continue;
+		}
 		$stats[ $row['post_status'] ] = $row['num_posts'];
 	}
 
@@ -1628,7 +1640,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 			continue;
 		}
 		
-		if ( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_travel_cost' )	{
+		if ( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
 			$value = $value;
 		} elseif ( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );
@@ -1637,6 +1649,8 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		} elseif ( $key == '_mdjm_event_package' && ! empty( $value ) )	{
 			$value = sanitize_text_field( strtolower( $value ) );	
 		} elseif ( $key == '_mdjm_event_addons' && ! empty( $value ) )	{
+			$value = $value;
+		} elseif ( $key == '_mdjm_event_travel_data' )	{
 			$value = $value;
 		} elseif ( ! strpos( $key, 'notes' ) && ! empty( $value ) )	{
 			$value = sanitize_text_field( ucwords( $value ) );

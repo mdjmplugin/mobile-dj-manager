@@ -47,6 +47,24 @@ function mdjm_admin_notices() {
 		);
 	}
 
+	if( isset( $_GET['mdjm-message'] ) && 'song_added' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-added-song',
+			__( 'Entry added to playlist.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+
+	if( isset( $_GET['mdjm-message'] ) && 'adding_song_failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-adding-song-failed',
+			__( 'Could not add entry to playlist.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+
 	if( isset( $_GET['mdjm-message'] ) && 'song_removed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',

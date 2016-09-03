@@ -181,7 +181,7 @@ class MDJM_Welcome {
 			?>
 
 			<div class="changelog">
-				<h3><?php _e( 'Reporting', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Reports &amp; Export', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
 						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-reports.png'; ?>"/>
@@ -190,6 +190,8 @@ class MDJM_Welcome {
 						<p><?php _e( "Knowing how your business is performing is key to its long term success. With MDJM Event Management version 1.4 we've provided easy access to a number of reports so you have this information at your fingertips at all times.", 'mobile-dj-manager' ); ?></p>
 
 						<p><?php printf( __( "Reports include income and expenditure, most popular %s types, most successful enquiry sources and more.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+
+						<p><?php printf( __( "Export %s, transaction, client and employee data to CSV files enabling you to subsequently import into other systems, such as accounting tools.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -204,7 +206,7 @@ class MDJM_Welcome {
 						<p><?php printf( __( 'From version 1.4 you can configure settings to automatically add the cost of %1$s travel to the overall %1$s cost.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
 
 						<p><?php _e( "Travel costs are determined by connecting to Google's distance matrix API and calculating the distance from the primary employees address (or the default address per settings) to the venue address. You define the per cost per mile/kilometer and a few other settings to match your preferences and MDJM will do the rest for you.", 'mobile-dj-manager' ); ?></p>
-                        <p><?php printf( __( "Handy shortcodes are also available to provide directions to a venue which you can include within automated emails received by employees ahead of an %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+                        <p><?php printf( __( "Handy shortcodes (see below) are also available to provide directions to a venue which you can include within automated emails received by employees ahead of an %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -216,7 +218,7 @@ class MDJM_Welcome {
 						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-list.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
-						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business products.', 'mobile-dj-manager' );?></p>
+						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business and products.', 'mobile-dj-manager' );?></p>
                         <p><?php _e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' );?></p>
                         <p><?php _e( 'In addition you can utilise a variety of plugins to show off your business products effectively and entice more clients to get in touch.', 'mobile-dj-manager' );?></p>
 
@@ -251,30 +253,16 @@ class MDJM_Welcome {
                 <hr />
 				<div class="feature-section three-col">
 					<div class="col">
-						<h4><?php _e( 'More Content Tags', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Even more content tags added to make displaying dynamic content quick and easy on any page.', 'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Travel Content Tags', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( '<code>{travel_cost}</code>, <code>{travel_directions}</code>, <code>{travel_distance}</code>, and <code>{travel_time}</code> content tags added.', 'mobile-dj-manager' );?></p>
 					</div>
                     <div class="col">
-						<h4><?php _e( 'Better use of WordPress Taxonomies', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Playlist Categories and Enquiry Sources are now custom taxonomies enabling better reporting.' ,'mobile-dj-manager' );?></p>
+						<h4><?php _e( 'Playlist Entries', 'mobile-dj-manager' );?></h4>
+						<p><?php printf( __( 'Employees can now add entries to a playlist via admin. Navigate to the %s screen and click on the playlist entries column.' ,'mobile-dj-manager' ), mdjm_get_label_plural( true ) );?></p>
 					</div>
 					<div class="col">
-						<h4><?php _e( 'Developer Friendly Code', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'Well formatted and documented code with a large number of hooks to enable developer customisations and integrations.', 'mobile-dj-manager' );?></p>
-					</div>
-					<div class="clear">
-						<div class="col">
-							<h4><?php _e( 'Settings API', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( 'Hook into our settings API to easily add settings for your MDJM extension with just a few lines of code.', 'mobile-dj-manager' );?></p>
-						</div>
-						<div class="col">
-							<h4><?php _e( 'Playlist Entries are Posts', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( "We've removed the custom database table that stored playlist entries and imported all your entries as WordPress posts for better integration.", 'mobile-dj-manager' );?></p>
-						</div>
-						<div class="col">
-							<h4><?php _e( 'Improved Event Filters', 'mobile-dj-manager' );?></h4>
-							<p><?php _e( 'Easily filter your events listings by date, type, client, and employee.' ,'mobile-dj-manager' );?></p>
-						</div>
+						<h4><?php _e( 'Improved Upgrade Procedures', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'Re-designed plugin update procedures providing a cleaner and more reliable upgrade procedure.', 'mobile-dj-manager' );?></p>
 					</div>
 				</div>
 			</div>
@@ -388,7 +376,7 @@ class MDJM_Welcome {
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Event More Features', 'mobile-dj-manager' );?></h3>
+				<h3><?php _e( 'Even More Features', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
 						<h4><?php _e( 'Integrated Client Portal','mobile-dj-manager' );?></h4>

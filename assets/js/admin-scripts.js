@@ -100,6 +100,59 @@ jQuery(document).ready(function ($) {
 
 	};
 
+	// Set travel data for event
+	var setTravelData = function()	{
+	if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
+		var venue = [
+			$('#venue_address1').val(),
+			$('#venue_address2').val(),
+			$('#venue_town').val(),
+			$('#venue_county').val(),
+			$('#venue_postcode').val(),
+		];
+	} else	{
+		var venue = $('#venue_id').val();
+	}
+	var postData = {
+		employee_id : $('#_mdjm_event_dj').val(),
+		venue : venue,
+		action  : 'mdjm_update_travel_data'
+	};
+
+	$.ajax({
+		type       : 'POST',
+		dataType   : 'json',
+		data       : postData,
+		url        : ajaxurl,
+		success: function (response) {
+			if(response.type == 'success') {
+				$(".mdjm-travel-distance").parents("tr").show();
+				$('.mdjm-travel-directions').parents("tr").show();
+				$('.mdjm-travel-distance').html(response.distance);
+				$('.mdjm-travel-time').html(response.time);
+				$('.mdjm-travel-cost').html(response.cost);
+				$("#travel_directions").attr("href", response.directions_url);
+				$('#mdjm_travel_distance').val(response.distance);
+				$('#mdjm_travel_time').val(response.time);
+				$('#mdjm_travel_cost').val(response.raw_cost);
+				$('#mdjm_travel_directions_url').val(response.directions_url);
+			} else	{
+				$(".mdjm-travel-distance").parents("tr").hide();
+				$('#travel-directions').attr("href", '' );
+				$('.mdjm-travel-directions').parents("tr").hide();
+				$('#mdjm_travel_distance').val('');
+				$('#mdjm_travel_time').val('');
+				$('#mdjm_travel_cost').val('');
+				$('#mdjm_travel_directions_url').val('');
+			}
+		}
+	}).fail(function (data) {
+		if ( window.console && window.console.log ) {
+			console.log( data );
+		}
+	});
+};
+
 	/**
 	 * General Settings Screens JS
 	 */
@@ -504,58 +557,6 @@ jQuery(document).ready(function ($) {
 				$('#_mdjm_event_package').trigger('change');
 			});
 
-			var setTravelData = function()	{
-				if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
-					var venue = [
-						$('#venue_address1').val(),
-						$('#venue_address2').val(),
-						$('#venue_town').val(),
-						$('#venue_county').val(),
-						$('#venue_postcode').val(),
-					];
-				} else	{
-					var venue = $('#venue_id').val();
-				}
-				var postData = {
-					employee_id : $('#_mdjm_event_dj').val(),
-					venue : venue,
-					action  : 'mdjm_update_travel_data'
-				};
-
-				$.ajax({
-					type       : 'POST',
-					dataType   : 'json',
-					data       : postData,
-					url        : ajaxurl,
-					success: function (response) {
-						if(response.type == 'success') {
-							$(".mdjm-travel-distance").parents("tr").show();
-							$('.mdjm-travel-directions').parents("tr").show();
-							$('.mdjm-travel-distance').html(response.distance);
-							$('.mdjm-travel-time').html(response.time);
-							$('.mdjm-travel-cost').html(response.cost);
-							$("#travel_directions").attr("href", response.directions_url);
-							$('#mdjm_travel_distance').val(response.distance);
-							$('#mdjm_travel_time').val(response.time);
-							$('#mdjm_travel_cost').val(response.raw_cost);
-							$('#mdjm_travel_directions_url').val(response.directions_url);
-						} else	{
-							$(".mdjm-travel-distance").parents("tr").hide();
-							$('#travel-directions').attr("href", '' );
-							$('.mdjm-travel-directions').parents("tr").hide();
-							$('#mdjm_travel_distance').val('');
-							$('#mdjm_travel_time').val('');
-							$('#mdjm_travel_cost').val('');
-							$('#mdjm_travel_directions_url').val('');
-						}
-					}
-				}).fail(function (data) {
-					if ( window.console && window.console.log ) {
-						console.log( data );
-					}
-				});
-			};
-
 			var setClientAddress = function(){
 				if( $('#client_name').length )	{
 					var client = $('#client_name').val();
@@ -826,7 +827,7 @@ jQuery(document).ready(function ($) {
 							console.log( data );
 						}
 					});
-
+					setTravelData();
 				}
 				$('#_mdjm_event_package').trigger('change');
 			});

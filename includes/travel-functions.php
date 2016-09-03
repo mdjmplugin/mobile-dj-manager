@@ -257,6 +257,26 @@ function mdjm_get_event_travel_fields()	{
 } // mdjm_get_event_travel_fields
 
 /**
+ * Retrieve event travel data.
+ *
+ * @since	1.4
+ * @param	int		$event_id	Event ID.
+ * @param	str		$field		The travel field to retrieve.
+ * @return	str
+ */
+function mdjm_get_event_travel_data( $event_id, $field = 'cost' )	{
+	$travel_data = get_post_meta( $event_id, '_mdjm_event_travel_data', true );
+
+	if ( $travel_data )	{
+		if ( ! empty( $travel_data[ $field ] ) )	{
+			return apply_filters( 'mdjm_event_travel_' . $field, $travel_data[ $field ], $event_id );
+		}
+	}
+
+	return false;
+} // mdjm_get_event_travel_fields
+
+/**
  * Adds the travel data row to the venue details metabox on the event screen.
  *
  * @since	1.4

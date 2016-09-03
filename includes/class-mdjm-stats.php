@@ -38,7 +38,6 @@ class MDJM_Stats	{
 	 */
 	public $start_date;
 
-
 	/**
 	 * The end date for the period we're getting stats for
 	 *
@@ -1066,7 +1065,7 @@ class MDJM_Stats	{
 	 * @return	int		$total		The total value for all transactions that meet the criteria
 	 */
 	public function get_enquiry_sources_by_date( $period = 'this_week' )	{
-		
+
 		$sources = get_terms(
 			array(
 				'taxonomy'    => 'enquiry-source',

@@ -608,6 +608,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_total_cost'
 		),
 		array(
+			'tag'         => 'travel_cost',
+			'description' => __( 'The cost of travel for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_travel_cost'
+		),
+		array(
 			'tag'         => 'venue',
 			'description' => __( 'The name of the event venue', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_venue'
@@ -2051,6 +2056,86 @@ function mdjm_content_tag_total_cost( $event_id='' )	{
 	
 	return $return;
 } // mdjm_content_tag_total_cost
+
+/**
+ * Content tag: travel_cost.
+ * The travel cost for the event.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Formatted event travel cost.
+ */
+function mdjm_content_tag_travel_cost( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_cost = mdjm_get_event_travel_data( $event_id );
+	
+	if ( ! empty( $travel_cost ) )	{
+		return mdjm_currency_filter( mdjm_format_amount( $travel_cost ) );
+	}
+} // mdjm_content_tag_travel_cost
+
+/**
+ * Content tag: travel_directions.
+ * A URL for the travel directions to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		URL to Google Maps directions.
+ */
+function mdjm_content_tag_travel_directions( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_directions = mdjm_get_event_travel_data( $event_id, 'directions_url' );
+	
+	if ( ! empty( $travel_directions ) )	{
+		return $travel_directions;
+	}
+} // mdjm_content_tag_travel_directions
+
+/**
+ * Content tag: travel_distance.
+ * The travel distance to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Travel distance to the event including units.
+ */
+function mdjm_content_tag_travel_distance( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_distance = mdjm_get_event_travel_data( $event_id, 'distance' );
+	
+	if ( ! empty( $travel_distance ) )	{
+		return $travel_distance;
+	}
+} // mdjm_content_tag_travel_distance
+
+/**
+ * Content tag: travel_time.
+ * The travel time to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Travel time to the event.
+ */
+function mdjm_content_tag_travel_time( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_time = mdjm_get_event_travel_data( $event_id, 'time' );
+	
+	if ( ! empty( $travel_time ) )	{
+		return $travel_time;
+	}
+} // mdjm_content_tag_travel_time
 
 /**
  * Content tag: venue.

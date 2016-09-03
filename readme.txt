@@ -109,7 +109,19 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Variable pricing is possible for individual (or grouped) months of the year
 * Settings for Packages and Addons have been moved to *MDJM -> Settings -> Events -> Packages & Add-ons*
 
+**Travel Data**
+
+* Added options to automatically add travel costs to overall event cost
+* Define cost per mile/kilometer
+* Select not to add costs if under specified distance
+* Costs are determined from events primary employee address (if stored), otherwise a default address specified in settings
+* Generation of URL to Google Maps to view directions to event
+* [Content Tags](http://mdjm.co.uk/docs/content-tags/ "Content Tags") added to output travel data including cost, distance, directions and time
+
+
 **Tweaks**
+
+* Add songs to playlist from within admin
 * Added System Info data under *MDJM->tools*. May be requested during support requests
 * New upgrade procedures. Initiated via Ajax and informative whilst running
 * Removed deprecated Playlists custom DB table
@@ -1063,3 +1075,6 @@ Enhanced the manual event payments feature. See changelog for details.
 This version addresses an issue that may result in a fatal error when selecting to save a venue during event updates. The `{contract_url}` content tag was generating incorrect output.
 
 Update immediately.
+
+= 1.4 =
+This version includes an update to all events, and equipment packages and add-ons. Take extra time to backup your database before proceeding. 

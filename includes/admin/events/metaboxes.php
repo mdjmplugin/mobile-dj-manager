@@ -1482,10 +1482,10 @@ function mdjm_event_metabox_travel_costs_fields( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	$travel_fields = mdjm_get_event_travel_fields();
-	$travel_data   = $mdjm_event->get_travel_data();
 
 	foreach( $travel_fields as $field ) : ?>
-    	<?php $value = ! empty( $travel_data[ $field ] ) ? $travel_data[ $field ] : ''; ?>
+    	<?php $travel_data = mdjm_get_event_travel_data( $event_id, $field ); ?>
+    	<?php $value = ! empty( $travel_data ) ? $travel_data : ''; ?>
 		<input type="hidden" name="travel_<?php echo $field; ?>" id="mdjm_travel_<?php echo $field; ?>" value="<?php echo $value; ?>" />
     <?php endforeach;
 
