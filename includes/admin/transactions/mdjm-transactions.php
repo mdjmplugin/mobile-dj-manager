@@ -36,7 +36,7 @@
 			}
 			
 			$transactions = get_posts( array(
-										'post_type'	  => MDJM_TRANS_POSTS,
+										'post_type'	  => 'mdjm-transaction',
 										'post_parent'	=> $event_id,
 										'post_status'	=> 'any',
 										'posts_per_page' => -1,
@@ -98,7 +98,7 @@
 			$total = '0.00';
 			
 			$transactions = get_posts( array(
-										'post_type'	  => MDJM_TRANS_POSTS,
+										'post_type'	  => 'mdjm-transaction',
 										'post_parent'	=> $event_id,
 										'post_status'	=> $direction,
 										'posts_per_page' => -1,
@@ -148,7 +148,7 @@
 			if( !function_exists( 'get_default_post_to_edit' ) )
 				require_once( ABSPATH . '/wp-admin/includes/post.php' );
 			
-			$trans_post = get_default_post_to_edit( MDJM_TRANS_POSTS, true );
+			$trans_post = get_default_post_to_edit( 'mdjm-transaction', true );
 			
 			$trans_data['ID'] = MDJM_EVENT_PREFIX . $trans_post->ID;
 			$trans_data['post_title'] = MDJM_EVENT_PREFIX . $trans_post->ID;
@@ -157,7 +157,7 @@
 			$trans_data['edit_date'] = true;
 			
 			$trans_data['post_author'] = ( !empty( $data['post_author'] ) ? $data['post_author'] : 1 );
-			$trans_data['post_type'] = MDJM_TRANS_POSTS;
+			$trans_data['post_type'] = 'mdjm-transaction';
 			$trans_data['post_category'] = ( !empty( $type ) ? array( $type ) : '' );
 			$trans_data['post_parent'] = ( !empty( $data['post_parent'] ) ? $data['post_parent'] : '' );
 			$trans_data['post_modified'] = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );

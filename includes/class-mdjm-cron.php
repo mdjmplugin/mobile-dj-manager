@@ -16,10 +16,27 @@ class MDJM_Cron	{
 	 */
 	public function __construct()	{
 		$this->schedules = get_option( 'mdjm_schedules' );
-		
+
+		add_filter( 'cron_schedules', array( $this, 'add_schedules'   ) );
 		add_action( 'mdjm_hourly_schedule', array( &$this, 'execute_cron' ) ); // Run the MDJM scheduler
 	} // __construct
-	
+
+	/**
+	 * Creates custom cron schedules within WP.
+	 *
+	 * @since	1.3.8.6
+	 * @return	void
+	 */
+	function add_schedules( $schedules = array() )	{
+		// Adds once weekly to the existing schedules.
+		$schedules['weekly'] = array(
+			'interval' => 604800,
+			'display'  => __( 'Once Weekly', 'mobile-dj-manager' )
+		);
+
+		return $schedules;
+	} // add_schedules
+
 	/*
 	 * Setup the tasks
 	 *
@@ -255,7 +272,7 @@ class MDJM_Cron	{
 		
 		$args = array(
 			'posts_per_page'	=> -1,
-			'post_type'		 => MDJM_EVENT_POSTS,
+			'post_type'		 => 'mdjm-event',
 			'post_status'	   => 'mdjm-approved',
 			'meta_key'		  => '_mdjm_event_date',
 			'orderby'		   => 'meta_value',
@@ -651,7 +668,7 @@ class MDJM_Cron	{
 					
 		$args = array(
 					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
+					'post_type'		 => 'mdjm-event',
 					'post_status'	   => 'mdjm-approved',
 					'meta_query'		=> array(
 											'relation'	=> 'AND',
@@ -909,7 +926,7 @@ class MDJM_Cron	{
 					
 		$args = array(
 					'posts_per_page'	=> -1,
-					'post_type'		 => MDJM_EVENT_POSTS,
+					'post_type'		 => 'mdjm-event',
 					'post_status'	   => 'mdjm-approved',
 					'meta_query'		=> array(
 											'relation'	=> 'AND',

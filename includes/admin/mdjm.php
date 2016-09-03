@@ -28,9 +28,7 @@
 				define( 'MDJM_QUOTE_POSTS', 'mdjm-quotes' );
 				define( 'MDJM_TRANS_POSTS', 'mdjm-transaction' );
 				define( 'MDJM_VENUE_POSTS', 'mdjm-venue' );
-				
-				$this->db_version = '2.6';
-				
+								
 				/**
 				 * This can be removed post 1.3
 				 *
@@ -55,8 +53,6 @@
 				add_action( 'init', array( &$this, 'mdjm_init' ) ); // init processes
 				add_action( 'admin_init', array( &$this, 'mdjm_admin_init' ) ); // Admin init processes
 				add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) ); // Admin styles & scripts
-				
-				add_action( 'plugins_loaded', array( &$this, 'all_plugins_loaded' ) ); // Hooks to run when plugins are loaded
 			} // __construct
 			
 /*
@@ -98,26 +94,6 @@
 					exit;
 				}
 			} // mdjm_admin_init
-			
-/*
- *
- * PLUGINS LOADED HOOK
- *
- */
-			/*
-			 * Methods to run during plugins loaded hook
-			 *
-			 *
-			 *
-			 */
-			public function all_plugins_loaded()	{
-			/* -- Database update -- */
-				if( MDJM_DB_VERSION != $this->db_version )	{ // DB Update needed
-					require_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-db.php' );
-					$mdjm_db = new MDJM_DB;
-					$mdjm_db->update_db();
-				}								
-			} // all_plugins_loaded
 	
 /*
  * --
@@ -216,32 +192,26 @@
 					wp_enqueue_script( 'jquery-validation-plugin' );
 								
 				/* -- Contract Templates Only -- */
-					if( get_post_type() == MDJM_CONTRACT_POSTS )	{
+					if( get_post_type() == 'contract' )	{
 						wp_register_script( 'mdjm-contract-val', MDJM_PLUGIN_URL . '/assets/js/mdjm-contract-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-contract-val' );
 					}
 				
 				/* -- Email Templates Only -- */
-					if( get_post_type() == MDJM_EMAIL_POSTS )	{
+					if( get_post_type() == 'email_template' )	{
 						wp_register_script( 'mdjm-email-val', MDJM_PLUGIN_URL . '/assets/js/mdjm-email-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-email-val' );
 					}
 				
-				/* -- Event Posts Only -- */
-					/*if( get_post_type() == MDJM_EVENT_POSTS )	{
-						wp_register_script( 'mdjm-event-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-event-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
-						wp_enqueue_script( 'mdjm-event-js' );
-					}*/
-					
 				/* -- Transaction Posts Only -- */
-					if( get_post_type() == MDJM_TRANS_POSTS )	{
+					if( get_post_type() == 'mdjm-transaction' )	{
 						wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-trans-js' );
 						wp_localize_script( 'mdjm-trans-js', 'transaction_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 					}
 				
 				/* -- Venue Posts Only -- */
-					if( get_post_type() == MDJM_VENUE_POSTS )	{
+					if( get_post_type() == 'mdjm-venue' )	{
 						wp_register_script( 'mdjm-venue-val', MDJM_PLUGIN_URL . '/assets/js/mdjm-venue-post-val.js', array( 'jquery-validation-plugin' ), MDJM_VERSION_NUM );
 						wp_enqueue_script( 'mdjm-venue-val' );
 					}

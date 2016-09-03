@@ -458,7 +458,7 @@ function mdjm_register_post_types()	{
 		'labels'                 => $venue_labels,
 		'description'			=> __( 'Venues stored for the MDJM Event Management plugin', 'mobile-dj-manager' ),
 		'show_ui'				=> true,
-		'show_in_menu'		   => 'edit.php?post_type=' . MDJM_VENUE_POSTS,
+		'show_in_menu'		   => 'edit.php?post_type=mdjm-venue',
 		'show_in_admin_bar'	  => true,
 		'rewrite' 			  	=> array( 'slug' => 'mdjm-venue'),
 		'capability_type'	    => 'mdjm_venue',
