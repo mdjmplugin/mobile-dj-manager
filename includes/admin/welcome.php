@@ -241,9 +241,7 @@ class MDJM_Welcome {
 					<div class="feature-section-content">
 						<p><?php _e( 'MDJM Event Management version 1.4 extends the WordPress REST API enabling easy, yet secure, access to a multitude of data via third party tools and integrations.', 'mobile-dj-manager' ); ?></p>
 
-						<p><?php _e( 'The settings options which only allowed text customisations have been removed. Instead, you can now copy template files to your [child] theme directory and fully customise their layout and content as much as you need to in order to make them fit in better with the design of your website.', 'mobile-dj-manager' ); ?></p>
-                        <p><?php _e( "Use a child theme and you won't have to worry about your changes being overwritten when the MDJM plugin is update or your currently active theme is updated.", 'mobile-dj-manager' ); ?></p>
-                        <p><?php printf( __( 'More information on the MDJM REST API can be found within the <a href="%s" target="_blank">Support Documentation</a>.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); ?></p>
+						<p><?php printf( __( 'Endpoints are available to retrieve data for %s, clients, employees, packages and add-ons, and availability. For more information visit the <a href="%s" target="_blank">Support Documentation</a>', 'mobile-dj-manager' ), mdjm_get_label_plural(), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -362,7 +360,7 @@ class MDJM_Welcome {
 				<h3><?php printf( __( 'Create %s Packages &amp; Add-ons', 'mobile-dj-manager' ), mdjm_get_label_singular() );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/mdjm-edit-packages.png'; ?>"/>
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-options.png'; ?>"/>
 					</div>
 					<div class="feature-section-content">
 						<h4><?php printf( __( '%1$s Packages','mobile-dj-manager' ), mdjm_get_label_singular() ); ?></h4>
@@ -370,7 +368,7 @@ class MDJM_Welcome {
 
 						<h4><?php _e( 'Add-ons', 'mobile-dj-manager' );?></h4>
 						<p><?php printf( __( 'Add-ons are additional equipment items that can be selected for an %1$s. Each add-on is assigned an individual price and when selected the %1$s %2$s and %3$s are automatically and dynamically re-calculated.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_balance_label(), mdjm_get_deposit_label() );?></p>
-                        <p><?php printf( __( 'Once you have enabled %1$s Packages &amp; Add-ons within the <a href="%3$s">MDJM %2$s Settings page</a>, manage them within <a href="%4$s">MDJM %2$s &rarr; Equipment Packages</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural(), admin_url( 'admin.php?page=mdjm-settings&tab=events' ), admin_url( 'admin.php?&page=mdjm-packages' ) ); ?></p>
+                        <p><?php printf( __( 'Once you have enabled %1$s Packages &amp; Add-ons within the <a href="%3$s">MDJM %2$s Settings page</a>, manage them within <a href="%4$s">MDJM %2$s &rarr; Equipment Packages</a> and a href="%5$s">MDJM %2$s &rarr; Equipment Add-ons</a>.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural(), admin_url( 'admin.php?page=mdjm-settings&tab=events' ), admin_url( 'edit.php?post_type=mdjm-package' ), admin_url( 'edit.php?post_type=mdjm-addon' ) ); ?></p>
 					</div>
 				</div>
 			</div>
