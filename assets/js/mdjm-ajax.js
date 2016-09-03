@@ -74,37 +74,35 @@ jQuery(document).ready(function ($) {
 				return false;
 			}
 			event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-			var check_date = $("#availability_check_date").val();
+			var date = $("#availability_check_date").val();
+			var postURL = mdjm_vars.rest_url;
+			postURL += 'availability/';
+			postURL += '?date=' + date;
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				dataType: "json",
-				url:  mdjm_vars.ajaxurl,
-				data: {
-					check_date : check_date,
-					action : "mdjm_do_availability_check"
-				},
+				url:  postURL,
 				beforeSend: function()	{
-					$('input[type="submit"]').hide();//prop('disabled', true);
+					$('input[type="submit"]').hide();
 					$("#pleasewait").show();
 				},
 				success: function(response)	{
-					if(response.result == "available") {
+					var availability = response.data.availability;
+					if(availability.response == "available") {
 						if( mdjm_vars.available_redirect != 'text' )	{
-							window.location.href = mdjm_vars.available_redirect + 'mdjm_avail_date=' + check_date;
+							window.location.href = mdjm_vars.available_redirect + 'mdjm_avail_date=' + date;
 						} else	{
-							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + response.message + '</div>');
+							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
 							$("#mdjm-submit-availability").fadeTo("slow", 1);
-							$("#mdjm-submit-availability").removeClass( "mdjm-updating" );
 							$("#pleasewait").hide();
 						}
 						$('input[type="submit"]').prop('disabled', false);
 					} else	{
 						if( mdjm_vars.unavailable_redirect != 'text' )	{
-							window.location.href = mdjm_vars.unavailable_redirect + 'mdjm_avail_date=' + check_date;
+							window.location.href = mdjm_vars.unavailable_redirect + 'mdjm_avail_date=' + date;
 						} else	{
-							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + response.message + '</div>');
+							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
 							$("#mdjm-submit-availability").fadeTo("slow", 1);
-							$("#mdjm-submit-availability").removeClass( "mdjm-updating" );
 							$("#pleasewait").hide();
 						}
 						
@@ -159,7 +157,7 @@ function mdjm_validate_payment_form(mdjmPurchaseform) {
 function mdjm_load_gateway( payment_mode ) {
 
 	// Show the ajax loader
-	jQuery('.mdjm-cart-ajax').show();
+	jQuery('.mdjm-payment-ajax').show();
 	jQuery('#mdjm_payment_form_wrap').html('<img src="' + mdjm_vars.ajax_loader + '"/>');
 
 	var url = mdjm_vars.ajaxurl;
@@ -176,6 +174,7 @@ function mdjm_load_gateway( payment_mode ) {
 		function(response){
 			jQuery('#mdjm_payment_form_wrap').html(response);
 			jQuery('.mdjm-no-js').hide();
+			jQuery('.mdjm-payment-ajax').hide();
 		}
 	);
 

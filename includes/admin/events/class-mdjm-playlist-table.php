@@ -417,7 +417,73 @@ class MDJM_PlayList_Table extends WP_List_Table	{
             <?php
 		endif;
 	} // display_header
-	
+
+	/**
+	 * Outputs the form for adding an entry
+	 *
+	 * @access 	public
+	 * @since	1.4
+	 * @return	void
+	 */
+	public function entry_form() {
+		?>
+        <h3><?php _e( 'Add Entry to Playlist', 'mobile-dj-manager' ); ?></h3>
+        <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
+			<?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
+            <?php mdjm_admin_action_field( 'add_playlist_entry' ); ?>
+            <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $_GET['event_id']; ?>" />
+            <input type="hidden" id="entry_addedby" name="entry_addedby" value="<?php echo mdjm_get_event_client_id( $_GET['event_id'] ); ?>" />
+            <table id="mdjm-playlist-form-table">
+                <tr>
+                    <td>
+                        <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
+                        <?php echo MDJM()->html->text( array(
+							'name' => 'entry_song',
+							'type' => 'text'
+						) ); ?>
+                    </td>
+                    
+                    <td class="mdjm-playlist-artist-cell">
+                        <label for="entry_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
+                        <?php echo MDJM()->html->text( array(
+							'name'  => 'entry_artist',
+							'type'  => 'text'
+						) ); ?>
+                    </td>
+
+                    <td class="mdjm-playlist-category-cell">
+                        <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
+                        <?php $playlist_categories = mdjm_get_playlist_categories(); ?>
+                        <?php $options = array(); ?>
+                        <?php foreach( $playlist_categories as $playlist_category ) : ?>
+                        	<?php $options[ $playlist_category->term_id ] = $playlist_category->name; ?>
+                        <?php endforeach; ?>
+                        <?php echo MDJM()->html->select( array(
+							'options'          => $options,
+							'name'             => 'entry_category',
+							'selected'         => mdjm_get_option( 'playlist_default_cat', 0 )
+						) ); ?>
+                    </td>
+
+				</tr>
+                <tr>
+
+                    <td class="mdjm-playlist-djnotes-cell" colspan="3">
+                        <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
+                        <?php echo MDJM()->html->textarea( array(
+							'name'        => 'entry_djnotes'
+						) ); ?>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button(
+				__( 'Add to Playlist', 'mobile-dj-manager' ),
+				'primary'
+			); ?>
+        </form>
+        <?php
+	} // entry_form
+
 	/**
 	 * Prepare the table columns, pagination and data for the table
 	 *
