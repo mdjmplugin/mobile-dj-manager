@@ -24,8 +24,9 @@ function mdjm_get_roles( $which_roles = array() )	{
 	global $wp_roles;
 	
 	// Retrieve all roles within this WP instance
-	$roles = $wp_roles->get_names();
-	
+	$roles      = $wp_roles->get_names();
+	$mdjm_roles = array();
+
 	if ( ! empty( $which_roles ) && ! is_array( $which_roles ) )	{
 		$which_roles = array( $which_roles );
 	}
