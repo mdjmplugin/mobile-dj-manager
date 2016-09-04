@@ -96,13 +96,14 @@ function mdjm_count_events( $args = array() ) {
 	global $wpdb;
 
 	$defaults = array(
+		'status'     => null, //array_keys( mdjm_all_event_status() ),
 		'employee'   => null,
 		'client'     => null,
 		's'          => null,
 		'start-date' => null, // This is the post date aka Enquiry received date
 		'end-date'   => null,
 		'date'       => null, // This is an event date or an array of dates if we want to search between
-		'type'       => null,
+		'type'       => null
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -111,8 +112,19 @@ function mdjm_count_events( $args = array() ) {
 	$join = '';
 	$where = "WHERE p.post_type = 'mdjm-event'";
 
+	// Count events with a specific status or statuses
+	if ( ! empty( $args['status'] ) )	{
+		if ( is_array( $args['status'] ) )	{
+			$clause = "IN ( " . implode( ', ', $args['status'] ) . " )";
+		} else	{
+			$clause = "= '{$args['status']}'";
+		}
+
+		$where .= " AND p.post_status " . $clause;
+	}
+
 	// Count events for a specific employee
-	if( ! empty( $args['employee'] ) ) {
+	if ( ! empty( $args['employee'] ) ) {
 
 		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
 
@@ -166,12 +178,12 @@ function mdjm_count_events( $args = array() ) {
 	}
 
 	// Limit event count by received date
-	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '/' ) ) {
+	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '-' ) ) {
 
-		$date_parts = explode( '/', $args['start-date'] );
-		$month      = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
-		$day        = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
-		$year       = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+		$date_parts = explode( '-', $args['start-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
 
 		$is_date    = checkdate( $month, $day, $year );
 		if ( false !== $is_date ) {
@@ -188,13 +200,12 @@ function mdjm_count_events( $args = array() ) {
 
 	}
 
-	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '/' ) ) {
+	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '-' ) ) {
 
-		$date_parts = explode( '/', $args['end-date'] );
-
-		$month      = ! empty( $date_parts[0] ) ? $date_parts[0] : 0;
-		$day        = ! empty( $date_parts[1] ) ? $date_parts[1] : 0;
-		$year       = ! empty( $date_parts[2] ) ? $date_parts[2] : 0;
+		$date_parts = explode( '-', $args['end-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
 
 		$is_date    = checkdate( $month, $day, $year );
 		if ( false !== $is_date ) {
@@ -214,13 +225,11 @@ function mdjm_count_events( $args = array() ) {
 			$start_date = new DateTime( $args['date'][0] );
 			$end_date   = new DateTime( $args['date'][1] );
 
-			$where .= $wpdb->prepare( "
+			$where .= "
 				AND m.meta_key = '_mdjm_event_date'
-				AND m.meta_value BETWEEN '%s'
-					AND '%s'",
-				$start_date->format( 'Y-m-d' ),
-				$end_date->format( 'Y-m-d' )
-			);
+				AND STR_TO_DATE(m.meta_value, '%Y-%m-%d' )
+					BETWEEN '" . $start_date->format( 'Y-m-d' ) . "'
+					AND '" . $end_date->format( 'Y-m-d' ) . "'";
 
 		} else	{
 
@@ -257,10 +266,6 @@ function mdjm_count_events( $args = array() ) {
 	$stats    = array();
 	$total    = 0;
 	$statuses = mdjm_all_event_status();
-
-	if ( isset( $statuses['private'] ) && empty( $args['s'] ) ) {
-		unset( $statuses['private'] );
-	}
 
 	foreach ( array_keys( $statuses ) as $state ) {
 		$stats[ $state ] = 0;

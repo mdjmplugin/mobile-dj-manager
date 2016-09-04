@@ -1003,7 +1003,7 @@ class MDJM_Stats	{
 	 * @return	float|int	Total number of conversions based on the passed arguments.
 	 */
 	public function get_conversions( $event_ids = false, $tax = 'event-types', $term, $start_date = false, $end_date = false )	{
-		$converted_statuses = apply_filters( 'mdjm_converted_event_statuses', array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed' ) );
+		$converted_statuses = apply_filters( 'mdjm_converted_event_statuses', array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-cancelled' ) );
 
 		if ( ! empty( $event_ids ) )	{
 			$conversions = 0;
@@ -1072,7 +1072,8 @@ class MDJM_Stats	{
 				'hide_empty'  => true				
 			)
 		);
-		
+		$this->setup_dates( $period );
+
 		$tax_count = array();
 		
 		if ( ! empty( $sources ) )	{
@@ -1086,7 +1087,19 @@ class MDJM_Stats	{
 				
 				$args = array(
 					'date_query'       => array(
-						$this->setup_dates( $period )
+						array(
+							'after' => array(
+								'year'  => date( 'Y', $this->start_date ),
+								'month' => date( 'n', $this->start_date ),
+								'day'   => date( 'd', $this->start_date )
+							),
+							'before'    => array(
+								'year'  => date( 'Y', $this->end_date ),
+								'month' => date( 'n', $this->end_date ),
+								'day'   => date( 'd', $this->end_date )
+							),
+							'inclusive' => true
+						)
 					),
 					'tax_query'        => array(
 						$tax_query

@@ -43,7 +43,56 @@ function mdjm_widget_events_overview() {
 	if ( mdjm_employee_can( 'manage_mdjm' ) )	{
 	
 		$stats = new MDJM_Stats();
-		
+
+		$enquiry_counts    = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
+		$conversion_counts = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
+		$enquiry_periods   = array(
+			'month'     => date( 'Y-m-01' ),
+			'this_year' => date( 'Y-01-01' ),
+			'last_year' => date( 'Y-01-01', strtotime( '-1 year' ) )
+		);
+
+		foreach ( $enquiry_periods as $period => $date )	{
+			$current_count = mdjm_count_events( array(
+				'start-date' => $date,
+				'end-date'   => $period != 'last_year' ? date( 'Y-m-d' ) : date( 'Y-12-31', strtotime( '-1 year' ) )
+			) );
+
+			foreach ( $current_count as $status => $count )	{
+				$enquiry_counts[ $period ] += $count;
+
+				if ( in_array( $status, array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-cancelled' ) ) )	{
+					$conversion_counts[ $period ] += $count;
+				}
+			}
+		}
+
+		$completed_counts = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
+		$event_periods = array(
+			'month'     => array( date( 'Y-m-01' ), date( 'Y-m-d' ) ),
+			'this_year' => array( date( 'Y-01-01' ), date( 'Y-m-d' ) ),
+			'last_year' => array( date( 'Y-m-01' ), strtotime( '-1 year' ), date( 'Y-12-31', strtotime( '-1 year' ) ) )
+		);
+
+		foreach ( $event_periods as $period => $date )	{
+			$current_count = mdjm_count_events( array( 'date' => $date, 'status' => 'mdjm-completed' ) );
+
+			foreach ( $current_count as $status => $count )	{
+				$completed_counts[ $period ] += $count;
+			}
+		}
+
+		$income_month  = $stats->get_income_by_date( null, date( 'n' ), date( 'Y' ) );
+		$income_year   = $stats->get_income_by_date( null, '', date( 'Y' ) );
+		$income_last   = $stats->get_income_by_date( null, '', date( 'Y' ) - 1 );
+		$expense_month = $stats->get_expenses_by_date( null, date( 'n' ), date( 'Y' ) );
+		$expense_year  = $stats->get_expenses_by_date( null, '', date( 'Y' ) );
+		$expense_last  = $stats->get_expenses_by_date( null, '', date( 'Y' ) - 1 );
+
+		$earnings_month = $income_month - $expense_month;
+		$earnings_year  = $income_year - $expense_year;
+		$earnings_last  = $income_last - $expense_last;
+
 		?>
 		<div class="mdjm_stat_grid">
         	<?php do_action( 'mdjm_before_events_overview' ); ?>
@@ -59,73 +108,82 @@ function mdjm_widget_events_overview() {
 				<tbody>
 					<tr>
 						<th><?php printf( __( '%s Received', 'mobile-dj-manager' ), get_post_status_object( 'mdjm-enquiry' )->plural ); ?></th>
-						<td><?php echo $stats->events_by_date( 'this_month' ); ?></td>
-						<td><?php echo $stats->events_by_date( 'this_year' ); ?></td>
-						<td><?php echo $stats->events_by_date( 'last_year' ); ?></td>
+						<td><?php echo $enquiry_counts['month']; ?></td>
+						<td><?php echo $enquiry_counts['this_year']; ?></td>
+						<td><?php echo $enquiry_counts['last_year']; ?></td>
 					</tr>
 					<tr>
 						<th><?php printf( __( '%s Converted', 'mobile-dj-manager' ), get_post_status_object( 'mdjm-enquiry' )->plural ); ?></th>
-						<td><?php echo $stats->events_by_date( 'this_month', mdjm_active_event_statuses() ); ?></td>
-						<td><?php echo $stats->events_by_date( 'this_year', mdjm_active_event_statuses() ); ?></td>
-						<td><?php echo $stats->events_by_date( 'last_year', mdjm_active_event_statuses() ); ?></td>
+						<td><?php echo $conversion_counts['month']; ?></td>
+						<td><?php echo $conversion_counts['this_year']; ?></td>
+						<td><?php echo $conversion_counts['last_year']; ?></td>
 					</tr>
 					<tr>
 						<th><?php printf( __( '%s Completed', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></th>
-						<td><?php echo $stats->events_by_date( 'this_month', 'mdjm-completed' ); ?></td>
-						<td><?php echo $stats->events_by_date( 'this_year', 'mdjm-completed' ); ?></td>
-						<td><?php echo $stats->events_by_date( 'last_year', 'mdjm-completed' ); ?></td>
+						<td><?php echo $completed_counts['month']; ?></td>
+						<td><?php echo $completed_counts['this_year']; ?></td>
+						<td><?php echo $completed_counts['last_year'];?></td>
 					</tr>
 					<tr>
 						<th><?php _e( 'Income', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo $stats->get_total_income_by_date( 'this_month' ); ?></td>
-						<td><?php echo $stats->get_total_income_by_date( 'this_year' ); ?></td>
-						<td><?php echo $stats->get_total_income_by_date( 'last_year' ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_month ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_year ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_last ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php _e( 'Outgoings', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo $stats->get_total_outgoings_by_date( 'this_month' ); ?></td>
-						<td><?php echo $stats->get_total_outgoings_by_date( 'this_year' ); ?></td>
-						<td><?php echo $stats->get_total_outgoings_by_date( 'last_year' ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_month ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_year ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_last ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php _e( 'Earnings', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo $stats->get_txns_total_by_date( 'this_month' ); ?></td>
-						<td><?php echo $stats->get_txns_total_by_date( 'this_year' ); ?></td>
-						<td><?php echo $stats->get_txns_total_by_date( 'last_year' ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_month ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_year ) ); ?></td>
+						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_last ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
 			
-			<p><?php echo 
-				sprintf( __( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ), admin_url( 'post-new.php?post_type=mdjm-event' ), mdjm_get_label_singular() ) .
-				'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' .
-				sprintf( __( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), admin_url( 'edit.php?post_type=mdjm-event' ), mdjm_get_label_plural() ) .
-				'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' .
-				sprintf( __( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ), admin_url( 'edit.php?post_type=mdjm-transaction' ) ) .
-				'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' .
-				sprintf( __( '<a href="%s">Settings</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-settings' ) ); ?>
-				
-			</p>
-			<?php
-			$sources = $stats->get_enquiry_sources_by_date( 'this_month' );
-			
-			if ( ! empty( $sources ) )	{
-				
-				foreach( $sources as $count => $source )	{
-					echo '<p>' . 
-						sprintf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month', 'mobile-dj-manager' ),
-						$source,
-						(int)$count ) .
-						'</p>';
-						
-					break;
-				}
-				
-			}
+			<p>
+				<?php printf(
+					__( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ),
+					admin_url( 'post-new.php?post_type=mdjm-event' ),
+					mdjm_get_label_singular() );
+				?>
+				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<?php printf(
+					__( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ),
+					admin_url( 'edit.php?post_type=mdjm-event' ),
+					mdjm_get_label_plural() );
+				?>
+				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<?php printf(
+					__( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ),
+					admin_url( 'edit.php?post_type=mdjm-transaction' ) );
+				?>
+				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<?php printf(
+					__( '<a href="%s">Settings</a>', 'mobile-dj-manager' ),
+					admin_url( 'admin.php?page=mdjm-settings' ) );
+				?>
+            </p>
 
-			do_action( 'mdjm_after_events_overview' );
+			<?php $sources = $stats->get_enquiry_sources_by_date( 'this_month' ); ?>
 
-			?>
+			<?php if ( ! empty( $sources ) ) : ?>
+				
+				<?php foreach( $sources as $count => $source ) : ?>
+					<p>
+					 <?php printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month.', 'mobile-dj-manager' ), $source, (int) $count ); ?>
+					</p>
+				<?php endforeach; ?>
+				
+			<?php else : ?>
+				<p><?php _e( 'No enquiries yet this month.', 'mobile-dj-manager' ); ?></p>
+			<?php endif; ?>
+
+			<?php do_action( 'mdjm_after_events_overview' ); ?>
 			
 		</div>
     
@@ -189,7 +247,7 @@ function f_mdjm_dash_availability()	{
  * @return	void
  */
 function mdjm_dashboard_at_a_glance_widget( $items ) {
-	$num_posts = wp_count_posts( 'mdjm-event' );
+	$num_posts = mdjm_count_events();
 	$count     = 0;
 	$statuses  = mdjm_all_event_status();
 
