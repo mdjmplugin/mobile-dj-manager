@@ -35,6 +35,7 @@ function mdjm_load_scripts()	{
 			'mdjm_script_vars',
 			array(
 				'ajaxurl'               => mdjm_get_ajax_url(),
+				'rest_url'              => esc_url_raw( rest_url( 'mdjm/v1/' ) ),
 				'ajax_loader'           => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'required_date_message' => __( 'Please select a date', 'mobile-dj-manager' ),
 				'availability_ajax'     => mdjm_get_option( 'avail_ajax', false ),
@@ -144,7 +145,7 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
 
-	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_PLUGIN_URL );
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
@@ -156,10 +157,18 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	$editing_event      = false;
 	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	$sortable           = array( 'admin_page_mdjm-custom-event-fields', 'admin_page_mdjm-custom-client-fields' );
+	$sortable           = array(
+		'admin_page_mdjm-custom-event-fields',
+		'admin_page_mdjm-custom-client-fields'
+	);
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-		
+
+		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
+			$sortable[] = 'post.php';
+			$sortable[] = 'post-new.php';
+		}
+
 		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
 			$editing_event = true;
 		}
@@ -205,12 +214,24 @@ function mdjm_register_admin_scripts( $hook )	{
 				'no_txn_for'           => __( 'What is the transaction for?', 'mobile-dj-manager' ),
 				'no_txn_src'           => __( 'Enter a transaction source', 'mobile-dj-manager' ),
 				'no_venue_name'        => __( 'Enter a name for the venue', 'mobile-dj-manager' ),
+				'currency'             => mdjm_get_currency(),
 				'currency_symbol'      => mdjm_currency_symbol(),
+				'currency_sign'        => mdjm_currency_filter( '' ),
+				'currency_position'    => mdjm_get_option( 'currency_format', 'before' ),
+				'currency_decimals'    => mdjm_currency_decimal_filter(),
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
-				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false
+				'update_deposit'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
+				'select_months'        => __( 'Select Months', 'mobile-dj-manager' ),
+				'one_month_min'        => __( 'You must have a pricing option for at least one month', 'mobile-dj-manager' ),
+				'one_item_min'         => __( 'Select at least one Add-on', 'mobile-dj-manager' ),
+				'min_travel_distance'  => mdjm_get_option( 'travel_min_distance' ),
+				'update_travel_cost'   => mdjm_get_option( 'travel_add_cost', false )
 			)
 		)
 	);
 
-} // mdjm_register_styles
+	wp_register_script( 'jquery-flot', $js_dir . 'jquery.flot.js' );
+	wp_enqueue_script( 'jquery-flot' );
+
+} // mdjm_register_admin_scripts
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_scripts' );

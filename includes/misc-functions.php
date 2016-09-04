@@ -142,12 +142,15 @@ function mdjm_insert_datepicker( $args = array() )	{
  * @since	1.0
  *
  * @param	int		$n
+ * @param	bool	$full	True to output the full month name
  * @return	str		Short month name
  */
-function mdjm_month_num_to_name( $n ) {
+function mdjm_month_num_to_name( $n, $full = false ) {
 	$timestamp = mktime( 0, 0, 0, $n, 1, 2005 );
 
-	return date_i18n( "M", $timestamp );
+	$output = $full ? 'F' : 'M';
+
+	return date_i18n( $output, $timestamp );
 } // mdjm_month_num_to_name
 
 /**
@@ -159,6 +162,20 @@ function mdjm_month_num_to_name( $n ) {
 function mdjm_get_php_arg_separator_output() {
 	return ini_get( 'arg_separator.output' );
 } // mdjm_get_php_arg_separator_output
+
+/**
+ * Checks whether function is disabled.
+ *
+ * @since	1.4
+ *
+ * @param	str		$function	Name of the function.
+ * @return	bool	Whether or not function is disabled.
+ */
+function mdjm_is_func_disabled( $function ) {
+	$disabled = explode( ',',  ini_get( 'disable_functions' ) );
+
+	return in_array( $function, $disabled );
+} // mdjm_is_func_disabled
 
 /**
  * Get the current page URL
@@ -393,3 +410,40 @@ function mdjm_messages( $key )	{
 	// Return all messages
 	return $messages;
 } // mdjm_messages
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @since  2.3
+ * @param  string $upgrade_action The upgrade action to check completion for
+ * @return bool                   If the action has been added to the copmleted actions array
+ */
+function mdjm_has_upgrade_completed( $upgrade_action = '' )	{
+
+	if ( empty( $upgrade_action ) )	{
+		return false;
+	}
+
+	$completed_upgrades = mdjm_get_completed_upgrades();
+
+	return in_array( $upgrade_action, $completed_upgrades );
+
+} // mdjm_has_upgrade_completed
+
+/**
+ * Retrieve the array of completed upgrade actions.
+ *
+ * @since 	1.4
+ * @return	arr		The array of completed upgrades.
+ */
+function mdjm_get_completed_upgrades()	{
+
+	$completed_upgrades = get_option( 'mdjm_completed_upgrades' );
+
+	if ( false === $completed_upgrades ) {
+		$completed_upgrades = array();
+	}
+
+	return $completed_upgrades;
+
+} // mdjm_get_completed_upgrades

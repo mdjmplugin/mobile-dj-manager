@@ -608,6 +608,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_total_cost'
 		),
 		array(
+			'tag'         => 'travel_cost',
+			'description' => __( 'The cost of travel for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_travel_cost'
+		),
+		array(
 			'tag'         => 'venue',
 			'description' => __( 'The name of the event venue', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_venue'
@@ -714,32 +719,10 @@ function mdjm_content_tag_artist_label()	{
  * or included within the event package
  *
  * @param	int		$event_id	Event ID if applicable.
- *
  * @return	str		The list of available addo-ns. No cost.
  */
 function mdjm_content_tag_available_addons( $event_id='' )	{
-	
-	$output = '';
-	
-	$available_addons = get_available_addons( '', '', $event_id );
-	
-	if ( ! empty( $available_addons ) )	{
-		
-		foreach ( $available_addons as $addon )	{
-			
-			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . '</strong><br />' .
-				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
-			
-		}
-		
-		$output .= implode( '', $available );
-		
-	} else	{
-		$output .= __( 'No packages available', 'mobile-dj-manager' );
-	}
-	
-	return $output;
-
+	return mdjm_list_available_addons();
 } // mdjm_content_tag_available_addons
 
 /**
@@ -748,34 +731,11 @@ function mdjm_content_tag_available_addons( $event_id='' )	{
  * If an event can be referenced, only lists add-ons not already assigned to the event,
  * or included within the event package
  *
- * @param	
- *
+ * @param	int		event_id	The event ID.	
  * @return	str		The list of available add-ons. With cost.
  */
 function mdjm_content_tag_available_addons_cost( $event_id='' )	{
-
-	$output = '';
-	
-	$available_addons = get_available_addons( '', '', $event_id );
-	
-	if ( ! empty( $available_addons ) )	{
-		
-		foreach ( $available_addons as $addon )	{
-			
-			$available[] = '<p><strong>' . stripslashes( $addon['name'] ) . ' - ' .
-				mdjm_currency_filter( mdjm_format_amount( $addon['cost'] ) ) . '</strong><br />' .
-				'<em>' . stripslashes( $addon['desc'] ) . '</em></p>';
-			
-		}
-		
-		$output .= implode( '', $available );
-		
-	} else	{
-		$output .= __( 'No packages available', 'mobile-dj-manager' );
-	}
-	
-	return $output;
-
+	return mdjm_list_available_addons( 0, true );
 } // mdjm_content_tag_available_addons_cost
 
 /**
@@ -787,26 +747,22 @@ function mdjm_content_tag_available_addons_cost( $event_id='' )	{
  * @return	str		The list of available packages. No cost.
  */
 function mdjm_content_tag_available_packages()	{
-	return get_available_packages();
+	return mdjm_list_available_packages();
 } // mdjm_content_tag_available_packages
 
 /**
  * Content tag: available_packages_cost.
  * The list of available packages with cost.
  *
- * @param	
- *
  * @return	str		The list of available packages. With cost.
  */
 function mdjm_content_tag_available_packages_cost()	{
-	return get_available_packages( '', true );
+	return mdjm_list_available_packages( 0, true );
 } // mdjm_content_tag_available_packages_cost
 
 /**
  * Content tag: company_name.
  * The name of the company running this MDJM instance.
- *
- * @param	
  *
  * @return	str		The name of the company running this MDJM instance.
  */
@@ -817,8 +773,6 @@ function mdjm_content_tag_company_name()	{
 /**
  * Content tag: contact_page.
  * The contact page.
- *
- * @param	
  *
  * @return	str		The URL of the contact page.
  */
@@ -835,7 +789,7 @@ function mdjm_content_tag_contact_page()	{
  * @return	str		The current date in short format.
  */
 function mdjm_content_tag_ddmmyyyy()	{
-	return date( mdjm_get_option( 'short_date_format', 'd/m/Y' ) );
+	return mdjm_format_short_date();
 } // mdjm_content_tag_ddmmyyyy
 
 /**
@@ -1135,7 +1089,7 @@ function mdjm_content_tag_admin_notes( $event_id='' )	{
  */
 function mdjm_content_tag_balance( $event_id='' )	{	
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$rcvd = MDJM()->txns->get_transactions( $event_id, 'mdjm-income' );
@@ -1173,7 +1127,7 @@ function mdjm_content_tag_balance_label()	{
  */
 function mdjm_content_tag_contract_date( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$signed = get_post_meta( $event_id, '_mdjm_event_contract_approved', true );
@@ -1199,7 +1153,7 @@ function mdjm_content_tag_contract_date( $event_id='' )	{
  */
 function mdjm_content_tag_contract_id( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return get_the_title( $event_id );
@@ -1216,7 +1170,7 @@ function mdjm_content_tag_contract_id( $event_id='' )	{
  */
 function mdjm_content_tag_contract_signatory( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 		
 	return mdjm_get_contract_signatory_name( $event_id );
@@ -1233,7 +1187,7 @@ function mdjm_content_tag_contract_signatory( $event_id='' )	{
  */
 function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 		
 	return mdjm_get_contract_signatory_ip( $event_id );
@@ -1250,7 +1204,7 @@ function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
  */
 function mdjm_content_tag_contract_url( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) . 'event_id=' . $event_id;
@@ -1267,7 +1221,7 @@ function mdjm_content_tag_contract_url( $event_id='' )	{
  */
 function mdjm_content_tag_deposit( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$deposit = get_post_meta( $event_id, '_mdjm_event_deposit', true );
@@ -1306,7 +1260,7 @@ function mdjm_content_tag_deposit_label()	{
  */
 function mdjm_content_tag_deposit_remaining( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_remaining_deposit( $event_id ) ) );
@@ -1323,7 +1277,7 @@ function mdjm_content_tag_deposit_remaining( $event_id='' )	{
  */
 function mdjm_content_tag_deposit_status( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = get_post_meta( $event_id, '_mdjm_event_deposit_status', true );
@@ -1346,7 +1300,7 @@ function mdjm_content_tag_deposit_status( $event_id='' )	{
  */
 function mdjm_content_tag_dj_email( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
@@ -1461,7 +1415,7 @@ function mdjm_content_tag_dj_primary_phone( $event_id='' )	{
  */
 function mdjm_content_tag_dj_notes( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return get_post_meta( $event_id, '_mdjm_event_dj_notes', true );
@@ -1478,7 +1432,7 @@ function mdjm_content_tag_dj_notes( $event_id='' )	{
  */
 function mdjm_content_tag_dj_setup_date( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = __( 'Not specified', 'mobile-dj-manager' );
@@ -1503,7 +1457,7 @@ function mdjm_content_tag_dj_setup_date( $event_id='' )	{
  */
 function mdjm_content_tag_dj_setup_time( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = __( 'Not specified', 'mobile-dj-manager' );
@@ -1528,7 +1482,7 @@ function mdjm_content_tag_dj_setup_time( $event_id='' )	{
  */
 function mdjm_content_tag_end_date( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = '';
@@ -1553,7 +1507,7 @@ function mdjm_content_tag_end_date( $event_id='' )	{
  */
 function mdjm_content_tag_end_time( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = '';
@@ -1572,16 +1526,14 @@ function mdjm_content_tag_end_time( $event_id='' )	{
  * The add-ons attached to the event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The add-on names or "No addons are assigned to this event".
  */
 function mdjm_content_tag_event_addons( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
-	
-	return get_event_addons( $event_id );
+
+	return mdjm_list_event_addons( $event_id );
 } // mdjm_content_tag_event_addons
 
 /**
@@ -1589,16 +1541,14 @@ function mdjm_content_tag_event_addons( $event_id='' )	{
  * The add-ons attached to the event and their cost.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The add-on names and cost or "No addons are assigned to this event".
  */
 function mdjm_content_tag_event_addons_cost( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
-	
-	return get_event_addons( $event_id, true );
+
+	return mdjm_list_event_addons( $event_id, true );
 } // mdjm_content_tag_event_addons_cost
 
 /**
@@ -1612,7 +1562,7 @@ function mdjm_content_tag_event_addons_cost( $event_id='' )	{
  */
 function mdjm_content_tag_event_date( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = '';
@@ -1637,7 +1587,7 @@ function mdjm_content_tag_event_date( $event_id='' )	{
  */
 function mdjm_content_tag_event_date_short( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = '';
@@ -1662,7 +1612,7 @@ function mdjm_content_tag_event_date_short( $event_id='' )	{
  */
 function mdjm_content_tag_event_description( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 		
 	$return = get_post_meta( $event_id, '_mdjm_event_notes', true );
@@ -1681,7 +1631,7 @@ function mdjm_content_tag_event_description( $event_id='' )	{
  */
 function mdjm_content_tag_event_duration( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 				
 	return mdjm_event_duration( $event_id );
@@ -1698,13 +1648,13 @@ function mdjm_content_tag_event_duration( $event_id='' )	{
  */
 function mdjm_content_tag_event_employees( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 
 	$employees = mdjm_get_all_event_employees( $event_id );
 	
 	if ( empty( $employees ) )	{
-		return '';
+		return;
 	}
 	
 	foreach ( $employees as $employee_id => $employee_data )	{
@@ -1727,13 +1677,13 @@ function mdjm_content_tag_event_employees( $event_id='' )	{
  */
 function mdjm_content_tag_event_employees_roles( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 
 	$employees = mdjm_get_all_event_employees( $event_id );
 	
 	if ( empty( $employees ) )	{
-		return '';
+		return;
 	}
 	
 	foreach ( $employees as $employee_id => $employee_data )	{
@@ -1755,8 +1705,8 @@ function mdjm_content_tag_event_employees_roles( $event_id='' )	{
  * @return	str		Contents of the event name field.
  */
 function mdjm_content_tag_event_name( $event_id='' )	{
-	if( empty( $event_id ) )	{
-		return '';
+	if( ! empty( $event_id ) )	{
+		return;
 	}
 		
 	$return = get_post_meta( $event_id, '_mdjm_event_name', true );
@@ -1769,16 +1719,24 @@ function mdjm_content_tag_event_name( $event_id='' )	{
  * The package attached to the event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package name or "No Package".
  */
 function mdjm_content_tag_event_package( $event_id='' )	{
-	if( empty( $event_id ) )	{
-		return '';
-	}
+	$return = __( 'No package is assigned to this event', 'mobile-dj-manager' );
+
+	if ( ! empty( $event_id ) )	{
+
+		$package_id = mdjm_get_event_package( $event_id );
+
+		$package_name = mdjm_get_package_name( $package_id );
 	
-	return get_event_package( $event_id );
+		if ( ! empty( $package_name ) )	{
+			$return = $package_name;
+		}
+
+	}
+
+	return $return;
 } // mdjm_content_tag_event_package
 
 /**
@@ -1786,16 +1744,24 @@ function mdjm_content_tag_event_package( $event_id='' )	{
  * The package attached to the event and it's cost.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package name and cost or "No Package".
  */
 function mdjm_content_tag_event_package_cost( $event_id='' )	{
-	if( empty( $event_id ) )	{
-		return '';
-	}
+	$return = '0.00';
 	
-	return get_event_package( $event_id, true );
+	if ( ! empty( $event_id ) )	{
+		$mdjm_event = new MDJM_Event( $event_id );
+		$package_id = $mdjm_event->get_package();
+
+		$package_price = mdjm_get_package_price( $package_id, $mdjm_event->date );
+	
+		if ( ! empty( $package_price ) )	{
+			$return = $package_price;
+		}
+
+	}
+
+	return mdjm_currency_filter( mdjm_format_amount( $return ) );
 } // mdjm_content_tag_event_package_cost
 
 /**
@@ -1803,13 +1769,11 @@ function mdjm_content_tag_event_package_cost( $event_id='' )	{
  * The package attached to the event.
  *
  * @param	int		The event ID.
- * @param
- *
  * @return	str		The package description.
  */
 function mdjm_content_tag_event_package_description( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return get_event_package_description( $event_id );
@@ -1826,7 +1790,7 @@ function mdjm_content_tag_event_package_description( $event_id='' )	{
  */
 function mdjm_content_tag_event_status( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_get_event_status( $event_id );
@@ -1843,7 +1807,7 @@ function mdjm_content_tag_event_status( $event_id='' )	{
  */
 function mdjm_content_tag_event_type( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	return mdjm_get_event_type( $event_id );
@@ -1903,7 +1867,7 @@ function mdjm_content_tag_final_balance( $event_id='' )	{
  */
 function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$url = mdjm_guest_playlist_url( $event_id );
@@ -2055,7 +2019,7 @@ function mdjm_content_tag_quotes_url( $event_id='' )	{
  */
 function mdjm_content_tag_start_time( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = '';
@@ -2079,7 +2043,7 @@ function mdjm_content_tag_start_time( $event_id='' )	{
  */
 function mdjm_content_tag_total_cost( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$return = __( 'Not specified', 'mobile-dj-manager' );
@@ -2094,6 +2058,86 @@ function mdjm_content_tag_total_cost( $event_id='' )	{
 } // mdjm_content_tag_total_cost
 
 /**
+ * Content tag: travel_cost.
+ * The travel cost for the event.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Formatted event travel cost.
+ */
+function mdjm_content_tag_travel_cost( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_cost = mdjm_get_event_travel_data( $event_id );
+	
+	if ( ! empty( $travel_cost ) )	{
+		return mdjm_currency_filter( mdjm_format_amount( $travel_cost ) );
+	}
+} // mdjm_content_tag_travel_cost
+
+/**
+ * Content tag: travel_directions.
+ * A URL for the travel directions to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		URL to Google Maps directions.
+ */
+function mdjm_content_tag_travel_directions( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_directions = mdjm_get_event_travel_data( $event_id, 'directions_url' );
+	
+	if ( ! empty( $travel_directions ) )	{
+		return $travel_directions;
+	}
+} // mdjm_content_tag_travel_directions
+
+/**
+ * Content tag: travel_distance.
+ * The travel distance to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Travel distance to the event including units.
+ */
+function mdjm_content_tag_travel_distance( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_distance = mdjm_get_event_travel_data( $event_id, 'distance' );
+	
+	if ( ! empty( $travel_distance ) )	{
+		return $travel_distance;
+	}
+} // mdjm_content_tag_travel_distance
+
+/**
+ * Content tag: travel_time.
+ * The travel time to the event location.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		Travel time to the event.
+ */
+function mdjm_content_tag_travel_time( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+	
+	$travel_time = mdjm_get_event_travel_data( $event_id, 'time' );
+	
+	if ( ! empty( $travel_time ) )	{
+		return $travel_time;
+	}
+} // mdjm_content_tag_travel_time
+
+/**
  * Content tag: venue.
  * The event venue name.
  *
@@ -2103,7 +2147,7 @@ function mdjm_content_tag_total_cost( $event_id='' )	{
  */
 function mdjm_content_tag_venue( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -2121,7 +2165,7 @@ function mdjm_content_tag_venue( $event_id='' )	{
  */
 function mdjm_content_tag_venue_contact( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -2139,7 +2183,7 @@ function mdjm_content_tag_venue_contact( $event_id='' )	{
  */
 function mdjm_content_tag_venue_details( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -2166,7 +2210,7 @@ function mdjm_content_tag_venue_details( $event_id='' )	{
  */
 function mdjm_content_tag_venue_email( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 	
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -2211,7 +2255,7 @@ function mdjm_content_tag_venue_full_address( $event_id='' )	{
  */
 function mdjm_content_tag_venue_notes( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -2230,7 +2274,7 @@ function mdjm_content_tag_venue_notes( $event_id='' )	{
  */
 function mdjm_content_tag_venue_telephone( $event_id='' )	{
 	if( empty( $event_id ) )	{
-		return '';
+		return;
 	}
 
 	$mdjm_event = new MDJM_Event( $event_id );

@@ -268,6 +268,11 @@
 							editor.insertContent('{total_cost}');
 						}
 					}, {
+						text: 'Final Balance',
+						onclick: function () {
+							editor.insertContent('{final_balance}');
+						}
+					}, {
 						text: 'Deposit Amount',
 						onclick: function () {
 							editor.insertContent('{deposit}');
@@ -281,6 +286,26 @@
 						text: 'Balance Owed',
 						onclick: function () {
 							editor.insertContent('{balance}');
+						}
+					}, {
+						text: 'Travel Cost',
+						onclick: function () {
+							editor.insertContent('{travel_cost}');
+						}
+					}, {
+						text: 'Travel Directions',
+						onclick: function () {
+							editor.insertContent('{travel_directions}');
+						}
+					}, {
+						text: 'Travel Distance',
+						onclick: function () {
+							editor.insertContent('{travel_distance}');
+						}
+					}, {
+						text: 'Travel Time',
+						onclick: function () {
+							editor.insertContent('{travel_time}');
 						}
 					}, {
 						text: 'Venue',

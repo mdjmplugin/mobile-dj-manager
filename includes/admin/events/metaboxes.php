@@ -399,7 +399,10 @@ function mdjm_event_metabox_options_type_row( $event_id )	{
 
 	?>
     <p>&nbsp;<i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;<label for="mdjm_event_type"><?php _e( 'Type:', 'mobile-dj-manager' ); ?></label>
-		<?php echo MDJM()->html->event_type_dropdown( 'mdjm_event_type', $event_type ); ?>
+		<?php echo MDJM()->html->event_type_dropdown( array(
+			'name'     => 'mdjm_event_type',
+			'selected' => $event_type
+		) ); ?>
 
 		<?php if ( mdjm_is_admin() ) : ?>
             <i id="event-type-add" class="fa fa-plus" aria-hidden="true"></i>
@@ -891,8 +894,10 @@ function mdjm_event_metabox_employee_select_row( $event_id )	{
                 <?php else : ?>
 
 					<?php echo MDJM()->html->employee_dropdown( array(
-                        'selected' => $employee_id,
-                        'group'    => true
+                        'selected'    => $employee_id,
+                        'group'       => true,
+						'chosen'      => true,
+						'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
                     ) ); ?>
             
                 <?php endif; ?>
@@ -998,14 +1003,17 @@ function mdjm_event_metabox_add_employee_fields( $event_id )	{
             	<tr>
                 	<td><label for="event_new_employee"><?php _e( 'Employee', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->employee_dropdown( array(
-							'name'     => 'event_new_employee',
-							'exclude'  => $exclude,
-							'group'    => true
+							'name'        => 'event_new_employee',
+							'exclude'     => $exclude,
+							'group'       => true,
+							'chosen'      => true,
+							'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
 						) ); ?></td>
 
 					<td><label for="event_new_employee_role"><?php _e( 'Role', 'mobile-dj-manager' ); ?>:</label><br />
                     	<?php echo MDJM()->html->roles_dropdown( array(
-							'name'  => 'event_new_employee_role'
+							'name'   => 'event_new_employee_role',
+							'chosen' => true
 						) ); ?></td>
 
 					<td>
@@ -1149,8 +1157,8 @@ function mdjm_event_metabox_details_price_row( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	if ( mdjm_employee_can( 'edit_txns' ) ) : ?>
-
-        <div class="mdjm_field_wrap mdjm_form_fields">
+		<span id="mdjm-price-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
+        <div  id="mdjm-event-price-row" class="mdjm_field_wrap mdjm_form_fields">
             <div class="mdjm_col col2">
                 <label for="_mdjm_event_deposit"><?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?></label><br />
 				<?php echo mdjm_currency_symbol() . MDJM()->html->text( array(
@@ -1206,17 +1214,27 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
 		return;
 	}
 
-	$package  = $mdjm_event->get_package();
-	$addons   = $mdjm_event->get_addons();
-	$employee = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
+	$package    = $mdjm_event->get_package();
+	$addons     = $mdjm_event->get_addons();
+	$employee   = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
+	$event_type = mdjm_get_event_type( $event_id, true );
+	$event_date = $mdjm_event->date ? $mdjm_event->date : false;
+	
+	if ( ! $event_type )	{
+		$event_type = mdjm_get_option( 'event_type_default', '' );
+	}
 
 	?>
-    <div class="mdjm_field_wrap mdjm_form_fields">
+    <span id="mdjm-equipment-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
+    <div id="mdjm-event-equipment-row" class="mdjm_field_wrap mdjm_form_fields">
         <div class="mdjm_col col2">
             <label for="_mdjm_event_package"><?php _e( 'Package:', 'mobile-dj-manager' ); ?></label><br />
 			<?php echo MDJM()->html->packages_dropdown( array(
-                'employee'         => $employee,
-                'selected'         => $package
+                'employee'   => $employee,
+				'event_type' => $event_type,
+				'event_date' => $event_date,
+                'selected'   => $package,
+				'chosen'     => true
             ) ); ?>
 		</div>
 
@@ -1227,9 +1245,12 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
                 'show_option_none' => false,
                 'show_option_all'  => false,
                 'employee'         => $employee,
+				'event_type'       => $event_type,
+				'event_date'       => $event_date,
                 'package'          => $package,
                 'cost'             => true,
-                'chosen'           => false,
+				'placeholder'      => __( 'Select Add-ons', 'mobile-dj-manager' ),
+                'chosen'           => true,
                 'data'             => array()
             ) ); ?></span>
 		</div>
@@ -1344,6 +1365,9 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
 	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
 	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
+	$employee_id    = ! empty( $mdjm_event->employee_id ) ? $mdjm_event->employee_id : '';
+
+	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
 
 	?>
     <div id="mdjm-event-add-new-venue-fields" class="mdjm-hidden">
@@ -1438,6 +1462,9 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
                     </tr>
                 <?php endif; ?>
 
+				<?php do_action( 'mdjm_venue_details_table_after_save', $event_id ); ?>
+                <?php do_action( 'mdjm_venue_details_travel_data', $venue_address, $employee_id ); ?>
+
             </tbody>
         </table>
     </div>
@@ -1446,33 +1473,28 @@ function mdjm_event_metabox_venue_add_new_table( $event_id )	{
 add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_add_new_table', 30 );
 
 /**
- * Output the event venue distance row
+ * Output the event travel costs hidden fields
  *
- * @since	1.3.8
+ * @since	1.4
  * @global	obj		$mdjm_event			MDJM_Event class object
  * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
  * @param	int		$event_id			The event ID.
  * @return	str
  */
-function mdjm_event_metabox_travel_data_row( $event_id )	{
+function mdjm_event_metabox_travel_costs_fields( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	$travel_data = mdjm_travel_get_distance( $event_id );
+	$travel_fields = mdjm_get_event_travel_fields();
 
-	if ( ! empty( $travel_data ) ) : ?>
-		<tr>
-            <td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-				<?php echo mdjm_format_distance( $travel_data['distance'], false, true ); ?></td>
-            <td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-            	<?php echo mdjm_seconds_to_time( $travel_data['duration'] ); ?></td>
-            <td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-            	<?php echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_travel_cost( $travel_data['distance'] ) ) ); ?></td>
-        </tr>
-	<?php endif;
+	foreach( $travel_fields as $field ) : ?>
+    	<?php $travel_data = mdjm_get_event_travel_data( $event_id, $field ); ?>
+    	<?php $value = ! empty( $travel_data ) ? $travel_data : ''; ?>
+		<input type="hidden" name="travel_<?php echo $field; ?>" id="mdjm_travel_<?php echo $field; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach;
 
-} // mdjm_event_metabox_travel_data_row
-//add_action( 'mdjm_event_metabox_travel_data_row', 'mdjm_event_metabox_travel_data_row', 10 );
+} // mdjm_event_metabox_travel_costs_fields
+add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_travel_costs_fields', 40 );
 
 /**
  * Output the event enquiry source row
