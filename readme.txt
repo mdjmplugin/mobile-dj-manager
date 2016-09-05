@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 1.3.8.5
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -79,7 +79,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4 =
 
-**Released XXXX, 2016**
+**Released 5th September, 2016**
 
 **New**
 
@@ -118,7 +118,6 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Generation of URL to Google Maps to view directions to event
 * [Content Tags](http://mdjm.co.uk/docs/content-tags/ "Content Tags") added to output travel data including cost, distance, directions and time
 
-
 **Tweaks**
 
 * Add songs to playlist from within admin
@@ -131,7 +130,6 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Availability checker on the front end now uses MDJM REST API if Ajax enabled
 * Improved licensing validation for addons
 * Added event count to *At a Glance* dashboard widget
-* 
 
 **Bug Fixes**
 
