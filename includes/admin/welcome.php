@@ -181,6 +181,32 @@ class MDJM_Welcome {
 			?>
 
 			<div class="changelog">
+				<h3><?php _e( 'Showcase your Business Products', 'mobile-dj-manager' );?></h3>
+				<div class="feature-section">
+					<div class="feature-section-media">
+						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-list.png'; ?>"/>
+					</div>
+					<div class="feature-section-content">
+						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business and products.', 'mobile-dj-manager' );?></p>
+                        <p><?php _e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' );?></p>
+                        <p><?php printf(
+							__( 'Each package and add-on has its own URL to be showcased on your website, or alternatively you can display the archives by creating menu links to <a href="%1$s" target="_blank">%1$s</a> and <a href="%2$s" target="_blank">%2$s</a> respectively.', 'mobile-dj-manager' ),
+							site_url( '/packages/' ),
+							site_url( '/addons/' )
+						);?></p>
+                        <p><?php _e( 'In addition you can utilise a variety of plugins to show off your business products effectively and entice more clients to get in touch.', 'mobile-dj-manager' );?></p>
+
+						<h4><?php _e( 'Variable Pricing', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( "Assign variable prices to your packages and addons depending on month's of the year.", 'mobile-dj-manager' );?><br />
+							<?php _e( 'Perhaps you have a full wedding package that is cheaper during winter months than in the summer.', 'mobile-dj-manager' ); ?></p>
+
+						<h4><?php _e( 'Set Availability Options', 'mobile-dj-manager' );?></h4>
+						<p><?php _e( 'You can now specify the conditions under which individual packages and addons are available for use. Options include availability during certain months of the year, for specific event types, and for individual employees.', 'mobile-dj-manager' );?></p>                        
+					</div>
+				</div>
+			</div>
+
+			<div class="changelog">
 				<h3><?php _e( 'Reports &amp; Export', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
@@ -207,27 +233,6 @@ class MDJM_Welcome {
 
 						<p><?php _e( "Travel costs are determined by connecting to Google's distance matrix API and calculating the distance from the primary employees address (or the default address per settings) to the venue address. You define the per cost per mile/kilometer and a few other settings to match your preferences and MDJM will do the rest for you.", 'mobile-dj-manager' ); ?></p>
                         <p><?php printf( __( "Handy shortcodes (see below) are also available to provide directions to a venue which you can include within automated emails received by employees ahead of an %s.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
-					</div>
-				</div>
-			</div>
-
-			<div class="changelog">
-				<h3><?php _e( 'Packages &amp; Addons', 'mobile-dj-manager' );?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/screenshots/14-package-list.png'; ?>"/>
-					</div>
-					<div class="feature-section-content">
-						<p><?php _e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business and products.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' );?></p>
-                        <p><?php _e( 'In addition you can utilise a variety of plugins to show off your business products effectively and entice more clients to get in touch.', 'mobile-dj-manager' );?></p>
-
-						<h4><?php _e( 'Variable Pricing', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( "Assign variable prices to your packages and addons depending on month's of the year.", 'mobile-dj-manager' );?><br />
-							<?php _e( 'Perhaps you have a full wedding package that is cheaper during winter months than in the summer.', 'mobile-dj-manager' ); ?></p>
-
-						<h4><?php _e( 'Set Availability Options', 'mobile-dj-manager' );?></h4>
-						<p><?php _e( 'You can now specify the conditions under which individual packages and addons are available for use. Options include availability during certain months of the year, for specific event types, and for individual employees.', 'mobile-dj-manager' );?></p>                        
 					</div>
 				</div>
 			</div>

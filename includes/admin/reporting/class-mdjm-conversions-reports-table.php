@@ -183,6 +183,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 				$events     = mdjm_get_events( $all_event_args );
 				$statuses   = mdjm_active_event_statuses();
 				$statuses[] = 'mdjm-completed';
+				$statuses[] = 'mdjm-cancelled';
 
 				if ( $events )	{
 					foreach ( $events as $event ) {
