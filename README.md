@@ -30,7 +30,7 @@ Anyone is welcome to contribute to MDJM Event Management.
 There are various ways you can contribute:
 
 1. Raise an Issue on GitHub
-1. Send us a Pull Request with your bug fixes and/or new features. Pull requests should be to the development branch.
+1. Send us a Pull Request with your bug fixes and/or new features.
 1. Translate MDJM into different languages
 1. Provide feedback and suggestions on enhancements
 1. Develop add-ons (free or premium)
