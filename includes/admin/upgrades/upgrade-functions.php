@@ -317,6 +317,9 @@ function mdjm_v14_upgrades()	{
 
 	}
 
+	// Clear the permalinks
+	flush_rewrite_rules( false );
+
 	// Log package upgrade procedure as completed
 	set_transient( 'mdjm_upgrade_v14_import_packages', $packages, 30 * DAY_IN_SECONDS );
 	update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
