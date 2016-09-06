@@ -33,7 +33,7 @@ function mdjm_get_packages( $args = array() )	{
 	$defaults = array(
 		'posts_per_page' => -1,
 		'orderby'        => 'post_title',
-		'order'          => 'DESC',
+		'order'          => 'ASC',
 		'post_type'      => 'mdjm-package',
 		'post_status'    => 'publish'
 	);
@@ -905,7 +905,7 @@ function mdjm_get_addons( $args = array() )	{
 	$defaults = array(
 		'posts_per_page' => -1,
 		'orderby'        => 'post_title',
-		'order'          => 'DESC',
+		'order'          => 'ASC',
 		'post_type'      => 'mdjm-addon',
 		'post_status'    => 'publish'
 	);
