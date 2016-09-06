@@ -1519,7 +1519,7 @@ function mdjm_list_event_addons( $event_id, $price = false )	{
 			$addon_price = '';
 
 			if ( $price )	{
-				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $addon_id, $event_date ) ) );
+				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon_id, $event_date ) ) );
 			}
 
 			$addons[] = mdjm_get_addon_name( $addon_id ) . '' . $addon_price;
