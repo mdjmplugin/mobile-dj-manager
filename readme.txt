@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -76,6 +76,18 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.4.1 =
+
+**Released 7th September, 2016**
+
+**Bug Fixes**
+
+* Incorrectly passing date string to dashboard widget causes fatal error
+* Issue [#144](https://github.com/mdjm/mobile-dj-manager/issues/144/ "Issue #144") - Incorrectly validating event ID renders *{event_name}* empty
+* Issue [#143](https://github.com/mdjm/mobile-dj-manager/issues/143/ "Issue #143") - Addon price not displaying when using *{event_addons_cost}* shortcode
+* Issue [#137](https://github.com/mdjm/mobile-dj-manager/issues/137/ "Issue #137") - Order packages and addons in ascending order
+* Issue [#139](https://github.com/mdjm/mobile-dj-manager/issues/139/ "Issue #139") - Auto setting employee for Unattended Enquiries received via Contact Forms may obscure available packages and add-ons
 
 = 1.4 =
 
