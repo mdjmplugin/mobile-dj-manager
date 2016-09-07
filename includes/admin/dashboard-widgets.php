@@ -71,7 +71,7 @@ function mdjm_widget_events_overview() {
 		$event_periods = array(
 			'month'     => array( date( 'Y-m-01' ), date( 'Y-m-d' ) ),
 			'this_year' => array( date( 'Y-01-01' ), date( 'Y-m-d' ) ),
-			'last_year' => array( date( 'Y-m-01' ), strtotime( '-1 year' ), date( 'Y-12-31', strtotime( '-1 year' ) ) )
+			'last_year' => array( date( 'Y-m-01', strtotime( '-1 year' ) ), date( 'Y-12-31', strtotime( '-1 year' ) ) )
 		);
 
 		foreach ( $event_periods as $period => $date )	{
