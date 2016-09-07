@@ -33,7 +33,7 @@ function mdjm_get_packages( $args = array() )	{
 	$defaults = array(
 		'posts_per_page' => -1,
 		'orderby'        => 'post_title',
-		'order'          => 'DESC',
+		'order'          => 'ASC',
 		'post_type'      => 'mdjm-package',
 		'post_status'    => 'publish'
 	);
@@ -905,7 +905,7 @@ function mdjm_get_addons( $args = array() )	{
 	$defaults = array(
 		'posts_per_page' => -1,
 		'orderby'        => 'post_title',
-		'order'          => 'DESC',
+		'order'          => 'ASC',
 		'post_type'      => 'mdjm-addon',
 		'post_status'    => 'publish'
 	);
@@ -1519,7 +1519,7 @@ function mdjm_list_event_addons( $event_id, $price = false )	{
 			$addon_price = '';
 
 			if ( $price )	{
-				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $addon_id, $event_date ) ) );
+				$addon_price = ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $addon_id, $event_date ) ) );
 			}
 
 			$addons[] = mdjm_get_addon_name( $addon_id ) . '' . $addon_price;

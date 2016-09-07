@@ -1705,13 +1705,11 @@ function mdjm_content_tag_event_employees_roles( $event_id='' )	{
  * @return	str		Contents of the event name field.
  */
 function mdjm_content_tag_event_name( $event_id='' )	{
-	if( ! empty( $event_id ) )	{
+	if( empty( $event_id ) )	{
 		return;
 	}
-		
-	$return = get_post_meta( $event_id, '_mdjm_event_name', true );
-		
-	return $return;
+
+	return get_post_meta( $event_id, '_mdjm_event_name', true );
 } // mdjm_content_tag_event_name
 
 /**

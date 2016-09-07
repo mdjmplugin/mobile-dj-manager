@@ -894,7 +894,7 @@ function mdjm_event_metabox_employee_select_row( $event_id )	{
                 <?php else : ?>
 
 					<?php echo MDJM()->html->employee_dropdown( array(
-                        'selected'    => $employee_id,
+                        'selected'    => $mdjm_event->employee_id,
                         'group'       => true,
 						'chosen'      => true,
 						'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )

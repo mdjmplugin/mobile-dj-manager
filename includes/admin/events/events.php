@@ -1254,7 +1254,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	}
 
 	$event_data['_mdjm_event_travel_data'] = $travel_data;
-error_log( var_export( $event_data['_mdjm_event_travel_data'], true ), 0 );
+
 	/**
 	 * Prepare the remaining event meta data.
 	 */
