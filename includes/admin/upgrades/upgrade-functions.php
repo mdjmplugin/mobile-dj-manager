@@ -435,8 +435,6 @@ function mdjm_v14_upgrade_event_packages()	{
 	} else {
 		// No more events found, finish up
 		mdjm_set_upgrade_complete( 'upgrade_event_packages' );
-		delete_transient( 'mdjm_upgrade_v14_import_addons' );
-		delete_transient( 'mdjm_upgrade_v14_import_packages' );
 		delete_option( 'mdjm_doing_upgrade' );
 
 		$url = add_query_arg( array(
