@@ -84,7 +84,7 @@ function mdjm_admin_menu()	{
 	$mdjm_playlist_page             = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	$mdjm_custom_event_fields_page  = add_submenu_page( null, __( 'Custom Event Fields', 'mobile-dj-manager' ), __( 'Custom Event Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-event-fields', array( 'MDJM_Event_Fields', 'custom_event_field_settings' ) );
 	$mdjm_custom_client_fields_page = add_submenu_page( null, __( 'Custom Client Fields', 'mobile-dj-manager' ), __( 'Custom Client Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-client-fields', 'mdjm_custom_client_fields_page' );
-	$mdjm_upgrades_screen           = add_submenu_page( null, __( 'MDJM Upgrades', 'mobile-dj-manager' ), __( 'MDJM Upgrades', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-upgrades', 'mdjm_upgrades_screen' );
+	$mdjm_upgrades_screen           = add_submenu_page( null, __( 'MDJM Upgrades', 'mobile-dj-manager' ), __( 'MDJM Upgrades', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-upgrades', 'mdjm_upgrades_screen' );
 
 } // mdjm_admin_menu
 add_action( 'admin_menu', 'mdjm_admin_menu', 9 );
