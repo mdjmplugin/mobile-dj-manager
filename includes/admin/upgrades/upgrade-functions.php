@@ -200,9 +200,9 @@ function mdjm_v14_upgrades()	{
 
 	$items             = array();
 	$packages          = array();
-	$existing_items    = get_option( 'mdjm_equipment' );
+	$existing_items    = get_option( 'mdjm_equipment', array() );
 	$existing_cats     = get_option( 'mdjm_cats' );
-	$existing_packages = get_option( 'mdjm_packages' );
+	$existing_packages = get_option( 'mdjm_packages', array() );
 
 	$convert_addons = get_option( 'mdjm_upgrade_v14_import_addons' );
 

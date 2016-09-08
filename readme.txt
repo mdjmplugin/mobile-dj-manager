@@ -77,6 +77,17 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.2 =
+
+**Released XXX September, 2016**
+
+* Default package and addon values to `array()` during upgrade to avoid PHP notices
+
+**Tweaks**
+
+* Downgrade required permissions for accessing upgrades page due to sporadic behaviour
+* Let upgrade transients expire rather than forcefully deleting
+
 = 1.4.1 =
 
 **Released 7th September, 2016**
