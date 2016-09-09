@@ -32,7 +32,7 @@ function mdjm_get_packages( $args = array() )	{
 
 	$defaults = array(
 		'posts_per_page' => -1,
-		'orderby'        => 'post_title',
+		'orderby'        => 'title',
 		'order'          => 'ASC',
 		'post_type'      => 'mdjm-package',
 		'post_status'    => 'publish'
@@ -522,7 +522,7 @@ function mdjm_get_packages_by_employee( $employee_id = 0, $enabled = true )	{
 
 	$args = array(
 		'posts_per_page' => -1,
-		'orderby'        => 'post_title',
+		'orderby'        => 'title',
 		'order'          => 'DESC',
 		'post_type'      => 'mdjm-package',
 		'post_status'    => $enabled ? 'publish' : 'any',
@@ -904,7 +904,7 @@ function mdjm_get_addons( $args = array() )	{
 
 	$defaults = array(
 		'posts_per_page' => -1,
-		'orderby'        => 'post_title',
+		'orderby'        => 'title',
 		'order'          => 'ASC',
 		'post_type'      => 'mdjm-addon',
 		'post_status'    => 'publish'
@@ -1306,7 +1306,7 @@ function mdjm_get_addons_by_employee( $employee_id = 0, $enabled = true )	{
 
 	$args = array(
 		'posts_per_page' => -1,
-		'orderby'        => 'post_title',
+		'orderby'        => 'title',
 		'order'          => 'DESC',
 		'post_type'      => 'mdjm-addon',
 		'post_status'    => $enabled ? 'publish' : 'any',
