@@ -81,7 +81,10 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Released XXX September, 2016**
 
+**Bug Fixes**
+
 * Default package and addon values to `array()` during upgrade to avoid PHP notices
+* Corrected ordering for packages and addons
 * Order by `meta_value_num` on packages and addons edit screen for price ordering
 
 **Tweaks**
