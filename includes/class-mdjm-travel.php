@@ -266,6 +266,10 @@ class MDJM_Travel {
 	 * @since	1.4
 	 */
 	function get_cost()	{
+		if ( ! $this->add_travel_cost )	{
+			return 0;
+		}
+
 		$min       = mdjm_get_option( 'travel_min_distance' );
 		$unit_cost = mdjm_get_option( 'cost_per_unit' );
 		$round     = mdjm_get_option( 'travel_cost_round' );
