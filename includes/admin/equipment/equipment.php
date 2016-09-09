@@ -222,7 +222,6 @@ function mdjm_package_post_order( $query )	{
 
 	switch( $orderby )	{
 		case 'ID':
-		default:
 			$query->set( 'orderby',  'ID' );
 			$query->set( 'order',  $order );
 			break;
@@ -527,7 +526,6 @@ function mdjm_addon_post_order( $query )	{
 
 	switch( $orderby )	{
 		case 'ID':
-		default:
 			$query->set( 'orderby',  'ID' );
 			$query->set( 'order',  $order );
 			break;
