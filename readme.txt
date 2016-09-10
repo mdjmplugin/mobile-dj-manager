@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -79,18 +79,20 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4.2 =
 
-**Released XXX September, 2016**
+**Released 10th September, 2016**
 
 **Bug Fixes**
 
 * Default package and addon values to `array()` during upgrade to avoid PHP notices
 * Corrected ordering for packages and addons
 * Order by `meta_value_num` on packages and addons edit screen for price ordering
+* Downgrade required permissions for accessing upgrades page due to sporadic behaviour
+* Manually `update_user_meta()` for a new client to address a strange issue whereby `wp_insert_user()` is not populating first/last name
 
 **Tweaks**
 
-* Downgrade required permissions for accessing upgrades page due to sporadic behaviour
 * Let upgrade transients expire rather than forcefully deleting
+* If the auto applying of travel costs is disabled, we will not display the travel cost under the venue
 
 = 1.4.1 =
 
