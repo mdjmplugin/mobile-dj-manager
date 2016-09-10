@@ -80,7 +80,6 @@ add_action( 'wp_ajax_mdjm_refresh_client_details', 'mdjm_refresh_client_details_
  *
  * @since	1.3.7
  * @global	arr		$_POST
- * @return	arr
  */
 function mdjm_add_client_ajax()	{
 
@@ -96,23 +95,21 @@ function mdjm_add_client_ajax()	{
 	} else	{
 
 		$user_data = array(
-			'first_name'    => $_POST['client_firstname'],
-			'last_name'     => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
+			'first_name'    => ucwords( $_POST['client_firstname'] ),
+			'last_name'     => ( ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '' ),
 			'user_email'    => $_POST['client_email'],
-			'client_phone'  => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: '',
-			'client_phone2' => ! empty( $_POST['client_phone2'] )		? $_POST['client_phone2']				: ''
+			'client_phone'  => ( ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '' ),
+			'client_phone2' => ( ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '' )
 		);
 
 		$user_data = apply_filters( 'mdjm_event_new_client_data', $user_data );
 
-		do_action( 'mdjm_before_add_new_client', $user_data );
-
 		$client_id = mdjm_add_client( $user_data );
 
 	}
-	
+
 	$clients = mdjm_get_clients( 'client' );
-		
+	
 	if ( ! empty( $clients ) )	{
 		foreach( $clients as $client )	{
 			$client_list .= sprintf( '<option value="%1$s"%2$s>%3$s</option>',
@@ -122,7 +119,7 @@ function mdjm_add_client_ajax()	{
 			);
 		}
 	}
-	
+
 	if ( empty( $client_id ) )	{
 		$result = array(
 			'type'    => 'error',

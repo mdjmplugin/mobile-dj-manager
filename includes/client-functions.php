@@ -104,88 +104,66 @@ function mdjm_get_client_id( $event_id )	{
  *
  * @since	1.3
  * @param	arr			$user_data	Array of client data. See $defaults.
- * @return	int|bool	$user_id	User ID of the new client or false on failure.
+ * @return	int|false	$user_id	User ID of the new client or false on failure.
  */
 function mdjm_add_client( $user_data = array() )	{
 	
-	if( ! mdjm_employee_can( 'list_all_clients' ) )	{
+	if ( ! mdjm_employee_can( 'list_all_clients' ) )	{
 		return false;
 	}
-	
+
+	$first_name = ( ! empty( $_POST['client_firstname'] ) ? ucwords( $_POST['client_firstname'] ) : '' );
+	$last_name  = ( ! empty( $_POST['client_lastname'] )  ? ucwords( $_POST['client_lastname'] )  : '' );
+	$email      = ( ! empty( $_POST['client_email'] )     ? $_POST['client_email']                : '' );
+	$phone      = ( ! empty( $_POST['client_phone'] )     ? $_POST['client_phone']                : '' );
+
 	$defaults = array(
-		'first_name'   => ! empty( $_POST['client_firstname'] )	? ucwords( $_POST['client_firstname'] ) : '',
-		'last_name'    => ! empty( $_POST['client_lastname'] )	? ucwords( $_POST['client_lastname'] )	: '',
-		'user_email'   => ! empty( $_POST['client_email'] )		? $_POST['client_email']				: '',
+		'first_name'   => $first_name,
+		'last_name'    => $last_name,
+		'user_email'   => $email,
 		'user_pass'    => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
 		'role'         => 'client',
-		'client_phone' => ! empty( $_POST['client_phone'] )		? $_POST['client_phone']				: ''
+		'client_phone' => $phone
 	);
-	
+
 	$defaults['display_name'] = $defaults['first_name'] . ' ' . $defaults['last_name'];
 	$defaults['nickname']     = $defaults['display_name'];
 	$defaults['user_login']   = is_email( $defaults['user_email'] );
-	
-	$args = wp_parse_args( $user_data, $defaults );
-	
-	/**
-	 * Allow filtering of the user data
-	 *
-	 * @since	1.3
-	 * @param	arr		$args	Array of user data
-	 */
-	$args = apply_filters( 'mdjm_add_client_user_data', $args );
-	
-	/**
-	 * Fire the `mdjm_pre_create_client` action.
-	 *
-	 * @since	1.3
-	 * @param	arr		$args	Array of user data
-	 */
+
+	$user_data = wp_parse_args( $user_data, $defaults );
+
 	do_action( 'mdjm_pre_add_client' );
-	
-	// Create the user
-	$user_id = wp_insert_user( $args );
-	
+
+	$user_id = wp_insert_user( $user_data );
+
 	if ( is_wp_error( $user_id ) )	{
-		
-		if( MDJM_DEBUG == true )	{
+
+		if ( MDJM_DEBUG == true )	{
 			MDJM()->debug->log_it( 'Error creating user: ' . $user_id->get_error_message(), true );
 		}
-		
+
 		return false;
 	}
 
 	$user_meta = array(
-		'show_admin_bar_front'	=> false,
-		'marketing'				=> 'Y',
-		'phone1'				=> isset( $args['client_phone'] )  ? $args['client_phone']  : '',
-		'phone2'				=> isset( $args['client_phone2'] ) ? $args['client_phone2'] : ''
+		'first_name'           => $user_data['first_name'],
+		'last_name'            => $user_data['last_name'],
+		'show_admin_bar_front' => false,
+		'marketing'            => 'Y',
+		'phone1'               => isset( $user_data['client_phone'] )  ? $user_data['client_phone']  : '',
+		'phone2'               => isset( $user_data['client_phone2'] ) ? $user_data['client_phone2'] : ''
 	);
-	
-	/**
-	 * Allow filtering of the client meta data
-	 *
-	 * @since	1.3
-	 * @param	arr		$user_meta	Array of client meta data
-	 */
+
 	$user_meta = apply_filters( 'mdjm_add_client_meta_data', $user_meta );
 
 	foreach( $user_meta as $key => $value )	{
 		update_user_meta( $user_id, $key, $value );
 	}
-	
-	/**
-	 * Fire the `mdjm_post_create_client` action.
-	 *
-	 * @since	1.3
-	 * @param	int		$user_id	ID of the new client
-	 */
+
 	do_action( 'mdjm_post_add_client', $user_id );
-	
-	MDJM()->debug->log_it( sprintf( 'Client created with ID: %d', $user_id ) );
-	
+
 	return $user_id;
-	
+
 } // mdjm_add_client
 
 /**
