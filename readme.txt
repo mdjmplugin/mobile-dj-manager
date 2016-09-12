@@ -77,6 +77,14 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.3 =
+
+**Released XXX September, 2016**
+
+**Tweaks**
+
+* Add the `data-cfasync="false"` attribute to MDJM JS scripts that are enqueued to tell CloudFlare Rocket Loader to ignore them
+
 = 1.4.2 =
 
 **Released 10th September, 2016**

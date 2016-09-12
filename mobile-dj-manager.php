@@ -226,6 +226,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-debug.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/plugin-compatibility.php' );
 			
 			if ( is_admin() )	{
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
