@@ -738,16 +738,17 @@
 				add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 				
 				// Update journal
-				MDJM()->events->add_journal( array(
-										'user' 			=> $my_mdjm['me']->ID,
-										'event'		   => $post->ID,
-										'comment_content' => $my_mdjm['me']->display_name . ' updated event - ' . $post->ID . '<br />(' . time() . ')',
-										'comment_type' 	=> 'mdjm-journal',
-										),
-										array(
-											'type' 		  => 'update-event',
-											'visibility'	=> '1',
-										) );
+				mdjm_add_journal(
+					array(
+						'user_id'         => $my_mdjm['me']->ID,
+						'event_id'        => $post->ID,
+						'comment_content' => $my_mdjm['me']->display_name . ' updated event - ' . $post->ID . '<br />(' . time() . ')'
+					),
+					array(
+						'type'       => 'update-event',
+						'visibility' => '1'
+					)
+				);
 				
 				$clientzone->display_notice( '2', 'Your event details have been updated successfully' );
 				

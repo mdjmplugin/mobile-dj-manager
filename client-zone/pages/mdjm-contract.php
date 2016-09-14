@@ -150,16 +150,17 @@
 							if( MDJM_DEBUG == true )
 								MDJM()->debug->log_it( '	-- Adding journal entry' );
 								
-							MDJM()->events->add_journal( array(
-										'user' 			=> $my_mdjm['me']->ID,
-										'event'		   => $this->event->ID,
-										'comment_content' => 'Contract Approval completed by ' . ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] . '<br>' ),
-										'comment_type' 	=> 'mdjm-journal',
-										),
-										array(
-											'type' 		  => 'update-event',
-											'visibility'	=> '2',
-										) );
+							mdjm_add_journal(
+								array(
+									'user_id'         => $my_mdjm['me']->ID,
+									'event_id'        => $this->event->ID,
+									'comment_content' => 'Contract Approval completed by ' . ucfirst( $_POST['sign_first_name'] ) . ' ' . ucfirst( $_POST['sign_last_name'] . '<br>' )
+								),
+								array(
+									'type'       => 'update-event',
+									'visibility' => '2'
+								)
+							);
 						}
 						else	{
 							if( MDJM_DEBUG == true )
