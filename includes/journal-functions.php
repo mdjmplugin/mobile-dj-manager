@@ -177,7 +177,7 @@ add_filter( 'comment_feed_where', 'mdjm_hide_journal_entries_from_feeds', 10, 2 
 
 
 /**
- * Remove MDJM Journal Comments from the wp_count_comments function
+ * Remove MDJM Journal Comments from the wp_count_comments function.
  *
  * @since	1.4.3
  * @param	arr		$stats		(empty from core filter)

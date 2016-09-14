@@ -84,6 +84,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 **Tweaks**
 
 * Add the `data-cfasync="false"` attribute to MDJM JS scripts that are enqueued to tell CloudFlare Rocket Loader to ignore them
+* Do not include journal entries in comment counts on the dashboard, or associated with the `mdjm-event` post type
 
 = 1.4.2 =
 
