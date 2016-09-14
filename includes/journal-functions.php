@@ -220,16 +220,16 @@ function mdjm_remove_journal_entries_in_comment_counts( $stats, $post_id ) {
 			$total += $row['num_comments'];
 		}
 
-		if ( isset( $approved[$row['comment_approved']] ) )	{
-			$stats[$approved[$row['comment_approved']]] = $row['num_comments'];
+		if ( isset( $approved[ $row['comment_approved'] ] ) )	{
+			$stats[ $approved[ $row['comment_approved'] ] ] = $row['num_comments'];
 		}
 	}
 
 	$stats['total_comments'] = $total;
 
 	foreach ( $approved as $key )	{
-		if ( empty($stats[$key]) )	{
-			$stats[$key] = 0;
+		if ( empty($stats[ $key ] ) )	{
+			$stats[ $key ] = 0;
 		}
 	}
 
