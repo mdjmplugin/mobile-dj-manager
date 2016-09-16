@@ -1298,20 +1298,18 @@ function mdjm_content_tag_deposit_status( $event_id='' )	{
  *
  * @return	str		The email address of the primary employee assigned to the event.
  */
-function mdjm_content_tag_dj_email( $event_id='' )	{
-	if( empty( $event_id ) )	{
+function mdjm_content_tag_dj_email( $event_id = '' )	{
+
+	if ( empty( $event_id ) )	{
 		return;
 	}
+
+	$employee_id = mdjm_get_event_primary_employee_id( $event_id );
 	
-	$user_id = get_post_meta( $event_id, '_mdjm_event_dj', true );
-	
-	$return = '';
-	
-	if( !empty( $user_id ) )	{
-		$return = get_user_meta( $user_id, 'user_email', true );
+	if ( ! empty( $employee_id ) )	{
+		return mdjm_get_employee_email( $employee_id ) ;
 	}
 	
-	return $return;
 } // mdjm_content_tag_dj_email
 
 /**
