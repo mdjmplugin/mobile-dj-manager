@@ -473,10 +473,26 @@ function mdjm_v143_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
+	// Set comment type on journal entries
 	$wpdb->update(
 		$wpdb->comments,
 		array( 'comment_type' => 'mdjm-journal' ),
 		array( 'comment_type' => 'update-event' )
 	);
+
+	// Sanitize client field IDs
+	$client_fields = get_option( 'mdjm_client_fields' );
+
+	if ( $client_fields )	{
+		foreach( $client_fields as $field_id => $client_field )	{
+			if ( ! empty( $client_field['default'] ) )	{
+				continue;
+			}
+	
+			$client_fields[ $field_id ]['id'] = sanitize_title_with_dashes( $client_field['label'], '', 'save' );
+		}
+
+		update_option( 'mdjm_client_fields', $client_fields );
+	}
 
 } // mdjm_v143_upgrades
