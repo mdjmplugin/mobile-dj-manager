@@ -234,12 +234,12 @@ if ( ! class_exists( 'MDJM_ClientFields' ) )	{
 				echo '<input type="hidden" name="field_position" id="field_position" value="' . $total . '" />' . "\r\n";
 			
 			echo '<h3>' . ( empty( $editing ) ? __( 'Add New Client Field' ) : 
-				__( 'Edit the ' ) . '<span class="mdjm-color">' . $this->fields[$_GET['id']]['label'] . '</span>' . __( ' Field' ) ) . '</h3>' . "\r\n";
+				__( 'Edit the ' ) . '<span class="mdjm-color">' . stripslashes( $this->fields[ $_GET['id'] ]['label'] ) . '</span>' . __( ' Field' ) ) . '</h3>' . "\r\n";
 			
 			// Field Label
 			echo '<p>';
 			echo '<label class="mdjm-label" for="field_label">' . __( 'Field Label', 'mobile-dj-manager' ) . ':</label><br />' . "\r\n";
-			echo '<input type="text" name="field_label" id="field_label" class="regular-text" value="' . ( !empty( $editing ) ? $this->fields[$_GET['id']]['label'] : '' ) . 
+			echo '<input type="text" name="field_label" id="field_label" class="regular-text" value="' . ( ! empty( $editing ) ? stripslashes( $this->fields[ $_GET['id'] ]['label'] ) : '' ) . 
 				'" class="regular-text" />';
 			echo '</p>' . "\r\n";
 			

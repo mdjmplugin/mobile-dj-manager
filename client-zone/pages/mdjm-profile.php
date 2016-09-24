@@ -214,7 +214,7 @@
 									if( $field['required'] == true )	{
 										echo '"' . $field['id'] . '":' . "\n";
 										echo '{' . "\n";
-										echo 'required: " ' . __( $field['label'] . ' is required' ) . '",' .  "\n";
+										echo 'required: " ' . stripslashes( __( $field['label'] . ' is required' ) ) . '",' .  "\n";
 										echo '},' . "\n";	
 									}
 								}
@@ -256,7 +256,7 @@
 					
 					echo '<td>' . "\r\n";
 					
-					echo '<label for="' . $field['id'] . '">' . $field['label'] . '</label><br>' . "\r\n"; 
+					echo '<label for="' . $field['id'] . '">' . stripslashes( $field['label'] ) . '</label><br>' . "\r\n"; 
 					$this->display_field( $field );
 					
 					echo '</td>' . "\r\n";
