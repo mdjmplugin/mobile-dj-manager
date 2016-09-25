@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -12,26 +12,32 @@ MDJM Event Management is an interface to fully manage your DJ/Events or Agency b
 
 == Description ==
 
-MDJM Event Management is the solution for Mobile DJ's who work on their own or businesses that employ multiple DJ's.
+MDJM Event Management is the solution for Event based businesses who wish to automate much of their processes and enable clients to manage their events.
 
 It is an event planning solution built specifically for websites running on WordPress ensuring the users are familiar with the Administration settings and look and feel.
 
-MDJM Event Management allows you to manage your events from enquiry stage through to completion. Add your DJ's, your clients and then create an event.
+MDJM Event Management allows you to manage your events from enquiry stage through to completion. Add your employees, your clients and then create an event.
 
-As a site admin you will be able to view all information, but as a DJ, depending on the permissions set by the Administrator, you will only see those events that are specific to you.
+**Key Features**
 
-Email automation is also built in, depending on your chosen settings. Quotes can be automatically sent to clients when an event is created, contracts can be issued automatically and digitally signed, and booking confirmations also emailed to both clients and DJ's alike.
-
-As a client, you gain access to a number of features via the main website once you login. These include;
-*	Profile management ensuring that the DJ has all the relevant contact details at all times
-*	Playlist management
-*	Secure online payments via PayPal
-*	Digitally sign event contracts
-*	Invite guests to add songs to the playlist via a unique URL. Clients can remove songs they do not deem appropriate
-
-The main dashboard provides a complete overview of your business detailing the number of events and earnings over the month and year.
-
-All in all MDJM Event Management helps you to run your DJ business efficiently.
+* No event or employee restrictions
+* Multi employee aware
+* Record all transactions
+* Detailed reporting
+* Granular permissions for employee roles
+* Showcase your business products
+* Auto calculate and apply travel costs to your events
+* A front-end client portal (Client Zone) where your clients can manage their events
+* Client playlists with guest access
+* Digital Contract Signing
+* Automated emails
+* Track whether or not client emails have been opened
+* Create event packages for simplistic price assignment
+* Track the most successful marketing strategies for your business
+* Automate daily and weekly tasks
+* Create an unlimited number of custom email and contract templates
+* Developer friendly
+* A number of [plugin extensions](http://mdjm.co.uk/add-ons/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
 
 == Installation ==
 
@@ -52,13 +58,13 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 1. Click "Install Now"
 1. Once installation has finished, select "Activate Plugin"
 1. Once activation has completed, click the "Settings" link under the MDJM Event Management plugin
-1. Installation has now completed. Next you need to <a title="Initial Configuration" href="http://mdjm.co.uk/docs/installation/">configure MDJM</a>.
+1. Installation has now completed. Next you need to [configure MDJM](http://mdjm.co.uk/docs/installation/ "MDJM Initial Configuration").
 
 == Frequently Asked Questions ==
 
 = Is any support provided? =
 
-Support can be obtained via our online [Support Forums](http://www.mydjplanner.co.uk/support/ "MDJM Support Forums") at or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
+Support can be obtained via our online [Support Pages](http://mdjm.co.uk/support/ "MDJM Support") at or via our [Facebook User Group](https://www.facebook.com/groups/mobiledjmanager "MDJM Facebook User Group").
 Support is provided on a best-endeavours basis. For premium support you must be an active license holder for on of the [MDJM Event Management add-ons](http://mdjm.co.uk/add-ons/ "MDJM Event Management add-ons")
 
 = Is there a Pro version with additional features? =
@@ -79,12 +85,20 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4.3 =
 
-**Released XXX September, 2016**
+**Released 25th September, 2016**
+
+**Bug Fixes**
+
+* Issue [#151](https://github.com/mdjm/mobile-dj-manager/issues/151/ "Issue #151") - `{dj_email}` content tag does not render content
+* Issue [#152](https://github.com/mdjm/mobile-dj-manager/issues/152/ "Issue #152") - Make sure Custom Client Field slugs do not contain non-standard characters and stripslashes from the labels
+* Issue [#153](https://github.com/mdjm/mobile-dj-manager/issues/153/ "Issue #153") - Corrected display for the `{ddmmyyyy}` content tag
 
 **Tweaks**
 
 * Add the `data-cfasync="false"` attribute to MDJM JS scripts that are enqueued to tell CloudFlare Rocket Loader to ignore them
 * Do not include journal entries in comment counts on the dashboard, or associated with the `mdjm-event` post type
+* Update all MDJM Journal entries to type `mdjm-journal`
+* Ensure we're using the `mdjm_add_journal()` function and no other deprecated function to insert journal entries
 
 = 1.4.2 =
 
