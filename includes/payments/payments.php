@@ -702,8 +702,7 @@ function mdjm_update_event_after_payment( $txn_data )	{
 				$type,
 				mdjm_currency_filter( mdjm_format_amount( $txn_data['total'] ) ),
 				mdjm_get_gateway_admin_label( $txn_data['gateway'] )
-			),
-			'comment_type'    => 'mdjm-journal',
+			)
 		)
 	);
 

@@ -1230,9 +1230,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' )	{
 			'user_id'          => 1,
 			'event_id'         => $event_id,
 			'comment_content'  => sprintf( __( 'Employee %s paid %s for their role as %s', 'mobile-dj-manager' ),
-				mdjm_get_employee_display_name( $employee_id ), $payment, translate_user_role( $wp_roles->roles[ $role ]['name'] ) ),
-			'comment_type'     => 'mdjm-journal',
-			'comment_date'     => current_time( 'timestamp' )
+				mdjm_get_employee_display_name( $employee_id ), $payment, translate_user_role( $wp_roles->roles[ $role ]['name'] ) )
 		);
 		
 		$journal_meta = array(

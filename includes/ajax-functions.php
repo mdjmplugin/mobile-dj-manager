@@ -380,9 +380,7 @@ function mdjm_save_event_transaction_ajax()	{
 				mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) ),
 				mdjm_get_label_singular( true ),
 				mdjm_get_event_contract_id( $_POST['event_id'] )
-			),
-			'comment_type'     => 'mdjm-journal',
-			'comment_date'     => current_time( 'timestamp' )
+			)
 		);
 		
 		mdjm_add_journal( $args );

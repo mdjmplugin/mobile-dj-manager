@@ -276,7 +276,7 @@ function mdjm_sanitize_key( $key ) {
 function mdjm_format_short_date( $date = '' )	{
 	
 	if ( empty( $date ) )	{
-		$date = current_time( 'timestamp' );
+		$date = (string) current_time( 'timestamp' );
 	}
 	
 	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{

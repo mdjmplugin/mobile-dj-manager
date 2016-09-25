@@ -121,14 +121,17 @@
 					if( !empty( $update_id ) )	{ // Success
 						// Journal Entry
 						if( MDJM_JOURNAL == true )	{
-							MDJM()->events->add_journal( array(
-											'user'			=> $this->eventinfo['client']->ID,
-											'event'		   => $this->event->ID,
-											'comment_content' => 'Song added to playlist by ' . $by,
-											'comment_type'	=> 'mdjm-journal', ),
-											 array(
-												'type'			=> 'update-event',
-												'visibility'	=> '2',) );
+							mdjm_add_journal(
+								array(
+									'user_id'         => $this->eventinfo['client']->ID,
+									'event_id'        => $this->event->ID,
+									'comment_content' => 'Song added to playlist by ' . $by
+								),
+								 array(
+									'type'       => 'update-event',
+									'visibility' => '2'
+								)
+							);
 						}
 						
 						if( MDJM_DEBUG == true )

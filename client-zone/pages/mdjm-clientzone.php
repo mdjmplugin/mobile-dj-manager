@@ -165,16 +165,17 @@
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( '	-- Adding journal entry' );
 						
-					MDJM()->events->add_journal( array(
-								'user' 			=> $my_mdjm['me']->ID,
-								'event'		   => $post->ID,
-								'comment_content' => 'Enquiry accepted by ' . $my_mdjm['me']->display_name,
-								'comment_type' 	=> 'mdjm-journal',
-								),
-								array(
-									'type' 		  => 'update-event',
-									'visibility'	=> '2',
-								) );
+					mdjm_add_journal(
+						array(
+							'user_id'         => $my_mdjm['me']->ID,
+							'event_id'        => $post->ID,
+							'comment_content' => 'Enquiry accepted by ' . $my_mdjm['me']->display_name
+						),
+						array(
+							'type'       => 'update-event',
+							'visibility' => '2'
+						)
+					);
 				}
 				else	{
 					if( MDJM_DEBUG == true )

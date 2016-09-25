@@ -325,16 +325,17 @@ class MDJM_Cron	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( '	-- Adding journal entry' );
 							
-					MDJM()->events->add_journal( array(
-								'user' 			=> 1,
-								'event'		   => $event->ID,
-								'comment_content' => 'Event marked as completed via Scheduled Task <br /><br />' . time(),
-								'comment_type' 	=> 'mdjm-journal',
-								),
-								array(
-									'type' 		  => 'update-event',
-									'visibility'	=> '1',
-								) );
+					mdjm_add_journal(
+						array(
+							'user_id'         => 1,
+							'event_id'        => $event->ID,
+							'comment_content' => 'Event marked as completed via Scheduled Task <br /><br />' . time()
+						),
+						array(
+							'type' 		  => 'update-event',
+							'visibility'	=> '1',
+						)
+					);
 				} // End if( MDJM_JOURNAL == true )
 				else	{
 					if( MDJM_DEBUG == true )
@@ -520,12 +521,11 @@ class MDJM_Cron	{
 				/* -- Update Journal -- */
 				MDJM()->debug->log_it( '	-- Adding journal entry' );
 						
-				MDJM()->events->add_journal(
+				mdjm_add_journal(
 					array(
-						'user' 			=> 1,
-						'event'		   => $enquiry->ID,
-						'comment_content' => 'Enquiry marked as lost via Scheduled Task <br /><br />' . time(),
-						'comment_type' 	=> 'mdjm-journal',
+						'user_id'         => 1,
+						'event_id'        => $enquiry->ID,
+						'comment_content' => 'Enquiry marked as lost via Scheduled Task <br /><br />' . time()
 					),
 					array(
 						'type' 		  => 'update-event',
@@ -725,16 +725,17 @@ class MDJM_Cron	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( '	-- Adding journal entry' );
 							
-					MDJM()->events->add_journal( array(
-								'user' 			=> 1,
-								'event'		   => $event->ID,
-								'comment_content' => mdjm_get_deposit_label() . ' request Scheduled Task executed<br /><br />' . time(),
-								'comment_type' 	=> 'mdjm-journal',
-								),
-								array(
-									'type' 		  => 'added-note',
-									'visibility'	=> '0',
-								) );
+					mdjm_add_journal(
+						array(
+							'user_id'         => 1,
+							'event_id'        => $event->ID,
+							'comment_content' => mdjm_get_deposit_label() . ' request Scheduled Task executed<br /><br />' . time()
+						),
+						array(
+							'type' 		  => 'added-note',
+							'visibility'	=> '0',
+						)
+					);
 				} // End if( MDJM_JOURNAL == true )
 				else	{
 					if( MDJM_DEBUG == true )
@@ -989,16 +990,16 @@ class MDJM_Cron	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( '	-- Adding journal entry' );
 							
-					MDJM()->events->add_journal( array(
-								'user' 			=> 1,
-								'event'		   => $event->ID,
-								'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time(),
-								'comment_type' 	=> 'mdjm-journal',
-								),
-								array(
-									'type' 		  => 'added-note',
-									'visibility'	=> '0',
-								) );
+					mdjm_add_journal(
+						array(
+							'user_id'         => 1,
+							'event_id'        => $event->ID,
+							'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time()
+						),
+						array(
+							'type'       => 'added-note',
+							'visibility' => '0',
+						) );
 				} // End if( MDJM_JOURNAL == true )
 				else	{
 					if( MDJM_DEBUG == true )

@@ -475,16 +475,17 @@
 						
 					/* -- Update Journal -- */
 					if( !empty( $journal ) && !empty( $event ) )	{
-						MDJM()->events->add_journal( array(
-										'user' 			=> !empty( $sender_data->ID ) ? $sender_data->ID : '1',
-										'event'		   => $event->ID,
-										'comment_content' => 'Email sent to Client - ' . $sub . '<br />(' . time() . ')',
-										'comment_type' 	=> 'mdjm-journal',
-										),
-										array(
-											'type' 		  => $journal,
-											'visibility'	=> '1',
-										) );
+						mdjm_add_journal(
+							array(
+								'user_id'         => ! empty( $sender_data->ID ) ? $sender_data->ID : '1',
+								'event_id'        => $event->ID,
+								'comment_content' => 'Email sent to Client - ' . $sub . '<br />(' . time() . ')'
+							),
+							array(
+								'type'       => $journal,
+								'visibility' => '1'
+							)
+						);
 					}
 						
 				}

@@ -1218,9 +1218,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
 					mdjm_get_deposit_label(),
 					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
-				),
-				'comment_type'     => 'mdjm-journal',
-				'comment_date'     => current_time( 'timestamp' )
+				)
 			);
 			
 			mdjm_add_journal( $args );
@@ -1290,9 +1288,7 @@ function mdjm_mark_event_balance_paid( $event_id )	{
 				'comment_content'  => sprintf( __( '%1$s payment of %2$s received and %1$s marked as paid.', 'mobile-dj-manager' ),
 					mdjm_get_balance_label(),
 					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
-				),
-				'comment_type'     => 'mdjm-journal',
-				'comment_date'     => current_time( 'timestamp' )
+				)
 			);
 			
 			mdjm_add_journal( $args );
@@ -1700,8 +1696,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		'event_id'        => $event_id,
 		'comment_content' => sprintf( __( '%s Updated', 'mobile-dj-manager' ) . ':<br />    %s',
 			mdjm_get_label_singular(), implode( '<br />', $debug )
-		),
-		'comment_type'    => 'update-event'
+		)
 	);
 	
 	mdjm_add_journal( $journal_args );
