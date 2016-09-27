@@ -1324,9 +1324,11 @@ class MDJM_API 	{
 		$addons_type   = isset( $this->request['addons_type']   ) ? $this->request['addons_type']              : 'dropdown';
 		$addons_cost   = isset( $this->request['addons_cost']   ) ? true                                       : false;
 		$selected      = isset( $this->request['selected']      ) ? explode( ',', $this->request['selected'] ) : '';
-			
+		$input_name    = ! empty ( $this->request['field']      ) ? $this->request['field']                    : 'event_addons';
+
 		$func   = 'mdjm_addons_' . $addons_type;
 		$args   = array(
+			'name'       => $input_name,
 			'package'    => $event_package,
 			'event_type' => $event_type,
 			'event_date' => $event_date,
