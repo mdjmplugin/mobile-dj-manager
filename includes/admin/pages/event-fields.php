@@ -358,7 +358,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
                             <td><span class="mdjm_draghandle"></span></td>
                             <td><?php the_title(); ?></td>
                             <td><?php echo ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ); ?></td>
-                            <td><?php the_content(); ?></td>
+                            <td><?php echo $fields->post->post_content; ?></td>
                             <td><?php self::field_icons( $fields->post->ID ); ?></td>
                             <td>
                                 <a href="<?php echo mdjm_get_admin_page( 'custom_event_fields' ) . '&edit_custom_field=1&id=' . $fields->post->ID; ?>"
@@ -442,12 +442,15 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<form name="mdjm-custom-event-fields" id="mdjm-custom-event-fields" method="post" action="<?php echo mdjm_get_admin_page( 'custom_event_fields' ); ?>">
 			
 			<?php
-			if( isset( $_GET['edit_custom_field'], $_GET['id'] ) )
+			if ( isset( $_GET['edit_custom_field'], $_GET['id'] ) )	{
 				$editing = true;
-			
+			}
+
 			// If editing a field we need this hidden field to identify it
-			if( !empty( $editing ) )
+			if( !empty( $editing ) )	{
+				$field = get_post( $_GET['id'] );
 				echo '<input type="hidden" name="custom_field_id" id="custom_field_id" value="' . $_GET['id'] . '" />' . "\r\n";
+			}
 				
 			echo '<h3>';
 			echo ( empty( $editing ) ? __( 'Add New Custom Field', 'mobile-dj-manager' ) : 
@@ -556,7 +559,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<p>
 			<label for="field_desc"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
 			<input type="text" name="field_desc" id="field_desc" value="<?php echo ( !empty( $editing ) ? 
-			get_the_content( $_GET['id'] ) : '' ); ?>" class="regular-text" /><br />
+			$field->post_content : '' ); ?>" class="regular-text" /><br />
 			<span class="description"><?php _e( "Not visible to client's", 'mobile-dj-manager' ); ?></span>
 			</p>
 			
