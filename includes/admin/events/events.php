@@ -560,7 +560,7 @@ function mdjm_event_view_filters( $views )	{
 	if( ! is_post_type_archive( 'mdjm-event' ) || ( empty( $_GET['mdjm_filter_employee'] ) && mdjm_employee_can( 'read_events_all' ) ) )	{
 		return $views;
 	}
-	
+
 	// The All filter
 	$views['all'] = preg_replace( '/\(.+\)/U', '(' . mdjm_count_employee_events() . ')', $views['all'] ); 
 				
@@ -843,6 +843,38 @@ function mdjm_limit_results_to_employee_events( $query )	{
 
 } // mdjm_limit_results_to_employee_events
 add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_events' );
+
+/**
+ * Hide completed events from the 'all' events list.
+ *
+ * @since	1.0
+ * @param	obj		$query	The WP_Query.
+ * @return	void
+ */
+function mdjm_hide_completed_events( $query )	{
+	if ( ! is_admin() || ! $query->is_main_query() || 'mdjm-event' != $query->get( 'post_type' ) )	{
+		return;
+	}
+
+	if ( isset( $_GET['post_status'] ) && 'mdjm-completed' == $_GET['post_status'] )	{
+		return;
+	}
+
+	if ( ! mdjm_get_option( 'hide_completed', false ) )	{
+		return;
+	}
+
+	$completed_ids = mdjm_get_events( array(
+		'post_status' => 'mdjm-completed',
+		'fields'      => 'ids'
+	) );
+
+	if ( $completed_ids )	{
+		$query->set( 'post__not_in', $completed_ids );
+	}
+
+} // mdjm_hide_completed_events
+add_action( 'pre_get_posts', 'mdjm_hide_completed_events' );
 
 /**
  * Adjust the query when the events are filtered.

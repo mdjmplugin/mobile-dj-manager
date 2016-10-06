@@ -392,6 +392,12 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
+					'hide_completed'   => array(
+						'id'          => 'hide_completed',
+						'name'        =>  __( 'Hide Completed Events', 'mobile-dj-manager' ),
+						'desc'        => __( 'Select to hide completed events from the All Events view.', 'mobile-dj-manager' ),
+						'type'        => 'checkbox'
+					),
 					'employer'         => array(
 						'id'          => 'employer',
 						'name'        =>  __( 'I am an Employer', 'mobile-dj-manager' ),
