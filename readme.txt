@@ -83,6 +83,24 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.5 =
+
+**Release XXXX**
+
+**New**
+
+* Added Event setting `Hide Inactive Events?`. When checked, The `All` view within the event listing page is replaced with `Active Events` and includes events in the status of Enquiry, Awaiting Contract and Confirmed only
+
+**Bug Fixes**
+
+* Issue [#162](https://github.com/mdjm/mobile-dj-manager/issues/162/ "Issue #162") - Reduced width of contract signing fields to avoid mis-alignment
+* Corrected path to gateway log file. Logs were not being written
+* Issue [#163](https://github.com/mdjm/mobile-dj-manager/issues/163/ "Issue #163") - Custom Event Field descriptions were not displayed correctly
+
+**Tweaks**
+
+* Use updated alert class after signatory details
+
 = 1.4.4 =
 
 **Released 27th September, 2016**

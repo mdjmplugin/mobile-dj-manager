@@ -392,10 +392,10 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-					'hide_completed'   => array(
-						'id'          => 'hide_completed',
-						'name'        =>  __( 'Hide Completed Events', 'mobile-dj-manager' ),
-						'desc'        => __( 'Select to hide completed events from the All Events view.', 'mobile-dj-manager' ),
+					'show_active_only'  => array(
+						'id'          => 'show_active_only',
+						'name'        => sprintf( __( 'Hide Inactive %s?', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+						'desc'        => sprintf( __( 'Select to include only active %1$s within the <code>All</code> view on the %1$s screen.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ),
 						'type'        => 'checkbox'
 					),
 					'employer'         => array(
