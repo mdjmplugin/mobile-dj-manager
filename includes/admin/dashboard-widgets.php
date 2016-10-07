@@ -252,7 +252,7 @@ function mdjm_dashboard_at_a_glance_widget( $items ) {
 	$statuses  = mdjm_all_event_status();
 
 	foreach( $statuses as $status => $label )	{
-		if ( $num_posts->$status )	{
+		if ( ! empty( $num_posts->$status ) )	{
 			$count += $num_posts->$status;
 		}
 	}

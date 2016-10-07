@@ -108,8 +108,47 @@ function mdjm_add_journal( $args = array(), $meta = array() )	{
  * @result	obj		Journal entries
  */
 function mdjm_get_journal_entries( $event_id )	{
-	return get_comments( array( 'post_id' => $event_id ) );
+	remove_action( 'pre_get_comments', 'mdjm_hide_journal_entries', 10 );
+
+	$journals = get_comments( array( 'post_id' => $event_id ) );
+
+	add_action( 'pre_get_comments', 'mdjm_hide_journal_entries', 10 );
 } // mdjm_get_journal_entries
+
+/**
+ * Gets the ticket note HTML.
+ *
+ * @since	1.0
+ * @param	obj|int	$journal	The comment object or ID
+ * @param	int		$event_id	The event ID the journal entry is connected to
+ * @return	str
+ */
+function mdjm_ticket_get_journal_entries_html( $note, $event_id = 0 ) {
+
+	if ( is_numeric( $journal ) ) {
+		$journal = get_comment( $journal );
+	}
+
+	if ( ! empty( $journal->user_id ) ) {
+		$user = get_userdata( $journal->user_id );
+		$user = $journal->display_name;
+	} else {
+		$user = __( 'MDJM Bot', 'kb-support' );
+	}
+
+	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+
+	$journal_html  ='<h3>';
+		$journal_html .= date_i18n( $date_format, strtotime( $journal->comment_date ) ) . '&nbsp;&ndash;&nbsp;' . $user;
+	$journal_html .= '</h3>';
+
+	$journal_html .= '<div>';
+		$journal_html .= wpautop( $journal->comment_content );
+	$journal_html .= '</div>';
+
+	return $note_html;
+
+} // mdjm_ticket_get_journal_entries_html
 
 /**
  * Exclude notes (comments) on mdjm-event post type from showing in Recent
@@ -122,11 +161,11 @@ function mdjm_get_journal_entries( $event_id )	{
 function mdjm_hide_journal_entries( $query ) {
 	global $wp_version;
 
-	if( version_compare( floatval( $wp_version ), '4.1', '>=' ) )	{
+	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) )	{
 
 		$types = isset( $query->query_vars['type__not_in'] ) ? $query->query_vars['type__not_in'] : array();
 
-		if( ! is_array( $types ) ) {
+		if ( ! is_array( $types ) ) {
 			$types = array( $types );
 		}
 
