@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -82,6 +82,24 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.4.5 =
+
+**Release Friday, 7th October 2016**
+
+**New**
+
+* Added Event setting `Hide Inactive Events?`. When checked, The `All` view within the event listing page is replaced with `Active Events` and includes events in the status of Enquiry, Awaiting Contract and Confirmed only
+
+**Bug Fixes**
+
+* Issue [#162](https://github.com/mdjm/mobile-dj-manager/issues/162/ "Issue #162") - Reduced width of contract signing fields to avoid mis-alignment
+* Corrected path to gateway log file. Logs were not being written
+* Issue [#163](https://github.com/mdjm/mobile-dj-manager/issues/163/ "Issue #163") - Custom Event Field descriptions were not displayed correctly
+
+**Tweaks**
+
+* Use updated alert class after signatory details
 
 = 1.4.4 =
 

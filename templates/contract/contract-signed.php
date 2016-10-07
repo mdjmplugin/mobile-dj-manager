@@ -53,7 +53,7 @@ global $mdjm_event;
     <div id="mdjm-contract-footer">
     	<?php do_action( 'mdjm_pre_contract_footer', $mdjm_event->ID ); ?>
         
-        <p class="mdjm-contract-signed"><span><?php _e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
+        <p class="mdjm-alert mdjm-alert-success"><span style="font-weight: bold;"><?php _e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
             <?php printf( __( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
                 '{contract_date}',
                 '{contract_signatory}' ); ?><br />

@@ -392,6 +392,12 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
+					'show_active_only'  => array(
+						'id'          => 'show_active_only',
+						'name'        => sprintf( __( 'Hide Inactive %s?', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+						'desc'        => sprintf( __( 'Select to include only active %1$s within the <code>All</code> view on the %1$s screen.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ),
+						'type'        => 'checkbox'
+					),
 					'employer'         => array(
 						'id'          => 'employer',
 						'name'        =>  __( 'I am an Employer', 'mobile-dj-manager' ),

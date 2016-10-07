@@ -721,7 +721,7 @@ function mdjm_record_gateway_log( $msg, $stampit = false )	{
 		
 	$debug_log = $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg;
 	
-	error_log( $debug_log . "\r\n", 3, MDJM_PLUGIN_DIR, '/includes/payments/gateway-logs.log' );
+	error_log( $debug_log . "\r\n", 3, MDJM_PLUGIN_DIR . '/includes/payments/gateway-logs.log' );
 
 } // mdjm_record_gateway_log
 
