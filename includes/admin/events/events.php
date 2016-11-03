@@ -276,7 +276,7 @@ function mdjm_event_add_reject_bulk_actions()	{
 	
 	$current_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : false;
 	
-	if ( $current_status != 'mdjm-unattended' || $post->post_type != 'mdjm-event' )	{
+	if ( $current_status != 'mdjm-unattended' || 'mdjm-event' != get_post_type() )	{
 		return;
 	}
 	
@@ -565,11 +565,12 @@ function mdjm_event_view_filters( $views )	{
 		$args['employee'] = get_current_user_id();
 	}
 
-	$active_only     = mdjm_get_option( 'show_active_only' );
-	$num_posts       = mdjm_count_events( $args );
-	$count           = 0;
-	$statuses        = mdjm_all_event_status();
-	$active_statuses = mdjm_active_event_statuses();
+	$active_only       = mdjm_get_option( 'show_active_only' );
+	$num_posts         = mdjm_count_events( $args );
+	$count             = 0;
+	$statuses          = mdjm_all_event_status();
+	$active_statuses   = mdjm_active_event_statuses();
+	$active_statuses[] = 'mdjm-unattended';
 
 	foreach( $statuses as $status => $label )	{
 		if ( ! empty( $num_posts->$status ) )	{
