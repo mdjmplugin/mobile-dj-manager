@@ -83,6 +83,14 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.6 =
+
+**Release XXX**
+
+**Bug Fixes**
+
+* Issue [#166](https://github.com/mdjm/mobile-dj-manager/issues/166/ "Issue #166") - Package select field may generate a PHP notice if not set to an employer
+
 = 1.4.5 =
 
 **Release Friday, 7th October 2016**
