@@ -113,6 +113,8 @@ function mdjm_get_journal_entries( $event_id )	{
 	$journals = get_comments( array( 'post_id' => $event_id ) );
 
 	add_action( 'pre_get_comments', 'mdjm_hide_journal_entries', 10 );
+
+	return $journals;
 } // mdjm_get_journal_entries
 
 /**
@@ -162,6 +164,10 @@ function mdjm_hide_journal_entries( $query ) {
 	global $wp_version;
 
 	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) )	{
+
+		if ( isset( $_REQUEST['p'] ) && 'mdjm-event' == get_post_type( $_REQUEST['p'] ) )	{
+			return;
+		}
 
 		$types = isset( $query->query_vars['type__not_in'] ) ? $query->query_vars['type__not_in'] : array();
 

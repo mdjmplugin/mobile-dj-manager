@@ -90,6 +90,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 **Bug Fixes**
 
 * Issue [#166](https://github.com/mdjm/mobile-dj-manager/issues/166/ "Issue #166") - Package select field may generate a PHP notice if not set to an employer
+* Issue [#167](https://github.com/mdjm/mobile-dj-manager/issues/167/ "Issue #167") - Journal entries are not visible
 
 = 1.4.5 =
 
