@@ -91,6 +91,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 * Issue [#166](https://github.com/mdjm/mobile-dj-manager/issues/166/ "Issue #166") - Package select field may generate a PHP notice if not set to an employer
 * Issue [#167](https://github.com/mdjm/mobile-dj-manager/issues/167/ "Issue #167") - Journal entries are not visible
+* Issue [#168](https://github.com/mdjm/mobile-dj-manager/issues/168/ "Issue #168") - Duplicate event statuses returned from mdjm_all_event_status() function
 
 = 1.4.5 =
 
