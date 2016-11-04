@@ -574,7 +574,7 @@ function mdjm_all_event_status()	{
 		'mdjm-failed'
 	);
 
-	$mdjm_status = apply_filters( 'mdjm_all_event_status', $post_status );
+	$post_status = apply_filters( 'mdjm_all_event_status', $post_status );
 
 	foreach( $post_status as $status )	{
 		$mdjm_status[ $status ] = get_post_status_object( $status )->label;
