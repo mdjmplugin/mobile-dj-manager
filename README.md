@@ -21,7 +21,7 @@ From a client perspective, a front end portal is provided which fits in seamless
 Let us know [here](https://github.com/mydjplanner/mobile-dj-manager/issues/)!
 
 <h2>Support</h2>
-This is a developers portal for MDJM Event Management and should not be used for support. Please visit the [Support Forums](http://www.mydjplanner.co.uk/forums/forum/general-support/) or our [Facebook Group](https://www.facebook.com/groups/mobiledjmanager)
+This is a developers portal for MDJM Event Management and should not be used for support. Please visit our [Support site](https://mdjm.co.uk/support/) or our [Facebook Group](https://www.facebook.com/groups/mobiledjmanager)
 
 <h2>Contributions</h2>
 
