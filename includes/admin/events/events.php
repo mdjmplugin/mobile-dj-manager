@@ -1,13 +1,11 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	
 /**
- * Manage the Event posts
+ * Manages Event posts admin screen and queries.
  *
- *
- *
+ * @since	0.5
  */
-		
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 /**
  * Define the columns to be displayed for event posts
  *
@@ -556,8 +554,10 @@ function mdjm_event_client_filter_dropdown()	{
  */
 function mdjm_event_view_filters( $views )	{
 
-	if ( ! is_post_type_archive( 'mdjm-event' ) )	{
-		return;
+	$active_only = mdjm_get_option( 'show_active_only' );
+
+	if ( 'mdjm-event' != get_post_type() || ! $active_only )	{
+		return $views;
 	}
 
 	$args = array();
@@ -565,19 +565,19 @@ function mdjm_event_view_filters( $views )	{
 		$args['employee'] = get_current_user_id();
 	}
 
-	$active_only       = mdjm_get_option( 'show_active_only' );
+	$all_statuses      = mdjm_all_event_status_keys();
+	$inactive_statuses = mdjm_inactive_event_status_keys();
 	$num_posts         = mdjm_count_events( $args );
 	$count             = 0;
-	$statuses          = mdjm_all_event_status();
-	$active_statuses   = mdjm_active_event_statuses();
-	$active_statuses[] = 'mdjm-unattended';
 
-	foreach( $statuses as $status => $label )	{
-		if ( ! empty( $num_posts->$status ) )	{
-			$views[ $status ] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $num_posts->$status ) . ')', $views[ $status ] );
+	if ( ! empty( $num_posts ) )	{
+		foreach( $num_posts as $status => $status_count )	{
+			if ( ! empty( $num_posts->$status ) && in_array( $status, $all_statuses ) )	{
+				$views[ $status ] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $num_posts->$status ) . ')', $views[ $status ] );
+			}
 
-			if ( ! $active_only || in_array( $status, $active_statuses ) )	{
-				$count += $num_posts->$status;
+			if ( ! in_array( $status, $inactive_statuses ) )	{
+				$count += $status_count;
 			}
 		}
 	}
@@ -591,7 +591,7 @@ function mdjm_event_view_filters( $views )	{
 	}
 
 	foreach( $views as $status => $link )	{
-		if ( $status != 'all' && ! array_key_exists( $status, $statuses ) )	{
+		if ( $status != 'all' && ! in_array( $status, $all_statuses ) )	{
 			unset( $views[ $status ] );
 		}
 	}
@@ -863,13 +863,8 @@ add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_events' );
  * @return	void
  */
 function mdjm_hide_inactive_events( $query )	{
+
 	if ( ! is_admin() || ! $query->is_main_query() || 'mdjm-event' != $query->get( 'post_type' ) )	{
-		return;
-	}
-
-	$active_statuses = mdjm_active_event_statuses();
-
-	if ( isset( $_GET['post_status'] ) && in_array( $_GET['post_status'], $active_statuses ) )	{
 		return;
 	}
 
@@ -877,13 +872,27 @@ function mdjm_hide_inactive_events( $query )	{
 		return;
 	}
 
-	$active_ids = mdjm_get_events( array(
-		'post_status' => $active_statuses,
-		'fields'      => 'ids'
-	) );
+	if ( isset( $_GET['post_status'] ) && 'all' != $_GET['post_status'] )	{
+		return;
+	}
 
-	if ( $active_ids )	{
-		$query->set( 'post__in', $active_ids );
+	$active_statuses   = mdjm_all_event_status_keys();
+	$inactive_statuses = mdjm_inactive_event_status_keys();
+
+	foreach( $inactive_statuses as $inactive_status )	{
+		if ( ( $key = array_search( $inactive_status, $active_statuses ) ) !== false )	{
+			unset( $active_statuses[ $key ] );
+		}
+	}
+
+	$active_events = mdjm_get_events( array(
+		'post_status' => $active_statuses,
+		'fields' => 'ids',
+		'number' => -1
+	) );
+error_log( implode( ',', $active_events ), 0 );
+	if ( $active_events )	{
+		$query->set( 'post__in', $active_events );
 	}
 
 } // mdjm_hide_inactive_events

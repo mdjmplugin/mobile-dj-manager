@@ -554,15 +554,15 @@ function mdjm_count_events_by_status( $status )	{
 function mdjm_event_exists( $event_id )	{
 	return mdjm_get_event_by_id( $event_id );
 } // mdjm_event_exists
-	
+
 /**
- * Returns an array of event post status.
+ * Returns an array of event post status keys.
  *
- * @since	1.3
+ * @since	1.4.6
  * @param
- * @return	arr		Array of event status'. Key = post_status value = MDJM Event status
+ * @return	arr		Array of event status keys
  */
-function mdjm_all_event_status()	{
+function mdjm_all_event_status_keys()	{
 	$post_status = array(
 		'mdjm-unattended',
 		'mdjm-enquiry',
@@ -574,7 +574,18 @@ function mdjm_all_event_status()	{
 		'mdjm-failed'
 	);
 
-	$post_status = apply_filters( 'mdjm_all_event_status', $post_status );
+	return apply_filters( 'mdjm_all_event_status', $post_status );
+} // mdjm_all_event_status_keys
+
+/**
+ * Returns an array of event post status.
+ *
+ * @since	1.3
+ * @param
+ * @return	arr		Array of event status'. Key = post_status value = MDJM Event status
+ */
+function mdjm_all_event_status()	{
+	$post_status = mdjm_all_event_status_keys();
 
 	foreach( $post_status as $status )	{
 		$mdjm_status[ $status ] = get_post_status_object( $status )->label;
@@ -607,6 +618,24 @@ function mdjm_active_event_statuses()	{
 	
 	return $event_status;
 } // mdjm_active_event_statuses
+
+/**
+ * Returns an array of inactive event post status keys.
+ *
+ * @since	1.4.6
+ * @param
+ * @return	arr		Array of event status keys
+ */
+function mdjm_inactive_event_status_keys()	{
+	$post_status = array(
+		'mdjm-completed',
+		'mdjm-cancelled',
+		'mdjm-rejected',
+		'mdjm-failed'
+	);
+
+	return apply_filters( 'mdjm_inactive_event_status', $post_status );
+} // mdjm_inactive_event_status_keys
 
 /**
  * Return the event status label for given event ID.
