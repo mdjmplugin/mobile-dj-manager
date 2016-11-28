@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -85,10 +85,11 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4.6 =
 
-**Release XXX**
+**Release 28th November, 2016**
 
 **Bug Fixes**
 
+* Issue [#170](https://github.com/mdjm/mobile-dj-manager/issues/170/ "Issue #170") - Unattended Enquiries were missing when `Hide Inactive Events?` was enabled
 * Issue [#166](https://github.com/mdjm/mobile-dj-manager/issues/166/ "Issue #166") - Package select field may generate a PHP notice if not set to an employer
 * Issue [#167](https://github.com/mdjm/mobile-dj-manager/issues/167/ "Issue #167") - Journal entries are not visible
 * Issue [#168](https://github.com/mdjm/mobile-dj-manager/issues/168/ "Issue #168") - Duplicate event statuses returned from mdjm_all_event_status() function
