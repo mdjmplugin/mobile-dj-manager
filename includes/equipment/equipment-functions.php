@@ -564,6 +564,10 @@ function mdjm_employee_has_package( $package_id, $employee_id = 0 )	{
 	}
 
 	if ( $employees )	{
+		if ( ! is_array( $employees ) )	{
+			$employees = array( 'all' );
+		}
+	
 		if ( in_array( 'all', $employees ) || in_array( $employee_id, $employees ) )	{
 			return true;
 		}

@@ -293,7 +293,11 @@ function mdjm_save_package_post( $post_id, $post )	{
 
 	foreach ( $fields as $field )	{
 
-		if ( ! empty( $_POST[ $field ] ) ) {
+		if ( ! empty( $_POST[ $field ] ) )	{
+			if ( '_package_employees' == $field && ! is_array( $_POST[ $field ] ) )	{
+				$_POST[ $field ] = array( 'all' );
+			}
+
 			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, $_POST[ $field ] );
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
@@ -665,7 +669,11 @@ function mdjm_save_addon_post( $post_id, $post )	{
 
 	foreach ( $fields as $field )	{
 
-		if ( ! empty( $_POST[ $field ] ) ) {
+		if ( ! empty( $_POST[ $field ] ) )	{
+			if ( '_addon_employees' == $field && ! is_array( $_POST[ $field ] ) )	{
+				$_POST[ $field ] = array( 'all' );
+			}
+
 			$new_value = apply_filters( 'mdjm_addon_metabox_save_' . $field, $_POST[ $field ] );
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
