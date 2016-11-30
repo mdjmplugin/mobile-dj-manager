@@ -173,6 +173,27 @@ grunt.initConfig({
             }
         },
 
+		uglify: {
+			options: {
+				manage: false
+			},
+			my_target: {
+				files: {
+				'assets/js/admin-scripts.min.js': ['assets/js/admin-scripts.js'],
+				'assets/js/mdjm-ajax.min.js': ['assets/js/mdjm-ajax.js']
+				}
+			}
+		},
+
+		cssmin:	{
+			build:	{
+				files: {
+					'assets/css/mdjm-admin.min.css': ['assets/css/mdjm-admin.css'],
+					'templates/mdjm.min.css': ['templates/mdjm.css']
+				}
+			}
+		},
+
 		phpdocumentor: {
             dist: {
                 options: {
@@ -185,12 +206,16 @@ grunt.initConfig({
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-phpdocumentor');
     grunt.loadNpmTasks('grunt-wp-i18n');
 
 	// Default tasks
 	grunt.registerTask( 'default', [
 		'jshint',
+		'uglify',
+		'cssmin',
 		'makepot'
 	]);
 
