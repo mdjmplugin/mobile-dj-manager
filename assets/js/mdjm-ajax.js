@@ -137,7 +137,7 @@ function mdjm_validate_payment_form(mdjmPurchaseform) {
 	// Make sure an amount is selected
 	var payment = jQuery("input[type='radio'][name='mdjm_payment_amount']:checked");
 
-	if ( payment.length == 0 ) {
+	if ( payment.length === 0 ) {
 		return( {msg:mdjm_vars.no_payment_amount} );
 	}
 

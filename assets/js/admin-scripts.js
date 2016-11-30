@@ -44,9 +44,10 @@ jQuery(document).ready(function ($) {
 	var setCost = function()	{
 		
 		var current_cost = $('#_mdjm_event_cost').val();
+		var venue;
 
 		if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
-			var venue = [
+			venue = [
 				$('#venue_address1').val(),
 				$('#venue_address2').val(),
 				$('#venue_town').val(),
@@ -54,7 +55,7 @@ jQuery(document).ready(function ($) {
 				$('#venue_postcode').val(),
 			];
 		} else	{
-			var venue = $('#venue_id').val();
+			venue = $('#venue_id').val();
 		}
 
 		var postData     = {
@@ -102,8 +103,9 @@ jQuery(document).ready(function ($) {
 
 	// Set travel data for event
 	var setTravelData = function()	{
+	var venue;
 	if ( 'manual' == $('#venue_id').val() || 'client' == $('#venue_id').val() )	{
-		var venue = [
+		venue = [
 			$('#venue_address1').val(),
 			$('#venue_address2').val(),
 			$('#venue_town').val(),
@@ -111,7 +113,7 @@ jQuery(document).ready(function ($) {
 			$('#venue_postcode').val(),
 		];
 	} else	{
-		var venue = $('#venue_id').val();
+		venue = $('#venue_id').val();
 	}
 	var postData = {
 		employee_id : $('#_mdjm_event_dj').val(),
@@ -197,7 +199,7 @@ jQuery(document).ready(function ($) {
 				}
 			});
 		}
-	}
+	};
 	MDJM_Settings.init();
 
 	/**
@@ -227,7 +229,7 @@ jQuery(document).ready(function ($) {
 				
 				event.preventDefault();
 				
-				if ( '' == $('#client_name').val() )	{
+				if ( '' === $('#client_name').val() )	{
 					$('#mdjm-event-add-new-client-fields').hide("slow");
 					return;
 				} else if ( 'mdjm_add_client' == $('#client_name').val() )	{
@@ -635,7 +637,7 @@ jQuery(document).ready(function ($) {
 							$('#mdjm_event_type').show();
 							$('#mdjm_event_type').replaceWith(response.event_types);
 						} else	{
-							alert(response.msg)
+							alert(response.msg);
 						}
 
 						$('#mdjm-event-type-loader').hide();
@@ -687,7 +689,7 @@ jQuery(document).ready(function ($) {
 					$('#mdjm_txn_to_container').addClass('mdjm-hidden');
 					$('#mdjm-txn-email').removeClass('mdjm-hidden');
 				}
-				if ( 'Out' == $('#mdjm_txn_direction').val() || '' == $('#mdjm_txn_direction').val() )	{
+				if ( 'Out' == $('#mdjm_txn_direction').val() || '' === $('#mdjm_txn_direction').val() )	{
 					$('#mdjm_txn_to_container').removeClass('mdjm-hidden');
 					$('#mdjm_txn_from_container').addClass('mdjm-hidden');
 					$('#mdjm-txn-email').addClass('mdjm-hidden');
@@ -747,12 +749,12 @@ jQuery(document).ready(function ($) {
 								$('#balance_paid').prop('checked', true );	
 							}
 						} else	{
-							alert(response.msg)
+							alert(response.msg);
 						}
-						$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
+						$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>');
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>')
+					$('#mdjm-loading').replaceWith('<div id="mdjm_event_txn_table">' + response.transactions + '</div>');
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -769,7 +771,7 @@ jQuery(document).ready(function ($) {
 					$('#mdjm-save-venue-button-row').removeClass('mdjm-hidden');
 					$('#toggle_venue_details').addClass('mdjm-hidden');
 				} else	{
-					if ( '0' != $('#venue_id').val() && '' != $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
+					if ( '0' != $('#venue_id').val() && '' !== $('#venue_id').val() && 'client' != $('#venue_id').val() )	{
 						$('#mdjm-save-venue-button-row').addClass('mdjm-hidden');
 						$('#toggle_venue_details').removeClass('mdjm-hidden');
 					}
@@ -888,7 +890,7 @@ jQuery(document).ready(function ($) {
 			
 		}
 		
-	}
+	};
 	MDJM_Events.init();
 
 	/**
@@ -955,7 +957,7 @@ jQuery(document).ready(function ($) {
 
 			clone.find( '.mdjm_repeatable_default_input' ).each( function() {
 				$( this ).val( parseInt( key ) ).removeAttr('checked');
-			})
+			});
 
 			// Remove Chosen elements
 			clone.find( '.search-choice' ).remove();
@@ -1059,7 +1061,7 @@ jQuery(document).ready(function ($) {
 			});
 
 		}
-	}
+	};
 	MDJM_Equipment.init();
 
 	/**
@@ -1171,7 +1173,7 @@ jQuery(document).ready(function ($) {
 
 		}
 
-	}
+	};
 	MDJM_Comms.init();
 
 	/**
@@ -1354,7 +1356,7 @@ var mdjmFormatCurrency = function (value) {
 	var eventCurrency = mdjm_admin_vars.currency;
 	var decimalPlaces = mdjm_admin_vars.currency_decimals;
 	return numeric.toLocaleString(eventCurrency, { style: 'currency', currency: eventCurrency, minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
-}
+};
 
 var mdjmFormatNumber = function(value) {
 	// Convert the value to a floating point number in case it arrives as a string.
@@ -1363,11 +1365,11 @@ var mdjmFormatNumber = function(value) {
 	var eventCurrency = mdjm_admin_vars.currency;
 	var decimalPlaces = mdjm_admin_vars.currency_decimals;
 	return numeric.toLocaleString(eventCurrency, { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-}
+};
 
 var mdjmLabelFormatter = function (label, series) {
 	return '<div style="font-size:12px; text-align:center; padding:2px">' + label + '</div>';
-}
+};
 
 var mdjmLegendFormatterSources = function (label, series) {
 	var slug  = label.toLowerCase().replace(/\s/g, '-');
@@ -1377,7 +1379,7 @@ var mdjmLegendFormatterSources = function (label, series) {
 
 	jQuery('#mdjm-pie-legend-' + series.mdjm_vars.id).append( item );
 	return item;
-}
+};
 
 var mdjmLegendFormatterEarnings = function (label, series) {
 	var slug  = label.toLowerCase().replace(/\s/g, '-');
@@ -1387,4 +1389,4 @@ var mdjmLegendFormatterEarnings = function (label, series) {
 
 	jQuery('#mdjm-pie-legend-' + series.mdjm_vars.id).append( item );
 	return item;
-}
+};

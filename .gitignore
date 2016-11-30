@@ -39,3 +39,8 @@ Thumbs.db
 # Folders #
 ######################
 _notes/
+docs
+
+# Grunt #
+######################
+node_modules
