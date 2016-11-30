@@ -36,7 +36,9 @@ grunt.initConfig({
 					src: [
 						'**/*.php', // Include all files
 						'!node_modules/**', // Exclude node_modules/
-						'!build/.*'// Exclude build/
+						'!build/.*', // Exclude build/
+						'!docs/.*', // Exclude docs
+						'!tests/.*' // Exclude tests
 						],
 					expand: true
 				}
@@ -111,6 +113,7 @@ grunt.initConfig({
 			main: {
 				src:  [
 					'**',
+					'!_notes/**',
 					'!node_modules/**',
 					'!build/**',
 					'!.git/**',
@@ -118,8 +121,11 @@ grunt.initConfig({
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
+					'!.travis.yml',
 					'!.tx/**',
 					'!tests/**',
+					'!docs/**',
+					'!phpunit.xml',
 					'!**/Gruntfile.js',
 					'!**/package.json',
 					'!**/README.md',
