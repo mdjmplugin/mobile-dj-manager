@@ -200,21 +200,12 @@ grunt.initConfig({
 			}
 		},
 
-		phpdocumentor: {
-            dist: {
-                options: {
-                    ignore: 'node_modules'
-                }
-            }
-        },
-
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-phpdocumentor');
     grunt.loadNpmTasks('grunt-wp-i18n');
 
 	// Default tasks
@@ -223,11 +214,6 @@ grunt.initConfig({
 		'uglify',
 		'cssmin',
 		'makepot'
-	]);
-
-	// Doc tasks
-	grunt.registerTask('docs' [
-		'phpdocumentor:dist'
 	]);
 
 	// Build task(s).
