@@ -706,7 +706,7 @@ function mdjm_count_events_with_package( $package_id )	{
  * @param	arr			$args	Arguments for package retrieval. See @defaults.
  * @return	arr|false	Array of WP_Post objects.
  */
-function mdjm_get_available_packages( $args )	{
+function mdjm_get_available_packages( $args = array() )	{
 
 	if( ! mdjm_packages_enabled() )	{
 		return false;
