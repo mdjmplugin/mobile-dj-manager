@@ -135,7 +135,6 @@ class mdjm_availability_widget extends WP_Widget {
 	 * @param	arr		$instance	Saved values from database.
 	 */
 	public function widget( $args, $instance )	{
-		add_action( 'wp_head', array( &$this, 'datepicker' ) );
 		if( !empty( $instance['ajax'] ) )	{
 			self::ajax( $args, $instance );
 		}
