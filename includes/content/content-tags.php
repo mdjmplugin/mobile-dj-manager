@@ -1568,7 +1568,7 @@ function mdjm_content_tag_event_date( $event_id='' )	{
 	$date = get_post_meta( $event_id, '_mdjm_event_date', true );
 	
 	if( !empty( $date ) )	{
-		$return = date( 'l, jS F Y', strtotime( $date ) );
+		$return = date( get_option( 'date_format' ), strtotime( $date ) );
 	}
 	
 	return $return;
