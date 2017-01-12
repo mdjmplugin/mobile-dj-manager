@@ -107,15 +107,17 @@ function mdjm_insert_datepicker( $args = array() )	{
 		'changeyear'	=> 'true',
 		'changemonth'	=> 'true'		
 	);
-	
+
 	$args = wp_parse_args( $args, $defaults );
-	
+
 	if ( ! empty( $args['id'] ) )	{
 		$field = '#' . $args['id'];
 	} else	{
 		$field = '.' . $args['class'];
 	}
-	
+
+	wp_enqueue_style( 'jquery-ui-css' );
+
 	?>
     <script type="text/javascript">
 	jQuery(document).ready( function($)	{
