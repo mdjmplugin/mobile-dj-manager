@@ -22,10 +22,11 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_load_scripts()	{
-	
+
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
-	
-	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax' . $suffix . '.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-ajax' );
 
 	wp_localize_script(
@@ -52,12 +53,12 @@ function mdjm_load_scripts()	{
 			)
 		)
 	);
-		
+
 	wp_register_script( 'jquery-validation-plugin', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-validation-plugin');
-	
+
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-	
+
 } // mdjm_load_scripts
 add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
 
@@ -70,15 +71,17 @@ add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
  * @return	void
  */
 function mdjm_register_styles()	{
+	global $post;
 
-	$file          = 'mdjm.css';
 	$templates_dir = mdjm_get_theme_template_dir_name();
-	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
-	
-	$child_theme_style_sheet    = trailingslashit( get_stylesheet_directory() ) . $templates_dir . $file;
-	$parent_theme_style_sheet   = trailingslashit( get_template_directory()   ) . $templates_dir . $file;
+	$css_dir       = MDJM_PLUGIN_URL . '/assets/css/';
+	$suffix        = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file          = 'mdjm' . $suffix . '.css';
+
+	$child_theme_style_sheet    = trailingslashit( get_stylesheet_directory()  ) . $templates_dir . $file;
+	$parent_theme_style_sheet   = trailingslashit( get_template_directory()    ) . $templates_dir . $file;
 	$mdjm_plugin_style_sheet    = trailingslashit( mdjm_get_templates_dir()    ) . $file;
-	
+
 	// Look in the child theme, followed by the parent theme, and finally the MDJM template DIR.
 	// Allows users to copy the MDJM stylesheet to their theme DIR and customise.
 	if ( file_exists( $child_theme_style_sheet ) )	{
@@ -88,15 +91,18 @@ function mdjm_register_styles()	{
 	} elseif	( file_exists( $mdjm_plugin_style_sheet ) || file_exists( $mdjm_plugin_style_sheet ) )	{
 		$url = trailingslashit( mdjm_get_templates_url() ) . $file;
 	}
-	
+
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
-	
+
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );	
 	wp_enqueue_style( 'font-awesome' );
-	
-	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
-  	wp_enqueue_style( 'jquery-ui' );
+
+	if ( ! empty( $post ) )	{
+		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'mdjm-availability' ) )	{
+			wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui' . $suffix . '.css', array(), MDJM_VERSION_NUM );
+		}
+	}
 
 	if ( mdjm_is_payment( true ) ) {
 		wp_enqueue_style( 'dashicons' );
@@ -115,19 +121,21 @@ add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
  */
 function mdjm_register_admin_styles( $hook )	{
 
-	$file          = 'mdjm-admin.css';
-	$css_dir = MDJM_PLUGIN_URL . '/assets/css/';
+	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
+	$css_dir  = MDJM_PLUGIN_URL . '/assets/css/';
+	$suffix   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file     = 'mdjm-admin' . $suffix . '.css';
 
 	wp_register_style( 'jquery-chosen', $css_dir . 'chosen.css', array(), MDJM_PLUGIN_URL );
 
 	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-admin' );
 	
-	wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
 
 	wp_enqueue_style( 'jquery-chosen' );
-  	wp_enqueue_style( 'jquery-ui' );
+  	//wp_enqueue_style( 'jquery-ui' );
 	wp_enqueue_style( 'font-awesome' );
 
 } // mdjm_register_styles
