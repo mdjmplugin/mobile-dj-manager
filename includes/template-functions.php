@@ -135,7 +135,8 @@ function mdjm_get_template_files() {
 			'login-form.php'
 		),
 		'payments' => array(
-			'payments.php'
+			'payments-cc.php',
+			'payments-items.php'
 		),
 		'playlist' => array(
 			'playlist-client.php',

@@ -231,6 +231,33 @@ function mdjm_tools_sysinfo_get()	{
 
 	$return  = apply_filters( 'mdjm_sysinfo_after_mdjm_pages', $return );
 
+	// MDJM page templates
+	$clientzone_templates = '';
+	$page_templates       = mdjm_get_template_files();
+
+	foreach( $page_templates as $template_area => $page_template )	{
+
+		foreach( $page_template as $single_template )	{
+			$file_names = explode( '-', $single_template, 2 );
+
+			$slug = $file_names[0];
+			$name = null;
+
+			if ( false !== strpos( $file_names[0], '.php' ) )	{
+				$slug = substr( $file_names[0], 0, -4 );
+			}
+
+			if ( ! empty( $file_names[1] ) && false !== strpos( $file_names[1], '.php' ) )	{
+				$name = substr( $file_names[1], 0, -4 );
+			}
+
+			$clientzone_templates .= ucfirst( $template_area ) . ':         ' . mdjm_get_template_part( $slug, $name, false ) . "\n";
+		}
+	}
+
+	$return .= "\n" . '-- MDJM Template Files' . "\n\n";
+	$return .= $clientzone_templates;
+
 	// MDJM email templates
 	$quote_template             = mdjm_get_option( 'enquiry', '' );
 	$online_quote               = mdjm_get_option( 'online_enquiry', '' );
