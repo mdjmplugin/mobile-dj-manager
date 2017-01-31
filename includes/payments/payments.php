@@ -675,6 +675,7 @@ add_action( 'mdjm_after_send_gateway_receipt', 'mdjm_admin_payment_notice' );
 function mdjm_update_event_after_payment( $txn_data )	{
 
 	$type = mdjm_get_txn_type( $txn_data['txn_id'] );
+	$meta = array();
 
 	if( $type == mdjm_get_deposit_label() )	{
 		$meta['_mdjm_event_deposit_status'] = 'Paid';
