@@ -605,18 +605,19 @@ function mdjm_all_event_status()	{
  * @return	arr		Array of active event status'.
  */
 function mdjm_active_event_statuses()	{
-	$event_status = apply_filters( 'mdjm_active_event_statuses',
-		array(
-			'mdjm-approved',
-			'mdjm-contract',
-			'mdjm-enquiry'
-		)
-	);
-	
+	$statuses = mdjm_all_event_status_keys();
+	$inactive = mdjm_inactive_event_status_keys();
+
+	foreach( $inactive as $status )	{
+		if ( in_array( $status, $statuses ) )	{
+			unset( $statuses[ $status ] );
+		}
+	}
+
 	// Sort alphabetically
-	asort( $event_status );
-	
-	return $event_status;
+	asort( $statuses );
+
+	return $statuses;
 } // mdjm_active_event_statuses
 
 /**
