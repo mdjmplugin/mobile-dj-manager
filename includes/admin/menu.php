@@ -30,7 +30,7 @@ function mdjm_admin_menu()	{
 	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
 		   $mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
 		   $mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
-		   $mdjm_custom_client_fields_page;
+		   $mdjm_custom_client_fields_page, $mdjm_extensions_page;
 	
 	
 	//$mdjm_dashboard_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Dashboard', 'mobile-dj-manager' ), __( 'Dashboard', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-dashboard', 'mdjm_dashboard_page' );
@@ -81,6 +81,7 @@ function mdjm_admin_menu()	{
 
 	$mdjm_tools_page                = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Tools', 'mobile-dj-manager' ), __( 'Tools', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-tools', 'mdjm_tools_page' );
 	$mdjm_reports_page              = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Reports', 'mobile-dj-manager' ), __( 'Reports', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-reports', 'mdjm_reports_page' );
+	$mdjm_extensions_page           = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'MDJM Extensions', 'mobile-dj-manager' ),  __( 'Extensions', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-addons', 'mdjm_extensions_page' );
 	$mdjm_playlist_page             = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	$mdjm_custom_event_fields_page  = add_submenu_page( null, __( 'Custom Event Fields', 'mobile-dj-manager' ), __( 'Custom Event Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-event-fields', array( 'MDJM_Event_Fields', 'custom_event_field_settings' ) );
 	$mdjm_custom_client_fields_page = add_submenu_page( null, __( 'Custom Client Fields', 'mobile-dj-manager' ), __( 'Custom Client Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-client-fields', 'mdjm_custom_client_fields_page' );

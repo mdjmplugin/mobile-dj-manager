@@ -261,6 +261,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/class-mdjm-graph.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/class-mdjm-pie-graph.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/graphing-functions.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/extensions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );

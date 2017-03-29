@@ -317,6 +317,141 @@ checkbox.mdjm-form-error {
 	height:100%;
 }
 
+/* Extensions page Styles
+-------------------------------------------------------------- */
+.mdjm-extension-wrapper {
+	overflow: hidden;
+}
+
+.col {
+	background: #eee;
+	float: left;
+	margin-left: 3.2%;
+	margin-bottom: 30px;
+}
+.fullwidth .col {
+	float: none;
+	margin-left: 0;
+}
+
+.grid4 .col {
+	width: 22.6%;
+}
+
+.grid3 .col {
+	width: 31.2%;
+}
+
+.grid2 .col {
+	width: 48.4%;
+}
+
+.grid4 .col:nth-of-type(4n+1),
+.grid3 .col:nth-of-type(3n+1),
+.grid2 .col:nth-of-type(2n+1) {
+	margin-left: 0;
+	clear: left;
+}
+
+@media screen and (max-width: 740px) {
+	.grid4 .col {
+		width: 31.2%;
+	}
+	.grid4 .col:nth-of-type(4n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid4 .col:nth-of-type(3n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.grid4 .col {
+		width: 48.4%;
+	}
+	.grid4 .col:nth-of-type(3n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid4 .col:nth-of-type(2n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+
+	.grid3 .col {
+		width: 48.4%;
+	}
+	.grid3 .col:nth-of-type(3n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid3 .col:nth-of-type(2n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.col {
+		width: 100% !important;
+		margin-left: 0 !important;
+		clear: none !important;
+	}
+}
+
+.mdjm-extension-item {
+  width: calc(100% - 25px);
+  background: #FFFFFF;
+  margin: 25px auto;
+  text-align: left;
+  height: 425px;
+  
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+}
+
+.mdjm-extension-item-img {
+  position: relative;
+  width: 100%;
+}
+
+.mdjm-extension-item-img img {
+  position: relative;
+  width: 100%;
+}
+
+.mdjm-extension-item-desc {
+  position: relative;
+  padding: 25px;
+}
+
+.mdjm-extension-item-desc a {
+  position: relative;
+  display: block;
+  font-weight: 500;
+  margin: 25px 0 0 0;
+  color: #37474F;
+}
+
+.mdjm-extension-item-heading {
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.mdjm-extension-item-excerpt	{
+	height: 100px;
+}
+
+.mdjm-extension-buy-now {
+	padding-top: 20px;
+	text-align: center !important;
+	font-weight: normal;
+}
+
 /* =Metaboxes
 -------------------------------------------------------------- */
 .mdjm_field_wrap	{
