@@ -264,53 +264,51 @@ class MDJM_Cron	{
 	 */
 	public function complete_event()	{
 		global $mdjm, $mdjm_settings;
-		
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( '*** Starting the Complete Events task ***', true );
-		
-		$cron_start = microtime(true);
-		
-		$args = array(
-			'posts_per_page'	=> -1,
-			'post_type'		 => 'mdjm-event',
-			'post_status'	   => 'mdjm-approved',
-			'meta_key'		  => '_mdjm_event_date',
-			'orderby'		   => 'meta_value',
-			'order'			 => 'ASC',
-			'meta_query'		=> array(
-				'key'		=> '_mdjm_event_date',
-				'value'	  => date( 'Y-m-d' ),
-				'type' 	   => 'date',
-				'compare'	=> '<'
+
+		MDJM()->debug->log_it( '*** Starting the Complete Events task ***', true );
+
+		$cron_start = microtime( true );
+
+		$events = mdjm_get_events( array(
+			'post_status' => 'mdjm-approved',
+			'meta_key'    => '_mdjm_event_date',
+			'orderby'     => 'meta_value',
+			'order'       => 'ASC',
+			'meta_query'  => array(
+				'key'     => '_mdjm_event_date',
+				'value'   => date( 'Y-m-d' ),
+				'type'    => 'date',
+				'compare' => '<'
 			)
-		);
-								
-		$events = get_posts( $args );
-		
+		) );
+
 		$notify = array();
 		$x = 0;
-		
-		if( count( $events ) > 0 )	{ // Enquiries to process
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' to mark as completed' );
+
+		if ( count( $events ) > 0 )	{ // Enquiries to process
+			MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' to mark as completed' );
 			
 			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 			
 			/* -- Loop through the enquiries and update as completed -- */	
 			foreach( $events as $event )	{
 				$cronned = get_post_meta( $event->ID, '_mdjm_event_tasks', true );
-				if( !empty( $cronned ) && $cronned != '' )
+
+				if ( ! empty( $cronned ) && $cronned != '' )	{
 					$cron_update = json_decode( $cronned, true );
-				
-				if( !empty( $cron_update ) && array_key_exists( 'complete-events', $cron_update ) )	{// Task has already run for this event
+				}
+
+				if ( ! empty( $cron_update ) && array_key_exists( 'complete-events', $cron_update ) )	{ // Task has already run for this event
 					MDJM()->debug->log_it( 'This task has already run for this event (' . $event->ID . ')' );
 					continue;
 				}
 					
-				if( empty( $cron_update ) || !is_array( $cron_update ) ) $cron_update = array();
-				
-				$cron_update[$this->schedules['complete-events']['slug']] = time();
-				
+				if ( empty( $cron_update ) || ! is_array( $cron_update ) )	{
+					$cron_update = array();
+				}
+
+				$cron_update[ $this->schedules['complete-events']['slug'] ] = time();
+
 				wp_update_post( array( 'ID' => $event->ID, 'post_status' => 'mdjm-completed' ) );
 				
 				update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
@@ -321,10 +319,9 @@ class MDJM_Cron	{
 				}
 				
 				/* -- Update Journal -- */
-				if( MDJM_JOURNAL == true )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Adding journal entry' );
-							
+				if ( mdjm_get_option( 'journaling' ) )	{
+					MDJM()->debug->log_it( '	-- Adding journal entry' );
+
 					mdjm_add_journal(
 						array(
 							'user_id'         => 1,
@@ -332,134 +329,132 @@ class MDJM_Cron	{
 							'comment_content' => 'Event marked as completed via Scheduled Task <br /><br />' . time()
 						),
 						array(
-							'type' 		  => 'update-event',
-							'visibility'	=> '1',
+							'type'       => 'update-event',
+							'visibility' => '1',
 						)
 					);
 				} // End if( MDJM_JOURNAL == true )
 				else	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+					MDJM()->debug->log_it( '	-- Journalling is disabled' );	
 				}
 				
-				$notify_dj = isset( $this->schedules['complete-events']['options']['notify_dj'] ) ? $this->schedules['complete-events']['options']['notify_dj'] : '';
+				$notify_dj    = isset( $this->schedules['complete-events']['options']['notify_dj'] ) ? $this->schedules['complete-events']['options']['notify_dj'] : '';
 				$notify_admin = isset( $this->schedules['complete-events']['options']['notify_admin'] ) ? $this->schedules['complete-events']['options']['notify_admin'] : '';
 				
 				$client = get_post_meta( $event->ID, '_mdjm_event_client', true );
-				$dj = get_post_meta( $event->ID, '_mdjm_event_dj', true );
-				$event_date = get_post_meta( $event->ID, '_mdjm_event_date', true );
-				
-				$event_dj = !empty( $dj ) ? get_userdata( $dj ) : 'DJ not found';
-				$event_client = !empty( $client ) ? get_userdata( $client ) : 'Client not found';
-				
+				$dj     = get_post_meta( $event->ID, '_mdjm_event_dj', true );
+
+				$event_date   = get_post_meta( $event->ID, '_mdjm_event_date', true );
+				$event_dj     = ! empty( $dj )     ? get_userdata( $dj )     : __( 'DJ not found', 'mobile-dj-manager' );
+				$event_client = ! empty( $client ) ? get_userdata( $client ) : __( 'Client not found', 'mobile-dj-manager' );
+
 				$venue_post_id = get_post_meta( $event->ID, '_mdjm_event_venue_id', true );
-				
+
 				$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
-			
-				/* Prepare admin notification email data array */
-				if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
-						
-					if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
-					
-					$notify['admin'][$event->ID] = array(
-															'id'		=> $event->ID,
-															'client'	=> $event_client->display_name,
-															'venue'	 => !empty( $event_venue['name'] ) ? 
-																$event_venue['name'] : 'No Venue Set',
-															'djinfo'	=> $event_dj,
-															'date'	  => !empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : 'Date not found',
-															);
+
+				// Prepare admin notification email data array
+				if ( ! empty( $notify_admin ) && $notify_admin == 'Y' )	{
+					MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+
+					if ( ! isset( $notify['admin'] ) || ! is_array( $notify['admin'] ) )	{
+						$notify['admin'] = array();
+					}
+
+					$notify['admin'][ $event->ID ] = array(
+						'id'     => $event->ID,
+						'client' => $event_client->display_name,
+						'venue'  => ! empty( $event_venue['name'] ) ? $event_venue['name'] : __( 'No Venue Set', 'mobile-dj-manager' ),
+						'djinfo' => $event_dj,
+						'date'   => ! empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : __( 'Date not found', 'mobile-dj-manager' )
+					);
 				} // End if( !empty( $notify_admin ) && $notify_admin == 'Y' )
-				
-				/* Prepare DJ notification email data array */
-				if( !empty( $notify_dj ) && $notify_dj == 'Y' )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
-						
-					if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
-					$notify['dj'][$dj] = array();
-					$notify['dj'][$dj][$event->ID] = array(
-															'id'		=> $event->ID,
-															'client'	=> $event_client->display_name,
-															'venue'	 => !empty( $event_venue['name'] ) ? 
-																$event_venue['name'] : 'No Venue Set',
-															'djinfo'	=> $event_dj,
-															'date'	  => !empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : 'Date not found',
-															);
+
+				// Prepare DJ notification email data array
+				if ( ! empty( $notify_dj ) && $notify_dj == 'Y' )	{
+					MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+
+					if ( ! isset( $notify['dj'] ) || !is_array( $notify['dj'] ) )	{
+						$notify['dj'] = array();
+					}
+
+					$notify['dj'][ $dj ] = array();
+					$notify['dj'][ $dj ][ $event->ID ] = array(
+						'id'     => $event->ID,
+						'client' => $event_client->display_name,
+						'venue'  => ! empty( $event_venue['name'] ) ? $event_venue['name'] : __( 'No Venue Set', 'mobile-dj-manager' ),
+						'djinfo' => $event_dj,
+						'date'   => ! empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : __( 'Date not found', 'mobile-dj-manager' )
+					);
 						
 				} // End if( !empty( $notify_dj ) && $notify_dj == 'Y' )
 				
 				$x++;
 				
 			} // End foreach
-			$cron_end = microtime(true);
+			$cron_end = microtime( true );
 							
-			/* -- Prepare the Admin notification email -- */
-			if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
+			// Prepare the Admin notification email
+			if ( ! empty( $notify_admin ) && $notify_admin == 'Y' )	{
 				$notify_email_args = array(
-										'data'		=> $notify['admin'],
-										'taskinfo'	=> $this->schedules['complete-events'],
-										'start'	   => $cron_start,
-										'end'		 => $cron_end,
-										'total'	   => $x,
-									); // $notify_email_args
+					'data'     => $notify['admin'],
+					'taskinfo' => $this->schedules['complete-events'],
+					'start'    => $cron_start,
+					'end'      => $cron_end,
+					'total'    => $x,
+				); // $notify_email_args
 									
 				$mdjm->send_email( array(
-										'content'	=> $this->notification_content( $notify_email_args ),
-										'to'		 => $mdjm_settings['email']['system_email'],
-										'subject'	=> sanitize_text_field( $this->schedules['complete-events']['options']['email_subject'] ),
-										'journal'	=> false,
-										'html'	   => false,
-										'cc_admin'   => false,
-										'cc_dj'	  => false,
-										'filter'	 => false,
-										'log_comm'   => false,
-										) );
-			}// if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
-			
-			/* -- Prepare the DJ notification email -- */
-			if( !empty( $notify_dj ) && $notify_dj == 'Y' )	{
+					'content'  => $this->notification_content( $notify_email_args ),
+					'to'       => $mdjm_settings['email']['system_email'],
+					'subject'  => sanitize_text_field( $this->schedules['complete-events']['options']['email_subject'] ),
+					'journal'  => false,
+					'html'     => false,
+					'cc_admin' => false,
+					'cc_dj'    => false,
+					'filter'   => false,
+					'log_comm' => false,
+				) );
+			} // if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
+
+			// Prepare the DJ notification email
+			if ( ! empty( $notify_dj ) && $notify_dj == 'Y' )	{
 				foreach( $notify['dj'] as $notify_dj )	{
 					foreach( $notify_dj as $dj )	{
 						$notify_email_args = array(
-												'data'		=> $notify_dj,
-												'taskinfo'	=> $this->schedules['complete-events'],
-												'start'	   => $cron_start,
-												'end'		 => $cron_end,
-												'total'	   => $x,
-											); // $notify_email_args
-																		
+							'data'     => $notify_dj,
+							'taskinfo' => $this->schedules['complete-events'],
+							'start'    => $cron_start,
+							'end'      => $cron_end,
+							'total'    => $x,
+						); // $notify_email_args
+
 						$mdjm->send_email( array(
-												'content'	=> $this->notification_content( $notify_email_args ),
-												'to'		 => $dj->ID,
-												'subject'	=> sanitize_text_field( $this->schedules['complete-events']['options']['email_subject'] ),
-												'journal'	=> false,
-												'html'	   => false,
-												'cc_admin'   => false,
-												'cc_dj'	  => false,
-												'filter'   => false,
-												'log_comm'   => false,
-												) );
+							'content'  => $this->notification_content( $notify_email_args ),
+							'to'       => $dj->ID,
+							'subject'  => sanitize_text_field( $this->schedules['complete-events']['options']['email_subject'] ),
+							'journal'  => false,
+							'html'     => false,
+							'cc_admin' => false,
+							'cc_dj'    => false,
+							'filter'   => false,
+							'log_comm' => false,
+						) );
 					} // foreach( $notify_dj as $dj )
 				} // foreach( $notify['dj'] as $notify_dj )
 			} // if( !empty( $notify_dj ) && $notify_dj == 'Y' )
 			
 			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 		} // if( count( $events ) > 0 )
-		
+
 		else	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'No events to mark as complete' );	
+			MDJM()->debug->log_it( 'No events to mark as complete' );	
 		}
-					
+
 		// Prepare next run time
 		$this->update_nextrun( 'complete-events' );
-		
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( '*** Completed the Complete Events task ***', true );
-		
+
+		MDJM()->debug->log_it( '*** Completed the Complete Events task ***', true );
+
 	} // complete_event
 	
 	/*
@@ -915,262 +910,246 @@ class MDJM_Cron	{
 	 *
 	 */
 	public function balance_reminder()	{
-		global $mdjm, $mdjm_settings;
+		global $mdjm;
 		
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( '*** Starting the Request Balance task ***', true );
+		MDJM()->debug->log_it( '*** Starting the Request Balance task ***', true );
 		
-		$cron_start = microtime(true);
+		$cron_start = microtime( true );
+		$notify     = array();
+		$x          = 0;
+		$options    = $this->schedules['balance-reminder']['options'];
 		
-		/* -- Calculate the time period for which the task should run -- */
-		$due_date = date( 'Y-m-d', strtotime( "-" . $this->schedules['balance-reminder']['options']['age'] ) );
-					
-		$args = array(
-					'posts_per_page'	=> -1,
-					'post_type'		 => 'mdjm-event',
-					'post_status'	   => 'mdjm-approved',
-					'meta_query'		=> array(
-											'relation'	=> 'AND',
-												array(
-													'key'		=> '_mdjm_event_date',
-													'compare'	=> '>=',
-													'value'	  => $due_date,
-													'type'	   => 'date',
-												),
-												array(
-													'key'		=> '_mdjm_event_balance_status',
-													'compare'	=> '==',
-													'value'	  => 'Due',
-												),
-												array(
-													'key'		=> '_mdjm_event_cost',
-													'value'	  => '0.00',
-													'compare'	=> '>',
-												),
-												array(
-													'key'		=> '_mdjm_event_tasks',
-													'value'	  => 'balance-reminder',
-													'compare'	=> 'NOT IN',
-												),
-											),
-					);
-		
-		// Retrieve events for which balance is due
-		$events = get_posts( $args );
-		
-		$notify = array();
-		$x = 0;
-		
-		if( count( $events ) > 0 )	{ // Events to process
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the balance is due' );
-			
+		// Calculate the time period for which the task should run
+		$due_date = date( 'Y-m-d', strtotime( "-" . $options['age'] ) );
+
+		$events = mdjm_get_events( array(
+			'post_status' => 'mdjm-approved',
+			'meta_query'  => array(
+				'relation' => 'AND',
+					array(
+						'key'     => '_mdjm_event_date',
+						'compare' => '>=',
+						'value'   => $due_date,
+						'type'    => 'date'
+					),
+					array(
+						'key'     => '_mdjm_event_balance_status',
+						'value'   => 'Due'
+					),
+					array(
+						'key'     => '_mdjm_event_cost',
+						'value'   => '0.00',
+						'compare' => '>'
+					),
+					array(
+						'key'     => '_mdjm_event_tasks',
+						'value'   => 'balance-reminder',
+						'compare' => 'NOT IN'
+					)
+				)
+		) );
+
+		if ( count( $events ) > 0 )	{ // Events to process
+			MDJM()->debug->log_it( count( $events ) . ' ' . _n( 'event', 'events', count( $events ) ) . ' where the balance is due' );
+
 			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-			
-			/* -- Loop through the enquiries and update as completed -- */	
-			foreach( $events as $event )	{
-				$cronned = get_post_meta( $event->ID, '_mdjm_event_tasks', true );
-				if( !empty( $cronned ) && $cronned != '' )
-					$cron_update = json_decode( $cronned, true );
+
+			// Loop through the enquiries and update as completed
+			foreach( $events as $_event )	{
+				$event = new MDJM_Event( $_event->ID );
+
+				if ( ! $event )	{
+					return;
+				}
+
+				$tasks = $event->get_tasks();
 				
-				if( array_key_exists( 'balance-reminder', $cron_update ) ) // Task has already run for this event
+				if ( ! empty( $tasks ) && array_key_exists( 'balance-reminder', $tasks ) )	{
 					continue;
-					
-				if( !is_array( $cron_update ) ) $cron_update = array();
-				
-				$cron_update[$this->schedules['balance-reminder']['slug']] = time();
-				
+				}
+
 				wp_update_post( array( 'ID' => $event->ID, 'post_modified' => date( 'Y-m-d H:i:s' ) ) );
-				
+
 				update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
-				update_post_meta( $event->ID, '_mdjm_event_tasks', json_encode( $cron_update ) );
-				
-				/* -- Update Journal -- */
-				if( MDJM_JOURNAL == true )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Adding journal entry' );
-							
-					mdjm_add_journal(
-						array(
-							'user_id'         => 1,
-							'event_id'        => $event->ID,
-							'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time()
-						),
-						array(
-							'type'       => 'added-note',
-							'visibility' => '0',
-						) );
-				} // End if( MDJM_JOURNAL == true )
-				else	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Journalling is disabled' );	
+				$event->complete_task( 'balance-reminder' );
+
+				// Update Journal
+				mdjm_add_journal(
+					array(
+						'user_id'         => 1,
+						'event_id'        => $event->ID,
+						'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time()
+					),
+					array(
+						'type'       => 'added-note',
+						'visibility' => '0',
+					) );
+
+				$notify_dj    = isset( $options['notify_dj'] ) ? $options['notify_dj'] : '';
+				$notify_admin = isset( $options['notify_dj'] ) ? $options['notify_dj'] : '';
+
+				$client     = $event->client;
+				$dj         = $event->employee_id;
+				$event_date = $event->date;
+
+				$event_dj      = ! empty( $dj )     ? get_userdata( $dj )     : __( 'DJ not found', 'mobile-dj-manager' );
+				$event_client  = ! empty( $client ) ? get_userdata( $client ) : __( 'Client not found', 'mobile-dj-manager' );
+				$event_deposit = $event->deposit;
+				$event_cost    = $event->price;
+
+				$venue_post_id = $event->get_venue_id();
+
+				$contact_client = ( isset( $options['email_client'] ) && $options['email_client'] == 'Y'  ? true : false );
+
+				if ( isset( $options['email_template'] ) && is_string( get_post_status( $options['email_template'] ) ) )	{
+					$email_template = $options['email_template'];
+				} else	{
+					$email_template = false;
 				}
-				
-				$notify_dj = isset( $this->schedules['balance-reminder']['options']['notify_dj'] ) ? $this->schedules['balance-reminder']['options']['notify_dj'] : '';
-				$notify_admin = isset( $this->schedules['balance-reminder']['options']['notify_admin'] ) ? $this->schedules['balance-reminder']['options']['notify_admin'] : '';
-				
-				$client = get_post_meta( $event->ID, '_mdjm_event_client', true );
-				$dj = get_post_meta( $event->ID, '_mdjm_event_dj', true );
-				$event_date = get_post_meta( $event->ID, '_mdjm_event_date', true );
-				
-				$event_dj = !empty( $dj ) ? get_userdata( $dj ) : 'DJ not found';
-				$event_client = !empty( $client ) ? get_userdata( $client ) : 'Client not found';
-				$event_deposit = get_post_meta( $event->ID, '_mdjm_event_deposit', true );
-				$event_cost = get_post_meta( $event->ID, '_mdjm_event_cost', true );
-				
-				$venue_post_id = get_post_meta( $event->ID, '_mdjm_event_venue_id', true );
-				
-				$event_venue = MDJM()->events->mdjm_get_venue_details( $venue_post_id, $event->ID );	
-			
-				$contact_client = ( isset( $this->schedules['balance-reminder']['options']['email_client'] ) 
-					&& $this->schedules['balance-reminder']['options']['email_client'] == 'Y'  ? true : false );
 					
-				$email_template = ( isset( $this->schedules['balance-reminder']['options']['email_template'] ) && 
-					is_string( get_post_status( $this->schedules['balance-reminder']['options']['email_template'] ) ) ? 
-					$this->schedules['balance-reminder']['options']['email_template'] : false );
-				
-				/* -- Client Deposit Request Email -- */
-				if( !empty( $contact_client ) && !empty( $email_template ) )	{ // Email the client
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is configured to notify client that deposit is due' );
-						
-					$request = $mdjm->send_email( array( 
-								'content'	=> $email_template,
-								'to'		 => $event_client->ID,
-								'from'	   => $mdjm_settings['templates']['enquiry_from'] == 'dj' ? $event_dj->ID : 0,
-								'journal'	=> 'email-client',
-								'event_id'   => $event->ID,
-								'html'	   => true,
-								'cc_dj'	  => isset( $mdjm_settings['email']['bcc_dj_to_client'] ) ? true : false,
-								'cc_admin'   => isset( $mdjm_settings['email']['bcc_admin_to_client'] ) ? true : false,
-								'source'	 => __( 'Request ' . mdjm_get_balance_label() . ' Scheduled Task' ),
-							) );
-					if( $request )	{
-						if( MDJM_DEBUG == true )
-							 MDJM()->debug->log_it( '	-- Balance reminder sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
+				// Client Balance Request Email
+				if ( $contact_client && $email_template )	{
+					MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is configured to notify client that balance is due' );
+
+					$from_email = mdjm_get_option( 'system_email' );
+					$from_name  = mdjm_get_option( 'company_name' );
+
+					if ( 'dj' == $options['email_from'] )	{
+						$from_email = $event_dj->user_email;
+						$from_name  = $event_dj->display_name;
 					}
-					else	{
-						if( MDJM_DEBUG == true )
-							 MDJM()->debug->log_it( '	ERROR: Balance reminder was not sent' );
+
+					$email_args = array(
+						'to_email'       => $event_client->user_email,
+						'from_name'      => $from_name,
+						'from_email'     => $from_email,
+						'event_id'       => $event->ID,
+						'client_id'      => $event->client,
+						'subject'        => $options['email_subject'],
+						'message'        => mdjm_get_email_template_content( $email_template ),
+						'track'          => true,
+						'source'         => __( 'Request ' . mdjm_get_balance_label() . ' Scheduled Task' )
+					);
+
+					if ( mdjm_send_email_content( $email_args ) )	{
+						 MDJM()->debug->log_it( '	-- Balance reminder sent to ' . $event_client->display_name . '. ' . $request . ' ID ' );
+					} else	{
+						 MDJM()->debug->log_it( '	ERROR: Balance reminder was not sent' );
 					}
-				}
-				else	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is not configured to notify client' );	
+				} else	{
+					MDJM()->debug->log_it( 'Task ' . $this->schedules['balance-reminder']['name'] . ' is not configured to notify client' );	
 				}
 			
-				/* Prepare admin notification email data array */
-				if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
+				// Prepare admin notification email data array
+				if ( ! empty( $notify_admin ) && $notify_admin == 'Y' )	{
+					MDJM()->debug->log_it( '	-- Admin notifications are enabled' );
 						
-					if( !isset( $notify['admin'] ) || !is_array( $notify['admin'] ) ) $notify['admin'] = array();
-					
-					$notify['admin'][$event->ID] = array(
-															'id'		=> $event->ID,
-															'client'	=> $event_client->display_name,
-															'deposit'   => !empty( $event_deposit ) ? 
-																			$event_deposit : '0',
-															'cost'   => !empty( $event_cost ) ? 
-																			$event_cost : '0',
-															'venue'	 => !empty( $event_venue['name'] ) ? 
-																$event_venue['name'] : 'No Venue Set',
-															'djinfo'	=> $event_dj,
-															'date'	  => !empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : 'Date not found',
-															);
-				} // End if( !empty( $notify_admin ) && $notify_admin == 'Y' )
-				
-				/* Prepare DJ notification email data array */
-				if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
-					if( MDJM_DEBUG == true )
-						MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
+					if ( ! isset( $notify['admin'] ) || ! is_array( $notify['admin'] ) )	{
+						$notify['admin'] = array();
+					}
+
+					$notify['admin'][ $event->ID ] = array(
+						'id'      => $event->ID,
+						'client'  => $event_client->display_name,
+						'deposit' => ! empty( $event_deposit ) ? $event_deposit : '0',
+						'cost'    => ! empty( $event_cost ) ? $event_cost : '0',
+						'venue'   => ! empty( $event_venue['name'] ) ? $event_venue['name'] : __( 'No Venue Set', 'mobile-dj-manager' ),
+						'djinfo'  => $event_dj,
+						'date'    => ! empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : __( 'Date not found', 'mobile-dj-manager' )
+					);
+				}
+
+				// Prepare DJ notification email data array
+				if ( ! empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
+					MDJM()->debug->log_it( '	-- DJ notifications are enabled' );
 						
-					if( !isset( $notify['dj'] ) || !is_array( $notify['dj'] ) ) $notify['dj'] = array();
-					$notify['dj'][$dj] = array();
-					$notify['dj'][$dj][$event->ID] = array(
-															'id'		=> $event->id,
-															'client'	=> $event_client->display_name,
-															'deposit'   => !empty( $event_deposit ) ? 
-																			$event_deposit : '0',
-															'cost'   => !empty( $event_cost ) ? 
-																			$event_cost : '0',
-															'venue'	 => !empty( $event_venue['name'] ) ? 
-																$event_venue['name'] : 'No Venue Set',
-															'djinfo'	=> $event_dj,
-															'date'	  => !empty( $event_date ) ? date( "d M Y", strtotime( $event_date ) ) : 'Date not found',
-															);
-						
-				} // End if( !empty( $notify_dj ) && $notify_dj == 'Y' )
-				
+					if ( ! isset( $notify['dj'] ) ||  !is_array( $notify['dj'] ) )	{
+						$notify['dj'] = array();
+					}
+
+					$notify['dj'][ $dj ] = array();
+					$notify['dj'][ $dj ][ $event->ID ] = array(
+						'id'      => $event->id,
+						'client'  => $event_client->display_name,
+						'deposit' => ! empty( $event_deposit ) ? $event_deposit : '0',
+						'cost'    => ! empty( $event_cost )    ? $event_cost : '0',
+						'venue'   => ! empty( $event_venue['name'] ) ? $event_venue['name'] : __( 'No Venue Set', 'mobile-dj-manager' ),
+						'djinfo'  => $event_dj,
+						'date'    => ! empty( $event_date )    ? date( "d M Y", strtotime( $event_date ) ) : __( 'Date not found', 'mobile-dj-manager' )
+					);
+
+				}
+
 				$x++;
-				
-			} // End foreach
-			$cron_end = microtime(true);
-							
-			/* -- Prepare the Admin notification email -- */
-			if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
+
+			}
+			$cron_end = microtime( true );
+
+			// Prepare the Admin notification email
+			if ( ! empty( $notify_admin ) && $notify_admin == 'Y' )	{
 				$notify_email_args = array(
-										'data'		=> $notify['admin'],
-										'taskinfo'	=> $this->schedules['balance-reminder'],
-										'start'	   => $cron_start,
-										'end'		 => $cron_end,
-										'total'	   => $x,
-									); // $notify_email_args
-									
+					'data'     => $notify['admin'],
+					'taskinfo' => $this->schedules['balance-reminder'],
+					'start'    => $cron_start,
+					'end'      => $cron_end,
+					'total'    => $x
+				);
+
 				$mdjm->send_email( array(
-										'content'	=> $this->notification_content( $notify_email_args ),
-										'to'		 => $mdjm_settings['email']['system_email'],
-										'subject'	=> 'Balance Reminder Scheduled Task Completed - ' . MDJM_APP,
-										'journal'	=> false,
-										'html'	   => false,
-										'cc_admin'   => false,
-										'cc_dj'	  => false,
-										'filter'	 => false,
-										'log_comm'   => false,
-										) );
-			}// if( !empty( $notify_admin ) && $notify_admin == 'Y' )	{
-			
-			/* -- Prepare the DJ notification email -- */
-			if( !empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
+					'content'  => $this->notification_content( $notify_email_args ),
+					'to'       => mdjm_get_option( 'system_email' ),
+					'subject'  => 'Balance Reminder Scheduled Task Completed - ' . MDJM_APP,
+					'journal'  => false,
+					'html'     => false,
+					'cc_admin' => false,
+					'cc_dj'    => false,
+					'filter'   => false,
+					'log_comm' => false
+				) );
+			}
+
+			// Prepare the DJ notification email
+			if ( ! empty( $notify_dj ) && $notify_dj == 'Y' && mdjm_employee_can( 'edit_txns' ) )	{
+
 				foreach( $notify['dj'] as $notify_dj )	{
+
 					foreach( $notify_dj as $dj )	{
+
 						$notify_email_args = array(
-												'data'		=> $notify_dj,
-												'taskinfo'	=> $this->schedules['balance-reminder'],
-												'start'	   => $cron_start,
-												'end'		 => $cron_end,
-												'total'	   => $x,
-											); // $notify_email_args
-																		
+							'data'		=> $notify_dj,
+							'taskinfo'	=> $this->schedules['balance-reminder'],
+							'start'	   => $cron_start,
+							'end'		 => $cron_end,
+							'total'	   => $x,
+						); // $notify_email_args
+
 						$mdjm->send_email( array(
-												'content'	=> $this->notification_content( $notify_email_args ),
-												'to'		 => $dj->ID,
-												'subject'	=> 'Balance Reminder Scheduled Task Completed - ' . MDJM_APP,
-												'journal'	=> false,
-												'html'	   => false,
-												'cc_admin'   => false,
-												'cc_dj'	  => false,
-												'filter'   => false,
-												'log_comm'   => false,
-												) );
-					} // foreach( $notify_dj as $dj )
-				} // foreach( $notify['dj'] as $notify_dj )
-			} // if( !empty( $notify_dj ) && $notify_dj == 'Y' )
-			
+							'content'	=> $this->notification_content( $notify_email_args ),
+							'to'		 => $dj->ID,
+							'subject'	=> 'Balance Reminder Scheduled Task Completed - ' . MDJM_APP,
+							'journal'	=> false,
+							'html'	   => false,
+							'cc_admin'   => false,
+							'cc_dj'	  => false,
+							'filter'   => false,
+							'log_comm'   => false,
+						) );
+
+					}
+
+				}
+			}
+
 			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-		} // if( count( $events ) > 0 )
-		
-		else	{
-			if( MDJM_DEBUG == true )
-				MDJM()->debug->log_it( 'No balances are due' );
+		} else	{
+			MDJM()->debug->log_it( 'No balances are due' );
 		}
-					
+
 		// Prepare next run time
 		$this->update_nextrun( 'balance-reminder' );
-		
-		if( MDJM_DEBUG == true )
-			MDJM()->debug->log_it( '*** Completed the Balance Reminder task ***', true );
-		
+
+		MDJM()->debug->log_it( '*** Completed the Balance Reminder task ***', true );
+
 	} // balance_reminder
 	
 	/**
