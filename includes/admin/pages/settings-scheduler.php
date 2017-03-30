@@ -1,8 +1,17 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	if ( !current_user_can( 'manage_options' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-	}
+/**
+ * The tasks page
+ *
+ * @package		MDJM
+ * @subpackage	Tasks
+ * @since		0.9.3
+ */
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+if ( ! current_user_can( 'manage_options' ) )  {
+	wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+}
 		
 /*
 * settings-scheduler.php 

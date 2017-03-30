@@ -504,7 +504,8 @@ function mdjm_v143_upgrades()	{
 } // mdjm_v143_upgrades
 
 /**
- * Ensure all events have the _mdjm_event_tasks  meta key.
+ * Ensure all events have the _mdjm_event_tasks meta key.
+ * Update schedules.
  *
  * @since	1.4.7
  * @return	void
@@ -520,6 +521,7 @@ function mdjm_v147_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
+	// Ensure all events have the _mdjm_event_tasks meta key
 	$today = date( 'Y-m-d' );
 
 	$events = mdjm_get_events( array(
@@ -543,6 +545,57 @@ function mdjm_v147_upgrades()	{
 		foreach( $events as $event )	{
 			add_post_meta( $event->ID, '_mdjm_event_tasks', array(), true );
 		}
+	}
+
+	// Update schedules
+	$tasks = get_option( 'mdjm_schedules' );
+
+	if ( $tasks )	{
+
+		foreach( $tasks as $slug => $task )	{
+			$active       = false;
+			$lastrun      = false;
+			$email_client = false;
+			$notify_admin = false;
+			$notify_dj    = false;
+			$default      = false;
+
+			if ( ! empty( $task['active'] ) && 'Y' == $task['active'] )	{
+				$active = true;
+			}
+
+			if ( ! empty( $task['lastran'] ) && 'Never' != $task['lastran'] )	{
+				$lastrun = $task['lastran'];
+			}
+
+			if ( ! empty( $task['options']['email_client'] ) && 'Y' == $task['options']['email_client'] )	{
+				$email_client = true;
+			}
+
+			if ( ! empty( $task['options']['notify_admin'] ) && 'Y' == $task['options']['notify_admin'] )	{
+				$notify_admin = true;
+			}
+
+			if ( ! empty( $task['options']['notify_dj'] ) && 'Y' == $task['options']['notify_dj'] )	{
+				$notify_dj = true;
+			}
+
+			if ( ! empty( $task['default'] ) && 'Y' == $task['default'] )	{
+				$default = true;
+			}
+
+			$tasks[ $slug ]['active']                  = $active;
+			$tasks[ $slug ]['lastran']                 = $lastrun;
+			$tasks[ $slug ]['options']['email_client'] = $email_client;
+			$tasks[ $slug ]['options']['notify_admin'] = $notify_admin;
+			$tasks[ $slug ]['options']['notify_dj']    = $notify_dj;
+			$tasks[ $slug ]['default']                 = $default;
+			$tasks[ $slug ]['last_result']             = false;
+
+		}
+
+		update_option( 'mdjm_schedules', $tasks );
+
 	}
 
 } // mdjm_v147_upgrades
