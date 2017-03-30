@@ -47,6 +47,12 @@ function mdjm_do_automatic_upgrades() {
 
 	}
 
+	if( version_compare( $mdjm_version, '1.4.7', '<' ) ) {
+
+		mdjm_v147_upgrades();
+
+	}
+
 	if( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 
 		// Let us know that an upgrade has happened
@@ -496,3 +502,47 @@ function mdjm_v143_upgrades()	{
 	}
 
 } // mdjm_v143_upgrades
+
+/**
+ * Ensure all events have the _mdjm_event_tasks  meta key.
+ *
+ * @since	1.4.7
+ * @return	void
+ */
+function mdjm_v147_upgrades()	{
+	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	$today = date( 'Y-m-d' );
+
+	$events = mdjm_get_events( array(
+		'meta_query' => array(
+			'relation' => 'AND',
+			array(
+				'key'     => '_mdjm_event_tasks',
+				'compare' => 'NOT EXISTS',
+				'value'   => 'BUG'
+			),
+			array(
+				'key'     => '_mdjm_event_date',
+				'compare' => '>',
+				'value'   => $today,
+				'type'    => 'DATE'
+			)
+		)
+	) );
+
+	if ( $events )	{
+		foreach( $events as $event )	{
+			add_post_meta( $event->ID, '_mdjm_event_tasks', array(), true );
+		}
+	}
+
+} // mdjm_v147_upgrades
