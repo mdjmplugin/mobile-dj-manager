@@ -1313,6 +1313,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * Prepare the remaining event meta data.
 	 */
 	$event_data['_mdjm_event_last_updated_by'] = get_current_user_id();
+	if ( ! get_post_meta( $post_id, '_mdjm_event_tasks', true ) )	{
+		$event_data['_mdjm_event_tasks'] = array();
+	}
 	
 	/**
 	 * Event name.
