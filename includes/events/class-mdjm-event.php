@@ -32,91 +32,98 @@ class MDJM_Event {
 	 * @since	1.3
 	 */
 	public $date;
-	
+
 	/**
 	 * The event short date
 	 *
 	 * @since	1.3
 	 */
 	public $short_date;
-	
+
 	/**
 	 * The client ID
 	 *
 	 * @since	1.3
 	 */
 	public $client;
-	
+
 	/**
 	 * The primary employee ID
 	 *
 	 * @since	1.3
 	 */
 	public $employee_id;
-	
+
 	/**
 	 * The event employees
 	 *
 	 * @since	1.3
 	 */
 	public $employees;
-	
+
 	/**
 	 * The event price
 	 *
 	 * @since	1.3
 	 */
 	public $price;
-	
+
 	/**
 	 * The event deposit
 	 *
 	 * @since	1.3
 	 */
 	public $deposit;
-	
+
 	/**
 	 * The deposit status
 	 *
 	 * @since	1.3
 	 */
 	public $deposit_status;
-	
+
 	/**
 	 * The event balance
 	 *
 	 * @since	1.3
 	 */
 	public $balance;
-	
+
 	/**
 	 * The balance status
 	 *
 	 * @since	1.3
 	 */
 	public $balance_status;
-		
+
 	/**
 	 * The total income
 	 *
 	 * @since	1.3
 	 */
 	public $income;
-	
+
 	/**
 	 * The total outgoings
 	 *
 	 * @since	1.3
 	 */
 	public $outgoings;
-	
+
 	/**
 	 * The event guest playlist code
 	 *
 	 * @since	1.3
 	 */
 	public $playlist_code;
-		
+
+	/**
+	 * Completed tasks
+	 *
+	 * @since	1.4.7
+	 */
+	public $tasks;
+
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
 	 * Anything we've delcared above has been removed.
@@ -680,7 +687,7 @@ class MDJM_Event {
 				$this->price = 0;
 
 			}
-			
+
 		}
 
 		/**
@@ -715,7 +722,7 @@ class MDJM_Event {
 				$this->deposit = 0;
 
 			}
-			
+
 		}
 
 		/**
@@ -736,17 +743,17 @@ class MDJM_Event {
 	 * @return	str
 	 */
 	public function get_remaining_deposit()	{
-		
+
 		$income = $this->get_total_income();
-		
+
 		if ( $income >= $this->get_deposit() )	{
 			$return = '0';
 		} else	{
 			$return = ( $this->get_deposit() - $income );
 		}
-		
+
 		return apply_filters( 'mdjm_get_remaining_deposit', $return, $this->ID );
-		
+
 	} // get_remaining_deposit
 	
 	/**
@@ -764,15 +771,15 @@ class MDJM_Event {
 			if ( ! $this->deposit_status || $this->deposit_status != 'Paid' || $this->get_deposit() > 0 ) {
 
 				$this->deposit_status = 'Due';
-				
+
 				if ( mdjm_sanitize_amount( $this->get_total_income() ) >= mdjm_sanitize_amount( $this->get_deposit() ) )	{
-					
+
 					$this->deposit_status = 'Paid';
-					
+
 				}
 
 			} else	{
-			
+
 				if ( empty( $this->deposit ) || $this->deposit == '0.00' )	{
 					$this->deposit_status ='Paid';
 				} else	{
@@ -780,7 +787,7 @@ class MDJM_Event {
 				}
 
 			}
-			
+
 		}
 
 		/**
@@ -811,21 +818,21 @@ class MDJM_Event {
 				$this->balance_status ='Due';
 
 				if ( mdjm_sanitize_amount( $this->get_total_income() ) >= mdjm_sanitize_amount( $this->get_price() ) )	{
-					
+
 					$this->balance_status = 'Paid';
-					
+
 				}
 
 			} else	{
-						
+
 				if ( empty( $this->price ) || $this->price == '0.00' )	{
 					$this->balance_status ='Paid';
 				} else	{
 					$this->balance_status = 'Due';
 				}
-					
+
 			}
-			
+
 		}
 
 		/**
@@ -848,14 +855,14 @@ class MDJM_Event {
 	public function get_balance() {
 
 		if ( ! isset( $this->balance ) ) {
-			
+
 			$income = $this->get_total_income();
 
 			$this->balance = $this->price;
 			if ( ! empty( $income ) )	{
 				$this->balance = $this->price - $income;
 			}
-			
+
 		}
 
 		/**
@@ -888,11 +895,11 @@ class MDJM_Event {
 
 					$this->income += $mdjm_txn->price;
 				}
-				
+
 			}
 
 		}
-		
+
 		/**
 		 * Override the income for this event.
 		 *
@@ -927,7 +934,7 @@ class MDJM_Event {
 			}
 
 		}
-		
+
 		/**
 		 * Override the income for this event.
 		 *
@@ -948,7 +955,7 @@ class MDJM_Event {
 	public function get_total_profit()	{
 
 		$profit = ( $this->get_total_income() - $this->get_total_outgoings() );
-		
+
 		/**
 		 * Override the profit for this event.
 		 *
@@ -967,19 +974,19 @@ class MDJM_Event {
 	 * @return	str
 	 */
 	public function get_wages_total()	{
-		
+
 		if ( ! isset( $this->employees ) )	{
 			$this->get_all_employees();
 		}
-		
+
 		$wages = mdjm_format_amount( 0 );
-		
+
 		if( ! empty( $this->employees ) )	{
 			foreach( $this->employees as $employee => $employee_data )	{
 				$wages += $employee_data['wage'];
 			}
 		}
-		
+
 		/**
 		 * Override the income for this event.
 		 *
@@ -999,11 +1006,11 @@ class MDJM_Event {
 	 */
 	public function get_venue_id() {
 		$venue_id = get_post_meta( $this->ID, '_mdjm_event_venue_id', true );
-		
+
 		if ( 'Manual' == $venue_id )	{
 			$venue_id = $this->ID;
 		}
-		
+
 		/**
 		 * Override the venue id.
 		 *
@@ -1021,7 +1028,7 @@ class MDJM_Event {
 	 */
 	public function get_travel_data() {
 		$travel_data = $this->get_meta( '_mdjm_event_travel_data' );
-		
+
 		/**
 		 * Override the travel data.
 		 *
@@ -1041,10 +1048,10 @@ class MDJM_Event {
 		if ( ! isset( $this->playlist_code ) ) {
 			$this->playlist_code = get_post_meta( $this->ID, '_mdjm_event_playlist_access', true );
 		}
-		
+
 		return apply_filters( 'mdjm_guest_playlist_code', $this->playlist_code, $this->ID );
 	} // get_playlist_code
-	
+
 	/**
 	 * Determine if the playlist is enabled.
 	 *
@@ -1053,14 +1060,14 @@ class MDJM_Event {
 	 */
 	public function playlist_is_enabled() {
 		$return = false;
-		
+
 		if ( 'Y' == get_post_meta( $this->ID, '_mdjm_event_playlist', true ) )	{
 			$return = true;
 		}
-					
+
 		return apply_filters( 'mdjm_playlist_status', $return, $this->ID );
 	} // is_playlist_enabled
-	
+
 	/**
 	 * Determine if the playlist is open.
 	 *
@@ -1072,17 +1079,56 @@ class MDJM_Event {
 		if( ! $this->playlist_is_enabled() )	{
 			return false;
 		}
-		
+
 		$close = mdjm_get_option( 'close', false );
-		
+
 		// Playlist never closes
 		if( empty( $close ) )	{
 			return true;
 		}
-		
+
 		$date = get_post_meta( $this->ID, '_mdjm_event_date', true );
-			
+
 		return time() > ( strtotime( $date ) - ( $close * DAY_IN_SECONDS ) ) ? false : true;
 	} // is_playlist_open
-	
+
+	/**
+	 * Retrieve the completed tasks for the event.
+	 *
+	 * @since	1.4.7
+	 * @return	array
+	 */
+	public function get_tasks()	{
+		if ( ! isset( $this->tasks ) )	{
+			$_tasks = json_decode( $this->get_meta( '_mdjm_event_tasks' ), true );
+		}
+
+		return $this->tasks;
+	} // get_tasks
+
+	/**
+	 * Retrieve the completed tasks for the event.
+	 *
+	 * @since	1.4.7
+	 * @param	str		$task	Slug name of task to mark as complete
+	 * @return	bool|array
+	 */
+	public function complete_task( $task = '' )	{
+		if ( empty( $task ) )	{
+			return false;
+		}
+
+		$this->get_tasks();
+
+		if ( array_key_exists( $task, $this->tasks ) )	{
+			return false;
+		}
+
+		$this->tasks[ $task ] = current_time( 'timestamp' );
+
+		update_post_meta( $this->ID, '_mdjm_event_tasks', json_encode( $this->tasks ) );
+
+		return $this->get_tasks();
+	} // get_tasks
+
 } // class MDJM_Event

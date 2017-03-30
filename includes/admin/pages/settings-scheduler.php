@@ -12,8 +12,6 @@
 */
 	require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' );
 	$mdjm_cron = new MDJM_Cron();
-		
-	global $mdjm_settings;
 			
 /* Check for form submission */
 	if( isset( $_POST['submit'] ) )	{
@@ -26,7 +24,7 @@
 						$mdjm_schedules[$task['slug']]['active'] = 'N';
 					}
 					else	{
-						$mdjm_schedules[$task['slug']]['active'] = ( !empty( $mdjm_settings['playlist']['upload_playlists'] ) ? 'Y' : 'N' );
+						$mdjm_schedules[$task['slug']]['active'] = mdjm_get_option( 'upload_playlists' ) ? 'Y' : 'N';
 					}
 				}
 				/* Now activate the selected tasks */
