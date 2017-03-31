@@ -642,7 +642,8 @@ function mdjm_process_playlist_upload()	{
 		'company'	=> urlencode( mdjm_get_option( 'company_name', get_bloginfo( 'name' ) ) )
 	);
 
-	$debug[] = sprintf( __( '%d playlist entries to upload', 'mobile-dj-manager' ), count( $entries ) );
+	$count = count( $entries );
+	$debug[] = sprintf( __( '%d playlist entries to upload', 'mobile-dj-manager' ), $count );
 
 	$i = 1;
 
@@ -669,11 +670,13 @@ function mdjm_process_playlist_upload()	{
 			$debug[] = sprintf( __( '%s by %s could not be uploaded.', 'mobile-dj-manager' ), $entry_data['song'], $entry_data['artist'] );
 		}
 
-		$i++;
+		if ( $i != $count )	{
+			$i++;
+		}
 
 	}
 
-	$debug[] = sprintf( __( '%d out of %d entries successfully uploaded.', 'mobile-dj-manager' ), $i, count( $entries ) );
+	$debug[] = sprintf( __( '%d out of %d entries successfully uploaded.', 'mobile-dj-manager' ), $i, $count );
 
 	if ( ! empty( $debug ) )	{
 

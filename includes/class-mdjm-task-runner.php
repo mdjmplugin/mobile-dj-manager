@@ -129,11 +129,10 @@ class MDJM_Task_Runner {
 	 * @since	1.4.7
 	 */
 	public function __construct( $task = false ) {
-
 		if ( empty( $task ) )	{
 			return false;
 		}
-		
+
 		if ( $this->setup_task( $task ) )	{
 			$this->execute();
 		}
@@ -149,14 +148,13 @@ class MDJM_Task_Runner {
 	 */
 	private function setup_task( $task )	{
 		$this->all_tasks = get_option( 'mdjm_schedules' );
-
 		if ( empty( $this->all_tasks ) || ! array_key_exists( $task, $this->all_tasks ) )	{
 			return false;
 		}
 
 		$this_task = $this->all_tasks[ $task ];
 
-		$this->task        = $task;
+		$this->slug        = $task;
 		$this->name        = $this_task['name'];
 		$this->description = $this_task['desc'];
 		$this->frequency   = $this_task['frequency'];
@@ -203,7 +201,7 @@ class MDJM_Task_Runner {
 	 * @return	bool
 	 */
 	public function execute()	{
-		$method = str_replace( '-', '_', $this->task );
+		$method = str_replace( '-', '_', $this->slug );
 
 		if ( method_exists( $this, $method ) )	{
 			if ( $this->$method() )	{
@@ -219,8 +217,9 @@ class MDJM_Task_Runner {
 	 * @return	void
 	 */
 	public function complete_task()	{
-		$this->set_next_run();
-		$this->all_tasks[ $task ]['totalruns'] = $this->total++;
+		$this->all_tasks[ $this->slug ]['totalruns'] = $this->total + 1;
+		$this->all_tasks[ $this->slug ]['nextrun'] = current_time( 'timestamp' ) + $this->set_next_run();
+		$this->all_tasks[ $this->slug ]['lastran'] = current_time( 'timestamp' );
 
 		update_option( 'mdjm_schedules', $this->all_tasks );
 	} // complete_task
@@ -233,11 +232,6 @@ class MDJM_Task_Runner {
 	 */
 	public function set_next_run()	{
 		switch( $this->frequency )	{
-			case 'Hourly':
-			default:
-				$wait = HOUR_IN_SECONDS;
-				break;
-
 			case 'Daily':
 				$wait = DAY_IN_SECONDS;
 				break;
@@ -257,9 +251,14 @@ class MDJM_Task_Runner {
 			case 'Yearly':
 				$wait = YEAR_IN_SECONDS;
 				break;
+
+			case 'Hourly':
+			default:
+				$wait = HOUR_IN_SECONDS;
+				break;
 		}
 
-		$this->all_tasks[ $task ]['nextrun'] = current_time( 'timestamp' ) + $wait;
+		return $wait;
 	} // set_next_run
 
 	/**
@@ -268,13 +267,31 @@ class MDJM_Task_Runner {
 	 * @since	1.4.7
 	 * @return	bool
 	 */
-	function upload_playlist()	{
+	function upload_playlists()	{
 		MDJM()->debug->log_it( "*** Starting the $this->name task ***", true );
 		
 		mdjm_process_playlist_upload();
 		
 		MDJM()->debug->log_it( "*** $this->name task Completed ***", true );
-	} // upload_playlist
+
+		return true;
+	} // upload_playlists
+
+	/**
+	 * Execute the Complete Events task
+	 *
+	 * @since	1.4.7
+	 * @return	bool
+	 */
+	function complete_events()	{
+		MDJM()->debug->log_it( '*** Starting the $this->name task ***', true );
+
+		
+
+		MDJM()->debug->log_it( "*** $this->name task Completed ***", true );
+
+		return true;
+	} // complete_events
 
 	/**
 	 * Execute the Balance Reminder task
@@ -283,37 +300,13 @@ class MDJM_Task_Runner {
 	 * @return	bool
 	 */
 	function balance_reminder()	{
-		MDJM()->debug->log_it( '*** Starting the $this->name ***', true );
+		MDJM()->debug->log_it( '*** Starting the $this->name task ***', true );
 
 		$due_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
 
-		$i      = 1;
-		$events = mdjm_get_events( array(
-			'post_status' => 'mdjm-approved',
-			'meta_query'  => array(
-				'relation' => 'AND',
-					array(
-						'key'     => '_mdjm_event_date',
-						'compare' => '>=',
-						'value'   => $due_date,
-						'type'    => 'date'
-					),
-					array(
-						'key'     => '_mdjm_event_balance_status',
-						'value'   => 'Due'
-					),
-					array(
-						'key'     => '_mdjm_event_cost',
-						'value'   => '0.00',
-						'compare' => '>'
-					),
-					array(
-						'key'     => '_mdjm_event_tasks',
-						'value'   => $this->slug,
-						'compare' => 'NOT IN'
-					)
-				)
-		) );
+		$i         = 1;
+		$completed = 0;
+		$events    = mdjm_get_events( $this->build_query() );
 
 		if ( $events )	{
 			$count = count( $events );
@@ -357,7 +350,9 @@ class MDJM_Task_Runner {
 				if ( mdjm_send_email_content( $email_args ) )	{
 					MDJM()->debug->log_it( 'Balance reminder sent to ' . $client->display_name );
 
+					remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 					wp_update_post( array( 'ID' => $event->ID, 'post_modified' => date( 'Y-m-d H:i:s' ) ) );
+					add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
 					update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
 					$event->complete_task( $this->slug );
@@ -366,12 +361,12 @@ class MDJM_Task_Runner {
 						array(
 							'user_id'         => 1,
 							'event_id'        => $event->ID,
-							'comment_content' => mdjm_get_balance_label() . ' Reminder Scheduled Task executed<br /><br />' . time()
+							'comment_content' => $this->name . ' task executed<br /><br />' . time()
 						)
 					);
 
 				} else	{
-					MDJM()->debug->log_it( 'ERROR: Balance reminder was not sent' );
+					MDJM()->debug->log_it( 'ERROR: Balance reminder was not sent. Event ID ' . $event->ID );
 				}
 
 			}
@@ -381,6 +376,67 @@ class MDJM_Task_Runner {
 		}
 
 		MDJM()->debug->log_it( "*** $this->name task Completed ***", true );
+
+		return true;
 	} // balance_reminder
+
+	/**
+	 * Build the task query
+	 *
+	 * @since	1.4.7
+	 * @return	bool
+	 */
+	public function build_query()	{
+		switch ( $this->slug )	{
+			case 'complete-events':
+				$query = array(
+					'post_status' => 'mdjm-approved',
+					'meta_key'    => '_mdjm_event_date',
+					'orderby'     => 'meta_value',
+					'order'       => 'ASC',
+					'meta_query'  => array(
+						'key'     => '_mdjm_event_date',
+						'value'   => date( 'Y-m-d' ),
+						'type'    => 'date',
+						'compare' => '<'
+					)
+				);
+				break;
+
+			case 'balance-reminder':
+				$query = array(
+					'post_status'  => 'mdjm-approved',
+					'meta_query'   => array(
+						'relation' => 'AND',
+						array(
+							'key'     => '_mdjm_event_date',
+							'compare' => '>=',
+							'value'   => $due_date,
+							'type'    => 'date'
+						),
+						array(
+							'key'     => '_mdjm_event_balance_status',
+							'value'   => 'Due'
+						),
+						array(
+							'key'     => '_mdjm_event_cost',
+							'value'   => '0.00',
+							'compare' => '>'
+						),
+						array(
+							'key'     => '_mdjm_event_tasks',
+							'value'   => $this->slug,
+							'compare' => 'NOT IN'
+						)
+					)
+				);
+				break;
+
+			default:
+				$query = false;
+		}
+
+		return apply_filters( 'mdjm_task_query', $query, $this->slug, $this );
+	} // build_query
 
 }
