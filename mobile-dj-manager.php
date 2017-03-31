@@ -294,8 +294,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	
 endif;
 
-	function MDJM()	{
-		return Mobile_DJ_Manager::instance();
-	}
+function MDJM()	{
+	return Mobile_DJ_Manager::instance();
+}
 
-	MDJM();
+MDJM();
