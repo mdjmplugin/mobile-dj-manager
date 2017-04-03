@@ -511,7 +511,7 @@ function mdjm_v143_upgrades()	{
  * @return	void
  */
 function mdjm_v147_upgrades()	{
-	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -597,5 +597,7 @@ function mdjm_v147_upgrades()	{
 		update_option( 'mdjm_schedules', $tasks );
 
 	}
+
+	delete_option( 'mdjm_uninst' );
 
 } // mdjm_v147_upgrades
