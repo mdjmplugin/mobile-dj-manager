@@ -6,137 +6,159 @@
  * @since 0.8
  */
 
-/* Do not run unless the uninstall procedure was called by WordPress */
-	if( !defined( 'WP_UNINSTALL_PLUGIN' ) )	{
-		exit();
-	}
+// Do not run unless the uninstall procedure was called by WordPress
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )	{
+	exit;
+}
+
+// Call the MDJM main class file
+include_once( 'mobile-dj-manager.php' );
 	
-	global $wpdb;
+global $wpdb;
+
+if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
+	// Delete the Custom Post Types
+	$mdjm_taxonomies = array(
+		'package-category', 'addon-category', 'event-types', 'enquiry-source', 'playlist-category',
+		'transaction-types', 'venue-details'
+	);
 	
-	$settings = get_option( 'mdjm_uninst' );
+	$mdjm_post_types = array(
+		'mdjm-event', 'mdjm-package', 'mdjm-addon', 'mdjm_communication',
+		'contract', 'mdjm-signed-contract', 'mdjm-custom-field', 'email_template',
+		'mdjm-playlist', 'mdjm-quotes', 'mdjm-transaction', 'mdjm-venue'
+	);
 	
-	// Delete users		
-	if( !empty( $settings['uninst_remove_mdjm_users'] ) )	{
-		$roles = array( 'client'			 => 'Client',
-						'inactive_client'	=> 'Inactive Client',
-						'dj'				 => 'DJ', 
-						'inactive_dj'   		=> 'Inactive DJ' );
-		
-		// Loop through roles array removing users
-		foreach( $roles as $role => $display )	{
-			$args = array( 'role' => $role,
-						   'orderby' => 'display_name',
-						   'order' => 'ASC' );
-			
-			$mdjm_users = get_users( $args );
-			
-			foreach( $mdjm_users as $mdjm_user )	{
-				wp_delete_user( $mdjm_user->ID );
-			}
-		} // End foreach( $roles as $role => $display )
-	}
+	foreach ( $mdjm_post_types as $post_type ) {
 	
-/* -- Remove capabilities -- */
-	$role = get_role( 'administrator' );
-	$role->remove_cap( 'manage_mdjm' );
-	$role = get_role( 'dj' );
+		$mdjm_taxonomies = array_merge( $mdjm_taxonomies, get_object_taxonomies( $post_type ) );
+		$items = get_posts( array(
+			'post_type'   => $post_type,
+			'post_status' => 'any',
+			'numberposts' => -1,
+			'fields'      => 'ids'
+		) );
 	
-/* -- Remove roles -- */
-	remove_role( 'dj' );
-	remove_role( 'inactive_dj' );
-	remove_role( 'client' );
-	remove_role( 'inactive_client' );
-	
-/* -- Remove MDJM Data -- */			
-	$data_type = array( 'Communications'		=> 'mdjm_communication',
-						'Contract Templates'	=> 'contract',
-						'Signed Contracts'		=> 'mdjm-signed-contract',
-						'Email Templates'		=> 'email_template',
-						'Events'				=> 'mdjm-event',
-						'Quotes'				=> 'mdjm-quotes',
-						'Transactions'			=> 'mdjm-transaction',
-						'Venues'				=> 'mdjm-venue' );
-	
-	$mdjm_custom = array( 'mdjm_communication',
-						  'mdjm-signed-contract',
-						  'mdjm-event',
-						  'mdjm-quotes',
-						  'mdjm-transaction',
-						  'mdjm-venue' );
-										
-	$templates = array( 'contract', 'email_template' );
-						
-	// Loop through the array removing the data
-	foreach( $data_type as $display => $type )	{
-		// Check if we are deleting
-		if( empty( $settings['uninst_remove_mdjm_posts'] ) && in_array( $type, $mdjm_custom ) )
-			continue;
-				
-		$mdjm_posts = $wpdb->get_results( "SELECT ID FROM " . $wpdb->posts . " WHERE `post_type` = '" . $type . "'" );
-		
-		// Delete the post and all data permanently
-		foreach( $mdjm_posts as $mdjm_post )	{
-			wp_delete_post( $mdjm_post->ID, true );
-		}
-		
-	} // End foreach( $data_type as $type )
-	
-/* -- Remove custom DB Tables -- */
-	// If the option to remove the tables is not selected, skip
-	if( !empty( $settings['uninst_remove_db'] ) )	{	
-		$tables = array( 
-					 'Availability'	 => $wpdb->prefix . 'mdjm_avail' );
-		
-		foreach( $tables as $table_display => $table_name )	{
-			$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $table_name . "'" );
-			if( $results )	{
-				$wpdb->query( 'DROP TABLE IF EXISTS ' . $table_name );
+		if ( $items ) {
+			foreach ( $items as $item )	{
+				wp_delete_post( $item, true );
 			}
 		}
 	}
 	
-/* -- Remove MDJM Pages -- */
-	// If the option to remove the pages is not selected, skip
-	if( !empty( $settings['uninst_remove_mdjm_pages'] ) )	{
-		$mdjm_pages = get_option( 'mdjm_plugin_pages' );
-		
-		// Do not delete the contact page, it was not created by us!
-		unset( $mdjm_pages['contact_page'] );
-		
-		foreach( $mdjm_pages as $mdjm_page )	{
-			wp_delete_post( $mdjm_page, true );
-		} // End foreach( $mdjm_pages as $mdjm_page )
-			
+	// Delete Terms & Taxonomies
+	foreach ( array_unique( array_filter( $mdjm_taxonomies ) ) as $taxonomy )	{
+	
+		$terms = $wpdb->get_results( $wpdb->prepare(
+			"SELECT t.*, tt.*
+			FROM $wpdb->terms
+			AS t
+			INNER JOIN $wpdb->term_taxonomy
+			AS tt
+			ON t.term_id = tt.term_id
+			WHERE tt.taxonomy IN ('%s')
+			ORDER BY t.name ASC", $taxonomy
+		) );
+	
+		// Delete Terms.
+		if ( $terms ) {
+			foreach ( $terms as $term ) {
+				$wpdb->delete( $wpdb->term_relationships, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
+				$wpdb->delete( $wpdb->term_taxonomy, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
+				$wpdb->delete( $wpdb->terms, array( 'term_id' => $term->term_id ) );
+			}
+		}
+	
+		// Delete Taxonomies.
+		$wpdb->delete( $wpdb->term_taxonomy, array( 'taxonomy' => $taxonomy ), array( '%s' ) );
 	}
-	
-/* -- Remove setting options -- */
-	delete_option( 'mdjm_availability_settings' );
-			
-	delete_option( 'mdjm_cats' );
-	delete_option( 'mdjm_equipment' );
-	delete_option( 'mdjm_packages' );
-	
-	delete_option( 'mdjm_client_fields' );
-	
-	delete_option( 'mdjm_clientzone_settings' );
-	
-	delete_option( 'mdjm_email_settings' );
-	delete_option( 'mdjm_event_settings' );
-	delete_option( 'mdjm_frontend_text' );
-	delete_option( 'mdjm_plugin_settings' );
-	
-	delete_option( 'mdjm_payment_settings' );
-	delete_option( 'mdjm_playlist_settings' );
-	delete_option( 'mdjm_plugin_pages' );
-	delete_option( 'mdjm_plugin_permissions' );
-	delete_option( 'mdjm_plugin_settings' );
-	delete_option( 'mdjm_templates_settings' );
-				
-	delete_option( 'mdjm_schedules' );
-	
-	delete_option( 'mdjm_version');
-	delete_option( 'mdjm_db_version' );
-	delete_option( 'mdjm_updated' );
-	delete_option( 'mdjm_uninst' );
-	delete_option( 'mdjm_debug_settings' );
-?>
+
+	// Delete Plugin Pages
+	$mdjm_pages = array(
+		'app_home_page', 'contracts_page', 'payments_page',
+		'playlist_page', 'profile_page', 'quotes_page'
+	);
+
+	foreach ( $mdjm_pages as $mdjm_page ) {
+
+		$page = mdjm_get_option( $mdjm_page, false );
+
+		if ( $page )	{
+			wp_delete_post( $page, true );
+		}
+
+	}
+
+	// Remove users
+	$roles = array( 'client', 'inactive_client', 'dj', 'inactive_dj' );
+
+	// Loop through roles array removing users
+	foreach( $roles as $role )	{
+		$args = array(
+			'role'    => $role,
+			'orderby' => 'display_name',
+			'order'   => 'ASC'
+		);
+
+		$mdjm_users = get_users( $args );
+
+		foreach( $mdjm_users as $mdjm_user )	{
+			wp_delete_user( $mdjm_user->ID );
+		}
+	}
+
+	// Remove setting options
+	$all_options = array(
+		'mdjm_api_data',
+		'mdjm_availability_settings',
+		'mdjm_cats',
+		'mdjm_clientzone_settings',
+		'mdjm_client_fields',
+		'mdjm_completed_upgrades',
+		'mdjm_db_update_to_13',
+		'mdjm_db_version',
+		'mdjm_debug_settings',
+		'mdjm_email_settings',
+		'mdjm_enquiry_terms_created',
+		'mdjm_equipment',
+		'mdjm_event_settings',
+		'mdjm_frontend_text',
+		'mdjm_packages',
+		'mdjm_playlist_import',
+		'mdjm_playlist_settings',
+		'mdjm_plugin_pages',
+		'mdjm_plugin_permissions',
+		'mdjm_plugin_settings',
+		'mdjm_schedules',
+		'mdjm_settings',
+		'mdjm_templates_settings',
+		'mdjm_txn_terms_13',
+		'mdjm_updated',
+		'mdjm_update_me',
+		'mdjm_version',
+		'mdjm_version_upgraded_from'
+	);
+
+	foreach ( $all_options as $all_option )	{
+		delete_option( $all_option );
+	}
+
+	// Remove all database tables
+	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "mdjm_avail" );
+
+	// Remove any transients and options we've left behind
+	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_mdjm\_%'" );
+	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_timeout\_mdjm\_%'" );
+
+}
+
+// Remove capabilities
+$role = get_role( 'administrator' );
+$role->remove_cap( 'manage_mdjm' );
+$role = get_role( 'dj' );
+
+// Remove roles
+remove_role( 'dj' );
+remove_role( 'inactive_dj' );
+remove_role( 'client' );
+remove_role( 'inactive_client' );

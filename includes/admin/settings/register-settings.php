@@ -301,6 +301,12 @@ function mdjm_get_registered_settings()	{
 										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
 										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
 						'type'    => 'checkbox',
+					),
+					'remove_on_uninstall' => array(
+						'id'      => 'remove_on_uninstall',
+						'name'    => __( 'Remove Data on Uninstall?', 'mobile-dj-manager' ),
+						'desc'    => __( 'Check this box if you would like MDJM to completely remove all of its data when the plugin is deleted.', 'mobile-dj-manager' ),
+						'type'    => 'checkbox'
 					)
 				),
 				'debugging' => array(
@@ -337,39 +343,6 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'debug_auto_purge',
 						'name'        => __( 'Auto Purge Log Files', 'mobile-dj-manager' ),
 						'desc'        => __( 'If selected, log files will be auto-purged when they reach the value of <code>Maximum Log File Size</code>', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					)
-				),
-				'uninstall' => array(
-					'uninst_settings'   => array(
-						'id'          => 'uninst_settings',
-						'name'        => '<h3>' . __( 'Uninstallation Settings', 'mobile-dj-manager' ) . '</h3>',
-						'desc'        => '',
-						'type'        => 'header',
-					),
-					'uninst_remove_db'  => array(
-						'id'          => 'uninst_remove_db',
-						'name'        => __( 'Remove Database Tables', 'mobile-dj-manager' ),
-						'desc'        =>  __( 'Should the database tables and data be removed when uninstalling the plugin? ' . 
-										'Cannot be recovered unless you or your host have a backup solution in place and a recent backup.', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					),
-					'uninst_remove_mdjm_posts'  => array(
-						'id'          => 'uninst_remove_mdjm_posts',
-						'name'        => __( 'Remove Data?', 'mobile-dj-manager' ),
-						'desc'        =>  __( 'Do you want to remove all MDJM pages', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					),
-					'uninst_remove_mdjm_pages'  => array(
-						'id'          => 'uninst_remove_mdjm_pages',
-						'name'        => __( 'Remove Pages?', 'mobile-dj-manager' ),
-						'desc'        => __( 'Do you want to remove all MDJM pages?', 'mobile-dj-manager' ),
-						'type'        => 'checkbox'
-					),
-					'uninst_remove_users'  => array(
-						'id'          => 'uninst_remove_users',
-						'name'        => __( 'Remove Employees and Clients?', 'mobile-dj-manager' ),
-						'desc'        => __( 'If selected, all users who are defined as clients or employees will be removed.', 'mobile-dj-manager' ),
 						'type'        => 'checkbox'
 					)
 				)
@@ -1422,8 +1395,7 @@ function mdjm_get_registered_settings_sections() {
 	$sections = array(
 		'general'         => apply_filters( 'mdjm_settings_sections_general', array(
 			'main'               => __( 'Application Settings', 'mobile-dj-manager' ),
-			'debugging'          => __( 'Debug Settings', 'mobile-dj-manager' ),
-			'uninstall'          => __( 'Uninstall Actions', 'mobile-dj-manager' )
+			'debugging'          => __( 'Debug Settings', 'mobile-dj-manager' )
 		) ),
 		'events'          => apply_filters( 'mdjm_settings_sections_gateways', array(
 			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
