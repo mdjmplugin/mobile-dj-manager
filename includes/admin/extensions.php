@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_extensions_page()	{
 	setlocale( LC_MONETARY, get_locale() );
-	$extensions_url = 'https://mdjm.co.uk/addons/';
+	$extensions_url = 'https://mdjm.co.uk/add-ons/';
 	$extensions     = mdjm_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
@@ -37,7 +37,7 @@ function mdjm_extensions_page()	{
 			<?php _e( 'Extensions for MDJM Event Management', 'mobile-dj-manager' ); ?>
 		</h1>
 		<div>
-        	<p><a href="https://mdjm.com/extensions/" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'mobile-dj-manager' ); ?></a></p>
+        	<p><a href="<?php echo $extensions_url; ?>" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'mobile-dj-manager' ); ?></a></p>
 			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your MDJM Event Management solution.', 'mobile-dj-manager' ); ?></p>
             <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 15%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'mobile-dj-manager' ), 'https://mobile-dj-manager.com/#newsletter-signup', '%', $extensions_url ); ?></p>
 		</div>
@@ -46,7 +46,7 @@ function mdjm_extensions_page()	{
 			<?php foreach ( $extensions as $key => $extension ) :
 				$the_excerpt = '';
 				$slug        = $extension->info->slug;
-				$link        = 'https://mobile-dj-manager.com/downloads/' . $slug .'/';
+				$link        = 'https://mdjm.co.uk/downloads/' . $slug .'/';
 				$price       = false;
 
 				if ( 'payment-gateways' == $slug )	{
@@ -113,7 +113,7 @@ function mdjm_get_extensions()	{
 	if ( false === $extensions || doing_action( 'mdjm_daily_scheduled_events' ) )	{
 		$route    = esc_url( 'https://mdjm.co.uk/edd-api/products/' );
 		$number   = 20;
-		$endpoint = add_query_arg( array( 'number' => $number ), $route );
+		$endpoint = add_query_arg( array( 'number' => $number, 'orderby' => 'rand' ), $route );
 		$response = wp_remote_get( $endpoint );
 
 		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
