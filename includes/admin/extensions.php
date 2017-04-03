@@ -44,10 +44,14 @@ function mdjm_extensions_page()	{
 
 		<div class="mdjm-extension-wrapper grid3">
 			<?php foreach ( $extensions as $key => $extension ) :
+				$the_excerpt = '';
+				$slug        = $extension->info->slug;
+				$link        = 'https://mobile-dj-manager.com/downloads/' . $slug .'/';
+				$price       = false;
 
-				$slug  = $extension->info->slug;
-				$link  = 'https://mobile-dj-manager.com/downloads/' . $slug .'/';
-				$price = false;
+				if ( 'payment-gateways' == $slug )	{
+					continue;
+				}
 
 				if ( array_key_exists( $slug, $slug_corrections ) )	{
 					$slug = $slug_corrections[ $slug ];
