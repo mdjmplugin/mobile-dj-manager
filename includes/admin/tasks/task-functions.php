@@ -19,6 +19,9 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_get_tasks()	{
 	$tasks = get_option( 'mdjm_schedules' );
+	if ( $tasks )	{
+		ksort( $tasks );
+	}
 
 	return apply_filters( 'mdjm_tasks', $tasks );
 } // mdjm_get_tasks
