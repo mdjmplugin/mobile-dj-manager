@@ -1100,7 +1100,10 @@ class MDJM_Event {
 	 */
 	public function get_tasks()	{
 		if ( ! isset( $this->tasks ) )	{
-			$_tasks = json_decode( $this->get_meta( '_mdjm_event_tasks' ), true );
+			$_tasks = $this->get_meta( '_mdjm_event_tasks' );
+			if ( ! empty( $_tasks ) )	{
+				$this->tasks = json_decode( $_tasks, true );
+			}
 		}
 
 		return $this->tasks;

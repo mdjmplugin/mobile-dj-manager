@@ -41,7 +41,7 @@ function mdjm_admin_menu()	{
 		$mdjm_email_template_page	   = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Email Templates', 'mobile-dj-manager' ), __( 'Email Templates', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=email_template', '' );
 	}
 
-	$mdjm_auto_tasks_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Automated Tasks', 'mobile-dj-manager' ), __( 'Automated Tasks', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-tasks', 'mdjm_auto_tasks_page' );
+	$mdjm_auto_tasks_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Automated Tasks', 'mobile-dj-manager' ), __( 'Automated Tasks', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-tasks', 'mdjm_tasks_page' );
 	
 	if( mdjm_employee_can( 'view_clients_list' ) )	{
 		$mdjm_clients_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Clients', 'mobile-dj-manager' ), __( 'Clients', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-clients', array( MDJM()->users, 'client_manager' ) );
@@ -563,10 +563,6 @@ function mdjm_admin_toolbar( $admin_bar )	{
 	));
 } // mdjm_admin_toolbar
 add_action( 'admin_bar_menu', 'mdjm_admin_toolbar', 99 );
-						
-function mdjm_auto_tasks_page()	{				
-	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/settings-scheduler.php' );
-} // mdjm_auto_tasks_page
 
 function mdjm_clients_page()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );	
