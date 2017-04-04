@@ -167,7 +167,7 @@
 	 */
 	function mdjm_all_dates_in_range( $from_date, $to_date )	{
 		$from_date = \DateTime::createFromFormat( 'Y-m-d', $from_date );
-		$to_date = \DateTime::createFromFormat( 'Y-m-d', $to_date );
+		$to_date   = \DateTime::createFromFormat( 'Y-m-d', $to_date );
 		return new \DatePeriod(
 			$from_date,
 			new \DateInterval( 'P1D' ),
@@ -189,19 +189,28 @@
 	function mdjm_add_holiday( $args )	{
 		global $wpdb;
 		
-		$date_range = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+		$date_range  = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+		$insert_args = array(
+			'id'         => '',
+			'user_id'    => $args['employee'],
+			'entry_id'   => get_current_user_id() . '_' . time(),
+			'date_from'  => $the_date->format( 'Y-m-d' ),
+			'date_to'    => $args['to_date'],
+			'notes'      => $args['notes'],
+		);
+		$insert_args = apply_filters( 'mdjm_add_holiday_args', $insert_args );
+
+		do_action( 'mdjm_before_added_holiday', $args, $insert_args );
+
 		foreach( $date_range as $the_date )	{
 			$wpdb->insert( 
 				MDJM_HOLIDAY_TABLE,
-					array(
-						'id'	     => '',
-						'user_id'    => $args['employee'],
-						'entry_id'   => get_current_user_id() . '_' . time(),
-						'date_from'  => $the_date->format( 'Y-m-d' ),
-						'date_to'  	 => $args['to_date'],
-						'notes'      => $args['notes'],
-					) );
+				$insert_args
+			);
 		}
+
+		do_action( 'mdjm_added_holiday', $args, $insert_args );
+
 		mdjm_update_notice( 'updated', 'The entry was added successfully' );	
 	} // mdjm_add_holiday
 	
@@ -215,14 +224,17 @@
 	 */
 	function mdjm_remove_holiday( $entry_id )	{
 		global $wpdb;
-		if( empty( $entry_id ) )	{
+
+		if ( empty( $entry_id ) )	{
 			return mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
-		
+
+		do_action( 'mdjm_before_remove_holiday', $entry_id );
+
 		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'entry_id' => $entry_id, ) ) )	{
+			do_action( 'mdjm_remove_holiday', $entry_id );
 			mdjm_update_notice( 'updated', 'The entry was <strong>deleted</strong> successfully' );					
-		}
-		else	{
+		} else	{
 			mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
 	} // mdjm_remove_holiday
