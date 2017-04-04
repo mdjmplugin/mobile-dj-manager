@@ -316,6 +316,38 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-status-updated' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-task-status-updated',
+			__( 'Task status updated.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-status-update-failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-task-status-update-failed',
+			__( 'Task status could not be updated.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-run' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-task-run',
+			__( 'Task executed successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-run-failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-run-failed',
+			__( 'Task could not be executed.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	
