@@ -1,6 +1,6 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977
-Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
+Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.7
 Stable tag: 1.4.6
@@ -8,11 +8,11 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
 
-MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
+The most efficient event management solution for WordPress.
 
 == Description ==
 
-MDJM Event Management is the solution for Event based businesses who wish to automate much of their processes and enable clients to manage their events.
+MDJM Event Management is the solution for Event based businesses who wish to automate their processes and enable clients to manage events.
 
 It is an event planning solution built specifically for websites running on WordPress ensuring the users are familiar with the Administration settings and look and feel.
 
