@@ -316,7 +316,7 @@ class MDJM_Tasks_Table extends WP_List_Table {
 		$order      = isset( $_GET['order'] )      ? sanitize_text_field( $_GET['order'] )   : 'DESC';
 		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( $_GET['orderby'] ) : 'id';
 
-		$tasks      = get_option( 'mdjm_schedules' );
+		$tasks      = mdjm_get_tasks();
 
 		if ( $tasks ) {
 			foreach ( $tasks as $task ) {
