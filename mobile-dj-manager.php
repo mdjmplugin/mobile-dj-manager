@@ -3,7 +3,7 @@
 /**
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
- * Description: MDJM Event Management is an interface to fully manage your DJ/Events or Agency business efficiently.
+ * Description: The most efficient event management solution for WordPress.
  * Version: 1.4.6
  * Date: 28 November 2016
  * Author: Mike Howard <mike@mdjm.co.uk>
@@ -12,7 +12,7 @@
  * Domain Path: /lang
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Tags: MDJM, MDJM Event Management, Mobile DJ Manager, DJ, Mobile DJ, DJ Planning, Event Planning, CRM, Event Planner, DJ Event Planner, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, Event Management, DJ Manager, DJ Management, Music, Playlist, Music Playlist
+ * Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
  */
 /**
    MDJM Event Management is free software; you can redistribute it and/or modify

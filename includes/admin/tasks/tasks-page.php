@@ -22,31 +22,18 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function mdjm_tasks_page() {
-	$default_views  = mdjm_task_views();
 	$requested_view = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : 'tasks';
 
 	if ( array_key_exists( $requested_view, $default_views ) && function_exists( $default_views[ $requested_view ] ) ) {
 		if ( 'view' == $requested_view )	{
 			mdjm_render_single_task_view();
 		} else	{
-			
+			wp_die( __( 'Page not found', 'mobile-dj-manager' ) );
 		}
 	} else {
 		mdjm_tasks_list();
 	}
 } // mdjm_tasks_page
-
-/**
- * Register the views for customer management
- *
- * @since	1.0
- * @return	arr		Array of views and their callbacks
- */
-function mdjm_task_views() {
-	$views = array();
-
-	return apply_filters( 'mdjm_task_views', $views );
-} // mdjm_task_views
 
 /**
  * List table of customers
@@ -88,9 +75,9 @@ function mdjm_tasks_list() {
  */
 function mdjm_render_single_task_view( $view, $callbacks ) {
 
-	$render             = isset( $_GET['render'] ) ? $_GET['render'] : true;
-	$task_view_role     = apply_filters( 'mdjm_view_tasks_role', 'manage_mdjm' );
-	$url                = remove_query_arg( array( 'mdjm-message', 'render' ) );
+	$id             = isset( $_GET['id'] ) ? $_GET['id'] : 0;
+	$task_view_role = apply_filters( 'mdjm_view_tasks_role', 'manage_mdjm' );
+	$url            = remove_query_arg( array( 'mdjm-message', 'render' ) );
 
 	?>
 
