@@ -70,23 +70,6 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-event_page_mdjm-settings .form-table tr > th > h3
 { font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
-/* =Task Columns
--------------------------------------------------------------- */
-.wp-list-table th.column-active	{
-	width: 50px;
-}
-
-.wp-list-table th.column-frequency,
-.wp-list-table th.column-totalruns,
-.wp-list-table th.column-lastran,
-.wp-list-table th.column-nextrun	{
-	width: 125px;
-}
-
-.wp-list-table th.column-name	{
-	width: 150px;
-}
-
 /* =Client Field Settings
 -------------------------------------------------------------- */
 .mdjm-client-field-container	{
@@ -334,7 +317,24 @@ checkbox.mdjm-form-error {
 	height:100%;
 }
 
-/* Extensions page Styles
+/* =Task Page Styles
+-------------------------------------------------------------- */
+.wp-list-table th.column-active	{
+	width: 50px;
+}
+
+.wp-list-table th.column-frequency,
+.wp-list-table th.column-totalruns,
+.wp-list-table th.column-lastran,
+.wp-list-table th.column-nextrun	{
+	width: 125px;
+}
+
+.wp-list-table th.column-name	{
+	width: 175px;
+}
+
+/* Extensions Page Styles
 -------------------------------------------------------------- */
 .mdjm-extension-wrapper {
 	overflow: hidden;
