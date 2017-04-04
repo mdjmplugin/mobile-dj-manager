@@ -890,7 +890,7 @@ function mdjm_hide_inactive_events( $query )	{
 		'fields' => 'ids',
 		'number' => -1
 	) );
-error_log( implode( ',', $active_events ), 0 );
+
 	if ( $active_events )	{
 		$query->set( 'post__in', $active_events );
 	}
