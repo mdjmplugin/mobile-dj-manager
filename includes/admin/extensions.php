@@ -28,7 +28,8 @@ function mdjm_extensions_page()	{
 
 	$slug_corrections = array(
 		'ratings-and-satisfaction' => 'ratings-satisfaction',
-		'easy-digital-downloads'   => 'edd'
+		'easy-digital-downloads'   => 'edd',
+		'pdf-export'               => 'to-pdf'
 	);
 
 	?>
@@ -58,7 +59,11 @@ function mdjm_extensions_page()	{
 				}
 
 				if ( isset( $extension->pricing->amount ) ) {
-					$price = '&pound;' . number_format( $extension->pricing->amount, 2 );
+					if ( '0.00' == $extension->pricing->amount )	{
+						$price = false;
+					} else	{
+						$price = '&pound;' . number_format( $extension->pricing->amount, 2 );
+					}
 				} else {
 					if ( isset( $extension->pricing->singlesite ) ) {
 						$price = '&pound;' . number_format( $extension->pricing->singlesite, 2 );
@@ -86,7 +91,18 @@ function mdjm_extensions_page()	{
                             </div>
                             <div class="mdjm-extension-buy-now">
                                 <?php if ( ! is_plugin_active( 'mdjm-' . $slug . '/' . 'mdjm-' . $slug . '.php' ) ) : ?>
-                                    <a href="<?php echo $link; ?>" class="button-primary" target="_blank"><?php printf( __( 'Buy Now from %s', 'mobile-dj-manager' ), $price ); ?></a>
+                                	<?php if ( ! $price ) : ?>
+                                    	<?php
+										$link = add_query_arg( array(
+											's'    => 'mdjm-to-pdf',
+											'tab'  => 'search',
+											'type' => 'term'
+										), admin_url( 'plugin-install.php' ) );
+										?>
+                                    	<a href="<?php echo $link; ?>" class="button-primary"><?php _e( 'Download Now for Free', 'mobile-dj-manager' ); ?></a>
+                                    <?php else : ?>
+                                        <a href="<?php echo $link; ?>" class="button-primary" target="_blank"><?php printf( __( 'Buy Now from %s', 'mobile-dj-manager' ), $price ); ?></a>
+                                    <?php endif; ?>
                                 <?php else : ?>
                                     <p class="button-primary"><?php _e( 'Already Installed', 'mobile-dj-manager' ); ?></p>
                                 <?php endif; ?>
