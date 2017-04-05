@@ -35,7 +35,7 @@ function mdjm_options_page() {
 	$section             = isset( $_GET['section'] ) && ! empty( $registered_sections ) && array_key_exists( $_GET['section'], $registered_sections ) ? $_GET['section'] : $key;
 	ob_start();
 	?>
-	<div class="wrap">
+	<div class="wrap <?php echo 'wrap-' . $active_tab; ?>">
 		<h1 class="nav-tab-wrapper">
 			<?php
 			foreach( mdjm_get_settings_tabs() as $tab_id => $tab_name ) {
