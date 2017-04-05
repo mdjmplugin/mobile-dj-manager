@@ -421,6 +421,98 @@ checkbox.mdjm-form-error {
 	width: 175px;
 }
 
+/* Task Details Page Styles
+-------------------------------------------------------------- */
+
+#mdjm-edit-task-form .column {
+	width: 32%;
+}
+#mdjm-edit-task-form .columns-4 .column:nth-child(2n+1),
+#mdjm-edit-task-form .columns-5 .column:nth-child(3n+1),
+#mdjm-edit-task-form .column:nth-child(2n+1) {
+	margin-right: 0;
+}
+.mdjm-admin-box .label {
+	font-weight: 600;
+}
+.mdjm-admin-box-inside {
+	border-bottom: 1px solid #eee;
+	clear: both;
+	padding: 3px 12px;
+	margin: 0;
+	word-break: break-word;
+}
+.rtl .mdjm-admin-box-inside {
+	padding: 5px 10px 5px 0;
+}
+.mdjm-admin-box-inside .strong {
+	font-weight: 600;
+}
+.mdjm-admin-box .right {
+	float: right;
+}
+.rtl .mdjm-admin-box .right {
+	float: left;
+	margin-left: 10px;
+}
+#mdjm-task-update .inside {
+	margin: 0;
+	padding: 0;
+}
+.mdjm-admin-box-inside:last-child {
+	border-bottom: 0;
+}
+#mdjm-edit-task-form .data-payment-key {
+	word-break: break-all;
+}
+.mdjm-task-update-box #major-publishing-actions .button-secondary {
+	margin-right: 10px;
+}
+#mdjm-edit-task-form .column input,
+#mdjm-task-details .task-data-column p.data input {
+	clear: both;
+	display: block;
+}
+#mdjm-task-details .task-info .column {
+	width: 49%;
+}
+#mdjm-task-details .column-2 {
+	float: right;
+}
+#mdjm-task-update span.label {
+	display: inline;
+	width: 50px;
+}
+.mdjm-task-update-box .button-primary {
+	margin-right: 0;
+}
+#mdjm-edit-task-form .column .description {
+	padding-right: 10px;
+}
+#mdjm-edit-task-form .column {
+	display: inline-block;
+	line-height: 1.4;
+	position: relative;
+	margin: 0;
+	vertical-align: middle;
+}
+
+@media screen and ( max-width: 782px ) {
+
+	#mdjm-edit-task-form .column {
+		width: 49%;
+	}
+
+}
+
+@media screen and ( max-width: 600px ) {
+
+	#mdjm-edit-task-form .column {
+		width: 100%;
+	}
+
+}
+
 /* Extensions Page Styles
 -------------------------------------------------------------- */
 .mdjm-extension-wrapper {
