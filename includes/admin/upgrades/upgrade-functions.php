@@ -548,7 +548,11 @@ function mdjm_v147_upgrades()	{
 	}
 
 	// Update schedules
-	$tasks = get_option( 'mdjm_schedules' );
+	$tasks       = get_option( 'mdjm_schedules' );
+	$email_tasks = array(
+		'request-deposit',
+		'balance-reminder'
+	);
 
 	if ( $tasks )	{
 
@@ -572,16 +576,18 @@ function mdjm_v147_upgrades()	{
 				$email_client = true;
 			}
 
-			if ( ! empty( $task['options']['notify_admin'] ) && 'Y' == $task['options']['notify_admin'] )	{
-				$notify_admin = true;
+			if ( isset( $task['options']['notify_admin'] ) )	{
+				unset( $task['options']['notify_admin'] );
 			}
 
-			if ( ! empty( $task['options']['notify_dj'] ) && 'Y' == $task['options']['notify_dj'] )	{
-				$notify_dj = true;
+			if ( isset( $task['options']['notify_dj'] ) )	{
+				unset( $task['options']['notify_dj'] );
 			}
 
 			if ( ! empty( $task['default'] ) && 'Y' == $task['default'] )	{
 				$default = true;
+			} else	{
+				$default = false;
 			}
 
 			$tasks[ $slug ]['active']                  = $active;
@@ -591,6 +597,16 @@ function mdjm_v147_upgrades()	{
 			$tasks[ $slug ]['options']['notify_dj']    = $notify_dj;
 			$tasks[ $slug ]['default']                 = $default;
 			$tasks[ $slug ]['last_result']             = false;
+
+			unset( $tasks[ $slug ]['options']['email_client'] );
+			unset( $tasks[ $slug ]['options']['notify_admin'] );
+			unset( $tasks[ $slug ]['options']['notify_dj'] );
+
+			if ( ! in_array( $slug, $email_tasks ) )	{
+				unset( $tasks[ $slug ]['options']['email_template'] );
+				unset( $tasks[ $slug ]['options']['email_subject'] );
+				unset( $tasks[ $slug ]['options']['email_from'] );
+			}
 
 		}
 
