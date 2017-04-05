@@ -203,32 +203,37 @@ function mdjm_register_settings() {
 					continue;
 				}
 
+				$args = wp_parse_args( $option, array(
+				    'section'       => $section,
+				    'id'            => null,
+				    'desc'          => '',
+					'hint'          => '',
+				    'name'          => '',
+				    'size'          => null,
+				    'options'       => '',
+				    'std'           => '',
+				    'min'           => null,
+				    'max'           => null,
+				    'step'          => null,
+				    'chosen'        => null,
+				    'placeholder'   => null,
+				    'allow_blank'   => true,
+				    'readonly'      => false,
+				    'faux'          => false,
+				    'tooltip_title' => false,
+				    'tooltip_desc'  => false,
+				    'field_class'   => ''
+				) );
+
 				$name = isset( $option['name'] ) ? $option['name'] : '';
 
 				add_settings_field(
 					'mdjm_settings[' . $option['id'] . ']',
-					$name,
+					$args['name'],
 					function_exists( 'mdjm_' . $option['type'] . '_callback' ) ? 'mdjm_' . $option['type'] . '_callback' : 'mdjm_missing_callback',
 					'mdjm_settings_' . $tab . '_' . $section,
 					'mdjm_settings_' . $tab . '_' . $section,
-					array(
-						'section'     => $section,
-						'id'          => isset( $option['id'] )          ? $option['id']          : null,
-						'hint'        => ! empty( $option['hint'] )      ? $option['hint']        : '',
-						'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
-						'name'        => isset( $option['name'] )        ? $option['name']        : null,
-						'size'        => isset( $option['size'] )        ? $option['size']        : null,
-						'options'     => isset( $option['options'] )     ? $option['options']     : '',
-						'std'         => isset( $option['std'] )         ? $option['std']         : '',
-						'min'         => isset( $option['min'] )         ? $option['min']         : null,
-						'max'         => isset( $option['max'] )         ? $option['max']         : null,
-						'step'        => isset( $option['step'] )        ? $option['step']        : null,
-						'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
-						'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-						'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-						'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
-						'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
-					)
+					$args
 				);
 			}
 		}
@@ -1332,6 +1337,26 @@ function mdjm_sanitize_text_field( $input ) {
 add_filter( 'mdjm_settings_sanitize_text', 'mdjm_sanitize_text_field' );
 
 /**
+ * Sanitize HTML Class Names
+ *
+ * @since	1.0
+ * @param	str|arr		$class	HTML Class Name(s)
+ * @return	str			$class
+ */
+function mdjm_sanitize_html_class( $class = '' ) {
+
+	if ( is_string( $class ) )	{
+		$class = sanitize_html_class( $class );
+	} else if ( is_array( $class ) )	{
+		$class = array_values( array_map( 'sanitize_html_class', $class ) );
+		$class = implode( ' ', array_unique( $class ) );
+	}
+
+	return $class;
+
+} // mdjm_sanitize_html_class
+
+/**
  * Retrieve settings tabs
  *
  * @since	1.3
@@ -2053,12 +2078,213 @@ function mdjm_descriptive_text_callback( $args ) {
 /**
  * Registers the license field callback for Software Licensing
  *
+ * @since	1.0
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$mdjm_options	Array of all the MDJM options
+ * @return void
+ */
+if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
+	function mdjm_license_key_callback( $args )	{
+
+		$mdjm_option = mdjm_get_option( $args['id'] );
+
+		$messages = array();
+		$license  = get_option( $args['options']['is_valid_license_option'] );
+
+		if ( $mdjm_option )	{
+			$value = $mdjm_option;
+		} else	{
+			$value = isset( $args['std'] ) ? $args['std'] : '';
+		}
+
+		if ( ! empty( $license ) && is_object( $license ) )	{
+
+			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
+			if ( false === $license->success ) {
+
+				switch( $license->error ) {
+
+					case 'expired' :
+
+						$class = 'expired';
+						$messages[] = sprintf(
+							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'kb-support' ),
+							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
+							'http://kb-support.com/checkout/?edd_license_key=' . $value
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'revoked' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'kb-support' ),
+							'https://kb-support.com/support'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'missing' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'kb-support' ),
+							'http://kb-support.com/your-account'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'invalid' :
+					case 'site_inactive' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'kb-support' ),
+							$args['name'],
+							'http://kb-support.com/your-account'
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'item_name_mismatch' :
+
+						$class = 'error';
+						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'kb-support' ), $args['name'] );
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'no_activations_left':
+
+						$class = 'error';
+						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'kb-support' ), 'http://kb-support.com/your-account/' );
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'license_not_activable':
+
+						$class = 'error';
+						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'kb-support' );
+
+						$license_status = 'license-' . $class . '-notice';
+						break;
+
+					default :
+
+						$class = 'error';
+						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'kb-support' );
+						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
+
+						$license_status = 'license-' . $class . '-notice';
+						break;
+
+				}
+
+			} else {
+
+				switch( $license->license ) {
+
+					case 'valid' :
+					default:
+
+						$class = 'valid';
+
+						$now        = current_time( 'timestamp' );
+						$expiration = strtotime( $license->expires, current_time( 'timestamp' ) );
+
+						if( 'lifetime' === $license->expires ) {
+
+							$messages[] = __( 'License key never expires.', 'kb-support' );
+
+							$license_status = 'license-lifetime-notice';
+
+						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
+
+							$messages[] = sprintf(
+								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'kb-support' ),
+								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
+								'http://kb-support.com/checkout/?edd_license_key=' . $value
+							);
+
+							$license_status = 'license-expires-soon-notice';
+
+						} else {
+
+							$messages[] = sprintf(
+								__( 'Your license key expires on %s.', 'kb-support' ),
+								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) )
+							);
+
+							$license_status = 'license-expiration-date-notice';
+
+						}
+
+						break;
+
+				}
+
+			}
+
+		} else	{
+			$class = 'empty';
+
+			$messages[] = sprintf(
+				__( 'To receive updates, please enter your valid %s license key.', 'kb-support' ),
+				$args['name']
+			);
+
+			$license_status = null;
+		}
+
+		$class .= ' ' . mdjm_sanitize_html_class( $args['field_class'] );
+
+		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
+
+		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
+			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'kb-support' ) . '"/>';
+		}
+
+		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+
+		if ( ! empty( $messages ) ) {
+			foreach( $messages as $message ) {
+
+				$html .= '<div class="mdjm-license-data mdjm-license-' . $class . ' ' . $license_status . '">';
+					$html .= '<p>' . $message . '</p>';
+				$html .= '</div>';
+
+			}
+		}
+
+		wp_nonce_field( mdjm_sanitize_key( $args['id'] ) . '-nonce', mdjm_sanitize_key( $args['id'] ) . '-nonce' );
+
+		echo $html;
+	}
+
+} // mdjm_license_key_callback
+
+/**
+ * Registers the license field callback for Software Licensing
+ *
  * @since 1.5
  * @param array $args Arguments passed by the setting
  * @global $mdjm_options Array of all the MDJM options
  * @return void
  */
-if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
+/*if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 	function mdjm_license_key_callback( $args ) {
 		global $mdjm_options;
 
@@ -2212,7 +2438,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 			echo '<div class="license-null">' . $html . '</div>';
 		}
 	}
-} // mdjm_license_key_callback
+} // mdjm_license_key_callback*/
 
 /**
  * Hook Callback
