@@ -1,18 +1,20 @@
 <?php
 /**
- * License handler for MDJM Event Management
+ * License handler for MDJM
+ *
+ * Taken from Easy Digital Downloads.
  *
  * This class should simplify the process of adding license information
  * to new MDJM extensions.
  *
- * @version	1.0
+ * @version 1.0
  */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
-if ( ! class_exists( 'MDJM_License' ) ) :
+if ( ! class_exists( 'MDJM_License' ) )	{
 
 	/**
 	 * MDJM_License Class
@@ -25,23 +27,23 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		private $item_shortname;
 		private $version;
 		private $author;
-		private $api_url = 'http://mdjm.co.uk/edd-sl-api/';
+		private $api_url = 'https://mdjm.co.uk/edd-sl-api/';
 	
 		/**
 		 * Class constructor
 		 *
-		 * @param string  $_file
-		 * @param string  $_item_name
-		 * @param string  $_version
-		 * @param string  $_author
-		 * @param string  $_optname
-		 * @param string  $_api_url
+		 * @param	str		$_file
+		 * @param	str		$_item
+		 * @param	str		$_version
+		 * @param	str		$_author
+		 * @param	str		$_optname
+		 * @param	str		$_api_url
 		 */
 		function __construct( $_file, $_item, $_version, $_author, $_optname = null, $_api_url = null ) {
 	
 			$this->file           = $_file;
 	
-			if( is_numeric( $_item ) ) {
+			if( is_numeric( $_item ) )	{
 				$this->item_id    = absint( $_item );
 			} else {
 				$this->item_name  = $_item;
@@ -70,18 +72,19 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			// Setup hooks
 			$this->includes();
 			$this->hooks();
-			//$this->auto_updater();
+	
 		} // __construct
 	
 		/**
 		 * Include the updater class
 		 *
-		 * @access	private
-		 * @return	void
+		 * @access  private
+		 * @since	1.0
+		 * @return  void
 		 */
 		private function includes() {
-			if ( ! class_exists( 'MDJM_Plugin_Updater' ) )	{
-				require_once 'MDJM_Plugin_Updater.php';
+			if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) )  {
+				require_once 'EDD_SL_Plugin_Updater.php';
 			}
 		} // includes
 	
@@ -89,13 +92,14 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		 * Setup hooks
 		 *
 		 * @access  private
+		 * @since	1.0
 		 * @return  void
 		 */
 		private function hooks() {
 	
 			// Register settings
 			add_filter( 'mdjm_settings_licenses', array( $this, 'settings' ), 1 );
-			
+	
 			// Display help text at the top of the Licenses tab
 			add_action( 'mdjm_settings_tab_top', array( $this, 'license_help_text' ) );
 	
@@ -104,23 +108,28 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			// Deactivate license key
 			add_action( 'admin_init', array( $this, 'deactivate_license' ) );
-			
+	
 			// Check that license is valid once per week
 			add_action( 'mdjm_weekly_scheduled_events', array( $this, 'weekly_license_check' ) );
+	
+			// For testing license notices, uncomment this line to force checks on every page load
+			//add_action( 'admin_init', array( $this, 'weekly_license_check' ) );
 	
 			// Updater
 			add_action( 'admin_init', array( $this, 'auto_updater' ), 0 );
 	
+			// Display notices to admins
 			add_action( 'admin_notices', array( $this, 'notices' ) );
-			
+	
 			add_action( 'in_plugin_update_message-' . plugin_basename( $this->file ), array( $this, 'plugin_row_license_missing' ), 10, 2 );
-
-		} // hooks
+	
+		}
 	
 		/**
 		 * Auto updater
 		 *
 		 * @access  private
+		 * @since	1.0
 		 * @return  void
 		 */
 		public function auto_updater() {
@@ -130,34 +139,35 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 				'license'   => $this->license,
 				'author'    => $this->author
 			);
-
-			if( ! empty( $this->item_id ) ) {
+	
+			if ( ! empty( $this->item_id ) )	{
 				$args['item_id']   = $this->item_id;
 			} else {
 				$args['item_name'] = $this->item_name;
 			}
-
+	
 			// Setup the updater
-			$mdjm_updater = new MDJM_Plugin_Updater(
+			$mdjm_updater = new EDD_SL_Plugin_Updater(
 				$this->api_url,
 				$this->file,
 				$args
 			);
-
+	
 		} // auto_updater
+	
 	
 		/**
 		 * Add license field to settings
 		 *
-		 * @access  public
-		 * @param array   $settings
-		 * @return  array
+		 * @access	public
+		 * @param	arr		$settings	Array of registered settings
+		 * @return	arr		Filtered array of registered settings
 		 */
 		public function settings( $settings ) {
 			$mdjm_license_settings = array(
 				array(
 					'id'      => $this->item_shortname . '_license_key',
-					'name'    => sprintf( __( '%1$s License Key', 'mobile-dj-manager' ), $this->item_name ),
+					'name'    => sprintf( __( '%1$s', 'mobile-dj-manager' ), $this->item_name ),
 					'desc'    => '',
 					'type'    => 'license_key',
 					'options' => array( 'is_valid_license_option' => $this->item_shortname . '_license_active' ),
@@ -167,30 +177,32 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			return array_merge( $settings, $mdjm_license_settings );
 		} // settings
-		
+	
+	
 		/**
-		 * Display help text at the top of the Licenses tag
+		 * Display help text at the top of the Licenses settings tab.
 		 *
-		 * @access  public
-		 * @since   1.3
-		 * @param   string   $active_tab
-		 * @return  void
+		 * @access	public
+		 * @since   1.0
+		 * @param	str		$active_tab		The currently active settings tab
+		 * @return	void
 		 */
 		public function license_help_text( $active_tab = '' ) {
 	
 			static $has_ran;
 	
-			if( 'licenses' !== $active_tab ) {
+			if ( 'licenses' !== $active_tab ) {
 				return;
 			}
 	
-			if( ! empty( $has_ran ) ) {
+			if ( ! empty( $has_ran ) ) {
 				return;
 			}
 	
 			echo '<p>' . sprintf(
-				__( 'Enter your add-on license keys here to receive updates for purchased extensions. If your license key has expired, please <a href="%s" target="_blank" title="License renewal FAQ">renew your license</a>.', 'mobile-dj-manager' ),
-				'http://mdjm.co.uk/docs/renewing-add-on-licenses/'
+				__( 'Enter your extension <a href="%s" target="_blank">license keys</a> here to receive updates for purchased extensions. If your license key has expired, please <a href="%s" target="_blank">renew your license</a>.', 'mobile-dj-manager' ),
+				'https://mdjm.co.uk/your-account/',
+				'https://mdjm.co.uk/articles/renewing-add-licenses/'
 			) . '</p>';
 	
 			$has_ran = true;
@@ -200,8 +212,9 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 		/**
 		 * Activate the license key
 		 *
-		 * @access  public
-		 * @return  void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function activate_license() {
 	
@@ -209,33 +222,40 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 				return;
 			}
 	
-			if ( ! isset( $_POST['mdjm_settings'][ $this->item_shortname . '_license_key'] ) ) {
+			if ( ! isset( $_REQUEST[ $this->item_shortname . '_license_key-nonce'] ) || ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
+	
+				return;
+	
+			}
+	
+			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
 				return;
 			}
 	
-			foreach( $_POST as $key => $value ) {
-				if( false !== strpos( $key, 'license_key_deactivate' ) ) {
+			if ( empty( $_POST['mdjm_settings'][ $this->item_shortname . '_license_key'] ) ) {
+	
+				delete_option( $this->item_shortname . '_license_active' );
+	
+				return;
+	
+			}
+	
+			foreach ( $_POST as $key => $value ) {
+				if ( false !== strpos( $key, 'license_key_deactivate' ) ) {
 					// Don't activate a key when deactivating a different key
 					return;
 				}
 			}
 	
-			if( ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
-				wp_die( __( 'Nonce verification failed', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+			$details = get_option( $this->item_shortname . '_license_active' );
 	
-			}
-	
-			if( ! mdjm_is_admin() ) {
-				return;
-			}
-	
-			if ( 'valid' === get_option( $this->item_shortname . '_license_active' ) ) {
+			if ( is_object( $details ) && 'valid' === $details->license ) {
 				return;
 			}
 	
 			$license = sanitize_text_field( $_POST['mdjm_settings'][ $this->item_shortname . '_license_key'] );
 	
-			if( empty( $license ) ) {
+			if ( empty( $license ) ) {
 				return;
 			}
 	
@@ -270,18 +290,15 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			update_option( $this->item_shortname . '_license_active', $license_data );
 	
-			if( ! (bool) $license_data->success ) {
-				set_transient( 'mdjm_license_error', $license_data, 1000 );
-			} else {
-				delete_transient( 'mdjm_license_error' );
-			}
 		} // activate_license
+	
 	
 		/**
 		 * Deactivate the license key
 		 *
-		 * @access  public
-		 * @return  void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function deactivate_license() {
 	
@@ -291,13 +308,13 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			if ( ! isset( $_POST['mdjm_settings'][ $this->item_shortname . '_license_key'] ) )
 				return;
 	
-			if( ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
+			if ( ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
 	
 				wp_die( __( 'Nonce verification failed', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	
 			}
 	
-			if( ! mdjm_is_admin() ) {
+			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
 				return;
 			}
 	
@@ -332,32 +349,29 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 				delete_option( $this->item_shortname . '_license_active' );
 	
-				if( ! (bool) $license_data->success ) {
-					set_transient( 'mdjm_license_error', $license_data, 1000 );
-				} else {
-					delete_transient( 'mdjm_license_error' );
-				}
 			}
+	
 		} // deactivate_license
-		
+	
+	
 		/**
 		 * Check if license key is valid once per week
 		 *
-		 * @access  public
-		 * @since   2.5
-		 * @return  void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
-		public function weekly_license_check() {
+		public function weekly_license_check()	{
 	
-			if( ! empty( $_POST['mdjm_settings'] ) ) {
+			if ( ! empty( $_POST['mdjm_settings'] ) ) {
 				return; // Don't fire when saving settings
 			}
 	
-			if( empty( $this->license ) ) {
+			if ( empty( $this->license ) )	{
 				return;
 			}
 	
-			// Data to send in our API request
+			// data to send in our API request
 			$api_params = array(
 				'edd_action' => 'check_license',
 				'license' 	=> $this->license,
@@ -375,7 +389,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 				)
 			);
 	
-			// Make sure the response came back okay
+			// make sure the response came back okay
 			if ( is_wp_error( $response ) ) {
 				return false;
 			}
@@ -386,21 +400,23 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 		} // weekly_license_check
 	
+	
 		/**
 		 * Admin notices for errors
 		 *
-		 * @access  public
-		 * @return  void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function notices() {
 	
 			static $showed_invalid_message;
-
-			if( empty( $this->license ) ) {
+	
+			if ( empty( $this->license ) ) {
 				return;
 			}
 	
-			if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
 				return;
 			}
 	
@@ -408,12 +424,12 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			$license = get_option( $this->item_shortname . '_license_active' );
 	
-			if( is_object( $license ) && 'valid' !== $license->license && empty( $showed_invalid_message ) ) {
+			if ( is_object( $license ) && 'valid' !== $license->license && empty( $showed_invalid_message ) ) {
 	
-				if( empty( $_GET['tab'] ) || 'licenses' !== $_GET['tab'] ) {
+				if ( empty( $_GET['tab'] ) || 'licenses' !== $_GET['tab'] ) {
 	
 					$messages[] = sprintf(
-						__( 'You have invalid or expired license keys for MDJM Event Management. Please go to the <a href="%s" title="Go to Licenses page">Licenses page</a> to correct this issue.', 'easy-digital-downloads' ),
+						__( 'You have invalid or expired license keys for MDJM Event Management. Please go to the <a href="%s">Licenses page</a> to correct this issue.', 'mobile-dj-manager' ),
 						admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-settings&tab=licenses' )
 					);
 	
@@ -423,7 +439,7 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			}
 	
-			if( ! empty( $messages ) ) {
+			if ( ! empty( $messages ) ) {
 	
 				foreach( $messages as $message ) {
 	
@@ -436,13 +452,13 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 			}
 	
 		} // notices
-		
+	
 		/**
 		 * Displays message inline on plugin row that the license key is missing
 		 *
-		 * @access  public
-		 * @since   1.3
-		 * @return  void
+		 * @access	public
+		 * @since	1.0
+		 * @return	void
 		 */
 		public function plugin_row_license_missing( $plugin_data, $version_info ) {
 	
@@ -450,13 +466,12 @@ if ( ! class_exists( 'MDJM_License' ) ) :
 	
 			$license = get_option( $this->item_shortname . '_license_active' );
 	
-			if( ( ! is_object( $license ) || 'valid' !== $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
-	
+			if ( ( ! is_object( $license ) || 'valid' !== $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
 				echo '&nbsp;<strong><a href="' . esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-settings&tab=licenses' ) ) . '">' . __( 'Enter a valid license key for automatic updates.', 'mobile-dj-manager' ) . '</a></strong>';
 				$showed_imissing_key_message[ $this->item_shortname ] = true;
 			}
 	
 		} // plugin_row_license_missing
+	} // MDJM_License
 
-	} // class MDJM_License
-endif; // end class_exists check
+} // end class_exists check
