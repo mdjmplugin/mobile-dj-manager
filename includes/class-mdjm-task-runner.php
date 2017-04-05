@@ -464,10 +464,10 @@ class MDJM_Task_Runner {
 					'source'         => __( 'Request ' . mdjm_get_balance_label() . ' Scheduled Task' )
 				);
 
-				if ( 'dj' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
-					$dj         = get_userdata( $event->employee_id );
-					$email_args['from_email'] = $dj->user_email;
-					$email_args['from_name']  = $dj->display_name;
+				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
+					$employee                 = get_userdata( $event->employee_id );
+					$email_args['from_email'] = $employee->user_email;
+					$email_args['from_name']  = $employee->display_name;
 				}
 
 				if ( mdjm_send_email_content( $email_args ) )	{
@@ -549,10 +549,10 @@ class MDJM_Task_Runner {
 					'source'         => __( 'Request ' . mdjm_get_deposit_label() . ' Scheduled Task' )
 				);
 
-				if ( 'dj' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
-					$dj         = get_userdata( $event->employee_id );
-					$email_args['from_email'] = $dj->user_email;
-					$email_args['from_name']  = $dj->display_name;
+				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
+					$employee                 = get_userdata( $event->employee_id );
+					$email_args['from_email'] = $employee->user_email;
+					$email_args['from_name']  = $employee->display_name;
 				}
 
 				if ( mdjm_send_email_content( $email_args ) )	{

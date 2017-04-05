@@ -348,6 +348,22 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-updated' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-task-updated',
+			__( 'Task updated.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+	if ( isset( $_GET['mdjm-message'] ) && 'task-update-failed' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-update-failed',
+			__( 'Task update failed.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	

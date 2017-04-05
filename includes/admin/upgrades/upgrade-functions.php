@@ -559,9 +559,6 @@ function mdjm_v147_upgrades()	{
 		foreach( $tasks as $slug => $task )	{
 			$active       = false;
 			$lastrun      = false;
-			$email_client = false;
-			$notify_admin = false;
-			$notify_dj    = false;
 			$default      = false;
 
 			if ( ! empty( $task['active'] ) && 'Y' == $task['active'] )	{
@@ -572,18 +569,6 @@ function mdjm_v147_upgrades()	{
 				$lastrun = $task['lastran'];
 			}
 
-			if ( ! empty( $task['options']['email_client'] ) && 'Y' == $task['options']['email_client'] )	{
-				$email_client = true;
-			}
-
-			if ( isset( $task['options']['notify_admin'] ) )	{
-				unset( $task['options']['notify_admin'] );
-			}
-
-			if ( isset( $task['options']['notify_dj'] ) )	{
-				unset( $task['options']['notify_dj'] );
-			}
-
 			if ( ! empty( $task['default'] ) && 'Y' == $task['default'] )	{
 				$default = true;
 			} else	{
@@ -592,9 +577,6 @@ function mdjm_v147_upgrades()	{
 
 			$tasks[ $slug ]['active']                  = $active;
 			$tasks[ $slug ]['lastran']                 = $lastrun;
-			$tasks[ $slug ]['options']['email_client'] = $email_client;
-			$tasks[ $slug ]['options']['notify_admin'] = $notify_admin;
-			$tasks[ $slug ]['options']['notify_dj']    = $notify_dj;
 			$tasks[ $slug ]['default']                 = $default;
 			$tasks[ $slug ]['last_result']             = false;
 
@@ -606,6 +588,12 @@ function mdjm_v147_upgrades()	{
 				unset( $tasks[ $slug ]['options']['email_template'] );
 				unset( $tasks[ $slug ]['options']['email_subject'] );
 				unset( $tasks[ $slug ]['options']['email_from'] );
+			} else	{
+				if ( isset( $tasks[ $slug ]['options']['email_from'] ) && 'dj' == $tasks[ $slug ]['options']['email_from'] )	{
+					$tasks[ $slug ]['options']['email_from'] = 'employee';
+				} else	{
+					$tasks[ $slug ]['options']['email_from'] = 'admin';
+				}
 			}
 
 		}

@@ -27,6 +27,34 @@ function mdjm_get_tasks()	{
 } // mdjm_get_tasks
 
 /**
+ * Update a single tasks
+ *
+ * @since	1.4.7
+ * @param	arr		$data		Array of task data to save
+ * @return	bool	True if update successful, or false
+ */
+function mdjm_update_task( $data )	{
+	if ( ! isset( $data['id'] ) )	{
+		return false;
+	}
+
+	$id    = $data['id'];
+	$tasks = mdjm_get_tasks();
+
+	foreach( $data as $key => $value )	{
+		if ( 'id' == $key )	{
+			continue;
+		}
+
+		$tasks[ $id ][ $key ] = $value;
+
+	}
+
+	return update_option( 'mdjm_schedules', $tasks );
+
+} // mdjm_update_task
+
+/**
  * Retrieve a single tasks
  *
  * @since	1.4.7
@@ -70,18 +98,38 @@ function mdjm_can_delete_task( $task )	{
  */
 function mdjm_get_task_schedule_options()	{
 	$schedules = array(
-		'Hourly'      => 'Hourly',
-		'Daily'       => 'Daily',
-        'Twice Daily' => 'Twice Daily',
-        'Weekly'      => 'Weekly',
-        'Monthly'     => 'Monthly',
-        'Yearly'      => 'Yearly',
+		'Hourly'      => __( 'Hourly', 'mobile-dj-manager' ),
+		'Daily'       => __( 'Daily', 'mobile-dj-manager' ),
+        'Twice Daily' => __( 'Twice Daily', 'mobile-dj-manager' ),
+        'Weekly'      => __( 'Weekly', 'mobile-dj-manager' ),
+        'Monthly'     => __( 'Monthly', 'mobile-dj-manager' ),
+        'Yearly'      => __( 'Yearly', 'mobile-dj-manager' )
 	);
 
 	$schedules = apply_filters( 'mdjm_task_schedule_options', $schedules );
 
 	return $schedules;
-} // mdjm_get_task
+} // mdjm_get_task_schedule_options
+
+/**
+ * Retrieve task run time options
+ *
+ * @since	1.4.7
+ * @return	arr		Array of options
+ */
+function mdjm_get_task_run_times()	{
+	$event_label = mdjm_get_label_singular();
+	$run_times   = array(
+		'event_created'  => sprintf( __( 'After the %s is Created', 'mobile-dj-manager' ), $event_label ),
+		'after_approval' => sprintf( __( 'After the %s is Confirmed', 'mobile-dj-manager' ), $event_label ),
+		'before_event'   => sprintf( __( 'Before the %s', 'mobile-dj-manager' ), $event_label ),
+		'after_event'    => sprintf( __( 'After the %s', 'mobile-dj-manager' ), $event_label ),
+	);
+
+	$run_times = apply_filters( 'mdjm_task_run_times', $run_times );
+
+	return $run_times;
+} // mdjm_get_task_run_times
 
 /**
  * Set the status for a given task
