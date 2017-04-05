@@ -775,7 +775,7 @@ class MDJM_HTML_Elements {
 	} // time_hour_select
 	
 	/**
-	 * Renders an Time Dropdown of Hours
+	 * Renders an Time Dropdown of Minutes
 	 *
 	 * @since	1.3.7
 	 *
@@ -815,7 +815,7 @@ class MDJM_HTML_Elements {
 	} // time_minute_select
 
 	/**
-	 * Renders an Time Period Dropdown
+	 * Renders a Time Period Dropdown
 	 *
 	 * @since	1.3.7
 	 *
