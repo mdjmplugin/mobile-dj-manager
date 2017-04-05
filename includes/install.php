@@ -59,7 +59,7 @@ function mdjm_run_install()	{
 	
 	global $mdjm_options, $wpdb;
 	
-	// Schedule the hourly tasks.
+	// Schedule the cron tasks.
 	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
 	wp_schedule_event( time(), 'weekly', 'mdjm_weekly_scheduled_events' );
 
