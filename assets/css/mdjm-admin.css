@@ -473,10 +473,12 @@ checkbox.mdjm-form-error {
 	clear: both;
 	display: block;
 }
-#mdjm-task-details .task-info .column {
+#mdjm-task-details .task-info .column,
+#mdjm-task-email-options .email-options .column {
 	width: 49%;
 }
-#mdjm-task-details .column-2 {
+#mdjm-task-details .column-2,
+#mdjm-task-email-options .column-2 {
 	float: right;
 }
 #mdjm-task-update span.label {

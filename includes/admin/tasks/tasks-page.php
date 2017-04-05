@@ -72,6 +72,7 @@ function mdjm_render_single_task_view( $id ) {
 	$task_view_role = apply_filters( 'mdjm_view_tasks_role', 'manage_mdjm' );
 	$url            = remove_query_arg( array( 'mdjm-message', 'render' ) );
 	$task           = mdjm_get_task( $id );
+	$run_when       = explode( ' ', $task['options']['age'] );
 	$return_url     = add_query_arg( array(
 		'post_type' => 'mdjm-event',
 		'page'      => 'mdjm-tasks'
@@ -151,8 +152,7 @@ function mdjm_render_single_task_view( $id ) {
 											<?php echo MDJM()->html->text( array(
 												'id'    => 'mdjm-task-name',
 												'name'  => 'task_name',
-												'value' => esc_html( $task['name'] ),
-												'class' => 'regular-text',
+												'value' => esc_html( $task['name'] )
 											) ); ?>
 										</div>
                                         <div class="column column-2">
@@ -167,6 +167,8 @@ function mdjm_render_single_task_view( $id ) {
 										</div>
 									</div>
 
+									<?php do_action( 'mdjm_task_view_details_after_info', $id ); ?>
+
 									<div class="column-container task-info">
                                         <p><strong><?php _e( 'Description:', 'mobile-dj-manager' ); ?></strong>
                                         <br />
@@ -177,21 +179,110 @@ function mdjm_render_single_task_view( $id ) {
                                         ) ); ?></p>
 									</div>
 
-									<?php
-									do_action( 'mdjm_task_view_details', $id );
-									?>
+									<?php do_action( 'mdjm_task_view_details_after_description', $id ); ?>
+
+									<div class="column-container task-info">
+                                        <p><strong><?php _e( 'Run this task:', 'mobile-dj-manager' ); ?></strong>
+                                        <br />
+                                        <?php
+											$run_times = array();
+											for( $i = 1; $i <= 12; $i++ )	{
+												$run_times[ $i ] = $i;
+											}
+
+										?>
+                                        <?php echo MDJM()->html->select( array(
+                                            'name'        => 'task_run_time',
+											'id'          => 'task-run-time',
+											'selected'    => $run_when[0],
+											'options'     => $run_times
+                                        ) ); ?>
+                                        &nbsp;&nbsp;
+                                        <?php echo MDJM()->html->select( array(
+                                            'name'        => 'task_run_period',
+											'id'          => 'task-run-period',
+											'selected'    => $run_when[1],
+											'options'     => array(
+												'HOUR'  => __( 'Hour(s)', 'mobile-dj-manager' ),
+												'DAY'   => __( 'Day(s)', 'mobile-dj-manager' ),
+												'WEEK'  => __( 'Week(s)', 'mobile-dj-manager' ),
+												'MONTH' => __( 'Month(s)', 'mobile-dj-manager' ),
+												'YEAR'  => __( 'Year(s)', 'mobile-dj-manager' )
+											)
+                                        ) ); ?>
+                                        &nbsp;&nbsp;
+                                        <?php echo MDJM()->html->select( array(
+                                            'name'        => 'task_run_event_status',
+											'id'          => 'task-run-event-status',
+											'selected'    => $task['options']['run_when'],
+											'options'     => mdjm_get_task_run_times()
+                                        ) ); ?>
+                                        </p>
+									</div>
+
+									<?php do_action( 'mdjm_task_view_details', $id ); ?>
 
 								</div><!-- /.inside -->
 							</div><!-- /#mdjm-task-details -->
 
 							<?php do_action( 'mdjm_view_task_details_main_after', $id ); ?>
+
+							<?php if ( isset( $task['options']['email_template'] ) ) : ?>
+
+								<?php do_action( 'mdjm_view_task_details_email_options_before', $id ); ?>
+    
+                                <div id="mdjm-task-email-options" class="postbox">
+                                    <h3 class="hndle">
+                                        <span><?php _e( 'Email Options', 'mobile-dj-manager' ); ?></span>
+                                    </h3>
+                                    <div class="inside mdjm-clearfix">
+                                        <div class="column-container email-options">
+                                            <div class="column">
+                                                <strong><?php _e( 'Email Template:', 'mobile-dj-manager' ); ?></strong>
+                                                <br />
+                                                <?php echo MDJM()->html->select( array(
+                                                    'options'          => mdjm_list_templates( 'email_template' ),
+                                                    'name'             => 'task_email_template',
+                                                    'id'               => 'mdjm-task-email-template',
+                                                    'selected'         => $task['options']['email_template']
+                                                ) ); ?>
+                                            </div>
+                                            <div class="column column-2">
+                                                <strong><?php _e( 'Subject:', 'mobile-dj-manager' ); ?></strong>
+                                                <br />
+                                                <?php echo MDJM()->html->text( array(
+                                                    'id'    => 'mdjm-task-email-subject',
+                                                    'name'  => 'task_email_subject',
+                                                    'value' => esc_html( $task['options']['email_subject'] )
+                                                ) ); ?>
+                                            </div>
+                                        </div>
+                                        <div class="column-container email-options">
+                                            <div class="column">
+                                                <p><strong><?php _e( 'Email From:', 'mobile-dj-manager' ); ?></strong>
+                                                <br />
+                                                <?php echo MDJM()->html->select( array(
+                                                    'options'          => array(
+                                                        'admin'    => __( 'System Administrator', 'mobile-dj-manager' ),
+                                                        'employee' => __( 'Primary Employee', 'mobile-dj-manager' )
+                                                    ),
+                                                    'name'             => 'task_email_from',
+                                                    'id'               => 'mdjm-task-email-from',
+                                                    'selected'         => $task['options']['email_from']
+                                                ) ); ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div><!-- #mdjm-task-email-options -->
+
 						</div><!-- /#normal-sortables -->
 					</div><!-- #postbox-container-2 -->
 				</div><!-- /#post-body -->
 			</div><!-- #mdjm-dashboard-widgets-wrap -->
 		</div><!-- /#post-stuff -->
 		<?php do_action( 'mdjm_view_task_details_form_bottom', $id ); ?>
-		<?php wp_nonce_field( 'mdjm_update_task_details_nonce' ); ?>
+		<?php wp_nonce_field( 'mdjm_update_task_details_nonce', 'mdjm_task_nonce' ); ?>
 		<input type="hidden" name="mdjm_task_id" value="<?php echo esc_attr( $id ); ?>"/>
         <input type="hidden" name="mdjm-action" value="update_task_details"/>
 	</form>
