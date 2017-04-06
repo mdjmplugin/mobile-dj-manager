@@ -50,9 +50,9 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
 			$event_default = mdjm_get_option( 'default_contract' );
 			
 			if ( $event_default == $post_id )	{
-				echo '<span style="color: green; font-weight: bold;">' . __( 'Yes' );
+				echo '<span style="color: green; font-weight: bold;">' . __( 'Yes', 'mobile-dj-manager' );
 			} else	{
-				_e( 'No' );
+				_e( 'No', 'mobile-dj-manager' );
 			}
 			break;
 			
@@ -229,7 +229,7 @@ function mdjm_contract_post_messages( $messages )	{
 		0 => '', // Unused. Messages start at index 1.
 		1 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		4 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
-		5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.' ), $url2, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+		5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.', 'mobile-dj-manager' ), $url2, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 		6 => sprintf( __( '%2$s published. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		10 => sprintf( __( '%2$s draft updated. %1$s%2$s List%3$s..', 'mobile-dj-manager' ), $url1, $url2, $url3 )

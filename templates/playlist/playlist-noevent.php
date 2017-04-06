@@ -13,6 +13,6 @@
  */
 ?>
 <div id="client-playlist-no-events">
-	<p><?php printf( __( "We haven't been able to locate your %s. Please return to our <a href='%s'>%s</a> page to see a list of your %s."),
+	<p><?php printf( __( "We haven't been able to locate your %s. Please return to our <a href='%s'>%s</a> page to see a list of your %s.", 'mobile-dj-manager' ),
 		mdjm_get_label_singular(), '{application_home}', '{application_name}', mdjm_get_label_plural() ); ?></p>    
 </div>

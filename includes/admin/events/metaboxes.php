@@ -48,7 +48,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	$save              = __( 'Create', 'kb-support' );
+	$save              = __( 'Create', 'mobile-dj-manager' );
 	$mdjm_event_update = false;
 	$mdjm_event        = new MDJM_Event( $post->ID );
 	
@@ -371,7 +371,7 @@ function mdjm_event_metabox_options_status_row( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	?>
-    <p class="dashicons-before dashicons-post-status"><label for="mdjm_event_status"><?php _e( 'Status:' ); ?></label>
+    <p class="dashicons-before dashicons-post-status"><label for="mdjm_event_status"><?php _e( 'Status:', 'mobile-dj-manager' ); ?></label>
 		<?php echo MDJM()->html->event_status_dropdown( 'mdjm_event_status', $mdjm_event->post_status ); ?></p>
     <?php
 
@@ -702,7 +702,7 @@ function mdjm_event_metabox_client_select_row( $event_id )	{
 	?>
 	<div class="mdjm_field_wrap mdjm_form_fields">
     	<div class="mdjm_col">
-            <label for="client_name"><?php _e( 'Client:' ); ?></label> 
+            <label for="client_name"><?php _e( 'Client:', 'mobile-dj-manager' ); ?></label> 
             <?php if ( mdjm_event_is_active( $event_id ) ) : ?>
     
                 <?php $clients = mdjm_get_clients( 'client' ); ?>
@@ -1311,7 +1311,7 @@ function mdjm_event_metabox_venue_select_row( $event_id )	{
 	?>
 	<div class="mdjm_field_wrap mdjm_form_fields">
     	<div class="mdjm_col">
-            <label for="venue_id"><?php _e(' Select Venue:' ); ?></label> 
+            <label for="venue_id"><?php _e(' Select Venue:', 'mobile-dj-manager' ); ?></label> 
             <?php echo MDJM()->html->venue_dropdown( array(
                 'name'        => 'venue_id',
                 'selected'    => $venue_id,

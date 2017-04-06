@@ -1511,7 +1511,7 @@ function mdjm_event_post_messages( $messages )	{
 		0 => '', // Unused. Messages start at index 1.
 		1 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
 		4 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
-		6 => sprintf( __( '%2$s created. %1$s%3$s List%4$s.' ), $url1, $url2, $url3, $url4 ),
+		6 => sprintf( __( '%2$s created. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
 		7 => sprintf( __( '%2$s saved. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
 		8 => sprintf( __( '%2$s submitted. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 )
 	);

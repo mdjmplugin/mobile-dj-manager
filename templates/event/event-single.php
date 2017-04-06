@@ -52,7 +52,7 @@ global $mdjm_event;
             <tr>
             	<th><?php printf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></th>
                 <td>{event_type}</td>
-                <th><?php printf(  __( 'Your %s:', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mogile-dj-manager' ) ) ); ?></th>
+                <th><?php printf(  __( 'Your %s:', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?></th>
                 <td>{dj_fullname}</td>
             </tr>
             

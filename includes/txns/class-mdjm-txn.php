@@ -173,7 +173,7 @@ class MDJM_Txn {
 		);
 
 		$default_meta = array(
-			'_mdjm_txn_source'     => mdjm_get_option( 'default_type', __( 'Cash' ) ),
+			'_mdjm_txn_source'     => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
 			'_mdjm_txn_currency'   => mdjm_get_currency(),
 			'_mdjm_txn_status'     => 'Pending'
 		);

@@ -260,7 +260,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 												   'selected' 			=> ( isset( $existing_transaction_type[0]->term_id ) ? $existing_transaction_type[0]->term_id : '' ),
 												   'orderby' 			=> 'name',
 												   'hierarchical' 		=> 0,
-												   'show_option_none' 	=> __( 'Select Transaction Type' ),
+												   'show_option_none' 	=> __( 'Select Transaction Type', 'mobile-dj-manager' ),
 												   'class'				=> 'required',
 													) );
 						echo '<a id="new_transaction_type" class="side-meta" href="#">Add New</a>' . "\r\n";

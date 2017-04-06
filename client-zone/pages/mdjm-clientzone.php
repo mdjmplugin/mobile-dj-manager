@@ -355,7 +355,7 @@
 						$client_address[] = stripslashes( $client->postcode );
 				}
 				
-				return ( !empty( $client_address ) ? implode( '<br />', $client_address ) : __( 'No Address' ) );
+				return ( !empty( $client_address ) ? implode( '<br />', $client_address ) : __( 'No Address', 'mobile-dj-manager' ) );
 				
 			} // get_client_address
 			
@@ -498,10 +498,10 @@
 			public function no_permission()	{
 				global $mdjm, $mdjm_settings;
 				
-				echo '<p>' . __( 'ERROR: You do not have permission to view this page. ') . '</p>' . "\r\n" . 
+				echo '<p>' . __( 'ERROR: You do not have permission to view this page.', 'mobile-dj-manager' ) . '</p>' . "\r\n" . 
 				'<p>' . __( 'Please contact the <a href="mailto:' . $mdjm_settings['email']['system_email'] . 
 				'">website administrator</a> or <a href="' . mdjm_get_formatted_url( MDJM_HOME ) . '">' . 
-				'Click here to return to the ' . MDJM_COMPANY . ' ' . MDJM_APP . ' home page.' ) . '</p>';
+				'Click here to return to the ' . MDJM_COMPANY . ' ' . MDJM_APP . ' home page.', 'mobile-dj-manager' ) . '</p>';
 			
 			} // no_permission
 

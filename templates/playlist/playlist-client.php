@@ -143,7 +143,7 @@ global $mdjm_event;
 							<?php endif; // endif( $category == 'Guest Added' ) ?>
                         </div>
                         
-                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->ID . '&event_id=' . $mdjm_event->ID, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove' ); ?></a>
+                        <div class="mdjm-playlist-remove last"><a href="<?php echo wp_nonce_url( mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjm_action=remove_playlist_entry&id=' . $entry->ID . '&event_id=' . $mdjm_event->ID, 'remove_playlist_entry', 'mdjm_nonce' ); ?>"><?php _e( 'Remove', 'mobile-dj-manager' ); ?></a>
                     </div>
                 </div>
                 

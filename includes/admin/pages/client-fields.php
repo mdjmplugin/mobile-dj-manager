@@ -153,11 +153,11 @@ if ( ! class_exists( 'MDJM_ClientFields' ) )	{
 			echo '<thead>' . "\r\n";
 			echo '<tr>' . "\r\n";
 			echo '<th style="width: 20px;"></th>' . "\r\n";
-			echo '<th style="width: 15%;">' . __( 'Label' ) . '</th>' . "\r\n";
-			echo '<th style="width: 15%;">' . __( 'Type' ) . '</th>' . "\r\n";
-			echo '<th style="width: 35%;">' . __( 'Description' ) . '</th>' . "\r\n";
-			echo '<th style="width: 15%;">' . __( 'Options' ) . '</th>' . "\r\n";
-			echo '<th>' . __( 'Actions' ) . '</th>' . "\r\n";
+			echo '<th style="width: 15%;">' . __( 'Label', 'mobile-dj-manager' ) . '</th>' . "\r\n";
+			echo '<th style="width: 15%;">' . __( 'Type', 'mobile-dj-manager' ) . '</th>' . "\r\n";
+			echo '<th style="width: 35%;">' . __( 'Description', 'mobile-dj-manager' ) . '</th>' . "\r\n";
+			echo '<th style="width: 15%;">' . __( 'Options', 'mobile-dj-manager' ) . '</th>' . "\r\n";
+			echo '<th>' . __( 'Actions', 'mobile-dj-manager' ) . '</th>' . "\r\n";
 			echo '</tr>' . "\r\n";
 			echo '</thead>' . "\r\n";
 			echo '<tbody>' . "\r\n";
@@ -182,10 +182,10 @@ if ( ! class_exists( 'MDJM_ClientFields' ) )	{
 				echo '<td>' . $this->field_icons( $field ) . '</td>' . "\r\n";
 				echo '<td>';
 				echo '<a href="' . mdjm_get_admin_page( 'client_fields' ) . '&action=edit_field&id=' . $field['id'] . 
-					'" class="button button-primary button-small">' . __( 'Edit' ) . '</a>';
+					'" class="button button-primary button-small">' . __( 'Edit', 'mobile-dj-manager' ) . '</a>';
 				if( empty( $field['default'] ) )
 					echo '&nbsp;&nbsp;&nbsp;<a href="' . mdjm_get_admin_page( 'client_fields' ) . '&action=delete_field&id=' . $field['id'] . 
-					'" class="button button-secondary button-small">' . __( 'Delete' ) . '</a>';
+					'" class="button button-secondary button-small">' . __( 'Delete', 'mobile-dj-manager' ) . '</a>';
 				echo'</td>' . "\r\n";
 				echo '</tr>' . "\r\n";
 				
@@ -233,8 +233,8 @@ if ( ! class_exists( 'MDJM_ClientFields' ) )	{
 			else
 				echo '<input type="hidden" name="field_position" id="field_position" value="' . $total . '" />' . "\r\n";
 			
-			echo '<h3>' . ( empty( $editing ) ? __( 'Add New Client Field' ) : 
-				__( 'Edit the ' ) . '<span class="mdjm-color">' . stripslashes( $this->fields[ $_GET['id'] ]['label'] ) . '</span>' . __( ' Field' ) ) . '</h3>' . "\r\n";
+			echo '<h3>' . ( empty( $editing ) ? __( 'Add New Client Field', 'mobile-dj-manager' ) : 
+				__( 'Edit the ', 'mobile-dj-manager' ) . '<span class="mdjm-color">' . stripslashes( $this->fields[ $_GET['id'] ]['label'] ) . '</span>' . __( ' Field', 'mobile-dj-manager' ) ) . '</h3>' . "\r\n";
 			
 			// Field Label
 			echo '<p>';
@@ -254,7 +254,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) )	{
 				echo '<option value="' . $type . '"';
 				if( !empty( $editing ) )
 					selected( $type, $this->fields[$_GET['id']]['type'] );
-				echo '>' . __( ucfirst( str_replace( 'dropdown', 'select', $type ) ) . ' Field' ) . '</option>' . "\r\n";
+				echo '>' . __( ucfirst( str_replace( 'dropdown', 'select', $type ) ) . ' Field', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 			}
 			
 			echo '</select>' . "\r\n";

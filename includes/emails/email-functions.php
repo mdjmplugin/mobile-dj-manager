@@ -277,7 +277,7 @@ function mdjm_send_gateway_receipt( $event_id )	{
 		$emails->__set( 'copy_to', mdjm_get_option( 'system_email' ) );
 	}
 	
-	$sent = $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mdjm-stripe-payments' ), mdjm_get_label_singular() ) );
+	$sent = $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Payment received confirmation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ) );
 	
 	return $sent;
 

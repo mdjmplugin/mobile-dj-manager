@@ -22,7 +22,7 @@ function mdjm_comms_page()	{
 	
 	if( ! mdjm_employee_can( 'send_comms' ) )  {
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
