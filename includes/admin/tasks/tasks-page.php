@@ -219,10 +219,10 @@ function mdjm_render_single_task_view( $id ) {
                                         	<strong><?php _e( 'Frequency:', 'mobile-dj-manager' ); ?></strong>
                                             <br />
 											<?php echo MDJM()->html->select( array(
-												'options'          => mdjm_get_task_schedule_options(),
-												'name'             => 'task_frequency',
-												'id'               => 'mdjm-task-frequency',
-												'selected'         => $task['frequency']
+												'options'  => mdjm_get_task_schedule_options(),
+												'name'     => 'task_frequency',
+												'id'       => 'mdjm-task-frequency',
+												'selected' => $task['frequency']
 											) ); ?>
 										</div>
 									</div>
@@ -233,9 +233,9 @@ function mdjm_render_single_task_view( $id ) {
                                         <p><strong><?php _e( 'Description:', 'mobile-dj-manager' ); ?></strong>
                                         <br />
                                         <?php echo MDJM()->html->textarea( array(
-                                            'name'        => 'task_description',
-											'value'       => esc_html( $task['desc'] ),
-											'class'       => 'large-text description'
+                                            'name'  => 'task_description',
+											'value' => esc_html( $task['desc'] ),
+											'class' => 'large-text description'
                                         ) ); ?></p>
 									</div>
 
@@ -245,24 +245,24 @@ function mdjm_render_single_task_view( $id ) {
                                         <p><strong><?php _e( 'Run this task:', 'mobile-dj-manager' ); ?></strong>
                                         <br />
                                         <?php
-											$run_times = array();
+											$run_intervals = array();
 											for( $i = 1; $i <= 12; $i++ )	{
-												$run_times[ $i ] = $i;
+												$run_intervals[ $i ] = $i;
 											}
 
 										?>
                                         <?php echo MDJM()->html->select( array(
-                                            'name'        => 'task_run_time',
-											'id'          => 'task-run-time',
-											'selected'    => $run_when[0],
-											'options'     => $run_times
+                                            'name'     => 'task_run_time',
+											'id'       => 'task-run-time',
+											'selected' => $run_when[0],
+											'options'  => $run_intervals
                                         ) ); ?>
                                         &nbsp;&nbsp;
                                         <?php echo MDJM()->html->select( array(
-                                            'name'        => 'task_run_period',
-											'id'          => 'task-run-period',
-											'selected'    => $run_when[1],
-											'options'     => array(
+                                            'name'     => 'task_run_period',
+											'id'       => 'task-run-period',
+											'selected' => $run_when[1],
+											'options'  => array(
 												'HOUR'  => __( 'Hour(s)', 'mobile-dj-manager' ),
 												'DAY'   => __( 'Day(s)', 'mobile-dj-manager' ),
 												'WEEK'  => __( 'Week(s)', 'mobile-dj-manager' ),
@@ -272,10 +272,10 @@ function mdjm_render_single_task_view( $id ) {
                                         ) ); ?>
                                         &nbsp;&nbsp;
                                         <?php echo MDJM()->html->select( array(
-                                            'name'        => 'task_run_event_status',
-											'id'          => 'task-run-event-status',
-											'selected'    => $task['options']['run_when'],
-											'options'     => mdjm_get_task_run_times()
+                                            'name'     => 'task_run_event_status',
+											'id'       => 'task-run-event-status',
+											'selected' => $task['options']['run_when'],
+											'options'  => mdjm_get_task_run_times( $id )
                                         ) ); ?>
                                         </p>
 									</div>
@@ -301,10 +301,10 @@ function mdjm_render_single_task_view( $id ) {
                                                 <strong><?php _e( 'Email Template:', 'mobile-dj-manager' ); ?></strong>
                                                 <br />
                                                 <?php echo MDJM()->html->select( array(
-                                                    'options'          => mdjm_list_templates( 'email_template' ),
-                                                    'name'             => 'task_email_template',
-                                                    'id'               => 'mdjm-task-email-template',
-                                                    'selected'         => $task['options']['email_template']
+                                                    'options'  => mdjm_list_templates( 'email_template' ),
+                                                    'name'     => 'task_email_template',
+                                                    'id'       => 'mdjm-task-email-template',
+                                                    'selected' => $task['options']['email_template']
                                                 ) ); ?>
                                             </div>
                                             <div class="column column-2">
@@ -322,13 +322,13 @@ function mdjm_render_single_task_view( $id ) {
                                                 <p><strong><?php _e( 'Email From:', 'mobile-dj-manager' ); ?></strong>
                                                 <br />
                                                 <?php echo MDJM()->html->select( array(
-                                                    'options'          => array(
+                                                    'options'  => array(
                                                         'admin'    => __( 'System Administrator', 'mobile-dj-manager' ),
                                                         'employee' => __( 'Primary Employee', 'mobile-dj-manager' )
                                                     ),
-                                                    'name'             => 'task_email_from',
-                                                    'id'               => 'mdjm-task-email-from',
-                                                    'selected'         => $task['options']['email_from']
+                                                    'name'     => 'task_email_from',
+                                                    'id'       => 'mdjm-task-email-from',
+                                                    'selected' => $task['options']['email_from']
                                                 ) ); ?></p>
                                             </div>
                                         </div>

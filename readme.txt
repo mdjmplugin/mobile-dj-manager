@@ -83,6 +83,35 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.7 =
+
+**Released 6th April, 2017**
+
+**New**
+
+* New Automated Tasks interface
+* Added options to run automated tasks on demand
+* Added `{event_admin_url}` content tag
+* Minified all MDJM scripts
+* Added better styling to the licensing settings page
+* Added Extensions page
+* Updated license handler
+
+**Bug Fixes**
+
+* Some automated tasks were not running if the associated meta key was missing from the event
+* Inserted missing text domain
+
+**Tweaks**
+
+* {event_date} now returns the date as defined within WordPress -> Settings -> Date Format
+* Improved uninstallation procedure
+* Added hooks before and after employee holiday additions
+* Display template path in system info if custom templates in use
+* Use local jquery-ui CSS files
+* Some generic code tidying
+* Improved code commenting
+
 = 1.4.6 =
 
 **Release 28th November, 2016**

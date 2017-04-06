@@ -134,9 +134,10 @@ function mdjm_get_task_schedule_options()	{
  * Retrieve task run time options
  *
  * @since	1.4.7
+ * @param	int		$id		The task ID
  * @return	arr		Array of options
  */
-function mdjm_get_task_run_times()	{
+function mdjm_get_task_run_times( $id = false )	{
 	$event_label = mdjm_get_label_singular();
 	$run_times   = array(
 		'event_created'  => sprintf( __( 'After the %s is Created', 'mobile-dj-manager' ), $event_label ),
@@ -145,10 +146,36 @@ function mdjm_get_task_run_times()	{
 		'after_event'    => sprintf( __( 'After the %s', 'mobile-dj-manager' ), $event_label ),
 	);
 
-	$run_times = apply_filters( 'mdjm_task_run_times', $run_times );
+	$run_times = apply_filters( 'mdjm_task_run_times', $run_times, $id );
 
 	return $run_times;
 } // mdjm_get_task_run_times
+
+/**
+ *
+ * @since	1.4.7
+ * @param	arr		$run_times	The run time schedules
+ * @param	int		$id			The task ID
+ * @return	arr		The run time schedules
+ */
+function mdjm_filter_task_run_times( $run_times, $id )	{
+	if ( 'complete-events' == $id || 'upload-playlists' == $id )	{
+		$unset = array( 'event_created', 'after_approval', 'before_event' );
+	} elseif( 'fail-enquiry' == $id )	{
+		$unset = array( 'after_approval', 'before_event', 'after_event' );
+	} elseif( 'request-deposit' == $id || 'balance-reminder' == $id )	{
+		$unset = array( 'event_created', 'after_event' );
+	}
+
+	if ( isset( $unset ) )	{
+		foreach( $unset as $time )	{
+			unset( $run_times[ $time ] );
+		}
+	}
+
+	return $run_times;
+} // mdjm_filter_task_run_times
+add_filter( 'mdjm_task_run_times', 'mdjm_filter_task_run_times', 10, 2 );
 
 /**
  * Set the status for a given task

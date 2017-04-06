@@ -153,3 +153,35 @@ function mdjm_run_now_task_action( $data )	{
 
 } // mdjm_run_now_task_action
 add_action( 'mdjm-run_task', 'mdjm_run_now_task_action' );
+
+/**
+ * Schedule tasks to run after event approval.
+ *
+ * @since	1.4.7
+ * @return	void
+ */
+function mdjm_set_task_run_time_after_approval( $result, $event_id, $old_status )	{
+
+	if ( empty( $result ) )	{
+		return;
+	}
+
+	$tasks = mdjm_get_tasks();
+
+	if ( ! $tasks )	{
+		return;
+	}
+
+	foreach( $tasks as $slug => $data )	{
+		$meta_key = '_mdjm_event_task_after_approval';
+
+		if ( 'after_approval' != $data['options']['run_when'] )	{
+			continue;
+		}
+
+		$run_time = date( 'Y-m-d H:i:s', strtotime( '+' . $data['options']['age'] ) );
+		update_post_meta( $event_id, $meta_key, $run_time );
+	}
+
+} // mdjm_set_task_run_time_after_approval
+add_action( 'mdjm_post_event_status_change', 'mdjm_set_task_run_time_after_approval', 10, 3 );

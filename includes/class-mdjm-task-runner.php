@@ -600,6 +600,24 @@ class MDJM_Task_Runner {
 	 * @return	bool
 	 */
 	public function build_query()	{
+		if ( 'after_approval' == $this->options['run_when'] )	{
+			$run_date   = date( 'Y-m-d H:i:s', strtotime( "-" . $this->options['age'] ) );
+			$date_query = array(
+				'key'     => '_mdjm_event_task_after_approval',
+				'compare' => '<',
+				'value'   => $run_date,
+				'type'    => 'datetime'
+			);
+		} else	{
+			$run_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
+			$date_query = array(
+				'key'     => '_mdjm_event_date',
+				'compare' => '>=',
+				'value'   => $run_date,
+				'type'    => 'date'
+			);
+		}
+
 		switch ( $this->slug )	{
 			case 'complete-events':
 				$query = array(
@@ -611,7 +629,7 @@ class MDJM_Task_Runner {
 						'key'     => '_mdjm_event_date',
 						'value'   => date( 'Y-m-d' ),
 						'type'    => 'date',
-						'compare' => '<'
+						'compare' => '<='
 					)
 				);
 				break;
@@ -622,26 +640,20 @@ class MDJM_Task_Runner {
 				$query = array(
 					'post_status' => array( 'mdjm-unattended', 'mdjm-enquiry' ),
 					'date_query'  => array(
-						'before'	=> $expired
+						'before' => $expired
 					)
 				);
 				break;
 
 			case 'balance-reminder':
-				$due_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
 				$query = array(
 					'post_status'  => 'mdjm-approved',
 					'meta_query'   => array(
 						'relation' => 'AND',
+						$date_query,
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
-							'value'   => $due_date,
-							'type'    => 'date'
-						),
-						array(
-							'key'     => '_mdjm_event_date',
-							'compare' => '<=',
 							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date'
 						),
@@ -659,11 +671,11 @@ class MDJM_Task_Runner {
 				break;
 
 			case 'request-deposit':
-				$due_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
 				$query = array(
 					'post_status' => 'mdjm-approved',
 					'meta_query'  => array(
 					'relation' => 'AND',
+						$date_query,
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
@@ -672,7 +684,7 @@ class MDJM_Task_Runner {
 						),
 						array(
 							'key'     => '_mdjm_event_date',
-							'compare' => '<=',
+							'compare' => '>=',
 							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date'
 						),
@@ -687,6 +699,7 @@ class MDJM_Task_Runner {
 						)
 					)
 				);
+				break;
 
 			default:
 				$query = false;
