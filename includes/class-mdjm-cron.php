@@ -94,7 +94,7 @@ class MDJM_Cron	{
 				'lastran'        => __( 'Never', 'mobile-dj-manager' ),
 				'options'        => array(
 					'email_template' => '0',
-					'email_subject'  => __( 'Request Deposit Task Complete', 'mobile-dj-manager' ),
+					'email_subject'  => sprintf( __( 'The %s for your %s is now due', 'mobile-dj-manager' ), mdjm_get_balance_label(), mdjm_get_label_singular( true ) ),
 					'email_from'	 => 'admin',
 					'run_when'	   => 'after_approval',
 					'age'			=> '3 DAY'
@@ -113,7 +113,7 @@ class MDJM_Cron	{
 				'lastran'         => __( 'Never', 'mobile-dj-manager' ),
 				'options'         => array(
 					'email_template' => '0',
-					'email_subject'  => __( 'Balance Reminder Task Complete', 'mobile-dj-manager' ),
+					'email_subject'  =>sprintf( __( 'The %s for your %s is now due', 'mobile-dj-manager' ), mdjm_get_deposit_label(), mdjm_get_label_singular( true ) ),
 					'email_from'     => 'admin',
 					'run_when'       => 'before_event',
 					'age'            => '2 WEEK'

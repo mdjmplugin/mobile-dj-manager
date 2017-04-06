@@ -103,6 +103,10 @@ function mdjm_save_task_action( $data )	{
 		$task_data['options']['email_from']     = sanitize_text_field( $data['task_email_from'] );
 	}
 
+	if ( 'upload-playlists' != $task_data['id'] )	{
+		$task_data['active'] = ! empty( $data['task_active'] ) ? true : false;
+	}
+
 	if( mdjm_update_task( $task_data ) )	{
 		$message = 'task-updated';
 	} else	{

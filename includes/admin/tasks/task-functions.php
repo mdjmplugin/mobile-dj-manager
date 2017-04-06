@@ -72,11 +72,30 @@ function mdjm_get_task( $id )	{
 } // mdjm_get_task
 
 /**
+ * Retrieve a tasks status
+ *
+ * @since	1.4.7
+ * @param	str|arr		$task		A task ID, or array
+ * @return	bool		True or false
+ */
+function mdjm_is_task_active( $task )	{
+	if ( ! is_array( $task ) )	{
+		$task = mdjm_get_task( $task );
+	}
+
+	if ( ! empty( $task['active'] ) )	{
+		return true;
+	}
+
+	return false;
+} // mdjm_is_task_active
+
+/**
  * Whether or not a task can be deleted
  *
  * @since	1.4.7
  * @param	str|arr		$task		A task ID, or array
- * @return	arr		Array of tasks
+ * @return	arr			Array of tasks
  */
 function mdjm_can_delete_task( $task )	{
 	if ( ! is_array( $task ) )	{
