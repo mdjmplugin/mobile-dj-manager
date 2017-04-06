@@ -303,6 +303,8 @@ class MDJM_Task_Runner {
 		$events    = mdjm_get_events( $this->build_query() );
 
 		if ( $events )	{
+			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
 			$count = count( $events );
 			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events ) . ' to be marked as completed' );
 
@@ -326,7 +328,7 @@ class MDJM_Task_Runner {
 				}
 
 				$end_time      = DateTime::createFromFormat( $date_format, $end_date . ' ' . $time );
-				$mark_complete = strtotime( '+ ' . $this->options['age'] );
+				$mark_complete = strtotime( '+' . $this->options['age'] );
 
 				if ( $mark_complete < strtotime( $end_time->format( $date_format ) ) )	{
 					continue;
@@ -355,6 +357,7 @@ class MDJM_Task_Runner {
 					MDJM()->debug->log_it( 'Event ' . $event->ID . ' could not be marked as completed' );
 				}
 			}
+			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 		}
 
 		MDJM()->debug->log_it( "$completed event(s) marked as completed" );
@@ -377,6 +380,8 @@ class MDJM_Task_Runner {
 		$events    = mdjm_get_events( $this->build_query() );
 
 		if ( $events )	{
+			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
 			$count = count( $events );
 			MDJM()->debug->log_it( $count . ' ' . _n( 'enquiry', 'enquiries', $events ) . ' to be marked as failed' );
 
@@ -410,7 +415,7 @@ class MDJM_Task_Runner {
 				}
 
 			}
-
+			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 		}
 
 		MDJM()->debug->log_it( "*** $this->name task Completed ***", true );
@@ -612,7 +617,7 @@ class MDJM_Task_Runner {
 				break;
 
 			case 'fail-enquiry':
-				$expired = date( 'Y-m-d', strtotime( "- " . $this->options['age'] ) );
+				$expired = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
 
 				$query = array(
 					'post_status' => array( 'mdjm-unattended', 'mdjm-enquiry' ),
