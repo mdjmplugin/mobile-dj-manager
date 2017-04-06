@@ -1582,10 +1582,15 @@ function mdjm_get_event_primary_employee_id( $event_id )	{
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
+ * @param	bool	$admin		True to retrieve the admin URL to the event
  * @return	str		URL to Client Zone page for the event.
  */
-function mdjm_get_event_uri( $event_id )	{
-	return add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) );
+function mdjm_get_event_uri( $event_id, $admin = false )	{
+	if ( $admin )	{
+		return add_query_arg( array( 'post' => $event_id, 'action' => 'edit' ), admin_url( 'post.php' ) );
+	} else	{
+		return add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ) ) );
+	}
 } // mdjm_get_event_uri
 
 /**
