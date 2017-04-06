@@ -3,7 +3,7 @@
 	
 	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage employees or permissions.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
@@ -283,7 +283,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 		// All roles link
 		$class = ( empty( $current ) || $current == 'all' ? ' class="current"' : '' );
 		$all_url = remove_query_arg( 'display_role' );
-		$views['all'] = '<a href="' . $all_url . '" ' . $class . '>' . __( 'All' ) . 
+		$views['all'] = '<a href="' . $all_url . '" ' . $class . '>' . __( 'All', 'mobile-dj-manager' ) . 
 			' <span class="count">(' . MDJM_Employee_Manager::$total_employees . ')</span></a>';
 		
 		// Loop through all roles and generate the required views for each

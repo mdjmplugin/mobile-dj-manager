@@ -417,7 +417,7 @@ function mdjm_get_next_event( $employee_id = '' )	{
 	
 	if ( ! empty( $employee_id ) && ! mdjm_employee_can( 'manage_all_events' ) && $employee_id != get_current_user_id() )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . sprintf( __( 'Your %s permissions do not permit you to search all %s!', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural( true ) ) . '</p>',
 			403
 		);
@@ -1701,21 +1701,21 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) )	{
 			
-			$debug[] = sprintf( __( 'Adding %s value as %s' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Adding %s value as %s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
-			$debug[] = sprintf( __( 'Updating %s with %s' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Updating %s with %s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			update_post_meta( $event_id, $key, $value );
 			
 			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
 			
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
 		
-			$debug[] = sprintf( __( 'Removing %s from %s' ), $current_meta[ $key ][0], mdjm_event_get_meta_label( $key ) );
+			$debug[] = sprintf( __( 'Removing %s from %s', 'mobile-dj-manager' ), $current_meta[ $key ][0], mdjm_event_get_meta_label( $key ) );
 			delete_post_meta( $event_id, $key, $value );
 			
 			if( isset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] ) )	{

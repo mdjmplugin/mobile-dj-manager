@@ -99,11 +99,11 @@ function mdjm_contract_details_metabox( $post )	{
 
 	$event_count = count( $contract_events );
 		
-	$total_events = sprintf( _n( ' %s', ' %s', $event_count ),
+	$total_events = sprintf( _n( ' %s', ' %s', $event_count, 'mobile-dj-manager' ),
 						mdjm_get_label_singular(), mdjm_get_label_plural()
 					);
 	
-	$default_contract = mdjm_get_option( 'default_contract' ) == $post->ID ? __( 'Yes' ) : __( 'No' );
+	$default_contract = mdjm_get_option( 'default_contract' ) == $post->ID ? __( 'Yes', 'mobile-dj-manager' ) : __( 'No', 'mobile-dj-manager' );
 			
 	?>
 	<script type="text/javascript">
@@ -121,7 +121,7 @@ function mdjm_contract_details_metabox( $post )	{
     </p>
 	
 	<p><?php _e( '<strong>Assigned To</strong>: ', 'mobile-dj-manager' );
-				printf( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count ),
+				printf( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count, 'mobile-dj-manager' ),
 						mdjm_get_label_singular(), mdjm_get_label_plural() ); ?>
     </p>
 	

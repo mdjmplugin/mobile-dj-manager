@@ -306,7 +306,7 @@ class MDJM_Task_Runner {
 			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
 			$count = count( $events );
-			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events ) . ' to be marked as completed' );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events, 'mobile-dj-manager' ) . ' to be marked as completed' );
 
 			foreach( $events as $_event )	{
 				$event = new MDJM_Event( $_event->ID );
@@ -383,7 +383,7 @@ class MDJM_Task_Runner {
 			remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
 			$count = count( $events );
-			MDJM()->debug->log_it( $count . ' ' . _n( 'enquiry', 'enquiries', $events ) . ' to be marked as failed' );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'enquiry', 'enquiries', $events, 'mobile-dj-manager' ) . ' to be marked as failed' );
 
 			foreach( $events as $_event )	{
 				$event = new MDJM_Event( $_event->ID );
@@ -440,7 +440,7 @@ class MDJM_Task_Runner {
 
 		if ( $events )	{
 			$count = count( $events );
-			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events ) . ' due balance' );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events, 'mobile-dj-manager' ) . ' due balance' );
 
 			foreach( $events as $_event )	{
 				$event = new MDJM_Event( $_event->ID );
@@ -466,7 +466,7 @@ class MDJM_Task_Runner {
 					'subject'        => $this->options['email_subject'],
 					'message'        => mdjm_get_email_template_content( $this->options['email_template'] ),
 					'track'          => true,
-					'source'         => __( 'Request ' . mdjm_get_balance_label() . ' Scheduled Task' )
+					'source'         => sprintf( __( 'Request %s Scheduled Task', 'mobile-dj-manager' ), mdjm_get_balance_label() )
 				);
 
 				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
@@ -525,7 +525,7 @@ class MDJM_Task_Runner {
 
 		if ( $events )	{
 			$count = count( $events );
-			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events ) . ' due deposit' );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events, 'mobile-dj-manager' ) . ' due deposit' );
 
 			foreach( $events as $_event )	{
 				$event = new MDJM_Event( $_event->ID );
@@ -551,7 +551,7 @@ class MDJM_Task_Runner {
 					'subject'        => $this->options['email_subject'],
 					'message'        => mdjm_get_email_template_content( $this->options['email_template'] ),
 					'track'          => true,
-					'source'         => __( 'Request ' . mdjm_get_deposit_label() . ' Scheduled Task' )
+					'source'         => sprintf( __( 'Request %s Scheduled Task', 'mobile-dj-manager' ), mdjm_get_deposit_label() )
 				);
 
 				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{

@@ -1163,7 +1163,7 @@
 			$event = get_post( $event_id );
 			
 			$user = !empty( $user ) ? $user : $current_user->ID;
-			$reason = !empty( $reason ) ? stripslashes( $reason ) : __( 'Unavailable' );
+			$reason = !empty( $reason ) ? stripslashes( $reason ) : __( 'Unavailable', 'mobile-dj-manager' );
 			
 			$meta_update = array(
 				'_mdjm_event_last_updated_by'		=> $user,

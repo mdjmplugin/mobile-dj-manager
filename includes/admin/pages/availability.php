@@ -3,7 +3,7 @@
 	
 	if( ! mdjm_is_admin() )  {
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . __( 'You are not allowed to access this page.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
@@ -73,7 +73,7 @@
 						$i = 1;
 						foreach( $roles as $role => $employees )	{
 							$avail_message .= count( $roles[$role] );
-							$avail_message .= ' ' . _n( $role, $role . "'s", count( $roles[$role] ) );
+							$avail_message .= ' ' . _n( $role, $role . "'s", count( $roles[$role] ), 'mobile-dj-manager' );
 							$avail_message .= ' ' . __( 'available on', 'mobile-dj-manager' ) . ' ';
 							$avail_message .= date( 'l, jS F Y', strtotime( $_POST['check_date'] ) );
 							$avail_message .= '<br />';
@@ -94,7 +94,7 @@
 					}
 					// All employee check
 					elseif ( !empty( $dj_avail['available'] ) && $_POST['check_employee'] == 'all' )	{
-						$avail_message = count( $dj_avail['available'] ) . _n( ' Employee', ' Employees', count( $dj_avail['available'] ) ) . ' available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
+						$avail_message = count( $dj_avail['available'] ) . _n( ' Employee', ' Employees', count( $dj_avail['available'] ), 'mobile-dj-manager' ) . ' available on ' . date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) . ' <a href="' . mdjm_get_admin_page( 'add_event' ) . '">Create event</a><br />';
 						$class = 'updated';
 						?><ui><?php
 						foreach( $dj_avail['available'] as $dj_detail )	{
@@ -118,7 +118,7 @@
 								$roles[] = translate_user_role( $wp_roles->roles[$role]['name'] );
 							}
 							
-							$avail_message = sprintf( __( 'No %s available on %s', 'mobile-dj-manager' ), implode( ' ' . __( 'or' ) . ' ', $roles ), date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );
+							$avail_message = sprintf( __( 'No %s available on %s', 'mobile-dj-manager' ), implode( ' ' . __( 'or', 'mobile-dj-manager' ) . ' ', $roles ), date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );
 						}
 						elseif( $_POST['check_employee'] == 'all' )	{
 							$avail_message = sprintf( __( 'No employee available on %s', 'mobile-dj-manager'), date( 'l, jS F Y', strtotime( $_POST['check_date'] ) ) );

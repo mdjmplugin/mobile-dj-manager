@@ -527,7 +527,7 @@ function mdjm_reports_tab_export()	{
 					<div class="postbox mdjm-export-events-earnings">
 						<h3><span><?php _e( 'Export Transaction History', 'mobile-dj-manager' ); ?></span></h3>
 						<div class="inside">
-							<p><?php _e( 'Download a CSV of all transactions recorded.' ); ?></p>
+							<p><?php _e( 'Download a CSV of all transactions recorded.', 'mobile-dj-manager' ); ?></p>
 							<form id="mdjm-export-txns" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-txn-export-start',
@@ -572,7 +572,7 @@ function mdjm_reports_tab_export()	{
 					<div class="postbox mdjm-export-events">
 						<h3><span><?php printf( __( 'Export %s', 'mobile-dj-manager' ), $label_plural ); ?></span></h3>
 						<div class="inside">
-							<p><?php printf( __( 'Download a CSV of %s data.' ), $label_plural ); ?></p>
+							<p><?php printf( __( 'Download a CSV of %s data.', 'mobile-dj-manager' ), $label_plural ); ?></p>
 							<form id="mdjm-export-events" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-event-export-start',

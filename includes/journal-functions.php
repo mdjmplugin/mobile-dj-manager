@@ -135,7 +135,7 @@ function mdjm_ticket_get_journal_entries_html( $note, $event_id = 0 ) {
 		$user = get_userdata( $journal->user_id );
 		$user = $journal->display_name;
 	} else {
-		$user = __( 'MDJM Bot', 'kb-support' );
+		$user = __( 'MDJM Bot', 'mobile-dj-manager' );
 	}
 
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );

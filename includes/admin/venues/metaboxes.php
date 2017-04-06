@@ -94,7 +94,7 @@ function mdjm_venue_details_metabox( $post )	{
 	<!-- Start first row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<label for="venue_contact" class="mdjm-label"><strong><?php _e( 'Contact Name: ' ); ?></strong></label><br />
+			<label for="venue_contact" class="mdjm-label"><strong><?php _e( 'Contact Name: ', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_contact" id="venue_contact" class="regular-text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_contact', true ) ); ?>">
 		</div>
 	</div>
@@ -102,7 +102,7 @@ function mdjm_venue_details_metabox( $post )	{
 	<!-- Start second row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<label for="venue_phone" class="mdjm-label"><strong><?php _e( 'Contact Phone:' ); ?></strong></label><br />
+			<label for="venue_phone" class="mdjm-label"><strong><?php _e( 'Contact Phone:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_phone" id="venue_phone" class="regular-text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_phone', true ) ); ?>" />
 		</div>
 	</div>
@@ -110,7 +110,7 @@ function mdjm_venue_details_metabox( $post )	{
 	<!-- Start third row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<label for="venue_email" class="mdjm-label"><strong><?php _e( 'Contact Email: ' ); ?></strong></label><br />
+			<label for="venue_email" class="mdjm-label"><strong><?php _e( 'Contact Email: ', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_email" id="venue_email" class="regular-text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_email', true ) ); ?>">
 		</div>
 	</div>
@@ -119,13 +119,13 @@ function mdjm_venue_details_metabox( $post )	{
 	<div class="mdjm-post-row">
 		<!-- Start first coloumn -->
 		<div class="mdjm-post-2column">
-			<label for="venue_address1" class="mdjm-label"><strong><?php _e( 'Address Line 1:' ); ?></strong></label><br />
+			<label for="venue_address1" class="mdjm-label"><strong><?php _e( 'Address Line 1:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_address1" id="venue_address1" class="regular-text required" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_address1', true ) ); ?>" />
 		</div>
 		<!-- End first coloumn -->
 		<!-- Start second coloumn -->
 		<div class="mdjm-post-last-2column">
-			<label for="venue_address2" class="mdjm-label"><strong><?php _e( 'Address Line 2:' ); ?></strong></label><br />
+			<label for="venue_address2" class="mdjm-label"><strong><?php _e( 'Address Line 2:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_address2" id="venue_address2" class="regular-text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_address2', true ) ); ?>" />
 		</div>
 		<!-- End second coloumn -->
@@ -135,13 +135,13 @@ function mdjm_venue_details_metabox( $post )	{
 	<div class="mdjm-post-row">
 		<!-- Start first coloumn -->
 		<div class="mdjm-post-2column">
-			<label for="venue_town" class="mdjm-label"><strong><?php _e( 'Town:' ); ?></strong></label><br />
+			<label for="venue_town" class="mdjm-label"><strong><?php _e( 'Town:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_town" id="venue_town" class="regular-text required" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_town', true ) ); ?>" />
 		</div>
 		<!-- End first coloumn -->
 		<!-- Start second coloumn -->
 		<div class="mdjm-post-last-2column">
-			<label for="venue_county" class="mdjm-label"><strong><?php _e( 'County:' ); ?></strong></label><br />
+			<label for="venue_county" class="mdjm-label"><strong><?php _e( 'County:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_county" id="venue_county" class="regular-text required" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_county', true ) ); ?>" />
 		</div>
 		<!-- End second coloumn -->
@@ -150,7 +150,7 @@ function mdjm_venue_details_metabox( $post )	{
 	<!-- Start sixth row -->
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<label for="venue_postcode" class="mdjm-label"><strong><?php _e( 'Post Code:' ); ?></strong></label><br />
+			<label for="venue_postcode" class="mdjm-label"><strong><?php _e( 'Post Code:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<input type="text" name="venue_postcode" id="venue_postcode" class="regular-text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_venue_postcode', true ) ); ?>" />
 		</div>
 	</div>
@@ -158,7 +158,7 @@ function mdjm_venue_details_metabox( $post )	{
 	<!-- Start seventh row -->
 	<div class="mdjm-post-row-single-textarea">
 		<div class="mdjm-post-1column">
-			<label for="venue_information" class="mdjm-label"><strong><?php _e( 'General Information:' ); ?></strong></label><br />
+			<label for="venue_information" class="mdjm-label"><strong><?php _e( 'General Information:', 'mobile-dj-manager' ); ?></strong></label><br />
 			<textarea name="venue_information" id="venue_information" class="widefat" cols="30" rows="3" placeholder="Enter any information you feel relevant for the venue here. Consider adding or selecting venue details where possible via the 'Venue Details' side box"><?php echo esc_attr( get_post_meta( $post->ID, '_venue_information', true ) ); ?></textarea>
 		</div>
 	</div>

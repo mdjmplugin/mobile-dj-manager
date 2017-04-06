@@ -158,7 +158,7 @@ class MDJM_HTML_Elements {
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
-			'show_option_none' => __( ' - Select Txn Type - ' )
+			'show_option_none' => __( ' - Select Txn Type - ', 'mobile-dj-manager' )
 		) );
 
 		return $output;
@@ -184,7 +184,7 @@ class MDJM_HTML_Elements {
 			'multiple'         => false,
 			'allow_add'        => true,
 			'show_option_all'  => false,
-			'show_option_none' => __( ' - Select Venue - ' ),
+			'show_option_none' => __( ' - Select Venue - ', 'mobile-dj-manager' ),
 			'data'             => array()
 		);
 		

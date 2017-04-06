@@ -276,15 +276,15 @@ function mdjm_register_post_types()	{
 			'singular_name'      => _x( 'Custom Event Field', 'post type singular name', 'mobile-dj-manager' ),
 			'menu_name'          => _x( 'Custom Event Fields', 'admin menu', 'mobile-dj-manager' ),
 			'add_new'            => _x( 'Add Custom Event Field', 'add new on admin bar', 'mobile-dj-manager' ),
-			'add_new_item'       => __( 'Add New Custom Event Field' ),
-			'edit'               => __( 'Edit Custom Event Field' ),
-			'edit_item'          => __( 'Edit Custom Event Field' ),
-			'new_item'           => __( 'New Hosted Plugin' ),
-			'view'               => __( 'View Custom Event Field' ),
-			'view_item'          => __( 'View Custom Event Field' ),
-			'search_items'       => __( 'Search Custom Event Field' ),
-			'not_found'          => __( 'No Custom Event Fields found' ),
-			'not_found_in_trash' => __( 'No Custom Event Fields found in trash' )
+			'add_new_item'       => __( 'Add New Custom Event Field', 'mobile-dj-manager' ),
+			'edit'               => __( 'Edit Custom Event Field', 'mobile-dj-manager' ),
+			'edit_item'          => __( 'Edit Custom Event Field', 'mobile-dj-manager' ),
+			'new_item'           => __( 'New Hosted Plugin', 'mobile-dj-manager' ),
+			'view'               => __( 'View Custom Event Field', 'mobile-dj-manager' ),
+			'view_item'          => __( 'View Custom Event Field', 'mobile-dj-manager' ),
+			'search_items'       => __( 'Search Custom Event Field', 'mobile-dj-manager' ),
+			'not_found'          => __( 'No Custom Event Fields found', 'mobile-dj-manager' ),
+			'not_found_in_trash' => __( 'No Custom Event Fields found in trash', 'mobile-dj-manager' )
 		)
 	);
 		

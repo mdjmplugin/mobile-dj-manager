@@ -637,25 +637,25 @@
 																		
 					'{DEPOSIT}'			  => ( !empty( $eventinfo['deposit'] ) ? $eventinfo['deposit'] : '' ),
 												
-					'{DEPOSIT_STATUS}'	   => ( !empty( $eventinfo['deposit_status'] ) ? $eventinfo['deposit_status'] : __( 'Due' ) ),
-					'{DJ_EMAIL}'		     => ( !empty( $eventinfo['dj']->user_email ) ? $eventinfo['dj']->user_email : __( 'Not Assigned' ) ),
+					'{DEPOSIT_STATUS}'	   => ( !empty( $eventinfo['deposit_status'] ) ? $eventinfo['deposit_status'] : __( 'Due', 'mobile-dj-manager' ) ),
+					'{DJ_EMAIL}'		     => ( !empty( $eventinfo['dj']->user_email ) ? $eventinfo['dj']->user_email : __( 'Not Assigned', 'mobile-dj-manager' ) ),
 					'{DJ_FIRSTNAME}'	     => ( !empty( $eventinfo['dj']->user_firstname ) ? $eventinfo['dj']->user_firstname : '' ),
 					'{DJ_FULLNAME}'		  => ( !empty( $eventinfo['dj']->display_name ) ? $eventinfo['dj']->display_name : '' ),
 					'{DJ_NOTES}'		     => ( !empty( $eventinfo['dj_notes'] ) ? $eventinfo['dj_notes'] : '' ),
 					'{DJ_PRIMARY_PHONE}'     => ( !empty( $eventinfo['dj']->phone1 ) ? $eventinfo['dj']->phone1 : '' ),
 					'{DJ_SETUP_DATE}'	    => ( !empty( $eventinfo['setup_date'] ) && $eventinfo['setup_date'] != 'Not Specified' ? 
-						date( MDJM_SHORTDATE_FORMAT, $eventinfo['setup_date'] ) : __( 'Not Specified' ) ),
+						date( MDJM_SHORTDATE_FORMAT, $eventinfo['setup_date'] ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 						
 					'{DJ_SETUP_TIME}'	    => ( !empty( $eventinfo['setup_time'] ) ? $eventinfo['setup_time'] : '' ),
 					'{END_TIME}'		     => ( !empty( $eventinfo['finish'] ) ? $eventinfo['finish'] : '' ),
 					'{END_DATE}'		     => ( !empty( $eventinfo['end_date'] ) && is_numeric( $eventinfo['end_date'] ) ? 
-						date( MDJM_SHORTDATE_FORMAT, $eventinfo['end_date'] ) : __( 'Not Specified' ) ),
+						date( MDJM_SHORTDATE_FORMAT, $eventinfo['end_date'] ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 						
 					'{EVENT_DATE}'		   => ( !empty( $eventinfo['date'] ) && is_numeric( $eventinfo['date'] ) ? 
-						date( 'l, jS F Y', $eventinfo['date'] ) : __( 'Not Specified' ) ),
+						date( 'l, jS F Y', $eventinfo['date'] ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 						
 					'{EVENT_DATE_SHORT}'     => ( !empty( $eventinfo['date'] ) && is_numeric( $eventinfo['date'] ) ? 
-						date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : __( 'Not Specified' ) ),
+						date( MDJM_SHORTDATE_FORMAT, $eventinfo['date'] ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 						
 					'{EVENT_DESCRIPTION}'    => ( !empty( $eventinfo['notes'] ) ? $eventinfo['notes'] : '' ),
 					'{EVENT_NAME}'		   => ( !empty( $eventinfo['name'] ) ? $eventinfo['name'] : '' ),

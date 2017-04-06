@@ -129,7 +129,7 @@ class MDJM_Debug	{
 			
 			echo '<div class="mdjm-warning">' . "\r\n";
 			echo '<form name="mdjm_log_files" method="POST">' . "\r\n";
-			echo _n( 'One', 'Some', count( $warn ) ) . __( ' of your log files exceed the specified limit of ' . mdjm_get_option( 'debug_log_size', 2 ) . ' megabytes' ) 
+			echo _n( 'One', 'Some', count( $warn ), 'mobile-dj-manager' ) . __( ' of your log files exceed the specified limit of ' . mdjm_get_option( 'debug_log_size', 2 ) . ' megabytes', 'mobile-dj-manager' ) 
 			. '<p>' . "\r\n";
 			
 			$i = 1;

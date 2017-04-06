@@ -500,7 +500,7 @@ function mdjm_add_transaction_type_ajax()	{
 				'id' 				=> 'mdjm_transaction_type',
 				'orderby' 			 => 'name',
 				'hierarchical' 		=> 0,
-				'show_option_none' 	=> __( 'Select Transaction Type' ),
+				'show_option_none' 	=> __( 'Select Transaction Type', 'mobile-dj-manager' ),
 				'class'			   => ' required',
 				'echo'				=> 0,
 			);

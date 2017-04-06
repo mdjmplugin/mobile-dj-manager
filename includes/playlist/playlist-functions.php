@@ -632,7 +632,7 @@ function mdjm_process_playlist_upload()	{
 	$entries = mdjm_prepare_playlist_upload_data();
 
 	if ( empty( $entries ) )	{
-		MDJM()->debug->log_it( __( 'There are no playlist entries to upload' ) );
+		MDJM()->debug->log_it( __( 'There are no playlist entries to upload', 'mobile-dj-manager' ) );
 
 		return;
 	}

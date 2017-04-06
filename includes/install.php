@@ -609,18 +609,18 @@ function mdjm_run_install()	{
 			'label' => __( 'Birthday', 'mobile-dj-manager' ),
 			'id' => 'birthday',
 			'type' => 'dropdown',
-			'value' => __( 'January' ) . "\r\n" . 
-					   __( 'February' ) . "\r\n" .
-					   __( 'March' ) . "\r\n" . 
-					   __( 'April' ) . "\r\n" . 
-					   __( 'May' ) . "\r\n" . 
-					   __( 'June' ) . "\r\n" . 
-					   __( 'July' ) . "\r\n" . 
-					   __( 'August' ) . "\r\n" . 
-					   __( 'September' ) . "\r\n" . 
-					   __( 'October' ) . "\r\n" . 
-					   __( 'November' ) . "\r\n" . 
-					   __( 'December' ),
+			'value' => __( 'January', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'February', 'mobile-dj-manager' ) . "\r\n" .
+					   __( 'March', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'April', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'May', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'June', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'July', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'August', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'September', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'October', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'November', 'mobile-dj-manager' ) . "\r\n" . 
+					   __( 'December', 'mobile-dj-manager' ),
 			'checked' => '0',
 			'display' => '1',
 			'desc' => '',

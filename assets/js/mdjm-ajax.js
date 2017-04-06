@@ -3,11 +3,11 @@ jQuery(document).ready(function ($) {
 	/*=Payments Form
 	---------------------------------------------------- */
 	// Load the fields for the selected payment method
-	$('select#mdjm-gateway, input.mdjm-gateway').change( function (e) {
+	$('select#mdjm-gateway, input.mdjm-gateway').change( function () {
 
 		var payment_mode = $('#mdjm-gateway option:selected, input.mdjm-gateway:checked').val();
 
-		if( payment_mode == '0' )	{
+		if( payment_mode === '0' )	{
 			return false;
 		}
 
@@ -17,51 +17,49 @@ jQuery(document).ready(function ($) {
 	});
 
 	// Auto load first payment gateway
-	if( mdjm_vars.is_payment == '1' && $('select#mdjm-gateway, input.mdjm-gateway').length ) {
+	if( mdjm_vars.is_payment === '1' && $('select#mdjm-gateway, input.mdjm-gateway').length ) {
 		setTimeout( function() {
 			mdjm_load_gateway( mdjm_vars.default_gateway );
 		}, 200);
 	}
 
 	$( document.body ).on( 'click', '#mdjm-payment-part', function() {
-		$('#mdjm-payment-custom').show("fast");
+		$('#mdjm-payment-custom').show('fast');
 	});
 
 	$( document.body ).on( 'click', '#mdjm-payment-deposit, #mdjm-payment-balance', function() {
-		$('#mdjm-payment-custom').hide("fast");
+		$('#mdjm-payment-custom').hide('fast');
 	});
 
 	$(document).on('click', '#mdjm_payment_form #mdjm_payment_submit input[type=submit]', function(e) {
 		var mdjmPurchaseform = document.getElementById('mdjm_payment_form');
 
-		if( typeof mdjmPurchaseform.checkValidity === "function" && false === mdjmPurchaseform.checkValidity() ) {
+		if( typeof mdjmPurchaseform.checkValidity === 'function' && false === mdjmPurchaseform.checkValidity() ) {
 			return;
 		}
 
 		e.preventDefault();
 
-		var complete_purchase_val = $(this).val();
-
 		$(this).val(mdjm_vars.payment_loading);
-		$(this).prop("disabled", true);
+		$(this).prop('disabled', true);
 		$(this).after('<span class="mdjm-payment-ajax"><i class="mdjm-icon-spinner mdjm-icon-spin"></i></span>');
 
 		var valid = mdjm_validate_payment_form(mdjmPurchaseform);
 
-		if ( valid.type == 'success' )	{
-			$(mdjmPurchaseform).find('.mdjm-alert').hide("fast");
-			$(mdjmPurchaseform).find('.error').removeClass("error");
+		if ( valid.type === 'success' )	{
+			$(mdjmPurchaseform).find('.mdjm-alert').hide('fast');
+			$(mdjmPurchaseform).find('.error').removeClass('error');
 			$(mdjmPurchaseform).submit();
 		} else	{
-			$(mdjmPurchaseform).find('.mdjm-alert').show("fast");
+			$(mdjmPurchaseform).find('.mdjm-alert').show('fast');
 			$(mdjmPurchaseform).find('.mdjm-alert').text(valid.msg);
 
 			if ( valid.field )	{
-				$('#' + valid.field).addClass("error");
+				$('#' + valid.field).addClass('error');
 			}
 
 			$(this).val(mdjm_vars.complete_payment);
-			$(this).prop("disabled", false);
+			$(this).prop('disabled', false);
 		}
 
 	});
@@ -70,40 +68,40 @@ jQuery(document).ready(function ($) {
 	---------------------------------------------------- */
 	if( mdjm_vars.availability_ajax )	{
 		$('#mdjm-availability-check').submit(function(event)	{
-			if( !$("#availability_check_date").val() )	{
+			if( !$('#availability_check_date').val() )	{
 				return false;
 			}
-			event.preventDefault ? event.preventDefault() : (event.returnValue = false);
-			var date = $("#availability_check_date").val();
+			event.preventDefault ? event.preventDefault() : false;
+			var date = $('#availability_check_date').val();
 			var postURL = mdjm_vars.rest_url;
 			postURL += 'availability/';
 			postURL += '?date=' + date;
 			$.ajax({
-				type: "GET",
-				dataType: "json",
+				type: 'GET',
+				dataType: 'json',
 				url:  postURL,
 				beforeSend: function()	{
 					$('input[type="submit"]').hide();
-					$("#pleasewait").show();
+					$('#pleasewait').show();
 				},
 				success: function(response)	{
 					var availability = response.data.availability;
-					if(availability.response == "available") {
-						if( mdjm_vars.available_redirect != 'text' )	{
+					if(availability.response === 'available') {
+						if( mdjm_vars.available_redirect !== 'text' )	{
 							window.location.href = mdjm_vars.available_redirect + 'mdjm_avail_date=' + date;
 						} else	{
-							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
-							$("#mdjm-submit-availability").fadeTo("slow", 1);
-							$("#pleasewait").hide();
+							$('#mdjm-availability-result').replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
+							$('#mdjm-submit-availability').fadeTo('slow', 1);
+							$('#pleasewait').hide();
 						}
 						$('input[type="submit"]').prop('disabled', false);
 					} else	{
-						if( mdjm_vars.unavailable_redirect != 'text' )	{
+						if( mdjm_vars.unavailable_redirect !== 'text' )	{
 							window.location.href = mdjm_vars.unavailable_redirect + 'mdjm_avail_date=' + date;
 						} else	{
-							$("#mdjm-availability-result").replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
-							$("#mdjm-submit-availability").fadeTo("slow", 1);
-							$("#pleasewait").hide();
+							$('#mdjm-availability-result').replaceWith('<div id="mdjm-availability-result">' + availability.message + '</div>');
+							$('#mdjm-submit-availability').fadeTo('slow', 1);
+							$('#pleasewait').hide();
 						}
 						
 						$('input[type="submit"]').prop('disabled', false);
@@ -125,32 +123,32 @@ jQuery(document).ready(function ($) {
 			},
 		},
 	
-		errorClass: "mdjm_form_error",
-		validClass: "mdjm_form_valid",
+		errorClass: 'mdjm_form_error',
+		validClass: 'mdjm_form_valid',
 	});
 });
 
-function mdjm_validate_payment_form(mdjmPurchaseform) {
+function mdjm_validate_payment_form() {
 
 	var msg = false;
 
 	// Make sure an amount is selected
-	var payment = jQuery("input[type='radio'][name='mdjm_payment_amount']:checked");
+	var payment = jQuery('input[type="radio"][name="mdjm_payment_amount"]:checked');
 
 	if ( payment.length === 0 ) {
 		return( {msg:mdjm_vars.no_payment_amount} );
 	}
 
 	// If part payment, make sure the value is greater than 0
-	if ( 'part_payment' == payment.val() )	{
+	if ( 'part_payment' === payment.val() )	{
 		var amount = jQuery('#part-payment').val();
 
 		if ( ! jQuery.isNumeric(amount) )	{
-			return( {type:"error", field:"part-payment", msg:mdjm_vars.no_payment_amount} );
+			return( {type:'error', field:'part-payment', msg:mdjm_vars.no_payment_amount} );
 		}
 	} 
 
-	return( {type:"success"} );
+	return( {type:'success'} );
 
 }
 

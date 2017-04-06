@@ -2108,7 +2108,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						$class = 'expired';
 						$messages[] = sprintf(
-							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'kb-support' ),
+							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
 							'http://kb-support.com/checkout/?edd_license_key=' . $value
 						);
@@ -2121,7 +2121,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						$class = 'error';
 						$messages[] = sprintf(
-							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'kb-support' ),
+							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'mobile-dj-manager ),
 							'https://kb-support.com/support'
 						);
 
@@ -2133,7 +2133,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						$class = 'error';
 						$messages[] = sprintf(
-							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'kb-support' ),
+							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'mobile-dj-manager ),
 							'http://kb-support.com/your-account'
 						);
 
@@ -2146,7 +2146,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						$class = 'error';
 						$messages[] = sprintf(
-							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'kb-support' ),
+							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'mobile-dj-manager ),
 							$args['name'],
 							'http://kb-support.com/your-account'
 						);
@@ -2158,7 +2158,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 					case 'item_name_mismatch' :
 
 						$class = 'error';
-						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'kb-support' ), $args['name'] );
+						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'mobile-dj-manager ), $args['name'] );
 
 						$license_status = 'license-' . $class . '-notice';
 
@@ -2167,7 +2167,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 					case 'no_activations_left':
 
 						$class = 'error';
-						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'kb-support' ), 'http://kb-support.com/your-account/' );
+						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'mobile-dj-manager ), 'http://kb-support.com/your-account/' );
 
 						$license_status = 'license-' . $class . '-notice';
 
@@ -2176,7 +2176,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 					case 'license_not_activable':
 
 						$class = 'error';
-						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'kb-support' );
+						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'mobile-dj-manager );
 
 						$license_status = 'license-' . $class . '-notice';
 						break;
@@ -2184,8 +2184,8 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 					default :
 
 						$class = 'error';
-						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'kb-support' );
-						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
+						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager );
+						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'mobile-dj-manager ), $error, 'https://kb-support.com/support' );
 
 						$license_status = 'license-' . $class . '-notice';
 						break;
@@ -2206,14 +2206,14 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						if( 'lifetime' === $license->expires ) {
 
-							$messages[] = __( 'License key never expires.', 'kb-support' );
+							$messages[] = __( 'License key never expires.', 'mobile-dj-manager );
 
 							$license_status = 'license-lifetime-notice';
 
 						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
 
 							$messages[] = sprintf(
-								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'kb-support' ),
+								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'mobile-dj-manager ),
 								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
 								'http://kb-support.com/checkout/?edd_license_key=' . $value
 							);
@@ -2223,7 +2223,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						} else {
 
 							$messages[] = sprintf(
-								__( 'Your license key expires on %s.', 'kb-support' ),
+								__( 'Your license key expires on %s.', 'mobile-dj-manager ),
 								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) )
 							);
 
@@ -2241,7 +2241,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 			$class = 'empty';
 
 			$messages[] = sprintf(
-				__( 'To receive updates, please enter your valid %s license key.', 'kb-support' ),
+				__( 'To receive updates, please enter your valid %s license key.', 'mobile-dj-manager ),
 				$args['name']
 			);
 
@@ -2254,7 +2254,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
 
 		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
-			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'kb-support' ) . '"/>';
+			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'mobile-dj-manager ) . '"/>';
 		}
 
 		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
