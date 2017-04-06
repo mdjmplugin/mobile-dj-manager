@@ -907,7 +907,8 @@ jQuery(document).ready(function ($) {
 		clone_repeatable : function(row) {
 
 			// Retrieve the highest current key
-			var key = highest = 1;
+			var highest = 1;
+			var key = highest;
 			row.parent().find( 'tr.mdjm_repeatable_row' ).each(function() {
 				var current = $(this).data( 'key' );
 				if( parseInt( current ) > highest ) {
