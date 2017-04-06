@@ -441,7 +441,7 @@ function mdjm_register_post_types()	{
 			'all_items'          => __( 'All Transactions', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Transactions', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No Transactions found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No Transactions found in Trash.' )
+			'not_found_in_trash' => __( 'No Transactions found in Trash.', 'mobile-dj-manager' )
 		)
 	);
 		
