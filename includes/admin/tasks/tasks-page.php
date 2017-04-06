@@ -82,6 +82,13 @@ function mdjm_render_single_task_view( $id ) {
 		wp_die( __( 'Invalid task', 'mobile-dj-manager' ) );
 	}
 
+	$run_task_url = add_query_arg( array(
+		'post_type'   => 'mdjm-event',
+		'page'        => 'mdjm-tasks',
+		'id'          => $id,
+		'mdjm-action' => 'run_task'   
+	), admin_url( 'edit.php' ) );
+
 	$delete_url = add_query_arg( array(
 		'post_type'   => 'mdjm-event',
 		'page'        => 'mdjm-tasks',
@@ -93,7 +100,12 @@ function mdjm_render_single_task_view( $id ) {
 	?>
 
 	<div class="wrap mdjm-wrap">
-        <h2><?php printf( __( 'Task: %s', 'mobile-dj-manager' ), esc_html( $task['name'] ) ); ?></h2>
+        <h1>
+			<?php printf( __( 'Task: %s', 'mobile-dj-manager' ), esc_html( $task['name'] ) ); ?>
+        	<a href="<?php echo $return_url; ?>" class="page-title-action">
+				<?php _e( 'Back to Task List', 'mobile-dj-manager' ); ?>
+            </a>
+        </h1>
         <?php do_action( 'mdjm_view_task_details_before', $id ); ?>
         <form id="mdjm-edit-task-form" method="post">
 		<?php do_action( 'mdjm_view_task_details_form_top', $id ); ?>
@@ -110,6 +122,54 @@ function mdjm_render_single_task_view( $id ) {
 								<h3 class="hndle">
 									<span><?php _e( 'Update Task', 'mobile-dj-manager' ); ?></span>
 								</h3>
+                                <div class="inside">
+									<div class="mdjm-admin-box">
+
+										<?php do_action( 'mdjm_task_details_stats_before', $id ); ?>
+
+										<div class="mdjm-admin-box-inside mdjm-task-stats">
+                                        	<p>
+												<span class="label"><?php _e( 'Last Ran:', 'mobile-dj-manager' ); ?>&nbsp;</span>
+                                                <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['lastran'] ); ?>
+                                            </p>
+
+											<p>
+												<span class="label"><?php _e( 'Next Due:', 'mobile-dj-manager' ); ?>&nbsp;</span>
+                                                <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ); ?>
+                                            </p>
+
+											<p>
+												<span class="label"><?php _e( 'Total Runs:', 'mobile-dj-manager' ); ?>&nbsp;</span>
+                                                <?php echo $task['totalruns']; ?>
+                                            </p>
+
+											<?php if ( 'upload-playlists' == $id ) : ?>
+                                                <p>
+                                                    <span class="label"><?php _e( 'Entries Uploaded:', 'mobile-dj-manager' ); ?>&nbsp;</span>
+													<?php echo mdjm_get_uploaded_playlist_entry_count(); ?>
+                                                </p>
+                                            <?php else : ?>
+                                            	<p>
+													<?php echo MDJM()->html->checkbox( array(
+														'name'    => 'task_active',
+														'current' => ! empty( $task['active'] ) ? true : false
+													) ); ?>&nbsp;
+                                                    <span class="label"><?php _e( 'Task Active', 'mobile-dj-manager' ); ?></span>
+                                                </p>
+                                            <?php endif; ?>
+
+											<?php if ( ! empty( $task['active'] ) ) : ?>
+                                            	<p>
+                                                    <a href="<?php echo $run_task_url; ?>" class="button button-secondary">
+														<?php _e( 'Run Task', 'mobile-dj-manager' ); ?>
+                                                    </a>
+                                                </p>
+                                            <?php endif; ?>
+
+                                        </div><!-- /.mdjm-admin-box-inside -->
+
+                                    </div><!-- /.mdjm-admin-box -->
+                                </div><!-- /.inside -->
 
 								<div class="mdjm-task-update-box mdjm-admin-box">
 									<?php do_action( 'mdjm_view_task_details_update_before', $id ); ?>

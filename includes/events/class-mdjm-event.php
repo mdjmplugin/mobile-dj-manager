@@ -1099,11 +1099,12 @@ class MDJM_Event {
 	 * @return	array
 	 */
 	public function get_tasks()	{
-		if ( ! isset( $this->tasks ) )	{
-			$_tasks = $this->get_meta( '_mdjm_event_tasks' );
-			if ( ! empty( $_tasks ) )	{
-				$this->tasks = json_decode( $_tasks, true );
-			}
+		$completed = $this->get_meta( '_mdjm_event_tasks' );
+
+		if ( empty( $completed ) )	{
+			$this->tasks = array();
+		} else	{
+			$this->tasks = $completed;
 		}
 
 		return $this->tasks;
@@ -1129,7 +1130,7 @@ class MDJM_Event {
 
 		$this->tasks[ $task ] = current_time( 'timestamp' );
 
-		update_post_meta( $this->ID, '_mdjm_event_tasks', json_encode( $this->tasks ) );
+		update_post_meta( $this->ID, '_mdjm_event_tasks', $this->tasks );
 
 		return $this->get_tasks();
 	} // get_tasks

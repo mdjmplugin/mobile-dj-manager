@@ -326,9 +326,9 @@ class MDJM_Task_Runner {
 				}
 
 				$end_time      = DateTime::createFromFormat( $date_format, $end_date . ' ' . $time );
-				$mark_complete = strtotime( '+' . $this->options['age'] );
+				$mark_complete = strtotime( '+ ' . $this->options['age'] );
 
-				if ( $mark_complete < strtotime( $end_time ) )	{
+				if ( $mark_complete < strtotime( $end_time->format( $date_format ) ) )	{
 					continue;
 				}
 
@@ -612,10 +612,10 @@ class MDJM_Task_Runner {
 				break;
 
 			case 'fail-enquiry':
-				$expired = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
+				$expired = date( 'Y-m-d', strtotime( "- " . $this->options['age'] ) );
 
 				$query = array(
-					'post_status' => 'mdjm-enquiry',
+					'post_status' => array( 'mdjm-unattended', 'mdjm-enquiry' ),
 					'date_query'  => array(
 						'before'	=> $expired
 					)
