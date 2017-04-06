@@ -548,6 +548,11 @@ function mdjm_setup_content_tags() {
 			'function'    => 'mdjm_content_tag_event_url'
 		),
 		array(
+			'tag'         => 'event_admin_url',
+			'description' => __( 'The URL of the event admin page', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_event_admin_url'
+		),
+		array(
 			'tag'         => 'final_balance',
 			'description' => __( 'The final balance payment for an event which is the total cost minus deposit, even if the deposit is unpaid.', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_final_balance'
@@ -1811,10 +1816,9 @@ function mdjm_content_tag_event_type( $event_id='' )	{
 
 /**
  * Content tag: event_url.
- * The current event url.
+ * The front end event url.
  *
  * @param	int		The event ID.
- * @param
  *
  * @return	str		The current event type label.
  */
@@ -1825,6 +1829,22 @@ function mdjm_content_tag_event_url( $event_id='' )	{
 	
 	return mdjm_get_event_uri( $event_id );
 } // mdjm_content_tag_event_url
+
+/**
+ * Content tag: event_admin_url.
+ * The admin event url.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		The current event type label.
+ */
+function mdjm_content_tag_event_admin_url( $event_id='' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+	
+	return mdjm_get_event_uri( $event_id, true );
+} // mdjm_content_tag_event_admin_url
 
 /**
  * Content tag: final_balance.
