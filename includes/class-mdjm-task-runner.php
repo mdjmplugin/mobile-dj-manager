@@ -640,6 +640,12 @@ class MDJM_Task_Runner {
 							'type'    => 'date'
 						),
 						array(
+							'key'     => '_mdjm_event_date',
+							'compare' => '<=',
+							'value'   => date( 'Y-m-d' ),
+							'type'    => 'date'
+						),
+						array(
 							'key'     => '_mdjm_event_balance_status',
 							'value'   => 'Due'
 						),
@@ -662,6 +668,12 @@ class MDJM_Task_Runner {
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
 							'value'   => $due_date,
+							'type'    => 'date'
+						),
+						array(
+							'key'     => '_mdjm_event_date',
+							'compare' => '<=',
+							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date'
 						),
 						array(
