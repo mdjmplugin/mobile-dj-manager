@@ -783,6 +783,21 @@ function mdjm_remove_employee_from_event_ajax()	{
 add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_event_ajax' );
 
 /**
+ * Retrieve the title of a template
+ *
+ * @since	1.4.7
+ * @return	str
+ */
+function mdjm_mdjm_get_template_title_ajax()	{
+	$title = get_the_title( $_POST['template'] );
+	$result['title'] = $title;
+	echo json_encode( $result );
+
+	die();
+} // mdjm_mdjm_get_template_title_ajax
+add_action( 'wp_ajax_mdjm_get_template_title', 'mdjm_mdjm_get_template_title_ajax' );
+
+/**
  * Update the email content field with the selected template.
  *
  * @since	1.3

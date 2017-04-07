@@ -1178,6 +1178,52 @@ jQuery(document).ready(function ($) {
 	MDJM_Comms.init();
 
 	/**
+	 * Tasks screen JS
+	 */
+	var MDJM_Tasks = {
+
+		init : function()	{
+			this.template_select();
+		},
+
+		template_select: function()	{
+			// Update event list when recipient changes
+			$( document.body ).on( 'change', '#mdjm_task_email_template', function(event) {
+				event.preventDefault();
+
+				var postData         = {
+					template : $('#mdjm_task_email_template').val(),
+					action   : 'mdjm_get_template_title'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+						$('#mdjm-task-email-subject').addClass('mdjm-updating');
+						$('#mdjm-task-email-subject').fadeTo('slow', 0.5);
+					},
+					success: function (response) {
+						if(response.title) {
+							$('#mdjm-task-email-subject').val(response.title);
+						}
+						$('#mdjm-task-email-subject').fadeTo('slow', 1);
+						$('#mdjm-task-email-subject').removeClass('mdjm-updating');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+	};
+	MDJM_Tasks.init();
+
+	/**
 	 * Reports / Exports screen JS
 	 */
 	var MDJM_Reports = {
