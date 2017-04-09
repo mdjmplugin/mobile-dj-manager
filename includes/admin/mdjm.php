@@ -18,16 +18,6 @@
 			 */
 			public function __construct()	{
 				global $wpdb, $pagenow, $mdjm_post_types, $clientzone;
-				
-				define( 'MDJM_COMM_POSTS', 'mdjm_communication' );
-				define( 'MDJM_CONTRACT_POSTS', 'contract' );
-				define( 'MDJM_CUSTOM_FIELD_POSTS', 'mdjm-custom-fields' );
-				define( 'MDJM_SIGNED_CONTRACT_POSTS', 'mdjm-signed-contract' );
-				define( 'MDJM_EMAIL_POSTS', 'email_template' );
-				define( 'MDJM_EVENT_POSTS', 'mdjm-event' );
-				define( 'MDJM_QUOTE_POSTS', 'mdjm-quotes' );
-				define( 'MDJM_TRANS_POSTS', 'mdjm-transaction' );
-				define( 'MDJM_VENUE_POSTS', 'mdjm-venue' );
 								
 				/**
 				 * This can be removed post 1.3
