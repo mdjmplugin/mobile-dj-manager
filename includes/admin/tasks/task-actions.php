@@ -184,4 +184,4 @@ function mdjm_set_task_run_time_after_approval( $result, $event_id, $old_status 
 	}
 
 } // mdjm_set_task_run_time_after_approval
-add_action( 'mdjm_post_event_status_change', 'mdjm_set_task_run_time_after_approval', 10, 3 );
+add_action( 'mdjm_post_update_event_status_mdjm-approval', 'mdjm_set_task_run_time_after_approval', 10, 3 );
