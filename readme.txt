@@ -101,6 +101,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 * Some automated tasks were not running if the associated meta key was missing from the event
 * Inserted missing text domain
+* Duplicate enqueuing of datepicker within Availability widget causing potential PHP notice
 
 **Tweaks**
 
