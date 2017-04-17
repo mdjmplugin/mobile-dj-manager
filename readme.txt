@@ -86,7 +86,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.4.7 =
 
 **Released 6th April, 2017**
-
+Eric - 1-816-880-3200
 **New**
 
 * New Automated Tasks interface
@@ -99,6 +99,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Bug Fixes**
 
+* Incorrect URL format on availability check when no availability
 * Some automated tasks were not running if the associated meta key was missing from the event
 * Inserted missing text domain
 * Duplicate enqueuing of datepicker within Availability widget causing potential PHP notice
