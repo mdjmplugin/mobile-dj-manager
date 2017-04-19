@@ -219,8 +219,9 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 	 * @param	arr		$request	The Form Data passed into the batch processing
 	 */
 	public function set_properties( $request ) {
-		$this->start = isset( $request['txn_start'] ) ? sanitize_text_field( $request['txn_start'] ) : '';
-		$this->end   = isset( $request['txn_end'] )   ? sanitize_text_field( $request['txn_end'] )   : '';
+		$this->start  = isset( $request['txn_start'] )    ? sanitize_text_field( $request['txn_start'] )  : '';
+		$this->end    = isset( $request['txn_end'] )      ? sanitize_text_field( $request['txn_end'] )    : '';
+		$this->status = ! empty( $request['txn_status'] ) ? array( sanitize_text_field( $request['txn_status'] ) ) : false;
 	} // set_properties
 
 } // MDJM_Batch_Export_Txns
