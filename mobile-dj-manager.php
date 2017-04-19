@@ -9,7 +9,7 @@
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
- * Domain Path: /lang
+ * Domain Path: /languages
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
@@ -289,7 +289,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			load_plugin_textdomain( 
 				'mobile-dj-manager',
 				false, 
-				dirname( plugin_basename(__FILE__) ) . '/lang/'
+				dirname( plugin_basename(__FILE__) ) . '/languages/'
 			);
 		} // load_textdomain
 		

@@ -42,7 +42,7 @@ module.exports = function( grunt ) {
 						pot.headers['report-msgid-bugs-to'] = 'https://mdjm.co.uk/';
 						pot.headers['last-translator'] = 'WP-Translations (http://wp-translations.org/)';
 						pot.headers['language-team'] = 'WP-Translations <wpt@wp-translations.org>';
-						pot.headers.language = 'en_US';
+						pot.headers.language = 'en_GB';
 						var translation, // Exclude meta data from pot.
 							excluded_meta = [
 								'MDJM Event Management',
