@@ -558,6 +558,7 @@ function mdjm_reports_tab_export()	{
                                     <option value="Completed"><?php _e( 'Completed', 'mobile-dj-manager' ); ?></option>
                                     <option value="Pending"><?php _e( 'Pending', 'mobile-dj-manager' ); ?></option>
                                     <option value="Cancelled"><?php _e( 'Cancelled', 'mobile-dj-manager' ); ?></option>
+                                    <option value="Failed"><?php _e( 'Failed', 'mobile-dj-manager' ); ?></option>
 								</select>
 								<?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
 								<input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Txns"/>
