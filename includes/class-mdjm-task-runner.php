@@ -698,7 +698,7 @@ class MDJM_Task_Runner {
 			default:
 				$query = false;
 		}
-error_log( var_export( $query, true ) );
+
 		return apply_filters( 'mdjm_task_query', $query, $this->slug, $this );
 	} // build_query
 
