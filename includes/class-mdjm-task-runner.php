@@ -603,7 +603,7 @@ class MDJM_Task_Runner {
 		if ( 'after_approval' == $this->options['run_when'] )	{
 			$run_date   = date( 'Y-m-d H:i:s', strtotime( "-" . $this->options['age'] ) );
 			$date_query = array(
-				'key'     => '_mdjm_event_task_after_approval',
+				'key'     => '_mdjm_event_task_after_approval_' . $this->slug,
 				'compare' => '<',
 				'value'   => $run_date,
 				'type'    => 'datetime'
@@ -679,12 +679,6 @@ class MDJM_Task_Runner {
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
-							'value'   => $due_date,
-							'type'    => 'date'
-						),
-						array(
-							'key'     => '_mdjm_event_date',
-							'compare' => '>=',
 							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date'
 						),
@@ -704,8 +698,8 @@ class MDJM_Task_Runner {
 			default:
 				$query = false;
 		}
-
+error_log( var_export( $query, true ) );
 		return apply_filters( 'mdjm_task_query', $query, $this->slug, $this );
 	} // build_query
 
-}
+} // MDJM_Task_Runner

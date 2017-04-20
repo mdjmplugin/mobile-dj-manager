@@ -173,13 +173,14 @@ function mdjm_set_task_run_time_after_approval( $result, $event_id, $old_status 
 	}
 
 	foreach( $tasks as $slug => $data )	{
-		$meta_key = '_mdjm_event_task_after_approval';
+		$meta_key = '_mdjm_event_task_after_approval_' . $slug;
 
 		if ( 'after_approval' != $data['options']['run_when'] )	{
 			continue;
 		}
 
 		$run_time = date( 'Y-m-d H:i:s', strtotime( '+' . $data['options']['age'] ) );
+		
 		update_post_meta( $event_id, $meta_key, $run_time );
 	}
 
