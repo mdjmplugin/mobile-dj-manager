@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.4.6\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2017-04-06 13:10:25+00:00\n"
+"POT-Creation-Date: 2017-04-20 08:04:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: "
 "__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
 "attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"Language: en_US\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: United States\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Please enter a date"
 msgstr ""
 
-#: client-zone/includes/mdjm-dynamic.php:35 includes/ajax-functions.php:907
+#: client-zone/includes/mdjm-dynamic.php:35 includes/ajax-functions.php:922
 #: includes/api/class-mdjm-api.php:1347 includes/api/class-mdjm-api.php:1348
 #: includes/equipment/equipment-functions.php:1608
 #: includes/equipment/equipment-functions.php:1618 includes/shortcodes.php:571
@@ -750,12 +750,12 @@ msgid "Associated %s"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:112
-#: includes/ajax-functions.php:854
+#: includes/ajax-functions.php:869
 msgid "from"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:120
-#: includes/ajax-functions.php:827
+#: includes/ajax-functions.php:842
 msgid "Select an Event"
 msgstr ""
 
@@ -1623,7 +1623,7 @@ msgid "%s type"
 msgstr ""
 
 #: includes/admin/events/events.php:27 includes/admin/events/metaboxes.php:569
-#: includes/admin/events/metaboxes.php:570 includes/admin/mdjm.php:640
+#: includes/admin/events/metaboxes.php:570 includes/admin/mdjm.php:630
 #: includes/events/class-events.php:624 includes/events/class-events.php:626
 #: includes/events/class-mdjm-event.php:247
 #: includes/events/class-mdjm-event.php:248
@@ -1926,7 +1926,7 @@ msgid "Add-ons:"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1252 includes/ajax-functions.php:663
-#: includes/ajax-functions.php:896
+#: includes/ajax-functions.php:911
 msgid "Select Add-ons"
 msgstr ""
 
@@ -2222,16 +2222,16 @@ msgstr ""
 msgid "Already Installed"
 msgstr ""
 
-#: includes/admin/mdjm.php:564 includes/content/content-tags.php:1052
+#: includes/admin/mdjm.php:554 includes/content/content-tags.php:1052
 msgid "Please <a href=\"%s\">click here</a> to reset your password"
 msgstr ""
 
-#: includes/admin/mdjm.php:641 includes/events/class-events.php:602
+#: includes/admin/mdjm.php:631 includes/events/class-events.php:602
 msgid "Not Assigned"
 msgstr ""
 
-#: includes/admin/mdjm.php:647 includes/admin/mdjm.php:652
-#: includes/admin/mdjm.php:655 includes/admin/mdjm.php:658
+#: includes/admin/mdjm.php:637 includes/admin/mdjm.php:642
+#: includes/admin/mdjm.php:645 includes/admin/mdjm.php:648
 #: includes/events/class-events.php:595 includes/events/class-events.php:598
 #: includes/events/class-events.php:604 includes/events/class-events.php:606
 #: includes/events/class-events.php:608 includes/events/class-events.php:612
@@ -2239,11 +2239,11 @@ msgstr ""
 msgid "Not Specified"
 msgstr ""
 
-#: includes/admin/mdjm.php:669
+#: includes/admin/mdjm.php:659
 msgid "No payments"
 msgstr ""
 
-#: includes/admin/mdjm.php:743
+#: includes/admin/mdjm.php:733
 msgid "Field deleted successfully"
 msgstr ""
 
@@ -3544,17 +3544,17 @@ msgid "Download a CSV of all transactions recorded."
 msgstr ""
 
 #: includes/admin/reporting/reporting-functions.php:539
-#: includes/admin/reporting/reporting-functions.php:584
+#: includes/admin/reporting/reporting-functions.php:585
 msgid "Select Start Date"
 msgstr ""
 
 #: includes/admin/reporting/reporting-functions.php:551
-#: includes/admin/reporting/reporting-functions.php:596
+#: includes/admin/reporting/reporting-functions.php:597
 msgid "Select End Date"
 msgstr ""
 
 #: includes/admin/reporting/reporting-functions.php:557
-#: includes/admin/reporting/reporting-functions.php:602
+#: includes/admin/reporting/reporting-functions.php:603
 msgid "All Statuses"
 msgstr ""
 
@@ -3572,34 +3572,39 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:565
-#: includes/admin/reporting/reporting-functions.php:610
-#: includes/admin/reporting/reporting-functions.php:624
-#: includes/admin/reporting/reporting-functions.php:637
+#: includes/admin/reporting/reporting-functions.php:561
+#: includes/post-types.php:663
+msgid "Failed"
+msgstr ""
+
+#: includes/admin/reporting/reporting-functions.php:566
+#: includes/admin/reporting/reporting-functions.php:611
+#: includes/admin/reporting/reporting-functions.php:625
+#: includes/admin/reporting/reporting-functions.php:638
 msgid "Generate CSV"
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:573
+#: includes/admin/reporting/reporting-functions.php:574
 msgid "Export %s"
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:575
+#: includes/admin/reporting/reporting-functions.php:576
 msgid "Download a CSV of %s data."
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:618
+#: includes/admin/reporting/reporting-functions.php:619
 msgid "Export Clients"
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:620
+#: includes/admin/reporting/reporting-functions.php:621
 msgid "Download a CSV of clients."
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:631
+#: includes/admin/reporting/reporting-functions.php:632
 msgid "Export Employees"
 msgstr ""
 
-#: includes/admin/reporting/reporting-functions.php:633
+#: includes/admin/reporting/reporting-functions.php:634
 msgid "Download a CSV of employees."
 msgstr ""
 
@@ -4984,19 +4989,19 @@ msgstr ""
 msgid "Yearly"
 msgstr ""
 
-#: includes/admin/tasks/task-functions.php:142
+#: includes/admin/tasks/task-functions.php:143
 msgid "After the %s is Created"
 msgstr ""
 
-#: includes/admin/tasks/task-functions.php:143
+#: includes/admin/tasks/task-functions.php:144
 msgid "After the %s is Confirmed"
 msgstr ""
 
-#: includes/admin/tasks/task-functions.php:144
+#: includes/admin/tasks/task-functions.php:145
 msgid "Before the %s"
 msgstr ""
 
-#: includes/admin/tasks/task-functions.php:145
+#: includes/admin/tasks/task-functions.php:146
 msgid "After the %s"
 msgstr ""
 
@@ -6146,7 +6151,7 @@ msgstr ""
 msgid "Unable to add employee"
 msgstr ""
 
-#: includes/ajax-functions.php:801
+#: includes/ajax-functions.php:816
 msgid "Unable to retrieve template content"
 msgstr ""
 
@@ -8518,10 +8523,6 @@ msgid "Opened <span class=\"count\">(%s)</span>"
 msgid_plural "Opened <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
-
-#: includes/post-types.php:663
-msgid "Failed"
-msgstr ""
 
 #: includes/post-types.php:668
 msgid "Failed <span class=\"count\">(%s)</span>"
