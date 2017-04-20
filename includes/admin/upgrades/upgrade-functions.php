@@ -602,6 +602,8 @@ function mdjm_v147_upgrades()	{
 
 	}
 
+	wp_clear_scheduled_hook( 'mdjm_hourly_schedule' );
+
 	delete_option( 'mdjm_uninst' );
 
 } // mdjm_v147_upgrades

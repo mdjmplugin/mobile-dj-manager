@@ -1,20 +1,27 @@
 <?php
-/*
- * MDJM Cron Class
- * 10/03/2015
- * @since 1.1.2
- * The MDJM cron class
- */
-	
-/* -- Build the MDJM_Cron class -- */
+/**
+ * Cron tasks
+ *
+ * @package     MDJM
+ * @subpackage  Classes/Tasks
+ * @copyright   Copyright (c) 2016, Mike Howard
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.1.2
+*/
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 class MDJM_Cron	{
 		
 	/*
 	 * Get things going
 	 */
 	public function __construct()	{
-		add_filter( 'cron_schedules', array( $this, 'add_schedules'   ) );
-		add_action( 'mdjm_hourly_schedule', array( &$this, 'execute_cron' ) ); // Run the MDJM scheduler
+		add_filter( 'cron_schedules',               array( $this, 'add_schedules'   ) );
+		add_action( 'wp',                           array( $this, 'schedule_events' ) );
+		add_action( 'mdjm_hourly_scheduled_events', array( $this, 'execute_tasks'  ) );
 	} // __construct
 
 	/**
@@ -33,13 +40,75 @@ class MDJM_Cron	{
 		return $schedules;
 	} // add_schedules
 
+	/**
+	 * Schedules our events
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function schedule_events() {
+		$this->hourly_events();
+		$this->daily_events();
+		$this->weekly_events();
+	} // schedule_events
+
+	/**
+	 * Schedule hourly events
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	private function hourly_events() {
+		if ( ! wp_next_scheduled( 'mdjm_hourly_scheduled_events' ) )	{
+			wp_schedule_event( current_time( 'timestamp', true ), 'hourly', 'mdjm_hourly_scheduled_events' );
+		}
+	} // hourly_events
+
+	/**
+	 * Schedule daily events
+	 *
+	 * @since	1.4.7
+	 * @return	void
+	 */
+	private function daily_events() {
+		if ( ! wp_next_scheduled( 'mdjm_daily_scheduled_events' ) )	{
+			wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'mdjm_daily_scheduled_events' );
+		}
+	} // daily_events
+
+	/**
+	 * Schedule weekly events
+	 *
+	 * @since	1.4.7
+	 * @return	void
+	 */
+	private function weekly_events() {
+		if ( ! wp_next_scheduled( 'mdjm_weekly_scheduled_events' ) )	{
+			wp_schedule_event( current_time( 'timestamp', true ), 'weekly', 'mdjm_weekly_scheduled_events' );
+		}
+	} // weekly_events
+
+	/**
+	 * Unschedule events.
+	 *
+	 * Runs on plugin deactivation.
+	 *
+	 * @since	1.4.7
+	 * @return	void
+	 */
+	public function unschedule_events()	{
+		wp_clear_scheduled_hook( 'mdjm_hourly_scheduled_events' );
+		wp_clear_scheduled_hook( 'mdjm_daily_scheduled_events' );
+		wp_clear_scheduled_hook( 'mdjm_weekly_scheduled_events' );
+	} // unschedule_events
+
 	/*
 	 * Execute the schedules tasks which are due to be run
 	 *
 	 * @since	1.4.7
 	 * @return	void
 	 */
-	public function execute_cron()	{
+	public function execute_tasks()	{
 		require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-task-runner.php' );
 		$tasks = get_option( 'mdjm_schedules' );
 
@@ -48,7 +117,7 @@ class MDJM_Cron	{
 				new MDJM_Task_Runner( $slug );
 			}
 		}
-	} // execute_cron
+	} // execute_tasks
 
 	/*
 	 * Setup the tasks

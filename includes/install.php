@@ -58,37 +58,33 @@ register_activation_hook( MDJM_PLUGIN_FILE, 'mdjm_install' );
 function mdjm_run_install()	{
 	
 	global $mdjm_options, $wpdb;
-	
-	// Schedule the cron tasks.
-	wp_schedule_event( time(), 'hourly', 'mdjm_hourly_schedule' );
-	wp_schedule_event( time(), 'weekly', 'mdjm_weekly_scheduled_events' );
 
 	$current_version = get_option( 'mdjm_version' );
 	if ( $current_version ) {
 		return;
 	}
-	
+
 	// Setup custom post types
 	mdjm_register_post_types();
-	
+
 	// Setup custom post statuses
 	mdjm_register_post_statuses();
-	
+
 	// Setup custom taxonomies
 	mdjm_register_taxonomies();
-	
+
 	// Clear the permalinks
 	flush_rewrite_rules( false );
-	
+
 	// Setup some default options
 	$options = array();
 
 	// Pull options from WP, not MDJM's global
 	$current_options = get_option( 'mdjm_settings', array() );
-	
+
 	// Checks if the Client Zone page option exists
 	if ( ! array_key_exists( 'app_home_page', $current_options ) ) {
-		
+
 		// Client Zone Home Page
 		$client_zone = wp_insert_post(
 			array(
@@ -100,7 +96,7 @@ function mdjm_run_install()	{
 				'comment_status' => 'closed'
 			)
 		);
-		
+
 		// User Profile Page
 		$profile = wp_insert_post(
 			array(
@@ -113,7 +109,7 @@ function mdjm_run_install()	{
 				'comment_status' => 'closed'
 			)
 		);
-		
+
 		// Event Contract Page
 		$contract = wp_insert_post(
 			array(
@@ -808,7 +804,6 @@ function mdjm_run_install()	{
  * @return	void
  */
 function mdjm_deactivate()	{
-	wp_clear_scheduled_hook( 'mdjm_hourly_schedule' );
-	wp_clear_scheduled_hook( 'mdjm_weekly_scheduled_events' );
+	MDJM()->cron->unschedule_events();
 } // mdjm_deactivate
 register_deactivation_hook( MDJM_PLUGIN_FILE, 'mdjm_deactivate' );

@@ -178,46 +178,6 @@
 			
 /*
  * --
- * SCHEDULED TASKS
- * --
- */			
-			/**
-			 * cron
-			 * Initiates the scheduled tasks
-			 *
-			 * @param	
-			 * @return
-			 * @since	1.1.3
-			 * @called hook_mdjm_hourly_schedule action hook
-			 */
-			public function cron()	{
-				global $mdjm_settings;
-				/* Access the cron functions */
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/class-mdjm-cron.php' );
-				
-				/* Get the scheduled tasks */
-				$mdjm_schedules = get_option( 'mdjm_schedules' );
-				if( isset( $mdjm_settings['playlist']['upload_playlists'] ) )	{
-					$mdjm_schedules['upload-playlists']['active'] = $mdjm_settings['playlist']['upload_playlists'];
-				}
-				
-				foreach( $mdjm_schedules as $task )	{
-					/* Only execute active tasks */
-					if( $task['active'] == 'Y' )	{
-						/* Check frequency and whether to run */
-						if( !isset( $task['nextrun'] ) || $task['nextrun'] <= time() || $task['nextrun'] == 'Today'
-							|| $task['nextrun'] == 'Next Week' || $task['nextrun'] == 'Next Month'
-							|| $task['nextrun'] == 'Next Year' )	{
-							$func = $task['function'];
-							if( function_exists( $func ) )
-								$func();
-						}
-					} // if( $task['active'] == 'Y' )
-				} // foreach( $mdjm_schedules as $task )
-			} // cron
-			
-/*
- * --
  * GENERAL
  * --
  */			
