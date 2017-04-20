@@ -86,7 +86,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 = 1.4.7 =
 
 **Released 6th April, 2017**
-Eric - 1-816-880-3200
+
 **New**
 
 * New Automated Tasks interface
@@ -99,9 +99,10 @@ Eric - 1-816-880-3200
 
 **Bug Fixes**
 
-* Incorrect URL format on availability check when no availability
-* Some automated tasks were not running if the associated meta key was missing from the event
-* Inserted missing text domain
+* Issue [#177](https://github.com/mdjm/mobile-dj-manager/issues/177/ "Issue #177") - Corrected end date format for exporting of transactions which was causing CSV export failure
+* Issue [#176](https://github.com/mdjm/mobile-dj-manager/issues/176/ "Issue #176") - Incorrect URL format for redirects on availability check when there is no availability
+* Issue [#174](https://github.com/mdjm/mobile-dj-manager/issues/174/ "Issue #174") - Some automated tasks were not running if the associated meta key was missing from the event
+* Inserted missing text domain in various locations
 * Duplicate enqueuing of datepicker within Availability widget causing potential PHP notice
 
 **Tweaks**
@@ -110,9 +111,12 @@ Eric - 1-816-880-3200
 * Improved uninstallation procedure
 * Added hooks before and after employee holiday additions
 * Display template path in system info if custom templates in use
+* Moved language files from /lang/ to /languages/
 * Use local jquery-ui CSS files
 * Some generic code tidying
 * Improved code commenting
+* Removed a bunch of deprecated constants
+* Added jshint
 
 = 1.4.6 =
 
