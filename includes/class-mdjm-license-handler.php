@@ -109,11 +109,11 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 			// Deactivate license key
 			add_action( 'admin_init', array( $this, 'deactivate_license' ) );
 	
-			// Check that license is valid once per week
-			add_action( 'mdjm_weekly_scheduled_events', array( $this, 'weekly_license_check' ) );
+			// Check that license is valid once per day
+			add_action( 'mdjm_daily_scheduled_events', array( $this, 'daily_license_check' ) );
 	
 			// For testing license notices, uncomment this line to force checks on every page load
-			//add_action( 'admin_init', array( $this, 'weekly_license_check' ) );
+			//add_action( 'admin_init', array( $this, 'daily_license_check' ) );
 	
 			// Updater
 			add_action( 'admin_init', array( $this, 'auto_updater' ), 0 );
@@ -355,13 +355,13 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 	
 	
 		/**
-		 * Check if license key is valid once per week
+		 * Check if license key is valid once per day
 		 *
 		 * @access	public
 		 * @since	1.0
 		 * @return	void
 		 */
-		public function weekly_license_check()	{
+		public function daily_license_check()	{
 	
 			if ( ! empty( $_POST['mdjm_settings'] ) ) {
 				return; // Don't fire when saving settings
@@ -398,7 +398,7 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 	
 			update_option( $this->item_shortname . '_license_active', $license_data );
 	
-		} // weekly_license_check
+		} // daily_license_check
 	
 	
 		/**
