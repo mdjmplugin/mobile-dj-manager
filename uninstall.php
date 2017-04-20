@@ -89,24 +89,6 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 
 	}
 
-	// Remove users
-	$roles = array( 'client', 'inactive_client', 'dj', 'inactive_dj' );
-
-	// Loop through roles array removing users
-	foreach( $roles as $role )	{
-		$args = array(
-			'role'    => $role,
-			'orderby' => 'display_name',
-			'order'   => 'ASC'
-		);
-
-		$mdjm_users = get_users( $args );
-
-		foreach( $mdjm_users as $mdjm_user )	{
-			wp_delete_user( $mdjm_user->ID );
-		}
-	}
-
 	// Remove setting options
 	$all_options = array(
 		'mdjm_api_data',
@@ -143,22 +125,116 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 		delete_option( $all_option );
 	}
 
+	$availability_table = $wpdb->prefix . 'mdjm_avail';
+
 	// Remove all database tables
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "mdjm_avail" );
+	$wpdb->query( "DROP TABLE IF EXISTS $availability_table" );
 
 	// Remove any transients and options we've left behind
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_mdjm\_%'" );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_timeout\_mdjm\_%'" );
 
+	// Remove roles and capabilities
+	$all_caps = array(
+		// MDJM Admin
+		'manage_mdjm',
+		
+		// Clients
+		'mdjm_client_edit', 'mdjm_client_edit_own',
+		
+		// Employees
+		'mdjm_employee_edit',
+		
+		// Packages
+		'mdjm_package_edit_own', 'mdjm_package_edit',
+		'publish_mdjm_packages', 'edit_mdjm_packages',
+		'edit_others_mdjm_packages', 'delete_mdjm_packages',
+		'delete_others_mdjm_packages', 'read_private_mdjm_packages',
+	
+		// Comm posts
+		'mdjm_comms_send', 'edit_mdjm_comms', 'edit_others_mdjm_comms',
+		'publish_mdjm_comms', 'read_private_mdjm_comms', 
+		'edit_published_mdjm_comms', 'delete_mdjm_comms',
+		'delete_others_mdjm_comms', 'delete_private_mdjm_comms',
+		'delete_published_mdjm_comms', 'edit_private_mdjm_comms',
+		
+		// Event posts
+		'mdjm_event_read', 'mdjm_event_read_own', 'mdjm_event_edit',
+		'mdjm_event_edit_own', 'publish_mdjm_events', 'edit_mdjm_events',
+		'edit_others_mdjm_events', 'delete_mdjm_events', 'delete_others_mdjm_events',
+		'read_private_mdjm_events',
+		
+		// Quote posts
+		'mdjm_quote_view_own', 'mdjm_quote_view', 'edit_mdjm_quotes',
+		'edit_others_mdjm_quotes', 'publish_mdjm_quotes', 
+		'read_private_mdjm_quotes', 'edit_published_mdjm_quotes',
+		'edit_private_mdjm_quotes', 'delete_mdjm_quotes', 'delete_others_mdjm_quotes',
+		'delete_private_mdjm_quotes', 'delete_published_mdjm_quotes',
+	
+		// Reports
+		'view_event_reports',
+	
+		// Templates
+		'mdjm_template_edit', 'edit_mdjm_templates',
+		'edit_others_mdjm_templates', 'publish_mdjm_templates', 'read_private_mdjm_templates',
+		'edit_published_mdjm_templates', 'edit_private_mdjm_templates', 'delete_mdjm_templates',
+		'delete_others_mdjm_templates', 'delete_private_mdjm_templates',
+		'delete_published_mdjm_templates',
+		
+		// Transaction posts
+		'mdjm_txn_edit', 'edit_mdjm_txns', 'edit_others_mdjm_txns', 'publish_mdjm_txns',
+		'read_private_mdjm_txns', 'edit_published_mdjm_txns', 'edit_private_mdjm_txns',
+		'delete_mdjm_txns', 'delete_others_mdjm_txns', 'delete_private_mdjm_txns',
+		'delete_published_mdjm_txns',
+		
+		// Venue posts
+		'mdjm_venue_read', 'mdjm_venue_edit', 'edit_mdjm_venues',
+		'edit_others_mdjm_venues', 'publish_mdjm_venues', 'read_private_mdjm_venues',
+		'edit_published_mdjm_venues', 'edit_private_mdjm_venues', 'delete_mdjm_venues',
+		'delete_others_mdjm_venues', 'delete_private_mdjm_venues',
+		'delete_published_mdjm_venues'
+	);
+
+	$roles = MDJM()->roles->get_roles();
+
+	foreach( $roles as $role_id => $role_name )	{
+		$role = get_role( $role_id );
+
+		if ( empty( $role ) )	{
+			continue;
+		}
+
+		foreach( $all_caps as $cap )	{
+			$role->remove_cap( $cap );
+		}
+
+		if ( 'administrator' != $role_id )	{
+			remove_role( $role_id );
+		}
+
+	}
+
+	// Remove users
+	$roles = array( 'client', 'inactive_client', 'dj', 'inactive_dj' );
+
+	// Loop through roles array removing users
+	foreach( $roles as $role )	{
+		$args = array(
+			'role'         => $role,
+			'role__not_in' => 'Administrator',
+			'orderby'      => 'display_name',
+			'order'        => 'ASC'
+		);
+
+		$mdjm_users = get_users( $args );
+
+		foreach( $mdjm_users as $mdjm_user )	{
+			wp_delete_user( $mdjm_user->ID );
+		}
+	}
+
+	remove_role( 'inactive_dj' );
+	remove_role( 'client' );
+	remove_role( 'inactive_client' );
+
 }
-
-// Remove capabilities
-$role = get_role( 'administrator' );
-$role->remove_cap( 'manage_mdjm' );
-$role = get_role( 'dj' );
-
-// Remove roles
-remove_role( 'dj' );
-remove_role( 'inactive_dj' );
-remove_role( 'client' );
-remove_role( 'inactive_client' );

@@ -111,6 +111,8 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Improved uninstallation procedure
 * Added hooks before and after employee holiday additions
 * Display template path in system info if custom templates in use
+* Better scheduling of WP Cron tasks
+* Adjusted license handler checks to daily
 * Moved language files from /lang/ to /languages/
 * Use local jquery-ui CSS files
 * Some generic code tidying
