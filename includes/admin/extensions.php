@@ -49,6 +49,12 @@ function mdjm_extensions_page()	{
 				$slug        = $extension->info->slug;
 				$link        = 'https://mdjm.co.uk/downloads/' . $slug .'/';
 				$price       = false;
+				$link        = esc_url( add_query_arg( array(
+					'utm_source'   => 'plugin-addons-page',
+					'utm_medium'   => 'plugin',
+					'utm_campaign' => 'MDJM_Addons_Page',
+					'utm_content'  => $extension->info->title
+				), $link ) );
 
 				if ( 'payment-gateways' == $slug )	{
 					continue;
