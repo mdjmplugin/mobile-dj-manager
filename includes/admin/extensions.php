@@ -21,10 +21,22 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_extensions_page()	{
 	setlocale( LC_MONETARY, get_locale() );
-	$extensions_url = 'https://mdjm.co.uk/add-ons/';
 	$extensions     = mdjm_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
+	$extensions_url = esc_url( add_query_arg( array(
+		'utm_source'   => 'plugin-addons-page',
+		'utm_medium'   => 'plugin',
+		'utm_campaign' => 'MDJM_Addons_Page',
+		'utm_content'  => 'All Addons'
+	), 'https://mdjm.co.uk/add-ons/' ) );
+
+	$newsletter_url = esc_url( add_query_arg( array(
+		'utm_source'   => 'plugin-addons-page',
+		'utm_medium'   => 'newsletter',
+		'utm_campaign' => 'MDJM_Addons_Page',
+		'utm_content'  => 'newsletter_signup'
+	), 'https://mdjm.co.uk/#newsletter-signup' ) );
 
 	$slug_corrections = array(
 		'ratings-and-satisfaction' => 'ratings-satisfaction',
@@ -40,7 +52,7 @@ function mdjm_extensions_page()	{
 		<div>
         	<p><a href="<?php echo $extensions_url; ?>" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'mobile-dj-manager' ); ?></a></p>
 			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your MDJM Event Management solution.', 'mobile-dj-manager' ); ?></p>
-            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 15%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'mobile-dj-manager' ), 'https://mobile-dj-manager.com/#newsletter-signup', '%', $extensions_url ); ?></p>
+            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 15%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'mobile-dj-manager' ), $newsletter_url, '%', $extensions_url ); ?></p>
 		</div>
 
 		<div class="mdjm-extension-wrapper grid3">
