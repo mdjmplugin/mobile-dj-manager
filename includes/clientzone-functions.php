@@ -138,7 +138,7 @@ function mdjm_accept_enquiry( $data )	{
 		'client_id'		=> $mdjm_event->client,
 		'subject'		=> sprintf( __( '%s Quotation Accepted', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'message'		=> $content,
-		'copy_to'       => 'disabled'
+		'copy_to'       => 'disable'
 	);
 	
 	mdjm_send_email_content( $args );
