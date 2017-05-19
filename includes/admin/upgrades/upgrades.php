@@ -44,7 +44,7 @@ function mdjm_upgrades_screen() {
 	}
 	?>
 	<div class="wrap">
-		<h2><?php _e( 'MDJM Event Management - Upgrades', 'mobile-dj-manager' ); ?></h2>
+		<h2><?php _e( 'MDJM Event Management - Upgrading, Please wait...', 'mobile-dj-manager' ); ?></h2>
 
 		<?php if( ! empty( $action ) ) : ?>
 
