@@ -682,7 +682,7 @@ function mdjm_addon_metabox_availability_employee_row( $post )	{
                 ) ); ?></p>
             </div>
         <?php else : ?>
-            <input type="hidden" name="_package_employees" value="all" />
+            <input type="hidden" name="_addon_employees" value="all" />
         <?php endif; ?>
 
 			<div id="addon-event-type" class="mdjm_col col2">
