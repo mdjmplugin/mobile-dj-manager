@@ -113,7 +113,7 @@ function mdjm_comms_page()	{
 							$value .= mdjm_get_event_start( $_GET['event_id'] ) . ' ';
 							$value .= '(' . mdjm_get_event_status( $_GET['event_id'] ) . ')';
 							?>
-							<input type="text" name="mdjm_email_event_show" id="mdjm_email_event_show" value="<?php echo $value; ?>" readonly="readonly" size="50" />
+							<input type="text" name="mdjm_email_event_show" id="mdjm_email_event_show" value="<?php echo $value; ?>" readonly size="50" />
                             <input type="hidden" name="mdjm_email_event" id="mdjm_email_event" value="<?php echo $_GET['event_id']; ?>" />
                         <?php else : ?>
                             <select name="mdjm_email_event" id="mdjm_email_event">

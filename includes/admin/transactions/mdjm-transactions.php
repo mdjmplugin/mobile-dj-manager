@@ -229,4 +229,3 @@
 			return $txn_id;
 		} // add_transaction
 	} // class MDJM_Transactions
-?>

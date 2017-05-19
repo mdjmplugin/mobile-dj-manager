@@ -2463,4 +2463,3 @@ function mdjm_set_settings_cap() {
 	return 'manage_mdjm';
 } // mdjm_set_settings_cap
 add_filter( 'option_page_capability_mdjm_settings', 'mdjm_set_settings_cap' );
-

@@ -195,4 +195,3 @@
 	
 	/* -- Insantiate the MDJM_Dashboard class -- */
 	$mdjm_dash = new MDJM_Dashboard();
-?>

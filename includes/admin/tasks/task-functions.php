@@ -228,4 +228,3 @@ function mdjm_task_run_now( $id )	{
 
 	return new MDJM_Task_Runner( $id );
 } // mdjm_task_run_now
-

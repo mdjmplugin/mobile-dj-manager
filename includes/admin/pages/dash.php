@@ -293,5 +293,3 @@
 <?php
 	}
 	mdjm_dashboard();
-
-?>

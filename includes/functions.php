@@ -20,4 +20,3 @@
 	function f_mdjm_availability_form( $args )	{
 		MDJM_Availability_Checker::availability_form( $args );
 	}
-?>

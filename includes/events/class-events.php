@@ -1598,4 +1598,3 @@
 			return $comment_id;	
 		} // add_journal
 	} // class
-?>

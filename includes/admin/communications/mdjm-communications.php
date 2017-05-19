@@ -186,4 +186,3 @@
 		} // change_email_status
 		
 	} // class
-?>

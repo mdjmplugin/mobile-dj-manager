@@ -280,7 +280,7 @@
 			$userinfo = get_user_by( 'id', $_GET['to_user'] );	
 		}
 		?>
-		<input type="email" name="user_addr" id="user_addr" value="<?php if( isset( $userinfo ) && $userinfo != '' ) echo $userinfo->user_email; ?>" class="regular-text" readonly="readonly" /> </td>
+		<input type="email" name="user_addr" id="user_addr" value="<?php if( isset( $userinfo ) && $userinfo != '' ) echo $userinfo->user_email; ?>" class="regular-text" readonly /> </td>
         </tr>
         <tr class="alternate">
         <th class="row-title"><label for="copy_sender">Copy yourself?</label></th>

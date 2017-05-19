@@ -16,7 +16,27 @@ include_once( 'mobile-dj-manager.php' );
 	
 global $wpdb;
 
+ignore_user_abort( true );
+
+if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+    @set_time_limit( 0 );
+}
+
+remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+remove_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
+remove_action( 'save_post_mdjm-addon', 'mdjm_save_addon_post', 10, 2 );
+remove_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
+remove_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
+remove_action( 'mdjm_delete_package', 'mdjm_remove_package_from_events' );
+remove_action( 'mdjm_delete_addon', 'mdjm_remove_addons_from_packages', 10 );
+remove_action( 'mdjm_delete_addon', 'mdjm_remove_addons_from_events', 15 );
+remove_action( 'before_delete_post', 'mdjm_deleting_package' );
+remove_action( 'wp_trash_post', 'mdjm_deleting_package' );
+remove_action( 'before_delete_post', 'mdjm_deleting_addon' );
+remove_action( 'wp_trash_post', 'mdjm_deleting_addon' );
+
 if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
+
 	// Delete the Custom Post Types
 	$mdjm_taxonomies = array(
 		'package-category', 'addon-category', 'event-types', 'enquiry-source', 'playlist-category',
@@ -28,24 +48,20 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 		'contract', 'mdjm-signed-contract', 'mdjm-custom-field', 'email_template',
 		'mdjm-playlist', 'mdjm-quotes', 'mdjm-transaction', 'mdjm-venue'
 	);
-	
-	foreach ( $mdjm_post_types as $post_type ) {
-	
+
+    foreach ( $mdjm_post_types as $post_type ) {
+
 		$mdjm_taxonomies = array_merge( $mdjm_taxonomies, get_object_taxonomies( $post_type ) );
-		$items = get_posts( array(
-			'post_type'   => $post_type,
-			'post_status' => 'any',
-			'numberposts' => -1,
-			'fields'      => 'ids'
-		) );
-	
+		$items = get_posts( array( 'post_type' => $post_type, 'post_status' => 'any', 'numberposts' => -1, 'fields' => 'ids' ) );
+
 		if ( $items ) {
-			foreach ( $items as $item )	{
-				wp_delete_post( $item, true );
+			foreach ( $items as $item ) {
+				wp_delete_post( $item, true);
 			}
 		}
 	}
-	
+
+
 	// Delete Terms & Taxonomies
 	foreach ( array_unique( array_filter( $mdjm_taxonomies ) ) as $taxonomy )	{
 	
@@ -236,5 +252,4 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 	remove_role( 'inactive_dj' );
 	remove_role( 'client' );
 	remove_role( 'inactive_client' );
-
 }
