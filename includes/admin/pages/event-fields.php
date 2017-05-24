@@ -698,7 +698,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 */
 		function display_input( $field, $mdjm_event )	{
-			$name     = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
+			$name     = '_mdjm_event_' . strtolower( str_replace( '-', '_', $field->post_name ) );
 			$type     = get_post_meta( $field->ID, '_mdjm_field_type', true );
 			$current  = get_post_meta( $field->ID, '_mdjm_field_checked', true );
 
@@ -760,7 +760,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					elseif( $type == 'textarea' )	{
 						echo '<textarea name="' . $name . '" id="' . $name . '"';
 						echo ' class="widefat" rows="3">';
-						echo get_post_meta( $post->ID, $name, true );
+						echo get_post_meta( $mdjm_event->ID, $name, true );
 						echo '</textarea>' . "\r\n";
 					}
 					?>

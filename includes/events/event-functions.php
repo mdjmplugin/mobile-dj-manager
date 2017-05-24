@@ -1693,7 +1693,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		} elseif ( ! strpos( $key, 'notes' ) && ! empty( $value ) )	{
 			$value = sanitize_text_field( ucwords( $value ) );
 		} elseif ( ! empty( $value ) )	{
-			$value = sanitize_text_field( ucfirst( $value ) );
+			$value = $value;
 		} else	{
 			$value = '';
 		}
