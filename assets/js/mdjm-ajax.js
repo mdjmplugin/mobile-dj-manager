@@ -6,9 +6,15 @@ jQuery(document).ready(function ($) {
 	var mdjm_datepicker = $( '.mdjm_datepicker' );
 	if ( mdjm_datepicker.length > 0 ) {
 		var dateFormat = mdjm_vars.date_format;
-		mdjm_datepicker.datepicker( {
-			dateFormat: dateFormat
-		} );
+        var firstDay   = mdjm_vars.first_day;
+        mdjm_datepicker.datepicker({
+			dateFormat  : dateFormat,
+            altfield    : '#_mdjm_event_date',
+            altformat   : 'yy-mm-dd',
+            firstday    : firstDay,
+            changeyear  : true,
+            changemonth : true
+		});
 	}
 
 	/*=Payments Form
