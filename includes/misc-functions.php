@@ -414,6 +414,21 @@ function mdjm_messages( $key )	{
 } // mdjm_messages
 
 /**
+ * Validate the form honeypot to protect against bots.
+ *
+ * @since	1.4.7
+ * @param	arr		$data	Form post data
+ * @return	void
+ */
+function mdjm_do_honeypot_check( $data )	{
+	if ( ! empty( $data['mdjm_honeypot'] ) )	{
+		wp_die( __( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'mobile-dj-manager' ) );
+	}
+	
+	return;
+} // mdjm_do_honeypot_check
+
+/**
  * Check if the upgrade routine has been run for a specific action
  *
  * @since  2.3
