@@ -1,5 +1,16 @@
 var mdjm_vars;
 jQuery(document).ready(function ($) {
+
+	/* = Datepicker
+	====================================================================================== */
+	var mdjm_datepicker = $( '.mdjm_datepicker' );
+	if ( mdjm_datepicker.length > 0 ) {
+		var dateFormat = mdjm_vars.date_format;
+		mdjm_datepicker.datepicker( {
+			dateFormat: dateFormat
+		} );
+	}
+
 	/*=Payments Form
 	---------------------------------------------------- */
 	// Load the fields for the selected payment method

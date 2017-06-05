@@ -49,7 +49,8 @@ function mdjm_load_scripts()	{
 				'payment_loading'       => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'no_payment_amount'     => __( 'Select Payment Amount', 'mobile-dj-manager' ),
 				'no_card_name'          => __( 'Enter the name printed on your card', 'mobile-dj-manager' ),
-				'complete_payment'      => mdjm_get_payment_button_text()
+				'complete_payment'      => mdjm_get_payment_button_text(),
+				'date_format'           => mdjm_format_datepicker_date()
 			)
 		)
 	);
