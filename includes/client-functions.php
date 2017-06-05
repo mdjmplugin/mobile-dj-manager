@@ -107,10 +107,6 @@ function mdjm_get_client_id( $event_id )	{
  * @return	int|false	$user_id	User ID of the new client or false on failure.
  */
 function mdjm_add_client( $user_data = array() )	{
-	
-	if ( ! mdjm_employee_can( 'list_all_clients' ) )	{
-		return false;
-	}
 
 	$first_name = ( ! empty( $_POST['client_firstname'] ) ? ucwords( $_POST['client_firstname'] ) : '' );
 	$last_name  = ( ! empty( $_POST['client_lastname'] )  ? ucwords( $_POST['client_lastname'] )  : '' );
