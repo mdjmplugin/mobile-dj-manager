@@ -653,7 +653,7 @@ function mdjm_run_install()	{
 				if( 'checkbox' == $option['type'] && ! empty( $option['std'] ) ) {
 					$options[ $option['id'] ] = '1';
 				} elseif ( ! empty( $option['std'] ) )  {
-                    $options[ $option['std'] ];
+                    $options[ $option['id'] ] = $options[ $option['std'] ];
                 }
 
 			}
