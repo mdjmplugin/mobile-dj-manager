@@ -648,7 +648,27 @@ function mdjm_v147_upgrade_event_tasks()	{
 
 	if ( $event_ids )	{
 		foreach( $event_ids as $event_id )	{
-			add_post_meta( $event_id, '_mdjm_event_tasks', array(), true );
+
+            $tasks = array();
+            $event = new MDJM_Event( $event_id );
+
+            if ( 'mdjm-completed' == $event->post_status )   {
+                $tasks['complete-events'] = current_time( 'timestamp' );
+            }
+
+            if ( 'mdjm-failed' == $event->post_status )   {
+                $tasks['fail-enquiry'] = current_time( 'timestamp' );
+            }
+
+            if ( 'Paid' == $event->get_deposit_status() )   {
+                $tasks['request-deposit'] = current_time( 'timestamp' );
+            }
+
+            if ( 'Paid' == $event->get_balance_status() )   {
+                $tasks['balance-reminder'] = current_time( 'timestamp' );
+            }
+
+			add_post_meta( $event_id, '_mdjm_event_tasks', $tasks, true );
 		}
 
 		// Events found so upgrade them
