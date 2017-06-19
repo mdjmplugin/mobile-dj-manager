@@ -85,7 +85,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4.7 =
 
-**Released 6th April, 2017**
+**Released 19th June, 2017**
 
 **New**
 
@@ -96,18 +96,23 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Added better styling to the licensing settings page
 * Added Extensions page
 * Updated license handler
+* Set all default settings on install
 
 **Bug Fixes**
 
 * Issue [#177](https://github.com/mdjm/mobile-dj-manager/issues/177/ "Issue #177") - Corrected end date format for exporting of transactions which was causing CSV export failure
 * Issue [#176](https://github.com/mdjm/mobile-dj-manager/issues/176/ "Issue #176") - Incorrect URL format for redirects on availability check when there is no availability
 * Issue [#174](https://github.com/mdjm/mobile-dj-manager/issues/174/ "Issue #174") - Some automated tasks were not running if the associated meta key was missing from the event
+* Issue [#180](https://github.com/mdjm/mobile-dj-manager/issues/180/ "Issue #180") - Client shortcodes displayed employee details when templates are emailed to employees via the Communication feature
+* Textarea input not saving correctly for custom fields on the event screen
 * Inserted missing text domain in various locations
 * Duplicate enqueuing of datepicker within Availability widget causing potential PHP notice
+* Ensure employee settings are saved correctly for add-ons
 
 **Tweaks**
 
 * {event_date} now returns the date as defined within WordPress -> Settings -> Date Format
+* Added `mdjm_do_honeypot_check()` function
 * Improved uninstallation procedure
 * Added hooks before and after employee holiday additions
 * Display template path in system info if custom templates in use
@@ -118,7 +123,6 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Some generic code tidying
 * Improved code commenting
 * Removed a bunch of deprecated constants
-* Added jshint
 
 = 1.4.6 =
 
