@@ -250,15 +250,22 @@ function mdjm_send_comm_email( $data )	{
 		if ( empty( $attachments ) )	{
 			$attachments = array();
 		}
-		
+
 		$attachments = apply_filters( 'mdjm_send_comm_email_attachments', $attachments, $data );
-		
+        $client_id   = $data['mdjm_email_to'];
+        
+        if ( ! empty( $data['mdjm_email_event'] ) )  {
+            $event     = new MDJM_Event( $data['mdjm_email_event'] );
+            $client_id = $event->client;
+        }
+
+
 		$email_args = array(
 			'to_email'       => mdjm_get_client_email( $data['mdjm_email_to'] ),
 			'from_name'      => $data['mdjm_email_from_name'],
 			'from_email'     => $data['mdjm_email_from_address'],
 			'event_id'       => $data['mdjm_email_event'],
-			'client_id'      => $data['mdjm_email_to'],
+			'client_id'      => $client_id,
 			'subject'        => stripslashes( $data['mdjm_email_subject'] ),
 			'attachments'    => ! empty( $attachments ) ? $attachments : array(),
 			'message'        => stripslashes( $data['mdjm_email_content'] ),
