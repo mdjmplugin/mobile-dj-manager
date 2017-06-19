@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
 
-The most efficient event management solution for WordPress.
+The most efficient and versatile event management solution for WordPress.
 
 == Description ==
 

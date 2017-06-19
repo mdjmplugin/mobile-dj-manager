@@ -3,9 +3,9 @@
 /**
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
- * Description: The most efficient event management solution for WordPress.
+ * Description: The most efficient and versatile event management solution for WordPress.
  * Version: 1.4.7
- * Date: 20 April 2017
+ * Date: 19 June 2017
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
