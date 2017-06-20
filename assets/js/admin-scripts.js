@@ -1373,6 +1373,9 @@ jQuery(document).ready(function ($) {
 	
 	// Events page
 	if ( mdjm_admin_vars.editing_event )	{
+        $.validator.addMethod('minStrict', function (value, el, param) {
+            return value > param;
+        });
 		$('#post').validate({
 			errorClass: 'mdjm-form-error',
 			validClass: 'mdjm-form-valid',
@@ -1381,7 +1384,10 @@ jQuery(document).ready(function ($) {
 			rules:	{
 				client_name : { required: true, minlength : 1 },
 				display_event_date : { required: true },
-				_mdjm_event_cost : { number: true },
+				_mdjm_event_cost   : {
+                    number: true,
+                    minStrict: '0'
+                },
 				_mdjm_event_deposit : { number: true }
 			},
 			
