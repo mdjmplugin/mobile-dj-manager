@@ -1828,14 +1828,15 @@ function mdjm_addons_checkboxes( $args = array() )	{
 
 			foreach( $addons as $items )	{
 				foreach ( $items as $item_id => $item )	{
-					$output .= sprintf(
+					$output .= '<label for="' . esc_attr( $args['name'] ) . '-' . $item_id . '" title="' . mdjm_get_addon_excerpt( $item_id ) . '">';
+                    $output .= sprintf(
 						'<input type="checkbox" name="%1$s[]" id="%1$s-%2$d" class="%3$s" value="%2$d" %4$s />',
 						esc_attr( $args['name'] ),
 						$item_id,
 						sanitize_html_class( $args['class'] ),
 						checked( in_array( $item_id, $args['current'] ), true, false ) 
 					);
-					$output .= '<label for="' . esc_attr( $args['name'] ) . '-' . $item_id . '" title="' . mdjm_get_addon_excerpt( $item_id ) . '">';
+                    $output .= '&nbsp;';
 					$output .= esc_html( $item );
 					$output .= '</label>';
 					$output .= '<br />';
