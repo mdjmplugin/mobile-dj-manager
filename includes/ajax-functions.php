@@ -89,9 +89,9 @@ function mdjm_add_client_ajax()	{
 	$message     = array();
 
 	if ( ! is_email( $_POST['client_email'] ) )	{
-		$message[] = __( 'Email address is invalid', 'mobile-dj-manager' );
+		$message = __( 'Email address is invalid', 'mobile-dj-manager' );
 	} elseif ( email_exists( $_POST['client_email'] ) )	{
-		$message[] = __( 'Email address is already in use', 'mobile-dj-manager' );
+		$message = __( 'Email address is already in use', 'mobile-dj-manager' );
 	} else	{
 
 		$user_data = array(
