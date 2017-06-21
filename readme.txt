@@ -108,6 +108,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 * Inserted missing text domain in various locations
 * Duplicate enqueuing of datepicker within Availability widget causing potential PHP notice
 * Ensure employee settings are saved correctly for add-ons
+* "Null" message was being displayed when adding a new client failed
 
 **Tweaks**
 
