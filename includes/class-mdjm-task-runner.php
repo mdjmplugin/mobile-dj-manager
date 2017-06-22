@@ -653,7 +653,7 @@ class MDJM_Task_Runner {
 						$date_query,
 						array(
 							'key'     => '_mdjm_event_date',
-							'compare' => '>=',
+							'compare' => '<=',
 							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date'
 						),
