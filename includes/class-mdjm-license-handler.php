@@ -223,12 +223,12 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 			}
 	
 			if ( ! isset( $_REQUEST[ $this->item_shortname . '_license_key-nonce'] ) || ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
-	
+	error_log( '111');
 				return;
 	
 			}
 	
-			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+			if ( ! current_user_can( 'manage_mdjm' ) ) {
 				return;
 			}
 	
@@ -314,7 +314,7 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 	
 			}
 	
-			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+			if ( ! current_user_can( 'manage_mdjm' ) ) {
 				return;
 			}
 	
@@ -416,7 +416,7 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 				return;
 			}
 	
-			if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+			if ( ! current_user_can( 'manage_mdjm' ) ) {
 				return;
 			}
 	
