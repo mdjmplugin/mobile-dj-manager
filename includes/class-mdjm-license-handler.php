@@ -223,7 +223,7 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 			}
 	
 			if ( ! isset( $_REQUEST[ $this->item_shortname . '_license_key-nonce'] ) || ! wp_verify_nonce( $_REQUEST[ $this->item_shortname . '_license_key-nonce'], $this->item_shortname . '_license_key-nonce' ) ) {
-	error_log( '111');
+	
 				return;
 	
 			}
