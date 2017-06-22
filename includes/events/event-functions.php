@@ -1704,29 +1704,20 @@ function mdjm_update_event_meta( $event_id, $data )	{
 			$debug[] = sprintf( __( 'Adding %s value as %s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 			
-			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
-			
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] )	{ // If a value existed, but has changed, update it.
 		
 			$debug[] = sprintf( __( 'Updating %s with %s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			update_post_meta( $event_id, $key, $value );
-			
-			$meta[ str_replace( '_mdjm_event', '', $key ) ] = $value;
+
 			
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) )	{ // If there is no new meta value but an old value exists, delete it.
 		
 			$debug[] = sprintf( __( 'Removing %s from %s', 'mobile-dj-manager' ), $current_meta[ $key ][0], mdjm_event_get_meta_label( $key ) );
 			delete_post_meta( $event_id, $key, $value );
 			
-			if( isset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] ) )	{
-				unset( $meta[ str_replace( '_mdjm_event_', '', $key ) ] );
-			}
-			
 		}
 		
 	}
-	
-	$update = update_post_meta( $event_id, '_mdjm_event_data', $meta );
 	
 	$journal_args = array(
 		'user_id'         => is_user_logged_in() ? get_current_user_id() : 1,
@@ -1739,7 +1730,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 	mdjm_add_journal( $journal_args );
 	
 	do_action( 'mdjm_primary_employee_payment_status', $event_id, $current_meta, $data );
-	do_action( 'mdjm_post_update_event_meta', $event_id, $current_meta, $data, $meta );
+	do_action( 'mdjm_post_update_event_meta', $event_id, $current_meta, $data );
 	
 	if ( ! empty( $debug ) )	{
 		
@@ -1749,7 +1740,7 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		
 	}
 	
-	return $update;
+	return true;
 	
 } // mdjm_update_event_meta
 
