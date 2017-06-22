@@ -339,7 +339,7 @@ function mdjm_event_metabox_history_callback( $post )	{
  *
  * @since	1.3
  * @global	obj		$post				WP_Post object
- * @global	obj		$mdjm_event			MDJM_Ticket class object
+ * @global	obj		$mdjm_event			MDJM_Event class object
  * @global	bool	$mdjm_event_update	True if this event is being updated, false if new
  * @param	obj		$post				The post object (WP_Post).
  * @return

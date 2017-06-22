@@ -118,14 +118,14 @@ function mdjm_get_journal_entries( $event_id )	{
 } // mdjm_get_journal_entries
 
 /**
- * Gets the ticket note HTML.
+ * Gets the journal note HTML.
  *
  * @since	1.0
  * @param	obj|int	$journal	The comment object or ID
  * @param	int		$event_id	The event ID the journal entry is connected to
  * @return	str
  */
-function mdjm_ticket_get_journal_entries_html( $note, $event_id = 0 ) {
+function mdjm_event_get_journal_entries_html( $note, $event_id = 0 ) {
 
 	if ( is_numeric( $journal ) ) {
 		$journal = get_comment( $journal );
@@ -150,7 +150,7 @@ function mdjm_ticket_get_journal_entries_html( $note, $event_id = 0 ) {
 
 	return $note_html;
 
-} // mdjm_ticket_get_journal_entries_html
+} // mdjm_event_get_journal_entries_html
 
 /**
  * Exclude notes (comments) on mdjm-event post type from showing in Recent

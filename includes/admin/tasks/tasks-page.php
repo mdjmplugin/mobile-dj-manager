@@ -57,7 +57,7 @@ function mdjm_tasks_list() {
 		<?php do_action( 'mdjm_tasks_table_bottom' ); ?>
 	</div>
 	<?php
-} // kbs_customers_list
+} // mdjm_tasks_list
 
 /**
  * Renders the task view wrapper
