@@ -1,6 +1,6 @@
 {
   "name": "mobile-dj-manager",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "MDJM Event Management",
   "main": "Gruntfile.js",
   "devDependencies": {
