@@ -112,7 +112,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 **Tweaks**
 
-* Do not allow zero cost for an event
+* Validate zero cost for an event before saving
 * {event_date} now returns the date as defined within WordPress -> Settings -> Date Format
 * Added `mdjm_do_honeypot_check()` function
 * Improved uninstallation procedure
