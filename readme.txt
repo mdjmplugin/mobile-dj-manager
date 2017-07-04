@@ -85,7 +85,7 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 = 1.4.7.1 =
 
-**Released 14th July, 2017**
+**Released 4th July, 2017**
 
 **New**
 
