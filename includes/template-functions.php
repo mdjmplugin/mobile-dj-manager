@@ -12,6 +12,21 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
+ * Retrieve page ID's.
+ *
+ * Used for the Client Zone pages.
+ *
+ * @since	1.4.8
+ * @param	str		$page	The page to retrieve the ID for
+ * @return	int		The page ID
+ */
+function mdjm_get_page_id( $page )	{
+	$page = apply_filters( 'mdjm_get_' . $page . '_page_id', mdjm_get_option( $page . '_page' ) );
+
+	return $page ? absint( $page ) : -1;
+} // mdjm_get_page_id
+
+/**
  * Append Enquire Link to Packages.
  *
  * Automatically appends the enquiry link to package content, if enabled.
