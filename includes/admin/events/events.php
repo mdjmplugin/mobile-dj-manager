@@ -617,53 +617,50 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 		return $actions;
 	}
 	
-	if( isset( $actions['trash'] ) )	{
+	if ( isset( $actions['trash'] ) )	{
 		unset( $actions['trash'] );
 	}
-	if( isset( $actions['view'] ) )	{
+	if ( isset( $actions['view'] ) )	{
 		unset( $actions['view'] );
 	}
-	if( isset( $actions['edit'] ) )	{
+	if ( isset( $actions['edit'] ) && 'mdjm-unattended' == $post->post_status )	{
 		unset( $actions['edit'] );
 	}
-	if( isset( $actions['inline hide-if-no-js'] ) )	{
+	if ( isset( $actions['inline hide-if-no-js'] ) )	{
 		unset( $actions['inline hide-if-no-js'] );
 	}
 	
 	// Unattended events have additional actions to allow one-click responses
-	if( $post->post_status == 'mdjm-unattended' )	{
+    $url = remove_query_arg( array( 'mdjm-action', 'event_id' ) );
 
-		$url = remove_query_arg( array( 'mdjm-action', 'event_id' ) );
+	if ( 'mdjm-unattended' == $post->post_status )	{
 
 		// Quote for event
 		$actions['quote'] = sprintf(
-								__( '<a href="%s">Quote</a>', 'mobile-dj-manager' ),
-								admin_url( 'post.php?post=' . $post->ID . '&action=edit&mdjm_action=respond' ) );
+            __( '<a href="%s">Quote</a>', 'mobile-dj-manager' ),
+			admin_url( 'post.php?post=' . $post->ID . '&action=edit&mdjm_action=respond' )
+        );
 		
 		// Check availability
 		$actions['availability'] = sprintf(
-										__( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
-										add_query_arg(
-											array(
-												'mdjm-action' => 'get_event_availability',
-												'event_id'    => $post->ID
-											),
-											wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
-										)
-									);
+            __( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
+			add_query_arg( array(
+                'mdjm-action' => 'get_event_availability',
+				'event_id'    => $post->ID
+            ), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
+        ) );
+
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf( 
 			__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
-			add_query_arg( 
-				array( 
-					'recipient'   => mdjm_get_client_id( $post->ID ),
-					'template'    => mdjm_get_option( 'unavailable' ),
-					'event_id'    => $post->ID,
-					'mdjm-action' => 'respond_unavailable'
-				),
-				admin_url( 'admin.php?page=mdjm-comms' )
-			)
-		);
+			add_query_arg( array( 
+				'recipient'   => mdjm_get_client_id( $post->ID ),
+				'template'    => mdjm_get_option( 'unavailable' ),
+				'event_id'    => $post->ID,
+				'mdjm-action' => 'respond_unavailable'
+            ), admin_url( 'admin.php?page=mdjm-comms' )
+        ) );
+
 	}
 	
 	return $actions;
