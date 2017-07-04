@@ -18,7 +18,7 @@ function mdjm_event_post_columns( $columns ) {
 	$columns = array(
 			'cb'           => '<input type="checkbox" />',
 			'event_date'   => __( 'Date', 'mobile-dj-manager' ),
-			'title'        => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'event_id'     => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			'client'       => __( 'Client', 'mobile-dj-manager' ),
 			'employees'    => __( 'Employees', 'mobile-dj-manager' ),
 			'event_status' => __( 'Status', 'mobile-dj-manager' ),
@@ -42,7 +42,7 @@ function mdjm_event_post_columns( $columns ) {
 	return $columns;
 } // mdjm_event_post_columns
 add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
-		
+
 /**
  * Define which columns are sortable for event posts
  *
@@ -82,7 +82,11 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				echo '<strong>' . date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) . '</strong>';
 			}
 		break;
-			
+
+        case 'event_id':
+            echo '<strong><a href="' . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . '">' . mdjm_get_event_contract_id( $post_id ) . '</a>';
+            break;
+
 		// Client
 		case 'client':
 			$client = get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) );
