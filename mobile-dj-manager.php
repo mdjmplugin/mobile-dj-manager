@@ -40,7 +40,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		
 		public $content_tags;
 		
-		public $cron;t
+		public $cron;
 		
 		public $debug;
 		
