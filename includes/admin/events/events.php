@@ -1358,7 +1358,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	 * We store all times in H:i:s but the user may prefer a different format so we
 	 * determine their time format setting and adjust to H:i:s for saving.
 	 */
-	if( mdjm_get_option( 'time_format', 'H:i' ) == 'H:i' )	{ // 24 Hr
+	if ( mdjm_get_option( 'time_format', 'H:i' ) == 'H:i' )	{ // 24 Hr
 	
 		$event_data['_mdjm_event_start']		= date( 'H:i:s', strtotime( $_POST['event_start_hr'] . ':' . $_POST['event_start_min'] ) ); 
 		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( $_POST['event_finish_hr'] . ':' . $_POST['event_finish_min'] ) );
@@ -1375,13 +1375,16 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 
 	/**
 	 * Set the event end date.
+     * If a value is set from the field, use it otherwise determine fom start/finish time
 	 * If the finish time is less than the start time, assume following day.
 	 */
-	if( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )	{
-		$event_data['_mdjm_event_end_date'] = $_POST['_mdjm_event_date'];
-	} else	{// End date is following day
-		$event_data['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $_POST['_mdjm_event_date'] ) ) );
-	}
+    if ( empty( $event_data['_mdjm_event_finish'] ) )  {
+        if ( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )	{
+            $event_data['_mdjm_event_end_date'] = $_POST['_mdjm_event_date'];
+        } else	{// End date is following day
+            $event_data['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $_POST['_mdjm_event_date'] ) ) );
+        }
+    }
 		
 	/**
 	 * Determine the state of the Deposit & Balance payments.

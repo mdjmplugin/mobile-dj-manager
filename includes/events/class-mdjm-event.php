@@ -549,6 +549,26 @@ class MDJM_Event {
 		return apply_filters( 'mdjm_event_start', $start, $this->ID );
 	} // get_start_time
 
+    /**
+	 * Retrieve the event finish date
+	 *
+	 * @since	1.4.8
+	 * @return	str
+	 */
+	public function get_finish_date() {
+		$finish_date = get_post_meta( $this->ID, '_mdjm_event_end_date', true );
+		
+		/**
+		 * Override the event finish date.
+		 *
+		 * @since	1.4.8
+		 *
+		 * @param	str		$date The event finish date.
+		 * @param	int		$ID   The event ID.
+		 */
+		return apply_filters( 'mdjm_event_finish_date', $finish_date, $this->ID );
+	} // get_date
+
 	/**
 	 * Retrieve the event finish time
 	 *

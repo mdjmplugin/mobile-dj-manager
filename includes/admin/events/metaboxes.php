@@ -785,11 +785,13 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
 							'class'       => '',
 							'placeholder' => __( 'Optional', 'mobile-dj-manager' )
 						) ); ?></td>
-
-                    <td><label for="client_email"><?php _e( 'Email:', 'mobile-dj-manager' ); ?></label><br />
+                </tr>
+                <?php do_action( 'mdjm_event_add_client_after_name' ); ?>
+                <tr>
+                    <td colspan="2"><label for="client_email"><?php _e( 'Email Address:', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->text( array(
 							'name'  => 'client_email',
-							'class' => '',
+							'class' => 'regular-text',
 							'type'  => 'email'
 						) ); ?></td>
                 </tr>
@@ -808,11 +810,10 @@ function mdjm_event_metabox_client_add_new_row( $event_id )	{
 							'class'       => '',
 							'placeholder' => __( 'Optional', 'mobile-dj-manager' )
 						) ); ?></td>
-                    <td></td>
                 </tr>
 				<?php do_action( 'mdjm_event_add_client_after_phone' ); ?>
                 <tr>
-                	<td colspan="3">
+                	<td colspan="2">
                     	<a id="mdjm-add-client" class="button button-primary button-small"><?php _e( 'Add Client', 'mobile-dj-manager' ); ?></a>
                     </td>
                 </tr>
@@ -1041,7 +1042,37 @@ function mdjm_event_metabox_add_employee_fields( $event_id )	{
 add_action( 'mdjm_event_employee_fields', 'mdjm_event_metabox_add_employee_fields', 30 );
 
 /**
- * Output the event date row
+ * Output the event name row
+ *
+ * @since	1.4.8
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_details_name_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+    <div class="mdjm_field_wrap mdjm_form_fields">
+		<div class="mdjm_col">
+            <label for="_mdjm_event_name"><?php _e( 'Name:', 'mobile-dj-manager' ); ?></label><br />
+			<?php echo MDJM()->html->text( array(
+                'name'        => '_mdjm_event_name',
+                'value'       => $mdjm_event->get_name(),
+                'placeholder' => sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) )
+            ) ); ?>
+        </div>
+	</div>    
+
+    <?php
+
+} // mdjm_event_metabox_details_name_row
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_name_row', 10 );
+
+/**
+ * Output the event start date/time row
  *
  * @since	1.3.7
  * @global	obj		$mdjm_event			MDJM_Event class object
@@ -1049,16 +1080,25 @@ add_action( 'mdjm_event_employee_fields', 'mdjm_event_metabox_add_employee_field
  * @param	int		$event_id			The event ID.
  * @return	str
  */
-function mdjm_event_metabox_details_date_row( $event_id )	{
+function mdjm_event_metabox_details_start_date_time_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	mdjm_insert_datepicker();
+    $finish_date = $mdjm_event->get_finish_date();
+
+	mdjm_insert_datepicker(array(
+		'id'       => 'display_event_date'
+	) );
+
+    mdjm_insert_datepicker( array(
+		'id'       => 'display_event_finish_date',
+		'altfield' => '_mdjm_event_end_date'
+	) );
 
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
         <div class="mdjm_col col2">
-            <label for="display_event_date"><?php _e( 'Date:', 'mobile-dj-manager' ); ?></label><br />
+            <label for="display_event_date"><?php printf( __( '%s Date:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label><br />
             <?php echo MDJM()->html->text( array(
                 'name'     => 'display_event_date',
                 'class'    => 'mdjm_date',
@@ -1071,20 +1111,25 @@ function mdjm_event_metabox_details_date_row( $event_id )	{
             ) ); ?>
         </div>
 
-		<div class="mdjm_col col2">
-            <label for="_mdjm_event_name"><?php _e( 'Name:', 'mobile-dj-manager' ); ?></label><br />
-			<?php echo MDJM()->html->text( array(
-                'name'        => '_mdjm_event_name',
-                'value'       => $mdjm_event->get_name(),
-                'placeholder' => sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) )
+        <div class="mdjm_col col2">
+            <label for="display_event_end_date"><?php _e( 'End Date:', 'mobile-dj-manager' ); ?></label><br />
+            <?php echo MDJM()->html->text( array(
+                'name'     => 'display_event_finish_date',
+                'class'    => 'mdjm_date',
+                'required' => true,
+                'value'    => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
+            ) ); ?>
+            <?php echo MDJM()->html->hidden( array(
+                'name'  => '_mdjm_event_end_date',
+                'value' => ! empty( $finish_date ) ? $finish_date : ''
             ) ); ?>
         </div>
 	</div>    
 
     <?php
 
-} // mdjm_event_metabox_details_date_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_date_row', 10 );
+} // mdjm_event_metabox_details_start_date_time_row
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_start_date_time_row', 20 );
 
 /**
  * Output the event time row
@@ -1099,14 +1144,15 @@ function mdjm_event_metabox_details_time_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	$start  = $mdjm_event->get_start_time();
+    $start  = $mdjm_event->get_start_time();
 	$finish = $mdjm_event->get_finish_time();
 	$format = mdjm_get_option( 'time_format', 'H:i' );
 
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
-    	<div class="mdjm_col col2">
-        	<label for="event_start_hr"><?php _e( 'Start Time:', 'mobile-dj-manager' ); ?></label><br />
+
+        <div class="mdjm_col col2">
+            <label for="event_start_hr"><?php _e( 'Start Time:', 'mobile-dj-manager' ); ?></label><br />
 			<?php echo MDJM()->html->time_hour_select( array(
                 'selected' => ! empty( $start ) ? date( $format[0], strtotime( $start ) ) : ''
             ) ); ?> 
@@ -1141,7 +1187,7 @@ function mdjm_event_metabox_details_time_row( $event_id )	{
 
     <?php
 } // mdjm_event_metabox_details_time_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_time_row', 20 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_time_row', 30 );
 
 /**
  * Output the event price row
@@ -1195,7 +1241,7 @@ function mdjm_event_metabox_details_price_row( $event_id )	{
     <?php endif;
 
 } // mdjm_event_metabox_details_price_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 30 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 40 );
 
 /**
  * Output the event packages row
@@ -1259,7 +1305,7 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
     <?php
 
 } // mdjm_event_metabox_details_packages_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_packages_row', 40 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_packages_row', 50 );
 
 /**
  * Output the event notes row
@@ -1287,7 +1333,7 @@ function mdjm_event_metabox_details_notes_row( $event_id )	{
 	<?php
 
 } // mdjm_event_metabox_details_notes_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 50 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 60 );
 
 /**
  * Output the event venue select row
