@@ -59,10 +59,10 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 		case 'from':
 			$author = get_userdata( $post->post_author );
 
-			if( $author )	{
+			if ( $author )	{
 				printf( '<a href="%s">%s</a>', admin_url( "user-edit.php?user_id={$author->ID}" ), ucwords( $author->display_name ) );
 			} else	{
-				echo get_post_meta( $post_id, '_recipient' );	
+				echo get_post_meta( $post_id, '_recipient', true );	
 			}
 
 			break;
