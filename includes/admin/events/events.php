@@ -6,6 +6,7 @@
  */
 if ( ! defined( 'ABSPATH' ) )
 	exit;
+
 /**
  * Define the columns to be displayed for event posts
  *
@@ -23,6 +24,7 @@ function mdjm_event_post_columns( $columns ) {
 			'employees'    => __( 'Employees', 'mobile-dj-manager' ),
 			'event_status' => __( 'Status', 'mobile-dj-manager' ),
 			'event_type'   => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+            'event_name'   => __( 'Name', 'mobile-dj-manager' ),
 			'value'        => __( 'Value', 'mobile-dj-manager' ),
 			'balance'      => __( 'Due', 'mobile-dj-manager' ),
 			'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
@@ -42,6 +44,23 @@ function mdjm_event_post_columns( $columns ) {
 	return $columns;
 } // mdjm_event_post_columns
 add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
+
+/**
+ * Define the event post columns hidden by default
+ *
+ * @since	1.4.7.3
+ * @param   arr         $hidden     An array of columns hidden by default.
+ * @param   WP_Screen   $screen     WP_Screen object of the current screen.
+ */
+function mdjm_event_post_hidden_columns( $hidden, $screen ) {
+   
+    if ( 'edit-mdjm-event' == $screen->id ) {
+        $hidden[] = 'event_name';
+    }
+
+    return $hidden;
+} // mdjm_event_post_hidden_columns
+add_filter( 'default_hidden_columns', 'mdjm_event_post_hidden_columns', 10, 2 );
 
 /**
  * Define which columns are sortable for event posts
@@ -182,6 +201,11 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				echo implode( "<br/>", $event_types );
 			}
 			break;
+
+        // Event Name
+		case 'event_name':
+            echo esc_attr( mdjm_get_event_name( $post_id ) );
+            break;
 
 		// Value
 		case 'value':
