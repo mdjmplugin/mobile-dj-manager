@@ -665,6 +665,30 @@ function mdjm_get_event_status( $event_id='' )	{
 } // mdjm_get_event_status
 
 /**
+ * Returns the event name.
+ *
+ * @since	1.4.7.3
+ * @param	int		$event_id	ID of the event.
+ * @return	str		Name for current event.
+ */
+function mdjm_get_event_name( $event_id = 0 )   {
+    if ( empty( $event_id ) )   {
+        return;
+    }
+
+    $name = get_post_meta( $event_id, '_mdjm_event_name', true );
+		
+    /**
+     * Override the event name.
+     *
+     * @since	1.3
+     *
+     * @param	str		$name The event name.
+     */
+    return apply_filters( 'mdjm_event_name', $name, $event_id );
+} // mdjm_get_event_name
+
+/**
  * Return a select list of possible event statuses
  * 
  *	@since	1.1.3

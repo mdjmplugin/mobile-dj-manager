@@ -620,16 +620,7 @@ class MDJM_Event {
 	 * @return	str
 	 */
 	public function get_name() {
-		$name = get_post_meta( $this->ID, '_mdjm_event_name', true );
-		
-		/**
-		 * Override the event date.
-		 *
-		 * @since	1.3
-		 *
-		 * @param	str		$name The event name.
-		 */
-		return apply_filters( 'mdjm_event_name', $name, $this->ID );
+		return mdjm_get_event_name( $this->ID );
 	} // get_name
 	
 	/**
