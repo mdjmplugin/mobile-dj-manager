@@ -74,9 +74,9 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 == Screenshots ==
 
 1. An overview of the MDJM Event Management Dashboard screen as seen by an Administrator when they are logged into the WordPress Admin UI
-2. The Dashboard as seen by a DJ (employee) when they are logged in
-3. A view of the settings page (not seen by DJs)
-4. Permissions can be set to determine what a DJ can see/do within the application
+2. The Dashboard as seen by an employee when they are logged in
+3. A view of the settings page (not seen by non-admins)
+4. Permissions can be set to determine what an employee can see/do within the application
 5. Event listing within the Admin UI
 6. The client's homepage on the website front end
 7. The playlist feature as utilised by clients
