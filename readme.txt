@@ -83,6 +83,22 @@ Premium addons are available to enhance the plugin at http://mdjm.co.uk/add-ons/
 
 == Changelog ==
 
+= 1.4.7.3 =
+
+**Released XXXX**
+
+**Tweaks**
+
+* Added `End Date` field to event screen
+* Made `Add New Client` table more responsive. Reduced to 2 column
+* Made `Client Email` field larger on event screen
+* Added `Event Name` column to event list table. Column is hidden by default and can be made visible via Screen Options
+* Added `Edit Event` link to transactions that are linked to events
+
+**Bug Fixes**
+
+* From column may display "array" within Communication History
+
 = 1.4.7.2 =
 
 **Released 4th July, 2017**
