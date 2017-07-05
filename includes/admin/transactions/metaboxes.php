@@ -156,33 +156,47 @@ function mdjm_transaction_metabox_save_txn( $post )	{
  * @return
  */
 function mdjm_transaction_metabox_txn_details( $post )	{
-	
+
+	$event_singular = mdjm_get_label_singular();
+
+	$message = sprintf(
+		__( 'Go to the <a href="%s">%s Management Interface</a> to add a transaction associated to an %s.', 'mobile-dj-manager' ),
+		admin_url( 'edit.php?post_type=mdjm-event' ),
+		$event_singular,
+		strtolower( $event_singular )
+	);
+
+	if ( ! empty( $post->post_parent ) && 'mdjm-event' == get_post_type( $post->post_parent ) )	{
+		$event_url = add_query_arg( array(
+			'post'   => $post->post_parent,
+			'action' => 'edit'
+		), admin_url( 'post.php' ) );
+		$message   = sprintf(
+			__( '<a class="page-title-action" href="%s">Edit %s</a>', 'mobile-dj-manager' ),
+			$event_url,
+			$event_singular
+		);
+	}
+
 	do_action( 'mdjm_pre_txn_details_metabox', $post );
-		
+
 	?>
-    
+ 
 	<input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
-	<!-- Start first row -->
+
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<?php printf( __( 'Go to the <a href="%s">%s Management Interface</a> to add a transaction associated to an %s.', 'mobile-dj-manager' ),
-					mdjm_get_admin_page( 'events', 'str' ),
-					mdjm_get_label_singular(),
-					mdjm_get_label_singular( true )
-				);
-			?>
+			<p><?php echo $message; ?></p>
 		</div>
 	</div>
-	<!-- End first row -->
+
 	<?php
-	mdjm_insert_datepicker(
-		array(
-			'class'		=> 'trans_date',
-			'altfield'	=> 'transaction_date',
-			'maxdate'	=> 'today'
-		)
-	);
-	
+	mdjm_insert_datepicker( array(
+		'class'    => 'trans_date',
+		'altfield' => 'transaction_date',
+		'maxdate'  => 'today'
+	) );
+
 	echo '<div class="mdjm-post-row">' . "\r\n";
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
@@ -300,8 +314,8 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	</div>
 	<div class="mdjm-post-row-single-textarea">
 		<div class="mdjm-post-1column">
-			<label for="transaction_description" class="mdjm-label">Description:</label><br />
-			<textarea name="transaction_description" id="transaction_description" class="widefat" cols="30" rows="3" placeholder="Enter any optional information here..."><?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_txn_notes', true ) ); ?></textarea>
+			<label for="transaction_description" class="mdjm-label"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
+			<textarea name="transaction_description" id="transaction_description" class="widefat" cols="30" rows="3" placeholder="Enter any optional information here..."><?php esc_attr_e( get_post_meta( $post->ID, '_mdjm_txn_notes', true ) ); ?></textarea>
 		</div>
 	</div>
 	<?php
