@@ -315,7 +315,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	<div class="mdjm-post-row-single-textarea">
 		<div class="mdjm-post-1column">
 			<label for="transaction_description" class="mdjm-label"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
-			<textarea name="transaction_description" id="transaction_description" class="widefat" cols="30" rows="3" placeholder="Enter any optional information here..."><?php esc_attr_e( get_post_meta( $post->ID, '_mdjm_txn_notes', true ) ); ?></textarea>
+			<textarea name="transaction_description" id="transaction_description" class="widefat" cols="30" rows="3" placeholder="Enter any optional information here..."><?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_txn_notes', true ) ); ?></textarea>
 		</div>
 	</div>
 	<?php
