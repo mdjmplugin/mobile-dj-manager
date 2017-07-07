@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.9
-Stable tag: 1.4.7.2
+Stable tag: 1.4.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -85,7 +85,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 = 1.4.7.3 =
 
-**Released XXXX**
+**Released 7th July, 2017**
 
 **Tweaks**
 
