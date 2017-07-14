@@ -364,6 +364,14 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	if ( isset( $_GET['mdjm-message'] ) && 'settings-imported' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-settings-imported',
+			__( 'Settings sucessfully imported.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
 
 	settings_errors( 'mdjm-notices' );
 	

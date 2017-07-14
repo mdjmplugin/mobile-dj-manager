@@ -577,7 +577,13 @@ function mdjm_tools_import_export_process_import() {
 
 	update_option( 'mdjm_settings', $settings );
 
-	wp_safe_redirect( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&mdjm-message=settings-imported' ) ); exit;
+	wp_safe_redirect( add_query_arg( array(
+		'post_type'    => 'mdjm-event',
+		'page'         => 'mdjm-tools',
+		'tab'          => 'import_export',
+		'mdjm-message' => 'settings-imported'
+	), admin_url( 'edit.php' ) ) );
+	exit;
 
 } // mdjm_tools_import_export_process_import
 add_action( 'mdjm_import_settings', 'mdjm_tools_import_export_process_import' );
