@@ -28,7 +28,8 @@ function mdjm_tools_page()	{
 
 	?>
     <div class="wrap">
-		<h1 class="nav-tab-wrapper">
+        <h1><?php _e( 'MDJM Event Management Tools', 'mobile-dj-manager' ); ?></h1>
+		<h2 class="nav-tab-wrapper">
 			<?php
 			foreach( mdjm_get_tools_page_tabs() as $tab_id => $tab_name ) {
 
@@ -45,8 +46,8 @@ function mdjm_tools_page()	{
 				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . $active . '">' . esc_html( $tab_name ) . '</a>';
 			}
 			?>
-		</h1>
-        <div class="tab-container">
+		</h2>
+        <div class="metabox-holder">
         	<?php do_action( 'mdjm_tools_tab_' . $active_tab ); ?>
         </div>
     </div>
@@ -63,8 +64,9 @@ function mdjm_tools_page()	{
 function mdjm_get_tools_page_tabs()	{
 
 	$tabs = array(
-		'api_keys'    => __( 'API Keys', 'mobile-dj-manager' ),
-		'system_info' => __( 'System Info', 'mobile-dj-manager' )
+		'api_keys'      => __( 'API Keys', 'mobile-dj-manager' ),
+		'system_info'   => __( 'System Info', 'mobile-dj-manager' ),
+        'import_export' => __( 'Import/Export', 'mobile-dj-manager' )
 	);
 
 	return apply_filters( 'mdjm_tools_page_tabs', $tabs );
@@ -111,7 +113,7 @@ function mdjm_tools_system_info_display()	{
 	?>
 
 	<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
-		<textarea readonly="readonly" onclick="this.focus(); this.select()" id="system-info-textarea" name="mdjm-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo mdjm_tools_sysinfo_get(); ?></textarea>
+		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="mdjm-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo mdjm_tools_sysinfo_get(); ?></textarea>
 		<p class="submit">
 			<input type="hidden" name="mdjm-action" value="download_sysinfo" />
 			<?php submit_button( 'Download System Info File', 'primary', 'mdjm-download-sysinfo', false ); ?>
@@ -444,3 +446,144 @@ function mdjm_tools_sysinfo_download() {
 	die();
 } // mdjm_tools_sysinfo_download
 add_action( 'mdjm-download_sysinfo', 'mdjm_tools_sysinfo_download' );
+
+/**
+ * Display the tools import/export tab
+ *
+ * @since       1.5
+ * @return      void
+ */
+function mdjm_tools_import_export_display() {
+
+	if ( ! current_user_can( 'manage_mdjm' ) ) {
+		return;
+	}
+
+	do_action( 'mdjm_tools_import_export_before' );
+?>
+
+	<div class="postbox">
+		<h3><span><?php _e( 'Export Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<div class="inside">
+			<p><?php _e( 'Export the MDJM Event Management settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'mobile-dj-manager' ); ?></p>
+			<p><?php printf(
+                __( 'To export %s data (%s, clients, etc), visit the <a href="%s">Reports</a> page.', 'mobile-dj-manager' ),
+                mdjm_get_label_singular( true ),
+                mdjm_get_label_plural( true ),
+                admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&tab=export' )
+            ); ?></p>
+			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ); ?>">
+				<p><input type="hidden" name="mdjm_action" value="export_settings" /></p>
+				<p>
+					<?php wp_nonce_field( 'mdjm_export_nonce', 'mdjm_export_nonce' ); ?>
+					<?php submit_button( __( 'Export', 'mobile-dj-manager' ), 'secondary', 'submit', false ); ?>
+				</p>
+			</form>
+		</div><!-- .inside -->
+	</div><!-- .postbox -->
+
+	<div class="postbox">
+		<h3><span><?php _e( 'Import Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<div class="inside">
+			<p><?php _e( 'Import the MDJM Event Management settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'mobile-dj-manager' ); ?></p>
+			<form method="post" enctype="multipart/form-data" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ); ?>">
+				<p>
+					<input type="file" name="import_file"/>
+				</p>
+				<p>
+					<input type="hidden" name="mdjm_action" value="import_settings" />
+					<?php wp_nonce_field( 'mdjm_import_nonce', 'mdjm_import_nonce' ); ?>
+					<?php submit_button( __( 'Import', 'mobile-dj-manager' ), 'secondary', 'submit', false ); ?>
+				</p>
+			</form>
+		</div><!-- .inside -->
+	</div><!-- .postbox -->
+<?php
+	do_action( 'mdjm_tools_import_export_after' );
+} // mdjm_tools_import_export_display
+add_action( 'mdjm_tools_tab_import_export', 'mdjm_tools_import_export_display' );
+
+
+/**
+ * Process a settings export that generates a .json file of the shop settings
+ *
+ * @since       1.5
+ * @return      void
+ */
+function mdjm_tools_import_export_process_export() {
+
+	if ( empty( $_POST['mdjm_export_nonce'] ) )    {
+		return;
+    }
+
+	if ( ! wp_verify_nonce( $_POST['mdjm_export_nonce'], 'mdjm_export_nonce' ) )    {
+		return;
+    }
+
+	if ( ! current_user_can( 'manage_mdjm' ) ) {
+		return;
+    }
+
+	$settings = array();
+	$settings = get_option( 'mdjm_settings' );
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) )
+		set_time_limit( 0 );
+
+	nocache_headers();
+	header( 'Content-Type: application/json; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename=' . apply_filters( 'mdjm_settings_export_filename', 'mdjm-settings-export-' . date( 'd-m-Y' ) ) . '.json' );
+	header( "Expires: 0" );
+
+	echo json_encode( $settings );
+	exit;
+} // mdjm_tools_import_export_process_export
+add_action( 'mdjm_export_settings', 'mdjm_tools_import_export_process_export' );
+
+/**
+ * Process a settings import from a json file
+ *
+ * @since   1.5
+ * @return  void
+ */
+function mdjm_tools_import_export_process_import() {
+
+	if ( empty( $_POST['mdjm_import_nonce'] ) ) {
+		return;
+    }
+
+	if ( ! wp_verify_nonce( $_POST['mdjm_import_nonce'], 'mdjm_import_nonce' ) )   {
+		return;
+    }
+
+	if ( ! current_user_can( 'manage_mdjm' ) ) {
+		return;
+    }
+
+	if ( mdjm_get_file_extension( $_FILES['import_file']['name'] ) != 'json' ) {
+		wp_die( __( 'Please upload a valid .json file', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
+	}
+
+	$import_file = $_FILES['import_file']['tmp_name'];
+
+	if( empty( $import_file ) ) {
+		wp_die( __( 'Please upload a file to import', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
+	}
+
+	// Retrieve the settings from the file and convert the json object to an array
+	$settings = mdjm_object_to_array( json_decode( file_get_contents( $import_file ) ) );
+
+	update_option( 'mdjm_settings', $settings );
+
+	wp_safe_redirect( add_query_arg( array(
+		'post_type'    => 'mdjm-event',
+		'page'         => 'mdjm-tools',
+		'tab'          => 'import_export',
+		'mdjm-message' => 'settings-imported'
+	), admin_url( 'edit.php' ) ) );
+	exit;
+
+} // mdjm_tools_import_export_process_import
+add_action( 'mdjm_import_settings', 'mdjm_tools_import_export_process_import' );

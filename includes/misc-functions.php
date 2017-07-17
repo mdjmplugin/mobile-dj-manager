@@ -61,6 +61,62 @@ function mdjm_display_shortcode_button()	{
 add_action( 'admin_head', 'mdjm_display_shortcode_button' );
 
 /**
+ * Get File Extension
+ *
+ * Returns the file extension of a filename.
+ *
+ * @since    1.5
+ *
+ * @param    unknown     $str    File name
+ * @return   mixed       File extension
+ */
+function mdjm_get_file_extension( $str ) {
+	$parts = explode( '.', $str );
+	return end( $parts );
+} // mdjm_get_file_extension
+
+/**
+ * Given an object or array of objects, convert them to arrays
+ *
+ * @since   1.5
+ * @param   object|array   $object An object or an array of objects
+ * @return  arr            An array or array of arrays, converted from the provided object(s)
+ */
+function mdjm_object_to_array( $object = array() ) {
+
+	if ( empty( $object ) || ( ! is_object( $object ) && ! is_array( $object ) ) ) {
+		return $object;
+	}
+
+	if ( is_array( $object ) ) {
+		$return = array();
+		foreach ( $object as $item ) {
+			if ( is_a( $object, 'MDJM_Event' ) ) {
+				$return[] = $object->array_convert();
+			} else {
+				$return[] = mdjm_object_to_array( $item );
+			}
+
+		}
+	} else {
+		if ( is_a( $object, 'MDJM_Event' ) ) {
+			$return = $object->array_convert();
+		} else {
+			$return = get_object_vars( $object );
+
+			// Now look at the items that came back and convert any nested objects to arrays
+			foreach ( $return as $key => $value ) {
+				$value = ( is_array( $value ) || is_object( $value ) ) ? mdjm_object_to_array( $value ) : $value;
+				$return[ $key ] = $value;
+			}
+		}
+	}
+
+	return $return;
+
+} // mdjm_object_to_array
+
+/**
  * Register the script that inserts ths MDJM Shortcodes into the content
  * when the MDJM Shortcode button is used
  *

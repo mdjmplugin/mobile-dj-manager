@@ -279,7 +279,7 @@ function mdjm_format_short_date( $date = '' )	{
 		$date = (string) current_time( 'timestamp' );
 	}
 	
-	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
+	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( $date >= ~PHP_INT_MAX ) )	{
 		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), $date );
 	} else	{
 		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
