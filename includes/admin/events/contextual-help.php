@@ -60,8 +60,6 @@ function mdjm_events_contextual_help() {
 						admin_url( 'edit-tags.php?taxonomy=event-types&post_type=mdjm-event' )
 					) . '</p>' .
 			'<p>' . sprintf( __( '<strong>%1$s Contract</strong> - Select the contract associated with this %1$s.', 'mobile-dj-manager' ), mdjm_get_label_singular() ) . '</p>' .
-			'<p>' . __( '<strong>Disable Client Update Emails?</strong> - Selecting this option will stop any emails being sent to the client during update.', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . __( "<strong>Reset Client Password</strong> - If selected whilst transitioning to enquiry status, the client's password will be reset. If you insert the <code>{client_password}</code> content tag into your email template, the password will be inserted.", 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . __( '<strong>Email Quote Template</strong> - During transition to Enquiry status, select which quote email template should be sent to the client.', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . __( '<strong>Online Quote Template</strong> - During transition to Enquiry status, select which quote template should be used to generate the page that displays the online quote.', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . sprintf(
@@ -80,7 +78,9 @@ function mdjm_events_contextual_help() {
 		'id'	    => 'mdjm-settings-client-details',
 		'title'	    => __( 'Client Details', 'mobile-dj-manager' ),
 		'content'	=>
-			'<p>' . sprintf( __( "Select a client for this %s. If the client does not exist, you can select <em>Add New Client</em>. In doing so, additional fields will be displayed enabling you to enter the new client's details.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</p>'
+			'<p>' . sprintf( __( "Select a client for this %s. If the client does not exist, you can select <em>Add New Client</em>. In doing so, additional fields will be displayed enabling you to enter the new client's details.", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</p>' .
+            '<p>' . __( '<strong>Disable Client Update Emails?</strong> - Selecting this option will stop any emails being sent to the client during update.', 'mobile-dj-manager' ) . '</p>' .
+			'<p>' . __( "<strong>Reset Client Password</strong> - If selected whilst transitioning to enquiry status, the client's password will be reset. If you insert the <code>{client_password}</code> content tag into your email template, the password will be inserted.", 'mobile-dj-manager' ) . '</p>'
 	) );
 
 	$screen->add_help_tab( array(
