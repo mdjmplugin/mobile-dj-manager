@@ -4,11 +4,11 @@
             text: 'MDJM',
             icon: false,
             type: 'menubutton',
-			tooltip: 'Insert MDJM shortcodes into your document',
+			tooltip: 'Insert MDJM shortcodes and content tags into your document',
             menu: [{
-				text: 'Text Replacements',
+				text: 'Content Tags',
 				menu:[{
-					text: 'Application Shortcodes',
+					text: 'Application Content Tags',
 					menu: [{
 						text: 'Admin URL',
 						onclick: function () {
@@ -56,7 +56,7 @@
 						}
 					}]
 				}, {
-					text: 'Client Shortcodes',
+					text: 'Client Content Tags',
 					menu: [{
 						text: 'Client Firstname',
 						onclick: function () {
@@ -104,7 +104,7 @@
 						}
 					}]
 				}, {
-					text: 'DJ Shortcodes',
+					text: 'DJ Content Tags',
 					menu: [{
 						text: 'DJ Firstname',
 						onclick: function () {
@@ -127,7 +127,7 @@
 						}
 					}]
 				}, {
-					text: 'Equipment Shortcodes',
+					text: 'Equipment Content Tags',
 					menu: [{
 						text: 'Available Addons',
 						onclick: function () {
@@ -175,7 +175,7 @@
 						}
 					}]
 				}, {
-					text: 'Event Shortcodes',
+					text: 'Event Content Tags',
 					menu: [{
 						text: 'Event Name',
 						onclick: function () {
@@ -334,7 +334,7 @@
 						}
 					}]
 				}, {
-					text: 'Online Payment Shortcodes',
+					text: 'Online Payment Content Tags',
 					menu: [{
 						text: 'Payment Amount',
 						onclick: function () {
@@ -352,7 +352,7 @@
 						}
 					}]
 				}, {
-					text: 'General Shortcodes',
+					text: 'General Content Tags',
 					menu: [{
 						text: 'Date DD/MM/YYYY',
 						onclick: function () {
@@ -361,7 +361,7 @@
 					}]
 				}]
 			}, {
-				text: 'Content',
+				text: 'Content Shortcodes',
 				menu: [{
 					text: 'Addons List',
 					onclick: function() {
@@ -374,7 +374,7 @@
 					}
 				}]
 			}, {
-				text: 'Pages',
+				text: 'Pages Shortcodes',
 				menu: [{
 					text: 'Client Zone Home',
 					onclick: function () {
