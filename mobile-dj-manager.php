@@ -290,7 +290,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			load_plugin_textdomain( 
 				'mobile-dj-manager',
 				false, 
-				dirname( plugin_basename(__FILE__) ) . '/languages/'
+				dirname( plugin_basename(__FILE__) ) . '/languages'
 			);
 		} // load_textdomain
 		
