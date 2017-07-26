@@ -110,7 +110,7 @@ class MDJM_Cache_Helper {
 			'app_home',
 			'contact',
 			'contracts',
-			'payment',
+			'payments',
 			'playlist',
 			'profile',
 			'quotes'
