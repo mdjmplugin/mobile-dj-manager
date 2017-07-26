@@ -102,7 +102,7 @@ class MDJM_Cache_Helper {
 	 * @return	void
 	 */
 	 public static function delete_page_cache( $old_value, $value )	{
-		if ( ! isset( $old_value['tickets_page'] ) )	{
+		if ( ! isset( $old_value['app_home_page'] ) )	{
 			return;
 		}
 
