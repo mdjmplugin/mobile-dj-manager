@@ -785,7 +785,7 @@ function mdjm_v15_upgrades()	{
 		'lastran'           => 'Never',
 		'options'           => array(
 			'run_when'        => 'before_event',
-			'age'             => '3 DAYS',
+			'age'             => '3 DAY',
 			'email_template'  => '0',
 			'email_subject'   => sprintf( __( '%s playlist notification', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 			'email_from'      => 'admin'
