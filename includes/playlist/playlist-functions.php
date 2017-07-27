@@ -183,9 +183,7 @@ function mdjm_store_guest_playlist_entry( $details )	{
 	$event_id	= $details['entry_event'];
 
 	// Add the playlist entry
-	$meta = apply_filters( 'mdjm_insert_guest_playlist_entry', $meta );
-
-	do_action( 'mdjm_insert_guest_playlist_entry_before', $meta );
+	$meta = apply_filters( 'mdjm_insert_guest_playlist_entry_meta', $meta );
 
 	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
 				mdjm_get_option( 'event_prefix', '' ) . $event_id,
@@ -211,7 +209,7 @@ function mdjm_store_guest_playlist_entry( $details )	{
 		update_post_meta( $entry_id, '_mdjm_playlist_entry_' . $key, $value );
 	}
 
-	do_action( 'mdjm_insert_guest_playlist_entry_after', $meta, $entry_id );
+	do_action( 'mdjm_insert_guest_playlist_entry', $entry_id, $event_id );
 
 	// Playlist entry added
 	return $entry_id;

@@ -286,3 +286,18 @@ function mdjm_print_playlist_action( $data )	{
 	die();
 } // mdjm_add_playlist_entry
 add_action( 'mdjm_add_playlist_entry', 'mdjm_add_playlist_entry_action' );
+
+/**
+ * Sets the flag to notify clients when a guest entry is added
+ *
+ * @since   1.5
+ * @param   int     $entry_id   The playlist entry ID
+ * @param   int     $event_id   The event ID
+ * @return  void
+ */
+function mdjm_event_playlist_set_guest_notification_action( $entry_id, $event_id )  {
+    if ( mdjm_is_task_active( 'playlist-notification' ) ) {
+        update_post_meta( $event_id, '_mdjm_playlist_client_notify', '1', true );
+    }
+} // mdjm_event_playlist_set_guest_notification_action
+add_action( 'mdjm_insert_guest_playlist_entry', 'mdjm_event_playlist_set_guest_notification_action', 10, 2 );
