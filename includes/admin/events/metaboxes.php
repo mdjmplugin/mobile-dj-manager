@@ -1116,7 +1116,7 @@ function mdjm_event_metabox_details_start_date_time_row( $event_id )	{
             <?php echo MDJM()->html->text( array(
                 'name'     => 'display_event_finish_date',
                 'class'    => 'mdjm_date',
-                'required' => true,
+                'required' => false,
                 'value'    => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
             ) ); ?>
             <?php echo MDJM()->html->hidden( array(
