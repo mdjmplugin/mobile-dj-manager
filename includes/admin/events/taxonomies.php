@@ -142,10 +142,11 @@ add_action( 'edited_enquiry-source', 'mdjm_save_enquiry_source', 10, 2 );
  * @return	str
  */
 function mdjm_add_playlist_category_fields( $tag )	{
+
 	?>
     <div class="form-field term-group">
         <label for="playlist_default_cat"><?php _e( 'Set as default Category?', 'mobile-dj-manager' ); ?></label>
-        <input type="checkbox" name="playlist_default_cat" id="playlist_default_cat" value="<?php echo $tag->term_id; ?>" />
+        <input type="checkbox" name="playlist_default_cat" id="playlist_default_cat" value="1" />
     </div>
     <?php
 	
