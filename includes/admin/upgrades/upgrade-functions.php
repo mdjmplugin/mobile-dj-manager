@@ -785,7 +785,10 @@ function mdjm_v15_upgrades()	{
 		'lastran'           => 'Never',
 		'options'           => array(
 			'run_when'        => 'before_event',
-			'age'             => '3 DAYS'
+			'age'             => '3 DAYS',
+			'email_template'  => '0',
+			'email_subject'   => sprintf( __( 'Your %s playlist has been updated', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'email_from'      => 'admin'
 		),
 		'totalruns'           => '0',
 		'default'             => true,
