@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.9
-Stable tag: 1.4.7.3
+Stable tag: 1.4.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -82,6 +82,21 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.4.7.5 =
+
+**Released 27th July, 2017**
+
+**New**
+
+* Added option to export and import MDJM settings via the MDJM menu, Tools -> Import/Export so settings can be exported from one site and imported into another
+
+**Bug Fixes**
+
+* Event end date should not be a required field
+* Event end date was not auto recognising next day finishes
+* Corrected setting variable within cache helper
+* PHP warning may have been displayed when formatting date for datepicker
 
 = 1.4.7.3 =
 
