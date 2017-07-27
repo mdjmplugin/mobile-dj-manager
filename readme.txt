@@ -83,7 +83,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 == Changelog ==
 
-= 1.4.7.4 =
+= 1.4.7.5 =
 
 **Released 27th July, 2017**
 
@@ -93,7 +93,8 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 **Bug Fixes**
 
-* Event end date was not auto recognising next day finishes if left blank
+* Event end date should not be a required field
+* Event end date was not auto recognising next day finishes
 * Corrected setting variable within cache helper
 * PHP warning may have been displayed when formatting date for datepicker
 
