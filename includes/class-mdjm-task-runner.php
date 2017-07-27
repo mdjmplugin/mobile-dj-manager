@@ -873,15 +873,15 @@ class MDJM_Task_Runner {
                 break;
 
 			case 'playlist-employee-notify':
+				$start = date( 'Y-m-d' );
+				$end   = date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) );
 				$query = array(
 					'post_status'  => 'mdjm-approved',
 					'meta_query'   => array(
-						'relation' => 'AND',
-						$date_query,
 						array(
 							'key'     => '_mdjm_event_date',
-							'compare' => '<=',
-							'value'   => date( 'Y-m-d' ),
+							'compare' => 'BETWEEN',
+							'value'   => array( $start, $end ),
 							'type'    => 'date'
 						)
 					)
