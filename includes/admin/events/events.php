@@ -1402,7 +1402,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
      * If a value is set from the field, use it otherwise determine fom start/finish time
 	 * If the finish time is less than the start time, assume following day.
 	 */
-    if ( empty( $event_data['_mdjm_event_finish'] ) )  {
+    if ( empty( $event_data['_mdjm_event_end_date'] ) )  {
         if ( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) )	{
             $event_data['_mdjm_event_end_date'] = $_POST['_mdjm_event_date'];
         } else	{// End date is following day
