@@ -775,8 +775,8 @@ function mdjm_v15_upgrades()	{
 		'last_result'         => false
 	);
 
-	$tasks['playlist-employe-notify'] = array(
-		'slug'              => 'playlist-employe-notify',
+	$tasks['playlist-employee-notify'] = array(
+		'slug'              => 'playlist-employee-notify',
 		'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
 		'active'            => false,
 		'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
