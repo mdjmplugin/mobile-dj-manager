@@ -308,11 +308,10 @@ function mdjm_get_playlist_by_category( $event_id, $args=array() )	{
  *
  * @since	1.3
  * @param	int		$event_id	The event ID.
- * @param	arr		$args		See codex get_terms
  * @return	arr		Array of all unique playlist categories.
  */
-function mdjm_get_event_playlist_categories( $event_id, $args=array() )	{
-	$terms		= mdjm_get_playlist_categories( $args );
+function mdjm_get_event_playlist_categories( $event_id )	{
+	$terms		= mdjm_get_playlist_categories();
 	$categories = array();
 
 	if ( ! $terms )	{
@@ -470,11 +469,13 @@ function mdjm_guest_playlist_url( $event_id )	{
  * Retrieve all playlist categories.
  *
  * @since	1.3
- * @param	arr			$args		See codex get_terms
  * @return	obj|bool	Array of categories, or false if none.
  */
-function mdjm_get_playlist_categories( $args=array() )	{
-	$terms = get_terms( 'playlist-category', $args );
+function mdjm_get_playlist_categories()	{
+	$terms = get_terms( array(
+		'taxonomy'   => 'playlist-category',
+		'hide_empty' => false
+	) );
 
 	if ( ! empty( $terms ) && ! is_wp_error( $terms ) )	{
 		return $terms;
