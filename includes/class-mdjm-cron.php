@@ -230,13 +230,16 @@ class MDJM_Cron	{
 				'slug'              => 'playlist-employee-notify',
 				'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
 				'active'            => false,
-				'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 				'frequency'         => 'Daily',
 				'nextrun'           => 'N/A',
 				'lastran'           => 'Never',
 				'options'           => array(
 					'run_when'        => 'before_event',
-					'age'             => '3 DAYS'
+					'age'             => '3 DAY',
+					'email_template'  => '0',
+					'email_subject'   => sprintf( __( '%s playlist notification', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+					'email_from'      => 'admin'
 				),
 				'totalruns'           => '0',
 				'default'             => true,
