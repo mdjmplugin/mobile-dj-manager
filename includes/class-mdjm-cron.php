@@ -226,6 +226,22 @@ class MDJM_Cron	{
 				'default'             => true,
 				'last_result'         => false
             ),
+			'playlist-employee-notify' => array(
+				'slug'              => 'playlist-employee-notify',
+				'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
+				'active'            => false,
+				'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'frequency'         => 'Daily',
+				'nextrun'           => 'N/A',
+				'lastran'           => 'Never',
+				'options'           => array(
+					'run_when'        => 'before_event',
+					'age'             => '3 DAYS'
+				),
+				'totalruns'           => '0',
+				'default'             => true,
+				'last_result'         => false
+			),
 			'upload-playlists'      => array(
 				'slug'              => 'upload-playlists',
 				'name'              => __( 'Upload Playlists', 'mobile-dj-manager' ),
