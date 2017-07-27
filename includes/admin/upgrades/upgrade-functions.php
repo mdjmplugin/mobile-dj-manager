@@ -35,32 +35,38 @@ function mdjm_do_automatic_upgrades() {
 		}
 	}
 
-	if( version_compare( $mdjm_version, '1.4', '<' ) ) {
+	if ( version_compare( $mdjm_version, '1.4', '<' ) ) {
 
 		mdjm_v14_upgrades();
 
 	}
 
-	if( version_compare( $mdjm_version, '1.4.3', '<' ) ) {
+	if ( version_compare( $mdjm_version, '1.4.3', '<' ) ) {
 
 		mdjm_v143_upgrades();
 
 	}
 
-	if( version_compare( $mdjm_version, '1.4.7', '<' ) ) {
+	if ( version_compare( $mdjm_version, '1.4.7', '<' ) ) {
 
 		mdjm_v147_upgrades();
 
 	}
 
-	if( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
+    /*if ( version_compare( $mdjm_version, '1.5', '<' ) ) {
+
+		mdjm_v15_upgrades();
+
+	}*/
+
+	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
 
 	}
 
-	if( $did_upgrade ) {
+	if ( $did_upgrade ) {
 
 		// Send to what's new page
 		if ( substr_count( MDJM_VERSION_NUM, '.' ) < 2 )	{
@@ -701,3 +707,90 @@ function mdjm_v147_upgrade_event_tasks()	{
 
 } // mdjm_v147_upgrade_event_tasks
 add_action( 'mdjm-upgrade_event_tasks', 'mdjm_v147_upgrade_event_tasks' );
+
+/**
+ * 1.5 Upgrade.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_v15_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	// Create the event builder page
+	$event_builder = wp_insert_post(
+		array(
+			'post_title'     => sprintf( __( 'Builder your %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'post_content'   => '[mdjm-event-builder]',
+			'post_status'    => 'publish',
+			'post_author'    => 1,
+			'post_type'      => 'page',
+			'comment_status' => 'closed'
+		)
+	);
+
+    // Add default event builder options
+    $options = array(
+		'event_builder_page'           => $event_builder,
+        'event_builder_packages'       => '1',
+        'event_builder_addons'         => '1',
+        'event_builder_display_prices' => '1',
+        'event_builder_label_previous' => __( 'Previous', 'mobile-dj-manager' ),
+        'event_builder_label_next'     => __( 'Next', 'mobile-dj-manager' ),
+        'event_builder_label_submit'   => __( 'Submit', 'mobile-dj-manager' )
+    );
+
+    foreach ( $options as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
+
+	// Add new automated tasks
+	$tasks = get_option( 'mdjm_schedules' );
+
+	$tasks['playlist-notification'] = array(
+		'slug'              => 'playlist-notification',
+		'name'              => __( 'Client Playlist Notifications', 'mobile-dj-manager' ),
+		'active'            => false,
+		'desc'              => __( 'Sends notifications to clients if a guest has added an entry to their playlist.', 'mobile-dj-manager' ),
+		'frequency'         => 'Daily',
+		'nextrun'           => 'N/A',
+		'lastran'           => 'Never',
+		'options'           => array(
+			'run_when'        => 'after_event',
+			'age'             => '1 HOUR',
+			'email_template'  => '0',
+			'email_subject'   => sprintf( __( 'Your %s playlist has been updated', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'email_from'      => 'admin'
+		),
+		'totalruns'           => '0',
+		'default'             => true,
+		'last_result'         => false
+	);
+
+	$tasks['playlist-employe-notify'] = array(
+		'slug'              => 'playlist-employe-notify',
+		'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
+		'active'            => false,
+		'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'frequency'         => 'Daily',
+		'nextrun'           => 'N/A',
+		'lastran'           => 'Never',
+		'options'           => array(
+			'run_when'        => 'before_event',
+			'age'             => '3 DAYS'
+		),
+		'totalruns'           => '0',
+		'default'             => true,
+		'last_result'         => false
+	);
+
+	update_option( 'mdjm_schedules', $tasks );
+} // mdjm_v15_upgrades
