@@ -730,6 +730,11 @@ class MDJM_Task_Runner {
 					'source'         => sprintf( __( '%s Scheduled Task', 'mobile-dj-manager' ), $this->name )
 				);
 
+				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
+					$email_args['from_email'] = $employee->user_email;
+					$email_args['from_name']  = $employee->display_name;
+				}
+
 				if ( mdjm_send_email_content( $email_args ) )	{
 					MDJM()->debug->log_it( $this->name . ' sent to ' . $employee->display_name );
 
