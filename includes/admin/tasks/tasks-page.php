@@ -141,7 +141,7 @@ function mdjm_render_single_task_view( $id ) {
 
 											<p>
 												<span class="label"><?php _e( 'Next Due:', 'mobile-dj-manager' ); ?>&nbsp;</span>
-                                                <?php if ( ! empty( $task['nextrun'] ) && 'Never' != $task['nextrun'] ) : ?>
+                                                <?php if ( ! empty( $task['nextrun'] ) && 'N/A' != $task['nextrun'] ) : ?>
                                                      <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ); ?>
                                                 <?php else : ?>
                                                     <?php echo __( 'N/A', 'mobile-dj-manager' ); ?>
