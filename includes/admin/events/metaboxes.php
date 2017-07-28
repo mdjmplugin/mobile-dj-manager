@@ -986,8 +986,20 @@ function mdjm_event_metabox_event_type_contract_row( $event_id )	{
 
     $contract        = $mdjm_event->get_contract();
 	$contract_status = $mdjm_event->get_contract_status();
+	$new_event_type  = '';
 
-	?>
+	if ( mdjm_is_admin() ) :
+		$new_event_type = '<i id="event-type-add" class="fa fa-plus" aria-hidden="true"></i>';
+		?>
+        <div class="mdjm_field_wrap mdjm_form_fields" id="mdjm-new-event-type-row">
+            <?php echo MDJM()->html->text( array(
+                'name'        => 'event_type_name',
+                'placeholder' => sprintf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+            ) ); ?> 
+            <a id="add_event_type" class="button button-primary" href="#"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a></div>
+        <span id="mdjm-event-type-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
+
+    <?php endif; ?>
 
     <div class="mdjm_field_wrap mdjm_form_fields">
         <div class="mdjm_col col2">
@@ -995,20 +1007,7 @@ function mdjm_event_metabox_event_type_contract_row( $event_id )	{
             <?php echo MDJM()->html->event_type_dropdown( array(
                 'name'     => 'mdjm_event_type',
                 'selected' => $event_type
-            ) ); ?>
-
-            <?php if ( mdjm_is_admin() ) : ?>
-                <i id="event-type-add" class="fa fa-plus" aria-hidden="true"></i>
-
-                <div id="mdjm-new-event-type-row">
-                    <?php echo MDJM()->html->text( array(
-                        'name'        => 'event_type_name',
-                        'placeholder' => sprintf( __( '%s Type Name', 'mobile-dj-manager' ), mdjm_get_label_singular() )
-                    ) ); ?> 
-                    <button id="add_event_type" class="button button-primary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></button></div>
-                <span id="mdjm-event-type-loader" class="mdjm-loader mdjm-hidden"><img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" /></span>
-
-            <?php endif; ?>
+            ) ) . $new_event_type; ?>
         </div>
 
          <div class="mdjm_col col2">
@@ -1028,6 +1027,7 @@ function mdjm_event_metabox_event_type_contract_row( $event_id )	{
             <?php endif; ?>
         </div>
 	</div>
+
     <?php
 
 } // mdjm_event_metabox_event_type_contract_row
