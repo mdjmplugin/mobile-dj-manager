@@ -25,7 +25,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 
 ## Code Documentation
 
-* We ensure that every KBS function is documented well and follows the standards set by phpDoc
+* We ensure that every MDJM function is documented well and follows the standards set by phpDoc
 * Please make sure that every function is documented so that when we update our API Documentation things don't go awry!
 * Finally, please use tabs and not spaces. The tab indent size should be 4 for all MDJM code.
 
