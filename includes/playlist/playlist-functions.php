@@ -344,6 +344,15 @@ function mdjm_get_event_playlist_categories( $event_id, $args=array() )	{
 	return $categories;
 } // mdjm_get_event_playlist_categories
 
+/** Get the playlist  limit count
+ *
+ */
+
+function mdjm_get_playlist_limit ( $event_id )  {
+     $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
+     return $playlist_limit;
+}
+
 /**
  * Determine if this event has playlists enabled.
  *

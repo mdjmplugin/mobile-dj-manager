@@ -477,7 +477,17 @@ function mdjm_get_registered_settings()	{
 										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' . 
 										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
+					),
+					'playlist_limit' => array(
+						'id'          => 'playlist_limit',
+						'name'        => __( 'Playlist Limit?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'If this number is non-zero, event playlists will be limited to this number of entries ', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+
+						'type'        => 'text',
+                                                'size'	      => 'small',
+                                                'std'         => '0'
 					)
+
 				),
 				// Packages & Addons
 				'packages' => array(

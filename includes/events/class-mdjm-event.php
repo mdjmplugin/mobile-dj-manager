@@ -241,6 +241,7 @@ class MDJM_Event {
 			'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
 			'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
 			'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
+			'_mdjm_event_playlist_limit'	 => mdjm_get_option( 'playlist_limit' ),
 			'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
 			'_mdjm_event_cost'               => 0,
 			'_mdjm_event_deposit'            => 0,
@@ -1078,6 +1079,13 @@ class MDJM_Event {
 
 		return apply_filters( 'mdjm_playlist_status', $return, $this->ID );
 	} // is_playlist_enabled
+	/** Get the playlist limit
+	 * @return number
+	 */
+public function get_playlist_limit() {
+	$pl_limit = get_post_meta( $this->ID, '_mdjm_event_playlist_limit', true );
+	return $pl_limit;
+}
 
 	/**
 	 * Determine if the playlist is open.
