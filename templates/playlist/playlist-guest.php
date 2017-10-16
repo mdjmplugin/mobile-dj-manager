@@ -39,7 +39,9 @@ global $mdjm_event;
     
     	<?php do_action( 'mdjm_guest_playlist_header_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-header -->
-    
+<?php $event_playlist_limit = mdjm_get_playlist_limit( $mdjm_event->ID ); ?>
+<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
+<?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 )        :  ?> 
 	<div id="mdjm-guest-playlist-form">
     	<?php do_action( 'mdjm_guest_playlist_form_top', $mdjm_event->ID ); ?>
         
@@ -87,6 +89,11 @@ global $mdjm_event;
 						"{client_fullname}'s", '{event_type}', '{event_date}' ); ?></p>
             
         <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
+<?php else : ?>
+            <p><?php printf( __( 'Sorry but the music playlist system for %s %s on %s is currently full.', 'mobile-dj-manager' ),
+						"{client_fullname}'s", '{event_type}', '{event_date}' ); ?></p>
+
+<?php endif; //endif($entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) ?>
         
     	<?php do_action( 'mdjm_guest_playlist_form_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-guest-playlist-form -->

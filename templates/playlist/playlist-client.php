@@ -41,9 +41,12 @@ global $mdjm_event;
     
 	<div id="mdjm-playlist-form">
     	<?php do_action( 'mdjm_playlist_form_top', $mdjm_event->ID ); ?>
+
+<?php $event_playlist_limit = mdjm_get_playlist_limit( $mdjm_event->ID ); ?>
+<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
         
+<?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 )        :  ?>
         <?php if( $mdjm_event->playlist_is_open() ) : ?>
-        
             <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
                 <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
                 <?php mdjm_action_field( 'add_playlist_entry' ); ?>
@@ -90,7 +93,9 @@ global $mdjm_event;
             <p><?php printf( __( 'The playlist for this %s is currently closed to allow %s to prepare for your event. Existing playlist entries are displayed below.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), '{dj_firstname}' ); ?></p>
             
         <?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
-        
+<?php else : ?>
+<p><?php printf( __( 'You have used %s tracks our of your allowance of %s in the playlist for your %s.  Existing playlist entries are displayed below.', 'mobile-dj-manager' ), $entries_in_playlist,$event_playlist_limit, mdjm_get_label_singular( true ) ); ?></p>
+<?php endif; // endif test if playlist limit reached ?>
     	<?php do_action( 'mdjm_playlist_form_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-form -->
     	
@@ -99,15 +104,17 @@ global $mdjm_event;
     <?php if( $playlist ) : ?>
     	 <div id="mdjm-playlist-entries">
         	<?php do_action( 'mdjm_playlist_entries_top', $mdjm_event->ID ); ?>
-            
-        	<?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
         	<p><?php printf( __( 'Your playlist currently consists of %d %s and is approximately %s long. Your %s is %s long.', 'mobile-dj-manager' ),
 					$entries_in_playlist,
 					_n( 'track', 'tracks', $entries_in_playlist, 'mobile-dj-manager' ),
 					'{playlist_duration}',
 					mdjm_get_label_singular(),
 					'{event_duration}' ); ?></p>
-        
+
+<?php if ( $event_playlist_limit ) : ?>
+<p><?php printf( __( 'You have used %s out of your allowance of %s tracks'), $entries_in_playlist, $event_playlist_limit ); ?></p>
+<?php endif; ?>        
+
         	<?php foreach( $playlist as $category => $entries ) : ?>
             	
 				<?php $entries_in_category = mdjm_count_playlist_entries( $mdjm_event->ID, $category ); ?>
