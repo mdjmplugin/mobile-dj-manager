@@ -79,23 +79,21 @@ global $mdjm_event;
                         		</td>
                     		</tr>
                 		</table>
-            	</form>
+	            	</form>
 		<?php else : ?>
 			<p><?php printf( __( 'You have used %s tracks our of your allowance of %s in the playlist for your %s.  Existing playlist entries are displayed below.', 'mobile-dj-manager' ), $entries_in_playlist,$event_playlist_limit, mdjm_get_label_singular( true ) ); ?></p>
 		<?php endif; // endif  ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) ?>
-            
-	        <?php else : ?>
+	<?php else : ?>
         		<style type="text/css">
 				.mdjm-playlist-remove	{
 					display: none;
 				}
 			</style>
         		<?php do_action( 'mdjm_playlist_closed', $mdjm_event->ID ); ?>
-            
+
             		<p><?php printf( __( 'The playlist for this %s is currently closed to allow %s to prepare for your event. Existing playlist entries are displayed below.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), '{dj_firstname}' ); ?></p>
 
-            
-        	<?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
+       	<?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
     	<?php do_action( 'mdjm_playlist_form_bottom', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-playlist-form -->
     	
