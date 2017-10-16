@@ -609,7 +609,16 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
 	$enable_playlist = mdjm_get_option( 'enable_playlists', true );
-	$playlist_limit  = $mdjm_event->get_meta( '_mdjm_event_playlist_limit' );
+
+	if ( ! $mdjm_event_update ) {
+    		$playlist_limit = mdjm_get_option( 'playlist_limit' );
+	} else {
+    		$playlist_limit = mdjm_get_playlist_limit( $mdjm_event->ID );
+		}
+
+	if ( ! $playlist_limit ) {
+		$playlist_limit = 0;
+	}
 
 	if ( $mdjm_event_update )	{
 		$enable_playlist = $mdjm_event->playlist_is_enabled();
@@ -628,9 +637,8 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
     <p><?php _e ( 'Playlist Limit', 'mobile-dj-manager' ); ?>
 
     <?php echo MDJM()->html->number( array(
-       		 	 'name'  => '_mdjm_event_playlist_limit',
-                	 'class' => '',
-                 	'value' => ! empty( $playlist_limit ) ? $playlist_limit : '' ) ); ?></p>
+       			'name'  => '_mdjm_event_playlist_limit',
+ 	              	'value' => ! empty( $playlist_limit ) ? $playlist_limit : '' ) ); ?></p>
 
     <?php
 
