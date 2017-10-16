@@ -87,21 +87,22 @@ function mdjm_contract_details_metabox( $post )	{
 	
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-contract' . '_nonce' );
 	
-	$contract_events = get_posts(
-		array(
-			'post_type'			=> 'mdjm-event',
-			'posts_per_page'	=> -1,
-			'meta_key'			=> '_mdjm_event_contract',
-			'meta_value_num'	=> $post->ID,
-			'post_status'		=> 'any'
-		)
-	);
+	$contract_events = mdjm_get_events( array(
+        'meta_query'     => array(
+            array(
+                'key'   => '_mdjm_event_contract',
+                'value' => $post->ID,
+                'type'  => 'NUMERIC'
+            )
+        )
+    ) );
 
 	$event_count = count( $contract_events );
 		
-	$total_events = sprintf( _n( ' %s', ' %s', $event_count, 'mobile-dj-manager' ),
-						mdjm_get_label_singular(), mdjm_get_label_plural()
-					);
+	$total_events = sprintf(
+        _n( ' %s', ' %s', $event_count, 'mobile-dj-manager' ),
+		mdjm_get_label_singular(), mdjm_get_label_plural()
+    );
 	
 	$default_contract = mdjm_get_option( 'default_contract' ) == $post->ID ? __( 'Yes', 'mobile-dj-manager' ) : __( 'No', 'mobile-dj-manager' );
 			

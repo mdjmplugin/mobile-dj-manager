@@ -43,7 +43,7 @@ add_filter( 'manage_contract_posts_columns' , 'mdjm_contract_post_columns' );
  * @return
  */
 function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
-				
+
 	switch( $column_name ) {
 		// Is Default?
 		case 'event_default':
@@ -54,26 +54,28 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				_e( 'No', 'mobile-dj-manager' );
 			}
+
 			break;
-			
+
 		// Assigned To
 		case 'assigned':
-			
-			$contract_events = get_posts(
-				array(
-					'post_type'			=> 'mdjm-event',
-					'posts_per_page'	=> -1,
-					'meta_key'			=> '_mdjm_event_contract',
-					'meta_value'		=> $post_id,
-					'post_status'		=> 'any'
-					)
-				);
-			
+
+			$contract_events = mdjm_get_events( array(
+                'meta_query'     => array(
+                    array(
+                        'key'   => '_mdjm_event_contract',
+                        'value' => $post_id,
+                        'type'  => 'NUMERIC'
+                    )
+                )
+            ) );
+
 			$total = count( $contract_events );
 			echo $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() );
+
 			break;
 	} // switch
-				
+
 } // mdjm_contract_posts_custom_column
 add_action( 'manage_contract_posts_custom_column' , 'mdjm_contract_posts_custom_column', 10, 2 );
 
