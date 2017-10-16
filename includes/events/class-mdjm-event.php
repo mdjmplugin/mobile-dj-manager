@@ -1079,13 +1079,14 @@ class MDJM_Event {
 
 		return apply_filters( 'mdjm_playlist_status', $return, $this->ID );
 	} // is_playlist_enabled
+
 	/** Get the playlist limit
 	 * @return number
 	 */
-public function get_playlist_limit() {
-	$pl_limit = get_post_meta( $this->ID, '_mdjm_event_playlist_limit', true );
-	return $pl_limit;
-}
+	public function get_playlist_limit() {
+		$pl_limit = get_post_meta( $this->ID, '_mdjm_event_playlist_limit', true );
+		return $pl_limit;
+	} // get_playlist_limit
 
 	/**
 	 * Determine if the playlist is open.
