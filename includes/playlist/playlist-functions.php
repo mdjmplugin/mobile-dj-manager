@@ -347,7 +347,6 @@ function mdjm_get_event_playlist_categories( $event_id, $args=array() )	{
 /** Get the playlist limit for this event
  *
  */
-
 function mdjm_get_playlist_limit ( $event_id )  {
      $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
      return $playlist_limit;
