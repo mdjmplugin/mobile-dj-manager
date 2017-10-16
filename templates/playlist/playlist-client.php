@@ -81,7 +81,10 @@ global $mdjm_event;
                 		</table>
 	            	</form>
 		<?php else : ?>
-			<p><?php printf( __( 'You have used %s tracks our of your allowance of %s in the playlist for your %s.  Existing playlist entries are displayed below.', 'mobile-dj-manager' ), $entries_in_playlist,$event_playlist_limit, mdjm_get_label_singular( true ) ); ?></p>
+			<p><?php printf( __( 'You have used %d %s our of your allowance of %d in the playlist for your %s.  Existing playlist entries are displayed below.', 'mobile-dj-manager' ), 
+					$entries_in_playlist,
+                                        _n( 'track', 'tracks', $entries_in_playlist, 'mobile-dj-manager' ),
+					$event_playlist_limit, mdjm_get_label_singular( true ) ); ?></p>
 		<?php endif; // endif  ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) ?>
 	<?php else : ?>
         		<style type="text/css">
