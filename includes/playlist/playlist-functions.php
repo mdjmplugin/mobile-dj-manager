@@ -344,11 +344,15 @@ function mdjm_get_event_playlist_categories( $event_id, $args=array() )	{
 	return $categories;
 } // mdjm_get_event_playlist_categories
 
-/** Get the playlist limit for this event
+/** Get the playlist limit for an event
  *
+ * @since   1.5
+ * @param   int     $event_id   Event ID
+ * @return  int|false
  */
 function mdjm_get_playlist_limit ( $event_id ) {
      $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
+
      return apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
 } // mdjm_get_playlist_limit
 
