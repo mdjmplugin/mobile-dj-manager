@@ -638,7 +638,7 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
 
     <?php echo MDJM()->html->number( array(
        			'name'  => '_mdjm_event_playlist_limit',
- 	              	'value' => $playlist_limit; ?></p>
+ 	              	'value' => $playlist_limit ) ); ?></p>
 
     <?php
 
