@@ -610,18 +610,15 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
 
 	$enable_playlist = mdjm_get_option( 'enable_playlists', true );
 
-	if ( ! $mdjm_event_update ) {
-    		$playlist_limit = mdjm_get_option( 'playlist_limit' );
+	if ( ! $mdjm_event_update || 'mdjm-unattended' == $mdjm_event->post_status ) {
+        $playlist_limit = mdjm_get_option( 'playlist_limit' );
 	} else {
-    		$playlist_limit = mdjm_get_playlist_limit( $mdjm_event->ID );
-		}
+        $playlist_limit  = mdjm_get_playlist_limit( $mdjm_event->ID );
+        $enable_playlist = $mdjm_event->playlist_is_enabled();
+    }
 
 	if ( ! $playlist_limit ) {
 		$playlist_limit = 0;
-	}
-
-	if ( $mdjm_event_update )	{
-		$enable_playlist = $mdjm_event->playlist_is_enabled();
 	}
 
 	?>
@@ -629,16 +626,17 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
 	<p><strong><?php printf( __( '%s Options', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong></p>
 
     <p><?php echo MDJM()->html->checkbox( array(
-			'name'     => '_mdjm_event_playlist',
-			'value'    => 'Y',
-			'current'  => $enable_playlist ? 'Y' : 0,
-		) ); ?> <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?></p>
+        'name'     => '_mdjm_event_playlist',
+        'value'    => 'Y',
+        'current'  => $enable_playlist ? 'Y' : 0,
+    ) ); ?> <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?></p>
 
     <p><?php _e ( 'Playlist Limit', 'mobile-dj-manager' ); ?>
 
     <?php echo MDJM()->html->number( array(
-       			'name'  => '_mdjm_event_playlist_limit',
- 	              	'value' => $playlist_limit ) ); ?></p>
+        'name'  => '_mdjm_event_playlist_limit',
+        'value' => $playlist_limit
+    ) ); ?></p>
 
     <?php
 
