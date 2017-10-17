@@ -11,9 +11,9 @@
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/login/login-form.php
  */
-global $mdjm_login_redirect;
-?>
-<?php if( ! is_user_logged_in() ) : ?>
+global $mdjm_login_redirect; ?>
+
+<?php if ( ! is_user_logged_in() ) : ?>
 
 	<?php do_action( 'mdjm_print_notices' ); ?>
     
@@ -60,4 +60,4 @@ global $mdjm_login_redirect;
 
     <?php _e( 'You are already logged in', 'mobile-dj-manager' ); ?>
     
-<?php endif; ?><!-- endif( ! user_is_logged_in() ) )
+<?php endif; ?>

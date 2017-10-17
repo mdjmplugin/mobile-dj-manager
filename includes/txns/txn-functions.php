@@ -559,13 +559,21 @@ function mdjm_update_txn_status( $txn_id, $new_status )	{
 function mdjm_update_txn_meta( $txn_id, $data )	{
 	
 	$meta = get_post_meta( $txn_id, '_mdjm_txn_data', true );
+
+    if ( ! $meta )  {
+        $meta = array();
+    } elseif ( ! is_array( $meta ) )    {
+        $meta = array( $meta );
+    }
 	
 	foreach( $data as $key => $value )	{
 		
 		if( $key == 'mdjm_nonce' || $key == 'mdjm_action' ) {
 			continue;
 		}
-		
+
+        if ( ! array_key_exists( $key, $meta ) );
+
 		// For backwards comaptibility
 		update_post_meta( $txn_id, $key, $value );
 		
