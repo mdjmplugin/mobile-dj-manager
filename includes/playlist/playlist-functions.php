@@ -12,6 +12,16 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the global playlist limit.
+ *
+ * @since	1.5
+ * @return	int  	The number of entries playlists are limited to by default.
+ */
+function mdjm_playlist_global_limit()	{
+	return (int) mdjm_get_option( 'playlist_limit' );
+} // mdjm_playlist_global_limit
+
+/**
  * Get Playlist Entry
  *
  * Retrieves a complete entry by entry ID.

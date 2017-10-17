@@ -611,7 +611,7 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
 	$enable_playlist = mdjm_get_option( 'enable_playlists', true );
 
 	if ( ! $mdjm_event_update || 'mdjm-unattended' == $mdjm_event->post_status ) {
-        $playlist_limit = mdjm_get_option( 'playlist_limit' );
+        $playlist_limit = mdjm_playlist_global_limit();
 	} else {
         $playlist_limit  = mdjm_get_event_playlist_limit( $mdjm_event->ID );
         $enable_playlist = $mdjm_event->playlist_is_enabled();
