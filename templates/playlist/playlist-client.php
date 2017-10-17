@@ -44,7 +44,7 @@ global $mdjm_event;
 
         
        	<?php if( $mdjm_event->playlist_is_open() ) : ?>
-            <?php $event_playlist_limit = mdjm_get_playlist_limit( $mdjm_event->ID ); ?>
+            <?php $event_playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID ); ?>
             <?php $entries_in_playlist  = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
     		<?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 )        :  ?>
                 <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">

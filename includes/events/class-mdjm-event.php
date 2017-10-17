@@ -1084,7 +1084,7 @@ class MDJM_Event {
 	 * @return number
 	 */
 	public function get_playlist_limit() {
-   		return mdjm_get_playlist_limit( $this->ID );
+   		return mdjm_get_event_playlist_limit( $this->ID );
 	} // get_playlist_limit
 
 	/**
