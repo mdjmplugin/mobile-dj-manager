@@ -211,6 +211,7 @@ jQuery(document).ready(function ($) {
 			this.client();
 			this.employee();
 			this.equipment();
+			this.playlist();
 			this.time();
 			this.travel();
 			this.type();
@@ -537,7 +538,13 @@ jQuery(document).ready(function ($) {
 			});
 
 		},
-		
+
+		playlist : function()	{
+			$( document.body ).on( 'change', '#_mdjm_event_playlist', function() {
+				$('#mdjm-playlist-limit').slideToggle();
+			});
+		},
+
 		time : function()	{
 			// Set the DJ Setup Date
 			$( document.body ).on( 'change', '#display_event_date', function() {
