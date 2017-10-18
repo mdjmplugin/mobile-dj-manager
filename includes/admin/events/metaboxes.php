@@ -637,7 +637,7 @@ function mdjm_event_metabox_options_playlist_row( $event_id )	{
     ) ); ?> <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?></p>
 
     <div id="mdjm-playlist-limit" <?php echo $limit_class; ?>>
-        <p><?php _e ( 'Playlist Limit', 'mobile-dj-manager' ); ?>
+        <p><?php _e ( 'Playlist Limit:', 'mobile-dj-manager' ); ?>
         <?php echo MDJM()->html->number( array(
             'name'  => '_mdjm_event_playlist_limit',
             'value' => $playlist_limit
