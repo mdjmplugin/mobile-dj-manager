@@ -59,9 +59,9 @@ function mdjm_add_event_meta_boxes( $post )	{
 	$metaboxes = apply_filters( 'mdjm_event_add_metaboxes',
 		array(
 			array(
-				'id'         => 'mdjm-event-options-mb',
+				'id'         => 'mdjm-event-save-mb',
 				'title'      => sprintf( __( '%s #%s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_event_contract_id( $post->ID ) ),
-				'callback'   => 'mdjm_event_metabox_options_callback',
+				'callback'   => 'mdjm_event_metabox_save_callback',
 				'context'    => 'side',
 				'priority'   => 'high',
 				'args'       => array(),
@@ -183,7 +183,7 @@ add_action( 'add_meta_boxes_mdjm-event', 'mdjm_add_event_meta_boxes' );
  * @param	obj		$post	The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_options_callback( $post )	{
+function mdjm_event_metabox_save_callback( $post )	{
 
 	global $post, $mdjm_event, $mdjm_event_update;
 
@@ -210,7 +210,7 @@ function mdjm_event_metabox_options_callback( $post )	{
 	<?php
 	do_action( 'mdjm_event_options_fields_save', $post->ID );
 
-} // mdjm_event_metabox_options_callback
+} // mdjm_event_metabox_save_callback
 
 /**
  * Output for the Client Details meta box.
