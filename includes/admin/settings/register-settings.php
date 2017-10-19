@@ -441,7 +441,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Log and track all client &amp; %s actions (recommended).', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'type'        => 'checkbox',
-						'std'		 => '1'
+						'std'		  => '1'
 					)
 				),
 				'playlist' => array(
@@ -476,7 +476,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Number of days before %s that the playlist should close to new entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small',
-						'std'		 => '5'
+						'std'		  => '5'
 					),
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
