@@ -458,6 +458,14 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'checkbox',
 						'std'         => '1'
 					),
+					'playlist_limit' => array(
+						'id'          => 'playlist_limit',
+						'name'        => __( 'Playlist Limit?', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Set the global limit for the number of entries a playlist can contain or enter 0 for no limit.  If this number is non-zero, %s playlists will be limited to this number of entries ', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'        => 'number',
+                                                'size'	      => 'small',
+                                                'std'         => '0'
+					),
 					'close'           => array(
 						'id'          => 'close',
 						'name'        => __( 'Close the Playlist', 'mobile-dj-manager' ),

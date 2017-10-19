@@ -12,6 +12,16 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the global playlist limit.
+ *
+ * @since	1.5
+ * @return	int  	The number of entries playlists are limited to by default.
+ */
+function mdjm_playlist_global_limit()	{
+	return (int) mdjm_get_option( 'playlist_limit' );
+} // mdjm_playlist_global_limit
+
+/**
  * Get Playlist Entry
  *
  * Retrieves a complete entry by entry ID.
@@ -340,6 +350,18 @@ function mdjm_get_event_playlist_categories( $event_id )	{
 
 	return $categories;
 } // mdjm_get_event_playlist_categories
+
+/** Get the playlist limit for an event
+ *
+ * @since   1.5
+ * @param   int     $event_id   Event ID
+ * @return  int|false
+ */
+function mdjm_get_event_playlist_limit ( $event_id ) {
+     $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
+
+     return apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
+} // mdjm_get_event_playlist_limit
 
 /**
  * Determine if this event has playlists enabled.
