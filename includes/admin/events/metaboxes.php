@@ -191,9 +191,6 @@ function mdjm_event_metabox_save_callback( $post )	{
 
 	<div class="submitbox" id="submitpost">
 		<div id="minor-publishing">
-        	<div id="minor-publishing-actions">
-            
-            </div><!-- #minor-publishing-actions -->
             <div id="mdjm-event-actions">
             	
                 <?php
