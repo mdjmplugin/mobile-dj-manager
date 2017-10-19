@@ -725,6 +725,9 @@ function mdjm_v15_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
+    // Add the new playlist limit default setting
+    mdjm_update_option( 'playlist_limit', '0' );
+
 	// Create the event builder page
 	$event_builder = wp_insert_post(
 		array(
@@ -796,4 +799,5 @@ function mdjm_v15_upgrades()	{
 	);
 
 	update_option( 'mdjm_schedules', $tasks );
+
 } // mdjm_v15_upgrades
