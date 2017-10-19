@@ -692,7 +692,7 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 add_filter( 'post_row_actions', 'mdjm_event_post_row_actions', 10, 2 );
 
 /**
- * Set the event post title and set as readonly.
+ * Output the event post title hidden field.
  *
  * @since	1.0
  * @param	arr		$actions	Current post row actions
@@ -703,17 +703,40 @@ function mdjm_event_set_post_title( $post ) {
 	if( 'mdjm-event' != $post->post_type )	{
 		return;
 	}
-	
-	?>
-	<script type="text/javascript">
-		jQuery(document).ready(function($) {
-			$("#title").val("<?php echo mdjm_get_event_contract_id( $post->ID ); ?>");
-			$("#title").prop("readonly", true);
-		});
-	</script>
-	<?php
+
+    ?>
+    <input type="hidden" name="post_title" value="<?php echo mdjm_get_event_contract_id( $post->ID ); ?>" id="title" />
+    <?php
+
 } // mdjm_event_set_post_title
 add_action( 'edit_form_after_title', 'mdjm_event_set_post_title' );
+
+/**
+ * Output the event name field.
+ *
+ * @since	1.5
+ * @param	arr		$actions	Current post row actions
+ * @param	obj		$post		The WP_Post post object
+ */
+function mdjm_output_event_name_field( $post ) {
+	
+	if( 'mdjm-event' != $post->post_type )	{
+		return;
+	}
+
+    $value       = esc_attr( mdjm_get_event_name( $post->ID ) );
+    $placeholder = sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) );
+
+    ?>
+    <div id="titlediv">
+        <div id="titlewrap">
+            <input type="text" name="_mdjm_event_name" id="_mdjm_event_name" autocomplete="off" value="<?php echo $value; ?>" placeholder="<?php echo $placeholder; ?>" />
+        </div>
+    </div>
+    <?php
+
+} // mdjm_output_event_name_field
+add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' );
 
 /**
  * Rename the Publish and Update post buttons for events

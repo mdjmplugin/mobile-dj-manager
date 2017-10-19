@@ -68,6 +68,16 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'dependancy' => '',
 				'permission' => ''
 			),
+            array(
+				'id'         => 'mdjm-event-details-mb',
+				'title'      => sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'callback'   => 'mdjm_event_metabox_details_callback',
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => ''
+			),
 			array(
 				'id'         => 'mdjm-event-client-mb',
 				'title'      => __( 'Client Details', 'mobile-dj-manager' ),
@@ -82,16 +92,6 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'id'         => 'mdjm-event-employees-mb',
 				'title'      => sprintf( __( '%s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'callback'   => 'mdjm_event_metabox_employees_callback',
-				'context'    => 'normal',
-				'priority'   => 'high',
-				'args'       => array(),
-				'dependancy' => '',
-				'permission' => ''
-			),
-			array(
-				'id'         => 'mdjm-event-details-mb',
-				'title'      => sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'callback'   => 'mdjm_event_metabox_details_callback',
 				'context'    => 'normal',
 				'priority'   => 'high',
 				'args'       => array(),
@@ -1054,36 +1054,6 @@ function mdjm_event_metabox_event_type_contract_row( $event_id )	{
 add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_event_type_contract_row', 10 );
 
 /**
- * Output the event name row
- *
- * @since	1.4.8
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_metabox_details_name_row( $event_id )	{
-
-	global $mdjm_event, $mdjm_event_update;
-
-	?>
-    <div class="mdjm_field_wrap mdjm_form_fields">
-		<div class="mdjm_col">
-            <label for="_mdjm_event_name"><?php _e( 'Name:', 'mobile-dj-manager' ); ?></label><br />
-			<?php echo MDJM()->html->text( array(
-                'name'        => '_mdjm_event_name',
-                'value'       => $mdjm_event->get_name(),
-                'placeholder' => sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) )
-            ) ); ?>
-        </div>
-	</div>    
-
-    <?php
-
-} // mdjm_event_metabox_details_name_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_name_row', 20 );
-
-/**
  * Output the event start date/time row
  *
  * @since	1.3.7
@@ -1141,7 +1111,7 @@ function mdjm_event_metabox_details_start_date_time_row( $event_id )	{
     <?php
 
 } // mdjm_event_metabox_details_start_date_time_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_start_date_time_row', 30 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_start_date_time_row', 20 );
 
 /**
  * Output the event time row
@@ -1199,7 +1169,7 @@ function mdjm_event_metabox_details_time_row( $event_id )	{
 
     <?php
 } // mdjm_event_metabox_details_time_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_time_row', 40 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_time_row', 30 );
 
 /**
  * Output the event price row
@@ -1253,7 +1223,7 @@ function mdjm_event_metabox_details_price_row( $event_id )	{
     <?php endif;
 
 } // mdjm_event_metabox_details_price_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 50 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 40 );
 
 /**
  * Output the event packages row
@@ -1317,7 +1287,7 @@ function mdjm_event_metabox_details_packages_row( $event_id )	{
     <?php
 
 } // mdjm_event_metabox_details_packages_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_packages_row', 60 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_packages_row', 50 );
 
 /**
  * Output the event notes row
@@ -1345,7 +1315,7 @@ function mdjm_event_metabox_details_notes_row( $event_id )	{
 	<?php
 
 } // mdjm_event_metabox_details_notes_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 70 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 60 );
 
 /**
  * Output the event venue select row
