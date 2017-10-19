@@ -60,7 +60,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 		array(
 			array(
 				'id'         => 'mdjm-event-options-mb',
-				'title'      => sprintf( __( '%s Options', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'title'      => sprintf( __( '%s #%s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_event_contract_id( $post->ID ) ),
 				'callback'   => 'mdjm_event_metabox_options_callback',
 				'context'    => 'side',
 				'priority'   => 'high',
