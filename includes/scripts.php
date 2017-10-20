@@ -236,7 +236,11 @@ function mdjm_register_admin_scripts( $hook )	{
 				'one_item_min'         => __( 'Select at least one Add-on', 'mobile-dj-manager' ),
 				'min_travel_distance'  => mdjm_get_option( 'travel_min_distance' ),
 				'update_travel_cost'   => mdjm_get_option( 'travel_add_cost', false ),
-				'zero_cost'            => sprintf( __( 'Are you sure you want to save this %s with a total cost of %s?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_currency_filter( mdjm_format_amount( '0.00' ) ) )
+				'zero_cost'            => sprintf( __( 'Are you sure you want to save this %s with a total cost of %s?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_currency_filter( mdjm_format_amount( '0.00' ) ) ),
+                'show_client_form'     => __( 'Show Client Form', 'mobile-dj-manager' ),
+                'hide_client_form'     => __( 'Hide Client Form', 'mobile-dj-manager' ),
+                'show_client_details'  => __( 'Show Client Details', 'mobile-dj-manager' ),
+                'hide_client_details'  => __( 'Hide Client Details', 'mobile-dj-manager' )
 			)
 		)
 	);

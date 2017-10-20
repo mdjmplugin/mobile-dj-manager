@@ -220,6 +220,50 @@ jQuery(document).ready(function ($) {
 		},
 		
 		client : function()	{
+            // Toggle display of new client fields section for an event
+            $( document.body ).on( 'click', '.toggle-client-add-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_client_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_client_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_client_form );
+                }
+
+                var header = $(this).parents('.mdjm-client-row-header');
+                header.siblings('.mdjm-client-add-event-sections-wrap').slideToggle();
+
+                var first_input;
+                if ( show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-client-add-event-sections-wrap'));
+                } else {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                }
+                first_input.focus();
+            });
+
+            // Toggle display of client details section for an event
+            $( document.body ).on( 'click', '.toggle-client-details-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_client_details ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_client_details );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_client_details );
+                }
+
+                var header = $(this).parents('.mdjm-client-row-header');
+                header.siblings('.mdjm-client-details-event-sections-wrap').slideToggle();
+
+                var first_input;
+                if ( ! show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                    first_input.focus();
+                }
+            });
+
 			// Display client details
 			$( document.body ).on( 'click', '#toggle_client_details', function() {
 				$('#mdjm-event-client-details').toggle('slow');
