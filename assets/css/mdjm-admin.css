@@ -704,7 +704,9 @@ checkbox.mdjm-form-error {
 .mdjm_event_overview_wrapper:not(:first-child)    {
 	margin-top: 12px;
 }
-
+#mdjm_event_overview_event_fields	{
+	margin-top: 12px;
+}
 .mdjm-repeatable-row-actions {
 	color: #777;
 	font-size: 12px;
@@ -716,15 +718,18 @@ checkbox.mdjm-form-error {
 	vertical-align: middle;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
-.mdjm-repeatable-row-actions .toggle-client-details-option-section {
+.mdjm-repeatable-row-actions .toggle-client-details-option-section,
+.mdjm-repeatable-row-actions .toggle-event-setup-option-section {
 	color: #777;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
-.mdjm-repeatable-row-actions .toggle-client-details-option-section:hover {
+.mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-event-setup-option-section:hover {
 	color: #444;
 }
 
 .mdjm-client-row-header,
+.mdjm-event-row-header,
 .mdjm-repeatable-row-header {
 	clear: both;
 	background: #f1f1f1;
@@ -735,12 +740,15 @@ checkbox.mdjm-form-error {
 }
 .mdjm-client-row-header:before,
 .mdjm-client-row-header:after,
+.mdjm-event-row-header:before,
+.mdjm-event-row-header:after,
 .mdjm-repeatable-row-header:before,
 .mdjm-repeatable-row-header:after {
 	content: '';
 	display: table;
 }
 .mdjm-client-row-header:after,
+.mdjm-event-row-header:after,
 .mdjm-repeatable-row-header:after {
 	clear: both;
 }
@@ -784,12 +792,26 @@ checkbox.mdjm-form-error {
 	margin-left: 4px;
 }
 .mdjm-client-name,
+.mdjm-event-type,
+.mdjm-event-contract,
+.mdjm-event-venue,
+.mdjm-event-date,
+.mdjm-event-finish-date,
+.mdjm-event-start-time,
+.mdjm-event-end-time,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
     margin-right: 10px;
 }
-.mdjm-client-name {
+.mdjm-client-name,
+.mdjm-event-type,
+.mdjm-event-contract,
+.mdjm-event-venue,
+.mdjm-event-date,
+.mdjm-event-finish-date,
+.mdjm-event-start-time,
+.mdjm-event-end-time {
 	width: 25%;
 	margin-right: 5%;
 }
@@ -832,8 +854,10 @@ checkbox.mdjm-form-error {
 	margin-bottom: 2px;
 }
 .mdjm-client-new-email,
-.mdjm-add-client-action {
+.mdjm-add-client-action,
+.mdjm-event-date-fields {
     display: block !important;
+	margin-top: 6px;
 }
 
 @media screen and ( max-width: 480px ) {
@@ -846,6 +870,13 @@ checkbox.mdjm-form-error {
 		padding-bottom: 0;
 	}
     .mdjm-client-name,
+	.mdjm-event-type,
+	.mdjm-event-contract,
+	.mdjm-event-venue,
+	.mdjm-event-date,
+	.mdjm-event-finish-date,
+	.mdjm-event-start-time,
+	.mdjm-event-end-time, 
     .mdjm-repeatable-option {
 		float: none;
 		text-align: left;

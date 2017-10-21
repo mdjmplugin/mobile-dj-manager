@@ -315,9 +315,9 @@ jQuery(document).ready(function ($) {
 
 			// Add a new client from the event screen
 			$( document.body ).on( 'click', '#mdjm-add-client', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				if ( $('#client_firstname').val().length < 1 )	{
 					alert(mdjm_admin_vars.no_client_first_name);
 					return;
@@ -326,7 +326,7 @@ jQuery(document).ready(function ($) {
 					alert(mdjm_admin_vars.no_client_email);
 					return;
 				}
-				
+
 				var postData = {
 					client_firstname : $('#client_firstname').val(),
 					client_lastname  : $('#client_lastname').val(),
@@ -343,13 +343,18 @@ jQuery(document).ready(function ($) {
 					url        : ajaxurl,
 					beforeSend : function()	{
 						$('#mdjm-add-client').hide();
-						$('#mdjm-event-add-new-client-fields').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
 					},
 					success: function (response) {
+						$('#mdjm-add-client-fields').slideToggle();
+						$('#add-client-action').html( mdjm_admin_vars.show_client_form );
 						$('#client_name').empty();
+						$('#client_firstname').val('');
+						$('#client_lastname').val('');
+						$('#client_email').val('');
+						$('#client_phone').val('');
+						$('#client_phone2').val('');
 						$('#client_name').append(response.client_list);
 						$('#mdjm-add-client').show();
-						$('#mdjm-loading').remove();
 						$('#_mdjm_event_block_emails').prop('checked', false );
 						$('#mdjm_reset_pw').prop('checked', true );
 						$('#client_name').trigger('chosen:updated');
@@ -360,8 +365,6 @@ jQuery(document).ready(function ($) {
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').remove();
-
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}

@@ -184,7 +184,7 @@ class MDJM_HTML_Elements {
 			'multiple'         => false,
 			'allow_add'        => true,
 			'show_option_all'  => false,
-			'show_option_none' => __( ' - Select Venue - ', 'mobile-dj-manager' ),
+			'show_option_none' => __( 'Select Venue', 'mobile-dj-manager' ),
 			'data'             => array()
 		);
 		
@@ -192,8 +192,8 @@ class MDJM_HTML_Elements {
 
 		if ( $args['allow_add'] )	{
 			$args['options']  = array(
-				'manual' => __( '  - Enter Manually - ', 'mobile-dj-manager' ),
-				'client' => __( '  - Use Client Address - ', 'mobile-dj-manager' )
+				'manual' => __( 'Enter Manually', 'mobile-dj-manager' ),
+				'client' => __( 'Use Client Address', 'mobile-dj-manager' )
 			);
 		}
 
