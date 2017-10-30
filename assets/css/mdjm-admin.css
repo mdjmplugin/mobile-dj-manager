@@ -819,10 +819,20 @@ checkbox.mdjm-form-error {
 	text-align: center;
 	min-width: 80px;
 }
+/* Hidden Sections */
 .mdjm-custom-event-sections-wrap,
 .mdjm-client-add-event-sections-wrap,
 .mdjm-client-details-event-sections-wrap {
 	display: none;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: #e5e5e5;
+	box-sizing: border-box;
+	width: 100%;
+}
+/* Visible Sections */
+.mdjm-event-details-event-sections-wrap {
+	background: #f9f9f9;
 	border-width: 0 1px 1px;
 	border-style: solid;
 	border-color: #e5e5e5;
