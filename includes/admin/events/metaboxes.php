@@ -1332,7 +1332,7 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 
 						<?php
 						$actions = array(
-							//'view_setup' => '<a href="#" class="toggle-event-setup-option-section">' . __( 'Show setup options', 'mobile-dj-manager' ) . '</a>'
+							'event_type' => '<a href="#" class="toggle-event-type-option-section">' . sprintf( __( 'Add %s type', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>'
 						);
                         ?>
 
@@ -1466,10 +1466,10 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
                                 </span>
                             
 								<?php echo MDJM()->html->text( array(
-									'name'     => 'display_event_finish_date',
-									'class'    => 'mdjm_date',
-									'required' => false,
-									'value'    => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
+									'name'        => 'display_event_finish_date',
+									'class'       => 'mdjm_date',
+									'required'    => false,
+									'value'       => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
 								) ); ?>
 								<?php echo MDJM()->html->hidden( array(
 									'name'  => '_mdjm_event_end_date',
@@ -1555,17 +1555,20 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
                                 </span>
                             
 								<?php echo MDJM()->html->time_hour_select( array(
-									'name'     => 'dj_setup_hr',
-									'selected' => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : ''
+									'name'        => 'dj_setup_hr',
+									'selected'    => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : '',
+                                    'blank_first' => true
 								) ); ?> 
 								<?php echo MDJM()->html->time_minute_select( array(
-									'name'     => 'dj_setup_min',
-									'selected' => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : ''
+									'name'        => 'dj_setup_min',
+									'selected'    => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : '',
+                                    'blank_first' => true
 								) ); ?> 
 								<?php if ( 'H:i' != $format ) : ?>
 									<?php echo MDJM()->html->time_period_select( array(
-										'name'     => 'dj_setup_period',
-										'selected' => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : ''
+										'name'        => 'dj_setup_period',
+										'selected'    => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : '',
+                                        'blank_first' => true
 									) ); ?>
 								<?php endif; ?>
 
@@ -1586,6 +1589,50 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 
 } // mdjm_event_overview_metabox_event_sections
 add_action( 'mdjm_event_overview_fields', 'mdjm_event_overview_metabox_event_sections', 20 );
+
+/**
+ * Output the add event type section
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_add_event_type_section( $event_id )    {
+
+    global $mdjm_event, $mdjm_event_update; ?>
+
+    <div id="mdjm-add-event-type-fields" class="mdjm-add-event-type-sections-wrap">
+        <div class="mdjm-custom-event-sections">
+            <div class="mdjm-custom-event-section">
+                <span class="mdjm-custom-event-section-title"><?php printf( __( 'New %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span>
+
+                <span class="mdjm-new-event-type">
+                    <label class="mdjm-event-type">
+                        <?php printf( __( '%s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'event_type_name',
+                        'class'       => 'mdjm-name-field large-text'
+                    ) ); ?> 
+                </span>
+
+                <span class="mdjm-add-event-type-action">
+                    <label>&nbsp;</label>
+                    <?php submit_button(
+                        sprintf( __( 'Add %s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+                        array( 'secondary', 'mdjm-add-event-type' ),
+                        'mdjm-add-event-type',
+                        false
+                    ); ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <?php
+} // mdjm_event_overview_metabox_add_event_type_section
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_event_type_section' );
 
 /**
  * Output the event type and contract row

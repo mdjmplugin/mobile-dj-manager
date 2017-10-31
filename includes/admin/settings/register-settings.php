@@ -389,8 +389,21 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
-						'std'		 => __( 'DJ', 'mobile-dj-manager' )
+						'std'		  => __( 'DJ', 'mobile-dj-manager' )
 					),
+                    'setup_time'      => array(
+                        'id'    => 'setup_time',
+                        'name'  => __( 'Setup Time', 'mobile-dj-manager' ),
+                        'desc'  => sprintf(
+                            __( 'Enter the time in minutes before an %s starts that you normally setup to auto define the %s setup time and date. <code>0</code> to disable.', 'mobile-dj-manager' ),
+                            mdjm_get_label_singular( true ),
+                            mdjm_get_option( 'artist' )
+                        ),
+                        'type'  => 'number',
+                        'size'  => 'small',
+                        'step'  => '15',
+                        'std'   => 0
+                    ),
 					'default_contract' => array(
 						'id'          => 'default_contract',
 						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),

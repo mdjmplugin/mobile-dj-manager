@@ -725,9 +725,6 @@ function mdjm_v15_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
-    // Add the new playlist limit default setting
-    mdjm_update_option( 'playlist_limit', '0' );
-
 	// Create the event builder page
 	$event_builder = wp_insert_post(
 		array(
@@ -740,8 +737,10 @@ function mdjm_v15_upgrades()	{
 		)
 	);
 
-    // Add default event builder options
+    // Add default values for new setting options
     $options = array(
+        'playlist_limit'               => '0',
+        'setup_time'                   => '0',
 		'event_builder_page'           => $event_builder,
         'event_builder_packages'       => '1',
         'event_builder_addons'         => '1',

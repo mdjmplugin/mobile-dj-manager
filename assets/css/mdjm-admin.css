@@ -719,12 +719,12 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section,
-.mdjm-repeatable-row-actions .toggle-event-setup-option-section {
+.mdjm-repeatable-row-actions .toggle-event-type-option-section {
 	color: #777;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
-.mdjm-repeatable-row-actions .toggle-event-setup-option-section:hover {
+.mdjm-repeatable-row-actions .toggle-event-type-option-section:hover {
 	color: #444;
 }
 
@@ -826,7 +826,8 @@ checkbox.mdjm-form-error {
 /* Hidden Sections */
 .mdjm-custom-event-sections-wrap,
 .mdjm-client-add-event-sections-wrap,
-.mdjm-client-details-event-sections-wrap {
+.mdjm-client-details-event-sections-wrap,
+.mdjm-add-event-type-sections-wrap {
 	display: none;
 	border-width: 0 1px 1px;
 	border-style: solid;

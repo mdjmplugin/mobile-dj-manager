@@ -736,7 +736,9 @@ class MDJM_HTML_Elements {
 			'name'             => 'event_start_hr',
 			'class'            => 'mdjm-time',
 			'id'               => '',
-			'selected'         => 0
+			'selected'         => 0,
+            'show_option_all'  => false,
+			'show_option_none' => false
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -761,14 +763,9 @@ class MDJM_HTML_Elements {
 			$i++;
 		}
 
-		$output = $this->select( array(
-			'name'     => $args['name'],
-			'selected' => $args['selected'],
-			'class'    => $args['class'],
-			'options'  => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+        $args['options'] = $options;
+
+		$output = $this->select( $args );
 
 		return $output;
 
@@ -787,10 +784,12 @@ class MDJM_HTML_Elements {
 		$options  = array();
 		$minutes  = apply_filters( 'mdjm_time_minutes', array( '00', '15', '30', '45' ) );
 		$defaults = array(
-			'name'      => 'event_start_min',
-			'class'     => 'mdjm-time',
-			'id'        => '',
-			'selected'  => 0
+			'name'             => 'event_start_min',
+			'class'            => 'mdjm-time',
+			'id'               => '',
+			'selected'         => 0,
+            'show_option_all'  => false,
+			'show_option_none' => false
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -801,14 +800,9 @@ class MDJM_HTML_Elements {
 			$options[ $minute ] = $minute;
 		}
 
-		$output = $this->select( array(
-			'name'     => $args['name'],
-			'selected' => $args['selected'],
-			'class'    => $args['class'],
-			'options'  => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+        $args['options'] = $options;
+
+		$output = $this->select( $args );
 
 		return $output;
 
@@ -830,7 +824,9 @@ class MDJM_HTML_Elements {
 			'name'             => 'event_start_period',
 			'class'            => 'mdjm-time',
 			'id'               => '',
-			'selected'         => 0
+			'selected'         => 0,
+            'show_option_all'  => false,
+			'show_option_none' => false
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -842,14 +838,9 @@ class MDJM_HTML_Elements {
 			'PM' => __( 'PM', 'mobile-dj-manager' )
 		);
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'selected'         => $args['selected'],
-			'class'    => $args['class'],
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+        $args['options'] = $options;
+
+		$output = $this->select( $args );
 
 		return $output;
 

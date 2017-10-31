@@ -593,12 +593,55 @@ jQuery(document).ready(function ($) {
 		},
 
 		time : function()	{
-			// Set the DJ Setup Date
+			// Set the setup date
 			$( document.body ).on( 'change', '#display_event_date', function() {
 				if( $('#dj_setup_date').val().length < 1 )	{
 					$('#dj_setup_date').val($('#display_event_date').val());
 				}
 			});
+
+            // Set the setup time
+            if ( mdjm_admin_vars.setup_time_interval )  {
+                $( document.body ).on( 'change', '#event_start_hr, #event_start_min, #event_start_period', function() {
+                    var hour       = $('#event_start_hr').val();
+                    var minute     = $('#event_start_min').val();
+                    var meridiem   = '';
+                    var date       = $('#_mdjm_event_date').val();
+
+                    if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                        meridiem = ' ' + $('#event_start_period').val();
+                    }
+
+                    var time = hour + ':' + minute + meridiem;
+
+                    var postData = {
+                        time   : time,
+                        date   : date,
+                        action : 'mdjm_event_setup_time'
+                    };
+                    $.ajax({
+                        type       : 'POST',
+                        dataType   : 'json',
+                        data       : postData,
+                        url        : ajaxurl,
+                        success: function (response) {
+                            $('#dj_setup_hr').val(response.data.hour);
+                            $('#dj_setup_min').val(response.data.minute);
+                            if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                                $('#dj_setup_period').val(response.data.meridiem);
+                            }
+                            if( $('#dj_setup_date').val().length < 1 || $('#dj_setup_date').val() !== response.data.date )   {
+                                $('#dj_setup_date').val(response.data.date);
+                                $('#_mdjm_event_djsetup').val(response.data.datepicker);
+                            }
+                        }
+                    }).fail(function (data) {
+                        if ( window.console && window.console.log ) {
+                            console.log( data );
+                        }
+                    });
+                });
+            }
 		},
 
 		travel : function()	{
@@ -663,9 +706,16 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#event-type-add', function() {
 				$('#mdjm-new-event-type-row').toggle('fast');
 			});
-			
+
+            $( document.body ).on( 'click', '.toggle-event-type-option-section', function(e) {
+                e.preventDefault();
+
+                var header = $(this).parents('.mdjm-event-row-header');
+                header.siblings('.mdjm-add-event-type-sections-wrap').slideToggle();
+            });
+
 			// Save a new event type
-			$( document.body ).on( 'click', '#add_event_type', function(event) {
+			$( document.body ).on( 'click', '#mdjm-add-event-type', function(event) {
 				
 				event.preventDefault();
 				
@@ -680,30 +730,23 @@ jQuery(document).ready(function ($) {
 					dataType   : 'json',
 					data       : postData,
 					url        : ajaxurl,
-					beforeSend : function()	{
-						$('#add_event_type').hide();
-						$('#mdjm-event-type-loader').show();
-					},
 					success: function (response) {
-						if(response.type === 'success') {
-							$('#event_type_name').val('');
-							$('#mdjm-new-event-type-row').toggle('fast');
-							$('#mdjm_event_type').show();
-							$('#mdjm_event_type').replaceWith(response.event_types);
+						if(response) {
+                            if ( 'success' !== response.data.msg )  {
+                                alert(response.data.msg);
+                                return;
+                            }
+                            $('#event_type_name').val('');
+                            $('.mdjm-add-event-type-sections-wrap').slideToggle();
+                            $('#mdjm_event_type').empty();
+                            $('#mdjm_event_type').append(response.data.event_types);
+                            $('#mdjm_event_type').trigger('chosen:updated');
 						} else	{
-							alert(response.msg);
+							alert(response.data.msg);
 						}
-
-						$('#mdjm-event-type-loader').hide();
-						$('#add_event_type').show();
 
 					}
 				}).fail(function (data) {
-					$('#mdjm_event_type').show();
-					$('#mdjm-new-event-type-row').toggle('fast');
-					$('#mdjm-event-type-loader').hide();
-					$('#add_event_type').show();
-
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}

@@ -451,32 +451,37 @@ add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' 
  *
  */
 function mdjm_add_event_type_ajax()	{
-			
-	if( empty( $_POST['type'] ) )	{
 
-		$result['type'] = 'Error';
-		$result['msg']  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
-
+	if ( empty( $_POST['type'] ) )	{
+        $msg  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
+        wp_send_json_error( array( 'selected' => $_POST['current'], 'msg' => $msg ) );
 	} else	{
-
 		$term = wp_insert_term( $_POST['type'], 'event-types' );
 
 		if ( is_array( $term ) )	{
-			$result['type'] = 'success';
-		} else	{
-			$result['type'] = 'error';
-		}
+            $msg = 'success';
+        }
 
 	}
 	
-	$selected = ( $result['type'] == 'success' ) ? $term['term_id'] : $_POST['current'];
-	
-	$result['event_types'] = MDJM()->html->event_type_dropdown( array(
-		'name'     => 'mdjm_event_type',
-		'selected' => $selected
-	) );
-	
-	echo json_encode($result);
+	$selected   = ( $msg == 'success' ) ? $term['term_id'] : $_POST['current'];
+    $categories = get_terms( 'event-types', array( 'hide_empty' => false ) );
+    $options    = array();
+    $output     = '';
+
+    foreach ( $categories as $category ) {
+        $options[ absint( $category->term_id ) ] = esc_html( $category->name );
+    }
+
+    foreach( $options as $key => $option ) {
+        $selected = selected( $term['term_id'], $key, false );
+
+        $output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+    }
+	wp_send_json_success( array(
+        'event_types' => $output,
+        'msg'         => 'success'
+    ) );
 	
 	die();
 
@@ -534,6 +539,34 @@ function mdjm_add_transaction_type_ajax()	{
 } // mdjm_add_transaction_type_ajax
 add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
 
+/**
+ * Determine the event setup time
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_event_setup_time_ajax()   {
+    $time_format = mdjm_get_option( 'time_format' );
+    $start_time  = $_POST['time'];
+    $event_date  = $_POST['date'];
+    $date        = new DateTime( $event_date . ' ' . $start_time );
+    $timestamp   = $date->format( 'U' );
+
+    $setup_time  = $timestamp - ( (int) mdjm_get_option( 'setup_time' ) * 60 );
+
+    $hour     = 'H:i' == $time_format ? date( 'H', $setup_time ) : date( 'g', $setup_time );
+    $minute   = date( 'i', $setup_time );
+    $meridiem = 'H:i' == $time_format ? '' : date( 'A', $setup_time );
+
+    wp_send_json_success( array(
+        'hour'       => $hour,
+        'minute'     => $minute,
+        'meridiem'   => $meridiem,
+        'date'       => date( mdjm_get_option( 'short_date_format' ), $setup_time ),
+        'datepicker' => date( 'Y-m-d', $setup_time )
+    ) );
+} // mdjm_event_setup_time_ajax
+add_action( 'wp_ajax_mdjm_event_setup_time', 'mdjm_event_setup_time_ajax' );
 	
 /**
  * Calculate the event cost as event elements change
