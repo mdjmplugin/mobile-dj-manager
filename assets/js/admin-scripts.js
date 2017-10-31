@@ -319,11 +319,11 @@ jQuery(document).ready(function ($) {
 				event.preventDefault();
 
 				if ( $('#client_firstname').val().length < 1 )	{
-					alert(mdjm_admin_vars.no_client_first_name);
+					$('#client_firstname').addClass('mdjm-form-error');
 					return;
 				}
 				if ( $('#client_email').val().length < 1 )	{
-					alert(mdjm_admin_vars.no_client_email);
+					$('#client_email').addClass('mdjm-form-error');
 					return;
 				}
 
@@ -710,8 +710,10 @@ jQuery(document).ready(function ($) {
             $( document.body ).on( 'click', '.toggle-event-type-option-section', function(e) {
                 e.preventDefault();
 
-                var header = $(this).parents('.mdjm-event-row-header');
-                header.siblings('.mdjm-add-event-type-sections-wrap').slideToggle();
+                $('.mdjm-add-event-type-sections-wrap').slideToggle();
+				if ( $('.mdjm-add-event-type-sections-wrap').is(":visible") )	{
+					$('#event_type_name').focus();
+				}
             });
 
 			// Save a new event type
@@ -733,7 +735,7 @@ jQuery(document).ready(function ($) {
 					success: function (response) {
 						if(response) {
                             if ( 'success' !== response.data.msg )  {
-                                alert(response.data.msg);
+                                $('#event_type_name').addClass('mdjm-form-error');
                                 return;
                             }
                             $('#event_type_name').val('');
