@@ -797,8 +797,10 @@ checkbox.mdjm-form-error {
 .mdjm-event-venue,
 .mdjm-event-date,
 .mdjm-event-finish-date,
+.mdjm-event-setup-date,
 .mdjm-event-start-time,
 .mdjm-event-end-time,
+.mdjm-event-setup-time,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
@@ -810,8 +812,10 @@ checkbox.mdjm-form-error {
 .mdjm-event-venue,
 .mdjm-event-date,
 .mdjm-event-finish-date,
+.mdjm-event-setup-date,
 .mdjm-event-start-time,
-.mdjm-event-end-time {
+.mdjm-event-end-time,
+.mdjm-event-setup-time {
 	width: 25%;
 	margin-right: 5%;
 }
@@ -885,8 +889,10 @@ checkbox.mdjm-form-error {
 	.mdjm-event-venue,
 	.mdjm-event-date,
 	.mdjm-event-finish-date,
+	.mdjm-event-setup-date,
 	.mdjm-event-start-time,
-	.mdjm-event-end-time, 
+	.mdjm-event-end-time,
+	.mdjm-event-setup-time,
     .mdjm-repeatable-option {
 		float: none;
 		text-align: left;

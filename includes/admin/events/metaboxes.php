@@ -1332,7 +1332,7 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 
 						<?php
 						$actions = array(
-							'view_setup' => '<a href="#" class="toggle-event-setup-option-section">' . __( 'Show setup options', 'mobile-dj-manager' ) . '</a>'
+							//'view_setup' => '<a href="#" class="toggle-event-setup-option-section">' . __( 'Show setup options', 'mobile-dj-manager' ) . '</a>'
 						);
                         ?>
 
@@ -1427,6 +1427,16 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 							'id'       => 'display_event_finish_date',
 							'altfield' => '_mdjm_event_end_date'
 						) );
+
+						mdjm_insert_datepicker( array(
+							'id'       => 'dj_setup_date',
+							'altfield' => '_mdjm_event_djsetup'
+						) );
+
+						$setup_date = $mdjm_event->get_setup_date();
+						$setup_time = $mdjm_event->get_setup_time();
+						$format = mdjm_get_option( 'time_format', 'H:i' );
+
 						?>
 
 						<div class="mdjm-event-date-fields">
@@ -1452,7 +1462,7 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 							<div class="mdjm-event-finish-date">
 
                                 <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'End Date', 'mobile-dj-manager' ); ?>
+                                    <?php _e( 'End', 'mobile-dj-manager' ); ?>
                                 </span>
                             
 								<?php echo MDJM()->html->text( array(
@@ -1464,6 +1474,24 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 								<?php echo MDJM()->html->hidden( array(
 									'name'  => '_mdjm_event_end_date',
 									'value' => ! empty( $finish_date ) ? $finish_date : ''
+								) ); ?>
+
+                            </div>
+
+							<div class="mdjm-event-setup-date">
+
+                                <span class="mdjm-repeatable-row-setting-label">
+                                    <?php _e( 'Setup', 'mobile-dj-manager' ); ?>
+                                </span>
+                            
+								<?php echo MDJM()->html->text( array(
+									'name'  => 'dj_setup_date',
+									'class' => 'mdjm_setup_date',
+									'value' => $setup_date ? mdjm_format_short_date( $setup_date ) : ''
+								) ); ?>
+								<?php echo MDJM()->html->hidden( array(
+									'name'  => '_mdjm_event_djsetup',
+									'value' => $setup_date ? $setup_date : ''
 								) ); ?>
 
                             </div>
@@ -1480,7 +1508,7 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
                         	<div class="mdjm-event-start-time">
 
                                 <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'Start Time', 'mobile-dj-manager' ); ?>
+                                    <?php _e( 'Start', 'mobile-dj-manager' ); ?>
                                 </span>
                             
 								<?php echo MDJM()->html->time_hour_select( array(
@@ -1500,7 +1528,7 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 							<div class="mdjm-event-end-time">
 
                                 <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'End Time', 'mobile-dj-manager' ); ?>
+                                    <?php _e( 'End', 'mobile-dj-manager' ); ?>
                                 </span>
                             
 								<?php echo MDJM()->html->time_hour_select( array(
@@ -1515,6 +1543,29 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 									<?php echo MDJM()->html->time_period_select( array(
 										'name'     => 'event_finish_period',
 										'selected' => ! empty( $finish ) ? date( 'A', strtotime( $finish ) ) : ''
+									) ); ?>
+								<?php endif; ?>
+
+                            </div>
+
+							<div class="mdjm-event-setup-time">
+
+                                <span class="mdjm-repeatable-row-setting-label">
+                                    <?php _e( 'Setup', 'mobile-dj-manager' ); ?>
+                                </span>
+                            
+								<?php echo MDJM()->html->time_hour_select( array(
+									'name'     => 'dj_setup_hr',
+									'selected' => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : ''
+								) ); ?> 
+								<?php echo MDJM()->html->time_minute_select( array(
+									'name'     => 'dj_setup_min',
+									'selected' => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : ''
+								) ); ?> 
+								<?php if ( 'H:i' != $format ) : ?>
+									<?php echo MDJM()->html->time_period_select( array(
+										'name'     => 'dj_setup_period',
+										'selected' => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : ''
 									) ); ?>
 								<?php endif; ?>
 
