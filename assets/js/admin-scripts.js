@@ -978,7 +978,7 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-add-venue').hide();
+						$('#mdjm-add-venue').hide('fast');
 					},
 					success: function (response) {
 						$('.mdjm-add-event-venue-sections-wrap').slideToggle();
@@ -989,12 +989,12 @@ jQuery(document).ready(function ($) {
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
-							$('#mdjm-add-venue').show();
+							$('#mdjm-add-venue').show('fast');
 						}
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-add-venue').show();
+					$('#mdjm-add-venue').show('fast');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
