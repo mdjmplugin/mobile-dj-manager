@@ -333,6 +333,11 @@ jQuery(document).ready(function ($) {
 					client_email     : $('#client_email').val(),
 					client_phone     : $('#client_phone').val(),
 					client_phone2    : $('#client_phone2').val(),
+					client_address1  : $('#client_address1').val(),
+					client_address2  : $('#client_address2').val(),
+					client_town      : $('#client_town').val(),
+					client_county    : $('#client_county').val(),
+					client_postcode  : $('#client_postcode').val(),
 					action           : 'mdjm_event_add_client'
 				};
 

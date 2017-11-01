@@ -1166,7 +1166,7 @@ function mdjm_event_overview_metabox_add_client_section( $event_id )    {
                 <span class="mdjm-custom-event-section-title"><?php _e( 'Add a New Client', 'mobile-dj-manager'); ?></span>
 
                 <span class="mdjm-client-new-first">
-                    <label for="client_firstname" class="mdjm-client-first">
+                    <label class="mdjm-client-first">
                         <?php _e( 'First Name', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
@@ -1176,7 +1176,7 @@ function mdjm_event_overview_metabox_add_client_section( $event_id )    {
                 </span>
 
                 <span class="mdjm-client-new-last">
-                    <label for="client_lastname" class="mdjm-client-last">
+                    <label class="mdjm-client-last">
                         <?php _e( 'Last Name', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
@@ -1187,7 +1187,7 @@ function mdjm_event_overview_metabox_add_client_section( $event_id )    {
                 </span>
 
                 <span class="mdjm-client-new-email">
-                    <label for="client_email" class="mdjm-client-email">
+                    <label class="mdjm-client-email">
                         <?php _e( 'Email Address', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
@@ -1197,24 +1197,79 @@ function mdjm_event_overview_metabox_add_client_section( $event_id )    {
                 </span>
 
                 <span class="mdjm-client-new-phone">
-                    <label for="client_phone" class="mdjm-client-phone">
+                    <label class="mdjm-client-phone">
                         <?php _e( 'Primary Phone', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
                         'name'        => 'client_phone',
                         'class'       => 'mdjm-name-field large-text',
-                        'placeholder' => __( 'Optional', 'mobile-dj-manager' )
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
                     ) ); ?>
                 </span>
 
                 <span class="mdjm-client-new-alt-phone">
-                    <label for="client_phone2" class="mdjm-client-phone">
+                    <label class="mdjm-client-phone">
                         <?php _e( 'Alternative Phone', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
                         'name'        => 'client_phone2',
                         'class'       => 'mdjm-name-field large-text',
-                        'placeholder' => __( 'Optional', 'mobile-dj-manager' )
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<span class="mdjm-client-new-address1">
+                    <label class="mdjm-client-address1">
+                        <?php _e( 'Address Line 1', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'client_address1',
+                        'class'       => 'mdjm-name-field large-text',
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<span class="mdjm-client-new-address2">
+                    <label class="mdjm-client-address2">
+                        <?php _e( 'Address Line 2', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'client_address2',
+                        'class'       => 'mdjm-name-field large-text',
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<span class="mdjm-client-new-town">
+                    <label class="mdjm-client-town">
+                        <?php _e( 'Town', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'client_town',
+                        'class'       => 'mdjm-name-field large-text',
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<span class="mdjm-client-new-county">
+                    <label class="mdjm-client-county">
+                        <?php _e( 'County', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'client_county',
+                        'class'       => 'mdjm-name-field large-text',
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<span class="mdjm-client-new-postcode">
+                    <label class="mdjm-client-postcode">
+                        <?php _e( 'Postal Code', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+                        'name'        => 'client_postcode',
+                        'class'       => 'mdjm-name-field large-text',
+                        'placeholder' => __( '(optional)', 'mobile-dj-manager' )
                     ) ); ?>
                 </span>
 

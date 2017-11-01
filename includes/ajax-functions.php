@@ -95,11 +95,16 @@ function mdjm_add_client_ajax()	{
 	} else	{
 
 		$user_data = array(
-			'first_name'    => ucwords( $_POST['client_firstname'] ),
-			'last_name'     => ( ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '' ),
-			'user_email'    => $_POST['client_email'],
-			'client_phone'  => ( ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '' ),
-			'client_phone2' => ( ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '' )
+			'first_name'      => ucwords( $_POST['client_firstname'] ),
+			'last_name'       => ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '',
+			'user_email'      => strtolower( $_POST['client_email'] ),
+			'client_phone'    => ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '',
+			'client_phone2'   => ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '',
+			'client_address1' => ! empty( $_POST['client_address1'] ) ? $_POST['client_address1']            : '',
+			'client_address2' => ! empty( $_POST['client_address2'] ) ? $_POST['client_address2']            : '',
+			'client_town'     => ! empty( $_POST['client_town'] )     ? $_POST['client_town']                : '',
+			'client_county'   => ! empty( $_POST['client_county'] )   ? $_POST['client_county']              : '',
+			'client_postcode' => ! empty( $_POST['client_postcode'] ) ? $_POST['client_postcode']            : ''
 		);
 
 		$user_data = apply_filters( 'mdjm_event_new_client_data', $user_data );
