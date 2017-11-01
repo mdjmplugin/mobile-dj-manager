@@ -184,7 +184,7 @@ class MDJM_HTML_Elements {
 			'multiple'         => false,
 			'allow_add'        => true,
 			'show_option_all'  => false,
-			'show_option_none' => __( 'Select Venue', 'mobile-dj-manager' ),
+            'blank_first'      => true,
 			'data'             => array()
 		);
 		
