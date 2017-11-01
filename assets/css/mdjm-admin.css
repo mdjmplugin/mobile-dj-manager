@@ -794,6 +794,8 @@ checkbox.mdjm-form-error {
 	margin-left: 4px;
 }
 .mdjm-client-name,
+.mdjm-quote-template,
+.mdjm-online-template,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -810,6 +812,8 @@ checkbox.mdjm-form-error {
     margin-right: 10px;
 }
 .mdjm-client-name,
+.mdjm-quote-template,
+.mdjm-online-template,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -844,6 +848,7 @@ checkbox.mdjm-form-error {
 	width: 100%;
 }
 /* Visible Sections */
+.mdjm-event-details-client-template-sections-wrap,
 .mdjm-event-details-event-sections-wrap {
 	background: #f9f9f9;
 	border-width: 0 1px 1px;
@@ -876,6 +881,7 @@ checkbox.mdjm-form-error {
 	display: block;
 	margin-bottom: 2px;
 }
+.mdjm-client-template-fields,
 .mdjm-client-new-email,
 .mdjm-add-client-action,
 .mdjm-event-date-fields {
@@ -893,6 +899,8 @@ checkbox.mdjm-form-error {
 		padding-bottom: 0;
 	}
     .mdjm-client-name,
+    .mdjm-quote-template,
+    .mdjm-online-template,
 	.mdjm-event-type,
 	.mdjm-event-contract,
 	.mdjm-event-venue,

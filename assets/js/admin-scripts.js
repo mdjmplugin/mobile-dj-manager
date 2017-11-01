@@ -331,13 +331,13 @@ jQuery(document).ready(function ($) {
 					client_firstname : $('#client_firstname').val(),
 					client_lastname  : $('#client_lastname').val(),
 					client_email     : $('#client_email').val(),
-					client_phone     : $('#client_phone').val(),
-					client_phone2    : $('#client_phone2').val(),
 					client_address1  : $('#client_address1').val(),
 					client_address2  : $('#client_address2').val(),
 					client_town      : $('#client_town').val(),
 					client_county    : $('#client_county').val(),
 					client_postcode  : $('#client_postcode').val(),
+                    client_phone     : $('#client_phone').val(),
+					client_phone2    : $('#client_phone2').val(),
 					action           : 'mdjm_event_add_client'
 				};
 
@@ -347,7 +347,7 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-add-client').hide();
+						$('#mdjm-add-client').hide('fast');
 					},
 					success: function (response) {
 						$('#mdjm-add-client-fields').slideToggle();
@@ -356,10 +356,15 @@ jQuery(document).ready(function ($) {
 						$('#client_firstname').val('');
 						$('#client_lastname').val('');
 						$('#client_email').val('');
-						$('#client_phone').val('');
+                        $('#client_address1').val('');
+                        $('#client_address2').val('');
+                        $('#client_town').val('');
+                        $('#client_county').val('');
+                        $('#client_postcode').val('');
+                        $('#client_phone').val('');
 						$('#client_phone2').val('');
 						$('#client_name').append(response.client_list);
-						$('#mdjm-add-client').show();
+						$('#mdjm-add-client').show('fast');
 						$('#_mdjm_event_block_emails').prop('checked', false );
 						$('#mdjm_reset_pw').prop('checked', true );
 						$('#client_name').trigger('chosen:updated');
@@ -762,9 +767,9 @@ jQuery(document).ready(function ($) {
 		
 			});
 
-			// Show/Hide the email templates when the disable emails checkbox is toggles
+			// Show/Hide the email templates when the disable emails checkbox is toggled
 			$( document.body ).on( 'click', '#mdjm_block_emails', function() {
-				$('#mdjm-event-email-templates').toggle('fast');
+				$('.mdjm-quote-template').toggle('fast');
 			});
 
 		},
