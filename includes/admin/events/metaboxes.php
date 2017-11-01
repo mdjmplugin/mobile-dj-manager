@@ -470,54 +470,6 @@ function mdjm_event_metabox_options_status_row( $event_id )	{
 add_action( 'mdjm_event_options_fields', 'mdjm_event_metabox_options_status_row', 10 );
 
 /**
- * Output the event options email template row
- *
- * @since	1.3.7
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_metabox_options_email_templates_row( $event_id )	{
-
-	global $mdjm_event, $mdjm_event_update;
-	
-	if ( $mdjm_event_update && $mdjm_event->post_status != 'mdjm-unattended' )	{
-		return;
-	}
-
-	?>
-
-	<p><strong><?php _e( 'Templates', 'mobile-dj-manager' ); ?></strong></p>
-
-        <div id="mdjm-event-email-templates">
-            <p><label for="mdjm_email_template"><?php _e( 'Quote:', 'mobile-dj-manager' ); ?></label>
-                <?php echo MDJM()->html->select( array(
-                    'name'     => 'mdjm_email_template',
-                    'options'  => mdjm_list_templates( 'email_template' ),
-                    'selected' => mdjm_get_option( 'enquiry' )
-                ) ); ?></p>
-        </div>
-    <?php
-	
-	if ( ! mdjm_get_option( 'online_enquiry', false ) )	{
-		return;
-	}
-
-	?>
-    
-    <p><label for="mdjm_email_template"><?php _e( 'Online:', 'mobile-dj-manager' ); ?></label>
-		<?php echo MDJM()->html->select( array(
-			'name'     => 'mdjm_online_quote',
-			'options'  => mdjm_list_templates( 'email_template' ),
-			'selected' => mdjm_get_option( 'online_enquiry' )
-		) ); ?></p>
-    <?php
-
-} // mdjm_event_metabox_options_email_templates_row
-add_action( 'mdjm_event_options_fields', 'mdjm_event_metabox_options_email_templates_row', 25 );
-
-/**
  * Output the event options payments row
  *
  * @since	1.3.7
@@ -2471,69 +2423,6 @@ function mdjm_event_metabox_admin_enquiry_source_row( $event_id )	{
 	<?php
 } // mdjm_event_metabox_admin_enquiry_source_row
 add_action( 'mdjm_event_admin_fields', 'mdjm_event_metabox_admin_enquiry_source_row', 10 );
-
-/**
- * Output the employee setup row
- *
- * @since	1.3.7
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_metabox_admin_dj_setup_row( $event_id )	{
-
-	global $mdjm_event, $mdjm_event_update;
-
-	mdjm_insert_datepicker(
-		array(
-			'id'       => 'dj_setup_date',
-			'altfield' => '_mdjm_event_djsetup'
-		)
-	);
-
-	$setup_date = $mdjm_event->get_setup_date();
-	$setup_time = $mdjm_event->get_setup_time();
-	$format = mdjm_get_option( 'time_format', 'H:i' );
-
-	?>
-	<div class="mdjm_field_wrap mdjm_form_fields">
-    	<div class="mdjm_col col2">
-            <label for="dj_setup_date"><?php _e( 'Setup Date:', 'mobile-dj-manager' ); ?></label><br />
-            <?php echo MDJM()->html->text( array(
-                'name'  => 'dj_setup_date',
-                'class' => 'mdjm_setup_date',
-                'value' => $setup_date ? mdjm_format_short_date( $setup_date ) : ''
-            ) ); ?>
-
-            <?php echo MDJM()->html->hidden( array(
-                'name'  => '_mdjm_event_djsetup',
-                'value' => $setup_date ? $setup_date : ''
-            ) ); ?>
-        </div>
-
-		<div class="mdjm_col col2">
-        	<label for="dj_setup_hr"><?php _e( 'Setup Time:', 'mobile-dj-manager' ); ?></label><br />
-			<?php echo MDJM()->html->time_hour_select( array(
-                'name'     => 'dj_setup_hr',
-                'selected' => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : ''
-            ) ); ?> 
-            <?php echo MDJM()->html->time_minute_select( array(
-                'name'     => 'dj_setup_min',
-                'selected' => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : ''
-            ) ); ?> 
-            <?php if ( 'H:i' != $format ) : ?>
-                <?php echo MDJM()->html->time_period_select( array(
-                    'name'     => 'dj_setup_period',
-                    'selected' => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : ''
-                ) ); ?>
-            <?php endif; ?>
-		</div>
-    </div>
-
-	<?php
-} // mdjm_event_metabox_admin_dj_setup_row
-add_action( 'mdjm_event_admin_fields', 'mdjm_event_metabox_admin_dj_setup_row', 20 );
 
 /**
  * Output the employee notes row
