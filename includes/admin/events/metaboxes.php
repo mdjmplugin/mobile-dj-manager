@@ -1320,11 +1320,8 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
     <div id="mdjm_event_overview_event_fields" class="mdjm_meta_table_wrap">
 
         <div class="widefat mdjm_repeatable_table">
-
             <div class="mdjm-event-option-fields mdjm-repeatables-wrap">
-
                 <div class="mdjm_event_overview_wrapper">
-
                     <div class="mdjm-event-row-header">
                         <span class="mdjm-repeatable-row-title">
                             <?php printf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>
@@ -1332,7 +1329,8 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 
 						<?php
 						$actions = array(
-							'event_type' => '<a href="#" class="toggle-event-type-option-section">' . sprintf( __( 'Add %s type', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>'
+							'event_type' => '<a href="#" class="toggle-event-type-option-section">' . sprintf( __( 'Add %s type', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>',
+							'add_venue'  => '<a href="#" class="toggle-event-add-venue-option-section">' . __( 'Add venue', 'mobile-dj-manager' ) . '</a>'
 						);
                         ?>
 
@@ -1342,253 +1340,273 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 					</div>
 
 					<div class="mdjm-repeatable-row-standard-fields">
-
-						<?php
-						$event_type = mdjm_get_event_type( $event_id, true );
-
-						if ( ! $event_type )	{
-							$event_type = mdjm_get_option( 'event_type_default', '' );
-						}
-						?>
-
-                        <div class="mdjm-event-type">
-                            <span class="mdjm-repeatable-row-setting-label">
-								<?php printf( __( '%s Type', 'mobile-dj-manager' ), $singular ); ?>
-                            </span>
-                            
-							<?php echo MDJM()->html->event_type_dropdown( array(
-								'name'     => 'mdjm_event_type',
-								'chosen'   => true,
-								'selected' => $event_type
-							) ); ?>
-                        </div>
-
-						<?php
-						$contract        = $mdjm_event->get_contract();
-						$contract_status = $mdjm_event->get_contract_status();
-						?>
-
-						<div class="mdjm-event-contract">
-                            <span class="mdjm-repeatable-row-setting-label">
-								<?php _e( 'Contract', 'mobile-dj-manager' ); ?>
-                            </span>
-
-							<?php if ( ! $contract_status ) : ?>
-
-								<?php echo MDJM()->html->select( array(
-									'name'     => '_mdjm_event_contract',
-									'options'  => mdjm_list_templates( 'contract' ),
-									'chosen'   => true,
-									'selected' => ! empty( $contract ) ? $contract : mdjm_get_option( 'default_contract' )
-								) ); ?>
-				
-							<?php else : ?>
-
-								<?php if ( mdjm_employee_can( 'manage_events' ) ) : ?>
-                                    <a id="view_contract" href="<?php echo esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $event_id ), home_url() ) ); ?>" target="_blank"><?php _e( 'View signed contract', 'mobile-dj-manager' ); ?></a>
-                                <?php else : ?>
-                                    <?php _e( 'Contract is Signed', 'mobile-dj-manager' ); ?>
-                                <?php endif; ?>
-                
-                            <?php endif; ?>
-
-                        </div>
-
-						<?php
-						$venue_id = $mdjm_event->get_venue_id();
-
-						if ( ! empty( $venue_id ) && $venue_id == $event_id )	{
-							$venue_id = 'manual';
-						}
-						?>
-
-                        <div class="mdjm-event-venue">
-                            <span class="mdjm-repeatable-row-setting-label">
-								<?php _e( 'Venue', 'mobile-dj-manager' ); ?>
-                            </span>
-
-							<?php echo MDJM()->html->venue_dropdown( array(
-								'name'        => 'venue_id',
-								'selected'    => $venue_id,
-								'placeholder' => __( 'Select a Venue', 'mobile-dj-manager' ),
-								'chosen'      => true
-							) ); ?> 
-
-						</div>
-
-						<?php
-                        $finish_date = $mdjm_event->get_finish_date();
-
-						mdjm_insert_datepicker(array(
-							'id'       => 'display_event_date'
-						) );
-
-						mdjm_insert_datepicker( array(
-							'id'       => 'display_event_finish_date',
-							'altfield' => '_mdjm_event_end_date'
-						) );
-
-						mdjm_insert_datepicker( array(
-							'id'       => 'dj_setup_date',
-							'altfield' => '_mdjm_event_djsetup'
-						) );
-
-						$setup_date = $mdjm_event->get_setup_date();
-						$setup_time = $mdjm_event->get_setup_time();
-						$format = mdjm_get_option( 'time_format', 'H:i' );
-
-						?>
-
-						<div class="mdjm-event-date-fields">
-                        	<div class="mdjm-event-date">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'Date', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->text( array(
-									'name'     => 'display_event_date',
-									'class'    => 'mdjm_date',
-									'required' => true,
-									'value'    => ! empty( $mdjm_event->date ) ? mdjm_format_short_date( $mdjm_event->date ) : ''
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
-									'name'  => '_mdjm_event_date',
-									'value' => ! empty( $mdjm_event->date ) ? $mdjm_event->date : ''
-								) ); ?>
-
-                            </div>
-
-							<div class="mdjm-event-finish-date">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'End', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->text( array(
-									'name'        => 'display_event_finish_date',
-									'class'       => 'mdjm_date',
-									'required'    => false,
-									'value'       => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
-									'name'  => '_mdjm_event_end_date',
-									'value' => ! empty( $finish_date ) ? $finish_date : ''
-								) ); ?>
-
-                            </div>
-
-							<div class="mdjm-event-setup-date">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'Setup', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->text( array(
-									'name'  => 'dj_setup_date',
-									'class' => 'mdjm_setup_date',
-									'value' => $setup_date ? mdjm_format_short_date( $setup_date ) : ''
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
-									'name'  => '_mdjm_event_djsetup',
-									'value' => $setup_date ? $setup_date : ''
-								) ); ?>
-
-                            </div>
-
-                        </div>
-
-						<?php
-						$start  = $mdjm_event->get_start_time();
-						$finish = $mdjm_event->get_finish_time();
-						$format = mdjm_get_option( 'time_format', 'H:i' );
-						?>
-
-						<div class="mdjm-event-date-fields">
-                        	<div class="mdjm-event-start-time">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'Start', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->time_hour_select( array(
-                                    'selected' => ! empty( $start ) ? date( $format[0], strtotime( $start ) ) : ''
-                                ) ); ?> 
-                                <?php echo MDJM()->html->time_minute_select( array(
-                                    'selected' => ! empty( $start ) ? date( $format[2], strtotime( $start ) ) : ''
-                                ) ); ?> 
-                                <?php if ( 'H:i' != $format ) : ?>
-                                    <?php echo MDJM()->html->time_period_select( array(
-                                        'selected' => ! empty( $start ) ? date( 'A', strtotime( $start ) ) : ''
-                                    ) ); ?>
-                                <?php endif; ?>
-
-                            </div>
-
-							<div class="mdjm-event-end-time">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'End', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->time_hour_select( array(
-									'name'     => 'event_finish_hr',
-									'selected' => ! empty( $finish ) ? date( $format[0], strtotime( $finish ) ) : ''
-								) ); ?> 
-								<?php echo MDJM()->html->time_minute_select( array(
-									'name'     => 'event_finish_min',
-									'selected' => ! empty( $finish ) ? date( $format[2], strtotime( $finish ) ) : ''
-								) ); ?> 
-								<?php if ( 'H:i' != $format ) : ?>
-									<?php echo MDJM()->html->time_period_select( array(
-										'name'     => 'event_finish_period',
-										'selected' => ! empty( $finish ) ? date( 'A', strtotime( $finish ) ) : ''
-									) ); ?>
-								<?php endif; ?>
-
-                            </div>
-
-							<div class="mdjm-event-setup-time">
-
-                                <span class="mdjm-repeatable-row-setting-label">
-                                    <?php _e( 'Setup', 'mobile-dj-manager' ); ?>
-                                </span>
-                            
-								<?php echo MDJM()->html->time_hour_select( array(
-									'name'        => 'dj_setup_hr',
-									'selected'    => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : '',
-                                    'blank_first' => true
-								) ); ?> 
-								<?php echo MDJM()->html->time_minute_select( array(
-									'name'        => 'dj_setup_min',
-									'selected'    => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : '',
-                                    'blank_first' => true
-								) ); ?> 
-								<?php if ( 'H:i' != $format ) : ?>
-									<?php echo MDJM()->html->time_period_select( array(
-										'name'        => 'dj_setup_period',
-										'selected'    => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : '',
-                                        'blank_first' => true
-									) ); ?>
-								<?php endif; ?>
-
-                            </div>
-
-                        </div>
-
+						<?php do_action( 'mdjm_event_overview_standard_event_sections', $event_id ); ?>
                     </div>
                     <?php do_action( 'mdjm_event_overview_custom_event_sections', $event_id ); ?>
                 </div>
-
 			</div>
-
 		</div>
-
 	</div>
     <?php
 
 } // mdjm_event_overview_metabox_event_sections
 add_action( 'mdjm_event_overview_fields', 'mdjm_event_overview_metabox_event_sections', 20 );
+
+/**
+ * Output the event type, contract and venue row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_type_contract_venue_row( $event_id )    {
+
+    global $mdjm_event, $mdjm_event_update;
+
+    $event_type      = mdjm_get_event_type( $event_id, true );
+	$contract        = $mdjm_event->get_contract();
+	$contract_status = $mdjm_event->get_contract_status();
+	$venue_id        = $mdjm_event->get_venue_id();
+
+	if ( ! $event_type )	{
+		$event_type = mdjm_get_option( 'event_type_default', '' );
+	}
+
+	if ( ! empty( $venue_id ) && $venue_id == $event_id )	{
+		$venue_id = 'manual';
+	}
+
+	?>
+    <div class="mdjm-event-type">
+        <span class="mdjm-repeatable-row-setting-label">
+            <?php printf( __( '%s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?>
+        </span>
+        
+        <?php echo MDJM()->html->event_type_dropdown( array(
+            'name'     => 'mdjm_event_type',
+            'chosen'   => true,
+            'selected' => $event_type
+        ) ); ?>
+    </div>
+
+	<div class="mdjm-event-contract">
+        <span class="mdjm-repeatable-row-setting-label">
+            <?php _e( 'Contract', 'mobile-dj-manager' ); ?>
+        </span>
+
+        <?php if ( ! $contract_status ) : ?>
+
+            <?php echo MDJM()->html->select( array(
+                'name'     => '_mdjm_event_contract',
+                'options'  => mdjm_list_templates( 'contract' ),
+                'chosen'   => true,
+                'selected' => ! empty( $contract ) ? $contract : mdjm_get_option( 'default_contract' )
+            ) ); ?>
+
+        <?php else : ?>
+
+            <?php if ( mdjm_employee_can( 'manage_events' ) ) : ?>
+                <a id="view_contract" href="<?php echo esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $event_id ), home_url() ) ); ?>" target="_blank"><?php _e( 'View signed contract', 'mobile-dj-manager' ); ?></a>
+            <?php else : ?>
+                <?php _e( 'Contract is Signed', 'mobile-dj-manager' ); ?>
+            <?php endif; ?>
+
+        <?php endif; ?>
+    </div>
+
+    <div class="mdjm-event-venue">
+        <span class="mdjm-repeatable-row-setting-label">
+            <?php _e( 'Venue', 'mobile-dj-manager' ); ?>
+        </span>
+
+        <?php echo MDJM()->html->venue_dropdown( array(
+            'name'        => 'venue_id',
+            'selected'    => $venue_id,
+            'placeholder' => __( 'Select a Venue', 'mobile-dj-manager' ),
+            'chosen'      => true
+        ) ); ?> 
+    </div>
+
+    <?php
+} // mdjm_event_overview_metabox_type_contract_venue_row
+add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_type_contract_venue_row', 10 );
+
+/**
+ * Output the event date rows
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_dates_row( $event_id )    {
+
+    global $mdjm_event, $mdjm_event_update;
+
+	$finish_date = $mdjm_event->get_finish_date();
+	$setup_date  = $mdjm_event->get_setup_date();
+
+	mdjm_insert_datepicker( array(
+		'id'       => 'display_event_date'
+	) );
+
+	mdjm_insert_datepicker( array(
+		'id'       => 'display_event_finish_date',
+		'altfield' => '_mdjm_event_end_date'
+	) );
+
+	mdjm_insert_datepicker( array(
+		'id'       => 'dj_setup_date',
+		'altfield' => '_mdjm_event_djsetup'
+	) );
+
+	?>
+	<div class="mdjm-event-date-fields">
+        <div class="mdjm-event-date">
+            <span class="mdjm-repeatable-row-setting-label">
+                <?php _e( 'Date', 'mobile-dj-manager' ); ?>
+            </span>
+
+            <?php echo MDJM()->html->text( array(
+                'name'     => 'display_event_date',
+                'class'    => 'mdjm_date',
+                'required' => true,
+                'value'    => ! empty( $mdjm_event->date ) ? mdjm_format_short_date( $mdjm_event->date ) : ''
+            ) ); ?>
+            <?php echo MDJM()->html->hidden( array(
+                'name'  => '_mdjm_event_date',
+                'value' => ! empty( $mdjm_event->date ) ? $mdjm_event->date : ''
+            ) ); ?>
+        </div>
+
+        <div class="mdjm-event-finish-date">
+            <span class="mdjm-repeatable-row-setting-label">
+                <?php _e( 'End', 'mobile-dj-manager' ); ?>
+            </span>
+        
+            <?php echo MDJM()->html->text( array(
+                'name'        => 'display_event_finish_date',
+                'class'       => 'mdjm_date',
+                'required'    => false,
+                'value'       => ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : ''
+            ) ); ?>
+            <?php echo MDJM()->html->hidden( array(
+                'name'  => '_mdjm_event_end_date',
+                'value' => ! empty( $finish_date ) ? $finish_date : ''
+            ) ); ?>
+        </div>
+
+        <div class="mdjm-event-setup-date">
+            <span class="mdjm-repeatable-row-setting-label">
+                <?php _e( 'Setup', 'mobile-dj-manager' ); ?>
+            </span>
+        
+            <?php echo MDJM()->html->text( array(
+                'name'  => 'dj_setup_date',
+                'class' => 'mdjm_setup_date',
+                'value' => $setup_date ? mdjm_format_short_date( $setup_date ) : ''
+            ) ); ?>
+            <?php echo MDJM()->html->hidden( array(
+                'name'  => '_mdjm_event_djsetup',
+                'value' => $setup_date ? $setup_date : ''
+            ) ); ?>
+        </div>
+    </div>
+	<?php
+
+} // mdjm_event_overview_metabox_dates_row
+add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_dates_row', 15 );
+
+/**
+ * Output the event times row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_times_row( $event_id )    {
+
+    global $mdjm_event, $mdjm_event_update;
+
+	$start      = $mdjm_event->get_start_time();
+	$finish     = $mdjm_event->get_finish_time();
+	$setup_time = $mdjm_event->get_setup_time();
+	$format     = mdjm_get_option( 'time_format', 'H:i' );
+	?>
+
+	<div class="mdjm-event-date-fields">
+		<div class="mdjm-event-start-time">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'Start', 'mobile-dj-manager' ); ?>
+			</span>
+		
+			<?php echo MDJM()->html->time_hour_select( array(
+				'selected' => ! empty( $start ) ? date( $format[0], strtotime( $start ) ) : ''
+			) ); ?> 
+			<?php echo MDJM()->html->time_minute_select( array(
+				'selected' => ! empty( $start ) ? date( $format[2], strtotime( $start ) ) : ''
+			) ); ?> 
+			<?php if ( 'H:i' != $format ) : ?>
+				<?php echo MDJM()->html->time_period_select( array(
+					'selected' => ! empty( $start ) ? date( 'A', strtotime( $start ) ) : ''
+				) ); ?>
+			<?php endif; ?>
+		</div>
+
+		<div class="mdjm-event-end-time">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'End', 'mobile-dj-manager' ); ?>
+			</span>
+		
+			<?php echo MDJM()->html->time_hour_select( array(
+				'name'     => 'event_finish_hr',
+				'selected' => ! empty( $finish ) ? date( $format[0], strtotime( $finish ) ) : ''
+			) ); ?> 
+			<?php echo MDJM()->html->time_minute_select( array(
+				'name'     => 'event_finish_min',
+				'selected' => ! empty( $finish ) ? date( $format[2], strtotime( $finish ) ) : ''
+			) ); ?> 
+			<?php if ( 'H:i' != $format ) : ?>
+				<?php echo MDJM()->html->time_period_select( array(
+					'name'     => 'event_finish_period',
+					'selected' => ! empty( $finish ) ? date( 'A', strtotime( $finish ) ) : ''
+				) ); ?>
+			<?php endif; ?>
+		</div>
+
+		<div class="mdjm-event-setup-time">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'Setup', 'mobile-dj-manager' ); ?>
+			</span>
+		
+			<?php echo MDJM()->html->time_hour_select( array(
+				'name'        => 'dj_setup_hr',
+				'selected'    => ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : '',
+				'blank_first' => true
+			) ); ?> 
+			<?php echo MDJM()->html->time_minute_select( array(
+				'name'        => 'dj_setup_min',
+				'selected'    => ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : '',
+				'blank_first' => true
+			) ); ?> 
+			<?php if ( 'H:i' != $format ) : ?>
+				<?php echo MDJM()->html->time_period_select( array(
+					'name'        => 'dj_setup_period',
+					'selected'    => ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : '',
+					'blank_first' => true
+				) ); ?>
+			<?php endif; ?>
+		</div>
+	</div>
+	<?php
+
+} // mdjm_event_overview_metabox_times_row
+add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_times_row', 20 );
 
 /**
  * Output the add event type section
@@ -1633,6 +1651,163 @@ function mdjm_event_overview_metabox_add_event_type_section( $event_id )    {
     <?php
 } // mdjm_event_overview_metabox_add_event_type_section
 add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_event_type_section' );
+
+/**
+ * Output the add venue section
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
+
+    global $mdjm_event, $mdjm_event_update;
+
+	$venue_name     = mdjm_get_event_venue_meta( $event_id, 'name' );
+	$venue_contact  = mdjm_get_event_venue_meta( $event_id, 'contact' );
+	$venue_email    = mdjm_get_event_venue_meta( $event_id, 'email' );
+	$venue_address1 = mdjm_get_event_venue_meta( $event_id, 'address1' );
+	$venue_address2 = mdjm_get_event_venue_meta( $event_id, 'address2' );
+	$venue_town     = mdjm_get_event_venue_meta( $event_id, 'town' );
+	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
+	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
+	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
+	$employee_id    = ! empty( $mdjm_event->employee_id ) ? $mdjm_event->employee_id : '';
+
+	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
+	?>
+
+    <div id="mdjm-add-venue-fields" class="mdjm-add-event-venue-sections-wrap">
+        <div class="mdjm-custom-event-sections">
+            <div class="mdjm-custom-event-section">
+                <span class="mdjm-custom-event-section-title"><?php _e( 'Add a New Venue', 'mobile-dj-manager'); ?></span>
+
+                <span class="mdjm-add-venue-name">
+                    <label class="mdjm-venue-name">
+                        <?php _e( 'Venue', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'  => 'venue_name',
+						'class' => 'mdjm-name-field large-text',
+						'value' => ! empty( $venue_name ) ? $venue_name : ''
+					) ); ?>
+                </span>
+
+                <span class="mdjm-add-venue-contact">
+                    <label class="mdjm-venue-contact">
+                        <?php _e( 'Contact', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_contact',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_contact ) ? $venue_contact : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+                <span class="mdjm-add-venue-email">
+                    <label class="mdjm-venue-email">
+                        <?php _e( 'Email Address', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_email',
+						'class'       => 'mdjm-name-field large-text',
+						'type'        => 'email',
+						'value'       => ! empty( $venue_email ) ? $venue_email : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+				<span class="mdjm-add-venue-postcode">
+                    <label class="mdjm-venue-postcode">
+                        <?php _e( 'Phone', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_phone',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_phone ) ? $venue_phone : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+                <span class="mdjm-add-venue-address1">
+                    <label class="mdjm-venue-address1">
+                        <?php _e( 'Address Line 1', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_address1',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_address1 ) ? $venue_address1 : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+                <span class="mdjm-add-venue-address2">
+                    <label class="mdjm-venue-address2">
+                        <?php _e( 'Address Line 2', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_address2',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_address2 ) ? $venue_address2 : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+				<span class="mdjm-add-venue-town">
+                    <label class="mdjm-venue-town">
+                        <?php _e( 'Town', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_town',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_town ) ? $venue_town : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+				<span class="mdjm-add-venue-county">
+                    <label class="mdjm-venue-county">
+                        <?php _e( 'County', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_county',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_county ) ? $venue_county : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+				<span class="mdjm-add-venue-postcode">
+                    <label class="mdjm-venue-postcode">
+                        <?php _e( 'Post Code', 'mobile-dj-manager' ); ?>
+                    </label>
+                    <?php echo MDJM()->html->text( array(
+						'name'        => 'venue_postcode',
+						'class'       => 'mdjm-name-field large-text',
+						'value'       => ! empty( $venue_postcode ) ? $venue_postcode : '',
+						'placeholder' => __( '(optional)', 'mobile-dj-manager' )
+					) ); ?>
+                </span>
+
+                <span class="mdjm-add-venue-action">
+                    <label>&nbsp;</label>
+                    <?php submit_button(
+                        __( 'Add Venue', 'mobile-dj-manager' ),
+                        array( 'secondary', 'mdjm-add-venue' ),
+                        'mdjm-add-venue',
+                        false
+                    ); ?>
+                </span>
+
+            </div>
+        </div>
+    </div>
+    <?php
+} // mdjm_event_overview_metabox_add_venue_section
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_venue_section' );
 
 /**
  * Output the event type and contract row

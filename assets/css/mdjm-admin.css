@@ -719,12 +719,14 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section,
-.mdjm-repeatable-row-actions .toggle-event-type-option-section {
+.mdjm-repeatable-row-actions .toggle-event-type-option-section,
+.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section {
 	color: #777;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
-.mdjm-repeatable-row-actions .toggle-event-type-option-section:hover {
+.mdjm-repeatable-row-actions .toggle-event-type-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section:hover {
 	color: #444;
 }
 
@@ -801,6 +803,7 @@ checkbox.mdjm-form-error {
 .mdjm-event-start-time,
 .mdjm-event-end-time,
 .mdjm-event-setup-time,
+.mdjm-playlist-options,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
@@ -815,7 +818,8 @@ checkbox.mdjm-form-error {
 .mdjm-event-setup-date,
 .mdjm-event-start-time,
 .mdjm-event-end-time,
-.mdjm-event-setup-time {
+.mdjm-event-setup-time,
+.mdjm-playlist-options {
 	width: 25%;
 	margin-right: 5%;
 }
@@ -823,11 +827,15 @@ checkbox.mdjm-form-error {
 	text-align: center;
 	min-width: 80px;
 }
+.mdjm-playlist-options	{
+	margin-top: 10px;
+}
 /* Hidden Sections */
 .mdjm-custom-event-sections-wrap,
 .mdjm-client-add-event-sections-wrap,
 .mdjm-client-details-event-sections-wrap,
-.mdjm-add-event-type-sections-wrap {
+.mdjm-add-event-type-sections-wrap,
+.mdjm-add-event-venue-sections-wrap {
 	display: none;
 	border-width: 0 1px 1px;
 	border-style: solid;
