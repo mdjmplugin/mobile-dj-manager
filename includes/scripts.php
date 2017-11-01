@@ -244,8 +244,8 @@ function mdjm_register_admin_scripts( $hook )	{
                 'hide_client_form'     => __( 'Hide client form', 'mobile-dj-manager' ),
                 'show_client_details'  => __( 'Show client details', 'mobile-dj-manager' ),
                 'hide_client_details'  => __( 'Hide client details', 'mobile-dj-manager' ),
-				'show_setup_options'   => __( 'Show setup options', 'mobile-dj-manager' ),
-                'hide_setup_options'   => __( 'Hide setup options', 'mobile-dj-manager' )
+				'show_venue_details'   => __( 'Show venue', 'mobile-dj-manager' ),
+                'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' )
 			)
 		)
 	);

@@ -717,7 +717,7 @@ jQuery(document).ready(function ($) {
                 e.preventDefault();
 
                 $('.mdjm-add-event-type-sections-wrap').slideToggle();
-				if ( $('.mdjm-add-event-type-sections-wrap').is(":visible") )	{
+				if ( $('.mdjm-add-event-type-sections-wrap').is(':visible') )	{
 					$('#event_type_name').focus();
 				}
             });
@@ -888,12 +888,27 @@ jQuery(document).ready(function ($) {
 				}
 			}
 
+            // Reveal the venue details on the event screen
+            $( document.body ).on( 'click', '.toggle-event-view-venue-option-section', function(e) {
+                e.preventDefault();
+
+                var show = $(this).html() === mdjm_admin_vars.show_venue_details ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_venue_details );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_venue_details );
+                }
+
+                $('.mdjm-event-venue-details-sections-wrap').slideToggle();
+            });
+
 			// Reveal the input field to add a new venue from events screen
             $( document.body ).on( 'click', '.toggle-event-add-venue-option-section', function(e) {
                 e.preventDefault();
 
                 $('.mdjm-add-event-venue-sections-wrap').slideToggle();
-				if ( $('.mdjm-add-event-venue-sections-wrap').is(":visible") )	{
+				if ( $('.mdjm-add-event-venue-sections-wrap').is(':visible') )	{
 					$('#venue_name').focus();
 				}
             });

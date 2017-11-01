@@ -720,12 +720,14 @@ checkbox.mdjm-form-error {
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section,
+.mdjm-repeatable-row-actions .toggle-event-view-venue-option-section,
 .mdjm-repeatable-row-actions .toggle-event-add-venue-option-section {
 	color: #777;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-event-view-venue-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-add-venue-option-section:hover {
 	color: #444;
 }
@@ -839,6 +841,7 @@ checkbox.mdjm-form-error {
 .mdjm-client-add-event-sections-wrap,
 .mdjm-client-details-event-sections-wrap,
 .mdjm-add-event-type-sections-wrap,
+.mdjm-event-venue-details-sections-wrap,
 .mdjm-add-event-venue-sections-wrap {
 	display: none;
 	border-width: 0 1px 1px;
