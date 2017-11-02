@@ -977,7 +977,7 @@ function mdjm_event_overview_metabox_client_name_row( $event_id )    {
         <?php endif; ?>
     </div>
 
-	<?php if ( mdjm_event_is_active( $mdjm_event->ID ) && 'mdjm-completed' != $mdjm_event->post_status ) : ?>
+	<?php if ( mdjm_event_is_active( $mdjm_event->ID ) && 'mdjm-completed' != $mdjm_event->post_status && 'mdjm-approved' != $mdjm_event->post_status ) : ?>
         <div class="mdjm-repeatable-option mdjm_repeatable_default_wrapper">
     
             <span class="mdjm-repeatable-row-setting-label"><?php _e( 'Disable Emails?', 'mobile-dj-manager' ); ?></span>
@@ -1716,13 +1716,20 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
 	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
 	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
     $venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
+    $section_title  = __( 'Add a New Venue', 'mobile-dj-manager');
+    $add_save_label = __( 'Add', 'mobile-dj-manager');
+
+    if ( $mdjm_event->ID == $mdjm_event->get_venue_id() )   {
+        $section_title  = __( 'Manual Venue', 'mobile-dj-manager');
+        $add_save_label = __( 'Save', 'mobile-dj-manager');
+    }
 
 	?>
 
     <div id="mdjm-add-venue-fields" class="mdjm-add-event-venue-sections-wrap">
         <div class="mdjm-custom-event-sections">
             <div class="mdjm-custom-event-section">
-                <span class="mdjm-custom-event-section-title"><?php _e( 'Add a New Venue', 'mobile-dj-manager'); ?></span>
+                <span class="mdjm-custom-event-section-title"><?php echo $section_title; ?></span>
 
                 <span class="mdjm-add-venue-name">
                     <label class="mdjm-venue-name">
@@ -1835,7 +1842,7 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
                 <span class="mdjm-add-venue-action">
                     <label>&nbsp;</label>
                     <?php submit_button(
-                        __( 'Add Venue', 'mobile-dj-manager' ),
+                        sprintf( __( '%s Venue', 'mobile-dj-manager' ), $add_save_label ),
                         array( 'secondary', 'mdjm-add-venue' ),
                         'mdjm-add-venue',
                         false
@@ -1994,24 +2001,6 @@ function mdjm_event_metabox_details_notes_row( $event_id )	{
 
 } // mdjm_event_metabox_details_notes_row
 add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 60 );
-
-/**
- * Output the event venue details row
- *
- * @since	1.3.7
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_metabox_venue_details_row( $event_id )	{
-
-	global $mdjm_event, $mdjm_event_update;
-
-	mdjm_do_venue_details_table( $mdjm_event->get_venue_id(), $event_id );
-
-} // mdjm_event_metabox_venue_details_row
-add_action( 'mdjm_event_venue_fields', 'mdjm_event_metabox_venue_details_row', 20 );
 
 /**
  * Output the event travel costs hidden fields
