@@ -145,14 +145,14 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 	if ( empty( $venue_id ) )	{
 		return;
 	}
-
+error_log( $venue_id);
 	switch( $field )	{
 		case 'address' :
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_address1', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_address2', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_town', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_county', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_address1', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_address2', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_town', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_county', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_postcode', true );
 
 			if ( ! empty( $return ) )	{
 				$return = array_filter( $return );
@@ -160,47 +160,47 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			break;
 
 		case 'address1' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_address1', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_address1', true );
 			break;
 			
 		case 'address2' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_address2', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_address2', true );
 			break;
 
 		case 'town' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_town', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_town', true );
 			break;
 
 		case 'county' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_county', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_county', true );
 			break;
 
 		case 'postcode' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_postcode', true );
 			break;
 		
 		case 'contact' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_contact', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_contact', true );
 			break;
 		
 		case 'details' :
-			$return = mdjm_get_venue_details( $item_id );
+			$return = mdjm_get_venue_details( $venue_id );
 			break;
 		
 		case 'email' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_email', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_email', true );
 			break;
 		
 		case 'name' :
-			$return = empty( $prefix ) ? get_the_title( $item_id ) : get_post_meta( $item_id, $prefix . '_venue_name', true );
+			$return = empty( $prefix ) ? get_the_title( $venue_id ) : get_post_meta( $venue_id, $prefix . '_venue_name', true );
 			break;
 		
 		case 'notes' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_information', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_information', true );
 			break;
 		
 		case 'phone' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_phone', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_phone', true );
 			break;
 		
 		default :

@@ -1577,15 +1577,16 @@ function mdjm_event_overview_metabox_venue_details_section( $event_id )    {
 
     global $mdjm_event, $mdjm_event_update;
 
-	$venue_name     = mdjm_get_event_venue_meta( $event_id, 'name' );
-	$venue_contact  = mdjm_get_event_venue_meta( $event_id, 'contact' );
-	$venue_email    = mdjm_get_event_venue_meta( $event_id, 'email' );
-	$venue_address1 = mdjm_get_event_venue_meta( $event_id, 'address1' );
-	$venue_address2 = mdjm_get_event_venue_meta( $event_id, 'address2' );
-	$venue_town     = mdjm_get_event_venue_meta( $event_id, 'town' );
-	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
-	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
-	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
+    $venue_id       = $mdjm_event->get_venue_id();
+	$venue_name     = mdjm_get_event_venue_meta( $venue_id, 'name' );
+	$venue_contact  = mdjm_get_event_venue_meta( $venue_id, 'contact' );
+	$venue_email    = mdjm_get_event_venue_meta( $venue_id, 'email' );
+	$venue_address1 = mdjm_get_event_venue_meta( $venue_id, 'address1' );
+	$venue_address2 = mdjm_get_event_venue_meta( $venue_id, 'address2' );
+	$venue_town     = mdjm_get_event_venue_meta( $venue_id, 'town' );
+	$venue_county   = mdjm_get_event_venue_meta( $venue_id, 'county' );
+	$venue_postcode = mdjm_get_event_venue_meta( $venue_id, 'postcode' );
+	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
 	$venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
 	?>
 
@@ -1706,15 +1707,16 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
 
     global $mdjm_event, $mdjm_event_update;
 
-    $venue_name     = mdjm_get_event_venue_meta( $event_id, 'name' );
-	$venue_contact  = mdjm_get_event_venue_meta( $event_id, 'contact' );
-	$venue_email    = mdjm_get_event_venue_meta( $event_id, 'email' );
-	$venue_address1 = mdjm_get_event_venue_meta( $event_id, 'address1' );
-	$venue_address2 = mdjm_get_event_venue_meta( $event_id, 'address2' );
-	$venue_town     = mdjm_get_event_venue_meta( $event_id, 'town' );
-	$venue_county   = mdjm_get_event_venue_meta( $event_id, 'county' );
-	$venue_postcode = mdjm_get_event_venue_meta( $event_id, 'postcode' );
-	$venue_phone    = mdjm_get_event_venue_meta( $event_id, 'phone' );
+    $venue_id       = $mdjm_event->get_venue_id();
+    $venue_name     = mdjm_get_event_venue_meta( $venue_id, 'name' );
+	$venue_contact  = mdjm_get_event_venue_meta( $venue_id, 'contact' );
+	$venue_email    = mdjm_get_event_venue_meta( $venue_id, 'email' );
+	$venue_address1 = mdjm_get_event_venue_meta( $venue_id, 'address1' );
+	$venue_address2 = mdjm_get_event_venue_meta( $venue_id, 'address2' );
+	$venue_town     = mdjm_get_event_venue_meta( $venue_id, 'town' );
+	$venue_county   = mdjm_get_event_venue_meta( $venue_id, 'county' );
+	$venue_postcode = mdjm_get_event_venue_meta( $venue_id, 'postcode' );
+	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
     $venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
     $section_title  = __( 'Add a New Venue', 'mobile-dj-manager');
     $add_save_label = __( 'Add', 'mobile-dj-manager');
@@ -1737,7 +1739,7 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
                     </label>
                     <?php echo MDJM()->html->text( array(
 						'name'  => 'venue_name',
-                        'value' => ! empty( $venue_name ) ? $venue_name : '',
+                        'value' => $venue_name,
 						'class' => 'mdjm-name-field large-text'
 					) ); ?>
                 </span>
