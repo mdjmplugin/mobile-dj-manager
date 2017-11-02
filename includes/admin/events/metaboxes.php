@@ -977,33 +977,36 @@ function mdjm_event_overview_metabox_client_name_row( $event_id )    {
         <?php endif; ?>
     </div>
 
-    <div class="mdjm-repeatable-option mdjm_repeatable_default_wrapper">
+	<?php if ( mdjm_event_is_active( $mdjm_event->ID ) && 'mdjm-completed' != $mdjm_event->post_status ) : ?>
+        <div class="mdjm-repeatable-option mdjm_repeatable_default_wrapper">
+    
+            <span class="mdjm-repeatable-row-setting-label"><?php _e( 'Disable Emails?', 'mobile-dj-manager' ); ?></span>
+            <label class="mdjm-block-email">
+                <?php echo MDJM()->html->checkbox( array(
+                    'name'     => 'mdjm_block_emails',
+                    'current'  => $block_emails
+                ) ); ?>
+                <span class="screen-reader-text"><?php printf( __( 'Block update emails for this %s to the client', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
+            </label>
+    
+        </div>
+    <?php endif; ?>
 
-        <span class="mdjm-repeatable-row-setting-label"><?php _e( 'Disable Emails?', 'mobile-dj-manager' ); ?></span>
-        <label class="mdjm-block-email">
-            <?php echo MDJM()->html->checkbox( array(
-                'name'     => 'mdjm_block_emails',
-                'current'  => $block_emails
-            ) ); ?>
-            <span class="screen-reader-text"><?php printf( __( 'Block update emails for this %s to the client', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
-        </label>
+	<?php if ( ! $mdjm_event_update || 'mdjm-unattended' == $mdjm_event->post_status ) : ?>
+        <div class="mdjm-repeatable-option mdjm_repeatable_default_wrapper">
+    
+            <span class="mdjm-repeatable-row-setting-label"><?php _e( 'Reset Password?', 'mobile-dj-manager' ); ?></span>
+            <label class="mdjm-reset-password">
+                <?php echo MDJM()->html->checkbox( array(
+                    'name'  => 'mdjm_reset_pw',
+                    'value' => 'Y'
+                ) ); ?>
+                <span class="screen-reader-text"><?php printf( __( 'Click to reset the client password during %s update', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
+            </label>
+    
+        </div>
+    <?php endif;
 
-    </div>
-
-    <div class="mdjm-repeatable-option mdjm_repeatable_default_wrapper">
-
-        <span class="mdjm-repeatable-row-setting-label"><?php _e( 'Reset Password?', 'mobile-dj-manager' ); ?></span>
-        <label class="mdjm-reset-password">
-            <?php echo MDJM()->html->checkbox( array(
-                'name'  => 'mdjm_reset_pw',
-                'value' => 'Y'
-            ) ); ?>
-            <span class="screen-reader-text"><?php printf( __( 'Click to reset the client password during %s update', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
-        </label>
-
-    </div>
-
-    <?php
 } // mdjm_event_overview_metabox_client_name_row
 add_action( 'mdjm_event_overview_standard_client_sections', 'mdjm_event_overview_metabox_client_name_row', 10 );
 
