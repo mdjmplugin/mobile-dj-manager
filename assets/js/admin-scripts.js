@@ -877,14 +877,7 @@ jQuery(document).ready(function ($) {
 			// Show manual venue details if pre-selected on event load
 			if ( mdjm_admin_vars.current_page === 'post.php' )	{
 				if ( 'manual' === $('#venue_id').val() )	{
-					$('#mdjm-event-add-new-venue-fields').show();
-					$('#mdjm-save-venue-button-row').removeClass('mdjm-hidden');
-					$('#toggle_venue_details').addClass('mdjm-hidden');
-				} else	{
-					if ( '0' !== $('#venue_id').val() && '' !== $('#venue_id').val() && 'client' !== $('#venue_id').val() )	{
-						$('#mdjm-save-venue-button-row').addClass('mdjm-hidden');
-						$('#toggle_venue_details').removeClass('mdjm-hidden');
-					}
+					$('.mdjm-add-event-venue-sections-wrap').show();
 				}
 			}
 
@@ -913,12 +906,6 @@ jQuery(document).ready(function ($) {
 				}
             });
 			
-
-			// Display Venue Details
-			$( document.body ).on( 'click', '#toggle_venue_details', function() {
-				$('#mdjm-event-venue-details').toggle('slow');
-			});
-			
 			// Update the venue details when the venue selection changes
 			$( document.body ).on( 'change', '#venue_id', function(event) {
 				
@@ -926,19 +913,10 @@ jQuery(document).ready(function ($) {
 				
 				if ( 'manual' === $('#venue_id').val() || 'client' === $('#venue_id').val() )	{
 
-					$('#mdjm-event-venue-details').hide('slow');
-					$('#mdjm-event-add-new-venue-fields').show('slow');
-					$('#mdjm-save-venue').removeClass('mdjm-hidden');
-					$('#toggle_venue_details').addClass('mdjm-hidden');
+					$('.mdjm-event-venue-details-sections-wrap').hide('fast');
+					$('.mdjm-add-event-venue-sections-wrap').show('fast');
 				} else	{
-					$('#mdjm-save-venue').addClass('mdjm-hidden');
-					$('#mdjm-event-add-new-venue-fields').hide('slow');
-					
-					if( '0' !== $('#venue_id').val() && 'client' !== $('#venue_id').val() )	{
-						$('#toggle_venue_details').removeClass('mdjm-hidden');
-					} else	{
-						$('#toggle_venue_details').addClass('mdjm-hidden');
-					}
+					$('.mdjm-add-event-venue-sections-wrap').hide('fast');
 
 					var postData = {
 						venue_id   : $('#venue_id').val(),
