@@ -36,38 +36,31 @@ function mdjm_do_automatic_upgrades() {
 	}
 
 	if ( version_compare( $mdjm_version, '1.4', '<' ) ) {
-
 		mdjm_v14_upgrades();
-
 	}
 
 	if ( version_compare( $mdjm_version, '1.4.3', '<' ) ) {
-
 		mdjm_v143_upgrades();
-
 	}
 
 	if ( version_compare( $mdjm_version, '1.4.7', '<' ) ) {
-
 		mdjm_v147_upgrades();
-
 	}
 
+    if ( version_compare( $mdjm_version, '1,4,7,7', '<' ) )  {
+        mdjm_update_option( 'playlist_limit', '0' );
+    }
+
     /*if ( version_compare( $mdjm_version, '1.5', '<' ) ) {
-
 		mdjm_v15_upgrades();
-
 	}*/
 
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
-
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
-
 	}
 
 	if ( $did_upgrade ) {
-
 		// Send to what's new page
 		if ( substr_count( MDJM_VERSION_NUM, '.' ) < 2 )	{
 			set_transient( '_mdjm_activation_redirect', true, 30 );
@@ -75,7 +68,6 @@ function mdjm_do_automatic_upgrades() {
 
 		update_option( 'mdjm_version_upgraded_from', get_option( 'mdjm_version' ) );
 		update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
-
 	}
 
 } // mdjm_do_automatic_upgrades

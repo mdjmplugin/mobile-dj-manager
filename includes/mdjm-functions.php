@@ -190,26 +190,24 @@
 		global $wpdb;
 		
 		$date_range  = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
-		$insert_args = array(
-			'id'         => '',
-			'user_id'    => $args['employee'],
-			'entry_id'   => get_current_user_id() . '_' . time(),
-			'date_from'  => $the_date->format( 'Y-m-d' ),
-			'date_to'    => $args['to_date'],
-			'notes'      => $args['notes'],
-		);
-		$insert_args = apply_filters( 'mdjm_add_holiday_args', $insert_args );
 
-		do_action( 'mdjm_before_added_holiday', $args, $insert_args );
+		do_action( 'mdjm_before_added_holiday', $args, $date_range );
 
 		foreach( $date_range as $the_date )	{
 			$wpdb->insert( 
 				MDJM_HOLIDAY_TABLE,
-				$insert_args
+				apply_filters( 'mdjm_add_holiday_args', array(
+                    'id'         => '',
+                    'user_id'    => $args['employee'],
+                    'entry_id'   => get_current_user_id() . '_' . time(),
+                    'date_from'  => $the_date->format( 'Y-m-d' ),
+                    'date_to'    => $args['to_date'],
+                    'notes'      => $args['notes'],
+                ) )
 			);
 		}
 
-		do_action( 'mdjm_added_holiday', $args, $insert_args );
+		do_action( 'mdjm_added_holiday', $args, $date_range );
 
 		mdjm_update_notice( 'updated', 'The entry was added successfully' );	
 	} // mdjm_add_holiday

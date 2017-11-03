@@ -122,7 +122,7 @@ global $mdjm_event;
 					'{event_duration}' ); ?></p>
 
 		<?php if ( $event_playlist_limit ) : ?>
-			<p><?php printf( __( 'You have used %s out of your allowance of %s tracks'), $entries_in_playlist, $event_playlist_limit ); ?></p>
+			<p><?php printf( __( 'You have used %s out of your allowance of %s tracks', 'mobile-dj-manager' ), $entries_in_playlist, $event_playlist_limit ); ?></p>
 		<?php endif; ?>        
 
         <?php foreach( $playlist as $category => $entries ) : ?>
