@@ -739,7 +739,6 @@ function mdjm_v15_upgrades()	{
 
     // Add default values for new setting options
     $options = array(
-        'playlist_limit'               => '0',
         'setup_time'                   => '0',
 		'event_builder_page'           => $event_builder,
         'event_builder_packages'       => '1',
