@@ -53,6 +53,10 @@ function mdjm_do_automatic_upgrades() {
 
 	}
 
+    if( version_compare( $mdjm_version, '1,4,7,7', '<' ) )  {
+        mdjm_update_option( 'playlist_limit', '0' );
+    }
+
 	if( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 
 		// Let us know that an upgrade has happened
