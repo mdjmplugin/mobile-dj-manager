@@ -145,7 +145,7 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 	if ( empty( $venue_id ) )	{
 		return;
 	}
-error_log( $venue_id);
+
 	switch( $field )	{
 		case 'address' :
 			$return[] = get_post_meta( $venue_id, $prefix . '_venue_address1', true );

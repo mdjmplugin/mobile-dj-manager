@@ -704,7 +704,8 @@ checkbox.mdjm-form-error {
 .mdjm_event_overview_wrapper:not(:first-child)    {
 	margin-top: 12px;
 }
-#mdjm_event_overview_event_fields	{
+#mdjm_event_overview_event_fields,
+#mdjm_event_overview_package_fields {
 	margin-top: 12px;
 }
 .mdjm-repeatable-row-actions {
@@ -734,6 +735,7 @@ checkbox.mdjm-form-error {
 
 .mdjm-client-row-header,
 .mdjm-event-row-header,
+.mdjm-package-row-header,
 .mdjm-repeatable-row-header {
 	clear: both;
 	background: #f1f1f1;
@@ -746,6 +748,8 @@ checkbox.mdjm-form-error {
 .mdjm-client-row-header:after,
 .mdjm-event-row-header:before,
 .mdjm-event-row-header:after,
+.mdjm-package-row-header:before,
+.mdjm-package-row-header:after,
 .mdjm-repeatable-row-header:before,
 .mdjm-repeatable-row-header:after {
 	content: '';
@@ -753,6 +757,7 @@ checkbox.mdjm-form-error {
 }
 .mdjm-client-row-header:after,
 .mdjm-event-row-header:after,
+.mdjm-package-row-header:after,
 .mdjm-repeatable-row-header:after {
 	clear: both;
 }

@@ -341,7 +341,7 @@ class MDJM_HTML_Elements {
 				if ( ! empty( $args['group'] ) )	{
 					$options['groups'][ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = array( $employee->ID => $employee->display_name );
 				} else	{
-					$options[ $user->ID ] = $user->display_name;
+					$options[ $employee->ID ] = $employee->display_name;
 				}
 			}
 		}
