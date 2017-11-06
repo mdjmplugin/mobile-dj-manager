@@ -720,6 +720,7 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section,
+.mdjm-repeatable-row-actions .toggle-event-options-section,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section,
 .mdjm-repeatable-row-actions .toggle-event-add-venue-option-section {
@@ -727,6 +728,7 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-event-options-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-add-venue-option-section:hover {
@@ -803,6 +805,8 @@ checkbox.mdjm-form-error {
 .mdjm-client-name,
 .mdjm-quote-template,
 .mdjm-online-template,
+.mdjm-event-primary-employee,
+.mdjm-event-employee-wage,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -812,7 +816,8 @@ checkbox.mdjm-form-error {
 .mdjm-event-start-time,
 .mdjm-event-end-time,
 .mdjm-event-setup-time,
-.mdjm-playlist-options,
+.mdjm-event-package,
+.mdjm-event-addons,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
@@ -821,6 +826,8 @@ checkbox.mdjm-form-error {
 .mdjm-client-name,
 .mdjm-quote-template,
 .mdjm-online-template,
+.mdjm-event-primary-employee,
+.mdjm-event-employee-wage,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -830,7 +837,8 @@ checkbox.mdjm-form-error {
 .mdjm-event-start-time,
 .mdjm-event-end-time,
 .mdjm-event-setup-time,
-.mdjm-playlist-options {
+.mdjm-event-package,
+.mdjm-event-addons {
 	width: 25%;
 	margin-right: 5%;
 }
@@ -838,13 +846,11 @@ checkbox.mdjm-form-error {
 	text-align: center;
 	min-width: 80px;
 }
-.mdjm-playlist-options	{
-	margin-top: 10px;
-}
 /* Hidden Sections */
 .mdjm-custom-event-sections-wrap,
 .mdjm-client-add-event-sections-wrap,
 .mdjm-client-details-event-sections-wrap,
+.mdjm-event-options-sections-wrap,
 .mdjm-add-event-type-sections-wrap,
 .mdjm-event-venue-details-sections-wrap,
 .mdjm-add-event-venue-sections-wrap {
@@ -892,7 +898,10 @@ checkbox.mdjm-form-error {
 .mdjm-client-template-fields,
 .mdjm-client-new-email,
 .mdjm-add-client-action,
-.mdjm-event-date-fields {
+.mdjm-event-employee-fields,
+.mdjm-event-type-fields,
+.mdjm-event-date-fields,
+.mdjm-event-package-fields {
     display: block !important;
 	margin-top: 6px;
 }
@@ -909,6 +918,8 @@ checkbox.mdjm-form-error {
     .mdjm-client-name,
     .mdjm-quote-template,
     .mdjm-online-template,
+	.mdjm-event-primary-employee,
+	.mdjm-event-employee-wage,
 	.mdjm-event-type,
 	.mdjm-event-contract,
 	.mdjm-event-venue,
@@ -918,6 +929,8 @@ checkbox.mdjm-form-error {
 	.mdjm-event-start-time,
 	.mdjm-event-end-time,
 	.mdjm-event-setup-time,
+	.mdjm-event-package,
+	.mdjm-event-addons,
     .mdjm-repeatable-option {
 		float: none;
 		text-align: left;
@@ -929,6 +942,9 @@ checkbox.mdjm-form-error {
 input[class*="mdjm-name-field"] {
 	padding: 3px 5px;
 	width: 300px;
+}
+.mdjm-view-venue-details i	{
+	padding-right: 5px;
 }
 
 /* OLD STYLES */

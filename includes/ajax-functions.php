@@ -154,7 +154,7 @@ add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
  */
 function mdjm_refresh_venue_details_ajax()	{
 
-	$result = array();
+	/*$result = array();
 
 	ob_start();
 	mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] );
@@ -163,7 +163,11 @@ function mdjm_refresh_venue_details_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	die();*/
+
+	wp_send_json_success(
+		array( 'venue' => mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] ) )
+	);
 
 } // mdjm_refresh_venue_details_ajax
 add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );

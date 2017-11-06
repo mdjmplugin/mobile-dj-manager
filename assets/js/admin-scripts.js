@@ -208,6 +208,7 @@ jQuery(document).ready(function ($) {
 	var MDJM_Events = {
 		
 		init : function()	{
+			this.options(),
 			this.client();
 			this.employee();
 			this.equipment();
@@ -218,7 +219,23 @@ jQuery(document).ready(function ($) {
 			this.txns();
 			this.venue();
 		},
-		
+
+		options : function()	{
+			// Toggle display of event options
+            $( document.body ).on( 'click', '.toggle-event-options-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_event_options ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_event_options );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_event_options );
+                }
+
+                $('.mdjm-event-options-sections-wrap').slideToggle();
+            });
+		},
+
 		client : function()	{
             // Toggle display of new client fields section for an event
             $( document.body ).on( 'click', '.toggle-client-add-option-section', function(e) {
@@ -929,15 +946,11 @@ jQuery(document).ready(function ($) {
 						dataType   : 'json',
 						data       : postData,
 						url        : ajaxurl,
-						beforeSend : function()	{
-							$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
-						},
 						success: function (response) {
-							$('#mdjm-loading').replaceWith(response.venue_details);
+							$('#mdjm-venue-details-fields').html(response.data.venue);
+							$('.mdjm-event-venue-details-sections-wrap').show('fast');
 						}
 					}).fail(function (data) {
-						$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
-	
 						if ( window.console && window.console.log ) {
 							console.log( data );
 						}

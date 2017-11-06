@@ -243,7 +243,9 @@ function mdjm_register_admin_scripts( $hook )	{
                 'show_client_form'     => __( 'Show client form', 'mobile-dj-manager' ),
                 'hide_client_form'     => __( 'Hide client form', 'mobile-dj-manager' ),
                 'show_client_details'  => __( 'Show client details', 'mobile-dj-manager' ),
-                'hide_client_details'  => __( 'Hide client details', 'mobile-dj-manager' ),
+                'hide_client_details'  => __( 'Hide client details', 'mobile-dj-manager' ), 
+				'show_event_options'   => sprintf( __( 'Show %s options', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+				'hide_event_options'   => sprintf( __( 'Hide %s options', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 				'show_venue_details'   => __( 'Show venue', 'mobile-dj-manager' ),
                 'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' )
 			)
