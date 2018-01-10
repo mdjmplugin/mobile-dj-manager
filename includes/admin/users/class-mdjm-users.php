@@ -357,7 +357,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			}
 			
 			// For administrators, determine if they should be an employee
-			if ( user_can( $user_id, 'administrator' ) && mdjm_is_admin() )	{
+			if ( $user_id != get_current_user_id() && user_can( $user_id, 'administrator' ) && mdjm_is_admin() )	{
 
 				if ( ! empty( $_POST['_mdjm_event_roles'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
