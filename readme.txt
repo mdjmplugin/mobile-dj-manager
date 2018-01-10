@@ -2,8 +2,8 @@
 Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
-Tested up to: 4.9
-Stable tag: 1.4.7.7
+Tested up to: 5.0
+Stable tag: 1.4.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -82,6 +82,12 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.4.7.8 =
+
+**Released 10th January, 2018**
+
+* IMPORTANT: An admin updating their own user profile may result in a loss of MDJM permissions
 
 = 1.4.7.7 =
 
@@ -1251,6 +1257,9 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
 
 == Upgrade Notice ==
+
+= 1.4.7.8 =
+Resolves an issue that may result in administrators losing MDJM permissions. Upgrade ASAP.
 
 = 1.3.7.2 =
 Fixes issue with venue content tags not always returning the correct (or any) data. Upgrade ASAP.
