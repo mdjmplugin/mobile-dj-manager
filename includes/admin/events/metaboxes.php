@@ -61,11 +61,8 @@ function mdjm_event_details_get_action_links( $event_id, $mdjm_event, $mdjm_even
     }
 
     // Venues
+    $actions['view_venue'] = '<a href="#" class="toggle-event-view-venue-option-section">' . __( 'Show venue', 'mobile-dj-manager' ) . '</a>';
     $actions['add_venue']  = '<a href="#" class="toggle-event-add-venue-option-section">' . __( 'Add venue', 'mobile-dj-manager' ) . '</a>';
-
-    if ( ! empty( $venue_id ) && $venue_id != $event_id )	{
-        $actions['view_venue'] = '<a href="#" class="toggle-event-view-venue-option-section">' . __( 'Show venue', 'mobile-dj-manager' ) . '</a>';
-	}
 
     $actions = apply_filters( 'mdjm_event_metabox_event_details_actions', $actions, $event_id, $mdjm_event, $mdjm_event_update );
     return $actions;

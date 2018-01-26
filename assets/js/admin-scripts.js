@@ -928,36 +928,7 @@ jQuery(document).ready(function ($) {
 				
 				event.preventDefault();
 				
-				if ( 'manual' === $('#venue_id').val() || 'client' === $('#venue_id').val() )	{
-
-					$('.mdjm-event-venue-details-sections-wrap').hide('fast');
-					$('.mdjm-add-event-venue-sections-wrap').show('fast');
-				} else	{
-					$('.mdjm-add-event-venue-sections-wrap').hide('fast');
-
-					var postData = {
-						venue_id   : $('#venue_id').val(),
-						event_id   : $('#post_ID').val(),
-						action     : 'mdjm_refresh_venue_details'
-					};
-
-					$.ajax({
-						type       : 'POST',
-						dataType   : 'json',
-						data       : postData,
-						url        : ajaxurl,
-						success: function (response) {
-							$('#mdjm-venue-details-fields').html(response.data.venue);
-							$('.mdjm-event-venue-details-sections-wrap').show('fast');
-						}
-					}).fail(function (data) {
-						if ( window.console && window.console.log ) {
-							console.log( data );
-						}
-					});
-					setTravelData();
-				}
-				$('#_mdjm_event_package').trigger('change');
+				refreshEventVenueDetails();
 			});
 
 			// Add a new venue from the event screen
@@ -997,6 +968,7 @@ jQuery(document).ready(function ($) {
 						$('#venue_id').append(response.venue_list);
 						$('#mdjm-add-venue').show();
 						$('#venue_id').trigger('chosen:updated');
+                        refreshEventVenueDetails();
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
@@ -1474,6 +1446,40 @@ jQuery(document).ready(function ($) {
 
 	};
 	MDJM_Export.init();
+
+    function refreshEventVenueDetails() {
+        // Update the venue details when the venue selection changes
+        if ( 'manual' === $('#venue_id').val() || 'client' === $('#venue_id').val() )	{
+
+            $('.mdjm-event-venue-details-sections-wrap').hide('fast');
+            $('.mdjm-add-event-venue-sections-wrap').show('fast');
+        } else	{
+            $('.mdjm-add-event-venue-sections-wrap').hide('fast');
+
+            var postData = {
+                venue_id   : $('#venue_id').val(),
+                event_id   : $('#post_ID').val(),
+                action     : 'mdjm_refresh_venue_details'
+            };
+
+            $.ajax({
+                type       : 'POST',
+                dataType   : 'json',
+                data       : postData,
+                url        : ajaxurl,
+                success: function (response) {
+                    $('#mdjm-venue-details-fields').html(response.data.venue);
+                    $('.mdjm-event-venue-details-sections-wrap').show('fast');
+                }
+            }).fail(function (data) {
+                if ( window.console && window.console.log ) {
+                    console.log( data );
+                }
+            });
+            setTravelData();
+        }
+        $('#_mdjm_event_package').trigger('change');
+    }
 
 /*
  * Validation Rules
