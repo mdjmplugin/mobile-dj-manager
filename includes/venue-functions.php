@@ -384,7 +384,11 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
         <div class="mdjm-custom-event-sections">
             <div class="mdjm-custom-event-section">
                 <span class="mdjm-custom-event-section-title">
-					<?php printf( __( 'Venue Details for %s', 'mobile-dj-manager'), esc_attr( $venue_name ) ); ?>
+                    <?php if ( ! empty( $venue_name ) ) : ?>
+                        <?php printf( __( 'Venue Details for %s', 'mobile-dj-manager'), esc_attr( $venue_name ) ); ?>
+                    <?php else : ?>
+                        <?php printf( __( 'No venue has been selected for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?>
+                    <?php endif; ?>
                 </span>
 
 				<?php foreach( $output as $key => $value ) : ?>
