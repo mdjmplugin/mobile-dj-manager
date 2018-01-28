@@ -49,6 +49,7 @@
 						'add_event'             => 'post-new.php?post_type=mdjm-event',
 						'enquiries'             => 'edit.php?post_status=mdjm-enquiry&post_type=mdjm-event',
 						'unattended'            => 'edit.php?post_status=mdjm-unattended&post_type=mdjm-event',
+                                                'awaitingdeposit'	=> 'edit.php?post_status=mdjm0awaitingdeposit&post_type=mdjm-event',
 						'playlists'             => 'admin.php?page=mdjm-playlists&event_id=',
 						'custom_event_fields'   => 'admin.php?page=mdjm-custom-event-fields',
 						'venues'                => 'edit.php?post_type=mdjm-venue',
