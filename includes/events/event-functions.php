@@ -1296,7 +1296,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 	if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) { 
 
                 mdjm_update_event_status(
-                $event->ID,
+                $event_id->ID,
                 'mdjm-approved',
                 $event->post_status,
                 array(
