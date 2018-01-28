@@ -1298,7 +1298,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
                 mdjm_update_event_status(
                 $event_id->ID,
                 'mdjm-approved',
-                $event->post_status,
+                $mdjm_event->post_status,
                 array(
                         'meta'                    => $event_meta,
                         'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )

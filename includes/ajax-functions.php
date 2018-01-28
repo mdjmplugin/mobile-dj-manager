@@ -421,6 +421,19 @@ function mdjm_save_event_transaction_ajax()	{
 		if ( $mdjm_event->get_remaining_deposit() < 1 )	{
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
 			$result['deposit_paid'] = 'Y';
+			// juski update event status here
+			 if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) {
+		                mdjm_update_event_status(
+                		$mdjm_event->ID,
+		                'mdjm-approved',
+                		$mdjm_event->post_status,
+		                array(
+                		        'meta'                    => $event_meta,
+                        		'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
+                     	             )
+                		);
+        		}
+
 		}
 		if ( $mdjm_event->get_balance() < 1 )	{
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_balance_status' => 'Paid' ) );
