@@ -431,7 +431,6 @@ function mdjm_save_event_transaction_ajax()	{
                         		'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
                      	             )
                 		);
-               $result['event_status'] = get_post_status( $mdjm_event->ID ); 
         		}
 
 		}
@@ -446,6 +445,8 @@ function mdjm_save_event_transaction_ajax()	{
 		$result['type'] = 'error';
 		$result['msg']  = __( 'Unable to add transaction', 'mobile-dj-manager' );
 	}
+
+        $result['event_status'] = get_post_status( $mdjm_event->ID ); 
 
 	ob_start();
 	mdjm_do_event_txn_table( $_POST['event_id'] );
