@@ -175,7 +175,7 @@ function mdjm_set_client_venue_ajax()	{
 
 	$client = get_userdata( $client_id );
 
-	if ( $client )	{
+if ( $client )	{
 		if ( ! empty( $client->address1 ) )	{
 			$response['address1'] = stripslashes( $client->address1 );
 		}
@@ -421,17 +421,17 @@ function mdjm_save_event_transaction_ajax()	{
 		if ( $mdjm_event->get_remaining_deposit() < 1 )	{
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
 			$result['deposit_paid'] = 'Y';
-			// juski update event status here
+			// Update event status if contract signed & we wait for deposit paid before confirming booking
 			 if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) {
 		                mdjm_update_event_status(
                 		$mdjm_event->ID,
 		                'mdjm-approved',
                 		$mdjm_event->post_status,
 		                array(
-                		        'meta'                    => $event_meta,
                         		'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
                      	             )
                 		);
+               $result['event_status'] = get_post_status( $mdjm_event->ID ); 
         		}
 
 		}

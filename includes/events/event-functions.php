@@ -1291,16 +1291,13 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 
 	}
 
-// if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
-// juski
+        // if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
 	if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) { 
-
                 mdjm_update_event_status(
-                $event_id->ID,
+                $mdjm_event->ID,
                 'mdjm-approved',
                 $mdjm_event->post_status,
                 array(
-                        'meta'                    => $event_meta,
                         'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
                      )
                 );
