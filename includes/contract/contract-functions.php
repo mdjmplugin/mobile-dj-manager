@@ -211,9 +211,8 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 
 	);
 
-	// juski
+	// Update the event status with awaitingdeposit if configured to wait for deposit before issuing confirmation
 	if ( mdjm_get_option( 'deposit_wait' ) && ($event->get_deposit_status() != "Paid")) { 
-	// Update the event status with awaitingdeposit
 	mdjm_update_event_status(
 		$event->ID,
 		'mdjm-awaitingdeposit',
