@@ -1998,9 +1998,9 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
        mdjm_update_event_meta( $event_id, $args['meta'] );
 
        // Email the client
-//       if( ! empty( $args['client_notices'] ) )        {
-//               mdjm_email_awaitingdeposit ( $event_id );
-//       }
+       if( ! empty( $args['client_notices'] ) )        {
+               mdjm_email_awaitingdeposit ( $event_id );
+       }
 
        add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
