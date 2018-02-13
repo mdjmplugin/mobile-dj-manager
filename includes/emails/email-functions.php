@@ -194,10 +194,10 @@ function mdjm_email_awaitingdeposit( $event_id )       {
        $to_email     = $client->user_email;
 
        $subject      = mdjm_email_set_subject( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
-       $subject      = apply_filters( 'mdjm_contract_subject', wp_strip_all_tags( $subject ) );
+       $subject      = apply_filters( 'mdjm_desposit_subject', wp_strip_all_tags( $subject ) );
        $subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
 
-       $attachments  = apply_filters( 'mdjm_contract_attachments', array(), $mdjm_event );
+       $attachments  = apply_filters( 'mdjm_deposit_attachments', array(), $mdjm_event );
 
        $message          = mdjm_get_email_template_content( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
        $message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
@@ -208,14 +208,14 @@ function mdjm_email_awaitingdeposit( $event_id )       {
        $emails->__set( 'from_name', $from_name );
        $emails->__set( 'from_address', $from_email );
 
-       $headers = apply_filters( 'mdjm_contract_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
+       $headers = apply_filters( 'mdjm_deposit_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
        $emails->__set( 'headers', $headers );
 
        $emails->__set( 'track', apply_filters( 'mdjm_track_email_enquiry_accepted', mdjm_get_option( 'track_client_emails' ) ) );
 
        $emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
-       $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_statu$
+       $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 
 } // mdjm_email_awaitingdeposit
 
