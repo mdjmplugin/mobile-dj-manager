@@ -567,7 +567,7 @@ function mdjm_all_event_status_keys()	{
 	$post_status = array(
 		'mdjm-unattended',
 		'mdjm-enquiry',
-                'mdjm-awaitingdeposit',
+        'mdjm-awaitingdeposit',
 		'mdjm-approved',
 		'mdjm-contract',
 		'mdjm-completed',
@@ -1291,17 +1291,15 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 
 	}
 
-        // if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
+    // if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
 	if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) { 
-                mdjm_update_event_status(
-                $mdjm_event->ID,
-                'mdjm-approved',
-                $mdjm_event->post_status,
-                array(
-                        'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
-                     )
-                );
-        }
+        mdjm_update_event_status(
+            $mdjm_event->ID,
+            'mdjm-approved',
+            $mdjm_event->post_status,
+            array( 'client_notices' => mdjm_get_option( 'booking_conf_to_client' ) )
+        );
+    }
 
 
 
@@ -1986,10 +1984,10 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
        remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
        $update = wp_update_post(
-               array(
-                       'ID'             => $event_id,
-                       'post_status'    => 'mdjm-awaitingdeposit'
-               )
+           array(
+               'ID'          => $event_id,
+               'post_status' => 'mdjm-awaitingdeposit'
+           )
        );
 
        // Meta updates
@@ -1998,7 +1996,7 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
        mdjm_update_event_meta( $event_id, $args['meta'] );
 
        // Email the client
-       if( ! empty( $args['client_notices'] ) )        {
+       if ( ! empty( $args['client_notices'] ) )    {
                mdjm_email_awaitingdeposit ( $event_id );
        }
 
@@ -2006,8 +2004,6 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
 
        return $update;
 } // mdjm_set_event_status_mdjm_awaitingdeposit
-
-
 
 /**
  * Update event status to Awaiting Contract.
