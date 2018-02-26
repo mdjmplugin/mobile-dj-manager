@@ -182,40 +182,40 @@ function mdjm_email_enquiry_accepted( $event_id )	{
  */
 function mdjm_email_awaitingdeposit( $event_id )       {
 
-       $mdjm_event   = mdjm_get_event( $event_id );
+   $mdjm_event   = mdjm_get_event( $event_id );
 
-       $from_name    = mdjm_email_set_from_name( 'awaitingdeposit', $mdjm_event );
-       $from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'awaitingdeposit', $mdjm_event );
+   $from_name    = mdjm_email_set_from_name( 'awaitingdeposit', $mdjm_event );
+   $from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'awaitingdeposit', $mdjm_event );
 
-       $from_email   = mdjm_email_set_from_address( 'awaitingdeposit', $mdjm_event );
-       $from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'awaitingdeposit', $mdjm_event );
+   $from_email   = mdjm_email_set_from_address( 'awaitingdeposit', $mdjm_event );
+   $from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'awaitingdeposit', $mdjm_event );
 
-       $client           = get_userdata( $mdjm_event->client );
-       $to_email     = $client->user_email;
+   $client           = get_userdata( $mdjm_event->client );
+   $to_email     = $client->user_email;
 
-       $subject      = mdjm_email_set_subject( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
-       $subject      = apply_filters( 'mdjm_desposit_subject', wp_strip_all_tags( $subject ) );
-       $subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
+   $subject      = mdjm_email_set_subject( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
+   $subject      = apply_filters( 'mdjm_desposit_subject', wp_strip_all_tags( $subject ) );
+   $subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
 
-       $attachments  = apply_filters( 'mdjm_deposit_attachments', array(), $mdjm_event );
+   $attachments  = apply_filters( 'mdjm_deposit_attachments', array(), $mdjm_event );
 
-       $message          = mdjm_get_email_template_content( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
-       $message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
+   $message          = mdjm_get_email_template_content( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
+   $message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
 
-       $emails = MDJM()->emails;
+   $emails = MDJM()->emails;
 
-       $emails->__set( 'event_id', $mdjm_event->ID );
-       $emails->__set( 'from_name', $from_name );
-       $emails->__set( 'from_address', $from_email );
+   $emails->__set( 'event_id', $mdjm_event->ID );
+   $emails->__set( 'from_name', $from_name );
+   $emails->__set( 'from_address', $from_email );
 
-       $headers = apply_filters( 'mdjm_deposit_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
-       $emails->__set( 'headers', $headers );
+   $headers = apply_filters( 'mdjm_deposit_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
+   $emails->__set( 'headers', $headers );
 
-       $emails->__set( 'track', apply_filters( 'mdjm_track_email_enquiry_accepted', mdjm_get_option( 'track_client_emails' ) ) );
+   $emails->__set( 'track', apply_filters( 'mdjm_track_email_enquiry_accepted', mdjm_get_option( 'track_client_emails' ) ) );
 
-       $emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
+   $emails->__set( 'copy_to', mdjm_email_maybe_send_a_copy( $to_email, $event_id ) );
 
-       $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
+   $emails->send( $to_email, $subject, $message, $attachments, sprintf( __( '%s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 
 } // mdjm_email_awaitingdeposit
 
