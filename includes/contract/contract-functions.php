@@ -208,65 +208,63 @@ function mdjm_sign_event_contract( $event_id, $details )	{
 		'_mdjm_event_contract_approver'    => strip_tags( addslashes( ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] ) ) ),
 		'_mdjm_event_contract_approver_ip' => $_SERVER['REMOTE_ADDR'],
 		'_mdjm_event_last_updated_by'      => get_current_user_id()
-
 	);
 
 	// Update the event status with awaitingdeposit if configured to wait for deposit before issuing confirmation
-	if ( mdjm_get_option( 'deposit_wait' ) && ($event->get_deposit_status() != "Paid")) { 
-	mdjm_update_event_status(
-		$event->ID,
-		'mdjm-awaitingdeposit',
-		$event->post_status,
-		array(
-			'meta'			  => $event_meta,
-			'client_notices'	=> mdjm_get_option( 'awaitingdeposit_to_client' )
-		)
-	);
+	if ( mdjm_get_option( 'deposit_wait' ) && ( 'Paid' != $event->get_deposit_status() ) ) { 
+        mdjm_update_event_status(
+            $event->ID,
+            'mdjm-awaitingdeposit',
+            $event->post_status,
+            array(
+                'meta'			  => $event_meta,
+                'client_notices'	=> mdjm_get_option( 'awaitingdeposit_to_client' )
+            )
+        );
 
-	mdjm_add_journal( 
-		array(
-			'user' 				=> get_current_user_id(),
-			'event'				=> $event->ID,
-			'comment_content'	=> __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
-		),
-		array(
-			'type'				=> 'update-event',
-			'visibility'		=> '2'
-		)
-	);
+        mdjm_add_journal( 
+            array(
+                'user'            => get_current_user_id(),
+                'event'           => $event->ID,
+                'comment_content' => __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
+            ),
+            array(
+                'type'            => 'update-event',
+                'visibility'      => '2'
+            )
+        );
 
-	do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
+        do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
 
-	return true;
+        return true;
 
-	}
-	else {
-	// Update the event status
-	mdjm_update_event_status(
-		$event->ID,
-		'mdjm-approved',
-		$event->post_status,
-		array(
-			'meta'			  => $event_meta,
-			'client_notices'	=> mdjm_get_option( 'booking_conf_to_client' )
-		)
-	);
+	} else {
+        // Update the event status
+        mdjm_update_event_status(
+            $event->ID,
+            'mdjm-approved',
+            $event->post_status,
+            array(
+                'meta'           => $event_meta,
+                'client_notices' => mdjm_get_option( 'booking_conf_to_client' )
+            )
+        );
 	
-	mdjm_add_journal( 
-		array(
-			'user' 				=> get_current_user_id(),
-			'event'				=> $event->ID,
-			'comment_content'	=> __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
-		),
-		array(
-			'type'				=> 'update-event',
-			'visibility'		=> '2'
-		)
-	);
+        mdjm_add_journal( 
+            array(
+                'user'            => get_current_user_id(),
+                'event'           => $event->ID,
+                'comment_content' => __( 'Contract Approval completed by ', 'mobile-dj-manager' ) . ucfirst( $details['mdjm_first_name'] ) . ' ' . ucfirst( $details['mdjm_last_name'] . '<br>' ),
+            ),
+            array(
+                'type'            => 'update-event',
+                'visibility'      => '2'
+            )
+        );
 	
-	do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
+        do_action( 'mdjm_post_sign_event_contract', $event_id, $details );
 	
-	return true;
+        return true;
 	}
 
 } // mdjm_sign_event_contract
