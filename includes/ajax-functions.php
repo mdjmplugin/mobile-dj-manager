@@ -175,7 +175,7 @@ function mdjm_set_client_venue_ajax()	{
 
 	$client = get_userdata( $client_id );
 
-if ( $client )	{
+    if ( $client )	{
 		if ( ! empty( $client->address1 ) )	{
 			$response['address1'] = stripslashes( $client->address1 );
 		}
@@ -421,19 +421,21 @@ function mdjm_save_event_transaction_ajax()	{
 		if ( $mdjm_event->get_remaining_deposit() < 1 )	{
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
 			$result['deposit_paid'] = 'Y';
-			// Update event status if contract signed & we wait for deposit paid before confirming booking
-			 if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) {
-		                mdjm_update_event_status(
-                		$mdjm_event->ID,
-		                'mdjm-approved',
-                		$mdjm_event->post_status,
-		                array(
-                        		'client_notices'        => mdjm_get_option( 'booking_conf_to_client' )
-                     	             )
-                		);
-        		}
+
+            // Update event status if contract signed & we wait for deposit paid before confirming booking
+            if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) {
+
+                mdjm_update_event_status(
+                    $mdjm_event->ID,
+                    'mdjm-approved',
+                    $mdjm_event->post_status,
+                    array( 'client_notices' => mdjm_get_option( 'booking_conf_to_client' ) )
+                );
+
+            }
 
 		}
+
 		if ( $mdjm_event->get_balance() < 1 )	{
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_balance_status' => 'Paid' ) );
 			mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
@@ -446,7 +448,7 @@ function mdjm_save_event_transaction_ajax()	{
 		$result['msg']  = __( 'Unable to add transaction', 'mobile-dj-manager' );
 	}
 
-        $result['event_status'] = get_post_status( $mdjm_event->ID ); 
+    $result['event_status'] = get_post_status( $mdjm_event->ID ); 
 
 	ob_start();
 	mdjm_do_event_txn_table( $_POST['event_id'] );
