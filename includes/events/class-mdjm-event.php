@@ -457,20 +457,19 @@ class MDJM_Event {
 	 * @return	int|bool
 	 */
 	public function get_contract_status() {		
-		if( isset( $this->ID ) )	{
+		if ( isset( $this->ID ) )	{
+
 			$signed_contract_id = get_post_meta( $this->ID, '_mdjm_event_signed_contract', true );
-			
-			if( ! empty( $signed_contract_id ) && mdjm_contract_exists( $signed_contract_id ) && ( $this->post_status == 'mdjm-approved' || $this->post_status == 'mdjm-completed' || $this->post_status == 'mdjm-awaitingdeposit' ) )	{
-				
+
+			if ( ! empty( $signed_contract_id ) && mdjm_contract_exists( $signed_contract_id ) && ( $this->post_status == 'mdjm-approved' || $this->post_status == 'mdjm-completed' || $this->post_status == 'mdjm-awaitingdeposit' ) )	{
+
 				return apply_filters( 'mdjm_get_contract_status', $signed_contract_id, $this->ID );
-				
+
 			} else	{
-				
 				return false;
-				
 			}
 		}
-		
+
 		return false;
 	} // get_contract_status
 	
