@@ -1881,19 +1881,19 @@ function mdjm_content_tag_final_balance( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The playlist page URL for guests.
  */
-function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
+function mdjm_content_tag_guest_playlist_url( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
 	
 	$url = mdjm_guest_playlist_url( $event_id );
 	
-	if( empty( $url ) )	{
+	if ( empty( $url ) )	{
 		$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
 	}
 	
 	else	{
-		$return = $url;
+		$return = apply_filters( 'mdjm_tag_event_guest_playlist_url', $url, $event_id );
 	}
 		
 	return $return;
@@ -1990,17 +1990,20 @@ function mdjm_content_tag_playlist_duration( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The playlist page URL for clients.
  */
-function mdjm_content_tag_playlist_url( $event_id='' )	{
+function mdjm_content_tag_playlist_url( $event_id = '' )	{
 	$access = get_post_meta( $event_id, '_mdjm_event_playlist', true );
 	
 	$return = __( 'Event playlist disabled', 'mobile-dj-manager' );
 	
-	if( $access == 'Y' )	{
+	if ( $access == 'Y' )	{
 		$return = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true );
 		
-		if( !empty( $event_id ) )	{
+		if ( ! empty( $event_id ) )	{
 			$return .=  'event_id=' . $event_id;
 		}
+
+		$return = apply_filters( 'mdjm_tag_event_playlist_url', $return, $event_id );
+
 	}
 	
 	return $return;
