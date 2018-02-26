@@ -249,13 +249,13 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'parent'	=> 'mdjm-settings',
 			'title'	 => sprintf( 
 							__( '%s Settings', 'mobile-dj-manager' ), 
-							mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) )
+							mdjm_get_application_name()
 						),
 			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_zone' ),
 			'meta'	  => array(
 				'title'	 => sprintf( 
 								__( '%s Settings', 'mobile-dj-manager' ), 
-								mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) )
+								mdjm_get_application_name()
 							),
 			)
 		) );

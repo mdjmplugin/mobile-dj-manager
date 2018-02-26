@@ -1081,7 +1081,7 @@ function mdjm_event_metabox_details_name_row( $event_id )	{
 			<?php echo MDJM()->html->text( array(
                 'name'        => '_mdjm_event_name',
                 'value'       => $mdjm_event->get_name(),
-                'placeholder' => sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) )
+                'placeholder' => sprintf( __( 'Optional: Display name in %s', 'mobile-dj-manager' ), mdjm_get_application_name() )
             ) ); ?>
         </div>
 	</div>    

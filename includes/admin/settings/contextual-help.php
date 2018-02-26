@@ -72,8 +72,8 @@ function mdjm_settings_contextual_help() {
 
 	$screen->add_help_tab( array(
 		'id'	    => 'mdjm-settings-client-zone',
-		'title'	    => mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
-		'content'	=> '<p>' . sprintf( __( "This screen allows you to configure settings associated with the %s as well as set various pages and configure the Availability Checker.", 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</p>'
+		'title'	    => mdjm_get_application_name(),
+		'content'	=> '<p>' . sprintf( __( "This screen allows you to configure settings associated with the %s as well as set various pages and configure the Availability Checker.", 'mobile-dj-manager' ), mdjm_get_application_name() ) . '</p>'
 	) );
 
 	$screen->add_help_tab( array(

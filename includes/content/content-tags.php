@@ -236,7 +236,7 @@ function mdjm_get_content_tags_list() {
  *
  * @return	str		Content with content tags filtered out.
  */
-function mdjm_do_content_tags( $content, $event_id='', $client_id='' ) {
+function mdjm_do_content_tags( $content, $event_id = '', $client_id='' ) {
 	// Replace all tags
 	$content = MDJM()->content_tags->do_tags( $content, $event_id, $client_id );
 
@@ -509,6 +509,7 @@ function mdjm_setup_content_tags() {
 		),
 		array(
 			'tag'         => 'event_employees_roles',
+
 			'description' => __( 'The list of employees working their event and their assigned role', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_event_employees_roles'
 		),
@@ -690,7 +691,10 @@ function mdjm_content_tag_admin_url()	{
  * @return	str		The URL to the Client Zone home page.
  */
 function mdjm_content_tag_application_home()	{
-	return mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ), false );
+	$url = mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ), false );
+    $url = apply_filters( 'mdjm_tag_clientzone_url', $url );
+
+    return $url;
 } // mdjm_content_tag_application_home
 
 /**
@@ -702,7 +706,7 @@ function mdjm_content_tag_application_home()	{
  * @return	str		The customised name of the Client Zone.
  */
 function mdjm_content_tag_application_name()	{
-	return mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) );
+	return mdjm_get_application_name();
 } // mdjm_content_tag_application_name
 
 /**
@@ -726,7 +730,7 @@ function mdjm_content_tag_artist_label()	{
  * @param	int		$event_id	Event ID if applicable.
  * @return	str		The list of available addo-ns. No cost.
  */
-function mdjm_content_tag_available_addons( $event_id='' )	{
+function mdjm_content_tag_available_addons( $event_id = '' )	{
 	return mdjm_list_available_addons();
 } // mdjm_content_tag_available_addons
 
@@ -739,7 +743,7 @@ function mdjm_content_tag_available_addons( $event_id='' )	{
  * @param	int		event_id	The event ID.	
  * @return	str		The list of available add-ons. With cost.
  */
-function mdjm_content_tag_available_addons_cost( $event_id='' )	{
+function mdjm_content_tag_available_addons_cost( $event_id = '' )	{
 	return mdjm_list_available_addons( 0, true );
 } // mdjm_content_tag_available_addons_cost
 
@@ -782,7 +786,10 @@ function mdjm_content_tag_company_name()	{
  * @return	str		The URL of the contact page.
  */
 function mdjm_content_tag_contact_page()	{
-	return mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ), false );
+	$url = mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ), false );
+    $url = apply_filters( 'mdjm_tag_contact_page_url', $url );
+
+    return $url;
 } // mdjm_content_tag_contact_page
 
 /**
@@ -818,7 +825,7 @@ function mdjm_content_tag_website_url()	{
  *
  * @return	str		The first name of the client.
  */
-function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_firstname( $event_id = '', $client_id='' )	{
 
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -847,7 +854,7 @@ function mdjm_content_tag_client_firstname( $event_id='', $client_id='' )	{
  *
  * @return	str		The last name of the client.
  */
-function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_lastname( $event_id = '', $client_id='' )	{
 
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -876,7 +883,7 @@ function mdjm_content_tag_client_lastname( $event_id='', $client_id='' )	{
  *
  * @return	str		The full name (display name) of the client.
  */
-function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_fullname( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -903,7 +910,7 @@ function mdjm_content_tag_client_fullname( $event_id='', $client_id='' )	{
  *
  * @return	str		The address of the client.
  */
-function mdjm_content_tag_client_full_address( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_full_address( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -930,7 +937,7 @@ function mdjm_content_tag_client_full_address( $event_id='', $client_id='' )	{
  *
  * @return	str		The email address of the client.
  */
-function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_email( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -957,7 +964,7 @@ function mdjm_content_tag_client_email( $event_id='', $client_id='' )	{
  *
  * @return	str		The primary phone number of the client.
  */
-function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_primary_phone( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -984,7 +991,7 @@ function mdjm_content_tag_client_primary_phone( $event_id='', $client_id='' )	{
  *
  * @return	str		The alternative phone number of the client.
  */
-function mdjm_content_tag_client_alt_phone( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_alt_phone( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -1011,7 +1018,7 @@ function mdjm_content_tag_client_alt_phone( $event_id='', $client_id='' )	{
  *
  * @return	str		The login name of the client.
  */
-function mdjm_content_tag_client_username( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_username( $event_id = '', $client_id='' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -1038,7 +1045,7 @@ function mdjm_content_tag_client_username( $event_id='', $client_id='' )	{
  *
  * @return	str		The login password for the client.
  */
-function mdjm_content_tag_client_password( $event_id='', $client_id='' )	{
+function mdjm_content_tag_client_password( $event_id = '', $client_id='' )	{
 	
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -1079,7 +1086,7 @@ function mdjm_content_tag_client_password( $event_id='', $client_id='' )	{
  *
  * @return	str		Event admin notes.
  */
-function mdjm_content_tag_admin_notes( $event_id='' )	{	
+function mdjm_content_tag_admin_notes( $event_id = '' )	{	
 	return ! empty( $event_id ) ? get_post_meta( $event_id, '_mdjm_event_admin_notes', true ) : '';
 } // mdjm_content_tag_admin_notes
 
@@ -1092,7 +1099,7 @@ function mdjm_content_tag_admin_notes( $event_id='' )	{
  *
  * @return	str		The event payment balance.
  */
-function mdjm_content_tag_balance( $event_id='' )	{	
+function mdjm_content_tag_balance( $event_id = '' )	{	
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1130,7 +1137,7 @@ function mdjm_content_tag_balance_label()	{
  *
  * @return	str		The event contract date.
  */
-function mdjm_content_tag_contract_date( $event_id='' )	{
+function mdjm_content_tag_contract_date( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1156,7 +1163,7 @@ function mdjm_content_tag_contract_date( $event_id='' )	{
  *
  * @return	str		The event contract ID.
  */
-function mdjm_content_tag_contract_id( $event_id='' )	{
+function mdjm_content_tag_contract_id( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1173,7 +1180,7 @@ function mdjm_content_tag_contract_id( $event_id='' )	{
  *
  * @return	str		The name of the person who signed the contract.
  */
-function mdjm_content_tag_contract_signatory( $event_id='' )	{
+function mdjm_content_tag_contract_signatory( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1190,7 +1197,7 @@ function mdjm_content_tag_contract_signatory( $event_id='' )	{
  *
  * @return	str		The IP address of the person who signed the contract.
  */
-function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
+function mdjm_content_tag_contract_signatory_ip( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1207,24 +1214,27 @@ function mdjm_content_tag_contract_signatory_ip( $event_id='' )	{
  *
  * @return	str		The URL to the client contract within Client Zone
  */
-function mdjm_content_tag_contract_url( $event_id='' )	{
+function mdjm_content_tag_contract_url( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
 	
-	return mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) . 'event_id=' . $event_id;
+	$url = mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) . 'event_id=' . $event_id;
+    $url = apply_filters( 'mdjm_tag_event_contract_url', $url, $event_id );
+
+    return $url;
 } // mdjm_content_tag_contract_url
 
 /**
  * Content tag: deposit.
- * The event contract URL for the client.
+ * The required deposit amount.
  *
  * @param	int		The event ID.
  * @param
  *
  * @return	str		The formatted event deposit amount
  */
-function mdjm_content_tag_deposit( $event_id='' )	{
+function mdjm_content_tag_deposit( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1263,7 +1273,7 @@ function mdjm_content_tag_deposit_label()	{
  *
  * @return	str		The remaining amount to be paid towards the deposit.
  */
-function mdjm_content_tag_deposit_remaining( $event_id='' )	{
+function mdjm_content_tag_deposit_remaining( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1280,7 +1290,7 @@ function mdjm_content_tag_deposit_remaining( $event_id='' )	{
  *
  * @return	str		The status of the deposit payment, or Due if no status is found.
  */
-function mdjm_content_tag_deposit_status( $event_id='' )	{
+function mdjm_content_tag_deposit_status( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1324,7 +1334,7 @@ function mdjm_content_tag_dj_email( $event_id = '' )	{
  * @param	int		The event ID.
  * @return	str		The first name of the primary employee assigned to the event.
  */
-function mdjm_content_tag_dj_firstname( $event_id='' )	{
+function mdjm_content_tag_dj_firstname( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1346,7 +1356,7 @@ function mdjm_content_tag_dj_firstname( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The last name of the primary employee assigned to the event.
  */
-function mdjm_content_tag_dj_lastname( $event_id='' )	{
+function mdjm_content_tag_dj_lastname( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1368,7 +1378,7 @@ function mdjm_content_tag_dj_lastname( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The full name (display name) of the primary employee assigned to the event.
  */
-function mdjm_content_tag_dj_fullname( $event_id='' )	{
+function mdjm_content_tag_dj_fullname( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1392,7 +1402,7 @@ function mdjm_content_tag_dj_fullname( $event_id='' )	{
  *
  * @return	str		The notes tassociated with the event that are for the DJ.
  */
-function mdjm_content_tag_dj_primary_phone( $event_id='' )	{
+function mdjm_content_tag_dj_primary_phone( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1416,7 +1426,7 @@ function mdjm_content_tag_dj_primary_phone( $event_id='' )	{
  *
  * @return	str		The notes tassociated with the event that are for the DJ.
  */
-function mdjm_content_tag_dj_notes( $event_id='' )	{
+function mdjm_content_tag_dj_notes( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1433,7 +1443,7 @@ function mdjm_content_tag_dj_notes( $event_id='' )	{
  *
  * @return	str		The date for which the event needs to be setup.
  */
-function mdjm_content_tag_dj_setup_date( $event_id='' )	{
+function mdjm_content_tag_dj_setup_date( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1458,7 +1468,7 @@ function mdjm_content_tag_dj_setup_date( $event_id='' )	{
  *
  * @return	str		Formatted time for which the event needs to be setup.
  */
-function mdjm_content_tag_dj_setup_time( $event_id='' )	{
+function mdjm_content_tag_dj_setup_time( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1483,7 +1493,7 @@ function mdjm_content_tag_dj_setup_time( $event_id='' )	{
  *
  * @return	str		Formatted date the event finishes.
  */
-function mdjm_content_tag_end_date( $event_id='' )	{
+function mdjm_content_tag_end_date( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1508,7 +1518,7 @@ function mdjm_content_tag_end_date( $event_id='' )	{
  *
  * @return	str		Formatted time for when the event finishes.
  */
-function mdjm_content_tag_end_time( $event_id='' )	{
+function mdjm_content_tag_end_time( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1531,7 +1541,7 @@ function mdjm_content_tag_end_time( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The add-on names or "No addons are assigned to this event".
  */
-function mdjm_content_tag_event_addons( $event_id='' )	{
+function mdjm_content_tag_event_addons( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1546,7 +1556,7 @@ function mdjm_content_tag_event_addons( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The add-on names and cost or "No addons are assigned to this event".
  */
-function mdjm_content_tag_event_addons_cost( $event_id='' )	{
+function mdjm_content_tag_event_addons_cost( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1563,7 +1573,7 @@ function mdjm_content_tag_event_addons_cost( $event_id='' )	{
  *
  * @return	str		Formatted long date of the event.
  */
-function mdjm_content_tag_event_date( $event_id='' )	{
+function mdjm_content_tag_event_date( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1588,7 +1598,7 @@ function mdjm_content_tag_event_date( $event_id='' )	{
  *
  * @return	str		Formatted short date of the event.
  */
-function mdjm_content_tag_event_date_short( $event_id='' )	{
+function mdjm_content_tag_event_date_short( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1613,7 +1623,7 @@ function mdjm_content_tag_event_date_short( $event_id='' )	{
  *
  * @return	str		Contents of the event description field.
  */
-function mdjm_content_tag_event_description( $event_id='' )	{
+function mdjm_content_tag_event_description( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1632,7 +1642,7 @@ function mdjm_content_tag_event_description( $event_id='' )	{
  *
  * @return	str		The duration of the event in hours, minutes.
  */
-function mdjm_content_tag_event_duration( $event_id='' )	{
+function mdjm_content_tag_event_duration( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1649,7 +1659,7 @@ function mdjm_content_tag_event_duration( $event_id='' )	{
  *
  * @return	str		List of employees working the event.
  */
-function mdjm_content_tag_event_employees( $event_id='' )	{
+function mdjm_content_tag_event_employees( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1678,7 +1688,7 @@ function mdjm_content_tag_event_employees( $event_id='' )	{
  *
  * @return	str		List of employees working the event.
  */
-function mdjm_content_tag_event_employees_roles( $event_id='' )	{
+function mdjm_content_tag_event_employees_roles( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1707,7 +1717,7 @@ function mdjm_content_tag_event_employees_roles( $event_id='' )	{
  *
  * @return	str		Contents of the event name field.
  */
-function mdjm_content_tag_event_name( $event_id='' )	{
+function mdjm_content_tag_event_name( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1722,7 +1732,7 @@ function mdjm_content_tag_event_name( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The package name or "No Package".
  */
-function mdjm_content_tag_event_package( $event_id='' )	{
+function mdjm_content_tag_event_package( $event_id = '' )	{
 	$return = __( 'No package is assigned to this event', 'mobile-dj-manager' );
 
 	if ( ! empty( $event_id ) )	{
@@ -1747,7 +1757,7 @@ function mdjm_content_tag_event_package( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The package name and cost or "No Package".
  */
-function mdjm_content_tag_event_package_cost( $event_id='' )	{
+function mdjm_content_tag_event_package_cost( $event_id = '' )	{
 	$return = '0.00';
 	
 	if ( ! empty( $event_id ) )	{
@@ -1772,7 +1782,7 @@ function mdjm_content_tag_event_package_cost( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The package description.
  */
-function mdjm_content_tag_event_package_description( $event_id='' )	{
+function mdjm_content_tag_event_package_description( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1789,7 +1799,7 @@ function mdjm_content_tag_event_package_description( $event_id='' )	{
  *
  * @return	str		The current event status label.
  */
-function mdjm_content_tag_event_status( $event_id='' )	{
+function mdjm_content_tag_event_status( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1806,7 +1816,7 @@ function mdjm_content_tag_event_status( $event_id='' )	{
  *
  * @return	str		The current event type label.
  */
-function mdjm_content_tag_event_type( $event_id='' )	{
+function mdjm_content_tag_event_type( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1822,12 +1832,15 @@ function mdjm_content_tag_event_type( $event_id='' )	{
  *
  * @return	str		The current event type label.
  */
-function mdjm_content_tag_event_url( $event_id='' )	{
+function mdjm_content_tag_event_url( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
 	
-	return mdjm_get_event_uri( $event_id );
+	$url = mdjm_get_event_uri( $event_id );
+    $url = apply_filters( 'mdjm_tag_event_url', $url, $event_id );
+
+    return $url;
 } // mdjm_content_tag_event_url
 
 /**
@@ -1838,12 +1851,15 @@ function mdjm_content_tag_event_url( $event_id='' )	{
  *
  * @return	str		The current event type label.
  */
-function mdjm_content_tag_event_admin_url( $event_id='' )	{
+function mdjm_content_tag_event_admin_url( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
 	
-	return mdjm_get_event_uri( $event_id, true );
+	$url = mdjm_get_event_uri( $event_id, true );
+    $url = apply_filters( 'mdjm_tag_event_admin_url', $url, $event_id );
+
+    return $url;
 } // mdjm_content_tag_event_admin_url
 
 /**
@@ -1855,7 +1871,7 @@ function mdjm_content_tag_event_admin_url( $event_id='' )	{
  *
  * @return	str		The event final balance (cost - unpaid deposit).
  */
-function mdjm_content_tag_final_balance( $event_id='' )	{
+function mdjm_content_tag_final_balance( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -1881,18 +1897,17 @@ function mdjm_content_tag_final_balance( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The playlist page URL for guests.
  */
-function mdjm_content_tag_guest_playlist_url( $event_id='' )	{
+function mdjm_content_tag_guest_playlist_url( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
 	
 	$url = mdjm_guest_playlist_url( $event_id );
 	
-	if( empty( $url ) )	{
+	if ( empty( $url ) )	{
 		$return = __( 'Guest playlist is disabled.', 'mobile-dj-manager' );
-	}
-	
-	else	{
+	} else	{
+        $url = apply_filters( 'mdjm_tag_event_guest_playlist_url', $url, $event_id );
 		$return = $url;
 	}
 		
@@ -1921,7 +1936,7 @@ function mdjm_content_tag_part_payment_label()	{
  *
  * @return	str		The events payment history.
  */
-function mdjm_content_tag_payment_history( $event_id='' )	{
+function mdjm_content_tag_payment_history( $event_id = '' )	{
 	if ( ! empty( $event_id ) )	{
 		return mdjm_list_event_txns( $event_id );
 	}
@@ -1937,7 +1952,10 @@ function mdjm_content_tag_payment_history( $event_id='' )	{
  * @return	str		The payments page URL.
  */
 function mdjm_content_tag_payment_url()	{	
-	return mdjm_get_formatted_url( mdjm_get_option( 'payments_page' ), false );
+	$url = mdjm_get_formatted_url( mdjm_get_option( 'payments_page' ), false );
+    $url = apply_filters( 'mdjm_tag_payment_url', $url );
+
+    return $url;
 } // mdjm_content_tag_payment_url
 
 /**
@@ -1962,7 +1980,7 @@ function mdjm_content_tag_pdf_pagebreak()	{
  *
  * @return	int|str	The number of days until the playlist for the event closes, or 'never' if it does not.
  */
-function mdjm_content_tag_playlist_close( $event_id='' )	{
+function mdjm_content_tag_playlist_close( $event_id = '' )	{
 	$close = mdjm_get_option( 'close' );
 	
 	return !empty( $close ) ? $close : 'never';
@@ -1977,7 +1995,7 @@ function mdjm_content_tag_playlist_close( $event_id='' )	{
  *
  * @return	int|str	The approximate length of the playlist.
  */
-function mdjm_content_tag_playlist_duration( $event_id='' )	{
+function mdjm_content_tag_playlist_duration( $event_id = '' )	{
 	$total_entries = mdjm_count_playlist_entries( $event_id );
 	
 	return mdjm_playlist_duration( $event_id, $total_entries );
@@ -1990,17 +2008,19 @@ function mdjm_content_tag_playlist_duration( $event_id='' )	{
  * @param	int		The event ID.
  * @return	str		The playlist page URL for clients.
  */
-function mdjm_content_tag_playlist_url( $event_id='' )	{
+function mdjm_content_tag_playlist_url( $event_id = '' )	{
 	$access = get_post_meta( $event_id, '_mdjm_event_playlist', true );
 	
 	$return = __( 'Event playlist disabled', 'mobile-dj-manager' );
 	
-	if( $access == 'Y' )	{
+	if ( $access == 'Y' )	{
 		$return = mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ), true );
 		
-		if( !empty( $event_id ) )	{
+		if ( ! empty( $event_id ) )	{
 			$return .=  'event_id=' . $event_id;
 		}
+
+        $return = apply_filters( 'mdjm_tag_event_playlist_url', $return, $event_id );
 	}
 	
 	return $return;
@@ -2014,7 +2034,7 @@ function mdjm_content_tag_playlist_url( $event_id='' )	{
  *
  * @return	str		The online quote page URL for clients.
  */
-function mdjm_content_tag_quotes_url( $event_id='' )	{
+function mdjm_content_tag_quotes_url( $event_id = '' )	{
 	$return = add_query_arg(
 		array(
 			'event_id' => $event_id
@@ -2022,7 +2042,7 @@ function mdjm_content_tag_quotes_url( $event_id='' )	{
 		mdjm_get_formatted_url( mdjm_get_option( 'quotes_page' ), true )
 	);
 	
-	return apply_filters( 'mdjm_content_tag_quotes_url', $return, $event_id );
+	return apply_filters( 'mdjm_tag_event_quote_url', $return, $event_id );
 } // mdjm_content_tag_quotes_url
 
 /**
@@ -2033,7 +2053,7 @@ function mdjm_content_tag_quotes_url( $event_id='' )	{
  *
  * @return	str		Formatted event start time.
  */
-function mdjm_content_tag_start_time( $event_id='' )	{
+function mdjm_content_tag_start_time( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2057,7 +2077,7 @@ function mdjm_content_tag_start_time( $event_id='' )	{
  *
  * @return	str		Formatted event total cost.
  */
-function mdjm_content_tag_total_cost( $event_id='' )	{
+function mdjm_content_tag_total_cost( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2161,7 +2181,7 @@ function mdjm_content_tag_travel_time( $event_id = '' )	{
  *
  * @return	str		Name of the event venue.
  */
-function mdjm_content_tag_venue( $event_id='' )	{
+function mdjm_content_tag_venue( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2179,7 +2199,7 @@ function mdjm_content_tag_venue( $event_id='' )	{
  *
  * @return	str		Name of the contact at the event venue.
  */
-function mdjm_content_tag_venue_contact( $event_id='' )	{
+function mdjm_content_tag_venue_contact( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2197,7 +2217,7 @@ function mdjm_content_tag_venue_contact( $event_id='' )	{
  *
  * @return	str		The details (tags) associated with the venue.
  */
-function mdjm_content_tag_venue_details( $event_id='' )	{
+function mdjm_content_tag_venue_details( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2224,7 +2244,7 @@ function mdjm_content_tag_venue_details( $event_id='' )	{
  *
  * @return	str		Email address of the event venue.
  */
-function mdjm_content_tag_venue_email( $event_id='' )	{
+function mdjm_content_tag_venue_email( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2242,7 +2262,7 @@ function mdjm_content_tag_venue_email( $event_id='' )	{
  *
  * @return	str		The details (tags) associated with the venue.
  */
-function mdjm_content_tag_venue_full_address( $event_id='' )	{
+function mdjm_content_tag_venue_full_address( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2269,7 +2289,7 @@ function mdjm_content_tag_venue_full_address( $event_id='' )	{
  *
  * @return	str		Notes associated with venue.
  */
-function mdjm_content_tag_venue_notes( $event_id='' )	{
+function mdjm_content_tag_venue_notes( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}
@@ -2288,7 +2308,7 @@ function mdjm_content_tag_venue_notes( $event_id='' )	{
  *
  * @return	str		Phone number of the event venue.
  */
-function mdjm_content_tag_venue_telephone( $event_id='' )	{
+function mdjm_content_tag_venue_telephone( $event_id = '' )	{
 	if( empty( $event_id ) )	{
 		return;
 	}

@@ -356,7 +356,7 @@ class MDJM_Welcome {
                         <p><?php _e( 'With email tracking enabled, you can even be sure that your client received your email and know when they have read it.', 'mobile-dj-manager' ); ?></p>
 
 						<h4><?php _e( 'Contract Templates', 'mobile-dj-manager' ); ?></h4>
-						<p><?php printf( __( 'Create contract templates that be assigned to your %s. Clients will be able to review and <strong>Digitally Sign</strong> the contract via the %2$s.', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+						<p><?php printf( __( 'Create contract templates that be assigned to your %s. Clients will be able to review and <strong>Digitally Sign</strong> the contract via the %2$s.', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_application_name() ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -383,11 +383,11 @@ class MDJM_Welcome {
 				<div class="feature-section two-col">
 					<div class="col">
 						<h4><?php _e( 'Integrated Client Portal','mobile-dj-manager' );?></h4>
-						<p><?php printf( __( 'Known as the <em>Client Zone</em> by default, a password protected portal is available to your clients where they can review their %1$s, view and accept your quote, digitally sign their contract, and manage their %1$s playlist. All %2$s pages use a template system and are fully customisable.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ); ?></p>
+						<p><?php printf( __( 'Known as the <em>Client Zone</em> by default, a password protected portal is available to your clients where they can review their %1$s, view and accept your quote, digitally sign their contract, and manage their %1$s playlist. All %2$s pages use a template system and are fully customisable.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_application_name() ); ?></p>
 					</div>
 					<div class="col">
 						<h4><?php _e( 'Digitally Sign Contracts', 'mobile-dj-manager' );?></h4>
-						<p><?php printf( __( 'Via the %s, clients are able to review and digitally sign their %s contract. Signing requires confirmation of their name and password for verification to maintain security.', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ), mdjm_get_label_singular() );?></p>
+						<p><?php printf( __( 'Via the %s, clients are able to review and digitally sign their %s contract. Signing requires confirmation of their name and password for verification to maintain security.', 'mobile-dj-manager' ), mdjm_get_application_name(), mdjm_get_label_singular() );?></p>
 					</div>
 				</div>
                 <div class="feature-section two-col">
