@@ -2021,6 +2021,7 @@ function mdjm_content_tag_playlist_url( $event_id = '' )	{
 		}
 
         $return = apply_filters( 'mdjm_tag_event_playlist_url', $return, $event_id );
+
 	}
 	
 	return $return;
