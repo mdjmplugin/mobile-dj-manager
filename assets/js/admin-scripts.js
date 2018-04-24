@@ -1470,6 +1470,13 @@ jQuery(document).ready(function ($) {
                 success: function (response) {
                     $('#mdjm-venue-details-fields').html(response.data.venue);
                     $('.mdjm-event-venue-details-sections-wrap').show('fast');
+
+                    var show = $('.toggle-event-view-venue-option-section').html() === mdjm_admin_vars.show_venue_details ? true : false;
+
+                    if ( show ) {
+                        $('.toggle-event-view-venue-option-section').html( mdjm_admin_vars.hide_venue_details );
+                    }
+
                 }
             }).fail(function (data) {
                 if ( window.console && window.console.log ) {
