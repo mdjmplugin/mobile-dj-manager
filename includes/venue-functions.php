@@ -329,6 +329,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
+    $employee_id    = ! empty( $event_id ) ? mdjm_get_event_primary_employee_id( $event_id ) : '';
 	$output         = array();
 
 	if ( ! empty( $venue_contact ) )    {
@@ -396,6 +397,7 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
                         <?php echo $value; ?>
                     </span>
                 <?php endforeach; ?>
+                <?php do_action( 'mdjm_after_venue_notes', $venue_address, $employee_id ); ?>
             </div>
         </div>
     </div>
