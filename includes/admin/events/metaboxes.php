@@ -1792,6 +1792,7 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
     $venue_address  = array( $venue_address1, $venue_address2, $venue_town, $venue_county, $venue_postcode );
     $section_title  = __( 'Add a New Venue', 'mobile-dj-manager');
     $add_save_label = __( 'Add', 'mobile-dj-manager');
+    $employee_id    = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
 
     if ( $mdjm_event->ID == $mdjm_event->get_venue_id() )   {
         $section_title  = __( 'Manual Venue', 'mobile-dj-manager');
@@ -1923,12 +1924,35 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
                     ); ?>
                 </span>
 
+                <?php do_action( 'mdjm_venue_details_table_after_save', $event_id ); ?>
+                <?php do_action( 'mdjm_venue_details_travel_data', $venue_address, $employee_id ); ?>
+
             </div>
         </div>
     </div>
     <?php
 } // mdjm_event_overview_metabox_add_venue_section
 add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_venue_section', 25 );
+
+/**
+ * Output the event travel costs hidden fields
+ *
+ * @since	1.4
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_venue_travel_section( $event_id )	{
+	global $mdjm_event, $mdjm_event_update;
+	$travel_fields = mdjm_get_event_travel_fields();
+	foreach( $travel_fields as $field ) : ?>
+    	<?php $travel_data = mdjm_get_event_travel_data( $event_id, $field ); ?>
+    	<?php $value = ! empty( $travel_data ) ? $travel_data : ''; ?>
+		<input type="hidden" name="travel_<?php echo $field; ?>" id="mdjm_travel_<?php echo $field; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach;
+} // mdjm_event_overview_metabox_venue_travel_section
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_venue_travel_section', 30 );
 
 /**
  * Output the event price row
