@@ -56,13 +56,9 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-color	{
 	color: #F90;	
 }
-/*.mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
-.mdjm-select-chosen label { padding-right: 3px; }*/
 
-.mdjm-select-chosen {
-	width: 100%;
-	max-width: 300px;
-}
+.mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
+.mdjm-select-chosen label { padding-right: 3px; }
 .chosen-container-multi .chosen-choices {
 	background-image: none;
 	border-color: #dfdfdf;
@@ -708,6 +704,10 @@ checkbox.mdjm-form-error {
 #mdjm_event_overview_package_fields {
 	margin-top: 12px;
 }
+#mdjm-event-actions .mdjm-select-chosen { min-width: 200px; margin: 2px; padding-bottom: 2px; }
+#mdjm-event-actions a.chosen-single	{
+	min-width: 200px;
+}
 .mdjm-repeatable-row-actions {
 	color: #777;
 	font-size: 12px;
@@ -943,8 +943,16 @@ input[class*="mdjm-name-field"] {
 	padding: 3px 5px;
 	width: 300px;
 }
-.mdjm-view-venue-details i	{
+.mdjm-view-venue-details	{
 	padding-right: 5px;
+}
+
+#mdjm-travel-data    {
+    display: block;
+}
+
+span.mdjm-travel-unit    {
+    padding: 5px;
 }
 
 /* OLD STYLES */

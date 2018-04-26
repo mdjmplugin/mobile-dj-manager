@@ -321,19 +321,25 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 	}
 
 	ob_start(); ?>
-	<tr id="mdjm-travel-data" class="<?php echo $class; ?>">
-		<td><i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-			<span class="mdjm-travel-distance"><?php echo $distance; ?></span></td>
-		<td><i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-			<span class="mdjm-travel-time"><?php echo $duration; ?></span></td>
-		<td><i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-			<span class="mdjm-travel-cost"><?php echo $cost; ?></span></td>
-	</tr>
 
-    <tr id="mdjm-travel-directions" class="<?php echo $class; ?>">
-        <td colspan="3"><i class="fa fa-map-signs" aria-hidden="true" title="<?php _e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
-        <span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url; ?>" target="_blank"><?php _e( 'Directions', 'mobile-dj-manager' ); ?></a></span></td>
-    </tr>
+    <div id="mdjm-travel-data" class="<?php echo $class; ?>">
+        <span class="mdjm-travel-unit">
+            <i class="fa fa-car" aria-hidden="true" title="<?php _e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
+            <span class="mdjm-travel-distance"><?php echo $distance; ?></span>
+        </span>
+        <span class="mdjm-travel-unit">
+            <i class="fa fa-clock-o" aria-hidden="true" title="<?php _e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
+            <span class="mdjm-travel-time"><?php echo $duration; ?></span>
+        </span>
+        <span class="mdjm-travel-unit">
+            <i class="fa fa-money" aria-hidden="true" title="<?php _e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
+            <span class="mdjm-travel-cost"><?php echo $cost; ?></span>
+        </span>
+        <span class="mdjm-travel-unit">
+            <i class="fa fa-map-signs" aria-hidden="true" title="<?php _e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
+            <span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url; ?>" target="_blank"><?php _e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
+        </span>
+        </div>
 
 	<?php $travel_data_row = ob_get_contents();
 	ob_end_clean();

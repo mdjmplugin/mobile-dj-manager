@@ -43,7 +43,12 @@ class MDJM_HTML_Elements {
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_none' => false,
+            'chosen'           => true,
+            'data'             => array(
+				'search-type'        => 'status',
+				'search-placeholder' => sprintf( __( 'Type to search all %s statuses', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
+			)
 		) );
 
 		return $output;
@@ -69,7 +74,11 @@ class MDJM_HTML_Elements {
 			'placeholder'      => null,
 			'multiple'         => false,
 			'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_none' => false,
+            'data'             => array(
+				'search-type'        => 'type',
+				'search-placeholder' => sprintf( __( 'Type to search all %s types', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -158,7 +167,11 @@ class MDJM_HTML_Elements {
 			'selected'         => $selected,
 			'options'          => $options,
 			'show_option_all'  => false,
-			'show_option_none' => __( ' - Select Txn Type - ', 'mobile-dj-manager' )
+			'show_option_none' => __( ' - Select Txn Type - ', 'mobile-dj-manager' ),
+            'data'             => array(
+				'search-type'        => 'txn_type',
+				'search-placeholder' => __( 'Type to search all transaction statuses', 'mobile-dj-manager' )
+			)
 		) );
 
 		return $output;
@@ -185,7 +198,10 @@ class MDJM_HTML_Elements {
 			'allow_add'        => true,
 			'show_option_all'  => false,
             'blank_first'      => true,
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'venue',
+				'search-placeholder' => __( 'Type to search all venues', 'mobile-dj-manager' )
+			)
 		);
 		
 		$args = wp_parse_args( $args, $defaults );
@@ -313,7 +329,10 @@ class MDJM_HTML_Elements {
 			'placeholder'      => __( 'Select an Employee', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'blank_first'      => true,
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'employee',
+				'search-placeholder' => __( 'Type to search all employees', 'mobile-dj-manager' )
+			)
 		);
 		
 		$args    = wp_parse_args( $args, $defaults );
@@ -425,7 +444,10 @@ class MDJM_HTML_Elements {
 			'add_new'          => false,
 			'show_option_all'  => _x( 'All Clients', 'all dropdown items', 'mobile-dj-manager' ),
 			'show_option_none' => _x( 'Select a Client', 'no dropdown items', 'mobile-dj-manager' ),
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'client',
+				'search-placeholder' => __( 'Type to search all clients', 'mobile-dj-manager' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -488,7 +510,10 @@ class MDJM_HTML_Elements {
 			'multiple'         => false,
 			'show_option_all'  => _x( 'All Users', 'all dropdown items', 'mobile-dj-manager' ),
 			'show_option_none' => _x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' ),
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'user',
+				'search-placeholder' => __( 'Type to search all users', 'mobile-dj-manager' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -545,7 +570,10 @@ class MDJM_HTML_Elements {
 			'titles'           => false,
 			'options_only'     => false,
 			'blank_first'      => true,
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'package',
+				'search-placeholder' => __( 'Type to search all packages', 'mobile-dj-manager' )
+			)
 		);
 		
 		$args    = wp_parse_args( $args, $defaults );
@@ -635,7 +663,10 @@ class MDJM_HTML_Elements {
 			'titles'           => false,
 			'options_only'     => false,
 			'blank_first'      => false,
-			'data'             => array()
+			'data'             => array(
+				'search-type'        => 'addons',
+				'search-placeholder' => __( 'Type to search all addons', 'mobile-dj-manager' )
+			)
 		);
 		
 		$args    = wp_parse_args( $args, $defaults );

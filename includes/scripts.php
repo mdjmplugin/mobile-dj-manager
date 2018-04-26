@@ -247,7 +247,11 @@ function mdjm_register_admin_scripts( $hook )	{
 				'show_event_options'   => sprintf( __( 'Show %s options', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 				'hide_event_options'   => sprintf( __( 'Hide %s options', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 				'show_venue_details'   => __( 'Show venue', 'mobile-dj-manager' ),
-                'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' )
+                'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' ),
+                'one_option'           => __( 'Choose an option', 'mobile-dj-manager' ),
+        		'one_or_more_option'   => __( 'Choose one or more options', 'mobile-dj-manager' ),
+                'type_to_search'       => __( 'Type to search', 'mobile-dj-manager' ),
+                'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' )
 			)
 		)
 	);

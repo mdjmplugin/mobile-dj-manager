@@ -1,8 +1,26 @@
+var mdjm_admin_vars;
 jQuery(document).ready(function ($) {
 
-	// Setup Chosen menus
+    // Setup Chosen menus
 	$('.mdjm-select-chosen').chosen({
-		inherit_select_classes: true
+		inherit_select_classes: true,
+		placeholder_text_single: mdjm_admin_vars.one_option,
+		placeholder_text_multiple: mdjm_admin_vars.one_or_more_option
+	});
+
+	$('.mdjm-select-chosen .chosen-search input').each( function() {
+		var selectElem = $(this).parent().parent().parent().prev('select.mdjm-select-chosen'),
+			placeholder = selectElem.data('search-placeholder');
+		$(this).attr( 'placeholder', placeholder );
+	});
+
+	// Add placeholders for Chosen input fields
+	$( '.chosen-choices' ).on( 'click', function () {
+		var placeholder = $(this).parent().prev().data('search-placeholder');
+		if ( typeof placeholder === 'undefined' ) {
+			placeholder = mdjm_admin_vars.type_to_search;
+		}
+		$(this).children('li').children('input').attr( 'placeholder', placeholder );
 	});
 
 	// Set the deposit value for the event
