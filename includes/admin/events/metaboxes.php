@@ -25,7 +25,7 @@ function mdjm_client_details_get_action_links( $event_id, $mdjm_event, $mdjm_eve
 
      $actions = array();
 
-    if ( ! empty( $mdjm_event->client ) && mdjm_employee_can( 'view_clients_list' ) )   {
+    if ( ! empty( $mdjm_event->clipent ) && mdjm_employee_can( 'view_clients_list' ) )   {
         $actions = array(
             'view_client' => '<a href="#" class="toggle-client-details-option-section">' . __( 'Show client details', 'mobile-dj-manager' ) . '</a>'
         );
@@ -69,7 +69,7 @@ function mdjm_event_details_get_action_links( $event_id, $mdjm_event, $mdjm_even
 } // mdjm_event_details_get_action_links
 
 /**
- * Generate the package / addons action links.
+ * Generate the event pricing action links.
  *
  * @since   1.5
  * @param   int     $event_id           The event ID
@@ -77,13 +77,13 @@ function mdjm_event_details_get_action_links( $event_id, $mdjm_event, $mdjm_even
  * @param   bool    $mdjm_event_update  Whether an event is being updated
  * @return  arr     Array of action links
  */
-function mdjm_package_addons_get_action_links( $event_id, $mdjm_event, $mdjm_event_update )    {
+function mdjm_event_pricing_get_action_links( $event_id, $mdjm_event, $mdjm_event_update )    {
 
     $actions  = array();
 
-    $actions = apply_filters( 'mdjm_event_metabox_package_addons_actions', $actions, $event_id, $mdjm_event, $mdjm_event_update );
+    $actions = apply_filters( 'mdjm_event_pricing_actions', $actions, $event_id, $mdjm_event, $mdjm_event_update );
     return $actions;
-} // mdjm_package_addons_get_action_links
+} // mdjm_event_pricing_get_action_links
 
 /**
  * Remove unwanted metaboxes to for the mdjm-event post type.
@@ -826,6 +826,73 @@ function mdjm_event_overview_metabox_event_sections( $event_id ) {
 add_action( 'mdjm_event_overview_fields', 'mdjm_event_overview_metabox_event_sections', 20 );
 
 /**
+ * Output the event price sections
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
+
+    global $mdjm_event, $mdjm_event_update;
+
+	$singular = mdjm_get_label_singular();
+
+    if ( mdjm_employee_can( 'edit_txns' ) ) : ?>
+
+        <div id="mdjm_event_overview_event_price_fields" class="mdjm_meta_table_wrap">
+
+            <div class="widefat mdjm_repeatable_table">
+                <div class="mdjm-event-option-fields mdjm-repeatables-wrap">
+                    <div class="mdjm_event_overview_wrapper">
+                        <div class="mdjm-event-row-header">
+                            <span class="mdjm-repeatable-row-title">
+                                <?php _e( 'Pricing', 'mobile-dj-manager' ); ?>
+                            </span>
+
+                            <?php
+                            $actions = mdjm_event_pricing_get_action_links( $event_id, $mdjm_event, $mdjm_event_update );
+                            ?>
+
+                            <span class="mdjm-repeatable-row-actions">
+                                <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+                            </span>
+                        </div>
+
+                        <div class="mdjm-repeatable-row-standard-fields">
+                            <?php do_action( 'mdjm_event_overview_standard_event_price_sections', $event_id ); ?>
+                        </div>
+                        <?php do_action( 'mdjm_event_overview_custom_event_price_sections', $event_id ); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <?php else : ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_discount',
+            'value' => ! empty( $mdjm_event->discount ) ? mdjm_sanitize_amount( $mdjm_event->discount ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_cost',
+            'value' => ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_deposit',
+            'value' => $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : ''
+        ) ); ?>
+
+    <?php endif;
+
+} // mdjm_event_overview_metabox_event_price_sections
+add_action( 'mdjm_event_overview_fields', 'mdjm_event_overview_metabox_event_price_sections', 30 );
+
+/**
  * Output the client name row
  *
  * @since	1.5
@@ -1492,6 +1559,15 @@ function mdjm_event_overview_metabox_event_times_row( $event_id )    {
 } // mdjm_event_overview_metabox_event_times_row
 add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_event_times_row', 20 );
 
+/**
+ * Output the event package row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
 function mdjm_event_overview_metabox_event_packages_row( $event_id )	{
 
 	if ( ! mdjm_packages_enabled() )	{
@@ -1500,11 +1576,19 @@ function mdjm_event_overview_metabox_event_packages_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-	$package    = $mdjm_event->get_package();
-	$addons     = $mdjm_event->get_addons();
-	$employee   = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
-	$event_type = mdjm_get_event_type( $event_id, true );
-	$event_date = $mdjm_event->date ? $mdjm_event->date : false;
+	$package       = $mdjm_event->get_package();
+	$addons        = $mdjm_event->get_addons();
+	$employee      = $mdjm_event->employee_id ? $mdjm_event->employee_id : get_current_user_id();
+	$event_type    = mdjm_get_event_type( $event_id, true );
+	$event_date    = $mdjm_event->date ? $mdjm_event->date : false;
+    $package_price = ! empty( $package ) ? mdjm_get_package_price( $package, $event_date ) : '0.00';
+
+    if ( ! empty( $addons ) )	{
+		foreach( $addons as $addon )	{
+			$addon_price   = mdjm_get_addon_price( $addon, $event_date );
+            $package_price = $package_price + (float) $addon_price;
+        }
+    }
 	
 	if ( ! $event_type )	{
 		$event_type = mdjm_get_option( 'event_type_default', '' );
@@ -1548,6 +1632,39 @@ function mdjm_event_overview_metabox_event_packages_row( $event_id )	{
 
 } // mdjm_event_overview_metabox_event_packages_row
 add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_event_packages_row', 30 );
+
+/**
+ * Output the event client notes row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_event_client_notes_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+
+	<div class="mdjm-event-client-notes-fields">
+		<div class="mdjm-event-notes">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'Client Notes', 'mobile-dj-manager' ); ?>
+			</span>
+		
+			<?php echo MDJM()->html->textarea( array(
+                'name'        => '_mdjm_event_notes',
+                'placeholder' => __( 'Information entered here is visible by both clients and employees', 'mobile-dj-manager' ),
+                'value'       => esc_attr( $mdjm_event->get_meta( '_mdjm_event_notes' ) )
+            ) ); ?>
+		</div>
+	</div>
+	<?php
+
+} // mdjm_event_overview_metabox_event_client_notes_row
+add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_event_client_notes_row', 50 );
 
 /**
  * Output the playlist options section
@@ -1997,7 +2114,7 @@ add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_packages_ro
  * @param	int		$event_id			The event ID.
  * @return	str
  */
-function mdjm_event_metabox_details_notes_row( $event_id )	{
+/*function mdjm_event_metabox_details_notes_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
@@ -2014,7 +2131,7 @@ function mdjm_event_metabox_details_notes_row( $event_id )	{
 	<?php
 
 } // mdjm_event_metabox_details_notes_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 60 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_notes_row', 60 );*/
 
 /**
  * Output the event travel costs hidden fields

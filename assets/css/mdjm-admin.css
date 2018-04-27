@@ -701,7 +701,7 @@ checkbox.mdjm-form-error {
 	margin-top: 12px;
 }
 #mdjm_event_overview_event_fields,
-#mdjm_event_overview_package_fields {
+#mdjm_event_overview_event_price_fields {
 	margin-top: 12px;
 }
 #mdjm-event-actions .mdjm-select-chosen { min-width: 200px; margin: 2px; padding-bottom: 2px; }
@@ -818,6 +818,7 @@ checkbox.mdjm-form-error {
 .mdjm-event-setup-time,
 .mdjm-event-package,
 .mdjm-event-addons,
+.mdjm-event-client-notes,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
