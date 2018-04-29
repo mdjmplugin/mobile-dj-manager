@@ -151,7 +151,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'dependancy' => '',
 				'permission' => ''
 			),
-            array(
+            /*array(
 				'id'         => 'mdjm-event-details-mb',
 				'title'      => sprintf( __( '%s Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'callback'   => 'mdjm_event_metabox_details_callback',
@@ -160,7 +160,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'args'       => array(),
 				'dependancy' => '',
 				'permission' => ''
-			),
+			),*/
 			/*array(
 				'id'         => 'mdjm-event-client-mb',
 				'title'      => __( 'Client Details', 'mobile-dj-manager' ),
@@ -181,7 +181,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'dependancy' => '',
 				'permission' => ''
 			),
-			array(
+			/*array(
 				'id'         => 'mdjm-event-venue-mb',
 				'title'      => __( 'Venue Details', 'mobile-dj-manager' ),
 				'callback'   => 'mdjm_event_metabox_venue_callback',
@@ -190,7 +190,7 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'args'       => array(),
 				'dependancy' => '',
 				'permission' => ''
-			),
+			),*/
 			array(
 				'id'         => 'mdjm-event-admin-mb',
 				'title'      => __( 'Administration', 'mobile-dj-manager' ),
@@ -299,18 +299,18 @@ function mdjm_event_metabox_save_callback( $post )	{
  * @param	obj		$post	The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_employees_callback( $post )	{
+//function mdjm_event_metabox_employees_callback( $post )	{
 
-	global $post, $mdjm_event, $mdjm_event_update;
+//	global $post, $mdjm_event, $mdjm_event_update;
 
 	/*
 	 * Output the items for the employee metabox
 	 * @since	1.3.7
 	 * @param	int	$post_id	The Event post ID
 	 */
-	do_action( 'mdjm_event_employee_fields', $post->ID );
+//	do_action( 'mdjm_event_employee_fields', $post->ID );
 
-} // mdjm_event_metabox_employees_callback
+//} // mdjm_event_metabox_employees_callback
 
 /**
  * Output for the Event Overview meta box.
@@ -339,7 +339,7 @@ function mdjm_event_metabox_overview_callback( $post )	{
  * @param	obj		$post	The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_details_callback( $post )	{
+/*function mdjm_event_metabox_details_callback( $post )	{
 
 	global $post, $mdjm_event, $mdjm_event_update;
 
@@ -348,9 +348,9 @@ function mdjm_event_metabox_details_callback( $post )	{
 	 * @since	1.3.7
 	 * @param	int	$post_id	The Event post ID
 	 */
-	do_action( 'mdjm_event_details_fields', $post->ID );
+	//do_action( 'mdjm_event_details_fields', $post->ID );
 
-} // mdjm_event_metabox_details_callback
+//} // mdjm_event_metabox_details_callback
 
 /**
  * Output for the Event Venue meta box.
@@ -359,7 +359,7 @@ function mdjm_event_metabox_details_callback( $post )	{
  * @param	obj		$post	The post object (WP_Post).
  * @return
  */
-function mdjm_event_metabox_venue_callback( $post )	{
+/*function mdjm_event_metabox_venue_callback( $post )	{
 
 	global $post, $mdjm_event, $mdjm_event_update;
 
@@ -368,9 +368,9 @@ function mdjm_event_metabox_venue_callback( $post )	{
 	 * @since	1.3.7
 	 * @param	int	$post_id	The Event post ID
 	 */
-	do_action( 'mdjm_event_venue_fields', $post->ID );
+	//do_action( 'mdjm_event_venue_fields', $post->ID );
 
-} // mdjm_event_metabox_venue_callback
+//} // mdjm_event_metabox_venue_callback
 
 /**
  * Output for the Event Administration meta box.
@@ -1278,7 +1278,7 @@ function mdjm_event_overview_metabox_primary_employee_row( $event_id )    {
 
             <div class="mdjm-event-employee-wage">
                 <span class="mdjm-repeatable-row-setting-label">
-                    <?php _e( 'Wage', 'mobile-dj-manager' ); ?>
+                    <?php _e( 'Wage', 'mobile-dj-manager' ); echo ' ' . mdjm_currency_symbol(); ?>
                 </span>
     
 				<?php echo MDJM()->html->text( array(
@@ -1988,6 +1988,54 @@ function mdjm_event_overview_metabox_venue_travel_section( $event_id )	{
 add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_venue_travel_section', 30 );
 
 /**
+ * Output the event price discount row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_event_price_discount_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+
+	<div class="mdjm-event-price-fields">
+		<div class="mdjm-event-cost">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'Total Cost', 'mobile-dj-manager' ); echo ' ' . mdjm_currency_symbol(); ?>
+			</span>
+		
+			<?php echo MDJM()->html->text( array(
+				'name'        => '_mdjm_event_cost',
+				'class'       => 'mdjm-currency',
+				'placeholder' => mdjm_sanitize_amount( '0.00' ),
+				'value'       => ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : ''
+			) ); ?>
+		</div>
+
+		<div class="mdjm-event-deposit">
+			<span class="mdjm-repeatable-row-setting-label">
+				<?php _e( 'Deposit', 'mobile-dj-manager' ); echo ' ' . mdjm_currency_symbol(); ?>
+			</span>
+		
+			<?php echo MDJM()->html->text( array(
+				'name'        => '_mdjm_event_deposit',
+				'class'       => 'mdjm-currency',
+				'placeholder' => mdjm_sanitize_amount( '0.00' ),
+				'value'       => $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : mdjm_calculate_deposit( $mdjm_event->price )
+			) ); ?>
+		</div>
+
+	</div>
+	<?php
+
+} // mdjm_event_overview_metabox_event_price_discount_row
+add_action( 'mdjm_event_overview_standard_event_price_sections', 'mdjm_event_overview_metabox_event_price_discount_row', 10 );
+
+/**
  * Output the event price row
  *
  * @since	1.3.7
@@ -1996,7 +2044,7 @@ add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_me
  * @param	int		$event_id			The event ID.
  * @return	str
  */
-function mdjm_event_metabox_details_price_row( $event_id )	{
+/*function mdjm_event_metabox_details_price_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
@@ -2039,7 +2087,7 @@ function mdjm_event_metabox_details_price_row( $event_id )	{
     <?php endif;
 
 } // mdjm_event_metabox_details_price_row
-add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 40 );
+add_action( 'mdjm_event_details_fields', 'mdjm_event_metabox_details_price_row', 40 );*/
 
 /**
  * Output the event packages row
