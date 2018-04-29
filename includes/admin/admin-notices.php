@@ -14,6 +14,87 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve all dismissed notices.
+ *
+ * @since	1.5
+ * @return	array	Array of dismissed notices
+ */
+function mdjm_dismissed_notices() {
+
+	global $current_user;
+
+	$user_notices = (array) get_user_option( 'mdjm_dismissed_notices', $current_user->ID );
+
+	return $user_notices;
+
+} // mdjm_dismissed_notices
+
+/**
+ * Check if a specific notice has been dismissed.
+ *
+ * @since	1.5
+ * @param	string	$notice	Notice to check
+ * @return	bool	Whether or not the notice has been dismissed
+ */
+function mdjm_is_notice_dismissed( $notice ) {
+
+	$dismissed = mdjm_dismissed_notices();
+
+	if ( array_key_exists( $notice, $dismissed ) ) {
+		return true;
+	} else {
+		return false;
+	}
+
+} // mdjm_is_notice_dismissed
+
+/**
+ * Dismiss a notice.
+ *
+ * @since	1.5
+ * @param	string		$notice	Notice to dismiss
+ * @return	bool|int	True on success, false on failure, meta ID if it didn't exist yet
+ */
+function mdjm_dismiss_notice( $notice ) {
+
+	global $current_user;
+
+	$dismissed_notices = $new = (array) mdjm_dismissed_notices();
+
+	if ( ! array_key_exists( $notice, $dismissed_notices ) ) {
+		$new[ $notice ] = 'true';
+	}
+
+	$update = update_user_option( $current_user->ID, 'mdjm_dismissed_notices', $new );
+
+	return $update;
+
+} // mdjm_dismiss_notice
+
+/**
+ * Restore a dismissed notice.
+ *
+ * @since	1.5
+ * @param	string		$notice	Notice to restore
+ * @return	bool|int	True on success, false on failure, meta ID if it didn't exist yet
+ */
+function mdjm_restore_notice( $notice ) {
+
+	global $current_user;
+
+	$dismissed_notices = (array) mdjm_dismissed_notices();
+
+	if ( array_key_exists( $notice, $dismissed_notices ) ) {
+		unset( $dismissed_notices[ $notice ] );
+	}
+
+	$update = update_user_option( $current_user->ID, 'mdjm_dismissed_notices', $dismissed_notices );
+
+	return $update;
+
+} // mdjm_restore_notice
+
+/**
  * Admin Messages
  *
  * @since	1.3
@@ -377,3 +458,77 @@ function mdjm_admin_notices() {
 	
 } // mdjm_admin_messages
 add_action( 'admin_notices', 'mdjm_admin_notices' );
+
+/**
+ * Admin WP Rating Request Notice
+ *
+ * @since	1.5
+ * @return	void
+*/
+function mdjm_admin_wp_5star_rating_notice() {
+	ob_start(); ?>
+
+	<div class="updated notice notice-mdjm-dismiss is-dismissible" data-notice="mdjm_request_wp_5star_rating">
+		<p>
+			<?php _e( '<strong>Awesome!</strong> It looks like you have using MDJM Event Management for a while now which is really fantastic!', 'mobile-dj-manager' ); ?>
+		</p>
+		<p>
+			<?php printf(
+				__( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'mobile-dj-manager' ),
+				'https://wordpress.org/support/plugin/mobile-dj-manager/reviews/'
+			); ?>
+		</p>
+	</div>
+
+	<?php echo ob_get_clean();
+} // mdjm_admin_wp_5star_rating_notice
+
+/**
+ * Request 5 star rating after 5 events have completed.
+ *
+ * After 5 completed events we ask the admin for a 5 star rating on WordPress.org
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_request_wp_5star_rating() {
+
+	global $typenow, $pagenow;
+
+	$allowed_types   = array(
+		'mdjm-event', 'mdjm-package', 'mdjm-addon', 'mdjm_communication',
+		'contract', 'email_template', 'mdjm-playlist', 'mdjm-transaction', 'mdjm-venue'
+	);
+	$allowed_pages   = array( 'edit.php', 'post.php', 'post-new.php', 'index.php', 'plugins.php' );
+
+	if ( ! current_user_can( 'administrator' ) )	{
+		return;
+	}
+
+	if ( ! in_array( $typenow, $allowed_types ) && ! in_array( $pagenow, $allowed_pages ) ) {
+		return;
+	}
+
+	if ( mdjm_is_notice_dismissed( 'mdjm_request_wp_5star_rating' ) )	{
+		return ;
+	}
+
+	global $wpdb;
+
+	$completed_events = $wpdb->get_var( $wpdb->prepare(
+		"
+			SELECT COUNT(*)
+			FROM $wpdb->posts
+			WHERE `post_type` = %s
+			AND `post_status` = %s
+		",
+		'mdjm-event',
+		'mdjm-completed'
+	) );
+
+	if ( $completed_events >= 5 ) {
+		add_action( 'admin_notices', 'mdjm_admin_wp_5star_rating_notice' );
+	}
+
+} // mdjm_request_wp_5star_rating
+add_action( 'plugins_loaded', 'mdjm_request_wp_5star_rating' );
