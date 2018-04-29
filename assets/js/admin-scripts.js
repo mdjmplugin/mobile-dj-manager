@@ -23,6 +23,23 @@ jQuery(document).ready(function ($) {
 		$(this).children('li').children('input').attr( 'placeholder', placeholder );
 	});
 
+	// Dismiss admin notices
+    $( document ).on( 'click', '.notice-mdjm-dismiss .notice-dismiss', function () {
+        var notice = $( this ).closest( '.notice-mdjm-dismiss' ).data( 'notice' );
+
+        var postData         = {
+            notice    : notice,
+            action       : 'mdjm_dismiss_notice'
+        };
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            url: ajaxurl
+        });
+    });
+
 	// Set the deposit value for the event
 	var setDeposit = function()	{
 		var current_deposit = $('#_mdjm_event_deposit').val();

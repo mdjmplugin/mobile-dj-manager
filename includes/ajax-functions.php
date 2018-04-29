@@ -33,6 +33,23 @@ function mdjm_get_ajax_url() {
 } // mdjm_get_ajax_url
 
 /**
+ * Dismiss admin notices.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_ajax_dismiss_admin_notice()	{
+
+	$notice = sanitize_text_field( $_POST['notice'] );
+    mdjm_dismiss_notice( $notice );
+
+	wp_send_json_success();
+
+} // mdjm_ajax_dismiss_admin_notice
+add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
+
+
+/**
  * Save the client fields order during drag and drop.
  *
  *
