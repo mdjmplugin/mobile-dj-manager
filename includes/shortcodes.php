@@ -93,7 +93,7 @@ function mdjm_shortcode_home( $atts )	{
 		
 		mdjm_add_content_tag(
 			'event_action_buttons',
-			sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_option( 'app_name' ) ),
+			sprintf( __( '%s action buttons within %s', 'mobile-dj-manager' ), mdjm_get_application_name() ),
 			'mdjm_do_action_buttons'
 		);
 		

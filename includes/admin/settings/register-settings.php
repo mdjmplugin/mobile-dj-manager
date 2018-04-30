@@ -304,7 +304,7 @@ function mdjm_get_registered_settings()	{
 						'name'    => __( 'Display Credits?', 'mobile-dj-manager' ),
 						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by ' . 
 										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
-										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_application_name() ),
 						'type'    => 'checkbox',
 					),
 					'remove_on_uninstall' => array(
@@ -687,7 +687,7 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'online_enquiry',
 						'name'        => __( 'Online Quote Template', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+											mdjm_get_application_name() ),
 						'type'        => 'select',
 						'options'     => mdjm_list_templates( 'email_template', true )
 					),
@@ -795,7 +795,7 @@ function mdjm_get_registered_settings()	{
 				'main' => array(
 					'client_zone_settings' => array(
 						'id'          => 'client_zone_settings',
-						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ) . '</h3>',
+						'name'        => '<h3>' . sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_application_name() ) . '</h3>',
 						'desc'        => '',
 						'type'        => 'header'
 					),
@@ -857,7 +857,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Display Package Price?', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Select to display %s package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
 											mdjm_get_label_singular( true ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) ),
+											mdjm_get_application_name() ),
 						'type'        => 'checkbox'
 					),
 				),
@@ -891,9 +891,9 @@ function mdjm_get_registered_settings()	{
 					),
 					'app_home_page'    => array(
 						'id'          => 'app_home_page',
-						'name'        => mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ) . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
+						'name'        => mdjm_get_application_name() . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( "Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s", 'mobile-dj-manager' ),
-											mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) ),
+											mdjm_get_application_name(),
 											'<code>',
 											'</code>' ),
 						'type'        => 'select',
@@ -1391,7 +1391,7 @@ function mdjm_get_settings_tabs() {
 	$tabs['general']       = __( 'General', 'mobile-dj-manager' );
 	$tabs['events']        = sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() );
 	$tabs['emails']        = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
-	$tabs['client_zone']   = mdjm_get_option( 'app_name', __( 'Client Zone', 'mobile-dj-manager' ) );
+	$tabs['client_zone']   = mdjm_get_application_name();
 	$tabs['payments']      = __( 'Payments', 'mobile-dj-manager' );
 
 	if( ! empty( $settings['extensions'] ) ) {
@@ -1454,7 +1454,7 @@ function mdjm_get_registered_settings_sections() {
 			'templates'          => sprintf( __( '%s Templates', 'mobile-dj-manager' ), mdjm_get_label_singular() )
 		) ),
 		'client_zone'     => apply_filters( 'mdjm_settings_sections_styles', array(
-			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_option( 'app_name', __( 'Client Zone Settings', 'mobile-dj-manager' ) ) ),
+			'main'               => sprintf( __( '%s Settings', 'mobile-dj-manager' ), mdjm_get_application_name() ),
 			'styles'             => __( 'Styles', 'mobile-dj-manager' ),
 			'pages'              => __( 'Pages', 'mobile-dj-manager' ),
 			'availability'       => __( 'Availability Checker', 'mobile-dj-manager' )
