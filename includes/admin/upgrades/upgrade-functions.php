@@ -30,7 +30,7 @@ function mdjm_do_automatic_upgrades() {
 	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) )	{
 		add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
 	
-		if( $current_version < MDJM_VERSION_NUM )	{	
+		if ( $current_version < MDJM_VERSION_NUM )	{	
 			include_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
 		}
 	}
@@ -114,6 +114,14 @@ function mdjm_show_upgrade_notice()	{
 				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
 				mdjm_get_label_plural( true ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_tasks&message=1&redirect=' . mdjm_get_current_page_url() ) )
+			);
+		}
+
+        if ( version_compare( $mdjm_version, '1.5', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_pricing_15' ) )	{
+			printf(
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+				mdjm_get_label_plural( true ),
+				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_pricing_15&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
@@ -791,3 +799,124 @@ function mdjm_v15_upgrades()	{
 	update_option( 'mdjm_schedules', $tasks );
 
 } // mdjm_v15_upgrades
+
+/**
+ * Add the pricing breakdown meta keys to all existing events
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_v15_upgrade_event_pricing()	{
+
+	global $wpdb;
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	$number   = 1;
+	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
+	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
+	$redirect = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+
+	if ( $step < 2 ) {
+		// Check if we have any events before moving on
+		$sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft' LIMIT 1";
+		$has_events = $wpdb->get_col( $sql );
+
+		if ( empty( $has_events ) ) {
+			// We had no events, just complete
+			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
+			mdjm_set_upgrade_complete( 'upgrade_event_pricing_15' );
+			delete_option( 'mdjm_doing_upgrade' );
+			wp_redirect( $redirect );
+			exit;
+		}
+	}
+
+	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+	if ( empty( $total ) || $total <= 1 ) {
+		$total_sql = "SELECT COUNT(ID) as total_events FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft'";
+		$results   = $wpdb->get_row( $total_sql, 0 );
+
+		$total     = $results->total_events;
+	}
+
+	$event_ids = $wpdb->get_col( $wpdb->prepare( 
+		"
+			SELECT ID 
+			FROM $wpdb->posts 
+			WHERE post_type = 'mdjm-event' 
+            AND post_status != 'draft' 
+            AND post_status != 'auto-draft'
+			ORDER BY ID DESC LIMIT %d,%d;
+		", 
+		$offset, $number
+	) );
+
+	if ( $event_ids )	{
+		foreach( $event_ids as $event_id )	{
+
+            $mdjm_event = new MDJM_Event( $event_id );
+
+            if ( ! $mdjm_event )    {
+                continue;
+            }
+
+            // Package price
+            $package_price = $mdjm_event->get_package_price();
+            update_post_meta( $event_id, '_mdjm_event_package_cost', mdjm_sanitize_amount( $package_price ) );
+
+            // Addons cost
+            $addons_price = $mdjm_event->get_addons_price();
+            update_post_meta( $event_id, '_mdjm_event_addons_cost', mdjm_sanitize_amount( $addons_price ) );
+
+            // Travel cost
+            $travel_cost = mdjm_get_event_travel_data( $event_id );
+            if ( empty( $travel_cost ) )    {
+                $travel_cost = 0;
+            }
+            
+            update_post_meta( $event_id, '_mdjm_event_travel_cost', mdjm_sanitize_amount( $travel_cost ) );
+            
+            // Additional costs
+            update_post_meta( $event_id, '_mdjm_event_additional_cost', mdjm_sanitize_amount( 0 ) );
+            
+            // Discount
+            update_post_meta( $event_id, '_mdjm_event_discount', mdjm_sanitize_amount( 0 ) );
+
+            unset( $mdjm_event );
+		}
+
+		// Events found so upgrade them
+		$step++;
+		$redirect = add_query_arg( array(
+			'page'         => 'mdjm-upgrades',
+			'mdjm-upgrade' => 'upgrade_event_pricing_15',
+			'step'         => $step,
+			'number'       => $number,
+			'total'        => $total,
+			'redirect'     => $redirect,
+			'message'      => $message
+		), admin_url( 'index.php' ) );
+
+		wp_redirect( $redirect );
+		exit;
+
+	} else {
+		// No more events found, finish up
+		mdjm_set_upgrade_complete( 'upgrade_event_pricing_15' );
+		delete_option( 'mdjm_doing_upgrade' );
+
+		$url = add_query_arg( array(
+			'mdjm-message' => 'upgrade-completed'
+		), $redirect );
+
+		wp_redirect( $url );
+		exit;
+	}
+} // mdjm_v15_upgrade_event_pricing
+add_action( 'mdjm-upgrade_event_pricing_15', 'mdjm_v15_upgrade_event_pricing' );

@@ -83,6 +83,23 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 == Changelog ==
 
+= 1.5 =
+
+**DATE HERE**
+
+**New**: Refreshed the events admin screen with more responsive and easy to manage layout
+**New**: Added client playlist notification task to notify clients of guest submissions
+**New**: Added employee playlist notification task to notify if entried exist
+**New**: Added fields to enter client address when creating client from events page
+**New**: Auto set the setup time based on event start time. Define the default setup time within Settings -> Events
+**Tweak**: Correctly named media button options from Shortcodes to Content Tags
+**Tweak**: Updated jQuery Chosen library version
+**Fix**: Corrected ID for playlist employee notification task
+**Fix**: Do not hide empty categories when adding items to the playlist
+**Fix**: Corrected value for default playlist category
+**Fix**: Corrected the number of events a contract is assigned to
+**Fix**: Removed notification that client received playlist email when emailing to employee via admin
+
 = 1.4.7.8 =
 
 **Released 10th January, 2018**
