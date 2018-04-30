@@ -243,8 +243,9 @@ jQuery(document).ready(function ($) {
 	var MDJM_Events = {
 		
 		init : function()	{
-			this.options(),
+			this.options();
 			this.client();
+			this.costs();
 			this.employee();
 			this.equipment();
 			this.playlist();
@@ -448,7 +449,45 @@ jQuery(document).ready(function ($) {
 			});
 			
 		},
-		
+
+		costs : function()	{
+			// When a package is selected
+			$( document.body ).on( 'change', '#_mdjm_event_package', function() {
+				var package_price = $(this).find(':selected').data('price');
+
+				if( typeof package_price === 'undefined' )	{
+					package_price = '';
+				}
+
+				$('#_mdjm_event_package_cost').val(package_price);
+
+			});
+
+			// When addons are selected
+			$( document.body ).on( 'change', '#event_addons', function() {
+				var selected = $(this).find('option:selected', this);
+				var total_price = Number('0');
+				var addon_costs = [];
+				var array_length;
+
+				selected.each( function() {
+					addon_costs.push( Number( $(this).data('price') ) );
+				});
+
+				array_length = addon_costs.length;
+
+				for (i = 0; i < array_length; i++)	{
+					if( typeof addon_costs !== 'undefined' )	{
+						total_price += Number(addon_costs[i]);
+					}
+				}
+
+				$('#_mdjm_event_addons_cost').val( mdjmFormatCurrency( total_price ).substr(1) );
+
+			});
+
+		},
+
 		employee : function()	{
 			// Display form to add event employee
 			$( document.body ).on( 'click', '#toggle_add_employee_fields', function() {
