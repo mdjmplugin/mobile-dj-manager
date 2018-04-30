@@ -816,7 +816,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 		@set_time_limit( 0 );
 	}
 
-	$number   = 1;
+	$number   = 20;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
 	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
 	$redirect = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
