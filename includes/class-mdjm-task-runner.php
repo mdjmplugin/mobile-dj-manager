@@ -432,8 +432,6 @@ class MDJM_Task_Runner {
 	public function balance_reminder()	{
 		MDJM()->debug->log_it( "*** Starting the $this->name task ***", true );
 
-		$due_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
-
 		$i         = 1;
 		$completed = 0;
 		$events    = mdjm_get_events( $this->build_query() );
@@ -820,11 +818,16 @@ class MDJM_Task_Runner {
 					'post_status'  => 'mdjm-approved',
 					'meta_query'   => array(
 						'relation' => 'AND',
-						$date_query,
+						array(
+                            'key'     => '_mdjm_event_date',
+                            'compare' => '>=',
+                            'value'   => date( 'Y-m-d' ),
+                            'type'    => 'date'
+                        ),
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '<=',
-							'value'   => date( 'Y-m-d' ),
+							'value'   => date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) ),
 							'type'    => 'date'
 						),
 						array(
