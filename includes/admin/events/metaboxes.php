@@ -98,7 +98,8 @@ function mdjm_remove_event_meta_boxes()	{
 		array(
 			array( 'submitdiv', 'mdjm-event', 'side' ),
 			array( 'event-typesdiv', 'mdjm-event', 'side' ),
-			array( 'tagsdiv-enquiry-source', 'mdjm-event', 'side' )
+			array( 'tagsdiv-enquiry-source', 'mdjm-event', 'side' ),
+            array( 'commentsdiv', 'mdjm-event', 'normal' )
 		)
 	);
 	
