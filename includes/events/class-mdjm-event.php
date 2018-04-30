@@ -124,6 +124,13 @@ class MDJM_Event {
 	 */
 	public $tasks;
 
+    /**
+     * Event data array
+     *
+     * @since   1.5
+     */
+    public $data;
+
 	/**
 	 * Declare the default properities in WP_Post as we can't extend it
 	 * Anything we've delcared above has been removed.
@@ -316,7 +323,61 @@ class MDJM_Event {
 		return $this->setup_event( $event );
 
 	} // create
-	
+
+    /**
+     * Retrieve event data array
+     *
+     * @since   1.5
+     * @return  array
+     */
+    public function get_event_data() {
+
+        $event_date      =  $this->date ? $this->date : false;
+        $package         = $this->get_package();
+        $package_price   = $this->get_meta( '_mdjm_event_package_cost' );
+        $addons          = $this->get_addons();
+        $addons_price    = $this->get_meta( '_mdjm_event_addons_cost' );
+        $travel_cost     = $this->get_meta( '_mdjm_event_travel_cost' );
+        $additional_cost = $this->get_meta( '_mdjm_event_additional_cost' );
+        $discount        = $this->get_meta( '_mdjm_event_discount' );
+
+        $this->data = array(
+            'ID'                              => $this->ID,
+            'additional_cost'                 => ! empty( $additional_cost ) ? $additional_cost : 0,
+            'addons'                          => $addons,
+            'addons_price'                    => ! empty( $addons_price ) ? $addons_price : 0,
+            'client'                          => $this->client,
+            'contract'                        => $this->get_contract(),
+            'contract_id'                     => mdjm_get_event_contract_id( $this->ID ),
+            'contract_status'                 => $this->get_contract_status(),
+            'date'                            => $this->date,
+            'discount'                        => ! empty( $discount ) ? $discount : 0,
+            'employee_id'                     => $this->employee_id,
+            'finish_date'                     => $this->get_finish_date(),
+            'finish_time'                     => $this->get_finish_time(),
+            'notes'                           => $this->get_meta( '_mdjm_event_notes' ),
+            'package'                         => $package,
+            'package_price'                   => ! empty( $package_price ) ? $package_price : 0,
+            'playlist_enabled'                => $this->playlist_is_enabled(),
+            'playlist_limit'                  => $this->get_playlist_limit(),
+            'playlist_open'                   => $this->playlist_is_open(),
+            'primary_employee_payment_status' => $this->employee_id ? mdjm_event_employees_paid( $this->ID, $this->employee_id ) : false,
+            'setup_date'                      => $this->get_setup_date(),
+            'setup_time'                      => $this->get_setup_time(),
+            'start_time'                      => $this->get_start_time(),
+            'travel_cost'                     => ! empty( $travel_cost ) ? $travel_cost : 0,
+            'status'                          => $this->post_status,
+            'venue_id'                        => $this->get_venue_id()
+        );
+
+        $this->data = apply_filters( 'mdjm_event_data', $this->data, $this );
+
+        asort( $this->data );
+
+        return $this->data;
+
+    } // get_event_data
+
 	/**
 	 * Retrieve the ID
 	 *
@@ -634,6 +695,30 @@ class MDJM_Event {
 		return mdjm_get_event_package( $this->ID );
 	} // get_package
 
+    /**
+     * Retrieve the cost of packages
+     *
+     * @since   1.5
+     * @return  float
+     */
+    public function get_package_price( $package = '', $date = '' )    {
+        if ( empty( $package ) )    {
+            $package = $this->get_package();
+        }
+
+        if ( empty( $date ) )    {
+            $date = $this->date;
+        }
+
+        $package_price = mdjm_get_package_price( $package, $date );
+
+        if ( empty( $package_price ) )  {
+            $package_price = 0;
+        }
+
+        return $package_price;
+    } // get_package_price
+
 	/**
 	 * Retrieve the event addons
 	 *
@@ -643,6 +728,34 @@ class MDJM_Event {
 	public function get_addons() {
 		return mdjm_get_event_addons( $this->ID );
 	} // get_addons
+
+    /**
+     * Retrieve the cost of addons
+     *
+     * @since   1.5
+     * @return  float
+     */
+    public function get_addons_price( $addons = array(), $date = '' )    {
+        if ( empty( $addons ) )    {
+            $addons = $this->get_addons();
+        }
+
+        if ( empty( $addons ) ) {
+            $addons = array();
+        }
+
+        if ( empty( $date ) )    {
+            $date = $this->date;
+        }
+
+        $addons_price = 0;
+
+        foreach( $addons as $addon )    {
+            $addons_price = $addons_price + (float) mdjm_get_addon_price( $addon, $date );
+        }
+
+        return $addons_price;
+    } // get_addons_price
 
 	/**
 	 * Retrieve the event status.
