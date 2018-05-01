@@ -777,13 +777,23 @@ class MDJM_Task_Runner {
 				'type'    => 'datetime'
 			);
 		} else	{
-			$run_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
-			$date_query = array(
-				'key'     => '_mdjm_event_date',
-				'compare' => '>=',
-				'value'   => $run_date,
-				'type'    => 'date'
-			);
+            if ( 'before_event' == $this->options['run_when'] ) {
+                $run_date = date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) );
+                $date_query = array(
+                    'key'     => '_mdjm_event_date',
+                    'compare' => '<=',
+                    'value'   => $run_date,
+                    'type'    => 'date'
+                );
+            } else  {
+                $run_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
+                $date_query = array(
+                    'key'     => '_mdjm_event_date',
+                    'compare' => '>=',
+                    'value'   => $run_date,
+                    'type'    => 'date'
+                );
+            }
 		}
 
 		switch ( $this->slug )	{
@@ -824,12 +834,7 @@ class MDJM_Task_Runner {
                             'value'   => date( 'Y-m-d' ),
                             'type'    => 'date'
                         ),
-						array(
-							'key'     => '_mdjm_event_date',
-							'compare' => '<=',
-							'value'   => date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) ),
-							'type'    => 'date'
-						),
+						$date_query,
 						array(
 							'key'     => '_mdjm_event_balance_status',
 							'value'   => 'Due'
