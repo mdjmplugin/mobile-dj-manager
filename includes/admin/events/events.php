@@ -1391,8 +1391,17 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	foreach( $_POST as $key => $value )	{
 		
 		if( substr( $key, 0, 12 ) == '_mdjm_event_' )	{
-			error_log( $key . ' = ' . $value );
-			if ( $key == '_mdjm_event_dj_wage' || $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' )	{
+			$cost_keys = array(
+                '_mdjm_event_dj_wage',
+                '_mdjm_event_package_cost',
+                '_mdjm_event_addons_cost',
+                '_mdjm_event_travel_cost',
+                '_mdjm_event_additional_cost',
+                '_mdjm_event_discount',
+                '_mdjm_event_deposit',
+                '_mdjm_event_cost'
+            );
+			if ( in_array( $key, $cost_keys ) )	{
 				$value = mdjm_sanitize_amount( $value );
 			}
 		

@@ -16,6 +16,7 @@
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
 a.mdjm-fake { cursor: pointer; cursor: hand; }
+.mdjm-mute { opacity: 0.4; }
 .mdjm-input-currency {
 	width: 75px;
 }
@@ -792,6 +793,13 @@ checkbox.mdjm-form-error {
 	border-width: 0 1px 1px;
 	border-style: solid;
 	border-color: #e5e5e5;
+}
+
+#mdjm-event-pricing-loader    {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    display: none;
 }
 
 .mdjm-repeatable-row-setting-label {

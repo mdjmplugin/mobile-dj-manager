@@ -1138,6 +1138,10 @@ function mdjm_get_employees_with_addon( $addon_id )	{
 function mdjm_get_addon_event_types( $addon_id )	{
 	$event_types = get_post_meta( $addon_id, '_addon_event_types', true );
 
+    if ( ! $event_types || ! is_array( $event_types ) ) {
+        $event_types = array( 'all' );
+    }
+
 	return apply_filters( 'mdjm_addon_event_types', $event_types, $addon_id );
 } // mdjm_get_addon_event_types
 

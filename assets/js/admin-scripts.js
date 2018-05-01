@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
 			url        : ajaxurl,
 			beforeSend : function()	{
 				$('#_mdjm_event_deposit').attr('readonly', true );
-				$('#_mdjm_event_deposit').addClass('mdjm-loader');
+				$('#mdjm-event-pricing-detail').addClass('mdjm-mute');
 			},
 			success: function (response) {
 				if(response.type === 'success') {
@@ -64,7 +64,7 @@ jQuery(document).ready(function ($) {
 					alert(response.msg);
 					$('#_mdjm_event_deposit').val(current_deposit);
 				}
-				$('#_mdjm_event_deposit').removeClass('mdjm-loader');
+				$('#mdjm-event-pricing-detail').removeClass('mdjm-mute');
 				$('#_mdjm_event_deposit').attr('readonly', false );				
 			}
 		}).fail(function (data) {
@@ -101,6 +101,8 @@ jQuery(document).ready(function ($) {
 			event_date      : $('#_mdjm_event_date').val(),
 			venue           : venue,
 			employee_id     : $('#_mdjm_event_dj').val(),
+            additional      : $('#_mdjm_event_additional_cost').val(),
+            discount        : $('#_mdjm_event_discount').val(),
 			action          : 'mdjm_update_event_cost'
 		};
 
@@ -110,12 +112,21 @@ jQuery(document).ready(function ($) {
 			data       : postData,
 			url        : ajaxurl,
 			beforeSend : function()	{
-				$('#_mdjm_event_cost').addClass('mdjm-loader');
-				$('#_mdjm_event_cost').attr('readonly', true);
+                $('#mdjm-event-pricing-detail').addClass('mdjm-mute');
 			},
 			success: function (response) {
 				if(response.type === 'success') {
-					$('#_mdjm_event_cost').val(response.cost);
+					$('#_mdjm_event_package_cost').val(response.package_cost);
+                    $('#_mdjm_event_addons_cost').val(response.addons_cost);
+                    $('#_mdjm_event_travel_cost').val(response.travel_cost);
+                    $('#_mdjm_event_additional_cost').val(response.additional_cost);
+                    $('#_mdjm_event_discount').val(response.discount);
+
+                    var value = Number(response.package_cost) + Number(response.addons_cost) + Number(response.travel_cost) + Number(response.additional_cost);
+                    value = Number(value) - Number(response.discount);
+                    value = mdjmFormatCurrency( value ).substr(1)
+
+                    $('#_mdjm_event_cost').val(value);
 
 					if( mdjm_admin_vars.update_deposit )	{
 						setDeposit();
@@ -125,8 +136,7 @@ jQuery(document).ready(function ($) {
 					$('#_mdjm_event_cost').val(current_cost);
 				}
 
-				$('#_mdjm_event_cost').removeClass('mdjm-loader');
-				$('#_mdjm_event_cost').attr('readonly', false);
+                $('#mdjm-event-pricing-detail').removeClass('mdjm-mute');
 			}
 		}).fail(function (data) {
 			if ( window.console && window.console.log ) {
@@ -245,7 +255,7 @@ jQuery(document).ready(function ($) {
 		init : function()	{
 			this.options();
 			this.client();
-			this.costs();
+			//this.costs();
 			this.employee();
 			this.equipment();
 			this.playlist();
@@ -450,7 +460,7 @@ jQuery(document).ready(function ($) {
 			
 		},
 
-		costs : function()	{
+		/*costs : function()	{
 			// When a package is selected
 			$( document.body ).on( 'change', '#_mdjm_event_package', function() {
 				var package_price = $(this).find(':selected').data('price');
@@ -486,7 +496,7 @@ jQuery(document).ready(function ($) {
 
 			});
 
-		},
+		},*/
 
 		employee : function()	{
 			// Display form to add event employee
@@ -576,7 +586,7 @@ jQuery(document).ready(function ($) {
 		
 		equipment : function()	{
 
-			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function() {
+			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons,#_mdjm_event_additional_cost,#_mdjm_event_discount', function() {
 				setCost();
 			});
 			
@@ -667,6 +677,7 @@ jQuery(document).ready(function ($) {
 							$('#event_addons').empty();
 							$('#event_addons').append(response.addons);
 							$('#event_addons').trigger('chosen:updated');
+                            setCost();
 
 							$('#mdjm-equipment-loader').hide();
 							$('#mdjm-event-equipment-row').show();

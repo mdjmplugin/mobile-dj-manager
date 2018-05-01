@@ -863,7 +863,10 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
                             </span>
                         </div>
 
-                        <div class="mdjm-repeatable-row-standard-fields">
+                        <div id="mdjm-event-pricing-loader" class="mdjm-repeatable-row-standard-fields">
+                            <?php _e( 'Updating...', 'mobile-dj-manager' ); ?>
+                        </div>
+                        <div id="mdjm-event-pricing-detail" class="mdjm-repeatable-row-standard-fields">
                             <?php do_action( 'mdjm_event_overview_standard_event_price_sections', $event_id ); ?>
                         </div>
                         <?php do_action( 'mdjm_event_overview_custom_event_price_sections', $event_id ); ?>
@@ -875,18 +878,38 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
     <?php else : ?>
 
         <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_package_cost',
+            'value' => ! empty( $mdjm_event->package_price ) ? mdjm_sanitize_amount( $mdjm_event->package_price ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_addons_cost',
+            'value' => ! empty( $mdjm_event->addons_price ) ? mdjm_sanitize_amount( $mdjm_event->addons_price ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_travel_cost',
+            'value' => ! empty( $mdjm_event->travel_cost ) ? mdjm_sanitize_amount( $mdjm_event->travel_cost ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
+            'name'  => '_mdjm_event_additional_cost',
+            'value' => ! empty( $mdjm_event->additional_cost ) ? mdjm_sanitize_amount( $mdjm_event->additional_cost ) : ''
+        ) ); ?>
+
+        <?php echo MDJM()->html->hidden( array(
             'name'  => '_mdjm_event_discount',
             'value' => ! empty( $mdjm_event->discount ) ? mdjm_sanitize_amount( $mdjm_event->discount ) : ''
         ) ); ?>
 
         <?php echo MDJM()->html->hidden( array(
-            'name'  => '_mdjm_event_cost',
-            'value' => ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : ''
+            'name'  => '_mdjm_event_deposit',
+            'value' => $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : ''
         ) ); ?>
 
         <?php echo MDJM()->html->hidden( array(
-            'name'  => '_mdjm_event_deposit',
-            'value' => $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : ''
+            'name'  => '_mdjm_event_cost',
+            'value' => ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : ''
         ) ); ?>
 
     <?php endif;

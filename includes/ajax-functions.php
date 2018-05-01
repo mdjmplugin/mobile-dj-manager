@@ -615,6 +615,11 @@ function mdjm_update_event_cost_ajax()	{
 	$employee_id   = $_POST['employee_id'];
 	$dest          = $_POST['venue'];
 	$dest          = maybe_unserialize( $dest );
+    $package_cost  = 0;
+    $addons_cost   = 0;
+    $travel_cost   = 0;
+    $additional    = ! empty( $_POST['additional'] ) ? (float) $_POST['additional'] : 0;
+    $discount      = ! empty( $_POST['discount'] )   ? (float) $_POST['discount']   : 0;
 	
 	if ( $event_cost )	{
 		$event_cost = (float) $event_cost;
@@ -636,21 +641,21 @@ function mdjm_update_event_cost_ajax()	{
 		$base_cost = $base_cost - (float) $travel_data['cost'];
 	}
 
+    $base_cost = $base_cost - $additional;
+    $base_cost = $base_cost + $discount;
+
 	$new_package = ! empty( $_POST['package'] )      ? $_POST['package']      : false;
 	$new_addons  = ! empty( $_POST['addons']  )      ? $_POST['addons']       : false;
 
 	$cost = $base_cost;
 
 	if ( $new_package )	{
-		$new_package_price = mdjm_get_package_price( $new_package, $event_date );
-		$cost += (float) $new_package_price;
+		$package_cost = (float) mdjm_get_package_price( $new_package, $event_date );
 	}
 
 	if ( $new_addons )	{
 		foreach( $new_addons as $new_addon )	{
-			$new_addon_price = mdjm_get_addon_price( $new_addon, $event_date );
-
-			$cost += (float) $new_addon_price;
+			$addons_cost += (float) mdjm_get_addon_price( $new_addon, $event_date );
 		}
 	}
 
@@ -665,9 +670,15 @@ function mdjm_update_event_cost_ajax()	{
 		$new_travel = ! empty( $mdjm_travel->data ) ? $mdjm_travel->get_cost() : false;
 	
 		if ( $new_travel && (float) preg_replace( '/[^0-9.]*/', '', $mdjm_travel->data['distance'] ) >= mdjm_get_option( 'travel_min_distance' ) )	{
-			$cost += (float) $new_travel;
+			$travel_cost = (float) $new_travel;
 		}
 	}
+
+    $cost += $package_cost;
+    $cost += $addons_cost;
+    $cost += $travel_cost;
+    $cost += $additional;
+    //$cost -= $discount;
 
 	if ( ! empty( $cost ) )	{
 		$result['type'] = 'success';
@@ -676,6 +687,12 @@ function mdjm_update_event_cost_ajax()	{
 		$result['type'] = 'success';
 		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
+
+    $result['package_cost']     = mdjm_sanitize_amount( $package_cost );
+    $result['addons_cost']      = mdjm_sanitize_amount( $addons_cost );
+    $result['travel_cost']      = mdjm_sanitize_amount( $travel_cost );
+    $result['additional_cost']  = mdjm_sanitize_amount( $additional );
+    $result['discount']         = mdjm_sanitize_amount( $discount );
 
 	wp_send_json( $result );
 
