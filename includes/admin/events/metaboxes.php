@@ -715,9 +715,6 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
                             </span>
                         </div>
 
-                        <div id="mdjm-event-pricing-loader" class="mdjm-repeatable-row-standard-fields">
-                            <?php _e( 'Updating...', 'mobile-dj-manager' ); ?>
-                        </div>
                         <div id="mdjm-event-pricing-detail" class="mdjm-repeatable-row-standard-fields">
                             <?php do_action( 'mdjm_event_overview_standard_event_price_sections', $event_id ); ?>
                         </div>
@@ -880,7 +877,11 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id )    {
                     'name'     => 'mdjm_email_template',
                     'options'  => mdjm_list_templates( 'email_template' ),
                     'selected' => mdjm_get_option( 'enquiry' ),
-                    'chosen'   => true
+                    'chosen'   => true,
+                    'data'     => array(
+                        'search-type'        => 'template',
+                        'search-placeholder' => __( 'Type to search all templates', 'mobile-dj-manager' )
+                    )
                 ) ); ?>
             </div>
 
@@ -892,7 +893,11 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id )    {
                         'name'     => 'mdjm_online_quote',
                         'options'  => mdjm_list_templates( 'email_template' ),
                         'selected' => mdjm_get_option( 'online_enquiry' ),
-                        'chosen'   => true
+                        'chosen'   => true,
+                        'data'     => array(
+                            'search-type'        => 'template',
+                            'search-placeholder' => __( 'Type to search all templates', 'mobile-dj-manager' )
+                        )
                     ) ); ?>
                 </div>
 
@@ -1534,6 +1539,49 @@ function mdjm_event_overview_metabox_event_client_notes_row( $event_id )	{
 
 } // mdjm_event_overview_metabox_event_client_notes_row
 add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_event_client_notes_row', 50 );
+
+/**
+ * Output the event workers section
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_event_workers_row( $event_id )	{
+	global $mdjm_event, $mdjm_event_update;
+
+	?>
+    <a id="mdjm-event-workers"></a>
+    <div id="mdjm-event-workers-fields" class="mdjm-event-workers-sections-wrap">
+        <div class="mdjm-custom-event-sections">
+        	<?php do_action( 'mdjm_event_overview_workers_top', $event_id ); ?>
+            <div class="mdjm-custom-event-section">
+                <span class="mdjm-custom-event-section-title"><?php printf( __( '%s Workers', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span>
+
+				<div class="mdjm-repeatable-option">
+                    <span class="mdjm-event-workers-option">
+                        <label class="mdjm-enable-playlist">
+                            <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?>
+                        </label>
+                        <?php echo MDJM()->html->checkbox( array(
+                            'name'     => '_mdjm_event_playlist',
+                            'value'    => 'Y',
+                            'current'  => 'Y',
+                        ) ); ?>
+                    </span>
+                </div>
+
+            </div>
+            <?php do_action( 'mdjm_event_overview_workers', $event_id ); ?>
+        </div>
+    </div>
+
+    <?php
+
+} // mdjm_event_overview_metabox_event_workers_row
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_event_workers_row', 2 );
 
 /**
  * Output the playlist options section

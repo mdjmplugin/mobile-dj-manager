@@ -795,13 +795,6 @@ checkbox.mdjm-form-error {
 	border-color: #e5e5e5;
 }
 
-#mdjm-event-pricing-loader    {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    display: none;
-}
-
 .mdjm-repeatable-row-setting-label {
 	display: block;
 	margin-bottom: 4px;
@@ -815,6 +808,7 @@ checkbox.mdjm-form-error {
 .mdjm-online-template,
 .mdjm-event-primary-employee,
 .mdjm-event-employee-wage,
+.mdjm-event-add-worker,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -844,6 +838,7 @@ checkbox.mdjm-form-error {
 .mdjm-online-template,
 .mdjm-event-primary-employee,
 .mdjm-event-employee-wage,
+.mdjm-event-add-worker,
 .mdjm-event-type,
 .mdjm-event-contract,
 .mdjm-event-venue,
@@ -873,6 +868,7 @@ checkbox.mdjm-form-error {
 .mdjm-custom-event-sections-wrap,
 .mdjm-client-add-event-sections-wrap,
 .mdjm-client-details-event-sections-wrap,
+.mdjm-event-workers-sections-wrap,
 .mdjm-event-options-sections-wrap,
 .mdjm-add-event-type-sections-wrap,
 .mdjm-event-venue-details-sections-wrap,
@@ -883,6 +879,9 @@ checkbox.mdjm-form-error {
 	border-color: #e5e5e5;
 	box-sizing: border-box;
 	width: 100%;
+}
+#mdjm-event-workers-fields    {
+    display: block;
 }
 /* Visible Sections */
 .mdjm-event-details-client-template-sections-wrap,
@@ -950,6 +949,7 @@ checkbox.mdjm-form-error {
     .mdjm-online-template,
 	.mdjm-event-primary-employee,
 	.mdjm-event-employee-wage,
+    .mdjm-event-add-worker,
 	.mdjm-event-type,
 	.mdjm-event-contract,
 	.mdjm-event-venue,
