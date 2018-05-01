@@ -930,6 +930,12 @@ checkbox.mdjm-form-error {
 	margin-top: 6px;
 }
 
+#_mdjm_event_notes,
+#_mdjm_event_dj_notes,
+#_mdjm_event_admin_notes {
+    min-height: 5em;
+}
+
 @media screen and ( max-width: 480px ) {
     .mdjm-repeatable-row-title,
 	.mdjm-repeatable-row-actions {

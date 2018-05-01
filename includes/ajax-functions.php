@@ -484,13 +484,15 @@ function mdjm_add_event_type_ajax()	{
 	} else	{
 		$term = wp_insert_term( $_POST['type'], 'event-types' );
 
-		if ( is_array( $term ) )	{
+		if ( ! is_wp_error( $term ) )	{
             $msg = 'success';
+        } else  {
+            error_log( $term->get_error_message() );
         }
 
 	}
 	
-	$selected   = ( $msg == 'success' ) ? $term['term_id'] : $_POST['current'];
+	$selected   = $msg == 'success' ? $term['term_id'] : $_POST['current'];
     $categories = get_terms( 'event-types', array( 'hide_empty' => false ) );
     $options    = array();
     $output     = '';

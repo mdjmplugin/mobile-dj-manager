@@ -410,7 +410,8 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-add-client').hide('fast');
+                        $('.mdjm-client-option-fields').addClass('mdjm-mute');
+                        $('#mdjm-add-client').hide('fast');
 					},
 					success: function (response) {
 						$('#mdjm-add-client-fields').slideToggle();
@@ -431,6 +432,8 @@ jQuery(document).ready(function ($) {
 						$('#_mdjm_event_block_emails').prop('checked', false );
 						$('#mdjm_reset_pw').prop('checked', true );
 						$('#client_name').trigger('chosen:updated');
+
+                        $('.mdjm-client-option-fields').removeClass('mdjm-mute');
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
@@ -841,6 +844,7 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
+                        $('.mdjm-event-option-fields').addClass('mdjm-mute');
 						$('#mdjm-add-event-type').hide('fast');
 					},
 					success: function (response) {
@@ -856,6 +860,8 @@ jQuery(document).ready(function ($) {
                             $('#mdjm_event_type').append(response.data.event_types);
                             $('#mdjm_event_type').trigger('chosen:updated');
 							$('#mdjm-add-event-type').show('fast');
+
+                            $('.mdjm-event-option-fields').removeClass('mdjm-mute');
 						} else	{
 							alert(response.data.msg);
 							$('#mdjm-add-event-type').show('fast');
@@ -1045,6 +1051,7 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
+                        $('.mdjm-event-option-fields').addClass('mdjm-mute');
 						$('#mdjm-add-venue').hide('fast');
 					},
 					success: function (response) {
@@ -1054,6 +1061,8 @@ jQuery(document).ready(function ($) {
 						$('#mdjm-add-venue').show();
 						$('#venue_id').trigger('chosen:updated');
                         refreshEventVenueDetails();
+
+                        $('.mdjm-event-option-fields').removeClass('mdjm-mute');
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
