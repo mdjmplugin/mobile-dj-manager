@@ -104,8 +104,13 @@
 						}
 					}]
 				}, {
-					text: 'DJ Content Tags',
+					text: 'Employee Content Tags',
 					menu: [{
+                        text: 'Employee Address',
+						onclick: function () {
+							editor.insertContent('{employee_address}');
+						}
+                    },
 						text: 'DJ Firstname',
 						onclick: function () {
 							editor.insertContent('{dj_firstname}');
