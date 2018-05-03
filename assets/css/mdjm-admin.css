@@ -701,6 +701,7 @@ checkbox.mdjm-form-error {
 .mdjm_event_overview_wrapper:not(:first-child)    {
 	margin-top: 12px;
 }
+.mdjm_event_overview_wrapper .mdjm-select-chosen { margin: 0px; }
 #mdjm_event_overview_event_fields,
 #mdjm_event_overview_event_price_fields {
 	margin-top: 12px;
@@ -880,7 +881,8 @@ checkbox.mdjm-form-error {
 	box-sizing: border-box;
 	width: 100%;
 }
-#mdjm-event-workers-fields    {
+#mdjm-event-workers-fields,
+#mdjm-event-worker-add    {
     display: block;
 }
 /* Visible Sections */
@@ -917,6 +919,8 @@ checkbox.mdjm-form-error {
 	display: block;
 	margin-bottom: 2px;
 }
+.mdjm-custom-event-section .mdjm-select-chosen { margin: 0px; }
+
 .mdjm-client-template-fields,
 .mdjm-client-new-email,
 .mdjm-add-client-action,

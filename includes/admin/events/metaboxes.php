@@ -1552,6 +1552,14 @@ add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_
 function mdjm_event_overview_metabox_event_workers_row( $event_id )	{
 	global $mdjm_event, $mdjm_event_update;
 
+	$exclude   = false;
+
+	if ( ! empty( $mdjm_event->data['employees'] ) )	{
+		foreach( $mdjm_event->data['employees'] as $employee_id => $employee_data )	{
+			$exclude[] = $employee_id;
+		}
+	}
+
 	?>
     <a id="mdjm-event-workers"></a>
     <div id="mdjm-event-workers-fields" class="mdjm-event-workers-sections-wrap">
@@ -1560,20 +1568,40 @@ function mdjm_event_overview_metabox_event_workers_row( $event_id )	{
             <div class="mdjm-custom-event-section">
                 <span class="mdjm-custom-event-section-title"><?php printf( __( '%s Workers', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span>
 
-				<div class="mdjm-repeatable-option">
-                    <span class="mdjm-event-workers-option">
-                        <label class="mdjm-enable-playlist">
-                            <?php _e( 'Enable Playlist?', 'mobile-dj-manager' ); ?>
-                        </label>
-                        <?php echo MDJM()->html->checkbox( array(
-                            'name'     => '_mdjm_event_playlist',
-                            'value'    => 'Y',
-                            'current'  => 'Y',
+                <span class="mdjm-event-workers-role">
+                    <?php echo MDJM()->html->roles_dropdown( array(
+                        'name'   => 'event_new_employee_role',
+                        'chosen' => true
+                    ) ); ?>
+                </span>
+
+                <span class="mdjm-event-workers-employee">
+                    <?php echo MDJM()->html->employee_dropdown( array(
+                        'name'        => 'event_new_employee',
+                        'exclude'     => $exclude,
+                        'group'       => true,
+                        'chosen'      => true,
+                        'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
+                    <span class="mdjm-event-workers-wage">
+                        <?php echo MDJM()->html->text( array(
+                            'name'        => 'event_new_employee_wage',
+                            'class'       => 'mdjm-currency',
+                            'placeholder' => mdjm_sanitize_amount( '0' )
                         ) ); ?>
                     </span>
-                </div>
+                <?php endif; ?>
+
+				<br />
+				<span class="mdjm-event-worker-add">
+                	<a id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+                </span>
 
             </div>
+
             <?php do_action( 'mdjm_event_overview_workers', $event_id ); ?>
         </div>
     </div>

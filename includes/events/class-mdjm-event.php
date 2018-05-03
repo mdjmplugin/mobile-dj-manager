@@ -356,6 +356,7 @@ class MDJM_Event {
             'date'                            => $this->date,
             'discount'                        => ! empty( $discount ) ? $discount : 0,
             'employee_id'                     => $this->employee_id,
+			'employees'                       => $this->get_all_employees(),
             'finish_date'                     => $this->get_finish_date(),
             'finish_time'                     => $this->get_finish_time(),
             'notes'                           => $this->get_meta( '_mdjm_event_notes' ),
