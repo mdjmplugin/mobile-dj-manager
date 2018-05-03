@@ -564,6 +564,7 @@ class MDJM_HTML_Elements {
 			'employee'         => false,
 			'event_type'       => false,
 			'event_date'       => false,
+            'exclude_cats'     => null,
 			'placeholder'      => __( 'Select a Package', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'cost'             => true,
@@ -582,7 +583,22 @@ class MDJM_HTML_Elements {
 		$options      = array();
 		
 		$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
-		
+
+        if ( isset( $args['exclude_cats'] ) )   {
+            $exclude = $args['exclude_cats'];
+
+            if ( ! is_array( $exclude ) )   {
+                $exclude = array( $exclude );
+
+                $package_args['tax_query'] = array( array(
+                    'taxonomy' => 'package-category',
+                    'field'    => 'term_id',
+                    'terms'    => $exclude,
+                    'operator' => 'NOT IN'
+                ) );
+            }
+        }
+
 		$packages = mdjm_get_packages( $package_args );
 
 		if ( $packages )	{
@@ -660,6 +676,7 @@ class MDJM_HTML_Elements {
 			'employee'         => false,
 			'event_type'       => false,
 			'event_date'       => false,
+            'exclude_cats'     => null,
 			'placeholder'      => null,
 			'multiple'         => true,
 			'package'          => '',
@@ -679,6 +696,22 @@ class MDJM_HTML_Elements {
         $addons_args = array();
 		$options     = array();
 		$titles      = array();
+
+        if ( isset( $args['exclude_cats'] ) )   {
+            $exclude = $args['exclude_cats'];
+
+            if ( ! is_array( $exclude ) )   {
+                $exclude = array( $exclude );
+
+                $addons_args['tax_query'] = array( array(
+                    'taxonomy' => 'addon-category',
+                    'field'    => 'term_id',
+                    'terms'    => $exclude,
+                    'operator' => 'NOT IN'
+                ) );
+            }
+        }
+
 		$addons      = mdjm_get_addons( $addons_args );
 
 		if ( $addons )	{
