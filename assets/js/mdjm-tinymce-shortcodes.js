@@ -4,11 +4,11 @@
             text: 'MDJM',
             icon: false,
             type: 'menubutton',
-			tooltip: 'Insert MDJM shortcodes and content tags into your document',
+			tooltip: 'Insert MDJM shortcodes into your document',
             menu: [{
 				text: 'Content Tags',
 				menu:[{
-					text: 'Application Content Tags',
+					text: 'Application',
 					menu: [{
 						text: 'Admin URL',
 						onclick: function () {
@@ -56,7 +56,7 @@
 						}
 					}]
 				}, {
-					text: 'Client Content Tags',
+					text: 'Clients',
 					menu: [{
 						text: 'Client Firstname',
 						onclick: function () {
@@ -104,35 +104,30 @@
 						}
 					}]
 				}, {
-					text: 'Employee Content Tags',
+					text: 'Employees',
 					menu: [{
-                        text: 'Employee Address',
+						text: 'Employee Firstname',
 						onclick: function () {
-							editor.insertContent('{employee_address}');
-						}
-                    },
-						text: 'DJ Firstname',
-						onclick: function () {
-							editor.insertContent('{dj_firstname}');
+							editor.insertContent('{employee_firstname}');
 						}
 					}, {
-						text: 'DJ Fullname',
+						text: 'Employee Fullname',
 						onclick: function () {
-							editor.insertContent('{dj_fullname}');
+							editor.insertContent('{employee_fullname}');
 						}
 					}, {
-						text: 'DJ Email',
+						text: 'Employee Email',
 						onclick: function () {
-							editor.insertContent('{dj_email}');
+							editor.insertContent('{employee_email}');
 						}
 					}, {
-						text: 'DJ Phone',
+						text: 'Employee Phone',
 						onclick: function () {
-							editor.insertContent('{dj_primary_phone}');
+							editor.insertContent('{employee_primary_phone}');
 						}
 					}]
 				}, {
-					text: 'Equipment Content Tags',
+					text: 'Equipment',
 					menu: [{
 						text: 'Available Addons',
 						onclick: function () {
@@ -180,7 +175,7 @@
 						}
 					}]
 				}, {
-					text: 'Event Content Tags',
+					text: 'Events',
 					menu: [{
 						text: 'Event Name',
 						onclick: function () {
@@ -339,7 +334,7 @@
 						}
 					}]
 				}, {
-					text: 'Online Payment Content Tags',
+					text: 'Online Payments',
 					menu: [{
 						text: 'Payment Amount',
 						onclick: function () {
@@ -357,7 +352,7 @@
 						}
 					}]
 				}, {
-					text: 'General Content Tags',
+					text: 'General',
 					menu: [{
 						text: 'Date DD/MM/YYYY',
 						onclick: function () {
@@ -379,7 +374,7 @@
 					}
 				}]
 			}, {
-				text: 'Pages Shortcodes',
+				text: 'Page Shortcodes',
 				menu: [{
 					text: 'Client Zone Home',
 					onclick: function () {
@@ -404,29 +399,6 @@
 					text: 'Client Profile',
 					onclick: function () {
 						editor.insertContent('[mdjm-profile]');
-					}
-				}]
-			}, {
-				text: 'MDJM to PDF',
-				menu: [{
-					text: 'Download PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-download type="text" text="Download"]');
-					}
-				}, {
-					text: 'Email PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-email type="text" text="Email PDF"]');
-					}
-				}, {
-					text: 'Print PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-print type="text" text="Print"]');
-					}
-				}, {
-					text: 'PDF Page Break',
-					onclick: function() {
-						editor.insertContent('{pdf_pagebreak}');
 					}
 				}]
 			}]
