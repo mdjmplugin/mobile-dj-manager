@@ -577,12 +577,13 @@ class MDJM_HTML_Elements {
 			)
 		);
 		
-		$args    = wp_parse_args( $args, $defaults );
-		$options = array();
+		$args         = wp_parse_args( $args, $defaults );
+        $package_args = array();
+		$options      = array();
 		
 		$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
 		
-		$packages = mdjm_get_packages();
+		$packages = mdjm_get_packages( $package_args );
 
 		if ( $packages )	{
 
@@ -674,10 +675,11 @@ class MDJM_HTML_Elements {
 			)
 		);
 		
-		$args    = wp_parse_args( $args, $defaults );
-		$options = array();
-		$titles  = array();
-		$addons  = mdjm_get_addons();
+		$args        = wp_parse_args( $args, $defaults );
+        $addons_args = array();
+		$options     = array();
+		$titles      = array();
+		$addons      = mdjm_get_addons( $addons_args );
 
 		if ( $addons )	{
 			foreach( $addons as $addon )	{
