@@ -581,10 +581,10 @@ class MDJM_HTML_Elements {
 		$args         = wp_parse_args( $args, $defaults );
         $package_args = array();
 		$options      = array();
-		
+
 		$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
 
-        if ( isset( $args['exclude_cats'] ) )   {
+        if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) )   {
             $exclude = $args['exclude_cats'];
 
             if ( ! is_array( $exclude ) )   {
@@ -697,7 +697,7 @@ class MDJM_HTML_Elements {
 		$options     = array();
 		$titles      = array();
 
-        if ( isset( $args['exclude_cats'] ) )   {
+        if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) )   {
             $exclude = $args['exclude_cats'];
 
             if ( ! is_array( $exclude ) )   {

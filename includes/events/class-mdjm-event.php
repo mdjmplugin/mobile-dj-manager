@@ -242,22 +242,27 @@ class MDJM_Event {
 			'post_status'  => 'mdjm-enquiry',
 			'post_title'   => __( 'New Event', 'mobile-dj-manager' ),
 		);
-		
+
 		$default_meta = array(
-			'_mdjm_event_date'               => date( 'Y-m-d' ),
-			'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
-			'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
-			'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
-			'_mdjm_event_playlist_limit'	 => mdjm_playlist_global_limit(),
-			'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
-			'_mdjm_event_cost'               => 0,
-			'_mdjm_event_deposit'            => 0,
-			'_mdjm_event_deposit_status'     => __( 'Due', 'mobile-dj-manager' ),
-			'_mdjm_event_balance_status'     => __( 'Due', 'mobile-dj-manager' ),
-			'mdjm_event_type'                => mdjm_get_option( 'event_type_default' ),
-			'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' ),
-			'_mdjm_event_venue_id'           => 'Manual',
-			'_mdjm_event_tasks'              => array()
+			'_mdjm_event_date'            => date( 'Y-m-d' ),
+			'_mdjm_event_dj'              => ! mdjm_get_option( 'employer' ) ? 1 : 0,
+			'_mdjm_event_playlist_access' => mdjm_generate_playlist_guest_code(),
+			'_mdjm_event_playlist'        => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
+			'_mdjm_event_playlist_limit'  => mdjm_playlist_global_limit(),
+			'_mdjm_event_contract'        => mdjm_get_default_event_contract(),
+            '_mdjm_event_package_cost'    => 0,
+            '_mdjm_event_addons_cost'     => 0,
+            '_mdjm_event_travel_cost'     => 0,
+            '_mdjm_event_additional_cost' => 0,
+            '_mdjm_event_discount'        => 0,
+			'_mdjm_event_cost'            => 0,
+			'_mdjm_event_deposit'         => 0,
+			'_mdjm_event_deposit_status'  => __( 'Due', 'mobile-dj-manager' ),
+			'_mdjm_event_balance_status'  => __( 'Due', 'mobile-dj-manager' ),
+			'mdjm_event_type'             => mdjm_get_option( 'event_type_default' ),
+			'mdjm_enquiry_source'         => mdjm_get_option( 'enquiry_source_default' ),
+			'_mdjm_event_venue_id'        => 'Manual',
+			'_mdjm_event_tasks'           => array()
 		);
 
 		$data = wp_parse_args( $data, $defaults );
@@ -270,54 +275,52 @@ class MDJM_Event {
 		$event = WP_Post::get_instance( $id );
 
 		if ( $event )	{
-			
+
 			if ( ! empty( $meta['mdjm_event_type'] ) )	{
 				mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
 				$meta['_mdjm_event_name'] = get_term( $meta['mdjm_event_type'], 'event-types' )->name;
 				$meta['_mdjm_event_name'] = apply_filters( 'mdjm_event_name', $meta['_mdjm_event_name'], $id );
 			}
-			
+
 			if ( ! empty( $meta['mdjm_enquiry_source'] ) )	{
 				mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
 			}
-						
+
 			if ( ! empty( $meta['_mdjm_event_start'] ) && ! empty( $meta['_mdjm_event_finish'] ) )	{
 				
-				if( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $meta['_mdjm_event_start'] ) ) )	{
+				if ( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $meta['_mdjm_event_start'] ) ) )	{
 					$meta['_mdjm_event_end_date'] = $meta['_mdjm_event_date'];
 				} else	{
 					$meta['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $meta['_mdjm_event_date'] ) ) );
 				}
 			}
-			
+
 			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
 				$meta['_mdjm_event_cost'] += mdjm_get_package_price( $meta['_mdjm_event_package'], $meta['_mdjm_event_date'] );
 			}
-			
+
 			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
 				foreach( $meta['_mdjm_event_addons'] as $addon )	{
 					$meta['_mdjm_event_cost'] += mdjm_get_addon_price( $addon );
 				}
 			}
-			
+
 			if ( empty( $meta['_mdjm_event_deposit'] ) )	{
 				$meta['_mdjm_event_deposit'] = mdjm_calculate_deposit( $meta['_mdjm_event_cost'] );
 			}
-			
+
 			mdjm_update_event_meta( $event->ID, $meta );
-			
-			wp_update_post(
-				array(
-					'ID'         => $id,
-					'post_title' => mdjm_get_event_contract_id( $id ),
-					'post_name'  => mdjm_get_event_contract_id( $id )
-				)
-			);
-			
+
+			wp_update_post( array(
+                'ID'         => $id,
+                'post_title' => mdjm_get_event_contract_id( $id ),
+                'post_name'  => mdjm_get_event_contract_id( $id )
+            ) );
+
 		}
 
 		do_action( 'mdjm_event_post_create', $id, $data );
-		
+
 		add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
 		return $this->setup_event( $event );
@@ -332,7 +335,7 @@ class MDJM_Event {
      */
     public function get_event_data() {
 
-        $event_date      =  $this->date ? $this->date : false;
+        $event_date      = $this->date ? $this->date : false;
         $package         = $this->get_package();
         $package_price   = $this->get_meta( '_mdjm_event_package_cost' );
         $addons          = $this->get_addons();

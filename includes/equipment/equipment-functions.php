@@ -829,6 +829,7 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 		'employee'        => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : '',
 		'event_type'      => false,
 		'event_date'      => false,
+        'exclude_cats'    => null,
 		'titles'          => true,
 		'cost'            => true,
 		'required'        => false
@@ -1679,18 +1680,19 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 	global $current_user;
 
 	$defaults = array(
-		'name'             => 'event_addons',
-		'id'               => '',
-		'class'            => '',
-		'selected'         => '',
-		'first_entry'      => '',
-		'first_entry_val'  => '',
-		'employee'         => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : false,
-		'event_type'       => false,
-		'event_date'       => false,
-		'package'          => '',
-		'cost'             => true,
-		'titles'           => true
+		'name'            => 'event_addons',
+		'id'              => '',
+		'class'           => '',
+		'selected'        => '',
+		'first_entry'     => '',
+		'first_entry_val' => '',
+		'employee'        => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : false,
+		'event_type'      => false,
+		'event_date'      => false,
+        'exclude_cats'    => null,
+		'package'         => '',
+		'cost'            => true,
+		'titles'          => true
 	);
 
 	$args = wp_parse_args( $args, $defaults );
