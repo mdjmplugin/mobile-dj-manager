@@ -111,6 +111,11 @@
 							editor.insertContent('{employee_firstname}');
 						}
 					}, {
+						text: 'Employee Lastname',
+						onclick: function () {
+							editor.insertContent('{employee_lastname}');
+						}
+					}, {
 						text: 'Employee Fullname',
 						onclick: function () {
 							editor.insertContent('{employee_fullname}');
@@ -119,6 +124,11 @@
 						text: 'Employee Email',
 						onclick: function () {
 							editor.insertContent('{employee_email}');
+						}
+					}, {
+						text: 'Employee Address',
+						onclick: function () {
+							editor.insertContent('{employee_address}');
 						}
 					}, {
 						text: 'Employee Phone',
