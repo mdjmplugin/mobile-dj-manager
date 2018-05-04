@@ -1126,8 +1126,7 @@ function mdjm_get_registered_settings()	{
                             __( 'Wait for %s to be paid before the booking confirmation is issued', 'mobile-dj-manager' ),
                             mdjm_get_deposit_label()
                         ),
-						'type'        => 'checkbox',
-						'std'         => true
+						'type'        => 'checkbox'
 					),
                     'payment_form_settings' => array(
 						'id'          => 'payment_form_settings',
