@@ -95,10 +95,12 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Added fields to enter client address when creating client from events page
 **New**: Auto set the setup time based on event start time. Define the default setup time within Settings -> Events
 **New**: Added the `employee_address` content tag
+**New**: Clicking the number of events within the venue list table will now take you to a filtered list of events for the venue
+**New**: Added pagination to the clients list
+**Tweak**: Clients can now be searched by ID, email, and display name on the clients page
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
-**Fix**: Corrected ID for playlist employee notification task
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to

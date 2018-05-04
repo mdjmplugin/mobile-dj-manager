@@ -1,7 +1,7 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
-	if( !mdjm_employee_can( 'view_clients_list' ) )	{
+	if ( !mdjm_employee_can( 'view_clients_list' ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
@@ -10,17 +10,16 @@
 	}
 	
 // This class extends WP_List_Table
-if( !class_exists( 'WP_List_Table' ) )
+if ( !class_exists( 'WP_List_Table' ) )	{
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
 	
 /**
  * Class Name: MDJM_Client_Manager
  * User management interface for employees
  *
- *
- *
  */
-if( !class_exists( 'MDJM_Client_Manager' ) ) : 
+if ( !class_exists( 'MDJM_Client_Manager' ) ) : 
 	class MDJM_Client_Manager extends WP_List_Table	{
 		private static $orderby;
 		private static $order;
@@ -31,14 +30,12 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Class constructor
 		 *
-		 *
-		 *
 		 */
 		public function __construct()	{
 			parent::__construct( array(
-				'singular'=> 'mdjm_list_client', //Singular label
-				'plural' => 'mdjm_list_clients', //plural label, also this will be one of the table css class
-				'ajax'   => false //We won't support Ajax for this table
+				'singular' => 'mdjm_list_client', // Singular label
+				'plural'   => 'mdjm_list_clients', // Plural label, also this will be one of the table css class
+				'ajax'     => false // We won't support Ajax for this table
 			) );
 			$this->process_bulk_actions();
 			$this->get_clients();
@@ -56,19 +53,18 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			self::$order        = ! empty( $_GET['order'] )        ? $_GET['order']        : 'ASC';
 			
 			// Searching
-			if( ! empty( $_POST['s'] ) )	{
+			if ( ! empty( $_POST['s'] ) )	{
 
 				// Build out the query args for the WP_User_Query
-				self::$clients = get_users(
-					array(
-						'search'  => $_POST['s'],
-						'role__in'=> array( 'client', 'inactive_client' ),
-						'orderby' => self::$orderby,
-						'order'   => self::$order
-					)
-				);
+				self::$clients = get_users( array(
+					'search'         => $_POST['s'],
+					'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email', 'display_name' ),
+					'role__in'       => array( 'client', 'inactive_client' ),
+					'orderby'        => self::$orderby,
+					'order'          => self::$order
+				) );
 
-			} elseif( ! empty( $_POST['filter_client'] ) )	{
+			} elseif ( ! empty( $_POST['filter_client'] ) )	{
 	
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
@@ -88,7 +84,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 
 			}
 			
-			self::$total_clients = count( mdjm_get_clients() );
+			self::$total_clients = count( self::$clients );
 
 		} // get_clients
 					
