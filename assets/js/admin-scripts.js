@@ -956,6 +956,9 @@ jQuery(document).ready(function ($) {
 							if(response.balance_paid === 'Y')	{
 								$('#balance_paid').prop('checked', true );	
 							}
+							if( response.event_status !== $('#mdjm_event_status').val() ) {
+								$('#mdjm_event_status').val(response.event_status);
+							}
 						} else	{
 							alert(response.msg);
 						}

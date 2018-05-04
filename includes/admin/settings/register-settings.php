@@ -681,6 +681,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Quote Template', 'mobile-dj-manager' ),
 						'desc'        => __( 'This is the default template used when sending quotes via email to clients', 'mobile-dj-manager' ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
 					'online_enquiry'   => array(
@@ -689,6 +690,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
 											mdjm_get_application_name() ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template', true )
 					),
 					'unavailable'      => array(
@@ -696,6 +698,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Unavailability Template', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'This is the default template used when responding to enquiries that you are unavailable for the %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
 					'enquiry_from'     => array(
@@ -707,7 +710,16 @@ function mdjm_get_registered_settings()	{
 							'admin'   => __( 'Admin', 'mobile-dj-manager' ),
 							'dj'      => mdjm_get_option( 'artist', __( 'Primary Employee', 'mobile-dj-manager' ) )
 						),
+                        'chosen'      => true,
 						'std'         => 'admin'
+					),
+					'awaitingdeposit' => array(
+                        'id'       => 'awaitingdeposit',
+                        'name'     => sprintf( __( 'Awaiting %s Template', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+                        'desc'     => sprintf( __( 'Select an email template to be used when sending the %s reminder to the client', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+                        'type'     => 'select',
+                        'chosen'      => true,
+                        'options'  => mdjm_list_templates( 'email_template' )
 					),
 					'contract_templates' => array(
 						'id'          => 'contract_templates',
@@ -727,6 +739,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Contract Template', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Only applies if %sContract Notification Email%s is enabled', 'mobile-dj-manager' ), '<em>', '</em>' ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
 					'contract_from'    => array(
@@ -758,6 +771,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Client Booking Confirmation Template', 'mobile-dj-manager' ),
 						'desc'        => __( 'Select an email template to be used when sending the Booking Confirmation to Clients', 'mobile-dj-manager' ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template' )
 					),
 					'booking_conf_from' => array(
@@ -784,6 +798,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => sprintf( __( '%s Booking Confirmation Template', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'desc'        => sprintf( __( 'Select an email template to be used when sending the Booking Confirmation to %s primary %s', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'type'        => 'select',
+                        'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template' )
 					)
 				)
@@ -1104,7 +1119,17 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-					'payment_form_settings' => array(
+
+					'deposit_wait'   => array(
+						'id'          => 'deposit_wait',
+						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Wait', 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( "Wait for %s to be paid before issuing a booking confirmation", 'mobile-dj-manager' ),
+											mdjm_get_deposit_label()
+                        ),
+						'type'        => 'checkbox'
+					),
+
+                    'payment_form_settings' => array(
 						'id'          => 'payment_form_settings',
 						'name'        => '<h3>' . __( 'Payment Form Settings', 'mobile-dj-manager' ) . '</h3>',
 						'desc'        => '',
