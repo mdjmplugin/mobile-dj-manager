@@ -829,6 +829,7 @@ function mdjm_package_dropdown( $args = array(), $structure = true )	{
 		'employee'        => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : '',
 		'event_type'      => false,
 		'event_date'      => false,
+        'exclude_cats'    => null,
 		'titles'          => true,
 		'cost'            => true,
 		'required'        => false
@@ -1137,6 +1138,10 @@ function mdjm_get_employees_with_addon( $addon_id )	{
  */
 function mdjm_get_addon_event_types( $addon_id )	{
 	$event_types = get_post_meta( $addon_id, '_addon_event_types', true );
+
+    if ( ! $event_types || ! is_array( $event_types ) ) {
+        $event_types = array( 'all' );
+    }
 
 	return apply_filters( 'mdjm_addon_event_types', $event_types, $addon_id );
 } // mdjm_get_addon_event_types
@@ -1675,18 +1680,19 @@ function mdjm_addons_dropdown( $args = array(), $structure = true )	{
 	global $current_user;
 
 	$defaults = array(
-		'name'             => 'event_addons',
-		'id'               => '',
-		'class'            => '',
-		'selected'         => '',
-		'first_entry'      => '',
-		'first_entry_val'  => '',
-		'employee'         => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : false,
-		'event_type'       => false,
-		'event_date'       => false,
-		'package'          => '',
-		'cost'             => true,
-		'titles'           => true
+		'name'            => 'event_addons',
+		'id'              => '',
+		'class'           => '',
+		'selected'        => '',
+		'first_entry'     => '',
+		'first_entry_val' => '',
+		'employee'        => ( is_user_logged_in() && ! current_user_can( 'client' ) ) ? $current_user->ID : false,
+		'event_type'      => false,
+		'event_date'      => false,
+        'exclude_cats'    => null,
+		'package'         => '',
+		'cost'            => true,
+		'titles'          => true
 	);
 
 	$args = wp_parse_args( $args, $defaults );

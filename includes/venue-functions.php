@@ -148,11 +148,11 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 
 	switch( $field )	{
 		case 'address' :
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_address1', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_address2', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_town', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_county', true );
-			$return[] = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_address1', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_address2', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_town', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_county', true );
+			$return[] = get_post_meta( $venue_id, $prefix . '_venue_postcode', true );
 
 			if ( ! empty( $return ) )	{
 				$return = array_filter( $return );
@@ -160,47 +160,47 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 			break;
 
 		case 'address1' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_address1', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_address1', true );
 			break;
 			
 		case 'address2' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_address2', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_address2', true );
 			break;
 
 		case 'town' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_town', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_town', true );
 			break;
 
 		case 'county' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_county', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_county', true );
 			break;
 
 		case 'postcode' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_postcode', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_postcode', true );
 			break;
 		
 		case 'contact' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_contact', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_contact', true );
 			break;
 		
 		case 'details' :
-			$return = mdjm_get_venue_details( $item_id );
+			$return = mdjm_get_venue_details( $venue_id );
 			break;
 		
 		case 'email' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_email', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_email', true );
 			break;
 		
 		case 'name' :
-			$return = empty( $prefix ) ? get_the_title( $item_id ) : get_post_meta( $item_id, $prefix . '_venue_name', true );
+			$return = empty( $prefix ) ? get_the_title( $venue_id ) : get_post_meta( $venue_id, $prefix . '_venue_name', true );
 			break;
 		
 		case 'notes' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_information', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_information', true );
 			break;
 		
 		case 'phone' :
-			$return = get_post_meta( $item_id, $prefix . '_venue_phone', true );
+			$return = get_post_meta( $venue_id, $prefix . '_venue_phone', true );
 			break;
 		
 		default :
@@ -329,60 +329,79 @@ function mdjm_do_venue_details_table( $venue_id = '', $event_id = '' )	{
 	$venue_phone    = mdjm_get_event_venue_meta( $venue_id, 'phone' );
 	$venue_notes    = mdjm_get_event_venue_meta( $venue_id, 'notes' );
 	$venue_details  = mdjm_get_venue_details( $venue_id );
-	$employee_id    = ! empty( $event_id ) ? mdjm_get_event_primary_employee_id( $event_id ) : '';
+    $employee_id    = ! empty( $event_id ) ? mdjm_get_event_primary_employee_id( $event_id ) : '';
+	$output         = array();
 
-	if ( empty( $employee_id ) )	{
-		$employee_id = get_current_user_id();
+	if ( ! empty( $venue_contact ) )    {
+        $output['contact'] = sprintf(
+			'<label>%s</label>%s',
+			__( 'Contact', 'mobile-dj-manager' ),
+			esc_attr( $venue_contact )
+		);
+    }
+
+    if ( ! empty( $venue_email ) )    {
+        $output['email'] = sprintf(
+			'<label>%1$s</label><a href="mailto:%2$s">%2$s</a>',
+			__( 'Email', 'mobile-dj-manager' ),
+			esc_attr( $venue_email )
+		);
+    }
+
+    if ( ! empty( $venue_phone ) )    {
+        $output['phone'] = sprintf(
+			'<label>%s</label>%s',
+			__( 'Phone', 'mobile-dj-manager' ),
+			esc_attr( $venue_phone )
+		);
+    }
+
+    if ( ! empty( $venue_address ) )    {
+        $output['address'] = sprintf(
+			'<label>%s</label>%s',
+			__( 'Address', 'mobile-dj-manager' ),
+			implode( '<br>', $venue_address )
+		);
+    }
+
+	if ( ! empty( $venue_notes ) )	{
+		$output['notes'] = sprintf(
+			'<label>%s</label>%s',
+			__( 'Information', 'mobile-dj-manager' ),
+			esc_attr( $venue_notes )
+		);
 	}
 
-	?>
-    <div id="mdjm-event-venue-details" class="mdjm-hidden">
-        <table class="widefat mdjm_event_venue_details mdjm_form_fields">
-        	<thead>
-            	<tr>
-                	<th colspan="3"><?php printf( __( 'Details for %s', 'mobile-dj-manager' ),
-						! empty( $venue_name ) ? $venue_name : '' ); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-            	<?php do_action( 'mdjm_venue_details_table_before_contact_name', $venue_id = '', $event_id = '' ); ?>
-            	<tr>
-                	<td><i class="fa fa-user" aria-hidden="true" title="<?php _e( 'Contact Name', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo ! empty( $venue_contact ) ? $venue_contact : ''; ?></td>
+	if ( ! empty( $venue_details ) )	{
+		$output['details'] = sprintf(
+			'<label>%s</label>%s',
+			__( 'Details', 'mobile-dj-manager' ),
+			implode( '<br>', $venue_details )
+		);
+	}
 
-                	<td rowspan="3"><?php echo ! empty( $venue_address ) ? implode( '<br />', $venue_address ) : ''; ?></td>
-                    <td rowspan="3"><?php echo ! empty( $venue_details ) ? implode( '<br />', $venue_details ) : ''; ?></td>
-           		</tr>
+	ob_start(); ?>
+    <div id="mdjm-venue-details-fields" class="mdjm-event-venue-details-sections-wrap">
+        <div class="mdjm-custom-event-sections">
+            <div class="mdjm-custom-event-section">
+                <span class="mdjm-custom-event-section-title">
+                    <?php if ( ! empty( $venue_name ) ) : ?>
+                        <?php printf( __( 'Venue Details for %s', 'mobile-dj-manager'), esc_attr( $venue_name ) ); ?>
+                    <?php else : ?>
+                        <?php printf( __( 'No venue has been selected for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?>
+                    <?php endif; ?>
+                </span>
 
-				<?php do_action( 'mdjm_venue_details_table_after_contact_name', $venue_id = '', $event_id = '' ); ?>
-
-                <tr>
-                	<td><i class="fa fa-phone" aria-hidden="true" title="<?php _e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo ! empty( $venue_phone ) ? $venue_phone : ''; ?></td>
-				</tr>
-
-				<?php do_action( 'mdjm_venue_details_table_after_contact_phone', $venue_id = '', $event_id = '' ); ?>
-
-				<?php $email = ! empty( $venue_email ) ? $venue_email : ''; ?>
-
-				<tr>
-                	<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
-                    <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></td>                  	
-           		</tr>
-
-				<?php do_action( 'mdjm_venue_details_table_after_contact_email', $venue_id = '', $event_id = '' ); ?>
-
-               <tr>
-                	<td><i class="fa fa-comments-o" aria-hidden="true" title="<?php _e( 'Information', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo ! empty( $venue_notes ) ? $venue_notes : ''; ?></td>                  	
-           		</tr>
-
-				<?php do_action( 'mdjm_after_venue_notes', $venue_address, $employee_id ); ?>
-
-            </tbody>
-        </table>
+				<?php foreach( $output as $key => $value ) : ?>
+                    <span class="mdjm-view-venue-<?php echo $key; ?>">
+                        <?php echo $value; ?>
+                    </span>
+                <?php endforeach; ?>
+                <?php do_action( 'mdjm_after_venue_notes', $venue_address, $employee_id ); ?>
+            </div>
+        </div>
     </div>
 
-    <?php
+	<?php return ob_get_clean();
 
 } // mdjm_do_venue_details_table

@@ -146,8 +146,13 @@ function mdjm_add_client( $user_data = array() )	{
 		'last_name'            => $user_data['last_name'],
 		'show_admin_bar_front' => false,
 		'marketing'            => 'Y',
-		'phone1'               => isset( $user_data['client_phone'] )  ? $user_data['client_phone']  : '',
-		'phone2'               => isset( $user_data['client_phone2'] ) ? $user_data['client_phone2'] : ''
+		'phone1'               => isset( $user_data['client_phone'] )    ? $user_data['client_phone']    : '',
+		'phone2'               => isset( $user_data['client_phone2'] )   ? $user_data['client_phone2']   : '',
+		'address1'             => isset( $user_data['client_address1'] ) ? $user_data['client_address1'] : '',
+		'address2'             => isset( $user_data['client_address2'] ) ? $user_data['client_address2'] : '',
+		'town'                 => isset( $user_data['client_town'] )     ? $user_data['client_town']     : '',
+		'county'               => isset( $user_data['client_county'] )   ? $user_data['client_county']   : '',
+		'postcode'             => isset( $user_data['client_postcode'] ) ? $user_data['client_postcode'] : ''
 	);
 
 	$user_meta = apply_filters( 'mdjm_add_client_meta_data', $user_meta );

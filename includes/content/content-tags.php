@@ -75,7 +75,28 @@ class MDJM_Content_Tags	{
 	public function remove( $tag ) {
 		unset( $this->tags[ $tag ] );
 	} // remove
-	
+
+    /**
+	 * Deprecated tags.
+	 *
+     * Remap deprecated tags to replacement tags to ensure backwards compatibility.
+     *
+	 * @since	1.5
+	 *
+	 * @return	array	Array of deprecated tags with values of replacement tags
+	 */
+	public function maybe_deprecated( $tag ) {
+		$deprecated_tags = array(
+            'dj_email' => 'employee_email'
+        );
+
+        if ( array_key_exists( $tag, $deprecated_tags ) )   {
+            $tag = $deprecated_tags[ $tag ];
+        }
+
+        return $tag;
+	} // maybe_deprecated
+
 	/**
 	 * Check if $tag is a registered content tag.
 	 *
@@ -86,6 +107,8 @@ class MDJM_Content_Tags	{
 	 * @return	bool
 	 */
 	public function content_tag_exists( $tag ) {
+        $tag = $this->maybe_deprecated( $tag );
+
 		return array_key_exists( $tag, $this->tags );
 	} // content_tag_exists
 
@@ -213,9 +236,15 @@ function mdjm_get_content_tags_list() {
 	$content_tags = mdjm_get_content_tags();
 
 	// Check
-	if( count( $content_tags ) > 0 )	{
+	if ( count( $content_tags ) > 0 )	{
 		// Loop
 		foreach( $content_tags as $content_tag )	{
+
+            // Do not list deprecated tags
+            if ( $tag != MDJM()->content_tags->maybe_deprecated( $tag ) )   {
+                continue;
+            }
+
 			// Add email tag to list.
 			$list .= '{' . $content_tag['tag'] . '} - ' . $content_tag['description'] . '<br/>';
 		}
@@ -236,7 +265,7 @@ function mdjm_get_content_tags_list() {
  *
  * @return	str		Content with content tags filtered out.
  */
-function mdjm_do_content_tags( $content, $event_id = '', $client_id='' ) {
+function mdjm_do_content_tags( $content, $event_id = '', $client_id = '' ) {
 	// Replace all tags
 	$content = MDJM()->content_tags->do_tags( $content, $event_id, $client_id );
 
@@ -425,22 +454,22 @@ function mdjm_setup_content_tags() {
 		array(
 			'tag'         => 'dj_email',
 			'description' => __( 'The email address of the events assigned primary employee', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_dj_email'
+			'function'    => 'mdjm_content_tag_employee_email'
 		),
 		array(
 			'tag'         => 'dj_firstname',
 			'description' => __( 'The first name of the events assigned primary employee', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_dj_firstname'
+			'function'    => 'mdjm_content_tag_employee_firstname'
 		),
 		array(
 			'tag'         => 'dj_lastname',
 			'description' => __( 'The last name of the events assigned primary employee', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_dj_lastname'
+			'function'    => 'mdjm_content_tag_employee_lastname'
 		),
 		array(
 			'tag'         => 'dj_fullname',
 			'description' => __( 'The full name of the events assigned primary employee', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_dj_fullname'
+			'function'    => 'mdjm_content_tag_employee_fullname'
 		),
 		array(
 			'tag'         => 'dj_notes',
@@ -450,7 +479,7 @@ function mdjm_setup_content_tags() {
 		array(
 			'tag'         => 'dj_primary_phone',
 			'description' => __( 'The primary phone number of the events assigned primary employee', 'mobile-dj-manager' ),
-			'function'    => 'mdjm_content_tag_dj_primary_phone'
+			'function'    => 'mdjm_content_tag_employee_primary_phone'
 		),
 		array(
 			'tag'         => 'dj_setup_date',
@@ -461,6 +490,36 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'dj_setup_time',
 			'description' => __( 'The setup time for the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_dj_setup_time'
+		),
+        array(
+			'tag'         => 'employee_address',
+			'description' => __( 'The mailing address of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_address'
+		),
+        array(
+			'tag'         => 'employee_email',
+			'description' => __( 'The email address of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_email'
+		),
+        array(
+			'tag'         => 'employee_firstname',
+			'description' => __( 'The first name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_firstname'
+		),
+        array(
+			'tag'         => 'employee_fullname',
+			'description' => __( 'The full name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_fullname'
+		),
+        array(
+			'tag'         => 'employee_lastname',
+			'description' => __( 'The last name of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_lastname'
+		),
+        array(
+			'tag'         => 'employee_primary_phone',
+			'description' => __( 'The primary phone number of the events assigned primary employee', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_employee_primary_phone'
 		),
 		array(
 			'tag'         => 'end_date',
@@ -825,7 +884,7 @@ function mdjm_content_tag_website_url()	{
  *
  * @return	str		The first name of the client.
  */
-function mdjm_content_tag_client_firstname( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_firstname( $event_id = '', $client_id = '' )	{
 
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -854,7 +913,7 @@ function mdjm_content_tag_client_firstname( $event_id = '', $client_id='' )	{
  *
  * @return	str		The last name of the client.
  */
-function mdjm_content_tag_client_lastname( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_lastname( $event_id = '', $client_id = '' )	{
 
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -883,7 +942,7 @@ function mdjm_content_tag_client_lastname( $event_id = '', $client_id='' )	{
  *
  * @return	str		The full name (display name) of the client.
  */
-function mdjm_content_tag_client_fullname( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_fullname( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -910,7 +969,7 @@ function mdjm_content_tag_client_fullname( $event_id = '', $client_id='' )	{
  *
  * @return	str		The address of the client.
  */
-function mdjm_content_tag_client_full_address( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_full_address( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -937,7 +996,7 @@ function mdjm_content_tag_client_full_address( $event_id = '', $client_id='' )	{
  *
  * @return	str		The email address of the client.
  */
-function mdjm_content_tag_client_email( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_email( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -964,7 +1023,7 @@ function mdjm_content_tag_client_email( $event_id = '', $client_id='' )	{
  *
  * @return	str		The primary phone number of the client.
  */
-function mdjm_content_tag_client_primary_phone( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_primary_phone( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -991,7 +1050,7 @@ function mdjm_content_tag_client_primary_phone( $event_id = '', $client_id='' )	
  *
  * @return	str		The alternative phone number of the client.
  */
-function mdjm_content_tag_client_alt_phone( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_alt_phone( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -1018,7 +1077,7 @@ function mdjm_content_tag_client_alt_phone( $event_id = '', $client_id='' )	{
  *
  * @return	str		The login name of the client.
  */
-function mdjm_content_tag_client_username( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_username( $event_id = '', $client_id = '' )	{
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
 	} elseif( ! empty( $event_id ) )	{
@@ -1045,7 +1104,7 @@ function mdjm_content_tag_client_username( $event_id = '', $client_id='' )	{
  *
  * @return	str		The login password for the client.
  */
-function mdjm_content_tag_client_password( $event_id = '', $client_id='' )	{
+function mdjm_content_tag_client_password( $event_id = '', $client_id = '' )	{
 	
 	if( ! empty( $client_id ) )	{
 		$user_id = $client_id;
@@ -1315,15 +1374,7 @@ function mdjm_content_tag_deposit_status( $event_id = '' )	{
  */
 function mdjm_content_tag_dj_email( $event_id = '' )	{
 
-	if ( empty( $event_id ) )	{
-		return;
-	}
-
-	$employee_id = mdjm_get_event_primary_employee_id( $event_id );
-	
-	if ( ! empty( $employee_id ) )	{
-		return mdjm_get_employee_email( $employee_id ) ;
-	}
+	return mdjm_content_tag_employee_email( $event_id );
 	
 } // mdjm_content_tag_dj_email
 
@@ -1335,18 +1386,7 @@ function mdjm_content_tag_dj_email( $event_id = '' )	{
  * @return	str		The first name of the primary employee assigned to the event.
  */
 function mdjm_content_tag_dj_firstname( $event_id = '' )	{
-	if( empty( $event_id ) )	{
-		return;
-	}
-
-	$first_name = '';
-	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
-	
-	if( ! empty( $user_id ) )	{
-		$first_name = mdjm_get_employee_firstname( $user_id );
-	}
-	
-	return $first_name;
+	return mdjm_content_tag_employee_firstname( $event_id );
 } // mdjm_content_tag_dj_firstname
 
 /**
@@ -1357,18 +1397,7 @@ function mdjm_content_tag_dj_firstname( $event_id = '' )	{
  * @return	str		The last name of the primary employee assigned to the event.
  */
 function mdjm_content_tag_dj_lastname( $event_id = '' )	{
-	if( empty( $event_id ) )	{
-		return;
-	}
-
-	$last_name = '';
-	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
-	
-	if( ! empty( $user_id ) )	{
-		$last_name = mdjm_get_employee_lastname( $user_id );
-	}
-	
-	return $last_name;
+	return mdjm_content_tag_employee_lastname( $event_id );
 } // mdjm_content_tag_dj_lastname
 
 /**
@@ -1379,18 +1408,7 @@ function mdjm_content_tag_dj_lastname( $event_id = '' )	{
  * @return	str		The full name (display name) of the primary employee assigned to the event.
  */
 function mdjm_content_tag_dj_fullname( $event_id = '' )	{
-	if( empty( $event_id ) )	{
-		return;
-	}
-
-	$full_name = '';
-	$user_id   = mdjm_get_event_primary_employee_id( $event_id );
-	
-	if( ! empty( $user_id ) )	{
-		$full_name = mdjm_get_employee_display_name( $user_id );
-	}
-	
-	return $full_name;
+	return mdjm_content_tag_employee_fullname( $event_id );
 } // mdjm_content_tag_dj_fullname
 
 /**
@@ -1403,18 +1421,7 @@ function mdjm_content_tag_dj_fullname( $event_id = '' )	{
  * @return	str		The notes tassociated with the event that are for the DJ.
  */
 function mdjm_content_tag_dj_primary_phone( $event_id = '' )	{
-	if( empty( $event_id ) )	{
-		return;
-	}
-
-	$phone   = '';
-	$user_id = mdjm_get_event_primary_employee_id( $event_id );
-	
-	if( ! empty( $user_id ) )	{
-		$phone = mdjm_get_employee_phone( $user_id );
-	}
-	
-	return $phone;
+	return mdjm_content_tag_employee_primary_phone( $event_id );
 } // mdjm_content_tag_dj_primary_phone
 
 /**
@@ -1483,6 +1490,143 @@ function mdjm_content_tag_dj_setup_time( $event_id = '' )	{
 	
 	return $return;
 } // mdjm_content_tag_dj_setup_time
+
+/**
+ * Content tag: employee_address.
+ * The address of the primary employee assigned to the event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		Address of employee.
+ */
+function mdjm_content_tag_employee_address( $event_id = '' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+
+	$employee_id = mdjm_get_event_primary_employee_id( $event_id );
+    $address     = array();
+
+    if ( ! empty( $employee_id ) )	{
+		$address = mdjm_get_employee_address( $employee_id );
+	}
+
+    return is_array( $address ) ? implode( '<br />', $address ) : '';
+} // mdjm_content_tag_employee_address
+
+/**
+ * Content tag: employee_email.
+ * Email address of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The email address of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_employee_email( $event_id = '' )	{
+
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$employee_id = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if ( ! empty( $employee_id ) )	{
+		return mdjm_get_employee_email( $employee_id ) ;
+	}
+	
+} // mdjm_content_tag_employee_email
+
+/**
+ * Content tag: employee_firstname.
+ * First name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @return	str		The first name of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_employee_firstname( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$first_name = '';
+	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if ( ! empty( $user_id ) )	{
+		$first_name = mdjm_get_employee_firstname( $user_id );
+	}
+	
+	return $first_name;
+} // mdjm_content_tag_employee_firstname
+
+/**
+ * Content tag: employee_fullname.
+ * Full name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @return	str		The full name (display name) of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_employee_fullname( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$full_name = '';
+	$user_id   = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if ( ! empty( $user_id ) )	{
+		$full_name = mdjm_get_employee_display_name( $user_id );
+	}
+	
+	return $full_name;
+} // mdjm_content_tag_employee_fullname
+
+/**
+ * Content tag: employee_lastname.
+ * Last name of primary employee assigned to event.
+ *
+ * @param	int		The event ID.
+ * @return	str		The last name of the primary employee assigned to the event.
+ */
+function mdjm_content_tag_employee_lastname( $event_id = '' )	{
+	if( empty( $event_id ) )	{
+		return;
+	}
+
+	$last_name = '';
+	$user_id    = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if( ! empty( $user_id ) )	{
+		$last_name = mdjm_get_employee_lastname( $user_id );
+	}
+	
+	return $last_name;
+} // mdjm_content_tag_employee_lastname
+
+/**
+ * Content tag: employee_primary_phone.
+ * DJ Notes associated with event.
+ *
+ * @param	int		The event ID.
+ * @param
+ *
+ * @return	str		The notes tassociated with the event that are for the DJ.
+ */
+function mdjm_content_tag_employee_primary_phone( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$phone   = '';
+	$user_id = mdjm_get_event_primary_employee_id( $event_id );
+	
+	if ( ! empty( $user_id ) )	{
+		$phone = mdjm_get_employee_phone( $user_id );
+	}
+	
+	return $phone;
+} // mdjm_content_tag_employee_primary_phone
 
 /**
  * Content tag: end_date.

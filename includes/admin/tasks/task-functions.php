@@ -165,6 +165,8 @@ function mdjm_filter_task_run_times( $run_times, $id )	{
 		$unset = array( 'after_approval', 'before_event', 'after_event' );
 	} elseif( 'request-deposit' == $id || 'balance-reminder' == $id )	{
 		$unset = array( 'event_created', 'after_event' );
+	} elseif( 'playlist-employee-notify' == $id )	{
+		$unset = array( 'event_created', 'after_event', 'after_approval' );
 	}
 
 	if ( isset( $unset ) )	{

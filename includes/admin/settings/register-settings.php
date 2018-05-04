@@ -389,8 +389,21 @@ function mdjm_get_registered_settings()	{
 						'desc'        => __( 'Change the name of your performers here as necessary.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
-						'std'		 => __( 'DJ', 'mobile-dj-manager' )
+						'std'		  => __( 'DJ', 'mobile-dj-manager' )
 					),
+                    'setup_time'      => array(
+                        'id'    => 'setup_time',
+                        'name'  => __( 'Setup Time', 'mobile-dj-manager' ),
+                        'desc'  => sprintf(
+                            __( 'Enter the time in minutes before an %s starts that you normally setup to auto define the %s setup time and date. <code>0</code> to disable.', 'mobile-dj-manager' ),
+                            mdjm_get_label_singular( true ),
+                            mdjm_get_option( 'artist' )
+                        ),
+                        'type'  => 'number',
+                        'size'  => 'small',
+                        'step'  => '15',
+                        'std'   => 0
+                    ),
 					'default_contract' => array(
 						'id'          => 'default_contract',
 						'name'        => __( 'Default Contract', 'mobile-dj-manager' ),
@@ -441,7 +454,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Enable Journaling?', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Log and track all client &amp; %s actions (recommended).', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 						'type'        => 'checkbox',
-						'std'		 => '1'
+						'std'		  => '1'
 					)
 				),
 				'playlist' => array(
@@ -461,10 +474,10 @@ function mdjm_get_registered_settings()	{
 					'playlist_limit' => array(
 						'id'          => 'playlist_limit',
 						'name'        => __( 'Playlist Limit?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Set the global limit for the number of entries a playlist can contain or enter 0 for no limit.  If this number is non-zero, %s playlists will be limited to this number of entries ', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc'        => sprintf( __( 'Set the global limit for the number of entries a playlist can contain or enter <code>0</code> for no limit. Can be overridden per %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'number',
-                                                'size'	      => 'small',
-                                                'std'         => '0'
+                        'size'	      => 'small',
+                        'std'         => '0'
 					),
 					'close'           => array(
 						'id'          => 'close',
@@ -476,7 +489,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Number of days before %s that the playlist should close to new entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small',
-						'std'		 => '5'
+						'std'		  => '5'
 					),
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',

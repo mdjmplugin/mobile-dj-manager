@@ -33,6 +33,23 @@ function mdjm_get_ajax_url() {
 } // mdjm_get_ajax_url
 
 /**
+ * Dismiss admin notices.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_ajax_dismiss_admin_notice()	{
+
+	$notice = sanitize_text_field( $_POST['notice'] );
+    mdjm_dismiss_notice( $notice );
+
+	wp_send_json_success();
+
+} // mdjm_ajax_dismiss_admin_notice
+add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
+
+
+/**
  * Save the client fields order during drag and drop.
  *
  *
@@ -95,11 +112,16 @@ function mdjm_add_client_ajax()	{
 	} else	{
 
 		$user_data = array(
-			'first_name'    => ucwords( $_POST['client_firstname'] ),
-			'last_name'     => ( ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '' ),
-			'user_email'    => $_POST['client_email'],
-			'client_phone'  => ( ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '' ),
-			'client_phone2' => ( ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '' )
+			'first_name'      => ucwords( $_POST['client_firstname'] ),
+			'last_name'       => ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '',
+			'user_email'      => strtolower( $_POST['client_email'] ),
+			'client_phone'    => ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '',
+			'client_phone2'   => ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '',
+			'client_address1' => ! empty( $_POST['client_address1'] ) ? $_POST['client_address1']            : '',
+			'client_address2' => ! empty( $_POST['client_address2'] ) ? $_POST['client_address2']            : '',
+			'client_town'     => ! empty( $_POST['client_town'] )     ? $_POST['client_town']                : '',
+			'client_county'   => ! empty( $_POST['client_county'] )   ? $_POST['client_county']              : '',
+			'client_postcode' => ! empty( $_POST['client_postcode'] ) ? $_POST['client_postcode']            : ''
 		);
 
 		$user_data = apply_filters( 'mdjm_event_new_client_data', $user_data );
@@ -149,7 +171,7 @@ add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
  */
 function mdjm_refresh_venue_details_ajax()	{
 
-	$result = array();
+	/*$result = array();
 
 	ob_start();
 	mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] );
@@ -158,7 +180,11 @@ function mdjm_refresh_venue_details_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	die();*/
+
+	wp_send_json_success(
+		array( 'venue' => mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] ) )
+	);
 
 } // mdjm_refresh_venue_details_ajax
 add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_ajax' );
@@ -451,32 +477,39 @@ add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' 
  *
  */
 function mdjm_add_event_type_ajax()	{
-			
-	if( empty( $_POST['type'] ) )	{
 
-		$result['type'] = 'Error';
-		$result['msg']  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
-
+	if ( empty( $_POST['type'] ) )	{
+        $msg  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
+        wp_send_json_error( array( 'selected' => $_POST['current'], 'msg' => $msg ) );
 	} else	{
-
 		$term = wp_insert_term( $_POST['type'], 'event-types' );
 
-		if ( is_array( $term ) )	{
-			$result['type'] = 'success';
-		} else	{
-			$result['type'] = 'error';
-		}
+		if ( ! is_wp_error( $term ) )	{
+            $msg = 'success';
+        } else  {
+            error_log( $term->get_error_message() );
+        }
 
 	}
 	
-	$selected = ( $result['type'] == 'success' ) ? $term['term_id'] : $_POST['current'];
-	
-	$result['event_types'] = MDJM()->html->event_type_dropdown( array(
-		'name'     => 'mdjm_event_type',
-		'selected' => $selected
-	) );
-	
-	echo json_encode($result);
+	$selected   = $msg == 'success' ? $term['term_id'] : $_POST['current'];
+    $categories = get_terms( 'event-types', array( 'hide_empty' => false ) );
+    $options    = array();
+    $output     = '';
+
+    foreach ( $categories as $category ) {
+        $options[ absint( $category->term_id ) ] = esc_html( $category->name );
+    }
+
+    foreach( $options as $key => $option ) {
+        $selected = selected( $term['term_id'], $key, false );
+
+        $output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
+    }
+	wp_send_json_success( array(
+        'event_types' => $output,
+        'msg'         => 'success'
+    ) );
 	
 	die();
 
@@ -534,6 +567,34 @@ function mdjm_add_transaction_type_ajax()	{
 } // mdjm_add_transaction_type_ajax
 add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
 
+/**
+ * Determine the event setup time
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_event_setup_time_ajax()   {
+    $time_format = mdjm_get_option( 'time_format' );
+    $start_time  = $_POST['time'];
+    $event_date  = $_POST['date'];
+    $date        = new DateTime( $event_date . ' ' . $start_time );
+    $timestamp   = $date->format( 'U' );
+
+    $setup_time  = $timestamp - ( (int) mdjm_get_option( 'setup_time' ) * 60 );
+
+    $hour     = 'H:i' == $time_format ? date( 'H', $setup_time ) : date( 'g', $setup_time );
+    $minute   = date( 'i', $setup_time );
+    $meridiem = 'H:i' == $time_format ? '' : date( 'A', $setup_time );
+
+    wp_send_json_success( array(
+        'hour'       => $hour,
+        'minute'     => $minute,
+        'meridiem'   => $meridiem,
+        'date'       => date( mdjm_get_option( 'short_date_format' ), $setup_time ),
+        'datepicker' => date( 'Y-m-d', $setup_time )
+    ) );
+} // mdjm_event_setup_time_ajax
+add_action( 'wp_ajax_mdjm_event_setup_time', 'mdjm_event_setup_time_ajax' );
 	
 /**
  * Calculate the event cost as event elements change
@@ -556,6 +617,11 @@ function mdjm_update_event_cost_ajax()	{
 	$employee_id   = $_POST['employee_id'];
 	$dest          = $_POST['venue'];
 	$dest          = maybe_unserialize( $dest );
+    $package_cost  = 0;
+    $addons_cost   = 0;
+    $travel_cost   = 0;
+    $additional    = ! empty( $_POST['additional'] ) ? (float) $_POST['additional'] : 0;
+    $discount      = ! empty( $_POST['discount'] )   ? (float) $_POST['discount']   : 0;
 	
 	if ( $event_cost )	{
 		$event_cost = (float) $event_cost;
@@ -577,21 +643,21 @@ function mdjm_update_event_cost_ajax()	{
 		$base_cost = $base_cost - (float) $travel_data['cost'];
 	}
 
+    $base_cost = $base_cost - $additional;
+    $base_cost = $base_cost + $discount;
+
 	$new_package = ! empty( $_POST['package'] )      ? $_POST['package']      : false;
 	$new_addons  = ! empty( $_POST['addons']  )      ? $_POST['addons']       : false;
 
 	$cost = $base_cost;
 
 	if ( $new_package )	{
-		$new_package_price = mdjm_get_package_price( $new_package, $event_date );
-		$cost += (float) $new_package_price;
+		$package_cost = (float) mdjm_get_package_price( $new_package, $event_date );
 	}
 
 	if ( $new_addons )	{
 		foreach( $new_addons as $new_addon )	{
-			$new_addon_price = mdjm_get_addon_price( $new_addon, $event_date );
-
-			$cost += (float) $new_addon_price;
+			$addons_cost += (float) mdjm_get_addon_price( $new_addon, $event_date );
 		}
 	}
 
@@ -606,9 +672,15 @@ function mdjm_update_event_cost_ajax()	{
 		$new_travel = ! empty( $mdjm_travel->data ) ? $mdjm_travel->get_cost() : false;
 	
 		if ( $new_travel && (float) preg_replace( '/[^0-9.]*/', '', $mdjm_travel->data['distance'] ) >= mdjm_get_option( 'travel_min_distance' ) )	{
-			$cost += (float) $new_travel;
+			$travel_cost = (float) $new_travel;
 		}
 	}
+
+    $cost += $package_cost;
+    $cost += $addons_cost;
+    $cost += $travel_cost;
+    $cost += $additional;
+    //$cost -= $discount;
 
 	if ( ! empty( $cost ) )	{
 		$result['type'] = 'success';
@@ -617,6 +689,12 @@ function mdjm_update_event_cost_ajax()	{
 		$result['type'] = 'success';
 		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
+
+    $result['package_cost']     = mdjm_sanitize_amount( $package_cost );
+    $result['addons_cost']      = mdjm_sanitize_amount( $addons_cost );
+    $result['travel_cost']      = mdjm_sanitize_amount( $travel_cost );
+    $result['additional_cost']  = mdjm_sanitize_amount( $additional );
+    $result['discount']         = mdjm_sanitize_amount( $discount );
 
 	wp_send_json( $result );
 

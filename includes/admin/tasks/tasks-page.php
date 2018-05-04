@@ -73,6 +73,8 @@ function mdjm_render_single_task_view( $id ) {
 	$url            = remove_query_arg( array( 'mdjm-message', 'render' ) );
 	$task           = mdjm_get_task( $id );
 	$run_when       = explode( ' ', $task['options']['age'] );
+    $run_times      = mdjm_get_task_run_times( $id );
+    $hide_runtimes  = 'playlist-notification' == $id ? ' mdjm-hidden' : '';
 	$return_url     = add_query_arg( array(
 		'post_type' => 'mdjm-event',
 		'page'      => 'mdjm-tasks'
@@ -130,12 +132,20 @@ function mdjm_render_single_task_view( $id ) {
 										<div class="mdjm-admin-box-inside mdjm-task-stats">
                                         	<p>
 												<span class="label"><?php _e( 'Last Ran:', 'mobile-dj-manager' ); ?>&nbsp;</span>
-                                                <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['lastran'] ); ?>
+                                                <?php if ( ! empty( $task['lastran'] ) && 'Never' != $task['lastran'] ) : ?>
+                                                    <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['lastran'] ); ?>
+                                                <?php else : ?>
+                                                    <?php echo __( 'Never', 'mobile-dj-manager' ); ?>
+                                                <?php endif; ?>
                                             </p>
 
 											<p>
 												<span class="label"><?php _e( 'Next Due:', 'mobile-dj-manager' ); ?>&nbsp;</span>
-                                                <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ); ?>
+                                                <?php if ( ! empty( $task['nextrun'] ) && 'N/A' != $task['nextrun'] ) : ?>
+                                                     <?php echo date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ); ?>
+                                                <?php else : ?>
+                                                    <?php echo __( 'N/A', 'mobile-dj-manager' ); ?>
+                                                <?php endif; ?>
                                             </p>
 
 											<p>
@@ -241,44 +251,44 @@ function mdjm_render_single_task_view( $id ) {
 
 									<?php do_action( 'mdjm_task_view_details_after_description', $id ); ?>
 
-									<div class="column-container task-info">
+                                    <div class="column-container task-info<?php echo $hide_runtimes; ?>">
                                         <p><strong><?php _e( 'Run this task:', 'mobile-dj-manager' ); ?></strong>
                                         <br />
                                         <?php
-											$run_intervals = array();
-											for( $i = 1; $i <= 12; $i++ )	{
-												$run_intervals[ $i ] = $i;
-											}
+                                            $run_intervals = array();
+                                            for( $i = 1; $i <= 12; $i++ )	{
+                                                $run_intervals[ $i ] = $i;
+                                            }
 
-										?>
+                                        ?>
                                         <?php echo MDJM()->html->select( array(
                                             'name'     => 'task_run_time',
-											'id'       => 'task-run-time',
-											'selected' => $run_when[0],
-											'options'  => $run_intervals
+                                            'id'       => 'task-run-time',
+                                            'selected' => $run_when[0],
+                                            'options'  => $run_intervals
                                         ) ); ?>
                                         &nbsp;&nbsp;
                                         <?php echo MDJM()->html->select( array(
                                             'name'     => 'task_run_period',
-											'id'       => 'task-run-period',
-											'selected' => $run_when[1],
-											'options'  => array(
-												'HOUR'  => __( 'Hour(s)', 'mobile-dj-manager' ),
-												'DAY'   => __( 'Day(s)', 'mobile-dj-manager' ),
-												'WEEK'  => __( 'Week(s)', 'mobile-dj-manager' ),
-												'MONTH' => __( 'Month(s)', 'mobile-dj-manager' ),
-												'YEAR'  => __( 'Year(s)', 'mobile-dj-manager' )
-											)
+                                            'id'       => 'task-run-period',
+                                            'selected' => $run_when[1],
+                                            'options'  => array(
+                                                'HOUR'  => __( 'Hour(s)', 'mobile-dj-manager' ),
+                                                'DAY'   => __( 'Day(s)', 'mobile-dj-manager' ),
+                                                'WEEK'  => __( 'Week(s)', 'mobile-dj-manager' ),
+                                                'MONTH' => __( 'Month(s)', 'mobile-dj-manager' ),
+                                                'YEAR'  => __( 'Year(s)', 'mobile-dj-manager' )
+                                            )
                                         ) ); ?>
                                         &nbsp;&nbsp;
                                         <?php echo MDJM()->html->select( array(
                                             'name'     => 'task_run_event_status',
-											'id'       => 'task-run-event-status',
-											'selected' => $task['options']['run_when'],
-											'options'  => mdjm_get_task_run_times( $id )
+                                            'id'       => 'task-run-event-status',
+                                            'selected' => $task['options']['run_when'],
+                                            'options'  => $run_times
                                         ) ); ?>
                                         </p>
-									</div>
+                                    </div>
 
 									<?php do_action( 'mdjm_task_view_details', $id ); ?>
 

@@ -784,7 +784,8 @@ function mdjm_run_install()	{
 		// When new upgrade routines are added, mark them as complete on fresh install
 		$upgrade_routines = array(
 			'upgrade_event_packages',
-            'upgrade_event_tasks'
+            'upgrade_event_tasks',
+            'upgrade_event_pricing_15'
 		);
 
 		foreach ( $upgrade_routines as $upgrade ) {

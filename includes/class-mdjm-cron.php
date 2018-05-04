@@ -206,7 +206,45 @@ class MDJM_Cron	{
 				'totalruns'          => '0',
 				'default'            => true,
 				'last_result'        => false
-			),		
+			),
+            'playlist-notification' => array(
+                'slug'              => 'playlist-notification',
+				'name'              => __( 'Client Playlist Notifications', 'mobile-dj-manager' ),
+				'active'            => false,
+				'desc'              => __( 'Sends notifications to clients if a guest has added an entry to the playlist.', 'mobile-dj-manager' ),
+				'frequency'         => 'Daily',
+				'nextrun'           => 'N/A',
+				'lastran'           => 'Never',
+				'options'           => array(
+                    'run_when'        => 'after_event',
+					'age'             => '1 HOUR',
+                    'email_template'  => '0',
+					'email_subject'   => sprintf( __( 'Your %s playlist has been updated', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+					'email_from'      => 'admin'
+				),
+				'totalruns'           => '0',
+				'default'             => true,
+				'last_result'         => false
+            ),
+			'playlist-employee-notify' => array(
+				'slug'              => 'playlist-employee-notify',
+				'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
+				'active'            => false,
+				'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+				'frequency'         => 'Daily',
+				'nextrun'           => 'N/A',
+				'lastran'           => 'Never',
+				'options'           => array(
+					'run_when'        => 'before_event',
+					'age'             => '3 DAY',
+					'email_template'  => '0',
+					'email_subject'   => sprintf( __( '%s playlist notification', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+					'email_from'      => 'admin'
+				),
+				'totalruns'           => '0',
+				'default'             => true,
+				'last_result'         => false
+			),
 			'upload-playlists'      => array(
 				'slug'              => 'upload-playlists',
 				'name'              => __( 'Upload Playlists', 'mobile-dj-manager' ),

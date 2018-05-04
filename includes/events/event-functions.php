@@ -1702,8 +1702,20 @@ function mdjm_update_event_meta( $event_id, $data )	{
 		if ( $key == 'mdjm_nonce' || $key == 'mdjm_action' || substr( $key, 0, 12 ) != '_mdjm_event_' ) {
 			continue;
 		}
-		
-		if ( $key == '_mdjm_event_cost' || $key == '_mdjm_event_deposit' || $key == '_mdjm_event_dj_wage' )	{
+
+        $price_keys = array(
+            '_mdjm_event_dj_wage',
+            '_mdjm_event_package_cost',
+            '_mdjm_event_addons_cost',
+            '_mdjm_event_travel_cost',
+            '_mdjm_event_additional_cost',
+            '_mdjm_event_discount',
+            '_mdjm_event_deposit',
+            '_mdjm_event_cost'
+            
+        );
+
+		if ( in_array( $key, $price_keys ) )  {
 			$value = $value;
 		} elseif ( $key == '_mdjm_event_venue_postcode' && ! empty( $value ) )	{ // Postcodes are uppercase.
 			$value = strtoupper( $value );

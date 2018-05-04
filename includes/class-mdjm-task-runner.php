@@ -432,8 +432,6 @@ class MDJM_Task_Runner {
 	public function balance_reminder()	{
 		MDJM()->debug->log_it( "*** Starting the $this->name task ***", true );
 
-		$due_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
-
 		$i         = 1;
 		$completed = 0;
 		$events    = mdjm_get_events( $this->build_query() );
@@ -593,6 +591,176 @@ class MDJM_Task_Runner {
 		return true;
 	} // request_deposit
 
+    /**
+	 * Execute the Playlist Notification task
+	 *
+	 * @since	1.5
+	 * @return	bool
+	 */
+	public function playlist_notification()	{
+		MDJM()->debug->log_it( "*** Starting the {$this->name} task ***", true );
+
+        $i         = 1;
+		$completed = 0;
+		$events    = mdjm_get_events( $this->build_query() );
+
+        if ( $events )  {
+            $count = count( $events );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events, 'mobile-dj-manager' ) . ' have new playlist entries within the past 24 hours' );
+
+            foreach( $events as $_event )	{
+				$event = new MDJM_Event( $_event->ID );
+
+				if ( ! $event )	{
+					continue;
+				}
+
+                $entries = mdjm_get_playlist_entries( $event->ID, array(
+                    'posts_per_page' => 1,
+                    'date_query'     => array(
+                        array( 'after' => '24 hours ago' )
+                     )
+                ) );
+
+                if ( ! $entries )   {
+                    continue;
+                }
+
+				if ( empty( $this->options['email_template'] ) || empty( $event->client ) )	{
+					continue;
+				}
+
+				$client = get_userdata( $event->client );
+
+				$email_args = array(
+					'to_email'       => $client->user_email,
+					'event_id'       => $event->ID,
+					'client_id'      => $event->client,
+					'subject'        => $this->options['email_subject'],
+					'message'        => mdjm_get_email_template_content( $this->options['email_template'] ),
+					'track'          => true,
+					'source'         => sprintf( __( '%s Scheduled Task', 'mobile-dj-manager' ), $this->name )
+				);
+
+                if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
+					$employee                 = get_userdata( $event->employee_id );
+					$email_args['from_email'] = $employee->user_email;
+					$email_args['from_name']  = $employee->display_name;
+				}
+
+				if ( mdjm_send_email_content( $email_args ) )	{
+					MDJM()->debug->log_it( $this->name . ' sent to ' . $client->display_name );
+
+					delete_post_meta( $event->ID, '_mdjm_playlist_client_notify' );
+
+					mdjm_add_journal(
+						array(
+							'user_id'         => 1,
+							'event_id'        => $event->ID,
+							'comment_content' => "{$this->name} task executed<br /><br />" . time()
+						)
+					);
+
+				} else	{
+					MDJM()->debug->log_it( 'ERROR: Playlist notification was not sent. Event ID ' . $event->ID );
+				}
+
+            }
+
+        } else	{
+			MDJM()->debug->log_it( 'No events have new playlist entries within the past 24 hours' );
+		}
+
+		MDJM()->debug->log_it( "*** {$this->name} task Completed ***", true );
+
+		return true;
+	} // playlist_notification
+
+	/**
+	 * Execute the Playlist Employee Notification task
+	 *
+	 * @since	1.5
+	 * @return	bool
+	 */
+	public function playlist_employee_notify()	{
+		MDJM()->debug->log_it( "*** Starting the {$this->name} task ***", true );
+
+        $i         = 1;
+		$completed = 0;
+		$events    = mdjm_get_events( $this->build_query() );
+
+        if ( $events )  {
+            $count = count( $events );
+			MDJM()->debug->log_it( $count . ' ' . _n( 'event', 'events', $events, 'mobile-dj-manager' ) . " are scheduled within the next {$this->options['age']}" );
+
+            foreach( $events as $_event )	{
+				$event = new MDJM_Event( $_event->ID );
+
+				if ( ! $event )	{
+					continue;
+				}
+
+				if ( $this->task_has_run( $event ) )	{
+					continue;
+				}
+
+				if ( empty( $this->options['email_template'] ) || empty( $event->employee_id ) )	{
+					continue;
+				}
+
+                $entries = mdjm_get_playlist_entries( $event->ID, array(
+                    'posts_per_page' => 1,
+                ) );
+
+                if ( ! $entries )   {
+                    continue;
+                }
+
+				$employee = get_userdata( $event->employee_id );
+
+				$email_args = array(
+					'to_email'       => $employee->user_email,
+					'event_id'       => $event->ID,
+					'client_id'      => $event->client,
+					'subject'        => $this->options['email_subject'],
+					'message'        => mdjm_get_email_template_content( $this->options['email_template'] ),
+					'track'          => true,
+					'source'         => sprintf( __( '%s Scheduled Task', 'mobile-dj-manager' ), $this->name )
+				);
+
+				if ( 'employee' == $this->options['email_from'] && ! empty( $event->employee_id ) )	{
+					$email_args['from_email'] = $employee->user_email;
+					$email_args['from_name']  = $employee->display_name;
+				}
+
+				if ( mdjm_send_email_content( $email_args ) )	{
+					MDJM()->debug->log_it( $this->name . ' sent to ' . $employee->display_name );
+
+					$event->complete_task( $this->slug );
+
+					mdjm_add_journal(
+						array(
+							'user_id'         => 1,
+							'event_id'        => $event->ID,
+							'comment_content' => "{$this->name} task executed<br /><br />" . time()
+						)
+					);
+
+				} else	{
+					MDJM()->debug->log_it( 'ERROR: Playlist notification was not sent. Event ID ' . $event->ID );
+				}
+
+            }
+
+        } else	{
+			MDJM()->debug->log_it( "No events are scheduled within the next {$this->options['age']}" );
+		}
+
+		MDJM()->debug->log_it( "*** {$this->name} task Completed ***", true );
+
+		return true;
+	} // playlist_employee_notify
+
 	/**
 	 * Build the task query
 	 *
@@ -609,13 +777,23 @@ class MDJM_Task_Runner {
 				'type'    => 'datetime'
 			);
 		} else	{
-			$run_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
-			$date_query = array(
-				'key'     => '_mdjm_event_date',
-				'compare' => '>=',
-				'value'   => $run_date,
-				'type'    => 'date'
-			);
+            if ( 'before_event' == $this->options['run_when'] ) {
+                $run_date = date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) );
+                $date_query = array(
+                    'key'     => '_mdjm_event_date',
+                    'compare' => '<=',
+                    'value'   => $run_date,
+                    'type'    => 'date'
+                );
+            } else  {
+                $run_date = date( 'Y-m-d', strtotime( "-" . $this->options['age'] ) );
+                $date_query = array(
+                    'key'     => '_mdjm_event_date',
+                    'compare' => '>=',
+                    'value'   => $run_date,
+                    'type'    => 'date'
+                );
+            }
 		}
 
 		switch ( $this->slug )	{
@@ -650,13 +828,13 @@ class MDJM_Task_Runner {
 					'post_status'  => 'mdjm-approved',
 					'meta_query'   => array(
 						'relation' => 'AND',
-						$date_query,
 						array(
-							'key'     => '_mdjm_event_date',
-							'compare' => '<=',
-							'value'   => date( 'Y-m-d' ),
-							'type'    => 'date'
-						),
+                            'key'     => '_mdjm_event_date',
+                            'compare' => '>=',
+                            'value'   => date( 'Y-m-d' ),
+                            'type'    => 'date'
+                        ),
+						$date_query,
 						array(
 							'key'     => '_mdjm_event_balance_status',
 							'value'   => 'Due'
@@ -690,6 +868,29 @@ class MDJM_Task_Runner {
 							'key'     => '_mdjm_event_deposit',
 							'value'   => '0.00',
 							'compare' => '>',
+						)
+					)
+				);
+				break;
+
+            case 'playlist-notification':
+                $query = array(
+                    'meta_key'   => '_mdjm_playlist_client_notify',
+                    'meta_value' => '1'
+                );
+                break;
+
+			case 'playlist-employee-notify':
+				$start = date( 'Y-m-d' );
+				$end   = date( 'Y-m-d', strtotime( "+" . $this->options['age'] ) );
+				$query = array(
+					'post_status'  => 'mdjm-approved',
+					'meta_query'   => array(
+						array(
+							'key'     => '_mdjm_event_date',
+							'compare' => 'BETWEEN',
+							'value'   => array( $start, $end ),
+							'type'    => 'date'
 						)
 					)
 				);

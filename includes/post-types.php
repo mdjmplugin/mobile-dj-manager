@@ -66,7 +66,7 @@ function mdjm_register_post_types()	{
 		) ),
 		'map_meta_cap'            => true,
 		'has_archive'             => true,
-		'supports'                => apply_filters( 'mdjm_event_supports', array( 'title' ) ),
+		'supports'                => apply_filters( 'mdjm_event_supports', false ),
 		'menu_icon'               => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
 		'taxonomies'              => array( 'mdjm-event' )
 	);

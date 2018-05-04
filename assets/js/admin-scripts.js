@@ -1,9 +1,44 @@
+var mdjm_admin_vars;
 jQuery(document).ready(function ($) {
 
-	// Setup Chosen menus
+    // Setup Chosen menus
 	$('.mdjm-select-chosen').chosen({
-		inherit_select_classes: true
+		inherit_select_classes: true,
+		placeholder_text_single: mdjm_admin_vars.one_option,
+		placeholder_text_multiple: mdjm_admin_vars.one_or_more_option
 	});
+
+	$('.mdjm-select-chosen .chosen-search input').each( function() {
+		var selectElem = $(this).parent().parent().parent().prev('select.mdjm-select-chosen'),
+			placeholder = selectElem.data('search-placeholder');
+		$(this).attr( 'placeholder', placeholder );
+	});
+
+	// Add placeholders for Chosen input fields
+	$( '.chosen-choices' ).on( 'click', function () {
+		var placeholder = $(this).parent().prev().data('search-placeholder');
+		if ( typeof placeholder === 'undefined' ) {
+			placeholder = mdjm_admin_vars.type_to_search;
+		}
+		$(this).children('li').children('input').attr( 'placeholder', placeholder );
+	});
+
+	// Dismiss admin notices
+    $( document ).on( 'click', '.notice-mdjm-dismiss .notice-dismiss', function () {
+        var notice = $( this ).closest( '.notice-mdjm-dismiss' ).data( 'notice' );
+
+        var postData         = {
+            notice    : notice,
+            action       : 'mdjm_dismiss_notice'
+        };
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            url: ajaxurl
+        });
+    });
 
 	// Set the deposit value for the event
 	var setDeposit = function()	{
@@ -20,7 +55,7 @@ jQuery(document).ready(function ($) {
 			url        : ajaxurl,
 			beforeSend : function()	{
 				$('#_mdjm_event_deposit').attr('readonly', true );
-				$('#_mdjm_event_deposit').addClass('mdjm-loader');
+				$('#mdjm-event-pricing-detail').addClass('mdjm-mute');
 			},
 			success: function (response) {
 				if(response.type === 'success') {
@@ -29,7 +64,7 @@ jQuery(document).ready(function ($) {
 					alert(response.msg);
 					$('#_mdjm_event_deposit').val(current_deposit);
 				}
-				$('#_mdjm_event_deposit').removeClass('mdjm-loader');
+				$('#mdjm-event-pricing-detail').removeClass('mdjm-mute');
 				$('#_mdjm_event_deposit').attr('readonly', false );				
 			}
 		}).fail(function (data) {
@@ -66,6 +101,8 @@ jQuery(document).ready(function ($) {
 			event_date      : $('#_mdjm_event_date').val(),
 			venue           : venue,
 			employee_id     : $('#_mdjm_event_dj').val(),
+            additional      : $('#_mdjm_event_additional_cost').val(),
+            discount        : $('#_mdjm_event_discount').val(),
 			action          : 'mdjm_update_event_cost'
 		};
 
@@ -75,12 +112,21 @@ jQuery(document).ready(function ($) {
 			data       : postData,
 			url        : ajaxurl,
 			beforeSend : function()	{
-				$('#_mdjm_event_cost').addClass('mdjm-loader');
-				$('#_mdjm_event_cost').attr('readonly', true);
+                $('#mdjm-event-pricing-detail').addClass('mdjm-mute');
 			},
 			success: function (response) {
 				if(response.type === 'success') {
-					$('#_mdjm_event_cost').val(response.cost);
+					$('#_mdjm_event_package_cost').val(response.package_cost);
+                    $('#_mdjm_event_addons_cost').val(response.addons_cost);
+                    $('#_mdjm_event_travel_cost').val(response.travel_cost);
+                    $('#_mdjm_event_additional_cost').val(response.additional_cost);
+                    $('#_mdjm_event_discount').val(response.discount);
+
+                    var value = Number(response.package_cost) + Number(response.addons_cost) + Number(response.travel_cost) + Number(response.additional_cost);
+                    value = Number(value) - Number(response.discount);
+                    value = mdjmFormatCurrency( value ).substr(1)
+
+                    $('#_mdjm_event_cost').val(value);
 
 					if( mdjm_admin_vars.update_deposit )	{
 						setDeposit();
@@ -90,8 +136,7 @@ jQuery(document).ready(function ($) {
 					$('#_mdjm_event_cost').val(current_cost);
 				}
 
-				$('#_mdjm_event_cost').removeClass('mdjm-loader');
-				$('#_mdjm_event_cost').attr('readonly', false);
+                $('#mdjm-event-pricing-detail').removeClass('mdjm-mute');
 			}
 		}).fail(function (data) {
 			if ( window.console && window.console.log ) {
@@ -208,7 +253,9 @@ jQuery(document).ready(function ($) {
 	var MDJM_Events = {
 		
 		init : function()	{
+			this.options();
 			this.client();
+			//this.costs();
 			this.employee();
 			this.equipment();
 			this.playlist();
@@ -218,8 +265,68 @@ jQuery(document).ready(function ($) {
 			this.txns();
 			this.venue();
 		},
-		
+
+		options : function()	{
+			// Toggle display of event options
+            $( document.body ).on( 'click', '.toggle-event-options-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_event_options ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_event_options );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_event_options );
+                }
+
+                $('.mdjm-event-options-sections-wrap').slideToggle();
+            });
+		},
+
 		client : function()	{
+            // Toggle display of new client fields section for an event
+            $( document.body ).on( 'click', '.toggle-client-add-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_client_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_client_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_client_form );
+                }
+
+                var header = $(this).parents('.mdjm-client-row-header');
+                header.siblings('.mdjm-client-add-event-sections-wrap').slideToggle();
+
+                var first_input;
+                if ( show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-client-add-event-sections-wrap'));
+                } else {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                }
+                first_input.focus();
+            });
+
+            // Toggle display of client details section for an event
+            $( document.body ).on( 'click', '.toggle-client-details-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_client_details ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_client_details );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_client_details );
+                }
+
+                var header = $(this).parents('.mdjm-client-row-header');
+                header.siblings('.mdjm-client-details-event-sections-wrap').slideToggle();
+
+                var first_input;
+                if ( ! show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                    first_input.focus();
+                }
+            });
+
 			// Display client details
 			$( document.body ).on( 'click', '#toggle_client_details', function() {
 				$('#mdjm-event-client-details').toggle('slow');
@@ -271,23 +378,28 @@ jQuery(document).ready(function ($) {
 
 			// Add a new client from the event screen
 			$( document.body ).on( 'click', '#mdjm-add-client', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				if ( $('#client_firstname').val().length < 1 )	{
-					alert(mdjm_admin_vars.no_client_first_name);
+					$('#client_firstname').addClass('mdjm-form-error');
 					return;
 				}
 				if ( $('#client_email').val().length < 1 )	{
-					alert(mdjm_admin_vars.no_client_email);
+					$('#client_email').addClass('mdjm-form-error');
 					return;
 				}
-				
+
 				var postData = {
 					client_firstname : $('#client_firstname').val(),
 					client_lastname  : $('#client_lastname').val(),
 					client_email     : $('#client_email').val(),
-					client_phone     : $('#client_phone').val(),
+					client_address1  : $('#client_address1').val(),
+					client_address2  : $('#client_address2').val(),
+					client_town      : $('#client_town').val(),
+					client_county    : $('#client_county').val(),
+					client_postcode  : $('#client_postcode').val(),
+                    client_phone     : $('#client_phone').val(),
 					client_phone2    : $('#client_phone2').val(),
 					action           : 'mdjm_event_add_client'
 				};
@@ -298,17 +410,30 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-add-client').hide();
-						$('#mdjm-event-add-new-client-fields').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+                        $('.mdjm-client-option-fields').addClass('mdjm-mute');
+                        $('#mdjm-add-client').hide('fast');
 					},
 					success: function (response) {
+						$('#mdjm-add-client-fields').slideToggle();
+						$('#add-client-action').html( mdjm_admin_vars.show_client_form );
 						$('#client_name').empty();
+						$('#client_firstname').val('');
+						$('#client_lastname').val('');
+						$('#client_email').val('');
+                        $('#client_address1').val('');
+                        $('#client_address2').val('');
+                        $('#client_town').val('');
+                        $('#client_county').val('');
+                        $('#client_postcode').val('');
+                        $('#client_phone').val('');
+						$('#client_phone2').val('');
 						$('#client_name').append(response.client_list);
-						$('#mdjm-add-client').show();
-						$('#mdjm-loading').remove();
+						$('#mdjm-add-client').show('fast');
 						$('#_mdjm_event_block_emails').prop('checked', false );
 						$('#mdjm_reset_pw').prop('checked', true );
 						$('#client_name').trigger('chosen:updated');
+
+                        $('.mdjm-client-option-fields').removeClass('mdjm-mute');
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
@@ -316,8 +441,6 @@ jQuery(document).ready(function ($) {
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').remove();
-
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -339,23 +462,40 @@ jQuery(document).ready(function ($) {
 			});
 			
 		},
-		
+
 		employee : function()	{
-			// Display form to add event employee
-			$( document.body ).on( 'click', '#toggle_add_employee_fields', function() {
-				$('#mdjm_event_add_employee_table tbody').toggle('slow');
-				if ( 'show form' === $('#toggle_add_employee_fields').text() )	{
-					$('#toggle_add_employee_fields').text('hide form');
-				} else	{
-					$('#toggle_add_employee_fields').text('show form');
+			// Reveal the input field to add a new event type
+            $( document.body ).on( 'click', '.toggle-add-worker-section', function(e) {
+                e.preventDefault();
+
+                var show = $(this).html() === mdjm_admin_vars.show_workers ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_workers );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_workers );
+                }
+
+                $('.mdjm-event-workers-sections-wrap').slideToggle();
+				if ( $('.mdjm-event-workers-sections-wrap').is(':visible') )	{
+					$('#event_new_employee_role').focus();
 				}
-			});
+            });
+
+            // Currency format for new employee wage
+            $( document.body ).on( 'change', '#event_new_employee_wage', function() {
+                var value = $(this).val();
+
+                if( value.length > 0)   {
+                    $(this).val(mdjmFormatCurrency( value ).substr(1));
+                }
+            });
 
 			// Add an employee to the event
 			$( document.body ).on( 'click', '#add_event_employee', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				var postData    = {
 					event_id      : $('#post_ID').val(),
 					employee_id   : $('#event_new_employee').val(),
@@ -370,17 +510,24 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+                        $('.mdjm-event-workers-sections-wrap').addClass('mdjm-mute');
+                        $('#mdjm-event-employee-list').slideToggle();
 					},
 					success: function (response) {
 						if(response.type !== 'success') {
 							alert(response.msg);
 						}
-						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                        $('#mdjm-event-employee-list').html(response.employees);
+                        $('#mdjm-event-employee-list').slideToggle();
+                        $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
+                        $('#event_new_employee_role').val( '' ).trigger("chosen:updated");;
+                        $('#event_new_employee').val( '' ).trigger("chosen:updated");;
+                        $('#event_new_employee_wage').val( '' );
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                    $('#mdjm-event-employee-list').slideToggle();
+                    $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
@@ -406,17 +553,21 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('.mdjm-event-workers-sections-wrap').addClass('mdjm-mute');
+                        $('#mdjm-event-employee-list').slideToggle();
 					},
-					success: function (response) {
+					success: function(response) {
 						if(response.type !== 'success') {
 							alert('Error');
 						}
-						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+						$('#mdjm-event-employee-list').html(response.employees);
+                        $('#mdjm-event-employee-list').slideToggle();
+                        $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                    $('#mdjm-event-employee-list').slideToggle();
+                    $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
@@ -428,7 +579,7 @@ jQuery(document).ready(function ($) {
 		
 		equipment : function()	{
 
-			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons', function() {
+			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons,#_mdjm_event_additional_cost,#_mdjm_event_discount', function() {
 				setCost();
 			});
 			
@@ -519,6 +670,7 @@ jQuery(document).ready(function ($) {
 							$('#event_addons').empty();
 							$('#event_addons').append(response.addons);
 							$('#event_addons').trigger('chosen:updated');
+                            setCost();
 
 							$('#mdjm-equipment-loader').hide();
 							$('#mdjm-event-equipment-row').show();
@@ -541,17 +693,60 @@ jQuery(document).ready(function ($) {
 
 		playlist : function()	{
 			$( document.body ).on( 'change', '#_mdjm_event_playlist', function() {
-				$('#mdjm-playlist-limit').slideToggle();
+				$('#mdjm-playlist-limit').toggle('fast');
 			});
 		},
 
 		time : function()	{
-			// Set the DJ Setup Date
+			// Set the setup date
 			$( document.body ).on( 'change', '#display_event_date', function() {
 				if( $('#dj_setup_date').val().length < 1 )	{
 					$('#dj_setup_date').val($('#display_event_date').val());
 				}
 			});
+
+            // Set the setup time
+            if ( mdjm_admin_vars.setup_time_interval )  {
+                $( document.body ).on( 'change', '#event_start_hr, #event_start_min, #event_start_period', function() {
+                    var hour       = $('#event_start_hr').val();
+                    var minute     = $('#event_start_min').val();
+                    var meridiem   = '';
+                    var date       = $('#_mdjm_event_date').val();
+
+                    if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                        meridiem = ' ' + $('#event_start_period').val();
+                    }
+
+                    var time = hour + ':' + minute + meridiem;
+
+                    var postData = {
+                        time   : time,
+                        date   : date,
+                        action : 'mdjm_event_setup_time'
+                    };
+                    $.ajax({
+                        type       : 'POST',
+                        dataType   : 'json',
+                        data       : postData,
+                        url        : ajaxurl,
+                        success: function (response) {
+                            $('#dj_setup_hr').val(response.data.hour);
+                            $('#dj_setup_min').val(response.data.minute);
+                            if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                                $('#dj_setup_period').val(response.data.meridiem);
+                            }
+                            if( $('#dj_setup_date').val().length < 1 || $('#dj_setup_date').val() !== response.data.date )   {
+                                $('#dj_setup_date').val(response.data.date);
+                                $('#_mdjm_event_djsetup').val(response.data.datepicker);
+                            }
+                        }
+                    }).fail(function (data) {
+                        if ( window.console && window.console.log ) {
+                            console.log( data );
+                        }
+                    });
+                });
+            }
 		},
 
 		travel : function()	{
@@ -612,13 +807,18 @@ jQuery(document).ready(function ($) {
 		},
 
 		type : function()	{
-			// Reveal the input fields to add a new event type
-			$( document.body ).on( 'click', '#event-type-add', function() {
-				$('#mdjm-new-event-type-row').toggle('fast');
-			});
-			
+			// Reveal the input field to add a new event type
+            $( document.body ).on( 'click', '.toggle-event-type-option-section', function(e) {
+                e.preventDefault();
+
+                $('.mdjm-add-event-type-sections-wrap').slideToggle();
+				if ( $('.mdjm-add-event-type-sections-wrap').is(':visible') )	{
+					$('#event_type_name').focus();
+				}
+            });
+
 			// Save a new event type
-			$( document.body ).on( 'click', '#add_event_type', function(event) {
+			$( document.body ).on( 'click', '#mdjm-add-event-type', function(event) {
 				
 				event.preventDefault();
 				
@@ -634,29 +834,30 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#add_event_type').hide();
-						$('#mdjm-event-type-loader').show();
+                        $('.mdjm-event-option-fields').addClass('mdjm-mute');
+						$('#mdjm-add-event-type').hide('fast');
 					},
 					success: function (response) {
-						if(response.type === 'success') {
-							$('#event_type_name').val('');
-							$('#mdjm-new-event-type-row').toggle('fast');
-							$('#mdjm_event_type').show();
-							$('#mdjm_event_type').replaceWith(response.event_types);
+						if(response) {
+                            if ( 'success' !== response.data.msg )  {
+                                $('#event_type_name').addClass('mdjm-form-error');
+								$('#mdjm-add-event-type').show('fast');
+                                return;
+                            }
+                            $('#event_type_name').val('');
+                            $('.mdjm-add-event-type-sections-wrap').slideToggle();
+                            $('#mdjm_event_type').empty();
+                            $('#mdjm_event_type').append(response.data.event_types);
+                            $('#mdjm_event_type').trigger('chosen:updated');
+							$('#mdjm-add-event-type').show('fast');
+
+                            $('.mdjm-event-option-fields').removeClass('mdjm-mute');
 						} else	{
-							alert(response.msg);
+							alert(response.data.msg);
+							$('#mdjm-add-event-type').show('fast');
 						}
-
-						$('#mdjm-event-type-loader').hide();
-						$('#add_event_type').show();
-
 					}
 				}).fail(function (data) {
-					$('#mdjm_event_type').show();
-					$('#mdjm-new-event-type-row').toggle('fast');
-					$('#mdjm-event-type-loader').hide();
-					$('#add_event_type').show();
-
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -664,9 +865,9 @@ jQuery(document).ready(function ($) {
 		
 			});
 
-			// Show/Hide the email templates when the disable emails checkbox is toggles
+			// Show/Hide the email templates when the disable emails checkbox is toggled
 			$( document.body ).on( 'click', '#mdjm_block_emails', function() {
-				$('#mdjm-event-email-templates').toggle('fast');
+				$('.mdjm-quote-template').toggle('fast');
 			});
 
 		},
@@ -774,80 +975,50 @@ jQuery(document).ready(function ($) {
 			// Show manual venue details if pre-selected on event load
 			if ( mdjm_admin_vars.current_page === 'post.php' )	{
 				if ( 'manual' === $('#venue_id').val() )	{
-					$('#mdjm-event-add-new-venue-fields').show();
-					$('#mdjm-save-venue-button-row').removeClass('mdjm-hidden');
-					$('#toggle_venue_details').addClass('mdjm-hidden');
-				} else	{
-					if ( '0' !== $('#venue_id').val() && '' !== $('#venue_id').val() && 'client' !== $('#venue_id').val() )	{
-						$('#mdjm-save-venue-button-row').addClass('mdjm-hidden');
-						$('#toggle_venue_details').removeClass('mdjm-hidden');
-					}
+					$('.mdjm-add-event-venue-sections-wrap').show();
 				}
-
-				
 			}
-			// Display Venue Details
-			$( document.body ).on( 'click', '#toggle_venue_details', function() {
-				$('#mdjm-event-venue-details').toggle('slow');
-			});
+
+            // Reveal the venue details on the event screen
+            $( document.body ).on( 'click', '.toggle-event-view-venue-option-section', function(e) {
+                e.preventDefault();
+
+                var show = $(this).html() === mdjm_admin_vars.show_venue_details ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_venue_details );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_venue_details );
+                }
+
+                $('.mdjm-event-venue-details-sections-wrap').slideToggle();
+            });
+
+			// Reveal the input field to add a new venue from events screen
+            $( document.body ).on( 'click', '.toggle-event-add-venue-option-section', function(e) {
+                e.preventDefault();
+
+                $('.mdjm-add-event-venue-sections-wrap').slideToggle();
+				if ( $('.mdjm-add-event-venue-sections-wrap').is(':visible') )	{
+					$('#venue_name').focus();
+				}
+            });
 			
 			// Update the venue details when the venue selection changes
 			$( document.body ).on( 'change', '#venue_id', function(event) {
 				
 				event.preventDefault();
 				
-				if ( 'manual' === $('#venue_id').val() || 'client' === $('#venue_id').val() )	{
-
-					$('#mdjm-event-venue-details').hide('slow');
-					$('#mdjm-event-add-new-venue-fields').show('slow');
-					$('#mdjm-save-venue').removeClass('mdjm-hidden');
-					$('#toggle_venue_details').addClass('mdjm-hidden');
-				} else	{
-					$('#mdjm-save-venue').addClass('mdjm-hidden');
-					$('#mdjm-event-add-new-venue-fields').hide('slow');
-					
-					if( '0' !== $('#venue_id').val() && 'client' !== $('#venue_id').val() )	{
-						$('#toggle_venue_details').removeClass('mdjm-hidden');
-					} else	{
-						$('#toggle_venue_details').addClass('mdjm-hidden');
-					}
-
-					var postData = {
-						venue_id   : $('#venue_id').val(),
-						event_id   : $('#post_ID').val(),
-						action     : 'mdjm_refresh_venue_details'
-					};
-
-					$.ajax({
-						type       : 'POST',
-						dataType   : 'json',
-						data       : postData,
-						url        : ajaxurl,
-						beforeSend : function()	{
-							$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
-						},
-						success: function (response) {
-							$('#mdjm-loading').replaceWith(response.venue_details);
-						}
-					}).fail(function (data) {
-						$('#mdjm-event-venue-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
-	
-						if ( window.console && window.console.log ) {
-							console.log( data );
-						}
-					});
-					setTravelData();
-				}
-				$('#_mdjm_event_package').trigger('change');
+				refreshEventVenueDetails();
 			});
 
 			// Add a new venue from the event screen
-			$( document.body ).on( 'click', '#mdjm-save-venue', function(event) {
+			$( document.body ).on( 'click', '#mdjm-add-venue', function(event) {
 				
 				event.preventDefault();
 				
 				if ( $('#venue_name').val().length < 1 )	{
-					alert(mdjm_admin_vars.no_venue_name);
+					$('#venue_name').addClass('mdjm-form-error');
 					return;
 				}
 				
@@ -870,29 +1041,32 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-add-venue').hide();
-						$('#mdjm-event-add-new-venue-fields').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+                        $('.mdjm-event-option-fields').addClass('mdjm-mute');
+						$('#mdjm-add-venue').hide('fast');
 					},
 					success: function (response) {
+						$('.mdjm-add-event-venue-sections-wrap').slideToggle();
 						$('#venue_id').empty();
 						$('#venue_id').append(response.venue_list);
 						$('#mdjm-add-venue').show();
-						$('#mdjm-loading').remove();
 						$('#venue_id').trigger('chosen:updated');
+                        refreshEventVenueDetails();
+
+                        $('.mdjm-event-option-fields').removeClass('mdjm-mute');
 
 						if ( response.type === 'error' )	{
 							alert(response.message);
+							$('#mdjm-add-venue').show('fast');
 						}
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading').remove();
+					$('#mdjm-add-venue').show('fast');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
 				});
-
 			});
 			
 		}
@@ -1356,6 +1530,47 @@ jQuery(document).ready(function ($) {
 
 	};
 	MDJM_Export.init();
+
+    function refreshEventVenueDetails() {
+        // Update the venue details when the venue selection changes
+        if ( 'manual' === $('#venue_id').val() || 'client' === $('#venue_id').val() )	{
+
+            $('.mdjm-event-venue-details-sections-wrap').hide('fast');
+            $('.mdjm-add-event-venue-sections-wrap').show('fast');
+        } else	{
+            $('.mdjm-add-event-venue-sections-wrap').hide('fast');
+
+            var postData = {
+                venue_id   : $('#venue_id').val(),
+                event_id   : $('#post_ID').val(),
+                action     : 'mdjm_refresh_venue_details'
+            };
+
+            $.ajax({
+                type       : 'POST',
+                dataType   : 'json',
+                data       : postData,
+                url        : ajaxurl,
+                success: function (response) {
+                    $('#mdjm-venue-details-fields').html(response.data.venue);
+                    $('.mdjm-event-venue-details-sections-wrap').show('fast');
+
+                    var show = $('.toggle-event-view-venue-option-section').html() === mdjm_admin_vars.show_venue_details ? true : false;
+
+                    if ( show ) {
+                        $('.toggle-event-view-venue-option-section').html( mdjm_admin_vars.hide_venue_details );
+                    }
+
+                }
+            }).fail(function (data) {
+                if ( window.console && window.console.log ) {
+                    console.log( data );
+                }
+            });
+            setTravelData();
+        }
+        $('#_mdjm_event_package').trigger('change');
+    }
 
 /*
  * Validation Rules

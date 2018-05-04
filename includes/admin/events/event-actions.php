@@ -233,7 +233,8 @@ function mdjm_email_event_playlist_action( $data )	{
 			'event_id'		=> $mdjm_event->ID,
 			'client_id'		=> $mdjm_event->client,
 			'subject'		=> sprintf( __( 'Playlist for %s ID {contract_id}', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'message'		=> $html_content_start . $content . $html_content_end
+			'message'		=> $html_content_start . $content . $html_content_end,
+			'copy_to'       => 'disable'
 		);
 		
 		if ( mdjm_send_email_content( $args ) )	{

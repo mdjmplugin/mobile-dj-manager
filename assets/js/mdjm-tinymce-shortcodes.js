@@ -6,9 +6,9 @@
             type: 'menubutton',
 			tooltip: 'Insert MDJM shortcodes into your document',
             menu: [{
-				text: 'Text Replacements',
+				text: 'Content Tags',
 				menu:[{
-					text: 'Application Shortcodes',
+					text: 'Application',
 					menu: [{
 						text: 'Admin URL',
 						onclick: function () {
@@ -56,7 +56,7 @@
 						}
 					}]
 				}, {
-					text: 'Client Shortcodes',
+					text: 'Clients',
 					menu: [{
 						text: 'Client Firstname',
 						onclick: function () {
@@ -104,30 +104,40 @@
 						}
 					}]
 				}, {
-					text: 'DJ Shortcodes',
+					text: 'Employees',
 					menu: [{
-						text: 'DJ Firstname',
+						text: 'Employee Firstname',
 						onclick: function () {
-							editor.insertContent('{dj_firstname}');
+							editor.insertContent('{employee_firstname}');
 						}
 					}, {
-						text: 'DJ Fullname',
+						text: 'Employee Lastname',
 						onclick: function () {
-							editor.insertContent('{dj_fullname}');
+							editor.insertContent('{employee_lastname}');
 						}
 					}, {
-						text: 'DJ Email',
+						text: 'Employee Fullname',
 						onclick: function () {
-							editor.insertContent('{dj_email}');
+							editor.insertContent('{employee_fullname}');
 						}
 					}, {
-						text: 'DJ Phone',
+						text: 'Employee Email',
 						onclick: function () {
-							editor.insertContent('{dj_primary_phone}');
+							editor.insertContent('{employee_email}');
+						}
+					}, {
+						text: 'Employee Address',
+						onclick: function () {
+							editor.insertContent('{employee_address}');
+						}
+					}, {
+						text: 'Employee Phone',
+						onclick: function () {
+							editor.insertContent('{employee_primary_phone}');
 						}
 					}]
 				}, {
-					text: 'Equipment Shortcodes',
+					text: 'Equipment',
 					menu: [{
 						text: 'Available Addons',
 						onclick: function () {
@@ -175,7 +185,7 @@
 						}
 					}]
 				}, {
-					text: 'Event Shortcodes',
+					text: 'Events',
 					menu: [{
 						text: 'Event Name',
 						onclick: function () {
@@ -334,7 +344,7 @@
 						}
 					}]
 				}, {
-					text: 'Online Payment Shortcodes',
+					text: 'Online Payments',
 					menu: [{
 						text: 'Payment Amount',
 						onclick: function () {
@@ -352,7 +362,7 @@
 						}
 					}]
 				}, {
-					text: 'General Shortcodes',
+					text: 'General',
 					menu: [{
 						text: 'Date DD/MM/YYYY',
 						onclick: function () {
@@ -361,7 +371,7 @@
 					}]
 				}]
 			}, {
-				text: 'Content',
+				text: 'Content Shortcodes',
 				menu: [{
 					text: 'Addons List',
 					onclick: function() {
@@ -374,7 +384,7 @@
 					}
 				}]
 			}, {
-				text: 'Pages',
+				text: 'Page Shortcodes',
 				menu: [{
 					text: 'Client Zone Home',
 					onclick: function () {
@@ -399,29 +409,6 @@
 					text: 'Client Profile',
 					onclick: function () {
 						editor.insertContent('[mdjm-profile]');
-					}
-				}]
-			}, {
-				text: 'MDJM to PDF',
-				menu: [{
-					text: 'Download PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-download type="text" text="Download"]');
-					}
-				}, {
-					text: 'Email PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-email type="text" text="Email PDF"]');
-					}
-				}, {
-					text: 'Print PDF',
-					onclick: function() {
-						editor.insertContent('[mdjm-pdf-print type="text" text="Print"]');
-					}
-				}, {
-					text: 'PDF Page Break',
-					onclick: function() {
-						editor.insertContent('{pdf_pagebreak}');
 					}
 				}]
 			}]
