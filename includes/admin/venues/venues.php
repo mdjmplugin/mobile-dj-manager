@@ -120,19 +120,32 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 		
 		// Event Count
 		case 'event_count':
-			$events_at_venue = get_posts( 
-				array(
-					'post_type'	=> 'mdjm-event',
-					'meta_query'   => array(
-						'key'	  => '_mdjm_event_venue_id',
-						'value'    => $post_id,
-						'type'     => 'NUMERIC'
-					),
-					'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
-				)
-			);
-			
-			echo ! empty( $events_at_venue ) ? count( $events_at_venue ) : '0';
+			$events_at_venue = get_posts( array(
+                'post_type'	=> 'mdjm-event',
+                'meta_query'   => array(
+                    'key'	  => '_mdjm_event_venue_id',
+                    'value'    => $post_id,
+                    'type'     => 'NUMERIC'
+                ),
+                'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
+            ) );
+
+            $count = ! empty( $events_at_venue ) ? count( $events_at_venue ) : '0';
+
+            if ( $count > 0 )   {
+                $url = add_query_arg( array(
+                    'post_type'         => 'mdjm-event',
+                    'post_status'       => 'all',
+                    'action'            => -1,
+                    'mdjm_filter_date'  => 0,
+                    'mdjm_filter_venue' => $post_id,
+                    'filter_action'     => 'Filter'
+                ), admin_url( 'edit.php' ) );
+
+                $count = sprintf( '<a href="%s">%s</a>', $url, $count );
+            }
+
+            echo $count;
 			break;	
 		
 		// Information

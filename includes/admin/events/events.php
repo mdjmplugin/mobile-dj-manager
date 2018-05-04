@@ -529,39 +529,38 @@ function mdjm_event_client_filter_dropdown()	{
 
 	$roles    = array( 'client', 'inactive_client' );
 	$employee = ! mdjm_employee_can( 'read_events_all' ) ? get_current_user_id() : false;
-		
+
 	$all_clients = mdjm_get_clients( $roles, $employee );
-	
+
 	if ( ! $all_clients || 1 == count( $all_clients ) )	{
 		return;
 	}
-	
+
 	$selected = isset( $_GET['mdjm_filter_client'] ) ? (int) $_GET['mdjm_filter_client'] : 0;
-	
+
 	foreach( $all_clients as $_client )	{
 		$client_events = mdjm_get_client_events( $_client->ID );
 		
 		if ( $client_events )	{
 			$clients[ $_client->ID ] = $_client->display_name;
 		}
-		
 	}
-	
+
 	if ( empty( $clients ) )	{
 		return;
 	}
-	
+
 	?>
 	<label for="filter-by-client" class="screen-reader-text">Filter by <?php _e( 'Client', 'mobile-dj-manager' ); ?></label>
 	<select name="mdjm_filter_client" id="mdjm_filter_client-by-dj">
 		<option value="0"<?php selected( $selected, 0, false ); ?>><?php _e( "All Client's", 'mobile-dj-manager' ); ?></option>
 	<?php
 	foreach( $clients as $ID => $display_name ) {
-		
+
 		if( empty( $display_name ) )	{
 			continue;
 		}
-		
+
 		printf( "<option %s value='%s'>%s</option>\n",
 			selected( $selected, $ID, false ),
 			$ID,
@@ -957,8 +956,8 @@ function mdjm_event_post_filtered( $query )	{
 	
 	global $pagenow;
 	
-	$post_type   = isset( $_GET['post_type'] )   ? $_GET['post_type']   : '';
-	$post_status = isset( $_GET['post_status'] ) ? $_GET['post_status'] : '';
+	$post_type   = isset( $_GET['post_type'] )   ? sanitize_text_field( $_GET['post_type'] )   : '';
+	$post_status = isset( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : '';
 	
 	if ( 'edit.php' != $pagenow || 'mdjm-event' != $post_type || ! is_admin() )	{
 		return;
@@ -972,13 +971,13 @@ function mdjm_event_post_filtered( $query )	{
 	if( ! empty( $_GET['mdjm_filter_date'] ) )	{
 		
 		// Create the date start and end range
-		$start	= date( 'Y-m-d', strtotime( substr( $_GET['mdjm_filter_date'], 0, 4 ) . '-' . substr( $_GET['mdjm_filter_date'], -2 ) . '-01' ) );
-		$end	  = date( 'Y-m-t', strtotime( $start ) );
+		$start = date( 'Y-m-d', strtotime( substr( $_GET['mdjm_filter_date'], 0, 4 ) . '-' . substr( $_GET['mdjm_filter_date'], -2 ) . '-01' ) );
+		$end   = date( 'Y-m-t', strtotime( $start ) );
 		
 		$query->query_vars['meta_query'] = array(
 			array(
-				'key' => '_mdjm_event_date',
-				'value' => array( $start, $end ),
+				'key'     => '_mdjm_event_date',
+				'value'   => array( $start, $end ),
 				'compare' => 'BETWEEN'
 			)
 		);
@@ -986,18 +985,18 @@ function mdjm_event_post_filtered( $query )	{
 	}
 	
 	// Filter by event type
-	if( ! empty( $_GET['mdjm_filter_type'] ) )	{
+	if ( ! empty( $_GET['mdjm_filter_type'] ) )	{
 		
-		$type = isset( $_GET['mdjm_filter_type'] ) ? $_GET['mdjm_filter_type'] : 0;
+		$type = isset( $_GET['mdjm_filter_type'] ) ? absint( $_GET['mdjm_filter_type'] ) : 0;
 				
-		if( $type != 0 ) {
+		if ( $type != 0 ) {
 			$query->set(
 				'tax_query',
 				array(
 					array(
-						'taxonomy'		=> 'event-types',
-						'field'		   => 'term_id',
-						'terms'		   => $type
+						'taxonomy' => 'event-types',
+						'field'    => 'term_id',
+						'terms'    => $type
 					)
 				)
 			);
@@ -1009,15 +1008,15 @@ function mdjm_event_post_filtered( $query )	{
 	if( ! empty( $_GET['mdjm_filter_employee'] ) )	{
 		
 		$query->query_vars['meta_query'] = array(
-			'relation'	=> 'OR',
+			'relation'    => 'OR',
 			array(
-				'key' => '_mdjm_event_dj',
-				'value' => $_GET['mdjm_filter_employee']
+				'key'     => '_mdjm_event_dj',
+				'value'   => $_GET['mdjm_filter_employee']
 			),
 			array(
-				'key'		=> '_mdjm_event_employees',
-				'value'	  => sprintf( ':"%s";', $_GET['mdjm_filter_employee'] ),
-				'compare'	=> 'LIKE'
+				'key'     => '_mdjm_event_employees',
+				'value'   => sprintf( ':"%s";', $_GET['mdjm_filter_employee'] ),
+				'compare' => 'LIKE'
 			)
 		);
 
@@ -1028,8 +1027,20 @@ function mdjm_event_post_filtered( $query )	{
 		
 		$query->query_vars['meta_query'] = array(
 			array(
-				'key' => '_mdjm_event_client',
-				'value' => $_GET['mdjm_filter_client']
+				'key'   => '_mdjm_event_client',
+				'value' => absint( $_GET['mdjm_filter_client'] )
+			)
+		);
+
+	}
+
+    // Filter by selected venue
+	if ( ! empty( $_GET['mdjm_filter_venue'] ) )	{
+		
+		$query->query_vars['meta_query'] = array(
+			array(
+				'key'   => '_mdjm_event_venue_id',
+				'value' => absint( $_GET['mdjm_filter_venue'] )
 			)
 		);
 
