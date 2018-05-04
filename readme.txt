@@ -2,7 +2,7 @@
 Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
-Tested up to: 5.0
+Tested up to: 4.9.5
 Stable tag: 1.4.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -88,11 +88,15 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **DATE HERE**
 
 **New**: Refreshed the events admin screen with more responsive and easy to manage layout
+**New**: Discounts can now be applied to events
+**New**: Display break down of event costs on events page
 **New**: Added client playlist notification task to notify clients of guest submissions
-**New**: Added employee playlist notification task to notify if entried exist
+**New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page
 **New**: Auto set the setup time based on event start time. Define the default setup time within Settings -> Events
+**New**: Added the `employee_address` content tag
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
+**Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
 **Fix**: Corrected ID for playlist employee notification task
 **Fix**: Do not hide empty categories when adding items to the playlist

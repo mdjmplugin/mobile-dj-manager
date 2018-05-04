@@ -155,16 +155,6 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'permission' => ''
 			),
 			array(
-				'id'         => 'mdjm-event-employees-mb',
-				'title'      => sprintf( __( '%s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-				'callback'   => 'mdjm_event_metabox_employees_callback',
-				'context'    => 'normal',
-				'priority'   => 'high',
-				'args'       => array(),
-				'dependancy' => '',
-				'permission' => ''
-			),
-			array(
 				'id'         => 'mdjm-event-admin-mb',
 				'title'      => __( 'Administration', 'mobile-dj-manager' ),
 				'callback'   => 'mdjm_event_metabox_admin_callback',
