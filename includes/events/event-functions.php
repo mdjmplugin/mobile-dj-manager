@@ -567,6 +567,7 @@ function mdjm_all_event_status_keys()	{
 	$post_status = array(
 		'mdjm-unattended',
 		'mdjm-enquiry',
+        'mdjm-awaitingdeposit',
 		'mdjm-approved',
 		'mdjm-contract',
 		'mdjm-completed',
@@ -1227,6 +1228,19 @@ function mdjm_calculate_deposit( $price = '' )	{
 } // mdjm_calculate_deposit
 
 /**
+ * Whether or not a deposit it required before an event can be confirmed.
+ *
+ * @since	1.5
+ * @return	bool
+ */
+function mdjm_require_deposit_before_confirming()	{
+	$require = mdjm_get_option( 'deposit_before_confirm' );
+	$require = (bool) apply_filters( 'mdjm_require_deposit_before_confirming', $require );
+
+	return $require;
+} // mdjm_require_deposit_before_confirming
+
+/**
  * Mark the event deposit as paid.
  *
  * Determines if any deposit remains and if so, assumes it has been paid and
@@ -1251,7 +1265,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 
 	if ( ! empty( $remaining ) && $remaining > 0 )	{
 		$mdjm_txn = new MDJM_Txn;
-		
+
 		$txn_meta = array(
 			'_mdjm_txn_source'      => mdjm_get_option( 'default_type', __( 'Cash', 'mobile-dj-manager' ) ),
 			'_mdjm_txn_currency'    => mdjm_get_currency(),
@@ -1262,9 +1276,9 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 			'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
 			'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
 		);
-		
+
 		$mdjm_txn->create( array( 'post_parent' => $event_id ), $txn_meta );
-		
+
 		if ( $mdjm_txn->ID > 0 )	{
 
 			mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-deposit-payments' ) );
@@ -1277,18 +1291,28 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 					mdjm_currency_filter( mdjm_format_amount( $remaining ) )
 				)
 			);
-			
+
 			mdjm_add_journal( $args );
 
 			mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), 'mdjm_content_tag_deposit_label' );
 			mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $remaining ) { return mdjm_currency_filter( mdjm_format_amount( $remaining ) ); } );
 			mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), 'mdjm_content_tag_ddmmyyyy' );
-			
+
 			do_action( 'mdjm_post_add_manual_txn_in', $event_id, $mdjm_txn->ID );
-			
+
 		}
 
 	}
+
+    // if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
+	if ( mdjm_require_deposit_before_confirming() && $mdjm_event->get_contract_status() ) { 
+        mdjm_update_event_status(
+            $mdjm_event->ID,
+            'mdjm-approved',
+            $mdjm_event->post_status,
+            array( 'client_notices' => mdjm_get_option( 'booking_conf_to_client' ) )
+        );
+    }
 
 	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
 
@@ -1966,6 +1990,41 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 	return $update;
 	
 } // mdjm_set_event_status_mdjm_enquiry
+
+/* Update event status to Avaiting Deposit
+ *
+ * If you're looking for hooks, see the mdjm_update_event_status() function.
+ * Do not call this function directly, instead call mdjm_update_event_status() to ensure
+ * all hooks are processed.
+ *
+ * @since      1.5
+ * @param      int             $event_id       The event ID.
+ * @param      str             $old_status     The old event status.
+ * @param      arr             $args           Array of data required for transition.
+ * @return     int             The ID of the event if it is successfully updated. Otherwise returns 0.
+ */
+function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $args = array() ) {
+        remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
+        $update = wp_update_post( array(
+                'ID'          => $event_id,
+                'post_status' => 'mdjm-awaitingdeposit'
+        ) );
+
+        // Meta updates
+        $args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+
+        mdjm_update_event_meta( $event_id, $args['meta'] );
+
+        // Email the client
+        if ( ! empty( $args['client_notices'] ) )    {
+            mdjm_email_awaitingdeposit ( $event_id );
+        }
+
+        add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
+        return $update;
+} // mdjm_set_event_status_mdjm_awaitingdeposit
 
 /**
  * Update event status to Awaiting Contract.

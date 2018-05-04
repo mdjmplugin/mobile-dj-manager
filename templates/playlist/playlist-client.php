@@ -54,8 +54,8 @@ global $mdjm_event;
                     <table id="mdjm-playlist-form-table">
                         <tr>
                             <td class="mdjm-playlist-song-cell">
-                                    <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                                    <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" required />
+                                <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
+                                <input type="text" name="entry_song" id="entry_song" data-placeholder="<?php _e( 'Song Name', 'mobile-dj-manager' ); ?>" required />
                             </td>
 
                             <td class="mdjm-playlist-artist-cell">
@@ -64,8 +64,8 @@ global $mdjm_event;
                             </td>
 
                             <td class="mdjm-playlist-category-cell">
-                                    <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
-                                    <?php mdjm_playlist_category_dropdown(); ?>
+                                <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
+                                <?php mdjm_playlist_category_dropdown(); ?>
                             </td>
 
                             <td class="mdjm-playlist-djnotes-cell">

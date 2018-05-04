@@ -1,7 +1,7 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
-	if( !mdjm_employee_can( 'view_clients_list' ) )	{
+	if ( !mdjm_employee_can( 'view_clients_list' ) )	{
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . __( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
@@ -10,17 +10,16 @@
 	}
 	
 // This class extends WP_List_Table
-if( !class_exists( 'WP_List_Table' ) )
+if ( !class_exists( 'WP_List_Table' ) )	{
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
 	
 /**
  * Class Name: MDJM_Client_Manager
  * User management interface for employees
  *
- *
- *
  */
-if( !class_exists( 'MDJM_Client_Manager' ) ) : 
+if ( !class_exists( 'MDJM_Client_Manager' ) ) : 
 	class MDJM_Client_Manager extends WP_List_Table	{
 		private static $orderby;
 		private static $order;
@@ -31,20 +30,18 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Class constructor
 		 *
-		 *
-		 *
 		 */
 		public function __construct()	{
 			parent::__construct( array(
-				'singular'=> 'mdjm_list_client', //Singular label
-				'plural' => 'mdjm_list_clients', //plural label, also this will be one of the table css class
-				'ajax'   => false //We won't support Ajax for this table
+				'singular' => 'mdjm_list_client', // Singular label
+				'plural'   => 'mdjm_list_clients', // Plural label, also this will be one of the table css class
+				'ajax'     => false // We won't support Ajax for this table
 			) );
 			$this->process_bulk_actions();
 			$this->get_clients();
 			
 			$this->prepare_items();
-				
+
 			// Display the page
 			$this->client_page();	
 		} // __construct
@@ -56,19 +53,18 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			self::$order        = ! empty( $_GET['order'] )        ? $_GET['order']        : 'ASC';
 			
 			// Searching
-			if( ! empty( $_POST['s'] ) )	{
+			if ( ! empty( $_POST['s'] ) )	{
 
 				// Build out the query args for the WP_User_Query
-				self::$clients = get_users(
-					array(
-						'search'  => $_POST['s'],
-						'role__in'=> array( 'client', 'inactive_client' ),
-						'orderby' => self::$orderby,
-						'order'   => self::$order
-					)
-				);
+				self::$clients = get_users( array(
+					'search'         => $_POST['s'],
+					'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email', 'display_name' ),
+					'role__in'       => array( 'client', 'inactive_client' ),
+					'orderby'        => self::$orderby,
+					'order'          => self::$order
+				) );
 
-			} elseif( ! empty( $_POST['filter_client'] ) )	{
+			} elseif ( ! empty( $_POST['filter_client'] ) )	{
 	
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
@@ -88,7 +84,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 
 			}
 			
-			self::$total_clients = count( mdjm_get_clients() );
+			self::$total_clients = count( self::$clients );
 
 		} // get_clients
 					
@@ -104,10 +100,9 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			<div id="icon-themes" class="icon32"></div>
             <h1><?php printf( __( '%s Clients', 'mobile-dj-manager' ), MDJM_COMPANY ); ?></h1>
             <form name="mdjm-client-list" id="mdjm-client-list" method="post">
-            <?php
-			$this->views();
-			$this->display();
-			?>
+                <?php $this->views(); ?>
+                <?php $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' ); ?>
+                <?php $this->display(); ?>
             </form>
             <?php
 		} // page_header
@@ -137,8 +132,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 				?>
                 <input type="submit" name="show_only" id="show_only" class="button" value="<?php _e( 'Go!', 'mobile-dj-manager' ); ?>" />
             </div>
-              <?php
-			  $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' );
+            <?php
 		   }	   
 		} // extra_tablenav
 		
@@ -176,18 +170,23 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 */
 		public function prepare_items() {
 			// Prepare columns
-			$columns = $this->get_columns();
-			$hidden = array();
-			$sortable = $this->get_sortable_columns();
+			$columns               = $this->get_columns();
+			$hidden                = array();
+			$sortable              = $this->get_sortable_columns();
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 			
 			// Pagination. TODO
-			$per_page = 5;
+			$per_page     = $this->get_items_per_page( 'users_per_page' );
 			$current_page = $this->get_pagenum();
 									
-			$total_items = count( self::$total_clients );
-									
-			$this->items = self::$clients;
+			$total_items = self::$total_clients;
+
+            $this->set_pagination_args( array(
+                'total_items' => $total_items,
+                'per_page'    => $per_page
+            ) );
+
+			$this->items = array_slice( self::$clients, ( ( $current_page -1 ) * $per_page ), $per_page );
 		} // prepare_items
 		
 		/**

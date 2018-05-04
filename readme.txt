@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.9.5
-Stable tag: 1.4.7.8
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -85,20 +85,23 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 = 1.5 =
 
-**DATE HERE**
+**Tuesday, 8th May 2018**
 
 **New**: Refreshed the events admin screen with more responsive and easy to manage layout
 **New**: Discounts can now be applied to events
 **New**: Display break down of event costs on events page
+**New**: Added option to require deposit to be paid before an event is marked as confirmed
 **New**: Added client playlist notification task to notify clients of guest submissions
 **New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page
 **New**: Auto set the setup time based on event start time. Define the default setup time within Settings -> Events
 **New**: Added the `employee_address` content tag
+**New**: Clicking the number of events within the venue list table will now take you to a filtered list of events for the venue
+**New**: Added pagination to the clients list
+**Tweak**: Clients can now be searched by ID, email, and display name on the clients page
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
-**Fix**: Corrected ID for playlist employee notification task
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to

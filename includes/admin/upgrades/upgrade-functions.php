@@ -51,9 +51,9 @@ function mdjm_do_automatic_upgrades() {
         mdjm_update_option( 'playlist_limit', '0' );
     }
 
-    /*if ( version_compare( $mdjm_version, '1.5', '<' ) ) {
+    if ( version_compare( $mdjm_version, '1.5', '<' ) ) {
 		mdjm_v15_upgrades();
-	}*/
+	}
 
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
@@ -62,9 +62,9 @@ function mdjm_do_automatic_upgrades() {
 
 	if ( $did_upgrade ) {
 		// Send to what's new page
-		if ( substr_count( MDJM_VERSION_NUM, '.' ) < 2 )	{
+		/*if ( substr_count( MDJM_VERSION_NUM, '.' ) < 2 )	{
 			set_transient( '_mdjm_activation_redirect', true, 30 );
-		}
+		}*/
 
 		update_option( 'mdjm_version_upgraded_from', get_option( 'mdjm_version' ) );
 		update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
@@ -727,7 +727,8 @@ function mdjm_v15_upgrades()	{
 
     // Add default values for new setting options
     $options = array(
-        'setup_time' => '0',
+        'setup_time'             => '0',
+		'deposit_before_confirm' => false
     );
 
     foreach ( $options as $key => $value )  {

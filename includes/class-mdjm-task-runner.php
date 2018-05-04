@@ -825,7 +825,7 @@ class MDJM_Task_Runner {
 
 			case 'balance-reminder':
 				$query = array(
-					'post_status'  => 'mdjm-approved',
+					'post_status'  => array( 'mdjm-approved', 'mdjm-awaitingdeposit' ),
 					'meta_query'   => array(
 						'relation' => 'AND',
 						array(
@@ -850,7 +850,7 @@ class MDJM_Task_Runner {
 
 			case 'request-deposit':
 				$query = array(
-					'post_status' => 'mdjm-approved',
+					'post_status' => array( 'mdjm-approved', 'mdjm-awaitingdeposit' ),
 					'meta_query'  => array(
 					'relation' => 'AND',
 						$date_query,

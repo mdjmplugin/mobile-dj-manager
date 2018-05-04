@@ -124,7 +124,7 @@ jQuery(document).ready(function ($) {
 
                     var value = Number(response.package_cost) + Number(response.addons_cost) + Number(response.travel_cost) + Number(response.additional_cost);
                     value = Number(value) - Number(response.discount);
-                    value = mdjmFormatCurrency( value ).substr(1)
+                    value = mdjmFormatCurrency( value ).substr(1);
 
                     $('#_mdjm_event_cost').val(value);
 
@@ -520,8 +520,8 @@ jQuery(document).ready(function ($) {
                         $('#mdjm-event-employee-list').html(response.employees);
                         $('#mdjm-event-employee-list').slideToggle();
                         $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
-                        $('#event_new_employee_role').val( '' ).trigger("chosen:updated");;
-                        $('#event_new_employee').val( '' ).trigger("chosen:updated");;
+                        $('#event_new_employee_role').val( '' ).trigger('chosen:updated');
+                        $('#event_new_employee').val( '' ).trigger('chosen:updated');
                         $('#event_new_employee_wage').val( '' );
 
 					}
@@ -955,6 +955,9 @@ jQuery(document).ready(function ($) {
 							}
 							if(response.balance_paid === 'Y')	{
 								$('#balance_paid').prop('checked', true );	
+							}
+							if( response.event_status !== $('#mdjm_event_status').val() ) {
+								$('#mdjm_event_status').val(response.event_status);
 							}
 						} else	{
 							alert(response.msg);
