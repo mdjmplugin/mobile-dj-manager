@@ -595,33 +595,29 @@ function mdjm_do_event_employees_list_table( $event_id )	{
 	}
 
 	?>
-    <table class="widefat mdjm_event_employee_list">
-        <thead>
-            <tr>
-                <th style="text-align:left; width:25%;"><?php _e( 'Role', 'mobile-dj-manager' ); ?></th>
-                <th style="text-align:left; width:25%;"><?php _e( 'Name', 'mobile-dj-manager' ); ?></th>
-                <th style="text-align:left; width:20%;"><?php _e( 'Wage', 'mobile-dj-manager' ); ?></th>
-                <th style="text-align:left;"><?php _e( 'Status', 'mobile-dj-manager' ); ?></th>
 
-            </tr>
-        </thead>
-
+    <table class="mdjm_event_employee_list">
         <tbody>
             <?php foreach( $employees as $employee ) : ?>
 
+                <?php
+                $role = translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] );
+                $name = mdjm_get_employee_display_name( $employee['id'] );
+                $wage = mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) );
+                ?>
+
                 <tr class="mdjm_field_wrapper">
-                    <td><?php echo translate_user_role( $wp_roles->roles[ $employee['role'] ]['name'] ); ?></td>
-                    <td><?php echo mdjm_get_employee_display_name( $employee['id'] ); ?></td>
+                    <td><?php printf( '%s (%s)', $name, $role ); ?></td>
                     <td>
                         <?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
-                            <?php echo mdjm_currency_filter( mdjm_sanitize_amount( $employee['wage'] ) ); ?>
+                            <?php echo $wage; ?>
                         <?php endif; ?>
                     </td>
                     <td>
                         <?php if ( mdjm_employee_can( 'mdjm_event_edit' ) ) : ?>
                             <?php if ( 'paid' != mdjm_get_employees_event_payment_status( $event_id, $employee['id'] ) ) : ?>
 
-                                <?php printf( __( '<a class="button button-secondary button-small remove_event_employee" style="margin: 6px 0 10px;" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', 'mobile-dj-manager' ), $employee['id'] ); ?>
+                                <?php printf( '<a class="mdjm-delete remove_event_employee mdjm-fake" style="margin: 6px 0 10px;" data-employee_id="%1$d" id="remove-employee-%1$d">Remove</a>', $employee['id'] ); ?>
 
 
                             <?php elseif ( mdjm_get_option( 'enable_employee_payments' ) ) : ?>
@@ -635,7 +631,6 @@ function mdjm_do_event_employees_list_table( $event_id )	{
 
             <?php endforeach; ?>
         </tbody>
-
     </table>
 
 	<?php

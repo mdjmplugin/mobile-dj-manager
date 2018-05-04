@@ -722,6 +722,7 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section,
+.mdjm-repeatable-row-actions .toggle-add-worker-section,
 .mdjm-repeatable-row-actions .toggle-event-options-section,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section,
@@ -730,6 +731,7 @@ checkbox.mdjm-form-error {
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-client-details-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-add-worker-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-options-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section:hover,
@@ -881,7 +883,6 @@ checkbox.mdjm-form-error {
 	box-sizing: border-box;
 	width: 100%;
 }
-#mdjm-event-workers-fields,
 #mdjm-event-worker-add    {
     display: block;
 }
@@ -927,16 +928,26 @@ checkbox.mdjm-form-error {
 .mdjm-event-employee-fields,
 .mdjm-event-type-fields,
 .mdjm-event-date-fields,
+.mdjm-event-package-fields,
 .mdjm-event-price-fields,
 .mdjm-event-equipment-price-fields {
     display: block !important;
 	margin-top: 6px;
 }
 
+#mdjm-playlist-view    {
+    text-align: center;
+}
+
 #_mdjm_event_notes,
 #_mdjm_event_dj_notes,
 #_mdjm_event_admin_notes {
     min-height: 5em;
+}
+
+.mdjm_event_employee_list    {
+    min-width: 25%;
+    margin: 4px;
 }
 
 @media screen and ( max-width: 480px ) {

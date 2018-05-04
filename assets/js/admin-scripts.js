@@ -463,60 +463,39 @@ jQuery(document).ready(function ($) {
 			
 		},
 
-		/*costs : function()	{
-			// When a package is selected
-			$( document.body ).on( 'change', '#_mdjm_event_package', function() {
-				var package_price = $(this).find(':selected').data('price');
-
-				if( typeof package_price === 'undefined' )	{
-					package_price = '';
-				}
-
-				$('#_mdjm_event_package_cost').val(package_price);
-
-			});
-
-			// When addons are selected
-			$( document.body ).on( 'change', '#event_addons', function() {
-				var selected = $(this).find('option:selected', this);
-				var total_price = Number('0');
-				var addon_costs = [];
-				var array_length;
-
-				selected.each( function() {
-					addon_costs.push( Number( $(this).data('price') ) );
-				});
-
-				array_length = addon_costs.length;
-
-				for (i = 0; i < array_length; i++)	{
-					if( typeof addon_costs !== 'undefined' )	{
-						total_price += Number(addon_costs[i]);
-					}
-				}
-
-				$('#_mdjm_event_addons_cost').val( mdjmFormatCurrency( total_price ).substr(1) );
-
-			});
-
-		},*/
-
 		employee : function()	{
-			// Display form to add event employee
-			$( document.body ).on( 'click', '#toggle_add_employee_fields', function() {
-				$('#mdjm_event_add_employee_table tbody').toggle('slow');
-				if ( 'show form' === $('#toggle_add_employee_fields').text() )	{
-					$('#toggle_add_employee_fields').text('hide form');
-				} else	{
-					$('#toggle_add_employee_fields').text('show form');
+			// Reveal the input field to add a new event type
+            $( document.body ).on( 'click', '.toggle-add-worker-section', function(e) {
+                e.preventDefault();
+
+                var show = $(this).html() === mdjm_admin_vars.show_workers ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_workers );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_workers );
+                }
+
+                $('.mdjm-event-workers-sections-wrap').slideToggle();
+				if ( $('.mdjm-event-workers-sections-wrap').is(':visible') )	{
+					$('#event_new_employee_role').focus();
 				}
-			});
+            });
+
+            // Currency format for new employee wage
+            $( document.body ).on( 'change', '#event_new_employee_wage', function() {
+                var value = $(this).val();
+
+                if( value.length > 0)   {
+                    $(this).val(mdjmFormatCurrency( value ).substr(1));
+                }
+            });
 
 			// Add an employee to the event
 			$( document.body ).on( 'click', '#add_event_employee', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				var postData    = {
 					event_id      : $('#post_ID').val(),
 					employee_id   : $('#event_new_employee').val(),
@@ -531,17 +510,24 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+                        $('.mdjm-event-workers-sections-wrap').addClass('mdjm-mute');
+                        $('#mdjm-event-employee-list').slideToggle();
 					},
 					success: function (response) {
 						if(response.type !== 'success') {
 							alert(response.msg);
 						}
-						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                        $('#mdjm-event-employee-list').html(response.employees);
+                        $('#mdjm-event-employee-list').slideToggle();
+                        $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
+                        $('#event_new_employee_role').val( '' ).trigger("chosen:updated");;
+                        $('#event_new_employee').val( '' ).trigger("chosen:updated");;
+                        $('#event_new_employee_wage').val( '' );
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                    $('#mdjm-event-employee-list').slideToggle();
+                    $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
@@ -567,17 +553,21 @@ jQuery(document).ready(function ($) {
 					data       : postData,
 					url        : ajaxurl,
 					beforeSend : function()	{
-						$('#mdjm-event-employee-list').replaceWith('<div id="mdjm-loading-employees" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
+						$('.mdjm-event-workers-sections-wrap').addClass('mdjm-mute');
+                        $('#mdjm-event-employee-list').slideToggle();
 					},
-					success: function (response) {
+					success: function(response) {
 						if(response.type !== 'success') {
 							alert('Error');
 						}
-						$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+						$('#mdjm-event-employee-list').html(response.employees);
+                        $('#mdjm-event-employee-list').slideToggle();
+                        $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					}
 				}).fail(function (data) {
-					$('#mdjm-loading-employees').replaceWith('<div id="mdjm-event-employee-list">' + response.employees + '</div>');
+                    $('#mdjm-event-employee-list').slideToggle();
+                    $('.mdjm-event-workers-sections-wrap').removeClass('mdjm-mute');
 
 					if ( window.console && window.console.log ) {
 						console.log( data );
@@ -703,7 +693,7 @@ jQuery(document).ready(function ($) {
 
 		playlist : function()	{
 			$( document.body ).on( 'change', '#_mdjm_event_playlist', function() {
-				$('#mdjm-playlist-limit').slideToggle();
+				$('#mdjm-playlist-limit').toggle('fast');
 			});
 		},
 

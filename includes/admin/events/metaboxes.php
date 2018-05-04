@@ -51,6 +51,11 @@ function mdjm_event_details_get_action_links( $event_id, $mdjm_event, $mdjm_even
 		'event_options' => '<a href="#" class="toggle-event-options-section">' . sprintf( __( 'Show %s options', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>'
 	);
 
+    // Event workers
+    if ( mdjm_is_employer() )   {
+        $actions['event_workers'] = '<a href="#" class="toggle-add-worker-section">' . sprintf( __( 'Show %s workers', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>';
+    }
+
     // New event type
     if ( mdjm_is_admin() )  {
         $actions['event_type'] = '<a href="#" class="toggle-event-type-option-section">' . sprintf( __( 'Add %s type', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ) . '</a>';
@@ -1541,77 +1546,6 @@ function mdjm_event_overview_metabox_event_client_notes_row( $event_id )	{
 add_action( 'mdjm_event_overview_standard_event_sections', 'mdjm_event_overview_metabox_event_client_notes_row', 50 );
 
 /**
- * Output the event workers section
- *
- * @since	1.5
- * @global	obj		$mdjm_event			MDJM_Event class object
- * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
- * @param	int		$event_id			The event ID.
- * @return	str
- */
-function mdjm_event_overview_metabox_event_workers_row( $event_id )	{
-	global $mdjm_event, $mdjm_event_update;
-
-	$exclude   = false;
-
-	if ( ! empty( $mdjm_event->data['employees'] ) )	{
-		foreach( $mdjm_event->data['employees'] as $employee_id => $employee_data )	{
-			$exclude[] = $employee_id;
-		}
-	}
-
-	?>
-    <a id="mdjm-event-workers"></a>
-    <div id="mdjm-event-workers-fields" class="mdjm-event-workers-sections-wrap">
-        <div class="mdjm-custom-event-sections">
-        	<?php do_action( 'mdjm_event_overview_workers_top', $event_id ); ?>
-            <div class="mdjm-custom-event-section">
-                <span class="mdjm-custom-event-section-title"><?php printf( __( '%s Workers', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span>
-
-                <span class="mdjm-event-workers-role">
-                    <?php echo MDJM()->html->roles_dropdown( array(
-                        'name'   => 'event_new_employee_role',
-                        'chosen' => true
-                    ) ); ?>
-                </span>
-
-                <span class="mdjm-event-workers-employee">
-                    <?php echo MDJM()->html->employee_dropdown( array(
-                        'name'        => 'event_new_employee',
-                        'exclude'     => $exclude,
-                        'group'       => true,
-                        'chosen'      => true,
-                        'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
-                    ) ); ?>
-                </span>
-
-				<?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
-                    <span class="mdjm-event-workers-wage">
-                        <?php echo MDJM()->html->text( array(
-                            'name'        => 'event_new_employee_wage',
-                            'class'       => 'mdjm-currency',
-                            'placeholder' => mdjm_sanitize_amount( '0' )
-                        ) ); ?>
-                    </span>
-                <?php endif; ?>
-
-				<br />
-				<span class="mdjm-event-worker-add">
-                	<a id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
-                </span>
-
-            </div>
-
-            <?php do_action( 'mdjm_event_overview_workers', $event_id ); ?>
-        </div>
-    </div>
-
-    <?php
-
-} // mdjm_event_overview_metabox_event_workers_row
-add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_event_workers_row', 2 );
-
-/**
  * Output the playlist options section
  *
  * @since	1.5
@@ -1670,6 +1604,22 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id )	{
 						'value' => $playlist_limit
 					) ); ?>
                 </span>
+
+                <?php if ( mdjm_event_has_playlist( $event_id ) ) : ?>
+                    <?php $songs = mdjm_count_playlist_entries( $event_id ); ?>
+                    <?php $url   = add_query_arg( array( 
+                        'page'     => 'mdjm-playlists',
+                        'event_id' => $event_id
+                    ), admin_url( 'admin.php' ) ); ?>
+
+                    <span id="mdjm-playlist-view" class="mdjm-playlist-view-option">
+                        <label class="mdjm-playlist-view">
+                            <?php printf( _n( '%s Song in Playlist', '%s Songs in Playlist', $songs, 'mobile-dj-manager' ), $songs ) ?>
+                        </label>
+                        <a href="<?php echo $url; ?>"><?php _e( 'View', 'mobile-dj-manager' ); ?></a>
+                    </span>
+                <?php endif; ?>
+
             </div>
             <?php do_action( 'mdjm_event_overview_options', $event_id ); ?>
         </div>
@@ -1679,6 +1629,94 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id )	{
 
 } // mdjm_event_overview_metabox_event_playlist_options_row
 add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_event_playlist_options_row', 5 );
+
+/**
+ * Output the event workers section
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_overview_metabox_event_workers_row( $event_id )	{
+	global $mdjm_event, $mdjm_event_update;
+
+    if ( ! mdjm_is_employer() ) {
+        return;
+    }
+
+	$exclude = false;
+
+	if ( ! empty( $mdjm_event->data['employees'] ) )	{
+		foreach( $mdjm_event->data['employees'] as $employee_id => $employee_data )	{
+			$exclude[] = $employee_id;
+		}
+	}
+
+	?>
+    <a id="mdjm-event-workers"></a>
+    <div id="mdjm-event-workers-fields" class="mdjm-event-workers-sections-wrap">
+        <div class="mdjm-custom-event-sections">
+        	<?php do_action( 'mdjm_event_overview_workers_top', $event_id ); ?>
+            <div class="mdjm-custom-event-section">
+                <span class="mdjm-custom-event-section-title"><?php printf( __( '%s Workers', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span>
+
+                <span class="mdjm-event-workers-role">
+                    <?php echo MDJM()->html->roles_dropdown( array(
+                        'name'   => 'event_new_employee_role',
+                        'chosen' => true
+                    ) ); ?>
+                </span>
+
+                <span class="mdjm-event-workers-employee">
+                    <?php echo MDJM()->html->employee_dropdown( array(
+                        'name'        => 'event_new_employee',
+                        'exclude'     => $exclude,
+                        'group'       => true,
+                        'chosen'      => true,
+                        'placeholder' => __( 'Select an Employee', 'mobile-dj-manager' )
+                    ) ); ?>
+                </span>
+
+				<?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
+                    <span class="mdjm-event-workers-wage">
+                        <?php echo MDJM()->html->text( array(
+                            'name'        => 'event_new_employee_wage',
+                            'class'       => 'mdjm-currency',
+                            'placeholder' => mdjm_sanitize_amount( '0' )
+                        ) ); ?>
+                    </span>
+                <?php endif; ?>
+
+				<br />
+				<span class="mdjm-event-worker-add">
+                	<a id="add_event_employee" class="button button-secondary button-small"><?php _e( 'Add', 'mobile-dj-manager' ); ?></a>
+                </span>
+
+            </div>
+
+            <?php do_action( 'mdjm_event_overview_workers', $event_id ); ?>
+        </div>
+
+        <div id="mdjm-event-employee-list">
+            <?php mdjm_do_event_employees_list_table( $event_id ); ?>
+        </div>
+
+        <?php if ( mdjm_get_option( 'enable_employee_payments' ) && in_array( $mdjm_event->post_status, mdjm_get_option( 'employee_pay_status' ) ) && mdjm_employee_can( 'manage_txns' ) && ! mdjm_event_employees_paid( $event_id ) ) : ?>
+
+            <div class="mdjm_field_wrap mdjm_form_fields">
+                <p><a href="<?php echo wp_nonce_url( add_query_arg( array( 'mdjm-action' => 'pay_event_employees', 'event_id' => $event_id ), admin_url( 'admin.php' ) ), 'pay_event_employees', 'mdjm_nonce' ); ?>" id="pay_event_employees" class="button button-primary button-small"><?php printf( __( 'Pay %s Employees', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+            </div>
+
+        <?php endif; ?>
+
+    </div>
+
+    <?php
+
+} // mdjm_event_overview_metabox_event_workers_row
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_event_workers_row', 10 );
 
 /**
  * Output the add event type section
@@ -1722,7 +1760,7 @@ function mdjm_event_overview_metabox_add_event_type_section( $event_id )    {
     </div>
     <?php
 } // mdjm_event_overview_metabox_add_event_type_section
-add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_event_type_section', 10 );
+add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_metabox_add_event_type_section', 15 );
 
 /**
  * Output the venue details section

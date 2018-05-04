@@ -296,13 +296,29 @@ class MDJM_Event {
 			}
 
 			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
-				$meta['_mdjm_event_cost'] += mdjm_get_package_price( $meta['_mdjm_event_package'], $meta['_mdjm_event_date'] );
+                $package_price = mdjm_get_package_price( $meta['_mdjm_event_package'], $meta['_mdjm_event_date'] );
+                $meta['_mdjm_event_package_cost'] = $package_price;
+				$meta['_mdjm_event_cost'] += $package_price;
 			}
 
 			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
 				foreach( $meta['_mdjm_event_addons'] as $addon )	{
-					$meta['_mdjm_event_cost'] += mdjm_get_addon_price( $addon );
+                    $addons_price = mdjm_get_addon_price( $addon );
+                    $meta['_mdjm_event_addons_cost'] = $addons_price;
+					$meta['_mdjm_event_cost'] += $addons_price;
 				}
+			}
+
+            if ( ! empty( $meta['_mdjm_event_travel_cost'] ) )	{
+				$meta['_mdjm_event_cost'] += (float) $meta['_mdjm_event_travel_cost'];
+			}
+
+            if ( ! empty( $meta['_mdjm_event_additional_cost'] ) )	{
+				$meta['_mdjm_event_cost'] += (float) $meta['_mdjm_event_additional_cost'];
+			}
+
+            if ( ! empty( $meta['_mdjm_event_discount'] ) )	{
+				$meta['_mdjm_event_cost'] = $meta['_mdjm_event_cost'] - (float) $meta['_mdjm_event_discount'];
 			}
 
 			if ( empty( $meta['_mdjm_event_deposit'] ) )	{

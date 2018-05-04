@@ -377,7 +377,24 @@ function mdjm_playlist_is_enabled( $event_id )	{
 
 	return false;
 } // mdjm_playlist_is_enabled
-	
+
+/** Whether or not playlist entries exist for the event
+ *
+ * @since   1.5
+ * @param   int     $event_id   Event ID
+ * @return  bool
+ */
+function mdjm_event_has_playlist ( $event_id ) {
+     $playlist = get_posts( array(
+		'post_type'	     => 'mdjm-playlist',
+		'post_status'	 => 'publish',
+		'post_parent'	 => $event_id,
+		'posts_per_page' => 1
+	) );
+
+    return $playlist ? true : false;
+} // mdjm_event_has_playlist
+
 /**
  * Returns the status of the event playlist.
  *
