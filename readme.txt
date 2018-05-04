@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.9.5
-Stable tag: 1.4.7.8
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -85,11 +85,12 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 = 1.5 =
 
-**DATE HERE**
+**Tuesday, 8th May 2018**
 
 **New**: Refreshed the events admin screen with more responsive and easy to manage layout
 **New**: Discounts can now be applied to events
 **New**: Display break down of event costs on events page
+**New**: Added option to require deposit to be paid before an event is marked as confirmed
 **New**: Added client playlist notification task to notify clients of guest submissions
 **New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page

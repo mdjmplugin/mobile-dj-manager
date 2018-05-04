@@ -713,7 +713,11 @@ function mdjm_register_post_statuses()	{
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
-                'label_count'               => _n_noop( sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+                'label_count'               => _n_noop(
+					sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
+					sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
+					'mobile-dj-manager'
+				),
                 'mdjm-event'                => true
             )
         )
