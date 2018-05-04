@@ -174,13 +174,13 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 */
 		public function prepare_items() {
 			// Prepare columns
-			$columns = $this->get_columns();
-			$hidden = array();
-			$sortable = $this->get_sortable_columns();
+			$columns               = $this->get_columns();
+			$hidden                = array();
+			$sortable              = $this->get_sortable_columns();
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 			
 			// Pagination. TODO
-			$per_page = 20;
+			$per_page     = $this->get_items_per_page( 'users_per_page' );
 			$current_page = $this->get_pagenum();
 									
 			$total_items = self::$total_clients;
