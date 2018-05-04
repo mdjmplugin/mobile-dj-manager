@@ -727,7 +727,8 @@ function mdjm_v15_upgrades()	{
 
     // Add default values for new setting options
     $options = array(
-        'setup_time' => '0',
+        'setup_time'             => '0',
+		'deposit_before_confirm' => false
     );
 
     foreach ( $options as $key => $value )  {

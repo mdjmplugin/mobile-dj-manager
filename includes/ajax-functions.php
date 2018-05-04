@@ -449,7 +449,7 @@ function mdjm_save_event_transaction_ajax()	{
 			$result['deposit_paid'] = 'Y';
 
             // Update event status if contract signed & we wait for deposit paid before confirming booking
-            if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) {
+            if ( mdjm_require_deposit_before_confirming() && $mdjm_event->get_contract_status() ) {
 
                 mdjm_update_event_status(
                     $mdjm_event->ID,

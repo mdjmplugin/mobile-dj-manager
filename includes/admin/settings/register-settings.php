@@ -1119,14 +1119,15 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-					'deposit_wait'     => array(
-						'id'          => 'deposit_wait',
-						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Wait', 'mobile-dj-manager' ),
+					'deposit_before_confirm'     => array(
+						'id'          => 'deposit_before_confirm',
+						'name'        => sprintf( __( 'Wait for %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
 						'desc'        => sprintf(
-                            __( 'Wait for %s to be paid before issuing a booking confirmation', 'mobile-dj-manager' ),
+                            __( 'Wait for %s to be paid before the booking confirmation is issued', 'mobile-dj-manager' ),
                             mdjm_get_deposit_label()
                         ),
-						'type'        => 'checkbox'
+						'type'        => 'checkbox',
+						'std'         => true
 					),
                     'payment_form_settings' => array(
 						'id'          => 'payment_form_settings',

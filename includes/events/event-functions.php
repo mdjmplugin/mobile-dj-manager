@@ -1228,6 +1228,19 @@ function mdjm_calculate_deposit( $price = '' )	{
 } // mdjm_calculate_deposit
 
 /**
+ * Whether or not a deposit it required before an event can be confirmed.
+ *
+ * @since	1.5
+ * @return	bool
+ */
+function mdjm_require_deposit_before_confirming()	{
+	$require = mdjm_get_option( 'deposit_before_confirm' );
+	$require = (bool) apply_filters( 'mdjm_require_deposit_before_confirming', $require );
+
+	return $require;
+} // mdjm_require_deposit_before_confirming
+
+/**
  * Mark the event deposit as paid.
  *
  * Determines if any deposit remains and if so, assumes it has been paid and
@@ -1292,7 +1305,7 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
 	}
 
     // if we've been waiting for the deposit & the contract is signed, mark the event status as confirmed
-	if ( mdjm_get_option( 'deposit_wait' ) && $mdjm_event->get_contract_status() ) { 
+	if ( mdjm_require_deposit_before_confirming() && $mdjm_event->get_contract_status() ) { 
         mdjm_update_event_status(
             $mdjm_event->ID,
             'mdjm-approved',
