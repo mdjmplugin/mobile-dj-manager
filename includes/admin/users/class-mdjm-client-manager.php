@@ -44,7 +44,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$this->get_clients();
 			
 			$this->prepare_items();
-				
+
 			// Display the page
 			$this->client_page();	
 		} // __construct
@@ -104,10 +104,9 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			<div id="icon-themes" class="icon32"></div>
             <h1><?php printf( __( '%s Clients', 'mobile-dj-manager' ), MDJM_COMPANY ); ?></h1>
             <form name="mdjm-client-list" id="mdjm-client-list" method="post">
-            <?php
-			$this->views();
-			$this->display();
-			?>
+                <?php $this->views(); ?>
+                <?php $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' ); ?>
+                <?php $this->display(); ?>
             </form>
             <?php
 		} // page_header
@@ -137,8 +136,7 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 				?>
                 <input type="submit" name="show_only" id="show_only" class="button" value="<?php _e( 'Go!', 'mobile-dj-manager' ); ?>" />
             </div>
-              <?php
-			  $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' );
+            <?php
 		   }	   
 		} // extra_tablenav
 		
@@ -182,12 +180,17 @@ if( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 			
 			// Pagination. TODO
-			$per_page = 5;
+			$per_page = 20;
 			$current_page = $this->get_pagenum();
 									
-			$total_items = count( self::$total_clients );
-									
-			$this->items = self::$clients;
+			$total_items = self::$total_clients;
+
+            $this->set_pagination_args( array(
+                'total_items' => $total_items,
+                'per_page'    => $per_page
+            ) );
+
+			$this->items = array_slice( self::$clients, ( ( $current_page -1 ) * $per_page ), $per_page );
 		} // prepare_items
 		
 		/**
