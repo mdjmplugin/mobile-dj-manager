@@ -190,7 +190,7 @@ function mdjm_email_awaitingdeposit( $event_id )       {
    $from_email   = mdjm_email_set_from_address( 'awaitingdeposit', $mdjm_event );
    $from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'awaitingdeposit', $mdjm_event );
 
-   $client           = get_userdata( $mdjm_event->client );
+   $client       = get_userdata( $mdjm_event->client );
    $to_email     = $client->user_email;
 
    $subject      = mdjm_email_set_subject( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
@@ -199,7 +199,7 @@ function mdjm_email_awaitingdeposit( $event_id )       {
 
    $attachments  = apply_filters( 'mdjm_deposit_attachments', array(), $mdjm_event );
 
-   $message          = mdjm_get_email_template_content( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
+   $message      = mdjm_get_email_template_content( mdjm_get_option( 'awaitingdeposit', false ), 'awaitingdeposit' );
    $message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
 
    $emails = MDJM()->emails;

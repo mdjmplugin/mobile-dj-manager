@@ -1301,8 +1301,6 @@ function mdjm_mark_event_deposit_paid( $event_id )	{
         );
     }
 
-
-
 	mdjm_update_event_meta( $mdjm_event->ID, array( '_mdjm_event_deposit_status' => 'Paid' ) );
 
 	do_action( 'mdjm_post_mark_event_deposit_paid', $event_id );
@@ -1986,35 +1984,33 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
  * Do not call this function directly, instead call mdjm_update_event_status() to ensure
  * all hooks are processed.
  *
- * @since      1.3
+ * @since      1.5
  * @param      int             $event_id       The event ID.
  * @param      str             $old_status     The old event status.
  * @param      arr             $args           Array of data required for transition.
  * @return     int             The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $args = array() ) {
-       remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+        remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
-       $update = wp_update_post(
-           array(
-               'ID'          => $event_id,
-               'post_status' => 'mdjm-awaitingdeposit'
-           )
-       );
+        $update = wp_update_post( array(
+                'ID'          => $event_id,
+                'post_status' => 'mdjm-awaitingdeposit'
+        ) );
 
-       // Meta updates
-       $args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
+        // Meta updates
+        $args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
 
-       mdjm_update_event_meta( $event_id, $args['meta'] );
+        mdjm_update_event_meta( $event_id, $args['meta'] );
 
-       // Email the client
-       if ( ! empty( $args['client_notices'] ) )    {
-               mdjm_email_awaitingdeposit ( $event_id );
-       }
+        // Email the client
+        if ( ! empty( $args['client_notices'] ) )    {
+            mdjm_email_awaitingdeposit ( $event_id );
+        }
 
-       add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+        add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
-       return $update;
+        return $update;
 } // mdjm_set_event_status_mdjm_awaitingdeposit
 
 /**

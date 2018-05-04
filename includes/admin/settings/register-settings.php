@@ -714,12 +714,12 @@ function mdjm_get_registered_settings()	{
 						'std'         => 'admin'
 					),
 					'awaitingdeposit' => array(
-                        'id'       => 'awaitingdeposit',
-                        'name'     => sprintf( __( 'Awaiting %s Template', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
-                        'desc'     => sprintf( __( 'Select an email template to be used when sending the %s reminder to the client', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
-                        'type'     => 'select',
+                        'id'          => 'awaitingdeposit',
+                        'name'        => sprintf( __( 'Awaiting %s Template', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+                        'desc'        => sprintf( __( 'Select an email template to be used when sending the %s reminder to the client', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+                        'type'        => 'select',
                         'chosen'      => true,
-                        'options'  => mdjm_list_templates( 'email_template' )
+                        'options'     => mdjm_list_templates( 'email_template' )
 					),
 					'contract_templates' => array(
 						'id'          => 'contract_templates',
@@ -1119,16 +1119,15 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small'
 					),
-
-					'deposit_wait'   => array(
+					'deposit_wait'     => array(
 						'id'          => 'deposit_wait',
 						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Wait', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Wait for %s to be paid before issuing a booking confirmation", 'mobile-dj-manager' ),
-											mdjm_get_deposit_label()
+						'desc'        => sprintf(
+                            __( 'Wait for %s to be paid before issuing a booking confirmation', 'mobile-dj-manager' ),
+                            mdjm_get_deposit_label()
                         ),
 						'type'        => 'checkbox'
 					),
-
                     'payment_form_settings' => array(
 						'id'          => 'payment_form_settings',
 						'name'        => '<h3>' . __( 'Payment Form Settings', 'mobile-dj-manager' ) . '</h3>',
