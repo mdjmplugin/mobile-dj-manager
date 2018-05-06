@@ -703,25 +703,27 @@ function mdjm_register_post_statuses()	{
 		)
 	);
 
-    register_post_status(
-        'mdjm-awaitingdeposit',
-        apply_filters( 'mdjm_event_awaitingdeposit_status',
-            array(
-                'label' 		            => sprintf( __( 'Awaiting %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
-                'plural'                    => sprintf( __( 'Awaiting %s'.'s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
-                'public'                    => true,
-                'exclude_from_search'       => false,
-                'show_in_admin_all_list'    => true,
-                'show_in_admin_status_list' => true,
-                'label_count'               => _n_noop(
-					sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
-					sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
-					'mobile-dj-manager'
-				),
-                'mdjm-event'                => true
-            )
-        )
-    );
+	if ( mdjm_require_deposit_before_confirming() )	{
+		register_post_status(
+			'mdjm-awaitingdeposit',
+			apply_filters( 'mdjm_event_awaitingdeposit_status',
+				array(
+					'label' 		            => sprintf( __( 'Awaiting %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+					'plural'                    => sprintf( __( 'Awaiting %s'.'s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+					'public'                    => true,
+					'exclude_from_search'       => false,
+					'show_in_admin_all_list'    => true,
+					'show_in_admin_status_list' => true,
+					'label_count'               => _n_noop(
+						sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
+						sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
+						'mobile-dj-manager'
+					),
+					'mdjm-event'                => true
+				)
+			)
+		);
+	}
 
 	register_post_status(
 		'mdjm-approved',
