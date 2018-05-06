@@ -33,7 +33,7 @@ class MDJM_HTML_Elements {
 	public function event_status_dropdown( $name = 'post_status', $selected = 0 ) {
 		$event_statuses = mdjm_get_post_statuses( 'labels' );
 		$options        = array();
-		
+
 		foreach ( $event_statuses as $event_statuses ) {
 			$options[ $event_statuses->name ] = esc_html( $event_statuses->label );
 		}

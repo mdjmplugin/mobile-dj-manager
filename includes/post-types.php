@@ -724,22 +724,6 @@ function mdjm_register_post_statuses()	{
     );
 
 	register_post_status(
-		'mdjm-approved',
-		apply_filters( 'mdjm_event_approved_status',
-			array(
-				'label'                     => __( 'Confirmed', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Confirmed', 'mobile-dj-manager' ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
-			)
-		)
-	);
-		
-	register_post_status(
 		'mdjm-contract',
 		apply_filters( 'mdjm_event_contract_status',
 			array(
@@ -750,6 +734,22 @@ function mdjm_register_post_statuses()	{
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' ),
+				'mdjm-event'                => true
+			)
+		)
+	);
+
+	register_post_status(
+		'mdjm-approved',
+		apply_filters( 'mdjm_event_approved_status',
+			array(
+				'label'                     => __( 'Confirmed', 'mobile-dj-manager' ),
+				'plural'					=> __( 'Confirmed', 'mobile-dj-manager' ),
+				'public'                    => true,
+				'exclude_from_search'       => false,
+				'show_in_admin_all_list'    => true,
+				'show_in_admin_status_list' => true,
+				'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 				'mdjm-event'                => true
 			)
 		)
