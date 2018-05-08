@@ -98,6 +98,9 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Added the `employee_address` content tag
 **New**: Clicking the number of events within the venue list table will now take you to a filtered list of events for the venue
 **New**: Added pagination to the clients list
+**New**: Added the `additional_cost` content tag
+**New**" Added the `discount` content tag
+**Tweak**: Prohibit the deletion or renaming of the slug for the playlist Guest category
 **Tweak**: Clients can now be searched by ID, email, and display name on the clients page
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
