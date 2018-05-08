@@ -292,6 +292,11 @@ function mdjm_setup_content_tags() {
 	// Setup default tags array
 	$content_tags = array(
 		array(
+			'tag'         => 'additional_cost',
+			'description' => __( 'The total additional cost for the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_additional_cost'
+		),
+		array(
 			'tag'         => 'admin_notes',
 			'description' => __( 'The admin notes associated with the event', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_admin_notes'
@@ -450,6 +455,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'deposit_status',
 			'description' => __( "The deposit payment status. Generally 'Paid' or 'Due'", 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_deposit_status'
+		),
+		array(
+			'tag'         => 'discount',
+			'description' => __( 'The total discount applied to the event', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_discount'
 		),
 		array(
 			'tag'         => 'dj_email',
@@ -1285,6 +1295,27 @@ function mdjm_content_tag_contract_url( $event_id = '' )	{
 } // mdjm_content_tag_contract_url
 
 /**
+ * Content tag: additional_cost.
+ *
+ * @since	1.5
+ * @param	int		The event ID.
+ * @return	string	Total additional cost applied to event
+ */
+function mdjm_content_tag_additional_cost( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$additional_cost = get_post_meta( $event_id, '_mdjm_event_additional_cost', true );
+
+	if ( ! $additional_cost )	{
+		$additional_cost = 0;
+	}
+
+	return mdjm_currency_filter( mdjm_sanitize_amount( $additional_cost ) );
+} // mdjm_content_tag_additional_cost
+
+/**
  * Content tag: deposit.
  * The required deposit amount.
  *
@@ -1362,6 +1393,27 @@ function mdjm_content_tag_deposit_status( $event_id = '' )	{
 	
 	return $return;
 } // mdjm_content_tag_deposit_status
+
+/**
+ * Content tag: discount.
+ *
+ * @param	int		The event ID.
+ *
+ * @return	str		The event final balance (cost - unpaid deposit).
+ */
+function mdjm_content_tag_discount( $event_id = '' )	{
+	if ( empty( $event_id ) )	{
+		return;
+	}
+
+	$discount = get_post_meta( $event_id, '_mdjm_event_discount', true );
+
+	if ( ! $discount )	{
+		$discount = 0;
+	}
+
+	return mdjm_currency_filter( mdjm_sanitize_amount( $discount ) );
+} // mdjm_content_tag_discount
 
 /**
  * Content tag: dj_email.
