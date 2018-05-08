@@ -172,44 +172,42 @@ function mdjm_remove_stored_playlist_entry( $entry_id )	{
  * Store a guest playlist entry.
  *
  * @since	1.3
- * @param	arr		$details	Playlist entry data
+ * @param	arr		$data	Playlist form input data
  * @return	bool	Whether or not the entry was created.
  */
-function mdjm_store_guest_playlist_entry( $details )	{
+function mdjm_store_guest_playlist_entry( $data )	{
 	$meta = array(
-		'song'      => isset( $details['entry_guest_song'] )      ? $details['entry_guest_song']		: '',
-		'artist'    => isset( $details['entry_guest_artist'] )	? $details['entry_guest_artist']		: '',
-		'added_by'  => ucwords( $details['entry_guest_firstname'] . ' ' . $details['entry_guest_lastname'] ),
+		'song'      => sanitize_text_field( $data['mdjm_guest_song'] ),
+		'artist'    => isset( $data['mdjm_guest_artist'] ) ? sanitize_text_field( $data['mdjm_guest_artist'] ) : '',
+		'added_by'  => ucwords( sanitize_text_field( $data['mdjm_guest_name'] ) ),
 		'to_mdjm'   => '',
-		'uploaded'  => false,
+		'uploaded'  => false
 	);
 
 	$guest_term = get_term_by( 'name', 'Guest', 'playlist-category' );
 
 	if ( ! empty( $guest_term ) )	{
-		(int)$term   = $guest_term->term_id;
+		(int)$term = $guest_term->term_id;
 	}
 
-	$event_id	= $details['entry_event'];
+	$event_id = absint( $data['mdjm_playlist_event'] );
+	$meta     = apply_filters( 'mdjm_insert_guest_playlist_entry_meta', $meta );
 
-	// Add the playlist entry
-	$meta = apply_filters( 'mdjm_insert_guest_playlist_entry_meta', $meta );
-
-	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
-				mdjm_get_option( 'event_prefix', '' ) . $event_id,
-				$meta['song'],
-				$meta['artist'] );
-
-	$entry_id = wp_insert_post(
-		array(
-			'post_type'     => 'mdjm-playlist',
-			'post_title'    => $title,
-			'post_author'	=> 1,
-			'post_status'   => 'publish',
-			'post_parent'   => $event_id,
-			'post_category' => array( $term )
-		)
+	$title = sprintf(
+		__( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
+		mdjm_get_option( 'event_prefix', '' ) . $event_id,
+		$meta['song'],
+		$meta['artist']
 	);
+
+	$entry_id = wp_insert_post( array(
+		'post_type'     => 'mdjm-playlist',
+		'post_title'    => $title,
+		'post_author'	=> 1,
+		'post_status'   => 'publish',
+		'post_parent'   => $event_id,
+		'post_category' => array( $term )
+	) );
 
 	if ( ! empty( $term ) )	{
 		mdjm_set_playlist_entry_category( $entry_id, $term );
@@ -221,7 +219,6 @@ function mdjm_store_guest_playlist_entry( $details )	{
 
 	do_action( 'mdjm_insert_guest_playlist_entry', $entry_id, $event_id );
 
-	// Playlist entry added
 	return $entry_id;
 } // mdjm_store_guest_playlist_entry
 

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-04 21:31:21+00:00\n"
+"POT-Creation-Date: 2018-05-08 23:18:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Please enter a date"
 msgstr ""
 
-#: client-zone/includes/mdjm-dynamic.php:35 includes/ajax-functions.php:1016
+#: client-zone/includes/mdjm-dynamic.php:35 includes/ajax-functions.php:1069
 #: includes/api/class-mdjm-api.php:1347 includes/api/class-mdjm-api.php:1348
 #: includes/equipment/equipment-functions.php:1613
 #: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:571
@@ -412,8 +412,7 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:447
 #: includes/admin/events/playlist-page.php:155
 #: templates/playlist/playlist-client.php:62
-#: templates/playlist/playlist-guest.php:75
-#: templates/playlist/playlist-guest.php:76
+#: templates/playlist/playlist-guest.php:48
 msgid "Artist"
 msgstr ""
 
@@ -768,12 +767,12 @@ msgid "Associated %s"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:112
-#: includes/ajax-functions.php:963
+#: includes/ajax-functions.php:1016
 msgid "from"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:120
-#: includes/ajax-functions.php:936
+#: includes/ajax-functions.php:989
 msgid "Select an Event"
 msgstr ""
 
@@ -1231,7 +1230,7 @@ msgstr ""
 #: includes/admin/equipment/metaboxes.php:254
 #: includes/admin/equipment/metaboxes.php:489
 #: includes/admin/equipment/metaboxes.php:736
-#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:236
+#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:239
 msgid "Select Months"
 msgstr ""
 
@@ -1293,10 +1292,9 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:259
 #: includes/admin/events/class-mdjm-playlist-table.php:439
 #: includes/admin/events/events.php:254
-#: includes/admin/events/playlist-page.php:154
+#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:62
 #: templates/playlist/playlist-client.php:57
-#: templates/playlist/playlist-guest.php:70
-#: templates/playlist/playlist-guest.php:71
+#: templates/playlist/playlist-guest.php:50
 msgid "Song"
 msgstr ""
 
@@ -1650,6 +1648,7 @@ msgstr ""
 #: includes/admin/tasks/class-mdjm-tasks-table.php:246
 #: includes/admin/users/class-mdjm-client-manager.php:149
 #: includes/admin/users/class-mdjm-employee-manager.php:69
+#: includes/ajax-functions.php:61 templates/playlist/playlist-guest.php:46
 msgid "Name"
 msgstr ""
 
@@ -1681,7 +1680,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:792
 #: includes/admin/settings/register-settings.php:798
 #: includes/admin/settings/register-settings.php:799
-#: includes/content/content-tags.php:780 templates/event/event-single.php:55
+#: includes/content/content-tags.php:790 templates/event/event-single.php:55
 msgid "DJ"
 msgstr ""
 
@@ -1761,19 +1760,19 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:29 includes/scripts.php:245
+#: includes/admin/events/metaboxes.php:29 includes/scripts.php:248
 msgid "Show client details"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:32 includes/scripts.php:243
+#: includes/admin/events/metaboxes.php:32 includes/scripts.php:246
 msgid "Show client form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:51 includes/scripts.php:247
+#: includes/admin/events/metaboxes.php:51 includes/scripts.php:250
 msgid "Show %s options"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:56 includes/scripts.php:249
+#: includes/admin/events/metaboxes.php:56 includes/scripts.php:252
 msgid "Show %s workers"
 msgstr ""
 
@@ -1781,7 +1780,7 @@ msgstr ""
 msgid "Add %s type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:65 includes/scripts.php:251
+#: includes/admin/events/metaboxes.php:65 includes/scripts.php:254
 msgid "Show venue"
 msgstr ""
 
@@ -1919,8 +1918,6 @@ msgstr ""
 #: includes/admin/reporting/class-mdjm-clients-export.php:68
 #: includes/admin/users/class-mdjm-employee-manager.php:573
 #: includes/install.php:484 templates/contract/contract.php:82
-#: templates/playlist/playlist-guest.php:60
-#: templates/playlist/playlist-guest.php:61
 msgid "First Name"
 msgstr ""
 
@@ -1928,8 +1925,6 @@ msgstr ""
 #: includes/admin/reporting/class-mdjm-clients-export.php:69
 #: includes/admin/users/class-mdjm-employee-manager.php:577
 #: includes/install.php:496 templates/contract/contract.php:87
-#: templates/playlist/playlist-guest.php:65
-#: templates/playlist/playlist-guest.php:66
 msgid "Last Name"
 msgstr ""
 
@@ -2078,8 +2073,8 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:757
-#: includes/ajax-functions.php:1005
+#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:810
+#: includes/ajax-functions.php:1058
 msgid "Select Add-ons"
 msgstr ""
 
@@ -2222,11 +2217,11 @@ msgstr ""
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:405
+#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:458
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:405
+#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:458
 msgid "Outgoing"
 msgstr ""
 
@@ -2404,7 +2399,7 @@ msgstr ""
 msgid "Already Installed"
 msgstr ""
 
-#: includes/admin/mdjm.php:514 includes/content/content-tags.php:1118
+#: includes/admin/mdjm.php:514 includes/content/content-tags.php:1128
 msgid "Please <a href=\"%s\">click here</a> to reset your password"
 msgstr ""
 
@@ -3191,7 +3186,7 @@ msgstr ""
 
 #: includes/admin/procedures/update_to_1.3.php:463
 #: includes/playlist/playlist-functions.php:120
-#: includes/playlist/playlist-functions.php:198
+#: includes/playlist/playlist-functions.php:197
 msgid "Event ID: %s %s %s"
 msgstr ""
 
@@ -5127,46 +5122,6 @@ msgstr ""
 msgid "Next Run"
 msgstr ""
 
-#: includes/admin/tasks/task-functions.php:120
-msgid "Hourly"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:121
-msgid "Daily"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:122
-msgid "Twice Daily"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:123
-msgid "Weekly"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:124
-msgid "Monthly"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:125
-msgid "Yearly"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:143
-msgid "After the %s is Created"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:144
-msgid "After the %s is Confirmed"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:145
-msgid "Before the %s"
-msgstr ""
-
-#: includes/admin/tasks/task-functions.php:146
-msgid "After the %s"
-msgstr ""
-
 #: includes/admin/tasks/tasks-page.php:84
 msgid "Invalid task"
 msgstr ""
@@ -5511,7 +5466,7 @@ msgid "<a class=\"page-title-action\" href=\"%s\">Edit %s</a>"
 msgstr ""
 
 #: includes/admin/transactions/metaboxes.php:277
-#: includes/ajax-functions.php:552
+#: includes/ajax-functions.php:605
 msgid "Select Transaction Type"
 msgstr ""
 
@@ -6330,71 +6285,75 @@ msgstr ""
 msgid "No valid changelog was found."
 msgstr ""
 
-#: includes/ajax-functions.php:109
+#: includes/ajax-functions.php:70
+msgid "%s is a required field"
+msgstr ""
+
+#: includes/ajax-functions.php:173
 msgid "Email address is invalid"
 msgstr ""
 
-#: includes/ajax-functions.php:111
+#: includes/ajax-functions.php:175
 msgid "Email address is already in use"
 msgstr ""
 
-#: includes/ajax-functions.php:256
+#: includes/ajax-functions.php:309
 msgid "  - Enter Manually - "
 msgstr ""
 
-#: includes/ajax-functions.php:257
+#: includes/ajax-functions.php:310
 msgid "  - Use Client Address - "
 msgstr ""
 
-#: includes/ajax-functions.php:272
+#: includes/ajax-functions.php:325
 msgid "Unable to add venue"
 msgstr ""
 
-#: includes/ajax-functions.php:404
+#: includes/ajax-functions.php:457
 msgid "%1$s payment of %2$s received for %3$s %4$s."
 msgstr ""
 
-#: includes/ajax-functions.php:423 includes/events/event-functions.php:1297
+#: includes/ajax-functions.php:476 includes/events/event-functions.php:1297
 #: includes/events/event-functions.php:1377 includes/payments/payments.php:547
 msgid "Reason for payment"
 msgstr ""
 
-#: includes/ajax-functions.php:425 includes/events/event-functions.php:1298
+#: includes/ajax-functions.php:478 includes/events/event-functions.php:1298
 #: includes/events/event-functions.php:1378 includes/payments/payments.php:569
 msgid "Payment amount"
 msgstr ""
 
-#: includes/ajax-functions.php:427 includes/events/event-functions.php:1299
+#: includes/ajax-functions.php:480 includes/events/event-functions.php:1299
 #: includes/events/event-functions.php:1379 includes/payments/payments.php:591
 msgid "Date of payment"
 msgstr ""
 
-#: includes/ajax-functions.php:474
+#: includes/ajax-functions.php:527
 msgid "Unable to add transaction"
 msgstr ""
 
-#: includes/ajax-functions.php:498
+#: includes/ajax-functions.php:551
 msgid "Enter a name for the new Event Type"
 msgstr ""
 
-#: includes/ajax-functions.php:768
+#: includes/ajax-functions.php:821
 msgid "No packages or addons available"
 msgstr ""
 
-#: includes/ajax-functions.php:774 includes/ajax-functions.php:777
+#: includes/ajax-functions.php:827 includes/ajax-functions.php:830
 #: includes/class-mdjm-html-elements.php:647
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/ajax-functions.php:780
+#: includes/ajax-functions.php:833
 msgid "No Addons Available"
 msgstr ""
 
-#: includes/ajax-functions.php:837
+#: includes/ajax-functions.php:890
 msgid "Unable to add employee"
 msgstr ""
 
-#: includes/ajax-functions.php:910
+#: includes/ajax-functions.php:963
 msgid "Unable to retrieve template content"
 msgstr ""
 
@@ -6741,345 +6700,353 @@ msgid "Make a Payment"
 msgstr ""
 
 #: includes/content/content-tags.php:296
-msgid "The admin notes associated with the event"
+msgid "The total additional cost for the event"
 msgstr ""
 
 #: includes/content/content-tags.php:301
-msgid "The admin URL to WordPress"
+msgid "The admin notes associated with the event"
 msgstr ""
 
 #: includes/content/content-tags.php:306
-msgid "The Client Zone application URL"
+msgid "The admin URL to WordPress"
 msgstr ""
 
 #: includes/content/content-tags.php:311
-msgid "The name of this MDJM application"
+msgid "The Client Zone application URL"
 msgstr ""
 
 #: includes/content/content-tags.php:316
-msgid "The label defined for artists (default is DJ)."
+msgid "The name of this MDJM application"
 msgstr ""
 
 #: includes/content/content-tags.php:321
+msgid "The label defined for artists (default is DJ)."
+msgstr ""
+
+#: includes/content/content-tags.php:326
 msgid ""
 "The list of add-ons available. No price. If an event can be referenced, "
 "only lists add-ons not already assigned to the event, or included in the "
 "event package"
 msgstr ""
 
-#: includes/content/content-tags.php:326
+#: includes/content/content-tags.php:331
 msgid ""
 "The list of add-ons available. With price. If an event can be referenced, "
 "only lists add-ons not already assigned to the event, or included in the "
 "event package"
 msgstr ""
 
-#: includes/content/content-tags.php:331
+#: includes/content/content-tags.php:336
 msgid "The list of packages available. No price"
 msgstr ""
 
-#: includes/content/content-tags.php:336
+#: includes/content/content-tags.php:341
 msgid "The list of packages available. With price"
 msgstr ""
 
-#: includes/content/content-tags.php:341
+#: includes/content/content-tags.php:346
 msgid "The remaining balance owed for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:346
+#: includes/content/content-tags.php:351
 msgid "The label used for balance payments"
 msgstr ""
 
-#: includes/content/content-tags.php:351
+#: includes/content/content-tags.php:356
 msgid "The event clients email address"
 msgstr ""
 
-#: includes/content/content-tags.php:356
+#: includes/content/content-tags.php:361
 msgid "The event clients first name"
 msgstr ""
 
-#: includes/content/content-tags.php:361
+#: includes/content/content-tags.php:366
 msgid "The event clients full address"
 msgstr ""
 
-#: includes/content/content-tags.php:366
+#: includes/content/content-tags.php:371
 msgid "The event clients full name"
 msgstr ""
 
-#: includes/content/content-tags.php:371
+#: includes/content/content-tags.php:376
 msgid "The event clients last name"
 msgstr ""
 
-#: includes/content/content-tags.php:376
+#: includes/content/content-tags.php:381
 msgid "The event clients password for logging into %s"
 msgstr ""
 
-#: includes/content/content-tags.php:381
+#: includes/content/content-tags.php:386
 msgid "The event clients primary phone number"
 msgstr ""
 
-#: includes/content/content-tags.php:386
+#: includes/content/content-tags.php:391
 msgid "The event clients alternative phone number"
 msgstr ""
 
-#: includes/content/content-tags.php:391
+#: includes/content/content-tags.php:396
 msgid "The event clients username for logging into %s"
 msgstr ""
 
-#: includes/content/content-tags.php:396
+#: includes/content/content-tags.php:401
 msgid "The name of your company"
 msgstr ""
 
-#: includes/content/content-tags.php:401
+#: includes/content/content-tags.php:406
 msgid "The URL to your websites contact page"
 msgstr ""
 
-#: includes/content/content-tags.php:406
+#: includes/content/content-tags.php:411
 msgid "The date the event contract was signed, or today's date"
 msgstr ""
 
-#: includes/content/content-tags.php:411
+#: includes/content/content-tags.php:416
 msgid "The contract / event ID"
 msgstr ""
 
-#: includes/content/content-tags.php:416
+#: includes/content/content-tags.php:421
 msgid "The name of the person who signed the contract"
 msgstr ""
 
-#: includes/content/content-tags.php:421
+#: includes/content/content-tags.php:426
 msgid "The IP address recorded during contract signing"
 msgstr ""
 
-#: includes/content/content-tags.php:426
+#: includes/content/content-tags.php:431
 msgid "The URL for the client to access their event contract"
 msgstr ""
 
-#: includes/content/content-tags.php:431
+#: includes/content/content-tags.php:436
 msgid "Todays date in shortdate format"
 msgstr ""
 
-#: includes/content/content-tags.php:436
+#: includes/content/content-tags.php:441
 msgid "The deposit amount for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:441
+#: includes/content/content-tags.php:446
 msgid "The label used for deposit payments"
 msgstr ""
 
-#: includes/content/content-tags.php:446
+#: includes/content/content-tags.php:451
 msgid "The remaining %s value due for the %s"
 msgstr ""
 
-#: includes/content/content-tags.php:451
+#: includes/content/content-tags.php:456
 msgid "The deposit payment status. Generally 'Paid' or 'Due'"
 msgstr ""
 
-#: includes/content/content-tags.php:456 includes/content/content-tags.php:501
+#: includes/content/content-tags.php:461
+msgid "The total discount applied to the event"
+msgstr ""
+
+#: includes/content/content-tags.php:466 includes/content/content-tags.php:511
 msgid "The email address of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:461 includes/content/content-tags.php:506
+#: includes/content/content-tags.php:471 includes/content/content-tags.php:516
 msgid "The first name of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:466 includes/content/content-tags.php:516
+#: includes/content/content-tags.php:476 includes/content/content-tags.php:526
 msgid "The last name of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:471 includes/content/content-tags.php:511
+#: includes/content/content-tags.php:481 includes/content/content-tags.php:521
 msgid "The full name of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:476
+#: includes/content/content-tags.php:486
 msgid "The DJ notes that have been entered against the event"
 msgstr ""
 
-#: includes/content/content-tags.php:481 includes/content/content-tags.php:521
+#: includes/content/content-tags.php:491 includes/content/content-tags.php:531
 msgid "The primary phone number of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:486
+#: includes/content/content-tags.php:496
 msgid "The setup date for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:491
+#: includes/content/content-tags.php:501
 msgid "The setup time for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:496
+#: includes/content/content-tags.php:506
 msgid "The mailing address of the events assigned primary employee"
 msgstr ""
 
-#: includes/content/content-tags.php:526
+#: includes/content/content-tags.php:536
 msgid "The date the event completes"
 msgstr ""
 
-#: includes/content/content-tags.php:531
+#: includes/content/content-tags.php:541
 msgid "The time the event completes"
 msgstr ""
 
-#: includes/content/content-tags.php:536
+#: includes/content/content-tags.php:546
 msgid "The add-ons included with the event"
 msgstr ""
 
-#: includes/content/content-tags.php:541
+#: includes/content/content-tags.php:551
 msgid "The add-ons included with the event, with costs"
 msgstr ""
 
-#: includes/content/content-tags.php:546
+#: includes/content/content-tags.php:556
 msgid "The date of the event in long format"
 msgstr ""
 
-#: includes/content/content-tags.php:551
+#: includes/content/content-tags.php:561
 msgid "The date of the event in short format"
 msgstr ""
 
-#: includes/content/content-tags.php:556
+#: includes/content/content-tags.php:566
 msgid "The contents of the event description field"
 msgstr ""
 
-#: includes/content/content-tags.php:561
+#: includes/content/content-tags.php:571
 msgid "The duration of the event"
 msgstr ""
 
-#: includes/content/content-tags.php:566
+#: includes/content/content-tags.php:576
 msgid "The list of employees working their event"
 msgstr ""
 
-#: includes/content/content-tags.php:572
+#: includes/content/content-tags.php:582
 msgid "The list of employees working their event and their assigned role"
 msgstr ""
 
-#: includes/content/content-tags.php:577
+#: includes/content/content-tags.php:587
 msgid "The assigned name of the event"
 msgstr ""
 
-#: includes/content/content-tags.php:582
+#: includes/content/content-tags.php:592
 msgid "The package associated with the %s or \"No Package\"."
 msgstr ""
 
-#: includes/content/content-tags.php:587
+#: includes/content/content-tags.php:597
 msgid "The package associated with the %s and its cost, or \"No Package\"."
 msgstr ""
 
-#: includes/content/content-tags.php:592
+#: includes/content/content-tags.php:602
 msgid "The description of the package associated with the %s."
 msgstr ""
 
-#: includes/content/content-tags.php:597
+#: includes/content/content-tags.php:607
 msgid "The current status of the event"
 msgstr ""
 
-#: includes/content/content-tags.php:602
+#: includes/content/content-tags.php:612
 msgid "The type of event"
 msgstr ""
 
-#: includes/content/content-tags.php:607
+#: includes/content/content-tags.php:617
 msgid "The URL of the event page"
 msgstr ""
 
-#: includes/content/content-tags.php:612
+#: includes/content/content-tags.php:622
 msgid "The URL of the event admin page"
 msgstr ""
 
-#: includes/content/content-tags.php:617
+#: includes/content/content-tags.php:627
 msgid ""
 "The final balance payment for an event which is the total cost minus "
 "deposit, even if the deposit is unpaid."
 msgstr ""
 
-#: includes/content/content-tags.php:622
+#: includes/content/content-tags.php:632
 msgid "The URL to your event playlist page for guests"
 msgstr ""
 
-#: includes/content/content-tags.php:632
+#: includes/content/content-tags.php:642
 msgid "An overview of payments made by the client for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:637
+#: includes/content/content-tags.php:647
 msgid "The URL to your payments page"
 msgstr ""
 
-#: includes/content/content-tags.php:642
+#: includes/content/content-tags.php:652
 msgid "Adds a page break into a PDF document"
 msgstr ""
 
-#: includes/content/content-tags.php:647
+#: includes/content/content-tags.php:657
 msgid "The number of days before the event that the playlist closes"
 msgstr ""
 
-#: includes/content/content-tags.php:652
+#: includes/content/content-tags.php:662
 msgid "The approximate length of the %s playlist"
 msgstr ""
 
-#: includes/content/content-tags.php:657
+#: includes/content/content-tags.php:667
 msgid "The URL to your event playlist page for clients"
 msgstr ""
 
-#: includes/content/content-tags.php:662
+#: includes/content/content-tags.php:672
 msgid "The URL to your online quotes page"
 msgstr ""
 
-#: includes/content/content-tags.php:667
+#: includes/content/content-tags.php:677
 msgid "The event start time"
 msgstr ""
 
-#: includes/content/content-tags.php:672
+#: includes/content/content-tags.php:682
 msgid "The total cost of the event"
 msgstr ""
 
-#: includes/content/content-tags.php:677
+#: includes/content/content-tags.php:687
 msgid "The cost of travel for the event"
 msgstr ""
 
-#: includes/content/content-tags.php:682
+#: includes/content/content-tags.php:692
 msgid "The name of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:687
+#: includes/content/content-tags.php:697
 msgid "The name of the contact at event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:692
+#: includes/content/content-tags.php:702
 msgid "Details stored for the venue"
 msgstr ""
 
-#: includes/content/content-tags.php:697
+#: includes/content/content-tags.php:707
 msgid "The email address of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:702
+#: includes/content/content-tags.php:712
 msgid "The full address of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:707
+#: includes/content/content-tags.php:717
 msgid "Notes associated with the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:712
+#: includes/content/content-tags.php:722
 msgid "The phone number of the event venue"
 msgstr ""
 
-#: includes/content/content-tags.php:717
+#: includes/content/content-tags.php:727
 msgid "The URL to your website"
 msgstr ""
 
-#: includes/content/content-tags.php:1458
-#: includes/content/content-tags.php:1483
-#: includes/content/content-tags.php:2230
+#: includes/content/content-tags.php:1510
+#: includes/content/content-tags.php:1535
+#: includes/content/content-tags.php:2282
 #: includes/emails/email-functions.php:36
 msgid "Not specified"
 msgstr ""
 
-#: includes/content/content-tags.php:1880 includes/deprecated-functions.php:278
+#: includes/content/content-tags.php:1932 includes/deprecated-functions.php:278
 msgid "No package is assigned to this event"
 msgstr ""
 
-#: includes/content/content-tags.php:2052
+#: includes/content/content-tags.php:2104
 msgid "Guest playlist is disabled."
 msgstr ""
 
-#: includes/content/content-tags.php:2158
+#: includes/content/content-tags.php:2210
 msgid "Event playlist disabled"
 msgstr ""
 
@@ -8336,23 +8303,23 @@ msgid ""
 "payments can be processed."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:673
+#: includes/playlist/playlist-functions.php:670
 msgid "There are no playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:684
+#: includes/playlist/playlist-functions.php:681
 msgid "%d playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:702
+#: includes/playlist/playlist-functions.php:699
 msgid "%s by %s successfully uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:708
+#: includes/playlist/playlist-functions.php:705
 msgid "%s by %s could not be uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:717
+#: includes/playlist/playlist-functions.php:714
 msgid "%d out of %d entries successfully uploaded."
 msgstr ""
 
@@ -8852,27 +8819,27 @@ msgstr[1] ""
 msgid "Awaiting %s"
 msgstr ""
 
-#: includes/post-types.php:730 includes/post-types.php:731
-msgid "Confirmed"
-msgstr ""
-
-#: includes/post-types.php:736
-msgid "Confirmed <span class=\"count\">(%s)</span>"
-msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/post-types.php:746
+#: includes/post-types.php:730
 msgid "Awaiting Contract"
 msgstr ""
 
-#: includes/post-types.php:747
+#: includes/post-types.php:731
 msgid "Awaiting Contracts"
 msgstr ""
 
-#: includes/post-types.php:752
+#: includes/post-types.php:736
 msgid "Awaiting Contract <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting Contracts <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/post-types.php:746 includes/post-types.php:747
+msgid "Confirmed"
+msgstr ""
+
+#: includes/post-types.php:752
+msgid "Confirmed <span class=\"count\">(%s)</span>"
+msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -9096,99 +9063,107 @@ msgstr ""
 msgid "No playlist categories found"
 msgstr ""
 
-#: includes/scripts.php:41 widgets/class-mdjm-widget.php:51
-msgid "Please select a date"
+#: includes/scripts.php:47 templates/playlist/playlist-guest.php:35
+msgid "The playlist for this %s is now closed and not accepting suggestions"
 msgstr ""
 
 #: includes/scripts.php:49
-msgid "Please Wait..."
+msgid "Enter the name printed on your card"
 msgstr ""
 
 #: includes/scripts.php:50 templates/payments/payments-items.php:40
 msgid "Select Payment Amount"
 msgstr ""
 
-#: includes/scripts.php:51
-msgid "Enter the name printed on your card"
+#: includes/scripts.php:51 includes/scripts.php:55
+msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:227
-msgid "Enter an email address for the client"
+#: includes/scripts.php:52 widgets/class-mdjm-widget.php:51
+msgid "Please select a date"
 msgstr ""
 
-#: includes/scripts.php:228
-msgid "Enter a first name for the client"
-msgstr ""
-
-#: includes/scripts.php:229
-msgid "Enter a transaction value"
+#: includes/scripts.php:54 templates/playlist/playlist-guest.php:52
+msgid "Suggest Song"
 msgstr ""
 
 #: includes/scripts.php:230
-msgid "Enter a transaction date"
+msgid "Enter an email address for the client"
 msgstr ""
 
 #: includes/scripts.php:231
-msgid "What is the transaction for?"
+msgid "Enter a first name for the client"
 msgstr ""
 
 #: includes/scripts.php:232
-msgid "Enter a transaction source"
+msgid "Enter a transaction value"
 msgstr ""
 
 #: includes/scripts.php:233
-msgid "Enter a name for the venue"
+msgid "Enter a transaction date"
 msgstr ""
 
 #: includes/scripts.php:234
-msgid "You must have a pricing option for at least one month"
+msgid "What is the transaction for?"
 msgstr ""
 
 #: includes/scripts.php:235
+msgid "Enter a transaction source"
+msgstr ""
+
+#: includes/scripts.php:236
+msgid "Enter a name for the venue"
+msgstr ""
+
+#: includes/scripts.php:237
+msgid "You must have a pricing option for at least one month"
+msgstr ""
+
+#: includes/scripts.php:238
 msgid "Select at least one Add-on"
 msgstr ""
 
-#: includes/scripts.php:240
+#: includes/scripts.php:243
 msgid "Are you sure you want to save this %s with a total cost of %s?"
 msgstr ""
 
-#: includes/scripts.php:241
+#: includes/scripts.php:244
 msgid "Do you want to auto set the setup time?"
 msgstr ""
 
-#: includes/scripts.php:244
+#: includes/scripts.php:247
 msgid "Hide client form"
 msgstr ""
 
-#: includes/scripts.php:246
+#: includes/scripts.php:249
 msgid "Hide client details"
 msgstr ""
 
-#: includes/scripts.php:248
+#: includes/scripts.php:251
 msgid "Hide %s options"
 msgstr ""
 
-#: includes/scripts.php:250
+#: includes/scripts.php:253
 msgid "Hide %s workers"
 msgstr ""
 
-#: includes/scripts.php:252
+#: includes/scripts.php:255
 msgid "Hide venue"
 msgstr ""
 
-#: includes/scripts.php:253
+#: includes/scripts.php:256
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:254
+#: includes/scripts.php:257
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:255
+#: includes/scripts.php:258
 msgid "Type to search"
 msgstr ""
 
-#: includes/scripts.php:256
+#: includes/scripts.php:259
 msgid "Type to search all options"
 msgstr ""
 
@@ -9227,6 +9202,46 @@ msgstr ""
 #: includes/shortcodes.php:454 includes/widgets.php:256
 #: widgets/class-mdjm-widget.php:168
 msgid "Check Availability"
+msgstr ""
+
+#: includes/task-functions.php:120
+msgid "Hourly"
+msgstr ""
+
+#: includes/task-functions.php:121
+msgid "Daily"
+msgstr ""
+
+#: includes/task-functions.php:122
+msgid "Twice Daily"
+msgstr ""
+
+#: includes/task-functions.php:123
+msgid "Weekly"
+msgstr ""
+
+#: includes/task-functions.php:124
+msgid "Monthly"
+msgstr ""
+
+#: includes/task-functions.php:125
+msgid "Yearly"
+msgstr ""
+
+#: includes/task-functions.php:143
+msgid "After the %s is Created"
+msgstr ""
+
+#: includes/task-functions.php:144
+msgid "After the %s is Confirmed"
+msgstr ""
+
+#: includes/task-functions.php:145
+msgid "Before the %s"
+msgstr ""
+
+#: includes/task-functions.php:146
+msgid "After the %s"
 msgstr ""
 
 #: includes/travel-functions.php:327
@@ -9617,31 +9632,41 @@ msgid_plural "entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/playlist/playlist-guest.php:29
+#: templates/playlist/playlist-guest.php:20
 msgid ""
 "Welcome to the %s %s music playlist management system for %s %s taking "
 "place on %s."
 msgstr ""
 
-#: templates/playlist/playlist-guest.php:36
+#: templates/playlist/playlist-guest.php:29
 msgid ""
 "%1$s has invited you to provide input for the music that will be played "
 "during their %2$s. Simply add your selections below and %1$s will be able "
 "to review them."
 msgstr ""
 
-#: templates/playlist/playlist-guest.php:81
-msgid "Suggest Song"
+#: templates/playlist/playlist-guest.php:40
+msgid "The playlist for this %s is full and not accepting suggestions"
 msgstr ""
 
-#: templates/playlist/playlist-guest.php:89
-msgid "Sorry but the music playlist system for %s %s on %s is currently full."
+#: templates/playlist/playlist-guest.php:44
+msgid "%s %s Playlist"
 msgstr ""
 
-#: templates/playlist/playlist-guest.php:100
-msgid ""
-"Sorry but the music playlist system for %s %s on %s is no longer accepting "
-"suggestions."
+#: templates/playlist/playlist-guest.php:45
+msgid "Here's what you've added so far..."
+msgstr ""
+
+#: templates/playlist/playlist-guest.php:47
+msgid "So %s knows who added this song"
+msgstr ""
+
+#: templates/playlist/playlist-guest.php:49
+msgid "The name of the artist who sang the song"
+msgstr ""
+
+#: templates/playlist/playlist-guest.php:51
+msgid "The name of the song you are suggesting"
 msgstr ""
 
 #: templates/playlist/playlist-noevent.php:16

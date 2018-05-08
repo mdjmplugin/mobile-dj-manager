@@ -2,9 +2,9 @@
 /**
  * This template is used to generate the page for the shortcode [mdjm-playlist] and is used for guests.
  *
- * @version			1.0
+ * @version			1.1
  * @author			Mike Howard
- * @since			1.3
+ * @since			1.5
  * @content_tag		client
  * @content_tag		event
  * @shortcodes		Not Supported
@@ -15,103 +15,133 @@
 
 // These global vars must remain
 global $mdjm_event;
+
+$intro_text = sprintf(
+	__( 'Welcome to the %s %s music playlist management system for %s %s taking place on %s.', 'mobile-dj-manager' ),
+	'{company_name}',
+	'{application_name}',
+	"{client_fullname}'s",
+	'{event_type}',
+	'{event_date}'
+);
+
+$lead_in_text = sprintf(
+	__( '%1$s has invited you to provide input for the music that will be played during their %2$s. Simply add your selections below and %1$s will be able to review them.', 'mobile-dj-manager' ),
+	'{client_firstname}',
+	mdjm_get_label_singular( true )
+);
+
+$playlist_closed = sprintf(
+	__( 'The playlist for this %s is now closed and not accepting suggestions', 'mobile-dj-manager' ),
+	mdjm_get_label_singular( true )
+);
+
+$limit_reached = sprintf(
+	__( 'The playlist for this %s is full and not accepting suggestions', 'mobile-dj-manager' ),
+	mdjm_get_label_singular( true )
+);
+
+$form_title         = sprintf( __( '%s %s Playlist', 'mobile-dj-manager' ), "{client_firstname}'s", '{event_type}' );
+$existing_entries   = __( "Here's what you've added so far...", 'mobile-dj-manager' );
+$name_label         = __( 'Name', 'mobile-dj-manager' );
+$name_description   = sprintf( __( 'So %s knows who added this song', 'mobile-dj-manager' ), '{client_firstname}' );
+$artist_label       = __( 'Artist', 'mobile-dj-manager' );
+$artist_description = __( 'The name of the artist who sang the song', 'mobile-dj-manager' );
+$song_label         = __( 'Song', 'mobile-dj-manager' );
+$song_description   = __( 'The name of the song you are suggesting', 'mobile-dj-manager' );
+$submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
+
 ?>
+<div id="mdjm_guest_playlist_wrap">
+	<?php do_action( 'mdjm_print_notices' ); ?>
+	<div id="mdjm_guest_playlist_form_wrap" class="mdjm_clearfix">
+        <?php do_action( 'mdjm_before_guest_playlist_form' ); ?>
 
-<div id="mdjm-guest-playlist-wrapper">
-	<?php do_action( 'mdjm_guest_playlist_top', $mdjm_event->ID ); ?>
-	
-	<div id="mdjm-guest-playlist-header">
-    	
-        <?php do_action( 'mdjm_print_notices' ); ?>
-        
-    	<?php do_action( 'mdjm_guest_playlist_header_top', $mdjm_event->ID ); ?>
-                        
-        <p><?php printf( __( 'Welcome to the %s %s music playlist management system for %s %s taking place on %s.', 'mobile-dj-manager' ),
-                '{company_name}',
-				'{application_name}',
-                "{client_fullname}'s",
-				'{event_type}',
-				'{event_date}' ); ?></p>
-                
-        <p><?php printf( __( '%1$s has invited you to provide input for the music that will be played during their %2$s. Simply add your selections below and %1$s will be able to review them.', 'mobile-dj-manager' ),
-                    '{client_firstname}',
-					mdjm_get_label_singular( true ) ); ?></p>
-    
-    	<?php do_action( 'mdjm_guest_playlist_header_bottom', $mdjm_event->ID ); ?>
-	</div><!-- end mdjm-playlist-header -->
-    <div id="mdjm-guest-playlist-form">
+        <p><?php echo esc_attr( $intro_text ); ?></p>
+		<p><?php echo esc_attr( $lead_in_text ); ?></p>
 
-        <?php do_action( 'mdjm_guest_playlist_form_top', $mdjm_event->ID ); ?>
-
-        <?php if ( $mdjm_event->playlist_is_open() ) : ?>
+		<?php if ( $mdjm_event->playlist_is_open() ) : ?>
             <?php $event_playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID ); ?>
             <?php $entries_in_playlist  = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
 
             <?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) : ?> 
 
-        	   	<form id="mdjm-guest-playlist-form" name="mdjm-guest-playlist-form" action="" method="post">
+                <form id="mdjm_guest_playlist_form" class="mdjm_form" method="post">
                     <?php wp_nonce_field( 'add_guest_playlist_entry', 'mdjm_nonce', true, true ); ?>
-                    <?php mdjm_action_field( 'add_guest_playlist_entry' ); ?>
-                    <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" id="action" name="action" value="mdjm_submit_guest_playlist" />
 
-                    <table id="mdjm-guest-playlist-form-table">
-                        <tr>
-                            <td class="mdjm-guest-playlist-firstname-cell">
-                                    <label for="entry_guest_firstname"><?php _e( 'First Name', 'mobile-dj-manager' ); ?></label><br />
-                                    <input type="text" name="entry_guest_firstname" id="entry_guest_firstname" data-placeholder="<?php _e( 'First Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['firstname'] ) ) : echo $mdjm_guest['firstname']; endif; ?>" required />
-                            </td>
+                    <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
 
-                            <td class="mdjm-guest-playlist-lastname-cell">
-                                    <label for="entry_guest_lastname"><?php _e( 'Last Name', 'mobile-dj-manager' ); ?></label><br />
-                                    <input type="text" name="entry_guest_lastname" id="entry_guest_lastname" data-placeholder="<?php _e( 'Last Name', 'mobile-dj-manager' ); ?>" placeholder="<?php if( ! empty( $mdjm_guest['lastname'] ) ) : echo $mdjm_guest['lastname']; endif; ?>" required />
-                            </td>
+					<?php do_action( 'mdjm_guest_playlist_form_top' ); ?>
 
-                            <td class="mdjm-guest-playlist-category-cell">
-                                    <label for="entry_guest_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                                    <input type="text" name="entry_guest_song" id="entry_guest_song" data-placeholder="<?php _e( 'Song', 'mobile-dj-manager' ); ?>" />
-                            </td>
+                    <fieldset id="mdjm_guest_playlist_form_fields">
+                        <legend><?php echo esc_attr( $form_title ); ?></legend>
 
-                            <td class="mdjm-guest-playlist-djnotes-cell">
-                                    <label for="entry_guest_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
-                                    <input type="text" name="entry_guest_artist" id="entry_guest_artist" data-placeholder="<?php _e( 'Artist', 'mobile-dj-manager' ); ?>" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="mdjm-guest-playlist-addnew-cell" colspan="4">
-                                    <input type="submit" name="entry_guest_addnew" id="entry_guest_addnew" value="<?php _e( 'Suggest Song', 'mobile-dj-manager' ); ?>" />
-                            </td>
-                        </tr>
-                    </table>
+						<?php do_action( 'mdjm_guest_playlist_before_entries' ); ?>
+                        <div id="guest-playlist-entries" class="mdjm-hidden">
+                            <p><?php echo esc_attr( $existing_entries ); ?></p>
+                            <div class="guest-playlist-entry-row">
+                                <div class="guest-playlist-entry-column">
+                                    <span class="guest-playlist-entry-heading">Artist</span>
+                                </div>
+                                <div class="guest-playlist-entry-column">
+                                    <span class="guest-playlist-entry-heading">Song</span>
+                                </div>
+                            </div>
+                        </div>
+
+						<div id="mdjm-guest-playlist-input-fields">
+                            <p class="mdjm_guest_name_field">
+                                <label for="mdjm_guest_name">
+                                    <?php echo esc_attr( $name_label ); ?> <span class="mdjm-required-indicator">*</span>
+                                </label>
+                                <span class="mdjm-description"><?php echo esc_html( $name_description ); ?></span>
+
+                                <input type="text" name="mdjm_guest_name" id="mdjm-guest-name" class="mdjm-input" />
+                            </p>
+
+                            <p class="mdjm_guest_artist_field">
+                                <label for="mdjm_guest_artist">
+                                    <?php echo esc_attr( $artist_label ); ?>
+                                </label>
+                                <span class="mdjm-description"><?php echo esc_html( $artist_description ); ?></span>
+
+                                <input type="text" name="mdjm_guest_artist" id="mdjm-guest-artist" class="mdjm-input" />
+                            </p>
+
+                            <p class="mdjm_guest_song_field">
+                                <label for="mdjm_guest_song">
+                                    <?php echo esc_attr( $song_label ); ?> <span class="mdjm-required-indicator">*</span>
+                                </label>
+                                <span class="mdjm-description"><?php echo esc_html( $song_description ); ?></span>
+
+                                <input type="text" name="mdjm_guest_song" id="mdjm-guest-song" class="mdjm-input" />
+                            </p>
+
+							<?php do_action( 'mdjm_guest_playlist_form_after_fields' ); ?>
+
+                            <input class="button" name="entry_guest_submit" id="entry_guest_submit" type="submit" value="<?php echo esc_attr( $submit_label ); ?>" />
+
+							<?php do_action( 'mdjm_guest_playlist_form_after_submit' ); ?>
+                        </div>
+
+                    </fieldset>
+
+					<?php do_action( 'mdjm_guest_playlist_form_bottom' ); ?>
+
                 </form>
 
-            <?php else : ?>
-        	    <p><?php printf(
-                    __( 'Sorry but the music playlist system for %s %s on %s is currently full.', 'mobile-dj-manager' ),
-					"{client_fullname}'s",
-                    '{event_type}',
-                    '{event_date}'
-                ); ?></p>
-            <?php endif; //endif ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) ?>
+				<?php do_action( 'mdjm_after_guest_playlist_form' ); ?>
 
-       	<?php else : ?>
-       		<?php do_action( 'mdjm_guest_playlist_closed', $mdjm_event->ID ); ?>
+			<?php else : ?>
+        	    <div class="mdjm-alert mdjm-alert-info"><?php echo esc_attr( $limit_reached ); ?></div>
+			<?php endif; ?>
 
-       		<p><?php printf(
-                __( 'Sorry but the music playlist system for %s %s on %s is no longer accepting suggestions.', 'mobile-dj-manager' ),
-				"{client_fullname}'s",
-                '{event_type}',
-                '{event_date}' );
-            ?></p>
+		<?php else : ?>
+			<?php do_action( 'mdjm_guest_playlist_closed', $mdjm_event->ID ); ?>
+       		<div class="mdjm-alert mdjm-alert-info"><?php echo esc_attr( $playlist_closed ); ?></div>
+		<?php endif; ?>
 
-       	<?php endif; // endif( mdjm_playlist_is_open( $mdjm_event->ID ) ) ?>
-
-    	<?php do_action( 'mdjm_guest_playlist_form_bottom', $mdjm_event->ID ); ?>
-	</div><!-- end mdjm-guest-playlist-form -->
-    	
-    <div id="mdjm-guest-playlist-footer">
-    	<?php do_action( 'mdjm_guest_playlist_footer_top', $mdjm_event->ID ); ?>
-    	<?php do_action( 'mdjm_guest_playlist_footer_bottom', $mdjm_event->ID ); ?>
-    </div><!-- end mdjm-guest-playlist-footer -->
-    
-	<?php do_action( 'mdjm_guest_playlist_bottom', $mdjm_event->ID ); ?>
-</div><!-- end mdjm-guest-playlist-wrapper -->
+    </div><!--end #mdjm_guest_playlist_form_wrap-->
+</div><!-- end of #mdjm_guest_playlist_wrap -->

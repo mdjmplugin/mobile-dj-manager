@@ -29,6 +29,7 @@ p.head-nav	{
 	-webkit-animation: mdjm-icon-spin 2s infinite linear;
 	animation: mdjm-icon-spin 2s infinite linear;
 }
+.mdjm_mute { opacity: 0.4; }
 @-moz-keyframes mdjm-icon-spin {
 	0% {
 		-moz-transform: rotate(0deg)
@@ -582,68 +583,120 @@ a	{
 	font-size: small;
 }
 
-/* =Guest Playlist
+/* = Theme Specific styling
 -------------------------------------------------------------- */
 
-#mdjm-guest-playlist-header	{
-	float: left;
+/* Twenty Twelve */
+.mdjm_form input.mdjm-input.required,
+.mdjm_form select.mdjm-select.required {
+	color: #000;
 }
 
-/* Playlist Table */
-#mdjm-guest-playlist-form-table	{
-	border-collapse: collapse;
-	border: none;
-	font-size: smaller;
-}
-
-#mdjm-guest-playlist-form-table td	{
-	text-align: left;
-	vertical-align: top;
-	border: none;
-	padding: 5px;
-}
-
-#mdjm-guest-playlist-form-table td label	{
+/* = Guest Playlist
+-------------------------------------------------------------- */
+#mdjm_guest_playlist_wrap span.mdjm-description,
+#mdjm_item_wrapper span.mdjm-description	{
+	color: #666;
+	font-size: 80%;
+	display: block;
+	margin: 0 0 5px;
 	font-style: italic;
+}
+
+#mdjm_guest_playlist_wrap input.kbs-input,
+#mdjm_guest_playlist_form_wrap input.kbs-input,
+#mdjm_guest_playlist_form_wrap select,
+#mdjm_guest_playlist_form_wrap .kbs-select-chosen	{
+	display: inline-block;
+	width: 70%;
+}
+
+#mdjm_guest_playlist_wrap fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
 	font-weight: bold;
-	text-decoration: underline;
 }
 
-#mdjm-guest-playlist-form-table td input,
-#mdjm-guest-playlist-form-table td select,
-#mdjm-guest-playlist-form-table td textarea	{
-	font-size: smaller;
+#mdjm_guest_playlist_form_wrap fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
 }
 
-#mdjm-guest-playlist-form-table .mdjm-playlist-addnew-cell	{
-	text-align: right;
+#mdjm_guest_playlist_form_wrap input.error,
+#input.error	{
+	border-color: #c4554e;
 }
 
-/* Playlist Entries */
-#mdjm-guest-playlist-entries .col	{
+#mdjm_guest_playlist_form_wrap fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
+}
+#mdjm_guest_playlist_form_wrap {
+	padding: 0;
+	border: none;
+}
+
+#mdjm_guest_playlist_form_wrap label {
+	font-weight: bold;
+	display: block;
+	position: relative;
+	line-height: 100%;
+	font-size: 95%;
+	margin: 0 0 5px;
+}
+
+#mdjm_guest_playlist_form_wrap a.thickbox,
+.agree_terms {
+	font-size: 80%;
+	font-style: italic;
+}
+
+#mdjm_guest_playlist_form_wrap p.checklabel {
+	font-size: 80%;
+	font-style: italic;
+}
+
+#mdjm_guest_playlist_form_wrap label:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	height: 0;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#mdjm_guest_playlist_form_wrap span.mdjm-required-indicator {
+	color: #b94a48;
+	display: inline;
+}
+
+#entry_guest_submit .mdjm_event_ajax {
+	display: none;
+	position: relative;
+	left: -35px;
+}
+
+#guest-playlist-entries	{
+	margin-bottom: 50px;
+}
+
+.guest-playlist-entry-column {
     float: left;
     width: 25%;
+    padding: 2px;
 }
 
-#mdjm-guest-playlist-entries .last	{
-    float: right;
-    width: 25%;
+.guest-playlist-entry-row:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
-#mdjm-guest-playlist-entries .category	{
-    float: left;
-    width: 100%;
-	font-weight: bold;
-	padding-top: 10px;
-}
-
-#mdjm-guest-playlist-entries .row	{
-    height: auto;
-    overflow: auto;
-}
-
-#mdjm-guest-playlist-entries .mdjm-guest-playlist-entry:hover	{
-	background-color: #DFF2BF;
+span.guest-playlist-entry-heading	{
+	font-weight:600;
 }
 
 /* =Login Form
@@ -796,3 +849,68 @@ a	{
 #mdjm_availability_widget .mdjm_pleasewait	{
 	display: none;
 }
+
+/* = OLD Guest Playlist
+-------------------------------------------------------------- */
+
+#mdjm-guest-playlist-header	{
+	float: left;
+}
+
+/* Playlist Table */
+#mdjm-guest-playlist-form-table	{
+	border-collapse: collapse;
+	border: none;
+	font-size: smaller;
+}
+
+#mdjm-guest-playlist-form-table td	{
+	text-align: left;
+	vertical-align: top;
+	border: none;
+	padding: 5px;
+}
+
+#mdjm-guest-playlist-form-table td label	{
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#mdjm-guest-playlist-form-table td input,
+#mdjm-guest-playlist-form-table td select,
+#mdjm-guest-playlist-form-table td textarea	{
+	font-size: smaller;
+}
+
+#mdjm-guest-playlist-form-table .mdjm-playlist-addnew-cell	{
+	text-align: right;
+}
+
+/* Playlist Entries */
+#mdjm-guest-playlist-entries .col	{
+    float: left;
+    width: 25%;
+}
+
+#mdjm-guest-playlist-entries .last	{
+    float: right;
+    width: 25%;
+}
+
+#mdjm-guest-playlist-entries .category	{
+    float: left;
+    width: 100%;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+#mdjm-guest-playlist-entries .row	{
+    height: auto;
+    overflow: auto;
+}
+
+#mdjm-guest-playlist-entries .mdjm-guest-playlist-entry:hover	{
+	background-color: #DFF2BF;
+}
+

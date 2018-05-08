@@ -10,8 +10,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )	{
 	exit;
+}
 
 /**
  * Get AJAX URL
@@ -48,6 +49,69 @@ function mdjm_ajax_dismiss_admin_notice()	{
 } // mdjm_ajax_dismiss_admin_notice
 add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
 
+/**
+ * Process guest playlist submission.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_submit_guest_playlist_ajax()	{
+
+	$required_fields = array(
+		'mdjm_guest_name' => __( 'Name', 'mobile-dj-manager' ),
+		'mdjm_guest_song' => __( 'Song', 'mobile-dj-manager' )
+	);
+
+	$required_fields = apply_filters( 'mdjm_guest_playlist_required_fields', $required_fields );
+
+	foreach ( $required_fields as $required_field => $field_name )	{
+		if ( empty( $_POST[ $required_field ] ) )	{
+			wp_send_json( array(
+				'error' => sprintf( __( '%s is a required field', 'mobile-dj-manager' ), esc_attr( $field_name ) ),
+				'field' => $required_field
+			) );
+		}
+	}
+
+	$song   = sanitize_text_field( $_POST['mdjm_guest_song'] );
+	$artist = isset( $_POST['mdjm_guest_artist'] ) ? sanitize_text_field( $_POST['mdjm_guest_artist'] ) : '';
+	$guest  = ucwords( sanitize_text_field( $_POST['mdjm_guest_name'] ) );
+	$event  = absint( $_POST['mdjm_playlist_event'] );
+	$closed = false;
+
+	$playlist_data = array(
+		'mdjm_guest_song'     => $song,
+		'mdjm_guest_artist'   => $artist,
+		'mdjm_guest_name'     => $guest,
+		'mdjm_playlist_event' => $event
+	);
+
+	if ( mdjm_store_guest_playlist_entry( $playlist_data ) )	{
+		ob_start(); ?>
+		<div class="guest-playlist-entry-row">
+			<div class="guest-playlist-entry-column">
+				<span class="guest-playlist-entry"><?php echo esc_attr( $artist ); ?></span>
+			</div>
+			<div class="guest-playlist-entry-column">
+				<span class="guest-playlist-entry"><?php echo esc_attr( $song ); ?></span>
+			</div>
+		</div>
+		<?php
+		$entry = ob_get_clean();
+
+		$event_playlist_limit = mdjm_get_event_playlist_limit( $event );
+        $entries_in_playlist  = mdjm_count_playlist_entries( $event );
+
+        if ( $event_playlist_limit != 0 && $entries_in_playlist >= $event_playlist_limit )	{
+			$closed = true;
+		}
+
+		wp_send_json( array( 'entry' => $entry, 'closed' => $closed ) );
+	}
+
+} // mdjm_submit_guest_playlist_ajax
+add_action( 'wp_ajax_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
 
 /**
  * Save the client fields order during drag and drop.
@@ -170,17 +234,6 @@ add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
  *
  */
 function mdjm_refresh_venue_details_ajax()	{
-
-	/*$result = array();
-
-	ob_start();
-	mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] );
-	$result['venue_details'] = ob_get_contents();
-	ob_get_clean();
-
-	echo json_encode( $result );
-
-	die();*/
 
 	wp_send_json_success(
 		array( 'venue' => mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] ) )

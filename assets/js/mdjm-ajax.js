@@ -81,6 +81,72 @@ jQuery(document).ready(function ($) {
 
 	});
 
+	/* = Ticket submission form validation and submission
+	====================================================================================== */
+	$(document).on('click', '#mdjm_guest_playlist_form #entry_guest_submit', function(e) {
+		var mdjmGuestPlaylistForm = document.getElementById('mdjm_guest_playlist_form');
+
+		if( typeof mdjmGuestPlaylistForm.checkValidity === 'function' && false === mdjmGuestPlaylistForm.checkValidity() ) {
+			return;
+		}
+
+		e.preventDefault();
+		$(this).val(mdjm_vars.submit_playlist_loading);
+		$(this).prop('disabled', true);
+		$('#mdjm_guest_playlist_form_fields').addClass('mdjm_mute');
+		$(this).after(' <span id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_vars.ajax_loader + '" /></span>');
+		$('input').removeClass('error');
+
+		var $form        = $('#mdjm_guest_playlist_form');
+		var playlistData = $('#mdjm_guest_playlist_form').serialize();
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : playlistData,
+			url        : mdjm_vars.ajaxurl,
+			success    : function (response) {
+				if ( response.error )	{
+					$form.find('.mdjm-alert-error').show('fast');
+					$form.find('.mdjm-alert-error').html(response.error);
+				} else	{
+					//$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
+					//$form.get(0).submit();
+					if( $('.mdjm_guest_name_field').is(':visible') )	{
+						$('.mdjm_guest_name_field').slideToggle('fast');
+					}
+
+					$('#mdjm-guest-artist').val('');
+					$('#mdjm-guest-song').val('');
+					$('#mdjm-guest-artist').focus();
+
+					if( $('#guest-playlist-entries').hasClass('mdjm-hidden') )	{
+						$('#guest-playlist-entries').removeClass('mdjm-hidden');
+					}
+
+					$('#guest-playlist-entries').append(response.entry);
+
+					if( response.closed )	{
+						$('#mdjm-guest-playlist-input-fields').addClass('mdjm-hidden');
+						$('#guest-playlist-entries').append('<div class="mdjm-alert mdjm-alert-info">' + mdjm_vars.guest_playlist_closed + '</div>');
+					}
+
+				}
+
+				$('#entry_guest_submit').prop('disabled', false);
+				$('#mdjm_guest_playlist_form_fields').find('#mdjm-loading').remove();
+				$('#entry_guest_submit').val(mdjm_vars.submit_guest_playlist);
+				$('#mdjm_guest_playlist_form_fields').removeClass('mdjm_mute');
+
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+
+	});
+
 	/*=Availability Checker
 	---------------------------------------------------- */
 	if( mdjm_vars.availability_ajax )	{
