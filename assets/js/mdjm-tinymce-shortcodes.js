@@ -298,6 +298,16 @@
 							editor.insertContent('{balance}');
 						}
 					}, {
+						text: 'Additional Cost',
+						onclick: function () {
+							editor.insertContent('{additional_cost}');
+						}
+					}, {
+						text: 'Discount',
+						onclick: function () {
+							editor.insertContent('{discount}');
+						}
+					}, {
 						text: 'Travel Cost',
 						onclick: function () {
 							editor.insertContent('{travel_cost}');
