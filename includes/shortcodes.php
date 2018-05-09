@@ -7,6 +7,9 @@
  * @since		1.3
  */
 
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
  * The 'MDJM' shortcode replacements.
  * Used for pages and functions.

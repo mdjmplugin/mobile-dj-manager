@@ -1,4 +1,4 @@
-/**
+pl/**
  * MDJM Event Management Styles
  *
  * @package     MDJM
@@ -515,7 +515,6 @@ a	{
 
 /* =Playlist Page
 -------------------------------------------------------------- */
-
 #mdjm-playlist-header	{
 	float: left;
 }
@@ -603,10 +602,10 @@ a	{
 	font-style: italic;
 }
 
-#mdjm_guest_playlist_wrap input.kbs-input,
-#mdjm_guest_playlist_form_wrap input.kbs-input,
+#mdjm_guest_playlist_wrap input.mdjm-input,
+#mdjm_guest_playlist_form_wrap input.mdjm-input,
 #mdjm_guest_playlist_form_wrap select,
-#mdjm_guest_playlist_form_wrap .kbs-select-chosen	{
+#mdjm_guest_playlist_form_wrap .mdjm-select-chosen	{
 	display: inline-block;
 	width: 70%;
 }
@@ -817,6 +816,92 @@ span.guest-playlist-entry-heading	{
 }
 
 #mdjm_payment_submit .mdjm-payment-ajax {
+	display: none;
+	position: relative;
+	left: -35px;
+}
+
+/* =Profile Page
+-------------------------------------------------------------- */
+#mdjm_client_profile_wrap span.mdjm-description	{
+	color: #666;
+	font-size: 80%;
+	display: block;
+	margin: 0 0 5px;
+	font-style: italic;
+}
+
+#mdjm_client_profile_wrap input.mdjm-input,
+#mdjm_client_profile_form_wrap input.mdjm-input,
+#mdjm_client_profile_form_wrap select,
+#mdjm_client_profile_form_wrap .mdjm-select-chosen	{
+	display: inline-block;
+	width: 70%;
+}
+
+#mdjm_client_profile_wrap fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#mdjm_client_profile_form_wrap fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
+}
+
+#mdjm_client_profile_form_wrap input.error,
+#input.error	{
+	border-color: #c4554e;
+}
+
+#mdjm_client_profile_form_wrap fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
+}
+#mdjm_client_profile_form_wrap {
+	padding: 0;
+	border: none;
+}
+
+#mdjm_client_profile_form_wrap label {
+	font-weight: bold;
+	display: block;
+	position: relative;
+	line-height: 100%;
+	font-size: 95%;
+	margin: 0 0 5px;
+}
+
+#mdjm_client_profile_form_wrap a.thickbox,
+.agree_terms {
+	font-size: 80%;
+	font-style: italic;
+}
+
+#mdjm_client_profile_form_wrap p.checklabel {
+	font-size: 80%;
+	font-style: italic;
+}
+
+#mdjm_client_profile_form_wrap label:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	height: 0;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#mdjm_client_profile_form_wrap span.mdjm-required-indicator {
+	color: #b94a48;
+	display: inline;
+}
+
+#entry_guest_submit .mdjm_event_ajax {
 	display: none;
 	position: relative;
 	left: -35px;

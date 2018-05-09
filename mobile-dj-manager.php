@@ -1,5 +1,8 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
@@ -203,6 +206,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/client-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/clients/client-functions.php' );
+            require_once( MDJM_PLUGIN_DIR . '/includes/clients/class-mdjm-client.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/employee-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/class-mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/roles-functions.php' );

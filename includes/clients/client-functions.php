@@ -556,14 +556,22 @@ function mdjm_get_client_last_login( $client_id )	{
 function mdjm_get_client_fields()	{
 	
 	$client_fields = get_option( 'mdjm_client_fields' );
-	
-	if ( ! empty( $client_fields ) )	{
-		return $client_fields;
-	} else	{
-		return false;
-	}
+	$client_fields = apply_filters( 'mdjm_client_fields', $client_fields );
+
+    return $client_fields;
 		
 } // mdjm_get_client_fields
+
+/**
+ * Whether or not a client field should be displayed.
+ *
+ * @since   1.5
+ * @param   array   $field  The field to query
+ * @return  bool    True if we should display
+ */
+function mdjm_display_client_field( $field )    {
+    return ! empty( $field['display'] ) ? true : false;
+} // mdjm_display_client_field
 
 /**
  * Output the clients details.
