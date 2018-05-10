@@ -29,7 +29,7 @@ $client_fields = mdjm_get_client_fields();
 
                 <form id="mdjm_client_profile_form" class="mdjm_form" method="post">
                     <?php wp_nonce_field( 'update_client_profile', 'mdjm_nonce', true, true ); ?>
-                    <input type="hidden" id="mdjm_client_id" name="mdjm_client_id" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" id="mdjm_client_id" name="mdjm_client_id" value="<?php echo $client->ID; ?>" />
                     <input type="hidden" id="action" name="action" value="mdjm_update_client_profile" />
 
                     <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
@@ -39,18 +39,20 @@ $client_fields = mdjm_get_client_fields();
                     <fieldset id="mdjm_guest_playlist_form_fields">
                         <legend><?php echo esc_attr( $form_title ); ?></legend>
 
-						<div id="mdjm-guest-playlist-input-fields">
+						<div id="mdjm-client-profile-input-fields">
 
                             <?php foreach( $client->get_profile_fields() as $field ) : ?>
-                                <?php if ( mdjm_display_client_field( $field ) ) : ?>
+                                <?php if ( mdjm_display_client_field( $field ) ) :
+									$id    = esc_attr( $field['id'] );
+									$label = esc_attr( $field['label'] );
+									?>
 
-                                    <p class="mdjm_guest_name_field">
-                                        <label for="mdjm_guest_name">
-                                            <?php echo esc_attr( $name_label ); ?> <span class="mdjm-required-indicator">*</span>
+                                    <p class="mdjm_<?php echo $id; ?>_field">
+                                        <label for="mdjm_<?php echo $id; ?>">
+                                            <?php echo $label; ?> <?php if ( ! empty( $field['required'] ) ) : ?><span class="mdjm-required-indicator">*</span><?php endif; ?>
                                         </label>
-                                        <span class="mdjm-description"><?php echo esc_html( $name_description ); ?></span>
 
-                                        <input type="text" name="mdjm_guest_name" id="mdjm-guest-name" class="mdjm-input" />
+                                        <?php mdjm_display_client_input_field( $field, $client ); ?>
                                     </p>
 
                                 <?php endif; ?>
@@ -58,7 +60,7 @@ $client_fields = mdjm_get_client_fields();
 
 							<?php do_action( 'mdjm_client_profile_form_after_fields' ); ?>
 
-                            <input class="button" name="entry_guest_submit" id="entry_guest_submit" type="submit" value="<?php echo esc_attr( $submit_label ); ?>" />
+                            <input class="button" name="update_profile_submit" id="update_profile_submit" type="submit" value="<?php echo esc_attr( $submit_label ); ?>" />
 
 							<?php do_action( 'mdjm_client_profile_form_after_submit' ); ?>
                         </div>

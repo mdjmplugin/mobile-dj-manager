@@ -22,7 +22,7 @@ function shortcode_mdjm( $atts )	{
 	// Array mapping the args to the pages/functions
 	$pairs = array(
 		'Home'          => 'mdjm_shortcode_home',
-		'Profile'       => MDJM_CLIENTZONE . '/pages/mdjm-profile.php',
+		'Profile'       => 'mdjm_shortcode_profile',
 		'Playlist'      => 'mdjm_shortcode_playlist',
 		'Contract'      => 'mdjm_shortcode_contract',
 		'Availability'  => 'f_mdjm_availability_form',
@@ -281,9 +281,11 @@ add_shortcode( 'mdjm-payments', 'mdjm_shortcode_payment' );
  * @return	string
  */
 function mdjm_shortcode_profile( $atts )	{
-	
-	return do_shortcode( '[MDJM Page="Profile"]' );
-	
+	ob_start();
+
+	mdjm_get_template_part( 'profile', 'client' );
+
+	return ob_get_clean() . '&nbsp;';
 } // mdjm_shortcode_profile
 add_shortcode( 'mdjm-profile', 'mdjm_shortcode_profile' );
 

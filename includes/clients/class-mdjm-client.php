@@ -95,6 +95,20 @@ class MDJM_Client {
 	 */
 	public $alt_phone;
 
+	/**
+	 * Client birthday
+	 *
+	 * @since	1.5
+	 */
+	public $birthday;
+
+	/**
+	 * Send marketing materials?
+	 *
+	 * @since	1.5
+	 */
+	public $marketing;
+
     /**
 	 * Whether the client is active
 	 *
@@ -148,13 +162,15 @@ class MDJM_Client {
 
         $this->first_name    = $client->first_name;
         $this->last_name     = $client->last_name;
-        $this->address[]     = ! empty( $client->address1 ) ? esc_attr( $client->address1 ) : '';
-        $this->address[]     = ! empty( $client->address2 ) ? esc_attr( $client->address2 ) : '';
-        $this->address[]     = ! empty( $client->town )     ? esc_attr( $client->town )     : '';
-        $this->address[]     = ! empty( $client->county )   ? esc_attr( $client->county )   : '';
-        $this->address[]     = ! empty( $client->postcode ) ? esc_attr( $client->postcode ) : '';
-        $this->primary_phone = ! empty( $client->phone1 )   ? esc_attr( $client->phone1 ) : '';
-        $this->alt_phone     = ! empty( $client->phone2 )   ? esc_attr( $client->phone2 ) : '';
+        $this->address[]     = ! empty( $client->address1 )  ? esc_attr( $client->address1 ) : '';
+        $this->address[]     = ! empty( $client->address2 )  ? esc_attr( $client->address2 ) : '';
+        $this->address[]     = ! empty( $client->town )      ? esc_attr( $client->town )     : '';
+        $this->address[]     = ! empty( $client->county )    ? esc_attr( $client->county )   : '';
+        $this->address[]     = ! empty( $client->postcode )  ? esc_attr( $client->postcode ) : '';
+        $this->primary_phone = ! empty( $client->phone1 )    ? esc_attr( $client->phone1 )   : '';
+        $this->alt_phone     = ! empty( $client->phone2 )    ? esc_attr( $client->phone2 )   : '';
+		$this->birthday      = ! empty( $client->birthday )  ? esc_attr( $client->birthday ) : '';
+		$this->marketing     = ! empty( $client->marketing ) ? $client->marketing            : 'N';
 
 		//$this->get_fields();
 		//$this->mapped_fields();

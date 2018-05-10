@@ -12,11 +12,6 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
-function mh_test()  {
-    $client = new MDJM_Client( '4' );
-}
-add_action( 'init', 'mh_test' );
-
 /**
  * Hooks MDJM actions, when present in the $_GET superglobal. Every mdjm_action
  * present in $_GET is called using WordPress's do_action function. These

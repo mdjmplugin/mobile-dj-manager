@@ -51,6 +51,7 @@ function mdjm_load_scripts()	{
 				'payment_loading'         => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'required_date_message'   => __( 'Please select a date', 'mobile-dj-manager' ),
 				'rest_url'                => esc_url_raw( rest_url( 'mdjm/v1/' ) ),
+				'submit_client_profile'   => __( 'Update Details', 'mobile-dj-manager' ),
 				'submit_guest_playlist'   => __( 'Suggest Song', 'mobile-dj-manager' ),
 				'submit_playlist_loading' => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'unavailable_redirect'    => mdjm_get_option( 'availability_check_fail_page', 'text' ) != 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_fail_page' ) ) : 'text',

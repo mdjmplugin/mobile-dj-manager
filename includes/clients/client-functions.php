@@ -15,10 +15,9 @@ if ( ! defined( 'ABSPATH' ) )
  * Retrieve a list of all clients
  *
  * @param	str|arr	$roles		Optional: The roles for which we want to retrieve the clients from.
- *			int		$employee	Optional: Only display clients of the given employee
- *			str		$orderby	Optional: The field by which to order. Default display_name
- *			str		$order		Optional: ASC (default) | Desc
- *
+ * @param	int		$employee	Optional: Only display clients of the given employee
+ * @param	str		$orderby	Optional: The field by which to order. Default display_name
+ * @param	str		$order		Optional: ASC (default) | Desc
  * @return	$arr	$clients	or false if no clients for the specified roles
  */
 function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $employee = false, $orderby = 'display_name', $order = 'ASC' )	{
@@ -572,6 +571,65 @@ function mdjm_get_client_fields()	{
 function mdjm_display_client_field( $field )    {
     return ! empty( $field['display'] ) ? true : false;
 } // mdjm_display_client_field
+
+/**
+ * Outputs a client input field
+ *
+ * @since	1.5
+ * @param	array	$field	The field to display
+ * @param	object	$client	MDJM_Client object
+ * @return	string
+ */
+function mdjm_display_client_input_field( $field, $client )	{
+
+	$id       = $field['id'];
+	$label    = esc_attr( $field['label'] );
+	$type     = esc_attr( $field['type'] );
+	$value    = esc_attr( $client->$id );
+	$required = ! empty( $field['required'] ) ? ' required="required"' : '';
+
+	switch( $type )	{
+		case 'text':
+		default:
+			printf(
+				'<input name="%1$s" id="%1$s" type="%2$s" value="%3$s"%4$s />',
+				$id,
+				$type,
+				$value,
+				$required
+			);
+			break;
+
+		case 'dropdown':
+			$options = explode( "\r\n", $field['value'] );
+			printf(
+				'<select name="%1$s" id="%1$s">',
+				$id
+			);
+
+			foreach( $options as $option )	{
+				printf(
+					'<option value="%1$s"%2$s>%1$s</option>',
+					$option,
+					selected( $option, $client->$id, false )
+				);				
+			}
+
+			echo '</select>';
+			break;
+
+		case 'checkbox':
+			printf(
+				'<input name="%1$s" id="%1$s" type="%2$s" value="Y"%4$s />',
+				$id,
+				$type,
+				esc_attr( $field['value'] ),
+				checked( $field['value'], $client->$id, false )
+			);
+			break;
+
+	}
+} // mdjm_display_client_input_field
 
 /**
  * Output the clients details.
