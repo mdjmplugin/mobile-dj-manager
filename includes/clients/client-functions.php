@@ -588,6 +588,10 @@ function mdjm_display_client_input_field( $field, $client )	{
 	$value    = esc_attr( $client->$id );
 	$required = ! empty( $field['required'] ) ? ' required="required"' : '';
 
+    if ( 'user_email' == $id )  {
+        $type = 'email';
+    }
+
 	switch( $type )	{
 		case 'text':
 		default:
@@ -620,7 +624,7 @@ function mdjm_display_client_input_field( $field, $client )	{
 
 		case 'checkbox':
 			printf(
-				'<input name="%1$s" id="%1$s" type="%2$s" value="Y"%4$s />',
+				'<input name="%1$s" id="%1$s" type="%2$s" value="%3$s"%4$s />',
 				$id,
 				$type,
 				esc_attr( $field['value'] ),

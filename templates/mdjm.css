@@ -901,7 +901,7 @@ span.guest-playlist-entry-heading	{
 	display: inline;
 }
 
-#entry_guest_submit .mdjm_event_ajax {
+#update_profile_submit .mdjm_event_ajax {
 	display: none;
 	position: relative;
 	left: -35px;

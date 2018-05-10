@@ -81,7 +81,7 @@ jQuery(document).ready(function ($) {
 
 	});
 
-	/* = Ticket submission form validation and submission
+	/* = Guest playlist form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#mdjm_guest_playlist_form #entry_guest_submit', function(e) {
 		var mdjmGuestPlaylistForm = document.getElementById('mdjm_guest_playlist_form');
@@ -100,6 +100,8 @@ jQuery(document).ready(function ($) {
 		var $form        = $('#mdjm_guest_playlist_form');
 		var playlistData = $('#mdjm_guest_playlist_form').serialize();
 
+        $form.find('.mdjm-alert').hide('fast');
+
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
@@ -109,9 +111,8 @@ jQuery(document).ready(function ($) {
 				if ( response.error )	{
 					$form.find('.mdjm-alert-error').show('fast');
 					$form.find('.mdjm-alert-error').html(response.error);
+                    $form.find('#' + response.field).addClass('error');
 				} else	{
-					//$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
-					//$form.get(0).submit();
 					if( $('.mdjm_guest_name_field').is(':visible') )	{
 						$('.mdjm_guest_name_field').slideToggle('fast');
 					}
@@ -144,8 +145,65 @@ jQuery(document).ready(function ($) {
 				console.log( data );
 			}
 		});
-
 	});
+
+    /* = Client profile form validation and submission
+	====================================================================================== */
+    $(document).on('click', '#mdjm_client_profile_form #update_profile_submit', function(e) {
+		var mdjmClientProfileForm = document.getElementById('mdjm_client_profile_form');
+
+		if( typeof mdjmClientProfileForm.checkValidity === 'function' && false === mdjmClientProfileForm.checkValidity() ) {
+			return;
+		}
+
+		e.preventDefault();
+        $(this).val(mdjm_vars.submit_profile_loading);
+		$(this).prop('disabled', true);
+		$('#mdjm_client_profile_form_fields').addClass('mdjm_mute');
+		$(this).after(' <span id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_vars.ajax_loader + '" /></span>');
+		$('input').removeClass('error');
+
+        var $form       = $('#mdjm_client_profile_form');
+		var profileData = $('#mdjm_client_profile_form').serialize();
+
+        $form.find('.mdjm-alert').hide('fast');
+
+        $.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : profileData,
+			url        : mdjm_vars.ajaxurl,
+			success    : function (response) {
+				if ( response.error )	{
+					$form.find('.mdjm-alert-error').show('fast');
+					$form.find('.mdjm-alert-error').html(response.error);
+                    $form.find('#' + response.field).addClass('error');
+                    $form.find('#' + response.field).focus();
+				} else	{
+					$form.find('.mdjm-alert-success').show('fast');
+					$form.find('.mdjm-alert-success').html(mdjm_vars.profile_updated);
+
+                    $('html, body').animate({
+                        scrollTop: $('.mdjm-alert-success').offset().top
+                    }, 500);
+				}
+
+                if ( response.password )    {
+                    window.location.href = mdjm_vars.profile_page;
+                } else  {
+                    $('#update_profile_submit').prop('disabled', false);
+                    $('#mdjm_client_profile_form_fields').find('#mdjm-loading').remove();
+                    $('#update_profile_submit').val(mdjm_vars.submit_client_profile);
+                    $('#mdjm_client_profile_form_fields').removeClass('mdjm_mute');
+                }
+
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+    });
 
 	/*=Availability Checker
 	---------------------------------------------------- */

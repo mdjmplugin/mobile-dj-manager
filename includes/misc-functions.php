@@ -332,6 +332,11 @@ function mdjm_messages( $key )	{
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
+            'login_profile'         => array(
+                'class'		=> 'info',
+				'title'		=> __( 'Login Required', 'mobile-dj-manager' ),
+				'message'	=> __( 'Please login to update your details.', 'mobile-dj-manager' )
+            ),
 			'password_incorrect'	=> array(
 				'class'		=> 'error',
 				'title'		=> __( 'Error', 'mobile-dj-manager' ),

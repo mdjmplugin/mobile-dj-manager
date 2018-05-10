@@ -87,10 +87,14 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 **Tuesday, 8th May 2018**
 
+**NOTE**: The `playlist-client.php`, `playlist-guest.php`, `profile-client.php` `mdjm.css` and `mdjm.min.css` files have been updated. If you have customised templates and copied to your theme, you will need to compare the changes
+
 **New**: Refreshed the events admin screen with more responsive and easy to manage layout
 **New**: Discounts can now be applied to events
 **New**: Display break down of event costs on events page
 **New**: Added option to require deposit to be paid before an event is marked as confirmed
+**New**: Client profile page is now templated and AJAX based
+**New**: Guest playlist form is now AJAX based and displays all entries added by the guest during the current session
 **New**: Added client playlist notification task to notify clients of guest submissions
 **New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page

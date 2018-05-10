@@ -215,14 +215,12 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/menu.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/login.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/formatting.php' );
-			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/widgets.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-stats.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-events-query.php' );
@@ -275,8 +273,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
 				
-			} else	{ // Required for front end only
-				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/install.php' );

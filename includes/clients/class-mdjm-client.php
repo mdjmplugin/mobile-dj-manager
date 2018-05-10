@@ -79,6 +79,11 @@ class MDJM_Client {
 	 *
 	 * @since	1.5
 	 */
+    public $address1;
+    public $address2;
+    public $town;
+    public $county;
+    public $postcode;
 	public $address;
 
     /**
@@ -86,14 +91,14 @@ class MDJM_Client {
 	 *
 	 * @since	1.5
 	 */
-	public $primary_phone;
+	public $phone1;
 
     /**
 	 * The client alternate phone
 	 *
 	 * @since	1.5
 	 */
-	public $alt_phone;
+	public $phone2;
 
 	/**
 	 * Client birthday
@@ -160,17 +165,22 @@ class MDJM_Client {
 			}
 		}
 
-        $this->first_name    = $client->first_name;
-        $this->last_name     = $client->last_name;
-        $this->address[]     = ! empty( $client->address1 )  ? esc_attr( $client->address1 ) : '';
-        $this->address[]     = ! empty( $client->address2 )  ? esc_attr( $client->address2 ) : '';
-        $this->address[]     = ! empty( $client->town )      ? esc_attr( $client->town )     : '';
-        $this->address[]     = ! empty( $client->county )    ? esc_attr( $client->county )   : '';
-        $this->address[]     = ! empty( $client->postcode )  ? esc_attr( $client->postcode ) : '';
-        $this->primary_phone = ! empty( $client->phone1 )    ? esc_attr( $client->phone1 )   : '';
-        $this->alt_phone     = ! empty( $client->phone2 )    ? esc_attr( $client->phone2 )   : '';
-		$this->birthday      = ! empty( $client->birthday )  ? esc_attr( $client->birthday ) : '';
-		$this->marketing     = ! empty( $client->marketing ) ? $client->marketing            : 'N';
+        $this->first_name = $client->first_name;
+        $this->last_name  = $client->last_name;
+        $this->address1   = $client->address1;
+        $this->address2   = $client->address2;
+        $this->town       = $client->town;
+        $this->county     = $client->county;
+        $this->postcode   = $client->postcode;
+        $this->address[]  = ! empty( $client->address1 )  ? esc_attr( $client->address1 ) : '';
+        $this->address[]  = ! empty( $client->address2 )  ? esc_attr( $client->address2 ) : '';
+        $this->address[]  = ! empty( $client->town )      ? esc_attr( $client->town )     : '';
+        $this->address[]  = ! empty( $client->county )    ? esc_attr( $client->county )   : '';
+        $this->address[]  = ! empty( $client->postcode )  ? esc_attr( $client->postcode ) : '';
+        $this->phone1     = ! empty( $client->phone1 )    ? esc_attr( $client->phone1 )   : '';
+        $this->phone2     = ! empty( $client->phone2 )    ? esc_attr( $client->phone2 )   : '';
+		$this->birthday   = ! empty( $client->birthday )  ? esc_attr( $client->birthday ) : '';
+		$this->marketing  = ! empty( $client->marketing ) ? $client->marketing            : 'N';
 
 		//$this->get_fields();
 		//$this->mapped_fields();
