@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-08 23:18:43+00:00\n"
+"POT-Creation-Date: 2018-05-10 17:50:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,435 +23,6 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
-
-#: client-zone/includes/mdjm-availability.php:200
-#: client-zone/includes/mdjm-availability.php:286 includes/shortcodes.php:483
-#: includes/shortcodes.php:494 includes/widgets.php:38
-#: widgets/class-mdjm-widget.php:25
-msgid "MDJM Availability Checker"
-msgstr ""
-
-#: client-zone/includes/mdjm-availability.php:279
-#: client-zone/includes/mdjm-availability.php:281
-#: includes/admin/users/class-mdjm-employee-manager.php:538
-#: includes/shortcodes.php:456 includes/widgets.php:214
-msgid "Please wait..."
-msgstr ""
-
-#: client-zone/includes/mdjm-availability.php:312 includes/widgets.php:228
-msgid "Please enter a date"
-msgstr ""
-
-#: client-zone/includes/mdjm-dynamic.php:35 includes/ajax-functions.php:1069
-#: includes/api/class-mdjm-api.php:1347 includes/api/class-mdjm-api.php:1348
-#: includes/equipment/equipment-functions.php:1613
-#: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:571
-msgid "No addons available"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:242
-msgid "Good news... %s has just accepted their event quotation via %s"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:246
-#: client-zone/pages/mdjm-contract.php:266 includes/admin/events/quotes.php:23
-msgid "Event ID"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:250
-#: client-zone/pages/mdjm-contract.php:270 client-zone/pages/mdjm-home.php:231
-#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1298
-#: includes/admin/events/metaboxes.php:2381
-#: includes/admin/events/metaboxes.php:2447
-#: includes/admin/pages/availability.php:259
-#: includes/admin/reporting/class-mdjm-export-earnings.php:64
-#: includes/admin/reporting/class-mdjm-export.php:90
-#: includes/admin/reporting/export/class-batch-export-events.php:45
-#: includes/admin/reporting/export/class-batch-export-txns.php:44
-#: includes/admin/templates/contracts.php:26
-#: includes/admin/templates/emails.php:24
-#: includes/admin/transactions/txns.php:23
-#: includes/events/event-functions.php:1530 includes/payments/payments.php:621
-msgid "Date"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:251
-#: client-zone/pages/mdjm-contract.php:271
-#: includes/admin/pages/client-fields.php:157
-#: includes/admin/pages/event-fields.php:339
-#: includes/admin/pages/event-fields.php:394
-#: includes/admin/pages/event-fields.php:491
-#: includes/admin/reporting/class-mdjm-types-reports-table.php:88
-#: includes/admin/reporting/export/class-batch-export-txns.php:49
-#: includes/clientzone-functions.php:127
-msgid "Type"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:255
-#: client-zone/pages/mdjm-contract.php:275 client-zone/pages/mdjm-home.php:232
-#: includes/admin/communications/comms.php:27
-#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2449
-#: includes/admin/reporting/export/class-batch-export-events.php:46
-#: includes/admin/reporting/export/class-batch-export-txns.php:45
-#: includes/admin/transactions/txns.php:26
-#: includes/clientzone-functions.php:129 includes/payments/payments.php:623
-msgid "Status"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:256
-#: client-zone/pages/mdjm-contract.php:276 includes/admin/events/events.php:23
-#: includes/admin/events/events.php:554 includes/admin/events/metaboxes.php:789
-#: includes/admin/events/quotes.php:24
-#: includes/admin/reporting/export/class-batch-export-events.php:47
-#: includes/admin/roles/class-mdjm-roles.php:82
-#: includes/clientzone-functions.php:130
-#: includes/events/event-functions.php:1821 includes/payments/payments.php:624
-msgid "Client"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:257
-#: client-zone/pages/mdjm-contract.php:277 includes/admin/events/events.php:28
-#: includes/admin/transactions/txns.php:29
-#: includes/clientzone-functions.php:131
-msgid "Value"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:263
-#: client-zone/pages/mdjm-contract.php:283
-#: includes/admin/events/metaboxes.php:2083
-#: includes/admin/reporting/export/class-batch-export-events.php:53
-#: includes/clientzone-functions.php:133 includes/install.php:719
-#: includes/txns/txn-functions.php:26
-msgid "Deposit"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:265
-#: client-zone/pages/mdjm-contract.php:285
-#: includes/clientzone-functions.php:135
-msgid "Balance Due"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:267
-#: client-zone/pages/mdjm-contract.php:287
-msgid "%sView Event%s"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:277
-msgid "Event Quotation Accepted"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:358
-msgid "No Address"
-msgstr ""
-
-#: client-zone/pages/mdjm-clientzone.php:501
-msgid "ERROR: You do not have permission to view this page."
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:51
-#: client-zone/pages/mdjm-contract.php:419
-#: includes/clientzone-functions.php:264 templates/contract/contract.php:105
-msgid "Sign Contract"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:113
-#: includes/contract/contract-functions.php:171
-msgid "Signatory"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:116
-#: includes/contract/contract-functions.php:174
-msgid "Date of Signature"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:117
-#: includes/contract/contract-functions.php:175
-msgid "Verification Method"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:262
-msgid "Good news... %s has just signed their event contract via %s"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:301
-msgid "Event Contract Signed"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:340
-msgid "The Client contract is displayed below. It is not yet signed"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:357
-msgid ""
-"<p>Your contract is not yet ready for signing as you have not indicated "
-"that you would like to proceed with your event. You can do this <a "
-"href=\"{APPLICATION_HOME}\">here</a>.</p>"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:358
-msgid ""
-"<p>The client contract is not yet ready for signing as the event status has "
-"not been updated to \"Awaiting Contract\"</p>"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:391 templates/contract/contract.php:81
-msgid "First Name:"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:395 templates/contract/contract.php:86
-msgid "Last Name:"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:402 templates/contract/contract.php:92
-msgid "I hereby confirm that I have read and accept the contract and its terms"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:408 templates/contract/contract.php:96
-msgid ""
-"I hereby confirm that the person named within the above contract is me and "
-"that all associated details are correct"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:413
-msgid "Re-Enter Your Password"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:443
-msgid "This contract has been signed"
-msgstr ""
-
-#: client-zone/pages/mdjm-contract.php:446
-msgid " with password verification"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:77
-msgid "View Event Quote"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:81 client-zone/pages/mdjm-onlinequote.php:66
-msgid "Book this Event"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:86
-msgid "Review &amp; Approve Contract"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:91 includes/clientzone-functions.php:278
-msgid "View Contract"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:98 includes/clientzone-functions.php:293
-msgid "Manage Playlist"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:102 includes/clientzone-functions.php:321
-msgid "Update Profile"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:105
-msgid "Book Another Event"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:226
-msgid "Click on an event date below to begin managing that event."
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:233 includes/travel-functions.php:335
-msgid "Cost"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:316 client-zone/pages/mdjm-home.php:472
-msgid "Event Details"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:321 client-zone/pages/mdjm-home.php:476
-msgid "Event Name:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:327 templates/event/event-loop.php:25
-#: templates/event/event-single.php:49
-msgid "Status:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:334 client-zone/pages/mdjm-home.php:482
-msgid "Event Date:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:336 client-zone/pages/mdjm-home.php:489
-msgid "Event Type:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:340 client-zone/pages/mdjm-home.php:504
-#: includes/install.php:247
-msgid "Start Time:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:342 client-zone/pages/mdjm-home.php:547
-#: includes/install.php:249
-msgid "End Time:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:347 client-zone/pages/mdjm-home.php:596
-#: templates/event/event-single.php:71
-msgid "Package:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:362 client-zone/pages/mdjm-home.php:608
-msgid "Addons:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:383 templates/event/event-loop.php:48
-#: templates/event/event-single.php:83
-msgid "Total Cost:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:395
-msgid "Information:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:404
-msgid "Your Contact Details"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:406 includes/client-functions.php:589
-msgid "edit"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:410 includes/admin/tasks/tasks-page.php:220
-#: templates/event/event-single.php:94
-msgid "Name:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:412 templates/event/event-single.php:96
-msgid "Phone:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:417 includes/install.php:208
-#: includes/install.php:353 includes/install.php:420 includes/install.php:449
-#: templates/event/event-single.php:101
-msgid "Email:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:419 client-zone/pages/mdjm-home.php:435
-#: templates/event/event-single.php:103 templates/event/event-single.php:114
-msgid "Address:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:427
-#: includes/admin/events/contextual-help.php:149 includes/admin/menu.php:535
-#: includes/admin/procedures/mdjm-upgrade.php:660
-#: includes/admin/venues/metaboxes.php:30 includes/post-types.php:1122
-#: templates/event/event-single.php:108
-msgid "Venue Details"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:433 templates/event/event-single.php:112
-msgid "Venue:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:627
-msgid "Notes:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:633
-msgid "Reason for Changes:"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:634
-msgid "If you are making any changes to your event, please enter the reason here"
-msgstr ""
-
-#: client-zone/pages/mdjm-home.php:640
-#: includes/admin/pages/client-fields.php:378
-#: includes/admin/pages/event-fields.php:576
-msgid "Cancel Changes"
-msgstr ""
-
-#: client-zone/pages/mdjm-onlinequote.php:37
-msgid "This option is disabled for your event. Please %scontact us%s for assistance"
-msgstr ""
-
-#: client-zone/pages/mdjm-onlinequote.php:44
-msgid ""
-"An error is stopping your access to this quotation. Please %scontact us%s "
-"for assistance"
-msgstr ""
-
-#: client-zone/pages/mdjm-onlinequote.php:169
-#: client-zone/pages/mdjm-onlinequote.php:188
-#: client-zone/pages/mdjm-onlinequote.php:202
-msgid "Unable to process request. Please %scontact us%s for assistance"
-msgstr ""
-
-#: client-zone/pages/mdjm-onlinequote.php:234
-msgid "An error has occured, please %scontact us%s for assistance"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:75
-msgid "The song was successfully removed"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:80
-#: client-zone/pages/mdjm-playlist.php:153
-msgid "An error occurred. Please try again."
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:144
-msgid "The song was successfully added"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:363
-#: includes/admin/events/class-mdjm-playlist-table.php:399
-#: includes/admin/events/class-mdjm-playlist-table.php:412
-#: templates/playlist/playlist-client.php:58
-msgid "Song Name"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:366
-#: includes/admin/events/class-mdjm-playlist-table.php:260
-#: includes/admin/events/class-mdjm-playlist-table.php:447
-#: includes/admin/events/playlist-page.php:155
-#: templates/playlist/playlist-client.php:62
-#: templates/playlist/playlist-guest.php:48
-msgid "Artist"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:369
-msgid "When to Play"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:379
-msgid "Info"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:402
-msgid "Existing playlist entries are displayed below"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:430
-#: templates/playlist/playlist-client.php:166
-msgid "Remove"
-msgstr ""
-
-#: client-zone/pages/mdjm-playlist.php:436
-msgid " Song"
-msgid_plural " Songs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: client-zone/pages/mdjm-profile.php:149
-msgid ""
-"<p>Please keep your details up to date as incorrect information may cause "
-"problems with your event.</p>"
-msgstr ""
-
-#: client-zone/pages/mdjm-profile.php:300
-msgid "New Password"
-msgstr ""
-
-#: client-zone/pages/mdjm-profile.php:304
-msgid "Confirm"
-msgstr ""
 
 #: includes/EDD_SL_Plugin_Updater.php:201
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
@@ -481,11 +52,11 @@ msgstr ""
 #: includes/admin/upgrades/upgrade-functions.php:719
 #: includes/api/class-mdjm-api.php:452 includes/api/class-mdjm-api.php:457
 #: includes/api/class-mdjm-api.php:471
-#: includes/class-mdjm-license-handler.php:313 includes/misc-functions.php:337
-#: includes/misc-functions.php:342 includes/misc-functions.php:347
-#: includes/misc-functions.php:367 includes/misc-functions.php:382
-#: includes/misc-functions.php:397 includes/misc-functions.php:402
-#: includes/misc-functions.php:412 includes/misc-functions.php:445
+#: includes/class-mdjm-license-handler.php:313 includes/misc-functions.php:342
+#: includes/misc-functions.php:347 includes/misc-functions.php:352
+#: includes/misc-functions.php:372 includes/misc-functions.php:387
+#: includes/misc-functions.php:402 includes/misc-functions.php:407
+#: includes/misc-functions.php:417 includes/misc-functions.php:450
 msgid "Error"
 msgstr ""
 
@@ -767,12 +338,12 @@ msgid "Associated %s"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:112
-#: includes/ajax-functions.php:1016
+#: includes/ajax-functions.php:1131
 msgid "from"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:120
-#: includes/ajax-functions.php:989
+#: includes/ajax-functions.php:1104
 msgid "Select an Event"
 msgstr ""
 
@@ -837,6 +408,15 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:1416
 #: includes/admin/transactions/txns.php:28 includes/admin/venues/venues.php:27
 msgid "%s"
+msgstr ""
+
+#: includes/admin/communications/comms.php:27
+#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2449
+#: includes/admin/reporting/export/class-batch-export-events.php:46
+#: includes/admin/reporting/export/class-batch-export-txns.php:45
+#: includes/admin/transactions/txns.php:26
+#: includes/clientzone-functions.php:129 includes/payments/payments.php:623
+msgid "Status"
 msgstr ""
 
 #: includes/admin/communications/comms.php:28
@@ -1230,7 +810,7 @@ msgstr ""
 #: includes/admin/equipment/metaboxes.php:254
 #: includes/admin/equipment/metaboxes.php:489
 #: includes/admin/equipment/metaboxes.php:736
-#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:239
+#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:243
 msgid "Select Months"
 msgstr ""
 
@@ -1292,10 +872,18 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:259
 #: includes/admin/events/class-mdjm-playlist-table.php:439
 #: includes/admin/events/events.php:254
-#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:62
+#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:177
 #: templates/playlist/playlist-client.php:57
 #: templates/playlist/playlist-guest.php:50
 msgid "Song"
+msgstr ""
+
+#: includes/admin/events/class-mdjm-playlist-table.php:260
+#: includes/admin/events/class-mdjm-playlist-table.php:447
+#: includes/admin/events/playlist-page.php:155
+#: templates/playlist/playlist-client.php:62
+#: templates/playlist/playlist-guest.php:48
+msgid "Artist"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:261
@@ -1373,6 +961,12 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:411
 #: templates/playlist/playlist-client.php:63
 msgid "Artist Name"
+msgstr ""
+
+#: includes/admin/events/class-mdjm-playlist-table.php:399
+#: includes/admin/events/class-mdjm-playlist-table.php:412
+#: templates/playlist/playlist-client.php:58
+msgid "Song Name"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:401
@@ -1555,6 +1149,13 @@ msgid ""
 "%1$s role and allocate their wages."
 msgstr ""
 
+#: includes/admin/events/contextual-help.php:149 includes/admin/menu.php:535
+#: includes/admin/procedures/mdjm-upgrade.php:660
+#: includes/admin/venues/metaboxes.php:30 includes/post-types.php:1122
+#: templates/event/event-single.php:108
+msgid "Venue Details"
+msgstr ""
+
 #: includes/admin/events/contextual-help.php:151
 msgid ""
 "Select the venue from the drop down. If the venue does not exist, you can "
@@ -1631,10 +1232,34 @@ msgstr ""
 msgid "Playlist for %s ID {contract_id}"
 msgstr ""
 
+#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1298
+#: includes/admin/events/metaboxes.php:2381
+#: includes/admin/events/metaboxes.php:2447
+#: includes/admin/pages/availability.php:259
+#: includes/admin/reporting/class-mdjm-export-earnings.php:64
+#: includes/admin/reporting/class-mdjm-export.php:90
+#: includes/admin/reporting/export/class-batch-export-events.php:45
+#: includes/admin/reporting/export/class-batch-export-txns.php:44
+#: includes/admin/templates/contracts.php:26
+#: includes/admin/templates/emails.php:24
+#: includes/admin/transactions/txns.php:23
+#: includes/events/event-functions.php:1530 includes/payments/payments.php:621
+msgid "Date"
+msgstr ""
+
 #: includes/admin/events/events.php:22
 #: includes/admin/reporting/export/class-batch-export-events.php:44
 #: includes/payments/payments.php:619
 msgid "%s ID"
+msgstr ""
+
+#: includes/admin/events/events.php:23 includes/admin/events/events.php:554
+#: includes/admin/events/metaboxes.php:789 includes/admin/events/quotes.php:24
+#: includes/admin/reporting/export/class-batch-export-events.php:47
+#: includes/admin/roles/class-mdjm-roles.php:82
+#: includes/clientzone-functions.php:130
+#: includes/events/event-functions.php:1821 includes/payments/payments.php:624
+msgid "Client"
 msgstr ""
 
 #: includes/admin/events/events.php:26
@@ -1648,8 +1273,13 @@ msgstr ""
 #: includes/admin/tasks/class-mdjm-tasks-table.php:246
 #: includes/admin/users/class-mdjm-client-manager.php:149
 #: includes/admin/users/class-mdjm-employee-manager.php:69
-#: includes/ajax-functions.php:61 templates/playlist/playlist-guest.php:46
+#: includes/ajax-functions.php:176 templates/playlist/playlist-guest.php:46
 msgid "Name"
+msgstr ""
+
+#: includes/admin/events/events.php:28 includes/admin/transactions/txns.php:29
+#: includes/clientzone-functions.php:131
+msgid "Value"
 msgstr ""
 
 #: includes/admin/events/events.php:29 includes/admin/events/metaboxes.php:379
@@ -1760,19 +1390,19 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:29 includes/scripts.php:248
+#: includes/admin/events/metaboxes.php:29 includes/scripts.php:252
 msgid "Show client details"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:32 includes/scripts.php:246
+#: includes/admin/events/metaboxes.php:32 includes/scripts.php:250
 msgid "Show client form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:51 includes/scripts.php:250
+#: includes/admin/events/metaboxes.php:51 includes/scripts.php:254
 msgid "Show %s options"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:56 includes/scripts.php:252
+#: includes/admin/events/metaboxes.php:56 includes/scripts.php:256
 msgid "Show %s workers"
 msgstr ""
 
@@ -1780,7 +1410,7 @@ msgstr ""
 msgid "Add %s type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:65 includes/scripts.php:254
+#: includes/admin/events/metaboxes.php:65 includes/scripts.php:258
 msgid "Show venue"
 msgstr ""
 
@@ -1991,13 +1621,14 @@ msgstr ""
 msgid "Add Client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1086 includes/client-functions.php:588
+#: includes/admin/events/metaboxes.php:1086
+#: includes/clients/client-functions.php:658
 msgid "Contact Details for %s"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1090
 #: includes/admin/events/metaboxes.php:1853 includes/admin/venues/venues.php:24
-#: includes/client-functions.php:594 includes/venue-functions.php:354
+#: includes/clients/client-functions.php:664 includes/venue-functions.php:354
 msgid "Phone"
 msgstr ""
 
@@ -2006,7 +1637,7 @@ msgstr ""
 #: includes/admin/reporting/class-mdjm-clients-export.php:81
 #: includes/admin/reporting/export/class-batch-export-clients.php:45
 #: includes/admin/reporting/export/class-batch-export-employees.php:45
-#: includes/client-functions.php:601 includes/install.php:699
+#: includes/clients/client-functions.php:671 includes/install.php:699
 #: includes/venue-functions.php:346
 msgid "Email"
 msgstr ""
@@ -2014,7 +1645,7 @@ msgstr ""
 #: includes/admin/events/metaboxes.php:1106
 #: includes/admin/users/class-mdjm-client-manager.php:152
 #: includes/admin/users/class-mdjm-employee-manager.php:73
-#: includes/client-functions.php:606
+#: includes/clients/client-functions.php:676
 msgid "Last Login"
 msgstr ""
 
@@ -2073,8 +1704,8 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:810
-#: includes/ajax-functions.php:1058
+#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:925
+#: includes/ajax-functions.php:1173
 msgid "Select Add-ons"
 msgstr ""
 
@@ -2162,6 +1793,13 @@ msgstr ""
 msgid "Discount"
 msgstr ""
 
+#: includes/admin/events/metaboxes.php:2083
+#: includes/admin/reporting/export/class-batch-export-events.php:53
+#: includes/clientzone-functions.php:133 includes/install.php:719
+#: includes/txns/txn-functions.php:26
+msgid "Deposit"
+msgstr ""
+
 #: includes/admin/events/metaboxes.php:2118
 #: includes/admin/settings/register-settings.php:430
 #: includes/events/event-functions.php:1825
@@ -2217,11 +1855,11 @@ msgstr ""
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:458
+#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:573
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:458
+#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:573
 msgid "Outgoing"
 msgstr ""
 
@@ -2316,6 +1954,10 @@ msgstr ""
 
 #: includes/admin/events/quotes.php:22 includes/post-types.php:827
 msgid "Generated"
+msgstr ""
+
+#: includes/admin/events/quotes.php:23
+msgid "Event ID"
 msgstr ""
 
 #: includes/admin/events/quotes.php:25
@@ -2796,6 +2438,16 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+#: includes/admin/pages/client-fields.php:157
+#: includes/admin/pages/event-fields.php:339
+#: includes/admin/pages/event-fields.php:394
+#: includes/admin/pages/event-fields.php:491
+#: includes/admin/reporting/class-mdjm-types-reports-table.php:88
+#: includes/admin/reporting/export/class-batch-export-txns.php:49
+#: includes/clientzone-functions.php:127
+msgid "Type"
+msgstr ""
+
 #: includes/admin/pages/client-fields.php:158
 #: includes/admin/pages/client-fields.php:328
 #: includes/admin/pages/event-fields.php:340
@@ -2876,6 +2528,11 @@ msgstr ""
 
 #: includes/admin/pages/client-fields.php:347
 msgid " Required Field?"
+msgstr ""
+
+#: includes/admin/pages/client-fields.php:378
+#: includes/admin/pages/event-fields.php:576
+msgid "Cancel Changes"
 msgstr ""
 
 #: includes/admin/pages/client-fields.php:402
@@ -5085,7 +4742,7 @@ msgstr ""
 #: includes/admin/users/class-mdjm-client-manager.php:302
 #: includes/admin/users/class-mdjm-employee-manager.php:269
 #: includes/class-mdjm-cron.php:163 includes/class-mdjm-cron.php:182
-#: includes/client-functions.php:543
+#: includes/clients/client-functions.php:542
 msgid "Never"
 msgstr ""
 
@@ -5168,6 +4825,10 @@ msgstr ""
 
 #: includes/admin/tasks/tasks-page.php:214
 msgid "Task Details"
+msgstr ""
+
+#: includes/admin/tasks/tasks-page.php:220 templates/event/event-single.php:94
+msgid "Name:"
 msgstr ""
 
 #: includes/admin/tasks/tasks-page.php:229
@@ -5466,7 +5127,7 @@ msgid "<a class=\"page-title-action\" href=\"%s\">Edit %s</a>"
 msgstr ""
 
 #: includes/admin/transactions/metaboxes.php:277
-#: includes/ajax-functions.php:605
+#: includes/ajax-functions.php:720
 msgid "Select Transaction Type"
 msgstr ""
 
@@ -5692,6 +5353,11 @@ msgstr ""
 
 #: includes/admin/users/class-mdjm-employee-manager.php:538
 msgid "Add Role"
+msgstr ""
+
+#: includes/admin/users/class-mdjm-employee-manager.php:538
+#: includes/shortcodes.php:461 includes/widgets.php:214
+msgid "Please wait..."
 msgstr ""
 
 #: includes/admin/users/class-mdjm-employee-manager.php:567
@@ -6285,76 +5951,96 @@ msgstr ""
 msgid "No valid changelog was found."
 msgstr ""
 
-#: includes/ajax-functions.php:70
+#: includes/ajax-functions.php:62 includes/ajax-functions.php:145
+#: includes/ajax-functions.php:170
+msgid "An error occured"
+msgstr ""
+
+#: includes/ajax-functions.php:79 includes/ajax-functions.php:185
 msgid "%s is a required field"
 msgstr ""
 
-#: includes/ajax-functions.php:173
+#: includes/ajax-functions.php:88
+msgid "%s is not a valid email address"
+msgstr ""
+
+#: includes/ajax-functions.php:128
+msgid "Passwords do not match"
+msgstr ""
+
+#: includes/ajax-functions.php:288
 msgid "Email address is invalid"
 msgstr ""
 
-#: includes/ajax-functions.php:175
+#: includes/ajax-functions.php:290
 msgid "Email address is already in use"
 msgstr ""
 
-#: includes/ajax-functions.php:309
+#: includes/ajax-functions.php:424
 msgid "  - Enter Manually - "
 msgstr ""
 
-#: includes/ajax-functions.php:310
+#: includes/ajax-functions.php:425
 msgid "  - Use Client Address - "
 msgstr ""
 
-#: includes/ajax-functions.php:325
+#: includes/ajax-functions.php:440
 msgid "Unable to add venue"
 msgstr ""
 
-#: includes/ajax-functions.php:457
+#: includes/ajax-functions.php:572
 msgid "%1$s payment of %2$s received for %3$s %4$s."
 msgstr ""
 
-#: includes/ajax-functions.php:476 includes/events/event-functions.php:1297
+#: includes/ajax-functions.php:591 includes/events/event-functions.php:1297
 #: includes/events/event-functions.php:1377 includes/payments/payments.php:547
 msgid "Reason for payment"
 msgstr ""
 
-#: includes/ajax-functions.php:478 includes/events/event-functions.php:1298
+#: includes/ajax-functions.php:593 includes/events/event-functions.php:1298
 #: includes/events/event-functions.php:1378 includes/payments/payments.php:569
 msgid "Payment amount"
 msgstr ""
 
-#: includes/ajax-functions.php:480 includes/events/event-functions.php:1299
+#: includes/ajax-functions.php:595 includes/events/event-functions.php:1299
 #: includes/events/event-functions.php:1379 includes/payments/payments.php:591
 msgid "Date of payment"
 msgstr ""
 
-#: includes/ajax-functions.php:527
+#: includes/ajax-functions.php:642
 msgid "Unable to add transaction"
 msgstr ""
 
-#: includes/ajax-functions.php:551
+#: includes/ajax-functions.php:666
 msgid "Enter a name for the new Event Type"
 msgstr ""
 
-#: includes/ajax-functions.php:821
+#: includes/ajax-functions.php:936
 msgid "No packages or addons available"
 msgstr ""
 
-#: includes/ajax-functions.php:827 includes/ajax-functions.php:830
+#: includes/ajax-functions.php:942 includes/ajax-functions.php:945
 #: includes/class-mdjm-html-elements.php:647
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/ajax-functions.php:833
+#: includes/ajax-functions.php:948
 msgid "No Addons Available"
 msgstr ""
 
-#: includes/ajax-functions.php:890
+#: includes/ajax-functions.php:1005
 msgid "Unable to add employee"
 msgstr ""
 
-#: includes/ajax-functions.php:963
+#: includes/ajax-functions.php:1078
 msgid "Unable to retrieve template content"
+msgstr ""
+
+#: includes/ajax-functions.php:1184 includes/api/class-mdjm-api.php:1347
+#: includes/api/class-mdjm-api.php:1348
+#: includes/equipment/equipment-functions.php:1613
+#: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:576
+msgid "No addons available"
 msgstr ""
 
 #: includes/api/class-mdjm-api.php:366
@@ -6657,6 +6343,10 @@ msgstr ""
 msgid "Can't get property %s"
 msgstr ""
 
+#: includes/clients/client-functions.php:659
+msgid "edit"
+msgstr ""
+
 #: includes/clientzone-functions.php:38
 msgid ""
 "Powered by <a href=\"%s\" target=\"_blank\">MDJM Event Management</a>, "
@@ -6679,6 +6369,10 @@ msgstr ""
 msgid "Date: %s"
 msgstr ""
 
+#: includes/clientzone-functions.php:135
+msgid "Balance Due"
+msgstr ""
+
 #: includes/clientzone-functions.php:138 includes/payments/payments.php:641
 msgid "<a href=\"%s\">View %s</a>"
 msgstr ""
@@ -6695,8 +6389,24 @@ msgstr ""
 msgid "Book %s"
 msgstr ""
 
+#: includes/clientzone-functions.php:264 templates/contract/contract.php:105
+msgid "Sign Contract"
+msgstr ""
+
+#: includes/clientzone-functions.php:278
+msgid "View Contract"
+msgstr ""
+
+#: includes/clientzone-functions.php:293
+msgid "Manage Playlist"
+msgstr ""
+
 #: includes/clientzone-functions.php:308
 msgid "Make a Payment"
+msgstr ""
+
+#: includes/clientzone-functions.php:321
+msgid "Update Profile"
 msgstr ""
 
 #: includes/content/content-tags.php:296
@@ -7066,6 +6776,18 @@ msgstr ""
 msgid "IP address not recorded"
 msgstr ""
 
+#: includes/contract/contract-functions.php:171
+msgid "Signatory"
+msgstr ""
+
+#: includes/contract/contract-functions.php:174
+msgid "Date of Signature"
+msgstr ""
+
+#: includes/contract/contract-functions.php:175
+msgid "Verification Method"
+msgstr ""
+
 #: includes/contract/contract-functions.php:175
 msgid "User Password Confirmation"
 msgstr ""
@@ -7168,7 +6890,7 @@ msgstr ""
 msgid "<strong>Login URL</strong>: <a href=\"%1$s\">%1$s</a>"
 msgstr ""
 
-#: includes/employee-functions.php:288 includes/misc-functions.php:352
+#: includes/employee-functions.php:288 includes/misc-functions.php:357
 msgid "Thanks"
 msgstr ""
 
@@ -7385,6 +7107,7 @@ msgid ""
 msgstr ""
 
 #: includes/install.php:103 templates/event/event-single.php:90
+#: templates/profile/profile-client.php:23
 msgid "Your Details"
 msgstr ""
 
@@ -7453,6 +7176,11 @@ msgstr ""
 msgid "Best Regards"
 msgstr ""
 
+#: includes/install.php:208 includes/install.php:353 includes/install.php:420
+#: includes/install.php:449 templates/event/event-single.php:101
+msgid "Email:"
+msgstr ""
+
 #: includes/install.php:210 includes/install.php:355 includes/install.php:422
 #: includes/install.php:451
 msgid "Tel:"
@@ -7497,6 +7225,14 @@ msgstr ""
 
 #: includes/install.php:243 templates/event/event-single.php:53
 msgid "%s Type:"
+msgstr ""
+
+#: includes/install.php:247
+msgid "Start Time:"
+msgstr ""
+
+#: includes/install.php:249
+msgid "End Time:"
 msgstr ""
 
 #: includes/install.php:253
@@ -8097,139 +7833,147 @@ msgstr[1] ""
 msgid "%s %s successfully marked as %s."
 msgstr ""
 
+#: includes/misc-functions.php:337
+msgid "Login Required"
+msgstr ""
+
 #: includes/misc-functions.php:338
-msgid "Incorrect password."
+msgid "Please login to update your details."
 msgstr ""
 
 #: includes/misc-functions.php:343
-msgid "Unknown username."
+msgid "Incorrect password."
 msgstr ""
 
 #: includes/misc-functions.php:348
-msgid "We could not locate the details of your %s."
+msgid "Unknown username."
 msgstr ""
 
 #: includes/misc-functions.php:353
+msgid "We could not locate the details of your %s."
+msgstr ""
+
+#: includes/misc-functions.php:358
 msgid ""
 "You have accepted our quote and details of your contract are now on their "
 "way to you via email."
 msgstr ""
 
-#: includes/misc-functions.php:357 includes/misc-functions.php:435
+#: includes/misc-functions.php:362 includes/misc-functions.php:440
 msgid "Sorry"
 msgstr ""
 
-#: includes/misc-functions.php:358
+#: includes/misc-functions.php:363
 msgid "We could not process your request."
 msgstr ""
 
-#: includes/misc-functions.php:362 includes/misc-functions.php:377
-#: includes/misc-functions.php:392 includes/misc-functions.php:407
+#: includes/misc-functions.php:367 includes/misc-functions.php:382
+#: includes/misc-functions.php:397 includes/misc-functions.php:412
 msgid "Done"
 msgstr ""
 
-#: includes/misc-functions.php:363
+#: includes/misc-functions.php:368
 msgid ""
 "You have successfully signed your %s contract. Confirmation will be sent to "
 "you via email in the next few minutes."
 msgstr ""
 
-#: includes/misc-functions.php:368
+#: includes/misc-functions.php:373
 msgid "Unable to sign %s contract."
 msgstr ""
 
-#: includes/misc-functions.php:372 includes/misc-functions.php:387
-#: includes/misc-functions.php:417
+#: includes/misc-functions.php:377 includes/misc-functions.php:392
+#: includes/misc-functions.php:422
 msgid "Data missing"
 msgstr ""
 
-#: includes/misc-functions.php:373
+#: includes/misc-functions.php:378
 msgid ""
 "Please ensure all fields have been completed, you have accepted the terms, "
 "confirmed your identity and re-entered your password."
 msgstr ""
 
-#: includes/misc-functions.php:378
+#: includes/misc-functions.php:383
 msgid "Playlist entry added."
 msgstr ""
 
-#: includes/misc-functions.php:383
+#: includes/misc-functions.php:388
 msgid "Unable to add playlist entry."
 msgstr ""
 
-#: includes/misc-functions.php:388 includes/misc-functions.php:418
+#: includes/misc-functions.php:393 includes/misc-functions.php:423
 msgid "Please provide at least a song and an artist for this entry."
 msgstr ""
 
-#: includes/misc-functions.php:393
+#: includes/misc-functions.php:398
 msgid "Playlist entry removed."
 msgstr ""
 
-#: includes/misc-functions.php:398
+#: includes/misc-functions.php:403
 msgid "Unable to remove playlist entry."
 msgstr ""
 
-#: includes/misc-functions.php:403
+#: includes/misc-functions.php:408
 msgid "No playlist entry selected."
 msgstr ""
 
-#: includes/misc-functions.php:408
+#: includes/misc-functions.php:413
 msgid "Playlist suggestion submitted."
 msgstr ""
 
-#: includes/misc-functions.php:413
+#: includes/misc-functions.php:418
 msgid "Unable to add playlist suggestion."
 msgstr ""
 
-#: includes/misc-functions.php:422
+#: includes/misc-functions.php:427
 msgid "The date you selected is available."
 msgstr ""
 
-#: includes/misc-functions.php:426
+#: includes/misc-functions.php:431
 msgid "We're not available on the selected date."
 msgstr ""
 
-#: includes/misc-functions.php:430
+#: includes/misc-functions.php:435
 msgid "Ooops"
 msgstr ""
 
-#: includes/misc-functions.php:431
+#: includes/misc-functions.php:436
 msgid "You forgot to enter a date."
 msgstr ""
 
-#: includes/misc-functions.php:436
+#: includes/misc-functions.php:441
 msgid "We seem to be missing the %s details."
 msgstr ""
 
-#: includes/misc-functions.php:440
+#: includes/misc-functions.php:445
 msgid "Password Error"
 msgstr ""
 
-#: includes/misc-functions.php:441
+#: includes/misc-functions.php:446
 msgid "An incorrect password was entered"
 msgstr ""
 
-#: includes/misc-functions.php:446
+#: includes/misc-functions.php:451
 msgid "Security verification failed."
 msgstr ""
 
-#: includes/misc-functions.php:450
+#: includes/misc-functions.php:455
 msgid "Thank you"
 msgstr ""
 
-#: includes/misc-functions.php:451
+#: includes/misc-functions.php:456
 msgid "Your payment has completed successfully"
 msgstr ""
 
-#: includes/misc-functions.php:455
+#: includes/misc-functions.php:460
 msgid "There was an error processing your payment"
 msgstr ""
 
-#: includes/misc-functions.php:456
+#: includes/misc-functions.php:461
 msgid "To process your payment again, please follow the steps below"
 msgstr ""
 
-#: includes/misc-functions.php:481
+#: includes/misc-functions.php:486
 msgid "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!"
 msgstr ""
 
@@ -9075,133 +8819,146 @@ msgstr ""
 msgid "Select Payment Amount"
 msgstr ""
 
-#: includes/scripts.php:51 includes/scripts.php:55
+#: includes/scripts.php:51 includes/scripts.php:58 includes/scripts.php:59
 msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:52 widgets/class-mdjm-widget.php:51
+#: includes/scripts.php:53
+msgid "Your details have been updated"
+msgstr ""
+
+#: includes/scripts.php:54 widgets/class-mdjm-widget.php:51
 msgid "Please select a date"
 msgstr ""
 
-#: includes/scripts.php:54 templates/playlist/playlist-guest.php:52
+#: includes/scripts.php:56 templates/profile/profile-client.php:25
+msgid "Update Details"
+msgstr ""
+
+#: includes/scripts.php:57 templates/playlist/playlist-guest.php:52
 msgid "Suggest Song"
 msgstr ""
 
-#: includes/scripts.php:230
+#: includes/scripts.php:234
 msgid "Enter an email address for the client"
 msgstr ""
 
-#: includes/scripts.php:231
+#: includes/scripts.php:235
 msgid "Enter a first name for the client"
 msgstr ""
 
-#: includes/scripts.php:232
+#: includes/scripts.php:236
 msgid "Enter a transaction value"
 msgstr ""
 
-#: includes/scripts.php:233
+#: includes/scripts.php:237
 msgid "Enter a transaction date"
 msgstr ""
 
-#: includes/scripts.php:234
+#: includes/scripts.php:238
 msgid "What is the transaction for?"
 msgstr ""
 
-#: includes/scripts.php:235
+#: includes/scripts.php:239
 msgid "Enter a transaction source"
 msgstr ""
 
-#: includes/scripts.php:236
+#: includes/scripts.php:240
 msgid "Enter a name for the venue"
 msgstr ""
 
-#: includes/scripts.php:237
+#: includes/scripts.php:241
 msgid "You must have a pricing option for at least one month"
 msgstr ""
 
-#: includes/scripts.php:238
+#: includes/scripts.php:242
 msgid "Select at least one Add-on"
 msgstr ""
 
-#: includes/scripts.php:243
+#: includes/scripts.php:247
 msgid "Are you sure you want to save this %s with a total cost of %s?"
 msgstr ""
 
-#: includes/scripts.php:244
+#: includes/scripts.php:248
 msgid "Do you want to auto set the setup time?"
 msgstr ""
 
-#: includes/scripts.php:247
+#: includes/scripts.php:251
 msgid "Hide client form"
 msgstr ""
 
-#: includes/scripts.php:249
+#: includes/scripts.php:253
 msgid "Hide client details"
 msgstr ""
 
-#: includes/scripts.php:251
+#: includes/scripts.php:255
 msgid "Hide %s options"
 msgstr ""
 
-#: includes/scripts.php:253
+#: includes/scripts.php:257
 msgid "Hide %s workers"
 msgstr ""
 
-#: includes/scripts.php:255
+#: includes/scripts.php:259
 msgid "Hide venue"
 msgstr ""
 
-#: includes/scripts.php:256
+#: includes/scripts.php:260
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:257
+#: includes/scripts.php:261
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:258
+#: includes/scripts.php:262
 msgid "Type to search"
 msgstr ""
 
-#: includes/scripts.php:259
+#: includes/scripts.php:263
 msgid "Type to search all options"
 msgstr ""
 
-#: includes/shortcodes.php:34
+#: includes/shortcodes.php:37
 msgid "ERROR: Unknown Page"
 msgstr ""
 
-#: includes/shortcodes.php:60
+#: includes/shortcodes.php:63
 msgid "An error has occurred"
 msgstr ""
 
-#: includes/shortcodes.php:96
+#: includes/shortcodes.php:99
 msgid "%s action buttons within %s"
 msgstr ""
 
-#: includes/shortcodes.php:203 includes/shortcodes.php:216
+#: includes/shortcodes.php:206 includes/shortcodes.php:219
 msgid ""
 "Ooops! There seems to be a slight issue and we've been unable to find your "
 "%s."
 msgstr ""
 
-#: includes/shortcodes.php:248 includes/shortcodes.php:258
+#: includes/shortcodes.php:251 includes/shortcodes.php:261
 msgid ""
 "Ooops! There seems to be a slight issue and we've been unable to find your "
 "event"
 msgstr ""
 
-#: includes/shortcodes.php:369
+#: includes/shortcodes.php:374
 msgid "Book this %s"
 msgstr ""
 
-#: includes/shortcodes.php:451
+#: includes/shortcodes.php:456
 msgid "Select Date"
 msgstr ""
 
-#: includes/shortcodes.php:454 includes/widgets.php:256
+#: includes/shortcodes.php:459 includes/widgets.php:256
 #: widgets/class-mdjm-widget.php:168
 msgid "Check Availability"
+msgstr ""
+
+#: includes/shortcodes.php:488 includes/shortcodes.php:499
+#: includes/widgets.php:38 widgets/class-mdjm-widget.php:25
+msgid "MDJM Availability Checker"
 msgstr ""
 
 #: includes/task-functions.php:120
@@ -9250,6 +9007,10 @@ msgstr ""
 
 #: includes/travel-functions.php:331
 msgid "Travel Time"
+msgstr ""
+
+#: includes/travel-functions.php:335
+msgid "Cost"
 msgstr ""
 
 #: includes/travel-functions.php:339 includes/travel-functions.php:340
@@ -9397,6 +9158,10 @@ msgstr ""
 msgid "Enables clients to check your availability"
 msgstr ""
 
+#: includes/widgets.php:228
+msgid "Please enter a date"
+msgstr ""
+
 #: includes/widgets.php:254
 msgid "Check my availability for your %s by entering the date below"
 msgstr ""
@@ -9439,7 +9204,7 @@ msgstr ""
 msgid "Redirect on Unavailable"
 msgstr ""
 
-#: mobile-dj-manager.php:117
+#: mobile-dj-manager.php:120
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -9480,6 +9245,24 @@ msgid ""
 "details</a> screen to confirm that you wish to proceed."
 msgstr ""
 
+#: templates/contract/contract.php:81
+msgid "First Name:"
+msgstr ""
+
+#: templates/contract/contract.php:86
+msgid "Last Name:"
+msgstr ""
+
+#: templates/contract/contract.php:92
+msgid "I hereby confirm that I have read and accept the contract and its terms"
+msgstr ""
+
+#: templates/contract/contract.php:96
+msgid ""
+"I hereby confirm that the person named within the above contract is me and "
+"that all associated details are correct"
+msgstr ""
+
 #: templates/contract/contract.php:100
 msgid "Enter Your Password:"
 msgstr ""
@@ -9496,12 +9279,20 @@ msgstr ""
 msgid "ID:"
 msgstr ""
 
+#: templates/event/event-loop.php:25 templates/event/event-single.php:49
+msgid "Status:"
+msgstr ""
+
 #: templates/event/event-loop.php:30
 msgid "Time"
 msgstr ""
 
 #: templates/event/event-loop.php:47
 msgid "Cost Summary"
+msgstr ""
+
+#: templates/event/event-loop.php:48 templates/event/event-single.php:83
+msgid "Total Cost:"
 msgstr ""
 
 #: templates/event/event-loop.php:50 templates/event/event-single.php:85
@@ -9548,6 +9339,22 @@ msgstr ""
 
 #: templates/event/event-single.php:67
 msgid "Package Details:"
+msgstr ""
+
+#: templates/event/event-single.php:71
+msgid "Package:"
+msgstr ""
+
+#: templates/event/event-single.php:96
+msgid "Phone:"
+msgstr ""
+
+#: templates/event/event-single.php:103 templates/event/event-single.php:114
+msgid "Address:"
+msgstr ""
+
+#: templates/event/event-single.php:112
+msgid "Venue:"
 msgstr ""
 
 #: templates/login/login-form.php:26 templates/login/login-form.php:44
@@ -9632,6 +9439,10 @@ msgid_plural "entries"
 msgstr[0] ""
 msgstr[1] ""
 
+#: templates/playlist/playlist-client.php:166
+msgid "Remove"
+msgstr ""
+
 #: templates/playlist/playlist-guest.php:20
 msgid ""
 "Welcome to the %s %s music playlist management system for %s %s taking "
@@ -9674,6 +9485,26 @@ msgstr ""
 msgid ""
 "We haven't been able to locate your %s. Please return to our <a "
 "href='%s'>%s</a> page to see a list of your %s."
+msgstr ""
+
+#: templates/profile/profile-client.php:22
+msgid ""
+"Please keep your details up to date as incorrect information may cause "
+"problems with your %s."
+msgstr ""
+
+#: templates/profile/profile-client.php:24
+msgid ""
+"To change your password, type the new password and confirm it below. Leave "
+"this field empty to keep your current password"
+msgstr ""
+
+#: templates/profile/profile-client.php:73
+msgid "New Password"
+msgstr ""
+
+#: templates/profile/profile-client.php:81
+msgid "Confirm New Password"
 msgstr ""
 
 #: widgets/class-mdjm-widget.php:166

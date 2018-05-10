@@ -524,11 +524,10 @@ function mdjm_get_playlist_categories()	{
  * Creates a select input field which contains all playlist categories.
  *
  * @since	1.3
- * @param	arr		$args	Override the defaults for the select field. See $defaults within the function.
- * @param	bool	$echo	True to echo the output, false to return as a string.
- * @return	str		HTML output for the select field.
+ * @param	array	$args	Override the defaults for the select field. See $defaults within the function.
+ * @return	string	HTML output for the select field.
  */	
-function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
+function mdjm_playlist_category_dropdown( $args = '' )	{
 	$defaults = array(
 		'show_option_all'    => '',
 		'show_option_none'   => '',
@@ -542,23 +541,18 @@ function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 		'echo'               => 0,
 		'selected'           => mdjm_get_option( 'playlist_default_cat', 0 ),
 		'hierarchical'       => 0, 
-		'name'               => 'entry_category',
-		'id'                 => 'entry_category',
-		'class'              => '',
+		'name'               => 'mdjm_category',
+		'id'                 => 'mdjm_category',
+		'class'              => 'mdjm-input',
 		'taxonomy'           => 'playlist-category',
 		'hide_if_empty'      => false,
 		'value_field'	    => 'term_id'
 	);
 
-	$settings = wp_parse_args( $args, $defaults );
+	$args              = wp_parse_args( $args, $defaults );
+	$category_dropdown = wp_dropdown_categories( $args );
 
-	$category_dropdown = wp_dropdown_categories( $settings );
-
-	if ( ! empty( $echo ) )	{
-		echo $category_dropdown;
-	} else	{
-		return $category_dropdown;
-	}
+	return $category_dropdown;
 } // mdjm_playlist_category_dropdown
 
 /**

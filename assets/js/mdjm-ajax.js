@@ -81,6 +81,70 @@ jQuery(document).ready(function ($) {
 
 	});
 
+	/* = Playlist form validation and submission
+	====================================================================================== */
+	$(document).on('click', '#mdjm_playlist_form #playlist_entry_submit', function(e) {
+		var mdjmPlaylistForm = document.getElementById('mdjm_playlist_form');
+
+		if( typeof mdjmPlaylistForm.checkValidity === 'function' && false === mdjmPlaylistForm.checkValidity() ) {
+			return;
+		}
+
+		e.preventDefault();
+		$(this).val(mdjm_vars.submit_playlist_loading);
+		$(this).prop('disabled', true);
+		$('#mdjm_playlist_form_fields').addClass('mdjm_mute');
+		$(this).after(' <span id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_vars.ajax_loader + '" /></span>');
+		$('input').removeClass('error');
+
+		var $form        = $('#mdjm_guest_playlist_form');
+		var playlistData = $('#mdjm_guest_playlist_form').serialize();
+
+        $form.find('.mdjm-alert').hide('fast');
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : playlistData,
+			url        : mdjm_vars.ajaxurl,
+			success    : function (response) {
+				if ( response.error )	{
+					$form.find('.mdjm-alert-error').show('fast');
+					$form.find('.mdjm-alert-error').html(response.error);
+                    $form.find('#' + response.field).addClass('error');
+				} else	{
+					$('#mdjm_artist').val('');
+					$('#mdjm_song').val('');
+					$('#mdjm_notes').val('');
+					$('#mdjm_artist').focus();
+
+					if( $('#playlist-entries').hasClass('mdjm-hidden') )	{
+						$('#playlist-entries').removeClass('mdjm-hidden');
+					}
+
+					$('#playlist-entries').append(response.entry);
+
+					if( response.closed )	{
+						$('#mdjm-playlist-input-fields').addClass('mdjm-hidden');
+						$('#playlist-entries').append('<div class="mdjm-alert mdjm-alert-info">' + mdjm_vars.playlist_closed + '</div>');
+					}
+
+				}
+
+				$('#playlist_entry_submit').prop('disabled', false);
+				$('#mdjm_playlist_form_fields').find('#mdjm-loading').remove();
+				$('#playlist_entry_submit').val(mdjm_vars.submit_playlist);
+				$('#mdjm_guest_playlist_form_fields').removeClass('mdjm_mute');
+
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+	});
+
+
 	/* = Guest playlist form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#mdjm_guest_playlist_form #entry_guest_submit', function(e) {
