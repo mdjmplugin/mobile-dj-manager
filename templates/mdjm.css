@@ -706,6 +706,9 @@ span.guest-playlist-entry-heading	{
 	font-weight:600;
 }
 
+.mdjm_playlist_share {
+    margin: 2px;
+}
 /* =Login Form
 -------------------------------------------------------------- */
 #mdjm-login-form fieldset legend	{
