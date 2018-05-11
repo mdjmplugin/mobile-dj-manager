@@ -97,8 +97,8 @@ jQuery(document).ready(function ($) {
 		$(this).after(' <span id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_vars.ajax_loader + '" /></span>');
 		$('input').removeClass('error');
 
-		var $form        = $('#mdjm_guest_playlist_form');
-		var playlistData = $('#mdjm_guest_playlist_form').serialize();
+		var $form        = $('#mdjm_playlist_form');
+		var playlistData = $('#mdjm_playlist_form').serialize();
 
         $form.find('.mdjm-alert').hide('fast');
 
@@ -112,29 +112,33 @@ jQuery(document).ready(function ($) {
 					$form.find('.mdjm-alert-error').show('fast');
 					$form.find('.mdjm-alert-error').html(response.error);
                     $form.find('#' + response.field).addClass('error');
+                    $form.find('#' + response.field).focus();
 				} else	{
 					$('#mdjm_artist').val('');
 					$('#mdjm_song').val('');
 					$('#mdjm_notes').val('');
 					$('#mdjm_artist').focus();
 
-					if( $('#playlist-entries').hasClass('mdjm-hidden') )	{
+					if ( $('#playlist-entries').hasClass('mdjm-hidden') )	{
 						$('#playlist-entries').removeClass('mdjm-hidden');
 					}
 
-					$('#playlist-entries').append(response.entry);
+                    $form.find('.mdjm-alert-success').show('fast').delay(3000).hide('fast');
+					$form.find('.mdjm-alert-success').html(mdjm_vars.playlist_updated);
 
-					if( response.closed )	{
+					//$('#playlist-entries').append(response.entry);
+
+					/*if( response.closed )	{
 						$('#mdjm-playlist-input-fields').addClass('mdjm-hidden');
 						$('#playlist-entries').append('<div class="mdjm-alert mdjm-alert-info">' + mdjm_vars.playlist_closed + '</div>');
-					}
+					}*/
 
 				}
 
 				$('#playlist_entry_submit').prop('disabled', false);
 				$('#mdjm_playlist_form_fields').find('#mdjm-loading').remove();
 				$('#playlist_entry_submit').val(mdjm_vars.submit_playlist);
-				$('#mdjm_guest_playlist_form_fields').removeClass('mdjm_mute');
+				$('#mdjm_playlist_form_fields').removeClass('mdjm_mute');
 
 			}
 		}).fail(function (data) {
@@ -143,7 +147,6 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	});
-
 
 	/* = Guest playlist form validation and submission
 	====================================================================================== */
@@ -176,6 +179,7 @@ jQuery(document).ready(function ($) {
 					$form.find('.mdjm-alert-error').show('fast');
 					$form.find('.mdjm-alert-error').html(response.error);
                     $form.find('#' + response.field).addClass('error');
+                    $form.find('#' + response.field).focus();
 				} else	{
 					if( $('.mdjm_guest_name_field').is(':visible') )	{
 						$('.mdjm_guest_name_field').slideToggle('fast');
@@ -188,6 +192,9 @@ jQuery(document).ready(function ($) {
 					if( $('#guest-playlist-entries').hasClass('mdjm-hidden') )	{
 						$('#guest-playlist-entries').removeClass('mdjm-hidden');
 					}
+
+                    $form.find('.mdjm-alert-success').show('fast').delay(3000).hide('fast');
+					$form.find('.mdjm-alert-success').html(mdjm_vars.playlist_updated);
 
 					$('#guest-playlist-entries').append(response.entry);
 

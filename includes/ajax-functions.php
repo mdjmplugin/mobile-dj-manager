@@ -163,6 +163,59 @@ add_action( 'wp_ajax_nopriv_mdjm_validate_client_profile', 'mdjm_validate_client
  * @since	1.5
  * @return	void
  */
+function mdjm_submit_playlist_ajax()	{
+
+    if ( ! check_ajax_referer( 'add_playlist_entry', 'mdjm_nonce', false ) ) {
+        wp_send_json( array(
+            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'field' => 'mdjm_nonce'
+        ) );
+    }
+
+	$required_fields = array(
+		'mdjm_song' => __( 'Song', 'mobile-dj-manager' )
+	);
+
+	$required_fields = apply_filters( 'mdjm_playlist_required_fields', $required_fields );
+
+	foreach ( $required_fields as $required_field => $field_name )	{
+		if ( empty( $_POST[ $required_field ] ) )	{
+			wp_send_json( array(
+				'error' => sprintf( __( '%s is a required field', 'mobile-dj-manager' ), esc_attr( $field_name ) ),
+				'field' => $required_field
+			) );
+		}
+	}
+
+    $event    = absint( $_POST['mdjm_playlist_event'] );
+	$song     = sanitize_text_field( $_POST['mdjm_song'] );
+	$artist   = isset( $_POST['mdjm_artist'] )   ? sanitize_text_field( $_POST['mdjm_artist'] )    : '';
+    $category = isset( $_POST['mdjm_category'] ) ? absint( $_POST['mdjm_category'] )               : NULL;
+    $notes    = isset( $_POST['mdjm_notes'] )    ? sanitize_textarea_field( $_POST['mdjm_notes'] ) : NULL;
+	$closed   = false;
+
+	$playlist_data = array(
+        'event_id' => $event,
+		'song'     => $song,
+		'artist'   => $artist,
+        'category' => $category,
+		'added_by' => get_current_user_id(),
+        'notes'    => $notes
+	);
+
+	mdjm_store_playlist_entry( $playlist_data );
+    wp_send_json_success();
+
+} // mdjm_submit_playlist_ajax
+add_action( 'wp_ajax_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
+
+/**
+ * Process guest playlist submission.
+ *
+ * @since	1.5
+ * @return	void
+ */
 function mdjm_submit_guest_playlist_ajax()	{
 
     if ( ! check_ajax_referer( 'add_guest_playlist_entry', 'mdjm_nonce', false ) ) {

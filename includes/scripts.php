@@ -50,6 +50,7 @@ function mdjm_load_scripts()	{
 				'no_card_name'              => __( 'Enter the name printed on your card', 'mobile-dj-manager' ),
 				'no_payment_amount'         => __( 'Select Payment Amount', 'mobile-dj-manager' ),
 				'payment_loading'           => __( 'Please Wait...', 'mobile-dj-manager' ),
+                'playlist_updated'          => __( 'Your entry was added successfully', 'mobile-dj-manager' ),
                 'profile_page'              => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ) ),
                 'profile_updated'           => __( 'Your details have been updated', 'mobile-dj-manager' ),
 				'required_date_message'     => __( 'Please select a date', 'mobile-dj-manager' ),

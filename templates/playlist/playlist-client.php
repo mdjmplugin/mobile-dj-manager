@@ -23,11 +23,16 @@ $intro_text = sprintf(
 	'{event_date}'
 );
 
-$guest_text = sprintf(
-	__( 'You can invite your guests to add their suggestions to your playlist too. They won\'t be able to see any existing entries, and you will be able to filter through their suggestions and remove any you do not feel are suitable. Just tell them to visit <a href="%s">%s</a> to get started.', 'mobile-dj-manager' ),
-	'{guest_playlist_url}',
-	'{guest_playlist_url}'
+$guest_text = __( 'You can invite your guests to add their suggestions to your playlist too. They won\'t be able to see any existing entries, and you will be able to filter through their suggestions and remove any you do not feel are suitable.', 'mobile-dj-manager' );
+
+$share_heading  = __( 'Share with Guests', 'mobile-dj-manager' );
+$share_options  = array(
+    mdjm_playlist_twitter_share( $mdjm_event->ID ),
+    mdjm_playlist_facebook_share( $mdjm_event->ID ),
+    sprintf( __( 'or simply share the URL: <a href="%1$s">%1$s</a>', 'mobile-dj-manager' ), '{guest_playlist_url}' )
 );
+
+$share_text = implode( '<br>', $share_options );
 
 $playlist_closed = sprintf(
 	__( 'The playlist for this %s is currently closed to allow %s to prepare for your event. Existing playlist entries are displayed below.', 'mobile-dj-manager' ),
@@ -58,6 +63,8 @@ $submit_label         = __( 'Add to Playlist', 'mobile-dj-manager' );
         
         <p><?php echo esc_attr( $intro_text ); ?></p>
 		<p><?php echo $guest_text; ?></p>
+		<h5><?php echo $share_heading; ?></h5>
+		<p><?php echo $share_text; ?></p>
 
 		<?php if ( $mdjm_event->playlist_is_open() ) : ?>
             <?php $event_playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID ); ?>
@@ -76,6 +83,8 @@ $submit_label         = __( 'Add to Playlist', 'mobile-dj-manager' );
 
                     <fieldset id="mdjm_playlist_form_fields">
                         <legend><?php echo esc_attr( $form_title ); ?></legend>
+
+                        <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>
 
 						<?php do_action( 'mdjm_playlist_before_entries' ); ?>
                         <div id="playlist-entries" class="mdjm-hidden">

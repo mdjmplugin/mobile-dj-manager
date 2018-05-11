@@ -304,7 +304,7 @@ function mdjm_shortcode_playlist( $atts )	{
 	global $mdjm_event;
 	
 	if ( isset( $_GET['mdjmeventid'] ) )	{
-		$_GET['guest_playlist'] = $_GET['mdjmeventid'];
+		$_GET['guest_playlist'] = absint( $_GET['mdjmeventid'] );
 	}
 	
 	$visitor  = isset( $_GET['guest_playlist'] ) ? 'guest' : 'client';
@@ -321,27 +321,22 @@ function mdjm_shortcode_playlist( $atts )	{
 		}
 	}
 	
-	if( ! isset( $event_id ) && ! isset( $_GET['guest_playlist'] ) )	{
+	if (  ! isset( $event_id ) && ! isset( $_GET['guest_playlist'] ) )	{
 		ob_start();
 		mdjm_get_template_part( 'playlist', 'noevent' );
 		$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
 	} else	{
 	
-		$mdjm_event = ( $visitor == 'client' ? mdjm_get_event( $event_id ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] ) );
-		
-		if( $visitor == 'client' )	{
-			if( ! is_user_logged_in() )	{
-				echo mdjm_login_form( add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) ) );
-			}
-		}
+		$mdjm_event = $visitor == 'client' ? mdjm_get_event( $event_id ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] );
 		
 		ob_start();
-		
-		if( $mdjm_event )	{
+
+        if ( $visitor == 'client' && ! is_user_logged_in() )	{
+            $output .= mdjm_login_form( add_query_arg( 'event_id', $event_id, mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) ) );
+		} elseif ( $mdjm_event )	{
 			mdjm_get_template_part( 'playlist', $visitor );
 			$output .= mdjm_do_content_tags( ob_get_contents(), $mdjm_event->ID, $mdjm_event->client );
-		}
-		else	{
+		} else	{
 			mdjm_get_template_part( 'playlist', 'noevent' );
 			$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
 		}

@@ -72,6 +72,7 @@ $submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
                     <input type="hidden" id="action" name="action" value="mdjm_submit_guest_playlist" />
 
                     <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
+                    <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>
 
 					<?php do_action( 'mdjm_guest_playlist_form_top' ); ?>
 
@@ -83,10 +84,10 @@ $submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
                             <p><?php echo esc_attr( $existing_entries ); ?></p>
                             <div class="guest-playlist-entry-row">
                                 <div class="guest-playlist-entry-column">
-                                    <span class="guest-playlist-entry-heading">Artist</span>
+                                    <span class="guest-playlist-entry-heading"><?php echo $artist_label; ?></span>
                                 </div>
                                 <div class="guest-playlist-entry-column">
-                                    <span class="guest-playlist-entry-heading">Song</span>
+                                    <span class="guest-playlist-entry-heading"><?php echo $song_label; ?></span>
                                 </div>
                             </div>
                         </div>
