@@ -158,7 +158,7 @@ add_action( 'wp_ajax_mdjm_validate_client_profile', 'mdjm_validate_client_profil
 add_action( 'wp_ajax_nopriv_mdjm_validate_client_profile', 'mdjm_validate_client_profile_form_ajax' );
 
 /**
- * Process guest playlist submission.
+ * Process playlist submission.
  *
  * @since	1.5
  * @return	void
@@ -192,7 +192,6 @@ function mdjm_submit_playlist_ajax()	{
 	$artist   = isset( $_POST['mdjm_artist'] )   ? sanitize_text_field( $_POST['mdjm_artist'] )    : '';
     $category = isset( $_POST['mdjm_category'] ) ? absint( $_POST['mdjm_category'] )               : NULL;
     $notes    = isset( $_POST['mdjm_notes'] )    ? sanitize_textarea_field( $_POST['mdjm_notes'] ) : NULL;
-	$closed   = false;
 
 	$playlist_data = array(
         'event_id' => $event,
@@ -203,12 +202,96 @@ function mdjm_submit_playlist_ajax()	{
         'notes'    => $notes
 	);
 
-	mdjm_store_playlist_entry( $playlist_data );
-    wp_send_json_success();
+	$entry_id = mdjm_store_playlist_entry( $playlist_data );
 
+	if ( $entry_id )	{
+		$category   = get_term( $category, 'playlist-category' );
+		$entry_data = mdjm_get_playlist_entry_data( $entry_id );
+
+		ob_start(); ?>
+
+		<div class="playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $entry_data['artist'] ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $entry_data['song'] ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $category->name ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry">
+                    <?php if ( 'Guest' == $category->name ) : ?>
+                        <?php echo esc_attr( $entry_data['added_by'] ); ?>
+                    <?php elseif ( ! empty( $entry_data['djnotes'] ) ) : ?>
+                        <?php echo esc_attr( $entry_data['djnotes'] ); ?>
+                    <?php else : ?>
+                        <?php echo '&ndash;'; ?>
+                    <?php endif; ?>
+                </span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry">
+                    <a class="mdjm-delete playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php _e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                </span>
+            </div>
+        </div>
+
+		<?php $row_data = ob_get_clean();
+
+		$mdjm_event     = new MDJM_Event( $event );
+		$playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID );
+		$total_entries  = mdjm_count_playlist_entries( $mdjm_event->ID );
+		$songs          = sprintf( '%d %s', $total_entries, _n( 'song', 'songs', $total_entries, 'mobile-dj-manager' ) );
+		$length         = mdjm_playlist_duration( $mdjm_event->ID, $total_entries );
+
+		if ( ! $mdjm_event->playlist_is_open() )	{
+			$closed = true;
+		} elseif ( $playlist_limit != 0 && $total_entries >= $playlist_limit )	{
+			$closed = true;
+		} else	{
+			$closed = false;
+		}
+
+		wp_send_json_success( array(
+			'row_data' => $row_data,
+			'closed' => $closed,
+			'songs'  => $songs,
+			'length' => $length
+		) );
+	}
+
+	wp_send_json_error();
 } // mdjm_submit_playlist_ajax
 add_action( 'wp_ajax_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
 add_action( 'wp_ajax_nopriv_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
+
+/**
+ * Remove playlist entry.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_remove_playlist_entry_ajax()	{
+	$event_id = absint( $_POST['event_id'] );
+	$song_id  = absint( $_POST['song_id'] );
+
+	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
+		$total  = mdjm_count_playlist_entries( $event_id );
+		$songs  = sprintf( '%d %s', $total, _n( 'song', 'songs', $total, 'mobile-dj-manager' ) );
+		$length = mdjm_playlist_duration( $event_id, $total );
+		wp_send_json_success( array(
+			'count'  => $total,
+			'songs'  => $songs,
+			'length' => $length
+		) );
+	}
+
+	wp_send_json_error();
+} // mdjm_remove_playlist_entry_ajax
+add_action( 'wp_ajax_mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_ajax' );
 
 /**
  * Process guest playlist submission.

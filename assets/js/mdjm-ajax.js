@@ -126,12 +126,14 @@ jQuery(document).ready(function ($) {
                     $form.find('.mdjm-alert-success').show('fast').delay(3000).hide('fast');
 					$form.find('.mdjm-alert-success').html(mdjm_vars.playlist_updated);
 
-					//$('#playlist-entries').append(response.entry);
+					$('#playlist-entries').append(response.data.row_data);
 
-					/*if( response.closed )	{
-						$('#mdjm-playlist-input-fields').addClass('mdjm-hidden');
-						$('#playlist-entries').append('<div class="mdjm-alert mdjm-alert-info">' + mdjm_vars.playlist_closed + '</div>');
-					}*/
+					if( response.data.closed )	{
+						window.location.href = mdjm_vars.playlist_page;
+					} else {
+						$('.song-count').text(response.data.songs);
+						$('.playlist-length').text(response.data.length);
+					}
 
 				}
 
@@ -146,6 +148,50 @@ jQuery(document).ready(function ($) {
 				console.log( data );
 			}
 		});
+	});
+
+	/* = Remove playlist entry
+	====================================================================================== */
+	$(document).on('click', '.playlist-delete-entry', function(e) {
+		var event_id = $(this).data('event');
+		var song_id  = $(this).data('entry');
+		var postData = {
+			event_id: event_id,
+            song_id : song_id,
+            action  : 'mdjm_remove_playlist_entry'
+        };
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : postData,
+			url        : mdjm_vars.ajaxurl,
+			beforeSend : function()	{
+				$('#playlist-entries').addClass('mdjm_mute');
+			},
+			complete   : function() {
+				$('#playlist-entries').removeClass('mdjm_mute');
+			},
+			success    : function (response) {
+				if ( response.success )	{
+					var row = '.mdjm-playlist-entry-' + song_id;
+					$(row).addClass('mdjm_playlist_removing').delay(1000).remove();
+
+					if ( response.data.count > 0 ) {
+						$('.song-count').text(response.data.songs);
+						$('.playlist-length').text(response.data.length);
+					} else {
+						$('#playlist-entries').addClass('mdjm-hidden');
+					}
+
+				}
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+
 	});
 
 	/* = Guest playlist form validation and submission

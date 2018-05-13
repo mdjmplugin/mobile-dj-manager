@@ -29,7 +29,13 @@ p.head-nav	{
 	-webkit-animation: mdjm-icon-spin 2s infinite linear;
 	animation: mdjm-icon-spin 2s infinite linear;
 }
+a.mdjm-delete {
+	color: #a00;
+	cursor: pointer;
+}
+a.mdjm-delete:hover { color: #f00; }
 .mdjm_mute { opacity: 0.4; }
+
 @-moz-keyframes mdjm-icon-spin {
 	0% {
 		-moz-transform: rotate(0deg)
@@ -686,8 +692,14 @@ a	{
 	left: -35px;
 }
 
+#playlist-entries,
 #guest-playlist-entries	{
 	margin-bottom: 50px;
+}
+
+.playlist-entry-row-headings,
+.playlist-entry-row {
+	font-size: 80%;
 }
 
 .guest-playlist-entry-column {
@@ -696,18 +708,45 @@ a	{
     padding: 2px;
 }
 
+.playlist-entry-column {
+    float: left;
+    width: 20%;
+    padding: 2px;
+}
+.playlist-entry-column:nth-child(4) {
+	width: 30%;
+}
+.playlist-entry-column:nth-child(5) {
+	width: 10%;
+}
+
+.playlist-entry-row-headings:after,
+.playlist-entry-row:after,
 .guest-playlist-entry-row:after {
     content: "";
     display: table;
     clear: both;
 }
 
+.playlist-entry-row:hover {
+	background-color: #E9ECEA;
+}
+
+span.playlist-entry-heading,
 span.guest-playlist-entry-heading	{
 	font-weight:600;
 }
 
 .mdjm_playlist_share {
     margin: 2px;
+}
+
+.mdjm_playlist_share {
+	text-align: center;
+}
+
+.mdjm_playlist_removing {
+	background-color: #a00;
 }
 /* =Login Form
 -------------------------------------------------------------- */

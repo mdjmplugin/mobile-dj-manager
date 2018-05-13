@@ -226,17 +226,11 @@ function mdjm_store_playlist_entry( $data )	{
  * @return	bool	Whether or not the entry was removed.
  */
 function mdjm_remove_stored_playlist_entry( $entry_id )	{
-	// Process actions before removing entry.
 	do_action( 'mdjm_delete_playlist_entry_before', $entry_id );
 
 	$entry = wp_delete_post( $entry_id, true );
 
-	if ( $entry )	{
-		// Process actions after removing song.
-		do_action( 'mdjm_delete_playlist_entry_after', $entry );		
-	} else	{
-		$entry = false;
-	}
+	do_action( 'mdjm_delete_playlist_entry_after', $entry );		
 
 	return $entry;
 } // mdjm_remove_stored_playlist_entry
@@ -430,7 +424,7 @@ function mdjm_get_event_playlist_categories( $event_id )	{
 function mdjm_get_event_playlist_limit ( $event_id ) {
      $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
 
-     return apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
+     return (int) apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
 } // mdjm_get_event_playlist_limit
 
 /**
