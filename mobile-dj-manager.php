@@ -1,5 +1,8 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
  * Plugin Name: MDJM Event Management
  * Plugin URI: http://mdjm.co.uk
@@ -202,7 +205,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/event-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/client-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/client-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/clients/client-functions.php' );
+            require_once( MDJM_PLUGIN_DIR . '/includes/clients/class-mdjm-client.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/employee-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/class-mdjm-roles.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/roles/roles-functions.php' );
@@ -211,21 +215,19 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/menu.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/content/content-tags.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/mdjm-functions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/functions.php' ); // THIS CAN BE DEPRECATED SOON
 			require_once( MDJM_PLUGIN_DIR . '/includes/clientzone-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/login.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cron.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/scripts.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/post-types.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/formatting.php' );
-			require_once( MDJM_CLIENTZONE . '/includes/mdjm-dynamic.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/widgets.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-stats.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/events/class-mdjm-events-query.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-debug.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/transactions/mdjm-transactions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/admin/tasks/task-functions.php' );
+			require_once( MDJM_PLUGIN_DIR . '/includes/tasks/task-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/plugin-compatibility.php' );
 			
 			if ( is_admin() )	{
@@ -271,8 +273,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
 				
-			} else	{ // Required for front end only
-				require_once( MDJM_CLIENTZONE . '/pages/mdjm-clientzone.php' );
 			}
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/install.php' );

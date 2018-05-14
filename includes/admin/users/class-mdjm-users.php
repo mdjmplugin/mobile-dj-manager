@@ -273,10 +273,10 @@ if( !class_exists( 'MDJM_Users' ) ) :
 						// Checkbox Field
 						if( $custom_field['type'] == 'checkbox' )	{
 							
-							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="Y" ';
+							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="' . $custom_field['value'] . '" ';
 							
 							if( $pagenow != 'user-new.php' )	{
-								checked( $field_value, 'Y' );
+								checked( $field_value, '1' );
 							} else	{
 								checked ( '', '' );
 							}
@@ -384,7 +384,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					
 					// Checkbox unchecked = N
 					if( $custom_field['type'] == 'checkbox' && empty( $_POST[ $field ] ) )	{
-						$_POST[ $field ] = 'N';
+						$_POST[ $field ] = 0;
 					}
 					
 					// Update the users meta data

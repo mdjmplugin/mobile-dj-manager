@@ -46,6 +46,77 @@ function mdjm_get_playlist_entry( $entry_id = 0 ) {
 } // mdjm_get_playlist_entry
 
 /**
+ * Share playlist guest URL via Twitter
+ *
+ * @since   1.5
+ * @param   int     $event_id   The event ID
+ * @return  string
+ */
+function mdjm_playlist_twitter_share( $event_id, $args = array() )   {
+
+    $defaults = array(
+        'text'        => sprintf( __( 'Looking forward to my %s? Add your song requests at', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+        'url'         => mdjm_guest_playlist_url( $event_id ),
+        'show-count'  => 'false',
+        'button_text' => __( 'Tweet', 'mobile-dj-manager' )
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+    $uri  = add_query_arg( array(
+        'ref_src' => 'twsrc^Etfw'
+    ), 'https://twitter.com/share' );
+
+    $url = sprintf(
+        '<a href="%s" class="twitter-share-button" data-text="%s" data-url="%s" data-show-count="false">%s</a>',
+        $uri,
+        esc_attr( $args['text'] ),
+        esc_url( $args['url'] ),
+        $args['show-count'],
+        esc_attr( $args['button_text'] )
+    );
+
+    $url .= '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'; 
+
+    return $url;
+} // mdjm_playlist_twitter_share
+
+/**
+ * Share playlist guest URL via Twitter
+ *
+ * @since   1.5
+ * @param   int     $event_id   The event ID
+ * @return  string
+ */
+function mdjm_playlist_facebook_share( $event_id, $args = array() )   {
+
+    $defaults = array(
+        'href'          => mdjm_guest_playlist_url( $event_id ),
+        'layout'        => 'button',
+        'size'          => 'small',
+        'mobile_iframe' => 'false'
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    $url = add_query_arg( array(
+        'href'          => esc_url( $args['href'] ),
+        'layout'        => esc_attr( $args['layout'] ),
+        'size'          => esc_attr( $args['size'] ),
+        'mobile_iframe' => esc_attr( $args['mobile_iframe'] ),
+        'appId'         => '832846726735750',
+        'width'         => '59',
+        'height'        => '20'
+    ), 'https://www.facebook.com/plugins/share_button.php' );
+
+    $output = sprintf(
+        '<iframe src="%s" width="59" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>',
+        $url
+    );
+
+    return $output;
+} // mdjm_playlist_facebook_share
+
+/**
  * Get Playlist Entries.
  *
  * Retrieves all playlist entries for the event.
@@ -96,39 +167,42 @@ function mdjm_get_playlist_entry_data( $entry_id )	{
  * Store a playlist entry. If it exists, update it, otherwise create a new one.
  *
  * @since	1.3
- * @param	arr		$details	Playlist entry data
+ * @param	arr		$data	Playlist entry data
  * @return	bool	Whether or not the entry was created.
  */
-function mdjm_store_playlist_entry( $details )	{
+function mdjm_store_playlist_entry( $data )	{
 	$meta = array(
-		'song'      => isset( $details['entry_song'] )      ? $details['entry_song']		: '',
-		'artist'    => isset( $details['entry_artist'] )	? $details['entry_artist']		: '',
-		'added_by'  => isset( $details['entry_addedby'] )   ? $details['entry_addedby']	  : get_current_user_id(),
-		'djnotes'   => isset( $details['entry_djnotes'] )   ? $details['entry_djnotes']	 : '',
+		'song'      => isset( $data['song'] )     ? sanitize_text_field( $data['song'] )      : '',
+		'artist'    => isset( $data['artist'] )	  ? sanitize_text_field( $data['artist'] )    : '',
+		'added_by'  => isset( $data['added_by'] ) ? (int) $data['added_by']                   : get_current_user_id(),
+		'djnotes'   => isset( $data['notes'] )    ? sanitize_textarea_field( $data['notes'] ) : '',
 		'to_mdjm'   => '',
 		'uploaded'  => false,
 	);
-	
-	(int)$term  = isset( $details['entry_category'] ) 	? $details['entry_category']	: '';
-	$event_id	= isset( $details['entry_event'] )		? $details['entry_event']       : '';
+
+    $event_id = isset( $data['event_id'] ) ? (int) $data['event_id'] : '';
+	$term     = isset( $data['category'] ) ? (int) $data['category'] : '';
 	
 	// Add the playlist entry
 	$meta = apply_filters( 'mdjm_insert_playlist_entry', $meta );
 
 	do_action( 'mdjm_insert_playlist_entry_before', $meta );
 
-	$title = sprintf( __( 'Event ID: %s %s %s', 'mobile-dj-manager' ),
-				mdjm_get_option( 'event_prefix', '' ) . $event_id,
-				$meta['song'],
-				$meta['artist'] );
+	$title = sprintf(
+        __( '%s ID: %s %s %s', 'mobile-dj-manager' ),
+        mdjm_get_label_singular(),
+        mdjm_get_option( 'event_prefix', '' ) . $event_id,
+		$meta['song'],
+		$meta['artist']
+    );
 
 	$entry_id = wp_insert_post( array(
-			'post_type'     => 'mdjm-playlist',
-			'post_title'    => $title,
-			'post_author'	=> 1,
-			'post_status'   => 'publish',
-			'post_parent'   => $event_id,
-			'post_category' => array( $term )
+        'post_type'     => 'mdjm-playlist',
+        'post_title'    => $title,
+        'post_author'	=> 1,
+        'post_status'   => 'publish',
+        'post_parent'   => $event_id,
+        'post_category' => array( $term )
 	) );
 
 	if ( ! empty( $term ) )	{
@@ -141,7 +215,6 @@ function mdjm_store_playlist_entry( $details )	{
 
 	do_action( 'mdjm_insert_playlist_entry_after', $meta, $entry_id );
 
-	// Playlist entry added
 	return $entry_id;
 } // mdjm_store_playlist_entry
 
@@ -153,17 +226,11 @@ function mdjm_store_playlist_entry( $details )	{
  * @return	bool	Whether or not the entry was removed.
  */
 function mdjm_remove_stored_playlist_entry( $entry_id )	{
-	// Process actions before removing entry.
 	do_action( 'mdjm_delete_playlist_entry_before', $entry_id );
 
 	$entry = wp_delete_post( $entry_id, true );
 
-	if ( $entry )	{
-		// Process actions after removing song.
-		do_action( 'mdjm_delete_playlist_entry_after', $entry );		
-	} else	{
-		$entry = false;
-	}
+	do_action( 'mdjm_delete_playlist_entry_after', $entry );		
 
 	return $entry;
 } // mdjm_remove_stored_playlist_entry
@@ -357,7 +424,7 @@ function mdjm_get_event_playlist_categories( $event_id )	{
 function mdjm_get_event_playlist_limit ( $event_id ) {
      $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
 
-     return apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
+     return (int) apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
 } // mdjm_get_event_playlist_limit
 
 /**
@@ -524,11 +591,10 @@ function mdjm_get_playlist_categories()	{
  * Creates a select input field which contains all playlist categories.
  *
  * @since	1.3
- * @param	arr		$args	Override the defaults for the select field. See $defaults within the function.
- * @param	bool	$echo	True to echo the output, false to return as a string.
- * @return	str		HTML output for the select field.
+ * @param	array	$args	Override the defaults for the select field. See $defaults within the function.
+ * @return	string	HTML output for the select field.
  */	
-function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
+function mdjm_playlist_category_dropdown( $args = '' )	{
 	$defaults = array(
 		'show_option_all'    => '',
 		'show_option_none'   => '',
@@ -542,23 +608,18 @@ function mdjm_playlist_category_dropdown( $args='', $echo=true )	{
 		'echo'               => 0,
 		'selected'           => mdjm_get_option( 'playlist_default_cat', 0 ),
 		'hierarchical'       => 0, 
-		'name'               => 'entry_category',
-		'id'                 => 'entry_category',
-		'class'              => '',
+		'name'               => 'mdjm_category',
+		'id'                 => 'mdjm_category',
+		'class'              => 'mdjm-input',
 		'taxonomy'           => 'playlist-category',
 		'hide_if_empty'      => false,
 		'value_field'	    => 'term_id'
 	);
 
-	$settings = wp_parse_args( $args, $defaults );
+	$args              = wp_parse_args( $args, $defaults );
+	$category_dropdown = wp_dropdown_categories( $args );
 
-	$category_dropdown = wp_dropdown_categories( $settings );
-
-	if ( ! empty( $echo ) )	{
-		echo $category_dropdown;
-	} else	{
-		return $category_dropdown;
-	}
+	return $category_dropdown;
 } // mdjm_playlist_category_dropdown
 
 /**

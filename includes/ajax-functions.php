@@ -50,12 +50,263 @@ function mdjm_ajax_dismiss_admin_notice()	{
 add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
 
 /**
+ * Client profile update form validation
+ *
+ * @since   1.5
+ * @return  void
+ */
+function mdjm_validate_client_profile_form_ajax()   {
+
+    if ( ! check_ajax_referer( 'update_client_profile', 'mdjm_nonce', false ) ) {
+        wp_send_json( array(
+            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'field' => 'mdjm_nonce'
+        ) );
+    }
+
+    $client_id    = absint( $_POST['mdjm_client_id'] );
+    $client       = new MDJM_Client( $client_id );
+    $fields       = $client->get_profile_fields();
+    $new_password = ! empty( $_POST['mdjm_new_password'] ) ? $_POST['mdjm_new_password'] : false;
+    $core_fields  = array( 'first_name', 'last_name', 'user_email' );
+    $update_args  = array( 'ID' => $client_id );
+    $update_meta  = array ();
+    $display_name = '';
+
+    foreach( $fields as $field )    {
+        if ( ! empty( $field['required'] ) && empty( $_POST[ $field['id'] ] ) )  {
+            wp_send_json( array(
+				'error' => sprintf( __( '%s is a required field', 'mobile-dj-manager' ), esc_attr( $field['label'] ) ),
+				'field' => $field['id']
+			) );
+        }
+
+        switch( $field['id'] )    {
+            case 'user_email':
+                if ( ! is_email( $_POST[ $field['id'] ] ) ) {
+                    wp_send_json( array(
+                        'error' => sprintf( __( '%s is not a valid email address', 'mobile-dj-manager' ), esc_attr( $_POST[ $field['id'] ] ) ),
+                        'field' => $field['id']
+                    ) );
+                }
+        }
+
+        switch( $field['type'] )    {
+            case 'text':
+            case 'dropdown':
+            default:
+                $value = sanitize_text_field( $_POST[ $field['id'] ] );
+                if ( 'first_name' == $field['id'] || 'last_name' == $field['id'] )  {
+                    $value = ucfirst( trim( $value ) );
+
+                    if ( 'first_name' == $field['id'] ) {
+                        $display_name = ! empty( $display_name ) ? $value . ' ' . $display_name : $value;
+                    }
+
+                    if ( 'last_name' == $field['id'] ) {
+                        $display_name = ! empty( $display_name ) ? $display_name . ' ' . $value : $value;
+                    }
+                }
+                break;
+
+            case 'checkbox':
+                $value = ! empty( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : 0;
+                break;
+        }
+
+        if ( in_array( $field['id'], $core_fields ) )   {
+            $update_args[ $field['id'] ] = $value;
+        } else  {
+            $update_meta[ $field['id'] ] = $value;
+        }
+
+    }
+
+    if ( $new_password )    {
+        if ( empty( $_POST['mdjm_confirm_password'] ) || $_POST['mdjm_confirm_password'] != $new_password ) {
+            wp_send_json( array(
+				'error' => __( 'Passwords do not match', 'mobile-dj-manager' ),
+				'field' => 'mdjm_confirm_password'
+			) );
+        }
+
+        $update_args['user_pass'] = $new_password;
+        $new_password = true;
+    }
+
+    foreach( $update_meta as $meta_key => $meta_value )    {
+        update_user_meta( $client->ID, $meta_key, $meta_value );
+    }
+
+    $user_id = wp_update_user( $update_args );
+
+    if ( is_wp_error( $user_id ) )  {
+        wp_send_json( array(
+            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'field' => 'mdjm_nonce'
+        ) );
+    }
+
+    if ( $new_password )    {
+        wp_clear_auth_cookie();
+        wp_logout();
+    }
+    wp_send_json( array( 'password' => $new_password ) );
+
+} // mdjm_validate_client_profile_form_ajax
+add_action( 'wp_ajax_mdjm_validate_client_profile', 'mdjm_validate_client_profile_form_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_validate_client_profile', 'mdjm_validate_client_profile_form_ajax' );
+
+/**
+ * Process playlist submission.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_submit_playlist_ajax()	{
+
+    if ( ! check_ajax_referer( 'add_playlist_entry', 'mdjm_nonce', false ) ) {
+        wp_send_json( array(
+            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'field' => 'mdjm_nonce'
+        ) );
+    }
+
+	$required_fields = array(
+		'mdjm_song' => __( 'Song', 'mobile-dj-manager' )
+	);
+
+	$required_fields = apply_filters( 'mdjm_playlist_required_fields', $required_fields );
+
+	foreach ( $required_fields as $required_field => $field_name )	{
+		if ( empty( $_POST[ $required_field ] ) )	{
+			wp_send_json( array(
+				'error' => sprintf( __( '%s is a required field', 'mobile-dj-manager' ), esc_attr( $field_name ) ),
+				'field' => $required_field
+			) );
+		}
+	}
+
+    $event    = absint( $_POST['mdjm_playlist_event'] );
+	$song     = sanitize_text_field( $_POST['mdjm_song'] );
+	$artist   = isset( $_POST['mdjm_artist'] )   ? sanitize_text_field( $_POST['mdjm_artist'] )    : '';
+    $category = isset( $_POST['mdjm_category'] ) ? absint( $_POST['mdjm_category'] )               : NULL;
+    $notes    = isset( $_POST['mdjm_notes'] )    ? sanitize_textarea_field( $_POST['mdjm_notes'] ) : NULL;
+
+	$playlist_data = array(
+        'event_id' => $event,
+		'song'     => $song,
+		'artist'   => $artist,
+        'category' => $category,
+		'added_by' => get_current_user_id(),
+        'notes'    => $notes
+	);
+
+	$entry_id = mdjm_store_playlist_entry( $playlist_data );
+
+	if ( $entry_id )	{
+		$category   = get_term( $category, 'playlist-category' );
+		$entry_data = mdjm_get_playlist_entry_data( $entry_id );
+
+		ob_start(); ?>
+
+		<div class="playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $entry_data['artist'] ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $entry_data['song'] ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry"><?php echo esc_attr( $category->name ); ?></span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry">
+                    <?php if ( 'Guest' == $category->name ) : ?>
+                        <?php echo esc_attr( $entry_data['added_by'] ); ?>
+                    <?php elseif ( ! empty( $entry_data['djnotes'] ) ) : ?>
+                        <?php echo esc_attr( $entry_data['djnotes'] ); ?>
+                    <?php else : ?>
+                        <?php echo '&ndash;'; ?>
+                    <?php endif; ?>
+                </span>
+            </div>
+            <div class="playlist-entry-column">
+                <span class="playlist-entry">
+                    <a class="mdjm-delete playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php _e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                </span>
+            </div>
+        </div>
+
+		<?php $row_data = ob_get_clean();
+
+		$mdjm_event     = new MDJM_Event( $event );
+		$playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID );
+		$total_entries  = mdjm_count_playlist_entries( $mdjm_event->ID );
+		$songs          = sprintf( '%d %s', $total_entries, _n( 'song', 'songs', $total_entries, 'mobile-dj-manager' ) );
+		$length         = mdjm_playlist_duration( $mdjm_event->ID, $total_entries );
+
+		if ( ! $mdjm_event->playlist_is_open() )	{
+			$closed = true;
+		} elseif ( $playlist_limit != 0 && $total_entries >= $playlist_limit )	{
+			$closed = true;
+		} else	{
+			$closed = false;
+		}
+
+		wp_send_json_success( array(
+			'row_data' => $row_data,
+			'closed' => $closed,
+			'songs'  => $songs,
+			'length' => $length
+		) );
+	}
+
+	wp_send_json_error();
+} // mdjm_submit_playlist_ajax
+add_action( 'wp_ajax_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' );
+
+/**
+ * Remove playlist entry.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_remove_playlist_entry_ajax()	{
+	$event_id = absint( $_POST['event_id'] );
+	$song_id  = absint( $_POST['song_id'] );
+
+	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
+		$total  = mdjm_count_playlist_entries( $event_id );
+		$songs  = sprintf( '%d %s', $total, _n( 'song', 'songs', $total, 'mobile-dj-manager' ) );
+		$length = mdjm_playlist_duration( $event_id, $total );
+		wp_send_json_success( array(
+			'count'  => $total,
+			'songs'  => $songs,
+			'length' => $length
+		) );
+	}
+
+	wp_send_json_error();
+} // mdjm_remove_playlist_entry_ajax
+add_action( 'wp_ajax_mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_ajax' );
+
+/**
  * Process guest playlist submission.
  *
  * @since	1.5
  * @return	void
  */
 function mdjm_submit_guest_playlist_ajax()	{
+
+    if ( ! check_ajax_referer( 'add_guest_playlist_entry', 'mdjm_nonce', false ) ) {
+        wp_send_json( array(
+            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'field' => 'mdjm_nonce'
+        ) );
+    }
 
 	$required_fields = array(
 		'mdjm_guest_name' => __( 'Name', 'mobile-dj-manager' ),
