@@ -55,7 +55,7 @@ $view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
 	<div id="mdjm_playlist_form_wrap" class="mdjm_clearfix">
         <?php do_action( 'mdjm_before_playlist_form' ); ?>
 
-		<p class="head-nav"><a href="{event_url}"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+		<p class="head-nav"><a href="{event_url}"><?php printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
         
         <p><?php echo esc_attr( $intro_text ); ?></p>
 		<p><?php echo esc_attr( $guest_text ); ?></p>
@@ -77,7 +77,7 @@ $view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
                         <legend><?php echo esc_attr( $form_title ); ?></legend>
 
                         <?php if ( $total_entries > 0 ) : ?>
-                            <p class="view_current_playlist"><a href="#client-playlist-entries"><?php echo $view_playlist; ?></a></p>
+                            <p class="view_current_playlist"><a class="mdjm-scroller" href="#client-playlist-entries"><?php echo $view_playlist; ?></a></p>
                         <?php endif; ?>
 
                         <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>

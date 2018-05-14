@@ -17,6 +17,16 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+    /* = When a link with class .mdjm-scroller is clicked, we scroll
+	====================================================================================== */
+    $(document).on('click', '.mdjm-scroller', function(e) {
+        e.preventDefault();
+        var goto = $(this).attr('href');
+        $('html, body').animate({
+            scrollTop: $(goto).offset().top
+        }, 500);
+    });
+
 	/*=Payments Form
 	---------------------------------------------------- */
 	// Load the fields for the selected payment method
