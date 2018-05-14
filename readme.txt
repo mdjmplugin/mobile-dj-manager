@@ -99,6 +99,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Client playlist is powered by AJAX
 **New**: Added Twitter and Facebook share links to the client playlist page
 **New**: Guest playlist form is now powered by AJAX and displays all entries added by the guest during the current session
+**New**: Guests can now remove songs they have entered during their current session
 **New**: Added client playlist notification task to notify clients of guest submissions
 **New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page
@@ -114,6 +115,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
 **Tweak**: Removed a bunch of deprecated files
+**Fix**: Balance reminder task may not send reminder until day of event
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to

@@ -337,15 +337,22 @@ function mdjm_submit_guest_playlist_ajax()	{
 		'mdjm_playlist_event' => $event
 	);
 
-	if ( mdjm_store_guest_playlist_entry( $playlist_data ) )	{
+    $entry_id = mdjm_store_guest_playlist_entry( $playlist_data );
+
+	if ( $entry_id )	{
 		ob_start(); ?>
-		<div class="guest-playlist-entry-row">
+		<div class="guest-playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
 			<div class="guest-playlist-entry-column">
 				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $artist ) ); ?></span>
 			</div>
 			<div class="guest-playlist-entry-column">
 				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $song ) ); ?></span>
 			</div>
+			<div class="guest-playlist-entry-column">
+                <span class="playlist-entry">
+                    <a class="mdjm-delete guest-playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php _e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                </span>
+            </div>
 		</div>
 		<?php
 		$entry = ob_get_clean();
@@ -363,6 +370,25 @@ function mdjm_submit_guest_playlist_ajax()	{
 } // mdjm_submit_guest_playlist_ajax
 add_action( 'wp_ajax_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
 add_action( 'wp_ajax_nopriv_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
+
+/**
+ * Remove guest playlist entry.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_remove_guest_playlist_entry_ajax()	{
+	$event_id = absint( $_POST['event_id'] );
+	$song_id  = absint( $_POST['song_id'] );
+
+	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
+		wp_send_json_success();
+	}
+
+	wp_send_json_error();
+} // mdjm_remove_guest_playlist_entry_ajax
+add_action( 'wp_ajax_mdjm_remove_guest_playlist_entry', 'mdjm_remove_guest_playlist_entry_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_remove_guest_playlist_entry', 'mdjm_remove_guest_playlist_entry_ajax' );
 
 /**
  * Save the client fields order during drag and drop.
