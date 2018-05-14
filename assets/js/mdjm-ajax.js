@@ -146,12 +146,8 @@ jQuery(document).ready(function ($) {
 
 						if ( 0 !== response.data.total && $('.view_current_playlist').hasClass('mdjm-hidden') ) {
 							$('.view_current_playlist').removeClass('mdjm-hidden');
-						} else if ( 0 === response.data.total && ! $('.view_current_playlist').hasClass('mdjm-hidden') ) {
-							$('.view_current_playlist').addClass('mdjm-hidden');
 						}
-
 					}
-
 				}
 
 				$('#playlist_entry_submit').prop('disabled', false);
@@ -200,6 +196,10 @@ jQuery(document).ready(function ($) {
 						$('.playlist-length').text(response.data.length);
 					} else {
 						$('#playlist-entries').addClass('mdjm-hidden');
+
+						if ( ! $('.view_current_playlist').hasClass('mdjm-hidden') ) {
+							$('.view_current_playlist').addClass('mdjm-hidden');
+						}
 					}
 
 				}
