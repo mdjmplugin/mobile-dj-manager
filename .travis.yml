@@ -29,8 +29,3 @@ before_script:
 script:
   - cd wp-tests/spec && bundle exec rspec test.rb
   
-  branches:
-  only:
-    - master
-    - /^release\/.*$/
-  
