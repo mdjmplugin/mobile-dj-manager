@@ -1,4 +1,4 @@
-re/**
+plre/**
  * MDJM Event Management Styles
  *
  * @package     MDJM
@@ -686,6 +686,13 @@ span.guest-playlist-entry-heading	{
 .mdjm_playlist_removing {
 	background-color: #BD8889;
     opacity: 0.7;
+}
+
+p.view_current_playlist {
+    font-size: 80%;
+    padding: 0px;
+    margin: 0px;
+    text-align: right;
 }
 /* =Login Form
 -------------------------------------------------------------- */

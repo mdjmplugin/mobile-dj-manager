@@ -46,6 +46,7 @@ $limit_reached        = sprintf( __( 'Your playlist has now reached the maximum 
 $playlist_closed      = sprintf( __( 'The playlist system is now closed to allow %s to prepare for your %s. No further songs can be added at this time.', 'mobile-dj-manager' ), '{employee_firstname}', mdjm_get_label_singular( true ) );
 $delete_entry         = __( 'Remove', 'mobile-dj-manager' );
 $total_entries        = mdjm_count_playlist_entries( $mdjm_event->ID );
+$view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
 ?>
 
 <div id="mdjm_playlist_wrap">
@@ -74,6 +75,10 @@ $total_entries        = mdjm_count_playlist_entries( $mdjm_event->ID );
 
                     <fieldset id="mdjm_playlist_form_fields">
                         <legend><?php echo esc_attr( $form_title ); ?></legend>
+
+                        <?php if ( $total_entries > 0 ) : ?>
+                            <p class="view_current_playlist"><a href="#client-playlist-entries"><?php echo $view_playlist; ?></a></p>
+                        <?php endif; ?>
 
                         <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>
 
@@ -150,6 +155,7 @@ $total_entries        = mdjm_count_playlist_entries( $mdjm_event->ID );
 
     <div id="playlist-entries"<?php echo $entries_class; ?>>
 
+        <a id="client-playlist-entries"></a>
 		<h5><?php echo $your_playlist; ?></h5>
 
         <p><?php printf(
