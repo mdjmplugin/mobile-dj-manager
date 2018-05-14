@@ -138,11 +138,18 @@ jQuery(document).ready(function ($) {
 
 					$('#playlist-entries').append(response.data.row_data);
 
-					if( response.data.closed )	{
+					if ( response.data.closed )	{
 						window.location.href = mdjm_vars.playlist_page;
 					} else {
 						$('.song-count').text(response.data.songs);
 						$('.playlist-length').text(response.data.length);
+
+						if ( 0 !== response.data.total && $('.view_current_playlist').hasClass('mdjm-hidden') ) {
+							$('.view_current_playlist').removeClass('mdjm-hidden');
+						} else if ( 0 === response.data.total && ! $('.view_current_playlist').hasClass('mdjm-hidden') ) {
+							$('.view_current_playlist').addClass('mdjm-hidden');
+						}
+
 					}
 
 				}

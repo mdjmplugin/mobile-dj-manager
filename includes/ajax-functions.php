@@ -258,7 +258,8 @@ function mdjm_submit_playlist_ajax()	{
 			'row_data' => $row_data,
 			'closed'   => $closed,
 			'songs'    => $songs,
-			'length'   => $length
+			'length'   => $length,
+			'total'    => $total_entries
 		) );
 	}
 

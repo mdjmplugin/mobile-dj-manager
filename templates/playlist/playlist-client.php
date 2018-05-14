@@ -47,6 +47,7 @@ $playlist_closed      = sprintf( __( 'The playlist system is now closed to allow
 $delete_entry         = __( 'Remove', 'mobile-dj-manager' );
 $total_entries        = mdjm_count_playlist_entries( $mdjm_event->ID );
 $view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
+$view_playlist_class  = ' mdjm-hidden';
 ?>
 
 <div id="mdjm_playlist_wrap">
@@ -77,8 +78,11 @@ $view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
                         <legend><?php echo esc_attr( $form_title ); ?></legend>
 
                         <?php if ( $total_entries > 0 ) : ?>
-                            <p class="view_current_playlist"><a class="mdjm-scroller" href="#client-playlist-entries"><?php echo $view_playlist; ?></a></p>
+                        	<?php $view_playlist_class = ''; ?>
                         <?php endif; ?>
+                        <p class="view_current_playlist<?php echo $view_playlist_class; ?>">
+                        	<a class="mdjm-scroller" href="#client-playlist-entries"><?php echo $view_playlist; ?></a>
+                        </p>
 
                         <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>
 
