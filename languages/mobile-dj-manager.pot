@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-10 17:50:49+00:00\n"
+"POT-Creation-Date: 2018-05-14 12:26:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -338,12 +338,12 @@ msgid "Associated %s"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:112
-#: includes/ajax-functions.php:1131
+#: includes/ajax-functions.php:1267
 msgid "from"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:120
-#: includes/ajax-functions.php:1104
+#: includes/ajax-functions.php:1240
 msgid "Select an Event"
 msgstr ""
 
@@ -810,7 +810,7 @@ msgstr ""
 #: includes/admin/equipment/metaboxes.php:254
 #: includes/admin/equipment/metaboxes.php:489
 #: includes/admin/equipment/metaboxes.php:736
-#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:243
+#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:247
 msgid "Select Months"
 msgstr ""
 
@@ -872,8 +872,8 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:259
 #: includes/admin/events/class-mdjm-playlist-table.php:439
 #: includes/admin/events/events.php:254
-#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:177
-#: templates/playlist/playlist-client.php:57
+#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:176
+#: includes/ajax-functions.php:313 templates/playlist/playlist-client.php:37
 #: templates/playlist/playlist-guest.php:50
 msgid "Song"
 msgstr ""
@@ -881,7 +881,7 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:260
 #: includes/admin/events/class-mdjm-playlist-table.php:447
 #: includes/admin/events/playlist-page.php:155
-#: templates/playlist/playlist-client.php:62
+#: templates/playlist/playlist-client.php:35
 #: templates/playlist/playlist-guest.php:48
 msgid "Artist"
 msgstr ""
@@ -891,13 +891,14 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:413
 #: includes/admin/events/class-mdjm-playlist-table.php:455
 #: includes/admin/events/playlist-page.php:156
-#: templates/playlist/playlist-client.php:67
+#: templates/playlist/playlist-client.php:39
 msgid "Category"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:262
 #: includes/admin/events/class-mdjm-playlist-table.php:472
 #: includes/admin/events/playlist-page.php:157
+#: templates/playlist/playlist-client.php:175
 msgid "Notes"
 msgstr ""
 
@@ -959,13 +960,11 @@ msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:398
 #: includes/admin/events/class-mdjm-playlist-table.php:411
-#: templates/playlist/playlist-client.php:63
 msgid "Artist Name"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:399
 #: includes/admin/events/class-mdjm-playlist-table.php:412
-#: templates/playlist/playlist-client.php:58
 msgid "Song Name"
 msgstr ""
 
@@ -989,7 +988,7 @@ msgid "Add Entry to Playlist"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:480
-#: templates/playlist/playlist-client.php:78
+#: includes/scripts.php:61 templates/playlist/playlist-client.php:43
 msgid "Add to Playlist"
 msgstr ""
 
@@ -1273,7 +1272,7 @@ msgstr ""
 #: includes/admin/tasks/class-mdjm-tasks-table.php:246
 #: includes/admin/users/class-mdjm-client-manager.php:149
 #: includes/admin/users/class-mdjm-employee-manager.php:69
-#: includes/ajax-functions.php:176 templates/playlist/playlist-guest.php:46
+#: includes/ajax-functions.php:312 templates/playlist/playlist-guest.php:46
 msgid "Name"
 msgstr ""
 
@@ -1390,19 +1389,19 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:29 includes/scripts.php:252
+#: includes/admin/events/metaboxes.php:29 includes/scripts.php:256
 msgid "Show client details"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:32 includes/scripts.php:250
+#: includes/admin/events/metaboxes.php:32 includes/scripts.php:254
 msgid "Show client form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:51 includes/scripts.php:254
+#: includes/admin/events/metaboxes.php:51 includes/scripts.php:258
 msgid "Show %s options"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:56 includes/scripts.php:256
+#: includes/admin/events/metaboxes.php:56 includes/scripts.php:260
 msgid "Show %s workers"
 msgstr ""
 
@@ -1410,7 +1409,7 @@ msgstr ""
 msgid "Add %s type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:65 includes/scripts.php:258
+#: includes/admin/events/metaboxes.php:65 includes/scripts.php:262
 msgid "Show venue"
 msgstr ""
 
@@ -1451,7 +1450,7 @@ msgstr ""
 
 #: includes/admin/events/metaboxes.php:433
 #: templates/contract/contract-signed.php:25 templates/contract/contract.php:25
-#: templates/playlist/playlist-client.php:27 templates/quote/quote.php:26
+#: templates/playlist/playlist-client.php:57 templates/quote/quote.php:26
 msgid "Back to %s"
 msgstr ""
 
@@ -1704,8 +1703,8 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:925
-#: includes/ajax-functions.php:1173
+#: includes/admin/events/metaboxes.php:1495 includes/ajax-functions.php:1061
+#: includes/ajax-functions.php:1309
 msgid "Select Add-ons"
 msgstr ""
 
@@ -1855,11 +1854,11 @@ msgstr ""
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:573
+#: includes/admin/events/metaboxes.php:2299 includes/ajax-functions.php:709
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:573
+#: includes/admin/events/metaboxes.php:2300 includes/ajax-functions.php:709
 msgid "Outgoing"
 msgstr ""
 
@@ -2842,8 +2841,7 @@ msgid "Charges from payment gateways are assigned to this term"
 msgstr ""
 
 #: includes/admin/procedures/update_to_1.3.php:463
-#: includes/playlist/playlist-functions.php:120
-#: includes/playlist/playlist-functions.php:197
+#: includes/playlist/playlist-functions.php:264
 msgid "Event ID: %s %s %s"
 msgstr ""
 
@@ -5127,7 +5125,7 @@ msgid "<a class=\"page-title-action\" href=\"%s\">Edit %s</a>"
 msgstr ""
 
 #: includes/admin/transactions/metaboxes.php:277
-#: includes/ajax-functions.php:720
+#: includes/ajax-functions.php:856
 msgid "Select Transaction Type"
 msgstr ""
 
@@ -5356,7 +5354,7 @@ msgid "Add Role"
 msgstr ""
 
 #: includes/admin/users/class-mdjm-employee-manager.php:538
-#: includes/shortcodes.php:461 includes/widgets.php:214
+#: includes/shortcodes.php:456 includes/widgets.php:214
 msgid "Please wait..."
 msgstr ""
 
@@ -5952,11 +5950,12 @@ msgid "No valid changelog was found."
 msgstr ""
 
 #: includes/ajax-functions.php:62 includes/ajax-functions.php:145
-#: includes/ajax-functions.php:170
+#: includes/ajax-functions.php:170 includes/ajax-functions.php:306
 msgid "An error occured"
 msgstr ""
 
-#: includes/ajax-functions.php:79 includes/ajax-functions.php:185
+#: includes/ajax-functions.php:79 includes/ajax-functions.php:184
+#: includes/ajax-functions.php:321
 msgid "%s is a required field"
 msgstr ""
 
@@ -5968,78 +5967,89 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: includes/ajax-functions.php:288
+#: includes/ajax-functions.php:236 templates/playlist/playlist-client.php:47
+msgid "Remove"
+msgstr ""
+
+#: includes/ajax-functions.php:246 includes/ajax-functions.php:282
+#: templates/playlist/playlist-client.php:158
+msgid "song"
+msgid_plural "songs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/ajax-functions.php:424
 msgid "Email address is invalid"
 msgstr ""
 
-#: includes/ajax-functions.php:290
+#: includes/ajax-functions.php:426
 msgid "Email address is already in use"
 msgstr ""
 
-#: includes/ajax-functions.php:424
+#: includes/ajax-functions.php:560
 msgid "  - Enter Manually - "
 msgstr ""
 
-#: includes/ajax-functions.php:425
+#: includes/ajax-functions.php:561
 msgid "  - Use Client Address - "
 msgstr ""
 
-#: includes/ajax-functions.php:440
+#: includes/ajax-functions.php:576
 msgid "Unable to add venue"
 msgstr ""
 
-#: includes/ajax-functions.php:572
+#: includes/ajax-functions.php:708
 msgid "%1$s payment of %2$s received for %3$s %4$s."
 msgstr ""
 
-#: includes/ajax-functions.php:591 includes/events/event-functions.php:1297
+#: includes/ajax-functions.php:727 includes/events/event-functions.php:1297
 #: includes/events/event-functions.php:1377 includes/payments/payments.php:547
 msgid "Reason for payment"
 msgstr ""
 
-#: includes/ajax-functions.php:593 includes/events/event-functions.php:1298
+#: includes/ajax-functions.php:729 includes/events/event-functions.php:1298
 #: includes/events/event-functions.php:1378 includes/payments/payments.php:569
 msgid "Payment amount"
 msgstr ""
 
-#: includes/ajax-functions.php:595 includes/events/event-functions.php:1299
+#: includes/ajax-functions.php:731 includes/events/event-functions.php:1299
 #: includes/events/event-functions.php:1379 includes/payments/payments.php:591
 msgid "Date of payment"
 msgstr ""
 
-#: includes/ajax-functions.php:642
+#: includes/ajax-functions.php:778
 msgid "Unable to add transaction"
 msgstr ""
 
-#: includes/ajax-functions.php:666
+#: includes/ajax-functions.php:802
 msgid "Enter a name for the new Event Type"
 msgstr ""
 
-#: includes/ajax-functions.php:936
+#: includes/ajax-functions.php:1072
 msgid "No packages or addons available"
 msgstr ""
 
-#: includes/ajax-functions.php:942 includes/ajax-functions.php:945
+#: includes/ajax-functions.php:1078 includes/ajax-functions.php:1081
 #: includes/class-mdjm-html-elements.php:647
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/ajax-functions.php:948
+#: includes/ajax-functions.php:1084
 msgid "No Addons Available"
 msgstr ""
 
-#: includes/ajax-functions.php:1005
+#: includes/ajax-functions.php:1141
 msgid "Unable to add employee"
 msgstr ""
 
-#: includes/ajax-functions.php:1078
+#: includes/ajax-functions.php:1214
 msgid "Unable to retrieve template content"
 msgstr ""
 
-#: includes/ajax-functions.php:1184 includes/api/class-mdjm-api.php:1347
+#: includes/ajax-functions.php:1320 includes/api/class-mdjm-api.php:1347
 #: includes/api/class-mdjm-api.php:1348
 #: includes/equipment/equipment-functions.php:1613
-#: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:576
+#: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:571
 msgid "No addons available"
 msgstr ""
 
@@ -8047,23 +8057,35 @@ msgid ""
 "payments can be processed."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:670
+#: includes/playlist/playlist-functions.php:58
+msgid "Looking forward to my %s? Add your song requests at"
+msgstr ""
+
+#: includes/playlist/playlist-functions.php:61
+msgid "Tweet"
+msgstr ""
+
+#: includes/playlist/playlist-functions.php:192
+msgid "%s ID: %s %s %s"
+msgstr ""
+
+#: includes/playlist/playlist-functions.php:731
 msgid "There are no playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:681
+#: includes/playlist/playlist-functions.php:742
 msgid "%d playlist entries to upload"
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:699
+#: includes/playlist/playlist-functions.php:760
 msgid "%s by %s successfully uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:705
+#: includes/playlist/playlist-functions.php:766
 msgid "%s by %s could not be uploaded."
 msgstr ""
 
-#: includes/playlist/playlist-functions.php:714
+#: includes/playlist/playlist-functions.php:775
 msgid "%d out of %d entries successfully uploaded."
 msgstr ""
 
@@ -8355,7 +8377,7 @@ msgstr ""
 msgid "Email Templates for the MDJM Event Management plugin"
 msgstr ""
 
-#: includes/post-types.php:352
+#: includes/post-types.php:352 templates/playlist/playlist-client.php:34
 msgid "Add Playlist Entry"
 msgstr ""
 
@@ -8807,115 +8829,119 @@ msgstr ""
 msgid "No playlist categories found"
 msgstr ""
 
-#: includes/scripts.php:47 templates/playlist/playlist-guest.php:35
+#: includes/scripts.php:48 templates/playlist/playlist-guest.php:35
 msgid "The playlist for this %s is now closed and not accepting suggestions"
 msgstr ""
 
-#: includes/scripts.php:49
+#: includes/scripts.php:50
 msgid "Enter the name printed on your card"
 msgstr ""
 
-#: includes/scripts.php:50 templates/payments/payments-items.php:40
+#: includes/scripts.php:51 templates/payments/payments-items.php:40
 msgid "Select Payment Amount"
 msgstr ""
 
-#: includes/scripts.php:51 includes/scripts.php:58 includes/scripts.php:59
+#: includes/scripts.php:52 includes/scripts.php:62 includes/scripts.php:63
 msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:53
+#: includes/scripts.php:54
+msgid "Your entry was added successfully"
+msgstr ""
+
+#: includes/scripts.php:56
 msgid "Your details have been updated"
 msgstr ""
 
-#: includes/scripts.php:54 widgets/class-mdjm-widget.php:51
+#: includes/scripts.php:57 widgets/class-mdjm-widget.php:51
 msgid "Please select a date"
 msgstr ""
 
-#: includes/scripts.php:56 templates/profile/profile-client.php:25
+#: includes/scripts.php:59 templates/profile/profile-client.php:25
 msgid "Update Details"
 msgstr ""
 
-#: includes/scripts.php:57 templates/playlist/playlist-guest.php:52
+#: includes/scripts.php:60 templates/playlist/playlist-guest.php:52
 msgid "Suggest Song"
 msgstr ""
 
-#: includes/scripts.php:234
+#: includes/scripts.php:238
 msgid "Enter an email address for the client"
 msgstr ""
 
-#: includes/scripts.php:235
+#: includes/scripts.php:239
 msgid "Enter a first name for the client"
 msgstr ""
 
-#: includes/scripts.php:236
+#: includes/scripts.php:240
 msgid "Enter a transaction value"
 msgstr ""
 
-#: includes/scripts.php:237
+#: includes/scripts.php:241
 msgid "Enter a transaction date"
 msgstr ""
 
-#: includes/scripts.php:238
+#: includes/scripts.php:242
 msgid "What is the transaction for?"
 msgstr ""
 
-#: includes/scripts.php:239
+#: includes/scripts.php:243
 msgid "Enter a transaction source"
 msgstr ""
 
-#: includes/scripts.php:240
+#: includes/scripts.php:244
 msgid "Enter a name for the venue"
 msgstr ""
 
-#: includes/scripts.php:241
+#: includes/scripts.php:245
 msgid "You must have a pricing option for at least one month"
 msgstr ""
 
-#: includes/scripts.php:242
+#: includes/scripts.php:246
 msgid "Select at least one Add-on"
 msgstr ""
 
-#: includes/scripts.php:247
+#: includes/scripts.php:251
 msgid "Are you sure you want to save this %s with a total cost of %s?"
 msgstr ""
 
-#: includes/scripts.php:248
+#: includes/scripts.php:252
 msgid "Do you want to auto set the setup time?"
 msgstr ""
 
-#: includes/scripts.php:251
+#: includes/scripts.php:255
 msgid "Hide client form"
 msgstr ""
 
-#: includes/scripts.php:253
+#: includes/scripts.php:257
 msgid "Hide client details"
 msgstr ""
 
-#: includes/scripts.php:255
+#: includes/scripts.php:259
 msgid "Hide %s options"
 msgstr ""
 
-#: includes/scripts.php:257
+#: includes/scripts.php:261
 msgid "Hide %s workers"
 msgstr ""
 
-#: includes/scripts.php:259
+#: includes/scripts.php:263
 msgid "Hide venue"
 msgstr ""
 
-#: includes/scripts.php:260
+#: includes/scripts.php:264
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:261
+#: includes/scripts.php:265
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:262
+#: includes/scripts.php:266
 msgid "Type to search"
 msgstr ""
 
-#: includes/scripts.php:263
+#: includes/scripts.php:267
 msgid "Type to search all options"
 msgstr ""
 
@@ -8943,61 +8969,61 @@ msgid ""
 "event"
 msgstr ""
 
-#: includes/shortcodes.php:374
+#: includes/shortcodes.php:369
 msgid "Book this %s"
 msgstr ""
 
-#: includes/shortcodes.php:456
+#: includes/shortcodes.php:451
 msgid "Select Date"
 msgstr ""
 
-#: includes/shortcodes.php:459 includes/widgets.php:256
+#: includes/shortcodes.php:454 includes/widgets.php:256
 #: widgets/class-mdjm-widget.php:168
 msgid "Check Availability"
 msgstr ""
 
-#: includes/shortcodes.php:488 includes/shortcodes.php:499
+#: includes/shortcodes.php:483 includes/shortcodes.php:494
 #: includes/widgets.php:38 widgets/class-mdjm-widget.php:25
 msgid "MDJM Availability Checker"
 msgstr ""
 
-#: includes/task-functions.php:120
+#: includes/tasks/task-functions.php:120
 msgid "Hourly"
 msgstr ""
 
-#: includes/task-functions.php:121
+#: includes/tasks/task-functions.php:121
 msgid "Daily"
 msgstr ""
 
-#: includes/task-functions.php:122
+#: includes/tasks/task-functions.php:122
 msgid "Twice Daily"
 msgstr ""
 
-#: includes/task-functions.php:123
+#: includes/tasks/task-functions.php:123
 msgid "Weekly"
 msgstr ""
 
-#: includes/task-functions.php:124
+#: includes/tasks/task-functions.php:124
 msgid "Monthly"
 msgstr ""
 
-#: includes/task-functions.php:125
+#: includes/tasks/task-functions.php:125
 msgid "Yearly"
 msgstr ""
 
-#: includes/task-functions.php:143
+#: includes/tasks/task-functions.php:143
 msgid "After the %s is Created"
 msgstr ""
 
-#: includes/task-functions.php:144
+#: includes/tasks/task-functions.php:144
 msgid "After the %s is Confirmed"
 msgstr ""
 
-#: includes/task-functions.php:145
+#: includes/tasks/task-functions.php:145
 msgid "Before the %s"
 msgstr ""
 
-#: includes/task-functions.php:146
+#: includes/tasks/task-functions.php:146
 msgid "After the %s"
 msgstr ""
 
@@ -9385,62 +9411,64 @@ msgstr ""
 msgid "To pay a custom amount, select %s and enter the value into the text field."
 msgstr ""
 
-#: templates/playlist/playlist-client.php:29
+#: templates/playlist/playlist-client.php:18
 msgid ""
 "The %s playlist management system enables you to give %s (your %s) an idea "
 "of the types of songs you would like played during your %s on %s."
 msgstr ""
 
-#: templates/playlist/playlist-client.php:36
+#: templates/playlist/playlist-client.php:26
 msgid ""
-"Don't forget that you can invite your guests to add their suggestions to "
-"your playlist too. They won't be able to see any existing entries, and you "
-"will be able to filter through their suggestions if you do not feel they "
-"are suitable. Just tell them to visit <a href='%s'>%s</a> to get started."
+"You can invite your guests to add their suggestions to your playlist too. "
+"They won't be able to see any existing entries and you will be able to "
+"filter through their suggestions and remove any you do not feel are "
+"suitable."
 msgstr ""
 
-#: templates/playlist/playlist-client.php:72
-#: templates/playlist/playlist-client.php:73
+#: templates/playlist/playlist-client.php:36
+#: templates/playlist/playlist-guest.php:49
+msgid "The name of the artist who sang the song"
+msgstr ""
+
+#: templates/playlist/playlist-client.php:38
+msgid "The name of the song you are adding"
+msgstr ""
+
+#: templates/playlist/playlist-client.php:40
+msgid "Select the category that best suits your song choice"
+msgstr ""
+
+#: templates/playlist/playlist-client.php:41
 msgid "Notes for your %s"
 msgstr ""
 
-#: templates/playlist/playlist-client.php:85
+#: templates/playlist/playlist-client.php:42
 msgid ""
-"You have used %d %s our of your allowance of %d in the playlist for your "
-"%s.  Existing playlist entries are displayed below."
+"Is this song important to you? Want it played at a specific time? Let us "
+"know here!"
 msgstr ""
 
-#: templates/playlist/playlist-client.php:87
-#: templates/playlist/playlist-client.php:119
-msgid "track"
-msgid_plural "tracks"
-msgstr[0] ""
-msgstr[1] ""
-
-#: templates/playlist/playlist-client.php:101
+#: templates/playlist/playlist-client.php:45
 msgid ""
-"The playlist for this %s is currently closed to allow %s to prepare for "
-"your event. Existing playlist entries are displayed below."
+"Your playlist has now reached the maximum of %d allowed songs. To add a new "
+"entry, an existing one must first be removed."
 msgstr ""
 
-#: templates/playlist/playlist-client.php:117
+#: templates/playlist/playlist-client.php:46
 msgid ""
-"Your playlist currently consists of %d %s and is approximately %s long. "
-"Your %s is %s long."
+"The playlist system is now closed to allow %s to prepare for your %s. No "
+"further songs can be added at this time."
 msgstr ""
 
-#: templates/playlist/playlist-client.php:125
-msgid "You have used %s out of your allowance of %s tracks"
+#: templates/playlist/playlist-client.php:148
+msgid "Your Current Playlist"
 msgstr ""
 
-#: templates/playlist/playlist-client.php:135
-msgid "entry"
-msgid_plural "entries"
-msgstr[0] ""
-msgstr[1] ""
-
-#: templates/playlist/playlist-client.php:166
-msgid "Remove"
+#: templates/playlist/playlist-client.php:156
+msgid ""
+"Your playlist currently consists of <span class=\"song-count\">%d %s</span> "
+"and is approximately <span class=\"playlist-length\">%s</span> long. Your "
+"%s is scheduled for %s."
 msgstr ""
 
 #: templates/playlist/playlist-guest.php:20
@@ -9472,15 +9500,11 @@ msgstr ""
 msgid "So %s knows who added this song"
 msgstr ""
 
-#: templates/playlist/playlist-guest.php:49
-msgid "The name of the artist who sang the song"
-msgstr ""
-
 #: templates/playlist/playlist-guest.php:51
 msgid "The name of the song you are suggesting"
 msgstr ""
 
-#: templates/playlist/playlist-noevent.php:16
+#: templates/playlist/playlist-noevent.php:15
 #: templates/quote/quote-noevent.php:16
 msgid ""
 "We haven't been able to locate your %s. Please return to our <a "
