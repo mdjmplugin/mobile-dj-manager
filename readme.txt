@@ -94,6 +94,8 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Display break down of event costs on events page
 **New**: Added option to require deposit to be paid before an event is marked as confirmed
 **New**: Client profile page is now templated and AJAX based
+**New**: Client profile page has been updated to be more responsive and inline with the formatting of forms used elsewhere
+**New**: Playlist client and guest pages have been updated to be more responsive and inline with the formatting of forms used elsewhere
 **New**: Client playlist is powered by AJAX
 **New**: Added Twitter and Facebook share links to the client playlist page
 **New**: Guest playlist form is now powered by AJAX and displays all entries added by the guest during the current session
