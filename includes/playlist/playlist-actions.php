@@ -85,46 +85,6 @@ function mdjm_correct_guest_playlist_url_action()	{
 	}
 } // mdjm_correct_guest_playlist_url_action
 add_action( 'template_redirect', 'mdjm_correct_guest_playlist_url_action' );
-	
-/**
- * Remove a song.
- *
- * Remove a new song from the event playlist.
- *
- * @since	1.3
- * @param	int		$entry_id	DB entry ID.
- * @return	int		true if successfull, false if not.
- */
-function mdjm_remove_playlist_entry_action( $data )	{
-	if( ! isset( $data['id'] ) )	{
-		$message = 'playlist_not_selected';
-	}
-	
-	elseif( ! wp_verify_nonce( $data['mdjm_nonce'], 'remove_playlist_entry' ) )	{
-		$message = 'nonce_fail';
-	}
-	
-	else	{
-		if( mdjm_remove_stored_playlist_entry( $data['id'] ) )	{
-			$message = 'playlist_removed';
-		}
-		else	{
-			$message = 'playlist_not_removed';
-		}
-	}
-	
-	wp_redirect( 
-		add_query_arg( 
-			array(
-				'event_id'	  => $data['event_id'],
-				'mdjm_message'  => $message
-			),
-			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) )
-		)
-	);
-	die();
-} // mdjm_remove_playlist_entry
-add_action( 'mdjm_remove_playlist_entry', 'mdjm_remove_playlist_entry_action' );
 
 /**
  * Sets the flag to notify clients when a guest entry is added

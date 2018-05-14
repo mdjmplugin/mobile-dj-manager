@@ -256,9 +256,9 @@ function mdjm_submit_playlist_ajax()	{
 
 		wp_send_json_success( array(
 			'row_data' => $row_data,
-			'closed' => $closed,
-			'songs'  => $songs,
-			'length' => $length
+			'closed'   => $closed,
+			'songs'    => $songs,
+			'length'   => $length
 		) );
 	}
 
@@ -341,10 +341,10 @@ function mdjm_submit_guest_playlist_ajax()	{
 		ob_start(); ?>
 		<div class="guest-playlist-entry-row">
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo esc_attr( $artist ); ?></span>
+				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $artist ) ); ?></span>
 			</div>
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo esc_attr( $song ); ?></span>
+				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $song ) ); ?></span>
 			</div>
 		</div>
 		<?php
