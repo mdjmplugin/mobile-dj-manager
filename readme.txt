@@ -113,6 +113,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
+**Tweak**: Removed a bunch of deprecated files
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to
