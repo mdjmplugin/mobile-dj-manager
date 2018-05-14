@@ -1646,7 +1646,7 @@ var mdjmFormatNumber = function(value) {
 	return numeric.toLocaleString(eventCurrency, { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 };
 
-var mdjmLabelFormatter = function (label, series) {
+var mdjmLabelFormatter = function (label) {
 	return '<div style="font-size:12px; text-align:center; padding:2px">' + label + '</div>';
 };
 
