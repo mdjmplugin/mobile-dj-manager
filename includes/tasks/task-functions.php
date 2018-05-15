@@ -72,6 +72,21 @@ function mdjm_get_task( $id )	{
 } // mdjm_get_task
 
 /**
+ * Retrieve a task name
+ *
+ * @since	1.5
+ * @param	string|array     $task	A task ID, or array
+ * @return	bool             True or false
+ */
+function mdjm_get_task_name( $task )	{
+	if ( ! is_array( $task ) )	{
+		$task = mdjm_get_task( $task );
+	}
+
+	return $task['name'];
+} // mdjm_get_task_name
+
+/**
  * Retrieve a tasks status
  *
  * @since	1.4.7
@@ -230,3 +245,61 @@ function mdjm_task_run_now( $id )	{
 
 	return new MDJM_Task_Runner( $id );
 } // mdjm_task_run_now
+
+/**
+ * Retrieve single available event tasks based on the event status.
+ *
+ * Does not consider whether or not a task has been previously executed.
+ *
+ * @since   1.5
+ * @param   int     $event_id   Event post ID
+ * @return  array   Array of tasks that can be executed for the event
+ */
+function mdjm_get_tasks_for_event( $event_id )  {
+    $event           = new MDJM_Event( $event_id );
+    $tasks           = array();
+    $completed_tasks = $event->get_tasks();
+    $playlist        = mdjm_get_playlist_entries( $event_id, array( 'posts_per_page' => 1 ) );
+    $guest_args      = array(
+        'posts_per_page' => 1,
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'playlist-category',
+                'field'    => 'slug',
+                'terms'    => 'guest'
+            )
+        )
+    );
+
+    $guest_playlist = mdjm_get_playlist_entries( $event_id, $guest_args );
+
+    if ( in_array( $event->post_status, array( 'mdjm-awaitingdeposit', 'mdjm-approved', 'mdjm-contract' ) ) )  {
+        if ( 'Due' == $event->get_deposit_status() )    {
+            $tasks['request-deposit'] = mdjm_get_task_name( 'request-deposit' );
+        }
+        if ( 'Due' == $event->get_balance_status() )    {
+            $tasks['balance-reminder'] = mdjm_get_task_name( 'balance-reminder' );
+        }
+    }
+
+    if ( $playlist )    {
+        $tasks['playlist-employee-notify'] = mdjm_get_task_name( 'playlist-employee-notify' );
+    }
+
+    if ( $guest_playlist )  {
+        $tasks['playlist-notification'] = mdjm_get_task_name( 'playlist-notification' );
+    }
+
+    if ( in_array( $event->post_status, array( 'mdjm-unattended', 'mdjm-enquiry' ) ) ) {
+        $tasks['fail-enquiry']   = mdjm_get_task_name( 'fail-enquiry' );
+        $tasks['reject-enquiry'] = __( 'Reject Enquiry', 'mobile-dj-manager' );
+    }
+
+    $tasks = apply_filters( 'mdjm_tasks_for_event', $tasks, $event_id );
+
+    if ( ! empty( $tasks ) )    {
+        ksort( $tasks );
+    }
+
+    return $tasks;
+} // mdjm_get_tasks_for_event

@@ -255,10 +255,10 @@ jQuery(document).ready(function ($) {
 		init : function()	{
 			this.options();
 			this.client();
-			//this.costs();
 			this.employee();
 			this.equipment();
 			this.playlist();
+            this.tasks();
 			this.time();
 			this.travel();
 			this.type();
@@ -694,6 +694,18 @@ jQuery(document).ready(function ($) {
 		playlist : function()	{
 			$( document.body ).on( 'change', '#_mdjm_event_playlist', function() {
 				$('#mdjm-playlist-limit').toggle('fast');
+			});
+		},
+
+        tasks : function()	{
+			$( document.body ).on( 'change', '#mdjm_event_task', function() {
+                var task = $(this).val();
+
+                if ( '0' === task ) {
+                    $('#mdjm-event-task-data').addClass('mdjm-hidden');
+                } else  {
+                    $('#mdjm-event-task-data').removeClass('mdjm-hidden');
+                }
 			});
 		},
 

@@ -1106,9 +1106,18 @@ span.mdjm-travel-unit    {
 	font-style: italic;
 	float: right;
 }
+#mdjm-event-tasks .description {
+	color: #666;
+	font-style: italic;
+}
 #mdjm-event-actions #event-type-add { cursor: pointer; }
 
 #mdjm-new-event-type-row { display: none; vertical-align: top; }
+
+.mdjm-execute-event-task {
+    text-align: center;
+    margin: 0px;
+}
 
 /* System Info page styles
 -------------------------------------------------------------- */

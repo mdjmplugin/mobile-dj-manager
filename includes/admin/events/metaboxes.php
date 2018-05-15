@@ -145,6 +145,16 @@ function mdjm_add_event_meta_boxes( $post )	{
 				'permission' => ''
 			),
             array(
+				'id'         => 'mdjm-event-tasks-mb',
+				'title'      => __( 'Tasks', 'mobile-dj-manager' ),
+				'callback'   => 'mdjm_event_metabox_tasks_callback',
+				'context'    => 'side',
+				'priority'   => 'default',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => ''
+			),
+            array(
 				'id'         => 'mdjm-event-overview-mb',
 				'title'      => sprintf( __( '%s Overview', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 				'callback'   => 'mdjm_event_metabox_overview_callback',
@@ -254,6 +264,27 @@ function mdjm_event_metabox_save_callback( $post )	{
 	do_action( 'mdjm_event_options_fields_save', $post->ID );
 
 } // mdjm_event_metabox_save_callback
+
+/**
+ * Output for the Event Tasks meta box.
+ *
+ * @since	1.5
+ * @param	obj		$post	The post object (WP_Post).
+ * @return
+ */
+function mdjm_event_metabox_tasks_callback( $post )	{
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+    /*
+     * Output the items for the options metabox
+     * These items go inside the mdjm-event-actions div
+     * @since	1.5
+     * @param	int	$post_id	The Event post ID
+     */
+	do_action( 'mdjm_event_tasks_fields', $post->ID );
+
+} // mdjm_event_metabox_tasks_callback
 
 /**
  * Output for the Event Overview meta box.
@@ -461,6 +492,62 @@ function mdjm_event_metabox_options_save_row( $event_id )	{
 
 } // mdjm_event_metabox_options_save_row
 add_action( 'mdjm_event_options_fields_save', 'mdjm_event_metabox_options_save_row', 40 );
+
+/**
+ * Output the event tasks row
+ *
+ * @since	1.5
+ * @global	obj		$mdjm_event			MDJM_Event class object
+ * @global	bool	$mdjm_event_update	True if this event is being updated, false if new.
+ * @param	int		$event_id			The event ID.
+ * @return	str
+ */
+function mdjm_event_metabox_tasks_row( $event_id )	{
+
+	global $mdjm_event, $mdjm_event_update;
+
+    $tasks = mdjm_get_tasks_for_event( $event_id );
+
+    ?>
+    <div id="mdjm-event-tasks">
+        <?php if ( ! $mdjm_event_update || empty( $tasks ) ) : ?>
+            <span class="description">
+                <?php printf( __( 'No tasks are available for this %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?>
+            </span>
+        <?php else :
+
+            foreach( $tasks as $id => $name ) : ?>
+                <?php $options[ $id ] = $name; ?>
+            <?php endforeach; ?>
+
+            <?php echo MDJM()->html->select( array(
+                'options'          => $options,
+                'name'             => 'mdjm_event_task',
+                'id'               => 'mdjm-event-task',
+                'chosen'           => true,
+                'placeholder'      => __( 'Select a Task', 'mobile-dj-manager' ),
+                'show_option_none' => __( 'Select a Task', 'mobile-dj-manager' )
+            ) ); ?>
+
+            <div id="mdjm-event-task-data" class="mdjm-hidden">
+                <p>
+                    <?php _e( 'Status:', 'mobile-dj-manager' ); ?><span id="task-status"></span><br>
+                </p>
+                <p class="mdjm-execute-event-task"><?php submit_button(
+                    __( 'Run Task', 'mobile-dj-manager' ),
+                    array( 'secondary', 'mdjm-run-event-task' ),
+                    'mdjm-run-task',
+                    false
+                ); ?></p>
+            </div>
+
+        <?php endif; ?>
+    </div>
+
+    <?php
+
+} // mdjm_event_metabox_tasks_row
+add_action( 'mdjm_event_tasks_fields', 'mdjm_event_metabox_tasks_row', 10 );
 
 /**
  * Output the event employee table
