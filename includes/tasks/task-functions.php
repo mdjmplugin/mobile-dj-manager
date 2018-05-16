@@ -76,7 +76,7 @@ function mdjm_get_task( $id )	{
  *
  * @since	1.5
  * @param	string|array     $task	A task ID, or array
- * @return	bool             True or false
+ * @return	string
  */
 function mdjm_get_task_name( $task )	{
 	if ( ! is_array( $task ) )	{
@@ -85,6 +85,21 @@ function mdjm_get_task_name( $task )	{
 
 	return $task['name'];
 } // mdjm_get_task_name
+
+/**
+ * Retrieve a task description
+ *
+ * @since	1.5
+ * @param	string|array     $task	A task ID, or array
+ * @return	string
+ */
+function mdjm_get_task_description( $task )	{
+	if ( ! is_array( $task ) )	{
+		$task = mdjm_get_task( $task );
+	}
+
+	return $task['desc'];
+} // mdjm_get_task_description
 
 /**
  * Retrieve a tasks status
@@ -303,3 +318,45 @@ function mdjm_get_tasks_for_event( $event_id )  {
 
     return $tasks;
 } // mdjm_get_tasks_for_event
+
+/**
+ * Executes a single event task.
+ *
+ * @since   1.5
+ * @param   int     $event_id   The event post ID
+ * @param   string  $task_id    The slug (id) of the task to be executed
+ * @return   bool    True if the task ran successfully, otherwise false
+ */
+function mdjm_run_single_event_task( $event_id, $task_id ) {
+    $task  = mdjm_get_task( $task_id );
+
+    switch( $task_id )  {
+        case 'fail-enquiry':
+            return mdjm_fail_enquiry_single_task( $event_id );
+            break;
+    }
+} // mdjm_run_single_event_task
+
+/**
+ * Executes the fail enquiry task for a single event.
+ *
+ * @since   1.5
+ * @param   $event_id
+ * @return  bool    True if task ran successfully
+ */
+function mdjm_fail_enquiry_single_task( $event_id ) {
+    $event = new MDJM_Event( $event_id );
+
+    $fail = mdjm_update_event_status( $event->ID, 'mdjm-failed', $event->post_status );
+    if ( $fail )	{
+        mdjm_add_journal( array(
+            'user_id'         => 1,
+            'event_id'        => $event->ID,
+            'comment_content' => __( 'Enquiry marked as lost via manually executed Scheduled Task', 'mobile-dj-manager' ) . '<br /><br />' . time()
+        ) );
+
+        $event->complete_task( 'fail-enquiry' );
+    }
+
+    return $fail;
+} // mdjm_fail_enquiry_single_task

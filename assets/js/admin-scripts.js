@@ -698,15 +698,58 @@ jQuery(document).ready(function ($) {
 		},
 
         tasks : function()	{
+            // Render the run task button when an event task is selected
 			$( document.body ).on( 'change', '#mdjm_event_task', function() {
                 var task = $(this).val();
 
                 if ( '0' === task ) {
-                    $('#mdjm-event-task-data').addClass('mdjm-hidden');
+                    $('#mdjm-event-task-run').addClass('mdjm-hidden');
                 } else  {
-                    $('#mdjm-event-task-data').removeClass('mdjm-hidden');
+                    $('#mdjm-event-task-run').removeClass('mdjm-hidden');
                 }
 			});
+
+            // Execute the selected event task
+            $( document.body ).on( 'click', '#mdjm-run-task', function(e)   {
+                e.preventDefault();
+
+                $('#mdjm-event-tasks').addClass('mdjm-mute');
+
+                var task     = $('#mdjm_event_task').val(),
+                    event_id = $('#post_ID').val();
+
+                if ( 'reject-enquiry' === task )    {
+                    var client = $('#client_name').val(),
+                        params = { page:'mdjm-comms', recipient:client, template:mdjm_admin_vars.unavailable_template, event_id:event_id, 'mdjm-action':'respond_unavailable' },
+                        url    = mdjm_admin_vars.admin_url + 'admin.php?';
+
+                    window.location.href = url + $.param( params );
+                    return;
+                }
+
+                var postData = {
+                    event_id : event_id,
+                    task     : task,
+                    action   : 'mdjm_execute_event_task'
+                };
+                $.ajax({
+                    type       : 'POST',
+                    dataType   : 'json',
+                    data       : postData,
+                    url        : ajaxurl,
+                    complete : function()	{
+						$('#mdjm-event-tasks').removeClass('mdjm-mute');
+					},
+                    success: function (response) {
+                        $('#mdjm-event-task-run').addClass('mdjm-hidden');
+                        $('#mdjm_event_status').val(response.status);
+                    }
+                }).fail(function (data) {
+                    if ( window.console && window.console.log ) {
+                        console.log( data );
+                    }
+                });
+            });
 		},
 
 		time : function()	{

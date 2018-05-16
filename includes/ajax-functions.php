@@ -862,7 +862,23 @@ function mdjm_add_event_type_ajax()	{
 
 } // mdjm_add_event_type_ajax
 add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
-	
+
+/**
+ * Refresh task details on the event screen.
+ *
+ * @since   1.5
+ */
+function mdjm_execute_event_task_ajax() {
+    $task_id  = sanitize_text_field( $_POST['task'] );
+    $event_id = absint( $_POST['event_id'] );
+
+    $result = mdjm_run_single_event_task( $event_id, $task_id );
+    $status = get_post_status( $event_id );
+
+    wp_send_json( array( 'status' => $status ) );
+} // mdjm_execute_event_task_ajax
+add_action( 'wp_ajax_mdjm_execute_event_task', 'mdjm_execute_event_task_ajax' );
+
 /**
  * Add a new transaction type
  * Initiated from the Transaction Post screen
@@ -874,29 +890,26 @@ function mdjm_add_transaction_type_ajax()	{
 	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 		
 	$args = array( 
-				'taxonomy'			=> 'transaction-types',
-				'hide_empty' 		  => 0,
-				'name' 				=> 'mdjm_transaction_type',
-				'id' 				=> 'mdjm_transaction_type',
-				'orderby' 			 => 'name',
-				'hierarchical' 		=> 0,
-				'show_option_none' 	=> __( 'Select Transaction Type', 'mobile-dj-manager' ),
-				'class'			   => ' required',
-				'echo'				=> 0,
-			);
+        'taxonomy'         => 'transaction-types',
+        'hide_empty'       => 0,
+        'name'             => 'mdjm_transaction_type',
+        'id'               => 'mdjm_transaction_type',
+        'orderby'          => 'name',
+        'hierarchical'     => 0,
+        'show_option_none' => __( 'Select Transaction Type', 'mobile-dj-manager' ),
+        'class'			   => ' required',
+        'echo'             => 0
+    );
 			
 	/* -- Validate that we have a Transaction Type to add -- */
-	if( empty( $_POST['type'] ) )	{
+	if ( empty( $_POST['type'] ) )	{
 		$result['type'] = 'Error';
-		$result['msg'] = 'Please enter a name for the new Transaction Type';
-	}
-	/* -- Add the new Event Type (term) -- */
-	else	{
+		$result['msg']  = 'Please enter a name for the new Transaction Type';
+	} else	{
 		$term = wp_insert_term( $_POST['type'], 'transaction-types' );
-		if( is_array( $term ) )	{
+		if ( is_array( $term ) )	{
 			$result['type'] = 'success';
-		}
-		else	{
+		} else	{
 			$result['type'] = 'error';
 		}
 	}

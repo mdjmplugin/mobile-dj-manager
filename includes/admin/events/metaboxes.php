@@ -506,7 +506,21 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
 
 	global $mdjm_event, $mdjm_event_update;
 
-    $tasks = mdjm_get_tasks_for_event( $event_id );
+    $completed_tasks = $mdjm_event->get_tasks();
+    $tasks_history   = array();
+    $tasks           = mdjm_get_tasks_for_event( $event_id );
+
+    foreach( $completed_tasks as $task_slug => $run_time )  {
+        if ( ! array_key_exists( $task_slug, $tasks ) ) {
+            continue;
+        }
+
+        $tasks_history[] = sprintf(
+            '%s: %s',
+            mdjm_get_task_name( $task_slug ),
+            date( mdjm_get_option( 'short_date_format' ), $run_time )
+        );
+    }
 
     ?>
     <div id="mdjm-event-tasks">
@@ -529,10 +543,7 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
                 'show_option_none' => __( 'Select a Task', 'mobile-dj-manager' )
             ) ); ?>
 
-            <div id="mdjm-event-task-data" class="mdjm-hidden">
-                <p>
-                    <?php _e( 'Status:', 'mobile-dj-manager' ); ?><span id="task-status"></span><br>
-                </p>
+            <div id="mdjm-event-task-run" class="mdjm-hidden">
                 <p class="mdjm-execute-event-task"><?php submit_button(
                     __( 'Run Task', 'mobile-dj-manager' ),
                     array( 'secondary', 'mdjm-run-event-task' ),
@@ -541,6 +552,12 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
                 ); ?></p>
             </div>
 
+            <p><strong><?php _e( 'Completed Tasks', 'mobile-dj-manager' ); ?></strong></p>
+            <?php if ( ! empty( $tasks_history ) ) : ?>
+                <span class="task-history-items"><?php echo implode( '<br>', $tasks_history ); ?></span>
+            <?php else : ?>
+                <span class="description"><?php printf( __( 'None of the available tasks have been executed for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 

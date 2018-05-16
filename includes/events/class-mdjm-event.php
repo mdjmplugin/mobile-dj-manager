@@ -1275,10 +1275,6 @@ class MDJM_Event {
 
 		$this->get_tasks();
 
-		if ( array_key_exists( $task, $this->tasks ) )	{
-			return false;
-		}
-
 		$this->tasks[ $task ] = current_time( 'timestamp' );
 
 		update_post_meta( $this->ID, '_mdjm_event_tasks', $this->tasks );

@@ -223,6 +223,7 @@ function mdjm_register_admin_scripts( $hook )	{
 		apply_filters(
 			'mdjm_admin_script_vars',
 			array(
+                'admin_url'            => ! is_multisite() ? admin_url() : network_admin_url(),
                 'ajax_loader'          => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'ajaxurl'              => mdjm_get_ajax_url(),
                 'currency'             => mdjm_get_currency(),
@@ -263,8 +264,9 @@ function mdjm_register_admin_scripts( $hook )	{
                 'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' ),
                 'one_option'           => __( 'Choose an option', 'mobile-dj-manager' ),
         		'one_or_more_option'   => __( 'Choose one or more options', 'mobile-dj-manager' ),
+                'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' ),
                 'type_to_search'       => __( 'Type to search', 'mobile-dj-manager' ),
-                'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' )
+                'unavailable_template' => mdjm_get_option( 'unavailable' )
 			)
 		)
 	);
