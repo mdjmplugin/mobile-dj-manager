@@ -551,6 +551,7 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
                     false
                 ); ?></p>
             </div>
+            <div id="task-complete" class="notice notice-success mdjm-hidden"></div>
 
             <p><strong><?php _e( 'Completed Tasks', 'mobile-dj-manager' ); ?></strong></p>
             <?php if ( ! empty( $tasks_history ) ) : ?>

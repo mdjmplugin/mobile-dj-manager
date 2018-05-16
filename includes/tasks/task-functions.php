@@ -334,6 +334,11 @@ function mdjm_run_single_event_task( $event_id, $task_id ) {
         case 'fail-enquiry':
             return mdjm_fail_enquiry_single_task( $event_id );
             break;
+		case 'balance-reminder':
+			
+			break;
+		default:
+			break;
     }
 } // mdjm_run_single_event_task
 
@@ -346,8 +351,8 @@ function mdjm_run_single_event_task( $event_id, $task_id ) {
  */
 function mdjm_fail_enquiry_single_task( $event_id ) {
     $event = new MDJM_Event( $event_id );
+    $fail  = mdjm_update_event_status( $event->ID, 'mdjm-failed', $event->post_status );
 
-    $fail = mdjm_update_event_status( $event->ID, 'mdjm-failed', $event->post_status );
     if ( $fail )	{
         mdjm_add_journal( array(
             'user_id'         => 1,

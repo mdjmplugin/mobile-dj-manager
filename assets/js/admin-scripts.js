@@ -743,6 +743,10 @@ jQuery(document).ready(function ($) {
                     success: function (response) {
                         $('#mdjm-event-task-run').addClass('mdjm-hidden');
                         $('#mdjm_event_status').val(response.status);
+						$('#mdjm_event_status').trigger('chosen:updated');
+						$('.task-history-items').text(response.history);
+						$('#task-complete').text(mdjm_admin_vars.task_completed);
+						$('#task-complete').slideToggle('fast').delay(3000).slideToggle('fast');
                     }
                 }).fail(function (data) {
                     if ( window.console && window.console.log ) {

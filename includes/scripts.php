@@ -265,6 +265,7 @@ function mdjm_register_admin_scripts( $hook )	{
                 'one_option'           => __( 'Choose an option', 'mobile-dj-manager' ),
         		'one_or_more_option'   => __( 'Choose one or more options', 'mobile-dj-manager' ),
                 'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' ),
+				'task_completed'       => __( 'Task executed successfully', 'mobile-dj-manager' ),
                 'type_to_search'       => __( 'Type to search', 'mobile-dj-manager' ),
                 'unavailable_template' => mdjm_get_option( 'unavailable' )
 			)
