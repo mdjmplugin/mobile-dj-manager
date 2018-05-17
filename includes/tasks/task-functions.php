@@ -305,9 +305,12 @@ function mdjm_get_tasks_for_event( $event_id )  {
         $tasks['playlist-notification'] = mdjm_get_task_name( 'playlist-notification' );
     }
 
-    if ( in_array( $event->post_status, array( 'mdjm-unattended', 'mdjm-enquiry' ) ) ) {
-        $tasks['fail-enquiry']   = mdjm_get_task_name( 'fail-enquiry' );
+    if ( 'mdjm-unattended' == $event->post_status ) {
         $tasks['reject-enquiry'] = __( 'Reject Enquiry', 'mobile-dj-manager' );
+    }
+
+    if ( 'mdjm-enquiry' == $event->post_status ) {
+        $tasks['fail-enquiry']   = mdjm_get_task_name( 'fail-enquiry' );
     }
 
     $tasks = apply_filters( 'mdjm_tasks_for_event', $tasks, $event_id );
@@ -328,15 +331,21 @@ function mdjm_get_tasks_for_event( $event_id )  {
  * @return   bool    True if the task ran successfully, otherwise false
  */
 function mdjm_run_single_event_task( $event_id, $task_id ) {
-    $task  = mdjm_get_task( $task_id );
+    $task = mdjm_get_task( $task_id );
 
     switch( $task_id )  {
         case 'fail-enquiry':
             return mdjm_fail_enquiry_single_task( $event_id );
             break;
-		case 'balance-reminder':
-			
+
+        case 'request-deposit':
+			return mdjm_request_deposit_single_task( $event_id );
 			break;
+
+		case 'balance-reminder':
+			return mdjm_balance_reminder_single_task( $event_id );
+			break;
+
 		default:
 			break;
     }
@@ -351,9 +360,8 @@ function mdjm_run_single_event_task( $event_id, $task_id ) {
  */
 function mdjm_fail_enquiry_single_task( $event_id ) {
     $event = new MDJM_Event( $event_id );
-    $fail  = mdjm_update_event_status( $event->ID, 'mdjm-failed', $event->post_status );
 
-    if ( $fail )	{
+    if ( mdjm_update_event_status( $event->ID, 'mdjm-failed', $event->post_status ) )	{
         mdjm_add_journal( array(
             'user_id'         => 1,
             'event_id'        => $event->ID,
@@ -361,7 +369,114 @@ function mdjm_fail_enquiry_single_task( $event_id ) {
         ) );
 
         $event->complete_task( 'fail-enquiry' );
+
+        return true;
     }
 
-    return $fail;
+    return false;
 } // mdjm_fail_enquiry_single_task
+
+/**
+ * Executes the request deposit task for a single event.
+ *
+ * @since   1.5
+ * @param   $event_id
+ * @return  bool    True if task ran successfully
+ */
+function mdjm_request_deposit_single_task( $event_id ) {
+    $event = new MDJM_Event( $event_id );
+    $task  = mdjm_get_task( 'request-deposit' );
+
+    if ( ! empty( $task['options']['email_template'] ) && ! empty( $event->client ) )	{
+
+        $client = get_userdata( $event->client );
+
+        $email_args = array(
+            'to_email'  => $client->user_email,
+            'event_id'  => $event->ID,
+            'client_id' => $event->client,
+            'subject'   => $task['options']['email_subject'],
+            'message'   => mdjm_get_email_template_content( $task['options']['email_template'] ),
+            'track'     => true,
+            'source'    => sprintf( __( 'Request %s Scheduled Task', 'mobile-dj-manager' ), mdjm_get_deposit_label() )
+        );
+
+        if ( 'employee' == $task['options']['email_from'] && ! empty( $event->employee_id ) )	{
+            $employee                 = get_userdata( $event->employee_id );
+            $email_args['from_email'] = $employee->user_email;
+            $email_args['from_name']  = $employee->display_name;
+        }
+
+        if ( mdjm_send_email_content( $email_args ) )	{
+            remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+            wp_update_post( array( 'ID' => $event->ID, 'post_modified' => date( 'Y-m-d H:i:s' ) ) );
+            add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
+            update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
+            $event->complete_task( $task['slug'] );
+
+            mdjm_add_journal( array(
+                'user_id'         => 1,
+                'event_id'        => $event->ID,
+                'comment_content' => sprintf( __( '%s task manually executed', 'mobile-dj-manager' ), esc_attr( $task['name'] ) ) . '<br /><br />' . time()
+            ) );
+
+            return true;
+        }
+    }
+
+    return false;
+} // mdjm_request_deposit_single_task
+
+/**
+ * Executes the balance reminder task for a single event.
+ *
+ * @since   1.5
+ * @param   $event_id
+ * @return  bool    True if task ran successfully
+ */
+function mdjm_balance_reminder_single_task( $event_id ) {
+    $event = new MDJM_Event( $event_id );
+    $task  = mdjm_get_task( 'balance-reminder' );
+
+    if ( ! empty( $task['options']['email_template'] ) && ! empty( $event->client ) )	{
+
+        $client = get_userdata( $event->client );
+
+        $email_args = array(
+            'to_email'       => $client->user_email,
+            'event_id'       => $event->ID,
+            'client_id'      => $event->client,
+            'subject'        => $task['options']['email_subject'],
+            'message'        => mdjm_get_email_template_content( $task['options']['email_template'] ),
+            'track'          => true,
+            'source'         => sprintf( __( 'Request %s Scheduled Task', 'mobile-dj-manager' ), mdjm_get_balance_label() )
+        );
+
+        if ( 'employee' == $task['options']['email_from'] && ! empty( $event->employee_id ) )	{
+            $employee                 = get_userdata( $event->employee_id );
+            $email_args['from_email'] = $employee->user_email;
+            $email_args['from_name']  = $employee->display_name;
+        }
+
+        if ( mdjm_send_email_content( $email_args ) )	{
+
+            remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+            wp_update_post( array( 'ID' => $event->ID, 'post_modified' => date( 'Y-m-d H:i:s' ) ) );
+            add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
+
+            update_post_meta( $event->ID, '_mdjm_event_last_updated_by', 0 );
+            $event->complete_task( $task['slug'] );
+
+            mdjm_add_journal( array(
+                'user_id'         => 1,
+                'event_id'        => $event->ID,
+                'comment_content' => sprintf( __( '%s  task manually executed', 'mobile-dj-manager' ), $task['name'] ) . '<br /><br />' . time()
+            ) );
+
+            return true;
+        }
+    }
+
+    return false;
+} // mdjm_balance_reminder_single_task

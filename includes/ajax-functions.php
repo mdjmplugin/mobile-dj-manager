@@ -869,14 +869,17 @@ add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
  * @since   1.5
  */
 function mdjm_execute_event_task_ajax() {
-    $task_id  = sanitize_text_field( $_POST['task'] );
-    $event_id = absint( $_POST['event_id'] );
-
+    $task_id         = sanitize_text_field( $_POST['task'] );
+    $event_id        = absint( $_POST['event_id'] );
+    $tasks           = mdjm_get_tasks_for_event( $event_id );
     $result          = mdjm_run_single_event_task( $event_id, $task_id );
 	$mdjm_event      = new MDJM_Event( $event_id );
 	$completed_tasks = $mdjm_event->get_tasks();
     $tasks_history   = array();
-    $tasks           = mdjm_get_tasks_for_event( $event_id );
+
+    if ( ! $result )    {
+        wp_send_json_error();
+    }
 
     foreach( $completed_tasks as $task_slug => $run_time )  {
         if ( ! array_key_exists( $task_slug, $tasks ) ) {
@@ -892,7 +895,10 @@ function mdjm_execute_event_task_ajax() {
 
 	$task_history = '<span class="task-history-items">' . implode( '<br>', $tasks_history ) . '</span>';
 
-    wp_send_json( array( 'status' => $mdjm_event->post_status, 'history' => $task_history ) );
+    wp_send_json_success( array(
+        'status' => $mdjm_event->post_status,
+        'history' => $task_history
+    ) );
 } // mdjm_execute_event_task_ajax
 add_action( 'wp_ajax_mdjm_execute_event_task', 'mdjm_execute_event_task_ajax' );
 

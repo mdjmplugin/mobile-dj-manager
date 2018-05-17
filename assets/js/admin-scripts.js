@@ -737,16 +737,27 @@ jQuery(document).ready(function ($) {
                     dataType   : 'json',
                     data       : postData,
                     url        : ajaxurl,
+                    beforeSend : function() {
+                        $('#mdjm-run-task').addClass('mdjm-hidden');
+                        $('#mdjm-spinner').css('visibility', 'visible');
+                    },
                     complete : function()	{
 						$('#mdjm-event-tasks').removeClass('mdjm-mute');
 					},
                     success: function (response) {
-                        $('#mdjm-event-task-run').addClass('mdjm-hidden');
-                        $('#mdjm_event_status').val(response.status);
-						$('#mdjm_event_status').trigger('chosen:updated');
-						$('.task-history-items').text(response.history);
-						$('#task-complete').text(mdjm_admin_vars.task_completed);
-						$('#task-complete').slideToggle('fast').delay(3000).slideToggle('fast');
+                        if ( response.success ) {
+                            $('#mdjm-event-task-run').addClass('mdjm-hidden');
+                            $('#mdjm_event_status').val(response.data.status);
+                            $('#mdjm_event_status').trigger('chosen:updated');
+                            $('.task-history-items').html(response.data.history);
+                            $('.task-history-items').removeClass('description');
+                            $('#mdjm-run-task').removeClass('mdjm-hidden');
+                            $('#mdjm_event_task').val('0');
+                            $('#mdjm_event_task').trigger('chosen:updated');
+                            $('#mdjm-spinner').css('visibility', 'hidden');
+                        } else  {
+                            alert('Error');
+                        }
                     }
                 }).fail(function (data) {
                     if ( window.console && window.console.log ) {

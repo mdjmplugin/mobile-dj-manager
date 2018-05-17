@@ -522,6 +522,14 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
         );
     }
 
+     if ( ! empty( $tasks_history ) )   {
+         $history_class = '';
+         $history       = implode( '<br>', $tasks_history );
+     } else {
+         $history_class = ' description';
+         $history       = sprintf( __( 'None of the available tasks have been executed for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) );
+     }
+
     ?>
     <div id="mdjm-event-tasks">
         <?php if ( ! $mdjm_event_update || empty( $tasks ) ) : ?>
@@ -550,15 +558,11 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
                     'mdjm-run-task',
                     false
                 ); ?></p>
+                <span id="mdjm-spinner" class="spinner"></span>
             </div>
-            <div id="task-complete" class="notice notice-success mdjm-hidden"></div>
 
             <p><strong><?php _e( 'Completed Tasks', 'mobile-dj-manager' ); ?></strong></p>
-            <?php if ( ! empty( $tasks_history ) ) : ?>
-                <span class="task-history-items"><?php echo implode( '<br>', $tasks_history ); ?></span>
-            <?php else : ?>
-                <span class="description"><?php printf( __( 'None of the available tasks have been executed for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></span>
-            <?php endif; ?>
+            <span class="task-history-items<?php echo $history_class; ?>"><?php echo $history; ?></span>
         <?php endif; ?>
     </div>
 
