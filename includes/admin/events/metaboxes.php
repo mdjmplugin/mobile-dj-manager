@@ -558,7 +558,7 @@ function mdjm_event_metabox_tasks_row( $event_id )	{
                     'mdjm-run-task',
                     false
                 ); ?></p>
-                <span id="mdjm-spinner" class="spinner"></span>
+                <span id="mdjm-spinner" class="spinner mdjm-execute-event-task"></span>
             </div>
 
             <p><strong><?php _e( 'Completed Tasks', 'mobile-dj-manager' ); ?></strong></p>

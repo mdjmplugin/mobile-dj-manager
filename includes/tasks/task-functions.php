@@ -297,9 +297,9 @@ function mdjm_get_tasks_for_event( $event_id )  {
         }
     }
 
-    if ( $playlist )    {
+    /*if ( $playlist )    {
         $tasks['playlist-employee-notify'] = mdjm_get_task_name( 'playlist-employee-notify' );
-    }
+    }*/
 
     if ( $guest_playlist )  {
         $tasks['playlist-notification'] = mdjm_get_task_name( 'playlist-notification' );
@@ -345,6 +345,10 @@ function mdjm_run_single_event_task( $event_id, $task_id ) {
 		case 'balance-reminder':
 			return mdjm_balance_reminder_single_task( $event_id );
 			break;
+
+        case 'playlist-employee-notify':
+            return mdjm_employee_playlist_notify_single_task( $event_id );
+            break;
 
 		default:
 			break;
@@ -480,3 +484,38 @@ function mdjm_balance_reminder_single_task( $event_id ) {
 
     return false;
 } // mdjm_balance_reminder_single_task
+
+/**
+ * Executes the employee playlist notification task for a single event.
+ *
+ * @since   1.5
+ * @param   $event_id
+ * @return  bool    True if task ran successfully
+ */
+function mdjm_employee_playlist_notify_single_task( $event_id ) {
+    $event = new MDJM_Event( $event_id );
+
+    $content = mdjm_format_playlist_content( $event_id, '', 'ASC', '', true );
+    $content = apply_filters( 'mdjm_print_playlist', $content, $event );
+
+    $html_content_start = '<html>' . "\n" . '<body>' . "\n";
+    $html_content_end   = '<p>' . __( 'Regards', 'mobile-dj-manager' ) . '</p>' . "\n" .
+        '<p>{company_name}</p>' . "\n";
+        '<p>&nbsp;</p>' . "\n";
+        '<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="https://mdjm.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n" .
+        '</body>' . "\n" . '</html>';
+
+    $args = array(
+        'to_email'		=> mdjm_get_employee_email( $event->employee_id ),
+        'from_name'		=> mdjm_get_option( 'company_name' ),
+        'from_email'	=> mdjm_get_option( 'system_email' ),
+        'event_id'		=> $event_id,
+        'client_id'		=> $event->client,
+        'subject'		=> sprintf( __( 'Playlist for %s ID %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{contract_id}' ),
+        'message'		=> $html_content_start . $content . $html_content_end,
+        'copy_to'       => 'disable'
+    );
+
+    $event->complete_task( 'employee-playlist-notify' );
+    return mdjm_send_email_content( $args );
+} // mdjm_employee_playlist_notify_single_task
