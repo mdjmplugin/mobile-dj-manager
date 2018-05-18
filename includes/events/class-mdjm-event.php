@@ -1030,7 +1030,13 @@ class MDJM_Event {
 		if ( ! isset( $this->income ) )	{
 
 			$this->income = '0.00';
-			$txns         = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-income' ) );
+			$cache_key    = md5( sprintf( 'mdjm_event_income_txns_%s', $this->ID ) );
+			$txns         = get_transient( $cache_key );
+
+			if ( false === $txns )	{
+				$txns = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-income' ) );
+				set_transient( $cache_key, $txns );
+			}
 
 			if ( ! empty ( $txns ) )	{
 
@@ -1065,7 +1071,13 @@ class MDJM_Event {
 		if ( ! isset( $this->outgoings ) )	{
 
 			$this->outgoings = '0.00';
-			$txns         = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-expenditure' ) );
+			$cache_key    = md5( sprintf( 'mdjm_event_outgoing_txns_%s', $this->ID ) );
+			$txns         = get_transient( $cache_key );
+
+			if ( false === $txns )	{
+				$txns = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-expenditure' ) );
+				set_transient( $cache_key, $txns );
+			}
 
 			if ( ! empty ( $txns ) )	{
 

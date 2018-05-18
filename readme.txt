@@ -93,6 +93,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Discounts can now be applied to events
 **New**: Display break down of event costs on events page
 **New**: Added option to require deposit to be paid before an event is marked as confirmed
+**New**: Added the Tasks metabox to the event screen so admins can execute tasks whilst managing an event
 **New**: Client profile page is now templated and AJAX based
 **New**: Client profile page has been updated to be more responsive and inline with the formatting of forms used elsewhere
 **New**: Playlist client and guest pages have been updated to be more responsive and inline with the formatting of forms used elsewhere
@@ -108,7 +109,8 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Clicking the number of events within the venue list table will now take you to a filtered list of events for the venue
 **New**: Added pagination to the clients list
 **New**: Added the `additional_cost` content tag
-**New**" Added the `discount` content tag
+**New**: Added the `discount` content tag
+**New**: Added caching to event transaction queries to improve event screen load times
 **Tweak**: Prohibit the deletion or renaming of the slug for the playlist Guest category
 **Tweak**: Clients can now be searched by ID, email, and display name on the clients page
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
