@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-18 23:51:48+00:00\n"
+"POT-Creation-Date: 2018-05-20 21:52:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -303,12 +303,12 @@ msgstr ""
 
 #: includes/admin/communications/comms-functions.php:73
 #: includes/admin/equipment/equipment.php:34
-#: includes/admin/equipment/equipment.php:354
+#: includes/admin/equipment/equipment.php:359
 #: includes/admin/events/events.php:24 includes/admin/menu.php:64
 #: includes/admin/menu.php:278 includes/admin/menu.php:281
 #: includes/admin/reporting/export/class-batch-export-events.php:49
 #: includes/admin/users/class-mdjm-employee-manager.php:658
-#: includes/events/event-functions.php:1835
+#: includes/events/event-functions.php:1852
 msgid "Employees"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 #: includes/admin/events/metaboxes.php:1580
 #: includes/admin/reporting/class-mdjm-packages-reports-table.php:88
 #: includes/admin/reporting/export/class-batch-export-events.php:50
-#: includes/events/event-functions.php:1842
+#: includes/events/event-functions.php:1859
 msgid "Package"
 msgstr ""
 
@@ -669,19 +669,19 @@ msgid "Items"
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:32
-#: includes/admin/equipment/equipment.php:352
+#: includes/admin/equipment/equipment.php:357
 #: includes/admin/equipment/metaboxes.php:29
 #: includes/admin/equipment/metaboxes.php:540 includes/admin/menu.php:67
 msgid "Availability"
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:33
-#: includes/admin/equipment/equipment.php:353 includes/admin/menu.php:161
+#: includes/admin/equipment/equipment.php:358 includes/admin/menu.php:161
 msgid "%s Types"
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:35
-#: includes/admin/equipment/equipment.php:355
+#: includes/admin/equipment/equipment.php:360
 #: includes/admin/equipment/metaboxes.php:415
 #: includes/admin/equipment/metaboxes.php:803
 #: includes/admin/reporting/export/class-batch-export-events.php:52
@@ -689,14 +689,14 @@ msgid "Price"
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:36
-#: includes/admin/equipment/equipment.php:356
+#: includes/admin/equipment/equipment.php:361
 msgid "Usage"
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:100
 #: includes/admin/equipment/equipment.php:105
-#: includes/admin/equipment/equipment.php:403
 #: includes/admin/equipment/equipment.php:408
+#: includes/admin/equipment/equipment.php:413
 #: includes/equipment/equipment-functions.php:138
 #: includes/equipment/equipment-functions.php:143
 #: includes/equipment/equipment-functions.php:1000
@@ -704,8 +704,8 @@ msgstr ""
 msgid "Always"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:127
-#: includes/admin/equipment/equipment.php:430
+#: includes/admin/equipment/equipment.php:131
+#: includes/admin/equipment/equipment.php:435
 #: includes/admin/equipment/metaboxes.php:212
 #: includes/admin/equipment/metaboxes.php:694
 #: includes/admin/events/events.php:476
@@ -714,8 +714,8 @@ msgstr ""
 msgid "All %s Types"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:148
-#: includes/admin/equipment/equipment.php:451
+#: includes/admin/equipment/equipment.php:152
+#: includes/admin/equipment/equipment.php:456
 #: includes/admin/equipment/metaboxes.php:195
 #: includes/admin/equipment/metaboxes.php:677
 #: includes/admin/events/events.php:511
@@ -724,52 +724,52 @@ msgstr ""
 msgid "All Employees"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:199
+#: includes/admin/equipment/equipment.php:203
 msgid "Enter a name for this package"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:350
+#: includes/admin/equipment/equipment.php:355
 #: includes/admin/reporting/class-mdjm-addons-reports-table.php:88
 msgid "Addon"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:485
+#: includes/admin/equipment/equipment.php:490
 msgid " Package"
 msgid_plural " Packages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/equipment/equipment.php:507
+#: includes/admin/equipment/equipment.php:512
 msgid "Enter a name for this add-on"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:726
+#: includes/admin/equipment/equipment.php:731
 msgid "Add-on"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:727 includes/admin/menu.php:427
+#: includes/admin/equipment/equipment.php:732 includes/admin/menu.php:427
 #: includes/admin/menu.php:430 includes/admin/welcome.php:374
-#: includes/events/event-functions.php:1818
+#: includes/events/event-functions.php:1835
 msgid "Add-ons"
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:732
-#: includes/admin/equipment/equipment.php:733
+#: includes/admin/equipment/equipment.php:737
+#: includes/admin/equipment/equipment.php:738
 #: includes/admin/events/events.php:1583 includes/admin/events/events.php:1584
 msgid "%2$s updated. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:734
+#: includes/admin/equipment/equipment.php:739
 #: includes/admin/events/events.php:1585
 msgid "%2$s created. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:735
+#: includes/admin/equipment/equipment.php:740
 #: includes/admin/events/events.php:1586
 msgid "%2$s saved. %1$s%3$s List%4$s."
 msgstr ""
 
-#: includes/admin/equipment/equipment.php:736
+#: includes/admin/equipment/equipment.php:741
 #: includes/admin/events/events.php:1587
 msgid "%2$s submitted. %1$s%3$s List%4$s."
 msgstr ""
@@ -1258,7 +1258,7 @@ msgstr ""
 #: includes/admin/reporting/export/class-batch-export-events.php:47
 #: includes/admin/roles/class-mdjm-roles.php:82
 #: includes/clientzone-functions.php:130
-#: includes/events/event-functions.php:1821 includes/payments/payments.php:624
+#: includes/events/event-functions.php:1838 includes/payments/payments.php:624
 msgid "Client"
 msgstr ""
 
@@ -1831,7 +1831,7 @@ msgstr ""
 
 #: includes/admin/events/metaboxes.php:2227
 #: includes/admin/settings/register-settings.php:430
-#: includes/events/event-functions.php:1825
+#: includes/events/event-functions.php:1842
 msgid "Total Cost"
 msgstr ""
 
@@ -2484,7 +2484,7 @@ msgstr ""
 #: includes/admin/pages/event-fields.php:560
 #: includes/admin/tasks/class-mdjm-tasks-table.php:248
 #: includes/admin/transactions/metaboxes.php:317
-#: includes/events/event-functions.php:1841
+#: includes/events/event-functions.php:1858
 msgid "Description"
 msgstr ""
 
@@ -2912,7 +2912,7 @@ msgstr ""
 
 #: includes/admin/reporting/class-mdjm-clients-export.php:71
 #: includes/admin/settings/register-settings.php:429
-#: includes/events/event-functions.php:1826
+#: includes/events/event-functions.php:1843
 msgid "%s Date"
 msgstr ""
 
@@ -3076,12 +3076,12 @@ msgid "Balance Status"
 msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-events.php:57
-#: includes/events/event-functions.php:1846
+#: includes/events/event-functions.php:1863
 msgid "Start Time"
 msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-events.php:58
-#: includes/events/event-functions.php:1838
+#: includes/events/event-functions.php:1855
 msgid "End Time"
 msgstr ""
 
@@ -3113,7 +3113,7 @@ msgid "Contract Status"
 msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-events.php:65
-#: includes/events/event-functions.php:1843
+#: includes/events/event-functions.php:1860
 msgid "Playlist Enabled"
 msgstr ""
 
@@ -3122,7 +3122,7 @@ msgid "Playlist Status"
 msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-events.php:67
-#: includes/events/event-functions.php:1837
+#: includes/events/event-functions.php:1854
 msgid "Enquiry Source"
 msgstr ""
 
@@ -3846,8 +3846,8 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:565
-#: includes/events/event-functions.php:1820
-#: includes/events/event-functions.php:1828
+#: includes/events/event-functions.php:1837
+#: includes/events/event-functions.php:1845
 msgid "%s Status"
 msgstr ""
 
@@ -5646,7 +5646,7 @@ msgid ""
 "to subsequently import into other systems, such as accounting tools."
 msgstr ""
 
-#: includes/admin/welcome.php:226 includes/events/event-functions.php:1847
+#: includes/admin/welcome.php:226 includes/events/event-functions.php:1864
 msgid "Travel Data"
 msgstr ""
 
@@ -6294,11 +6294,11 @@ msgstr ""
 msgid "PM"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:1465
+#: includes/class-mdjm-html-elements.php:1466
 msgid "Enter username"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:1480
+#: includes/class-mdjm-html-elements.php:1481
 msgid "Cancel"
 msgstr ""
 
@@ -6970,7 +6970,7 @@ msgstr ""
 msgid "New Event"
 msgstr ""
 
-#: includes/events/class-mdjm-event.php:807
+#: includes/events/class-mdjm-event.php:827
 msgid "No event type set"
 msgstr ""
 
@@ -7011,124 +7011,124 @@ msgstr ""
 msgid "%s Earnings:"
 msgstr ""
 
-#: includes/events/event-functions.php:1765
+#: includes/events/event-functions.php:1782
 msgid "Adding %s value as %s"
 msgstr ""
 
-#: includes/events/event-functions.php:1770
+#: includes/events/event-functions.php:1787
 msgid "Updating %s with %s"
 msgstr ""
 
-#: includes/events/event-functions.php:1776
+#: includes/events/event-functions.php:1793
 msgid "Removing %s from %s"
 msgstr ""
 
-#: includes/events/event-functions.php:1786
+#: includes/events/event-functions.php:1803
 msgid "%s Updated"
 msgstr ""
 
-#: includes/events/event-functions.php:1819
+#: includes/events/event-functions.php:1836
 msgid "Admin Notes"
 msgstr ""
 
-#: includes/events/event-functions.php:1822
-#: includes/events/event-functions.php:1829 includes/install.php:116
+#: includes/events/event-functions.php:1839
+#: includes/events/event-functions.php:1846 includes/install.php:116
 msgid "%s Contract"
 msgstr ""
 
-#: includes/events/event-functions.php:1823
+#: includes/events/event-functions.php:1840
 msgid "Contract Approved Date"
 msgstr ""
 
-#: includes/events/event-functions.php:1824
+#: includes/events/event-functions.php:1841
 msgid "Contract Approved By"
 msgstr ""
 
-#: includes/events/event-functions.php:1830
+#: includes/events/event-functions.php:1847
 msgid "Employee Notes"
 msgstr ""
 
-#: includes/events/event-functions.php:1831
+#: includes/events/event-functions.php:1848
 msgid "Primary Employee %s Payment Details"
 msgstr ""
 
-#: includes/events/event-functions.php:1832
+#: includes/events/event-functions.php:1849
 msgid "%s Setup Date"
 msgstr ""
 
-#: includes/events/event-functions.php:1833
+#: includes/events/event-functions.php:1850
 msgid "%s Setup Time"
 msgstr ""
 
-#: includes/events/event-functions.php:1834
+#: includes/events/event-functions.php:1851
 msgid "Primary Employee %s Wage"
 msgstr ""
 
-#: includes/events/event-functions.php:1836
+#: includes/events/event-functions.php:1853
 msgid "Employees Payment Data"
 msgstr ""
 
-#: includes/events/event-functions.php:1839
+#: includes/events/event-functions.php:1856
 msgid "Last Updated By"
 msgstr ""
 
-#: includes/events/event-functions.php:1840
+#: includes/events/event-functions.php:1857
 msgid "%s Name"
 msgstr ""
 
-#: includes/events/event-functions.php:1844
+#: includes/events/event-functions.php:1861
 msgid "Playlist Guest Access Code"
 msgstr ""
 
-#: includes/events/event-functions.php:1845
+#: includes/events/event-functions.php:1862
 msgid "Playlist Limit"
 msgstr ""
 
-#: includes/events/event-functions.php:1848
+#: includes/events/event-functions.php:1865
 msgid "Venue Address Line 1"
 msgstr ""
 
-#: includes/events/event-functions.php:1849
+#: includes/events/event-functions.php:1866
 msgid "Venue Address Line 2"
 msgstr ""
 
-#: includes/events/event-functions.php:1850
+#: includes/events/event-functions.php:1867
 msgid "Venue Contact"
 msgstr ""
 
-#: includes/events/event-functions.php:1851
+#: includes/events/event-functions.php:1868
 msgid "Venue County"
 msgstr ""
 
-#: includes/events/event-functions.php:1852
+#: includes/events/event-functions.php:1869
 msgid "Venue Email Address"
 msgstr ""
 
-#: includes/events/event-functions.php:1853
+#: includes/events/event-functions.php:1870
 msgid "Venue ID"
 msgstr ""
 
-#: includes/events/event-functions.php:1854
+#: includes/events/event-functions.php:1871
 msgid "Venue Name"
 msgstr ""
 
-#: includes/events/event-functions.php:1855
+#: includes/events/event-functions.php:1872
 msgid "Venue Phone Number"
 msgstr ""
 
-#: includes/events/event-functions.php:1856
+#: includes/events/event-functions.php:1873
 msgid "Venue Post Code"
 msgstr ""
 
-#: includes/events/event-functions.php:1857
+#: includes/events/event-functions.php:1874
 msgid "Venue Post Town"
 msgstr ""
 
-#: includes/events/event-functions.php:2349
+#: includes/events/event-functions.php:2366
 msgid "Quote %s"
 msgstr ""
 
-#: includes/events/event-functions.php:2405
+#: includes/events/event-functions.php:2422
 msgid "Sorry but the quote for your %s could not be displayed."
 msgstr ""
 
