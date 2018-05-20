@@ -123,6 +123,10 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			$event_label = mdjm_get_label_singular();
 			$event_types = mdjm_get_package_event_types( $post_id );
 
+			if ( ! $event_types )	{
+				$event_types = array( 'all' );
+			}
+
 			if ( in_array( 'all', $event_types ) )	{
 				$output[] = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), $event_label );
 			} else	{
