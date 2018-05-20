@@ -1643,6 +1643,23 @@ function mdjm_get_event_uri( $event_id, $admin = false )	{
 } // mdjm_get_event_uri
 
 /**
+ * Retrieve the length of the event in hours.
+ *
+ * @since	1.5
+ * @param	int		$event_id	The event ID
+ * @return	int		The event duration in hours
+ */
+function mdjm_get_event_duration_in_hours( $event_id )	{
+	$event = new MDJM_Event( $event_id );
+
+	if ( 0 == $event->ID )	{
+		return 0;
+	}
+
+	return $event->get_duration();
+} // mdjm_get_event_duration_in_hours
+
+/**
  * Retrieve the duration of the event.
  *
  * Calculate the duration of the event and return in human readable format.

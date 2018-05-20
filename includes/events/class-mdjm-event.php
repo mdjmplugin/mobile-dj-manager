@@ -663,6 +663,26 @@ class MDJM_Event {
 	} // get_finish_time
 
 	/**
+	 * Retrieve the event duration in hours.
+	 *
+	 * @since	1.5
+	 * @param	bool	$round_up	Whether to round up to nearest hour
+	 * @return	int		The event duration in hours
+	 */
+	public function get_duration( $round_up = true ) {
+		$start_timestamp = strtotime( $this->get_start_time() . ' ' . $this->date );
+		$end_timestamp   = strtotime( $this->get_finish_time() . ' ' . $this->get_finish_date() );
+		$event_seconds   = $end_timestamp - $start_timestamp;
+		$event_hours     = $event_seconds / HOUR_IN_SECONDS;
+
+		if ( $round_up )	{
+			$event_hours = round( $event_hours );
+		}
+
+		return (int) $event_hours;
+	} // get_duration
+
+	/**
 	 * Retrieve the event setup date
 	 *
 	 * @since	1.3
