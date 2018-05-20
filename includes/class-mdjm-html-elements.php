@@ -1378,8 +1378,8 @@ class MDJM_HTML_Elements {
 			'desc'         => isset( $desc )  ? $desc  : null,
 			'placeholder'  => '',
 			'class'        => 'small-text',
-			'min'          => '',
-			'max'          => '',
+			'min'          => null,
+			'max'          => null,
 			'disabled'     => false,
 			'autocomplete' => '',
 			'data'         => false
@@ -1402,8 +1402,8 @@ class MDJM_HTML_Elements {
 			}
 		}
 		
-		$min = ! empty( $args['min'] ) ? ' min="' . $args['min'] . '"' : '';
-		$max = ! empty( $args['max'] ) ? ' max="' . $args['max'] . '"' : '';
+		$min = isset( $args['min'] ) ? ' min="' . absint( $args['min'] ) . '"' : '';
+		$max = isset( $args['max'] ) ? ' max="' . absint( $args['max'] ) . '"' : '';
 		
 		if ( $max > 5 )	{
 			$max = 5;
@@ -1413,13 +1413,14 @@ class MDJM_HTML_Elements {
 
 			$output .= '<label for="' . mdjm_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-			if ( ! empty( $args['desc'] ) ) {
-				$output .= '<span class="mdjm-description">' . esc_html( $args['desc'] ) . '</span>';
-			}
-
 			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
 
 		$output .= '</span>';
+
+		if ( ! empty( $args['desc'] ) ) {
+			$output .= '<br />';
+			$output .= '<span class="description">' . $args['desc'] . '</span>';
+		}
 
 		return $output;
 	} // number
