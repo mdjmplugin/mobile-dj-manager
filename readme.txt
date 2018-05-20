@@ -122,6 +122,8 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to
 **Fix**: Removed notification that client received playlist email when emailing to employee via admin
+**Fix**: Correctly set the value to 'all' if no event type is defined for a package
+**Fix**; Correctly honour the min/max values for a number field within the `MDJM_HTML_Elements` class
 
 = 1.4.7.8 =
 
