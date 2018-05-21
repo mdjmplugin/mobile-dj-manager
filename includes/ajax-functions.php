@@ -1192,13 +1192,13 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
 function mdjm_add_employee_to_event_ajax()	{
 
 	$args = array(
-		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
+		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']    : '',
 		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
 		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
 		'payment_status'  => 'unpaid'
 	);
 
-	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
+	if ( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
 
 		$result['type'] = 'error';
 		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );

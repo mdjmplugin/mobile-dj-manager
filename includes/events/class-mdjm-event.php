@@ -489,7 +489,7 @@ class MDJM_Event {
 			
 			$employees_data = get_post_meta( $this->ID, '_mdjm_event_employees_data', true );
 			
-			if ( ! empty( $employees_data ) )	{
+			if ( ! empty( $employees_data ) && is_array( $employees_data ) )	{
 				
 				foreach( $employees_data as $employee_data )	{
 					

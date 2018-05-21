@@ -590,7 +590,7 @@ function mdjm_do_event_employees_list_table( $event_id )	{
 	
 	$employees = mdjm_get_event_employees_data( $event_id );
 		
-	if( ! $employees )	{
+	if( ! $employees || ! is_array( $employees ) )	{
 		return;
 	}
 
@@ -663,12 +663,10 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 		return false;
 	}
 
-	$employees         = mdjm_get_event_employees( $event_id );
-	$employees_data    = mdjm_get_event_employees_data( $event_id );
-	
-	if ( empty( $employees ) )	{
-		$employees = array();
-	}
+	$employees      = mdjm_get_event_employees( $event_id );
+	$employees      = ! empty( $employees ) ? $employees : array();
+	$employees_data = mdjm_get_event_employees_data( $event_id );
+	$employees_data = ! empty( $employees_data ) ? $employees_data : array();
 	
 	$mdjm_txn = new MDJM_Txn();
 	
@@ -691,7 +689,6 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	}
 	
 	mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-employee-wages' ) );
-	
 	array_push( $employees, $data['id'] );
 	$employees_data[ $data['id'] ] = $data;
 	
