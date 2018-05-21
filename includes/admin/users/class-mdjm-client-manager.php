@@ -98,7 +98,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			?>
 			<div class="wrap">
 			<div id="icon-themes" class="icon32"></div>
-            <h1><?php printf( __( '%s Clients', 'mobile-dj-manager' ), MDJM_COMPANY ); ?></h1>
+            <h1><?php printf( __( '%s Clients', 'mobile-dj-manager' ), esc_attr( mdjm_get_option( 'company_name' ) ) ); ?></h1>
             <form name="mdjm-client-list" id="mdjm-client-list" method="post">
                 <?php $this->views(); ?>
                 <?php $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' ); ?>

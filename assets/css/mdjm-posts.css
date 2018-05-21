@@ -16,17 +16,11 @@
 	 * Hidden DIV's
 	 *
 	 */
-	#email_template_fields	{
-		display: block;
-	}
 	#paid_to_field	{
 		display: none;
 	}
 	#paid_from_field	{
 		display: block;
-	}
-	#new_event_type_div	{
-		display: none;	
 	}
 	#new_transaction_type_div	{
 		display: none;	
@@ -40,16 +34,7 @@
 		overflow: auto;
 		height: 60px;
 	}
-	/* -- 4 Column -- */
-	.mdjm-post-4column	{
-		float: left;
-		width: 25%;
-	}
 	
-	.mdjm-post-last-4column	{
-		float: right;
-		width: 25%;
-	}
 	/* -- 3 Column -- */
 	.mdjm-post-3column	{
 		float: left;

@@ -40,50 +40,6 @@
 			return $events;
 		}
 
-		/**
-		 * Get specified users next event
-		 *
-		 * @param:
-		 *			$user		str		The user to query for. Default to current user
-		 *			$user_type	str		Client of DJ (lowercase). Default to client
-		 *			
-		 * @return:	$next_event	arr		Object array of next event
-		 *
-		 */
-		public function next_event( $user='', $user_type='' )	{
-			global $current_user;
-
-			$user      = ! empty( $user )      ? $user      : $current_user->ID;
-			$user_type = ! empty( $user_type ) ? $user_type : 'client';
-
-			$args = array(
-				'post_type'      => 'mdjm-event',
-				'post_status'    => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-enquiry', 'mdjm-unattended' ),
-				'posts_per_page' => 1,
-				'meta_key'		 => '_mdjm_event_date',
-				'orderby'        => 'meta_value',
-				'order'          => 'ASC',
-				'meta_query'	 => array(
-					'relation' => 'AND',
-					array( 
-						'key'     => '_mdjm_event_' . $user_type,
-						'value'   => $user,
-						'compare' => '=',
-					),
-					array(
-						'key'     => '_mdjm_event_date',
-						'value'   => date( 'Y-m-d' ),
-						'compare' => '>=',
-						'type'    => 'date',
-					)
-				)
-			);
-
-			$next_event = get_posts( $args );
-
-			return $next_event;	
-		} // next_event
-
 		/*
 		 * Get the current events key details and place them into an array
 		 *
@@ -134,11 +90,11 @@
 							'client'          => ( !empty( $client ) ? get_userdata( $client ) : '' ),
 							'dj'              => ( !empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned', 'mobile-dj-manager' ) ),
 							'dj_wage'         => ( !empty( $dj_wage ) ? mdjm_currency_filter( mdjm_sanitize_amount( $dj_wage ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-							'start'           => ( !empty( $start ) ? date( MDJM_TIME_FORMAT, strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-							'finish'          => ( !empty( $finish ) ? date( MDJM_TIME_FORMAT, strtotime( $finish ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							'start'           => ( !empty( $start ) ? date( mdjm_get_option( 'time_format' ), strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							'finish'          => ( !empty( $finish ) ? date( mdjm_get_option( 'time_format' ), strtotime( $finish ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							'status'          => ( !empty( $status ) ? $status : '' ),
 							'setup_date'      => ( !empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-							'setup_time'      => ( !empty( $setup_time ) ? date( MDJM_TIME_FORMAT, strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+							'setup_time'      => ( !empty( $setup_time ) ? date( mdjm_get_option( 'time_format' ), strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							'cost'            => ( !empty( $cost ) ? mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 							'deposit'         => ( !empty( $deposit ) ? mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) ) : '0.00' ),
 							'balance'         => ( !empty( $paid ) && $paid != '0.00' && !empty( $cost ) ? 
@@ -149,8 +105,8 @@
 							'type'            => $this->get_event_type( $post_id ),
 							'online_quote'    => mdjm_get_option( 'online_enquiry', false ) && ! empty( $online_quote ) ? $online_quote : '',
 							'contract'        => ( !empty( $contract ) ? $contract : '' ),
-							'contract_date'	  => ( !empty( $contract_date ) ? date( MDJM_SHORTDATE_FORMAT, strtotime( $contract_date ) ) : 
-								date( MDJM_SHORTDATE_FORMAT ) ),
+							'contract_date'	  => ( !empty( $contract_date ) ? date( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) : 
+								date( mdjm_get_option( 'short_date_format' ) ) ),
 
 							'signed_contract' => ( !empty( $signed_contract ) ? $signed_contract : '' ),
 							'notes'           => ( !empty( $notes ) ? $notes : '' ),
@@ -159,7 +115,7 @@
 							'package'         => ( !empty( $package ) ? $package : '' ),
 							'addons'          => ( !empty( $addons ) ? implode( "\n", $addons ) : '' ),
 							'guest_playlist'  => ( !empty( $guest_playlist ) ? 
-								mdjm_get_formatted_url( MDJM_PLAYLIST_PAGE ) . 'mdjmeventid=' . $guest_playlist : '' ),
+								mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjmeventid=' . $guest_playlist : '' ),
 							);
 
 			// Allow the $eventinfo array to be filtered

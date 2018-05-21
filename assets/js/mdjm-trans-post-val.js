@@ -1,48 +1,4 @@
 	/*
-	 * Validate transaction form input data
-	 *
-	 *
-	 *
-	 *
-	 */
-	jQuery().ready(function()	{
-		jQuery("#post").validate(	{
-			
-			/* -- Classes -- */
-			errorClass: "mdjm-form-error",
-			validClass: "mdjm-form-valid",
-			focusInvalid: false,
-			
-			/* -- Rules -- */
-			rules:	{
-				transaction_amount:	{
-					number: true,	
-				},
-			}, // End rules
-			
-			messages:	{
-				transaction_amount:	{
-					required:			" Enter a cost",
-					number:				" Accepted format example 10.00",
-				},
-				
-				transaction_date:	{
-					required:		 	" A date is required",
-					date:				" Must be a valid date (use date picker)",
-				},
-				
-				mdjm_transaction_type:	" Select an option",
-				
-				transaction_src:		" Select an option",
-				
-				transaction_status:	 " Select a status",
-				
-			}
-			
-		} ); // Validate
-	} ); // function
-	
-	/*
 	 * When the user clicks to add a new transaction type
 	 * Display the input field for the Transaction Type name
 	 *

@@ -30,9 +30,6 @@ function mdjm_do_automatic_upgrades() {
 	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) )	{
 		add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
 	
-		if ( $current_version < MDJM_VERSION_NUM )	{	
-			include_once( MDJM_PLUGIN_DIR . '/includes/admin/procedures/mdjm-upgrade.php' );
-		}
 	}
 
 	if ( version_compare( $mdjm_version, '1.4', '<' ) ) {

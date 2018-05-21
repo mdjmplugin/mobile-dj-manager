@@ -1,4 +1,4 @@
-avar mdjm_admin_vars;
+var mdjm_admin_vars;
 jQuery(document).ready(function ($) {
 
     // Setup Chosen menus
@@ -464,6 +464,68 @@ jQuery(document).ready(function ($) {
 		},
 
 		employee : function()	{
+
+			// Add a new employee role
+			$( document.body ).on( 'click', '#new_mdjm_role', function(e) {
+				e.preventDefault();
+
+				if ( $('#add_mdjm_role').hasClass('mdjm-form-error') )	{
+					$('#add_mdjm_role').removeClass('mdjm-form-error');
+				}
+
+				if ( $('#add_mdjm_role').val().length < 1 )	{
+					$('#add_mdjm_role').addClass('mdjm-form-error');
+					return;
+				}
+
+				var postData  = {
+					role_name : $('#add_mdjm_role').val(),
+					action    : 'mdjm_add_role'
+				};
+						
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('input[type="submit"]').prop('disabled', true);
+						$('#new_mdjm_role').hide();
+						$('#pleasewait').show();
+						$('#all_roles').addClass( 'mdjm-mute' );
+						$('#employee_role').addClass( 'mdjm-mute' );
+						$('#all_roles').fadeTo('slow', 0.5);
+						$('#employee_role').fadeTo('slow', 0.5);
+					},
+					success: function(response)	{
+						if(response.type === 'success') {
+							$('#all_roles').empty(); // Remove existing options
+							$('#employee_role').empty();
+							$('#all_roles').append(response.options);
+							$('#employee_role').append(response.options);
+							$('#add_mdjm_role').val('');
+							$('#all_roles').fadeTo('slow', 1);
+							$('#all_roles').removeClass( 'mdjm-mute' );
+							$('#employee_role').fadeTo('slow', 1);
+							$('#employee_role').removeClass( 'mdjm-mute' );
+							$('input[type="submit"]').prop('disabled', false);
+							$('#pleasewait').hide();
+							$('#new_mdjm_role').show();
+						}
+						else	{
+							alert(response.msg);
+							$('#all_roles').fadeTo('slow', 1);
+							$('#all_roles').removeClass( 'mdjm-mute' );
+							$('#employee_role').fadeTo('slow', 1);
+							$('#employee_role').removeClass( 'mdjm-mute' );
+							$('input[type="submit"]').prop('disabled', false);
+							$('#pleasewait').hide();
+							$('#new_mdjm_role').show();
+						}
+					}
+				});
+			});
+
 			// Reveal the input field to add a new event worker
             $( document.body ).on( 'click', '.toggle-add-worker-section', function(e) {
                 e.preventDefault();

@@ -195,58 +195,57 @@ function mdjm_employee_dropdown( $args='' )	{
  * @return	void
  */
 function mdjm_add_employee( $post_data )	{
-	
-	if( empty( $post_data['first_name'] ) || empty( $post_data['last_name'] ) || empty( $post_data['user_email'] ) || empty( $post_data['employee_role'] ) )	{
+
+	if ( empty( $post_data['first_name'] ) || empty( $post_data['last_name'] ) || empty( $post_data['user_email'] ) || empty( $post_data['employee_role'] ) )	{
 		return false;
 	}
-	
+
 	// We don't need to execute the hooks for user saves
-	remove_action( 'user_register', array( 'MDJM_Users', 'save_custom_user_fields' ), 10, 1 );
-	remove_action( 'personal_options_update', array( 'MDJM_Users', 'save_custom_user_fields' ) );
+	remove_action( 'user_register',            array( 'MDJM_Users', 'save_custom_user_fields' ), 10, 1 );
+	remove_action( 'personal_options_update',  array( 'MDJM_Users', 'save_custom_user_fields' ) );
 	remove_action( 'edit_user_profile_update', array( 'MDJM_Users', 'save_custom_user_fields' ) );
-	
+
 	// Default employee settings
 	$userdata = array(
-		'user_email'            => $post_data['user_email'],
-		'user_login'            => $post_data['user_email'],
-		'user_pass'		     => wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] ),
-		'first_name'            => ucfirst( $post_data['first_name'] ),
-		'last_name'             => ucfirst( $post_data['last_name'] ),
-		'display_name'          => ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ),
-		'role'                  => $post_data['employee_role'],
-		'show_admin_bar_front'  => false
+		'user_email'           => $post_data['user_email'],
+		'user_login'           => $post_data['user_email'],
+		'user_pass'            => wp_generate_password( mdjm_get_option( 'pass_length' ) ),
+		'first_name'           => ucfirst( $post_data['first_name'] ),
+		'last_name'            => ucfirst( $post_data['last_name'] ),
+		'display_name'         => ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ),
+		'role'                 => $post_data['employee_role'],
+		'show_admin_bar_front' => false
 	);
-	
+
 	/**
 	 * Insert the new employee into the DB.
 	 * Fire a hook on the way to allow filtering of the $default_userdata array.
 	 */
 	$userdata = apply_filters( 'mdjm_new_employee_data', $userdata );
-	
+
 	$user_id = wp_insert_user( $userdata );
-	
+
 	// Re-add our custom user save hooks
 	add_action( 'user_register', array( 'MDJM_Users', 'save_custom_user_fields' ), 10, 1 );
 	add_action( 'personal_options_update', array( 'MDJM_Users', 'save_custom_user_fields' ) );
 	add_action( 'edit_user_profile_update', array( 'MDJM_Users', 'save_custom_user_fields' ) );
-	
+
 	// Success
-	if( !is_wp_error( $user_id ) )	{
-		if( MDJM_DEBUG == true )	{
+	if ( ! is_wp_error( $user_id ) )	{
+		if ( MDJM_DEBUG == true )	{
 			MDJM()->debug->log_it( 
 				'Adding employee ' . ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ) . ' with user ID ' . $user_id,
 				true
 			);
 		}
-		
+
 		mdjm_send_employee_welcome_email( $user_id, $userdata );
-		
+
 		return true;
-	}
-	else	{
+	} else	{
 		if( MDJM_DEBUG == true )
 			MDJM()->debug->log_it( 'ERROR: Unable to add employee. ' . $user_id->get_error_message(), true );
-			
+
 		return false;
 	}			
 } // mdjm_add_employee

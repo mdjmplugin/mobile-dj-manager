@@ -986,7 +986,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 	* **New**: Payment confirmation email to admin now includes the remaining balance for the booking
 	* **New**: Transactions list now includes To/From column to identify the payer/payee
 	* **New**: Events list now includes a Due column displaying the balance owed on the event
-	* **New**: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?>
+	* **New**: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo mdjm_get_application_name(); ?>
 	* **Bug Fix**: PayPal API now correctly processes non deposit/balance payments
 	* **Bug Fix**: Dynamic coding did not update values under certain circumstances
 
@@ -1136,7 +1136,7 @@ Join our Facebook group for all the latest discussions, news and more - https://
 		due to security controls
 	* **Tweak**: Digital contract signing now requires the client to re-enter their password as an additional verification step
 	* **Bug Fix**: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content
-	* **Tweak**: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed
+	* **Tweak**: Begun updating <?php echo mdjm_get_application_name(); ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed
 	* **New**: Create backups of the MDJM database tables and download within the debugging screen
 	* **Tweak**: Significant improvements to the application debugging. No annoying notification when debugging
 		is enabled, however we still only recommend to enable when you are experiencing an issue
