@@ -106,7 +106,7 @@ function mdjm_admin_notices() {
 
 	// Unattended events
 	if ( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
-		$unattended = MDJM()->events->mdjm_count_event_status( 'mdjm-unattended' );
+		$unattended = mdjm_event_count( 'mdjm-unattended' );
 		
 		if( ! empty( $unattended ) && $unattended > 0 )	{
 			echo '<div class="notice notice-info is-dismissible">';

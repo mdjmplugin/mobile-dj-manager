@@ -26,14 +26,14 @@ function mdjm_admin_menu()	{
 		return;
 	}
 	
-	global $mdjm_dashboard_page, $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page, 
+	global $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page, 
 	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
 		   $mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
 		   $mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
 		   $mdjm_custom_client_fields_page, $mdjm_extensions_page;
 	
 	
-	//$mdjm_dashboard_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Dashboard', 'mobile-dj-manager' ), __( 'Dashboard', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-dashboard', 'mdjm_dashboard_page' );
+
 	$mdjm_settings_page	 = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Settings', 'mobile-dj-manager' ), __( 'Settings', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-settings', 'mdjm_options_page' );
 	
 	if( mdjm_employee_can( 'manage_templates' ) )	{
@@ -140,7 +140,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'mdjm-enquiry' => __( 'View Enquiries', 'mobile-dj-manager' ) );
 			
 		foreach( $event_status as $current_status => $display )	{
-			$status_count = MDJM()->events->mdjm_count_event_status( $current_status );
+			$status_count = mdjm_event_count( $current_status );
 			if( !$status_count )
 				continue;
 				
@@ -568,18 +568,10 @@ function mdjm_clients_page()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );	
 } // mdjm_clients_page
 
-function mdjm_comms_page_old()	{
-	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/comms.php' );
-} // mdjm_comms_page_old
-
 function mdjm_employee_availability_page()	{				
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
 } // mdjm_employee_availability_page
 						
-function mdjm_dashboard_page()	{
-	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/dash.php' );
-} // mdjm_dashboard_page
-
 function mdjm_custom_client_fields_page()	{
 	new MDJM_ClientFields();
-} // mdjm_dashboard_page
+} // mdjm_custom_client_fields_page

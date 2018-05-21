@@ -784,9 +784,9 @@ function mdjm_set_employee_role( $employees, $role )	{
  * @return	mixed	$events			False if no events, otherwise an object array of all employees events.
  */
 function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
-	
+
 	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
-	
+
 	$employee_query	= array(
 		'relation' => 'OR',
 		array( 
@@ -810,11 +810,9 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 		'date'           => false, // Required if checking for events on a specific date. Parse an array if querying a date range
 		'date_compare'   => '='
 	);
-		
+
 	$args = wp_parse_args( $args, $defaults );
-	
-	$order_by_num = array( '_mdjm_event_date', '_mdjm_event_dj', '_mdjm_event_client' );
-	
+
 	if ( ! empty( $args['date'] ) )	{
 		$date_query = array(
 			'relation' => 'AND',
@@ -825,23 +823,23 @@ function mdjm_get_employee_events( $employee_id = '', $args = array() )	{
 				'compare' => $args['date_compare']
 			)
 		);
-		
+
 		$args['meta_query'] = array_merge( $employee_query, $date_query );
-		
+
 	}
-	
+
 	// We don't need the date args any longer
 	unset( $args['date'], $args['date_compare'] );
-	
+
 	$events = get_posts( $args );
-	
+
 	// Return the results
 	if ( $events )	{
 		return $events;
 	} else	{
 		return false;
 	}
-	
+
 } // mdjm_get_employee_events
 
 /**
