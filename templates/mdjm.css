@@ -929,3 +929,30 @@ p.view_current_playlist {
 #mdjm_availability_widget .mdjm_pleasewait	{
 	display: none;
 }
+
+/* =Footer
+-------------------------------------------------------------- */
+#mdjm-client-zone-footer	{
+	text-align: center;
+}
+#mdjm-client-zone-footer p	{
+	font-size: 11px;
+	color: #F90;
+}
+#mdjm-client-zone-footer a	{
+	color: #F90;
+	text-decoration: none;
+}
+#mdjm-client-zone-footer a:link {
+	color: #F90;
+}
+
+#mdjm-client-zone-footer a:visited {
+	color: #F90;
+	text-decoration: underline;
+}
+
+#mdjm-client-zone-footer a:hover {
+	color: #F90;
+	text-decoration: underline;
+}

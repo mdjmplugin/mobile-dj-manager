@@ -32,7 +32,7 @@ function mdjm_get_application_name()    {
 function mdjm_show_footer_in_client_zone()	{
 	
 	if ( mdjm_get_option( 'show_credits', false ) )	{
-		echo '<div id="mdjm-cz-footer">';
+		echo '<div id="mdjm-client-zone-footer">';
 		echo '<p>';
 		
 		printf( __( 'Powered by <a href="%s" target="_blank">MDJM Event Management</a>, version %s', 'mobile-dj-manager' ), 'http://mdjm.co.uk', MDJM_VERSION_NUM );

@@ -165,6 +165,8 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
 function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file   = 'admin-scripts' . $suffix . '.js';
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
@@ -217,7 +219,7 @@ function mdjm_register_admin_scripts( $hook )	{
 		wp_enqueue_script( 'jquery-ui-sortable' );
 	}
 
-	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_register_script( 'mdjm-admin-scripts', $js_dir . $file, array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-scripts' );
 
 	wp_localize_script(

@@ -102,7 +102,7 @@
 							'deposit_status'  => ( !empty( $deposit_status ) ? $deposit_status : __( 'Due', 'mobile-dj-manager' ) ),
 							'balance_status'  => ( !empty( $balance_status ) ? $balance_status : __( 'Due', 'mobile-dj-manager' ) ),
 							'payment_history' => MDJM()->txns->list_event_transactions( $post_id ),
-							'type'            => $this->get_event_type( $post_id ),
+							'type'            => mdjm_get_event_type( $post_id, true ),
 							'online_quote'    => mdjm_get_option( 'online_enquiry', false ) && ! empty( $online_quote ) ? $online_quote : '',
 							'contract'        => ( !empty( $contract ) ? $contract : '' ),
 							'contract_date'	  => ( !empty( $contract_date ) ? date( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) : 
