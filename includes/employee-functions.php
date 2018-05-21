@@ -670,19 +670,17 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	
 	$mdjm_txn = new MDJM_Txn();
 	
-	$mdjm_txn->create(
-		array(
-			'post_title'     => sprintf( __( 'Wage payment to %s for %d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $data['id'] ), $event_id ),
-			'post_status'    => 'mdjm-expenditure',
-			'post_author'    => 1,
-			'post_parent'    => $event_id
-		),
-		array(
-			'_mdjm_txn_status'    => 'Pending',
-			'_mdjm_payment_to'    => $data['id'],
-			'_mdjm_txn_total'     => $data['wage']
-		)
-	);
+	$mdjm_txn->create( array(
+		'post_title'  => sprintf( __( 'Wage payment to %s for %d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $data['id'] ), $event_id ),
+		'post_status' => 'mdjm-expenditure',
+		'post_author' => 1,
+		'post_parent' => $event_id
+	),
+	array(
+		'_mdjm_txn_status' => 'Pending',
+		'_mdjm_payment_to' => $data['id'],
+		'_mdjm_txn_total'  => $data['wage']
+	) );
 	
 	if ( ! empty( $mdjm_txn ) )	{
 		$data['txn_id'] = $mdjm_txn->ID;
@@ -692,7 +690,7 @@ function mdjm_add_employee_to_event( $event_id, $args )	{
 	array_push( $employees, $data['id'] );
 	$employees_data[ $data['id'] ] = $data;
 	
-	if( update_post_meta( $event_id, '_mdjm_event_employees', $employees ) && update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data ) )	{
+	if ( update_post_meta( $event_id, '_mdjm_event_employees', $employees ) && update_post_meta( $event_id, '_mdjm_event_employees_data', $employees_data ) )	{
 		return true;
 	} else	{
 		return false;

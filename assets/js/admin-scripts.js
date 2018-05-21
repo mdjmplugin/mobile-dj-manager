@@ -1,4 +1,4 @@
-var mdjm_admin_vars;
+avar mdjm_admin_vars;
 jQuery(document).ready(function ($) {
 
     // Setup Chosen menus
@@ -464,7 +464,7 @@ jQuery(document).ready(function ($) {
 		},
 
 		employee : function()	{
-			// Reveal the input field to add a new event type
+			// Reveal the input field to add a new event worker
             $( document.body ).on( 'click', '.toggle-add-worker-section', function(e) {
                 e.preventDefault();
 
