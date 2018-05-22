@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param	arr		Array of form post data.
  */
 function mdjm_add_event_playlist_entry_action( $data )	{
-	if ( empty( $data['entry_song'] ) || empty( $data['entry_artist'] ) )	{
+	if ( empty( $data['song'] ) || empty( $data['artist'] ) )	{
 		$message = 'adding_song_failed';
 	}
 	elseif ( ! wp_verify_nonce( $data['mdjm_nonce'], 'add_playlist_entry' ) )	{
@@ -223,7 +223,7 @@ function mdjm_email_event_playlist_action( $data )	{
 		$html_content_end = '<p>' . __( 'Regards', 'mobile-dj-manager' ) . '</p>' . "\n" .
 					'<p>{company_name}</p>' . "\n";
 					'<p>&nbsp;</p>' . "\n";
-					'<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n" .
+					'<p align="center" style="font-size: 9px">Powered by <a style="color:#F90" href="https://mdjm.co.uk" target="_blank">' . MDJM_NAME . '</a> version ' . MDJM_VERSION_NUM . '</p>' . "\n" .
 					'</body>' . "\n" . '</html>';
 		
 		$args = array(

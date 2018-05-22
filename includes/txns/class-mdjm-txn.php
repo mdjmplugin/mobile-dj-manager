@@ -208,6 +208,9 @@ class MDJM_Txn {
 
 		add_action( 'save_post_mdjm-transaction', 'mdjm_save_txn_post', 10, 3 );
 
+		$cache_key = md5( sprintf( 'mdjm_event_income_txns_%s', $data['post_parent'] ) );
+		delete_transient( $cache_key );
+
 		return $this->setup_txn( $txn );
 
 	} // create

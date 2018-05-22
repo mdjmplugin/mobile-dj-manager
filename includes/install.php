@@ -203,11 +203,11 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									__( 'Best Regards', 'mobile-dj-manager' ) .
 									'<br /><br />' .
-									'{dj_fullname}' .
+									'{employee_fullname}' .
 									'<br /><br />' .
-									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{employee_email}">{employee_email}</a>' .
 									'<br />' .
-									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {employee_primary_phone}' .
 									'<br />' .
 									'<a href="{website_url}">{website_url}</a>'
 			)
@@ -223,7 +223,7 @@ function mdjm_run_install()	{
 				'comment_status' => 'closed',
 				'post_content'   => sprintf( '[caption id="" align="alignleft" width="128"]<a href="%1$s"><img title="%2$s" src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/10/icon-128x1281.png" alt="%2$s" width="128" height="128" /></a> %2$s[/caption]', '{website_url}', '{company_name}' ) .
 									'<h3>' . sprintf( __( '%s Quotation for %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{client_fullname}' ) . '</h3>' .
-									'<pre>' . sprintf( __( 'Prepared by: %s', 'mobile-dj-manager' ), '{dj_fullname}' ) .
+									'<pre>' . sprintf( __( 'Prepared by: %s', 'mobile-dj-manager' ), '{employee_fullname}' ) .
 									'<br />' .
 									__( 'Date:', 'mobile-dj-manager' ) . ' {DDMMYYYY}' .
 									'<br />' .
@@ -233,7 +233,7 @@ function mdjm_run_install()	{
 									'<br />' .
 									sprintf( __( 'It is with pleasure that I am providing you with the following costs for your %s on %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), '{event_date}' ) .
 									'<br /><br />' .
-									sprintf( __( 'I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on %1$s or at <a href="mailto: %2$s">%2$s</a>.', 'mobile-dj-manager' ), '{dj_primary_phone}', '{dj_email}' ) .
+									sprintf( __( 'I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on %1$s or at <a href="mailto: %2$s">%2$s</a>.', 'mobile-dj-manager' ), '{employee_primary_phone}', '{employee_email}' ) .
 									'<br />' .
 									'<table style="font-size: 11px;">' .
 									'<tbody>' .
@@ -326,7 +326,7 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									sprintf( __( 'Thank you for booking your up and coming %s with %s. Your booking is now confirmed.', 'mobile-dj-manager' ), mdjm_get_label_singular(), '{company_name}' ) .
 									'<br /><br />' .
-									sprintf( __( 'My name is %s and I will be your DJ on %s. Should you wish to contact me at any stage to discuss your %s, my details are at the end of this email.', 'mobile-dj-manager' ), '{dj_fullname}', '{event_date}', mdjm_get_label_singular( true ) ) .
+									sprintf( __( 'My name is %s and I will be your DJ on %s. Should you wish to contact me at any stage to discuss your %s, my details are at the end of this email.', 'mobile-dj-manager' ), '{employee_fullname}', '{event_date}', mdjm_get_label_singular( true ) ) .
 									'<br />' .
 									'<h2>' . __( 'What Now?', 'mobile-dj-manager' ) . '</h2>' .
 									'<br />' .
@@ -348,11 +348,11 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									__( 'Best Regards', 'mobile-dj-manager' ) .
 									'<br /><br />' .
-									'{dj_fullname}' .
+									'{employee_fullname}' .
 									'<br /><br />' .
-									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{employee_email}">{employee_email}</a>' .
 									'<br />' .
-									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {employee_primary_phone}' .
 									'<br />' .
 									'<a href="{website_url}">{website_url}</a>'
 			)
@@ -367,7 +367,7 @@ function mdjm_run_install()	{
 				'ping_status'    => 'closed',
 				'comment_status' => 'closed',
 				'post_content'   => '<h1>' . __( 'Booking Confirmation', 'mobile-dj-manager' ) . '</h1>' .
-									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{dj_firstname}' ) .
+									sprintf( __( 'Dear %s,', 'mobile-dj-manager' ), '{employee_firstname}' ) .
 									'<br /><br />' .
 									sprintf( __( 'Your client %s has just confirmed their booking for you to DJ at their %s on %s.', 'mobile-dj-manager' ), '{client_fullname}', mdjm_get_label_singular( true ), '{event_date}' ) .
 									'<br /><br />' .
@@ -415,11 +415,11 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									__( 'Best Regards', 'mobile-dj-manager' ) .
 									'<br /><br />' .
-									'{dj_fullname}' .
+									'{employee_fullname}' .
 									'<br /><br />' .
-									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{employee_email}">{employee_email}</a>' .
 									'<br />' .
-									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {employee_primary_phone}' .
 									'<br />' .
 									'<a href="{website_url}">{website_url}</a>'
 			)
@@ -444,11 +444,11 @@ function mdjm_run_install()	{
 									'<br /><br />' .
 									__( 'Best Regards', 'mobile-dj-manager' ) .
 									'<br /><br />' .
-									'{dj_fullname}' .
+									'{employee_fullname}' .
 									'<br /><br />' .
-									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{dj_email}">{dj_email}</a>' .
+									__( 'Email:', 'mobile-dj-manager' ) . ' <a href="mailto:{employee_email}">{employee_email}</a>' .
 									'<br />' .
-									__( 'Tel:', 'mobile-dj-manager' ) . ' {dj_primary_phone}' .
+									__( 'Tel:', 'mobile-dj-manager' ) . ' {employee_primary_phone}' .
 									'<br />' .
 									'<a href="{website_url}">{website_url}</a>'
 			)

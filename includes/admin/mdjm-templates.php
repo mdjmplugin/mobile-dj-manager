@@ -47,10 +47,10 @@
 								<br />
 								Best Regards<br />
 								<br />
-								{DJ_FULLNAME}<br />
+								{employee_fullname}<br />
 								<br />
-								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
-								Tel: {DJ_PRIMARY_PHONE}<br />
+								Email: <a href="mailto:{employee_email}">{employee_email}</a><br />
+								Tel: {employee_primary_phone}<br />
 								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_enquiry_content_args = array(
@@ -101,7 +101,7 @@
 									<br />
 									Thank you for booking your up and coming disco with {COMPANY_NAME}. Your booking is now confirmed.<br />
 									<br />
-									My name is {DJ_FULLNAME} and I will be your DJ on {EVENT_DATE}. Should you wish to contact me at any stage to discuss your disco, my details are at the end of this email.<br />
+									My name is {employee_fullname} and I will be your DJ on {EVENT_DATE}. Should you wish to contact me at any stage to discuss your disco, my details are at the end of this email.<br />
 									<h2>What Now?</h2><br />
 									<strong>Music Selection & Playlists</strong><br />
 									<br />
@@ -121,10 +121,10 @@
 									<br />
 									Best Regards<br />
 									<br />
-									{DJ_FULLNAME}<br />
+									{employee_fullname}<br />
 									<br />
-									Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
-									Tel: {DJ_PRIMARY_PHONE}<br />
+									Email: <a href="mailto:{employee_email}">{employee_email}</a><br />
+									Tel: {employee_primary_phone}<br />
 									<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_client_booking_confirm_args = array(
@@ -138,7 +138,7 @@
 								);
 
 	$email_dj_booking_confirm = '<h1>Booking Confirmation</h1>
-								Dear {DJ_FIRSTNAME},<br />
+								Dear {employee_firstname},<br />
 								<br />
 								Your client {CLIENT_FULLNAME} has just confirmed their booking for you to DJ at their event on {EVENT_DATE}.<br />
 								<br />
@@ -184,10 +184,10 @@
 								<br />
 								Best Regards<br />
 								<br />
-								{DJ_FULLNAME}<br />
+								{employee_fullname}<br />
 								<br />
-								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
-								Tel: {DJ_PRIMARY_PHONE}<br />
+								Email: <a href="mailto:{employee_email}">{employee_email}</a><br />
+								Tel: {employee_primary_phone}<br />
 								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_unavailability_template_args = array(
@@ -216,10 +216,10 @@
 								<br />
 								Best Regards<br />
 								<br />
-								{DJ_FULLNAME}<br />
+								{employee_fullname}<br />
 								<br />
-								Email: <a href="mailto:{DJ_EMAIL}">{DJ_EMAIL}</a><br />
-								Tel: {DJ_PRIMARY_PHONE}<br />
+								Email: <a href="mailto:{employee_email}">{employee_email}</a><br />
+								Tel: {employee_primary_phone}<br />
 								<a href="{WEBSITE_URL}">{WEBSITE_URL}</a>';
 	
 	$email_payment_received_template_args = array(
@@ -234,14 +234,14 @@
 								
 		$online_quote_template = '[caption id="" align="alignleft" width="128"]<a href="{WEBSITE_URL}"><img title="{COMPANY_NAME}" src="http://www.mydjplanner.co.uk/wp-content/uploads/2014/10/icon-128x1281.png" alt="{COMPANY_NAME}" width="128" height="128" /></a> {COMPANY_NAME}[/caption]
 							<h3>Event Quotation for {CLIENT_FULLNAME}</h3>
-							<pre>Prepared by: {DJ_FULLNAME}<br />
+							<pre>Prepared by: {employee_fullname}<br />
 							Date: {DDMMYYYY}<br />
 							Valid for: 2 weeks from date</pre><br />
 							Dear {CLIENT_FIRSTNAME},<br />
 							
 							It is with pleasure that I am providing you with the following costs for your event on {EVENT_DATE}.<br /><br />
 							
-							I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on {DJ_PRIMARY_PHONE} or at <a href="mailto: {DJ_EMAIL}">{DJ_EMAIL}</a>.<br />
+							I hope you find our quotation to your satisfaction. If there is anything you would like to discuss in further detail, please contact me on {employee_primary_phone} or at <a href="mailto: {employee_email}">{employee_email}</a>.<br />
 							<table style="font-size: 11px;">
 							<tbody>
 							<tr>

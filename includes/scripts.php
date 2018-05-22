@@ -165,15 +165,16 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
 function mdjm_register_admin_scripts( $hook )	{
 
 	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file   = 'admin-scripts' . $suffix . '.js';
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-		
-	if( strpos( $hook, 'mdjm' ) )	{
+
+	if ( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
-		
 	}
 
 	$editing_event      = false;
@@ -184,7 +185,6 @@ function mdjm_register_admin_scripts( $hook )	{
 	);
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-
 		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
 			$sortable[] = 'post.php';
 			$sortable[] = 'post-new.php';
@@ -193,28 +193,33 @@ function mdjm_register_admin_scripts( $hook )	{
 		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
 			$editing_event = true;
 		}
+
 		if ( isset( $_GET['post_type'] ) && 'mdjm-event' == $_GET['post_type'] )	{
 			$editing_event = true;
 		}
-		
+
 		if ( $editing_event )	{
 			$require_validation[] = 'post.php';
 			$require_validation[] = 'post-new.php';
 		}
+
+		if ( isset( $_GET['post'] ) && 'mdjm-transaction' == get_post_type( $_GET['post'] ) )	{
+			wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery' ), MDJM_VERSION_NUM );
+			wp_enqueue_script( 'mdjm-trans-js' );
+			wp_localize_script( 'mdjm-trans-js', 'transaction_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		}
 	}
-	
+
 	if ( in_array( $hook, $require_validation ) )	{
-		
 		wp_register_script( 'jquery-validation-plugin', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
 		wp_enqueue_script( 'jquery-validation-plugin' );
-
 	}
 
 	if ( in_array( $hook, $sortable ) )	{
 		wp_enqueue_script( 'jquery-ui-sortable' );
 	}
-	
-	wp_register_script( 'mdjm-admin-scripts', $js_dir . 'admin-scripts.js', array( 'jquery' ), MDJM_VERSION_NUM );
+
+	wp_register_script( 'mdjm-admin-scripts', $js_dir . $file, array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-admin-scripts' );
 
 	wp_localize_script(
@@ -223,6 +228,7 @@ function mdjm_register_admin_scripts( $hook )	{
 		apply_filters(
 			'mdjm_admin_script_vars',
 			array(
+                'admin_url'            => ! is_multisite() ? admin_url() : network_admin_url(),
                 'ajax_loader'          => MDJM_PLUGIN_URL . '/assets/images/loading.gif',
 				'ajaxurl'              => mdjm_get_ajax_url(),
                 'currency'             => mdjm_get_currency(),
@@ -263,8 +269,10 @@ function mdjm_register_admin_scripts( $hook )	{
                 'hide_venue_details'   => __( 'Hide venue', 'mobile-dj-manager' ),
                 'one_option'           => __( 'Choose an option', 'mobile-dj-manager' ),
         		'one_or_more_option'   => __( 'Choose one or more options', 'mobile-dj-manager' ),
+                'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' ),
+				'task_completed'       => __( 'Task executed successfully', 'mobile-dj-manager' ),
                 'type_to_search'       => __( 'Type to search', 'mobile-dj-manager' ),
-                'search_placeholder'   => __( 'Type to search all options', 'mobile-dj-manager' )
+                'unavailable_template' => mdjm_get_option( 'unavailable' )
 			)
 		)
 	);

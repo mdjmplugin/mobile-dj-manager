@@ -88,7 +88,7 @@ add_filter( 'manage_edit-mdjm-event_sortable_columns', 'mdjm_event_post_sortable
 function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	global $post;
 	
-	if( mdjm_employee_can( 'edit_txns' ) && ( $column_name == 'value' || $column_name == 'balance' ) )	{
+	if( mdjm_employee_can( 'edit_txns' ) && $column_name == 'value' )	{
 		$value = mdjm_get_event_price( $post_id );
 	}
 		

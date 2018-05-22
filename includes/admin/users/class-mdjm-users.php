@@ -529,7 +529,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				if( is_admin() )	{
 					
 					if( !defined( 'DOING_AJAX' ) || !DOING_AJAX )	{
-						wp_redirect( mdjm_get_formatted_url( MDJM_HOME, false ) );
+						wp_redirect( mdjm_get_formatted_url( mdjm_get_option( 'app_home_page' ), false ) );
 						exit;	
 					}
 					
@@ -551,17 +551,17 @@ if( !class_exists( 'MDJM_Users' ) ) :
 		public function prepare_user_pass_reset( $user_id )	{
 
 			MDJM()->debug->log_it( 'Preparing user ' . $user_id . ' for password reset' );
-				
+
 			$reset = update_user_meta(
 				$user_id,
 				'mdjm_pass_action',
-				wp_generate_password( $GLOBALS['mdjm_settings']['clientzone']['pass_length'] )
+				wp_generate_password( mdjm_get_option( 'pass_length' ) )
 			);
-			
+
 			MDJM()->debug->log_it( 'Password preparation ' . !empty( $reset ) ? 'success' : 'fail' );
-			
+
 			return $reset;
-			
+
 		} // prepare_user_pass_reset
 		
 		/**

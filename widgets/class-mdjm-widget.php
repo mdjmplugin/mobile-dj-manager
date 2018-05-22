@@ -120,7 +120,7 @@
 				if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
 					$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
 					$replace = array( date( 'l, jS F Y', strtotime( $_POST['widget_check_date'] ) ), 
-									date( MDJM_SHORTDATE_FORMAT, strtotime( $_POST['widget_check_date'] ) ) );
+									date( mdjm_get_option( 'short_date_format' ), strtotime( $_POST['widget_check_date'] ) ) );
 				}
 				if( !isset( $_POST['mdjm_widget_avail_submit'] ) || $_POST['mdjm_widget_avail_submit'] != $instance['submit_text'] )	{
 					echo '<div id="widget_avail_intro">' . $instance['intro'] . '</div>';

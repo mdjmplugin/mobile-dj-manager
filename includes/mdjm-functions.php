@@ -237,54 +237,52 @@
 			mdjm_update_notice( 'error', 'Could not remove entry' );	
 		}
 	} // mdjm_remove_holiday
-	
-	/*
-	 * Check the availability of the DJ('s) on the given date (Y-m-d)
-	 *
-	 * @param	int			$dj		Optional: The user ID of the DJ, if empty we'll check all
-	 *			arr			$roles	Optional: If no $dj is set, we can check an array of role names
-	 *			str|arr		$date	The date (Y-m-d) to check
-	 *
-	 * @return	arr			$status	array of user id's (['available'] | ['unavailable']
-	 */
-	function dj_available( $dj='', $roles='', $date='' )	{
-		global $mdjm;
-		
-		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
-		
-		$required_roles = array( 'administrator' );
-		
-		if( !empty( $GLOBALS['mdjm_settings']['availability']['availability_roles'] ) )
-			$required_roles = array_merge( $required_roles, $GLOBALS['mdjm_settings']['availability']['availability_roles'] );
-		
-		// If no DJ is specified but roles are, retrieve all employees for the roles
-		if( empty( $dj ) && !empty( $roles ) )
-			$dj = mdjm_get_employees( $roles );
-		
-		$dj = !empty( $dj ) ? $dj : mdjm_get_employees( $required_roles );
 
-		$date = !empty( $date ) ? $date : date( 'Y-m-d' );
-		
-		if( is_array( $dj ) )	{
-			foreach( $dj as $employee )	{						
+	/*
+	 * Check the availability of the Employee('s) on the given date (Y-m-d)
+	 *
+	 * @param	int				$dj		Optional: The user ID of the DJ, if empty we'll check all
+	 * @param	arr				$roles	Optional: If no $dj is set, we can check an array of role names
+	 * @param	string|array	$date	The date (Y-m-d) to check
+	 * @return	array			$status	array of user id's (['available'] | ['unavailable']
+	 */
+	function dj_available( $dj = '', $roles = '', $date = '' )	{
+		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
+
+		$required_roles     = array( 'administrator' );
+		$availability_roles = mdjm_get_option( 'availability_roles' );
+
+		if ( ! empty( $availability_roles ) )	{
+			$required_roles = array_merge( $required_roles, $availability_roles );
+		}
+
+		// If no DJ is specified but roles are, retrieve all employees for the roles
+		if ( empty( $dj ) && ! empty( $roles ) )	{
+			$dj = mdjm_get_employees( $roles );
+		}
+
+		$dj   = ! empty( $dj )   ? $dj   : mdjm_get_employees( $required_roles );
+		$date = ! empty( $date ) ? $date : date( 'Y-m-d' );
+
+		if ( is_array( $dj ) )	{
+			foreach( $dj as $employee )	{
 				$user[] = $employee->ID;
 			}
-		}
-		else	{
+		} else	{
 			$user[] = $dj;
 		}
-		
+
 		foreach( $user as $dj )	{
-			if( MDJM()->events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{ // Unavailable
+			if( MDJM()->events->employee_bookings( $dj, $date ) || is_on_holiday( $dj, $date ) )	{
 				$status['unavailable'][] = $dj;
-			}
-			else	{
+			} else	{
 				$status['available'][] = $dj;	
 			}
 		}
+
 		return $status;
 	} // dj_available
-	
+
 	/*
 	 * Check if the DJ is on holiday during the given date
 	 *

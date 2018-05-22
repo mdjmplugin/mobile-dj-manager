@@ -123,6 +123,10 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			$event_label = mdjm_get_label_singular();
 			$event_types = mdjm_get_package_event_types( $post_id );
 
+			if ( ! $event_types )	{
+				$event_types = array( 'all' );
+			}
+
 			if ( in_array( 'all', $event_types ) )	{
 				$output[] = sprintf( __( 'All %s Types', 'mobile-dj-manager' ), $event_label );
 			} else	{
@@ -294,7 +298,8 @@ function mdjm_save_package_post( $post_id, $post )	{
 	foreach ( $fields as $field )	{
 
 		if ( ! empty( $_POST[ $field ] ) )	{
-			if ( '_package_employees' == $field && ! is_array( $_POST[ $field ] ) )	{
+			$array_fields = array( '_package_event_types', '_package_employees' );
+			if ( in_array( $field, $array_fields ) && ! is_array( $_POST[ $field ] ) )	{
 				$_POST[ $field ] = array( 'all' );
 			}
 

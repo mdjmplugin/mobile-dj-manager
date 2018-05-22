@@ -1,4 +1,4 @@
-/**
+plre/**
  * MDJM Event Management Styles
  *
  * @package     MDJM
@@ -11,7 +11,7 @@
 /* =General
 -------------------------------------------------------------- */
 p.head-nav	{
-	font-size: 11px;
+	font-size: 80%;
 	text-align: right;
 	color: #7B7D80;
 }
@@ -519,75 +519,6 @@ a	{
 	background-image: url('../assets/images/info-icon.png');
 }
 
-/* =Playlist Page
--------------------------------------------------------------- */
-#mdjm-playlist-header	{
-	float: left;
-}
-
-/* Playlist Table */
-#mdjm-playlist-form-table	{
-	border-collapse: collapse;
-	border: none;
-	font-size: smaller;
-}
-
-#mdjm-playlist-form-table td	{
-	text-align: left;
-	vertical-align: top;
-	border: none;
-	padding: 5px;
-}
-
-#mdjm-playlist-form-table td label	{
-	font-style: italic;
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-#mdjm-playlist-form-table td input,
-#mdjm-playlist-form-table td select,
-#mdjm-playlist-form-table td textarea	{
-	font-size: smaller;
-}
-
-#mdjm-playlist-form-table .mdjm-playlist-addnew-cell	{
-	text-align: right;
-}
-
-/* Playlist Entries */
-#mdjm-playlist-entries .col	{
-    float: left;
-    width: 25%;
-}
-
-#mdjm-playlist-entries .last	{
-    float: right;
-    width: 25%;
-}
-
-#mdjm-playlist-entries .category	{
-    float: left;
-    width: 100%;
-	font-weight: bold;
-	padding-top: 10px;
-}
-
-#mdjm-playlist-entries .row	{
-    height: auto;
-    overflow: auto;
-}
-
-#mdjm-playlist-entries .mdjm-playlist-entry:hover	{
-	background-color: #DFF2BF;
-}
-
-#mdjm-playlist-entries .cat-count	{
-	font-style: italic;
-	font-weight: normal;
-	font-size: small;
-}
-
 /* = Theme Specific styling
 -------------------------------------------------------------- */
 
@@ -698,13 +629,21 @@ a	{
 }
 
 .playlist-entry-row-headings,
-.playlist-entry-row {
+.playlist-entry-row,
+.guest-playlist-entry-row-headings,
+.guest-playlist-entry-row {
 	font-size: 80%;
 }
 
 .guest-playlist-entry-column {
     float: left;
-    width: 25%;
+    width: 33%;
+    padding: 2px;
+}
+
+.guest-playlist-entry-column:nth-child(3) {
+    float: left;
+    width: 15%;
     padding: 2px;
 }
 
@@ -722,13 +661,15 @@ a	{
 
 .playlist-entry-row-headings:after,
 .playlist-entry-row:after,
+.guest-playlist-entry-row-headings:after,
 .guest-playlist-entry-row:after {
     content: "";
     display: table;
     clear: both;
 }
 
-.playlist-entry-row:hover {
+.playlist-entry-row:hover,
+.guest-playlist-entry-row:hover{
 	background-color: #E9ECEA;
 }
 
@@ -739,14 +680,19 @@ span.guest-playlist-entry-heading	{
 
 .mdjm_playlist_share {
     margin: 2px;
-}
-
-.mdjm_playlist_share {
-	text-align: center;
+    text-align: center;
 }
 
 .mdjm_playlist_removing {
-	background-color: #a00;
+	background-color: #c4554e;
+    opacity: 0.7;
+}
+
+p.view_current_playlist {
+    font-size: 80%;
+    padding: 0px;
+    margin: 0px;
+    text-align: right;
 }
 /* =Login Form
 -------------------------------------------------------------- */
@@ -901,8 +847,7 @@ span.guest-playlist-entry-heading	{
 	padding: 0;
 }
 
-#mdjm_client_profile_form_wrap input.error,
-#input.error	{
+#mdjm_client_profile_form_wrap input.error	{
 	border-color: #c4554e;
 }
 
@@ -985,66 +930,29 @@ span.guest-playlist-entry-heading	{
 	display: none;
 }
 
-/* = OLD Guest Playlist
+/* =Footer
 -------------------------------------------------------------- */
-
-#mdjm-guest-playlist-header	{
-	float: left;
+#mdjm-client-zone-footer	{
+	text-align: center;
+}
+#mdjm-client-zone-footer p	{
+	font-size: 11px;
+	color: #F90;
+}
+#mdjm-client-zone-footer a	{
+	color: #F90;
+	text-decoration: none;
+}
+#mdjm-client-zone-footer a:link {
+	color: #F90;
 }
 
-/* Playlist Table */
-#mdjm-guest-playlist-form-table	{
-	border-collapse: collapse;
-	border: none;
-	font-size: smaller;
-}
-
-#mdjm-guest-playlist-form-table td	{
-	text-align: left;
-	vertical-align: top;
-	border: none;
-	padding: 5px;
-}
-
-#mdjm-guest-playlist-form-table td label	{
-	font-style: italic;
-	font-weight: bold;
+#mdjm-client-zone-footer a:visited {
+	color: #F90;
 	text-decoration: underline;
 }
 
-#mdjm-guest-playlist-form-table td input,
-#mdjm-guest-playlist-form-table td select,
-#mdjm-guest-playlist-form-table td textarea	{
-	font-size: smaller;
-}
-
-#mdjm-guest-playlist-form-table .mdjm-playlist-addnew-cell	{
-	text-align: right;
-}
-
-/* Playlist Entries */
-#mdjm-guest-playlist-entries .col	{
-    float: left;
-    width: 25%;
-}
-
-#mdjm-guest-playlist-entries .last	{
-    float: right;
-    width: 25%;
-}
-
-#mdjm-guest-playlist-entries .category	{
-    float: left;
-    width: 100%;
-	font-weight: bold;
-	padding-top: 10px;
-}
-
-#mdjm-guest-playlist-entries .row	{
-    height: auto;
-    overflow: auto;
-}
-
-#mdjm-guest-playlist-entries .mdjm-guest-playlist-entry:hover	{
-	background-color: #DFF2BF;
+#mdjm-client-zone-footer a:hover {
+	color: #F90;
+	text-decoration: underline;
 }

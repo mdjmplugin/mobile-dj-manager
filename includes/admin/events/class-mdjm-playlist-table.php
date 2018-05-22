@@ -431,28 +431,28 @@ class MDJM_PlayList_Table extends WP_List_Table	{
         <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
 			<?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
             <?php mdjm_admin_action_field( 'add_playlist_entry' ); ?>
-            <input type="hidden" id="entry_event" name="entry_event" value="<?php echo $_GET['event_id']; ?>" />
-            <input type="hidden" id="entry_addedby" name="entry_addedby" value="<?php echo mdjm_get_event_client_id( $_GET['event_id'] ); ?>" />
+            <input type="hidden" id="event_id" name="event_id" value="<?php echo $_GET['event_id']; ?>" />
+            <input type="hidden" id="added_by" name="added_by" value="<?php echo mdjm_get_event_client_id( $_GET['event_id'] ); ?>" />
             <table id="mdjm-playlist-form-table">
                 <tr>
                     <td>
-                        <label for="entry_song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
+                        <label for="song"><?php _e( 'Song', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->text( array(
-							'name' => 'entry_song',
+							'name' => 'song',
 							'type' => 'text'
 						) ); ?>
                     </td>
                     
                     <td class="mdjm-playlist-artist-cell">
-                        <label for="entry_artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
+                        <label for="artist"><?php _e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
                         <?php echo MDJM()->html->text( array(
-							'name'  => 'entry_artist',
+							'name'  => 'artist',
 							'type'  => 'text'
 						) ); ?>
                     </td>
 
                     <td class="mdjm-playlist-category-cell">
-                        <label for="entry_category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
+                        <label for="category"><?php _e( 'Category', 'mobile-dj-manager' ); ?></label><br />
                         <?php $playlist_categories = mdjm_get_playlist_categories(); ?>
                         <?php $options = array(); ?>
                         <?php foreach( $playlist_categories as $playlist_category ) : ?>
@@ -460,7 +460,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
                         <?php endforeach; ?>
                         <?php echo MDJM()->html->select( array(
 							'options'          => $options,
-							'name'             => 'entry_category',
+							'name'             => 'category',
 							'selected'         => mdjm_get_option( 'playlist_default_cat', 0 )
 						) ); ?>
                     </td>
@@ -469,9 +469,9 @@ class MDJM_PlayList_Table extends WP_List_Table	{
                 <tr>
 
                     <td class="mdjm-playlist-djnotes-cell" colspan="3">
-                        <label for="mdjm_playlist_djnotes"><?php printf( __( 'Notes', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
+                        <label for="notes"><?php printf( __( 'Notes', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
                         <?php echo MDJM()->html->textarea( array(
-							'name'        => 'entry_djnotes'
+							'name'        => 'notes'
 						) ); ?>
                     </td>
                 </tr>

@@ -128,7 +128,7 @@
 		 * @param: $p => the post ID
 		 */
 		function insert_stat_image( $p )	{			
-			if( empty( $p ) || MDJM_TRACK_EMAILS != true )
+			if( empty( $p ) || mdjm_get_option( 'track_client_emails' ) != true )
 				return;
 				
 			$stat = sprintf( '<img alt="" src="'. home_url() . '/?mdjm-api=%s&post=%s&action=%s" border="0" height="3"  width="37" />', 'MDJM_EMAIL_RCPT', $p, 'open_email' );

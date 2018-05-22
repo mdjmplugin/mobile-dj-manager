@@ -93,12 +93,14 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Discounts can now be applied to events
 **New**: Display break down of event costs on events page
 **New**: Added option to require deposit to be paid before an event is marked as confirmed
+**New**: Added the Tasks metabox to the event screen so admins can execute tasks whilst managing an event
 **New**: Client profile page is now templated and AJAX based
 **New**: Client profile page has been updated to be more responsive and inline with the formatting of forms used elsewhere
 **New**: Playlist client and guest pages have been updated to be more responsive and inline with the formatting of forms used elsewhere
 **New**: Client playlist is powered by AJAX
 **New**: Added Twitter and Facebook share links to the client playlist page
 **New**: Guest playlist form is now powered by AJAX and displays all entries added by the guest during the current session
+**New**: Guests can now remove songs they have entered during their current session
 **New**: Added client playlist notification task to notify clients of guest submissions
 **New**: Added employee playlist notification task to notify if entries exist
 **New**: Added fields to enter client address when creating client from events page
@@ -107,17 +109,21 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **New**: Clicking the number of events within the venue list table will now take you to a filtered list of events for the venue
 **New**: Added pagination to the clients list
 **New**: Added the `additional_cost` content tag
-**New**" Added the `discount` content tag
+**New**: Added the `discount` content tag
+**New**: Added caching to event transaction queries to improve event screen load times
 **Tweak**: Prohibit the deletion or renaming of the slug for the playlist Guest category
 **Tweak**: Clients can now be searched by ID, email, and display name on the clients page
 **Tweak**: Correctly named media button options from Shortcodes to Content Tags
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
 **Tweak**: Removed a bunch of deprecated files
+**Fix**: Balance reminder task may not send reminder until day of event
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
 **Fix**: Corrected the number of events a contract is assigned to
 **Fix**: Removed notification that client received playlist email when emailing to employee via admin
+**Fix**: Correctly set the value to 'all' if no event type is defined for a package
+**Fix**; Correctly honour the min/max values for a number field within the `MDJM_HTML_Elements` class
 
 = 1.4.7.8 =
 
@@ -980,7 +986,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 	* **New**: Payment confirmation email to admin now includes the remaining balance for the booking
 	* **New**: Transactions list now includes To/From column to identify the payer/payee
 	* **New**: Events list now includes a Due column displaying the balance owed on the event
-	* **New**: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo MDJM_APP; ?>
+	* **New**: Notify Admin?<a href="<?php echo mdjm_get_admin_page( 'clientzone_settings' ); ?>">Setting</a> added and enabled by default. With selected, admin will receive email notification when a client accepts a quotation, or signs a contract via the <?php echo mdjm_get_application_name(); ?>
 	* **Bug Fix**: PayPal API now correctly processes non deposit/balance payments
 	* **Bug Fix**: Dynamic coding did not update values under certain circumstances
 
@@ -1130,7 +1136,7 @@ Join our Facebook group for all the latest discussions, news and more - https://
 		due to security controls
 	* **Tweak**: Digital contract signing now requires the client to re-enter their password as an additional verification step
 	* **Bug Fix**: Strange actions if the Availability widget was displayed at the same time as an Availability form within the main content
-	* **Tweak**: Begun updating <?php echo MDJM_APP; ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed
+	* **Tweak**: Begun updating <?php echo mdjm_get_application_name(); ?> pages for HTML5 &amp; CSS3 compliance. Not yet completed
 	* **New**: Create backups of the MDJM database tables and download within the debugging screen
 	* **Tweak**: Significant improvements to the application debugging. No annoying notification when debugging
 		is enabled, however we still only recommend to enable when you are experiencing an issue

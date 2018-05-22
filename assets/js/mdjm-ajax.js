@@ -17,6 +17,16 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+    /* = When a link with class .mdjm-scroller is clicked, we scroll
+	====================================================================================== */
+    $(document).on('click', '.mdjm-scroller', function(e) {
+        e.preventDefault();
+        var goto = $(this).attr('href');
+        $('html, body').animate({
+            scrollTop: $(goto).offset().top
+        }, 500);
+    });
+
 	/*=Payments Form
 	---------------------------------------------------- */
 	// Load the fields for the selected payment method
@@ -128,13 +138,16 @@ jQuery(document).ready(function ($) {
 
 					$('#playlist-entries').append(response.data.row_data);
 
-					if( response.data.closed )	{
+					if ( response.data.closed )	{
 						window.location.href = mdjm_vars.playlist_page;
 					} else {
 						$('.song-count').text(response.data.songs);
 						$('.playlist-length').text(response.data.length);
-					}
 
+						if ( 0 !== response.data.total && $('.view_current_playlist').hasClass('mdjm-hidden') ) {
+							$('.view_current_playlist').removeClass('mdjm-hidden');
+						}
+					}
 				}
 
 				$('#playlist_entry_submit').prop('disabled', false);
@@ -152,9 +165,10 @@ jQuery(document).ready(function ($) {
 
 	/* = Remove playlist entry
 	====================================================================================== */
-	$(document).on('click', '.playlist-delete-entry', function(e) {
+	$(document).on('click', '.playlist-delete-entry', function() {
 		var event_id = $(this).data('event');
 		var song_id  = $(this).data('entry');
+        var row      = '.mdjm-playlist-entry-' + song_id;
 		var postData = {
 			event_id: event_id,
             song_id : song_id,
@@ -168,20 +182,24 @@ jQuery(document).ready(function ($) {
 			url        : mdjm_vars.ajaxurl,
 			beforeSend : function()	{
 				$('#playlist-entries').addClass('mdjm_mute');
+                $(row).addClass('mdjm_playlist_removing');
 			},
 			complete   : function() {
 				$('#playlist-entries').removeClass('mdjm_mute');
 			},
 			success    : function (response) {
 				if ( response.success )	{
-					var row = '.mdjm-playlist-entry-' + song_id;
-					$(row).addClass('mdjm_playlist_removing').delay(1000).remove();
+					$(row).remove();
 
 					if ( response.data.count > 0 ) {
 						$('.song-count').text(response.data.songs);
 						$('.playlist-length').text(response.data.length);
 					} else {
 						$('#playlist-entries').addClass('mdjm-hidden');
+
+						if ( ! $('.view_current_playlist').hasClass('mdjm-hidden') ) {
+							$('.view_current_playlist').addClass('mdjm-hidden');
+						}
 					}
 
 				}
@@ -262,6 +280,43 @@ jQuery(document).ready(function ($) {
 				console.log( data );
 			}
 		});
+	});
+
+    /* = Remove guest playlist entry
+	====================================================================================== */
+	$(document).on('click', '.guest-playlist-delete-entry', function() {
+		var event_id = $(this).data('event');
+		var song_id  = $(this).data('entry');
+        var row      = '.mdjm-playlist-entry-' + song_id;
+		var postData = {
+			event_id: event_id,
+            song_id : song_id,
+            action  : 'mdjm_remove_guest_playlist_entry'
+        };
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : postData,
+			url        : mdjm_vars.ajaxurl,
+			beforeSend : function()	{
+				$('#guest-playlist-entries').addClass('mdjm_mute');
+                $(row).addClass('mdjm_playlist_removing');
+			},
+			complete   : function() {
+				$('#guest-playlist-entries').removeClass('mdjm_mute');
+			},
+			success    : function (response) {
+				if ( response.success )	{
+					$(row).remove();
+				}
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+
 	});
 
     /* = Client profile form validation and submission

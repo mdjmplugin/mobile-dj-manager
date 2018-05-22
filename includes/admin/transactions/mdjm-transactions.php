@@ -71,7 +71,7 @@
 						
 						$output = mdjm_currency_filter( mdjm_sanitize_amount( get_post_meta( $txn->ID, '_mdjm_txn_total', true ) ) );
 						$output .=  ' ';
-						$output .=  'on ' . date( MDJM_SHORTDATE_FORMAT, strtotime( $txn->post_date ) ) . ' (' . $txn_type . ')';
+						$output .=  'on ' . date( mdjm_get_option( 'short_date_format' ), strtotime( $txn->post_date ) ) . ' (' . $txn_type . ')';
 						
 						if( $i < count( $txns ) )
 							$output .= '<br />';
@@ -150,8 +150,8 @@
 			
 			$trans_post = get_default_post_to_edit( 'mdjm-transaction', true );
 			
-			$trans_data['ID'] = MDJM_EVENT_PREFIX . $trans_post->ID;
-			$trans_data['post_title'] = MDJM_EVENT_PREFIX . $trans_post->ID;
+			$trans_data['ID'] = mdjm_get_option( 'event_prefix' ) . $trans_post->ID;
+			$trans_data['post_title'] = mdjm_get_option( 'event_prefix' ) . $trans_post->ID;
 			$trans_data['post_status'] = $txn_status;
 			$trans_data['post_date'] = ( !empty( $data['post_date'] ) ? $data['post_date'] : date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) );
 			$trans_data['edit_date'] = true;

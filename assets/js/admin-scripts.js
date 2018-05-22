@@ -255,10 +255,10 @@ jQuery(document).ready(function ($) {
 		init : function()	{
 			this.options();
 			this.client();
-			//this.costs();
 			this.employee();
 			this.equipment();
 			this.playlist();
+            this.tasks();
 			this.time();
 			this.travel();
 			this.type();
@@ -464,7 +464,69 @@ jQuery(document).ready(function ($) {
 		},
 
 		employee : function()	{
-			// Reveal the input field to add a new event type
+
+			// Add a new employee role
+			$( document.body ).on( 'click', '#new_mdjm_role', function(e) {
+				e.preventDefault();
+
+				if ( $('#add_mdjm_role').hasClass('mdjm-form-error') )	{
+					$('#add_mdjm_role').removeClass('mdjm-form-error');
+				}
+
+				if ( $('#add_mdjm_role').val().length < 1 )	{
+					$('#add_mdjm_role').addClass('mdjm-form-error');
+					return;
+				}
+
+				var postData  = {
+					role_name : $('#add_mdjm_role').val(),
+					action    : 'mdjm_add_role'
+				};
+						
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('input[type="submit"]').prop('disabled', true);
+						$('#new_mdjm_role').hide();
+						$('#pleasewait').show();
+						$('#all_roles').addClass( 'mdjm-mute' );
+						$('#employee_role').addClass( 'mdjm-mute' );
+						$('#all_roles').fadeTo('slow', 0.5);
+						$('#employee_role').fadeTo('slow', 0.5);
+					},
+					success: function(response)	{
+						if(response.type === 'success') {
+							$('#all_roles').empty(); // Remove existing options
+							$('#employee_role').empty();
+							$('#all_roles').append(response.options);
+							$('#employee_role').append(response.options);
+							$('#add_mdjm_role').val('');
+							$('#all_roles').fadeTo('slow', 1);
+							$('#all_roles').removeClass( 'mdjm-mute' );
+							$('#employee_role').fadeTo('slow', 1);
+							$('#employee_role').removeClass( 'mdjm-mute' );
+							$('input[type="submit"]').prop('disabled', false);
+							$('#pleasewait').hide();
+							$('#new_mdjm_role').show();
+						}
+						else	{
+							alert(response.msg);
+							$('#all_roles').fadeTo('slow', 1);
+							$('#all_roles').removeClass( 'mdjm-mute' );
+							$('#employee_role').fadeTo('slow', 1);
+							$('#employee_role').removeClass( 'mdjm-mute' );
+							$('input[type="submit"]').prop('disabled', false);
+							$('#pleasewait').hide();
+							$('#new_mdjm_role').show();
+						}
+					}
+				});
+			});
+
+			// Reveal the input field to add a new event worker
             $( document.body ).on( 'click', '.toggle-add-worker-section', function(e) {
                 e.preventDefault();
 
@@ -695,6 +757,76 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'change', '#_mdjm_event_playlist', function() {
 				$('#mdjm-playlist-limit').toggle('fast');
 			});
+		},
+
+        tasks : function()	{
+            // Render the run task button when an event task is selected
+			$( document.body ).on( 'change', '#mdjm_event_task', function() {
+                var task = $(this).val();
+
+                if ( '0' === task ) {
+                    $('#mdjm-event-task-run').addClass('mdjm-hidden');
+                } else  {
+                    $('#mdjm-event-task-run').removeClass('mdjm-hidden');
+                }
+			});
+
+            // Execute the selected event task
+            $( document.body ).on( 'click', '#mdjm-run-task', function(e)   {
+                e.preventDefault();
+
+                $('#mdjm-event-tasks').addClass('mdjm-mute');
+
+                var task     = $('#mdjm_event_task').val(),
+                    event_id = $('#post_ID').val();
+
+                if ( 'reject-enquiry' === task )    {
+                    var client = $('#client_name').val(),
+                        params = { page:'mdjm-comms', recipient:client, template:mdjm_admin_vars.unavailable_template, event_id:event_id, 'mdjm-action':'respond_unavailable' },
+                        url    = mdjm_admin_vars.admin_url + 'admin.php?';
+
+                    window.location.href = url + $.param( params );
+                    return;
+                }
+
+                var postData = {
+                    event_id : event_id,
+                    task     : task,
+                    action   : 'mdjm_execute_event_task'
+                };
+                $.ajax({
+                    type       : 'POST',
+                    dataType   : 'json',
+                    data       : postData,
+                    url        : ajaxurl,
+                    beforeSend : function() {
+                        $('#mdjm-run-task').addClass('mdjm-hidden');
+                        $('#mdjm-spinner').css('visibility', 'visible');
+                    },
+                    complete : function()	{
+						$('#mdjm-event-tasks').removeClass('mdjm-mute');
+					},
+                    success: function (response) {
+                        if ( response.success ) {
+                            $('#mdjm-event-task-run').addClass('mdjm-hidden');
+                            $('#mdjm_event_status').val(response.data.status);
+                            $('#mdjm_event_status').trigger('chosen:updated');
+                            $('.task-history-items').html(response.data.history);
+                            $('.task-history-items').removeClass('description');
+                            $('#mdjm-run-task').removeClass('mdjm-hidden');
+                            $('#mdjm_event_task').val('0');
+                            $('#mdjm_event_task').trigger('chosen:updated');
+                            $('#mdjm-spinner').css('visibility', 'hidden');
+                        } else  {
+                            alert('Error');
+                        }
+                    }
+                }).fail(function (data) {
+                    if ( window.console && window.console.log ) {
+                        console.log( data );
+                    }
+                });
+            });
 		},
 
 		time : function()	{
@@ -1646,7 +1778,7 @@ var mdjmFormatNumber = function(value) {
 	return numeric.toLocaleString(eventCurrency, { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 };
 
-var mdjmLabelFormatter = function (label, series) {
+var mdjmLabelFormatter = function (label) {
 	return '<div style="font-size:12px; text-align:center; padding:2px">' + label + '</div>';
 };
 

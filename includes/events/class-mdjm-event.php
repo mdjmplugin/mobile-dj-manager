@@ -489,7 +489,7 @@ class MDJM_Event {
 			
 			$employees_data = get_post_meta( $this->ID, '_mdjm_event_employees_data', true );
 			
-			if ( ! empty( $employees_data ) )	{
+			if ( ! empty( $employees_data ) && is_array( $employees_data ) )	{
 				
 				foreach( $employees_data as $employee_data )	{
 					
@@ -661,6 +661,26 @@ class MDJM_Event {
 		
 		return apply_filters( 'mdjm_event_finish', $finish, $this->ID );
 	} // get_finish_time
+
+	/**
+	 * Retrieve the event duration in hours.
+	 *
+	 * @since	1.5
+	 * @param	bool	$round_up	Whether to round up to nearest hour
+	 * @return	int		The event duration in hours
+	 */
+	public function get_duration( $round_up = true ) {
+		$start_timestamp = strtotime( $this->get_start_time() . ' ' . $this->date );
+		$end_timestamp   = strtotime( $this->get_finish_time() . ' ' . $this->get_finish_date() );
+		$event_seconds   = $end_timestamp - $start_timestamp;
+		$event_hours     = $event_seconds / HOUR_IN_SECONDS;
+
+		if ( $round_up )	{
+			$event_hours = round( $event_hours );
+		}
+
+		return (int) $event_hours;
+	} // get_duration
 
 	/**
 	 * Retrieve the event setup date
@@ -1030,7 +1050,13 @@ class MDJM_Event {
 		if ( ! isset( $this->income ) )	{
 
 			$this->income = '0.00';
-			$txns         = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-income' ) );
+			$cache_key    = md5( sprintf( 'mdjm_event_income_txns_%s', $this->ID ) );
+			$txns         = get_transient( $cache_key );
+
+			if ( false === $txns )	{
+				$txns = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-income' ) );
+				set_transient( $cache_key, $txns );
+			}
 
 			if ( ! empty ( $txns ) )	{
 
@@ -1065,7 +1091,13 @@ class MDJM_Event {
 		if ( ! isset( $this->outgoings ) )	{
 
 			$this->outgoings = '0.00';
-			$txns         = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-expenditure' ) );
+			$cache_key    = md5( sprintf( 'mdjm_event_outgoing_txns_%s', $this->ID ) );
+			$txns         = get_transient( $cache_key );
+
+			if ( false === $txns )	{
+				$txns = mdjm_get_event_txns( $this->ID, array( 'post_status' => 'mdjm-expenditure' ) );
+				set_transient( $cache_key, $txns );
+			}
 
 			if ( ! empty ( $txns ) )	{
 
@@ -1274,10 +1306,6 @@ class MDJM_Event {
 		}
 
 		$this->get_tasks();
-
-		if ( array_key_exists( $task, $this->tasks ) )	{
-			return false;
-		}
 
 		$this->tasks[ $task ] = current_time( 'timestamp' );
 

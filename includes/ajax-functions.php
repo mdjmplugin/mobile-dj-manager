@@ -256,9 +256,10 @@ function mdjm_submit_playlist_ajax()	{
 
 		wp_send_json_success( array(
 			'row_data' => $row_data,
-			'closed' => $closed,
-			'songs'  => $songs,
-			'length' => $length
+			'closed'   => $closed,
+			'songs'    => $songs,
+			'length'   => $length,
+			'total'    => $total_entries
 		) );
 	}
 
@@ -337,15 +338,22 @@ function mdjm_submit_guest_playlist_ajax()	{
 		'mdjm_playlist_event' => $event
 	);
 
-	if ( mdjm_store_guest_playlist_entry( $playlist_data ) )	{
+    $entry_id = mdjm_store_guest_playlist_entry( $playlist_data );
+
+	if ( $entry_id )	{
 		ob_start(); ?>
-		<div class="guest-playlist-entry-row">
+		<div class="guest-playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo esc_attr( $artist ); ?></span>
+				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $artist ) ); ?></span>
 			</div>
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo esc_attr( $song ); ?></span>
+				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $song ) ); ?></span>
 			</div>
+			<div class="guest-playlist-entry-column">
+                <span class="playlist-entry">
+                    <a class="mdjm-delete guest-playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php _e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                </span>
+            </div>
 		</div>
 		<?php
 		$entry = ob_get_clean();
@@ -363,6 +371,25 @@ function mdjm_submit_guest_playlist_ajax()	{
 } // mdjm_submit_guest_playlist_ajax
 add_action( 'wp_ajax_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
 add_action( 'wp_ajax_nopriv_mdjm_submit_guest_playlist', 'mdjm_submit_guest_playlist_ajax' );
+
+/**
+ * Remove guest playlist entry.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_remove_guest_playlist_entry_ajax()	{
+	$event_id = absint( $_POST['event_id'] );
+	$song_id  = absint( $_POST['song_id'] );
+
+	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
+		wp_send_json_success();
+	}
+
+	wp_send_json_error();
+} // mdjm_remove_guest_playlist_entry_ajax
+add_action( 'wp_ajax_mdjm_remove_guest_playlist_entry', 'mdjm_remove_guest_playlist_entry_ajax' );
+add_action( 'wp_ajax_nopriv_mdjm_remove_guest_playlist_entry', 'mdjm_remove_guest_playlist_entry_ajax' );
 
 /**
  * Save the client fields order during drag and drop.
@@ -835,7 +862,46 @@ function mdjm_add_event_type_ajax()	{
 
 } // mdjm_add_event_type_ajax
 add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
-	
+
+/**
+ * Execute single event tasks.
+ *
+ * @since   1.5
+ */
+function mdjm_execute_event_task_ajax() {
+    $task_id         = sanitize_text_field( $_POST['task'] );
+    $event_id        = absint( $_POST['event_id'] );
+    $tasks           = mdjm_get_tasks_for_event( $event_id );
+    $result          = mdjm_run_single_event_task( $event_id, $task_id );
+	$mdjm_event      = new MDJM_Event( $event_id );
+	$completed_tasks = $mdjm_event->get_tasks();
+    $tasks_history   = array();
+
+    if ( ! $result )    {
+        wp_send_json_error();
+    }
+
+    foreach( $completed_tasks as $task_slug => $run_time )  {
+        if ( ! array_key_exists( $task_slug, $tasks ) ) {
+            continue;
+        }
+
+        $tasks_history[] = sprintf(
+            '%s: %s',
+            mdjm_get_task_name( $task_slug ),
+            date( mdjm_get_option( 'short_date_format' ), $run_time )
+        );
+    }
+
+	$task_history = '<span class="task-history-items">' . implode( '<br>', $tasks_history ) . '</span>';
+
+    wp_send_json_success( array(
+        'status' => $mdjm_event->post_status,
+        'history' => $task_history
+    ) );
+} // mdjm_execute_event_task_ajax
+add_action( 'wp_ajax_mdjm_execute_event_task', 'mdjm_execute_event_task_ajax' );
+
 /**
  * Add a new transaction type
  * Initiated from the Transaction Post screen
@@ -847,29 +913,26 @@ function mdjm_add_transaction_type_ajax()	{
 	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
 		
 	$args = array( 
-				'taxonomy'			=> 'transaction-types',
-				'hide_empty' 		  => 0,
-				'name' 				=> 'mdjm_transaction_type',
-				'id' 				=> 'mdjm_transaction_type',
-				'orderby' 			 => 'name',
-				'hierarchical' 		=> 0,
-				'show_option_none' 	=> __( 'Select Transaction Type', 'mobile-dj-manager' ),
-				'class'			   => ' required',
-				'echo'				=> 0,
-			);
+        'taxonomy'         => 'transaction-types',
+        'hide_empty'       => 0,
+        'name'             => 'mdjm_transaction_type',
+        'id'               => 'mdjm_transaction_type',
+        'orderby'          => 'name',
+        'hierarchical'     => 0,
+        'show_option_none' => __( 'Select Transaction Type', 'mobile-dj-manager' ),
+        'class'			   => ' required',
+        'echo'             => 0
+    );
 			
 	/* -- Validate that we have a Transaction Type to add -- */
-	if( empty( $_POST['type'] ) )	{
+	if ( empty( $_POST['type'] ) )	{
 		$result['type'] = 'Error';
-		$result['msg'] = 'Please enter a name for the new Transaction Type';
-	}
-	/* -- Add the new Event Type (term) -- */
-	else	{
+		$result['msg']  = 'Please enter a name for the new Transaction Type';
+	} else	{
 		$term = wp_insert_term( $_POST['type'], 'transaction-types' );
-		if( is_array( $term ) )	{
+		if ( is_array( $term ) )	{
 			$result['type'] = 'success';
-		}
-		else	{
+		} else	{
 			$result['type'] = 'error';
 		}
 	}
@@ -1129,13 +1192,13 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
 function mdjm_add_employee_to_event_ajax()	{
 
 	$args = array(
-		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']      : '',
+		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']    : '',
 		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
 		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
 		'payment_status'  => 'unpaid'
 	);
 
-	if( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
+	if ( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
 
 		$result['type'] = 'error';
 		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );
