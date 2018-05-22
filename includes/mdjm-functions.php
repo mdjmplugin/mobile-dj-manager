@@ -249,10 +249,11 @@
 	function dj_available( $dj = '', $roles = '', $date = '' )	{
 		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
 
-		$required_roles = array( 'administrator' );
+		$required_roles     = array( 'administrator' );
+		$availability_roles = mdjm_get_option( 'availability_roles', array() );
 
 		if ( ! empty( mdjm_get_option( 'availability_roles' ) ) )	{
-			$required_roles = array_merge( $required_roles, mdjm_get_option( 'availability_roles' ) );
+			$required_roles = array_merge( $required_roles, $availability_roles );
 		}
 
 		// If no DJ is specified but roles are, retrieve all employees for the roles
