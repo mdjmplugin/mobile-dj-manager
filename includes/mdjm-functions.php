@@ -250,9 +250,9 @@
 		MDJM()->debug->log_it( 'Check availability for ' . $date, true );
 
 		$required_roles     = array( 'administrator' );
-		$availability_roles = mdjm_get_option( 'availability_roles', array() );
+		$availability_roles = mdjm_get_option( 'availability_roles' );
 
-		if ( ! empty( mdjm_get_option( 'availability_roles' ) ) )	{
+		if ( ! empty( $availability_roles ) )	{
 			$required_roles = array_merge( $required_roles, $availability_roles );
 		}
 
