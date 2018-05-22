@@ -776,13 +776,6 @@ function mdjm_v15_upgrades()	{
 
 	update_option( 'mdjm_schedules', $tasks );
 
-	// Create the new Playlist database tables
-	$playlist      = new MDJM_DB_Playlists;
-	$playlist_meta = new DB_Playlist_Meta;
-
-	$playlist->create_table();
-	$playlist_meta->create_table();
-
 } // mdjm_v15_upgrades
 
 /**

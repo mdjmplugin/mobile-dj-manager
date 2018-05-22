@@ -135,17 +135,11 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 			define( 'MDJM_PLUGIN_FILE', __FILE__ );
-			define( 'MDJM_NAME', 'MDJM Event Management' );
-			
-			define( 'MDJM_CLIENTZONE', MDJM_PLUGIN_DIR . '/client-zone' );
-			define( 'MDJM_CLIENT_FIELDS', 'mdjm_client_fields' );
-			
-			define( 'MDJM_DB_VERSION', get_option( 'mdjm_db_version' ) );
+			define( 'MDJM_NAME', 'MDJM Event Management' );			
 			
 			define( 'MDJM_API_SETTINGS_KEY', 'mdjm_api_data' );
 			
 			// Tables
-			define( 'MDJM_PLAYLIST_TABLE', $wpdb->prefix . 'mdjm_playlists' );
 			define( 'MDJM_HOLIDAY_TABLE', $wpdb->prefix . 'mdjm_avail' );
 			
 		} // setup_constants
@@ -171,7 +165,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/api/class-mdjm-api.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-db.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
@@ -197,8 +190,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/travel-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/playlist-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/playlist-actions.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/class-mdjm-db-playlists.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/playlist/class-mdjm-db-playlist-meta.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/venue-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/txns/class-mdjm-txn.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/txns/txn-functions.php' );
