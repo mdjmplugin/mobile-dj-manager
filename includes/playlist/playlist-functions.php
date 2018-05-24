@@ -1,4 +1,4 @@
-u<?php
+<?php
 /**
  * Contains all playlist related functions
  *
