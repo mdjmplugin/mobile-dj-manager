@@ -1507,9 +1507,9 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 			$_POST['mdjm_event_status'],
 			$_POST['original_post_status'],
 			array(
-				'client_notices'	=> empty( $_POST['mdjm_block_emails'] )		? true							: false,
-				'email_template'	=> ! empty( $_POST['mdjm_email_template'] )	? $_POST['mdjm_email_template']	: false,
-				'quote_template'	=> ! empty( $_POST['mdjm_online_quote'] )	? $_POST['mdjm_online_quote']	: false
+				'client_notices'  => empty( $_POST['mdjm_block_emails'] )     ? true							: false,
+				'email_template'  => ! empty( $_POST['mdjm_email_template'] ) ? $_POST['mdjm_email_template']	: false,
+				'quote_template'  => ! empty( $_POST['mdjm_online_quote'] )   ? $_POST['mdjm_online_quote']	: false
 			)
 		);
 				

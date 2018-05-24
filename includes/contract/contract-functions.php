@@ -217,8 +217,8 @@ function mdjm_sign_event_contract( $event_id, $details )	{
             'mdjm-awaitingdeposit',
             $event->post_status,
             array(
-                'meta'           => $event_meta,
-                'client_notices' => mdjm_get_option( 'awaitingdeposit_to_client' )
+                'meta'            => $event_meta,
+                'client_notices'  => mdjm_get_option( 'awaitingdeposit_to_client' )
             )
         );
 

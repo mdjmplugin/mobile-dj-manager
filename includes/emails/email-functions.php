@@ -271,12 +271,10 @@ function mdjm_email_booking_confirmation( $event_id )	{
  * Email the booking confirmation to the employee from a customisable email template.
  *
  * @since	1.5
- * @param	int		$event_id	Event ID
+ * @param	object	$mdjm_event		MDJM_Event class object
  * @return	void
  */
-function mdjm_email_employee_booking_confirmation( $event_id )	{
-	
-	$mdjm_event   = mdjm_get_event( $event_id );
+function mdjm_email_employee_booking_confirmation( $mdjm_event )	{
 
 	$from_name    = mdjm_get_option( 'company_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'employee_booking_conf', $mdjm_event );
@@ -289,12 +287,12 @@ function mdjm_email_employee_booking_confirmation( $event_id )	{
 
 	$subject      = mdjm_email_set_subject( mdjm_get_option( 'email_dj_confirm', false ), 'employee_booking_conf' );
 	$subject      = apply_filters( 'mdjm_employee_booking_conf_subject', wp_strip_all_tags( $subject ) );
-	$subject      = mdjm_do_content_tags( $subject, $event_id, $mdjm_event->client );
+	$subject      = mdjm_do_content_tags( $subject, $mdjm_event->ID, $mdjm_event->client );
 
 	$attachments  = apply_filters( 'mdjm_employee_booking_conf_attachments', array(), $mdjm_event );
 	
 	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'email_dj_confirm', false ), 'employee_booking_conf' );
-	$message      = mdjm_do_content_tags( $message, $event_id, $mdjm_event->client );
+	$message      = mdjm_do_content_tags( $message, $mdjm_event->ID, $mdjm_event->client );
 
 	$emails = MDJM()->emails;
 
@@ -302,7 +300,7 @@ function mdjm_email_employee_booking_confirmation( $event_id )	{
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_address', $from_email );
 	
-	$headers = apply_filters( 'mdjm_employee_booking_conf_headers', $emails->get_headers(), $event_id, $mdjm_event->client );
+	$headers = apply_filters( 'mdjm_employee_booking_conf_headers', $emails->get_headers(), $mdjm_event->ID, $mdjm_event->client );
 	$emails->__set( 'headers', $headers );
 	
 	$emails->__set( 'track', apply_filters( 'mdjm_track_email_employee_booking_confirmation', false ) );
@@ -312,6 +310,7 @@ function mdjm_email_employee_booking_confirmation( $event_id )	{
 	$emails->send( $to_email, $subject, $message, $attachments );
 	
 } // mdjm_email_employee_booking_confirmation
+add_action( 'mdjm_email_booking_confirmation', 'mdjm_email_employee_booking_confirmation' );
 
 /**
  * Email the payment receipt for payments received via a gateway.

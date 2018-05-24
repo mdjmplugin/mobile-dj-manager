@@ -2119,11 +2119,6 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
 		mdjm_email_booking_confirmation( $event_id );
 	}
 
-	if ( mdjm_get_option( 'booking_conf_to_dj' ) )	{
-		error_log( '111' );
-		mdjm_email_employee_booking_confirmation( $event_id );
-	}
-
 	return $update;
 	
 } // mdjm_set_event_status_mdjm_approved
