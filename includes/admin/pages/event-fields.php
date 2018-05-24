@@ -713,9 +713,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				case 'checkbox':
 					$div_class = 'mdjm-repeatable-option mdjm_repeatable_default_wrapper';
 					$output = MDJM()->html->checkbox( array(
-						'name'     => $name,
-						'current'  => $current,
-						'value'    => $value
+						'name'    => $name,
+						'current' => $current,
+						'value'   => $value
 					) );
 					break;
 
@@ -747,8 +747,8 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 				case 'textarea':
 					$output = MDJM()->html->textarea( array(
-						'name'        => $name,
-						'value'       => get_post_meta( $mdjm_event->ID, $name, true )
+						'name'  => $name,
+						'value' => get_post_meta( $mdjm_event->ID, $name, true )
 					) );
 					break;
 			}
@@ -776,7 +776,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			$mdjm_event    = new MDJM_Event( $post->ID );
 			$query         = mdjm_get_custom_fields();
 			$custom_fields = $query->get_posts();
-			
+
 			foreach ( $custom_fields as $custom_field )	{
 
 				if ( 'checkbox' != get_post_meta( $custom_field->ID, '_mdjm_field_type', true ) )	{
@@ -790,11 +790,11 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				}
 
 			}
-			
+
 			if ( ! empty( $meta ) )	{
 				mdjm_update_event_meta( $mdjm_event->ID, $meta );
 			}
-			
+
 		} // manage_custom_fields_on_event_save
 				
 		/**
