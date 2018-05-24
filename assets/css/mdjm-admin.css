@@ -831,6 +831,7 @@ checkbox.mdjm-form-error {
 .mdjm-event-discount,
 .mdjm-event-deposit,
 .mdjm-event-cost,
+.mdjm-custom-field,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
@@ -859,9 +860,13 @@ checkbox.mdjm-form-error {
 .mdjm-event-additional-cost,
 .mdjm-event-discount,
 .mdjm-event-deposit,
-.mdjm-event-cost {
+.mdjm-event-cost,
+.mdjm-custom-field {
 	width: 25%;
 	margin-right: 5%;
+}
+.mdjm-custom-field input[type="text"] {
+	width: 200px;
 }
 .mdjm-repeatable-option {
 	text-align: center;
@@ -930,7 +935,10 @@ checkbox.mdjm-form-error {
 .mdjm-event-date-fields,
 .mdjm-event-package-fields,
 .mdjm-event-price-fields,
-.mdjm-event-equipment-price-fields {
+.mdjm-event-equipment-price-fields,
+.mdjm-client-custom-fields,
+.mdjm-event-custom-fields,
+.mdjm-venue-custom-fields {
     display: block !important;
 	margin-top: 6px;
 }
@@ -983,6 +991,7 @@ checkbox.mdjm-form-error {
 	.mdjm-event-discount,
     .mdjm-event-deposit,
     .mdjm-event-cost,
+	.mdjm-custom-field,
     .mdjm-repeatable-option {
 		float: none;
 		text-align: left;
