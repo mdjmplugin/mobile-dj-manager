@@ -2115,10 +2115,15 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
 	mdjm_update_event_meta( $event_id, $args['meta'] );
 	
 	// Email the client
-	if( ! empty( $args['client_notices'] ) )	{
+	if ( ! empty( $args['client_notices'] ) )	{
 		mdjm_email_booking_confirmation( $event_id );
 	}
-	
+
+	if ( mdjm_get_option( 'booking_conf_to_dj' ) )	{
+		error_log( '111' );
+		mdjm_email_employee_booking_confirmation( $event_id );
+	}
+
 	return $update;
 	
 } // mdjm_set_event_status_mdjm_approved
