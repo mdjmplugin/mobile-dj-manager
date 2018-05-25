@@ -1972,40 +1972,32 @@ function mdjm_set_event_status_mdjm_enquiry( $event_id, $old_status, $args = arr
 	
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-enquiry'
-		)
-	);
-	
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-enquiry'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-	
+
 	// Generate an online quote that is visible via the Client Zone
 	if( mdjm_get_option( 'online_enquiry', false ) )	{
-		
 		$quote_template = isset( $args['quote_template'] ) ? $args['quote_template'] : mdjm_get_option( 'online_enquiry' );
-		
-		$quote_id = mdjm_create_online_quote( $event_id, $quote_template );
-
+		$quote_id       = mdjm_create_online_quote( $event_id, $quote_template );
 	}
-	
+
 	// Email the client
-	if( ! empty( $args['client_notices'] ) )	{
-
+	if ( ! empty( $args['client_notices'] ) )	{
 		$email_template = isset( $args['email_template'] ) ? $args['email_template'] : mdjm_get_option( 'enquiry' );
-		
 		mdjm_email_quote( $event_id, $email_template );
-
 	}
-		
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_enquiry
 
 /* Update event status to Avaiting Deposit
@@ -2024,8 +2016,8 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
         remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 
         $update = wp_update_post( array(
-                'ID'          => $event_id,
-                'post_status' => 'mdjm-awaitingdeposit'
+			'ID'          => $event_id,
+			'post_status' => 'mdjm-awaitingdeposit'
         ) );
 
         // Meta updates
@@ -2057,30 +2049,28 @@ function mdjm_set_event_status_mdjm_awaitingdeposit( $event_id, $old_status, $ar
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-contract'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-contract'
+	) );
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-	
+
 	// Email the client
 	if( ! empty( $args['client_notices'] ) )	{
 		mdjm_email_enquiry_accepted( $event_id );
 	}
-	
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_contract
 
 /**
@@ -2097,30 +2087,28 @@ function mdjm_set_event_status_mdjm_contract( $event_id, $old_status, $args = ar
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-approved'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-approved'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-	
+
 	// Email the client
 	if ( ! empty( $args['client_notices'] ) )	{
 		mdjm_email_booking_confirmation( $event_id );
 	}
 
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_approved
 
 /**
@@ -2137,25 +2125,23 @@ function mdjm_set_event_status_mdjm_approved( $event_id, $old_status, $args = ar
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_completed( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-completed'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-completed'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-		
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_completed
 
 /**
@@ -2172,25 +2158,23 @@ function mdjm_set_event_status_mdjm_completed( $event_id, $old_status, $args = a
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_cancelled( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-cancelled'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'             => $event_id,
+		'post_status'    => 'mdjm-cancelled'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-		
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_cancelled
 
 /**
@@ -2207,25 +2191,23 @@ function mdjm_set_event_status_mdjm_cancelled( $event_id, $old_status, $args = a
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_failed( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-failed'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-failed'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-		
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_failed
 
 /**
@@ -2242,25 +2224,23 @@ function mdjm_set_event_status_mdjm_failed( $event_id, $old_status, $args = arra
  * @return	int		The ID of the event if it is successfully updated. Otherwise returns 0.
  */
 function mdjm_set_event_status_mdjm_rejected( $event_id, $old_status, $args = array() )	{
-	
+
 	remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
-	$update = wp_update_post(
-		array( 
-			'ID'             => $event_id,
-			'post_status'    => 'mdjm-rejected'
-		)
-	);
-	
+
+	$update = wp_update_post( array( 
+		'ID'          => $event_id,
+		'post_status' => 'mdjm-rejected'
+	) );
+
 	add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
-	
+
 	// Meta updates
 	$args['meta']['_mdjm_event_last_updated_by'] = is_user_logged_in() ? get_current_user_id() : 1;
-	
+
 	mdjm_update_event_meta( $event_id, $args['meta'] );
-		
+
 	return $update;
-	
+
 } // mdjm_set_event_status_mdjm_rejected
 
 /**
@@ -2271,22 +2251,20 @@ function mdjm_set_event_status_mdjm_rejected( $event_id, $old_status, $args = ar
  * @return	obj			Quote post object or false if no quote exists
  */
 function mdjm_get_event_quote( $event_id )	{
-	
-	$quote = get_posts( 
-		array( 
-			'posts_per_page'	 => 1,
-			'post_parent'		=> $event_id,
-			'post_type'		  => 'mdjm-quotes',
-			'post_status'		=> 'any'
-		)
-	);
-								
-	if( $quote )	{
+
+	$quote = get_posts(  array( 
+		'posts_per_page' => 1,
+		'post_parent'    => $event_id,
+		'post_type'      => 'mdjm-quotes',
+		'post_status'    => 'any'
+	) );
+
+	if ( $quote )	{
 		return $quote[0];
 	} else	{
 		return false;
 	}
-					
+
 } // mdjm_get_event_quote
 
 /**
@@ -2297,15 +2275,15 @@ function mdjm_get_event_quote( $event_id )	{
  * @return	int			Quote post ID false if no quote exists
  */
 function mdjm_get_event_quote_id( $event_id )	{
-	
+
 	$quote = mdjm_get_event_quote( $event_id );
-									
-	if( $quote )	{
+
+	if ( $quote )	{
 		return $quote->ID;
 	} else	{
 		return false;
 	}
-					
+
 } // mdjm_get_event_quote_id
 
 /**
@@ -2319,15 +2297,14 @@ function mdjm_get_event_quote_id( $event_id )	{
  * @return	int			$quote_id		The ID of the newly created post or false on fail.
  */
 function mdjm_create_online_quote( $event_id, $template_id = '' )	{
-	
+
 	$existing_id = mdjm_get_event_quote_id( $event_id );
-	
 	$template_id = ! empty( $template_id ) ? $template_id : mdjm_get_option( 'online_enquiry' );
-	
+
 	if ( empty( $template_id ) )	{
 		return false;
 	}
-	
+
 	/**
 	 * Allow filtering of the quote template.
 	 *
@@ -2335,13 +2312,12 @@ function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 	 * @param	$template_id
 	 */
 	$template_id = apply_filters( 'mdjm_online_quote_template', $template_id );
-	
-	$template = get_post( $template_id );
-	
+	$template    = get_post( $template_id );
+
 	if ( ! $template )	{
 		return false;
 	}
-	
+
 	/**
 	 * Fire the `mdjm_pre_create_online_quote` hook.
 	 *
@@ -2351,14 +2327,14 @@ function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 	 * @param	obj		$template		The quote template WP_Post object
 	 */
 	do_action( 'mdjm_pre_create_online_quote', $event_id, $template_id, $template );
-	
+
 	$client_id = mdjm_get_event_client_id( $event_id );
-	
+
 	$content = $template->post_content;
 	$content = apply_filters( 'the_content', $content );
 	$content = str_replace( ']]>', ']]&gt;', $content );
 	$content = mdjm_do_content_tags( $content, $event_id, $client_id );
-	
+
 	$args = array(
 		'ID'			=> $existing_id,
 		'post_date'		=> current_time( 'mysql' ),
@@ -2374,27 +2350,26 @@ function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 			'_mdjm_quote_viewed_count'	=> 0
 		)
 	);
-	
+
 	/**
 	 * Allow filtering of the quote template args.
 	 *
 	 * @since	1.3
 	 * @param	$args
 	 */
-	$args = apply_filters( 'mdjm_create_online_quote_args', $args );
-	
+	$args     = apply_filters( 'mdjm_create_online_quote_args', $args );
 	$quote_id = wp_insert_post( $args );
-	
+
 	if ( ! $quote_id )	{
 		return false;
 	}
-	
+
 	// Reset view date and count for existing quotes
-	if( ! empty( $existing_id ) )	{
+	if ( ! empty( $existing_id ) )	{
 		delete_post_meta( $quote_id, '_mdjm_quote_viewed_date' );
 		delete_post_meta( $quote_id, '_mdjm_quote_viewed_count' );
 	}
-	
+
 	/**
 	 * Fire the `mdjm_post_create_online_quote` hook.
 	 *
@@ -2402,9 +2377,9 @@ function mdjm_create_online_quote( $event_id, $template_id = '' )	{
 	 * @param	int		$quote_id		The new quote ID
 	 */
 	do_action( 'mdjm_pre_create_online_quote', $quote_id );
-	
+
 	return $quote_id;
-	
+
 } // mdjm_create_online_quote
 
 /**
