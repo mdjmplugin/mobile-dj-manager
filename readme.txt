@@ -117,6 +117,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
 **Tweak**: Removed a bunch of deprecated files
+**Fix**: Employee notification email was not sent during event confirmation
 **Fix**: Balance reminder task may not send reminder until day of event
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
