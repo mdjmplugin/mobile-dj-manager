@@ -276,14 +276,18 @@ function mdjm_email_booking_confirmation( $event_id )	{
  */
 function mdjm_email_employee_booking_confirmation( $mdjm_event )	{
 
+    if ( ! mdjm_get_option( 'booking_conf_to_dj' ) )    {
+        return;
+    }
+
 	$from_name    = mdjm_get_option( 'company_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'employee_booking_conf', $mdjm_event );
 
 	$from_email   = mdjm_get_option( 'system_email', get_bloginfo( 'admin_email' ) );
 	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'employee_booking_conf', $mdjm_event );
 
-	$employee     = get_userdata( $mdjm_event->client );
-	$to_email     = $employee->employee_id;
+	$employee     = get_userdata( $mdjm_event->employee_id );
+	$to_email     = $employee->user_email;
 
 	$subject      = mdjm_email_set_subject( mdjm_get_option( 'email_dj_confirm', false ), 'employee_booking_conf' );
 	$subject      = apply_filters( 'mdjm_employee_booking_conf_subject', wp_strip_all_tags( $subject ) );

@@ -64,9 +64,9 @@ function mdjm_get_events_by_date( $date )	{
 function mdjm_get_events( $args = array() )	{
 		
 	$defaults = array(
-		'post_type'         => 'mdjm-event',
-		'post_status'       => 'any',
-		'posts_per_page'	=> -1,
+		'post_type'      => 'mdjm-event',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
 	);
 		
 	$args = wp_parse_args( $args, $defaults );
@@ -129,18 +129,20 @@ function mdjm_count_events( $args = array() ) {
 		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
 
 		$where .= "
-				AND m.meta_key = '_mdjm_event_dj'
-				AND m.meta_value = '{$args['employee']}'
-				OR m.meta_key = '_mdjm_event_employees'
-				AND m.meta_value LIKE '%:\"{$args['employee']}\";%'";
+		  AND m.meta_key = '_mdjm_event_dj'
+          AND m.meta_value = '{$args['employee']}'
+          OR m.meta_key = '_mdjm_event_employees'
+          AND m.meta_value LIKE '%:\"{$args['employee']}\";%'
+        ";
 
 	// Count events for a specific client
 	} elseif ( ! empty( $args['client'] ) ) {
 
 		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
 		$where .= "
-			AND m.meta_key = '_mdjm_event_client'
-			AND m.meta_value = '{$args['client']}'";
+		  AND m.meta_key = '_mdjm_event_client'
+          AND m.meta_value = '{$args['client']}'
+        ";
 
 	// Count event for a search
 	} elseif( ! empty( $args['s'] ) ) {
@@ -288,16 +290,18 @@ function mdjm_count_events( $args = array() ) {
  * Retrieve the total event count.
  *
  * @since	1.4
- * @param	str|arr	$status			Post statuses.
- * @return	int		Event count
+ * @param	string|arrary	$status     Post statuses.
+ * @param   array           $args       Array of arguments to pass WP_Query
+ * @return	int		        Event count
  */
-function mdjm_event_count( $status = 'any' )	{
-	$args = array(
+function mdjm_event_count( $status = 'any', $args = array() )	{
+	$defaults = array(
 		'post_type'      => 'mdjm-event',
 		'post_status'    => $status,
 		'posts_per_page' => -1
 	);
 
+    $args = wp_parse_args( $args, $defaults );
 	$args = apply_filters( 'mdjm_event_count_args', $args );
 
 	$events = new WP_Query( $args );
@@ -352,7 +356,7 @@ function mdjm_get_event_data( $event )	{
 			'playlist_enabled'    => $mdjm_event->playlist_is_enabled(),
 			'playlist_guest_code' => $mdjm_event->get_playlist_code(),
 			'playlist_status'     => $mdjm_event->playlist_is_open(),
-                        'playlist_limit'      => $mdjm_event->get_playlist_limit(),
+            'playlist_limit'      => $mdjm_event->get_playlist_limit(),
 		),
 		'setup_date'          => $mdjm_event->get_setup_date(),
 		'setup_time'          => $mdjm_event->get_setup_time(),
@@ -398,12 +402,7 @@ function mdjm_event_is_active( $event_id = '' )	{
 	$event_statuses[] = 'auto-draft';
 	$event_statuses[] = 'draft';
 
-	if ( in_array( get_post_status( $event_id ), $event_statuses ) )	{
-		return true;	
-	}
-
-	return false;
-
+	return in_array( get_post_status( $event_id ), $event_statuses );
 } // mdjm_event_is_active
 
 /**
@@ -432,11 +431,11 @@ function mdjm_get_next_event( $employee_id = '' )	{
 	} else	{
 		
 		$args = array(
-			'post_status'	  => mdjm_active_event_statuses(),
-			'posts_per_page'   => 1,
-			'meta_key'		 => '_mdjm_event_date',
-			'orderby'		  => 'meta_value',
-			'order' 			=> 'ASC',
+			'post_status'    => mdjm_active_event_statuses(),
+			'posts_per_page' => 1,
+			'meta_key'       => '_mdjm_event_date',
+			'orderby'        => 'meta_value',
+			'order'          => 'ASC',
 		);
 		
 		$event = mdjm_get_events( $args );
@@ -467,11 +466,11 @@ function mdjm_get_todays_events( $employee_id = '' )	{
 	$employee_id = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
 	
 	$args = array(
-		'post_status'	  => mdjm_active_event_statuses(),
-		'posts_per_page'   => 1,
-		'meta_key'		 => '_mdjm_event_date',
-		'orderby'		  => 'meta_value',
-		'order' 			=> 'DESC',
+		'post_status'    => mdjm_active_event_statuses(),
+		'posts_per_page' => 1,
+		'meta_key'       => '_mdjm_event_date',
+		'orderby'        => 'meta_value',
+		'order'          => 'DESC',
 	);
 	
 	$event = mdjm_get_employee_events( $employee_id, $args );
@@ -494,11 +493,13 @@ function mdjm_get_todays_events( $employee_id = '' )	{
 function mdjm_get_event_by_playlist_code( $access_code )	{
 	global $wpdb;
 	
-	$query = "SELECT `post_id`
-			  AS `event_id` 
-			  FROM `$wpdb->postmeta` 
-			  WHERE `meta_value` = '$access_code' 
-			  LIMIT 1";
+	$query = "
+        SELECT `post_id`
+        AS `event_id` 
+        FROM `$wpdb->postmeta` 
+        WHERE `meta_value` = '$access_code' 
+        LIMIT 1
+    ";
 					
 	$result = $wpdb->get_row( $query );
 	
@@ -533,8 +534,7 @@ function mdjm_get_events_by_status( $status )	{
  */
 function mdjm_count_events_by_status( $status )	{
 	
-	$count = 0;
-	
+	$count  = 0;
 	$events = mdjm_get_events_by_status( $status );
 	
 	if ( $events )	{
