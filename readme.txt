@@ -3,7 +3,8 @@ Contributors: mikeyhoward1977
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 4.4
 Tested up to: 4.9.6
-Stable tag: 1.5
+Requires PHP: 5.4
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -82,6 +83,15 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.1 =
+
+**Monday, 28th May 2018**
+
+**Fix**: Manually entered venues were not output on the events screen
+**Fix**: Fatal error when viewing client screen
+**Fix**: Client details not output on events screen (related to above)
+**Tweak**: Added *Required PHP Version* to readme.txt
 
 = 1.5 =
 

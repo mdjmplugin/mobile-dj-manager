@@ -140,6 +140,10 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 	} else	{
 		$venue_id = get_post_meta( $item_id, '_mdjm_event_venue_id', true );
 		$prefix   = '_mdjm_event';
+
+		if ( 'Manual' == $venue_id )	{
+			$venue_id = $item_id;
+		}
 	}
 
 	if ( empty( $venue_id ) )	{
@@ -205,7 +209,7 @@ function mdjm_get_event_venue_meta( $item_id, $field='' )	{
 		
 		default :
 			$return = '';
-		break;
+			break;
 	}
 
 	if ( ! empty( $return ) ) 	{

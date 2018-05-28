@@ -260,7 +260,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * @return	str		The HTML output for the events column
 		 */
 		public function column_events( $item ) {
-			$total = MDJM()->events->client_events( $item->ID );
+			$total = mdjm_get_client_events( $item->ID );
 			
 			echo ( !empty( $total ) ?
 				'<a href="' . admin_url( 'edit.php?s&post_type=mdjm-event?s&post_status=all' .
