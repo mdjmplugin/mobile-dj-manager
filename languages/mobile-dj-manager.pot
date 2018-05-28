@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.5\n"
+"Project-Id-Version: MDJM Event Management 1.5.1\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-27 13:40:49+00:00\n"
+"POT-Creation-Date: 2018-05-28 21:45:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -312,7 +312,7 @@ msgid "Employees"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:87
-#: includes/admin/events/metaboxes.php:2445
+#: includes/admin/events/metaboxes.php:2450
 msgid "Subject"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgid "%s"
 msgstr ""
 
 #: includes/admin/communications/comms.php:27
-#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2446
+#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2451
 #: includes/admin/reporting/export/class-batch-export-events.php:46
 #: includes/admin/reporting/export/class-batch-export-txns.php:45
 #: includes/admin/transactions/txns.php:26
@@ -545,7 +545,7 @@ msgstr ""
 
 #: includes/admin/communications/metaboxes.php:52
 #: includes/admin/transactions/txns.php:27 includes/admin/venues/venues.php:29
-#: includes/events/event-functions.php:1534 includes/venue-functions.php:378
+#: includes/events/event-functions.php:1534 includes/venue-functions.php:382
 msgid "Details"
 msgstr ""
 
@@ -1231,8 +1231,8 @@ msgid "Playlist for %s ID {contract_id}"
 msgstr ""
 
 #: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1295
-#: includes/admin/events/metaboxes.php:2378
-#: includes/admin/events/metaboxes.php:2444
+#: includes/admin/events/metaboxes.php:2383
+#: includes/admin/events/metaboxes.php:2449
 #: includes/admin/pages/availability.php:259
 #: includes/admin/reporting/class-mdjm-export-earnings.php:64
 #: includes/admin/reporting/class-mdjm-export.php:90
@@ -1551,41 +1551,41 @@ msgstr ""
 #: includes/admin/events/metaboxes.php:1004
 #: includes/admin/events/metaboxes.php:1015
 #: includes/admin/events/metaboxes.php:1026
-#: includes/admin/events/metaboxes.php:1831
-#: includes/admin/events/metaboxes.php:1844
-#: includes/admin/events/metaboxes.php:1856
-#: includes/admin/events/metaboxes.php:1868
-#: includes/admin/events/metaboxes.php:1880
-#: includes/admin/events/metaboxes.php:1892
-#: includes/admin/events/metaboxes.php:1904
-#: includes/admin/events/metaboxes.php:1916
+#: includes/admin/events/metaboxes.php:1836
+#: includes/admin/events/metaboxes.php:1849
+#: includes/admin/events/metaboxes.php:1861
+#: includes/admin/events/metaboxes.php:1873
+#: includes/admin/events/metaboxes.php:1885
+#: includes/admin/events/metaboxes.php:1897
+#: includes/admin/events/metaboxes.php:1909
+#: includes/admin/events/metaboxes.php:1921
 msgid "(optional)"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:945
-#: includes/admin/events/metaboxes.php:1837
+#: includes/admin/events/metaboxes.php:1842
 #: includes/admin/users/class-mdjm-employee-manager.php:581
 #: includes/install.php:508
 msgid "Email Address"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:955
-#: includes/admin/events/metaboxes.php:1862
+#: includes/admin/events/metaboxes.php:1867
 msgid "Address Line 1"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:966
-#: includes/admin/events/metaboxes.php:1874
+#: includes/admin/events/metaboxes.php:1879
 msgid "Address Line 2"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:977
-#: includes/admin/events/metaboxes.php:1886 includes/admin/venues/venues.php:25
+#: includes/admin/events/metaboxes.php:1891 includes/admin/venues/venues.php:25
 msgid "Town"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:988
-#: includes/admin/events/metaboxes.php:1898 includes/admin/venues/venues.php:26
+#: includes/admin/events/metaboxes.php:1903 includes/admin/venues/venues.php:26
 #: includes/install.php:556
 msgid "County"
 msgstr ""
@@ -1612,8 +1612,8 @@ msgid "Contact Details for %s"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1087
-#: includes/admin/events/metaboxes.php:1850 includes/admin/venues/venues.php:24
-#: includes/clients/client-functions.php:662 includes/venue-functions.php:354
+#: includes/admin/events/metaboxes.php:1855 includes/admin/venues/venues.php:24
+#: includes/clients/client-functions.php:662 includes/venue-functions.php:358
 msgid "Phone"
 msgstr ""
 
@@ -1623,7 +1623,7 @@ msgstr ""
 #: includes/admin/reporting/export/class-batch-export-clients.php:45
 #: includes/admin/reporting/export/class-batch-export-employees.php:45
 #: includes/clients/client-functions.php:669 includes/install.php:699
-#: includes/venue-functions.php:346
+#: includes/venue-functions.php:350
 msgid "Email"
 msgstr ""
 
@@ -1664,7 +1664,7 @@ msgid "Contract is Signed"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1245
-#: includes/admin/events/metaboxes.php:1814
+#: includes/admin/events/metaboxes.php:1819
 #: includes/admin/reporting/export/class-batch-export-events.php:69
 #: includes/admin/venues/venues.php:22 templates/event/event-loop.php:35
 msgid "Venue"
@@ -1735,7 +1735,7 @@ msgid "Select an Employee"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1681
-#: includes/admin/events/metaboxes.php:1797
+#: includes/admin/events/metaboxes.php:1802
 msgid "Add"
 msgstr ""
 
@@ -1751,172 +1751,172 @@ msgstr ""
 msgid "Add %s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1796
+#: includes/admin/events/metaboxes.php:1801
 msgid "Add a New Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1801
+#: includes/admin/events/metaboxes.php:1806
 msgid "Manual Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1802
+#: includes/admin/events/metaboxes.php:1807
 msgid "Save"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1825 includes/admin/venues/venues.php:23
-#: includes/venue-functions.php:338
+#: includes/admin/events/metaboxes.php:1830 includes/admin/venues/venues.php:23
+#: includes/venue-functions.php:342
 msgid "Contact"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1910 includes/install.php:569
+#: includes/admin/events/metaboxes.php:1915 includes/install.php:569
 msgid "Post Code"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1923
+#: includes/admin/events/metaboxes.php:1928
 msgid "%s Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1984
+#: includes/admin/events/metaboxes.php:1989
 msgid "Package Costs"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1998
+#: includes/admin/events/metaboxes.php:2003
 msgid "Addons Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2016
+#: includes/admin/events/metaboxes.php:2021
 msgid "Travel Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2054
+#: includes/admin/events/metaboxes.php:2059
 msgid "Additional Costs"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2067
+#: includes/admin/events/metaboxes.php:2072
 msgid "Discount"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2080
+#: includes/admin/events/metaboxes.php:2085
 #: includes/admin/reporting/export/class-batch-export-events.php:53
 #: includes/clientzone-functions.php:133 includes/install.php:719
 #: includes/txns/txn-functions.php:26
 msgid "Deposit"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2115
+#: includes/admin/events/metaboxes.php:2120
 #: includes/admin/settings/register-settings.php:430
 #: includes/events/event-functions.php:1842
 msgid "Total Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2151
+#: includes/admin/events/metaboxes.php:2156
 msgid "Enquiry Source:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2178
+#: includes/admin/events/metaboxes.php:2183
 msgid "%s Notes:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2180
+#: includes/admin/events/metaboxes.php:2185
 msgid "This information is not visible to clients"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2209
+#: includes/admin/events/metaboxes.php:2214
 msgid "Admin Notes:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2211
+#: includes/admin/events/metaboxes.php:2216
 msgid "This information is only visible to admins"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2234 includes/post-types.php:441
+#: includes/admin/events/metaboxes.php:2239 includes/post-types.php:441
 msgid "All Transactions"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2234
+#: includes/admin/events/metaboxes.php:2239
 msgid "toggle"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2269
-#: includes/admin/events/metaboxes.php:2349 includes/admin/menu.php:494
+#: includes/admin/events/metaboxes.php:2274
+#: includes/admin/events/metaboxes.php:2354 includes/admin/menu.php:494
 #: includes/admin/menu.php:497 includes/post-types.php:436
 msgid "Add Transaction"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2269
+#: includes/admin/events/metaboxes.php:2274
 msgid "show form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2275
+#: includes/admin/events/metaboxes.php:2280
 msgid "Amount:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2283 includes/install.php:228
+#: includes/admin/events/metaboxes.php:2288 includes/install.php:228
 msgid "Date:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2292
+#: includes/admin/events/metaboxes.php:2297
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2296 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2301 includes/ajax-functions.php:736
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2297 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2302 includes/ajax-functions.php:736
 msgid "Outgoing"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2305
+#: includes/admin/events/metaboxes.php:2310
 msgid "From:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2309
-#: includes/admin/events/metaboxes.php:2315
+#: includes/admin/events/metaboxes.php:2314
+#: includes/admin/events/metaboxes.php:2320
 msgid "Leave empty if client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2311
+#: includes/admin/events/metaboxes.php:2316
 msgid "To:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2318
+#: includes/admin/events/metaboxes.php:2323
 msgid "For:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2321
+#: includes/admin/events/metaboxes.php:2326
 msgid "Paid via:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2339
+#: includes/admin/events/metaboxes.php:2344
 msgid "Send manual payment confirmation email?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2374
+#: includes/admin/events/metaboxes.php:2379
 msgid "Recent Journal Entries"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2379
+#: includes/admin/events/metaboxes.php:2384
 msgid "Excerpt"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2397
+#: includes/admin/events/metaboxes.php:2402
 msgid "There are no journal entries associated with this %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2406
+#: includes/admin/events/metaboxes.php:2411
 msgid "Displaying the most recent %d entries of <a href=\"%s\">%d total"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2440
+#: includes/admin/events/metaboxes.php:2445
 msgid "Associated Emails"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2471
+#: includes/admin/events/metaboxes.php:2476
 msgid "There are no emails associated with this %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2480
+#: includes/admin/events/metaboxes.php:2485
 msgid "Displaying the most recent %d emails of %d total"
 msgstr ""
 
@@ -5273,7 +5273,7 @@ msgstr ""
 msgid "General Information:"
 msgstr ""
 
-#: includes/admin/venues/venues.php:28 includes/venue-functions.php:370
+#: includes/admin/venues/venues.php:28 includes/venue-functions.php:374
 msgid "Information"
 msgstr ""
 
@@ -9109,19 +9109,19 @@ msgstr ""
 msgid "Russian Rubles"
 msgstr ""
 
-#: includes/venue-functions.php:291
+#: includes/venue-functions.php:295
 msgid "No venues exist"
 msgstr ""
 
-#: includes/venue-functions.php:362
+#: includes/venue-functions.php:366
 msgid "Address"
 msgstr ""
 
-#: includes/venue-functions.php:389
+#: includes/venue-functions.php:393
 msgid "Venue Details for %s"
 msgstr ""
 
-#: includes/venue-functions.php:391
+#: includes/venue-functions.php:395
 msgid "No venue has been selected for this %s"
 msgstr ""
 
