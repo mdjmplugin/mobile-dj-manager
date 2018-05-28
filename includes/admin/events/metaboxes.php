@@ -1782,7 +1782,12 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id )    {
 
     global $mdjm_event, $mdjm_event_update;
 
-    $venue_id       = $mdjm_event->data['venue_id'];
+    $venue_id = $mdjm_event->data['venue_id'];
+
+	if ( 'Manual' == $venue_id )	{
+		$venue_id = $event_id;
+	}
+
     $venue_name     = mdjm_get_event_venue_meta( $venue_id, 'name' );
 	$venue_contact  = mdjm_get_event_venue_meta( $venue_id, 'contact' );
 	$venue_email    = mdjm_get_event_venue_meta( $venue_id, 'email' );
