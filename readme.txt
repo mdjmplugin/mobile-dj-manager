@@ -85,7 +85,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 = 1.5 =
 
-**Tuesday, 8th May 2018**
+**Sunday, 27th May 2018**
 
 **NOTE**: The `playlist-client.php`, `playlist-guest.php`, `profile-client.php` `mdjm.css` and `mdjm.min.css` files have been updated. If you have customized templates and copied to your theme, you will need to compare the changes
 
@@ -117,6 +117,7 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 **Tweak**: Employee content tags now start with `employee_` rather than `dj_`. `dj_` is maintained for backwards compatibility
 **Tweak**: Updated jQuery Chosen library version
 **Tweak**: Removed a bunch of deprecated files
+**Fix**: Employee notification email was not sent during event confirmation
 **Fix**: Balance reminder task may not send reminder until day of event
 **Fix**: Do not hide empty categories when adding items to the playlist
 **Fix**: Corrected value for default playlist category
@@ -1315,4 +1316,8 @@ This version addresses an issue that may result in a fatal error when selecting 
 Update immediately.
 
 = 1.4 =
-This version includes an update to all events, and equipment packages and add-ons. Take extra time to backup your database before proceeding. 
+This version includes an update to all events, and equipment packages and add-ons. Take extra time to backup your database before proceeding.
+
+= 1.5 =
+Ensure you have backed up your database prior to upgrading
+

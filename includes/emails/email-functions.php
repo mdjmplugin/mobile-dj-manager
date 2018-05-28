@@ -263,12 +263,58 @@ function mdjm_email_booking_confirmation( $event_id )	{
 
 	$emails->send( $to_email, $subject, $message, $attachments, sprintf( __( 'Contract Signed and %s Status set to %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_post_status_label( $mdjm_event->post_status ) ) );
 	
-	// Send a copy of this email to the primary employee
-	if ( mdjm_get_option( 'booking_conf_to_dj', false ) )	{
-		do_action( 'mdjm_employee_booking_conf_notice', $mdjm_event );
-	}
+	do_action( 'mdjm_email_booking_confirmation', $mdjm_event );
 	
 } // mdjm_email_booking_confirmation
+
+/**
+ * Email the booking confirmation to the employee from a customisable email template.
+ *
+ * @since	1.5
+ * @param	object	$mdjm_event		MDJM_Event class object
+ * @return	void
+ */
+function mdjm_email_employee_booking_confirmation( $mdjm_event )	{
+
+    if ( ! mdjm_get_option( 'booking_conf_to_dj' ) )    {
+        return;
+    }
+
+	$from_name    = mdjm_get_option( 'company_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_name    = apply_filters( 'mdjm_email_from_name', $from_name, 'employee_booking_conf', $mdjm_event );
+
+	$from_email   = mdjm_get_option( 'system_email', get_bloginfo( 'admin_email' ) );
+	$from_email   = apply_filters( 'mdjm_email_from_address', $from_email, 'employee_booking_conf', $mdjm_event );
+
+	$employee     = get_userdata( $mdjm_event->employee_id );
+	$to_email     = $employee->user_email;
+
+	$subject      = mdjm_email_set_subject( mdjm_get_option( 'email_dj_confirm', false ), 'employee_booking_conf' );
+	$subject      = apply_filters( 'mdjm_employee_booking_conf_subject', wp_strip_all_tags( $subject ) );
+	$subject      = mdjm_do_content_tags( $subject, $mdjm_event->ID, $mdjm_event->client );
+
+	$attachments  = apply_filters( 'mdjm_employee_booking_conf_attachments', array(), $mdjm_event );
+	
+	$message	  = mdjm_get_email_template_content( mdjm_get_option( 'email_dj_confirm', false ), 'employee_booking_conf' );
+	$message      = mdjm_do_content_tags( $message, $mdjm_event->ID, $mdjm_event->client );
+
+	$emails = MDJM()->emails;
+
+	$emails->__set( 'event_id', $mdjm_event->ID );
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_address', $from_email );
+	
+	$headers = apply_filters( 'mdjm_employee_booking_conf_headers', $emails->get_headers(), $mdjm_event->ID, $mdjm_event->client );
+	$emails->__set( 'headers', $headers );
+	
+	$emails->__set( 'track', apply_filters( 'mdjm_track_email_employee_booking_confirmation', false ) );
+	
+	$emails->__set( 'copy_to', false );
+
+	$emails->send( $to_email, $subject, $message, $attachments );
+	
+} // mdjm_email_employee_booking_confirmation
+add_action( 'mdjm_email_booking_confirmation', 'mdjm_email_employee_booking_confirmation' );
 
 /**
  * Email the payment receipt for payments received via a gateway.

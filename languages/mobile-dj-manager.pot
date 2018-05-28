@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-21 17:59:53+00:00\n"
+"POT-Creation-Date: 2018-05-27 13:40:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -272,7 +272,7 @@ msgstr ""
 #: includes/admin/pages/availability.php:6
 #: includes/admin/users/class-mdjm-client-manager.php:6
 #: includes/admin/users/class-mdjm-employee-manager.php:6
-#: includes/events/event-functions.php:421
+#: includes/events/event-functions.php:420
 msgid "Cheatin&#8217; uh?"
 msgstr ""
 
@@ -312,7 +312,7 @@ msgid "Employees"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:87
-#: includes/admin/events/metaboxes.php:2557
+#: includes/admin/events/metaboxes.php:2445
 msgid "Subject"
 msgstr ""
 
@@ -403,14 +403,14 @@ msgid "Recipient"
 msgstr ""
 
 #: includes/admin/communications/comms.php:26
-#: includes/admin/pages/event-fields.php:824
+#: includes/admin/pages/event-fields.php:819
 #: includes/admin/settings/register-settings.php:1416
 #: includes/admin/transactions/txns.php:28 includes/admin/venues/venues.php:27
 msgid "%s"
 msgstr ""
 
 #: includes/admin/communications/comms.php:27
-#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2558
+#: includes/admin/events/events.php:25 includes/admin/events/metaboxes.php:2446
 #: includes/admin/reporting/export/class-batch-export-events.php:46
 #: includes/admin/reporting/export/class-batch-export-txns.php:45
 #: includes/admin/transactions/txns.php:26
@@ -655,7 +655,7 @@ msgid "No enquiries yet this month."
 msgstr ""
 
 #: includes/admin/equipment/equipment.php:29
-#: includes/admin/events/metaboxes.php:1580
+#: includes/admin/events/metaboxes.php:1468
 #: includes/admin/reporting/class-mdjm-packages-reports-table.php:88
 #: includes/admin/reporting/export/class-batch-export-events.php:50
 #: includes/events/event-functions.php:1859
@@ -992,7 +992,7 @@ msgid "Add to Playlist"
 msgstr ""
 
 #: includes/admin/events/contextual-help.php:55
-#: includes/admin/events/metaboxes.php:1682
+#: includes/admin/events/metaboxes.php:1570
 msgid "%s Options"
 msgstr ""
 
@@ -1030,7 +1030,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/events/contextual-help.php:79
-#: includes/admin/events/metaboxes.php:710
+#: includes/admin/events/metaboxes.php:598
 msgid "Client Details"
 msgstr ""
 
@@ -1056,7 +1056,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/events/contextual-help.php:88
-#: includes/admin/events/metaboxes.php:761
+#: includes/admin/events/metaboxes.php:649
 #: includes/admin/templates/contextual-help.php:69 includes/install.php:380
 msgid "%s Details"
 msgstr ""
@@ -1230,9 +1230,9 @@ msgstr ""
 msgid "Playlist for %s ID {contract_id}"
 msgstr ""
 
-#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1407
-#: includes/admin/events/metaboxes.php:2490
-#: includes/admin/events/metaboxes.php:2556
+#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1295
+#: includes/admin/events/metaboxes.php:2378
+#: includes/admin/events/metaboxes.php:2444
 #: includes/admin/pages/availability.php:259
 #: includes/admin/reporting/class-mdjm-export-earnings.php:64
 #: includes/admin/reporting/class-mdjm-export.php:90
@@ -1252,7 +1252,7 @@ msgid "%s ID"
 msgstr ""
 
 #: includes/admin/events/events.php:23 includes/admin/events/events.php:554
-#: includes/admin/events/metaboxes.php:898 includes/admin/events/quotes.php:24
+#: includes/admin/events/metaboxes.php:786 includes/admin/events/quotes.php:24
 #: includes/admin/reporting/export/class-batch-export-events.php:47
 #: includes/admin/roles/class-mdjm-roles.php:82
 #: includes/clientzone-functions.php:130
@@ -1486,180 +1486,138 @@ msgstr ""
 msgid "Completed Tasks"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:595
-#: includes/admin/events/metaboxes.php:1808
-msgid "Pay %s Employees"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:641
-msgid "Add Employees"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:641
-#: includes/admin/events/metaboxes.php:2381
-msgid "show form"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:647
-#: includes/admin/pages/availability.php:264
-#: includes/admin/reporting/class-mdjm-employees-reports-table.php:88
-msgid "Employee"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:653
-#: includes/admin/events/metaboxes.php:1777
-#: includes/class-mdjm-html-elements.php:329
-msgid "Select an Employee"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:656
-#: includes/admin/users/class-mdjm-employee-manager.php:585
-msgid "Role"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:664
-#: includes/admin/events/metaboxes.php:1267
-msgid "Wage"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:675
-#: includes/admin/events/metaboxes.php:1793
-#: includes/admin/events/metaboxes.php:1909
-msgid "Add"
-msgstr ""
-
-#: includes/admin/events/metaboxes.php:810 templates/event/event-single.php:79
+#: includes/admin/events/metaboxes.php:698 templates/event/event-single.php:79
 msgid "Pricing"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:908
-#: includes/admin/events/metaboxes.php:909
+#: includes/admin/events/metaboxes.php:796
+#: includes/admin/events/metaboxes.php:797
 msgid "Select a Client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:933
+#: includes/admin/events/metaboxes.php:821
 msgid "Disable Emails?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:939
+#: includes/admin/events/metaboxes.php:827
 msgid "Block update emails for this %s to the client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:948
+#: includes/admin/events/metaboxes.php:836
 msgid "Reset Password?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:954
+#: includes/admin/events/metaboxes.php:842
 msgid "Click to reset the client password during %s update"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:979
+#: includes/admin/events/metaboxes.php:867
 #: includes/admin/settings/register-settings.php:681
 msgid "Quote Template"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:987
-#: includes/admin/events/metaboxes.php:1003
+#: includes/admin/events/metaboxes.php:875
+#: includes/admin/events/metaboxes.php:891
 msgid "Type to search all templates"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:995
+#: includes/admin/events/metaboxes.php:883
 msgid "Online Quote"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1032
+#: includes/admin/events/metaboxes.php:920
 msgid "Add a New Client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1036
+#: includes/admin/events/metaboxes.php:924
 #: includes/admin/reporting/class-mdjm-clients-export.php:68
 #: includes/admin/users/class-mdjm-employee-manager.php:573
 #: includes/install.php:484 templates/contract/contract.php:82
 msgid "First Name"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1046
+#: includes/admin/events/metaboxes.php:934
 #: includes/admin/reporting/class-mdjm-clients-export.php:69
 #: includes/admin/users/class-mdjm-employee-manager.php:577
 #: includes/install.php:496 templates/contract/contract.php:87
 msgid "Last Name"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1051
-#: includes/admin/events/metaboxes.php:1072
-#: includes/admin/events/metaboxes.php:1083
-#: includes/admin/events/metaboxes.php:1094
-#: includes/admin/events/metaboxes.php:1105
-#: includes/admin/events/metaboxes.php:1116
-#: includes/admin/events/metaboxes.php:1127
-#: includes/admin/events/metaboxes.php:1138
-#: includes/admin/events/metaboxes.php:1943
-#: includes/admin/events/metaboxes.php:1956
-#: includes/admin/events/metaboxes.php:1968
-#: includes/admin/events/metaboxes.php:1980
-#: includes/admin/events/metaboxes.php:1992
-#: includes/admin/events/metaboxes.php:2004
-#: includes/admin/events/metaboxes.php:2016
-#: includes/admin/events/metaboxes.php:2028
+#: includes/admin/events/metaboxes.php:939
+#: includes/admin/events/metaboxes.php:960
+#: includes/admin/events/metaboxes.php:971
+#: includes/admin/events/metaboxes.php:982
+#: includes/admin/events/metaboxes.php:993
+#: includes/admin/events/metaboxes.php:1004
+#: includes/admin/events/metaboxes.php:1015
+#: includes/admin/events/metaboxes.php:1026
+#: includes/admin/events/metaboxes.php:1831
+#: includes/admin/events/metaboxes.php:1844
+#: includes/admin/events/metaboxes.php:1856
+#: includes/admin/events/metaboxes.php:1868
+#: includes/admin/events/metaboxes.php:1880
+#: includes/admin/events/metaboxes.php:1892
+#: includes/admin/events/metaboxes.php:1904
+#: includes/admin/events/metaboxes.php:1916
 msgid "(optional)"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1057
-#: includes/admin/events/metaboxes.php:1949
+#: includes/admin/events/metaboxes.php:945
+#: includes/admin/events/metaboxes.php:1837
 #: includes/admin/users/class-mdjm-employee-manager.php:581
 #: includes/install.php:508
 msgid "Email Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1067
-#: includes/admin/events/metaboxes.php:1974
+#: includes/admin/events/metaboxes.php:955
+#: includes/admin/events/metaboxes.php:1862
 msgid "Address Line 1"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1078
-#: includes/admin/events/metaboxes.php:1986
+#: includes/admin/events/metaboxes.php:966
+#: includes/admin/events/metaboxes.php:1874
 msgid "Address Line 2"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1089
-#: includes/admin/events/metaboxes.php:1998 includes/admin/venues/venues.php:25
+#: includes/admin/events/metaboxes.php:977
+#: includes/admin/events/metaboxes.php:1886 includes/admin/venues/venues.php:25
 msgid "Town"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1100
-#: includes/admin/events/metaboxes.php:2010 includes/admin/venues/venues.php:26
+#: includes/admin/events/metaboxes.php:988
+#: includes/admin/events/metaboxes.php:1898 includes/admin/venues/venues.php:26
 #: includes/install.php:556
 msgid "County"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1111
+#: includes/admin/events/metaboxes.php:999
 msgid "Postal Code"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1122 includes/install.php:582
+#: includes/admin/events/metaboxes.php:1010 includes/install.php:582
 msgid "Primary Phone"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1133 includes/install.php:594
+#: includes/admin/events/metaboxes.php:1021 includes/install.php:594
 msgid "Alternative Phone"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1145 includes/admin/menu.php:323
+#: includes/admin/events/metaboxes.php:1033 includes/admin/menu.php:323
 msgid "Add Client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1195
+#: includes/admin/events/metaboxes.php:1083
 #: includes/clients/client-functions.php:656
 msgid "Contact Details for %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1199
-#: includes/admin/events/metaboxes.php:1962 includes/admin/venues/venues.php:24
+#: includes/admin/events/metaboxes.php:1087
+#: includes/admin/events/metaboxes.php:1850 includes/admin/venues/venues.php:24
 #: includes/clients/client-functions.php:662 includes/venue-functions.php:354
 msgid "Phone"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1204
+#: includes/admin/events/metaboxes.php:1092
 #: includes/admin/reporting/class-mdjm-clients-export.php:70
 #: includes/admin/reporting/class-mdjm-clients-export.php:81
 #: includes/admin/reporting/export/class-batch-export-clients.php:45
@@ -1669,277 +1627,296 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1215
+#: includes/admin/events/metaboxes.php:1103
 #: includes/admin/users/class-mdjm-client-manager.php:152
 #: includes/admin/users/class-mdjm-employee-manager.php:73
 #: includes/clients/client-functions.php:674
 msgid "Last Login"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1257
+#: includes/admin/events/metaboxes.php:1145
 msgid "Select %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1316
-#: includes/admin/events/metaboxes.php:1840 templates/event/event-loop.php:42
+#: includes/admin/events/metaboxes.php:1155
+msgid "Wage"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:1204
+#: includes/admin/events/metaboxes.php:1728 templates/event/event-loop.php:42
 msgid "%s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1328
+#: includes/admin/events/metaboxes.php:1216
 msgid "Contract"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1340
+#: includes/admin/events/metaboxes.php:1228
 msgid "Type to search all contracts"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1347
+#: includes/admin/events/metaboxes.php:1235
 msgid "View signed contract"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1349
+#: includes/admin/events/metaboxes.php:1237
 msgid "Contract is Signed"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1357
-#: includes/admin/events/metaboxes.php:1926
+#: includes/admin/events/metaboxes.php:1245
+#: includes/admin/events/metaboxes.php:1814
 #: includes/admin/reporting/export/class-batch-export-events.php:69
 #: includes/admin/venues/venues.php:22 templates/event/event-loop.php:35
 msgid "Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1363
+#: includes/admin/events/metaboxes.php:1251
 msgid "Select a Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1424
-#: includes/admin/events/metaboxes.php:1500
+#: includes/admin/events/metaboxes.php:1312
+#: includes/admin/events/metaboxes.php:1388
 msgid "End"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1441
-#: includes/admin/events/metaboxes.php:1521
+#: includes/admin/events/metaboxes.php:1329
+#: includes/admin/events/metaboxes.php:1409
 msgid "Setup"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1482
+#: includes/admin/events/metaboxes.php:1370
 msgid "Start"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1594 includes/admin/menu.php:71
+#: includes/admin/events/metaboxes.php:1482 includes/admin/menu.php:71
 #: includes/admin/reporting/export/class-batch-export-events.php:51
 msgid "Addons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1604 includes/ajax-functions.php:1124
+#: includes/admin/events/metaboxes.php:1492 includes/ajax-functions.php:1124
 #: includes/ajax-functions.php:1372
 msgid "Select Add-ons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1632
+#: includes/admin/events/metaboxes.php:1520
 msgid "Client Notes"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1637
+#: includes/admin/events/metaboxes.php:1525
 msgid "Information entered here is visible by both clients and employees"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1687
+#: includes/admin/events/metaboxes.php:1575
 msgid "Enable Playlist?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1699
+#: includes/admin/events/metaboxes.php:1587
 msgid "Song Limit"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1716
+#: includes/admin/events/metaboxes.php:1604
 msgid "%s Song in Playlist"
 msgid_plural "%s Songs in Playlist"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/events/metaboxes.php:1718
+#: includes/admin/events/metaboxes.php:1606
 #: includes/admin/users/class-mdjm-employee-manager.php:784
 msgid "View"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1762
+#: includes/admin/events/metaboxes.php:1650
 msgid "%s Workers"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1836
+#: includes/admin/events/metaboxes.php:1665
+#: includes/class-mdjm-html-elements.php:329
+msgid "Select an Employee"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:1681
+#: includes/admin/events/metaboxes.php:1797
+msgid "Add"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:1696
+msgid "Pay %s Employees"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:1724
 msgid "New %s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1851
+#: includes/admin/events/metaboxes.php:1739
 msgid "Add %s Type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1908
+#: includes/admin/events/metaboxes.php:1796
 msgid "Add a New Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1913
+#: includes/admin/events/metaboxes.php:1801
 msgid "Manual Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1914
+#: includes/admin/events/metaboxes.php:1802
 msgid "Save"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1937 includes/admin/venues/venues.php:23
+#: includes/admin/events/metaboxes.php:1825 includes/admin/venues/venues.php:23
 #: includes/venue-functions.php:338
 msgid "Contact"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2022 includes/install.php:569
+#: includes/admin/events/metaboxes.php:1910 includes/install.php:569
 msgid "Post Code"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2035
+#: includes/admin/events/metaboxes.php:1923
 msgid "%s Venue"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2096
+#: includes/admin/events/metaboxes.php:1984
 msgid "Package Costs"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2110
+#: includes/admin/events/metaboxes.php:1998
 msgid "Addons Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2128
+#: includes/admin/events/metaboxes.php:2016
 msgid "Travel Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2166
+#: includes/admin/events/metaboxes.php:2054
 msgid "Additional Costs"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2179
+#: includes/admin/events/metaboxes.php:2067
 msgid "Discount"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2192
+#: includes/admin/events/metaboxes.php:2080
 #: includes/admin/reporting/export/class-batch-export-events.php:53
 #: includes/clientzone-functions.php:133 includes/install.php:719
 #: includes/txns/txn-functions.php:26
 msgid "Deposit"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2227
+#: includes/admin/events/metaboxes.php:2115
 #: includes/admin/settings/register-settings.php:430
 #: includes/events/event-functions.php:1842
 msgid "Total Cost"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2263
+#: includes/admin/events/metaboxes.php:2151
 msgid "Enquiry Source:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2290
+#: includes/admin/events/metaboxes.php:2178
 msgid "%s Notes:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2292
+#: includes/admin/events/metaboxes.php:2180
 msgid "This information is not visible to clients"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2321
+#: includes/admin/events/metaboxes.php:2209
 msgid "Admin Notes:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2323
+#: includes/admin/events/metaboxes.php:2211
 msgid "This information is only visible to admins"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2346 includes/post-types.php:441
+#: includes/admin/events/metaboxes.php:2234 includes/post-types.php:441
 msgid "All Transactions"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2346
-#: includes/admin/pages/event-fields.php:630
-#: includes/admin/pages/event-fields.php:656
-#: includes/admin/pages/event-fields.php:682
+#: includes/admin/events/metaboxes.php:2234
 msgid "toggle"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2381
-#: includes/admin/events/metaboxes.php:2461 includes/admin/menu.php:494
+#: includes/admin/events/metaboxes.php:2269
+#: includes/admin/events/metaboxes.php:2349 includes/admin/menu.php:494
 #: includes/admin/menu.php:497 includes/post-types.php:436
 msgid "Add Transaction"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2387
+#: includes/admin/events/metaboxes.php:2269
+msgid "show form"
+msgstr ""
+
+#: includes/admin/events/metaboxes.php:2275
 msgid "Amount:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2395 includes/install.php:228
+#: includes/admin/events/metaboxes.php:2283 includes/install.php:228
 msgid "Date:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2404
+#: includes/admin/events/metaboxes.php:2292
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2408 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2296 includes/ajax-functions.php:736
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2409 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2297 includes/ajax-functions.php:736
 msgid "Outgoing"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2417
+#: includes/admin/events/metaboxes.php:2305
 msgid "From:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2421
-#: includes/admin/events/metaboxes.php:2427
+#: includes/admin/events/metaboxes.php:2309
+#: includes/admin/events/metaboxes.php:2315
 msgid "Leave empty if client"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2423
+#: includes/admin/events/metaboxes.php:2311
 msgid "To:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2430
+#: includes/admin/events/metaboxes.php:2318
 msgid "For:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2433
+#: includes/admin/events/metaboxes.php:2321
 msgid "Paid via:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2451
+#: includes/admin/events/metaboxes.php:2339
 msgid "Send manual payment confirmation email?"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2486
+#: includes/admin/events/metaboxes.php:2374
 msgid "Recent Journal Entries"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2491
+#: includes/admin/events/metaboxes.php:2379
 msgid "Excerpt"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2509
+#: includes/admin/events/metaboxes.php:2397
 msgid "There are no journal entries associated with this %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2518
+#: includes/admin/events/metaboxes.php:2406
 msgid "Displaying the most recent %d entries of <a href=\"%s\">%d total"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2552
+#: includes/admin/events/metaboxes.php:2440
 msgid "Associated Emails"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2583
+#: includes/admin/events/metaboxes.php:2471
 msgid "There are no emails associated with this %s"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2592
+#: includes/admin/events/metaboxes.php:2480
 msgid "Displaying the most recent %d emails of %d total"
 msgstr ""
 
@@ -2144,7 +2121,6 @@ msgid "Custom Event Fields"
 msgstr ""
 
 #: includes/admin/menu.php:87 includes/admin/menu.php:332
-#: includes/admin/pages/event-fields.php:630
 msgid "Custom Client Fields"
 msgstr ""
 
@@ -2283,7 +2259,7 @@ msgstr ""
 msgid "Addon Categories"
 msgstr ""
 
-#: includes/admin/menu.php:449 includes/admin/pages/event-fields.php:656
+#: includes/admin/menu.php:449
 msgid "Custom %s Fields"
 msgstr ""
 
@@ -2388,6 +2364,11 @@ msgstr ""
 
 #: includes/admin/pages/availability.php:256
 msgid "Check Employee Availability"
+msgstr ""
+
+#: includes/admin/pages/availability.php:264
+#: includes/admin/reporting/class-mdjm-employees-reports-table.php:88
+msgid "Employee"
 msgstr ""
 
 #: includes/admin/pages/availability.php:287
@@ -2630,8 +2611,8 @@ msgstr ""
 msgid "Checked Checkbox Field"
 msgstr ""
 
-#: includes/admin/pages/event-fields.php:682
-msgid "Custom Venue Fields"
+#: includes/admin/pages/event-fields.php:743 includes/scripts.php:272
+msgid "Type to search all options"
 msgstr ""
 
 #: includes/admin/plugins.php:44
@@ -5165,6 +5146,10 @@ msgstr ""
 msgid "Employee Quick Add"
 msgstr ""
 
+#: includes/admin/users/class-mdjm-employee-manager.php:585
+msgid "Role"
+msgstr ""
+
 #: includes/admin/users/class-mdjm-employee-manager.php:587
 #: includes/class-mdjm-html-elements.php:410
 msgid "Select Role"
@@ -6662,16 +6647,16 @@ msgstr ""
 msgid "Contract Signed and %s Status set to %s"
 msgstr ""
 
-#: includes/emails/email-functions.php:325
-#: includes/emails/email-functions.php:380
+#: includes/emails/email-functions.php:371
+#: includes/emails/email-functions.php:426
 msgid "Payment received confirmation for %s"
 msgstr ""
 
-#: includes/emails/email-functions.php:677
+#: includes/emails/email-functions.php:723
 msgid "The following email was recently sent to %s via %s."
 msgstr ""
 
-#: includes/emails/email-functions.php:679
+#: includes/emails/email-functions.php:725
 msgid ""
 "You are receiving a copy of this message either because you chose to do so, "
 "or the %s application settings dictate that you do so."
@@ -6768,15 +6753,15 @@ msgstr ""
 msgid "%s status updated to %s.%s"
 msgstr ""
 
-#: includes/events/event-functions.php:329
+#: includes/events/event-functions.php:333
 msgid "Signed"
 msgstr ""
 
-#: includes/events/event-functions.php:329
+#: includes/events/event-functions.php:333
 msgid "Unsigned"
 msgstr ""
 
-#: includes/events/event-functions.php:422
+#: includes/events/event-functions.php:421
 msgid "Your %s permissions do not permit you to search all %s!"
 msgstr ""
 
@@ -6914,11 +6899,11 @@ msgstr ""
 msgid "Venue Post Town"
 msgstr ""
 
-#: includes/events/event-functions.php:2366
+#: includes/events/event-functions.php:2342
 msgid "Quote %s"
 msgstr ""
 
-#: includes/events/event-functions.php:2422
+#: includes/events/event-functions.php:2397
 msgid "Sorry but the quote for your %s could not be displayed."
 msgstr ""
 
@@ -7662,24 +7647,24 @@ msgstr ""
 msgid "MDJM Bot"
 msgstr ""
 
-#: includes/mdjm-functions.php:506
+#: includes/mdjm-functions.php:507
 msgid ""
 "ERROR: %s were set as %s.%sContact \n"
 "\t\t\t\t%sMDJM Support%s with details of any errors that are displayed on "
 "your screen."
 msgstr ""
 
-#: includes/mdjm-functions.php:516
+#: includes/mdjm-functions.php:517
 msgid "WARNING: Some errors occured and only %s out of %s %s were set as %s."
 msgstr ""
 
-#: includes/mdjm-functions.php:519 includes/mdjm-functions.php:526
+#: includes/mdjm-functions.php:520 includes/mdjm-functions.php:527
 msgid "user"
 msgid_plural "users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/mdjm-functions.php:524
+#: includes/mdjm-functions.php:525
 msgid "%s %s successfully marked as %s."
 msgstr ""
 
@@ -8875,10 +8860,6 @@ msgstr ""
 
 #: includes/scripts.php:271
 msgid "Choose one or more options"
-msgstr ""
-
-#: includes/scripts.php:272
-msgid "Type to search all options"
 msgstr ""
 
 #: includes/scripts.php:273
