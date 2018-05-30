@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_get_privacy_page() {
     $privacy_page = get_option( 'wp_page_for_privacy_policy' );
-    $privacy_page = apply_filters( 'mdjms_privacy_page', $privacy_page );
+    $privacy_page = apply_filters( 'mdjm_privacy_page', $privacy_page );
 
     return $privacy_page;
 } // mdjm_get_privacy_page
@@ -296,11 +296,13 @@ function _mdjm_anonymize_client( $client_id = 0 ) {
     delete_user_meta( $client->ID, 'phone1' );
     delete_user_meta( $client->ID, 'phone2' );
 
+	$anonymized_email = mdjm_anonymize_email( $client->user_email );
+
 	wp_update_user( array(
         'ID'           => $client_id,
 		'first_name'   => __( 'Anonymized', 'mobile-dj-manager' ),
         'last_name'    => __( 'Client', 'mobile-dj-manager' ),
-		'email'        => mdjm_anonymize_email( $client->user_email )
+		'email'        => $anonymized_email
 	) );
 
 	/**
@@ -312,7 +314,7 @@ function _mdjm_anonymize_client( $client_id = 0 ) {
 	 * @since	1.5.3
 	 * @param	WP_User      $client	The WP_User object that was found.
 	 */
-	do_action( 'mdjm_anonymize_client', $client );
+	do_action( 'mdjm_anonymize_client', $client, $anonymized_email );
 
 	return array( 'success' => true, 'message' => sprintf( __( 'Client ID %d successfully anonymized.', 'mobile-dj-manager' ), $customer_id ) );
 
@@ -320,7 +322,7 @@ function _mdjm_anonymize_client( $client_id = 0 ) {
 
 
 /**
- * Since our eraser callbacks need to look up a stored customer ID by hashed email address,
+ * Since our eraser callbacks need to look up a stored client ID by hashed email address,
  * developers can use this to retrieve the customer ID associated with an email address that's being
  * requested to be deleted even after the customer has been anonymized.
  *
@@ -345,7 +347,7 @@ function _mdjm_privacy_get_client_id_for_email( $email_address ) {
 function mdjm_register_privacy_exporters( $exporters ) {
 
 	$exporters[] = array(
-		'exporter_friendly_name' => __( 'MDJM Customer Record', 'mobile-dj-manager' ),
+		'exporter_friendly_name' => __( 'MDJM Client Record', 'mobile-dj-manager' ),
 		'callback'               => 'mdjm_privacy_client_record_exporter'
 	);
 
@@ -373,23 +375,36 @@ function mdjm_privacy_client_record_exporter( $email_address = '', $page = 1 ) {
     $custom_fields = get_option( 'mdjm_client_fields' );
     $address       = mdjm_get_client_address( $client->ID );
 
+	// We can exclude some fields as WordPress has these covered for us
+	$exclude = array(
+		'ID',
+		'first_name',
+		'last_name',
+		'user_email'
+	);
+
 	$export_data = array(
 		'group_id'    => 'mdjm-client-record',
 		'group_label' => __( 'MDJM Client Record', 'mobile-dj-manager' ),
 		'item_id'     => "mdjm-client-record-{$client->ID}",
-		'data'        => array(
-			array(
-				'name'  => __( 'Client ID', 'mobile-dj-manager' ),
-				'value' => $client->id
-			)
-		)
+		'data'        => array()
 	);
 
     if ( ! empty( $custom_fields ) )	{
         foreach( $custom_fields as $custom_field )	{
+			if ( in_array( $custom_field['id'], $exclude ) )	{
+				continue;
+			}
+
+			$value = get_user_meta( $client->ID, $custom_field['id'], true );
+
+			if ( empty( $value ) )	{
+				continue;
+			}
+
             $export_data['data'][] = array(
                 'name'  => esc_attr( $custom_field['label'] ),
-                'value' => esc_attr( get_user_meta( $user_id, $custom_field['id'], true ) )
+                'value' => esc_attr( $value )
             );
         }
     }
