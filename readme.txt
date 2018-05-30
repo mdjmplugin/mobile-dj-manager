@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 4.4
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,13 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.2 =
+
+**Wednesday, 30th May 2018**
+
+**Fix**: Custom event fields were not correctly setting value on events screen following contact form submission
+**Fix**: Client primary phone was not being displayed within the *Show client details* box on the events screen
 
 = 1.5.1 =
 
