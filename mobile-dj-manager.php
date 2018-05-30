@@ -196,6 +196,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/txns/txn-actions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/equipment/equipment-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/misc-functions.php' );
+            require_once( MDJM_PLUGIN_DIR . '/includes/privacy-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/event-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/client-fields.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/class-mdjm-users.php' );
