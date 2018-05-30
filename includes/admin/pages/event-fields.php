@@ -730,12 +730,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 				case 'select':
 				case 'multi select':
-					$values = explode( "\r\n", $value );
-					$values = array_map( 'esc_attr', $values );
+					$values   = explode( "\r\n", $value );
+					$values   = array_map( 'esc_attr', $values );
+                    $selected = get_post_meta( $mdjm_event->ID, $name, true );
+                    foreach( $values as $key => $value )    {
+                        $options[ $value ] = $value;
+                    }
 					$output = MDJM()->html->select( array(
 						'name'     => $name,
-						'options'  => $values,
-						'selected' => get_post_meta( $mdjm_event->ID, $name, true ),
+						'options'  => $options,
+						'selected' => $selected,
 						'chosen'   => true,
 						'multiple' => 'multi select' == $type ? true : false,
 						'data'     => array(

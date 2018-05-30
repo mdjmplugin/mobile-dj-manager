@@ -1069,8 +1069,8 @@ function mdjm_event_overview_metabox_client_details_section( $event_id )    {
 	}
 
     $phone_numbers = array();
-    if ( ! empty( $client->phone ) )    {
-        $phone_numbers[] = $client->phone;
+    if ( ! empty( $client->phone1 ) )    {
+        $phone_numbers[] = $client->phone1;
     }
     if ( ! empty( $client->phone2 ) )   {
         $phone_numbers[] = $client->phone2;
