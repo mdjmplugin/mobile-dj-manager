@@ -459,6 +459,16 @@ function mdjm_messages( $key )	{
 				'class'   => 'error',
 				'title'   => __( 'There was an error processing your payment', 'mobile-dj-manager' ),
 				'message' => __( 'To process your payment again, please follow the steps below', 'mobile-dj-manager' )
+			),
+			'agree_to_policy' => array(
+				'class'   => 'error',
+				'title'   => __( 'Error', 'mobile-dj-manager' ),
+				'message' => __( 'You must acknowledge and accept our privacy policy', 'mobile-dj-manager' )
+			),
+			'agree_to_terms' => array(
+				'class'   => 'error',
+				'title'   => __( 'Error', 'mobile-dj-manager' ),
+				'message' => __( 'You must agree to the terms and conditions', 'mobile-dj-manager' )
 			)
 		)
 	);

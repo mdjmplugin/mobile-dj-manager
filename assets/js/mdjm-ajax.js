@@ -461,6 +461,18 @@ function mdjm_validate_payment_form() {
 		}
 	} 
 
+	if ( mdjm_vars.require_privacy )	{
+		if ( ! jQuery('#mdjm-agree-privacy-policy').is(':checked') )	{
+			return( {type:'error', field:'mdjm-agree-privacy-policy', msg:mdjm_vars.privacy_error} );
+		}
+	}
+
+	if ( mdjm_vars.require_terms )	{
+		if ( ! jQuery('#mdjm-agree-terms').is(':checked') )	{
+			return( {type:'error', field:'mdjm-agree-terms', msg:mdjm_vars.terms_error} );
+		}
+	}
+
 	return( {type:'success'} );
 
 }

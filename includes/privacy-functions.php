@@ -216,6 +216,31 @@ function mdjm_log_terms_and_privacy_times( $event_id, $form_data ) {
 } // mdjm_log_terms_and_privacy_times
 add_action( 'mdjm_dcf_after_create_event', 'mdjm_log_terms_and_privacy_times', 10, 2 );
 
+/**
+ * Capture payment transactions prior to them being sent to the gateway.
+ *
+ * @since	1.5.3
+ * @param	array	$data			Array of $_POST data
+ * @param	array	$payment_data	Array of payment data
+ * @return	void
+ */
+function mdjm_payment_terms_privacy_log_action( $data, $payment_data )	{
+	$form_data = array();
+	$event_id  = absint( $payment_data['event_id'] );
+	$timestamp = current_time( 'timestamp' );
+
+	if ( isset( $data['mdjm_agree_privacy_policy'] ) )	{
+		$form_data['form_data']['data']['privacy_accepted'] = $timestamp;
+	}
+
+	if ( isset( $data['mdjm_agree_terms'] ) )	{
+		$form_data['form_data']['data']['terms_agreed'] = $timestamp;
+	}
+
+	mdjm_log_terms_and_privacy_times( $event_id, $form_data );
+} // mdjm_payment_terms_privacy_log_action
+add_action( 'mdjm_payment_before_gateway', 'mdjm_payment_terms_privacy_log_action', 10, 2 );
+
 /*
  * Returns an anonymized email address.
  *

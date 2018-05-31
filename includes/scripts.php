@@ -23,12 +23,16 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_load_scripts()	{
 
-	$js_dir     = MDJM_PLUGIN_URL . '/assets/js/';
-	$suffix     = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-    $is_payment = mdjm_is_payment() ? '1' : '0';
-    $privacy    = false;
-    $terms      = false;
-    $thickbox   = false;
+	$js_dir        = MDJM_PLUGIN_URL . '/assets/js/';
+	$suffix        = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+    $is_payment    = mdjm_is_payment() ? '1' : '0';
+    $privacy       = false;
+    $terms         = false;
+    $thickbox      = false;
+	$privacy_error = mdjm_messages( 'agree_to_policy' );
+	$privacy_error = $privacy_error['message'];
+	$terms_error   = mdjm_messages( 'agree_to_terms' );
+	$terms_error   = $terms_error['message'];
 
     if ( ! empty( mdjm_get_option( 'show_agree_to_privacy_policy', false ) ) && ! empty( mdjm_get_privacy_page() ) )   {
         $privacy = true;
@@ -73,6 +77,7 @@ function mdjm_load_scripts()	{
 				'payment_loading'           => __( 'Please Wait...', 'mobile-dj-manager' ),
                 'playlist_page'             => mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ),
 				'playlist_updated'          => __( 'Your entry was added successfully', 'mobile-dj-manager' ),
+				'privacy_error'             => esc_html( $privacy_error ),
                 'profile_page'              => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ) ),
                 'profile_updated'           => __( 'Your details have been updated', 'mobile-dj-manager' ),
 				'required_date_message'     => __( 'Please select a date', 'mobile-dj-manager' ),
@@ -85,6 +90,7 @@ function mdjm_load_scripts()	{
 				'submit_playlist_loading'   => __( 'Please Wait...', 'mobile-dj-manager' ),
                 'submit_profile_loading'    => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'unavailable_redirect'      => mdjm_get_option( 'availability_check_fail_page', 'text' ) != 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_fail_page' ) ) : 'text',
+				'terms_error'               => esc_html( $terms_error ),
 				'unavailable_text'          => mdjm_get_option( 'availability_check_fail_text', false ),
 			)
 		)
