@@ -26,7 +26,12 @@ function mdjm_load_scripts()	{
 	$js_dir        = MDJM_PLUGIN_URL . '/assets/js/';
 	$suffix        = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
     $is_payment    = mdjm_is_payment() ? '1' : '0';
+	$agree_privacy = mdjm_get_option( 'show_agree_to_privacy_policy', false );
+	$privacy_page  = mdjm_get_privacy_page();
     $privacy       = false;
+	$agree_terms   = mdjm_get_option( 'show_agree_to_terms', false );
+	$terms_text    = mdjm_get_option( 'agree_terms_text', false );
+	$terms_label   = mdjm_get_option( 'agree_terms_label', false );
     $terms         = false;
     $thickbox      = false;
 	$privacy_error = mdjm_messages( 'agree_to_policy' );
@@ -34,7 +39,7 @@ function mdjm_load_scripts()	{
 	$terms_error   = mdjm_messages( 'agree_to_terms' );
 	$terms_error   = $terms_error['message'];
 
-    if ( ! empty( mdjm_get_option( 'show_agree_to_privacy_policy', false ) ) && ! empty( mdjm_get_privacy_page() ) )   {
+    if ( ! empty( $agree_privacy ) && ! empty( $privacy_page ) )   {
         $privacy = true;
 
         if ( 'thickbox' == mdjm_get_option( 'show_agree_policy_type' ) )    {
@@ -42,7 +47,7 @@ function mdjm_load_scripts()	{
         }
     }
 
-    if ( ! empty( mdjm_get_option( 'show_agree_to_terms', false ) ) && ! empty( mdjm_get_option( 'agree_terms_text', false ) ) && ! empty( mdjm_get_option( 'agree_terms_label', false ) ) )  {
+    if ( ! empty( $agree_terms ) && ! empty( $terms_text ) && ! empty( $terms_label ) )  {
         $terms    = true;
         $thickbox = true;
     }
