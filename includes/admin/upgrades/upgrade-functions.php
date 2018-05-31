@@ -52,8 +52,8 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v15_upgrades();
 	}
 
-    if ( version_compare( $mdjm_version, '1.5.3', '<' ) ) {
-		mdjm_v153_upgrades();
+    if ( version_compare( $mdjm_version, '1.5.4', '<' ) ) {
+		mdjm_v154_upgrades();
 	}
 
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
@@ -904,12 +904,12 @@ function mdjm_v15_upgrade_event_pricing()	{
 add_action( 'mdjm-upgrade_event_pricing_15', 'mdjm_v15_upgrade_event_pricing' );
 
 /**
- * 1.5.3 Upgrade.
+ * 1.5.4 Upgrade.
  *
- * @since	1.5
+ * @since	1.5.4
  * @return	void
  */
-function mdjm_v153_upgrades()	{
+function mdjm_v154_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -937,4 +937,4 @@ function mdjm_v153_upgrades()	{
         mdjm_update_option( $key, $value );
     }
 
-} // mdjm_v153_upgrades
+} // mdjm_v154_upgrades
