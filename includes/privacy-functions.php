@@ -206,12 +206,12 @@ function mdjm_log_terms_and_privacy_times( $event_id, $form_data ) {
 		return;
 	}
 
-	if ( ! empty( $form_data['privacy_accepted'] ) ) {
-		update_user_meta( $client->ID, 'agree_to_privacy_time', $form_data['privacy_accepted'] );
+	if ( ! empty( $form_data['form_data']['data']['privacy_accepted'] ) ) {
+		update_user_meta( $client->ID, 'agree_to_privacy_time', $form_data['form_data']['data']['privacy_accepted'] );
 	}
 
-	if ( ! empty( $form_data['terms_agreed'] ) ) {
-		update_user_meta( $client->ID, 'agree_to_terms_time', $form_data['terms_agreed'] );
+	if ( ! empty( $form_data['form_data']['data']['terms_agreed'] ) ) {
+		update_user_meta( $client->ID, 'agree_to_terms_time', $form_data['form_data']['data']['terms_agreed'] );
 	}
 } // mdjm_log_terms_and_privacy_times
 add_action( 'mdjm_dcf_after_create_event', 'mdjm_log_terms_and_privacy_times', 10, 2 );
@@ -380,7 +380,8 @@ function mdjm_privacy_client_record_exporter( $email_address = '', $page = 1 ) {
 		'ID',
 		'first_name',
 		'last_name',
-		'user_email'
+		'user_email',
+        'marketing'
 	);
 
 	$export_data = array(
@@ -433,3 +434,127 @@ function mdjm_privacy_client_record_exporter( $email_address = '', $page = 1 ) {
 
 	return array( 'data' => array( $export_data ), 'done' => true );
 } // mdjm_privacy_client_record_exporter
+
+/**
+ * Render the agree to privacy policy checkbox.
+ *
+ * @since	1.5.3
+ * @return	string
+ */
+function mdjm_render_agree_to_privacy_policy_field()	{
+	$agree_to_policy = mdjm_get_option( 'show_agree_to_privacy_policy', false );
+	$privacy_page    = mdjm_get_privacy_page();
+	$label           = mdjm_get_option( 'agree_privacy_label', false );
+    $description     = mdjm_get_option( 'agree_privacy_descripton', false );
+
+	if ( empty( $agree_to_policy ) || empty( $privacy_page ) || empty( $label ) )	{
+    	return;
+	}
+
+	$privacy_text = get_post_field( 'post_content', $privacy_page );
+
+	if ( empty( $privacy_text ) )	{
+		return;
+	}
+
+	$label_class = '';
+	$input_class = '';
+
+	$args = apply_filters( 'mdjm_agree_to_privacy_policy_args', array(
+		'label_class' => '',
+		'input_class' => ''
+	) );
+
+	if ( ! empty( $args['label_class'] ) )	{
+		$label_class = ' ' . sanitize_html_class( $args['label_class'] );
+	}
+
+	if ( ! empty( $args['input_class'] ) )	{
+		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+	}
+
+    if ( 'thickbox' == mdjm_get_option( 'show_agree_policy_type' ) )	{
+        $privacy_url = sprintf(
+            '<a href="#TB_inline?width=600&height=550&inlineId=mdjm-privacy-policy" class="thickbox"%s title="%s">%s</a>',
+            $label_class,
+            esc_html( get_the_title( $privacy_page ) ),
+            esc_attr( $label )
+        );
+    } else  {
+        $privacy_url = sprintf(
+            '<a href="%s" target="_blank" title="%s" class="%s">%s</a>',
+            get_permalink( $privacy_page ),
+            esc_html( get_the_title( $privacy_page ) ),
+            $label_class,
+            esc_attr( $label )
+        );
+    }
+
+	ob_start(); ?>
+
+	<p><input type="checkbox" name="mdjm_agree_privacy_policy" id="mdjm-agree-privacy-policy"<?php echo $input_class; ?> value="1" /> <?php echo $privacy_url; ?></p>
+
+    <?php if ( ! empty( $description ) ) : ?>
+        <span class="mdjm-description"><?php echo esc_html( $description ); ?></span>
+    <?php endif; ?>
+
+    <?php if ( 'thickbox' == mdjm_get_option( 'show_agree_policy_type' ) ) : ?>
+        <div id="mdjm-privacy-policy" class="mdjm-hidden">
+            <?php do_action( 'mdjm_before_privacy_policy' ); ?>
+            <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+            <?php do_action( 'mdjm_after_privacy_policy' ); ?>
+        </div>
+    <?php endif; ?>
+
+	<?php echo ob_get_clean();
+
+} // mdjm_render_agree_to_privacy_policy_field
+add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_render_agree_to_privacy_policy_field', 950 );
+
+/**
+ * Render the agree to terms checkbox.
+ *
+ * @since	1.5.3
+ * @return	string
+ */
+function mdjm_render_agree_to_terms_field()	{
+	$agree_to_terms = mdjm_get_option( 'show_agree_to_terms', false );
+	$agree_text     = mdjm_get_option( 'agree_terms_text', false );
+	$label          = mdjm_get_option( 'agree_terms_label', false );
+	$terms_heading  = mdjm_get_option( 'agree_terms_heading',
+		__( 'Terms and Conditions', 'mobile-dj-manager' ) );
+
+	if ( ! $agree_to_terms || ! $agree_text || ! $label )	{
+    	return;
+	}
+
+	$label_class = '';
+	$input_class = '';
+
+	$args = apply_filters( 'mdjm_agree_to_terms_args', array(
+		'label_class' => '',
+		'input_class' => ''
+	) );
+
+	if ( ! empty( $args['label_class'] ) )	{
+		$label_class = ' ' . sanitize_html_class( $args['label_class'] );
+	}
+
+	if ( ! empty( $args['input_class'] ) )	{
+		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+	}
+
+	ob_start(); ?>
+
+	<p><input type="checkbox" name="mdjm_agree_terms" id="mdjm-agree-terms"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=mdjm-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'mobile-dj-manager' ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'mobile-dj-manager' ); ?></a></p>
+
+	<div id="mdjm-terms-conditions" class="mdjm-hidden">
+		<?php do_action( 'mdjm_before_terms' ); ?>
+		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
+		<?php do_action( 'mdjm_after_terms' ); ?>
+    </div>
+
+	<?php echo ob_get_clean();
+
+} // mdjm_render_agree_to_terms_field
+add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_render_agree_to_terms_field', 999 );

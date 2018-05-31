@@ -52,6 +52,10 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v15_upgrades();
 	}
 
+    if ( version_compare( $mdjm_version, '1.5.3', '<' ) ) {
+		mdjm_v153_upgrades();
+	}
+
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
@@ -898,3 +902,39 @@ function mdjm_v15_upgrade_event_pricing()	{
 	}
 } // mdjm_v15_upgrade_event_pricing
 add_action( 'mdjm-upgrade_event_pricing_15', 'mdjm_v15_upgrade_event_pricing' );
+
+/**
+ * 1.5.3 Upgrade.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function mdjm_v153_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+    // Add default values for new setting options
+    $options = array(
+        'show_agree_to_privacy_policy' => false,
+		'agree_privacy_label'          => '',
+        'agree_privacy_descripton'     => '',
+        'show_agree_policy_type'       => 'thickbox',
+        'show_agree_to_terms'          => false,
+        'agree_terms_label'            => __( 'I have read and agree to the terms and conditions', 'mobile-dj-manager' ),
+        'agree_terms_description'      => '',
+        'agree_terms_heading'          => sprintf( __( 'Terms and Conditions for %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+        'agree_terms_text'             => ''
+    );
+
+    foreach ( $options as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
+
+} // mdjm_v153_upgrades

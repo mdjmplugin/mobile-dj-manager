@@ -1283,6 +1283,95 @@ function mdjm_get_registered_settings()	{
 				)
 			)
 		),
+        /** Compliance Settings */
+		'terms_compliance' => apply_filters( 'mdjm_settings_terms_compliance',
+			array(
+				'privacy'     => array(
+					'privacy_settings' => array(
+						'id'   => 'privacy_settings',
+						'name' => '<h3>' . __( 'Agreement Settings', 'mobile-dj-manager' ) . '</h3>',
+						'type' => 'header',
+					),
+					'show_agree_to_privacy_policy' => array(
+						'id'   => 'show_agree_to_privacy_policy',
+						'name' => __( 'Agree to Privacy Policy?', 'mobile-dj-manager' ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type' => 'checkbox',
+                        'std'  => false
+					),
+					'agree_privacy_label' => array(
+						'id'   => 'agree_privacy_label',
+						'name' => __( 'Agree to Privacy Policy Label', 'mobile-dj-manager' ),
+						'desc' => sprintf( __( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'mobile-dj-manager' ), esc_attr( admin_url( 'privacy.php' ) ) ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+                    'agree_privacy_descripton' => array(
+						'id'   => 'agree_privacy_descripton',
+						'name' => __( 'Agree to Privacy Policy Description', 'mobile-dj-manager' ),
+						'desc' => __( 'Description shown under the Agree to Privacy Policy field. Leave blank for none', 'mobile-dj-manager' ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+                    'show_agree_policy_type' => array(
+                        'id'      => 'show_agree_policy_type',
+						'name'    => __( 'Display Privacy Policy in', 'mobile-dj-manager' ),
+						'desc'    => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'    => 'select',
+                        'options' => array(
+                            'blank'    => __( 'New Page', 'mobile-dj-manager' ),
+                            'thickbox' => __( 'Thickbox', 'mobile-dj-manager' )
+                        ),
+                        'std'     => 'thickbox'
+                    )
+				),
+				'terms_conditions'     => array(
+					'terms_settings' => array(
+						'id'   => 'terms_settings',
+						'name' => '<h3>' . __( 'Agreement Settings', 'mobile-dj-manager' ) . '</h3>',
+						'type' => 'header',
+					),
+					'show_agree_to_terms' => array(
+						'id'   => 'show_agree_to_terms',
+						'name' => __( 'Agree to Terms', 'mobile-dj-manager' ),
+						'desc' => __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting.', 'mobile-dj-manager' ),
+						'type' => 'checkbox',
+						'std'  => false
+					),
+					'agree_terms_label' => array(
+						'id'   => 'agree_terms_label',
+						'name' => __( 'Agree to Terms Label', 'mobile-dj-manager' ),
+						'desc' => __( 'Label shown next to the agree to terms checkbox.', 'mobile-dj-manager' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => __( 'I have read and agree to the terms and conditions', 'mobile-dj-manager' )
+					),
+                    'agree_terms_description' => array(
+						'id'   => 'agree_terms_description',
+						'name' => __( 'Agree to Terms Description', 'mobile-dj-manager' ),
+						'desc' => __( 'Description shown under the Agree to Terms field. Leave blank for none', 'mobile-dj-manager' ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+					'agree_terms_heading' => array(
+						'id'   => 'agree_terms_heading',
+						'name' => __( 'Terms Heading', 'mobile-dj-manager' ),
+						'desc' => __( 'Heading for the agree to terms thickbox.', 'mobile-dj-manager' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => sprintf(
+							__( 'Terms and Conditions for %s', 'mobile-dj-manager' ), mdjm_get_label_plural()
+						)
+					),
+					'agree_terms_text' => array(
+						'id'   => 'agree_terms_text',
+						'name' => __( 'Agreement Text', 'mobile-dj-manager' ),
+						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'mobile-dj-manager' ),
+						'type' => 'rich_editor'
+					)
+				)
+			)
+        ),
 		/** Extension Settings */
 		'extensions' => apply_filters( 'mdjm_settings_extensions',
 			array()
@@ -1411,12 +1500,13 @@ function mdjm_get_settings_tabs() {
 
 	$settings = mdjm_get_registered_settings();
 
-	$tabs                  = array();
-	$tabs['general']       = __( 'General', 'mobile-dj-manager' );
-	$tabs['events']        = sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() );
-	$tabs['emails']        = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
-	$tabs['client_zone']   = mdjm_get_application_name();
-	$tabs['payments']      = __( 'Payments', 'mobile-dj-manager' );
+	$tabs                     = array();
+	$tabs['general']          = __( 'General', 'mobile-dj-manager' );
+	$tabs['events']           = sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() );
+	$tabs['emails']           = __( 'Emails &amp; Templates', 'mobile-dj-manager' );
+	$tabs['client_zone']      = mdjm_get_application_name();
+	$tabs['payments']         = __( 'Payments', 'mobile-dj-manager' );
+    $tabs['terms_compliance'] = __( 'Compliance', 'mobile-dj-manager' );
 
 	if( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'mobile-dj-manager' );
@@ -1487,6 +1577,10 @@ function mdjm_get_registered_settings_sections() {
 			'main'               => __( 'Payment Settings', 'mobile-dj-manager' ),
 			'employee_payments'  => __( 'Employee Payments', 'mobile-dj-manager' ),
 			'receipts'           => __( 'Receipts', 'mobile-dj-manager' )
+		) ),
+        'terms_compliance'  => apply_filters( 'mdjm_settings_sections_terms_compliance', array(
+			'privacy'             => __( 'Privacy Policy', 'mobile-dj-manager' ),
+			'terms_conditions'    => __( 'Terms and Conditions', 'mobile-dj-manager' )
 		) ),
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
@@ -2155,7 +2249,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						$messages[] = sprintf(
 							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager' ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
-							'http://kb-support.com/checkout/?edd_license_key=' . $value
+							'http://mobile-dj-manager.com/checkout/?edd_license_key=' . $value
 						);
 
 						$license_status = 'license-' . $class . '-notice';
@@ -2167,7 +2261,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						$class = 'error';
 						$messages[] = sprintf(
 							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'mobile-dj-manager' ),
-							'https://kb-support.com/support'
+							'https://mobile-dj-manager.com/support'
 						);
 
 						$license_status = 'license-' . $class . '-notice';
