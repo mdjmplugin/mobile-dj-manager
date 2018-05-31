@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 4.4
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.5.2
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,18 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.4 =
+
+**Thursday, 31st May 2018**
+
+**New**: Added privacy functionality for General Data Protection Regulation (GDPR) compliance
+**New**: Added **Compliance** tab within MDJM Events -> Settings
+**New**: Added ability to present and require acceptance of Privacy Policy for all MDJM related forms
+**New**: Added ability to present and require acceptance of Terms & Conditions for all MDJM related forms (payment forms, contact forms, etc.)
+**New**: User information stored as part of MDJM will be exported as part of the WordPress Export Personal Data process
+**New**: Capture time of acceptance for privacy policy and terms and conditions
+**New**: Added MDJM GDPR Privacy Policy template suggestion
 
 = 1.5.2 =
 

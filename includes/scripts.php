@@ -23,8 +23,38 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_load_scripts()	{
 
-	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$js_dir        = MDJM_PLUGIN_URL . '/assets/js/';
+	$suffix        = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+    $is_payment    = mdjm_is_payment() ? '1' : '0';
+	$agree_privacy = mdjm_get_option( 'show_agree_to_privacy_policy', false );
+	$privacy_page  = mdjm_get_privacy_page();
+    $privacy       = false;
+	$agree_terms   = mdjm_get_option( 'show_agree_to_terms', false );
+	$terms_text    = mdjm_get_option( 'agree_terms_text', false );
+	$terms_label   = mdjm_get_option( 'agree_terms_label', false );
+    $terms         = false;
+    $thickbox      = false;
+	$privacy_error = mdjm_messages( 'agree_to_policy' );
+	$privacy_error = $privacy_error['message'];
+	$terms_error   = mdjm_messages( 'agree_to_terms' );
+	$terms_error   = $terms_error['message'];
+
+    if ( ! empty( $agree_privacy ) && ! empty( $privacy_page ) )   {
+        $privacy = true;
+
+        if ( 'thickbox' == mdjm_get_option( 'show_agree_policy_type' ) )    {
+            $thickbox = true;
+        }
+    }
+
+    if ( ! empty( $agree_terms ) && ! empty( $terms_text ) && ! empty( $terms_label ) )  {
+        $terms    = true;
+        $thickbox = true;
+    }
+
+    if ( $is_payment && $thickbox && ( $privacy || $terms ) )    {
+        add_thickbox();
+    }
 
 	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax' . $suffix . '.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-ajax' );
@@ -46,15 +76,18 @@ function mdjm_load_scripts()	{
 				'default_playlist_category' => mdjm_get_option( 'playlist_default_cat' ),
 				'first_day'                 => get_option( 'start_of_week' ),
 				'guest_playlist_closed'     => sprintf( __( 'The playlist for this %s is now closed and not accepting suggestions', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-				'is_payment'                => mdjm_is_payment() ? '1' : '0',
+				'is_payment'                => $is_payment,
 				'no_card_name'              => __( 'Enter the name printed on your card', 'mobile-dj-manager' ),
 				'no_payment_amount'         => __( 'Select Payment Amount', 'mobile-dj-manager' ),
 				'payment_loading'           => __( 'Please Wait...', 'mobile-dj-manager' ),
                 'playlist_page'             => mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ),
 				'playlist_updated'          => __( 'Your entry was added successfully', 'mobile-dj-manager' ),
+				'privacy_error'             => esc_html( $privacy_error ),
                 'profile_page'              => mdjm_get_formatted_url( mdjm_get_option( 'profile_page' ) ),
                 'profile_updated'           => __( 'Your details have been updated', 'mobile-dj-manager' ),
 				'required_date_message'     => __( 'Please select a date', 'mobile-dj-manager' ),
+                'require_privacy'           => $privacy,
+                'require_terms'             => $terms,
 				'rest_url'                  => esc_url_raw( rest_url( 'mdjm/v1/' ) ),
 				'submit_client_profile'     => __( 'Update Details', 'mobile-dj-manager' ),
 				'submit_guest_playlist'     => __( 'Suggest Song', 'mobile-dj-manager' ),
@@ -62,6 +95,7 @@ function mdjm_load_scripts()	{
 				'submit_playlist_loading'   => __( 'Please Wait...', 'mobile-dj-manager' ),
                 'submit_profile_loading'    => __( 'Please Wait...', 'mobile-dj-manager' ),
 				'unavailable_redirect'      => mdjm_get_option( 'availability_check_fail_page', 'text' ) != 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_fail_page' ) ) : 'text',
+				'terms_error'               => esc_html( $terms_error ),
 				'unavailable_text'          => mdjm_get_option( 'availability_check_fail_text', false ),
 			)
 		)
