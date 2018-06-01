@@ -1337,6 +1337,10 @@ Our fully customisable Contact Forms enable full management of events from the i
 
 == Upgrade Notice ==
 
+= 1.5.5 =
+
+Resolve an issue where event cost is not calculated for currencies displaying symbol after amount
+
 = 1.4.7.8 =
 Resolves an issue that may result in administrators losing MDJM permissions. Upgrade ASAP.
 
