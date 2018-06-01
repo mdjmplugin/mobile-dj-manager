@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: MDJM Event Management 1.5.4\n"
+"Project-Id-Version: MDJM Event Management 1.5.5\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-05-31 23:02:40+00:00\n"
+"POT-Creation-Date: 2018-06-01 14:20:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -406,7 +406,7 @@ msgstr ""
 
 #: includes/admin/communications/comms.php:26
 #: includes/admin/pages/event-fields.php:823
-#: includes/admin/settings/register-settings.php:1505
+#: includes/admin/settings/register-settings.php:1504
 #: includes/admin/transactions/txns.php:28 includes/admin/venues/venues.php:27
 msgid "%s"
 msgstr ""
@@ -811,7 +811,7 @@ msgstr ""
 #: includes/admin/equipment/metaboxes.php:254
 #: includes/admin/equipment/metaboxes.php:489
 #: includes/admin/equipment/metaboxes.php:736
-#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:282
+#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:287
 msgid "Select Months"
 msgstr ""
 
@@ -989,7 +989,7 @@ msgid "Add Entry to Playlist"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:480
-#: includes/scripts.php:89 templates/playlist/playlist-client.php:43
+#: includes/scripts.php:94 templates/playlist/playlist-client.php:43
 msgid "Add to Playlist"
 msgstr ""
 
@@ -1391,19 +1391,19 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:29 includes/scripts.php:291
+#: includes/admin/events/metaboxes.php:29 includes/scripts.php:296
 msgid "Show client details"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:32 includes/scripts.php:289
+#: includes/admin/events/metaboxes.php:32 includes/scripts.php:294
 msgid "Show client form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:51 includes/scripts.php:293
+#: includes/admin/events/metaboxes.php:51 includes/scripts.php:298
 msgid "Show %s options"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:56 includes/scripts.php:295
+#: includes/admin/events/metaboxes.php:56 includes/scripts.php:300
 msgid "Show %s workers"
 msgstr ""
 
@@ -1411,7 +1411,7 @@ msgstr ""
 msgid "Add %s type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:65 includes/scripts.php:297
+#: includes/admin/events/metaboxes.php:65 includes/scripts.php:302
 msgid "Show venue"
 msgstr ""
 
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: includes/admin/events/metaboxes.php:420
 #: includes/admin/settings/contextual-help.php:81
-#: includes/admin/settings/register-settings.php:1508 includes/install.php:129
+#: includes/admin/settings/register-settings.php:1507 includes/install.php:129
 msgid "Payments"
 msgstr ""
 
@@ -2110,7 +2110,7 @@ msgstr ""
 
 #: includes/admin/menu.php:84 includes/admin/plugins.php:46
 #: includes/admin/settings/contextual-help.php:88
-#: includes/admin/settings/register-settings.php:1512
+#: includes/admin/settings/register-settings.php:1511
 #: includes/admin/welcome.php:434
 msgid "Extensions"
 msgstr ""
@@ -2180,7 +2180,7 @@ msgid "MDJM Settings"
 msgstr ""
 
 #: includes/admin/menu.php:214 includes/admin/settings/contextual-help.php:53
-#: includes/admin/settings/register-settings.php:1504 includes/install.php:459
+#: includes/admin/settings/register-settings.php:1503 includes/install.php:459
 #: includes/install.php:708
 msgid "General"
 msgstr ""
@@ -2216,13 +2216,13 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:813
 #: includes/admin/settings/register-settings.php:866
 #: includes/admin/settings/register-settings.php:1098
-#: includes/admin/settings/register-settings.php:1561
-#: includes/admin/settings/register-settings.php:1571
+#: includes/admin/settings/register-settings.php:1560
+#: includes/admin/settings/register-settings.php:1570
 msgid "%s Settings"
 msgstr ""
 
 #: includes/admin/menu.php:265
-#: includes/admin/settings/register-settings.php:1577
+#: includes/admin/settings/register-settings.php:1576
 msgid "Payment Settings"
 msgstr ""
 
@@ -2614,7 +2614,7 @@ msgstr ""
 msgid "Checked Checkbox Field"
 msgstr ""
 
-#: includes/admin/pages/event-fields.php:747 includes/scripts.php:301
+#: includes/admin/pages/event-fields.php:747 includes/scripts.php:306
 msgid "Type to search all options"
 msgstr ""
 
@@ -3240,7 +3240,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:68
-#: includes/admin/settings/register-settings.php:1506
+#: includes/admin/settings/register-settings.php:1505
 msgid "Emails &amp; Templates"
 msgstr ""
 
@@ -3271,7 +3271,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:94
-#: includes/admin/settings/register-settings.php:1515
+#: includes/admin/settings/register-settings.php:1514
 msgid "Licenses"
 msgstr ""
 
@@ -3481,7 +3481,7 @@ msgid "Log and track all client &amp; %s actions (recommended)."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:463
-#: includes/admin/settings/register-settings.php:1562
+#: includes/admin/settings/register-settings.php:1561
 msgid "Playlist Settings"
 msgstr ""
 
@@ -3574,7 +3574,7 @@ msgid "Enquire Now"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:546
-#: includes/admin/settings/register-settings.php:1564
+#: includes/admin/settings/register-settings.php:1563
 msgid "Travel Settings"
 msgstr ""
 
@@ -4375,7 +4375,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1292
-#: includes/admin/settings/register-settings.php:1331
+#: includes/admin/settings/register-settings.php:1330
 msgid "Agreement Settings"
 msgstr ""
 
@@ -4385,8 +4385,8 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:1298
 msgid ""
-"Check this to show an agree to terms on the submission page that users must "
-"agree to before submitting their %s."
+"Check this to enforce acceptance of your privacy policy on a submission "
+"page that users must agree to before proceeding."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1304
@@ -4395,7 +4395,7 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:1305
 msgid ""
-"Label shown next to the agree to privacy policy checkbox. This text will "
+"Label shown next to the agree to Privacy Policy checkbox. This text will "
 "link to your defined <a href=\"%s\">privacy policy</a>."
 msgstr ""
 
@@ -4405,7 +4405,7 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:1312
 msgid ""
-"Description shown under the Agree to Privacy Policy field. Leave blank for "
+"Description shown under the agree to Privacy Policy field. Leave blank for "
 "none"
 msgstr ""
 
@@ -4413,135 +4413,129 @@ msgstr ""
 msgid "Display Privacy Policy in"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1319
-msgid ""
-"Check this to show an agree to terms on the submission page that users must "
-"agree to."
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:1322
+#: includes/admin/settings/register-settings.php:1321
 msgid "New Page"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1323
+#: includes/admin/settings/register-settings.php:1322
 msgid "Thickbox"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1336
+#: includes/admin/settings/register-settings.php:1335
 msgid "Agree to Terms"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1337
+#: includes/admin/settings/register-settings.php:1336
 msgid ""
 "Check this to show an agree to terms on the submission page that users must "
 "agree to before submitting."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1343
+#: includes/admin/settings/register-settings.php:1342
 msgid "Agree to Terms Label"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1344
+#: includes/admin/settings/register-settings.php:1343
 msgid "Label shown next to the agree to terms checkbox."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1347
+#: includes/admin/settings/register-settings.php:1346
 #: includes/admin/upgrades/upgrade-functions.php:930
 msgid "I have read and agree to the terms and conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1351
+#: includes/admin/settings/register-settings.php:1350
 msgid "Agree to Terms Description"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1352
+#: includes/admin/settings/register-settings.php:1351
 msgid "Description shown under the Agree to Terms field. Leave blank for none"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1358
+#: includes/admin/settings/register-settings.php:1357
 msgid "Terms Heading"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1359
+#: includes/admin/settings/register-settings.php:1358
 msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1363
+#: includes/admin/settings/register-settings.php:1362
 #: includes/admin/upgrades/upgrade-functions.php:932
 msgid "Terms and Conditions for %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1368
+#: includes/admin/settings/register-settings.php:1367
 msgid "Agreement Text"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1369
+#: includes/admin/settings/register-settings.php:1368
 msgid "If Agree to Terms is checked, enter the agreement terms here."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1456
+#: includes/admin/settings/register-settings.php:1455
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1509
+#: includes/admin/settings/register-settings.php:1508
 msgid "Compliance"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1557
+#: includes/admin/settings/register-settings.php:1556
 msgid "Application Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1558
+#: includes/admin/settings/register-settings.php:1557
 msgid "Debug Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1563
+#: includes/admin/settings/register-settings.php:1562
 msgid "Packages &amp; Add-ons"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1567
+#: includes/admin/settings/register-settings.php:1566
 msgid "General Email Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1568
+#: includes/admin/settings/register-settings.php:1567
 msgid "%s Templates"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1572
+#: includes/admin/settings/register-settings.php:1571
 msgid "Styles"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1573
+#: includes/admin/settings/register-settings.php:1572
 msgid "Pages"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1574 includes/widgets.php:252
+#: includes/admin/settings/register-settings.php:1573 includes/widgets.php:252
 #: widgets/class-mdjm-widget.php:164
 msgid "Availability Checker"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1578
+#: includes/admin/settings/register-settings.php:1577
 msgid "Employee Payments"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1579
+#: includes/admin/settings/register-settings.php:1578
 msgid "Receipts"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1582
+#: includes/admin/settings/register-settings.php:1581
 msgid "Privacy Policy"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1583
+#: includes/admin/settings/register-settings.php:1582
 #: includes/privacy-functions.php:550
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1586
+#: includes/admin/settings/register-settings.php:1585
 msgid "Main"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1617
+#: includes/admin/settings/register-settings.php:1616
 #: includes/admin/users/class-mdjm-employee-manager.php:243
 #: includes/admin/users/class-mdjm-employee-manager.php:644
 #: includes/admin/users/class-mdjm-employee-manager.php:660
@@ -4556,84 +4550,84 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1981
+#: includes/admin/settings/register-settings.php:1980
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2168
+#: includes/admin/settings/register-settings.php:2167
 msgid "Upload File"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2250
+#: includes/admin/settings/register-settings.php:2249
 msgid ""
 "Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Renew your license key\">renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2263
+#: includes/admin/settings/register-settings.php:2262
 msgid ""
 "Your license key has been disabled. Please <a href=\"%s\" "
 "target=\"_blank\">contact support</a> for more information."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2275
+#: includes/admin/settings/register-settings.php:2274
 msgid ""
 "Invalid license. Please <a href=\"%s\" target=\"_blank\" title=\"Visit "
 "account page\">visit your account page</a> and verify it."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2288
+#: includes/admin/settings/register-settings.php:2287
 msgid ""
 "Your %s is not active for this URL. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Visit account page\">visit your account page</a> to manage your "
 "license key URLs."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2300
+#: includes/admin/settings/register-settings.php:2299
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2309
+#: includes/admin/settings/register-settings.php:2308
 msgid ""
 "Your license key has reached its activation limit. <a href=\"%s\">View "
 "possible upgrades</a> now."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2318
+#: includes/admin/settings/register-settings.php:2317
 msgid ""
 "The key you entered belongs to a bundle, please use the product specific "
 "license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2326
+#: includes/admin/settings/register-settings.php:2325
 msgid "unknown_error"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2327
+#: includes/admin/settings/register-settings.php:2326
 msgid ""
 "There was an error with this license key: %s. Please <a href=\"%s\">contact "
 "our support team</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2348
+#: includes/admin/settings/register-settings.php:2347
 msgid "License key never expires."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2355
+#: includes/admin/settings/register-settings.php:2354
 msgid ""
 "Your license key expires soon! It expires on %s. <a href=\"%s\" "
 "target=\"_blank\" title=\"Renew license\">Renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2365
+#: includes/admin/settings/register-settings.php:2364
 msgid "Your license key expires on %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2383
+#: includes/admin/settings/register-settings.php:2382
 msgid "To receive updates, please enter your valid %s license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2396
+#: includes/admin/settings/register-settings.php:2395
 msgid "Deactivate License"
 msgstr ""
 
@@ -8952,119 +8946,119 @@ msgstr ""
 msgid "Agreed to Terms"
 msgstr ""
 
-#: includes/scripts.php:73 templates/playlist/playlist-guest.php:35
+#: includes/scripts.php:78 templates/playlist/playlist-guest.php:35
 msgid "The playlist for this %s is now closed and not accepting suggestions"
 msgstr ""
 
-#: includes/scripts.php:75
+#: includes/scripts.php:80
 msgid "Enter the name printed on your card"
 msgstr ""
 
-#: includes/scripts.php:76 templates/payments/payments-items.php:40
+#: includes/scripts.php:81 templates/payments/payments-items.php:40
 msgid "Select Payment Amount"
 msgstr ""
 
-#: includes/scripts.php:77 includes/scripts.php:90 includes/scripts.php:91
+#: includes/scripts.php:82 includes/scripts.php:95 includes/scripts.php:96
 msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:79
+#: includes/scripts.php:84
 msgid "Your entry was added successfully"
 msgstr ""
 
-#: includes/scripts.php:82
+#: includes/scripts.php:87
 msgid "Your details have been updated"
 msgstr ""
 
-#: includes/scripts.php:83 widgets/class-mdjm-widget.php:51
+#: includes/scripts.php:88 widgets/class-mdjm-widget.php:51
 msgid "Please select a date"
 msgstr ""
 
-#: includes/scripts.php:87 templates/profile/profile-client.php:25
+#: includes/scripts.php:92 templates/profile/profile-client.php:25
 msgid "Update Details"
 msgstr ""
 
-#: includes/scripts.php:88 templates/playlist/playlist-guest.php:52
+#: includes/scripts.php:93 templates/playlist/playlist-guest.php:52
 msgid "Suggest Song"
 msgstr ""
 
-#: includes/scripts.php:273
+#: includes/scripts.php:278
 msgid "Enter an email address for the client"
 msgstr ""
 
-#: includes/scripts.php:274
+#: includes/scripts.php:279
 msgid "Enter a first name for the client"
 msgstr ""
 
-#: includes/scripts.php:275
+#: includes/scripts.php:280
 msgid "Enter a transaction value"
 msgstr ""
 
-#: includes/scripts.php:276
+#: includes/scripts.php:281
 msgid "Enter a transaction date"
 msgstr ""
 
-#: includes/scripts.php:277
+#: includes/scripts.php:282
 msgid "What is the transaction for?"
 msgstr ""
 
-#: includes/scripts.php:278
+#: includes/scripts.php:283
 msgid "Enter a transaction source"
 msgstr ""
 
-#: includes/scripts.php:279
+#: includes/scripts.php:284
 msgid "Enter a name for the venue"
 msgstr ""
 
-#: includes/scripts.php:280
+#: includes/scripts.php:285
 msgid "You must have a pricing option for at least one month"
 msgstr ""
 
-#: includes/scripts.php:281
+#: includes/scripts.php:286
 msgid "Select at least one Add-on"
 msgstr ""
 
-#: includes/scripts.php:286
+#: includes/scripts.php:291
 msgid "Are you sure you want to save this %s with a total cost of %s?"
 msgstr ""
 
-#: includes/scripts.php:287
+#: includes/scripts.php:292
 msgid "Do you want to auto set the setup time?"
 msgstr ""
 
-#: includes/scripts.php:290
+#: includes/scripts.php:295
 msgid "Hide client form"
 msgstr ""
 
-#: includes/scripts.php:292
+#: includes/scripts.php:297
 msgid "Hide client details"
 msgstr ""
 
-#: includes/scripts.php:294
+#: includes/scripts.php:299
 msgid "Hide %s options"
 msgstr ""
 
-#: includes/scripts.php:296
+#: includes/scripts.php:301
 msgid "Hide %s workers"
 msgstr ""
 
-#: includes/scripts.php:298
+#: includes/scripts.php:303
 msgid "Hide venue"
 msgstr ""
 
-#: includes/scripts.php:299
+#: includes/scripts.php:304
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:300
+#: includes/scripts.php:305
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:302
+#: includes/scripts.php:307
 msgid "Task executed successfully"
 msgstr ""
 
-#: includes/scripts.php:303
+#: includes/scripts.php:308
 msgid "Type to search"
 msgstr ""
 
