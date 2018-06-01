@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 4.4
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,13 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.5 =
+
+**Friday, 1st June 2018**
+
+**Bug**: Incorrectly formatted values for currencies that show the symbol after the amount caused event cost to not be updated
+**Tweak*: Updated setting description for Privacy Policy settings
 
 = 1.5.4 =
 
