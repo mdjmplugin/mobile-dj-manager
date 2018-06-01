@@ -1295,28 +1295,27 @@ function mdjm_get_registered_settings()	{
 					'show_agree_to_privacy_policy' => array(
 						'id'   => 'show_agree_to_privacy_policy',
 						'name' => __( 'Agree to Privacy Policy?', 'mobile-dj-manager' ),
-						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc' => __( 'Check this to enforce acceptance of your privacy policy on a submission page that users must agree to before proceeding.', 'mobile-dj-manager' ),
 						'type' => 'checkbox',
                         'std'  => false
 					),
 					'agree_privacy_label' => array(
 						'id'   => 'agree_privacy_label',
 						'name' => __( 'Agree to Privacy Policy Label', 'mobile-dj-manager' ),
-						'desc' => sprintf( __( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'mobile-dj-manager' ), esc_attr( admin_url( 'privacy.php' ) ) ),
+						'desc' => sprintf( __( 'Label shown next to the agree to Privacy Policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'mobile-dj-manager' ), esc_attr( admin_url( 'privacy.php' ) ) ),
 						'type' => 'text',
 						'size' => 'regular'
 					),
                     'agree_privacy_descripton' => array(
 						'id'   => 'agree_privacy_descripton',
 						'name' => __( 'Agree to Privacy Policy Description', 'mobile-dj-manager' ),
-						'desc' => __( 'Description shown under the Agree to Privacy Policy field. Leave blank for none', 'mobile-dj-manager' ),
+						'desc' => __( 'Description shown under the agree to Privacy Policy field. Leave blank for none', 'mobile-dj-manager' ),
 						'type' => 'text',
 						'size' => 'regular'
 					),
                     'show_agree_policy_type' => array(
                         'id'      => 'show_agree_policy_type',
 						'name'    => __( 'Display Privacy Policy in', 'mobile-dj-manager' ),
-						'desc'    => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'    => 'select',
                         'options' => array(
                             'blank'    => __( 'New Page', 'mobile-dj-manager' ),

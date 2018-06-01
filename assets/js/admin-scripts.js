@@ -124,7 +124,7 @@ jQuery(document).ready(function ($) {
 
                     var value = Number(response.package_cost) + Number(response.addons_cost) + Number(response.travel_cost) + Number(response.additional_cost);
                     value = Number(value) - Number(response.discount);
-                    value = mdjmFormatCurrency( value ).substr(1);
+                    value = mdjmFormatNumberStd( value );
 
                     $('#_mdjm_event_cost').val(value);
 
@@ -549,7 +549,7 @@ jQuery(document).ready(function ($) {
                 var value = $(this).val();
 
                 if( value.length > 0)   {
-                    $(this).val(mdjmFormatCurrency( value ).substr(1));
+                    $(this).val(mdjmFormatNumberStd( value ));
                 }
             });
 
@@ -1760,6 +1760,15 @@ jQuery(document).ready(function ($) {
 	}
 	
 });
+
+var mdjmFormatNumberStd = function (value)	{
+	// Convert the value to a floating point number in case it arrives as a string.
+	var numeric = parseFloat(value);
+	// Specify the local currency.
+	var eventCurrency = mdjm_admin_vars.currency;
+	var decimalPlaces = mdjm_admin_vars.currency_decimals;
+	return numeric.toLocaleString(eventCurrency, { style: 'decimal', currency: eventCurrency, minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
+}
 
 var mdjmFormatCurrency = function (value) {
 	// Convert the value to a floating point number in case it arrives as a string.
