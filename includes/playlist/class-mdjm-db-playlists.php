@@ -504,10 +504,9 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	 * @since	1.5
 	 */
 	public function create_table() {
-
 		global $wpdb;
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE " . $this->table_name . " (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -519,7 +518,9 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		notes longtext NOT NULL,
 		date_added datetime NOT NULL,
 		PRIMARY KEY  (id)
-		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( $sql );
 

@@ -56,6 +56,10 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v154_upgrades();
 	}
 
+	if ( version_compare( $mdjm_version, '1.5.6', '<' ) ) {
+		mdjm_v156_upgrades();
+	}
+
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
@@ -938,3 +942,43 @@ function mdjm_v154_upgrades()	{
     }
 
 } // mdjm_v154_upgrades
+
+/**
+ * 1.5.4 Upgrade.
+ *
+ * @since	1.5.4
+ * @return	void
+ */
+function mdjm_v156_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+    // Create the new database tables
+	$availability_db = MDJM()->availability_db;
+	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
+		@$availability_db->create_table();
+	}
+
+	$availability_meta_db = MDJM()->availability_meta_db;
+	if ( ! $availability_meta_db->table_exists( $availability_meta_db->table_name ) ) {
+		@$availability_meta_db->create_table();
+	}
+
+	$playlist_db = MDJM()->playlist_db;
+	if ( ! $playlist_db->table_exists( $playlist_db->table_name ) ) {
+		@$playlist_db->create_table();
+	}
+
+	$playlist_meta_db = MDJM()->playlist_meta_db;
+	if ( ! $playlist_meta_db->table_exists( $playlist_meta_db->table_name ) ) {
+		@$playlist_meta_db->create_table();
+	}
+
+} // mdjm_v156_upgrades
