@@ -12,6 +12,74 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
+function test_mdjm_av_upgrade()	{
+	global $wpdb;
+
+	$table   = $wpdb->prefix . 'mdjm_avail';
+	$count   = 0;
+	$entries = $wpdb->get_results( 
+		"
+		SELECT user_id, entry_id 
+		FROM $table
+		GROUP BY entry_id
+		"
+	);
+
+	$group_ids = get_transient( 'mdjm_availability_db_migrate' );
+
+	if ( false === $group_ids )	{
+		$group_ids = array();
+	}
+
+	foreach( $entries as $entry )	{
+		$group_ids[ $entry->entry_id ] = md5( $entry->user_id . '_' . mdjm_generate_random_string() );
+	}
+
+	set_transient( 'mdjm_availability_db_migrate', $group_ids, WEEK_IN_SECONDS );
+
+	$entries = get_transient( 'mdjm_availability_db_migrate' );
+	if ( false !== $entries )	{
+		$count = count( $entries );
+	}
+
+	if ( $count > 0 )	{
+		foreach( $entries as $old_key => $new_key )	{
+			$data    = array();
+			$results = $wpdb->get_results( $wpdb->prepare(
+				"
+				SELECT *
+				FROM $table
+				WHERE entry_id = '%s'
+				",
+				$old_key
+			) );
+
+			foreach( $results as $result )	{
+				$data['employee_id'] = $result->user_id;
+				$data['group_id']    = $new_key;
+				$data['from_date']   = $result->date_from;
+				$data['to_date']     = $result->date_to;
+				$data['notes']       = $result->notes;
+
+				MDJM()->availability_db->add( $data );
+			}
+
+			$migrated = MDJM()->availability_db->get_entries( array( 'group_id' => $new_key ) );
+
+			if ( count( $migrated ) == count( $results ) )	{
+				unset( $entries[ $old_key ] );
+				set_transient( 'mdjm_availability_db_migrate', $entries, WEEK_IN_SECONDS );
+				$wpdb->delete( $table, array( 'entry_id' => $old_key ), array( '%s' ) );
+				error_log( "Migrated successfully" );
+			}
+
+		}
+
+	}
+
+}
+//add_action( 'admin_init', 'test_mdjm_av_upgrade' );
+
 /**
  * Hooks MDJM actions, when present in the $_GET superglobal. Every mdjm_action
  * present in $_GET is called using WordPress's do_action function. These

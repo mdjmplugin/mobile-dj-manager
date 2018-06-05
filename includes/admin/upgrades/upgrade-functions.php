@@ -982,3 +982,94 @@ function mdjm_v156_upgrades()	{
 	}
 
 } // mdjm_v156_upgrades
+
+/**
+ * Migrate availability data to new database table.
+ *
+ * @since	1.5.6
+ * @return	void
+ */
+function mdjm_v156_upgrade_availability_db()	{
+
+	global $wpdb;
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	$number    = 5;
+	$step      = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
+	$offset    = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
+	$redirect  = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message   = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$old_table = $wpdb->prefix . 'mdjm_avail';
+
+	if ( $step < 2 ) {
+		// Check if we have any events before moving on
+		$sql         = "SELECT id FROM $old_table LIMIT 1";
+		$has_entries = $wpdb->get_col( $sql );
+
+		if ( empty( $has_entries ) ) {
+			// We had no entries, just complete
+			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
+			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
+			delete_option( 'mdjm_doing_upgrade' );
+			wp_redirect( $redirect );
+			exit;
+		}
+	}
+
+	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+	if ( empty( $total ) || $total <= 1 ) {
+		$total_sql = "SELECT COUNT(DISTINCT(entry_id)) as total_entries FROM $old_table";
+		$results   = $wpdb->get_row( $total_sql, 0 );
+
+		$total     = $results->total_entries;
+	}
+
+	$entry_ids = $wpdb->get_col( $wpdb->prepare( 
+		"
+			SELECT * 
+			FROM $old_table
+			WHERE entry_id = '%s'
+			LIMIT %d,%d;
+		", 
+		$offset, $number
+	) );
+
+	if ( $event_ids )	{
+		foreach( $event_ids as $event_id )	{
+
+		}
+
+		// Records found so migrate them
+		$step++;
+		$redirect = add_query_arg( array(
+			'page'         => 'mdjm-upgrades',
+			'mdjm-upgrade' => 'upgrade_availability_db_156',
+			'step'         => $step,
+			'number'       => $number,
+			'total'        => $total,
+			'redirect'     => $redirect,
+			'message'      => $message
+		), admin_url( 'index.php' ) );
+
+		wp_redirect( $redirect );
+		exit;
+
+	} else {
+		// No more events found, finish up
+		mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
+		delete_option( 'mdjm_doing_upgrade' );
+
+		$url = add_query_arg( array(
+			'mdjm-message' => 'upgrade-completed'
+		), $redirect );
+
+		wp_redirect( $url );
+		exit;
+	}
+} // mdjm_v15_upgrade_event_pricing
+add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_db' );
