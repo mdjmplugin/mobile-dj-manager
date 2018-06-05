@@ -19,20 +19,6 @@
 */
 	/* Process form submissions */
 	if( isset( $_POST['submit'] ) )	{
-		if( $_POST['submit'] == 'Add Entry' )	{
-			if( !isset( $_POST['from_date'] ) || empty( $_POST['from_date'] ) )	{
-				mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>From Date</strong>' );
-			}
-			elseif( !isset( $_POST['to_date'] ) || empty( $_POST['to_date'] ) )	{
-				mdjm_update_notice( 'error', 'ERROR: You did not enter a <strong>To Date</strong>' );
-			}
-			elseif( date( 'Y-m-d', strtotime( $_POST['from_date'] ) ) < date( 'Y-m-d' ) )	{
-				mdjm_update_notice( 'error', 'ERROR: The from date you entered is in the past' );	
-			}
-			else	{
-				mdjm_add_holiday( $_POST );
-			}
-		}
 		if( $_POST['submit'] == 'Check Date' )	{
 			if( !isset( $_POST['check_date'] ) || empty( $_POST['check_date'] ) )	{
 				mdjm_update_notice( 'error', 'ERROR: You did not enter a date to check' );	
@@ -206,33 +192,31 @@
     </td>
     <td>
     <form name="holiday-quick-entry" method="post" action="">
+    <?php wp_nonce_field( 'add_employee_absence', 'mdjm_nonce' ); ?>
+    <input type="hidden" name="mdjm-action" value="add_employee_absence">
     <table class="widefat">
     <tr>
     <th colspan="2" class="alternate"><strong><?php _e( 'Quick Absence Entry', 'mobile-dj-manager' ); ?></strong></th>
     </tr>
     <tr>
     <th scope="row" width="25%"><label for="employee"><?php _e( 'Employee:', 'mobile-dj-manager' ); ?></label></th>
-    <td><select name="employee" id="employee">
+    <td>
     <?php
-	if( !mdjm_employee_can( 'manage_employees' ) )	{
+	if ( ! mdjm_employee_can( 'manage_employees' ) )	{
 		?>
-		<option value="<?php echo $current_user->ID; ?>"><?php echo $current_user->display_name; ?></option>
+		<input type="hidden" name="employee_id" value="<?php echo $current_user->ID; ?>">
       	<?php
 	}
 	else	{
-		mdjm_employee_dropdown( 
-			array(
-				'name'				=> 'check_employee',
-				'first_entry'		=> '--- ' . __( 'Select Employee', 'mobile-dj-manager' ) . ' ---',
-				'first_entry_val'	=> '0',
-				'selected'			=> $current_user->ID,
-				'structure'			=> false,
-				'group'				=> false
-			)
-		);
+		echo MDJM()->html->employee_dropdown( array(
+            'name'        => 'employee_id',
+            'selected'    => $current_user->ID,
+            'group'       => false,
+            'chosen'      => true,
+            'placeholder' => sprintf( __( 'Select %s', 'mobile-dj-manager' ), $artist )
+        ) );
 	}
 	?>
-    </select>
     </td>
     </tr>
     <th scope="row"><label for="show_from_date"><?php _e( 'From', 'mobile-dj-manager' ); ?>:</label></th>

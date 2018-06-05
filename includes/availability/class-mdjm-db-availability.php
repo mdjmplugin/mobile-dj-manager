@@ -151,40 +151,19 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			return false;
 		}
 
-		$column   = ( false !== strpos( '_', $id_or_group ) ) ? 'group_id' : 'id';
-		$customer = $this->get_entry_by( $column, $id_or_group );
+		$column = ( 32 == strlen( $id_or_group ) && ctype_xdigit( $id_or_group ) ) ? 'group_id' : 'id';
+		$entry  = $this->get_entry_by( $column, $id_or_group );
+        $format = 'group_id' == $column ? array( '%s' ) : array( '%d' );
+        $return = false;
 
 		if ( $entry->id > 0 ) {
-
 			global $wpdb;
-			return $wpdb->delete( $this->table_name, array( 'id' => $entry->id ), array( '%d' ) );
 
-		} else {
-			return false;
+			$return = $wpdb->delete( $this->table_name, array( $column => $id_or_group ), $format );
 		}
 
+        return $return;
 	} // delete
-
-	/**
-	 * Checks if an entry exists
-	 *
-	 * @access	public
-	 * @since	1.5.5
-	 * @param	int		$event_id	The event ID to which the entry is associated
-	 * @param	mixed	$value		The value to search for
-	 * @param	string	$field		The field to search within
-	 */
-	public function exists( $event_id, $value = '', $field = 'email' ) {
-
-		$columns = $this->get_columns();
-
-		if ( ! array_key_exists( $field, $columns ) ) {
-			return false;
-		}
-
-		return (bool) $this->get_column_by( 'id', $field, $value );
-
-	} // exists
 
 	/**
 	 * Retrieves a single entry from the database
@@ -217,7 +196,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		} elseif ( 'group_id' === $field ) {
 
-			if ( false === strpos( '_', $value ) ) {
+			if ( 32 != strlen( $id_or_group ) && ctype_xdigit( $id_or_group ) ) {
 				return false;
 			}
 

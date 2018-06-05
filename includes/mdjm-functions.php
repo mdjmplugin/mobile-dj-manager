@@ -159,61 +159,6 @@
 	} // is_dj
 	
 	/**
-	 * Return all dates within the given range
-	 * 
-	 * @param	$str	$from_date		The start date Y-m-d
-	 *			$str	$to_date		The end date Y-m-d
-	 * 
-	 * @return all dates between 2 given dates as an array
-	 */
-	function mdjm_all_dates_in_range( $from_date, $to_date )	{
-		$from_date = \DateTime::createFromFormat( 'Y-m-d', $from_date );
-		$to_date   = \DateTime::createFromFormat( 'Y-m-d', $to_date );
-		return new \DatePeriod(
-			$from_date,
-			new \DateInterval( 'P1D' ),
-			$to_date->modify( '+1 day' )
-		);
-	} // mdjm_all_dates_in_range
-	
-	/**
-	 * Insert an employee holiday into the database
-	 * 
-	 * 
-	 * @param	arr		$args	An array of information regarding the holiday
-	 *							'from_date' Y-m-d
-	 *							'to_date' Y-m-d
-	 *							'employee' UserID
-	 *							'notes' String with information re holiday
-	 * 
-	 */
-	function mdjm_add_holiday( $args )	{
-		global $wpdb;
-		
-		$date_range  = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
-
-		do_action( 'mdjm_before_added_holiday', $args, $date_range );
-
-		foreach( $date_range as $the_date )	{
-			$wpdb->insert( 
-				MDJM_HOLIDAY_TABLE,
-				apply_filters( 'mdjm_add_holiday_args', array(
-                    'id'         => '',
-                    'user_id'    => $args['employee'],
-                    'entry_id'   => get_current_user_id() . '_' . time(),
-                    'date_from'  => $the_date->format( 'Y-m-d' ),
-                    'date_to'    => $args['to_date'],
-                    'notes'      => $args['notes'],
-                ) )
-			);
-		}
-
-		do_action( 'mdjm_added_holiday', $args, $date_range );
-
-		mdjm_update_notice( 'updated', 'The entry was added successfully' );	
-	} // mdjm_add_holiday
-	
-	/**
 	 * Remove an employee holiday entry from the database
 	 * 
 	 * 
@@ -338,7 +283,7 @@
 			$last_day = date( 'Y-m-d', strtotime( '+1 week' ) );
 		}
 		
-		$date_range = mdjm_all_dates_in_range( $first_day, $last_day );
+		$date_range = mdjm_get_all_dates_in_range( $first_day, $last_day );
 		
 		$event_args = array(
 						'posts_per_page'	=> -1,
@@ -420,7 +365,7 @@
 					?>
 					<tr>
                     <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $dj->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
-					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php mdjm_get_admin_page( 'availability', 'echo' ); ?>&action=del_entry&entry_id=<?php echo $holiday->entry_id; ?>">Delete Entry</a></td>
+					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php echo wp_nonce_url( mdjm_get_admin_page( 'availability' ) . '&mdjm-action=remove_employee_absence&group_id=' . $holiday->entry_id, 'remove_employee_absence', 'mdjm_nonce' ); ?>">Delete Entry</a></td>
                     </tr>
                     <?php
 				}

@@ -661,3 +661,57 @@ function mdjm_update_event_cost_from_package_ajax()	{
 
 } // mdjm_update_event_cost_from_package_ajax
 add_action( 'wp_ajax_update_event_cost_from_package', 'mdjm_update_event_cost_from_package_ajax' );
+
+/**
+ * Return all dates within the given range
+ * 
+ * @param	$str	$from_date		The start date Y-m-d
+ *			$str	$to_date		The end date Y-m-d
+ * 
+ * @return all dates between 2 given dates as an array
+ */
+function mdjm_all_dates_in_range( $from_date, $to_date )	{
+
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_get_all_dates_in_range' );
+
+    return mdjm_get_all_dates_in_range( $from_date, $to_date );
+} // mdjm_all_dates_in_range
+
+/**
+ * Insert an employee holiday into the database
+ * 
+ * 
+ * @param	arr		$args	An array of information regarding the holiday
+ *							'from_date' Y-m-d
+ *							'to_date' Y-m-d
+ *							'employee' UserID
+ *							'notes' String with information re holiday
+ * 
+ */
+function mdjm_add_holiday( $args )	{
+    global $wpdb;
+
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_add_employee_absence()' );
+
+    $date_range  = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+
+    do_action( 'mdjm_before_added_holiday', $args, $date_range );
+
+    foreach( $date_range as $the_date )	{
+        $wpdb->insert( 
+            MDJM_HOLIDAY_TABLE,
+            apply_filters( 'mdjm_add_holiday_args', array(
+                'id'         => '',
+                'user_id'    => $args['employee'],
+                'entry_id'   => get_current_user_id() . '_' . time(),
+                'date_from'  => $the_date->format( 'Y-m-d' ),
+                'date_to'    => $args['to_date'],
+                'notes'      => $args['notes'],
+            ) )
+        );
+    }
+
+    do_action( 'mdjm_added_holiday', $args, $date_range );
+
+    mdjm_update_notice( 'updated', 'The entry was added successfully' );	
+} // mdjm_add_holiday

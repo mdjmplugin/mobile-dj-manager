@@ -454,6 +454,24 @@ function mdjm_admin_notices() {
 		);
 	}
 
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-added' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-added',
+			__( 'Absence added successfully.', 'mobile-dj-manager' ),
+			'updated'
+		);
+	}
+
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-add-fail' == $_GET['mdjm-message'] )	{
+		add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-fail',
+			__( 'Absence could not be added.', 'mobile-dj-manager' ),
+			'error'
+		);
+	}
+
 	settings_errors( 'mdjm-notices' );
 	
 } // mdjm_admin_messages
