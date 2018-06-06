@@ -555,11 +555,7 @@ function mdjm_has_upgrade_completed( $upgrade_action = '' )	{
  */
 function mdjm_get_completed_upgrades()	{
 
-	$completed_upgrades = get_option( 'mdjm_completed_upgrades' );
-
-	if ( false === $completed_upgrades ) {
-		$completed_upgrades = array();
-	}
+	$completed_upgrades = get_option( 'mdjm_completed_upgrades', array() );
 
 	return $completed_upgrades;
 

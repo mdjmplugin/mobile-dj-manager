@@ -213,7 +213,7 @@
             'selected'    => $current_user->ID,
             'group'       => false,
             'chosen'      => true,
-            'placeholder' => sprintf( __( 'Select %s', 'mobile-dj-manager' ), $artist )
+            'placeholder' => sprintf( __( 'Select %s', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ) )
         ) );
 	}
 	?>

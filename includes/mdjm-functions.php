@@ -286,54 +286,56 @@
 		$date_range = mdjm_get_all_dates_in_range( $first_day, $last_day );
 		
 		$event_args = array(
-						'posts_per_page'	=> -1,
-						'post_type'			=> 'mdjm-event',
-						'post_status'		=> array( 'mdjm-unattended',
-													  'mdjm-enquiry',
-													  'mdjm-contract',
-													  'mdjm-approved',
-													  'mdjm-completed' ),
-						'orderby'			=> 'meta_value',
-						'order'				=> 'ASC',
-						);
+            'posts_per_page'	=> -1,
+            'post_type'			=> 'mdjm-event',
+            'post_status'		=> array(
+                'mdjm-unattended',
+                'mdjm-enquiry',
+                'mdjm-contract',
+                'mdjm-approved',
+                'mdjm-completed'
+            ),
+            'orderby'			=> 'meta_value',
+            'order'				=> 'ASC',
+        );
 		
 		/* Loop through the days */
 		foreach( $date_range as $day )	{
 			if( mdjm_is_admin() )	{
-				$event_args['meta_query'] = array(
-												array( 
-													'key'		=> '_mdjm_event_date',
-													'value'  	=> $day->format( 'Y-m-d' ),
-													'compare'	=> '=',
-													'type'		=> 'date',
-													),
-												);
+				$event_args['meta_query'] = array( array( 
+                    'key'		=> '_mdjm_event_date',
+                    'value'  	=> $day->format( 'Y-m-d' ),
+                    'compare'	=> '=',
+                    'type'		=> 'date',
+                ) );
 				
-				$hol_query = "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "'";
+				$hol_query_args = array( 'from_date' => $day->format( 'Y-m-d' ) );
 			}
 			else	{
 				$event_args['meta_query'] = array(
-												'relation'	=> 'AND',
-												array(
-													'key'		=> '_mdjm_event_date',
-													'value'  	=> $day->format( 'Y-m-d' ),
-													'compare'	=> '=',
-													'type'		=> 'date',
-												),
-												array( 
-													'key'		=> '_mdjm_event_dj',
-													'value'  	  => $current_user->ID,
-													'compare'	=> '=',
-												),
-											);
+                    'relation'	=> 'AND',
+                    array(
+                        'key'     => '_mdjm_event_date',
+                        'value'   => $day->format( 'Y-m-d' ),
+                        'compare' => '=',
+                        'type'    => 'date',
+                    ),
+                    array( 
+                        'key'     => '_mdjm_event_dj',
+                        'value'   => $current_user->ID
+                    )
+                );
 				
-				$hol_query = "SELECT * FROM " . MDJM_HOLIDAY_TABLE . " WHERE DATE(date_from) = '" . $day->format( 'Y-m-d' ) . "' AND `user_id` = '" . get_current_user_id() . "'";
+				$hol_query_args = array(
+                    'from_date' => $day->format( 'Y-m-d' ),
+                    'user_id'   => get_current_user_id()
+                );
 			}
 			/* Work Query */
 			$work_result = get_posts( $event_args );
 			
 			/* Holiday Query */
-			$hol_result = $wpdb->get_results( $hol_query );
+			$hol_result = MDJM()->availability_db->get_entries( $hol_query_args );
 			/* Print results */
 			$result_array = array();
 			if( count( $work_result ) > 0 || $hol_result )	{
@@ -361,11 +363,11 @@
 			}
 			if( $hol_result )	{
 				foreach( $hol_result as $holiday )	{
-					$dj = get_userdata( $holiday->user_id );
+					$dj = get_userdata( $holiday->employee_id );
 					?>
 					<tr>
                     <td width="25%"><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?><strong><?php echo $dj->display_name; ?></strong><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?></td>
-					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) &&$month != 0 && $year != 0 ) echo ' - ' . $holiday->notes; ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php echo wp_nonce_url( mdjm_get_admin_page( 'availability' ) . '&mdjm-action=remove_employee_absence&group_id=' . $holiday->entry_id, 'remove_employee_absence', 'mdjm_nonce' ); ?>">Delete Entry</a></td>
+					<td><?php if( $month == 0 && $year == 0 ) echo '<font style="font-size:12px">'; ?>Unavailable<?php if( isset( $holiday->notes ) && !empty( $holiday->notes ) && $month != 0 && $year != 0 ) echo ' - ' . esc_html( stripslashes( $holiday->notes ) ); ?><?php if( $month == 0 && $year == 0 ) echo '</font>'; ?> <a style="color: #F00;" href="<?php echo wp_nonce_url( mdjm_get_admin_page( 'availability' ) . '&mdjm-action=remove_employee_absence&group_id=' . $holiday->group_id, 'remove_employee_absence', 'mdjm_nonce' ); ?>">Delete Entry</a></td>
                     </tr>
                     <?php
 				}

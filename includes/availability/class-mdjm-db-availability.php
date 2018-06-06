@@ -308,16 +308,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		}
 
-		// Specific entries by from date
-		if ( ! empty( $args['from_date'] ) ) {
-			// TODO
-		}
-
-		// Specific entries by artist
-		if ( ! empty( $args['to_date'] ) ) {
-			// TODO
-		}
-
 		// Entries starting on a specific date or in a date range
 		if ( ! empty( $args['from_date'] ) ) {
 
