@@ -689,29 +689,81 @@ function mdjm_all_dates_in_range( $from_date, $to_date )	{
  * 
  */
 function mdjm_add_holiday( $args )	{
-    global $wpdb;
-
     _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_add_employee_absence()' );
 
-    $date_range  = mdjm_all_dates_in_range( $args['from_date'], $args['to_date'] );
+	$employee_id = $args['employee'];
 
     do_action( 'mdjm_before_added_holiday', $args, $date_range );
 
-    foreach( $date_range as $the_date )	{
-        $wpdb->insert( 
-            MDJM_HOLIDAY_TABLE,
-            apply_filters( 'mdjm_add_holiday_args', array(
-                'id'         => '',
-                'user_id'    => $args['employee'],
-                'entry_id'   => get_current_user_id() . '_' . time(),
-                'date_from'  => $the_date->format( 'Y-m-d' ),
-                'date_to'    => $args['to_date'],
-                'notes'      => $args['notes'],
-            ) )
-        );
-    }
+    mdjm_add_employee_absence( $employee_id, $args );
 
     do_action( 'mdjm_added_holiday', $args, $date_range );
 
-    mdjm_update_notice( 'updated', 'The entry was added successfully' );	
+    mdjm_update_notice( 'updated', __( 'The entry was added successfully', 'mobile-dj-manager' ) );	
 } // mdjm_add_holiday
+
+/**
+ * Remove an employee holiday entry from the database
+ * 
+ * 
+ * @param	int		$entry	The database ID for the entry
+ *
+ * 
+ */
+function mdjm_remove_holiday( $entry_id )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_remove_employee_absence()' );
+
+	do_action( 'mdjm_before_remove_holiday', $entry_id );
+
+	mdjm_remove_employee_absence( $entry_id );
+} // mdjm_remove_holiday
+
+/*
+* Determine if the current user is a DJ
+* 
+* @since: 	1.1.3
+* @params: 
+* @returns:	bool	true : false
+*/
+function is_dj( $user='' )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_is_employee()' );
+	if( !empty( $user ) && user_can( $user, 'dj' ) )
+		return true;			
+
+	if( current_user_can( 'dj' ) )
+		return true;
+
+	return false;
+} // is_dj
+
+/*
+* dj_can
+* 19/03/2015
+* Determine if the DJ is allowed to carry out the current action
+* 
+*	@since: 1.1.3
+*	@params: $task
+*	@returns: true : false
+*/
+function dj_can( $task )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_employee_can()' );
+	global $mdjm_settings;
+
+	return isset( $mdjm_settings['permissions']['dj_' . $task] ) ? true : false;
+}
+
+/*
+* mdjm_get_djs
+* 19/03/2015
+* Retrieve a list of all DJ's
+* 
+*	@since: 1.1.3
+*	@params:
+*	@returns: $djs => object
+*/
+function mdjm_get_djs( $role = 'dj' )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_get_employees()' );
+	return mdjm_get_employees(
+		$role == 'dj' ? array( 'administrator', $role ) : $role
+	);
+} // mdjm_get_djs

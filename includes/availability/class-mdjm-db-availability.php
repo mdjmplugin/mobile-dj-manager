@@ -196,7 +196,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		} elseif ( 'group_id' === $field ) {
 
-			if ( 32 != strlen( $id_or_group ) && ctype_xdigit( $id_or_group ) ) {
+			if ( 32 != strlen( $value ) && ctype_xdigit( $value ) ) {
 				return false;
 			}
 

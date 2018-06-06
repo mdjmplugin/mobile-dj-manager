@@ -12,6 +12,28 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the default event statuses that make an employee unavailable.
+ *
+ * @since	1.5.6
+ * @return	array
+ */
+function mdjm_get_availability_statuses()	{
+	$statuses = mdjm_get_option( 'availability_status', 'any' );
+	return apply_filters( 'mdjm_availability_statuses', $statuses );
+} // mdjm_get_availability_statuses
+
+/**
+ * Retrieve the default roles to check for availability.
+ *
+ * @since	1.5.6
+ * @return	array
+ */
+function mdjm_get_availability_roles()	{
+	$roles = mdjm_get_option( 'availability_roles', array() );
+	return apply_filters( 'mdjm_availability_roles', $roles );
+} // mdjm_get_availability_roles
+
+/**
  * Retrieve all dates within the given range
  *
  * @since   1.5.6
@@ -172,28 +194,16 @@ function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{
  * @return	bool	True if the employee is on vacation, otherwise false.
  */
 function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
-	global $wpdb;
-	
-	if( empty( $employee_id ) )	{
-		$employee_id = get_current_user_id();
-	}
-	
-	$date = date( 'Y-m-d', $date );
-	
-	$query = "
-		SELECT COUNT(*) FROM 
-		" . $wpdb->prefix . "mdjm_avail 
-		WHERE DATE(date_from) = '$date' 
-		AND `user_id` = '$employee_id'
-	";
-			  			  
-	$result = $wpdb->get_var( $query );
-		
-	$result = apply_filters( 'mdjm_employee_is_on_vacation', $result, $date, $employee_id );
-	
-	if( $result )	{
-		return true;
-	}
+	$employee_id = empty( $employee_id ) ? get_current_user_id() : $employee_id;
+	$date        = date( 'Y-m-d', $date );
 
-	return false;
+	$result      = MDJM()->availability_db->get_entries( array(
+		'employee_id' => $employee_id,
+		'from_date'   => $date,
+		'number'      => 1
+	) );
+
+	$result = apply_filters( 'mdjm_employee_is_on_vacation', $result, $date, $employee_id );
+
+	return ! empty( $result );
 } // mdjm_employee_is_on_vacation

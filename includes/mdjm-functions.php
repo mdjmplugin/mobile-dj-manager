@@ -98,91 +98,10 @@
 		echo '<p>' . __( $message, 'mobile-dj-manager' ) . '</p>';
 		echo '</div>';
 	} // mdjm_update_notice
-
-/*
- * -- START EVENT FUNCTIONS
- */
-		
-	
-/*
- * -- END EVENT FUNCTIONS
- */
   
 /*
  * -- START DJ FUNCTIONS
  */
-	/*
-	* mdjm_get_djs
-	* 19/03/2015
-	* Retrieve a list of all DJ's
-	* 
-	*	@since: 1.1.3
-	*	@params:
-	*	@returns: $djs => object
-	*/
-	function mdjm_get_djs( $role = 'dj' )	{
-		return mdjm_get_employees(
-			$role == 'dj' ? array( 'administrator', $role ) : $role
-		);
-	} // mdjm_get_djs
-	
-	/*
-	* dj_can
-	* 19/03/2015
-	* Determine if the DJ is allowed to carry out the current action
-	* 
-	*	@since: 1.1.3
-	*	@params: $task
-	*	@returns: true : false
-	*/
-	function dj_can( $task )	{
-		global $mdjm_settings;
-		
-		return isset( $mdjm_settings['permissions']['dj_' . $task] ) ? true : false;
-	}
-	
-	/*
-	* Determine if the current user is a DJ
-	* 
-	* @since: 	1.1.3
-	* @params: 
-	* @returns:	bool	true : false
-	*/
-	function is_dj( $user='' )	{
-		if( !empty( $user ) && user_can( $user, 'dj' ) )
-			return true;			
-		
-		if( current_user_can( 'dj' ) )
-			return true;
-		
-		return false;
-	} // is_dj
-	
-	/**
-	 * Remove an employee holiday entry from the database
-	 * 
-	 * 
-	 * @param	int		$entry	The database ID for the entry
-	 *
-	 * 
-	 */
-	function mdjm_remove_holiday( $entry_id )	{
-		global $wpdb;
-
-		if ( empty( $entry_id ) )	{
-			return mdjm_update_notice( 'error', 'Could not remove entry' );	
-		}
-
-		do_action( 'mdjm_before_remove_holiday', $entry_id );
-
-		if ( $wpdb->delete( MDJM_HOLIDAY_TABLE, array( 'entry_id' => $entry_id, ) ) )	{
-			do_action( 'mdjm_remove_holiday', $entry_id );
-			mdjm_update_notice( 'updated', 'The entry was <strong>deleted</strong> successfully' );					
-		} else	{
-			mdjm_update_notice( 'error', 'Could not remove entry' );	
-		}
-	} // mdjm_remove_holiday
-
 	/*
 	 * Check the availability of the Employee('s) on the given date (Y-m-d)
 	 *

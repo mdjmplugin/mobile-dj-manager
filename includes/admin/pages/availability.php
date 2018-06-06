@@ -119,16 +119,6 @@
 			}
 		}
 	}
-	elseif( !empty( $_GET['action'] ) )	{
-		if( $_GET['action'] == 'del_entry' )	{
-			if( empty( $_GET['entry_id'] ) )	{
-				return;	
-			}
-			else	{
-				mdjm_remove_holiday( $_GET['entry_id'] );
-			}
-		}
-	}
 
 	mdjm_insert_datepicker(
 		array(
@@ -236,6 +226,7 @@
     </tr>
     </form>
     <form name="check-date" method="post" action="">
+	<?php wp_nonce_field( 'employee_availability_check', 'mdjm_nonce' ); ?>
     <tr>
     <th colspan="2" class="alternate"><strong><?php _e( 'Check Employee Availability', 'mobile-dj-manager' ); ?></strong></th>
     </tr>
