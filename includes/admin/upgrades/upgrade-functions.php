@@ -130,6 +130,13 @@ function mdjm_show_upgrade_notice()	{
 			);
 		}
 
+        if ( version_compare( $mdjm_version, '1.5.6', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_availability_db_156' ) )	{
+			printf(
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the availability database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_availability_db_156&message=1&redirect=' . mdjm_get_current_page_url() ) )
+			);
+		}
+
 		/*
 		 *  NOTICE:
 		 *
@@ -960,6 +967,8 @@ function mdjm_v156_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
+    global $wpdb;
+
     // Create the new database tables
 	$availability_db = MDJM()->availability_db;
 	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
@@ -980,6 +989,27 @@ function mdjm_v156_upgrades()	{
 	if ( ! $playlist_meta_db->table_exists( $playlist_meta_db->table_name ) ) {
 		@$playlist_meta_db->create_table();
 	}
+
+    // Prepare the DB migration for availability
+    $group_ids = get_option( 'mdjm_availability_db_migrate' );
+    if ( ! $group_ids ) {
+        $table     = $wpdb->prefix . 'mdjm_avail';
+        $group_ids = array();
+        $count     = 0;
+        $entries   = $wpdb->get_results( 
+            "
+            SELECT user_id, entry_id 
+            FROM $table
+            GROUP BY entry_id
+            "
+        );
+
+        foreach( $entries as $entry )	{
+            $group_ids[ $entry->entry_id ] = md5( $entry->user_id . '_' . mdjm_generate_random_string() );
+        }
+
+        add_option( 'mdjm_availability_db_migrate', $group_ids, false );
+    }
 
 } // mdjm_v156_upgrades
 
@@ -1005,13 +1035,11 @@ function mdjm_v156_upgrade_availability_db()	{
 	$redirect  = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
 	$message   = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
 	$old_table = $wpdb->prefix . 'mdjm_avail';
+    $entries   = get_option( 'mdjm_availability_db_migrate' );
 
 	if ( $step < 2 ) {
-		// Check if we have any events before moving on
-		$sql         = "SELECT id FROM $old_table LIMIT 1";
-		$has_entries = $wpdb->get_col( $sql );
-
-		if ( empty( $has_entries ) ) {
+		// Check if we have any entries before moving on
+		if ( ! $has_entries ) {
 			// We had no entries, just complete
 			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
@@ -1023,25 +1051,37 @@ function mdjm_v156_upgrade_availability_db()	{
 
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
-		$total_sql = "SELECT COUNT(DISTINCT(entry_id)) as total_entries FROM $old_table";
-		$results   = $wpdb->get_row( $total_sql, 0 );
-
-		$total     = $results->total_entries;
+		$total = count( $entries );
 	}
 
-	$entry_ids = $wpdb->get_col( $wpdb->prepare( 
-		"
-			SELECT * 
-			FROM $old_table
-			WHERE entry_id = '%s'
-			LIMIT %d,%d;
-		", 
-		$offset, $number
-	) );
+	if ( $entries )	{
+		foreach( $entries as $entry_id => $group_id )	{
+            $data    = array();
+			$results = $wpdb->get_results( $wpdb->prepare(
+				"
+				SELECT *
+				FROM $old_table
+				WHERE entry_id = '%s'
+				",
+				$entry_id
+			) );
 
-	if ( $event_ids )	{
-		foreach( $event_ids as $event_id )	{
+            foreach( $results as $result )	{
+				$data['employee_id'] = $result->user_id;
+				$data['group_id']    = $group_id;
+				$data['from_date']   = $result->date_from;
+				$data['to_date']     = $result->date_to;
+				$data['notes']       = $result->notes;
 
+				MDJM()->availability_db->add( $data );
+			}
+
+            $migrated = MDJM()->availability_db->get_entries( array( 'group_id' => $group_id ) );
+
+            if ( count( $migrated ) == count( $results ) )	{
+				unset( $entries[ $entry_id ] );
+				update_option( 'mdjm_availability_db_migrate', $entries, WEEK_IN_SECONDS );
+			}
 		}
 
 		// Records found so migrate them
