@@ -29,7 +29,6 @@ function mdjm_do_automatic_upgrades() {
 	// Version 1.3.8.5 was the last version to use the old update procedures which were applied automatically.
 	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) )	{
 		add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
-	
 	}
 
 	if ( version_compare( $mdjm_version, '1.4', '<' ) ) {
@@ -1026,6 +1025,7 @@ function mdjm_v156_upgrade_availability_db()	{
 			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
             delete_option( 'mdjm_availability_hashes' );
 			delete_option( 'mdjm_doing_upgrade' );
+            delete_option( 'mdjm_db_version' );
 			wp_redirect( $redirect );
 			exit;
 		}
@@ -1058,10 +1058,11 @@ function mdjm_v156_upgrade_availability_db()	{
             }
 
             $data = array();
+            $data['event_id']    = 0;
             $data['employee_id'] = $entry->user_id;
             $data['group_id']    = $hashes[ $entry->entry_id ];
-            $data['from_date']   = $entry->date_from;
-            $data['to_date']     = $entry->date_to;
+            $data['start']       = $entry->date_from . ' 00:00:00';
+            $data['end']         = $entry->date_to . ' 23:59:59';
             $data['notes']       = $entry->notes;
 
             MDJM()->availability_db->add( $data );
@@ -1087,6 +1088,7 @@ function mdjm_v156_upgrade_availability_db()	{
 		mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
         delete_option( 'mdjm_availability_hashes' );
 		delete_option( 'mdjm_doing_upgrade' );
+        delete_option( 'mdjm_db_version' );
 
 		$url = add_query_arg( array(
 			'mdjm-message' => 'upgrade-completed'
@@ -1095,5 +1097,5 @@ function mdjm_v156_upgrade_availability_db()	{
 		wp_redirect( $url );
 		exit;
 	}
-} // mdjm_v15_upgrade_event_pricing
+} // mdjm_v156_upgrade_event_pricing
 add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_db' );

@@ -65,12 +65,15 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
         return false;
     }
 
+    $start_time = ' 00:00:00';
+    $end_time   = ' 23:59:59';
+
     $args                = array();
     $args['employee_id'] = $employee_id;
-    $args['group_id']    = isset( $data['group_id'] )  ? $data['group_id']    : md5( $employee_id . '_' . mdjm_generate_random_string() );
-    $args['from_date']   = isset( $data['from_date'] ) ? $data['from_date']   : '';
-    $args['to_date']     = isset( $data['to_date'] )   ? $data['to_date']     : '';
-    $args['notes']       = isset( $data['notes'] )     ? sanitize_textarea_field( $data['notes'] )        : '';
+    $args['group_id']    = ! empty( $data['group_id'] )  ? $data['group_id']                         : md5( $employee_id . '_' . mdjm_generate_random_string() );
+    $args['start']       = ! empty( $data['start'] )     ? $data['start'] . $start_time              : '';
+    $args['end']         = ! empty( $data['end'] )       ? $data['end'] . $end_time                  : '';
+    $args['notes']       = ! empty( $data['notes'] )     ? sanitize_textarea_field( $data['notes'] ) : '';
 
     $args = apply_filters( 'mdjm_add_employee_absence_args', $args, $employee_id, $data );
 
@@ -94,7 +97,7 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
 } // mdjm_add_employee_absence
 
 /**
- * Remove en employee absence entry.
+ * Remove an employee absence entry.
  *
  * @since   1.5.6
  * @param   string     $group_id
@@ -199,7 +202,7 @@ function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
 
 	$result      = MDJM()->availability_db->get_entries( array(
 		'employee_id' => $employee_id,
-		'from_date'   => $date,
+		'start'       => $date,
 		'number'      => 1
 	) );
 

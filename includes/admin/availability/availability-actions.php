@@ -27,8 +27,8 @@ function mdjm_add_employee_absence_action( $form_data )	{
 
     $data['employee_id'] = $employee_id;
     $data['group_id']    = md5( $employee_id . '_' . mdjm_generate_random_string() );
-    $data['from_date']   = isset( $form_data['from_date'] ) ? $form_data['from_date'] : '';
-    $data['to_date']     = isset( $form_data['to_date'] )   ? $form_data['to_date']   : '';
+    $data['start']       = isset( $form_data['start'] ) ? $form_data['start'] : '';
+    $data['end']         = isset( $form_data['end'] )   ? $form_data['end']   : '';
     $data['notes']       = isset( $form_data['notes'] )     ? sanitize_textarea_field( $form_data['notes'] )        : '';
 
     if ( mdjm_add_employee_absence( $employee_id, $data ) ) {

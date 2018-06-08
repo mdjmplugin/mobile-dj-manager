@@ -123,13 +123,13 @@
 	mdjm_insert_datepicker(
 		array(
 			'class'		=> 'from_custom_date',
-			'altfield'	=> 'from_date'
+			'altfield'	=> 'start'
 		)
 	); // Holiday from
 	mdjm_insert_datepicker(
 		array(
 			'class'		=> 'to_custom_date',
-			'altfield'	=> 'to_date'
+			'altfield'	=> 'end'
 		)
 	); // Holiday to
 	mdjm_insert_datepicker(
@@ -209,13 +209,13 @@
 	?>
     </td>
     </tr>
-    <th scope="row"><label for="show_from_date"><?php _e( 'From', 'mobile-dj-manager' ); ?>:</label></th>
-    <td><input type="text" name="show_from_date" id="show_from_date" class="from_custom_date" required="required" /></td>
-    <input type="hidden" name="from_date" id="from_date" />
+    <th scope="row"><label for="show_start"><?php _e( 'From', 'mobile-dj-manager' ); ?>:</label></th>
+    <td><input type="text" name="show_start" id="show_start" class="from_custom_date" required="required" /></td>
+    <input type="hidden" name="start" id="start" />
     </tr>
-    <th scope="row"><label for="show_to_date"><?php _e( 'To', 'mobile-dj-manager' ); ?>:</label></th>
-    <td><input type="text" name="show_to_date" id="show_to_date" class="to_custom_date" required="required" /></td>
-    <input type="hidden" name="to_date" id="to_date" />
+    <th scope="row"><label for="show_end"><?php _e( 'To', 'mobile-dj-manager' ); ?>:</label></th>
+    <td><input type="text" name="show_end" id="show_end" class="to_custom_date" required="required" /></td>
+    <input type="hidden" name="end" id="end" />
     </tr>
     <th scope="row" valign="top">Notes:</th>
     <td><textarea name="notes" id="notes" class="all-options" placeholder="i.e. On holiday"></textarea></td>

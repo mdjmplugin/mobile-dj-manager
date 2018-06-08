@@ -54,14 +54,15 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	 */
 	public function get_columns() {
 		return array(
-			'id'           => '%d',
-			'employee_id'  => '%d',
-			'group_id'     => '%s',
-			'from_date'    => '%s',
-			'to_date'      => '%s',
-			'notes'        => '%s',
-			'date_added'   => '%s',
-			'added_by'     => '%d'
+			'id'          => '%d',
+            'event_id'    => '%d',
+			'employee_id' => '%d',
+			'group_id'    => '%s',
+			'start'       => '%s',
+			'end'         => '%s',
+			'notes'       => '%s',
+			'date_added'  => '%s',
+			'added_by'    => '%d'
 		);
 	} // get_columns
 
@@ -73,14 +74,15 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	 */
 	public function get_column_defaults() {
 		return array(
-			'id'            => 0,
-			'employee_id'   => get_current_user_id(),
-			'group_id'      => '',
-			'from_date'     => '',
-			'to_date'       => '',
-			'notes'         => '',
-			'date_added'    => date( 'Y-m-d H:i:s' ),
-			'added_by'      => get_current_user_id()
+			'id'          => 0,
+            'event_id'    => 0,
+			'employee_id' => get_current_user_id(),
+			'group_id'    => '',
+			'start'       => '',
+			'end'         => '',
+			'notes'       => '',
+			'date_added'  => date( 'Y-m-d H:i:s' ),
+			'added_by'    => get_current_user_id()
 		);
 	} // get_column_defaults
 
@@ -94,8 +96,8 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		return apply_filters( 'mdjm_db_availability_required_fields', array(
 			'employee_id',
 			'group_id',
-			'from_date',
-			'to_date'
+			'start',
+			'end'
 		) );
 	} // get_required_fields
 
@@ -181,7 +183,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			return NULL;
 		}
 
-		if ( 'id' == $field || 'employee_id' == $field ) {
+		if ( 'id' == $field || 'event_id' == $field || 'employee_id' == $field ) {
 			// Make sure the value is numeric to avoid casting objects, for example,
 			// to int 1.
 			if ( ! is_numeric( $value ) ) {
@@ -210,6 +212,9 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		switch ( $field ) {
 			case 'id':
 				$db_field = 'id';
+				break;
+            case 'event_id':
+				$db_field = 'event_id';
 				break;
 			case 'employee_id':
 				$db_field = 'employee_id';
@@ -249,15 +254,16 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		global $wpdb;
 
 		$defaults = array(
-			'number'       => 20,
-			'offset'       => 0,
-			'id'           => 0,
-			'group_id'     => 0,
-			'employee_id'  => 0,
-			'from_date'    => false,
-			'to_date'      => false,
-			'orderby'      => 'id',
-			'order'        => 'DESC'
+			'number'      => 20,
+			'offset'      => 0,
+			'id'          => 0,
+            'event_id'    => 0,
+            'employee_id' => 0,
+			'group_id'    => 0,
+			'start'       => false,
+			'end'         => false,
+			'orderby'     => 'id',
+			'order'       => 'DESC'
 		);
 
 		$args  = wp_parse_args( $args, $defaults );
@@ -295,6 +301,19 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		}
 
+        // Entries for specific events
+		if ( ! empty( $args['event_id'] ) ) {
+
+			if ( is_array( $args['event_id'] ) ) {
+				$event_ids = implode( ',', array_map( 'intval', $args['event_id'] ) );
+			} else {
+				$event_ids = intval( $args['event_id'] );
+			}
+
+			$where .= " AND `event_id` IN( {$event_ids} ) ";
+
+		}
+
 		// Entries for specific employees
 		if ( ! empty( $args['employee_id'] ) ) {
 
@@ -309,34 +328,34 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		}
 
 		// Entries starting on a specific date or in a date range
-		if ( ! empty( $args['from_date'] ) ) {
+		if ( ! empty( $args['start'] ) ) {
 
-			if ( ! empty( $args['to_date'] ) ) {
+			if ( ! empty( $args['end'] ) ) {
 
-				$from   = date( 'Y-m-d', strtotime( $args['from_date'] ) );
-				$to     = date( 'Y-m-d', strtotime( $args['to_date'] ) );
-				$where .= " AND `from_date` >= '{$from}'";
-				$where .= " AND `to_date` >= '{$to}'";
+				$from   = date( 'Y-m-d', strtotime( $args['start'] ) );
+				$to     = date( 'Y-m-d', strtotime( $args['end'] ) );
+				$where .= " AND `start` >= '{$from}'";
+				$where .= " AND `end` >= '{$to}'";
 
 			} else {
 
-				$year  = date( 'Y', strtotime( $args['from_date'] ) );
-				$month = date( 'm', strtotime( $args['from_date'] ) );
-				$day   = date( 'd', strtotime( $args['from_date'] ) );
+				$year  = date( 'Y', strtotime( $args['start'] ) );
+				$month = date( 'm', strtotime( $args['start'] ) );
+				$day   = date( 'd', strtotime( $args['start'] ) );
 
-				$where .= " AND $year = YEAR ( from_date ) AND $month = MONTH ( from_date ) AND $day = DAY ( from_date )";
+				$where .= " AND $year = YEAR ( start ) AND $month = MONTH ( start ) AND $day = DAY ( start )";
 			}
 
 		}
 
 		// Entries ending on a specific date
-		if ( ! empty( $args['to_date'] ) ) {
+		if ( ! empty( $args['end'] ) ) {
 
-			$year  = date( 'Y', strtotime( $args['to_date'] ) );
-			$month = date( 'm', strtotime( $args['to_date'] ) );
-			$day   = date( 'd', strtotime( $args['to_date'] ) );
+			$year  = date( 'Y', strtotime( $args['end'] ) );
+			$month = date( 'm', strtotime( $args['end'] ) );
+			$day   = date( 'd', strtotime( $args['end'] ) );
 
-			$where .= " AND $year = YEAR ( to_date ) AND $month = MONTH ( to_date ) AND $day = DAY ( to_date )";
+			$where .= " AND $year = YEAR ( end ) AND $month = MONTH ( end ) AND $day = DAY ( end )";
 		}
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
@@ -384,18 +403,20 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		$sql = "CREATE TABLE {$this->table_name} (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
-		employee_id bigint(20) NOT NULL,
+		event_id bigint(20) NOT NULL,
+        employee_id bigint(20) NOT NULL,
 		group_id varchar(50) NOT NULL,
-		to_date date NOT NULL default '0000-00-00',
-		from_date date NOT NULL default '0000-00-00',
+		start datetime NOT NULL,
+		end datetime NOT NULL,
 		notes longtext NULL,
 		date_added datetime NOT NULL default '0000-00-00 00:00:00',
 		added_by bigint(20) NOT NULL,
 		PRIMARY KEY  (id),
-		KEY employee_id (employee_id),
+		KEY event_id (event_id),
+        KEY employee_id (employee_id),
 		KEY group_id (group_id),
-		KEY to_date (to_date),
-		KEY from_date (from_date)
+		KEY end (end),
+		KEY start (start)
 		) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

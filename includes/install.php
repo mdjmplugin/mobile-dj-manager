@@ -760,23 +760,16 @@ function mdjm_run_install()	{
 	$role = get_role( 'dj' );
 	$role->add_cap( 'mdjm_employee' );
 	
-	// Create the availability check DB table
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	
-	$sql = "CREATE TABLE " . $wpdb->prefix . "mdjm_avail (
-		id int(11) NOT NULL AUTO_INCREMENT,
-		user_id int(11) NOT NULL,
-		entry_id varchar(100) NOT NULL,
-		date_from date NOT NULL,
-		date_to date NOT NULL,
-		notes text NULL,
-		PRIMARY KEY  (id),
-		KEY user_id (user_id)
-		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+	// Create the new database tables
+	$availability_db = MDJM()->availability_db;
+	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
+		@$availability_db->create_table();
+	}
 
-	dbDelta( $sql );
-
-	update_option( 'mdjm_db_version', $mdjm_db_version );
+	$availability_meta_db = MDJM()->availability_meta_db;
+	if ( ! $availability_meta_db->table_exists( $availability_meta_db->table_name ) ) {
+		@$availability_meta_db->create_table();
+	}
 
 	if ( ! $current_version ) {
 		require_once MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php';
@@ -785,7 +778,8 @@ function mdjm_run_install()	{
 		$upgrade_routines = array(
 			'upgrade_event_packages',
             'upgrade_event_tasks',
-            'upgrade_event_pricing_15'
+            'upgrade_event_pricing_15',
+            'upgrade_availability_db_156'
 		);
 
 		foreach ( $upgrade_routines as $upgrade ) {
