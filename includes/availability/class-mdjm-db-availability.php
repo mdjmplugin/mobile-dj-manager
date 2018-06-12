@@ -332,24 +332,21 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 			if ( ! empty( $args['end'] ) ) {
 
-				$from   = date( 'Y-m-d', strtotime( $args['start'] ) );
-				$to     = date( 'Y-m-d', strtotime( $args['end'] ) );
-				$where .= " AND `start` >= '{$from}'";
-				$where .= " AND `end` >= '{$to}'";
+				$start  = date( 'Y-m-d H:i:s', $args['start'] );
+				$end    = date( 'Y-m-d H:i:s', $args['end'] );
+				$where .= " AND `start` <= '{$start}'";
+				$where .= " AND `end` >= '{$end}'";
 
 			} else {
 
-				$year  = date( 'Y', strtotime( $args['start'] ) );
-				$month = date( 'm', strtotime( $args['start'] ) );
-				$day   = date( 'd', strtotime( $args['start'] ) );
+				$year  = date( 'Y', strtotime( $args['end'] ) );
+				$month = date( 'm', strtotime( $args['end'] ) );
+				$day   = date( 'd', strtotime( $args['end'] ) );
 
 				$where .= " AND $year = YEAR ( start ) AND $month = MONTH ( start ) AND $day = DAY ( start )";
 			}
 
-		}
-
-		// Entries ending on a specific date
-		if ( ! empty( $args['end'] ) ) {
+		} elseif ( ! empty( $args['end'] ) ) { // Entries ending on a specific date
 
 			$year  = date( 'Y', strtotime( $args['end'] ) );
 			$month = date( 'm', strtotime( $args['end'] ) );

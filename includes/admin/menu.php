@@ -53,18 +53,17 @@ function mdjm_admin_menu()	{
 		$mdjm_comms_history_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Communication History', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'History', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm_communication' );
 	}
 	
-	/**
-	 * Placeholder for the Contact Forms menu item
-	 */
-	if( mdjm_is_admin() )	{
-		do_action( 'mdjm_dcf_menu_items' );
-	}
-	
 	if( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		$mdjm_emp_page = add_submenu_page(  'edit.php?post_type=mdjm-event', __(  'Employees', 'mobile-dj-manager' ), __(  'Employees', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-employees', array( MDJM()->users, 'employee_manager' ) );
 	}
 	
-	$mdjm_availability_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Employee Availability', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Availability', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-availability', 'mdjm_employee_availability_page' );
+	$mdjm_availability_page = add_submenu_page(
+		'edit.php?post_type=mdjm-event',
+		__( 'Employee Availability', 'mobile-dj-manager' ),
+		'&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Availability', 'mobile-dj-manager' ), 'manage_mdjm',
+		'mdjm-availability',
+		'mdjm_availability_page'
+	);
 											
 	if( ( mdjm_get_option( 'enable_packages' ) ) && mdjm_employee_can( 'manage_packages' ) )	{
 		$mdjm_packages_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Packages', 'mobile-dj-manager' ), __( 'Packages', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-package', '' );

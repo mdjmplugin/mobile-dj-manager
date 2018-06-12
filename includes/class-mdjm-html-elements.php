@@ -408,7 +408,11 @@ class MDJM_HTML_Elements {
 			'options'     => mdjm_get_roles(),
 			'blank_first' => true,
 			'placeholder' => __( 'Select Role', 'mobile-dj-manager' ),
-			'chosen'      => false
+			'chosen'      => false,
+			'data'        => array(
+				'search-type'        => 'roles',
+				'search-placeholder' => __( 'Type to search all roles', 'mobile-dj-manager' )
+			)
 		);
 
 		$args             = wp_parse_args( $args, $defaults );

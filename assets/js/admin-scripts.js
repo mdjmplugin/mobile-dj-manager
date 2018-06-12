@@ -248,6 +248,73 @@ jQuery(document).ready(function ($) {
 	MDJM_Settings.init();
 
 	/**
+	 * Availability screen JS
+	 */
+	var MDJM_Availability = {
+		init : function()	{
+			this.options();
+			this.checker();
+		},
+
+		options : function()	{
+			// Toggle display of availability checker
+            $( document.body ).on( 'click', '.toggle-availability-checker-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_avail_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_avail_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_avail_form );
+                }
+
+                $('.mdjm-availability-checker-fields').slideToggle();
+            });
+		},
+
+		checker : function()	{
+			$( document.body ).on( 'click', '#check-availability', function()	{
+				var date         = $('#check_date'),
+					display_date = $('#display_date'),
+					employees    = $('#display_date'),
+					roles        = $('#check_roles'),
+					notice       = $('#mdjm-pending-notice');
+
+				if ( ! date.val() || ! display_date.val() )	{
+					display_date.addClass( 'mdjm-form-error' );
+					return;
+				}
+
+				var postData = {
+					date     : date,
+					employees : employees,
+					roles     : roles,
+					action : 'do_availability_check_ajax'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+                        $('#mdjm_availability_fields').addClass('mdjm-mute');
+					},
+					success: function (response) {
+						$('#mdjm_availability_fields').removeClass('mdjm-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+	};
+	MDJM_Availability.init();
+
+	/**
 	 * Events screen JS
 	 */
 	var MDJM_Events = {

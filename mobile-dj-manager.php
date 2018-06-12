@@ -163,13 +163,13 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/settings/register-settings.php' );
 			$mdjm_options = mdjm_get_settings();
-			
+
 			require_once( MDJM_PLUGIN_DIR . '/includes/actions.php' );
-			
+
 			if( file_exists( MDJM_PLUGIN_DIR . '/includes/deprecated-functions.php' ) )	{
 				require_once( MDJM_PLUGIN_DIR . '/includes/deprecated-functions.php' );
 			}
-			
+
 			require_once( MDJM_PLUGIN_DIR . '/includes/ajax-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/api/class-mdjm-api.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-db.php' );
@@ -236,7 +236,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/shortcodes.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/tasks/task-functions.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/plugin-compatibility.php' );
-			
+
 			if ( is_admin() )	{
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/plugins.php' );
@@ -267,6 +267,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/event-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/users/employee-actions.php' );
                 require_once( MDJM_PLUGIN_DIR . '/includes/admin/availability/availability-actions.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/availability/availability-page.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/tasks/task-actions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/tasks/tasks-page.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/admin-notices.php' );
