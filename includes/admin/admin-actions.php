@@ -13,6 +13,15 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
+function mh_test()	{
+	
+	$date = date( 'Y-m-d', '1530639000' );
+	$av   = new MDJM_Availability_Checker( $date );
+	$av->availability_check();
+
+}
+//add_action( 'admin_init', 'mh_test' );
+
 /**
  * Processes all MDJM actions sent via POST and GET by looking for the 'mdjm-action'
  * request and running do_action() to call the function
