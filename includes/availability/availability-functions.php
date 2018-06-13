@@ -83,39 +83,30 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
         return false;
     }
 
-    $start_time = ' 00:00:00';
-    $end_time   = ' 00:00:00';
-	$end_date   = '';
+	$start      = ! empty( $data['start'] )      ? $data['start']      : date( 'Y-m-d' );
+	$end        = ! empty( $data['end'] )        ? $data['end']        : date( 'Y-m-d' );
+	$start_time = ! empty( $data['start_time'] ) ? $data['start_time'] : '00:00:00';
+	$end_time   = ! empty( $data['end_time'] )   ? $data['end_time']   : '00:00:00';
+	$start      = $start . ' ' . $start_time;
+	$end        = $end   . ' ' . $end_time;
+	$all_day    = ! empty( $data['all_day'] )    ? $data['all_day']    : true;
+	$notes      = ! empty( $data['notes'] )      ? $data['notes']      : '';
 
-	if ( ! empty( $data['end'] ) )	{
-		$end_date = date( 'Y-m-d', strtotime( '+1 day', $data['end'] ) . $end_time );
-	} else	{
-		if ( ! empty( $data['start'] ) )	{
-			$end_date = date( 'Y-m-d', strtotime( '+1 day', $data['start'] ) . $end_time );
-		}
+	if ( $all_day )	{
+		$end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) ) . ' 00:00:00';
 	}
 
     $args                = array();
     $args['employee_id'] = $employee_id;
-    $args['group_id']    = ! empty( $data['group_id'] )  ? $data['group_id']                         : md5( $employee_id . '_' . mdjm_generate_random_string() );
-    $args['start']       = ! empty( $data['start'] )     ? $data['start'] . $start_time              : '';
-    $args['end']         = $end_date;
-    $args['notes']       = ! empty( $data['notes'] )     ? sanitize_textarea_field( $data['notes'] ) : '';
+    $args['start']       = $start;
+    $args['end']         = $end;
+    $args['notes']       = sanitize_textarea_field( $notes );
 
     $args = apply_filters( 'mdjm_add_employee_absence_args', $args, $employee_id, $data );
 
     do_action( 'mdjm_before_add_employee_absence', $args, $data );
 
-    $absence_range = mdjm_get_all_dates_in_range( $args['from_date'], $args['to_date'] );
-
-    foreach( $absence_range as $date )	{
-        $args['from_date'] = $date->format( 'Y-m-d' );
-        $return = MDJM()->availability_db->add( $args );
-
-        if ( ! $return )    {
-            return false;
-        }
-    }
+    $return = MDJM()->availability_db->add( $args );
 
     do_action( 'mdjm_add_employee_absence', $args, $data, $return );
     do_action( 'mdjm_add_employee_absence_' . $employee_id, $args, $data, $return );
@@ -127,15 +118,15 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
  * Remove an employee absence entry.
  *
  * @since   1.5.6
- * @param   string     $group_id
- * @return  int        The number of rows deleted or false
+ * @param   int     $id
+ * @return  int     The number of rows deleted or false
  */
-function mdjm_remove_employee_absence( $group_id )  {
-    do_action( 'mdjm_before_remove_employee_absence', $group_id );
+function mdjm_remove_employee_absence( $id )  {
+    do_action( 'mdjm_before_remove_employee_absence', $id );
 
-    $deleted = MDJM()->availability_db->delete( $group_id );
+    $deleted = MDJM()->availability_db->delete( $id );
 
-    do_action( 'mdjm_remove_employee_absence', $group_id, $deleted );
+    do_action( 'mdjm_remove_employee_absence', $id, $deleted );
 
     return $deleted;
 } // mdjm_remove_employee_absence
@@ -327,7 +318,8 @@ function mdjm_get_event_availability_activity( $start, $end )	{
  */
 function mdjm_get_calendar_event_description_text()	{
 
-	$default = sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
+	$default = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$default .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
 	$default .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
 	$default .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
 	$default .= sprintf( __( 'Setup: %s', 'mobile-dj-manager' ), '{dj_setup_time}' ) . PHP_EOL;

@@ -253,6 +253,7 @@ jQuery(document).ready(function ($) {
 	var MDJM_Availability = {
 		init : function()	{
 			this.options();
+			this.absence();
 			this.checker();
 		},
 
@@ -285,6 +286,11 @@ jQuery(document).ready(function ($) {
                 var header = $(this).parents('.mdjm-availability-row-header');
                 header.siblings('.mdjm-availability-add-absence-sections-wrap').slideToggle();
 
+				if ( $( '#absence_all_day' ).is(':checked') )	{
+					$('.mdjm-absence-start-time-option').hide('fast');
+					$('.mdjm-absence-end-time-option').hide('fast');
+				}
+
                 var first_input;
                 if ( show ) {
                     first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-availability-add-absence-sections-wrap'));
@@ -293,6 +299,77 @@ jQuery(document).ready(function ($) {
                 }
                 first_input.focus();
             });
+
+			// Toggle display of absence time fields
+			$( document.body ).on( 'change', '#absence_all_day', function() {
+				$('.mdjm-absence-start-time-option').slideToggle();
+				$('.mdjm-absence-end-time-option').slideToggle();
+			});
+
+		},
+
+		absence : function()	{
+			// Add a new absence entry
+			$( document.body ).on( 'click', '#add-absence', function()	{
+				var employee_id       = $('#absence_employee_id').val(),
+					start_date        = $('#absence_start').val(),
+					end_date          = $('#absence_end').val(),
+					all_day           = $('#absence_all_day').is(':checked') ? 1 : 0,
+					start_time_hr     = $('#absence_start_time_hr').val(),
+					start_time_min    = $('#absence_start_time_min').val(),
+					start_time_period = 0,
+					end_time_hr       = $('#absence_end_time_hr').val(),
+					end_time_min      = $('#absence_end_time_min').val(),
+					end_time_period   = 0,
+					notes             = $('#absence_notes').val();
+
+				if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+					start_time_period = $('#absence_start_time_period').val();
+					end_time_period   = $('#absence_end_time_period').val();
+				}
+
+				if ( ! start_date )	{
+					$('#display_absence_start').addClass( 'mdjm-form-error' );
+					return;
+				}
+				if ( ! end_date )	{
+					$('#display_absence_end').addClass( 'mdjm-form-error' );
+					return;
+				}
+
+				var postData = {
+					employee_id       : employee_id,
+					start_date        : start_date,
+					end_date          : end_date,
+					all_day           : all_day,
+					start_time_hr     : start_time_hr,
+					start_time_min    : start_time_min,
+					start_time_period : start_time_period,
+					end_time_hr       : end_time_hr,
+					end_time_min      : end_time_min,
+					end_time_period   : end_time_period,
+					notes             : notes,
+					action            : 'mdjm_add_employee_absence'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+                        $('#mdjm-add-absence-fields').addClass('mdjm-mute');
+					},
+					success: function (response) {
+						$('#mdjm-add-absence-fields').removeClass('mdjm-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
 		},
 
 		checker : function()	{

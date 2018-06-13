@@ -915,6 +915,7 @@ checkbox.mdjm-form-error {
 #mdjm-event-worker-add    {
     display: block;
 }
+
 /* Visible Sections */
 .mdjm-event-details-client-template-sections-wrap,
 .mdjm-event-details-event-sections-wrap {
@@ -970,6 +971,10 @@ checkbox.mdjm-form-error {
 }
 
 .mdjm-availability-checker-fields { display: none; margin-top: 6px; }
+.mdjm-absence-start-time-option,
+.mdjm-absence-end-time-option { display: none; }
+
+.mdjm-absence-notes-option textarea { min-width: 480px; }
 
 #mdjm-playlist-view    {
     text-align: center;

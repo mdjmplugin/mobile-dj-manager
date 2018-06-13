@@ -331,15 +331,15 @@ class MDJM_Availability_Checker {
 			}
 
 			if ( $short_date_end > $short_date_start )	{
-				$description[] = sprintf(
-					__( 'From: %s', 'mobile-dj-manager' ),
-					date( $date_format, strtotime( $short_date_start ) )
-				);
-				$description[] = sprintf(
-					__( 'Returns: %s', 'mobile-dj-manager' ),
-					date( $date_format, strtotime( $short_date_end ) )
-				);
+				$from = date( $date_format, strtotime( $short_date_start ) );
+				$to   = date( $date_format, strtotime( $short_date_end ) );
+			} else	{
+				$from = date( time_format . ' \o\n ' . $date_format, strtotime( $short_date_start ) );
+				$to   = date( time_format . ' \o\n ' . $date_format, strtotime( $short_date_end ) );
 			}
+
+			$description[] = sprintf( __( 'From: %s', 'mobile-dj-manager' ), $from );
+			$description[] = sprintf( __( 'Returns: %s', 'mobile-dj-manager' ), $to );
 
 			if ( ! empty( $entry->notes ) )	{
 				$description[] = stripslashes( $entry->notes );

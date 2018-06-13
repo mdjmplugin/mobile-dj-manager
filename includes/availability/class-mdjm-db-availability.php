@@ -57,7 +57,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'          => '%d',
             'event_id'    => '%d',
 			'employee_id' => '%d',
-			'group_id'    => '%s',
 			'start'       => '%s',
 			'end'         => '%s',
 			'notes'       => '%s',
@@ -77,7 +76,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'          => 0,
             'event_id'    => 0,
 			'employee_id' => get_current_user_id(),
-			'group_id'    => '',
 			'start'       => '',
 			'end'         => '',
 			'notes'       => '',
@@ -95,7 +93,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	public function get_required_fields()	{
 		return apply_filters( 'mdjm_db_availability_required_fields', array(
 			'employee_id',
-			'group_id',
 			'start',
 			'end'
 		) );
@@ -144,24 +141,22 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	 * Delete an availability entry
 	 *
 	 * @access	public
-	 * @since	1.5.5
-	 * @param	int|string		$id_or_group	The ID or group ID
+	 * @since	1.5.6
+	 * @param	int			$id	The ID
 	 */
-	public function delete( $id_or_group = 0 ) {
+	public function delete( $id = 0 ) {
 
-		if ( empty( $id_or_group ) ) {
+		if ( empty( $id ) ) {
 			return false;
 		}
 
-		$column = ( 32 == strlen( $id_or_group ) && ctype_xdigit( $id_or_group ) ) ? 'group_id' : 'id';
-		$entry  = $this->get_entry_by( $column, $id_or_group );
-        $format = 'group_id' == $column ? array( '%s' ) : array( '%d' );
+		$entry  = $this->get_entry_by( 'id', $id );
         $return = false;
 
 		if ( $entry->id > 0 ) {
 			global $wpdb;
 
-			$return = $wpdb->delete( $this->table_name, array( $column => $id_or_group ), $format );
+			$return = $wpdb->delete( $this->table_name, array( 'id' => $id ), '%d' );
 		}
 
         return $return;
@@ -196,13 +191,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 				return false;
 			}
 
-		} elseif ( 'group_id' === $field ) {
-
-			if ( 32 != strlen( $value ) && ctype_xdigit( $value ) ) {
-				return false;
-			}
-
-			$value = trim( $value );
 		}
 
 		if ( ! $value ) {
@@ -218,10 +206,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 				break;
 			case 'employee_id':
 				$db_field = 'employee_id';
-				break;
-			case 'group_id':
-				$value    = sanitize_text_field( $value );
-				$db_field = 'group_id';
 				break;
 			default:
 				return false;
@@ -259,7 +243,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'          => 0,
             'event_id'    => 0,
             'employee_id' => 0,
-			'group_id'    => 0,
 			'start'       => false,
 			'end'         => false,
             'calendar'    => false,
@@ -286,19 +269,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			}
 
 			$where .= " AND `id` IN( {$ids} ) ";
-
-		}
-
-		// Entries for a specific group
-		if ( ! empty( $args['group_id'] ) ) {
-
-			if ( is_array( $args['group_id'] ) ) {
-				$group_ids = implode( ',', array_map( 'sanitize_text_field', $args['group_id'] ) );
-			} else {
-				$group_ids = intval( $args['group_id'] );
-			}
-
-			$where .= " AND `group_id` IN( {$group_ids} ) ";
 
 		}
 
@@ -409,7 +379,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		event_id bigint(20) NOT NULL,
         employee_id bigint(20) NOT NULL,
-		group_id varchar(50) NOT NULL,
 		start datetime NOT NULL,
 		end datetime NOT NULL,
 		notes longtext NULL,
@@ -418,7 +387,6 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		PRIMARY KEY  (id),
 		KEY event_id (event_id),
         KEY employee_id (employee_id),
-		KEY group_id (group_id),
 		KEY end (end),
 		KEY start (start)
 		) $charset_collate;";

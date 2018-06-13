@@ -67,6 +67,42 @@ function mdjm_calendar_activity_ajax()	{
 add_action( 'wp_ajax_mdjm_calendar_activity', 'mdjm_calendar_activity_ajax' );
 
 /**
+ * Adds an employee absence entry.
+ *
+ * @since	1.5.6
+ * @return	void
+ */
+function mdjm_add_employee_absence_ajax()	{
+	$employee_id = absint( $_POST['employee_id'] );
+	$start_date  = $_POST['start_date'];
+	$end_date    = $_POST['end_date'];
+	$all_day     = $_POST['all_day'];
+	$start_time  = $_POST['start_time_hr'] . ':' . $_POST['start_time_min'];
+	$end_time    = $_POST['end_time_hr'] . ':' . $_POST['end_time_min'];
+	$start_time  .= ! empty( $_POST['start_time_period'] ) ? $_POST['start_time_period'] : '';
+	$end_time    .= ! empty( $_POST['end_time_period'] )   ? $_POST['end_time_period']   : '';
+	$notes       = ! empty( $_POST['notes'] ) ? sanitize_textarea_field( $_POST['notes'] ) : '';
+
+	$data = array(
+		'employee_id'  => $employee_id,
+		'start'        => $start_date,
+		'start_time'   => $start_time,
+		'end'          => $end_date,
+		'end_time'     => $end_time,
+		'all_day'      => $all_day,
+		'notes'        => $notes
+	);
+
+    if ( mdjm_add_employee_absence( $employee_id, $data ) ) {
+        wp_send_json_success();
+    } else  {
+        wp_send_json_error();
+    }
+
+} // mdjm_add_employee_absence_ajax
+add_action( 'wp_ajax_mdjm_add_employee_absence', 'mdjm_add_employee_absence_ajax' );
+
+/**
  * Client profile update form validation
  *
  * @since   1.5
