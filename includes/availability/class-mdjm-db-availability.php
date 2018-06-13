@@ -262,6 +262,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'group_id'    => 0,
 			'start'       => false,
 			'end'         => false,
+            'calendar'    => false,
 			'orderby'     => 'id',
 			'order'       => 'DESC'
 		);
@@ -334,8 +335,14 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 				$start  = date( 'Y-m-d H:i:s', $args['start'] );
 				$end    = date( 'Y-m-d H:i:s', $args['end'] );
-				$where .= " AND `start` <= '{$start}'";
-				$where .= " AND `end` >= '{$end}'";
+
+                if ( ! $args['calendar' ] ) {
+                    $where .= " AND `start` <= '{$start}'";
+                    $where .= " AND `end` >= '{$end}'";
+                } else  {
+                    $where .= " AND `start` >= '{$start}'";
+                    $where .= " AND `end` <= '{$end}'";
+                }
 
 			} else {
 
@@ -359,7 +366,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		$cache_key = md5( 'mdjm_availability_' . serialize( $args ) );
 
-		$entries = wp_cache_get( $cache_key, 'availability' );
+		$entries = false; //wp_cache_get( $cache_key, 'availability' );
 
 		$args['orderby'] = esc_sql( $args['orderby'] );
 		$args['order']   = esc_sql( $args['order'] );

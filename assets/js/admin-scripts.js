@@ -270,6 +270,29 @@ jQuery(document).ready(function ($) {
 
                 $('.mdjm-availability-checker-fields').slideToggle();
             });
+
+            // Toggle display of absence form section
+            $( document.body ).on( 'click', '.toggle-add-absence-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_absence_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_absence_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_absence_form );
+                }
+
+                var header = $(this).parents('.mdjm-availability-row-header');
+                header.siblings('.mdjm-availability-add-absence-sections-wrap').slideToggle();
+
+                var first_input;
+                if ( show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-availability-add-absence-sections-wrap'));
+                } else {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                }
+                first_input.focus();
+            });
 		},
 
 		checker : function()	{

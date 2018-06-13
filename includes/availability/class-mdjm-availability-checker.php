@@ -204,6 +204,7 @@ class MDJM_Availability_Checker {
 			}
 		}
 
+        $this->employees = array_map( 'intval', array_unique( $this->employees ) );
 		$this->available = $this->employees;
 
 	} // setup_employees
@@ -280,9 +281,161 @@ class MDJM_Availability_Checker {
 			);
 
 			$this->absentees[] = $absence->employee_id;
-			unset( $this->available[ $absence->employee_id ] );
+
+            if ( false !== $key = array_search( $absence->employee_id, $this->available ) ) {
+                unset( $this->available[ $key ] );
+            }
 		}
 	} // check_absences
+
+    /**
+	 * Retrieve entries for the calendar.
+	 *
+	 * @since	1.5.6
+	 */
+	public function get_calendar_entries()	{
+		$this->get_absences_in_range();
+        $this->get_events_in_range();
+
+        return $this->results;
+	} // get_calendar_entries
+
+	/**
+	 * Retrieve employee absences within the given date range.
+	 *
+	 * @since	1.5.6
+	 * @return	array	Array of absence data
+	 */
+	public function get_absences_in_range()	{
+        $date_format = get_option( 'date_format' );
+        $time_format = get_option( 'time_format' );
+
+		$absences = MDJM()->availability_db->get_entries( array(
+			'employee_id' => $this->available,
+			'start'       => $this->start,
+			'end'         => $this->end,
+            'calendar'    => true,
+			'number'      => 100
+		) );
+
+		foreach( $absences as $entry )	{
+
+            $short_date_start = date( 'Y-m-d', strtotime( $entry->start ) );
+			$short_date_end   = date( 'Y-m-d', strtotime( $entry->end ) );
+            $description      = array();
+            $employee         = mdjm_get_employee_display_name( $entry->employee_id );
+			$title            = __( 'Unknown', 'mobile-dj-manager' );
+
+			if ( ! empty( $employee ) )	{
+				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
+			}
+
+			if ( $short_date_end > $short_date_start )	{
+				$description[] = sprintf(
+					__( 'From: %s', 'mobile-dj-manager' ),
+					date( $date_format, strtotime( $short_date_start ) )
+				);
+				$description[] = sprintf(
+					__( 'Returns: %s', 'mobile-dj-manager' ),
+					date( $date_format, strtotime( $short_date_end ) )
+				);
+			}
+
+			if ( ! empty( $entry->notes ) )	{
+				$description[] = stripslashes( $entry->notes );
+			}
+
+            $this->results[] = array(
+				'allDay'          => true,
+				'backgroundColor' => '#f7f7f7',
+				'borderColor'     => '#cccccc',
+                'className'       => 'mdjm_calendar_absence',
+				'end'             => $entry->end,
+				'id'              => $entry->id,
+				'notes'           => implode( '<br>', $description ),
+				'start'           => $entry->start,
+				'textColor'       => '#555',
+				'tipTitle'        => $title,
+				'title'           => $employee
+            );
+
+            $array_key = $key = array_search( $entry->employee_id, $this->available );
+			if ( false !== $key ) {
+                unset( $this->available[ $key ] );
+            }
+		}
+	} // get_absences_in_range
+
+    /**
+	 * Retrieve events within the given date range.
+     *
+     * We only need to search for events where an employee is available.
+     * i.e. not absent as a result of the get_absences_in_range() method
+	 *
+	 * @since	1.5.6
+	 * @return	array	Array of absence data
+	 */
+	public function get_events_in_range()	{
+        $employees_query  = array();
+        $event_statuses   = mdjm_active_event_statuses();
+        $event_statuses[] = 'mdjm-completed';
+
+        foreach( $this->employees as $employee_id )    {
+            $employees_query[] = array(
+                'key'     => '_mdjm_event_employees',
+                'value'   => sprintf( ':"%s";', $employee_id ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        $query_args = array(
+            'post_status' => $event_statuses,
+            'meta_query'  => array(
+                'key'     => '_mdjm_event_date',
+                'value'   => array( date( 'Y-m-d', $this->start ), date( 'Y-m-d', $this->end ) ),
+                'compare' => 'BETWEEN',
+                'type'    => 'DATE'
+            )
+        );
+
+        $query_args = apply_filters( 'mdjm_events_in_range_args', $query_args );
+        $events     = mdjm_get_events( $query_args );
+
+        if ( $events )  {
+            foreach( $events as $event )    {
+                $popover      = 'top';
+                $mdjm_event   = new MDJM_Event( $event->ID );
+                $event_type   = $mdjm_event->get_type();
+                $event_status = $mdjm_event->get_status();
+                $employee     = mdjm_get_employee_display_name( $mdjm_event->employee_id );
+                $event_id     = mdjm_get_event_contract_id( $mdjm_event->ID );
+                $title        = sprintf( '%s (%s)', esc_attr( $event_type ), esc_attr( $event_status) );
+                $description  = array();
+                $notes        = mdjm_get_calendar_event_description_text();
+                $notes        = mdjm_do_content_tags( $notes, $mdjm_event->ID, $mdjm_event->client );
+                $tip_title    = sprintf(
+                    '%s %s - %s',
+                    esc_html( mdjm_get_label_singular() ),
+                    $event_id,
+                    esc_attr( $event_type )
+                );			
+
+                $this->results[] = array(
+                    'allDay'          => false,
+                    'backgroundColor' => '#2ea2cc',
+                    'borderColor'     => '#0074a2',
+                    'className'       => 'mdjm_calendar_event',
+                    'end'             => $mdjm_event->get_finish_date() . ' ' . $mdjm_event->get_finish_time(),
+                    'id'              => $mdjm_event->ID,
+                    'notes'           => $notes,
+                    'start'           => $mdjm_event->date . ' ' . $mdjm_event->get_start_time(),
+                    'textColor'       => '#fff',
+                    'tipTitle'        => $tip_title,
+                    'title'           => $title
+                );
+            }
+        }
+    } // get_events_in_range
 
 	/**
 	 * Determine if the employee is working on the given day.

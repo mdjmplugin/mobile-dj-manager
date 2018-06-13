@@ -19,6 +19,48 @@ function mh_test()	{
 	$av   = new MDJM_Availability_Checker( $date );
 	$av->availability_check();
 
+    $employees_query = array();
+    $all = array();
+    $employees       = mdjm_get_employees();
+
+    foreach( $employees as $employee )	{
+        if ( is_object( $employee ) )	{
+            $all[] = $employee->ID;
+        } else	{
+            $all[] = $employee;
+        }
+    }
+
+    foreach( $all as $employee_id )    {
+        $employees_query[] = array(
+            'key'     => '_mdjm_event_employees',
+            'value'   => sprintf( ':"%s";', $employee_id ),
+            'compare' => 'LIKE'
+        );
+    }
+
+    $events = 
+        array(
+            'post_status'    => 'any',
+            'posts_per_page' => 100,
+            'meta_query'     => array(
+                'relation' => 'AND',
+                array(
+                    'key'     => '_mdjm_event_date',
+                    'value'   => date( 'Y-m-d', time() )
+                ),
+                array(
+                    'relation' => 'OR',
+                    array(
+                        'key'     => '_mdjm_event_dj',
+                        'value'   => implode( ',', $all ),
+                        'compare' => 'IN'
+                    ),
+                    $employees_query
+                )
+            )
+    );
+    error_log( var_export( $events, true ) );
 }
 //add_action( 'admin_init', 'mh_test' );
 

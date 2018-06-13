@@ -139,7 +139,6 @@ function mdjm_remove_employee_absence( $group_id )  {
 
     return $deleted;
 } // mdjm_remove_employee_absence
- 
 
 /**
  * Perform the availability lookup.
@@ -159,6 +158,25 @@ function mdjm_do_availability_check( $date, $employees = '', $roles = '', $statu
 	return $check->result;
 	
 } // mdjm_do_availability_check
+
+/**
+ * Retrieve employee and event activity for a given date range.
+ *
+ * @since	1.5.6
+ * @param	string	$start	Start date for which to retrieve activity
+ * @param	string	$end	End date for which to retrieve activity
+ * @return	array	Array of data for the calendar
+ */
+function mdjm_get_calendar_entries( $start, $end )	{
+	$activity     = array();
+	$availability = new MDJM_Availability_Checker( $start, $end );
+
+	$availability->get_calendar_entries();
+
+	$activity = apply_filters( 'mdjm_employee_availability_activity', $availability->results, $start, $end );
+
+	return $activity;
+} // mdjm_get_calendar_entries
 
 /**
  * Determine if an employee is working on the given date.
@@ -237,74 +255,6 @@ function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
 
 	return ! empty( $result );
 } // mdjm_employee_is_on_vacation
-
-/**
- * Retrieve employee availability activity for a given date range.
- *
- * @since	1.5.6
- * @param	string	$start	Start date for which to retrieve activity
- * @param	string	$end	End date for which to retrieve activity
- * @return	array	Array of data for the calendar
- */
-function mdjm_get_employee_availability_activity( $start, $end )	{
-	$activity    = array();
-	$description = array();
-	$date_format = get_option( 'date_format' );
-	$time_format = get_option( 'time_format' );
-	$entries     = MDJM()->availability_db->get_entries( array(
-		'start'   => date( 'Y-m-d H:i:s', $start ),
-		'end'     => date( 'Y-m-d H:i:s', $end ),
-		'orderby' => 'start',
-		'order'   => 'ASC'
-	) );
-
-	if ( ! empty( $entries ) )	{
-		foreach( $entries as $entry )	{
-
-			$employee = mdjm_get_employee_display_name( $entry->employee_id );
-			$title    = __( 'Unknown', 'mobile-dj-manager' );
-
-			$short_date_start = date( 'Y-m-d', strtotime( $entry->start ) );
-			$short_date_end   = date( 'Y-m-d', strtotime( $entry->end ) );
-
-			if ( ! empty( $employee ) )	{
-				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
-			}
-
-			if ( $short_date_end > $short_date_start )	{
-				$description[] = sprintf(
-					__( 'From: %s', 'mobile-dj-manager' ),
-					date( $date_format, strtotime( $short_date_start ) )
-				);
-				$description[] = sprintf(
-					__( 'Returns: %s', 'mobile-dj-manager' ),
-					date( $date_format, strtotime( $short_date_end ) )
-				);
-			}
-
-			if ( ! empty( $entry->notes ) )	{
-				$description[] = stripslashes( $entry->notes );
-			}
-
-			$activity[] = array(
-				'allDay'          => true,
-				'backgroundColor' => '#f7f7f7',
-				'borderColor'     => '#cccccc',
-				'end'             => $entry->end,
-				'id'              => $entry->id,
-				'notes'           => implode( '<br>', $description ),
-				'start'           => $entry->start,
-				'textColor'       => '#555',
-				'tipTitle'        => $title,
-				'title'           => $employee
-			);
-		}
-	}
-
-	$activity = apply_filters( 'mdjm_employee_availability_activity', $activity, $start, $end );
-
-	return $activity;
-} // mdjm_get_employee_availability_activity
 
 /**
  * Retrieve event activity for a given date range.

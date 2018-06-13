@@ -60,22 +60,9 @@ function mdjm_calendar_activity_ajax()	{
 	$start = $_POST['start'];
 	$end   = $_POST['end'];
 
-	$employee_entries = mdjm_get_employee_availability_activity( $start, $end );
-	$event_entries    = mdjm_get_event_availability_activity( $start, $end );
+	$activity = mdjm_get_calendar_entries( $start, $end );
 
-	if ( ! empty( $employee_entries ) )	{
-		foreach( $employee_entries as $employee_entry )	{
-			$data[] = $employee_entry;
-		}
-	}
-
-	if ( ! empty( $event_entries ) )	{
-		foreach( $event_entries as $event_entry )	{
-			$data[] = $event_entry;
-		}
-	}
-
-	wp_send_json( $data );
+	wp_send_json( $activity );
 } // mdjm_calendar_activity_ajax
 add_action( 'wp_ajax_mdjm_calendar_activity', 'mdjm_calendar_activity_ajax' );
 
