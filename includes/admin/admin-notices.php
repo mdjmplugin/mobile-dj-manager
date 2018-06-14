@@ -119,6 +119,7 @@ function mdjm_admin_notices() {
 		}
 	}
 
+    // Settings
 	if( isset( $_GET['mdjm-message'] ) && 'upgrade-completed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -127,6 +128,43 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
+
+    // Availability
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-added' == $_GET['mdjm-message'] )   {
+        add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-added',
+			__( 'Absence added.', 'mobile-dj-manager' ),
+			'updated'
+		);
+    }
+
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-fail' == $_GET['mdjm-message'] )   {
+        add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-fail',
+			__( 'Absence could not be added.', 'mobile-dj-manager' ),
+			'error'
+		);
+    }
+
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-removed' == $_GET['mdjm-message'] )   {
+        add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-deleted',
+			__( 'Absence deleted.', 'mobile-dj-manager' ),
+			'updated'
+		);
+    }
+
+    if ( isset( $_GET['mdjm-message'] ) && 'absence-delete-fail' == $_GET['mdjm-message'] )   {
+        add_settings_error(
+			'mdjm-notices',
+			'mdjm-absence-remove-fail',
+			__( 'Absence could not be deleted.', 'mobile-dj-manager' ),
+			'error'
+		);
+    }
 
 	if( isset( $_GET['mdjm-message'] ) && 'song_added' == $_GET['mdjm-message'] )	{
 		add_settings_error(
@@ -451,42 +489,6 @@ function mdjm_admin_notices() {
 			'mdjm-settings-imported',
 			__( 'Settings sucessfully imported.', 'mobile-dj-manager' ),
 			'updated'
-		);
-	}
-
-    if ( isset( $_GET['mdjm-message'] ) && 'absence-added' == $_GET['mdjm-message'] )	{
-		add_settings_error(
-			'mdjm-notices',
-			'mdjm-absence-added',
-			__( 'Absence added.', 'mobile-dj-manager' ),
-			'updated'
-		);
-	}
-
-    if ( isset( $_GET['mdjm-message'] ) && 'absence-add-fail' == $_GET['mdjm-message'] )	{
-		add_settings_error(
-			'mdjm-notices',
-			'mdjm-absence-fail',
-			__( 'Absence could not be added.', 'mobile-dj-manager' ),
-			'error'
-		);
-	}
-
-	if ( isset( $_GET['mdjm-message'] ) && 'absence-removed' == $_GET['mdjm-message'] )	{
-		add_settings_error(
-			'mdjm-notices',
-			'mdjm-absence-deleted',
-			__( 'Absence deleted.', 'mobile-dj-manager' ),
-			'updated'
-		);
-	}
-
-    if ( isset( $_GET['mdjm-message'] ) && 'absence-remove-fail' == $_GET['mdjm-message'] )	{
-		add_settings_error(
-			'mdjm-notices',
-			'mdjm-absence-remove-fail',
-			__( 'Absence could not be deleted.', 'mobile-dj-manager' ),
-			'error'
 		);
 	}
 

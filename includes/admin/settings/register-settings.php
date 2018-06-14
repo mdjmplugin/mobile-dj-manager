@@ -1378,6 +1378,17 @@ function mdjm_get_registered_settings()	{
 		'licenses' => apply_filters( 'mdjm_settings_licenses',
 			array()
 		),
+        'misc' => apply_filters( 'mdjm_settings_misc',
+			array(
+				'calendar'     => array(
+					'calendar_settings' => array(
+						'id'   => 'calendar_settings',
+						'name' => '<h3>' . __( 'Calendar Settings', 'mobile-dj-manager' ) . '</h3>',
+						'type' => 'header',
+					),
+                )
+            )
+        )
 	);
 	
 	return apply_filters( 'mdjm_registered_settings', $mdjm_settings );
@@ -1514,6 +1525,8 @@ function mdjm_get_settings_tabs() {
 		$tabs['licenses'] = __( 'Licenses', 'mobile-dj-manager' );
 	}
 
+    $tabs['misc'] = __( 'Misc', 'mobile-dj-manager' );
+
 	return apply_filters( 'mdjm_settings_tabs', $tabs );
 } // mdjm_get_settings_tabs
 
@@ -1584,7 +1597,10 @@ function mdjm_get_registered_settings_sections() {
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
 		) ),
-		'licenses'   => apply_filters( 'mdjm_settings_sections_licenses', array() )
+		'licenses'   => apply_filters( 'mdjm_settings_sections_licenses', array() ),
+        'misc' => apply_filters( 'mdjm_settings_sections_misc', array(
+			'calendar'           => __( 'Availability Calendar', 'mobile-dj-manager' )
+		) ),
 	);
 
 	$sections = apply_filters( 'mdjm_settings_sections', $sections );

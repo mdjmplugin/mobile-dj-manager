@@ -199,7 +199,6 @@ function mdjm_render_availability_absence_form()    {
         <div class="mdjm-custom-event-sections">
             <div class="mdjm-custom-event-section">
                 <span class="mdjm-custom-event-section-title"><?php _e( 'Add Employee Absence', 'mobile-dj-manager'); ?></span>
-
                 <?php if ( mdjm_employee_can( 'manage_employees' ) ) : ?>
                     <span class="mdjm-employee-option">
                         <label class="mdjm-employee-id">
@@ -309,9 +308,9 @@ function mdjm_render_availability_absence_form()    {
 
 				<br>
 				<span class="mdjm-absence-submit-option">
-					<a id="add-absence" class="button button-secondary">
+					<button id="add-absence" class="button button-secondary">
 						<?php _e( 'Add Absence', 'mobile-dj-manager' ); ?>
-					</a>
+					</button>
 				</span>
 
             </div>

@@ -310,8 +310,11 @@ jQuery(document).ready(function ($) {
 
 		absence : function()	{
 			// Add a new absence entry
-			$( document.body ).on( 'click', '#add-absence', function()	{
-				var employee_id       = $('#absence_employee_id').val(),
+			$( document.body ).on( 'click', '#add-absence', function(e)	{
+                e.preventDefault();
+
+				var button            = $(this),
+                    employee_id       = $('#absence_employee_id').val(),
 					start_date        = $('#absence_start').val(),
 					end_date          = $('#absence_end').val(),
 					all_day           = $('#absence_all_day').is(':checked') ? 1 : 0,
@@ -322,6 +325,7 @@ jQuery(document).ready(function ($) {
 					end_time_min      = $('#absence_end_time_min').val(),
 					end_time_period   = 0,
 					notes             = $('#absence_notes').val();
+
 
 				if ( 'H:i' !== mdjm_admin_vars.time_format )    {
 					start_time_period = $('#absence_start_time_period').val();
@@ -361,7 +365,22 @@ jQuery(document).ready(function ($) {
                         $('#mdjm-add-absence-fields').addClass('mdjm-mute');
 					},
 					success: function (response) {
-						$('#mdjm-add-absence-fields').removeClass('mdjm-mute');
+                        if ( true === response.success )   {
+                            $('#mdjm-calendar').fullCalendar( 'refetchEvents' );
+                            $('#mdjm-calendar').fullCalendar( 'gotoDate', response.date );
+                        }
+                        $('#display_absence_start').val('');
+                        $('#absence_start').val('');
+                        $('#display_absence_end').val('');
+                        $('#absence_end').val('');
+                        $('#absence_all_day').prop('checked, true');
+                        $('#absence_notes').val('');
+                        $('#mdjm-calendar').removeClass('mdjm-mute');
+                        $('#mdjm-add-absence-fields').removeClass('mdjm-mute');
+                        $( 'html, body' ).animate({
+                            scrollTop: $('.toggle-add-absence-section').offset().top
+                        }, 500);
+                        $('.toggle-add-absence-section').trigger('click');
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
@@ -370,6 +389,35 @@ jQuery(document).ready(function ($) {
 				});
 
 			});
+
+            // Delete an entry from the calendar screen
+            $( document.body ).on( 'click', '.delete-absence', function(e)  {
+                e.preventDefault();
+
+                $('#mdjm-calendar').addClass('mdjm-mute');
+                var postData = {
+                    id     : $(this).data('entry'),
+                    action : 'mdjm_delete_employee_absence'
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: ajaxurl,
+                    dataType: 'json',
+                    data: postData,
+                    success: function(response) {
+                        if ( true === response.success )   {
+                            $('#mdjm-calendar').fullCalendar( 'refetchEvents' );
+                            $('.popover').hide('fast');
+                        }
+                        $('#mdjm-calendar').removeClass('mdjm-mute');
+                    }
+                }).fail(function (data) {
+                    if ( window.console && window.console.log ) {
+                        console.log( data );
+                    }
+                });
+            });
 		},
 
 		checker : function()	{

@@ -15,6 +15,7 @@
 .mdjm-wrap a { text-decoration: none; }
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
+a.availability-link { float: right; }
 a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-mute { opacity: 0.4; }
 .mdjm-input-currency {
@@ -96,6 +97,16 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 }
 
 #mdjm-pending-notice { display: none; }
+
+#mdjm_availability_fields .notice-wrap {
+	background-color: #f4f4f4;
+	border-style: solid;
+	border-width: 1px 0;
+	border-color: #eae9e9;
+	padding: 12px 12px 4px;
+	overflow: auto;
+	margin: 20px -12px -23px;
+}
 
 /* Fullcalendar Styles
 -------------------------------------------------------------- */

@@ -301,8 +301,8 @@ function mdjm_register_admin_scripts( $hook )	{
 			MDJM_VERSION_NUM
 		);
 		wp_register_script(
-			'admin-availability-calendar-js',
-			$js_dir . 'admin-availability-calendar' . $suffix . '.js',
+			'mdjm-availability-scripts-js',
+			$js_dir . 'availability-scripts' . $suffix . '.js',
 			array( 'jquery', 'mdjm-moment-js', 'mdjm-fullcalendar-js' ),
 			MDJM_VERSION_NUM
 		);
@@ -311,10 +311,10 @@ function mdjm_register_admin_scripts( $hook )	{
 		wp_enqueue_script( 'mdjm-fullcalendar-js' );
 		wp_enqueue_script( 'mdjm-popper-js' );
 		wp_enqueue_script( 'mdjm-bootstrap-js' );
-		wp_enqueue_script( 'admin-availability-calendar-js' );
+		wp_enqueue_script( 'mdjm-availability-scripts-js' );
 
 		wp_localize_script(
-			'admin-availability-calendar-js',
+			'mdjm-availability-scripts-js',
 			'mdjm_calendar_vars',
 			apply_filters(
 				'mdjm_calendar_vars',

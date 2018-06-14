@@ -1,5 +1,7 @@
 var mdjm_calendar_vars;
 jQuery(document).ready(function ($) {
+
+    // Render the calendar
 	$('#mdjm-calendar').fullCalendar({
 		defaultView: 'month',
 		displayEventTime: false,
@@ -22,10 +24,10 @@ jQuery(document).ready(function ($) {
 					show: 0,
 					hide: 100
 				},
-				html: true,
 				placement: 'top',
 				title: event.tipTitle,
-				trigger: 'hover'
+				trigger: 'click',
+                html: true
 			});
 		},
 		events: function(start, end, timezone, callback) {

@@ -330,29 +330,34 @@ class MDJM_Availability_Checker {
 				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
 			}
 
-			if ( $short_date_end > $short_date_start )	{
-				$from = date( $date_format, strtotime( $short_date_start ) );
-				$to   = date( $date_format, strtotime( $short_date_end ) );
-			} else	{
-				$from = date( time_format . ' \o\n ' . $date_format, strtotime( $short_date_start ) );
-				$to   = date( time_format . ' \o\n ' . $date_format, strtotime( $short_date_end ) );
-			}
+			$from = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->start ) );
+			$to   = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->end ) );
 
 			$description[] = sprintf( __( 'From: %s', 'mobile-dj-manager' ), $from );
-			$description[] = sprintf( __( 'Returns: %s', 'mobile-dj-manager' ), $to );
+			$description[] = sprintf( __( 'To: %s', 'mobile-dj-manager' ), $to );
 
 			if ( ! empty( $entry->notes ) )	{
 				$description[] = stripslashes( $entry->notes );
 			}
 
+            $description  = '<p>' . implode( '<br>', $description ) . '</p>';
+
+            if ( mdjm_employee_can( 'manage_employees' ) )  {
+                $description .= sprintf(
+                    '<p><a class="mdjm-delete availability-link delete-absence" data-entry="%d" href="#" >%s</a></p>',
+                    $entry->id,
+                    __( 'Delete entry', 'mobile-dj-manager' )
+                );
+            }
+
             $this->results[] = array(
-				'allDay'          => true,
+				'allDay'          => false,
 				'backgroundColor' => '#f7f7f7',
 				'borderColor'     => '#cccccc',
                 'className'       => 'mdjm_calendar_absence',
 				'end'             => $entry->end,
 				'id'              => $entry->id,
-				'notes'           => implode( '<br>', $description ),
+				'notes'           => $description,
 				'start'           => $entry->start,
 				'textColor'       => '#555',
 				'tipTitle'        => $title,
@@ -419,6 +424,17 @@ class MDJM_Availability_Checker {
                     $event_id,
                     esc_attr( $event_type )
                 );			
+
+                $event_url = add_query_arg( array(
+                    'post'   => $mdjm_event->ID,
+                    'action' => 'edit'
+                ), admin_url( 'post.php' ) );
+
+                $notes .= sprintf(
+                '<p><a class="availability-link" href="%s" >%s</a></p>',
+                $event_url,
+                sprintf( __( 'View %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
+            );
 
                 $this->results[] = array(
                     'allDay'          => false,

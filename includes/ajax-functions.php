@@ -94,13 +94,33 @@ function mdjm_add_employee_absence_ajax()	{
 	);
 
     if ( mdjm_add_employee_absence( $employee_id, $data ) ) {
-        wp_send_json_success();
+        $success = true;
     } else  {
-        wp_send_json_error();
+        $success = false;
     }
+
+    wp_send_json( array( 'success' => $success, 'date' => $start_date ) );
 
 } // mdjm_add_employee_absence_ajax
 add_action( 'wp_ajax_mdjm_add_employee_absence', 'mdjm_add_employee_absence_ajax' );
+
+/**
+ * Removes an employee absence entry.
+ *
+ * @since   1.5.6
+ * return   void
+ */
+function mdjm_delete_employee_absence_ajax()    {
+    $id = absint( $_POST['id'] );
+    $deleted = mdjm_remove_employee_absence( $id );
+
+    if ( $deleted > 0 ) {
+        wp_send_json_success();
+    }
+
+    wp_send_json_error();
+} // mdjm_delete_employee_absence_ajax
+add_action( 'wp_ajax_mdjm_delete_employee_absence', 'mdjm_delete_employee_absence_ajax' );
 
 /**
  * Client profile update form validation
