@@ -15,7 +15,7 @@
 .mdjm-wrap a { text-decoration: none; }
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
-a.availability-link { float: right; }
+a.availability-link { float: right; cursor: pointer;}
 a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-mute { opacity: 0.4; }
 .mdjm-input-currency {
@@ -113,6 +113,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 #mdjm-calendar .fc-title { font-size: 13px; }
 /* bootstrap default styles make it black. undo */
 #mdjm-calendar a.fc-event { color: #fff; }
+.fc-content { cursor: pointer; }
 
 /* General Settings Styles
 -------------------------------------------------------------- */
