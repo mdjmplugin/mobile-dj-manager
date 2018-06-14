@@ -110,10 +110,20 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 
 /* Fullcalendar Styles
 -------------------------------------------------------------- */
-#mdjm-calendar .fc-title { font-size: 13px; }
+#mdjm-calendar .fc-title,
+#mdjm-dashboard-calendar .fc-title {
+	font-size: 13px;
+}
+
 /* bootstrap default styles make it black. undo */
-#mdjm-calendar a.fc-event { color: #fff; }
-.fc-content { cursor: pointer; }
+#mdjm-calendar a.fc-event,
+#mdjm-dashboard-calendar a.fc-event {
+	color: #fff;
+}
+.fc-content,
+.fc-list-item-title {
+	cursor: pointer;
+}
 
 /* General Settings Styles
 -------------------------------------------------------------- */

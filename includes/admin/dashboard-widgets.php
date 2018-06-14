@@ -212,10 +212,8 @@ function f_mdjm_dash_availability()	{
 		)
 	);
 	?>
-	
+	<div id="mdjm-dashboard-calendar"></div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<?php /* Display Availability Overview */ ?>
-	<?php get_availability_activity( 0, 0 ); ?>
 	
 	<?php /* Availability Check */ ?>
 	<form name="availability-check" id="availability-check" method="post" action="<?php mdjm_get_admin_page( 'availability', 'echo' ); ?>">
