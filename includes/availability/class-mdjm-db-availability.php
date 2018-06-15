@@ -162,6 +162,17 @@ class MDJM_DB_Availability extends MDJM_DB  {
         return $return;
 	} // delete
 
+    /**
+     * Retrieve a single entry by ID.
+     *
+     * @since   1.5.6
+     * @param   int     $id     ID
+     * @return  object|false
+     */
+    public function get_entry( $id )    {
+        return $this->get_entry_by( 'id', $id );
+    } // get_entry
+
 	/**
 	 * Retrieves a single entry from the database
 	 *
@@ -238,16 +249,17 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		global $wpdb;
 
 		$defaults = array(
-			'number'      => 20,
-			'offset'      => 0,
-			'id'          => 0,
-            'event_id'    => 0,
-            'employee_id' => 0,
-			'start'       => false,
-			'end'         => false,
-            'calendar'    => false,
-			'orderby'     => 'id',
-			'order'       => 'DESC'
+			'number'         => 20,
+			'offset'         => 0,
+			'id'             => 0,
+            'event_id'       => 0,
+            'employee_id'    => 0,
+			'start'          => false,
+			'end'            => false,
+            'calendar'       => false,
+            'employees_only' => false,
+			'orderby'        => 'id',
+			'order'          => 'DESC'
 		);
 
 		$args  = wp_parse_args( $args, $defaults );
@@ -331,6 +343,11 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 			$where .= " AND $year = YEAR ( end ) AND $month = MONTH ( end ) AND $day = DAY ( end )";
 		}
+
+        // Employees only
+        if ( ! empty( $args['employees_only'] ) )   {
+            $where .= " AND `employee_id` > 0";
+        }
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
