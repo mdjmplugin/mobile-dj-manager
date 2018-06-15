@@ -62,6 +62,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		public $users;
 
 		public $availability_db;
+
+        public $availability_meta_db;
 		
 		/**
 		 * Ensure we only have one instance of MDJM loaded into memory at any time.
