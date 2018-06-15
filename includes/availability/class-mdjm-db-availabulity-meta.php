@@ -43,7 +43,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	public function get_columns() {
 		return array(
 			'meta_id'    => '%d',
-			'entry_id'   => '%d',
+			'mdjm_availability_id'   => '%d',
 			'meta_key'   => '%s',
 			'meta_value' => '%s',
 		);
@@ -97,6 +97,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 * @since	1.5.6
 	 */
 	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
+
 		$id = $this->sanitize_entry_id( $id );
 		if ( false === $id ) {
 			return false;
@@ -167,10 +168,10 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 
 		$sql = "CREATE TABLE {$this->table_name} (
 			meta_id bigint(20) NOT NULL AUTO_INCREMENT,
-			entry_id bigint(20) NOT NULL,
+			mdjm_availability_id bigint(20) NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
-			PRIMARY KEY  (meta_id),
+			PRIMARY KEY  (meta_id),f
 			KEY entry_id (entry_id),
 			KEY meta_key (meta_key)
 			) $charset_collate;";
