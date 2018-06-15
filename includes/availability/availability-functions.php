@@ -180,6 +180,21 @@ function mdjm_remove_employee_absence( $id )  {
 } // mdjm_remove_employee_absence
 
 /**
+ * Retrieve all employee absences.
+ *
+ * @since   1.5.6
+ * @return  array   Array of database result objects
+ */
+function mdjm_get_all_absences()   {
+    $absences = MDJM()->availability_db->get_entries( array(
+        'number'         => -1,
+        'employees_only' => true
+    ) );
+
+    return $entries;
+} // mdjm_get_all_absences
+
+/**
  * Perform the availability lookup.
  *
  * @since	1.3
