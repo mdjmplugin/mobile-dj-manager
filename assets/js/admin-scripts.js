@@ -205,11 +205,20 @@ jQuery(document).ready(function ($) {
 	 */
 	var MDJM_Settings = {
 		init : function()	{
+            this.general();
 			if ( 'admin_page_mdjm-custom-event-fields' === mdjm_admin_vars.current_page || 'admin_page_mdjm-custom-client-fields' === mdjm_admin_vars.current_page )	{
 				this.custom_fields();
 			}
 		},
-		
+
+        general : function()    {
+            var mdjm_color_picker = $('.mdjm-color-picker');
+
+			if ( mdjm_color_picker.length ) {
+				mdjm_color_picker.wpColorPicker();
+			}
+        },
+
 		custom_fields : function()	{
 			// Sortable Client Fields
 			jQuery(document).ready(function($) 	{

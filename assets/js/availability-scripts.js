@@ -3,10 +3,10 @@ jQuery(document).ready(function ($) {
 
     // Render the full calendar
 	$('#mdjm-calendar').fullCalendar({
-		defaultView: 'month',
+		defaultView: mdjm_calendar_vars.default_view,
 		displayEventTime: false,
 		header: {
-			left: 'month,agendaWeek,agendaDay',
+			left: 'month,agendaWeek,agendaDay,list',
 			center: 'title',
 			right: 'today prev,next'
 		},

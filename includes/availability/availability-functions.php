@@ -37,7 +37,6 @@ function mdjm_get_availability_roles()	{
  * Set the correct time format for the calendar
  *
  * @since	1.5.6
- * @param
  * @return
  */
 function mdjm_format_calendar_time()	{
@@ -50,6 +49,55 @@ function mdjm_format_calendar_time()	{
 			
 	return apply_filters( 'mdjm_format_calendar_time', $time_format );
 } // mdjm_format_calendar_time
+
+/**
+ * Retrieve the default view for the calendar.
+ *
+ * @since	1.5.6
+ * @param   bool    $dashboard  True if the view is for the dashboard page
+ * @return  string  The default view for the calendar
+ */
+function mdjm_get_calendar_view( $dashboard = false )	{
+	$option_name = ! $dashboard ? 'availability' : 'dashboard';
+    $option_name = $option_name . '_view';
+
+    $view = mdjm_get_option( $option_name, 'month' );
+
+    return apply_filters( 'mdjm_calendar_view', $view, $dashboard );
+} // mdjm_get_calendar_view
+
+/**
+ * Retrieve view options for the calendar
+ *
+ * @since	1.5.6
+ * @return  array   Array of view options
+ */
+function mdjm_get_calendar_views()	{
+	$views = array(
+        'agendaDay'  => __( 'Day', 'mobile-dj-manager' ),
+        'list'       => __( 'List', 'mobile-dj-manager' ),
+        'month'      => __( 'Month', 'mobile-dj-manager' ),
+        'agendaWeek' => __( 'Week', 'mobile-dj-manager' ),
+    );
+			
+	return apply_filters( 'mdjm_calendar_views', $views );
+} // mdjm_get_calendar_views
+
+/**
+ * Retrieve color options for the calendar
+ *
+ * @since	1.5.6
+ * @param   $color  string  Which color to retrieve
+ * @param   $event  bool    True if retrieving for an event or false for an asbence
+ * @return  array   Array of view options
+ */
+function mdjm_get_calendar_color( $color = 'background', $event = false )	{
+	$option_name = ! $event ? 'absence_' : 'event_';
+    $option_name = $option_name . $color . '_color';
+    $return      = mdjm_get_option( $option_name );
+
+	return apply_filters( 'mdjm_calendar_color', $return, $color, $event, $option_name );
+} // mdjm_get_calendar_color
 
 /**
  * Retrieve all dates within the given range

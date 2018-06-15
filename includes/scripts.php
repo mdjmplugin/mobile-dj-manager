@@ -35,7 +35,7 @@ function mdjm_load_scripts()	{
     $terms         = false;
     $thickbox      = false;
 	$privacy_error = mdjm_messages( 'agree_to_policy' );
-	$privacy_error = $privacy_error['message'];
+	$privacy_error = $privacy_availerror['message'];
 	$terms_error   = mdjm_messages( 'agree_to_terms' );
 	$terms_error   = $terms_error['message'];
 
@@ -182,6 +182,11 @@ function mdjm_register_admin_styles( $hook )	{
   	wp_enqueue_style( 'jquery-ui-css' );
 	wp_enqueue_style( 'font-awesome' );
 
+    // Settings page color picker
+    if ( 'mdjm-event_page_mdjm-settings' == $hook ) {
+        wp_enqueue_style( 'wp-color-picker' );
+    }
+
 	// Availability calendar
 	if ( 'mdjm-event_page_mdjm-availability' == $hook )	{
 		wp_register_style(
@@ -218,10 +223,17 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
  */
 function mdjm_register_admin_scripts( $hook )	{
 
-	$js_dir   = MDJM_PLUGIN_URL . '/assets/js/';
-	$libs_dir = MDJM_PLUGIN_URL . '/assets/libs/';
-	$suffix   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-	$file     = 'admin-scripts' . $suffix . '.js';
+	$js_dir             = MDJM_PLUGIN_URL . '/assets/js/';
+	$libs_dir           = MDJM_PLUGIN_URL . '/assets/libs/';
+	$suffix             = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file               = 'admin-scripts' . $suffix . '.js';
+    $dashboard          = 'index.php' == $hook ? true : false;
+    $editing_event      = false;
+	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
+	$sortable           = array(
+		'admin_page_mdjm-custom-event-fields',
+		'admin_page_mdjm-custom-client-fields'
+	);
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
@@ -231,13 +243,6 @@ function mdjm_register_admin_scripts( $hook )	{
 	if ( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
 	}
-
-	$editing_event      = false;
-	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	$sortable           = array(
-		'admin_page_mdjm-custom-event-fields',
-		'admin_page_mdjm-custom-client-fields'
-	);
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
@@ -273,6 +278,11 @@ function mdjm_register_admin_scripts( $hook )	{
 	if ( in_array( $hook, $sortable ) )	{
 		wp_enqueue_script( 'jquery-ui-sortable' );
 	}
+
+    // Settings page color picker
+    if ( 'mdjm-event_page_mdjm-settings' == $hook ) {
+        wp_enqueue_script( 'wp-color-picker' );
+    }
 
 	// Availability calendar
 	if ( 'mdjm-event_page_mdjm-availability' == $hook )	{
@@ -319,8 +329,9 @@ function mdjm_register_admin_scripts( $hook )	{
 			apply_filters(
 				'mdjm_calendar_vars',
 				array(
-					'first_day'   => get_option( 'start_of_week' ),
-					'time_format' => mdjm_format_calendar_time()
+                    'default_view' => mdjm_get_calendar_view( $dashboard ),
+					'first_day'    => get_option( 'start_of_week' ),
+					'time_format'  => mdjm_format_calendar_time()
 				)
 			)
 		);

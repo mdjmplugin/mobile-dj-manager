@@ -352,14 +352,14 @@ class MDJM_Availability_Checker {
 
             $this->results[] = array(
 				'allDay'          => false,
-				'backgroundColor' => '#f7f7f7',
-				'borderColor'     => '#cccccc',
+				'backgroundColor' => mdjm_get_calendar_color(),
+				'borderColor'     => mdjm_get_calendar_color( 'border' ),
                 'className'       => 'mdjm_calendar_absence',
 				'end'             => $entry->end,
 				'id'              => $entry->id,
 				'notes'           => $description,
 				'start'           => $entry->start,
-				'textColor'       => '#555',
+				'textColor'       => mdjm_get_calendar_color( 'text' ),
 				'tipTitle'        => $title,
 				'title'           => $employee
             );
@@ -438,14 +438,14 @@ class MDJM_Availability_Checker {
 
                 $this->results[] = array(
                     'allDay'          => false,
-                    'backgroundColor' => '#2ea2cc',
-                    'borderColor'     => '#0074a2',
+                    'backgroundColor' => mdjm_get_calendar_color( 'background', true ),
+                    'borderColor'     => mdjm_get_calendar_color( 'border', true ),
                     'className'       => 'mdjm_calendar_event',
                     'end'             => $mdjm_event->get_finish_date() . ' ' . $mdjm_event->get_finish_time(),
                     'id'              => $mdjm_event->ID,
                     'notes'           => $notes,
                     'start'           => $mdjm_event->date . ' ' . $mdjm_event->get_start_time(),
-                    'textColor'       => '#fff',
+                    'textColor'       => mdjm_get_calendar_color( 'text', true ),
                     'tipTitle'        => $tip_title,
                     'title'           => $title
                 );
