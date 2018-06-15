@@ -153,7 +153,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		$entry  = $this->get_entry_by( 'id', $id );
         $return = false;
 
-		if ( $entry->id > 0 ) {
+		if ( ! empty( $entry ) && $entry->id > 0 ) {
 			global $wpdb;
 
 			$return = $wpdb->delete( $this->table_name, array( 'id' => $id ), '%d' );
