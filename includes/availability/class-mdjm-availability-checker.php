@@ -254,7 +254,7 @@ class MDJM_Availability_Checker {
 	 */
 	public function availability_check()	{
         if ( ! empty( $this->available ) )  {
-		  $this->check_absences();
+			$this->check_absences();
         }
 
         if ( ! empty( $this->available ) )  {
@@ -277,7 +277,7 @@ class MDJM_Availability_Checker {
 		) );
 
 		foreach( $absences as $absence )	{
-			$this->unavailable[ $absence->employee_id ] = array(
+			$this->unavailable[ $absence->employee_id ][] = array(
 				'absence' => array(
 					'id'    => $absence->id,
 					'start' => $absence->start,
@@ -329,9 +329,23 @@ class MDJM_Availability_Checker {
         ) );
 
         foreach( $events as $event )    {
-            $employees = mdjm_get_all_event_employees( $event->ID );
+			$mdjm_event = new MDJM_Event( $event->ID );
+            $employees  = $mdjm_event->get_all_employees();
 
             foreach( $employees as $employee_id => $data )  {
+
+				$this->unavailable[ $absence->employee_id ][] = array(
+					'events' => array(
+						'id'     => $event->ID,
+						'date'   => $mdjm_event->date,
+						'end'    => $mdjm_event->get_finish_date(),
+						'start'  => $mdjm_event->get_start_time(),
+						'finish' => $mdjm_event->get_finish_time(),
+						'role'   => $data['role'],
+						'status' => $mdjm_event->get_status()
+					)
+				);
+
                 if ( ! in_array( $employee_id, $this->absentees ) ) {
                     $this->absentees[] = $employee_id;
                 }
