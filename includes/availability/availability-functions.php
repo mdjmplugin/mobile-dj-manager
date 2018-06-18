@@ -127,7 +127,7 @@ function mdjm_get_all_dates_in_range( $start, $end )	{
 function mdjm_add_employee_absence( $employee_id, $data )    {
     $employee_id = absint( $employee_id );
 
-    if ( empty( $employee_id ) || ! mdjm_is_employee( $employee_id ) )   {
+    if ( empty( $employee_id ) )   {
         return false;
     }
 
@@ -206,11 +206,11 @@ function mdjm_get_all_absences()   {
  */
 function mdjm_do_availability_check( $date, $employees = '', $roles = '', $status = '' )	{
 
-	$check = new MDJM_Availability_Checker( $date, $employees, $roles, $status );
+	$check = new MDJM_Availability_Checker( $date, '', $employees, $roles, $status );
 	
-	$check->check_availability();
+	$check->availability_check();
 	
-	return $check->result;
+	return $check->available;
 	
 } // mdjm_do_availability_check
 

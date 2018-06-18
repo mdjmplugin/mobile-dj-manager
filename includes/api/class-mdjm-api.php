@@ -750,39 +750,36 @@ class MDJM_API 	{
 			$search       = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
 			$replace      = array( date( 'l, jS F Y', strtotime( $date ) ), mdjm_format_short_date( $date ) );
 
-			$result = mdjm_do_availability_check( $date, $employees, $roles );
+			$result = mdjm_do_availability_check( $date, '', $employees, $roles );
 			
 		}
-	
-		if ( $result )	{
 
-			if( ! empty( $result['available'] ) )	{
-				$message = str_replace( $search, $replace, $available_text );
+		if ( ! empty( $result ) )	{
 
-				$response['availability'] = array(
-					'date'      => $date,
-					'response'  => 'available',
-					'employees' => $result['available'],
-					'message'   => mdjm_do_content_tags( $message )
-				);
-			} else	{
-				$message = str_replace( $search, $replace, $unavailable_text );
+            $message = str_replace( $search, $replace, $available_text );
 
-				$response['availability'] = array(
-					'date'      => $date,
-					'response'  => 'unavailable',
-					'employees' => '',
-					'message'   => mdjm_do_content_tags( $message )
-				);
-			}
+            $response['availability'] = array(
+                'date'      => $date,
+                'response'  => 'available',
+                'employees' => $result,
+                'message'   => mdjm_do_content_tags( $message )
+            );
+        } else	{
+            $message = str_replace( $search, $replace, $unavailable_text );
 
-		}
+            $response['availability'] = array(
+                'date'      => $date,
+                'response'  => 'unavailable',
+                'employees' => '',
+                'message'   => mdjm_do_content_tags( $message )
+            );
+        }
 
 		do_action( 'mdjm_after_api_availability_check', $this );
 
 		$this->data = array_merge( $this->data, $response );
 		$this->output();
-
+  
 	} // availability_check
 
 	/**

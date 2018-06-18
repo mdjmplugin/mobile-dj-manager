@@ -35,7 +35,7 @@ function mdjm_load_scripts()	{
     $terms         = false;
     $thickbox      = false;
 	$privacy_error = mdjm_messages( 'agree_to_policy' );
-	$privacy_error = $privacy_availerror['message'];
+	$privacy_error = $privacy_error['message'];
 	$terms_error   = mdjm_messages( 'agree_to_terms' );
 	$terms_error   = $terms_error['message'];
 

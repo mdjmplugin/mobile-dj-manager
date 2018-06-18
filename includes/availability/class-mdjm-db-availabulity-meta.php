@@ -30,6 +30,12 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 		$this->primary_key = 'meta_id';
 		$this->version     = '1.0';
 
+        $db_version = get_option( $this->table_name . '_db_version' );
+
+		if ( ! $this->table_exists( $this->table_name ) || version_compare( $db_version, $this->version, '<' ) ) {
+			$this->create_table();
+		}
+
 		add_action( 'plugins_loaded',               array( $this, 'register_table' ), 11 );
         add_action( 'mdjm_remove_employee_absence', array( $this, 'remove_meta_after_delete' ), 999, 2 );
 
@@ -211,8 +217,8 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 			mdjm_availability_id bigint(20) NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
-			PRIMARY KEY  (meta_id),f
-			KEY entry_id (entry_id),
+			PRIMARY KEY  (meta_id),
+			KEY mdjm_availability_id (mdjm_availability_id),
 			KEY meta_key (meta_key)
 			) $charset_collate;";
 

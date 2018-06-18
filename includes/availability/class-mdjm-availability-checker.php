@@ -254,6 +254,7 @@ class MDJM_Availability_Checker {
 	 */
 	public function availability_check()	{
 		$this->check_absences();
+        $this->check_events();
 	} // availability_check
 
 	/**
@@ -287,6 +288,55 @@ class MDJM_Availability_Checker {
             }
 		}
 	} // check_absences
+
+    /**
+	 * Checks active events for the given date(s).
+	 *
+	 * @since	1.5.6
+	 * @return	array	Array of absence data
+	 */
+    function check_events() {
+        $employees_query = array();
+
+        foreach( $this->available as $employee_id )    {
+            $employees_query[] = array(
+                'key'     => '_mdjm_event_employees',
+                'value'   => sprintf( ':"%s";', $employee_id ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        $events = mdjm_get_events( array(
+            'post_status'    => $this->status,
+            'posts_per_page' => -1,
+            'meta_key'       => '_mdjm_event_date',
+            'meta_value'     => date( 'Y-m-d', $this->start ),
+            'meta_query'     => array(
+                'relation' => 'OR',
+                array(
+                    'key'     => '_mdjm_event_dj',
+                    'value'   => implode( ',', $this->available ),
+                    'compare' => 'IN',
+                    'type'    => 'NUMERIC'
+                ),
+                $employees_query
+            )
+        ) );
+
+        foreach( $events as $event )    {
+            $employees = mdjm_get_all_event_employees( $event->ID );
+
+            foreach( $employees as $employee_id => $data )  {
+                if ( ! in_array( $employee_id, $this->absentees ) ) {
+                    $this->absentees[] = $employee_id;
+                }
+
+                if ( false !== $key = array_search( $employee_id, $this->available ) ) {
+                    unset( $this->available[ $key ] );
+                }
+            }
+        }
+    } // check_events
 
     /**
 	 * Retrieve entries for the calendar.
@@ -382,17 +432,8 @@ class MDJM_Availability_Checker {
 	 * @return	array	Array of absence data
 	 */
 	public function get_events_in_range()	{
-        $employees_query  = array();
         $event_statuses   = mdjm_active_event_statuses();
         $event_statuses[] = 'mdjm-completed';
-
-        foreach( $this->employees as $employee_id )    {
-            $employees_query[] = array(
-                'key'     => '_mdjm_event_employees',
-                'value'   => sprintf( ':"%s";', $employee_id ),
-                'compare' => 'LIKE'
-            );
-        }
 
         $query_args = array(
             'post_status' => $event_statuses,
@@ -432,10 +473,10 @@ class MDJM_Availability_Checker {
                 ), admin_url( 'post.php' ) );
 
                 $notes .= sprintf(
-                '<p><a class="availability-link" href="%s" >%s</a></p>',
-                $event_url,
-                sprintf( __( 'View %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
-            );
+                    '<p><a class="availability-link" href="%s" >%s</a></p>',
+                    $event_url,
+                    sprintf( __( 'View %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
+                );
 
                 $this->results[] = array(
                     'allDay'          => false,
