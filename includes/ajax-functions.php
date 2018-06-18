@@ -85,11 +85,11 @@ function mdjm_add_employee_absence_ajax()	{
 
 	$data = array(
 		'employee_id'  => $employee_id,
+        'all_day'      => $all_day,
 		'start'        => $start_date,
 		'start_time'   => $start_time,
 		'end'          => $end_date,
 		'end_time'     => $end_time,
-		'all_day'      => $all_day,
 		'notes'        => $notes
 	);
 

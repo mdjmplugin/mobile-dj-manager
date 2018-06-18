@@ -325,6 +325,7 @@ class MDJM_Availability_Checker {
             $description      = array();
             $employee         = mdjm_get_employee_display_name( $entry->employee_id );
 			$title            = __( 'Unknown', 'mobile-dj-manager' );
+            $all_day          = ! empty( $entry->all_day ) ? true : false;
 
 			if ( ! empty( $employee ) )	{
 				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
@@ -351,7 +352,7 @@ class MDJM_Availability_Checker {
             }
 
             $this->results[] = array(
-				'allDay'          => false,
+				'allDay'          => $all_day,
 				'backgroundColor' => mdjm_get_calendar_color(),
 				'borderColor'     => mdjm_get_calendar_color( 'border' ),
                 'className'       => 'mdjm_calendar_absence',

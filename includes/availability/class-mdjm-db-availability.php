@@ -57,6 +57,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'          => '%d',
             'event_id'    => '%d',
 			'employee_id' => '%d',
+            'all_day'     => '%d',
 			'start'       => '%s',
 			'end'         => '%s',
 			'notes'       => '%s',
@@ -76,6 +77,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'          => 0,
             'event_id'    => 0,
 			'employee_id' => get_current_user_id(),
+            'all_day'     => 0,
 			'start'       => '',
 			'end'         => '',
 			'notes'       => '',
@@ -156,7 +158,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		if ( ! empty( $entry ) && $entry->id > 0 ) {
 			global $wpdb;
 
-			$return = $wpdb->delete( $this->table_name, array( 'id' => $id ), '%d' );
+			$return = $wpdb->delete( $this->table_name, array( 'id' => $entry->id ), '%d' );
 		}
 
         return $return;
@@ -254,6 +256,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'id'             => 0,
             'event_id'       => 0,
             'employee_id'    => 0,
+            'all_day'        => null,
 			'start'          => false,
 			'end'            => false,
             'calendar'       => false,
@@ -396,6 +399,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		event_id bigint(20) NOT NULL,
         employee_id bigint(20) NOT NULL,
+        all_day tinyint(1) NOT NULL default '0',
 		start datetime NOT NULL,
 		end datetime NOT NULL,
 		notes longtext NULL,

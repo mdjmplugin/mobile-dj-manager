@@ -383,7 +383,17 @@ jQuery(document).ready(function ($) {
                         $('#display_absence_end').val('');
                         $('#absence_end').val('');
                         $('#absence_all_day').prop('checked, true');
+                        $('#absence_start_time_hr').val('00');
+                        $('#absence_start_time_min').val('00');
+                        $('#absence_end_time_hr').val('00');
+                        $('#absence_end_time_min').val('00');
                         $('#absence_notes').val('');
+
+                        if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                            $('#absence_start_time_period').val('am');
+                            $('#absence_end_time_period').val('am');
+                        }
+
                         $('#mdjm-calendar').removeClass('mdjm-mute');
                         $('#mdjm-add-absence-fields').removeClass('mdjm-mute');
                         $( 'html, body' ).animate({

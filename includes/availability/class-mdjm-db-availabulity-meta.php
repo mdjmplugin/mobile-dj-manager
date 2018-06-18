@@ -30,7 +30,8 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 		$this->primary_key = 'meta_id';
 		$this->version     = '1.0';
 
-		add_action( 'plugins_loaded', array( $this, 'register_table' ), 11 );
+		add_action( 'plugins_loaded',               array( $this, 'register_table' ), 11 );
+        add_action( 'mdjm_remove_employee_absence', array( $this, 'remove_meta_after_delete' ), 999, 2 );
 
 	} // __construct
 
@@ -42,10 +43,10 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	*/
 	public function get_columns() {
 		return array(
-			'meta_id'    => '%d',
-			'mdjm_availability_id'   => '%d',
-			'meta_key'   => '%s',
-			'meta_value' => '%s',
+			'meta_id'              => '%d',
+			'mdjm_availability_id' => '%d',
+			'meta_key'             => '%s',
+			'meta_value'           => '%s'
 		);
 	} // get_columns
 
@@ -154,6 +155,45 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	public function delete_meta( $id = 0, $meta_key = '', $meta_value = '' ) {
 		return delete_metadata( 'mdjm_availability', $id, $meta_key, $meta_value );
 	} // delete_meta
+
+    /**
+     * Execute the deletion of meta data when an absence has been deleted.
+     * 
+     * @since   1.5.6
+     * @hook    mdjm_remove_employee_absence
+     * @param   int     $absence_id     The absence entry ID
+     * @param   bool    $deleted        Whether or not the absence entry was removed
+     */
+    public function remove_meta_after_delete( $absence_id, $deleted )    {
+        if ( ! empty( $absence_id ) && ! empty( $deleted ) )  {
+            $this->delete_all_meta( $absence_id );
+        }
+    } // remove_meta_after_delete
+
+    /**
+     * Remove all meta data for an absence.
+     *
+     * @since   1.5.6
+     * @param   int     $absence_id   The absence entry ID
+     * @param   bool    
+     * @return  void
+     */
+    public function delete_all_meta( $absence_id )    {
+        global $wpdb;
+
+        $meta_ids = $wpdb->get_col( $wpdb->prepare(
+            "
+            SELECT meta_id
+            FROM $this->table_name
+            WHERE mdjm_availability_id = %d
+            ", $absence_id
+        ) );
+
+        foreach ( $meta_ids as $mid )   {
+            delete_metadata_by_mid( 'mdjm_availability', $mid );
+        }
+    } // delete_all_meta
+    
 
 	/**
 	 * Create the table

@@ -173,7 +173,8 @@ abstract class MDJM_DB {
 		global $wpdb;
 
 		// Set default values
-		$data = wp_parse_args( $data, $this->get_column_defaults() );
+        $return = false;
+		$data   = wp_parse_args( $data, $this->get_column_defaults() );
 
 		do_action( 'mdjm_pre_db_insert_' . $type, $data );
 
@@ -190,11 +191,12 @@ abstract class MDJM_DB {
 		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
-		$wpdb->insert( $this->table_name, $data, $column_formats );
+		if ( $wpdb->insert( $this->table_name, $data, $column_formats ) ) {
+            do_action( 'mdjm_post_db_insert_' . $type, $wpdb->insert_id, $data );
+            $return = $wpdb->insert_id;
+        }
 
-		do_action( 'mdjm_post_db_insert_' . $type, $wpdb->insert_id, $data );
-
-		return $wpdb->insert_id;
+        return $return;
 	} // insert
 
 	/**

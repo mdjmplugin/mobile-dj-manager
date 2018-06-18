@@ -1023,17 +1023,19 @@ function mdjm_v156_upgrade_availability_db()	{
 			// We had no entries, just complete
 			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
-            delete_option( 'mdjm_availability_hashes' );
 			delete_option( 'mdjm_doing_upgrade' );
             delete_option( 'mdjm_db_version' );
 			wp_redirect( $redirect );
 			exit;
-		}
+		} else    {
+            $all_entries = $wpdb->get_results( "SELECT * FROM $old_table" );
+            set_transient( 'mdjm_156_availability_entries', $all_entries, MONTH_IN_SECONDS );
+        }
 	}
 
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
-		$total_sql = "SELECT COUNT(id) as total_entries FROM $old_table";
+		$total_sql = "SELECT COUNT(*) as total_entries FROM $old_table GROUP BY entry_id ORDER BY id ASC LIMIT 1";
 		$results   = $wpdb->get_row( $total_sql, 0 );
 
 		$total     = $results->total_entries;
@@ -1043,6 +1045,7 @@ function mdjm_v156_upgrade_availability_db()	{
 		"
 			SELECT * 
 			FROM $old_table
+            GROUP BY entry_id
 			ORDER BY id ASC LIMIT %d,%d;
 		", 
 		$offset, $number
@@ -1050,22 +1053,25 @@ function mdjm_v156_upgrade_availability_db()	{
 
 	if ( $entries )	{
 		foreach( $entries as $entry )	{
-            $hashes    = get_option( 'mdjm_availability_hashes', array() );
-
-            if ( ! array_key_exists( $entry->entry_id, $hashes ) )  {
-                $hashes[ $entry->entry_id ] = md5( $entry->user_id . '_' . mdjm_generate_random_string() );
-                update_option( 'mdjm_availability_hashes', $hashes );
-            }
-
+            $start = strtotime( $entry->date_from . ' 00:00:00' );
+            $end   = strtotime( '+1 day', strtotime( $entry->date_to . ' 00:00:00' ) );
+            
             $data = array();
             $data['event_id']    = 0;
             $data['employee_id'] = $entry->user_id;
-            $data['group_id']    = $hashes[ $entry->entry_id ];
-            $data['start']       = $entry->date_from . ' 00:00:00';
-            $data['end']         = $entry->date_to . ' 23:59:59';
+            $data['all_day']     = 1;
+            $data['start']       = date( 'Y-m-d H:i:s', $start );
+            $data['end']         = date( 'Y-m-d H:i:s', $end );
             $data['notes']       = $entry->notes;
 
             MDJM()->availability_db->add( $data );
+
+            /*$wpdb->query( $wpdb->prepare(
+                "
+                DELETE FROM $old_table
+                WHERE entry_id = '%s'
+                ", $entry->entry_id
+            ) );*/
 		}
 
 		// Entries found so upgrade them

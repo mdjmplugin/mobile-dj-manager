@@ -131,13 +131,13 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
         return false;
     }
 
+    $all_day    = isset( $data['all_day'] )      ? $data['all_day']    : 0;
 	$start      = ! empty( $data['start'] )      ? $data['start']      : date( 'Y-m-d' );
 	$end        = ! empty( $data['end'] )        ? $data['end']        : date( 'Y-m-d' );
 	$start_time = ! empty( $data['start_time'] ) ? $data['start_time'] : '00:00:00';
 	$end_time   = ! empty( $data['end_time'] )   ? $data['end_time']   : '00:00:00';
 	$start      = $start . ' ' . $start_time;
 	$end        = $end   . ' ' . $end_time;
-	$all_day    = ! empty( $data['all_day'] )    ? $data['all_day']    : false;
 	$notes      = ! empty( $data['notes'] )      ? $data['notes']      : '';
 
 	if ( $all_day )	{
@@ -146,6 +146,7 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
 
     $args                = array();
     $args['employee_id'] = $employee_id;
+    $args['all_day']     = $all_day;
     $args['start']       = $start;
     $args['end']         = $end;
     $args['notes']       = sanitize_textarea_field( $notes );
