@@ -253,8 +253,13 @@ class MDJM_Availability_Checker {
 	 * @since	1.5.6
 	 */
 	public function availability_check()	{
-		$this->check_absences();
-        $this->check_events();
+        if ( ! empty( $this->available ) )  {
+		  $this->check_absences();
+        }
+
+        if ( ! empty( $this->available ) )  {
+            $this->check_events();
+        }
 	} // availability_check
 
 	/**
