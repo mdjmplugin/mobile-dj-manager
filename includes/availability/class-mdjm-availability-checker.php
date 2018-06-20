@@ -209,6 +209,28 @@ class MDJM_Availability_Checker {
 
 	} // setup_employees
 
+    /* Whether or not an employee is absent on the given date
+     *
+     * @since   1.5.6
+     * @return  bool    True if the employee is absent, otherwise false
+     */
+    public function is_employee_absent()   {
+        $this->check_absences();
+
+        return empty( $this->available );
+    } // is_employee_absent
+
+    /* Whether or not an employee is working on the given date
+     *
+     * @since   1.5.6
+     * @return  bool    True if the employee is working, otherwise false
+     */
+    public function is_employee_working()   {
+        $this->check_events();
+
+        return empty( $this->available );
+    } // is_employee_working
+
 	/**
 	 * Setup status.
 	 *

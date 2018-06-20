@@ -234,6 +234,25 @@ function mdjm_get_calendar_entries( $start, $end )	{
 } // mdjm_get_calendar_entries
 
 /**
+ * Determine if an employee is absent on the given date.
+ *
+ * @since	1.3
+ * @param	str			$date		The date
+ * @param	int			$employee	The employee ID
+ * @return	bool		True if the employee is working, otherwise false.
+ */
+function mdjm_employee_is_absent( $date, $employee_id = '' )	{	
+
+	if ( empty( $employee_id ) && is_user_logged_in() )	{
+		$employee_id = get_current_user_id();
+	}
+
+	$availability = new MDJM_Availability_Checker( $date, $employee_id );
+
+    return $availability->is_employee_absent();
+} // mdjm_employee_is_absent
+
+/**
  * Determine if an employee is working on the given date.
  *
  * @since	1.3
@@ -242,74 +261,16 @@ function mdjm_get_calendar_entries( $start, $end )	{
  * @param	str|arr		$status		The employee ID
  * @return	bool		True if the employee is working, otherwise false.
  */
-function mdjm_employee_is_working( $date, $employee_id='', $status='' )	{	
-	
+function mdjm_employee_is_working( $date, $employee_id = '' )	{	
+
 	if ( empty( $employee_id ) && is_user_logged_in() )	{
 		$employee_id = get_current_user_id();
 	}
-	
-	if ( empty( $employee_id ) )	{
-		wp_die( __( 'Ooops, an error occured.', 'mobile-dj-manager' ) );
-	}
-	
-	if ( empty( $status ) )	{
-		$status = mdjm_get_availability_statuses();
-	}
-	
-	$event = mdjm_get_events(
-		array(
-			'post_status'    => $status,
-			'posts_per_page' => 1,
-			'meta_key'       => '_mdjm_event_date',
-			'meta_value'     => date( 'Y-m-d', $date ),
-			'meta_query'     => array(
-				'relation' => 'OR',
-				array(
-					'key'     => '_mdjm_event_dj',
-					'value'   => $employee_id,
-					'compare' => '=',
-					'type'    => 'NUMERIC'
-				),
-				array(
-					'key'     => '_mdjm_event_employees',
-					'value'   => sprintf( ':"%s";', $employee_id ),
-					'compare' => 'LIKE'
-				)
-			)
-		)
-	);
-	
-	$event = apply_filters( 'mdjm_employee_is_working', $event, $date, $employee_id );
-	
-	if ( $event )	{
-		return true;
-	}
-	
-	return false;
+
+	$availability = new MDJM_Availability_Checker( $date, $employee_id );
+
+    return $availability->is_employee_working();
 } // mdjm_employee_is_working
-
-/**
- * Determine if an employee is on vacaion the given date.
- *
- * @since	1.3
- * @param	str		$date		The date
- * @param	int		$employee	The employee
- * @return	bool	True if the employee is on vacation, otherwise false.
- */
-function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
-	$employee_id = empty( $employee_id ) ? get_current_user_id() : $employee_id;
-	$date        = date( 'Y-m-d', $date );
-
-	$result      = MDJM()->availability_db->get_entries( array(
-		'employee_id' => $employee_id,
-		'start'       => $date,
-		'number'      => 1
-	) );
-
-	$result = apply_filters( 'mdjm_employee_is_on_vacation', $result, $date, $employee_id );
-
-	return ! empty( $result );
-} // mdjm_employee_is_on_vacation
 
 /**
  * Retrieve the description text for the calendar popup
