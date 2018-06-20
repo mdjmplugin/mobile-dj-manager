@@ -210,7 +210,7 @@ function mdjm_do_availability_check( $date, $employees = '', $roles = '', $statu
 	
 	$check->availability_check();
 	
-	return $check->available;
+	return $check->result;
 	
 } // mdjm_do_availability_check
 
@@ -310,69 +310,6 @@ function mdjm_employee_is_on_vacation( $date, $employee_id = '' )	{
 
 	return ! empty( $result );
 } // mdjm_employee_is_on_vacation
-
-/**
- * Retrieve event activity for a given date range.
- *
- * @since	1.5.6
- * @param	string	$start	Start date for which to retrieve activity
- * @param	string	$end	End date for which to retrieve activity
- * @return	array	Array of data for the calendar
- */
-function mdjm_get_event_availability_activity( $start, $end )	{
-	$activity = array();
-	$args     = array(
-		'meta_query' => array(
-			array(
-				'key'     => '_mdjm_event_date',
-				'value'   => array( date( 'Y-m-d', $start ), date( 'Y-m-d', $end ) ),
-				'compare' => 'BETWEEN',
-				'type'    => 'DATE'
-			)
-		)
-	);
-
-	$events = mdjm_get_events( $args );
-
-	if ( ! empty( $events ) )	{
-		foreach( $events as $_event )	{
-
-			$popover     = 'top';
-			$event       = new MDJM_Event( $_event->ID );
-			$employee    = mdjm_get_employee_display_name( $event->employee_id );
-			$event_id    = mdjm_get_event_contract_id( $event->ID );
-			$title       = esc_attr( $event->get_type() );
-			$description = array();
-			$notes       = mdjm_get_calendar_event_description_text();
-			$notes       = mdjm_do_content_tags( $notes, $event->ID, $event->client );
-			$tip_title   = sprintf(
-				'%s %s - %s',
-				esc_html( mdjm_get_label_singular() ),
-				$event_id,
-				$title
-			);			
-
-			$day = date( 'N', $start );
-
-			$activity[] = array(
-				'allDay'          => false,
-				'backgroundColor' => '#2ea2cc',
-				'borderColor'     => '#0074a2',
-				'end'             => $event->get_finish_date() . ' ' . $event->get_finish_time(),
-				'id'              => $event->ID,
-				'notes'           => $notes,
-				'start'           => $event->date . ' ' . $event->get_start_time(),
-				'textColor'       => '#fff',
-				'tipTitle'        => $tip_title,
-				'title'           => $title
-			);
-		}
-	}
-
-	$activity = apply_filters( 'mdjm_event_availability_activity', $activity, $start, $end );
-
-	return $activity;
-} // mdjm_get_event_availability_activity
 
 /**
  * Retrieve the description text for the calendar popup

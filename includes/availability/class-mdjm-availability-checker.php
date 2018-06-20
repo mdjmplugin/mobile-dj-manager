@@ -223,31 +223,6 @@ class MDJM_Availability_Checker {
 	} // setup_status
 
 	/**
-	 * Perform the availability lookup.
-	 *
-	 * @since	1.3
-	 * @param
-	 * @return	bool
-	 */
-	public function check_availability()	{
-
-		foreach( $this->employees as $employee_id )	{
-
-			if ( ! $this->employee_working( $employee_id ) && ! $this->employee_has_vacation( $employee_id ) )	{
-				$this->result['available'][] = $employee_id;
-			} else	{
-				$this->result['unavailable'][] = $employee_id;
-			}
-		}
-
-		if ( ! empty( $this->result['available'] ) )	{
-			return true;
-		}
-
-		return false;
-	} // check_availability
-
-	/**
 	 * Perform a detailed lookup.
 	 *
 	 * @since	1.5.6
@@ -260,6 +235,10 @@ class MDJM_Availability_Checker {
         if ( ! empty( $this->available ) )  {
             $this->check_events();
         }
+
+        $this->result['available']   = $this->available;
+        $this->result['unavailable'] = $this->unavailable;
+        $this->result['absentees']   = $this->absentees;
 	} // availability_check
 
 	/**
@@ -331,7 +310,7 @@ class MDJM_Availability_Checker {
 
             foreach( $employees as $employee_id => $data )  {
 
-				$this->unavailable[ $absence->employee_id ]['event'][ $event->ID ] = array(
+				$this->unavailable[ $employee_id ]['event'][ $event->ID ] = array(
 					'date'   => $mdjm_event->date,
 					'end'    => $mdjm_event->get_finish_date(),
 					'finish' => $mdjm_event->get_finish_time(),
@@ -508,27 +487,4 @@ class MDJM_Availability_Checker {
         }
     } // get_events_in_range
 
-	/**
-	 * Determine if the employee is working on the given day.
-	 *
-	 * @since	1.3
-	 * @param	int		$employee	The employee ID
-	 * @param	int		$start		The date
-	 * @return	bool	True if the employee has an event, or false
-	 */
-	public function employee_working( $employee_id )	{
-		return mdjm_employee_is_working( $this->start, $employee_id, $this->status );
-	} // employee_working
-
-	/**
-	 * Determine if the employee has vacation on the given day.
-	 *
-	 * @since	1.3
-	 * @param	int		$employee	The employee ID
-	 * @param	int		$start		The date
-	 * @return	bool	True if the employee has vacation, or false
-	 */
-	public function employee_has_vacation( $employee_id )	{
-		return mdjm_employee_is_on_vacation( $this->start, $employee_id );
-	} // employee_has_vacation
 } // class MDJM_Availability_Checker
