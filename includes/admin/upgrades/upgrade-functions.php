@@ -989,6 +989,18 @@ function mdjm_v156_upgrades()	{
 		@$playlist_meta_db->create_table();
 	}
 
+    $new_settings = array(
+        'absence_background_color' => '#f7f7f7',
+        'absence_border_color'     => '#cccccc',
+        'absence_text_color'       => '#555555',
+        'event_background_color'   => '#2ea2cc',
+        'event_border_color'       => '#0074a2',
+        'event_text_color'         => '#ffffff'
+    );
+
+    foreach( $new_settings as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
 } // mdjm_v156_upgrades
 
 /**
