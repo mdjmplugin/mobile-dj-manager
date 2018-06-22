@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MDJM Event Management 1.5.6\n"
 "Report-Msgid-Bugs-To: https://mdjm.co.uk/\n"
-"POT-Creation-Date: 2018-06-08 23:02:55+00:00\n"
+"POT-Creation-Date: 2018-06-22 12:55:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -67,177 +67,177 @@ msgstr ""
 msgid "You have unattended enquiries. <a href=\"%s\">Click here</a> to manage."
 msgstr ""
 
-#: includes/admin/admin-notices.php:126
+#: includes/admin/admin-notices.php:127
 msgid "MDJM Event Management has been upgraded successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:135
+#: includes/admin/admin-notices.php:137
+msgid "Absence added."
+msgstr ""
+
+#: includes/admin/admin-notices.php:146
+msgid "Absence could not be added."
+msgstr ""
+
+#: includes/admin/admin-notices.php:155
+msgid "Absence deleted."
+msgstr ""
+
+#: includes/admin/admin-notices.php:164
+msgid "Absence could not be deleted."
+msgstr ""
+
+#: includes/admin/admin-notices.php:173
 msgid "Entry added to playlist."
 msgstr ""
 
-#: includes/admin/admin-notices.php:144
+#: includes/admin/admin-notices.php:182
 msgid "Could not add entry to playlist."
 msgstr ""
 
-#: includes/admin/admin-notices.php:153
+#: includes/admin/admin-notices.php:191
 msgid "The selected songs were removed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:162
+#: includes/admin/admin-notices.php:200
 msgid "The songs count not be removed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:171
+#: includes/admin/admin-notices.php:209
 msgid "Security verification failed. Action not completed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:180
+#: includes/admin/admin-notices.php:218
 msgid "The playlist was emailed successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:189
+#: includes/admin/admin-notices.php:227
 msgid "The playlist could not be emailed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:198
+#: includes/admin/admin-notices.php:236
 msgid "Employee added."
 msgstr ""
 
-#: includes/admin/admin-notices.php:206
+#: includes/admin/admin-notices.php:244
 msgid "Could not add employee."
 msgstr ""
 
-#: includes/admin/admin-notices.php:214
+#: includes/admin/admin-notices.php:252
 msgid "Insufficient information to create employee."
 msgstr ""
 
-#: includes/admin/admin-notices.php:222
+#: includes/admin/admin-notices.php:260
 msgid "Not all required fields have been completed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:230
+#: includes/admin/admin-notices.php:268
 msgid "Email sent successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:238
+#: includes/admin/admin-notices.php:276
 msgid "Email not sent."
 msgstr ""
 
-#: includes/admin/admin-notices.php:259
+#: includes/admin/admin-notices.php:299
 msgid ""
 "<a href=\"%s\" title=\"Assign &amp; Respond to Enquiry\">Assign %s &amp; "
 "respond to enquiry</a>"
 msgstr ""
 
-#: includes/admin/admin-notices.php:275
+#: includes/admin/admin-notices.php:315
 msgid "You have %d employees available to work %s %s on %s."
 msgstr ""
 
-#: includes/admin/admin-notices.php:289
+#: includes/admin/admin-notices.php:329
 msgid "There are no employees available to work %s %s on %s"
 msgstr ""
 
-#: includes/admin/admin-notices.php:304
+#: includes/admin/admin-notices.php:344
 msgid "Event not identified."
 msgstr ""
 
-#: includes/admin/admin-notices.php:312
+#: includes/admin/admin-notices.php:352
 msgid "Unable to make payment to employee."
 msgstr ""
 
-#: includes/admin/admin-notices.php:320
+#: includes/admin/admin-notices.php:360
 msgid "Unable to make payment to employees."
 msgstr ""
 
-#: includes/admin/admin-notices.php:328
+#: includes/admin/admin-notices.php:368
 msgid "Not all employees could be paid."
 msgstr ""
 
-#: includes/admin/admin-notices.php:336
+#: includes/admin/admin-notices.php:376
 msgid "Employee successfully paid."
 msgstr ""
 
-#: includes/admin/admin-notices.php:344
+#: includes/admin/admin-notices.php:384
 msgid "Employees successfully paid."
 msgstr ""
 
-#: includes/admin/admin-notices.php:352
+#: includes/admin/admin-notices.php:392
 msgid "%1$s %2$s successfully rejected."
 msgid_plural "%1$s %3$s successfully rejected."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/admin-notices.php:364
+#: includes/admin/admin-notices.php:404
 msgid "Errors were encountered."
 msgstr ""
 
-#: includes/admin/admin-notices.php:372
+#: includes/admin/admin-notices.php:412
 msgid "API keys generated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:380
+#: includes/admin/admin-notices.php:420
 msgid "API keys re-generated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:388
+#: includes/admin/admin-notices.php:428
 msgid "API keys revoked."
 msgstr ""
 
-#: includes/admin/admin-notices.php:396
+#: includes/admin/admin-notices.php:436
 msgid "Generating API keys failed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:404
+#: includes/admin/admin-notices.php:444
 msgid "Task status updated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:412
+#: includes/admin/admin-notices.php:452
 msgid "Task status could not be updated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:420
+#: includes/admin/admin-notices.php:460
 msgid "Task executed successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:428
+#: includes/admin/admin-notices.php:468
 msgid "Task could not be executed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:436
+#: includes/admin/admin-notices.php:476
 msgid "Task updated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:444
+#: includes/admin/admin-notices.php:484
 msgid "Task update failed."
 msgstr ""
 
-#: includes/admin/admin-notices.php:452
+#: includes/admin/admin-notices.php:492
 msgid "Settings sucessfully imported."
 msgstr ""
 
-#: includes/admin/admin-notices.php:461
-msgid "Absence added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:470
-msgid "Absence could not be added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:479
-msgid "Absence deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:488
-msgid "Absence could not be deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:509
+#: includes/admin/admin-notices.php:513
 msgid ""
 "<strong>Awesome!</strong> It looks like you have using MDJM Event "
 "Management for a while now which is really fantastic!"
 msgstr ""
 
-#: includes/admin/admin-notices.php:513
+#: includes/admin/admin-notices.php:517
 msgid ""
 "Would you <strong>please</strong> do us a favour and leave a 5 star rating "
 "on WordPress.org? It only takes a minute and it <strong>really "
@@ -247,9 +247,94 @@ msgid ""
 msgstr ""
 
 #: includes/admin/availability/availability-actions.php:23
-#: includes/admin/availability/availability-actions.php:60
-#: includes/admin/availability/availability-actions.php:94
 msgid "Security failure"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:26
+#: includes/scripts.php:378
+msgid "Show absence form"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:101
+#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1295
+#: includes/admin/events/metaboxes.php:2383
+#: includes/admin/events/metaboxes.php:2449
+#: includes/admin/reporting/class-mdjm-export-earnings.php:64
+#: includes/admin/reporting/class-mdjm-export.php:90
+#: includes/admin/reporting/export/class-batch-export-events.php:45
+#: includes/admin/reporting/export/class-batch-export-txns.php:44
+#: includes/admin/templates/contracts.php:26
+#: includes/admin/templates/emails.php:24
+#: includes/admin/transactions/txns.php:23
+#: includes/events/event-functions.php:1530 includes/payments/payments.php:621
+msgid "Date"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:125
+msgid "Checking all employees"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:133
+#: includes/admin/reporting/export/class-batch-export-employees.php:47
+#: includes/admin/users/class-mdjm-employee-manager.php:616
+msgid "Roles"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:139
+msgid "Checking all roles"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:153
+#: includes/shortcodes.php:454 includes/widgets.php:258
+msgid "Check Availability"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:201
+msgid "Add Employee Absence"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:205
+#: includes/admin/reporting/class-mdjm-employees-reports-table.php:88
+msgid "Employee"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:223
+#: includes/admin/communications/comms.php:24
+#: includes/admin/reporting/graphing-functions.php:733
+msgid "From"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:238
+#: includes/admin/reporting/graphing-functions.php:749
+msgid "To"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:254
+msgid "All day?"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:265
+msgid "Start time"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:282
+msgid "End time"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:300
+#: includes/admin/events/class-mdjm-playlist-table.php:262
+#: includes/admin/events/class-mdjm-playlist-table.php:472
+#: includes/admin/events/playlist-page.php:157
+#: templates/playlist/playlist-client.php:185
+msgid "Notes"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:304
+msgid "i.e. On holiday"
+msgstr ""
+
+#: includes/admin/availability/availability-page.php:312
+msgid "Add Absence"
 msgstr ""
 
 #: includes/admin/class-mdjm-api-keys-table.php:54
@@ -294,7 +379,6 @@ msgstr ""
 
 #: includes/admin/communications/comms-functions.php:25
 #: includes/admin/events/playlist-page.php:21
-#: includes/admin/pages/availability.php:6
 #: includes/admin/users/class-mdjm-client-manager.php:6
 #: includes/admin/users/class-mdjm-employee-manager.php:6
 #: includes/events/event-functions.php:420
@@ -362,12 +446,12 @@ msgid "Associated %s"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:112
-#: includes/ajax-functions.php:1330
+#: includes/ajax-functions.php:1403
 msgid "from"
 msgstr ""
 
 #: includes/admin/communications/comms-functions.php:120
-#: includes/ajax-functions.php:1303
+#: includes/ajax-functions.php:1376
 msgid "Select an Event"
 msgstr ""
 
@@ -417,19 +501,13 @@ msgstr ""
 msgid "Email Subject"
 msgstr ""
 
-#: includes/admin/communications/comms.php:24
-#: includes/admin/pages/availability.php:212
-#: includes/admin/reporting/graphing-functions.php:733
-msgid "From"
-msgstr ""
-
 #: includes/admin/communications/comms.php:25
 msgid "Recipient"
 msgstr ""
 
 #: includes/admin/communications/comms.php:26
 #: includes/admin/pages/event-fields.php:823
-#: includes/admin/settings/register-settings.php:1504
+#: includes/admin/settings/register-settings.php:1572
 #: includes/admin/transactions/txns.php:28 includes/admin/venues/venues.php:27
 msgid "%s"
 msgstr ""
@@ -615,67 +693,67 @@ msgstr ""
 msgid "%s Overview"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:103
+#: includes/admin/dashboard-widgets.php:101
 msgid "MTD"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:104
+#: includes/admin/dashboard-widgets.php:102
 msgid "YTD"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:110
+#: includes/admin/dashboard-widgets.php:108
 msgid "%s Received"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:116
+#: includes/admin/dashboard-widgets.php:114
 msgid "%s Converted"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:122
+#: includes/admin/dashboard-widgets.php:120
 msgid "%s Completed"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:128
+#: includes/admin/dashboard-widgets.php:126
 #: includes/admin/reporting/export/class-batch-export-txns.php:46
 #: includes/admin/reporting/graphing-functions.php:604
 #: includes/post-types.php:856
 msgid "Income"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:134
+#: includes/admin/dashboard-widgets.php:132
 msgid "Outgoings"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:140
+#: includes/admin/dashboard-widgets.php:138
 #: includes/admin/reporting/class-mdjm-export-earnings.php:66
 #: includes/admin/reporting/graphing-functions.php:258
 #: includes/admin/reporting/reporting-functions.php:55
 msgid "Earnings"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:150
+#: includes/admin/dashboard-widgets.php:148
 msgid "<a href=\"%s\">Create %s</a>"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:156 templates/event/event-loop.php:26
+#: includes/admin/dashboard-widgets.php:154 templates/event/event-loop.php:26
 msgid "<a href=\"%s\">Manage %s</a>"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:162
+#: includes/admin/dashboard-widgets.php:160
 msgid "<a href=\"%s\">Transactions</a>"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:167
+#: includes/admin/dashboard-widgets.php:165
 msgid "<a href=\"%s\">Settings</a>"
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:178
+#: includes/admin/dashboard-widgets.php:176
 msgid ""
 "<p>Most enquiries have been received via <strong>%s (%d)</strong> so far "
 "this month."
 msgstr ""
 
-#: includes/admin/dashboard-widgets.php:183
+#: includes/admin/dashboard-widgets.php:181
 msgid "No enquiries yet this month."
 msgstr ""
 
@@ -834,7 +912,7 @@ msgstr ""
 #: includes/admin/equipment/metaboxes.php:254
 #: includes/admin/equipment/metaboxes.php:489
 #: includes/admin/equipment/metaboxes.php:736
-#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:338
+#: includes/admin/equipment/metaboxes.php:877 includes/scripts.php:371
 msgid "Select Months"
 msgstr ""
 
@@ -869,6 +947,7 @@ msgstr ""
 
 #: includes/admin/equipment/metaboxes.php:414
 #: includes/admin/equipment/metaboxes.php:802
+#: includes/availability/availability-functions.php:79
 msgid "Month"
 msgstr ""
 
@@ -896,8 +975,8 @@ msgstr ""
 #: includes/admin/events/class-mdjm-playlist-table.php:259
 #: includes/admin/events/class-mdjm-playlist-table.php:439
 #: includes/admin/events/events.php:254
-#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:176
-#: includes/ajax-functions.php:314 templates/playlist/playlist-client.php:37
+#: includes/admin/events/playlist-page.php:154 includes/ajax-functions.php:249
+#: includes/ajax-functions.php:387 templates/playlist/playlist-client.php:37
 #: templates/playlist/playlist-guest.php:50
 msgid "Song"
 msgstr ""
@@ -917,13 +996,6 @@ msgstr ""
 #: includes/admin/events/playlist-page.php:156
 #: templates/playlist/playlist-client.php:39
 msgid "Category"
-msgstr ""
-
-#: includes/admin/events/class-mdjm-playlist-table.php:262
-#: includes/admin/events/class-mdjm-playlist-table.php:472
-#: includes/admin/events/playlist-page.php:157
-#: templates/playlist/playlist-client.php:185
-msgid "Notes"
 msgstr ""
 
 #: includes/admin/events/class-mdjm-playlist-table.php:263
@@ -1255,21 +1327,6 @@ msgstr ""
 msgid "Playlist for %s ID {contract_id}"
 msgstr ""
 
-#: includes/admin/events/events.php:21 includes/admin/events/metaboxes.php:1295
-#: includes/admin/events/metaboxes.php:2383
-#: includes/admin/events/metaboxes.php:2449
-#: includes/admin/pages/availability.php:234
-#: includes/admin/reporting/class-mdjm-export-earnings.php:64
-#: includes/admin/reporting/class-mdjm-export.php:90
-#: includes/admin/reporting/export/class-batch-export-events.php:45
-#: includes/admin/reporting/export/class-batch-export-txns.php:44
-#: includes/admin/templates/contracts.php:26
-#: includes/admin/templates/emails.php:24
-#: includes/admin/transactions/txns.php:23
-#: includes/events/event-functions.php:1530 includes/payments/payments.php:621
-msgid "Date"
-msgstr ""
-
 #: includes/admin/events/events.php:22
 #: includes/admin/reporting/export/class-batch-export-events.php:44
 #: includes/payments/payments.php:619
@@ -1297,7 +1354,7 @@ msgstr ""
 #: includes/admin/tasks/class-mdjm-tasks-table.php:246
 #: includes/admin/users/class-mdjm-client-manager.php:149
 #: includes/admin/users/class-mdjm-employee-manager.php:69
-#: includes/ajax-functions.php:313 templates/playlist/playlist-guest.php:46
+#: includes/ajax-functions.php:386 templates/playlist/playlist-guest.php:46
 msgid "Name"
 msgstr ""
 
@@ -1370,7 +1427,6 @@ msgid "All Client's"
 msgstr ""
 
 #: includes/admin/events/events.php:615
-#: includes/admin/pages/availability.php:251
 #: includes/admin/users/class-mdjm-client-manager.php:321
 #: includes/admin/users/class-mdjm-employee-manager.php:286
 msgid "All"
@@ -1414,19 +1470,19 @@ msgstr ""
 msgid "Client Address"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:29 includes/scripts.php:347
+#: includes/admin/events/metaboxes.php:29 includes/scripts.php:384
 msgid "Show client details"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:32 includes/scripts.php:345
+#: includes/admin/events/metaboxes.php:32 includes/scripts.php:382
 msgid "Show client form"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:51 includes/scripts.php:349
+#: includes/admin/events/metaboxes.php:51 includes/scripts.php:386
 msgid "Show %s options"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:56 includes/scripts.php:351
+#: includes/admin/events/metaboxes.php:56 includes/scripts.php:388
 msgid "Show %s workers"
 msgstr ""
 
@@ -1434,7 +1490,7 @@ msgstr ""
 msgid "Add %s type"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:65 includes/scripts.php:353
+#: includes/admin/events/metaboxes.php:65 includes/scripts.php:390
 msgid "Show venue"
 msgstr ""
 
@@ -1462,7 +1518,7 @@ msgstr ""
 
 #: includes/admin/events/metaboxes.php:420
 #: includes/admin/settings/contextual-help.php:81
-#: includes/admin/settings/register-settings.php:1507 includes/install.php:129
+#: includes/admin/settings/register-settings.php:1575 includes/install.php:129
 msgid "Payments"
 msgstr ""
 
@@ -1661,7 +1717,6 @@ msgid "Last Login"
 msgstr ""
 
 #: includes/admin/events/metaboxes.php:1145
-#: includes/admin/pages/availability.php:206
 msgid "Select %s"
 msgstr ""
 
@@ -1720,8 +1775,8 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:1492 includes/ajax-functions.php:1124
-#: includes/ajax-functions.php:1372
+#: includes/admin/events/metaboxes.php:1492 includes/ajax-functions.php:1197
+#: includes/ajax-functions.php:1445
 msgid "Select Add-ons"
 msgstr ""
 
@@ -1886,11 +1941,11 @@ msgstr ""
 msgid "Direction:"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2301 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2301 includes/ajax-functions.php:809
 msgid "Incoming"
 msgstr ""
 
-#: includes/admin/events/metaboxes.php:2302 includes/ajax-functions.php:736
+#: includes/admin/events/metaboxes.php:2302 includes/ajax-functions.php:809
 msgid "Outgoing"
 msgstr ""
 
@@ -2134,7 +2189,7 @@ msgstr ""
 
 #: includes/admin/menu.php:83 includes/admin/plugins.php:46
 #: includes/admin/settings/contextual-help.php:88
-#: includes/admin/settings/register-settings.php:1511
+#: includes/admin/settings/register-settings.php:1579
 #: includes/admin/welcome.php:434
 msgid "Extensions"
 msgstr ""
@@ -2204,7 +2259,7 @@ msgid "MDJM Settings"
 msgstr ""
 
 #: includes/admin/menu.php:213 includes/admin/settings/contextual-help.php:53
-#: includes/admin/settings/register-settings.php:1503 includes/install.php:459
+#: includes/admin/settings/register-settings.php:1571 includes/install.php:459
 #: includes/install.php:708
 msgid "General"
 msgstr ""
@@ -2240,13 +2295,13 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:813
 #: includes/admin/settings/register-settings.php:866
 #: includes/admin/settings/register-settings.php:1098
-#: includes/admin/settings/register-settings.php:1560
-#: includes/admin/settings/register-settings.php:1570
+#: includes/admin/settings/register-settings.php:1630
+#: includes/admin/settings/register-settings.php:1640
 msgid "%s Settings"
 msgstr ""
 
 #: includes/admin/menu.php:264
-#: includes/admin/settings/register-settings.php:1576
+#: includes/admin/settings/register-settings.php:1646
 msgid "Payment Settings"
 msgstr ""
 
@@ -2254,7 +2309,7 @@ msgstr ""
 msgid "MDJM Payment Settings"
 msgstr ""
 
-#: includes/admin/menu.php:325 includes/class-mdjm-html-elements.php:466
+#: includes/admin/menu.php:325 includes/class-mdjm-html-elements.php:470
 msgid "Add New Client"
 msgstr ""
 
@@ -2340,66 +2395,6 @@ msgstr ""
 
 #: includes/admin/menu.php:559
 msgid "MDJM Support Forums"
-msgstr ""
-
-#: includes/admin/pages/availability.php:7
-msgid "You are not allowed to access this page."
-msgstr ""
-
-#: includes/admin/pages/availability.php:63
-msgid "available on"
-msgstr ""
-
-#: includes/admin/pages/availability.php:83
-msgid " Employee"
-msgid_plural " Employees"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/admin/pages/availability.php:107
-msgid "No %s available on %s"
-msgstr ""
-
-#: includes/admin/pages/availability.php:107
-msgid "or"
-msgstr ""
-
-#: includes/admin/pages/availability.php:110
-msgid "No employee available on %s"
-msgstr ""
-
-#: includes/admin/pages/availability.php:114
-msgid "%s is not available on %s"
-msgstr ""
-
-#: includes/admin/pages/availability.php:189
-msgid "Quick Absence Entry"
-msgstr ""
-
-#: includes/admin/pages/availability.php:192
-msgid "Employee:"
-msgstr ""
-
-#: includes/admin/pages/availability.php:216
-#: includes/admin/reporting/graphing-functions.php:749
-msgid "To"
-msgstr ""
-
-#: includes/admin/pages/availability.php:231
-msgid "Check Employee Availability"
-msgstr ""
-
-#: includes/admin/pages/availability.php:239
-#: includes/admin/reporting/class-mdjm-employees-reports-table.php:88
-msgid "Employee"
-msgstr ""
-
-#: includes/admin/pages/availability.php:262
-msgid "or Roles"
-msgstr ""
-
-#: includes/admin/pages/availability.php:267
-msgid "You cannot view roles"
 msgstr ""
 
 #: includes/admin/pages/client-fields.php:40
@@ -2501,7 +2496,7 @@ msgstr ""
 msgid " Field"
 msgstr ""
 
-#: includes/admin/pages/client-fields.php:241 includes/widgets.php:282
+#: includes/admin/pages/client-fields.php:241 includes/widgets.php:284
 msgid "Field Label"
 msgstr ""
 
@@ -2633,7 +2628,7 @@ msgstr ""
 msgid "Checked Checkbox Field"
 msgstr ""
 
-#: includes/admin/pages/event-fields.php:747 includes/scripts.php:357
+#: includes/admin/pages/event-fields.php:747 includes/scripts.php:394
 msgid "Type to search all options"
 msgstr ""
 
@@ -2809,11 +2804,6 @@ msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-clients.php:47
 msgid "Client Value"
-msgstr ""
-
-#: includes/admin/reporting/export/class-batch-export-employees.php:47
-#: includes/admin/users/class-mdjm-employee-manager.php:616
-msgid "Roles"
 msgstr ""
 
 #: includes/admin/reporting/export/class-batch-export-employees.php:49
@@ -3259,7 +3249,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:68
-#: includes/admin/settings/register-settings.php:1505
+#: includes/admin/settings/register-settings.php:1573
 msgid "Emails &amp; Templates"
 msgstr ""
 
@@ -3290,7 +3280,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:94
-#: includes/admin/settings/register-settings.php:1514
+#: includes/admin/settings/register-settings.php:1582
 msgid "Licenses"
 msgstr ""
 
@@ -3500,7 +3490,7 @@ msgid "Log and track all client &amp; %s actions (recommended)."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:463
-#: includes/admin/settings/register-settings.php:1561
+#: includes/admin/settings/register-settings.php:1631
 msgid "Playlist Settings"
 msgstr ""
 
@@ -3593,7 +3583,7 @@ msgid "Enquire Now"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:546
-#: includes/admin/settings/register-settings.php:1563
+#: includes/admin/settings/register-settings.php:1633
 msgid "Travel Settings"
 msgstr ""
 
@@ -4029,7 +4019,7 @@ msgstr ""
 msgid "CTRL (cmd on MAC) + Click to select employee roles that need to be available"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:993 includes/widgets.php:273
+#: includes/admin/settings/register-settings.php:993 includes/widgets.php:275
 msgid "Use Ajax?"
 msgstr ""
 
@@ -4049,11 +4039,11 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:1003
 #: includes/admin/settings/register-settings.php:1018 includes/widgets.php:304
-#: includes/widgets.php:324
+#: includes/widgets.php:320
 msgid "NO REDIRECT - USE TEXT"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1008 includes/widgets.php:312
+#: includes/admin/settings/register-settings.php:1008 includes/widgets.php:310
 msgid "Available Text"
 msgstr ""
 
@@ -4079,7 +4069,7 @@ msgid ""
 "is not successful"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1023 includes/widgets.php:332
+#: includes/admin/settings/register-settings.php:1023 includes/widgets.php:326
 msgid "Unavailable Text"
 msgstr ""
 
@@ -4488,68 +4478,136 @@ msgstr ""
 msgid "If Agree to Terms is checked, enter the agreement terms here."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1455
+#: includes/admin/settings/register-settings.php:1386
+msgid "Calendar Settings"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1391
+msgid "Default Availability View"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1392
+msgid "Select the default calendar view on the availability page."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1400
+msgid "Absence Background"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1401
+msgid "Select the background color of absence entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1408
+msgid "Absence Border"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1409
+msgid "Select the border color of absence entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1416
+msgid "Absence Text"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1417
+msgid "Select the text color of absence entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1424
+msgid "%s Background"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1425
+msgid "Select the background color of %s entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1432
+msgid "%s Border"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1433
+msgid "Select the border color of %s entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1440
+msgid "%s Text"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1441
+msgid "Select the text color of %s entries."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1523
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1508
+#: includes/admin/settings/register-settings.php:1576
 msgid "Compliance"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1556
+#: includes/admin/settings/register-settings.php:1585
+msgid "Misc"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1626
 msgid "Application Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1557
+#: includes/admin/settings/register-settings.php:1627
 msgid "Debug Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1562
+#: includes/admin/settings/register-settings.php:1632
 msgid "Packages &amp; Add-ons"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1566
+#: includes/admin/settings/register-settings.php:1636
 msgid "General Email Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1567
+#: includes/admin/settings/register-settings.php:1637
 msgid "%s Templates"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1571
+#: includes/admin/settings/register-settings.php:1641
 msgid "Styles"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1572
+#: includes/admin/settings/register-settings.php:1642
 msgid "Pages"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1573 includes/widgets.php:252
+#: includes/admin/settings/register-settings.php:1643 includes/widgets.php:252
 msgid "Availability Checker"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1577
+#: includes/admin/settings/register-settings.php:1647
 msgid "Employee Payments"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1578
+#: includes/admin/settings/register-settings.php:1648
 msgid "Receipts"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1581
+#: includes/admin/settings/register-settings.php:1651
 msgid "Privacy Policy"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1582
+#: includes/admin/settings/register-settings.php:1652
 #: includes/privacy-functions.php:550
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1585
+#: includes/admin/settings/register-settings.php:1655
 msgid "Main"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1616
+#: includes/admin/settings/register-settings.php:1659
+msgid "Availability Calendar"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1689
 #: includes/admin/users/class-mdjm-employee-manager.php:243
 #: includes/admin/users/class-mdjm-employee-manager.php:644
 #: includes/admin/users/class-mdjm-employee-manager.php:660
@@ -4564,84 +4622,84 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1980
+#: includes/admin/settings/register-settings.php:2053
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2167
+#: includes/admin/settings/register-settings.php:2240
 msgid "Upload File"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2249
+#: includes/admin/settings/register-settings.php:2322
 msgid ""
 "Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Renew your license key\">renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2262
+#: includes/admin/settings/register-settings.php:2335
 msgid ""
 "Your license key has been disabled. Please <a href=\"%s\" "
 "target=\"_blank\">contact support</a> for more information."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2274
+#: includes/admin/settings/register-settings.php:2347
 msgid ""
 "Invalid license. Please <a href=\"%s\" target=\"_blank\" title=\"Visit "
 "account page\">visit your account page</a> and verify it."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2287
+#: includes/admin/settings/register-settings.php:2360
 msgid ""
 "Your %s is not active for this URL. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Visit account page\">visit your account page</a> to manage your "
 "license key URLs."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2299
+#: includes/admin/settings/register-settings.php:2372
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2308
+#: includes/admin/settings/register-settings.php:2381
 msgid ""
 "Your license key has reached its activation limit. <a href=\"%s\">View "
 "possible upgrades</a> now."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2317
+#: includes/admin/settings/register-settings.php:2390
 msgid ""
 "The key you entered belongs to a bundle, please use the product specific "
 "license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2325
+#: includes/admin/settings/register-settings.php:2398
 msgid "unknown_error"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2326
+#: includes/admin/settings/register-settings.php:2399
 msgid ""
 "There was an error with this license key: %s. Please <a href=\"%s\">contact "
 "our support team</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2347
+#: includes/admin/settings/register-settings.php:2420
 msgid "License key never expires."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2354
+#: includes/admin/settings/register-settings.php:2427
 msgid ""
 "Your license key expires soon! It expires on %s. <a href=\"%s\" "
 "target=\"_blank\" title=\"Renew license\">Renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2364
+#: includes/admin/settings/register-settings.php:2437
 msgid "Your license key expires on %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2382
+#: includes/admin/settings/register-settings.php:2455
 msgid "To receive updates, please enter your valid %s license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2395
+#: includes/admin/settings/register-settings.php:2468
 msgid "Deactivate License"
 msgstr ""
 
@@ -5034,7 +5092,7 @@ msgid "<a class=\"page-title-action\" href=\"%s\">Edit %s</a>"
 msgstr ""
 
 #: includes/admin/transactions/metaboxes.php:277
-#: includes/ajax-functions.php:922
+#: includes/ajax-functions.php:995
 msgid "Select Transaction Type"
 msgstr ""
 
@@ -5874,106 +5932,106 @@ msgstr ""
 msgid "No valid changelog was found."
 msgstr ""
 
-#: includes/ajax-functions.php:62 includes/ajax-functions.php:145
-#: includes/ajax-functions.php:170 includes/ajax-functions.php:307
+#: includes/ajax-functions.php:135 includes/ajax-functions.php:218
+#: includes/ajax-functions.php:243 includes/ajax-functions.php:380
 msgid "An error occured"
 msgstr ""
 
-#: includes/ajax-functions.php:79 includes/ajax-functions.php:184
-#: includes/ajax-functions.php:322
+#: includes/ajax-functions.php:152 includes/ajax-functions.php:257
+#: includes/ajax-functions.php:395
 msgid "%s is a required field"
 msgstr ""
 
-#: includes/ajax-functions.php:88
+#: includes/ajax-functions.php:161
 msgid "%s is not a valid email address"
 msgstr ""
 
-#: includes/ajax-functions.php:128
+#: includes/ajax-functions.php:201
 msgid "Passwords do not match"
 msgstr ""
 
-#: includes/ajax-functions.php:236 includes/ajax-functions.php:354
+#: includes/ajax-functions.php:309 includes/ajax-functions.php:427
 #: templates/playlist/playlist-client.php:47
 msgid "Remove"
 msgstr ""
 
-#: includes/ajax-functions.php:246 includes/ajax-functions.php:283
+#: includes/ajax-functions.php:319 includes/ajax-functions.php:356
 #: templates/playlist/playlist-client.php:168
 msgid "song"
 msgid_plural "songs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/ajax-functions.php:451
+#: includes/ajax-functions.php:524
 msgid "Email address is invalid"
 msgstr ""
 
-#: includes/ajax-functions.php:453
+#: includes/ajax-functions.php:526
 msgid "Email address is already in use"
 msgstr ""
 
-#: includes/ajax-functions.php:587
+#: includes/ajax-functions.php:660
 msgid "  - Enter Manually - "
 msgstr ""
 
-#: includes/ajax-functions.php:588
+#: includes/ajax-functions.php:661
 msgid "  - Use Client Address - "
 msgstr ""
 
-#: includes/ajax-functions.php:603
+#: includes/ajax-functions.php:676
 msgid "Unable to add venue"
 msgstr ""
 
-#: includes/ajax-functions.php:735
+#: includes/ajax-functions.php:808
 msgid "%1$s payment of %2$s received for %3$s %4$s."
 msgstr ""
 
-#: includes/ajax-functions.php:754 includes/events/event-functions.php:1297
+#: includes/ajax-functions.php:827 includes/events/event-functions.php:1297
 #: includes/events/event-functions.php:1377 includes/payments/payments.php:547
 msgid "Reason for payment"
 msgstr ""
 
-#: includes/ajax-functions.php:756 includes/events/event-functions.php:1298
+#: includes/ajax-functions.php:829 includes/events/event-functions.php:1298
 #: includes/events/event-functions.php:1378 includes/payments/payments.php:569
 msgid "Payment amount"
 msgstr ""
 
-#: includes/ajax-functions.php:758 includes/events/event-functions.php:1299
+#: includes/ajax-functions.php:831 includes/events/event-functions.php:1299
 #: includes/events/event-functions.php:1379 includes/payments/payments.php:591
 msgid "Date of payment"
 msgstr ""
 
-#: includes/ajax-functions.php:805
+#: includes/ajax-functions.php:878
 msgid "Unable to add transaction"
 msgstr ""
 
-#: includes/ajax-functions.php:829
+#: includes/ajax-functions.php:902
 msgid "Enter a name for the new Event Type"
 msgstr ""
 
-#: includes/ajax-functions.php:1135
+#: includes/ajax-functions.php:1208
 msgid "No packages or addons available"
 msgstr ""
 
-#: includes/ajax-functions.php:1141 includes/ajax-functions.php:1144
-#: includes/class-mdjm-html-elements.php:647
+#: includes/ajax-functions.php:1214 includes/ajax-functions.php:1217
+#: includes/class-mdjm-html-elements.php:651
 msgid "No Packages Available"
 msgstr ""
 
-#: includes/ajax-functions.php:1147
+#: includes/ajax-functions.php:1220
 msgid "No Addons Available"
 msgstr ""
 
-#: includes/ajax-functions.php:1204
+#: includes/ajax-functions.php:1277
 msgid "Unable to add employee"
 msgstr ""
 
-#: includes/ajax-functions.php:1277
+#: includes/ajax-functions.php:1350
 msgid "Unable to retrieve template content"
 msgstr ""
 
-#: includes/ajax-functions.php:1383 includes/api/class-mdjm-api.php:1347
-#: includes/api/class-mdjm-api.php:1348
+#: includes/ajax-functions.php:1456 includes/api/class-mdjm-api.php:1344
+#: includes/api/class-mdjm-api.php:1345
 #: includes/equipment/equipment-functions.php:1613
 #: includes/equipment/equipment-functions.php:1623 includes/shortcodes.php:571
 msgid "No addons available"
@@ -6007,54 +6065,115 @@ msgstr ""
 msgid "You do not have permission to %s API keys for this user"
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:815
+#: includes/api/class-mdjm-api.php:812
 msgid "Error retrieving client."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:822
+#: includes/api/class-mdjm-api.php:819
 msgid "Client could not be found."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:886
+#: includes/api/class-mdjm-api.php:883
 msgid "Employee could not be found."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:893
+#: includes/api/class-mdjm-api.php:890
 msgid "Error retrieving employee."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:971
+#: includes/api/class-mdjm-api.php:968
 msgid "%s does not exist."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1023
+#: includes/api/class-mdjm-api.php:1020
 msgid "No %s found."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1071
+#: includes/api/class-mdjm-api.php:1068
 msgid "Package does not exist."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1123 includes/post-types.php:91
+#: includes/api/class-mdjm-api.php:1120 includes/post-types.php:91
 msgid "No packages found."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1176
+#: includes/api/class-mdjm-api.php:1173
 #: includes/equipment/equipment-functions.php:752
 #: includes/equipment/equipment-functions.php:762
 msgid "No packages available"
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1209
+#: includes/api/class-mdjm-api.php:1206
 msgid "Addon does not exist."
 msgstr ""
 
-#: includes/api/class-mdjm-api.php:1287 includes/post-types.php:135
+#: includes/api/class-mdjm-api.php:1284 includes/post-types.php:135
 msgid "No addons found."
 msgstr ""
 
-#: includes/availability/availability-functions.php:152
-msgid "Ooops, an error occured."
+#: includes/availability/availability-functions.php:77
+msgid "Day"
+msgstr ""
+
+#: includes/availability/availability-functions.php:78
+msgid "List"
+msgstr ""
+
+#: includes/availability/availability-functions.php:80
+msgid "Week"
+msgstr ""
+
+#: includes/availability/availability-functions.php:283
+msgid "Status: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:284
+#: includes/clientzone-functions.php:125
+msgid "Date: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:285
+msgid "Start: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:286
+msgid "Finish: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:287
+msgid "Setup: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:288
+msgid "Cost: %s"
+msgstr ""
+
+#: includes/availability/availability-functions.php:289
+msgid "Employees: %s"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:393
+msgid "Unknown"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:397
+msgid "Absence"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:403
+msgid "From: %s"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:404
+msgid "To: %s"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:416
+msgid "Delete entry"
+msgstr ""
+
+#: includes/availability/class-mdjm-availability-checker.php:494
+msgid "View %s"
 msgstr ""
 
 #: includes/class-mdjm-cron.php:37
@@ -6163,47 +6282,51 @@ msgstr ""
 msgid "No Employees"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:449
+#: includes/class-mdjm-html-elements.php:414
+msgid "Type to search all roles"
+msgstr ""
+
+#: includes/class-mdjm-html-elements.php:453
 msgid "Type to search all clients"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:515
+#: includes/class-mdjm-html-elements.php:519
 msgid "Type to search all users"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:561
+#: includes/class-mdjm-html-elements.php:565
 msgid "No Package"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:568
+#: includes/class-mdjm-html-elements.php:572
 msgid "Select a Package"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:577
+#: includes/class-mdjm-html-elements.php:581
 msgid "Type to search all packages"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:673
+#: includes/class-mdjm-html-elements.php:677
 msgid "No Addons"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:691
+#: includes/class-mdjm-html-elements.php:695
 msgid "Type to search all addons"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:911
+#: includes/class-mdjm-html-elements.php:915
 msgid "AM"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:912
+#: includes/class-mdjm-html-elements.php:916
 msgid "PM"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:1466
+#: includes/class-mdjm-html-elements.php:1470
 msgid "Enter username"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:1481
+#: includes/class-mdjm-html-elements.php:1485
 msgid "Cancel"
 msgstr ""
 
@@ -6300,10 +6423,6 @@ msgstr ""
 
 #: includes/clientzone-functions.php:118
 msgid "<a href=\"%s\">%s ID: %s</a>"
-msgstr ""
-
-#: includes/clientzone-functions.php:125
-msgid "Date: %s"
 msgstr ""
 
 #: includes/clientzone-functions.php:135
@@ -7788,27 +7907,6 @@ msgstr ""
 msgid "MDJM Bot"
 msgstr ""
 
-#: includes/mdjm-functions.php:373
-msgid ""
-"ERROR: %s were set as %s.%sContact \n"
-"\t\t\t\t%sMDJM Support%s with details of any errors that are displayed on "
-"your screen."
-msgstr ""
-
-#: includes/mdjm-functions.php:383
-msgid "WARNING: Some errors occured and only %s out of %s %s were set as %s."
-msgstr ""
-
-#: includes/mdjm-functions.php:386 includes/mdjm-functions.php:393
-msgid "user"
-msgid_plural "users"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/mdjm-functions.php:391
-msgid "%s %s successfully marked as %s."
-msgstr ""
-
 #: includes/misc-functions.php:366
 msgid "Login Required"
 msgstr ""
@@ -9007,83 +9105,95 @@ msgstr ""
 msgid "Suggest Song"
 msgstr ""
 
-#: includes/scripts.php:329
+#: includes/scripts.php:362
 msgid "Enter an email address for the client"
 msgstr ""
 
-#: includes/scripts.php:330
+#: includes/scripts.php:363
 msgid "Enter a first name for the client"
 msgstr ""
 
-#: includes/scripts.php:331
+#: includes/scripts.php:364
 msgid "Enter a transaction value"
 msgstr ""
 
-#: includes/scripts.php:332
+#: includes/scripts.php:365
 msgid "Enter a transaction date"
 msgstr ""
 
-#: includes/scripts.php:333
+#: includes/scripts.php:366
 msgid "What is the transaction for?"
 msgstr ""
 
-#: includes/scripts.php:334
+#: includes/scripts.php:367
 msgid "Enter a transaction source"
 msgstr ""
 
-#: includes/scripts.php:335
+#: includes/scripts.php:368
 msgid "Enter a name for the venue"
 msgstr ""
 
-#: includes/scripts.php:336
+#: includes/scripts.php:369
 msgid "You must have a pricing option for at least one month"
 msgstr ""
 
-#: includes/scripts.php:337
+#: includes/scripts.php:370
 msgid "Select at least one Add-on"
 msgstr ""
 
-#: includes/scripts.php:342
+#: includes/scripts.php:375
 msgid "Are you sure you want to save this %s with a total cost of %s?"
 msgstr ""
 
-#: includes/scripts.php:343
+#: includes/scripts.php:376
 msgid "Do you want to auto set the setup time?"
 msgstr ""
 
-#: includes/scripts.php:346
+#: includes/scripts.php:379
+msgid "Hide absence form"
+msgstr ""
+
+#: includes/scripts.php:380
+msgid "Show availability checker"
+msgstr ""
+
+#: includes/scripts.php:381
+msgid "Hide availability checker"
+msgstr ""
+
+#: includes/scripts.php:383
 msgid "Hide client form"
 msgstr ""
 
-#: includes/scripts.php:348
+#: includes/scripts.php:385
 msgid "Hide client details"
 msgstr ""
 
-#: includes/scripts.php:350
+#: includes/scripts.php:387
 msgid "Hide %s options"
 msgstr ""
 
-#: includes/scripts.php:352
+#: includes/scripts.php:389
 msgid "Hide %s workers"
 msgstr ""
 
-#: includes/scripts.php:354
+#: includes/scripts.php:391
 msgid "Hide venue"
 msgstr ""
 
-#: includes/scripts.php:355
+#: includes/scripts.php:392
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:356
+#: includes/scripts.php:393
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:358
+#: includes/scripts.php:395
 msgid "Task executed successfully"
 msgstr ""
 
-#: includes/scripts.php:359
+#: includes/scripts.php:396
 msgid "Type to search"
 msgstr ""
 
@@ -9117,10 +9227,6 @@ msgstr ""
 
 #: includes/shortcodes.php:451
 msgid "Select Date"
-msgstr ""
-
-#: includes/shortcodes.php:454 includes/widgets.php:256
-msgid "Check Availability"
 msgstr ""
 
 #: includes/shortcodes.php:483 includes/shortcodes.php:494
@@ -9349,49 +9455,49 @@ msgstr ""
 msgid "Please enter a date"
 msgstr ""
 
-#: includes/widgets.php:254
+#: includes/widgets.php:255
 msgid "Check my availability for your %s by entering the date below"
 msgstr ""
 
-#: includes/widgets.php:255
+#: includes/widgets.php:257
 msgid "Select Date:"
 msgstr ""
 
-#: includes/widgets.php:259
+#: includes/widgets.php:261
 msgid "Good news, we are available on {event_date}. Please contact us now"
 msgstr ""
 
-#: includes/widgets.php:261
+#: includes/widgets.php:263
 msgid ""
 "Unfortunately we do not appear to be available on {event_date}. Why not try "
 "another date below..."
 msgstr ""
 
-#: includes/widgets.php:267
+#: includes/widgets.php:269
 msgid "Title"
 msgstr ""
 
-#: includes/widgets.php:277
+#: includes/widgets.php:279
 msgid "Intro Text"
 msgstr ""
 
-#: includes/widgets.php:287
+#: includes/widgets.php:289
 msgid "Submit Button Label"
 msgstr ""
 
-#: includes/widgets.php:292
+#: includes/widgets.php:294
 msgid "Centre Submit Button"
 msgstr ""
 
-#: includes/widgets.php:297
+#: includes/widgets.php:299
 msgid "Redirect on Available"
 msgstr ""
 
-#: includes/widgets.php:317
+#: includes/widgets.php:315
 msgid "Redirect on Unavailable"
 msgstr ""
 
-#: mobile-dj-manager.php:127
+#: mobile-dj-manager.php:129
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -9715,22 +9821,22 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-mdjm-api-keys-table.php:204
-#: includes/class-mdjm-html-elements.php:512
+#: includes/class-mdjm-html-elements.php:516
 msgctxt "no dropdown items"
 msgid "Select a User"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:446
+#: includes/class-mdjm-html-elements.php:450
 msgctxt "no dropdown items"
 msgid "Select a Client"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:445
+#: includes/class-mdjm-html-elements.php:449
 msgctxt "all dropdown items"
 msgid "All Clients"
 msgstr ""
 
-#: includes/class-mdjm-html-elements.php:511
+#: includes/class-mdjm-html-elements.php:515
 msgctxt "all dropdown items"
 msgid "All Users"
 msgstr ""
