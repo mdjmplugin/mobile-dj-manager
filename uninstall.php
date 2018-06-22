@@ -149,6 +149,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
     foreach( $custom_tables as $custom_table )  {
         $table_name = $wpdb->prefix . $custom_table;
         $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+        delete_option( $table_name . '_db_version' );
     }
 
 	// Remove any transients and options we've left behind
