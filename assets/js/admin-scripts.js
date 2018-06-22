@@ -322,8 +322,7 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#add-absence', function(e)	{
                 e.preventDefault();
 
-				var button            = $(this),
-                    employee_id       = $('#absence_employee_id').val(),
+				var employee_id       = $('#absence_employee_id').val(),
 					start_date        = $('#absence_start').val(),
 					end_date          = $('#absence_end').val(),
 					all_day           = $('#absence_all_day').is(':checked') ? 1 : 0,
@@ -417,7 +416,7 @@ jQuery(document).ready(function ($) {
                 var postData = {
                     id     : $(this).data('entry'),
                     action : 'mdjm_delete_employee_absence'
-                }
+                };
 
                 $.ajax({
                     type: 'POST',
@@ -444,8 +443,7 @@ jQuery(document).ready(function ($) {
 				var date         = $('#check_date'),
 					display_date = $('#display_date'),
 					employees    = $('#display_date'),
-					roles        = $('#check_roles'),
-					notice       = $('#mdjm-pending-notice');
+					roles        = $('#check_roles');
 
 				if ( ! date.val() || ! display_date.val() )	{
 					display_date.addClass( 'mdjm-form-error' );
@@ -1994,15 +1992,6 @@ jQuery(document).ready(function ($) {
 	}
 	
 });
-
-var mdjmFormatNumberStd = function (value)	{
-	// Convert the value to a floating point number in case it arrives as a string.
-	var numeric = parseFloat(value);
-	// Specify the local currency.
-	var eventCurrency = mdjm_admin_vars.currency;
-	var decimalPlaces = mdjm_admin_vars.currency_decimals;
-	return numeric.toLocaleString(eventCurrency, { style: 'decimal', maximumFractionDigits: decimalPlaces });
-}
 
 var mdjmFormatCurrency = function (value) {
 	// Convert the value to a floating point number in case it arrives as a string.
