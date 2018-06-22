@@ -326,27 +326,29 @@ class MDJM_Availability_Checker {
             )
         ) );
 
-        foreach( $events as $event )    {
-			$mdjm_event = new MDJM_Event( $event->ID );
-            $employees  = $mdjm_event->get_all_employees();
+        if ( $events )  {
+            foreach( $events as $event )    {
+                $mdjm_event = new MDJM_Event( $event->ID );
+                $employees  = $mdjm_event->get_all_employees();
 
-            foreach( $employees as $employee_id => $data )  {
+                foreach( $employees as $employee_id => $data )  {
 
-				$this->unavailable[ $employee_id ]['event'][ $event->ID ] = array(
-					'date'   => $mdjm_event->date,
-					'end'    => $mdjm_event->get_finish_date(),
-					'finish' => $mdjm_event->get_finish_time(),
-					'start'  => $mdjm_event->get_start_time(),
-					'status' => $mdjm_event->get_status(),
-					'role'   => $data['role']
-				);
+                    $this->unavailable[ $employee_id ]['event'][ $event->ID ] = array(
+                        'date'   => $mdjm_event->date,
+                        'end'    => $mdjm_event->get_finish_date(),
+                        'finish' => $mdjm_event->get_finish_time(),
+                        'start'  => $mdjm_event->get_start_time(),
+                        'status' => $mdjm_event->get_status(),
+                        'role'   => $data['role']
+                    );
 
-                if ( ! in_array( $employee_id, $this->absentees ) ) {
-                    $this->absentees[] = $employee_id;
-                }
+                    if ( ! in_array( $employee_id, $this->absentees ) ) {
+                        $this->absentees[] = $employee_id;
+                    }
 
-                if ( false !== $key = array_search( $employee_id, $this->available ) ) {
-                    unset( $this->available[ $key ] );
+                    if ( false !== $key = array_search( $employee_id, $this->available ) ) {
+                        unset( $this->available[ $key ] );
+                    }
                 }
             }
         }
