@@ -767,3 +767,16 @@ function mdjm_get_djs( $role = 'dj' )	{
 		$role == 'dj' ? array( 'administrator', $role ) : $role
 	);
 } // mdjm_get_djs
+
+/*
+ * Check the availability of the Employee('s) on the given date (Y-m-d)
+ *
+ * @param	int				$employees	Optional: The user ID of the employee, if empty we'll check all
+ * @param	arr				$roles	Optional: If no $dj is set, we can check an array of role names
+ * @param	string|array	$date	The date (Y-m-d) to check
+ * @return	array			$status	array of user id's (['available'] | ['unavailable']
+ */
+function dj_available( $employees = '', $roles = '', $date = '' )	{
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_do_availability_check()' );
+    return mdjm_do_availability_check( $date, $employees, $roles );
+} // dj_available
