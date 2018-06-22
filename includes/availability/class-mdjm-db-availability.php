@@ -325,8 +325,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
                     $where .= " AND `start` <= '{$start}'";
                     $where .= " AND `end` >= '{$end}'";
                 } else  {
-                    $where .= " AND `start` >= '{$start}'";
-                    $where .= " AND `end` <= '{$end}'";
+                    $where .= " AND ( `start` BETWEEN '{$start}' AND '{$end}' OR `end` BETWEEN '{$start}' AND '{$end}')";
                 }
 
 			} else {
