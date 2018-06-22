@@ -168,22 +168,47 @@ add_action( 'wp_enqueue_scripts', 'mdjm_register_styles' );
  */
 function mdjm_register_admin_styles( $hook )	{
 
-	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
-	$css_dir  = MDJM_PLUGIN_URL . '/assets/css/';
-	$suffix   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-	$file     = 'mdjm-admin' . $suffix . '.css';
+	$ui_style  = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
+	$css_dir   = MDJM_PLUGIN_URL . '/assets/css/';
+	$libs_dir  = MDJM_PLUGIN_URL . '/assets/libs/';
+	$suffix    = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file      = 'mdjm-admin' . $suffix . '.css';
 
 	wp_register_style( 'jquery-chosen', $css_dir . 'chosen.css', array(), MDJM_PLUGIN_URL );
-
-	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
-	wp_enqueue_style( 'mdjm-admin' );
-	
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
 	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
 
 	wp_enqueue_style( 'jquery-chosen' );
-  	//wp_enqueue_style( 'jquery-ui' );
+  	wp_enqueue_style( 'jquery-ui-css' );
 	wp_enqueue_style( 'font-awesome' );
+
+    // Settings page color picker
+    if ( 'mdjm-event_page_mdjm-settings' == $hook ) {
+        wp_enqueue_style( 'wp-color-picker' );
+    }
+
+	// Availability calendar
+	if ( 'mdjm-event_page_mdjm-availability' == $hook )	{
+		wp_register_style(
+			'mdjm-bootstrap-css',
+			'//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+			array(),
+			MDJM_VERSION_NUM
+		);
+
+		wp_register_style(
+			'mdjm-fullcalendar-css',
+			$libs_dir . '/fullcalendar/fullcalendar' . $suffix . '.css',
+			array(),
+			MDJM_VERSION_NUM
+		);
+
+		wp_enqueue_style( 'mdjm-fullcalendar-css' );
+		wp_enqueue_style( 'mdjm-bootstrap-css' );
+	}
+
+	wp_register_style( 'mdjm-admin', $css_dir . $file, '', MDJM_VERSION_NUM );
+	wp_enqueue_style( 'mdjm-admin' );
 
 } // mdjm_register_styles
 add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
@@ -198,9 +223,17 @@ add_action( 'admin_enqueue_scripts', 'mdjm_register_admin_styles' );
  */
 function mdjm_register_admin_scripts( $hook )	{
 
-	$js_dir = MDJM_PLUGIN_URL . '/assets/js/';
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-	$file   = 'admin-scripts' . $suffix . '.js';
+	$js_dir             = MDJM_PLUGIN_URL . '/assets/js/';
+	$libs_dir           = MDJM_PLUGIN_URL . '/assets/libs/';
+	$suffix             = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$file               = 'admin-scripts' . $suffix . '.js';
+    $dashboard          = 'index.php' == $hook ? true : false;
+    $editing_event      = false;
+	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
+	$sortable           = array(
+		'admin_page_mdjm-custom-event-fields',
+		'admin_page_mdjm-custom-client-fields'
+	);
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'jquery-chosen' );
@@ -210,13 +243,6 @@ function mdjm_register_admin_scripts( $hook )	{
 	if ( strpos( $hook, 'mdjm' ) )	{
 		wp_enqueue_script( 'jquery' );
 	}
-
-	$editing_event      = false;
-	$require_validation = array( 'mdjm-event_page_mdjm-comms' );
-	$sortable           = array(
-		'admin_page_mdjm-custom-event-fields',
-		'admin_page_mdjm-custom-client-fields'
-	);
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
@@ -251,6 +277,64 @@ function mdjm_register_admin_scripts( $hook )	{
 
 	if ( in_array( $hook, $sortable ) )	{
 		wp_enqueue_script( 'jquery-ui-sortable' );
+	}
+
+    // Settings page color picker
+    if ( 'mdjm-event_page_mdjm-settings' == $hook ) {
+        wp_enqueue_script( 'wp-color-picker' );
+    }
+
+	// Availability calendar
+	if ( 'mdjm-event_page_mdjm-availability' == $hook )	{
+		wp_register_script(
+			'mdjm-moment-js',
+			$libs_dir . 'moment/moment-with-locales' . $suffix . '.js',
+			array( 'jquery' ),
+			MDJM_VERSION_NUM
+		);
+		wp_register_script(
+			'mdjm-fullcalendar-js',
+			$libs_dir . 'fullcalendar/fullcalendar' . $suffix . '.js',
+			array( 'jquery', 'mdjm-moment-js' ),
+			MDJM_VERSION_NUM
+		);
+		wp_register_script(
+			'mdjm-popper-js',
+			'//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js',
+			array( 'jquery', ),
+			MDJM_VERSION_NUM
+		);
+		wp_register_script(
+			'mdjm-bootstrap-js',
+			'//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js',
+			array( 'jquery', ),
+			MDJM_VERSION_NUM
+		);
+		wp_register_script(
+			'mdjm-availability-scripts-js',
+			$js_dir . 'availability-scripts' . $suffix . '.js',
+			array( 'jquery', 'mdjm-moment-js', 'mdjm-fullcalendar-js' ),
+			MDJM_VERSION_NUM
+		);
+
+		wp_enqueue_script( 'mdjm-moment-js' );
+		wp_enqueue_script( 'mdjm-fullcalendar-js' );
+		wp_enqueue_script( 'mdjm-popper-js' );
+		wp_enqueue_script( 'mdjm-bootstrap-js' );
+		wp_enqueue_script( 'mdjm-availability-scripts-js' );
+
+		wp_localize_script(
+			'mdjm-availability-scripts-js',
+			'mdjm_calendar_vars',
+			apply_filters(
+				'mdjm_calendar_vars',
+				array(
+                    'default_view' => mdjm_get_calendar_view( $dashboard ),
+					'first_day'    => get_option( 'start_of_week' ),
+					'time_format'  => mdjm_format_calendar_time()
+				)
+			)
+		);
 	}
 
 	wp_register_script( 'mdjm-admin-scripts', $js_dir . $file, array( 'jquery' ), MDJM_VERSION_NUM );
@@ -291,6 +375,10 @@ function mdjm_register_admin_scripts( $hook )	{
 				'zero_cost'            => sprintf( __( 'Are you sure you want to save this %s with a total cost of %s?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_currency_filter( mdjm_format_amount( '0.00' ) ) ),
                 'setup_time_change'    => __( 'Do you want to auto set the setup time?', 'mobile-dj-manager' ),
                 'setup_time_interval'  => mdjm_get_option( 'setup_time', false ),
+				'show_absence_form'    => __( 'Show absence form', 'mobile-dj-manager' ),
+                'hide_absence_form'    => __( 'Hide absence form', 'mobile-dj-manager' ),
+                'show_avail_form'      => __( 'Show availability checker', 'mobile-dj-manager' ),
+                'hide_avail_form'      => __( 'Hide availability checker', 'mobile-dj-manager' ),
                 'show_client_form'     => __( 'Show client form', 'mobile-dj-manager' ),
                 'hide_client_form'     => __( 'Hide client form', 'mobile-dj-manager' ),
                 'show_client_details'  => __( 'Show client details', 'mobile-dj-manager' ),

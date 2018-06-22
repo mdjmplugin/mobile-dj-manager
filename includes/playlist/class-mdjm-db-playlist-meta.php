@@ -46,10 +46,10 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	*/
 	public function get_columns() {
 		return array(
-			'meta_id'           => '%d',
-			'playlist_entry_id' => '%d',
-			'meta_key'          => '%s',
-			'meta_value'        => '%s'
+			'meta_id'    => '%d',
+			'entry_id'   => '%d',
+			'meta_key'   => '%s',
+			'meta_value' => '%s'
 		);
 	} // get_columns
 
@@ -165,18 +165,21 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 * @since	1.5
 	*/
 	public function create_table() {
+		global $wpdb;
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE {$this->table_name} (
 			meta_id bigint(20) NOT NULL AUTO_INCREMENT,
-			playlist_entry_id bigint(20) NOT NULL,
+			entry_id bigint(20) NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
 			PRIMARY KEY  (meta_id),
-			KEY playlist_entry_id (playlist_entry_id),
+			KEY entry_id (entry_id),
 			KEY meta_key (meta_key)
-			) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+			) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( $sql );
 

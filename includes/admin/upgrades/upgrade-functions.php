@@ -29,7 +29,6 @@ function mdjm_do_automatic_upgrades() {
 	// Version 1.3.8.5 was the last version to use the old update procedures which were applied automatically.
 	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) )	{
 		add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
-	
 	}
 
 	if ( version_compare( $mdjm_version, '1.4', '<' ) ) {
@@ -54,6 +53,10 @@ function mdjm_do_automatic_upgrades() {
 
     if ( version_compare( $mdjm_version, '1.5.4', '<' ) ) {
 		mdjm_v154_upgrades();
+	}
+
+	if ( version_compare( $mdjm_version, '1.5.6', '<' ) ) {
+		mdjm_v156_upgrades();
 	}
 
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
@@ -123,6 +126,13 @@ function mdjm_show_upgrade_notice()	{
 				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
 				mdjm_get_label_plural( true ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_pricing_15&message=1&redirect=' . mdjm_get_current_page_url() ) )
+			);
+		}
+
+        if ( version_compare( $mdjm_version, '1.5.6', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_availability_db_156' ) )	{
+			printf(
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the availability database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_availability_db_156&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
@@ -938,3 +948,172 @@ function mdjm_v154_upgrades()	{
     }
 
 } // mdjm_v154_upgrades
+
+/**
+ * 1.5.4 Upgrade.
+ *
+ * @since	1.5.4
+ * @return	void
+ */
+function mdjm_v156_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+    global $wpdb;
+
+    // Create the new database tables
+	$availability_db = MDJM()->availability_db;
+	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
+		@$availability_db->create_table();
+	}
+
+	$availability_meta_db = MDJM()->availability_meta_db;
+	if ( ! $availability_meta_db->table_exists( $availability_meta_db->table_name ) ) {
+		@$availability_meta_db->create_table();
+	}
+
+	$playlist_db = MDJM()->playlist_db;
+	if ( ! $playlist_db->table_exists( $playlist_db->table_name ) ) {
+		@$playlist_db->create_table();
+	}
+
+	$playlist_meta_db = MDJM()->playlist_meta_db;
+	if ( ! $playlist_meta_db->table_exists( $playlist_meta_db->table_name ) ) {
+		@$playlist_meta_db->create_table();
+	}
+
+    $new_settings = array(
+        'absence_background_color' => '#f7f7f7',
+        'absence_border_color'     => '#cccccc',
+        'absence_text_color'       => '#555555',
+        'event_background_color'   => '#2ea2cc',
+        'event_border_color'       => '#0074a2',
+        'event_text_color'         => '#ffffff'
+    );
+
+    foreach( $new_settings as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
+} // mdjm_v156_upgrades
+
+/**
+ * Migrate availability data to new database table.
+ *
+ * @since	1.5.6
+ * @return	void
+ */
+function mdjm_v156_upgrade_availability_db()	{
+
+	global $wpdb;
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	$number    = 10;
+	$step      = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
+	$offset    = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
+	$redirect  = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message   = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$old_table = $wpdb->prefix . 'mdjm_avail';
+
+	if ( $step < 2 ) {
+		// Check if we have any entries before moving on
+		$sql = "SELECT id FROM $old_table LIMIT 1";
+		$has_entries = $wpdb->get_col( $sql );
+
+		if ( empty( $has_entries ) ) {
+			// We had no entries, just complete
+			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
+			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
+			delete_option( 'mdjm_doing_upgrade' );
+            delete_option( 'mdjm_db_version' );
+			wp_redirect( $redirect );
+			exit;
+		} else    {
+            $all_entries = $wpdb->get_results( "SELECT * FROM $old_table" );
+            set_transient( 'mdjm_156_availability_entries', $all_entries, MONTH_IN_SECONDS );
+        }
+	}
+
+	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+	if ( empty( $total ) || $total <= 1 ) {
+		$total_sql = "SELECT COUNT(*) as total_entries FROM $old_table GROUP BY entry_id ORDER BY id ASC LIMIT 1";
+		$results   = $wpdb->get_row( $total_sql, 0 );
+
+		$total     = $results->total_entries;
+	}
+
+	$entries = $wpdb->get_results( $wpdb->prepare( 
+		"
+			SELECT * 
+			FROM $old_table
+            GROUP BY entry_id
+			ORDER BY id ASC LIMIT %d,%d;
+		", 
+		$offset, $number
+	) );
+
+	if ( $entries )	{
+		foreach( $entries as $entry )	{
+            $start = strtotime( $entry->date_from . ' 00:00:00' );
+            $end   = strtotime( '+1 day', strtotime( $entry->date_to . ' 00:00:00' ) );
+            
+            $data = array();
+            $data['event_id']    = 0;
+            $data['employee_id'] = $entry->user_id;
+            $data['all_day']     = 1;
+            $data['start']       = date( 'Y-m-d H:i:s', $start );
+            $data['end']         = date( 'Y-m-d H:i:s', $end );
+            $data['notes']       = $entry->notes;
+
+            MDJM()->availability_db->add( $data );
+
+            /*$wpdb->query( $wpdb->prepare(
+                "
+                DELETE FROM $old_table
+                WHERE entry_id = '%s'
+                ", $entry->entry_id
+            ) );*/
+		}
+
+		// Entries found so upgrade them
+		$step++;
+		$redirect = add_query_arg( array(
+			'page'         => 'mdjm-upgrades',
+			'mdjm-upgrade' => 'upgrade_availability_db_156',
+			'step'         => $step,
+			'number'       => $number,
+			'total'        => $total,
+			'redirect'     => $redirect,
+			'message'      => $message
+		), admin_url( 'index.php' ) );
+
+		wp_redirect( $redirect );
+		exit;
+
+	} else {
+		// No more events found, finish up
+		mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
+        delete_option( 'mdjm_availability_hashes' );
+		delete_option( 'mdjm_doing_upgrade' );
+        delete_option( 'mdjm_db_version' );
+
+		$url = add_query_arg( array(
+			'mdjm-message' => 'upgrade-completed'
+		), $redirect );
+
+		wp_redirect( $url );
+		exit;
+	}
+} // mdjm_v156_upgrade_event_pricing
+add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_db' );

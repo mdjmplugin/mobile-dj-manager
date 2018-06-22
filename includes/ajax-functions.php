@@ -50,6 +50,79 @@ function mdjm_ajax_dismiss_admin_notice()	{
 add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
 
 /**
+ * Retrieve employee availability data for the calendar view.
+ *
+ * @since	1.5.6
+ * @return	void
+ */
+function mdjm_calendar_activity_ajax()	{
+	$data  = array();
+	$start = $_POST['start'];
+	$end   = $_POST['end'];
+
+	$activity = mdjm_get_calendar_entries( $start, $end );
+
+	wp_send_json( $activity );
+} // mdjm_calendar_activity_ajax
+add_action( 'wp_ajax_mdjm_calendar_activity', 'mdjm_calendar_activity_ajax' );
+
+/**
+ * Adds an employee absence entry.
+ *
+ * @since	1.5.6
+ * @return	void
+ */
+function mdjm_add_employee_absence_ajax()	{
+	$employee_id = absint( $_POST['employee_id'] );
+	$start_date  = $_POST['start_date'];
+	$end_date    = $_POST['end_date'];
+	$all_day     = $_POST['all_day'];
+	$start_time  = $_POST['start_time_hr'] . ':' . $_POST['start_time_min'];
+	$end_time    = $_POST['end_time_hr'] . ':' . $_POST['end_time_min'];
+	$start_time  .= ! empty( $_POST['start_time_period'] ) ? $_POST['start_time_period'] : '';
+	$end_time    .= ! empty( $_POST['end_time_period'] )   ? $_POST['end_time_period']   : '';
+	$notes       = ! empty( $_POST['notes'] ) ? sanitize_textarea_field( $_POST['notes'] ) : '';
+
+	$data = array(
+		'employee_id'  => $employee_id,
+        'all_day'      => $all_day,
+		'start'        => $start_date,
+		'start_time'   => $start_time,
+		'end'          => $end_date,
+		'end_time'     => $end_time,
+		'notes'        => $notes
+	);
+
+    if ( mdjm_add_employee_absence( $employee_id, $data ) ) {
+        $success = true;
+    } else  {
+        $success = false;
+    }
+
+    wp_send_json( array( 'success' => $success, 'date' => $start_date ) );
+
+} // mdjm_add_employee_absence_ajax
+add_action( 'wp_ajax_mdjm_add_employee_absence', 'mdjm_add_employee_absence_ajax' );
+
+/**
+ * Removes an employee absence entry.
+ *
+ * @since   1.5.6
+ * return   void
+ */
+function mdjm_delete_employee_absence_ajax()    {
+    $id = absint( $_POST['id'] );
+    $deleted = mdjm_remove_employee_absence( $id );
+
+    if ( $deleted > 0 ) {
+        wp_send_json_success();
+    }
+
+    wp_send_json_error();
+} // mdjm_delete_employee_absence_ajax
+add_action( 'wp_ajax_mdjm_delete_employee_absence', 'mdjm_delete_employee_absence_ajax' );
+
+/**
  * Client profile update form validation
  *
  * @since   1.5
@@ -1399,35 +1472,24 @@ add_action( 'wp_ajax_nopriv_refresh_event_addon_options', 'mdjm_refresh_event_ad
  * @return	arr
  */
 function mdjm_do_availability_check_ajax()	{
-	
-	$date = $_POST['check_date'];
-	
-	$avail_text   = ! empty( $_POST['avail_text'] )   ? $_POST['avail_text']   : mdjm_get_option( 'availability_check_pass_text' );
-	$unavail_text = ! empty( $_POST['unavail_text'] ) ? $_POST['unavail_text'] : mdjm_get_option( 'availability_check_fail_text' );
-	$search       = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
-	$replace      = array( date( 'l, jS F Y', strtotime( $date ) ), mdjm_format_short_date( $date ) );
-	
-	
-	
-	$result = mdjm_do_availability_check( $date );
-	
-	if( ! empty( $result['available'] ) )	{
 
-		$result['result']  = 'available';
-		$result['message'] = str_replace( $search, $replace, $avail_text );
-		$result['message'] = mdjm_do_content_tags( $result['message'] );
+	$date       = $_POST['date'];
+	$employees  = isset ( $_POST['employees'] ) ? $_POST['employees'] : false;
+	$roles      = isset ( $_POST['roles'] )     ? $_POST['roles']     : false;
+	$short_date = mdjm_format_short_date( $date );
+	$result     = mdjm_do_availability_check( $date, $employees, $roles );
 
+	if ( ! empty( $result['available'] ) )	{
+		$result['result']       = 'available';
+		$result['notice_class'] = 'updated';
 	} else	{
-
-		$result['result'] = 'unavailable';
-		$result['message'] = str_replace( $search, $replace, $unavail_text );
-		$result['message'] = mdjm_do_content_tags( $result['message'] );
-
+		$result['result']       = 'unavailable';
+		$result['notice_class'] = 'error';
 	}
+
 	
-	echo json_encode( $result );
-	
-	die();
+
+	wp_send_json( $result );
 } // mdjm_do_availability_check_ajax
 add_action( 'wp_ajax_mdjm_do_availability_check', 'mdjm_do_availability_check_ajax' );
 add_action( 'wp_ajax_nopriv_mdjm_do_availability_check', 'mdjm_do_availability_check_ajax' );

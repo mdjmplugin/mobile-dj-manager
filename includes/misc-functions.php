@@ -212,6 +212,35 @@ function mdjm_month_num_to_name( $n, $full = false ) {
 } // mdjm_month_num_to_name
 
 /**
+ * Generate a random alphanumeric string.
+ *
+ * @since   1.5.6
+ * @param   string|int  $prefix A prefix for the string
+ * @param   string|int  $suffic A suffix for the string
+ * @param   int         $length The length of the random string
+ * @param   bool        $lower  True for lowercase, false for upper
+ */
+function mdjm_generate_random_string( $prefix = '', $suffix = '', $length = 6, $lower = true )  {
+    $range   = array_merge( range( 0, 9 ), range( 'a', 'z' ), range( 'A', 'Z' ) );
+    $string  = '';
+    $prefix .= ! empty( $prefix ) ? sanitize_text_field( $prefix ) : '';
+    $suffix .= ! empty( $suffix ) ? sanitize_text_field( $suffix ) : '';
+
+    for( $x = 0; $x < 2; $x++ )   {
+        for ( $i = 0; $i < $length; $i++ )   {
+            $string .= $range[ mt_rand( 0, count( $range ) - 1 ) ];
+        }
+
+        $string .= '';
+    }
+
+    $string = $prefix . rtrim( $string, '-' ) . $suffix;
+    $string = ! $lower ? strtoupper( $string ) : strtolower( $string );
+
+    return $string;
+} // mdjm_generate_random_string
+
+/**
  * Get PHP Arg Separator Output
  *
  * @since	1.3.8
@@ -526,11 +555,7 @@ function mdjm_has_upgrade_completed( $upgrade_action = '' )	{
  */
 function mdjm_get_completed_upgrades()	{
 
-	$completed_upgrades = get_option( 'mdjm_completed_upgrades' );
-
-	if ( false === $completed_upgrades ) {
-		$completed_upgrades = array();
-	}
+	$completed_upgrades = get_option( 'mdjm_completed_upgrades', array() );
 
 	return $completed_upgrades;
 

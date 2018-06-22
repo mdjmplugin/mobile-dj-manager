@@ -1378,6 +1378,74 @@ function mdjm_get_registered_settings()	{
 		'licenses' => apply_filters( 'mdjm_settings_licenses',
 			array()
 		),
+        'misc' => apply_filters( 'mdjm_settings_misc',
+			array(
+				'calendar'     => array(
+					'calendar_settings' => array(
+						'id'   => 'calendar_settings',
+						'name' => '<h3>' . __( 'Calendar Settings', 'mobile-dj-manager' ) . '</h3>',
+						'type' => 'header',
+					),
+                    'availability_view' => array(
+						'id'      => 'availability_view',
+						'name'    => __( 'Default Availability View', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the default calendar view on the availability page.', 'mobile-dj-manager' ),
+						'type'    => 'select',
+						'chosen'  => true,
+                        'options' => mdjm_get_calendar_views(),
+						'std'     => 'month'
+					),
+                    'absence_background_color' => array(
+						'id'      => 'absence_background_color',
+						'name'    => __( 'Absence Background', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the background color of absence entries.', 'mobile-dj-manager' ),
+						'type'    => 'color',
+                        'default' => '#f7f7f7',
+                        'std'     => '#f7f7f7'
+					),
+                    'absence_border_color' => array(
+						'id'      => 'absence_border_color',
+						'name'    => __( 'Absence Border', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the border color of absence entries.', 'mobile-dj-manager' ),
+						'type'    => 'color',
+                        'default' => '#cccccc',
+                        'std'     => '#cccccc'
+					),
+                    'absence_text_color' => array(
+						'id'      => 'absence_text_color',
+						'name'    => __( 'Absence Text', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the text color of absence entries.', 'mobile-dj-manager' ),
+						'type'    => 'color',
+                        'default' => '#555555',
+                        'std'     => '#555555'
+					),
+                    'event_background_color' => array(
+						'id'      => 'event_background_color',
+						'name'    => sprintf( __( '%s Background', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'    => sprintf( __( 'Select the background color of %s entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'    => 'color',
+                        'default' => '#2ea2cc',
+                        'std'     => '#2ea2cc'
+					),
+                    'event_border_color' => array(
+						'id'      => 'event_border_color',
+						'name'    => sprintf( __( '%s Border', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'    => sprintf( __( 'Select the border color of %s entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'    => 'color',
+                        'default' => '#0074a2',
+                        'std'     => '#0074a2'
+					),
+                    'event_text_color' => array(
+						'id'      => 'event_text_color',
+						'name'    => sprintf( __( '%s Text', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+						'desc'    => sprintf( __( 'Select the text color of %s entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'type'    => 'color',
+                        'default' => '#ffffff',
+                        'std'     => '#ffffff'
+					),
+                )
+            )
+        )
 	);
 	
 	return apply_filters( 'mdjm_registered_settings', $mdjm_settings );
@@ -1514,6 +1582,8 @@ function mdjm_get_settings_tabs() {
 		$tabs['licenses'] = __( 'Licenses', 'mobile-dj-manager' );
 	}
 
+    $tabs['misc'] = __( 'Misc', 'mobile-dj-manager' );
+
 	return apply_filters( 'mdjm_settings_tabs', $tabs );
 } // mdjm_get_settings_tabs
 
@@ -1584,7 +1654,10 @@ function mdjm_get_registered_settings_sections() {
 		'extensions' => apply_filters( 'mdjm_settings_sections_extensions', array(
 			'main'               => __( 'Main', 'mobile-dj-manager' )
 		) ),
-		'licenses'   => apply_filters( 'mdjm_settings_sections_licenses', array() )
+		'licenses'   => apply_filters( 'mdjm_settings_sections_licenses', array() ),
+        'misc' => apply_filters( 'mdjm_settings_sections_misc', array(
+			'calendar'           => __( 'Availability Calendar', 'mobile-dj-manager' )
+		) ),
 	);
 
 	$sections = apply_filters( 'mdjm_settings_sections', $sections );
@@ -2193,7 +2266,7 @@ function mdjm_color_callback( $args ) {
 	$default = isset( $args['std'] ) ? $args['std'] : '';
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="text" class="mdjm-color-field" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
+	$html = '<input type="text" class="mdjm-color-picker" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 

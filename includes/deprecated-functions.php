@@ -661,3 +661,122 @@ function mdjm_update_event_cost_from_package_ajax()	{
 
 } // mdjm_update_event_cost_from_package_ajax
 add_action( 'wp_ajax_update_event_cost_from_package', 'mdjm_update_event_cost_from_package_ajax' );
+
+/**
+ * Return all dates within the given range
+ * 
+ * @param	$str	$from_date		The start date Y-m-d
+ *			$str	$to_date		The end date Y-m-d
+ * 
+ * @return all dates between 2 given dates as an array
+ */
+function mdjm_all_dates_in_range( $from_date, $to_date )	{
+
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_get_all_dates_in_range' );
+
+    return mdjm_get_all_dates_in_range( $from_date, $to_date );
+} // mdjm_all_dates_in_range
+
+/**
+ * Insert an employee holiday into the database
+ * 
+ * 
+ * @param	arr		$args	An array of information regarding the holiday
+ *							'from_date' Y-m-d
+ *							'to_date' Y-m-d
+ *							'employee' UserID
+ *							'notes' String with information re holiday
+ * 
+ */
+function mdjm_add_holiday( $args )	{
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_add_employee_absence()' );
+
+	$employee_id = $args['employee'];
+
+    do_action( 'mdjm_before_added_holiday', $args, $date_range );
+
+    mdjm_add_employee_absence( $employee_id, $args );
+
+    do_action( 'mdjm_added_holiday', $args, $date_range );
+
+    mdjm_update_notice( 'updated', __( 'The entry was added successfully', 'mobile-dj-manager' ) );	
+} // mdjm_add_holiday
+
+/**
+ * Remove an employee holiday entry from the database
+ * 
+ * 
+ * @param	int		$entry	The database ID for the entry
+ *
+ * 
+ */
+function mdjm_remove_holiday( $entry_id )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_remove_employee_absence()' );
+
+	do_action( 'mdjm_before_remove_holiday', $entry_id );
+
+	mdjm_remove_employee_absence( $entry_id );
+} // mdjm_remove_holiday
+
+/*
+* Determine if the current user is a DJ
+* 
+* @since: 	1.1.3
+* @params: 
+* @returns:	bool	true : false
+*/
+function is_dj( $user='' )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_is_employee()' );
+	if( !empty( $user ) && user_can( $user, 'dj' ) )
+		return true;			
+
+	if( current_user_can( 'dj' ) )
+		return true;
+
+	return false;
+} // is_dj
+
+/*
+* dj_can
+* 19/03/2015
+* Determine if the DJ is allowed to carry out the current action
+* 
+*	@since: 1.1.3
+*	@params: $task
+*	@returns: true : false
+*/
+function dj_can( $task )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_employee_can()' );
+	global $mdjm_settings;
+
+	return isset( $mdjm_settings['permissions']['dj_' . $task] ) ? true : false;
+}
+
+/*
+* mdjm_get_djs
+* 19/03/2015
+* Retrieve a list of all DJ's
+* 
+*	@since: 1.1.3
+*	@params:
+*	@returns: $djs => object
+*/
+function mdjm_get_djs( $role = 'dj' )	{
+	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_get_employees()' );
+	return mdjm_get_employees(
+		$role == 'dj' ? array( 'administrator', $role ) : $role
+	);
+} // mdjm_get_djs
+
+/*
+ * Check the availability of the Employee('s) on the given date (Y-m-d)
+ *
+ * @param	int				$employees	Optional: The user ID of the employee, if empty we'll check all
+ * @param	arr				$roles	Optional: If no $dj is set, we can check an array of role names
+ * @param	string|array	$date	The date (Y-m-d) to check
+ * @return	array			$status	array of user id's (['available'] | ['unavailable']
+ */
+function dj_available( $employees = '', $roles = '', $date = '' )	{
+    _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_do_availability_check()' );
+    return mdjm_do_availability_check( $date, $employees, $roles );
+} // dj_available

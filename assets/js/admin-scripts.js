@@ -124,7 +124,7 @@ jQuery(document).ready(function ($) {
 
                     var value = Number(response.package_cost) + Number(response.addons_cost) + Number(response.travel_cost) + Number(response.additional_cost);
                     value = Number(value) - Number(response.discount);
-                    value = mdjmFormatNumberStd( value );
+                    value = value.toFixed(2);
 
                     $('#_mdjm_event_cost').val(value);
 
@@ -205,11 +205,20 @@ jQuery(document).ready(function ($) {
 	 */
 	var MDJM_Settings = {
 		init : function()	{
+            this.general();
 			if ( 'admin_page_mdjm-custom-event-fields' === mdjm_admin_vars.current_page || 'admin_page_mdjm-custom-client-fields' === mdjm_admin_vars.current_page )	{
 				this.custom_fields();
 			}
 		},
-		
+
+        general : function()    {
+            var mdjm_color_picker = $('.mdjm-color-picker');
+
+			if ( mdjm_color_picker.length ) {
+				mdjm_color_picker.wpColorPicker();
+			}
+        },
+
 		custom_fields : function()	{
 			// Sortable Client Fields
 			jQuery(document).ready(function($) 	{
@@ -246,6 +255,229 @@ jQuery(document).ready(function ($) {
 		}
 	};
 	MDJM_Settings.init();
+
+	/**
+	 * Availability screen JS
+	 */
+	var MDJM_Availability = {
+		init : function()	{
+			this.options();
+			this.absence();
+			this.checker();
+		},
+
+		options : function()	{
+			// Toggle display of availability checker
+            $( document.body ).on( 'click', '.toggle-availability-checker-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_avail_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_avail_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_avail_form );
+                }
+
+                $('.mdjm-availability-checker-fields').slideToggle();
+            });
+
+            // Toggle display of absence form section
+            $( document.body ).on( 'click', '.toggle-add-absence-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === mdjm_admin_vars.show_absence_form ? true : false;
+
+                if ( show ) {
+                    $(this).html( mdjm_admin_vars.hide_absence_form );
+                } else {
+                    $(this).html( mdjm_admin_vars.show_absence_form );
+                }
+
+                var header = $(this).parents('.mdjm-availability-row-header');
+                header.siblings('.mdjm-availability-add-absence-sections-wrap').slideToggle();
+
+				if ( $( '#absence_all_day' ).is(':checked') )	{
+					$('.mdjm-absence-start-time-option').hide('fast');
+					$('.mdjm-absence-end-time-option').hide('fast');
+				}
+
+                var first_input;
+                if ( show ) {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-availability-add-absence-sections-wrap'));
+                } else {
+                    first_input = $(':input:not(input[type=button],input[type=submit],button):visible:first', header.siblings('.mdjm-repeatable-row-standard-fields'));
+                }
+                first_input.focus();
+            });
+
+			// Toggle display of absence time fields
+			$( document.body ).on( 'change', '#absence_all_day', function() {
+				$('.mdjm-absence-start-time-option').slideToggle();
+				$('.mdjm-absence-end-time-option').slideToggle();
+			});
+
+		},
+
+		absence : function()	{
+			// Add a new absence entry
+			$( document.body ).on( 'click', '#add-absence', function(e)	{
+                e.preventDefault();
+
+				var employee_id       = $('#absence_employee_id').val(),
+					start_date        = $('#absence_start').val(),
+					end_date          = $('#absence_end').val(),
+					all_day           = $('#absence_all_day').is(':checked') ? 1 : 0,
+					start_time_hr     = $('#absence_start_time_hr').val(),
+					start_time_min    = $('#absence_start_time_min').val(),
+					start_time_period = 0,
+					end_time_hr       = $('#absence_end_time_hr').val(),
+					end_time_min      = $('#absence_end_time_min').val(),
+					end_time_period   = 0,
+					notes             = $('#absence_notes').val();
+
+
+				if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+					start_time_period = $('#absence_start_time_period').val();
+					end_time_period   = $('#absence_end_time_period').val();
+				}
+
+				if ( ! start_date )	{
+					$('#display_absence_start').addClass( 'mdjm-form-error' );
+					return;
+				}
+				if ( ! end_date )	{
+					$('#display_absence_end').addClass( 'mdjm-form-error' );
+					return;
+				}
+
+				var postData = {
+					employee_id       : employee_id,
+					start_date        : start_date,
+					end_date          : end_date,
+					all_day           : all_day,
+					start_time_hr     : start_time_hr,
+					start_time_min    : start_time_min,
+					start_time_period : start_time_period,
+					end_time_hr       : end_time_hr,
+					end_time_min      : end_time_min,
+					end_time_period   : end_time_period,
+					notes             : notes,
+					action            : 'mdjm_add_employee_absence'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+                        $('#mdjm-add-absence-fields').addClass('mdjm-mute');
+					},
+					success: function (response) {
+                        if ( true === response.success )   {
+                            $('#mdjm-calendar').fullCalendar( 'refetchEvents' );
+                            $('#mdjm-calendar').fullCalendar( 'gotoDate', response.date );
+                        }
+                        $('#display_absence_start').val('');
+                        $('#absence_start').val('');
+                        $('#display_absence_end').val('');
+                        $('#absence_end').val('');
+                        $('#absence_all_day').prop('checked, true');
+                        $('#absence_start_time_hr').val('00');
+                        $('#absence_start_time_min').val('00');
+                        $('#absence_end_time_hr').val('00');
+                        $('#absence_end_time_min').val('00');
+                        $('#absence_notes').val('');
+
+                        if ( 'H:i' !== mdjm_admin_vars.time_format )    {
+                            $('#absence_start_time_period').val('am');
+                            $('#absence_end_time_period').val('am');
+                        }
+
+                        $('#mdjm-calendar').removeClass('mdjm-mute');
+                        $('#mdjm-add-absence-fields').removeClass('mdjm-mute');
+                        $( 'html, body' ).animate({
+                            scrollTop: $('.toggle-add-absence-section').offset().top
+                        }, 500);
+                        $('.toggle-add-absence-section').trigger('click');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+
+            // Delete an entry from the calendar screen
+            $( document.body ).on( 'click', '.delete-absence', function(e)  {
+                e.preventDefault();
+
+                $('#mdjm-calendar').addClass('mdjm-mute');
+                var postData = {
+                    id     : $(this).data('entry'),
+                    action : 'mdjm_delete_employee_absence'
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: ajaxurl,
+                    dataType: 'json',
+                    data: postData,
+                    success: function(response) {
+                        if ( true === response.success )   {
+                            $('#mdjm-calendar').fullCalendar( 'refetchEvents' );
+                            $('.popover').hide('fast');
+                        }
+                        $('#mdjm-calendar').removeClass('mdjm-mute');
+                    }
+                }).fail(function (data) {
+                    if ( window.console && window.console.log ) {
+                        console.log( data );
+                    }
+                });
+            });
+		},
+
+		checker : function()	{
+			$( document.body ).on( 'click', '#check-availability', function()	{
+				var date         = $('#check_date'),
+					display_date = $('#display_date'),
+					employees    = $('#display_date'),
+					roles        = $('#check_roles');
+
+				if ( ! date.val() || ! display_date.val() )	{
+					display_date.addClass( 'mdjm-form-error' );
+					return;
+				}
+
+				var postData = {
+					date     : date,
+					employees : employees,
+					roles     : roles,
+					action : 'do_availability_check_ajax'
+				};
+
+				$.ajax({
+					type       : 'POST',
+					dataType   : 'json',
+					data       : postData,
+					url        : ajaxurl,
+					beforeSend : function()	{
+                        $('#mdjm_availability_fields').addClass('mdjm-mute');
+					},
+					success: function () {
+						$('#mdjm_availability_fields').removeClass('mdjm-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+	};
+	MDJM_Availability.init();
 
 	/**
 	 * Events screen JS
@@ -549,7 +781,7 @@ jQuery(document).ready(function ($) {
                 var value = $(this).val();
 
                 if( value.length > 0)   {
-                    $(this).val(mdjmFormatNumberStd( value ));
+                    $(this).val(value.toFixed(2));
                 }
             });
 
@@ -1760,15 +1992,6 @@ jQuery(document).ready(function ($) {
 	}
 	
 });
-
-var mdjmFormatNumberStd = function (value)	{
-	// Convert the value to a floating point number in case it arrives as a string.
-	var numeric = parseFloat(value);
-	// Specify the local currency.
-	var eventCurrency = mdjm_admin_vars.currency;
-	var decimalPlaces = mdjm_admin_vars.currency_decimals;
-	return numeric.toLocaleString(eventCurrency, { style: 'decimal', currency: eventCurrency, minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces });
-}
 
 var mdjmFormatCurrency = function (value) {
 	// Convert the value to a floating point number in case it arrives as a string.

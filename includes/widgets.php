@@ -249,88 +249,82 @@ class mdjm_availability_widget extends WP_Widget {
 	 */
 	public function form( $instance ) {							
 		$defaults = array( 
-					'title'              => __( 'Availability Checker', 'mobile-dj-manager' ),
-					'ajax'			   => true,
-					'intro'              => sprintf( __( 'Check my availability for your %s by entering the date below', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-					'label'              => __( 'Select Date:', 'mobile-dj-manager' ),
-					'submit_text'        => __( 'Check Availability', 'mobile-dj-manager' ),
-					'submit_centre'      => 'Y',
-					'available_action'   => 'text',
-					'available_text'     => __( 'Good news, we are available on {event_date}. Please contact us now', 'mobile-dj-manager' ),
-					'unavailable_action' => 'text',
-					'unavailable_text'   => __( 'Unfortunately we do not appear to be available on {event_date}. Why not try another date below...', 'mobile-dj-manager' ),
-					
-					);
-		$instance = wp_parse_args( (array) $instance, $defaults );
-		?>
+            'title'              => __( 'Availability Checker', 'mobile-dj-manager' ),
+            'ajax'               => true,
+            'intro'              => sprintf(
+                __( 'Check my availability for your %s by entering the date below', 'mobile-dj-manager' ), mdjm_get_label_singular( true )
+            ),
+            'label'              => __( 'Select Date:', 'mobile-dj-manager' ),
+            'submit_text'        => __( 'Check Availability', 'mobile-dj-manager' ),
+            'submit_centre'      => 'Y',
+            'available_action'   => 'text',
+            'available_text'     => __( 'Good news, we are available on {event_date}. Please contact us now', 'mobile-dj-manager' ),
+            'unavailable_action' => 'text',
+            'unavailable_text'   => __( 'Unfortunately we do not appear to be available on {event_date}. Why not try another date below...', 'mobile-dj-manager' )
+        );
+
+		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'mobile-dj-manager' ); ?>:</label>
+            <input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
+		</p>
+
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'mobile-dj-manager' ); ?>:</label>
-		<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
+            <input type="checkbox" id="<?php echo $this->get_field_id( 'ajax' ); ?>" name="<?php echo $this->get_field_name( 'ajax' ); ?>" value="1"<?php checked( $instance['ajax'], 1 ); ?> />
+            <label for="<?php echo $this->get_field_id( 'ajax' ); ?>"><?php _e( 'Use Ajax?', 'mobile-dj-manager' ); ?>:</label>
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'intro' ); ?>"><?php _e( 'Intro Text', 'mobile-dj-manager' ); ?>:</label>
+            <textarea id="<?php echo $this->get_field_id( 'intro' ); ?>" name="<?php echo $this->get_field_name( 'intro' ); ?>" style="width:100%;"><?php echo $instance['intro']; ?></textarea>
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'label' ); ?>"><?php _e( 'Field Label', 'mobile-dj-manager' ); ?>:</label>
+            <input id="<?php echo $this->get_field_id( 'label' ); ?>" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo $instance['label']; ?>" style="width:100%;" />
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'submit_text' ); ?>"><?php _e( 'Submit Button Label', 'mobile-dj-manager' ); ?>:</label>
+            <input id="<?php echo $this->get_field_id( 'submit_text' ); ?>" name="<?php echo $this->get_field_name( 'submit_text' ); ?>" value="<?php echo $instance['submit_text']; ?>" style="width:100%;" />
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'submit_centre' ); ?>"><?php _e( 'Centre Submit Button', 'mobile-dj-manager' ); ?>?</label>
+            <input type="checkbox" id="<?php echo $this->get_field_id( 'submit_centre' ); ?>" name="<?php echo $this->get_field_name( 'submit_centre' ); ?>" value="Y"<?php checked( 'Y', $instance['submit_centre'] ); ?> />
+		</p>
+
+		<p>
+    		<label for="<?php echo $this->get_field_id( 'available_action' ); ?>"><?php _e( 'Redirect on Available', 'mobile-dj-manager' ); ?>:</label>
+            <?php wp_dropdown_pages( array(
+                'selected'          => $instance['available_action'],
+                'name'              => $this->get_field_name( 'available_action' ),
+                'id'                => $this->get_field_id( 'available_action' ),
+                'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
+                'option_none_value' => 'text',
+            ) ); ?>
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'available_text' ); ?>"><?php _e( 'Available Text', 'mobile-dj-manager' ); ?>:</label>
+            <textarea id="<?php echo $this->get_field_id( 'available_text' ); ?>" name="<?php echo $this->get_field_name( 'available_text' ); ?>" style="width:100%;"><?php echo $instance['available_text']; ?></textarea>
+		</p>
+
+		<p>
+            <label for="<?php echo $this->get_field_id( 'unavailable_action' ); ?>"><?php _e( 'Redirect on Unavailable', 'mobile-dj-manager' ); ?>:</label>
+            <?php wp_dropdown_pages( array(
+                'selected'          => $instance['unavailable_action'],
+                'name'              => $this->get_field_name( 'unavailable_action' ),
+                'id'                => $this->get_field_id( 'unavailable_action' ),
+                'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
+                'option_none_value' => 'text',
+            ) ); ?>
 		</p>
 		
 		<p>
-		<input type="checkbox" id="<?php echo $this->get_field_id( 'ajax' ); ?>" name="<?php echo $this->get_field_name( 'ajax' ); ?>" value="1"<?php checked( $instance['ajax'], 1 ); ?> />
-		<label for="<?php echo $this->get_field_id( 'ajax' ); ?>"><?php _e( 'Use Ajax?', 'mobile-dj-manager' ); ?>:</label>
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'intro' ); ?>"><?php _e( 'Intro Text', 'mobile-dj-manager' ); ?>:</label>
-		<textarea id="<?php echo $this->get_field_id( 'intro' ); ?>" name="<?php echo $this->get_field_name( 'intro' ); ?>" style="width:100%;"><?php echo $instance['intro']; ?></textarea>
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'label' ); ?>"><?php _e( 'Field Label', 'mobile-dj-manager' ); ?>:</label>
-		<input id="<?php echo $this->get_field_id( 'label' ); ?>" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo $instance['label']; ?>" style="width:100%;" />
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'submit_text' ); ?>"><?php _e( 'Submit Button Label', 'mobile-dj-manager' ); ?>:</label>
-		<input id="<?php echo $this->get_field_id( 'submit_text' ); ?>" name="<?php echo $this->get_field_name( 'submit_text' ); ?>" value="<?php echo $instance['submit_text']; ?>" style="width:100%;" />
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'submit_centre' ); ?>"><?php _e( 'Centre Submit Button', 'mobile-dj-manager' ); ?>?</label>
-		<input type="checkbox" id="<?php echo $this->get_field_id( 'submit_centre' ); ?>" name="<?php echo $this->get_field_name( 'submit_centre' ); ?>" value="Y"<?php checked( 'Y', $instance['submit_centre'] ); ?> />
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'available_action' ); ?>"><?php _e( 'Redirect on Available', 'mobile-dj-manager' ); ?>:</label>
-		<?php 
-		wp_dropdown_pages(
-			array(
-				'selected'          => $instance['available_action'],
-				'name'              => $this->get_field_name( 'available_action' ),
-				'id'                => $this->get_field_id( 'available_action' ),
-				'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
-				'option_none_value' => 'text',
-			 )
-		);
-		?>
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'available_text' ); ?>"><?php _e( 'Available Text', 'mobile-dj-manager' ); ?>:</label>
-		<textarea id="<?php echo $this->get_field_id( 'available_text' ); ?>" name="<?php echo $this->get_field_name( 'available_text' ); ?>" style="width:100%;"><?php echo $instance['available_text']; ?></textarea>
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'unavailable_action' ); ?>"><?php _e( 'Redirect on Unavailable', 'mobile-dj-manager' ); ?>:</label>
-		<?php 
-		wp_dropdown_pages(
-			array(
-				'selected'          => $instance['unavailable_action'],
-				'name'              => $this->get_field_name( 'unavailable_action' ),
-				'id'                => $this->get_field_id( 'unavailable_action' ),
-				'show_option_none'  => __( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
-				'option_none_value' => 'text',
-			 )
-		);
-		?>
-		</p>
-		
-		<p>
-		<label for="<?php echo $this->get_field_id( 'unavailable_text' ); ?>"><?php _e( 'Unavailable Text', 'mobile-dj-manager' ); ?>:</label>
-		<textarea id="<?php echo $this->get_field_id( 'unavailable_text' ); ?>" name="<?php echo $this->get_field_name( 'unavailable_text' ); ?>" style="width:100%;"><?php echo $instance['unavailable_text']; ?></textarea>
+            <label for="<?php echo $this->get_field_id( 'unavailable_text' ); ?>"><?php _e( 'Unavailable Text', 'mobile-dj-manager' ); ?>:</label>
+            <textarea id="<?php echo $this->get_field_id( 'unavailable_text' ); ?>" name="<?php echo $this->get_field_name( 'unavailable_text' ); ?>" style="width:100%;"><?php echo $instance['unavailable_text']; ?></textarea>
 		</p>
 		
 		<?php 
@@ -348,16 +342,16 @@ class mdjm_availability_widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['title']				 = ( !empty( $new_instance['title'] ) )				 ? strip_tags( $new_instance['title'] )				 : '';
-		$instance['ajax']				  = ( !empty( $new_instance['ajax'] ) )				  ? true												 : false;
-		$instance['intro']				 = ( !empty( $new_instance['intro'] ) )				 ? strip_tags( $new_instance['intro'] )				 : '';
-		$instance['label']				 = ( !empty( $new_instance['label'] ) )				 ? strip_tags( $new_instance['label'] )				 : '';
-		$instance['submit_text']		   = ( !empty( $new_instance['submit_text'] ) )		   ? strip_tags( $new_instance['submit_text'] )		   : '';
-		$instance['submit_centre']		 = ( !empty( $new_instance['submit_centre'] ) )		 ? $new_instance['submit_centre']					   : '';
-		$instance['available_action']	  = ( !empty( $new_instance['available_action'] ) )	  ? strip_tags( $new_instance['available_action'] )	  : '';
-		$instance['available_text']		= ( !empty( $new_instance['available_text'] ) )		? strip_tags( $new_instance['available_text'] )		: '';
-		$instance['unavailable_action']	= ( !empty( $new_instance['unavailable_action'] ) )	? strip_tags( $new_instance['unavailable_action'] )	: '';
-		$instance['unavailable_text']	  = ( !empty( $new_instance['unavailable_text'] ) )	  ? strip_tags( $new_instance['unavailable_text'] )	  : '';
+		$instance['title']              = ( !empty( $new_instance['title'] ) )              ? strip_tags( $new_instance['title'] )              : '';
+		$instance['ajax']               = ( !empty( $new_instance['ajax'] ) )               ? true                                              : false;
+		$instance['intro']              = ( !empty( $new_instance['intro'] ) )              ? strip_tags( $new_instance['intro'] )              : '';
+		$instance['label']              = ( !empty( $new_instance['label'] ) )              ? strip_tags( $new_instance['label'] )              : '';
+		$instance['submit_text']        = ( !empty( $new_instance['submit_text'] ) )        ? strip_tags( $new_instance['submit_text'] )        : '';
+		$instance['submit_centre']      = ( !empty( $new_instance['submit_centre'] ) )      ? $new_instance['submit_centre']                    : '';
+		$instance['available_action']   = ( !empty( $new_instance['available_action'] ) )   ? strip_tags( $new_instance['available_action'] )   : '';
+		$instance['available_text']     = ( !empty( $new_instance['available_text'] ) )     ? strip_tags( $new_instance['available_text'] )     : '';
+		$instance['unavailable_action'] = ( !empty( $new_instance['unavailable_action'] ) ) ? strip_tags( $new_instance['unavailable_action'] ) : '';
+		$instance['unavailable_text']   = ( !empty( $new_instance['unavailable_text'] ) )   ? strip_tags( $new_instance['unavailable_text'] )   : '';
 
 		return $instance;
 	} // update

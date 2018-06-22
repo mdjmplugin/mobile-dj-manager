@@ -134,6 +134,7 @@ module.exports = function( grunt ) {
 			all: [
 				'Gruntfile.js',
 				'<%= dirs.main.js %>/admin-scripts.js',
+				'<%= dirs.main.js %>/availability-scripts.js',
 				'<%= dirs.main.js %>/mdjm-ajax.js'
 			]
 		},
@@ -153,6 +154,7 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					'<%= dirs.main.js %>/admin-scripts.min.js': ['<%= dirs.main.js %>/admin-scripts.js'],
+					'<%= dirs.main.js %>/availability-scripts.min.js' : ['<%= dirs.main.js %>/availability-scripts.js'],
 					'<%= dirs.main.js %>/mdjm-ajax.min.js': ['<%= dirs.main.js %>/mdjm-ajax.js']
 				}
 			}

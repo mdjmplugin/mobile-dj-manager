@@ -15,6 +15,7 @@
 .mdjm-wrap a { text-decoration: none; }
 a.mdjm-delete { color: #a00; }
 a.mdjm-delete:hover { color: #f00; }
+a.availability-link { float: right; cursor: pointer;}
 a.mdjm-fake { cursor: pointer; cursor: hand; }
 .mdjm-mute { opacity: 0.4; }
 .mdjm-input-currency {
@@ -93,6 +94,35 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	border-bottom-right-radius: 0;
 	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#mdjm-pending-notice { display: none; }
+
+#mdjm_availability_fields .notice-wrap {
+	background-color: #f4f4f4;
+	border-style: solid;
+	border-width: 1px 0;
+	border-color: #eae9e9;
+	padding: 12px 12px 4px;
+	overflow: auto;
+	margin: 20px -12px -23px;
+}
+
+/* Fullcalendar Styles
+-------------------------------------------------------------- */
+#mdjm-calendar .fc-title,
+#mdjm-dashboard-calendar .fc-title {
+	font-size: 13px;
+}
+
+/* bootstrap default styles make it black. undo */
+#mdjm-calendar a.fc-event,
+#mdjm-dashboard-calendar a.fc-event {
+	color: #fff;
+}
+.fc-content,
+.fc-list-item-title {
+	cursor: pointer;
 }
 
 /* General Settings Styles
@@ -698,7 +728,11 @@ checkbox.mdjm-form-error {
     background-color: #fff;
 }
 
-.mdjm_event_overview_wrapper:not(:first-child)    {
+/* Bootstrap sets the font-size too high, undo */
+#mdjm_availability_fields { font-size: 13px; }
+
+.mdjm_event_overview_wrapper:not(:first-child),
+.mdjm_availability_wrapper:not(:first-child) {
 	margin-top: 12px;
 }
 .mdjm_event_overview_wrapper .mdjm-select-chosen { margin: 0px; }
@@ -726,7 +760,9 @@ checkbox.mdjm-form-error {
 .mdjm-repeatable-row-actions .toggle-event-options-section,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section,
-.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section {
+.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section,
+.mdjm-repeatable-row-actions .toggle-availability-checker-section,
+.mdjm-repeatable-row-actions .toggle-add-absence-section {
 	color: #777;
 }
 .mdjm-repeatable-row-actions .toggle-client-add-option-section:hover,
@@ -735,13 +771,16 @@ checkbox.mdjm-form-error {
 .mdjm-repeatable-row-actions .toggle-event-options-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-type-option-section:hover,
 .mdjm-repeatable-row-actions .toggle-event-view-venue-option-section:hover,
-.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section:hover {
+.mdjm-repeatable-row-actions .toggle-event-add-venue-option-section:hover,
+.mdjm-repeatable-row-actions .toggle-availability-checker-section:hover,
+.mdjm-repeatable-row-actions .toggle-add-absence-section:hover {
 	color: #444;
 }
 
 .mdjm-client-row-header,
 .mdjm-event-row-header,
 .mdjm-package-row-header,
+.mdjm-availability-row-header,
 .mdjm-repeatable-row-header {
 	clear: both;
 	background: #f1f1f1;
@@ -756,6 +795,8 @@ checkbox.mdjm-form-error {
 .mdjm-event-row-header:after,
 .mdjm-package-row-header:before,
 .mdjm-package-row-header:after,
+.mdjm-availability-row-header:before,
+.mdjm-availability-row-header:after,
 .mdjm-repeatable-row-header:before,
 .mdjm-repeatable-row-header:after {
 	content: '';
@@ -764,6 +805,7 @@ checkbox.mdjm-form-error {
 .mdjm-client-row-header:after,
 .mdjm-event-row-header:after,
 .mdjm-package-row-header:after,
+.mdjm-availability-row-header:after,
 .mdjm-repeatable-row-header:after {
 	clear: both;
 }
@@ -832,6 +874,7 @@ checkbox.mdjm-form-error {
 .mdjm-event-deposit,
 .mdjm-event-cost,
 .mdjm-custom-field,
+.mdjm-availability-check-date,
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
@@ -861,6 +904,7 @@ checkbox.mdjm-form-error {
 .mdjm-event-discount,
 .mdjm-event-deposit,
 .mdjm-event-cost,
+.mdjm-availability-check-date,
 .mdjm-custom-field {
 	width: 25%;
 	margin-right: 5%;
@@ -880,7 +924,8 @@ checkbox.mdjm-form-error {
 .mdjm-event-options-sections-wrap,
 .mdjm-add-event-type-sections-wrap,
 .mdjm-event-venue-details-sections-wrap,
-.mdjm-add-event-venue-sections-wrap {
+.mdjm-add-event-venue-sections-wrap,
+.mdjm-availability-add-absence-sections-wrap {
 	display: none;
 	border-width: 0 1px 1px;
 	border-style: solid;
@@ -888,9 +933,11 @@ checkbox.mdjm-form-error {
 	box-sizing: border-box;
 	width: 100%;
 }
+
 #mdjm-event-worker-add    {
     display: block;
 }
+
 /* Visible Sections */
 .mdjm-event-details-client-template-sections-wrap,
 .mdjm-event-details-event-sections-wrap {
@@ -938,10 +985,18 @@ checkbox.mdjm-form-error {
 .mdjm-event-equipment-price-fields,
 .mdjm-client-custom-fields,
 .mdjm-event-custom-fields,
-.mdjm-venue-custom-fields {
+.mdjm-venue-custom-fields,
+.mdjm-check-availabilty-action,
+.mdjm-add-absence-action {
     display: block !important;
 	margin-top: 6px;
 }
+
+.mdjm-availability-checker-fields { display: none; margin-top: 6px; }
+.mdjm-absence-start-time-option,
+.mdjm-absence-end-time-option { display: none; }
+
+.mdjm-absence-notes-option textarea { min-width: 480px; }
 
 #mdjm-playlist-view    {
     text-align: center;
@@ -992,6 +1047,7 @@ checkbox.mdjm-form-error {
     .mdjm-event-deposit,
     .mdjm-event-cost,
 	.mdjm-custom-field,
+	.mdjm-availability-check-date,
     .mdjm-repeatable-option {
 		float: none;
 		text-align: left;
