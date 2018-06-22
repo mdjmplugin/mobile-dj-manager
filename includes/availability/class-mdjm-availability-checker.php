@@ -209,6 +209,19 @@ class MDJM_Availability_Checker {
 
 	} // setup_employees
 
+    /**
+	 * Setup status.
+	 *
+	 * @since	1.5.6
+	 * @param	mixed	$status
+	 * @return	array	Array of statuses to check
+	 */
+	public function setup_status( $status )	{
+		$status = ! empty( $status ) ? $status : mdjm_get_availability_statuses();
+
+		$this->status = ! is_array( $status ) ? array( $status ) : $status;
+	} // setup_status
+
     /* Whether or not an employee is absent on the given date
      *
      * @since   1.5.6
@@ -230,19 +243,6 @@ class MDJM_Availability_Checker {
 
         return empty( $this->available );
     } // is_employee_working
-
-	/**
-	 * Setup status.
-	 *
-	 * @since	1.5.6
-	 * @param	mixed	$status
-	 * @return	array	Array of statuses to check
-	 */
-	public function setup_status( $status )	{
-		$status = ! empty( $status ) ? $status : mdjm_get_availability_statuses();
-
-		$this->status = ! is_array( $status ) ? array( $status ) : $status;
-	} // setup_status
 
 	/**
 	 * Perform a detailed lookup.
