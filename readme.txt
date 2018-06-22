@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 4.4
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.5.5
+Stable tag: 1.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,23 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.6 =
+
+**Friday, 22nd June 2018**
+
+**New**: The availability system has been revamped to allow more functionality flexibity, and faster lookups
+**New**: Full calendar view on the availability admin page. Click calendar events to manage them
+**New**: New availability databases add flexibility for enhanced future functionality
+**New**: Added calendar settings under *Misc* tab
+
+**Tweak**: Creation of new playlist database tables ready for future release
+**Tweak**: Updated uninstall process to remove new database tables
+
+**Bug**: Incorrect formatting of currency during total cost calculation meant some events could not be saved
+
+**Dev**: Added hooks to enable extensions to perform actions during absence actions
+**Dev**: Removed a bunch of deprecated functions
 
 = 1.5.5 =
 
@@ -1336,6 +1353,10 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* **Bug Fix**: In some instances the links within the Client Zone did not work correctly due to a conflict in configuration
 
 == Upgrade Notice ==
+
+= 1.5.6 =
+
+Addresses an issue whereby an event could not be saved due to incorrect formatting of currency
 
 = 1.5.5 =
 

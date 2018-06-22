@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) )
  * Plugin URI: http://mdjm.co.uk
  * Description: The most efficient and versatile event management solution for WordPress.
  * Version: 1.5.6
- * Date: 1 June 2018
+ * Date: 22 June 2018
  * Author: Mike Howard <mike@mdjm.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
