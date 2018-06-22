@@ -25,7 +25,7 @@ function mdjm_get_availability_page_action_links()    {
 
 	$actions['add_absence'] = '<a id="mdjm-add-absence-action" href="#" class="toggle-add-absence-section">' . __( 'Show absence form', 'mobile-dj-manager' ) . '</a>';
 
-    $actions['availabiility_check'] = '<a id="mdjm-check-availabilty-action" href="#" class="toggle-availability-checker-section">' . __( 'Show availability checker', 'mobile-dj-manager' ) . '</a>';
+    //$actions['availabiility_check'] = '<a id="mdjm-check-availabilty-action" href="#" class="toggle-availability-checker-section">' . __( 'Show availability checker', 'mobile-dj-manager' ) . '</a>';
 
     $actions = apply_filters( 'mdjm_availability_page_actions', $actions );
 
