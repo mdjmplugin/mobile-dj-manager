@@ -754,7 +754,7 @@ class MDJM_API 	{
 			
 		}
 
-		if ( ! empty( $result ) )	{
+		if ( ! empty( $result ) && ! empty( $result['available'] ) )	{
 
             $message = str_replace( $search, $replace, $available_text );
 
