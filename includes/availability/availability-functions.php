@@ -207,11 +207,11 @@ function mdjm_get_all_absences()   {
 function mdjm_do_availability_check( $date, $employees = '', $roles = '', $status = '' )	{
 
 	$check = new MDJM_Availability_Checker( $date, '', $employees, $roles, $status );
-	
+
 	$check->availability_check();
-	
+
 	return $check->result;
-	
+
 } // mdjm_do_availability_check
 
 /**
