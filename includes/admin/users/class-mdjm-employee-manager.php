@@ -263,7 +263,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 */
 	public function column_login( $item ) {
 		if( '' != get_user_meta( $item->ID, 'last_login', true ) )
-			echo date( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) );
+			echo date_i18n( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) );
 			
 		else
 			echo __( 'Never', 'mobile-dj-manager' );
