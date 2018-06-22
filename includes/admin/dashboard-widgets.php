@@ -24,8 +24,6 @@ function mdjm_add_wp_dashboard_widgets() {
 	
 	wp_add_dashboard_widget( 'mdjm-widget-overview', sprintf( __( '%s Overview', 'mobile-dj-manager' ), mdjm_get_option( 'company_name', 'MDJM' ) ), 'mdjm_widget_events_overview' );
 
-	wp_add_dashboard_widget( 'mdjm-availability-overview', 'MDJM Availability', 'f_mdjm_dash_availability' );
-
 } // mdjm_add_wp_dashboard_widgets
 add_action( 'wp_dashboard_setup', 'mdjm_add_wp_dashboard_widgets' );
 
@@ -144,7 +142,7 @@ function mdjm_widget_events_overview() {
 					</tr>
 				</tbody>
 			</table>
-			
+
 			<p>
 				<?php printf(
 					__( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ),
@@ -172,71 +170,25 @@ function mdjm_widget_events_overview() {
 			<?php $sources = $stats->get_enquiry_sources_by_date( 'this_month' ); ?>
 
 			<?php if ( ! empty( $sources ) ) : ?>
-				
+
 				<?php foreach( $sources as $count => $source ) : ?>
 					<p>
 					 <?php printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month.', 'mobile-dj-manager' ), $source, (int) $count ); ?>
 					</p>
 				<?php endforeach; ?>
-				
+
 			<?php else : ?>
 				<p><?php _e( 'No enquiries yet this month.', 'mobile-dj-manager' ); ?></p>
 			<?php endif; ?>
 
 			<?php do_action( 'mdjm_after_events_overview' ); ?>
-			
+
 		</div>
-    
+
 		<?php
 	}
-	
+
 } // mdjm_widget_events_overview
-	
-/*
-* f_mdjm_dash_availability
-* 07/01/2015
-* @since 0.9.9.6
-* Displays the MDJM AVailability Status on the main WP Dashboard
-*/
-function f_mdjm_dash_availability()	{
-	global $mdjm_settings;
-	
-	/* Enqueue the jQuery Datepicker Scripts */
-	wp_enqueue_script('jquery-ui-datepicker');
-	wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-	
-	mdjm_insert_datepicker(
-		array(
-			'class'		=> 'check_custom_date',
-			'altfield'	=> 'check_date'
-		)
-	);
-	?>
-	<div id="mdjm-dashboard-calendar"></div>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	
-	<?php /* Availability Check */ ?>
-	<form name="availability-check" id="availability-check" method="post" action="<?php mdjm_get_admin_page( 'availability', 'echo' ); ?>">
-	<?php
-	if( !current_user_can( 'administrator' ) )	{
-		?><input type="hidden" name="check_employee" id="check_employee" value="<?php echo get_current_user_id(); ?>" /><?php
-	}
-	else	{
-		?><input type="hidden" name="check_employee" id="check_employee" value="all" /><?php	
-	}
-	?>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
-	<tr>
-	<td colspan="2"><input type="text" name="show_check_date" id="show_check_date" class="check_custom_date" required="required" style="font-size:12px" />&nbsp;&nbsp;&nbsp;
-	<input type="hidden" name="check_date" id="check_date" />
-	<?php submit_button( 'Check Date', 'primary small', 'submit', false, '' ); ?></td>
-	</tr>
-	</form>
-	</table>
-	<?php	
-}
 
 /**
  * Add event count to At a glance widget
