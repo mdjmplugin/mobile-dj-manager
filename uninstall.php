@@ -141,10 +141,15 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 		delete_option( $all_option );
 	}
 
-	$availability_table = $wpdb->prefix . 'mdjm_avail';
+    $custom_tables = array(
+        'mdjm_avail', 'mdjm_availability', 'mdjm_availabilitymeta', 'mdjm_playlists', 'mdjm_playlistmeta'
+    );
 
-	// Remove all database tables
-	$wpdb->query( "DROP TABLE IF EXISTS $availability_table" );
+    // Remove all database tables
+    foreach( $custom_tables as $custom_table )  {
+        $table_name = $wpdb->prefix . $custom_table;
+        $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+    }
 
 	// Remove any transients and options we've left behind
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_mdjm\_%'" );
