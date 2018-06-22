@@ -465,7 +465,7 @@ jQuery(document).ready(function ($) {
 					beforeSend : function()	{
                         $('#mdjm_availability_fields').addClass('mdjm-mute');
 					},
-					success: function (response) {
+					success: function () {
 						$('#mdjm_availability_fields').removeClass('mdjm-mute');
 					}
 				}).fail(function (data) {
