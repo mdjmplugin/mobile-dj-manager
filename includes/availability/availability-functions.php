@@ -224,7 +224,8 @@ function mdjm_do_availability_check( $date, $employees = '', $roles = '', $statu
  */
 function mdjm_get_calendar_entries( $start, $end )	{
 	$activity     = array();
-	$availability = new MDJM_Availability_Checker( $start, $end );
+	$roles        = 
+	$availability = new MDJM_Availability_Checker( $start, $end, '', mdjm_get_roles() );
 
 	$availability->get_calendar_entries();
 
