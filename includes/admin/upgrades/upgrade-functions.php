@@ -1139,8 +1139,34 @@ function mdjm_v157_upgrades()	{
 		@set_time_limit( 0 );
 	}
 
+	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
+
+	$absence_content = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
+	$absence_content .= sprintf( __( 'To: %s', 'mobile-dj-manager' ), '{end}' ) . PHP_EOL;
+	$absence_content .= '{notes}';
+
+	$event_title = '{event_type} ({event_status})';
+
+	$event_tip_title = mdjm_get_label_singular() . ' {contract_id} - {event_type}';
+
+	$event_content = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Setup: %s', 'mobile-dj-manager' ), '{dj_setup_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Cost: %s', 'mobile-dj-manager' ), '{total_cost}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Employees: %s', 'mobile-dj-manager' ), '{event_employees}' ) . PHP_EOL;
+
     $new_settings = array(
-        'remove_absences_on_delete' => '1',
+        'remove_absences_on_delete'    => '1',
+		'calendar_absence_title'       => '{employee_name}',
+		'calendar_absence_tip_title'   => $absence_tip,
+		'calendar_absence_tip_content' => $absence_content,
+		'calendar_event_title'         => $event_title,
+		'calendar_event_tip_title'     => $event_tip_title,
+		'calendar_event_tip_content'   => $event_content
+		
+		
     );
 
     foreach( $new_settings as $key => $value )  {

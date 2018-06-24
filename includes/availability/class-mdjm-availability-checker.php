@@ -389,28 +389,29 @@ class MDJM_Availability_Checker {
             $short_date_start = date( 'Y-m-d', strtotime( $entry->start ) );
 			$short_date_end   = date( 'Y-m-d', strtotime( $entry->end ) );
             $description      = array();
-            $employee         = mdjm_get_employee_display_name( $entry->employee_id );
-			$title            = __( 'Unknown', 'mobile-dj-manager' );
             $all_day          = ! empty( $entry->all_day ) ? true : false;
-
-			if ( ! empty( $employee ) )	{
-				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
-			}
 
 			$from = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->start ) );
 			$to   = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->end ) );
 
-			$description[] = sprintf( __( 'From: %s', 'mobile-dj-manager' ), $from );
-			$description[] = sprintf( __( 'To: %s', 'mobile-dj-manager' ), $to );
+			$title = mdjm_do_absence_content_tags(
+				mdjm_get_calendar_absence_title(),
+				$entry
+			);
 
-			if ( ! empty( $entry->notes ) )	{
-				$description[] = stripslashes( $entry->notes );
-			}
+			$tip_title = mdjm_do_absence_content_tags(
+				mdjm_get_calendar_absence_tip_title(),
+				$entry
+			);
 
-            $description  = '<p>' . implode( '<br>', $description ) . '</p>';
+            $notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_absence_tip_content() ) . '<p>'; 
+			$notes = mdjm_do_absence_content_tags(
+				$notes,
+				$entry
+			);
 
             if ( mdjm_employee_can( 'manage_employees' ) )  {
-                $description .= sprintf(
+                $notes .= sprintf(
                     '<p><a class="mdjm-delete availability-link delete-absence" data-entry="%d" href="#" >%s</a></p>',
                     $entry->id,
                     __( 'Delete entry', 'mobile-dj-manager' )
@@ -424,11 +425,11 @@ class MDJM_Availability_Checker {
                 'className'       => 'mdjm_calendar_absence',
 				'end'             => $entry->end,
 				'id'              => $entry->id,
-				'notes'           => $description,
+				'notes'           => $notes,
 				'start'           => $entry->start,
 				'textColor'       => mdjm_get_calendar_color( 'text' ),
-				'tipTitle'        => $title,
-				'title'           => $employee
+				'tipTitle'        => $tip_title,
+				'title'           => $title
             );
 
             $array_key = $key = array_search( $entry->employee_id, $this->available );
@@ -472,21 +473,29 @@ class MDJM_Availability_Checker {
                 $event_status = $mdjm_event->get_status();
                 $employee     = mdjm_get_employee_display_name( $mdjm_event->employee_id );
                 $event_id     = mdjm_get_event_contract_id( $mdjm_event->ID );
-                $title        = sprintf( '%s (%s)', esc_attr( $event_type ), esc_attr( $event_status) );
-                $description  = array();
-                $notes        = mdjm_get_calendar_event_description_text();
-                $notes        = mdjm_do_content_tags( $notes, $mdjm_event->ID, $mdjm_event->client );
-                $tip_title    = sprintf(
-                    '%s %s - %s',
-                    esc_html( mdjm_get_label_singular() ),
-                    $event_id,
-                    esc_attr( $event_type )
-                );			
-
-                $event_url = add_query_arg( array(
+                $event_url    = add_query_arg( array(
                     'post'   => $mdjm_event->ID,
                     'action' => 'edit'
                 ), admin_url( 'post.php' ) );
+
+				$title = mdjm_do_content_tags(
+					mdjm_get_calendar_event_title(),
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
+
+				$tip_title = mdjm_do_content_tags(
+					mdjm_get_calendar_event_tip_title(),
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
+
+				$notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_event_tip_content() ) . '<p>'; 
+				$notes = mdjm_do_content_tags(
+					$notes,
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
 
                 $notes .= sprintf(
                     '<p><a class="availability-link" href="%s" >%s</a></p>',
