@@ -59,6 +59,10 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v156_upgrades();
 	}
 
+	if ( version_compare( $mdjm_version, '1.5.7', '<' ) ) {
+		mdjm_v157_upgrades();
+	}
+
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
@@ -950,7 +954,7 @@ function mdjm_v154_upgrades()	{
 } // mdjm_v154_upgrades
 
 /**
- * 1.5.4 Upgrade.
+ * 1.5.6 Upgrade.
  *
  * @since	1.5.4
  * @return	void
@@ -1117,3 +1121,29 @@ function mdjm_v156_upgrade_availability_db()	{
 	}
 } // mdjm_v156_upgrade_event_pricing
 add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_db' );
+
+/**
+ * 1.5.7 Upgrade.
+ *
+ * @since	1.5.7
+ * @return	void
+ */
+function mdjm_v157_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+    $new_settings = array(
+        'remove_absences_on_delete' => '1',
+    );
+
+    foreach( $new_settings as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
+} // mdjm_v157_upgrades

@@ -167,10 +167,17 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
  * Remove an employee absence entry.
  *
  * @since   1.5.6
- * @param   int     $id
+ * @param   int     $id		The absence ID to remove
  * @return  int     The number of rows deleted or false
  */
 function mdjm_remove_employee_absence( $id )  {
+
+	$id = absint( $id );
+
+	if ( empty( $id ) )	{
+		return false;
+	}
+
     do_action( 'mdjm_before_remove_employee_absence', $id );
 
     $deleted = MDJM()->availability_db->delete( $id );
@@ -194,6 +201,28 @@ function mdjm_get_all_absences()   {
 
     return $absences;
 } // mdjm_get_all_absences
+
+/**
+ * Retrieve all absences for an employee.
+ *
+ * @since	1.5.7
+ * @param	int		$employee_id	WP User ID
+ * @return	array	Array of employee absence objects
+ */
+function mdjm_get_employee_absences( $employee_id )	{
+	$employee_id = absint( $employee_id );
+
+	if ( empty( $employee_id ) )	{
+		return false;
+	}
+
+	$absences = MDJM()->availability_db->get_entries( array(
+        'number'       => -1,
+        'employee_id'  => $employee_id
+    ) );
+
+    return $absences;
+} // mdjm_get_employee_absences
 
 /**
  * Perform the availability lookup.

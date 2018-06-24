@@ -1395,13 +1395,21 @@ function mdjm_get_registered_settings()	{
                         'options' => mdjm_get_calendar_views(),
 						'std'     => 'month'
 					),
-                    'absence_background_color' => array(
-						'id'      => 'absence_background_color',
-						'name'    => __( 'Absence Background', 'mobile-dj-manager' ),
-						'desc'    => __( 'Select the background color of absence entries.', 'mobile-dj-manager' ),
-						'type'    => 'color',
-                        'default' => '#f7f7f7',
-                        'std'     => '#f7f7f7'
+					'availability_view' => array(
+						'id'      => 'availability_view',
+						'name'    => __( 'Default Availability View', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the default calendar view on the availability page.', 'mobile-dj-manager' ),
+						'type'    => 'select',
+						'chosen'  => true,
+                        'options' => mdjm_get_calendar_views(),
+						'std'     => 'month'
+					),
+                    'remove_absences_on_delete' => array(
+						'id'      => 'remove_absences_on_delete',
+						'name'    => __( 'Delete Absence with Employee?', 'mobile-dj-manager' ),
+						'desc'    => __( 'If enabled, all absences associated with an employee will be removed when an employee is removed.', 'mobile-dj-manager' ),
+						'type'    => 'checkbox',
+                        'std'     => '1'
 					),
                     'absence_border_color' => array(
 						'id'      => 'absence_border_color',
