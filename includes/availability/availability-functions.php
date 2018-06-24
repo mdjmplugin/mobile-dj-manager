@@ -120,7 +120,7 @@ function mdjm_display_absence_content_tags( $seperator = ', ' )	{
  * @return	string	Filtered content
  */
 function mdjm_do_absence_content_tags( $content = '', $absence = false )	{
-	if ( ! empty( $content && ! empty( $absence ) ) )	{
+	if ( ! empty( $content ) && ! empty( $absence ) )	{
 		$employee_id = $absence->employee_id;
 		$start       = strtotime( $absence->start );
 		$end         = strtotime( $absence->end );
