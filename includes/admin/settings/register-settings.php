@@ -251,6 +251,25 @@ add_action( 'admin_init', 'mdjm_register_settings' );
  * @return	array
 */
 function mdjm_get_registered_settings()	{
+
+	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
+
+	$absence_content = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
+	$absence_content .= sprintf( __( 'To: %s', 'mobile-dj-manager' ), '{end}' ) . PHP_EOL;
+	$absence_content .= '{notes}';
+
+	$event_title = '{event_type} ({event_status})';
+
+	$event_tip_title = mdjm_get_label_singular() . ' {contract_id} - {event_type}';
+
+	$event_content = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Setup: %s', 'mobile-dj-manager' ), '{dj_setup_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Cost: %s', 'mobile-dj-manager' ), '{total_cost}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Employees: %s', 'mobile-dj-manager' ), '{event_employees}' ) . PHP_EOL;
+
 	/**
 	 * 'Whitelisted' MDJM settings, filters are provided for each settings
 	 * section to allow extensions and other plugins to add their own settings
@@ -1395,13 +1414,51 @@ function mdjm_get_registered_settings()	{
                         'options' => mdjm_get_calendar_views(),
 						'std'     => 'month'
 					),
-                    'absence_background_color' => array(
-						'id'      => 'absence_background_color',
-						'name'    => __( 'Absence Background', 'mobile-dj-manager' ),
-						'desc'    => __( 'Select the background color of absence entries.', 'mobile-dj-manager' ),
-						'type'    => 'color',
-                        'default' => '#f7f7f7',
-                        'std'     => '#f7f7f7'
+					'availability_view' => array(
+						'id'      => 'availability_view',
+						'name'    => __( 'Default Availability View', 'mobile-dj-manager' ),
+						'desc'    => __( 'Select the default calendar view on the availability page.', 'mobile-dj-manager' ),
+						'type'    => 'select',
+						'chosen'  => true,
+                        'options' => mdjm_get_calendar_views(),
+						'std'     => 'month'
+					),
+                    'remove_absences_on_delete' => array(
+						'id'      => 'remove_absences_on_delete',
+						'name'    => __( 'Delete Absence with Employee?', 'mobile-dj-manager' ),
+						'desc'    => __( 'If enabled, all absences associated with an employee will be removed when an employee is removed.', 'mobile-dj-manager' ),
+						'type'    => 'checkbox',
+                        'std'     => '1'
+					),
+					'calendar_absence_title' => array(
+						'id'   => 'calendar_absence_title',
+						'name' => __( 'Absence Title', 'mobile-dj-manager' ),
+						'desc' => sprintf(
+							__( 'Title for the absence. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'text',
+						'std'  => '{employee_name}'
+					),
+					'calendar_absence_tip_title' => array(
+						'id'   => 'calendar_absence_tip_title',
+						'name' => __( 'Absence Tip Title', 'mobile-dj-manager' ),
+						'desc' => sprintf(
+							__( 'Title for the absence tip. Tips are visible after clicking an entry. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'text',
+						'std'  => $absence_tip
+					),
+					'calendar_absence_tip_content' => array(
+						'id'   => 'calendar_absence_tip_content',
+						'name' => __( 'Absence Tip Content', 'mobile-dj-manager' ),
+						'desc' => sprintf(
+							__( 'Content for the absence tip. Tips are visible after clicking an entry. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'textarea',
+						'std'  => $absence_content
 					),
                     'absence_border_color' => array(
 						'id'      => 'absence_border_color',
@@ -1418,6 +1475,48 @@ function mdjm_get_registered_settings()	{
 						'type'    => 'color',
                         'default' => '#555555',
                         'std'     => '#555555'
+					),
+					'calendar_event_title' => array(
+						'id'   => 'calendar_event_title',
+						'name' => sprintf(
+							__( '%s Title', 'mobile-dj-manager' ),
+							mdjm_get_label_singular()
+						),
+						'desc' => sprintf(
+							__( 'Title for the %s. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_get_label_singular(),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'text',
+						'std'  => $event_title
+					),
+					'calendar_event_tip_title' => array(
+						'id'   => 'calendar_event_tip_title',
+						'name' => sprintf(
+							__( '%s Tip Title', 'mobile-dj-manager' ),
+							mdjm_get_label_singular()
+						),
+						'desc' => sprintf(
+							__( 'Title for the %s tip. Tips are visible after clicking an entry. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_get_label_singular(),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'text',
+						'std'  => $event_tip_title
+					),
+					'calendar_event_tip_content' => array(
+						'id'   => 'calendar_event_tip_content',
+						'name' => sprintf(
+							__( '%s Tip Content', 'mobile-dj-manager' ),
+							mdjm_get_label_singular()
+						),
+						'desc' => sprintf(
+							__( 'Content for the %s tip. Tips are visible after clicking an entry. The following tags can be used: %s', 'mobile-dj-manager' ),
+							mdjm_get_label_singular(),
+							mdjm_display_absence_content_tags()
+						),
+						'type' => 'textarea',
+						'std'  => $event_content
 					),
                     'event_background_color' => array(
 						'id'      => 'event_background_color',
@@ -2486,170 +2585,6 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 	}
 
 } // mdjm_license_key_callback
-
-/**
- * Registers the license field callback for Software Licensing
- *
- * @since 1.5
- * @param array $args Arguments passed by the setting
- * @global $mdjm_options Array of all the MDJM options
- * @return void
- */
-/*if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
-	function mdjm_license_key_callback( $args ) {
-		global $mdjm_options;
-
-		$messages = array();
-		$license  = get_option( $args['options']['is_valid_license_option'] );
-
-		if ( isset( $mdjm_options[ $args['id'] ] ) ) {
-			$value = $mdjm_options[ $args['id'] ];
-		} else {
-			$value = isset( $args['std'] ) ? $args['std'] : '';
-		}
-
-		if( ! empty( $license ) && is_object( $license ) ) {
-
-			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
-			if ( false === $license->success ) {
-
-				switch( $license->error ) {
-
-					case 'expired' :
-
-						$class = 'error';
-						$messages[] = sprintf(
-							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager' ),
-							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
-							'http://mdjm.co.uk/checkout/?edd_license_key=' . $value . '&utm_campaign=admin&utm_source=licenses&utm_medium=expired'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'missing' :
-
-						$class = 'error';
-						$messages[] = sprintf(
-							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'mobile-dj-manager' ),
-							'http://mdjm.co.uk/your-account?utm_campaign=admin&utm_source=licenses&utm_medium=missing'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'invalid' :
-					case 'site_inactive' :
-
-						$class = 'error';
-						$messages[] = sprintf(
-							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'mobile-dj-manager' ),
-							$args['name'],
-							'http://mdjm.co.uk/your-account?utm_campaign=admin&utm_source=licenses&utm_medium=invalid'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'item_name_mismatch' :
-
-						$class = 'error';
-						$messages[] = sprintf( __( 'This is not a %s.', 'mobile-dj-manager' ), $args['name'] );
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'no_activations_left':
-
-						$class = 'error';
-						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/your-account/' );
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-				}
-
-			} else {
-
-				switch( $license->license ) {
-
-					case 'valid' :
-					default:
-
-						$class = 'valid';
-
-						$now        = current_time( 'timestamp' );
-						$expiration = strtotime( $license->expires, current_time( 'timestamp' ) );
-
-						if( 'lifetime' === $license->expires ) {
-
-							$messages[] = __( 'License key never expires.', 'mobile-dj-manager' );
-
-							$license_status = 'license-lifetime-notice';
-
-						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
-
-							$messages[] = sprintf(
-								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'mobile-dj-manager' ),
-								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
-								'http://mdjm.co.uk/checkout/?edd_license_key=' . $value . '&utm_campaign=admin&utm_source=licenses&utm_medium=renew'
-							);
-
-							$license_status = 'license-expires-soon-notice';
-
-						} else {
-
-							$messages[] = sprintf(
-								__( 'Your license key expires on %s.', 'mobile-dj-manager' ),
-								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) )
-							);
-
-							$license_status = 'license-expiration-date-notice';
-
-						}
-
-						break;
-
-				}
-
-			}
-
-		} else {
-			$license_status = null;
-		}
-
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
-
-		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
-			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'mobile-dj-manager' ) . '"/>';
-		}
-		$html .= '<label for="mdjm_settings[' . $args['id'] . ']">'  . $args['desc'] . '</label>';
-
-		if ( ! empty( $messages ) ) {
-			foreach( $messages as $message ) {
-
-				$html .= '<div class="mdjm-license-data mdjm-license-' . $class . '">';
-					$html .= '<p class="description">' . $message . '</p>';
-				$html .= '</div>';
-
-			}
-		}
-
-		wp_nonce_field( $args['id'] . '-nonce', $args['id'] . '-nonce' );
-
-		if ( isset( $license_status ) ) {
-			echo '<div class="' . $license_status . '">' . $html . '</div>';
-		} else {
-			echo '<div class="license-null">' . $html . '</div>';
-		}
-	}
-} // mdjm_license_key_callback*/
 
 /**
  * Hook Callback

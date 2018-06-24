@@ -12,6 +12,137 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve absence title
+ *
+ * @since	1.5.7
+ * @return	string	Absence title
+ */
+function mdjm_get_calendar_absence_title()	{
+	$absence_title = mdjm_get_option( 'calendar_absence_title' );
+	return stripslashes( $absence_title );
+} // mdjm_get_calendar_absence_title
+
+/**
+ * Retrieve absence tip title
+ *
+ * @since	1.5.7
+ * @return	string	Absence tip title
+ */
+function mdjm_get_calendar_absence_tip_title()	{
+	$tip_title = mdjm_get_option( 'calendar_absence_tip_title' );
+	return stripslashes( $tip_title );
+} // mdjm_get_calendar_absence_tip_title
+
+/**
+ * Retrieve absence content
+ *
+ * @since	1.5.7
+ * @return	string	Absence tip content
+ */
+function mdjm_get_calendar_absence_tip_content()	{
+	$tip_content = mdjm_get_option( 'calendar_absence_tip_content' );
+	return stripslashes( $tip_content );
+} // mdjm_get_calendar_absence_tip_content
+
+/**
+ * Retrieve event title
+ *
+ * @since	1.5.7
+ * @return	string	Event title
+ */
+function mdjm_get_calendar_event_title()	{
+	$event_title = mdjm_get_option( 'calendar_event_title' );
+	return stripslashes( $event_title );
+} // mdjm_get_calendar_event_title
+
+/**
+ * Retrieve absence tip title
+ *
+ * @since	1.5.7
+ * @return	string	Event tip title
+ */
+function mdjm_get_calendar_event_tip_title()	{
+	$tip_title = mdjm_get_option( 'calendar_event_tip_title' );
+	return stripslashes( $tip_title );
+} // mdjm_get_calendar_event_tip_title
+
+/**
+ * Retrieve event content
+ *
+ * @since	1.5.7
+ * @return	string	Event tip content
+ */
+function mdjm_get_calendar_event_tip_content()	{
+	$tip_content = mdjm_get_option( 'calendar_event_tip_content' );
+	return stripslashes( $tip_content );
+} // mdjm_get_calendar_event_tip_content
+
+/**
+ * Retrieve absence content tags
+ *
+ * @since	1.5.7
+ * @return	array	Array of tags
+ */
+function mdjm_get_absence_content_tags()	{
+	$absence_tags  = array(
+		'{employee_name}',
+		'{start}',
+		'{end}',
+		'{notes}'
+	);
+
+	$absence_tags = apply_filters( 'mdjm_absence_tags', $absence_tags );
+	return $absence_tags;
+} // mdjm_get_absence_content_tags
+
+/**
+ * Display available absence content tags
+ *
+ * @since	1.5.7
+ * @param	string	$seperator	The string to use to seperate the tags
+ * @return	string	Absence tags
+ */
+function mdjm_display_absence_content_tags( $seperator = ', ' )	{
+	$absence_tags = array();
+
+	foreach( mdjm_get_absence_content_tags() as $absence_tag )	{
+		$absence_tags[] = sprintf( '<code>%s</code>', $absence_tag );
+	}
+
+	return implode( $seperator, $absence_tags);
+} // mdjm_display_absence_content_tags
+
+/**
+ * Perform the content tag replacements for absences.
+ * @since	1.5.7
+ * @param	string	$content	The content	to search and replace
+ * @param   object  $absence    Absence database object
+ * @return	string	Filtered content
+ */
+function mdjm_do_absence_content_tags( $content = '', $absence = false )	{
+	if ( ! empty( $content ) && ! empty( $absence ) )	{
+		$employee_id = $absence->employee_id;
+		$start       = strtotime( $absence->start );
+		$end         = strtotime( $absence->end );
+		$notes       = ! empty( $absence->notes ) ? stripslashes( $absence->notes ) : '';
+		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		$search = mdjm_get_absence_content_tags();
+
+		$replace = array(
+			mdjm_get_employee_display_name( $employee_id ),
+			date( $date_format, $start ),
+			date( $date_format, $end ),
+			$notes
+		);
+
+		$content = str_replace( $search, $replace, $content );
+	}
+
+	return $content;
+} // mdjm_do_absence_content_tags
+
+/**
  * Retrieve the default event statuses that make an employee unavailable.
  *
  * @since	1.5.6
@@ -167,10 +298,17 @@ function mdjm_add_employee_absence( $employee_id, $data )    {
  * Remove an employee absence entry.
  *
  * @since   1.5.6
- * @param   int     $id
+ * @param   int     $id		The absence ID to remove
  * @return  int     The number of rows deleted or false
  */
 function mdjm_remove_employee_absence( $id )  {
+
+	$id = absint( $id );
+
+	if ( empty( $id ) )	{
+		return false;
+	}
+
     do_action( 'mdjm_before_remove_employee_absence', $id );
 
     $deleted = MDJM()->availability_db->delete( $id );
@@ -192,8 +330,30 @@ function mdjm_get_all_absences()   {
         'employees_only' => true
     ) );
 
-    return $entries;
+    return $absences;
 } // mdjm_get_all_absences
+
+/**
+ * Retrieve all absences for an employee.
+ *
+ * @since	1.5.7
+ * @param	int		$employee_id	WP User ID
+ * @return	array	Array of employee absence objects
+ */
+function mdjm_get_employee_absences( $employee_id )	{
+	$employee_id = absint( $employee_id );
+
+	if ( empty( $employee_id ) )	{
+		return false;
+	}
+
+	$absences = MDJM()->availability_db->get_entries( array(
+        'number'       => -1,
+        'employee_id'  => $employee_id
+    ) );
+
+    return $absences;
+} // mdjm_get_employee_absences
 
 /**
  * Perform the availability lookup.
@@ -224,7 +384,8 @@ function mdjm_do_availability_check( $date, $employees = '', $roles = '', $statu
  */
 function mdjm_get_calendar_entries( $start, $end )	{
 	$activity     = array();
-	$availability = new MDJM_Availability_Checker( $start, $end );
+	$roles        = 
+	$availability = new MDJM_Availability_Checker( $start, $end, '', mdjm_get_roles() );
 
 	$availability->get_calendar_entries();
 
@@ -288,8 +449,9 @@ function mdjm_get_calendar_event_description_text()	{
 	$default .= sprintf( __( 'Cost: %s', 'mobile-dj-manager' ), '{total_cost}' ) . PHP_EOL;
 	$default .= sprintf( __( 'Employees: %s', 'mobile-dj-manager' ), '{event_employees}' ) . PHP_EOL;
 
-	$text = mdjm_get_option( 'calendar_event_description', $default );
-	$text = utf8_encode( str_replace( '<br>', PHP_EOL, $text ) );
+	$text = mdjm_get_event_tip_content();
+	$text = ! empty( $text ) ? $text : $default;
+	$text = utf8_encode( str_replace( PHP_EOL, '<br>', $text ) );
 
 	return $text;
 } // mdjm_get_calendar_event_description_text

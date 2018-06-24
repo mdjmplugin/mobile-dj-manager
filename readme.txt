@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 4.4
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,17 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.7 =
+
+**Monday, 25th June 2018**
+
+**New**: Added setting options to customize the title, tip title and tip content for availability calendar entries
+**New**: Added option to delete employee absence entries when user account is deleted
+
+**Tweak**: Display all employee absences on the calendar - previous only those holding a role that was defined within *Settings -> Client Zone -> Availability Checker -> Employee Roles* were displayed
+
+**Bug**: Incorrect return variable within `mdjm_get_all_absences()` resulted in meta not being removed with absences
 
 = 1.5.6 =
 

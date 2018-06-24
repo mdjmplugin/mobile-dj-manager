@@ -59,6 +59,10 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v156_upgrades();
 	}
 
+	if ( version_compare( $mdjm_version, '1.5.7', '<' ) ) {
+		mdjm_v157_upgrades();
+	}
+
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
@@ -950,7 +954,7 @@ function mdjm_v154_upgrades()	{
 } // mdjm_v154_upgrades
 
 /**
- * 1.5.4 Upgrade.
+ * 1.5.6 Upgrade.
  *
  * @since	1.5.4
  * @return	void
@@ -1117,3 +1121,53 @@ function mdjm_v156_upgrade_availability_db()	{
 	}
 } // mdjm_v156_upgrade_event_pricing
 add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_db' );
+
+/**
+ * 1.5.7 Upgrade.
+ *
+ * @since	1.5.7
+ * @return	void
+ */
+function mdjm_v157_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+		@set_time_limit( 0 );
+	}
+
+	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
+
+	$absence_content = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
+	$absence_content .= sprintf( __( 'To: %s', 'mobile-dj-manager' ), '{end}' ) . PHP_EOL;
+	$absence_content .= '{notes}';
+
+	$event_title = '{event_type} ({event_status})';
+
+	$event_tip_title = mdjm_get_label_singular() . ' {contract_id} - {event_type}';
+
+	$event_content = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Setup: %s', 'mobile-dj-manager' ), '{dj_setup_time}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Cost: %s', 'mobile-dj-manager' ), '{total_cost}' ) . PHP_EOL;
+	$event_content .= sprintf( __( 'Employees: %s', 'mobile-dj-manager' ), '{event_employees}' ) . PHP_EOL;
+
+    $new_settings = array(
+        'remove_absences_on_delete'    => '1',
+		'calendar_absence_title'       => '{employee_name}',
+		'calendar_absence_tip_title'   => $absence_tip,
+		'calendar_absence_tip_content' => $absence_content,
+		'calendar_event_title'         => $event_title,
+		'calendar_event_tip_title'     => $event_tip_title,
+		'calendar_event_tip_content'   => $event_content
+    );
+
+    foreach( $new_settings as $key => $value )  {
+        mdjm_update_option( $key, $value );
+    }
+} // mdjm_v157_upgrades

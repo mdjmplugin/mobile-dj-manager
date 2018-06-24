@@ -384,54 +384,62 @@ class MDJM_Availability_Checker {
 			'number'      => 100
 		) );
 
-		foreach( $absences as $entry )	{
+		foreach( $absences as $absence )	{
 
-            $short_date_start = date( 'Y-m-d', strtotime( $entry->start ) );
-			$short_date_end   = date( 'Y-m-d', strtotime( $entry->end ) );
+            $short_date_start = date( 'Y-m-d', strtotime( $absence->start ) );
+			$short_date_end   = date( 'Y-m-d', strtotime( $absence->end ) );
             $description      = array();
-            $employee         = mdjm_get_employee_display_name( $entry->employee_id );
-			$title            = __( 'Unknown', 'mobile-dj-manager' );
-            $all_day          = ! empty( $entry->all_day ) ? true : false;
+            $all_day          = ! empty( $absence->all_day ) ? true : false;
+			$actions          = array();
 
-			if ( ! empty( $employee ) )	{
-				$title = sprintf( '%s: %s', __( 'Absence', 'mobile-dj-manager' ), $employee );
-			}
+			$from = date( $time_format . ' \o\n ' . $date_format, strtotime( $absence->start ) );
+			$to   = date( $time_format . ' \o\n ' . $date_format, strtotime( $absence->end ) );
 
-			$from = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->start ) );
-			$to   = date( $time_format . ' \o\n ' . $date_format, strtotime( $entry->end ) );
+			$title = mdjm_do_absence_content_tags(
+				mdjm_get_calendar_absence_title(),
+				$absence
+			);
 
-			$description[] = sprintf( __( 'From: %s', 'mobile-dj-manager' ), $from );
-			$description[] = sprintf( __( 'To: %s', 'mobile-dj-manager' ), $to );
+			$tip_title = mdjm_do_absence_content_tags(
+				mdjm_get_calendar_absence_tip_title(),
+				$absence
+			);
 
-			if ( ! empty( $entry->notes ) )	{
-				$description[] = stripslashes( $entry->notes );
-			}
+            $notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_absence_tip_content() ) . '<p>'; 
+			$notes = mdjm_do_absence_content_tags(
+				$notes,
+				$absence
+			);
 
-            $description  = '<p>' . implode( '<br>', $description ) . '</p>';
+			$actions = apply_filters( 'mdjm_calendar_absence_actions', $actions );
 
             if ( mdjm_employee_can( 'manage_employees' ) )  {
-                $description .= sprintf(
-                    '<p><a class="mdjm-delete availability-link delete-absence" data-entry="%d" href="#" >%s</a></p>',
-                    $entry->id,
+                $actions[] = sprintf(
+                    '<a class="mdjm-delete availability-link delete-absence" data-entry="%d" href="#" >%s</a>',
+                    $absence->id,
                     __( 'Delete entry', 'mobile-dj-manager' )
                 );
             }
+
+			if ( ! empty( $actions ) )	{
+				$notes .= '<p>' . implode( '&nbsp;&#124;&nbsp;', $actions ) . '</p>';
+			}
 
             $this->results[] = array(
 				'allDay'          => $all_day,
 				'backgroundColor' => mdjm_get_calendar_color(),
 				'borderColor'     => mdjm_get_calendar_color( 'border' ),
                 'className'       => 'mdjm_calendar_absence',
-				'end'             => $entry->end,
-				'id'              => $entry->id,
-				'notes'           => $description,
-				'start'           => $entry->start,
+				'end'             => $absence->end,
+				'id'              => $absence->id,
+				'notes'           => $notes,
+				'start'           => $absence->start,
 				'textColor'       => mdjm_get_calendar_color( 'text' ),
-				'tipTitle'        => $title,
-				'title'           => $employee
+				'tipTitle'        => $tip_title,
+				'title'           => $title
             );
 
-            $array_key = $key = array_search( $entry->employee_id, $this->available );
+            $array_key = $key = array_search( $absence->employee_id, $this->available );
 			if ( false !== $key ) {
                 unset( $this->available[ $key ] );
             }
@@ -472,27 +480,42 @@ class MDJM_Availability_Checker {
                 $event_status = $mdjm_event->get_status();
                 $employee     = mdjm_get_employee_display_name( $mdjm_event->employee_id );
                 $event_id     = mdjm_get_event_contract_id( $mdjm_event->ID );
-                $title        = sprintf( '%s (%s)', esc_attr( $event_type ), esc_attr( $event_status) );
-                $description  = array();
-                $notes        = mdjm_get_calendar_event_description_text();
-                $notes        = mdjm_do_content_tags( $notes, $mdjm_event->ID, $mdjm_event->client );
-                $tip_title    = sprintf(
-                    '%s %s - %s',
-                    esc_html( mdjm_get_label_singular() ),
-                    $event_id,
-                    esc_attr( $event_type )
-                );			
-
-                $event_url = add_query_arg( array(
+				$actions      = array();
+                $event_url    = add_query_arg( array(
                     'post'   => $mdjm_event->ID,
                     'action' => 'edit'
                 ), admin_url( 'post.php' ) );
 
-                $notes .= sprintf(
-                    '<p><a class="availability-link" href="%s" >%s</a></p>',
+				$title = mdjm_do_content_tags(
+					mdjm_get_calendar_event_title(),
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
+
+				$tip_title = mdjm_do_content_tags(
+					mdjm_get_calendar_event_tip_title(),
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
+
+				$notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_event_tip_content() ) . '<p>'; 
+				$notes = mdjm_do_content_tags(
+					$notes,
+					$mdjm_event->ID,
+					$mdjm_event->client
+				);
+
+                $actions[] = sprintf(
+                    '<a class="availability-link" href="%s" >%s</a>',
                     $event_url,
                     sprintf( __( 'View %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
                 );
+
+				$actions = apply_filters( 'mdjm_calendar_event_actions', $actions );
+
+				if ( ! empty( $actions ) )	{
+					$notes .= '<p>' . implode( '&nbsp;&#124;&nbsp;', $actions ) . '</p>';
+				}
 
                 $this->results[] = array(
                     'allDay'          => false,

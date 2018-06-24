@@ -27,7 +27,11 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			add_action( 'personal_options_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'edit_user_profile_update', array( &$this, 'save_custom_user_fields' ) );
 			add_action( 'profile_update', array( &$this, 'admin_user_rights' ), 10, 2 );
-			
+
+			// When an employee is deleted
+			add_action( 'deleted_user', array( $this, 'remove_employee_data' ) );
+
+			// Capture the timestamp of a successful login
 			add_action( 'wp_login', array( &$this, 'datestamp_login' ), 10, 2 );
 						
 			// Display admin notices
@@ -510,7 +514,27 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			}
 			
 		} // admin_user_rights
-		
+
+		/**
+		 * Remove employees absence entries when their user account is deleted.
+		 *
+		 * @since	1.5.7
+		 * @param	int		$user_id	The WP user ID
+		 * @return	void
+		 */
+		function remove_employee_data( $user_id )	{
+			$remove_absences = mdjm_get_option( 'remove_absences_on_delete', false );
+
+			if ( $remove_absences )	{
+				$absences = mdjm_get_employee_absences( $user_id );
+
+				foreach( $absences as $absence )	{
+					mdjm_remove_employee_absence( $absence->id );
+				}
+			}
+
+		} // remove_employee_data
+
 		/**
 		 * Remove admin bar & do not allow admin UI for Clients.
 		 * Redirect to Client Zone.
