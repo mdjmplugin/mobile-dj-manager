@@ -1165,8 +1165,6 @@ function mdjm_v157_upgrades()	{
 		'calendar_event_title'         => $event_title,
 		'calendar_event_tip_title'     => $event_tip_title,
 		'calendar_event_tip_content'   => $event_content
-		
-		
     );
 
     foreach( $new_settings as $key => $value )  {
