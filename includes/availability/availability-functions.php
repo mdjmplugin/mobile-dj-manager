@@ -192,7 +192,7 @@ function mdjm_get_all_absences()   {
         'employees_only' => true
     ) );
 
-    return $entries;
+    return $absences;
 } // mdjm_get_all_absences
 
 /**
