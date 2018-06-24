@@ -263,11 +263,11 @@ module.exports = function( grunt ) {
 
 	// default task
 	grunt.registerTask( 'default', [
-		'cssmin',
+		'checktextdomain',
 		'jshint',
+		'cssmin',
 		'uglify',
 		'makepot',
-		'checktextdomain',
 		//'potomo',
 		//'glotpress_download'
 	] );
