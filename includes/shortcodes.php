@@ -103,7 +103,7 @@ function mdjm_shortcode_home( $atts )	{
 		if( isset( $_GET['event_id'] ) )	{
 			$mdjm_event = mdjm_get_event( $_GET['event_id'] );
 
-			if( ! empty( $mdjm_event->ID ) && intval($mdjm_event->client) === $client_id )	{
+			if( ! empty( $mdjm_event->ID ) && absint( $mdjm_event->client ) === $client_id )	{
 				ob_start();
 
 				mdjm_get_template_part( 'event', 'single' );
