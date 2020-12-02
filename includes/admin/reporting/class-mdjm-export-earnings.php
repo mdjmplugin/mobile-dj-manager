@@ -40,9 +40,7 @@ class MDJM_Earnings_Export extends MDJM_Export {
 
 		ignore_user_abort( true );
 
-		if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-			set_time_limit( 0 );
-		}
+		mdjm_set_time_limit( 0 );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
@@ -106,10 +104,10 @@ class MDJM_Earnings_Export extends MDJM_Export {
 				$m2 = $end_month;
 
 			} else	{
-			
+
 				$m1 = 1;
 				$m2 = 12;
-			
+
 			}
 
 			while( $m1 <= $m2 )	{

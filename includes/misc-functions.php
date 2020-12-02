@@ -21,42 +21,42 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_format_datepicker_date()	{
 	$date_format = mdjm_get_option( 'short_date_format', 'd/m/Y' );
-	
+
 	$search = array( 'd', 'm', 'Y' );
 	$replace = array( 'dd', 'mm', 'yy' );
-	
+
 	$date_format = str_replace( $search, $replace, $date_format );
-			
+
 	return apply_filters( 'mdjm_format_datepicker_date', $date_format );
 } // mdjm_format_datepicker_date
 
 /**
  * Add the MDJM MCE Shortcode button.
- * 
+ *
  * @since	1.3
  * @param
  * @return
  */
-function mdjm_display_shortcode_button()	{    
-    
+function mdjm_display_shortcode_button()	{
+
 	// Define the post types & screens within which the MCE button should be displayed
     $post_types = array( 'email_template', 'contract', 'page' );
-    
-	$screens = array( 
+
+	$screens = array(
         'mdjm-event_page_mdjm-comms',
         'mdjm-event_page_mdjm-settings' );
-    
+
     // Add the MDJM TinyMCE buttons
     $current_screen = get_current_screen();
-    
+
 	if( in_array( get_post_type(), $post_types ) || in_array( $current_screen->id, $screens ) )	{
-		
+
 		if ( 'true' == get_user_option( 'rich_editing' ) ) {
 			add_filter( 'mce_external_plugins', 'mdjm_register_mce_plugin' );
 			add_filter( 'mce_buttons', 'mdjm_register_mce_buttons' );
 		}
-	}  
-	  
+	}
+
 } // mdjm_display_shortcode_button
 add_action( 'admin_head', 'mdjm_display_shortcode_button' );
 
@@ -126,24 +126,24 @@ function mdjm_object_to_array( $object = array() ) {
  *
  */
 function mdjm_register_mce_plugin( $plugin_array ) {
-	
+
 	$plugin_array['mdjm_shortcodes_btn'] = MDJM_PLUGIN_URL . '/assets/js/mdjm-tinymce-shortcodes.js';
-	
+
 	return $plugin_array;
-	
+
 } // mdjm_register_mce_plugin
 
 /*
  * Register the MDJM Shortcode button within the TinyMCE interface
- * 
+ *
  * @since	1.3
  * @params	arr		$buttons	Array of registered MCE buttons
  * @return	arr		$buttons	Filtered array of registered MCE buttons
  */
 function mdjm_register_mce_buttons( $buttons ) {
-	
+
 	array_push( $buttons, 'mdjm_shortcodes_btn' );
-	
+
 	return $buttons;
 } // mdjm_register_mce_buttons
 
@@ -161,7 +161,7 @@ function mdjm_insert_datepicker( $args = array() )	{
 		'altformat'		=> 'yy-mm-dd',
 		'firstday'		=> get_option( 'start_of_week' ),
 		'changeyear'	=> 'true',
-		'changemonth'	=> 'true'		
+		'changemonth'	=> 'true'
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -311,9 +311,9 @@ function mdjm_get_user_ip()	{
  * @param	int		$m		The notice message key.
  * @return	str		The HTML string for the notice
  */
-function mdjm_display_notice( $m )	{	
+function mdjm_display_notice( $m )	{
 	$message = mdjm_messages( $m );
-	
+
 	$notice = '<div class="mdjm-alert mdjm-alert-' . $message['class'] . '">';
 	$notice .= ! empty( $message['title'] ) ? '<span><strong>' . $message['title'] . '</strong></span><br />' : '';
 	$notice .= $message['message'] . '</div>';
@@ -334,13 +334,13 @@ function mdjm_print_notices()	{
 	if( ! isset( $_GET, $_GET['mdjm_message'] ) )	{
 		return;
 	}
-	
+
 	if ( isset( $_GET['event_id'] ) )	{
-		
+
 		$mdjm_event = new MDJM_Event( $_GET['event_id'] );
-		
+
 		echo mdjm_do_content_tags( mdjm_display_notice( $_GET['mdjm_message'] ), $mdjm_event->ID, $mdjm_event->client );
-	
+
 	} else	{
 		echo mdjm_display_notice( $_GET['mdjm_message'] );
 	}
@@ -357,7 +357,7 @@ add_action( 'mdjm_print_notices', 'mdjm_print_notices' );
  * @return	arr		Array containing message text, title and class.
  */
 function mdjm_messages( $key )	{
-	
+
 	$messages = apply_filters(
 		'mdjm_messages',
 		array(
@@ -501,14 +501,14 @@ function mdjm_messages( $key )	{
 			)
 		)
 	);
-	
+
 	// Return a single message
 	if ( isset( $key ) && array_key_exists( $key, $messages ) )	{
 		return $messages[ $key ];
 	} elseif ( isset( $key ) && ! array_key_exists( $key, $messages ) )	{
 		return;
 	}
-	
+
 	// Return all messages
 	return $messages;
 } // mdjm_messages
@@ -524,7 +524,7 @@ function mdjm_do_honeypot_check( $data )	{
 	if ( ! empty( $data['mdjm_honeypot'] ) )	{
 		wp_die( __( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'mobile-dj-manager' ) );
 	}
-	
+
 	return;
 } // mdjm_do_honeypot_check
 
@@ -560,3 +560,15 @@ function mdjm_get_completed_upgrades()	{
 	return $completed_upgrades;
 
 } // mdjm_get_completed_upgrades
+
+/**
+ * Wrapper for set_time_limit to see if it is enabled.
+ *
+ * @since 1.5.8
+ * @param int $limit Time limit.
+ */
+function mdjm_set_time_limit( $limit = 0 ) {
+	if ( function_exists( 'set_time_limit' ) && false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) { // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
+		@set_time_limit( $limit );
+	}
+}

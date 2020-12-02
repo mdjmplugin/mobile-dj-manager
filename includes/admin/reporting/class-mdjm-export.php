@@ -67,9 +67,7 @@ class MDJM_Export {
 	public function headers() {
 		ignore_user_abort( true );
 
-		if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) )	{
-			set_time_limit( 0 );
-		}
+		mdjm_set_time_limit( 0 );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );

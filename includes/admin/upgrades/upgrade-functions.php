@@ -231,9 +231,7 @@ function mdjm_v14_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	// Drop the deprecated Playlists table
 	$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $wpdb->prefix . 'mdjm_playlists' . "'" );
@@ -294,7 +292,7 @@ function mdjm_v14_upgrades()	{
 
 					$items[ $slug ] = $addon_id; // Store each addon's slug and new post ID for use later
 				}
-		
+
 			}
 
 		}
@@ -307,7 +305,7 @@ function mdjm_v14_upgrades()	{
 	$convert_packages = get_option( 'mdjm_upgrade_v14_import_packages' );
 
 	if ( ! $convert_packages )	{
-		
+
 		foreach ( $existing_packages as $slug => $existing_package )	{
 
 			$addons    = array();
@@ -378,9 +376,7 @@ function mdjm_v14_upgrade_event_packages()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	$items    = get_transient( 'mdjm_upgrade_v14_import_addons' );
 	$packages = get_transient( 'mdjm_upgrade_v14_import_packages' );
@@ -414,18 +410,18 @@ function mdjm_v14_upgrade_event_packages()	{
 		$total     = $results->total_events;
 	}
 
-	$event_ids = $wpdb->get_col( $wpdb->prepare( 
+	$event_ids = $wpdb->get_col( $wpdb->prepare(
 		"
-			SELECT post_id 
-			FROM $wpdb->postmeta 
-			WHERE meta_value != '' 
+			SELECT post_id
+			FROM $wpdb->postmeta
+			WHERE meta_value != ''
 			AND (
-				meta_key = %s 
-				OR 
 				meta_key = %s
-			) 
+				OR
+				meta_key = %s
+			)
 			ORDER BY post_id DESC LIMIT %d,%d;
-		", 
+		",
 		'_mdjm_event_package', '_mdjm_event_addons', $offset, $number
 	) );
 
@@ -506,9 +502,7 @@ function mdjm_v143_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	// Set comment type on journal entries
 	$wpdb->update(
@@ -525,7 +519,7 @@ function mdjm_v143_upgrades()	{
 			if ( ! empty( $client_field['default'] ) )	{
 				continue;
 			}
-	
+
 			$client_fields[ $field_id ]['id'] = sanitize_title_with_dashes( $client_field['label'], '', 'save' );
 		}
 
@@ -547,9 +541,7 @@ function mdjm_v147_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	// Update schedules
 	$tasks       = get_option( 'mdjm_schedules' );
@@ -624,9 +616,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	$number   = 20;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
@@ -657,13 +647,13 @@ function mdjm_v147_upgrade_event_tasks()	{
 		$total     = $results->total_events;
 	}
 
-	$event_ids = $wpdb->get_col( $wpdb->prepare( 
+	$event_ids = $wpdb->get_col( $wpdb->prepare(
 		"
-			SELECT ID 
-			FROM $wpdb->posts 
+			SELECT ID
+			FROM $wpdb->posts
 			WHERE post_type = 'mdjm-event'
 			ORDER BY ID DESC LIMIT %d,%d;
-		", 
+		",
 		$offset, $number
 	) );
 
@@ -736,9 +726,7 @@ function mdjm_v15_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
     // Add default values for new setting options
     $options = array(
@@ -808,9 +796,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	$number   = 20;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
@@ -841,15 +827,15 @@ function mdjm_v15_upgrade_event_pricing()	{
 		$total     = $results->total_events;
 	}
 
-	$event_ids = $wpdb->get_col( $wpdb->prepare( 
+	$event_ids = $wpdb->get_col( $wpdb->prepare(
 		"
-			SELECT ID 
-			FROM $wpdb->posts 
-			WHERE post_type = 'mdjm-event' 
-            AND post_status != 'draft' 
+			SELECT ID
+			FROM $wpdb->posts
+			WHERE post_type = 'mdjm-event'
+            AND post_status != 'draft'
             AND post_status != 'auto-draft'
 			ORDER BY ID DESC LIMIT %d,%d;
-		", 
+		",
 		$offset, $number
 	) );
 
@@ -875,12 +861,12 @@ function mdjm_v15_upgrade_event_pricing()	{
             if ( empty( $travel_cost ) )    {
                 $travel_cost = 0;
             }
-            
+
             update_post_meta( $event_id, '_mdjm_event_travel_cost', mdjm_sanitize_amount( $travel_cost ) );
-            
+
             // Additional costs
             update_post_meta( $event_id, '_mdjm_event_additional_cost', mdjm_sanitize_amount( 0 ) );
-            
+
             // Discount
             update_post_meta( $event_id, '_mdjm_event_discount', mdjm_sanitize_amount( 0 ) );
 
@@ -930,9 +916,7 @@ function mdjm_v154_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
     // Add default values for new setting options
     $options = array(
@@ -966,9 +950,7 @@ function mdjm_v156_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
     global $wpdb;
 
@@ -1019,9 +1001,7 @@ function mdjm_v156_upgrade_availability_db()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	$number    = 10;
 	$step      = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
@@ -1057,13 +1037,13 @@ function mdjm_v156_upgrade_availability_db()	{
 		$total     = $results->total_entries;
 	}
 
-	$entries = $wpdb->get_results( $wpdb->prepare( 
+	$entries = $wpdb->get_results( $wpdb->prepare(
 		"
-			SELECT * 
+			SELECT *
 			FROM $old_table
             GROUP BY entry_id
 			ORDER BY id ASC LIMIT %d,%d;
-		", 
+		",
 		$offset, $number
 	) );
 
@@ -1071,7 +1051,7 @@ function mdjm_v156_upgrade_availability_db()	{
 		foreach( $entries as $entry )	{
             $start = strtotime( $entry->date_from . ' 00:00:00' );
             $end   = strtotime( '+1 day', strtotime( $entry->date_to . ' 00:00:00' ) );
-            
+
             $data = array();
             $data['event_id']    = 0;
             $data['employee_id'] = $entry->user_id;
@@ -1135,9 +1115,7 @@ function mdjm_v157_upgrades()	{
 
 	ignore_user_abort( true );
 
-	if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-		@set_time_limit( 0 );
-	}
+	mdjm_set_time_limit( 0 );
 
 	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
 
