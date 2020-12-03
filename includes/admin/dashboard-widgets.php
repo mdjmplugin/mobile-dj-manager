@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return
  */
 function mdjm_add_wp_dashboard_widgets() {
-	
+
 	wp_add_dashboard_widget( 'mdjm-widget-overview', sprintf( __( '%s Overview', 'mobile-dj-manager' ), mdjm_get_option( 'company_name', 'MDJM' ) ), 'mdjm_widget_events_overview' );
 
 } // mdjm_add_wp_dashboard_widgets
@@ -35,11 +35,11 @@ add_action( 'wp_dashboard_setup', 'mdjm_add_wp_dashboard_widgets' );
  * @return
  */
 function mdjm_widget_events_overview() {
-	
+
 	global $current_user;
-	
+
 	if ( mdjm_employee_can( 'manage_mdjm' ) )	{
-	
+
 		$stats = new MDJM_Stats();
 
 		$enquiry_counts    = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
@@ -98,8 +98,8 @@ function mdjm_widget_events_overview() {
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
-						<th><?php _e( 'MTD', 'mobile-dj-manager' ); ?></th>
-						<th><?php _e( 'YTD', 'mobile-dj-manager' ); ?></th>
+						<th><?php esc_html_e( 'MTD', 'mobile-dj-manager' ); ?></th>
+						<th><?php esc_html_e( 'YTD', 'mobile-dj-manager' ); ?></th>
 						<th><?php echo date( 'Y', strtotime( '-1 year' ) ); ?></th>
 					</tr>
 				</thead>
@@ -123,19 +123,19 @@ function mdjm_widget_events_overview() {
 						<td><?php echo $completed_counts['last_year'];?></td>
 					</tr>
 					<tr>
-						<th><?php _e( 'Income', 'mobile-dj-manager' ); ?></th>
+						<th><?php esc_html_e( 'Income', 'mobile-dj-manager' ); ?></th>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_month ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_year ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_last ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php _e( 'Outgoings', 'mobile-dj-manager' ); ?></th>
+						<th><?php esc_html_e( 'Outgoings', 'mobile-dj-manager' ); ?></th>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_month ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_year ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_last ) ); ?></td>
 					</tr>
 					<tr>
-						<th><?php _e( 'Earnings', 'mobile-dj-manager' ); ?></th>
+						<th><?php esc_html_e( 'Earnings', 'mobile-dj-manager' ); ?></th>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_month ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_year ) ); ?></td>
 						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_last ) ); ?></td>
@@ -178,7 +178,7 @@ function mdjm_widget_events_overview() {
 				<?php endforeach; ?>
 
 			<?php else : ?>
-				<p><?php _e( 'No enquiries yet this month.', 'mobile-dj-manager' ); ?></p>
+				<p><?php esc_html_e( 'No enquiries yet this month.', 'mobile-dj-manager' ); ?></p>
 			<?php endif; ?>
 
 			<?php do_action( 'mdjm_after_events_overview' ); ?>

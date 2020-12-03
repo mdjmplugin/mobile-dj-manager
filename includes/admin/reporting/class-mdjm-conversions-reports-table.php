@@ -170,7 +170,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 						)
 					),
 					'date_query'             => array(
-						array( 
+						array(
 							'after'        => date( 'Y-m-d', $stats->start_date ),
 							'before'       => date( 'Y-m-d', $stats->end_date ),
 							'inclusive'    => true
@@ -313,7 +313,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total enquiries for period shown: ', 'mobile-dj-manager' );
+					esc_html_e( 'Total enquiries for period shown: ', 'mobile-dj-manager' );
                     echo $this->total_enquiries;
                 ?>
             </strong>
@@ -321,7 +321,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total Conversions for period shown: ', 'mobile-dj-manager' );
+					esc_html_e( 'Total Conversions for period shown: ', 'mobile-dj-manager' );
                     echo $this->total_conversions;
                 ?>
             </strong>
@@ -329,7 +329,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Conversion ratio for period shown: ', 'mobile-dj-manager' );
+					esc_html_e( 'Conversion ratio for period shown: ', 'mobile-dj-manager' );
                     echo round( (float) ( $this->total_conversions / $this->total_enquiries ) * 100 ) . '%';
                 ?>
             </strong>
@@ -337,7 +337,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total Value for period shown: ', 'mobile-dj-manager' );
+					esc_html_e( 'Total Value for period shown: ', 'mobile-dj-manager' );
                     echo mdjm_currency_filter( mdjm_format_amount( $this->total_value ) );
                 ?>
             </strong>
@@ -351,7 +351,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	 * @since	1.4
 	 */
 	public function no_items() {
-		_e( 'No data to display for this period.', 'mobile-dj-manager' );
+		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

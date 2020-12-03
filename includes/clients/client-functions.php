@@ -10,7 +10,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-	
+
 /**
  * Retrieve a list of all clients
  *
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	$arr	$clients	or false if no clients for the specified roles
  */
 function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $employee = false, $orderby = 'display_name', $order = 'ASC' )	{
-		
+
 	// We'll work with an array of roles
 	if ( ! empty( $roles ) && ! is_array( $roles ) )	{
 		$roles = array( $roles );
@@ -34,27 +34,27 @@ function mdjm_get_clients( $roles = array( 'client', 'inactive_client' ), $emplo
 	) );
 
 	$all_clients = get_users( $client_args );
-	
-	// If we are only quering an employee's client, we need to filter	
+
+	// If we are only quering an employee's client, we need to filter
 	if ( $employee )	{
 		foreach( $all_clients as $client )	{
-			
+
 			if ( ! MDJM()->users->is_employee_client( $client->ID, $employee ) )	{
 				continue;
 			}
-				
+
 			$clients[] = $client;
 		}
 
 		if ( empty( $clients ) )	{
 			return false;
 		}
-			
+
 		$all_clients = $clients;
 	}
-	
-	$clients = $all_clients; 
-				
+
+	$clients = $all_clients;
+
 	return $clients;
 } // mdjm_get_clients
 
@@ -192,9 +192,9 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
 			)
 		)
 	);
-	
+
 	$events = mdjm_get_events( $args );
-	
+
 	return $events;
 } // mdjm_get_client_events
 
@@ -206,7 +206,7 @@ function mdjm_get_client_events( $client_id='', $status='any', $orderby='event_d
  * @return	WP_Post object for clients next event, or false
  */
 function mdjm_get_clients_next_event( $client_id = '' )	{
-	
+
 	$client_id = ! empty( $client_id ) ? $client_id : get_current_user_id();
 
 	$args = array(
@@ -215,7 +215,7 @@ function mdjm_get_clients_next_event( $client_id = '' )	{
 		'meta_key'        => '_mdjm_event_date',
 		'meta_query'      => array(
 			'relation'    => 'AND',
-			array( 
+			array(
 				'key'     => '_mdjm_event_client',
 				'value'   => $client_id
 			),
@@ -229,11 +229,11 @@ function mdjm_get_clients_next_event( $client_id = '' )	{
 		'orderby'         => 'meta_value',
 		'order'           => 'ASC'
 	);
-				
+
 	$next_event = mdjm_get_events( $args );
-		
-	return apply_filters( 'mdjm_get_clients_next_event', $next_event );	
-	
+
+	return apply_filters( 'mdjm_get_clients_next_event', $next_event );
+
 } // mdjm_get_clients_next_event
 
 /**
@@ -247,7 +247,7 @@ function mdjm_user_is_client( $client_id )	{
 	if( mdjm_get_client_events( $client_id ) )	{
 		return true;
 	}
-	
+
 	return false;
 } // mdjm_user_is_client
 
@@ -314,7 +314,7 @@ function mdjm_update_client_status( $client_id, $status = 'active' )	{
 	}
 
 	$user = new WP_User( $client_id );
-					
+
 	$user->set_role( $role );
 
 } // mdjm_update_client_status
@@ -336,15 +336,15 @@ function mdjm_set_client_status_inactive( $result, $event_id )	{
 	if ( ! $result )	{
 		return;
 	}
-	
+
 	$client_id = mdjm_get_event_client_id( $event_id );
-	
+
 	if ( empty( $client_id ) )	{
 		return;
 	}
-	
+
 	$next_event = mdjm_get_clients_next_event( $client_id );
-	
+
 	if ( ! $next_event )	{
 		mdjm_update_client_status( $client_id, 'inactive' );
 	}
@@ -364,11 +364,11 @@ add_action( 'mdjm_post_update_event_status_mdjm-rejected', 'mdjm_set_client_stat
 function mdjm_get_client_login( $user_id )	{
 	$login  = '';
 	$client = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->user_login ) )	{
 		$login = $client->user_login;
 	}
-	
+
 	return apply_filters( 'mdjm_client_login', $login, $user_id );
 } // mdjm_get_client_login
 
@@ -382,11 +382,11 @@ function mdjm_get_client_login( $user_id )	{
 function mdjm_get_client_firstname( $user_id )	{
 	$first_name = '';
 	$client     = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->first_name ) )	{
 		$first_name = ucwords( $client->first_name );
 	}
-	
+
 	return apply_filters( 'mdjm_client_firstname', $first_name, $user_id );
 } // mdjm_get_client_firstname
 
@@ -400,11 +400,11 @@ function mdjm_get_client_firstname( $user_id )	{
 function mdjm_get_client_lastname( $user_id )	{
 	$last_name = '';
 	$client    = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->last_name ) )	{
 		$last_name = ucwords( $client->last_name );
 	}
-	
+
 	return apply_filters( 'mdjm_client_lastname', $last_name, $user_id );
 } // mdjm_get_client_lastname
 
@@ -418,11 +418,11 @@ function mdjm_get_client_lastname( $user_id )	{
 function mdjm_get_client_display_name( $user_id )	{
 	$display_name = '';
 	$client       = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->display_name ) )	{
 		$display_name = ucwords( $client->display_name );
 	}
-	
+
 	return apply_filters( 'mdjm_client_display_name', $display_name, $user_id );
 } // mdjm_get_client_display_name
 
@@ -435,13 +435,13 @@ function mdjm_get_client_display_name( $user_id )	{
  */
 function mdjm_get_client_email( $user_id )	{
 	$client = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->user_email ) )	{
 		$email = strtolower( $client->user_email );
 	} else	{
 		$email = '';
 	}
-	
+
 	return apply_filters( 'mdjm_client_email', $email, $user_id );
 } // mdjm_get_client_email
 
@@ -453,7 +453,7 @@ function mdjm_get_client_email( $user_id )	{
  * @return	arr		The address of the client.
  */
 function mdjm_get_client_address( $client_id )	{
-	
+
 	$client  = get_userdata( $client_id );
 	$address = array();
 
@@ -486,9 +486,9 @@ function mdjm_get_client_address( $client_id )	{
 function mdjm_get_client_full_address( $client_id )	{
 
 	$address = mdjm_get_client_address( $client_id );
-	
+
 	$address = apply_filters( 'mdjm_client_full_address', $address );
-	
+
 	return is_array( $address ) ? implode( '<br />', $address ) : '';
 } // mdjm_get_client_full_address
 
@@ -502,11 +502,11 @@ function mdjm_get_client_full_address( $client_id )	{
 function mdjm_get_client_phone( $user_id )	{
 	$phone  = '';
 	$client = get_userdata( $user_id );
-	
+
 	if( $client && ! empty( $client->phone1 ) )	{
 		$phone = $client->phone1;
 	}
-	
+
 	return apply_filters( 'mdjm_client_phone', $phone, $user_id );
 } // mdjm_get_client_phone
 
@@ -519,7 +519,7 @@ function mdjm_get_client_phone( $user_id )	{
  */
 function mdjm_get_client_alt_phone( $user_id )	{
 	$alt_phone = get_user_meta( $user_id, 'phone2', true );
-	
+
 	return apply_filters( 'mdjm_client_alt_phone', $alt_phone, $user_id );
 } // mdjm_get_client_alt_phone
 
@@ -531,15 +531,15 @@ function mdjm_get_client_alt_phone( $user_id )	{
  * @return	str		The phone number of the client.
  */
 function mdjm_get_client_last_login( $client_id )	{
-	
+
 	$client = get_userdata( $client_id );
-	
+
 	if( $client && ! empty( $client->last_login ) )	{
 		$login = $client->last_login;
 	} else	{
 		$login = __( 'Never', 'mobile-dj-manager' );
 	}
-	
+
 	return apply_filters( 'mdjm_client_last_login', $login, $client_id );
 } // mdjm_get_client_last_login
 
@@ -551,12 +551,12 @@ function mdjm_get_client_last_login( $client_id )	{
  * @return	arr|bool	Array of client fields or false.
  */
 function mdjm_get_client_fields()	{
-	
+
 	$client_fields = get_option( 'mdjm_client_fields' );
 	$client_fields = apply_filters( 'mdjm_client_fields', $client_fields );
 
     return $client_fields;
-		
+
 } // mdjm_get_client_fields
 
 /**
@@ -614,7 +614,7 @@ function mdjm_display_client_input_field( $field, $client )	{
 					'<option value="%1$s"%2$s>%1$s</option>',
 					$option,
 					selected( $option, $client->$id, false )
-				);				
+				);
 			}
 
 			echo '</select>';
@@ -643,7 +643,7 @@ function mdjm_display_client_input_field( $field, $client )	{
 function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
 
 	$client = get_userdata( $client_id );
-	
+
 	if ( ! $client )	{
 		return;
 	}
@@ -653,26 +653,26 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
         <table class="widefat mdjm_event_client_details mdjm_form_fields">
         	<thead>
             	<tr>
-                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?> 
-                    	<span class="description">(<a href="<?php echo add_query_arg( array( 'user_id' => $client_id ), admin_url( 'user-edit.php' ) ); ?>"><?php _e( 'edit', 'mobile-dj-manager' ); ?></a>)</span></th>
+                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?>
+                    	<span class="description">(<a href="<?php echo add_query_arg( array( 'user_id' => $client_id ), admin_url( 'user-edit.php' ) ); ?>"><?php esc_html_e( 'edit', 'mobile-dj-manager' ); ?></a>)</span></th>
                 </tr>
             </thead>
             <tbody>
             	<tr>
-                	<td><i class="fa fa-phone" aria-hidden="true" title="<?php _e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
+                	<td><i class="fa fa-phone" aria-hidden="true" title="<?php esc_attr_e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
                     <?php echo $client->phone1; echo '' != $client->phone2 ? ' / ' . $client->phone2 : '' ?></td>
 
                 	<td rowspan="3"><?php echo mdjm_get_client_full_address( $client->ID ); ?></td>
            		</tr>
-                
+
                 <tr>
-					<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php _e( 'Email', 'mobile-dj-manager' ); ?>"></i>
+					<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php esc_attr_e( 'Email', 'mobile-dj-manager' ); ?>"></i>
                     <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>
 				</tr>
 
 				<tr>
-                	<td><i class="fa fa-sign-in" aria-hidden="true" title="<?php _e( 'Last Login', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>                  	
+                	<td><i class="fa fa-sign-in" aria-hidden="true" title="<?php esc_attr_e( 'Last Login', 'mobile-dj-manager' ); ?>"></i>
+                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>
            		</tr>
             </tbody>
         </table>

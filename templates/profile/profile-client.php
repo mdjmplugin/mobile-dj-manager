@@ -70,7 +70,7 @@ if ( ! is_user_logged_in() ) : ?>
 
                                 <p class="mdjm_new_password_field">
                                     <label for="mdjm_new_password">
-                                        <?php _e( 'New Password', 'mobile-dj-manager' ); ?>
+                                        <?php esc_html_e( 'New Password', 'mobile-dj-manager' ); ?>
                                     </label>
 
                                     <input name="mdjm_new_password" id="mdjm_new_password" type="password" autocomplete="off" />
@@ -78,7 +78,7 @@ if ( ! is_user_logged_in() ) : ?>
 
                                 <p class="mdjm_confirm_password_field">
                                     <label for="mdjm_confirm_password">
-                                        <?php _e( 'Confirm New Password', 'mobile-dj-manager' ); ?>
+                                        <?php esc_html_e( 'Confirm New Password', 'mobile-dj-manager' ); ?>
                                     </label>
 
                                     <input name="mdjm_confirm_password" id="mdjm_confirm_password" type="password" autocomplete="off" />

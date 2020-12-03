@@ -123,7 +123,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 					echo $client->display_name;
 				}
 			} else	{
-				_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
+				esc_html_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
 			}
 		break;
 
@@ -150,7 +150,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				}
 
 			} else	{
-				_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
+				esc_html_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
 			}
 
 			if ( ! empty( $employees ) )	{
@@ -309,8 +309,8 @@ function mdjm_event_add_reject_bulk_actions()	{
 	?>
     <script type="text/javascript">
 	jQuery(document).ready(function() {
-		jQuery('<option>').val('reject_enquiry').text('<?php _e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action']");
-		jQuery('<option>').val('reject_enquiry').text('<?php _e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action2']");
+		jQuery('<option>').val('reject_enquiry').text('<?php esc_attr_e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action']");
+		jQuery('<option>').val('reject_enquiry').text('<?php esc_attr_e( 'Reject', 'mobile-dj-manager' ); ?>').appendTo("select[name='action2']");
 	});
 	</script>
     <?php
@@ -422,7 +422,7 @@ function mdjm_event_date_filter_dropdown()	{
 	?>
 	<label for="filter-by-date" class="screen-reader-text">Filter by Date</label>
 	<select name="mdjm_filter_date" id="filter-by-date">
-		<option value="0"><?php _e( 'All Dates', 'mobile-dj-manager' ); ?></option>
+		<option value="0"><?php esc_attr_e( 'All Dates', 'mobile-dj-manager' ); ?></option>
 	<?php
 	foreach ( $months as $arc_row ) {
 		if ( 0 == $arc_row->year )	{
@@ -499,7 +499,7 @@ function mdjm_event_employee_filter_dropdown()	{
 	}
 
 	?>
-	<label for="filter-by-employee" class="screen-reader-text"><?php _e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
+	<label for="filter-by-employee" class="screen-reader-text"><?php esc_html_e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
 
     <?php
 	mdjm_employee_dropdown(
@@ -550,9 +550,9 @@ function mdjm_event_client_filter_dropdown()	{
 	}
 
 	?>
-	<label for="filter-by-client" class="screen-reader-text">Filter by <?php _e( 'Client', 'mobile-dj-manager' ); ?></label>
+	<label for="filter-by-client" class="screen-reader-text">Filter by <?php esc_html_e( 'Client', 'mobile-dj-manager' ); ?></label>
 	<select name="mdjm_filter_client" id="mdjm_filter_client-by-dj">
-		<option value="0"<?php selected( $selected, 0, false ); ?>><?php _e( "All Client's", 'mobile-dj-manager' ); ?></option>
+		<option value="0"<?php selected( $selected, 0, false ); ?>><?php esc_attr_e( "All Client's", 'mobile-dj-manager' ); ?></option>
 	<?php
 	foreach( $clients as $ID => $display_name ) {
 

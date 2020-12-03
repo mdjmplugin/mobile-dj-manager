@@ -107,11 +107,11 @@ function mdjm_admin_notices() {
 	// Unattended events
 	if ( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
 		$unattended = mdjm_event_count( 'mdjm-unattended' );
-		
+
 		if( ! empty( $unattended ) && $unattended > 0 )	{
 			echo '<div class="notice notice-info is-dismissible">';
 			echo '<p>' .
-					sprintf( 
+					sprintf(
 						__( 'You have unattended enquiries. <a href="%s">Click here</a> to manage.', 'mobile-dj-manager' ),
 						admin_url( 'edit.php?post_type=mdjm-event&post_status=mdjm-unattended' )
 					). '</p>';
@@ -192,7 +192,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'song_remove_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -201,7 +201,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'security_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -210,7 +210,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'playlist_emailed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -219,7 +219,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'playlist_email_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -228,7 +228,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'employee_added' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -495,7 +495,7 @@ function mdjm_admin_notices() {
 	}
 
 	settings_errors( 'mdjm-notices' );
-	
+
 } // mdjm_admin_messages
 add_action( 'admin_notices', 'mdjm_admin_notices' );
 
@@ -510,7 +510,7 @@ function mdjm_admin_wp_5star_rating_notice() {
 
 	<div class="updated notice notice-mdjm-dismiss is-dismissible" data-notice="mdjm_request_wp_5star_rating">
 		<p>
-			<?php _e( '<strong>Awesome!</strong> It looks like you have using MDJM Event Management for a while now which is really fantastic!', 'mobile-dj-manager' ); ?>
+			<strong><?php esc_html_e( 'Awesome!', 'mobile-dj-manager' ); ?></strong> <?php esc_html_e( 'It looks like you have using MDJM Event Management for a while now which is really fantastic!', 'mobile-dj-manager' ); ?>
 		</p>
 		<p>
 			<?php printf(

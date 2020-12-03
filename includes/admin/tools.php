@@ -28,7 +28,7 @@ function mdjm_tools_page()	{
 
 	?>
     <div class="wrap">
-        <h1><?php _e( 'MDJM Event Management Tools', 'mobile-dj-manager' ); ?></h1>
+        <h1><?php esc_html_e( 'MDJM Event Management Tools', 'mobile-dj-manager' ); ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<?php
 			foreach( mdjm_get_tools_page_tabs() as $tab_id => $tab_name ) {
@@ -463,9 +463,9 @@ function mdjm_tools_import_export_display() {
 ?>
 
 	<div class="postbox">
-		<h3><span><?php _e( 'Export Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Export Settings', 'mobile-dj-manager' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Export the MDJM Event Management settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'mobile-dj-manager' ); ?></p>
+			<p><?php esc_html_e( 'Export the MDJM Event Management settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'mobile-dj-manager' ); ?></p>
 			<p><?php printf(
                 __( 'To export %s data (%s, clients, etc), visit the <a href="%s">Reports</a> page.', 'mobile-dj-manager' ),
                 mdjm_get_label_singular( true ),
@@ -483,9 +483,9 @@ function mdjm_tools_import_export_display() {
 	</div><!-- .postbox -->
 
 	<div class="postbox">
-		<h3><span><?php _e( 'Import Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Import Settings', 'mobile-dj-manager' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Import the MDJM Event Management settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'mobile-dj-manager' ); ?></p>
+			<p><?php esc_html_e( 'Import the MDJM Event Management settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'mobile-dj-manager' ); ?></p>
 			<form method="post" enctype="multipart/form-data" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ); ?>">
 				<p>
 					<input type="file" name="import_file"/>

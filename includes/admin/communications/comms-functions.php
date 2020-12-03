@@ -42,7 +42,7 @@ function mdjm_comms_page()	{
 
 	?>
     <div class="wrap">
-		<h1><?php _e( 'Client and Employee Communications', 'mobile-dj-manager' ); ?></h1>
+		<h1><?php esc_html_e( 'Client and Employee Communications', 'mobile-dj-manager' ); ?></h1>
         <form name="mdjm_form_send_comms" id="mdjm_form_send_comms" method="post" enctype="multipart/form-data">
         	<?php wp_nonce_field( 'send_comm_email', 'mdjm_nonce', true, true ); ?>
 			<?php mdjm_admin_action_field( 'send_comm_email' ); ?>
@@ -52,11 +52,11 @@ function mdjm_comms_page()	{
             <table class="form-table">
                 <?php do_action( 'mdjm_add_comms_fields_before_recipient' ); ?>
                 <tr>
-                	<th scope="row"><label for="mdjm_email_to"><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_to"><?php esc_html_e( 'Select a Recipient', 'mobile-dj-manager' ); ?></label></th>
                     <td>
                     	<select name="mdjm_email_to" id="mdjm_email_to">
-                        	<option value=""><?php _e( 'Select a Recipient', 'mobile-dj-manager' ); ?></option>
-                        	<optgroup label="<?php _e( 'Clients', 'mobile-dj-manager' ); ?>">
+                        	<option value=""><?php esc_attr_e( 'Select a Recipient', 'mobile-dj-manager' ); ?></option>
+                        	<optgroup label="<?php esc_attr_e( 'Clients', 'mobile-dj-manager' ); ?>">
                             	<?php
 								if ( empty( $clients ) )	{
 									echo '<option disabled="disabled">' . __( 'No Clients Found', 'mobile-dj-manager' ) . '</option>';
@@ -84,19 +84,19 @@ function mdjm_comms_page()	{
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
-                	<th scope="row"><label for="mdjm_email_subject"><?php _e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_subject"><?php esc_html_e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
                     <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
                 </tr>
                 <tr>
-                	<th scope="row"><label for="mdjm_email_copy_to"><?php _e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php _e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
+                	<th scope="row"><label for="mdjm_email_copy_to"><?php esc_html_e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
+                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php esc_html_e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_template' ); ?>
             	<tr>
-                	<th scope="row"><label for="mdjm_email_template"><?php _e( 'Select a Template', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_template"><?php esc_html_e( 'Select a Template', 'mobile-dj-manager' ); ?></label></th>
                     <td>
                     	<select name="mdjm_email_template" id="mdjm_email_template">
-                        	<option value="0"><?php _e( 'No Template', 'mobile-dj-manager' ); ?></option>
+                        	<option value="0"><?php esc_html_e( 'No Template', 'mobile-dj-manager' ); ?></option>
                             <?php $template = isset( $_GET['template'] ) ? $_GET['template'] : 0; ?>
                         	<?php echo mdjm_comms_template_options( $template ); ?>
                         </select>
@@ -117,7 +117,7 @@ function mdjm_comms_page()	{
                             <input type="hidden" name="mdjm_email_event" id="mdjm_email_event" value="<?php echo absint($_GET['event_id']); ?>" />
                         <?php else : ?>
                             <select name="mdjm_email_event" id="mdjm_email_event">
-                            <option value="0"><?php _e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
+                            <option value="0"><?php esc_attr_e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
                             </select>
                         <?php endif; ?>
                         <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
@@ -125,7 +125,7 @@ function mdjm_comms_page()	{
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_file' ); ?>
                 <tr>
-                	<th scope="row"><label for="mdjm_email_upload_file"><?php _e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
+                	<th scope="row"><label for="mdjm_email_upload_file"><?php esc_html_e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
                     <td><input type="file" name="mdjm_email_upload_file" id="mdjm_email_upload_file" class="regular-text" value="" />
                     	<p class="description"><?php printf( __( 'Max file size %dMB. Change php.ini <code>post_max_size</code> to increase', 'mobile-dj-manager' ), ini_get( 'post_max_size' ) ); ?></p>
                     </td>

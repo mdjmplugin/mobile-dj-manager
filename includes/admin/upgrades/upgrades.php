@@ -44,12 +44,12 @@ function mdjm_upgrades_screen() {
 	}
 	?>
 	<div class="wrap">
-		<h2><?php _e( 'MDJM Event Management - Upgrading, Please wait...', 'mobile-dj-manager' ); ?></h2>
+		<h2><?php esc_html_e( 'MDJM Event Management - Upgrading, Please wait...', 'mobile-dj-manager' ); ?></h2>
 
 		<?php if( ! empty( $action ) ) : ?>
 
 			<div id="mdjm-upgrade-status">
-				<p><?php _e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'mobile-dj-manager' ); ?></p>
+				<p><?php esc_html_e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'mobile-dj-manager' ); ?></p>
 
 				<?php if( ! empty( $total ) ) : ?>
 					<p><strong>
@@ -65,7 +65,7 @@ function mdjm_upgrades_screen() {
 
 			<div id="mdjm-upgrade-status">
 				<p>
-					<?php _e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'mobile-dj-manager' ); ?>
+					<?php esc_html_e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'mobile-dj-manager' ); ?>
 					<img src="<?php echo MDJM_PLUGIN_URL . '/assets/images/loading.gif'; ?>" id="mdjm-upgrade-loader"/>
 				</p>
 			</div>

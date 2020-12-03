@@ -71,7 +71,7 @@ function mdjm_availability_page()	{
 				</div>
 
 			</div>
-    
+
 		</div>
 	</div><!--wrap-->
 	<?php
@@ -98,7 +98,7 @@ function mdjm_render_availability_page_checker()	{
 	<div class="mdjm-availability-checker-fields">
 		<div class="mdjm-availability-check-date">
 			<span class="mdjm-repeatable-row-setting-label">
-				<?php _e( 'Date', 'mobile-dj-manager' );?>
+				<?php esc_html_e( 'Date', 'mobile-dj-manager' );?>
 			</span>
 
 			<?php echo MDJM()->html->text( array(
@@ -130,7 +130,7 @@ function mdjm_render_availability_page_checker()	{
 
 			<div class="mdjm-event-primary-employee">
 				<span class="mdjm-repeatable-row-setting-label">
-					<?php _e( 'Roles', 'mobile-dj-manager' ); ?>
+					<?php esc_html_e( 'Roles', 'mobile-dj-manager' ); ?>
 				</span>
 
 				<?php echo MDJM()->html->roles_dropdown( array(
@@ -150,7 +150,7 @@ function mdjm_render_availability_page_checker()	{
 		<br>
 		<p><span class="mdjm-event-worker-add">
 			<a id="check-availability" class="button button-secondary">
-				<?php _e( 'Check Availability', 'mobile-dj-manager' ); ?>
+				<?php esc_html_e( 'Check Availability', 'mobile-dj-manager' ); ?>
 			</a>
 		</span></p>
 	</div>
@@ -198,11 +198,11 @@ function mdjm_render_availability_absence_form()    {
     <div id="mdjm-add-absence-fields" class="mdjm-availability-add-absence-sections-wrap">
         <div class="mdjm-custom-event-sections">
             <div class="mdjm-custom-event-section">
-                <span class="mdjm-custom-event-section-title"><?php _e( 'Add Employee Absence', 'mobile-dj-manager'); ?></span>
+                <span class="mdjm-custom-event-section-title"><?php esc_html_e( 'Add Employee Absence', 'mobile-dj-manager'); ?></span>
                 <?php if ( mdjm_employee_can( 'manage_employees' ) ) : ?>
                     <span class="mdjm-employee-option">
                         <label class="mdjm-employee-id">
-                            <?php _e( 'Employee', 'mobile-dj-manager' ); ?>
+                            <?php esc_html_e( 'Employee', 'mobile-dj-manager' ); ?>
                         </label>
                         <?php echo MDJM()->html->employee_dropdown( array(
                             'name'     => 'absence_employee_id',
@@ -220,7 +220,7 @@ function mdjm_render_availability_absence_form()    {
 
                 <span class="mdjm-absence-start-option">
                     <label class="mdjm-absence-start">
-                        <?php _e( 'From', 'mobile-dj-manager' ); ?>
+                        <?php esc_html_e( 'From', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
                         'name'  => 'display_absence_start',
@@ -235,7 +235,7 @@ function mdjm_render_availability_absence_form()    {
 
                 <span class="mdjm-absence-end-option">
                     <label class="mdjm-absence-end">
-                        <?php _e( 'To', 'mobile-dj-manager' ); ?>
+                        <?php esc_html_e( 'To', 'mobile-dj-manager' ); ?>
                     </label>
                     <?php echo MDJM()->html->text( array(
                         'name'  => 'display_absence_end',
@@ -251,7 +251,7 @@ function mdjm_render_availability_absence_form()    {
                 <div class="mdjm-repeatable-option">
                     <span class="mdjm-absence-allday-option">
                         <label class="mdjm-absence-all-day">
-                            <?php _e( 'All day?', 'mobile-dj-manager' ); ?>
+                            <?php esc_html_e( 'All day?', 'mobile-dj-manager' ); ?>
                         </label>
                         <?php echo MDJM()->html->checkbox( array(
                             'name'    => 'absence_all_day',
@@ -262,14 +262,14 @@ function mdjm_render_availability_absence_form()    {
 
 				<span class="mdjm-absence-start-time-option mdjm-hidden">
 					<label class="mdjm-absence-start-hour">
-						<?php _e( 'Start time', 'mobile-dj-manager' ); ?>
+						<?php esc_html_e( 'Start time', 'mobile-dj-manager' ); ?>
 					</label>
 					<?php echo MDJM()->html->time_hour_select( array(
 						'name' => 'absence_start_time_hr'
-					) ); ?> 
+					) ); ?>
 					<?php echo MDJM()->html->time_minute_select( array(
 						'name' => 'absence_start_time_min'
-					) ); ?> 
+					) ); ?>
 					<?php if ( $ampm ) : ?>
 						<?php echo MDJM()->html->time_period_select( array(
 							'name' => 'absence_start_time_period'
@@ -279,14 +279,14 @@ function mdjm_render_availability_absence_form()    {
 
 				<span class="mdjm-absence-end-time-option">
 					<label class="mdjm-absence-end-hour">
-						<?php _e( 'End time', 'mobile-dj-manager' ); ?>
+						<?php esc_html_e( 'End time', 'mobile-dj-manager' ); ?>
 					</label>
 					<?php echo MDJM()->html->time_hour_select( array(
 						'name' => 'absence_end_time_hr'
-					) ); ?> 
+					) ); ?>
 					<?php echo MDJM()->html->time_minute_select( array(
 						'name' => 'absence_end_time_min'
-					) ); ?> 
+					) ); ?>
 					<?php if ( $ampm ) : ?>
 						<?php echo MDJM()->html->time_period_select( array(
 							'name' => 'absence_end_time_period'
@@ -297,7 +297,7 @@ function mdjm_render_availability_absence_form()    {
 				<br>
 				<span class="mdjm-absence-notes-option">
 					<label class="mdjm-absence-notes">
-						<?php _e( 'Notes', 'mobile-dj-manager' ); ?>
+						<?php esc_html_e( 'Notes', 'mobile-dj-manager' ); ?>
 					</label>
 					<?php echo MDJM()->html->textarea( array(
 						'name'        => 'absence_notes',
@@ -309,7 +309,7 @@ function mdjm_render_availability_absence_form()    {
 				<br>
 				<span class="mdjm-absence-submit-option">
 					<button id="add-absence" class="button button-secondary">
-						<?php _e( 'Add Absence', 'mobile-dj-manager' ); ?>
+						<?php esc_html_e( 'Add Absence', 'mobile-dj-manager' ); ?>
 					</button>
 				</span>
 

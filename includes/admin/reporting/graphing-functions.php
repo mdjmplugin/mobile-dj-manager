@@ -265,7 +265,7 @@ function mdjm_earnings_reports_graph() {
 	<div id="mdjm-dashboard-widgets-wrap">
 		<div class="metabox-holder" style="padding-top: 0;">
 			<div class="postbox">
-				<h3><span><?php _e( 'Earnings Over Time', 'mobile-dj-manager' ); ?></span></h3>
+				<h3><span><?php esc_html_e( 'Earnings Over Time', 'mobile-dj-manager' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
@@ -280,7 +280,7 @@ function mdjm_earnings_reports_graph() {
 					<p class="mdjm_graph_totals">
 						<strong>
 							<?php
-								_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
+								esc_html_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
 								echo mdjm_currency_filter( mdjm_format_amount( $earnings_totals ) );
 							?>
 						</strong>
@@ -612,7 +612,7 @@ function mdjm_transactions_reports_graph() {
 	<div id="mdjm-dashboard-widgets-wrap">
 		<div class="metabox-holder" style="padding-top: 0;">
 			<div class="postbox">
-				<h3><span><?php _e( 'Transactions Over Time', 'mobile-dj-manager' ); ?></span></h3>
+				<h3><span><?php esc_html_e( 'Transactions Over Time', 'mobile-dj-manager' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
@@ -627,7 +627,7 @@ function mdjm_transactions_reports_graph() {
 					<p class="mdjm_graph_totals">
 						<strong>
 							<?php
-								_e( 'Total income for period shown: ', 'mobile-dj-manager' );
+								esc_html_e( 'Total income for period shown: ', 'mobile-dj-manager' );
 								echo mdjm_currency_filter( mdjm_format_amount( $income_totals ) );
 							?>
 						</strong>
@@ -635,7 +635,7 @@ function mdjm_transactions_reports_graph() {
 					<p class="mdjm_graph_totals">
 						<strong>
 							<?php
-								_e( 'Total expense for period shown: ', 'mobile-dj-manager' );
+								esc_html_e( 'Total expense for period shown: ', 'mobile-dj-manager' );
 								echo mdjm_currency_filter( mdjm_format_amount( $expense_totals ) );
 							?>
 						</strong>
@@ -643,7 +643,7 @@ function mdjm_transactions_reports_graph() {
                     <p class="mdjm_graph_totals">
 						<strong>
 							<?php
-								_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
+								esc_html_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
 								echo mdjm_currency_filter( mdjm_format_amount( $income_totals - $expense_totals ) );
 							?>
 						</strong>
@@ -730,7 +730,7 @@ function mdjm_reports_graph_controls() {
 				</select>
 
 				<div id="mdjm-date-range-options" <?php echo $display; ?>>
-					<span><?php _e( 'From', 'mobile-dj-manager' ); ?>&nbsp;</span>
+					<span><?php esc_html_e( 'From', 'mobile-dj-manager' ); ?>&nbsp;</span>
 					<select id="mdjm-graphs-month-start" name="m_start">
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_start'] ); ?>><?php echo mdjm_month_num_to_name( $i ); ?></option>
@@ -746,7 +746,7 @@ function mdjm_reports_graph_controls() {
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year'] ); ?>><?php echo $i; ?></option>
 						<?php endfor; ?>
 					</select>
-					<span><?php _e( 'To', 'mobile-dj-manager' ); ?>&nbsp;</span>
+					<span><?php esc_html_e( 'To', 'mobile-dj-manager' ); ?>&nbsp;</span>
 					<select id="mdjm-graphs-month-end" name="m_end">
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_end'] ); ?>><?php echo mdjm_month_num_to_name( $i ); ?></option>
@@ -766,7 +766,7 @@ function mdjm_reports_graph_controls() {
 
 				<div class="mdjm-graph-filter-submit graph-option-section">
 					<input type="hidden" name="mdjm-action" value="filter_reports" />
-					<input type="submit" class="button-secondary" value="<?php _e( 'Filter', 'mobile-dj-manager' ); ?>"/>
+					<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Filter', 'mobile-dj-manager' ); ?>"/>
 				</div>
 			</div>
 		</div>

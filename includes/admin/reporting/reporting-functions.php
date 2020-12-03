@@ -27,8 +27,8 @@ function mdjm_reports_page() {
 	?>
 	<div class="wrap">
 		<h1 class="nav-tab-wrapper">
-			<a href="<?php echo add_query_arg( array( 'tab' => 'reports', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Reports', 'mobile-dj-manager' ); ?></a>
-            <a href="<?php echo add_query_arg( array( 'tab' => 'export', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Export', 'mobile-dj-manager' ); ?></a>
+			<a href="<?php echo add_query_arg( array( 'tab' => 'reports', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Reports', 'mobile-dj-manager' ); ?></a>
+            <a href="<?php echo add_query_arg( array( 'tab' => 'export', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Export', 'mobile-dj-manager' ); ?></a>
 			<?php do_action( 'mdjm_reports_tabs' ); ?>
 		</h1>
 
@@ -138,7 +138,7 @@ function mdjm_report_views() {
 	?>
 	<form id="mdjm-reports-filter" method="get">
 		<select id="mdjm-reports-view" name="view">
-			<option value="-1"><?php _e( 'Report Type', 'mobile-dj-manager' ); ?></option>
+			<option value="-1"><?php esc_html_e( 'Report Type', 'mobile-dj-manager' ); ?></option>
 			<?php foreach ( $views as $view_id => $label ) : ?>
 				<option value="<?php echo esc_attr( $view_id ); ?>" <?php selected( $view_id, $current_view ); ?>><?php echo $label; ?></option>
 			<?php endforeach; ?>
@@ -228,7 +228,7 @@ function mdjm_reports_employees_table() {
                 <?php $employees_table->output_employee_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Employee Wages Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Employee Wages Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $employees_table->output_wages_graph(); ?>
             </div>
         </div>
@@ -283,7 +283,7 @@ function mdjm_reports_types_table() {
                 <?php $types_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Type Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Type Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $types_table->output_earnings_graph(); ?>
             </div>
         </div>
@@ -331,11 +331,11 @@ function mdjm_reports_conversions_table() {
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Enquiry Source Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Enquiry Source Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $conversions_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Source Values Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Source Values Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $conversions_table->output_earnings_graph(); ?>
             </div>
         </div>
@@ -387,7 +387,7 @@ function mdjm_reports_packages_table() {
                 <?php $packages_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Package Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Package Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $packages_table->output_earnings_graph(); ?>
             </div>
         </div>
@@ -439,7 +439,7 @@ function mdjm_reports_addons_table() {
                 <?php $addons_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Addon Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Addon Earnings Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $addons_table->output_earnings_graph(); ?>
             </div>
         </div>
@@ -485,11 +485,11 @@ function mdjm_reports_txn_types_table() {
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Transaction Types Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Transaction Types Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $txn_types_table->output_types_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
-                <strong><?php _e( 'Transaction Values Mix: ', 'mobile-dj-manager' ); ?></strong>
+                <strong><?php esc_html_e( 'Transaction Values Mix: ', 'mobile-dj-manager' ); ?></strong>
                 <?php $txn_types_table->output_values_graph(); ?>
             </div>
         </div>
@@ -525,9 +525,9 @@ function mdjm_reports_tab_export()	{
 					<?php do_action( 'mdjm_reports_tab_export_content_top' ); ?>
 
 					<div class="postbox mdjm-export-events-earnings">
-						<h3><span><?php _e( 'Export Transaction History', 'mobile-dj-manager' ); ?></span></h3>
+						<h3><span><?php esc_html_e( 'Export Transaction History', 'mobile-dj-manager' ); ?></span></h3>
 						<div class="inside">
-							<p><?php _e( 'Download a CSV of all transactions recorded.', 'mobile-dj-manager' ); ?></p>
+							<p><?php esc_html_e( 'Download a CSV of all transactions recorded.', 'mobile-dj-manager' ); ?></p>
 							<form id="mdjm-export-txns" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-txn-export-start',
@@ -538,7 +538,7 @@ function mdjm_reports_tab_export()	{
 									'name'        => 'display_start_date',
 									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array( 
+								<?php echo MDJM()->html->hidden( array(
 									'name' => 'txn_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
@@ -550,20 +550,20 @@ function mdjm_reports_tab_export()	{
 									'name'        => 'display_end_date',
 									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array( 
+								<?php echo MDJM()->html->hidden( array(
 									'name' => 'txn_end'
 								) ); ?>
 								<select name="txn_status">
-									<option value=""><?php _e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
-                                    <option value="Completed"><?php _e( 'Completed', 'mobile-dj-manager' ); ?></option>
-                                    <option value="Pending"><?php _e( 'Pending', 'mobile-dj-manager' ); ?></option>
-                                    <option value="Cancelled"><?php _e( 'Cancelled', 'mobile-dj-manager' ); ?></option>
-                                    <option value="Failed"><?php _e( 'Failed', 'mobile-dj-manager' ); ?></option>
+									<option value=""><?php esc_html_e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
+                                    <option value="Completed"><?php esc_html_e( 'Completed', 'mobile-dj-manager' ); ?></option>
+                                    <option value="Pending"><?php esc_html_e( 'Pending', 'mobile-dj-manager' ); ?></option>
+                                    <option value="Cancelled"><?php esc_html_e( 'Cancelled', 'mobile-dj-manager' ); ?></option>
+                                    <option value="Failed"><?php esc_html_e( 'Failed', 'mobile-dj-manager' ); ?></option>
 								</select>
 								<?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
 								<input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Txns"/>
 								<span>
-									<input type="submit" value="<?php _e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
+									<input type="submit" value="<?php esc_attr_e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
 									<span class="spinner"></span>
 								</span>
 							</form>
@@ -584,7 +584,7 @@ function mdjm_reports_tab_export()	{
 									'name'        => 'display_start_date',
 									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array( 
+								<?php echo MDJM()->html->hidden( array(
 									'name' => 'event_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
@@ -596,11 +596,11 @@ function mdjm_reports_tab_export()	{
 									'name'        => 'display_end_date',
 									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array( 
+								<?php echo MDJM()->html->hidden( array(
 									'name' => 'event_end'
 								) ); ?>
 								<select name="event_status">
-									<option value="any"><?php _e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
+									<option value="any"><?php esc_html_e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
                                     <?php foreach( mdjm_all_event_status() as $status => $label ) : ?>
                                     	<option value="<?php echo $status; ?>"><?php echo $label; ?></option>
                                     <?php endforeach; ?>
@@ -608,7 +608,7 @@ function mdjm_reports_tab_export()	{
 								<?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
 								<input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Events"/>
 								<span>
-									<input type="submit" value="<?php _e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
+									<input type="submit" value="<?php esc_attr_e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
 									<span class="spinner"></span>
 								</span>
 							</form>
@@ -616,26 +616,26 @@ function mdjm_reports_tab_export()	{
 					</div><!-- .postbox -->
 
 					<div class="postbox mdjm-export-clients">
-						<h3><span><?php _e( 'Export Clients','mobile-dj-manager' ); ?></span></h3>
+						<h3><span><?php esc_html_e( 'Export Clients','mobile-dj-manager' ); ?></span></h3>
 						<div class="inside">
-							<p><?php _e( 'Download a CSV of clients.', 'mobile-dj-manager' ); ?></p>
+							<p><?php esc_html_e( 'Download a CSV of clients.', 'mobile-dj-manager' ); ?></p>
 							<form id="mdjm-export-clients" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
 								<input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Clients"/>
-								<input type="submit" value="<?php _e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
+								<input type="submit" value="<?php esc_attr_e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
 							</form>
 						</div><!-- .inside -->
 					</div><!-- .postbox -->
 
 					<?php if ( mdjm_is_employer() ) : ?>
                         <div class="postbox mdjm-export-employees">
-                            <h3><span><?php _e( 'Export Employees','mobile-dj-manager' ); ?></span></h3>
+                            <h3><span><?php esc_html_e( 'Export Employees','mobile-dj-manager' ); ?></span></h3>
                             <div class="inside">
-                                <p><?php _e( 'Download a CSV of employees.', 'mobile-dj-manager' ); ?></p>
+                                <p><?php esc_html_e( 'Download a CSV of employees.', 'mobile-dj-manager' ); ?></p>
                                 <form id="mdjm-export-employees" class="mdjm-export-form mdjm-import-export-form" method="post">
                                     <?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>
                                     <input type="hidden" name="mdjm-export-class" value="MDJM_Batch_Export_Employees"/>
-                                    <input type="submit" value="<?php _e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
+                                    <input type="submit" value="<?php esc_attr_e( 'Generate CSV', 'mobile-dj-manager' ); ?>" class="button-secondary"/>
                                 </form>
                             </div><!-- .inside -->
                         </div><!-- .postbox -->

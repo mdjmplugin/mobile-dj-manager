@@ -92,7 +92,7 @@ function mdjm_payment_mode_select() {
 	$page_URL = mdjm_get_current_page_url();
 	do_action( 'mdjm_payment_mode_top' ); ?>
 		<fieldset id="mdjm_payment_mode_select">
-        	<legend><?php _e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
+        	<legend><?php esc_html_e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
 			<?php do_action( 'mdjm_payment_mode_before_gateways_wrap' ); ?>
 			<div id="mdjm-payment-mode-wrap">
 				<?php

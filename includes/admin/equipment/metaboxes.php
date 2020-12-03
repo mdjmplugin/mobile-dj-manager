@@ -58,24 +58,24 @@ function mdjm_register_package_meta_boxes( $post )	{
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_package_before_metaboxes' );
-	
+
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
 		if ( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
-		
+
 		// Permission check
 		if ( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
-		
+
 		// Callback check
 		if ( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-				
+
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -86,7 +86,7 @@ function mdjm_register_package_meta_boxes( $post )	{
 			$metabox['args']
 		);
 	}
-	
+
 	// Runs after metabox output
 	do_action( 'mdjm_package_after_metaboxes' );
 } // mdjm_register_package_meta_boxes
@@ -187,7 +187,7 @@ function mdjm_package_metabox_availability_employee_row( $post )	{
     <div class="mdjm_field_wrap mdjm_form_fields">
 		<?php if ( mdjm_is_employer() ) : ?>
             <div id="package-employee-select" class="mdjm_col col2">
-                <p><label for="_package_employees"><?php _e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
+                <p><label for="_package_employees"><?php esc_html_e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_package_employees',
                     'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ),
@@ -240,11 +240,11 @@ function mdjm_package_metabox_availability_period_row( $post )	{
                 'name'     => '_package_restrict_date',
 				'current'  => $restricted
             ) ); ?>
-            <label for="_package_restrict_date"><?php _e( 'Select if this package is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_package_restrict_date"><?php esc_html_e( 'Select if this package is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
         </div>
-        
+
         <div id="mdjm-package-month-selection"<?php echo $class; ?>>
-        	 <p><label for="_package_months"><?php _e( 'Select the months this package is available', 'mobile-dj-manager' ); ?></label><br />
+        	 <p><label for="_package_months"><?php esc_html_e( 'Select the months this package is available', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->month_dropdown( array(
 					'name'        => '_package_months',
 					'selected'    => mdjm_get_package_months_available( $post->ID ),
@@ -280,7 +280,7 @@ function mdjm_package_metabox_items_row( $post )	{
 			<table class="widefat mdjm_repeatable_table">
             	<thead>
 					<tr>
-						<th style="width: 50px;"><?php _e( 'Item', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 50px;"><?php esc_html_e( 'Item', 'mobile-dj-manager' ); ?></th>
 						<?php do_action( 'mdjm_package_price_table_head', $post->ID ); ?>
                         <th style="width: 2%"></th>
 					</tr>
@@ -300,7 +300,7 @@ function mdjm_package_metabox_items_row( $post )	{
 
 					<tr>
 						<td class="submit" colspan="2" style="float: none; clear:both; background:#fff;">
-							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Item', 'mobile-dj-manager' ); ?></a>
+							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php esc_html_e( 'Add New Item', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
 
@@ -383,7 +383,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 					'placeholder' => mdjm_format_amount( '10.00' )
 				);
 			?>
-			<p><label for="<?php echo $price_args['name']; ?>"><?php _e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
+			<p><label for="<?php echo $price_args['name']; ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
 			<?php if ( $currency_position == 'before' ) : ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
 				<?php echo MDJM()->html->text( $price_args ); ?>
@@ -391,7 +391,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 				<?php echo MDJM()->html->text( $price_args ); ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
 			<?php endif; ?></p>
-	
+
 			<?php do_action( 'mdjm_package_price_field', $post->ID ); ?>
 		</div>
 		<?php do_action( 'mdjm_after_package_price_field', $post->ID ); ?>
@@ -400,7 +400,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
                 'name'    => '_package_variable_pricing',
 				'current' => $variable
             ) ); ?>
-            <label for="_package_variable_pricing"><?php _e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_package_variable_pricing"><?php esc_html_e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
         <?php do_action( 'mdjm_after_package_variable_pricing_field', $post->ID ); ?>
     </div>
@@ -411,8 +411,8 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 			<table class="widefat mdjm_repeatable_table">
             	<thead>
 					<tr>
-						<th style="width: 50px;"><?php _e( 'Month', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 100px;"><?php _e( 'Price', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 50px;"><?php esc_html_e( 'Month', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 100px;"><?php esc_html_e( 'Price', 'mobile-dj-manager' ); ?></th>
 						<?php do_action( 'mdjm_package_price_table_head', $post->ID ); ?>
                         <th style="width: 2%"></th>
 					</tr>
@@ -440,7 +440,7 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 
                     <tr>
 						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
-							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
+							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php esc_html_e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
 
@@ -559,24 +559,24 @@ function mdjm_register_addon_meta_boxes( $post )	{
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_addon_before_metaboxes' );
-	
+
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
 		if ( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
-		
+
 		// Permission check
 		if ( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
-		
+
 		// Callback check
 		if ( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-				
+
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -587,7 +587,7 @@ function mdjm_register_addon_meta_boxes( $post )	{
 			$metabox['args']
 		);
 	}
-	
+
 	// Runs after metabox output
 	do_action( 'mdjm_addon_after_metaboxes' );
 } // mdjm_register_addon_meta_boxes
@@ -669,7 +669,7 @@ function mdjm_addon_metabox_availability_employee_row( $post )	{
     <div class="mdjm_field_wrap mdjm_form_fields">
 		<?php if ( mdjm_is_employer() ) : ?>
             <div id="addon-employee-select" class="mdjm_col col2">
-                <p><label for="_addon_employees"><?php _e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
+                <p><label for="_addon_employees"><?php esc_html_e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->employee_dropdown( array(
                     'name'             => '_addon_employees',
                     'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ),
@@ -722,11 +722,11 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
                 'name'     => '_addon_restrict_date',
 				'current'  => $restricted
             ) ); ?>
-            <label for="_addon_restrict_date"><?php _e( 'Select if this add-on is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_restrict_date"><?php esc_html_e( 'Select if this add-on is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
         </div>
-        
+
         <div id="mdjm-addon-month-selection"<?php echo $class; ?>>
-        	 <p><label for="_addon_months"><?php _e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
+        	 <p><label for="_addon_months"><?php esc_html_e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
                 <?php echo MDJM()->html->month_dropdown( array(
 					'name'        => '_addon_months',
 					'selected'    => mdjm_get_addon_months_available( $post->ID ),
@@ -771,7 +771,7 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 					'desc'        => __( 'Will be used if variable pricing is not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
 				);
 			?>
-			<p><label for="<?php echo $price_args['name']; ?>"><?php _e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
+			<p><label for="<?php echo $price_args['name']; ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
 			<?php if ( $currency_position == 'before' ) : ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
 				<?php echo MDJM()->html->text( $price_args ); ?>
@@ -779,7 +779,7 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 				<?php echo MDJM()->html->text( $price_args ); ?>
 				<?php echo mdjm_currency_filter( '' ); ?>
 			<?php endif; ?></p>
-	
+
 			<?php do_action( 'mdjm_addon_price_field', $post->ID ); ?>
 		</div>
 		<?php do_action( 'mdjm_after_addon_price_field', $post->ID ); ?>
@@ -788,7 +788,7 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
                 'name'    => '_addon_variable_pricing',
 				'current' => $variable
             ) ); ?>
-            <label for="_addon_variable_pricing"><?php _e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
+            <label for="_addon_variable_pricing"><?php esc_html_e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
         <?php do_action( 'mdjm_after_addon_variable_pricing_field', $post->ID ); ?>
     </div>
@@ -799,8 +799,8 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 			<table class="widefat mdjm_repeatable_table">
             	<thead>
 					<tr>
-						<th style="width: 50px;"><?php _e( 'Month', 'mobile-dj-manager' ); ?></th>
-						<th style="width: 100px;"><?php _e( 'Price', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 50px;"><?php esc_html_e( 'Month', 'mobile-dj-manager' ); ?></th>
+						<th style="width: 100px;"><?php esc_html_e( 'Price', 'mobile-dj-manager' ); ?></th>
 						<?php do_action( 'mdjm_addon_price_table_head', $post->ID ); ?>
                         <th style="width: 2%"></th>
 					</tr>
@@ -828,7 +828,7 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 
                     <tr>
 						<td class="submit" colspan="3" style="float: none; clear:both; background:#fff;">
-							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php _e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
+							<a class="button-secondary mdjm_add_repeatable" style="margin: 6px 0;"><?php esc_html_e( 'Add New Price', 'mobile-dj-manager' ); ?></a>
 						</td>
 					</tr>
 

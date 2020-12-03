@@ -308,7 +308,7 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	 * @return	str
 	 */
 	function no_items()	{
-		_e( 'No API keys have been generated.', 'mobile-dj-manager' );
+		esc_html_e( 'No API keys have been generated.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

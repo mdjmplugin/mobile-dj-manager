@@ -57,14 +57,14 @@ $view_playlist_class  = ' mdjm-hidden';
         <?php do_action( 'mdjm_before_playlist_form' ); ?>
 
 		<p class="head-nav"><a href="{event_url}"><?php printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
-        
+
         <p><?php echo esc_attr( $intro_text ); ?></p>
 		<p><?php echo esc_attr( $guest_text ); ?></p>
 		<p class="mdjm_playlist_share"><?php echo $share_text; ?></p>
 
 		<?php if ( $mdjm_event->playlist_is_open() ) : ?>
 
-            <?php if ( $total_entries < $playlist_limit || $playlist_limit == 0 ) : ?> 
+            <?php if ( $total_entries < $playlist_limit || $playlist_limit == 0 ) : ?>
                 <form id="mdjm_playlist_form" class="mdjm_form" method="post">
                     <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
                     <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo $mdjm_event->ID; ?>" />
@@ -182,7 +182,7 @@ $view_playlist_class  = ' mdjm-hidden';
                 <span class="playlist-entry-heading"><?php echo $category_label; ?></span>
             </div>
             <div class="playlist-entry-column">
-                <span class="playlist-entry-heading"><?php _e( 'Notes', 'mobile-dj-manager' ); ?></span>
+                <span class="playlist-entry-heading"><?php esc_html_e( 'Notes', 'mobile-dj-manager' ); ?></span>
             </div>
             <div class="playlist-entry-column">
                 <span class="playlist-entry-heading"></span>
