@@ -54,7 +54,7 @@ function mdjm_earnings_reports_graph() {
 	$earnings_totals = 0.00; // Total earnings for time period shown
 	$events_totals   = 0;    // Total events for time period shown
 
-	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{		
+	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{
 		// Hour by hour
 		$hour  = 1;
 		$month = $dates['m_start'];
@@ -358,8 +358,8 @@ function mdjm_transactions_reports_graph() {
 	$income_totals  = 0.00; // Total income for time period shown
 	$expense_totals = 0.00; // Total expense for time period shown
 	$events_totals  = 0; // Total events for the time period shown
-	
-	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{		
+
+	if( $dates['range'] == 'today' || $dates['range'] == 'yesterday' )	{
 		// Hour by hour
 		$hour  = 1;
 		$month = $dates['m_start'];
@@ -972,7 +972,7 @@ function mdjm_parse_report_dates( $data ) {
 	$view          = mdjm_get_reporting_view();
 	$id            = isset( $_GET['event-id'] ) ? $_GET['event-id'] : null;
 
-	wp_redirect( add_query_arg( $dates, admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=' . esc_attr( $view ) . '&event-id=' . absint( $id ) ) ) );
-	wp_die();
+	wp_safe_redirect( add_query_arg( $dates, admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=' . esc_attr( $view ) . '&event-id=' . absint( $id ) ) ) );
+	exit;
 } // mdjm_parse_report_dates
 add_action( 'mdjm_filter_reports', 'mdjm_parse_report_dates' );

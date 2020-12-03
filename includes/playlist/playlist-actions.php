@@ -22,16 +22,16 @@ function mdjm_goto_playlist_action( $data )	{
 	if( ! isset( $data['event_id'] ) )	{
 		return;
 	}
-	
+
 	if( ! mdjm_event_exists( $data['event_id'] ) )	{
 		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
 	}
-	
-	wp_redirect( 
-		add_query_arg( 'event_id', $data['event_id'], 
+
+	wp_safe_redirect(
+		add_query_arg( 'event_id', $data['event_id'],
 		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 	);
-	die();
+	exit;
 } // mdjm_goto_guest_playlist
 add_action( 'mdjm_goto_playlist', 'mdjm_goto_playlist_action' );
 
@@ -46,18 +46,18 @@ function mdjm_goto_guest_playlist_action( $data )	{
 	if( ! isset( $data['playlist'] ) )	{
 		return;
 	}
-	
+
 	$event = mdjm_get_event_by_playlist_code( $data['playlist'] );
-	
+
 	if( ! $event )	{
 		wp_die( 'Sorry but no event exists', 'mobile-dj-manager' );
 	}
-	
-	wp_redirect( 
-		add_query_arg( 'guest_playlist', $data['playlist'], 
+
+	wp_safe_redirect(
+		add_query_arg( 'guest_playlist', $data['playlist'],
 		mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 	);
-	die();
+	exit;
 } // mdjm_goto_guest_playlist
 add_action( 'mdjm_goto_guest_playlist', 'mdjm_goto_guest_playlist_action' );
 
@@ -77,11 +77,11 @@ function mdjm_correct_guest_playlist_url_action()	{
 	}
 
 	if ( ! is_page( mdjm_get_option( 'playlist_page' ) ) )	{
-		wp_redirect( 
-			add_query_arg( 'guest_playlist', $_GET['guest_playlist'], 
+		wp_safe_redirect(
+			add_query_arg( 'guest_playlist', $_GET['guest_playlist'],
 			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 		);
-		die();
+		exit;
 	}
 } // mdjm_correct_guest_playlist_url_action
 add_action( 'template_redirect', 'mdjm_correct_guest_playlist_url_action' );

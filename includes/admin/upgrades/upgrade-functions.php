@@ -397,7 +397,7 @@ function mdjm_v14_upgrade_event_packages()	{
 			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 			mdjm_set_upgrade_complete( 'upgrade_event_packages' );
 			delete_option( 'mdjm_doing_upgrade' );
-			wp_redirect( $redirect );
+			wp_safe_redirect( $redirect );
 			exit;
 		}
 	}
@@ -468,7 +468,7 @@ function mdjm_v14_upgrade_event_packages()	{
 			'message'      => $message
 		), admin_url( 'index.php' ) );
 
-		wp_redirect( $redirect );
+		wp_safe_redirect( $redirect );
 		exit;
 
 	} else {
@@ -480,7 +480,7 @@ function mdjm_v14_upgrade_event_packages()	{
 			'mdjm-message' => $message
 		), $redirect );
 
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit;
 	}
 
@@ -634,7 +634,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 			mdjm_set_upgrade_complete( 'upgrade_event_tasks' );
 			delete_option( 'mdjm_doing_upgrade' );
-			wp_redirect( $redirect );
+			wp_safe_redirect( $redirect );
 			exit;
 		}
 	}
@@ -694,7 +694,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 			'message'      => $message
 		), admin_url( 'index.php' ) );
 
-		wp_redirect( $redirect );
+		wp_safe_redirect( $redirect );
 		exit;
 
 	} else {
@@ -706,7 +706,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 			'mdjm-message' => 'upgrade-completed'
 		), $redirect );
 
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit;
 	}
 
@@ -814,7 +814,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 			update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 			mdjm_set_upgrade_complete( 'upgrade_event_pricing_15' );
 			delete_option( 'mdjm_doing_upgrade' );
-			wp_redirect( $redirect );
+			wp_safe_redirect( $redirect );
 			exit;
 		}
 	}
@@ -885,7 +885,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 			'message'      => $message
 		), admin_url( 'index.php' ) );
 
-		wp_redirect( $redirect );
+		wp_safe_redirect( $redirect );
 		exit;
 
 	} else {
@@ -897,7 +897,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 			'mdjm-message' => 'upgrade-completed'
 		), $redirect );
 
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit;
 	}
 } // mdjm_v15_upgrade_event_pricing
@@ -1021,7 +1021,7 @@ function mdjm_v156_upgrade_availability_db()	{
 			mdjm_set_upgrade_complete( 'upgrade_availability_db_156' );
 			delete_option( 'mdjm_doing_upgrade' );
             delete_option( 'mdjm_db_version' );
-			wp_redirect( $redirect );
+			wp_safe_redirect( $redirect );
 			exit;
 		} else    {
             $all_entries = $wpdb->get_results( "SELECT * FROM $old_table" );
@@ -1082,7 +1082,7 @@ function mdjm_v156_upgrade_availability_db()	{
 			'message'      => $message
 		), admin_url( 'index.php' ) );
 
-		wp_redirect( $redirect );
+		wp_safe_redirect( $redirect );
 		exit;
 
 	} else {
@@ -1096,7 +1096,7 @@ function mdjm_v156_upgrade_availability_db()	{
 			'mdjm-message' => 'upgrade-completed'
 		), $redirect );
 
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 		exit;
 	}
 } // mdjm_v156_upgrade_event_pricing

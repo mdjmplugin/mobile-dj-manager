@@ -19,22 +19,22 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_availability_check_action( $data )	{
-		
+
 	if ( ! isset( $data['availability_check_date'] ) )	{
 		$message = 'missing_date';
 	} else	{
 		$result = mdjm_do_availability_check( $data['availability_check_date'] );
-				
+
 		if ( ! empty( $result['available'] ) )	{
 			$message = 'available';
 		} else	{
 			$message = 'not_available';
 		}
 	}
-	
+
 	$url = remove_query_arg( array( 'mdjm_avail_date', 'mdjm_message' ) );
-	
-	wp_redirect(
+
+	wp_safe_redirect(
 		add_query_arg(
 			array(
 				'mdjm_avail_date' => $data['availability_check_date'],
@@ -43,8 +43,8 @@ function mdjm_availability_check_action( $data )	{
 			$url
 		)
 	);
-	
-	die();
+
+	exit;
 
 } // mdjm_availability_check_action
 add_action( 'mdjm_do_availability_check', 'mdjm_availability_check_action' );

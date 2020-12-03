@@ -98,7 +98,7 @@ class MDJM_API 	{
 	 */
 	public function __construct()	{
 		$this->namespace = 'mdjm/v' . self::VERSION;
-		
+
 		add_action( 'rest_api_init',             array( $this, 'register_endpoints' ) );
 		add_action( 'mdjm-process_api_key',      array( $this, 'process_api_key'    ) );
 		add_action( '/mdjm/v1/availability',     array( $this, 'availability_check' ) );
@@ -412,7 +412,7 @@ class MDJM_API 	{
 	 */
 	private function missing_params( $params ) {
 		$error = array();
-		$error['error'] = sprintf( 
+		$error['error'] = sprintf(
 			__( 'Not all required parameters were provided. Missing: %s', 'mobile-dj-manager' ),
 			is_array( $params ) ? implode( ', ', $params ) : $params
 		);
@@ -480,19 +480,19 @@ class MDJM_API 	{
 
 					delete_transient( 'mdjm-total-api-keys' );
 
-					wp_redirect( add_query_arg(
+					wp_safe_redirect( add_query_arg(
 						array( 'mdjm-message' => 'api-key-generated' ),
 						'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 					) );
-					exit();
+					exit;
 
 				} else {
 
-					wp_redirect( add_query_arg(
+					wp_safe_redirect( add_query_arg(
 						array( 'mdjm-message' => 'api-key-failed' ),
 						'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 					) );
-					exit();
+					exit;
 
 				}
 
@@ -502,22 +502,22 @@ class MDJM_API 	{
 				$this->generate_api_key( $user_id, true );
 				delete_transient( 'mdjm-total-api-keys' );
 
-				wp_redirect( add_query_arg( 
+				wp_safe_redirect( add_query_arg(
 					array( 'mdjm-message' => 'api-key-regenerated' ),
 					'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 				) );
-				exit();
+				exit;
 				break;
 
 			case 'revoke':
 				$this->revoke_api_key( $user_id );
 				delete_transient( 'mdjm-total-api-keys' );
 
-				wp_redirect( add_query_arg(
+				wp_safe_redirect( add_query_arg(
 					array( 'mdjm-message' => 'api-key-revoked' ),
 					'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys'
 				) );
-				exit();
+				exit;
 				break;
 
 			default;
@@ -718,9 +718,9 @@ class MDJM_API 	{
 		$response->set_status( $status_code );
 		$response->header( 'Content-type', 'application/json' );
 		$response->set_data( $this->data );
-		
+
 		echo wp_json_encode( $response );
-		
+
 		die();
 	} // output
 
@@ -751,7 +751,7 @@ class MDJM_API 	{
 			$replace      = array( date( 'l, jS F Y', strtotime( $date ) ), mdjm_format_short_date( $date ) );
 
 			$result = mdjm_do_availability_check( $date, '', $employees, $roles );
-			
+
 		}
 
 		if ( ! empty( $result ) && ! empty( $result['available'] ) )	{
@@ -779,7 +779,7 @@ class MDJM_API 	{
 
 		$this->data = array_merge( $this->data, $response );
 		$this->output();
-  
+
 	} // availability_check
 
 	/**
@@ -810,14 +810,14 @@ class MDJM_API 	{
 
 		if ( ! user_can( $client->ID, 'client' ) && ! user_can( $client->ID, 'inactive_client' ) )	{
 			$response['error'] = __( 'Error retrieving client.', 'mobile-dj-manager' );
-			
+
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
 
 		if ( ! $client )	{
 			$response['error'] = __( 'Client could not be found.', 'mobile-dj-manager' );
-			
+
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
@@ -881,14 +881,14 @@ class MDJM_API 	{
 
 		if ( ! $employee )	{
 			$response['error'] = __( 'Employee could not be found.', 'mobile-dj-manager' );
-			
+
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
 
 		if ( ! mdjm_is_employee( $employee->ID ) )	{
 			$response['error'] = __( 'Error retrieving employee.', 'mobile-dj-manager' );
-			
+
 			$this->data = array_merge( $response, $this->data );
 			$this->output();
 		}
@@ -908,14 +908,14 @@ class MDJM_API 	{
 		}
 
 		if( ! empty( $employee->roles ) )	{
-			
+
 			foreach( $employee->roles as $role )	{
 				if( array_key_exists( $role, $mdjm_roles ) )	{
 					$roles[ $role ] = $mdjm_roles[ $role ];
 				}
-				
+
 			}
-			
+
 		}
 
 		$response['employee'] = array(
@@ -966,7 +966,7 @@ class MDJM_API 	{
 		if ( ! $mdjm_event )	{
 			$error = array();
 			$error['error'] = sprintf( __( '%s does not exist.', 'mobile-dj-manager' ), mdjm_get_label_singular() );
-			
+
 			$this->data = $error;
 			$this->output();
 		}
@@ -1066,7 +1066,7 @@ class MDJM_API 	{
 		if ( ! $package )	{
 			$error = array();
 			$error['error'] = __( 'Package does not exist.', 'mobile-dj-manager' );
-			
+
 			$this->data = $error;
 			$this->output();
 		}
@@ -1113,12 +1113,12 @@ class MDJM_API 	{
 				$packages[] = $package->ID;
 
 			}
-		}			
+		}
 
 		if ( empty( $packages ) )	{
 			$error = array();
 			$error['error'] = __( 'No packages found.', 'mobile-dj-manager' );
-			
+
 			$this->data = $error;
 			$this->output();
 		}
@@ -1155,7 +1155,7 @@ class MDJM_API 	{
 		$event_date   = ! empty( $this->request['event_date'] ) ? $this->request['event_date']  : false;
 		$package_cost = isset( $this->request['package_cost'] ) ? true                          : false;
 		$selected     = isset( $this->request['selected'] )     ? $this->request['selected']    : '';
-			
+
 		$args   = array(
 			'event_type' => $event_type,
 			'event_date' => $event_date,
@@ -1164,7 +1164,7 @@ class MDJM_API 	{
 		);
 
 		$packages = mdjm_package_dropdown( $args, false );
-	
+
 		if ( ! empty( $packages ) )	{
 			$response['type']     = 'success';
 			$response['packages'] = $packages;
@@ -1172,9 +1172,9 @@ class MDJM_API 	{
 			$response['type']     = 'success';
 			$response['packages'] = '<option value="0" disabled="disabled">' . __( 'No packages available', 'mobile-dj-manager' ) . '</option>';
 		}
-	
+
 		$this->data = array_merge( $this->data, $response );
-	
+
 		$this->output();
 
 	} // package_options
@@ -1204,7 +1204,7 @@ class MDJM_API 	{
 		if ( ! $addon )	{
 			$error = array();
 			$error['error'] = __( 'Addon does not exist.', 'mobile-dj-manager' );
-			
+
 			$this->data = $error;
 			$this->output();
 		}
@@ -1277,12 +1277,12 @@ class MDJM_API 	{
 				$addons[] = $addon->ID;
 
 			}
-		}			
+		}
 
 		if ( empty( $addons ) )	{
 			$error = array();
 			$error['error'] = __( 'No addons found.', 'mobile-dj-manager' );
-			
+
 			$this->data = $error;
 			$this->output();
 		}
@@ -1334,19 +1334,19 @@ class MDJM_API 	{
 		);
 
 		$addons = $func( $args, false );
-	
+
 		if ( ! empty( $addons ) )	{
 			$response['type']   = 'success';
 			$response['addons'] = $addons;
 		} else	{
 			$response['type']   = 'success';
-			$response['addons'] = 'dropdown' == $addons_type ? 
-				'<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>' : 
+			$response['addons'] = 'dropdown' == $addons_type ?
+				'<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>' :
 				__( 'No addons available', 'mobile-dj-manager' );
 		}
-	
+
 		$this->data = array_merge( $this->data, $response );
-	
+
 		$this->output();
 
 	} // addon_options

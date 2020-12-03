@@ -1,6 +1,6 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	
+
 /**
  * Class: MDJM_Event_Fields
  * Contains methods relating to the custom event fields functionality
@@ -17,19 +17,19 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		function __construct()	{
 			add_action( 'admin_init', array( &$this, 'custom_fields_controller' ) );
-			
+
 			add_action( 'mdjm_add_content_tags', array( &$this, 'add_tags' ) );
 			add_action( 'mdjm_event_overview_standard_client_sections', array( $this, 'custom_client_event_fields'  ), 100 );
 			add_action( 'mdjm_event_overview_standard_event_sections',  array( $this, 'custom_event_details_fields' ), 100 );
 			add_action( 'mdjm_event_overview_standard_venue_sections',  array( $this, 'custom_venue_event_fields'   ), 100 );
 			add_action( 'mdjm_save_event', array( &$this, 'manage_custom_fields_on_event_save' ), 10 );
-			
+
 			add_filter( 'mdjm_shortcode_filter_pairs', array( &$this, 'custom_event_fields_shortcode_pairs' ), 10, 3 );
-			
+
 			add_filter( 'dcf_mapping_fields', array( &$this, 'dcf_mapping_fields' ), 10, 2 );
 			add_filter( 'dcf_mapping_fields_on_submit', array( &$this, 'dcf_mapping_fields_on_submit' ), 10, 2 );
 		}
-		
+
 		/**
 		 * Load the custom tags into the MDJM_Content_Tags class.
 		 *
@@ -38,13 +38,13 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		public function add_tags()	{
-			
+
 			$query = mdjm_get_custom_fields();
 			$fields = $query->get_posts();
-			
+
 			if( $fields )	{
 				foreach( $fields as $field )	{
-					mdjm_add_content_tag( 
+					mdjm_add_content_tag(
 						'mdjm_cf_' . strtolower( str_replace( array( ' ', '/' ), array( '_', '' ), get_the_title( $field->ID ) ) ),
 						$field->post_content,
 						array( &$this, 'do_custom_field_tags' )
@@ -53,7 +53,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			}
 
 		} // add_tags
-		
+
 		/**
 		 * Process the custom field tags.
 		 *
@@ -68,19 +68,19 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				return '';
 			}
 			$tag = str_replace( array( '-', '(', ')', 'mdjm_cf_' ), array( '_', '', '', '' ), $tag );
-			
+
 			$meta_key = '_mdjm_event_' . str_replace( array( '-', '(', ')' ), array( '_', '', '' ), $tag );
 
 			$meta_value = get_post_meta( $event_id, $meta_key, true );
-			
+
 			if ( empty ( $meta_value ) )	{
 				return '';
 			}
-			
+
 			return apply_filters( "do_custom_field_tag_{$meta_key}", $meta_value, $event_id, $tag );
-			
+
 		} // do_custom_field_tags
-					
+
 		/**
 		 * Determine if any actions need to be taken for custom fields
 		 *
@@ -92,17 +92,17 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( isset( $_POST['submit_custom_field'] ) )	{
 				if( $_POST['submit_custom_field'] == __( 'Add Field', 'mobile-dj-manager' ) )
 					$this->add_field();
-					
+
 				elseif( $_POST['submit_custom_field'] == __( 'Save Changes', 'mobile-dj-manager' ) )
 					$this->update_field();
 			}
-				
+
 			if( isset( $_GET['delete_custom_field'], $_GET['id'] ) )
 				$this->delete_field();
-			
+
 			return;
 		} // custom_fields_controller
-		
+
 		/**
 		 * Display a list of custom shortcodes.
 		 *
@@ -123,19 +123,19 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					}
 				}
 			}
-			
+
 			if( ! empty( $custom_tags ) )	{
 				$output .= '<ul>';
-				
+
 				foreach( $custom_tags as $custom_tag )	{
 					$output .= '<li style="font-style: italic; font-size: smaller;">';
 					$output .= "{{$custom_tag['tag']}} - {$custom_tag['description']}";
 					$output .= '</li>';
 				}
-				
+
 				$output .= '</ul>';
 			}
-			
+
 			echo $output;
 		} // list_custom_tags
 
@@ -147,27 +147,27 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		function add_field()	{
-						
+
 			$existing = mdjm_get_custom_fields( $_POST['_mdjm_field_section'], 'menu_order', 'DESC', 1 );
-			
+
 			if( $existing->have_posts() )	{
 				while ( $existing->have_posts() ) {
 					$existing->the_post();
-					
+
 					$menu_order = $existing->post->menu_order;
 				}
 				wp_reset_postdata();
-				
+
 				if( !empty( $menu_order ) )
 					$menu_order++;
-					
+
 				else
 					$menu_order = 1;
 			}
 			else
 				$menu_order = 1;
-			
-			$id = wp_insert_post( 
+
+			$id = wp_insert_post(
 				array(
 					'post_title'	=> wp_strip_all_tags( $_POST['field_label'] ),
 					'post_content'  => !empty( $_POST['field_desc'] ) ? $_POST['field_desc'] : '',
@@ -176,7 +176,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'post_type'	 => 'mdjm-custom-fields',
 					'menu_order'	=> $menu_order ),
 				true );
-			
+
 			/**
 			* Success
 			* We can now add the meta data
@@ -184,16 +184,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Custom field added ' . $_POST['field_label'], true );
-				
+
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
 						continue;
-						
+
 					// Add the meta data to the post
 					add_post_meta( $id, $key, $value );
 				}
-				
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=1' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=1' );
 				exit;
 			}
 			/**
@@ -203,10 +203,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
 					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
-					
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
-			}		
+			}
 		} // add_field
 
 		/**
@@ -217,19 +217,19 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		function update_field()	{
-			
+
 			// Retrieve the existing settings for the field so we can compare
 			$existing = get_post( $_POST['custom_field_id'] );
-			
+
 			if( !$existing )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Unable to update field with ID: ' . $_GET['id'] . '. May not exist', true );
-					
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
 				exit;
 			}
-			
-			$id = wp_update_post( 
+
+			$id = wp_update_post(
 				array(
 					'ID'			=> $_POST['custom_field_id'],
 					'post_title'	=> wp_strip_all_tags( $_POST['field_label'] ),
@@ -245,16 +245,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Custom field updated ' . $_POST['field_label'], true );
-				
+
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
 						continue;
-						
+
 					// Add the meta data to the post
 					update_post_meta( $id, $key, $value );
 				}
-				
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=2' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=2' );
 				exit;
 			}
 
@@ -265,10 +265,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
 					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
-					
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
-			}		
+			}
 		} // update_field
 
 		/**
@@ -282,16 +282,16 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( wp_delete_post( $_GET['id'], true ) )	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Custom event field deleted with ID: ' . $_GET['id'], true );
-					
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=3' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=3' );
 				exit;
 			}
-			
+
 			else	{
 				if( MDJM_DEBUG == true )
 					MDJM()->debug->log_it( 'Custom event field with ID: ' . $_GET['id'] . ' could not be deleted', true );
-				
-				wp_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
+
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
 				exit;
 			}
 		} // delete_field
@@ -312,7 +312,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'4'	=> array( 'error', __( 'Unable to add field.', 'mobile-dj-manager' ) ),
 					'5'	=> array( 'error', __( 'Unable to update field.', 'mobile-dj-manager' ) ),
 					'6'	=> array( 'error', __( 'Unable to delete field.', 'mobile-dj-manager' ) ) );
-				
+
 				mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
 			}
 			?>
@@ -327,7 +327,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			 *
 			 */
 			$field_types = array( 'client', 'event', 'venue' );
-			
+
 			foreach( $field_types as $field_type )	{
 				?>
 				<h3><?php printf( __( '%s Fields', 'mobile-dj-manager' ), ucfirst( $field_type ) ) ; ?></h3>
@@ -345,11 +345,11 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					<tbody>
 				<?php
 				$fields = mdjm_get_custom_fields( $field_type );
-				
+
 				// Display the custom fields
 				if( $fields->have_posts() )	{
 					$i = 0;
-					
+
 					while( $fields->have_posts() ) {
 						$fields->the_post();
 						?>
@@ -369,13 +369,13 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
                         </tr>
                         <?php
 						$i++;
-						
+
 						if( $i == 2 )
 							$i = 0;
 					}
 					wp_reset_postdata();
 				}
-				
+
 				// No custom fields
 				else	{
 					?>
@@ -384,7 +384,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					</tr>
 					<?php
 				}
-				
+
 				?>
 					</tbody>
 					<tfoot>
@@ -402,9 +402,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			} // End foreach loop
 			?>
 			</div>
-			
+
 			<?php self::add_new_custom_field_table( $field_types ); ?>
-			
+
 			</div>
 			<?php
 		} // custom_event_field_settings
@@ -418,29 +418,29 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		public static function add_new_custom_field_table( $field_types )	{
 			wp_enqueue_script( 'jquery' );
-			
+
 			wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
 			wp_enqueue_script( 'jquery-validation-plugin' );
 			?>
 			<script type="text/javascript">
 			jQuery().ready(function()	{
 				jQuery("#mdjm-custom-event-fields").validate(	{
-					
+
 					/* -- Classes -- */
 					errorClass: "mdjm-form-error",
 					validClass: "mdjm-form-valid",
 					focusInvalid: false,
-									
+
 					messages:	{
 						field_label: " <?php _e( 'Enter a label!', 'mobile-dj-manager' ); ?>",
 					}
-					
+
 				} ); // Validate
 			} ); // function
 			</script>
 			<div class="mdjm-event-field-column-right">
 			<form name="mdjm-custom-event-fields" id="mdjm-custom-event-fields" method="post" action="<?php echo mdjm_get_admin_page( 'custom_event_fields' ); ?>">
-			
+
 			<?php
 			if ( isset( $_GET['edit_custom_field'], $_GET['id'] ) )	{
 				$editing = true;
@@ -451,9 +451,9 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				$field = get_post( $_GET['id'] );
 				echo '<input type="hidden" name="custom_field_id" id="custom_field_id" value="' . $_GET['id'] . '" />' . "\r\n";
 			}
-				
+
 			echo '<h3>';
-			echo ( empty( $editing ) ? __( 'Add New Custom Field', 'mobile-dj-manager' ) : 
+			echo ( empty( $editing ) ? __( 'Add New Custom Field', 'mobile-dj-manager' ) :
 				sprintf(
 					__( 'Edit the %s%s%s %s', 'mobile-dj-manager' ),
 					'<span class="mdjm-color">',
@@ -461,12 +461,12 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'</span>',
 					__( 'Field', 'mobile-dj-manager' ) ) );
 			echo '</h3>' . "\r\n";
-			
+
 			// Types of input fields that can be selected
 			$types = array( 'text', 'checkbox', 'select', 'multi select', 'textarea' );
-			
+
 			?>
-			
+
             <p>
 			<label for="_mdjm_field_section"><?php _e( 'Section', 'mobile-dj-manager' ); ?>:</label><br />
 			<select name="_mdjm_field_section" id="_mdjm_field_section">
@@ -480,13 +480,13 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			?>
 			</select>
 			</p>
-            
+
 			<p>
 			<label for="field_label"><?php _e( 'Label', 'mobile-dj-manager' ); ?>:</label><br />
-			<input type="text" name="field_label" id="field_label" class="regular-text" value="<?php echo ( !empty( $editing ) ? 
+			<input type="text" name="field_label" id="field_label" class="regular-text" value="<?php echo ( !empty( $editing ) ?
 			get_the_title( $_GET['id'] ) : '' ); ?>" class="regular-text" required="required" />
 			</p>
-			
+
 			<p>
 			<label for="_mdjm_field_type"><?php _e( 'Type', 'mobile-dj-manager' ); ?>:</label><br />
 			<select name="_mdjm_field_type" id="_mdjm_field_type" onChange="whichField();">
@@ -500,7 +500,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			?>
 			</select>
 			</p>
-			
+
             <style type="text/css">
 				#value_field_select	{
 					display: <?php echo ( !empty( $editing ) && get_post_meta( $_GET['id'], '_mdjm_field_type', true ) == 'select' ? 'block;' : 'none;' ); ?>
@@ -509,11 +509,11 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					display: <?php echo ( !empty( $editing ) && get_post_meta( $_GET['id'], '_mdjm_field_type', true ) == 'checkbox' ? 'block;' : 'none;' ); ?>
 				}
 			</style>
-            
+
             <div id="value_field_select">
 				<p>
 				<label for="_mdjm_field_options"><?php _e( 'Selectable Options', 'mobile-dj-manager' ); ?>:</label><br />
-				<textarea name="_mdjm_field_options" id="_mdjm_field_options" class="all-options" rows="5"><?php 
+				<textarea name="_mdjm_field_options" id="_mdjm_field_options" class="all-options" rows="5"><?php
 					echo ( !empty( $editing ) ? get_post_meta( $_GET['id'], '_mdjm_field_options', true ) : '' ); ?></textarea><br />
                 <span class="description"><?php _e( 'One entry per line', 'mobile-dj-manager' ); ?></span>
 				</p>
@@ -521,26 +521,26 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
             <div id="value_field_checkbox">
 				<p>
 				<label for="_mdjm_field_value"><?php _e( 'Checked Value', 'mobile-dj-manager' ); ?>:</label><br />
-				<input type="text" name="_mdjm_field_value" id="_mdjm_field_value" value="<?php echo ( !empty( $editing ) ? 
+				<input type="text" name="_mdjm_field_value" id="_mdjm_field_value" value="<?php echo ( !empty( $editing ) ?
 					get_post_meta( $_GET['id'], '_mdjm_field_value', true ) : '1' ); ?>" class="small-text" />
 				</p>
-				
+
 				<p>
-				<input type="checkbox" name="_mdjm_field_checked" id="_mdjm_field_checked" value="1" 
-					<?php 
+				<input type="checkbox" name="_mdjm_field_checked" id="_mdjm_field_checked" value="1"
+					<?php
 					if( !empty( $editing ) )
 						checked( '1', get_post_meta( $_GET['id'], '_mdjm_field_checked', true ) );
-					?> 
+					?>
                     />&nbsp;<label for="_mdjm_field_checked"><?php _e( 'Checked by Default', 'mobile-dj-manager' ); ?>?</label>
 				</p>
             </div>
-            
+
             <script type="text/javascript">
 				function whichField() {
 					var type = _mdjm_field_type.options[_mdjm_field_type.selectedIndex].value;
 					var select_div =  document.getElementById("value_field_select");
 					var checkbox_div =  document.getElementById("value_field_checkbox");
-					
+
 					if (type == 'text' || type == 'textarea') {
 						select_div.style.display = "none";
 						checkbox_div.style.display = "none";
@@ -555,27 +555,27 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					}
 				}
             </script>
-            
+
 			<p>
 			<label for="field_desc"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
-			<input type="text" name="field_desc" id="field_desc" value="<?php echo ( !empty( $editing ) ? 
+			<input type="text" name="field_desc" id="field_desc" value="<?php echo ( !empty( $editing ) ?
 			$field->post_content : '' ); ?>" class="regular-text" /><br />
 			<span class="description"><?php _e( "Not visible to client's", 'mobile-dj-manager' ); ?></span>
 			</p>
-			
+
 			<p>
 			<?php
-			submit_button( ( empty( $editing ) ? __( 'Add Field', 'mobile-dj-manager' ) : __( 'Save Changes', 'mobile-dj-manager' ) ), 
-							'primary', 
+			submit_button( ( empty( $editing ) ? __( 'Add Field', 'mobile-dj-manager' ) : __( 'Save Changes', 'mobile-dj-manager' ) ),
+							'primary',
 							'submit_custom_field',
 							false );
-			
+
 			if( !empty( $editing ) )	{
 				echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				echo '<a href="' . mdjm_get_admin_page( 'custom_event_fields' ) . '" class="button-secondary">' . 
+				echo '<a href="' . mdjm_get_admin_page( 'custom_event_fields' ) . '" class="button-secondary">' .
 					__( 'Cancel Changes', 'mobile-dj-manager' ) . '</a>';
 			}
-			?>                
+			?>
 			</p>
 			</form>
             <h4><?php _e( 'Your Custom Shortcodes', 'mobile-dj-manager' ); ?></h4>
@@ -593,28 +593,28 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		public static function field_icons( $field_id )	{
 			$dir = MDJM_PLUGIN_URL . '/assets/images/form-icons';
-			
+
 			$output = '';
-			
+
 			$type = get_post_meta( $field_id, '_mdjm_field_type', true );
 			$selected = get_post_meta( $field_id, '_mdjm_field_checked', true );
 			$value = $type == 'checkbox' ? get_post_meta( $field_id, '_mdjm_field_value', true ) : get_post_meta( $field_id, '_mdjm_field_options', true );
-							
+
 			if( !empty( $type ) && $type == 'checkbox' && $selected == '1' )
 				$output .= '<img src="' . $dir . '/captcha.jpg" width="14" height="14" alt="' . __( 'Checked Checkbox Field', 'mobile-dj-manager' ) . '" title="' . __( 'Checked', 'mobile-dj-manager' ) . '" />';
-			
+
 			if( $type == 'checkbox' )
 				$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="' . __( 'Checked Value', 'mobile-dj-manager' ) . '" title="' . __( 'Checked Value', 'mobile-dj-manager' ) . ' = ' . $value . '" />' . "\r\n";
-				
+
 			if( $type == 'select' || $type == 'multi select' )
 				$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="' . __( 'Dropdown field options', 'mobile-dj-manager' ) . '" title="' . str_replace( ',', "\r\n", $value ) . '" />' . "\r\n";
-								
+
 			echo $output;
 		} // field_icons
 
 		/**
 		 * Add the custom fields to the end of the event client details metabox.
-		 * 
+		 *
 		 * @since	1.3.7
 		 * @called: mdjm_event_client_fields
 		 * @param	int		$event_id	The Event ID
@@ -639,7 +639,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 		/**
 		 * Add the custom fields to the end of the event Event Details metabox.
-		 * 
+		 *
 		 * @since	1.3.7
 		 * @called: mdjm_event_details_fields
 		 * @param	int		$event_id	The Event ID
@@ -650,7 +650,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			$query = mdjm_get_custom_fields( 'event' );
 			$fields = $query->get_posts();
-			
+
 			if ( $fields ) : ?>
 				<div class="mdjm-event-custom-fields">
 					<?php foreach( $fields as $field ) : ?>
@@ -675,7 +675,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			$query = mdjm_get_custom_fields( 'venue' );
 			$fields = $query->get_posts();
-			
+
 			if ( $fields ) : ?>
 				<div class="mdjm-venue-custom-fields">
 					<?php foreach( $fields as $field ) : ?>
@@ -705,8 +705,8 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				$current = $mdjm_event->get_meta( $name );
 			}
 
-			$value = $type == 'checkbox' ? 
-				get_post_meta( $field->ID, '_mdjm_field_value', true ) : 
+			$value = $type == 'checkbox' ?
+				get_post_meta( $field->ID, '_mdjm_field_value', true ) :
 				get_post_meta( $field->ID, '_mdjm_field_options', true );
 
 			switch( $type )	{
@@ -766,7 +766,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			</div>
 			<?php
 		} // display_input
-		
+
 		/**
 		 * Manage checkboxes on event save.
 		 * When an event is saved on the event screen and a checkbox is not checked,
@@ -800,7 +800,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			}
 
 		} // manage_custom_fields_on_event_save
-				
+
 		/**
 		 * Append the custom event fields to the Contact Form mapping options
 		 * @called: dcf_mapping_fields hook
@@ -814,20 +814,20 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function dcf_mapping_fields( $mappings, $type )	{
 			$query = mdjm_get_custom_fields( $type );
 			$fields = $query->get_posts();
-			
+
 			if( $fields )	{
 				foreach( $fields as $field )	{
 					$name = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
-					
-					$mappings[$name] = sprintf( 
-											__( '%s', 'mobile-dj-manager' ), 
+
+					$mappings[$name] = sprintf(
+											__( '%s', 'mobile-dj-manager' ),
 											ucfirst( $type ) ) . ' ' . get_the_title( $field->ID );
 				}
 			}
-			
+
 			return $mappings;
 		} // dcf_mapping_fields
-		
+
 		/**
 		 * Append the custom event fields to the Contact Form mapping array.
 		 * Used on the front end of the contact form
@@ -842,18 +842,18 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		function dcf_mapping_fields_on_submit( $mappings, $type )	{
 			$query = mdjm_get_custom_fields( $type );
 			$fields = $query->get_posts();
-			
+
 			if( $fields )	{
 				foreach( $fields as $field )	{
 					$name = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
-					
+
 					$mappings[] = $name;
 				}
 			}
-			
+
 			return $mappings;
 		} // dcf_mapping_fields_on_submit
-		
+
 		/**
 		 * Add the custom event fields and their values to the filter array
 		 *
@@ -867,25 +867,25 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			// Get the custom fields
 			$query = mdjm_get_custom_fields();
 			$fields = $query->get_posts();
-			
+
 			if( $fields )	{
 				foreach( $fields as $field )	{
 					$meta_key = '_mdjm_event_' . str_replace( '-', '_', $field->post_name );
 					$meta_value = get_post_meta( $event_id, $meta_key, true );
-					
+
 					if( !empty( $meta_value ) )	{
 						if( is_array( $meta_value ) )
 							$meta_value = implode( '<br />', $meta_value );
-						
-						$pairs['{MDJM_CF_' . strtoupper( str_replace( ' ', '_', get_the_title( $field->ID ) ) ) . '}'] = !empty( $meta_value ) ? 
+
+						$pairs['{MDJM_CF_' . strtoupper( str_replace( ' ', '_', get_the_title( $field->ID ) ) ) . '}'] = !empty( $meta_value ) ?
 							$meta_value : '';
 					}
 				}
 			}
-			
+
 			return $pairs;
 		} // custom_event_fields_shortcode_pairs
-		
+
 	} // class MDJM_Event_Fields
 endif;
 	new MDJM_Event_Fields();

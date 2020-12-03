@@ -24,7 +24,7 @@ function mdjm_employee_availability_check_action( $data )	{
     }
 
 	if ( ! empty( $data['check_date'] ) )	{
-		
+
 	}
 
 	$return_url = add_query_arg( array(
@@ -33,7 +33,7 @@ function mdjm_employee_availability_check_action( $data )	{
         'mdjm-message' => $message
     ), admin_url( 'edit.php' ) );
 
-    wp_safe_redirect( $return_url );
-    die();
+	wp_safe_redirect( $return_url );
+    exit;
 } // mdjm_employee_availability_check_action
 add_action( 'mdjm-employee_availability_lookup', 'mdjm_employee_availability_check_action' );

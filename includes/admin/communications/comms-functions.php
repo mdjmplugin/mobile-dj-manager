@@ -292,9 +292,9 @@ function mdjm_send_comm_email( $data )	{
 
 	}
 
-	wp_redirect( add_query_arg( 'mdjm-message', $message, $url ) );
+	wp_safe_redirect( add_query_arg( 'mdjm-message', $message, $url ) );
 
-	die();
+	exit;
 
 } // mdjm_send_comm_email
 add_action( 'mdjm-send_comm_email', 'mdjm_send_comm_email' );

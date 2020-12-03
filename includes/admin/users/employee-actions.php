@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function mdjm_add_employee_action( $data )	{
-	
+
 	if( ! wp_verify_nonce( $data['mdjm_nonce'], 'add_employee' ) )	{
 		$message = 'security_failed';
 	} else	{
@@ -33,18 +33,17 @@ function mdjm_add_employee_action( $data )	{
 			$message = 'employee_add_failed';
 		}
 	}
-			
+
 	$url = remove_query_arg( array( 'mdjm-action', 'mdjm_nonce' ) );
-	
-	wp_redirect( 
-		add_query_arg( 
+
+	wp_safe_redirect(
+		add_query_arg(
 			array(
 				'mdjm-message'  => $message
 			),
 			$url
 		)
 	);
-	die();
-	
+	exit;
 } // mdjm_add_employee_action
 add_action( 'mdjm-add_employee', 'mdjm_add_employee_action' );

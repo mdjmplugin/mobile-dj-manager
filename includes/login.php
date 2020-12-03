@@ -22,19 +22,19 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function mdjm_login_form( $redirect = '' )	{
 	global $mdjm_login_redirect;
-	
+
 	if ( empty( $redirect ) ) {
 		$redirect = mdjm_do_content_tags( '{application_home}' );
 	}
 
 	$mdjm_login_redirect = remove_query_arg( 'mdjm_message', $redirect );
-	
+
 	ob_start();
 
 	mdjm_get_template_part( 'login', 'form' );
-	
+
 	$output = ob_get_clean();
-	$output = mdjm_do_content_tags( $output ); 
+	$output = mdjm_do_content_tags( $output );
 
 	return apply_filters( 'mdjm_login_form', $output );
 } // mdjm_login_form
@@ -72,13 +72,13 @@ function mdjm_process_login_form( $data ) {
 
 		if ( ! empty( $message ) )	{
 			$url = remove_query_arg( 'mdjm_message' );
-			wp_redirect( add_query_arg( 'mdjm_message', $message, $url ) );
-			die();
+			wp_safe_redirect( add_query_arg( 'mdjm_message', $message, $url ) );
+			exit;
 		}
 
 		$redirect = apply_filters( 'mdjm_login_redirect', $data['mdjm_redirect'], $user_ID );
-		wp_redirect( $redirect );
-		die();
+		wp_safe_redirect( $redirect );
+		exit;
 
 	}
 } // mdjm_process_login_form
