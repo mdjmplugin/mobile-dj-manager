@@ -123,7 +123,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 					echo $client->display_name;
 				}
 			} else	{
-				esc_html_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
+				echo '<span class="mdjm-form-error">';
+				esc_html_e( 'Not Assigned', 'mobile-dj-manager' );
+				echo '</span>';
 			}
 		break;
 
@@ -150,7 +152,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				}
 
 			} else	{
-				esc_html_e( '<span class="mdjm-form-error">Not Assigned</span>', 'mobile-dj-manager' );
+				echo '<span class="mdjm-form-error">';
+				esc_html_e( 'Not Assigned', 'mobile-dj-manager' );
+				echo '</span>';
 			}
 
 			if ( ! empty( $employees ) )	{
