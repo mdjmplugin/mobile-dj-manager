@@ -434,7 +434,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		public static function add_new_custom_field_table( $field_types )	{
 			wp_enqueue_script( 'jquery' );
 
-			wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
+			wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', false );
 			wp_enqueue_script( 'jquery-validation-plugin' );
 			?>
 			<script type="text/javascript">

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) )
  * Description: The most efficient and versatile event management solution for WordPress.
  * Version: 1.5.8
  * Date: 23 December 2020
- * Author: Mike Howard <mike@mdjm.co.uk>
+ * Author: DeckBooks <info@deckbooks.co.uk>
  * Author URI: http://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /languages

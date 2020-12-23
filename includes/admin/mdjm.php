@@ -9,10 +9,10 @@
 	if ( ! class_exists( 'MDJM' ) )	{
 		class MDJM	{
 			// Publicise the Events class so we can use it throughout
-			public $mdjm_events;			
+			public $mdjm_events;
 			/**
 			 * Class constructor
-			 * 
+			 *
 			 *
 			 *
 			 */
@@ -51,7 +51,7 @@
 				global $mdjm_post_types;
 
 				// jQuery Validation
-				wp_register_script( 'jquery-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', false );
+				wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', false );
 
 				if ( in_array( get_post_type(), $mdjm_post_types ) || ( isset( $_GET['section'] ) && $_GET['section'] == 'mdjm_custom_event_fields' ) )	{
 
@@ -62,6 +62,6 @@
 
 				}
 			} // admin_enqueue
-			
+
 		} // MDJM class
 	} // if( !class_exists )
