@@ -12,8 +12,8 @@
 
 if ( ! is_user_logged_in() ) : ?>
 
-	<?php echo mdjm_display_notice( 'login_profile' ); ?>
-	<?php echo mdjm_login_form( mdjm_get_current_page_url() ); ?>
+	<?php echo mdjm_display_notice( 'login_profile' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+	<?php echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 <?php else :
 
@@ -36,7 +36,7 @@ if ( ! is_user_logged_in() ) : ?>
 
                     <form id="mdjm_client_profile_form" class="mdjm_form" method="post">
                         <?php wp_nonce_field( 'update_client_profile', 'mdjm_nonce', true, true ); ?>
-                        <input type="hidden" id="mdjm_client_id" name="mdjm_client_id" value="<?php echo $client->ID; ?>" />
+                        <input type="hidden" id="mdjm_client_id" name="mdjm_client_id" value="<?php echo esc_attr( $client->ID ); ?>" />
                         <input type="hidden" id="action" name="action" value="mdjm_validate_client_profile" />
 
                         <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
@@ -55,9 +55,9 @@ if ( ! is_user_logged_in() ) : ?>
                                         $label = esc_attr( $field['label'] );
                                         ?>
 
-                                        <p class="mdjm_<?php echo $id; ?>_field">
-                                            <label for="mdjm_<?php echo $id; ?>">
-                                                <?php echo $label; ?> <?php if ( ! empty( $field['required'] ) ) : ?><span class="mdjm-required-indicator">*</span><?php endif; ?>
+                                        <p class="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>_field">
+                                            <label for="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+                                                <?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php if ( ! empty( $field['required'] ) ) : ?><span class="mdjm-required-indicator">*</span><?php endif; ?>
                                             </label>
 
                                             <?php mdjm_display_client_input_field( $field, $client ); ?>
@@ -66,7 +66,7 @@ if ( ! is_user_logged_in() ) : ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
 
-                                <p><span class="mdjm-description"><?php echo $password_text; ?></span></p>
+                                <p><span class="mdjm-description"><?php echo esc_html( $password_text ); ?></span></p>
 
                                 <p class="mdjm_new_password_field">
                                     <label for="mdjm_new_password">

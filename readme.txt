@@ -1,8 +1,8 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977, bcdandd, deckbooks
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
-Requires at least: 4.4
-Tested up to: 5.4
+Requires at least: 5.3
+Tested up to: 5.6
 Requires PHP: 7.3
 Stable tag: 1.5.7
 License: GPLv2 or later

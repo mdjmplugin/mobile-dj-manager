@@ -3,7 +3,7 @@
  * mdjm-functions.php
  * 17/03/2015
  * Contains all main MDJM functions used in front & back end
- * 
+ *
  */
 
 /*
@@ -13,7 +13,7 @@
 	 * Return the admin URL for the given page
 	 *
 	 *
-	 * 
+	 *
 	 * @params 	STR		$mdjm_page	Required: The page for which we want the URL
 	 * 			str		$action		Optional: Whether to return as string (Default) or echo the URL.
 	 * @returns $mdjm_page - str or echo
@@ -21,7 +21,7 @@
 	function mdjm_get_admin_page( $mdjm_page, $action='str' )	{
 		if( empty( $mdjm_page ) )
 			return;
-		
+
 		$mydjplanner = array( 'mydjplanner', 'user_guides', 'mdjm_support', 'mdjm_forums' );
 		$mdjm_pages = array(
 						'wp_dashboard'          => 'index.php',
@@ -69,20 +69,20 @@
 						'mdjm_forums'           => 'http://mdjm.co.uk/forums',
 						);
 		if( in_array( $mdjm_page, $mydjplanner ) )	{
-			$mdjm_page = $mdjm_pages[$mdjm_page];	
+			$mdjm_page = $mdjm_pages[$mdjm_page];
 		}
 		else	{
 			$mdjm_page = admin_url( $mdjm_pages[$mdjm_page] );
 		}
 		if( $action == 'str' )	{
-			return $mdjm_page;	
+			return $mdjm_page;
 		}
 		else	{
-			echo $mdjm_page;
+			echo esc_url( $mdjm_page );
 			return;
 		}
 	} // mdjm_get_admin_page
-	
+
 	/*
 	 * Display update notice within Admin UI
 	 *
@@ -93,9 +93,9 @@
 	 */
 	function mdjm_update_notice( $class, $message, $dismiss='' )	{
 		$dismiss = ( !empty( $dismiss ) ? ' notice is-dismissible' : '' );
-		
-		echo '<div id="message" class="' . $class . $dismiss . '">';
-		echo '<p>' . __( $message, 'mobile-dj-manager' ) . '</p>';
+
+		echo '<div id="message" class="' . esc_attr( $class ) . esc_attr( $dismiss ) . '">';
+		echo '<p>' . esc_html__( $message, 'mobile-dj-manager' ) . '</p>';
 		echo '</div>';
 	} // mdjm_update_notice
 
@@ -144,12 +144,12 @@
                 'orderby'        => array( 'field_clause' => $order, $orderby => $order ),
                 'order'          => $order
             ) );
-		
+
 		}
-		
+
 		return $custom_fields;
 	} // mdjm_get_custom_fields
-	
+
 /**
  * -- END CUSTOM FIELD FUNCTIONS
  */

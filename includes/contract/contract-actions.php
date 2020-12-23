@@ -24,12 +24,12 @@ function mdjm_goto_contract_action()	{
 		return;
 	}
 
-	if( ! mdjm_event_exists( $_GET['event_id'] ) )	{
+	if( ! mdjm_event_exists( absint( wp_unslash( $_GET['event_id'] ) ) ) )	{
 		wp_die( 'Sorry but we could not locate your event.', 'mobile-dj-manager' );
 	}
 
 	wp_safe_redirect(
-		add_query_arg( 'event_id', $_GET['event_id'],
+		add_query_arg( 'event_id', absint( wp_unslash( $_GET['event_id'] ) ),
 		mdjm_get_formatted_url( mdjm_get_option( 'contracts_page' ) ) )
 	);
 	exit;
@@ -127,7 +127,14 @@ function mdjm_review_signed_contract()	{
 		return;
 	}
 
-	$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+	$event_id = isset($_GET['event_id']) ? absint( wp_unslash( $_GET['event_id'] ) ) : 0;
+
+	if ( empty( $event_id ) ) {
+		esc_html_e( 'The event cannot be found', 'mobile-dj-manager' );
+		exit;
+	}
+
+	$mdjm_event = new MDJM_Event( $event_id );
 
 	if ( ! mdjm_is_admin() )	{
 		if ( ! array_key_exists( get_current_user_id(), $mdjm_event->get_all_employees() ) )	{
@@ -136,7 +143,7 @@ function mdjm_review_signed_contract()	{
 	}
 
 	if ( ! $mdjm_event->get_contract_status() )	{
-		printf( __( 'The contract for this %s is not signed', 'mobile-dj-manager' ), mdjm_get_label_singular() );
+		printf( esc_html__( 'The contract for this %s is not signed', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) );
 		exit;
 	}
 
@@ -146,7 +153,7 @@ function mdjm_review_signed_contract()	{
 		return;
 	}
 
-	echo mdjm_show_contract( $contract_id, $mdjm_event );
+	echo mdjm_show_contract( $contract_id, $mdjm_event ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
 

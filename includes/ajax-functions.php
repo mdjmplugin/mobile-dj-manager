@@ -41,7 +41,7 @@ function mdjm_get_ajax_url() {
  */
 function mdjm_ajax_dismiss_admin_notice()	{
 
-	$notice = sanitize_text_field( $_POST['notice'] );
+	$notice = isset($_POST['notice']) ? sanitize_text_field( wp_unslash( $_POST['notice'] ) ) : NULL;
     mdjm_dismiss_notice( $notice );
 
 	wp_send_json_success();
@@ -56,9 +56,13 @@ add_action( 'wp_ajax_mdjm_dismiss_notice', 'mdjm_ajax_dismiss_admin_notice' );
  * @return	void
  */
 function mdjm_calendar_activity_ajax()	{
-	$data  = array();
-	$start = $_POST['start'];
-	$end   = $_POST['end'];
+	$start = !empty($_POST['start']) ? sanitize_text_field( wp_unslash( $_POST['start'] ) ) : NULL;
+	$end   = !empty($_POST['end']) ? sanitize_text_field( wp_unslash( $_POST['end'] ) ) : NULL;
+
+	if (empty( $start )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
 
 	$activity = mdjm_get_calendar_entries( $start, $end );
 
@@ -73,15 +77,15 @@ add_action( 'wp_ajax_mdjm_calendar_activity', 'mdjm_calendar_activity_ajax' );
  * @return	void
  */
 function mdjm_add_employee_absence_ajax()	{
-	$employee_id = absint( $_POST['employee_id'] );
-	$start_date  = $_POST['start_date'];
-	$end_date    = $_POST['end_date'];
-	$all_day     = $_POST['all_day'];
-	$start_time  = $_POST['start_time_hr'] . ':' . $_POST['start_time_min'];
-	$end_time    = $_POST['end_time_hr'] . ':' . $_POST['end_time_min'];
-	$start_time  .= ! empty( $_POST['start_time_period'] ) ? $_POST['start_time_period'] : '';
-	$end_time    .= ! empty( $_POST['end_time_period'] )   ? $_POST['end_time_period']   : '';
-	$notes       = ! empty( $_POST['notes'] ) ? sanitize_textarea_field( $_POST['notes'] ) : '';
+	$employee_id = ! empty( $_POST['employee_id'] ) ? absint( wp_unslash( $_POST['employee_id'] ) ) : 0;
+	$start_date  = ! empty( $_POST['start_date'] ) ? sanitize_text_field( wp_unslash( $_POST['start_date'] ) )  : '';
+	$end_date    = ! empty( $_POST['end_date'] ) ? sanitize_text_field( wp_unslash( $_POST['end_date'] ) )  : '';
+	$all_day     = ! empty( $_POST['all_day'] ) ? sanitize_text_field( wp_unslash( $_POST['all_day'] ) )  : '';
+	$start_time  = ! empty( $_POST['start_time_hr'] ) && ! empty( $_POST['start_time_min'] ) ? sanitize_text_field( wp_unslash($_POST['start_time_hr'] . ':' . $_POST['start_time_min'] ) )  : '';
+	$end_time    =  ! empty( $_POST['end_time_hr'] ) && ! empty( $_POST['end_time_min'] ) ? sanitize_text_field( wp_unslash($_POST['end_time_hr'] . ':' . $_POST['end_time_min'] ) )  : '';
+	$start_time  .= ! empty( $_POST['start_time_period'] ) ? sanitize_text_field( wp_unslash( $_POST['start_time_period'] ) ) : '';
+	$end_time    .= ! empty( $_POST['end_time_period'] ) ? sanitize_text_field( wp_unslash( $_POST['end_time_period'] ) )  : '';
+	$notes       = ! empty( $_POST['notes'] ) ? sanitize_textarea_field( wp_unslash( $_POST['notes'] ) ) : '';
 
 	$data = array(
 		'employee_id'  => $employee_id,
@@ -92,6 +96,11 @@ function mdjm_add_employee_absence_ajax()	{
 		'end_time'     => $end_time,
 		'notes'        => $notes
 	);
+
+	if (empty( $employee_id ) || empty( $start_date ) || empty( $end_date )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
 
     if ( mdjm_add_employee_absence( $employee_id, $data ) ) {
         $success = true;
@@ -111,7 +120,13 @@ add_action( 'wp_ajax_mdjm_add_employee_absence', 'mdjm_add_employee_absence_ajax
  * return   void
  */
 function mdjm_delete_employee_absence_ajax()    {
-    $id = absint( $_POST['id'] );
+    $id = isset($_POST['id']) ? absint( wp_unslash( $_POST['id'] ) ) : NULL;
+
+	if (empty( $id )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
     $deleted = mdjm_remove_employee_absence( $id );
 
     if ( $deleted > 0 ) {
@@ -137,14 +152,20 @@ function mdjm_validate_client_profile_form_ajax()   {
         ) );
     }
 
-    $client_id    = absint( $_POST['mdjm_client_id'] );
-    $client       = new MDJM_Client( $client_id );
-    $fields       = $client->get_profile_fields();
-    $new_password = ! empty( $_POST['mdjm_new_password'] ) ? $_POST['mdjm_new_password'] : false;
+    $client_id    = isset($_POST['mdjm_client_id']) ? absint( $_POST['mdjm_client_id'] ) : NULL;
+    $new_password = ! empty( $_POST['mdjm_new_password'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_new_password'] ) ) : false;
     $core_fields  = array( 'first_name', 'last_name', 'user_email' );
     $update_args  = array( 'ID' => $client_id );
     $update_meta  = array ();
     $display_name = '';
+
+	if (empty( $client_id )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
+	$client       = new MDJM_Client( $client_id );
+	$fields       = $client->get_profile_fields();
 
     foreach( $fields as $field )    {
         if ( ! empty( $field['required'] ) && empty( $_POST[ $field['id'] ] ) )  {
@@ -156,9 +177,9 @@ function mdjm_validate_client_profile_form_ajax()   {
 
         switch( $field['id'] )    {
             case 'user_email':
-                if ( ! is_email( $_POST[ $field['id'] ] ) ) {
+                if ( ! is_email( sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) ) ) ) {
                     wp_send_json( array(
-                        'error' => sprintf( __( '%s is not a valid email address', 'mobile-dj-manager' ), esc_attr( $_POST[ $field['id'] ] ) ),
+                        'error' => sprintf( __( '%s is not a valid email address', 'mobile-dj-manager' ), esc_attr( sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) ) ) ),
                         'field' => $field['id']
                     ) );
                 }
@@ -168,7 +189,7 @@ function mdjm_validate_client_profile_form_ajax()   {
             case 'text':
             case 'dropdown':
             default:
-                $value = sanitize_text_field( $_POST[ $field['id'] ] );
+                $value = sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) );
                 if ( 'first_name' == $field['id'] || 'last_name' == $field['id'] )  {
                     $value = ucfirst( trim( $value ) );
 
@@ -183,7 +204,7 @@ function mdjm_validate_client_profile_form_ajax()   {
                 break;
 
             case 'checkbox':
-                $value = ! empty( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : 0;
+                $value = ! empty( $_POST[ $field['id'] ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field['id'] ] ) ) : 0;
                 break;
         }
 
@@ -260,11 +281,11 @@ function mdjm_submit_playlist_ajax()	{
 		}
 	}
 
-    $event    = absint( $_POST['mdjm_playlist_event'] );
-	$song     = sanitize_text_field( $_POST['mdjm_song'] );
-	$artist   = isset( $_POST['mdjm_artist'] )   ? sanitize_text_field( $_POST['mdjm_artist'] )    : '';
+    $event    = isset( $_POST['mdjm_playlist_event'] ) ? absint( $_POST['mdjm_playlist_event'] ) : NULL;
+	$song     = isset( $_POST['mdjm_song'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_song'] ) ) : '';
+	$artist   = isset( $_POST['mdjm_artist'] )   ? sanitize_text_field( wp_unslash( $_POST['mdjm_artist'] ) )    : '';
     $category = isset( $_POST['mdjm_category'] ) ? absint( $_POST['mdjm_category'] )               : NULL;
-    $notes    = isset( $_POST['mdjm_notes'] )    ? sanitize_textarea_field( $_POST['mdjm_notes'] ) : NULL;
+    $notes    = isset( $_POST['mdjm_notes'] )    ? sanitize_textarea_field( wp_unslash( $_POST['mdjm_notes'] ) ) : NULL;
 
 	$playlist_data = array(
         'event_id' => $event,
@@ -283,7 +304,7 @@ function mdjm_submit_playlist_ajax()	{
 
 		ob_start(); ?>
 
-		<div class="playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
+		<div class="playlist-entry-row mdjm-playlist-entry-<?php echo esc_attr( $entry_id ); ?>">
             <div class="playlist-entry-column">
                 <span class="playlist-entry"><?php echo esc_attr( $entry_data['artist'] ); ?></span>
             </div>
@@ -306,7 +327,7 @@ function mdjm_submit_playlist_ajax()	{
             </div>
             <div class="playlist-entry-column">
                 <span class="playlist-entry">
-                    <a class="mdjm-delete playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php esc_html_e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                    <a class="mdjm-delete playlist-delete-entry" data-event="<?php echo esc_attr( $event );?>" data-entry="<?php echo esc_attr( $entry_id ); ?>"><?php esc_html_e( 'Remove', 'mobile-dj-manager' ); ?></a>
                 </span>
             </div>
         </div>
@@ -348,8 +369,13 @@ add_action( 'wp_ajax_nopriv_mdjm_submit_playlist', 'mdjm_submit_playlist_ajax' )
  * @return	void
  */
 function mdjm_remove_playlist_entry_ajax()	{
-	$event_id = absint( $_POST['event_id'] );
-	$song_id  = absint( $_POST['song_id'] );
+	$event_id = isset( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : 0;
+	$song_id  = isset( $_POST['song_id'] ) ? absint( $_POST['song_id'] ) : 0 ;
+
+	if (empty( $event_id ) || empty( $song_id )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
 
 	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
 		$total  = mdjm_count_playlist_entries( $event_id );
@@ -377,14 +403,14 @@ function mdjm_submit_guest_playlist_ajax()	{
 
     if ( ! check_ajax_referer( 'add_guest_playlist_entry', 'mdjm_nonce', false ) ) {
         wp_send_json( array(
-            'error' => __( 'An error occured', 'mobile-dj-manager' ),
+            'error' => esc_html__( 'An error occured', 'mobile-dj-manager' ),
             'field' => 'mdjm_nonce'
         ) );
     }
 
 	$required_fields = array(
-		'mdjm_guest_name' => __( 'Name', 'mobile-dj-manager' ),
-		'mdjm_guest_song' => __( 'Song', 'mobile-dj-manager' )
+		'mdjm_guest_name' => esc_html__( 'Name', 'mobile-dj-manager' ),
+		'mdjm_guest_song' => esc_html__( 'Song', 'mobile-dj-manager' )
 	);
 
 	$required_fields = apply_filters( 'mdjm_guest_playlist_required_fields', $required_fields );
@@ -398,10 +424,10 @@ function mdjm_submit_guest_playlist_ajax()	{
 		}
 	}
 
-	$song   = sanitize_text_field( $_POST['mdjm_guest_song'] );
-	$artist = isset( $_POST['mdjm_guest_artist'] ) ? sanitize_text_field( $_POST['mdjm_guest_artist'] ) : '';
-	$guest  = ucwords( sanitize_text_field( $_POST['mdjm_guest_name'] ) );
-	$event  = absint( $_POST['mdjm_playlist_event'] );
+	$song   = isset( $_POST['mdjm_guest_song'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_guest_song'] ) ) : '';
+	$artist = isset( $_POST['mdjm_guest_artist'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_guest_artist'] ) ) : '';
+	$guest  = isset( $_POST['mdjm_guest_name'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['mdjm_guest_name'] ) ) ) : '';
+	$event  = isset( $_POST['mdjm_playlist_event'] ) ? absint( $_POST['mdjm_playlist_event'] ) : 0;
 	$closed = false;
 
 	$playlist_data = array(
@@ -415,16 +441,16 @@ function mdjm_submit_guest_playlist_ajax()	{
 
 	if ( $entry_id )	{
 		ob_start(); ?>
-		<div class="guest-playlist-entry-row mdjm-playlist-entry-<?php echo $entry_id; ?>">
+		<div class="guest-playlist-entry-row mdjm-playlist-entry-<?php echo esc_attr( $entry_id ); ?>">
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $artist ) ); ?></span>
+				<span class="guest-playlist-entry"><?php echo esc_html( wp_unslash( $artist ) ); ?></span>
 			</div>
 			<div class="guest-playlist-entry-column">
-				<span class="guest-playlist-entry"><?php echo stripslashes( esc_attr( $song ) ); ?></span>
+				<span class="guest-playlist-entry"><?php echo esc_html( wp_unslash( $song ) ); ?></span>
 			</div>
 			<div class="guest-playlist-entry-column">
                 <span class="playlist-entry">
-                    <a class="mdjm-delete guest-playlist-delete-entry" data-event="<?php echo $event;?>" data-entry="<?php echo $entry_id ?>"><?php esc_html_e( 'Remove', 'mobile-dj-manager' ); ?></a>
+                    <a class="mdjm-delete guest-playlist-delete-entry" data-event="<?php echo esc_attr( $event );?>" data-entry="<?php echo esc_attr( $entry_id ); ?>"><?php esc_html_e( 'Remove', 'mobile-dj-manager' ); ?></a>
                 </span>
             </div>
 		</div>
@@ -452,8 +478,13 @@ add_action( 'wp_ajax_nopriv_mdjm_submit_guest_playlist', 'mdjm_submit_guest_play
  * @return	void
  */
 function mdjm_remove_guest_playlist_entry_ajax()	{
-	$event_id = absint( $_POST['event_id'] );
-	$song_id  = absint( $_POST['song_id'] );
+	$event_id = isset($_POST['event_id']) ? absint( $_POST['event_id'] ) : 0;
+	$song_id  = isset($_POST['song_id']) ? absint( $_POST['song_id'] ) : 0;
+
+	if (empty( $event_id ) || empty( $song_id ) ) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
 
 	if ( mdjm_remove_stored_playlist_entry( $song_id ) )	{
 		wp_send_json_success();
@@ -473,15 +504,17 @@ add_action( 'wp_ajax_nopriv_mdjm_remove_guest_playlist_entry', 'mdjm_remove_gues
 function mdjm_save_client_field_order_ajax()	{
 	$client_fields = get_option( 'mdjm_client_fields' );
 
-	foreach( $_POST['fields'] as $order => $field )	{
-		$i = $order + 1;
+	if (isset( $_POST['fields'] )) {
+		foreach (wp_unslash( $_POST['fields'] ) as $order => $field) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$i = $order + 1;
 
-		$client_fields[$field]['position'] = $i;
+			$client_fields[$field]['position'] = $i;
 
+		}
+		update_option('mdjm_client_fields', $client_fields);
 	}
-	update_option( 'mdjm_client_fields', $client_fields );
 
-	die();
+	exit;
 } // mdjm_save_client_field_order_ajax
 add_action( 'wp_ajax_mdjm_update_client_field_order', 'mdjm_save_client_field_order_ajax' );
 
@@ -495,14 +528,17 @@ function mdjm_refresh_client_details_ajax()	{
 
 	$result = array();
 
+	$client_id = isset( $_POST['client_id'] ) ? sanitize_text_field( wp_unslash( $_POST['client_id'] ) ) : 0;
+	$event_id = isset( $_POST['event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['event_id'] ) ) : 0;
+
 	ob_start();
-	mdjm_do_client_details_table( $_POST['client_id'], $_POST['event_id'] );
+	mdjm_do_client_details_table( $client_id, $event_id );
 	$result['client_details'] = ob_get_contents();
 	ob_get_clean();
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 
 } // mdjm_refresh_client_details_ajax
 add_action( 'wp_ajax_mdjm_refresh_client_details', 'mdjm_refresh_client_details_ajax' );
@@ -520,23 +556,25 @@ function mdjm_add_client_ajax()	{
 	$result      = array();
 	$message     = array();
 
-	if ( ! is_email( $_POST['client_email'] ) )	{
+	$client_email = isset( $_POST['client_email'] ) ? sanitize_email( wp_unslash( $_POST['client_email'] ) ) : '';
+
+	if ( ! is_email( $client_email ) )	{
 		$message = __( 'Email address is invalid', 'mobile-dj-manager' );
-	} elseif ( email_exists( $_POST['client_email'] ) )	{
+	} elseif ( email_exists( $client_email ) )	{
 		$message = __( 'Email address is already in use', 'mobile-dj-manager' );
 	} else	{
 
 		$user_data = array(
-			'first_name'      => ucwords( $_POST['client_firstname'] ),
-			'last_name'       => ! empty( $_POST['client_lastname'] ) ? ucwords( $_POST['client_lastname'] ) : '',
-			'user_email'      => strtolower( $_POST['client_email'] ),
-			'client_phone'    => ! empty( $_POST['client_phone'] )    ? $_POST['client_phone']               : '',
-			'client_phone2'   => ! empty( $_POST['client_phone2'] )   ? $_POST['client_phone2']              : '',
-			'client_address1' => ! empty( $_POST['client_address1'] ) ? $_POST['client_address1']            : '',
-			'client_address2' => ! empty( $_POST['client_address2'] ) ? $_POST['client_address2']            : '',
-			'client_town'     => ! empty( $_POST['client_town'] )     ? $_POST['client_town']                : '',
-			'client_county'   => ! empty( $_POST['client_county'] )   ? $_POST['client_county']              : '',
-			'client_postcode' => ! empty( $_POST['client_postcode'] ) ? $_POST['client_postcode']            : ''
+			'first_name'      => ! empty( $_POST['client_firstname'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['client_firstname'] ) ) ) : '',
+			'last_name'       => ! empty( $_POST['client_lastname'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['client_lastname'] ) ) ) : '',
+			'user_email'      => strtolower( $client_email ),
+			'client_phone'    => ! empty( $_POST['client_phone'] )    ? sanitize_text_field( wp_unslash( $_POST['client_phone'] ) )              : '',
+			'client_phone2'   => ! empty( $_POST['client_phone2'] )   ? sanitize_text_field( wp_unslash( $_POST['client_phone2'] ) )            : '',
+			'client_address1' => ! empty( $_POST['client_address1'] ) ? sanitize_text_field( wp_unslash( $_POST['client_address1'] ) )           : '',
+			'client_address2' => ! empty( $_POST['client_address2'] ) ? sanitize_text_field( wp_unslash( $_POST['client_address2'] ) )           : '',
+			'client_town'     => ! empty( $_POST['client_town'] )     ? sanitize_text_field( wp_unslash( $_POST['client_town'] ) )               : '',
+			'client_county'   => ! empty( $_POST['client_county'] )   ? sanitize_text_field( wp_unslash( $_POST['client_county'] ) )            : '',
+			'client_postcode' => ! empty( $_POST['client_postcode'] ) ?sanitize_text_field( wp_unslash(  $_POST['client_postcode'] ) )           : ''
 		);
 
 		$user_data = apply_filters( 'mdjm_event_new_client_data', $user_data );
@@ -573,7 +611,7 @@ function mdjm_add_client_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 
 } // mdjm_add_client_ajax
 add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
@@ -586,8 +624,16 @@ add_action( 'wp_ajax_mdjm_event_add_client', 'mdjm_add_client_ajax' );
  */
 function mdjm_refresh_venue_details_ajax()	{
 
+	$venue_id = isset( $_POST['venue_id'] ) ? absint( wp_unslash( $_POST['venue_id'] ) ) : 0;
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : 0;
+
+	if (empty( $venue_id ) || empty( $event_id ) ) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
 	wp_send_json_success(
-		array( 'venue' => mdjm_do_venue_details_table( $_POST['venue_id'], $_POST['event_id'] ) )
+		array( 'venue' => mdjm_do_venue_details_table( $venue_id, $event_id ) )
 	);
 
 } // mdjm_refresh_venue_details_ajax
@@ -600,26 +646,32 @@ add_action( 'wp_ajax_mdjm_refresh_venue_details', 'mdjm_refresh_venue_details_aj
  */
 function mdjm_set_client_venue_ajax()	{
 
-	$client_id = $_POST['client_id'];
+	$client_id = isset( $_POST['client_id'] ) ? absint( wp_unslash( $_POST['client_id'] ) ) : 0;
+
+	if (empty( $client_id ) ) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
 	$response  = array();
 
 	$client = get_userdata( $client_id );
 
     if ( $client )	{
 		if ( ! empty( $client->address1 ) )	{
-			$response['address1'] = stripslashes( $client->address1 );
+			$response['address1'] = wp_unslash( $client->address1 );
 		}
 		if ( ! empty( $client->address2 ) )	{
-			$response['address2'] = stripslashes( $client->address2 );
+			$response['address2'] = wp_unslash( $client->address2 );
 		}
 		if ( ! empty( $client->town ) )	{
-			$response['town'] = stripslashes( $client->town );
+			$response['town'] = wp_unslash( $client->town );
 		}
 		if ( ! empty( $client->county ) )	{
-			$response['county'] = stripslashes( $client->county );
+			$response['county'] = wp_unslash( $client->county );
 		}
 		if ( ! empty( $client->postcode ) )	{
-			$response['postcode'] = stripslashes( $client->postcode );
+			$response['postcode'] = wp_unslash( $client->postcode );
 		}
 	}
 
@@ -686,7 +738,7 @@ function mdjm_add_venue_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 
 } // mdjm_add_venue_ajax
 add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
@@ -697,9 +749,14 @@ add_action( 'wp_ajax_mdjm_add_venue', 'mdjm_add_venue_ajax' );
  * @since	1.4
  */
 function mdjm_update_event_travel_data_ajax()	{
-	$employee_id = $_POST['employee_id'];
-	$dest        = $_POST['venue'];
+	$employee_id = isset( $_POST['employee_id'] ) ? absint( wp_unslash( $_POST['employee_id'] ) ) : 0;
+	$dest        = isset( $_POST['venue'] ) ? wp_unslash( $_POST['venue'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$dest        = maybe_unserialize( $dest );
+
+	if (empty ( $des ) ) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
 
 	$mdjm_travel = new MDJM_Travel;
 
@@ -735,16 +792,18 @@ add_action( 'wp_ajax_mdjm_update_travel_data', 'mdjm_update_event_travel_data_aj
  */
 function mdjm_order_custom_event_fields_ajax()	{
 
-	foreach( $_POST['customfields'] as $order => $id )	{
-		$order++;
+	if ( isset( $_POST['customfields'] ) ) {
+		foreach ( wp_unslash( $_POST['customfields'] ) as $order => $id) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$order++;
 
-		wp_update_post( array(
-			'ID' => $id,
-			'menu_order' => $order
-		) );
+			wp_update_post(array(
+					'ID' => $id,
+					'menu_order' => $order
+			));
+		}
 	}
 
-	die();
+	exit;
 
 } // mdjm_order_custom_event_field_ajax
 add_action( 'wp_ajax_order_custom_event_fields', 'mdjm_order_custom_event_fields_ajax' );
@@ -758,31 +817,42 @@ function mdjm_save_event_transaction_ajax()	{
 	global $mdjm_event;
 
 	$result = array();
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : 0;
+	$txn_direction = isset( $_POST['direction'] ) ? sanitize_text_field( wp_unslash( $_POST['direction'] ) ) : '';
+	$txn_date = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+	$txn_amount = isset( $_POST['amount'] ) ? sanitize_text_field( wp_unslash( $_POST['amount'] ) ) : '';
+	$txn_source = isset( $_POST['src'] ) ? sanitize_text_field( wp_unslash( $_POST['src'] ) ) : '';
+	$txn_for = isset( $_POST['for'] ) ? sanitize_text_field( wp_unslash( $_POST['for'] ) ) : '';
 
-	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
+	if (empty( $event_id )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
+	$mdjm_event = new MDJM_Event( $event_id );
 	$mdjm_txn   = new MDJM_Txn();
 
 	$txn_data = array(
-		'post_parent'           => $_POST['event_id'],
+		'post_parent'           => $event_id,
 		'post_author'           => $mdjm_event->client,
-		'post_status'           => $_POST['direction'] == 'Out' ? 'mdjm-expenditure' : 'mdjm-income',
-		'post_date'             => date( 'Y-m-d H:i:s', strtotime( $_POST['date'] ) )
+		'post_status'           => $txn_direction == 'Out' ? 'mdjm-expenditure' : 'mdjm-income',
+		'post_date'             => date( 'Y-m-d H:i:s', strtotime( $txn_date ) )
 	);
 
 	$txn_meta = array(
 		'_mdjm_txn_status'      => 'Completed',
 		'_mdjm_payment_from'    => $mdjm_event->client,
-		'_mdjm_txn_total'       => $_POST['amount'],
+		'_mdjm_txn_total'       => $txn_amount,
 		'_mdjm_payer_firstname' => mdjm_get_client_firstname( $mdjm_event->client ),
 		'_mdjm_payer_lastname'  => mdjm_get_client_lastname( $mdjm_event->client ),
 		'_mdjm_payer_email'     => mdjm_get_client_email( $mdjm_event->client ),
 		'_mdjm_payment_from'    => mdjm_get_client_display_name( $mdjm_event->client ),
-		'_mdjm_txn_source'      => $_POST['src']
+		'_mdjm_txn_source'      => $txn_source
 	);
 
 	if ( $_POST['direction'] == 'In' )	{
 		if ( ! empty( $_POST['from'] ) )	{
-			$txn_meta['_mdjm_payment_from'] = sanitize_text_field( $_POST['from'] );
+			$txn_meta['_mdjm_payment_from'] = sanitize_text_field( wp_unslash( $_POST['from'] ) );
 		} else	{
 			$txn_meta['_mdjm_payment_from'] = mdjm_get_client_display_name( $mdjm_event->client );
 		}
@@ -790,7 +860,7 @@ function mdjm_save_event_transaction_ajax()	{
 
 	if ( $_POST['direction'] == 'Out' )	{
 		if ( ! empty( $_POST['to'] ) )	{
-			$txn_meta['_mdjm_payment_to'] = sanitize_text_field( $_POST['to'] );
+			$txn_meta['_mdjm_payment_to'] = sanitize_text_field( wp_unslash( $_POST['to'] ) );
 		} else	{
 			$txn_meta['_mdjm_payment_to'] = mdjm_get_client_display_name( $mdjm_event->client );
 		}
@@ -800,16 +870,16 @@ function mdjm_save_event_transaction_ajax()	{
 
 	if ( $mdjm_txn->ID > 0 )	{
 		$result['type'] = 'success';
-		mdjm_set_txn_type( $mdjm_txn->ID, $_POST['for'] );
+		mdjm_set_txn_type( $mdjm_txn->ID, $txn_for );
 
 		$args = array(
 			'user_id'          => get_current_user_id(),
-			'event_id'         => $_POST['event_id'],
+			'event_id'         => $event_id,
 			'comment_content'  => sprintf( __( '%1$s payment of %2$s received for %3$s %4$s.', 'mobile-dj-manager' ),
 				$_POST['direction'] == 'In' ? __( 'Incoming', 'mobile-dj-manager' ) : __( 'Outgoing', 'mobile-dj-manager' ),
-				mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) ),
+				mdjm_currency_filter( mdjm_format_amount( sanitize_text_field( wp_unslash( $_POST['amount'] ) ) ) ),
 				mdjm_get_label_singular( true ),
-				mdjm_get_event_contract_id( $_POST['event_id'] )
+				mdjm_get_event_contract_id( $event_id )
 			)
 		);
 
@@ -822,7 +892,7 @@ function mdjm_save_event_transaction_ajax()	{
 		}
 
 		$payment_for = $mdjm_txn->get_type();
-		$amount      = mdjm_currency_filter( mdjm_format_amount( $_POST['amount'] ) );
+		$amount      = mdjm_currency_filter( mdjm_format_amount( sanitize_text_field( wp_unslash( $_POST['amount'] ) ) ) );
 
 		mdjm_add_content_tag( 'payment_for', __( 'Reason for payment', 'mobile-dj-manager' ), function() use ( $payment_for ) { return $payment_for; } );
 
@@ -838,7 +908,7 @@ function mdjm_save_event_transaction_ajax()	{
 		 * @param	int		$event_id
 		 * @param	obj		$txn_id
 		 */
-		do_action( 'mdjm_post_add_manual_txn_' . strtolower( $_POST['direction'] ), $_POST['event_id'], $mdjm_txn->ID );
+		do_action( 'mdjm_post_add_manual_txn_' . strtolower( $txn_direction ), $event_id, $mdjm_txn->ID );
 
 		// Email overide
 		if ( empty( $_POST['send_notice'] ) && isset( $manual_email_template ) )	{
@@ -881,13 +951,13 @@ function mdjm_save_event_transaction_ajax()	{
     $result['event_status'] = get_post_status( $mdjm_event->ID );
 
 	ob_start();
-	mdjm_do_event_txn_table( $_POST['event_id'] );
+	mdjm_do_event_txn_table( $event_id );
 	$result['transactions'] = ob_get_contents();
 	ob_get_clean();
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 } // mdjm_save_event_transaction_ajax
 add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' );
 
@@ -898,11 +968,13 @@ add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' 
  */
 function mdjm_add_event_type_ajax()	{
 
+	$current = isset( $_POST['current'] ) ? sanitize_text_field( wp_unslash( $_POST['current'] ) ) : '';
+
 	if ( empty( $_POST['type'] ) )	{
         $msg  = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
-        wp_send_json_error( array( 'selected' => $_POST['current'], 'msg' => $msg ) );
+        wp_send_json_error( array( 'selected' => $current, 'msg' => $msg ) );
 	} else	{
-		$term = wp_insert_term( $_POST['type'], 'event-types' );
+		$term = wp_insert_term( sanitize_text_field( wp_unslash( $_POST['type'] ) ), 'event-types' );
 
 		if ( ! is_wp_error( $term ) )	{
             $msg = 'success';
@@ -912,7 +984,7 @@ function mdjm_add_event_type_ajax()	{
 
 	}
 
-	$selected   = $msg == 'success' ? $term['term_id'] : $_POST['current'];
+	$selected   = $msg == 'success' ? $term['term_id'] : $current;
     $categories = get_terms( 'event-types', array( 'hide_empty' => false ) );
     $options    = array();
     $output     = '';
@@ -942,8 +1014,13 @@ add_action( 'wp_ajax_add_event_type', 'mdjm_add_event_type_ajax' );
  * @since   1.5
  */
 function mdjm_execute_event_task_ajax() {
-    $task_id         = sanitize_text_field( $_POST['task'] );
-    $event_id        = absint( $_POST['event_id'] );
+    $task_id         = isset( $_POST['task'] ) ? sanitize_text_field( wp_unslash( $_POST['task'] ) ) : '';
+    $event_id        = isset( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : 0;
+
+	if ( empty( $task_id ) || empty ( $event_id ) )    {
+		wp_send_json_error();
+	}
+
     $tasks           = mdjm_get_tasks_for_event( $event_id );
     $result          = mdjm_run_single_event_task( $event_id, $task_id );
 	$mdjm_event      = new MDJM_Event( $event_id );
@@ -983,7 +1060,10 @@ add_action( 'wp_ajax_mdjm_execute_event_task', 'mdjm_execute_event_task_ajax' );
 function mdjm_add_transaction_type_ajax()	{
 	global $mdjm;
 
-	MDJM()->debug->log_it( 'Adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+	$type = isset( $_POST['type']  ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : '';
+	$current = isset( $_POST['current']  ) ? sanitize_text_field( wp_unslash( $_POST['current'] ) ) : '';
+
+	MDJM()->debug->log_it( 'Adding ' . $type . ' new Transaction Type from Transaction Post form', true );
 
 	$args = array(
         'taxonomy'         => 'transaction-types',
@@ -998,11 +1078,11 @@ function mdjm_add_transaction_type_ajax()	{
     );
 
 	/* -- Validate that we have a Transaction Type to add -- */
-	if ( empty( $_POST['type'] ) )	{
+	if ( empty( $type ) )	{
 		$result['type'] = 'Error';
 		$result['msg']  = 'Please enter a name for the new Transaction Type';
 	} else	{
-		$term = wp_insert_term( $_POST['type'], 'transaction-types' );
+		$term = wp_insert_term( $type, 'transaction-types' );
 		if ( is_array( $term ) )	{
 			$result['type'] = 'success';
 		} else	{
@@ -1010,16 +1090,16 @@ function mdjm_add_transaction_type_ajax()	{
 		}
 	}
 
-	MDJM()->debug->log_it( 'Completed adding ' . $_POST['type'] . ' new Transaction Type from Transaction Post form', true );
+	MDJM()->debug->log_it( 'Completed adding ' . $type . ' new Transaction Type from Transaction Post form', true );
 
-	$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $_POST['current'];
+	$args['selected'] = $result['type'] == 'success' ? $term['term_id'] : $current;
 
 	$result['transaction_types'] = wp_dropdown_categories( $args );
 
 	$result = json_encode($result);
-	echo $result;
+	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 } // mdjm_add_transaction_type_ajax
 add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
 
@@ -1031,8 +1111,8 @@ add_action( 'wp_ajax_add_transaction_type', 'mdjm_add_transaction_type_ajax' );
  */
 function mdjm_event_setup_time_ajax()   {
     $time_format = mdjm_get_option( 'time_format' );
-    $start_time  = $_POST['time'];
-    $event_date  = $_POST['date'];
+    $start_time  = isset($_POST['time']) ? sanitize_text_field( wp_unslash( $_POST['time'] ) ) : '';
+    $event_date  = isset($_POST['date']) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
     $date        = new DateTime( $event_date . ' ' . $start_time );
     $timestamp   = $date->format( 'U' );
 
@@ -1060,18 +1140,25 @@ add_action( 'wp_ajax_mdjm_event_setup_time', 'mdjm_event_setup_time_ajax' );
  */
 function mdjm_update_event_cost_ajax()	{
 
-	$mdjm_event  = new MDJM_Event( $_POST['event_id'] );
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : NULL;
+
+	if (empty( $event_id )) {
+		wp_send_json_error('Error: Invalid data!' );
+		exit;
+	}
+
+	$mdjm_event  = new MDJM_Event( $event_id );
 	$mdjm_travel = new MDJM_Travel;
 
 	$event_cost    = $mdjm_event->price;
-	$event_date    = $event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
+	$event_date    = $event_date = ! empty( $_POST['event_date'] ) ? sanitize_text_field( wp_unslash( $_POST['event_date'] ) ): NULL;
 	$base_cost     = '0.00';
 	$package       = $mdjm_event->get_package();
 	$package_price = $package ? mdjm_get_package_price( $package, $event_date ) : '0.00';
 	$addons        = $mdjm_event->get_addons();
 	$travel_data   = $mdjm_event->get_travel_data();
-	$employee_id   = $_POST['employee_id'];
-	$dest          = $_POST['venue'];
+	$employee_id   = isset($_POST['employee_id']) ? sanitize_text_field( wp_unslash( $_POST['employee_id'] ) ) : 0;
+	$dest          = isset($_POST['venue']) ? wp_unslash( $_POST['venue'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$dest          = maybe_unserialize( $dest );
     $package_cost  = 0;
     $addons_cost   = 0;
@@ -1102,8 +1189,8 @@ function mdjm_update_event_cost_ajax()	{
     $base_cost = $base_cost - $additional;
     $base_cost = $base_cost + $discount;
 
-	$new_package = ! empty( $_POST['package'] )      ? $_POST['package']      : false;
-	$new_addons  = ! empty( $_POST['addons']  )      ? $_POST['addons']       : false;
+	$new_package = ! empty( $_POST['package'] )      ? absint( wp_unslash( $_POST['package'] ) )      : false;
+	$new_addons  = ! empty( $_POST['addons']  )      ? wp_unslash( $_POST['addons'] )      : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 	$cost = $base_cost;
 
@@ -1113,7 +1200,7 @@ function mdjm_update_event_cost_ajax()	{
 
 	if ( $new_addons )	{
 		foreach( $new_addons as $new_addon )	{
-			$addons_cost += (float) mdjm_get_addon_price( $new_addon, $event_date );
+			$addons_cost += (float) mdjm_get_addon_price( absint( $new_addon ), $event_date );
 		}
 	}
 
@@ -1166,11 +1253,11 @@ add_action( 'wp_ajax_mdjm_update_event_cost', 'mdjm_update_event_cost_ajax' );
  */
 function mdjm_refresh_event_package_options_ajax()	{
 
-	$employee        = ( ! empty( $_POST['employee'] )   ? $_POST['employee']   : '' );
-	$current_package = ( ! empty( $_POST['package'] )    ? $_POST['package']    : '' );
-	$current_addons  = ( ! empty( $_POST['addons'] )     ? $_POST['addons']     : '' );
-	$event_type      = ( ! empty( $_POST['event_type'] ) ? $_POST['event_type'] : '' );
-	$event_date      = ( ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : '' );
+	$employee        = ( ! empty( $_POST['employee'] )   ? sanitize_text_field( wp_unslash( $_POST['employee'] ) )  : '' );
+	$current_package = ( ! empty( $_POST['package'] )    ? sanitize_text_field( wp_unslash( $_POST['package'] ) )    : '' );
+	$current_addons  = ( ! empty( $_POST['addons'] )     ? wp_unslash( $_POST['addons'] )    : '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$event_type      = ( ! empty( $_POST['event_type'] ) ? sanitize_text_field( wp_unslash( $_POST['event_type'] ) ) : '' );
+	$event_date      = ( ! empty( $_POST['event_date'] ) ? sanitize_text_field( wp_unslash( $_POST['event_date'] ) ) : '' );
 
 	$packages = MDJM()->html->packages_dropdown( array(
 		'selected'     => $current_package,
@@ -1183,7 +1270,7 @@ function mdjm_refresh_event_package_options_ajax()	{
 		'data'         => array()
 	) );
 
-	$selected_addons = ! empty( $_POST['addons'] ) ? $_POST['addons'] : array();
+	$selected_addons = ! empty( $current_addons ) ? $current_addons : array();
 
 	$addons = MDJM()->html->addons_dropdown( array(
 		'selected'         => $selected_addons,
@@ -1222,7 +1309,7 @@ function mdjm_refresh_event_package_options_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 
 } // mdjm_refresh_event_package_options_ajax
 add_action( 'wp_ajax_refresh_event_package_options', 'mdjm_refresh_event_package_options_ajax' );
@@ -1236,7 +1323,7 @@ add_action( 'wp_ajax_refresh_event_package_options', 'mdjm_refresh_event_package
  */
 function mdjm_update_event_deposit_ajax()	{
 
-	$event_cost = $_POST['current_cost'];
+	$event_cost = isset( $_POST['current_cost'] ) ? sanitize_text_field( wp_unslash( $_POST['current_cost'] ) ) : 0;
 
 	$deposit = mdjm_calculate_deposit( $event_cost );
 
@@ -1249,9 +1336,9 @@ function mdjm_update_event_deposit_ajax()	{
 	}
 
 	$result = json_encode( $result );
-	echo $result;
+	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_update_event_deposit_ajax
 add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
@@ -1264,14 +1351,16 @@ add_action( 'wp_ajax_update_event_deposit', 'mdjm_update_event_deposit_ajax' );
  */
 function mdjm_add_employee_to_event_ajax()	{
 
+	$event_id = isset( $_POST['event_id'] )      ? absint( wp_unslash( $_POST['event_id'] ) )   : 0;
+
 	$args = array(
-		'id'              => isset( $_POST['employee_id'] )      ? $_POST['employee_id']    : '',
-		'role'            => isset( $_POST['employee_role'] )    ? $_POST['employee_role']	: '',
-		'wage'            => isset( $_POST['employee_wage'] )    ? $_POST['employee_wage']	: '',
+		'id'              => isset( $_POST['employee_id'] )      ? sanitize_text_field( wp_unslash( $_POST['employee_id'] ) )   : '',
+		'role'            => isset( $_POST['employee_role'] )    ? sanitize_text_field( wp_unslash( $_POST['employee_role'] ) )	: '',
+		'wage'            => isset( $_POST['employee_wage'] )    ? sanitize_text_field( wp_unslash( $_POST['employee_wage'] ) )	: '',
 		'payment_status'  => 'unpaid'
 	);
 
-	if ( ! mdjm_add_employee_to_event( $_POST['event_id'], $args ) )	{
+	if ( ! mdjm_add_employee_to_event( $event_id, $args ) )	{
 
 		$result['type'] = 'error';
 		$result['msg'] = __( 'Unable to add employee', 'mobile-dj-manager' );
@@ -1281,13 +1370,13 @@ function mdjm_add_employee_to_event_ajax()	{
 	}
 
 	ob_start();
-	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	mdjm_do_event_employees_list_table( $event_id );
 	$result['employees'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result );
+	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_add_employee_to_event_ajax
 add_action( 'wp_ajax_add_employee_to_event', 'mdjm_add_employee_to_event_ajax' );
@@ -1300,18 +1389,21 @@ add_action( 'wp_ajax_add_employee_to_event', 'mdjm_add_employee_to_event_ajax' )
  */
 function mdjm_remove_employee_from_event_ajax()	{
 
-	mdjm_remove_employee_from_event( $_POST['employee_id'], $_POST['event_id'] );
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : 0;
+	$employee_id = isset( $_POST['employee_id'] ) ? absint( wp_unslash( $_POST['employee_id'] ) ) : 0;
+
+	mdjm_remove_employee_from_event( $employee_id, $event_id );
 
 	$result['type'] = 'success';
 
 	ob_start();
-	mdjm_do_event_employees_list_table( $_POST['event_id'] );
+	mdjm_do_event_employees_list_table( $event_id );
 	$result['employees'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result );
+	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_remove_employee_from_event_ajax
 add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_event_ajax' );
@@ -1323,11 +1415,11 @@ add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_eve
  * @return	str
  */
 function mdjm_mdjm_get_template_title_ajax()	{
-	$title = get_the_title( $_POST['template'] );
+	$title = isset($_POST['template']) ? get_the_title( sanitize_text_field( wp_unslash( $_POST['template'] ) ) ) : '';
 	$result['title'] = $title;
-	echo json_encode( $result );
+	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 } // mdjm_mdjm_get_template_title_ajax
 add_action( 'wp_ajax_mdjm_get_template_title', 'mdjm_mdjm_get_template_title_ajax' );
 
@@ -1343,7 +1435,7 @@ function mdjm_set_email_content_ajax()	{
 		$result['type'] = 'success';
 		$result['updated_content'] = '';
 	} else	{
-		$content = mdjm_get_email_template_content( $_POST['template'] );
+		$content = mdjm_get_email_template_content( sanitize_text_field( wp_unslash( $_POST['template'] ) ) );
 
 		if ( ! $content )	{
 			$result['type'] = 'error';
@@ -1351,15 +1443,15 @@ function mdjm_set_email_content_ajax()	{
 		} else	{
 			$result['type']            = 'success';
 			$result['updated_content'] = $content;
-			$result['updated_subject'] = html_entity_decode( get_the_title( $_POST['template'] ) );
+			$result['updated_subject'] = html_entity_decode( get_the_title( sanitize_text_field( wp_unslash( $_POST['template'] ) ) ) );
 		}
 	}
 
 	$result = json_encode( $result );
 
-	echo $result;
+	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_set_email_content_ajax
 add_action( 'wp_ajax_mdjm_set_email_content', 'mdjm_set_email_content_ajax' );
@@ -1379,13 +1471,13 @@ function mdjm_user_events_dropdown_ajax()	{
 
 		$statuses = 'any';
 
-		if ( mdjm_is_employee( $_POST['recipient'] ) )	{
+		if ( mdjm_is_employee( absint( wp_unslash( $_POST['recipient'] ) ) ) )	{
 
 			if ( mdjm_get_option( 'comms_show_active_events_only' ) )	{
 				$statuses = array( 'post_status' => mdjm_active_event_statuses() );
 			}
 
-			$events = mdjm_get_employee_events( $_POST['recipient'], $statuses );
+			$events = mdjm_get_employee_events( absint( wp_unslash( $_POST['recipient'] ) ), $statuses );
 
 		} else	{
 
@@ -1393,7 +1485,7 @@ function mdjm_user_events_dropdown_ajax()	{
 				$statuses = mdjm_active_event_statuses();
 			}
 
-			$events = mdjm_get_client_events( $_POST['recipient'], $statuses );
+			$events = mdjm_get_client_events( absint( wp_unslash( $_POST['recipient'] ) ), $statuses );
 		}
 
 		if ( $events )	{
@@ -1412,9 +1504,9 @@ function mdjm_user_events_dropdown_ajax()	{
 	$result['type'] = 'success';
 	$result = json_encode( $result );
 
-	echo $result;
+	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_user_events_dropdown_ajax
 add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_user_events_dropdown_ajax' );
@@ -1427,11 +1519,11 @@ add_action( 'wp_ajax_mdjm_user_events_dropdown', 'mdjm_user_events_dropdown_ajax
  */
 function mdjm_refresh_event_addon_options_ajax()	{
 
-	$package     = $_POST['package'];
-	$employee    = ( isset( $_POST['employee'] )     ? $_POST['employee']   : false   );
-	$selected    = ( ! empty( $_POST['selected'] )   ? $_POST['selected']   : array() );
-	$event_type  = ( ! empty( $_POST['event_type'] ) ? $_POST['event_type'] : ''      );
-	$event_date  = ( ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : ''      );
+	$package     = isset( $_POST['package'] ) ? sanitize_text_field( wp_unslash( $_POST['package'] ) ) : 0;
+	$employee    = ( isset( $_POST['employee'] )     ? sanitize_text_field( wp_unslash( $_POST['employee'] ) )   : false   );
+	$selected    = ( ! empty( $_POST['selected'] )   ? wp_unslash( $_POST['selected'] )   : array() ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$event_type  = ( ! empty( $_POST['event_type'] ) ? sanitize_text_field( wp_unslash( $_POST['event_type'] ) ) : ''      );
+	$event_date  = ( ! empty( $_POST['event_date'] ) ? sanitize_text_field( wp_unslash( $_POST['event_date'] ) ) : ''      );
 
 	$addons = MDJM()->html->addons_dropdown( array(
 		'selected'         => $selected,
@@ -1458,7 +1550,7 @@ function mdjm_refresh_event_addon_options_ajax()	{
 
 	echo json_encode( $result );
 
-	die();
+	exit;
 
 } // mdjm_refresh_event_addon_options_ajax
 add_action( 'wp_ajax_refresh_event_addon_options', 'mdjm_refresh_event_addon_options_ajax' );
@@ -1473,18 +1565,30 @@ add_action( 'wp_ajax_nopriv_refresh_event_addon_options', 'mdjm_refresh_event_ad
  */
 function mdjm_do_availability_check_ajax()	{
 
-	$date       = $_POST['date'];
-	$employees  = isset ( $_POST['employees'] ) ? $_POST['employees'] : false;
-	$roles      = isset ( $_POST['roles'] )     ? $_POST['roles']     : false;
+	$date       = isset ( $_POST['check_date'] ) ? sanitize_text_field( wp_unslash( $_POST['check_date'] ) ) : '';
+	$employees  = isset ( $_POST['employees'] ) ? wp_unslash( $_POST['employees'] ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$roles      = isset ( $_POST['roles'] )     ? wp_unslash( $_POST['roles'] )     : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$short_date = mdjm_format_short_date( $date );
 	$result     = mdjm_do_availability_check( $date, $employees, $roles );
+
+	$available_text   = mdjm_get_option( 'availability_check_pass_text' );
+	$unavailable_text = mdjm_get_option( 'availability_check_fail_text' );
+	$search       = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
+	$replace      = array( date( 'l, jS F Y', strtotime( $date ) ), mdjm_format_short_date( $date ) );
 
 	if ( ! empty( $result['available'] ) )	{
 		$result['result']       = 'available';
 		$result['notice_class'] = 'updated';
+		$message = str_ireplace( $search, $replace, $available_text );
+
+		$result['message'] = mdjm_do_content_tags( $message );
+
 	} else	{
 		$result['result']       = 'unavailable';
 		$result['notice_class'] = 'error';
+		$message = str_ireplace( $search, $replace, $unavailable_text );
+
+		$result['message'] = mdjm_do_content_tags( $message );
 	}
 
 

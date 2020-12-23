@@ -56,18 +56,18 @@ $view_playlist_class  = ' mdjm-hidden';
 	<div id="mdjm_playlist_form_wrap" class="mdjm_clearfix">
         <?php do_action( 'mdjm_before_playlist_form' ); ?>
 
-		<p class="head-nav"><a href="{event_url}"><?php printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+		<p class="head-nav"><a href="{event_url}"><?php printf( esc_html__( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
 
         <p><?php echo esc_attr( $intro_text ); ?></p>
 		<p><?php echo esc_attr( $guest_text ); ?></p>
-		<p class="mdjm_playlist_share"><?php echo $share_text; ?></p>
+		<p class="mdjm_playlist_share"><?php echo $share_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 
 		<?php if ( $mdjm_event->playlist_is_open() ) : ?>
 
             <?php if ( $total_entries < $playlist_limit || $playlist_limit == 0 ) : ?>
                 <form id="mdjm_playlist_form" class="mdjm_form" method="post">
                     <?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
-                    <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo esc_attr( $mdjm_event->ID ); ?>" />
                     <input type="hidden" id="action" name="action" value="mdjm_submit_playlist" />
 
                     <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
@@ -80,8 +80,8 @@ $view_playlist_class  = ' mdjm-hidden';
                         <?php if ( $total_entries > 0 ) : ?>
                         	<?php $view_playlist_class = ''; ?>
                         <?php endif; ?>
-                        <p class="view_current_playlist<?php echo $view_playlist_class; ?>">
-                        	<a class="mdjm-scroller" href="#client-playlist-entries"><?php echo $view_playlist; ?></a>
+                        <p class="view_current_playlist<?php echo esc_attr( $view_playlist_class ); ?>">
+                        	<a class="mdjm-scroller" href="#client-playlist-entries"><?php echo esc_html( $view_playlist ); ?></a>
                         </p>
 
                         <div class="mdjm-alert mdjm-alert-success mdjm-hidden"></div>
@@ -111,7 +111,7 @@ $view_playlist_class  = ' mdjm-hidden';
                                 </label>
                                 <span class="mdjm-description"><?php echo esc_html( $category_description ); ?></span>
 
-                                <?php echo mdjm_playlist_category_dropdown(); ?>
+                                <?php echo mdjm_playlist_category_dropdown(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             </p>
 
 							<p class="mdjm_notes_field">
@@ -144,7 +144,7 @@ $view_playlist_class  = ' mdjm-hidden';
 
 		<?php else : ?>
 			<?php do_action( 'mdjm_playlist_closed', $mdjm_event->ID ); ?>
-       		<div class="mdjm-alert mdjm-alert-info"><?php echo $playlist_closed; ?></div>
+       		<div class="mdjm-alert mdjm-alert-info"><?php echo esc_html( $playlist_closed ); ?></div>
 		<?php endif; ?>
 
     </div><!--end #mdjm_playlist_form_wrap-->
@@ -157,29 +157,29 @@ $view_playlist_class  = ' mdjm-hidden';
 	$your_playlist    = __( 'Your Current Playlist', 'mobile-dj-manager' );
 	?>
 
-    <div id="playlist-entries"<?php echo $entries_class; ?>>
+    <div id="playlist-entries"<?php echo $entries_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 
         <a id="client-playlist-entries"></a>
-		<h5><?php echo $your_playlist; ?></h5>
+		<h5><?php echo esc_html( $your_playlist ); ?></h5>
 
         <p><?php printf(
-            __( 'Your playlist currently consists of <span class="song-count">%d %s</span> and is approximately <span class="playlist-length">%s</span> long. Your %s is scheduled for %s.', 'mobile-dj-manager' ),
-            $total_entries,
-            _n( 'song', 'songs', $total_entries, 'mobile-dj-manager' ),
+            __( 'Your playlist currently consists of <span class="song-count">%d %s</span> and is approximately <span class="playlist-length">%s</span> long. Your %s is scheduled for %s.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            esc_html( $total_entries ),
+			esc_html( _n( 'song', 'songs', esc_html( $total_entries ), 'mobile-dj-manager' ) ),
             '{playlist_duration}',
-            mdjm_get_label_singular( true ),
+            esc_html( mdjm_get_label_singular( true ) ),
             '{event_duration}'
         ); ?></p>
 
         <div class="playlist-entry-row-headings">
             <div class="playlist-entry-column">
-                <span class="playlist-entry-heading"><?php echo $artist_label; ?></span>
+                <span class="playlist-entry-heading"><?php echo esc_html( $artist_label ); ?></span>
             </div>
             <div class="playlist-entry-column">
-                <span class="playlist-entry-heading"><?php echo $song_label; ?></span>
+                <span class="playlist-entry-heading"><?php echo esc_html( $song_label ); ?></span>
             </div>
             <div class="playlist-entry-column">
-                <span class="playlist-entry-heading"><?php echo $category_label; ?></span>
+                <span class="playlist-entry-heading"><?php echo esc_html( $category_label ); ?></span>
             </div>
             <div class="playlist-entry-column">
                 <span class="playlist-entry-heading"><?php esc_html_e( 'Notes', 'mobile-dj-manager' ); ?></span>
@@ -194,7 +194,7 @@ $view_playlist_class  = ' mdjm-hidden';
 			<?php foreach( $category_entries as $entry ) : ?>
 				<?php $entry_data = mdjm_get_playlist_entry_data( $entry->ID ); ?>
 
-				<div class="playlist-entry-row mdjm-playlist-entry-<?php echo $entry->ID; ?>">
+				<div class="playlist-entry-row mdjm-playlist-entry-<?php echo esc_attr( $entry->ID ); ?>">
                     <div class="playlist-entry-column">
                         <span class="playlist-entry"><?php echo esc_attr( $entry_data['artist'] ); ?></span>
                     </div>
@@ -217,7 +217,7 @@ $view_playlist_class  = ' mdjm-hidden';
                     </div>
                     <div class="playlist-entry-column">
                         <span class="playlist-entry">
-                        	<a class="mdjm-delete playlist-delete-entry" data-event="<?php echo $mdjm_event->ID;?>" data-entry="<?php echo $entry->ID ?>"><?php echo $delete_entry; ?></a>
+                        	<a class="mdjm-delete playlist-delete-entry" data-event="<?php echo esc_attr( $mdjm_event->ID ); ?>" data-entry="<?php echo esc_attr( $entry->ID ); ?>"><?php echo esc_html( $delete_entry ); ?></a>
                         </span>
                     </div>
                 </div>

@@ -22,18 +22,18 @@ global $mdjm_event;
 
         <?php do_action( 'mdjm_print_notices' ); ?>
 
-        <p class="head-nav"><a href="{event_url}"><?php  printf( __( 'Back to %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></a></p>
+        <p class="head-nav"><a href="{event_url}"><?php  printf( esc_html__( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
 
     	<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
 
-        <p><?php printf( __( 'The contract for your %s taking place on %s is displayed below.', 'mobile-dj-manager' ),
-                mdjm_get_label_singular( true ), '{event_date}' ); ?></p>
+        <p><?php printf( esc_html__( 'The contract for your %s taking place on %s is displayed below.', 'mobile-dj-manager' ),
+                esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); ?></p>
 
         <p class="mdjm-alert mdjm-alert-success"><span style="font-weight: bold;"><?php esc_html_e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
-            <?php printf( __( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
+            <?php printf( esc_html__( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
                 '{contract_date}',
                 '{contract_signatory}' ); ?><br />
-            <?php printf( __( 'IP address recorded as: %s', 'mobile-dj-manager' ), '{contract_signatory_ip}' ); ?></p>
+            <?php printf( esc_html__( 'IP address recorded as: %s', 'mobile-dj-manager' ), '{contract_signatory_ip}' ); ?></p>
 
     	<?php do_action( 'mdjm_pre_contract_content', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-contract-header -->
@@ -43,7 +43,7 @@ global $mdjm_event;
 
     	<?php do_action( 'mdjm_pre_contract_content', $mdjm_event->ID ); ?>
 
-        <?php echo mdjm_show_contract( $mdjm_event->get_contract(), $mdjm_event ); ?>
+        <?php echo mdjm_show_contract( $mdjm_event->get_contract(), $mdjm_event ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <?php do_action( 'mdjm_post_contract_footer', $mdjm_event->ID ); ?>
 
@@ -54,10 +54,10 @@ global $mdjm_event;
     	<?php do_action( 'mdjm_pre_contract_footer', $mdjm_event->ID ); ?>
 
         <p class="mdjm-alert mdjm-alert-success"><span style="font-weight: bold;"><?php esc_html_e( 'Your contract is signed', 'mobile-dj-manager' ); ?></span><br />
-            <?php printf( __( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
+            <?php printf( esc_html__( 'Signed on %s by %s with password verification', 'mobile-dj-manager' ),
                 '{contract_date}',
                 '{contract_signatory}' ); ?><br />
-            <?php printf( __( 'IP address recorded as: %s', 'mobile-dj-manager' ), '{contract_signatory_ip}' ); ?></p>
+            <?php printf( esc_html__( 'IP address recorded as: %s', 'mobile-dj-manager' ), '{contract_signatory_ip}' ); ?></p>
 
         <?php do_action( 'mdjm_post_contract_footer', $mdjm_event->ID ); ?>
     </div><!-- end mdjm-contract-footer -->

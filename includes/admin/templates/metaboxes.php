@@ -112,18 +112,18 @@ function mdjm_contract_details_metabox( $post )	{
 	document.getElementById("content").className += " required";
 	</script>
 
-	<p><?php printf( __( '<strong>Author</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-				admin_url( "user-edit.php?user_id={$post->post_author}" ),
-				get_the_author_meta( 'display_name', $post->post_author ) ); ?>
+	<p><?php printf( __( '<strong>Author</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_url( admin_url( "user-edit.php?user_id={$post->post_author}" ) ),
+				esc_html( get_the_author_meta( 'display_name', $post->post_author ) ) ); ?>
 	</p>
 
 	<p><strong><?php esc_html_e( 'Default?', 'mobile-dj-manager' );
-		echo '</strong> ' . $default_contract; ?>
+		echo '</strong> ' . esc_html( $default_contract ); ?>
     </p>
 
 	<p><strong><?php esc_html_e( 'Assigned To', 'mobile-dj-manager' );?></strong>:
-				<?php printf( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count, 'mobile-dj-manager' ),
-						mdjm_get_label_singular(), mdjm_get_label_plural() ); ?>
+				<?php printf( esc_html( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count, 'mobile-dj-manager' )),
+						esc_html( mdjm_get_label_singular() ), esc_html( mdjm_get_label_plural() ) ); ?>
     </p>
 
 	<p><strong><?php esc_html_e( 'Description', 'mobile-dj-manager' ); ?></strong>: <span class="description"><?php esc_html_e( '(optional)', 'mobile-dj-manager' ); ?></span>

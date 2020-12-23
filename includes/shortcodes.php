@@ -101,7 +101,7 @@ function mdjm_shortcode_home( $atts )	{
 		);
 
 		if( isset( $_GET['event_id'] ) )	{
-			$mdjm_event = mdjm_get_event( $_GET['event_id'] );
+			$mdjm_event = mdjm_get_event( absint( wp_unslash( $_GET['event_id'] ) ) );
 
 			if( ! empty( $mdjm_event->ID ) && absint( $mdjm_event->client ) === $client_id )	{
 				ob_start();
@@ -165,7 +165,7 @@ function mdjm_shortcode_home( $atts )	{
 		return $output;
 	}
 	else	{
-		echo mdjm_login_form( mdjm_get_current_page_url() );
+		echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 } // mdjm_shortcode_home
@@ -181,12 +181,13 @@ add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
  * @return	string
  */
 function mdjm_shortcode_contract( $atts )	{
+	$event_id = isset( $_GET['event_id'] ) ? absint( wp_unslash( $_GET['event_id'] ) ) : 0;
 
-	if( isset( $_GET['event_id'] ) && mdjm_event_exists( $_GET['event_id'] ) )	{
+	if( mdjm_event_exists( $event_id ) )	{
 		if( is_user_logged_in() )	{
 			global $mdjm_event;
 
-			$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+			$mdjm_event = new MDJM_Event( $event_id );
 
 			$status = ! $mdjm_event->get_contract_status() ? '' : 'signed';
 
@@ -212,7 +213,7 @@ function mdjm_shortcode_contract( $atts )	{
 			return $output;
 		}
 		else	{
-			echo mdjm_login_form( mdjm_get_current_page_url() );
+			echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 	else	{
@@ -238,7 +239,7 @@ function mdjm_shortcode_payment( $atts )	{
 		global $mdjm_event;
 
 		if ( isset( $_GET['event_id'] ) )	{
-			$event_id = $_GET['event_id'];
+			$event_id = absint( wp_unslash( $_GET['event_id'] ) );
 		} else	{
 			$next_event = mdjm_get_clients_next_event( get_current_user_id() );
 
@@ -265,7 +266,7 @@ function mdjm_shortcode_payment( $atts )	{
 		$mdjm_event = '';
 
 	} else	{
-		echo mdjm_login_form();
+		echo mdjm_login_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 } // mdjm_shortcode_payment
@@ -312,7 +313,7 @@ function mdjm_shortcode_playlist( $atts )	{
 	$event_id = '';
 
 	if ( ! empty( $_GET['event_id'] ) )	{
-		$event_id = $_GET['event_id'];
+		$event_id = absint( wp_unslash( $_GET['event_id'] ) );
 	} else	{
 		$next_event = mdjm_get_clients_next_event( get_current_user_id() );
 
@@ -327,7 +328,7 @@ function mdjm_shortcode_playlist( $atts )	{
 		$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
 	} else	{
 
-		$mdjm_event = $visitor == 'client' ? mdjm_get_event( $event_id ) : mdjm_get_event_by_playlist_code( $_GET['guest_playlist'] );
+		$mdjm_event = $visitor == 'client' ? mdjm_get_event( $event_id ) : mdjm_get_event_by_playlist_code( wp_unslash( $_GET['guest_playlist'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		ob_start();
 
@@ -375,7 +376,7 @@ function mdjm_shortcode_quote( $atts )	{
 	$event_id = '';
 
 	if ( ! empty( $_GET['event_id'] ) )	{
-		$event_id = $_GET['event_id'];
+		$event_id = absint( wp_unslash( $_GET['event_id'] ) );
 	} else	{
 		$next_event = mdjm_get_clients_next_event( get_current_user_id() );
 
@@ -421,7 +422,7 @@ function mdjm_shortcode_quote( $atts )	{
 			return $output;
 
 		} else	{
-			echo mdjm_login_form( mdjm_get_current_page_url() );
+			echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 	} else	{
@@ -480,7 +481,7 @@ function mdjm_shortcode_availability( $atts )	{
 		)
 	);
 
-	echo '<!-- ' . __( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . MDJM_VERSION_NUM . ') -->';
+	echo '<!-- ' . esc_html( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . esc_html( MDJM_VERSION_NUM ) . ') -->';
 	echo '<form name="mdjm-availability-check" id="mdjm-availability-check" method="post">';
 	wp_nonce_field( 'do_availability_check', 'mdjm_nonce', true, true );
 	mdjm_action_field( 'do_availability_check' );
@@ -637,7 +638,7 @@ function mdjm_shortcode_addons_list( $atts )	{
 
 	}
 
-	echo apply_filters( 'mdjm_shortcode_addons_list', $output );
+	echo apply_filters( 'mdjm_shortcode_addons_list', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	return ob_get_clean();
 

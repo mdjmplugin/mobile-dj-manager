@@ -78,7 +78,7 @@ function mdjm_correct_guest_playlist_url_action()	{
 
 	if ( ! is_page( mdjm_get_option( 'playlist_page' ) ) )	{
 		wp_safe_redirect(
-			add_query_arg( 'guest_playlist', $_GET['guest_playlist'],
+			add_query_arg( 'guest_playlist', sanitize_text_field( wp_unslash( $_GET['guest_playlist'] ) ),
 			mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) )
 		);
 		exit;

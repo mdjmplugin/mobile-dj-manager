@@ -59,7 +59,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				6 => array( 'error', __( 'Not all roles could be deleted. Do you still have users assigned?', 'mobile-dj-manager' ) ),
 				7 => array( 'updated', __( '', 'mobile-dj-manager' ) ) );
 
-			mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
+			mdjm_update_notice( $messages[absint( wp_unslash( $_GET['message'] ) )][0], $messages[absint( wp_unslash( $_GET['message'] ) )][1], true );
 		} // messages
 
 		/**
@@ -199,8 +199,8 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 			}
 			else	{
 				$result = add_role(
-					'mdjm-' . sanitize_title_with_dashes( strtolower( str_replace( '_', '-', $_POST['role_name'] ) ) ),
-					ucwords( $_POST['role_name'] ) );
+					'mdjm-' . sanitize_title_with_dashes( strtolower( str_replace( '_', '-', sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) ) ),
+					ucwords( sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) );
 
 				if ( null !== $result ) {
 					$return['type'] = 'success';
@@ -219,7 +219,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 
 			echo json_encode( $return );
 
-			die();
+			exit;
 		} // add_role
 
 		/**
@@ -231,12 +231,13 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 * @return	arr		$result		JSON encoded array
 		 */
 		public function delete_roles( $roles='' )	{
-			if( isset( $_POST['delete-roles'] ) && !empty( $_POST['all_roles'] ) )
-				$roles = $_POST['all_roles'];
+			if( isset( $_POST['delete-roles'] ) && !empty( $_POST['all_roles'] ) ) {
+				$roles = wp_unslash( $_POST['all_roles'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			}
 
 			// No roles
 			if( empty( $roles ) )	{
-				wp_safe_redirect( $_SERVER['HTTP_REFERER'] . '&role_action=1&message=5' );
+				wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=5' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				exit;
 			}
 
@@ -248,7 +249,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 			$employees = mdjm_get_employees( $roles );
 
 			if( !empty( $employees ) )	{
-				wp_safe_redirect( $_SERVER['HTTP_REFERER'] . '&role_action=1&message=6' );
+				wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=6' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				exit;
 			}
 
@@ -256,7 +257,7 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 			foreach( $roles as $role )	{
 				remove_role( $role );
 			}
-			wp_safe_redirect( $_SERVER['HTTP_REFERER'] . '&role_action=1&message=1' );
+			wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=1' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			exit;
 		} // delete_roles
 

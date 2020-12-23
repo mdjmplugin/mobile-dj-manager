@@ -55,7 +55,7 @@ class MDJM_Permissions	{
 			'venue_permissions'    => 'mdjm_venue'
 		);
 
-		foreach( $_POST['employee_roles'] as $_role )	{
+		foreach( wp_unslash( $_POST['employee_roles'] ) as $_role )	{ // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$role = get_role( $_role );
 
 			// If the role is to become admin
@@ -76,8 +76,7 @@ class MDJM_Permissions	{
 
 				$caps = empty( $_POST[$field . '_' . $_role] ) ?
 					$this->get_capabilities( $prefix . '_none' ) :
-					$this->get_capabilities( $_POST[$field . '_' . $_role]
-				);
+					$this->get_capabilities( wp_unslash( $_POST[$field . '_' . $_role] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 				foreach( $caps as $cap => $val )	{
 
@@ -91,7 +90,7 @@ class MDJM_Permissions	{
 			}
 		}
 
-		wp_safe_redirect( $_SERVER['HTTP_REFERER'] . '&role_action=1&message=4' );
+		wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=4' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		exit;
 
 	} // set_permissions

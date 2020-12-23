@@ -186,7 +186,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<p><?php echo $message; ?></p>
+			<p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 		</div>
 	</div>
 
@@ -200,14 +200,14 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	echo '<div class="mdjm-post-row">' . "\r\n";
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' .
-				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' .
-				mdjm_sanitize_amount( '10' ) . '" value="' . mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_txn_total', true ) ) . '" />' . "\r\n";
+				esc_html( mdjm_currency_symbol() ) . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' .
+				esc_html( mdjm_sanitize_amount( '10' ) ) . '" value="' . esc_attr( mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_txn_total', true ) ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_display_date">Date:</label><br />' .
-			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . mdjm_format_short_date( $post->post_date ) . '" />' .
-			'<input type="hidden" name="transaction_date" id="transaction_date" value="' . date( 'Y-m-d', strtotime( $post->post_date ) ) . '" />' . "\r\n";
+			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . esc_attr( mdjm_format_short_date( $post->post_date ) ) . '" />' .
+			'<input type="hidden" name="transaction_date" id="transaction_date" value="' . esc_attr( date( 'Y-m-d', strtotime( $post->post_date ) ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
 
 		echo '<div class="mdjm-post-last-3column">' . "\r\n";
@@ -255,9 +255,9 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 				echo '<label class="mdjm-label" for="transaction_to">Paid To:</label><br />';
 			echo '</div>' . "\r\n";
 			echo '<input type="text" name="transaction_payee" id="transaction_payee" class="regular_text" value="'
-				. ( $post->post_status == 'mdjm-income' ?
+				. esc_attr( ( $post->post_status == 'mdjm-income' ?
 				get_post_meta( $post->ID, '_mdjm_payment_from', true ) :
-				get_post_meta( $post->ID, '_mdjm_payment_to', true ) )
+				get_post_meta( $post->ID, '_mdjm_payment_to', true ) ) )
 				. '" />';
 		echo '</div>' . "\r\n";
 
@@ -289,7 +289,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 				'<select name="transaction_src" id="transaction_src" class="required">' . "\r\n" .
 				'<option value="">--- Select ---</option>' . "\r\n";
 				foreach( $sources as $source )	{
-					echo '<option value="' . $source . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . $source . '</option>' . "\r\n";
+					echo '<option value="' . esc_attr( $source ) . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . esc_attr( $source ) . '</option>' . "\r\n";
 				}
 				echo '</select>' . "\r\n";
 		echo '</div>' . "\r\n";

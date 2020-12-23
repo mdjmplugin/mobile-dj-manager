@@ -136,7 +136,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				$output .= '</ul>';
 			}
 
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} // list_custom_tags
 
 		/**
@@ -148,7 +148,12 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		function add_field()	{
 
-			$existing = mdjm_get_custom_fields( $_POST['_mdjm_field_section'], 'menu_order', 'DESC', 1 );
+			if (!isset( $_POST['_mdjm_field_section'] ) || !isset( $_POST['field_label'] )) {
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
+				exit;
+			}
+
+			$existing = mdjm_get_custom_fields( sanitize_text_field( wp_unslash( $_POST['_mdjm_field_section'] ) ), 'menu_order', 'DESC', 1 );
 
 			if( $existing->have_posts() )	{
 				while ( $existing->have_posts() ) {
@@ -169,8 +174,8 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			$id = wp_insert_post(
 				array(
-					'post_title'	=> wp_strip_all_tags( $_POST['field_label'] ),
-					'post_content'  => !empty( $_POST['field_desc'] ) ? $_POST['field_desc'] : '',
+					'post_title'	=> sanitize_text_field( wp_strip_all_tags( wp_unslash( $_POST['field_label'] ) ) ),
+					'post_content'  => !empty( $_POST['field_desc'] ) ? sanitize_text_field( wp_unslash( $_POST['field_desc'] ) ) : '',
 					'post_status'   => 'publish',
 					'post_author'   => get_current_user_id(),
 					'post_type'	 => 'mdjm-custom-fields',
@@ -183,7 +188,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Custom field added ' . $_POST['field_label'], true );
+					MDJM()->debug->log_it( 'Custom field added ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ), true );
 
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
@@ -202,7 +207,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
-					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
+					MDJM()->debug->log_it( 'Unable to create custom field ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ) . '. ' . get_error_message(), true );
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
@@ -218,12 +223,17 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 */
 		function update_field()	{
 
+			if (!isset( $_POST['custom_field_id'] ) || !isset( $_GET['id'] ) || !isset( $_POST['field_label'] )) {
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
+				exit;
+			}
+
 			// Retrieve the existing settings for the field so we can compare
-			$existing = get_post( $_POST['custom_field_id'] );
+			$existing = get_post( absint( wp_unslash( $_POST['custom_field_id'] ) ) );
 
 			if( !$existing )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Unable to update field with ID: ' . $_GET['id'] . '. May not exist', true );
+					MDJM()->debug->log_it( 'Unable to update field with ID: ' . absint( wp_unslash( $_GET['id'] ) ) . '. May not exist', true );
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
 				exit;
@@ -231,10 +241,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			$id = wp_update_post(
 				array(
-					'ID'			=> $_POST['custom_field_id'],
-					'post_title'	=> wp_strip_all_tags( $_POST['field_label'] ),
-					'post_content'  => !empty( $_POST['field_desc'] ) ? $_POST['field_desc'] : '',
-					'post_name'     => sanitize_title( $_POST['field_label'] ),
+					'ID'			=> absint( wp_unslash( $_POST['custom_field_id'] ) ),
+					'post_title'	=> sanitize_text_field( wp_strip_all_tags( wp_unslash( $_POST['field_label'] ) ) ),
+					'post_content'  => !empty( $_POST['field_desc'] ) ? sanitize_text_field( wp_unslash( $_POST['field_desc'] ) ) : '',
+					'post_name'     => sanitize_title( wp_unslash( $_POST['field_label'] ) ),
 					'post_status'   => 'publish' ),
 				true );
 
@@ -244,7 +254,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			if( !empty( $id ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Custom field updated ' . $_POST['field_label'], true );
+					MDJM()->debug->log_it( 'Custom field updated ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ), true );
 
 				foreach( $_POST as $key => $value )	{
 					if( substr( $key, 0, 5 ) != '_mdjm' )
@@ -264,7 +274,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			*/
 			else	{
 				if( MDJM_DEBUG == true && is_wp_error( $id ) )
-					MDJM()->debug->log_it( 'Unable to create custom field ' . $_POST['field_label'] . '. ' . get_error_message(), true );
+					MDJM()->debug->log_it( 'Unable to create custom field ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ) . '. ' . get_error_message(), true );
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
 				exit;
@@ -279,9 +289,14 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @return
 		 */
 		function delete_field()	{
-			if( wp_delete_post( $_GET['id'], true ) )	{
+			if (!isset( $_GET['id'] )) {
+				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
+				exit;
+			}
+
+			if( wp_delete_post( absint( wp_unslash( $_GET['id'] ) ), true ) )	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Custom event field deleted with ID: ' . $_GET['id'], true );
+					MDJM()->debug->log_it( 'Custom event field deleted with ID: ' . absint( wp_unslash( $_GET['id'] ) ), true );
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=3' );
 				exit;
@@ -289,7 +304,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			else	{
 				if( MDJM_DEBUG == true )
-					MDJM()->debug->log_it( 'Custom event field with ID: ' . $_GET['id'] . ' could not be deleted', true );
+					MDJM()->debug->log_it( 'Custom event field with ID: ' . absint( wp_unslash( $_GET['id'] ) ) . ' could not be deleted', true );
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
 				exit;
@@ -313,7 +328,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					'5'	=> array( 'error', __( 'Unable to update field.', 'mobile-dj-manager' ) ),
 					'6'	=> array( 'error', __( 'Unable to delete field.', 'mobile-dj-manager' ) ) );
 
-				mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
+				mdjm_update_notice( $messages[ sanitize_text_field( wp_unslash( $_GET['message'] ) ) ][0], $messages[ sanitize_text_field( wp_unslash( $_GET['message'] ) ) ][1], true );
 			}
 			?>
 			<div class="mdjm-event-field-container">
@@ -330,8 +345,8 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			foreach( $field_types as $field_type )	{
 				?>
-				<h3><?php printf( __( '%s Fields', 'mobile-dj-manager' ), ucfirst( $field_type ) ) ; ?></h3>
-				<table id="mdjm_custom-<?php echo $field_type; ?>" class="widefat mdjm-custom-<?php echo $field_type; ?>-list-item" style="width:90%">
+				<h3><?php printf( esc_html__( '%s Fields', 'mobile-dj-manager' ), esc_html( ucfirst( $field_type ) ) ) ; ?></h3>
+				<table id="mdjm_custom-<?php echo esc_attr( $field_type ); ?>" class="widefat mdjm-custom-<?php echo esc_attr( $field_type ); ?>-list-item" style="width:90%">
 					<thead>
 					<tr>
                     	<th style="width: 20px;"></th>
@@ -353,17 +368,17 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 					while( $fields->have_posts() ) {
 						$fields->the_post();
 						?>
-						<tr id="customfields_<?php echo $fields->post->ID; ?>" class="
-							<?php echo ( $i == 0 ? 'alternate mdjm_sortable_row' : 'mdjm_sortable_row' ); ?>" data-key="<?php echo $fields->post->ID; ?>">
+						<tr id="customfields_<?php echo esc_attr( $fields->post->ID ); ?>" class="
+							<?php echo ( $i == 0 ? 'alternate mdjm_sortable_row' : 'mdjm_sortable_row' ); ?>" data-key="<?php echo esc_attr( $fields->post->ID ); ?>">
                             <td><span class="mdjm_draghandle"></span></td>
                             <td><?php the_title(); ?></td>
-                            <td><?php echo ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ); ?></td>
-                            <td><?php echo $fields->post->post_content; ?></td>
+                            <td><?php echo esc_html( ucfirst( get_post_meta( $fields->post->ID, '_mdjm_field_type', true ) ) ); ?></td>
+                            <td><?php echo esc_html( $fields->post->post_content ); ?></td>
                             <td><?php self::field_icons( $fields->post->ID ); ?></td>
                             <td>
-                                <a href="<?php echo mdjm_get_admin_page( 'custom_event_fields' ) . '&edit_custom_field=1&id=' . $fields->post->ID; ?>"
+                                <a href="<?php echo esc_url( mdjm_get_admin_page( 'custom_event_fields' ) . '&edit_custom_field=1&id=' . $fields->post->ID ); ?>"
                                 class="button button-primary button-small"><?php esc_html_e( 'Edit', 'mobile-dj-manager' ); ?></a>
-                                &nbsp;&nbsp;&nbsp;<a href="<?php echo mdjm_get_admin_page( 'custom_event_fields' ) . '&delete_custom_field=1&id=' . $fields->post->ID; ?>"
+                                &nbsp;&nbsp;&nbsp;<a href="<?php echo esc_url( mdjm_get_admin_page( 'custom_event_fields' ) . '&delete_custom_field=1&id=' . $fields->post->ID ); ?>"
                         		class="button button-secondary button-small"><?php esc_html_e( 'Delete', 'mobile-dj-manager' ); ?></a>
                             </td>
                         </tr>
@@ -380,7 +395,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				else	{
 					?>
 					<tr>
-						<td colspan="6"><?php printf( __( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), ucfirst( $field_type ) ); ?></td>
+						<td colspan="6"><?php printf( esc_html__( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), esc_html( ucfirst( $field_type ) ) ); ?></td>
 					</tr>
 					<?php
 				}
@@ -439,7 +454,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			} ); // function
 			</script>
 			<div class="mdjm-event-field-column-right">
-			<form name="mdjm-custom-event-fields" id="mdjm-custom-event-fields" method="post" action="<?php echo mdjm_get_admin_page( 'custom_event_fields' ); ?>">
+			<form name="mdjm-custom-event-fields" id="mdjm-custom-event-fields" method="post" action="<?php echo esc_url( mdjm_get_admin_page( 'custom_event_fields' ) ); ?>">
 
 			<?php
 			if ( isset( $_GET['edit_custom_field'], $_GET['id'] ) )	{
@@ -448,18 +463,18 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
 			// If editing a field we need this hidden field to identify it
 			if( !empty( $editing ) )	{
-				$field = get_post( $_GET['id'] );
-				echo '<input type="hidden" name="custom_field_id" id="custom_field_id" value="' . $_GET['id'] . '" />' . "\r\n";
+				$field = get_post( absint( wp_unslash( $_GET['id'] ) ) );
+				echo '<input type="hidden" name="custom_field_id" id="custom_field_id" value="' . absint( wp_unslash( $_GET['id'] ) ) . '" />' . "\r\n";
 			}
 
 			echo '<h3>';
-			echo ( empty( $editing ) ? __( 'Add New Custom Field', 'mobile-dj-manager' ) :
+			echo ( empty( $editing ) ? esc_html__( 'Add New Custom Field', 'mobile-dj-manager' ) :
 				sprintf(
-					__( 'Edit the %s%s%s %s', 'mobile-dj-manager' ),
+					esc_html__( 'Edit the %s%s%s %s', 'mobile-dj-manager' ),
 					'<span class="mdjm-color">',
-					get_the_title( $_GET['id'] ),
+					esc_html( get_the_title( absint( wp_unslash( $_GET['id'] ) ) ) ),
 					'</span>',
-					__( 'Field', 'mobile-dj-manager' ) ) );
+					esc_html__( 'Field', 'mobile-dj-manager' ) ) );
 			echo '</h3>' . "\r\n";
 
 			// Types of input fields that can be selected
@@ -472,10 +487,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<select name="_mdjm_field_section" id="_mdjm_field_section">
 			<?php
 			foreach( $field_types as $type )	{
-				echo '<option value="' . $type . '"';
+				echo '<option value="' . esc_attr( $type ) . '"';
 				if( !empty( $editing ) )
-					selected( $type, get_post_meta( $_GET['id'], '_mdjm_field_section', true ) );
-				echo '>' . sprintf( __( '%s Section', 'mobile-dj-manager' ), ucfirst( $type ) ) . '</option>' . "\r\n";
+					selected( $type, get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_section', true ) );
+				echo '>' . sprintf( esc_html__( '%s Section', 'mobile-dj-manager' ), esc_html( ucfirst( $type ) ) ) . '</option>' . "\r\n";
 			}
 			?>
 			</select>
@@ -484,7 +499,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<p>
 			<label for="field_label"><?php esc_html_e( 'Label', 'mobile-dj-manager' ); ?>:</label><br />
 			<input type="text" name="field_label" id="field_label" class="regular-text" value="<?php echo ( !empty( $editing ) ?
-			get_the_title( $_GET['id'] ) : '' ); ?>" class="regular-text" required="required" />
+			esc_attr( get_the_title( absint( wp_unslash( $_GET['id'] ) ) ) ) : '' ); ?>" class="regular-text" required="required" />
 			</p>
 
 			<p>
@@ -492,10 +507,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<select name="_mdjm_field_type" id="_mdjm_field_type" onChange="whichField();">
 			<?php
 			foreach( $types as $type )	{
-				echo '<option value="' . $type . '"';
+				echo '<option value="' . esc_attr( $type ) . '"';
 				if( !empty( $editing ) )
-					selected( $type, get_post_meta( $_GET['id'], '_mdjm_field_type', true ) );
-				echo '>' . sprintf( __( '%s Field', 'mobile-dj-manager' ), ucwords( $type ) ) . '</option>' . "\r\n";
+					selected( $type, get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_type', true ) );
+				echo '>' . sprintf( esc_html__( '%s Field', 'mobile-dj-manager' ), esc_html( ucwords( $type ) ) ) . '</option>' . "\r\n";
 			}
 			?>
 			</select>
@@ -503,10 +518,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 
             <style type="text/css">
 				#value_field_select	{
-					display: <?php echo ( !empty( $editing ) && get_post_meta( $_GET['id'], '_mdjm_field_type', true ) == 'select' ? 'block;' : 'none;' ); ?>
+					display: <?php echo ( !empty( $editing ) && get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_type', true ) == 'select' ? 'block;' : 'none;' ); ?>
 				}
 				#value_field_checkbox	{
-					display: <?php echo ( !empty( $editing ) && get_post_meta( $_GET['id'], '_mdjm_field_type', true ) == 'checkbox' ? 'block;' : 'none;' ); ?>
+					display: <?php echo ( !empty( $editing ) && get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_type', true ) == 'checkbox' ? 'block;' : 'none;' ); ?>
 				}
 			</style>
 
@@ -514,7 +529,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				<p>
 				<label for="_mdjm_field_options"><?php esc_html_e( 'Selectable Options', 'mobile-dj-manager' ); ?>:</label><br />
 				<textarea name="_mdjm_field_options" id="_mdjm_field_options" class="all-options" rows="5"><?php
-					echo ( !empty( $editing ) ? get_post_meta( $_GET['id'], '_mdjm_field_options', true ) : '' ); ?></textarea><br />
+					echo ( !empty( $editing ) ? esc_html( get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_options', true ) ) : '' ); ?></textarea><br />
                 <span class="description"><?php esc_html_e( 'One entry per line', 'mobile-dj-manager' ); ?></span>
 				</p>
             </div>
@@ -522,14 +537,14 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 				<p>
 				<label for="_mdjm_field_value"><?php esc_html_e( 'Checked Value', 'mobile-dj-manager' ); ?>:</label><br />
 				<input type="text" name="_mdjm_field_value" id="_mdjm_field_value" value="<?php echo ( !empty( $editing ) ?
-					get_post_meta( $_GET['id'], '_mdjm_field_value', true ) : '1' ); ?>" class="small-text" />
+					esc_attr( get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_value', true ) ) : '1' ); ?>" class="small-text" />
 				</p>
 
 				<p>
 				<input type="checkbox" name="_mdjm_field_checked" id="_mdjm_field_checked" value="1"
 					<?php
 					if( !empty( $editing ) )
-						checked( '1', get_post_meta( $_GET['id'], '_mdjm_field_checked', true ) );
+						checked( '1', get_post_meta( absint( wp_unslash( $_GET['id'] ) ), '_mdjm_field_checked', true ) );
 					?>
                     />&nbsp;<label for="_mdjm_field_checked"><?php esc_html_e( 'Checked by Default', 'mobile-dj-manager' ); ?>?</label>
 				</p>
@@ -559,21 +574,21 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			<p>
 			<label for="field_desc"><?php esc_html_e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
 			<input type="text" name="field_desc" id="field_desc" value="<?php echo ( !empty( $editing ) ?
-			$field->post_content : '' ); ?>" class="regular-text" /><br />
+			esc_attr( $field->post_content ) : '' ); ?>" class="regular-text" /><br />
 			<span class="description"><?php esc_html_e( "Not visible to client's", 'mobile-dj-manager' ); ?></span>
 			</p>
 
 			<p>
 			<?php
-			submit_button( ( empty( $editing ) ? __( 'Add Field', 'mobile-dj-manager' ) : __( 'Save Changes', 'mobile-dj-manager' ) ),
+			submit_button( ( empty( $editing ) ? esc_html__( 'Add Field', 'mobile-dj-manager' ) : esc_html__( 'Save Changes', 'mobile-dj-manager' ) ),
 							'primary',
 							'submit_custom_field',
 							false );
 
 			if( !empty( $editing ) )	{
 				echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				echo '<a href="' . mdjm_get_admin_page( 'custom_event_fields' ) . '" class="button-secondary">' .
-					__( 'Cancel Changes', 'mobile-dj-manager' ) . '</a>';
+				echo '<a href="' . esc_url( mdjm_get_admin_page( 'custom_event_fields' ) ) . '" class="button-secondary">' .
+					esc_html__( 'Cancel Changes', 'mobile-dj-manager' ) . '</a>';
 			}
 			?>
 			</p>
@@ -609,7 +624,7 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			if( $type == 'select' || $type == 'multi select' )
 				$output .= '<img src="' . $dir . '/select_list.jpg" width="14" height="14" alt="' . __( 'Dropdown field options', 'mobile-dj-manager' ) . '" title="' . str_replace( ',', "\r\n", $value ) . '" />' . "\r\n";
 
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} // field_icons
 
 		/**
@@ -758,10 +773,10 @@ if( !class_exists( 'MDJM_Event_Fields' ) ) :
 			}
 
 			?>
-			<div class="<?php echo $div_class; ?>">
-				<span class="mdjm-repeatable-row-setting-label"><?php echo $title; ?></span>
+			<div class="<?php echo esc_attr( $div_class ); ?>">
+				<span class="mdjm-repeatable-row-setting-label"><?php echo esc_html( $title ); ?></span>
 				<label class="mdjm-custom-field-label">
-					<?php echo $output; ?>
+					<?php echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</label>
 			</div>
 			<?php

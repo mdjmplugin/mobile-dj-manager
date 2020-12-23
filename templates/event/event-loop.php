@@ -15,7 +15,7 @@
 global $mdjm_event;
 ?>
 <?php do_action( 'mdjm_pre_event_loop' ); ?>
-<div id="post-<?php echo $mdjm_event->ID; ?>" class="<?php echo $mdjm_event->post_status; ?>">
+<div id="post-<?php echo esc_attr( $mdjm_event->ID ); ?>" class="<?php echo esc_attr( $mdjm_event->post_status ); ?>">
 	<table class="mdjm-event-overview">
 		<tr>
 			<th class="mdjm-event-heading">{event_name}<br />
@@ -23,7 +23,7 @@ global $mdjm_event;
 			</th>
             <th class="mdjm-event-heading right-align"><?php esc_html_e( 'ID:', 'mobile-dj-manager' ); ?> {contract_id}<br />
 				<?php esc_html_e( 'Status:', 'mobile-dj-manager' ); ?> {event_status}<br />
-				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), '{event_url}', mdjm_get_label_singular() ); ?></span>
+				<span class="mdjm-edit"><?php printf( __( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), '{event_url}', mdjm_get_label_singular() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
             </th>
 		</tr>
 		<tr>
@@ -39,7 +39,7 @@ global $mdjm_event;
 			</td>
 		</tr>
         <tr>
-        	<td><span class="mdjm-event-label"><?php printf( __( '%s Type', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></span><br />
+        	<td><span class="mdjm-event-label"><?php printf( esc_html__( '%s Type', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></span><br />
 				{event_type}
 			</td>
         </tr>
@@ -69,7 +69,7 @@ global $mdjm_event;
             	<tr>
             <?php endif; ?><!-- endif( $i == 1 ) -->
 
-            		<td class="action-button"><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . $button['label'] . '</a>', mdjm_get_option( 'action_button_colour', 'blue' ), $button['url'] ); ?></td>
+            		<td class="action-button"><?php printf( '<a class="mdjm-action-button mdjm-action-button-%s" href="%s">' . esc_html( $button['label'] ) . '</a>', esc_html( mdjm_get_option( 'action_button_colour', 'blue' ) ), esc_url( $button['url'] ) ); ?></td>
 
 			<?php if( $i == $cells ) : ?>
                 </tr>

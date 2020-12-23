@@ -56,9 +56,9 @@ add_action( 'mdjm-add_playlist_entry', 'mdjm_add_event_playlist_entry_action' );
 function mdjm_bulk_action_remove_playlist_entry_action()	{
 
 	if ( isset( $_POST['action'] ) )	{
-		$action = $_POST['action'];
+		$action = sanitize_text_field( wp_unslash( $_POST['action'] ) );
 	} elseif( isset( $_POST['action2'] ) )	{
-		$action = $_POST['action2'];
+		$action = sanitize_text_field( wp_unslash( $_POST['action2'] ) );
 	} else	{
 		return;
 	}
@@ -67,8 +67,8 @@ function mdjm_bulk_action_remove_playlist_entry_action()	{
 		return;
 	}
 
-	foreach ( $_POST['mdjm-playlist-bulk-delete'] as $id ) {
-		mdjm_remove_stored_playlist_entry( $id );
+	foreach ( wp_unslash( $_POST['mdjm-playlist-bulk-delete'] ) as $id ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		mdjm_remove_stored_playlist_entry( absint( wp_unslash( $id ) ) );
 	}
 
 	wp_safe_redirect(
@@ -188,8 +188,8 @@ function mdjm_print_event_playlist_action( $data )	{
 		}
 		</style>
         <?php
-		echo $content;
-		echo '<p style="text-align: center" class="description">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . MDJM_NAME . '></a>, version ' . MDJM_VERSION_NUM . '</p>' . "\n";
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<p style="text-align: center" class="description">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . esc_html( MDJM_NAME ) . '></a>, version ' . esc_html( MDJM_VERSION_NUM ) . '</p>' . "\n";
 
 	}
 

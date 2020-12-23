@@ -87,7 +87,7 @@ function mdjm_payment_form_validate_fields()	{
 		return false;
 	}
 
-	$event_id = $_POST['event_id'];
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : 0;
 
 	if ( empty( $event_id ) )	{
 		return false;
@@ -153,7 +153,7 @@ function mdjm_payment_form_validate_gateway() {
 
 	// Check if a gateway value is present
 	if ( ! empty( $_REQUEST['mdjm_gateway'] ) ) {
-		$gateway = sanitize_text_field( $_REQUEST['mdjm_gateway'] );
+		$gateway = sanitize_text_field( wp_unslash( $_REQUEST['mdjm_gateway'] ) );
 	}
 
 	return $gateway;
@@ -166,7 +166,7 @@ function mdjm_payment_form_validate_gateway() {
  * @return	str
  */
 function mdjm_get_payment_type()	{
-	$type     = $_POST['mdjm_payment_amount'];
+	$type     = isset($_POST['mdjm_payment_amount']) ? sanitize_text_field( wp_unslash( $_POST['mdjm_payment_amount'] ) ) : '';
 
 	if ( 'deposit' == $type )	{
 		$type  = mdjm_get_deposit_label();
@@ -187,8 +187,8 @@ function mdjm_get_payment_type()	{
  * @return	str
  */
 function mdjm_get_payment_total()	{
-	$event_id = $_POST['event_id'];
-	$type     = $_POST['mdjm_payment_amount'];
+	$event_id = isset( $_POST['event_id'] ) ? absint( wp_unslash( $_POST['event_id'] ) ) : 0;
+	$type     = isset($_POST['mdjm_payment_amount']) ? sanitize_text_field( wp_unslash( $_POST['mdjm_payment_amount'] ) ) : '';
 	$total    = false;
 
 	$mdjm_event = new MDJM_Event( $event_id );
@@ -201,7 +201,7 @@ function mdjm_get_payment_total()	{
 		$total = $mdjm_event->get_balance();
 	} else	{
 		$type  = mdjm_get_other_amount_label();
-		$total = ! empty( $_POST['part_payment'] ) ? $_POST['part_payment'] : false;
+		$total = ! empty( $_POST['part_payment'] ) ? sanitize_text_field( wp_unslash( $_POST['part_payment'] ) ) : false;
 	}
 
 	return $total;
@@ -216,17 +216,17 @@ function mdjm_get_payment_total()	{
  */
 function mdjm_get_purchase_cc_info() {
 	$cc_info = array();
-	$cc_info['card_name']      = isset( $_POST['card_name'] )       ? sanitize_text_field( $_POST['card_name'] )       : '';
-	$cc_info['card_number']    = isset( $_POST['card_number'] )     ? sanitize_text_field( $_POST['card_number'] )     : '';
-	$cc_info['card_cvc']       = isset( $_POST['card_cvc'] )        ? sanitize_text_field( $_POST['card_cvc'] )        : '';
-	$cc_info['card_exp_month'] = isset( $_POST['card_exp_month'] )  ? sanitize_text_field( $_POST['card_exp_month'] )  : '';
-	$cc_info['card_exp_year']  = isset( $_POST['card_exp_year'] )   ? sanitize_text_field( $_POST['card_exp_year'] )   : '';
-	$cc_info['card_address']   = isset( $_POST['card_address'] )    ? sanitize_text_field( $_POST['card_address'] )    : '';
-	$cc_info['card_address_2'] = isset( $_POST['card_address_2'] )  ? sanitize_text_field( $_POST['card_address_2'] )  : '';
-	$cc_info['card_city']      = isset( $_POST['card_city'] )       ? sanitize_text_field( $_POST['card_city'] )       : '';
-	$cc_info['card_state']     = isset( $_POST['card_state'] )      ? sanitize_text_field( $_POST['card_state'] )      : '';
-	$cc_info['card_country']   = isset( $_POST['billing_country'] ) ? sanitize_text_field( $_POST['billing_country'] ) : '';
-	$cc_info['card_zip']       = isset( $_POST['card_zip'] )        ? sanitize_text_field( $_POST['card_zip'] )        : '';
+	$cc_info['card_name']      = isset( $_POST['card_name'] )       ? sanitize_text_field( wp_unslash( $_POST['card_name'] ) )      : '';
+	$cc_info['card_number']    = isset( $_POST['card_number'] )     ? sanitize_text_field( wp_unslash( $_POST['card_number'] ) )    : '';
+	$cc_info['card_cvc']       = isset( $_POST['card_cvc'] )        ? sanitize_text_field( wp_unslash( $_POST['card_cvc'] ) )    : '';
+	$cc_info['card_exp_month'] = isset( $_POST['card_exp_month'] )  ? sanitize_text_field( wp_unslash( $_POST['card_exp_month'] ) )  : '';
+	$cc_info['card_exp_year']  = isset( $_POST['card_exp_year'] )   ? sanitize_text_field( wp_unslash( $_POST['card_exp_year'] ) )  : '';
+	$cc_info['card_address']   = isset( $_POST['card_address'] )    ? sanitize_text_field( wp_unslash( $_POST['card_address'] ) )   : '';
+	$cc_info['card_address_2'] = isset( $_POST['card_address_2'] )  ? sanitize_text_field( wp_unslash( $_POST['card_address_2'] ) ) : '';
+	$cc_info['card_city']      = isset( $_POST['card_city'] )       ? sanitize_text_field( wp_unslash( $_POST['card_city'] ) )     : '';
+	$cc_info['card_state']     = isset( $_POST['card_state'] )      ? sanitize_text_field( wp_unslash( $_POST['card_state'] ) )    : '';
+	$cc_info['card_country']   = isset( $_POST['billing_country'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_country'] ) ) : '';
+	$cc_info['card_zip']       = isset( $_POST['card_zip'] )        ? sanitize_text_field( wp_unslash( $_POST['card_zip'] ) )       : '';
 
 	return $cc_info;
 } // mdjm_get_purchase_cc_info

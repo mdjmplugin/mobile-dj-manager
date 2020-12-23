@@ -13,13 +13,13 @@
  */
 ?>
 <div id="client-no-events">
-	<p><?php esc_html_e( 'Hey', 'mobile-dj-manager' ); ?> {client_firstname}, <?php printf( __( 'welcome to the %s %s.', 'mobile-dj-manager' ),
+	<p><?php esc_html_e( 'Hey', 'mobile-dj-manager' ); ?> {client_firstname}, <?php printf( esc_html__( 'welcome to the %s %s.', 'mobile-dj-manager' ),
 		'{company_name}',
 		'{application_name}' ); ?></p>
 
-    <p><?php printf( __( 'You do not currently have any active %s booked with us.', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></p>
+    <p><?php printf( esc_html__( 'You do not currently have any active %s booked with us.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural() ) ); ?></p>
 
     <p><?php printf(
-		__( 'If you are ready to plan your next %s, contact us <a href="%s">here</a>.', 'mobile-dj-manager' ),
-		mdjm_get_label_singular( true ), '{contact_page}' ); ?></p>
+		__( 'If you are ready to plan your next %s, contact us <a href="%s">here</a>.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		esc_html( mdjm_get_label_singular( true ) ), '{contact_page}' ); ?></p>
 </div>

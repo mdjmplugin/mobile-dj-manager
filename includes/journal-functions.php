@@ -10,12 +10,12 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-	
+
 /**
  * Update the event journal.
  *
  * @since	1.3
- * @param 	arr			$data	
+ * @param 	arr			$data
  * @param 	arr			$meta
  * @return: int|bool	comment_id or false on failure
  */
@@ -165,7 +165,7 @@ function mdjm_hide_journal_entries( $query ) {
 
 	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) )	{
 
-		if ( isset( $_REQUEST['p'] ) && 'mdjm-event' == get_post_type( $_REQUEST['p'] ) )	{
+		if ( isset( $_REQUEST['p'] ) && 'mdjm-event' == get_post_type( sanitize_text_field( wp_unslash( $_REQUEST['p'] ) ) ) )	{
 			return;
 		}
 

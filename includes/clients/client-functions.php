@@ -105,10 +105,10 @@ function mdjm_get_client_id( $event_id )	{
  */
 function mdjm_add_client( $user_data = array() )	{
 
-	$first_name = ( ! empty( $_POST['client_firstname'] ) ? ucwords( $_POST['client_firstname'] ) : '' );
-	$last_name  = ( ! empty( $_POST['client_lastname'] )  ? ucwords( $_POST['client_lastname'] )  : '' );
-	$email      = ( ! empty( $_POST['client_email'] )     ? $_POST['client_email']                : '' );
-	$phone      = ( ! empty( $_POST['client_phone'] )     ? $_POST['client_phone']                : '' );
+	$first_name = ( ! empty( $_POST['client_firstname'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['client_firstname'] ) ) ) : '' );
+	$last_name  = ( ! empty( $_POST['client_lastname'] )  ? ucwords( sanitize_text_field( wp_unslash( $_POST['client_lastname'] ) ) ) : '' );
+	$email      = ( ! empty( $_POST['client_email'] )     ? sanitize_email( wp_unslash( $_POST['client_email'] ) ) : '' );
+	$phone      = ( ! empty( $_POST['client_phone'] )     ? sanitize_text_field( wp_unslash( $_POST['client_phone'] ) ) : '' );
 
 	$defaults = array(
 		'first_name'   => $first_name,
@@ -595,10 +595,10 @@ function mdjm_display_client_input_field( $field, $client )	{
 		default:
 			printf(
 				'<input name="%1$s" id="%1$s" type="%2$s" value="%3$s"%4$s />',
-				$id,
-				$type,
-				$value,
-				$required
+				esc_attr( $id ),
+				esc_attr( $type ),
+				esc_attr( $value ),
+				esc_attr( $required )
 			);
 			break;
 
@@ -606,13 +606,13 @@ function mdjm_display_client_input_field( $field, $client )	{
 			$options = explode( "\r\n", $field['value'] );
 			printf(
 				'<select name="%1$s" id="%1$s">',
-				$id
+				esc_attr( $id )
 			);
 
 			foreach( $options as $option )	{
 				printf(
 					'<option value="%1$s"%2$s>%1$s</option>',
-					$option,
+					esc_attr( $option ),
 					selected( $option, $client->$id, false )
 				);
 			}
@@ -623,8 +623,8 @@ function mdjm_display_client_input_field( $field, $client )	{
 		case 'checkbox':
 			printf(
 				'<input name="%1$s" id="%1$s" type="%2$s" value="%3$s"%4$s />',
-				$id,
-				$type,
+				esc_attr( $id ),
+				esc_attr( $type ),
 				esc_attr( $field['value'] ),
 				checked( $field['value'], $client->$id, false )
 			);
@@ -653,26 +653,26 @@ function mdjm_do_client_details_table( $client_id, $event_id = 0 )	{
         <table class="widefat mdjm_event_client_details mdjm_form_fields">
         	<thead>
             	<tr>
-                	<th colspan="3"><?php printf( __( 'Contact Details for %s', 'mobile-dj-manager' ), $client->display_name ); ?>
-                    	<span class="description">(<a href="<?php echo add_query_arg( array( 'user_id' => $client_id ), admin_url( 'user-edit.php' ) ); ?>"><?php esc_html_e( 'edit', 'mobile-dj-manager' ); ?></a>)</span></th>
+                	<th colspan="3"><?php printf( esc_html__( 'Contact Details for %s', 'mobile-dj-manager' ), esc_html( $client->display_name ) ); ?>
+                    	<span class="description">(<a href="<?php echo esc_url( add_query_arg( array( 'user_id' => $client_id ), admin_url( 'user-edit.php' ) ) ); ?>"><?php esc_html_e( 'edit', 'mobile-dj-manager' ); ?></a>)</span></th>
                 </tr>
             </thead>
             <tbody>
             	<tr>
                 	<td><i class="fa fa-phone" aria-hidden="true" title="<?php esc_attr_e( 'Phone', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo $client->phone1; echo '' != $client->phone2 ? ' / ' . $client->phone2 : '' ?></td>
+                    <?php echo esc_html( $client->phone1 ); echo '' != $client->phone2 ? ' / ' . esc_html( $client->phone2 ) : '' ?></td>
 
-                	<td rowspan="3"><?php echo mdjm_get_client_full_address( $client->ID ); ?></td>
+                	<td rowspan="3"><?php echo mdjm_get_client_full_address( $client->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
            		</tr>
 
                 <tr>
 					<td><i class="fa fa-envelope-o" aria-hidden="true" title="<?php esc_attr_e( 'Email', 'mobile-dj-manager' ); ?>"></i>
-                    <a href="<?php echo add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ); ?>"><?php echo $client->user_email; ?></a></td>
+                    <a href="<?php echo esc_url( add_query_arg( array( 'recipient' => $client->ID, 'event_id'  => $event_id ), admin_url( 'admin.php?page=mdjm-comms' ) ) ); ?>"><?php echo esc_html( $client->user_email ); ?></a></td>
 				</tr>
 
 				<tr>
                 	<td><i class="fa fa-sign-in" aria-hidden="true" title="<?php esc_attr_e( 'Last Login', 'mobile-dj-manager' ); ?>"></i>
-                    <?php echo mdjm_get_client_last_login( $client_id ); ?></td>
+                    <?php echo esc_html( mdjm_get_client_last_login( $client_id ) ); ?></td>
            		</tr>
             </tbody>
         </table>

@@ -43,17 +43,21 @@ function mdjm_do_ajax_export() {
 
 	require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/export/class-batch-export.php' );
 
-	parse_str( $_POST['form'], $form );
+	if ( !isset( $_POST['form'] ) ) {
+		die( '-2' );
+	}
+
+	parse_str( wp_unslash( $_POST['form'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 	$_REQUEST = $form = (array) $form;
 
-	if ( ! wp_verify_nonce( $_REQUEST['mdjm_ajax_export'], 'mdjm_ajax_export' ) ) {
+	if ( !isset( $_REQUEST['mdjm_ajax_export'] ) || ! wp_verify_nonce( $_REQUEST['mdjm_ajax_export'], 'mdjm_ajax_export' ) ) {
 		die( '-2' );
 	}
 
 	do_action( 'mdjm_batch_export_class_include', $form['mdjm-export-class'] );
 
-	$step     = absint( $_POST['step'] );
+	$step     = isset( $_POST['step']) ? absint( $_POST['step'] ) : 1;
 	$class    = sanitize_text_field( $form['mdjm-export-class'] );
 	$export   = new $class( $step );
 

@@ -15,14 +15,14 @@
 global $mdjm_event;
 ?>
 <?php do_action( 'mdjm_pre_event_detail', $mdjm_event->ID, $mdjm_event ); ?>
-<div id="post-<?php echo $mdjm_event->ID; ?>" class="mdjm-<?php echo $mdjm_event->post_status; ?>">
+<div id="post-<?php echo esc_attr( $mdjm_event->ID ); ?>" class="mdjm-<?php echo esc_attr( $mdjm_event->post_status ); ?>">
 
 	<?php do_action( 'mdjm_print_notices' ); ?>
 
-	<p><?php printf( __( 'Details of your %s taking place on %s are shown below.', 'mobile-dj-manager' ),
-			mdjm_get_label_singular( true ), '{event_date}' ); ?></p>
+	<p><?php printf( esc_html__( 'Details of your %s taking place on %s are shown below.', 'mobile-dj-manager' ),
+			esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); ?></p>
 
-    <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ),
+    <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'{contact_page}' ); ?></p>
 
     <?php
@@ -50,9 +50,9 @@ global $mdjm_event;
             </tr>
 
             <tr>
-            	<th><?php printf( __( '%s Type:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></th>
+            	<th><?php printf( esc_html__( '%s Type:', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></th>
                 <td>{event_type}</td>
-                <th><?php printf(  __( 'Your %s:', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ); ?></th>
+                <th><?php printf(  esc_html__( 'Your %s:', 'mobile-dj-manager' ), esc_html( mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) ); ?></th>
                 <td>{employee_fullname}</td>
             </tr>
 

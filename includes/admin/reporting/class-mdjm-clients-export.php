@@ -72,13 +72,13 @@ class MDJM_Clients_Export extends MDJM_Export {
 
 			$cols = array();
 
-			if( 'emails' != $_POST['mdjm_export_option'] ) {
+			if( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
 				$cols['name'] = __( 'Name',   'mobile-dj-manager' );
 			}
 
 			$cols['email'] = __( 'Email',   'mobile-dj-manager' );
 
-			if( 'full' == $_POST['mdjm_export_option'] ) {
+			if( isset( $_POST['mdjm_export_option'] ) &&  'full' == $_POST['mdjm_export_option'] ) {
 				$cols['events'] = sprintf( __( 'Total %s',   'mobile-dj-manager' ), mdjm_get_label_plural() );
 				$cols['amount']    = __( 'Total Value', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')';
 			}
@@ -108,13 +108,13 @@ class MDJM_Clients_Export extends MDJM_Export {
 
 		foreach ( $clients as $client ) {
 
-			if( 'emails' != $_POST['mdjm_export_option'] ) {
+			if( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
 				$data[$i]['name'] = $client->name;
 			}
 
 			$data[$i]['email'] = $client->email;
 
-			if( 'full' == $_POST['mdjm_export_option'] )	{
+			if( isset( $_POST['mdjm_export_option'] ) && 'full' == $_POST['mdjm_export_option'] )	{
 				$amount = 0;
 				$events = mdjm_get_client_events( $client->ID );
 				$data[$i]['events'] = $events ? count( $events ) : 0;

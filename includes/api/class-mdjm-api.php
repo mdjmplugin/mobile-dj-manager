@@ -147,66 +147,77 @@ class MDJM_API 	{
 			'/availability/' => array(
 				'methods'      => array( WP_REST_Server::READABLE ),
 				'callback'     => array( $this, 'process_request' ),
-				'require_auth' => false
+				'permission_callback' => '__return_true',
+				'require_auth' => false,
 			),
 			// Single client
 			'/client/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => true
 			),
 			// Single employee
 			'/employee/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => true
 			),
 			// Single event
 			'/event/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				//'require_auth' => true
 			),
 			// Multiple events
 			'/events/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				//'require_auth' => true
 			),
 			// Retrieving a Package
 			'/package/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			),
 			// Retrieving Multiple Packages
 			'/packages/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			),
 			// Retrieving Multiple Packages
 			'/packages/options/' => array(
 				'methods'      => array( WP_REST_Server::READABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			),
 			// Retrieving an Addon
 			'/addon/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			),
 			// Retrieving Multiple Addons
 			'/addons/' => array(
 				'methods'      => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			),
 			// For retrieving addon options
 			'/addons/options/' => array(
 				'methods'      => array( WP_REST_Server::READABLE ),
 				'callback'     => array( $this, 'process_request' ),
+				'permission_callback' => '__return_true',
 				'require_auth' => false
 			)
 		);
@@ -449,12 +460,12 @@ class MDJM_API 	{
 
 		if( ! isset ( $_REQUEST['api_nonce'] ) || ! wp_verify_nonce( $_REQUEST['api_nonce'], 'mdjm-api-nonce' ) ) {
 
-			wp_die( __( 'Nonce verification failed', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Nonce verification failed', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 
 		}
 
 		if ( empty( $args['user_id'] ) ) {
-			wp_die( sprintf( __( 'User ID Required', 'mobile-dj-manager' ), $process ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 401 ) );
+			wp_die( esc_html__( 'User ID Required', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 401 ) );
 		}
 
 		if ( is_numeric( $args['user_id'] ) ) {
@@ -468,7 +479,7 @@ class MDJM_API 	{
 
 		if ( ! mdjm_employee_can( 'manage_mdjm' ) )	{
 
-			wp_die( sprintf( __( 'You do not have permission to %s API keys for this user', 'mobile-dj-manager' ), $process ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+			wp_die( sprintf( esc_html__( 'You do not have permission to %s API keys for this user', 'mobile-dj-manager' ), esc_attr( $process ) ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 
 		}
 

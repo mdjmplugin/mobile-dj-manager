@@ -50,7 +50,7 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
 			$event_default = mdjm_get_option( 'default_contract' );
 
 			if ( $event_default == $post_id )	{
-				echo '<span style="color: green; font-weight: bold;">' . __( 'Yes', 'mobile-dj-manager' );
+				echo '<span style="color: green; font-weight: bold;">' . esc_html__( 'Yes', 'mobile-dj-manager' );
 			} else	{
 				esc_html_e( 'No', 'mobile-dj-manager' );
 			}
@@ -71,7 +71,7 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id )	{
             ) );
 
 			$total = count( $contract_events );
-			echo $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() );
+			echo esc_html( $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() ) );
 
 			break;
 	} // switch
@@ -186,12 +186,12 @@ function mdjm_save_contract_post( $post_id, $post, $update )	{
 
 	// If we have a value and the key did not exist previously, add it.
 	if( !empty( $_POST['contract_description'] ) && empty( $current_desc ) )	{
-		add_post_meta( $ID, '_contract_description', $_POST['contract_description'], true );
+		add_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
 	}
 
 	// If a value existed, but has changed, update it
 	elseif( !empty( $_POST['contract_description'] ) && $current_desc != $_POST['contract_description'] )	{
-		update_post_meta( $ID, '_contract_description', $_POST['contract_description'] );
+		update_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
 	}
 
 	// If there is no new meta value but an old value exists, delete it.

@@ -168,14 +168,14 @@ class MDJM_Graph {
 		<script type="text/javascript">
 			jQuery( document ).ready( function($) {
 				$.plot(
-					$("#mdjm-graph-<?php echo $this->id; ?>"),
+					$("#mdjm-graph-<?php echo esc_attr( $this->id ); ?>"),
 					[
 						<?php foreach( $this->get_data() as $label => $data ) : ?>
 						{
 							label: "<?php echo esc_attr( $label ); ?>",
 							id: "<?php echo sanitize_key( $label ); ?>",
 							// data format is: [ point on x, value on y ]
-							data: [<?php foreach( $data as $point ) { echo '[' . implode( ',', $point ) . '],'; } ?>],
+							data: [<?php foreach( $data as $point ) { echo '[' . implode( ',', $point ) . '],';  } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>],
 							points: {
 								show: <?php echo $this->options['points'] ? 'true' : 'false'; ?>,
 							},
@@ -188,7 +188,7 @@ class MDJM_Graph {
 								show: <?php echo $this->options['lines'] ? 'true' : 'false'; ?>
 							},
 							<?php if( $this->options['multiple_y_axes'] ) : ?>
-							yaxis: <?php echo $yaxis_count; ?>
+							yaxis: <?php echo esc_html( $yaxis_count ); ?>
 							<?php endif; ?>
 						},
 						<?php $yaxis_count++; endforeach; ?>
@@ -198,28 +198,28 @@ class MDJM_Graph {
 						grid: {
 							show: true,
 							aboveData: false,
-							color: "<?php echo $this->options['color']; ?>",
-							backgroundColor: "<?php echo $this->options['bgcolor']; ?>",
-							borderColor: "<?php echo $this->options['bordercolor']; ?>",
+							color: "<?php echo esc_html( $this->options['color'] ); ?>",
+							backgroundColor: "<?php echo esc_html( $this->options['bgcolor'] ); ?>",
+							borderColor: "<?php echo esc_html( $this->options['bordercolor'] ); ?>",
 							borderWidth: <?php echo absint( $this->options['borderwidth'] ); ?>,
 							clickable: false,
 							hoverable: true
 						},
 						xaxis: {
-							mode: "<?php echo $this->options['x_mode']; ?>",
-							timeFormat: "<?php echo $this->options['x_mode'] == 'time' ? $this->options['time_format'] : ''; ?>",
-							tickSize: "<?php echo $this->options['x_mode'] == 'time' ? '' : $this->options['ticksize_num']; ?>",
+							mode: "<?php echo esc_html( $this->options['x_mode'] ); ?>",
+							timeFormat: "<?php echo $this->options['x_mode'] == 'time' ? esc_html( $this->options['time_format'] ) : ''; ?>",
+							tickSize: "<?php echo $this->options['x_mode'] == 'time' ? '' : esc_html( $this->options['ticksize_num'] ); ?>",
 							<?php if( $this->options['x_mode'] != 'time' ) : ?>
-							tickDecimals: <?php echo $this->options['x_decimals']; ?>
+							tickDecimals: <?php echo esc_html( $this->options['x_decimals'] ); ?>
 							<?php endif; ?>
 						},
 						yaxis: {
 							position: 'right',
 							min: 0,
-							mode: "<?php echo $this->options['y_mode']; ?>",
-							timeFormat: "<?php echo $this->options['y_mode'] == 'time' ? $this->options['time_format'] : ''; ?>",
+							mode: "<?php echo esc_html( $this->options['y_mode'] ); ?>",
+							timeFormat: "<?php echo $this->options['y_mode'] == 'time' ? esc_html( $this->options['time_format'] ) : ''; ?>",
 							<?php if( $this->options['y_mode'] != 'time' ) : ?>
-							tickDecimals: <?php echo $this->options['y_decimals']; ?>
+							tickDecimals: <?php echo esc_html( $this->options['y_decimals'] ); ?>
 							<?php endif; ?>
 						}
 					}
@@ -240,7 +240,7 @@ class MDJM_Graph {
 				}
 
 				var previousPoint = null;
-				$("#mdjm-graph-<?php echo $this->id; ?>").bind("plothover", function (event, pos, item) {
+				$("#mdjm-graph-<?php echo esc_attr( $this->id ); ?>").bind("plothover", function (event, pos, item) {
 					$("#x").text(pos.x.toFixed(2));
 					$("#y").text(pos.y.toFixed(2));
 					if (item) {
@@ -268,7 +268,7 @@ class MDJM_Graph {
 			});
 
 		</script>
-		<div id="mdjm-graph-<?php echo $this->id; ?>" class="mdjm-graph" style="height: 300px;"></div>
+		<div id="mdjm-graph-<?php echo esc_attr( $this->id ); ?>" class="mdjm-graph" style="height: 300px;"></div>
 <?php
 		return ob_get_clean();
 	}
@@ -280,7 +280,7 @@ class MDJM_Graph {
 	 */
 	public function display() {
 		do_action( 'mdjm_before_graph', $this );
-		echo $this->build_graph();
+		echo $this->build_graph(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'mdjm_after_graph', $this );
 	}
 

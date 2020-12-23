@@ -1,5 +1,5 @@
 <?php
-	
+
 /**
  * Package and Addon Posts
  *
@@ -39,7 +39,7 @@ function mdjm_package_post_columns( $columns ) {
 	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
 		unset( $columns['cb'] );
 	}
-		
+
 	return $columns;
 } // mdjm_package_post_columns
 add_filter( 'manage_mdjm-package_posts_columns' , 'mdjm_package_post_columns' );
@@ -53,11 +53,11 @@ add_filter( 'manage_mdjm-package_posts_columns' , 'mdjm_package_post_columns' );
  */
 function mdjm_package_post_sortable_columns( $sortable_columns )	{
 	$sortable_columns['price'] = 'price';
-	
+
 	return $sortable_columns;
 } // mdjm_package_post_sortable_columns
 add_filter( 'manage_edit-mdjm-package_sortable_columns', 'mdjm_package_post_sortable_columns' );
-		
+
 /**
  * Define the data to be displayed in each of the custom columns for the Package post types
  *
@@ -68,7 +68,7 @@ add_filter( 'manage_edit-mdjm-package_sortable_columns', 'mdjm_package_post_sort
  */
 function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 	global $post;
-		
+
 	switch ( $column_name ) {
 		// Items
 		case 'items':
@@ -77,7 +77,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 			if ( $items )	{
 				$i = 0;
 				foreach ( $items as $item )	{
-					echo '<a href="' . admin_url( "post.php?post={$item}&action=edit" ) . '">' . mdjm_get_addon_name( $item ) . '</a>';
+					echo '<a href="' . esc_url( admin_url( "post.php?post={$item}&action=edit" ) ) . '">' . esc_html( mdjm_get_addon_name( $item ) ) . '</a>';
 					$i++;
 					if ( $i < count( $items ) )	{
 						echo '<br />';
@@ -113,7 +113,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', $output );
+			echo implode( ', ', esc_html( $output ) );
 
 			break;
 
@@ -139,7 +139,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', $output );
+			echo implode( ', ', esc_html( $output ) );
 
 			break;
 
@@ -155,11 +155,11 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output[] = '<a href="' . get_edit_user_link( $employee ) . '">' . mdjm_get_employee_display_name( $employee ) . '</a>';
+					$output[] = '<a href="' . esc_url( get_edit_user_link( $employee ) ) . '">' . esc_html( mdjm_get_employee_display_name( $employee ) ) . '</a>';
 				}
-				
+
 			}
-			echo implode( '<br />', $output );
+			echo implode( '<br />', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			break;
 
@@ -169,22 +169,22 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 
 				$range = mdjm_get_package_price_range( $post_id );
 
-				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( $range['low'] ) ) );
 				echo ' &mdash; ';
-				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( $range['high'] ) ) );
 
 			} else	{
-				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $post_id ) ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $post_id ) ) ) );
 			}
 		break;
 
 		case 'usage':
 			$count = mdjm_count_events_with_package( $post_id );
-			echo $count . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $count, 'mobile-dj-manager' );
+			echo esc_html( $count . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $count, 'mobile-dj-manager' ) );
 			break;
 
 	} // switch
-	
+
 } // mdjm_package_posts_custom_column
 add_action( 'manage_mdjm-package_posts_custom_column' , 'mdjm_package_posts_custom_column', 10, 2 );
 
@@ -196,7 +196,7 @@ add_action( 'manage_mdjm-package_posts_custom_column' , 'mdjm_package_posts_cust
  * @return	str		$title	Post placeholder title
  */
 function mdjm_package_set_post_title_placeholder( $title ) {
-	
+
 	$screen = get_current_screen();
 
 	if ( 'mdjm-package' == $screen->post_type )	{
@@ -216,7 +216,7 @@ add_action( 'enter_title_here', 'mdjm_package_set_post_title_placeholder' );
  * @return	void
  */
 function mdjm_package_post_order( $query )	{
-	
+
 	if ( ! is_admin() || 'mdjm-package' != $query->get( 'post_type' ) )	{
 		return;
 	}
@@ -236,7 +236,7 @@ function mdjm_package_post_order( $query )	{
 			$query->set( 'order',  $order );
             break;
 	}
-	
+
 } // mdjm_package_post_order
 add_action( 'pre_get_posts', 'mdjm_package_post_order' );
 
@@ -248,13 +248,13 @@ add_action( 'pre_get_posts', 'mdjm_package_post_order' );
  * @return	void
  */
 function mdjm_limit_results_to_employee_packages( $query )	{
-	
+
 	if ( ! is_admin() || 'mdjm-package' != $query->get( 'post_type' ) || mdjm_employee_can( 'mdjm_package_edit' ) )	{
 		return;
 	}
-			
+
 	global $user_ID;
-	
+
 	$query->set(
 		'meta_query',
 		array(
@@ -275,7 +275,7 @@ add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_packages' );
  * @since	1.4
  * @param	int		$post_id		The current event post ID.
  * @param	obj		$post			The current event post object (WP_Post).
- * 
+ *
  * @return	void
  */
 function mdjm_save_package_post( $post_id, $post )	{
@@ -283,7 +283,7 @@ function mdjm_save_package_post( $post_id, $post )	{
 	if ( ! isset( $_POST['mdjm_package_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['mdjm_package_meta_box_nonce'], 'mdjm-package' ) ) {
 		return;
 	}
-	
+
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
 	}
@@ -303,7 +303,7 @@ function mdjm_save_package_post( $post_id, $post )	{
 				$_POST[ $field ] = array( 'all' );
 			}
 
-			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, $_POST[ $field ] );
+			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, wp_unslash( $_POST[ $field ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
@@ -338,7 +338,7 @@ add_action( 'wp_trash_post', 'mdjm_deleting_package' );
 /***********************************************************
  * Addons
  **********************************************************/
-		
+
 /**
  * Define the columns to be displayed for addon posts
  *
@@ -364,11 +364,11 @@ function mdjm_addon_post_columns( $columns ) {
 	if( ! mdjm_employee_can( 'manage_packages' ) && isset( $columns['cb'] ) )	{
 		unset( $columns['cb'] );
 	}
-		
+
 	return $columns;
 } // mdjm_addon_post_columns
 add_filter( 'manage_mdjm-addon_posts_columns' , 'mdjm_addon_post_columns' );
-		
+
 /**
  * Define which columns are sortable for addon posts
  *
@@ -378,11 +378,11 @@ add_filter( 'manage_mdjm-addon_posts_columns' , 'mdjm_addon_post_columns' );
  */
 function mdjm_addon_post_sortable_columns( $sortable_columns )	{
 	$sortable_columns['price'] = 'price';
-	
+
 	return $sortable_columns;
 } // mdjm_addon_post_sortable_columns
 add_filter( 'manage_edit-mdjm-addon_sortable_columns', 'mdjm_addon_post_sortable_columns' );
-		
+
 /**
  * Define the data to be displayed in each of the custom columns for the Addon post types
  *
@@ -393,7 +393,7 @@ add_filter( 'manage_edit-mdjm-addon_sortable_columns', 'mdjm_addon_post_sortable
  */
 function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 	global $post;
-		
+
 	switch ( $column_name ) {
 		// Category
 		case 'addon_category':
@@ -421,7 +421,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', $output );
+			echo implode( ', ', esc_html( $output ) );
 
 			break;
 
@@ -443,7 +443,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', $output );
+			echo implode( ', ', esc_html( $output ) );
 
 			break;
 
@@ -459,11 +459,11 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 					if ( 'all' == $employee )	{
 						continue;
 					}
-					$output[] = '<a href="' . get_edit_user_link( $employee ) . '">' . mdjm_get_employee_display_name( $employee ) . '</a>';
+					$output[] = '<a href="' . esc_url( get_edit_user_link( $employee ) ) . '">' . esc_html( mdjm_get_employee_display_name( $employee ) ) . '</a>';
 				}
-				
+
 			}
-			echo implode( '<br />', $output );
+			echo implode( '<br />', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			break;
 
@@ -473,12 +473,12 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 
 				$range = mdjm_get_addon_price_range( $post_id );
 
-				echo mdjm_currency_filter( mdjm_format_amount( $range['low'] ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( $range['low'] ) ) );
 				echo ' &mdash; ';
-				echo mdjm_currency_filter( mdjm_format_amount( $range['high'] ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( $range['high'] ) ) );
 
 			} else	{
-				echo mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $post_id ) ) );
+				echo esc_html( mdjm_currency_filter( mdjm_format_amount( mdjm_get_addon_price( $post_id ) ) ) );
 			}
 			break;
 
@@ -487,13 +487,13 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 			$packages = mdjm_count_packages_with_addon( $post_id );
 			$events   = mdjm_count_events_with_addon( $post_id );
 
-			echo $packages . _n( ' Package', ' Packages', $packages, 'mobile-dj-manager' ) . '<br />';
-			echo $events . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $events, 'mobile-dj-manager' );
-				
+			echo esc_html( $packages . _n( ' Package', ' Packages', $packages, 'mobile-dj-manager' ) ) . '<br />';
+			echo esc_html( $events . ' ' . _n( mdjm_get_label_singular(), mdjm_get_label_plural(), $events, 'mobile-dj-manager' ) );
+
 			break;
 
 	} // switch
-	
+
 } // mdjm_addon_posts_custom_column
 add_action( 'manage_mdjm-addon_posts_custom_column' , 'mdjm_addon_posts_custom_column', 10, 2 );
 
@@ -505,7 +505,7 @@ add_action( 'manage_mdjm-addon_posts_custom_column' , 'mdjm_addon_posts_custom_c
  * @return	str		$title	Post placeholder title
  */
 function mdjm_addon_set_post_title_placeholder( $title ) {
-	
+
 	$screen = get_current_screen();
 
 	if ( 'mdjm-addon' == $screen->post_type )	{
@@ -525,7 +525,7 @@ add_action( 'enter_title_here', 'mdjm_addon_set_post_title_placeholder' );
  * @return	void
  */
 function mdjm_addon_post_order( $query )	{
-	
+
 	if ( ! is_admin() || 'mdjm-addon' != $query->get( 'post_type' ) )	{
 		return;
 	}
@@ -545,7 +545,7 @@ function mdjm_addon_post_order( $query )	{
 			$query->set( 'order',  $order );
             break;
 	}
-	
+
 } // mdjm_addon_post_order
 add_action( 'pre_get_posts', 'mdjm_addon_post_order' );
 
@@ -557,13 +557,13 @@ add_action( 'pre_get_posts', 'mdjm_addon_post_order' );
  * @return	void
  */
 function mdjm_limit_results_to_employee_addons( $query )	{
-	
+
 	if ( ! is_admin() || 'mdjm-addon' != $query->get( 'post_type' ) || mdjm_employee_can( 'mdjm_package_edit' ) )	{
 		return;
 	}
-			
+
 	global $user_ID;
-	
+
 	$query->set(
 		'meta_query',
 		array(
@@ -588,26 +588,26 @@ add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_addons' );
  * @param	arr		$args		Adds the context to the cap. Typically the object ID.
  */
 function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
-	
+
 	// If editing, deleting, or reading a package or addon, get the post and post type object.
 	if ( 'edit_mdjm_package' == $cap || 'delete_mdjm_package' == $cap || 'read_mdjm_package' == $cap || 'publish_mdjm_package' == $cap ) {
-		
+
 		$post = get_post( $args[0] );
-		
+
 		if ( empty( $post ) )	{
 			return $caps;
 		}
-		
+
 		$post_type = get_post_type_object( $post->post_type );
 
 		// Set an empty array for the caps.
 		$caps = array();
-		
+
 	}
-			
+
 	// If editing a package or an addon, assign the required capability. */
 	if ( 'read_mdjm_package' == $cap )	{
-		
+
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->edit_posts;
 		} else	{
@@ -615,10 +615,10 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 		}
 
 	}
-	
+
 	// If deleting a package or an addon, assign the required capability.
 	elseif ( 'delete_mdjm_package' == $cap ) {
-		
+
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->delete_posts;
 		} else	{
@@ -626,7 +626,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 		}
 
 	}
-	
+
 	// If reading a private package or addon, assign the required capability.
 	elseif ( 'read_mdjm_package' == $cap )	{
 
@@ -639,10 +639,10 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
 		}
 
 	}
-	
+
 	// Return the capabilities required by the user.
 	return $caps;
-	
+
 } // mdjm_addon_map_meta_cap
 //add_filter( 'map_meta_cap', 'mdjm_addon_map_meta_cap', 10, 4 );
 
@@ -652,7 +652,7 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args )	{
  * @since	1.4
  * @param	int		$post_id		The current event post ID.
  * @param	obj		$post			The current event post object (WP_Post).
- * 
+ *
  * @return	void
  */
 function mdjm_save_addon_post( $post_id, $post )	{
@@ -660,7 +660,7 @@ function mdjm_save_addon_post( $post_id, $post )	{
 	if ( ! isset( $_POST['mdjm_addon_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['mdjm_addon_meta_box_nonce'], 'mdjm-addon' ) ) {
 		return;
 	}
-	
+
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
 	}
@@ -679,7 +679,7 @@ function mdjm_save_addon_post( $post_id, $post )	{
 				$_POST[ $field ] = array( 'all' );
 			}
 
-			$new_value = apply_filters( 'mdjm_addon_metabox_save_' . $field, $_POST[ $field ] );
+			$new_value = apply_filters( 'mdjm_addon_metabox_save_' . $field, wp_unslash( $_POST[ $field ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
@@ -720,18 +720,18 @@ add_action( 'wp_trash_post', 'mdjm_deleting_addon' );
  *
  */
 function mdjm_addon_post_messages( $messages )	{
-	
+
 	global $post;
-	
+
 	if( 'mdjm-addon' != $post->post_type )	{
 		return $messages;
 	}
-	
+
 	$url1 = '<a href="' . admin_url( 'edit.php?post_type=mdjm-addon' ) . '">';
 	$url2 = __( 'Add-on', 'mobile-dj-manager' );
 	$url3 = __( 'Add-ons', 'mobile-dj-manager' );
 	$url4 = '</a>';
-		
+
 	$messages['mdjm-addon'] = array(
 		0 => '', // Unused. Messages start at index 1.
 		1 => sprintf( __( '%2$s updated. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
@@ -740,8 +740,8 @@ function mdjm_addon_post_messages( $messages )	{
 		7 => sprintf( __( '%2$s saved. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 ),
 		8 => sprintf( __( '%2$s submitted. %1$s%3$s List%4$s.', 'mobile-dj-manager' ), $url1, $url2, $url3, $url4 )
 	);
-	
+
 	return apply_filters( 'mdjm_addon_post_messages', $messages );
-	
+
 } // mdjm_event_post_messages
 add_filter( 'post_updated_messages', 'mdjm_addon_post_messages' );

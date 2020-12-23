@@ -38,7 +38,7 @@ function mdjm_get_page_id( $page )	{
 
 function mdjm_append_package_enquiry_link( $package_id ) {
 	if ( mdjm_get_option( 'package_contact_btn', false ) ) {
-		echo mdjm_get_enquire_now_button( array( 'id' => $package_id ) );
+		echo mdjm_get_enquire_now_button( array( 'id' => $package_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 } // mdjm_append_package_enquiry_link
 add_action( 'mdjm_after_package_content', 'mdjm_append_package_enquiry_link' );
@@ -55,7 +55,7 @@ add_action( 'mdjm_after_package_content', 'mdjm_append_package_enquiry_link' );
 
 function mdjm_append_addon_enquiry_link( $addon_id ) {
 	if ( mdjm_get_option( 'package_contact_btn', false ) ) {
-		echo mdjm_get_enquire_now_button( array( 'type' => 'addon', 'id' => $addon_id ) );
+		echo mdjm_get_enquire_now_button( array( 'type' => 'addon', 'id' => $addon_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 } // mdjm_append_addon_enquiry_link
 add_action( 'mdjm_after_addon_content', 'mdjm_append_addon_enquiry_link' );
@@ -84,8 +84,8 @@ function mdjm_get_enquire_now_button( $args )	{
 
 	ob_start();
 	?>
-    <a href="<?php echo mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ) ) . $args['type'] . '=' . $args['id']; ?>">
-        <button type="button" name="<?php echo $name; ?>" class="<?php echo $class; ?>" formmethod="get" value="test"><?php echo $label; ?></button>
+    <a href="<?php echo esc_url( mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ) ) . $args['type'] . '=' . $args['id'] ); ?>">
+        <button type="button" name="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>" formmethod="get" value="test"><?php echo esc_html( $label ); ?></button>
     </a>
     <?php
 	$enquire_link = ob_get_clean();
@@ -120,7 +120,7 @@ function mdjm_get_templates_url() {
  * @return	arr
  */
 function mdjm_get_template_files() {
-	
+
 	$template_files = array(
 		'availability' => array(
 			'availability-horizontal.php',
@@ -163,9 +163,9 @@ function mdjm_get_template_files() {
 			'quote.php'
 		)
 	);
-	
+
 	return apply_filters( 'mdjm_template_files', $template_files );
-	
+
 } // mdjm_get_template_files
 
 /**
@@ -184,17 +184,17 @@ function mdjm_get_template_files() {
  * @uses	get_template_part()
  */
 function mdjm_get_template_part( $slug, $name = null, $load = true ) {
-	
+
 	// Execute code for this part
 	do_action( 'get_template_part_' . $slug, $slug, $name );
 
 	// Setup possible parts
 	$templates = array();
-	
+
 	if ( isset( $name ) )	{
 		$templates[] = $slug . '/' . $slug . '-' . $name . '.php';
 	}
-	
+
 	$templates[] = $slug . '/' . $slug . '.php';
 
 	// Allow template parts to be filtered
@@ -223,7 +223,7 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
  * @return	str		The template filename if one is located.
  */
 function mdjm_locate_template( $template_names, $load = false, $require_once = true ) {
-	
+
 	// No file found yet
 	$located = false;
 

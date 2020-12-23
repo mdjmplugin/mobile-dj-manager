@@ -9,54 +9,51 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3
  */
- 
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /*
  * Builds the admin menu
- * 
+ *
  * @since	1.3
  * @param
  * @return	void
  */
 function mdjm_admin_menu()	{
-	
+
 	if( ! current_user_can( 'mdjm_employee' ) )	{
 		return;
 	}
-	
-	global $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page, 
+
+	global $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page,
 	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
 		   $mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
 		   $mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
 		   $mdjm_custom_client_fields_page, $mdjm_extensions_page;
-	
-	
 
-	$mdjm_settings_page	 = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Settings', 'mobile-dj-manager' ), __( 'Settings', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-settings', 'mdjm_options_page' );
-	
+
 	if( mdjm_employee_can( 'manage_templates' ) )	{
 		$mdjm_contract_template_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Contract Templates', 'mobile-dj-manager' ), __( 'Contract Templates', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=contract', '' );
 		$mdjm_email_template_page	   = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Email Templates', 'mobile-dj-manager' ), __( 'Email Templates', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=email_template', '' );
 	}
 
 	$mdjm_auto_tasks_page	= add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Automated Tasks', 'mobile-dj-manager' ), __( 'Automated Tasks', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-tasks', 'mdjm_tasks_page' );
-	
+
 	if( mdjm_employee_can( 'view_clients_list' ) )	{
 		$mdjm_clients_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Clients', 'mobile-dj-manager' ), __( 'Clients', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-clients', array( MDJM()->users, 'client_manager' ) );
 	}
-	
+
 	if( mdjm_employee_can( 'send_comms' ) )	{
 		$mdjm_comms_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Communications', 'mobile-dj-manager' ), __( 'Communications', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-comms', 'mdjm_comms_page' );
-		
+
 		$mdjm_comms_history_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Communication History', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'History', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm_communication' );
 	}
-	
+
 	if( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		$mdjm_emp_page = add_submenu_page(  'edit.php?post_type=mdjm-event', __(  'Employees', 'mobile-dj-manager' ), __(  'Employees', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-employees', array( MDJM()->users, 'employee_manager' ) );
 	}
-	
+
 	$mdjm_availability_page = add_submenu_page(
 		'edit.php?post_type=mdjm-event',
 		__( 'Employee Availability', 'mobile-dj-manager' ),
@@ -64,26 +61,29 @@ function mdjm_admin_menu()	{
 		'mdjm-availability',
 		'mdjm_availability_page'
 	);
-											
+
 	if( ( mdjm_get_option( 'enable_packages' ) ) && mdjm_employee_can( 'manage_packages' ) )	{
 		$mdjm_packages_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Packages', 'mobile-dj-manager' ), __( 'Packages', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-package', '' );
 		$mdjm_addons_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Addons', 'mobile-dj-manager' ), '&nbsp;&nbsp;&nbsp;&mdash;&nbsp;' . __( 'Addons', 'mobile-dj-manager' ), 'mdjm_package_edit_own', 'edit.php?post_type=mdjm-addon', '' );
 	}
-	
-	if ( mdjm_employee_can( 'edit_txns' ) )	{									   
+
+	if ( mdjm_employee_can( 'edit_txns' ) )	{
 		$mdjm_transactions_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Transactions', 'mobile-dj-manager' ), __( 'Transactions', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm-transaction', '' );
 	}
-	
+
 	if ( mdjm_employee_can( 'list_venues' ) )	{
 		$mdjm_venues_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Venues', 'mobile-dj-manager' ), __( 'Venues', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=mdjm-venue', '' );
 	}
 
-	$mdjm_tools_page                = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Tools', 'mobile-dj-manager' ), __( 'Tools', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-tools', 'mdjm_tools_page' );
 	$mdjm_reports_page              = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Reports', 'mobile-dj-manager' ), __( 'Reports', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-reports', 'mdjm_reports_page' );
-	$mdjm_extensions_page           = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'MDJM Extensions', 'mobile-dj-manager' ),  __( 'Extensions', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-addons', 'mdjm_extensions_page' );
 	$mdjm_playlist_page             = add_submenu_page( null, __( 'Playlists', 'mobile-dj-manager' ), __( 'Playlists', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-playlists', 'mdjm_display_event_playlist_page' );
 	$mdjm_custom_event_fields_page  = add_submenu_page( null, __( 'Custom Event Fields', 'mobile-dj-manager' ), __( 'Custom Event Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-event-fields', array( 'MDJM_Event_Fields', 'custom_event_field_settings' ) );
 	$mdjm_custom_client_fields_page = add_submenu_page( null, __( 'Custom Client Fields', 'mobile-dj-manager' ), __( 'Custom Client Fields', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-custom-client-fields', 'mdjm_custom_client_fields_page' );
+
+	$mdjm_tools_page                = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Tools', 'mobile-dj-manager' ), __( 'Tools', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-tools', 'mdjm_tools_page' );
+	$mdjm_settings_page	 = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Settings', 'mobile-dj-manager' ), __( 'Settings', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-settings', 'mdjm_options_page' );
+
+	$mdjm_extensions_page           = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'MDJM Extensions', 'mobile-dj-manager' ),  __( 'Extensions', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-addons', 'mdjm_extensions_page' );
 	$mdjm_upgrades_screen           = add_submenu_page( null, __( 'MDJM Upgrades', 'mobile-dj-manager' ), __( 'MDJM Upgrades', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-upgrades', 'mdjm_upgrades_screen' );
 
 } // mdjm_admin_menu
@@ -91,13 +91,13 @@ add_action( 'admin_menu', 'mdjm_admin_menu', 9 );
 
 /*
  * Builds the admin toolbar
- * 
+ *
  * @since	1.3
  * @param
  * @return	void
  */
 function mdjm_admin_toolbar( $admin_bar )	{
-	
+
 	if( ! current_user_can( 'mdjm_employee' ) )	{
 		return;
 	}
@@ -108,7 +108,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		'title'	 => sprintf( __( 'MDJM %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
 		'href'	  => mdjm_employee_can( 'read_events' ) ? admin_url( 'edit.php?post_type=mdjm-event' ) : '#',
 		'meta'	  => array(
-			'title' => __( 'MDJM Event Management', 'mobile-dj-manager' ),            
+			'title' => __( 'MDJM Event Management', 'mobile-dj-manager' ),
 		),
 	) );
 	if( mdjm_employee_can( 'read_events' ) )	{
@@ -134,15 +134,15 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			),
 		) );
 		// Enquiries
-		$event_status = array( 
-			'mdjm-unattended' => __( 'Unattended Enquiries', 'mobile-dj-manager' ), 
+		$event_status = array(
+			'mdjm-unattended' => __( 'Unattended Enquiries', 'mobile-dj-manager' ),
 			'mdjm-enquiry' => __( 'View Enquiries', 'mobile-dj-manager' ) );
-			
+
 		foreach( $event_status as $current_status => $display )	{
 			$status_count = mdjm_event_count( $current_status );
 			if( !$status_count )
 				continue;
-				
+
 			$admin_bar->add_menu( array(
 				'id'     => 'mdjm-' . str_replace( ' ', '-', strtolower( $display ) ),
 				'parent' => 'mdjm-events',
@@ -163,7 +163,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 				'title' => sprintf( __( 'Manage %s Types', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			),
 		) );
-		
+
 		// Playlist Categories
 		$admin_bar->add_menu( array(
 			'id'     => 'mdjm-playlist-cats',
@@ -174,7 +174,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 				'title' => __( 'Manage Playlist Categories', 'mobile-dj-manager' ),
 			),
 		) );
-		
+
 		// Enquiry Sources
 		$admin_bar->add_menu( array(
 			'id'     => 'mdjm-enquiry-sources',
@@ -196,79 +196,6 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'title' => __( 'MDJM Dashboard', 'mobile-dj-manager' ),
 		),
 	) ); */
-	// Settings
-	if( mdjm_is_admin() )	{
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings',
-			'parent'	=> 'mdjm',
-			'title'	 => __( 'Settings', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings' ),
-			'meta'	  => array(
-				'title' => __( 'MDJM Settings', 'mobile-dj-manager' ),
-			),
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-general',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => __( 'General', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=general' ),
-			'meta'	  => array(
-				'title' => __( 'MDJM General Settings', 'mobile-dj-manager' ),
-			),
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-events',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => mdjm_get_label_plural(),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=events' ),
-			'meta'	  => array(
-				'title' => __( 'MDJM Event Settings', 'mobile-dj-manager' ),
-			),
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-permissions',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => __( 'Permissions', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=general&section=mdjm_app_permissions' ),
-			'meta'	  => array(
-				'title' => __( 'MDJM Permission Settings', 'mobile-dj-manager' ),
-			),
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-emails',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=emails' ),
-			'meta'	  => array(
-				'title' => sprintf( __( 'MDJM Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ),
-			),
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-client-zone',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => sprintf( 
-							__( '%s Settings', 'mobile-dj-manager' ), 
-							mdjm_get_application_name()
-						),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_zone' ),
-			'meta'	  => array(
-				'title'	 => sprintf( 
-								__( '%s Settings', 'mobile-dj-manager' ), 
-								mdjm_get_application_name()
-							),
-			)
-		) );
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-settings-payments',
-			'parent'	=> 'mdjm-settings',
-			'title'	 => __( 'Payment Settings', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=payments' ),
-			'meta'	  => array(
-				'title' => __( 'MDJM Payment Settings', 'mobile-dj-manager' ),
-			),
-		) );
-	}
-	do_action( 'mdjm_admin_bar_settings_items', $admin_bar );
 	if( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) )	{
 		// Employees
 		$admin_bar->add_menu( array(
@@ -462,7 +389,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'meta'   => array(
 				'title' => sprintf( __( 'View %s Quotes', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			),
-	) );	
+	) );
 	}
 	// Reporting
 	/*if( current_user_can( 'manage_options' ) )	{
@@ -474,7 +401,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			'meta'   => array(
 				'title' => __( 'MDJM Reports', 'mobile-dj-manager' ),
 			),
-		) );	
+		) );
 	}*/
 	if( mdjm_employee_can( 'edit_txns' ) )	{
 	// Transactions
@@ -539,6 +466,79 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			) );
 		}
 	}
+	// Settings
+	if( mdjm_is_admin() )	{
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings',
+			'parent'	=> 'mdjm',
+			'title'	 => __( 'Settings', 'mobile-dj-manager' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings' ),
+			'meta'	  => array(
+				'title' => __( 'MDJM Settings', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-general',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => __( 'General', 'mobile-dj-manager' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=general' ),
+			'meta'	  => array(
+				'title' => __( 'MDJM General Settings', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-events',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => mdjm_get_label_plural(),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=events' ),
+			'meta'	  => array(
+				'title' => __( 'MDJM Event Settings', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-permissions',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => __( 'Permissions', 'mobile-dj-manager' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=general&section=mdjm_app_permissions' ),
+			'meta'	  => array(
+				'title' => __( 'MDJM Permission Settings', 'mobile-dj-manager' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-emails',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => sprintf( __( 'Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=emails' ),
+			'meta'	  => array(
+				'title' => sprintf( __( 'MDJM Email %s Template Settings', 'mobile-dj-manager' ), '&amp;' ),
+			),
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-client-zone',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => sprintf(
+				__( '%s Settings', 'mobile-dj-manager' ),
+				mdjm_get_application_name()
+			),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=client_zone' ),
+			'meta'	  => array(
+				'title'	 => sprintf(
+					__( '%s Settings', 'mobile-dj-manager' ),
+					mdjm_get_application_name()
+				),
+			)
+		) );
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-settings-payments',
+			'parent'	=> 'mdjm-settings',
+			'title'	 => __( 'Payment Settings', 'mobile-dj-manager' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-settings&tab=payments' ),
+			'meta'	  => array(
+				'title' => __( 'MDJM Payment Settings', 'mobile-dj-manager' ),
+			),
+		) );
+	}
+	do_action( 'mdjm_admin_bar_settings_items', $admin_bar );
 	// MDJM Links
 	$admin_bar->add_menu( array(
 		'id'     => 'mdjm-user-guides',
@@ -564,13 +564,13 @@ function mdjm_admin_toolbar( $admin_bar )	{
 add_action( 'admin_bar_menu', 'mdjm_admin_toolbar', 99 );
 
 function mdjm_clients_page()	{
-	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );	
+	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/clients.php' );
 } // mdjm_clients_page
 
-function mdjm_employee_availability_page()	{				
+function mdjm_employee_availability_page()	{
 	include_once( MDJM_PLUGIN_DIR . '/includes/admin/pages/availability.php' );
 } // mdjm_employee_availability_page
-						
+
 function mdjm_custom_client_fields_page()	{
 	new MDJM_ClientFields();
 } // mdjm_custom_client_fields_page

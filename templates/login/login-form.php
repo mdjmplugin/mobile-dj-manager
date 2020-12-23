@@ -23,7 +23,7 @@ global $mdjm_login_redirect; ?>
 
     <form id="mdjm-login-form" name="mdjm-login-form" class="mdjm_form" action="" method="post">
     	<fieldset>
-        	<legend><?php printf( __( 'Login to %s', 'mobile-dj-manager' ), '{company_name}' ); ?></legend>
+        	<legend><?php printf( esc_html__( 'Login to %s', 'mobile-dj-manager' ), '{company_name}' ); ?></legend>
 			<?php do_action( 'mdjm_login_form_top' ); ?>
             <p class="mdjm-login-username">
                 <label for="mdjm-login-username"><?php esc_html_e( 'Email address:', 'mobile-dj-manager' ); ?></label>
@@ -39,13 +39,13 @@ global $mdjm_login_redirect; ?>
 
             <p class="mdjm-login-submit">
             	<input type="hidden" name="mdjm_redirect" value="<?php echo esc_url( $mdjm_login_redirect ); ?>"/>
-				<input type="hidden" name="mdjm_login_nonce" value="<?php echo wp_create_nonce( 'mdjm-login-nonce' ); ?>"/>
+				<input type="hidden" name="mdjm_login_nonce" value="<?php echo esc_attr( wp_create_nonce( 'mdjm-login-nonce' ) ); ?>"/>
 				<input type="hidden" name="mdjm_action" value="user_login"/>
-                <input id="mdjm_login_submit" type="submit" class="mdjm_submit" value="<?php printf( __( 'Login to %s', 'mobile-dj-manager' ), '{application_name}' ); ?>" />
+                <input id="mdjm_login_submit" type="submit" class="mdjm_submit" value="<?php printf( esc_attr__( 'Login to %s', 'mobile-dj-manager' ), '{application_name}' ); ?>" />
             </p>
 
             <p class="mdjm-lost-password">
-                <a href="<?php echo wp_lostpassword_url(); ?>" title="<?php esc_attr_e( 'Lost Password', 'mobile-dj-manager' ); ?>">
+                <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Lost Password', 'mobile-dj-manager' ); ?>">
                     <?php esc_html_e( 'Lost Password?', 'mobile-dj-manager' ); ?>
                 </a>
             </p>

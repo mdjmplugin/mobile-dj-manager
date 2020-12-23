@@ -23,12 +23,12 @@ if ( ! defined( 'ABSPATH' ) )
 */
 function mdjm_reports_page() {
 	$current_page = admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports' );
-	$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'reports';
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'reports';
 	?>
 	<div class="wrap">
 		<h1 class="nav-tab-wrapper">
-			<a href="<?php echo add_query_arg( array( 'tab' => 'reports', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Reports', 'mobile-dj-manager' ); ?></a>
-            <a href="<?php echo add_query_arg( array( 'tab' => 'export', 'settings-updated' => false ), $current_page ); ?>" class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Export', 'mobile-dj-manager' ); ?></a>
+			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'reports', 'settings-updated' => false ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Reports', 'mobile-dj-manager' ); ?></a>
+            <a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'export', 'settings-updated' => false ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Export', 'mobile-dj-manager' ); ?></a>
 			<?php do_action( 'mdjm_reports_tabs' ); ?>
 		</h1>
 
@@ -92,7 +92,7 @@ function mdjm_get_reporting_view( $default = 'events' ) {
 	if ( ! isset( $_GET['view'] ) || ! in_array( $_GET['view'], array_keys( mdjm_reports_default_views() ) ) ) {
 		$view = $default;
 	} else {
-		$view = $_GET['view'];
+		$view = sanitize_text_field( wp_unslash( $_GET['view'] ) );
 	}
 
 	return apply_filters( 'mdjm_get_reporting_view', $view );
@@ -107,14 +107,15 @@ function mdjm_get_reporting_view( $default = 'events' ) {
 function mdjm_reports_tab_reports() {
 
 	if( ! mdjm_employee_can( 'run_reports' ) ) {
-		wp_die( __( 'You do not have permission to access this report', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to access this report', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	$current_view = 'earnings';
 	$views        = mdjm_reports_default_views();
 
-	if ( isset( $_GET['view'] ) && array_key_exists( $_GET['view'], $views ) )
-		$current_view = $_GET['view'];
+	if ( isset( $_GET['view'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['view'] ) ), $views ) ) {
+		$current_view = sanitize_text_field( wp_unslash( $_GET['view'] ) );
+	}
 
 	do_action( 'mdjm_reports_view_' . $current_view );
 
@@ -134,13 +135,13 @@ function mdjm_report_views() {
 	}
 
 	$views        = mdjm_reports_default_views();
-	$current_view = isset( $_GET['view'] ) ? $_GET['view'] : 'earnings';
+	$current_view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'earnings';
 	?>
 	<form id="mdjm-reports-filter" method="get">
 		<select id="mdjm-reports-view" name="view">
 			<option value="-1"><?php esc_html_e( 'Report Type', 'mobile-dj-manager' ); ?></option>
 			<?php foreach ( $views as $view_id => $label ) : ?>
-				<option value="<?php echo esc_attr( $view_id ); ?>" <?php selected( $view_id, $current_view ); ?>><?php echo $label; ?></option>
+				<option value="<?php echo esc_attr( $view_id ); ?>" <?php selected( $view_id, $current_view ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
 
@@ -220,11 +221,11 @@ function mdjm_reports_employees_table() {
         $employees_table->display();
         ?>
 
-        <?php echo $employees_table->load_scripts(); ?>
+        <?php echo $employees_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php printf( __( 'Employee %s Mix: ', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></strong>
+                <strong><?php printf( esc_html__( 'Employee %s Mix: ', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural() ) ); ?></strong>
                 <?php $employees_table->output_employee_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
@@ -237,10 +238,10 @@ function mdjm_reports_employees_table() {
 
 		<p class="mdjm-graph-notes">
             <span>
-                <em><sup>&dagger;</sup> <?php printf( __( 'All employee %s are included whether they are the primary employee or not.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><sup>&dagger;</sup> <?php printf( esc_html__( 'All employee %s are included whether they are the primary employee or not.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
             <span>
-                <em><?php printf( __( 'Stats include all %s that take place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><?php printf( esc_html__( 'Stats include all %s that take place within the date period selected.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
         </p>
 
@@ -275,11 +276,11 @@ function mdjm_reports_types_table() {
         $types_table->display();
         ?>
 
-        <?php echo $types_table->load_scripts(); ?>
+        <?php echo $types_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php printf( __( '%s Types Mix: ', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong>
+                <strong><?php printf( esc_html__( '%s Types Mix: ', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></strong>
                 <?php $types_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
@@ -292,7 +293,7 @@ function mdjm_reports_types_table() {
 
 		<p class="mdjm-graph-notes">
             <span>
-                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
         </p>
 
@@ -327,7 +328,7 @@ function mdjm_reports_conversions_table() {
         $conversions_table->display();
         ?>
 
-        <?php echo $conversions_table->load_scripts(); ?>
+        <?php echo $conversions_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
@@ -344,7 +345,7 @@ function mdjm_reports_conversions_table() {
 
 		<p class="mdjm-graph-notes">
             <span>
-                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all enquiries that were received within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all enquiries that were received within the date period selected.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
         </p>
 
@@ -379,11 +380,11 @@ function mdjm_reports_packages_table() {
         $packages_table->display();
         ?>
 
-        <?php echo $packages_table->load_scripts(); ?>
+        <?php echo $packages_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php printf( __( '%s Package Mix: ', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong>
+                <strong><?php printf( esc_html__( '%s Package Mix: ', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></strong>
                 <?php $packages_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
@@ -396,7 +397,7 @@ function mdjm_reports_packages_table() {
 
 		<p class="mdjm-graph-notes">
             <span>
-                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
         </p>
 
@@ -431,11 +432,11 @@ function mdjm_reports_addons_table() {
         $addons_table->display();
         ?>
 
-        <?php echo $addons_table->load_scripts(); ?>
+        <?php echo $addons_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
-                <strong><?php printf( __( '%s Addons Mix: ', 'mobile-dj-manager' ), mdjm_get_label_Plural() ); ?></strong>
+                <strong><?php printf( esc_html__( '%s Addons Mix: ', 'mobile-dj-manager' ), esc_html( mdjm_get_label_Plural() ) ); ?></strong>
                 <?php $addons_table->output_source_graph(); ?>
             </div>
             <div class="mdjm-mix-chart">
@@ -448,7 +449,7 @@ function mdjm_reports_addons_table() {
 
 		<p class="mdjm-graph-notes">
             <span>
-                <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all %s with a date within the period selected regardless of their status.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
             </span>
         </p>
 
@@ -481,7 +482,7 @@ function mdjm_reports_txn_types_table() {
         $txn_types_table->display();
         ?>
 
-        <?php echo $txn_types_table->load_scripts(); ?>
+        <?php echo $txn_types_table->load_scripts(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="mdjm-mix-totals">
             <div class="mdjm-mix-chart">
@@ -510,7 +511,7 @@ add_action( 'mdjm_reports_view_txn-types', 'mdjm_reports_txn_types_table' );
 function mdjm_reports_tab_export()	{
 
 	if( ! mdjm_employee_can( 'run_reports' ) ) {
-		wp_die( __( 'You do not have permission to export reports', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to export reports', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	$label_single = mdjm_get_label_singular();
@@ -533,24 +534,24 @@ function mdjm_reports_tab_export()	{
 									'id'       => 'mdjm-txn-export-start',
 									'altfield' => 'txn_start'
 								) ); ?>
-                                <?php echo MDJM()->html->date_field( array(
+                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-txn-export-start',
 									'name'        => 'display_start_date',
-									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
+									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' )
+								) );  ?>
+								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'name' => 'txn_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-txn-export-end',
 									'altfield' => 'txn_end'
 								) ); ?>
-                                <?php echo MDJM()->html->date_field( array(
+                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-txn-export-end',
 									'name'        => 'display_end_date',
-									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
+									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
+								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'name' => 'txn_end'
 								) ); ?>
 								<select name="txn_status">
@@ -571,38 +572,38 @@ function mdjm_reports_tab_export()	{
 					</div><!-- .postbox -->
 
 					<div class="postbox mdjm-export-events">
-						<h3><span><?php printf( __( 'Export %s', 'mobile-dj-manager' ), $label_plural ); ?></span></h3>
+						<h3><span><?php printf( esc_html__( 'Export %s', 'mobile-dj-manager' ), esc_html( $label_plural ) ); ?></span></h3>
 						<div class="inside">
-							<p><?php printf( __( 'Download a CSV of %s data.', 'mobile-dj-manager' ), $label_plural ); ?></p>
+							<p><?php printf( esc_html__( 'Download a CSV of %s data.', 'mobile-dj-manager' ), esc_html( $label_plural ) ); ?></p>
 							<form id="mdjm-export-events" class="mdjm-export-form mdjm-import-export-form" method="post">
 								<?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-event-export-start',
 									'altfield' => 'event_start'
 								) ); ?>
-                                <?php echo MDJM()->html->date_field( array(
+                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-event-export-start',
 									'name'        => 'display_start_date',
-									'placeholder' => __( 'Select Start Date', 'mobile-dj-manager' )
+									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
+								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'name' => 'event_start'
 								) ); ?>
                                 <?php mdjm_insert_datepicker( array(
 									'id'       => 'mdjm-event-export-end',
 									'altfield' => 'event_end'
 								) ); ?>
-                                <?php echo MDJM()->html->date_field( array(
+                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-event-export-end',
 									'name'        => 'display_end_date',
-									'placeholder' => __( 'Select End Date', 'mobile-dj-manager' )
+									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' )
 								) ); ?>
-								<?php echo MDJM()->html->hidden( array(
+								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'name' => 'event_end'
 								) ); ?>
 								<select name="event_status">
 									<option value="any"><?php esc_html_e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
                                     <?php foreach( mdjm_all_event_status() as $status => $label ) : ?>
-                                    	<option value="<?php echo $status; ?>"><?php echo $label; ?></option>
+                                    	<option value="<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $label ); ?></option>
                                     <?php endforeach; ?>
 								</select>
 								<?php wp_nonce_field( 'mdjm_ajax_export', 'mdjm_ajax_export' ); ?>

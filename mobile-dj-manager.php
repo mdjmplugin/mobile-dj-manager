@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 /**
    MDJM Event Management is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License, version 2, as 
+   it under the terms of the GNU General Public License, version 2, as
    published by the Free Software Foundation.
 
    MDJM Event Management is distributed in the hope that it will be useful,
@@ -34,37 +34,37 @@ if ( ! defined( 'ABSPATH' ) )
  * Class: Mobile_DJ_Manager
  * Description: The main MDJM class
  */
- 
+
 if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	class Mobile_DJ_Manager	{
 		private static $instance;
-		
+
 		public $api;
-		
+
 		public $content_tags;
-		
+
 		public $cron;
-		
+
 		public $debug;
-		
+
 		public $emails;
-		
+
 		public $events;
-		
+
 		public $html;
-				
+
 		public $permissions;
-		
+
 		public $roles;
-		
+
 		public $txns;
-		
+
 		public $users;
 
 		public $availability_db;
 
         public $availability_meta_db;
-		
+
 		/**
 		 * Ensure we only have one instance of MDJM loaded into memory at any time.
 		 *
@@ -74,14 +74,14 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public static function instance()	{
 			global $mdjm, $mdjm_debug, $clientzone, $wp_version;
-			
+
 			if( !isset( self::$instance ) && !( self::$instance instanceof Mobile_DJ_Manager ) ) {
 				self::$instance = new Mobile_DJ_Manager;
-				
+
 				self::$instance->setup_constants();
 
 				add_action( 'plugins_loaded', array( __CLASS__, 'load_textdomain' ) );
-				
+
 				self::$instance->includes();
 				$mdjm                           = new MDJM();
 				self::$instance->debug          = new MDJM_Debug();
@@ -96,7 +96,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->availability_meta_db = new MDJM_DB_Availability_Meta();
 				self::$instance->playlist_db          = new MDJM_DB_Playlists();
 				self::$instance->playlist_meta_db     = new MDJM_DB_Playlist_Meta();
-				
+
 				self::$instance->content_tags = new MDJM_Content_Tags();
 				self::$instance->cron         = new MDJM_Cron();
 				self::$instance->emails       = new MDJM_Emails();
@@ -105,15 +105,15 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				self::$instance->roles        = new MDJM_Roles();
 				self::$instance->permissions  = new MDJM_Permissions();
 				self::$instance->txns         = new MDJM_Transactions();
-				
+
 				// If we're on the front end, load the ClienZone class
 				if( class_exists( 'ClientZone' ) )
 					$clientzone = new ClientZone();
 			}
-			
+
 			return self::$instance;
 		} // instance
-		
+
 		/**
 		 * Throw error on object clone
 		 *
@@ -126,9 +126,9 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'mobile-dj-manager' ), '1.3' );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'mobile-dj-manager' ), '1.3' );
 		}
-		
+
 		/**
 		 * Setup plugin constants.
 		 *
@@ -144,15 +144,15 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 			define( 'MDJM_PLUGIN_FILE', __FILE__ );
-			define( 'MDJM_NAME', 'MDJM Event Management' );			
-			
+			define( 'MDJM_NAME', 'MDJM Event Management' );
+
 			define( 'MDJM_API_SETTINGS_KEY', 'mdjm_api_data' );
-			
+
 			// Tables
 			define( 'MDJM_HOLIDAY_TABLE', $wpdb->prefix . 'mdjm_avail' );
-			
+
 		} // setup_constants
-				
+
 		/**
 		 * Include required files.
 		 *
@@ -176,7 +176,11 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/api/class-mdjm-api.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-db.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
-			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php' );
+
+			if ($this->has_extensions()) {
+				require_once(MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php');
+			}
+
 			require_once( MDJM_PLUGIN_DIR . '/includes/template-functions.php' );
             require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-cache-helper.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/payments/actions.php' );
@@ -283,13 +287,13 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
-				
+
 			}
-			
+
 			require_once( MDJM_PLUGIN_DIR . '/includes/install.php' );
-			
+
 		} // includes
-		
+
 		/**
 		 * Load the plugins text domain for translations.
 		 *
@@ -299,15 +303,53 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		public static function load_textdomain()	{
 			// Load the text domain for translations
-			load_plugin_textdomain( 
+			load_plugin_textdomain(
 				'mobile-dj-manager',
-				false, 
+				false,
 				dirname( plugin_basename(__FILE__) ) . '/languages'
 			);
 		} // load_textdomain
-		
+
+		private function has_extensions()	{
+			$extensions = [
+				'mdjm-dynamic-contact-forms.php',
+				'mdjm-google-calendar-sync.php',
+				'mdjm-mailchimp-subscribe.php',
+				'mdjm-mailpoet-subscribe.php',
+				'mdjm-payfast-gateway.php',
+				'mdjm-paypal-standard.php',
+				'mdjm-stripe-payments.php'
+			];
+
+			$active_plugins = (array) get_option( 'active_plugins', array() );
+
+			if ( is_multisite() ) {
+				$active_plugins = array_merge( $active_plugins, array_keys( get_site_option( 'active_sitewide_plugins', array() ) ) );
+			}
+
+			$plugin_filenames = array();
+
+			foreach ( $active_plugins as $plugin ) {
+
+				if ( false !== strpos( $plugin, '/' ) ) {
+
+					// normal plugin name (plugin-dir/plugin-filename.php)
+					list( , $filename ) = explode( '/', $plugin );
+
+				} else {
+
+					// no directory, just plugin file
+					$filename = $plugin;
+				}
+
+				$plugin_filenames[] = $filename;
+			}
+
+			return !empty(array_intersect($plugin_filenames, $extensions));
+		}
+
 	} // class Mobile_DJ_Manager
-	
+
 endif;
 
 function MDJM()	{

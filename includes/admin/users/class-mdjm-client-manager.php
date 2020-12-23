@@ -3,8 +3,8 @@
 
 	if ( !mdjm_employee_can( 'view_clients_list' ) )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
-			'<p>' . __( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
+			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
+			'<p>' . esc_html__( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
 	}
@@ -48,16 +48,16 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 
 		public function get_clients()	{
 			// Filter our search by role if we need to
-			self::$display_role = ! empty( $_GET['display_role'] ) ? $_GET['display_role'] : array( 'client', 'inactive_client' );
-			self::$orderby      = ! empty( $_GET['orderby'] )      ? $_GET['orderby']      : 'display_name';
-			self::$order        = ! empty( $_GET['order'] )        ? $_GET['order']        : 'ASC';
+			self::$display_role = ! empty( $_GET['display_role'] ) ? sanitize_text_field( wp_unslash( $_GET['display_role'] ) ) : array( 'client', 'inactive_client' );
+			self::$orderby      = ! empty( $_GET['orderby'] )      ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) )      : 'display_name';
+			self::$order        = ! empty( $_GET['order'] )        ? sanitize_text_field( wp_unslash( $_GET['order'] ) )        : 'ASC';
 
 			// Searching
 			if ( ! empty( $_POST['s'] ) )	{
 
 				// Build out the query args for the WP_User_Query
 				self::$clients = get_users( array(
-					'search'         => $_POST['s'],
+					'search'         => sanitize_text_field( wp_unslash( $_POST['s'] ) ),
 					'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email', 'display_name' ),
 					'role__in'       => array( 'client', 'inactive_client' ),
 					'orderby'        => self::$orderby,
@@ -68,7 +68,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
-					$_POST['filter_client'],
+					sanitize_text_field( wp_unslash( $_POST['filter_client'] ) ),
 					self::$orderby,
 					self::$order
 				);
@@ -98,7 +98,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			?>
 			<div class="wrap">
 			<div id="icon-themes" class="icon32"></div>
-            <h1><?php printf( __( '%s Clients', 'mobile-dj-manager' ), esc_attr( mdjm_get_option( 'company_name' ) ) ); ?></h1>
+            <h1><?php printf( esc_html__( '%s Clients', 'mobile-dj-manager' ), esc_attr( mdjm_get_option( 'company_name' ) ) ); ?></h1>
             <form name="mdjm-client-list" id="mdjm-client-list" method="post">
                 <?php $this->views(); ?>
                 <?php $this->search_box( __( 'Search', 'mobile-dj-manager' ), 'search_id' ); ?>
@@ -226,7 +226,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * @return	str		The HTML output for the checkbox column
 		 */
 		public function column_cb( $item ) {
-			echo '<input type="checkbox" name="client[]" id="clients-' . $item->ID . '" value="' . $item->ID . '" />';
+			echo '<input type="checkbox" name="client[]" id="clients-' . esc_attr( $item->ID ) . '" value="' . esc_attr( $item->ID ) . '" />';
 		} // column_cb
 
 		/**
@@ -242,10 +242,10 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			}
 
 			if( ! empty( $edit_users ) )	{
-				echo '<a href="' . get_edit_user_link( $item->ID ) . '">';
+				echo '<a href="' . esc_url( get_edit_user_link( $item->ID ) ) . '">';
 			}
 
-			echo $item->display_name;
+			echo esc_html( $item->display_name );
 
 			if( !empty( $edit_users ) )	{
 				echo '</a>';
@@ -263,9 +263,9 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$total = mdjm_get_client_events( $item->ID );
 
 			echo ( !empty( $total ) ?
-				'<a href="' . admin_url( 'edit.php?s&post_type=mdjm-event?s&post_status=all' .
+				'<a href="' . esc_url( admin_url( 'edit.php?s&post_type=mdjm-event?s&post_status=all' .
 				'&post_type=mdjm-event&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=0' .
-				'&mdjm_filter_client=' . $item->ID . '&filter_action=Filter&paged=1&action2=-1' ) . '">' . count( $total ) . '</a>' : '0'
+				'&mdjm_filter_client=' . $item->ID . '&filter_action=Filter&paged=1&action2=-1' ) ) . '">' . esc_html( count( $total ) ) . '</a>' : '0'
 			);
 		} // column_events
 
@@ -280,9 +280,9 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$next = mdjm_get_clients_next_event( $item->ID );
 
 			if ( ! empty( $next ) )	{
-				echo '<a href="' . get_edit_post_link( $next[0]->ID ) . '">' . mdjm_get_event_date( $next[0]->ID ) . '</a>';
+				echo '<a href="' . esc_url( get_edit_post_link( $next[0]->ID ) ) . '">' . esc_html( mdjm_get_event_date( $next[0]->ID ) ) . '</a>';
 			} else	{
-				echo __( 'N/A', 'mobile-dj-manager' );
+				echo esc_html__( 'N/A', 'mobile-dj-manager' );
 			}
 
 		} // column_next
@@ -296,10 +296,10 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 */
 		public function column_login( $item ) {
 			if( '' != get_user_meta( $item->ID, 'last_login', true ) )
-				echo date( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) );
+				echo esc_html( date( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) ) );
 
 			else
-				echo __( 'Never', 'mobile-dj-manager' );
+				echo esc_html__( 'Never', 'mobile-dj-manager' );
 		} // column_login
 
 		/**
@@ -380,7 +380,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$i = 0;
 
 			if( 'delete' === $action && !empty( $_POST['client'] ) )	{
-				foreach( $_POST['client'] as $user_id )	{
+				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'Deleting client with ID ' . $user_id, true );
 
@@ -394,7 +394,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 				if( empty( $_POST['client'] ) )
 					return;
 
-				foreach( $_POST['client'] as $user_id )	{
+				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id )	{
 					if( MDJM_DEBUG == true )
 						MDJM()->debug->log_it( 'Setting client with ID ' . $user_id . ' to ' . ucfirst( $this->current_action() ), true );
 

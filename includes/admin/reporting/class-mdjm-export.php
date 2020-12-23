@@ -114,7 +114,7 @@ class MDJM_Export {
 		$cols = $this->get_csv_cols();
 		$i = 1;
 		foreach( $cols as $col_id => $column ) {
-			echo '"' . addslashes( $column ) . '"';
+			echo '"' . esc_html( addslashes( $column ) ) . '"';
 			echo $i == count( $cols ) ? '' : ',';
 			$i++;
 		}
@@ -165,7 +165,7 @@ class MDJM_Export {
 			foreach ( $row as $col_id => $column ) {
 				// Make sure the column is valid
 				if ( array_key_exists( $col_id, $cols ) ) {
-					echo '"' . addslashes( $column ) . '"';
+					echo '"' . esc_html( addslashes( $column ) ) . '"';
 					echo $i == count( $cols ) ? '' : ',';
 					$i++;
 				}
@@ -187,7 +187,7 @@ class MDJM_Export {
 	 */
 	public function export() {
 		if ( ! $this->can_export() )
-			wp_die( __( 'You do not have permission to export data.', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to export data.', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 
 		// Set headers
 		$this->headers();

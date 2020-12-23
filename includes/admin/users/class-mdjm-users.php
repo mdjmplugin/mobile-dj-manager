@@ -54,7 +54,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				2 => array( 'updated', __( 'Employees deleted.', 'mobile-dj-manager' ) )
 			);
 
-			mdjm_update_notice( $messages[$_GET['message']][0], $messages[ $_GET['message'] ][1], true );
+			mdjm_update_notice( $messages[ sanitize_text_field( wp_unslash( $_GET['message'] ) ) ][0], $messages[ sanitize_text_field( wp_unslash( $_GET['message'] ) ) ][1], true );
 		} // messages
 
 		/**
@@ -202,7 +202,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 			global $current_screen, $user_ID, $pagenow;
 
 			if( $pagenow != 'user-new.php' )	{
-				$user_id = ( $current_screen->id == 'profile' ) ? $user_ID : $_REQUEST['user_id'];
+				$user_id = ( $current_screen->id == 'profile' ) ? $user_ID : sanitize_text_field( wp_unslash( $_REQUEST['user_id'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			}
 
 			do_action( 'mdjm_pre_profile_custom_fields', $user );
@@ -218,16 +218,16 @@ if( !class_exists( 'MDJM_Users' ) ) :
 				if( $user->ID != get_current_user_id() )	{
 
 					echo '<tr>' . "\r\n";
-					echo '<th><label for="_mdjm_event_roles">' . sprintf( __( '%s Employee Role(s)', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) ) . '</label></th>' . "\r\n";
+					echo '<th><label for="_mdjm_event_roles">' . sprintf( esc_html__( '%s Employee Role(s)', 'mobile-dj-manager' ), esc_html( mdjm_get_option( 'company_name' ) ) ) . '</label></th>' . "\r\n";
 					echo '<td>' . "\r\n";
 					echo '<select name="_mdjm_event_roles[]" id="_mdjm_event_roles" multiple="multiple">';
 
 					foreach( $mdjm_roles as $role_id => $role_name )	{
-						echo '<option value="' . $role_id . '"';
+						echo '<option value="' . esc_attr( $role_id ) . '"';
 
 						selected( in_array( $role_id, $user->roles ), true );
 
-						echo '>' . $role_name . '</option>';
+						echo '>' . esc_html( $role_name ) . '</option>';
 					}
 
 					echo '</select>' . "\r\n";
@@ -236,7 +236,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 
 					echo '<tr>';
 
-					echo '<th><label for="_mdjm_event_admin">' . __( 'User is MDJM Admin?', 'mobile-dj-manager' ) . '</label></th>' . "\r\n";
+					echo '<th><label for="_mdjm_event_admin">' . esc_html__( 'User is MDJM Admin?', 'mobile-dj-manager' ) . '</label></th>' . "\r\n";
 					echo '<td><input type="checkbox" name="_mdjm_event_admin" id="_mdjm_event_admin" value="1"';
 					checked( $user->__get( '_mdjm_event_admin' ), true );
 					echo ' /></td>';
@@ -247,7 +247,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 
 					foreach( $mdjm_roles as $role_id => $role_name )	{
 						if ( in_array( $role_id, $user->roles ) )	{
-							echo '<input type="hidden" name="_mdjm_event_roles[]" id="_mdjm_event_roles_' . $role_id . '" value="' . $role_id . '" />' . "\r\n";
+							echo '<input type="hidden" name="_mdjm_event_roles[]" id="_mdjm_event_roles_' . esc_attr( $role_id ) . '" value="' . esc_attr( $role_id ) . '" />' . "\r\n";
 						}
 					}
 
@@ -271,13 +271,13 @@ if( !class_exists( 'MDJM_Users' ) ) :
 					if( $custom_field['display'] == true && $custom_field['id'] != 'first_name' && $custom_field['id'] != 'last_name' && $custom_field['id'] != 'user_email' )	{
 
 						echo '<tr>' . "\r\n" .
-						'<th><label for="' . $custom_field['id'] . '">' . $custom_field['label'] . '</label></th>' . "\r\n" .
+						'<th><label for="' . esc_attr( $custom_field['id'] ) . '">' . esc_html( $custom_field['label'] ) . '</label></th>' . "\r\n" .
 						'<td>' . "\r\n";
 
 						// Checkbox Field
 						if( $custom_field['type'] == 'checkbox' )	{
 
-							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '" value="' . $custom_field['value'] . '" ';
+							echo '<input type="' . esc_attr( $custom_field['type'] ) . '" name="' . esc_attr( $custom_field['id'] ) . '" id="' . esc_attr( $custom_field['id'] ) . '" value="' . esc_attr( $custom_field['value'] ) . '" ';
 
 							if( $pagenow != 'user-new.php' )	{
 								checked( $field_value, '1' );
@@ -290,7 +290,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 						// Select List
 						elseif( $custom_field['type'] == 'dropdown' )	{
 
-							echo '<select name="' . $custom_field['id'] . '" id="' . $custom_field['id'] . '">';
+							echo '<select name="' . esc_attr( $custom_field['id'] ) . '" id="' . esc_attr( $custom_field['id'] ) . '">';
 
 							$option_data = explode( "\r\n", $custom_field['value'] );
 
@@ -302,28 +302,28 @@ if( !class_exists( 'MDJM_Users' ) ) :
 
 							foreach( $option_data as $option )	{
 
-								echo '<option value="' . $option . '"';
+								echo '<option value="' . esc_attr( $option ) . '"';
 
 								if( $pagenow != 'user-new.php' )	{
 									selected( $option, $field_value );
 								}
 
-								echo '>' . $option . '</option>' . "\r\n";
+								echo '>' . esc_html( $option ) . '</option>' . "\r\n";
 							}
 
 							echo '<select/>';
 						}
 						// Everything else
 						else	{
-							echo '<input type="' . $custom_field['type'] . '" name="' . $custom_field['id'] .
-							'" id="' . $custom_field['id'] . '" value="' . ( $pagenow != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'], $user->ID ) ) : '' ) .
+							echo '<input type="' . esc_attr( $custom_field['type'] ) . '" name="' . esc_attr ($custom_field['id'] ) .
+							'" id="' . esc_attr( $custom_field['id'] ) . '" value="' . (  esc_attr( $pagenow ) != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'],  esc_attr( $user->ID ) ) ) : '' ) .
 							'" class="regular-text" />' . "\r\n";
 						}
 
 						// Description if set
 						if( $custom_field['desc'] != '' )	{
 							echo '<br />' .
-							'<span class="description">' . $custom_field['desc'] . '</span>' . "\r\n";
+							'<span class="description">' . esc_html( $custom_field['desc'] ) . '</span>' . "\r\n";
 						}
 
 						// End the table row
@@ -365,7 +365,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 
 				if ( ! empty( $_POST['_mdjm_event_roles'] ) )	{
 					update_user_meta( $user_id, '_mdjm_event_staff', true );
-					update_user_meta( $user_id, '_mdjm_event_roles', $_POST['_mdjm_event_roles'] );
+					update_user_meta( $user_id, '_mdjm_event_roles', array_map('sanitize_text_field', wp_unslash( $_POST['_mdjm_event_roles'] ) ) );
 				} else	{
 					update_user_meta( $user_id, '_mdjm_event_staff', false );
 					update_user_meta( $user_id, '_mdjm_event_roles', false );
@@ -393,7 +393,7 @@ if( !class_exists( 'MDJM_Users' ) ) :
 
 					// Update the users meta data
 					if( ! empty( $_POST[ $field ] ) )	{
-						update_user_meta( $user_id, $field, $_POST[ $field ] );
+						update_user_meta( $user_id, $field, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
 					} else	{
 						delete_user_meta( $user_id, $field );
 					}

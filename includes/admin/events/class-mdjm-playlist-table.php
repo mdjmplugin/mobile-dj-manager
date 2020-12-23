@@ -51,10 +51,10 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 
 		$result = array();
 
-		$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+		$mdjm_event = new MDJM_Event( absint( wp_unslash( $_GET['event_id'] ) ) );
 
-		$orderby	= isset( $_GET['orderby'] )	? $_GET['orderby']	: 'category';
-		$order		= isset( $_GET['order'] )	? $_GET['order']	: 'ASC';
+		$orderby	= isset( $_GET['orderby'] )	? sanitize_text_field( wp_unslash( $_GET['orderby'] ) )	: 'category';
+		$order		= isset( $_GET['order'] )	? sanitize_text_field( wp_unslash( $_GET['order'] ) )	: 'ASC';
 
 		if( $orderby == 'category' )	{
 
@@ -321,10 +321,14 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 */
 	public function get_views() {
 
-		$views		= array();
-		$current	= ( !empty( $_GET['view_cat'] ) ? $_GET['view_cat'] : 'all' );
+		if( !isset($_GET['event_id']) ) {
+			return [];
+		}
 
-		$categories = mdjm_get_playlist_categories( $_GET['event_id'] );
+		$views		= array();
+		$current	= ( !empty( $_GET['view_cat'] ) ? sanitize_text_field( wp_unslash( $_GET['view_cat'] ) ) : 'all' );
+
+		$categories = mdjm_get_playlist_categories( absint( wp_unslash( $_GET['event_id'] ) ) );
 
 		if( $categories )	{
 			$class		= ( $current == 'all' ? ' class="current"' : '' );
@@ -335,11 +339,11 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 								$all_url,
 								$class
 							) .
-							'<span class="count">' . mdjm_count_playlist_entries( $_GET['event_id'] ) . '</span>';
+							'<span class="count">' . mdjm_count_playlist_entries( absint( wp_unslash( $_GET['event_id'] ) ) ) . '</span>';
 
 			foreach( $categories as $category )	{
 
-				$count = mdjm_count_playlist_entries( $_GET['event_id'], $category->name );
+				$count = mdjm_count_playlist_entries( absint( wp_unslash( $_GET['event_id'] ) ), $category->name );
 
 				if( $count > 0 )	{
 
@@ -367,30 +371,35 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 * @return	str
 	 */
 	function display_header()	{
+
+		if( !isset($_GET['event_id']) ) {
+			exit;
+		}
+
 		?>
-        <p><?php printf( __( '<strong>Date</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_long_date( $_GET['event_id'] ) ); ?>
+        <p><?php printf( __( '<strong>Date</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_long_date( absint( wp_unslash( $_GET['event_id'] ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Status</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_status( $_GET['event_id'] ) ); ?>
+        <?php printf( __( '<strong>Status</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_status( absint( wp_unslash( $_GET['event_id'] ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Type</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_type( $_GET['event_id'] ) ); ?>
+        <?php printf( __( '<strong>Type</strong>: %s', 'mobile-dj-manager'), mdjm_get_event_type( absint( wp_unslash( $_GET['event_id'] ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Primary Employee</strong>: %s', 'mobile-dj-manager'), mdjm_get_employee_display_name( mdjm_get_event_primary_employee_id( $_GET['event_id'] ) ) ); ?>
+        <?php printf( __( '<strong>Primary Employee</strong>: %s', 'mobile-dj-manager'), mdjm_get_employee_display_name( mdjm_get_event_primary_employee_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Client</strong>: %s', 'mobile-dj-manager'), mdjm_get_employee_display_name( mdjm_get_event_client_id( $_GET['event_id'] ) ) ); ?>
+        <?php printf( __( '<strong>Client</strong>: %s', 'mobile-dj-manager'), mdjm_get_employee_display_name( mdjm_get_event_client_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Total Songs</strong>: %s', 'mobile-dj-manager'), count( $this->items ) ); ?>
+        <?php printf( __( '<strong>Total Songs</strong>: %s', 'mobile-dj-manager'), count( $this->items ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <br />
-        <?php printf( __( '<strong>Current Status</strong>: %s', 'mobile-dj-manager'), mdjm_playlist_is_open( $_GET['event_id'] ) ? __( 'Open', 'mobile-dj-manager' ) : __( 'Closed', 'mobile-dj-manager' ) ); ?>
+        <?php printf( __( '<strong>Current Status</strong>: %s', 'mobile-dj-manager'), mdjm_playlist_is_open( absint( wp_unslash( $_GET['event_id'] ) ) ) ? esc_html__( 'Open', 'mobile-dj-manager' ) : esc_html__( 'Closed', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </p>
 
         <?php
-        if( $this->count_entries( $_GET['event_id'] ) > 0 )	:
+        if( $this->count_entries( absint( wp_unslash( $_GET['event_id'] ) ) ) > 0 )	:
 			?>
 
             <p>
             <form method="post" target="_blank">
                 <?php mdjm_admin_action_field( 'print_playlist' ); ?>
-                <input type="hidden" name="print_playlist_event_id" id="print_playlist_event_id" value="<?php echo $_GET['event_id']; ?>" />
+                <input type="hidden" name="print_playlist_event_id" id="print_playlist_event_id" value="<?php echo esc_attr( absint( wp_unslash( $_GET['event_id'] ) ) ); ?>" />
                 <?php wp_nonce_field( 'print_playlist_entry', 'mdjm_nonce', true, true ); ?>
                 <?php submit_button( 'Print this List', 'primary small', 'submit_print_pl', false ); ?>
                 <?php esc_html_e( 'ordered by', 'mobile-dj-manager' ); ?> <select name="print_order_by" id="print_order_by">
@@ -404,7 +413,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
             <form method="post">
                 <?php mdjm_admin_action_field( 'email_playlist' ); ?>
                 <?php wp_nonce_field( 'email_playlist_entry', 'mdjm_nonce', true, true ); ?>
-                <input type="hidden" name="email_playlist_event_id" id="email_playlist_event_id" value="<?php echo $_GET['event_id']; ?>" />
+                <input type="hidden" name="email_playlist_event_id" id="email_playlist_event_id" value="<?php echo esc_attr( absint( wp_unslash( $_GET['event_id'] ) ) ); ?>" />
                 <?php submit_button( 'Email this List', 'primary small', 'submit_email_pl', false ); ?>
                 <?php esc_html_e( 'ordered by', 'mobile-dj-manager' ); ?> <select name="email_order_by" id="email_order_by">
                 <option value="date" selected="selected"><?php esc_attr_e( 'Date Added', 'mobile-dj-manager' ); ?></option>
@@ -426,18 +435,23 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 * @return	void
 	 */
 	public function entry_form() {
+
+		if( !isset($_GET['event_id']) ) {
+			exit;
+		}
+
 		?>
         <h3><?php esc_html_e( 'Add Entry to Playlist', 'mobile-dj-manager' ); ?></h3>
         <form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
 			<?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
             <?php mdjm_admin_action_field( 'add_playlist_entry' ); ?>
-            <input type="hidden" id="event_id" name="event_id" value="<?php echo $_GET['event_id']; ?>" />
-            <input type="hidden" id="added_by" name="added_by" value="<?php echo mdjm_get_event_client_id( $_GET['event_id'] ); ?>" />
+            <input type="hidden" id="event_id" name="event_id" value="<?php echo esc_attr( absint( wp_unslash( $_GET['event_id'] ) ) ); ?>" />
+            <input type="hidden" id="added_by" name="added_by" value="<?php echo esc_attr( mdjm_get_event_client_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ); ?>" />
             <table id="mdjm-playlist-form-table">
                 <tr>
                     <td>
                         <label for="song"><?php esc_html_e( 'Song', 'mobile-dj-manager' ); ?></label><br />
-                        <?php echo MDJM()->html->text( array(
+                        <?php echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name' => 'song',
 							'type' => 'text'
 						) ); ?>
@@ -445,7 +459,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 
                     <td class="mdjm-playlist-artist-cell">
                         <label for="artist"><?php esc_html_e( 'Artist', 'mobile-dj-manager' ); ?></label><br />
-                        <?php echo MDJM()->html->text( array(
+                        <?php echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'  => 'artist',
 							'type'  => 'text'
 						) ); ?>
@@ -458,10 +472,10 @@ class MDJM_PlayList_Table extends WP_List_Table	{
                         <?php foreach( $playlist_categories as $playlist_category ) : ?>
                         	<?php $options[ $playlist_category->term_id ] = $playlist_category->name; ?>
                         <?php endforeach; ?>
-                        <?php echo MDJM()->html->select( array(
+                        <?php echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'options'          => $options,
 							'name'             => 'category',
-							'selected'         => mdjm_get_option( 'playlist_default_cat', 0 )
+							'selected'         => mdjm_get_option( 'playlist_default_cat', 0 ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						) ); ?>
                     </td>
 
@@ -469,15 +483,15 @@ class MDJM_PlayList_Table extends WP_List_Table	{
                 <tr>
 
                     <td class="mdjm-playlist-djnotes-cell" colspan="3">
-                        <label for="notes"><?php printf( __( 'Notes', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
-                        <?php echo MDJM()->html->textarea( array(
+                        <label for="notes"><?php printf( esc_html__( 'Notes', 'mobile-dj-manager' ), '{artist_label}' ); ?></label><br />
+                        <?php echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'        => 'notes'
 						) ); ?>
                     </td>
                 </tr>
             </table>
             <?php submit_button(
-				__( 'Add to Playlist', 'mobile-dj-manager' ),
+				esc_html__( 'Add to Playlist', 'mobile-dj-manager' ),
 				'primary'
 			); ?>
         </form>
@@ -493,6 +507,10 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 	 */
 	public function prepare_items() {
 
+		if( !isset($_GET['event_id']) ) {
+			exit;
+		}
+
 		$columns  = $this->get_columns(); // Retrieve table columns
 		$hidden   = array(); // Which fields are hidden
 		$sortable = $this->get_sortable_columns(); // Which fields can be sorted by
@@ -500,7 +518,7 @@ class MDJM_PlayList_Table extends WP_List_Table	{
 
 		$per_page     = $this->get_items_per_page( 'entries_per_page', 5 );
 		$current_page = $this->get_pagenum();
-		$total_items  = $this->count_entries( $_GET['event_id'] );
+		$total_items  = $this->count_entries( absint( wp_unslash( $_GET['event_id'] ) ) );
 
 		$this->set_pagination_args(
 			array(

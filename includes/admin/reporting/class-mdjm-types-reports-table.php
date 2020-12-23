@@ -242,7 +242,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . sprintf( __( 'No %s for dates provided.', 'mobile-dj-manager' ), strtolower( $this->label_plural ) ) . '</em></p>';
+			echo '<p><em>' . sprintf( esc_html__( 'No %s for dates provided.', 'mobile-dj-manager' ), esc_html( strtolower( $this->label_plural ) ) ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -279,7 +279,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_earnings ) ) {
-			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please

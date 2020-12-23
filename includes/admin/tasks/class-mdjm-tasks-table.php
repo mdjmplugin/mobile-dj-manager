@@ -90,16 +90,16 @@ class MDJM_Tasks_Table extends WP_List_Table {
 		$input_id = $input_id . '-search-input';
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) : ?>
-			<input type="hidden" name="orderby" value="<?php echo esc_attr( $_REQUEST['orderby'] ); ?>" />
+			<input type="hidden" name="orderby" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) ); ?>" />
         <?php endif;
 
 		if ( ! empty( $_REQUEST['order'] ) ) : ?>
-			<input type="hidden" name="order" value="<?php echo esc_attr( $_REQUEST['order'] ); ?>" />
+			<input type="hidden" name="order" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) ); ?>" />
 		<?php endif; ?>
 
 		<p class="search-box">
-			<label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
-			<input type="search" id="<?php echo $input_id ?>" name="s" value="<?php _admin_search_query(); ?>" />
+			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $text ); ?>:</label>
+			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php esc_attr( _admin_search_query() ); ?>" />
 			<?php submit_button( $text, 'button', false, false, array('ID' => 'search-submit') ); ?>
 		</p>
 		<?php
@@ -166,8 +166,8 @@ class MDJM_Tasks_Table extends WP_List_Table {
 	public function column_active( $item )	{
 		$checked  = checked( 1, $item['active'], false );
 		$disabled = ! empty( $item['default'] ) ? ' disabled="disabled"' : '';
-		
-		return '<input type="checkbox" name="active_task_' . $item['id'] . '"' . $checked . $disabled . ' />'; 
+
+		return '<input type="checkbox" name="active_task_' . $item['id'] . '"' . $checked . $disabled . ' />';
 	} // column_active
 
 	public function column_name( $item ) {
@@ -184,28 +184,28 @@ class MDJM_Tasks_Table extends WP_List_Table {
 			'post_type'   => 'mdjm-event',
 			'page'        => 'mdjm-tasks',
 			'id'          => $item['id'],
-			'mdjm-action' => 'delete_task'   
+			'mdjm-action' => 'delete_task'
 		), admin_url( 'edit.php' ) );
 
 		$activate_url = add_query_arg( array(
 			'post_type'   => 'mdjm-event',
 			'page'        => 'mdjm-tasks',
 			'id'          => $item['id'],
-			'mdjm-action' => 'activate_task'   
+			'mdjm-action' => 'activate_task'
 		), admin_url( 'edit.php' ) );
 
 		$deactivate_url = add_query_arg( array(
 			'post_type'   => 'mdjm-event',
 			'page'        => 'mdjm-tasks',
 			'id'          => $item['id'],
-			'mdjm-action' => 'deactivate_task'   
+			'mdjm-action' => 'deactivate_task'
 		), admin_url( 'edit.php' ) );
 
 		$run_now_url = add_query_arg( array(
 			'post_type'   => 'mdjm-event',
 			'page'        => 'mdjm-tasks',
 			'id'          => $item['id'],
-			'mdjm-action' => 'run_task'   
+			'mdjm-action' => 'run_task'
 		), admin_url( 'edit.php' ) );
 
 		$actions  = array(
@@ -296,7 +296,7 @@ class MDJM_Tasks_Table extends WP_List_Table {
 	 * @return	mixed	String if search is present, false otherwise
 	 */
 	public function get_search() {
-		return ! empty( $_GET['s'] ) ? urldecode( trim( $_GET['s'] ) ) : false;
+		return ! empty( $_GET['s'] ) ?  urldecode( trim( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) ) : false;
 	} // get_search
 
 	/**
@@ -313,8 +313,8 @@ class MDJM_Tasks_Table extends WP_List_Table {
 		$paged      = $this->get_paged();
 		$offset     = $this->per_page * ( $paged - 1 );
 		$search     = $this->get_search();
-		$order      = isset( $_GET['order'] )      ? sanitize_text_field( $_GET['order'] )   : 'DESC';
-		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$order      = isset( $_GET['order'] )      ? sanitize_text_field( wp_unslash( $_GET['order'] ) )   : 'DESC';
+		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'id';
 
 		$tasks      = mdjm_get_tasks();
 

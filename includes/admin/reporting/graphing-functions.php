@@ -281,7 +281,7 @@ function mdjm_earnings_reports_graph() {
 						<strong>
 							<?php
 								esc_html_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
-								echo mdjm_currency_filter( mdjm_format_amount( $earnings_totals ) );
+								echo esc_html( mdjm_currency_filter( mdjm_format_amount( $earnings_totals ) ) );
 							?>
 						</strong>
 					</p>
@@ -289,10 +289,10 @@ function mdjm_earnings_reports_graph() {
                     	<strong>
 							<?php
                             	printf(
-									__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
-									mdjm_get_label_plural( true )
+									esc_html__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
+									esc_html( mdjm_get_label_plural( true ) )
 								);
-								echo $events_totals;
+								echo esc_html( $events_totals );
 							?>
                         </strong>
                     </p>
@@ -301,7 +301,7 @@ function mdjm_earnings_reports_graph() {
 
 					<p class="mdjm-graph-notes">
                         <span>
-                            <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                            <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
                         </span>
                     </p>
 
@@ -314,7 +314,7 @@ function mdjm_earnings_reports_graph() {
 	$output = ob_get_contents();
 	ob_end_clean();
 
-	echo $output;
+	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_earnings_reports_graph
 
 /**
@@ -628,7 +628,7 @@ function mdjm_transactions_reports_graph() {
 						<strong>
 							<?php
 								esc_html_e( 'Total income for period shown: ', 'mobile-dj-manager' );
-								echo mdjm_currency_filter( mdjm_format_amount( $income_totals ) );
+								echo esc_html( mdjm_currency_filter( mdjm_format_amount( $income_totals ) ) );
 							?>
 						</strong>
 					</p>
@@ -636,7 +636,7 @@ function mdjm_transactions_reports_graph() {
 						<strong>
 							<?php
 								esc_html_e( 'Total expense for period shown: ', 'mobile-dj-manager' );
-								echo mdjm_currency_filter( mdjm_format_amount( $expense_totals ) );
+								echo esc_html( mdjm_currency_filter( mdjm_format_amount( $expense_totals ) ) );
 							?>
 						</strong>
 					</p>
@@ -644,7 +644,7 @@ function mdjm_transactions_reports_graph() {
 						<strong>
 							<?php
 								esc_html_e( 'Total earnings for period shown: ', 'mobile-dj-manager' );
-								echo mdjm_currency_filter( mdjm_format_amount( $income_totals - $expense_totals ) );
+								echo esc_html( mdjm_currency_filter( mdjm_format_amount( $income_totals - $expense_totals ) ) );
 							?>
 						</strong>
 					</p>
@@ -652,10 +652,10 @@ function mdjm_transactions_reports_graph() {
 						<strong>
 							<?php
 								printf(
-									__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
-									mdjm_get_label_plural()
+									esc_html__( 'Total %s for period shown: ', 'mobile-dj-manager' ),
+									esc_html( mdjm_get_label_plural() )
 								);
-								echo $events_totals;
+								echo esc_html( $events_totals );
 							?>
 						</strong>
 					</p>
@@ -664,7 +664,7 @@ function mdjm_transactions_reports_graph() {
 
 					<p class="mdjm-graph-notes">
                         <span>
-                            <em><sup>&dagger;</sup> <?php printf( __( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></em>
+                            <em><sup>&dagger;</sup> <?php printf( esc_html__( 'Stats include all %s taking place within the date period selected.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></em>
                         </span>
                     </p>
 
@@ -677,7 +677,7 @@ function mdjm_transactions_reports_graph() {
 	$output = ob_get_contents();
 	ob_end_clean();
 
-	echo $output;
+	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_transactions_reports_graph
 
 /**
@@ -729,37 +729,37 @@ function mdjm_reports_graph_controls() {
 					<?php endforeach; ?>
 				</select>
 
-				<div id="mdjm-date-range-options" <?php echo $display; ?>>
+				<div id="mdjm-date-range-options" <?php echo $display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 					<span><?php esc_html_e( 'From', 'mobile-dj-manager' ); ?>&nbsp;</span>
 					<select id="mdjm-graphs-month-start" name="m_start">
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
-							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_start'] ); ?>><?php echo mdjm_month_num_to_name( $i ); ?></option>
+							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_start'] ); ?>><?php echo esc_html( mdjm_month_num_to_name( $i ) ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<select id="mdjm-graphs-day-start" name="day">
 						<?php for ( $i = 1; $i <= 31; $i++ ) : ?>
-							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['day'] ); ?>><?php echo $i; ?></option>
+							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['day'] ); ?>><?php echo esc_html( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<select id="mdjm-graphs-year-start" name="year">
 						<?php for ( $i = 2007; $i <= date( 'Y' ); $i++ ) : ?>
-							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year'] ); ?>><?php echo $i; ?></option>
+							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year'] ); ?>><?php echo esc_html( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<span><?php esc_html_e( 'To', 'mobile-dj-manager' ); ?>&nbsp;</span>
 					<select id="mdjm-graphs-month-end" name="m_end">
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
-							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_end'] ); ?>><?php echo mdjm_month_num_to_name( $i ); ?></option>
+							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_end'] ); ?>><?php echo esc_html( mdjm_month_num_to_name( $i ) ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<select id="mdjm-graphs-day-end" name="day_end">
 						<?php for ( $i = 1; $i <= 31; $i++ ) : ?>
-							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['day_end'] ); ?>><?php echo $i; ?></option>
+							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['day_end'] ); ?>><?php echo esc_html( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<select id="mdjm-graphs-year-end" name="year_end">
 						<?php for ( $i = 2007; $i <= date( 'Y' ); $i++ ) : ?>
-						<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year_end'] ); ?>><?php echo $i; ?></option>
+						<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year_end'] ); ?>><?php echo esc_html( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
 				</div>
@@ -788,15 +788,15 @@ function mdjm_get_report_dates() {
 
 	$current_time = current_time( 'timestamp' );
 
-	$dates['range'] = isset( $_GET['range'] ) ? $_GET['range'] : 'this_month';
+	$dates['range'] = isset( $_GET['range'] ) ? sanitize_text_field( wp_unslash( $_GET['range'] ) ) : 'this_month';
 
 	if ( 'custom' !== $dates['range'] ) {
-		$dates['year']     = isset( $_GET['year'] )     ? $_GET['year']     : date( 'Y' );
-		$dates['year_end'] = isset( $_GET['year_end'] ) ? $_GET['year_end'] : date( 'Y' );
-		$dates['m_start']  = isset( $_GET['m_start'] )  ? $_GET['m_start']  : 1;
-		$dates['m_end']    = isset( $_GET['m_end'] )    ? $_GET['m_end']    : 12;
-		$dates['day']      = isset( $_GET['day'] )      ? $_GET['day']      : 1;
-		$dates['day_end']  = isset( $_GET['day_end'] )  ? $_GET['day_end']  : cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+		$dates['year']     = isset( $_GET['year'] )     ? sanitize_text_field( wp_unslash( $_GET['year'] ) )     : date( 'Y' );
+		$dates['year_end'] = isset( $_GET['year_end'] ) ? sanitize_text_field( wp_unslash( $_GET['year_end'] ) ) : date( 'Y' );
+		$dates['m_start']  = isset( $_GET['m_start'] )  ? sanitize_text_field( wp_unslash( $_GET['m_start'] ) ) : 1;
+		$dates['m_end']    = isset( $_GET['m_end'] )    ? sanitize_text_field( wp_unslash( $_GET['m_end'] ) )   : 12;
+		$dates['day']      = isset( $_GET['day'] )      ? sanitize_text_field( wp_unslash( $_GET['day'] ) )     : 1;
+		$dates['day_end']  = isset( $_GET['day_end'] )  ? sanitize_text_field( wp_unslash( $_GET['day_end'] ) )  : cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
 	}
 
 	// Modify dates based on predefined ranges
@@ -970,7 +970,7 @@ function mdjm_parse_report_dates( $data ) {
 	$dates = mdjm_get_report_dates();
 
 	$view          = mdjm_get_reporting_view();
-	$id            = isset( $_GET['event-id'] ) ? $_GET['event-id'] : null;
+	$id            = isset( $_GET['event-id'] ) ? sanitize_text_field( wp_unslash( $_GET['event-id'] ) ) : null;
 
 	wp_safe_redirect( add_query_arg( $dates, admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&view=' . esc_attr( $view ) . '&event-id=' . absint( $id ) ) ) );
 	exit;

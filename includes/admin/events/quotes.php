@@ -144,9 +144,9 @@ function mdjm_quote_posts_custom_column( $column_name, $post_id )	{
 			if ( ! empty( $parent ) )	{
 
 				printf( '<a href="%s">%s</a><br /><em>%s</em>',
-					admin_url( '/post.php?post={$parent}&action=edit' ),
-					mdjm_get_event_contract_id( $parent ),
-					mdjm_get_event_date( $parent )
+					esc_url( admin_url( '/post.php?post={$parent}&action=edit' ) ),
+					esc_html( mdjm_get_event_contract_id( $parent ) ),
+					esc_html( mdjm_get_event_date( $parent ) )
 				);
 
 			} else	{
@@ -159,12 +159,12 @@ function mdjm_quote_posts_custom_column( $column_name, $post_id )	{
 		case 'quote_client':
 			global $post;
 
-			echo '<a href="' . admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $post->post_author ) . '">' . get_the_author() . '</a>';
+			echo '<a href="' . esc_url( admin_url( 'admin.php?page=mdjm-clients&action=view_client&client_id=' . $post->post_author ) ) . '">' . get_the_author() . '</a>';
 			break;
 
 		// Cost
 		case 'quote_value':
-			echo mdjm_currency_filter( mdjm_get_event_price( $parent ) );
+			echo esc_html( mdjm_currency_filter( mdjm_get_event_price( $parent ) ) );
 			break;
 
 		// Date Viewed
@@ -172,7 +172,7 @@ function mdjm_quote_posts_custom_column( $column_name, $post_id )	{
 
 			if( 'mdjm-quote-viewed' == get_post_status( $post_id ) )	{
 
-				echo date( 'd M Y H:i:s', strtotime( get_post_meta( $post_id, '_mdjm_quote_viewed_date', true ) ) );
+				echo esc_html( date( 'd M Y H:i:s', strtotime( get_post_meta( $post_id, '_mdjm_quote_viewed_date', true ) ) ) );
 
 			} else	{
 				esc_html_e( 'N/A', 'mobile-dj-manager' );
@@ -189,7 +189,7 @@ function mdjm_quote_posts_custom_column( $column_name, $post_id )	{
 				$count = 0;
 			}
 
-			echo $count . _n( ' time', ' times', $count, 'mobile-dj-manager' );
+			echo esc_html( $count . _n( ' time', ' times', $count, 'mobile-dj-manager' ) );
 
 		break;
 	} // switch

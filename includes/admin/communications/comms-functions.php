@@ -22,8 +22,8 @@ function mdjm_comms_page()	{
 
 	if( ! mdjm_employee_can( 'send_comms' ) )  {
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
-			'<p>' . __( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
+			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
+			'<p>' . esc_html__( 'You do not have permission to access this page.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
 	}
@@ -46,8 +46,8 @@ function mdjm_comms_page()	{
         <form name="mdjm_form_send_comms" id="mdjm_form_send_comms" method="post" enctype="multipart/form-data">
         	<?php wp_nonce_field( 'send_comm_email', 'mdjm_nonce', true, true ); ?>
 			<?php mdjm_admin_action_field( 'send_comm_email' ); ?>
-            <input type="hidden" name="mdjm_email_from_address" id="mdjm_email_from_address" value="<?php echo $current_user->user_email; ?>" />
-            <input type="hidden" name="mdjm_email_from_name" id="mdjm_email_from_name" value="<?php echo $current_user->display_name; ?>" />
+            <input type="hidden" name="mdjm_email_from_address" id="mdjm_email_from_address" value="<?php echo esc_attr( $current_user->user_email ); ?>" />
+            <input type="hidden" name="mdjm_email_from_name" id="mdjm_email_from_name" value="<?php echo esc_attr( $current_user->display_name ); ?>" />
             <?php do_action( 'mdjm_pre_comms_table' ); ?>
             <table class="form-table">
                 <?php do_action( 'mdjm_add_comms_fields_before_recipient' ); ?>
@@ -59,10 +59,10 @@ function mdjm_comms_page()	{
                         	<optgroup label="<?php esc_attr_e( 'Clients', 'mobile-dj-manager' ); ?>">
                             	<?php
 								if ( empty( $clients ) )	{
-									echo '<option disabled="disabled">' . __( 'No Clients Found', 'mobile-dj-manager' ) . '</option>';
+									echo '<option disabled="disabled">' . esc_html__( 'No Clients Found', 'mobile-dj-manager' ) . '</option>';
 								} else	{
 									foreach( $clients as $client )	{
-										echo '<option value="' . $client->ID . '">' . $client->display_name . '</option>';
+										echo '<option value="' . esc_attr( $client->ID ) . '">' . esc_html( $client->display_name ) . '</option>';
 									}
 								}
 								?>
@@ -70,10 +70,10 @@ function mdjm_comms_page()	{
                             <?php
 							if ( ! empty( $employees ) )	{
 
-								echo '<optgroup label="' . __( 'Employees', 'mobile-dj-manager' ) . '">';
+								echo '<optgroup label="' . esc_html__( 'Employees', 'mobile-dj-manager' ) . '">';
 
 								foreach( $employees as $employee )	{
-									echo '<option value="' . $employee->ID . '">' . $employee->display_name . '</option>';
+									echo '<option value="' . esc_attr( $employee->ID ) . '">' . esc_html( $employee->display_name ) . '</option>';
 								}
 
 								echo '</optgroup>';
@@ -85,11 +85,11 @@ function mdjm_comms_page()	{
                 <?php do_action( 'mdjm_add_comms_fields_before_subject' ); ?>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_subject"><?php esc_html_e( 'Subject', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( $_GET['template'] ) ) : ''; ?>" /></td>
+                    <td><input type="text" name="mdjm_email_subject" id="mdjm_email_subject" class="regular-text" value="<?php echo isset( $_GET['template'] ) ? esc_attr( get_the_title( sanitize_text_field( wp_unslash( $_GET['template'] ) ) ) ) : ''; ?>" /></td>
                 </tr>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_copy_to"><?php esc_html_e( 'Copy Yourself?', 'mobile-dj-manager' ); ?></label></th>
-                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo $current_user->user_email; ?>" /> <span class="description"><?php esc_html_e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
+                    <td><input type="checkbox" name="mdjm_email_copy_to" id="mdjm_email_copy_to" value="<?php echo esc_attr( $current_user->user_email ); ?>" /> <span class="description"><?php esc_html_e( 'Settings may dictate that additional email copies are also sent', 'mobile-dj-manager' ); ?></span></td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_template' ); ?>
             	<tr>
@@ -97,44 +97,44 @@ function mdjm_comms_page()	{
                     <td>
                     	<select name="mdjm_email_template" id="mdjm_email_template">
                         	<option value="0"><?php esc_html_e( 'No Template', 'mobile-dj-manager' ); ?></option>
-                            <?php $template = isset( $_GET['template'] ) ? $_GET['template'] : 0; ?>
-                        	<?php echo mdjm_comms_template_options( $template ); ?>
+                            <?php $template = isset( $_GET['template'] ) ? sanitize_text_field( wp_unslash( $_GET['template'] ) ) : 0; ?>
+                        	<?php echo mdjm_comms_template_options( $template ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </select>
                     </td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_event' ); ?>
                 <tr>
-                    <th scope="row"><label for="mdjm_email_event"><?php printf( __( 'Associated %s', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
+                    <th scope="row"><label for="mdjm_email_event"><?php printf( esc_html__( 'Associated %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></label></th>
                     <td>
                     	<?php if ( isset( $_GET['event_id'] ) || ( isset( $_GET['mdjm-action'] ) && $_GET['mdjm-action'] == 'respond_unavailable' ) )	: ?>
                         	<?php
-							$value = mdjm_get_event_date( $_GET['event_id'] ) . ' ';
-							$value .= __( 'from', 'mobile-dj-manager' ) . ' ';
-							$value .= mdjm_get_event_start( $_GET['event_id'] ) . ' ';
-							$value .= '(' . mdjm_get_event_status( $_GET['event_id'] ) . ')';
+							$value = mdjm_get_event_date( absint( wp_unslash( $_GET['event_id'] ) ) ) . ' ';
+							$value .= esc_html__( 'from', 'mobile-dj-manager' ) . ' ';
+							$value .= mdjm_get_event_start( absint( wp_unslash( $_GET['event_id'] ) ) ) . ' ';
+							$value .= '(' . mdjm_get_event_status( absint( wp_unslash( $_GET['event_id'] ) ) ) . ')';
 							?>
-							<input type="text" name="mdjm_email_event_show" id="mdjm_email_event_show" value="<?php echo $value; ?>" readonly size="50" />
-                            <input type="hidden" name="mdjm_email_event" id="mdjm_email_event" value="<?php echo absint($_GET['event_id']); ?>" />
+							<input type="text" name="mdjm_email_event_show" id="mdjm_email_event_show" value="<?php echo esc_attr( $value ); ?>" readonly size="50" />
+                            <input type="hidden" name="mdjm_email_event" id="mdjm_email_event" value="<?php echo absint( wp_unslash( $_GET['event_id'] ) ); ?>" />
                         <?php else : ?>
                             <select name="mdjm_email_event" id="mdjm_email_event">
                             <option value="0"><?php esc_attr_e( 'Select an Event', 'mobile-dj-manager' ); ?></option>
                             </select>
                         <?php endif; ?>
-                        <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></p>
+                        <p class="description"><?php printf( __( 'If no %s is selected <code>{event_*}</code> content tags may not be used', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                     </td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_file' ); ?>
                 <tr>
                 	<th scope="row"><label for="mdjm_email_upload_file"><?php esc_html_e( 'Attach a File', 'mobile-dj-manager' ); ?></label></th>
                     <td><input type="file" name="mdjm_email_upload_file" id="mdjm_email_upload_file" class="regular-text" value="" />
-                    	<p class="description"><?php printf( __( 'Max file size %dMB. Change php.ini <code>post_max_size</code> to increase', 'mobile-dj-manager' ), ini_get( 'post_max_size' ) ); ?></p>
+                    	<p class="description"><?php printf( __( 'Max file size %dMB. Change php.ini <code>post_max_size</code> to increase', 'mobile-dj-manager' ), ini_get( 'post_max_size' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                     </td>
                 </tr>
                 <?php do_action( 'mdjm_add_comms_fields_before_content' ); ?>
                 <tr>
                     <td colspan="2">
                         <?php
-							$content = isset( $_GET['template'] ) ? mdjm_get_email_template_content( $_GET['template'] ) : '';
+							$content = isset( $_GET['template'] ) ? mdjm_get_email_template_content( absint( wp_unslash( $_GET['template'] ) ) ) : '';
 
                             wp_editor(
                                 $content,
@@ -235,12 +235,12 @@ function mdjm_send_comm_email( $data )	{
 		$message = 'comm_missing_content';
 	} else	{
 
-		if( isset( $_FILES['mdjm_email_upload_file'] ) && '' !== $_FILES['mdjm_email_upload_file']['name'] )	{
+		if( isset( $_FILES['mdjm_email_upload_file'] ) && isset( $_FILES['mdjm_email_upload_file']['name']  ) && '' !== $_FILES['mdjm_email_upload_file']['name'] )	{
 			$upload_dir = wp_upload_dir();
 
-			$file_name  = $_FILES['mdjm_email_upload_file']['name'];
+			$file_name  = sanitize_file_name( wp_unslash( $_FILES['mdjm_email_upload_file']['name'] ) );
 			$file_path  = $upload_dir['path'] . '/' . $file_name;
-			$tmp_path   = $_FILES['mdjm_email_upload_file']['tmp_name'];
+			$tmp_path   = sanitize_file_name( wp_unslash( $_FILES['mdjm_email_upload_file']['tmp_name'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 			if( move_uploaded_file( $tmp_path, $file_path ) )	{
 				$attachments[] = $file_path;
@@ -320,7 +320,7 @@ function mdjm_add_reject_reason_field()	{
 	$output .= '</td>';
     $output .= '</tr>';
 
-	echo apply_filters( 'mdjm_add_reject_reason_field', $output );
+	echo apply_filters( 'mdjm_add_reject_reason_field', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_add_reject_reason_field
 add_action( 'mdjm_add_comms_fields_before_file', 'mdjm_add_reject_reason_field' );

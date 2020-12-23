@@ -51,7 +51,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 	switch( $column_name ) {
 		// Date Sent
 		case 'date_sent':
-			echo date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) );
+			echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) ) );
 
 			break;
 
@@ -60,9 +60,9 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			$author = get_userdata( $post->post_author );
 
 			if ( $author )	{
-				printf( '<a href="%s">%s</a>', admin_url( "user-edit.php?user_id={$author->ID}" ), ucwords( $author->display_name ) );
+				printf( '<a href="%s">%s</a>', esc_url( admin_url( "user-edit.php?user_id={$author->ID}" ) ), esc_html( ucwords( $author->display_name ) ) );
 			} else	{
-				echo get_post_meta( $post_id, '_recipient', true );
+				echo esc_html( get_post_meta( $post_id, '_recipient', true ) );
 			}
 
 			break;
@@ -72,9 +72,9 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			$client = get_userdata( get_post_meta( $post_id, '_recipient', true ) );
 
 			if( $client )	{
-				printf( '<a href="%s">%s</a>', admin_url( "user-edit.php?user_id={$client->ID}" ), ucwords( $client->display_name ) );
+				printf( '<a href="%s">%s</a>', esc_url( admin_url( "user-edit.php?user_id={$client->ID}" ) ), esc_html( ucwords( $client->display_name ) ) );
 			} else	{
-				echo __( 'Recipient no longer exists', 'mobile-dj-manager' );
+				echo esc_html__( 'Recipient no longer exists', 'mobile-dj-manager' );
 			}
 
 			$copies = get_post_meta( $post_id, '_mdjm_copy_to', true );
@@ -86,7 +86,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 				foreach( $copies as $copy )	{
 					$user = get_user_by( 'email', $copy );
 					if ( $user )	{
-						echo "<br /><em>{$user->display_name} (copy)</em>";
+						echo "<br /><em>" . esc_html( $user->display_name ) . " (copy)</em>";
 					}
 				}
 			}
@@ -98,7 +98,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 			$event_id = get_post_meta( $post_id, '_event', true );
 
 			if ( ! empty( $event_id ) )	{
-				echo '<a href="'. get_edit_post_link( $event_id ) . '">' . mdjm_get_event_contract_id( $event_id ) . '</a>';
+				echo '<a href="'. esc_url( get_edit_post_link( $event_id ) ) . '">' . esc_html( mdjm_get_event_contract_id( $event_id ) ) . '</a>';
 			} else	{
 				esc_html_e( 'N/A', 'mobile-dj-manager' );
 			}
@@ -108,18 +108,18 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id )	{
 		// Status
 		case 'current_status':
 
-			echo get_post_status_object( $post->post_status )->label;
+			echo esc_html( get_post_status_object( $post->post_status )->label );
 
 			if ( ! empty( $post->post_modified ) && 'opened' == $post->post_status )	{
 				echo '<br />';
-				echo '<em>' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) . '</em>';
+				echo '<em>' . esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) ) . '</em>';
 			}
 
 			break;
 
 		// Source
 		case 'source':
-			echo stripslashes( get_post_meta( $post_id, '_source', true ) );
+			echo esc_html( wp_unslash( get_post_meta( $post_id, '_source', true ) ) );
 
 			break;
 	} // switch

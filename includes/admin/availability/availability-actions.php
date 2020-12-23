@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_employee_availability_check_action( $data )	{
 	if ( ! isset( $data['mdjm_nonce'] ) || ! wp_verify_nonce( $data[ 'mdjm_nonce' ], 'employee_availability_check' ) )  {
-        wp_die( __( 'Security failure', 'mobile-dj-manager' ) );
+        wp_die( esc_html__( 'Security failure', 'mobile-dj-manager' ) );
     }
 
 	if ( ! empty( $data['check_date'] ) )	{

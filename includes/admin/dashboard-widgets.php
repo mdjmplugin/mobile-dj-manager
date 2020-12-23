@@ -100,70 +100,70 @@ function mdjm_widget_events_overview() {
 						<th>&nbsp;</th>
 						<th><?php esc_html_e( 'MTD', 'mobile-dj-manager' ); ?></th>
 						<th><?php esc_html_e( 'YTD', 'mobile-dj-manager' ); ?></th>
-						<th><?php echo date( 'Y', strtotime( '-1 year' ) ); ?></th>
+						<th><?php echo esc_html( date( 'Y', strtotime( '-1 year' ) ) ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<th><?php printf( __( '%s Received', 'mobile-dj-manager' ), get_post_status_object( 'mdjm-enquiry' )->plural ); ?></th>
-						<td><?php echo $enquiry_counts['month']; ?></td>
-						<td><?php echo $enquiry_counts['this_year']; ?></td>
-						<td><?php echo $enquiry_counts['last_year']; ?></td>
+						<th><?php printf( esc_html__( '%s Received', 'mobile-dj-manager' ), esc_html( get_post_status_object( 'mdjm-enquiry' )->plural ) ); ?></th>
+						<td><?php echo esc_html( $enquiry_counts['month'] ); ?></td>
+						<td><?php echo esc_html( $enquiry_counts['this_year'] ); ?></td>
+						<td><?php echo esc_html( $enquiry_counts['last_year'] ); ?></td>
 					</tr>
 					<tr>
-						<th><?php printf( __( '%s Converted', 'mobile-dj-manager' ), get_post_status_object( 'mdjm-enquiry' )->plural ); ?></th>
-						<td><?php echo $conversion_counts['month']; ?></td>
-						<td><?php echo $conversion_counts['this_year']; ?></td>
-						<td><?php echo $conversion_counts['last_year']; ?></td>
+						<th><?php printf( esc_html__( '%s Converted', 'mobile-dj-manager' ), esc_html( get_post_status_object( 'mdjm-enquiry' )->plural ) ); ?></th>
+						<td><?php echo esc_html( $conversion_counts['month'] ); ?></td>
+						<td><?php echo esc_html( $conversion_counts['this_year'] ); ?></td>
+						<td><?php echo esc_html( $conversion_counts['last_year'] ); ?></td>
 					</tr>
 					<tr>
-						<th><?php printf( __( '%s Completed', 'mobile-dj-manager' ), mdjm_get_label_plural() ); ?></th>
-						<td><?php echo $completed_counts['month']; ?></td>
-						<td><?php echo $completed_counts['this_year']; ?></td>
-						<td><?php echo $completed_counts['last_year'];?></td>
+						<th><?php printf( esc_html__( '%s Completed', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural() ) ); ?></th>
+						<td><?php echo esc_html( $completed_counts['month'] ); ?></td>
+						<td><?php echo esc_html( $completed_counts['this_year'] ); ?></td>
+						<td><?php echo esc_html( $completed_counts['last_year'] );?></td>
 					</tr>
 					<tr>
 						<th><?php esc_html_e( 'Income', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_month ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_year ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $income_last ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $income_month ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $income_year ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $income_last ) ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php esc_html_e( 'Outgoings', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_month ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_year ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $expense_last ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $expense_month ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $expense_year ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $expense_last ) ) ); ?></td>
 					</tr>
 					<tr>
 						<th><?php esc_html_e( 'Earnings', 'mobile-dj-manager' ); ?></th>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_month ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_year ) ); ?></td>
-						<td><?php echo mdjm_currency_filter( mdjm_format_amount( $earnings_last ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $earnings_month ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $earnings_year ) ) ); ?></td>
+						<td><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $earnings_last ) ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
 
 			<p>
 				<?php printf(
-					__( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ),
-					admin_url( 'post-new.php?post_type=mdjm-event' ),
-					mdjm_get_label_singular() );
+					__( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					admin_url( 'post-new.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					mdjm_get_label_singular() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 				<?php printf(
-					__( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ),
-					admin_url( 'edit.php?post_type=mdjm-event' ),
-					mdjm_get_label_plural() );
+					__( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					admin_url( 'edit.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					mdjm_get_label_plural() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 				<?php printf(
-					__( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ),
-					admin_url( 'edit.php?post_type=mdjm-transaction' ) );
+					__( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					admin_url( 'edit.php?post_type=mdjm-transaction' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 				<?php printf(
-					__( '<a href="%s">Settings</a>', 'mobile-dj-manager' ),
-					admin_url( 'admin.php?page=mdjm-settings' ) );
+					__( '<a href="%s">Settings</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					admin_url( 'admin.php?page=mdjm-settings' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
             </p>
 
@@ -173,7 +173,7 @@ function mdjm_widget_events_overview() {
 
 				<?php foreach( $sources as $count => $source ) : ?>
 					<p>
-					 <?php printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month.', 'mobile-dj-manager' ), $source, (int) $count ); ?>
+					 <?php printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month.', 'mobile-dj-manager' ), esc_html( $source ), (int) $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 				<?php endforeach; ?>
 

@@ -64,11 +64,11 @@ $submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
             <?php $event_playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID ); ?>
             <?php $entries_in_playlist  = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
 
-            <?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) : ?> 
+            <?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) : ?>
 
                 <form id="mdjm_guest_playlist_form" class="mdjm_form" method="post">
                     <?php wp_nonce_field( 'add_guest_playlist_entry', 'mdjm_nonce', true, true ); ?>
-                    <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" id="mdjm_playlist_event" name="mdjm_playlist_event" value="<?php echo esc_attr( $mdjm_event->ID ); ?>" />
                     <input type="hidden" id="action" name="action" value="mdjm_submit_guest_playlist" />
 
                     <div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
@@ -84,10 +84,10 @@ $submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
                             <p><?php echo esc_attr( $existing_entries ); ?></p>
                             <div class="guest-playlist-entry-row-headings">
                                 <div class="guest-playlist-entry-column">
-                                    <span class="guest-playlist-entry-heading"><?php echo $artist_label; ?></span>
+                                    <span class="guest-playlist-entry-heading"><?php echo esc_html( $artist_label ); ?></span>
                                 </div>
                                 <div class="guest-playlist-entry-column">
-                                    <span class="guest-playlist-entry-heading"><?php echo $song_label; ?></span>
+                                    <span class="guest-playlist-entry-heading"><?php echo esc_html( $song_label ); ?></span>
                                 </div>
                                 <div class="guest-playlist-entry-column">
                                     <span class="guest-playlist-entry-heading"></span>

@@ -248,7 +248,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_txns ) ) {
-			echo '<p><em>' . __( 'No transactions for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No transactions for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -285,7 +285,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_value ) ) {
-			echo '<p><em>' . __( 'No transactions for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No transactions for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -320,7 +320,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
             <strong>
                 <?php
 					esc_html_e( 'Total transactions for period shown: ', 'mobile-dj-manager' );
-                    echo $this->total_txn_count;
+                    echo esc_html( $this->total_txn_count );
                 ?>
             </strong>
         </p>
@@ -328,7 +328,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
             <strong>
                 <?php
 					esc_html_e( 'Income for period shown: ', 'mobile-dj-manager' );
-                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income ) );
+                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income ) ) );
                 ?>
             </strong>
         </p>
@@ -336,7 +336,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
             <strong>
                 <?php
 					esc_html_e( 'Expenses for period shown: ', 'mobile-dj-manager' );
-                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_txn_expense ) );
+                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_expense ) ) );
                 ?>
             </strong>
         </p>
@@ -344,7 +344,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
             <strong>
                 <?php
 					esc_html_e( 'Earnings for period shown: ', 'mobile-dj-manager' );
-                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income - $this->total_txn_expense ) );
+                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income - $this->total_txn_expense ) ) );
                 ?>
             </strong>
         </p>
@@ -352,7 +352,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
             <strong>
                 <?php
 					esc_html_e( 'Total turnover for period shown: ', 'mobile-dj-manager' );
-                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income + $this->total_txn_expense ) );
+                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income + $this->total_txn_expense ) ) );
                 ?>
             </strong>
         </p>

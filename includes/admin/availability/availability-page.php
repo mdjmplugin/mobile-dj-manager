@@ -57,7 +57,7 @@ function mdjm_availability_page()	{
 							?>
 
 							<span class="mdjm-repeatable-row-actions">
-								<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+								<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</span>
 						</div>
 
@@ -101,12 +101,12 @@ function mdjm_render_availability_page_checker()	{
 				<?php esc_html_e( 'Date', 'mobile-dj-manager' );?>
 			</span>
 
-			<?php echo MDJM()->html->text( array(
+			<?php echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'     => 'display_date',
 				'id'       => 'display_date',
 				'class'    => 'mdjm_date'
 			) ); ?>
-			<?php echo MDJM()->html->hidden( array(
+			<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'  => 'check_date',
 				'id'    => 'check_date'
 			) ); ?>
@@ -115,14 +115,14 @@ function mdjm_render_availability_page_checker()	{
 		<?php if ( mdjm_employee_can( 'manage_employees' ) ) : ?>
 			<div class="mdjm-event-primary-employee">
 				<span class="mdjm-repeatable-row-setting-label">
-					<?php printf( '%s', $artist ); ?>
+					<?php printf( '%s', esc_html ( $artist  ) ); ?>
 				</span>
 
-				<?php echo MDJM()->html->employee_dropdown( array(
+				<?php echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'        => 'check_employee',
-					'group'       => mdjm_is_employer(),
+					'group'       => mdjm_is_employer(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'chosen'      => true,
-					'placeholder' => __( 'Checking all employees', 'mobile-dj-manager'  ),
+					'placeholder' => esc_html__( 'Checking all employees', 'mobile-dj-manager'  ),
 					'multiple'    => true,
 					'selected'    => array()
 				) ); ?>
@@ -133,18 +133,18 @@ function mdjm_render_availability_page_checker()	{
 					<?php esc_html_e( 'Roles', 'mobile-dj-manager' ); ?>
 				</span>
 
-				<?php echo MDJM()->html->roles_dropdown( array(
+				<?php echo MDJM()->html->roles_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'             => 'check_roles',
 					'chosen'           => true,
-					'placeholder'      => __( 'Checking all roles', 'mobile-dj-manager' ),
+					'placeholder'      => esc_html__( 'Checking all roles', 'mobile-dj-manager' ),
 					'multiple'         => true,
 					'selected'         => array()
 				) ); ?>
 			</div>
 		<?php else : ?>
-			<?php echo MDJM()->html->hidden( array(
+			<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'  => 'check_employee',
-				'value' => $employee_id
+				'value' => esc_attr( $employee_id )
 			) ); ?>
 		<?php endif; ?>
 		<br>
@@ -204,17 +204,17 @@ function mdjm_render_availability_absence_form()    {
                         <label class="mdjm-employee-id">
                             <?php esc_html_e( 'Employee', 'mobile-dj-manager' ); ?>
                         </label>
-                        <?php echo MDJM()->html->employee_dropdown( array(
+                        <?php echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'name'     => 'absence_employee_id',
-                            'selected' => $employee_id,
-                            'group'    => mdjm_is_employer(),
+                            'selected' => esc_attr( $employee_id ),
+                            'group'    => mdjm_is_employer(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'chosen'   => true
                         ) ); ?>
                     </span>
                 <?php else : ?>
-                    <?php echo MDJM()->html->hidden( array(
+                    <?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'absence_employee_id',
-                        'value' => $employee_id
+                        'value' => esc_attr( $employee_id )
                     ) ); ?>
                 <?php endif; ?>
 
@@ -222,12 +222,12 @@ function mdjm_render_availability_absence_form()    {
                     <label class="mdjm-absence-start">
                         <?php esc_html_e( 'From', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php echo MDJM()->html->text( array(
+                    <?php echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'display_absence_start',
                         'id'    => 'display_absence_start',
                         'class' => 'mdjm_date'
                     ) ); ?>
-                    <?php echo MDJM()->html->hidden( array(
+                    <?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name' => 'absence_start',
                         'id'   => 'absence_start'
                     ) ); ?>
@@ -237,12 +237,12 @@ function mdjm_render_availability_absence_form()    {
                     <label class="mdjm-absence-end">
                         <?php esc_html_e( 'To', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php echo MDJM()->html->text( array(
+                    <?php echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'display_absence_end',
                         'id'    => 'display_absence_end',
                         'class' => 'mdjm_date'
                     ) ); ?>
-                    <?php echo MDJM()->html->hidden( array(
+                    <?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name' => 'absence_end',
                         'id'   => 'absence_end'
                     ) ); ?>
@@ -253,7 +253,7 @@ function mdjm_render_availability_absence_form()    {
                         <label class="mdjm-absence-all-day">
                             <?php esc_html_e( 'All day?', 'mobile-dj-manager' ); ?>
                         </label>
-                        <?php echo MDJM()->html->checkbox( array(
+                        <?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'name'    => 'absence_all_day',
 							'current' => true
                         ) ); ?>
@@ -264,14 +264,14 @@ function mdjm_render_availability_absence_form()    {
 					<label class="mdjm-absence-start-hour">
 						<?php esc_html_e( 'Start time', 'mobile-dj-manager' ); ?>
 					</label>
-					<?php echo MDJM()->html->time_hour_select( array(
+					<?php echo MDJM()->html->time_hour_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name' => 'absence_start_time_hr'
 					) ); ?>
-					<?php echo MDJM()->html->time_minute_select( array(
+					<?php echo MDJM()->html->time_minute_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name' => 'absence_start_time_min'
 					) ); ?>
 					<?php if ( $ampm ) : ?>
-						<?php echo MDJM()->html->time_period_select( array(
+						<?php echo MDJM()->html->time_period_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name' => 'absence_start_time_period'
 						) ); ?>
 					<?php endif; ?>
@@ -281,14 +281,14 @@ function mdjm_render_availability_absence_form()    {
 					<label class="mdjm-absence-end-hour">
 						<?php esc_html_e( 'End time', 'mobile-dj-manager' ); ?>
 					</label>
-					<?php echo MDJM()->html->time_hour_select( array(
+					<?php echo MDJM()->html->time_hour_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name' => 'absence_end_time_hr'
 					) ); ?>
-					<?php echo MDJM()->html->time_minute_select( array(
+					<?php echo MDJM()->html->time_minute_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name' => 'absence_end_time_min'
 					) ); ?>
 					<?php if ( $ampm ) : ?>
-						<?php echo MDJM()->html->time_period_select( array(
+						<?php echo MDJM()->html->time_period_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name' => 'absence_end_time_period'
 						) ); ?>
 					<?php endif; ?>
@@ -299,9 +299,9 @@ function mdjm_render_availability_absence_form()    {
 					<label class="mdjm-absence-notes">
 						<?php esc_html_e( 'Notes', 'mobile-dj-manager' ); ?>
 					</label>
-					<?php echo MDJM()->html->textarea( array(
+					<?php echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'absence_notes',
-						'placeholder' => __( 'i.e. On holiday', 'mobile-dj-manager' ),
+						'placeholder' => esc_html__( 'i.e. On holiday', 'mobile-dj-manager' ),
 						'class'       => 'mdjm_form_fields'
 					) ); ?>
 				</span>

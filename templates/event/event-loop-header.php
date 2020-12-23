@@ -15,14 +15,14 @@
 ?>
 <div id="mdjm-event-loop-header">
 	<?php do_action( 'mdjm_event_loop_before_header' ); ?>
-    
-	<p><?php printf( __( 'Hello %s and welcome to the %s %s.', 'mobile-dj-manager' ),
+
+	<p><?php printf( esc_html__( 'Hello %s and welcome to the %s %s.', 'mobile-dj-manager' ),
 			'{client_firstname}',
 			'{company_name}',
 			'{application_name}' ); ?>
     </p>
-    
-    <p><?php printf( __( 'The %s you have scheduled with us are listed below...', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ); ?></p>
-    
+
+    <p><?php printf( esc_html__( 'The %s you have scheduled with us are listed below...', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural( true ) ) ); ?></p>
+
     <?php do_action( 'mdjm_event_loop_after_header' ); ?>
 </div>

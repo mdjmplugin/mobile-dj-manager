@@ -20,15 +20,15 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_process_batch_export_download() {
 
-	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'mdjm-batch-export' ) ) {
-		wp_die( __( 'Nonce verification failed', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	if ( !isset($_REQUEST['nonce']) || ! wp_verify_nonce( $_REQUEST['nonce'], 'mdjm-batch-export' ) ) {
+		wp_die( esc_html__( 'Nonce verification failed', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	require_once( MDJM_PLUGIN_DIR . '/includes/admin/reporting/export/class-batch-export.php' );
 
-	do_action( 'mdjm_batch_export_class_include', $_REQUEST['class'] );
+	do_action( 'mdjm_batch_export_class_include', sanitize_text_field( wp_unslash( $_REQUEST['class'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
-	$export = new $_REQUEST['class'];
+	$export = new $_REQUEST['class']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 	$export->export();
 
 }

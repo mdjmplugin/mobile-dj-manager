@@ -417,8 +417,8 @@ function mdjm_get_next_event( $employee_id = '' )	{
 
 	if ( ! empty( $employee_id ) && ! mdjm_employee_can( 'manage_all_events' ) && $employee_id != get_current_user_id() )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
-			'<p>' . sprintf( __( 'Your %s permissions do not permit you to search all %s!', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural( true ) ) . '</p>',
+			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
+			'<p>' . esc_html( sprintf( __( 'Your %s permissions do not permit you to search all %s!', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_label_plural( true ) ) ) . '</p>',
 			403
 		);
 	}
@@ -493,17 +493,20 @@ function mdjm_get_todays_events( $employee_id = '' )	{
 function mdjm_get_event_by_playlist_code( $access_code )	{
 	global $wpdb;
 
-	$query = "
-        SELECT `post_id`
-        AS `event_id`
-        FROM `$wpdb->postmeta`
-        WHERE `meta_value` = '$access_code'
-        LIMIT 1
-    ";
+	$event_id = $wpdb->get_var(
+		$wpdb->prepare(
+		"
+			SELECT post_id
+			AS event_id
+			FROM {$wpdb->postmeta}
+			WHERE meta_value = %s
+			LIMIT 1
+			",
+			$access_code
+		)
+	);
 
-	$result = $wpdb->get_row( $query );
-
-	return ( $result ? mdjm_get_event( $result->event_id ) : false );
+	return ( !empty( $event_id ) ? mdjm_get_event( $event_id) : false );
 } // mdjm_get_event_by_playlist_code
 
 /**
@@ -739,7 +742,7 @@ function mdjm_event_status_dropdown( $args='' )	{
 	$output .= '</select>' . "\r\n";
 
 	if( $args['return_type'] == 'list' )	{
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	return $output;
@@ -876,7 +879,7 @@ function mdjm_enquiry_sources_dropdown( $args )	{
 	$output .= '</select>';
 
 	if ( ! empty( $args['echo'] ) )	{
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else	{
 		return $output;
 	}
@@ -961,7 +964,7 @@ function mdjm_event_types_dropdown( $args )	{
 	$output .= '</select>';
 
 	if ( ! empty( $args['echo'] ) )	{
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else	{
 		return $output;
 	}
@@ -1542,12 +1545,12 @@ function mdjm_do_event_txn_table( $event_id )	{
                 <?php $txn = new MDJM_Txn( $event_txn->ID ); ?>
 
                 <tr class="mdjm_field_wrapper">
-                    <td><a href="<?php echo get_edit_post_link( $txn->ID ); ?>"><?php echo mdjm_format_short_date( $txn->post_date ); ?></a></td>
+                    <td><a href="<?php echo esc_url( get_edit_post_link( $txn->ID ) ); ?>"><?php echo esc_html( mdjm_format_short_date( $txn->post_date ) ); ?></a></td>
                     <td><?php echo esc_attr( mdjm_get_txn_recipient_name( $txn->ID ) ); ?></td>
                     <td>
                         <?php if ( $txn->post_status == 'mdjm-income' ) : ?>
                             <?php $in += mdjm_sanitize_amount( $txn->price ); ?>
-                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                            <?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $txn->price ) ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>
                         <?php endif; ?>
@@ -1555,17 +1558,17 @@ function mdjm_do_event_txn_table( $event_id )	{
                     <td>
                         <?php if ( $txn->post_status == 'mdjm-expenditure' ) : ?>
                             <?php $out += mdjm_sanitize_amount( $txn->price ); ?>
-                            <?php echo mdjm_currency_filter( mdjm_format_amount( $txn->price ) ); ?>
+                            <?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $txn->price ) ) ); ?>
                         <?php else : ?>
                             <?php echo '&ndash;' ?>
                         <?php endif; ?>
                     </td>
-                    <td><?php echo $txn->get_type(); ?></td>
+                    <td><?php echo esc_html( $txn->get_type() ); ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else : ?>
         <tr>
-            <td colspan="5"><?php printf( __( 'There are currently no transactions for this %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ); ?></td>
+            <td colspan="5"><?php printf( esc_html__( 'There are currently no transactions for this %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ); ?></td>
         </tr>
         <?php endif; ?>
         </tbody>
@@ -1573,9 +1576,9 @@ function mdjm_do_event_txn_table( $event_id )	{
         <tr>
             <th style="width: 20%">&nbsp;</th>
             <th style="width: 20%">&nbsp;</th>
-            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $in ) ); ?></strong></th>
-            <th style="width: 15%"><strong><?php echo mdjm_currency_filter( mdjm_format_amount( $out ) ); ?></strong></th>
-            <th><strong><?php printf( __( '%s Earnings:', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?> <?php echo mdjm_currency_filter( mdjm_format_amount( ( $in - $out ) ) ); ?></strong></th>
+            <th style="width: 15%"><strong><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $in ) ) ); ?></strong></th>
+            <th style="width: 15%"><strong><?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( $out ) ) ); ?></strong></th>
+            <th><strong><?php printf( esc_html__( '%s Earnings:', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?> <?php echo esc_html( mdjm_currency_filter( mdjm_format_amount( ( $in - $out ) ) ) ); ?></strong></th>
         </tr>
         <?php do_action( 'mdjm_event_txn_table_foot', $event_id ); ?>
         </tfoot>

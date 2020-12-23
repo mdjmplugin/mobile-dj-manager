@@ -188,15 +188,15 @@ function mdjm_package_metabox_availability_employee_row( $post )	{
 		<?php if ( mdjm_is_employer() ) : ?>
             <div id="package-employee-select" class="mdjm_col col2">
                 <p><label for="_package_employees"><?php esc_html_e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
-                <?php echo MDJM()->html->employee_dropdown( array(
+                <?php echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'             => '_package_employees',
-                    'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ),
+                    'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'show_option_none' => false,
-                    'show_option_all'  => __( 'All Employees', 'mobile-dj-manager' ),
+                    'show_option_all'  => esc_html__( 'All Employees', 'mobile-dj-manager' ),
                     'group'            => true,
 					'chosen'           => true,
                     'multiple'         => true,
-                    'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
+                    'placeholder'      => esc_html__( 'Click to select employees', 'mobile-dj-manager' )
                 ) ); ?></p>
             </div>
         <?php else : ?>
@@ -204,15 +204,15 @@ function mdjm_package_metabox_availability_employee_row( $post )	{
         <?php endif; ?>
 
 			<div id="package-event-type" class="mdjm_col col2">
-				<p><label for="_package_event_types"><?php printf( __( 'Available for %s types', 'mobile-dj-manager' ), $event_label ); ?></label><br />
-                <?php echo MDJM()->html->event_type_dropdown( array(
+				<p><label for="_package_event_types"><?php printf( esc_html__( 'Available for %s types', 'mobile-dj-manager' ), esc_html( $event_label ) ); ?></label><br />
+                <?php echo MDJM()->html->event_type_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'             => '_package_event_types',
-                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ),
+                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'show_option_none' => false,
-                    'show_option_all'  => sprintf( __( 'All %s Types', 'mobile-dj-manager' ), ucfirst( $event_label ) ),
+                    'show_option_all'  => sprintf( esc_html__( 'All %s Types', 'mobile-dj-manager' ), esc_html( ucfirst( $event_label ) ) ),
                     'multiple'         => true,
 					'chosen'           => true,
-                    'placeholder'      => sprintf( __( 'Click to select %s types', 'mobile-dj-manager' ), $event_label )
+                    'placeholder'      => sprintf( esc_html__( 'Click to select %s types', 'mobile-dj-manager' ), esc_html( $event_label ) )
                 ) ); ?></p>
 			</div>
 	</div>
@@ -236,22 +236,22 @@ function mdjm_package_metabox_availability_period_row( $post )	{
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
         <div id="package-date-restrict">
-        	 <p><?php echo MDJM()->html->checkbox( array(
+        	 <p><?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => '_package_restrict_date',
-				'current'  => $restricted
+				'current'  => $restricted // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ) ); ?>
             <label for="_package_restrict_date"><?php esc_html_e( 'Select if this package is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
         </div>
 
-        <div id="mdjm-package-month-selection"<?php echo $class; ?>>
+        <div id="mdjm-package-month-selection"<?php echo $class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
         	 <p><label for="_package_months"><?php esc_html_e( 'Select the months this package is available', 'mobile-dj-manager' ); ?></label><br />
-                <?php echo MDJM()->html->month_dropdown( array(
+                <?php echo MDJM()->html->month_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'        => '_package_months',
-					'selected'    => mdjm_get_package_months_available( $post->ID ),
+					'selected'    => mdjm_get_package_months_available( $post->ID ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'fullname'    => true,
 					'multiple'    => true,
 					'chosen'      => true,
-					'placeholder' => __( 'Select Months', 'mobile-dj-manager' )
+					'placeholder' => esc_html__( 'Select Months', 'mobile-dj-manager' )
 				) ); ?></p>
         </div>
     </div>
@@ -330,15 +330,15 @@ function mdjm_package_metabox_item_row( $item, $post_id ) {
 
 	?>
 	<td>
-		<?php echo MDJM()->html->addons_dropdown( array(
+		<?php echo MDJM()->html->addons_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'name'             => '_package_items[]',
-			'selected'         => ! empty( $item ) ? $item : '',
+			'selected'         => ! empty( $item ) ? $item : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'show_option_none' => false,
 			'show_option_all'  => false,
 			'employee'         => false,
 			'chosen'           => true,
 			'class'            => 'package-items',
-			'placeholder'      => __( 'Select an add-on', 'mobile-dj-manager' ),
+			'placeholder'      => esc_html__( 'Select an add-on', 'mobile-dj-manager' ),
 			'cost'             => false,
 			'desc'             => 7,
 			'blank_first'      => true,
@@ -349,7 +349,7 @@ function mdjm_package_metabox_item_row( $item, $post_id ) {
 	<?php do_action( 'mdjm_package_item_table_row', $post_id, $item ); ?>
 
 	<td>
-		<a href="#" class="mdjm_remove_repeatable" data-type="item" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+		<a href="#" class="mdjm_remove_repeatable" data-type="item" style="background: url(<?php echo esc_url( admin_url('/images/xit.gif') ); ?>) no-repeat;">&times;</a>
 	</td>
 	<?php
 } // mdjm_package_metabox_item_row
@@ -383,29 +383,29 @@ function mdjm_package_metabox_pricing_options_row( $post )	{
 					'placeholder' => mdjm_format_amount( '10.00' )
 				);
 			?>
-			<p><label for="<?php echo $price_args['name']; ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
+			<p><label for="<?php echo esc_attr( $price_args['name'] ); ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
 			<?php if ( $currency_position == 'before' ) : ?>
-				<?php echo mdjm_currency_filter( '' ); ?>
-				<?php echo MDJM()->html->text( $price_args ); ?>
+				<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
+				<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<?php else : ?>
-				<?php echo MDJM()->html->text( $price_args ); ?>
-				<?php echo mdjm_currency_filter( '' ); ?>
+				<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
 			<?php endif; ?></p>
 
 			<?php do_action( 'mdjm_package_price_field', $post->ID ); ?>
 		</div>
 		<?php do_action( 'mdjm_after_package_price_field', $post->ID ); ?>
         <div id="package-variable-price">
-        	<p><?php echo MDJM()->html->checkbox( array(
+        	<p><?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'    => '_package_variable_pricing',
-				'current' => $variable
+				'current' => $variable // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ) ); ?>
             <label for="_package_variable_pricing"><?php esc_html_e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
         <?php do_action( 'mdjm_after_package_variable_pricing_field', $post->ID ); ?>
     </div>
 
-	<div id="mdjm-package-variable-price-fields" class="mdjm_pricing_fields" <?php echo $variable_display; ?>>
+	<div id="mdjm-package-variable-price-fields" class="mdjm_pricing_fields" <?php echo $variable_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<input type="hidden" id="mdjm_variable_prices" class="mdjm_variable_prices_name_field" value="" />
         <div id="mdjm_price_fields" class="mdjm_meta_table_wrap">
 			<table class="widefat mdjm_repeatable_table">
@@ -480,13 +480,13 @@ function mdjm_package_metabox_price_row( $key, $args, $post_id, $index ) {
 
 ?>
 	<td>
-		<?php echo MDJM()->html->month_dropdown( array(
-			'name'        => '_package_variable_prices[' . $key . '][months]',
-			'selected'    => ! empty( $args['months'] ) ? $args['months'] : '',
+		<?php echo MDJM()->html->month_dropdown( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			'name'        => '_package_variable_prices[' . esc_attr( $key ) . '][months]',
+			'selected'    => ! empty( $args['months'] ) ? $args['months'] : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'fullname'    => true,
 			'multiple'    => true,
 			'chosen'      => true,
-			'placeholder' => __( 'Select Months', 'mobile-dj-manager' )
+			'placeholder' => esc_html__( 'Select Months', 'mobile-dj-manager' )
 		) ); ?>
 	</td>
 
@@ -501,18 +501,18 @@ function mdjm_package_metabox_price_row( $key, $args, $post_id, $index ) {
 		?>
 
 		<?php if( $currency_position == 'before' ) : ?>
-			<span><?php echo mdjm_currency_filter( '' ); ?></span>
-			<?php echo MDJM()->html->text( $price_args ); ?>
+			<span><?php echo esc_html( mdjm_currency_filter( '' ) ); ?></span>
+			<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php else : ?>
-			<?php echo MDJM()->html->text( $price_args ); ?>
-			<?php echo mdjm_currency_filter( '' ); ?>
+			<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
 		<?php endif; ?>
 	</td>
 
 	<?php do_action( 'mdjm_package_price_table_row', $post_id, $key, $args ); ?>
 
 	<td>
-		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo esc_url( admin_url('/images/xit.gif') ); ?>) no-repeat;">&times;</a>
 	</td>
 	<?php
 } // mdjm_package_metabox_price_row
@@ -670,15 +670,15 @@ function mdjm_addon_metabox_availability_employee_row( $post )	{
 		<?php if ( mdjm_is_employer() ) : ?>
             <div id="addon-employee-select" class="mdjm_col col2">
                 <p><label for="_addon_employees"><?php esc_html_e( 'Employees with this package', 'mobile-dj-manager' ); ?></label><br />
-                <?php echo MDJM()->html->employee_dropdown( array(
+                <?php echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'             => '_addon_employees',
-                    'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ),
+                    'selected'         => ! empty( $employees_with ) ? $employees_with : array( 'all' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'show_option_none' => false,
-                    'show_option_all'  => __( 'All Employees', 'mobile-dj-manager' ),
+                    'show_option_all'  => esc_html__( 'All Employees', 'mobile-dj-manager' ),
                     'group'            => true,
 					'chosen'           => true,
                     'multiple'         => true,
-                    'placeholder'      => __( 'Click to select employees', 'mobile-dj-manager' )
+                    'placeholder'      => esc_html__( 'Click to select employees', 'mobile-dj-manager' )
                 ) ); ?></p>
             </div>
         <?php else : ?>
@@ -686,15 +686,15 @@ function mdjm_addon_metabox_availability_employee_row( $post )	{
         <?php endif; ?>
 
 			<div id="addon-event-type" class="mdjm_col col2">
-				<p><label for="_addon_event_types"><?php printf( __( 'Available for %s types', 'mobile-dj-manager' ), $event_label ); ?></label><br />
-                <?php echo MDJM()->html->event_type_dropdown( array(
+				<p><label for="_addon_event_types"><?php printf( esc_html__( 'Available for %s types', 'mobile-dj-manager' ), esc_html( $event_label ) ); ?></label><br />
+                <?php echo MDJM()->html->event_type_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'             => '_addon_event_types',
-                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ),
+                    'selected'         => ! empty( $event_types ) ? $event_types : array( 'all' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'show_option_none' => false,
-                    'show_option_all'  => sprintf( __( 'All %s Types', 'mobile-dj-manager' ), ucfirst( $event_label ) ),
+                    'show_option_all'  => sprintf( esc_html__( 'All %s Types', 'mobile-dj-manager' ), esc_html( ucfirst( $event_label ) ) ),
                     'multiple'         => true,
 					'chosen'           => true,
-                    'placeholder'      => sprintf( __( 'Click to select %s types', 'mobile-dj-manager' ), $event_label )
+                    'placeholder'      => sprintf( esc_html__( 'Click to select %s types', 'mobile-dj-manager' ), esc_html( $event_label ) )
                 ) ); ?></p>
 			</div>
 	</div>
@@ -718,22 +718,22 @@ function mdjm_addon_metabox_availability_period_row( $post )	{
 	?>
     <div class="mdjm_field_wrap mdjm_form_fields">
         <div id="addon-date-restrict">
-        	 <p><?php echo MDJM()->html->checkbox( array(
+        	 <p><?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => '_addon_restrict_date',
-				'current'  => $restricted
+				'current'  => $restricted // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ) ); ?>
             <label for="_addon_restrict_date"><?php esc_html_e( 'Select if this add-on is only available during certain months of the year', 'mobile-dj-manager' ); ?></label></p>
         </div>
 
-        <div id="mdjm-addon-month-selection"<?php echo $class; ?>>
+        <div id="mdjm-addon-month-selection"<?php echo $class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
         	 <p><label for="_addon_months"><?php esc_html_e( 'Select the months this add-on is available', 'mobile-dj-manager' ); ?></label><br />
-                <?php echo MDJM()->html->month_dropdown( array(
+                <?php echo MDJM()->html->month_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'        => '_addon_months',
-					'selected'    => mdjm_get_addon_months_available( $post->ID ),
+					'selected'    => mdjm_get_addon_months_available( $post->ID ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'fullname'    => true,
 					'multiple'    => true,
 					'chosen'      => true,
-					'placeholder' => __( 'Select Months', 'mobile-dj-manager' )
+					'placeholder' => esc_html__( 'Select Months', 'mobile-dj-manager' )
 				) ); ?></p>
         </div>
     </div>
@@ -771,29 +771,29 @@ function mdjm_addon_metabox_pricing_options_row( $post )	{
 					'desc'        => __( 'Will be used if variable pricing is not in use, or for months that are not defined within variable pricing', 'mobile-dj-manager' ),
 				);
 			?>
-			<p><label for="<?php echo $price_args['name']; ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
+			<p><label for="<?php echo esc_attr( $price_args['name'] ); ?>"><?php esc_html_e( 'Standard Price', 'mobile-dj-manager' ); ?></label><br />
 			<?php if ( $currency_position == 'before' ) : ?>
-				<?php echo mdjm_currency_filter( '' ); ?>
-				<?php echo MDJM()->html->text( $price_args ); ?>
+				<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
+				<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<?php else : ?>
-				<?php echo MDJM()->html->text( $price_args ); ?>
-				<?php echo mdjm_currency_filter( '' ); ?>
+				<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
 			<?php endif; ?></p>
 
 			<?php do_action( 'mdjm_addon_price_field', $post->ID ); ?>
 		</div>
 		<?php do_action( 'mdjm_after_addon_price_field', $post->ID ); ?>
         <div id="addon-variable-price">
-        	<p><?php echo MDJM()->html->checkbox( array(
+        	<p><?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'    => '_addon_variable_pricing',
-				'current' => $variable
+				'current' => $variable // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ) ); ?>
             <label for="_addon_variable_pricing"><?php esc_html_e( 'Enable variable pricing', 'mobile-dj-manager' ); ?></label></p>
         </div>
         <?php do_action( 'mdjm_after_addon_variable_pricing_field', $post->ID ); ?>
     </div>
 
-	<div id="mdjm-addon-variable-price-fields" class="mdjm_pricing_fields" <?php echo $variable_display; ?>>
+	<div id="mdjm-addon-variable-price-fields" class="mdjm_pricing_fields" <?php echo $variable_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<input type="hidden" id="mdjm_variable_prices" class="mdjm_variable_prices_name_field" value=""/>
         <div id="mdjm_price_fields" class="mdjm_meta_table_wrap">
 			<table class="widefat mdjm_repeatable_table">
@@ -868,13 +868,13 @@ function mdjm_addon_metabox_price_row( $key, $args, $post_id, $index ) {
 
 ?>
 	<td>
-		<?php echo MDJM()->html->month_dropdown( array(
-			'name'        => '_addon_variable_prices[' . $key . '][months]',
-			'selected'    => ! empty( $args['months'] ) ? $args['months'] : '',
+		<?php echo MDJM()->html->month_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			'name'        => '_addon_variable_prices[' . esc_attr( $key ) . '][months]',
+			'selected'    => ! empty( $args['months'] ) ? $args['months'] : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'fullname'    => true,
 			'multiple'    => true,
 			'chosen'      => true,
-			'placeholder' => __( 'Select Months', 'mobile-dj-manager' )
+			'placeholder' => esc_html__( 'Select Months', 'mobile-dj-manager' )
 		) ); ?>
 	</td>
 
@@ -889,18 +889,18 @@ function mdjm_addon_metabox_price_row( $key, $args, $post_id, $index ) {
 		?>
 
 		<?php if( $currency_position == 'before' ) : ?>
-			<span><?php echo mdjm_currency_filter( '' ); ?></span>
-			<?php echo MDJM()->html->text( $price_args ); ?>
+			<span><?php echo esc_html( mdjm_currency_filter( '' ) ); ?></span>
+			<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php else : ?>
-			<?php echo MDJM()->html->text( $price_args ); ?>
-			<?php echo mdjm_currency_filter( '' ); ?>
+			<?php echo MDJM()->html->text( $price_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo esc_html( mdjm_currency_filter( '' ) ); ?>
 		<?php endif; ?>
 	</td>
 
 	<?php do_action( 'mdjm_addon_price_table_row', $post_id, $key, $args ); ?>
 
 	<td>
-		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+		<a href="#" class="mdjm_remove_repeatable" data-type="price" style="background: url(<?php echo esc_url( admin_url('/images/xit.gif') ); ?>) no-repeat;">&times;</a>
 	</td>
 	<?php
 }

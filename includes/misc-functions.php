@@ -177,15 +177,15 @@ function mdjm_insert_datepicker( $args = array() )	{
 	?>
     <script type="text/javascript">
 	jQuery(document).ready( function($)	{
-		$("<?php echo $field; ?>").datepicker({
-			dateFormat  : "<?php echo mdjm_format_datepicker_date(); ?>",
-			altField    : "#<?php echo $args['altfield']; ?>",
-			altFormat   : "<?php echo $args['altformat']; ?>",
-			firstDay    : "<?php echo $args['firstday']; ?>",
-			changeYear  : "<?php echo $args['changeyear']; ?>",
-			changeMonth : "<?php echo $args['changemonth']; ?>",
-			minDate     : "<?php echo ( isset( $args['mindate'] ) ) ? $args['mindate'] : '' ; ?>",
-			maxDate     : "<?php echo ( isset( $args['maxdate'] ) ) ? $args['maxdate'] : '' ; ?>"
+		$("<?php echo esc_html( $field ); ?>").datepicker({
+			dateFormat  : "<?php echo esc_attr( mdjm_format_datepicker_date() ); ?>",
+			altField    : "#<?php echo esc_attr( $args['altfield'] ); ?>",
+			altFormat   : "<?php echo esc_attr( $args['altformat'] ); ?>",
+			firstDay    : "<?php echo esc_attr( $args['firstday'] ); ?>",
+			changeYear  : "<?php echo esc_attr( $args['changeyear'] ); ?>",
+			changeMonth : "<?php echo esc_attr( $args['changemonth'] ); ?>",
+			minDate     : "<?php echo ( isset( $args['mindate'] ) ) ? esc_attr( $args['mindate'] ) : '' ; ?>",
+			maxDate     : "<?php echo ( isset( $args['maxdate'] ) ) ? esc_attr( $args['maxdate'] ) : '' ; ?>"
 		});
 	});
 	</script>
@@ -273,7 +273,7 @@ function mdjm_is_func_disabled( $function ) {
  */
 function mdjm_get_current_page_url() {
 	$scheme = is_ssl() ? 'https' : 'http';
-	$uri    = esc_url( site_url( $_SERVER['REQUEST_URI'], $scheme ) );
+	$uri    = esc_url( site_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), $scheme ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 	if ( is_front_page() )	{
 		$uri = home_url();
@@ -292,11 +292,11 @@ function mdjm_get_current_page_url() {
  */
 function mdjm_get_user_ip()	{
 	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) )	{
-		$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+		$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )	{
-		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 	} else {
-		$ip_address = $_SERVER['REMOTE_ADDR'];
+		$ip_address = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	}
 
 	return apply_filters( 'mdjm_get_user_ip', $ip_address );
@@ -337,12 +337,12 @@ function mdjm_print_notices()	{
 
 	if ( isset( $_GET['event_id'] ) )	{
 
-		$mdjm_event = new MDJM_Event( $_GET['event_id'] );
+		$mdjm_event = new MDJM_Event( absint( wp_unslash( $_GET['event_id'] ) ) );
 
-		echo mdjm_do_content_tags( mdjm_display_notice( $_GET['mdjm_message'] ), $mdjm_event->ID, $mdjm_event->client );
+		echo mdjm_do_content_tags( mdjm_display_notice( sanitize_text_field( wp_unslash( $_GET['mdjm_message'] ) ) ), $mdjm_event->ID, $mdjm_event->client ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	} else	{
-		echo mdjm_display_notice( $_GET['mdjm_message'] );
+		echo mdjm_display_notice( sanitize_text_field( wp_unslash( $_GET['mdjm_message'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 } // mdjm_print_notices
 add_action( 'mdjm_print_notices', 'mdjm_print_notices' );
@@ -522,7 +522,7 @@ function mdjm_messages( $key )	{
  */
 function mdjm_do_honeypot_check( $data )	{
 	if ( ! empty( $data['mdjm_honeypot'] ) )	{
-		wp_die( __( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'mobile-dj-manager' ) );
+		wp_die( esc_html__( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'mobile-dj-manager' ) );
 	}
 
 	return;

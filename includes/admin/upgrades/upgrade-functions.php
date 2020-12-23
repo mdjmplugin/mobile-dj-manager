@@ -103,7 +103,7 @@ function mdjm_show_upgrade_notice()	{
 
 		$resume_url = add_query_arg( $resume_upgrade, admin_url( 'index.php' ) );
 		printf(
-			'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to complete an upgrade that was previously started. Click <a href="%s">here</a> to resume the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+			'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to complete an upgrade that was previously started. Click <a href="%s">here</a> to resume the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_url( $resume_url )
 		);
 
@@ -111,31 +111,31 @@ function mdjm_show_upgrade_notice()	{
 
 		if ( version_compare( $mdjm_version, '1.4', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_packages' ) )	{
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %s Packages and Add-ons. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
-				mdjm_get_label_singular( true ),
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %s Packages and Add-ons. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_html( mdjm_get_label_singular( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_packages&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
 		if ( version_compare( $mdjm_version, '1.4.7', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_tasks' ) )	{
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
-				mdjm_get_label_plural( true ),
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_html( mdjm_get_label_plural( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_tasks&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
         if ( version_compare( $mdjm_version, '1.5', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_pricing_15' ) )	{
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
-				mdjm_get_label_plural( true ),
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_html( mdjm_get_label_plural( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_pricing_15&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
         if ( version_compare( $mdjm_version, '1.5.6', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_availability_db_156' ) )	{
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the availability database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>',
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the availability database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_availability_db_156&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
@@ -164,7 +164,7 @@ add_action( 'admin_notices', 'mdjm_show_upgrade_notice' );
 function mdjm_trigger_upgrades() {
 
 	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	update_option( 'mdjm_version', MDJM_VERSION_NUM );
@@ -226,7 +226,7 @@ function mdjm_v14_upgrades()	{
 	global $wpdb;
 
 	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -384,7 +384,7 @@ function mdjm_v14_upgrade_event_packages()	{
 	$number   = 50;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
 	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
 	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
 
 	if ( $step < 2 ) {
@@ -497,7 +497,7 @@ function mdjm_v143_upgrades()	{
 	global $wpdb;
 
 	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -536,7 +536,7 @@ function mdjm_v143_upgrades()	{
  */
 function mdjm_v147_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -621,7 +621,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 	$number   = 20;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
 	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( ['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
 	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
 
 	if ( $step < 2 ) {
@@ -721,7 +721,7 @@ add_action( 'mdjm-upgrade_event_tasks', 'mdjm_v147_upgrade_event_tasks' );
  */
 function mdjm_v15_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -801,7 +801,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 	$number   = 20;
 	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
 	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )       : admin_url( 'edit.php?post_type=mdjm-event' );
 	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
 
 	if ( $step < 2 ) {
@@ -911,7 +911,7 @@ add_action( 'mdjm-upgrade_event_pricing_15', 'mdjm_v15_upgrade_event_pricing' );
  */
 function mdjm_v154_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -945,7 +945,7 @@ function mdjm_v154_upgrades()	{
  */
 function mdjm_v156_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -1006,7 +1006,7 @@ function mdjm_v156_upgrade_availability_db()	{
 	$number    = 10;
 	$step      = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
 	$offset    = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect  = isset( $_GET['redirect'] ) ? $_GET['redirect']       : admin_url( 'edit.php?post_type=mdjm-event' );
+	$redirect  = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
 	$message   = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
 	$old_table = $wpdb->prefix . 'mdjm_avail';
 
@@ -1110,7 +1110,7 @@ add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_
  */
 function mdjm_v157_upgrades()	{
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
-		wp_die( __( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );

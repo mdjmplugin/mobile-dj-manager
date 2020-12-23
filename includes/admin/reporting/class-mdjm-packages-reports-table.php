@@ -218,7 +218,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . __( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -255,7 +255,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_earnings ) ) {
-			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please

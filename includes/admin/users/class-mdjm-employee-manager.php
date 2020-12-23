@@ -3,8 +3,8 @@
 
 	if( !mdjm_employee_can( 'manage_employees' ) )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
-			'<p>' . __( 'You do not have permission to manage employees or permissions.', 'mobile-dj-manager' ) . '</p>',
+			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
+			'<p>' . esc_html__( 'You do not have permission to manage employees or permissions.', 'mobile-dj-manager' ) . '</p>',
 			403
 		);
 	}
@@ -45,7 +45,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 				<option value=""><?php esc_html_e( 'Change role to', 'mobile-dj-manager' ); ?>&hellip;</option>
 				<?php
 				add_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
-				echo MDJM()->roles->roles_dropdown();
+				echo MDJM()->roles->roles_dropdown(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				remove_filter( 'mdjm_user_roles', array( MDJM()->roles, 'no_admin_role' ) );
 				?>
 			</select>
@@ -138,12 +138,12 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 * @return	str		The HTML output for the checkbox column
 	 */
 	public function column_cb( $item ) {
-		echo '<input type="checkbox" name="employees[]" id="employees-' . $item->ID . '"';
+		echo '<input type="checkbox" name="employees[]" id="employees-' . esc_attr( $item->ID ) . '"';
 
 		if( in_array( 'administrator', $item->roles ) )
 			echo ' disabled="disabled"';
 
-		echo ' value="' . $item->ID . '" />';
+		echo ' value="' . esc_attr( $item->ID ) . '" />';
 	} // column_cb
 
 	/**
@@ -159,21 +159,21 @@ class MDJM_Employee_Table extends WP_List_Table {
 		}
 
 		if( ! empty( $edit_users ) )	{
-			echo '<a href="' . get_edit_user_link( $item->ID ) . '">';
+			echo '<a href="' . esc_url( get_edit_user_link( $item->ID ) ) . '">';
 		}
 
-		echo $item->display_name;
+		echo esc_html( $item->display_name );
 
 		if( !empty( $edit_users ) )	{
 			echo '</a>';
 		}
 
 		if ( mdjm_is_admin( $item->ID ) )	{
-			echo '<br />' . __( '<em>MDJM Admin</em>', 'mobile-dj-manager' );
+			echo '<br />' . __( '<em>MDJM Admin</em>', 'mobile-dj-manager' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		if ( user_can( $item->ID, 'administrator' ) )	{
-			echo '<br />' . __( '<em>WordPress Admin</em>', 'mobile-dj-manager' );
+			echo '<br />' . __( '<em>WordPress Admin</em>', 'mobile-dj-manager' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 	} // column_name
@@ -207,9 +207,9 @@ class MDJM_Employee_Table extends WP_List_Table {
 			foreach( $roles as $role_id => $role )	{
 
 				printf( '%s%s%s',
-					$item->roles[0] != $role_id ? '<span style="font-style: italic;">' : '',
-					translate_user_role( $wp_roles->roles[ $role_id ]['name'] ),
-					$item->roles[0] != $role_id ? '</span>' : ''
+					esc_attr( $item->roles[0]) != $role_id ? '<span style="font-style: italic;">' : '',
+					esc_html( translate_user_role( $wp_roles->roles[ $role_id ]['name'] ) ),
+					esc_attr( $item->roles[0] ) != $role_id ? '</span>' : ''
 				);
 
 				if( $i < count( $roles ) )
@@ -220,7 +220,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 			}
 
 		} else	{
-			echo __( 'No role assigned', 'mobile-dj-manager' );
+			echo esc_html__( 'No role assigned', 'mobile-dj-manager' );
 		}
 
 	} // column_role
@@ -238,18 +238,18 @@ class MDJM_Employee_Table extends WP_List_Table {
 
 		printf(
 			__( 'Next: %s', 'mobile-dj-manager' ),
-			! empty( $next_event ) ? '<a href="' . get_edit_post_link( $next_event->ID ) . '">' .
-			mdjm_format_short_date( get_post_meta( $next_event->ID, '_mdjm_event_date', true ) ) . '</a>' :
-			__( 'None', 'mobile-dj-manager' )
+			! empty( $next_event ) ? '<a href="' . esc_url( get_edit_post_link( $next_event->ID ) ) . '">' .
+			esc_html( mdjm_format_short_date( get_post_meta( $next_event->ID, '_mdjm_event_date', true ) ) ) . '</a>' :
+			esc_html__( 'None', 'mobile-dj-manager' )
 		);
 
 		echo '<br />';
 
 		printf(
 			__( 'Total: %s', 'mobile-dj-manager' ),
-			! empty( $total_events ) ? '<a href="' . admin_url( 'edit.php?s&post_type=mdjm-event&post_status=all' .
+			! empty( $total_events ) ? '<a href="' . esc_url( admin_url( 'edit.php?s&post_type=mdjm-event&post_status=all' .
 				'&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
-				'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) . '">' . $total_events . '</a>' :
+				'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) ) . '">' . esc_html( $total_events ) . '</a>' :
 				'0'
 		);
 	} // column_events
@@ -263,10 +263,10 @@ class MDJM_Employee_Table extends WP_List_Table {
 	 */
 	public function column_login( $item ) {
 		if( '' != get_user_meta( $item->ID, 'last_login', true ) )
-			echo date_i18n( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) );
+			echo esc_html( date_i18n( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) ) );
 
 		else
-			echo __( 'Never', 'mobile-dj-manager' );
+			echo esc_html__( 'Never', 'mobile-dj-manager' );
 	} // column_login
 
 	/**
@@ -334,7 +334,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 
 		if( 'delete' === $this->current_action() && !empty( $_POST['employees'] ) )	{
 
-			foreach( $_POST['employees'] as $user_id )	{
+			foreach( array_map('sanitize_text_field', wp_unslash( $_POST['employees'] ) ) as $user_id )	{
 				MDJM()->debug->log_it( 'Deleting employee with ID ' . $user_id, true );
 				wp_delete_user( $user_id );
 			}
@@ -348,7 +348,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 
 			if( 'add_role_' . $role_id === $this->current_action() && !empty( $_POST['employees'] ) )	{
 
-				foreach( $_POST['employees'] as $user_id )	{
+				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['employees'] ) ) as $user_id )	{
 
 					MDJM()->debug->log_it( 'Adding additional role ' . $role . ' to user ' . $user_id, true );
 
@@ -401,8 +401,8 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 			// Listen for post requests
 			// Update the user role
 			if( isset( $_POST['change_role'], $_POST['new_role'], $_POST['employees'] ) )	{
-				foreach( $_POST['employees'] as $employee )	{
-					mdjm_set_employee_role( $employee, $_POST['new_role'] );
+				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['employees'] ) ) as $employee )	{
+					mdjm_set_employee_role( $employee, sanitize_text_field( wp_unslash( $_POST['new_role'] ) ) );
 				}
 
 				mdjm_update_notice( 'updated', __( 'Employee roles updated.', 'mobile-dj-manager' ), true );
@@ -413,12 +413,12 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 			self::$all_roles = $wp_roles;
 
 			// Filter our search by role if we need to
-			self::$display_role = ! empty( $_GET['display_role'] ) ? $_GET['display_role'] : '';
-			self::$orderby      = ! empty( $_GET['orderby']      ) ? $_GET['orderby']      : '';
-			self::$order        = ! empty( $_GET['order']        ) ? $_GET['order']        : '';
+			self::$display_role = ! empty( $_GET['display_role'] ) ? sanitize_text_field( wp_unslash( $_GET['display_role'] ) ) : '';
+			self::$orderby      = ! empty( $_GET['orderby']      ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) )      : '';
+			self::$order        = ! empty( $_GET['order']        ) ? sanitize_text_field( wp_unslash( $_GET['order'] ) )        : '';
 
 			// Which tab?
-			self::$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'user_roles';
+			self::$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'user_roles';
 
 			// Display the page tabs
 			self::page_header();
@@ -456,7 +456,7 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 			$employees = array();
 
 			$args = array(
-				'search'         => '*' . $_POST['s'] . '*',
+				'search'         => '*' . sanitize_text_field( wp_unslash( $_POST['s'] ) ) . '*', // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				'role__in'       => $roles
 			);
 
@@ -521,7 +521,7 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 			<select name="all_roles[]" id="all_roles" multiple="multiple" style="min-width: 250px; height: auto;">
 			<?php
 			// Display the roles
-			echo MDJM()->roles->roles_dropdown( array( 'disable_default' => true ) );
+			echo MDJM()->roles->roles_dropdown( array( 'disable_default' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 			</select>
 			<br />
@@ -586,7 +586,7 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 			<select name="employee_role" id="employee_role" required>
                 <option value=""><?php esc_attr_e( 'Select Role', 'mobile-dj-manager' ); ?>&hellip;</option>
                 <?php
-                echo MDJM()->roles->roles_dropdown();
+                echo MDJM()->roles->roles_dropdown(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 ?>
             </select>
             </td>
@@ -628,164 +628,164 @@ if( ! class_exists( 'MDJM_Employee_Manager' ) ) :
 
 				$caps = get_role( $role_id );
 
-				echo '<input type="hidden" name="employee_roles[]" value="' . $role_id . '" />' . "\r\n";
+				echo '<input type="hidden" name="employee_roles[]" value="' . esc_attr( $role_id ) . '" />' . "\r\n";
 				echo '<tr' . ( $i == 0 ? ' class="alternate"' : '' ) . '>' . "\r\n";
-                echo '<th scope="row" id="' . $role_id . '-role" class="manage-row row-' . $role_id . '-roles row-primary" style="font-size: small;"><strong>' . $role . '</strong></th>' . "\r\n";
+                echo '<th scope="row" id="' . esc_attr( $role_id ) . '-role" class="manage-row row-' . esc_attr( $role_id ) . '-roles row-primary" style="font-size: small;"><strong>' . esc_html( $role ) . '</strong></th>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small; vertical-align: middle;">';
-					echo '<input type="checkbox" name="manage_mdjm_' . $role_id . '" id="manage_mdjm_' . $role_id . '" value="1" style="font-size: small;"';
+					echo '<input type="checkbox" name="manage_mdjm_' . esc_attr( $role_id ) . '" id="manage_mdjm_' . esc_attr( $role_id ) . '" value="1" style="font-size: small;"';
 					if( !empty( $caps->capabilities['manage_mdjm'] ) ) echo ' checked="checked"';
 					echo ' />' . "\r\n";
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Clients', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="client_permissions_' . $role_id . '" id="client_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_client_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Clients', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="client_permissions_' . esc_attr( $role_id ) . '" id="client_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_client_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_client_edit_own"';
 					if( !empty( $caps->capabilities['mdjm_client_edit_own'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_client_edit"';
 					if( !empty( $caps->capabilities['mdjm_client_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 					echo '<br /><br />' . "\r\n";
 
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Employees', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="employee_permissions_' . $role_id . '" id="employee_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_employee_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Employees', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="employee_permissions_' . esc_attr( $role_id ) . '" id="employee_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_employee_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_employee_edit"';
 					if( !empty( $caps->capabilities['mdjm_employee_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Manage', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Manage', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Comms', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="comm_permissions_' . $role_id . '" id="comm_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_comms_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Comms', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="comm_permissions_' . esc_attr( $role_id ) . '" id="comm_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_comms_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_comms_send"';
 					if( !empty( $caps->capabilities['mdjm_comms_send'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Send', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Send', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 					echo '<br /><br />' . "\r\n";
 
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Packages', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="package_permissions_' . $role_id . '" id="package_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_package_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Packages', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="package_permissions_' . esc_attr( $role_id ) . '" id="package_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_package_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_package_edit_own"';
 					if( !empty( $caps->capabilities['mdjm_package_edit_own'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_package_edit"';
 					if( !empty( $caps->capabilities['mdjm_package_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Events', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="event_permissions_' . $role_id . '" id="event_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_event_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Events', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="event_permissions_' . esc_attr( $role_id ) . '" id="event_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_event_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_event_read_own"';
 					if( !empty( $caps->capabilities['mdjm_event_read_own'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Read Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Read Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_event_read"';
 					if( !empty( $caps->capabilities['mdjm_event_read'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Read All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Read All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_event_edit_own"';
 					if( !empty( $caps->capabilities['mdjm_event_edit_own'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_event_edit"';
 					if( !empty( $caps->capabilities['mdjm_event_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 					echo '<br /><br />' . "\r\n";
 
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Templates', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="template_permissions_' . $role_id . '" id="template_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_template_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Templates', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="template_permissions_' . esc_attr( $role_id ) . '" id="template_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_template_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_template_edit"';
 					if( !empty( $caps->capabilities['mdjm_template_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Txns', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="txn_permissions_' . $role_id . '" id="txn_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_txn_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Txns', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="txn_permissions_' . esc_attr( $role_id ) . '" id="txn_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_txn_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_txn_edit"';
 					if( !empty( $caps->capabilities['mdjm_txn_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 					echo '<br /><br />' . "\r\n";
 
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Reports', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="report_permissions_' . $role_id . '" id="report_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_reports_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Reports', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="report_permissions_' . esc_attr( $role_id ) . '" id="report_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_reports_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_reports_run"';
 					if( !empty( $caps->capabilities['mdjm_reports_run'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Run', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Run', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Quotes', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="quote_permissions_' . $role_id . '" id="quote_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_quote_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Quotes', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="quote_permissions_' . esc_attr( $role_id ) . '" id="quote_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_quote_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_quote_view_own"';
 					if( !empty( $caps->capabilities['mdjm_quote_view_own'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'View Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'View Own', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_quote_view"';
 					if( !empty( $caps->capabilities['mdjm_quote_view'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'View All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'View All', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '</select>' . "\r\n";
 				echo '</td>' . "\r\n";
 
 				echo '<td scope="row" style="font-size: small;">';
-					echo '<span style="font-size: small; font-weight: bold;">' . __( 'Venues', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
-					echo '<select name="venue_permissions_' . $role_id . '" id="venue_permissions_' . $role_id . '" style="font-size: small;">' . "\r\n";
-					echo '<option value="mdjm_venue_none">' . __( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '<span style="font-size: small; font-weight: bold;">' . esc_html__( 'Venues', 'mobile-dj-manager' ) . ':</span><br />' . "\r\n";
+					echo '<select name="venue_permissions_' . esc_attr( $role_id ) . '" id="venue_permissions_' . esc_attr( $role_id ) . '" style="font-size: small;">' . "\r\n";
+					echo '<option value="mdjm_venue_none">' . esc_html__( 'None', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_venue_read"';
 					if( !empty( $caps->capabilities['mdjm_venue_read'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'View', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'View', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
 					echo '<option value="mdjm_venue_edit"';
 					if( !empty( $caps->capabilities['mdjm_venue_edit'] ) ) echo ' selected="selected"';
-					echo '>' . __( 'Edit', 'mobile-dj-manager' ) . '</option>' . "\r\n";
+					echo '>' . esc_html__( 'Edit', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 					echo '</select>' . "\r\n";
 				echo '</td>' . "\r\n";
 

@@ -10,7 +10,7 @@
 function mdjm_add_event_type_fields( $tag )	{
 	?>
     <div class="form-field term-group">
-        <label for="event_type_default"><?php printf( __( 'Set as Default %s type?', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label>
+        <label for="event_type_default"><?php printf( esc_html__( 'Set as Default %s type?', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></label>
         <input type="checkbox" name="event_type_default" id="event_type_default" value="1" />
     </div>
     <?php
@@ -29,8 +29,8 @@ function mdjm_edit_event_type_fields( $tag )	{
 
 	?>
     <tr class="form-field term-group-wrap">
-        <th scope="row"><label for="event_type_default"><?php printf( __( 'Set as Default %s type?', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></label></th>
-        <td><input type="checkbox" id="event_type_default" name="event_type_default" value="<?php echo $tag->term_id; ?>" <?php checked( mdjm_get_option( 'event_type_default' ), $tag->term_id ); ?>></td>
+        <th scope="row"><label for="event_type_default"><?php printf( esc_html__( 'Set as Default %s type?', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></label></th>
+        <td><input type="checkbox" id="event_type_default" name="event_type_default" value="<?php echo esc_attr( $tag->term_id ); ?>" <?php checked( mdjm_get_option( 'event_type_default' ), $tag->term_id ); ?>></td>
     </tr>
     <?php
 
@@ -97,7 +97,7 @@ function mdjm_edit_enquiry_source_fields( $tag )	{
 	?>
     <tr class="form-field term-group-wrap">
         <th scope="row"><label for="enquiry_source_default"><?php  esc_html_e( 'Set as Default Enquiry Source?', 'mobile-dj-manager' ); ?></label></th>
-        <td><input type="checkbox" id="enquiry_source_default" name="enquiry_source_default" value="<?php echo $tag->term_id; ?>" <?php checked( mdjm_get_option( 'enquiry_source_default' ), $tag->term_id ); ?>></td>
+        <td><input type="checkbox" id="enquiry_source_default" name="enquiry_source_default" value="<?php echo esc_attr( $tag->term_id ); ?>" <?php checked( mdjm_get_option( 'enquiry_source_default' ), $tag->term_id ); ?>></td>
     </tr>
     <?php
 
@@ -165,7 +165,7 @@ function mdjm_edit_playlist_category_fields( $tag )	{
 	?>
     <tr class="form-field term-group-wrap">
         <th scope="row"><label for="playlist_default_cat"><?php esc_html_e( 'Set as Default Category?', 'mobile-dj-manager' ); ?></label></th>
-        <td><input type="checkbox" id="playlist_default_cat" name="playlist_default_cat" value="<?php echo $tag->term_id; ?>" <?php checked( mdjm_get_option( 'playlist_default_cat' ), $tag->term_id ); ?>></td>
+        <td><input type="checkbox" id="playlist_default_cat" name="playlist_default_cat" value="<?php echo esc_attr( $tag->term_id ); ?>" <?php checked( mdjm_get_option( 'playlist_default_cat' ), $tag->term_id ); ?>></td>
     </tr>
     <?php
 
@@ -246,7 +246,7 @@ function mdjm_guest_playlist_term_remove_checkbox()	{
 			$obj_term = get_term_by( 'slug', $term_slug, 'playlist-category' );
 
 			if( !empty( $obj_term ) )	{
-				?>$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();<?php
+				?>$('input#cb-select-<?php echo esc_attr( $obj_term->term_id ); ?>').prop('disabled', true).hide();<?php
 			}
 
 		}
