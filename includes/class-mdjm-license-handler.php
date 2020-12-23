@@ -7,6 +7,8 @@
  * This class should simplify the process of adding license information
  * to new MDJM extensions.
  *
+ * This file is only called if paid extensions for mobile-dj-manager are installed.
+ *
  * @version 1.0
  */
 
