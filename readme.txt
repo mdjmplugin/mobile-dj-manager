@@ -1379,6 +1379,10 @@ Our fully customisable Contact Forms enable full management of events from the i
 
 == Upgrade Notice ==
 
+= 1.5.8 =
+
+Fixes numerous security issues and general security improvements. Upgrade immediately.
+
 = 1.5.6 =
 
 Addresses an issue whereby an event could not be saved due to incorrect formatting of currency
@@ -1407,3 +1411,7 @@ This version includes an update to all events, and equipment packages and add-on
 = 1.5 =
 Ensure you have backed up your database prior to upgrading
 
+== Paid extensions installation, licensing and updates ==
+All paid extensions for mobile-dj-manager must be installed manually, see [Installing Extensions](https://mdjm.co.uk/articles/installing-add-ons/) for more info.
+
+License and update checks for paid extensions are only run when there are paid extensions for mobile-dj-manager installed.
