@@ -88,9 +88,9 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 **Wednesday, 23rd December 2020**
 
-**Security**: Audit: Fixed several XSS vulnerabilities
-**Security**: Audit: Input data hardening (validation and sanitization)
-**Security**: Audit: Output data hardening (escaping)
+**Security**: Audit - Fixed several XSS vulnerabilities
+**Security**: Audit - Input data hardening (validation and sanitization)
+**Security**: Audit - Output data hardening (escaping)
 **Security**: Fix unauthorised client event access (Reported by waynehaffenden)
 **Security**: Remove remote libraries called within the plugin, libraries are now stored locally within the plugin
 
