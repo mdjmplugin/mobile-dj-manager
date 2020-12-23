@@ -3,6 +3,7 @@
 /node_modules
 /vendor
 /src
+/tests
 /.wordpress-org
 
 .distignore
