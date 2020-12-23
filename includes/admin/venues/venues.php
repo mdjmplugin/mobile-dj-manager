@@ -337,11 +337,11 @@ function mdjm_save_venue_post( $post_id, $post, $update )	{
 			$current_meta_value = get_post_meta( $post_id, '_' . $meta_key, true );
 
 			if( $meta_key == 'venue_postcode' && !empty( $new_meta_value ) )	{
-				$new_meta_value = strtoupper( $new_meta_value );
+				$new_meta_value = strtoupper( sanitize_text_field( $new_meta_value ) );
 			} elseif( $meta_key == 'venue_email' && !empty( $new_meta_value ) )	{
 				$new_meta_value = sanitize_email( $new_meta_value );
 			} else	{
-				$new_meta_value = sanitize_text_field( ucwords( $new_meta_value ) );
+				$new_meta_value = ucwords( sanitize_text_field( $new_meta_value ) );
 			}
 
 			// If we have a value and the key did not exist previously, add it
