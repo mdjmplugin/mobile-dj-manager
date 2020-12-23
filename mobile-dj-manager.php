@@ -177,7 +177,8 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			require_once( MDJM_PLUGIN_DIR . '/includes/class-mdjm-db.php' );
 			require_once( MDJM_PLUGIN_DIR . '/includes/admin/mdjm.php' );
 
-			if ($this->has_extensions()) {
+			// Only include the licensing/update handler when paid extensions are installed.
+			if ($this->has_paid_extensions()) {
 				require_once(MDJM_PLUGIN_DIR . '/includes/class-mdjm-license-handler.php');
 			}
 
@@ -310,7 +311,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 			);
 		} // load_textdomain
 
-		private function has_extensions()	{
+		private function has_paid_extensions()	{
 			$extensions = [
 				'mdjm-dynamic-contact-forms.php',
 				'mdjm-google-calendar-sync.php',
