@@ -107,13 +107,13 @@ function mdjm_admin_notices() {
 	// Unattended events
 	if ( mdjm_employee_can( 'manage_all_events' ) && ( mdjm_get_option( 'warn_unattended' ) ) )	{
 		$unattended = mdjm_event_count( 'mdjm-unattended' );
-		
+
 		if( ! empty( $unattended ) && $unattended > 0 )	{
 			echo '<div class="notice notice-info is-dismissible">';
 			echo '<p>' .
-					sprintf( 
-						__( 'You have unattended enquiries. <a href="%s">Click here</a> to manage.', 'mobile-dj-manager' ),
-						admin_url( 'edit.php?post_type=mdjm-event&post_status=mdjm-unattended' )
+					sprintf(
+						__( 'You have unattended enquiries. <a href="%s">Click here</a> to manage.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						admin_url( 'edit.php?post_type=mdjm-event&post_status=mdjm-unattended' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					). '</p>';
 			echo '</div>';
 		}
@@ -192,7 +192,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'song_remove_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -201,7 +201,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'security_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -210,7 +210,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'playlist_emailed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -219,7 +219,7 @@ function mdjm_admin_notices() {
 			'updated'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'playlist_email_failed' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -228,7 +228,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
-	
+
 	if ( isset( $_GET['mdjm-message'] ) && 'employee_added' == $_GET['mdjm-message'] )	{
 		add_settings_error(
 			'mdjm-notices',
@@ -279,13 +279,13 @@ function mdjm_admin_notices() {
 	}
 	if ( isset( $_GET['mdjm-action'] ) && 'get_event_availability' == $_GET['mdjm-action'] )	{
 
-		if ( ! wp_verify_nonce( $_GET[ 'mdjm_nonce' ], 'get_event_availability' ) )	{
+		if ( !isset( $_GET[ 'mdjm_nonce' ] ) || ! wp_verify_nonce( $_GET[ 'mdjm_nonce' ], 'get_event_availability' ) )	{
 			return;
 		} elseif ( ! isset( $_GET['event_id'] ) )	{
 			return;
 		} else	{
 
-			$date = get_post_meta( $_GET['event_id'], '_mdjm_event_date', true );
+			$date = get_post_meta( absint( wp_unslash( $_GET['event_id'] ) ), '_mdjm_event_date', true );
 
 			$result = mdjm_do_availability_check( $date );
 
@@ -296,13 +296,13 @@ function mdjm_admin_notices() {
 				foreach( $result['available'] as $employee_id )	{
 					echo '<li>';
                         printf(
-                            __( '<a href="%s" title="Assign &amp; Respond to Enquiry">Assign %s &amp; respond to enquiry</a>', 'mobile-dj-manager' ),
-                            add_query_arg(
+                            __( '<a href="%s" title="Assign &amp; Respond to Enquiry">Assign %s &amp; respond to enquiry</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            add_query_arg( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                 'primary_employee',
                                 $employee_id,
-                                get_edit_post_link( $_GET['event_id'] )
+                                get_edit_post_link( absint( wp_unslash( $_GET['event_id'] ) ) )
                             ),
-                            mdjm_get_employee_display_name( $employee_id )
+                            mdjm_get_employee_display_name( $employee_id ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         );
                     echo '</li>';
 				}
@@ -312,11 +312,11 @@ function mdjm_admin_notices() {
 				echo '<div class="notice notice-info is-dismissible">';
                     echo '<p>';
                     printf(
-                        __( 'You have %d employees available to work %s %s on %s.', 'mobile-dj-manager' ),
+                        esc_html__( 'You have %d employees available to work %s %s on %s.', 'mobile-dj-manager' ),
                         count( $result['available'] ),
-                        mdjm_get_label_singular( true ),
-                        mdjm_get_event_contract_id( $_GET['event_id'] ),
-                        mdjm_get_event_long_date( $_GET['event_id'] )
+                        esc_html( mdjm_get_label_singular( true ) ),
+                        esc_html( mdjm_get_event_contract_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ),
+                        esc_html( mdjm_get_event_long_date( absint( wp_unslash( $_GET['event_id'] ) ) ) )
                     );
                     echo '</p>';
     			echo '</div>';
@@ -326,10 +326,10 @@ function mdjm_admin_notices() {
 				echo '<div class="notice notice-error is-dismissible">';
                     echo '<p>';
                     printf(
-                        __( 'There are no employees available to work %s %s on %s', 'mobile-dj-manager' ),
-                        mdjm_get_label_singular( true ),
-                        mdjm_get_event_contract_id( $_GET['event_id'] ),
-                        mdjm_get_event_long_date( $_GET['event_id'] )
+                        esc_html__( 'There are no employees available to work %s %s on %s', 'mobile-dj-manager' ),
+                        esc_html( mdjm_get_label_singular( true ) ),
+                        esc_html( mdjm_get_event_contract_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ),
+                        esc_html( mdjm_get_event_long_date( absint( wp_unslash( $_GET['event_id'] ) ) ) )
                     );
                     echo '</p>';
     			echo '</div>';
@@ -389,10 +389,10 @@ function mdjm_admin_notices() {
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_success',
-			sprintf( _n( '%1$s %2$s successfully rejected.', '%1$s %3$s successfully rejected.', $_GET['mdjm-count'], 'mobile-dj-manager' ),
-				$_GET['mdjm-count'],
-				mdjm_get_label_singular(),
-				mdjm_get_label_plural()
+			sprintf( _n( '%1$s %2$s successfully rejected.', '%1$s %3$s successfully rejected.', isset( $_GET['mdjm-count'] ) ? absint( wp_unslash( $_GET['mdjm-count'] ) ) : 0, 'mobile-dj-manager' ),
+				isset( $_GET['mdjm-count'] ) ? absint( wp_unslash( $_GET['mdjm-count'] ) ) : 0,
+				esc_html( mdjm_get_label_singular() ),
+				esc_html( mdjm_get_label_plural() )
 			),
 			'updated'
 		);
@@ -495,7 +495,7 @@ function mdjm_admin_notices() {
 	}
 
 	settings_errors( 'mdjm-notices' );
-	
+
 } // mdjm_admin_messages
 add_action( 'admin_notices', 'mdjm_admin_notices' );
 
@@ -510,17 +510,17 @@ function mdjm_admin_wp_5star_rating_notice() {
 
 	<div class="updated notice notice-mdjm-dismiss is-dismissible" data-notice="mdjm_request_wp_5star_rating">
 		<p>
-			<?php _e( '<strong>Awesome!</strong> It looks like you have using MDJM Event Management for a while now which is really fantastic!', 'mobile-dj-manager' ); ?>
+			<strong><?php esc_html_e( 'Awesome!', 'mobile-dj-manager' ); ?></strong> <?php esc_html_e( 'It looks like you have using MDJM Event Management for a while now which is really fantastic!', 'mobile-dj-manager' ); ?>
 		</p>
 		<p>
 			<?php printf(
-				__( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'mobile-dj-manager' ),
+				__( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'https://wordpress.org/support/plugin/mobile-dj-manager/reviews/'
 			); ?>
 		</p>
 	</div>
 
-	<?php echo ob_get_clean();
+	<?php echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_admin_wp_5star_rating_notice
 
 /**

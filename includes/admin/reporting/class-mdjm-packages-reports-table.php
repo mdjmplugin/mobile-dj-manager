@@ -147,7 +147,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 			if ( $packages )	{
 
 				foreach ( $packages as $package )	{
-	
+
 					$event_count  = 0;
 					$total_value  = 0;
 
@@ -170,7 +170,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 					);
 
 					$events = mdjm_get_events( $event_args );
-	
+
 					if ( $events )	{
 						foreach ( $events as $event ) {
 							$event_count++;
@@ -180,7 +180,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 					} else	{
 						continue;
 					}
-	
+
 					$reports_data[] = array(
 						'ID'        => $package->ID,
 						'package'   => mdjm_get_package_name( $package->ID ),
@@ -188,7 +188,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 						'value'     => mdjm_currency_filter( mdjm_format_amount( $total_value ) ),
 						'value_raw' => $total_value
 					);
-	
+
 				}
 			}
 		}
@@ -218,7 +218,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . __( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -255,7 +255,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_earnings ) ) {
-			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -276,7 +276,7 @@ class MDJM_Packages_Reports_Table extends WP_List_Table {
 	 * @since	1.4
 	 */
 	public function no_items() {
-		_e( 'No data to display for this period.', 'mobile-dj-manager' );
+		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

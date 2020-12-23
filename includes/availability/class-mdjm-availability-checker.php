@@ -94,7 +94,7 @@ class MDJM_Availability_Checker {
 	 * Get things going
 	 *
 	 * All vars are optional.
-	 * 
+	 *
 	 * Dates can be parsed either as a unix timestamp
 	 * or as an english formatted date.
 	 * See http://php.net/manual/en/datetime.formats.php.
@@ -405,7 +405,7 @@ class MDJM_Availability_Checker {
 				$absence
 			);
 
-            $notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_absence_tip_content() ) . '<p>'; 
+            $notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_absence_tip_content() ) . '<p>';
 			$notes = mdjm_do_absence_content_tags(
 				$notes,
 				$absence
@@ -498,7 +498,7 @@ class MDJM_Availability_Checker {
 					$mdjm_event->client
 				);
 
-				$notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_event_tip_content() ) . '<p>'; 
+				$notes = '<p>' . str_replace( PHP_EOL, '<br>', mdjm_get_calendar_event_tip_content() ) . '<p>';
 				$notes = mdjm_do_content_tags(
 					$notes,
 					$mdjm_event->ID,

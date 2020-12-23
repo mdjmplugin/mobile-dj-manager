@@ -135,7 +135,7 @@ class MDJM_Batch_Export extends MDJM_Export {
 	public function process_step() {
 
 		if ( ! $this->can_export() ) {
-			wp_die( __( 'You do not have permission to export data.', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to export data.', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 		}
 
 		if ( $this->step < 2 ) {
@@ -200,7 +200,7 @@ class MDJM_Batch_Export extends MDJM_Export {
 				$i = 1;
 				foreach ( $row as $col_id => $column ) {
 					if ( is_array( $column ) )	{
-						error_log( $col_id . ' - ' . var_export( $column, true ), 0 );	
+						error_log( $col_id . ' - ' . var_export( $column, true ), 0 );
 					}
 					// Make sure the column is valid
 					if ( array_key_exists( $col_id, $cols ) ) {
@@ -296,9 +296,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 
 		@unlink( $this->file );
 
-		echo $file;
+		echo $file; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		die();
+		exit;
 	} // export
 
 	/*

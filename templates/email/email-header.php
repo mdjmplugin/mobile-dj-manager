@@ -12,13 +12,13 @@
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/email/email-header.php
  */
 if ( ! defined( 'ABSPATH' ) )
-	exit; 
+	exit;
 
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title><?php echo mdjm_get_option( 'company_name' ); ?></title>
+		<title><?php echo esc_html( mdjm_get_option( 'company_name' ) ); ?></title>
 	</head>
 	<body>

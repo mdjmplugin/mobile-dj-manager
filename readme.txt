@@ -1,9 +1,9 @@
 === MDJM Event Management ===
 Contributors: mikeyhoward1977, bcdandd, deckbooks
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
-Requires at least: 4.4
-Tested up to: 5.4
-Requires PHP: 5.4
+Requires at least: 5.3
+Tested up to: 5.6
+Requires PHP: 7.3
 Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -700,7 +700,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 * **Tweak**  : Changed ajax loader image from spinner
 * **Tweak**  : Added button class to Add New link for Event Types on events screen
 * **Tweak**  : Added button class to Remove Employee link events screen
-* **Tweak**  : Moved `MDJM_Employee_Table` class to start of file 
+* **Tweak**  : Moved `MDJM_Employee_Table` class to start of file
 * **Tweak**  : Removed New -> Quote from admin bar
 
 = 1.3.5.3 =
@@ -954,7 +954,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 
 	* **New**: {PAYMENT_HISTORY} client shortcode added. Displays a simple list of client payments for the current event
 	* **New**: Click the Details button on the event screen to reveal additional information
-	* **Tweak**: Added Domain Path for translations 
+	* **Tweak**: Added Domain Path for translations
 	* **Tweak**: Removed deprecated journal DB table
 	* **Tweak**: Preparation for MDJM to PDF extension
 	* **Tweak**: Rebranded to MDJM Event Management on the plugin screen
@@ -1191,7 +1191,7 @@ Join our Facebook group for all the latest discussions, news and more - https://
 	* **New**: Notifications to clients when payments are entered manually for events
 	* **New**: Event Transaction overview is displayed on each event page
 	* **New**: Transaction Types have been moved and no longer reside within settings
-	* **Tweak**: Email tracking accuracy has been improved. If it says it has been opened, 
+	* **Tweak**: Email tracking accuracy has been improved. If it says it has been opened,
 		you can be sure that the Client has received and opened the email
 	* **Bug Fix**: Printing playlist no longer shows menu
 	* **Bug Fix**: Email playlist corrections
@@ -1305,7 +1305,7 @@ The Events page has been updated slightly to be a little more intuitive. Unatten
 The majority of updates to this page were to do with better, cleaner coding resulting in faster loading times and more efficient lookups.
 
 **Bug Fixes &amp; Minor Enhancements**
-	
+
 		* **New**: Added <code>Make A Payment</code> link to the Client home page if PayPal is enabled for Client events that are due a deposit of balance payment
 		* **New**: Enabled the **Add Media** button within the Communications page. You can now include images in your Client Communications
 		* **New**: Added buttons in Playlist view to email the event playlist to yourself or print it
@@ -1313,11 +1313,11 @@ The majority of updates to this page were to do with better, cleaner coding resu
 		* **New**: Added sub-menu items to the admin toolbar Settings item
 		* **New**: **{CONTACT_URL}** <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcode</a> added
 		* **New**: <a href="http://www.mydjplanner.co.uk/shortcodes/" target="_blank">Shortcodes</a> added to support the new online payments system. To be used within the verification email template
-		
+
 			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_AMOUNT}**: Inserts the amount received by the payment
 			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_DATE}**: Inserts the date payment was received as determined by PayPal
 			* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{PAYMENT_FOR}**: Inserts **Deposit** or **Balance** depending on the payment received
-		
+
 		* **New**: Setting added **Deposit Label** enabling you to change the terminology used on both the front end and backend of your website. Some people prefer <code>Booking Fee</code> for example. Defaults to **Deposit**. Remember to update any email or contract templates as necessary
 		 * **New**: Setting added **Balance Label** enabling you to change the terminology used on both the front end and backend of your website. Defaults to <code>Balance</code>. Remember to update any email or contract templates as necessary
 		* **Bug Fix**: Slight adjustment to the Contact Forms validation scripts. In some instances determined during testing (no bug reports) the jQuery validation did not work correctly
@@ -1325,7 +1325,7 @@ The majority of updates to this page were to do with better, cleaner coding resu
 		* **Tweak**: Updated the uninstall script
 		* **Tweak**: Added the <code>Date Added</code> column to the playlist table admin view. List is sorted by this column as default
 		* **TODO**: Editing and ordering of Contact Form fields
-	
+
 
 = 1.0 =
 
@@ -1340,14 +1340,14 @@ Our fully customisable Contact Forms enable full management of events from the i
 	* Immediately respond to the client once they submit the form with a pre-defined template
 	* Customise each individual field as necessary
 	* *
-		
+
 			* Include a date picker
 			* Specify which fields are required to be completed before submission
 			* Specify your own CSS class
 			* Include placeholder hints
 			* & more
-		
-	
+
+
 	* Include text fields, free text areas, checkboxes, date fields, select (drop down) fields & more
 	* jQuery Validation
 	* Point successful Availability Checks to your MDJM Contact Form page for additional functionality

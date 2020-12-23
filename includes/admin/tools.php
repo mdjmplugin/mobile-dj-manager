@@ -13,7 +13,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-	
+
 /**
  * Tools
  *
@@ -24,11 +24,11 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_tools_page()	{
 
-	$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'api_keys';
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'api_keys';
 
 	?>
     <div class="wrap">
-        <h1><?php _e( 'MDJM Event Management Tools', 'mobile-dj-manager' ); ?></h1>
+        <h1><?php esc_html_e( 'MDJM Event Management Tools', 'mobile-dj-manager' ); ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<?php
 			foreach( mdjm_get_tools_page_tabs() as $tab_id => $tab_name ) {
@@ -43,7 +43,7 @@ function mdjm_tools_page()	{
 
 				$active = $active_tab == $tab_id ? ' nav-tab-active' : '';
 
-				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . $active . '">' . esc_html( $tab_name ) . '</a>';
+				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . esc_attr( $active ) . '">' . esc_html( $tab_name ) . '</a>';
 			}
 			?>
 		</h2>
@@ -113,7 +113,7 @@ function mdjm_tools_system_info_display()	{
 	?>
 
 	<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
-		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="mdjm-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo mdjm_tools_sysinfo_get(); ?></textarea>
+		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="mdjm-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo esc_html( mdjm_tools_sysinfo_get() ); ?></textarea>
 		<p class="submit">
 			<input type="hidden" name="mdjm-action" value="download_sysinfo" />
 			<?php submit_button( 'Download System Info File', 'primary', 'mdjm-download-sysinfo', false ); ?>
@@ -329,7 +329,7 @@ function mdjm_tools_sysinfo_get()	{
 	// Must-use plugins
 	// NOTE: MU plugins can't show updates!
 	$muplugins = get_mu_plugins();
-	if( count( $muplugins > 0 ) ) {
+	if( count( $muplugins ) > 0 ) {
 		$return .= "\n" . '-- Must-Use Plugins' . "\n\n";
 
 		foreach( $muplugins as $plugin => $plugin_data ) {
@@ -393,13 +393,13 @@ function mdjm_tools_sysinfo_get()	{
 	$return .= "\n" . '-- Webserver Configuration' . "\n\n";
 	$return .= 'PHP Version:              ' . PHP_VERSION . "\n";
 	$return .= 'MySQL Version:            ' . $wpdb->db_version() . "\n";
-	$return .= 'Webserver Info:           ' . $_SERVER['SERVER_SOFTWARE'] . "\n";
+	$return .= 'Webserver Info:           ' . isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'N/A' . "\n";
 
 	$return  = apply_filters( 'mdjm_sysinfo_after_webserver_config', $return );
 
 	// PHP configs... now we're getting to the important stuff
 	$return .= "\n" . '-- PHP Configuration' . "\n\n";
-	$return .= 'Safe Mode:                ' . ( ini_get( 'safe_mode' ) ? 'Enabled' : 'Disabled' . "\n" );
+	$return .= 'Safe Mode:                ' . ( ini_get( 'safe_mode' ) ? 'Enabled' : 'Disabled' . "\n" ); // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
 	$return .= 'Memory Limit:             ' . ini_get( 'memory_limit' ) . "\n";
 	$return .= 'Upload Max Size:          ' . ini_get( 'upload_max_filesize' ) . "\n";
 	$return .= 'Post Max Size:            ' . ini_get( 'post_max_size' ) . "\n";
@@ -442,8 +442,8 @@ function mdjm_tools_sysinfo_download() {
 	header( 'Content-Type: text/plain' );
 	header( 'Content-Disposition: attachment; filename="mdjm-system-info.txt"' );
 
-	echo wp_strip_all_tags( $_POST['mdjm-sysinfo'] );
-	die();
+	echo esc_html( wp_strip_all_tags( wp_unslash( $_POST['mdjm-sysinfo'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	exit;
 } // mdjm_tools_sysinfo_download
 add_action( 'mdjm-download_sysinfo', 'mdjm_tools_sysinfo_download' );
 
@@ -463,16 +463,16 @@ function mdjm_tools_import_export_display() {
 ?>
 
 	<div class="postbox">
-		<h3><span><?php _e( 'Export Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Export Settings', 'mobile-dj-manager' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Export the MDJM Event Management settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'mobile-dj-manager' ); ?></p>
+			<p><?php esc_html_e( 'Export the MDJM Event Management settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'mobile-dj-manager' ); ?></p>
 			<p><?php printf(
-                __( 'To export %s data (%s, clients, etc), visit the <a href="%s">Reports</a> page.', 'mobile-dj-manager' ),
-                mdjm_get_label_singular( true ),
-                mdjm_get_label_plural( true ),
-                admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&tab=export' )
+                __( 'To export %s data (%s, clients, etc), visit the <a href="%s">Reports</a> page.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                esc_html( mdjm_get_label_singular( true ) ),
+                esc_html( mdjm_get_label_plural( true ) ),
+                esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports&tab=export' ) )
             ); ?></p>
-			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ); ?>">
+			<form method="post" action="<?php echo esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ) ); ?>">
 				<p><input type="hidden" name="mdjm_action" value="export_settings" /></p>
 				<p>
 					<?php wp_nonce_field( 'mdjm_export_nonce', 'mdjm_export_nonce' ); ?>
@@ -483,10 +483,10 @@ function mdjm_tools_import_export_display() {
 	</div><!-- .postbox -->
 
 	<div class="postbox">
-		<h3><span><?php _e( 'Import Settings', 'mobile-dj-manager' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Import Settings', 'mobile-dj-manager' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Import the MDJM Event Management settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'mobile-dj-manager' ); ?></p>
-			<form method="post" enctype="multipart/form-data" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ); ?>">
+			<p><?php esc_html_e( 'Import the MDJM Event Management settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'mobile-dj-manager' ); ?></p>
+			<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=import_export' ) ); ?>">
 				<p>
 					<input type="file" name="import_file"/>
 				</p>
@@ -562,14 +562,15 @@ function mdjm_tools_import_export_process_import() {
 		return;
     }
 
-	if ( mdjm_get_file_extension( $_FILES['import_file']['name'] ) != 'json' ) {
-		wp_die( __( 'Please upload a valid .json file', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
+
+	if ( !isset( $_FILES['import_file']['name'] ) || mdjm_get_file_extension( sanitize_text_field( wp_unslash( $_FILES['import_file']['name'] ) ) ) != 'json' ) {
+		wp_die( esc_html__( 'Please upload a valid .json file', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
 	}
 
-	$import_file = $_FILES['import_file']['tmp_name'];
+	$import_file = isset($_FILES['import_file']['tmp_name']) ? sanitize_text_field( wp_unslash( $_FILES['import_file']['tmp_name'] ) ) : '';
 
 	if( empty( $import_file ) ) {
-		wp_die( __( 'Please upload a file to import', 'mobile-dj-manager' ), __( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
+		wp_die( esc_html__( 'Please upload a file to import', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 400 ) );
 	}
 
 	// Retrieve the settings from the file and convert the json object to an array

@@ -66,7 +66,7 @@ class MDJM_Cache_Helper {
 
 		if ( is_array( $mdjm_page_uris ) )	{
 			foreach ( $mdjm_page_uris as $uri )	{
-				if ( stristr( trailingslashit( $_SERVER['REQUEST_URI'] ), $uri ) )	{
+				if ( stristr( trailingslashit( isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ), $uri ) )	{
 					self::nocache();
 					break;
 				}
@@ -117,7 +117,7 @@ class MDJM_Cache_Helper {
 		);
 
 		foreach( $pages as $page )	{
-			if ( $value[ $page . '_page' ] != $old_value[ $page . '_page' ] )	{
+			if ( isset($value[ $page . '_page' ]) && $value[ $page . '_page' ] != $old_value[ $page . '_page' ] )	{
 				delete_transient( 'mdjm_cache_excluded_uris' );
 				break;
 			}

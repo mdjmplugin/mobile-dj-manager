@@ -118,7 +118,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 			return;
 		}
 
-		
+
 		mdjm_report_views();
 		mdjm_reports_graph_controls();
 	} // extra_tablenav
@@ -168,7 +168,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 						),
 						array(
 							'relation'	=> 'OR',
-							array( 
+							array(
 								'key'		=> '_mdjm_event_dj',
 								'value'		=> $employee_id,
 								'compare'	=> '=',
@@ -196,7 +196,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 						$current_wages      = mdjm_get_employees_event_wage( $event, $employee_id );
 						$current_paid_wages = 0;
 						$current_owed_wages = 0;
-	
+
 						$wages        += $current_wages;
 						$paid         += $payment_status ? $current_wages : 0.00;
 						$owed         += $payment_status ? 0.00 : $current_wages;
@@ -244,7 +244,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . sprintf( __( 'No %s for dates provided.', 'mobile-dj-manager' ), strtolower( $this->label_plural ) ) . '</em></p>';
+			echo '<p><em>' . sprintf( esc_html__( 'No %s for dates provided.', 'mobile-dj-manager' ), esc_html( strtolower( $this->label_plural ) ) ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -281,7 +281,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_wages ) ) {
-			echo '<p><em>' . __( 'No wages for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No wages for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -302,7 +302,7 @@ class MDJM_Employees_Reports_Table extends WP_List_Table {
 	 * @since	1.4
 	 */
 	public function no_items() {
-		_e( 'No data to display for this period.', 'mobile-dj-manager' );
+		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

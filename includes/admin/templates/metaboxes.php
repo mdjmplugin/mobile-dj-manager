@@ -39,24 +39,24 @@ function mdjm_add_contract_meta_boxes( $post )	{
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_contract_before_metaboxes' );
-	
+
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
 		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
-		
+
 		// Permission check
 		if( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
-		
+
 		// Callback check
 		if( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-				
+
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -67,10 +67,10 @@ function mdjm_add_contract_meta_boxes( $post )	{
 			$metabox['args']
 		);
 	}
-	
+
 	// Runs after metabox output
 	do_action( 'mdjm_contract_after_metaboxes' );
-	
+
 } // mdjm_add_communication_meta_boxes
 add_action( 'add_meta_boxes_contract', 'mdjm_add_contract_meta_boxes' );
 
@@ -82,11 +82,11 @@ add_action( 'add_meta_boxes_contract', 'mdjm_add_contract_meta_boxes' );
  * @return
  */
 function mdjm_contract_details_metabox( $post )	{
-	
+
 	do_action( 'mdjm_pre_contract_details_metabox', $post );
-	
+
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-contract' . '_nonce' );
-	
+
 	$contract_events = mdjm_get_events( array(
         'meta_query'     => array(
             array(
@@ -97,43 +97,43 @@ function mdjm_contract_details_metabox( $post )	{
         )
     ) );
 
-	$event_count = count( $contract_events );
-		
+	$event_count = $contract_events == false ? 0 : count( $contract_events );
+
 	$total_events = sprintf(
         _n( ' %s', ' %s', $event_count, 'mobile-dj-manager' ),
 		mdjm_get_label_singular(), mdjm_get_label_plural()
     );
-	
+
 	$default_contract = mdjm_get_option( 'default_contract' ) == $post->ID ? __( 'Yes', 'mobile-dj-manager' ) : __( 'No', 'mobile-dj-manager' );
-			
+
 	?>
 	<script type="text/javascript">
 	document.getElementById("title").className += " required";
 	document.getElementById("content").className += " required";
 	</script>
-	
-	<p><?php printf( __( '<strong>Author</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-				admin_url( "user-edit.php?user_id={$post->post_author}" ),
-				get_the_author_meta( 'display_name', $post->post_author ) ); ?>
+
+	<p><?php printf( __( '<strong>Author</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_url( admin_url( "user-edit.php?user_id={$post->post_author}" ) ),
+				esc_html( get_the_author_meta( 'display_name', $post->post_author ) ) ); ?>
 	</p>
-	
-	<p><?php _e( '<strong>Default</strong>?', 'mobile-dj-manager' );
-		echo ' ' . $default_contract; ?>
+
+	<p><strong><?php esc_html_e( 'Default?', 'mobile-dj-manager' );
+		echo '</strong> ' . esc_html( $default_contract ); ?>
     </p>
-	
-	<p><?php _e( '<strong>Assigned To</strong>: ', 'mobile-dj-manager' );
-				printf( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count, 'mobile-dj-manager' ),
-						mdjm_get_label_singular(), mdjm_get_label_plural() ); ?>
+
+	<p><strong><?php esc_html_e( 'Assigned To', 'mobile-dj-manager' );?></strong>:
+				<?php printf( esc_html( _n( $event_count . ' %1$s', $event_count . ' %2$s', $event_count, 'mobile-dj-manager' )),
+						esc_html( mdjm_get_label_singular() ), esc_html( mdjm_get_label_plural() ) ); ?>
     </p>
-	
-	<p><?php _e( '<strong>Description</strong>: <span class="description">(optional)</span>', 'mobile-dj-manager' ); ?>
+
+	<p><strong><?php esc_html_e( 'Description', 'mobile-dj-manager' ); ?></strong>: <span class="description"><?php esc_html_e( '(optional)', 'mobile-dj-manager' ); ?></span>
     	<br />
         <input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
-        <textarea name="contract_description" id="contract_description" class="widefat" rows="5" placeholder="<?php _e( 'i.e To be used for Pubs/Clubs', 'mobile-dj-manager' ); ?>"><?php echo esc_attr( get_post_meta( $post->ID, '_contract_description', true ) ); ?></textarea>
+        <textarea name="contract_description" id="contract_description" class="widefat" rows="5" placeholder="<?php esc_attr_e( 'i.e To be used for Pubs/Clubs', 'mobile-dj-manager' ); ?>"><?php echo esc_attr( get_post_meta( $post->ID, '_contract_description', true ) ); ?></textarea>
     </p>
-	
+
 	<?php
-	
+
 	do_action( 'mdjm_post_contract_details_metabox', $post );
-	
+
 } // mdjm_contract_details_metabox

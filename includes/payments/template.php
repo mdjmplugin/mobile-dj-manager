@@ -26,12 +26,12 @@ function mdjm_payment_form()	{
 	ob_start();
 		echo '<div id="mdjm_payment_wrap">';
 			do_action( 'mdjm_print_notices' );
-			echo '<p class="head-nav"><a href="' . mdjm_get_event_uri( $mdjm_event->ID ) . '">' . __( 'Back to Event', 'mobile-dj-manager' ) . '</a></p>';
+			echo '<p class="head-nav"><a href="' . esc_url( mdjm_get_event_uri( $mdjm_event->ID ) ) . '">' . esc_html__( 'Back to Event', 'mobile-dj-manager' ) . '</a></p>';
 ?>
 			<div id="mdjm_payments_form_wrap" class="mdjm_clearfix">
 				<?php do_action( 'mdjm_before_purchase_form' ); ?>
 				<form id="mdjm_payment_form" class="mdjm_form" action="" method="POST" autocomplete="off">
-                    <input type="hidden" name="event_id" id="mdjm-event-id" value="<?php echo $mdjm_event->ID; ?>" />
+                    <input type="hidden" name="event_id" id="mdjm-event-id" value="<?php echo esc_attr( $mdjm_event->ID ); ?>" />
 					<?php
 					mdjm_payment_items();
 					/**
@@ -92,7 +92,7 @@ function mdjm_payment_mode_select() {
 	$page_URL = mdjm_get_current_page_url();
 	do_action( 'mdjm_payment_mode_top' ); ?>
 		<fieldset id="mdjm_payment_mode_select">
-        	<legend><?php _e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
+        	<legend><?php esc_html_e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
 			<?php do_action( 'mdjm_payment_mode_before_gateways_wrap' ); ?>
 			<div id="mdjm-payment-mode-wrap">
 				<?php
@@ -103,8 +103,8 @@ function mdjm_payment_mode_select() {
 
 					$checked = checked( $gateway_id, mdjm_get_default_gateway(), false );
 					$checked_class = $checked ? ' mdjm-gateway-option-selected' : '';
-					echo '<label for="mdjm-gateway-' . esc_attr( $gateway_id ) . '" class="mdjm-gateway-option' . $checked_class . '" id="mdjm-gateway-option-' . esc_attr( $gateway_id ) . '">';
-						echo '<input type="radio" name="payment-mode" class="mdjm-gateway" id="mdjm-gateway-' . esc_attr( $gateway_id ) . '" value="' . esc_attr( $gateway_id ) . '"' . $checked . '>' . esc_html( $gateway['payment_label'] );
+					echo '<label for="mdjm-gateway-' . esc_attr( $gateway_id ) . '" class="mdjm-gateway-option' . esc_attr( $checked_class ) . '" id="mdjm-gateway-option-' . esc_attr( $gateway_id ) . '">';
+						echo '<input type="radio" name="payment-mode" class="mdjm-gateway" id="mdjm-gateway-' . esc_attr( $gateway_id ) . '" value="' . esc_attr( $gateway_id ) . '"' . $checked  . '>' . esc_html( $gateway['payment_label'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '</label>';
 				}
 
@@ -189,7 +189,7 @@ function mdjm_get_cc_form() {
 	<?php
 	do_action( 'mdjm_after_cc_fields' );
 
-	echo ob_get_clean();
+	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_get_cc_form
 add_action( 'mdjm_cc_form', 'mdjm_get_cc_form' );
 
@@ -212,12 +212,12 @@ function mdjm_payment_submit() {
 
 		<?php mdjm_payment_hidden_fields(); ?>
 		<div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
-		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php echo mdjm_get_payment_button_text(); ?>" />
+		<input type="submit" name="mdjm_payment_submit" id="mdjm-payment-submit" value="<?php echo esc_attr( mdjm_get_payment_button_text() ); ?>" />
 
 		<?php do_action( 'mdjm_payment_form_after_submit' ); ?>
 
 	</fieldset>
-	<?php echo ob_get_clean();
+	<?php echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_payment_submit
 add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
 
@@ -230,7 +230,7 @@ add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
 function mdjm_payment_hidden_fields() {
 ?>
 	<?php mdjm_action_field( 'event_payment' ); ?>
-	<input type="hidden" name="mdjm_gateway" id="mdjm_gateway" value="<?php echo mdjm_get_chosen_gateway(); ?>" />
+	<input type="hidden" name="mdjm_gateway" id="mdjm_gateway" value="<?php echo esc_attr( mdjm_get_chosen_gateway() ); ?>" />
 <?php
 } // mdjm_payment_hidden_fields
 
@@ -250,9 +250,9 @@ function mdjm_no_gateway_notice()	{
 
 	$notice = __( 'A gateway must be installed and enabled within MDJM Event Management before payments can be processed.', 'mobile-dj-manager' );
 	?>
-    <div class="mdjm-alert mdjm-alert-error"><?php echo $notice; ?></div>
+    <div class="mdjm-alert mdjm-alert-error"><?php echo esc_html( $notice ); ?></div>
 
-	<?php echo ob_get_clean();
+	<?php echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_alert_no_gateway
 add_action( 'mdjm_before_payment_items', 'mdjm_no_gateway_notice' );

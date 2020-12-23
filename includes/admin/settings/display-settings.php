@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) )
 function mdjm_options_page() {
 	$settings_tabs = mdjm_get_settings_tabs();
 	$settings_tabs = empty($settings_tabs) ? array() : $settings_tabs;
-	$active_tab    = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_tabs ) ? $_GET['tab'] : 'general';
+	$active_tab    = isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $settings_tabs ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 	$sections      = mdjm_get_settings_tab_sections( $active_tab );
 	$key           = 'main';
 
@@ -32,11 +32,12 @@ function mdjm_options_page() {
 	}
 
 	$registered_sections = mdjm_get_settings_tab_sections( $active_tab );
-	$section             = isset( $_GET['section'] ) && ! empty( $registered_sections ) && array_key_exists( $_GET['section'], $registered_sections ) ? $_GET['section'] : $key;
+	$section             = isset( $_GET['section'] ) && ! empty( $registered_sections ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['section'] ) ), $registered_sections ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : $key;
 	ob_start();
 	?>
-	<div class="wrap <?php echo 'wrap-' . $active_tab; ?>">
-		<h1 class="nav-tab-wrapper">
+	<div class="wrap <?php echo 'wrap-' . esc_attr( $active_tab ); ?>">
+		<h1 class="wp-heading-inline">Settings</h1>
+		<div class="nav-tab-wrapper">
 			<?php
 			foreach( mdjm_get_settings_tabs() as $tab_id => $tab_name ) {
 
@@ -50,12 +51,12 @@ function mdjm_options_page() {
 
 				$active = $active_tab == $tab_id ? ' nav-tab-active' : '';
 
-				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . $active . '">';
+				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . esc_attr( $active ) . '">';
 					echo esc_html( $tab_name );
 				echo '</a>';
 			}
 			?>
-		</h1>
+		</div>
 		<?php
 
 		$number_of_sections = count( $sections );
@@ -74,7 +75,7 @@ function mdjm_options_page() {
 				if ( $section == $section_id ) {
 					$class = 'current';
 				}
-				echo '<a class="' . $class . '" href="' . esc_url( $tab_url ) . '">' . $section_name . '</a>';
+				echo '<a class="' . esc_attr( $class ) . '" href="' . esc_url( $tab_url ) . '">' . esc_html( $section_name ) . '</a>';
 
 				if ( $number != $number_of_sections ) {
 					echo ' | ';
@@ -113,5 +114,5 @@ function mdjm_options_page() {
 		</div><!-- #tab_container-->
 	</div><!-- .wrap -->
 	<?php
-	echo ob_get_clean();
+	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_options_page

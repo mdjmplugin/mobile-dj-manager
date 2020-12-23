@@ -8,54 +8,54 @@
  */
 
 /**
- * Ensure that built-in terms cannot be deleted by removing the 
+ * Ensure that built-in terms cannot be deleted by removing the
  * delete, edit and quick edit options from the hover menu on the edit screen.
- * 
+ *
  * @since	1.0
  * @param	arr		$actions		The array of actions in the hover menu
  * 			obj		$tag			The object array for the term
  * @return	arr		$actions		The filtered array of actions in the hover menu
  */
 function mdjm_txn_protected_terms_remove_row_actions( $actions, $tag )	{
-	
+
 	$protected_terms = mdjm_get_txn_protected_terms();
-						
-	if ( in_array( $tag->slug, $protected_terms ) ) 
+
+	if ( in_array( $tag->slug, $protected_terms ) )
 		unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
-		
+
 	return $actions;
-	
+
 } // mdjm_txn_protected_terms_remove_row_actions
 add_filter( 'transaction-types_row_actions', 'mdjm_txn_protected_terms_remove_row_actions', 10, 2 );
 
 /**
- * Ensure that built-in terms cannot be deleted by removing the 
+ * Ensure that built-in terms cannot be deleted by removing the
  * bulk action checkboxes
- * 
+ *
  * @param
  *
  * @return
  */
 function mdjm_txn_protected_terms_remove_checkbox()	{
-	
+
 	if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )	{
 		return;
 	}
-	
+
 	$protected_terms = mdjm_get_txn_protected_terms();
-	
+
 	?>
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 		<?php
 		foreach( $protected_terms as $term_slug )	{
-			
+
 			$obj_term = get_term_by( 'slug', $term_slug, 'transaction-types' );
-			
+
 			if( !empty( $obj_term ) )	{
-				?>$('input#cb-select-<?php echo $obj_term->term_id; ?>').prop('disabled', true).hide();<?php
+				?>$('input#cb-select-<?php echo esc_attr( $obj_term->term_id ); ?>').prop('disabled', true).hide();<?php
 			}
-			
+
 		}
 		?>
 	});
@@ -72,22 +72,22 @@ add_action( 'admin_footer-edit-tags.php', 'mdjm_txn_protected_terms_remove_check
  * @return	arr		$protected_terms	Array of protected terms
  */
 function mdjm_get_txn_protected_terms()	{
-	
+
 	$other_amount_term = get_term_by( 'name', mdjm_get_option( 'other_amount_label' ), 'transaction-types' );
-	
+
 	$protected_terms = array(
 		'mdjm-balance-payments',
 		'mdjm-deposit-payments',
 		'mdjm-employee-wages',
 		'mdjm-merchant-fees'
 	);
-	
+
 	if ( ! empty( $other_amount_term ) )	{
 		$protected_terms[] = $other_amount_term->slug;
 	}
-	
+
 	return apply_filters( 'mdjm_txn_protected_terms', $protected_terms );
-	
+
 } // mdjm_get_txn_protected_terms
 
 /**
@@ -98,9 +98,9 @@ function mdjm_get_txn_protected_terms()	{
  * @return	str
  */
 function mdjm_set_protected_txn_terms_readonly( $tag )	{
-	
+
 	$protected_terms = mdjm_get_txn_protected_terms();
-	
+
 	if( in_array( $tag->slug, $protected_terms ) )	{
 		?>
         <script type="text/javascript">
@@ -125,17 +125,17 @@ add_action( 'transaction-types_edit_form_fields', 'mdjm_set_protected_txn_terms_
  * @return	void
  */
 function mdjm_update_txn_cat( $old_value, $new_value )	{
-	
+
 	$options = array( 'other_amount_label' );
 
 	foreach ( $options as $key )	{
-		
+
 		if ( $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] )	{
 			continue;
 		}
-		
+
 		$term = get_term_by( 'name', $old_value[ $key ], 'transaction-types' );
-	
+
 		wp_update_term(
 			$term->term_id,
 			'transaction-types',
@@ -146,6 +146,6 @@ function mdjm_update_txn_cat( $old_value, $new_value )	{
 		);
 
 	}
-	
+
 } // mdjm_update_txn_deposit_cat
 add_action( 'update_option_mdjm_settings', 'mdjm_update_txn_cat', 10, 2 );

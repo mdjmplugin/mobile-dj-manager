@@ -193,15 +193,15 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 		}
 
 		?>
-		<form id="api-key-generate-form" method="post" action="<?php echo admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys' ); ?>">
+		<form id="api-key-generate-form" method="post" action="<?php echo esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-tools&tab=api_keys' ) ); ?>">
 			<?php mdjm_admin_action_field( 'process_api_key' ); ?>
 			<input type="hidden" name="mdjm_api_process" value="generate" />
 			<?php wp_nonce_field( 'mdjm-api-nonce', 'api_nonce' ); ?>
-			<?php echo MDJM()->html->users_dropdown( array(
+			<?php echo MDJM()->html->users_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'             => 'user_id',
 				'chosen'           => true,
 				'show_option_all'  => false,
-				'show_option_none' => _x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' )
+				'show_option_none' => esc_html_x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' )
 			) ); ?>
 			<?php submit_button( __( 'Generate New API Keys', 'mobile-dj-manager' ), 'secondary', 'submit', false ); ?>
 		</form>
@@ -308,7 +308,7 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	 * @return	str
 	 */
 	function no_items()	{
-		_e( 'No API keys have been generated.', 'mobile-dj-manager' );
+		esc_html_e( 'No API keys have been generated.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

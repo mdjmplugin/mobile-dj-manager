@@ -24,28 +24,28 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_api_listener()	{
 
-	$listener = isset( $_GET['mdjm-api'] ) ? $_GET['mdjm-api'] : '';
-				
+	$listener = isset( $_GET['mdjm-api'] ) ? sanitize_text_field( wp_unslash( $_GET['mdjm-api'] ) ) : '';
+
 	if( empty( $listener ) )	{
 		return;
 	}
-	
+
 	switch( $listener )	{
 
 		case 'MDJM_EMAIL_RCPT':
 
 			_deprecated_function( __FUNCTION__, '1.3', 'mdjm_api_listener()' );
 
-			$data['tracker_id'] = ! empty( $_GET['post'] ) ? $_GET['post'] : '';
+			$data['tracker_id'] = ! empty( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : '';
 
 			do_action( 'mdjm_track_open_email', $data );
 
 		break;
-		
+
 		default:
 			return;
 
-	} // switch	
+	} // switch
 
 } // mdjm_api_listener
 add_action( 'wp_loaded', 'mdjm_api_listener' );
@@ -58,15 +58,15 @@ add_action( 'wp_loaded', 'mdjm_api_listener' );
  * @remove		1.5
  * @replacement	mdjm_format_datepicker_date
  */
-function mdjm_jquery_short_date()	{	
+function mdjm_jquery_short_date()	{
 	_deprecated_function( __FUNCTION__, '1.3', 'mdjm_format_datepicker_date()' );
-			
+
 	return mdjm_format_datepicker_date();
 } // mdjm_jquery_short_date
 
 /**
  * Insert the datepicker jQuery code
- * 
+ *
  *	@since: 1.1.3
  *	@called:
  *	@params 	$args =>array
@@ -85,12 +85,12 @@ function mdjm_jquery_short_date()	{
  */
 function mdjm_jquery_datepicker_script( $args='' )	{
 	_deprecated_function( __FUNCTION__, '1.3', 'mdjm_insert_datepicker()' );
-	
+
 	$class = !empty ( $args[0] ) ? $args[0] : 'mdjm_date';
 	$altfield = !empty( $args[1] ) ? $args[1] : '_mdjm_event_date';
 	$maxdate = !empty( $args[2] ) ? $args[2] : '';
 	$mindate = !empty( $args[3] ) ? $args[3] : '';
-	
+
 	return mdjm_insert_datepicker(
 		array(
 			'class'		=> $class,
@@ -113,36 +113,36 @@ function mdjm_jquery_datepicker_script( $args='' )	{
  */
 function display_price( $amount, $symbol=true )	{
 	_deprecated_function( __FUNCTION__, '1.3', 'display_price()' );
-	
+
 	global $mdjm_settings;
-	
+
 	if( empty( $amount ) || !is_numeric( $amount ) )
 		$amount = '0.00';
-	
+
 	$symbol = ( isset( $symbol ) ? $symbol : true );
-	
+
 	$dec = $mdjm_settings['payments']['decimal'];
 	$tho = $mdjm_settings['payments']['thousands_seperator'];
-	
+
 	// Currency before price
 	if( $mdjm_settings['payments']['currency_format'] == 'before' )
 		return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
-	
+
 	// Currency before price with space
 	elseif( $mdjm_settings['payments']['currency_format'] == 'before with space' )
 		return ( !empty( $symbol ) ? mdjm_currency_symbol() . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
-		
+
 	// Currency after price
 	elseif( $mdjm_settings['payments']['currency_format'] == 'after' )
 		return number_format( $amount, 2, $dec, $tho ) . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
-		
+
 	// Currency after price with space
 	elseif( $mdjm_settings['payments']['currency_format'] == 'after with space' )
 		return number_format( $amount, 2, $dec, $tho ) . ' ' . ( !empty( $symbol ) ? mdjm_currency_symbol() : '' );
-	
-	// Default	
+
+	// Default
 	return ( !empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
-	
+
 } // display_price
 
 /*
@@ -155,31 +155,31 @@ function display_price( $amount, $symbol=true )	{
  * @remove	1.5
  */
 function get_deposit( $cost='' )	{
-	
+
 	_deprecated_function( __FUNCTION__, '1.3', 'mdjm_calculate_deposit()' );
-		
+
 	// If no event cost is provided then we return 0
 	if( empty( $cost ) )	{
 		$deposit = '0.00';
 	}
-	
+
 	// If we don't need a deposit per settings, return 0
 	if( ! mdjm_get_option( 'deposit_type' ) )
 		$deposit = '0.00';
-	
+
 	// Set fixed deposit amount
 	elseif( mdjm_get_option( 'deposit_type' ) == 'fixed' )
 		$deposit = number_format( mdjm_get_option( 'deposit_amount' ), 2 );
-	
+
 	// Set deposit based on % of total cost
 	elseif( mdjm_get_option( 'deposit_type' ) == 'percentage' )	{
 		$percentage = mdjm_get_option( 'deposit_amount' ); // The % to apply
-		
+
 		$deposit = ( !empty( $cost ) && $cost > 0 ? round( $percentage * ( $cost / 100 ), 2 ) : '0.00' );
 	}
-	
+
 	return $deposit;
-	
+
 } // get_deposit
 
 /**
@@ -192,9 +192,9 @@ function get_deposit( $cost='' )	{
  */
 function mdjm_payments_write( $msg, $stampit = false )	{
 	_deprecated_function( __FUNCTION__, '1.3.8', 'mdjm_record_gateway_log()' );
-	
+
 	return mdjm_record_gateway_log( $msg, $stampit = false );
-	
+
 } // mdjm_payments_write
 
 /*
@@ -227,9 +227,9 @@ function get_available_addons( $employee = '', $package = '', $event_id = '' )	{
 			$addons[ $addon->post_name ]['desc'] = mdjm_get_addon_excerpt( $addon->ID );
 		}
 	}
-									
+
 	return $addons;
-			
+
 } // get_available_addons
 
 /**
@@ -240,9 +240,9 @@ function get_available_addons( $employee = '', $package = '', $event_id = '' )	{
  * @return
  */
 function get_available_packages( $dj='', $price=false )	{
-	
+
 	_deprecated_function( __FUNCTION__, '1.3.8', 'mdjm_get_available_packages()' );
-	
+
 	// All packages
 	$packages  = array();
 	$_packages = mdjm_get_available_packages( array(
@@ -261,7 +261,7 @@ function get_available_packages( $dj='', $price=false )	{
 	}
 
 	return $packages;
-			
+
 } // get_available_packages
 
 /**
@@ -279,11 +279,11 @@ function get_event_package( $event_id, $price=false )	{
 	$package_price = '';
 
 	$event_package = mdjm_get_event_package( $event_id );
-	
+
 	if( ! empty( $event_package ) )	{
 
 		$return = mdjm_get_package_name( $event_id );
-	
+
 		if ( ! empty( $price ) )	{
 			$return .= ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $event_package ) ) );
 		}
@@ -311,12 +311,12 @@ function get_event_package_description( $event_id )	{
 	if ( ! empty( $package_id ) )	{
 		$return = mdjm_get_package_excerpt( $package_id );
 	}
-	
+
 	// Event package
 	$event_package = get_post_meta( $event_id, '_mdjm_event_package', true );
-	
+
 	return $return;
-		
+
 } // get_event_package_description
 
 /**
@@ -365,9 +365,9 @@ function mdjm_get_package_cost( $slug )	{
  *
  * @since	1.4
  * @param	str		$slug		Slug name of the package
- * @return	str		$package	The display name of the package	
+ * @return	str		$package	The display name of the package
  */
-function get_package_name( $slug )	{	
+function get_package_name( $slug )	{
 	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_package_name()' );
 	$return = false;
 
@@ -376,9 +376,9 @@ function get_package_name( $slug )	{
 	if ( $package )	{
 		$return = $package->post_title;
 	}
-	
+
 	return $package;
-	
+
 } // get_package_name
 
 /**
@@ -389,8 +389,8 @@ function get_package_name( $slug )	{
  * @param	bool		$price		True to include the add-on price.
  * @return	str			$addons		Array with add-ons details, or false if no add-ons assigned
  */
-function get_event_addons( $event_id, $price=false )	{	
-	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_list_event_addons()' );							
+function get_event_addons( $event_id, $price=false )	{
+	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_list_event_addons()' );
 	return mdjm_list_event_addons( $event_id, $price );
 } // get_event_addons
 
@@ -422,14 +422,14 @@ function mdjm_addons_by_package_slug( $slug )	{
 
 	_deprecated_function( __FUNCTION__, '1.4', "mdjm_get_addons_by_package()" );
 	$package = mdjm_get_package_by( 'slug', strtolower( $slug ) );
-	
+
 	// No package returns false
 	if( empty( $package ) )	{
 		return false;
 	}
-	
+
 	return mdjm_get_package_addons( $package->ID );
-	
+
 } // mdjm_addons_by_package_slug
 
 /*
@@ -442,20 +442,20 @@ function get_package_details( $slug )	{
 	_deprecated_function( __FUNCTION__, '1.4' );
 	if( empty( $slug ) )
 		return false;
-	
+
 	$packages = mdjm_get_packages();
-	
+
 	if( empty( $packages[$slug] ) )
 		return false;
-	
+
 	$package['slug'] = $slug;
 	$package['name'] = stripslashes( esc_attr( $packages[$slug]['name'] ) );
 	$package['desc'] = stripslashes( esc_textarea( $packages[$slug]['desc'] ) );
 	$package['equipment'] = $packages[$slug]['equipment'];
 	$package['cost'] = $packages[$slug]['cost'];
-	
+
 	return $package;
-	
+
 } // get_package_details
 
 /**
@@ -470,24 +470,24 @@ function mdjm_addons_by_dj( $user_id )	{
 	// We work with an array
 	if( !is_array( $user_id ) )
 		$users = array( $user_id );
-		
+
 	$equipment = mdjm_get_addons();
-	
+
 	// No addons, return false
 	if( empty( $equipment ) )
 		return false;
-		
+
 	asort( $equipment );
-	
+
 	// Loop through the addons and filter for the given user(s)
 	foreach( $equipment as $addon )	{
 		$users_have = explode( ',', $addon[8] );
-		
-		foreach( $users as $user )	{			
+
+		foreach( $users as $user )	{
 			if( !in_array( $user, $users_have ) )
 				continue 2; // Continue from the foreach( $equipment as $addon ) loop
 		}
-			
+
 		$addons[] = $addon;
 	}
 	// Return the results, or false if none
@@ -504,19 +504,19 @@ function mdjm_addons_by_dj( $user_id )	{
 function mdjm_addons_by_cat( $cat )	{
 	_deprecated_function( __FUNCTION__, '1.4' );
 	$equipment = mdjm_get_addons();
-	
+
 	// No addons, return false
 	if( empty( $equipment ) )
 		return false;
-		
+
 	asort( $equipment );
-	
+
 	// Loop through the addons and filter for the given category
 	foreach( $equipment as $addon )	{
 		if( $addon[5] != $cat )
 			continue;
-		
-		$addons[] = $addon;	
+
+		$addons[] = $addon;
 	}
 	// Return the results, or false if none
 	return !empty( $addons ) ? $addons : false;
@@ -532,25 +532,25 @@ function mdjm_addons_by_cat( $cat )	{
 function mdjm_addons_by_package_name( $name )	{
 	_deprecated_function( __FUNCTION__, '1.4' );
 	$package = mdjm_get_package_by_name( $name );
-	
+
 	// No package or the package has no addons, return false
 	if( empty( $package ) || empty( $package['equipment'] ) )
 		return false;
-	
+
 	$package_items = explode( ',', $package['equipment'] );
 	$equipment = mdjm_get_addons();
-	
+
 	// No addons, return false
 	if( empty( $equipment ) )
 		return false;
-	
+
 	foreach( $equipment as $addon )	{
 		if( !in_array( $addon[1], $package_items ) )
 			continue;
-			
-		$addons[] = $addon;	
+
+		$addons[] = $addon;
 	}
-	
+
 	// Return the results, or false if none
 	return !empty( $addons ) ? $addons : false;
 } // mdjm_addons_by_package_name
@@ -566,16 +566,16 @@ function get_addon_name( $slug )	{
 	_deprecated_function( __FUNCTION__, '1.4', 'mdjm_get_addon_name()' );
 	if( empty( $slug ) )
 		return false;
-			
+
 	$equipment = mdjm_get_addons();
-	
+
 	if( empty( $equipment[$slug] ) || empty( $equipment[$slug][0] ) )
 		return false;
-		
+
 	$addon = stripslashes( esc_attr( $equipment[$slug][0] ) );
-	
+
 	return $addon;
-	
+
 } // get_addon_name
 
 /*
@@ -588,22 +588,22 @@ function get_addon_details( $slug )	{
 	_deprecated_function( __FUNCTION__, '1.4' );
 	if( empty( $slug ) )
 		return false;
-		
+
 	$cats = get_option( 'mdjm_cats' );
-	
+
 	$equipment = mdjm_get_addons();
-	
+
 	if( empty( $equipment[$slug] ) )
 		return false;
-		
+
 	$addon['slug'] = $slug;
 	$addon['cat'] = stripslashes( esc_attr( $cats[$equipment[$slug][5]] ) );
 	$addon['name'] = stripslashes( esc_attr( $equipment[$slug][0] ) );
 	$addon['desc'] = stripslashes( esc_textarea( $equipment[$slug][4] ) );
 	$addon['cost'] = $equipment[$slug][7];
-	
+
 	return $addon;
-	
+
 } // get_addon_details
 
 /**
@@ -614,12 +614,12 @@ function get_addon_details( $slug )	{
  */
 function mdjm_update_event_cost_from_package_ajax()	{
 	_deprecated_function( __FUNCTION__, '1.4' );
-	$mdjm_event = new MDJM_Event( $_POST['event_id'] );
+	$mdjm_event = new MDJM_Event( absint( wp_unslash( $_POST['event_id'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 	$package    = $mdjm_event->get_package();
 	$addons     = $mdjm_event->get_addons();
 	$event_cost = $mdjm_event->price;
-	$event_date = ! empty( $_POST['event_date'] ) ? $_POST['event_date'] : NULL;
+	$event_date = ! empty( $_POST['event_date'] ) ? sanitize_text_field( wp_unslash( $_POST['event_date'] ) ) : NULL;
 	$base_cost  = '0.00';
 
 	$package_price = ( $package ) ? (float) mdjm_get_package_price( $package->ID, $event_date ) : false;
@@ -632,13 +632,13 @@ function mdjm_update_event_cost_from_package_ajax()	{
 	if ( $addons )	{
 		foreach( $addons as $addon )	{
 			$addon_cost = mdjm_get_package_price( $addon->ID, $event_date );
-			$base_cost  = $base_cost - (float) $addon_cost;	
+			$base_cost  = $base_cost - (float) $addon_cost;
 		}
 	}
 
 	$cost = $base_cost;
 
-	$new_package       = $_POST['package'];
+	$new_package       = isset($_POST['package']) ? sanitize_text_field( wp_unslash( $_POST['package'] ) ) : NULL;
 	$new_package_price = ( ! empty( $new_package ) ) ? mdjm_get_package_price( $new_package, $event_date ) : false;
 
 	if ( $new_package_price )	{
@@ -647,7 +647,7 @@ function mdjm_update_event_cost_from_package_ajax()	{
 
 	if ( ! empty( $cost ) )	{
 		$result['type'] = 'success';
-		$result['cost'] = mdjm_sanitize_amount( (float) $cost );	
+		$result['cost'] = mdjm_sanitize_amount( (float) $cost );
 	} else	{
 		$result['type'] = 'success';
 		$result['cost'] = mdjm_sanitize_amount( 0 );
@@ -655,19 +655,19 @@ function mdjm_update_event_cost_from_package_ajax()	{
 
 	$result = json_encode( $result );
 
-	echo $result;
+	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-	die();
+	exit;
 
 } // mdjm_update_event_cost_from_package_ajax
 add_action( 'wp_ajax_update_event_cost_from_package', 'mdjm_update_event_cost_from_package_ajax' );
 
 /**
  * Return all dates within the given range
- * 
+ *
  * @param	$str	$from_date		The start date Y-m-d
  *			$str	$to_date		The end date Y-m-d
- * 
+ *
  * @return all dates between 2 given dates as an array
  */
 function mdjm_all_dates_in_range( $from_date, $to_date )	{
@@ -679,14 +679,14 @@ function mdjm_all_dates_in_range( $from_date, $to_date )	{
 
 /**
  * Insert an employee holiday into the database
- * 
- * 
+ *
+ *
  * @param	arr		$args	An array of information regarding the holiday
  *							'from_date' Y-m-d
  *							'to_date' Y-m-d
  *							'employee' UserID
  *							'notes' String with information re holiday
- * 
+ *
  */
 function mdjm_add_holiday( $args )	{
     _deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_add_employee_absence()' );
@@ -699,16 +699,16 @@ function mdjm_add_holiday( $args )	{
 
     do_action( 'mdjm_added_holiday', $args, $date_range );
 
-    mdjm_update_notice( 'updated', __( 'The entry was added successfully', 'mobile-dj-manager' ) );	
+    mdjm_update_notice( 'updated', __( 'The entry was added successfully', 'mobile-dj-manager' ) );
 } // mdjm_add_holiday
 
 /**
  * Remove an employee holiday entry from the database
- * 
- * 
+ *
+ *
  * @param	int		$entry	The database ID for the entry
  *
- * 
+ *
  */
 function mdjm_remove_holiday( $entry_id )	{
 	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_remove_employee_absence()' );
@@ -720,15 +720,15 @@ function mdjm_remove_holiday( $entry_id )	{
 
 /*
 * Determine if the current user is a DJ
-* 
+*
 * @since: 	1.1.3
-* @params: 
+* @params:
 * @returns:	bool	true : false
 */
 function is_dj( $user='' )	{
 	_deprecated_function( __FUNCTION__, '1.5.6', 'mdjm_is_employee()' );
 	if( !empty( $user ) && user_can( $user, 'dj' ) )
-		return true;			
+		return true;
 
 	if( current_user_can( 'dj' ) )
 		return true;
@@ -740,7 +740,7 @@ function is_dj( $user='' )	{
 * dj_can
 * 19/03/2015
 * Determine if the DJ is allowed to carry out the current action
-* 
+*
 *	@since: 1.1.3
 *	@params: $task
 *	@returns: true : false
@@ -756,7 +756,7 @@ function dj_can( $task )	{
 * mdjm_get_djs
 * 19/03/2015
 * Retrieve a list of all DJ's
-* 
+*
 *	@since: 1.1.3
 *	@params:
 *	@returns: $djs => object

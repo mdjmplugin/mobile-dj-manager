@@ -117,7 +117,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 			return;
 		}
 
-		
+
 		mdjm_report_views();
 		mdjm_reports_graph_controls();
 	} // extra_tablenav
@@ -185,16 +185,16 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 
 						$mdjm_event = new MDJM_Event( $event );
 						$current_average_earnings    = $current_earnings       = $mdjm_event->get_total_profit();
-	
+
 						$received_date = get_post_field( 'post_date', $event );
 						$diff          = abs( current_time( 'timestamp' ) - strtotime( $received_date ) );
 						$months        = floor( $diff / ( 30 * 60 * 60 * 24 ) ); // Number of months since publication
-	
+
 						if ( $months > 0 ) {
 							$current_average_earnings    = ( $current_earnings / $months );
 							//$current_average_events      = ( $events / $months );
 						}
-	
+
 						$earnings        += $current_earnings;
 						$avg_earnings    += $current_average_earnings;
 					}
@@ -242,7 +242,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . sprintf( __( 'No %s for dates provided.', 'mobile-dj-manager' ), strtolower( $this->label_plural ) ) . '</em></p>';
+			echo '<p><em>' . sprintf( esc_html__( 'No %s for dates provided.', 'mobile-dj-manager' ), esc_html( strtolower( $this->label_plural ) ) ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -279,7 +279,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_earnings ) ) {
-			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -300,7 +300,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 	 * @since	1.4
 	 */
 	public function no_items() {
-		_e( 'No data to display for this period.', 'mobile-dj-manager' );
+		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

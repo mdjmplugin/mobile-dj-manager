@@ -517,7 +517,7 @@ function mdjm_render_agree_to_privacy_policy_field()	{
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="mdjm_agree_privacy_policy" id="mdjm-agree-privacy-policy"<?php echo $input_class; ?> value="1" /> <?php echo $privacy_url; ?></p>
+	<p><input type="checkbox" name="mdjm_agree_privacy_policy" id="mdjm-agree-privacy-policy"<?php echo $input_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> value="1" /> <?php echo $privacy_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 
     <?php if ( ! empty( $description ) ) : ?>
         <span class="mdjm-description"><?php echo esc_html( $description ); ?></span>
@@ -526,12 +526,12 @@ function mdjm_render_agree_to_privacy_policy_field()	{
     <?php if ( 'thickbox' == mdjm_get_option( 'show_agree_policy_type' ) ) : ?>
         <div id="mdjm-privacy-policy" class="mdjm-hidden">
             <?php do_action( 'mdjm_before_privacy_policy' ); ?>
-            <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+            <?php echo wpautop( do_shortcode( wp_unslash( $privacy_text ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <?php do_action( 'mdjm_after_privacy_policy' ); ?>
         </div>
     <?php endif; ?>
 
-	<?php echo ob_get_clean();
+	<?php echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_render_agree_to_privacy_policy_field
 add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_render_agree_to_privacy_policy_field', 950 );
@@ -571,15 +571,15 @@ function mdjm_render_agree_to_terms_field()	{
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="mdjm_agree_terms" id="mdjm-agree-terms"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=mdjm-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'mobile-dj-manager' ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'mobile-dj-manager' ); ?></a></p>
+	<p><input type="checkbox" name="mdjm_agree_terms" id="mdjm-agree-terms"<?php echo $input_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=mdjm-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'mobile-dj-manager' ); ?>" class="thickbox"<?php echo $label_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_attr_e( $label, 'mobile-dj-manager' ); ?></a></p>
 
 	<div id="mdjm-terms-conditions" class="mdjm-hidden">
 		<?php do_action( 'mdjm_before_terms' ); ?>
-		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
+		<?php echo wpautop( wp_unslash( $agree_text ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php do_action( 'mdjm_after_terms' ); ?>
     </div>
 
-	<?php echo ob_get_clean();
+	<?php echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_render_agree_to_terms_field
 add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_render_agree_to_terms_field', 999 );

@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_get_option( $key = '', $default = false )	{
 	global $mdjm_options;
-	
+
 	$value = ! empty( $mdjm_options[ $key ] ) ? $mdjm_options[ $key ] : $default;
 	$value = apply_filters( 'mdjm_get_option', $value, $key, $default );
-	
+
 	return apply_filters( "mdjm_get_option_{$key}", $value, $key, $default );
 } // mdjm_get_option
 
@@ -143,7 +143,7 @@ function mdjm_get_settings() {
 		$ext_settings          = is_array( get_option( 'mdjm_settings_extensions' ) )   ? get_option( 'mdjm_settings_extensions' )   : array();
 		$license_settings      = is_array( get_option( 'mdjm_settings_licenses' ) )     ? get_option( 'mdjm_settings_licenses' )     : array();
 		$uninstall_settings    = is_array( get_option( 'mdjm_uninst' ) )                ? get_option( 'mdjm_uninst' )                : array();
-		
+
 		$settings = array_merge(
 			$main_settings,
 			$email_settings,
@@ -164,7 +164,7 @@ function mdjm_get_settings() {
 
 		update_option( 'mdjm_settings', $settings );
 	}
-	
+
 	return apply_filters( 'mdjm_get_settings', $settings );
 } // mdjm_get_settings
 
@@ -184,12 +184,12 @@ function mdjm_register_settings() {
 		foreach ( $sections as $section => $settings) {
 			// Check for backwards compatibility
 			$section_tabs = mdjm_get_settings_tab_sections( $tab );
-			
+
 			if ( ! is_array( $section_tabs ) || ! array_key_exists( $section, $section_tabs ) ) {
 				$section = 'main';
 				$settings = $sections;
 			}
-			
+
 			add_settings_section(
 				'mdjm_settings_' . $tab . '_' . $section,
 				__return_null(),
@@ -321,8 +321,8 @@ function mdjm_get_registered_settings()	{
 					'show_credits'         => array(
 						'id'      => 'show_credits',
 						'name'    => __( 'Display Credits?', 'mobile-dj-manager' ),
-						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by ' . 
-										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), 
+						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by ' .
+										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ),
 										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_application_name() ),
 						'type'    => 'checkbox',
 					),
@@ -350,7 +350,7 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'debug_log_size',
 						'name'        => __( 'Maximum Log File Size', 'mobile-dj-manager' ),
 						'hint'        => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
-						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 
+						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)',
 										'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'small',
@@ -513,8 +513,8 @@ function mdjm_get_registered_settings()	{
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
 						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' . 
-										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' . 
+						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' .
+										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' .
 										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					)
@@ -674,7 +674,7 @@ function mdjm_get_registered_settings()	{
 						'desc'        => sprintf( __( 'Send a copy of client emails to the %s primary %s', 'mobile-dj-manager' ),
 											mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
 										),
-											
+
 						'type'        => 'checkbox'
 					),
 					'bcc_admin_to_client' => array(
@@ -706,7 +706,7 @@ function mdjm_get_registered_settings()	{
 					'online_enquiry'   => array(
 						'id'          => 'online_enquiry',
 						'name'        => __( 'Online Quote Template', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), 
+						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ),
 											mdjm_get_application_name() ),
 						'type'        => 'select',
                         'chosen'      => true,
@@ -1204,7 +1204,7 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Apply Tax As', 'mobile-dj-manager' ),
 						'desc'        => __( 'How do you apply tax?', 'mobile-dj-manager' ),
 						'type'        => 'select',
-						'options'     => array( 
+						'options'     => array(
 							'percentage' => __( '% of total', 'mobile-dj-manager' ),
 							'fixed'      => __( 'Fixed rate', 'mobile-dj-manager' )
 						),
@@ -1229,12 +1229,12 @@ function mdjm_get_registered_settings()	{
 						'name'        => __( 'Payment Types', 'mobile-dj-manager' ),
 						'desc'        => __( 'Enter methods of payment.', 'mobile-dj-manager' ),
 						'type'        => 'textarea',
-						'std'         => __( 'BACS', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" . 
-								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" . 
+						'std'         => __( 'BACS', 'mobile-dj-manager' ) . "\r\n" .
+								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" .
+								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" .
+								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" .
 								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" .
-										 __( 'Stripe', 'mobile-dj-manager' ) . "\r\n" . 
+										 __( 'Stripe', 'mobile-dj-manager' ) . "\r\n" .
 								         __( 'Other', 'mobile-dj-manager' )
 					),
 					'default_type'     => array(
@@ -1546,7 +1546,7 @@ function mdjm_get_registered_settings()	{
             )
         )
 	);
-	
+
 	return apply_filters( 'mdjm_registered_settings', $mdjm_settings );
 } // mdjm_get_registered_settings
 
@@ -1569,7 +1569,7 @@ function mdjm_settings_sanitize( $input = array() ) {
 		return $input;
 	}
 
-	parse_str( $_POST['_wp_http_referer'], $referrer );
+	parse_str( sanitize_text_field( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer );
 
 	$settings = mdjm_get_registered_settings();
 	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
@@ -1702,7 +1702,7 @@ function mdjm_get_settings_tab_sections( $tab = false ) {
 	elseif ( $tab ) {
 		$tabs = false;
 	}
-	
+
 	return $tabs;
 } // mdjm_get_settings_tab_sections
 
@@ -1781,17 +1781,17 @@ function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ), 
 			'order'            => 'ASC'
 		)
 	);
-	
+
 	$templates = array();
-	
+
 	if ( ! empty( $show_none ) )	{
 		$templates[0] = __( 'None', 'mobile-dj-manager' );
 	}
-	
+
 	foreach( $template_posts as $template )	{
-		$templates[ $template->ID ] = $template->post_title;	
+		$templates[ $template->ID ] = $template->post_title;
 	}
-	
+
 	return $templates;
 } // mdjm_list_templates
 
@@ -1814,13 +1814,13 @@ function mdjm_list_pages( $first = array(), $force = false ) {
 	}
 
 	$pages = get_pages();
-	
+
 	if ( ! empty( $first ) && is_array( $first ) )	{
 		foreach ( $first as $key => $value )	{
 			$pages_options[ $key ] = $value;
 		}
 	}
-	
+
 	if ( $pages ) {
 		foreach ( $pages as $page ) {
 			$pages_options[ $page->ID ] = $page->post_title;
@@ -1839,11 +1839,11 @@ function mdjm_list_pages( $first = array(), $force = false ) {
  */
 function mdjm_list_txn_sources() {
 	$sources = mdjm_get_txn_source();
-	
+
 	foreach( $sources as $source )	{
-		$txn_sources[ $source ] = $source;	
+		$txn_sources[ $source ] = $source;
 	}
-	
+
 	return $txn_sources;
 } // mdjm_list_txn_sources
 
@@ -1884,7 +1884,7 @@ function mdjm_checkbox_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_checkbox_callback
 
 /**
@@ -1908,11 +1908,11 @@ function mdjm_multicheck_callback( $args ) {
 			else	{
 				$enabled = NULL;
 			}
-			
-			echo '<input name="mdjm_settings[' . $args['id'] . '][' . $key . ']" id="mdjm_settings[' . $args['id'] . '][' . $key . ']" type="checkbox" value="' . $option . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
-			echo '<label for="mdjm_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
+
+			echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
+			echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
 		endforeach;
-		echo '<p class="description">' . $args['desc'] . '</p>';
+		echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
 	}
 } // mdjm_multicheck_callback
 
@@ -1937,11 +1937,11 @@ function mdjm_radio_callback( $args ) {
 		elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[ $args['id'] ] ) )
 			$checked = true;
 
-		echo '<input name="mdjm_settings[' . $args['id'] . ']"" id="mdjm_settings[' . $args['id'] . '][' . $key . ']" type="radio" value="' . $key . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-		echo '<label for="mdjm_settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
+		echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . ']"" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="radio" value="' . esc_attr( $key ) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
+		echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
 	endforeach;
 
-	echo '<p class="description">' . $args['desc'] . '</p>';
+	echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
 } // mdjm_radio_callback
 
 /**
@@ -1974,7 +1974,7 @@ function mdjm_gateways_callback( $args )	{
 		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']">' . esc_html( $option['admin_label'] ) . '</label><br/>';
 	}
 
-	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_gateways_callback
 
@@ -2005,7 +2005,7 @@ function mdjm_gateway_select_callback( $args ) {
 	$html .= '</select>';
 	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo apply_filters( 'mdjm_after_setting_output', $html, $args );
+	echo apply_filters( 'mdjm_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_gateway_select_callback
 
@@ -2042,7 +2042,7 @@ function mdjm_text_callback( $args ) {
 	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_text_callback
 
 /**
@@ -2081,7 +2081,7 @@ function mdjm_number_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_number_callback
 
 /**
@@ -2107,7 +2107,7 @@ function mdjm_textarea_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_textarea_callback
 
 /**
@@ -2135,7 +2135,7 @@ function mdjm_password_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_password_callback
 
 /**
@@ -2149,8 +2149,8 @@ function mdjm_password_callback( $args ) {
  */
 function mdjm_missing_callback( $args ) {
 	printf(
-		__( 'The callback function used for the %s setting is missing.', 'mobile-dj-manager' ),
-		'<strong>' . $args['id'] . '</strong>'
+		esc_html__( 'The callback function used for the %s setting is missing.', 'mobile-dj-manager' ),
+		'<strong>' . esc_html( $args['id'] ) . '</strong>'
 	);
 } // mdjm_missing_callback
 
@@ -2184,7 +2184,7 @@ function mdjm_select_callback( $args ) {
 	} else {
 		$chosen = '';
 	}
-		
+
 	$html = '<select id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
@@ -2196,7 +2196,7 @@ function mdjm_select_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_select_callback
 
 /**
@@ -2217,7 +2217,7 @@ function mdjm_multiple_select_callback( $args ) {
 	} else {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
-	
+
 	if ( isset( $args['placeholder'] ) ) {
 		$placeholder = $args['placeholder'];
 	} else {
@@ -2241,7 +2241,7 @@ function mdjm_multiple_select_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_multiple_select_callback
 
 /**
@@ -2274,7 +2274,7 @@ function mdjm_color_select_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_color_select_callback
 
 /**
@@ -2312,7 +2312,7 @@ function mdjm_rich_editor_callback( $args ) {
 
 	$html .= '<p class="description"<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_rich_editor_callback
 
 /**
@@ -2340,7 +2340,7 @@ function mdjm_upload_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_upload_callback
 
 /**
@@ -2369,7 +2369,7 @@ function mdjm_color_callback( $args ) {
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
 
-	echo $html;
+	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_color_callback
 
 /**
@@ -2581,7 +2581,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 		wp_nonce_field( mdjm_sanitize_key( $args['id'] ) . '-nonce', mdjm_sanitize_key( $args['id'] ) . '-nonce' );
 
-		echo $html;
+		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 } // mdjm_license_key_callback

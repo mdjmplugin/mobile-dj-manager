@@ -53,7 +53,7 @@ function mdjm_sanitize_amount( $amount ) {
 
 	return apply_filters( 'mdjm_sanitize_amount', $amount );
 } // mdjm_sanitize_amount
-	
+
 /**
  * Returns a nicely formatted amount.
  *
@@ -91,7 +91,7 @@ function mdjm_format_amount( $amount, $decimals = true, $thousands = true ) {
 
 	$decimals		 = apply_filters( 'mdjm_format_amount_decimals', $decimals ? 2 : 0, $amount );
 	$thousands_sep	= apply_filters( 'mdjm_format_amount_thousands', $thousands ? $thousands_sep : '', $amount );
-	
+
 	$formatted = number_format( $amount, $decimals, $decimal_sep, $thousands_sep );
 
 	return apply_filters( 'mdjm_format_amount', $formatted, $amount, $decimals, $decimal_sep, $thousands_sep );
@@ -274,18 +274,18 @@ function mdjm_sanitize_key( $key ) {
  * @return	int		$date
 */
 function mdjm_format_short_date( $date = '' )	{
-	
+
 	if ( empty( $date ) )	{
 		$date = (string) current_time( 'timestamp' );
 	}
-	
+
 	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( $date >= ~PHP_INT_MAX ) )	{
 		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), $date );
 	} else	{
 		$short_date = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $date ) );
 	}
-		
-	return apply_filters( 'mdjm_format_short_date', $short_date, $date ); 
+
+	return apply_filters( 'mdjm_format_short_date', $short_date, $date );
 } // mdjm_format_short_date
 
 /**
@@ -297,21 +297,21 @@ function mdjm_format_short_date( $date = '' )	{
  * @return	int		$date
 */
 function mdjm_format_long_date( $date = '', $time = false )	{
-	
+
 	if ( empty( $date ) )	{
 		$date = current_time( 'timestamp' );
 	}
-	
+
 	$format = get_option( 'date_format', true ) . ! empty( $time ) ? ' \a\t ' .  get_option( 'time_format', true ): '';
-	
+
 	if( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
 		$long_date = date( $format, $date );
-				
+
 	} else	{
 		$long_date = date( $format, strtotime( $date ) );
 	}
-		
-	return apply_filters( 'mdjm_format_long_date', $long_date, $date ); 
+
+	return apply_filters( 'mdjm_format_long_date', $long_date, $date );
 } // mdjm_format_long_date
 
 /**
@@ -322,21 +322,21 @@ function mdjm_format_long_date( $date = '', $time = false )	{
  * @return	int		$date
 */
 function mdjm_format_time( $time = '' )	{
-	
+
 	if ( empty( $time ) )	{
 		$time = current_time( 'timestamp' );
 	}
-	
+
 	$format = mdjm_get_option( 'time_format', 'H:i' );
-	
+
 	if( ( (string) (int) $time === $time ) && ( $time <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) )	{
 		$time_format = date( $format, $time );
-				
+
 	} else	{
 		$time_format = date( $format, strtotime( $time ) );
 	}
-		
-	return apply_filters( 'mdjm_format_time', $time_format, $time ); 
+
+	return apply_filters( 'mdjm_format_time', $time_format, $time );
 } // mdjm_format_time
 
 /**
@@ -351,17 +351,17 @@ function mdjm_format_time( $time = '' )	{
 function mdjm_get_formatted_url( $page_id, $permalink=true, $echo=false )	{
 	// The URL
 	$return = get_permalink( $page_id );
-	
+
 	if ( ! empty( $permalink ) )	{
 		if( get_option( 'permalink_structure', false ) )	{
 			$return .= '?';
 		} else	{
-			$return .= '&amp;';	
+			$return .= '&amp;';
 		}
 	}
-	
+
 	if ( ! empty( $echo ) )	{
-		echo $return;	
+		echo esc_url( $return );
 	} else	{
 		return $return;
 	}
@@ -375,13 +375,13 @@ function mdjm_get_formatted_url( $page_id, $permalink=true, $echo=false )	{
  * @return	str		Filtered footer text string
  */
 function mdjm_wpadmin_footer_text( $text )	{
-	
+
 	$text .= ' ';
-	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ), 
+	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ),
 		'http://mdjm.co.uk',
 		MDJM_VERSION_NUM ) . '</em>';
-		
+
 	return $text;
-	
+
 } // mdjm_wpadmin_footer_text
 add_filter( 'admin_footer_text', 'mdjm_wpadmin_footer_text' );

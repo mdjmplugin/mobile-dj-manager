@@ -170,7 +170,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 						)
 					),
 					'date_query'             => array(
-						array( 
+						array(
 							'after'        => date( 'Y-m-d', $stats->start_date ),
 							'before'       => date( 'Y-m-d', $stats->end_date ),
 							'inclusive'    => true
@@ -247,7 +247,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 
 
 		if ( empty( $total_events ) ) {
-			echo '<p><em>' . sprintf( __( 'No %s for dates provided.', 'mobile-dj-manager' ), strtolower( $this->label_plural ) ) . '</em></p>';
+			echo '<p><em>' . sprintf( esc_html__( 'No %s for dates provided.', 'mobile-dj-manager' ), esc_html( strtolower(  $this->label_plural ) ) ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -284,7 +284,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 		}
 
 		if ( empty( $total_value ) ) {
-			echo '<p><em>' . __( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'No earnings for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
 		}
 
 		// Sort High to Low, prior to filter so people can reorder if they please
@@ -313,32 +313,32 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total enquiries for period shown: ', 'mobile-dj-manager' );
-                    echo $this->total_enquiries;
+					esc_html_e( 'Total enquiries for period shown: ', 'mobile-dj-manager' );
+                    echo esc_html( $this->total_enquiries );
                 ?>
             </strong>
         </p>
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total Conversions for period shown: ', 'mobile-dj-manager' );
-                    echo $this->total_conversions;
+					esc_html_e( 'Total Conversions for period shown: ', 'mobile-dj-manager' );
+                    echo esc_html( $this->total_conversions );
                 ?>
             </strong>
         </p>
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Conversion ratio for period shown: ', 'mobile-dj-manager' );
-                    echo round( (float) ( $this->total_conversions / $this->total_enquiries ) * 100 ) . '%';
+					esc_html_e( 'Conversion ratio for period shown: ', 'mobile-dj-manager' );
+                    echo esc_html( round( (float) ( $this->total_conversions / $this->total_enquiries ) * 100 ) . '%' );
                 ?>
             </strong>
         </p>
         <p class="mdjm_graph_totals">
             <strong>
                 <?php
-                    _e( 'Total Value for period shown: ', 'mobile-dj-manager' );
-                    echo mdjm_currency_filter( mdjm_format_amount( $this->total_value ) );
+					esc_html_e( 'Total Value for period shown: ', 'mobile-dj-manager' );
+                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_value ) ) );
                 ?>
             </strong>
         </p>
@@ -351,7 +351,7 @@ class MDJM_Conversions_Reports_Table extends WP_List_Table {
 	 * @since	1.4
 	 */
 	public function no_items() {
-		_e( 'No data to display for this period.', 'mobile-dj-manager' );
+		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**

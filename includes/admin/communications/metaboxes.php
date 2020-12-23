@@ -21,13 +21,13 @@ if ( ! defined( 'ABSPATH' ) )
  * @return
  */
 function mdjm_remove_communication_meta_boxes()	{
-	$metaboxes = apply_filters( 
+	$metaboxes = apply_filters(
 		'mdjm_communication_remove_metaboxes',
 		array(
 			array( 'submitdiv', 'mdjm_communication', 'side' )
 		)
 	);
-	
+
 	foreach( $metaboxes as $metabox )	{
 		remove_meta_box( $metabox[0], $metabox[1], $metabox[2] );
 	}
@@ -71,24 +71,24 @@ function mdjm_add_communication_meta_boxes( $post )	{
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_communication_before_metaboxes' );
-	
+
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
 		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
-		
+
 		// Permission check
 		if( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
-		
+
 		// Callback check
 		if( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-				
+
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -99,10 +99,10 @@ function mdjm_add_communication_meta_boxes( $post )	{
 			$metabox['args']
 		);
 	}
-	
+
 	// Runs after metabox output
 	do_action( 'mdjm_communication_after_metaboxes' );
-	
+
 } // mdjm_add_communication_meta_boxes
 add_action( 'add_meta_boxes_mdjm_communication', 'mdjm_add_communication_meta_boxes' );
 
@@ -114,15 +114,15 @@ add_action( 'add_meta_boxes_mdjm_communication', 'mdjm_add_communication_meta_bo
  * @return
  */
 function mdjm_communication_details_metabox( $post )	{
-	
+
 	do_action( 'mdjm_pre_communication_details_metabox', $post );
-	
+
 	wp_nonce_field( basename( __FILE__ ), 'mdjm_communication' . '_nonce' );
-		
+
 	$from      = get_userdata( $post->post_author );
 	$recipient = get_userdata( get_post_meta( $post->ID, '_recipient', true ) );
-	
-	$attachments = get_children( 
+
+	$attachments = get_children(
 		array(
 			'post_parent'  => $post->ID,
 			'post_type'    => 'attachment',
@@ -130,85 +130,85 @@ function mdjm_communication_details_metabox( $post )	{
 			'post_status'  => 'any'
 		)
 	);
-	
+
 	?>
-    <p><?php printf( __( '<strong>Date Sent</strong>: %s', 'mobile-dj-manager' ),
-		date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) ); ?></p>
-        
-    <p><?php printf( __( '<strong>From</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( "/user-edit.php?user_id={$from->ID}" ),
-		$from->display_name ); ?></p>
-        
-    <p><?php printf( __( '<strong>Recipient</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ),
-		admin_url( "/user-edit.php?user_id={$recipient->ID}" ), $recipient->display_name ); ?></p>
-    
+    <p><?php printf( __( '<strong>Date Sent</strong>: %s', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+
+    <p><?php printf( __( '<strong>From</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		esc_url( admin_url( "/user-edit.php?user_id={$from->ID}" ) ),
+		esc_html( $from->display_name ) ); ?></p>
+
+    <p><?php printf( __( '<strong>Recipient</strong>: <a href="%s">%s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		esc_url( admin_url( "/user-edit.php?user_id={$recipient->ID}" ) ), esc_html( $recipient->display_name ) ); ?></p>
+
     <?php
     $copies = get_post_meta( $post->ID, '_mdjm_copy_to', true );
-	
-		if ( ! empty( $copies ) )	{
-			
-			?><p><?php
 
-				_e( '<strong>Copied To</strong>: ', 'mobile-dj-manager' ); ?>
+		if ( ! empty( $copies ) )	{
+
+			?><p><?php
+				_e( '<strong>Copied To</strong>: ', 'mobile-dj-manager' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.Security.EscapeOutput.UnsafePrintingFunction ?>
+			<em>
 				<?php
-				
+
 				$i = 1;
 				foreach( $copies as $copy )	{
 					$user = get_user_by( 'email', $copy );
-					if ( $user )	{					
-						echo "<em>{$user->display_name}</em>";
-						
+					if ( $user )	{
+						echo esc_html( $user->display_name );
+
 						$i++;
-						
+
 						if ( $i < count( $copies ) )	{
 							echo '<br />';
 						}
-						
+
 					}
 				}
-				
-			?></p><?php
+
+			?></em></p><?php
 		}
     ?>
 
-    <p><?php _e( '<strong>Status</strong>:', 'mobile-dj-manager' ); ?>
-    	
-		<?php echo get_post_status_object( $post->post_status )->label;
-		
+    <p><?php _e( '<strong>Status</strong>:', 'mobile-dj-manager' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.Security.EscapeOutput.UnsafePrintingFunction ?>
+
+		<?php echo esc_html( get_post_status_object( $post->post_status )->label );
+
 		if ( $post->post_status == 'opened' )	{
-			echo ' ' . date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) );
+			echo ' ' . esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) );
 		}
 		?></p>
-        
-    <p><strong><?php echo mdjm_get_label_singular(); ?></strong>: <a href="<?php echo get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ); ?>"><?php echo mdjm_get_event_contract_id( stripslashes( get_post_meta( $post->ID, '_event', true ) ) ); ?></a></p>
-    
+
+    <p><strong><?php echo esc_html( mdjm_get_label_singular() ); ?></strong>: <a href="<?php echo esc_url( get_edit_post_link( get_post_meta( $post->ID, '_event', true ) ) ); ?>"><?php echo esc_html( mdjm_get_event_contract_id( wp_unslash( get_post_meta( $post->ID, '_event', true ) ) ) ); ?></a></p>
+
     <?php
     if( ! empty( $attachments ) )	{
-		
+
         $i = 1;
         ?>
-        <p><strong><?php _e( 'Attachments', 'mobile-dj-manager' ); ?></strong>:<br />
-            
+        <p><strong><?php esc_html_e( 'Attachments', 'mobile-dj-manager' ); ?></strong>:<br />
+
 			<?php
             foreach( $attachments as $attachment )	{
-                echo '<a style="font-size: 11px;" href="' . wp_get_attachment_url( $attachment->ID ) . '">';
-                echo basename( get_attached_file( $attachment->ID ) );
+                echo '<a style="font-size: 11px;" href="' . esc_url( wp_get_attachment_url( $attachment->ID ) ) . '">';
+                echo esc_html( basename( get_attached_file( $attachment->ID ) ) );
                 echo '</a>';
                 echo ( $i < count( $attachments ) ? '<br />' : '' );
-                $i++;	
+                $i++;
             }
             ?>
         </p>
-        <?php	
+        <?php
     }
     ?>
-    
-    <a class="button-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="<?php _e( 'Back to List', 'mobile-dj-manager' ); ?>"><?php _e( 'Back', 'mobile-dj-manager' ); ?></a>
-    
+
+    <a class="button-secondary" href="<?php echo isset( $_SERVER['HTTP_REFERER'] ) ? esc_url( sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) ) : '#'; ?>" title="<?php esc_attr_e( 'Back to List', 'mobile-dj-manager' ); ?>"><?php esc_html_e( 'Back', 'mobile-dj-manager' ); ?></a>
+
     <?php
-	
+
 	do_action( 'mdjm_post_communication_details_metabox', $post );
-	
+
 } // mdjm_communication_details_metabox
 
 /**
@@ -219,11 +219,11 @@ function mdjm_communication_details_metabox( $post )	{
  * @return
  */
 function mdjm_communication_content_metabox( $post )	{
-	
-	do_action( 'mdjm_pre_communication_content_metabox', $post );		
-	
-	echo $post->post_content;
-	
+
+	do_action( 'mdjm_pre_communication_content_metabox', $post );
+
+	echo $post->post_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 	do_action( 'mdjm_post_communication_content_metabox', $post );
-	
+
 } // mdjm_communication_content_metabox

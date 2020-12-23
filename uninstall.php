@@ -2,7 +2,7 @@
 /**
  * Uninstallation procedures for MDJM.
  * What happens here is determined by the plugin uninstallation settings.
- * 
+ *
  * @since 0.8
  */
 
@@ -13,14 +13,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )	{
 
 // Call the MDJM main class file
 include_once( 'mobile-dj-manager.php' );
-	
+
 global $wpdb;
 
 ignore_user_abort( true );
 
-if ( ! mdjm_is_func_disabled( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
-    @set_time_limit( 0 );
-}
+mdjm_set_time_limit( 0 );
+
 
 remove_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
 remove_action( 'save_post_mdjm-package', 'mdjm_save_package_post', 10, 2 );
@@ -42,7 +41,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 		'package-category', 'addon-category', 'event-types', 'enquiry-source', 'playlist-category',
 		'transaction-types', 'venue-details'
 	);
-	
+
 	$mdjm_post_types = array(
 		'mdjm-event', 'mdjm-package', 'mdjm-addon', 'mdjm_communication',
 		'contract', 'mdjm-signed-contract', 'mdjm-custom-field', 'email_template',
@@ -64,7 +63,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 
 	// Delete Terms & Taxonomies
 	foreach ( array_unique( array_filter( $mdjm_taxonomies ) ) as $taxonomy )	{
-	
+
 		$terms = $wpdb->get_results( $wpdb->prepare(
 			"SELECT t.*, tt.*
 			FROM $wpdb->terms
@@ -75,7 +74,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 			WHERE tt.taxonomy IN ('%s')
 			ORDER BY t.name ASC", $taxonomy
 		) );
-	
+
 		// Delete Terms.
 		if ( $terms ) {
 			foreach ( $terms as $term ) {
@@ -84,7 +83,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 				$wpdb->delete( $wpdb->terms, array( 'term_id' => $term->term_id ) );
 			}
 		}
-	
+
 		// Delete Taxonomies.
 		$wpdb->delete( $wpdb->term_taxonomy, array( 'taxonomy' => $taxonomy ), array( '%s' ) );
 	}
@@ -160,55 +159,55 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) )	{
 	$all_caps = array(
 		// MDJM Admin
 		'manage_mdjm',
-		
+
 		// Clients
 		'mdjm_client_edit', 'mdjm_client_edit_own',
-		
+
 		// Employees
 		'mdjm_employee_edit',
-		
+
 		// Packages
 		'mdjm_package_edit_own', 'mdjm_package_edit',
 		'publish_mdjm_packages', 'edit_mdjm_packages',
 		'edit_others_mdjm_packages', 'delete_mdjm_packages',
 		'delete_others_mdjm_packages', 'read_private_mdjm_packages',
-	
+
 		// Comm posts
 		'mdjm_comms_send', 'edit_mdjm_comms', 'edit_others_mdjm_comms',
-		'publish_mdjm_comms', 'read_private_mdjm_comms', 
+		'publish_mdjm_comms', 'read_private_mdjm_comms',
 		'edit_published_mdjm_comms', 'delete_mdjm_comms',
 		'delete_others_mdjm_comms', 'delete_private_mdjm_comms',
 		'delete_published_mdjm_comms', 'edit_private_mdjm_comms',
-		
+
 		// Event posts
 		'mdjm_event_read', 'mdjm_event_read_own', 'mdjm_event_edit',
 		'mdjm_event_edit_own', 'publish_mdjm_events', 'edit_mdjm_events',
 		'edit_others_mdjm_events', 'delete_mdjm_events', 'delete_others_mdjm_events',
 		'read_private_mdjm_events',
-		
+
 		// Quote posts
 		'mdjm_quote_view_own', 'mdjm_quote_view', 'edit_mdjm_quotes',
-		'edit_others_mdjm_quotes', 'publish_mdjm_quotes', 
+		'edit_others_mdjm_quotes', 'publish_mdjm_quotes',
 		'read_private_mdjm_quotes', 'edit_published_mdjm_quotes',
 		'edit_private_mdjm_quotes', 'delete_mdjm_quotes', 'delete_others_mdjm_quotes',
 		'delete_private_mdjm_quotes', 'delete_published_mdjm_quotes',
-	
+
 		// Reports
 		'view_event_reports',
-	
+
 		// Templates
 		'mdjm_template_edit', 'edit_mdjm_templates',
 		'edit_others_mdjm_templates', 'publish_mdjm_templates', 'read_private_mdjm_templates',
 		'edit_published_mdjm_templates', 'edit_private_mdjm_templates', 'delete_mdjm_templates',
 		'delete_others_mdjm_templates', 'delete_private_mdjm_templates',
 		'delete_published_mdjm_templates',
-		
+
 		// Transaction posts
 		'mdjm_txn_edit', 'edit_mdjm_txns', 'edit_others_mdjm_txns', 'publish_mdjm_txns',
 		'read_private_mdjm_txns', 'edit_published_mdjm_txns', 'edit_private_mdjm_txns',
 		'delete_mdjm_txns', 'delete_others_mdjm_txns', 'delete_private_mdjm_txns',
 		'delete_published_mdjm_txns',
-		
+
 		// Venue posts
 		'mdjm_venue_read', 'mdjm_venue_edit', 'edit_mdjm_venues',
 		'edit_others_mdjm_venues', 'publish_mdjm_venues', 'read_private_mdjm_venues',

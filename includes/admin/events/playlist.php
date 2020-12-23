@@ -1,7 +1,7 @@
 <?php
 /**
  * Manage playlists in admin.
- * 
+ *
  * @since		1.5
  * @package		MDJM
  * @subpackage	Functions/Playlists
@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Ensure that the guest playlist term cannot be deleted by removing the 
+ * Ensure that the guest playlist term cannot be deleted by removing the
  * delete option from the hover menu on the edit screen.
- * 
+ *
  * @since	1.5
  * @param	arr		$actions		The array of actions in the hover menu
  * @param	obj		$tag			The object array for the term
@@ -32,7 +32,7 @@ function mdjm_playlist_guest_term_remove_delete_row_action( $actions, $tag )	{
 add_filter( 'playlist-category_row_actions', 'mdjm_playlist_guest_term_remove_delete_row_action', 10, 2 );
 
 /**
- * Ensure that the guest playlist category term cannot be deleted by removing the 
+ * Ensure that the guest playlist category term cannot be deleted by removing the
  * bulk action checkboxes.
  *
  * @since	1.05
@@ -57,7 +57,7 @@ function mdjm_playlist_guest_term_remove_checkbox()	{
 		foreach( $terms as $term )	{
 
 			if ( ! empty( $term->term_id ) && 'guest' == $term->slug )	{
-				?>$('input#cb-select-<?php echo $term->term_id; ?>').prop('disabled', true).hide();<?php
+				?>$('input#cb-select-<?php echo esc_attr( $term->term_id ); ?>').prop('disabled', true).hide();<?php
 			}
 
 		}

@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) )
  * @return
  */
 function mdjm_remove_transaction_meta_boxes()	{
-	$metaboxes = apply_filters( 
+	$metaboxes = apply_filters(
 		'mdjm_transaction_remove_metaboxes',
 		array(
 			array( 'submitdiv', 'mdjm-transaction', 'side' ),
 			array( 'transaction-typesdiv', 'mdjm-transaction', 'side' ),
 		)
 	);
-	
+
 	foreach( $metaboxes as $metabox )	{
 		remove_meta_box( $metabox[0], $metabox[1], $metabox[2] );
 	}
@@ -72,24 +72,24 @@ function mdjm_add_transaction_meta_boxes( $post )	{
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_transaction_before_metaboxes' );
-	
+
 	// Begin metaboxes
 	foreach( $metaboxes as $metabox )	{
 		// Dependancy check
 		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
 			continue;
 		}
-		
+
 		// Permission check
 		if( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
 			continue;
 		}
-		
+
 		// Callback check
 		if( ! is_callable( $metabox['callback'] ) )	{
 			continue;
 		}
-				
+
 		add_meta_box(
 			$metabox['id'],
 			$metabox['title'],
@@ -100,7 +100,7 @@ function mdjm_add_transaction_meta_boxes( $post )	{
 			$metabox['args']
 		);
 	}
-	
+
 	// Runs after metabox output
 	do_action( 'mdjm_transaction_after_metaboxes' );
 } // mdjm_add_transaction_meta_boxes
@@ -114,11 +114,11 @@ add_action( 'add_meta_boxes_mdjm-transaction', 'mdjm_add_transaction_meta_boxes'
  * @return
  */
 function mdjm_transaction_metabox_save_txn( $post )	{
-	
+
 	do_action( 'mdjm_pre_txn_save_metabox', $post );
-	
+
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-transaction' . '_nonce' );
-		
+
 	?>
     <div id="new_transaction_type_div">
         <div class="mdjm-meta-row" style="height: 60px !important">
@@ -132,8 +132,8 @@ function mdjm_transaction_metabox_save_txn( $post )	{
 
     <div class="mdjm-meta-row">
         <div class="mdjm-left-col">
-         <?php 
-        submit_button( 
+         <?php
+        submit_button(
                     ( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
                     'primary',
                     'save',
@@ -143,9 +143,9 @@ function mdjm_transaction_metabox_save_txn( $post )	{
         </div>
     </div>
     <?php
-	
+
 	do_action( 'mdjm_post_txn_save_metabox', $post );
-	
+
 } // mdjm_transaction_metabox_save_txn
 
 /**
@@ -181,12 +181,12 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	do_action( 'mdjm_pre_txn_details_metabox', $post );
 
 	?>
- 
+
 	<input type="hidden" name="mdjm_update_custom_post" id="mdjm_update_custom_post" value="mdjm_update" />
 
 	<div class="mdjm-post-row-single">
 		<div class="mdjm-post-1column">
-			<p><?php echo $message; ?></p>
+			<p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 		</div>
 	</div>
 
@@ -199,32 +199,32 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 
 	echo '<div class="mdjm-post-row">' . "\r\n";
 		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' . 
-				mdjm_currency_symbol() . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' . 
-				mdjm_sanitize_amount( '10' ) . '" value="' . mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_txn_total', true ) ) . '" />' . "\r\n";
+			echo '<label class="mdjm-label" for="transaction_amount">Amount:</label><br />' .
+				esc_html( mdjm_currency_symbol() ) . '<input type="text" name="transaction_amount" id="transaction_amount" class="small-text required" placeholder="' .
+				esc_html( mdjm_sanitize_amount( '10' ) ) . '" value="' . esc_attr( mdjm_sanitize_amount( get_post_meta( $post->ID, '_mdjm_txn_total', true ) ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
-	
+
 		echo '<div class="mdjm-post-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_display_date">Date:</label><br />' . 
-			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . mdjm_format_short_date( $post->post_date ) . '" />' .
-			'<input type="hidden" name="transaction_date" id="transaction_date" value="' . date( 'Y-m-d', strtotime( $post->post_date ) ) . '" />' . "\r\n";
+			echo '<label class="mdjm-label" for="transaction_display_date">Date:</label><br />' .
+			'<input type="text" name="transaction_display_date" id="transaction_display_date" class="trans_date required" value="' . esc_attr( mdjm_format_short_date( $post->post_date ) ) . '" />' .
+			'<input type="hidden" name="transaction_date" id="transaction_date" value="' . esc_attr( date( 'Y-m-d', strtotime( $post->post_date ) ) ) . '" />' . "\r\n";
 		echo '</div>' . "\r\n";
-	
+
 		echo '<div class="mdjm-post-last-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_direction">Direction:</label><br />' . 
-			'<select name="transaction_direction" id="transaction_direction" onChange="displayPaid();">' . "\r\n" . 
-			'<option value="In"' . selected( 'mdjm-income', $post->post_status, false ) . '>Incoming</option>' . "\r\n" . 
-			'<option value="Out"' . selected( 'mdjm-expenditure', $post->post_status, false ) . '>Outgoing</option>' . "\r\n" . 
+			echo '<label class="mdjm-label" for="transaction_direction">Direction:</label><br />' .
+			'<select name="transaction_direction" id="transaction_direction" onChange="displayPaid();">' . "\r\n" .
+			'<option value="In"' . selected( 'mdjm-income', $post->post_status, false ) . '>Incoming</option>' . "\r\n" .
+			'<option value="Out"' . selected( 'mdjm-expenditure', $post->post_status, false ) . '>Outgoing</option>' . "\r\n" .
 			'</select>' . "\r\n";
 		echo '</div>' . "\r\n";
-	echo '</div>' . "\r\n";	
+	echo '</div>' . "\r\n";
 	?>
 	<style>
 	#paid_from_field	{
-		display: <?php echo ( $post->post_status != 'mdjm-expenditure' ? 'block' : 'none' ); ?>;	
+		display: <?php echo ( $post->post_status != 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
 	}
 	#paid_to_field	{
-		display: <?php echo ( $post->post_status == 'mdjm-expenditure' ? 'block' : 'none' ); ?>;	
+		display: <?php echo ( $post->post_status == 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
 	}
 	</style>
 	<script type="text/javascript">
@@ -233,7 +233,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 		var direction_val = direction.options[direction.selectedIndex].value;
 		var paid_from_div =  document.getElementById("paid_from_field");
 		var paid_to_div =  document.getElementById("paid_to_field");
-	
+
 	  if (direction_val == 'Out') {
 		  paid_from_div.style.display = "none";
 		  paid_to_div.style.display = "block";
@@ -241,8 +241,8 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	  else {
 		  paid_from_div.style.display = "block";
 		  paid_to_div.style.display = "none";
-	  }  
-	} 
+	  }
+	}
 	</script>
 	<?php
 	echo '<div class="mdjm-post-row">' . "\r\n";
@@ -250,23 +250,23 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 			echo '<div id="paid_from_field">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_from">Paid From:</label><br />';
 			echo '</div>' . "\r\n";
-			
+
 			echo '<div id="paid_to_field">' . "\r\n";
 				echo '<label class="mdjm-label" for="transaction_to">Paid To:</label><br />';
 			echo '</div>' . "\r\n";
-			echo '<input type="text" name="transaction_payee" id="transaction_payee" class="regular_text" value="' 
-				. ( $post->post_status == 'mdjm-income' ? 
+			echo '<input type="text" name="transaction_payee" id="transaction_payee" class="regular_text" value="'
+				. esc_attr( ( $post->post_status == 'mdjm-income' ?
 				get_post_meta( $post->ID, '_mdjm_payment_from', true ) :
-				get_post_meta( $post->ID, '_mdjm_payment_to', true ) )
+				get_post_meta( $post->ID, '_mdjm_payment_to', true ) ) )
 				. '" />';
 		echo '</div>' . "\r\n";
-		
+
 		/* -- The current transaction type -- */
 		$existing_transaction_type = wp_get_object_terms( $post->ID, 'transaction-types' );
 		echo '<div class="mdjm-post-3column">' . "\r\n";
 			echo '<label class="mdjm-label" for="transaction_for">Type:</label><br />';
 				echo '<div id="transaction_types">' . "\r\n";
-					/* -- Display the drop down selection -- */    
+					/* -- Display the drop down selection -- */
 					wp_dropdown_categories( array( 'taxonomy' 			=> 'transaction-types',
 												   'hide_empty' 		=> 0,
 												   'name' 				=> 'mdjm_transaction_type',
@@ -280,20 +280,20 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 						echo '<a id="new_transaction_type" class="side-meta" href="#">Add New</a>' . "\r\n";
 				echo '</div>' . "\r\n";
 		echo '</div>' . "\r\n";
-		echo '<script type="text/javascript">' . "\r\n" . 
-		'jQuery("#mdjm_transaction_type option:first").val(null);' . "\r\n" . 
+		echo '<script type="text/javascript">' . "\r\n" .
+		'jQuery("#mdjm_transaction_type option:first").val(null);' . "\r\n" .
 		'</script>' . "\r\n";
 		$sources = mdjm_get_txn_source();
 		echo '<div class="mdjm-post-last-3column">' . "\r\n";
-			echo '<label class="mdjm-label" for="transaction_src">Source:</label><br />' . "\r\n" . 
-				'<select name="transaction_src" id="transaction_src" class="required">' . "\r\n" . 
+			echo '<label class="mdjm-label" for="transaction_src">Source:</label><br />' . "\r\n" .
+				'<select name="transaction_src" id="transaction_src" class="required">' . "\r\n" .
 				'<option value="">--- Select ---</option>' . "\r\n";
 				foreach( $sources as $source )	{
-					echo '<option value="' . $source . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . $source . '</option>' . "\r\n";	
+					echo '<option value="' . esc_attr( $source ) . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . esc_attr( $source ) . '</option>' . "\r\n";
 				}
 				echo '</select>' . "\r\n";
 		echo '</div>' . "\r\n";
-		
+
 	echo '</div>' . "\r\n";
 	?>
 	<script type="text/javascript">
@@ -314,12 +314,12 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	</div>
 	<div class="mdjm-post-row-single-textarea">
 		<div class="mdjm-post-1column">
-			<label for="transaction_description" class="mdjm-label"><?php _e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
+			<label for="transaction_description" class="mdjm-label"><?php esc_html_e( 'Description', 'mobile-dj-manager' ); ?>:</label><br />
 			<textarea name="transaction_description" id="transaction_description" class="widefat" cols="30" rows="3" placeholder="Enter any optional information here..."><?php echo esc_attr( get_post_meta( $post->ID, '_mdjm_txn_notes', true ) ); ?></textarea>
 		</div>
 	</div>
 	<?php
-	
+
 	do_action( 'mdjm_post_txn_details_metabox', $post );
-	
+
 } // mdjm_transaction_metabox_txn_details

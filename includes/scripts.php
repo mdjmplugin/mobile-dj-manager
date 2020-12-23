@@ -142,7 +142,7 @@ function mdjm_register_styles()	{
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
 
-	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );	
+	wp_register_style( 'font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' );
 	wp_enqueue_style( 'font-awesome' );
 
 	if ( ! empty( $post ) )	{
@@ -245,12 +245,12 @@ function mdjm_register_admin_scripts( $hook )	{
 	}
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'mdjm-addon' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$sortable[] = 'post.php';
 			$sortable[] = 'post-new.php';
 		}
 
-		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'mdjm-event' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$editing_event = true;
 		}
 
@@ -263,7 +263,7 @@ function mdjm_register_admin_scripts( $hook )	{
 			$require_validation[] = 'post-new.php';
 		}
 
-		if ( isset( $_GET['post'] ) && 'mdjm-transaction' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'mdjm-transaction' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery' ), MDJM_VERSION_NUM );
 			wp_enqueue_script( 'mdjm-trans-js' );
 			wp_localize_script( 'mdjm-trans-js', 'transaction_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
@@ -357,7 +357,7 @@ function mdjm_register_admin_scripts( $hook )	{
                 'current_page'         => $hook,
 				'deposit_is_pct'       => ( 'percentage' == mdjm_get_event_deposit_type() ) ? true : false,
 				'editing_event'        => $editing_event,
-				'load_recipient'       => isset( $_GET['recipient'] ) ? $_GET['recipient'] : false,
+				'load_recipient'       => isset( $_GET['recipient'] ) ? absint( wp_unslash( $_GET['recipient'] ) ) : false,
                 'min_travel_distance'  => mdjm_get_option( 'travel_min_distance' ),
                 'no_client_email'      => __( 'Enter an email address for the client', 'mobile-dj-manager' ),
 				'no_client_first_name' => __( 'Enter a first name for the client', 'mobile-dj-manager' ),

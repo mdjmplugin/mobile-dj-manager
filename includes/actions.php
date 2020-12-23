@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) )
 */
 function mdjm_get_actions() {
 	if ( isset( $_GET['mdjm_action'] ) ) {
-		do_action( 'mdjm_' . $_GET['mdjm_action'], $_GET );
+		do_action( 'mdjm_' . sanitize_text_field( wp_unslash( $_GET['mdjm_action'] ) ), $_GET );
 	}
 } // mdjm_get_actions
 add_action( 'init', 'mdjm_get_actions' );
@@ -38,7 +38,7 @@ add_action( 'init', 'mdjm_get_actions' );
 */
 function mdjm_post_actions() {
 	if ( isset( $_POST['mdjm_action'] ) ) {
-		do_action( 'mdjm_' . $_POST['mdjm_action'], $_POST );
+		do_action( 'mdjm_' . sanitize_text_field( wp_unslash( $_POST['mdjm_action'] ) ), $_POST );
 	}
 } // mdjm_post_actions
 add_action( 'init', 'mdjm_post_actions' );
@@ -55,14 +55,14 @@ add_action( 'init', 'mdjm_post_actions' );
  */
 function mdjm_action_field( $action, $echo = true )	{
 	$name = apply_filters( 'mdjm_action_field_name', 'mdjm_action' );
-	
+
 	$input = '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $action . '" />';
-	
+
 	if( ! empty( $echo ) )	{
-		echo apply_filters( 'mdjm_action_field', $input, $action );
+		echo apply_filters( 'mdjm_action_field', $input, $action ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	else	{
 		return apply_filters( 'mdjm_action_field', $input, $action );
 	}
-	
+
 } // mdjm_action_field
