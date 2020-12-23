@@ -4,7 +4,7 @@ Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner,
 Requires at least: 5.3
 Tested up to: 5.6
 Requires PHP: 7.3
-Stable tag: 1.5.7
+Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://mdjm.co.uk/support-our-work/
@@ -83,6 +83,19 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.8 =
+
+**Wednesday, 23rd December 2020**
+
+**Security**: Audit: Fixed several XSS vulnerabilities
+**Security**: Audit: Input data hardening (validation and sanitization)
+**Security**: Audit: Output data hardening (escaping)
+**Security**: Fix unauthorised client event access (Reported by waynehaffenden)
+
+**New**: Compatibility up to WordPress 5.6
+
+**Bug**: 'Disable the visual editor when writing' breaks editor on communications screen (Reported by rikkilake)
 
 = 1.5.7 =
 
