@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
 			current_cost : $('#_mdjm_event_cost').val(),
 			action       : 'update_event_deposit'
 		};
-		
+
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
@@ -65,7 +65,7 @@ jQuery(document).ready(function ($) {
 					$('#_mdjm_event_deposit').val(current_deposit);
 				}
 				$('#mdjm-event-pricing-detail').removeClass('mdjm-mute');
-				$('#_mdjm_event_deposit').attr('readonly', false );				
+				$('#_mdjm_event_deposit').attr('readonly', false );
 			}
 		}).fail(function (data) {
 			if ( window.console && window.console.log ) {
@@ -74,10 +74,10 @@ jQuery(document).ready(function ($) {
 			$('#_mdjm_event_deposit').val(current_deposit);
 		});
 	};
-	
+
 	// Set the event cost.
 	var setCost = function()	{
-		
+
 		var current_cost = $('#_mdjm_event_cost').val();
 		var venue;
 
@@ -239,7 +239,7 @@ jQuery(document).ready(function ($) {
 
 			// Sortable Custom Event Fields
 			$('.mdjm-custom-client-list-item,.mdjm-custom-event-list-item,.mdjm-custom-venue-list-item').sortable({
-				
+
 				handle: '.mdjm_draghandle',
 				items: '.mdjm_sortable_row',
 				opacity: 0.6,
@@ -284,6 +284,7 @@ jQuery(document).ready(function ($) {
             // Toggle display of absence form section
             $( document.body ).on( 'click', '.toggle-add-absence-section', function(e) {
                 e.preventDefault();
+
                 var show = $(this).html() === mdjm_admin_vars.show_absence_form ? true : false;
 
                 if ( show ) {
@@ -483,7 +484,7 @@ jQuery(document).ready(function ($) {
 	 * Events screen JS
 	 */
 	var MDJM_Events = {
-		
+
 		init : function()	{
 			this.options();
 			this.client();
@@ -563,12 +564,12 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#toggle_client_details', function() {
 				$('#mdjm-event-client-details').toggle('slow');
 			});
-			
+
 			// Update the client details when the client selection changes
 			$( document.body ).on( 'change', '#client_name', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				if ( '' === $('#client_name').val() )	{
 					$('#mdjm-event-add-new-client-fields').hide('slow');
 					return;
@@ -583,7 +584,7 @@ jQuery(document).ready(function ($) {
 						event_id   : $('#post_ID').val(),
 						action     : 'mdjm_refresh_client_details'
 					};
-	
+
 					$.ajax({
 						type       : 'POST',
 						dataType   : 'json',
@@ -594,11 +595,11 @@ jQuery(document).ready(function ($) {
 						},
 						success: function (response) {
 							$('#mdjm-loading').replaceWith(response.client_details);
-	
+
 						}
 					}).fail(function (data) {
 						$('#mdjm-event-client-details').replaceWith('<div id="mdjm-loading" class="mdjm-loader"><img src="' + mdjm_admin_vars.ajax_loader + '" /></div>');
-	
+
 						if ( window.console && window.console.log ) {
 							console.log( data );
 						}
@@ -679,7 +680,7 @@ jQuery(document).ready(function ($) {
 				});
 
 			});
-			
+
 			// Display custom client fields
 			$( document.body ).on( 'click', '#toggle_custom_client_fields', function() {
 				$('#mdjm_event_custom_client_fields').toggle('fast');
@@ -692,7 +693,7 @@ jQuery(document).ready(function ($) {
 			$( document.body ).on( 'click', '#toggle_custom_venue_fields', function() {
 				$('#mdjm_event_custom_venue_fields').toggle('fast');
 			});
-			
+
 		},
 
 		employee : function()	{
@@ -714,7 +715,7 @@ jQuery(document).ready(function ($) {
 					role_name : $('#add_mdjm_role').val(),
 					action    : 'mdjm_add_role'
 				};
-						
+
 				$.ajax({
 					type: 'POST',
 					dataType: 'json',
@@ -797,7 +798,7 @@ jQuery(document).ready(function ($) {
 					employee_wage : $('#event_new_employee_wage').val(),
 					action        : 'add_employee_to_event'
 				};
-				
+
 				$.ajax({
 					type       : 'POST',
 					dataType   : 'json',
@@ -827,20 +828,20 @@ jQuery(document).ready(function ($) {
 						console.log( data );
 					}
 				});
-				
+
 			});
-			
+
 			// Remove an employee from the event
 			$( document.body ).on( 'click', '.remove_event_employee', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				var postData    = {
 					event_id    : $('#post_ID').val(),
 					employee_id : $(this).data('employee_id'),
 					action      : 'remove_employee_from_event'
 				};
-				
+
 				$.ajax({
 					type       : 'POST',
 					dataType   : 'json',
@@ -867,16 +868,16 @@ jQuery(document).ready(function ($) {
 						console.log( data );
 					}
 				});
-				
+
 			});
 		},
-		
+
 		equipment : function()	{
 
 			$( document.body ).on( 'change', '#_mdjm_event_package,#event_addons,#_mdjm_event_additional_cost,#_mdjm_event_discount', function() {
 				setCost();
 			});
-			
+
 			$( document.body ).on( 'focusout', '#_mdjm_event_cost', function() {
 				if( mdjm_admin_vars.deposit_is_pct )	{
 					setDeposit();
@@ -910,7 +911,7 @@ jQuery(document).ready(function ($) {
 							$('#_mdjm_event_package').empty(); // Remove existing package options
 							$('#_mdjm_event_package').append(response.packages);
 							$('#_mdjm_event_package').trigger('chosen:updated');
-							
+
 							$('#event_addons').empty(); // Remove existing addon options
 							$('#event_addons').append(response.addons);
 							$('#event_addons').trigger('chosen:updated');
@@ -921,7 +922,7 @@ jQuery(document).ready(function ($) {
 							setCost();
 						} else	{
 							alert(response.msg);
-						}						
+						}
 
 						$('#mdjm-equipment-loader').hide();
 						$('#mdjm-event-equipment-row').show();
@@ -938,7 +939,7 @@ jQuery(document).ready(function ($) {
 
 			// Refresh the add-ons when the package is updated
 			$( document.body ).on( 'change', '#_mdjm_event_package', function(event) {
-				
+
 				event.preventDefault();
 
 				var postData        = {
@@ -970,7 +971,7 @@ jQuery(document).ready(function ($) {
 							$('#mdjm-event-equipment-row').show();
 						} else	{
 							alert(response.msg);
-						}	
+						}
 
 						$('#mdjm-equipment-loader').hide();
 						$('#mdjm-event-equipment-row').show();
@@ -1183,15 +1184,15 @@ jQuery(document).ready(function ($) {
 
 			// Save a new event type
 			$( document.body ).on( 'click', '#mdjm-add-event-type', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				var postData = {
 					type    : $('#event_type_name').val(),
 					current : $('#mdjm_event_type').val(),
 					action  : 'add_event_type'
 				};
-				
+
 				$.ajax({
 					type       : 'POST',
 					dataType   : 'json',
@@ -1226,7 +1227,7 @@ jQuery(document).ready(function ($) {
 						console.log( data );
 					}
 				});
-		
+
 			});
 
 			// Show/Hide the email templates when the disable emails checkbox is toggled
@@ -1235,7 +1236,7 @@ jQuery(document).ready(function ($) {
 			});
 
 		},
-		
+
 		txns : function()	{
 
 			// Show/Hide transaction table
@@ -1253,7 +1254,7 @@ jQuery(document).ready(function ($) {
 					$('#toggle_add_txn_fields').text('show form');
 				}
 			});
-			
+
 			// Transaction direction
 			$( document.body ).on( 'change', '#mdjm_txn_direction', function() {
 				if ( 'In' === $('#mdjm_txn_direction').val() )	{
@@ -1270,7 +1271,7 @@ jQuery(document).ready(function ($) {
 
 			// Save an event transation
 			$( document.body ).on( 'click', '#save_transaction', function(event) {
-				
+
 				event.preventDefault();
 
 				if ( $('#mdjm_txn_amount').val().length < 1 )	{
@@ -1289,7 +1290,7 @@ jQuery(document).ready(function ($) {
 					alert( mdjm_admin_vars.no_txn_src );
 					return false;
 				}
-				
+
 				var postData         = {
 					event_id        : $('#post_ID').val(),
 					client          : $('#client_name').val(),
@@ -1303,7 +1304,7 @@ jQuery(document).ready(function ($) {
 					send_notice     : ( $('#mdjm_manual_txn_email').is(':checked') ) ? 1 : 0,
 					action          : 'add_event_transaction'
 				};
-				
+
 				$.ajax({
 					type       : 'POST',
 					dataType   : 'json',
@@ -1315,10 +1316,10 @@ jQuery(document).ready(function ($) {
 					success: function (response) {
 						if(response.type === 'success') {
 							if(response.deposit_paid === 'Y')	{
-								$('#deposit_paid').prop('checked', true );	
+								$('#deposit_paid').prop('checked', true );
 							}
 							if(response.balance_paid === 'Y')	{
-								$('#balance_paid').prop('checked', true );	
+								$('#balance_paid').prop('checked', true );
 							}
 							if( response.event_status !== $('#mdjm_event_status').val() ) {
 								$('#mdjm_event_status').val(response.event_status);
@@ -1335,9 +1336,9 @@ jQuery(document).ready(function ($) {
 					}
 				});
 			});
-			
+
 		},
-		
+
 		venue : function()	{
 			// Show manual venue details if pre-selected on event load
 			if ( mdjm_admin_vars.current_page === 'post.php' )	{
@@ -1370,25 +1371,25 @@ jQuery(document).ready(function ($) {
 					$('#venue_name').focus();
 				}
             });
-			
+
 			// Update the venue details when the venue selection changes
 			$( document.body ).on( 'change', '#venue_id', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				refreshEventVenueDetails();
 			});
 
 			// Add a new venue from the event screen
 			$( document.body ).on( 'click', '#mdjm-add-venue', function(event) {
-				
+
 				event.preventDefault();
-				
+
 				if ( $('#venue_name').val().length < 1 )	{
 					$('#venue_name').addClass('mdjm-form-error');
 					return;
 				}
-				
+
 				var postData = {
 					venue_name        : $('#venue_name').val(),
 					venue_contact     : $('#venue_contact').val(),
@@ -1435,9 +1436,9 @@ jQuery(document).ready(function ($) {
 					}
 				});
 			});
-			
+
 		}
-		
+
 	};
 	MDJM_Events.init();
 
@@ -1630,7 +1631,7 @@ jQuery(document).ready(function ($) {
 					recipient : recipient,
 					action    : 'mdjm_user_events_dropdown'
 				};
-				
+
 				$.ajax({
 					type       : 'POST',
 					dataType   : 'json',
@@ -1653,7 +1654,7 @@ jQuery(document).ready(function ($) {
 				});
 
 			};
-			
+
 			// Set initial event list when page loads
 			if( mdjm_admin_vars.load_recipient )	{
 				$('#mdjm_email_to').val(mdjm_admin_vars.load_recipient);
@@ -1692,14 +1693,21 @@ jQuery(document).ready(function ($) {
 						$('#mdjm_email_content').fadeTo('slow', 0.5);
 						$('#mdjm_email_template').addClass('mdjm-updating');
 						$('#mdjm_email_template').fadeTo('slow', 0.5);
-						tinymce.execCommand('mceToggleEditor',false,'mdjm_email_content');
+
+						if (typeof(tinymce) !== 'undefined') {
+							tinymce.execCommand('mceToggleEditor', false, 'mdjm_email_content');
+						}
 					},
 					success: function (response) {
 						if(response.type === 'success') {
 							$('#mdjm_email_content').empty();
-							tinyMCE.activeEditor.setContent('');
 							$('#mdjm_email_subject').val(response.updated_subject);
-							tinyMCE.activeEditor.setContent(response.updated_content);
+
+							if (typeof(tinymce) !== 'undefined') {
+								tinymce.activeEditor.setContent('');
+								tinymce.activeEditor.setContent(response.updated_content);
+							}
+
 							$('#mdjm_email_content').val(response.updated_content);
 						} else	{
 							alert(response.msg);
@@ -1710,7 +1718,10 @@ jQuery(document).ready(function ($) {
 						$('#mdjm_email_content').removeClass('mdjm-updating');
 						$('#mdjm_email_template').removeClass('mdjm-updating');
 						$('#mdjm_email_template').fadeTo('slow', 1);
-						tinymce.execCommand('mceToggleEditor',false,'mdjm_email_content');
+
+						if (typeof(tinymce) !== 'undefined') {
+							tinymce.execCommand('mceToggleEditor', false, 'mdjm_email_content');
+						}
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
@@ -1948,10 +1959,10 @@ jQuery(document).ready(function ($) {
 			errorClass: 'mdjm-form-error',
 			validClass: 'mdjm-form-valid',
 			focusInvalid: false,
-			
+
 			rules:	{
 			},
-			
+
 			messages:	{
 				mdjm_email_to      : null,
 				mdjm_email_subject : null,
@@ -1959,14 +1970,14 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	}
-	
+
 	// Events page
 	if ( mdjm_admin_vars.editing_event )	{
 		$('#post').validate({
 			errorClass: 'mdjm-form-error',
 			validClass: 'mdjm-form-valid',
 			focusInvalid: false,
-			
+
 			rules:	{
 				client_name : { required: true, minlength : 1 },
 				display_event_date : { required: true },
@@ -1975,7 +1986,7 @@ jQuery(document).ready(function ($) {
                 },
 				_mdjm_event_deposit : { number: true }
 			},
-			
+
 			messages:	{
 				client_name      : null,
 				display_event_date : null,
@@ -1990,7 +2001,7 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	}
-	
+
 });
 
 var mdjmFormatCurrency = function (value) {
