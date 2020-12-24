@@ -40,6 +40,9 @@ MDJM Event Management allows you to manage your events from enquiry stage throug
 * Developer friendly
 * A number of [plugin extensions](http://mdjm.co.uk/add-ons/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
 
+**Communication with MDJM Event Management Servers**
+This plugin will only communicate with MDJM Event Management servers when paid MDJM extensions are installed for the purpose of license checks and providing updates to the paid extensions only. This communication does not happen when there are no paid MDJM extensions installed.
+
 == Installation ==
 
 **Automated Installation**
@@ -1412,6 +1415,6 @@ This version includes an update to all events, and equipment packages and add-on
 Ensure you have backed up your database prior to upgrading
 
 == Paid extensions installation, licensing and updates ==
-All paid extensions for mobile-dj-manager must be installed manually, see [Installing Extensions](https://mdjm.co.uk/articles/installing-add-ons/) for more info.
+All paid extensions for MDJM Event Management must be installed manually, see [Installing Extensions](https://mdjm.co.uk/articles/installing-add-ons/) for more info.
 
-License and update checks for paid extensions are only run when there are paid extensions for mobile-dj-manager installed.
+License and update checks for paid extensions are only run when there are paid extensions for MDJM Event Management installed.
