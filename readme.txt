@@ -101,6 +101,8 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 **Bug**: 'Disable the visual editor when writing' breaks editor on communications screen (Reported by rikkilake)
 
+**Cleanup**: Remove 'qtip' and 'popover' libraries from plugin as these are not used
+
 = 1.5.7 =
 
 **Monday, 25th June 2018**
