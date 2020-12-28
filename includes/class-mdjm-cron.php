@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 class MDJM_Cron	{
-		
+
 	/*
 	 * Get things going
 	 */
@@ -60,7 +60,7 @@ class MDJM_Cron	{
 	 */
 	private function hourly_events() {
 		if ( ! wp_next_scheduled( 'mdjm_hourly_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'hourly', 'mdjm_hourly_scheduled_events' );
+			wp_schedule_event( time(), 'hourly', 'mdjm_hourly_scheduled_events' );
 		}
 	} // hourly_events
 
@@ -72,7 +72,7 @@ class MDJM_Cron	{
 	 */
 	private function daily_events() {
 		if ( ! wp_next_scheduled( 'mdjm_daily_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'mdjm_daily_scheduled_events' );
+			wp_schedule_event( time(), 'daily', 'mdjm_daily_scheduled_events' );
 		}
 	} // daily_events
 
@@ -84,7 +84,7 @@ class MDJM_Cron	{
 	 */
 	private function weekly_events() {
 		if ( ! wp_next_scheduled( 'mdjm_weekly_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'weekly', 'mdjm_weekly_scheduled_events' );
+			wp_schedule_event( time(), 'weekly', 'mdjm_weekly_scheduled_events' );
 		}
 	} // weekly_events
 
@@ -127,15 +127,15 @@ class MDJM_Cron	{
 	 */
 	public function create_tasks()	{
 		global $mdjm_options;
-		
+
 		$time = current_time( 'timestamp' );
-		
+
 		if( isset( $mdjm_options['upload_playlists'] ) )	{
 			$playlist_nextrun = strtotime( '+1 day', $time );
 		} else	{
 			$playlist_nextrun = 'N/A';
 		}
-		
+
 		$mdjm_schedules = array(
 			'complete-events'    => array(
 				'slug'           => 'complete-events',
@@ -152,7 +152,7 @@ class MDJM_Cron	{
 				'totalruns'      => '0',
 				'default'        => true,
 				'last_result'    => false
-			),			
+			),
 			'request-deposit'    => array(
 				'slug'           => 'request-deposit',
 				'name'           => __( 'Request Deposit', 'mobile-dj-manager' ),
@@ -171,7 +171,7 @@ class MDJM_Cron	{
 				'totalruns'      => '0',
 				'default'        => true,
 				'last_result'    => false
-			),			
+			),
 			'balance-reminder'    => array(
 				'slug'            => 'balance-reminder',
 				'name'            => __( 'Balance Reminder', 'mobile-dj-manager' ),
@@ -190,7 +190,7 @@ class MDJM_Cron	{
 				'totalruns'       => '0',
 				'default'         => true,
 				'last_result'     => false
-			), 
+			),
 			'fail-enquiry'         => array(
 				'slug'             => 'fail-enquiry',
 				'name'             => __( 'Fail Enquiry', 'mobile-dj-manager' ),
@@ -261,7 +261,7 @@ class MDJM_Cron	{
 				'last_result'         => false
 			)
 		);
-		
+
 		update_option( 'mdjm_schedules', $mdjm_schedules );
 	} // create_tasks
 
