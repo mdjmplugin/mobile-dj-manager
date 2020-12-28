@@ -157,7 +157,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id ) {
 						continue;
 					}
 					$output[] = '<a href="' . esc_url( get_edit_user_link( $employee ) ) . '">' . esc_html( mdjm_get_employee_display_name( $employee ) ) . '</a>';
-				}           
+				}
 			}
 			echo implode( '<br />', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -307,7 +307,7 @@ function mdjm_save_package_post( $post_id, $post ) {
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
-		}   
+		}
 	}
 
 	do_action( 'mdjm_save_package', $post_id, $post );
@@ -459,7 +459,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id ) {
 						continue;
 					}
 					$output[] = '<a href="' . esc_url( get_edit_user_link( $employee ) ) . '">' . esc_html( mdjm_get_employee_display_name( $employee ) ) . '</a>';
-				}           
+				}
 			}
 			echo implode( '<br />', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -610,21 +610,19 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			$caps[] = $post_type->cap->edit_posts;
 		} else {
 			$caps[] = $post_type->cap->edit_others_posts;
-		}   
-	}
+		}
+	} elseif ( 'delete_mdjm_package' == $cap ) {
 
-	// If deleting a package or an addon, assign the required capability.
-	elseif ( 'delete_mdjm_package' == $cap ) {
+		// If deleting a package or an addon, assign the required capability.
 
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) ) {
 			$caps[] = $post_type->cap->delete_posts;
 		} else {
 			$caps[] = $post_type->cap->delete_others_posts;
-		}   
-	}
+		}
+	} elseif ( 'read_mdjm_package' == $cap ) {
 
-	// If reading a private package or addon, assign the required capability.
-	elseif ( 'read_mdjm_package' == $cap ) {
+		// If reading a private package or addon, assign the required capability.
 
 		if ( 'private' != $post->post_status ) {
 			$caps[] = 'read';
@@ -632,14 +630,13 @@ function mdjm_addon_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			$caps[] = 'read';
 		} else {
 			$caps[] = $post_type->cap->read_private_posts;
-		}   
+		}
 	}
 
 	// Return the capabilities required by the user.
 	return $caps;
 
-} // mdjm_addon_map_meta_cap
-//add_filter( 'map_meta_cap', 'mdjm_addon_map_meta_cap', 10, 4 );
+}
 
 /**
  * Save the meta data for the addon
@@ -678,7 +675,7 @@ function mdjm_save_addon_post( $post_id, $post ) {
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
-		}   
+		}
 	}
 
 	do_action( 'mdjm_save_addon', $post_id, $post );

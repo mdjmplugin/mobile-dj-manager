@@ -348,15 +348,11 @@ function mdjm_save_venue_post( $post_id, $post, $update ) {
 			// If we have a value and the key did not exist previously, add it
 			if ( ! empty( $new_meta_value ) && empty( $current_meta_value ) ) {
 				add_post_meta( $post_id, '_' . $meta_key, $new_meta_value, true );
-			}
-
-			/* -- If a value existed, but has changed, update it -- */
-			elseif ( ! empty( $new_meta_value ) && $new_meta_value != $current_meta_value ) {
+			} elseif ( ! empty( $new_meta_value ) && $new_meta_value != $current_meta_value ) {
+				/* -- If a value existed, but has changed, update it -- */
 				update_post_meta( $post_id, '_' . $meta_key, $new_meta_value );
-			}
-
-			/* If there is no new meta value but an old value exists, delete it. */
-			elseif ( empty( $new_meta_value ) && ! empty( $current_meta_value ) ) {
+			} elseif ( empty( $new_meta_value ) && ! empty( $current_meta_value ) ) {
+				/* If there is no new meta value but an old value exists, delete it. */
 				delete_post_meta( $post_id, '_' . $meta_key, $meta_value );
 			}
 		}

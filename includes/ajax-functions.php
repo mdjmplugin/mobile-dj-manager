@@ -1234,7 +1234,6 @@ function mdjm_update_event_cost_ajax() {
     $cost += $addons_cost;
     $cost += $travel_cost;
     $cost += $additional;
-    //$cost -= $discount;
 
 	if ( ! empty( $cost ) ) {
 		$result['type'] = 'success';

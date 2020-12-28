@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param	int			$venue_id	The venue ID
  * @return	str			The distance to the event venue or an empty string
  */
-function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
+function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
 	if ( ! empty( $event ) )	{
 		if ( ! is_object( $event ) )	{
@@ -85,7 +85,7 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
  * @param	str			$distance		The distance of travel.
  * @return	str|int		The cost of travel.
  */
-function mdjm_get_travel_cost( $distance )	{
+function mdjm_get_travel_cost( $distance ) {
 	$mdjm_travel = new MDJM_Travel;
 	$mdjm_travel->__set( 'distance', $distance );
 
@@ -99,7 +99,7 @@ function mdjm_get_travel_cost( $distance )	{
  * @param	str			$start			The travel start address.
  * @return	str			$destination	The travel destination address.
  */
-function mdjm_travel_build_url( $start, $destination )	{
+function mdjm_travel_build_url( $start, $destination ) {
 
 	$api_key = mdjm_travel_get_api_key();
 	$prefix  = 'https://maps.googleapis.com/maps/api/distancematrix/json';
@@ -111,7 +111,6 @@ function mdjm_travel_build_url( $start, $destination )	{
 		'origins'      => str_replace( '%2C', ',', urlencode( $start ) ),
 		'destinations' => str_replace( '%2C', ',', urlencode( $destination ) ),
 		'mode'         => $mode,
-		//'key'          => $api_key
 		),
 		$prefix
 	);
@@ -127,7 +126,7 @@ function mdjm_travel_build_url( $start, $destination )	{
  * @param
  * @return	str			The API key.
  */
-function mdjm_travel_get_api_key()	{
+function mdjm_travel_get_api_key() {
 	return '617372114575-g846rsgcm715pkmhkokrho9c75ii3cne.apps.googleusercontent.com';
 } // mdjm_travel_get_api_key
 
@@ -138,7 +137,7 @@ function mdjm_travel_get_api_key()	{
  * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
  * @return	str
  */
-function mdjm_travel_get_start( $event = '' )	{
+function mdjm_travel_get_start( $event = '' ) {
 
 	if ( ! empty( $event ) )	{
 		if ( ! is_object( $event ) )	{
@@ -177,7 +176,7 @@ function mdjm_travel_get_start( $event = '' )	{
  * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
  * @return	str
  */
-function mdjm_travel_get_destination( $event, $venue_id = '' )	{
+function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 
 	if ( ! is_object( $event ) )	{
 		$mdjm_event = new MDJM_Event( $event );
@@ -209,7 +208,7 @@ function mdjm_travel_get_destination( $event, $venue_id = '' )	{
  * @param	bool	$lowercase	True to return a lowercase label, otherwise false.
  * @return	str
  */
-function mdjm_travel_unit_label( $singular = false, $lowercase = true )	{
+function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
 	$units = array(
 		'singular' => array(
 			'imperial' => 'Mile',
@@ -246,7 +245,7 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true )	{
  * @since	1.4
  * @return	arr
  */
-function mdjm_get_event_travel_fields()	{
+function mdjm_get_event_travel_fields() {
 	$travel_fields = array( 'cost', 'distance', 'time', 'directions_url' );
 
 	/**
@@ -265,7 +264,7 @@ function mdjm_get_event_travel_fields()	{
  * @param	str		$field		The travel field to retrieve.
  * @return	str
  */
-function mdjm_get_event_travel_data( $event_id, $field = 'cost' )	{
+function mdjm_get_event_travel_data( $event_id, $field = 'cost' ) {
 	$travel_data = get_post_meta( $event_id, '_mdjm_event_travel_data', true );
 
 	if ( $travel_data )	{
@@ -285,7 +284,7 @@ function mdjm_get_event_travel_data( $event_id, $field = 'cost' )	{
  * @param	int			$employee_id	An employee user ID.
  * @return	void
  */
-function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
+function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 
 	$mdjm_travel = new MDJM_Travel;
 

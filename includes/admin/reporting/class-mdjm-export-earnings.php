@@ -61,7 +61,6 @@ class MDJM_Earnings_Export extends MDJM_Export {
 
 		$cols = array(
 			'date'     => __( 'Date', 'mobile-dj-manager' ),
-			//'events'   => mdjm_get_label_plural(),
 			'earnings' => __( 'Earnings', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')',
 		);
 
@@ -120,7 +119,6 @@ class MDJM_Earnings_Export extends MDJM_Export {
 
 				$data[] = array(
 					'date'     => date_i18n( 'F Y', $date1 ),
-					//'events'   => $stats->get_events_by_date( null, $m1, $year ),
 					'earnings' => mdjm_format_amount( $stats->get_earnings( $m1, $year ) ),
 				);
 

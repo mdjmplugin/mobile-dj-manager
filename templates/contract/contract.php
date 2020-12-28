@@ -27,18 +27,18 @@ global $mdjm_event;
     	<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
 
         <p>
-        <?php 
+        <?php
         printf( esc_html__( 'The contract for your %1$s taking place on %2$s is displayed below.', 'mobile-dj-manager' ),
-        esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); 
+        esc_html( mdjm_get_label_singular( true ) ), '{event_date}' );
 		?>
                 </p>
 
         <?php if ( $mdjm_event->post_status == 'mdjm-contract' ) : ?>
 
             <p>
-            <?php 
+            <?php
             printf( __( 'When ready, please <a href="%s">scroll to the bottom</a> of this page to confirm your acceptance of the contractual terms and digitally sign the contract.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            '#signature_form' ); 
+            '#signature_form' );
 			?>
                 </p>
 
@@ -46,13 +46,13 @@ global $mdjm_event;
 
         <?php else : ?>
             <p class="mdjm-contract-notready">
-            <?php 
+            <?php
             printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %1$s. Please return to the <a href="%2$s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            esc_html( mdjm_get_label_singular( true ) ), '{event_url}' ); 
+            esc_html( mdjm_get_label_singular( true ) ), '{event_url}' );
 			?>
                 </p>
 
-        <?php endif; // endif( $mdjm_event->post_status == 'mdjm-contract' ) ?>
+        <?php endif; ?>
 
     	<?php do_action( 'mdjm_pre_contract_content', $mdjm_event->ID ); ?>
 	</div><!-- end mdjm-contract-header -->
@@ -78,13 +78,13 @@ global $mdjm_event;
 
             <?php $disabled = ' disabled="disabled"'; ?>
             <p class="mdjm-contract-notready">
-            <?php 
+            <?php
             printf( __( 'You cannot yet sign your contract as you have not indicated that you would like to proceed with your %1$s. Please return to the <a href="%2$s">event details</a> screen to confirm that you wish to proceed.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            esc_html( mdjm_get_label_singular( true ) ), '{event_url}' ); 
+            esc_html( mdjm_get_label_singular( true ) ), '{event_url}' );
 			?>
             </p>
 
-        <?php endif; // endif( $mdjm_event->post_status != 'mdjm-contract' ) ?>
+        <?php endif; ?>
 
         <div id="mdjm-contract-signature-form">
             <form name="mdjm-signature-form" id="mdjm-signature-form" method="post" action="<?php echo esc_attr( mdjm_get_current_page_url() ); ?>">

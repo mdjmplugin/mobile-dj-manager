@@ -81,7 +81,7 @@ class MDJM_Debug {
 	 *
 	 *
 	 */
-	function log_file_check() {
+	public function log_file_check() {
 
 		$files = array(
 			'MDJM Debug'      => array( MDJM_DEBUG_LOG, 'mdjm_debug.log' ),
@@ -120,7 +120,7 @@ class MDJM_Debug {
 
 					$this->log_it( 'Auto purge disabled. Displaying notice for oversized log file ' . $name, true );
 					$warn[ $conf[1] ] = $name;
-				}           
+				}
 			}
 		}
 
@@ -158,7 +158,7 @@ class MDJM_Debug {
 	 *								If "all" is parsed, all log files will be removed
 	 * @return	notice
 	 */
-	function delete_log( $files = '' ) {
+	private function delete_log( $files = '' ) {
 
 		foreach ( $files as $file ) {
 
@@ -174,8 +174,8 @@ class MDJM_Debug {
 					$this->log_it( 'ERROR: Could not purge the ' . $file . ' log file', true );
 					$error[] = 'The ' . $file . ' log file cound not be purged';
 
-				}           
-			}       
+				}
+			}
 		}
 
 		if ( isset( $success ) ) {

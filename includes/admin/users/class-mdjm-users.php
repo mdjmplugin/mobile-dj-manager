@@ -286,9 +286,8 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 							}
 
 							echo ' />' . "\r\n";
-						}
-						// Select List
-						elseif ( $custom_field['type'] == 'dropdown' ) {
+						} elseif ( $custom_field['type'] == 'dropdown' ) {
+							// Select List
 
 							echo '<select name="' . esc_attr( $custom_field['id'] ) . '" id="' . esc_attr( $custom_field['id'] ) . '">';
 
@@ -314,9 +313,8 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 							}
 
 							echo '<select/>';
-						}
-						// Everything else
-						else {
+						} else {
+							// Everything else
 							echo '<input type="' . esc_attr( $custom_field['type'] ) . '" name="' . esc_attr( $custom_field['id'] ) .
 							'" id="' . esc_attr( $custom_field['id'] ) . '" value="' . ( esc_attr( $pagenow ) != 'user-new.php' ? esc_attr( get_the_author_meta( $custom_field['id'], esc_attr( $user->ID ) ) ) : '' ) .
 							'" class="regular-text" />' . "\r\n";
@@ -430,7 +428,7 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 		 * @param   int     $user_id
 		 * @return  void
 		 */
-		function update_user_api_key( $user_id ) {
+		public function update_user_api_key( $user_id ) {
 
 			if ( current_user_can( 'edit_user', $user_id ) && isset( $_POST['mdjm_set_api_key'] ) ) {
 
@@ -520,7 +518,7 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 		 * @param   int     $user_id    The WP user ID
 		 * @return  void
 		 */
-		function remove_employee_data( $user_id ) {
+		public function remove_employee_data( $user_id ) {
 			$remove_absences = mdjm_get_option( 'remove_absences_on_delete', false );
 
 			if ( $remove_absences ) {

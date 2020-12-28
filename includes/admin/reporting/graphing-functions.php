@@ -667,8 +667,6 @@ function mdjm_transactions_reports_graph() {
 */
 function mdjm_reports_graph_controls() {
 	$date_options = apply_filters( 'mdjm_report_date_options', array(
-		//'today'        => __( 'Today', 'mobile-dj-manager' ),
-		//'yesterday'    => __( 'Yesterday', 'mobile-dj-manager' ),
 		'this_week'    => __( 'This Week', 'mobile-dj-manager' ),
 		'last_week'    => __( 'Last Week', 'mobile-dj-manager' ),
 		'this_month'   => __( 'This Month', 'mobile-dj-manager' ),

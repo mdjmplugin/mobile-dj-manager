@@ -298,14 +298,6 @@ function mdjm_get_tasks_for_event( $event_id ) {
         }
     }
 
-    /*if ( $playlist )    {
-        $tasks['playlist-employee-notify'] = mdjm_get_task_name( 'playlist-employee-notify' );
-    }*/
-
-    /*if ( $guest_playlist )  {
-        $tasks['playlist-notification'] = mdjm_get_task_name( 'playlist-notification' );
-    }*/
-
     if ( 'mdjm-unattended' == $event->post_status ) {
         $tasks['reject-enquiry'] = __( 'Reject Enquiry', 'mobile-dj-manager' );
     }

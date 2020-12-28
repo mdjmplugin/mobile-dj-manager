@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param	str		$default	What should be returned if the option is empty.
  * @return	mixed
  */
-function mdjm_get_option( $key = '', $default = false )	{
+function mdjm_get_option( $key = '', $default = false ) {
 	global $mdjm_options;
 
 	$value = ! empty( $mdjm_options[ $key ] ) ? $mdjm_options[ $key ] : $default;
@@ -65,7 +65,7 @@ function mdjm_update_option( $key = '', $value = false ) {
 
 	// Next let's try to update the value
 	$options[ $key ] = $value;
-	$did_update = update_option( 'mdjm_settings', $options );
+	$did_update      = update_option( 'mdjm_settings', $options );
 
 	// If it updated, let's update the global variable
 	if ( $did_update ){
@@ -187,7 +187,7 @@ function mdjm_register_settings() {
 			$section_tabs = mdjm_get_settings_tab_sections( $tab );
 
 			if ( ! is_array( $section_tabs ) || ! array_key_exists( $section, $section_tabs ) ) {
-				$section = 'main';
+				$section  = 'main';
 				$settings = $sections;
 			}
 
@@ -251,11 +251,11 @@ add_action( 'admin_init', 'mdjm_register_settings' );
  * @since	1.3
  * @return	array
 */
-function mdjm_get_registered_settings()	{
+function mdjm_get_registered_settings() {
 
 	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
 
-	$absence_content = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
+	$absence_content  = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
 	$absence_content .= sprintf( __( 'To: %s', 'mobile-dj-manager' ), '{end}' ) . PHP_EOL;
 	$absence_content .= '{notes}';
 
@@ -263,7 +263,7 @@ function mdjm_get_registered_settings()	{
 
 	$event_tip_title = mdjm_get_label_singular() . ' {contract_id} - {event_type}';
 
-	$event_content = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$event_content  = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
@@ -322,9 +322,7 @@ function mdjm_get_registered_settings()	{
 					'show_credits'         => array(
 						'id'      => 'show_credits',
 						'name'    => __( 'Display Credits?', 'mobile-dj-manager' ),
-						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by ' .
-										'%s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ),
-										'<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_application_name() ),
+						'desc'    => sprintf( __( 'Whether or not to display the %sPowered by %s, version %s%s text at the footer of the %s application pages.', 'mobile-dj-manager' ), '<span class="mdjm-admin-footer">', MDJM_NAME, MDJM_VERSION_NUM, '</span>', mdjm_get_application_name() ),
 						'type'    => 'checkbox',
 					),
 					'remove_on_uninstall' => array(
@@ -351,8 +349,7 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'debug_log_size',
 						'name'        => __( 'Maximum Log File Size', 'mobile-dj-manager' ),
 						'hint'        => sprintf( __( 'MB %sDefault is 2 (MB)%s', 'mobile-dj-manager' ), '<code>', '</code>' ),
-						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)',
-										'mobile-dj-manager' ),
+						'desc'        => __( 'The max size in Megabytes to allow your log files to grow to before you receive a warning (if configured below)', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'         => '2'
@@ -503,9 +500,9 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'close',
 						'name'        => __( 'Close the Playlist', 'mobile-dj-manager' ),
 						'hint'        => sprintf( __( 'Enter %s0%s to never close.', 'mobile-dj-manager' ),
-											'<code>',
-											'</code>'
-										),
+							'<code>',
+							'</code>'
+						),
 						'desc'        => sprintf( __( 'Number of days before %s that the playlist should close to new entries.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'text',
 						'size'        => 'small',
@@ -514,9 +511,7 @@ function mdjm_get_registered_settings()	{
 					'upload_playlists' => array(
 						'id'          => 'upload_playlists',
 						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' .
-										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' .
-										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers to help build an information library. The consolidated list of playlist songs will be freely shared. Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'checkbox'
 					)
 				),
@@ -673,18 +668,17 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'bcc_dj_to_client',
 						'name'        => sprintf( __( 'Copy %s in Client Emails?', 'mobile-dj-manager' ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'desc'        => sprintf( __( 'Send a copy of client emails to the %s primary %s', 'mobile-dj-manager' ),
-											mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
-										),
-
+							mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
+						),
 						'type'        => 'checkbox'
 					),
 					'bcc_admin_to_client' => array(
 						'id'          => 'bcc_admin_to_client',
 						'name'        => __( 'Copy Admin in Client Emails?', 'mobile-dj-manager' ),
 						'desc'        => sprintf( __( 'Send a copy of client emails to %sDefault From Address%s', 'mobile-dj-manager' ),
-											'<code>',
-											'</code>'
-										),
+							'<code>',
+							'</code>'
+						),
 						'type'        => 'checkbox',
 						'std'         => '1'
 					)
@@ -707,8 +701,7 @@ function mdjm_get_registered_settings()	{
 					'online_enquiry'   => array(
 						'id'          => 'online_enquiry',
 						'name'        => __( 'Online Quote Template', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ),
-											mdjm_get_application_name() ),
+						'desc'        => sprintf( __( 'This is the default template used for clients viewing quotes online via the %s.', 'mobile-dj-manager' ), mdjm_get_application_name() ),
 						'type'        => 'select',
                         'chosen'      => true,
 						'options'     => mdjm_list_templates( 'email_template', true )
@@ -808,9 +801,7 @@ function mdjm_get_registered_settings()	{
 					'booking_conf_to_dj' => array(
 						'id'          => 'booking_conf_to_dj',
 						'name'        => __( 'Booking Confirmation to Employee?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Email %s primary %s with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ),
-											mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) )
-										),
+						'desc'        => sprintf( __( 'Email %s primary %s with selected template when booking is confirmed i.e. contract accepted, or status changed to Approved', 'mobile-dj-manager' ), mdjm_get_label_plural( true ), mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ),
 						'type'        => 'checkbox'
 					),
 					'email_dj_confirm' => array(
@@ -837,9 +828,7 @@ function mdjm_get_registered_settings()	{
 					'app_name'         => array(
 						'id'          => 'app_name',
 						'name'        => __( 'Application Name', 'mobile-dj-manager' ),
-						'hint'        => sprintf( __( 'Default is %sClient Zone%s.', 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'hint'        => sprintf( __( 'Default is %sClient Zone%s.', 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'desc'        => __( 'Choose your own name for the application.', 'mobile-dj-manager' ),
 						'type'        => 'text',
 						'size'        => 'regular',
@@ -890,9 +879,7 @@ function mdjm_get_registered_settings()	{
 					'package_prices'   => array(
 						'id'          => 'package_prices',
 						'name'        => __( 'Display Package Price?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select to display %s package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ),
-											mdjm_get_label_singular( true ),
-											mdjm_get_application_name() ),
+						'desc'        => sprintf( __( 'Select to display %s package &amp; Add-on prices within hover text within the %s', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_application_name() ),
 						'type'        => 'checkbox'
 					),
 				),
@@ -927,10 +914,7 @@ function mdjm_get_registered_settings()	{
 					'app_home_page'    => array(
 						'id'          => 'app_home_page',
 						'name'        => mdjm_get_application_name() . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s', 'mobile-dj-manager' ),
-											mdjm_get_application_name(),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( 'Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s', 'mobile-dj-manager' ), mdjm_get_application_name(), '<code>', '</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
@@ -951,36 +935,28 @@ function mdjm_get_registered_settings()	{
 					'contracts_page'   => array(
 						'id'          => 'contracts_page',
 						'name'        => __( 'Contracts Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's contracts page. Needs to contain the shortcode %s[mdjm-contract]%s", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( "Select your website's contracts page. Needs to contain the shortcode %s[mdjm-contract]%s", 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
 					'payments_page'    => array(
 						'id'          => 'payments_page',
 						'name'        => __( 'Payments Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's payments page. Needs to contain the shortcode %s[mdjm-payments]%s", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( "Select your website's payments page. Needs to contain the shortcode %s[mdjm-payments]%s", 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
 					'playlist_page'    => array(
 						'id'          => 'playlist_page',
 						'name'        => __( 'Playlist Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's playlist page. Needs to contain the shortcode %s[mdjm-playlist]%s", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( "Select your website's playlist page. Needs to contain the shortcode %s[mdjm-playlist]%s", 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
 					'profile_page'     => array(
 						'id'          => 'profile_page',
 						'name'        => __( 'Profile Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select your website's profile page. Needs to contain the shortcode %s[mdjm-profile]%s", 'mobile-dj-manager' ),
-											'<code>',
-											'</code>' ),
+						'desc'        => sprintf( __( "Select your website's profile page. Needs to contain the shortcode %s[mdjm-profile]%s", 'mobile-dj-manager' ), '<code>', '</code>' ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					)
@@ -1122,8 +1098,7 @@ function mdjm_get_registered_settings()	{
 					'deposit_type'     => array(
 						'id'          => 'deposit_type',
 						'name'        => mdjm_get_deposit_label() . "'s " . __( 'are', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your %s, how should they be calculated?', 'mobile-dj-manager' ),
-											mdjm_get_label_plural( true ) ),
+						'desc'        => sprintf( __( 'If you require ' . mdjm_get_deposit_label() . ' payments for your %s, how should they be calculated?', 'mobile-dj-manager' ), mdjm_get_label_plural( true ) ),
 						'type'        => 'select',
 						'options'     => array(
 							'0'          => 'Not required',
@@ -1134,18 +1109,14 @@ function mdjm_get_registered_settings()	{
 					'deposit_amount'   => array(
 						'id'          => 'deposit_amount',
 						'name'        => mdjm_get_deposit_label() . ' ' . __( 'Amount', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "If your %s's are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format %s", 'mobile-dj-manager' ),
-											mdjm_get_deposit_label(), mdjm_format_amount( '0' ) ),
+						'desc'        => sprintf( __( "If your %s's are a percentage enter the value (i.e 20). For fixed prices, enter the amount in the format %s", 'mobile-dj-manager' ), mdjm_get_deposit_label(), mdjm_format_amount( '0' ) ),
 						'type'        => 'text',
 						'size'        => 'small'
 					),
 					'deposit_before_confirm'     => array(
 						'id'          => 'deposit_before_confirm',
 						'name'        => sprintf( __( 'Wait for %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
-						'desc'        => sprintf(
-                            __( 'Wait for %s to be paid before the booking confirmation is issued', 'mobile-dj-manager' ),
-                            mdjm_get_deposit_label()
-                        ),
+						'desc'        => sprintf( __( 'Wait for %s to be paid before the booking confirmation is issued', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
 						'type'        => 'checkbox'
 					),
                     'payment_form_settings' => array(
@@ -1181,9 +1152,7 @@ function mdjm_get_registered_settings()	{
 					'other_amount_default' => array(
 						'id'          => 'other_amount_default',
 						'name'        => __( 'Default', 'mobile-dj-manager' ) . ' ' . mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) ),
-						'desc'        => sprintf( __( 'Enter the default amount to be used in the %s field.', 'mobile-dj-manager' ),
-											mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) )
-										),
+						'desc'        => sprintf( __( 'Enter the default amount to be used in the %s field.', 'mobile-dj-manager' ), mdjm_get_option( 'other_amount_label', __( 'Other Amount', 'mobile-dj-manager' ) ) ),
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'         => '50.00'
@@ -1241,10 +1210,7 @@ function mdjm_get_registered_settings()	{
 					'default_type'     => array(
 						'id'          => 'default_type',
 						'name'        => __( 'Default Payment Type', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an %s %s as paid how should we log it?', 'mobile-dj-manager' ),
-											mdjm_get_label_singular( true ),
-											mdjm_get_balance_label()
-										),
+						'desc'        => sprintf( __( 'What is the default method of payment? i.e. if you select an %s %s as paid how should we log it?', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), mdjm_get_balance_label() ),
 						'type'        => 'select',
 						'options'     => mdjm_list_txn_sources()
 					)
@@ -1378,9 +1344,7 @@ function mdjm_get_registered_settings()	{
 						'desc' => __( 'Heading for the agree to terms thickbox.', 'mobile-dj-manager' ),
 						'type' => 'text',
 						'size' => 'regular',
-						'std'  => sprintf(
-							__( 'Terms and Conditions for %s', 'mobile-dj-manager' ), mdjm_get_label_plural()
-						)
+						'std'  => sprintf( __( 'Terms and Conditions for %s', 'mobile-dj-manager' ), mdjm_get_label_plural() )
 					),
 					'agree_terms_text' => array(
 						'id'   => 'agree_terms_text',
@@ -1576,7 +1540,7 @@ function mdjm_settings_sanitize( $input = array() ) {
 	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
 	$section  = isset( $referrer['section'] ) ? $referrer['section'] : 'main';
 
-	$input = $input ? $input : array();
+	$input          = $input ? $input : array();
 	$legacy_inputs  = apply_filters( 'mdjm_settings_' . $tab . '_sanitize', $input ); // Check for extensions that aren't using new sections
 	$section_inputs = apply_filters( 'mdjm_settings_' . $tab . '-' . $section . '_sanitize', $input );
 
@@ -1648,8 +1612,7 @@ function mdjm_sanitize_html_class( $class = '' ) {
 
 	if ( is_string( $class ) )	{
 		$class = sanitize_html_class( $class );
-	}
-	elseif ( is_array( $class ) )	{
+	} elseif ( is_array( $class ) )	{
 		$class = array_values( array_map( 'sanitize_html_class', $class ) );
 		$class = implode( ' ', array_unique( $class ) );
 	}
@@ -1700,8 +1663,7 @@ function mdjm_get_settings_tab_sections( $tab = false ) {
 
 	if( $tab && ! empty( $sections[ $tab ] ) ) {
 		$tabs = $sections[ $tab ];
-	}
-	elseif ( $tab ) {
+	} elseif ( $tab ) {
 		$tabs = false;
 	}
 
@@ -1774,7 +1736,7 @@ function mdjm_get_registered_settings_sections() {
  * @param	bool	$show_none	Whether to show the 'None' option
  * @return	arr		Array of templates, id => title.
  */
-function mdjm_list_templates( $post_type = array( 'contract', 'email_template' ), $show_none = false )	{
+function mdjm_list_templates( $post_type = array( 'contract', 'email_template' ), $show_none = false ) {
 	$template_posts = get_posts(
 		array(
 			'post_type'        => $post_type,
@@ -1883,9 +1845,9 @@ function mdjm_checkbox_callback( $args ) {
 	}
 
 	$checked = isset( $mdjm_options[ $args['id'] ] ) ? checked( 1, $mdjm_options[ $args['id'] ], false ) : '';
-	$html = '<input type="checkbox" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
+	$html    = '<input type="checkbox" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
+	$html   .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html   .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_checkbox_callback
@@ -1937,8 +1899,7 @@ function mdjm_radio_callback( $args ) {
 
 		if ( isset( $mdjm_options[$args['id']] ) && $mdjm_options[$args['id']] == $key ) {
 			$checked = true;
-		}
-		elseif ( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[$args['id']] ) ) {
+		} elseif ( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[$args['id']] ) ) {
 			$checked = true;
 		}
 
@@ -1959,7 +1920,7 @@ function mdjm_radio_callback( $args ) {
  * @global	$mdjm_options	Array of all the MDJM Options
  * @return	void
  */
-function mdjm_gateways_callback( $args )	{
+function mdjm_gateways_callback( $args ) {
 
 	$mdjm_option = mdjm_get_option( $args['id'] );
 
@@ -2003,7 +1964,7 @@ function mdjm_gateway_select_callback( $args ) {
 	foreach ( $args['options'] as $key => $option )	{
 
 		$selected = isset( $mdjm_option ) ? selected( $key, $mdjm_option, false ) : '';
-		$html .= '<option value="' . mdjm_sanitize_key( $key ) . '"' . $selected . '>' . esc_html( $option['admin_label'] ) . '</option>';
+		$html    .= '<option value="' . mdjm_sanitize_key( $key ) . '"' . $selected . '>' . esc_html( $option['admin_label'] ) . '</option>';
 
 	}
 
@@ -2035,8 +1996,8 @@ function mdjm_text_callback( $args ) {
 
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$args['readonly'] = true;
-		$value = isset( $args['std'] ) ? $args['std'] : '';
-		$name  = '';
+		$value            = isset( $args['std'] ) ? $args['std'] : '';
+		$name             = '';
 	} else {
 		$name = 'name="mdjm_settings[' . $args['id'] . ']"';
 	}
@@ -2071,8 +2032,8 @@ function mdjm_number_callback( $args ) {
 
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$args['readonly'] = true;
-		$value = isset( $args['std'] ) ? $args['std'] : '';
-		$name  = '';
+		$value            = isset( $args['std'] ) ? $args['std'] : '';
+		$name             = '';
 	} else {
 		$name = 'name="mdjm_settings[' . $args['id'] . ']"';
 	}
@@ -2081,8 +2042,8 @@ function mdjm_number_callback( $args ) {
 	$min  = isset( $args['min'] ) ? $args['min'] : 0;
 	$step = isset( $args['step'] ) ? $args['step'] : 1;
 
-	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html  = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
@@ -2108,7 +2069,7 @@ function mdjm_textarea_callback( $args ) {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$html = '<textarea class="large-text" cols="50" rows="5" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+	$html  = '<textarea class="large-text" cols="50" rows="5" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
@@ -2135,10 +2096,10 @@ function mdjm_password_callback( $args ) {
 	}
 
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
-	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"' . $readonly . '/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
+	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html     = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"' . $readonly . '/>';
+	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html    .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_password_callback
@@ -2194,7 +2155,7 @@ function mdjm_select_callback( $args ) {
 
 	foreach ( $args['options'] as $option => $name ) {
 		$selected = selected( $option, $value, false );
-		$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+		$html    .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
 	}
 
 	$html .= '</select>';
@@ -2239,7 +2200,7 @@ function mdjm_multiple_select_callback( $args ) {
 
 	foreach ( $args['options'] as $option => $name ) {
 		$selected = !empty( $value ) && in_array( $option, $value ) ? 'selected="selected"' : '';
-		$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+		$html    .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
 	}
 
 	$html .= '</select>';
@@ -2272,7 +2233,7 @@ function mdjm_color_select_callback( $args ) {
 
 	foreach ( $args['options'] as $option => $color ) {
 		$selected = selected( $option, $value, false );
-		$html .= '<option value="' . $option . '" ' . $selected . '>' . $color['label'] . '</option>';
+		$html    .= '<option value="' . $option . '" ' . $selected . '>' . $color['label'] . '</option>';
 	}
 
 	$html .= '</select>';
@@ -2339,8 +2300,8 @@ function mdjm_upload_callback( $args ) {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html  = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<span>&nbsp;<input type="button" class="mdjm_settings_upload_button button-secondary" value="' . __( 'Upload File', 'mobile-dj-manager' ) . '"/></span>';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
@@ -2369,8 +2330,8 @@ function mdjm_color_callback( $args ) {
 
 	$default = isset( $args['std'] ) ? $args['std'] : '';
 
-	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="text" class="mdjm-color-picker" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
+	$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+	$html  = '<input type="text" class="mdjm-color-picker" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
 	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
@@ -2399,7 +2360,7 @@ function mdjm_descriptive_text_callback( $args ) {
  * @return void
  */
 if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
-	function mdjm_license_key_callback( $args )	{
+	function mdjm_license_key_callback( $args ) {
 
 		$mdjm_option = mdjm_get_option( $args['id'] );
 
@@ -2420,7 +2381,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 				switch( $license->error ) {
 
 					case 'expired':
-						$class = 'expired';
+						$class      = 'expired';
 						$messages[] = sprintf(
 							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager' ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
@@ -2432,7 +2393,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'revoked':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = sprintf(
 							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'mobile-dj-manager' ),
 							'https://mobile-dj-manager.com/support'
@@ -2443,7 +2404,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'missing':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = sprintf(
 							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'mobile-dj-manager' ),
 							'https://mdjm.co.uk/your-account'
@@ -2455,7 +2416,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 					case 'invalid':
 					case 'site_inactive':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = sprintf(
 							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'mobile-dj-manager' ),
 							$args['name'],
@@ -2467,7 +2428,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'item_name_mismatch':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'mobile-dj-manager' ), $args['name'] );
 
 						$license_status = 'license-' . $class . '-notice';
@@ -2475,7 +2436,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'no_activations_left':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'mobile-dj-manager' ), 'https://mdjm.co.uk/your-account/' );
 
 						$license_status = 'license-' . $class . '-notice';
@@ -2483,15 +2444,15 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'license_not_activable':
-						$class = 'error';
+						$class      = 'error';
 						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'mobile-dj-manager' );
 
 						$license_status = 'license-' . $class . '-notice';
 						break;
 
 					default:
-						$class = 'error';
-						$error = ! empty( $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager' );
+						$class      = 'error';
+						$error      = ! empty( $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager' );
 						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'mobile-dj-manager' ), $error, 'https://mdjm.co.uk/support' );
 
 						$license_status = 'license-' . $class . '-notice';
@@ -2569,7 +2530,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 			foreach( $messages as $message ) {
 
 				$html .= '<div class="mdjm-license-data mdjm-license-' . $class . ' ' . $license_status . '">';
-					$html .= '<p>' . $message . '</p>';
+				$html .= '<p>' . $message . '</p>';
 				$html .= '</div>';
 
 			}

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since	1.3
  * @return	void
  */
-function mdjm_register_post_types()	{
+function mdjm_register_post_types() {
 
 	// Event Post Type
 	$event_labels = apply_filters(
@@ -99,19 +99,6 @@ function mdjm_register_post_types()	{
 			'description'             => __( 'Equipment Packages for the MDJM Event Management plugin', 'mobile-dj-manager' ),
 			'public'                  => true,
 			'show_in_menu'            => 'edit.php?post_type=mdjm-package',
-			//'capability_type'		  => 'post',
-			/*'capabilities'            => apply_filters( 'mdjm_package_caps', array(
-				'publish_posts'       => 'publish_mdjm_packages',
-				'edit_posts'          => 'edit_mdjm_packages',
-				'edit_others_posts'   => 'edit_others_mdjm_packages',
-				'delete_posts'        => 'delete_mdjm_packages',
-				'delete_others_posts' => 'delete_others_mdjm_packages',
-				'read_private_posts'  => 'read_private_mdjm_packages',
-				'edit_post'           => 'edit_mdjm_package',
-				'delete_post'         => 'delete_mdjm_package',
-				'read_post'           => 'read_mdjm_package',
-			) ),
-			'map_meta_cap'            => true,*/
 			'has_archive'             => true,
 			'rewrite'            	  => array( 'slug' => 'packages' ),
 			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
@@ -613,7 +600,7 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
  * @since	1.3
  * @return	void
  */
-function mdjm_register_post_statuses()	{
+function mdjm_register_post_statuses() {
 	/** Communication Post Statuses */
 	register_post_status(
 		'ready to send',
@@ -890,7 +877,7 @@ add_action( 'init', 'mdjm_register_post_statuses', 2 );
  * @param	str		$output		The type of output to return, either 'names' or 'objects'. Default 'names'.
  * @return	arr|obj
  */
-function mdjm_get_post_statuses( $output = 'names' )	{
+function mdjm_get_post_statuses( $output = 'names' ) {
 	$args['mdjm-event'] = true;
 
 	$mdjm_post_statuses = get_post_stati( $args, $output );
@@ -905,7 +892,7 @@ function mdjm_get_post_statuses( $output = 'names' )	{
  * @since	1.3
  * @return	void
  */
-function mdjm_register_taxonomies()	{
+function mdjm_register_taxonomies() {
 
 	/** Packages */
 	$package_category_labels = array(
@@ -1152,7 +1139,7 @@ add_action( 'init', 'mdjm_register_taxonomies', 0 );
  * @param
  * @return	arr
  */
-function mdjm_get_post_types()	{
+function mdjm_get_post_types() {
 	$post_types = array(
 		'mdjm_communication',
 		'contract',

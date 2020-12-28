@@ -197,10 +197,10 @@ function mdjm_do_action_buttons( $event_id ) {
 
 		$i++;
 
-		$output .= '</div>'; // <div class="mdjm-action-btn-col three">
+		$output .= '</div>';
 
 		if ( $i == $cells ) {
-			$output .= '</div>'; // <div class="mdjm-action_btn-row">
+			$output .= '</div>';
 			$i       = 0;
 		}
 	}

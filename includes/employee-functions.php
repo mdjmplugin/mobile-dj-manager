@@ -687,12 +687,12 @@ function mdjm_add_employee_to_event( $event_id, $args ) {
 		'post_status' => 'mdjm-expenditure',
 		'post_author' => 1,
 		'post_parent' => $event_id,
-	),
+        ),
         array(
 			'_mdjm_txn_status' => 'Pending',
 			'_mdjm_payment_to' => $data['id'],
 			'_mdjm_txn_total'  => $data['wage'],
-		) );
+    ) );
 
 	if ( ! empty( $mdjm_txn ) ) {
 		$data['txn_id'] = $mdjm_txn->ID;
@@ -941,12 +941,6 @@ function mdjm_get_employee_clients( $employee_id = '', $active_only = true, $ret
 
 	$employee_id         = ! empty( $employee_id ) ? $employee_id : get_current_user_id();
 	$args['post_status'] = ! empty( $active_only ) ? 'any' : mdjm_active_event_statuses();
-
-	// If we only want active events set an extra check for the event date.
-	/*if ( ! empty( $active_only ) )	{
-		$args['date']         = date( 'Y-m-d');
-		$args['date_compare'] = '>=';
-	}*/
 
 	$events = mdjm_get_employee_events( $employee_id, $args );
 

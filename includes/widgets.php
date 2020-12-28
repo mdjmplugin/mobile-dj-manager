@@ -169,8 +169,8 @@ class MDJM_Availability_Widget extends WP_Widget {
 						<?php
 					}
 				}
-			} // if( isset( $dj_avail ) )
-		} // if( isset( $_POST['mdjm_avail_submit'] ) ...
+			}
+		}
 
 		/* We need the jQuery Calendar */
 		wp_enqueue_script( 'jquery-ui-datepicker' );

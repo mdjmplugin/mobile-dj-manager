@@ -183,13 +183,10 @@ class MDJM_Client {
 		$this->birthday   = ! empty( $client->birthday ) ? esc_attr( $client->birthday ) : '';
 		$this->marketing  = ! empty( $client->marketing ) ? $client->marketing : 'N';
 
-		//$this->get_fields();
-		//$this->mapped_fields();
-
 		return true;
 
 	} // setup_client
-	
+
 	/**
 	 * Magic __get function to dispatch a call to retrieve a private property
 	 *
@@ -229,7 +226,7 @@ class MDJM_Client {
             $field                = array();
 
             foreach ( $this->profile_fields as $key => $row ) {
-                $field[ $key ] = $row['position'];  
+                $field[ $key ] = $row['position'];
             }
 
             array_multisort( $field, SORT_ASC, $this->profile_fields );

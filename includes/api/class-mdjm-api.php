@@ -169,14 +169,12 @@ class MDJM_API {
 				'methods'             => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'            => array( $this, 'process_request' ),
 				'permission_callback' => '__return_true',
-				//'require_auth' => true
 			),
 			// Multiple events
 			'/events/'           => array(
 				'methods'             => array( WP_REST_Server::READABLE, WP_REST_Server::CREATABLE ),
 				'callback'            => array( $this, 'process_request' ),
 				'permission_callback' => '__return_true',
-				//'require_auth' => true
 			),
 			// Retrieving a Package
 			'/package/'          => array(

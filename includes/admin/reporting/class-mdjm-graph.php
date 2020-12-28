@@ -21,34 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * MDJM_Graph Class
  *
  * @since   1.4
+ *
  */
 class MDJM_Graph {
-
-	/*
-
-	Simple example:
-
-	data format for each point: array( location on x, location on y )
-
-	$data = array(
-
-		'Label' => array(
-			array( 1, 5 ),
-			array( 3, 8 ),
-			array( 10, 2 )
-		),
-
-		'Second Label' => array(
-			array( 1, 7 ),
-			array( 4, 5 ),
-			array( 12, 8 )
-		)
-	);
-
-	$graph = new MDJM_Graph( $data );
-	$graph->display();
-
-	*/
 
 	/**
 	 * Data to graph
@@ -177,9 +152,9 @@ class MDJM_Graph {
 							id: "<?php echo sanitize_key( $label ); ?>",
 							// data format is: [ point on x, value on y ]
 							data: [
-                            <?php 
+                            <?php
                             foreach ( $data as $point ) {
-								echo '[' . implode( ',', $point ) . '],';  } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+								echo '[' . implode( ',', $point ) . '],';  } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
                             ],
 							points: {
@@ -197,9 +172,9 @@ class MDJM_Graph {
 							yaxis: <?php echo esc_html( $yaxis_count ); ?>
 							<?php endif; ?>
 						},
-							<?php 
+							<?php
 							$yaxis_count++;
-endforeach; 
+endforeach;
 						?>
 					],
 					{

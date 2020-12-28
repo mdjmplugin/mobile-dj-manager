@@ -42,7 +42,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 		 * @param   str     $_optname
 		 * @param   str     $_api_url
 		 */
-		function __construct( $_file, $_item, $_version, $_author, $_optname = null, $_api_url = null ) {
+		public function __construct( $_file, $_item, $_version, $_author, $_optname = null, $_api_url = null ) {
 
 			$this->file = $_file;
 
@@ -440,7 +440,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 					$showed_invalid_message = true;
 
-				}           
+				}
 			}
 
 			if ( ! empty( $messages ) ) {
@@ -451,7 +451,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 						echo '<p>' . $message . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '</div>';
 
-				}           
+				}
 			}
 
 		} // notices

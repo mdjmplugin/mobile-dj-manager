@@ -4,7 +4,7 @@ class MDJM_Events {
 
 	/*
 	* Event functions
-	*/         
+	*/
 	/* List employee bookings by given date
 	 * Only checks for the "active" statuses
 	 *
@@ -84,9 +84,9 @@ class MDJM_Events {
 
 		$eventinfo = array(
 			'name'            => ( ! empty( $name ) ? $name : '' ),
-			'date'            => ( ! empty( $date ) && is_int( strtotime( $date ) ) ? 
+			'date'            => ( ! empty( $date ) && is_int( strtotime( $date ) ) ?
 				strtotime( $date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-			'end_date'        => ( ! empty( $end_date ) && is_int( strtotime( $end_date ) ) ? 
+			'end_date'        => ( ! empty( $end_date ) && is_int( strtotime( $end_date ) ) ?
 				strtotime( $end_date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'client'          => ( ! empty( $client ) ? get_userdata( $client ) : '' ),
 			'dj'              => ( ! empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned', 'mobile-dj-manager' ) ),
@@ -98,7 +98,7 @@ class MDJM_Events {
 			'setup_time'      => ( ! empty( $setup_time ) ? date( mdjm_get_option( 'time_format' ), strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'cost'            => ( ! empty( $cost ) ? mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'deposit'         => ( ! empty( $deposit ) ? mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) ) : '0.00' ),
-			'balance'         => ( ! empty( $paid ) && $paid != '0.00' && ! empty( $cost ) ? 
+			'balance'         => ( ! empty( $paid ) && $paid != '0.00' && ! empty( $cost ) ?
 				mdjm_currency_filter( mdjm_sanitize_amount( ( $cost - $paid ) ) ) : mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) ),
 			'deposit_status'  => ( ! empty( $deposit_status ) ? $deposit_status : __( 'Due', 'mobile-dj-manager' ) ),
 			'balance_status'  => ( ! empty( $balance_status ) ? $balance_status : __( 'Due', 'mobile-dj-manager' ) ),
@@ -106,7 +106,7 @@ class MDJM_Events {
 			'type'            => mdjm_get_event_type( $post_id, true ),
 			'online_quote'    => mdjm_get_option( 'online_enquiry', false ) && ! empty( $online_quote ) ? $online_quote : '',
 			'contract'        => ( ! empty( $contract ) ? $contract : '' ),
-			'contract_date'   => ( ! empty( $contract_date ) ? date( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) : 
+			'contract_date'   => ( ! empty( $contract_date ) ? date( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) :
 				date( mdjm_get_option( 'short_date_format' ) ) ),
 
 			'signed_contract' => ( ! empty( $signed_contract ) ? $signed_contract : '' ),
@@ -115,7 +115,7 @@ class MDJM_Events {
 			'admin_notes'     => ( ! empty( $admin_notes ) ? $admin_notes : '' ),
 			'package'         => ( ! empty( $package ) ? $package : '' ),
 			'addons'          => ( ! empty( $addons ) ? implode( "\n", $addons ) : '' ),
-			'guest_playlist'  => ( ! empty( $guest_playlist ) ? 
+			'guest_playlist'  => ( ! empty( $guest_playlist ) ?
 				mdjm_get_formatted_url( mdjm_get_option( 'playlist_page' ) ) . 'mdjmeventid=' . $guest_playlist : '' ),
 		);
 
@@ -128,11 +128,11 @@ class MDJM_Events {
 	/*
 	 * mdjm_get_venue_details
 	 * Retrieve all venue meta
-	 * 
+	 *
 	 * @param: venue_post_id
 	 * @return: $venue_meta => array
 	 */
-	function mdjm_get_venue_details( $venue_post_id = '', $event_id = '' ) {
+	public function mdjm_get_venue_details( $venue_post_id = '', $event_id = '' ) {
 
 		if ( empty( $venue_post_id ) && empty( $event_id ) ) {
 			return;
@@ -154,9 +154,9 @@ class MDJM_Events {
 			$venue_details['venue_town']     = get_post_meta( $event_id, '_mdjm_event_venue_town', true );
 			$venue_details['venue_county']   = get_post_meta( $event_id, '_mdjm_event_venue_county', true );
 			$venue_details['venue_postcode'] = get_post_meta( $event_id, '_mdjm_event_venue_postcode', true );
-		}
-		/* -- The venue post exists -- */
-		else {
+		} else {
+			/* -- The venue post exists -- */
+
 			$venue_keys = array(
 				'_venue_contact',
 				'_venue_phone',
@@ -183,8 +183,8 @@ class MDJM_Events {
 			$details = wp_get_object_terms( $venue_post_id, 'venue-details' );
 
 			foreach ( $details as $detail ) {
-				$venue_details['details'][] = $detail->name;    
-			}               
+				$venue_details['details'][] = $detail->name;
+			}
 		}
 		// Full address
 		if ( ! empty( $venue_details['venue_address1'] ) ) {

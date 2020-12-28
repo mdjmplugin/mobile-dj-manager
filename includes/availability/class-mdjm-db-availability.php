@@ -355,7 +355,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 
 		$cache_key = md5( 'mdjm_availability_' . serialize( $args ) );
 
-		$entries = false; //wp_cache_get( $cache_key, 'availability' );
+		$entries = false;
 
 		$args['orderby'] = esc_sql( $args['orderby'] );
 		$args['order']   = esc_sql( $args['order'] );

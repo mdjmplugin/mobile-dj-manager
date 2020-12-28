@@ -10,7 +10,7 @@
  */
 
 class MDJM_Communication {
-	function __construct() {
+	public function __construct() {
 
 	} // __construct
 
@@ -25,7 +25,7 @@ class MDJM_Communication {
 	 *          optional: status, author, attachments
 	 * @return: the post id
 	 */
-	function insert_comm( $args ) {
+	public function insert_comm( $args ) {
 		global $mdjm;
 
 		if ( MDJM_DEBUG == true ) {
@@ -127,7 +127,7 @@ class MDJM_Communication {
 				$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 				wp_update_attachment_metadata( $attach_id, $attach_data );
 
-			} // End foreach( $args['attachments'] as $file )
+			}
 		} // Attachments
 
 		return $comm_post_id;
@@ -139,7 +139,7 @@ class MDJM_Communication {
 	 * Inserts the stat tracker image
 	 * @param: $p => the post ID
 	 */
-	function insert_stat_image( $p ) {
+	public function insert_stat_image( $p ) {
 		if ( empty( $p ) || mdjm_get_option( 'track_client_emails' ) != true ) {
 			return;
 		}
@@ -156,7 +156,7 @@ class MDJM_Communication {
 	 * Records the opening of an email
 	 * @param: $p => the post ID
 	 */
-	function track_email_open( $p ) {
+	public function track_email_open( $p ) {
 		if ( empty( $p ) || get_post_status( $p ) == 'opened' ) {
 			return;
 		}
@@ -195,7 +195,7 @@ class MDJM_Communication {
 	 * Changes the current status of an email
 	 * @param: $p => the post ID
 	 */
-	function change_email_status( $p, $status ) {
+	public function change_email_status( $p, $status ) {
 
 		if ( empty( $p ) || empty( $status ) ) {
 			return;

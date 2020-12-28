@@ -64,4 +64,4 @@ if ( ! class_exists( 'MDJM' ) ) {
 		} // admin_enqueue
 
 	} // MDJM class
-} // if( !class_exists )
+}

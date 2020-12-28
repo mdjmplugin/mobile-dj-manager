@@ -21,7 +21,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * The Constructor
 		 */
-		function __construct() {
+		public function __construct() {
 
 			$this->fields = get_option( 'mdjm_client_fields' );
 
@@ -53,7 +53,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * Process field deletions
 		 */
-		function delete_field() {
+		public function delete_field() {
 			unset( $this->fields[ $_GET['id'] ] );
 
 			if ( update_option( 'mdjm_client_fields', $this->fields ) ) {
@@ -66,7 +66,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * Add new field
 		 */
-		function add_field() {
+		public function add_field() {
 			global $current_user;
 
 			$id = sanitize_title_with_dashes( wp_unslash( $_POST['field_label'] ), '', 'save' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
@@ -106,7 +106,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * Update existing field
 		 */
-		function update_field() {
+		public function update_field() {
 			global $current_user;
 
 			if ( isset( $_POST['field_id'] ) ) {
@@ -144,7 +144,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * Display the client fields admin interface
 		 */
-		function display_fields() {
+		public function display_fields() {
 			/* -- Enable drag & drop -- */
 
 			$dir = MDJM_PLUGIN_URL . '/assets/images/form-icons';
@@ -224,7 +224,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		/*
 		 * Display form to add or edit a field
 		 */
-		function manage_field_form() { 
+		public function manage_field_form() {
 			$must = array( 'first_name', 'last_name', 'user_email' );
 
 			$total = count( $this->fields );
@@ -407,7 +407,7 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		 *
 		 * @param	arr		$field		The field which to query
 		 */
-		function field_icons( $field ) {
+		public function field_icons( $field ) {
 			$dir = MDJM_PLUGIN_URL . '/assets/images/form-icons';
 
 			$output = '';
@@ -442,4 +442,4 @@ if ( ! class_exists( 'MDJM_ClientFields' ) ) {
 		} // field_icons
 	} // class
 
-} // if( !class_exists( 'MDJM_ClientFields' ) )
+}

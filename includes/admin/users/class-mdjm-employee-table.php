@@ -69,7 +69,6 @@ class MDJM_Employee_Table extends WP_List_Table {
 			'name'   => __( 'Name', 'mobile-dj-manager' ),
 			'role'   => __( 'Role(s)', 'mobile-dj-manager' ),
 			'events' => __( 'Events', 'mobile-dj-manager' ),
-			//'earnings'  => __( 'Earnings', 'mobile-dj-manager' ),
 			'login'  => __( 'Last Login', 'mobile-dj-manager' ),
 		);
 

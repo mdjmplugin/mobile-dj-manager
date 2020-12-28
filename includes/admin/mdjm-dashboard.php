@@ -5,7 +5,7 @@
  * 21/02/2015
  * @since 1.1
  * A class to produce the MDJM Dashboard Overview
- * 
+ *
  * @version 1.0
  * @21/02/2015
  *
@@ -18,16 +18,16 @@
  */
 
 class MDJM_Dashboard {
-		
+
 	/*
 	 * The Contact Form constructor
 	 *
 	 *
 	 */
 	public function __construct() {
-			
+
 	} // __construct
-		
+
 	/*
 	 * Retrieve all events listed by status for specified period
 	 *
@@ -38,28 +38,28 @@ class MDJM_Dashboard {
 	 */
 	public function all_events_by_status( $status = '', $period = '', $type = false, $user_id = '' ) {
 		global $mdjm;
-			
+
 		if ( empty( $status ) || empty( $period ) ) {
 			if ( MDJM_DEBUG == true ) {
-				MDJM()->debug->log_it( 'ERROR: No ' . ( empty( $status ) ? 'status' : 'period' ) . 
+				MDJM()->debug->log_it( 'ERROR: No ' . ( empty( $status ) ? 'status' : 'period' ) .
                 ' was provided in ' . __METHOD__, true );
 			}
-				
-			return false;   
+
+			return false;
 		}
-			
+
 		if ( ! empty( $type ) && empty( $user_id ) ) {
 			if ( MDJM_DEBUG == true ) {
 				MDJM()->debug->log_it( 'ERROR: No user ID was provided in ' . __METHOD__, true );
 			}
-				
-			return false;   
+
+			return false;
 		}
-						
+
 		$start_date = $period == 'year' ? date( 'Y-01-01' ) : date( 'Y-m-01' );
 		$end_date   = $period == 'year' ? date( 'Y-12-31' ) : date( 'Y-m-t' );
-						
-		$args = array( 
+
+		$args = array(
 			'posts_per_page' => -1,
 			'post_type'      => 'mdjm-event',
 			'post_status'    => $status,
@@ -67,8 +67,8 @@ class MDJM_Dashboard {
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
 		);
-						
-		if ( ! empty( $type ) ) {   
+
+		if ( ! empty( $type ) ) {
 			$args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
@@ -91,28 +91,28 @@ class MDJM_Dashboard {
 				'compare' => 'BETWEEN',
 			);
 		}
-									
+
 		$events = get_posts( $args );
-			
+
 		return $events;
-			
+
 	} // all_events_by_status
-		
+
 	/*
 	 * Retrieve earnings by the given period
 	 *
 	 * @param   str     $period     Required: week, month or year
 	 *          int     $user_id    Optional: ID of the DJ to check, otherwise check all
 	 *          bool    $earned     true for already earned, false for possible
-	 * @return  
+	 * @return
 	 */
 	public function period_earnings( $period = '', $user_id = '', $earned = '' ) {
 		global $mdjm;
-			
+
 		if ( empty( $period ) ) {
 			if ( MDJM_DEBUG == true ) {
 				MDJM()->debug->log_it( 'ERROR: No period was provided in ' . __METHOD__, true );
-			}    
+			}
 		} elseif ( $period == 'week' ) {
 			$start_date = date( 'Y-m-d', strtotime( '-7 day' ) );
 			$end_date   = date( 'Y-m-d' );
@@ -121,11 +121,11 @@ class MDJM_Dashboard {
 			$end_date   = date( 'Y-m-t' );
 		} else {
 			$start_date = date( 'Y-01-01' );
-			$end_date   = date( 'Y-12-31' );  
+			$end_date   = date( 'Y-12-31' );
 		}
-			
+
 		$user_id = ! empty( $user_id ) ? $user_id : '';
-			
+
 		$args                = array(
 			'post_type'      => 'mdjm-event',
 			'posts_per_page' => -1,
@@ -140,7 +140,7 @@ class MDJM_Dashboard {
 			'mdjm-approved',
 			'mdjm-completed',
 		) : 'mdjm-completed';
-						
+
 		if ( ! empty( $user_id ) ) {
 			$args['meta_query'] = array(
 				'relation' => 'AND',
@@ -156,8 +156,7 @@ class MDJM_Dashboard {
 					'compare' => '=',
 				),
 			);
-		} // End if( !empty( $user ) )
-		else {
+		} else {
 			$args['meta_query'] = array(
 				'key'     => '_mdjm_event_date',
 				'value'   => array( $start_date, $end_date ),
@@ -170,7 +169,7 @@ class MDJM_Dashboard {
 		foreach ( $events as $event ) {
 			$event_cost = get_post_meta( $event->ID, '_mdjm_event_cost', true );
 			$earnings  += $event_cost;
-				
+
 			if ( ! empty( $earnings ) ) {
 				$transactions = MDJM()->txns->get_event_transactions( $event->ID );
 				foreach ( $transactions as $transaction ) {
@@ -178,23 +177,23 @@ class MDJM_Dashboard {
 					if ( empty( $status ) || $status == 'Completed' ) {
 						$txn_total = get_post_meta( $transaction->ID, '_mdjm_txn_total', true );
 					}
-							
+
 					if ( ! empty( $txn_total ) ) {
 						if ( $transaction->post_status == 'mdjm-income' ) {
 							$earnings += $txn_total;
 						} else {
 							$earnings -= $txn_total;
-                        }    
+                        }
 					}
-				} // foreach( $transactions as $transaction )
-			} // if( !empty( $earnings ) )
-					
-		} // End foreach( $events as $event )
-			
+				}
+			}
+
+		}
+
 		return mdjm_currency_filter( mdjm_sanitize_amount( $earnings ) );
 	} // period_earnings
-				
+
 } // Class
-	
+
 	/* -- Insantiate the MDJM_Dashboard class -- */
 	$mdjm_dash = new MDJM_Dashboard();

@@ -15,7 +15,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 *
 		 */
-		function __construct() {
+		public function __construct() {
 			add_action( 'admin_init', array( &$this, 'custom_fields_controller' ) );
 
 			add_action( 'mdjm_add_content_tags', array( &$this, 'add_tags' ) );
@@ -88,7 +88,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 *
 		 */
-		function custom_fields_controller() {
+		public function custom_fields_controller() {
 			if ( isset( $_POST['submit_custom_field'] ) ) {
 				if ( $_POST['submit_custom_field'] == __( 'Add Field', 'mobile-dj-manager' ) ) {
 					$this->add_field();
@@ -147,7 +147,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return
 		 */
-		function add_field() {
+		public function add_field() {
 
 			if ( ! isset( $_POST['_mdjm_field_section'] ) || ! isset( $_POST['field_label'] ) ) {
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=4' );
@@ -205,12 +205,12 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=1' );
 				exit;
-			}
-			/**
-			* Error
-			* Lets log it
-			*/
-			else {
+			} else {
+				/**
+				 * Error
+				 * Lets log it
+				 */
+
 				if ( MDJM_DEBUG == true && is_wp_error( $id ) ) {
 					MDJM()->debug->log_it( 'Unable to create custom field ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ) . '. ' . get_error_message(), true );
                 }
@@ -227,7 +227,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return
 		 */
-		function update_field() {
+		public function update_field() {
 
 			if ( ! isset( $_POST['custom_field_id'] ) || ! isset( $_GET['id'] ) || ! isset( $_POST['field_label'] ) ) {
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=5' );
@@ -276,13 +276,12 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=2' );
 				exit;
-			}
+			} else {
+				/**
+				 * Error
+				 * Lets log it
+				 */
 
-			/**
-			* Error
-			* Lets log it
-			*/
-			else {
 				if ( MDJM_DEBUG == true && is_wp_error( $id ) ) {
 					MDJM()->debug->log_it( 'Unable to create custom field ' . sanitize_text_field( wp_unslash( $_POST['field_label'] ) ) . '. ' . get_error_message(), true );
                 }
@@ -299,7 +298,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return
 		 */
-		function delete_field() {
+		public function delete_field() {
 			if ( ! isset( $_GET['id'] ) ) {
 				wp_safe_redirect( mdjm_get_admin_page( 'custom_event_fields' ) . '&message=6' );
 				exit;
@@ -402,10 +401,9 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
                         }
 					}
 					wp_reset_postdata();
-				}
+				} else {
+					// No custom fields
 
-				// No custom fields
-				else {
 					?>
 					<tr>
 						<td colspan="6"><?php printf( esc_html__( 'No Custom %s Fields Defined!', 'mobile-dj-manager' ), esc_html( ucfirst( $field_type ) ) ); ?></td>
@@ -669,7 +667,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @param   int     $event_id   The Event ID
 		 * @return  str     $output     This function must output the full required HTML
 		 */
-		function custom_client_event_fields( $event_id ) {
+		public function custom_client_event_fields( $event_id ) {
 			global $mdjm_event, $mdjm_event_update;
 
 			$query  = mdjm_get_custom_fields( 'client' );
@@ -696,7 +694,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @param   int     $event_id   The Event ID
 		 * @return  str     $output     This function must output the full required HTML
 		 */
-		function custom_event_details_fields( $event_id ) {
+		public function custom_event_details_fields( $event_id ) {
 			global $mdjm_event, $mdjm_event_update;
 
 			$query  = mdjm_get_custom_fields( 'event' );
@@ -723,7 +721,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @param   int     $event_id   The Event ID
 		 * @return  str     $output     This function must output the full required HTML
 		 */
-		function custom_venue_event_fields( $event_id ) {
+		public function custom_venue_event_fields( $event_id ) {
 			global $mdjm_event, $mdjm_event_update;
 
 			$query  = mdjm_get_custom_fields( 'venue' );
@@ -749,7 +747,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *          obj     $mdjm_event The MDJM Event object for the event
 		 *
 		 */
-		function display_input( $field, $mdjm_event ) {
+		public function display_input( $field, $mdjm_event ) {
 			$name      = '_mdjm_event_' . strtolower( str_replace( '-', '_', $field->post_name ) );
 			$type      = get_post_meta( $field->ID, '_mdjm_field_type', true );
 			$current   = get_post_meta( $field->ID, '_mdjm_field_checked', true );
@@ -830,7 +828,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 * @params  obj     $post   The events WP_POST object
 		 * @return  void
 		 */
-		function manage_custom_fields_on_event_save( $post ) {
+		public function manage_custom_fields_on_event_save( $post ) {
 
 			$mdjm_event    = new MDJM_Event( $post->ID );
 			$query         = mdjm_get_custom_fields();
@@ -865,7 +863,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return  arr     $mappings_event     The filtered mapping options
 		 */
-		function dcf_mapping_fields( $mappings, $type ) {
+		public function dcf_mapping_fields( $mappings, $type ) {
 			$query  = mdjm_get_custom_fields( $type );
 			$fields = $query->get_posts();
 
@@ -893,7 +891,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return  arr     $mappings_event     The filtered mapping options
 		 */
-		function dcf_mapping_fields_on_submit( $mappings, $type ) {
+		public function dcf_mapping_fields_on_submit( $mappings, $type ) {
 			$query  = mdjm_get_custom_fields( $type );
 			$fields = $query->get_posts();
 
@@ -917,7 +915,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		 *
 		 * @return  arr     $pairs      The filtered pairs array
 		 */
-		function custom_event_fields_shortcode_pairs( $pairs, $event_id = '', $eventinfo = '' ) {
+		public function custom_event_fields_shortcode_pairs( $pairs, $event_id = '', $eventinfo = '' ) {
 			// Get the custom fields
 			$query  = mdjm_get_custom_fields();
 			$fields = $query->get_posts();

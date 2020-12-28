@@ -37,8 +37,9 @@ function shortcode_mdjm( $atts ) {
 	if ( isset( $atts['page'] ) && ! array_key_exists( $atts['page'], $pairs ) ) {
 		$output = __( 'ERROR: Unknown Page', 'mobile-dj-manager' );
 	} else {
-		/* Process pages */
 		if ( ! empty( $atts['page'] ) ) {
+			/* Process pages */
+
 			ob_start();
 
 			if ( function_exists( $args[ $atts['page'] ] ) ) {
@@ -52,9 +53,9 @@ function shortcode_mdjm( $atts ) {
 
 				$output = ob_get_clean();
 			}
-		}
-		/* Process Functions */
-		elseif ( ! empty( $atts['function'] ) ) {
+		} elseif ( ! empty( $atts['function'] ) ) {
+			/* Process Functions */
+
 			$func = $args[ $atts['function'] ];
 			if ( function_exists( $func ) ) {
 				ob_start();
@@ -338,7 +339,7 @@ function mdjm_shortcode_playlist( $atts ) {
 		} else {
 			mdjm_get_template_part( 'playlist', 'noevent' );
 			$output .= mdjm_do_content_tags( ob_get_contents(), '', get_current_user_id() );
-		}   
+		}
 	}
 
 	ob_get_clean();
@@ -420,7 +421,7 @@ function mdjm_shortcode_quote( $atts ) {
 
 		} else {
 			echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}   
+		}
 	} else {
 		ob_start();
 		mdjm_get_template_part( 'quote', 'noevent' );
@@ -557,10 +558,10 @@ function mdjm_shortcode_addons_list( $atts ) {
 			$addons = array();
 			foreach ( $package_addons as $package ) {
 				$addons[] = mdjm_get_addon( $package );
-			}       
+			}
 		} elseif ( $atts['filter_by'] == 'user' ) {
 			$addons = mdjm_get_addons_by_employee( $atts['filter_value'] );
-		}   
+		}
 	} else {
 		$addons = mdjm_get_addons();
 	}
@@ -605,7 +606,7 @@ function mdjm_shortcode_addons_list( $atts ) {
 
 				if ( ! empty( $atts['cost_class'] ) && $atts['cost_class'] != 'false' ) {
 					$output = '</span>';
-				}           
+				}
 			}
 
 			$desc = mdjm_get_addon_excerpt( $addon->ID, $atts['desc_length'] );
@@ -626,13 +627,13 @@ function mdjm_shortcode_addons_list( $atts ) {
 
 			if ( ! empty( $atts['list'] ) ) {
 				$output .= '</' . $atts['list'] . '>';
-			}       
+			}
 		}
 
 		// Check to end bullet list
 		if ( $atts['list'] == 'li' ) {
 			$output .= '</ul>';
-		}   
+		}
 	}
 
 	echo apply_filters( 'mdjm_shortcode_addons_list', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -653,10 +654,7 @@ add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
  */
 function mdjm_shortcode_login( $atts ) {
 
-	extract( shortcode_atts( array(
-		'redirect' => '',
-    ), $atts, 'mdjm-login' )
-	);
+	extract( shortcode_atts( array('redirect' => ''), $atts, 'mdjm-login' ) );
 
 	return mdjm_login_form( $redirect );
 

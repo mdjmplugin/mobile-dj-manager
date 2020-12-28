@@ -301,7 +301,7 @@ class MDJM_Availability_Checker {
 	 * @since   1.5.6
 	 * @return  array   Array of absence data
 	 */
-    function check_events() {
+    public function check_events() {
         $employees_query = array();
 
         foreach ( $this->available as $employee_id ) {

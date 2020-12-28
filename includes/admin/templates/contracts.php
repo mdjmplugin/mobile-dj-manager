@@ -45,7 +45,7 @@ add_filter( 'manage_contract_posts_columns', 'mdjm_contract_post_columns' );
 function mdjm_contract_posts_custom_column( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
-		// Is Default?
+		// Is Default Contract?
 		case 'event_default':
 			$event_default = mdjm_get_option( 'default_contract' );
 
@@ -187,15 +187,11 @@ function mdjm_save_contract_post( $post_id, $post, $update ) {
 	// If we have a value and the key did not exist previously, add it.
 	if ( ! empty( $_POST['contract_description'] ) && empty( $current_desc ) ) {
 		add_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
-	}
-
-	// If a value existed, but has changed, update it
-	elseif ( ! empty( $_POST['contract_description'] ) && $current_desc != $_POST['contract_description'] ) {
+	} elseif ( ! empty( $_POST['contract_description'] ) && $current_desc != $_POST['contract_description'] ) {
+		// If a value existed, but has changed, update it
 		update_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
-	}
-
-	// If there is no new meta value but an old value exists, delete it.
-	elseif ( empty( $_POST['contract_description'] ) && ! empty( $current_desc ) ) {
+	} elseif ( empty( $_POST['contract_description'] ) && ! empty( $current_desc ) ) {
+		// If there is no new meta value but an old value exists, delete it.
 		delete_post_meta( $ID, '_contract_description' );
 	}
 

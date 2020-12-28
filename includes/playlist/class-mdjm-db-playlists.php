@@ -39,12 +39,6 @@ class MDJM_DB_Playlists extends MDJM_DB {
 		$this->primary_key = 'id';
 		$this->version     = '1.0';
 
-		$db_version = get_option( $this->table_name . '_db_version' );
-
-		/*if ( ! $this->table_exists( $this->table_name ) || version_compare( $db_version, $this->version, '<' ) ) {
-			$this->create_table();
-		}*/
-
 	} // __construct
 
 	/**

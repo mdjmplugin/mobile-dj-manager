@@ -85,7 +85,7 @@ class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 		$mdjm_roles = mdjm_get_roles();
 		$roles      = array();
 		$offset     = 30 * ( $this->step - 1 );
-	
+
 		foreach ( $mdjm_roles as $role_id => $role_name ) {
 			$roles[] = $role_id;
 		}
@@ -104,7 +104,7 @@ class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 
 		if ( $employees ) {
 			foreach ( $employees as $employee ) {
-	
+
 				$events = mdjm_get_employee_events( $employee->ID );
 				$wages  = 0;
 				$paid   = 0;
@@ -113,28 +113,28 @@ class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 				foreach ( $employee->roles as $role ) {
 					$role_names[] = translate_user_role( $wp_roles->roles[ $role ]['name'] );
 				}
-	
+
 				$data[ $i ]['id']     = $employee->ID;
 				$data[ $i ]['name']   = $employee->display_name;
 				$data[ $i ]['email']  = $employee->user_email;
 				$data[ $i ]['events'] = $events ? count( $events ) : 0;
 				$data[ $i ]['roles']  = implode( ', ', $role_names );
-	
+
 				if ( $events ) {
 					foreach ( $events as $event ) {
 						$event_wage = mdjm_get_employees_event_wage( $event->ID, $employee->ID );
 						$wages     += $event_wage;
-	
+
 						if ( ! empty( $event_wage ) && 'paid' == mdjm_get_employees_event_payment_status( $event->ID, $employee->ID ) ) {
 							$paid += $wages;
 						}
 					}
 				}
-	
+
 				$data[ $i ]['wages'] = mdjm_format_amount( $wages );
 				$data[ $i ]['paid']  = mdjm_format_amount( $paid );
 				$data[ $i ]['owed']  = mdjm_format_amount( $wages - $paid );
-	
+
 				$i++;
 			}
 		}
@@ -154,7 +154,7 @@ class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 
 		$percentage = 0;
 
-		$total = mdjm_employee_count();//count( mdjm_get_employees() );
+		$total = mdjm_employee_count();
 		error_log( $total );
 		if ( $total > 0 ) {
 			$percentage = ( ( 30 * $this->step ) / $total ) * 100;

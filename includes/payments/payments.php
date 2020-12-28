@@ -124,7 +124,7 @@ function mdjm_get_enabled_payment_gateways( $sort = false ) {
 
 			$gateway_list = array_merge( $default_gateway, $gateway_list );
 
-		}   
+		}
 	}
 
 	return apply_filters( 'mdjm_enabled_payment_gateways', $gateway_list );
@@ -276,7 +276,6 @@ function mdjm_get_payment_button_text() {
  */
 function mdjm_get_required_payment_fields() {
 
-	// Array format should be (arr)$gateway => (str)$name => (bool)$php_ignore
 	$required_fields = array();
 
 	// Allow filtering of the required fields.
@@ -308,7 +307,7 @@ function mdjm_required_payment_field( $gateway, $name, $php_ignore = false ) {
 
 		if ( $php_ignore ) {
 			$required = $required_fields[ $gateway ][ $name ];
-		}   
+		}
 	}
 
 	return (bool) $required;

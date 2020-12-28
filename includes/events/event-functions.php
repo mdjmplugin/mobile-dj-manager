@@ -97,7 +97,7 @@ function mdjm_count_events( $args = array() ) {
 	global $wpdb;
 
 	$defaults = array(
-		'status'     => null, //array_keys( mdjm_all_event_status() ),
+		'status'     => null,
 		'employee'   => null,
 		'client'     => null,
 		's'          => null,

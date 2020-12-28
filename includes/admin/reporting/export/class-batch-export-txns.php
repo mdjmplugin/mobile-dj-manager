@@ -92,7 +92,7 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 
 		if ( ! empty( $this->status ) && is_array( $this->status ) ) {
 			$meta_query = array();
-		
+
 			foreach ( $this->status as $txn_status ) {
 				$meta_query[] = array(
 					'key'   => '_mdjm_txn_status',
@@ -108,15 +108,15 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 		$all_txns = get_posts( $txn_args );
 
 		if ( $all_txns ) {
-	
+
 			$i       = 0;
 			$income  = 0;
 			$expense = 0;
 
 			foreach ( $all_txns as $txn ) {
-	
+
 				$mdjm_txn = new MDJM_Txn( $txn->ID );
-	
+
 				$data[ $i ]['id']      = $mdjm_txn->ID;
 				$data[ $i ]['date']    = date( 'd-M-Y', strtotime( $mdjm_txn->post_date ) );
 				$data[ $i ]['status']  = $mdjm_txn->payment_status;
@@ -137,10 +137,10 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 				$i++;
 
 			}
-	
+
 			$data = apply_filters( 'mdjm_export_get_data', $data );
 			$data = apply_filters( 'mdjm_export_get_data_' . $this->export_type, $data );
-	
+
 			return $data;
 
 		}
@@ -155,7 +155,7 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 	 * @param   arr     $args   The args for the count query
 	 * @return  arr     $args   The args for the count query
 	 */
-	function filter_count_args( $args ) {
+	private function filter_count_args( $args ) {
 
 		if ( ! empty( $this->start ) || ! empty( $this->end ) ) {
 
@@ -171,7 +171,7 @@ class MDJM_Batch_Export_Txns extends MDJM_Batch_Export {
 
 		if ( ! empty( $this->status ) && is_array( $this->status ) ) {
 			$meta_query = array();
-		
+
 			foreach ( $this->status as $txn_status ) {
 				$meta_query[] = array(
 					'key'   => '_mdjm_txn_status',

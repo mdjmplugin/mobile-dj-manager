@@ -100,12 +100,11 @@ function mdjm_format_playlist_content( $event_id, $orderby = 'category', $order 
 						'date'     => mdjm_format_short_date( $entry->post_date ),
 					);
 
-				}           
-			}       
+				}
+			}
 		}
-	}
-	// Obtain results ordered by another field.
-	else {
+	} else {
+		// Obtain results ordered by another field.
 
 		$args = array(
 			'orderby'  => $orderby == 'date' ? 'post_date' : 'meta_value',

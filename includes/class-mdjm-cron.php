@@ -31,7 +31,7 @@ class MDJM_Cron {
 	 * @since   1.3.8.6
 	 * @return  void
 	 */
-	function add_schedules( $schedules = array() ) {
+	public function add_schedules( $schedules = array() ) {
 		// Adds once weekly to the existing schedules.
 		$schedules['weekly'] = array(
 			'interval' => 604800,

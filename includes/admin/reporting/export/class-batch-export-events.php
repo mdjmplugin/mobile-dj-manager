@@ -118,7 +118,7 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 			$i = 0;
 
 			foreach ( $events as $event ) {
-	
+
 				$event_data = mdjm_get_event_data( $event->ID );
 				$employees  = array();
 				$package    = '';
@@ -181,7 +181,7 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 
 			$data = apply_filters( 'mdjm_export_get_data', $data );
 			$data = apply_filters( 'mdjm_export_get_data_' . $this->export_type, $data );
-	
+
 			return $data;
 
 		}
@@ -196,7 +196,7 @@ class MDJM_Batch_Export_Events extends MDJM_Batch_Export {
 	 * @param   arr     $args   The args for the count query
 	 * @return  arr     $args   The args for the count query
 	 */
-	function filter_count_args( $args ) {
+	private function filter_count_args( $args ) {
 
 		if ( ! empty( $this->start ) || ! empty( $this->end ) ) {
 

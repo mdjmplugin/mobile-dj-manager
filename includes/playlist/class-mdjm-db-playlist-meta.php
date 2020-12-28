@@ -31,10 +31,6 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 		$this->primary_key = 'meta_id';
 		$this->version     = '1.0';
 
-		/*if ( ! $this->table_exists( $this->table_name ) ) {
-			$this->create_table();
-		}*/
-
 		add_action( 'plugins_loaded', array( $this, 'register_table' ), 11 );
 
 	} // __construct

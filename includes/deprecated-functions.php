@@ -128,20 +128,14 @@ function display_price( $amount, $symbol = true ) {
 	// Currency before price
 	if ( $mdjm_settings['payments']['currency_format'] == 'before' ) {
 		return ( ! empty( $symbol ) ? mdjm_currency_symbol() : '' ) . number_format( $amount, 2, $dec, $tho );
-    }
-
-	// Currency before price with space
-	elseif ( $mdjm_settings['payments']['currency_format'] == 'before with space' ) {
+    } elseif ( $mdjm_settings['payments']['currency_format'] == 'before with space' ) {
+		// Currency before price with space
 		return ( ! empty( $symbol ) ? mdjm_currency_symbol() . ' ' : '' ) . number_format( $amount, 2, $dec, $tho );
-    }
-
-	// Currency after price
-	elseif ( $mdjm_settings['payments']['currency_format'] == 'after' ) {
+    } elseif ( $mdjm_settings['payments']['currency_format'] == 'after' ) {
+		// Currency after price
 		return number_format( $amount, 2, $dec, $tho ) . ( ! empty( $symbol ) ? mdjm_currency_symbol() : '' );
-    }
-
-	// Currency after price with space
-	elseif ( $mdjm_settings['payments']['currency_format'] == 'after with space' ) {
+    } elseif ( $mdjm_settings['payments']['currency_format'] == 'after with space' ) {
+		// Currency after price with space
 		return number_format( $amount, 2, $dec, $tho ) . ' ' . ( ! empty( $symbol ) ? mdjm_currency_symbol() : '' );
     }
 
@@ -171,15 +165,11 @@ function get_deposit( $cost = '' ) {
 	// If we don't need a deposit per settings, return 0
 	if ( ! mdjm_get_option( 'deposit_type' ) ) {
 		$deposit = '0.00';
-    }
-
-	// Set fixed deposit amount
-	elseif ( mdjm_get_option( 'deposit_type' ) == 'fixed' ) {
+    } elseif ( mdjm_get_option( 'deposit_type' ) == 'fixed' ) {
+		// Set fixed deposit amount
 		$deposit = number_format( mdjm_get_option( 'deposit_amount' ), 2 );
-    }
-
-	// Set deposit based on % of total cost
-	elseif ( mdjm_get_option( 'deposit_type' ) == 'percentage' ) {
+    } elseif ( mdjm_get_option( 'deposit_type' ) == 'percentage' ) {
+		// Set deposit based on % of total cost
 		$percentage = mdjm_get_option( 'deposit_amount' ); // The % to apply
 
 		$deposit = ( ! empty( $cost ) && $cost > 0 ? round( $percentage * ( $cost / 100 ), 2 ) : '0.00' );
@@ -293,7 +283,7 @@ function get_event_package( $event_id, $price = false ) {
 
 		if ( ! empty( $price ) ) {
 			$return .= ' ' . mdjm_currency_filter( mdjm_format_amount( mdjm_get_package_price( $event_package ) ) );
-		}   
+		}
 	}
 
 	return $return;

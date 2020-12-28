@@ -141,7 +141,7 @@ class MDJM_Travel {
 	public function __set( $key, $value ) {
 		$this->$key = $value;
 	} // __set
-	
+
 	/**
 	 * Magic __get function to dispatch a call to retrieve a private property
 	 *
@@ -218,11 +218,11 @@ class MDJM_Travel {
 		if ( empty( $travel_data->rows ) ) {
 			return false;
 		}
-	
+
 		if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) ) {
 			return false;
 		}
-	
+
 		if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) ) {
 			return false;
 		}
@@ -266,7 +266,7 @@ class MDJM_Travel {
 	 *
 	 * @since   1.4
 	 */
-	function get_cost() {
+	public function get_cost() {
 		if ( ! $this->add_travel_cost ) {
 			return 0;
 		}
@@ -274,13 +274,13 @@ class MDJM_Travel {
 		$min       = mdjm_get_option( 'travel_min_distance' );
 		$unit_cost = mdjm_get_option( 'cost_per_unit' );
 		$round     = mdjm_get_option( 'travel_cost_round' );
-	
+
 		if ( intval( $this->distance ) >= $min ) {
 			$this->cost = $this->distance * $unit_cost;
-		
+
 			if ( $round ) {
 				$nearest = mdjm_get_option( 'travel_round_to' );
-			
+
 				if ( intval( $this->cost ) == $this->cost && ! is_float( intval( $this->cost ) / $nearest ) ) {
 					$this->cost = intval( $this->cost );
 				} else {
@@ -337,7 +337,6 @@ class MDJM_Travel {
 			$employee_address = implode( ',', array_filter( $employee_address ) );
 		}
 
-		// To filter this use apply_filters( 'mdjm_get_employee_address', $address, $user_id );
 		$address = ! empty( $employee_address ) ? $employee_address : false;
 
 		return $address;
@@ -357,7 +356,6 @@ class MDJM_Travel {
 			$client_address = implode( ',', array_filter( $client_address ) );
 		}
 
-		// To filter this use apply_filters( 'mdjm_get_client_address', $address, $client_id );
 		$address = ! empty( $client_address ) ? $client_address : false;
 
 		return $address;
@@ -387,7 +385,7 @@ class MDJM_Travel {
 	 *
 	 * @since   1.4
 	 */
-	function get_directions_url() {
+	public function get_directions_url() {
 		if ( ! isset( $this->destination_address ) ) {
 			return false;
 		}

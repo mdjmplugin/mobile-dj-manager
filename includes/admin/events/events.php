@@ -70,7 +70,7 @@ add_filter( 'default_hidden_columns', 'mdjm_event_post_hidden_columns', 10, 2 );
  * @param	arr		$sortable_columns	Array of event post sortable columns
  * @return	arr		$sortable_columns	Filtered Array of event post sortable columns
  */
-function mdjm_event_post_sortable_columns( $sortable_columns )	{
+function mdjm_event_post_sortable_columns( $sortable_columns ) {
 	$sortable_columns['event_date'] = 'event_date';
 	$sortable_columns['value']      = 'value';
 
@@ -86,7 +86,7 @@ add_filter( 'manage_edit-mdjm-event_sortable_columns', 'mdjm_event_post_sortable
  * @param	int		$post_id		The current post ID
  * @return
  */
-function mdjm_event_posts_custom_column( $column_name, $post_id )	{
+function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 	global $post;
 
 	if( mdjm_employee_can( 'edit_txns' ) && $column_name == 'value' )	{
@@ -134,8 +134,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 		case 'employees':
 			global $wp_roles;
 
-			$primary	= get_userdata( mdjm_get_event_primary_employee( $post->ID ) );
-			$employees	= mdjm_get_event_employees_data( $post->ID );
+			$primary   = get_userdata( mdjm_get_event_primary_employee( $post->ID ) );
+			$employees = mdjm_get_event_employees_data( $post->ID );
 
 			if ( ! empty( $primary ) )	{
 
@@ -287,7 +287,7 @@ add_action( 'manage_mdjm-event_posts_custom_column', 'mdjm_event_posts_custom_co
  * @param	arr		$actions	Array of actions
  * @return	arr		$actions	Filtered Array of actions
  */
-function mdjm_event_bulk_action_list( $actions )	{
+function mdjm_event_bulk_action_list( $actions ) {
 	unset( $actions['edit'] );
 
 	return $actions;
@@ -301,7 +301,7 @@ add_filter( 'bulk_actions-edit-mdjm-event', 'mdjm_event_bulk_action_list' );
  * @param
  * @return
  */
-function mdjm_event_add_reject_bulk_actions()	{
+function mdjm_event_add_reject_bulk_actions() {
 
 	global $post;
 
@@ -330,7 +330,7 @@ add_action( 'admin_footer-edit.php', 'mdjm_event_add_reject_bulk_actions' );
  * @param
  * @return
  */
-function mdjm_event_instant_reject()	{
+function mdjm_event_instant_reject() {
 
 	if ( ! isset( $_REQUEST['post_status'] ) || $_REQUEST['post_status'] != 'mdjm-unattended' || isset( $_REQUEST['mdjm-message'] ) )	{
 		return;
@@ -360,8 +360,7 @@ function mdjm_event_instant_reject()	{
 	foreach( wp_unslash( $_REQUEST['post'] ) as $event_id )	{ // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! mdjm_update_event_status( $event_id, 'mdjm-rejected', get_post_status( $event_id ), $args ) )	{
 			$message = 'unattended_enquiries_rejected_failed';
-		}
-		else	{
+		} else {
 			$i++;
 		}
 	}
@@ -381,7 +380,7 @@ add_action( 'load-edit.php', 'mdjm_event_instant_reject' );
  * @param
  * @return	void
  */
-function mdjm_event_post_filter_list()	{
+function mdjm_event_post_filter_list() {
 
 	if( ! isset( $_GET['post_type'] ) || $_GET['post_type'] != 'mdjm-event' )	{
 		return;
@@ -408,7 +407,7 @@ add_action( 'restrict_manage_posts', 'mdjm_event_post_filter_list' );
  * @param
  * @return	void
  */
-function mdjm_event_date_filter_dropdown()	{
+function mdjm_event_date_filter_dropdown() {
 	global $wpdb, $wp_locale;
 
 	$month_query = 'SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month
@@ -435,7 +434,7 @@ function mdjm_event_date_filter_dropdown()	{
 		}
 
 		$month = zeroise( $arc_row->month, 2 );
-		$year = $arc_row->year;
+		$year  = $arc_row->year;
 
 		printf(
 			"<option %s value='%s'>%s</option>\r\n",
@@ -461,7 +460,7 @@ function mdjm_event_date_filter_dropdown()	{
  * @param
  * @return
  */
-function mdjm_event_type_filter_dropdown()	{
+function mdjm_event_type_filter_dropdown() {
 
 	$event_types = get_categories( array(
 		'type'			  => 'mdjm-event',
@@ -495,7 +494,7 @@ function mdjm_event_type_filter_dropdown()	{
  * @param
  * @return	str		Outputs the dropdown for the employee filter
  */
-function mdjm_event_employee_filter_dropdown()	{
+function mdjm_event_employee_filter_dropdown() {
 
 	$employees      = mdjm_get_employees();
 	$employee_count = count( $employees );
@@ -530,7 +529,7 @@ function mdjm_event_employee_filter_dropdown()	{
  * @param	arr
  * @return	arr
  */
-function mdjm_event_client_filter_dropdown()	{
+function mdjm_event_client_filter_dropdown() {
 
 	$roles    = array( 'client', 'inactive_client' );
 	$employee = ! mdjm_employee_can( 'read_events_all' ) ? get_current_user_id() : false;
@@ -584,7 +583,7 @@ function mdjm_event_client_filter_dropdown()	{
  * @param	arr		$views		Array of views
  * @return	arr		$views		Filtered Array of views
  */
-function mdjm_event_view_filters( $views )	{
+function mdjm_event_view_filters( $views ) {
 
 	$active_only = mdjm_get_option( 'show_active_only' );
 
@@ -639,7 +638,7 @@ add_filter( 'views_edit-mdjm-event', 'mdjm_event_view_filters' );
  * @param	arr		$actions	Current post row actions
  * @param	obj		$post		The WP_Post post object
  */
-function mdjm_event_post_row_actions( $actions, $post )	{
+function mdjm_event_post_row_actions( $actions, $post ) {
 
 	if( $post->post_type != 'mdjm-event' )	{
 		return $actions;
@@ -675,8 +674,9 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 			add_query_arg( array(
                 'mdjm-action' => 'get_event_availability',
 				'event_id'    => $post->ID
-            ), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
-        ) );
+                ), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
+			)
+		);
 
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf(
@@ -686,8 +686,9 @@ function mdjm_event_post_row_actions( $actions, $post )	{
 				'template'    => mdjm_get_option( 'unavailable' ),
 				'event_id'    => $post->ID,
 				'mdjm-action' => 'respond_unavailable'
-            ), admin_url( 'admin.php?page=mdjm-comms' )
-        ) );
+			    ), admin_url( 'admin.php?page=mdjm-comms' )
+			)
+		);
 
 	}
 
@@ -750,7 +751,7 @@ add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' );
  * @param	str		$text			The text translation for the button
  * @return	str		$translation	The filtererd text translation
  */
-function mdjm_event_rename_publish_button( $translation, $text )	{
+function mdjm_event_rename_publish_button( $translation, $text ) {
 
 	global $post;
 
@@ -780,7 +781,7 @@ add_filter( 'gettext', 'mdjm_event_rename_publish_button', 10, 2 );
  * @param
  * @return
  */
-function mdjm_event_highlight_unattended_event_rows()	{
+function mdjm_event_highlight_unattended_event_rows() {
 
 	global $post;
 
@@ -810,7 +811,7 @@ add_action( 'admin_footer', 'mdjm_event_highlight_unattended_event_rows' );
  * @param
  * @param
  */
-function mdjm_event_remove_date_filter()	{
+function mdjm_event_remove_date_filter() {
 
 	if( ! isset( $_GET['post_type'] ) ||  $_GET['post_type'] != 'mdjm-event' )	{
 		return;
@@ -828,7 +829,7 @@ add_action( 'admin_head', 'mdjm_event_remove_date_filter' );
  * @param	obj		$query		The WP_Query object
  * @return	void
  */
-function mdjm_event_post_order( $query )	{
+function mdjm_event_post_order( $query ) {
 
 	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) )	{
 		return;
@@ -877,7 +878,7 @@ add_action( 'pre_get_posts', 'mdjm_event_post_order' );
  * @param	arr		$query		The WP_Query
  * @return	void
  */
-function mdjm_limit_results_to_employee_events( $query )	{
+function mdjm_limit_results_to_employee_events( $query ) {
 
 	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) || mdjm_employee_can( 'read_events_all' ) )	{
 		return;
@@ -915,7 +916,7 @@ add_action( 'pre_get_posts', 'mdjm_limit_results_to_employee_events' );
  * @param	obj		$query	The WP_Query.
  * @return	void
  */
-function mdjm_hide_inactive_events( $query )	{
+function mdjm_hide_inactive_events( $query ) {
 
 	if ( ! is_admin() || ! $query->is_main_query() || 'mdjm-event' != $query->get( 'post_type' ) )	{
 		return;
@@ -959,7 +960,7 @@ add_action( 'pre_get_posts', 'mdjm_hide_inactive_events' );
  * @param	arr		$query		The WP_Query
  * @return	void
  */
-function mdjm_event_post_filtered( $query )	{
+function mdjm_event_post_filtered( $query ) {
 
 	global $pagenow;
 
@@ -1067,7 +1068,7 @@ add_filter( 'parse_query', 'mdjm_event_post_filtered' );
  * @param	arr		$query		The WP_Query
  * @return	void
  */
-function mdjm_event_post_search( $query )	{
+function mdjm_event_post_search( $query ) {
 	global $pagenow;
 
 	if ( ! is_admin() || 'mdjm-event' != $query->get( 'post_type' ) || ! $query->is_search() || 'edit.php' != $pagenow )	{
@@ -1130,7 +1131,7 @@ function mdjm_event_post_search( $query )	{
 
 			}
 
-		} // foreach( $users as $user )
+		}
 
 		if( ! empty( $events ) )	{
 
@@ -1139,7 +1140,7 @@ function mdjm_event_post_search( $query )	{
 
 		}
 
-	} // if( !empty( $users ) )
+	}
 
 } // mdjm_event_post_search
 add_action( 'pre_get_posts', 'mdjm_event_post_search' );
@@ -1153,7 +1154,7 @@ add_action( 'pre_get_posts', 'mdjm_event_post_search' );
  * @param	int		$user_id	The user ID
  * @param	arr		$args		Adds the context to the cap. Typically the object ID.
  */
-function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args )	{
+function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args ) {
 
 	// If editing, deleting, or reading an event, get the post and post type object.
 	if ( 'edit_mdjm_event' == $cap || 'delete_mdjm_event' == $cap || 'read_mdjm_event' == $cap || 'publish_mdjm_event' == $cap ) {
@@ -1176,14 +1177,12 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args )	{
 
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->edit_posts;
-		} else	{
+		} else {
 			$caps[] = $post_type->cap->edit_others_posts;
 		}
 
-	}
-
-	// If deleting a event, assign the required capability.
-	elseif ( 'delete_mdjm_event' == $cap ) {
+	} elseif ( 'delete_mdjm_event' == $cap ) {
+		// If deleting a event, assign the required capability.
 
 		if ( in_array( $user_id, mdjm_get_event_employees( $post->ID ) ) )	{
 			$caps[] = $post_type->cap->delete_posts;
@@ -1191,10 +1190,8 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args )	{
 			$caps[] = $post_type->cap->delete_others_posts;
 		}
 
-	}
-
-	// If reading a private event, assign the required capability.
-	elseif ( 'read_mdjm_event' == $cap )	{
+	} elseif ( 'read_mdjm_event' == $cap )	{
+		// If reading a private event, assign the required capability.
 
 		if ( 'private' != $post->post_status )	{
 			$caps[] = 'read';
@@ -1222,7 +1219,7 @@ add_filter( 'map_meta_cap', 'mdjm_event_map_meta_cap', 10, 4 );
  *
  * @return	void
  */
-function mdjm_save_event_post( $post_id, $post, $update )	{
+function mdjm_save_event_post( $post_id, $post, $update ) {
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
@@ -1304,11 +1301,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 				$venue_meta[ $venue_key ] = $venue_value;
 
 				if( $venue_key == 'venue_postcode' && ! empty( $venue_value ) )	{
-					$venue_meta[ $venue_key ] = strtoupper( $venue_value );
+					$venue_meta[ $venue_key ] = strtoupper( sanitize_text_field( $venue_value ) );
 				} elseif( $venue_key == 'venue_email' && ! empty( $venue_value ) )	{
 					$venue_meta[ $venue_key ] = sanitize_email( $venue_value );
 				} else	{
-					$venue_meta[ $venue_key ] = sanitize_text_field( ucwords( $venue_value ) );
+					$venue_meta[ $venue_key ] = ucwords( sanitize_text_field( $venue_value ) );
 				}
 
 			}
@@ -1318,12 +1315,11 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		// Create the new venue
 		$event_data['_mdjm_event_venue_id'] = mdjm_add_venue( isset( $_POST['venue_name'] ) ? sanitize_text_field( wp_unslash( $_POST['venue_name'] ) ) : 'N/A', $venue_meta );
 
-	}
+	} else {
+		// The venue is set to manual or client for this event so store the values in event post meta data.
 
-	// The venue is set to manual or client for this event so store the values in event post meta data.
-	else	{
 		// Manual venue address entry
-		if( $_POST['venue_id'] != 'client' )	{
+		if ( $_POST['venue_id'] != 'client' ) {
 
 			$event_data['_mdjm_event_venue_name']     = ucwords( sanitize_text_field( wp_unslash( $_POST['venue_name'] ) ) );
 			$event_data['_mdjm_event_venue_contact']  = isset( $_POST['venue_contact'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_contact'] ) ) ) : '';
@@ -1526,10 +1522,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 			array(
 				'user_id'            => get_current_user_id(),
 				'event_id'           => $post_id,
-				'comment_content'    => sprintf( '%s %s via Admin',
-											mdjm_get_label_singular(),
-											empty( $update ) ? 'created' : 'updated'
-										),
+				'comment_content'    => sprintf( '%s %s via Admin', mdjm_get_label_singular(), empty( $update ) ? 'created' : 'updated' ),
 			),
 			array(
 				'type'               => 'update-event',
@@ -1572,7 +1565,7 @@ add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
  * @return	arr		$messages	Filtered messages
  *
  */
-function mdjm_event_post_messages( $messages )	{
+function mdjm_event_post_messages( $messages ) {
 
 	global $post;
 

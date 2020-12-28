@@ -70,11 +70,6 @@ function mdjm_do_automatic_upgrades() {
 	}
 
 	if ( $did_upgrade ) {
-		// Send to what's new page
-		/*if ( substr_count( MDJM_VERSION_NUM, '.' ) < 2 )	{
-			set_transient( '_mdjm_activation_redirect', true, 30 );
-		}*/
-
 		update_option( 'mdjm_version_upgraded_from', get_option( 'mdjm_version' ) );
 		update_option( 'mdjm_version', preg_replace( '/[^0-9.].*/', '', MDJM_VERSION_NUM ) );
 	}
@@ -292,9 +287,9 @@ function mdjm_v14_upgrades() {
 					}
 
 					$items[ $slug ] = $addon_id; // Store each addon's slug and new post ID for use later
-				}           
-			}       
-		}   
+				}
+			}
+		}
 	}
 
 	// Log addon upgrade procedure as completed
@@ -348,8 +343,8 @@ function mdjm_v14_upgrades() {
 
 			if ( $package_id ) {
 				$packages[ $slug ] = $package_id; // Store each addon's slug and new post ID for use later
-			}       
-		}   
+			}
+		}
 	}
 
 	// Clear the permalinks
@@ -447,7 +442,7 @@ function mdjm_v14_upgrade_event_packages() {
 
 				if ( ! empty( $addons ) ) {
 					update_post_meta( $event_id, '_mdjm_event_addons', $addons );
-				}           
+				}
 			}
 		}
 
@@ -585,7 +580,7 @@ function mdjm_v147_upgrades() {
 				} else {
 					$tasks[ $slug ]['options']['email_from'] = 'admin';
 				}
-			}       
+			}
 		}
 
 		update_option( 'mdjm_schedules', $tasks );
@@ -1055,13 +1050,6 @@ function mdjm_v156_upgrade_availability_db() {
             $data['notes']       = $entry->notes;
 
             MDJM()->availability_db->add( $data );
-
-            /*$wpdb->query( $wpdb->prepare(
-                "
-                DELETE FROM $old_table
-                WHERE entry_id = '%s'
-                ", $entry->entry_id
-            ) );*/
 		}
 
 		// Entries found so upgrade them

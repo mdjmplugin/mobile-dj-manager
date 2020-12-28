@@ -155,7 +155,7 @@ if ( ! class_exists( 'MDJM_Client_Manager' ) ) :
 			return $columns;
 		} // get_columns
 
-		function get_sortable_columns() {
+		protected function get_sortable_columns() {
 			$sortable_columns = array(
 				'name' => array( 'display_name', true ),
 			);
