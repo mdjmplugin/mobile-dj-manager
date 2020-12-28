@@ -12,39 +12,40 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Batch_Export_Clients Class
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
 	 *
-	 * @var		str
-	 * @since	1.4
+	 * @var     str
+	 * @since   1.4
 	 */
 	public $export_type = 'clients';
 
 	/**
 	 * Set the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$cols	All the columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $cols   All the columns
 	 */
 	public function csv_cols() {
 
 		$cols = array(
-			'id'        => __( 'ID',   'mobile-dj-manager' ),
-			'name'      => __( 'Name',   'mobile-dj-manager' ),
-			'email'     => __( 'Email', 'mobile-dj-manager' ),
-			'events'    => sprintf( __( 'Number of %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
-			'amount'    => __( 'Client Value', 'mobile-dj-manager' )
+			'id'     => __( 'ID', 'mobile-dj-manager' ),
+			'name'   => __( 'Name', 'mobile-dj-manager' ),
+			'email'  => __( 'Email', 'mobile-dj-manager' ),
+			'events' => sprintf( __( 'Number of %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+			'amount' => __( 'Client Value', 'mobile-dj-manager' ),
 		);
 
 		return $cols;
@@ -53,12 +54,12 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	/**
 	 * Filter the get_client args.
 	 *
-	 * @since	1.4
-	 * @param	arr		$args	Args passed to get_users query.
-	 * @return	arr		$args	Args passed to get_users query.
+	 * @since   1.4
+	 * @param   arr     $args   Args passed to get_users query.
+	 * @return  arr     $args   Args passed to get_users query.
 	 */
-	public function filter_args( $args )	{
-		$offset = 30 * ( $this->step - 1 );
+	public function filter_args( $args ) {
+		$offset         = 30 * ( $this->step - 1 );
 		$args['number'] = 30;
 		$args['offset'] = $offset;
 		$args['paged']  = $this->step;
@@ -69,9 +70,9 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	/**
 	 * Get the Export Data
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$data	The data for the CSV file
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $data   The data for the CSV file
 	 */
 	public function get_data() {
 
@@ -89,18 +90,18 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 			$events = mdjm_get_client_events( $client->ID );
 			$amount = 0;
 
-			$data[$i]['id']     = $client->ID;
-			$data[$i]['name']   = $client->display_name;
-			$data[$i]['email']  = $client->user_email;
-			$data[$i]['events'] = $events ? count( $events ) : 0;
+			$data[ $i ]['id']     = $client->ID;
+			$data[ $i ]['name']   = $client->display_name;
+			$data[ $i ]['email']  = $client->user_email;
+			$data[ $i ]['events'] = $events ? count( $events ) : 0;
 
-			if ( $events )	{
-				foreach ( $events as $event )	{
+			if ( $events ) {
+				foreach ( $events as $event ) {
 					$amount += mdjm_get_event_price( $event->ID );
 				}
 			}
 
-			$data[$i]['amount'] = mdjm_format_amount( $amount );
+			$data[ $i ]['amount'] = mdjm_format_amount( $amount );
 
 			$i++;
 		}
@@ -114,8 +115,8 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	/**
 	 * Return the calculated completion percentage
 	 *
-	 * @since	1.4
-	 * @return	int
+	 * @since   1.4
+	 * @return  int
 	 */
 	public function get_percentage_complete() {
 
@@ -138,12 +139,12 @@ class MDJM_Batch_Export_Clients extends MDJM_Batch_Export {
 	/**
 	 * Set the properties specific to the Clients export
 	 *
-	 * @since	1.4
-	 * @param	arr		$request	The Form Data passed into the batch processing
+	 * @since   1.4
+	 * @param   arr     $request    The Form Data passed into the batch processing
 	 */
 	public function set_properties( $request ) {
-		$this->start    = isset( $request['start'] ) ? sanitize_text_field( $request['start'] ) : '';
-		$this->end      = isset( $request['end']   ) ? sanitize_text_field( $request['end']   ) : '';
+		$this->start = isset( $request['start'] ) ? sanitize_text_field( $request['start'] ) : '';
+		$this->end   = isset( $request['end'] ) ? sanitize_text_field( $request['end'] ) : '';
 	} // set_properties
 
 } // MDJM_Batch_Export_Clients

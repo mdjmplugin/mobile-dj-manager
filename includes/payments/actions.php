@@ -10,14 +10,15 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Loads a payment gateway via AJAX
  *
- * @since	1.3.8
- * @return	void
+ * @since   1.3.8
+ * @return  void
  */
 function mdjm_load_ajax_gateway() {
 	if ( isset( $_POST['mdjm_payment_mode'] ) ) {

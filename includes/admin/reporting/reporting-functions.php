@@ -10,25 +10,40 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Reports Page
  *
  * Renders the reports page contents.
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
 */
 function mdjm_reports_page() {
 	$current_page = admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-reports' );
-	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'reports';
+	$active_tab   = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'reports';
 	?>
 	<div class="wrap">
 		<h1 class="nav-tab-wrapper">
-			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'reports', 'settings-updated' => false ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Reports', 'mobile-dj-manager' ); ?></a>
-            <a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'export', 'settings-updated' => false ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Export', 'mobile-dj-manager' ); ?></a>
+			<a href="
+            <?php 
+            echo esc_url( add_query_arg( array(
+                'tab'              => 'reports',
+                'settings-updated' => false,
+			), $current_page ) ); 
+			?>
+            " class="nav-tab <?php echo $active_tab == 'reports' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Reports', 'mobile-dj-manager' ); ?></a>
+            <a href="
+            <?php 
+            echo esc_url( add_query_arg( array(
+                'tab'              => 'export',
+                'settings-updated' => false,
+			), $current_page ) ); 
+			?>
+            " class="nav-tab <?php echo $active_tab == 'export' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Export', 'mobile-dj-manager' ); ?></a>
 			<?php do_action( 'mdjm_reports_tabs' ); ?>
 		</h1>
 
@@ -44,8 +59,8 @@ function mdjm_reports_page() {
 /**
  * Default Report Views
  *
- * @since	1.4
- * @return	arr		$views	Report Views
+ * @since   1.4
+ * @return  arr     $views  Report Views
  */
 function mdjm_reports_default_views() {
 	$event_label_single = mdjm_get_label_singular();
@@ -59,14 +74,14 @@ function mdjm_reports_default_views() {
 		'employees'    => sprintf( __( '%s by Employee', 'mobile-dj-manager' ), $event_label_plural ),
 		'types'        => sprintf( __( '%s by Type', 'mobile-dj-manager' ), $event_label_plural ),
 		'packages'     => sprintf( __( '%s by Package', 'mobile-dj-manager' ), $event_label_plural ),
-		'addons'       => sprintf( __( '%s by Addon', 'mobile-dj-manager' ), $event_label_plural )
+		'addons'       => sprintf( __( '%s by Addon', 'mobile-dj-manager' ), $event_label_plural ),
 	);
 
-	if ( ! mdjm_is_employer() )	{
+	if ( ! mdjm_is_employer() ) {
 		unset( $views['employees'] );
 	}
 
-	if ( ! mdjm_packages_enabled() )	{
+	if ( ! mdjm_packages_enabled() ) {
 		unset( $views['packages'] );
 		unset( $views['addons'] );
 	}
@@ -83,8 +98,8 @@ function mdjm_reports_default_views() {
  *
  * @param string $default Default view to use.
  *
- * @since	1.4
- * @return	str		$view	Report View
+ * @since   1.4
+ * @return  str     $view   Report View
  *
  */
 function mdjm_get_reporting_view( $default = 'events' ) {
@@ -101,12 +116,12 @@ function mdjm_get_reporting_view( $default = 'events' ) {
 /**
  * Renders the Reports page
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
 function mdjm_reports_tab_reports() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		wp_die( esc_html__( 'You do not have permission to access this report', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -130,7 +145,7 @@ add_action( 'mdjm_reports_tab_reports', 'mdjm_reports_tab_reports' );
  */
 function mdjm_report_views() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
@@ -158,12 +173,12 @@ function mdjm_report_views() {
 /**
  * Renders the Reports Earnings Graphs
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
 function mdjm_reports_earnings() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 	?>
@@ -178,12 +193,12 @@ add_action( 'mdjm_reports_view_earnings', 'mdjm_reports_earnings' );
 /**
  * Renders the Reports Transactions Graphs
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
 function mdjm_reports_transactions() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 	?>
@@ -198,18 +213,18 @@ add_action( 'mdjm_reports_view_transactions', 'mdjm_reports_transactions' );
 /**
  * Renders the Reports Event Employees Table
  *
- * @since	1.4
- * @uses	MDJM_Employees_Reports_Table::prepare_items()
- * @uses	MDJM_Employees_Reports_Table::display()
- * @return	void
+ * @since   1.4
+ * @uses    MDJM_Employees_Reports_Table::prepare_items()
+ * @uses    MDJM_Employees_Reports_Table::display()
+ * @return  void
  */
 function mdjm_reports_employees_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-employees-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-employees-reports-table.php';
 
 	?>
 
@@ -253,18 +268,18 @@ add_action( 'mdjm_reports_view_employees', 'mdjm_reports_employees_table' );
 /**
  * Renders the Reports Event Types Table
  *
- * @since	1.4
- * @uses	MDJM_Types_Reports_Table::prepare_items()
- * @uses	MDJM_Types_Reports_Table::display()
- * @return	void
+ * @since   1.4
+ * @uses    MDJM_Types_Reports_Table::prepare_items()
+ * @uses    MDJM_Types_Reports_Table::display()
+ * @return  void
  */
 function mdjm_reports_types_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-types-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-types-reports-table.php';
 
 	?>
 
@@ -305,18 +320,18 @@ add_action( 'mdjm_reports_view_types', 'mdjm_reports_types_table' );
 /**
  * Renders the Reports Event Conversions Table
  *
- * @since	1.4
- * @uses	MDJM_Conversions_Reports_Table::prepare_items()
- * @uses	MDJM_Conversions_Reports_Table::display()
- * @return	void
+ * @since   1.4
+ * @uses    MDJM_Conversions_Reports_Table::prepare_items()
+ * @uses    MDJM_Conversions_Reports_Table::display()
+ * @return  void
  */
 function mdjm_reports_conversions_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-conversions-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-conversions-reports-table.php';
 
 	?>
 
@@ -357,18 +372,18 @@ add_action( 'mdjm_reports_view_conversions', 'mdjm_reports_conversions_table' );
 /**
  * Renders the Reports Event Packages Table
  *
- * @since	1.4
- * @uses	MDJM_Conversions_Reports_Table::prepare_items()
- * @uses	MDJM_Conversions_Reports_Table::display()
- * @return	void
+ * @since   1.4
+ * @uses    MDJM_Conversions_Reports_Table::prepare_items()
+ * @uses    MDJM_Conversions_Reports_Table::display()
+ * @return  void
  */
 function mdjm_reports_packages_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-packages-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-packages-reports-table.php';
 
 	?>
 
@@ -409,18 +424,18 @@ add_action( 'mdjm_reports_view_packages', 'mdjm_reports_packages_table' );
 /**
  * Renders the Reports Event Packages Table
  *
- * @since	1.4
- * @uses	MDJM_Conversions_Reports_Table::prepare_items()
- * @uses	MDJM_Conversions_Reports_Table::display()
- * @return	void
+ * @since   1.4
+ * @uses    MDJM_Conversions_Reports_Table::prepare_items()
+ * @uses    MDJM_Conversions_Reports_Table::display()
+ * @return  void
  */
 function mdjm_reports_addons_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-addons-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-addons-reports-table.php';
 
 	?>
 
@@ -461,16 +476,16 @@ add_action( 'mdjm_reports_view_addons', 'mdjm_reports_addons_table' );
 /**
  * Renders the Reports Transactions Graphs
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
 function mdjm_reports_txn_types_table() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		return;
 	}
 
-	include( dirname( __FILE__ ) . '/class-mdjm-transaction-types-reports-table.php' );
+	include dirname( __FILE__ ) . '/class-mdjm-transaction-types-reports-table.php';
 
 	?>
 
@@ -505,12 +520,12 @@ add_action( 'mdjm_reports_view_txn-types', 'mdjm_reports_txn_types_table' );
 /**
  * Renders the 'Export' tab on the Reports Page
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
-function mdjm_reports_tab_export()	{
+function mdjm_reports_tab_export() {
 
-	if( ! mdjm_employee_can( 'run_reports' ) ) {
+	if ( ! mdjm_employee_can( 'run_reports' ) ) {
 		wp_die( esc_html__( 'You do not have permission to export reports', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -530,30 +545,42 @@ function mdjm_reports_tab_export()	{
 						<div class="inside">
 							<p><?php esc_html_e( 'Download a CSV of all transactions recorded.', 'mobile-dj-manager' ); ?></p>
 							<form id="mdjm-export-txns" class="mdjm-export-form mdjm-import-export-form" method="post">
-								<?php mdjm_insert_datepicker( array(
-									'id'       => 'mdjm-txn-export-start',
-									'altfield' => 'txn_start'
-								) ); ?>
-                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								<?php 
+                                mdjm_insert_datepicker( array(
+                                    'id'       => 'mdjm-txn-export-start',
+                                    'altfield' => 'txn_start',
+								) ); 
+                                ?>
+                                <?php 
+                                echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-txn-export-start',
 									'name'        => 'display_start_date',
-									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' )
-								) );  ?>
-								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'name' => 'txn_start'
-								) ); ?>
-                                <?php mdjm_insert_datepicker( array(
-									'id'       => 'mdjm-txn-export-end',
-									'altfield' => 'txn_end'
-								) ); ?>
-                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' ),
+								) );  
+                                ?>
+								<?php 
+                                echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'name' => 'txn_start',
+								) ); 
+                                ?>
+                                <?php 
+                                mdjm_insert_datepicker( array(
+                                    'id'       => 'mdjm-txn-export-end',
+                                    'altfield' => 'txn_end',
+								) ); 
+                                ?>
+                                <?php 
+                                echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-txn-export-end',
 									'name'        => 'display_end_date',
-									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' )
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'name' => 'txn_end'
-								) ); ?>
+									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' ),
+								) ); 
+                                ?>
+								<?php 
+                                echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'name' => 'txn_end',
+								) ); 
+                                ?>
 								<select name="txn_status">
 									<option value=""><?php esc_html_e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
                                     <option value="Completed"><?php esc_html_e( 'Completed', 'mobile-dj-manager' ); ?></option>
@@ -576,33 +603,45 @@ function mdjm_reports_tab_export()	{
 						<div class="inside">
 							<p><?php printf( esc_html__( 'Download a CSV of %s data.', 'mobile-dj-manager' ), esc_html( $label_plural ) ); ?></p>
 							<form id="mdjm-export-events" class="mdjm-export-form mdjm-import-export-form" method="post">
-								<?php mdjm_insert_datepicker( array(
-									'id'       => 'mdjm-event-export-start',
-									'altfield' => 'event_start'
-								) ); ?>
-                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								<?php 
+                                mdjm_insert_datepicker( array(
+                                    'id'       => 'mdjm-event-export-start',
+                                    'altfield' => 'event_start',
+								) ); 
+                                ?>
+                                <?php 
+                                echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-event-export-start',
 									'name'        => 'display_start_date',
-									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' )
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'name' => 'event_start'
-								) ); ?>
-                                <?php mdjm_insert_datepicker( array(
-									'id'       => 'mdjm-event-export-end',
-									'altfield' => 'event_end'
-								) ); ?>
-                                <?php echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'placeholder' => esc_attr__( 'Select Start Date', 'mobile-dj-manager' ),
+								) ); 
+                                ?>
+								<?php 
+                                echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'name' => 'event_start',
+								) ); 
+                                ?>
+                                <?php 
+                                mdjm_insert_datepicker( array(
+                                    'id'       => 'mdjm-event-export-end',
+                                    'altfield' => 'event_end',
+								) ); 
+                                ?>
+                                <?php 
+                                echo MDJM()->html->date_field( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'id'          => 'mdjm-event-export-end',
 									'name'        => 'display_end_date',
-									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' )
-								) ); ?>
-								<?php echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'name' => 'event_end'
-								) ); ?>
+									'placeholder' => esc_attr__( 'Select End Date', 'mobile-dj-manager' ),
+								) ); 
+                                ?>
+								<?php 
+                                echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									'name' => 'event_end',
+								) ); 
+                                ?>
 								<select name="event_status">
 									<option value="any"><?php esc_html_e( 'All Statuses', 'mobile-dj-manager' ); ?></option>
-                                    <?php foreach( mdjm_all_event_status() as $status => $label ) : ?>
+                                    <?php foreach ( mdjm_all_event_status() as $status => $label ) : ?>
                                     	<option value="<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $label ); ?></option>
                                     <?php endforeach; ?>
 								</select>
@@ -617,7 +656,7 @@ function mdjm_reports_tab_export()	{
 					</div><!-- .postbox -->
 
 					<div class="postbox mdjm-export-clients">
-						<h3><span><?php esc_html_e( 'Export Clients','mobile-dj-manager' ); ?></span></h3>
+						<h3><span><?php esc_html_e( 'Export Clients', 'mobile-dj-manager' ); ?></span></h3>
 						<div class="inside">
 							<p><?php esc_html_e( 'Download a CSV of clients.', 'mobile-dj-manager' ); ?></p>
 							<form id="mdjm-export-clients" class="mdjm-export-form mdjm-import-export-form" method="post">
@@ -630,7 +669,7 @@ function mdjm_reports_tab_export()	{
 
 					<?php if ( mdjm_is_employer() ) : ?>
                         <div class="postbox mdjm-export-employees">
-                            <h3><span><?php esc_html_e( 'Export Employees','mobile-dj-manager' ); ?></span></h3>
+                            <h3><span><?php esc_html_e( 'Export Employees', 'mobile-dj-manager' ); ?></span></h3>
                             <div class="inside">
                                 <p><?php esc_html_e( 'Download a CSV of employees.', 'mobile-dj-manager' ); ?></p>
                                 <form id="mdjm-export-employees" class="mdjm-export-form mdjm-import-export-form" method="post">

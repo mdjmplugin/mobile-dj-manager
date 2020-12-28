@@ -2,12 +2,12 @@
 /**
  * This template is used to generate the page for the shortcode [mdjm-playlist] and is used for guests.
  *
- * @version			1.1
- * @author			Mike Howard
- * @since			1.5
- * @content_tag		client
- * @content_tag		event
- * @shortcodes		Not Supported
+ * @version         1.1
+ * @author          Mike Howard
+ * @since           1.5
+ * @content_tag     client
+ * @content_tag     event
+ * @shortcodes      Not Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-guest.php
@@ -17,7 +17,7 @@
 global $mdjm_event;
 
 $intro_text = sprintf(
-	__( 'Welcome to the %s %s music playlist management system for %s %s taking place on %s.', 'mobile-dj-manager' ),
+	__( 'Welcome to the %1$s %2$s music playlist management system for %3$s %4$s taking place on %5$s.', 'mobile-dj-manager' ),
 	'{company_name}',
 	'{application_name}',
 	"{client_fullname}'s",
@@ -41,7 +41,7 @@ $limit_reached = sprintf(
 	mdjm_get_label_singular( true )
 );
 
-$form_title         = sprintf( __( '%s %s Playlist', 'mobile-dj-manager' ), "{client_firstname}'s", '{event_type}' );
+$form_title         = sprintf( __( '%1$s %2$s Playlist', 'mobile-dj-manager' ), "{client_firstname}'s", '{event_type}' );
 $existing_entries   = __( "Here's what you've added so far...", 'mobile-dj-manager' );
 $name_label         = __( 'Name', 'mobile-dj-manager' );
 $name_description   = sprintf( __( 'So %s knows who added this song', 'mobile-dj-manager' ), '{client_firstname}' );
@@ -62,7 +62,7 @@ $submit_label       = __( 'Suggest Song', 'mobile-dj-manager' );
 
 		<?php if ( $mdjm_event->playlist_is_open() ) : ?>
             <?php $event_playlist_limit = mdjm_get_event_playlist_limit( $mdjm_event->ID ); ?>
-            <?php $entries_in_playlist  = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
+            <?php $entries_in_playlist = mdjm_count_playlist_entries( $mdjm_event->ID ); ?>
 
             <?php if ( $entries_in_playlist < $event_playlist_limit || $event_playlist_limit == 0 ) : ?>
 

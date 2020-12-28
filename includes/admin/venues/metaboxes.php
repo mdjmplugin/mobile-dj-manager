@@ -3,57 +3,58 @@
 /**
  * Contains all metabox functions for the mdjm-venue post type
  *
- * @package		MDJM
- * @subpackage	Venues
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Venues
+ * @since       1.3
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Define and add the metaboxes for the mdjm-venue post type.
  * Apply the `mdjm_venue_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @return
  */
-function mdjm_add_venue_meta_boxes( $post )	{
+function mdjm_add_venue_meta_boxes( $post ) {
 	$metaboxes = apply_filters(
 		'mdjm_venue_add_metaboxes',
 		array(
 			array(
-				'id'		  => 'mdjm-venue-details',
-				'title'	   => __( 'Venue Details', 'mobile-dj-manager' ),
-				'callback'	=> 'mdjm_venue_details_metabox',
-				'context'	 => 'normal',
-				'priority'	=> 'high',
-				'args'		=> array(),
-				'dependancy'  => '',
-				'permission'  => ''
-			)
+				'id'         => 'mdjm-venue-details',
+				'title'      => __( 'Venue Details', 'mobile-dj-manager' ),
+				'callback'   => 'mdjm_venue_details_metabox',
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => '',
+			),
 		)
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_venue_before_metaboxes' );
 
 	// Begin metaboxes
-	foreach( $metaboxes as $metabox )	{
+	foreach ( $metaboxes as $metabox ) {
 		// Dependancy check
-		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
+		if ( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false ) {
 			continue;
 		}
 
 		// Permission check
-		if( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
+		if ( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) ) {
 			continue;
 		}
 
 		// Callback check
-		if( ! is_callable( $metabox['callback'] ) )	{
+		if ( ! is_callable( $metabox['callback'] ) ) {
 			continue;
 		}
 
@@ -76,15 +77,15 @@ add_action( 'add_meta_boxes_mdjm-venue', 'mdjm_add_venue_meta_boxes' );
 /**
  * Output for the Venue Details meta box.
  *
- * @since	1.3
- * @param	obj		$post		The post object (WP_Post).
+ * @since   1.3
+ * @param   obj     $post       The post object (WP_Post).
  * @return
  */
-function mdjm_venue_details_metabox( $post )	{
+function mdjm_venue_details_metabox( $post ) {
 
 	do_action( 'mdjm_pre_venue_details_metabox', $post );
 
-	wp_nonce_field( basename( __FILE__ ), 'mdjm-venue' . '_nonce' );
+	wp_nonce_field( basename( __FILE__ ), 'mdjm-venue_nonce' );
 
 	?>
     <script type="text/javascript">

@@ -1,5 +1,5 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+	defined( 'ABSPATH' ) || die( 'Direct access to this page is disabled!!!' );
 
 /**
  * Manage the venue posts
@@ -11,43 +11,43 @@
 /**
  * Define the columns to be displayed for venue posts
  *
- * @since	0.5
- * @param	arr		$columns	Array of column names
- * @return	arr		$columns	Filtered array of column names
+ * @since   0.5
+ * @param   arr     $columns    Array of column names
+ * @return  arr     $columns    Filtered array of column names
  */
 function mdjm_venue_post_columns( $columns ) {
 
 	$columns = array(
-		'cb'			 => '<input type="checkbox" />',
-		'title' 	 	  => __( 'Venue', 'mobile-dj-manager' ),
-		'contact'		=> __( 'Contact', 'mobile-dj-manager' ),
-		'phone'		  => __( 'Phone', 'mobile-dj-manager' ),
-		'town'		   => __( 'Town', 'mobile-dj-manager' ),
-		'county'   		 => __( 'County', 'mobile-dj-manager' ),
-		'event_count'	=> sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
-		'info'		   => __( 'Information', 'mobile-dj-manager' ),
-		'details'	    => __( 'Details', 'mobile-dj-manager' ),
+		'cb'          => '<input type="checkbox" />',
+		'title'       => __( 'Venue', 'mobile-dj-manager' ),
+		'contact'     => __( 'Contact', 'mobile-dj-manager' ),
+		'phone'       => __( 'Phone', 'mobile-dj-manager' ),
+		'town'        => __( 'Town', 'mobile-dj-manager' ),
+		'county'      => __( 'County', 'mobile-dj-manager' ),
+		'event_count' => sprintf( __( '%s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
+		'info'        => __( 'Information', 'mobile-dj-manager' ),
+		'details'     => __( 'Details', 'mobile-dj-manager' ),
 	);
 
-	if( ! mdjm_employee_can( 'add_venues' ) && isset( $columns['cb'] ) )	{
+	if ( ! mdjm_employee_can( 'add_venues' ) && isset( $columns['cb'] ) ) {
 		unset( $columns['cb'] );
 	}
 
 	return $columns;
 } // mdjm_venue_post_columns
-add_filter( 'manage_mdjm-venue_posts_columns' , 'mdjm_venue_post_columns' );
+add_filter( 'manage_mdjm-venue_posts_columns', 'mdjm_venue_post_columns' );
 
 /**
  * Define which columns are sortable for venue posts
  *
- * @since	0.7
- * @param	arr		$sortable_columns	Array of transaction post sortable columns
- * @return	arr		$sortable_columns	Filtered Array of transaction post sortable columns
+ * @since   0.7
+ * @param   arr     $sortable_columns   Array of transaction post sortable columns
+ * @return  arr     $sortable_columns   Filtered Array of transaction post sortable columns
  */
-function mdjm_venue_post_sortable_columns( $sortable_columns )	{
+function mdjm_venue_post_sortable_columns( $sortable_columns ) {
 
-	$sortable_columns['town']	  = 'town';
-	$sortable_columns['county']	= 'county';
+	$sortable_columns['town']   = 'town';
+	$sortable_columns['county'] = 'county';
 
 	return $sortable_columns;
 
@@ -57,26 +57,26 @@ add_filter( 'manage_edit-mdjm-venue_sortable_columns', 'mdjm_venue_post_sortable
 /**
  * Order posts.
  *
- * @since	1.3
- * @param	obj		$query		The WP_Query object
- * @return	void
+ * @since   1.3
+ * @param   obj     $query      The WP_Query object
+ * @return  void
  */
-function mdjm_venue_post_order( $query )	{
+function mdjm_venue_post_order( $query ) {
 
-	if ( ! is_admin() || 'mdjm-venue' != $query->get( 'post_type' ) )	{
+	if ( ! is_admin() || 'mdjm-venue' != $query->get( 'post_type' ) ) {
 		return;
 	}
 
-	switch( $query->get( 'orderby' ) )	{
+	switch ( $query->get( 'orderby' ) ) {
 
 		case 'town':
 			$query->set( 'meta_key', '_venue_town' );
-			$query->set( 'orderby',  'meta_value' );
+			$query->set( 'orderby', 'meta_value' );
             break;
 
 		case 'county':
 			$query->set( 'meta_key', '_venue_county' );
-			$query->set( 'orderby',  'meta_value' );
+			$query->set( 'orderby', 'meta_value' );
             break;
 
 	}
@@ -87,12 +87,12 @@ add_action( 'pre_get_posts', 'mdjm_venue_post_order' );
 /**
  * Define the data to be displayed in each of the custom columns for the Venue post types
  *
- * @since	0.9
- * @param	str		$column_name	The name of the column to display
- * @param	int		$post_id		The current post ID
+ * @since   0.9
+ * @param   str     $column_name    The name of the column to display
+ * @param   int     $post_id        The current post ID
  * @return
  */
-function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
+function mdjm_venue_posts_custom_column( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
 		case 'contact':
@@ -121,25 +121,25 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 		// Event Count
 		case 'event_count':
 			$events_at_venue = get_posts( array(
-                'post_type'	=> 'mdjm-event',
-                'meta_query'   => array(
-                    'key'	  => '_mdjm_event_venue_id',
-                    'value'    => $post_id,
-                    'type'     => 'NUMERIC'
+                'post_type'   => 'mdjm-event',
+                'meta_query'  => array(
+                    'key'   => '_mdjm_event_venue_id',
+                    'value' => $post_id,
+                    'type'  => 'NUMERIC',
                 ),
-                'post_status'  => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' )
+                'post_status' => array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-enquiry', 'mdjm-unattended' ),
             ) );
 
             $count = ! empty( $events_at_venue ) ? count( $events_at_venue ) : '0';
 
-            if ( $count > 0 )   {
+            if ( $count > 0 ) {
                 $url = add_query_arg( array(
                     'post_type'         => 'mdjm-event',
                     'post_status'       => 'all',
                     'action'            => -1,
                     'mdjm_filter_date'  => 0,
                     'mdjm_filter_venue' => $post_id,
-                    'filter_action'     => 'Filter'
+                    'filter_action'     => 'Filter',
                 ), admin_url( 'edit.php' ) );
 
                 $count = sprintf( '<a href="%s">%s</a>', $url, $count );
@@ -155,45 +155,45 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id )	{
 
 		// Details
 		case 'details':
-			$venue_terms	= get_the_terms( $post_id, 'venue-details' );
-			$venue_term	 = '';
+			$venue_terms = get_the_terms( $post_id, 'venue-details' );
+			$venue_term  = '';
 
-			if( !empty( $venue_terms ) )	{
+			if ( ! empty( $venue_terms ) ) {
 
 				$venue_term .= '<ul class="details">' . "\r\n";
 
-				foreach( $venue_terms as $v_term )	{
+				foreach ( $venue_terms as $v_term ) {
 					$venue_term .= '<li>' . $v_term->name . '</li>' . "\r\n";
 				}
 
 				$venue_term .= '</ul>' . "\r\n";
 			}
 
-			echo esc_html(! empty( $venue_term ) ? $venue_term : '' );
+			echo esc_html( ! empty( $venue_term ) ? $venue_term : '' );
 			break;
 	} // switch
 
 } // mdjm_venue_posts_custom_column
-add_action( 'manage_mdjm-venue_posts_custom_column' , 'mdjm_venue_posts_custom_column', 10, 2 );
+add_action( 'manage_mdjm-venue_posts_custom_column', 'mdjm_venue_posts_custom_column', 10, 2 );
 
 /**
  * Customise the post row actions on the venue edit screen.
  *
- * @since	1.0
- * @param	arr		$actions	Current post row actions
- * @param	obj		$post		The WP_Post post object
+ * @since   1.0
+ * @param   arr     $actions    Current post row actions
+ * @param   obj     $post       The WP_Post post object
  */
-function mdjm_venue_post_row_actions( $actions, $post )	{
+function mdjm_venue_post_row_actions( $actions, $post ) {
 
-	if( $post->post_type != 'mdjm-venue' )	{
+	if ( $post->post_type != 'mdjm-venue' ) {
 		return $actions;
 	}
 
-	if( isset( $actions['view'] ) )	{
+	if ( isset( $actions['view'] ) ) {
 		unset( $actions['view'] );
 	}
 
-	if( isset( $actions['inline hide-if-no-js'] ) )	{
+	if ( isset( $actions['inline hide-if-no-js'] ) ) {
 		unset( $actions['inline hide-if-no-js'] );
 	}
 
@@ -205,11 +205,11 @@ add_filter( 'post_row_actions', 'mdjm_venue_post_row_actions', 10, 2 );
 /**
  * Remove the edit bulk action from the venue posts list
  *
- * @since	1.3
- * @param	arr		$actions	Array of actions
- * @return	arr		$actions	Filtered Array of actions
+ * @since   1.3
+ * @param   arr     $actions    Array of actions
+ * @return  arr     $actions    Filtered Array of actions
  */
-function mdjm_venue_bulk_action_list( $actions )	{
+function mdjm_venue_bulk_action_list( $actions ) {
 
 	unset( $actions['edit'] );
 
@@ -221,13 +221,13 @@ add_filter( 'bulk_actions-edit-mdjm-venue', 'mdjm_venue_bulk_action_list' );
 /**
  * Remove the dropdown filters from the edit post screen.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @param
  */
-function mdjm_venue_remove_filters()	{
+function mdjm_venue_remove_filters() {
 
-	if( ! isset( $_GET['post_type'] ) ||  $_GET['post_type'] != 'mdjm-venue' )	{
+	if ( ! isset( $_GET['post_type'] ) || $_GET['post_type'] != 'mdjm-venue' ) {
 		return;
 	}
 
@@ -247,14 +247,14 @@ add_action( 'admin_head', 'mdjm_venue_remove_filters' );
 /**
  * Set the post title placeholder for venues
  *
- * @since	1.3
- * @param	str		$title		The post title
- * @return  str		$title		The filtered post title
+ * @since   1.3
+ * @param   str     $title      The post title
+ * @return  str     $title      The filtered post title
  */
-function mdjm_venue_title_placeholder( $title )	{
+function mdjm_venue_title_placeholder( $title ) {
 	global $post;
 
-	if( !isset( $post ) || 'mdjm-venue' != $post->post_type )	{
+	if ( ! isset( $post ) || 'mdjm-venue' != $post->post_type ) {
 		return $title;
 	}
 
@@ -266,25 +266,26 @@ add_filter( 'enter_title_here', 'mdjm_venue_title_placeholder' );
 /**
  * Rename the Publish and Update post buttons for venues
  *
- * @since	1.3
- * @param	str		$translation	The current button text translation
- * @param	str		$text			The text translation for the button
- * @return	str		$translation	The filtererd text translation
+ * @since   1.3
+ * @param   str     $translation    The current button text translation
+ * @param   str     $text           The text translation for the button
+ * @return  str     $translation    The filtererd text translation
  */
-function mdjm_venue_rename_publish_button( $translation, $text )	{
+function mdjm_venue_rename_publish_button( $translation, $text ) {
 
 	global $post;
 
-	if( ! isset( $post ) || 'mdjm-venue' != $post->post_type )	{
+	if ( ! isset( $post ) || 'mdjm-venue' != $post->post_type ) {
 		return $translation;
 	}
 
-	if( $text == 'Publish' )	{
+	if ( $text == 'Publish' ) {
 		return __( 'Save Venue', 'mobile-dj-manager' );
-	} elseif( $text == 'Update' )	{
+	} elseif ( $text == 'Update' ) {
 		return __( 'Update Venue', 'mobile-dj-manager' );
-	} else
+	} else {
 		return $translation;
+    }
 
 } // mdjm_venue_rename_publish_button
 add_filter( 'gettext', 'mdjm_venue_rename_publish_button', 10, 2 );
@@ -292,30 +293,30 @@ add_filter( 'gettext', 'mdjm_venue_rename_publish_button', 10, 2 );
 /**
  * Save the meta data for the venue
  *
- * @since	1.3
- * @param	int		$post_id		The current post ID.
- * @param	obj		$post			The current post object (WP_Post).
- * @param	bool	$update			Whether this is an existing post being updated or not.
- * @return	void
+ * @since   1.3
+ * @param   int     $post_id        The current post ID.
+ * @param   obj     $post           The current post object (WP_Post).
+ * @param   bool    $update         Whether this is an existing post being updated or not.
+ * @return  void
  */
-function mdjm_save_venue_post( $post_id, $post, $update )	{
+function mdjm_save_venue_post( $post_id, $post, $update ) {
 
-	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
 
-	if ( $post->post_status == 'trash' )	{
+	if ( $post->post_status == 'trash' ) {
 		return;
 	}
 
-	if( empty( $update ) )	{
+	if ( empty( $update ) ) {
 		return;
 	}
 
 	// Permission Check
-	if( ! mdjm_employee_can( 'add_venues' ) )	{
+	if ( ! mdjm_employee_can( 'add_venues' ) ) {
 
-		if( MDJM_DEBUG == true )	{
+		if ( MDJM_DEBUG == true ) {
 			MDJM()->debug->log_it( 'PERMISSION ERROR: User ' . get_current_user_id() . ' is not allowed to edit venues' );
 		}
 
@@ -329,33 +330,33 @@ function mdjm_save_venue_post( $post_id, $post, $update )	{
 	do_action( 'mdjm_before_venue_save', $post_id, $post, $update );
 
 	// Loop through all fields sanitizing and updating as required
-	foreach( $_POST as $meta_key => $new_meta_value )	{
+	foreach ( $_POST as $meta_key => $new_meta_value ) {
 
 		// We're only interested in 'venue_' fields
-		if( substr( $meta_key, 0, 6 ) == 'venue_' )	{
+		if ( substr( $meta_key, 0, 6 ) == 'venue_' ) {
 
 			$current_meta_value = get_post_meta( $post_id, '_' . $meta_key, true );
 
-			if( $meta_key == 'venue_postcode' && !empty( $new_meta_value ) )	{
+			if ( $meta_key == 'venue_postcode' && ! empty( $new_meta_value ) ) {
 				$new_meta_value = strtoupper( sanitize_text_field( $new_meta_value ) );
-			} elseif( $meta_key == 'venue_email' && !empty( $new_meta_value ) )	{
+			} elseif ( $meta_key == 'venue_email' && ! empty( $new_meta_value ) ) {
 				$new_meta_value = sanitize_email( $new_meta_value );
-			} else	{
+			} else {
 				$new_meta_value = ucwords( sanitize_text_field( $new_meta_value ) );
 			}
 
 			// If we have a value and the key did not exist previously, add it
-			if ( !empty( $new_meta_value ) && empty( $current_meta_value ) )	{
+			if ( ! empty( $new_meta_value ) && empty( $current_meta_value ) ) {
 				add_post_meta( $post_id, '_' . $meta_key, $new_meta_value, true );
 			}
 
 			/* -- If a value existed, but has changed, update it -- */
-			elseif ( !empty( $new_meta_value ) && $new_meta_value != $current_meta_value )	{
+			elseif ( ! empty( $new_meta_value ) && $new_meta_value != $current_meta_value ) {
 				update_post_meta( $post_id, '_' . $meta_key, $new_meta_value );
 			}
 
 			/* If there is no new meta value but an old value exists, delete it. */
-			elseif ( empty( $new_meta_value ) && !empty( $current_meta_value ) )	{
+			elseif ( empty( $new_meta_value ) && ! empty( $current_meta_value ) ) {
 				delete_post_meta( $post_id, '_' . $meta_key, $meta_value );
 			}
 		}
@@ -373,15 +374,15 @@ add_action( 'save_post_mdjm-venue', 'mdjm_save_venue_post', 10, 3 );
 /**
  * Customise the messages associated with managing venue posts
  *
- * @since	1.3
- * @param	arr		$messages	The current messages
- * @return	arr		$messages	Filtered messages
+ * @since   1.3
+ * @param   arr     $messages   The current messages
+ * @return  arr     $messages   Filtered messages
  */
-function mdjm_venue_post_messages( $messages )	{
+function mdjm_venue_post_messages( $messages ) {
 
 	global $post;
 
-	if( 'mdjm-venue' != $post->post_type )	{
+	if ( 'mdjm-venue' != $post->post_type ) {
 		return $messages;
 	}
 
@@ -394,10 +395,10 @@ function mdjm_venue_post_messages( $messages )	{
 		1 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		4 => sprintf( __( '%2$s updated. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 		6 => sprintf( __( '%2$s added. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
-		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 )
+		7 => sprintf( __( '%2$s saved. %1$s%2$s List%3$s.', 'mobile-dj-manager' ), $url1, $url2, $url3 ),
 	);
 
 	return apply_filters( 'mdjm_venue_post_messages', $messages );
 
 } // mdjm_venue_post_messages
-add_filter( 'post_updated_messages','mdjm_venue_post_messages' );
+add_filter( 'post_updated_messages', 'mdjm_venue_post_messages' );

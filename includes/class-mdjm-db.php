@@ -1,8 +1,9 @@
 <?php
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_DB base class
@@ -141,9 +142,9 @@ abstract class MDJM_DB {
 	/**
 	 * Retrieve a specific column's value by the the specified column / value
 	 *
-	 * @access	public
+	 * @access  public
 	 * @since   1.5
-	 * @return	string
+	 * @return  string
 	 */
 	public function get_column_by( $column, $column_where, $column_value ) {
 		global $wpdb;
@@ -231,7 +232,7 @@ abstract class MDJM_DB {
 		$data = array_intersect_key( $data, $column_formats );
 
 		// Reorder $column_formats to match the order of columns given in $data
-		$data_keys = array_keys( $data );
+		$data_keys      = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
 		if ( false === $wpdb->update( $this->table_name, $data, array( $where => $row_id ), $column_formats ) ) {
@@ -255,7 +256,7 @@ abstract class MDJM_DB {
 		// Row ID must be positive integer
 		$row_id = absint( $row_id );
 
-		if( empty( $row_id ) ) {
+		if ( empty( $row_id ) ) {
 			return false;
 		}
 
@@ -270,8 +271,8 @@ abstract class MDJM_DB {
 	 * Check if the given table exists.
 	 *
 	 * @since   1.5
-	 * @param	string		$table	The table name
-	 * @return	bool	If the table name exists
+	 * @param   string      $table  The table name
+	 * @return  bool    If the table name exists
 	 */
 	public function table_exists( $table ) {
 		global $wpdb;
@@ -285,7 +286,7 @@ abstract class MDJM_DB {
 	 * Check if the table was ever installed
 	 *
 	 * @since   1.5
-	 * @return	bool	Returns if the customers table was installed and upgrade routine run
+	 * @return  bool    Returns if the customers table was installed and upgrade routine run
 	 */
 	public function installed() {
 		return $this->table_exists( $this->table_name );

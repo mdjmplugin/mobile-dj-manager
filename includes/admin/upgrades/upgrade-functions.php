@@ -12,22 +12,23 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Perform automatic database upgrades when necessary
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
 */
 function mdjm_do_automatic_upgrades() {
 
-	$did_upgrade = false;
+	$did_upgrade  = false;
 	$mdjm_version = preg_replace( '/[^0-9.].*/', '', get_option( 'mdjm_version' ) );
 
 	// Version 1.3.8.5 was the last version to use the old update procedures which were applied automatically.
-	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) )	{
+	if ( version_compare( $mdjm_version, '1.3.8.1', '<' ) ) {
 		add_option( 'mdjm_update_me', MDJM_VERSION_NUM );
 	}
 
@@ -43,7 +44,7 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v147_upgrades();
 	}
 
-    if ( version_compare( $mdjm_version, '1,4,7,7', '<' ) )  {
+    if ( version_compare( $mdjm_version, '1,4,7,7', '<' ) ) {
         mdjm_update_option( 'playlist_limit', '0' );
     }
 
@@ -84,11 +85,11 @@ add_action( 'admin_init', 'mdjm_do_automatic_upgrades' );
 /**
  * Display a notice if an upgrade is required.
  *
- * @since	1.4
+ * @since   1.4
  */
-function mdjm_show_upgrade_notice()	{
+function mdjm_show_upgrade_notice() {
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] == 'mdjm-upgrades' )	{
+	if ( isset( $_GET['page'] ) && $_GET['page'] == 'mdjm-upgrades' ) {
 		return;
 	}
 
@@ -99,7 +100,7 @@ function mdjm_show_upgrade_notice()	{
 	// Check if there is an incomplete upgrade routine.
 	$resume_upgrade = mdjm_maybe_resume_upgrade();
 
-	if ( ! empty( $resume_upgrade ) )	{
+	if ( ! empty( $resume_upgrade ) ) {
 
 		$resume_url = add_query_arg( $resume_upgrade, admin_url( 'index.php' ) );
 		printf(
@@ -109,31 +110,31 @@ function mdjm_show_upgrade_notice()	{
 
 	} else {
 
-		if ( version_compare( $mdjm_version, '1.4', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_packages' ) )	{
+		if ( version_compare( $mdjm_version, '1.4', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_packages' ) ) {
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %s Packages and Add-ons. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to %1$s Packages and Add-ons. Click <a href="%2$s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html( mdjm_get_label_singular( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_packages&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
-		if ( version_compare( $mdjm_version, '1.4.7', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_tasks' ) )	{
+		if ( version_compare( $mdjm_version, '1.4.7', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_tasks' ) ) {
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %1$s database. Click <a href="%2$s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html( mdjm_get_label_plural( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_tasks&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
-        if ( version_compare( $mdjm_version, '1.5', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_pricing_15' ) )	{
+        if ( version_compare( $mdjm_version, '1.5', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_event_pricing_15' ) ) {
 			printf(
-				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %s database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the %1$s database. Click <a href="%2$s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html( mdjm_get_label_plural( true ) ),
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_event_pricing_15&message=1&redirect=' . mdjm_get_current_page_url() ) )
 			);
 		}
 
-        if ( version_compare( $mdjm_version, '1.5.6', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_availability_db_156' ) )	{
+        if ( version_compare( $mdjm_version, '1.5.6', '<' ) || ! mdjm_has_upgrade_completed( 'upgrade_availability_db_156' ) ) {
 			printf(
 				'<div class="notice notice-error"><p>' . __( 'MDJM Event Management needs to perform an upgrade to the availability database. Click <a href="%s">here</a> to start the upgrade.', 'mobile-dj-manager' ) . '</p></div>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_url( admin_url( 'index.php?page=mdjm-upgrades&mdjm-upgrade=upgrade_availability_db_156&message=1&redirect=' . mdjm_get_current_page_url() ) )
@@ -158,18 +159,18 @@ add_action( 'admin_notices', 'mdjm_show_upgrade_notice' );
  *
  * This function is usually triggered via AJAX.
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
 */
 function mdjm_trigger_upgrades() {
 
-	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
 	update_option( 'mdjm_version', MDJM_VERSION_NUM );
 
-	if ( DOING_AJAX )	{
+	if ( DOING_AJAX ) {
 		die( 'complete' ); // Let AJAX know that the upgrade is complete
 	}
 
@@ -179,8 +180,8 @@ add_action( 'wp_ajax_mdjm_trigger_upgrades', 'mdjm_trigger_upgrades' );
 /**
  * For use when doing 'stepped' upgrade routines, to see if we need to start somewhere in the middle.
  *
- * @since	1.4
- * @return	mixed	When nothing to resume returns false, otherwise starts the upgrade where it left off.
+ * @since   1.4
+ * @return  mixed   When nothing to resume returns false, otherwise starts the upgrade where it left off.
  */
 function mdjm_maybe_resume_upgrade() {
 
@@ -197,9 +198,9 @@ function mdjm_maybe_resume_upgrade() {
 /**
  * Adds an upgrade action to the completed upgrades array.
  *
- * @since	1.4
- * @param	str		$upgrade_action		The action to add to the copmleted upgrades array.
- * @return	bool	If the function was successfully added.
+ * @since   1.4
+ * @param   str     $upgrade_action     The action to add to the copmleted upgrades array.
+ * @return  bool    If the function was successfully added.
  */
 function mdjm_set_upgrade_complete( $upgrade_action = '' ) {
 
@@ -219,13 +220,13 @@ function mdjm_set_upgrade_complete( $upgrade_action = '' ) {
 /**
  * Migrates event packages and addons from the options table to posts.
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
-function mdjm_v14_upgrades()	{
+function mdjm_v14_upgrades() {
 	global $wpdb;
 
-	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -235,7 +236,7 @@ function mdjm_v14_upgrades()	{
 
 	// Drop the deprecated Playlists table
 	$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $wpdb->prefix . 'mdjm_playlists' . "'" );
-	if( $results )	{
+	if ( $results ) {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'mdjm_playlists' );
 	}
 
@@ -247,19 +248,19 @@ function mdjm_v14_upgrades()	{
 
 	$convert_addons = get_option( 'mdjm_upgrade_v14_import_addons' );
 
-	if ( ! $convert_addons )	{
+	if ( ! $convert_addons ) {
 
-		if ( $existing_items )	{ // If addons exist we need to convert them
+		if ( $existing_items ) { // If addons exist we need to convert them
 
-			foreach( $existing_items as $slug => $existing_item )	{
+			foreach ( $existing_items as $slug => $existing_item ) {
 
 				$employees = array( 'all' );
 
-				if ( ! empty( $existing_item[8] ) )	{
+				if ( ! empty( $existing_item[8] ) ) {
 					$employees = explode( ',', $existing_item[8] );
 				}
 
-				if ( $existing_cats && ! term_exists( $existing_cats[ $existing_item[5] ], 'addon-category' ) )	{
+				if ( $existing_cats && ! term_exists( $existing_cats[ $existing_item[5] ], 'addon-category' ) ) {
 					wp_insert_term( $existing_cats[ $existing_item[5] ], 'addon-category', array( 'slug' => $existing_item[5] ) );
 
 					$category = get_term_by( 'name', $existing_cats[ $existing_item[5] ], 'addon-category' );
@@ -279,24 +280,21 @@ function mdjm_v14_upgrades()	{
 						'_addon_months'           => array(),
 						'_addon_price'            => ! empty( $existing_item[7] ) ? mdjm_format_amount( $existing_item[7] ) : mdjm_format_amount( '0' ),
 						'_addon_variable_pricing' => false,
-						'_addon_variable_prices'  => false
-					)
+						'_addon_variable_prices'  => false,
+					),
 				);
 
 				$addon_id = wp_insert_post( $args );
 
-				if ( $addon_id )	{
-					if( ! empty( $category ) )	{
+				if ( $addon_id ) {
+					if ( ! empty( $category ) ) {
 						mdjm_set_addon_category( $addon_id, $category->term_id );
 					}
 
 					$items[ $slug ] = $addon_id; // Store each addon's slug and new post ID for use later
-				}
-
-			}
-
-		}
-
+				}           
+			}       
+		}   
 	}
 
 	// Log addon upgrade procedure as completed
@@ -304,37 +302,37 @@ function mdjm_v14_upgrades()	{
 
 	$convert_packages = get_option( 'mdjm_upgrade_v14_import_packages' );
 
-	if ( ! $convert_packages )	{
+	if ( ! $convert_packages ) {
 
-		foreach ( $existing_packages as $slug => $existing_package )	{
+		foreach ( $existing_packages as $slug => $existing_package ) {
 
 			$addons    = array();
 			$equipment = array();
 			$employees = array( 'all' );
 
-			if ( ! empty( $existing_package['djs'] ) )	{
+			if ( ! empty( $existing_package['djs'] ) ) {
 				$employees = explode( ',', $existing_package['djs'] );
 			}
 
-			if ( ! empty( $existing_package['equipment'] ) )	{
+			if ( ! empty( $existing_package['equipment'] ) ) {
 				$equipment = explode( ',', $existing_package['equipment'] );
 			}
 
-			if ( ! empty( $equipment ) )	{
-				foreach( $equipment as $item )	{
-					if ( ! empty( $items[ $item ] ) )	{
+			if ( ! empty( $equipment ) ) {
+				foreach ( $equipment as $item ) {
+					if ( ! empty( $items[ $item ] ) ) {
 						$addons[] = $items[ $item ];
 					}
 				}
 			}
 
 			$args = array(
-				'post_type'     => 'mdjm-package',
-				'post_content'  => ! empty( $existing_package['desc'] ) ? stripslashes( $existing_package['desc'] ) : '',
-				'post_title'    => ! empty( $existing_package['name'] ) ? stripslashes( $existing_package['name'] ) : '',
-				'post_status'   => 'publish',
-				'post_name'     => stripslashes( $slug ),
-				'meta_input'    => array(
+				'post_type'    => 'mdjm-package',
+				'post_content' => ! empty( $existing_package['desc'] ) ? stripslashes( $existing_package['desc'] ) : '',
+				'post_title'   => ! empty( $existing_package['name'] ) ? stripslashes( $existing_package['name'] ) : '',
+				'post_status'  => 'publish',
+				'post_name'    => stripslashes( $slug ),
+				'meta_input'   => array(
 					'_package_employees'        => $employees,
 					'_package_event_types'      => array( 'all' ),
 					'_package_restrict_date'    => false,
@@ -342,18 +340,16 @@ function mdjm_v14_upgrades()	{
 					'_package_items'            => array_unique( $addons ),
 					'_package_price'            => ! empty( $existing_package['cost'] ) ? mdjm_format_amount( $existing_package['cost'] ) : mdjm_format_amount( '0' ),
 					'_package_variable_pricing' => false,
-					'_package_variable_prices'  => false
-				)
+					'_package_variable_prices'  => false,
+				),
 			);
 
 			$package_id = wp_insert_post( $args );
 
-			if ( $package_id )	{
+			if ( $package_id ) {
 				$packages[ $slug ] = $package_id; // Store each addon's slug and new post ID for use later
-			}
-
-		}
-
+			}       
+		}   
 	}
 
 	// Clear the permalinks
@@ -367,10 +363,10 @@ function mdjm_v14_upgrades()	{
 /**
  * Upgrade event packages from slugs to new post ID's.
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
-function mdjm_v14_upgrade_event_packages()	{
+function mdjm_v14_upgrade_event_packages() {
 
 	global $wpdb;
 
@@ -382,14 +378,14 @@ function mdjm_v14_upgrade_event_packages()	{
 	$packages = get_transient( 'mdjm_upgrade_v14_import_packages' );
 
 	$number   = 50;
-	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
-	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
-	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$step     = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
+	$offset   = $step == 1 ? 0 : ( $step - 1 ) * $number;
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) ) : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message  = isset( $_GET['message'] ) ? 'upgrade-completed' : '';
 
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
-		$sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
+		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
 		$has_events = $wpdb->get_col( $sql );
 
 		if ( empty( $has_events ) || ( 'false' === $items && 'false' === $packages ) ) {
@@ -407,7 +403,7 @@ function mdjm_v14_upgrade_event_packages()	{
 		$total_sql = "SELECT COUNT(post_id) as total_events FROM $wpdb->postmeta WHERE meta_value != '' AND (meta_key = '_mdjm_event_package' OR meta_key = '_mdjm_event_addons')";
 		$results   = $wpdb->get_row( $total_sql, 0 );
 
-		$total     = $results->total_events;
+		$total = $results->total_events;
 	}
 
 	$event_ids = $wpdb->get_col( $wpdb->prepare(
@@ -425,34 +421,33 @@ function mdjm_v14_upgrade_event_packages()	{
 		'_mdjm_event_package', '_mdjm_event_addons', $offset, $number
 	) );
 
-	if( $event_ids )	{
-		foreach( $event_ids as $event_id )	{
+	if ( $event_ids ) {
+		foreach ( $event_ids as $event_id ) {
 			$addons = array();
 
 			$current_package = get_post_meta( $event_id, '_mdjm_event_package', true );
 			$current_items   = get_post_meta( $event_id, '_mdjm_event_addons', true );
 
-			if ( ! empty( $current_package ) )	{
+			if ( ! empty( $current_package ) ) {
 				update_post_meta( $event_id, '_mdjm_event_package_pre_v14', $current_package );
-				if ( array_key_exists( $current_package, $packages ) )	{
+				if ( array_key_exists( $current_package, $packages ) ) {
 					update_post_meta( $event_id, '_mdjm_event_package', $packages[ $current_package ] );
 				}
 			}
 
-			if ( ! empty( $current_items ) && is_array( $current_items ) )	{
+			if ( ! empty( $current_items ) && is_array( $current_items ) ) {
 				update_post_meta( $event_id, '_mdjm_event_addons_pre_v14', $current_items );
 				$addons = array();
 
-				foreach ( $current_items as $current_item )	{
-					if ( array_key_exists( $current_item, $items ) )	{
+				foreach ( $current_items as $current_item ) {
+					if ( array_key_exists( $current_item, $items ) ) {
 						$addons[] = $items[ $current_item ];
 					}
 				}
 
-				if ( ! empty( $addons ) )	{
+				if ( ! empty( $addons ) ) {
 					update_post_meta( $event_id, '_mdjm_event_addons', $addons );
-				}
-
+				}           
 			}
 		}
 
@@ -465,7 +460,7 @@ function mdjm_v14_upgrade_event_packages()	{
 			'number'       => $number,
 			'total'        => $total,
 			'redirect'     => $redirect,
-			'message'      => $message
+			'message'      => $message,
 		), admin_url( 'index.php' ) );
 
 		wp_safe_redirect( $redirect );
@@ -477,7 +472,7 @@ function mdjm_v14_upgrade_event_packages()	{
 		delete_option( 'mdjm_doing_upgrade' );
 
 		$url = add_query_arg( array(
-			'mdjm-message' => $message
+			'mdjm-message' => $message,
 		), $redirect );
 
 		wp_safe_redirect( $url );
@@ -490,13 +485,13 @@ add_action( 'mdjm-upgrade_event_packages', 'mdjm_v14_upgrade_event_packages' );
 /**
  * Set all MDJM Journal Entry comment_type columns to mdjm-journal.
  *
- * @since	1.4.3
- * @return	void
+ * @since   1.4.3
+ * @return  void
  */
-function mdjm_v143_upgrades()	{
+function mdjm_v143_upgrades() {
 	global $wpdb;
 
-	if( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
 
@@ -514,9 +509,9 @@ function mdjm_v143_upgrades()	{
 	// Sanitize client field IDs
 	$client_fields = get_option( 'mdjm_client_fields' );
 
-	if ( $client_fields )	{
-		foreach( $client_fields as $field_id => $client_field )	{
-			if ( ! empty( $client_field['default'] ) )	{
+	if ( $client_fields ) {
+		foreach ( $client_fields as $field_id => $client_field ) {
+			if ( ! empty( $client_field['default'] ) ) {
 				continue;
 			}
 
@@ -531,10 +526,10 @@ function mdjm_v143_upgrades()	{
 /**
  * Update schedules.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_v147_upgrades()	{
+function mdjm_v147_upgrades() {
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -547,51 +542,50 @@ function mdjm_v147_upgrades()	{
 	$tasks       = get_option( 'mdjm_schedules' );
 	$email_tasks = array(
 		'request-deposit',
-		'balance-reminder'
+		'balance-reminder',
 	);
 
-	if ( $tasks )	{
+	if ( $tasks ) {
 
-		foreach( $tasks as $slug => $task )	{
+		foreach ( $tasks as $slug => $task ) {
 			$active  = false;
 			$lastrun = false;
 			$default = false;
 
-			if ( ! empty( $task['active'] ) && 'Y' == $task['active'] )	{
+			if ( ! empty( $task['active'] ) && 'Y' == $task['active'] ) {
 				$active = true;
 			}
 
-			if ( ! empty( $task['lastran'] ) && 'Never' != $task['lastran'] )	{
+			if ( ! empty( $task['lastran'] ) && 'Never' != $task['lastran'] ) {
 				$lastrun = $task['lastran'];
 			}
 
-			if ( ! empty( $task['default'] ) && 'Y' == $task['default'] )	{
+			if ( ! empty( $task['default'] ) && 'Y' == $task['default'] ) {
 				$default = true;
-			} else	{
+			} else {
 				$default = false;
 			}
 
-			$tasks[ $slug ]['active']                  = $active;
-			$tasks[ $slug ]['lastran']                 = $lastrun;
-			$tasks[ $slug ]['default']                 = $default;
-			$tasks[ $slug ]['last_result']             = false;
+			$tasks[ $slug ]['active']      = $active;
+			$tasks[ $slug ]['lastran']     = $lastrun;
+			$tasks[ $slug ]['default']     = $default;
+			$tasks[ $slug ]['last_result'] = false;
 
 			unset( $tasks[ $slug ]['options']['email_client'] );
 			unset( $tasks[ $slug ]['options']['notify_admin'] );
 			unset( $tasks[ $slug ]['options']['notify_dj'] );
 
-			if ( ! in_array( $slug, $email_tasks ) )	{
+			if ( ! in_array( $slug, $email_tasks ) ) {
 				unset( $tasks[ $slug ]['options']['email_template'] );
 				unset( $tasks[ $slug ]['options']['email_subject'] );
 				unset( $tasks[ $slug ]['options']['email_from'] );
-			} else	{
-				if ( isset( $tasks[ $slug ]['options']['email_from'] ) && 'dj' == $tasks[ $slug ]['options']['email_from'] )	{
+			} else {
+				if ( isset( $tasks[ $slug ]['options']['email_from'] ) && 'dj' == $tasks[ $slug ]['options']['email_from'] ) {
 					$tasks[ $slug ]['options']['email_from'] = 'employee';
-				} else	{
+				} else {
 					$tasks[ $slug ]['options']['email_from'] = 'admin';
 				}
-			}
-
+			}       
 		}
 
 		update_option( 'mdjm_schedules', $tasks );
@@ -607,10 +601,10 @@ function mdjm_v147_upgrades()	{
 /**
  * Ensure all events have the _mdjm_event_tasks meta key.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_v147_upgrade_event_tasks()	{
+function mdjm_v147_upgrade_event_tasks() {
 
 	global $wpdb;
 
@@ -619,14 +613,14 @@ function mdjm_v147_upgrade_event_tasks()	{
 	mdjm_set_time_limit( 0 );
 
 	$number   = 20;
-	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
-	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( ['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
-	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$step     = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
+	$offset   = $step == 1 ? 0 : ( $step - 1 ) * $number;
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( array( 'redirect' ) ) ) : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message  = isset( $_GET['message'] ) ? 'upgrade-completed' : '';
 
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
-		$sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
+		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
 		$has_events = $wpdb->get_col( $sql );
 
 		if ( empty( $has_events ) ) {
@@ -644,7 +638,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 		$total_sql = "SELECT COUNT(ID) as total_events FROM $wpdb->posts WHERE post_type = 'mdjm-event'";
 		$results   = $wpdb->get_row( $total_sql, 0 );
 
-		$total     = $results->total_events;
+		$total = $results->total_events;
 	}
 
 	$event_ids = $wpdb->get_col( $wpdb->prepare(
@@ -657,25 +651,25 @@ function mdjm_v147_upgrade_event_tasks()	{
 		$offset, $number
 	) );
 
-	if ( $event_ids )	{
-		foreach( $event_ids as $event_id )	{
+	if ( $event_ids ) {
+		foreach ( $event_ids as $event_id ) {
 
             $tasks = array();
             $event = new MDJM_Event( $event_id );
 
-            if ( 'mdjm-completed' == $event->post_status )   {
+            if ( 'mdjm-completed' == $event->post_status ) {
                 $tasks['complete-events'] = current_time( 'timestamp' );
             }
 
-            if ( 'mdjm-failed' == $event->post_status )   {
+            if ( 'mdjm-failed' == $event->post_status ) {
                 $tasks['fail-enquiry'] = current_time( 'timestamp' );
             }
 
-            if ( 'Paid' == $event->get_deposit_status() )   {
+            if ( 'Paid' == $event->get_deposit_status() ) {
                 $tasks['request-deposit'] = current_time( 'timestamp' );
             }
 
-            if ( 'Paid' == $event->get_balance_status() )   {
+            if ( 'Paid' == $event->get_balance_status() ) {
                 $tasks['balance-reminder'] = current_time( 'timestamp' );
             }
 
@@ -691,7 +685,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 			'number'       => $number,
 			'total'        => $total,
 			'redirect'     => $redirect,
-			'message'      => $message
+			'message'      => $message,
 		), admin_url( 'index.php' ) );
 
 		wp_safe_redirect( $redirect );
@@ -703,7 +697,7 @@ function mdjm_v147_upgrade_event_tasks()	{
 		delete_option( 'mdjm_doing_upgrade' );
 
 		$url = add_query_arg( array(
-			'mdjm-message' => 'upgrade-completed'
+			'mdjm-message' => 'upgrade-completed',
 		), $redirect );
 
 		wp_safe_redirect( $url );
@@ -716,10 +710,10 @@ add_action( 'mdjm-upgrade_event_tasks', 'mdjm_v147_upgrade_event_tasks' );
 /**
  * 1.5 Upgrade.
  *
- * @since	1.5
- * @return	void
+ * @since   1.5
+ * @return  void
  */
-function mdjm_v15_upgrades()	{
+function mdjm_v15_upgrades() {
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -731,10 +725,10 @@ function mdjm_v15_upgrades()	{
     // Add default values for new setting options
     $options = array(
         'setup_time'             => '0',
-		'deposit_before_confirm' => false
+		'deposit_before_confirm' => false,
     );
 
-    foreach ( $options as $key => $value )  {
+    foreach ( $options as $key => $value ) {
         mdjm_update_option( $key, $value );
     }
 
@@ -742,42 +736,42 @@ function mdjm_v15_upgrades()	{
 	$tasks = get_option( 'mdjm_schedules' );
 
 	$tasks['playlist-notification'] = array(
-		'slug'              => 'playlist-notification',
-		'name'              => __( 'Client Playlist Notifications', 'mobile-dj-manager' ),
-		'active'            => false,
-		'desc'              => __( 'Sends notifications to clients if a guest has added an entry to their playlist.', 'mobile-dj-manager' ),
-		'frequency'         => 'Daily',
-		'nextrun'           => 'N/A',
-		'lastran'           => 'Never',
-		'options'           => array(
-			'run_when'        => 'after_event',
-			'age'             => '1 HOUR',
-			'email_template'  => '0',
-			'email_subject'   => sprintf( __( 'Your %s playlist has been updated', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-			'email_from'      => 'admin'
+		'slug'        => 'playlist-notification',
+		'name'        => __( 'Client Playlist Notifications', 'mobile-dj-manager' ),
+		'active'      => false,
+		'desc'        => __( 'Sends notifications to clients if a guest has added an entry to their playlist.', 'mobile-dj-manager' ),
+		'frequency'   => 'Daily',
+		'nextrun'     => 'N/A',
+		'lastran'     => 'Never',
+		'options'     => array(
+			'run_when'       => 'after_event',
+			'age'            => '1 HOUR',
+			'email_template' => '0',
+			'email_subject'  => sprintf( __( 'Your %s playlist has been updated', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+			'email_from'     => 'admin',
 		),
-		'totalruns'           => '0',
-		'default'             => true,
-		'last_result'         => false
+		'totalruns'   => '0',
+		'default'     => true,
+		'last_result' => false,
 	);
 
 	$tasks['playlist-employee-notify'] = array(
-		'slug'              => 'playlist-employee-notify',
-		'name'              => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
-		'active'            => false,
-		'desc'              => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'frequency'         => 'Daily',
-		'nextrun'           => 'N/A',
-		'lastran'           => 'Never',
-		'options'           => array(
-			'run_when'        => 'before_event',
-			'age'             => '3 DAY',
-			'email_subject'   => sprintf( __( '%s playlist notification', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'email_from'      => 'admin'
+		'slug'        => 'playlist-employee-notify',
+		'name'        => __( 'Employee Playlist Notification', 'mobile-dj-manager' ),
+		'active'      => false,
+		'desc'        => sprintf( __( 'Sends notifications to an employee if an %s playlist has entries.', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'frequency'   => 'Daily',
+		'nextrun'     => 'N/A',
+		'lastran'     => 'Never',
+		'options'     => array(
+			'run_when'      => 'before_event',
+			'age'           => '3 DAY',
+			'email_subject' => sprintf( __( '%s playlist notification', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+			'email_from'    => 'admin',
 		),
-		'totalruns'           => '0',
-		'default'             => true,
-		'last_result'         => false
+		'totalruns'   => '0',
+		'default'     => true,
+		'last_result' => false,
 	);
 
 	update_option( 'mdjm_schedules', $tasks );
@@ -787,10 +781,10 @@ function mdjm_v15_upgrades()	{
 /**
  * Add the pricing breakdown meta keys to all existing events
  *
- * @since	1.5
- * @return	void
+ * @since   1.5
+ * @return  void
  */
-function mdjm_v15_upgrade_event_pricing()	{
+function mdjm_v15_upgrade_event_pricing() {
 
 	global $wpdb;
 
@@ -799,14 +793,14 @@ function mdjm_v15_upgrade_event_pricing()	{
 	mdjm_set_time_limit( 0 );
 
 	$number   = 20;
-	$step     = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
-	$offset   = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )       : admin_url( 'edit.php?post_type=mdjm-event' );
-	$message  = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$step     = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
+	$offset   = $step == 1 ? 0 : ( $step - 1 ) * $number;
+	$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) ) : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message  = isset( $_GET['message'] ) ? 'upgrade-completed' : '';
 
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
-		$sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft' LIMIT 1";
+		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft' LIMIT 1";
 		$has_events = $wpdb->get_col( $sql );
 
 		if ( empty( $has_events ) ) {
@@ -824,7 +818,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 		$total_sql = "SELECT COUNT(ID) as total_events FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft'";
 		$results   = $wpdb->get_row( $total_sql, 0 );
 
-		$total     = $results->total_events;
+		$total = $results->total_events;
 	}
 
 	$event_ids = $wpdb->get_col( $wpdb->prepare(
@@ -839,12 +833,12 @@ function mdjm_v15_upgrade_event_pricing()	{
 		$offset, $number
 	) );
 
-	if ( $event_ids )	{
-		foreach( $event_ids as $event_id )	{
+	if ( $event_ids ) {
+		foreach ( $event_ids as $event_id ) {
 
             $mdjm_event = new MDJM_Event( $event_id );
 
-            if ( ! $mdjm_event )    {
+            if ( ! $mdjm_event ) {
                 continue;
             }
 
@@ -858,7 +852,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 
             // Travel cost
             $travel_cost = mdjm_get_event_travel_data( $event_id );
-            if ( empty( $travel_cost ) )    {
+            if ( empty( $travel_cost ) ) {
                 $travel_cost = 0;
             }
 
@@ -882,7 +876,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 			'number'       => $number,
 			'total'        => $total,
 			'redirect'     => $redirect,
-			'message'      => $message
+			'message'      => $message,
 		), admin_url( 'index.php' ) );
 
 		wp_safe_redirect( $redirect );
@@ -894,7 +888,7 @@ function mdjm_v15_upgrade_event_pricing()	{
 		delete_option( 'mdjm_doing_upgrade' );
 
 		$url = add_query_arg( array(
-			'mdjm-message' => 'upgrade-completed'
+			'mdjm-message' => 'upgrade-completed',
 		), $redirect );
 
 		wp_safe_redirect( $url );
@@ -906,10 +900,10 @@ add_action( 'mdjm-upgrade_event_pricing_15', 'mdjm_v15_upgrade_event_pricing' );
 /**
  * 1.5.4 Upgrade.
  *
- * @since	1.5.4
- * @return	void
+ * @since   1.5.4
+ * @return  void
  */
-function mdjm_v154_upgrades()	{
+function mdjm_v154_upgrades() {
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -928,10 +922,10 @@ function mdjm_v154_upgrades()	{
         'agree_terms_label'            => __( 'I have read and agree to the terms and conditions', 'mobile-dj-manager' ),
         'agree_terms_description'      => '',
         'agree_terms_heading'          => sprintf( __( 'Terms and Conditions for %s', 'mobile-dj-manager' ), mdjm_get_label_plural() ),
-        'agree_terms_text'             => ''
+        'agree_terms_text'             => '',
     );
 
-    foreach ( $options as $key => $value )  {
+    foreach ( $options as $key => $value ) {
         mdjm_update_option( $key, $value );
     }
 
@@ -940,10 +934,10 @@ function mdjm_v154_upgrades()	{
 /**
  * 1.5.6 Upgrade.
  *
- * @since	1.5.4
- * @return	void
+ * @since   1.5.4
+ * @return  void
  */
-function mdjm_v156_upgrades()	{
+function mdjm_v156_upgrades() {
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -981,10 +975,10 @@ function mdjm_v156_upgrades()	{
         'absence_text_color'       => '#555555',
         'event_background_color'   => '#2ea2cc',
         'event_border_color'       => '#0074a2',
-        'event_text_color'         => '#ffffff'
+        'event_text_color'         => '#ffffff',
     );
 
-    foreach( $new_settings as $key => $value )  {
+    foreach ( $new_settings as $key => $value ) {
         mdjm_update_option( $key, $value );
     }
 } // mdjm_v156_upgrades
@@ -992,10 +986,10 @@ function mdjm_v156_upgrades()	{
 /**
  * Migrate availability data to new database table.
  *
- * @since	1.5.6
- * @return	void
+ * @since   1.5.6
+ * @return  void
  */
-function mdjm_v156_upgrade_availability_db()	{
+function mdjm_v156_upgrade_availability_db() {
 
 	global $wpdb;
 
@@ -1004,15 +998,15 @@ function mdjm_v156_upgrade_availability_db()	{
 	mdjm_set_time_limit( 0 );
 
 	$number    = 10;
-	$step      = isset( $_GET['step'] )     ? absint( $_GET['step'] ) : 1;
-	$offset    = $step == 1                 ? 0                       : ( $step - 1 ) * $number;
-	$redirect  = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) )      : admin_url( 'edit.php?post_type=mdjm-event' );
-	$message   = isset( $_GET['message'] )  ? 'upgrade-completed'     : '';
+	$step      = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
+	$offset    = $step == 1 ? 0 : ( $step - 1 ) * $number;
+	$redirect  = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( $_GET['redirect'] ) ) : admin_url( 'edit.php?post_type=mdjm-event' );
+	$message   = isset( $_GET['message'] ) ? 'upgrade-completed' : '';
 	$old_table = $wpdb->prefix . 'mdjm_avail';
 
 	if ( $step < 2 ) {
 		// Check if we have any entries before moving on
-		$sql = "SELECT id FROM $old_table LIMIT 1";
+		$sql         = "SELECT id FROM $old_table LIMIT 1";
 		$has_entries = $wpdb->get_col( $sql );
 
 		if ( empty( $has_entries ) ) {
@@ -1023,7 +1017,7 @@ function mdjm_v156_upgrade_availability_db()	{
             delete_option( 'mdjm_db_version' );
 			wp_safe_redirect( $redirect );
 			exit;
-		} else    {
+		} else {
             $all_entries = $wpdb->get_results( "SELECT * FROM $old_table" );
             set_transient( 'mdjm_156_availability_entries', $all_entries, MONTH_IN_SECONDS );
         }
@@ -1034,7 +1028,7 @@ function mdjm_v156_upgrade_availability_db()	{
 		$total_sql = "SELECT COUNT(*) as total_entries FROM $old_table GROUP BY entry_id ORDER BY id ASC LIMIT 1";
 		$results   = $wpdb->get_row( $total_sql, 0 );
 
-		$total     = $results->total_entries;
+		$total = $results->total_entries;
 	}
 
 	$entries = $wpdb->get_results( $wpdb->prepare(
@@ -1047,12 +1041,12 @@ function mdjm_v156_upgrade_availability_db()	{
 		$offset, $number
 	) );
 
-	if ( $entries )	{
-		foreach( $entries as $entry )	{
+	if ( $entries ) {
+		foreach ( $entries as $entry ) {
             $start = strtotime( $entry->date_from . ' 00:00:00' );
             $end   = strtotime( '+1 day', strtotime( $entry->date_to . ' 00:00:00' ) );
 
-            $data = array();
+            $data                = array();
             $data['event_id']    = 0;
             $data['employee_id'] = $entry->user_id;
             $data['all_day']     = 1;
@@ -1079,7 +1073,7 @@ function mdjm_v156_upgrade_availability_db()	{
 			'number'       => $number,
 			'total'        => $total,
 			'redirect'     => $redirect,
-			'message'      => $message
+			'message'      => $message,
 		), admin_url( 'index.php' ) );
 
 		wp_safe_redirect( $redirect );
@@ -1093,7 +1087,7 @@ function mdjm_v156_upgrade_availability_db()	{
         delete_option( 'mdjm_db_version' );
 
 		$url = add_query_arg( array(
-			'mdjm-message' => 'upgrade-completed'
+			'mdjm-message' => 'upgrade-completed',
 		), $redirect );
 
 		wp_safe_redirect( $url );
@@ -1105,10 +1099,10 @@ add_action( 'mdjm-upgrade_availability_db_156', 'mdjm_v156_upgrade_availability_
 /**
  * 1.5.7 Upgrade.
  *
- * @since	1.5.7
- * @return	void
+ * @since   1.5.7
+ * @return  void
  */
-function mdjm_v157_upgrades()	{
+function mdjm_v157_upgrades() {
 	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
 		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 	}
@@ -1119,7 +1113,7 @@ function mdjm_v157_upgrades()	{
 
 	$absence_tip = sprintf( __( 'Absence: %s', 'mobile-dj-manager' ), '{employee_name}' );
 
-	$absence_content = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
+	$absence_content  = sprintf( __( 'From: %s', 'mobile-dj-manager' ), '{start}' ) . PHP_EOL;
 	$absence_content .= sprintf( __( 'To: %s', 'mobile-dj-manager' ), '{end}' ) . PHP_EOL;
 	$absence_content .= '{notes}';
 
@@ -1127,7 +1121,7 @@ function mdjm_v157_upgrades()	{
 
 	$event_tip_title = mdjm_get_label_singular() . ' {contract_id} - {event_type}';
 
-	$event_content = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
+	$event_content  = sprintf( __( 'Status: %s', 'mobile-dj-manager' ), '{event_status}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Date: %s', 'mobile-dj-manager' ), '{event_date}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Start: %s', 'mobile-dj-manager' ), '{start_time}' ) . PHP_EOL;
 	$event_content .= sprintf( __( 'Finish: %s', 'mobile-dj-manager' ), '{end_time}' ) . PHP_EOL;
@@ -1142,10 +1136,10 @@ function mdjm_v157_upgrades()	{
 		'calendar_absence_tip_content' => $absence_content,
 		'calendar_event_title'         => $event_title,
 		'calendar_event_tip_title'     => $event_tip_title,
-		'calendar_event_tip_content'   => $event_content
+		'calendar_event_tip_content'   => $event_content,
     );
 
-    foreach( $new_settings as $key => $value )  {
+    foreach ( $new_settings as $key => $value ) {
         mdjm_update_option( $key, $value );
     }
 } // mdjm_v157_upgrades

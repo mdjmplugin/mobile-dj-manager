@@ -2,13 +2,13 @@
 /**
  * This template is used to display the availability form with shortcode [mdjm-availability display="vertical"].
  *
- * @version			1.0
- * @author			Mike Howard
- * @since			1.3
- * @content_tag		No {client_*}
- * @content_tag		No {event_*}
- * @content_tags	{label}, {label_class}, {field}, {field_class}, {submit_text}, {submit_class}, {please_wait_text}, {please_wait_class}
- * @shortcodes		Not Supported
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.3
+ * @content_tag     No {client_*}
+ * @content_tag     No {event_*}
+ * @content_tags    {label}, {label_class}, {field}, {field_class}, {submit_text}, {submit_class}, {please_wait_text}, {please_wait_class}
+ * @shortcodes      Not Supported
  *
  * Do not change any form field ID's.
  *

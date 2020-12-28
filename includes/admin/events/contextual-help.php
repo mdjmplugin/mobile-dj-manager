@@ -10,8 +10,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Events contextual help.
@@ -40,7 +41,7 @@ function mdjm_events_contextual_help() {
             esc_url( 'https://www.facebook.com/groups/mobiledjmanager/' )
         ) . '</p>' .
 		'<p>' . sprintf(
-            __( '<a href="%s">Post an issue</a> on <a href="%s">GitHub</a>.', 'mobile-dj-manager' ),
+            __( '<a href="%1$s">Post an issue</a> on <a href="%2$s">GitHub</a>.', 'mobile-dj-manager' ),
             esc_url( 'https://github.com/mdjm/mobile-dj-manager/issues' ),
             esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
         ) . '</p>' .
@@ -51,9 +52,9 @@ function mdjm_events_contextual_help() {
 	);
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-event-options',
-		'title'	    => sprintf( __( '%s Options', 'mobile-dj-manager' ), $singular ),
-		'content'	=>
+		'id'      => 'mdjm-event-options',
+		'title'   => sprintf( __( '%s Options', 'mobile-dj-manager' ), $singular ),
+		'content' =>
 			'<p>' . sprintf(
                 __( '<strong>%1$s Status</strong> - Set the status of this %2$s. An description of each status can be found <a href="%3$s" target="_blank">here</a>', 'mobile-dj-manager' ),
                 $singular, strtolower( $singular ), 'https://mdjm.co.uk/docs/event-statuses/'
@@ -67,26 +68,26 @@ function mdjm_events_contextual_help() {
 			'<p>' . sprintf(
                 __( '<strong>%1$s Paid?</strong> - Select this option if the client has paid their %1$s.', 'mobile-dj-manager' ),
                 mdjm_get_balance_label()
-            ). '</p>' .
+            ) . '</p>' .
 			'<p>' . sprintf(
                 __( '<strong>Enable %1$s Playlist?</strong> - Toggle whether or not the client can manage the playlist for this %2$s.', 'mobile-dj-manager' ),
                 $singular, strtolower( $singular )
-            ) . '</p>'
+            ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-client-details',
-		'title'	    => __( 'Client Details', 'mobile-dj-manager' ),
-		'content'	=>
+		'id'      => 'mdjm-settings-client-details',
+		'title'   => __( 'Client Details', 'mobile-dj-manager' ),
+		'content' =>
 			'<p>' . sprintf( __( "Select a client for this %s. If the client does not exist, you can select <em>Add New Client</em>. In doing so, additional fields will be displayed enabling you to enter the new client's details.", 'mobile-dj-manager' ), strtolower( $singular ) ) . '</p>' .
             '<p>' . __( '<strong>Disable Client Update Emails?</strong> - Selecting this option will stop any emails being sent to the client during update.', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . __( "<strong>Reset Client Password</strong> - If selected whilst transitioning to enquiry status, the client's password will be reset. If you insert the <code>{client_password}</code> content tag into your email template, the password will be inserted.", 'mobile-dj-manager' ) . '</p>'
+			'<p>' . __( "<strong>Reset Client Password</strong> - If selected whilst transitioning to enquiry status, the client's password will be reset. If you insert the <code>{client_password}</code> content tag into your email template, the password will be inserted.", 'mobile-dj-manager' ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-event-details',
-		'title'	    => sprintf( __( '%s Details', 'mobile-dj-manager' ), $singular ),
-		'content'	=>
+		'id'      => 'mdjm-event-details',
+		'title'   => sprintf( __( '%s Details', 'mobile-dj-manager' ), $singular ),
+		'content' =>
             '<p>' . sprintf(
                 __( '<strong>%1$s Type</strong> - Set the type of %2$s <em>i.e. Wedding or 40th Birthday</em>. You can define the types <a href="%3$s">here</a> or simply click the <i class="fa fa-plus"></i> icon to add a new %2$s type inline.', 'mobile-dj-manager' ),
                 $singular,
@@ -123,17 +124,17 @@ function mdjm_events_contextual_help() {
                 mdjm_get_deposit_label()
             ) . '</p>' .
 			'<p>' . sprintf(
-                __( '<strong>Select Add-ons</strong> - If packages are enabled you can assign add-ons to your %s here. The <em>Total Cost</em> and <em>%s</em> fields will be updated automatically to reflect the new costs.', 'mobile-dj-manager' ),
+                __( '<strong>Select Add-ons</strong> - If packages are enabled you can assign add-ons to your %1$s here. The <em>Total Cost</em> and <em>%2$s</em> fields will be updated automatically to reflect the new costs.', 'mobile-dj-manager' ),
                 strtolower( $singular ),
                 mdjm_get_deposit_label()
             ) . '</p>' .
-			'<p>' . __( '<strong>Notes</strong> - Information entered here will be visible to the client and all event employees.', 'mobile-dj-manager' ) . '</p>'
+			'<p>' . __( '<strong>Notes</strong> - Information entered here will be visible to the client and all event employees.', 'mobile-dj-manager' ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-event-employees',
-		'title'	    => sprintf( __( '%s Employees', 'mobile-dj-manager' ), $singular ),
-		'content'	=>
+		'id'      => 'mdjm-event-employees',
+		'title'   => sprintf( __( '%s Employees', 'mobile-dj-manager' ), $singular ),
+		'content' =>
             '<p>' . sprintf(
                 __( '<strong>Select Primary Employee</strong> - Select the primary employee for this %s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
@@ -141,34 +142,34 @@ function mdjm_events_contextual_help() {
 			'<p>' . sprintf(
                 __( 'Employees that are assigned to the %1$s are listed here together with their role and wage. You can add additional employees to the %1$s, select their %1$s role and allocate their wages.', 'mobile-dj-manager' ),
                 strtolower( $singular )
-            ) . '</p>'
+            ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-event-venue-details',
-		'title'	    => __( 'Venue Details', 'mobile-dj-manager' ),
-		'content'	=>
+		'id'      => 'mdjm-event-venue-details',
+		'title'   => __( 'Venue Details', 'mobile-dj-manager' ),
+		'content' =>
 			'<p>' . __( 'Select the venue from the drop down. If the venue does not exist, you can specify it manually by selecting <em>Enter Manually</em> and completing the additional fields that are then displayed.', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . __( 'Check the <em>Save this Venue</em> option to save the venue.', 'mobile-dj-manager' ) . '</p>'
+			'<p>' . __( 'Check the <em>Save this Venue</em> option to save the venue.', 'mobile-dj-manager' ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'		=> 'mdjm-event-transactions',
-		'title'		=> __( 'Transactions', 'mobile-dj-manager' ),
-		'content'	=>
+		'id'      => 'mdjm-event-transactions',
+		'title'   => __( 'Transactions', 'mobile-dj-manager' ),
+		'content' =>
 			'<p>' . sprintf(
                 __( 'This section allows you to add transactions associated with the %1$s as well as listing existing associated transactions.', 'mobile-dj-manager' ), strtolower( $singular )
             ) . '</p>' .
 			'<p>' . sprintf(
                 __( 'If transactions already exist, the total amount of income and expenditure is displayed as well as the total overall earnings so far for the %1$s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
-            ) . '</p>'
+            ) . '</p>',
 	) );
 
 	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-event-administration',
-		'title'	    => __( 'Administration', 'mobile-dj-manager' ),
-		'content'	=>
+		'id'      => 'mdjm-event-administration',
+		'title'   => __( 'Administration', 'mobile-dj-manager' ),
+		'content' =>
 			'<p>' . __( '<strong>Enquiry Source</strong> - Select how the client heard about your business', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . sprintf(
                 __( '<strong>Setup Date</strong> - Use the datepicker to select the date that you need to setup for this %s.', 'mobile-dj-manager' ),
@@ -182,7 +183,7 @@ function mdjm_events_contextual_help() {
 			'<p>' . sprintf(
                 __( '<strong>Admin Notes</strong> - Enter notes that are only visible by admins. Employees and clients will not see these notes', 'mobile-dj-manager' ),
                 strtolower( $singular )
-            ) . '</p>'
+            ) . '</p>',
 	) );
 
 	do_action( 'mdjm_events_contextual_help', $screen );

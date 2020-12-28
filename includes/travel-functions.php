@@ -8,8 +8,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Calculate the travel distance
@@ -341,7 +342,8 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
         </span>
         </div>
 
-	<?php $travel_data_row = ob_get_contents();
+	<?php
+	$travel_data_row = ob_get_contents();
 	ob_end_clean();
 
 	echo $travel_data_row; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

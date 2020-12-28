@@ -2,12 +2,12 @@
 /**
  * This template is used when no alternative is provided.
  *
- * @version 		1.0
- * @author			Mike Howard
- * @since			1.3.8
- * @content_tag		{client_*}
- * @content_tag		{event_*}
- * @shortcodes		Supported
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.3.8
+ * @content_tag     {client_*}
+ * @content_tag     {event_*}
+ * @shortcodes      Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/payments/payments-cc.php

@@ -2,13 +2,13 @@
 /**
  * This template is used to display the online quote page content.
  *
- * @version			1.0
- * @author			Mike Howard
- * @since			1.3
- * @content_tag		client
- * @content_tag		event
- * @shortcodes		Supported
- * @global			$mdjm_event		MDJM Event object
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.3
+ * @content_tag     client
+ * @content_tag     event
+ * @shortcodes      Supported
+ * @global          $mdjm_event     MDJM Event object
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/quote/quote.php
@@ -23,7 +23,7 @@ global $mdjm_event;
 
         <?php do_action( 'mdjm_print_notices' ); ?>
 
-        <p class="head-nav"><a href="{event_url}"><?php  printf( esc_html__( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
+        <p class="head-nav"><a href="{event_url}"><?php printf( esc_html__( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
 
     	<?php do_action( 'mdjm_pre_quote_header', $mdjm_event->ID ); ?>
 

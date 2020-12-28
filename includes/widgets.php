@@ -10,7 +10,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -27,10 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * Availability widget class.
  *
- * @sinc	1.0
- * @return	void
+ * @sinc    1.0
+ * @return  void
 */
-class mdjm_availability_widget extends WP_Widget {
+class MDJM_Availability_Widget extends WP_Widget {
 	/** Constructor */
 	public function __construct() {
 		parent::__construct(
@@ -43,17 +45,17 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Pass required variables to the jQuery script.
 	 *
-	 * @since	1.3
+	 * @since   1.3
 	 * @param
-	 * @return 	void
+	 * @return  void
 	 */
-	public function ajax( $args, $instance )	{
+	public function ajax( $args, $instance ) {
 
-		if( $instance['available_action'] != 'text' )	{
+		if ( $instance['available_action'] != 'text' ) {
 			$pass_redirect = true;
 		}
 
-		if( $instance['unavailable_action'] != 'text' )	{
+		if ( $instance['unavailable_action'] != 'text' ) {
 			$fail_redirect = true;
 		}
 
@@ -71,7 +73,7 @@ class mdjm_availability_widget extends WP_Widget {
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "<?php echo esc_url(admin_url( 'admin-ajax.php' )); ?>",
+					url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 					data: {
 						check_date : check_date,
 						avail_text: avail,
@@ -85,11 +87,11 @@ class mdjm_availability_widget extends WP_Widget {
 					success: function(response)	{
 						if(response.result == "available") {
 							<?php
-							if( !empty( $pass_redirect ) )	{
+							if ( ! empty( $pass_redirect ) ) {
 								?>
 								window.location.href = '<?php echo esc_url( mdjm_get_formatted_url( $instance['available_action'] ) ); ?>mdjm_avail_date=' + check_date;
 								<?php
-							} else	{
+							} else {
 								?>
 								$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
 								$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
@@ -102,11 +104,11 @@ class mdjm_availability_widget extends WP_Widget {
 						}
 						else	{
 							<?php
-							if( ! empty( $fail_redirect ) )	{
+							if ( ! empty( $fail_redirect ) ) {
 								?>
 								window.location.href = '<?php echo esc_url( mdjm_get_formatted_url( $instance['unavailable_action'] ) ); ?>';
 								<?php
-							} else	{
+							} else {
 								?>
 								$("#widget_avail_intro").replaceWith('<div id="widget_avail_intro">' + response.message + '</div>');
 								$("#mdjm_widget_avail_submit").fadeTo("slow", 1);
@@ -129,37 +131,37 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Front-end display of widget.
 	 *
-	 * @see		WP_Widget::widget()
+	 * @see     WP_Widget::widget()
 	 *
-	 * @param	arr		$args		Widget arguments.
-	 * @param	arr		$instance	Saved values from database.
+	 * @param   arr     $args       Widget arguments.
+	 * @param   arr     $instance   Saved values from database.
 	 */
-	public function widget( $args, $instance )	{
-		if( !empty( $instance['ajax'] ) )	{
+	public function widget( $args, $instance ) {
+		if ( ! empty( $instance['ajax'] ) ) {
 			self::ajax( $args, $instance );
 		}
 
 		echo $args['before_widget']; // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
 
-		if ( !empty( $instance['title'] ) )	{
+		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title']; // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
 		}
 
 		/* Check for form submission & process */
-		if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
-			$dj_avail = isset($_POST['widget_check_date']) ? dj_available( '', sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ) : null;
+		if ( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] ) {
+			$dj_avail = isset( $_POST['widget_check_date'] ) ? dj_available( '', sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ) : null;
 
-			if( isset( $dj_avail ) )	{
-				if ( !empty( $dj_avail['available'] ) )	{
-					if( isset( $instance['available_action'] ) && $instance['available_action'] != 'text' )	{
+			if ( isset( $dj_avail ) ) {
+				if ( ! empty( $dj_avail['available'] ) ) {
+					if ( isset( $instance['available_action'] ) && $instance['available_action'] != 'text' ) {
 						?>
 						<script type="text/javascript">
 						window.location = '<?php echo esc_url( mdjm_get_formatted_url( $instance['available_action'] ) . 'mdjm_avail=1&mdjm_avail_date=' . sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ); ?>';
 						</script>
 						<?php
 					}
-				} else	{
-					if( isset( $instance['unavailable_action'] ) && $instance['unavailable_action'] != 'text' )	{
+				} else {
+					if ( isset( $instance['unavailable_action'] ) && $instance['unavailable_action'] != 'text' ) {
 						?>
 						<script type="text/javascript">
 						window.location = '<?php echo esc_url( mdjm_get_formatted_url( $instance['unavailable_action'] ) ); ?>';
@@ -171,35 +173,37 @@ class mdjm_availability_widget extends WP_Widget {
 		} // if( isset( $_POST['mdjm_avail_submit'] ) ...
 
 		/* We need the jQuery Calendar */
-		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_script( 'jquery-ui-datepicker' );
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_style('jquery-ui-css', MDJM_PLUGIN_URL . '/assets/css/jquery-ui' . $suffix . '.css');
+		wp_enqueue_style( 'jquery-ui-css', MDJM_PLUGIN_URL . '/assets/css/jquery-ui' . $suffix . '.css' );
 
 		mdjm_insert_datepicker(
 			array(
-				'class'		=> 'mdjm_widget_date',
-				'altfield'	 => 'widget_check_date',
-				'mindate'	  => '1'
+				'class'    => 'mdjm_widget_date',
+				'altfield' => 'widget_check_date',
+				'mindate'  => '1',
 			)
 		);
 
-		if( isset( $instance['intro'] ) && !empty( $instance['intro'] ) )	{
-			if( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] )	{
-				$search = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
-				$replace = array( date( 'l, jS F Y', strtotime( sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ) ),
-								mdjm_format_short_date( sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ) );
+		if ( isset( $instance['intro'] ) && ! empty( $instance['intro'] ) ) {
+			if ( isset( $_POST['mdjm_widget_avail_submit'] ) && $_POST['mdjm_widget_avail_submit'] == $instance['submit_text'] ) {
+				$search  = array( '{EVENT_DATE}', '{EVENT_DATE_SHORT}' );
+				$replace = array(
+					date( 'l, jS F Y', strtotime( sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ) ),
+					mdjm_format_short_date( sanitize_text_field( wp_unslash( $_POST['widget_check_date'] ) ) ),
+				);
 			}
-			if( !isset( $_POST['mdjm_widget_avail_submit'] ) || $_POST['mdjm_widget_avail_submit'] != $instance['submit_text'] )	{
+			if ( ! isset( $_POST['mdjm_widget_avail_submit'] ) || $_POST['mdjm_widget_avail_submit'] != $instance['submit_text'] ) {
 				echo '<div id="widget_avail_intro">' . esc_html( $instance['intro'] ) . '</div>';
-			} else	{
-				if( !empty( $instance['ajax'] ) )	{
+			} else {
+				if ( ! empty( $instance['ajax'] ) ) {
 					?>
 					<div id="widget_availability_result"></div>
 					<?php
-				} else	{
-					if( ! empty( $dj_avail['available'] ) && $instance['available_action'] == 'text' && !empty( $instance['available_text'] ) )	{
+				} else {
+					if ( ! empty( $dj_avail['available'] ) && $instance['available_action'] == 'text' && ! empty( $instance['available_text'] ) ) {
 						echo esc_html( str_replace( $search, $replace, $instance['available_text'] ) );
-					} else	{
+					} else {
 						echo esc_html( str_replace( $search, $replace, $instance['unavailable_text'] ) );
 					}
 				}
@@ -244,9 +248,9 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Back-end widget form.
 	 *
-	 * @see		WP_Widget::form()
+	 * @see     WP_Widget::form()
 	 *
-	 * @param	arr		$instance	Previously saved values from database.
+	 * @param   arr     $instance   Previously saved values from database.
 	 */
 	public function form( $instance ) {
 		$defaults = array(
@@ -261,10 +265,11 @@ class mdjm_availability_widget extends WP_Widget {
             'available_action'   => 'text',
             'available_text'     => __( 'Good news, we are available on {event_date}. Please contact us now', 'mobile-dj-manager' ),
             'unavailable_action' => 'text',
-            'unavailable_text'   => __( 'Unfortunately we do not appear to be available on {event_date}. Why not try another date below...', 'mobile-dj-manager' )
+            'unavailable_text'   => __( 'Unfortunately we do not appear to be available on {event_date}. Why not try another date below...', 'mobile-dj-manager' ),
         );
 
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+		$instance = wp_parse_args( (array) $instance, $defaults );
+        ?>
 
         <p>
             <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'mobile-dj-manager' ); ?>:</label>
@@ -298,13 +303,15 @@ class mdjm_availability_widget extends WP_Widget {
 
 		<p>
     		<label for="<?php echo esc_attr( $this->get_field_id( 'available_action' ) ); ?>"><?php esc_html_e( 'Redirect on Available', 'mobile-dj-manager' ); ?>:</label>
-            <?php wp_dropdown_pages( array(
+            <?php
+            wp_dropdown_pages( array(
                 'selected'          => esc_attr( $instance['available_action'] ),
                 'name'              => esc_attr( $this->get_field_name( 'available_action' ) ),
                 'id'                => esc_attr( $this->get_field_id( 'available_action' ) ),
                 'show_option_none'  => esc_attr__( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
                 'option_none_value' => 'text',
-            ) ); ?>
+			) );
+            ?>
 		</p>
 
 		<p>
@@ -314,13 +321,15 @@ class mdjm_availability_widget extends WP_Widget {
 
 		<p>
             <label for="<?php echo esc_attr( $this->get_field_id( 'unavailable_action' ) ); ?>"><?php esc_html_e( 'Redirect on Unavailable', 'mobile-dj-manager' ); ?>:</label>
-            <?php wp_dropdown_pages( array(
+            <?php
+            wp_dropdown_pages( array(
                 'selected'          => esc_attr( $instance['unavailable_action'] ),
                 'name'              => esc_attr( $this->get_field_name( 'unavailable_action' ) ),
                 'id'                => esc_attr( $this->get_field_id( 'unavailable_action' ) ),
                 'show_option_none'  => esc_attr__( 'NO REDIRECT - USE TEXT', 'mobile-dj-manager' ),
                 'option_none_value' => 'text',
-            ) ); ?>
+			) );
+            ?>
 		</p>
 
 		<p>
@@ -334,25 +343,25 @@ class mdjm_availability_widget extends WP_Widget {
 	/**
 	 * Sanitize widget form values as they are saved.
 	 *
-	 * @see		WP_Widget::update()
+	 * @see     WP_Widget::update()
 	 *
-	 * @param	arr		$new_instance	Values just sent to be saved.
-	 * @param	arr		$old_instance	Previously saved values from database.
+	 * @param   arr     $new_instance   Values just sent to be saved.
+	 * @param   arr     $old_instance   Previously saved values from database.
 	 *
-	 * @return	arr		Updated safe values to be saved.
+	 * @return  arr     Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']              = ( !empty( $new_instance['title'] ) )              ? strip_tags( $new_instance['title'] )              : '';
-		$instance['ajax']               = ( !empty( $new_instance['ajax'] ) )               ? true                                              : false;
-		$instance['intro']              = ( !empty( $new_instance['intro'] ) )              ? strip_tags( $new_instance['intro'] )              : '';
-		$instance['label']              = ( !empty( $new_instance['label'] ) )              ? strip_tags( $new_instance['label'] )              : '';
-		$instance['submit_text']        = ( !empty( $new_instance['submit_text'] ) )        ? strip_tags( $new_instance['submit_text'] )        : '';
-		$instance['submit_centre']      = ( !empty( $new_instance['submit_centre'] ) )      ? $new_instance['submit_centre']                    : '';
-		$instance['available_action']   = ( !empty( $new_instance['available_action'] ) )   ? strip_tags( $new_instance['available_action'] )   : '';
-		$instance['available_text']     = ( !empty( $new_instance['available_text'] ) )     ? strip_tags( $new_instance['available_text'] )     : '';
-		$instance['unavailable_action'] = ( !empty( $new_instance['unavailable_action'] ) ) ? strip_tags( $new_instance['unavailable_action'] ) : '';
-		$instance['unavailable_text']   = ( !empty( $new_instance['unavailable_text'] ) )   ? strip_tags( $new_instance['unavailable_text'] )   : '';
+		$instance                       = array();
+		$instance['title']              = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['ajax']               = ( ! empty( $new_instance['ajax'] ) ) ? true : false;
+		$instance['intro']              = ( ! empty( $new_instance['intro'] ) ) ? strip_tags( $new_instance['intro'] ) : '';
+		$instance['label']              = ( ! empty( $new_instance['label'] ) ) ? strip_tags( $new_instance['label'] ) : '';
+		$instance['submit_text']        = ( ! empty( $new_instance['submit_text'] ) ) ? strip_tags( $new_instance['submit_text'] ) : '';
+		$instance['submit_centre']      = ( ! empty( $new_instance['submit_centre'] ) ) ? $new_instance['submit_centre'] : '';
+		$instance['available_action']   = ( ! empty( $new_instance['available_action'] ) ) ? strip_tags( $new_instance['available_action'] ) : '';
+		$instance['available_text']     = ( ! empty( $new_instance['available_text'] ) ) ? strip_tags( $new_instance['available_text'] ) : '';
+		$instance['unavailable_action'] = ( ! empty( $new_instance['unavailable_action'] ) ) ? strip_tags( $new_instance['unavailable_action'] ) : '';
+		$instance['unavailable_text']   = ( ! empty( $new_instance['unavailable_text'] ) ) ? strip_tags( $new_instance['unavailable_text'] ) : '';
 
 		return $instance;
 	} // update
@@ -364,8 +373,8 @@ class mdjm_availability_widget extends WP_Widget {
  *
  * Registers the MDJM Widgets.
  *
- * @since	1.3
- * @return	void
+ * @since   1.3
+ * @return  void
  */
 function mdjm_register_widgets() {
 	register_widget( 'mdjm_availability_widget' );

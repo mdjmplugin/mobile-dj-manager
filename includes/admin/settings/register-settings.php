@@ -9,8 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Get an option
@@ -926,7 +927,7 @@ function mdjm_get_registered_settings()	{
 					'app_home_page'    => array(
 						'id'          => 'app_home_page',
 						'name'        => mdjm_get_application_name() . ' ' . __( 'Home Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s", 'mobile-dj-manager' ),
+						'desc'        => sprintf( __( 'Select the home page for the %s application. Needs to contain the shortcode %s[mdjm-home]%s', 'mobile-dj-manager' ),
 											mdjm_get_application_name(),
 											'<code>',
 											'</code>' ),
@@ -936,7 +937,7 @@ function mdjm_get_registered_settings()	{
 					'quotes_page'      => array(
 						'id'          => 'quotes_page',
 						'name'        => __( 'Online Quotes Page', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( "Select the page to use for online %s quotes. Needs to contain the shortcode <code>[mdjm-quote]</code>", 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+						'desc'        => sprintf( __( 'Select the page to use for online %s quotes. Needs to contain the shortcode <code>[mdjm-quote]</code>', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
 						'type'        => 'select',
 						'options'     => mdjm_list_pages()
 					),
@@ -1025,7 +1026,7 @@ function mdjm_get_registered_settings()	{
 					'availability_check_pass_text' => array(
 						'id'          => 'availability_check_pass_text',
 						'name'        => __( 'Available Text', 'mobile-dj-manager' ),
-						'desc'        => __( 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
+						'desc'        => __( 'Text to be displayed when you are available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above, unless you are redirecting to an MDJM Contact Form. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>', 'mobile-dj-manager' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Good news, we are available on the date you entered. Please contact us now', 'mobile-dj-manager' )
 					),
@@ -1040,7 +1041,7 @@ function mdjm_get_registered_settings()	{
 					'availability_check_fail_text' => array(
 						'id'          => 'availability_check_fail_text',
 						'name'        => __( 'Unavailable Text', 'mobile-dj-manager' ),
-						'desc'        => __( 'Text to be displayed when you are not available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>','mobile-dj-manager' ),
+						'desc'        => __( 'Text to be displayed when you are not available - Only displayed if <code>NO REDIRECT - USE TEXT</code> is selected above. Valid shortcodes <code>{event_date}</code> &amp; <code>{event_date_short}</code>', 'mobile-dj-manager' ),
 						'type'        => 'rich_editor',
 						'std'         => __( 'Unfortunately we do not appear to be available on the date you selected. Why not try another date below...', 'mobile-dj-manager' )
 					)
@@ -1647,7 +1648,8 @@ function mdjm_sanitize_html_class( $class = '' ) {
 
 	if ( is_string( $class ) )	{
 		$class = sanitize_html_class( $class );
-	} else if ( is_array( $class ) )	{
+	}
+	elseif ( is_array( $class ) )	{
 		$class = array_values( array_map( 'sanitize_html_class', $class ) );
 		$class = implode( ' ', array_unique( $class ) );
 	}
@@ -1769,9 +1771,10 @@ function mdjm_get_registered_settings_sections() {
  *
  * @since	1.3
  * @param	str		$post_type	Optional: 'contract' or 'email_template'. If omitted, fetch both.
+ * @param	bool	$show_none	Whether to show the 'None' option
  * @return	arr		Array of templates, id => title.
  */
-function mdjm_list_templates( $post_type=array( 'contract', 'email_template' ), $show_none=false )	{
+function mdjm_list_templates( $post_type = array( 'contract', 'email_template' ), $show_none = false )	{
 	$template_posts = get_posts(
 		array(
 			'post_type'        => $post_type,
@@ -1901,17 +1904,17 @@ function mdjm_multicheck_callback( $args ) {
 	global $mdjm_options;
 
 	if ( ! empty( $args['options'] ) ) {
-		foreach( $args['options'] as $key => $option ):
-			if( isset( $mdjm_options[$args['id']][$key] ) )	{
+		foreach ( $args['options'] as $key => $option ) {
+			if (isset($mdjm_options[$args['id']][$key])) {
 				$enabled = $option;
-			}
-			else	{
-				$enabled = NULL;
+			} else {
+				$enabled = null;
 			}
 
-			echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
-			echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
-		endforeach;
+			echo '<input name="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" id="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" type="checkbox" value="' . esc_attr($option) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
+			echo '<label for="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']">' . esc_html($option) . '</label><br/>';
+		}
+
 		echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
 	}
 } // mdjm_multicheck_callback
@@ -1929,17 +1932,19 @@ function mdjm_multicheck_callback( $args ) {
 function mdjm_radio_callback( $args ) {
 	global $mdjm_options;
 
-	foreach ( $args['options'] as $key => $option ) :
+	foreach ( $args['options'] as $key => $option ) {
 		$checked = false;
 
-		if ( isset( $mdjm_options[ $args['id'] ] ) && $mdjm_options[ $args['id'] ] == $key )
+		if (isset($mdjm_options[$args['id']]) && $mdjm_options[$args['id']] == $key) {
 			$checked = true;
-		elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[ $args['id'] ] ) )
+		}
+		elseif (isset($args['std']) && $args['std'] == $key && !isset($mdjm_options[$args['id']])) {
 			$checked = true;
+		}
 
-		echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . ']"" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="radio" value="' . esc_attr( $key ) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-		echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
-	endforeach;
+		echo '<input name="mdjm_settings[' . esc_attr($args['id']) . ']"" id="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" type="radio" value="' . esc_attr($key) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
+		echo '<label for="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']">' . esc_html($option) . '</label><br/>';
+	}
 
 	echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
 } // mdjm_radio_callback
@@ -2414,8 +2419,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 				switch( $license->error ) {
 
-					case 'expired' :
-
+					case 'expired':
 						$class = 'expired';
 						$messages[] = sprintf(
 							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'mobile-dj-manager' ),
@@ -2427,8 +2431,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						break;
 
-					case 'revoked' :
-
+					case 'revoked':
 						$class = 'error';
 						$messages[] = sprintf(
 							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'mobile-dj-manager' ),
@@ -2439,8 +2442,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						break;
 
-					case 'missing' :
-
+					case 'missing':
 						$class = 'error';
 						$messages[] = sprintf(
 							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'mobile-dj-manager' ),
@@ -2451,9 +2453,8 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						break;
 
-					case 'invalid' :
-					case 'site_inactive' :
-
+					case 'invalid':
+					case 'site_inactive':
 						$class = 'error';
 						$messages[] = sprintf(
 							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'mobile-dj-manager' ),
@@ -2465,8 +2466,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						break;
 
-					case 'item_name_mismatch' :
-
+					case 'item_name_mismatch':
 						$class = 'error';
 						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'mobile-dj-manager' ), $args['name'] );
 
@@ -2475,7 +2475,6 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'no_activations_left':
-
 						$class = 'error';
 						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'mobile-dj-manager' ), 'https://mdjm.co.uk/your-account/' );
 
@@ -2484,15 +2483,13 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						break;
 
 					case 'license_not_activable':
-
 						$class = 'error';
 						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'mobile-dj-manager' );
 
 						$license_status = 'license-' . $class . '-notice';
 						break;
 
-					default :
-
+					default:
 						$class = 'error';
 						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager' );
 						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'mobile-dj-manager' ), $error, 'https://mdjm.co.uk/support' );
@@ -2506,9 +2503,8 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 				switch( $license->license ) {
 
-					case 'valid' :
+					case 'valid':
 					default:
-
 						$class = 'valid';
 
 						$now        = current_time( 'timestamp' );
@@ -2564,7 +2560,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" name="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
 
 		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
-			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'mobile-dj-manager' ) . '"/>';
+			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License', 'mobile-dj-manager' ) . '"/>';
 		}
 
 		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';

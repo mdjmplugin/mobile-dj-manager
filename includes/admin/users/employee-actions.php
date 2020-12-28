@@ -2,34 +2,33 @@
 /**
  * Process employee actions
  *
- * @package		MDJM
- * @subpackage	Users
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Users
+ * @since       1.3
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Add a new employee
  *
- * @since	1.3
- * @param	arr		$data	$_POST super global
- * @return	void
+ * @since   1.3
+ * @param   arr     $data   $_POST super global
+ * @return  void
  */
-function mdjm_add_employee_action( $data )	{
+function mdjm_add_employee_action( $data ) {
 
-	if( ! wp_verify_nonce( $data['mdjm_nonce'], 'add_employee' ) )	{
+	if ( ! wp_verify_nonce( $data['mdjm_nonce'], 'add_employee' ) ) {
 		$message = 'security_failed';
-	} else	{
-		if( empty( $data['first_name'] ) || empty( $data['last_name'] ) || empty( $data['user_email'] ) || ! is_email( $data['user_email'] ) || empty( $data['employee_role'] ) )	{
+	} else {
+		if ( empty( $data['first_name'] ) || empty( $data['last_name'] ) || empty( $data['user_email'] ) || ! is_email( $data['user_email'] ) || empty( $data['employee_role'] ) ) {
 			$message = 'employee_info_missing';
-		}
-		elseif( mdjm_add_employee( $data ) )	{
+		} elseif ( mdjm_add_employee( $data ) ) {
 			$message = 'employee_added';
-		}
-		else	{
+		} else {
 			$message = 'employee_add_failed';
 		}
 	}
@@ -39,7 +38,7 @@ function mdjm_add_employee_action( $data )	{
 	wp_safe_redirect(
 		add_query_arg(
 			array(
-				'mdjm-message'  => $message
+				'mdjm-message' => $message,
 			),
 			$url
 		)

@@ -10,25 +10,26 @@
  * @subpackage  Classes/DB Availability
  * @copyright   Copyright (c) 2018, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since	1.5.6
+ * @since   1.5.6
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_DB_Availability Class
  *
- * @since	1.5.5
+ * @since   1.5.5
  */
-class MDJM_DB_Availability extends MDJM_DB  {
+class MDJM_DB_Availability extends MDJM_DB {
 
 	/**
 	 * Get things started
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
 	public function __construct() {
 
@@ -49,8 +50,8 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	/**
 	 * Get columns and formats
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
 	public function get_columns() {
 		return array(
@@ -62,15 +63,15 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'end'         => '%s',
 			'notes'       => '%s',
 			'date_added'  => '%s',
-			'added_by'    => '%d'
+			'added_by'    => '%d',
 		);
 	} // get_columns
 
 	/**
 	 * Get default column values
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
 	public function get_column_defaults() {
 		return array(
@@ -82,29 +83,29 @@ class MDJM_DB_Availability extends MDJM_DB  {
 			'end'         => '',
 			'notes'       => '',
 			'date_added'  => date( 'Y-m-d H:i:s' ),
-			'added_by'    => get_current_user_id()
+			'added_by'    => get_current_user_id(),
 		);
 	} // get_column_defaults
 
 	/**
 	 * Get required columns
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
-	public function get_required_fields()	{
+	public function get_required_fields() {
 		return apply_filters( 'mdjm_db_availability_required_fields', array(
 			'employee_id',
 			'start',
-			'end'
+			'end',
 		) );
 	} // get_required_fields
 
 	/**
 	 * Add a playlist entry
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
 	public function add( $data = array() ) {
 
@@ -113,15 +114,15 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		$args = wp_parse_args( $data, $defaults );
 		$meta = array();
 
-		foreach( $this->get_required_fields() as $required_field )	{
+		foreach ( $this->get_required_fields() as $required_field ) {
 			if ( empty( $args[ $required_field ] ) ) {
 				return false;
 			}
 		}
 
 		// Check for data that needs to be stored as meta.
-		foreach ( $args as $key => $value )	{
-			if ( ! array_key_exists( $key, $this->get_columns() ) )	{
+		foreach ( $args as $key => $value ) {
+			if ( ! array_key_exists( $key, $this->get_columns() ) ) {
 				$meta[ $key ] = $value;
 				unset( $args[ $key ] );
 			}
@@ -129,8 +130,8 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 		$return = $this->insert( $args, 'availability' );
 
-		if ( $return )	{
-			foreach( $meta as $key => $value )	{
+		if ( $return ) {
+			foreach ( $meta as $key => $value ) {
 				MDJM()->availability_meta->update_meta( $return, $key, $value );
 			}
 		}
@@ -142,9 +143,9 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	/**
 	 * Delete an availability entry
 	 *
-	 * @access	public
-	 * @since	1.5.6
-	 * @param	int			$id	The ID
+	 * @access  public
+	 * @since   1.5.6
+	 * @param   int         $id The ID
 	 */
 	public function delete( $id = 0 ) {
 
@@ -171,24 +172,24 @@ class MDJM_DB_Availability extends MDJM_DB  {
      * @param   int     $id     ID
      * @return  object|false
      */
-    public function get_entry( $id )    {
+    public function get_entry( $id ) {
         return $this->get_entry_by( 'id', $id );
     } // get_entry
 
 	/**
 	 * Retrieves a single entry from the database
 	 *
-	 * @access 	public
-	 * @since	1.5.5
-	 * @param	string	$field		The field to get the entry by
-	 * @param	mixed	$value		The value to search
-	 * @return	mixed	Upon success, an object of the playlist entry. Upon failure, NULL
+	 * @access  public
+	 * @since   1.5.5
+	 * @param   string  $field      The field to get the entry by
+	 * @param   mixed   $value      The value to search
+	 * @return  mixed   Upon success, an object of the playlist entry. Upon failure, NULL
 	 */
 	public function get_entry_by( $field = 'id', $value = 0 ) {
 		global $wpdb;
 
 		if ( empty( $field ) || empty( $value ) ) {
-			return NULL;
+			return null;
 		}
 
 		if ( 'id' == $field || 'event_id' == $field || 'employee_id' == $field ) {
@@ -202,8 +203,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 			if ( $value < 1 ) {
 				return false;
-			}
-
+			}       
 		}
 
 		if ( ! $value ) {
@@ -242,9 +242,9 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	/**
 	 * Retrieve entries from the database
 	 *
-	 * @access	public
-	 * @since	1.5.5
-	 * @param	array	$args	Array of arguments to pass the query
+	 * @access  public
+	 * @since   1.5.5
+	 * @param   array   $args   Array of arguments to pass the query
 	 */
 	public function get_entries( $args = array() ) {
 
@@ -262,10 +262,10 @@ class MDJM_DB_Availability extends MDJM_DB  {
             'calendar'       => false,
             'employees_only' => false,
 			'orderby'        => 'id',
-			'order'          => 'DESC'
+			'order'          => 'DESC',
 		);
 
-		$args  = wp_parse_args( $args, $defaults );
+		$args = wp_parse_args( $args, $defaults );
 
 		if ( $args['number'] < 1 ) {
 			$args['number'] = 999999999999;
@@ -278,7 +278,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		if ( ! empty( $args['id'] ) ) {
 
 			if ( is_array( $args['id'] ) ) {
-				$ids = implode( ',', array_map('intval', $args['id'] ) );
+				$ids = implode( ',', array_map( 'intval', $args['id'] ) );
 			} else {
 				$ids = intval( $args['id'] );
 			}
@@ -318,16 +318,15 @@ class MDJM_DB_Availability extends MDJM_DB  {
 
 			if ( ! empty( $args['end'] ) ) {
 
-				$start  = date( 'Y-m-d H:i:s', $args['start'] );
-				$end    = date( 'Y-m-d H:i:s', $args['end'] );
+				$start = date( 'Y-m-d H:i:s', $args['start'] );
+				$end   = date( 'Y-m-d H:i:s', $args['end'] );
 
-                if ( ! $args['calendar' ] ) {
+                if ( ! $args['calendar'] ) {
                     $where .= " AND `start` <= '{$start}'";
                     $where .= " AND `end` >= '{$end}'";
-                } else  {
+                } else {
                     $where .= " AND ( `start` BETWEEN '{$start}' AND '{$end}' OR `end` BETWEEN '{$start}' AND '{$end}')";
-                }
-
+                }           
 			} else {
 
 				$year  = date( 'Y', strtotime( $args['end'] ) );
@@ -335,8 +334,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 				$day   = date( 'd', strtotime( $args['end'] ) );
 
 				$where .= " AND $year = YEAR ( start ) AND $month = MONTH ( start ) AND $day = DAY ( start )";
-			}
-
+			}       
 		} elseif ( ! empty( $args['end'] ) ) { // Entries ending on a specific date
 
 			$year  = date( 'Y', strtotime( $args['end'] ) );
@@ -347,8 +345,8 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		}
 
         // Employees only
-        if ( ! empty( $args['employees_only'] ) )   {
-            $where .= " AND `employee_id` > 0";
+        if ( ! empty( $args['employees_only'] ) ) {
+            $where .= ' AND `employee_id` > 0';
         }
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
@@ -361,7 +359,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		$args['order']   = esc_sql( $args['order'] );
 
 		if ( false === $entries ) {
-			$query = $wpdb->prepare(
+			$query   = $wpdb->prepare(
 				"
 					SELECT * FROM
 					$this->table_name
@@ -386,8 +384,8 @@ class MDJM_DB_Availability extends MDJM_DB  {
 	/**
 	 * Create the table
 	 *
-	 * @access	public
-	 * @since	1.5.5
+	 * @access  public
+	 * @since   1.5.5
 	 */
 	public function create_table() {
 		global $wpdb;
@@ -411,7 +409,7 @@ class MDJM_DB_Availability extends MDJM_DB  {
 		KEY start (start)
 		) $charset_collate;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
 
 		if ( $this->table_exists( $this->table_name ) ) {

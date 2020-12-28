@@ -12,21 +12,22 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Render Upgrades Screen
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
 */
 function mdjm_upgrades_screen() {
 	$action = isset( $_GET['mdjm-upgrade'] ) ? sanitize_text_field( wp_unslash( $_GET['mdjm-upgrade'] ) ) : '';
-	$step   = isset( $_GET['step'] )         ? absint( $_GET['step'] )                      : 1;
-	$total  = isset( $_GET['total'] )        ? absint( $_GET['total'] )                     : false;
-	$custom = isset( $_GET['custom'] )       ? absint( $_GET['custom'] )                    : 0;
-	$number = isset( $_GET['number'] )       ? absint( $_GET['number'] )                    : 100;
+	$step   = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
+	$total  = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+	$custom = isset( $_GET['custom'] ) ? absint( $_GET['custom'] ) : 0;
+	$number = isset( $_GET['number'] ) ? absint( $_GET['number'] ) : 100;
 	$steps  = round( ( $total / $number ), 0 );
 
 	$doing_upgrade_args = array(
@@ -35,7 +36,7 @@ function mdjm_upgrades_screen() {
 		'step'         => $step,
 		'total'        => $total,
 		'custom'       => $custom,
-		'steps'        => $steps
+		'steps'        => $steps,
 	);
 	update_option( 'mdjm_doing_upgrade', $doing_upgrade_args );
 	if ( $step > $steps ) {
@@ -46,14 +47,14 @@ function mdjm_upgrades_screen() {
 	<div class="wrap">
 		<h2><?php esc_html_e( 'MDJM Event Management - Upgrading, Please wait...', 'mobile-dj-manager' ); ?></h2>
 
-		<?php if( ! empty( $action ) ) : ?>
+		<?php if ( ! empty( $action ) ) : ?>
 
 			<div id="mdjm-upgrade-status">
 				<p><?php esc_html_e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'mobile-dj-manager' ); ?></p>
 
-				<?php if( ! empty( $total ) ) : ?>
+				<?php if ( ! empty( $total ) ) : ?>
 					<p><strong>
-						<?php printf( esc_html__( 'Step %d of approximately %d running', 'mobile-dj-manager' ), esc_html( $step ), esc_html( $steps ) ); ?>
+						<?php printf( esc_html__( 'Step %1$d of approximately %2$d running', 'mobile-dj-manager' ), esc_html( $step ), esc_html( $steps ) ); ?>
                     </strong><img src="<?php echo esc_url( MDJM_PLUGIN_URL ) . '/assets/images/loading.gif'; ?>" id="mdjm-upgrade-loader"/></p>
 				<?php endif; ?>
 			</div>

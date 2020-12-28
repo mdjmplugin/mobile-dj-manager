@@ -2,26 +2,27 @@
 /**
  * Contains all transaction taxonomy functions
  *
- * @package		MDJM
- * @subpackage	Transactions
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Transactions
+ * @since       1.3
  */
 
 /**
  * Ensure that built-in terms cannot be deleted by removing the
  * delete, edit and quick edit options from the hover menu on the edit screen.
  *
- * @since	1.0
- * @param	arr		$actions		The array of actions in the hover menu
- * 			obj		$tag			The object array for the term
- * @return	arr		$actions		The filtered array of actions in the hover menu
+ * @since   1.0
+ * @param   arr     $actions        The array of actions in the hover menu
+ *          obj     $tag            The object array for the term
+ * @return  arr     $actions        The filtered array of actions in the hover menu
  */
-function mdjm_txn_protected_terms_remove_row_actions( $actions, $tag )	{
+function mdjm_txn_protected_terms_remove_row_actions( $actions, $tag ) {
 
 	$protected_terms = mdjm_get_txn_protected_terms();
 
-	if ( in_array( $tag->slug, $protected_terms ) )
+	if ( in_array( $tag->slug, $protected_terms ) ) {
 		unset( $actions['delete'], $actions['edit'], $actions['inline hide-if-no-js'], $actions['view'] );
+    }
 
 	return $actions;
 
@@ -36,9 +37,9 @@ add_filter( 'transaction-types_row_actions', 'mdjm_txn_protected_terms_remove_ro
  *
  * @return
  */
-function mdjm_txn_protected_terms_remove_checkbox()	{
+function mdjm_txn_protected_terms_remove_checkbox() {
 
-	if ( !isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' )	{
+	if ( ! isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] != 'transaction-types' ) {
 		return;
 	}
 
@@ -48,14 +49,15 @@ function mdjm_txn_protected_terms_remove_checkbox()	{
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 		<?php
-		foreach( $protected_terms as $term_slug )	{
+		foreach ( $protected_terms as $term_slug ) {
 
 			$obj_term = get_term_by( 'slug', $term_slug, 'transaction-types' );
 
-			if( !empty( $obj_term ) )	{
-				?>$('input#cb-select-<?php echo esc_attr( $obj_term->term_id ); ?>').prop('disabled', true).hide();<?php
-			}
-
+			if ( ! empty( $obj_term ) ) {
+				?>
+                $('input#cb-select-<?php echo esc_attr( $obj_term->term_id ); ?>').prop('disabled', true).hide();
+                <?php
+			}       
 		}
 		?>
 	});
@@ -67,11 +69,11 @@ add_action( 'admin_footer-edit-tags.php', 'mdjm_txn_protected_terms_remove_check
 /**
  * Retrieve protected (built-in) txn terms.
  *
- * @since	1.3
+ * @since   1.3
  * @param
- * @return	arr		$protected_terms	Array of protected terms
+ * @return  arr     $protected_terms    Array of protected terms
  */
-function mdjm_get_txn_protected_terms()	{
+function mdjm_get_txn_protected_terms() {
 
 	$other_amount_term = get_term_by( 'name', mdjm_get_option( 'other_amount_label' ), 'transaction-types' );
 
@@ -79,10 +81,10 @@ function mdjm_get_txn_protected_terms()	{
 		'mdjm-balance-payments',
 		'mdjm-deposit-payments',
 		'mdjm-employee-wages',
-		'mdjm-merchant-fees'
+		'mdjm-merchant-fees',
 	);
 
-	if ( ! empty( $other_amount_term ) )	{
+	if ( ! empty( $other_amount_term ) ) {
 		$protected_terms[] = $other_amount_term->slug;
 	}
 
@@ -93,15 +95,15 @@ function mdjm_get_txn_protected_terms()	{
 /**
  * Make the Deposit, Balance and Wages term slugs read-only when editing.
  *
- * @since	1.3
- * @param	obj		$tag	The tag object
- * @return	str
+ * @since   1.3
+ * @param   obj     $tag    The tag object
+ * @return  str
  */
-function mdjm_set_protected_txn_terms_readonly( $tag )	{
+function mdjm_set_protected_txn_terms_readonly( $tag ) {
 
 	$protected_terms = mdjm_get_txn_protected_terms();
 
-	if( in_array( $tag->slug, $protected_terms ) )	{
+	if ( in_array( $tag->slug, $protected_terms ) ) {
 		?>
         <script type="text/javascript">
 		jQuery().ready(function($)	{
@@ -119,18 +121,18 @@ add_action( 'transaction-types_edit_form_fields', 'mdjm_set_protected_txn_terms_
  * Runs when the options are updated and checks if the Label for Deposit,
  * Balance or Other Amount options have been changed
  *
- * @since	1.3
- * @param	str		$old_value
- * @param	str		$new_value
- * @return	void
+ * @since   1.3
+ * @param   str     $old_value
+ * @param   str     $new_value
+ * @return  void
  */
-function mdjm_update_txn_cat( $old_value, $new_value )	{
+function mdjm_update_txn_cat( $old_value, $new_value ) {
 
 	$options = array( 'other_amount_label' );
 
-	foreach ( $options as $key )	{
+	foreach ( $options as $key ) {
 
-		if ( $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] )	{
+		if ( $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] ) {
 			continue;
 		}
 
@@ -140,8 +142,8 @@ function mdjm_update_txn_cat( $old_value, $new_value )	{
 			$term->term_id,
 			'transaction-types',
 			array(
-				'name'	=> $new_value[ $key ],
-				'slug'	=> 'mdjm-' . sanitize_title( $new_value[ $key ] )
+				'name' => $new_value[ $key ],
+				'slug' => 'mdjm-' . sanitize_title( $new_value[ $key ] ),
 			)
 		);
 

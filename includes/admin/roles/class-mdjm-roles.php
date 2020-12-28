@@ -1,5 +1,5 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+	defined( 'ABSPATH' ) || die( 'Direct access to this page is disabled!!!' );
 
 /**
  * Class Name: MDJM_Roles
@@ -8,17 +8,17 @@
  *
  *
  */
-if( !class_exists( 'MDJM_Roles' ) ) :
-	class MDJM_Roles	{
+if ( ! class_exists( 'MDJM_Roles' ) ) :
+	class MDJM_Roles {
 		/**
 		 * Class constructor
 		 */
-		public function __construct()	{
+		public function __construct() {
 			// Capture form submissions
 			add_action( 'init', array( &$this, 'init' ) );
 
 			// Runs after Events settings are updated
-			add_action ( 'update_option_mdjm_settings', array( &$this, 'rename_dj_role' ), 10, 2 );
+			add_action( 'update_option_mdjm_settings', array( &$this, 'rename_dj_role' ), 10, 2 );
 
 			// Ajax event for adding new roles
 			add_action( 'wp_ajax_mdjm_add_role', array( &$this, 'add_role' ) );
@@ -34,9 +34,10 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 *
 		 *
 		 */
-		public function init()	{
-			if( isset( $_POST['delete-roles'] ) )
+		public function init() {
+			if ( isset( $_POST['delete-roles'] ) ) {
 				$this->delete_roles();
+            }
 		} // init
 
 		/**
@@ -46,9 +47,10 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 *
 		 *
 		 */
-		public function messages()	{
-			if( !isset( $_GET['page'] ) || $_GET['page'] != 'mdjm-employees' || empty( $_GET['role_action'] ) || empty( $_GET['message'] ) )
+		public function messages() {
+			if ( ! isset( $_GET['page'] ) || $_GET['page'] != 'mdjm-employees' || empty( $_GET['role_action'] ) || empty( $_GET['message'] ) ) {
 				return;
+            }
 
 			$messages = array(
 				1 => array( 'updated', __( 'Roles deleted.', 'mobile-dj-manager' ) ),
@@ -57,19 +59,20 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				4 => array( 'updated', __( 'Permissions updated.', 'mobile-dj-manager' ) ),
 				5 => array( 'error', __( 'No roles selected for deletion.', 'mobile-dj-manager' ) ),
 				6 => array( 'error', __( 'Not all roles could be deleted. Do you still have users assigned?', 'mobile-dj-manager' ) ),
-				7 => array( 'updated', __( '', 'mobile-dj-manager' ) ) );
+				7 => array( 'updated', __( '', 'mobile-dj-manager' ) ),
+			);
 
-			mdjm_update_notice( $messages[absint( wp_unslash( $_GET['message'] ) )][0], $messages[absint( wp_unslash( $_GET['message'] ) )][1], true );
+			mdjm_update_notice( $messages[ absint( wp_unslash( $_GET['message'] ) ) ][0], $messages[ absint( wp_unslash( $_GET['message'] ) ) ][1], true );
 		} // messages
 
 		/**
 		 * Add the default roles to MDJM
 		 *
-		 * @since	1.3
+		 * @since   1.3
 		 * @param
-		 * @return	void
+		 * @return  void
 		 */
-		public function add_roles()	{
+		public function add_roles() {
 
 			add_role(
 				'inactive_client',
@@ -87,14 +90,14 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				'inactive_dj',
 				__( 'Inactive DJ', 'mobile-dj-manager' ),
 				array(
-					'read' => true,
-					'create_users' => false,
-					'edit_users' => false,
-					'delete_users' => false,
-					'edit_posts' => false,
-					'delete_posts' => false,
+					'read'          => true,
+					'create_users'  => false,
+					'edit_users'    => false,
+					'delete_users'  => false,
+					'edit_posts'    => false,
+					'delete_posts'  => false,
 					'publish_posts' => false,
-					'upload_files' => false
+					'upload_files'  => false,
 				)
 			);
 
@@ -102,9 +105,9 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 				'dj',
 				__( 'DJ', 'mobile-dj-manager' ),
 				array(
-					'read' => true,
-					'edit_posts' => true,
-					'delete_posts' => true
+					'read'         => true,
+					'edit_posts'   => true,
+					'delete_posts' => true,
 				)
 			);
 
@@ -115,18 +118,18 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 *
 		 * @params
 		 *
-		 * @return	arr		$mdjm_roles		An array of all MDJM roles
+		 * @return  arr     $mdjm_roles     An array of all MDJM roles
 		 */
-		public function get_roles()	{
+		public function get_roles() {
 			global $wp_roles;
 
 			// Retrieve all roles within this WP instance
 			$raw_roles = $wp_roles->get_names();
 
 			// Loop through the $raw_roles and filter for mdjm specific roles
-			foreach( $raw_roles as $role_id => $role_name )	{
-				if( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false )	{
-					$mdjm_roles[$role_id] = $role_name;
+			foreach ( $raw_roles as $role_id => $role_name ) {
+				if ( $role_id == 'dj' || strpos( $role_id, 'mdjm-' ) !== false ) {
+					$mdjm_roles[ $role_id ] = $role_name;
 				}
 			}
 
@@ -139,16 +142,16 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		/**
 		 * Retrieve all MDJM user roles and display return them as <options>
 		 *
-		 * @params	arr		$args			Arguments to pass to the select list. See $defaults.
+		 * @params  arr     $args           Arguments to pass to the select list. See $defaults.
 		 *
-		 * @return	str		$output			HTML code for the <options>
+		 * @return  str     $output         HTML code for the <options>
 		 */
-		public function roles_dropdown( $args='' )	{
+		public function roles_dropdown( $args = '' ) {
 			$defaults = array(
-				'selected'		=> '',
+				'selected'        => '',
 				'disable_default' => false,
-				'first_entry'	 => '',
-				'first_entry_val' => 0
+				'first_entry'     => '',
+				'first_entry_val' => 0,
 			);
 
 			$args = wp_parse_args( $args, $defaults );
@@ -158,24 +161,26 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 			// Filter the roles
 			$mdjm_roles = apply_filters( 'mdjm_user_roles', $mdjm_roles );
 
-			if( empty( $mdjm_roles ) )
+			if ( empty( $mdjm_roles ) ) {
 				$output = '<option value="0" disabled>' . __( 'No roles defined', 'mobile-dj-manager' ) . '</option>' . "\r\n";
 
-			else	{
+			} else {
 				$output = '';
 
-				if ( ! empty( $args['first_entry'] ) )	{
+				if ( ! empty( $args['first_entry'] ) ) {
 					$output .= '<option value="' . $args['first_entry_val'] . '">' . $args['first_entry'] . '</option>' . "\r\n";
 				}
 
-				foreach( $mdjm_roles as $role_id => $role )	{
+				foreach ( $mdjm_roles as $role_id => $role ) {
 					$output .= '<option value="' . $role_id . '"';
 
-					if( !empty( $args['selected'] ) )
+					if ( ! empty( $args['selected'] ) ) {
 						$output .= selected( $args['selected'], $role_id, false );
+                    }
 
-					if( !empty( $args['disable_default'] ) && ( $role_id == 'administrator' || $role_id == 'dj' ) )
+					if ( ! empty( $args['disable_default'] ) && ( $role_id == 'administrator' || $role_id == 'dj' ) ) {
 						$output .= ' disabled';
+                    }
 
 					$output .= '>' . $role . '</option>' . "\r\n";
 				}
@@ -188,19 +193,18 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 * Add new MDJM user role.
 		 * Call from employee management form via Ajax
 		 *
-		 * @param	str		$role		The requested name of the role
+		 * @param   str     $role       The requested name of the role
 		 *
-		 * @return	arr		$result		JSON encoded array
+		 * @return  arr     $result     JSON encoded array
 		 */
-		public function add_role()	{
-			if( empty( $_POST['role_name'] ) )	{
+		public function add_role() {
+			if ( empty( $_POST['role_name'] ) ) {
 				$return['type'] = 'error';
-				$return['msg'] = __( 'Ooops! You need to add a role name', 'mobile-dj-manager' );
-			}
-			else	{
+				$return['msg']  = __( 'Ooops! You need to add a role name', 'mobile-dj-manager' );
+			} else {
 				$result = add_role(
 					'mdjm-' . sanitize_title_with_dashes( strtolower( str_replace( '_', '-', sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) ) ),
-					ucwords( sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) );
+                ucwords( sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) );
 
 				if ( null !== $result ) {
 					$return['type'] = 'success';
@@ -210,10 +214,9 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 					$return['options'] = $updated_roles;
 					$result->add_cap( 'mdjm_employee' );
 					$result->add_cap( 'read' );
-				}
-				else {
+				} else {
 					$return['type'] = 'error';
-					$return['msg'] = __( 'Ooops! An error occured. Does the role already exist?', 'mobile-dj-manager' );
+					$return['msg']  = __( 'Ooops! An error occured. Does the role already exist?', 'mobile-dj-manager' );
 				}
 			}
 
@@ -226,35 +229,36 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		 * Delete MDJM user role(s).
 		 * If any users are still assigned to the role, do not delete but report an error
 		 *
-		 * @param	str|arr	$roles		Required: The role name to delete. $_POST['all_roles'] takes priority if exists
+		 * @param   str|arr $roles      Required: The role name to delete. $_POST['all_roles'] takes priority if exists
 		 *
-		 * @return	arr		$result		JSON encoded array
+		 * @return  arr     $result     JSON encoded array
 		 */
-		public function delete_roles( $roles='' )	{
-			if( isset( $_POST['delete-roles'] ) && !empty( $_POST['all_roles'] ) ) {
+		public function delete_roles( $roles = '' ) {
+			if ( isset( $_POST['delete-roles'] ) && ! empty( $_POST['all_roles'] ) ) {
 				$roles = wp_unslash( $_POST['all_roles'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			}
 
 			// No roles
-			if( empty( $roles ) )	{
+			if ( empty( $roles ) ) {
 				wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=5' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				exit;
 			}
 
 			// $roles must be an array so let's ensure it is
-			if( !is_array( $roles ) )
+			if ( ! is_array( $roles ) ) {
 				$roles = array( $roles );
+            }
 
 			// Make sure there are no employees assigned to the roles marked for deletion
 			$employees = mdjm_get_employees( $roles );
 
-			if( !empty( $employees ) )	{
+			if ( ! empty( $employees ) ) {
 				wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=6' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 				exit;
 			}
 
 			// Loop through the roles and remove after ensuring there are no users assigned
-			foreach( $roles as $role )	{
+			foreach ( $roles as $role ) {
 				remove_role( $role );
 			}
 			wp_safe_redirect( wp_unslash( $_SERVER['HTTP_REFERER'] ) . '&role_action=1&message=1' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
@@ -267,51 +271,55 @@ if( !class_exists( 'MDJM_Roles' ) ) :
 		  *
 		  * Called by: update_option_mdjm_event_settings hook
 		  *
-		  * @param		arr		$old_value		Old settings values
-		  *				arr		$new_value		New settings values
+		  * @param      arr     $old_value      Old settings values
+		  *             arr     $new_value      New settings values
 		  */
-		public function rename_dj_role( $old_value, $new_value )	{
+		public function rename_dj_role( $old_value, $new_value ) {
 			global $wpdb;
 
 			// If the artist setting has not been updated, we can return and do nothing
-			if( $new_value['artist'] == $old_value['artist'] )
+			if ( $new_value['artist'] == $old_value['artist'] ) {
 				return;
+            }
 
 			$user_roles = get_option( $wpdb->prefix . 'user_roles' );
 
-			if( empty( $user_roles ) )	{
-				if( MDJM_DEBUG == true )
+			if ( empty( $user_roles ) ) {
+				if ( MDJM_DEBUG == true ) {
 					MDJM()->debug->log_it( 'ERROR: Could not retrieve user roles from DB', true );
+                }
 
 				return;
 			}
 
 			$user_roles['inactive_dj']['name'] = __( 'Inactive', 'mobile-dj-manager' ) . ' ' . $new_value['artist'];
-			$user_roles['dj']['name'] = $new_value['artist'];
+			$user_roles['dj']['name']          = $new_value['artist'];
 
-			if( update_option( $wpdb->prefix . 'user_roles', $user_roles ) )	{
-				if( MDJM_DEBUG == true )
+			if ( update_option( $wpdb->prefix . 'user_roles', $user_roles ) ) {
+				if ( MDJM_DEBUG == true ) {
 					MDJM()->debug->log_it( 'Updated DJ role name to ' . $new_value['artist'], true );
+                }
 
 				return;
-			}
-			else	{
-				if( MDJM_DEBUG == true )
+			} else {
+				if ( MDJM_DEBUG == true ) {
 					MDJM()->debug->log_it( 'ERROR: Could not update DJ role name to ' . $new_value['artist'], true );
+                }
 			}
 		} // rename_dj_role
 
 		/**
 		 * Runs against the mdjm_user_roles filter to modify the results removing the Administrator option.
 		 *
-		 * @params	arr		$mdjm_roles		The list of MDJM roles
+		 * @params  arr     $mdjm_roles     The list of MDJM roles
 		 *
-		 * @return	arr		$mdjm_roles		Filtered list of MDJM roles
+		 * @return  arr     $mdjm_roles     Filtered list of MDJM roles
 		 */
-		public static function no_admin_role( $mdjm_roles )	{
+		public static function no_admin_role( $mdjm_roles ) {
 
-			if( isset( $mdjm_roles['administrator'] ) )
+			if ( isset( $mdjm_roles['administrator'] ) ) {
 				unset( $mdjm_roles['administrator'] );
+            }
 
 			return $mdjm_roles;
 		} // no_admin_role

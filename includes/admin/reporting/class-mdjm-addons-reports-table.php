@@ -10,11 +10,12 @@
  * @since       1.4
  */
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 // Load WP_List_Table if not loaded
-if ( !class_exists( 'WP_List_Table' ) ) {
+if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
@@ -23,7 +24,7 @@ if ( !class_exists( 'WP_List_Table' ) ) {
  *
  * Renders the Conversions Reports table
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_Addons_Reports_Table extends WP_List_Table {
 
@@ -33,7 +34,7 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Get things started
 	 *
-	 * @since	1.4
+	 * @since   1.4
 	 * @see WP_List_Table::__construct()
 	 */
 	public function __construct() {
@@ -41,9 +42,9 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 
 		// Set parent defaults
 		parent::__construct( array(
-			'singular'  => mdjm_get_label_singular(),    // Singular name of the listed records
-			'plural'    => mdjm_get_label_plural(),     // Plural name of the listed records
-			'ajax'      => false             			// Does this table support ajax?
+			'singular' => mdjm_get_label_singular(),    // Singular name of the listed records
+			'plural'   => mdjm_get_label_plural(),     // Plural name of the listed records
+			'ajax'     => false,                        // Does this table support ajax?
 		) );
 		$this->label_single = mdjm_get_label_singular();
 		$this->label_plural = mdjm_get_label_plural();
@@ -52,10 +53,10 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the primary column.
 	 *
-	 * @since	1.4
-	 * @access	protected
+	 * @since   1.4
+	 * @access  protected
 	 *
-	 * @return	str		Name of the primary column.
+	 * @return  str     Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
 		return 'addon';
@@ -64,13 +65,13 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * This function renders most of the columns in the list table.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 *
-	 * @param	arr		$item			Contains all the data of the downloads
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr     $item           Contains all the data of the downloads
+	 * @param   str     $column_name    The name of the column
 	 *
-	 * @return	str		Column Name
+	 * @return  str     Column Name
 	 */
 	public function column_default( $item, $column_name ) {
 		return $item[ $column_name ];
@@ -79,15 +80,15 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Retrieve the table columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$columns	Array of all the list table columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $columns    Array of all the list table columns
 	 */
 	public function get_columns() {
 		$columns = array(
-			'addon' => __( 'Addon', 'mobile-dj-manager' ),
-			'events'  => sprintf( __( 'Total %s', 'mobile-dj-manager' ), $this->label_plural ),
-			'value'   => __( 'Total Value', 'mobile-dj-manager' )
+			'addon'  => __( 'Addon', 'mobile-dj-manager' ),
+			'events' => sprintf( __( 'Total %s', 'mobile-dj-manager' ), $this->label_plural ),
+			'value'  => __( 'Total Value', 'mobile-dj-manager' ),
 		);
 
 		return $columns;
@@ -96,20 +97,20 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Retrieve the current page number
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	int		Current page number
+	 * @access  public
+	 * @since   1.4
+	 * @return  int     Current page number
 	 */
 	public function get_paged() {
-		return isset( $_GET[ 'paged' ] ) ? absint( $_GET[ 'paged' ] ) : 1;
+		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	} // get_paged
 
 	/**
 	 * Outputs the reporting views
 	 *
-	 * @access 	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function extra_tablenav( $which = '' ) {
 		if ( 'bottom' === $which ) {
@@ -123,9 +124,9 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Build all the reports data
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$reports_data	All the data for customer reports
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $reports_data   All the data for customer reports
 	 */
 	public function reports_data() {
 		$stats = new MDJM_Stats();
@@ -144,40 +145,40 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 
 			$addons = mdjm_get_addons();
 
-			if ( $addons )	{
+			if ( $addons ) {
 
-				foreach ( $addons as $addon )	{
+				foreach ( $addons as $addon ) {
 
-					$event_count  = 0;
-					$total_value  = 0;
+					$event_count = 0;
+					$total_value = 0;
 
 					$event_args = array(
 						'fields'     => 'ids',
 						'meta_query' => array(
 							'relation' => 'AND',
 							array(
-								'key'		=> '_mdjm_event_addons',
-								'value'		=> sprintf( ':"%s";', $addon->ID ),
-								'compare'	=> 'LIKE'
+								'key'     => '_mdjm_event_addons',
+								'value'   => sprintf( ':"%s";', $addon->ID ),
+								'compare' => 'LIKE',
 							),
 							array(
-								'key'		=> '_mdjm_event_date',
-								'value'		=> array( date( 'Y-m-d', $stats->start_date ), date( 'Y-m-d', $stats->end_date ) ),
-								'type'		=> 'date',
-								'compare'	=> 'BETWEEN',
-							)
-						)
+								'key'     => '_mdjm_event_date',
+								'value'   => array( date( 'Y-m-d', $stats->start_date ), date( 'Y-m-d', $stats->end_date ) ),
+								'type'    => 'date',
+								'compare' => 'BETWEEN',
+							),
+						),
 					);
 
 					$events = mdjm_get_events( $event_args );
 
-					if ( $events )	{
+					if ( $events ) {
 						foreach ( $events as $event ) {
 							$event_count++;
-							$event_date  = get_post_meta( $event, '_mdjm_event_date', true );
+							$event_date   = get_post_meta( $event, '_mdjm_event_date', true );
 							$total_value += mdjm_get_addon_price( $addon->ID, $event_date );
 						}
-					} else	{
+					} else {
 						continue;
 					}
 
@@ -186,7 +187,7 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 						'addon'     => mdjm_get_addon_name( $addon->ID ),
 						'events'    => $event_count,
 						'value'     => mdjm_currency_filter( mdjm_format_amount( $total_value ) ),
-						'value_raw' => $total_value
+						'value_raw' => $total_value,
 					);
 
 				}
@@ -199,23 +200,22 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Output the Addon Events Mix Pie Chart
 	 *
-	 * @since	1.4
-	 * @return	str		The HTML for the outputted graph
+	 * @since   1.4
+	 * @return  str     The HTML for the outputted graph
 	 */
 	public function output_source_graph() {
 		if ( empty( $this->items ) ) {
 			return;
 		}
 
-		$data        = array();
+		$data         = array();
 		$total_events = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_events += $item[ 'events' ];
+			$total_events += $item['events'];
 
-			$data[ $item[ 'addon' ] ] = $item[ 'events' ];
+			$data[ $item['addon'] ] = $item['events'];
 		}
-
 
 		if ( empty( $total_events ) ) {
 			echo '<p><em>' . esc_html__( 'No data for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
@@ -236,8 +236,8 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Output the Addon Earnings Mix Pie Chart
 	 *
-	 * @since	1.4
-	 * @return	str		The HTML for the outputted graph
+	 * @since   1.4
+	 * @return  str     The HTML for the outputted graph
 	 */
 	public function output_earnings_graph() {
 		if ( empty( $this->items ) ) {
@@ -248,9 +248,9 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 		$total_earnings = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_earnings += $item[ 'value_raw' ];
+			$total_earnings += $item['value_raw'];
 
-			$data[ $item[ 'addon' ] ] = $item[ 'value_raw' ];
+			$data[ $item['addon'] ] = $item['value_raw'];
 
 		}
 
@@ -273,7 +273,7 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * The output when no records are found.
 	 *
-	 * @since	1.4
+	 * @since   1.4
 	 */
 	public function no_items() {
 		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
@@ -282,12 +282,12 @@ class MDJM_Addons_Reports_Table extends WP_List_Table {
 	/**
 	 * Setup the final data for the table
 	 *
-	 * @access	public
-	 * @since 	1.4
-	 * @uses	MDJM_Conversions_Reports_Table::get_columns()
-	 * @uses	MDJM_Conversions_Reports_Table::get_sortable_columns()
-	 * @uses	MDJM_Conversions_Reports_Table::reports_data()
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @uses    MDJM_Conversions_Reports_Table::get_columns()
+	 * @uses    MDJM_Conversions_Reports_Table::get_sortable_columns()
+	 * @uses    MDJM_Conversions_Reports_Table::reports_data()
+	 * @return  void
 	 */
 	public function prepare_items() {
 		$columns               = $this->get_columns();

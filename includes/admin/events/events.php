@@ -4,8 +4,9 @@
  *
  * @since	0.5
  */
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Define the columns to be displayed for event posts
@@ -43,7 +44,7 @@ function mdjm_event_post_columns( $columns ) {
 
 	return $columns;
 } // mdjm_event_post_columns
-add_filter( 'manage_mdjm-event_posts_columns' , 'mdjm_event_post_columns' );
+add_filter( 'manage_mdjm-event_posts_columns', 'mdjm_event_post_columns' );
 
 /**
  * Define the event post columns hidden by default
@@ -100,7 +101,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			} else	{
 				echo '<strong>' . esc_html( date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) ) . '</strong>';
 			}
-		break;
+			break;
 
         case 'event_id':
             echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ). '">' . esc_html( mdjm_get_event_contract_id( $post_id ) ) . '</a>';
@@ -127,7 +128,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				esc_html_e( 'Not Assigned', 'mobile-dj-manager' );
 				echo '</span>';
 			}
-		break;
+			break;
 
 		// Employees
 		case 'employees':
@@ -202,7 +203,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 				foreach( $event_types as $key => $event_type ) {
 					$event_types[$key] = esc_html( $event_type->name );
 				}
-				echo implode( "<br/>", $event_types ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo implode( '<br/>', $event_types ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			break;
 
@@ -277,7 +278,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 	} // switch
 
 } // mdjm_event_posts_custom_column
-add_action( 'manage_mdjm-event_posts_custom_column' , 'mdjm_event_posts_custom_column', 10, 2 );
+add_action( 'manage_mdjm-event_posts_custom_column', 'mdjm_event_posts_custom_column', 10, 2 );
 
 /**
  * Remove the edit bulk action from the event posts list.
@@ -410,8 +411,8 @@ add_action( 'restrict_manage_posts', 'mdjm_event_post_filter_list' );
 function mdjm_event_date_filter_dropdown()	{
 	global $wpdb, $wp_locale;
 
-	$month_query = "SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month
-		FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_mdjm_event_date'";
+	$month_query = 'SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month
+		FROM `' . $wpdb->postmeta . "` WHERE `meta_key` = '_mdjm_event_date'";
 
 	$months = $wpdb->get_results( $month_query );
 
@@ -478,11 +479,12 @@ function mdjm_event_type_filter_dropdown()	{
         <select name="mdjm_filter_type">
             <option value=""><?php printf( esc_html__( 'All %s Types', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></option>
 			<?php foreach ( $event_types as $event_type ) : ?>
-				<option value="<?php echo esc_attr( $event_type->term_id ); ?>"<?php selected( $event_type->term_id, $current ); ?>><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count );?>)</option>
+				<option value="<?php echo esc_attr( $event_type->term_id ); ?>"<?php selected( $event_type->term_id, $current ); ?>><?php echo esc_html( $event_type->name ); ?> (<?php echo esc_html( $event_type->category_count ); ?>)</option>
 			<?php endforeach; ?>
         </select>
 
-	<?php endif;
+		<?php
+	endif;
 
 } // mdjm_event_type_filter_dropdown
 
@@ -628,7 +630,7 @@ function mdjm_event_view_filters( $views )	{
 
 	return apply_filters( 'mdjm_event_views', $views );
 } // mdjm_event_view_filters
-add_filter( 'views_edit-mdjm-event' , 'mdjm_event_view_filters' );
+add_filter( 'views_edit-mdjm-event', 'mdjm_event_view_filters' );
 
 /**
  * Customise the post row actions on the event edit screen.
@@ -764,8 +766,9 @@ function mdjm_event_rename_publish_button( $translation, $text )	{
 		return __( 'Create Event', 'mobile-dj-manager' );
 	} elseif( $text == 'Update' )	{
 		return __( 'Update Event', 'mobile-dj-manager' );
-	} else
+	} else {
 		return $translation;
+	}
 
 } // mdjm_event_rename_publish_button
 add_filter( 'gettext', 'mdjm_event_rename_publish_button', 10, 2 );
@@ -836,31 +839,31 @@ function mdjm_event_post_order( $query )	{
 
 	switch( $orderby )	{
 		case 'ID':
-			$query->set( 'orderby',  'ID' );
-			$query->set( 'order',  $order );
+			$query->set( 'orderby', 'ID' );
+			$query->set( 'order', $order );
 			break;
 
 		case 'post_date':
-			$query->set( 'orderby',  'post_date' );
-			$query->set( 'order',  $order );
+			$query->set( 'orderby', 'post_date' );
+			$query->set( 'order', $order );
 			break;
 
 		case 'event_date':
 		default:
 			$query->set( 'meta_key', '_mdjm_event_date' );
-			$query->set( 'orderby',  'meta_value' );
-			$query->set( 'order',  $order );
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'order', $order );
             break;
 
 		case 'title':
-			$query->set( 'orderby',  'ID' );
-			$query->set( 'order',  $order );
+			$query->set( 'orderby', 'ID' );
+			$query->set( 'order', $order );
 			break;
 
 		case 'value':
 			$query->set( 'meta_key', '_mdjm_event_cost' );
-			$query->set( 'orderby',  'meta_value_num' );
-			$query->set( 'order',  $order );
+			$query->set( 'orderby', 'meta_value_num' );
+			$query->set( 'order', $order );
             break;
 	}
 
@@ -1360,7 +1363,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	$travel_fields = mdjm_get_event_travel_fields();
 
 	foreach( $travel_fields as $travel_field )	{
-		$field       = 'travel_' . $travel_field;
+		$field = 'travel_' . $travel_field;
 
 		$travel_data[ $travel_field ] = ! empty( $_POST[ $field ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) : '';
 
@@ -1475,10 +1478,10 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 	// Assign the event type
 	$existing_event_type = wp_get_object_terms( $post_id, 'event-types' );
 
-	mdjm_set_event_type( $post_id, (int)$_POST['mdjm_event_type'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	mdjm_set_event_type( $post_id, (int) $_POST['mdjm_event_type'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 	// Assign the enquiry source
-	mdjm_set_enquiry_source( $post_id, (int)$_POST['mdjm_enquiry_source'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	mdjm_set_enquiry_source( $post_id, (int) $_POST['mdjm_enquiry_source'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 	/**
 	 * Update the event post meta data
@@ -1593,4 +1596,4 @@ function mdjm_event_post_messages( $messages )	{
 	return apply_filters( 'mdjm_event_post_messages', $messages );
 
 } // mdjm_event_post_messages
-add_filter( 'post_updated_messages','mdjm_event_post_messages' );
+add_filter( 'post_updated_messages', 'mdjm_event_post_messages' );

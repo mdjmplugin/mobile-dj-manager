@@ -2,12 +2,12 @@
 /**
  * This template is used to display the details of a single event to the client.
  *
- * @version 		1.0.1
- * @author			Mike Howard
- * @since			1.3
- * @content_tag		{client_*}
- * @content_tag		{event_*}
- * @shortcodes		Supported
+ * @version         1.0.1
+ * @author          Mike Howard
+ * @since           1.3
+ * @content_tag     {client_*}
+ * @content_tag     {event_*}
+ * @shortcodes      Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/event/event-single.php
@@ -19,11 +19,19 @@ global $mdjm_event;
 
 	<?php do_action( 'mdjm_print_notices' ); ?>
 
-	<p><?php printf( esc_html__( 'Details of your %s taking place on %s are shown below.', 'mobile-dj-manager' ),
-			esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); ?></p>
+	<p>
+    <?php 
+    printf( esc_html__( 'Details of your %1$s taking place on %2$s are shown below.', 'mobile-dj-manager' ),
+    esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); 
+	?>
+            </p>
 
-    <p><?php printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			'{contact_page}' ); ?></p>
+    <p>
+    <?php 
+    printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    '{contact_page}' ); 
+	?>
+            </p>
 
     <?php
 	/**
@@ -52,7 +60,7 @@ global $mdjm_event;
             <tr>
             	<th><?php printf( esc_html__( '%s Type:', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></th>
                 <td>{event_type}</td>
-                <th><?php printf(  esc_html__( 'Your %s:', 'mobile-dj-manager' ), esc_html( mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) ); ?></th>
+                <th><?php printf( esc_html__( 'Your %s:', 'mobile-dj-manager' ), esc_html( mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) ); ?></th>
                 <td>{employee_fullname}</td>
             </tr>
 

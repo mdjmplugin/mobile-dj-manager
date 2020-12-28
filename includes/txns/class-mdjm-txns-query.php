@@ -10,8 +10,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Txns_Query Class
@@ -20,25 +21,25 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * Transactions can be retrieved for date ranges and pre-defined periods
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_Txns_Query extends MDJM_Stats {
 
 	/**
 	 * The args to pass to the mdjm_get_transactions() query
 	 *
-	 * @var		array
-	 * @access	public
-	 * @since	1.4
+	 * @var     array
+	 * @access  public
+	 * @since   1.4
 	 */
 	public $args = array();
 
 	/**
 	 * The transactions found based on the criteria set
 	 *
-	 * @var		array
-	 * @access	public
-	 * @since	1.4
+	 * @var     array
+	 * @access  public
+	 * @since   1.4
 	 */
 	public $txns = array();
 
@@ -48,31 +49,31 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	 * Not all of these are valid arguments that can be passed to WP_Query. The ones that are not, are modified before
 	 * the query is run to convert them to the proper syntax.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @param	arr		$args	The array of arguments that can be passed in and used for setting up this payment query.
+	 * @access  public
+	 * @since   1.4
+	 * @param   arr     $args   The array of arguments that can be passed in and used for setting up this payment query.
 	 */
 	public function __construct( $args = array() ) {
 		$defaults = array(
-			'output'          => 'transactions', // Use 'posts' to get standard post objects
-			'post_type'       => array( 'mdjm-transaction' ),
-			'start_date'      => false,
-			'end_date'        => false,
-			'number'          => 20,
-			'page'            => null,
-			'orderby'         => 'date',
-			'order'           => 'DESC',
-			'user'            => null,
-			'client'          => null,
-			'status'          => array( 'mdjm-income', 'mdjm-expenditure' ),
-			'meta_key'        => null,
-			'year'            => null,
-			'month'           => null,
-			'day'             => null,
-			's'               => null,
-			'children'        => false,
-			'fields'          => null,
-			'event'           => null
+			'output'     => 'transactions', // Use 'posts' to get standard post objects
+			'post_type'  => array( 'mdjm-transaction' ),
+			'start_date' => false,
+			'end_date'   => false,
+			'number'     => 20,
+			'page'       => null,
+			'orderby'    => 'date',
+			'order'      => 'DESC',
+			'user'       => null,
+			'client'     => null,
+			'status'     => array( 'mdjm-income', 'mdjm-expenditure' ),
+			'meta_key'   => null,
+			'year'       => null,
+			'month'      => null,
+			'day'        => null,
+			's'          => null,
+			'children'   => false,
+			'fields'     => null,
+			'event'      => null,
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
@@ -83,21 +84,22 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Set a query variable.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 */
 	public function __set( $query_var, $value ) {
-		if ( in_array( $query_var, array( 'meta_query', 'tax_query' ) ) )
+		if ( in_array( $query_var, array( 'meta_query', 'tax_query' ) ) ) {
 			$this->args[ $query_var ][] = $value;
-		else
+		} else {
 			$this->args[ $query_var ] = $value;
+        }
 	} // __set
 
 	/**
 	 * Unset a query variable.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 */
 	public function __unset( $query_var ) {
 		unset( $this->args[ $query_var ] );
@@ -106,9 +108,9 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Modify the query/query arguments before we retrieve transactions.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function init() {
 
@@ -135,9 +137,9 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	 * query is run, or the filter on the arguments (existing mainly for backwards
 	 * compatibility).
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	obj
+	 * @access  public
+	 * @since   1.4
+	 * @return  obj
 	 */
 	public function get_txns() {
 
@@ -175,12 +177,12 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * If querying a specific date, add the proper filters.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function date_filter_pre() {
-		if( ! ( $this->args['start_date'] || $this->args['end_date'] ) ) {
+		if ( ! ( $this->args['start_date'] || $this->args['end_date'] ) ) {
 			return;
 		}
 
@@ -193,9 +195,9 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	 * If querying a specific date, remove filters after the query has been run
 	 * to avoid affecting future queries.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function date_filter_post() {
 		if ( ! ( $this->args['start_date'] || $this->args['end_date'] ) ) {
@@ -208,12 +210,12 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Post Status
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function status() {
-		if ( ! isset ( $this->args['status'] ) ) {
+		if ( ! isset( $this->args['status'] ) ) {
 			return;
 		}
 
@@ -224,12 +226,12 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Current Page
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function page() {
-		if ( ! isset ( $this->args['page'] ) ) {
+		if ( ! isset( $this->args['page'] ) ) {
 			return;
 		}
 
@@ -240,20 +242,19 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Posts Per Page
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function per_page() {
 
-		if( ! isset( $this->args['number'] ) ){
+		if ( ! isset( $this->args['number'] ) ) {
 			return;
 		}
 
 		if ( $this->args['number'] == -1 ) {
 			$this->__set( 'nopaging', true );
-		}
-		else{
+		} else {
 			$this->__set( 'posts_per_page', $this->args['number'] );
 		}
 
@@ -263,12 +264,12 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Current Month
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function month() {
-		if ( ! isset ( $this->args['month'] ) ) {
+		if ( ! isset( $this->args['month'] ) ) {
 			return;
 		}
 
@@ -279,19 +280,19 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Order by
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function orderby() {
 		switch ( $this->args['orderby'] ) {
-			case 'amount' :
+			case 'amount':
 				$this->__set( 'orderby', 'meta_value_num' );
 				$this->__set( 'meta_key', '_mdjm_txn_total' );
-			break;
-			default :
+			    break;
+			default:
 				$this->__set( 'orderby', $this->args['orderby'] );
-			break;
+			    break;
 		}
 	} // orderby
 
@@ -313,19 +314,19 @@ class MDJM_Txns_Query extends MDJM_Stats {
 	/**
 	 * Search
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function search() {
 
-		if( ! isset( $this->args['s'] ) ) {
+		if ( ! isset( $this->args['s'] ) ) {
 			return;
 		}
 
 		$search = trim( $this->args['s'] );
 
-		if( empty( $search ) ) {
+		if ( empty( $search ) ) {
 			return;
 		}
 
@@ -334,11 +335,11 @@ class MDJM_Txns_Query extends MDJM_Stats {
 
 		if ( $is_email ) {
 
-			$key = '_mdjm_payer_email';
+			$key         = '_mdjm_payer_email';
 			$search_meta = array(
 				'key'     => $key,
 				'value'   => $search,
-				'compare' => 'LIKE'
+				'compare' => 'LIKE',
 			);
 
 			$this->__set( 'meta_query', $search_meta );
@@ -348,7 +349,7 @@ class MDJM_Txns_Query extends MDJM_Stats {
 
 			$search_meta = array(
 				'key'   => '_mdjm_payee_user_id',
-				'value' => trim( str_replace( 'user:', '', strtolower( $search ) ) )
+				'value' => trim( str_replace( 'user:', '', strtolower( $search ) ) ),
 			);
 
 			$this->__set( 'meta_query', $search_meta );
@@ -359,14 +360,13 @@ class MDJM_Txns_Query extends MDJM_Stats {
 
 			$post = get_post( $search );
 
-			if( is_object( $post ) && $post->post_type == 'mdjm-transaction' ) {
+			if ( is_object( $post ) && $post->post_type == 'mdjm-transaction' ) {
 
 				$arr   = array();
 				$arr[] = $search;
 				$this->__set( 'post__in', $arr );
 				$this->__unset( 's' );
-			}
-
+			}       
 		} elseif ( '#' == substr( $search, 0, 1 ) ) {
 
 			$search = str_replace( '#:', '', $search );
@@ -395,20 +395,20 @@ class MDJM_Txns_Query extends MDJM_Stats {
 
 		$this->__set( 'meta_query', array(
 			'key'   => '_mdjm_txn_source',
-			'value' => $this->args['mode']
+			'value' => $this->args['mode'],
 		) );
 	} // mode
 
 	/**
 	 * Specific Event
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function event() {
 
-		if ( empty( $this->args['event'] ) )	{
+		if ( empty( $this->args['event'] ) ) {
 			return;
 		}
 

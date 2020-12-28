@@ -2,36 +2,36 @@
 /**
  * This template is used to display the items which can be paid for on the payment form.
  *
- * @version 		1.0
- * @author			Mike Howard
- * @since			1.3.8
- * @content_tag		{client_*}
- * @content_tag		{event_*}
- * @shortcodes		Supported
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.3.8
+ * @content_tag     {client_*}
+ * @content_tag     {event_*}
+ * @shortcodes      Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/payments/payments-items.php
  */
 global $mdjm_event;
 $deposit_disabled = '';
-if ( 'Paid' == $mdjm_event->get_deposit_status() )	{
+if ( 'Paid' == $mdjm_event->get_deposit_status() ) {
 	$deposit_disabled = ' disabled = "true"';
 }
 
 $balance_disabled = '';
-if ( 'Paid' == $mdjm_event->get_balance_status() )	{
+if ( 'Paid' == $mdjm_event->get_balance_status() ) {
 	$balance_disabled = ' disabled = "true"';
 }
 $other_amount_style = ' style="display: none;"';
-if ( ! empty( $balance_disabled ) && ! empty( $deposit_disabled ) )	{
+if ( ! empty( $balance_disabled ) && ! empty( $deposit_disabled ) ) {
 	$other_amount_style = '';
 }
 
-if ( empty ( $deposit_disabled ) )	{
+if ( empty( $deposit_disabled ) ) {
 	$selected = 'deposit';
-} elseif ( empty ( $balance_disabled ) )	{
+} elseif ( empty( $balance_disabled ) ) {
 	$selected = 'balance';
-} else	{
+} else {
 	$selected = 'part_payment';
 }
 

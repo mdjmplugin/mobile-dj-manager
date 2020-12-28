@@ -3,31 +3,32 @@
 /**
  * Contains payment functions.
  *
- * @package		MDJM
- * @subpackage	Functions
- * @since		1.3.8
+ * @package     MDJM
+ * @subpackage  Functions
+ * @since       1.3.8
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Whether or not a payment is in progress.
  *
- * @since	1.3.8
- * @param	bool	$ssl	True if SSL required, otherwise false.
- * @return	bool	True if a payment is in progress, otherwise false.
+ * @since   1.3.8
+ * @param   bool    $ssl    True if SSL required, otherwise false.
+ * @return  bool    True if a payment is in progress, otherwise false.
  */
-function mdjm_is_payment( $ssl = false )	{
+function mdjm_is_payment( $ssl = false ) {
 
 	$is_payment = is_page( mdjm_get_option( 'payments_page' ) );
 
-	if ( isset( $_GET['mdjm_action'] ) && 'process_payment' == $_GET['mdjm_action'] )	{
+	if ( isset( $_GET['mdjm_action'] ) && 'process_payment' == $_GET['mdjm_action'] ) {
 		$is_payment == true;
 	}
 
-	if ( $ssl && ! is_ssl() )	{
+	if ( $ssl && ! is_ssl() ) {
 		$is_payment = false;
 	}
 
@@ -38,15 +39,15 @@ function mdjm_is_payment( $ssl = false )	{
 /**
  * Whether or not there is a gateway.
  *
- * @since	1.3.8
+ * @since   1.3.8
  * @param
- * @return	bool	True if there is a gateway, otherwise false.
+ * @return  bool    True if there is a gateway, otherwise false.
  */
-function mdjm_has_gateway()	{
+function mdjm_has_gateway() {
 
 	$enabled_gateways = mdjm_get_enabled_payment_gateways();
 
-	if ( ! empty( $enabled_gateways ) && count( $enabled_gateways ) >= 1 )	{
+	if ( ! empty( $enabled_gateways ) && count( $enabled_gateways ) >= 1 ) {
 		return true;
 	}
 
@@ -57,16 +58,16 @@ function mdjm_has_gateway()	{
 /**
  * Removes gateway receipt email setting if no gateways are enabled.
  *
- * @since	1.3.8
- * @param	$mdjm_settings	arr		MDJM Settings array.
- * @return	$mdjm_settings	arr		MDJM Settings array.
+ * @since   1.3.8
+ * @param   $mdjm_settings  arr     MDJM Settings array.
+ * @return  $mdjm_settings  arr     MDJM Settings array.
  */
-function mdjm_filter_gateway_receipt_setting( $mdjm_settings )	{
+function mdjm_filter_gateway_receipt_setting( $mdjm_settings ) {
 
 	// Remove gateway receipt template if no gateway is enabled.
 	$enabled_gateways = mdjm_get_enabled_payment_gateways();
 
-	if ( empty( $enabled_gateways ) || count( $enabled_gateways ) < 1 )	{
+	if ( empty( $enabled_gateways ) || count( $enabled_gateways ) < 1 ) {
 		unset( $mdjm_settings['payments']['receipts']['payment_cfm_template'] );
 	}
 
@@ -78,16 +79,16 @@ add_filter( 'mdjm_registered_settings', 'mdjm_filter_gateway_receipt_setting' );
 /**
  * Returns a list of all available gateways.
  *
- * @since	1.3.8
- * @return	arr		$gateways	All the available gateways
+ * @since   1.3.8
+ * @return  arr     $gateways   All the available gateways
  */
 function mdjm_get_payment_gateways() {
 
 	$gateways = array(
 		'disabled' => array(
 			'admin_label'   => __( 'Disabled', 'mobile-dj-manager' ),
-			'payment_label' => __( 'Disabled', 'mobile-dj-manager' )
-		)
+			'payment_label' => __( 'Disabled', 'mobile-dj-manager' ),
+		),
 	);
 
 	return apply_filters( 'mdjm_payment_gateways', $gateways );
@@ -96,9 +97,9 @@ function mdjm_get_payment_gateways() {
 /**
  * Returns a list of all enabled gateways.
  *
- * @since	1.3.8
- * @param	bool	$sort			If true, the default gateway will be first
- * @return	arr		$gateway_list	All the available gateways
+ * @since   1.3.8
+ * @param   bool    $sort           If true, the default gateway will be first
+ * @return  arr     $gateway_list   All the available gateways
  */
 function mdjm_get_enabled_payment_gateways( $sort = false ) {
 	$gateways = mdjm_get_payment_gateways();
@@ -116,15 +117,14 @@ function mdjm_get_enabled_payment_gateways( $sort = false ) {
 		// Reorder our gateways so the default is first
 		$default_gateway_id = mdjm_get_default_gateway();
 
-		if( mdjm_is_gateway_active( $default_gateway_id ) ) {
+		if ( mdjm_is_gateway_active( $default_gateway_id ) ) {
 
-			$default_gateway    = array( $default_gateway_id => $gateway_list[ $default_gateway_id ] );
+			$default_gateway = array( $default_gateway_id => $gateway_list[ $default_gateway_id ] );
 			unset( $gateway_list[ $default_gateway_id ] );
 
 			$gateway_list = array_merge( $default_gateway, $gateway_list );
 
-		}
-
+		}   
 	}
 
 	return apply_filters( 'mdjm_enabled_payment_gateways', $gateway_list );
@@ -133,26 +133,26 @@ function mdjm_get_enabled_payment_gateways( $sort = false ) {
 /**
  * Checks whether a specified gateway is activated.
  *
- * @since	1.3.8
- * @param	str		$gateway	Name of the gateway to check for
- * @return	bool	true if enabled, false otherwise
+ * @since   1.3.8
+ * @param   str     $gateway    Name of the gateway to check for
+ * @return  bool    true if enabled, false otherwise
  */
 function mdjm_is_gateway_active( $gateway ) {
 	$gateways = mdjm_get_enabled_payment_gateways();
-	$ret = array_key_exists( $gateway, $gateways );
+	$ret      = array_key_exists( $gateway, $gateways );
 	return apply_filters( 'mdjm_is_gateway_active', $ret, $gateway, $gateways );
 } // mdjm_is_gateway_active
 
 /**
  * Gets the default payment gateway selected from the MDJM Settings
  *
- * @since	1.3.8
- * @return	str		Gateway ID
+ * @since   1.3.8
+ * @return  str     Gateway ID
  */
 function mdjm_get_default_gateway() {
 	$default = mdjm_get_option( 'payment_gateway', 'disabled' );
 
-	if( ! mdjm_is_gateway_active( $default ) ) {
+	if ( ! mdjm_is_gateway_active( $default ) ) {
 		$gateways = mdjm_get_enabled_payment_gateways();
 		$gateways = array_keys( $gateways );
 		$default  = reset( $gateways );
@@ -164,9 +164,9 @@ function mdjm_get_default_gateway() {
 /**
  * Returns the admin label for the specified gateway
  *
- * @since	1.3.8
- * @param	str		$gateway	Name of the gateway to retrieve a label for
- * @return	str		Gateway admin label
+ * @since   1.3.8
+ * @param   str     $gateway    Name of the gateway to retrieve a label for
+ * @return  str     Gateway admin label
  */
 function mdjm_get_gateway_admin_label( $gateway ) {
 	$gateways = mdjm_get_payment_gateways();
@@ -179,9 +179,9 @@ function mdjm_get_gateway_admin_label( $gateway ) {
 /**
  * Returns the payment label for the specified gateway
  *
- * @since	1.3.8
- * @param	str		$gateway	Name of the gateway to retrieve a label for
- * @return	str		Checkout label for the gateway
+ * @since   1.3.8
+ * @param   str     $gateway    Name of the gateway to retrieve a label for
+ * @return  str     Checkout label for the gateway
  */
 function mdjm_get_gateway_payment_label( $gateway ) {
 	$gateways = mdjm_get_payment_gateways();
@@ -193,21 +193,21 @@ function mdjm_get_gateway_payment_label( $gateway ) {
 /**
  * Determines what the currently selected gateway is
  *
- * @since	1.3.8
- * @return	str		$enabled_gateway	The slug of the gateway
+ * @since   1.3.8
+ * @return  str     $enabled_gateway    The slug of the gateway
  */
 function mdjm_get_chosen_gateway() {
 	$gateways = mdjm_get_enabled_payment_gateways();
 	$chosen   = isset( $_REQUEST['payment-mode'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['payment-mode'] ) ) : false;
 
 	if ( false !== $chosen ) {
-		$chosen = preg_replace('/[^a-zA-Z0-9-_]+/', '', $chosen );
+		$chosen = preg_replace( '/[^a-zA-Z0-9-_]+/', '', $chosen );
 	}
 
-	if ( ! empty ( $chosen ) ) {
+	if ( ! empty( $chosen ) ) {
 		$enabled_gateway = urldecode( $chosen );
-	} elseif( count( $gateways ) >= 1 && ! $chosen ) {
-		foreach ( $gateways as $gateway_id => $gateway )	{
+	} elseif ( count( $gateways ) >= 1 && ! $chosen ) {
+		foreach ( $gateways as $gateway_id => $gateway ) {
 			$enabled_gateway = $gateway_id;
 		}
 	} else {
@@ -220,9 +220,9 @@ function mdjm_get_chosen_gateway() {
 /**
  * Sends all the payment data to the specified gateway
  *
- * @since	1.3.8
- * @param	str		$gateway		Name of the gateway
- * @param	arr		$payment_data	All the payment data to be sent to the gateway
+ * @since   1.3.8
+ * @param   str     $gateway        Name of the gateway
+ * @param   arr     $payment_data   All the payment data to be sent to the gateway
  * @return void
 */
 function mdjm_send_to_gateway( $gateway, $payment_data ) {
@@ -236,14 +236,14 @@ function mdjm_send_to_gateway( $gateway, $payment_data ) {
 /**
  * Determines if the gateway menu should be shown
  *
- * @since	1.3.8
- * @return	bool	$show_gateways	Whether or not to show the gateways
+ * @since   1.3.8
+ * @return  bool    $show_gateways  Whether or not to show the gateways
  */
 function mdjm_show_gateways() {
-	$gateways = mdjm_get_enabled_payment_gateways();
+	$gateways      = mdjm_get_enabled_payment_gateways();
 	$show_gateways = false;
 
-	$chosen_gateway = isset( $_GET['payment-mode'] ) ? preg_replace('/[^a-zA-Z0-9-_]+/', '', sanitize_text_field( wp_unslash( $_GET['payment-mode'] ) ) ) : false;
+	$chosen_gateway = isset( $_GET['payment-mode'] ) ? preg_replace( '/[^a-zA-Z0-9-_]+/', '', sanitize_text_field( wp_unslash( $_GET['payment-mode'] ) ) ) : false;
 
 	if ( count( $gateways ) > 1 && empty( $chosen_gateway ) ) {
 		$show_gateways = true;
@@ -255,10 +255,10 @@ function mdjm_show_gateways() {
 /**
  * Returns the text for the payment button.
  *
- * @since	1.3.8
- * @return	str		Button text
+ * @since   1.3.8
+ * @return  str     Button text
  */
-function mdjm_get_payment_button_text()	{
+function mdjm_get_payment_button_text() {
 	$button_text = mdjm_get_option( 'payment_button', __( 'Pay Now', 'mobile-dj-manager' ) );
 
 	$button_text = esc_attr( apply_filters( 'mdjm_get_payment_button_text', $button_text ) );
@@ -270,11 +270,11 @@ function mdjm_get_payment_button_text()	{
 /**
  * Get the required fields on a payment form.
  *
- * @since	1.3.8.1
+ * @since   1.3.8.1
  * @param
- * @return	arr		$required_fields	Array of required fields.
+ * @return  arr     $required_fields    Array of required fields.
  */
-function mdjm_get_required_payment_fields()	{
+function mdjm_get_required_payment_fields() {
 
 	// Array format should be (arr)$gateway => (str)$name => (bool)$php_ignore
 	$required_fields = array();
@@ -291,28 +291,27 @@ function mdjm_get_required_payment_fields()	{
 /**
  * Whether or not the payment field is required.
  *
- * @since	1.3.8.1
- * @param	str		$gateway		Payment gateway
- * @param	str		$name			The ID or name of the payment field.
- * @param	bool	$php_ignore		True to ignore the validation within PHP.
- * @return	bool	True if required.
+ * @since   1.3.8.1
+ * @param   str     $gateway        Payment gateway
+ * @param   str     $name           The ID or name of the payment field.
+ * @param   bool    $php_ignore     True to ignore the validation within PHP.
+ * @return  bool    True if required.
  */
-function mdjm_required_payment_field( $gateway, $name, $php_ignore = false )	{
+function mdjm_required_payment_field( $gateway, $name, $php_ignore = false ) {
 
 	$required_fields = mdjm_get_required_payment_fields();
 	$required        = false;
 
-	if ( array_key_exists( $gateway, $required_fields ) )	{
+	if ( array_key_exists( $gateway, $required_fields ) ) {
 		$gateway_fields = $required_fields[ $gateway ];
 		$required       = array_key_exists( $name, $gateway_fields );
 
-		if ( $php_ignore )	{
+		if ( $php_ignore ) {
 			$required = $required_fields[ $gateway ][ $name ];
-		}
-
+		}   
 	}
 
-	return (bool)$required;
+	return (bool) $required;
 
 } // mdjm_required_payment_field
 
@@ -322,11 +321,11 @@ function mdjm_required_payment_field( $gateway, $name, $php_ignore = false )	{
  * The transaction status will be set to Pending.
  * Payment gateways should update this txn once payment is verified.
  *
- * @since	1.3.8
- * @param	arr		$payment_data	Array of data collected from payment form validation.
- * @return	int		Transaction ID	ID of the newly created transaction.
+ * @since   1.3.8
+ * @param   arr     $payment_data   Array of data collected from payment form validation.
+ * @return  int     Transaction ID  ID of the newly created transaction.
  */
-function mdjm_create_payment_txn( $payment_data )	{
+function mdjm_create_payment_txn( $payment_data ) {
 
 	$gateway_label = mdjm_get_gateway_payment_label( $payment_data['gateway'] );
 	$event_id      = $payment_data['event_id'];
@@ -337,10 +336,10 @@ function mdjm_create_payment_txn( $payment_data )	{
 
 	$mdjm_txn->create(
 		array(
-			'post_title'  => sprintf( __( '%s payment for %s', 'mobile-dj-manager' ), $gateway_label, $event_id ),
+			'post_title'  => sprintf( __( '%1$s payment for %2$s', 'mobile-dj-manager' ), $gateway_label, $event_id ),
 			'post_status' => 'mdjm-income',
 			'post_author' => 1,
-			'post_parent' => $event_id
+			'post_parent' => $event_id,
 		),
 		array(
 			'_mdjm_txn_source'      => $gateway_label,
@@ -352,7 +351,7 @@ function mdjm_create_payment_txn( $payment_data )	{
 			'_mdjm_payer_lastname'  => $payment_data['client_data']['last_name'],
 			'_mdjm_payer_email'     => $payment_data['client_data']['email'],
 			'_mdjm_payer_ip'        => $payment_data['ip'],
-			'_mdjm_payment_from'    => $payment_data['client_data']['display_name']
+			'_mdjm_payment_from'    => $payment_data['client_data']['display_name'],
 		)
 	);
 
@@ -368,13 +367,13 @@ function mdjm_create_payment_txn( $payment_data )	{
  * Completes the transaction record for the event payment
  * using data provided within the gateway response.
  *
- * @since	1.3.8
- * @param	$gateway_data	arr		Transaction data from gateway.
- * @return	void
+ * @since   1.3.8
+ * @param   $gateway_data   arr     Transaction data from gateway.
+ * @return  void
  */
-function mdjm_update_payment_from_gateway( $gateway_data )	{
+function mdjm_update_payment_from_gateway( $gateway_data ) {
 
-	$txn_data   = apply_filters(
+	$txn_data = apply_filters(
 		'mdjm_update_gateway_payment_data',
 		array(
 			'ID'            => $gateway_data['txn_id'],
@@ -386,7 +385,7 @@ function mdjm_update_payment_from_gateway( $gateway_data )	{
 			'post_author'   => mdjm_get_event_client_id( $gateway_data['event_id'] ),
 			'post_type'     => 'mdjm-transaction',
 			'post_parent'   => $gateway_data['event_id'],
-			'post_modified' => current_time( 'mysql' )
+			'post_modified' => current_time( 'mysql' ),
 		)
 	);
 
@@ -395,15 +394,15 @@ function mdjm_update_payment_from_gateway( $gateway_data )	{
 		array(
 			'_mdjm_txn_status'      => $gateway_data['status'],
 			'_mdjm_txn_gw_id'       => $gateway_data['gw_id'],
-			'_mdjm_txn_currency'	=> $gateway_data['currency'],
+			'_mdjm_txn_currency'    => $gateway_data['currency'],
 			'_mdjm_txn_gw_response' => $gateway_data['data'],
-			'_mdjm_txn_net'         => isset( $gateway_data['fee'] )             ? $gateway_data['total'] - $gateway_data['fee'] : '0.00',
-			'_mdjm_txn_fee'         => isset( $gateway_data['fee'] )             ? $gateway_data['fee']                          : '0.00',
-			'_mdjm_txn_gw_message'  => isset( $gateway_data['message'] )         ? $gateway_data['message']                      : '',
-			'_mdjm_txn_card_type'   => isset( $gateway_data['card_type'] )       ? $gateway_data['card_type']                    : '',
-			'_mdjm_txn_env'         => isset( $gateway_data['live'] )            ? $gateway_data['live']                         : '',
-			'_mdjm_txn_gw_invoice'  => isset( $gateway_data['gw_invoice'] )      ? $gateway_data['gw_invoice']                   : '',
-			'_mdjm_txn_gw_billing'  => isset( $gateway_data['billing_address'] ) ? $gateway_data['billing_address']              : ''
+			'_mdjm_txn_net'         => isset( $gateway_data['fee'] ) ? $gateway_data['total'] - $gateway_data['fee'] : '0.00',
+			'_mdjm_txn_fee'         => isset( $gateway_data['fee'] ) ? $gateway_data['fee'] : '0.00',
+			'_mdjm_txn_gw_message'  => isset( $gateway_data['message'] ) ? $gateway_data['message'] : '',
+			'_mdjm_txn_card_type'   => isset( $gateway_data['card_type'] ) ? $gateway_data['card_type'] : '',
+			'_mdjm_txn_env'         => isset( $gateway_data['live'] ) ? $gateway_data['live'] : '',
+			'_mdjm_txn_gw_invoice'  => isset( $gateway_data['gw_invoice'] ) ? $gateway_data['gw_invoice'] : '',
+			'_mdjm_txn_gw_billing'  => isset( $gateway_data['billing_address'] ) ? $gateway_data['billing_address'] : '',
 		)
 	);
 
@@ -425,19 +424,19 @@ add_action( 'mdjm_complete_event_payment_txn', 'mdjm_update_payment_from_gateway
 /**
  * Records the merchant fee transaction.
  *
- * @since	1.0
- * @param	arr		$gateway_data	Transaction data received from the gateway.
- * @return	void
+ * @since   1.0
+ * @param   arr     $gateway_data   Transaction data received from the gateway.
+ * @return  void
  */
-function mdjm_create_merchant_fee_txn( $gateway_data )	{
+function mdjm_create_merchant_fee_txn( $gateway_data ) {
 
-	if ( isset( $gateway_data['gateway'] ) )	{
+	if ( isset( $gateway_data['gateway'] ) ) {
 		$gateway = mdjm_get_gateway_payment_label( $gateway_data['gateway'] );
-	} else	{
+	} else {
 		$gateway = mdjm_get_gateway_payment_label( mdjm_get_default_gateway() );
 	}
 
-	if ( ! isset( $gateway_data['fee'] ) || $gateway_data['fee'] < '0.01' )	{
+	if ( ! isset( $gateway_data['fee'] ) || $gateway_data['fee'] < '0.01' ) {
 		return;
 	}
 
@@ -446,12 +445,12 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 		array(
 			'post_author' => mdjm_get_event_client_id( $gateway_data['event_id'] ),
 			'post_type'   => 'mdjm-transaction',
-			'post_title'  => sprintf( __( '%s Merchant Fee for Transaction %s', 'mobile-dj-manager' ),
+			'post_title'  => sprintf( __( '%1$s Merchant Fee for Transaction %2$s', 'mobile-dj-manager' ),
 				$gateway,
 				$gateway_data['txn_id']
 			),
 			'post_status' => 'mdjm-expenditure',
-			'post_parent' => $gateway_data['event_id']
+			'post_parent' => $gateway_data['event_id'],
 		)
 	);
 
@@ -462,7 +461,7 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 			'_mdjm_txn_source'   => $gateway,
 			'_mdjm_txn_currency' => $gateway_data['currency'],
 			'_mdjm_txn_total'    => $gateway_data['fee'],
-			'_mdjm_payment_to'   => $gateway
+			'_mdjm_payment_to'   => $gateway,
 		)
 	);
 
@@ -477,7 +476,7 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 
 	$merchant_fee_id = $mdjm_txn->ID;
 
-	if ( ! empty( $merchant_fee_id ) )	{
+	if ( ! empty( $merchant_fee_id ) ) {
 		mdjm_set_txn_type( $mdjm_txn->ID, mdjm_get_txn_cat_id( 'slug', 'mdjm-merchant-fees' ) );
 
 		// Update the incoming transaction meta to include the merchant txn ID.
@@ -487,16 +486,16 @@ function mdjm_create_merchant_fee_txn( $gateway_data )	{
 	do_action( 'mdjm_after_create_merchant_fee', $merchant_fee_id, $gateway_data );
 
 } // mdjm_create_merchant_fee_txn
-add_action ( 'mdjm_after_update_payment_from_gateway', 'mdjm_create_merchant_fee_txn' );
+add_action( 'mdjm_after_update_payment_from_gateway', 'mdjm_create_merchant_fee_txn' );
 
 /**
  * Completes an event payment process.
  *
- * @since	1.3.8
- * @param	arr		$txn_data	Transaction data.
- * @return	void
+ * @since   1.3.8
+ * @param   arr     $txn_data   Transaction data.
+ * @return  void
  */
-function mdjm_complete_event_payment( $txn_data )	{
+function mdjm_complete_event_payment( $txn_data ) {
 
 	// Allow filtering of the transaction data.
 	$txn_data = apply_filters( 'mdjm_complete_event_payment_data', $txn_data );
@@ -526,21 +525,21 @@ function mdjm_complete_event_payment( $txn_data )	{
 /**
  * Register the {payment_for} content tag for use within receipt emails.
  *
- * @since	1.3.8
- * @param	obj		$mdjm_txn		The transaction object.
- * @return	void
+ * @since   1.3.8
+ * @param   obj     $mdjm_txn       The transaction object.
+ * @return  void
  */
-function mdjm_register_payment_for_content_tag( $txn_data )	{
+function mdjm_register_payment_for_content_tag( $txn_data ) {
 
 	$txn_id = $txn_data['txn_id'];
 
 	$type = mdjm_get_txn_type( $txn_id );
 
-	if( $type == mdjm_get_deposit_label() )	{
+	if ( $type == mdjm_get_deposit_label() ) {
 		$payment_for = 'mdjm_content_tag_deposit_label';
-	} elseif( $type == mdjm_get_balance_label() )	{
+	} elseif ( $type == mdjm_get_balance_label() ) {
 		$payment_for = 'mdjm_content_tag_balance_label';
-	} else	{
+	} else {
 		$payment_for = 'mdjm_content_tag_part_payment_label';
 	}
 
@@ -554,19 +553,21 @@ add_action( 'mdjm_before_send_gateway_receipt', 'mdjm_register_payment_for_conte
  *
  * @requires PHP version 5.4 due to use of anonymous functions.
  *
- * @since	1.3.8
- * @param	obj		$mdjm_txn		The transaction object.
- * @return	void
+ * @since   1.3.8
+ * @param   obj     $mdjm_txn       The transaction object.
+ * @return  void
  */
-function mdjm_register_payment_amount_content_tag( $txn_data )	{
+function mdjm_register_payment_amount_content_tag( $txn_data ) {
 
-	if ( version_compare( phpversion(), '5.4', '<' ) )	{
+	if ( version_compare( phpversion(), '5.4', '<' ) ) {
 		return;
 	}
 
 	$txn_id = $txn_data['txn_id'];
 
-	mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $txn_id ) { return mdjm_currency_filter( mdjm_format_amount( mdjm_get_txn_price( $txn_id ) ) ); } );
+	mdjm_add_content_tag( 'payment_amount', __( 'Payment amount', 'mobile-dj-manager' ), function() use ( $txn_id ) {
+		return mdjm_currency_filter( mdjm_format_amount( mdjm_get_txn_price( $txn_id ) ) );
+	} );
 
 } // mdjm_register_payment_amount_content_tag
 add_action( 'mdjm_before_send_gateway_receipt', 'mdjm_register_payment_amount_content_tag' );
@@ -576,19 +577,21 @@ add_action( 'mdjm_before_send_gateway_receipt', 'mdjm_register_payment_amount_co
  *
  * @requires PHP version 5.4 due to use of anonymous functions.
  *
- * @since	1.3.8
- * @param	obj		$mdjm_txn		The transaction object.
- * @return	void
+ * @since   1.3.8
+ * @param   obj     $mdjm_txn       The transaction object.
+ * @return  void
  */
-function mdjm_register_payment_date_content_tag( $txn_data )	{
+function mdjm_register_payment_date_content_tag( $txn_data ) {
 
-	if ( version_compare( phpversion(), '5.4', '<' ) )	{
+	if ( version_compare( phpversion(), '5.4', '<' ) ) {
 		return;
 	}
 
 	$txn_id = $txn_data['txn_id'];
 
-	mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), function() use ( $txn_id ) { return mdjm_get_txn_date( $txn_id ); } );
+	mdjm_add_content_tag( 'payment_date', __( 'Date of payment', 'mobile-dj-manager' ), function() use ( $txn_id ) {
+		return mdjm_get_txn_date( $txn_id );
+	} );
 
 } // mdjm_register_payment_date_content_tag
 add_action( 'mdjm_before_send_gateway_receipt', 'mdjm_register_payment_date_content_tag' );
@@ -596,19 +599,19 @@ add_action( 'mdjm_before_send_gateway_receipt', 'mdjm_register_payment_date_cont
 /**
  * Send admin notice of payment.
  *
- * @since	1.3.8
+ * @since   1.3.8
  * @param
- * @return	void
+ * @return  void
  */
-function mdjm_admin_payment_notice( $txn_data )	{
+function mdjm_admin_payment_notice( $txn_data ) {
 
-	if ( isset( $txn_data['gateway'] ) )	{
+	if ( isset( $txn_data['gateway'] ) ) {
 		$gateway = mdjm_get_gateway_admin_label( $txn_data['gateway'] );
-	} else	{
+	} else {
 		$gateway = mdjm_get_gateway_admin_label( mdjm_get_default_gateway() );
 	}
 
-	$subject = sprintf( __( '%s Payment received via %s', 'mobile-dj-manager' ), mdjm_get_label_singular(), $gateway );
+	$subject = sprintf( __( '%1$s Payment received via %2$s', 'mobile-dj-manager' ), mdjm_get_label_singular(), $gateway );
 	$subject = apply_filters( 'mdjm_admin_payment_notice_subject', $subject );
 
 	$content  = '<!DOCTYPE html>' . "\n";
@@ -628,7 +631,7 @@ function mdjm_admin_payment_notice( $txn_data )	{
 	$content .= __( 'Amount', 'mobile-dj-manager' ) . ': {payment_amount}<br />' . "\n";
 	$content .= __( 'Merchant', 'mobile-dj-manager' ) . ': ' . $gateway . '<br />' . "\n";
 
-	if( ! empty( $txn_data['fee'] ) )	{
+	if ( ! empty( $txn_data['fee'] ) ) {
 
 		$content .= __( 'Transaction Fee', 'mobile-dj-manager' ) . ': ' . mdjm_currency_filter( mdjm_format_amount( $txn_data['fee'] ) ) . '</span><br />' . "\n";
 
@@ -638,7 +641,7 @@ function mdjm_admin_payment_notice( $txn_data )	{
 	}
 
 	$content .= __( 'Outstanding Balance', 'mobile-dj-manager' ) . ': {balance}</p>' . "\n";
-	$content .= sprintf( __( '<a href="%s">View %s</a>', 'mobile-dj-manager' ), admin_url( 'post.php?post=' . $txn_data['event_id'] . '&action=edit' ), mdjm_get_label_singular() ) . '</p>' . "\n";
+	$content .= sprintf( __( '<a href="%1$s">View %2$s</a>', 'mobile-dj-manager' ), admin_url( 'post.php?post=' . $txn_data['event_id'] . '&action=edit' ), mdjm_get_label_singular() ) . '</p>' . "\n";
 
 	$content .= '<hr />' . "\n";
 	$content .= '<p>' . __( 'Regards', 'mobile-dj-manager' ) . '<br />' . "\n";
@@ -650,15 +653,15 @@ function mdjm_admin_payment_notice( $txn_data )	{
 
 	mdjm_send_email_content(
 		array(
-			'to_email'       => mdjm_get_option( 'system_email' ),
-			'from_name'      => mdjm_get_option( 'company_name' ),
-			'from_email'     => mdjm_get_option( 'system_email' ),
-			'event_id'       => $txn_data['event_id'],
-			'client_id'      => mdjm_get_event_client_id( $txn_data['event_id'] ),
-			'subject'        => $subject,
-			'message'        => $content,
-			'copy_to'        => 'disable',
-			'source'         => __( 'Automated Payment Received', 'mobile-dj-manager' )
+			'to_email'   => mdjm_get_option( 'system_email' ),
+			'from_name'  => mdjm_get_option( 'company_name' ),
+			'from_email' => mdjm_get_option( 'system_email' ),
+			'event_id'   => $txn_data['event_id'],
+			'client_id'  => mdjm_get_event_client_id( $txn_data['event_id'] ),
+			'subject'    => $subject,
+			'message'    => $content,
+			'copy_to'    => 'disable',
+			'source'     => __( 'Automated Payment Received', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -668,25 +671,25 @@ add_action( 'mdjm_after_send_gateway_receipt', 'mdjm_admin_payment_notice' );
 /**
  * Updates an event once a payment is completed.
  *
- * @since	1.3.8
- * @param	arr		$txn_data	Transaction data from gateway.
- * @return	void
+ * @since   1.3.8
+ * @param   arr     $txn_data   Transaction data from gateway.
+ * @return  void
  */
-function mdjm_update_event_after_payment( $txn_data )	{
+function mdjm_update_event_after_payment( $txn_data ) {
 
 	$type = mdjm_get_txn_type( $txn_data['txn_id'] );
 	$meta = array();
 
-	if( $type == mdjm_get_deposit_label() )	{
+	if ( $type == mdjm_get_deposit_label() ) {
 		$meta['_mdjm_event_deposit_status'] = 'Paid';
-	} else if( $type == mdjm_get_balance_label() )	{
+	} elseif ( $type == mdjm_get_balance_label() ) {
 		$meta['_mdjm_event_deposit_status'] = 'Paid';
 		$meta['_mdjm_event_balance_status'] = 'Paid';
-	} else	{
-		if ( mdjm_get_event_remaining_deposit( $txn_data['event_id'] ) < 1 )	{
+	} else {
+		if ( mdjm_get_event_remaining_deposit( $txn_data['event_id'] ) < 1 ) {
 			$meta['_mdjm_event_deposit_status'] = 'Paid';
 		}
-		if ( mdjm_get_event_balance( $txn_data['event_id'] ) < 1 )	{
+		if ( mdjm_get_event_balance( $txn_data['event_id'] ) < 1 ) {
 			$meta['_mdjm_event_deposit_status'] = 'Paid';
 			$meta['_mdjm_event_balance_status'] = 'Paid';
 		}
@@ -699,11 +702,11 @@ function mdjm_update_event_after_payment( $txn_data )	{
 		array(
 			'user_id'         => $txn_data['client_id'],
 			'event_id'        => $txn_data['event_id'],
-			'comment_content' => sprintf( __( '%s of %s received via %s', 'mobile-dj-manager' ),
+			'comment_content' => sprintf( __( '%1$s of %2$s received via %3$s', 'mobile-dj-manager' ),
 				$type,
 				mdjm_currency_filter( mdjm_format_amount( $txn_data['total'] ) ),
 				mdjm_get_gateway_admin_label( $txn_data['gateway'] )
-			)
+			),
 		)
 	);
 
@@ -713,12 +716,12 @@ add_action( 'mdjm_after_update_payment_from_gateway', 'mdjm_update_event_after_p
 /**
  * Write to the gateway log file.
  *
- * @since	1.3.8
- * @param	str		$msg		The message to be logged.
- * @param	bool	$stampit	True to log with date/time.
- * @return	void
+ * @since   1.3.8
+ * @param   str     $msg        The message to be logged.
+ * @param   bool    $stampit    True to log with date/time.
+ * @return  void
  */
-function mdjm_record_gateway_log( $msg, $stampit = false )	{
+function mdjm_record_gateway_log( $msg, $stampit = false ) {
 
 	$debug_log = $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg;
 
@@ -729,11 +732,11 @@ function mdjm_record_gateway_log( $msg, $stampit = false )	{
 /**
  * Register the log file for core MDJM debugging class
  *
- * @since	1.0
- * @param	arr		$files		Log files.
- * @return	arr		$files		Filtered log files.
+ * @since   1.0
+ * @param   arr     $files      Log files.
+ * @return  arr     $files      Filtered log files.
  */
-function mdjm_payments_register_logs( $files )	{
+function mdjm_payments_register_logs( $files ) {
 
 	$files['MDJM Payment Gateways'] = array( MDJM_PLUGIN_DIR, '/includes/payments/gateway-logs.log' );
 

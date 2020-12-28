@@ -2,11 +2,11 @@
 /**
  * This template is used to generate the page for the shortcode [mdjm-login].
  *
- * @version			1.0
- * @author			Mike Howard
- * @since			1.3
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.3
  * @content_tag
- * @shortcodes		Not Supported
+ * @shortcodes      Not Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/login/login-form.php
@@ -56,7 +56,7 @@ global $mdjm_login_redirect; ?>
 
     <?php do_action( 'mdjm_after_login_form' ); ?>
 
-<?php else :?>
+<?php else : ?>
 
     <?php esc_html_e( 'You are already logged in', 'mobile-dj-manager' ); ?>
 

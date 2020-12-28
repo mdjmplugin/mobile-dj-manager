@@ -1,17 +1,17 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
+	defined( 'ABSPATH' ) || die( 'Direct access to this page is disabled!!!' );
 
-	if ( !mdjm_employee_can( 'view_clients_list' ) )	{
-		wp_die(
-			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
-			'<p>' . esc_html__( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
-			403
-		);
-	}
+if ( ! mdjm_employee_can( 'view_clients_list' ) ) {
+	wp_die(
+		'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
+		'<p>' . esc_html__( 'You do not have permission to manage clients.', 'mobile-dj-manager' ) . '</p>',
+		403
+	);
+}
 
 // This class extends WP_List_Table
-if ( !class_exists( 'WP_List_Table' ) )	{
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 /**
@@ -19,8 +19,8 @@ if ( !class_exists( 'WP_List_Table' ) )	{
  * User management interface for employees
  *
  */
-if ( !class_exists( 'MDJM_Client_Manager' ) ) :
-	class MDJM_Client_Manager extends WP_List_Table	{
+if ( ! class_exists( 'MDJM_Client_Manager' ) ) :
+	class MDJM_Client_Manager extends WP_List_Table {
 		private static $orderby;
 		private static $order;
 		public static $clients;
@@ -31,11 +31,11 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * Class constructor
 		 *
 		 */
-		public function __construct()	{
+		public function __construct() {
 			parent::__construct( array(
 				'singular' => 'mdjm_list_client', // Singular label
 				'plural'   => 'mdjm_list_clients', // Plural label, also this will be one of the table css class
-				'ajax'     => false // We won't support Ajax for this table
+				'ajax'     => false, // We won't support Ajax for this table
 			) );
 			$this->process_bulk_actions();
 			$this->get_clients();
@@ -46,14 +46,14 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 			$this->client_page();
 		} // __construct
 
-		public function get_clients()	{
+		public function get_clients() {
 			// Filter our search by role if we need to
 			self::$display_role = ! empty( $_GET['display_role'] ) ? sanitize_text_field( wp_unslash( $_GET['display_role'] ) ) : array( 'client', 'inactive_client' );
-			self::$orderby      = ! empty( $_GET['orderby'] )      ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) )      : 'display_name';
-			self::$order        = ! empty( $_GET['order'] )        ? sanitize_text_field( wp_unslash( $_GET['order'] ) )        : 'ASC';
+			self::$orderby      = ! empty( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'display_name';
+			self::$order        = ! empty( $_GET['order'] ) ? sanitize_text_field( wp_unslash( $_GET['order'] ) ) : 'ASC';
 
 			// Searching
-			if ( ! empty( $_POST['s'] ) )	{
+			if ( ! empty( $_POST['s'] ) ) {
 
 				// Build out the query args for the WP_User_Query
 				self::$clients = get_users( array(
@@ -61,10 +61,10 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 					'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email', 'display_name' ),
 					'role__in'       => array( 'client', 'inactive_client' ),
 					'orderby'        => self::$orderby,
-					'order'          => self::$order
+					'order'          => self::$order,
 				) );
 
-			} elseif ( ! empty( $_POST['filter_client'] ) )	{
+			} elseif ( ! empty( $_POST['filter_client'] ) ) {
 
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
@@ -73,7 +73,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 					self::$order
 				);
 
-			} else	{
+			} else {
 
 				self::$clients = mdjm_get_clients(
 					self::$display_role,
@@ -94,7 +94,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 *
 		 */
-		public function client_page()	{
+		public function client_page() {
 			?>
 			<div class="wrap">
 			<div id="icon-themes" class="icon32"></div>
@@ -110,30 +110,30 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Define items/data to be displayed before and after the list table
 		 *
-		 * @param	str		$action		Required: top for top of the table or bottom
+		 * @param   str     $action     Required: top for top of the table or bottom
 		 *
-		 * @return	str					The HTML to be output
+		 * @return  str                 The HTML to be output
 		 */
 		public function extra_tablenav( $which ) {
-			if ( $which == "top" )	{
-			?>
+			if ( $which == 'top' ) {
+				?>
 			<div class="alignleft actions">
                 <label class="screen-reader-text" for="filter_client"><?php esc_html_e( 'Only show', 'mobile-dj-manager' ); ?>&hellip;</label>
                 <?php
-               mdjm_employee_dropdown(
-                	array(
-						'name'			=> 'filter_client',
-						'first_entry' 	 => __( 'Show clients of', 'mobile-dj-manager' ) . '...',
+				mdjm_employee_dropdown(
+                    array(
+						'name'            => 'filter_client',
+						'first_entry'     => __( 'Show clients of', 'mobile-dj-manager' ) . '...',
 						'first_entry_val' => '',
-						'structure'	   => true,
-						'echo'			=> true
+						'structure'       => true,
+						'echo'            => true,
                     )
-                );
+				);
 				?>
                 <input type="submit" name="show_only" id="show_only" class="button" value="<?php esc_attr_e( 'Go!', 'mobile-dj-manager' ); ?>" />
             </div>
-            <?php
-		   }
+				<?php
+			}
 		} // extra_tablenav
 
 		/**
@@ -141,22 +141,23 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 * @param
 		 *
-		 * @return	$arr	$columns	The table column IDs and names
+		 * @return  $arr    $columns    The table column IDs and names
 		 */
-		public function get_columns(){
+		public function get_columns() {
 			$columns = array(
 				'cb'     => '<input type="checkbox" />',
 				'name'   => __( 'Name', 'mobile-dj-manager' ),
 				'events' => __( 'Total Events', 'mobile-dj-manager' ),
 				'next'   => __( 'Next Event', 'mobile-dj-manager' ),
-				'login'  => __( 'Last Login', 'mobile-dj-manager' ) );
+				'login'  => __( 'Last Login', 'mobile-dj-manager' ),
+			);
 
 			return $columns;
 		} // get_columns
 
 		function get_sortable_columns() {
 			$sortable_columns = array(
-				'name'  => array( 'display_name', true )
+				'name' => array( 'display_name', true ),
 			);
 			return $sortable_columns;
 		}
@@ -183,10 +184,10 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 
             $this->set_pagination_args( array(
                 'total_items' => $total_items,
-                'per_page'    => $per_page
+                'per_page'    => $per_page,
             ) );
 
-			$this->items = array_slice( self::$clients, ( ( $current_page -1 ) * $per_page ), $per_page );
+			$this->items = array_slice( self::$clients, ( ( $current_page - 1 ) * $per_page ), $per_page );
 		} // prepare_items
 
 		/**
@@ -194,7 +195,7 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 * @param
 		 *
-		 * @return	str		The text to be displayed when there are no results to display
+		 * @return  str     The text to be displayed when there are no results to display
 		 */
 		public function no_items() {
 			esc_html_e( "No Client's found.", 'mobile-dj-manager' );
@@ -204,26 +205,26 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 * Specifies the default data to be displayed within columns that do not have a
 		 * defined method within this class
 		 *
-		 * @param	obj		$item			The object array for the current data object
-		 *			str		$column_name	The name of the current column
+		 * @param   obj     $item           The object array for the current data object
+		 *          str     $column_name    The name of the current column
 		 *
-		 * @return	str		The data to be output into the column
+		 * @return  str     The data to be output into the column
 		 */
 		public function column_default( $item, $column_name ) {
 			global $wp_roles;
 
-			switch( $column_name ) {
+			switch ( $column_name ) {
 				default:
 					return;
-			  }
+			}
 		} // column_default
 
 		/**
 		 * Create the HTML output for the checkboxes column
 		 *
-		 * @param	obj		$item	The object array for the current item
+		 * @param   obj     $item   The object array for the current item
 		 *
-		 * @return	str		The HTML output for the checkbox column
+		 * @return  str     The HTML output for the checkbox column
 		 */
 		public function column_cb( $item ) {
 			echo '<input type="checkbox" name="client[]" id="clients-' . esc_attr( $item->ID ) . '" value="' . esc_attr( $item->ID ) . '" />';
@@ -232,22 +233,22 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Create the HTML output for the name column
 		 *
-		 * @param	obj		$item	The object array for the current item
+		 * @param   obj     $item   The object array for the current item
 		 *
-		 * @return	str		The HTML output for the name column
+		 * @return  str     The HTML output for the name column
 		 */
 		public function column_name( $item ) {
-			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() )	{
+			if ( current_user_can( 'edit_users' ) || $item->ID == get_current_user_id() ) {
 				$edit_users = true;
 			}
 
-			if( ! empty( $edit_users ) )	{
+			if ( ! empty( $edit_users ) ) {
 				echo '<a href="' . esc_url( get_edit_user_link( $item->ID ) ) . '">';
 			}
 
 			echo esc_html( $item->display_name );
 
-			if( !empty( $edit_users ) )	{
+			if ( ! empty( $edit_users ) ) {
 				echo '</a>';
 			}
 		} // column_name
@@ -255,16 +256,16 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Create the HTML output for the events column
 		 *
-		 * @param	obj		$item	The object array for the current item
+		 * @param   obj     $item   The object array for the current item
 		 *
-		 * @return	str		The HTML output for the events column
+		 * @return  str     The HTML output for the events column
 		 */
 		public function column_events( $item ) {
 			$total = mdjm_get_client_events( $item->ID );
 
-			echo ( !empty( $total ) ?
+			echo ( ! empty( $total ) ?
 				'<a href="' . esc_url( admin_url( 'edit.php?s&post_type=mdjm-event?s&post_status=all' .
-				'&post_type=mdjm-event&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=0' .
+                    '&post_type=mdjm-event&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=0' .
 				'&mdjm_filter_client=' . $item->ID . '&filter_action=Filter&paged=1&action2=-1' ) ) . '">' . esc_html( count( $total ) ) . '</a>' : '0'
 			);
 		} // column_events
@@ -272,16 +273,16 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Create the HTML output for the next event column
 		 *
-		 * @param	obj		$item	The object array for the current item
+		 * @param   obj     $item   The object array for the current item
 		 *
-		 * @return	str		The HTML output for the next event column
+		 * @return  str     The HTML output for the next event column
 		 */
 		public function column_next( $item ) {
 			$next = mdjm_get_clients_next_event( $item->ID );
 
-			if ( ! empty( $next ) )	{
+			if ( ! empty( $next ) ) {
 				echo '<a href="' . esc_url( get_edit_post_link( $next[0]->ID ) ) . '">' . esc_html( mdjm_get_event_date( $next[0]->ID ) ) . '</a>';
-			} else	{
+			} else {
 				echo esc_html__( 'N/A', 'mobile-dj-manager' );
 			}
 
@@ -290,16 +291,17 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		/**
 		 * Create the HTML output for the login column
 		 *
-		 * @param	obj		$item	The object array for the current item
+		 * @param   obj     $item   The object array for the current item
 		 *
-		 * @return	str		The HTML output for the login column
+		 * @return  str     The HTML output for the login column
 		 */
 		public function column_login( $item ) {
-			if( '' != get_user_meta( $item->ID, 'last_login', true ) )
+			if ( '' != get_user_meta( $item->ID, 'last_login', true ) ) {
 				echo esc_html( date( 'H:i d M Y', strtotime( get_user_meta( $item->ID, 'last_login', true ) ) ) );
 
-			else
+			} else {
 				echo esc_html__( 'Never', 'mobile-dj-manager' );
+            }
 		} // column_login
 
 		/**
@@ -307,41 +309,42 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 * @param
 		 *
-		 * @return	$views		Array of $view => $link
+		 * @return  $views      Array of $view => $link
 		 */
-		public function get_views()	{
+		public function get_views() {
 			global $wp_roles;
 
-			$views = array();
+			$views   = array();
 			$current = self::$display_role;
 
 			// All roles link
-			$class = ( empty( $current ) || $current == 'all' ? ' class="current"' : '' );
-			$all_url = remove_query_arg( 'display_role' );
+			$class        = ( empty( $current ) || $current == 'all' ? ' class="current"' : '' );
+			$all_url      = remove_query_arg( 'display_role' );
 			$views['all'] = '<a href="' . $all_url . '" ' . $class . '>' . __( 'All', 'mobile-dj-manager' ) .
 				' <span class="count">(' . self::$total_clients . ')</span></a>';
 
 			// Loop through all roles and generate the required views for each
 			$roles = array( 'client', 'inactive_client' );
-			foreach( $roles as $key => $role )	{
+			foreach ( $roles as $key => $role ) {
 				$count = count( mdjm_get_clients( $role ) );
 
-				if( empty( $count ) )
+				if ( empty( $count ) ) {
 					continue;
+                }
 
-				$class = ( $current == $role ? ' class="current"' : '' );
-				$role_url = add_query_arg( 'display_role', $role );
-				$views[$role] = '<a href="' . $role_url . '" ' . $class . '>' . translate_user_role( $wp_roles->roles[$role]['name'] ) .
+				$class          = ( $current == $role ? ' class="current"' : '' );
+				$role_url       = add_query_arg( 'display_role', $role );
+				$views[ $role ] = '<a href="' . $role_url . '" ' . $class . '>' . translate_user_role( $wp_roles->roles[ $role ]['name'] ) .
 					 ' <span class="count">(' . $count . ')</span></a>';
 			}
 
-			if( !empty( $_POST['s'] ) )	{
-				$class = ( $current == $role ? ' class="current"' : '' );
-				$views['search'] ='<a href="#" ' . $class . '>' . __( 'Search Results', 'mobile-dj-manager' ) .
+			if ( ! empty( $_POST['s'] ) ) {
+				$class           = ( $current == $role ? ' class="current"' : '' );
+				$views['search'] = '<a href="#" ' . $class . '>' . __( 'Search Results', 'mobile-dj-manager' ) .
 					 ' <span class="count">(' . count( self::$clients ) . ')</span></a>';
 			}
 
-		   return $views;
+			return $views;
 		} // get_views
 
 		/**
@@ -349,17 +352,20 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 * @params
 		 *
-		 * @return	arr		$actions		The options for the bulk action dropdown
+		 * @return  arr     $actions        The options for the bulk action dropdown
 		 */
 		public function get_bulk_actions() {
 			$actions = array(
-				'delete'    => __( 'Delete Client', 'mobile-dj-manager' ) );
+				'delete' => __( 'Delete Client', 'mobile-dj-manager' ),
+			);
 
-			if( !isset( $_GET['display_role'] ) || $_GET['display_role'] == 'inactive_client' )
+			if ( ! isset( $_GET['display_role'] ) || $_GET['display_role'] == 'inactive_client' ) {
 				$actions['active'] = 'Mark Active';
+            }
 
-			if( !isset( $_GET['display_role'] ) || $_GET['display_role'] == 'client' )
+			if ( ! isset( $_GET['display_role'] ) || $_GET['display_role'] == 'client' ) {
 				$actions['inactive'] = 'Mark Inactive';
+            }
 
 			return $actions;
 		} // get_bulk_actions
@@ -371,18 +377,20 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 		 *
 		 * @return
 		 */
-		public function process_bulk_actions()	{
+		public function process_bulk_actions() {
 			$action = $this->current_action();
 
-			if( empty( $action ) )
+			if ( empty( $action ) ) {
 				return;
+            }
 
 			$i = 0;
 
-			if( 'delete' === $action && !empty( $_POST['client'] ) )	{
-				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id )	{
-					if( MDJM_DEBUG == true )
+			if ( 'delete' === $action && ! empty( $_POST['client'] ) ) {
+				foreach ( array_map( 'sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id ) {
+					if ( MDJM_DEBUG == true ) {
 						MDJM()->debug->log_it( 'Deleting client with ID ' . $user_id, true );
+                    }
 
 					wp_delete_user( $user_id );
 					$i++;
@@ -390,13 +398,15 @@ if ( !class_exists( 'MDJM_Client_Manager' ) ) :
 
 				mdjm_update_notice( 'updated', __( $i . ' Client(s) deleted.', 'mobile-dj-manager' ), true );
 			}
-			if( 'inactive' === $action || 'active' === $action )	{
-				if( empty( $_POST['client'] ) )
+			if ( 'inactive' === $action || 'active' === $action ) {
+				if ( empty( $_POST['client'] ) ) {
 					return;
+                }
 
-				foreach( array_map('sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id )	{
-					if( MDJM_DEBUG == true )
+				foreach ( array_map( 'sanitize_text_field', wp_unslash( $_POST['client'] ) ) as $user_id ) {
+					if ( MDJM_DEBUG == true ) {
 						MDJM()->debug->log_it( 'Setting client with ID ' . $user_id . ' to ' . ucfirst( $this->current_action() ), true );
+                    }
 
 					$user = new WP_User( $user_id );
 

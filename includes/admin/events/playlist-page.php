@@ -2,29 +2,29 @@
 /**
  * Contains all admin playlist functions
  *
- * @package		MDJM
- * @subpackage	Admin/Events
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Admin/Events
+ * @since       1.3
  */
 
 /**
  * Display the event playlist page.
  *
- * @since	1.3
+ * @since   1.3
  * @param
- * @return	str		The event playlist page content.
+ * @return  str     The event playlist page content.
  */
-function mdjm_display_event_playlist_page()	{
+function mdjm_display_event_playlist_page() {
 
-	if (!isset( $_GET['event_id'] )) {
+	if ( ! isset( $_GET['event_id'] ) ) {
 		wp_die(
-				'<h1>' . esc_html__( 'Event not found', 'mobile-dj-manager' ) . '</h1>' .
+            '<h1>' . esc_html__( 'Event not found', 'mobile-dj-manager' ) . '</h1>' .
 				'<p>' . esc_html__( 'We are unable to find a playlist for this event.', 'mobile-dj-manager' ) . '</p>',
-		404
+            404
 		);
 	}
 
-	if( ! mdjm_employee_can( 'read_events' ) && ! mdjm_employee_working_event( absint( wp_unslash( $_GET['event_id'] ) ) ) )	{
+	if ( ! mdjm_employee_can( 'read_events' ) && ! mdjm_employee_working_event( absint( wp_unslash( $_GET['event_id'] ) ) ) ) {
 		wp_die(
 			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . esc_html__( 'You do not have permission to view this playlist.', 'mobile-dj-manager' ) . '</p>',
@@ -32,22 +32,22 @@ function mdjm_display_event_playlist_page()	{
 		);
 	}
 
-	if ( ! class_exists( 'MDJM_PlayList_Table' ) )	{
-		require_once( MDJM_PLUGIN_DIR . '/includes/admin/events/class-mdjm-playlist-table.php' );
+	if ( ! class_exists( 'MDJM_PlayList_Table' ) ) {
+		require_once MDJM_PLUGIN_DIR . '/includes/admin/events/class-mdjm-playlist-table.php';
 	}
 
 	$playlist_obj = new MDJM_PlayList_Table();
 
 	?>
 	<div class="wrap">
-		<h1><?php printf( esc_html__( 'Playlist for %s %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ), esc_html( mdjm_get_event_contract_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ) ); ?></h1>
+		<h1><?php printf( esc_html__( 'Playlist for %1$s %2$s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ), esc_html( mdjm_get_event_contract_id( absint( wp_unslash( $_GET['event_id'] ) ) ) ) ); ?></h1>
 
         <form method="post">
             <?php
             $playlist_obj->prepare_items();
 			$playlist_obj->display_header();
 
-			if( count( $playlist_obj->items ) > 0 )	{
+			if ( count( $playlist_obj->items ) > 0 ) {
 				$playlist_obj->views();
 			}
 
@@ -63,90 +63,88 @@ function mdjm_display_event_playlist_page()	{
 /**
  * Format the playlist results for emailing/printing.
  *
- * @since	1.3
- * @param	int		$event_id		The event ID to retrieve the playlist for.
- * @param	str		$orderby		Which field to order the playlist entries by.
- * @param	str		$order			Order ASC or DESC.
- * @param	int		$repeat_headers	Repeat the table headers after this many rows.
- * @param	bool	$hide_empty		If displaying by category do we hide empty categories?
- * @return	str		$results		Output of playlist entries.
+ * @since   1.3
+ * @param   int     $event_id       The event ID to retrieve the playlist for.
+ * @param   str     $orderby        Which field to order the playlist entries by.
+ * @param   str     $order          Order ASC or DESC.
+ * @param   int     $repeat_headers Repeat the table headers after this many rows.
+ * @param   bool    $hide_empty     If displaying by category do we hide empty categories?
+ * @return  str     $results        Output of playlist entries.
  */
-function mdjm_format_playlist_content( $event_id, $orderby='category', $order='ASC', $hide_empty=true, $repeat_headers=0 )	{
+function mdjm_format_playlist_content( $event_id, $orderby = 'category', $order = 'ASC', $hide_empty = true, $repeat_headers = 0 ) {
 	global $current_user;
 
 	$mdjm_event = mdjm_get_event( $event_id );
 
 	// Obtain results ordered by category
-	if( $orderby == 'category' )	{
+	if ( $orderby == 'category' ) {
 
 		$playlist = mdjm_get_playlist_by_category( $event_id, array( 'hide_empty' => $hide_empty ) );
 
-		if ( $playlist )	{
+		if ( $playlist ) {
 
-			foreach( $playlist as $cat => $entries )	{
+			foreach ( $playlist as $cat => $entries ) {
 
-				foreach( $entries as $entry )	{
+				foreach ( $entries as $entry ) {
 
 					$entry_data = mdjm_get_playlist_entry_data( $entry->ID );
 
 					$results[] = array(
-						'ID'		=> $entry->ID,
-						'event'		=> $event_id,
-						'artist'	=> stripslashes( $entry_data['artist'] ),
-						'song'		=> stripslashes( $entry_data['song'] ),
-						'added_by'	=> stripslashes( $entry_data['added_by'] ),
-						'category'	=> $cat,
-						'notes'		=> stripslashes( $entry_data['djnotes'] ),
-						'date'		=> mdjm_format_short_date( $entry->post_date )
+						'ID'       => $entry->ID,
+						'event'    => $event_id,
+						'artist'   => stripslashes( $entry_data['artist'] ),
+						'song'     => stripslashes( $entry_data['song'] ),
+						'added_by' => stripslashes( $entry_data['added_by'] ),
+						'category' => $cat,
+						'notes'    => stripslashes( $entry_data['djnotes'] ),
+						'date'     => mdjm_format_short_date( $entry->post_date ),
 					);
 
-				}
-
-			}
-
+				}           
+			}       
 		}
 	}
 	// Obtain results ordered by another field.
-	else	{
+	else {
 
 		$args = array(
-				'orderby'	=> $orderby == 'date' ? 'post_date'	: 'meta_value',
-				'order'		=> $order,
-				'meta_key'	=> $orderby == 'date' ? ''			: '_mdjm_playlist_entry_' . $orderby
+			'orderby'  => $orderby == 'date' ? 'post_date' : 'meta_value',
+			'order'    => $order,
+			'meta_key' => $orderby == 'date' ? '' : '_mdjm_playlist_entry_' . $orderby,
 		);
 
 		$entries = mdjm_get_playlist_entries( $event_id, $args );
 
-		if( $entries )	{
-			foreach( $entries as $entry )	{
+		if ( $entries ) {
+			foreach ( $entries as $entry ) {
 				$entry_data = mdjm_get_playlist_entry_data( $entry->ID );
 
 				$categories = wp_get_object_terms( $entry->ID, 'playlist-category' );
 
-				if ( ! empty( $categories ) )	{
+				if ( ! empty( $categories ) ) {
 					$category = $categories[0]->name;
 				}
 
 				$results[] = array(
-					'ID'		=> $entry->ID,
-					'event'		=> $event_id,
-					'artist'	=> stripslashes( $entry_data['artist'] ),
-					'song'		=> stripslashes( $entry_data['song'] ),
-					'added_by'	=> stripslashes( $entry_data['added_by'] ),
-					'category'	=> ! empty( $category ) ? $category : '',
-					'notes'		=> stripslashes( $entry_data['djnotes'] ),
-					'date'		=> mdjm_format_short_date( $entry->post_date )
+					'ID'       => $entry->ID,
+					'event'    => $event_id,
+					'artist'   => stripslashes( $entry_data['artist'] ),
+					'song'     => stripslashes( $entry_data['song'] ),
+					'added_by' => stripslashes( $entry_data['added_by'] ),
+					'category' => ! empty( $category ) ? $category : '',
+					'notes'    => stripslashes( $entry_data['djnotes'] ),
+					'date'     => mdjm_format_short_date( $entry->post_date ),
 				);
 			}
 		}
 	}
 
 	// Build out the formatted display
-	if( ! empty( $results ) )	{
+	if ( ! empty( $results ) ) {
 
-		$i				= 0;
+		$i = 0;
 
-		$output = '<p>' . sprintf( __( 'Hey %s', 'mobile-dj-manager' ), $current_user->first_name ) . '</p>' . "\n";
+		$output  = '<p>' . sprintf( __( 'Hey %s', 'mobile-dj-manager' ), $current_user->first_name ) . '</p>' . "\n";
 		$output .= '<p>' . __( 'Here is the playlist you requested...', 'mobile-dj-manager' ) . '</p>' . "\n";
 
 		$output .= '<p>' .
@@ -170,20 +168,20 @@ function mdjm_format_playlist_content( $event_id, $orderby='category', $order='A
 
 		$output .= $headers;
 
-		foreach( $results as $result )	{
-			if( $repeat_headers > 0 && $i == $repeat_headers )	{
+		foreach ( $results as $result ) {
+			if ( $repeat_headers > 0 && $i == $repeat_headers ) {
 				$output .= '<tr>' . "\n" .
 								'<td colspan="5">&nbsp;</td>' . "\n" .
 							'</tr>' . "\n" .
 							$headers;
-				$i = 0;
+				$i       = 0;
 			}
 
-			if ( is_numeric( $result['added_by'] ) )	{
+			if ( is_numeric( $result['added_by'] ) ) {
 				$user = get_userdata( $result['added_by'] );
 
 				$name = $user->display_name;
-			} else	{
+			} else {
 				$name = $result['added_by'];
 			}
 
@@ -200,8 +198,7 @@ function mdjm_format_playlist_content( $event_id, $orderby='category', $order='A
 
 		$output .= '</table>' . "\n";
 
-	}
-	else	{
+	} else {
 		$output = '<p>' . __( 'The playlist for this event does not contain any entries!', 'mobile-dj-manager' ) . '</p>' . "\n";
 	}
 

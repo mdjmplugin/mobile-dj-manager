@@ -4,24 +4,25 @@
  *
  * This class is for interacting with the availability meta database table
  *
- * @package		MDJM
- * @subpackage	Classes/MDJM_DB_Availability_Meta
+ * @package     MDJM
+ * @subpackage  Classes/MDJM_DB_Availability_Meta
  * @copyright   Copyright (c) 2018, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5.6
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 class MDJM_DB_Availability_Meta extends MDJM_DB {
 
 	/**
 	 * Get things started
 	 *
-	 * @access	public
-	 * @since	1.5.6
+	 * @access  public
+	 * @since   1.5.6
 	*/
 	public function __construct() {
 		global $wpdb;
@@ -36,7 +37,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 			$this->create_table();
 		}
 
-		add_action( 'plugins_loaded',               array( $this, 'register_table' ), 11 );
+		add_action( 'plugins_loaded', array( $this, 'register_table' ), 11 );
         add_action( 'mdjm_remove_employee_absence', array( $this, 'remove_meta_after_delete' ), 999, 2 );
 
 	} // __construct
@@ -44,23 +45,23 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	/**
 	 * Get table columns and data types
 	 *
-	 * @access	public
-	 * @since	1.5.6
+	 * @access  public
+	 * @since   1.5.6
 	*/
 	public function get_columns() {
 		return array(
 			'meta_id'              => '%d',
 			'mdjm_availability_id' => '%d',
 			'meta_key'             => '%s',
-			'meta_value'           => '%s'
+			'meta_value'           => '%s',
 		);
 	} // get_columns
 
 	/**
 	 * Register the table with $wpdb so the metadata api can find it
 	 *
-	 * @access	public
-	 * @since	1.5.6
+	 * @access  public
+	 * @since   1.5.6
 	*/
 	public function register_table() {
 		global $wpdb;
@@ -72,13 +73,13 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 *
 	 * For internal use only. Use MDJM_Availabiility->get_meta() for public usage.
 	 *
-	 * @param	int		$id				Entry ID.
-	 * @param	str		$meta_key		The meta key to retrieve.
-	 * @param	bool	$single			Whether to return a single value.
-	 * @return	mixed	Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @param   int     $id             Entry ID.
+	 * @param   str     $meta_key       The meta key to retrieve.
+	 * @param   bool    $single         Whether to return a single value.
+	 * @return  mixed   Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 *
-	 * @access	public
-	 * @since	1.5.6
+	 * @access  public
+	 * @since   1.5.6
 	 */
 	public function get_meta( $id = 0, $meta_key = '', $single = false ) {
 		$id = $this->sanitize_entry_id( $id );
@@ -94,14 +95,14 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 *
 	 * For internal use only. Use MDJM_DB_Availability->add_meta() for public usage.
 	 *
-	 * @param	int		$id				Entry ID.
-	 * @param	str		$meta_key		Metadata name.
-	 * @param	mixed	$meta_value		Metadata value.
-	 * @param	bool	$unique			Optional, default is false. Whether the same key should not be added.
-	 * @return	bool	False for failure. True for success.
+	 * @param   int     $id             Entry ID.
+	 * @param   str     $meta_key       Metadata name.
+	 * @param   mixed   $meta_value     Metadata value.
+	 * @param   bool    $unique         Optional, default is false. Whether the same key should not be added.
+	 * @return  bool    False for failure. True for success.
 	 *
-	 * @access	private
-	 * @since	1.5.6
+	 * @access  private
+	 * @since   1.5.6
 	 */
 	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
 
@@ -123,14 +124,14 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 *
 	 * If the meta field for the entry does not exist, it will be added.
 	 *
-	 * @param	int		$id				Entry ID.
-	 * @param	str		$meta_key		Metadata key.
-	 * @param	mixed	$meta_value		Metadata value.
-	 * @param	mixed	$prev_value		Optional. Previous value to check before removing.
-	 * @return	bool	False on failure, true if success.
+	 * @param   int     $id             Entry ID.
+	 * @param   str     $meta_key       Metadata key.
+	 * @param   mixed   $meta_value     Metadata value.
+	 * @param   mixed   $prev_value     Optional. Previous value to check before removing.
+	 * @return  bool    False on failure, true if success.
 	 *
-	 * @access	private
-	 * @since	1.5.6
+	 * @access  private
+	 * @since   1.5.6
 	 */
 	public function update_meta( $id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
 		$id = $this->sanitize_entry_id( $id );
@@ -150,13 +151,13 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 * value, will keep from removing duplicate metadata with the same key. It also
 	 * allows removing all metadata matching key, if needed.
 	 *
-	 * @param	int		$id				Entry ID.
-	 * @param	str		$meta_key		Metadata name.
-	 * @param	mixed	$meta_value		Optional. Metadata value.
-	 * @return	bool	False for failure. True for success.
+	 * @param   int     $id             Entry ID.
+	 * @param   str     $meta_key       Metadata name.
+	 * @param   mixed   $meta_value     Optional. Metadata value.
+	 * @return  bool    False for failure. True for success.
 	 *
-	 * @access	private
-	 * @since	1.5.6
+	 * @access  private
+	 * @since   1.5.6
 	 */
 	public function delete_meta( $id = 0, $meta_key = '', $meta_value = '' ) {
 		return delete_metadata( 'mdjm_availability', $id, $meta_key, $meta_value );
@@ -170,8 +171,8 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
      * @param   int     $absence_id     The absence entry ID
      * @param   bool    $deleted        Whether or not the absence entry was removed
      */
-    public function remove_meta_after_delete( $absence_id, $deleted )    {
-        if ( ! empty( $absence_id ) && ! empty( $deleted ) )  {
+    public function remove_meta_after_delete( $absence_id, $deleted ) {
+        if ( ! empty( $absence_id ) && ! empty( $deleted ) ) {
             $this->delete_all_meta( $absence_id );
         }
     } // remove_meta_after_delete
@@ -184,7 +185,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
      * @param   bool    
      * @return  void
      */
-    public function delete_all_meta( $absence_id )    {
+    public function delete_all_meta( $absence_id ) {
         global $wpdb;
 
         $meta_ids = $wpdb->get_col( $wpdb->prepare(
@@ -195,7 +196,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
             ", $absence_id
         ) );
 
-        foreach ( $meta_ids as $mid )   {
+        foreach ( $meta_ids as $mid ) {
             delete_metadata_by_mid( 'mdjm_availability', $mid );
         }
     } // delete_all_meta
@@ -204,8 +205,8 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	/**
 	 * Create the table
 	 *
-	 * @access	public
-	 * @since	1.5.6
+	 * @access  public
+	 * @since   1.5.6
 	*/
 	public function create_table() {
 		global $wpdb;
@@ -222,7 +223,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 			KEY meta_key (meta_key)
 			) $charset_collate;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		dbDelta( $sql );
 
@@ -232,9 +233,9 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	/**
 	 * Given an entry ID, make sure it's a positive number, greater than zero before inserting or adding.
 	 *
-	 * @since	1.5.6
-	 * @param	int|string	$entry_id	A passed entry ID.
-	 * @return	int|bool	The normalized entry ID or false if it's found to not be valid.
+	 * @since   1.5.6
+	 * @param   int|string  $entry_id   A passed entry ID.
+	 * @return  int|bool    The normalized entry ID or false if it's found to not be valid.
 	 */
 	private function sanitize_entry_id( $entry_id ) {
 		if ( ! is_numeric( $entry_id ) ) {

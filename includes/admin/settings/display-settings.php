@@ -9,20 +9,21 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Options Page
  *
  * Renders the options page contents.
  *
- * @since	1.3
- * @return	void
+ * @since   1.3
+ * @return  void
  */
 function mdjm_options_page() {
 	$settings_tabs = mdjm_get_settings_tabs();
-	$settings_tabs = empty($settings_tabs) ? array() : $settings_tabs;
+	$settings_tabs = empty( $settings_tabs ) ? array() : $settings_tabs;
 	$active_tab    = isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $settings_tabs ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 	$sections      = mdjm_get_settings_tab_sections( $active_tab );
 	$key           = 'main';
@@ -39,7 +40,7 @@ function mdjm_options_page() {
 		<h1 class="wp-heading-inline">Settings</h1>
 		<div class="nav-tab-wrapper">
 			<?php
-			foreach( mdjm_get_settings_tabs() as $tab_id => $tab_name ) {
+			foreach ( mdjm_get_settings_tabs() as $tab_id => $tab_name ) {
 
 				$tab_url = add_query_arg( array(
 					'settings-updated' => false,
@@ -60,18 +61,18 @@ function mdjm_options_page() {
 		<?php
 
 		$number_of_sections = count( $sections );
-		$number = 0;
+		$number             = 0;
 		if ( $number_of_sections > 1 ) {
 			echo '<div><ul class="subsubsub">';
-			foreach( $sections as $section_id => $section_name ) {
+			foreach ( $sections as $section_id => $section_name ) {
 				echo '<li>';
 				$number++;
 				$tab_url = add_query_arg( array(
 					'settings-updated' => false,
-					'tab' => $active_tab,
-					'section' => $section_id
+					'tab'              => $active_tab,
+					'section'          => $section_id,
 				) );
-				$class = '';
+				$class   = '';
 				if ( $section == $section_id ) {
 					$class = 'current';
 				}
@@ -100,7 +101,7 @@ function mdjm_options_page() {
 
 				do_settings_sections( 'mdjm_settings_' . $active_tab . '_' . $section );
 
-				do_action( 'mdjm_settings_tab_bottom_' . $active_tab . '_' . $section  );
+				do_action( 'mdjm_settings_tab_bottom_' . $active_tab . '_' . $section );
 
 				// For backwards compatibility
 				if ( 'main' === $section ) {

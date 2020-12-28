@@ -10,17 +10,19 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Login Form
  *
- * @since	1.3
- * @global	$post
- * @param	str		$redirect	Redirect page URL
- * @return	str		Login form
+ * @since   1.3
+ * @global  $post
+ * @param   str     $redirect   Redirect page URL
+ * @return  str     Login form
  */
-function mdjm_login_form( $redirect = '' )	{
+function mdjm_login_form( $redirect = '' ) {
 	global $mdjm_login_redirect;
 
 	if ( empty( $redirect ) ) {
@@ -42,8 +44,8 @@ function mdjm_login_form( $redirect = '' )	{
 /**
  * Process Login Form
  *
- * @since	1.3
- * @param	arr		$data	Data sent from the login form
+ * @since   1.3
+ * @param   arr     $data   Data sent from the login form
  * @return void
  */
 function mdjm_process_login_form( $data ) {
@@ -56,21 +58,20 @@ function mdjm_process_login_form( $data ) {
 
 		if ( $user_data ) {
 
-			$user_ID = $user_data->ID;
+			$user_ID    = $user_data->ID;
 			$user_email = $user_data->user_email;
 			if ( wp_check_password( $data['mdjm_user_pass'], $user_data->user_pass, $user_data->ID ) ) {
 				mdjm_log_user_in( $user_data->ID, $data['mdjm_user_login'], $data['mdjm_user_pass'] );
 			} else {
 				$message = 'password_incorrect';
-			}
-
+			}       
 		} else {
 
 			$message = 'username_incorrect';
 
 		}
 
-		if ( ! empty( $message ) )	{
+		if ( ! empty( $message ) ) {
 			$url = remove_query_arg( 'mdjm_message' );
 			wp_safe_redirect( add_query_arg( 'mdjm_message', $message, $url ) );
 			exit;
@@ -87,15 +88,15 @@ add_action( 'mdjm_user_login', 'mdjm_process_login_form' );
 /**
  * Log User In
  *
- * @since	1.3
- * @param	int		$user_id	User ID
- * @param	str		$user_login Username
- * @param	str		$user_pass	Password
- * @return	void
+ * @since   1.3
+ * @param   int     $user_id    User ID
+ * @param   str     $user_login Username
+ * @param   str     $user_pass  Password
+ * @return  void
  */
 function mdjm_log_user_in( $user_id, $user_login, $user_pass ) {
 
-	if ( $user_id < 1 )	{
+	if ( $user_id < 1 ) {
 		return;
 	}
 

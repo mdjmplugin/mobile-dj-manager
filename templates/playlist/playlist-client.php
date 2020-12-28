@@ -2,12 +2,12 @@
 /**
  * This template is used to generate the page for the shortcode [mdjm-playlist].
  *
- * @version			1.1
- * @author			Mike Howard
- * @since			1.5
- * @content_tag		client
- * @content_tag		event
- * @shortcodes		Not Supported
+ * @version         1.1
+ * @author          Mike Howard
+ * @since           1.5
+ * @content_tag     client
+ * @content_tag     event
+ * @shortcodes      Not Supported
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-client.php
@@ -15,7 +15,7 @@
 global $mdjm_event;
 
 $intro_text = sprintf(
-	__( 'The %s playlist management system enables you to give %s (your %s) an idea of the types of songs you would like played during your %s on %s.', 'mobile-dj-manager' ),
+	__( 'The %1$s playlist management system enables you to give %2$s (your %3$s) an idea of the types of songs you would like played during your %4$s on %5$s.', 'mobile-dj-manager' ),
 	'{company_name}',
 	'{employee_firstname}',
 	'{artist_label}',
@@ -27,7 +27,7 @@ $guest_text = __( 'You can invite your guests to add their suggestions to your p
 
 $share_options = array(
 	mdjm_playlist_facebook_share( $mdjm_event->ID ),
-    mdjm_playlist_twitter_share( $mdjm_event->ID )
+    mdjm_playlist_twitter_share( $mdjm_event->ID ),
 );
 
 $share_text           = implode( '&nbsp;&nbsp;&nbsp;', $share_options );
@@ -43,7 +43,7 @@ $notes_description    = __( 'Is this song important to you? Want it played at a 
 $submit_label         = __( 'Add to Playlist', 'mobile-dj-manager' );
 $playlist_limit       = mdjm_get_event_playlist_limit( $mdjm_event->ID );
 $limit_reached        = sprintf( __( 'Your playlist has now reached the maximum of %d allowed songs. To add a new entry, an existing one must first be removed.', 'mobile-dj-manager' ), $playlist_limit );
-$playlist_closed      = sprintf( __( 'The playlist system is now closed to allow %s to prepare for your %s. No further songs can be added at this time.', 'mobile-dj-manager' ), '{employee_firstname}', mdjm_get_label_singular( true ) );
+$playlist_closed      = sprintf( __( 'The playlist system is now closed to allow %1$s to prepare for your %2$s. No further songs can be added at this time.', 'mobile-dj-manager' ), '{employee_firstname}', mdjm_get_label_singular( true ) );
 $delete_entry         = __( 'Remove', 'mobile-dj-manager' );
 $total_entries        = mdjm_count_playlist_entries( $mdjm_event->ID );
 $view_playlist        = __( 'View Playlist', 'mobile-dj-manager' );
@@ -162,14 +162,18 @@ $view_playlist_class  = ' mdjm-hidden';
         <a id="client-playlist-entries"></a>
 		<h5><?php echo esc_html( $your_playlist ); ?></h5>
 
-        <p><?php printf(
-            __( 'Your playlist currently consists of <span class="song-count">%d %s</span> and is approximately <span class="playlist-length">%s</span> long. Your %s is scheduled for %s.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        <p>
+        <?php 
+        printf(
+            __( 'Your playlist currently consists of <span class="song-count">%1$d %2$s</span> and is approximately <span class="playlist-length">%3$s</span> long. Your %4$s is scheduled for %5$s.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             esc_html( $total_entries ),
 			esc_html( _n( 'song', 'songs', esc_html( $total_entries ), 'mobile-dj-manager' ) ),
             '{playlist_duration}',
             esc_html( mdjm_get_label_singular( true ) ),
             '{event_duration}'
-        ); ?></p>
+        ); 
+        ?>
+        </p>
 
         <div class="playlist-entry-row-headings">
             <div class="playlist-entry-column">
@@ -189,9 +193,9 @@ $view_playlist_class  = ' mdjm-hidden';
             </div>
         </div>
 
-		<?php foreach( $playlist_entries as $category => $category_entries ) : ?>
+		<?php foreach ( $playlist_entries as $category => $category_entries ) : ?>
 
-			<?php foreach( $category_entries as $entry ) : ?>
+			<?php foreach ( $category_entries as $entry ) : ?>
 				<?php $entry_data = mdjm_get_playlist_entry_data( $entry->ID ); ?>
 
 				<div class="playlist-entry-row mdjm-playlist-entry-<?php echo esc_attr( $entry->ID ); ?>">

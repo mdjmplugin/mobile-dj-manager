@@ -2,82 +2,83 @@
 /**
  * MDJM Client Class
  *
- * @package		MDJM
- * @subpackage	Clients
- * @since		1.5
+ * @package     MDJM
+ * @subpackage  Clients
+ * @since       1.5
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Client Class
  *
- * @since	1.5
+ * @since   1.5
  */
 class MDJM_Client {
 
 	/**
 	 * The client WP user ID
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $ID = 0;
 
     /**
 	 * The client login
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $user_login;
 
     /**
 	 * The client first name
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $first_name;
 
     /**
 	 * The client last name
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $last_name;
 
     /**
 	 * The client display name
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $display_name;
 
     /**
 	 * The client email address
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $user_email;
 
     /**
 	 * The client URL
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $user_url;
 
     /**
 	 * The date the client registered
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $user_registered;
 
     /**
 	 * The client address
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
     public $address1;
     public $address2;
@@ -89,49 +90,49 @@ class MDJM_Client {
     /**
 	 * The client primary phone
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $phone1;
 
     /**
 	 * The client alternate phone
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $phone2;
 
 	/**
 	 * Client birthday
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $birthday;
 
 	/**
 	 * Send marketing materials?
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $marketing;
 
     /**
 	 * Whether the client is active
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public $active;
 
 	/**
 	 * The client profile fields
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
-	public $profile_fields = NULL;
+	public $profile_fields = null;
 
 	/**
 	 * Get things going
 	 *
-	 * @since	1.5
+	 * @since   1.5
      * @param   int|string  $_id    The WP user ID or their login name or email address
 	 */
 	public function __construct( $_id = 0 ) {
@@ -147,9 +148,9 @@ class MDJM_Client {
 	/**
 	 * Given the client data, let's set the variables
 	 *
-	 * @since	1.5
-	 * @param 	obj		$client	The user object
-	 * @return	bool    If the setup was successful or not
+	 * @since   1.5
+	 * @param   obj     $client The user object
+	 * @return  bool    If the setup was successful or not
 	 */
 	private function setup_client( $client ) {
 
@@ -172,15 +173,15 @@ class MDJM_Client {
         $this->town       = $client->town;
         $this->county     = $client->county;
         $this->postcode   = $client->postcode;
-        $this->address[]  = ! empty( $client->address1 )  ? esc_attr( $client->address1 ) : '';
-        $this->address[]  = ! empty( $client->address2 )  ? esc_attr( $client->address2 ) : '';
-        $this->address[]  = ! empty( $client->town )      ? esc_attr( $client->town )     : '';
-        $this->address[]  = ! empty( $client->county )    ? esc_attr( $client->county )   : '';
-        $this->address[]  = ! empty( $client->postcode )  ? esc_attr( $client->postcode ) : '';
-        $this->phone1     = ! empty( $client->phone1 )    ? esc_attr( $client->phone1 )   : '';
-        $this->phone2     = ! empty( $client->phone2 )    ? esc_attr( $client->phone2 )   : '';
-		$this->birthday   = ! empty( $client->birthday )  ? esc_attr( $client->birthday ) : '';
-		$this->marketing  = ! empty( $client->marketing ) ? $client->marketing            : 'N';
+        $this->address[]  = ! empty( $client->address1 ) ? esc_attr( $client->address1 ) : '';
+        $this->address[]  = ! empty( $client->address2 ) ? esc_attr( $client->address2 ) : '';
+        $this->address[]  = ! empty( $client->town ) ? esc_attr( $client->town ) : '';
+        $this->address[]  = ! empty( $client->county ) ? esc_attr( $client->county ) : '';
+        $this->address[]  = ! empty( $client->postcode ) ? esc_attr( $client->postcode ) : '';
+        $this->phone1     = ! empty( $client->phone1 ) ? esc_attr( $client->phone1 ) : '';
+        $this->phone2     = ! empty( $client->phone2 ) ? esc_attr( $client->phone2 ) : '';
+		$this->birthday   = ! empty( $client->birthday ) ? esc_attr( $client->birthday ) : '';
+		$this->marketing  = ! empty( $client->marketing ) ? $client->marketing : 'N';
 
 		//$this->get_fields();
 		//$this->mapped_fields();
@@ -192,13 +193,13 @@ class MDJM_Client {
 	/**
 	 * Magic __get function to dispatch a call to retrieve a private property
 	 *
-	 * @since	1.5
+	 * @since   1.5
 	 */
 	public function __get( $key ) {
 
         if ( isset( $this->data->$key ) ) {
             $value = $this->data->$key;
-        } elseif ( method_exists( $this, 'get_' . $key ) )  {
+        } elseif ( method_exists( $this, 'get_' . $key ) ) {
             return call_user_func( array( $this, 'get_' . $key ) );
         } else {
             $value = get_user_meta( $this->ID, $key, true );
@@ -209,8 +210,8 @@ class MDJM_Client {
 	/**
 	 * Retrieve the ID
 	 *
-	 * @since	1.5
-	 * @return	int
+	 * @since   1.5
+	 * @return  int
 	 */
 	public function get_ID() {
 		return $this->ID;
@@ -223,12 +224,12 @@ class MDJM_Client {
      * @return  array
      */
     public function get_profile_fields() {
-		if ( ! isset( $this->profile_fields ) )   {
+		if ( ! isset( $this->profile_fields ) ) {
             $this->profile_fields = mdjm_get_client_fields();
-            $field = array();
+            $field                = array();
 
-            foreach( $this->profile_fields as $key => $row )	{
-                $field[ $key ] = $row['position'];	
+            foreach ( $this->profile_fields as $key => $row ) {
+                $field[ $key ] = $row['position'];  
             }
 
             array_multisort( $field, SORT_ASC, $this->profile_fields );

@@ -12,29 +12,30 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Clients_Export Class
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_Clients_Export extends MDJM_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions
 	 *
-	 * @var		str
-	 * @since	1.4
+	 * @var     str
+	 * @since   1.4
 	 */
 	public $export_type = 'clients';
 
 	/**
 	 * Set the export headers
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function headers() {
 		ignore_user_abort( true );
@@ -50,39 +51,38 @@ class MDJM_Clients_Export extends MDJM_Export {
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=' . apply_filters( 'mdjm_clients_export_filename', 'mdjm-export-' . $extra . $this->export_type . '-' . date( 'd-m-Y' ) ) . '.csv' );
-		header( "Expires: 0" );
+		header( 'Expires: 0' );
 	} // headers
 
 	/**
 	 * Set the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$cols	All the columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $cols   All the columns
 	 */
 	public function csv_cols() {
 		if ( ! empty( $_POST['mdjm_export_event'] ) ) {
 			$cols = array(
-				'first_name' => __( 'First Name',   'mobile-dj-manager' ),
-				'last_name'  => __( 'Last Name',   'mobile-dj-manager' ),
+				'first_name' => __( 'First Name', 'mobile-dj-manager' ),
+				'last_name'  => __( 'Last Name', 'mobile-dj-manager' ),
 				'email'      => __( 'Email', 'mobile-dj-manager' ),
-				'date'       => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() )
+				'date'       => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 			);
 		} else {
 
 			$cols = array();
 
-			if( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
-				$cols['name'] = __( 'Name',   'mobile-dj-manager' );
+			if ( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
+				$cols['name'] = __( 'Name', 'mobile-dj-manager' );
 			}
 
-			$cols['email'] = __( 'Email',   'mobile-dj-manager' );
+			$cols['email'] = __( 'Email', 'mobile-dj-manager' );
 
-			if( isset( $_POST['mdjm_export_option'] ) &&  'full' == $_POST['mdjm_export_option'] ) {
-				$cols['events'] = sprintf( __( 'Total %s',   'mobile-dj-manager' ), mdjm_get_label_plural() );
-				$cols['amount']    = __( 'Total Value', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')';
-			}
-
+			if ( isset( $_POST['mdjm_export_option'] ) && 'full' == $_POST['mdjm_export_option'] ) {
+				$cols['events'] = sprintf( __( 'Total %s', 'mobile-dj-manager' ), mdjm_get_label_plural() );
+				$cols['amount'] = __( 'Total Value', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')';
+			}       
 		}
 
 		return $cols;
@@ -91,10 +91,10 @@ class MDJM_Clients_Export extends MDJM_Export {
 	/**
 	 * Get the Export Data
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @global	obj		$wpdb	Used to query the database using the WordPress Database API
-	 * @return	arr		$data	The data for the CSV file
+	 * @access  public
+	 * @since   1.4
+	 * @global  obj     $wpdb   Used to query the database using the WordPress Database API
+	 * @return  arr     $data   The data for the CSV file
 	 */
 	public function get_data() {
 		global $wpdb;
@@ -108,24 +108,24 @@ class MDJM_Clients_Export extends MDJM_Export {
 
 		foreach ( $clients as $client ) {
 
-			if( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
-				$data[$i]['name'] = $client->name;
+			if ( isset( $_POST['mdjm_export_option'] ) && 'emails' != $_POST['mdjm_export_option'] ) {
+				$data[ $i ]['name'] = $client->name;
 			}
 
-			$data[$i]['email'] = $client->email;
+			$data[ $i ]['email'] = $client->email;
 
-			if( isset( $_POST['mdjm_export_option'] ) && 'full' == $_POST['mdjm_export_option'] )	{
-				$amount = 0;
-				$events = mdjm_get_client_events( $client->ID );
-				$data[$i]['events'] = $events ? count( $events ) : 0;
+			if ( isset( $_POST['mdjm_export_option'] ) && 'full' == $_POST['mdjm_export_option'] ) {
+				$amount               = 0;
+				$events               = mdjm_get_client_events( $client->ID );
+				$data[ $i ]['events'] = $events ? count( $events ) : 0;
 
-				if ( $events )	{
-					foreach ( $events as $event )	{
+				if ( $events ) {
+					foreach ( $events as $event ) {
 						$amount += mdjm_get_event_price( $event->ID );
 					}
 				}
 
-				$data[$i]['amount'] = mdjm_format_amount( $amount );
+				$data[ $i ]['amount'] = mdjm_format_amount( $amount );
 
 			}
 			$i++;

@@ -2,9 +2,9 @@
 /**
  * This template is used to generate the page for the shortcode [mdjm-profile] and is used by clients editing their profile.
  *
- * @version			1.0
- * @author			Mike Howard
- * @since			1.5
+ * @version         1.0
+ * @author          Mike Howard
+ * @since           1.5
  *
  * Do not customise this file!
  * If you wish to make changes, copy this file to your theme directory /theme/mdjm-templates/playlist/playlist-guest.php
@@ -15,7 +15,8 @@ if ( ! is_user_logged_in() ) : ?>
 	<?php echo mdjm_display_notice( 'login_profile' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-<?php else :
+	<?php 
+else :
 
     $client_id     = get_current_user_id();
     $client        = new MDJM_Client( $client_id );
@@ -26,7 +27,7 @@ if ( ! is_user_logged_in() ) : ?>
 
     $client_fields = $client->get_profile_fields();
 
-?>
+	?>
     <div id="mdjm_client_profile_wrap">
         <?php do_action( 'mdjm_print_notices' ); ?>
         <div id="mdjm_client_profile_form_wrap" class="mdjm_clearfix">
@@ -49,15 +50,19 @@ if ( ! is_user_logged_in() ) : ?>
 
                             <div id="mdjm-client-profile-input-fields">
 
-                                <?php foreach( $client->get_profile_fields() as $field ) : ?>
-                                    <?php if ( mdjm_display_client_field( $field ) ) :
+                                <?php foreach ( $client->get_profile_fields() as $field ) : ?>
+                                    <?php 
+                                    if ( mdjm_display_client_field( $field ) ) :
                                         $id    = esc_attr( $field['id'] );
                                         $label = esc_attr( $field['label'] );
                                         ?>
 
                                         <p class="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>_field">
                                             <label for="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
-                                                <?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php if ( ! empty( $field['required'] ) ) : ?><span class="mdjm-required-indicator">*</span><?php endif; ?>
+                                                <?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php 
+                                                if ( ! empty( $field['required'] ) ) :
+													?>
+                                                    <span class="mdjm-required-indicator">*</span><?php endif; ?>
                                             </label>
 
                                             <?php mdjm_display_client_input_field( $field, $client ); ?>

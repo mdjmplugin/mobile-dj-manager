@@ -10,16 +10,17 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Display the addons page.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_extensions_page()	{
+function mdjm_extensions_page() {
 	setlocale( LC_MONETARY, get_locale() );
 	$extensions     = mdjm_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
@@ -28,20 +29,20 @@ function mdjm_extensions_page()	{
 		'utm_source'   => 'plugin-addons-page',
 		'utm_medium'   => 'plugin',
 		'utm_campaign' => 'MDJM_Addons_Page',
-		'utm_content'  => 'All Addons'
+		'utm_content'  => 'All Addons',
 	), 'https://mdjm.co.uk/add-ons/' ) );
 
 	$newsletter_url = esc_url( add_query_arg( array(
 		'utm_source'   => 'plugin-addons-page',
 		'utm_medium'   => 'newsletter',
 		'utm_campaign' => 'MDJM_Addons_Page',
-		'utm_content'  => 'newsletter_signup'
+		'utm_content'  => 'newsletter_signup',
 	), 'https://mdjm.co.uk/#newsletter-signup' ) );
 
 	$slug_corrections = array(
 		'ratings-and-satisfaction' => 'ratings-satisfaction',
 		'easy-digital-downloads'   => 'edd',
-		'pdf-export'               => 'to-pdf'
+		'pdf-export'               => 'to-pdf',
 	);
 
 	?>
@@ -52,34 +53,35 @@ function mdjm_extensions_page()	{
 		<div>
         	<p><a href="<?php echo esc_url( $extensions_url ); ?>" class="button-primary" target="_blank"><?php esc_html_e( 'Browse All Extensions', 'mobile-dj-manager' ); ?></a></p>
 			<p><?php esc_html_e( 'These extensions', 'mobile-dj-manager' ); ?> <em><strong><?php esc_html_e( 'add even more functionality', 'mobile-dj-manager' ); ?></em></strong> <?php esc_html_e( 'to your MDJM Event Management solution.', 'mobile-dj-manager' ); ?></p>
-            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 15%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'mobile-dj-manager' ), $newsletter_url, '%', $extensions_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%1$s" target="_blank">sign up to our newsletter</a> and receive a 15%2$s discount off your next purchase from our <a href="%3$s" target="_blank">plugin store</a>.', 'mobile-dj-manager' ), $newsletter_url, '%', $extensions_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 		</div>
 
 		<div class="mdjm-extension-wrapper grid3">
-			<?php foreach ( $extensions as $key => $extension ) :
+			<?php
+            foreach ( $extensions as $key => $extension ) :
 				$the_excerpt = '';
 				$slug        = $extension->info->slug;
-				$link        = 'https://mdjm.co.uk/downloads/' . $slug .'/';
+				$link        = 'https://mdjm.co.uk/downloads/' . $slug . '/';
 				$price       = false;
 				$link        = esc_url( add_query_arg( array(
 					'utm_source'   => 'plugin-addons-page',
 					'utm_medium'   => 'plugin',
 					'utm_campaign' => 'MDJM_Addons_Page',
-					'utm_content'  => $extension->info->title
+					'utm_content'  => $extension->info->title,
 				), $link ) );
 
-				if ( 'payment-gateways' == $slug )	{
+				if ( 'payment-gateways' == $slug ) {
 					continue;
 				}
 
-				if ( array_key_exists( $slug, $slug_corrections ) )	{
+				if ( array_key_exists( $slug, $slug_corrections ) ) {
 					$slug = $slug_corrections[ $slug ];
 				}
 
 				if ( isset( $extension->pricing->amount ) ) {
-					if ( '0.00' == $extension->pricing->amount )	{
+					if ( '0.00' == $extension->pricing->amount ) {
 						$price = false;
-					} else	{
+					} else {
 						$price = '&pound;' . number_format( $extension->pricing->amount, 2 );
 					}
 				} else {
@@ -93,9 +95,10 @@ function mdjm_extensions_page()	{
 				}
 
 				$the_excerpt   = strip_shortcodes( wp_strip_all_tags( wp_unslash( $the_excerpt ), $tags ) );
-				$the_excerpt   = preg_split( '/\b/', $the_excerpt, $length * 2+1 );
+				$the_excerpt   = preg_split( '/\b/', $the_excerpt, $length * 2 + 1 );
 				$excerpt_waste = array_pop( $the_excerpt );
-				$the_excerpt   = implode( $the_excerpt ); ?>
+				$the_excerpt   = implode( $the_excerpt );
+                ?>
 
                 <article class="col">
                     <div class="mdjm-extension-item">
@@ -108,13 +111,13 @@ function mdjm_extensions_page()	{
                             	<p><?php echo esc_html( $the_excerpt ); ?></p>
                             </div>
                             <div class="mdjm-extension-buy-now">
-                                <?php if ( ! is_plugin_active( 'mdjm-' . $slug . '/' . 'mdjm-' . $slug . '.php' ) ) : ?>
+                                <?php if ( ! is_plugin_active( 'mdjm-' . $slug . '/mdjm-' . $slug . '.php' ) ) : ?>
                                 	<?php if ( ! $price ) : ?>
                                     	<?php
 										$link = add_query_arg( array(
 											's'    => 'mdjm-to-pdf',
 											'tab'  => 'search',
-											'type' => 'term'
+											'type' => 'term',
 										), admin_url( 'plugin-install.php' ) );
 										?>
                                     	<a href="<?php echo esc_url( $link ); ?>" class="button-primary"><?php esc_html_e( 'Download Now for Free', 'mobile-dj-manager' ); ?></a>
@@ -138,16 +141,19 @@ function mdjm_extensions_page()	{
 /**
  * Retrieve the published extensions from mobile-dj-manager.com and store within transient.
  *
- * @since	1.0.3
- * @return	void
+ * @since   1.0.3
+ * @return  void
  */
-function mdjm_get_extensions()	{
+function mdjm_get_extensions() {
 	$extensions = get_transient( '_mdjm_extensions_feed' );
 
-	if ( false === $extensions || doing_action( 'mdjm_daily_scheduled_events' ) )	{
+	if ( false === $extensions || doing_action( 'mdjm_daily_scheduled_events' ) ) {
 		$route    = esc_url( 'https://mdjm.co.uk/edd-api/products/' );
 		$number   = 20;
-		$endpoint = add_query_arg( array( 'number' => $number, 'orderby' => 'rand' ), $route );
+		$endpoint = add_query_arg( array(
+            'number'  => $number,
+            'orderby' => 'rand',
+		), $route );
 		$response = wp_remote_get( $endpoint );
 
 		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {

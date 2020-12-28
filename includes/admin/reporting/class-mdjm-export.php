@@ -9,39 +9,40 @@
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4
- * @taken from	Easy Digital Downloads
+ * @taken from  Easy Digital Downloads
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Export Class
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions
-	 * @var		str
-	 * @since	1.4
+	 * @var     str
+	 * @since   1.4
 	 */
 	public $export_type = 'default';
 
 	/**
 	 * Event labels.
-	 * @var		str
-	 * @since	1.4
+	 * @var     str
+	 * @since   1.4
 	 */
 	public $event_label_single;
 	public $event_label_plural;
 
 	/**
 	 * Constructor.
-	 * @since	1.4
+	 * @since   1.4
 	 */
-	public function __construct()	{
+	public function __construct() {
 		$this->event_label_single = mdjm_get_label_singular();
 		$this->event_label_plural = mdjm_get_label_plural();
 	} // __construct
@@ -49,9 +50,9 @@ class MDJM_Export {
 	/**
 	 * Can we export?
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	bool	Whether we can export or not
+	 * @access  public
+	 * @since   1.4
+	 * @return  bool    Whether we can export or not
 	 */
 	public function can_export() {
 		return (bool) apply_filters( 'mdjm_export_capability', mdjm_employee_can( 'run_reports' ) );
@@ -60,9 +61,9 @@ class MDJM_Export {
 	/**
 	 * Set the export headers
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function headers() {
 		ignore_user_abort( true );
@@ -72,20 +73,20 @@ class MDJM_Export {
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=mdjm-export-' . $this->export_type . '-' . date( 'd-m-Y' ) . '.csv' );
-		header( "Expires: 0" );
+		header( 'Expires: 0' );
 	} // headers
 
 	/**
 	 * Set the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$cols	All the columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $cols   All the columns
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'   => __( 'ID',   'mobile-dj-manager' ),
-			'date' => __( 'Date', 'mobile-dj-manager' )
+			'id'   => __( 'ID', 'mobile-dj-manager' ),
+			'date' => __( 'Date', 'mobile-dj-manager' ),
 		);
 		return $cols;
 	} // csv_cols
@@ -93,9 +94,9 @@ class MDJM_Export {
 	/**
 	 * Retrieve the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$cols	Array of the columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $cols   Array of the columns
 	 */
 	public function get_csv_cols() {
 		$cols = $this->csv_cols();
@@ -105,15 +106,15 @@ class MDJM_Export {
 	/**
 	 * Output the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @uses	MDJM_Export::get_csv_cols()
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @uses    MDJM_Export::get_csv_cols()
+	 * @return  void
 	 */
 	public function csv_cols_out() {
 		$cols = $this->get_csv_cols();
-		$i = 1;
-		foreach( $cols as $col_id => $column ) {
+		$i    = 1;
+		foreach ( $cols as $col_id => $column ) {
 			echo '"' . esc_html( addslashes( $column ) ) . '"';
 			echo $i == count( $cols ) ? '' : ',';
 			$i++;
@@ -124,21 +125,21 @@ class MDJM_Export {
 	/**
 	 * Get the data being exported
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$data	Data for Export
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $data   Data for Export
 	 */
 	public function get_data() {
 		// Just a sample data array
 		$data = array(
 			0 => array(
 				'id'   => '',
-				'data' => date( 'F j, Y' )
+				'data' => date( 'F j, Y' ),
 			),
 			1 => array(
 				'id'   => '',
-				'data' => date( 'F j, Y' )
-			)
+				'data' => date( 'F j, Y' ),
+			),
 		);
 
 		$data = apply_filters( 'mdjm_export_get_data', $data );
@@ -150,9 +151,9 @@ class MDJM_Export {
 	/**
 	 * Output the CSV rows
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function csv_rows_out() {
 		$data = $this->get_data();
@@ -177,17 +178,18 @@ class MDJM_Export {
 	/**
 	 * Perform the export
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @uses	MDJM_Export::can_export()
-	 * @uses	MDJM_Export::headers()
-	 * @uses	MDJM_Export::csv_cols_out()
-	 * @uses	MDJM_Export::csv_rows_out()
+	 * @access  public
+	 * @since   1.4
+	 * @uses    MDJM_Export::can_export()
+	 * @uses    MDJM_Export::headers()
+	 * @uses    MDJM_Export::csv_cols_out()
+	 * @uses    MDJM_Export::csv_rows_out()
 	 * @return void
 	 */
 	public function export() {
-		if ( ! $this->can_export() )
+		if ( ! $this->can_export() ) {
 			wp_die( esc_html__( 'You do not have permission to export data.', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+        }
 
 		// Set headers
 		$this->headers();

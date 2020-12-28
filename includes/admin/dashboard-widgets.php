@@ -3,20 +3,21 @@
  * WordPress Dashboard Widgets
  *
  * @package     MDJM
- * @subpackage	Admin/Widgets
+ * @subpackage  Admin/Widgets
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Registers the dashboard widgets.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @return
  */
@@ -30,7 +31,7 @@ add_action( 'wp_dashboard_setup', 'mdjm_add_wp_dashboard_widgets' );
 /**
  * Generate and display the content for the Events Overview dashboard widget.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @return
  */
@@ -38,44 +39,59 @@ function mdjm_widget_events_overview() {
 
 	global $current_user;
 
-	if ( mdjm_employee_can( 'manage_mdjm' ) )	{
+	if ( mdjm_employee_can( 'manage_mdjm' ) ) {
 
 		$stats = new MDJM_Stats();
 
-		$enquiry_counts    = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
-		$conversion_counts = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
+		$enquiry_counts    = array(
+			'month'     => 0,
+			'this_year' => 0,
+			'last_year' => 0,
+		);
+		$conversion_counts = array(
+			'month'     => 0,
+			'this_year' => 0,
+			'last_year' => 0,
+		);
 		$enquiry_periods   = array(
 			'month'     => date( 'Y-m-01' ),
 			'this_year' => date( 'Y-01-01' ),
-			'last_year' => date( 'Y-01-01', strtotime( '-1 year' ) )
+			'last_year' => date( 'Y-01-01', strtotime( '-1 year' ) ),
 		);
 
-		foreach ( $enquiry_periods as $period => $date )	{
+		foreach ( $enquiry_periods as $period => $date ) {
 			$current_count = mdjm_count_events( array(
 				'start-date' => $date,
-				'end-date'   => $period != 'last_year' ? date( 'Y-m-d' ) : date( 'Y-12-31', strtotime( '-1 year' ) )
+				'end-date'   => $period != 'last_year' ? date( 'Y-m-d' ) : date( 'Y-12-31', strtotime( '-1 year' ) ),
 			) );
 
-			foreach ( $current_count as $status => $count )	{
+			foreach ( $current_count as $status => $count ) {
 				$enquiry_counts[ $period ] += $count;
 
-				if ( in_array( $status, array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-cancelled' ) ) )	{
+				if ( in_array( $status, array( 'mdjm-approved', 'mdjm-contract', 'mdjm-completed', 'mdjm-cancelled' ) ) ) {
 					$conversion_counts[ $period ] += $count;
 				}
 			}
 		}
 
-		$completed_counts = array( 'month' => 0, 'this_year' => 0, 'last_year' => 0 );
-		$event_periods = array(
+		$completed_counts = array(
+			'month'     => 0,
+			'this_year' => 0,
+			'last_year' => 0,
+		);
+		$event_periods    = array(
 			'month'     => array( date( 'Y-m-01' ), date( 'Y-m-d' ) ),
 			'this_year' => array( date( 'Y-01-01' ), date( 'Y-m-d' ) ),
-			'last_year' => array( date( 'Y-m-01', strtotime( '-1 year' ) ), date( 'Y-12-31', strtotime( '-1 year' ) ) )
+			'last_year' => array( date( 'Y-m-01', strtotime( '-1 year' ) ), date( 'Y-12-31', strtotime( '-1 year' ) ) ),
 		);
 
-		foreach ( $event_periods as $period => $date )	{
-			$current_count = mdjm_count_events( array( 'date' => $date, 'status' => 'mdjm-completed' ) );
+		foreach ( $event_periods as $period => $date ) {
+			$current_count = mdjm_count_events( array(
+                'date'   => $date,
+                'status' => 'mdjm-completed',
+			) );
 
-			foreach ( $current_count as $status => $count )	{
+			foreach ( $current_count as $status => $count ) {
 				$completed_counts[ $period ] += $count;
 			}
 		}
@@ -120,7 +136,7 @@ function mdjm_widget_events_overview() {
 						<th><?php printf( esc_html__( '%s Completed', 'mobile-dj-manager' ), esc_html( mdjm_get_label_plural() ) ); ?></th>
 						<td><?php echo esc_html( $completed_counts['month'] ); ?></td>
 						<td><?php echo esc_html( $completed_counts['this_year'] ); ?></td>
-						<td><?php echo esc_html( $completed_counts['last_year'] );?></td>
+						<td><?php echo esc_html( $completed_counts['last_year'] ); ?></td>
 					</tr>
 					<tr>
 						<th><?php esc_html_e( 'Income', 'mobile-dj-manager' ); ?></th>
@@ -144,26 +160,30 @@ function mdjm_widget_events_overview() {
 			</table>
 
 			<p>
-				<?php printf(
-					__( '<a href="%s">Create %s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				<?php 
+                printf(
+					__( '<a href="%1$s">Create %2$s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					admin_url( 'post-new.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					mdjm_get_label_singular() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                mdjm_get_label_singular() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php printf(
-					__( '<a href="%s">Manage %s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				<?php 
+                printf(
+					__( '<a href="%1$s">Manage %2$s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					admin_url( 'edit.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					mdjm_get_label_plural() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                mdjm_get_label_plural() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php printf(
+				<?php 
+                printf(
 					__( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					admin_url( 'edit.php?post_type=mdjm-transaction' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                admin_url( 'edit.php?post_type=mdjm-transaction' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php printf(
+				<?php 
+                printf(
 					__( '<a href="%s">Settings</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					admin_url( 'admin.php?page=mdjm-settings' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                admin_url( 'admin.php?page=mdjm-settings' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
             </p>
 
@@ -171,9 +191,9 @@ function mdjm_widget_events_overview() {
 
 			<?php if ( ! empty( $sources ) ) : ?>
 
-				<?php foreach( $sources as $count => $source ) : ?>
+				<?php foreach ( $sources as $count => $source ) : ?>
 					<p>
-					 <?php printf( __( '<p>Most enquiries have been received via <strong>%s (%d)</strong> so far this month.', 'mobile-dj-manager' ), esc_html( $source ), (int) $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					 <?php printf( __( '<p>Most enquiries have been received via <strong>%1$s (%2$d)</strong> so far this month.', 'mobile-dj-manager' ), esc_html( $source ), (int) $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 				<?php endforeach; ?>
 
@@ -193,16 +213,16 @@ function mdjm_widget_events_overview() {
 /**
  * Add event count to At a glance widget
  *
- * @since	1.4
- * @return	void
+ * @since   1.4
+ * @return  void
  */
 function mdjm_dashboard_at_a_glance_widget( $items ) {
 	$num_posts = mdjm_count_events();
 	$count     = 0;
 	$statuses  = mdjm_all_event_status();
 
-	foreach( $statuses as $status => $label )	{
-		if ( ! empty( $num_posts->$status ) )	{
+	foreach ( $statuses as $status => $label ) {
+		if ( ! empty( $num_posts->$status ) ) {
 			$count += $num_posts->$status;
 		}
 	}
