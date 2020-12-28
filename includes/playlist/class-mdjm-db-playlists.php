@@ -208,7 +208,8 @@ class MDJM_DB_Playlists extends MDJM_DB {
 			return false;
 		}
 
-		if ( ! $entry = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->table_name WHERE id = %d LIMIT 1", $id ) ) ) {
+		$entry = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->table_name WHERE id = %d LIMIT 1", $id ) );
+		if ( ! $entry ) {
 			return false;
 		}
 
@@ -329,7 +330,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 					$end    = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
-				}           
+				}
 			} else {
 
 				$year  = date( 'Y', strtotime( $args['date'] ) );
@@ -337,7 +338,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 				$day   = date( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
-			}       
+			}
 		}
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
@@ -468,7 +469,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 					$end    = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
-				}           
+				}
 			} else {
 
 				$year  = date( 'Y', strtotime( $args['date'] ) );
@@ -476,7 +477,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 				$day   = date( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
-			}       
+			}
 		}
 
 		$cache_key = md5( 'mdjm_playlist_count' . serialize( $args ) );

@@ -1012,10 +1012,10 @@ function mdjm_get_employees_event_wage( $event_id, $employee_id = '' ) {
 
 					if ( ! empty( $employee_data['wage'] ) ) {
 						$wage = $employee_data['wage'];
-					}               
-				}           
-			}       
-		}   
+					}
+				}
+			}
+		}
 	}
 
 	return $wage;
@@ -1048,14 +1048,14 @@ function mdjm_event_employees_paid( $event_id, $employee_id = '' ) {
 
 		if ( $employees[ $employee_id ]['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employees[ $employee_id ]['txn_id'], '_mdjm_txn_status', true ) ) {
 			return false;
-		}   
+		}
 	} else {
 
 		foreach ( $employees as $employee ) {
 			if ( $employee['payment_status'] != 'paid' && 'Completed' != get_post_meta( $employee['txn_id'], '_mdjm_txn_status', true ) ) {
 				return false;
 			}
-		}   
+		}
 	}
 
 	return true;
@@ -1094,9 +1094,9 @@ function mdjm_get_employees_event_payment_status( $event_id, $employee_id = '' )
 
 					$payment_status = $employee_data['payment_status'];
 
-				}           
-			}       
-		}   
+				}
+			}
+		}
 	}
 
 	return $payment_status;
@@ -1161,7 +1161,7 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' ) {
 			MDJM()->debug->log_it( sprintf( 'Unable to pay %s for Event %d', mdjm_get_employee_display_name( $employee_id ), $event_id ) );
 
 			$return = false;
-		}   
+		}
 	} else {
 
 		$payment_data = get_post_meta( $event_id, '_mdjm_event_employees_data', true );
@@ -1208,8 +1208,8 @@ function mdjm_set_employee_paid( $employee_id, $event_id, $txn_id = '' ) {
 
 				$return = false;
 
-			}       
-		}   
+			}
+		}
 	}
 
 	if ( ! empty( $return ) ) {
@@ -1323,7 +1323,7 @@ function mdjm_manage_primary_employee_payment_status( $event_id, $old_meta, $new
 
 		if ( $payment_amount != $mdjm_txn->price ) {
 			update_post_meta( $mdjm_txn->ID, '_mdjm_txn_total', $payment_amount );
-		}   
+		}
 	}
 
 } // mdjm_manage_primary_employee_payment_status

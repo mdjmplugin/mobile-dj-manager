@@ -61,7 +61,7 @@ function mdjm_dismiss_notice( $notice ) {
 	global $current_user;
 
 	$dismissed_notices = (array) mdjm_dismissed_notices();
-	$new = $dismissed_notices;
+	$new               = $dismissed_notices;
 
 	if ( ! array_key_exists( $notice, $dismissed_notices ) ) {
 		$new[ $notice ] = 'true';

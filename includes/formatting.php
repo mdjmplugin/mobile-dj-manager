@@ -27,16 +27,20 @@ function mdjm_sanitize_amount( $amount ) {
 	$thousands_sep = mdjm_get_option( 'thousands_separator', ',' );
 	$decimal_sep   = mdjm_get_option( 'decimal', '.' );
 
+	$found_decimal_sep = strpos( $amount, $decimal_sep );
+	$found_thousands_sep = strpos( $amount, $thousands_sep );
+	$found_default_sep = strpos( $amount, '.' );
+
 	// Sanitize the amount
-	if ( $decimal_sep == ',' && false !== ( $found = strpos( $amount, $decimal_sep ) ) ) {
-		if ( ( $thousands_sep == '.' || $thousands_sep == ' ' ) && false !== ( $found = strpos( $amount, $thousands_sep ) ) ) {
+	if ( $decimal_sep == ',' && false !== $found_decimal_sep) {
+		if ( ( $thousands_sep == '.' || $thousands_sep == ' ' ) && false !== $found_thousands_sep ) {
 			$amount = str_replace( $thousands_sep, '', $amount );
-		} elseif ( empty( $thousands_sep ) && false !== ( $found = strpos( $amount, '.' ) ) ) {
+		} elseif ( empty( $thousands_sep ) && false !== $found_default_sep ) {
 			$amount = str_replace( '.', '', $amount );
 		}
 
 		$amount = str_replace( $decimal_sep, '.', $amount );
-	} elseif ( $thousands_sep == ',' && false !== ( $found = strpos( $amount, $thousands_sep ) ) ) {
+	} elseif ( $thousands_sep == ',' && false !== $found_thousands_sep ) {
 		$amount = str_replace( $thousands_sep, '', $amount );
 	}
 
@@ -69,20 +73,23 @@ function mdjm_format_amount( $amount, $decimals = true, $thousands = true ) {
 	$thousands_sep = mdjm_get_option( 'thousands_seperator', ',' );
 	$decimal_sep   = mdjm_get_option( 'decimal', '.' );
 
+	$found_decimal_sep = strpos( $amount, $decimal_sep );
+	$found_thousands_sep = strpos( $amount, $thousands_sep );
+
 	// Format the amount
-	if ( $decimal_sep == ',' && false !== ( $sep_found = strpos( $amount, $decimal_sep ) ) ) {
-		$whole  = substr( $amount, 0, $sep_found );
-		$part   = substr( $amount, $sep_found + 1, ( strlen( $amount ) - 1 ) );
+	if ( $decimal_sep == ',' && false !== $found_decimal_sep ) {
+		$whole  = substr( $amount, 0, $found_decimal_sep );
+		$part   = substr( $amount, $found_decimal_sep + 1, ( strlen( $amount ) - 1 ) );
 		$amount = $whole . '.' . $part;
 	}
 
 	// Strip , from the amount (if set as the thousands separator)
-	if ( $thousands_sep == ',' && false !== ( $found = strpos( $amount, $thousands_sep ) ) ) {
+	if ( $thousands_sep == ',' && false !== $found_thousands_sep ) {
 		$amount = str_replace( ',', '', $amount );
 	}
 
 	// Strip ' ' from the amount (if set as the thousands separator)
-	if ( $thousands_sep == ' ' && false !== ( $found = strpos( $amount, $thousands_sep ) ) ) {
+	if ( $thousands_sep == ' ' && false !== $found_thousands_sep ) {
 		$amount = str_replace( ' ', '', $amount );
 	}
 

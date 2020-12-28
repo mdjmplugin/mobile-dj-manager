@@ -249,7 +249,7 @@ class MDJM_Employee_Table extends WP_List_Table {
 			__( 'Total: %s', 'mobile-dj-manager' ),
 			! empty( $total_events ) ? '<a href="' . esc_url( admin_url( 'edit.php?s&post_type=mdjm-event&post_status=all' .
 					'&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
-					'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) ) . '">' . esc_html( $total_events ) . '</a>' :
+            '&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1' ) ) . '">' . esc_html( $total_events ) . '</a>' :
 				'0'
 		);
 	} // column_events

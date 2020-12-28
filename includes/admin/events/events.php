@@ -933,7 +933,8 @@ function mdjm_hide_inactive_events( $query )	{
 	$inactive_statuses = mdjm_inactive_event_status_keys();
 
 	foreach( $inactive_statuses as $inactive_status )	{
-		if ( ( $key = array_search( $inactive_status, $active_statuses ) ) !== false )	{
+		$key = array_search( $inactive_status, $active_statuses );
+		if ( $key !== false )	{
 			unset( $active_statuses[ $key ] );
 		}
 	}
@@ -1325,14 +1326,14 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		if( $_POST['venue_id'] != 'client' )	{
 
 			$event_data['_mdjm_event_venue_name']     = ucwords( sanitize_text_field( wp_unslash( $_POST['venue_name'] ) ) );
-			$event_data['_mdjm_event_venue_contact']  = isset( $_POST['venue_contact'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_contact'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_phone']    = isset( $_POST['venue_phone'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_phone'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_contact']  = isset( $_POST['venue_contact'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_contact'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_phone']    = isset( $_POST['venue_phone'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_phone'] ) ) ) : '';
 			$event_data['_mdjm_event_venue_email']    = isset( $_POST['venue_email'] ) ? strtolower( sanitize_email( wp_unslash( $_POST['venue_email'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_address1'] = isset( $_POST['venue_address1'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_address1'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_address2'] = isset( $_POST['venue_address2'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_address2'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_town']     = isset( $_POST['venue_town'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_town'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_county']   = isset( $_POST['venue_county'] ) ? ucwords( sanitize_text_field( wp_unslash(  $_POST['venue_county'] ) ) ) : '';
-			$event_data['_mdjm_event_venue_postcode'] = isset( $_POST['venue_postcode'] ) ? strtoupper( sanitize_text_field( wp_unslash(  $_POST['venue_postcode'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_address1'] = isset( $_POST['venue_address1'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_address1'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_address2'] = isset( $_POST['venue_address2'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_address2'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_town']     = isset( $_POST['venue_town'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_town'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_county']   = isset( $_POST['venue_county'] ) ? ucwords( sanitize_text_field( wp_unslash( $_POST['venue_county'] ) ) ) : '';
+			$event_data['_mdjm_event_venue_postcode'] = isset( $_POST['venue_postcode'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['venue_postcode'] ) ) ) : '';
 
 		} else	{ // Using clients address
 
@@ -1472,7 +1473,7 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 
 	// Add-Ons
 	if( mdjm_packages_enabled() )	{
-		$event_data['_mdjm_event_addons'] = ! empty( $_POST['event_addons'] ) ? array_map('sanitize_text_field', wp_unslash( $_POST['event_addons'] ) ) : '';
+		$event_data['_mdjm_event_addons'] = ! empty( $_POST['event_addons'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['event_addons'] ) ) : '';
 	}
 
 	// Assign the event type

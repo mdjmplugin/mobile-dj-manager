@@ -288,7 +288,8 @@ class MDJM_Availability_Checker {
 
 			$this->absentees[] = $absence->employee_id;
 
-            if ( false !== $key = array_search( $absence->employee_id, $this->available ) ) {
+			$key = array_search( $absence->employee_id, $this->available );
+            if ( false !== $key ) {
                 unset( $this->available[ $key ] );
             }
 		}
@@ -348,7 +349,8 @@ class MDJM_Availability_Checker {
                         $this->absentees[] = $employee_id;
                     }
 
-                    if ( false !== $key = array_search( $employee_id, $this->available ) ) {
+					$key = array_search( $employee_id, $this->available );
+                    if ( false !== $key ) {
                         unset( $this->available[ $key ] );
                     }
                 }

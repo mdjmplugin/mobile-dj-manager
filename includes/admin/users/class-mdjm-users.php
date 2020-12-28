@@ -109,7 +109,7 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 		 * @return  $arr    $employees  or false if no employees for the specified roles
 		 */
 		public function get( $roles = '', $orderby = 'display_name', $order = 'ASC' ) {
-			return mdjm_get_employees( $roles, 'display_name', 'ASC');
+			return mdjm_get_employees( $roles, 'display_name', 'ASC' );
 		} // get
 
 		/**

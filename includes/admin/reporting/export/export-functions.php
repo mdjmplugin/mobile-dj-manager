@@ -51,7 +51,7 @@ function mdjm_do_ajax_export() {
 	parse_str( wp_unslash( $_POST['form'] ), $form ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 	$_REQUEST = (array) $form;
-	$form = (array) $form;
+	$form     = (array) $form;
 
 	if ( ! isset( $_REQUEST['mdjm_ajax_export'] ) || ! wp_verify_nonce( $_REQUEST['mdjm_ajax_export'], 'mdjm_ajax_export' ) ) {
 		die( '-2' );

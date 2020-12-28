@@ -203,7 +203,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 
 			if ( $value < 1 ) {
 				return false;
-			}       
+			}
 		}
 
 		if ( ! $value ) {
@@ -232,7 +232,9 @@ class MDJM_DB_Availability extends MDJM_DB {
 				LIMIT 1
 			", $value
 		);
-		if ( ! $entry = $wpdb->get_row( $query ) ) {
+
+		$entry = $wpdb->get_row( $query );
+		if ( ! $entry ) {
 			return false;
 		}
 
@@ -326,7 +328,7 @@ class MDJM_DB_Availability extends MDJM_DB {
                     $where .= " AND `end` >= '{$end}'";
                 } else {
                     $where .= " AND ( `start` BETWEEN '{$start}' AND '{$end}' OR `end` BETWEEN '{$start}' AND '{$end}')";
-                }           
+                }
 			} else {
 
 				$year  = date( 'Y', strtotime( $args['end'] ) );
@@ -334,7 +336,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 				$day   = date( 'd', strtotime( $args['end'] ) );
 
 				$where .= " AND $year = YEAR ( start ) AND $month = MONTH ( start ) AND $day = DAY ( start )";
-			}       
+			}
 		} elseif ( ! empty( $args['end'] ) ) { // Entries ending on a specific date
 
 			$year  = date( 'Y', strtotime( $args['end'] ) );

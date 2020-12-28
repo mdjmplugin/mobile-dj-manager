@@ -237,6 +237,7 @@ class MDJM_API {
 
 		$endpoints = $this->define_endpoints();
 		$endpoint  = trailingslashit( str_replace( '/' . $this->namespace, '', $this->request->get_route() ) );
+		$user = $this->get_user();
 
 		if ( array_key_exists( 'require_auth', $endpoints[ $endpoint ] ) && false === $endpoints[ $endpoint ]['require_auth'] ) {
 
@@ -246,7 +247,7 @@ class MDJM_API {
 
 			$this->missing_auth();
 
-		} elseif ( ! ( $user = $this->get_user() ) ) {
+		} elseif ( ! $user ) {
 
 			$this->invalid_key();
 

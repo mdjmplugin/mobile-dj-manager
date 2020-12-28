@@ -349,5 +349,5 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 	echo $travel_data_row; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_show_travel_data_row
-add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row', 10, 2         );
+add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row', 10, 2 );
 add_action( 'mdjm_venue_details_travel_data', 'mdjm_show_travel_data_row', 10, 2 );

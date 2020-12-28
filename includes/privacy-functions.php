@@ -148,7 +148,7 @@ function mdjm_mask_domain( $domain = '' ) {
 
 		$mask_parts = $possible_cctld ? array_slice( $domain_parts, 0, $part_count - 2 ) : array_slice( $domain_parts, 0, $part_count - 1 );
 
-		$i = 0;
+		$i                = 0;
 		$total_mask_parts = count( $mask_parts );
 		while ( $i < $total_mask_parts ) {
 			$domain_parts[ $i ] = kbs_mask_string( $domain_parts[ $i ] );

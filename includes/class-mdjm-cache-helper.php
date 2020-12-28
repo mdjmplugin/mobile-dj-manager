@@ -34,7 +34,10 @@ class MDJM_Cache_Helper {
 	private static function get_page_uris( $mdjm_page ) {
 		$mdjm_page_uris = array();
 
-		if ( ( $page_id = mdjm_get_page_id( $mdjm_page ) ) && $page_id > 0 && ( $page = get_post( $page_id ) ) ) {
+		$page_id = mdjm_get_page_id( $mdjm_page );
+
+		$page = get_post( $page_id );
+		if ( $page_id && $page_id > 0 && $page ) {
 			$mdjm_page_uris[] = 'p=' . $page_id;
 			$mdjm_page_uris[] = '/' . $page->post_name . '/';
 		}
@@ -51,7 +54,9 @@ class MDJM_Cache_Helper {
 			return;
 		}
 
-		if ( false === ( $mdjm_page_uris = get_transient( 'mdjm_cache_excluded_uris' ) ) ) {
+		$mdjm_page_uris = get_transient( 'mdjm_cache_excluded_uris' );
+
+		if ( false === $mdjm_page_uris ) {
 			$mdjm_page_uris = array_filter( array_merge(
                 self::get_page_uris( 'app_home' ),
                 self::get_page_uris( 'contact' ),

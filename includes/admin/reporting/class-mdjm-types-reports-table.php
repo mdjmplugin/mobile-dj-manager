@@ -183,7 +183,7 @@ class MDJM_Types_Reports_Table extends WP_List_Table {
 					foreach ( $events as $event ) {
 						$event_count++;
 
-						$total_profit = $mdjm_event->get_total_profit();
+						$total_profit             = $mdjm_event->get_total_profit();
 						$mdjm_event               = new MDJM_Event( $event );
 						$current_average_earnings = $total_profit;
 						$current_earnings         = $total_profit;

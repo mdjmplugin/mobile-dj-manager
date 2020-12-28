@@ -1905,14 +1905,14 @@ function mdjm_multicheck_callback( $args ) {
 
 	if ( ! empty( $args['options'] ) ) {
 		foreach ( $args['options'] as $key => $option ) {
-			if (isset($mdjm_options[$args['id']][$key])) {
+			if ( isset( $mdjm_options[$args['id']][$key] ) ) {
 				$enabled = $option;
 			} else {
 				$enabled = null;
 			}
 
-			echo '<input name="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" id="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" type="checkbox" value="' . esc_attr($option) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
-			echo '<label for="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']">' . esc_html($option) . '</label><br/>';
+			echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked( $option, $enabled, false ) . '/>&nbsp;';
+			echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
 		}
 
 		echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
@@ -1935,15 +1935,15 @@ function mdjm_radio_callback( $args ) {
 	foreach ( $args['options'] as $key => $option ) {
 		$checked = false;
 
-		if (isset($mdjm_options[$args['id']]) && $mdjm_options[$args['id']] == $key) {
+		if ( isset( $mdjm_options[$args['id']] ) && $mdjm_options[$args['id']] == $key ) {
 			$checked = true;
 		}
-		elseif (isset($args['std']) && $args['std'] == $key && !isset($mdjm_options[$args['id']])) {
+		elseif ( isset( $args['std'] ) && $args['std'] == $key && ! isset( $mdjm_options[$args['id']] ) ) {
 			$checked = true;
 		}
 
-		echo '<input name="mdjm_settings[' . esc_attr($args['id']) . ']"" id="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']" type="radio" value="' . esc_attr($key) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-		echo '<label for="mdjm_settings[' . esc_attr($args['id']) . '][' . esc_attr($key) . ']">' . esc_html($option) . '</label><br/>';
+		echo '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . ']"" id="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']" type="radio" value="' . esc_attr( $key ) . '" ' . checked( true, $checked, false ) . '/>&nbsp;';
+		echo '<label for="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . esc_attr( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
 	}
 
 	echo '<p class="description">' . esc_html( $args['desc'] ) . '</p>';
@@ -1975,7 +1975,7 @@ function mdjm_gateways_callback( $args )	{
 			$enabled = null;
 		}
 
-		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked('1', $enabled, false) . '/>&nbsp;';
+		$html .= '<input name="mdjm_settings[' . esc_attr( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" id="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']" type="checkbox" value="1" ' . checked( '1', $enabled, false ) . '/>&nbsp;';
 		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . '][' . mdjm_sanitize_key( $key ) . ']">' . esc_html( $option['admin_label'] ) . '</label><br/>';
 	}
 
@@ -2336,7 +2336,7 @@ function mdjm_upload_callback( $args ) {
 	if ( isset( $mdjm_options[ $args['id'] ] ) ) {
 		$value = $mdjm_options[$args['id']];
 	} else {
-		$value = isset($args['std']) ? $args['std'] : '';
+		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
@@ -2491,7 +2491,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 					default:
 						$class = 'error';
-						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager' );
+						$error = ! empty( $license->error ) ?  $license->error : __( 'unknown_error', 'mobile-dj-manager' );
 						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'mobile-dj-manager' ), $error, 'https://mdjm.co.uk/support' );
 
 						$license_status = 'license-' . $class . '-notice';

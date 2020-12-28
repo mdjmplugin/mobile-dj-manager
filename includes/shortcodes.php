@@ -655,7 +655,7 @@ function mdjm_shortcode_login( $atts ) {
 
 	extract( shortcode_atts( array(
 		'redirect' => '',
-    ), $atts, 'mdjm-login' )
+        ), $atts, 'mdjm-login' )
 	);
 
 	return mdjm_login_form( $redirect );
