@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Plugin Name: MDJM Event Management
- * Plugin URI: http://mdjm.co.uk
+ * Plugin URI: https://mdjm.co.uk
  * Description: The most efficient and versatile event management solution for WordPress.
  * Version: 1.5.8
  * Date: 23 December 2020
  * Author: DeckBooks <info@deckbooks.co.uk>
- * Author URI: http://mdjm.co.uk
+ * Author URI: https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /languages
  * License: GPL2

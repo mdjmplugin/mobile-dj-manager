@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_events_contextual_help() {
 	$screen = get_current_screen();
-		
+
 	if ( $screen->id != 'mdjm-event' ) {
 		return;
     }
@@ -31,12 +31,12 @@ function mdjm_events_contextual_help() {
 
 	$screen->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-            __( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ), 
-            esc_url( 'http://mdjm.co.uk/support/' )
+		'<p>' . sprintf(
+            __( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ),
+            esc_url( 'https://mdjm.co.uk/support/' )
         ) . '</p>' .
-		'<p>' . sprintf( 
-            __( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ), 
+		'<p>' . sprintf(
+            __( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
             esc_url( 'https://www.facebook.com/groups/mobiledjmanager/' )
         ) . '</p>' .
 		'<p>' . sprintf(
@@ -46,7 +46,7 @@ function mdjm_events_contextual_help() {
         ) . '</p>' .
 		'<p>' . sprintf(
             __( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-            esc_url( 'http://mdjm.co.uk/add-ons/' )
+            esc_url( 'https://mdjm.co.uk/add-ons/' )
         ) . '</p>'
 	);
 
@@ -54,9 +54,9 @@ function mdjm_events_contextual_help() {
 		'id'	    => 'mdjm-event-options',
 		'title'	    => sprintf( __( '%s Options', 'mobile-dj-manager' ), $singular ),
 		'content'	=>
-			'<p>' . sprintf( 
-                __( '<strong>%1$s Status</strong> - Set the status of this %2$s. An description of each status can be found <a href="%3$s" target="_blank">here</a>', 'mobile-dj-manager' ), 
-                $singular, strtolower( $singular ), 'http://mdjm.co.uk/docs/event-statuses/'
+			'<p>' . sprintf(
+                __( '<strong>%1$s Status</strong> - Set the status of this %2$s. An description of each status can be found <a href="%3$s" target="_blank">here</a>', 'mobile-dj-manager' ),
+                $singular, strtolower( $singular ), 'https://mdjm.co.uk/docs/event-statuses/'
             ) . '</p>' .
 			'<p>' . __( '<strong>Email Quote Template</strong> - During transition to <strong>Enquiry</strong> status, select which quote email template should be sent to the client.', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . __( '<strong>Online Quote Template</strong> - During transition to <strong>Enquiry</strong> status, select which quote template should be used to generate the page that displays the online quote.', 'mobile-dj-manager' ) . '</p>' .
@@ -66,9 +66,9 @@ function mdjm_events_contextual_help() {
             ) . '</p>' .
 			'<p>' . sprintf(
                 __( '<strong>%1$s Paid?</strong> - Select this option if the client has paid their %1$s.', 'mobile-dj-manager' ),
-                mdjm_get_balance_label() 
+                mdjm_get_balance_label()
             ). '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>Enable %1$s Playlist?</strong> - Toggle whether or not the client can manage the playlist for this %2$s.', 'mobile-dj-manager' ),
                 $singular, strtolower( $singular )
             ) . '</p>'
@@ -87,7 +87,7 @@ function mdjm_events_contextual_help() {
 		'id'	    => 'mdjm-event-details',
 		'title'	    => sprintf( __( '%s Details', 'mobile-dj-manager' ), $singular ),
 		'content'	=>
-            '<p>' . sprintf( 
+            '<p>' . sprintf(
                 __( '<strong>%1$s Type</strong> - Set the type of %2$s <em>i.e. Wedding or 40th Birthday</em>. You can define the types <a href="%3$s">here</a> or simply click the <i class="fa fa-plus"></i> icon to add a new %2$s type inline.', 'mobile-dj-manager' ),
                 $singular,
                 strtolower( $singular ),
@@ -95,7 +95,7 @@ function mdjm_events_contextual_help() {
             ) . '</p>' .
             '<p>' . sprintf( __( '<strong>%1$s Contract</strong> - Select the contract associated with this %2$s.', 'mobile-dj-manager' ), $singular, strtolower( $singular ) ) . '</p>' .
 			'<p>' . sprintf( __( '<strong>%1$s Name</strong> - Assign a name for this %2$s. Can be viewed and adjusted by the client.', 'mobile-dj-manager' ), $singular, strtolower( $singular ) ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>%1$s Date</strong> - Use the datepicker to set the date for this %2$s.', 'mobile-dj-manager' ),
                 $singular,
                 strtolower( $singular )
@@ -104,7 +104,7 @@ function mdjm_events_contextual_help() {
                 __( '<strong>Start Time</strong> - Set the start time of the %s', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>End Time</strong> - Set the end time of the %s', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
@@ -112,7 +112,7 @@ function mdjm_events_contextual_help() {
                 __( '<strong>Total Cost</strong> - Enter the total cost of the %s. If using equipment packages and add-ons, selecting these will automatically set this cost.', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>%1$s</strong> - Enter the %1$s that needs to be collected for this %2$s upon contract signing. This field can be auto populated depending on your settings and equipment packages and add-on selections', 'mobile-dj-manager' ),
                 mdjm_get_deposit_label(),
                 strtolower( $singular )
@@ -122,7 +122,7 @@ function mdjm_events_contextual_help() {
                 $singular,
                 mdjm_get_deposit_label()
             ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>Select Add-ons</strong> - If packages are enabled you can assign add-ons to your %s here. The <em>Total Cost</em> and <em>%s</em> fields will be updated automatically to reflect the new costs.', 'mobile-dj-manager' ),
                 strtolower( $singular ),
                 mdjm_get_deposit_label()
@@ -134,7 +134,7 @@ function mdjm_events_contextual_help() {
 		'id'	    => 'mdjm-event-employees',
 		'title'	    => sprintf( __( '%s Employees', 'mobile-dj-manager' ), $singular ),
 		'content'	=>
-            '<p>' . sprintf( 
+            '<p>' . sprintf(
                 __( '<strong>Select Primary Employee</strong> - Select the primary employee for this %s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
@@ -155,11 +155,11 @@ function mdjm_events_contextual_help() {
 	$screen->add_help_tab( array(
 		'id'		=> 'mdjm-event-transactions',
 		'title'		=> __( 'Transactions', 'mobile-dj-manager' ),
-		'content'	=> 
+		'content'	=>
 			'<p>' . sprintf(
                 __( 'This section allows you to add transactions associated with the %1$s as well as listing existing associated transactions.', 'mobile-dj-manager' ), strtolower( $singular )
-            ) . '</p>' . 
-			'<p>' . sprintf( 
+            ) . '</p>' .
+			'<p>' . sprintf(
                 __( 'If transactions already exist, the total amount of income and expenditure is displayed as well as the total overall earnings so far for the %1$s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>'
@@ -170,16 +170,16 @@ function mdjm_events_contextual_help() {
 		'title'	    => __( 'Administration', 'mobile-dj-manager' ),
 		'content'	=>
 			'<p>' . __( '<strong>Enquiry Source</strong> - Select how the client heard about your business', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>Setup Date</strong> - Use the datepicker to select the date that you need to setup for this %s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>Setup Time</strong> - Select the time that you need to setup for this %s.', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>' .
 			'<p>' . __( '<strong>Employee Notes</strong> - Enter notes that are only visible by employees. Clients will not see these notes', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . sprintf( 
+			'<p>' . sprintf(
                 __( '<strong>Admin Notes</strong> - Enter notes that are only visible by admins. Employees and clients will not see these notes', 'mobile-dj-manager' ),
                 strtolower( $singular )
             ) . '</p>'

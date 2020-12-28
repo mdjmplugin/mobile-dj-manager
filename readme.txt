@@ -7,7 +7,7 @@ Requires PHP: 7.3
 Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://mdjm.co.uk/support-our-work/
+Donate link: https://mdjm.co.uk/support-our-work/
 
 The most efficient and versatile event management solution for WordPress.
 
@@ -38,7 +38,7 @@ MDJM Event Management allows you to manage your events from enquiry stage throug
 * Automate daily and weekly tasks
 * Create an unlimited number of custom email and contract templates
 * Developer friendly
-* A number of [plugin extensions](http://mdjm.co.uk/add-ons/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
+* A number of [plugin extensions](https://mdjm.co.uk/add-ons/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
 
 **Communication with MDJM Event Management Servers**
 This plugin will only communicate with MDJM Event Management servers when paid MDJM extensions are installed for the purpose of license checks and providing updates to the paid extensions only. This communication does not happen when there are no paid MDJM extensions installed.
@@ -62,18 +62,18 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 1. Click "Install Now"
 1. Once installation has finished, select "Activate Plugin"
 1. Once activation has completed, click the "Settings" link under the MDJM Event Management plugin
-1. Installation has now completed. Next you need to [configure MDJM](http://mdjm.co.uk/docs/installation/ "MDJM Initial Configuration").
+1. Installation has now completed. Next you need to [configure MDJM](https://mdjm.co.uk/docs/installation/ "MDJM Initial Configuration").
 
 == Frequently Asked Questions ==
 
 = Is any support provided? =
 
-Support can be obtained via our online [Support Pages](http://mdjm.co.uk/support/ "MDJM Support").
-Support is provided on a best-endeavours basis. For premium support you must be an active license holder for one of the [MDJM Event Management add-ons](http://mdjm.co.uk/add-ons/ "MDJM Event Management add-ons")
+Support can be obtained via our online [Support Pages](https://mdjm.co.uk/support/ "MDJM Support").
+Support is provided on a best-endeavours basis. For premium support you must be an active license holder for one of the [MDJM Event Management add-ons](https://mdjm.co.uk/add-ons/ "MDJM Event Management add-ons")
 
 = Is there a Pro version with additional features? =
 
-Premium addons are available to enhance the plugin via our [Plugin Store](http://mdjm.co.uk/add-ons/ "MDJM Add-ons")
+Premium addons are available to enhance the plugin via our [Plugin Store](https://mdjm.co.uk/add-ons/ "MDJM Add-ons")
 
 == Screenshots ==
 
@@ -404,23 +404,23 @@ Premium addons are available to enhance the plugin via our [Plugin Store](http:/
 
 **New**
 
-**[REST API](http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/ "MDJM REST API") introduced**
+**[REST API](https://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/ "MDJM REST API") introduced**
 
-A number of [API endpoints](http://mdjm.co.uk/docs/api/mdjm-rest-api-endpoints/) have been introduced enabling developers to easily and securely integrate and query MDJM.
+A number of [API endpoints](https://mdjm.co.uk/docs/api/mdjm-rest-api-endpoints/) have been introduced enabling developers to easily and securely integrate and query MDJM.
 
 In order to use an API endpoint, a user must have an API key and token which can be generated under *MDJM->Tools->API Keys*. Exceptions for the Availability and all Package/Addon related endpoints, which are public and require no authentication to generate a response.
 
 **Endpoints Include**
 
-* [/event/](http://mdjm.co.uk/docs/api/mdjm-rest-api-event/ "Event REST API Endpoint") to query a single event by ID
-* [/events/](http://mdjm.co.uk/docs/api/mdjm-rest-api-events/ "Events REST API Endpoint") to retrieve all events or query multiple events by date, employee, client, or status
-* [/employee/](http://mdjm.co.uk/docs/api/mdjm-rest-api-employee/ "Employee REST API Endpoint") to retrieve an employees details by their user ID
-* [/client/](http://mdjm.co.uk/docs/api/mdjm-rest-api-client/ "Client REST API Endpoint") to retrieve a clients details by their user ID
-* [/availability/](http://mdjm.co.uk/docs/api/mdjm-rest-api-availability/ "Availability REST API Endpoint") to query availability by date. Further filtering by employees or roles is also possible
-* [/package/](http://mdjm.co.uk/docs/api/mdjm-rest-api-package/ "Package REST API Endpoint") to retrieve information regarding a single equipment package
-* [/packages/](http://mdjm.co.uk/docs/api/mdjm-rest-api-packages/ "Packages REST API Endpoint") to retrieve multiple equipment packages. Filtering possible
-* [/addon/](http://mdjm.co.uk/docs/api/mdjm-rest-api-addon/ "Addon REST API Endpoint") to retrieve information regarding a single addon
-* [/addons/](http://mdjm.co.uk/docs/api/mdjm-rest-api-addons/ "Addons REST API Endpoint") to retrieve multiple equipment addons. Filtering possible.
+* [/event/](https://mdjm.co.uk/docs/api/mdjm-rest-api-event/ "Event REST API Endpoint") to query a single event by ID
+* [/events/](https://mdjm.co.uk/docs/api/mdjm-rest-api-events/ "Events REST API Endpoint") to retrieve all events or query multiple events by date, employee, client, or status
+* [/employee/](https://mdjm.co.uk/docs/api/mdjm-rest-api-employee/ "Employee REST API Endpoint") to retrieve an employees details by their user ID
+* [/client/](https://mdjm.co.uk/docs/api/mdjm-rest-api-client/ "Client REST API Endpoint") to retrieve a clients details by their user ID
+* [/availability/](https://mdjm.co.uk/docs/api/mdjm-rest-api-availability/ "Availability REST API Endpoint") to query availability by date. Further filtering by employees or roles is also possible
+* [/package/](https://mdjm.co.uk/docs/api/mdjm-rest-api-package/ "Package REST API Endpoint") to retrieve information regarding a single equipment package
+* [/packages/](https://mdjm.co.uk/docs/api/mdjm-rest-api-packages/ "Packages REST API Endpoint") to retrieve multiple equipment packages. Filtering possible
+* [/addon/](https://mdjm.co.uk/docs/api/mdjm-rest-api-addon/ "Addon REST API Endpoint") to retrieve information regarding a single addon
+* [/addons/](https://mdjm.co.uk/docs/api/mdjm-rest-api-addons/ "Addons REST API Endpoint") to retrieve multiple equipment addons. Filtering possible.
 
 **Equipment Packages and Addons**
 
@@ -437,7 +437,7 @@ In order to use an API endpoint, a user must have an API key and token which can
 * Select not to add costs if under specified distance
 * Costs are determined from events primary employee address (if stored), otherwise a default address specified in settings
 * Generation of URL to Google Maps to view directions to event
-* [Content Tags](http://mdjm.co.uk/docs/content-tags/ "Content Tags") added to output travel data including cost, distance, directions and time
+* [Content Tags](https://mdjm.co.uk/docs/content-tags/ "Content Tags") added to output travel data including cost, distance, directions and time
 
 **Tweaks**
 
@@ -768,9 +768,9 @@ In order to use an API endpoint, a user must have an API key and token which can
 
 = 1.3.4 =
 
-* **New**: Record employee event payments feature. See [Employee Event Payments](http://mdjm.co.uk/docs/employee-event-payments/ "MDJM Employee Event Payments")
+* **New**: Record employee event payments feature. See [Employee Event Payments](https://mdjm.co.uk/docs/employee-event-payments/ "MDJM Employee Event Payments")
 * **New**: Added setting **Communicate Active Events Only**. If checked, only active events will be displayed on the communication screen
-* **New**: Added `{available_addons}` and `{available_addons_cost}` content tags. See [Content Tags](http://mdjm.co.uk/docs/content-tags/ "Content Tags Available with MDJM Event Management")
+* **New**: Added `{available_addons}` and `{available_addons_cost}` content tags. See [Content Tags](https://mdjm.co.uk/docs/content-tags/ "Content Tags Available with MDJM Event Management")
 * **New**: Added `mdjm_get_clients_next_event()` function
 * **Bug Fix**: Issue #36. Saving venue within event can generate fatal error
 * **Bug Fix**: Issue #30. Content tag `{event_addons_cost}` missing

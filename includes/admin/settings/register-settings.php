@@ -547,7 +547,7 @@ function mdjm_get_registered_settings()	{
 						'id'          => 'package_contact_btn',
 						'name'        => __( 'Add Contact Button?', 'mobile-dj-manager' ),
 						'hint'        => sprintf( __( 'Select to auto add a contact button to the end of package/addons post content. The link will redirect to the <code>Contact Page</code>page as defined in <a href="%s">Pages</a>', 'mobile-dj-manager' ), admin_url( 'admin.php?page=mdjm-settings&tab=client_zone&section=pages' ) ),
-						'desc'        => sprintf( __( 'If you use the <a href="%s" target="_blank">Dynamic Contact Forms</a> add-on, the package/addon will be auto selected on page load', 'mobile-dj-manager' ), 'http://mdjm.co.uk/products/dynamic-contact-forms/' ),
+						'desc'        => sprintf( __( 'If you use the <a href="%s" target="_blank">Dynamic Contact Forms</a> add-on, the package/addon will be auto selected on page load', 'mobile-dj-manager' ), 'https://mdjm.co.uk/products/dynamic-contact-forms/' ),
 						'type'        => 'checkbox'
 					),
 					'package_contact_btn_text' => array(

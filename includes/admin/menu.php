@@ -544,7 +544,7 @@ function mdjm_admin_toolbar( $admin_bar )	{
 		'id'     => 'mdjm-user-guides',
 		'parent' => 'mdjm',
 		'title'  => sprintf( __( '%sDocumentation%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-		'href'   => 'http://mdjm.co.uk/support/',
+		'href'   => 'https://mdjm.co.uk/support/',
 		'meta'   => array(
 			'title' => __( 'Documentation', 'mobile-dj-manager' ),
 			'target' => '_blank'

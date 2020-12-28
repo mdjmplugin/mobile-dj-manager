@@ -21,18 +21,18 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function mdjm_settings_contextual_help() {
 	$screen = get_current_screen();
-		
+
 	if ( $screen->id != 'mdjm-event_page_mdjm-settings' )
 		return;
 
 	$screen->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-					__( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ), 
-					esc_url( 'http://mdjm.co.uk/support/' )
+		'<p>' . sprintf(
+					__( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ),
+					esc_url( 'https://mdjm.co.uk/support/' )
 				) . '</p>' .
-		'<p>' . sprintf( 
-					__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ), 
+		'<p>' . sprintf(
+					__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
 					esc_url( 'https://www.facebook.com/groups/mobiledjmanager/' )
 				) . '</p>' .
 		'<p>' . sprintf(
@@ -42,10 +42,10 @@ function mdjm_settings_contextual_help() {
 				) . '</p>' .
 		'<p>' . sprintf(
 					__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-					esc_url( 'http://mdjm.co.uk/add-ons/' )
+					esc_url( 'https://mdjm.co.uk/add-ons/' )
 				) . '</p>'
 	);
-	
+
 	do_action( 'mdjm_pre_settings_contextual_help', $screen );
 
 	$screen->add_help_tab( array(
@@ -95,7 +95,7 @@ function mdjm_settings_contextual_help() {
 		'content'	=>
 			'<p>' . sprintf(
 						__( 'If you have any <a href="%s">MDJM Event Management paid add-ons</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
-						esc_url( 'http://mdjm.co.uk/add-ons/' ) 
+						esc_url( 'https://mdjm.co.uk/add-ons/' )
 					) . '</p>'
 	) );
 

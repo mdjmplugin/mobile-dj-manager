@@ -63,10 +63,10 @@
 						'transactions'		  => 'edit.php?post_type=mdjm-transaction',
 						'updated'			   => 'admin.php?page=mdjm-updated',
 						'about'			     => 'admin.php?page=mdjm-about',
-						'mydjplanner'           => 'http://mdjm.co.uk',
-						'user_guides'           => 'http://mdjm.co.uk/support/user-guides',
-						'mdjm_support'          => 'http://mdjm.co.uk/support',
-						'mdjm_forums'           => 'http://mdjm.co.uk/forums',
+						'mydjplanner'           => 'https://mdjm.co.uk',
+						'user_guides'           => 'https://mdjm.co.uk/support/user-guides',
+						'mdjm_support'          => 'https://mdjm.co.uk/support',
+						'mdjm_forums'           => 'https://mdjm.co.uk/forums',
 						);
 		if( in_array( $mdjm_page, $mydjplanner ) )	{
 			$mdjm_page = $mdjm_pages[$mdjm_page];

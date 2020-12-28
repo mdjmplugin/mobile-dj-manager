@@ -247,7 +247,7 @@ class MDJM_Welcome {
 					<div class="feature-section-content">
 						<p><?php esc_html_e( 'MDJM Event Management version 1.4 extends the WordPress REST API enabling easy, yet secure, access to a multitude of data via third party tools and integrations.', 'mobile-dj-manager' ); ?></p>
 
-						<p><?php printf( __( 'Endpoints are available to retrieve data for %s, clients, employees, packages and add-ons, and availability. For more information visit the <a href="%s" target="_blank">Support Documentation</a>', 'mobile-dj-manager' ), mdjm_get_label_plural(), 'http://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+						<p><?php printf( __( 'Endpoints are available to retrieve data for %s, clients, employees, packages and add-ons, and availability. For more information visit the <a href="%s" target="_blank">Support Documentation</a>', 'mobile-dj-manager' ), mdjm_get_label_plural(), 'https://mdjm.co.uk/docs/api/mdjm-rest-api-introduction/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					</div>
 				</div>
 			</div>
@@ -353,7 +353,7 @@ class MDJM_Welcome {
 					</div>
 					<div class="feature-section-content">
 						<h4><?php esc_html_e( 'Email Templates','mobile-dj-manager' ); ?></h4>
-						<p><?php printf( __( 'Email templates can be configured to be sent automatically during an %1$s status change. Supporting our vast collection of <a href="%2$s" target="_blank">content tags</a> each email can be completley customised and tailored to the %1$s and client details.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), 'http://mdjm.co.uk/docs/content-tags/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+						<p><?php printf( __( 'Email templates can be configured to be sent automatically during an %1$s status change. Supporting our vast collection of <a href="%2$s" target="_blank">content tags</a> each email can be completley customised and tailored to the %1$s and client details.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ), 'https://mdjm.co.uk/docs/content-tags/' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                         <p><?php esc_html_e( 'With email tracking enabled, you can even be sure that your client received your email and know when they have read it.', 'mobile-dj-manager' ); ?></p>
 
 						<h4><?php esc_html_e( 'Contract Templates', 'mobile-dj-manager' ); ?></h4>
@@ -440,7 +440,7 @@ class MDJM_Welcome {
 					</div>
 					<div class="col">
 						<h4><?php esc_html_e( 'Visit the Add-ons Store', 'mobile-dj-manager' );?></h4>
-						<p><?php printf( __( '<a href="%s" target="_blank">The Add-ons store</a> has a list of all available extensions, including convenient category filters so you can find exactly what you are looking for.', 'mobile-dj-manager' ), 'http://mdjm.co.uk/add-ons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+						<p><?php printf( __( '<a href="%s" target="_blank">The Add-ons store</a> has a list of all available extensions, including convenient category filters so you can find exactly what you are looking for.', 'mobile-dj-manager' ), 'https://mdjm.co.uk/add-ons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					</div>
 				</div>
 			</div>

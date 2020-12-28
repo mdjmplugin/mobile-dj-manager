@@ -189,7 +189,7 @@ function mdjm_print_event_playlist_action( $data )	{
 		</style>
         <?php
 		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<p style="text-align: center" class="description">Powered by <a style="color:#F90" href="http://mdjm.co.uk" target="_blank">' . esc_html( MDJM_NAME ) . '></a>, version ' . esc_html( MDJM_VERSION_NUM ) . '</p>' . "\n";
+		echo '<p style="text-align: center" class="description">Powered by <a style="color:#F90" href="https://mdjm.co.uk" target="_blank">' . esc_html( MDJM_NAME ) . '></a>, version ' . esc_html( MDJM_VERSION_NUM ) . '</p>' . "\n";
 
 	}
 

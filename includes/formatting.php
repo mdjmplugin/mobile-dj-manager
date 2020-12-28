@@ -378,7 +378,7 @@ function mdjm_wpadmin_footer_text( $text )	{
 
 	$text .= ' ';
 	$text .= '<em>' . sprintf( __( 'Powered by <a class="mdjm-admin-footer" href="%s" target="_blank">MDJM Event Management, version %s</a>.', 'mobile-dj-manager' ),
-		'http://mdjm.co.uk',
+		'https://mdjm.co.uk',
 		MDJM_VERSION_NUM ) . '</em>';
 
 	return $text;

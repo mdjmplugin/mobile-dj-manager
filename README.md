@@ -35,4 +35,4 @@ There are various ways you can contribute:
 1. Provide feedback and suggestions on enhancements
 1. Develop add-ons (free or premium)
 
-[Contribute to our Project](http://mdjm.co.uk/support/get-involved/)
+[Contribute to our Project](https://mdjm.co.uk/support/get-involved/)

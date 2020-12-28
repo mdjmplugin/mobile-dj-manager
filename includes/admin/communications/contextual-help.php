@@ -22,19 +22,19 @@ if ( ! defined( 'ABSPATH' ) )
 function mdjm_comms_email_contextual_help() {
 
 	$screen = get_current_screen();
-		
+
 	if ( $screen->id != 'mdjm-event_page_mdjm-comms' )	{
 		return;
 	}
 
 	$screen->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-					__( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ), 
-					esc_url( 'http://mdjm.co.uk/support/' )
+		'<p>' . sprintf(
+					__( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ),
+					esc_url( 'https://mdjm.co.uk/support/' )
 				) . '</p>' .
-		'<p>' . sprintf( 
-					__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ), 
+		'<p>' . sprintf(
+					__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
 					esc_url( 'https://www.facebook.com/groups/mobiledjmanager/' )
 				) . '</p>' .
 		'<p>' . sprintf(
@@ -44,7 +44,7 @@ function mdjm_comms_email_contextual_help() {
 				) . '</p>' .
 		'<p>' . sprintf(
 					__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-					esc_url( 'http://mdjm.co.uk/add-ons/' )
+					esc_url( 'https://mdjm.co.uk/add-ons/' )
 				) . '</p>'
 	);
 
@@ -54,8 +54,8 @@ function mdjm_comms_email_contextual_help() {
 		'id'	    => 'mdjm-comm-email',
 		'title'	    => __( 'Communications', 'mobile-dj-manager' ),
 		'content'	=>
-			'<p>' . sprintf( 
-						__( '<strong>Select a Recipient</strong> - Choose from the dropdown list who your email is to. Users are grouped into Clients and Employees. Once you have selected a recipient the Associated %s list will be updated with their active %s. This is a required field.', 'mobile-dj-manager' ), 
+			'<p>' . sprintf(
+						__( '<strong>Select a Recipient</strong> - Choose from the dropdown list who your email is to. Users are grouped into Clients and Employees. Once you have selected a recipient the Associated %s list will be updated with their active %s. This is a required field.', 'mobile-dj-manager' ),
 						mdjm_get_label_plural(), mdjm_get_label_plural( true )
 					) . '</p>' .
 			'<p>' . __( '<strong>Subject</strong> - Enter the subject of your email. If you select a template the subject will be updated to the title of the template. This is a required field.', 'mobile-dj-manager' ) . '</p>' .

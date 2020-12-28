@@ -35,7 +35,7 @@ function mdjm_show_footer_in_client_zone()	{
 		echo '<div id="mdjm-client-zone-footer">';
 		echo '<p>';
 
-		printf( __( 'Powered by <a href="%s" target="_blank">MDJM Event Management</a>, version %s', 'mobile-dj-manager' ), 'http://mdjm.co.uk', MDJM_VERSION_NUM ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		printf( __( 'Powered by <a href="%s" target="_blank">MDJM Event Management</a>, version %s', 'mobile-dj-manager' ), 'https://mdjm.co.uk', MDJM_VERSION_NUM ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo '</p>';
 		echo '</div>';
