@@ -104,7 +104,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id )	{
 			break;
 
         case 'event_id':
-            echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ). '">' . esc_html( mdjm_get_event_contract_id( $post_id ) ) . '</a>';
+            echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ) . '">' . esc_html( mdjm_get_event_contract_id( $post_id ) ) . '</a>';
             break;
 
 		// Client
@@ -1438,8 +1438,8 @@ function mdjm_save_event_post( $post_id, $post, $update )	{
 		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['event_finish_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_finish_min'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['dj_setup_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['dj_setup_min'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	} else	{ // 12 hr
-		$event_data['_mdjm_event_start']		= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['event_start_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_start_min'] ) ). sanitize_text_field( wp_unslash( $_POST['event_start_period'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['event_finish_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_finish_min'] ) ). sanitize_text_field( wp_unslash( $_POST['event_finish_period'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$event_data['_mdjm_event_start']		= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['event_start_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_start_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['event_start_period'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		$event_data['_mdjm_event_finish']		= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['event_finish_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_finish_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['event_finish_period'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$event_data['_mdjm_event_djsetup_time']	= date( 'H:i:s', strtotime( sanitize_text_field( wp_unslash( $_POST['dj_setup_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['dj_setup_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['dj_setup_period'] ) ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	}
 

@@ -1884,8 +1884,8 @@ function mdjm_checkbox_callback( $args ) {
 
 	$checked = isset( $mdjm_options[ $args['id'] ] ) ? checked( 1, $mdjm_options[ $args['id'] ], false ) : '';
 	$html = '<input type="checkbox" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_checkbox_callback
@@ -2008,7 +2008,7 @@ function mdjm_gateway_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+	$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
 	echo apply_filters( 'mdjm_after_setting_output', $html, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -2044,8 +2044,8 @@ function mdjm_text_callback( $args ) {
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html     = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
-	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html    .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html    .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_text_callback
@@ -2083,8 +2083,8 @@ function mdjm_number_callback( $args ) {
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_number_callback
@@ -2109,8 +2109,8 @@ function mdjm_textarea_callback( $args ) {
 	}
 
 	$html = '<textarea class="large-text" cols="50" rows="5" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_textarea_callback
@@ -2137,8 +2137,8 @@ function mdjm_password_callback( $args ) {
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="password" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"' . $readonly . '/>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_password_callback
@@ -2198,8 +2198,8 @@ function mdjm_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_select_callback
@@ -2243,8 +2243,8 @@ function mdjm_multiple_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_multiple_select_callback
@@ -2276,8 +2276,8 @@ function mdjm_color_select_callback( $args ) {
 	}
 
 	$html .= '</select>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_color_select_callback
@@ -2315,7 +2315,7 @@ function mdjm_rich_editor_callback( $args ) {
 		$html = '<textarea class="large-text" rows="10" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	}
 
-	$html .= '<p class="description"<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<p class="description"<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_rich_editor_callback
@@ -2342,8 +2342,8 @@ function mdjm_upload_callback( $args ) {
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="text" class="' . $size . '-text" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<span>&nbsp;<input type="button" class="mdjm_settings_upload_button button-secondary" value="' . __( 'Upload File', 'mobile-dj-manager' ) . '"/></span>';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_upload_callback
@@ -2371,8 +2371,8 @@ function mdjm_color_callback( $args ) {
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 	$html = '<input type="text" class="mdjm-color-picker" id="mdjm_settings[' . $args['id'] . ']" name="mdjm_settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
-	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['hint'] . '</label>';
-	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label></p>';
+	$html .= '<label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['hint'] . '</label>';
+	$html .= '<p class="description"><label for="mdjm_settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label></p>';
 
 	echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_color_callback
@@ -2563,7 +2563,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License', 'mobile-dj-manager' ) . '"/>';
 		}
 
-		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+		$html .= '<label for="mdjm_settings[' . mdjm_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
 		if ( ! empty( $messages ) ) {
 			foreach( $messages as $message ) {
