@@ -27,12 +27,12 @@ function mdjm_sanitize_amount( $amount ) {
 	$thousands_sep = mdjm_get_option( 'thousands_separator', ',' );
 	$decimal_sep   = mdjm_get_option( 'decimal', '.' );
 
-	$found_decimal_sep = strpos( $amount, $decimal_sep );
+	$found_decimal_sep   = strpos( $amount, $decimal_sep );
 	$found_thousands_sep = strpos( $amount, $thousands_sep );
-	$found_default_sep = strpos( $amount, '.' );
+	$found_default_sep   = strpos( $amount, '.' );
 
 	// Sanitize the amount
-	if ( $decimal_sep == ',' && false !== $found_decimal_sep) {
+	if ( $decimal_sep == ',' && false !== $found_decimal_sep ) {
 		if ( ( $thousands_sep == '.' || $thousands_sep == ' ' ) && false !== $found_thousands_sep ) {
 			$amount = str_replace( $thousands_sep, '', $amount );
 		} elseif ( empty( $thousands_sep ) && false !== $found_default_sep ) {
@@ -73,7 +73,7 @@ function mdjm_format_amount( $amount, $decimals = true, $thousands = true ) {
 	$thousands_sep = mdjm_get_option( 'thousands_seperator', ',' );
 	$decimal_sep   = mdjm_get_option( 'decimal', '.' );
 
-	$found_decimal_sep = strpos( $amount, $decimal_sep );
+	$found_decimal_sep   = strpos( $amount, $decimal_sep );
 	$found_thousands_sep = strpos( $amount, $thousands_sep );
 
 	// Format the amount
@@ -311,7 +311,7 @@ function mdjm_format_long_date( $date = '', $time = false ) {
 
 	$format = get_option( 'date_format', true ) . ! empty( $time ) ? ' \a\t ' . get_option( 'time_format', true ) : '';
 
-	if ( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) ) {
+	if ( ( (string) (int) $date === $date ) && ( $date <= PHP_INT_MAX ) && ( $date >= ~PHP_INT_MAX ) ) {
 		$long_date = date( $format, $date );
 
 	} else {
@@ -336,7 +336,7 @@ function mdjm_format_time( $time = '' ) {
 
 	$format = mdjm_get_option( 'time_format', 'H:i' );
 
-	if ( ( (string) (int) $time === $time ) && ( $time <= PHP_INT_MAX ) && ( date >= ~PHP_INT_MAX ) ) {
+	if ( ( (string) (int) $time === $time ) && ( $time <= PHP_INT_MAX ) && ( $time >= ~PHP_INT_MAX ) ) {
 		$time_format = date( $format, $time );
 
 	} else {

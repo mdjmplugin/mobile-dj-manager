@@ -97,7 +97,7 @@ function mdjm_render_single_task_view( $id ) {
 		'page'        => 'mdjm-tasks',
 		'mdjm-action' => 'delete_task',
 		'task_id'     => $id,
-        ), admin_url( 'edit.php?' )
+	), admin_url( 'edit.php?' )
 	);
 
 	?>

@@ -687,12 +687,12 @@ function mdjm_add_employee_to_event( $event_id, $args ) {
 		'post_status' => 'mdjm-expenditure',
 		'post_author' => 1,
 		'post_parent' => $event_id,
-        ),
+	),
         array(
 			'_mdjm_txn_status' => 'Pending',
 			'_mdjm_payment_to' => $data['id'],
 			'_mdjm_txn_total'  => $data['wage'],
-    ) );
+		) );
 
 	if ( ! empty( $mdjm_txn ) ) {
 		$data['txn_id'] = $mdjm_txn->ID;
