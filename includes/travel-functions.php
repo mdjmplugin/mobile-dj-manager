@@ -2,9 +2,9 @@
 /**
  * Contains all travel related functions
  *
- * @package		MDJM
- * @subpackage	Venues
- * @since		1.3.8
+ * @package     MDJM
+ * @subpackage  Venues
+ * @since       1.3.8
  */
 
 // Exit if accessed directly
@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Calculate the travel distance
  *
- * @since	1.3.8
- * @param	int|obj		$event		The event ID or the event MDJM_Event class object.
- * @param	int			$venue_id	The venue ID
- * @return	str			The distance to the event venue or an empty string
+ * @since   1.3.8
+ * @param   int|object  $event      The event ID or the event MDJM_Event class object.
+ * @param   int         $venue_id   The venue ID
+ * @return  string      The distance to the event venue or an empty string
  */
 function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
@@ -33,7 +33,7 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 	$start       = mdjm_travel_get_start( $mdjm_event );
 	$destination = mdjm_travel_get_destination( $mdjm_event, $venue_id );
 
-	if ( empty( $start ) || empty( $destination ) )	{
+	if ( empty( $start ) || empty( $destination ) ) {
 		return false;
 	}
 
@@ -47,7 +47,7 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
 	$travel_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-	if ( empty( $travel_data ) || $travel_data->status != 'OK' ) {
+	if ( empty( $travel_data ) || 'OK' !== $travel_data->status ) {
 		return false;
 	}
 
@@ -81,12 +81,12 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 /**
  * Calculate the travel cost.
  *
- * @since	1.3.8
- * @param	str			$distance		The distance of travel.
- * @return	str|int		The cost of travel.
+ * @since   1.3.8
+ * @param   string          $distance The distance of travel.
+ * @return  string|int      The cost of travel.
  */
 function mdjm_get_travel_cost( $distance ) {
-	$mdjm_travel = new MDJM_Travel;
+	$mdjm_travel = new MDJM_Travel();
 	$mdjm_travel->__set( 'distance', $distance );
 
 	return $mdjm_travel->get_cost();
@@ -95,9 +95,9 @@ function mdjm_get_travel_cost( $distance ) {
 /**
  * Build the URL to retrieve the distance.
  *
- * @since	1.3.8
- * @param	str			$start			The travel start address.
- * @return	str			$destination	The travel destination address.
+ * @since   1.3.8
+ * @param   string    $start    The travel start address.
+ * @return  string    $destination    The travel destination address.
  */
 function mdjm_travel_build_url( $start, $destination ) {
 
@@ -106,14 +106,12 @@ function mdjm_travel_build_url( $start, $destination ) {
 	$mode    = 'driving';
 	$units   = mdjm_get_option( 'travel_units' );
 
-	$url = add_query_arg( array(
+	$url = add_query_arg(array(
 		'units'        => $units,
-		'origins'      => str_replace( '%2C', ',', urlencode( $start ) ),
-		'destinations' => str_replace( '%2C', ',', urlencode( $destination ) ),
+		'origins'      => str_replace( '%2C', ',', rawurlencode( $start ) ),
+		'destinations' => str_replace( '%2C', ',', rawurlencode( $destination ) ),
 		'mode'         => $mode,
-		),
-		$prefix
-	);
+	), $prefix);
 
 	return apply_filters( 'mdjm_travel_build_url', $url );
 
@@ -212,12 +210,12 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
 	$units = array(
 		'singular' => array(
 			'imperial' => 'Mile',
-			'metric'   => 'Kilometer'
+			'metric'   => 'Kilometer',
 		),
 		'plural'   => array(
 			'imperial' => 'Miles',
-			'metric'   => 'Kilometers'
-		)
+			'metric'   => 'Kilometers',
+		),
 	);
 
 	$type = 'singular';
@@ -298,7 +296,7 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 		if ( is_object( $dest ) ) {
 			$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $dest->employee_id ) );
 		} elseif ( is_numeric( $dest ) ) {
-			if ( 'mdjm-event' == get_post_type( $dest ) ) {
+			if ( 'mdjm-event' === get_post_type( $dest ) ) {
 				$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( mdjm_get_event_primary_employee_id( $dest ) ) );
 			}
 		}
