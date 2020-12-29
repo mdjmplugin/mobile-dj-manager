@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
-	if ( ! empty( $event ) )	{
-		if ( ! is_object( $event ) )	{
+	if ( ! empty( $event ) ) {
+		if ( ! is_object( $event ) ) {
 			$mdjm_event = new MDJM_Event( $event );
-		} else	{
+		} else {
 			$mdjm_event = $event;
 		}
 	}
@@ -47,19 +47,19 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
 	$travel_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-	if ( empty( $travel_data ) || $travel_data->status != 'OK' )	{
+	if ( empty( $travel_data ) || $travel_data->status != 'OK' ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->rows ) )	{
+	if ( empty( $travel_data->rows ) ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) )	{
+	if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) )	{
+	if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) ) {
 		return false;
 	}
 
@@ -139,29 +139,29 @@ function mdjm_travel_get_api_key() {
  */
 function mdjm_travel_get_start( $event = '' ) {
 
-	if ( ! empty( $event ) )	{
-		if ( ! is_object( $event ) )	{
+	if ( ! empty( $event ) ) {
+		if ( ! is_object( $event ) ) {
 			$mdjm_event = new MDJM_Event( $event );
-		} else	{
+		} else {
 			$mdjm_event = $event;
 		}
 	}
 
 	$employee = $mdjm_event->get_employee();
 
-	if ( $employee )	{
+	if ( $employee ) {
 		$address = mdjm_get_employee_address( $employee );
-	} else	{
+	} else {
 		$address = mdjm_get_option( 'travel_primary' );
 	}
 
 	$start = $address;
 
-	if ( empty( $start ) )	{
+	if ( empty( $start ) ) {
 		return;
 	}
 
-	if ( is_array( $start ) )	{
+	if ( is_array( $start ) ) {
 		$start = implode( ',', $start );
 	}
 
@@ -178,9 +178,9 @@ function mdjm_travel_get_start( $event = '' ) {
  */
 function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 
-	if ( ! is_object( $event ) )	{
+	if ( ! is_object( $event ) ) {
 		$mdjm_event = new MDJM_Event( $event );
-	} else	{
+	} else {
 		$mdjm_event = $event;
 	}
 
@@ -188,11 +188,11 @@ function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 
 	$destination = mdjm_get_event_venue_meta( $venue, 'address' );
 
-	if ( ! $destination )	{
+	if ( ! $destination ) {
 		return;
 	}
 
-	if ( is_array( $destination ) )	{
+	if ( is_array( $destination ) ) {
 		$destination = implode( ',', $destination );
 	}
 
@@ -222,13 +222,13 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
 
 	$type = 'singular';
 
-	if ( ! $singular )	{
+	if ( ! $singular ) {
 		$type = 'plural';
 	}
 
 	$return = $units[ $type ][ mdjm_get_option( 'travel_units', 'imperial' ) ];
 
-	if ( $lowercase )	{
+	if ( $lowercase ) {
 		$return = strtolower( $return );
 	}
 
@@ -268,7 +268,7 @@ function mdjm_get_event_travel_data( $event_id, $field = 'cost' ) {
 	$travel_data = get_post_meta( $event_id, '_mdjm_event_travel_data', true );
 
 	if ( $travel_data )	{
-		if ( ! empty( $travel_data[ $field ] ) )	{
+		if ( ! empty( $travel_data[ $field ] ) ) {
 			return apply_filters( 'mdjm_event_travel_' . $field, $travel_data[ $field ], $event_id );
 		}
 	}
@@ -288,17 +288,17 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 
 	$mdjm_travel = new MDJM_Travel;
 
-	if ( ! empty( $employee_id ) )	{
+	if ( ! empty( $employee_id ) ) {
 		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
 	}
 
 	$mdjm_travel->set_destination( $dest );
 
-	if ( empty( $employee_id ) )	{
-		if ( is_object( $dest ) )	{
+	if ( empty( $employee_id ) ) {
+		if ( is_object( $dest ) ) {
 			$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $dest->employee_id ) );
-		} elseif ( is_numeric( $dest ) )	{
-			if ( 'mdjm-event' == get_post_type( $dest ) )	{
+		} elseif ( is_numeric( $dest ) ) {
+			if ( 'mdjm-event' == get_post_type( $dest ) ) {
 				$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( mdjm_get_event_primary_employee_id( $dest ) ) );
 			}
 		}
@@ -312,7 +312,7 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 	$directions     = $mdjm_travel->get_directions_url();
 	$class          = 'mdjm-hidden';
 
-    if ( ! empty( $mdjm_travel->data ) )	{
+    if ( ! empty( $mdjm_travel->data ) ) {
 		$distance       = mdjm_format_distance( $mdjm_travel->data['distance'], false, true );
 		$duration       = mdjm_seconds_to_time( $mdjm_travel->data['duration'] );
 		$cost           = mdjm_currency_filter( mdjm_format_amount( $mdjm_travel->get_cost() ) );

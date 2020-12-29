@@ -186,8 +186,7 @@ class MDJM_Dashboard {
                         }
 					}
 				}
-			}
-
+			}       
 		}
 
 		return mdjm_currency_filter( mdjm_sanitize_amount( $earnings ) );

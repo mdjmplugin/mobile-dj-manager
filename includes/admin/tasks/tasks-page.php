@@ -97,8 +97,7 @@ function mdjm_render_single_task_view( $id ) {
 		'page'        => 'mdjm-tasks',
 		'mdjm-action' => 'delete_task',
 		'task_id'     => $id,
-        ), admin_url( 'edit.php?' )
-	);
+	), admin_url( 'edit.php?' ) );
 
 	?>
 
@@ -161,11 +160,11 @@ function mdjm_render_single_task_view( $id ) {
                                                 </p>
                                             <?php else : ?>
                                             	<p>
-													<?php 
+													<?php
                                                     echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 														'name'    => 'task_active',
 														'current' => ! empty( $task['active'] ) ? true : false, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-													) ); 
+													) );
                                                     ?>
                                                     &nbsp;
                                                     <span class="label"><?php esc_html_e( 'Task Active', 'mobile-dj-manager' ); ?></span>
@@ -223,24 +222,24 @@ function mdjm_render_single_task_view( $id ) {
 										<div class="column">
                                         	<strong><?php esc_html_e( 'Name:', 'mobile-dj-manager' ); ?></strong>
                                             <br />
-											<?php 
+											<?php
                                             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 												'id'    => 'mdjm-task-name',
 												'name'  => 'task_name',
 												'value' => esc_html( $task['name'] ),
-											) ); 
+											) );
                                             ?>
 										</div>
                                         <div class="column column-2">
                                         	<strong><?php esc_html_e( 'Frequency:', 'mobile-dj-manager' ); ?></strong>
                                             <br />
-											<?php 
+											<?php
                                             echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 												'options'  => mdjm_get_task_schedule_options(),
 												'name'     => 'task_frequency',
 												'id'       => 'mdjm-task-frequency',
 												'selected' => esc_attr( $task['frequency'] ),
-											) ); 
+											) );
                                             ?>
 										</div>
 									</div>
@@ -250,12 +249,12 @@ function mdjm_render_single_task_view( $id ) {
 									<div class="column-container task-info">
                                         <p><strong><?php esc_html_e( 'Description:', 'mobile-dj-manager' ); ?></strong>
                                         <br />
-                                        <?php 
+                                        <?php
                                         echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                             'name'  => 'task_description',
 											'value' => esc_html( $task['desc'] ),
 											'class' => 'large-text description',
-										) ); 
+										) );
                                         ?>
                                         </p>
 									</div>
@@ -272,16 +271,16 @@ function mdjm_render_single_task_view( $id ) {
 										}
 
                                         ?>
-                                        <?php 
+                                        <?php
                                         echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                             'name'     => 'task_run_time',
                                             'id'       => 'task-run-time',
                                             'selected' => esc_html( $run_when[0] ),
                                             'options'  => $run_intervals, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-										) ); 
+										) );
                                         ?>
                                         &nbsp;&nbsp;
-                                        <?php 
+                                        <?php
                                         echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                             'name'     => 'task_run_period',
                                             'id'       => 'task-run-period',
@@ -293,16 +292,16 @@ function mdjm_render_single_task_view( $id ) {
                                                 'MONTH' => esc_html__( 'Month(s)', 'mobile-dj-manager' ),
                                                 'YEAR'  => esc_html__( 'Year(s)', 'mobile-dj-manager' ),
                                             ),
-										) ); 
+										) );
                                         ?>
                                         &nbsp;&nbsp;
-                                        <?php 
+                                        <?php
                                         echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                             'name'     => 'task_run_event_status',
                                             'id'       => 'task-run-event-status',
                                             'selected' => esc_attr( $task['options']['run_when'] ),
                                             'options'  => $run_times, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-										) ); 
+										) );
                                         ?>
                                         </p>
                                     </div>
@@ -327,24 +326,24 @@ function mdjm_render_single_task_view( $id ) {
                                             <div class="column">
                                                 <strong><?php esc_html_e( 'Email Template:', 'mobile-dj-manager' ); ?></strong>
                                                 <br />
-                                                <?php 
+                                                <?php
                                                 echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                     'options' => mdjm_list_templates( 'email_template' ),
                                                     'name' => 'task_email_template',
                                                     'id'   => 'mdjm-task-email-template',
                                                     'selected' => esc_attr( $task['options']['email_template'] ),
-												) ); 
+												) );
                                                 ?>
                                             </div>
                                             <div class="column column-2">
                                                 <strong><?php esc_html_e( 'Subject:', 'mobile-dj-manager' ); ?></strong>
                                                 <br />
-                                                <?php 
+                                                <?php
                                                 echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                     'id'   => 'mdjm-task-email-subject',
                                                     'name' => 'task_email_subject',
                                                     'value' => esc_html( $task['options']['email_subject'] ),
-												) ); 
+												) );
                                                 ?>
                                             </div>
                                         </div>
@@ -352,7 +351,7 @@ function mdjm_render_single_task_view( $id ) {
                                             <div class="column">
                                                 <p><strong><?php esc_html_e( 'Email From:', 'mobile-dj-manager' ); ?></strong>
                                                 <br />
-                                                <?php 
+                                                <?php
                                                 echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                     'options' => array(
                                                         'admin'    => esc_html__( 'System Administrator', 'mobile-dj-manager' ),
@@ -361,7 +360,7 @@ function mdjm_render_single_task_view( $id ) {
 														   'name' => 'task_email_from',
 														   'id'   => 'mdjm-task-email-from',
 														   'selected' => esc_attr( $task['options']['email_from'] ),
-												) ); 
+												) );
                                                 ?>
                                                 </p>
                                             </div>

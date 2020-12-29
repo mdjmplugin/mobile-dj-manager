@@ -73,7 +73,7 @@ function mdjm_register_post_types() {
 	);
 	register_post_type( 'mdjm-event', apply_filters( 'mdjm_event_post_type_args', $event_args ) );
 
-	if ( mdjm_packages_enabled() )	{
+	if ( mdjm_packages_enabled() ) {
 		// Packages Post Type
 		$package_labels = apply_filters(
 			'mdjm_package_labels',
