@@ -120,9 +120,9 @@ function mdjm_travel_build_url( $start, $destination ) {
 /**
  * Retrieve the Google API key.
  *
- * @since	1.3.8
+ * @since   1.3.8
  * @param
- * @return	str			The API key.
+ * @return  str         The API key.
  */
 function mdjm_travel_get_api_key() {
 	return '617372114575-g846rsgcm715pkmhkokrho9c75ii3cne.apps.googleusercontent.com';
@@ -131,9 +131,9 @@ function mdjm_travel_get_api_key() {
 /**
  * Retrieves the travel starting point.
  *
- * @since	1.3.8
- * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
- * @return	str
+ * @since   1.3.8
+ * @param   int|obj     $event  The event ID or the event MDJM_Event class object.
+ * @return  str
  */
 function mdjm_travel_get_start( $event = '' ) {
 
@@ -170,9 +170,9 @@ function mdjm_travel_get_start( $event = '' ) {
 /**
  * Retrieves the travel destination address.
  *
- * @since	1.3.8
- * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
- * @return	str
+ * @since   1.3.8
+ * @param   int|obj     $event  The event ID or the event MDJM_Event class object.
+ * @return  str
  */
 function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 
@@ -201,10 +201,10 @@ function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 /**
  * Returns the label for the selected measurement unit.
  *
- * @since	1.3.8
- * @param	bool	$singular	Whether to return a singular (true) or plural (false) value.
- * @param	bool	$lowercase	True to return a lowercase label, otherwise false.
- * @return	str
+ * @since   1.3.8
+ * @param   bool    $singular   Whether to return a singular (true) or plural (false) value.
+ * @param   bool    $lowercase  True to return a lowercase label, otherwise false.
+ * @return  str
  */
 function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
 	$units = array(
@@ -240,8 +240,8 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
  * These fields are used to generate hidden fields on the event admin page
  * and store data relating to event travel.
  *
- * @since	1.4
- * @return	arr
+ * @since   1.4
+ * @return  arr
  */
 function mdjm_get_event_travel_fields() {
 	$travel_fields = array( 'cost', 'distance', 'time', 'directions_url' );
@@ -249,7 +249,7 @@ function mdjm_get_event_travel_fields() {
 	/**
 	 * Allow filtering of the travel fields for developers.
 	 *
-	 * @since	1.4
+	 * @since   1.4
 	 */
 	return apply_filters( 'mdjm_event_travel_fields', $travel_fields );
 } // mdjm_get_event_travel_fields
@@ -257,15 +257,15 @@ function mdjm_get_event_travel_fields() {
 /**
  * Retrieve event travel data.
  *
- * @since	1.4
- * @param	int		$event_id	Event ID.
- * @param	str		$field		The travel field to retrieve.
- * @return	str
+ * @since   1.4
+ * @param   int     $event_id   Event ID.
+ * @param   str     $field      The travel field to retrieve.
+ * @return  str
  */
 function mdjm_get_event_travel_data( $event_id, $field = 'cost' ) {
 	$travel_data = get_post_meta( $event_id, '_mdjm_event_travel_data', true );
 
-	if ( $travel_data )	{
+	if ( $travel_data ) {
 		if ( ! empty( $travel_data[ $field ] ) ) {
 			return apply_filters( 'mdjm_event_travel_' . $field, $travel_data[ $field ], $event_id );
 		}
@@ -277,14 +277,14 @@ function mdjm_get_event_travel_data( $event_id, $field = 'cost' ) {
 /**
  * Adds the travel data row to the venue details metabox on the event screen.
  *
- * @since	1.4
- * @param	int|arr|obj	$dest			An address array, event ID, event object or venue ID.
- * @param	int			$employee_id	An employee user ID.
- * @return	void
+ * @since   1.4
+ * @param   int|arr|obj $dest           An address array, event ID, event object or venue ID.
+ * @param   int         $employee_id    An employee user ID.
+ * @return  void
  */
 function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 
-	$mdjm_travel = new MDJM_Travel;
+	$mdjm_travel = new MDJM_Travel();
 
 	if ( ! empty( $employee_id ) ) {
 		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
