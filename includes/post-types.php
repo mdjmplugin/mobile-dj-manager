@@ -931,8 +931,7 @@ function mdjm_register_taxonomies() {
         	)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-	)
-	);
+	) );
 	register_taxonomy( 'package-category', array( 'mdjm-package' ), $package_category_args );
 	register_taxonomy_for_object_type( 'package-category', 'mdjm-package' );
 
@@ -967,8 +966,7 @@ function mdjm_register_taxonomies() {
 			)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-	)
-	);
+	) );
 	register_taxonomy( 'addon-category', array( 'mdjm-addon' ), $addon_category_args );
 	register_taxonomy_for_object_type( 'addon-category', 'mdjm-addon' );
 
@@ -1002,8 +1000,7 @@ function mdjm_register_taxonomies() {
         	)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-	)
-	);
+	) );
 	register_taxonomy( 'event-types', array( 'mdjm-event' ), $event_type_args );
 	register_taxonomy_for_object_type( 'event-types', 'mdjm-event' );
 
@@ -1041,8 +1038,7 @@ function mdjm_register_taxonomies() {
         	)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-	)
-	);
+	) );
 	register_taxonomy( 'enquiry-source', array( 'mdjm-event' ), $enquiry_source_args );
 	register_taxonomy_for_object_type( 'enquiry-source', 'mdjm-event' );
 
@@ -1075,8 +1071,7 @@ function mdjm_register_taxonomies() {
 			)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-		)
-	);
+	) );
 	register_taxonomy( 'playlist-category', array( 'mdjm-playlist' ), $playlist_category_args );
 	register_taxonomy_for_object_type( 'playlist-category', 'mdjm-playlist' );
 
@@ -1110,8 +1105,7 @@ function mdjm_register_taxonomies() {
         	)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-		)
-	);
+	) );
 	register_taxonomy( 'transaction-types', array( 'mdjm-transaction' ), $txn_type_args );
 	register_taxonomy_for_object_type( 'transaction-types', 'mdjm-transaction' );
 
@@ -1145,8 +1139,7 @@ function mdjm_register_taxonomies() {
         	)
 		),
 		'update_count_callback' => '_update_generic_term_count',
-		)
-	);
+	) );
 	register_taxonomy( 'venue-details', array( 'mdjm-venue' ), $venue_details_args );
 	register_taxonomy_for_object_type( 'venue-details', 'mdjm-venue' );
 } // mdjm_register_taxonomies
