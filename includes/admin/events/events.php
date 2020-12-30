@@ -18,18 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mdjm_event_post_columns( $columns ) {
 
 	$columns = array(
-			'cb'           => '<input type="checkbox" />',
-			'event_date'   => __( 'Date', 'mobile-dj-manager' ),
-			'event_id'     => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-			'client'       => __( 'Client', 'mobile-dj-manager' ),
-			'employees'    => __( 'Employees', 'mobile-dj-manager' ),
-			'event_status' => __( 'Status', 'mobile-dj-manager' ),
-			'event_type'   => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-            'event_name'   => __( 'Name', 'mobile-dj-manager' ),
-			'value'        => __( 'Value', 'mobile-dj-manager' ),
-			'balance'      => __( 'Due', 'mobile-dj-manager' ),
-			'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
-			'journal'      => __( 'Journal', 'mobile-dj-manager' ),
+		'cb'           => '<input type="checkbox" />',
+		'event_date'   => __( 'Date', 'mobile-dj-manager' ),
+		'event_id'     => sprintf( __( '%s ID', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'client'       => __( 'Client', 'mobile-dj-manager' ),
+		'employees'    => __( 'Employees', 'mobile-dj-manager' ),
+		'event_status' => __( 'Status', 'mobile-dj-manager' ),
+		'event_type'   => sprintf( __( '%s type', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'event_name'   => __( 'Name', 'mobile-dj-manager' ),
+		'value'        => __( 'Value', 'mobile-dj-manager' ),
+		'balance'      => __( 'Due', 'mobile-dj-manager' ),
+		'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
+		'journal'      => __( 'Journal', 'mobile-dj-manager' ),
 	);
 
 	if ( ! mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) ) {
@@ -116,8 +116,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 					printf( '<a href="%s">%s</a>',
 						esc_url( add_query_arg(
 							array(
-                            'recipient' => $client->ID,
-                            'event_id'  => $post_id,
+								'recipient' => $client->ID,
+								'event_id'  => $post_id,
                             ),
 							admin_url( 'admin.php?page=mdjm-comms' )
 						) ),
@@ -146,8 +146,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 					printf( '<a href="%s" title="%s">%s</a>',
 						esc_url( add_query_arg(
 							array(
-                            'recipient' => $primary->ID,
-                            'event_id'  => $post_id,
+								'recipient' => $primary->ID,
+								'event_id'  => $post_id,
                             ),
 							admin_url( 'admin.php?page=mdjm-comms' )
 						) ),
@@ -175,8 +175,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 						printf( '<a href="%s" title="%s">%s</a>',
 							esc_url( add_query_arg(
 								array(
-                                'recipient' => $employee['id'],
-                                'event_id'  => $post_id,
+									'recipient' => $employee['id'],
+									'event_id'  => $post_id,
                                 ),
 								admin_url( 'admin.php?page=mdjm-comms' )
 							) ),
