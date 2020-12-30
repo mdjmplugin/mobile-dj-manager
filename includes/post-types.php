@@ -439,8 +439,8 @@ function mdjm_register_post_types() {
 		'show_ui'                => true,
 		'show_in_menu'           => 'edit.php?post_type=mdjm-transaction',
 		'show_in_admin_bar'      => true,
-		'rewrite' 			  	=> array( 'slug' => 'mdjm-transaction'),
-		'capability_type'	    => 'mdjm_txn',
+		'rewrite'               => array( 'slug' => 'mdjm-transaction' ),
+		'capability_type'       => 'mdjm_txn',
 		'capabilities'           => apply_filters( 'mdjm_transaction_caps', array(
 			'edit_post'             => 'edit_mdjm_txn',
 			'read_post'             => 'read_mdjm_txn',
@@ -450,10 +450,10 @@ function mdjm_register_post_types() {
 			'publish_posts'         => 'publish_mdjm_txns',
 			'read_private_posts'    => 'read_private_mdjm_txns',
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_transaction_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-transaction' ),
+		'map_meta_cap'         => true,
+		'has_archive'           => true,
+		'supports'             => apply_filters( 'mdjm_transaction_supports', array( 'title' ) ),
+		'taxonomies'             => array( 'mdjm-transaction' ),
 	);
 	register_post_type( 'mdjm-transaction', apply_filters( 'mdjm_transaction_post_type_args', $txn_args ) );
 
@@ -479,12 +479,12 @@ function mdjm_register_post_types() {
 
 	$venue_args = array(
 		'labels'                 => $venue_labels,
-		'description'			=> __( 'Venues stored for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'show_ui'				=> true,
-		'show_in_menu'		   => 'edit.php?post_type=mdjm-venue',
-		'show_in_admin_bar'	  => true,
-		'rewrite' 			  	=> array( 'slug' => 'mdjm-venue'),
-		'capability_type'	    => 'mdjm_venue',
+		'description'           => __( 'Venues stored for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+		'show_ui'               => true,
+		'show_in_menu'         => 'edit.php?post_type=mdjm-venue',
+		'show_in_admin_bar'   => true,
+		'rewrite'               => array( 'slug' => 'mdjm-venue' ),
+		'capability_type'       => 'mdjm_venue',
 		'capabilities'           => apply_filters( 'mdjm_venue_caps', array(
 			'edit_post'             => 'edit_mdjm_venue',
 			'read_post'             => 'read_mdjm_venue',
@@ -494,10 +494,10 @@ function mdjm_register_post_types() {
 			'publish_posts'         => 'publish_mdjm_venues',
 			'read_private_posts'    => 'read_private_mdjm_venues',
 		) ),
-		'map_meta_cap'		   => true,
-		'has_archive'        	=> true,
-		'supports'			   => apply_filters( 'mdjm_venue_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-venue' ),
+		'map_meta_cap'         => true,
+		'has_archive'           => true,
+		'supports'             => apply_filters( 'mdjm_venue_supports', array( 'title' ) ),
+		'taxonomies'             => array( 'mdjm-venue' ),
 	);
 	register_post_type( 'mdjm-venue', apply_filters( 'mdjm_venue_post_type_args', $venue_args ) );
 } // mdjm_register_post_types
@@ -506,8 +506,8 @@ add_action( 'init', 'mdjm_register_post_types', 1 );
 /**
  * Get Default Labels
  *
- * @since	1.3
- * @return	arr		$defaults	Default labels
+ * @since   1.3
+ * @return  arr     $defaults   Default labels
  */
 function mdjm_get_default_labels() {
 	$defaults = array(
@@ -520,9 +520,9 @@ function mdjm_get_default_labels() {
 /**
  * Get Post Status Label
  *
- * @since	1.3
- * @param	str		$status		The post status
- * @return	arr		$defaults	Default labels
+ * @since   1.3
+ * @param   str     $status     The post status
+ * @return  arr     $defaults   Default labels
  */
 function mdjm_get_post_status_label( $status ) {
 	$object = get_post_status_object( $status );
@@ -533,9 +533,9 @@ function mdjm_get_post_status_label( $status ) {
 /**
  * Get Singular Label
  *
- * @since	1.3
- * @param	bool	$lowercase
- * @return	str		$defaults['singular']	Singular label
+ * @since   1.3
+ * @param   bool    $lowercase
+ * @return  str     $defaults['singular']   Singular label
  */
 function mdjm_get_label_singular( $lowercase = false ) {
 	$defaults = mdjm_get_default_labels();
@@ -545,9 +545,9 @@ function mdjm_get_label_singular( $lowercase = false ) {
 /**
  * Get Plural Label
  *
- * @since	1.3
- * @param	bool	$lowercase
- * @return	str		$defaults['plural']	Plural label
+ * @since   1.3
+ * @param   bool    $lowercase
+ * @return  str     $defaults['plural'] Plural label
  */
 function mdjm_get_label_plural( $lowercase = false ) {
 	$defaults = mdjm_get_default_labels();
@@ -557,9 +557,9 @@ function mdjm_get_label_plural( $lowercase = false ) {
 /**
  * Get the singular and plural labels for custom taxonomies.
  *
- * @since	0.1
- * @param	str		$taxonomy	The Taxonomy to get labels for
- * @return	arr		Associative array of labels (name = plural)
+ * @since   0.1
+ * @param   str     $taxonomy   The Taxonomy to get labels for
+ * @return  arr     Associative array of labels (name = plural)
  */
 function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 
@@ -603,8 +603,8 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
  * Registers Custom Post Statuses which are used by the Communication,
  * Event, Transaction and Quote custom post types.
  *
- * @since	1.3
- * @return	void
+ * @since   1.3
+ * @return  void
  */
 function mdjm_register_post_statuses() {
 	/** Communication Post Statuses */
@@ -670,7 +670,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_unattended_status',
 			array(
 				'label'                     => __( 'Unattended Enquiry', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Unattended Enquiries', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Unattended Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -686,7 +686,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_enquiry_status',
 			array(
 				'label'                     => __( 'Enquiry', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Enquiries', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -701,7 +701,7 @@ function mdjm_register_post_statuses() {
         'mdjm-awaitingdeposit',
         apply_filters( 'mdjm_event_awaitingdeposit_status',
             array(
-                'label' 		            => sprintf( __( 'Awaiting %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+                'label'                     => sprintf( __( 'Awaiting %s', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
                 'plural'                    => sprintf( __( 'Awaiting %ss', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
                 'public'                    => true,
                 'exclude_from_search'       => false,
@@ -722,7 +722,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_contract_status',
 			array(
 				'label'                     => __( 'Awaiting Contract', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Awaiting Contracts', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Awaiting Contracts', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -738,7 +738,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_approved_status',
 			array(
 				'label'                     => __( 'Confirmed', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Confirmed', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Confirmed', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -754,7 +754,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_completed_status',
 			array(
 				'label'                     => __( 'Completed', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Completed', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Completed', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -770,7 +770,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_cancelled_status',
 			array(
 				'label'                     => __( 'Cancelled', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Cancelled', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Cancelled', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -786,7 +786,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_rejected_status',
 			array(
 				'label'                     => __( 'Rejected Enquiry', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Rejected Enquiries', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Rejected Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -802,7 +802,7 @@ function mdjm_register_post_statuses() {
 		apply_filters( 'mdjm_event_failed_status',
 			array(
 				'label'                     => __( 'Failed Enquiry', 'mobile-dj-manager' ),
-				'plural'					=> __( 'Failed Enquiries', 'mobile-dj-manager' ),
+				'plural'                    => __( 'Failed Enquiries', 'mobile-dj-manager' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
@@ -878,10 +878,10 @@ add_action( 'init', 'mdjm_register_post_statuses', 2 );
 /**
  * Retrieve all MDJM Event custom post statuses.
  *
- * @since	1.0
- * @uses	get_post_stati()
- * @param	str		$output		The type of output to return, either 'names' or 'objects'. Default 'names'.
- * @return	arr|obj
+ * @since   1.0
+ * @uses    get_post_stati()
+ * @param   str     $output     The type of output to return, either 'names' or 'objects'. Default 'names'.
+ * @return  arr|obj
  */
 function mdjm_get_post_statuses( $output = 'names' ) {
 	$args['mdjm-event'] = true;
@@ -895,8 +895,8 @@ function mdjm_get_post_statuses( $output = 'names' ) {
  * Registers the custom taxonomies for the Event, Playlist.
  * Transaction and Venue custom post types.
  *
- * @since	1.3
- * @return	void
+ * @since   1.3
+ * @return  void
  */
 function mdjm_register_taxonomies() {
 
@@ -970,18 +970,18 @@ function mdjm_register_taxonomies() {
 
 	/** Event Types */
 	$event_type_labels = array(
-		'name'              		   => _x( 'Event Type', 'taxonomy general name', 'mobile-dj-manager' ),
-		'singular_name'     		  => _x( 'Event Type', 'taxonomy singular name', 'mobile-dj-manager' ),
-		'search_items'      		   => __( 'Search Event Types', 'mobile-dj-manager' ),
-		'all_items'         		  => __( 'All Event Types', 'mobile-dj-manager' ),
-		'edit_item'        		  => __( 'Edit Event Type', 'mobile-dj-manager' ),
-		'update_item'       			=> __( 'Update Event Type', 'mobile-dj-manager' ),
-		'add_new_item'      		   => __( 'Add New Event Type', 'mobile-dj-manager' ),
-		'new_item_name'     		  => __( 'New Event Type', 'mobile-dj-manager' ),
-		'menu_name'         		  => __( 'Event Types', 'mobile-dj-manager' ),
+		'name'                         => _x( 'Event Type', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'               => _x( 'Event Type', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'                 => __( 'Search Event Types', 'mobile-dj-manager' ),
+		'all_items'                   => __( 'All Event Types', 'mobile-dj-manager' ),
+		'edit_item'               => __( 'Edit Event Type', 'mobile-dj-manager' ),
+		'update_item'                   => __( 'Update Event Type', 'mobile-dj-manager' ),
+		'add_new_item'                 => __( 'Add New Event Type', 'mobile-dj-manager' ),
+		'new_item_name'               => __( 'New Event Type', 'mobile-dj-manager' ),
+		'menu_name'                   => __( 'Event Types', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
-		'choose_from_most_used'	  => __( 'Choose from the most popular Event Types', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No event types found', 'mobile-dj-manager' ),
+		'choose_from_most_used'   => __( 'Choose from the most popular Event Types', 'mobile-dj-manager' ),
+		'not_found'               => __( 'No event types found', 'mobile-dj-manager' ),
 	);
 
 	$event_type_args = apply_filters( 'mdjm_event_type_args', array(
@@ -1040,18 +1040,18 @@ function mdjm_register_taxonomies() {
 
 	/** Playlist Category */
 	$playlist_category_labels = array(
-		'name'              		   => _x( 'Playlist Categories', 'taxonomy general name', 'mobile-dj-manager' ),
-		'singular_name'     		  => _x( 'Playlist Category', 'taxonomy singular name', 'mobile-dj-manager' ),
-		'search_items'      		   => __( 'Playlist Categories', 'mobile-dj-manager' ),
-		'all_items'         		  => __( 'All Playlist Categories', 'mobile-dj-manager' ),
-		'edit_item'        		  => __( 'Edit Playlist Category', 'mobile-dj-manager' ),
+		'name'                         => _x( 'Playlist Categories', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'               => _x( 'Playlist Category', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'                 => __( 'Playlist Categories', 'mobile-dj-manager' ),
+		'all_items'                   => __( 'All Playlist Categories', 'mobile-dj-manager' ),
+		'edit_item'               => __( 'Edit Playlist Category', 'mobile-dj-manager' ),
 		'update_item'             => __( 'Update Playlist Category', 'mobile-dj-manager' ),
-		'add_new_item'      		   => __( 'Add New Playlist Category', 'mobile-dj-manager' ),
-		'new_item_name'     		  => __( 'New Playlist Category', 'mobile-dj-manager' ),
-		'menu_name'         		  => __( 'Event Playlist Categories', 'mobile-dj-manager' ),
+		'add_new_item'                 => __( 'Add New Playlist Category', 'mobile-dj-manager' ),
+		'new_item_name'               => __( 'New Playlist Category', 'mobile-dj-manager' ),
+		'menu_name'                   => __( 'Event Playlist Categories', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
-		'choose_from_most_used'	  => __( 'Choose from the most popular Playlist Categories', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No playlist categories found', 'mobile-dj-manager' ),
+		'choose_from_most_used'   => __( 'Choose from the most popular Playlist Categories', 'mobile-dj-manager' ),
+		'not_found'               => __( 'No playlist categories found', 'mobile-dj-manager' ),
 	);
 
 	$playlist_category_args = apply_filters( 'mdjm_playlist_category_args', array(
@@ -1072,30 +1072,30 @@ function mdjm_register_taxonomies() {
 
 	/** Transaction Types */
 	$txn_type_labels = array(
-		'name'              		   => _x( 'Transaction Type', 'taxonomy general name', 'mobile-dj-manager' ),
-		'singular_name'     		  => _x( 'Transaction Type', 'taxonomy singular name', 'mobile-dj-manager' ),
-		'search_items'      		   => __( 'Search Transaction Types', 'mobile-dj-manager' ),
-		'all_items'         		  => __( 'All Transaction Types', 'mobile-dj-manager' ),
-		'edit_item'        		  => __( 'Edit Transaction Type', 'mobile-dj-manager' ),
-		'update_item'       			=> __( 'Update Transaction Type', 'mobile-dj-manager' ),
-		'add_new_item'      		   => __( 'Add New Transaction Type', 'mobile-dj-manager' ),
-		'new_item_name'     		  => __( 'New Transaction Type', 'mobile-dj-manager' ),
-		'menu_name'         		  => __( 'Transaction Types', 'mobile-dj-manager' ),
+		'name'                         => _x( 'Transaction Type', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'               => _x( 'Transaction Type', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'                 => __( 'Search Transaction Types', 'mobile-dj-manager' ),
+		'all_items'                   => __( 'All Transaction Types', 'mobile-dj-manager' ),
+		'edit_item'               => __( 'Edit Transaction Type', 'mobile-dj-manager' ),
+		'update_item'                   => __( 'Update Transaction Type', 'mobile-dj-manager' ),
+		'add_new_item'                 => __( 'Add New Transaction Type', 'mobile-dj-manager' ),
+		'new_item_name'               => __( 'New Transaction Type', 'mobile-dj-manager' ),
+		'menu_name'                   => __( 'Transaction Types', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
-		'choose_from_most_used'	  => __( 'Choose from the most popular Transaction Types', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No transaction types found', 'mobile-dj-manager' ),
+		'choose_from_most_used'   => __( 'Choose from the most popular Transaction Types', 'mobile-dj-manager' ),
+		'not_found'               => __( 'No transaction types found', 'mobile-dj-manager' ),
 	);
 
 	$txn_type_args = apply_filters( 'mdjm_transaction_type_args', array(
 			'hierarchical'          => true,
 			'labels'                => apply_filters( 'mdjm_transaction_type_labels', $txn_type_labels ),
 			'query_var'             => true,
-			'rewrite'           		=> array( 'slug' => 'transaction-types' ),
+			'rewrite'                   => array( 'slug' => 'transaction-types' ),
 			'capabilities'          => apply_filters( 'mdjm_transaction_type_caps', array(
-				'manage_terms'	=> 'manage_mdjm',
-				'edit_terms'	  => 'manage_mdjm',
-				'delete_terms'	=> 'manage_mdjm',
-				'assign_terms'	=> 'mdjm_employee',
+				'manage_terms'  => 'manage_mdjm',
+				'edit_terms'      => 'manage_mdjm',
+				'delete_terms'  => 'manage_mdjm',
+				'assign_terms'  => 'mdjm_employee',
 			) ),
 			'update_count_callback' => '_update_generic_term_count',
 		)
@@ -1105,30 +1105,30 @@ function mdjm_register_taxonomies() {
 
 	/** Venue Details */
 	$venue_details_labels = array(
-		'name'              		   => _x( 'Venue Details', 'taxonomy general name', 'mobile-dj-manager' ),
-		'singular_name'     		  => _x( 'Venue Detail', 'taxonomy singular name', 'mobile-dj-manager' ),
-		'search_items'      		   => __( 'Search Venue Details', 'mobile-dj-manager' ),
-		'all_items'         		  => __( 'All Venue Details', 'mobile-dj-manager' ),
-		'edit_item'        		  => __( 'Edit Venue Detail', 'mobile-dj-manager' ),
-		'update_item'       			=> __( 'Update Venue Detail', 'mobile-dj-manager' ),
-		'add_new_item'      		   => __( 'Add New Venue Detail', 'mobile-dj-manager' ),
-		'new_item_name'     		  => __( 'New Venue Detail', 'mobile-dj-manager' ),
-		'menu_name'         		  => __( 'Venue Details', 'mobile-dj-manager' ),
+		'name'                         => _x( 'Venue Details', 'taxonomy general name', 'mobile-dj-manager' ),
+		'singular_name'               => _x( 'Venue Detail', 'taxonomy singular name', 'mobile-dj-manager' ),
+		'search_items'                 => __( 'Search Venue Details', 'mobile-dj-manager' ),
+		'all_items'                   => __( 'All Venue Details', 'mobile-dj-manager' ),
+		'edit_item'               => __( 'Edit Venue Detail', 'mobile-dj-manager' ),
+		'update_item'                   => __( 'Update Venue Detail', 'mobile-dj-manager' ),
+		'add_new_item'                 => __( 'Add New Venue Detail', 'mobile-dj-manager' ),
+		'new_item_name'               => __( 'New Venue Detail', 'mobile-dj-manager' ),
+		'menu_name'                   => __( 'Venue Details', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
-		'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No details found', 'mobile-dj-manager' ),
+		'choose_from_most_used'   => __( 'Choose from the most popular Venue Details', 'mobile-dj-manager' ),
+		'not_found'               => __( 'No details found', 'mobile-dj-manager' ),
 	);
 
 	$venue_details_args = apply_filters( 'mdjm_venue_details_args', array(
 			'hierarchical'          => true,
 			'labels'                => apply_filters( 'mdjm_venue_details_labels', $venue_details_labels ),
 			'query_var'             => true,
-			'rewrite'           		=> array( 'slug' => 'venue-details' ),
+			'rewrite'                   => array( 'slug' => 'venue-details' ),
 			'capabilities'          => apply_filters( 'mdjm_venue_details_caps', array(
-				'manage_terms'	=> 'manage_mdjm',
-				'edit_terms'	  => 'manage_mdjm',
-				'delete_terms'	=> 'manage_mdjm',
-				'assign_terms'	=> 'mdjm_employee',
+				'manage_terms'  => 'manage_mdjm',
+				'edit_terms'      => 'manage_mdjm',
+				'delete_terms'  => 'manage_mdjm',
+				'assign_terms'  => 'mdjm_employee',
 			) ),
 			'update_count_callback' => '_update_generic_term_count',
 		)
@@ -1141,9 +1141,9 @@ add_action( 'init', 'mdjm_register_taxonomies', 0 );
 /**
  * Retrieve all MDJM Post Types.
  *
- * @since	1.3
+ * @since   1.3
  * @param
- * @return	arr
+ * @return  arr
  */
 function mdjm_get_post_types() {
 	$post_types = array(
