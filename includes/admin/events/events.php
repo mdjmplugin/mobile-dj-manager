@@ -30,7 +30,7 @@ function mdjm_event_post_columns( $columns ) {
 			'balance'      => __( 'Due', 'mobile-dj-manager' ),
 			'playlist'     => __( 'Playlist', 'mobile-dj-manager' ),
 			'journal'      => __( 'Journal', 'mobile-dj-manager' ),
-		);
+	);
 
 	if ( ! mdjm_employee_can( 'manage_all_events' ) && isset( $columns['cb'] ) ) {
 		unset( $columns['cb'] );
@@ -117,7 +117,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 						esc_url( add_query_arg(
 							array(
                             'recipient' => $client->ID,
-                            'event_id' => $post_id,
+                            'event_id'  => $post_id,
                             ),
 							admin_url( 'admin.php?page=mdjm-comms' )
 						) ),
@@ -147,7 +147,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 						esc_url( add_query_arg(
 							array(
                             'recipient' => $primary->ID,
-                            'event_id' => $post_id,
+                            'event_id'  => $post_id,
                             ),
 							admin_url( 'admin.php?page=mdjm-comms' )
 						) ),
@@ -176,7 +176,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 							esc_url( add_query_arg(
 								array(
                                 'recipient' => $employee['id'],
-                                'event_id' => $post_id,
+                                'event_id'  => $post_id,
                                 ),
 								admin_url( 'admin.php?page=mdjm-comms' )
 							) ),
@@ -374,7 +374,7 @@ function mdjm_event_instant_reject() {
 
 	wp_safe_redirect( add_query_arg( array(
         'mdjm-message' => $message,
-        'mdjm-count' => $i,
+        'mdjm-count'   => $i,
 	), $url ) );
 	exit;
 
@@ -471,11 +471,11 @@ function mdjm_event_date_filter_dropdown() {
 function mdjm_event_type_filter_dropdown() {
 
 	$event_types = get_categories( array(
-		'type'            => 'mdjm-event',
-		'taxonomy'        => 'event-types',
-		'pad_counts'        => false,
-		'hide_empty'        => true,
-		'orderby'         => 'name',
+		'type'       => 'mdjm-event',
+		'taxonomy'   => 'event-types',
+		'pad_counts' => false,
+		'hide_empty' => true,
+		'orderby'    => 'name',
 	) );
 
 	$current = isset( $_GET['mdjm_filter_type'] ) ? sanitize_text_field( wp_unslash( $_GET['mdjm_filter_type'] ) ) : '';
@@ -517,14 +517,14 @@ function mdjm_event_employee_filter_dropdown() {
     <?php
 	mdjm_employee_dropdown(
 		array(
-			'name'                => 'mdjm_filter_employee',
-			'id'                  => 'filter-by-employee',
-			'selected'            => isset( $_GET['mdjm_filter_employee'] ) ? absint( wp_unslash( $_GET['mdjm_filter_employee'] ) ) : 0,
-			'first_entry'         => __( 'All Employees', 'mobile-dj-manager' ),
-			'first_entry_val'     => 0,
-			'group'               => true,
-			'structure'           => true,
-			'echo'                => true,
+			'name'            => 'mdjm_filter_employee',
+			'id'              => 'filter-by-employee',
+			'selected'        => isset( $_GET['mdjm_filter_employee'] ) ? absint( wp_unslash( $_GET['mdjm_filter_employee'] ) ) : 0,
+			'first_entry'     => __( 'All Employees', 'mobile-dj-manager' ),
+			'first_entry_val' => 0,
+			'group'           => true,
+			'structure'       => true,
+			'echo'            => true,
 		)
 	);
 
@@ -682,7 +682,7 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 			add_query_arg( array(
                 'mdjm-action' => 'get_event_availability',
 				'event_id'    => $post->ID,
-                ), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
+			), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
 			)
 		);
 
@@ -694,7 +694,7 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 				'template'    => mdjm_get_option( 'unavailable' ),
 				'event_id'    => $post->ID,
 				'mdjm-action' => 'respond_unavailable',
-			    ), admin_url( 'admin.php?page=mdjm-comms' )
+			), admin_url( 'admin.php?page=mdjm-comms' )
 			)
 		);
 
@@ -899,16 +899,16 @@ function mdjm_limit_results_to_employee_events( $query ) {
 		array(
 			'relation' => 'AND',
 			array(
-				'relation'  => 'OR',
+				'relation' => 'OR',
 				array(
-					'key'       => '_mdjm_event_dj',
-					'value'       => $user_ID,
-					'compare'   => '==',
+					'key'     => '_mdjm_event_dj',
+					'value'   => $user_ID,
+					'compare' => '==',
 				),
 				array(
-					'key'       => '_mdjm_event_employees',
-					'value'     => sprintf( ':"%s";', $user_ID ),
-					'compare'   => 'LIKE',
+					'key'     => '_mdjm_event_employees',
+					'value'   => sprintf( ':"%s";', $user_ID ),
+					'compare' => 'LIKE',
 				),
 			),
 		)
@@ -950,8 +950,8 @@ function mdjm_hide_inactive_events( $query ) {
 
 	$active_events = mdjm_get_events( array(
 		'post_status' => $active_statuses,
-		'fields' => 'ids',
-		'number' => -1,
+		'fields'      => 'ids',
+		'number'      => -1,
 	) );
 
 	if ( $active_events ) {
@@ -1023,10 +1023,10 @@ function mdjm_event_post_filtered( $query ) {
 	if ( ! empty( $_GET['mdjm_filter_employee'] ) ) {
 
 		$query->query_vars['meta_query'] = array(
-			'relation'    => 'OR',
+			'relation' => 'OR',
 			array(
-				'key'     => '_mdjm_event_dj',
-				'value'   => sanitize_text_field( wp_unslash( $_GET['mdjm_filter_employee'] ) ),
+				'key'   => '_mdjm_event_dj',
+				'value' => sanitize_text_field( wp_unslash( $_GET['mdjm_filter_employee'] ) ),
 			),
 			array(
 				'key'     => '_mdjm_event_employees',
@@ -1085,8 +1085,8 @@ function mdjm_event_post_search( $query ) {
 	// If searching it's only useful if we include clients and employees
 	$users = new WP_User_Query(
 		array(
-			'search'            => sanitize_text_field( wp_unslash( $_GET['s'] ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-			'search_columns'    => array(
+			'search'         => sanitize_text_field( wp_unslash( $_GET['s'] ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			'search_columns' => array(
 				'user_login',
 				'user_email',
 				'user_nicename',
@@ -1104,25 +1104,25 @@ function mdjm_event_post_search( $query ) {
 
 			$results = get_posts(
 				array(
-					'post_type'       => 'mdjm-event',
+					'post_type'      => 'mdjm-event',
 					'post_status'    => 'any',
-					'posts_per_page'  => -1,
-					'meta_query'      => array(
-						'relation'  => 'OR',
+					'posts_per_page' => -1,
+					'meta_query'     => array(
+						'relation' => 'OR',
 						array(
-							'key'       => '_mdjm_event_dj',
-							'value'       => $user->ID,
-							'type'     => 'NUMERIC',
+							'key'   => '_mdjm_event_dj',
+							'value' => $user->ID,
+							'type'  => 'NUMERIC',
 						),
 						array(
-							'key'       => '_mdjm_event_client',
-							'value'       => $user->ID,
-							'type'     => 'NUMERIC',
+							'key'   => '_mdjm_event_client',
+							'value' => $user->ID,
+							'type'  => 'NUMERIC',
 						),
 						array(
-							'key'       => '_mdjm_event_employees',
+							'key'     => '_mdjm_event_employees',
 							'value'   => sprintf( ':"%s";', $user->ID ),
-							'compare'   => 'LIKE',
+							'compare' => 'LIKE',
 						),
 					),
 				)
@@ -1507,9 +1507,9 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 			sanitize_text_field( wp_unslash( $_POST['mdjm_event_status'] ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			sanitize_text_field( wp_unslash( $_POST['original_post_status'] ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			array(
-				'client_notices'  => empty( $_POST['mdjm_block_emails'] ) ? true : false,
-				'email_template'  => ! empty( $_POST['mdjm_email_template'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_email_template'] ) ) : false,
-				'quote_template'  => ! empty( $_POST['mdjm_online_quote'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_online_quote'] ) ) : false,
+				'client_notices' => empty( $_POST['mdjm_block_emails'] ) ? true : false,
+				'email_template' => ! empty( $_POST['mdjm_email_template'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_email_template'] ) ) : false,
+				'quote_template' => ! empty( $_POST['mdjm_online_quote'] ) ? sanitize_text_field( wp_unslash( $_POST['mdjm_online_quote'] ) ) : false,
 			)
 		);
 
@@ -1517,13 +1517,13 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 
 		mdjm_add_journal(
 			array(
-				'user_id'            => get_current_user_id(),
-				'event_id'           => $post_id,
-				'comment_content'    => sprintf( '%s %s via Admin', mdjm_get_label_singular(), empty( $update ) ? 'created' : 'updated' ),
+				'user_id'         => get_current_user_id(),
+				'event_id'        => $post_id,
+				'comment_content' => sprintf( '%s %s via Admin', mdjm_get_label_singular(), empty( $update ) ? 'created' : 'updated' ),
 			),
 			array(
-				'type'               => 'update-event',
-				'visibility'         => '2',
+				'type'       => 'update-event',
+				'visibility' => '2',
 			)
 		);
 
