@@ -922,14 +922,16 @@ function mdjm_register_taxonomies() {
 		'labels'                => apply_filters( 'mdjm_package_category_labels', $package_category_labels ),
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'package-category' ),
-		'capabilities'          => apply_filters( 'mdjm_package_category_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_package_category_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+        	)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+	)
 	);
 	register_taxonomy( 'package-category', array( 'mdjm-package' ), $package_category_args );
 	register_taxonomy_for_object_type( 'package-category', 'mdjm-package' );
@@ -956,14 +958,16 @@ function mdjm_register_taxonomies() {
 		'labels'                => apply_filters( 'mdjm_addon_category_labels', $addon_category_labels ),
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'addon-category' ),
-		'capabilities'          => apply_filters( 'mdjm_addon_category_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_addon_category_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+			)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+	)
 	);
 	register_taxonomy( 'addon-category', array( 'mdjm-addon' ), $addon_category_args );
 	register_taxonomy_for_object_type( 'addon-category', 'mdjm-addon' );
@@ -989,14 +993,16 @@ function mdjm_register_taxonomies() {
 		'labels'                => apply_filters( 'mdjm_event_type_labels', $event_type_labels ),
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'event-types' ),
-		'capabilities'          => apply_filters( 'mdjm_event_type_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_event_type_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+        	)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+	)
 	);
 	register_taxonomy( 'event-types', array( 'mdjm-event' ), $event_type_args );
 	register_taxonomy_for_object_type( 'event-types', 'mdjm-event' );
@@ -1026,14 +1032,16 @@ function mdjm_register_taxonomies() {
 		'show_ui'               => true,
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'enquiry-source' ),
-		'capabilities'          => apply_filters( 'mdjm_event_type_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_event_type_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+        	)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+	)
 	);
 	register_taxonomy( 'enquiry-source', array( 'mdjm-event' ), $enquiry_source_args );
 	register_taxonomy_for_object_type( 'enquiry-source', 'mdjm-event' );
@@ -1058,14 +1066,16 @@ function mdjm_register_taxonomies() {
 		'hierarchical'          => true,
 		'labels'                => apply_filters( 'mdjm_playlist_category_labels', $playlist_category_labels ),
 		'query_var'             => true,
-		'capabilities'          => apply_filters( 'mdjm_playlist_category_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_playlist_category_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+			)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+		)
 	);
 	register_taxonomy( 'playlist-category', array( 'mdjm-playlist' ), $playlist_category_args );
 	register_taxonomy_for_object_type( 'playlist-category', 'mdjm-playlist' );
@@ -1091,14 +1101,16 @@ function mdjm_register_taxonomies() {
 		'labels'                => apply_filters( 'mdjm_transaction_type_labels', $txn_type_labels ),
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'transaction-types' ),
-		'capabilities'          => apply_filters( 'mdjm_transaction_type_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_transaction_type_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+        	)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+		)
 	);
 	register_taxonomy( 'transaction-types', array( 'mdjm-transaction' ), $txn_type_args );
 	register_taxonomy_for_object_type( 'transaction-types', 'mdjm-transaction' );
@@ -1124,14 +1136,16 @@ function mdjm_register_taxonomies() {
 		'labels'                => apply_filters( 'mdjm_venue_details_labels', $venue_details_labels ),
 		'query_var'             => true,
 		'rewrite'               => array( 'slug' => 'venue-details' ),
-		'capabilities'          => apply_filters( 'mdjm_venue_details_caps', array(
-			'manage_terms' => 'manage_mdjm',
-			'edit_terms'   => 'manage_mdjm',
-			'delete_terms' => 'manage_mdjm',
-			'assign_terms' => 'mdjm_employee',
-        ) ),
+		'capabilities'          => apply_filters( 'mdjm_venue_details_caps',
+			array(
+				'manage_terms' => 'manage_mdjm',
+				'edit_terms'   => 'manage_mdjm',
+				'delete_terms' => 'manage_mdjm',
+				'assign_terms' => 'mdjm_employee',
+        	)
+		),
 		'update_count_callback' => '_update_generic_term_count',
-        )
+		)
 	);
 	register_taxonomy( 'venue-details', array( 'mdjm-venue' ), $venue_details_args );
 	register_taxonomy_for_object_type( 'venue-details', 'mdjm-venue' );
