@@ -679,9 +679,10 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 		// Check availability
 		$actions['availability'] = sprintf(
             __( '<a href="%s">Availability</a>', 'mobile-dj-manager' ),
-			add_query_arg( array(
-                'mdjm-action' => 'get_event_availability',
-				'event_id'    => $post->ID,
+			add_query_arg(
+				array(
+					'mdjm-action' => 'get_event_availability',
+					'event_id'    => $post->ID,
 				),
 				wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
 			)
@@ -690,11 +691,12 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 		// Respond Unavailable
 		$actions['respond_unavailable'] = sprintf(
 			__( '<span class="trash"><a href="%s">Unavailable</a></span>', 'mobile-dj-manager' ),
-			add_query_arg( array(
-				'recipient'   => mdjm_get_client_id( $post->ID ),
-				'template'    => mdjm_get_option( 'unavailable' ),
-				'event_id'    => $post->ID,
-				'mdjm-action' => 'respond_unavailable',
+			add_query_arg(
+				array(
+					'recipient'   => mdjm_get_client_id( $post->ID ),
+					'template'    => mdjm_get_option( 'unavailable' ),
+					'event_id'    => $post->ID,
+					'mdjm-action' => 'respond_unavailable',
 				),
 				admin_url( 'admin.php?page=mdjm-comms' )
 			)
