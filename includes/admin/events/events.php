@@ -156,7 +156,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 					);
 				} else {
 					echo '<a title="' . esc_attr( mdjm_get_option( 'artist', __( 'DJ', 'mobile-dj-manager' ) ) ) . '">' . esc_html( $primary->display_name ) . '</a>';
-				}           
+				}
 			} else {
 				echo '<span class="mdjm-form-error">';
 				esc_html_e( 'Not Assigned', 'mobile-dj-manager' );
@@ -191,8 +191,8 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 
 					if ( $i != count( $employees ) ) {
 						echo '<br />';
-					}               
-				}           
+					}
+				}
 			}
 
 			break;
@@ -249,7 +249,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 						esc_html( mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_deposit( $post_id ) ) ) ),
 						esc_html( mdjm_get_deposit_label() )
 					);
-				}           
+				}
 			} else {
 				echo '&mdash;';
 			}
@@ -682,7 +682,8 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 			add_query_arg( array(
                 'mdjm-action' => 'get_event_availability',
 				'event_id'    => $post->ID,
-			), wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
+				),
+				wp_nonce_url( $url, 'get_event_availability', 'mdjm_nonce' )
 			)
 		);
 
@@ -694,7 +695,8 @@ function mdjm_event_post_row_actions( $actions, $post ) {
 				'template'    => mdjm_get_option( 'unavailable' ),
 				'event_id'    => $post->ID,
 				'mdjm-action' => 'respond_unavailable',
-			), admin_url( 'admin.php?page=mdjm-comms' )
+				),
+				admin_url( 'admin.php?page=mdjm-comms' )
 			)
 		);
 
@@ -1016,7 +1018,7 @@ function mdjm_event_post_filtered( $query ) {
 					),
 				)
 			);
-		}   
+		}
 	}
 
 	// Filter by selected employee
@@ -1134,8 +1136,8 @@ function mdjm_event_post_search( $query ) {
 
 					$events[] = $result->ID;
 
-				}           
-			}       
+				}
+			}
 		}
 
 		if ( ! empty( $events ) ) {
@@ -1143,7 +1145,7 @@ function mdjm_event_post_search( $query ) {
 			$query->set( 'post__in', $events );
 			$query->set( 'post_status', array( 'mdjm-unattended', 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved', 'mdjm-failed', 'mdjm-rejected', 'mdjm-completed' ) );
 
-		}   
+		}
 	}
 
 } // mdjm_event_post_search
@@ -1183,7 +1185,7 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			$caps[] = $post_type->cap->edit_posts;
 		} else {
 			$caps[] = $post_type->cap->edit_others_posts;
-		}   
+		}
 	} elseif ( 'delete_mdjm_event' == $cap ) {
 		// If deleting a event, assign the required capability.
 
@@ -1191,7 +1193,7 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			$caps[] = $post_type->cap->delete_posts;
 		} else {
 			$caps[] = $post_type->cap->delete_others_posts;
-		}   
+		}
 	} elseif ( 'read_mdjm_event' == $cap ) {
 		// If reading a private event, assign the required capability.
 
@@ -1201,7 +1203,7 @@ function mdjm_event_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			$caps[] = 'read';
 		} else {
 			$caps[] = $post_type->cap->read_private_posts;
-		}   
+		}
 	}
 
 	// Return the capabilities required by the user.
@@ -1307,8 +1309,8 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 					$venue_meta[ $venue_key ] = sanitize_email( $venue_value );
 				} else {
 					$venue_meta[ $venue_key ] = ucwords( sanitize_text_field( $venue_value ) );
-				}           
-			}       
+				}
+			}
 		}
 
 		// Create the new venue
@@ -1349,7 +1351,7 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 			$event_data['_mdjm_event_venue_county']   = ! empty( $client_data->county ) ? $client_data->county : '';
 			$event_data['_mdjm_event_venue_postcode'] = ! empty( $client_data->postcode ) ? $client_data->postcode : '';
 
-		}   
+		}
 	}
 
 	/**
@@ -1496,7 +1498,7 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 		} else {
 			unset( $event_data['_mdjm_event_deposit_status'] );
 			mdjm_mark_event_deposit_paid( $post_id );
-		}   
+		}
 	}
 
 	// Set the event status & initiate tasks based on the status
@@ -1547,7 +1549,7 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 		foreach ( $debug as $log ) {
 			MDJM()->debug->log_it( $log, $true );
 			$true = false;
-		}   
+		}
 	}
 
 } // mdjm_save_event_post
