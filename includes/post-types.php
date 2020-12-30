@@ -69,7 +69,7 @@ function mdjm_register_post_types() {
 		'has_archive'             => true,
 		'supports'                => apply_filters( 'mdjm_event_supports', false ),
 		'menu_icon'               => plugins_url( 'mobile-dj-manager/assets/images/mdjm-menu-16x16.jpg' ),
-		'taxonomies'              => array( 'mdjm-event' )
+		'taxonomies'              => array( 'mdjm-event' ),
 	);
 	register_post_type( 'mdjm-event', apply_filters( 'mdjm_event_post_type_args', $event_args ) );
 
@@ -90,7 +90,7 @@ function mdjm_register_post_types() {
 				'all_items'             => __( 'All Packages', 'mobile-dj-manager' ),
 				'search_items'          => __( 'Search Packages', 'mobile-dj-manager' ),
 				'not_found'             => __( 'No packages found.', 'mobile-dj-manager' ),
-				'not_found_in_trash'	=> __( 'No packages found in Trash.', 'mobile-dj-manager' )
+				'not_found_in_trash'	=> __( 'No packages found in Trash.', 'mobile-dj-manager' ),
 			)
 		);
 
@@ -101,7 +101,7 @@ function mdjm_register_post_types() {
 			'show_in_menu'            => 'edit.php?post_type=mdjm-package',
 			'has_archive'             => true,
 			'rewrite'            	  => array( 'slug' => 'packages' ),
-			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
+			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) ),
 		);
 		register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
 
@@ -121,7 +121,7 @@ function mdjm_register_post_types() {
 				'all_items'             => __( 'All Addons', 'mobile-dj-manager' ),
 				'search_items'          => __( 'Search Addons', 'mobile-dj-manager' ),
 				'not_found'             => __( 'No addons found.', 'mobile-dj-manager' ),
-				'not_found_in_trash'	=> __( 'No addons found in Trash.', 'mobile-dj-manager' )
+				'not_found_in_trash'    => __( 'No addons found in Trash.', 'mobile-dj-manager' ),
 			)
 		);
 
@@ -132,7 +132,7 @@ function mdjm_register_post_types() {
 			'show_in_menu'            => 'edit.php?post_type=mdjm-addon',
 			'has_archive'             => true,
 			'rewrite'            	  => array( 'slug' => 'addons' ),
-			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) )
+			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) ),
 		);
 		register_post_type( 'mdjm-addon', apply_filters( 'mdjm_addon_post_type_args', $addon_args ) );
 
@@ -221,7 +221,7 @@ function mdjm_register_post_types() {
 		) ),
 		'map_meta_cap'           => true,
 		'has_archive'            => true,
-		'supports'               => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) )
+		'supports'               => apply_filters( 'mdjm_contract_supports', array( 'title', 'editor', 'revisions' ) ),
 	);
 	register_post_type( 'contract', apply_filters( 'mdjm_contract_post_type_args', $contract_args ) );
 
@@ -325,7 +325,7 @@ function mdjm_register_post_types() {
 		) ),
 		'map_meta_cap'            => true,
 		'has_archive'             => true,
-		'supports'                => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) )
+		'supports'                => apply_filters( 'mdjm_email_template_supports', array( 'title', 'editor', 'revisions' ) ),
 	);
 	register_post_type( 'email_template', apply_filters( 'mdjm_email_template_post_type_args', $email_template_args ) );
 
@@ -345,7 +345,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Entries', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Entries', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No entries found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No entries found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No entries found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -366,7 +366,7 @@ function mdjm_register_post_types() {
 		) ),
 		'map_meta_cap'           => true,
 		'supports'               => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
-		'taxonomies'             => array( 'mdjm-playlist' )
+		'taxonomies'             => array( 'mdjm-playlist' ),
 	);
 	register_post_type( 'mdjm-playlist', apply_filters( 'mdjm_playlist_post_type_args', $playlist_args ) );
 
@@ -386,7 +386,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Quotes', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Quotes', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No quotes found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No quotes found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No quotes found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -566,8 +566,14 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 	$allowed_taxonomies = apply_filters(
 		'mdjm_allowed_taxonomies',
 		array(
-			'addon-category', 'event-types', 'mdjm-playlist', 'enquiry-source', 'mdjm-transactions',
-			'package-category', 'venue-details' )
+			'addon-category',
+			'event-types',
+			'mdjm-playlist',
+			'enquiry-source',
+			'mdjm-transactions',
+			'package-category',
+			'venue-details',
+		)
 	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
@@ -1039,7 +1045,7 @@ function mdjm_register_taxonomies() {
 		'search_items'      		   => __( 'Playlist Categories', 'mobile-dj-manager' ),
 		'all_items'         		  => __( 'All Playlist Categories', 'mobile-dj-manager' ),
 		'edit_item'        		  => __( 'Edit Playlist Category', 'mobile-dj-manager' ),
-		'update_item'       			=> __( 'Update Playlist Category', 'mobile-dj-manager' ),
+		'update_item'             => __( 'Update Playlist Category', 'mobile-dj-manager' ),
 		'add_new_item'      		   => __( 'Add New Playlist Category', 'mobile-dj-manager' ),
 		'new_item_name'     		  => __( 'New Playlist Category', 'mobile-dj-manager' ),
 		'menu_name'         		  => __( 'Event Playlist Categories', 'mobile-dj-manager' ),
@@ -1077,7 +1083,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'         		  => __( 'Transaction Types', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'	  => __( 'Choose from the most popular Transaction Types', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No transaction types found', 'mobile-dj-manager' )
+		'not_found'				  => __( 'No transaction types found', 'mobile-dj-manager' ),
 	);
 
 	$txn_type_args = apply_filters( 'mdjm_transaction_type_args', array(
