@@ -146,13 +146,13 @@ function mdjm_employee_dropdown( $args = '' ) {
 		$results       = new stdClass();
 		$results->role = array();
 		foreach ( $employees as $employee ) {
-			if ( $employee->roles[0] == 'administrator' && ! empty( $employee->roles[1] ) ) {
+			if ( 'administrator' === $employee->roles[0] && ! empty( $employee->roles[1] ) ) {
 				$employee->roles[0] = $employee->roles[1];
 			} else {
 				$employee->roles[0] = 'dj';
 			}
 
-			if ( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) ) {
+			if ( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'], true ) ) {
 				continue;
             }
 
@@ -167,7 +167,7 @@ function mdjm_employee_dropdown( $args = '' ) {
 			foreach ( $userobj as $user ) {
 				$output .= '<option value="' . $user->ID . '"';
 
-				if ( ! empty( $args['selected'] ) && $user->ID == $args['selected'] ) {
+				if ( ! empty( $args['selected'] ) && $user->ID === $args['selected'] ) {
 					$output .= ' selected="selected"';
                 }
 
@@ -181,7 +181,7 @@ function mdjm_employee_dropdown( $args = '' ) {
 	}
 
 	// End the structure
-	if ( $args['structure'] == true ) {
+	if ( true === $args['structure'] ) {
 		$output .= '</select>' . "\r\n";
     }
 
@@ -242,7 +242,7 @@ function mdjm_add_employee( $post_data ) {
 
 	// Success
 	if ( ! is_wp_error( $user_id ) ) {
-		if ( MDJM_DEBUG == true ) {
+		if ( MDJM_DEBUG === true ) {
 			MDJM()->debug->log_it(
 				'Adding employee ' . ucfirst( $post_data['first_name'] ) . ' ' . ucfirst( $post_data['last_name'] ) . ' with user ID ' . $user_id,
 				true
@@ -253,7 +253,7 @@ function mdjm_add_employee( $post_data ) {
 
 		return true;
 	} else {
-		if ( MDJM_DEBUG == true ) {
+		if ( MDJM_DEBUG === true ) {
 			MDJM()->debug->log_it( 'ERROR: Unable to add employee. ' . $user_id->get_error_message(), true );
         }
 
@@ -273,9 +273,11 @@ function mdjm_send_employee_welcome_email( $user_id, $userdata ) {
 
 	global $wp_roles;
 
+	/* translators: 1: company name */
 	$subject = sprintf( __( 'Your Employee Details from %s', 'mobile-dj-manager' ), mdjm_get_option( 'company_name' ) );
 	$subject = apply_filters( 'mdjm_new_employee_subject', $subject, $user_id, $userdata );
 
+	/* translators: 1: employee first name */
 	$message = '<p>' . sprintf( __( 'Hello %s,', 'mobile-dj-manager' ), $userdata['first_name'] ) . '</p>' . "\r\n" .
 
 				'<p>' . sprintf(
@@ -682,17 +684,19 @@ function mdjm_add_employee_to_event( $event_id, $args ) {
 
 	$mdjm_txn = new MDJM_Txn();
 
-	$mdjm_txn->create( array(
-		'post_title'  => sprintf( __( 'Wage payment to %1$s for %2$d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $data['id'] ), $event_id ),
-		'post_status' => 'mdjm-expenditure',
-		'post_author' => 1,
-		'post_parent' => $event_id,
-        ),
+	$mdjm_txn->create(
+		array(
+			'post_title'  => sprintf( __( 'Wage payment to %1$s for %2$d', 'mobile-dj-manager' ), mdjm_get_employee_display_name( $data['id'] ), $event_id ),
+			'post_status' => 'mdjm-expenditure',
+			'post_author' => 1,
+			'post_parent' => $event_id,
+	    ),
         array(
 			'_mdjm_txn_status' => 'Pending',
 			'_mdjm_payment_to' => $data['id'],
 			'_mdjm_txn_total'  => $data['wage'],
-    ) );
+		)
+	);
 
 	if ( ! empty( $mdjm_txn ) ) {
 		$data['txn_id'] = $mdjm_txn->ID;
