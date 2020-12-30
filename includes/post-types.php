@@ -17,8 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers and sets up the MDJM Event Management custom post types
  *
- * @since	1.3
- * @return	void
+ * @since   1.3
+ * @return  void
  */
 function mdjm_register_post_types() {
 
@@ -38,7 +38,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All %2$s', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search %2$s', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No %3$s found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No %3$s found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No %3$s found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -90,7 +90,7 @@ function mdjm_register_post_types() {
 				'all_items'             => __( 'All Packages', 'mobile-dj-manager' ),
 				'search_items'          => __( 'Search Packages', 'mobile-dj-manager' ),
 				'not_found'             => __( 'No packages found.', 'mobile-dj-manager' ),
-				'not_found_in_trash'	=> __( 'No packages found in Trash.', 'mobile-dj-manager' ),
+				'not_found_in_trash'    => __( 'No packages found in Trash.', 'mobile-dj-manager' ),
 			)
 		);
 
@@ -100,7 +100,7 @@ function mdjm_register_post_types() {
 			'public'                  => true,
 			'show_in_menu'            => 'edit.php?post_type=mdjm-package',
 			'has_archive'             => true,
-			'rewrite'            	  => array( 'slug' => 'packages' ),
+			'rewrite'                 => array( 'slug' => 'packages' ),
 			'supports'                => apply_filters( 'mdjm_package_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) ),
 		);
 		register_post_type( 'mdjm-package', apply_filters( 'mdjm_package_post_type_args', $package_args ) );
@@ -131,7 +131,7 @@ function mdjm_register_post_types() {
 			'public'                  => true,
 			'show_in_menu'            => 'edit.php?post_type=mdjm-addon',
 			'has_archive'             => true,
-			'rewrite'            	  => array( 'slug' => 'addons' ),
+			'rewrite'                 => array( 'slug' => 'addons' ),
 			'supports'                => apply_filters( 'mdjm_addon_supports', array( 'title', 'editor', 'revisions', 'excerpt', 'thumbnail' ) ),
 		);
 		register_post_type( 'mdjm-addon', apply_filters( 'mdjm_addon_post_type_args', $addon_args ) );
@@ -154,7 +154,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Emails', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Emails', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No Emails found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No Emails found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No Emails found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -174,11 +174,11 @@ function mdjm_register_post_types() {
 			'edit_posts'         => 'edit_mdjm_comms',
 			'edit_others_posts'  => 'edit_others_mdjm_comms',
 			'publish_posts'      => 'publish_mdjm_comms',
-			'read_private_posts' => 'read_private_mdjm_comms'
+			'read_private_posts' => 'read_private_mdjm_comms',
 		) ),
 		'map_meta_cap'           => true,
 		'has_archive'            => true,
-		'supports'               => apply_filters( 'mdjm_email_history_supports', array( 'title' ) )
+		'supports'               => apply_filters( 'mdjm_email_history_supports', array( 'title' ) ),
 	);
 	register_post_type( 'mdjm_communication', apply_filters( 'mdjm_email_history_post_type_args', $email_history_args ) );
 
@@ -198,7 +198,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Contract Templates', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Contract Templates', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No contract templates found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No contract templates found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No contract templates found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -217,7 +217,7 @@ function mdjm_register_post_types() {
 			'edit_posts'         => 'edit_mdjm_templates',
 			'edit_others_posts'  => 'edit_others_mdjm_templates',
 			'publish_posts'      => 'publish_mdjm_templates',
-			'read_private_posts' => 'read_private_mdjm_templates'
+			'read_private_posts' => 'read_private_mdjm_templates',
 		) ),
 		'map_meta_cap'           => true,
 		'has_archive'            => true,
@@ -241,7 +241,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Signed Contracts', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Signed Contracts', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No signed contracts found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No signed contracts found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No signed contracts found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -252,7 +252,7 @@ function mdjm_register_post_types() {
 		'capability_type'    => array( 'mdjm_signed_contract', 'mdjm_signed_contracts' ),
 		'map_meta_cap'       => true,
 		'has_archive'        => true,
-		'supports'           => array( '' )
+		'supports'           => array( '' ),
 	);
 	register_post_type( 'mdjm-signed-contract', apply_filters( 'mdjm_signed_contract_post_type_args', $signed_contract_args ) );
 
@@ -272,7 +272,7 @@ function mdjm_register_post_types() {
 			'view_item'          => __( 'View Custom Event Field', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Custom Event Field', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No Custom Event Fields found', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No Custom Event Fields found in trash', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No Custom Event Fields found in trash', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -280,7 +280,7 @@ function mdjm_register_post_types() {
 		'labels'      => $custom_field_labels,
 		'description' => __( 'This is where you can add Custom Event Fields for use in the event screen.', 'mobile-dj-manager' ),
 		'rewrite'     => array( 'slug' => 'mdjm-custom-fields' ),
-		'supports'    => array( 'title' )
+		'supports'    => array( 'title' ),
 	);
 	register_post_type( 'mdjm-custom-field', apply_filters( 'mdjm_custom_field_post_type_args', $custom_field_args ) );
 
@@ -300,7 +300,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Templates', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Templates', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No templates found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No templates found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No templates found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -362,7 +362,7 @@ function mdjm_register_post_types() {
 			'edit_posts'         => 'edit_mdjm_playlists',
 			'edit_others_posts'  => 'edit_others_mdjm_playlists',
 			'publish_posts'      => 'publish_mdjm_playlists',
-			'read_private_posts' => 'read_private_mdjm_playlists'
+			'read_private_posts' => 'read_private_mdjm_playlists',
 		) ),
 		'map_meta_cap'           => true,
 		'supports'               => apply_filters( 'mdjm_playlist_supports', array( 'title' ) ),
@@ -392,12 +392,12 @@ function mdjm_register_post_types() {
 
 	$quote_args = array(
 		'labels'                 => $quote_labels,
-		'description'			 => __( 'MDJM Event Management Quotes', 'mobile-dj-manager' ),
-		'show_ui'				 => true,
-		'show_in_menu'	   	     => 'edit.php?post_type=mdjm-quotes',
+		'description'            => __( 'MDJM Event Management Quotes', 'mobile-dj-manager' ),
+		'show_ui'                => true,
+		'show_in_menu'           => 'edit.php?post_type=mdjm-quotes',
 		'show_in_admin_bar'      => false,
-		'rewrite'            	 => array( 'slug' => 'mdjm-quotes' ),
-		'capability_type'	     => 'mdjm_quote',
+		'rewrite'                => array( 'slug' => 'mdjm-quotes' ),
+		'capability_type'        => 'mdjm_quote',
 		'capabilities'           => apply_filters( 'mdjm_quote_caps', array(
 			'edit_post'          => 'edit_mdjm_quote',
 			'read_post'          => 'read_mdjm_quote',
@@ -405,11 +405,11 @@ function mdjm_register_post_types() {
 			'edit_posts'         => 'edit_mdjm_quotes',
 			'edit_others_posts'  => 'edit_others_mdjm_quotes',
 			'publish_posts'      => 'publish_mdjm_quotes',
-			'read_private_posts' => 'read_private_mdjm_quotes'
+			'read_private_posts' => 'read_private_mdjm_quotes',
 		) ),
 		'map_meta_cap'           => true,
 		'has_archive'            => true,
-		'supports'               => apply_filters( 'mdjm_quote_supports', array( 'title' ) )
+		'supports'               => apply_filters( 'mdjm_quote_supports', array( 'title' ) ),
 	);
 	register_post_type( 'mdjm-quotes', apply_filters( 'mdjm_quotes_post_type_args', $quote_args ) );
 
@@ -429,16 +429,16 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Transactions', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Transactions', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No Transactions found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No Transactions found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No Transactions found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
 	$txn_args = array(
 		'labels'                 => $txn_labels,
-		'description'			=> __( 'Transactions for the MDJM Event Management plugin', 'mobile-dj-manager' ),
-		'show_ui'				=> true,
-		'show_in_menu'		   => 'edit.php?post_type=mdjm-transaction',
-		'show_in_admin_bar'	  => true,
+		'description'            => __( 'Transactions for the MDJM Event Management plugin', 'mobile-dj-manager' ),
+		'show_ui'                => true,
+		'show_in_menu'           => 'edit.php?post_type=mdjm-transaction',
+		'show_in_admin_bar'      => true,
 		'rewrite' 			  	=> array( 'slug' => 'mdjm-transaction'),
 		'capability_type'	    => 'mdjm_txn',
 		'capabilities'           => apply_filters( 'mdjm_transaction_caps', array(
@@ -448,12 +448,12 @@ function mdjm_register_post_types() {
 			'edit_posts'            => 'edit_mdjm_txns',
 			'edit_others_posts'     => 'edit_others_mdjm_txns',
 			'publish_posts'         => 'publish_mdjm_txns',
-			'read_private_posts'    => 'read_private_mdjm_txns'
+			'read_private_posts'    => 'read_private_mdjm_txns',
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
 		'supports'			   => apply_filters( 'mdjm_transaction_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-transaction' )
+		'taxonomies'			 => array( 'mdjm-transaction' ),
 	);
 	register_post_type( 'mdjm-transaction', apply_filters( 'mdjm_transaction_post_type_args', $txn_args ) );
 
@@ -473,7 +473,7 @@ function mdjm_register_post_types() {
 			'all_items'          => __( 'All Venues', 'mobile-dj-manager' ),
 			'search_items'       => __( 'Search Venues', 'mobile-dj-manager' ),
 			'not_found'          => __( 'No Venues found.', 'mobile-dj-manager' ),
-			'not_found_in_trash' => __( 'No Venues found in Trash.', 'mobile-dj-manager' )
+			'not_found_in_trash' => __( 'No Venues found in Trash.', 'mobile-dj-manager' ),
 		)
 	);
 
@@ -492,12 +492,12 @@ function mdjm_register_post_types() {
 			'edit_posts'            => 'edit_mdjm_venues',
 			'edit_others_posts'     => 'edit_others_mdjm_venues',
 			'publish_posts'         => 'publish_mdjm_venues',
-			'read_private_posts'    => 'read_private_mdjm_venues'
+			'read_private_posts'    => 'read_private_mdjm_venues',
 		) ),
 		'map_meta_cap'		   => true,
 		'has_archive'        	=> true,
 		'supports'			   => apply_filters( 'mdjm_venue_supports', array( 'title' ) ),
-		'taxonomies'			 => array( 'mdjm-venue' )
+		'taxonomies'			 => array( 'mdjm-venue' ),
 	);
 	register_post_type( 'mdjm-venue', apply_filters( 'mdjm_venue_post_type_args', $venue_args ) );
 } // mdjm_register_post_types
@@ -512,7 +512,7 @@ add_action( 'init', 'mdjm_register_post_types', 1 );
 function mdjm_get_default_labels() {
 	$defaults = array(
 	   'singular' => __( 'Event', 'mobile-dj-manager' ),
-	   'plural'   => __( 'Events', 'mobile-dj-manager' )
+	   'plural'   => __( 'Events', 'mobile-dj-manager' ),
 	);
 	return apply_filters( 'mdjm_default_events_name', $defaults );
 } // mdjm_get_default_labels
@@ -591,7 +591,7 @@ function mdjm_get_taxonomy_labels( $taxonomy = 'event-types' ) {
 		$labels = array(
 			'name'          => $name,
 			'singular_name' => $singular,
-			'column_name'   => $column ? $column : ''
+			'column_name'   => $column ? $column : '',
 		);
 	}
 
@@ -617,7 +617,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Ready to Send <span class="count">(%s)</span>', 'Ready to Send <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Ready to Send <span class="count">(%s)</span>', 'Ready to Send <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -631,7 +631,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -645,7 +645,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Opened <span class="count">(%s)</span>', 'Opened <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Opened <span class="count">(%s)</span>', 'Opened <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -659,7 +659,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -676,7 +676,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Unattended Enquiry <span class="count">(%s)</span>', 'Unattended Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -692,7 +692,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Enquiry <span class="count">(%s)</span>', 'Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -712,7 +712,7 @@ function mdjm_register_post_statuses() {
 					sprintf( 'Awaiting %s', mdjm_get_deposit_label() ) . ' <span class="count">(%s)</span>',
 					'mobile-dj-manager'
 				),
-                'mdjm-event'                => true
+                'mdjm-event'                => true,
             )
         )
     );
@@ -728,7 +728,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Awaiting Contract <span class="count">(%s)</span>', 'Awaiting Contracts <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -744,7 +744,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Confirmed <span class="count">(%s)</span>', 'Confirmed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -760,7 +760,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -776,7 +776,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -792,7 +792,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Rejected Enquiry <span class="count">(%s)</span>', 'Rejected Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -808,7 +808,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Failed Enquiry <span class="count">(%s)</span>', 'Failed Enquiries <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm-event'                => true
+				'mdjm-event'                => true,
 			)
 		)
 	);
@@ -823,7 +823,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Generated Quote <span class="count">(%s)</span>', 'Generated Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Generated Quote <span class="count">(%s)</span>', 'Generated Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -837,7 +837,7 @@ function mdjm_register_post_statuses() {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Viewed Quote <span class="count">(%s)</span>', 'Viewed Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' )
+				'label_count'               => _n_noop( 'Viewed Quote <span class="count">(%s)</span>', 'Viewed Quotes <span class="count">(%s)</span>', 'mobile-dj-manager' ),
 			)
 		)
 	);
@@ -853,7 +853,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Received Payment <span class="count">(%s)</span>', 'Received Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm'                      => true
+				'mdjm'                      => true,
 			)
 		)
 	);
@@ -868,7 +868,7 @@ function mdjm_register_post_statuses() {
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
 				'label_count'               => _n_noop( 'Outgoing Payment <span class="count">(%s)</span>', 'Outgoing Payments <span class="count">(%s)</span>', 'mobile-dj-manager' ),
-				'mdjm'                      => true
+				'mdjm'                      => true,
 			)
 		)
 	);
@@ -914,7 +914,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'                  => __( 'Event Package Categories', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'      => __( 'Choose from the most popular Package Categories', 'mobile-dj-manager' ),
-		'not_found'                  => __( 'No package categories found', 'mobile-dj-manager' )
+		'not_found'                  => __( 'No package categories found', 'mobile-dj-manager' ),
 	);
 
 	$package_category_args = apply_filters( 'mdjm_package_category_args', array(
@@ -926,9 +926,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
 				'delete_terms'          => 'manage_mdjm',
-				'assign_terms'          => 'mdjm_employee'
+				'assign_terms'          => 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'package-category', array( 'mdjm-package' ), $package_category_args );
@@ -948,7 +948,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'                  => __( 'Event Add-on Categories', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'      => __( 'Choose from the most popular Add-on Categories', 'mobile-dj-manager' ),
-		'not_found'                  => __( 'No add-ons categories found', 'mobile-dj-manager' )
+		'not_found'                  => __( 'No add-ons categories found', 'mobile-dj-manager' ),
 	);
 
 	$addon_category_args = apply_filters( 'mdjm_addon_category_args', array(
@@ -960,9 +960,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
 				'delete_terms'          => 'manage_mdjm',
-				'assign_terms'          => 'mdjm_employee'
+				'assign_terms'          => 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'addon-category', array( 'mdjm-addon' ), $addon_category_args );
@@ -981,7 +981,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'         		  => __( 'Event Types', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'	  => __( 'Choose from the most popular Event Types', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No event types found', 'mobile-dj-manager' )
+		'not_found'				  => __( 'No event types found', 'mobile-dj-manager' ),
 	);
 
 	$event_type_args = apply_filters( 'mdjm_event_type_args', array(
@@ -993,9 +993,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
 				'delete_terms'          => 'manage_mdjm',
-				'assign_terms'          => 'mdjm_employee'
+				'assign_terms'          => 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'event-types', array( 'mdjm-event' ), $event_type_args );
@@ -1015,7 +1015,7 @@ function mdjm_register_taxonomies() {
 		'popular_items'              => __( 'Most Enquiries from', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'      => __( 'Choose from the most popular Enquiry Sources', 'mobile-dj-manager' ),
-		'not_found'                  => __( 'No enquiry sources found', 'mobile-dj-manager' )
+		'not_found'                  => __( 'No enquiry sources found', 'mobile-dj-manager' ),
 	);
 
 	$enquiry_source_args = apply_filters( 'mdjm_enquiry_source_args', array(
@@ -1030,9 +1030,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
 				'delete_terms'          => 'manage_mdjm',
-				'assign_terms'          => 'mdjm_employee'
+				'assign_terms'          => 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'enquiry-source', array( 'mdjm-event' ), $enquiry_source_args );
@@ -1051,7 +1051,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'         		  => __( 'Event Playlist Categories', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'	  => __( 'Choose from the most popular Playlist Categories', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No playlist categories found', 'mobile-dj-manager' )
+		'not_found'				  => __( 'No playlist categories found', 'mobile-dj-manager' ),
 	);
 
 	$playlist_category_args = apply_filters( 'mdjm_playlist_category_args', array(
@@ -1062,9 +1062,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'          => 'manage_mdjm',
 				'edit_terms'            => 'manage_mdjm',
 				'delete_terms'          => 'manage_mdjm',
-				'assign_terms'          => 'mdjm_employee'
+				'assign_terms'          => 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'playlist-category', array( 'mdjm-playlist' ), $playlist_category_args );
@@ -1095,9 +1095,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'	=> 'manage_mdjm',
 				'edit_terms'	  => 'manage_mdjm',
 				'delete_terms'	=> 'manage_mdjm',
-				'assign_terms'	=> 'mdjm_employee'
+				'assign_terms'	=> 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'transaction-types', array( 'mdjm-transaction' ), $txn_type_args );
@@ -1116,7 +1116,7 @@ function mdjm_register_taxonomies() {
 		'menu_name'         		  => __( 'Venue Details', 'mobile-dj-manager' ),
 		'separate_items_with_commas' => null,
 		'choose_from_most_used'	  => __( 'Choose from the most popular Venue Details', 'mobile-dj-manager' ),
-		'not_found'				  => __( 'No details found', 'mobile-dj-manager' )
+		'not_found'				  => __( 'No details found', 'mobile-dj-manager' ),
 	);
 
 	$venue_details_args = apply_filters( 'mdjm_venue_details_args', array(
@@ -1128,9 +1128,9 @@ function mdjm_register_taxonomies() {
 				'manage_terms'	=> 'manage_mdjm',
 				'edit_terms'	  => 'manage_mdjm',
 				'delete_terms'	=> 'manage_mdjm',
-				'assign_terms'	=> 'mdjm_employee'
+				'assign_terms'	=> 'mdjm_employee',
 			) ),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
 		)
 	);
 	register_taxonomy( 'venue-details', array( 'mdjm-venue' ), $venue_details_args );
@@ -1155,7 +1155,7 @@ function mdjm_get_post_types() {
 		'mdjm-event',
 		'mdjm-quotes',
 		'mdjm-transaction',
-		'mdjm-venue'
+		'mdjm-venue',
 	);
 
 	return apply_filters( 'mdjm_post_types', $post_types );
