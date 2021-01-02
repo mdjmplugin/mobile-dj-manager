@@ -59,7 +59,7 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 		$this->type = 'pie';
 
 		// Generate unique ID, add 'a' since md5 can leave a numerical first character
-		$this->id = 'a' . md5( rand() );
+		$this->id = 'a' . md5( wp_rand() );
 
 		// Setup default options;
 		$defaults = array(

@@ -484,7 +484,7 @@ function mdjm_shortcode_availability( $atts ) {
 		)
 	);
 
-	echo '<!-- ' . esc_html( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . esc_html( MDJM_VERSION_NUM ) . ') -->';
+	echo '<!-- ' . esc_html__( 'MDJM Availability Checker', 'mobile-dj-manager' ) . ' (' . esc_html( MDJM_VERSION_NUM ) . ') -->';
 	echo '<form name="mdjm-availability-check" id="mdjm-availability-check" method="post">';
 	wp_nonce_field( 'do_availability_check', 'mdjm_nonce', true, true );
 	mdjm_action_field( 'do_availability_check' );
@@ -654,9 +654,7 @@ add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
  */
 function mdjm_shortcode_login( $atts ) {
 
-	extract( shortcode_atts( array( 'redirect' => '' ), $atts, 'mdjm-login' ) );
-
-	return mdjm_login_form( $redirect );
+	return mdjm_login_form( '' );
 
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-login', 'mdjm_shortcode_login' );

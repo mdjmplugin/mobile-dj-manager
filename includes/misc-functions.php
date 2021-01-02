@@ -229,7 +229,7 @@ function mdjm_generate_random_string( $prefix = '', $suffix = '', $length = 6, $
 
     for ( $x = 0; $x < 2; $x++ ) {
         for ( $i = 0; $i < $length; $i++ ) {
-            $string .= $range[ mt_rand( 0, count( $range ) - 1 ) ];
+            $string .= $range[ wp_rand( 0, count( $range ) - 1 ) ];
         }
 
         $string .= '';

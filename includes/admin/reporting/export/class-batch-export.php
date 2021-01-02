@@ -240,6 +240,11 @@ class MDJM_Batch_Export extends MDJM_Export {
 	 */
 	protected function get_file() {
 
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
+		WP_Filesystem();
+		global $wp_filesystem;
+
 		$file = '';
 
 		if ( @file_exists( $this->file ) ) {
@@ -248,12 +253,11 @@ class MDJM_Batch_Export extends MDJM_Export {
 				$this->is_writable = false;
 			}
 
-			$file = @file_get_contents( $this->file );
+			$file = $wp_filesystem->get_contents( $this->file );
 
 		} else {
 
-			@file_put_contents( $this->file, '' );
-			@chmod( $this->file, 0664 );
+			$wp_filesystem->put_contents( $this->file, '', FS_CHMOD_FILE );
 
 		}
 
@@ -269,9 +273,12 @@ class MDJM_Batch_Export extends MDJM_Export {
 	 */
 	protected function stash_step_data( $data = '' ) {
 
+		WP_Filesystem();
+		global $wp_filesystem;
+
 		$file  = $this->get_file();
 		$file .= $data;
-		@file_put_contents( $this->file, $file );
+		$wp_filesystem->put_contents( $this->file, $file, FS_CHMOD_FILE );
 
 		// If we have no rows after this step, mark it as an empty export
 		$file_rows    = file( $this->file, FILE_SKIP_EMPTY_LINES );

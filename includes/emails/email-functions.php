@@ -598,7 +598,7 @@ function mdjm_email_insert_tracking_post( $to, $subject, $message, $attachments,
 				// Generate the metadata for the attachment, and update the database record.
 				$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 				wp_update_attachment_metadata( $attach_id, $attach_data );
-			}       
+			}
 		}
 
 		return $tracking_id;
@@ -659,7 +659,7 @@ function mdjm_track_open_email( $data ) {
 
 	$invpicture = apply_filters( 'mdjm_email_track_invpicture', $invpicture );
 
-	$handle = fopen( $invpicture, 'r' );
+	$handle = fopen( $invpicture, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 
 	if ( ! $handle ) {
 		die();
@@ -667,9 +667,9 @@ function mdjm_track_open_email( $data ) {
 
 	header( 'Content-type: image/png' );
 
-	$contents = fread( $handle, filesize( $invpicture ) );
+	$contents = fread( $handle, filesize( $invpicture ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
 
-	fclose( $handle );
+	fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
 
 	echo $contents; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 

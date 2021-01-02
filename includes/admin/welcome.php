@@ -192,7 +192,7 @@ class MDJM_Welcome {
 						<p><?php esc_html_e( 'With MDJM Event Management version 1.4, you now have the ability to showcase your business and products.', 'mobile-dj-manager' ); ?></p>
                         <p><?php esc_html_e( 'Packages &amp; Addons are now created as custom post types so you can enjoy all the functionality of normal WordPress posts such as a featured image, including multiple images within the description, a detailed description, an excerpt and a full archive of your products.', 'mobile-dj-manager' ); ?></p>
                         <p>
-                        <?php 
+                        <?php
                         printf(
 							__( 'Each package and add-on has its own URL to be showcased on your website, or alternatively you can display the archives by creating menu links to <a href="%1$s" target="_blank">%1$s</a> and <a href="%2$s" target="_blank">%2$s</a> respectively.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							site_url( '/packages/' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -309,11 +309,11 @@ class MDJM_Welcome {
 
 			<div class="return-to-dashboard">
 				<a href="
-                <?php 
+                <?php
                 echo esc_url( admin_url( add_query_arg( array(
                     'post_type' => 'mdjm-event',
                     'page'      => 'mdjm-settings',
-				), 'edit.php' ) ) ); 
+				), 'edit.php' ) ) );
 				?>
                             "><?php esc_html_e( 'Go to MDJM Event Management Settings', 'mobile-dj-manager' ); ?></a>
 			</div>
@@ -467,12 +467,15 @@ class MDJM_Welcome {
 	 * @return string $readme HTML formatted readme file
 	 */
 	public function parse_readme() {
+		WP_Filesystem();
+		global $wp_filesystem;
+
 		$file = file_exists( MDJM_PLUGIN_DIR . '/readme.txt' ) ? MDJM_PLUGIN_DIR . '/readme.txt' : null;
 
 		if ( ! $file ) {
 			$readme = '<p>' . __( 'No valid changelog was found.', 'mobile-dj-manager' ) . '</p>';
 		} else {
-			$readme = file_get_contents( $file );
+			$readme = $wp_filesystem->get_contents( $file );
 			$readme = nl2br( esc_html( $readme ) );
 			$readme = explode( '== Changelog ==', $readme );
 			$readme = end( $readme );

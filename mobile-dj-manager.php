@@ -355,7 +355,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 
 endif;
 
-function MDJM() {
+function MDJM() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	return Mobile_DJ_Manager::instance();
 }
 

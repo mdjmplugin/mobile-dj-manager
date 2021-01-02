@@ -170,15 +170,15 @@ class MDJM_Communication {
 			$stat_image = MDJM_PLUGIN_DIR . '/assets/images/invpicture.png';
 		}
 
-		$handle = fopen( $stat_image, 'r' );
+		$handle = fopen( $stat_image, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 
 		if ( ! $handle ) {
 			exit;
 		}
 
 		header( 'Content-type: image/png' );
-		$contents = fread( $handle, filesize( $stat_image ) );
-		fclose( $handle );
+		$contents = fread( $handle, filesize( $stat_image ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
 		echo $contents; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		wp_update_post( array(

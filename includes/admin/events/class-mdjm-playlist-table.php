@@ -180,7 +180,7 @@ class MDJM_PlayList_Table extends WP_List_Table {
 				return $item[ $column_name ];
 
 			default:
-				return print_r( $item, true ); // Show the whole array for troubleshooting purposes
+				return 'UNKNOWN';
 		}
 
 	} // column_default

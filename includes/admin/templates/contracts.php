@@ -70,7 +70,7 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id ) {
             ) );
 
 			$total = count( $contract_events );
-			echo esc_html( $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() ) );
+			echo esc_html( $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() ) ); // phpcs:ignore WordPress.WP.I18n.MismatchedPlaceholders
 
 			break;
 	} // switch

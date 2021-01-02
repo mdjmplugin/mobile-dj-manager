@@ -391,7 +391,7 @@ function mdjm_admin_notices() {
 		add_settings_error(
 			'mdjm-notices',
 			'mdjm-unattended_enquiries_rejected_success',
-			sprintf( _n( '%1$s %2$s successfully rejected.', '%1$s %3$s successfully rejected.', isset( $_GET['mdjm-count'] ) ? absint( wp_unslash( $_GET['mdjm-count'] ) ) : 0, 'mobile-dj-manager' ),
+			sprintf( _n( '%1$s %2$s successfully rejected.', '%1$s %3$s successfully rejected.', isset( $_GET['mdjm-count'] ) ? absint( wp_unslash( $_GET['mdjm-count'] ) ) : 0, 'mobile-dj-manager' ), // phpcs:ignore WordPress.WP.I18n.MismatchedPlaceholders
 				isset( $_GET['mdjm-count'] ) ? absint( wp_unslash( $_GET['mdjm-count'] ) ) : 0,
 				esc_html( mdjm_get_label_singular() ),
 				esc_html( mdjm_get_label_plural() )

@@ -139,7 +139,7 @@ function mdjm_tools_sysinfo_get() {
 
 	// Get theme info
 	$theme_data = wp_get_theme();
-	$theme      = $theme_data->Name . ' ' . $theme_data->Version;
+	$theme      = $theme_data->name . ' ' . $theme_data->version;
 
 	$return = '### Begin System Info ###' . "\n\n";
 
@@ -183,12 +183,12 @@ function mdjm_tools_sysinfo_get() {
 	$response = wp_remote_post( 'https://www.paypal.com/cgi-bin/webscr', $params );
 
 	if ( ! is_wp_error( $response ) && $response['response']['code'] >= 200 && $response['response']['code'] < 300 ) {
-		$WP_REMOTE_POST = 'wp_remote_post() works';
+		$wp_remote_post = 'wp_remote_post() works';
 	} else {
-		$WP_REMOTE_POST = 'wp_remote_post() does not work';
+		$wp_remote_post = 'wp_remote_post() does not work';
 	}
 
-	$return .= 'Remote Post:              ' . $WP_REMOTE_POST . "\n";
+	$return .= 'Remote Post:              ' . $wp_remote_post . "\n";
 	$return .= 'Table Prefix:             Length: ' . strlen( $wpdb->prefix ) . '   Status: ' . ( strlen( $wpdb->prefix ) > 16 ? 'ERROR: Too long' : 'Acceptable' ) . "\n";
 	$return .= 'WP_DEBUG:                 ' . ( defined( 'WP_DEBUG' ) ? WP_DEBUG ? 'Enabled' : 'Disabled' : 'Not set' ) . "\n";
 	$return .= 'Memory Limit:             ' . WP_MEMORY_LIMIT . "\n";
@@ -559,6 +559,11 @@ add_action( 'mdjm_export_settings', 'mdjm_tools_import_export_process_export' );
  */
 function mdjm_tools_import_export_process_import() {
 
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+
+	WP_Filesystem();
+	global $wp_filesystem;
+
 	if ( empty( $_POST['mdjm_import_nonce'] ) ) {
 		return;
     }
@@ -582,7 +587,7 @@ function mdjm_tools_import_export_process_import() {
 	}
 
 	// Retrieve the settings from the file and convert the json object to an array
-	$settings = mdjm_object_to_array( json_decode( file_get_contents( $import_file ) ) );
+	$settings = mdjm_object_to_array( json_decode( $wp_filesystem->get_contents( $import_file ) ) );
 
 	update_option( 'mdjm_settings', $settings );
 

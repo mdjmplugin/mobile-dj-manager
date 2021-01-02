@@ -76,7 +76,7 @@ function mdjm_playlist_twitter_share( $event_id, $args = array() ) {
         esc_attr( $args['button_text'] )
     );
 
-    $url .= '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>';
+	wp_enqueue_script( 'twitter-widget', 'http://platform.twitter.com/widgets.js' );
 
     return $url;
 } // mdjm_playlist_twitter_share

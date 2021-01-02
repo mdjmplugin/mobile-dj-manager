@@ -59,7 +59,7 @@ class MDJM_Graph {
 		$this->data = $_data;
 
 		// Generate unique ID
-		$this->id = 'a' . md5( rand() );
+		$this->id = 'a' . md5( wp_rand() );
 
 		// Setup default options;
 		$this->options = array(
