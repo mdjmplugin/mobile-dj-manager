@@ -1,7 +1,7 @@
 ![Plugin Version](https://img.shields.io/wordpress/plugin/v/mobile-dj-manager) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/mobile-dj-manager) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/mobile-dj-manager) ![WordPress Compatibility](https://img.shields.io/wordpress/v/mobile-dj-manager) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://github.com/mdjm/mobile-dj-manager/blob/master/license.txt)
-<h1>MDJM Event Management plugin for WordPress</h1>
+# MDJM Event Management plugin for WordPress
 
-<h2>Welcome to our GitHub repository!</h2>
+## Welcome to our GitHub repository!
 
 MDJM provides entertainment industry professionals with a platform to manage their business efficiently.
 
@@ -17,13 +17,13 @@ From a client perspective, a front end portal is provided which fits in seamless
 * Give guests access to add to the playlist
 * and much more...
 
-<h2>Bugs & Issues</h2>
+## Bugs & Issues
 Let us know of any bugs and issues in our [issue tracker](https://github.com/deckbooks/mobile-dj-manager/issues)
 
-<h2>Support</h2>
+## Support
 This is a developers portal for MDJM Event Management and should not be used for support. Please visit our [Support site](https://mdjm.co.uk/support) or our [Facebook Group](https://www.facebook.com/groups/mdjmusers) for support.
 
-<h2>Contributions</h2>
+## Contributions
 
 Anyone is welcome to contribute to MDJM Event Management.
 
