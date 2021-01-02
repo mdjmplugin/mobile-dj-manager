@@ -76,7 +76,7 @@ function mdjm_sign_event_contract_action( $data ) {
 					);
 					die();
 				} elseif ( is_string( $value ) || is_int( $value ) ) {
-					$posted[ $key ] = strip_tags( addslashes( $value ) );
+					$posted[ $key ] = wp_strip_all_tags( addslashes( $value ) );
 				} elseif ( is_array( $value ) ) {
 					$posted[ $key ] = array_map( 'absint', $value );
 				}

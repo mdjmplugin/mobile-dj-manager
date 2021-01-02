@@ -663,7 +663,7 @@ function mdjm_update_event_cost_from_package_ajax() {
 		$result['cost'] = mdjm_sanitize_amount( 0 );
 	}
 
-	$result = json_encode( $result );
+	$result = wp_json_encode( $result );
 
 	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 

@@ -232,7 +232,7 @@ function mdjm_v14_upgrades() {
 	// Drop the deprecated Playlists table
 	$results = $wpdb->get_results( "SHOW TABLES LIKE '" . $wpdb->prefix . 'mdjm_playlists' . "'" );
 	if ( $results ) {
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'mdjm_playlists' );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'mdjm_playlists' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
 	}
 
 	$items             = array();

@@ -546,7 +546,7 @@ function mdjm_tools_import_export_process_export() {
 	header( 'Content-Disposition: attachment; filename=' . apply_filters( 'mdjm_settings_export_filename', 'mdjm-settings-export-' . date( 'd-m-Y' ) ) . '.json' );
 	header( 'Expires: 0' );
 
-	echo json_encode( $settings );
+	echo wp_json_encode( $settings );
 	exit;
 } // mdjm_tools_import_export_process_export
 add_action( 'mdjm_export_settings', 'mdjm_tools_import_export_process_export' );

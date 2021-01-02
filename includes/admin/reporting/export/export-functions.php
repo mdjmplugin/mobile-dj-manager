@@ -68,7 +68,7 @@ function mdjm_do_ajax_export() {
 	}
 
 	if ( ! $export->is_writable ) {
-		echo json_encode( array(
+		echo wp_json_encode( array(
             'error'   => true,
             'message' => __( 'Export location or file not writable', 'mobile-dj-manager' ),
 		) );
@@ -87,7 +87,7 @@ function mdjm_do_ajax_export() {
 	if ( $ret ) {
 
 		++$step;
-		echo json_encode( array(
+		echo wp_json_encode( array(
             'step'       => $step,
             'percentage' => $percentage,
 		) );
@@ -95,7 +95,7 @@ function mdjm_do_ajax_export() {
 
 	} elseif ( true === $export->is_empty ) {
 
-		echo json_encode( array(
+		echo wp_json_encode( array(
             'error'   => true,
             'message' => __( 'No data found for export parameters', 'mobile-dj-manager' ),
 		) );
@@ -104,7 +104,7 @@ function mdjm_do_ajax_export() {
 	} elseif ( true === $export->done && true === $export->is_void ) {
 
 		$message = ! empty( $export->message ) ? $export->message : __( 'Batch Processing Complete', 'mobile-dj-manager' );
-		echo json_encode( array(
+		echo wp_json_encode( array(
             'success' => true,
             'message' => $message,
 		) );
@@ -121,7 +121,7 @@ function mdjm_do_ajax_export() {
 
 		$event_url = add_query_arg( $args, admin_url() );
 
-		echo json_encode( array(
+		echo wp_json_encode( array(
             'step' => 'done',
             'url'  => $event_url,
 		) );

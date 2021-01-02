@@ -123,7 +123,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 
 		if ( $page ) {
 			wp_delete_post( $page, true );
-		}   
+		}
 	}
 
 	// Remove setting options
@@ -173,7 +173,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
     // Remove all database tables
     foreach ( $custom_tables as $custom_table ) {
         $table_name = $wpdb->prefix . $custom_table;
-        $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+        $wpdb->query( "DROP TABLE IF EXISTS $table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
         delete_option( $table_name . '_db_version' );
     }
 
@@ -301,7 +301,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 
 		if ( 'administrator' != $role_id ) {
 			remove_role( $role_id );
-		}   
+		}
 	}
 
 	// Remove users

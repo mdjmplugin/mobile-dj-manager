@@ -543,7 +543,7 @@ function mdjm_refresh_client_details_ajax() {
 	$result['client_details'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 
@@ -616,7 +616,7 @@ function mdjm_add_client_ajax() {
 		do_action( 'mdjm_after_add_new_client', $user_data );
 	}
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 
@@ -708,7 +708,7 @@ function mdjm_add_venue_ajax() {
 		} elseif ( $key == 'venue_name' ) {
 			$venue_name = $value;
 		} else {
-			$venue_meta[ $key ] = strip_tags( addslashes( $value ) );
+			$venue_meta[ $key ] = wp_strip_all_tags( addslashes( $value ) );
 		}
 	}
 
@@ -743,7 +743,7 @@ function mdjm_add_venue_ajax() {
 
 	}
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 
@@ -964,7 +964,7 @@ function mdjm_save_event_transaction_ajax() {
 	$result['transactions'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 } // mdjm_save_event_transaction_ajax
@@ -1107,7 +1107,7 @@ function mdjm_add_transaction_type_ajax() {
 
 	$result['transaction_types'] = wp_dropdown_categories( $args );
 
-	$result = json_encode( $result );
+	$result = wp_json_encode( $result );
 	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
@@ -1317,7 +1317,7 @@ function mdjm_refresh_event_package_options_ajax() {
 		$result['addons'] = __( 'No Addons Available', 'mobile-dj-manager' );
 	}
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 
@@ -1345,7 +1345,7 @@ function mdjm_update_event_deposit_ajax() {
 		$result['msg']  = 'Unable to calculate deposit';
 	}
 
-	$result = json_encode( $result );
+	$result = wp_json_encode( $result );
 	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
@@ -1384,7 +1384,7 @@ function mdjm_add_employee_to_event_ajax() {
 	$result['employees'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo wp_json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
 
@@ -1411,7 +1411,7 @@ function mdjm_remove_employee_from_event_ajax() {
 	$result['employees'] = ob_get_contents();
 	ob_get_clean();
 
-	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo wp_json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
 
@@ -1427,7 +1427,7 @@ add_action( 'wp_ajax_remove_employee_from_event', 'mdjm_remove_employee_from_eve
 function mdjm_mdjm_get_template_title_ajax() {
 	$title           = isset( $_POST['template'] ) ? get_the_title( sanitize_text_field( wp_unslash( $_POST['template'] ) ) ) : '';
 	$result['title'] = $title;
-	echo json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo wp_json_encode( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	exit;
 } // mdjm_mdjm_get_template_title_ajax
@@ -1457,7 +1457,7 @@ function mdjm_set_email_content_ajax() {
 		}
 	}
 
-	$result = json_encode( $result );
+	$result = wp_json_encode( $result );
 
 	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1511,7 +1511,7 @@ function mdjm_user_events_dropdown_ajax() {
 	}
 
 	$result['type'] = 'success';
-	$result         = json_encode( $result );
+	$result         = wp_json_encode( $result );
 
 	echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1557,7 +1557,7 @@ function mdjm_refresh_event_addon_options_ajax() {
 		$result['addons'] = '<option value="0" disabled="disabled">' . __( 'No addons available', 'mobile-dj-manager' ) . '</option>';
 	}
 
-	echo json_encode( $result );
+	echo wp_json_encode( $result );
 
 	exit;
 

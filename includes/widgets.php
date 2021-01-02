@@ -352,16 +352,16 @@ class MDJM_Availability_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                       = array();
-		$instance['title']              = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['title']              = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
 		$instance['ajax']               = ( ! empty( $new_instance['ajax'] ) ) ? true : false;
-		$instance['intro']              = ( ! empty( $new_instance['intro'] ) ) ? strip_tags( $new_instance['intro'] ) : '';
-		$instance['label']              = ( ! empty( $new_instance['label'] ) ) ? strip_tags( $new_instance['label'] ) : '';
-		$instance['submit_text']        = ( ! empty( $new_instance['submit_text'] ) ) ? strip_tags( $new_instance['submit_text'] ) : '';
+		$instance['intro']              = ( ! empty( $new_instance['intro'] ) ) ? wp_strip_all_tags( $new_instance['intro'] ) : '';
+		$instance['label']              = ( ! empty( $new_instance['label'] ) ) ? wp_strip_all_tags( $new_instance['label'] ) : '';
+		$instance['submit_text']        = ( ! empty( $new_instance['submit_text'] ) ) ? wp_strip_all_tags( $new_instance['submit_text'] ) : '';
 		$instance['submit_centre']      = ( ! empty( $new_instance['submit_centre'] ) ) ? $new_instance['submit_centre'] : '';
-		$instance['available_action']   = ( ! empty( $new_instance['available_action'] ) ) ? strip_tags( $new_instance['available_action'] ) : '';
-		$instance['available_text']     = ( ! empty( $new_instance['available_text'] ) ) ? strip_tags( $new_instance['available_text'] ) : '';
-		$instance['unavailable_action'] = ( ! empty( $new_instance['unavailable_action'] ) ) ? strip_tags( $new_instance['unavailable_action'] ) : '';
-		$instance['unavailable_text']   = ( ! empty( $new_instance['unavailable_text'] ) ) ? strip_tags( $new_instance['unavailable_text'] ) : '';
+		$instance['available_action']   = ( ! empty( $new_instance['available_action'] ) ) ? wp_strip_all_tags( $new_instance['available_action'] ) : '';
+		$instance['available_text']     = ( ! empty( $new_instance['available_text'] ) ) ? wp_strip_all_tags( $new_instance['available_text'] ) : '';
+		$instance['unavailable_action'] = ( ! empty( $new_instance['unavailable_action'] ) ) ? wp_strip_all_tags( $new_instance['unavailable_action'] ) : '';
+		$instance['unavailable_text']   = ( ! empty( $new_instance['unavailable_text'] ) ) ? wp_strip_all_tags( $new_instance['unavailable_text'] ) : '';
 
 		return $instance;
 	} // update

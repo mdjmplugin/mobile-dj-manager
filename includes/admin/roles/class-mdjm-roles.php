@@ -220,7 +220,7 @@ if ( ! class_exists( 'MDJM_Roles' ) ) :
 				}
 			}
 
-			echo json_encode( $return );
+			echo wp_json_encode( $return );
 
 			exit;
 		} // add_role
