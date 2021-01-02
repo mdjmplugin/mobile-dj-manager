@@ -1,8 +1,6 @@
 ![Plugin Version](https://img.shields.io/wordpress/plugin/v/mobile-dj-manager) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/mobile-dj-manager) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/mobile-dj-manager) ![WordPress Compatibility](https://img.shields.io/wordpress/v/mobile-dj-manager) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://github.com/mdjm/mobile-dj-manager/blob/master/license.txt)
 # MDJM Event Management plugin for WordPress
 
-## Welcome to our GitHub repository!
-
 MDJM provides entertainment industry professionals with a platform to manage their business efficiently.
 
 Through the administrative interface you can manage your staff, record all transactions, utilise full customised templates to communicate with clients and much much more.
