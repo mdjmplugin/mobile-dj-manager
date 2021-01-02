@@ -19,17 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
  */
 /**
-   MDJM Event Management is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License, version 2, as
-   published by the Free Software Foundation.
+	MDJM Event Management is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License, version 2, as
+	published by the Free Software Foundation.
 
-   MDJM Event Management is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+	MDJM Event Management is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with MDJM Event Management; if not, see https://www.gnu.org/licenses/gpl-2.0.html
+	You should have received a copy of the GNU General Public License
+	along with MDJM Event Management; if not, see https://www.gnu.org/licenses/gpl-2.0.html
  */
 /**
  * Class: Mobile_DJ_Manager
