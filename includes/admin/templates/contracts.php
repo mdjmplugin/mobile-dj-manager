@@ -182,17 +182,17 @@ function mdjm_save_contract_post( $post_id, $post, $update ) {
 	do_action( 'mdjm_pre_contract_save', $post_id, $post, $update );
 
 	// Current value of the contract description for comaprison.
-	$current_desc = get_post_meta( $ID, '_contract_description', true );
+	$current_desc = get_post_meta( $post_id, '_contract_description', true );
 
 	// If we have a value and the key did not exist previously, add it.
 	if ( ! empty( $_POST['contract_description'] ) && empty( $current_desc ) ) {
-		add_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
+		add_post_meta( $post_id, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
 	} elseif ( ! empty( $_POST['contract_description'] ) && $current_desc != $_POST['contract_description'] ) {
 		// If a value existed, but has changed, update it
-		update_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
+		update_post_meta( $post_id, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
 	} elseif ( empty( $_POST['contract_description'] ) && ! empty( $current_desc ) ) {
 		// If there is no new meta value but an old value exists, delete it.
-		delete_post_meta( $ID, '_contract_description' );
+		delete_post_meta( $post_id, '_contract_description' );
 	}
 
 	// Fire our post save hook

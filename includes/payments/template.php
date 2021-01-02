@@ -90,8 +90,8 @@ function mdjm_payment_items() {
  */
 function mdjm_payment_mode_select() {
 	$gateways = mdjm_get_enabled_payment_gateways( true );
-	$page_URL = mdjm_get_current_page_url();
-	do_action( 'mdjm_payment_mode_top' ); 
+	$page_url = mdjm_get_current_page_url();
+	do_action( 'mdjm_payment_mode_top' );
     ?>
 		<fieldset id="mdjm_payment_mode_select">
         	<legend><?php esc_html_e( 'Select Payment Method', 'mobile-dj-manager' ); ?></legend>
@@ -117,7 +117,7 @@ function mdjm_payment_mode_select() {
 			<?php do_action( 'mdjm_payment_mode_after_gateways_wrap' ); ?>
 		</fieldset>
 	<div id="mdjm_payment_form_wrap"></div><!-- the fields are loaded into this-->
-	<?php 
+	<?php
     do_action( 'mdjm_payment_mode_bottom' );
 } // mdjm_payment_mode_select
 add_action( 'mdjm_payment_mode_select', 'mdjm_payment_mode_select' );
@@ -181,7 +181,7 @@ add_action( 'mdjm_payment_form', 'mdjm_show_payment_form' );
  * @return  void
  */
 function mdjm_get_cc_form() {
-	ob_start(); 
+	ob_start();
     ?>
 
 	<?php do_action( 'mdjm_before_cc_fields' ); ?>
@@ -207,7 +207,7 @@ function mdjm_payment_submit() {
 		return;
 	}
 
-	ob_start(); 
+	ob_start();
     ?>
 
 	<fieldset id="mdjm_payment_submit">
@@ -220,7 +220,7 @@ function mdjm_payment_submit() {
 		<?php do_action( 'mdjm_payment_form_after_submit' ); ?>
 
 	</fieldset>
-	<?php 
+	<?php
     echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_payment_submit
 add_action( 'mdjm_payment_form_after_cc_form', 'mdjm_payment_submit', 9999 );
@@ -256,7 +256,7 @@ function mdjm_no_gateway_notice() {
 	?>
     <div class="mdjm-alert mdjm-alert-error"><?php echo esc_html( $notice ); ?></div>
 
-	<?php 
+	<?php
     echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_alert_no_gateway

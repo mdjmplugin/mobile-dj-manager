@@ -381,7 +381,7 @@ function mdjm_v14_upgrade_event_packages() {
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
 		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
-		$has_events = $wpdb->get_col( $sql );
+		$has_events = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $has_events ) || ( 'false' === $items && 'false' === $packages ) ) {
 			// We had no events, addons, or packages, just complete
@@ -396,7 +396,7 @@ function mdjm_v14_upgrade_event_packages() {
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
 		$total_sql = "SELECT COUNT(post_id) as total_events FROM $wpdb->postmeta WHERE meta_value != '' AND (meta_key = '_mdjm_event_package' OR meta_key = '_mdjm_event_addons')";
-		$results   = $wpdb->get_row( $total_sql, 0 );
+		$results   = $wpdb->get_row( $total_sql, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$total = $results->total_events;
 	}
@@ -616,7 +616,7 @@ function mdjm_v147_upgrade_event_tasks() {
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
 		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' LIMIT 1";
-		$has_events = $wpdb->get_col( $sql );
+		$has_events = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $has_events ) ) {
 			// We had no events, just complete
@@ -631,7 +631,7 @@ function mdjm_v147_upgrade_event_tasks() {
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
 		$total_sql = "SELECT COUNT(ID) as total_events FROM $wpdb->posts WHERE post_type = 'mdjm-event'";
-		$results   = $wpdb->get_row( $total_sql, 0 );
+		$results   = $wpdb->get_row( $total_sql, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$total = $results->total_events;
 	}
@@ -796,7 +796,7 @@ function mdjm_v15_upgrade_event_pricing() {
 	if ( $step < 2 ) {
 		// Check if we have any events before moving on
 		$sql        = "SELECT ID FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft' LIMIT 1";
-		$has_events = $wpdb->get_col( $sql );
+		$has_events = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $has_events ) ) {
 			// We had no events, just complete
@@ -811,7 +811,7 @@ function mdjm_v15_upgrade_event_pricing() {
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
 		$total_sql = "SELECT COUNT(ID) as total_events FROM $wpdb->posts WHERE post_type = 'mdjm-event' AND post_status != 'draft' AND post_status != 'auto-draft'";
-		$results   = $wpdb->get_row( $total_sql, 0 );
+		$results   = $wpdb->get_row( $total_sql, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$total = $results->total_events;
 	}
@@ -946,22 +946,22 @@ function mdjm_v156_upgrades() {
     // Create the new database tables
 	$availability_db = MDJM()->availability_db;
 	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
-		@$availability_db->create_table();
+		$availability_db->create_table();
 	}
 
 	$availability_meta_db = MDJM()->availability_meta_db;
 	if ( ! $availability_meta_db->table_exists( $availability_meta_db->table_name ) ) {
-		@$availability_meta_db->create_table();
+		$availability_meta_db->create_table();
 	}
 
 	$playlist_db = MDJM()->playlist_db;
 	if ( ! $playlist_db->table_exists( $playlist_db->table_name ) ) {
-		@$playlist_db->create_table();
+		$playlist_db->create_table();
 	}
 
 	$playlist_meta_db = MDJM()->playlist_meta_db;
 	if ( ! $playlist_meta_db->table_exists( $playlist_meta_db->table_name ) ) {
-		@$playlist_meta_db->create_table();
+		$playlist_meta_db->create_table();
 	}
 
     $new_settings = array(
@@ -1002,7 +1002,7 @@ function mdjm_v156_upgrade_availability_db() {
 	if ( $step < 2 ) {
 		// Check if we have any entries before moving on
 		$sql         = "SELECT id FROM $old_table LIMIT 1";
-		$has_entries = $wpdb->get_col( $sql );
+		$has_entries = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $has_entries ) ) {
 			// We had no entries, just complete
@@ -1021,7 +1021,7 @@ function mdjm_v156_upgrade_availability_db() {
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 	if ( empty( $total ) || $total <= 1 ) {
 		$total_sql = "SELECT COUNT(*) as total_entries FROM $old_table GROUP BY entry_id ORDER BY id ASC LIMIT 1";
-		$results   = $wpdb->get_row( $total_sql, 0 );
+		$results   = $wpdb->get_row( $total_sql, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$total = $results->total_entries;
 	}

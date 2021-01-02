@@ -15,7 +15,7 @@ if ( ! is_user_logged_in() ) : ?>
 	<?php echo mdjm_display_notice( 'login_profile' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-	<?php 
+	<?php
 else :
 
     $client_id     = get_current_user_id();
@@ -51,15 +51,15 @@ else :
                             <div id="mdjm-client-profile-input-fields">
 
                                 <?php foreach ( $client->get_profile_fields() as $field ) : ?>
-                                    <?php 
+                                    <?php
                                     if ( mdjm_display_client_field( $field ) ) :
-                                        $id    = esc_attr( $field['id'] );
-                                        $label = esc_attr( $field['label'] );
+                                        $field_id = esc_attr( $field['id'] );
+                                        $label    = esc_attr( $field['label'] );
                                         ?>
 
-                                        <p class="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>_field">
-                                            <label for="mdjm_<?php echo $id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
-                                                <?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php 
+                                        <p class="mdjm_<?php echo $field_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>_field">
+                                            <label for="mdjm_<?php echo $field_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+                                                <?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php
                                                 if ( ! empty( $field['required'] ) ) :
 													?>
                                                     <span class="mdjm-required-indicator">*</span><?php endif; ?>

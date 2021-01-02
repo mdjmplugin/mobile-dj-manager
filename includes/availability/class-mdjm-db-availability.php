@@ -233,7 +233,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 			", $value
 		);
 
-		$entry = $wpdb->get_row( $query );
+		$entry = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $entry ) {
 			return false;
 		}
@@ -353,7 +353,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
-		$cache_key = md5( 'mdjm_availability_' . serialize( $args ) );
+		$cache_key = md5( 'mdjm_availability_' . wp_json_encode( $args ) );
 
 		$entries = false;
 
@@ -375,7 +375,7 @@ class MDJM_DB_Availability extends MDJM_DB {
 				absint( $args['offset'] ),
 				absint( $args['number'] )
 			);
-			$entries = $wpdb->get_results( $query );
+			$entries = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			wp_cache_set( $cache_key, $entries, 'availability', 3600 );
 		}
 

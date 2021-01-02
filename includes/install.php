@@ -607,17 +607,17 @@ function mdjm_run_install() {
 			'id'       => 'birthday',
 			'type'     => 'dropdown',
 			'value'    => __( 'January', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'February', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'March', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'April', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'May', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'June', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'July', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'August', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'September', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'October', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'November', 'mobile-dj-manager' ) . "\r\n" .
-					   __( 'December', 'mobile-dj-manager' ),
+					__( 'February', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'March', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'April', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'May', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'June', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'July', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'August', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'September', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'October', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'November', 'mobile-dj-manager' ) . "\r\n" .
+					__( 'December', 'mobile-dj-manager' ),
 			'checked'  => '0',
 			'display'  => '1',
 			'desc'     => '',
@@ -777,12 +777,12 @@ function mdjm_run_install() {
 	// Create the new database tables
 	$availability_db = MDJM()->availability_db;
 	if ( ! $availability_db->table_exists( $availability_db->table_name ) ) {
-		@$availability_db->create_table();
+		$availability_db->create_table();
 	}
 
 	$availability_meta_db = MDJM()->availability_meta_db;
 	if ( ! $availability_meta_db->table_exists( $availability_meta_db->table_name ) ) {
-		@$availability_meta_db->create_table();
+		$availability_meta_db->create_table();
 	}
 
 	if ( ! $current_version ) {

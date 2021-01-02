@@ -62,11 +62,11 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 		'mdjm-venue',
 	);
 
-    foreach ( $mdjm_post_types as $post_type ) {
+    foreach ( $mdjm_post_types as $mdjm_post_type ) {
 
-		$mdjm_taxonomies = array_merge( $mdjm_taxonomies, get_object_taxonomies( $post_type ) );
+		$mdjm_taxonomies = array_merge( $mdjm_taxonomies, get_object_taxonomies( $mdjm_post_type ) );
 		$items           = get_posts( array(
-            'post_type'   => $post_type,
+            'post_type'   => $mdjm_post_type,
             'post_status' => 'any',
             'numberposts' => -1,
             'fields'      => 'ids',
@@ -81,7 +81,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 
 
 	// Delete Terms & Taxonomies
-	foreach ( array_unique( array_filter( $mdjm_taxonomies ) ) as $taxonomy ) {
+	foreach ( array_unique( array_filter( $mdjm_taxonomies ) ) as $mdjm_taxonomy ) {
 
 		$terms = $wpdb->get_results( $wpdb->prepare(
 			"SELECT t.*, tt.*
@@ -90,21 +90,21 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 			INNER JOIN $wpdb->term_taxonomy
 			AS tt
 			ON t.term_id = tt.term_id
-			WHERE tt.taxonomy IN ('%s')
-			ORDER BY t.name ASC", $taxonomy
+			WHERE tt.taxonomy IN (%s)
+			ORDER BY t.name ASC", $mdjm_taxonomy
 		) );
 
 		// Delete Terms.
 		if ( $terms ) {
-			foreach ( $terms as $term ) {
-				$wpdb->delete( $wpdb->term_relationships, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
-				$wpdb->delete( $wpdb->term_taxonomy, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
-				$wpdb->delete( $wpdb->terms, array( 'term_id' => $term->term_id ) );
+			foreach ( $terms as $mdjm_term ) {
+				$wpdb->delete( $wpdb->term_relationships, array( 'term_taxonomy_id' => $mdjm_term->term_taxonomy_id ) );
+				$wpdb->delete( $wpdb->term_taxonomy, array( 'term_taxonomy_id' => $mdjm_term->term_taxonomy_id ) );
+				$wpdb->delete( $wpdb->terms, array( 'term_id' => $mdjm_term->term_id ) );
 			}
 		}
 
 		// Delete Taxonomies.
-		$wpdb->delete( $wpdb->term_taxonomy, array( 'taxonomy' => $taxonomy ), array( '%s' ) );
+		$wpdb->delete( $wpdb->term_taxonomy, array( 'taxonomy' => $mdjm_taxonomy ), array( '%s' ) );
 	}
 
 	// Delete Plugin Pages
@@ -119,10 +119,10 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 
 	foreach ( $mdjm_pages as $mdjm_page ) {
 
-		$page = mdjm_get_option( $mdjm_page, false );
+		$mdjm_page_to_delete = mdjm_get_option( $mdjm_page, false );
 
-		if ( $page ) {
-			wp_delete_post( $page, true );
+		if ( $mdjm_page_to_delete ) {
+			wp_delete_post( $mdjm_page_to_delete, true );
 		}
 	}
 
@@ -289,14 +289,14 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 	$roles = MDJM()->roles->get_roles();
 
 	foreach ( $roles as $role_id => $role_name ) {
-		$role = get_role( $role_id );
+		$mdjm_role = get_role( $role_id );
 
-		if ( empty( $role ) ) {
+		if ( empty( $mdjm_role ) ) {
 			continue;
 		}
 
 		foreach ( $all_caps as $cap ) {
-			$role->remove_cap( $cap );
+			$mdjm_role->remove_cap( $cap );
 		}
 
 		if ( 'administrator' != $role_id ) {
@@ -308,9 +308,9 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 	$roles = array( 'client', 'inactive_client', 'dj', 'inactive_dj' );
 
 	// Loop through roles array removing users
-	foreach ( $roles as $role ) {
+	foreach ( $roles as $mdjm_role ) {
 		$args = array(
-			'role'         => $role,
+			'role'         => $mdjm_role,
 			'role__not_in' => 'Administrator',
 			'orderby'      => 'display_name',
 			'order'        => 'ASC',

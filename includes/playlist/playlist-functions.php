@@ -76,7 +76,7 @@ function mdjm_playlist_twitter_share( $event_id, $args = array() ) {
         esc_attr( $args['button_text'] )
     );
 
-	wp_enqueue_script( 'twitter-widget', 'http://platform.twitter.com/widgets.js' );
+	wp_enqueue_script( 'twitter-widget', 'http://platform.twitter.com/widgets.js', array(), MDJM_VERSION_NUM, true );
 
     return $url;
 } // mdjm_playlist_twitter_share
@@ -423,9 +423,9 @@ function mdjm_get_event_playlist_categories( $event_id ) {
  * @return  int|false
  */
 function mdjm_get_event_playlist_limit( $event_id ) {
-     $playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
+	$playlist_limit = get_post_meta( $event_id, '_mdjm_event_playlist_limit', true );
 
-     return (int) apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
+	return (int) apply_filters( 'mdjm_event_playlist_limit', $playlist_limit, $event_id );
 } // mdjm_get_event_playlist_limit
 
 /**
@@ -450,14 +450,14 @@ function mdjm_playlist_is_enabled( $event_id ) {
  * @return  bool
  */
 function mdjm_event_has_playlist( $event_id ) {
-     $playlist = get_posts( array(
-         'post_type'      => 'mdjm-playlist',
-         'post_status'    => 'publish',
-         'post_parent'    => $event_id,
-         'posts_per_page' => 1,
-	 ) );
+	$playlist = get_posts( array(
+		'post_type'      => 'mdjm-playlist',
+		'post_status'    => 'publish',
+		'post_parent'    => $event_id,
+		'posts_per_page' => 1,
+	) );
 
-    return $playlist ? true : false;
+	return $playlist ? true : false;
 } // mdjm_event_has_playlist
 
 /**
@@ -701,9 +701,9 @@ function mdjm_prepare_playlist_upload_data() {
 			$uploads[ $entry->ID ] = array(
 				'date_added' => date( 'Y-m-d', strtotime( $entry->post_date ) ),
 				'event_date' => date( 'Y-m-d', strtotime( $mdjm_event->date ) ),
-				'event_type' => esc_attr( urlencode( $mdjm_event->get_type() ) ),
-				'song'       => esc_attr( urlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_song', true ) ) ) ),
-				'artist'     => esc_attr( urlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_artist', true ) ) ) ),
+				'event_type' => esc_attr( rawurlencode( $mdjm_event->get_type() ) ),
+				'song'       => esc_attr( rawurlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_song', true ) ) ) ),
+				'artist'     => esc_attr( rawurlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_artist', true ) ) ) ),
 			);
 
 			$i++;
@@ -734,8 +734,8 @@ function mdjm_process_playlist_upload() {
 	}
 
 	$data = array(
-		'url'     => urlencode( get_site_url() ),
-		'company' => urlencode( mdjm_get_option( 'company_name', get_bloginfo( 'name' ) ) ),
+		'url'     => rawurlencode( get_site_url() ),
+		'company' => rawurlencode( mdjm_get_option( 'company_name', get_bloginfo( 'name' ) ) ),
 	);
 
 	$count   = count( $entries );

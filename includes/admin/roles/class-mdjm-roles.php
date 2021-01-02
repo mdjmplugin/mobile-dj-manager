@@ -266,14 +266,14 @@ if ( ! class_exists( 'MDJM_Roles' ) ) :
 		} // delete_roles
 
 		/**
-		  * Rename the DJ role display name when admin saves the event settings from the settings page.
-		  * Include both the standard and inactive role.
-		  *
-		  * Called by: update_option_mdjm_event_settings hook
-		  *
-		  * @param      arr     $old_value      Old settings values
-		  *             arr     $new_value      New settings values
-		  */
+		 * Rename the DJ role display name when admin saves the event settings from the settings page.
+		 * Include both the standard and inactive role.
+		 *
+		 * Called by: update_option_mdjm_event_settings hook
+		 *
+		 * @param      arr     $old_value      Old settings values
+		 *             arr     $new_value      New settings values
+		 */
 		public function rename_dj_role( $old_value, $new_value ) {
 			global $wpdb;
 

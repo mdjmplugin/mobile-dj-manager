@@ -143,7 +143,10 @@ class MDJM_Batch_Export extends MDJM_Export {
 		if ( $this->step < 2 ) {
 
 			// Make sure we start with a fresh file on step 1
-			@unlink( $this->file );
+			if ( file_exists( $this->file ) ) {
+				unlink( $this->file );
+			}
+
 			$this->print_csv_cols();
 		}
 
@@ -201,9 +204,15 @@ class MDJM_Batch_Export extends MDJM_Export {
 			foreach ( $data as $row ) {
 				$i = 1;
 				foreach ( $row as $col_id => $column ) {
+					// Column should not be an array, if it is continue
 					if ( is_array( $column ) ) {
-						error_log( $col_id . ' - ' . var_export( $column, true ), 0 );
+						if ( MDJM_DEBUG == true ) {
+							MDJM()->debug->log_it( 'CSV ROW ERROR: Column cannot be an array' );
+						}
+
+						continue;
 					}
+
 					// Make sure the column is valid
 					if ( array_key_exists( $col_id, $cols ) ) {
 						$row_data .= '"' . addslashes( preg_replace( '/"/', "'", $column ) ) . '"';
@@ -247,7 +256,7 @@ class MDJM_Batch_Export extends MDJM_Export {
 
 		$file = '';
 
-		if ( @file_exists( $this->file ) ) {
+		if ( file_exists( $this->file ) ) {
 
 			if ( ! is_writeable( $this->file ) ) {
 				$this->is_writable = false;
@@ -303,7 +312,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 
 		$file = $this->get_file();
 
-		@unlink( $this->file );
+		if ( file_exists( $this->file ) ) {
+			unlink( $this->file );
+		}
 
 		echo $file; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 

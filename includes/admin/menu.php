@@ -29,10 +29,10 @@ function mdjm_admin_menu() {
 	}
 
 	global $mdjm_settings_page, $mdjm_contract_template_page, $mdjm_email_template_page,
-	       $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
-		   $mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
-		   $mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
-		   $mdjm_custom_client_fields_page, $mdjm_extensions_page;
+			$mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
+			$mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
+			$mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
+			$mdjm_custom_client_fields_page, $mdjm_extensions_page;
 
 	if ( mdjm_employee_can( 'manage_templates' ) ) {
 		$mdjm_contract_template_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Contract Templates', 'mobile-dj-manager' ), __( 'Contract Templates', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=contract', '' );

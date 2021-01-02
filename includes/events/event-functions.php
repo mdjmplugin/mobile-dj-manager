@@ -191,7 +191,7 @@ function mdjm_count_events( $args = array() ) {
 		if ( false !== $is_date ) {
 
 			$date   = new DateTime( $args['start-date'] );
-			$where .= $wpdb->prepare( " AND p.post_date >= '%s'", $date->format( 'Y-m-d' ) );
+			$where .= $wpdb->prepare( ' AND p.post_date >= %s', $date->format( 'Y-m-d' ) );
 
 		}
 
@@ -212,7 +212,7 @@ function mdjm_count_events( $args = array() ) {
 		if ( false !== $is_date ) {
 
 			$date   = new DateTime( $args['end-date'] );
-			$where .= $wpdb->prepare( " AND p.post_date <= '%s'", $date->format( 'Y-m-d' ) );
+			$where .= $wpdb->prepare( ' AND p.post_date <= %s', $date->format( 'Y-m-d' ) );
 
 		}
 	}
@@ -236,7 +236,7 @@ function mdjm_count_events( $args = array() ) {
 			$date   = new DateTime( $args['date'] );
 			$where .= $wpdb->prepare( "
 				AND m.meta_key = '_mdjm_event_date'
-				AND m.meta_value = '%s'",
+				AND m.meta_value = %s",
 				$date->format( 'Y-m-d' )
 			);
 
@@ -261,7 +261,7 @@ function mdjm_count_events( $args = array() ) {
 		return $count;
 	}
 
-	$count    = $wpdb->get_results( $query, ARRAY_A );
+	$count    = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$stats    = array();
 	$total    = 0;
 	$statuses = mdjm_all_event_status();
@@ -1674,8 +1674,8 @@ function mdjm_event_duration( $event_id ) {
 	$end_date   = get_post_meta( $event_id, '_mdjm_event_end_date', true );
 
 	if ( ! empty( $start_time ) && ! empty( $start_date ) && ! empty( $end_time ) && ! empty( $end_time ) ) {
-		$start = strtotime( $start_time . ' ' . $start_date );
-		$end   = strtotime( $end_time . ' ' . $end_date );
+		$start = strtotime( $start_date . ' ' . $start_time );
+		$end   = strtotime( $end_date . ' ' . $end_time );
 
 		$duration = str_replace( 'min', 'minute', human_time_diff( $start, $end ) );
 
@@ -1777,12 +1777,12 @@ function mdjm_update_event_meta( $event_id, $data ) {
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) ) {
 
-			$debug[] = sprintf( __( 'Adding %1$s value as %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Adding %1$s value as %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 			add_post_meta( $event_id, $key, $value );
 
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] ) { // If a value existed, but has changed, update it.
 
-			$debug[] = sprintf( __( 'Updating %1$s with %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Updating %1$s with %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 			update_post_meta( $event_id, $key, $value );
 
 		} elseif ( empty( $value ) && ! empty( $current_meta[ $key ][0] ) ) { // If there is no new meta value but an old value exists, delete it.

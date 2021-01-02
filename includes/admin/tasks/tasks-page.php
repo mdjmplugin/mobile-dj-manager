@@ -142,7 +142,7 @@ function mdjm_render_single_task_view( $id ) {
 											<p>
 												<span class="label"><?php esc_html_e( 'Next Due:', 'mobile-dj-manager' ); ?>&nbsp;</span>
                                                 <?php if ( ! empty( $task['nextrun'] ) && 'N/A' != $task['nextrun'] ) : ?>
-                                                     <?php echo esc_html( date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ) ); ?>
+                                                	<?php echo esc_html( date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), $task['nextrun'] ) ); ?>
                                                 <?php else : ?>
                                                     <?php echo esc_html__( 'N/A', 'mobile-dj-manager' ); ?>
                                                 <?php endif; ?>
@@ -357,9 +357,9 @@ function mdjm_render_single_task_view( $id ) {
                                                         'admin'    => esc_html__( 'System Administrator', 'mobile-dj-manager' ),
                                                         'employee' => esc_html__( 'Primary Employee', 'mobile-dj-manager' ),
                                                     ),
-														   'name' => 'task_email_from',
-														   'id'   => 'mdjm-task-email-from',
-														   'selected' => esc_attr( $task['options']['email_from'] ),
+													'name' => 'task_email_from',
+													'id'   => 'mdjm-task-email-from',
+													'selected' => esc_attr( $task['options']['email_from'] ),
 												) );
                                                 ?>
                                                 </p>

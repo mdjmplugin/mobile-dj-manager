@@ -406,21 +406,21 @@ function mdjm_save_txn_post( $post_id, $post, $update ) {
 
 	// Update the post
 	if ( MDJM_DEBUG == true ) {
-		 MDJM()->debug->log_it( 'Updating the transaction' );
+		MDJM()->debug->log_it( 'Updating the transaction' );
 	}
 
 	wp_update_post( $trans_data );
 
 	// Set the transaction Type
 	if ( MDJM_DEBUG == true ) {
-		 MDJM()->debug->log_it( 'Setting the transaction type' );
+		MDJM()->debug->log_it( 'Setting the transaction type' );
 	}
 
 	wp_set_post_terms( $post_id, sanitize_text_field( wp_unslash( $_POST['mdjm_transaction_type'] ) ), 'transaction-types' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 	// Add the meta data
 	if ( MDJM_DEBUG == true ) {
-		 MDJM()->debug->log_it( 'Updating the transaction post meta' );
+		MDJM()->debug->log_it( 'Updating the transaction post meta' );
 	}
 
 	// Loop through the post meta and add/update/delete the meta keys.

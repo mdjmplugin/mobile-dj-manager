@@ -257,7 +257,7 @@ function mdjm_event_metabox_save_callback( $post ) {
 				 * @since	1.3.7
 				 * @param	int	$post_id	The Event post ID
 				 */
-				do_action( 'mdjm_event_options_fields', $post->ID ); 
+				do_action( 'mdjm_event_options_fields', $post->ID );
                 ?>
             </div><!-- #mdjm-event-actions -->
         </div><!-- #minor-publishing -->
@@ -422,24 +422,26 @@ function mdjm_event_metabox_options_payments_row( $event_id ) {
 	<p><strong><?php esc_html_e( 'Payments', 'mobile-dj-manager' ); ?></strong></p>
 
     <p>
-    <?php 
+    <?php
     echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'name'    => 'deposit_paid',
 			'value'   => 'Paid',
 			'current' => esc_html( $deposit_status ),
-    ) ); 
+    ) );
 	?>
-         <?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_deposit_label() ) ); ?></p>
+
+	<?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_deposit_label() ) ); ?></p>
 
 	<p>
-    <?php 
+    <?php
     echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'name'    => 'balance_paid',
 			'value'   => 'Paid',
 			'current' => esc_html( $balance_status ),
-    ) ); 
+    ) );
 	?>
-         <?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_balance_label() ) ); ?></p>
+
+	<?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_balance_label() ) ); ?></p>
 
     <?php
 
@@ -496,7 +498,7 @@ function mdjm_event_metabox_options_save_row( $event_id ) {
 				'save',
 				false,
 				array( 'id' => 'save-post' )
-			); 
+			);
             ?>
         </div>
         <div class="clear"></div>
@@ -550,15 +552,15 @@ function mdjm_event_metabox_tasks_row( $event_id ) {
             <span class="description">
                 <?php printf( esc_html__( 'No tasks are available for this %s.', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ); ?>
             </span>
-			<?php 
+			<?php
         else :
 
-            foreach ( $tasks as $id => $name ) : 
+            foreach ( $tasks as $id => $name ) :
 				?>
                 <?php $options[ $id ] = $name; ?>
             <?php endforeach; ?>
 
-            <?php 
+            <?php
             echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'options'          => $options,
                 'name'             => 'mdjm_event_task',
@@ -566,18 +568,18 @@ function mdjm_event_metabox_tasks_row( $event_id ) {
                 'chosen'           => true,
                 'placeholder'      => esc_html__( 'Select a Task', 'mobile-dj-manager' ),
                 'show_option_none' => esc_html__( 'Select a Task', 'mobile-dj-manager' ),
-			) ); 
+			) );
             ?>
 
             <div id="mdjm-event-task-run" class="mdjm-hidden">
                 <p class="mdjm-execute-event-task">
-                <?php 
+                <?php
                 submit_button(
                     __( 'Run Task', 'mobile-dj-manager' ),
                     array( 'secondary', 'mdjm-run-event-task' ),
                     'mdjm-run-task',
                     false
-                ); 
+                );
 				?>
                                                     </p>
                 <span id="mdjm-spinner" class="spinner mdjm-execute-event-task"></span>
@@ -708,7 +710,7 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
 
 	$singular = mdjm_get_label_singular();
 
-    if ( mdjm_employee_can( 'edit_txns' ) ) : 
+    if ( mdjm_employee_can( 'edit_txns' ) ) :
 		?>
 
         <div id="mdjm_event_overview_event_price_fields" class="mdjm_meta_table_wrap">
@@ -741,56 +743,56 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
 
     <?php else : ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_package_cost',
             'value' => esc_attr( ! empty( $mdjm_event->package_price ) ? mdjm_sanitize_amount( $mdjm_event->package_price ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_addons_cost',
             'value' => esc_attr( ! empty( $mdjm_event->addons_price ) ? mdjm_sanitize_amount( $mdjm_event->addons_price ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_travel_cost',
             'value' => esc_attr( ! empty( $mdjm_event->travel_cost ) ? mdjm_sanitize_amount( $mdjm_event->travel_cost ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_additional_cost',
             'value' => esc_attr( ! empty( $mdjm_event->additional_cost ) ? mdjm_sanitize_amount( $mdjm_event->additional_cost ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_discount',
             'value' => esc_attr( ! empty( $mdjm_event->discount ) ? mdjm_sanitize_amount( $mdjm_event->discount ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_deposit',
             'value' => esc_attr( $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : '' ),
-		) ); 
+		) );
         ?>
 
-        <?php 
+        <?php
         echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             'name'  => '_mdjm_event_cost',
             'value' => esc_attr( ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : '' ),
-		) ); 
+		) );
         ?>
 
-		<?php 
+		<?php
     endif;
 
 } // mdjm_event_overview_metabox_event_price_sections
@@ -818,16 +820,16 @@ function mdjm_event_overview_metabox_client_name_row( $event_id ) {
     if ( 'mdjm-enquiry' == $mdjm_event->post_status && ! mdjm_get_option( 'booking_conf_to_client' ) ) {
         $block_emails = true;
     }
-    ?>
+	?>
 
-   <div class="mdjm-client-name">
+	<div class="mdjm-client-name">
         <span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Client', 'mobile-dj-manager' ); ?></span>
 
         <?php if ( mdjm_event_is_active( $event_id ) ) : ?>
 
             <?php $clients = mdjm_get_clients( 'client' ); ?>
 
-            <?php 
+            <?php
             echo MDJM()->html->client_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'selected'         => $mdjm_event->client,
                 'roles'            => array( 'client' ),
@@ -836,24 +838,24 @@ function mdjm_event_overview_metabox_client_name_row( $event_id ) {
                 'null_value'       => array( '' => esc_html__( 'Select a Client', 'mobile-dj-manager' ) ),
                 'show_option_all'  => false,
                 'show_option_none' => false,
-			) ); 
+			) );
             ?>
 
         <?php else : ?>
 
-            <?php 
+            <?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => 'client_name_display',
                 'value'    => esc_attr( mdjm_get_client_display_name( $mdjm_event->client ) ),
                 'readonly' => true,
-			) ); 
+			) );
             ?>
 
-            <?php 
+            <?php
             echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'  => 'client_name',
                 'value' => esc_attr( $mdjm_event->client ),
-			) ); 
+			) );
             ?>
 
         <?php endif; ?>
@@ -864,11 +866,11 @@ function mdjm_event_overview_metabox_client_name_row( $event_id ) {
 
             <span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Disable Emails?', 'mobile-dj-manager' ); ?></span>
             <label class="mdjm-block-email">
-                <?php 
+                <?php
                 echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'    => 'mdjm_block_emails',
                     'current' => esc_attr( $block_emails ),
-				) ); 
+				) );
                 ?>
                 <span class="screen-reader-text"><?php printf( esc_html__( 'Block update emails for this %s to the client', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ); ?></span>
             </label>
@@ -881,17 +883,17 @@ function mdjm_event_overview_metabox_client_name_row( $event_id ) {
 
             <span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Reset Password?', 'mobile-dj-manager' ); ?></span>
             <label class="mdjm-reset-password">
-                <?php 
+                <?php
                 echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'  => 'mdjm_reset_pw',
                     'value' => 'Y',
-				) ); 
+				) );
                 ?>
                 <span class="screen-reader-text"><?php printf( esc_html__( 'Click to reset the client password during %s update', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ); ?></span>
             </label>
 
         </div>
-		<?php 
+		<?php
     endif;
 
 } // mdjm_event_overview_metabox_client_name_row
@@ -908,14 +910,14 @@ add_action( 'mdjm_event_overview_standard_client_sections', 'mdjm_event_overview
  */
 function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 
-    global $mdjm_event, $mdjm_event_update; 
+    global $mdjm_event, $mdjm_event_update;
     ?>
 
     <?php if ( ! $mdjm_event_update || $mdjm_event->post_status == 'mdjm-unattended' ) : ?>
         <div class="mdjm-client-template-fields">
             <div class="mdjm-quote-template">
                 <span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Quote Template', 'mobile-dj-manager' ); ?></span>
-                <?php 
+                <?php
                 echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'     => 'mdjm_email_template',
                     'options'  => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -925,7 +927,7 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
                         'search-type'        => 'template',
                         'search-placeholder' => esc_html__( 'Type to search all templates', 'mobile-dj-manager' ),
                     ),
-				) ); 
+				) );
                 ?>
             </div>
 
@@ -933,7 +935,7 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 
                 <div class="mdjm-online-template">
                     <span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Online Quote', 'mobile-dj-manager' ); ?></span>
-                    <?php 
+                    <?php
                     echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'     => 'mdjm_online_quote',
                         'options'  => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -943,14 +945,14 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
                             'search-type'        => 'template',
                             'search-placeholder' => esc_html__( 'Type to search all templates', 'mobile-dj-manager' ),
                         ),
-					) ); 
+					) );
                     ?>
                 </div>
 
             <?php endif; ?>
         </div>
 
-		<?php 
+		<?php
     endif;
 
 } // mdjm_event_overview_metabox_client_templates_row
@@ -967,7 +969,7 @@ add_action( 'mdjm_event_overview_standard_client_sections', 'mdjm_event_overview
  */
 function mdjm_event_overview_metabox_add_client_section( $event_id ) {
 
-    global $mdjm_event, $mdjm_event_update; 
+    global $mdjm_event, $mdjm_event_update;
     ?>
 
     <div id="mdjm-add-client-fields" class="mdjm-client-add-event-sections-wrap">
@@ -979,11 +981,11 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-first">
                         <?php esc_html_e( 'First Name', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'client_firstname',
                         'class' => 'mdjm-name-field large-text',
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -991,12 +993,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-last">
                         <?php esc_html_e( 'Last Name', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_lastname',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1004,11 +1006,11 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-email">
                         <?php esc_html_e( 'Email Address', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'client_email',
                         'class' => 'mdjm-name-field large-text',
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1016,12 +1018,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-address1">
                         <?php esc_html_e( 'Address Line 1', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_address1',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1029,12 +1031,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-address2">
                         <?php esc_html_e( 'Address Line 2', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_address2',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1042,12 +1044,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-town">
                         <?php esc_html_e( 'Town', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_town',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1055,12 +1057,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-county">
                         <?php esc_html_e( 'County', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_county',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1068,12 +1070,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-postcode">
                         <?php esc_html_e( 'Postal Code', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_postcode',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1081,12 +1083,12 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-phone">
                         <?php esc_html_e( 'Primary Phone', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_phone',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1094,24 +1096,24 @@ function mdjm_event_overview_metabox_add_client_section( $event_id ) {
                     <label class="mdjm-client-phone">
                         <?php esc_html_e( 'Alternative Phone', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'client_phone2',
                         'class'       => 'mdjm-name-field large-text',
                         'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
                 <span class="mdjm-add-client-action">
                     <label>&nbsp;</label>
-                    <?php 
+                    <?php
                     submit_button(
                         esc_html__( 'Add Client', 'mobile-dj-manager' ),
                         array( 'secondary', 'mdjm-add-client' ),
                         'mdjm-add-client',
                         false
-                    ); 
+                    );
                     ?>
                 </span>
 
@@ -1155,7 +1157,7 @@ function mdjm_event_overview_metabox_client_details_section( $event_id ) {
     }
 
     ?>
-     <div class="mdjm-client-details-event-sections-wrap">
+	<div class="mdjm-client-details-event-sections-wrap">
         <div class="mdjm-custom-event-sections">
             <div class="mdjm-custom-event-section">
                 <span class="mdjm-custom-event-section-title"><?php printf( esc_html__( 'Contact Details for %s', 'mobile-dj-manager' ), esc_html( $client->display_name ) ); ?></span>
@@ -1169,11 +1171,11 @@ function mdjm_event_overview_metabox_client_details_section( $event_id ) {
                 <span class="mdjm-client-email">
                     <i class="fa fa-envelope-o" aria-hidden="true" title="<?php esc_attr_e( 'Email', 'mobile-dj-manager' ); ?>"></i>&nbsp;
                     <a href="
-                    <?php 
+                    <?php
                     echo esc_url( add_query_arg( array(
                         'recipient' => $client->ID,
                         'event_id'  => $event_id,
-					), admin_url( 'admin.php?page=mdjm-comms' ) ) ); 
+					), admin_url( 'admin.php?page=mdjm-comms' ) ) );
 					?>
                     ">
                         <?php echo esc_html( $client->user_email ); ?>
@@ -1223,13 +1225,13 @@ function mdjm_event_overview_metabox_primary_employee_row( $event_id ) {
                 <?php printf( '%s', esc_html( $artist ) ); ?>
             </span>
 
-            <?php 
+            <?php
             echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'selected'    => $employee_id,
                 'group'       => mdjm_is_employer() ? true : false, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'chosen'      => true,
                 'placeholder' => sprintf( esc_html__( 'Select %s', 'mobile-dj-manager' ), esc_html( $artist ) ),
-			) ); 
+			) );
             ?>
         </div>
 
@@ -1239,20 +1241,20 @@ function mdjm_event_overview_metabox_primary_employee_row( $event_id ) {
 
             <div class="mdjm-event-employee-wage">
                 <span class="mdjm-repeatable-row-setting-label">
-                    <?php 
+                    <?php
                     esc_html_e( 'Wage', 'mobile-dj-manager' );
-					echo ' ' . esc_html( mdjm_currency_symbol() ); 
+					echo ' ' . esc_html( mdjm_currency_symbol() );
                     ?>
                 </span>
 
-				<?php 
+				<?php
                 echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'        => '_mdjm_event_dj_wage',
                     'class'       => 'mdjm-currency',
                     'value'       => esc_attr( ! empty( $wage ) ? $wage : '' ),
                     'placeholder' => esc_attr( mdjm_sanitize_amount( '0' ) ),
                     'readonly'    => $payment_status ? true : false, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				) ); 
+				) );
                 ?>
             </div>
 
@@ -1296,12 +1298,12 @@ function mdjm_event_overview_metabox_event_type_contract_venue_row( $event_id ) 
                 <?php printf( esc_html__( '%s Type', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?>
             </span>
 
-            <?php 
+            <?php
             echo MDJM()->html->event_type_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => 'mdjm_event_type',
                 'chosen'   => true,
                 'selected' => esc_attr( $event_type ),
-			) ); 
+			) );
             ?>
         </div>
 
@@ -1312,7 +1314,7 @@ function mdjm_event_overview_metabox_event_type_contract_venue_row( $event_id ) 
 
 			<?php if ( ! $contract_status ) : ?>
 
-				<?php 
+				<?php
                 echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'     => '_mdjm_event_contract',
                     'options'  => mdjm_list_templates( 'contract' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1322,18 +1324,18 @@ function mdjm_event_overview_metabox_event_type_contract_venue_row( $event_id ) 
                         'search-type'        => 'contract',
                         'search-placeholder' => esc_html__( 'Type to search all contracts', 'mobile-dj-manager' ),
                     ),
-				) ); 
+				) );
                 ?>
 
 			<?php else : ?>
 
 				<?php if ( mdjm_employee_can( 'manage_events' ) ) : ?>
                     <a id="view_contract" href="
-                    <?php 
+                    <?php
                     echo esc_url( add_query_arg( array(
                         'mdjm_action' => 'review_contract',
                         'event_id'    => $event_id,
-					), home_url() ) ); 
+					), home_url() ) );
 					?>
                     " target="_blank"><?php esc_html_e( 'View signed contract', 'mobile-dj-manager' ); ?></a>
                 <?php else : ?>
@@ -1348,13 +1350,13 @@ function mdjm_event_overview_metabox_event_type_contract_venue_row( $event_id ) 
                 <?php esc_html_e( 'Venue', 'mobile-dj-manager' ); ?>
             </span>
 
-			<?php 
+			<?php
             echo MDJM()->html->venue_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'        => 'venue_id',
                 'selected'    => esc_attr( $venue_id ),
                 'placeholder' => esc_html__( 'Select a Venue', 'mobile-dj-manager' ),
                 'chosen'      => true,
-			) ); 
+			) );
             ?>
         </div>
     </div>
@@ -1400,19 +1402,19 @@ function mdjm_event_overview_metabox_event_dates_row( $event_id ) {
                 <?php esc_html_e( 'Date', 'mobile-dj-manager' ); ?>
             </span>
 
-            <?php 
+            <?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => 'display_event_date',
                 'class'    => 'mdjm_date',
                 'required' => true,
                 'value'    => esc_attr( ! empty( $mdjm_event->data['date'] ) ? mdjm_format_short_date( $mdjm_event->data['date'] ) : '' ),
-			) ); 
+			) );
             ?>
-            <?php 
+            <?php
             echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'  => '_mdjm_event_date',
                 'value' => esc_attr( ! empty( $mdjm_event->data['date'] ) ? $mdjm_event->data['date'] : '' ),
-			) ); 
+			) );
             ?>
         </div>
 
@@ -1421,19 +1423,19 @@ function mdjm_event_overview_metabox_event_dates_row( $event_id ) {
                 <?php esc_html_e( 'End', 'mobile-dj-manager' ); ?>
             </span>
 
-            <?php 
+            <?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'     => 'display_event_finish_date',
                 'class'    => 'mdjm_date',
                 'required' => false,
                 'value'    => esc_attr( ! empty( $finish_date ) ? mdjm_format_short_date( $finish_date ) : '' ),
-			) ); 
+			) );
             ?>
-            <?php 
+            <?php
             echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'  => '_mdjm_event_end_date',
                 'value' => esc_attr( ! empty( $finish_date ) ? $finish_date : '' ),
-			) ); 
+			) );
             ?>
         </div>
 
@@ -1442,18 +1444,18 @@ function mdjm_event_overview_metabox_event_dates_row( $event_id ) {
                 <?php esc_html_e( 'Setup', 'mobile-dj-manager' ); ?>
             </span>
 
-            <?php 
+            <?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'  => 'dj_setup_date',
                 'class' => 'mdjm_setup_date',
                 'value' => esc_attr( $setup_date ? mdjm_format_short_date( $setup_date ) : '' ),
-			) ); 
+			) );
             ?>
-            <?php 
+            <?php
             echo MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'  => '_mdjm_event_djsetup',
                 'value' => esc_attr( $setup_date ? $setup_date : '' ),
-			) ); 
+			) );
             ?>
         </div>
     </div>
@@ -1487,21 +1489,21 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				<?php esc_html_e( 'Start', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->time_hour_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'selected' => esc_attr( ! empty( $start ) ? date( $format[0], esc_html( strtotime( $start ) ) ) : '' ),
-			) ); 
+			) );
             ?>
-			<?php 
+			<?php
             echo MDJM()->html->time_minute_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'selected' => esc_attr( ! empty( $start ) ? date( $format[2], esc_html( strtotime( $start ) ) ) : '' ),
-			) ); 
+			) );
             ?>
 			<?php if ( 'H:i' != $format ) : ?>
-				<?php 
+				<?php
                 echo MDJM()->html->time_period_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'selected' => esc_attr( ! empty( $start ) ? date( 'A', esc_html( strtotime( $start ) ) ) : '' ),
-				) ); 
+				) );
                 ?>
 			<?php endif; ?>
 		</div>
@@ -1511,24 +1513,24 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				<?php esc_html_e( 'End', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->time_hour_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'     => 'event_finish_hr',
 				'selected' => esc_attr( ! empty( $finish ) ? date( $format[0], strtotime( $finish ) ) : '' ),
-			) ); 
+			) );
             ?>
-			<?php 
+			<?php
             echo MDJM()->html->time_minute_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'     => 'event_finish_min',
 				'selected' => esc_attr( ! empty( $finish ) ? date( $format[2], strtotime( $finish ) ) : '' ),
-			) ); 
+			) );
             ?>
 			<?php if ( 'H:i' != $format ) : ?>
-				<?php 
+				<?php
                 echo MDJM()->html->time_period_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'     => 'event_finish_period',
 					'selected' => esc_attr( ! empty( $finish ) ? date( 'A', strtotime( $finish ) ) : '' ),
-				) ); 
+				) );
                 ?>
 			<?php endif; ?>
 		</div>
@@ -1538,27 +1540,27 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				<?php esc_html_e( 'Setup', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->time_hour_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => 'dj_setup_hr',
 				'selected'    => esc_attr( ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : '' ),
 				'blank_first' => true,
-			) ); 
+			) );
             ?>
-			<?php 
+			<?php
             echo MDJM()->html->time_minute_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => 'dj_setup_min',
 				'selected'    => esc_attr( ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : '' ),
 				'blank_first' => true,
-			) ); 
+			) );
             ?>
 			<?php if ( 'H:i' != $format ) : ?>
-				<?php 
+				<?php
                 echo MDJM()->html->time_period_select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'name'        => 'dj_setup_period',
 					'selected'    => esc_attr( ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : '' ),
 					'blank_first' => true,
-				) ); 
+				) );
                 ?>
 			<?php endif; ?>
 		</div>
@@ -1603,14 +1605,14 @@ function mdjm_event_overview_metabox_event_packages_row( $event_id ) {
 				<?php esc_html_e( 'Package', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->packages_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'employee'   => $employee,
 				'event_type' => esc_attr( $event_type ),
 				'event_date' => esc_attr( $event_date ),
                 'selected'   => esc_attr( $package ),
 				'chosen'     => true,
-			) ); 
+			) );
             ?>
 		</div>
 
@@ -1619,7 +1621,7 @@ function mdjm_event_overview_metabox_event_packages_row( $event_id ) {
 				<?php esc_html_e( 'Addons', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->addons_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'selected'         => $addons,
                 'show_option_none' => false,
@@ -1629,7 +1631,7 @@ function mdjm_event_overview_metabox_event_packages_row( $event_id ) {
                 'package'          => esc_attr( $package ),
 				'placeholder'      => esc_html__( 'Select Add-ons', 'mobile-dj-manager' ),
                 'chosen'           => true,
-			) ); 
+			) );
             ?>
 		</div>
 	</div>
@@ -1659,12 +1661,12 @@ function mdjm_event_overview_metabox_event_client_notes_row( $event_id ) {
 				<?php esc_html_e( 'Client Notes', 'mobile-dj-manager' ); ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'name'        => '_mdjm_event_notes',
                 'placeholder' => esc_html__( 'Information entered here is visible by both clients and employees', 'mobile-dj-manager' ),
                 'value'       => esc_attr( $mdjm_event->data['notes'] ),
-			) ); 
+			) );
             ?>
 		</div>
 	</div>
@@ -1715,12 +1717,12 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id ) {
                         <label class="mdjm-enable-playlist">
                             <?php esc_html_e( 'Enable Playlist?', 'mobile-dj-manager' ); ?>
                         </label>
-                        <?php 
+                        <?php
                         echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'name'    => '_mdjm_event_playlist',
                             'value'   => 'Y',
                             'current' => esc_attr( $enable_playlist ? 'Y' : 0 ),
-						) ); 
+						) );
                         ?>
                     </span>
                 </div>
@@ -1729,21 +1731,21 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id ) {
                     <label class="mdjm-playlist-limit">
                         <?php esc_html_e( 'Song Limit', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->number( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'  => '_mdjm_event_playlist_limit',
 						'value' => esc_attr( $playlist_limit ),
-					) ); 
+					) );
                     ?>
                 </span>
 
                 <?php if ( mdjm_event_has_playlist( $event_id ) ) : ?>
                     <?php $songs = mdjm_count_playlist_entries( $event_id ); ?>
-                    <?php 
+                    <?php
                     $url = add_query_arg( array(
                         'page'     => 'mdjm-playlists',
                         'event_id' => $event_id,
-					), admin_url( 'admin.php' ) ); 
+					), admin_url( 'admin.php' ) );
                     ?>
 
                     <span id="mdjm-playlist-view" class="mdjm-playlist-view-option">
@@ -1797,34 +1799,34 @@ function mdjm_event_overview_metabox_event_workers_row( $event_id ) {
                 <span class="mdjm-custom-event-section-title"><?php printf( esc_html__( '%s Workers', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></span>
 
                 <span class="mdjm-event-workers-role">
-                    <?php 
+                    <?php
                     echo MDJM()->html->roles_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'   => 'event_new_employee_role',
                         'chosen' => true,
-					) ); 
+					) );
                     ?>
                 </span>
 
                 <span class="mdjm-event-workers-employee">
-                    <?php 
+                    <?php
                     echo MDJM()->html->employee_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'        => 'event_new_employee',
                         'exclude'     => $exclude, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'group'       => true,
                         'chosen'      => true,
                         'placeholder' => esc_html__( 'Select an Employee', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
 				<?php if ( mdjm_get_option( 'enable_employee_payments' ) && mdjm_employee_can( 'manage_txns' ) ) : ?>
                     <span class="mdjm-event-workers-wage">
-                        <?php 
+                        <?php
                         echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'name'        => 'event_new_employee_wage',
                             'class'       => 'mdjm-currency',
                             'placeholder' => esc_attr( mdjm_sanitize_amount( '0' ) ),
-						) ); 
+						) );
                         ?>
                     </span>
                 <?php endif; ?>
@@ -1847,11 +1849,11 @@ function mdjm_event_overview_metabox_event_workers_row( $event_id ) {
 
             <div class="mdjm_field_wrap mdjm_form_fields">
                 <p><a href="
-                <?php 
+                <?php
                 echo esc_url( wp_nonce_url( add_query_arg( array(
                     'mdjm-action' => 'pay_event_employees',
                     'event_id'    => $event_id,
-				), admin_url( 'admin.php' ) ), 'pay_event_employees', 'mdjm_nonce' ) ); 
+				), admin_url( 'admin.php' ) ), 'pay_event_employees', 'mdjm_nonce' ) );
 				?>
                 " id="pay_event_employees" class="button button-primary button-small"><?php printf( esc_html__( 'Pay %s Employees', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
             </div>
@@ -1876,7 +1878,7 @@ add_action( 'mdjm_event_overview_custom_event_sections', 'mdjm_event_overview_me
  */
 function mdjm_event_overview_metabox_add_event_type_section( $event_id ) {
 
-    global $mdjm_event, $mdjm_event_update; 
+    global $mdjm_event, $mdjm_event_update;
     ?>
 
     <div id="mdjm-add-event-type-fields" class="mdjm-add-event-type-sections-wrap">
@@ -1888,23 +1890,23 @@ function mdjm_event_overview_metabox_add_event_type_section( $event_id ) {
                     <label class="mdjm-event-type">
                         <?php printf( esc_html__( '%s Type', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'name'  => 'event_type_name',
                         'class' => 'mdjm-name-field large-text',
-					) ); 
+					) );
                     ?>
                 </span>
 
                 <span class="mdjm-add-event-type-action">
                     <label>&nbsp;</label>
-                    <?php 
+                    <?php
                     submit_button(
                         sprintf( esc_html__( 'Add %s Type', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ),
                         array( 'secondary', 'mdjm-add-event-type' ),
                         'mdjm-add-event-type',
                         false
-                    ); 
+                    );
                     ?>
                 </span>
             </div>
@@ -1983,12 +1985,12 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-name">
                         <?php esc_html_e( 'Venue', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'  => 'venue_name',
                         'value' => esc_attr( $venue_name ),
 						'class' => 'mdjm-name-field large-text',
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -1996,13 +1998,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-contact">
                         <?php esc_html_e( 'Contact', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_contact',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_contact ) ? esc_attr( $venue_contact ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2010,14 +2012,14 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-email">
                         <?php esc_html_e( 'Email Address', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_email',
 						'class'       => 'mdjm-name-field large-text',
 						'type'        => 'email',
                         'value'       => esc_attr( ! empty( $venue_email ) ? esc_attr( $venue_email ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2025,13 +2027,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-phone">
                         <?php esc_html_e( 'Phone', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_phone',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_phone ) ? esc_attr( $venue_phone ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2039,13 +2041,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-address1">
                         <?php esc_html_e( 'Address Line 1', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_address1',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_address1 ) ? esc_attr( $venue_address1 ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2053,13 +2055,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-address2">
                         <?php esc_html_e( 'Address Line 2', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_address2',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_address2 ) ? esc_attr( $venue_address2 ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2067,13 +2069,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-town">
                         <?php esc_html_e( 'Town', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_town',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_town ) ? esc_attr( $venue_town ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2081,13 +2083,13 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-county">
                         <?php esc_html_e( 'County', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_county',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_county ) ? esc_attr( $venue_county ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
@@ -2095,25 +2097,25 @@ function mdjm_event_overview_metabox_add_venue_section( $event_id ) {
                     <label class="mdjm-venue-postcode">
                         <?php esc_html_e( 'Post Code', 'mobile-dj-manager' ); ?>
                     </label>
-                    <?php 
+                    <?php
                     echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'name'        => 'venue_postcode',
 						'class'       => 'mdjm-name-field large-text',
                         'value'       => esc_attr( ! empty( $venue_postcode ) ? esc_attr( $venue_postcode ) : '' ),
 						'placeholder' => esc_html__( '(optional)', 'mobile-dj-manager' ),
-					) ); 
+					) );
                     ?>
                 </span>
 
                 <span class="mdjm-add-venue-action">
                     <label>&nbsp;</label>
-                    <?php 
+                    <?php
                     submit_button(
                         sprintf( esc_html__( '%s Venue', 'mobile-dj-manager' ), $add_save_label ),
                         array( 'secondary', 'mdjm-add-venue' ),
                         'mdjm-add-venue',
                         false
-                    ); 
+                    );
                     ?>
                 </span>
 
@@ -2141,12 +2143,12 @@ function mdjm_event_overview_metabox_venue_travel_section( $event_id ) {
 
     $travel_fields = mdjm_get_event_travel_fields();
 
-	foreach ( $travel_fields as $field ) : 
+	foreach ( $travel_fields as $field ) :
 		?>
     	<?php $travel_data = mdjm_get_event_travel_data( $event_id, $field ); ?>
     	<?php $value = ! empty( $travel_data ) ? $travel_data : ''; ?>
 		<input type="hidden" name="travel_<?php echo esc_attr( $field ); ?>" id="mdjm_travel_<?php echo esc_attr( $field ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-		<?php 
+		<?php
     endforeach;
 
 } // mdjm_event_overview_metabox_venue_travel_section
@@ -2173,39 +2175,39 @@ function mdjm_event_overview_metabox_event_equipment_travel_costs_row( $event_id
 
             <div class="mdjm-event-package-cost">
                 <span class="mdjm-repeatable-row-setting-label">
-                    <?php 
+                    <?php
                     esc_html_e( 'Package Costs', 'mobile-dj-manager' );
-					echo ' ' . esc_html( mdjm_currency_symbol() ); 
+					echo ' ' . esc_html( mdjm_currency_symbol() );
                     ?>
                 </span>
 
-                <?php 
+                <?php
                 echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'        => '_mdjm_event_package_cost',
                     'class'       => 'mdjm-currency',
                     'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
                     'value'       => esc_attr( mdjm_sanitize_amount( $mdjm_event->data['package_price'] ) ),
                     'readonly'    => true,
-				) ); 
+				) );
                 ?>
             </div>
 
             <div class="mdjm-event-addons-cost">
                 <span class="mdjm-repeatable-row-setting-label">
-                    <?php 
+                    <?php
                     esc_html_e( 'Addons Cost', 'mobile-dj-manager' );
-					echo ' ' . esc_html( mdjm_currency_symbol() ); 
+					echo ' ' . esc_html( mdjm_currency_symbol() );
                     ?>
                 </span>
 
-                <?php 
+                <?php
                 echo MDJM()->html->text( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'        => '_mdjm_event_addons_cost',
                     'class'       => 'mdjm-currency',
                     'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
                     'value'       => esc_attr( mdjm_sanitize_amount( $mdjm_event->data['addons_price'] ) ),
                     'readonly'    => true,
-				) ); 
+				) );
                 ?>
             </div>
 
@@ -2215,20 +2217,20 @@ function mdjm_event_overview_metabox_event_equipment_travel_costs_row( $event_id
 
             <div class="mdjm-event-travel-cost">
                 <span class="mdjm-repeatable-row-setting-label">
-                    <?php 
+                    <?php
                     esc_html_e( 'Travel Cost', 'mobile-dj-manager' );
-					echo ' ' . esc_html( mdjm_currency_symbol() ); 
+					echo ' ' . esc_html( mdjm_currency_symbol() );
                     ?>
                 </span>
 
-                <?php 
+                <?php
                 echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'name'        => '_mdjm_event_travel_cost',
                     'class'       => 'mdjm-currency',
                     'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
                     'value'       => esc_attr( mdjm_sanitize_amount( $mdjm_event->data['travel_cost'] ) ),
                     'readonly'    => true,
-				) ); 
+				) );
                 ?>
             </div>
 
@@ -2258,55 +2260,55 @@ function mdjm_event_overview_metabox_event_discount_deposit_row( $event_id ) {
 	<div class="mdjm-event-price-fields">
         <div class="mdjm-event-additional-cost">
 			<span class="mdjm-repeatable-row-setting-label">
-				<?php 
+				<?php
                 esc_html_e( 'Additional Costs', 'mobile-dj-manager' );
-				echo ' ' . esc_html( mdjm_currency_symbol() ); 
+				echo ' ' . esc_html( mdjm_currency_symbol() );
                 ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => '_mdjm_event_additional_cost',
 				'class'       => 'mdjm-currency',
 				'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
 				'value'       => esc_attr( mdjm_sanitize_amount( $mdjm_event->data['additional_cost'] ) ),
-			) ); 
+			) );
             ?>
 		</div>
 
         <div class="mdjm-event-discount">
 			<span class="mdjm-repeatable-row-setting-label">
-				<?php 
+				<?php
                 esc_html_e( 'Discount', 'mobile-dj-manager' );
-				echo ' ' . esc_html( mdjm_currency_symbol() ); 
+				echo ' ' . esc_html( mdjm_currency_symbol() );
                 ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => '_mdjm_event_discount',
 				'class'       => 'mdjm-currency',
 				'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
 				'value'       => esc_attr( mdjm_sanitize_amount( $mdjm_event->data['discount'] ) ),
-			) ); 
+			) );
             ?>
 		</div>
 
 		<div class="mdjm-event-deposit">
 			<span class="mdjm-repeatable-row-setting-label">
-				<?php 
+				<?php
                 esc_html_e( 'Deposit', 'mobile-dj-manager' );
-				echo ' ' . esc_html( mdjm_currency_symbol() ); 
+				echo ' ' . esc_html( mdjm_currency_symbol() );
                 ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => '_mdjm_event_deposit',
 				'class'       => 'mdjm-currency',
 				'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
 				'value'       => esc_attr( $mdjm_event_update ? mdjm_sanitize_amount( $mdjm_event->deposit ) : mdjm_calculate_deposit( $mdjm_event->price ) ),
-			) ); 
+			) );
             ?>
 		</div>
 
@@ -2334,20 +2336,20 @@ function mdjm_event_overview_metabox_event_price_row( $event_id ) {
 	<div class="mdjm-event-price-fields">
         <div class="mdjm-event-cost">
 			<span class="mdjm-repeatable-row-setting-label">
-				<?php 
+				<?php
                 esc_html_e( 'Total Cost', 'mobile-dj-manager' );
-				echo ' ' . esc_html( mdjm_currency_symbol() ); 
+				echo ' ' . esc_html( mdjm_currency_symbol() );
                 ?>
 			</span>
 
-			<?php 
+			<?php
             echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'name'        => '_mdjm_event_cost',
 				'class'       => 'mdjm-currency',
 				'placeholder' => esc_attr( mdjm_sanitize_amount( '0.00' ) ),
 				'value'       => esc_attr( ! empty( $mdjm_event->price ) ? mdjm_sanitize_amount( $mdjm_event->price ) : '' ),
                 'readonly'    => true,
-			) ); 
+			) );
             ?>
 		</div>
 
@@ -2376,11 +2378,11 @@ function mdjm_event_metabox_admin_enquiry_source_row( $event_id ) {
 	<div class="mdjm_field_wrap mdjm_form_fields">
     	<div class="mdjm_col">
             <label for="mdjm_enquiry_source"><?php esc_html_e( 'Enquiry Source:', 'mobile-dj-manager' ); ?></label>
-            <?php 
+            <?php
             echo MDJM()->html->enquiry_source_dropdown( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 'mdjm_enquiry_source',
                 $enquiry_source ? $enquiry_source->term_id : ''
-            ); 
+            );
             ?>
         </div>
     </div>
@@ -2403,13 +2405,13 @@ function mdjm_event_metabox_admin_employee_notes_row( $event_id ) {
 
 	?>
 	<div class="mdjm_field_wrap mdjm_form_fields">
-		<?php 
+		<?php
         echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'label'       => sprintf( esc_html__( '%s Notes:', 'mobile-dj-manager' ), esc_html( mdjm_get_option( 'artist' ) ) ),
 			'name'        => '_mdjm_event_dj_notes',
 			'placeholder' => esc_html__( 'This information is not visible to clients', 'mobile-dj-manager' ),
 			'value'       => esc_attr( get_post_meta( $event_id, '_mdjm_event_dj_notes', true ) ),
-		) ); 
+		) );
         ?>
     </div>
 
@@ -2436,13 +2438,13 @@ function mdjm_event_metabox_admin_notes_row( $event_id ) {
 
 	?>
 	<div class="mdjm_field_wrap mdjm_form_fields">
-		<?php 
+		<?php
         echo MDJM()->html->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'label'       => esc_html__( 'Admin Notes:', 'mobile-dj-manager' ),
 			'name'        => '_mdjm_event_admin_notes',
 			'placeholder' => esc_html__( 'This information is only visible to admins', 'mobile-dj-manager' ),
 			'value'       => esc_attr( get_post_meta( $event_id, '_mdjm_event_admin_notes', true ) ),
-		) ); 
+		) );
         ?>
     </div>
 
@@ -2506,60 +2508,60 @@ function mdjm_event_metabox_txn_add_new_row( $event_id ) {
 			<tbody class="mdjm-hidden">
             	<tr>
                 	<td><label for="mdjm_txn_amount"><?php esc_html_e( 'Amount:', 'mobile-dj-manager' ); ?></label><br />
-                    	<?php 
+                    	<?php
                         echo esc_html( mdjm_currency_symbol() ) .
 						MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'        => 'mdjm_txn_amount',
 							'class'       => 'mdjm-input-currency',
 							'placeholder' => esc_attr( mdjm_sanitize_amount( '10' ) ),
-						) ); 
+						) );
                         ?>
                         </td>
 
 					<td><label for="mdjm_txn_display_date"><?php esc_html_e( 'Date:', 'mobile-dj-manager' ); ?></label><br />
-						<?php 
+						<?php
                         echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'  => 'mdjm_txn_display_date',
 							'class' => '',
 						) ) .
 						MDJM()->html->hidden( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name' => 'mdjm_txn_date',
-						) ); 
+						) );
                         ?>
                         </td>
 
 					<td><label for="mdjm_txn_amount"><?php esc_html_e( 'Direction:', 'mobile-dj-manager' ); ?></label><br />
-                    	<?php 
+                    	<?php
                         echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							'name'    => 'mdjm_txn_direction',
-							'options' => array(
+							'name'             => 'mdjm_txn_direction',
+							'options'          => array(
 								'In'  => esc_html__( 'Incoming', 'mobile-dj-manager' ),
 								'Out' => esc_html__( 'Outgoing', 'mobile-dj-manager' ),
 							),
-													 'show_option_all' => false,
-													 'show_option_none' => false,
-						) ); 
+							'show_option_all'  => false,
+							'show_option_none' => false,
+						) );
                         ?>
                         </td>
                 </tr>
 
 				<tr>
                 	<td><span id="mdjm_txn_from_container"><label for="mdjm_txn_from"><?php esc_html_e( 'From:', 'mobile-dj-manager' ); ?></label><br />
-                    	<?php 
+                    	<?php
                         echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'        => 'mdjm_txn_from',
 							'class'       => '',
 							'placeholder' => esc_html__( 'Leave empty if client', 'mobile-dj-manager' ),
-						) ); 
+						) );
                         ?>
                         </span>
                         <span id="mdjm_txn_to_container" class="mdjm-hidden"><label for="mdjm_txn_to"><?php esc_html_e( 'To:', 'mobile-dj-manager' ); ?></label><br />
-                    	<?php 
+                    	<?php
                         echo MDJM()->html->text( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'        => 'mdjm_txn_to',
 							'class'       => '',
 							'placeholder' => esc_html__( 'Leave empty if client', 'mobile-dj-manager' ),
-						) ); 
+						) );
                         ?>
                         </span></td>
 
@@ -2567,14 +2569,14 @@ function mdjm_event_metabox_txn_add_new_row( $event_id ) {
 						<?php echo MDJM()->html->txn_type_dropdown(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 
 					<td><label for="mdjm_txn_src"><?php esc_html_e( 'Paid via:', 'mobile-dj-manager' ); ?></label><br />
-                    	<?php 
+                    	<?php
                         echo MDJM()->html->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'name'             => 'mdjm_txn_src',
 							'options'          => mdjm_get_txn_source(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'selected'         => mdjm_get_option( 'default_type', 'Cash' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'show_option_all'  => false,
 							'show_option_none' => false,
-						) ); 
+						) );
                         ?>
                         </td>
                 </tr>
@@ -2583,12 +2585,12 @@ function mdjm_event_metabox_txn_add_new_row( $event_id ) {
 
                     <tr id="mdjm-txn-email">
                         <td colspan="3">
-                        <?php 
+                        <?php
                         echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             'name'    => 'mdjm_manual_txn_email',
                             'current' => esc_attr( mdjm_get_option( 'manual_payment_cfm_template' ) ? true : false ),
                             'class'   => 'mdjm-checkbox',
-                        ) ); 
+                        ) );
 						?>
                             <?php esc_html_e( 'Send manual payment confirmation email?', 'mobile-dj-manager' ); ?></td>
                     </tr>
@@ -2643,9 +2645,9 @@ function mdjm_event_metabox_history_journal_table( $event_id ) {
                         </tr>
 						<?php $i++; ?>
 
-                        <?php 
+                        <?php
                         if ( $i >= 3 ) {
-							break;} 
+							break;}
 						?>
 
                     <?php endforeach; ?>
@@ -2714,7 +2716,7 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
                             <?php
                             echo esc_html( get_post_status_object( $email->post_status )->label );
 
-                            if ( ! empty( $email->post_modified ) && 'opened' == $email->post_status ) : 
+                            if ( ! empty( $email->post_modified ) && 'opened' == $email->post_status ) :
 								?>
                                 <?php echo '<br />'; ?>
                                 <span class="description"><?php echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $email->post_modified ) ) ); ?></span>
@@ -2722,9 +2724,9 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
                         </tr>
 						<?php $i++; ?>
 
-                        <?php 
+                        <?php
                         if ( $i >= 3 ) {
-							break;} 
+							break;}
 						?>
 
                     <?php endforeach; ?>

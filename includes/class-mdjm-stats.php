@@ -714,7 +714,7 @@ class MDJM_Stats {
 		}
 
 		$args   = apply_filters( 'mdjm_get_events_by_date_args', $args );
-		$key    = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
+		$key    = 'mdjm_stats_' . substr( md5( wp_json_encode( $args ) ), 0, 15 );
 		$events = get_transient( $key );
 
 		if ( false === $events ) {
@@ -938,7 +938,7 @@ class MDJM_Stats {
 		}
 
 		$args     = apply_filters( 'mdjm_get_earnings_by_date_args', $args );
-		$key      = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
+		$key      = 'mdjm_stats_' . substr( md5( wp_json_encode( $args ) ), 0, 15 );
 		$earnings = get_transient( $key );
 
 		if ( false === $earnings ) {

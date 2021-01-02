@@ -991,7 +991,7 @@ function mdjm_add_event_type_ajax() {
 		if ( ! is_wp_error( $term ) ) {
             $msg = 'success';
         } else {
-            error_log( $term->get_error_message() );
+            error_log( $term->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
         }
 	}
 

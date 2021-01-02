@@ -86,10 +86,10 @@ global $mdjm_event;
             <?php while ( $i <= $cells ) : ?>
                 <td>&nbsp;</td>
                 <?php $i++; ?>
-                <?php 
+                <?php
                 if ( $i == $cells ) :
 					?>
-                     </tr> <?php endif; ?>
+			</tr> <?php endif; ?>
             <?php endwhile; ?><!-- endwhile( $i <= $cells ) -->
             </tr>
         <?php endif; ?><!-- endif( $i < $cells ) -->

@@ -445,7 +445,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 		public static function add_new_custom_field_table( $field_types ) {
 			wp_enqueue_script( 'jquery' );
 
-			wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', false );
+			wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', array(), MDJM_VERSION_NUM, true );
 			wp_enqueue_script( 'jquery-validation-plugin' );
 			?>
 			<script type="text/javascript">
@@ -510,12 +510,7 @@ if ( ! class_exists( 'MDJM_Event_Fields' ) ) :
 
 			<p>
 			<label for="field_label"><?php esc_html_e( 'Label', 'mobile-dj-manager' ); ?>:</label><br />
-			<input type="text" name="field_label" id="field_label" class="regular-text" value="
-            <?php
-            echo ( ! empty( $editing ) ?
-			esc_attr( get_the_title( absint( wp_unslash( $_GET['id'] ) ) ) ) : '' );
-			?>
-            " class="regular-text" required="required" />
+			<input type="text" name="field_label" id="field_label" class="regular-text" value="<?php echo ( ! empty( $editing ) ? esc_attr( get_the_title( absint( wp_unslash( $_GET['id'] ) ) ) ) : '' ); ?>" class="regular-text" required="required" />
 			</p>
 
 			<p>

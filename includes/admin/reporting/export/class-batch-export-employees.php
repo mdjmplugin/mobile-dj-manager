@@ -155,7 +155,7 @@ class MDJM_Batch_Export_Employees extends MDJM_Batch_Export {
 		$percentage = 0;
 
 		$total = mdjm_employee_count();
-		error_log( $total );
+
 		if ( $total > 0 ) {
 			$percentage = ( ( 30 * $this->step ) / $total ) * 100;
 		}

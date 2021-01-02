@@ -57,7 +57,7 @@ function mdjm_load_scripts() {
         add_thickbox();
     }
 
-	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax' . $suffix . '.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax' . $suffix . '.js', array( 'jquery' ), MDJM_VERSION_NUM, true );
 	wp_enqueue_script( 'mdjm-ajax' );
 
 	wp_localize_script(
@@ -102,10 +102,10 @@ function mdjm_load_scripts() {
 		)
 	);
 
-	wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', array( 'jquery' ) );
+	wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', array( 'jquery' ), MDJM_VERSION_NUM, true );
 	wp_enqueue_script( 'jquery-validation-plugin' );
 
-	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ), array(), MDJM_VERSION_NUM, true );
 
 } // mdjm_load_scripts
 add_action( 'wp_enqueue_scripts', 'mdjm_load_scripts' );
@@ -143,7 +143,7 @@ function mdjm_register_styles() {
 	wp_register_style( 'mdjm-styles', $url, array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'mdjm-styles' );
 
-	wp_register_style( 'font-awesome', MDJM_PLUGIN_URL . '/assets/libs/font-awesome/css/font-awesome.min.css' );
+	wp_register_style( 'font-awesome', MDJM_PLUGIN_URL . '/assets/libs/font-awesome/css/font-awesome.min.css', array(), MDJM_VERSION_NUM );
 	wp_enqueue_style( 'font-awesome' );
 
 	if ( ! empty( $post ) ) {
@@ -176,8 +176,8 @@ function mdjm_register_admin_styles( $hook ) {
 	$file     = 'mdjm-admin' . $suffix . '.css';
 
 	wp_register_style( 'jquery-chosen', $css_dir . 'chosen.css', array(), MDJM_PLUGIN_URL );
-	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
-	wp_register_style( 'font-awesome', MDJM_PLUGIN_URL . '/assets/libs/font-awesome/css/font-awesome.min.css' );
+	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css', array(), MDJM_VERSION_NUM );
+	wp_register_style( 'font-awesome', MDJM_PLUGIN_URL . '/assets/libs/font-awesome/css/font-awesome.min.css', array(), MDJM_VERSION_NUM );
 
 	wp_enqueue_style( 'jquery-chosen' );
   	wp_enqueue_style( 'jquery-ui-css' );
@@ -236,10 +236,10 @@ function mdjm_register_admin_scripts( $hook ) {
 		'admin_page_mdjm-custom-client-fields',
 	);
 
-	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), MDJM_VERSION_NUM, true );
 	wp_enqueue_script( 'jquery-chosen' );
 
-	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+	wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ), array(), MDJM_VERSION_NUM, true );
 
 	if ( strpos( $hook, 'mdjm' ) ) {
 		wp_enqueue_script( 'jquery' );
@@ -265,14 +265,14 @@ function mdjm_register_admin_scripts( $hook ) {
 		}
 
 		if ( isset( $_GET['post'] ) && 'mdjm-transaction' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) ) {
-			wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery' ), MDJM_VERSION_NUM );
+			wp_register_script( 'mdjm-trans-js', MDJM_PLUGIN_URL . '/assets/js/mdjm-trans-post-val.js', array( 'jquery' ), MDJM_VERSION_NUM, true );
 			wp_enqueue_script( 'mdjm-trans-js' );
 			wp_localize_script( 'mdjm-trans-js', 'transaction_type', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 		}
 	}
 
 	if ( in_array( $hook, $require_validation ) ) {
-		wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', false );
+		wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', array( 'jquery' ), MDJM_VERSION_NUM, true );
 		wp_enqueue_script( 'jquery-validation-plugin' );
 	}
 
@@ -291,31 +291,36 @@ function mdjm_register_admin_scripts( $hook ) {
 			'mdjm-moment-js',
 			$libs_dir . 'moment/moment-with-locales' . $suffix . '.js',
 			array( 'jquery' ),
-			MDJM_VERSION_NUM
+			MDJM_VERSION_NUM,
+			true,
 		);
 		wp_register_script(
 			'mdjm-fullcalendar-js',
 			$libs_dir . 'fullcalendar/fullcalendar' . $suffix . '.js',
 			array( 'jquery', 'mdjm-moment-js' ),
-			MDJM_VERSION_NUM
+			MDJM_VERSION_NUM,
+			true,
 		);
 		wp_register_script(
 			'mdjm-popper-js',
 			$libs_dir . 'popperjs/popper.min.js',
 			array( 'jquery' ),
-			MDJM_VERSION_NUM
+			MDJM_VERSION_NUM,
+			true,
 		);
 		wp_register_script(
 			'mdjm-bootstrap-js',
 			$libs_dir . 'bootstrap/js/bootstrap.min.js',
 			array( 'jquery' ),
-			MDJM_VERSION_NUM
+			MDJM_VERSION_NUM,
+			true,
 		);
 		wp_register_script(
 			'mdjm-availability-scripts-js',
 			$js_dir . 'availability-scripts' . $suffix . '.js',
 			array( 'jquery', 'mdjm-moment-js', 'mdjm-fullcalendar-js' ),
-			MDJM_VERSION_NUM
+			MDJM_VERSION_NUM,
+			true,
 		);
 
 		wp_enqueue_script( 'mdjm-moment-js' );
@@ -338,7 +343,7 @@ function mdjm_register_admin_scripts( $hook ) {
 		);
 	}
 
-	wp_register_script( 'mdjm-admin-scripts', $js_dir . $file, array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_register_script( 'mdjm-admin-scripts', $js_dir . $file, array( 'jquery' ), MDJM_VERSION_NUM, true );
 	wp_enqueue_script( 'mdjm-admin-scripts' );
 
 	wp_localize_script(
@@ -400,7 +405,7 @@ function mdjm_register_admin_scripts( $hook ) {
 		)
 	);
 
-	wp_register_script( 'jquery-flot', $js_dir . 'jquery.flot.js' );
+	wp_register_script( 'jquery-flot', $js_dir . 'jquery.flot.js', array(), MDJM_VERSION_NUM, true );
 	wp_enqueue_script( 'jquery-flot' );
 
 } // mdjm_register_admin_scripts

@@ -133,7 +133,7 @@ function mdjm_transaction_metabox_save_txn( $post ) {
 
     <div class="mdjm-meta-row">
         <div class="mdjm-left-col">
-         <?php
+			<?php
 			submit_button(
                 ( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
                 'primary',
@@ -235,14 +235,14 @@ function mdjm_transaction_metabox_txn_details( $post ) {
 		var paid_from_div =  document.getElementById("paid_from_field");
 		var paid_to_div =  document.getElementById("paid_to_field");
 
-	  if (direction_val == 'Out') {
-		  paid_from_div.style.display = "none";
-		  paid_to_div.style.display = "block";
-	  }
-	  else {
-		  paid_from_div.style.display = "block";
-		  paid_to_div.style.display = "none";
-	  }
+		if (direction_val == 'Out') {
+			paid_from_div.style.display = "none";
+			paid_to_div.style.display = "block";
+		}
+		else {
+			paid_from_div.style.display = "block";
+			paid_to_div.style.display = "none";
+		}
 	}
 	</script>
 	<?php

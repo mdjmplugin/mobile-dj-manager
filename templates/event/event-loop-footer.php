@@ -14,6 +14,6 @@
 ?>
 <div id="mdjm-event-loop-footer">
 	<?php do_action( 'mdjm_event_loop_before_footer' ); ?>
-    
+
     <?php do_action( 'mdjm_event_loop_after_footer' ); ?>
 </div>

@@ -334,14 +334,12 @@ if ( ! class_exists( 'MDJM_Client_Manager' ) ) :
 
 				$class          = ( $current == $role ? ' class="current"' : '' );
 				$role_url       = add_query_arg( 'display_role', $role );
-				$views[ $role ] = '<a href="' . $role_url . '" ' . $class . '>' . translate_user_role( $wp_roles->roles[ $role ]['name'] ) .
-					 ' <span class="count">(' . $count . ')</span></a>';
+				$views[ $role ] = '<a href="' . $role_url . '" ' . $class . '>' . translate_user_role( $wp_roles->roles[ $role ]['name'] ) . ' <span class="count">(' . $count . ')</span></a>';
 			}
 
 			if ( ! empty( $_POST['s'] ) ) {
 				$class           = ( $current == $role ? ' class="current"' : '' );
-				$views['search'] = '<a href="#" ' . $class . '>' . __( 'Search Results', 'mobile-dj-manager' ) .
-					 ' <span class="count">(' . count( self::$clients ) . ')</span></a>';
+				$views['search'] = '<a href="#" ' . $class . '>' . __( 'Search Results', 'mobile-dj-manager' ) . ' <span class="count">(' . count( self::$clients ) . ')</span></a>';
 			}
 
 			return $views;

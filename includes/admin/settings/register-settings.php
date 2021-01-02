@@ -1201,12 +1201,12 @@ function mdjm_get_registered_settings() {
 						'desc' => __( 'Enter methods of payment.', 'mobile-dj-manager' ),
 						'type' => 'textarea',
 						'std'  => __( 'BACS', 'mobile-dj-manager' ) . "\r\n" .
-								         __( 'Cash', 'mobile-dj-manager' ) . "\r\n" .
-								         __( 'Cheque', 'mobile-dj-manager' ) . "\r\n" .
-								         __( 'PayPal', 'mobile-dj-manager' ) . "\r\n" .
-								         __( 'PayFast', 'mobile-dj-manager' ) . "\r\n" .
-										 __( 'Stripe', 'mobile-dj-manager' ) . "\r\n" .
-								         __( 'Other', 'mobile-dj-manager' ),
+									__( 'Cash', 'mobile-dj-manager' ) . "\r\n" .
+									__( 'Cheque', 'mobile-dj-manager' ) . "\r\n" .
+									__( 'PayPal', 'mobile-dj-manager' ) . "\r\n" .
+									__( 'PayFast', 'mobile-dj-manager' ) . "\r\n" .
+									__( 'Stripe', 'mobile-dj-manager' ) . "\r\n" .
+									__( 'Other', 'mobile-dj-manager' ),
 					),
 					'default_type'           => array(
 						'id'      => 'default_type',
@@ -1577,7 +1577,7 @@ function mdjm_settings_sanitize( $input = array() ) {
 
 			if ( empty( $input[ $key ] ) ) {
 				unset( $mdjm_options[ $key ] );
-			}       
+			}
 		}
 	}
 
@@ -2461,7 +2461,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 						$license_status = 'license-' . $class . '-notice';
 						break;
 
-				}           
+				}
 			} else {
 
 				switch ( $license->license ) {
@@ -2502,8 +2502,8 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 
 						break;
 
-				}           
-			}       
+				}
+			}
 		} else {
 			$class = 'empty';
 

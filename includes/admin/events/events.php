@@ -421,7 +421,7 @@ function mdjm_event_date_filter_dropdown() {
 	$month_query = 'SELECT DISTINCT YEAR( meta_value ) as year, MONTH( meta_value ) as month
 		FROM `' . $wpdb->postmeta . "` WHERE `meta_key` = '_mdjm_event_date'";
 
-	$months = $wpdb->get_results( $month_query );
+	$months = $wpdb->get_results( $month_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	$month_count = count( $months );
 
@@ -567,15 +567,15 @@ function mdjm_event_client_filter_dropdown() {
 	<select name="mdjm_filter_client" id="mdjm_filter_client-by-dj">
 		<option value="0"<?php selected( $selected, 0, false ); ?>><?php esc_attr_e( "All Client's", 'mobile-dj-manager' ); ?></option>
 	<?php
-	foreach ( $clients as $ID => $display_name ) {
+	foreach ( $clients as $client_id => $display_name ) {
 
 		if ( empty( $display_name ) ) {
 			continue;
 		}
 
 		printf( "<option %s value='%s'>%s</option>\n",
-			selected( $selected, $ID, false ),
-			esc_attr( $ID ),
+			selected( $selected, $client_id, false ),
+			esc_attr( $client_id ),
 			esc_attr( $display_name )
 		);
 	}

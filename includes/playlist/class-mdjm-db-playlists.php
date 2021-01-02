@@ -286,14 +286,14 @@ class MDJM_DB_Playlists extends MDJM_DB {
 		if ( ! empty( $args['song'] ) ) {
 			$song   = sanitize_text_field( $args['song'] );
 			$song   = trim( $song );
-			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song );
+			$where .= $wpdb->prepare( ' AND `song` LIKE %s ', '%' . $wpdb->esc_like( $song ) . '%' );
 		}
 
 		// Specific entries by artist
 		if ( ! empty( $args['artist'] ) ) {
 			$artist = sanitize_text_field( $args['artist'] );
 			$artist = trim( $artist );
-			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist );
+			$where .= $wpdb->prepare( ' AND `artist` LIKE %s ', '%' . $wpdb->esc_like( $artist ) . '%' );
 		}
 
 		// Specific entries by category
@@ -337,7 +337,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
-		$cache_key = md5( 'mdjm_playlist_' . serialize( $args ) );
+		$cache_key = md5( 'mdjm_playlist_' . wp_json_encode( $args ) );
 
 		$entries = wp_cache_get( $cache_key, 'playlist' );
 
@@ -359,7 +359,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 				absint( $args['offset'] ),
 				absint( $args['number'] )
 			);
-			$entries = $wpdb->get_results( $query );
+			$entries = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			wp_cache_set( $cache_key, $entries, 'playlist', 3600 );
 		}
 
@@ -425,14 +425,14 @@ class MDJM_DB_Playlists extends MDJM_DB {
 		if ( ! empty( $args['song'] ) ) {
 			$song   = sanitize_text_field( $args['song'] );
 			$song   = trim( $song );
-			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song );
+			$where .= $wpdb->prepare( ' AND `song` LIKE %s ', '%' . $wpdb->esc_like( $song ) . '%' );
 		}
 
 		// Specific entries by artist
 		if ( ! empty( $args['artist'] ) ) {
 			$artist = sanitize_text_field( $args['artist'] );
 			$artist = trim( $artist );
-			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist );
+			$where .= $wpdb->prepare( ' AND `artist` LIKE %s ', '%' . $wpdb->esc_like( $artist ) . '%' );
 		}
 
 		// Specific entries by category
@@ -474,13 +474,13 @@ class MDJM_DB_Playlists extends MDJM_DB {
 			}
 		}
 
-		$cache_key = md5( 'mdjm_playlist_count' . serialize( $args ) );
+		$cache_key = md5( 'mdjm_playlist_count' . wp_json_encode( $args ) );
 
 		$count = wp_cache_get( $cache_key, 'playlist' );
 
 		if ( 'false' === $count ) {
 			$query = "SELECT COUNT($this->primary_key) FROM " . $this->table_name . "{$join} {$where};";
-			$count = $wpdb->get_var( $query );
+			$count = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			wp_cache_set( $cache_key, $count, 'playlist', 3600 );
 		}
 

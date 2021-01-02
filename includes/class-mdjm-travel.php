@@ -177,8 +177,8 @@ class MDJM_Travel {
 		$query_args = array(
 			'units'        => $this->units,
 			'mode'         => $this->mode,
-			'origins'      => str_replace( '%2C', ',', urlencode( $this->start_address ) ),
-			'destinations' => str_replace( '%2C', ',', urlencode( $this->destination_address ) ),
+			'origins'      => str_replace( '%2C', ',', rawurlencode( $this->start_address ) ),
+			'destinations' => str_replace( '%2C', ',', rawurlencode( $this->destination_address ) ),
 		);
 
 		/*
@@ -400,8 +400,8 @@ class MDJM_Travel {
 
 		$url = add_query_arg( array(
 			'dirflg' => 'd',
-			'saddr'  => urlencode( $this->start_address ),
-			'daddr'  => urlencode( $this->destination_address ),
+			'saddr'  => rawurlencode( $this->start_address ),
+			'daddr'  => rawurlencode( $this->destination_address ),
 		), $this->directions );
 
 		return apply_filters( 'mdjm_directions_url', $url, $this );

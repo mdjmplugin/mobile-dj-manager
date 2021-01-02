@@ -51,11 +51,11 @@ if ( ! class_exists( 'MDJM' ) ) {
 			global $mdjm_post_types;
 
 			// jQuery Validation
-			wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', false );
+			wp_register_script( 'jquery-validation-plugin', MDJM_PLUGIN_URL . '/assets/libs/jquery-validate/jquery.validate.min.js', array(), MDJM_VERSION_NUM, true );
 
 			if ( in_array( get_post_type(), $mdjm_post_types ) || ( isset( $_GET['section'] ) && $_GET['section'] == 'mdjm_custom_event_fields' ) ) {
 
-				wp_register_style( 'mdjm-posts', MDJM_PLUGIN_URL . '/assets/css/mdjm-posts.css', '', MDJM_VERSION_NUM );
+				wp_register_style( 'mdjm-posts', MDJM_PLUGIN_URL . '/assets/css/mdjm-posts.css', array(), MDJM_VERSION_NUM );
 				wp_enqueue_style( 'mdjm-posts' );
 
 				wp_enqueue_script( 'jquery-validation-plugin' );

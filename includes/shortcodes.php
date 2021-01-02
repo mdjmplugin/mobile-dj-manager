@@ -654,7 +654,14 @@ add_shortcode( 'mdjm-addons', 'mdjm_shortcode_addons_list' );
  */
 function mdjm_shortcode_login( $atts ) {
 
-	return mdjm_login_form( '' );
+	extract( shortcode_atts( // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+		array(
+			'redirect' => '',
+		),
+	    $atts, 'mdjm-login'
+	) );
+
+	return mdjm_login_form( $redirect );
 
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-login', 'mdjm_shortcode_login' );

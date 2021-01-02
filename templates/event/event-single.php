@@ -20,16 +20,16 @@ global $mdjm_event;
 	<?php do_action( 'mdjm_print_notices' ); ?>
 
 	<p>
-    <?php 
+    <?php
     printf( esc_html__( 'Details of your %1$s taking place on %2$s are shown below.', 'mobile-dj-manager' ),
-    esc_html( mdjm_get_label_singular( true ) ), '{event_date}' ); 
+    esc_html( mdjm_get_label_singular( true ) ), '{event_date}' );
 	?>
             </p>
 
     <p>
-    <?php 
+    <?php
     printf( __( 'Please confirm the details displayed are correct or <a href="%s">contact us</a> with any adjustments.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-    '{contact_page}' ); 
+    '{contact_page}' );
 	?>
             </p>
 
@@ -116,7 +116,7 @@ global $mdjm_event;
             	<th colspan="4"><?php esc_html_e( 'Venue Details', 'mobile-dj-manager' ); ?></th>
             </tr>
 
-             <tr>
+			<tr>
             	<th><?php esc_html_e( 'Venue:', 'mobile-dj-manager' ); ?></th>
                 <td>{venue}</td>
                 <th><?php esc_html_e( 'Address:', 'mobile-dj-manager' ); ?></th>

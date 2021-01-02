@@ -720,13 +720,13 @@ function mdjm_email_set_tracking_status( $tracking_id, $status ) {
 function mdjm_email_set_copy_text() {
 
 	$message = '<hr size="1" />' .
-			   '<p style="font-size: 11px;">' .
-			   sprintf( __( 'The following email was recently sent to %1$s via %2$s.', 'mobile-dj-manager' ), '{client_fullname}', '{application_name}' ) .
-			   '<br />' .
-			   sprintf( __( 'You are receiving a copy of this message either because you chose to do so, or the %s application settings dictate that you do so.', 'mobile-dj-manager' ), '{application_name}' ) .
-			   '<br />' .
-			   '</p>' .
-			   '<hr size="1" />';
+				'<p style="font-size: 11px;">' .
+				sprintf( __( 'The following email was recently sent to %1$s via %2$s.', 'mobile-dj-manager' ), '{client_fullname}', '{application_name}' ) .
+				'<br />' .
+				sprintf( __( 'You are receiving a copy of this message either because you chose to do so, or the %s application settings dictate that you do so.', 'mobile-dj-manager' ), '{application_name}' ) .
+				'<br />' .
+				'</p>' .
+				'<hr size="1" />';
 
 	return apply_filters( 'mdjm_email_set_copy_text', $message );
 

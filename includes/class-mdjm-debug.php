@@ -71,7 +71,7 @@ class MDJM_Debug {
 
 		$debug_log = $stampit == true ? date( 'd/m/Y  H:i:s', current_time( 'timestamp' ) ) . ' : ' . $msg : '    ' . $msg;
 
-		error_log( $debug_log . "\r\n", 3, MDJM_DEBUG_LOG );
+		error_log( $debug_log . "\r\n", 3, MDJM_DEBUG_LOG ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 
 	} // log_it
 

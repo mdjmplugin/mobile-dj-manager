@@ -56,8 +56,8 @@ class MDJM_Transactions {
 	 *
 	 * @return  str                     'No Payments Received' if no txns, otherwise txn detail as specified by $display
 	 */
-	public function list_event_transactions( $eventID, $display = 'list' ) {
-		$txns = $this->get_transactions( $eventID, 'mdjm-income', 'Completed', 'obj' );
+	public function list_event_transactions( $event_id, $display = 'list' ) {
+		$txns = $this->get_transactions( $event_id, 'mdjm-income', 'Completed', 'obj' );
 
 		if ( empty( $txns ) ) {
 			return __( 'No Payments Found', 'mobile-dj-manager' );

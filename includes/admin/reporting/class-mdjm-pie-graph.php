@@ -93,7 +93,7 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 	public function load_additional_scripts() {
 		// Use minified libraries if SCRIPT_DEBUG is turned off
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_script( 'jquery-flot-pie', MDJM_PLUGIN_URL . '/assets/js/jquery.flot.pie' . $suffix . '.js' );
+		wp_enqueue_script( 'jquery-flot-pie', MDJM_PLUGIN_URL . '/assets/js/jquery.flot.pie' . $suffix . '.js', array(), MDJM_VERSION_NUM, true );
 	} // load_additional_scripts
 
 	/**

@@ -121,7 +121,7 @@ class MDJM_Graph {
 	public function load_scripts() {
 		// Use minified libraries if SCRIPT_DEBUG is turned off
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_script( 'jquery-flot', MDJM_PLUGIN_URL . '/assets/js/jquery.flot' . $suffix . '.js' );
+		wp_enqueue_script( 'jquery-flot', MDJM_PLUGIN_URL . '/assets/js/jquery.flot' . $suffix . '.js', array(), MDJM_VERSION_NUM, true );
 
 		do_action( 'mdjm_graph_load_scripts' );
 	}

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.9.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "b93bcf0fa1fccb0b7d176b0967d969691cd74cca"
+                "reference": "7f3c618fcbfc787cca2bb7a127e7eb3a146c7046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/b93bcf0fa1fccb0b7d176b0967d969691cd74cca",
-                "reference": "b93bcf0fa1fccb0b7d176b0967d969691cd74cca",
+                "url": "https://api.github.com/repos/composer/installers/zipball/7f3c618fcbfc787cca2bb7a127e7eb3a146c7046",
+                "reference": "7f3c618fcbfc787cca2bb7a127e7eb3a146c7046",
                 "shasum": ""
             },
             "require": {
@@ -28,17 +28,18 @@
                 "shama/baton": "*"
             },
             "require-dev": {
-                "composer/composer": "1.6.* || 2.0.*@dev",
-                "composer/semver": "1.0.* || 2.0.*@dev",
-                "phpunit/phpunit": "^4.8.36",
-                "sebastian/comparator": "^1.2.4",
+                "composer/composer": "1.6.* || ^2.0",
+                "composer/semver": "^1 || ^3",
+                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "symfony/phpunit-bridge": "^4.2 || ^5",
                 "symfony/process": "^2.3"
             },
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -131,7 +132,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2020-04-07T06:57:05+00:00"
+            "time": "2020-12-08T15:13:21+00:00"
         }
     ],
     "packages-dev": [
@@ -141,12 +142,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
-                "reference": "8223172285ef3d62be1fd0fd3d6443dbfef1d8fa"
+                "reference": "c4a47f7f87efa81b0e65470793ca6e2cb798eb07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/8223172285ef3d62be1fd0fd3d6443dbfef1d8fa",
-                "reference": "8223172285ef3d62be1fd0fd3d6443dbfef1d8fa",
+                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/c4a47f7f87efa81b0e65470793ca6e2cb798eb07",
+                "reference": "c4a47f7f87efa81b0e65470793ca6e2cb798eb07",
                 "shasum": ""
             },
             "require": {
@@ -199,7 +200,7 @@
                 "stylecheck",
                 "tests"
             ],
-            "time": "2020-12-04T14:43:41+00:00"
+            "time": "2020-12-08T15:46:36+00:00"
         },
         {
             "name": "phpcompatibility/php-compatibility",
@@ -317,12 +318,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibilityWP.git",
-                "reference": "674ed5d2b57dc2ce1aca4c5eccef1db0a01bf48c"
+                "reference": "494189c1aec4b53ef1bfd6b48b2a31a972ea487e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/674ed5d2b57dc2ce1aca4c5eccef1db0a01bf48c",
-                "reference": "674ed5d2b57dc2ce1aca4c5eccef1db0a01bf48c",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/494189c1aec4b53ef1bfd6b48b2a31a972ea487e",
+                "reference": "494189c1aec4b53ef1bfd6b48b2a31a972ea487e",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +360,7 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2020-11-15T19:56:55+00:00"
+            "time": "2020-12-17T20:08:18+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -367,12 +368,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "cda358face567f4cd8356c8d5411e38f30e2d3e9"
+                "reference": "9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/cda358face567f4cd8356c8d5411e38f30e2d3e9",
-                "reference": "cda358face567f4cd8356c8d5411e38f30e2d3e9",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1",
+                "reference": "9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1",
                 "shasum": ""
             },
             "require": {
@@ -410,7 +411,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-11-23T23:43:09+00:00"
+            "time": "2020-12-15T02:38:00+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",

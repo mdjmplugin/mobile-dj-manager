@@ -160,27 +160,27 @@ function mdjm_widget_events_overview() {
 			</table>
 
 			<p>
-				<?php 
+				<?php
                 printf(
 					__( '<a href="%1$s">Create %2$s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					admin_url( 'post-new.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 mdjm_get_label_singular() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php 
+				<?php
                 printf(
 					__( '<a href="%1$s">Manage %2$s</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					admin_url( 'edit.php?post_type=mdjm-event' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 mdjm_get_label_plural() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php 
+				<?php
                 printf(
 					__( '<a href="%s">Transactions</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 admin_url( 'edit.php?post_type=mdjm-transaction' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-				<?php 
+				<?php
                 printf(
 					__( '<a href="%s">Settings</a>', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 admin_url( 'admin.php?page=mdjm-settings' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -193,7 +193,7 @@ function mdjm_widget_events_overview() {
 
 				<?php foreach ( $sources as $count => $source ) : ?>
 					<p>
-					 <?php printf( __( '<p>Most enquiries have been received via <strong>%1$s (%2$d)</strong> so far this month.', 'mobile-dj-manager' ), esc_html( $source ), (int) $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php printf( __( '<p>Most enquiries have been received via <strong>%1$s (%2$d)</strong> so far this month.', 'mobile-dj-manager' ), esc_html( $source ), (int) $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 				<?php endforeach; ?>
 

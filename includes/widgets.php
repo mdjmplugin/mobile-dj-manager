@@ -175,7 +175,7 @@ class MDJM_Availability_Widget extends WP_Widget {
 		/* We need the jQuery Calendar */
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_style( 'jquery-ui-css', MDJM_PLUGIN_URL . '/assets/css/jquery-ui' . $suffix . '.css' );
+		wp_enqueue_style( 'jquery-ui-css', MDJM_PLUGIN_URL . '/assets/css/jquery-ui' . $suffix . '.css', array(), MDJM_VERSION_NUM );
 
 		mdjm_insert_datepicker(
 			array(

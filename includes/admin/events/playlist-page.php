@@ -147,11 +147,11 @@ function mdjm_format_playlist_content( $event_id, $orderby = 'category', $order 
 		$output .= '<p>' . __( 'Here is the playlist you requested...', 'mobile-dj-manager' ) . '</p>' . "\n";
 
 		$output .= '<p>' .
-					   __( 'Client Name', 'mobile-dj-manager' ) . ': ' . mdjm_get_client_display_name( $mdjm_event->client ) . '<br />' . "\n" .
-					   __( 'Event Date', 'mobile-dj-manager' ) . ': ' . mdjm_get_event_long_date( $mdjm_event->ID ) . '<br />' . "\n" .
-					   __( 'Event Type', 'mobile-dj-manager' ) . ': ' . mdjm_get_event_type( $mdjm_event->ID ) . '<br />' . "\n" .
-					   __( 'Songs in Playlist', 'mobile-dj-manager' ) . ': ' . count( $results ) . '<br />' . "\n" .
-					   '</p>';
+					__( 'Client Name', 'mobile-dj-manager' ) . ': ' . mdjm_get_client_display_name( $mdjm_event->client ) . '<br />' . "\n" .
+					__( 'Event Date', 'mobile-dj-manager' ) . ': ' . mdjm_get_event_long_date( $mdjm_event->ID ) . '<br />' . "\n" .
+					__( 'Event Type', 'mobile-dj-manager' ) . ': ' . mdjm_get_event_type( $mdjm_event->ID ) . '<br />' . "\n" .
+					__( 'Songs in Playlist', 'mobile-dj-manager' ) . ': ' . count( $results ) . '<br />' . "\n" .
+					'</p>';
 
 		$output .= '<hr />' . "\n";
 
