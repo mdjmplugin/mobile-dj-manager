@@ -21,3 +21,4 @@ package-lock.json
 phpcs.xml.dist
 phpunit.xml
 README.md
+SECURITY.md
