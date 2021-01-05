@@ -59,7 +59,7 @@ function mdjm_options_page() {
 		</div>
 		<?php
 
-		$number_of_sections = count( $sections );
+		$number_of_sections = $sections != false ? count( $sections ) : 0;
 		$number = 0;
 		if ( $number_of_sections > 1 ) {
 			echo '<div><ul class="subsubsub">';
