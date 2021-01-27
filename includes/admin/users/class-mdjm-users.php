@@ -502,11 +502,11 @@ if ( ! class_exists( 'MDJM_Users' ) ) :
 			$permissions = new MDJM_Permissions();
 
 			if ( ! empty( $make_admin ) ) {
-				$permissions->make_admin( $user->ID );
 				$user->add_cap( 'mdjm_employee' );
+				$permissions->make_admin( $user->ID );
 			} else {
-				$permissions->make_admin( $user->ID, true );
 				$user->remove_cap( 'mdjm_employee' );
+				$permissions->make_admin( $user->ID, true );
 			}
 
 		} // admin_user_rights
