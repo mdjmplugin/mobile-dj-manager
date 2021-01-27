@@ -6,7 +6,7 @@
     "homepage": "https://mdjm.co.uk/",
     "license": "GPL-2.0+",
     "support": {
-   	  "issues": "https://mdjm.co.uk/support"
+   		"issues": "https://mdjm.co.uk/support"
     },
     "require": {
         "php": ">=7.3.0",

@@ -146,7 +146,7 @@ function mdjm_employee_dropdown( $args = '' ) {
 		$results       = new stdClass();
 		$results->role = array();
 		foreach ( $employees as $employee ) {
-			if ( 'administrator' === $employee->roles[0] && ! empty( $employee->roles[1] ) ) {
+			if ( isset( $employee->roles[0] ) && 'administrator' === $employee->roles[0] && ! empty( $employee->roles[1] ) ) {
 				$employee->roles[0] = $employee->roles[1];
 			} else {
 				$employee->roles[0] = 'dj';

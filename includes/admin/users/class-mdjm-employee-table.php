@@ -204,11 +204,12 @@ class MDJM_Employee_Table extends WP_List_Table {
 
 			$i = 1;
 			foreach ( $roles as $role_id => $role ) {
+				$role_found = array_key_exists($role_id, $roles);
 
 				printf( '%s%s%s',
-					esc_attr( $item->roles[0] ) != $role_id ? '<span style="font-style: italic;">' : '',
+						$role_found ? '<span style="font-style: italic;">' : '',
 					esc_html( translate_user_role( $wp_roles->roles[ $role_id ]['name'] ) ),
-					esc_attr( $item->roles[0] ) != $role_id ? '</span>' : ''
+					$role_found ? '</span>' : ''
 				);
 
 				if ( $i < count( $roles ) ) {

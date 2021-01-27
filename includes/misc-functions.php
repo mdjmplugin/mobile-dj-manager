@@ -51,7 +51,7 @@ function mdjm_display_shortcode_button() {
     // Add the MDJM TinyMCE buttons
     $current_screen = get_current_screen();
 
-	if ( in_array( get_post_type(), $post_types ) || in_array( $current_screen->id, $screens ) ) {
+	if ( in_array( get_post_type(), $post_types ) || ( ! empty( $current_screen ) && in_array( $current_screen->id, $screens ) ) ) {
 
 		if ( 'true' == get_user_option( 'rich_editing' ) ) {
 			add_filter( 'mce_external_plugins', 'mdjm_register_mce_plugin' );
