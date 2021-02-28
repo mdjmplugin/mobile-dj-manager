@@ -113,7 +113,7 @@ function mdjm_package_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', esc_html( $output ) );
+			echo esc_html( implode( ', ', $output ) );
 
 			break;
 
@@ -443,7 +443,7 @@ function mdjm_addon_posts_custom_column( $column_name, $post_id )	{
 				}
 			}
 
-			echo implode( ', ', esc_html( $output ) );
+			echo esc_html( implode( ', ', $output ) );
 
 			break;
 
